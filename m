@@ -2,121 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B00367F2B1
+	by mail.lfdr.de (Postfix) with ESMTP id BC17767F2B3
 	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjA1AHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:07:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S232557AbjA1AHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:07:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjA1AHj (ORCPT
+        with ESMTP id S232361AbjA1AHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 Jan 2023 19:07:39 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763DB8663B
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAE88BBB9
         for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:07:29 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id e10so4221468pgc.9
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4fa63c84621so72145917b3.20
         for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:07:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2A/Zg0V6mGpRrWbIuZ1WrswW+49OQc7hs6M62c327v4=;
-        b=bKX0PfG9IW1cUXUKM7Mxe7p2uhDtsdSaiECHRswG7K80hHqwsUZHSCcOONA7KTGoKn
-         WoLwxBWXZQPke5jVRofxheCvsoJpsyd7/hbQ3EbHG5KQo6PZ+3q+Nb0+blE4gPy/yaRj
-         jkBHtcyxxOOnSeI+H+tEw77v8oLsIxqT0kAlZyVT+2HVAYGgSaYR12HRgJSfY6blCmHZ
-         cJbV4KPl31+QqiXVZgKIQe3fGnwxEI8E2IJU2CdAu6ucriD5Ab5lcfe7xUVEeAdmLa/Z
-         5jA6iNfsqB5XHL5cxxAMvd53HjQbttZ5rDlp6NoOeh9TT8hLxq0XLi5xe3RxyebD6xTg
-         CrEw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yIdfwvHbGEKLCTuQ4JXyBNWQ+dba6F3QA3306R/+8B8=;
+        b=qZ/Cw1ZpKuyVqQo0SIKQO3hFAy3CjY/9aaJMfZbyC+AAQA8Lr/CZGet+F+ConZZLLJ
+         ix2/DtqZwP8+DVkUu/LLr0bdmL1ZNIXHNKA2BYtX0abF7Znnnibh6gxhTbaT4aX74vki
+         vR2EK8jSEoPacNVbr9Gv9dt4WpOszJjFZZ62fCf9Tup6nzGSFf91eJ1sWj+iX6nLiYOc
+         VgbFlkRj4A3P3UxDk4zNVPKcQg/M0hJVgdnx69WmpT+hjNBTUTGM7X25WwPsnXLbTI26
+         bj+eSjaDF+gCMUeV3cEtRPBk1FLRMo8wKKnmp7JEVu4fy8/JsVr/SoGCVKJWyOkTTE/2
+         JBXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2A/Zg0V6mGpRrWbIuZ1WrswW+49OQc7hs6M62c327v4=;
-        b=V7nGluFne5B6+gfgWr0dbUXQ4NTpXNLQtjwcG3rci3pnxbFzQMl9BrGyZCZvuxLSWi
-         OZspoZxeeuhA6vz5wwiG0MuQanMwpLoiNdqTtppkd3wvBqmp43zwy6Ya5c3HCA5oOzMx
-         WsdvJ3vVelOSNumNpN6Q/Y0/nHDIqaGjW551hI88AEmKRNdswHmfLgxnP42JdPA3hWZY
-         WQV3gCeFnfNV8VKcPrZzfw1ukarQsWeNJSCqQQ5bK0Cm+WzAuCsjnTUrfUz9tJgN87ZH
-         xSDq71K06/pnitrGHKkPRV54tfRTGhexUCI/xjHUuoV78k7YkcJSGnxoyeH2Uin//cM7
-         FWmA==
-X-Gm-Message-State: AFqh2krSf9ZP4/klRv8fQAoshlfBVqbtOikGIqJAWCRSymoa9OvZL7WQ
-        b9YSMip2LxyORW/LbNINhEnhymaQzZnnTPi05CuaHm/HP8+w
-X-Google-Smtp-Source: AMrXdXu4JO49N65C/MOynyZpgVpmlsh4riJCNBfaQ5OEUTtGhSYC7W10mjEhYOOv27I64fmXzLHkjjfsYpdMGPAGwO4=
-X-Received: by 2002:a65:58c1:0:b0:4d0:1233:d369 with SMTP id
- e1-20020a6558c1000000b004d01233d369mr4575134pgu.88.1674864448918; Fri, 27 Jan
- 2023 16:07:28 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1674682056.git.rgb@redhat.com> <f602429ce0f419c2abc3ae5a0e705e1368ac5650.1674682056.git.rgb@redhat.com>
- <CAHC9VhQiy9vP7BdQk+SXG7gQKAqOAqbYtU+c9R0_ym0h4bgG7g@mail.gmail.com>
- <Y9RX0QhHKfWv3TGL@madcap2.tricolour.ca> <5270af37-5544-42de-4e3f-c437889944dd@kernel.dk>
-In-Reply-To: <5270af37-5544-42de-4e3f-c437889944dd@kernel.dk>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 27 Jan 2023 19:07:17 -0500
-Message-ID: <CAHC9VhRCN9HHDkcp1xPJ7QwGq=_UG95ZCot9HRY7w5FCM2XtFg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] io_uring,audit: do not log IORING_OP_*GETXATTR
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Richard Guy Briggs <rgb@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yIdfwvHbGEKLCTuQ4JXyBNWQ+dba6F3QA3306R/+8B8=;
+        b=A+6vEbFqbE6WcuDdwD7aNmiGy9EmpBtaPXV+acJCe9gx8Dd2kLahUek/zdGX+pKrRa
+         26IBiHys5BRzZ2yIcxcAskDpOg6b176cUPIflG2jLclGcGbnu/D6vpNseLEjHVN2lN3U
+         89jEVHcat3P4vo9oHEC+SwNlIapUMOpbVEMY/bgg7IQVlsseC45MCU3qoVk2ouUa1iTM
+         1RmIT6sw/W+vSNEfHIJrgzDFscsd99BK7Zj65wzP4dbsiR53xpRNMVBMFOXRbyA5QBxZ
+         bkZc9URIoTAZeJCPEHkzJvfBOfuWrWh8rDYfm9LoQzX8bgRpEyXd2h85gIu3EkI3a8TL
+         V5vg==
+X-Gm-Message-State: AFqh2kqO3Hyshw7dCtJI6DsSidt1X6VaGphnBUHLoWyN24ETlXkuQhFj
+        8SCnFmVPniMxQwJMtOnM+Q7V7uVuXt0=
+X-Google-Smtp-Source: AMrXdXu57lkI2niI3+7FRw2C2JFNsAB9MeEoQ5LT6cdV+pzn/rs/r3PwjzjR3S6Xqv2ClauRzdM5YbSuZDk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a0d:e786:0:b0:500:b5eb:cdd with SMTP id
+ q128-20020a0de786000000b00500b5eb0cddmr3940728ywe.95.1674864448762; Fri, 27
+ Jan 2023 16:07:28 -0800 (PST)
+Date:   Sat, 28 Jan 2023 00:07:17 +0000
+In-Reply-To: <20230124234905.3774678-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20230124234905.3774678-1-seanjc@google.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <167478505768.321030.6496153359402477383.b4-ty@google.com>
+Subject: Re: [PATCH 0/6] KVM: x86/pmu: Misc PMU MSR fixes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Lewis <aaronlewis@google.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        Like Xu <likexu@tencent.com>
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 6:05 PM Jens Axboe <axboe@kernel.dk> wrote:
-> On 1/27/23 4:01=E2=80=AFPM, Richard Guy Briggs wrote:
-> > On 2023-01-27 17:43, Paul Moore wrote:
-> >> On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> w=
-rote:
-> >>> Getting XATTRs is not particularly interesting security-wise.
-> >>>
-> >>> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> >>> Fixes: a56834e0fafe ("io_uring: add fgetxattr and getxattr support")
-> >>> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> >>> ---
-> >>>  io_uring/opdef.c | 2 ++
-> >>>  1 file changed, 2 insertions(+)
-> >>
-> >> Depending on your security policy, fetching file data, including
-> >> xattrs, can be interesting from a security perspective.  As an
-> >> example, look at the SELinux file/getattr permission.
-> >>
-> >> https://github.com/SELinuxProject/selinux-notebook/blob/main/src/objec=
-t_classes_permissions.md#common-file-permissions
-> >
-> > The intent here is to lessen the impact of audit operations.  Read and
-> > Write were explicitly removed from io_uring auditing due to performance
-> > concerns coupled with the denial of service implications from sheer
-> > volume of records making other messages harder to locate.  Those
-> > operations are still possible for syscall auditing but they are strongl=
-y
-> > discouraged for normal use.
-> >
-> > If the frequency of getxattr io_uring ops is so infrequent as to be no
-> > distraction, then this patch may be more of a liability than a benefit.
->
-> (audit list removed)
->
-> Right now the xattr related functions are io-wq driven, and hence not
-> super performance sensitive. But I'd greatly prefer to clean these up
-> regardless, because once opcodes get upgraded from needing io-wq, then
-> we don't have to go through the audit discussion at that point. Better
-> to do it upfront, like now, regardless of expectation of frequency of
-> calls.
+On Tue, 24 Jan 2023 23:48:59 +0000, Sean Christopherson wrote:
+> Fix a handful of minor PMU MSR issues, mostly related to KVM's reporting
+> and handling of MSRs when the PMU is disabled.  E.g. running the
+> state_test selftest with enable_pmu=0 fails because KVM tells userspace
+> to save/restore the fixed counter MSRs, but then rejects attempts to
+> access said MSRs from userspace.
+> 
+> 
+> [...]
 
-See my reply to Richard, but unfortunately we need to continue to
-audit the getxattr ops.
+Applied to kvm-x86 pmu.  As mentioned in the cover letter (trimmed by b4),
+I'll yank these out of the queue if any objects and/or there are problems.
 
---=20
-paul-moore.com
+[1/6] KVM: x86/pmu: Cap kvm_pmu_cap.num_counters_gp at KVM's internal max
+      https://github.com/kvm-x86/linux/commit/8911ce66697e
+[2/6] KVM: x86/pmu: Gate all "unimplemented MSR" prints on report_ignored_msrs
+      https://github.com/kvm-x86/linux/commit/e76ae52747a8
+[3/6] KVM: x86/pmu: Use separate array for defining "PMU MSRs to save"
+      https://github.com/kvm-x86/linux/commit/2374b7310b66
+[4/6] KVM: x86/pmu: Don't tell userspace to save PMU MSRs if PMU is disabled
+      https://github.com/kvm-x86/linux/commit/c3531edc79a7
+[5/6] KVM: x86/pmu: Don't tell userspace to save MSRs for non-existent fixed PMCs
+      https://github.com/kvm-x86/linux/commit/e33b6d79acac
+[6/6] KVM: x86/pmu: Provide "error" semantics for unsupported-but-known PMU MSRs
+      https://github.com/kvm-x86/linux/commit/2de154f541fc
+
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
