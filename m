@@ -2,231 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7F267F78D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F169067F793
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbjA1L3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 06:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S233464AbjA1Ldv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 06:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjA1L3j (ORCPT
+        with ESMTP id S230474AbjA1Lds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 06:29:39 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E7F4EEB
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:29:37 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id bk16so7127009wrb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:29:37 -0800 (PST)
+        Sat, 28 Jan 2023 06:33:48 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7CAA271
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:33:47 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso11083931pjj.1
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:33:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JZ1xTDKyjH5p8vliIZMR6idzBEt9CT83BKCLR4uL47U=;
-        b=b8ycbPxp3whx6/XEh4a8jC6lqNyM4v4LqLtl0bW6c/TrTn68SSFdUqkyQpIUbg3iJb
-         vOsQu/p7o0zfr8vrTD8mw4O3zgFPAYBtSOMGZDrNwCdJpu7H0zt0FFSxsj09d4SXoAtZ
-         8FDpWyUq4YaQWsZe30AqU6CjJNvErLG0MEEt6Tad9U95F+F5tXFki/4SG3U5ksJIXDjn
-         tq/Zx6Ay0O5slTRzkxbwz0Tg83IRFQ7IdqJUFBflg/hKLJKRhIq69B+bNnullCdr+h/v
-         dUPickcVjXMYwXMhTLHzg+WlT0gGBZl/cAtrOJDJ09zWKshm6qKDhFWmrWz3YgVJg4I3
-         QvtA==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0+vbyXEO5ZjGT+93R/0smtSFLyUkyWND86MvhSizTJE=;
+        b=nSIjx/E5hZc7SLk8D4Jz/YgjkJJ7uwde0+7TDidW748INJ5hMQ9eWt34STpe6jbwCe
+         wHjk8Sl9+HIyY4bIRYkdGTJlACSA8t02WmGwuEQ3J4l+SnRbRKB6hFHPebSz6mUXtuBY
+         678AWnKtBNbkPKL/BPsLOdFW3hLIPfbzTCPZrvy4OQMsW4NzfSaRUBhqtNLdhjBybsvh
+         DUte4QoDxdlld6NTQN2GnR1Qwt6MffTvnCUwm+P44uBjNASyrnFFz4CQoqM8For4VPHs
+         WknIoyAJ++lnTUCRnLlxlBK9SQSvVKcwUY3vmD37hUPHk/zZbUteUVNQz/bH/MmBVV0Q
+         Pk8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JZ1xTDKyjH5p8vliIZMR6idzBEt9CT83BKCLR4uL47U=;
-        b=kQjQjdU3cbv27sNr7JdSzRkPNe2Ry9F2HJBCCQkUnBajw3+XSZCHu2pB9POqGSA1Bk
-         3wnuWk0LG05Py57s67pKusNWU9m91GMFkFWKw6wKWeYaPUepY7zqtETaS35ldRH0o/Z5
-         zfGgZ5b1HYb+Znr+kFFMfacoBkxwXZqFA2QgTX4jd4USPRVy7hTIYZQA9TBSuWFiTrpa
-         ZNsBROmEA9yZXseCDDVRbfc13G7SoPlYvbmwdKeMd7o78TZ5luyETbDXWqazcO0IXSQF
-         Ng++T7NXTEbF7XAopdW3ni+sJCqiAqudx9Qljve2hAiXEUHyAbhyX8gQVcG7FzK7AonW
-         ceUQ==
-X-Gm-Message-State: AO0yUKXswhBscwo1dljAcCpy1dEONA4AJ40Ssl7Uj00nfYMajj/EFtYq
-        pC+UaUPkfumty9ZQvQ1TEdI=
-X-Google-Smtp-Source: AK7set8jZBChQ4Mh1964/1gOr1EHny2Xr+bR6F+kxFYXVwe6cfyTwJ7DZORX26wfiUEPOtTTV23brQ==
-X-Received: by 2002:a5d:534c:0:b0:2bf:cfc0:ac71 with SMTP id t12-20020a5d534c000000b002bfcfc0ac71mr6538619wrv.53.1674905375766;
-        Sat, 28 Jan 2023 03:29:35 -0800 (PST)
-Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
-        by smtp.googlemail.com with ESMTPSA id x26-20020a1c7c1a000000b003db01178b62sm10298989wmc.40.2023.01.28.03.29.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Jan 2023 03:29:35 -0800 (PST)
-Message-ID: <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com>
-Date:   Sat, 28 Jan 2023 11:29:33 +0000
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0+vbyXEO5ZjGT+93R/0smtSFLyUkyWND86MvhSizTJE=;
+        b=jTAwzrAiDE9NwfyA/LX2eoTWQrWNHqSxfP2T2J/zChruMWGBoEHGOHQpDRLr5nG9CO
+         Ie6UJrX1QNlOd4H+XzLvwrZKvW0i4HX+xEvK1/SE7F5/BontaPDM1yg4xB/ixXxGufl1
+         zc8YzkIURrCBs9Od0S8eRW+eWtTNSp6WFnINzvYGnt53vAc/8dfq8IcbrFY9204nYrRa
+         Pw0SovMk/huhDlU1ODrzDKG6ZPGpabj317iBbFLHnNT/fyGkMufMOw84IyiY26asA1oF
+         TPgFHeTl23KFhZaK7vcXbeofqY6qfasNTJfxbuV1WIh1NG3SH038EtiOqHuKrBbZYBsY
+         WprQ==
+X-Gm-Message-State: AFqh2koVPKKu2Y9peB1/IHAlk3dIQdRkix7hnHBc+FWasNhFnj9tZm9a
+        xzQj78XJeqQ4aaRixWVgnaY=
+X-Google-Smtp-Source: AMrXdXust+O1bkLT1e54NDlo7jlLm8yw9QPmOTn14gd8+7KsCWht7KxIDy2ajF87971shDASiQgW7w==
+X-Received: by 2002:a17:902:cccb:b0:192:b927:39d1 with SMTP id z11-20020a170902cccb00b00192b92739d1mr45094625ple.3.1674905627356;
+        Sat, 28 Jan 2023 03:33:47 -0800 (PST)
+Received: from min-iamroot ([210.91.70.133])
+        by smtp.gmail.com with ESMTPSA id j22-20020a170902759600b00194a297cb8esm4345544pll.191.2023.01.28.03.33.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Jan 2023 03:33:47 -0800 (PST)
+Date:   Sat, 28 Jan 2023 20:33:42 +0900
+From:   Hyunmin Lee <hn.min.lee@gmail.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Jeungwoo Yoo <casionwoo@gmail.com>,
+        Sangyun Kim <sangyun.kim@snu.ac.kr>
+Subject: [PATCHv2] mm/vmalloc: replace BUG_ON to WARN_ON
+Message-ID: <20230128113342.GA1164537@min-iamroot>
+Reply-To: Y9PntwfqtarxWFUq@hyeyoo
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        ML nouveau <nouveau@lists.freedesktop.org>
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
- <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
- <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com>
- <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
-Content-Language: en-GB
-From:   Chris Clayton <chris2553@googlemail.com>
-In-Reply-To: <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As per the coding standards, in the event of an abnormal condition that should not occur under normal circumstances, the kernel should attempt recovery and proceed with execution, rather than halting the machine.
+Specifically, in the alloc_vmap_area() function, use WARN_ON() and fail the request instead of using BUG_ON() to halt the machine.
 
+Co-Developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Co-Developed-by: Jeungwoo Yoo <casionwoo@gmail.com>
+Co-Developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+Signed-off-by: Hyunmin Lee <hn.min.lee@gmail.com>
+Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
+Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
+Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+---
+ mm/vmalloc.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-On 28/01/2023 05:42, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
-> On 27.01.23 20:46, Chris Clayton wrote:
->> [Resend because the mail client on my phone decided to turn HTML on behind my back, so my reply got bounced.]
->>
->> Thanks Thorsten.
->>
->> I did try to revert but it didnt revert cleanly and I don't have the knowledge to fix it up.
->>
->> The patch was part of a merge that included a number of related patches. Tomorrow, I'll try to revert the lot and report
->> back.
-> 
-> You are free to do so, but there is no need for that from my side. I
-> only wanted to know if a simple revert would do the trick; if it
-> doesn't, it in my experience often is best to leave things to the
-> developers of the code in question, 
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 74afa2208558..9f9dba3132c5 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1587,9 +1587,14 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
+ 	int purged = 0;
+ 	int ret;
+ 
+-	BUG_ON(!size);
+-	BUG_ON(offset_in_page(size));
+-	BUG_ON(!is_power_of_2(align));
++	if (WARN_ON(!size))
++		return ERR_PTR(-EINVAL);
++
++	if (WARN_ON(offset_in_page(size)))
++		return ERR_PTR(-EINVAL);
++
++	if (WARN_ON(!is_power_of_2(align)))
++		return ERR_PTR(-EINVAL);
+ 
+ 	if (unlikely(!vmap_initialized))
+ 		return ERR_PTR(-EBUSY);
+-- 
+2.25.1
 
-Sound advice, Thorsten. Way to many conflicts for me to resolve.
-
-as they know it best and thus have a
-> better idea which hidden side effect a more complex revert might have.
-> 
-> Ciao, Thorsten
-> 
->> On 27/01/2023 11:20, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
->>> Hi, this is your Linux kernel regression tracker. Top-posting for once,
->>> to make this easily accessible to everyone.
->>>
->>> @nouveau-maintainers, did anyone take a look at this? The report is
->>> already 8 days old and I don't see a single reply. Sure, we'll likely
->>> get a -rc8, but still it would be good to not fix this on the finish line.
->>>
->>> Chris, btw, did you try if you can revert the commit on top of latest
->>> mainline? And if so, does it fix the problem?
->>>
->>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>> --
->>> Everything you wanna know about Linux kernel regression tracking:
->>> https://linux-regtracking.leemhuis.info/about/#tldr
->>> If I did something stupid, please tell me, as explained on that page.
->>>
->>> #regzbot poke
->>>
->>> On 19.01.23 15:33, Linux kernel regression tracking (Thorsten Leemhuis)
->>> wrote:
->>>> [adding various lists and the two other nouveau maintainers to the list
->>>> of recipients]
->>>
->>>> On 18.01.23 21:59, Chris Clayton wrote:
->>>>> Hi.
->>>>>
->>>>> I build and installed the lastest development kernel earlier this week. I've found that when I try the laptop down (or
->>>>> reboot it), it hangs right at the end of closing the current session. The last line I see on  the screen when rebooting is:
->>>>>
->>>>> 	sd 4:0:0:0: [sda] Synchronising SCSI cache
->>>>>
->>>>> when closing down I see one additional line:
->>>>>
->>>>> 	sd 4:0:0:0 [sda]Stopping disk
->>>>>
->>>>> In both cases the machine then hangs and I have to hold down the power button fot a few seconds to switch it off.
->>>>>
->>>>> Linux 6.1 is OK but 6.2-rc1 hangs, so I bisected between this two and landed on:
->>>>>
->>>>> 	# first bad commit: [0e44c21708761977dcbea9b846b51a6fb684907a] drm/nouveau/flcn: new code to load+boot simple HS FWs
->>>>> (VPR scrubber)
->>>>>
->>>>> I built and installed a kernel with f15cde64b66161bfa74fb58f4e5697d8265b802e (the parent of the bad commit) checked out
->>>>> and that shuts down and reboots fine. It the did the same with the bad commit checked out and that does indeed hang, so
->>>>> I'm confident the bisect outcome is OK.
->>>>>
->>>>> Kernels 6.1.6 and 5.15.88 are also OK.
->>>>>
->>>>> My system had dual GPUs - one intel and one NVidia. Related extracts from 'lscpi -v' is:
->>>>>
->>>>> 00:02.0 VGA compatible controller: Intel Corporation CometLake-H GT2 [UHD Graphics] (rev 05) (prog-if 00 [VGA controller])
->>>>>         Subsystem: CLEVO/KAPOK Computer CometLake-H GT2 [UHD Graphics]
->>>>>
->>>>>         Flags: bus master, fast devsel, latency 0, IRQ 142
->>>>>
->>>>>         Memory at c2000000 (64-bit, non-prefetchable) [size=16M]
->>>>>
->>>>>         Memory at a0000000 (64-bit, prefetchable) [size=256M]
->>>>>
->>>>>         I/O ports at 5000 [size=64]
->>>>>
->>>>>         Expansion ROM at 000c0000 [virtual] [disabled] [size=128K]
->>>>>
->>>>>         Capabilities: [40] Vendor Specific Information: Len=0c <?>
->>>>>
->>>>>         Capabilities: [70] Express Root Complex Integrated Endpoint, MSI 00
->>>>>
->>>>>         Capabilities: [ac] MSI: Enable+ Count=1/1 Maskable- 64bit-
->>>>>
->>>>>         Capabilities: [d0] Power Management version 2
->>>>>
->>>>>         Kernel driver in use: i915
->>>>>
->>>>>         Kernel modules: i915
->>>>>
->>>>>
->>>>> 01:00.0 VGA compatible controller: NVIDIA Corporation TU117M [GeForce GTX 1650 Ti Mobile] (rev a1) (prog-if 00 [VGA
->>>>> controller])
->>>>>         Subsystem: CLEVO/KAPOK Computer TU117M [GeForce GTX 1650 Ti Mobile]
->>>>>         Flags: bus master, fast devsel, latency 0, IRQ 141
->>>>>         Memory at c4000000 (32-bit, non-prefetchable) [size=16M]
->>>>>         Memory at b0000000 (64-bit, prefetchable) [size=256M]
->>>>>         Memory at c0000000 (64-bit, prefetchable) [size=32M]
->>>>>         I/O ports at 4000 [size=128]
->>>>>         Expansion ROM at c3000000 [disabled] [size=512K]
->>>>>         Capabilities: [60] Power Management version 3
->>>>>         Capabilities: [68] MSI: Enable+ Count=1/1 Maskable- 64bit+
->>>>>         Capabilities: [78] Express Legacy Endpoint, MSI 00
->>>>>         Kernel driver in use: nouveau
->>>>>         Kernel modules: nouveau
->>>>>
->>>>> DRI_PRIME=1 is exported in one of my init scripts (yes, I am still using sysvinit).
->>>>>
->>>>> I've attached the bisect.log, but please let me know if I can provide any other diagnostics. Please cc me as I'm not
->>>>> subscribed.
->>>>
->>>> Thanks for the report. To be sure the issue doesn't fall through the
->>>> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
->>>> tracking bot:
->>>>
->>>> #regzbot ^introduced e44c2170876197
->>>> #regzbot title drm: nouveau: hangs on poweroff/reboot
->>>> #regzbot ignore-activity
->>>>
->>>> This isn't a regression? This issue or a fix for it are already
->>>> discussed somewhere else? It was fixed already? You want to clarify when
->>>> the regression started to happen? Or point out I got the title or
->>>> something else totally wrong? Then just reply and tell me -- ideally
->>>> while also telling regzbot about it, as explained by the page listed in
->>>> the footer of this mail.
->>>>
->>>> Developers: When fixing the issue, remember to add 'Link:' tags pointing
->>>> to the report (the parent of this mail). See page linked in footer for
->>>> details.
->>>>
->>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>>> --
->>>> Everything you wanna know about Linux kernel regression tracking:
->>>> https://linux-regtracking.leemhuis.info/about/#tldr
->>>> That page also explains what to do if mails like this annoy you.
->>
->>
