@@ -2,80 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D6667F5D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 09:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F042667F5DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 09:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbjA1IEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 03:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
+        id S233672AbjA1IFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 03:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjA1IEj (ORCPT
+        with ESMTP id S229811AbjA1IFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 03:04:39 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5508001A
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 00:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674893078; x=1706429078;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PSAi4wQVJq8gb0ftJa1PBZZBA8rw8csOD0sJ4uctJ38=;
-  b=RNvK38SGjyTJ5f+vAtO6BTJqUdbJYJqdpA9suakkQEBQdYZ5+wtbORKq
-   23+tViD5yMbrDcXMC8PXqsflEEgJ7rgn46MT5ROzVl+NEa7KaCAcs4h8V
-   G6AViKDjlG6VQq6yPapvvpQr6zCahGyooHB8cmrdMU6PCN+DYSgzusCFj
-   6mWaa/TPI6ijSh2IYBZ5HJ/NNyhgwtJtTXbtf+MOmyHJenuv9DLHiprND
-   nhNCrgEHOQS/3i9uB6yD6aAaepBoROsoST9tOdCl/FsMKarY9OanE40we
-   FJgvBus7zLmApXJzouv6gcGr279P1RZFHUasAU94ZQXivCIz0QuCUWDPC
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="327290273"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="327290273"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 00:04:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="732129387"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="732129387"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.252.186.212]) ([10.252.186.212])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 00:04:36 -0800
-Message-ID: <0ff36f80-652a-655d-ba9c-222b5aa79f72@linux.intel.com>
-Date:   Sat, 28 Jan 2023 16:04:32 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, hch@lst.de, jgg@nvidia.com
-Subject: Re: [PATCH v2 2/8] iommu: Validate that devices match domains
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
-        will@kernel.org
-References: <cover.1674753627.git.robin.murphy@arm.com>
- <0f78ba36a7b31a0d534416e56ea0f1af0efc2659.1674753627.git.robin.murphy@arm.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <0f78ba36a7b31a0d534416e56ea0f1af0efc2659.1674753627.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 28 Jan 2023 03:05:12 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A66D8001A;
+        Sat, 28 Jan 2023 00:05:10 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4P3n6r6lwmz8R039;
+        Sat, 28 Jan 2023 16:05:08 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl1.zte.com.cn with SMTP id 30S84vGO010627;
+        Sat, 28 Jan 2023 16:04:57 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Sat, 28 Jan 2023 16:04:59 +0800 (CST)
+Date:   Sat, 28 Jan 2023 16:04:59 +0800 (CST)
+X-Zmail-TransId: 2af963d4d72bfffffffff60a89ea
+X-Mailer: Zmail v1.0
+Message-ID: <202301281604596831304@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <dmitry.torokhov@gmail.com>
+Cc:     <wsa+renesas@sang-engineering.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBJbnB1dDogYXBicHMyIC0gVXNlIGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 30S84vGO010627
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63D4D734.001 by FangMail milter!
+X-FangMail-Envelope: 1674893108/4P3n6r6lwmz8R039/63D4D734.001/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63D4D734.001/4P3n6r6lwmz8R039
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/27 2:26, Robin Murphy wrote:
-> Before we can allow drivers to coexist, we need to make sure that one
-> driver's domain ops can't misinterpret another driver's dev_iommu_priv
-> data. To that end, add a token to the domain so we can remember how it
-> was allocated - for now this may as well be the device ops, since they
-> still correlate 1:1 with drivers. We can trust ourselves for internal
-> default domain attachment, so add the check where it covers both the
-> external attach interfaces.
-> 
-> Signed-off-by: Robin Murphy<robin.murphy@arm.com>
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Best regards,
-baolu
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/input/serio/apbps2.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/input/serio/apbps2.c b/drivers/input/serio/apbps2.c
+index 9c9ce097f8bf..513d96e40e0e 100644
+--- a/drivers/input/serio/apbps2.c
++++ b/drivers/input/serio/apbps2.c
+@@ -132,7 +132,6 @@ static int apbps2_of_probe(struct platform_device *ofdev)
+ 	struct apbps2_priv *priv;
+ 	int irq, err;
+ 	u32 freq_hz;
+-	struct resource *res;
+
+ 	priv = devm_kzalloc(&ofdev->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv) {
+@@ -141,8 +140,7 @@ static int apbps2_of_probe(struct platform_device *ofdev)
+ 	}
+
+ 	/* Find Device Address */
+-	res = platform_get_resource(ofdev, IORESOURCE_MEM, 0);
+-	priv->regs = devm_ioremap_resource(&ofdev->dev, res);
++	priv->regs = devm_platform_get_and_ioremap_resource(ofdev, 0, NULL);
+ 	if (IS_ERR(priv->regs))
+ 		return PTR_ERR(priv->regs);
+
+-- 
+2.25.1
