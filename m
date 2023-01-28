@@ -2,123 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8AC67F57D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1866567F583
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbjA1HYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S233518AbjA1HZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjA1HYt (ORCPT
+        with ESMTP id S233489AbjA1HZc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:24:49 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814A184B6A;
-        Fri, 27 Jan 2023 23:24:48 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id s4so5947004qtx.6;
-        Fri, 27 Jan 2023 23:24:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AgFA+RHMz3Wcfazx0By2hslKEqkq6ZfDH5bkEcW7CJ8=;
-        b=k/jyveXDFwleTSKmkxFK634X76A44Lb4wRur1RfUX2tnW6r2CRBEAKM90uiwep7uzw
-         BAj9b3I1eIqiNv3nYzBdftTexZYBFaq968m6Tqpj5v0PS7p3gdgu8UM+W/v5yOhljmke
-         7XhzjqsZl39FpfJlB7vMZ4/rdQwIr/AeqLS37iz680GonPQveO0NFeg9SP1+BcUP2Qh5
-         QWhOTEBP511fweMjml0u1DwrpMjIfyim3+z52rEUv3zSsJDDDWZ2UboLfC8pK9pUjvaq
-         L2+M44rnGV/ym2okLU2vJLDCkxDAmg4JIEMiE84/KnzZ+8t+Upa17T/qS1g/dW0StOI/
-         pZrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AgFA+RHMz3Wcfazx0By2hslKEqkq6ZfDH5bkEcW7CJ8=;
-        b=DlTVK24JQXFkmINsYtK3ep4A0v8WI4IxfIJHl4lCuq72nY4yaC9DXczBN4FvfN0Tga
-         P+QQk19BJ4sI57xy/2J+4nmy3dCnVaXkCrQMurzf3f7tWBdkduL2pktKe9F8zxoUAeJN
-         CtoZ5avKHDgPXmrQX4J/TuF5duYUltQFno+3/choDYYDclEruei+2BZF4wi/w3+KIL3T
-         j7S4oeMao/Jq1krlmbKtUEnfOW3VcPeRl1jGv+zHPIpY9YCzNv5JZMrO66S0hSmQhqRU
-         r9hYJug+0t7F3zIYS6COFlbjQBnXiZHE3P4x6LixwPvPGyJpRnG8XH6sy8biNg4CNWvA
-         NK3g==
-X-Gm-Message-State: AO0yUKWMxaV2uhRcxoyS68KM8v0aqM/sauDHmqWmj/rwhSUqog7U/qaH
-        Z+YKZzfzUCGRhzyXbpYOq8Q=
-X-Google-Smtp-Source: AK7set9tUZJxv70jJY/N3WGM7GsCBX6K9dNzFJO9XDT8DWkUBSaqJBrLqCxBIgybfXXCCHd1AoCxnA==
-X-Received: by 2002:ac8:5b89:0:b0:3a4:fddd:f8ef with SMTP id a9-20020ac85b89000000b003a4fdddf8efmr2336327qta.53.1674890687665;
-        Fri, 27 Jan 2023 23:24:47 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id x20-20020ac84a14000000b00399fe4aac3esm4126800qtq.50.2023.01.27.23.24.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 23:24:47 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9453827C0054;
-        Sat, 28 Jan 2023 02:24:46 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sat, 28 Jan 2023 02:24:46 -0500
-X-ME-Sender: <xms:vs3UY90shyUKWHNBe1rLefHO5HpkHeECYVyUG_FA60KO2pAGWZjd8A>
-    <xme:vs3UY0HEjrZt05kEN-J3RIYCovnZsrqrVVesu7nuoWk23VFUdCPp60Q-3ofi_-r0v
-    WDCpEGseDJTFeVhOw>
-X-ME-Received: <xmr:vs3UY95NaEAAGQ31kG-lNP5K0QdfGUWF6HQi5Hij1XrdtQf9zS8m8mCpb60>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvjedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:vs3UY60H6rMK253CPw2XqyLqpYAbKcEQ5JWRCdTE5wkV3aSc0kuuTA>
-    <xmx:vs3UYwF3SjPmSxLxOLb5aCQjxYarUJQXrvDFwME5QDnNMAo9zbyzhA>
-    <xmx:vs3UY78tctE5ri8g_8F_UQ1JauMQuhQa6Lg3ZHoGXQ09-5IU130ZnA>
-    <xmx:vs3UY73gpbe2oIhXUq875a-Cbl4icB3E_H3WBF0S9qiLhSoRN_vtHQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 28 Jan 2023 02:24:46 -0500 (EST)
-Date:   Fri, 27 Jan 2023 23:23:58 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sat, 28 Jan 2023 02:25:32 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDA784B52;
+        Fri, 27 Jan 2023 23:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674890730; x=1706426730;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eDXPzbDiWfsbEwXkYaH34SmQGKn8//5UxGIVNNo7RcU=;
+  b=IH//ZbjhgJq3d9Dw6ZBGyuGxPitojL7VS1cdD16Flh5TdTJg10WOyQi1
+   cK/w262CleWo8JWxA4Y+GVPjh3oEz67skjsB7zcp09AaeQyxX4xhgyr8o
+   bNpbH8H18W1ptwz11efZpV1jIxYgdCd6TAx8pJdr7zocLVe6GLQTg7/QY
+   j1UiuE0TaiHfu3xV6XX0YBAMqagX8eaGoSJckGUpGCkXUOgQ42OuuAZFl
+   xvvvqVyVNiPYKTUZGjXCuh461BAJd5K6/H62mjktHs8KxOmwvzNHJues4
+   lpcIw/H/kN6EQl09t0JOEI5RJCrhxyh9rqdYzWBYTXMbvL4+KtDBstJib
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="315225924"
+X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
+   d="scan'208";a="315225924"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 23:25:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="663539356"
+X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
+   d="scan'208";a="663539356"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 27 Jan 2023 23:25:22 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLfaS-0000U6-36;
+        Sat, 28 Jan 2023 07:25:20 +0000
+Date:   Sat, 28 Jan 2023 15:24:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Byungchul Park <max.byungchul.park@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rust: MAINTAINERS: Add the zulip link
-Message-ID: <Y9TNjt7e9uwClarg@boqun-archlinux>
-References: <20230127190917.3369037-1-boqun.feng@gmail.com>
- <Y9TH1hQU3eaXB8lc@kroah.com>
+Cc:     oe-kbuild-all@lists.linux.dev, torvalds@linux-foundation.org,
+        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        mingo@redhat.com, peterz@infradead.org, will@kernel.org,
+        tglx@linutronix.de, rostedt@goodmis.org, joel@joelfernandes.org,
+        sashal@kernel.org, daniel.vetter@ffwll.ch, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        gregkh@linuxfoundation.org, kernel-team@lge.com,
+        linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+        minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+        sj@kernel.org
+Subject: Re: [PATCH v8 05/25] dept: Tie to Lockdep and IRQ tracing
+Message-ID: <202301281551.sSDuxg0O-lkp@intel.com>
+References: <1674782358-25542-6-git-send-email-max.byungchul.park@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9TH1hQU3eaXB8lc@kroah.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1674782358-25542-6-git-send-email-max.byungchul.park@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 07:59:34AM +0100, Greg KH wrote:
-> On Fri, Jan 27, 2023 at 11:09:13AM -0800, Boqun Feng wrote:
-> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> > ---
-> >  MAINTAINERS | 1 +
-> >  1 file changed, 1 insertion(+)
-> 
-> Most maintainers will not take patches without any changelog text, so
-> please, always do so.
-> 
+Hi Byungchul,
 
-Done, thanks for reminder ;-)
+Thank you for the patch! Yet something to improve:
 
-Regards,
-Boqun
+[auto build test ERROR on tip/locking/core]
+[also build test ERROR on tip/sched/core drm-misc/drm-misc-next linus/master v6.2-rc5 next-20230127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> thanks,
-> 
-> greg k-h
+url:    https://github.com/intel-lab-lkp/linux/commits/Byungchul-Park/llist-Move-llist_-head-node-definition-to-types-h/20230128-102456
+patch link:    https://lore.kernel.org/r/1674782358-25542-6-git-send-email-max.byungchul.park%40gmail.com
+patch subject: [PATCH v8 05/25] dept: Tie to Lockdep and IRQ tracing
+config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20230128/202301281551.sSDuxg0O-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/aed5169e3b6767146ee602447fcf75b4c734d2db
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Byungchul-Park/llist-Move-llist_-head-node-definition-to-types-h/20230128-102456
+        git checkout aed5169e3b6767146ee602447fcf75b4c734d2db
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc prepare
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from include/linux/bitops.h:68,
+                    from include/linux/kernel.h:22,
+                    from include/linux/irqflags.h:16,
+                    from include/asm-generic/cmpxchg-local.h:6,
+                    from arch/parisc/include/asm/cmpxchg.h:89,
+                    from arch/parisc/include/asm/atomic.h:10,
+                    from include/linux/atomic.h:7,
+                    from include/linux/rcupdate.h:25,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from arch/parisc/kernel/asm-offsets.c:18:
+   arch/parisc/include/asm/bitops.h: In function 'set_bit':
+>> arch/parisc/include/asm/bitops.h:27:9: error: implicit declaration of function '_atomic_spin_lock_irqsave'; did you mean '__atomic_is_lock_free'? [-Werror=implicit-function-declaration]
+      27 |         _atomic_spin_lock_irqsave(addr, flags);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |         __atomic_is_lock_free
+>> arch/parisc/include/asm/bitops.h:29:9: error: implicit declaration of function '_atomic_spin_unlock_irqrestore' [-Werror=implicit-function-declaration]
+      29 |         _atomic_spin_unlock_irqrestore(addr, flags);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/parisc/include/asm/bitops.h:204:
+   include/asm-generic/bitops/lock.h: In function 'arch_test_and_set_bit_lock':
+>> include/asm-generic/bitops/lock.h:28:15: error: implicit declaration of function 'arch_atomic_long_fetch_or_acquire' [-Werror=implicit-function-declaration]
+      28 |         old = arch_atomic_long_fetch_or_acquire(mask, (atomic_long_t *)p);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/asm-generic/bitops/lock.h:28:56: error: 'atomic_long_t' undeclared (first use in this function); did you mean 'atomic_t'?
+      28 |         old = arch_atomic_long_fetch_or_acquire(mask, (atomic_long_t *)p);
+         |                                                        ^~~~~~~~~~~~~
+         |                                                        atomic_t
+   include/asm-generic/bitops/lock.h:28:56: note: each undeclared identifier is reported only once for each function it appears in
+>> include/asm-generic/bitops/lock.h:28:71: error: expected expression before ')' token
+      28 |         old = arch_atomic_long_fetch_or_acquire(mask, (atomic_long_t *)p);
+         |                                                                       ^
+   include/asm-generic/bitops/lock.h: In function 'arch_clear_bit_unlock':
+>> include/asm-generic/bitops/lock.h:44:9: error: implicit declaration of function 'arch_atomic_long_fetch_andnot_release' [-Werror=implicit-function-declaration]
+      44 |         arch_atomic_long_fetch_andnot_release(BIT_MASK(nr), (atomic_long_t *)p);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/lock.h:44:62: error: 'atomic_long_t' undeclared (first use in this function); did you mean 'atomic_t'?
+      44 |         arch_atomic_long_fetch_andnot_release(BIT_MASK(nr), (atomic_long_t *)p);
+         |                                                              ^~~~~~~~~~~~~
+         |                                                              atomic_t
+   include/asm-generic/bitops/lock.h:44:77: error: expected expression before ')' token
+      44 |         arch_atomic_long_fetch_andnot_release(BIT_MASK(nr), (atomic_long_t *)p);
+         |                                                                             ^
+   include/asm-generic/bitops/lock.h: In function 'arch___clear_bit_unlock':
+>> include/asm-generic/bitops/lock.h:66:9: error: implicit declaration of function 'arch_atomic_long_set_release' [-Werror=implicit-function-declaration]
+      66 |         arch_atomic_long_set_release((atomic_long_t *)p, old);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/lock.h:66:39: error: 'atomic_long_t' undeclared (first use in this function); did you mean 'atomic_t'?
+      66 |         arch_atomic_long_set_release((atomic_long_t *)p, old);
+         |                                       ^~~~~~~~~~~~~
+         |                                       atomic_t
+   include/asm-generic/bitops/lock.h:66:54: error: expected expression before ')' token
+      66 |         arch_atomic_long_set_release((atomic_long_t *)p, old);
+         |                                                      ^
+   include/asm-generic/bitops/lock.h: In function 'arch_clear_bit_unlock_is_negative_byte':
+   include/asm-generic/bitops/lock.h:86:60: error: 'atomic_long_t' undeclared (first use in this function); did you mean 'atomic_t'?
+      86 |         old = arch_atomic_long_fetch_andnot_release(mask, (atomic_long_t *)p);
+         |                                                            ^~~~~~~~~~~~~
+         |                                                            atomic_t
+   include/asm-generic/bitops/lock.h:86:75: error: expected expression before ')' token
+      86 |         old = arch_atomic_long_fetch_andnot_release(mask, (atomic_long_t *)p);
+         |                                                                           ^
+   In file included from include/linux/atomic.h:81:
+   include/linux/atomic/atomic-long.h: At top level:
+>> include/linux/atomic/atomic-long.h:539:1: warning: conflicting types for 'arch_atomic_long_set_release'; have 'void(atomic_long_t *, long int)' {aka 'void(atomic_t *, long int)'}
+     539 | arch_atomic_long_set_release(atomic_long_t *v, long i)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/atomic/atomic-long.h:539:1: error: static declaration of 'arch_atomic_long_set_release' follows non-static declaration
+   include/asm-generic/bitops/lock.h:66:9: note: previous implicit declaration of 'arch_atomic_long_set_release' with type 'void(atomic_long_t *, long int)' {aka 'void(atomic_t *, long int)'}
+      66 |         arch_atomic_long_set_release((atomic_long_t *)p, old);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/atomic/atomic-long.h:809:1: error: conflicting types for 'arch_atomic_long_fetch_andnot_release'; have 'long int(long int,  atomic_long_t *)' {aka 'long int(long int,  atomic_t *)'}
+     809 | arch_atomic_long_fetch_andnot_release(long i, atomic_long_t *v)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/lock.h:44:9: note: previous implicit declaration of 'arch_atomic_long_fetch_andnot_release' with type 'int()'
+      44 |         arch_atomic_long_fetch_andnot_release(BIT_MASK(nr), (atomic_long_t *)p);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/atomic/atomic-long.h:833:1: error: conflicting types for 'arch_atomic_long_fetch_or_acquire'; have 'long int(long int,  atomic_long_t *)' {aka 'long int(long int,  atomic_t *)'}
+     833 | arch_atomic_long_fetch_or_acquire(long i, atomic_long_t *v)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/lock.h:28:15: note: previous implicit declaration of 'arch_atomic_long_fetch_or_acquire' with type 'int()'
+      28 |         old = arch_atomic_long_fetch_or_acquire(mask, (atomic_long_t *)p);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:114: arch/parisc/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1298: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:242: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +27 arch/parisc/include/asm/bitops.h
+
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16  14  
+a366064c3ff46c include/asm-parisc/bitops.h      Grant Grundler 2005-10-21  15  /* See http://marc.theaimsgroup.com/?t=108826637900003 for discussion
+a366064c3ff46c include/asm-parisc/bitops.h      Grant Grundler 2005-10-21  16   * on use of volatile and __*_bit() (set/clear/change):
+a366064c3ff46c include/asm-parisc/bitops.h      Grant Grundler 2005-10-21  17   *	*_bit() want use of volatile.
+a366064c3ff46c include/asm-parisc/bitops.h      Grant Grundler 2005-10-21  18   *	__*_bit() are "relaxed" and don't use spinlock or volatile.
+a366064c3ff46c include/asm-parisc/bitops.h      Grant Grundler 2005-10-21  19   */
+a366064c3ff46c include/asm-parisc/bitops.h      Grant Grundler 2005-10-21  20  
+a366064c3ff46c include/asm-parisc/bitops.h      Grant Grundler 2005-10-21  21  static __inline__ void set_bit(int nr, volatile unsigned long * addr)
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16  22  {
+208151bfb70fb7 arch/parisc/include/asm/bitops.h Helge Deller   2020-06-14  23  	unsigned long mask = BIT_MASK(nr);
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16  24  	unsigned long flags;
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16  25  
+208151bfb70fb7 arch/parisc/include/asm/bitops.h Helge Deller   2020-06-14  26  	addr += BIT_WORD(nr);
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16 @27  	_atomic_spin_lock_irqsave(addr, flags);
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16  28  	*addr |= mask;
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16 @29  	_atomic_spin_unlock_irqrestore(addr, flags);
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16  30  }
+^1da177e4c3f41 include/asm-parisc/bitops.h      Linus Torvalds 2005-04-16  31  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
