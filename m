@@ -2,153 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D4667F68F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 10:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E440C67F691
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 10:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbjA1JCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 04:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S234101AbjA1JDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 04:03:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233575AbjA1JCT (ORCPT
+        with ESMTP id S231672AbjA1JDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 04:02:19 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38EA6DFCF;
-        Sat, 28 Jan 2023 01:02:16 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso47524wms.5;
-        Sat, 28 Jan 2023 01:02:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v7ARCz3cVaBFOjYkC77qL/HBEniL1qdQHS5E6K6GFOY=;
-        b=aqbRojTHRCVjzGUAj7OwNNFidQtZRaRDHHmAjBWeAFhAl4EP6lU/HQ+DT3lz3ORLRs
-         krDbFNMyaAoPDNNbr2Us4LfdqxvtQoKw/VqPFwWdtmeZaX2Yr/xMNSAvUp0bHiLiSOj3
-         SN1iYBMZrJW6Tuoe05d5ixjoXDQyxOx+hHgkYRdk2YredIT5D868vyI7+JtGnCIwsINP
-         AC8gyFLqm6XouHJKilNfBj6iNxK7cGu1Nhc9VlLOm0nqQCpyycdmijDtgityKjfCFibc
-         kBECjMNCFbqcxj8dsEQrghcf75B90yP81hRDkvCSROQeKfuHc3hus0w8nNDlJyMcHou/
-         rQVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v7ARCz3cVaBFOjYkC77qL/HBEniL1qdQHS5E6K6GFOY=;
-        b=K/g0NVKqOEQIrhvafWdRvrjURipII3R7wZsomoncfvYxOaVsjxBB4GDtgjn1rX1MtO
-         KnY0l5JrvoLJvI7FX5LmggUrjXSISAK7DhqusGl6ORvy1tgnHzaBtrzy/+5DLIG3uF8P
-         lef2XfYvHcPw/UhMCNXBZF/FmVKfSZujzuKe+DvSSWACEhbvMhK9klK7GEp0ph2XKBUP
-         FSRIeXTua9Fs6dy+8P49dTlLlb3I+Hlxpk5CylXLBf14ePJ7EAXAfsx3dOTsbkqT13W6
-         135KB/lW487LBZjy5pAqw4JyLZ1S2JICUGNRKrM2DbK6tzk5uKReWuLp3qwHAX0Xuqwz
-         L8mg==
-X-Gm-Message-State: AFqh2koU+Pl3pQgtBSHxJ3WksDASjXOPbguqlLD3Odb34RoxJ7wn82bA
-        xeVo3OD529xv6CQsEwfTAho=
-X-Google-Smtp-Source: AMrXdXshtli+OqZ9VwFCdRpOAvHTMs/09zG9TMwa0gaZMZJ8uG1JiJOtVlF/BhmQxoXBbhlR7WJAkg==
-X-Received: by 2002:a05:600c:5116:b0:3db:1a8:c041 with SMTP id o22-20020a05600c511600b003db01a8c041mr42453030wms.17.1674896535134;
-        Sat, 28 Jan 2023 01:02:15 -0800 (PST)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id f28-20020a5d58fc000000b002be5401ef5fsm6212824wrd.39.2023.01.28.01.02.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 01:02:14 -0800 (PST)
-Date:   Sat, 28 Jan 2023 18:02:13 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux--csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 3/3] mm, arch: add generic implementation of pfn_valid()
- for FLATMEM
-Message-ID: <Y9TklS4v8oHCvCu2@antec>
-References: <20230125190757.22555-1-rppt@kernel.org>
- <20230125190757.22555-4-rppt@kernel.org>
+        Sat, 28 Jan 2023 04:03:09 -0500
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D371F1F5E5
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 01:03:06 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=guorui.yu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VaHEExj_1674896583;
+Received: from 30.221.129.22(mailfrom:GuoRui.Yu@linux.alibaba.com fp:SMTPD_---0VaHEExj_1674896583)
+          by smtp.aliyun-inc.com;
+          Sat, 28 Jan 2023 17:03:03 +0800
+Message-ID: <f9de1d58-a723-5791-605a-a0d4a024e3ad@linux.alibaba.com>
+Date:   Sat, 28 Jan 2023 17:03:02 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230125190757.22555-4-rppt@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC] swiotlb: Add a new cc-swiotlb implementation for
+ Confidential VMs
+To:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        konrad.wilk@oracle.com, linux-coco@lists.linux.dev, hch@lst.de,
+        m.szyprowski@samsung.com
+Cc:     robin.murphy@arm.com
+References: <20230128083254.86012-1-GuoRui.Yu@linux.alibaba.com>
+From:   Guorui Yu <GuoRui.Yu@linux.alibaba.com>
+In-Reply-To: <20230128083254.86012-1-GuoRui.Yu@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 09:07:57PM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> Every architecture that supports FLATMEM memory model defines its own
-> version of pfn_valid() that essentially compares a pfn to max_mapnr.
-> 
-> Use mips/powerpc version implemented as static inline as a generic
-> implementation of pfn_valid() and drop its per-architecture definitions
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/alpha/include/asm/page.h      |  4 ----
->  arch/arc/include/asm/page.h        |  1 -
->  arch/csky/include/asm/page.h       |  1 -
->  arch/hexagon/include/asm/page.h    |  1 -
->  arch/ia64/include/asm/page.h       |  4 ----
->  arch/loongarch/include/asm/page.h  | 13 -------------
->  arch/m68k/include/asm/page_no.h    |  2 --
->  arch/microblaze/include/asm/page.h |  1 -
->  arch/mips/include/asm/page.h       | 13 -------------
->  arch/nios2/include/asm/page.h      |  9 ---------
->  arch/openrisc/include/asm/page.h   |  2 --
->  arch/parisc/include/asm/page.h     |  4 ----
->  arch/powerpc/include/asm/page.h    |  9 ---------
->  arch/riscv/include/asm/page.h      |  5 -----
->  arch/sh/include/asm/page.h         |  3 ---
->  arch/sparc/include/asm/page_32.h   |  1 -
->  arch/um/include/asm/page.h         |  1 -
->  arch/x86/include/asm/page_32.h     |  4 ----
->  arch/x86/include/asm/page_64.h     |  4 ----
->  arch/xtensa/include/asm/page.h     |  2 --
->  include/asm-generic/memory_model.h | 12 ++++++++++++
->  include/asm-generic/page.h         |  2 --
->  22 files changed, 12 insertions(+), 86 deletions(-)
-> 
-[...] 
-> diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm/page.h
-> index aab6e64d6db4..52b0d7e76446 100644
-> --- a/arch/openrisc/include/asm/page.h
-> +++ b/arch/openrisc/include/asm/page.h
-> @@ -80,8 +80,6 @@ typedef struct page *pgtable_t;
->  
->  #define page_to_phys(page)      ((dma_addr_t)page_to_pfn(page) << PAGE_SHIFT)
->  
-> -#define pfn_valid(pfn)          ((pfn) < max_mapnr)
-> -
->  #define virt_addr_valid(kaddr)	(pfn_valid(virt_to_pfn(kaddr)))
->  
->  #endif /* __ASSEMBLY__ */
++ Marek Szyprowski and Robin Murphy.
 
-For OpenRISC
-
-Acked-by: Stafford Horne <shorne@gmail.com>
+在 2023/1/28 16:32, GuoRui.Yu 写道:
+> This patch series adds a new swiotlb implementation, cc-swiotlb, for
+> Confidential VMs (such as TDX and SEV-SNP). The new cc-swiotlb allocates
+> the DMA TLB buffer dynamically in runtime instead of allocating at boot
+> with a fixed size. Furthermore, future optimization and security
+> enhancement could be applied on cc-swiotlb without "infecting" the
+> legacy swiotlb.
+> 
+> Background
+> ==========
+> Under COnfidential COmputing (CoCo) scenarios, the VMM cannot access
+> guest memory directly but requires the guest to explicitly mark the
+> memory as shared (decrypted). To make the streaming DMA mappings work,
+> the current implementation relays on legacy SWIOTLB to bounce the DMA
+> buffer between private (encrypted) and shared (decrypted) memory.
+> 
+> However, the legacy swiotlb is designed for compatibility rather than
+> efficiency and CoCo purpose, which will inevitably introduce some
+> unnecessary restrictions.
+> 
+> 1. Fixed immutable swiotlb size cannot accommodate to requirements of
+> multiple devices. And 1GiB (current maximum size) of swiotlb in our
+> testbed cannot afford multiple disks reads/writes simultaneously.
+> 
+> 2. Fixed immutable IO_TLB_SIZE (2KiB) cannot satisfy various kinds of
+> devices. At the moment, the minimal size of a swiotlb buffer is 2KiB,
+> which will waste memory on small network packets (under 256 bytes) and
+> decrease efficiency on a large block (up to 256KiB) size reads/writes of
+> disks. And it is hard to have a trade-off on legacy swiotlb to rule them
+> all.
+> 
+> 3. The legacy swiotlb cannot efficiently support larger swiotlb buffers.
+> In the worst case, the current implementation requires a full scan of
+> the entire swiotlb buffer, which can cause severe performance hits.
+> 
+> Changes in this patch set
+> =========================
+> Instead of keeping "infecting" the legacy swiotlb code with CoCo logic,
+> this patch tries to introduce a new cc-swiotlb for Confidential VMs.
+> 
+> Confidential VMs usually have reasonable modern devices (virtio devices,
+> NVME, etc.), which can access memory above 4GiB, cc-swiotlb could
+> allocate TLB buffers at any position dynamically. Since
+> set_memory_{decrypted,encrypted} is time-consuming and cannot be used in
+> interrupt context, a new kernel thread "kccd" has been added to populate
+> new TLB buffers on-demand, which solved the problem 1.
+> 
+> In addition, the cc-swiotlb manages TLB buffers by different sizes
+> (512B, 2KiB, 4KiB, 16KiB, and 512KiB). The above values come from the
+> following observations (boot with 8core, 32 GiB, 1 nvme disk, and 1
+> virtio-net):
+> - Allocations of 512 bytes and below account for 3.5% of the total DMA
+>    cache allocations;
+> - Allocations of 2 KiB and below account for 57.7%;
+> - Allocations of 4 KiB and below account for 91.3%;
+> - Allocations of 16 KiB and below account for 96.0%;
+> - Allocations of 512 KiB and below accounted for 100%;
+> - At the end of booting, cc-swiotlb uses 288 MiB in total.
+> 
+> For comparison, legacy swiotlb reserves memory at 6%, which requires
+> min(1GiB, 32GiB * 0.06) = 1GiB, and will hang when operating multiple
+> disks simultaneously due to no memory for the swiotlb buffer.
+> 
+> These patches were tested with fio (using different iodepth and block
+> size) on a platform with 96 cores, 384 GiB, and 20 NVME disks, and no IO
+> hang or error was observed.
+> 
+> For simplicity, the current RFC version cannot switch between legacy
+> implementation with cmdline but through compile options. I am open to
+> discussing how to integrate the cc-swiotlb into the legacy one.
+> 
+> Patch Organization
+> ==================
+> - swiotlb: Split common code from swiotlb.{c,h}
+> - swiotlb: Add a new cc-swiotlb implementation for Confidential VMs
+> - swiotlb: Add tracepoint swiotlb_unbounced
+> - cc-swiotlb: Allow set swiotlb watermark from cmdline
+> 
+> Thanks for your time!
+> 
+> Have a nice day,
+> Guorui
+> 
