@@ -2,98 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646BC67F9B9
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAB567F9BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 18:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbjA1RDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 12:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S233999AbjA1RDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 12:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjA1RDA (ORCPT
+        with ESMTP id S230473AbjA1RDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 12:03:00 -0500
-Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E659620059;
-        Sat, 28 Jan 2023 09:02:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1674925368; bh=+8TKLKDrMXk1aX3sjR/kJoEvZAQFsAvwmSjZFAccLgg=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=Ui0AegwQcfT2+K0Cac1J2ZgbYyt5qkOTti+bkZ27XAokWCFdtDKV2rR0qAYxJSFIC
-         +FZU+uhv6OtyOKpVLcXokGF/xFp9dVsHA5+cNGX/d1/QUOrvmNXroP8Gv0NAduZxqE
-         u+5nlocKw7Y6csYdUSzNmk+JZ/X/ky0uwDHtiFIM=
-Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Sat, 28 Jan 2023 18:02:48 +0100 (CET)
-X-EA-Auth: h5MYg+Yeo7m+WjFzLuSX2OLGCOmYFsxT1QAjTicMi8hGeJhhYIs9w1BsP5iTpo4oQkyrL8I3lMmx3VJBPCwN73XoBV07RqTv
-Date:   Sat, 28 Jan 2023 22:32:42 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] scsi: bfa: Use min helpers for comparison and assignment
-Message-ID: <Y9VVMh8epgxQYyji@ubun2204.myguest.virtualbox.org>
+        Sat, 28 Jan 2023 12:03:53 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100DD2005E
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 09:03:52 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so7484847pjb.5
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 09:03:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FZB8lg0YeivU1JmY6qzB+xB0HCsqlxdwoCMFwmTxhGc=;
+        b=YuWBbzUv750b3lluA0Xc6lKsr9XDMwG9ONJRXLFKTbkZw5XSnXEy80i6xh+hAwKICO
+         09F9AfIAay1C21P2ZRssDSjfvhjxbcYu3VeUvBg9AqqSSmQuGXimp+OpQzy/VRa3Dq4e
+         UMK+mkQ4eAdn4/zqmLakHLyO06OJ1Of4mojiF9+jQbBwmDFmClpTAt776z2kAPVMY0eW
+         Ef8QZLIE/cdUpvAPr9Bls6jXYp1JPKDMyo//TNpJOb5xZp8Hcf8LQYHqvXify6hVcUyu
+         JH+60kQqWeh5blSKY2lWPJUf6LNlWDqmFF2LJ6evItT/6tn6UhVgGx3tfoFHjOLc6N1H
+         0DHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FZB8lg0YeivU1JmY6qzB+xB0HCsqlxdwoCMFwmTxhGc=;
+        b=mbIXX3+RY6hCDWaGxN7cjUWNfrvO/+83t41xs+ZRyljEJkxAyTFF0ugzL8+tw66FTv
+         FvonqKwF383x7k/a10Y/DR35Tl/y3tfTjaV/K0Q1aq4kpAOojSF3f7RJetMnUfZEzUoe
+         StQQSXQZ4dyJaJFl7e+3S9xdFRzNZ8iLVS14/880Op/18c1Sdj8JgniCwVA+VQ+xy+e7
+         3yni3LIUb+sJgxa0vudKLc/7nxI0eMtLliYP9ErfzAz80MERFfbmojjcUBw2rn1pV1Lh
+         fCeDV8/aK25imngNMrBfqsCAesqflDaOOQQAy/Pj57ItlsKJVNu28DEJ9Df9d2+QF7Cy
+         R6Cw==
+X-Gm-Message-State: AFqh2krwssIG/OnhN/7tn0BzmyuV7O3qo25+O+FiCQzjOH2ZYwM82zAg
+        OQaGqrJLFcYQuNCENBr3zi64C4mqmJ7w+dJE1rV3
+X-Google-Smtp-Source: AMrXdXts3HgaSZ1OMsaBQlmOSyte1KDM2wha7k7fk7BHABCeqM3pzpwKqS0gOaF7QboopE3ejUebzS9ZE6jmFHPI+3w=
+X-Received: by 2002:a17:902:c404:b0:194:954c:fb8 with SMTP id
+ k4-20020a170902c40400b00194954c0fb8mr5105429plk.20.1674925431278; Sat, 28 Jan
+ 2023 09:03:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1674682056.git.rgb@redhat.com> <d9da8035-ed81-fb28-bf3a-f98c8a1e044a@kernel.dk>
+ <CAHC9VhRpu7WZDqWKcLDj18A0Z5FJdUU=eUL3wbJH1CnEBWB4GA@mail.gmail.com> <12151218.O9o76ZdvQC@x2>
+In-Reply-To: <12151218.O9o76ZdvQC@x2>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sat, 28 Jan 2023 12:03:40 -0500
+Message-ID: <CAHC9VhRoJRRcsXWOMkBQWKOUkCdJEL5mkb+w196rZPJn0KuFtw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] two suggested iouring op audit updates
+To:     Steve Grubb <sgrubb@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify code by using min helper macros for logical evaluation
-and value assignment. Use the _t variant when the variable types
-are not same. The change also facilitates code realignment for improved
-readability.
-Proposed change is identified using minmax.cocci Coccinelle script.
+On Sat, Jan 28, 2023 at 11:48 AM Steve Grubb <sgrubb@redhat.com> wrote:
+> On Friday, January 27, 2023 5:53:24 PM EST Paul Moore wrote:
+> > On Fri, Jan 27, 2023 at 5:46 PM Jens Axboe <axboe@kernel.dk> wrote:
+> > > On 1/27/23 3:38=E2=80=AFPM, Paul Moore wrote:
+> > > > On Fri, Jan 27, 2023 at 2:43 PM Jens Axboe <axboe@kernel.dk> wrote:
+> > > >> On 1/27/23 12:42=E2=80=AFPM, Paul Moore wrote:
+> > > >>> On Fri, Jan 27, 2023 at 12:40 PM Jens Axboe <axboe@kernel.dk> wro=
+te:
+> > > >>>> On 1/27/23 10:23=E2=80=AFAM, Richard Guy Briggs wrote:
+> > > >>>>> A couple of updates to the iouring ops audit bypass selections
+> > > >>>>> suggested in consultation with Steve Grubb.
+> > > >>>>>
+> > > >>>>> Richard Guy Briggs (2):
+> > > >>>>>   io_uring,audit: audit IORING_OP_FADVISE but not IORING_OP_MAD=
+VISE
+> > > >>>>>   io_uring,audit: do not log IORING_OP_*GETXATTR
+> > > >>>>>
+> > > >>>>>  io_uring/opdef.c | 4 +++-
+> > > >>>>>  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > >>>>
+> > > >>>> Look fine to me - we should probably add stable to both of them,
+> > > >>>> just to keep things consistent across releases. I can queue them=
+ up
+> > > >>>> for 6.3.
+> > > >>>
+> > > >>> Please hold off until I've had a chance to look them over ...
+> > > >>
+> > > >> I haven't taken anything yet, for things like this I always let it
+> > > >> simmer until people have had a chance to do so.
+> > > >
+> > > > Thanks.  FWIW, that sounds very reasonable to me, but I've seen lot=
+s
+> > > > of different behaviors across subsystems and wanted to make sure we
+> > > > were on the same page.
+> > >
+> > > Sounds fair. BTW, can we stop CC'ing closed lists on patch
+> > > submissions? Getting these:
+> > >
+> > > Your message to Linux-audit awaits moderator approval
+> > >
+> > > on every reply is really annoying.
+> >
+> > We kinda need audit related stuff on the linux-audit list, that's our
+> > mailing list for audit stuff.
+> >
+> > However, I agree that it is crap that the linux-audit list is
+> > moderated, but unfortunately that isn't something I control (I haven't
+> > worked for RH in years, and even then the list owner was really weird
+> > about managing the list).  Occasionally I grumble about moving the
+> > kernel audit development to a linux-audit list on vger but haven't
+> > bothered yet, perhaps this is as good a reason as any.
+> >
+> > Richard, Steve - any chance of opening the linux-audit list?
+>
+> Unfortunately, it really has to be this way. I deleted 10 spam emails
+> yesterday. It seems like some people subscribed to this list are compromi=
+sed.
+> Because everytime there is a legit email, it's followed in a few seconds =
+by a
+> spam email.
+>
+> Anyways, all legit email will be approved without needing to be subscribe=
+d.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/scsi/bfa/bfa_fcbuild.c   | 3 +--
- drivers/scsi/bfa/bfa_fcs_rport.c | 5 +----
- 2 files changed, 2 insertions(+), 6 deletions(-)
+The problem is that other subsystem developers who aren't subscribed
+to the linux-audit list end up getting held mail notices (see the
+comments from Jens).  The moderation of linux-audit, as permissive as
+it may be for proper emails, is a problem for upstream linux audit
+development, I would say much more so than 10/day mails.
 
-diff --git a/drivers/scsi/bfa/bfa_fcbuild.c b/drivers/scsi/bfa/bfa_fcbuild.c
-index df18d9d2af53..a58a73e596c0 100644
---- a/drivers/scsi/bfa/bfa_fcbuild.c
-+++ b/drivers/scsi/bfa/bfa_fcbuild.c
-@@ -1092,8 +1092,7 @@ fc_rftid_build_sol(struct fchs_s *fchs, void *pyld, u32 s_id, u16 ox_id,
- 	memset(rftid, 0, sizeof(struct fcgs_rftid_req_s));
- 
- 	rftid->dap = s_id;
--	memcpy((void *)rftid->fc4_type, (void *)fc4_bitmap,
--		(bitmap_size < 32 ? bitmap_size : 32));
-+	memcpy((void *)rftid->fc4_type, (void *)fc4_bitmap, min_t(u32, bitmap_size, 32));
- 
- 	return sizeof(struct fcgs_rftid_req_s) + sizeof(struct ct_hdr_s);
- }
-diff --git a/drivers/scsi/bfa/bfa_fcs_rport.c b/drivers/scsi/bfa/bfa_fcs_rport.c
-index c21aa37b8adb..d501314be8d8 100644
---- a/drivers/scsi/bfa/bfa_fcs_rport.c
-+++ b/drivers/scsi/bfa/bfa_fcs_rport.c
-@@ -2539,10 +2539,7 @@ bfa_fcs_rport_update(struct bfa_fcs_rport_s *rport, struct fc_logi_s *plogi)
- 	 * - MAX receive frame size
- 	 */
- 	rport->cisc = plogi->csp.cisc;
--	if (be16_to_cpu(plogi->class3.rxsz) < be16_to_cpu(plogi->csp.rxsz))
--		rport->maxfrsize = be16_to_cpu(plogi->class3.rxsz);
--	else
--		rport->maxfrsize = be16_to_cpu(plogi->csp.rxsz);
-+	rport->maxfrsize = min(be16_to_cpu(plogi->class3.rxsz), be16_to_cpu(plogi->csp.rxsz));
- 
- 	bfa_trc(port->fcs, be16_to_cpu(plogi->csp.bbcred));
- 	bfa_trc(port->fcs, port->fabric->bb_credit);
--- 
-2.34.1
+If you are unable/unwilling to switch linux-audit over to an open
+mailing list we should revisit moving over to a vger list; at least
+for upstream kernel development, you are welcome to stick with the
+existing redhat.com list for discussion of your userspace tools.
 
-
-
+--=20
+paul-moore.com
