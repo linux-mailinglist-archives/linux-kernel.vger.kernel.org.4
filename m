@@ -2,198 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C095E67F471
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 04:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AF167F472
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 04:53:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbjA1DxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 22:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S232964AbjA1DxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 22:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjA1DxD (ORCPT
+        with ESMTP id S229737AbjA1DxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 27 Jan 2023 22:53:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBB738EA6
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D92359E7
         for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 19:53:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AF5E61DEC
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA090C433A8
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674877980;
-        bh=88Fy/MGRX8OjMc3tSFQozorT1nOLF89PQoPQzJVYSKw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UmDkP2bjxbg6iKcDj4t8XkqRQylP9wEzTac+qwMewcd2+/+6yaYwiDb7BObdNEs1s
-         iv53qHdIdUmojWFTW0pqmFiG4+falDmpLPCQ4Si9UmoJFsERMccspjCFCEg0evSTle
-         iNLY948OKRcRNCq9MyDnbXklHFVtlvcoCctKoahjn56ejAta2kaA6nJnmVTZhciO+p
-         R8rY/o61wbJQrQoT6OQKGPmCXoyMvgcwws5tA/RPu2H6FW7w/ioAGU+Xd/3OQFpgQl
-         BmMhW6V8jZ0RcHqE+GbWW2vUl0qCDFbNKh7m1CyUO1SVtutcoxDoce5RE5w7lA28uU
-         ha+6xIfXal6Sw==
-Received: by mail-ej1-f44.google.com with SMTP id v6so18557409ejg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 19:53:00 -0800 (PST)
-X-Gm-Message-State: AO0yUKVFoCOsQlGZkWXTP4OziBpGIanvUe4rfhORwcinnU6zlarQRp14
-        4jXWHWxwNR6a9Br2odBtHdwsHQhJZIOpd+SYG0E=
-X-Google-Smtp-Source: AK7set/98L4ZXutZEZt/qPQiBmkXllLtLzJU07Cl0RaXE6qsysDa7c4Jrq4RZG5zOguM7HyYw/sUbiwxGAemhlmy6AM=
-X-Received: by 2002:a17:906:14cf:b0:878:69e5:b797 with SMTP id
- y15-20020a17090614cf00b0087869e5b797mr1820948ejc.228.1674877979109; Fri, 27
- Jan 2023 19:52:59 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P3gTZ6nlFznVxm;
+        Sat, 28 Jan 2023 11:50:58 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 28 Jan 2023 11:52:55 +0800
+Message-ID: <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
+Date:   Sat, 28 Jan 2023 11:52:55 +0800
 MIME-Version: 1.0
-References: <20230126130509.1418251-1-guoren@kernel.org> <0871074a-cafb-a172-f062-6ada6d2a3a41@huawei.com>
- <CAJF2gTTd9V6PKu6_ip21HbXWgN6X-epw8yc_s6XonssStFNdEQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTTd9V6PKu6_ip21HbXWgN6X-epw8yc_s6XonssStFNdEQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 28 Jan 2023 11:52:47 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTCFPsn+8NJaQyHan9h9b7=UzjY-+H4_qi4DaGXJ_kD3w@mail.gmail.com>
-Message-ID: <CAJF2gTTCFPsn+8NJaQyHan9h9b7=UzjY-+H4_qi4DaGXJ_kD3w@mail.gmail.com>
-Subject: Re: [PATCH] riscv: kprobe: Fixup kernel panic when probing an illegal position
-To:     "liaochang (A)" <liaochang1@huawei.com>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com, mhiramat@kernel.org,
-        conor.dooley@microchip.com, penberg@kernel.org,
-        mark.rutland@arm.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   "liaochang (A)" <liaochang1@huawei.com>
+Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
+To:     <guoren@kernel.org>, <palmer@dabbelt.com>,
+        <paul.walmsley@sifive.com>, <mhiramat@kernel.org>,
+        <conor.dooley@microchip.com>, <penberg@kernel.org>,
+        <mark.rutland@arm.com>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+References: <20230126161559.1467374-1-guoren@kernel.org>
+In-Reply-To: <20230126161559.1467374-1-guoren@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 11:46 AM Guo Ren <guoren@kernel.org> wrote:
->
-> On Sat, Jan 28, 2023 at 10:55 AM liaochang (A) <liaochang1@huawei.com> wr=
-ote:
-> >
-> >
-> >
-> > =E5=9C=A8 2023/1/26 21:05, guoren@kernel.org =E5=86=99=E9=81=93:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > The kernel would panic when probed for an illegal position. eg:
-> > >
-> > > (CONFIG_RISCV_ISA_C=3Dn)
-> > >
-> > > echo 'p:hello kernel_clone+0x16 a0=3D%a0' >> kprobe_events
-> > > echo 1 > events/kprobes/hello/enable
-> > > cat trace
-> > >
-> > > Kernel panic - not syncing: stack-protector: Kernel stack
-> > > is corrupted in: __do_sys_newfstatat+0xb8/0xb8
-> > > CPU: 0 PID: 111 Comm: sh Not tainted
-> > > 6.2.0-rc1-00027-g2d398fe49a4d #490
-> > > Hardware name: riscv-virtio,qemu (DT)
-> > > Call Trace:
-> > > [<ffffffff80007268>] dump_backtrace+0x38/0x48
-> > > [<ffffffff80c5e83c>] show_stack+0x50/0x68
-> > > [<ffffffff80c6da28>] dump_stack_lvl+0x60/0x84
-> > > [<ffffffff80c6da6c>] dump_stack+0x20/0x30
-> > > [<ffffffff80c5ecf4>] panic+0x160/0x374
-> > > [<ffffffff80c6db94>] generic_handle_arch_irq+0x0/0xa8
-> > > [<ffffffff802deeb0>] sys_newstat+0x0/0x30
-> > > [<ffffffff800158c0>] sys_clone+0x20/0x30
-> > > [<ffffffff800039e8>] ret_from_syscall+0x0/0x4
-> > > ---[ end Kernel panic - not syncing: stack-protector:
-> > > Kernel stack is corrupted in: __do_sys_newfstatat+0xb8/0xb8 ]---
-> > >
-> > > That is because the kprobe's ebreak instruction broke the kernel's
-> > > original code. The user should guarantee the correction of the probe
-> > > position, but it couldn't make the kernel panic.
-> > >
-> > > This patch adds arch_check_kprobe in arch_prepare_kprobe to prevent a=
-n
-> > > illegal position (Such as the middle of an instruction).
-> > >
-> > > Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > >  arch/riscv/kernel/probes/kprobes.c | 18 ++++++++++++++++++
-> > >  1 file changed, 18 insertions(+)
-> > >
-> > > diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/p=
-robes/kprobes.c
-> > > index f21592d20306..475989f06d6d 100644
-> > > --- a/arch/riscv/kernel/probes/kprobes.c
-> > > +++ b/arch/riscv/kernel/probes/kprobes.c
-> > > @@ -48,6 +48,21 @@ static void __kprobes arch_simulate_insn(struct kp=
-robe *p, struct pt_regs *regs)
-> > >       post_kprobe_handler(p, kcb, regs);
-> > >  }
-> > >
-> > > +static bool __kprobes arch_check_kprobe(struct kprobe *p)
-> > > +{
-> > > +     unsigned long tmp  =3D (unsigned long)p->addr - p->offset;
-> > > +     unsigned long addr =3D (unsigned long)p->addr;
-> > > +
-> > > +     while (tmp <=3D addr) {
-> > > +             if (tmp =3D=3D addr)
-> > > +                     return true;
-> > > +
-> > > +             tmp +=3D GET_INSN_LENGTH(*(kprobe_opcode_t *)tmp);
-> > > +     }
-> > > +
-> > > +     return false;
-> > > +}
-> >
-> > LGTM.
-> >
-> > I have submit a patch to fix the same problem, found at:
-> Oh, I missed that patch. Our goal is the same.
->
-> But it would be best if you reused p->offset, not
-> kallsyms_lookup_size_offset, the p->addr added by _kprobe_addr
-> (kernel/kprobes.c), not just kallsyms_lookup_size_offset. Sure, it
-> works around for the current riscv, but that's not correct.
-Sorry, the above description is a little bit confusing. What I mean is that=
-:
-The p->addr =3D func_entry + p->offset. Not kallsyms_lookup_size_offset.
-Your patch could get the wrong func_entry.
+Hi, Guo Ren
 
->
-> >
-> > https://lore.kernel.org/lkml/20230127130541.1250865-11-chenguokai17@mai=
-ls.ucas.ac.cn/
-> >
-> > So this boundary check is necessary no matter CONFIG_RISCV_ISA_C is ena=
-ble or not, right?
-> Yes, my panic example in the commit log is based on the
-> !CONFIG_RISCV_ISA_C, you couldn't miss that.
->
-> >
-> >
-> > > +
-> > >  int __kprobes arch_prepare_kprobe(struct kprobe *p)
-> > >  {
-> > >       unsigned long probe_addr =3D (unsigned long)p->addr;
-> > > @@ -55,6 +70,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
-> > >       if (probe_addr & 0x1)
-> > >               return -EILSEQ;
-> > >
-> > > +     if (!arch_check_kprobe(p))
-> > > +             return -EILSEQ;
-> > > +
-> > >       /* copy instruction */
-> > >       p->opcode =3D *p->addr;
-> > >
-> >
-> > --
-> > BR,
-> > Liao, Chang
->
->
->
-> --
-> Best Regards
->  Guo Ren
+在 2023/1/27 0:15, guoren@kernel.org 写道:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> The previous implementation was based on the stop_matchine mechanism,
+> which reduced the speed of arm/disarm_kprobe. Using minimum ebreak
+> instruction would get accurate atomicity.
+> 
+> This patch removes the patch_text of riscv, which is based on
+> stop_machine. Then riscv only reserved patch_text_nosync, and developers
+> need to be more careful in dealing with patch_text atomicity.
 
+In the serie of RISCV OPTPROBES [1], it patches a long-jump instructions pair
+AUIPC/JALR in kernel text, so in order to ensure other CPUs does not execute
+in the instructions that will be modified, it is still need to stop other CPUs
+via patch_text API, or you have any better solution to achieve the purpose?
 
+Thanks.
 
---=20
-Best Regards
- Guo Ren
+> 
+> When CONFIG_RISCV_ISA_C=n, the ebreak could replace the whole
+> instruction. When CONFIG_RISCV_ISA_C=y, the patch uses 16-bit length
+> c.ebreak instruction, which may occupy the first part of the 32-bit
+> instruction and leave half the rest of the broken instruction. Because
+> ebreak could detour the flow to skip it, leaving it in the kernel text
+> memory is okay.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/include/asm/patch.h     |  1 -
+>  arch/riscv/kernel/patch.c          | 33 ------------------------------
+>  arch/riscv/kernel/probes/kprobes.c | 29 ++++++++++++++++++--------
+>  3 files changed, 21 insertions(+), 42 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/patch.h b/arch/riscv/include/asm/patch.h
+> index 9a7d7346001e..2500782e6f5b 100644
+> --- a/arch/riscv/include/asm/patch.h
+> +++ b/arch/riscv/include/asm/patch.h
+> @@ -7,6 +7,5 @@
+>  #define _ASM_RISCV_PATCH_H
+>  
+>  int patch_text_nosync(void *addr, const void *insns, size_t len);
+> -int patch_text(void *addr, u32 insn);
+>  
+>  #endif /* _ASM_RISCV_PATCH_H */
+> diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+> index 765004b60513..8bd51ed8b806 100644
+> --- a/arch/riscv/kernel/patch.c
+> +++ b/arch/riscv/kernel/patch.c
+> @@ -98,36 +98,3 @@ int patch_text_nosync(void *addr, const void *insns, size_t len)
+>  	return ret;
+>  }
+>  NOKPROBE_SYMBOL(patch_text_nosync);
+> -
+> -static int patch_text_cb(void *data)
+> -{
+> -	struct patch_insn *patch = data;
+> -	int ret = 0;
+> -
+> -	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
+> -		ret =
+> -		    patch_text_nosync(patch->addr, &patch->insn,
+> -					    GET_INSN_LENGTH(patch->insn));
+> -		atomic_inc(&patch->cpu_count);
+> -	} else {
+> -		while (atomic_read(&patch->cpu_count) <= num_online_cpus())
+> -			cpu_relax();
+> -		smp_mb();
+> -	}
+> -
+> -	return ret;
+> -}
+> -NOKPROBE_SYMBOL(patch_text_cb);
+> -
+> -int patch_text(void *addr, u32 insn)
+> -{
+> -	struct patch_insn patch = {
+> -		.addr = addr,
+> -		.insn = insn,
+> -		.cpu_count = ATOMIC_INIT(0),
+> -	};
+> -
+> -	return stop_machine_cpuslocked(patch_text_cb,
+> -				       &patch, cpu_online_mask);
+> -}
+> -NOKPROBE_SYMBOL(patch_text);
+> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+> index 475989f06d6d..27f8960c321c 100644
+> --- a/arch/riscv/kernel/probes/kprobes.c
+> +++ b/arch/riscv/kernel/probes/kprobes.c
+> @@ -24,12 +24,18 @@ post_kprobe_handler(struct kprobe *, struct kprobe_ctlblk *, struct pt_regs *);
+>  static void __kprobes arch_prepare_ss_slot(struct kprobe *p)
+>  {
+>  	unsigned long offset = GET_INSN_LENGTH(p->opcode);
+> +#ifdef CONFIG_RISCV_ISA_C
+> +	u32 opcode = __BUG_INSN_16;
+> +#else
+> +	u32 opcode = __BUG_INSN_32;
+> +#endif
+>  
+>  	p->ainsn.api.restore = (unsigned long)p->addr + offset;
+>  
+> -	patch_text(p->ainsn.api.insn, p->opcode);
+> -	patch_text((void *)((unsigned long)(p->ainsn.api.insn) + offset),
+> -		   __BUG_INSN_32);
+> +	patch_text_nosync(p->ainsn.api.insn, &p->opcode, offset);
+> +	patch_text_nosync((void *)((unsigned long)(p->ainsn.api.insn) + offset),
+> +			  &opcode, GET_INSN_LENGTH(opcode));
+> +
+
+I have submit a similar optimization for patching single-step slot [2].
+And it is indeed safe to use compact breakpoint in single-step slot no matter
+what type of patched instruction is.
+
+Thanks.
+
+>  }
+>  
+>  static void __kprobes arch_prepare_simulate(struct kprobe *p)
+> @@ -114,16 +120,23 @@ void *alloc_insn_page(void)
+>  /* install breakpoint in text */
+>  void __kprobes arch_arm_kprobe(struct kprobe *p)
+>  {
+> -	if ((p->opcode & __INSN_LENGTH_MASK) == __INSN_LENGTH_32)
+> -		patch_text(p->addr, __BUG_INSN_32);
+> -	else
+> -		patch_text(p->addr, __BUG_INSN_16);
+> +#ifdef CONFIG_RISCV_ISA_C
+> +	u32 opcode = __BUG_INSN_16;
+> +#else
+> +	u32 opcode = __BUG_INSN_32;
+> +#endif
+> +	patch_text_nosync(p->addr, &opcode, GET_INSN_LENGTH(opcode));
+
+Sounds good, but it will leave some RVI instruction truncated in kernel text,
+i doubt kernel behavior depends on the rest of the truncated instruction, well,
+it needs more strict testing to prove my concern :)
+
+>  }
+>  
+>  /* remove breakpoint from text */
+>  void __kprobes arch_disarm_kprobe(struct kprobe *p)
+>  {
+> -	patch_text(p->addr, p->opcode);
+> +#ifdef CONFIG_RISCV_ISA_C
+> +	u32 opcode = __BUG_INSN_16;
+> +#else
+> +	u32 opcode = __BUG_INSN_32;
+> +#endif
+> +	patch_text_nosync(p->addr, &p->opcode, GET_INSN_LENGTH(opcode));
+>  }
+>  
+>  void __kprobes arch_remove_kprobe(struct kprobe *p)
+
+[1] - https://lore.kernel.org/lkml/20230127130541.1250865-9-chenguokai17@mails.ucas.ac.cn/
+[2] - https://lore.kernel.org/lkml/20220927022435.129965-1-liaochang1@huawei.com/T/
+
+-- 
+BR,
+Liao, Chang
