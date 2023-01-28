@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE62567F664
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 09:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14DB867F66E
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 09:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234027AbjA1IhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 03:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
+        id S234070AbjA1Ik1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 03:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233967AbjA1IhM (ORCPT
+        with ESMTP id S232858AbjA1IkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 03:37:12 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BD737F0F;
-        Sat, 28 Jan 2023 00:36:25 -0800 (PST)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Sat, 28 Jan
- 2023 16:36:23 +0800
-Message-ID: <363c7666-30d6-698c-eefa-d9ee46061712@amlogic.com>
-Date:   Sat, 28 Jan 2023 16:36:23 +0800
+        Sat, 28 Jan 2023 03:40:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1141CF6D;
+        Sat, 28 Jan 2023 00:40:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A9A3B8123D;
+        Sat, 28 Jan 2023 08:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B5F2BC4339E;
+        Sat, 28 Jan 2023 08:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674895217;
+        bh=jDA4w6y762efolnnY+K19QZa9th064jEA9pb35qB3NA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cWb7s0zteTWg1CwHO40MmFcOhvStCZqNJfWQPW1StLqPifSSlrCEOJpzEkQyqb9eP
+         0ya1v17mKMZBYgGqWSCnx3/EFqnzoicbRIvzYXf//0t9gthJJVwK+FdxB7XyMF3DSW
+         qdjLEyndY6NmEEDP9Mb1ABQyPXmT+4YTx7Ixl4gM7wEjGmI8OZeidmKoF+SCynXS05
+         pHR5vIcvMy3vHysM7GKctr95nosL9Z4GRCersdVmyPuGSOsdMfJVTBY73EhPm0egtd
+         tHc2p9Nnm7oqobpMJQPn6YSbJPrTZLOG6yFtszz5YrDGBCQm6sbN1xXpiDSfiDfUif
+         bv1TKGpKoPkBA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9153AF83ED3;
+        Sat, 28 Jan 2023 08:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V6 2/3] clk: meson: S4: add support for Amlogic S4 SoC PLL
- clock driver
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     "kelvin . zhang" <Kelvin.Zhang@amlogic.com>,
-        "qi . duan" <qi.duan@amlogic.com>
-References: <20230116074214.2326-1-yu.tu@amlogic.com>
- <20230116074214.2326-3-yu.tu@amlogic.com>
- <1jedrqyd3w.fsf@starbuckisacylon.baylibre.com>
- <55659095-86d7-91b6-2db6-5cdca228bc09@amlogic.com>
- <1j1qnpy1wh.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1j1qnpy1wh.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: qrtr: free memory on error path in radix_tree_insert()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167489521759.20245.14249079137752848335.git-patchwork-notify@kernel.org>
+Date:   Sat, 28 Jan 2023 08:40:17 +0000
+References: <20230125134831.8090-1-n.petrova@fintech.ru>
+In-Reply-To: <20230125134831.8090-1-n.petrova@fintech.ru>
+To:     Natalia Petrova <n.petrova@fintech.ru>
+Cc:     mani@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,155 +58,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 25 Jan 2023 16:48:31 +0300 you wrote:
+> Function radix_tree_insert() returns errors if the node hasn't
+> been initialized and added to the tree.
+> 
+> "kfree(node)" and return value "NULL" of node_get() help
+> to avoid using unclear node in other calls.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> [...]
+
+Here is the summary with links:
+  - net: qrtr: free memory on error path in radix_tree_insert()
+    https://git.kernel.org/netdev/net/c/29de68c2b32c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 2023/1/20 17:43, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Fri 20 Jan 2023 at 10:58, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Hi Jerome,
->>
->> On 2023/1/19 19:20, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>> On Mon 16 Jan 2023 at 15:42, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>>> Add the S4 PLL clock controller driver in the s4 SoC family.
->>>>
->>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>> ---
->>> [...]
->>>
->>>> +
->>>> +static struct clk_regmap s4_fclk_div2 = {
->>>> +	.data = &(struct clk_regmap_gate_data){
->>>> +		.offset = ANACTRL_FIXPLL_CTRL1,
->>>> +		.bit_idx = 24,
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data){
->>>> +		.name = "fclk_div2",
->>>> +		.ops = &clk_regmap_gate_ro_ops,
->>> On the previous SoC, these fixed divider gate were not read-only.
->>> They are marked as critical when necessary, with the appropriate
->>> comment.
->>> Why is it different on the s4 ?
->>
->> In fact, this part of the SOC is no different from the previous G12a/b and
->> so on.
->>
->> I remember that my first version was made according to G12A, and I changed
->> this way under your suggestion.
->>
->> Maybe you were busy and forgot. For me, this mode and the previous g12a
->> mode function is ok. I can do either. So now how do you decide to go that
->> way?
-> 
-> No I did not forgot.
-> I told you that cannot put CRITICAL (or IGNORE_USED) without explaining
-> why. I stand by this. Same goes for RO ops.
-> 
-
-I will add an explanation.
-
->>
->>>
->>>> +		.parent_hws = (const struct clk_hw *[]) {
->>>> +			&s4_fclk_div2_div.hw
->>>> +		},
->>>> +		.num_parents = 1,
->>>> +	},
->>>> +};
->>>> +
->>> [...]
->>>
->>>> +#ifndef __MESON_S4_PLL_H__
->>>> +#define __MESON_S4_PLL_H__
->>>> +
->>>> +/* ANA_CTRL - Registers
->>>> + * REG_BASE:  REGISTER_BASE_ADDR = 0xfe008000
->>> This multi-line comment style is wrong in clk/
->>> REG_BASE is not used so I'm not sure this is useful
->>
->> I will remove REG_BASE and  change this format in next version.
->>
->>>
->>>> + */
->>>> +#define ANACTRL_FIXPLL_CTRL0                       0x040
->>>> +#define ANACTRL_FIXPLL_CTRL1                       0x044
->>>> +#define ANACTRL_FIXPLL_CTRL2                       0x048
->>>> +#define ANACTRL_FIXPLL_CTRL3                       0x04c
->>>> +#define ANACTRL_FIXPLL_CTRL4                       0x050
->>>> +#define ANACTRL_FIXPLL_CTRL5                       0x054
->>>> +#define ANACTRL_FIXPLL_CTRL6                       0x058
->>>> +#define ANACTRL_FIXPLL_STS                         0x05c
->>>> +#define ANACTRL_GP0PLL_CTRL0                       0x080
->>>> +#define ANACTRL_GP0PLL_CTRL1                       0x084
->>>> +#define ANACTRL_GP0PLL_CTRL2                       0x088
->>>> +#define ANACTRL_GP0PLL_CTRL3                       0x08c
->>>> +#define ANACTRL_GP0PLL_CTRL4                       0x090
->>>> +#define ANACTRL_GP0PLL_CTRL5                       0x094
->>>> +#define ANACTRL_GP0PLL_CTRL6                       0x098
->>>> +#define ANACTRL_GP0PLL_STS                         0x09c
->>>> +#define ANACTRL_HIFIPLL_CTRL0                      0x100
->>>> +#define ANACTRL_HIFIPLL_CTRL1                      0x104
->>>> +#define ANACTRL_HIFIPLL_CTRL2                      0x108
->>>> +#define ANACTRL_HIFIPLL_CTRL3                      0x10c
->>>> +#define ANACTRL_HIFIPLL_CTRL4                      0x110
->>>> +#define ANACTRL_HIFIPLL_CTRL5                      0x114
->>>> +#define ANACTRL_HIFIPLL_CTRL6                      0x118
->>>> +#define ANACTRL_HIFIPLL_STS                        0x11c
->>>> +#define ANACTRL_MPLL_CTRL0                         0x180
->>>> +#define ANACTRL_MPLL_CTRL1                         0x184
->>>> +#define ANACTRL_MPLL_CTRL2                         0x188
->>>> +#define ANACTRL_MPLL_CTRL3                         0x18c
->>>> +#define ANACTRL_MPLL_CTRL4                         0x190
->>>> +#define ANACTRL_MPLL_CTRL5                         0x194
->>>> +#define ANACTRL_MPLL_CTRL6                         0x198
->>>> +#define ANACTRL_MPLL_CTRL7                         0x19c
->>>> +#define ANACTRL_MPLL_CTRL8                         0x1a0
->>>> +#define ANACTRL_MPLL_STS                           0x1a4
->>>> +#define ANACTRL_HDMIPLL_CTRL0                      0x1c0
->>>> +#define ANACTRL_HDMIPLL_CTRL1                      0x1c4
->>>> +#define ANACTRL_HDMIPLL_CTRL2                      0x1c8
->>>> +#define ANACTRL_HDMIPLL_CTRL3                      0x1cc
->>>> +#define ANACTRL_HDMIPLL_CTRL4                      0x1d0
->>>> +#define ANACTRL_HDMIPLL_CTRL5                      0x1d4
->>>> +#define ANACTRL_HDMIPLL_CTRL6                      0x1d8
->>>> +#define ANACTRL_HDMIPLL_STS                        0x1dc
->>>> +#define ANACTRL_HDMIPLL_VLOCK                      0x1e4
->>>> +
->>>> +/*
->>>> + * CLKID index values
->>>> + *
->>>> + * These indices are entirely contrived and do not map onto the hardware.
->>>> + * It has now been decided to expose everything by default in the DT header:
->>>> + * include/dt-bindings/clock/axg-clkc.h. Only the clocks ids we don't want
->>>> + * to expose, such as the internal muxes and dividers of composite clocks,
->>>> + * will remain defined here.
->>>> + */
->>>> +#define CLKID_FIXED_PLL_DCO		0
->>>> +#define CLKID_FCLK_DIV2_DIV		2
->>>> +#define CLKID_FCLK_DIV3_DIV		4
->>>> +#define CLKID_FCLK_DIV4_DIV		6
->>>> +#define CLKID_FCLK_DIV5_DIV		8
->>>> +#define CLKID_FCLK_DIV7_DIV		10
->>>> +#define CLKID_FCLK_DIV2P5_DIV		12
->>>> +#define CLKID_GP0_PLL_DCO		14
->>>> +#define CLKID_HIFI_PLL_DCO		16
->>>> +#define CLKID_HDMI_PLL_DCO		18
->>>> +#define CLKID_HDMI_PLL_OD		19
->>>> +#define CLKID_MPLL_50M_DIV		21
->>>> +#define CLKID_MPLL_PREDIV		23
->>>> +#define CLKID_MPLL0_DIV			24
->>>> +#define CLKID_MPLL1_DIV			26
->>>> +#define CLKID_MPLL2_DIV			28
->>>> +#define CLKID_MPLL3_DIV			30
->>>> +
->>>> +#define NR_PLL_CLKS			32
->>>> +/* include the CLKIDs that have been made part of the DT binding */
->>>> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
->>>> +
->>>> +#endif /* __MESON_S4_PLL_H__ */
->>>
-> 
