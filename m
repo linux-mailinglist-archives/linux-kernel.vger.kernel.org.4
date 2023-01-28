@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DDB67FB54
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 23:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A8A67FB5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 23:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234813AbjA1WV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 17:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
+        id S234853AbjA1WbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 17:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjA1WVz (ORCPT
+        with ESMTP id S229637AbjA1WbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 17:21:55 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E36C23121
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 14:21:54 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id m2so22038833ejb.8
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 14:21:54 -0800 (PST)
+        Sat, 28 Jan 2023 17:31:12 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E8123866;
+        Sat, 28 Jan 2023 14:31:09 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id m199so10094121ybm.4;
+        Sat, 28 Jan 2023 14:31:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dl5J8IF0UNMDD8D3GziaB4fqdX3NHGyUny50QfP+wPg=;
-        b=WhZtk1FCMUYnUbQ1h/xNKX2OO6yUTcslHI9H7jV6vIZE/fpJgN5x6PmCES9jwDTRMY
-         +Qre0VFSTTJDyNPrxQuIEjxbvkiTFATfblWECLSnbv1ZLfzI7jwGTGy8u1nYehC5y5PE
-         qxfxk8RTSbuCAwh8PD8R3iI3AgZn0IM2DgSe9s8Bmfl2nFhZBacWXSioWJYdA+5/BYLe
-         m5YfMxHl2tQpkzx4Bcv3slySTMe7+7tlvJnkADFvg8yg+FWgxvr1it6fo/3CTNyYEx9V
-         vbOswhEYWPRtF8q51YgbHhJGVJqydzGf0spFo9ojhGipVOhsHYg5DPzECxYR0ksDYa6r
-         Gb/A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gq3UXuY96IZ2a/ozeYCG10SAJUx0PEg/adXlBHwr8e8=;
+        b=eIAhUQ1nNA2M/sdDSFQfpRPBbPGWVJPKwENHe8GqyOMTuJ0pn2A6rJwnWzb2Pgqf4C
+         YlmZn3aSHmJPt5bTI0DTwBTn1WVi0/NsrsdaIqesNY+ZgOsQwRc84bXIbxEWj3+ByORK
+         wjgF6OU5a6RXvg1M08LkTpbFdXkpKn4tYYh1UeGewKSUdKRpKBIxClmbPLGn2bLKglul
+         b0KMJyqWdrJgNTW5RFtiN6Yw61eXu1pPm9qQn11v2M3h8lamlvDjgSq+6nBBwzdVPawD
+         qggCVJgytLQp4g8zCJqAJjLuJUlxO+ZoxfIr9+s9yIeldOXV2iVHPJgnQdqjtUNP8K+v
+         GOxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Dl5J8IF0UNMDD8D3GziaB4fqdX3NHGyUny50QfP+wPg=;
-        b=sGiYibFsnWdWdeh+2yrZbb9mDF2BpEixwf7undrcfkCE9LzfcsmRfsUdPmQvagVH9s
-         IGa2EOC6ekXcBDW7atZEPZRu/8cC7THt9QdgSrgrXPF02OLn+5SDgeDCbeGFg6p/SZVF
-         5v1NZvvgqEFbI07ygrh6aIHqeGPGKFset/ZcHjqoRbN5ruuFUylMtlduaqyr7jkURP2A
-         qDSULLF+Y6qdHtPkanzaUoPzX+wgqv+If1NHYIlSq7lNepYUZrT2hrMUvC85EUl2SR99
-         iwnOlUtgOkxWpVUOL4zn9m+Yb8WjOmc/6RilpwQPN5ynLbitdql3+jOjByZ36rLEe2eT
-         Ycww==
-X-Gm-Message-State: AO0yUKXRmJPoxhSv8Z9stDOUEsZgXHpP9omoHLNBkJDj3NV5TEU1lbXb
-        YDP9Q6/HR95mq58N34I1XUc=
-X-Google-Smtp-Source: AK7set+mp0T/Bn4w6svd/9Ya7cp9J+GNgTccE2ClSDl6cWpmBNju5hxNlakkmnR/eqxRPN94c+iBTg==
-X-Received: by 2002:a17:907:3e13:b0:881:4d98:fe2e with SMTP id hp19-20020a1709073e1300b008814d98fe2emr5199135ejc.29.1674944511307;
-        Sat, 28 Jan 2023 14:21:51 -0800 (PST)
-Received: from andrea ([151.251.48.98])
-        by smtp.gmail.com with ESMTPSA id fy15-20020a1709069f0f00b0084c62b7b7d8sm4372567ejc.187.2023.01.28.14.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 14:21:50 -0800 (PST)
-Date:   Sat, 28 Jan 2023 23:21:43 +0100
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        paulmck@kernel.org, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
-        quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y9Wf9/rF4cVNCKeS@andrea>
-References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
- <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
- <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
- <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
- <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
- <Y9WeOTmGCCfjMUtG@andrea>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gq3UXuY96IZ2a/ozeYCG10SAJUx0PEg/adXlBHwr8e8=;
+        b=gOFx9uUjaqgoRj4+5eqLiyt6zirUR3/2MPFqCJXngTTggzM09X2RoDWtWRwZc5x03m
+         WcYBB4b1bxgUHvsrTsAIwkrwNxhV+jmdqZ3/UGFhLSHeu2mJKQV1gGUisL6JB3dNppbK
+         xNKF0oo18/AYSm++VcqtWh4AX711WwCdeHeAHN03RaSmG7dF4RwSiyLBPhKi93uSD4E4
+         bODJJBAbAW8GOU7oAQMG4OHfjRX57yeGvN7ErqYXv6/WTy1sjbW/0fRfy/W3ASgtn5r1
+         aqVzo5cYwOTM1/0ZBj6eHiyh1NT/aVc8ftrWvkgQScjsZEcELq+J1qGA+lW6kTz1ajBB
+         spFQ==
+X-Gm-Message-State: AFqh2kroCwuwb/3Cz8dRxtwyQpPvwgmyvAjrlT+sPxHOsceWf2rAS7JJ
+        8aM+HiR5N0b7HAjUqDCiT7KSfEpfMBGMTQD3678=
+X-Google-Smtp-Source: AMrXdXudUBRygvpqBA/djU59Mnt9ZklHyflmHzzXm8ltVAxQCE0xGNZEx4bYcQEUYVA7PBOG5YuKBN2fHYVKxY9tJm0=
+X-Received: by 2002:a25:8d03:0:b0:7bb:3a71:263d with SMTP id
+ n3-20020a258d03000000b007bb3a71263dmr2993234ybl.425.1674945068778; Sat, 28
+ Jan 2023 14:31:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9WeOTmGCCfjMUtG@andrea>
+References: <20230128055214.33648-1-jamiemdouglass@gmail.com> <f8590655-3869-d905-ebad-347b8c9ae8dd@linaro.org>
+In-Reply-To: <f8590655-3869-d905-ebad-347b8c9ae8dd@linaro.org>
+From:   Jamie Douglass <jamiemdouglass@gmail.com>
+Date:   Sun, 29 Jan 2023 09:30:57 +1100
+Message-ID: <CAETzdaEjfCbaGj8UeBsAZGbZnvOHgMP9KTCyxsY46qL5MxUhzg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: msm8992-lg-bullhead: Correct memory
+ overlap with SMEM region
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Petr Vorel <petr.vorel@gmail.com>,
+        Dominik Kobinski <dominikkobinski314@gmail.com>,
+        Konrad Dybico <konrad.dybico@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -81,34 +76,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 11:14:17PM +0100, Andrea Parri wrote:
-> > Evidently the plain-coherence check rules out x=1 at the 
-> > end, because when I relax that check, x=1 becomes a possible result.  
-> > Furthermore, the graphical output confirms that this execution has a 
-> > ww-incoh edge from Wx=2 to Wx=1.  But there is no ww-vis edge from Wx=1 
-> > to Wx=2!  How can this be possible?  It seems like a bug in herd7.
-> 
-> By default, herd7 performs some edges removal when generating the
-> graphical outputs.  The option -showraw can be useful to increase
-> the "verbosity", for example,
-> 
->   [with "exists (x=2)", output in /tmp/T.dot]
+My apologies, I completely forgot that I did that!
 
-This was meant to be "exists (x=1)".
+That change was necessary, because extending the reserved region
+past 0x7000000 creates another memory overlap, this time with the
+mpss_mem region:
+               OF: reserved mem: OVERLAP DETECTED!
+               reserved@6c00000 (0x0000000006c00000--0x0000000007200000)
+               overlaps with memory@7000000
+               (0x0000000007000000--0x000000000ca00000)
 
-  Andrea
+So my original patch is correct.
+
+Thanks,
+Jamie
 
 
->   $ herd7 -conf linux-kernel.cfg T.litmus -show prop -o /tmp -skipchecks plain-coherence -doshow ww-vis -showraw ww-vis
-> 
-> 
-> > Furthermore, the execution with x=2 at the end doesn't have either a 
-> > ww-vis or a ww-nonrace edge betwen Wx=1 and Wx=2.  So why isn't there a 
-> > ww-race edge?
-> 
-> And similarly
-> 
->   [with "exists (x=2)"]
->   $ herd7 -conf linux-kernel.cfg T.litmus -show prop -o /tmp -doshow ww-vis,ww-nonrace -showraw ww-vis,ww-nonrace
-> 
->   Andrea
+On Sun, 29 Jan 2023 at 01:30, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 28.01.2023 06:52, Jamie Douglass wrote:
+> > A previously committed reserved memory region was overlapping with the
+> > SMEM memory region, causing an error message in dmesg:
+> >       OF: reserved mem: OVERLAP DETECTED!
+> >       reserved@5000000 (0x0000000005000000--0x0000000007200000)
+> >       overlaps with smem_region@6a00000
+> >       (0x0000000006a00000--0x0000000006c00000)
+> > This patch splits the previous reserved memory region into two
+> > reserved sections either side of the SMEM memory region.
+> >
+> > Signed-off-by: Jamie Douglass <jamiemdouglass@gmail.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
+> > index 79de9cc395c4..5e375ea73c79 100644
+> > --- a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
+> > @@ -53,8 +53,13 @@ cont_splash_mem: memory@3400000 {
+> >                       no-map;
+> >               };
+> >
+> > -             removed_region: reserved@5000000 {
+> > -                     reg = <0 0x05000000 0 0x2200000>;
+> > +             reserved@5000000 {
+> > +                     reg = <0x0 0x05000000 0x0 0x1a00000>;
+> > +                     no-map;
+> > +             };
+> > +
+> > +             reserved@6c00000 {
+> > +                     reg = <0x0 0x06c00000 0x0 0x400000>;
+> I think you made this 0x200000 too small, unless there
+> is supposed to be functional change.
+>
+> Konrad
+> >                       no-map;
+> >               };
+> >       };
