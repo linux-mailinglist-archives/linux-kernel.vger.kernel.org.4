@@ -2,140 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7A967F93B
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 16:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5399D67F93D
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 16:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjA1PnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 10:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S232964AbjA1PnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 10:43:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjA1PnG (ORCPT
+        with ESMTP id S229811AbjA1PnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 10:43:06 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91721A4A3;
-        Sat, 28 Jan 2023 07:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=wUi74KtdSXKX64QHZXYmsThtpxECPWzUkYIa0sd0LmY=; b=jnIR1VMq6UWPmOrvgnWOOpnbA+
-        6ZGyIdlLZvqEB2ftxunczawqzCSJWak1wSSGkFKhFR6MzCQCl7yspkAr1/RuEiPAQzZavjy/QI6NX
-        BgPQKRD288e+EDHbx/xVyKvWIIKaDkQrmA1VzHeopSMh47KZZdy2cwgFjPxvdDleGMXM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pLnLy-003SOt-92; Sat, 28 Jan 2023 16:42:54 +0100
-Date:   Sat, 28 Jan 2023 16:42:54 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Frank Sae <Frank.Sae@motor-comm.com>
-Cc:     Peter Geis <pgwipeout@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, xiaogang.fan@motor-comm.com,
-        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 5/5] net: phy: Add driver for Motorcomm
- yt8531 gigabit ethernet phy
-Message-ID: <Y9VCfkzjHBDjXmet@lunn.ch>
-References: <20230128031314.19752-1-Frank.Sae@motor-comm.com>
- <20230128031314.19752-6-Frank.Sae@motor-comm.com>
+        Sat, 28 Jan 2023 10:43:10 -0500
+Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B0318B35
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 07:43:08 -0800 (PST)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id LnM9phWDqeUnHLnM9p9nzv; Sat, 28 Jan 2023 16:43:06 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 28 Jan 2023 16:43:06 +0100
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] dm-crypt: Slightly simplify crypt_set_keyring_key()
+Date:   Sat, 28 Jan 2023 16:43:00 +0100
+Message-Id: <c3d25e24503d9e625cf46e9fb4ee55f10bfdd398.1674920529.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128031314.19752-6-Frank.Sae@motor-comm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 11:13:14AM +0800, Frank Sae wrote:
->  Add a driver for the motorcomm yt8531 gigabit ethernet phy. We have
->  verified the driver on AM335x platform with yt8531 board. On the
->  board, yt8531 gigabit ethernet phy works in utp mode, RGMII
->  interface, supports 1000M/100M/10M speeds, and wol(magic package).
-> 
-> Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
-> ---
->  drivers/net/phy/Kconfig     |   2 +-
->  drivers/net/phy/motorcomm.c | 204 +++++++++++++++++++++++++++++++++++-
->  2 files changed, 203 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-> index f5df2edc94a5..dc2f7d0b0cd8 100644
-> --- a/drivers/net/phy/Kconfig
-> +++ b/drivers/net/phy/Kconfig
-> @@ -257,7 +257,7 @@ config MOTORCOMM_PHY
->  	tristate "Motorcomm PHYs"
->  	help
->  	  Enables support for Motorcomm network PHYs.
-> -	  Currently supports the YT8511, YT8521, YT8531S Gigabit Ethernet PHYs.
-> +	  Currently supports the YT8511, YT8521, YT8531, YT8531S Gigabit Ethernet PHYs.
+Use strchr() instead of strpbrk() when there is only 1 element in the set
+of characters to look for.
+This potentially saves a few cycles.
 
-This is O.K. for now, but when you add the next PHY, please do this in
-some other way, because it does not scale. Maybe just say YT85xx?
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+On my machine, the diff of the .s file shows that the generated code is
+the same:
 
->  
->  config NATIONAL_PHY
->  	tristate "National Semiconductor PHYs"
-> diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-> index 9559fc52814f..f1fc912738e0 100644
-> --- a/drivers/net/phy/motorcomm.c
-> +++ b/drivers/net/phy/motorcomm.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0+
->  /*
-> - * Motorcomm 8511/8521/8531S PHY driver.
-> + * Motorcomm 8511/8521/8531/8531S PHY driver.
->   *
->   * Author: Peter Geis <pgwipeout@gmail.com>
->   * Author: Frank <Frank.Sae@motor-comm.com>
-> @@ -14,6 +14,7 @@
->  
->  #define PHY_ID_YT8511		0x0000010a
->  #define PHY_ID_YT8521		0x0000011A
-> +#define PHY_ID_YT8531		0x4f51e91b
->  #define PHY_ID_YT8531S		0x4F51E91A
->  
->  /* YT8521/YT8531S Register Overview
-> @@ -517,6 +518,68 @@ static int ytphy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
->  	return phy_restore_page(phydev, old_page, ret);
->  }
->  
-> +static int yt8531_set_wol(struct phy_device *phydev,
-> +			  struct ethtool_wolinfo *wol)
-> +{
-> +	struct net_device *p_attached_dev;
-> +	const u16 mac_addr_reg[] = {
-> +		YTPHY_WOL_MACADDR2_REG,
-> +		YTPHY_WOL_MACADDR1_REG,
-> +		YTPHY_WOL_MACADDR0_REG,
-> +	};
-> +	const u8 *mac_addr;
-> +	u16 mask, val;
-> +	int ret;
-> +	u8 i;
-> +
-> +	if (wol->wolopts & WAKE_MAGIC) {
-> +		p_attached_dev = phydev->attached_dev;
-> +		if (!p_attached_dev)
-> +			return -ENODEV;
-> +
-> +		mac_addr = (const u8 *)p_attached_dev->dev_addr;
-> +		if (!is_valid_ether_addr(mac_addr))
-> +			return -EINVAL;
+-- drivers/md/dm-crypt.old.s	2023-01-28 16:28:08.968026902 +0100
+++ drivers/md/dm-crypt.s	2023-01-28 16:28:32.056027335 +0100
+@@ -17950,7 +17950,7 @@
+ 	call	__sanitizer_cov_trace_const_cmp1	#
+ 	testb	%bl, %bl	# _56
+ 	jne	.L928	#,
+-# drivers/md/dm-crypt.c:2490: 	key_desc = strpbrk(key_string, ":");
++# drivers/md/dm-crypt.c:2490: 	key_desc = strchr(key_string, ':');
+ 	call	__sanitizer_cov_trace_pc	#
+ 	movl	$58, %esi	#,
+ 	movq	%r12, %rdi	# key_string,
 
-Have you ever seen that happen? It suggests the MAC driver has a bug,
-not validating its MAC address.
+This is done thanks to fold_builtin_strpbrk() in gcc which already
+transforms such patterns.
+(https://github.com/gcc-mirror/gcc/blob/master/gcc/builtins.cc#L10238)
+---
+ drivers/md/dm-crypt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Also, does the PHY actually care? Will the firmware crash if given a
-bad MAC address?
+diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
+index 2653516bcdef..b9c41fd42e8a 100644
+--- a/drivers/md/dm-crypt.c
++++ b/drivers/md/dm-crypt.c
+@@ -2487,7 +2487,7 @@ static int crypt_set_keyring_key(struct crypt_config *cc, const char *key_string
+ 	}
+ 
+ 	/* look for next ':' separating key_type from key_description */
+-	key_desc = strpbrk(key_string, ":");
++	key_desc = strchr(key_string, ':');
+ 	if (!key_desc || key_desc == key_string || !strlen(key_desc + 1))
+ 		return -EINVAL;
+ 
+-- 
+2.34.1
 
-    Andrew
