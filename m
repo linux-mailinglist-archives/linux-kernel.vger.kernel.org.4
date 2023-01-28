@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0FC67FA4D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 19:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C738167FA50
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 19:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjA1S6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 13:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S231263AbjA1S6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 13:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjA1S56 (ORCPT
+        with ESMTP id S232881AbjA1S6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 13:57:58 -0500
+        Sat, 28 Jan 2023 13:58:44 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2337E12040;
-        Sat, 28 Jan 2023 10:57:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68966113FE
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 10:58:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674932277; x=1706468277;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C/Fj/U8MY72zX0xzMfuMhE7ROEG03cf3gcA25/GnMq4=;
-  b=ZxFri32kxuhz7r/YRQp3NR3rOLbvO4EsGUMqrivjqoDNS/vRr1GN51JO
-   6F7ewltH8MnE1dJ1H2KMZeN1DVEZlceEOBZplh5xc72noosQ7vJyFjtJy
-   zx0tUw9X6JMPXQ+/rzeILG8UPN/aH1WQpBInb82iozhRpaWee0FbCWtaI
-   Z9vmDm/GNzXvJFF8vit2aEC6MOYdTCfiAxKYlywXWjZZtF78vmguSQAY2
-   dvQOzZYivKGTZgEngl90w9byyS55ZvwVN8xLLB79+gdjzr1LUKOOu/3ez
-   7VyByN3j3uUS3Oqa4HXVIn1sRtO55U968lMUWIbvRGwF6nNln1mACB96a
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="325015347"
+  t=1674932316; x=1706468316;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0igZZSZ35WPHNtplLHFg7EG3QA4Q2VrQiwYSgkKTf7o=;
+  b=mjhOvGwX8KLe+Uc4ITEUFY6h7366XK7rEEXX7w7/bS0fwdGw6O9LFCVo
+   bxQnt9fQV/vutssvqlVsldF9Ngdu8wZpN1c8Fr1i+3G3tVoFFbJeV+dhS
+   ai8mhi5+KDOkJd2hmqaCeGQbb5lriM7sVbaHfRnqgLuLnV4CyrhqOgHcJ
+   Z12irbWSwGyrX9FjkSA0zFsab2sLh1ID7bvV3yde0wqxpZfZWOHWFwJ0m
+   DYQpc4Hr4RIOmSEVWWnDqln3f7olxjO6dlT4zs7xHphQka+z0N7yVCszt
+   bUIdongUfbE7EK3i5q+jirmnezHKKpNatJZuhF7c2/eeNjpnKDHQZM6IZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="325015396"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="325015347"
+   d="scan'208";a="325015396"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 10:57:53 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 10:58:17 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="771960911"
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="771960983"
 X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="771960911"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 28 Jan 2023 10:57:47 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLqOY-000109-2z;
-        Sat, 28 Jan 2023 18:57:46 +0000
-Date:   Sun, 29 Jan 2023 02:57:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Guillaume Ranquet <granquet@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jitao shi <jitao.shi@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>, CK Hu <ck.hu@mediatek.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mac.shen@mediatek.com, linux-phy@lists.infradead.org,
-        Guillaume Ranquet <granquet@baylibre.com>,
-        devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, stuart.lee@mediatek.com
-Subject: Re: [PATCH v5 3/3] phy: mediatek: add support for phy-mtk-hdmi-mt8195
-Message-ID: <202301290245.KWRXz5OS-lkp@intel.com>
-References: <20220919-v5-3-cfb0e5ad29b2@baylibre.com>
+   d="scan'208";a="771960983"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Jan 2023 10:58:16 -0800
+Received: from [10.209.53.179] (shedrick-mobl.amr.corp.intel.com [10.209.53.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 1C6F158093E;
+        Sat, 28 Jan 2023 10:58:15 -0800 (PST)
+Message-ID: <7c4b3e4e-1c5d-04f1-1891-84f686c94736@linux.intel.com>
+Date:   Sat, 28 Jan 2023 13:58:14 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919-v5-3-cfb0e5ad29b2@baylibre.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V3 0/7] iommu/vt-d: Support performance monitoring for
+ IOMMU
+To:     Baolu Lu <baolu.lu@linux.intel.com>, joro@8bytes.org,
+        will@kernel.org, dwmw2@infradead.org, robin.murphy@arm.com,
+        robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     yu-cheng.yu@intel.com
+References: <20230120165408.500511-1-kan.liang@linux.intel.com>
+ <723f8070-1f03-dcab-4592-bceaf9cbdf07@linux.intel.com>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <723f8070-1f03-dcab-4592-bceaf9cbdf07@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,38 +73,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guillaume,
 
-Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on e2f86c02fdc96ca29ced53221a3cbf50aa6f8b49]
+On 2023-01-28 2:10 a.m., Baolu Lu wrote:
+> On 2023/1/21 0:54, kan.liang@linux.intel.com wrote:
+>> From: Kan Liang <kan.liang@linux.intel.com>
+>>
+>> Changes since V2:
+>> - Move ecmd_submit_sync() to iommu.c to avoid #ifdef CONFIG_INTEL_IOMMU
+>>
+>> Changes since V1:
+>> - The cap and ecap registers are always in the first page. It's not
+>>    necessary to use the reg size in dmar_validate_one_drhd(). (Patch 1)
+>> - Move reg_size up and pair it with reg_base_addr in struct
+>>    dmar_drhd_unit (Patch 1)
+>> - Update the year of Copyright (Patch 2)
+>> - Return 0 if PMS is not supported (Patch 2)
+>> - Refine the comments and add a pr_warn for per-counter capabilities
+>>    check (Patch 2)
+>> - Remove unnecessary iommu_pmu->num_cntr = i (Patch 2)
+>> - Remove has_ob of ecmd_submit_sync() (Patch 3)
+>> - Remove the helpers from non-INTEL_IOMMU. (Patch 3)
+>> - Still keep #ifdef CONFIG_INTEL_IOMMU for ecmd_submit_sync() to
+>>    avoid compile warning with non-INTEL_IOMMU config.
+>> - Use pr_warn_once() to replace WARN_ONCE() (Patch 4 & 6)
+>> - Free iommu PMU if it fails to be registered. (Patch 4)
+>> - Remove unnecessary 'handled' variable. (Patch 6)
+>>
+>> A performance monitoring infrastructure, perfmon, is introduced with
+>> the VT-d Spec 4.0. The purpose of perfmon is to support collection of
+>> information about key events occurring during operation of the remapping
+>> hardware, to aid performance tuning and debug. The patch series is to
+>> support the perfmon for IOMMU.
+>>
+>> To facilitate the perfmon support, the patch series also supports two
+>> new generic features of VT-d Spec 4.0.
+>> - Support the 'size' field to retrieve the accurate size of the register
+>>    set for each dmar device from DRHD. (Patch 1)
+>> - Support the new Enhanced Command Interface. (Patch 3)
+>>
+>> With the patch series, users can collect the performance data of IOMMU
+>> via Linux perf tool. For example,
+>>
+>>   $ perf stat -e dmar0/iommu_requests,filter_ats=0/ -a sleep 1
+>>
+>>   Performance counter stats for 'system wide':
+>>
+>>                2135      dmar0/iommu_requests,filter_ats=0/
+>>
+>>         1.001087695 seconds time elapsed
+>>
+>> The IOMMU PMUs can be found under /sys/bus/event_source/devices/dmar*
+>>
+>> The available filters and event format can be found at the format folder
+>>   $ ls /sys/bus/event_source/devices/dmar0/format/
+>> event  event_group  filter_ats  filter_page_table
+>>
+>> The supported events can be found at the events folder
+>>
+>>   $ ls /sys/bus/event_source/devices/dmar0/events/
+>> ats_blocked        int_cache_hit_nonposted  iommu_mrds
+>> pasid_cache_lookup
+>> ctxt_cache_hit     int_cache_hit_posted     iommu_requests
+>> pg_req_posted
+>> ctxt_cache_lookup  int_cache_lookup         iotlb_hit
+>> pw_occupancy
+>> fs_nonleaf_hit     iommu_clocks             iotlb_lookup
+>> ss_nonleaf_hit
+>> fs_nonleaf_lookup  iommu_mem_blocked        pasid_cache_hit
+>> ss_nonleaf_lookup
+>>
+>> Kan Liang (7):
+>>    iommu/vt-d: Support size of the register set in DRHD
+>>    iommu/vt-d: Retrieve IOMMU perfmon capability information
+>>    iommu/vt-d: Support Enhanced Command Interface
+>>    iommu/vt-d: Add IOMMU perfmon support
+>>    iommu/vt-d: Support cpumask for IOMMU perfmon
+>>    iommu/vt-d: Add IOMMU perfmon overflow handler support
+>>    iommu/vt-d: Enable IOMMU perfmon support
+>>
+>>   .../sysfs-bus-event_source-devices-iommu      |  32 +
+>>   drivers/iommu/intel/Kconfig                   |   9 +
+>>   drivers/iommu/intel/Makefile                  |   1 +
+>>   drivers/iommu/intel/dmar.c                    |  33 +-
+>>   drivers/iommu/intel/iommu.c                   |  59 ++
+>>   drivers/iommu/intel/iommu.h                   | 101 +-
+>>   drivers/iommu/intel/perfmon.c                 | 860 ++++++++++++++++++
+>>   drivers/iommu/intel/perfmon.h                 |  65 ++
+>>   drivers/iommu/intel/svm.c                     |   2 +-
+>>   include/acpi/actbl1.h                         |   2 +-
+>>   include/linux/cpuhotplug.h                    |   1 +
+>>   include/linux/dmar.h                          |   1 +
+>>   12 files changed, 1159 insertions(+), 7 deletions(-)
+>>   create mode 100644
+>> Documentation/ABI/testing/sysfs-bus-event_source-devices-iommu
+>>   create mode 100644 drivers/iommu/intel/perfmon.c
+>>   create mode 100644 drivers/iommu/intel/perfmon.h
+> 
+> Thanks for the work. The overall looks good to me now. But I am still
+> seeing some code style issues after running "./scripts/checkpatch.pl
+> --strict" scripts.
+> 
+> Can you please fix those issues and post a v4?
+> 
+Sure.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Guillaume-Ranquet/dt-bindings-phy-mediatek-hdmi-phy-Add-mt8195-compatible/20230128-160522
-base:   e2f86c02fdc96ca29ced53221a3cbf50aa6f8b49
-patch link:    https://lore.kernel.org/r/20220919-v5-3-cfb0e5ad29b2%40baylibre.com
-patch subject: [PATCH v5 3/3] phy: mediatek: add support for phy-mtk-hdmi-mt8195
-config: arm-buildonly-randconfig-r005-20230129 (https://download.01.org/0day-ci/archive/20230129/202301290245.KWRXz5OS-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2cc45518a7fd551117426c770070d93acb31166e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Guillaume-Ranquet/dt-bindings-phy-mediatek-hdmi-phy-Add-mt8195-compatible/20230128-160522
-        git checkout 2cc45518a7fd551117426c770070d93acb31166e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__aeabi_uldivmod" [drivers/phy/mediatek/phy-mtk-hdmi-drv.ko] undefined!
->> ERROR: modpost: "__aeabi_ldivmod" [drivers/phy/mediatek/phy-mtk-hdmi-drv.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+Kan
