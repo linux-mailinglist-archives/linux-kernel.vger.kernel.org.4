@@ -2,376 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A8467F46E
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 04:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C095E67F471
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 04:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjA1Dqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 22:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S232700AbjA1DxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 22:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbjA1Dqm (ORCPT
+        with ESMTP id S229681AbjA1DxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 22:46:42 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2083.outbound.protection.outlook.com [40.107.20.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD948BB9E;
-        Fri, 27 Jan 2023 19:46:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PuoB+qqylHE9G9KgWHadXnauM4R3BgmPzWkfCPyqodm9KLNBrsXfFSE/7N0pKlDwFEW3wf73ku1Plfuq/NuX7Z6F7TzcGgy1srn0QK1PkVgGyR8vHFWYCsla0vjTwy3flrqMY65T/02FOuvbVBHznMDXRYwn5WernN/QKLcpUZrJV9abH5bHTQjLhl6aaDFvQSe7HCHEkaslqB1WG78mSOccyiWaw1P4S7I5s8q27AEKsdjW8Fn+gIo3WH6FGmiFQ2E6Lmm2nSzb7ap9T6HKSuxIiTKAeD4DuFkCA29bllz+0o0mzyyuccOQLpwzAWlLKZiWIO1ajl8cPiITZa/8vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+j8tmRGL2OR+I/QSXpdMl/m+O3C/9A+ffi0C2+j5zAY=;
- b=kc4iU8Wl5wfOK94TL9JOmD9iM63B2qQZ2or6p3tVy8LppJJER9WTfD2p/0qFymjPLuhQnya2GH9a4waI07cvcBUn4paMukAgDmWyaDyl5jeoNnCxMqYbSkboaMv514yw944FBGqo1eVjkOw3mZ8D87Z1gMoheV4/ZJgkPI7Y7KUH4PfjJPyQBbq7JpU2HkitBuWjJx0Kv2rEaL7AHKUU083sQNu/8a7dGIWY9RDeu/uTk5CJ8e5EdsqJjgY82Od4XU1Ejw4QKXYPhGnXI9B/vrnIt3VcbpcpjNtSasUGamUasmmZI5TlfhkpvxjfPRLgMfIfx/kQixnuEvPZUxbAeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+j8tmRGL2OR+I/QSXpdMl/m+O3C/9A+ffi0C2+j5zAY=;
- b=HwwRmDSjF8uvyVDB+AaH9MB+Q1f/lY5//DTVpQqgYHq/ip1tUZWjyPzAwn0czROuwUIH/0yYcxw2dVne7PPQHe5eOm6TLSE2eWe6Yv/mhJcsfcEAd3y1QpM2Z0iBy+loR/OkEgApnrPuL4/3U2ttc/nv1TxKMHK9gVq7T4feMdg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by PAXPR04MB9203.eurprd04.prod.outlook.com (2603:10a6:102:222::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.25; Sat, 28 Jan
- 2023 03:46:33 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::5725:92ec:f43e:f5fc]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::5725:92ec:f43e:f5fc%8]) with mapi id 15.20.6043.023; Sat, 28 Jan 2023
- 03:46:33 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com
-Subject: [PATCH 2/2] drm/bridge: imx: Add i.MX93 parallel display format configuration support
-Date:   Sat, 28 Jan 2023 11:47:13 +0800
-Message-Id: <20230128034713.1530218-3-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230128034713.1530218-1-victor.liu@nxp.com>
-References: <20230128034713.1530218-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0047.apcprd02.prod.outlook.com
- (2603:1096:4:196::14) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Fri, 27 Jan 2023 22:53:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBB738EA6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 19:53:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AF5E61DEC
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA090C433A8
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:53:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674877980;
+        bh=88Fy/MGRX8OjMc3tSFQozorT1nOLF89PQoPQzJVYSKw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UmDkP2bjxbg6iKcDj4t8XkqRQylP9wEzTac+qwMewcd2+/+6yaYwiDb7BObdNEs1s
+         iv53qHdIdUmojWFTW0pqmFiG4+falDmpLPCQ4Si9UmoJFsERMccspjCFCEg0evSTle
+         iNLY948OKRcRNCq9MyDnbXklHFVtlvcoCctKoahjn56ejAta2kaA6nJnmVTZhciO+p
+         R8rY/o61wbJQrQoT6OQKGPmCXoyMvgcwws5tA/RPu2H6FW7w/ioAGU+Xd/3OQFpgQl
+         BmMhW6V8jZ0RcHqE+GbWW2vUl0qCDFbNKh7m1CyUO1SVtutcoxDoce5RE5w7lA28uU
+         ha+6xIfXal6Sw==
+Received: by mail-ej1-f44.google.com with SMTP id v6so18557409ejg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 19:53:00 -0800 (PST)
+X-Gm-Message-State: AO0yUKVFoCOsQlGZkWXTP4OziBpGIanvUe4rfhORwcinnU6zlarQRp14
+        4jXWHWxwNR6a9Br2odBtHdwsHQhJZIOpd+SYG0E=
+X-Google-Smtp-Source: AK7set/98L4ZXutZEZt/qPQiBmkXllLtLzJU07Cl0RaXE6qsysDa7c4Jrq4RZG5zOguM7HyYw/sUbiwxGAemhlmy6AM=
+X-Received: by 2002:a17:906:14cf:b0:878:69e5:b797 with SMTP id
+ y15-20020a17090614cf00b0087869e5b797mr1820948ejc.228.1674877979109; Fri, 27
+ Jan 2023 19:52:59 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|PAXPR04MB9203:EE_
-X-MS-Office365-Filtering-Correlation-Id: 78dce08b-8365-4d9b-e9e0-08db00e23fc9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jUkeJxrgNoJuHiuJqE/JXn6LSX/anO2ue1wpnGP1MBoWVVUJDIDfjmEL+xR0uRdURbCd7yEON1liw3xASox/wjKn1eR4d74ro5wv/fPgI7OUHDCPqcmyyLMnd43fWGTRe+0y3trfeYPji9PB63/gtDCqotYj3rT6DPqCTW3QAhxEWwC8XBxKE/eN2UDYgCEt8X65SK4F3HdeM5IZIaM438YDnhmwwSwGOoK+Zs+RYLhYr2yCr5yyAan2YbRqkeZIPWkQ8XQcrXr7MtrIgjMFzH45E6BT28vCjOvZAdMYLgYw2iyyf4EhKkO6FELp/EyMy4oZrttN0GxJ4ZT6AmEcF4sftYKFqtQ+P70zw81u70je/vynGrAM53T3hrGVaB2XWG+4Iv2T4uvLbCWNiVBgC3BiJfhronr04WAk8k3fe4pgVfkuE+U38d76ja/eE7wsPVTrIK0Z5v/dpAlz45k53F6e5SfXpqiZRT3/g/1lip0wwxFOe/2ZsaDmwaYLX7ueRJagCjUUqRPz80Uj3JZG+29bXH4OwjVs33HcXwSC0Ch852GilgA4YFw06s9Ro8/uVVGQni1kXYFY3uShy4jnZQ7dyR1Y1aW/hd76g+sB7S5aHTqvgrzZkLXgRvTNJefk0dSD43G8ZHo2EY942VG565dC9FZ9j+5WE1XdUWLX1wH+S/PxeDW0x2Eckg0L/8+dcRIXbylZ0AHmtSKi+daUgg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(396003)(39860400002)(366004)(376002)(451199018)(186003)(36756003)(6506007)(1076003)(6512007)(26005)(38350700002)(5660300002)(7416002)(38100700002)(2906002)(6486002)(6666004)(52116002)(86362001)(2616005)(83380400001)(4326008)(66946007)(478600001)(66476007)(66556008)(316002)(8676002)(41300700001)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?luhCbWHG0nm4FPoG3l8Ck803Qcsvr2rP0WOlJSjUIwwHQ5AQC11j6lRzTOtO?=
- =?us-ascii?Q?ac1iwe8kTSj+6cBal3cnI8puqkxfeQE/lVuBTmao7HeSAUBomzXsGDUNymTl?=
- =?us-ascii?Q?lRnz3/YgxBFm3tVd4ZPh3GAFliBMMygXK2ALHbbGVAFTiWw7cH5SFggmJdmn?=
- =?us-ascii?Q?A76GcNRN8plaE7zupCvFZn4Mgp9DsrOxkQzoUa3uGVWFglMMBaPxVN+8BLQI?=
- =?us-ascii?Q?ryuwajPuekLLR08bjMiKVjvs3zsLcLLZZLWSea8RwHNVqK5nQiOyUXPg7eVK?=
- =?us-ascii?Q?wGaDIxpF40uoBOps12dj4ynCk5Mmgm5oOfy7L5fgqr0AScJ7mPUBQtZB+iPN?=
- =?us-ascii?Q?Q+O+QuwX9Xl6w1rXVc61HCrtKgv1GCAuFJbjOtKXDZ8tKlRz2lWnq3ukoXCf?=
- =?us-ascii?Q?R/g86ncjpYeLyuo4JuNDCfPaJ+WsLdKyjacgMVyMjM7ImImeXrOyNjU3d0Rl?=
- =?us-ascii?Q?ClDs0y4wwhc0yDbisLlmZyljmLagF79eYCAGjcbVDs8RcjmYWk4NbxEXHU0l?=
- =?us-ascii?Q?8D7k9cT1EmhetFTB5CapTA28ARqhS5DFs7GC+8XBPFnot8C3Z97xvlpIiGAg?=
- =?us-ascii?Q?kGH4Mts8hGC/FIRsv/fzNqAfH10HxtE4/Uy7FGuxk6FyNYFlUupvuNiLLPWl?=
- =?us-ascii?Q?IXkFwCqZm71weu5+CAZ/hoEq4zyLuhSrR3n51d6pqr2/gl36h7PDObVqiKrC?=
- =?us-ascii?Q?0SYYqY3OL8ojruAYsLwZLvbVrGTlLxhFTQewSfN/pSH7uluWd5y80petIFzx?=
- =?us-ascii?Q?iRTeNGr3gUWRYJBGUI263b1SPEqNIxmxSyV+GhHIJFT5Db+t1j+0O25n04we?=
- =?us-ascii?Q?gJwJyCCmQNZuwSopFWUq+T8P7NKF7GLNRJe/gbAdAqL6wTABT1lglFuKeJjE?=
- =?us-ascii?Q?mkYNuiEy+/rKcRvZQ/Jrv7UiO1v8RnH07hi4uCWIlUFxXy8FfQgV9ZK6mg1w?=
- =?us-ascii?Q?T3YHvpGRuFr297xEGsn3YUK2fR2/Q74GWDQjBcTByw9qLas6gGyQvKb61CNO?=
- =?us-ascii?Q?VTBaegGqpdntRGQD1WseKCej2jBixUTxbxgRr4zTEWaw+A3CPUYsQ1/eczgm?=
- =?us-ascii?Q?iyQEMTafiH0XVpTUG2c7n5X7OHbVKO11WlejcbTtMYTkAFF+2j6DBizrd8lc?=
- =?us-ascii?Q?EaB69DZhxX0P5lqoToiaxHEmZD8obW0ZZnUmnznnwVcUre3RouMzHmkhVvgY?=
- =?us-ascii?Q?1pdi+J4rxt+LhYb/KKErARWm5W6ZGTfFVvNeePBCcKF/c0VzXi9btoVwCBbf?=
- =?us-ascii?Q?piPDfSsVTj2rDSBZEXJlJ2jIUi59bYvpHfGw2Cyl//4S5jTdy0Utk01Ng24k?=
- =?us-ascii?Q?JohZnrWXiUfBz9r4uslPkt6Ob2da1ZMbFVHSkvDHtqGpJrRwLTB/cr1p7gF3?=
- =?us-ascii?Q?swoyvzViP5h980Au8YNvjN/yuYRb+9KaDrkQYm3YfAoEcDr7YvrisokeHstz?=
- =?us-ascii?Q?iA9w4dJg4D+R1wjtjoQSZSmBtXL/seg2dmMPWS16F6NlLPzO2rDDaoyuWFCE?=
- =?us-ascii?Q?MFB4KG8cxCG2nfijQQP/DO4efjLJNmhns/pTktPjPgYA1CqaMZ6UYWZwq7Fh?=
- =?us-ascii?Q?ujO1HYVfBFxOyGE01pPZg1Lnz7kw0eGR5eqtgdQY?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 78dce08b-8365-4d9b-e9e0-08db00e23fc9
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2023 03:46:33.7582
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5cxr2ii8SMzpRK8BpS4HMZ7CFtMBmTJxgg9rQn5FlG+I5ccf9wH2rTEH2+4/eHz/TQ7SMc9S8k9a9ybJYp2lhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9203
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230126130509.1418251-1-guoren@kernel.org> <0871074a-cafb-a172-f062-6ada6d2a3a41@huawei.com>
+ <CAJF2gTTd9V6PKu6_ip21HbXWgN6X-epw8yc_s6XonssStFNdEQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTTd9V6PKu6_ip21HbXWgN6X-epw8yc_s6XonssStFNdEQ@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sat, 28 Jan 2023 11:52:47 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTCFPsn+8NJaQyHan9h9b7=UzjY-+H4_qi4DaGXJ_kD3w@mail.gmail.com>
+Message-ID: <CAJF2gTTCFPsn+8NJaQyHan9h9b7=UzjY-+H4_qi4DaGXJ_kD3w@mail.gmail.com>
+Subject: Re: [PATCH] riscv: kprobe: Fixup kernel panic when probing an illegal position
+To:     "liaochang (A)" <liaochang1@huawei.com>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com, mhiramat@kernel.org,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        mark.rutland@arm.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NXP i.MX93 mediamix blk-ctrl contains one DISPLAY_MUX register which
-configures parallel display format by using the "PARALLEL_DISP_FORMAT"
-field. Add a DRM bridge driver to support the display format configuration.
+On Sat, Jan 28, 2023 at 11:46 AM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Sat, Jan 28, 2023 at 10:55 AM liaochang (A) <liaochang1@huawei.com> wr=
+ote:
+> >
+> >
+> >
+> > =E5=9C=A8 2023/1/26 21:05, guoren@kernel.org =E5=86=99=E9=81=93:
+> > > From: Guo Ren <guoren@linux.alibaba.com>
+> > >
+> > > The kernel would panic when probed for an illegal position. eg:
+> > >
+> > > (CONFIG_RISCV_ISA_C=3Dn)
+> > >
+> > > echo 'p:hello kernel_clone+0x16 a0=3D%a0' >> kprobe_events
+> > > echo 1 > events/kprobes/hello/enable
+> > > cat trace
+> > >
+> > > Kernel panic - not syncing: stack-protector: Kernel stack
+> > > is corrupted in: __do_sys_newfstatat+0xb8/0xb8
+> > > CPU: 0 PID: 111 Comm: sh Not tainted
+> > > 6.2.0-rc1-00027-g2d398fe49a4d #490
+> > > Hardware name: riscv-virtio,qemu (DT)
+> > > Call Trace:
+> > > [<ffffffff80007268>] dump_backtrace+0x38/0x48
+> > > [<ffffffff80c5e83c>] show_stack+0x50/0x68
+> > > [<ffffffff80c6da28>] dump_stack_lvl+0x60/0x84
+> > > [<ffffffff80c6da6c>] dump_stack+0x20/0x30
+> > > [<ffffffff80c5ecf4>] panic+0x160/0x374
+> > > [<ffffffff80c6db94>] generic_handle_arch_irq+0x0/0xa8
+> > > [<ffffffff802deeb0>] sys_newstat+0x0/0x30
+> > > [<ffffffff800158c0>] sys_clone+0x20/0x30
+> > > [<ffffffff800039e8>] ret_from_syscall+0x0/0x4
+> > > ---[ end Kernel panic - not syncing: stack-protector:
+> > > Kernel stack is corrupted in: __do_sys_newfstatat+0xb8/0xb8 ]---
+> > >
+> > > That is because the kprobe's ebreak instruction broke the kernel's
+> > > original code. The user should guarantee the correction of the probe
+> > > position, but it couldn't make the kernel panic.
+> > >
+> > > This patch adds arch_check_kprobe in arch_prepare_kprobe to prevent a=
+n
+> > > illegal position (Such as the middle of an instruction).
+> > >
+> > > Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > ---
+> > >  arch/riscv/kernel/probes/kprobes.c | 18 ++++++++++++++++++
+> > >  1 file changed, 18 insertions(+)
+> > >
+> > > diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/p=
+robes/kprobes.c
+> > > index f21592d20306..475989f06d6d 100644
+> > > --- a/arch/riscv/kernel/probes/kprobes.c
+> > > +++ b/arch/riscv/kernel/probes/kprobes.c
+> > > @@ -48,6 +48,21 @@ static void __kprobes arch_simulate_insn(struct kp=
+robe *p, struct pt_regs *regs)
+> > >       post_kprobe_handler(p, kcb, regs);
+> > >  }
+> > >
+> > > +static bool __kprobes arch_check_kprobe(struct kprobe *p)
+> > > +{
+> > > +     unsigned long tmp  =3D (unsigned long)p->addr - p->offset;
+> > > +     unsigned long addr =3D (unsigned long)p->addr;
+> > > +
+> > > +     while (tmp <=3D addr) {
+> > > +             if (tmp =3D=3D addr)
+> > > +                     return true;
+> > > +
+> > > +             tmp +=3D GET_INSN_LENGTH(*(kprobe_opcode_t *)tmp);
+> > > +     }
+> > > +
+> > > +     return false;
+> > > +}
+> >
+> > LGTM.
+> >
+> > I have submit a patch to fix the same problem, found at:
+> Oh, I missed that patch. Our goal is the same.
+>
+> But it would be best if you reused p->offset, not
+> kallsyms_lookup_size_offset, the p->addr added by _kprobe_addr
+> (kernel/kprobes.c), not just kallsyms_lookup_size_offset. Sure, it
+> works around for the current riscv, but that's not correct.
+Sorry, the above description is a little bit confusing. What I mean is that=
+:
+The p->addr =3D func_entry + p->offset. Not kallsyms_lookup_size_offset.
+Your patch could get the wrong func_entry.
 
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
----
- drivers/gpu/drm/bridge/imx/Kconfig      |   8 +
- drivers/gpu/drm/bridge/imx/Makefile     |   1 +
- drivers/gpu/drm/bridge/imx/imx93-pdfc.c | 209 ++++++++++++++++++++++++
- 3 files changed, 218 insertions(+)
- create mode 100644 drivers/gpu/drm/bridge/imx/imx93-pdfc.c
+>
+> >
+> > https://lore.kernel.org/lkml/20230127130541.1250865-11-chenguokai17@mai=
+ls.ucas.ac.cn/
+> >
+> > So this boundary check is necessary no matter CONFIG_RISCV_ISA_C is ena=
+ble or not, right?
+> Yes, my panic example in the commit log is based on the
+> !CONFIG_RISCV_ISA_C, you couldn't miss that.
+>
+> >
+> >
+> > > +
+> > >  int __kprobes arch_prepare_kprobe(struct kprobe *p)
+> > >  {
+> > >       unsigned long probe_addr =3D (unsigned long)p->addr;
+> > > @@ -55,6 +70,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+> > >       if (probe_addr & 0x1)
+> > >               return -EILSEQ;
+> > >
+> > > +     if (!arch_check_kprobe(p))
+> > > +             return -EILSEQ;
+> > > +
+> > >       /* copy instruction */
+> > >       p->opcode =3D *p->addr;
+> > >
+> >
+> > --
+> > BR,
+> > Liao, Chang
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
 
-diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
-index 608f47f41bcd..adbd75a924d1 100644
---- a/drivers/gpu/drm/bridge/imx/Kconfig
-+++ b/drivers/gpu/drm/bridge/imx/Kconfig
-@@ -44,4 +44,12 @@ config DRM_IMX8QXP_PIXEL_LINK_TO_DPI
- 	  Choose this to enable pixel link to display pixel interface(PXL2DPI)
- 	  found in Freescale i.MX8qxp processor.
- 
-+config DRM_IMX93_PARALLEL_DISP_FMT_CONFIG
-+	tristate "NXP i.MX93 parallel display format configuration"
-+	depends on OF
-+	select DRM_KMS_HELPER
-+	help
-+	  Choose this to enable parallel display format configuration
-+	  found in NXP i.MX93 processor.
-+
- endif # ARCH_MXC || COMPILE_TEST
-diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
-index aa90ec8d5433..e88821733770 100644
---- a/drivers/gpu/drm/bridge/imx/Makefile
-+++ b/drivers/gpu/drm/bridge/imx/Makefile
-@@ -7,3 +7,4 @@ obj-$(CONFIG_DRM_IMX8QXP_LDB) += imx8qxp-ldb.o
- obj-$(CONFIG_DRM_IMX8QXP_PIXEL_COMBINER) += imx8qxp-pixel-combiner.o
- obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK) += imx8qxp-pixel-link.o
- obj-$(CONFIG_DRM_IMX8QXP_PIXEL_LINK_TO_DPI) += imx8qxp-pxl2dpi.o
-+obj-$(CONFIG_DRM_IMX93_PARALLEL_DISP_FMT_CONFIG) += imx93-pdfc.o
-diff --git a/drivers/gpu/drm/bridge/imx/imx93-pdfc.c b/drivers/gpu/drm/bridge/imx/imx93-pdfc.c
-new file mode 100644
-index 000000000000..a891b1f6743a
---- /dev/null
-+++ b/drivers/gpu/drm/bridge/imx/imx93-pdfc.c
-@@ -0,0 +1,209 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+
-+/*
-+ * Copyright 2022,2023 NXP
-+ */
-+
-+#include <linux/media-bus-format.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#include <drm/drm_atomic_state_helper.h>
-+#include <drm/drm_bridge.h>
-+#include <drm/drm_print.h>
-+
-+#define DRIVER_NAME		"imx93_pdfc"
-+
-+#define DISPLAY_MUX		0x60
-+#define  PARALLEL_DISP_FORMAT	0x700
-+
-+enum imx93_pdfc_format {
-+	RGB888_TO_RGB888 = 0x0,
-+	RGB888_TO_RGB666 = 0x1 << 8,
-+	RGB565_TO_RGB565 = 0x2 << 8,
-+};
-+
-+struct imx93_pdfc {
-+	struct drm_bridge bridge;
-+	struct drm_bridge *next_bridge;
-+	struct device *dev;
-+	struct regmap *regmap;
-+	u32 format;
-+};
-+
-+static int imx93_pdfc_bridge_attach(struct drm_bridge *bridge,
-+				    enum drm_bridge_attach_flags flags)
-+{
-+	struct imx93_pdfc *pdfc = bridge->driver_private;
-+
-+	return drm_bridge_attach(bridge->encoder, pdfc->next_bridge, bridge, flags);
-+}
-+
-+static void
-+imx93_pdfc_bridge_atomic_enable(struct drm_bridge *bridge,
-+				struct drm_bridge_state *old_bridge_state)
-+{
-+	struct imx93_pdfc *pdfc = bridge->driver_private;
-+
-+	regmap_update_bits(pdfc->regmap, DISPLAY_MUX, PARALLEL_DISP_FORMAT,
-+			   pdfc->format);
-+}
-+
-+static const u32 imx93_pdfc_bus_output_fmts[] = {
-+	MEDIA_BUS_FMT_RGB888_1X24,
-+	MEDIA_BUS_FMT_RGB666_1X18,
-+	MEDIA_BUS_FMT_RGB565_1X16,
-+	MEDIA_BUS_FMT_FIXED
-+};
-+
-+static bool imx93_pdfc_bus_output_fmt_supported(u32 fmt)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(imx93_pdfc_bus_output_fmts); i++) {
-+		if (imx93_pdfc_bus_output_fmts[i] == fmt)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static u32 *
-+imx93_pdfc_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
-+					    struct drm_bridge_state *bridge_state,
-+					    struct drm_crtc_state *crtc_state,
-+					    struct drm_connector_state *conn_state,
-+					    u32 output_fmt,
-+					    unsigned int *num_input_fmts)
-+{
-+	u32 *input_fmts;
-+
-+	if (!imx93_pdfc_bus_output_fmt_supported(output_fmt))
-+		return NULL;
-+
-+	input_fmts = kmalloc(sizeof(*input_fmts), GFP_KERNEL);
-+	if (!input_fmts)
-+		return NULL;
-+
-+	switch (output_fmt) {
-+	case MEDIA_BUS_FMT_RGB888_1X24:
-+	case MEDIA_BUS_FMT_RGB565_1X16:
-+		input_fmts[0] = output_fmt;
-+		break;
-+	case MEDIA_BUS_FMT_RGB666_1X18:
-+	case MEDIA_BUS_FMT_FIXED:
-+		input_fmts[0] = MEDIA_BUS_FMT_RGB888_1X24;
-+		break;
-+	}
-+
-+	*num_input_fmts = 1;
-+
-+	return input_fmts;
-+}
-+
-+static int imx93_pdfc_bridge_atomic_check(struct drm_bridge *bridge,
-+					  struct drm_bridge_state *bridge_state,
-+					  struct drm_crtc_state *crtc_state,
-+					  struct drm_connector_state *conn_state)
-+{
-+	struct imx93_pdfc *pdfc = bridge->driver_private;
-+
-+	switch (bridge_state->output_bus_cfg.format) {
-+	case MEDIA_BUS_FMT_RGB888_1X24:
-+		pdfc->format = RGB888_TO_RGB888;
-+		break;
-+	case MEDIA_BUS_FMT_RGB666_1X18:
-+		pdfc->format = RGB888_TO_RGB666;
-+		break;
-+	case MEDIA_BUS_FMT_RGB565_1X16:
-+		pdfc->format = RGB565_TO_RGB565;
-+		break;
-+	default:
-+		DRM_DEV_DEBUG_DRIVER(pdfc->dev, "Unsupported output bus format: 0x%x\n",
-+				     bridge_state->output_bus_cfg.format);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct drm_bridge_funcs imx93_pdfc_bridge_funcs = {
-+	.attach			= imx93_pdfc_bridge_attach,
-+	.atomic_enable		= imx93_pdfc_bridge_atomic_enable,
-+	.atomic_duplicate_state	= drm_atomic_helper_bridge_duplicate_state,
-+	.atomic_destroy_state	= drm_atomic_helper_bridge_destroy_state,
-+	.atomic_get_input_bus_fmts	= imx93_pdfc_bridge_atomic_get_input_bus_fmts,
-+	.atomic_check		= imx93_pdfc_bridge_atomic_check,
-+	.atomic_reset		= drm_atomic_helper_bridge_reset,
-+};
-+
-+static int imx93_pdfc_bridge_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct imx93_pdfc *pdfc;
-+	int ret;
-+
-+	pdfc = devm_kzalloc(dev, sizeof(*pdfc), GFP_KERNEL);
-+	if (!pdfc)
-+		return -ENOMEM;
-+
-+	pdfc->regmap = syscon_node_to_regmap(dev->of_node->parent);
-+	if (IS_ERR(pdfc->regmap)) {
-+		ret = PTR_ERR(pdfc->regmap);
-+		if (ret != -EPROBE_DEFER)
-+			DRM_DEV_ERROR(dev, "failed to get regmap: %d\n", ret);
-+		return ret;
-+	}
-+
-+	pdfc->next_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
-+	if (IS_ERR(pdfc->next_bridge)) {
-+		ret = PTR_ERR(pdfc->next_bridge);
-+		if (ret != -EPROBE_DEFER)
-+			DRM_DEV_ERROR(dev, "failed to get next bridge: %d\n", ret);
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, pdfc);
-+
-+	pdfc->dev = dev;
-+	pdfc->bridge.driver_private = pdfc;
-+	pdfc->bridge.funcs = &imx93_pdfc_bridge_funcs;
-+	pdfc->bridge.of_node = dev->of_node;
-+
-+	drm_bridge_add(&pdfc->bridge);
-+
-+	return 0;
-+}
-+
-+static int imx93_pdfc_bridge_remove(struct platform_device *pdev)
-+{
-+	struct imx93_pdfc *pdfc = platform_get_drvdata(pdev);
-+
-+	drm_bridge_remove(&pdfc->bridge);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id imx93_pdfc_dt_ids[] = {
-+	{ .compatible = "nxp,imx93-pdfc", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, imx93_pdfc_dt_ids);
-+
-+static struct platform_driver imx93_pdfc_bridge_driver = {
-+	.probe	= imx93_pdfc_bridge_probe,
-+	.remove = imx93_pdfc_bridge_remove,
-+	.driver	= {
-+		.of_match_table = imx93_pdfc_dt_ids,
-+		.name = DRIVER_NAME,
-+	},
-+};
-+module_platform_driver(imx93_pdfc_bridge_driver);
-+
-+MODULE_DESCRIPTION("NXP i.MX93 parallel display format configuration driver");
-+MODULE_AUTHOR("Liu Ying <victor.liu@nxp.com>");
-+MODULE_LICENSE("GPL v2");
-+MODULE_ALIAS("platform:" DRIVER_NAME);
--- 
-2.37.1
 
+
+--=20
+Best Regards
+ Guo Ren
