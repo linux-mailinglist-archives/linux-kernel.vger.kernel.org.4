@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A587567F362
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2421A67F364
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjA1A4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:56:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
+        id S233556AbjA1A5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbjA1A4r (ORCPT
+        with ESMTP id S230482AbjA1A53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:56:47 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881027C716
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:56:46 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id x5so3169530plr.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:56:46 -0800 (PST)
+        Fri, 27 Jan 2023 19:57:29 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ED67C716
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:57:28 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id m11so6234461pji.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:57:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rI2c99rcSfo6XNONmsHvFbfDglWETie8DloTdHfivvk=;
-        b=p8go5RAKjk+0e+oaFqXN0FR2I7+FTTYJEnAPgt6hFL+lY0R6cp2EFioBSzJF+6Lu0u
-         oUmHkfzMFGfYHb+CpRX3ITsRXEPmTifnvf73ftA6CRqy9RJMCVNLaKmj7OSYR47H2MXB
-         2ulmKjdrS8wRLf586AD0fqBtxIbNfEkpnHFvJBvsaYPsozlf7BHD97Ifh6JW6SWeKOQI
-         Nkbv+n5vwSF8JAhQHLBeeREs2Y/o2lfnR1hwx69SYzwXZ1ilM6n26IUGpqilwe7piEXt
-         QvEoPOWtUxcVT4TrDDchhiAK8mqwNk5ToSEpZJltF3+Hm5pDLTHGomtbwjrMs6u+ssrg
-         Uw3Q==
+        bh=mt7riAo5IZBBNRUJXz8pkp6XLTWUB7DMintBQ4mnJ+w=;
+        b=Sq13TwL2JvleGsf86UiBkqxxqQvlrn+9JqKhbgZya6YonVrMlwpl9H7V+w46KzX9gU
+         XwtvFHc9MH103QXuWyqPeBIM+fap2Pn5mv1AVcStBkuR5SFqlWG7SO52BDCawpXKIqGC
+         DC9qIjbacFWuEMHWWUq9xpWei55rvNP66T/eo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rI2c99rcSfo6XNONmsHvFbfDglWETie8DloTdHfivvk=;
-        b=DAKAb96P/bazMFj86nypf23Lx/vcN1/pBe50z3QJvvsZM5EOVITISEiBjfyFgbt4XF
-         MP3XUGwK6d9upMmR+RpKKtDI0Lq6QA0gJaTgLDFdokrzUAYGjOknHf2YeZgrY3iZaqh1
-         1JySYHxLj4bNtLhbhjshyhZfujX/NofVoatzLuhuRMNaHQL//mfpwr4bLlXk8tRUhgSB
-         n53eiRRGNKcovRG6tpUVhGSaKvd+ZTqvhCM5PS5A23AjPdMmA0rc49myp81WZawTb4K8
-         7eFgxY/6pkc81YkxO+YKnUyy10IMDD9SH0nE7rcjQPUB5Nq7MRWHPR+m/hcJQ0/LRnXk
-         wjNA==
-X-Gm-Message-State: AO0yUKU4SLidjD6oZwzmmUyksHLtvobRCRY0eixvFs7I5MBiM5uSTq3E
-        ePwZ2ErP/VWppF6lnU3nh5M4BQ==
-X-Google-Smtp-Source: AK7set8krNpzRJzicYHFKi93jEMrwpbzoRjimX3jZk+2Qog5M44S0ZJLGQeBdajigna7YUvZLYX77A==
-X-Received: by 2002:a05:6a20:6d15:b0:a4:efde:2ed8 with SMTP id fv21-20020a056a206d1500b000a4efde2ed8mr263956pzb.0.1674867405931;
-        Fri, 27 Jan 2023 16:56:45 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c9-20020a6566c9000000b0046ff3634a78sm2908265pgw.71.2023.01.27.16.56.45
+        bh=mt7riAo5IZBBNRUJXz8pkp6XLTWUB7DMintBQ4mnJ+w=;
+        b=5RNuoOOWd7DOSZrYG/hMAobQ96ZwzdfCxZRi+ue0j4BX2zdzr7etQ61YL4O+Smumm3
+         HNRoA+VCSwF6xey6CHVluhz5aq6VExQnsrZgwO0QbsZ0y52mUcblW3sELDfSan0p491r
+         qSPFXeDbYd15pPVauyBhuudl88Wca8Phi6noDbJvr/2RqJA2+dPg/xrC9mK/WfepIlRo
+         T9TSMZC0jvFUWjrE4OMiy3Y9PIYWoGps0N2WmzKIGiYIMR6/KMI0bwCzKuN5eqx0NhB7
+         lgYdXtph/ZWBrblz1SrUt8Oc75oxLJrgaeoasakLBFXyT/nclJho4cyQ5t4v6t6siso2
+         9diA==
+X-Gm-Message-State: AFqh2kpYqbb9xJtVrldXqAhnOf0KXUKbI8V2ZNTTobblzxu1G/Pu8Ogc
+        pTUikKtkzLs0Lelqe3h8jGwr0g==
+X-Google-Smtp-Source: AMrXdXsGqzy4vwJ6nXgO7LJDjvy6Wk/X1EG3VvmKvq0e98qtLO69306EqidXqDBkwJxu6pgTQQeNrg==
+X-Received: by 2002:a17:90b:3b87:b0:22b:afe2:2bb4 with SMTP id pc7-20020a17090b3b8700b0022bafe22bb4mr30492573pjb.8.1674867447456;
+        Fri, 27 Jan 2023 16:57:27 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x9-20020a17090a6b4900b00228c8aa7916sm5553751pjl.38.2023.01.27.16.57.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:56:45 -0800 (PST)
-Date:   Sat, 28 Jan 2023 00:56:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 04/11] KVM: SVM: drop the SVM specific H_FLAGS
-Message-ID: <Y9RyyvqKDqX3ZNY9@google.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
- <20221129193717.513824-5-mlevitsk@redhat.com>
+        Fri, 27 Jan 2023 16:57:26 -0800 (PST)
+Date:   Fri, 27 Jan 2023 16:57:26 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] iommufd: Add top-level bounds check on kernel buffer size
+Message-ID: <202301271655.A51DC1CF@keescook>
+References: <20230127223816.never.413-kees@kernel.org>
+ <Y9RwpuVyEi2SBmdQ@ziepe.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129193717.513824-5-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9RwpuVyEi2SBmdQ@ziepe.ca>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022, Maxim Levitsky wrote:
-> @@ -3580,7 +3583,7 @@ bool svm_nmi_blocked(struct kvm_vcpu *vcpu)
->  		return false;
->  
->  	ret = (vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK) ||
-> -	      (vcpu->arch.hflags & HF_NMI_MASK);
-> +	      (svm->nmi_masked);
+On Fri, Jan 27, 2023 at 08:47:34PM -0400, Jason Gunthorpe wrote:
+> On Fri, Jan 27, 2023 at 02:38:17PM -0800, Kees Cook wrote:
+> > While the op->size assignments are already bounds-checked at static
+> > initializer time, these limits aren't aggregated and tracked when doing
+> > later variable range checking under -Warray-bounds. Help the compiler
+> > see that we know what we're talking about, and we'll never ask to
+> > write more that sizeof(ucmd.cmd) bytes during the memset() inside
+> > copy_struct_from_user(). Seen under GCC 13:
+> > 
+> > In function 'copy_struct_from_user',
+> >     inlined from 'iommufd_fops_ioctl' at ../drivers/iommu/iommufd/main.c:333:8:
+> > ../include/linux/fortify-string.h:59:33: warning: '__builtin_memset' offset [57, 4294967294] is out of the bounds [0, 56] of object 'buf' with type 'union ucmd_buffer' [-Warray-bounds=]
+> >    59 | #define __underlying_memset     __builtin_memset
+> 
+> This seems strange to me
+> 
+> I thought the way gcc handled this was if it knew the value must be in
+> a certain range then it would check it
+> 
+> If it couldn't figure out any ranges it would not make a warning.
+> 
+> So why did it decide "rest" was in that really weird range?
 
-Unnecessary parantheses.
+It's because it got bounds-checked at the lower end (for the minimum
+size test).
 
->  
->  	return ret;
->  }
+> 
+> Is this just a compiler bug?
+
+I don't think so. This just keeps the bounds within the buffer size now.
+
+-- 
+Kees Cook
