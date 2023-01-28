@@ -2,86 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AECD67F537
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 07:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3298E67F53D
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 07:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjA1Gcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 01:32:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
+        id S232483AbjA1GgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 01:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjA1Gcq (ORCPT
+        with ESMTP id S231902AbjA1GgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 01:32:46 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C3279630
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 22:32:44 -0800 (PST)
-Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P3kz32VdVzJqM6;
-        Sat, 28 Jan 2023 14:28:15 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sat, 28 Jan 2023 14:32:40 +0800
-From:   Wupeng Ma <mawupeng1@huawei.com>
-To:     <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <mawupeng1@huawei.com>, <kuleshovmail@gmail.com>,
-        <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v3 4/4] mm/msync: return ENOMEM if len overflows for msync
-Date:   Sat, 28 Jan 2023 14:32:29 +0800
-Message-ID: <20230128063229.989058-5-mawupeng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230128063229.989058-1-mawupeng1@huawei.com>
-References: <20230128063229.989058-1-mawupeng1@huawei.com>
+        Sat, 28 Jan 2023 01:36:13 -0500
+Received: from out28-197.mail.aliyun.com (out28-197.mail.aliyun.com [115.124.28.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECB12D68;
+        Fri, 27 Jan 2023 22:36:10 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2861495|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0108941-0.197445-0.791661;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.R2f-ODq_1674887763;
+Received: from sun-VirtualBox..(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.R2f-ODq_1674887763)
+          by smtp.aliyun-inc.com;
+          Sat, 28 Jan 2023 14:36:07 +0800
+From:   Frank Sae <Frank.Sae@motor-comm.com>
+To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
+        hua.sun@motor-comm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Frank <Frank.Sae@motor-comm.com>
+Subject: [PATCH net-next v1] net: phy: fix the spelling problem of Sentinel
+Date:   Sat, 28 Jan 2023 14:35:57 +0800
+Message-Id: <20230128063558.5850-1-Frank.Sae@motor-comm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500014.china.huawei.com (7.185.36.153)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ma Wupeng <mawupeng1@huawei.com>
+ CHECK: 'sentinal' may be misspelled - perhaps 'sentinel'?
 
-Check and return 0 if len == 0 at the beginning of the function.
-Return -ENOMEM if len overflows for msync.
-
-Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
 ---
- mm/msync.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/net/phy/motorcomm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/msync.c b/mm/msync.c
-index ac4c9bfea2e7..3104c97d70d3 100644
---- a/mm/msync.c
-+++ b/mm/msync.c
-@@ -46,13 +46,16 @@ SYSCALL_DEFINE3(msync, unsigned long, start, size_t, len, int, flags)
- 	if ((flags & MS_ASYNC) && (flags & MS_SYNC))
- 		goto out;
- 	error = -ENOMEM;
-+	if (!len)
-+		return 0;
-+
- 	len = (len + ~PAGE_MASK) & PAGE_MASK;
-+	if (!len)
-+		goto out;
-+
- 	end = start + len;
- 	if (end < start)
- 		goto out;
--	error = 0;
--	if (end == start)
--		goto out;
- 	/*
- 	 * If the interval [start,end) covers some unmapped address ranges,
- 	 * just ignore them, but return -ENOMEM at the end. Besides, if the
+diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
+index 685190db72de..b6968c78c303 100644
+--- a/drivers/net/phy/motorcomm.c
++++ b/drivers/net/phy/motorcomm.c
+@@ -1804,7 +1804,7 @@ static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
+ 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
+ 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8521) },
+ 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8531S) },
+-	{ /* sentinal */ }
++	{ /* sentinel */ }
+ };
+ 
+ MODULE_DEVICE_TABLE(mdio, motorcomm_tbl);
 -- 
-2.25.1
+2.34.1
 
