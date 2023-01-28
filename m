@@ -2,137 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9272467F7A4
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C426067F7AC
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbjA1Lqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 06:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
+        id S233962AbjA1Lxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 06:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjA1Lqr (ORCPT
+        with ESMTP id S230074AbjA1Lxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 06:46:47 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763FB234DA;
-        Sat, 28 Jan 2023 03:46:46 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 15783424D0;
-        Sat, 28 Jan 2023 11:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1674906405; bh=XF6Idsk35kfCAPNyhQs/PAXkcVnV95QoxC92DpEL/c4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=V15IkajZn+WdS3awUit4i1s1e3s8SG6WSJhHCNzwEvZ+LMmI8i5FtRGBxGcg4gXKv
-         nHjjWFSmwbhZWFr1QCxhPFg1VY0jdaFcR+3ut3wjICWQWTqEAqiEq42o/45Wabbn2X
-         12v/BFUOjBa+/a7+kH4kEuMEXnAKXsF5Kettw0MBR1KrsaRzzMDLS+xfZ9w4os4R+v
-         uOrdlUVPPN/NCagInIoX/gVqVi8/oVfslaG/XCNPdNS1qAKSikXjPpkNT5/304XLNb
-         amvj17OQeghu5PZgZ0iA8AOEZ+UIfmLv+ySQ/v9NOd8d9Z6WO7fOqGTeKSCgkvqNgo
-         rQGn08gnUW4tQ==
-Message-ID: <3b796124-5edf-aff1-15e9-4ee94da5177b@marcan.st>
-Date:   Sat, 28 Jan 2023 20:46:40 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4/4] iommu: dart: Add support for M1 USB4 PCIe DART
-Content-Language: en-US
-To:     Sven Peter <sven@svenpeter.dev>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
-        iommu@lists.linux.dev, devicetree@vger.kernel.org,
+        Sat, 28 Jan 2023 06:53:32 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F2810A8F
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674906810; x=1706442810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v56gkPCfVmp/5J0sTIEWbfckxqrXa5C8j87HJqOVgQA=;
+  b=FiTrOhvOfsTIv9TolLrxNBYNZoIE2i5Tyr10GGvaFCfTK3zNOjBFhqtd
+   vlK9076vN5JNKpGP8Lb5tbBLuwSlTIzLjgAc5gj8+vJ+WJ3T2k2YhVueo
+   uxnym7JQpmAhk7xFUPbSssjGZLgqujYTH3S28/URehrtOU0Y4iRtHW1M0
+   YlqTwc4uLBMDZ+l749v+CQf26aSLGAHznnVCW26jJMSn7Uc/OKL2/HQhq
+   +N495o9avBBEAGku/pyt+Ef/5zWbKC+JvYMPNDML7R/cDLJptuYC3Q5X4
+   vYOfzl0B0mK8usO/wgCZQKIJ/yQxoTQdwPZZZtECEFvfELMak/pSfA8h3
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="329412098"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="329412098"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 03:53:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="992368716"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="992368716"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jan 2023 03:53:27 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLjlv-0000cP-06;
+        Sat, 28 Jan 2023 11:53:27 +0000
+Date:   Sat, 28 Jan 2023 19:52:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
+        kevin.tian@intel.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        yi.l.liu@intel.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org
-References: <20230128111114.4049-1-sven@svenpeter.dev>
- <20230128111114.4049-5-sven@svenpeter.dev>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <20230128111114.4049-5-sven@svenpeter.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 2/3] iommufd/device: Make hwpt_list list_add/del symmetric
+Message-ID: <202301281943.Jdvwci2p-lkp@intel.com>
+References: <25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/01/2023 20.11, Sven Peter wrote:
-> This variant of the regular t8103 DART is used for the two
-> USB4/Thunderbolt PCIe controllers. It supports 64 instead of 16 streams
-> which requires a slightly different MMIO layout. We also disallow bypass
-> support since these DARTs will only ever be used for externally facing
-> devices on the USB4 ports.
-> 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
->  drivers/iommu/apple-dart.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-> index 7579c97a9062..a1304ba3639b 100644
-> --- a/drivers/iommu/apple-dart.c
-> +++ b/drivers/iommu/apple-dart.c
-> @@ -81,6 +81,7 @@
->  #define DART_T8020_TCR_BYPASS_DAPF      BIT(12)
->  
->  #define DART_T8020_TTBR       0x200
-> +#define DART_T8020_USB4_TTBR  0x400
->  #define DART_T8020_TTBR_VALID BIT(31)
->  #define DART_T8020_TTBR_ADDR_FIELD_SHIFT 0
->  #define DART_T8020_TTBR_SHIFT 12
-> @@ -1184,6 +1185,35 @@ static const struct apple_dart_hw apple_dart_hw_t8103 = {
->  	.ttbr_shift = DART_T8020_TTBR_SHIFT,
->  	.ttbr_count = 4,
->  };
-> +
-> +static const struct apple_dart_hw apple_dart_hw_t8103_usb4 = {
-> +	.type = DART_T8020,
-> +	.irq_handler = apple_dart_t8020_irq,
-> +	.invalidate_tlb = apple_dart_t8020_hw_invalidate_tlb,
-> +	.oas = 36,
-> +	.fmt = APPLE_DART,
-> +	.max_sid_count = 64,
-> +
-> +	.enable_streams = DART_T8020_STREAMS_ENABLE,
-> +	.lock = DART_T8020_CONFIG,
-> +	.lock_bit = DART_T8020_CONFIG_LOCK,
-> +
-> +	.error = DART_T8020_ERROR,
-> +
-> +	.tcr = DART_T8020_TCR,
-> +	.tcr_enabled = DART_T8020_TCR_TRANSLATE_ENABLE,
-> +	.tcr_disabled = 0,
-> +	.tcr_bypass = 0,
-> +
-> +	.ttbr = DART_T8020_USB4_TTBR,
-> +	.ttbr_valid = DART_T8020_TTBR_VALID,
-> +	.ttbr_addr_field_shift = DART_T8020_TTBR_ADDR_FIELD_SHIFT,
-> +	.ttbr_shift = DART_T8020_TTBR_SHIFT,
-> +	.ttbr_count = 4,
-> +
-> +	.disable_bypass = true,
-> +};
-> +
->  static const struct apple_dart_hw apple_dart_hw_t6000 = {
->  	.type = DART_T6000,
->  	.irq_handler = apple_dart_t8020_irq,
-> @@ -1276,6 +1306,7 @@ DEFINE_SIMPLE_DEV_PM_OPS(apple_dart_pm_ops, apple_dart_suspend, apple_dart_resum
->  
->  static const struct of_device_id apple_dart_of_match[] = {
->  	{ .compatible = "apple,t8103-dart", .data = &apple_dart_hw_t8103 },
-> +	{ .compatible = "apple,t8103-dart-usb4", .data = &apple_dart_hw_t8103_usb4 },
->  	{ .compatible = "apple,t8110-dart", .data = &apple_dart_hw_t8110 },
->  	{ .compatible = "apple,t6000-dart", .data = &apple_dart_hw_t6000 },
->  	{},
+Hi Nicolin,
 
-Other than the compatible as per patch #1,
+I love your patch! Perhaps something to improve:
 
-Acked-by: Hector Martin <marcan@marcan.st>
+[auto build test WARNING on v6.2-rc5]
+[also build test WARNING on linus/master next-20230127]
+[cannot apply to joro-iommu/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-- Hector
+url:    https://github.com/intel-lab-lkp/linux/commits/Nicolin-Chen/iommufd-Add-devices_users-to-track-the-hw_pagetable-usage-by-device/20230128-150429
+patch link:    https://lore.kernel.org/r/25b3b85b03fc2a7968c476b0533f451acecdfd13.1674872884.git.nicolinc%40nvidia.com
+patch subject: [PATCH 2/3] iommufd/device: Make hwpt_list list_add/del symmetric
+config: x86_64-randconfig-a011-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281943.Jdvwci2p-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4d48fdd86375f6d888bbcf830a10c48720008955
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Nicolin-Chen/iommufd-Add-devices_users-to-track-the-hw_pagetable-usage-by-device/20230128-150429
+        git checkout 4d48fdd86375f6d888bbcf830a10c48720008955
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/iommu/iommufd/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/iommu/iommufd/device.c:279:23: warning: variable 'hwpt' is uninitialized when used here [-Wuninitialized]
+           lockdep_assert_held(&hwpt->ioas->mutex);
+                                ^~~~
+   include/linux/lockdep.h:319:33: note: expanded from macro 'lockdep_assert_held'
+           lockdep_assert(lockdep_is_held(l) != LOCK_STATE_NOT_HELD)
+                                          ^
+   include/linux/lockdep.h:286:47: note: expanded from macro 'lockdep_is_held'
+   #define lockdep_is_held(lock)           lock_is_held(&(lock)->dep_map)
+                                                          ^~~~
+   include/linux/lockdep.h:313:32: note: expanded from macro 'lockdep_assert'
+           do { WARN_ON(debug_locks && !(cond)); } while (0)
+                                         ^~~~
+   include/asm-generic/bug.h:122:25: note: expanded from macro 'WARN_ON'
+           int __ret_warn_on = !!(condition);                              \
+                                  ^~~~~~~~~
+   drivers/iommu/iommufd/device.c:276:35: note: initialize the variable 'hwpt' to silence this warning
+           struct iommufd_hw_pagetable *hwpt;
+                                            ^
+                                             = NULL
+   1 warning generated.
+
+
+vim +/hwpt +279 drivers/iommu/iommufd/device.c
+
+   267	
+   268	/*
+   269	 * When automatically managing the domains we search for a compatible domain in
+   270	 * the iopt and if one is found use it, otherwise create a new domain.
+   271	 * Automatic domain selection will never pick a manually created domain.
+   272	 */
+   273	static int iommufd_device_auto_get_domain(struct iommufd_device *idev,
+   274						  struct iommufd_ioas *ioas)
+   275	{
+   276		struct iommufd_hw_pagetable *hwpt;
+   277		int rc;
+   278	
+ > 279		lockdep_assert_held(&hwpt->ioas->mutex);
+   280	
+   281		/*
+   282		 * There is no differentiation when domains are allocated, so any domain
+   283		 * that is willing to attach to the device is interchangeable with any
+   284		 * other.
+   285		 */
+   286		list_for_each_entry(hwpt, &ioas->hwpt_list, hwpt_item) {
+   287			if (!hwpt->auto_domain)
+   288				continue;
+   289	
+   290			rc = iommufd_device_do_attach(idev, hwpt);
+   291	
+   292			/*
+   293			 * -EINVAL means the domain is incompatible with the device.
+   294			 * Other error codes should propagate to userspace as failure.
+   295			 * Success means the domain is attached.
+   296			 */
+   297			if (rc == -EINVAL)
+   298				continue;
+   299			return rc;
+   300		}
+   301	
+   302		hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev->dev);
+   303		if (IS_ERR(hwpt))
+   304			return PTR_ERR(hwpt);
+   305		hwpt->auto_domain = true;
+   306	
+   307		rc = iommufd_device_do_attach(idev, hwpt);
+   308		if (rc)
+   309			goto out_abort;
+   310	
+   311		iommufd_object_finalize(idev->ictx, &hwpt->obj);
+   312		return 0;
+   313	
+   314	out_abort:
+   315		iommufd_object_abort_and_destroy(idev->ictx, &hwpt->obj);
+   316		return rc;
+   317	}
+   318	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
