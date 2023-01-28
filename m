@@ -2,166 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021C367F570
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1CD67F571
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjA1HT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S232700AbjA1HTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjA1HT0 (ORCPT
+        with ESMTP id S231575AbjA1HT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 28 Jan 2023 02:19:26 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762FD7E6CC
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3E97E6E3
         for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:19:24 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id jl3so7046785plb.8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=laXAH5vCj60E4SKPB0EaS+rzszoEwgFmO/AUUT4c6EE=;
-        b=tmPZMbcJdI07kMJbg//bhDUNZ5KDVVZ2XAzmy8ooz8DAs/87eQ8xaIW9TMmlo7p11e
-         hdSVHBR5OJilXJnd6grGS0h68h34HGg+wmw02fuRE3b8brDJ4Rpk3tb6YfnqMUaMNhjM
-         fgye91Hf232OS8bCCEAmgY2kHzH7TvDc87sBHl+WPLXCSalMe5BWf/ze5NEMJrUa7o2O
-         Jcy1lTTkJcImUcG+o7lTL+/xh3ChzFeROE8zm199gWvoBKR4rdbbAdKNH/EVHjkrThIl
-         Bz8K7V429/gShD3wOSxSSFR7OYsgY82uRYwvBvSbV+BGLHO84mkzYjIcLyNuodj9mkX3
-         YaOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=laXAH5vCj60E4SKPB0EaS+rzszoEwgFmO/AUUT4c6EE=;
-        b=rf3C0QOE9fopcvYOp4409JwwDK99vS7pn9lWp1uco5tVQ27p1UKBx427E85DQ2n67E
-         dzWIaDkmmZ3AmKOSqsZXvNnrrtFK1D/Kj9cAg5TROLTignklmpq9gwf8ak8AKy/pszN6
-         RvcdUG61isCyj+kP4C6+f3I/kRyounaQs7wOMkomb0kIpqCf6qnmxkFqFDPjiRmjaJJ0
-         wIoCmdnHz8mnORADW0tdeibcSXP1O+jQQ6gpkSPbnsp7PHwFQDt52h8AGpoYM28/PS7h
-         dt3PGPZaP7nFp0C6JjllDF5kpCKvt2fw8JBBJRGuUDskO5pVxwHZwvWtJrhDb58G4sm4
-         1+gA==
-X-Gm-Message-State: AO0yUKX20QaaQ1EpwLjdlz8Z0yln5ZxfiYPWruMQKaOuRVldPlekxlIP
-        YFazLEwx8Hux945Q3SASBdv6IAfJxP0So+zzst50bw==
-X-Google-Smtp-Source: AK7set9Mr0byHbMSV0I8NA2aqwV2H7BFCi7M8aNlkggIrU6lOiPUWBoUK5Tegh3Ooimmvu26mnAavaDANvOV+V848Ys=
-X-Received: by 2002:a17:90a:64c5:b0:22b:ef05:ea5b with SMTP id
- i5-20020a17090a64c500b0022bef05ea5bmr2691642pjm.50.1674890363672; Fri, 27 Jan
- 2023 23:19:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674890364; x=1706426364;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=LWxH/VW2+Lz+1Yq5hCTUsQb1SudnM4pE7CilyGZyicE=;
+  b=XhDwWUlA+3TlzCl5B9lwccOezixrh0H+p4dhGmx8okvtN9rOCvkayqBC
+   q/53foaZ2D8PCp6wcvh9DyTyeX3QUg3DjTGEOHJEFNGVJ/WEM0n5ZNJA5
+   OvqYVRUb4XkV9Fmf6GfdmM+k2LmE3jZ7yB9eSJkAzujlYcyv6g2r+bk4h
+   Q7O+iNIblw+/VScmzTow/Cl3lrI7F1TCnC7tzpgXim3lwSbOpNXcG6b0k
+   jssHUusQXqTOuzh3M3BYbqGfbgfMV2gejbmYvfxrOKtWlHm13+ZkfBwat
+   7c2JWb6A6/azJxnHHmiv+b+1IB+fx2EiL8yS3/7WuJ8pe6NpHx5Fip9hu
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="315225532"
+X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
+   d="scan'208";a="315225532"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 23:19:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="806079741"
+X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
+   d="scan'208";a="806079741"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga001.fm.intel.com with ESMTP; 27 Jan 2023 23:19:23 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 27 Jan 2023 23:19:23 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 27 Jan 2023 23:19:23 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.48) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 27 Jan 2023 23:19:22 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Hzg3kPfTGrs4QJB9188uokcna4sp/UoVXKXG5zpLFoS5P45MIaNaH+pWjQArrpJQ2Wpp+5e0TgSRfHEQLlLxKZmEcb1trsvPkbVCB/fJpfWtzsNyRfNQ1NtIsEPhdBYRiB7cIbja/ecJYiRLz7MS7LBpxk4EFI9cqW6l9yIfFSMzaXJ1rbGvVGw8D4L2HyXOs4KYzGEtxZmar8sQP5IU0Oga0zKdCkU+/ogdztZAtBxuWwwBuKfWU0Nx5/uUm3qGdJGTkMD1ercG77vBoTooLLUJbSWMVliHKvJiQSkSNKigFc9r1fX+PAtLOOOPIFT8qSaAJz0Yii8iNHvXOgTa3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LWxH/VW2+Lz+1Yq5hCTUsQb1SudnM4pE7CilyGZyicE=;
+ b=dGi8lqaUSpKaiTAkqs7iMslwaBl4NcKlaqnRfPODlgjfBZdKv5kTfleb/kuGLtMRGN7P35GGx8xVBzV9NVTEOtLYxcZSpEjYoFPhCtx5aQy3D1UgmxUEL6csom5cK3DQsDw3wO18ds9Kiz4mUwNhrK1TItFVCYTUCBcX1VWvyWAy3V8HWmm9mOKUHZ3A22ojk1WTqC4nfu2XxnSXDp7CeJh5RKkimEqz2eJXNBLWfQJ7UxfGC6nrZyxk9ZL0PkMHv6RsQljyWbw3jKHoLAo64GmPLAvf98+Q18YEUWky8ICGSPqriVP8c/lRMPDKUPoSjWFeWE5grM+pDCHQC9Dviw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SJ0PR11MB4832.namprd11.prod.outlook.com (2603:10b6:a03:2dd::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.25; Sat, 28 Jan
+ 2023 07:19:16 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%8]) with mapi id 15.20.6043.030; Sat, 28 Jan 2023
+ 07:19:15 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+CC:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/1] iommu/vt-d: Set No Execute Enable bit in PASID table
+ entry
+Thread-Topic: [PATCH 1/1] iommu/vt-d: Set No Execute Enable bit in PASID table
+ entry
+Thread-Index: AQHZMW1ctbLQ4QKwd0Snbo5JfNawX66zbWnQ
+Date:   Sat, 28 Jan 2023 07:19:15 +0000
+Message-ID: <BN9PR11MB5276D8D7CF2AD32D605EFD628CCD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230126095438.354205-1-baolu.lu@linux.intel.com>
+In-Reply-To: <20230126095438.354205-1-baolu.lu@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SJ0PR11MB4832:EE_
+x-ms-office365-filtering-correlation-id: 3a83fb0a-6f61-42f6-26e6-08db00fff65d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Zwc5gDoy4MW3msJ2j5v9MEo1nNi321faYzvGs0iN8dKaZSqv5pLpfQFLzuUqcn5HzaB8O9zUsA32NnkQF+TkkHm7G1yZ4skzTN+gKYWJguD9gD/cUVvkzgNE5pj1S0yD7oyKwCJ0OJg42/kye4LY5M+AmABc4DSOhUI0seNUCt1s9l+MezmkpDjSPo4YV00Ips6qKMliYWLPOulI2fViBlt0yNxmpNDFcHyeTlRVa4adVBtI0779tqiJD+hDNIrb2RvF1f0K/ZFf2aAHr0S5FQFmH4WTFQ9DOU3ALZ1r9mdRXvXBulnej5Vopp571Br/ZkayisLk78iU/r3oXXEpd0rCmheBpByhgpmDp70rdrZ94KfmV62gcWQczjcdLswewlV6F7VTlUXET53pGHI/hZfzfV+nHSt2HwI3uW5/sLMHKiyasLW3s4g3dls887UYOcCYspig0fy94g0qkAmBIleU3ToYiH71xTz7BjLjQueoHv0+ZGL90uoonlr0fp+WYwCGuc/69zJS1SFWXFZ5VDDIlA7Zr1n2m76/s6edtxxD9dxjiEZkqzGGxlxSlIehfqzSiSdK1zhLbg1huHZcWVCcMcXGuBt+9OaQLGcy5c/LrgiIWyl6PYEc4FQukNMyaTxcQubdscb5cAEf3RFdHT+CCdmHIrueemBLvUDsDXIckH7I+xinfeNWDhkkNX3cz+Q6UAOah6e7dxtlPuaW1A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(376002)(346002)(136003)(396003)(39860400002)(451199018)(478600001)(82960400001)(26005)(9686003)(186003)(76116006)(41300700001)(6506007)(4326008)(66556008)(8936002)(66446008)(66946007)(64756008)(8676002)(66476007)(55016003)(38100700002)(7696005)(316002)(2906002)(122000001)(86362001)(71200400001)(5660300002)(33656002)(110136005)(54906003)(4744005)(52536014)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1F8IJ78HbrrCQKwskrJijaEOJ/s666QONCKooFBxJIMBGJAiZGu8L8CwZUT3?=
+ =?us-ascii?Q?g8V804hut/U2pMui0W2j74gTtYasBEYGvVbDHyzevB8y5pitybKCbQpqJWYu?=
+ =?us-ascii?Q?4g2sx3/+71R3dKhHxefGF9UE9HsWTHrB77cP4fFHBOYQfLr5Fh5dGOVq0EWi?=
+ =?us-ascii?Q?QpqiLRCzcpdO3A8oas0JbDXYTyo4HaolEvqL/+VRNpFmQrRFwwZAstX1IvSg?=
+ =?us-ascii?Q?gq4ZZn9qm/ILF2m1VkEf8P52FxpSM1D4r0fzv8iB6JAytSC/AXwDLzU7pE+w?=
+ =?us-ascii?Q?hpMKadG+LM3Egg2U6ZqbMx7oZw5TxgvSm9O/8xizKELZKjad4yaLXtaSLHWc?=
+ =?us-ascii?Q?+De1Fe2uAZT22alTmEBFqBWVYD3ugX5buUcsVnacGYp9W0PLK/jWfSPbO8O5?=
+ =?us-ascii?Q?y1ytwOAPq5qwuq0/LmV99BPdI/ubzJhoLPAo+nT/lLxdUUrMhlYz20sNYFfW?=
+ =?us-ascii?Q?x3PtSUoRQxG3p7Dl7VN9S2nJmMPp0jPqq3/b/ljRPjvSpJB7sBiHeebvClWv?=
+ =?us-ascii?Q?/JViMXU4EKfUnUbowDxHcQUDNJC1Zcqz7VrcZwZNLqpyvyb30cLdZlUxcvB5?=
+ =?us-ascii?Q?WoOM2o2ZABMsSZOfWp8gS4V8Pt9HM3AvgCDTTa+7wzOpI4ejqxVFOzArMPNB?=
+ =?us-ascii?Q?grlRKrxCOXhWBKxvG3LbiGwpDR4NsP3F6TjuI4pknBiGFFS7izhbobaKQSl7?=
+ =?us-ascii?Q?gX1uXqRgML71jgTdFoR3KNhWcbE6t1INxUunOaUR7Xzz9+1Xl/vnApPJEhez?=
+ =?us-ascii?Q?fO/bwR/vdbNusSpWo2NVVIbNdx7+1iWbAgCKfumgjotG860Q1uPuQZclZwYN?=
+ =?us-ascii?Q?EvdgPXxHm80fNuUrxJ87Rs/oS1iPu3eB4PhkqwBrKdOQdRl5almj6wONOBei?=
+ =?us-ascii?Q?2xZTadzXKhpJhsBRmw95M1QYKlEbX8YB9ep84rZARVixu4aLDj63LdjU98iz?=
+ =?us-ascii?Q?tv1OfaC/S6ZShtqILXwWLxhAVemfIfBiihUInIxgxWTDGO4z5PPRRTnR96Iu?=
+ =?us-ascii?Q?HUAu/Rg2jyTEWAxVE61DsI5o0X5lmsX8ZL6zxXJ8XnPq//TknRZgkXZdQENk?=
+ =?us-ascii?Q?1o2f425q8mloMuquhumR6hx4sIIk1dvNKUP5Ts6be5nvwXkO5k94b2SauKIp?=
+ =?us-ascii?Q?l2bGI7eKTXXOhUQ+6XNi5X13Q9A87GX7Cd4q+WwqAFISlf4u34IognIi/mFM?=
+ =?us-ascii?Q?byUsxdn+JXZVvH+zgkTeo8I+zunxFUYtHK/ckevaConxi5OnkEgjc/yAf2BI?=
+ =?us-ascii?Q?ekasjVJrGio1D83WebM0J1acn4yI5IByXHq7iV610rLbJGCNINV+ro3t4g3A?=
+ =?us-ascii?Q?nDaIWPKRPl162vPWJ8Idw8y7mAQ/XkCNP4ehsGgvEp5g3o561Un1xcIJloAw?=
+ =?us-ascii?Q?3Ftwbk3GK9yDByjps25vOHoNIY/EyehAj+b4QRcZoY1zZRJXTY1Xc+sWLpPv?=
+ =?us-ascii?Q?uSUut4TSl+gk5iUTmoZE7IaJ8wmfQUcqrfStEvRurvr6HcXImrP4l+k4WLgR?=
+ =?us-ascii?Q?RZQk0faQewDr2ol9PhFkOW9VX5uFLVCUgw/FSDxw9jM+huYKDM5MKlkn4E3r?=
+ =?us-ascii?Q?XVWKewQdJpdgn+rJxZTPSO4LGUlawIpWuAivh04U?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-4-saravanak@google.com>
- <CAMuHMdV4B49OM7S-UAxJtfAR8OvG_-S526fGnTA+t+-orytrTw@mail.gmail.com>
-In-Reply-To: <CAMuHMdV4B49OM7S-UAxJtfAR8OvG_-S526fGnTA+t+-orytrTw@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 27 Jan 2023 23:18:46 -0800
-Message-ID: <CAGETcx9EXkbAfEX6pBL84DBr3SEwiJe7N4xh91TspLn8CwZ+LQ@mail.gmail.com>
-Subject: Re: [PATCH v2 03/11] soc: renesas: Move away from using OF_POPULATED
- for fw_devlink
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a83fb0a-6f61-42f6-26e6-08db00fff65d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2023 07:19:15.2548
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xnMbOgapJy6z0VYm8NSaTVktYmDMLZO7CUDN7wMpZ7AYaHSZvk1Rh8MVRouBdmhx1U8rq99FYMkyVquHDg3HiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4832
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 12:11 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Saravana,
->
-> On Fri, Jan 27, 2023 at 1:11 AM Saravana Kannan <saravanak@google.com> wrote:
-> > The OF_POPULATED flag was set to let fw_devlink know that the device
-> > tree node will not have a struct device created for it. This information
-> > is used by fw_devlink to avoid deferring the probe of consumers of this
-> > device tree node.
-> >
-> > Let's use fwnode_dev_initialized() instead because it achieves the same
-> > effect without using OF specific flags. This allows more generic code to
-> > be written in driver core.
-> >
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
->
-> Thanks for your patch!
->
-> > --- a/drivers/soc/renesas/rcar-sysc.c
-> > +++ b/drivers/soc/renesas/rcar-sysc.c
-> > @@ -437,7 +437,7 @@ static int __init rcar_sysc_pd_init(void)
-> >
-> >         error = of_genpd_add_provider_onecell(np, &domains->onecell_data);
-> >         if (!error)
-> > -               of_node_set_flag(np, OF_POPULATED);
-> > +               fwnode_dev_initialized(&np->fwnode, true);
->
-> As drivers/soc/renesas/rmobile-sysc.c is already using this method,
-> it should work fine.
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> i.e. will queue in renesas-devel for v6.4.
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+> Sent: Thursday, January 26, 2023 5:55 PM
+>=20
+> Setup No Execute Enable bit (Bit 133) of a scalable mode PASID
+> entry. It is required when XD bit of the first level page table
+> entry is about to be set.
 
-Thanks! Does that mean I should drop this from this series? If two
-maintainers pick the same patch up, will it cause problems? I'm
-eventually expecting this series to be picked up by Greg into
-driver-core-next.
+"is about to set" sounds like the NXE bit is set conditionally when
+certain event happens. But the actual definition of NXE bit is to
+allow the use of XD bit of the first level page table.
 
--Saravana
+With the comment fixed:
 
->
-> >
-> >  out_put:
-> >         of_node_put(np);
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
