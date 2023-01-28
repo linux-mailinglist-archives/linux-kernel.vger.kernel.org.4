@@ -2,116 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F169067F793
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62DC67F796
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjA1Ldv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 06:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S233569AbjA1Lfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 06:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjA1Lds (ORCPT
+        with ESMTP id S233096AbjA1Lfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 06:33:48 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7CAA271
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:33:47 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso11083931pjj.1
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:33:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0+vbyXEO5ZjGT+93R/0smtSFLyUkyWND86MvhSizTJE=;
-        b=nSIjx/E5hZc7SLk8D4Jz/YgjkJJ7uwde0+7TDidW748INJ5hMQ9eWt34STpe6jbwCe
-         wHjk8Sl9+HIyY4bIRYkdGTJlACSA8t02WmGwuEQ3J4l+SnRbRKB6hFHPebSz6mUXtuBY
-         678AWnKtBNbkPKL/BPsLOdFW3hLIPfbzTCPZrvy4OQMsW4NzfSaRUBhqtNLdhjBybsvh
-         DUte4QoDxdlld6NTQN2GnR1Qwt6MffTvnCUwm+P44uBjNASyrnFFz4CQoqM8For4VPHs
-         WknIoyAJ++lnTUCRnLlxlBK9SQSvVKcwUY3vmD37hUPHk/zZbUteUVNQz/bH/MmBVV0Q
-         Pk8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0+vbyXEO5ZjGT+93R/0smtSFLyUkyWND86MvhSizTJE=;
-        b=jTAwzrAiDE9NwfyA/LX2eoTWQrWNHqSxfP2T2J/zChruMWGBoEHGOHQpDRLr5nG9CO
-         Ie6UJrX1QNlOd4H+XzLvwrZKvW0i4HX+xEvK1/SE7F5/BontaPDM1yg4xB/ixXxGufl1
-         zc8YzkIURrCBs9Od0S8eRW+eWtTNSp6WFnINzvYGnt53vAc/8dfq8IcbrFY9204nYrRa
-         Pw0SovMk/huhDlU1ODrzDKG6ZPGpabj317iBbFLHnNT/fyGkMufMOw84IyiY26asA1oF
-         TPgFHeTl23KFhZaK7vcXbeofqY6qfasNTJfxbuV1WIh1NG3SH038EtiOqHuKrBbZYBsY
-         WprQ==
-X-Gm-Message-State: AFqh2koVPKKu2Y9peB1/IHAlk3dIQdRkix7hnHBc+FWasNhFnj9tZm9a
-        xzQj78XJeqQ4aaRixWVgnaY=
-X-Google-Smtp-Source: AMrXdXust+O1bkLT1e54NDlo7jlLm8yw9QPmOTn14gd8+7KsCWht7KxIDy2ajF87971shDASiQgW7w==
-X-Received: by 2002:a17:902:cccb:b0:192:b927:39d1 with SMTP id z11-20020a170902cccb00b00192b92739d1mr45094625ple.3.1674905627356;
-        Sat, 28 Jan 2023 03:33:47 -0800 (PST)
-Received: from min-iamroot ([210.91.70.133])
-        by smtp.gmail.com with ESMTPSA id j22-20020a170902759600b00194a297cb8esm4345544pll.191.2023.01.28.03.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 03:33:47 -0800 (PST)
-Date:   Sat, 28 Jan 2023 20:33:42 +0900
-From:   Hyunmin Lee <hn.min.lee@gmail.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Jeungwoo Yoo <casionwoo@gmail.com>,
-        Sangyun Kim <sangyun.kim@snu.ac.kr>
-Subject: [PATCHv2] mm/vmalloc: replace BUG_ON to WARN_ON
-Message-ID: <20230128113342.GA1164537@min-iamroot>
-Reply-To: Y9PntwfqtarxWFUq@hyeyoo
+        Sat, 28 Jan 2023 06:35:44 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB872E831
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:35:43 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 4FFE03200921;
+        Sat, 28 Jan 2023 06:35:42 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 28 Jan 2023 06:35:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1674905741; x=1674992141; bh=4olYd8m5Y3
+        m/Ketj4EwpMONs8K8Rrl0HRXvFBBCSojM=; b=bljsgFRJbyiyanK0zuGhiY2eKE
+        1w8dNqZ6EXngJ3Xk9DEgDZND5FceFkvIGJ566U7Dcf/RoJU555MnVTZPhYxyf3ji
+        9eGALqBWpsDzC3uVebiO2s+qseU6La9Ys4hirvioO8uw5uituT/tn9aOE3Pb9ASC
+        BVIeBEpj32yj+/r/uOZ1YGtKAgCx8MeU50kd2PNdL8MBK5SvtwPdAATZq/gfd4Rv
+        ZrQWlyHpi2ydEg6/tRcL3bgHV/th+uLA9ZIXXVQjsoKzUUDgB+p3sDN+t2Q8R1+x
+        7/vwGmB8USIBumdPiT4RNJv4nhDMWEf1UmGS5X7Ye/LhrUb0XqLEnq+Zz8cQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1674905741; x=1674992141; bh=4olYd8m5Y3m/Ketj4EwpMONs8K8Rrl0HRXv
+        FBBCSojM=; b=hDpqJwehKURHYH2X8/xGLrBUD+TpPSYu9hCLfuI5QFBGzDM2b0z
+        pshS+EG0vkK4avyUSz/Wxo0dk6nrCDESi9Dsi+wufoDQpKJ3p6iC8dGyhKzMbjos
+        p3AiklKV/Xr36lAacL0uXPxysuRu7mPcv/zGkn0di7TYsKO4kZjujgFVJiTDVW6m
+        FGIhak3pygmSfm/TZeV+/hFd5x/ME8SKcZCZ/s5MKapzueqeU0nqE9MaVdyv59aT
+        tDSAqxrEaoWTaPGZST9BogqzWjMI0sWOsB9XuttBy7LWs6aToKeZlNRmuf2+G6ZA
+        aWcwpnibBdh6JC2OXOUu4dxiHOytX6HM7xg==
+X-ME-Sender: <xms:jQjVY3Slwgfj5AekHjbAcdhhLpAKlw0qydxNrqWkb-G2Uodxa-0TxA>
+    <xme:jQjVY4zGbJXD2HpCyg83OP1HSkZcGaRTK8jmssJFIBhNc9yHxuIrMvZuz-RAfwN2n
+    uFA4WYkMj6f1B84qbc>
+X-ME-Received: <xmr:jQjVY82pIsIb9L2Lbejms4NdvZ8YaVyeaO5Tv2_Ljrx0r79lIc6CvnZXa3RXVGP1BAIuJ_T4j8LiFP71CMH3udn2Oe94PzflfUGxWxY5ebJ92qI3PCtTi2XfBC6TYA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvkedgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfr
+    vghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrh
+    hnpeeludffieehueevtdffvedtueelleejuddugfettdevhfefffdvgffhjeehgfelleen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnh
+    esshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:jQjVY3DmL2FkvGSzKPA5kXJhldLQJNRkolLH6Xn67T4zKUuahAEsqg>
+    <xmx:jQjVYwiC8TXuTDk08hHu4QEkz3RRs1eHo6QcvqvWVPUPefuwCLL98w>
+    <xmx:jQjVY7op7kLEOSe10kzi3fnv10YhaevUoyDcc43a2LaLULLj9wHRSQ>
+    <xmx:jQjVY5Wfs5iOzs8TkveFBWFXZv2RbTK_HHv07A8tdNkDX_zTTtFz7w>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 28 Jan 2023 06:35:40 -0500 (EST)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Robin Murphy <robin.murphy@arm.com>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu/dart: Fix apple_dart_device_group for PCI groups
+Date:   Sat, 28 Jan 2023 12:35:32 +0100
+Message-Id: <20230128113532.94651-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per the coding standards, in the event of an abnormal condition that should not occur under normal circumstances, the kernel should attempt recovery and proceed with execution, rather than halting the machine.
-Specifically, in the alloc_vmap_area() function, use WARN_ON() and fail the request instead of using BUG_ON() to halt the machine.
+pci_device_group() can return an already existing IOMMU group if the PCI
+device's pagetables have to be shared with another one due to bus
+toplogy, isolation features and/or DMA alias quirks.
+apple_dart_device_group() however assumes that the group has just been
+created and overwrites its iommudata which will eventually lead to
+apple_dart_release_group leaving stale entries in sid2group.
+Fix that by merging the iommudata if the returned group already exists.
 
-Co-Developed-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Co-Developed-by: Jeungwoo Yoo <casionwoo@gmail.com>
-Co-Developed-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-Signed-off-by: Hyunmin Lee <hn.min.lee@gmail.com>
-Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Signed-off-by: Jeungwoo Yoo <casionwoo@gmail.com>
-Signed-off-by: Sangyun Kim <sangyun.kim@snu.ac.kr>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Fixes: f0b636804c7c ("iommu/dart: Clear sid2group entry when a group is freed")
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- mm/vmalloc.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/iommu/apple-dart.c | 51 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 44 insertions(+), 7 deletions(-)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 74afa2208558..9f9dba3132c5 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1587,9 +1587,14 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
- 	int purged = 0;
- 	int ret;
+This won't apply cleanly to iommu/fixes as it's based on the t8110 DART
+changes since the USB4/Thunderbolt DART itself also depends on those.
+That's not a big deal though since it's not possible to run into this
+bug without complex PCI bus topologies which can only be created using
+USB4/Thunderbolt on these SoCs and there's no support for that upstream
+yet.
+
+diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+index a1304ba3639b..02f7a1740b14 100644
+--- a/drivers/iommu/apple-dart.c
++++ b/drivers/iommu/apple-dart.c
+@@ -840,6 +840,29 @@ static void apple_dart_release_group(void *iommu_data)
+ 	mutex_unlock(&apple_dart_groups_lock);
+ }
  
--	BUG_ON(!size);
--	BUG_ON(offset_in_page(size));
--	BUG_ON(!is_power_of_2(align));
-+	if (WARN_ON(!size))
-+		return ERR_PTR(-EINVAL);
++static int apple_dart_merge_master_cfg(struct apple_dart_master_cfg *dst,
++				       struct apple_dart_master_cfg *src)
++{
++	/*
++	 * We know that this function is only called for groups returned from
++	 * pci_device_group and that all Apple Silicon platforms never spread
++	 * PCIe devices from the same bus across multiple DARTs such that we can
++	 * just assume that both src and dst only have the same single DART.
++	 */
++	if (src->stream_maps[1].dart)
++		return -EINVAL;
++	if (dst->stream_maps[1].dart)
++		return -EINVAL;
++	if (src->stream_maps[0].dart != dst->stream_maps[0].dart)
++		return -EINVAL;
 +
-+	if (WARN_ON(offset_in_page(size)))
-+		return ERR_PTR(-EINVAL);
++	bitmap_or(dst->stream_maps[0].sidmap,
++		  dst->stream_maps[0].sidmap,
++		  src->stream_maps[0].sidmap,
++		  dst->stream_maps[0].dart->num_streams);
++	return 0;
++}
 +
-+	if (WARN_ON(!is_power_of_2(align)))
-+		return ERR_PTR(-EINVAL);
+ static struct iommu_group *apple_dart_device_group(struct device *dev)
+ {
+ 	int i, sid;
+@@ -881,14 +904,28 @@ static struct iommu_group *apple_dart_device_group(struct device *dev)
+ 	if (!group)
+ 		goto out;
  
- 	if (unlikely(!vmap_initialized))
- 		return ERR_PTR(-EBUSY);
+-	group_master_cfg = kmemdup(cfg, sizeof(*group_master_cfg), GFP_KERNEL);
+-	if (!group_master_cfg) {
+-		iommu_group_put(group);
+-		goto out;
+-	}
++	group_master_cfg = iommu_group_get_iommudata(group);
++	if (group_master_cfg) {
++		int ret;
+ 
+-	iommu_group_set_iommudata(group, group_master_cfg,
+-		apple_dart_release_group);
++		ret = apple_dart_merge_master_cfg(group_master_cfg, cfg);
++		if (ret) {
++			dev_err(dev, "Failed to merge DART IOMMU grups.\n");
++			iommu_group_put(group);
++			res = ERR_PTR(ret);
++			goto out;
++		}
++	} else {
++		group_master_cfg = kmemdup(cfg, sizeof(*group_master_cfg),
++					   GFP_KERNEL);
++		if (!group_master_cfg) {
++			iommu_group_put(group);
++			goto out;
++		}
++
++		iommu_group_set_iommudata(group, group_master_cfg,
++			apple_dart_release_group);
++	}
+ 
+ 	for_each_stream_map(i, cfg, stream_map)
+ 		for_each_set_bit(sid, stream_map->sidmap, stream_map->dart->num_streams)
 -- 
 2.25.1
 
