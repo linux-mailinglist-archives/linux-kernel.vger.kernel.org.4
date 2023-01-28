@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE60A67F6C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 10:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D50667F69F
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 10:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbjA1Jjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 04:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S232700AbjA1JRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 04:17:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjA1Jjn (ORCPT
+        with ESMTP id S231444AbjA1JRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 04:39:43 -0500
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608D82D69;
-        Sat, 28 Jan 2023 01:39:41 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VaHEO08_1674898762;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VaHEO08_1674898762)
-          by smtp.aliyun-inc.com;
-          Sat, 28 Jan 2023 17:39:38 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     bcain@quicinc.com
-Cc:     linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] trap: Fix warning comparing pointer to 0
-Date:   Sat, 28 Jan 2023 17:39:20 +0800
-Message-Id: <20230128093920.2729-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Sat, 28 Jan 2023 04:17:48 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649BB30D0;
+        Sat, 28 Jan 2023 01:17:46 -0800 (PST)
+Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P3pkT5GC9zfZ8f;
+        Sat, 28 Jan 2023 17:17:37 +0800 (CST)
+Received: from localhost.localdomain (10.175.127.227) by
+ kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sat, 28 Jan 2023 17:17:42 +0800
+From:   Zhong Jinghua <zhongjinghua@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hare@suse.de>, <bvanassche@acm.org>,
+        <emilne@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <zhongjinghua@huawei.com>, <yi.zhang@huawei.com>,
+        <yukuai3@huawei.com>
+Subject: [PATCH-next v2 0/2] scsi, driver core: fix iscsi rescan fails to create block device
+Date:   Sat, 28 Jan 2023 17:41:44 +0800
+Message-ID: <20230128094146.205858-1-zhongjinghua@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600002.china.huawei.com (7.193.23.29)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid pointer type value compared with 0 to make code clear.
+v1->v2: add a new patch that introduces get_device_unless_zero() method.
 
-./arch/hexagon/kernel/traps.c:138:6-7: WARNING comparing pointer to 0.
+Hello, This patchset introduces get_device_unless_zero() method, Avoid
+dev's reference count from 0 to 1, as this will cause bugs in some parts
+of the kernel. 
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3860
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- arch/hexagon/kernel/traps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We used this method when we fixed an issue with iSCSI delete order.
+Zhong Jinghua (2):
+  driver core: introduce get_device_unless_zero()
+  scsi: fix iscsi rescan fails to create block device
 
-diff --git a/arch/hexagon/kernel/traps.c b/arch/hexagon/kernel/traps.c
-index 6447763ce5a9..fdbbf78b4ce0 100644
---- a/arch/hexagon/kernel/traps.c
-+++ b/arch/hexagon/kernel/traps.c
-@@ -135,7 +135,7 @@ static void do_show_stack(struct task_struct *task, unsigned long *fp,
- 		}
- 
- 		/* Attempt to continue past exception. */
--		if (0 == newfp) {
-+		if (!newfp) {
- 			struct pt_regs *regs = (struct pt_regs *) (((void *)fp)
- 						+ 8);
- 
+ drivers/base/core.c       | 8 ++++++++
+ drivers/scsi/scsi_sysfs.c | 4 +---
+ include/linux/device.h    | 1 +
+ 3 files changed, 10 insertions(+), 3 deletions(-)
+
 -- 
-2.20.1.7.g153144c
+2.31.1
 
