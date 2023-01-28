@@ -2,142 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25EF67F28E
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF6867F298
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbjA1AAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
+        id S231292AbjA1AEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjA1AA3 (ORCPT
+        with ESMTP id S229776AbjA1AER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:00:29 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE201A24D
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:00:28 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id h5so7888573ybj.8
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:00:28 -0800 (PST)
+        Fri, 27 Jan 2023 19:04:17 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32CC834B2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:04:16 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 141so4257705pgc.0
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:04:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lijrLZpsXTwOwkkTPhsucO7YRqlZ4/gQhAOPSV+Ow1Y=;
-        b=ZI6mj7LMKoNI/oOcrUtd9AUED9JuO6xGc225ZP5uALsCXRzd5tFQyZH9QfEgcc0bEJ
-         9MyRsCvVZhFftsPfxOsSdKAlZ9GqA6WUrV9aTPd04wtI360xfqHl28+MEAyKXCixyLSk
-         v8GrgI9q5COmywhNxiEU2+JydvMvd/BUJNpQDFUYR03wciVHZjv2EuSHGsiQLe/irS5u
-         RDJKdxaqaPSErbAgtbt4IW1KQBMdHVynCsJnp7XSUo4WFhOq1Cn2ildO86zTjyE4mi+d
-         qY/TAAQK5YagCO/hba9UdT8QCqoflyP2AkBiQBN42R1sMEg9No3XOKucr14HB2VVZKdY
-         RBZg==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FDc1f6H36kSbMyhmdOu12h8TguEbHWVRiGzB2+CN2EQ=;
+        b=jqN19sWZ3nZ1ylcOToqEKpzql3r9UmN8+byIOuXDFEh2VxNe/47KCoXcmXX2cCO8t0
+         artbB2vnijdLeMOclOlwjOQ4oil+/MxPYfFhyebOQLChNRaruqY1qpqQ2eFTJSg5TdAu
+         i1uFKylpcNV6TRc0ZpzXNmOK0MT8gRs3RUt/A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lijrLZpsXTwOwkkTPhsucO7YRqlZ4/gQhAOPSV+Ow1Y=;
-        b=HhBWqix4bRfGKtmlC+D0XO+V9jZpeopm5e7TYIej4s1+44w40Nojhv7FXkVI2ecZx6
-         mpGclf9x4RNtOUb8f4cd4tp8PP/Kv2vUmMA/d0Hzo23YqxzSRasnABn5Q9BQKWWGoU+c
-         OpQT5tJKzX+NFHTL80xnUxF3MfE3bJu/vD9IwMEvKlTbewdEAzWRDt8GAserROAb6Xqi
-         tPrUNmM3iE0NJc48sfOnSCiMkiRGi/FGWPkjVIggMh3WP9e6BqzFj/ylkmOerXTmBGRI
-         QCpmg7pDjSkw8fsyoKYZNSh8KMWdQemGLdbkg4WFpGJxQOkxwzes7hKPdPMXXNZs9a+V
-         7m2Q==
-X-Gm-Message-State: AFqh2kpwHsnvVwbZFitRYPlMED2rVgHazMhp+2TySoG3PvaWhVmckOoW
-        lIe0l6StBqTqOJtyviugEhjiW6i0HCLi6CTyKfbG+A==
-X-Google-Smtp-Source: AMrXdXt1DVl+V4XP4vcyqRZaRp4SMPhEnSli2MXcg6xWkpJvGYiDP4ZAV3sZnOd/WucpWORfIrnrxsVJGAKOMpQ5+cE=
-X-Received: by 2002:a25:9801:0:b0:7d5:b884:3617 with SMTP id
- a1-20020a259801000000b007d5b8843617mr3722360ybo.380.1674864027905; Fri, 27
- Jan 2023 16:00:27 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FDc1f6H36kSbMyhmdOu12h8TguEbHWVRiGzB2+CN2EQ=;
+        b=dDeQ08uryTUMtqqh+PMSKYq9q8/TZqsyWFkFpFkzKzfeXZJD+94IffyESFkbeeqcpN
+         jovAwx7+q9PeHR0qRQHALyxMKU87DRp+38YzAnMBPLt0brbrBruuv4kEsVYFQG19rhP7
+         NPjPgBXv1rh89diJ4CiC7pzkIWDML6QR66Igqvk05bmch9FDa8M1lyNGtzI7MEdpy9cm
+         qxfonIlKbAHSavmzWj7eKz8v9QLo4m01RXgVaK0EYC9hh1dKArSEOpSrO4JninwmEB56
+         bSWzQRBQg3p0+bqi0EgGuDVbMVYBkBz0d5ZG+8fwKnU2sug03mISX2JqdfxmZYjKSb/e
+         PQhw==
+X-Gm-Message-State: AO0yUKUNBPYqRoD2qMRlO21jgSrp4gU3miLDswZN0GSYpaEIs4kvHEHN
+        a1Z4h/qrhZaRA8JqyWsLq95LFQ==
+X-Google-Smtp-Source: AK7set8nSePnnSfEVdKbfxF6scz0/Uj2c71pQ6W+5fNQ70sm53fXibm/RGvGyWY1TXB5PRKOwLAytQ==
+X-Received: by 2002:a62:b505:0:b0:593:9109:4627 with SMTP id y5-20020a62b505000000b0059391094627mr714429pfe.0.1674864256051;
+        Fri, 27 Jan 2023 16:04:16 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x28-20020aa7957c000000b0056bc5ad4862sm2527886pfq.28.2023.01.27.16.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 16:04:15 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Kees Cook <keescook@chromium.org>, Hannes Reinecke <hare@suse.de>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] scsi: aacraid: Allocate cmd_priv with scsicmd
+Date:   Fri, 27 Jan 2023 16:04:13 -0800
+Message-Id: <20230128000409.never.976-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230127194110.533103-1-surenb@google.com> <20230127145138.8cc44bf00ebf289dffec0975@linux-foundation.org>
- <Y9Rdmy5h2F1z5yR3@casper.infradead.org>
-In-Reply-To: <Y9Rdmy5h2F1z5yR3@casper.infradead.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 27 Jan 2023 16:00:16 -0800
-Message-ID: <CAJuCfpEq2F4EwWAeP6nLqS9m9XLpUss8n=35ZTgYgtiAJyvsxQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/33] Per-VMA locks
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2826; h=from:subject:message-id; bh=8KFZgqjwwJO+qq8QfdeM9HK9KDv6PDJJEB0n/EnuyKA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBj1GZ9mcYxxmBFWjb9WJlVcSCr1yuma3vzlXTE6ry5 XFz/f5+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY9RmfQAKCRCJcvTf3G3AJnDqD/ 47sfkHG+/a3xdJClnia5fi++tP4YYoZynZ5fqtTBOFFNLI319Zlz2wlqHjfcc1sz2eweq62ksWB2TB YW6aC0dSd+5FoXkT4uVVml2nZDZxy0E9cMn2qJ5pFbZrfCZpmSrashWSunKUeB6Eb4TfkgLG61WIFP SNYnzVIz4DVO/INJgJobsjQyp4axpBZCRpmBiw14V4sIv3fDg+OWXVTqUNHFMm1DULBEPAVxaBx+FQ Vti5fflR3WJMRI7HCoNdsO+iRnZ+FyCybX4oNoYu2SVas+pzDJfwP+NUWc/j5M0ALVZTshiuQBol6U c+3T6d0A/LN3kWyICneQSULVNfMLPw8hcgAZHl9v3tWN5l2O40zGRqliaTZDJ31k+Tfc3vtTzp1aVy N1rAU9Q6dCDJgAPqm8cu6SCUFyQawV5xfY9S0qh4M0kGY0kPaAreBvLizpLSd6rWgB/5eIY+1Lluu2 tEKhMvRr0BQTUtBNKtPxtZYjJtBFAjetGQ8g3ez42Ty0CZ0nONtVCkcAi1PsysjehWBTlTrau8Zr2i /tSBvd730+TfBbfhB3sZcDKpuWL6mL59ZKPRX+8as6QZklDgblu72PXEY+nA4K6uArXk0P9m50S1wY 3qo8bUnPG18px6gVheiFE0q7XMDZ9RHj+yhfnrvE8zSygQh2akGwWKFqbieQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 3:26 PM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Fri, Jan 27, 2023 at 02:51:38PM -0800, Andrew Morton wrote:
-> > On Fri, 27 Jan 2023 11:40:37 -0800 Suren Baghdasaryan <surenb@google.co=
-m> wrote:
-> >
-> > > Per-vma locks idea that was discussed during SPF [1] discussion at LS=
-F/MM
-> > > last year [2], which concluded with suggestion that =E2=80=9Ca reader=
-/writer
-> > > semaphore could be put into the VMA itself; that would have the effec=
-t of
-> > > using the VMA as a sort of range lock. There would still be contentio=
-n at
-> > > the VMA level, but it would be an improvement.=E2=80=9D This patchset=
- implements
-> > > this suggested approach.
-> >
-> > I think I'll await reviewer/tester input for a while.
+The aac_priv() helper assumes that the private cmd area immediately
+follows struct scsi_cmnd. Allocate this space as part of scsicmd,
+else there is a risk of heap overflow. Seen with GCC 13:
 
-Sure, I don't expect the review to be very quick considering the
-complexity, however I would appreciate any testing that can be done.
+../drivers/scsi/aacraid/aachba.c: In function 'aac_probe_container':
+../drivers/scsi/aacraid/aachba.c:841:26: warning: array subscript 16 is outside array bounds of 'void[392]' [-Warray-bounds=]
+  841 |         status = cmd_priv->status;
+      |                          ^~
+In file included from ../include/linux/resource_ext.h:11,
+                 from ../include/linux/pci.h:40,
+                 from ../drivers/scsi/aacraid/aachba.c:22:
+In function 'kmalloc',
+    inlined from 'kzalloc' at ../include/linux/slab.h:720:9,
+    inlined from 'aac_probe_container' at ../drivers/scsi/aacraid/aachba.c:821:30:
+../include/linux/slab.h:580:24: note: at offset 392 into object of size 392 allocated by 'kmalloc_trace'
+  580 |                 return kmalloc_trace(
+      |                        ^~~~~~~~~~~~~~
+  581 |                                 kmalloc_caches[kmalloc_type(flags)][index],
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  582 |                                 flags, size);
+      |                                 ~~~~~~~~~~~~
 
-> >
-> > > The patchset implements per-VMA locking only for anonymous pages whic=
-h
-> > > are not in swap and avoids userfaultfs as their implementation is mor=
-e
-> > > complex. Additional support for file-back page faults, swapped and us=
-er
-> > > pages can be added incrementally.
-> >
-> > This is a significant risk.  How can we be confident that these as yet
-> > unimplemented parts are implementable and that the result will be good?
->
-> They don't need to be implementable for this patchset to be evaluated
-> on its own terms.  This patchset improves scalability for anon pages
-> without making file/swap/uffd pages worse (or if it does, I haven't
-> seen the benchmarks to prove it).
+Fixes: 76a3451b64c6 ("scsi: aacraid: Move the SCSI pointer to private command data")
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
+Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/scsi/aacraid/aachba.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Making it work for all kinds of page faults would require much more
-time. So, this incremental approach, when we tackle the mmap_lock
-scalability problem part-by-part seems more doable. Even with
-anonymous-only support, the patch shows considerable improvements.
-Therefore I would argue that the patch is viable even if it does not
-support the above-mentioned cases.
+diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+index 4d4cb47b3846..24c049eff157 100644
+--- a/drivers/scsi/aacraid/aachba.c
++++ b/drivers/scsi/aacraid/aachba.c
+@@ -818,8 +818,8 @@ static void aac_probe_container_scsi_done(struct scsi_cmnd *scsi_cmnd)
+ 
+ int aac_probe_container(struct aac_dev *dev, int cid)
+ {
+-	struct scsi_cmnd *scsicmd = kzalloc(sizeof(*scsicmd), GFP_KERNEL);
+-	struct aac_cmd_priv *cmd_priv = aac_priv(scsicmd);
++	struct aac_cmd_priv *cmd_priv;
++	struct scsi_cmnd *scsicmd = kzalloc(sizeof(*scsicmd) + sizeof(*cmd_priv), GFP_KERNEL);
+ 	struct scsi_device *scsidev = kzalloc(sizeof(*scsidev), GFP_KERNEL);
+ 	int status;
+ 
+@@ -838,6 +838,7 @@ int aac_probe_container(struct aac_dev *dev, int cid)
+ 		while (scsicmd->device == scsidev)
+ 			schedule();
+ 	kfree(scsidev);
++	cmd_priv = aac_priv(scsicmd);
+ 	status = cmd_priv->status;
+ 	kfree(scsicmd);
+ 	return status;
+-- 
+2.34.1
 
->
-> That said, I'm confident that I have a good handle on how to make
-> file-backed page faults work under RCU.
-
-Looking forward to collaborating on that!
-Thanks,
-Suren.
