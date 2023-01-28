@@ -2,55 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C235067F3E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 03:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D440A67F3F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 03:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjA1CH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 21:07:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S231679AbjA1CSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 21:18:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjA1CH6 (ORCPT
+        with ESMTP id S229498AbjA1CSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 21:07:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CF51A979
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 18:07:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C224261DDC
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 02:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 724E0C433EF;
-        Sat, 28 Jan 2023 02:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674871675;
-        bh=xgzCRzmI0lEryWo5hfa+X56jGl8dwqUVxbtlBrWeTJ0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QLjkhLTOehTSsfYs+XlzYgoTWNywLpaOOD/rrOee6Nda8wCsRGMWtXoJyo+0EYY9g
-         BpVDLLW3Pp1RzKD3Z33u3jmUEJwtJWhauUchgGYdUZ9qz5ICnx/QZGs6A+zWo6Ieob
-         DBWRclqJsqT9a36iy8oE3ggScDqx27MCGWZnKrNTbY0aXh4FK/nOrDXYfH2oBskJ3K
-         BK55KV2x0BJ7HdOxBR+6r6FtTTBP0lvcTnkJCtMbFuOOHV1qVKxW8vsr4WUluXGok3
-         GRX4zKim8qK63V3pHwxLDo3f6ZNhls5g7yUnkdddcGROhUY3mrzNtRhc3oGDYo7kkN
-         /15Rm9/SraZWQ==
-Message-ID: <ed5f65a7-13bb-581c-cfb5-df5ab30fbc4c@kernel.org>
-Date:   Sat, 28 Jan 2023 10:07:48 +0800
+        Fri, 27 Jan 2023 21:18:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21ED5A806
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 18:17:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674872246;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Nfb5TyV36RNZzOexJAnbr/uhWI9BYbLm6GvCjHYzrI=;
+        b=XWdT1s43ktZCqtnYqBBSYptnHM29H5QYUzom+i3avAbVwLSdm5oIfpGP7VbW8F/XpHAc9O
+        55OiSZw/HuHTcUsYx+zi9xjWgSiR30ZSXG49OD9FNhO2QLxf9as8Vg0tKIuhA0nFy5w/hP
+        ED8wf3OA5LrE4NToRY4kz8bG2S9oO1g=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-64-3SzMkpjzPpOnIGTAs_M60g-1; Fri, 27 Jan 2023 21:17:24 -0500
+X-MC-Unique: 3SzMkpjzPpOnIGTAs_M60g-1
+Received: by mail-ej1-f70.google.com with SMTP id du14-20020a17090772ce00b0087108bbcfa6so4427850ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 18:17:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Nfb5TyV36RNZzOexJAnbr/uhWI9BYbLm6GvCjHYzrI=;
+        b=m+Wz1HoSCUIjxc0v5m545QLrD7oWM1D4o7xMtH69FPoHehGQK49vA8IevtmVk+I+jf
+         /MU7P28NW9nACfURDJNdTM9hHhqDQux1V8hYQudAUIwKWGkBZYhFbMqOooPholCfUdkh
+         gohf1h44UtJIuzwzH28FV0Er107JVEeOMV06plVNcZgLgukEVbpx7bjwf5Lh96EcLcIc
+         p5UM/orukirGOfnoIrhvFpAYOPKKv43Wr7nHFC5XQTVl9nkr/brGxRwiQoA4yA5Xc3EP
+         G8fpcIQ9Rx/C0HrQemGW8rEYvYK8pxWQxxg3mEMcj/5Cnadl8e227Gy8Uj4uBkURY4D4
+         pPcA==
+X-Gm-Message-State: AFqh2kranE7mClEntgzbWVe1ywXHGhvl5YESf+EBFEw71UkRaJeWlbId
+        pvS6IenkOudgV7LaaYij80nhs6K6XcWZfkKvteo94KfUY7z94Ksn/mUz3hRyZCI/hejyGqh653g
+        SdqoUlsc7S6U2XCsjyNQ6kE0H
+X-Received: by 2002:a17:907:d684:b0:870:4986:2ce with SMTP id wf4-20020a170907d68400b00870498602cemr51588155ejc.58.1674872243765;
+        Fri, 27 Jan 2023 18:17:23 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXum01YGNXBgtWBiKpPeFfGkYkT0P2LOkTiVNvtA7VlleM4KOwoApiJmgjZunuCwGbsvP8dFdQ==
+X-Received: by 2002:a17:907:d684:b0:870:4986:2ce with SMTP id wf4-20020a170907d68400b00870498602cemr51588140ejc.58.1674872243534;
+        Fri, 27 Jan 2023 18:17:23 -0800 (PST)
+Received: from WINDOWS. ([2a02:810d:4b3f:de78:34ca:d547:b407:3c1c])
+        by smtp.gmail.com with ESMTPSA id t21-20020a170906065500b007a4e02e32ffsm3202905ejb.60.2023.01.27.18.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 18:17:22 -0800 (PST)
+Message-ID: <63d485b2.170a0220.4af4c.d54f@mx.google.com>
+X-Google-Original-Message-ID: <Y9SFqwE50SA4NwMZ@WINDOWS.>
+Date:   Sat, 28 Jan 2023 03:17:15 +0100
+From:   Danilo Krummrich <dakr@redhat.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     bskeggs@redhat.com, alex000young@gmail.com, security@kernel.org,
+        kherbst@redhat.com, nouveau@lists.freedesktop.org,
+        hackerzheng666@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Zheng Wang <zyytlz.wz@163.com>
+Subject: Re: [PATCH] drm/nouveau/mmu: fix Use after Free bug in
+ nvkm_vmm_node_split
+References: <20221230072758.443644-1-zyytlz.wz@163.com>
+ <87mt6zr9s4.wl-tiwai@suse.de>
+ <87mt64qit5.wl-tiwai@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [f2fs-dev] [PATCH] f2fs: synchronize atomic write aborts
-To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>,
-        syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
-References: <20230113004933.2082072-1-daeho43@gmail.com>
-Content-Language: en-US
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230113004933.2082072-1-daeho43@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mt64qit5.wl-tiwai@suse.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,178 +83,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daeho, Jaegeuk,
-
-Please take a look at patchset in below link:
-
-https://lore.kernel.org/linux-f2fs-devel/20230109034453.490176-1-chao@kernel.org/T/#t
-
-In PATCH 4/5, I'm trying to fix the same issue w/ alternative way, let me
-know your preference. :)
-
-One comment as below.
-
-On 2023/1/13 8:49, Daeho Jeong wrote:
-> From: Daeho Jeong <daehojeong@google.com>
+On Fri, Jan 27, 2023 at 01:10:46PM +0100, Takashi Iwai wrote:
+> On Tue, 03 Jan 2023 15:07:55 +0100,
+> Takashi Iwai wrote:
+> > 
+> > On Fri, 30 Dec 2022 08:27:58 +0100,
+> > Zheng Wang wrote:
+> > > 
+> > > Here is a function call chain.
+> > > nvkm_vmm_pfn_map->nvkm_vmm_pfn_split_merge->nvkm_vmm_node_split
+> > > If nvkm_vma_tail return NULL in nvkm_vmm_node_split, it will
+> > > finally invoke nvkm_vmm_node_merge->nvkm_vmm_node_delete, which
+> > > will free the vma. However, nvkm_vmm_pfn_map didn't notice that.
+> > > It goes into next label and UAF happens.
+> > > 
+> > > Fix it by returning the return-value of nvkm_vmm_node_merge
+> > > instead of NULL.
+> > > 
+> > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > 
+> > FWIW, CVE-2023-0030 has been assigned to this bug.
+> > It's a question whether it really deserves as a security issue, but a
+> > bug is a bug...
+> > 
+> > Ben, could you review this please?
 > 
-> To fix a race condition between atomic write aborts, I use the inode
-> lock and make COW inode to be re-usable thoroughout the whole
-> atomic file inode lifetime.
+> A gentle ping as reminder.  The bug is still present.
+
+This was also reported in [1]. I had a closer look and FWICT this code is fine
+and there isn't a bug.
+
+Zheng Wang, the reporter of the BZ, also confirmed this to be a false positive
+from CodeQL.
+
+Anyway, here's the explaination I also posted in the BZ:
+
+"In nvkm_vmm_node_merge() nvkm_vmm_node_delete() is only called when prev is
+set. However, prev is NULL unless we enter the "if (vma->addr != addr)" path in
+nvkm_vmm_node_split(). In such a case the vma pointer, which is also passed to
+nvkm_vmm_node_merge(), is set to a freshly allocated struct nvkm_vma with
+nvkm_vma_tail() right before prev is set to the old vma pointer.
+
+Hence, the only thing happening there when nvkm_vma_tail() fails in the
+"if (vma->size != size)" path is that either nvkm_vmm_node_merge() does nothing
+in case prev wasn't set or it merges and frees the new vma created in the
+"if (vma->addr != addr)" path. Or in other words the proper cleanup for the
+error condition is done.
+
+I can't see any case where the original vma pointer given by nvkm_vmm_pfn_map()
+is actually freed."
+
+[1] https://bugzilla.redhat.com/show_bug.cgi?id=2157041
+
+- Danilo
+
 > 
-> Reported-by: syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
-> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
-> Signed-off-by: Daeho Jeong <daehojeong@google.com>
-> ---
->   fs/f2fs/file.c    | 43 ++++++++++++++++++++++++++++---------------
->   fs/f2fs/inode.c   | 11 +++++++++--
->   fs/f2fs/segment.c |  3 ---
->   fs/f2fs/super.c   |  2 --
->   4 files changed, 37 insertions(+), 22 deletions(-)
 > 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index ecbc8c135b49..ff072a9ed258 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -1866,7 +1866,10 @@ static int f2fs_release_file(struct inode *inode, struct file *filp)
->   			atomic_read(&inode->i_writecount) != 1)
->   		return 0;
->   
-> +	inode_lock(inode);
->   	f2fs_abort_atomic_write(inode, true);
-> +	inode_unlock(inode);
-> +
->   	return 0;
->   }
->   
-> @@ -1880,8 +1883,11 @@ static int f2fs_file_flush(struct file *file, fl_owner_t id)
->   	 * until all the writers close its file. Since this should be done
->   	 * before dropping file lock, it needs to do in ->flush.
->   	 */
-> -	if (F2FS_I(inode)->atomic_write_task == current)
-> +	if (F2FS_I(inode)->atomic_write_task == current) {
-> +		inode_lock(inode);
->   		f2fs_abort_atomic_write(inode, true);
-> +		inode_unlock(inode);
-> +	}
->   	return 0;
->   }
->   
-> @@ -2087,19 +2093,28 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
->   		goto out;
->   	}
->   
-> -	/* Create a COW inode for atomic write */
-> -	pinode = f2fs_iget(inode->i_sb, fi->i_pino);
-> -	if (IS_ERR(pinode)) {
-> -		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> -		ret = PTR_ERR(pinode);
-> -		goto out;
-> -	}
-> +	/* Check if the inode already has a COW inode */
-> +	if (fi->cow_inode == NULL) {
-> +		/* Create a COW inode for atomic write */
-> +		pinode = f2fs_iget(inode->i_sb, fi->i_pino);
-> +		if (IS_ERR(pinode)) {
-> +			f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> +			ret = PTR_ERR(pinode);
-> +			goto out;
-> +		}
->   
-> -	ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
-> -	iput(pinode);
-> -	if (ret) {
-> -		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> -		goto out;
-> +		ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
-> +		iput(pinode);
-> +		if (ret) {
-> +			f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> +			goto out;
-> +		}
-> +
-> +		set_inode_flag(fi->cow_inode, FI_COW_FILE);
-> +		clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
-> +	} else {
-> +		/* Reuse the already created COW inode */
-> +		f2fs_do_truncate_blocks(fi->cow_inode, 0, true);
->   	}
->   
->   	f2fs_write_inode(inode, NULL);
-> @@ -2107,8 +2122,6 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
->   	stat_inc_atomic_inode(inode);
->   
->   	set_inode_flag(inode, FI_ATOMIC_FILE);
-> -	set_inode_flag(fi->cow_inode, FI_COW_FILE);
-> -	clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
->   
->   	isize = i_size_read(inode);
->   	fi->original_i_size = isize;
-> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> index ff6cf66ed46b..4921f7209e28 100644
-> --- a/fs/f2fs/inode.c
-> +++ b/fs/f2fs/inode.c
-> @@ -766,11 +766,18 @@ int f2fs_write_inode(struct inode *inode, struct writeback_control *wbc)
->   void f2fs_evict_inode(struct inode *inode)
->   {
->   	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-> -	nid_t xnid = F2FS_I(inode)->i_xattr_nid;
-> +	struct f2fs_inode_info *fi = F2FS_I(inode);
-> +	nid_t xnid = fi->i_xattr_nid;
->   	int err = 0;
->   
->   	f2fs_abort_atomic_write(inode, true);
->   
-> +	if (fi->cow_inode) {
-> +		clear_inode_flag(fi->cow_inode, FI_COW_FILE);
-> +		iput(fi->cow_inode);
-> +		fi->cow_inode = NULL;
-> +	}
-> +
->   	trace_f2fs_evict_inode(inode);
->   	truncate_inode_pages_final(&inode->i_data);
->   
-> @@ -857,7 +864,7 @@ void f2fs_evict_inode(struct inode *inode)
->   	stat_dec_inline_inode(inode);
->   	stat_dec_compr_inode(inode);
->   	stat_sub_compr_blocks(inode,
-> -			atomic_read(&F2FS_I(inode)->i_compr_blocks));
-> +			atomic_read(&fi->i_compr_blocks));
->   
->   	if (likely(!f2fs_cp_error(sbi) &&
->   				!is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index ae3c4e5474ef..536d7c674b04 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -192,9 +192,6 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
->   	if (!f2fs_is_atomic_file(inode))
->   		return;
->   
-> -	clear_inode_flag(fi->cow_inode, FI_COW_FILE);
-> -	iput(fi->cow_inode);
-> -	fi->cow_inode = NULL;
->   	release_atomic_write_cnt(inode);
->   	clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
->   	clear_inode_flag(inode, FI_ATOMIC_REPLACE);
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index 1f812b9ce985..10463f084d30 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -1430,8 +1430,6 @@ static int f2fs_drop_inode(struct inode *inode)
->   			atomic_inc(&inode->i_count);
->   			spin_unlock(&inode->i_lock);
->   
-> -			f2fs_abort_atomic_write(inode, true);
+> thanks,
+> 
+> Takashi
+> 
+> > 
+> > 
+> > thanks,
+> > 
+> > Takashi
+> > 
+> > > ---
+> > >  drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > > index ae793f400ba1..84d6fc87b2e8 100644
+> > > --- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > > +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> > > @@ -937,8 +937,8 @@ nvkm_vmm_node_split(struct nvkm_vmm *vmm,
+> > >  	if (vma->size != size) {
+> > >  		struct nvkm_vma *tmp;
+> > >  		if (!(tmp = nvkm_vma_tail(vma, vma->size - size))) {
+> > > -			nvkm_vmm_node_merge(vmm, prev, vma, NULL, vma->size);
+> > > -			return NULL;
+> > > +			tmp = nvkm_vmm_node_merge(vmm, prev, vma, NULL, vma->size);
+> > > +			return tmp;
+> > >  		}
+> > >  		tmp->part = true;
+> > >  		nvkm_vmm_node_insert(vmm, tmp);
+> > > -- 
+> > > 2.25.1
+> > > 
+> 
 
-In order to avoid caching obsolete page of cow_inode, how about truncating
-them here?
-
-if (f2fs_is_atomic_file() && cow_inode)
-	truncate_inode_pages_final(&cow_inode->i_data);
-
-Thanks,
-
-> -
->   			/* should remain fi->extent_tree for writepage */
->   			f2fs_destroy_extent_node(inode);
->   
