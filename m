@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538F467F5BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4FC67F5C1
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233397AbjA1Hqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:46:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S232010AbjA1Hta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:49:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjA1Hqh (ORCPT
+        with ESMTP id S233409AbjA1Ht1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:46:37 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7F613D5E
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:46:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674891995; x=1706427995;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z2XYMfIj1jdvBuGFknlCYVhV0le0R/9Zvjo9QIX6thc=;
-  b=AQoIZ9qDjKuxwKoa2KdqkdJjehV5upsBlyGRHkX6Df50ao38tFa3/rbV
-   eZul3uwf+hidSjG+Sr+zXI9yjhnZyw52WYh23vd0rT/3JR1jCTYNkR0ca
-   U9KxsfvZESNDjFpsenccmcQ/n14QtFBxXeNKL3njf9d1dYuoqhTamj12f
-   VwP7VmaWqPYVR/rh1i221wS7L/sXJ1xy4PjMf3izrPO8oBh3keDRunk+u
-   cbNG3r08RdaHzyW0hE00mYM3+u0PkJ5iXJqSre/Bv0J2GkDAmnuL9uKCu
-   KeBmGajVPEVfrBVUA7BZ7aqATqA3NhrAIbjlYsNmL6OehkNKxleSXnYr/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="327289364"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="327289364"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2023 23:46:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10603"; a="726946178"
-X-IronPort-AV: E=Sophos;i="5.97,253,1669104000"; 
-   d="scan'208";a="726946178"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Jan 2023 23:46:22 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLfun-0000V9-2x;
-        Sat, 28 Jan 2023 07:46:21 +0000
-Date:   Sat, 28 Jan 2023 15:45:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Roman Kagan <rkagan@amazon.de>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>,
+        Sat, 28 Jan 2023 02:49:27 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B921D43463
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:49:25 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4fa63c84621so80245827b3.20
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=njgu18qiSiC7PKHqD1eW4WpXwSTsEi6L+XuK9oyJA54=;
+        b=pLy/Pg28DWMln8N1EHdUUj7iQUhpZ/ozBKcSxRA1KJYarkAfs5aarApo21UIlfZc4o
+         6tm1LNS4Reb1QYF01YQ4axwFZbczaSDOKajyoNdgLucnOgFx7Sm2llwfFwZK8p89FkdE
+         MGB4zkD7lxbmYEx4V9UkMNwmSKV/94JcpAYtVzyT93xd7AtOiS3hDOU0ASS2vtcNzFWP
+         2jEmr+KP15/5NlDuPI7MjsaxXVDytDmwJTlAggJYRjY2TqzH5U5bao8Zc0gPSpO6EKkA
+         YgeLSx3GAS1fYQucCgxg0o6on4du85qMGwnmUsoz9zchm/QLBr1nx2bmooigiUtrB0KF
+         oxeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=njgu18qiSiC7PKHqD1eW4WpXwSTsEi6L+XuK9oyJA54=;
+        b=hKWkIWuLbDk6HO9/rGerp8PJ3AQQwYRg+hVivy2Zs7ncMoH75Dz5mN5eSnu4TN1jUg
+         2hXcS1YGp3bC1HQzsiAnw3MBBgYp/E2qgTc0DiqjfB/z4rjuOd8D9hz7LNJotrSY64AT
+         4mqWCGFr1YwexUv8rz7bmSkpRtDwJzQ8nYEhINLuFKHXJmd0oTwlu0d4P0JQGXpUDk2T
+         s3Ac4GkWHJet5TBXKj2Hq4Ag2vJvL55IYlWwxtyHeQo/WUPm8BZJrO5Y6zwqfMyCOITP
+         xjTU6JJc1N+mjFqW2L7Meoi25Suxvq7B1woEvmOoJUxXkzQgXSjXfzt8SU8j8Xf1exgK
+         cQAg==
+X-Gm-Message-State: AO0yUKVIFIp9maCZlt/OwSSvGrAlKma3agRbYcg3f5F0NSPT9tQpBgnr
+        ifI5+AHVjMWrVko5vsvey5MMK0F7qYesyA==
+X-Google-Smtp-Source: AK7set9i0wLwickB9XQjpihxWFd6cY21CoMmcfJSKpvcv5JZ5sjmxQ0M5sgDHXaSUBZggU2wtlZRgcFthK+CCw==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a0d:cb02:0:b0:506:464e:9f25 with SMTP id
+ n2-20020a0dcb02000000b00506464e9f25mr2539397ywd.511.1674892165030; Fri, 27
+ Jan 2023 23:49:25 -0800 (PST)
+Date:   Sat, 28 Jan 2023 15:49:17 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230128074918.1180523-1-davidgow@google.com>
+Subject: [PATCH v2 1/2] kunit: Expose 'static stub' API to redirect functions
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>,
+        Sadiya Kazi <sadiyakazi@google.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Juri Lelli <juri.lelli@redhat.com>
-Subject: Re: [PATCH] sched/fair: sanitize vruntime of entity being placed
-Message-ID: <202301281536.CiaoBlBO-lkp@intel.com>
-References: <20230127163230.3339408-1-rkagan@amazon.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127163230.3339408-1-rkagan@amazon.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DIET_1,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Joe Fradley <joefradley@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,197 +77,430 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roman,
+Add a simple way of redirecting calls to functions by including a
+special prologue in the "real" function which checks to see if the
+replacement function should be called (and, if so, calls it).
 
-Thank you for the patch! Perhaps something to improve:
+To redirect calls to a function, make the first (non-declaration) line
+of the function:
 
-[auto build test WARNING on tip/sched/core]
-[also build test WARNING on linus/master v6.2-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+	KUNIT_STATIC_STUB_REDIRECT(function_name, [function arguments]);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kagan/sched-fair-sanitize-vruntime-of-entity-being-placed/20230128-130846
-patch link:    https://lore.kernel.org/r/20230127163230.3339408-1-rkagan%40amazon.de
-patch subject: [PATCH] sched/fair: sanitize vruntime of entity being placed
-config: hexagon-randconfig-r041-20230123 (https://download.01.org/0day-ci/archive/20230128/202301281536.CiaoBlBO-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2db31a18bcb88c280481672d7721f7e003d8df5a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Roman-Kagan/sched-fair-sanitize-vruntime-of-entity-being-placed/20230128-130846
-        git checkout 2db31a18bcb88c280481672d7721f7e003d8df5a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash kernel/sched/
+(This will compile away to nothing if KUnit is not enabled, otherwise it
+will check if a redirection is active, call the replacement function,
+and return. This check is protected by a static branch, so has very
+little overhead when there are no KUnit tests running.)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Calls to the real function can be redirected to a replacement using:
 
-All warnings (new ones prefixed by >>):
+	kunit_activate_static_stub(test, real_fn, replacement_fn);
 
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from kernel/sched/fair.c:28:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> kernel/sched/fair.c:4697:27: warning: overflow in expression; result is -129542144 with type 'long' [-Winteger-overflow]
-           if ((s64)sleep_time > 60 * NSEC_PER_SEC)
-                                    ^
-   kernel/sched/fair.c:6078:6: warning: no previous prototype for function 'init_cfs_bandwidth' [-Wmissing-prototypes]
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-        ^
-   kernel/sched/fair.c:6078:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-   ^
-   static 
-   kernel/sched/fair.c:12498:6: warning: no previous prototype for function 'free_fair_sched_group' [-Wmissing-prototypes]
-   void free_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12498:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void free_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:12500:5: warning: no previous prototype for function 'alloc_fair_sched_group' [-Wmissing-prototypes]
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-       ^
-   kernel/sched/fair.c:12500:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int alloc_fair_sched_group(struct task_group *tg, struct task_group *parent)
-   ^
-   static 
-   kernel/sched/fair.c:12505:6: warning: no previous prototype for function 'online_fair_sched_group' [-Wmissing-prototypes]
-   void online_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12505:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void online_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:12507:6: warning: no previous prototype for function 'unregister_fair_sched_group' [-Wmissing-prototypes]
-   void unregister_fair_sched_group(struct task_group *tg) { }
-        ^
-   kernel/sched/fair.c:12507:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void unregister_fair_sched_group(struct task_group *tg) { }
-   ^
-   static 
-   kernel/sched/fair.c:535:20: warning: unused function 'list_del_leaf_cfs_rq' [-Wunused-function]
-   static inline void list_del_leaf_cfs_rq(struct cfs_rq *cfs_rq)
-                      ^
-   kernel/sched/fair.c:556:19: warning: unused function 'tg_is_idle' [-Wunused-function]
-   static inline int tg_is_idle(struct task_group *tg)
-                     ^
-   kernel/sched/fair.c:6051:20: warning: unused function 'cfs_bandwidth_used' [-Wunused-function]
-   static inline bool cfs_bandwidth_used(void)
-                      ^
-   kernel/sched/fair.c:6059:20: warning: unused function 'sync_throttle' [-Wunused-function]
-   static inline void sync_throttle(struct task_group *tg, int cpu) {}
-                      ^
-   kernel/sched/fair.c:6084:37: warning: unused function 'tg_cfs_bandwidth' [-Wunused-function]
-   static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
-                                       ^
-   kernel/sched/fair.c:6088:20: warning: unused function 'destroy_cfs_bandwidth' [-Wunused-function]
-   static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
-                      ^
-   18 warnings generated.
+The redirection will only affect calls made from within the kthread of
+the current test, and will be automatically disabled when the test
+completes. It can also be manually disabled with
+kunit_deactivate_static_stub().
 
+The 'example' KUnit test suite has a more complete example.
 
-vim +/long +4697 kernel/sched/fair.c
+Co-developed-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+---
 
-  4654	
-  4655	static void
-  4656	place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
-  4657	{
-  4658		u64 vruntime = cfs_rq->min_vruntime;
-  4659		u64 sleep_time;
-  4660	
-  4661		/*
-  4662		 * The 'current' period is already promised to the current tasks,
-  4663		 * however the extra weight of the new task will slow them down a
-  4664		 * little, place the new task so that it fits in the slot that
-  4665		 * stays open at the end.
-  4666		 */
-  4667		if (initial && sched_feat(START_DEBIT))
-  4668			vruntime += sched_vslice(cfs_rq, se);
-  4669	
-  4670		/* sleeps up to a single latency don't count. */
-  4671		if (!initial) {
-  4672			unsigned long thresh;
-  4673	
-  4674			if (se_is_idle(se))
-  4675				thresh = sysctl_sched_min_granularity;
-  4676			else
-  4677				thresh = sysctl_sched_latency;
-  4678	
-  4679			/*
-  4680			 * Halve their sleep time's effect, to allow
-  4681			 * for a gentler effect of sleepers:
-  4682			 */
-  4683			if (sched_feat(GENTLE_FAIR_SLEEPERS))
-  4684				thresh >>= 1;
-  4685	
-  4686			vruntime -= thresh;
-  4687		}
-  4688	
-  4689		/*
-  4690		 * Pull vruntime of the entity being placed to the base level of
-  4691		 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
-  4692		 * slept for a long time, don't even try to compare its vruntime with
-  4693		 * the base as it may be too far off and the comparison may get
-  4694		 * inversed due to s64 overflow.
-  4695		 */
-  4696		sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-> 4697		if ((s64)sleep_time > 60 * NSEC_PER_SEC)
-  4698			se->vruntime = vruntime;
-  4699		else
-  4700			se->vruntime = max_vruntime(se->vruntime, vruntime);
-  4701	}
-  4702	
+This patch depends upon the 'hooks' implementation in
+https://lore.kernel.org/linux-kselftest/20230128071007.1134942-1-davidgow@google.com/
 
+Note that checkpatch.pl does warn about control flow in the
+KUNIT_STATIC_STUB_REDIRECT() macro. This is an intentional design choice
+(we think it makes the feature easier to use), though if there are
+strong objections, we can of course reconsider.
+
+Changes since v1:
+https://lore.kernel.org/all/20221208061841.2186447-2-davidgow@google.com/
+- Adapted to use the "hooks" mechanism
+  - See: https://lore.kernel.org/linux-kselftest/20230128071007.1134942-1-davidgow@google.com/
+  - Now works when KUnit itself is compiled as a module (CONFIG_KUNIT=m)
+
+Changes since RFC v2:
+https://lore.kernel.org/linux-kselftest/20220910212804.670622-2-davidgow@google.com/
+- Now uses the kunit_get_current_test() function, which uses the static
+  key to reduce overhead.
+  - Thanks Kees for the suggestion.
+  - Note that this does prevent redirections from working when
+    CONFIG_KUNIT=m -- this is a restriction of kunit_get_current_test()
+    which will be removed in a future patch.
+- Several tidy-ups to the inline documentation.
+
+Changes since RFC v1:
+https://lore.kernel.org/lkml/20220318021314.3225240-2-davidgow@google.com/
+- Use typecheck_fn() to fix typechecking in some cases (thanks Brendan)
+
+---
+ include/kunit/static_stub.h    | 113 ++++++++++++++++++++++++++++++
+ include/kunit/test-bug.h       |   1 +
+ lib/kunit/Makefile             |   1 +
+ lib/kunit/hooks-impl.h         |   2 +
+ lib/kunit/kunit-example-test.c |  38 ++++++++++
+ lib/kunit/static_stub.c        | 123 +++++++++++++++++++++++++++++++++
+ 6 files changed, 278 insertions(+)
+ create mode 100644 include/kunit/static_stub.h
+ create mode 100644 lib/kunit/static_stub.c
+
+diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
+new file mode 100644
+index 000000000000..047b68d65f1a
+--- /dev/null
++++ b/include/kunit/static_stub.h
+@@ -0,0 +1,113 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * KUnit function redirection (static stubbing) API.
++ *
++ * Copyright (C) 2022, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++#ifndef _KUNIT_STATIC_STUB_H
++#define _KUNIT_STATIC_STUB_H
++
++#if !IS_ENABLED(CONFIG_KUNIT)
++
++/* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
++#define KUNIT_TRIGGER_STATIC_STUB(real_fn_name, args...) do {} while (0)
++
++#else
++
++#include <kunit/test.h>
++#include <kunit/test-bug.h>
++
++#include <linux/compiler.h> /* for {un,}likely() */
++#include <linux/sched.h> /* for task_struct */
++
++
++/**
++ * KUNIT_STATIC_STUB_REDIRECT() - call a replacement 'static stub' if one exists
++ * @real_fn_name: The name of this function (as an identifier, not a string)
++ * @args: All of the arguments passed to this function
++ *
++ * This is a function prologue which is used to allow calls to the current
++ * function to be redirected by a KUnit test. KUnit tests can call
++ * kunit_activate_static_stub() to pass a replacement function in. The
++ * replacement function will be called by KUNIT_TRIGGER_STATIC_STUB(), which
++ * will then return from the function. If the caller is not in a KUnit context,
++ * the function will continue execution as normal.
++ *
++ * Example:
++ *
++ * .. code-block:: c
++ *
++ *	int real_func(int n)
++ *	{
++ *		KUNIT_STATIC_STUB_REDIRECT(real_func, n);
++ *		return 0;
++ *	}
++ *
++ *	void replacement_func(int n)
++ *	{
++ *		return 42;
++ *	}
++ *
++ *	void example_test(struct kunit *test)
++ *	{
++ *		kunit_activate_static_stub(test, real_func, replacement_func);
++ *		KUNIT_EXPECT_EQ(test, real_func(1), 42);
++ *	}
++ *
++ */
++#define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...)		\
++do {									\
++	typeof(&real_fn_name) replacement;				\
++	struct kunit *current_test = kunit_get_current_test();		\
++									\
++	if (likely(!current_test))					\
++		break;							\
++									\
++	replacement = kunit_hooks.get_static_stub_address(current_test,	\
++							&real_fn_name);	\
++									\
++	if (unlikely(replacement))					\
++		return replacement(args);				\
++} while (0)
++
++/* Helper function for kunit_activate_static_stub(). The macro does
++ * typechecking, so use it instead.
++ */
++void __kunit_activate_static_stub(struct kunit *test,
++				  void *real_fn_addr,
++				  void *replacement_addr);
++
++/**
++ * kunit_activate_static_stub() - replace a function using static stubs.
++ * @test: A pointer to the 'struct kunit' test context for the current test.
++ * @real_fn_addr: The address of the function to replace.
++ * @replacement_addr: The address of the function to replace it with.
++ *
++ * When activated, calls to real_fn_addr from within this test (even if called
++ * indirectly) will instead call replacement_addr. The function pointed to by
++ * real_fn_addr must begin with the static stub prologue in
++ * KUNIT_TRIGGER_STATIC_STUB() for this to work. real_fn_addr and
++ * replacement_addr must have the same type.
++ *
++ * The redirection can be disabled again with kunit_deactivate_static_stub().
++ */
++#define kunit_activate_static_stub(test, real_fn_addr, replacement_addr) do {	\
++	typecheck_fn(typeof(&real_fn_addr), replacement_addr);			\
++	__kunit_activate_static_stub(test, real_fn_addr, replacement_addr);	\
++} while (0)
++
++
++/**
++ * kunit_deactivate_static_stub() - disable a function redirection
++ * @test: A pointer to the 'struct kunit' test context for the current test.
++ * @real_fn_addr: The address of the function to no-longer redirect
++ *
++ * Deactivates a redirection configured with kunit_activate_static_stub(). After
++ * this function returns, calls to real_fn_addr() will execute the original
++ * real_fn, not any previously-configured replacement.
++ */
++void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr);
++
++#endif
++#endif
+diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+index 2b505a95b641..30ca541b6ff2 100644
+--- a/include/kunit/test-bug.h
++++ b/include/kunit/test-bug.h
+@@ -20,6 +20,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ /* Hooks table: a table of function pointers filled in when kunit loads */
+ extern struct kunit_hooks_table {
+ 	__printf(3, 4) void (*fail_current_test)(const char*, int, const char*, ...);
++	void *(*get_static_stub_address)(struct kunit *test, void *real_fn_addr);
+ } kunit_hooks;
+ 
+ /**
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index deeb46cc879b..da665cd4ea12 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -2,6 +2,7 @@ obj-$(CONFIG_KUNIT) +=			kunit.o
+ 
+ kunit-objs +=				test.o \
+ 					resource.o \
++					static_stub.o \
+ 					string-stream.o \
+ 					assert.o \
+ 					try-catch.o \
+diff --git a/lib/kunit/hooks-impl.h b/lib/kunit/hooks-impl.h
+index d911f40f76db..ec745a39832c 100644
+--- a/lib/kunit/hooks-impl.h
++++ b/lib/kunit/hooks-impl.h
+@@ -16,12 +16,14 @@
+ 
+ /* List of declarations. */
+ void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...);
++void *__kunit_get_static_stub_address_impl(struct kunit *test, void *real_fn_addr);
+ 
+ /* Code to set all of the function pointers. */
+ static inline void kunit_install_hooks(void)
+ {
+ 	/* Install the KUnit hook functions. */
+ 	kunit_hooks.fail_current_test = __kunit_fail_current_test_impl;
++	kunit_hooks.get_static_stub_address = __kunit_get_static_stub_address_impl;
+ }
+ 
+ #endif /* _KUNIT_HOOKS_IMPL_H */
+diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+index 66cc4e2365ec..cd8b7e51d02b 100644
+--- a/lib/kunit/kunit-example-test.c
++++ b/lib/kunit/kunit-example-test.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <kunit/test.h>
++#include <kunit/static_stub.h>
+ 
+ /*
+  * This is the most fundamental element of KUnit, the test case. A test case
+@@ -130,6 +131,42 @@ static void example_all_expect_macros_test(struct kunit *test)
+ 	KUNIT_ASSERT_GT_MSG(test, sizeof(int), 0, "Your ints are 0-bit?!");
+ }
+ 
++/* This is a function we'll replace with static stubs. */
++static int add_one(int i)
++{
++	/* This will trigger the stub if active. */
++	KUNIT_STATIC_STUB_REDIRECT(add_one, i);
++
++	return i + 1;
++}
++
++/* This is used as a replacement for the above function. */
++static int subtract_one(int i)
++{
++	/* We don't need to trigger the stub from the replacement. */
++
++	return i - 1;
++}
++
++/*
++ * This test shows the use of static stubs.
++ */
++static void example_static_stub_test(struct kunit *test)
++{
++	/* By default, function is not stubbed. */
++	KUNIT_EXPECT_EQ(test, add_one(1), 2);
++
++	/* Replace add_one() with subtract_one(). */
++	kunit_activate_static_stub(test, add_one, subtract_one);
++
++	/* add_one() is now replaced. */
++	KUNIT_EXPECT_EQ(test, add_one(1), 0);
++
++	/* Return add_one() to normal. */
++	kunit_deactivate_static_stub(test, add_one);
++	KUNIT_EXPECT_EQ(test, add_one(1), 2);
++}
++
+ /*
+  * Here we make a list of all the test cases we want to add to the test suite
+  * below.
+@@ -145,6 +182,7 @@ static struct kunit_case example_test_cases[] = {
+ 	KUNIT_CASE(example_skip_test),
+ 	KUNIT_CASE(example_mark_skipped_test),
+ 	KUNIT_CASE(example_all_expect_macros_test),
++	KUNIT_CASE(example_static_stub_test),
+ 	{}
+ };
+ 
+diff --git a/lib/kunit/static_stub.c b/lib/kunit/static_stub.c
+new file mode 100644
+index 000000000000..92b2cccd5e76
+--- /dev/null
++++ b/lib/kunit/static_stub.c
+@@ -0,0 +1,123 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit function redirection (static stubbing) API.
++ *
++ * Copyright (C) 2022, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++
++#include <kunit/test.h>
++#include <kunit/static_stub.h>
++#include "hooks-impl.h"
++
++
++/* Context for a static stub. This is stored in the resource data. */
++struct kunit_static_stub_ctx {
++	void *real_fn_addr;
++	void *replacement_addr;
++};
++
++static void __kunit_static_stub_resource_free(struct kunit_resource *res)
++{
++	kfree(res->data);
++}
++
++/* Matching function for kunit_find_resource(). match_data is real_fn_addr. */
++static bool __kunit_static_stub_resource_match(struct kunit *test,
++						struct kunit_resource *res,
++						void *match_real_fn_addr)
++{
++	/* This pointer is only valid if res is a static stub resource. */
++	struct kunit_static_stub_ctx *ctx = res->data;
++
++	/* Make sure the resource is a static stub resource. */
++	if (res->free != &__kunit_static_stub_resource_free)
++		return false;
++
++	return ctx->real_fn_addr == match_real_fn_addr;
++}
++
++/* Hook to return the address of the replacement function. */
++void *__kunit_get_static_stub_address_impl(struct kunit *test, void *real_fn_addr)
++{
++	struct kunit_resource *res;
++	struct kunit_static_stub_ctx *ctx;
++	void *replacement_addr;
++
++	res = kunit_find_resource(test,
++				  __kunit_static_stub_resource_match,
++				  real_fn_addr);
++
++	if (!res)
++		return NULL;
++
++	ctx = res->data;
++	replacement_addr = ctx->replacement_addr;
++	kunit_put_resource(res);
++	return replacement_addr;
++}
++
++void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr)
++{
++	struct kunit_resource *res;
++
++	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
++				"Tried to deactivate a NULL stub.");
++
++	/* Look up the existing stub for this function. */
++	res = kunit_find_resource(test,
++				  __kunit_static_stub_resource_match,
++				  real_fn_addr);
++
++	/* Error out if the stub doesn't exist. */
++	KUNIT_ASSERT_PTR_NE_MSG(test, res, NULL,
++				"Tried to deactivate a nonexistent stub.");
++
++	/* Free the stub. We 'put' twice, as we got a reference
++	 * from kunit_find_resource()
++	 */
++	kunit_remove_resource(test, res);
++	kunit_put_resource(res);
++}
++EXPORT_SYMBOL_GPL(kunit_deactivate_static_stub);
++
++/* Helper function for kunit_activate_static_stub(). The macro does
++ * typechecking, so use it instead.
++ */
++void __kunit_activate_static_stub(struct kunit *test,
++				  void *real_fn_addr,
++				  void *replacement_addr)
++{
++	struct kunit_static_stub_ctx *ctx;
++	struct kunit_resource *res;
++
++	KUNIT_ASSERT_PTR_NE_MSG(test, real_fn_addr, NULL,
++				"Tried to activate a stub for function NULL");
++
++	/* If the replacement address is NULL, deactivate the stub. */
++	if (!replacement_addr) {
++		kunit_deactivate_static_stub(test, replacement_addr);
++		return;
++	}
++
++	/* Look up any existing stubs for this function, and replace them. */
++	res = kunit_find_resource(test,
++				  __kunit_static_stub_resource_match,
++				  real_fn_addr);
++	if (res) {
++		ctx = res->data;
++		ctx->replacement_addr = replacement_addr;
++
++		/* We got an extra reference from find_resource(), so put it. */
++		kunit_put_resource(res);
++	} else {
++		ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++		ctx->real_fn_addr = real_fn_addr;
++		ctx->replacement_addr = replacement_addr;
++		res = kunit_alloc_resource(test, NULL,
++				     &__kunit_static_stub_resource_free,
++				     GFP_KERNEL, ctx);
++	}
++}
++EXPORT_SYMBOL_GPL(__kunit_activate_static_stub);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1.456.gfc5497dd1b-goog
+
