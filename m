@@ -2,462 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C21267F593
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2144767F59A
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjA1H3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        id S231548AbjA1HeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbjA1H2u (ORCPT
+        with ESMTP id S230381AbjA1HeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:28:50 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E067C8E158
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:28:28 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id o13so6707742pjg.2
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:28:28 -0800 (PST)
+        Sat, 28 Jan 2023 02:34:07 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AF23B0F1
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:34:05 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p24so7048709plw.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:34:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=us5B6b3oPSKbN4nBqiSd04SSFe3RmeK4iNYbvjeKM1Q=;
-        b=BrOdZ5qe+AN8KI8lC2qMGYK+L+nJ51mrWGMbP4mc2dIJx04R56JRcaA9iJfbv6PTRW
-         QOleEjZyx69jObv5iR5EpHGToGUeh94Ie41NbvADbudOloW9lRk7JSlNh7OEw0pmzXu/
-         q952me+8vNsNeCywDDNw+RqHlatk9Z8syy7PrtR8x9uC6BlwYigoBSdYEcXMnYyVw5Ut
-         L9fYuPZYR7Sb43IpBkqalgzZCZ1ffjj3fVWp4p4G2D06Yk+LrrWRMiJGkAgmY1QSLH5K
-         UbpInYVDrcP7dKSNmdrKcCOpqxiwOi2xTIZorELkQJ56UanwdKTgPS2sf0gZ3ePhZlNU
-         WsVg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=48cPMwKfIB+JYXBPIFLFeL3uIHX0dr8TubcBcaVKSWg=;
+        b=eVNLr6tMgu58ayq3Ao3L3DJzKMEFfj2tbmldarzOO8OyCpMG/ZZ2rlLfICfMDBCo5+
+         VPYoXRhj8EtItKKFrhehPMIQ7V1tPMG99UpZlCDM+Mf1oyRyrBCvCMbMtihyB6F18Nao
+         9o2PNPcr9v3ZFB/7Z1DSqGc7acdqB66aVOInvkxBZPLNSmIILNTUYiDsDD+44ujq4lEd
+         cLTSvGeHYw69BwlArYctelJXJx5wZKHpPd5Qyzrkwm48CtOFvqXRpCvtFZ0A4kHJNfdv
+         wjR9G1GhyqmB7Hs2pnSNtyQ6eABh67bfwViZQ35v1D/NA5ofowoPu+IqSZmLzYz9vXhP
+         J71w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=us5B6b3oPSKbN4nBqiSd04SSFe3RmeK4iNYbvjeKM1Q=;
-        b=MerA+xjNlTlFH2OtT7osjfPe63YtnuvUGN0/sPyOPP+FZuXoBIRqNPttAJ4N54UMAu
-         2FDcYCBNyrxrw1SRCmisV1WJG6yANRyK+05C5Sn5pCGPaFrFdIOwBSzcpwB8ZipBgAZ+
-         TkGYsBNuVOLCDXeIXgh/2+kj68t242mEyP2MnKBhncuzBBx+o8aB4r7bPr1nAY8omOIq
-         86Zc1uaSYx/MozZaar3sh+W1Nwgw8aIijI1u7A3p7XGFwj7j4UdNv7r+GstX1TAIP+ad
-         JMrljXJXemuwA7/Jkr3uR9PVsiNEbMQZLID9nD4VBUNbsVJhThUIz8ao9AWcb6cn720P
-         0x5g==
-X-Gm-Message-State: AO0yUKURyv9SK8YO/tPqBtEwFVMJ/+LnyFZtekLb9ArVPSAHac+N2jZS
-        Q9hK3+RnfYdTiDojWf/TXVK3qA==
-X-Google-Smtp-Source: AK7set97XI7KvrHC4kgG8ABr/KtYeQLuS83oA1GwQYk7TijEr0uOta3Q3bL6ZAmfgd7rj/1W/x4D2A==
-X-Received: by 2002:a17:902:d2cd:b0:196:5484:a087 with SMTP id n13-20020a170902d2cd00b001965484a087mr6846970plc.56.1674890900317;
-        Fri, 27 Jan 2023 23:28:20 -0800 (PST)
-Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id jh19-20020a170903329300b00194ac38bc86sm753132plb.131.2023.01.27.23.28.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 23:28:19 -0800 (PST)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v2 7/7] RISC-V: KVM: Implement guest external interrupt line management
-Date:   Sat, 28 Jan 2023 12:57:37 +0530
-Message-Id: <20230128072737.2995881-8-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230128072737.2995881-1-apatel@ventanamicro.com>
-References: <20230128072737.2995881-1-apatel@ventanamicro.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=48cPMwKfIB+JYXBPIFLFeL3uIHX0dr8TubcBcaVKSWg=;
+        b=W7/GcMqmdmsFuJsM2rtl/qkIEz3p3MoEgiQHDLnX7O3eIeS0jQOMv/9MqgWdtVNzAa
+         44nUnE3cAhBuHYgADyWJg4oipw0IIuNJaaDby6T0GeUm5X29UpCWUxPfGBjjDHIyCHop
+         E4wufcgIgSQ5jAVErQlzQm7i514FnNQ7/3ceLLDJEQNoEKglsR6iG41p5S8GMZjYv9u4
+         knHcX0PSvzPcgr+JCPW5YsmZTkGK/0yvhQpoCMwZslniW3IVV5TOZoi/gnBJgY9FjdNA
+         /D2ubPqq80oO2o6CLoWy7tASJUEZE37bUf/0F8gFBGzp0is499Rnb76+Y3OMxM161qv1
+         iDpQ==
+X-Gm-Message-State: AO0yUKVQFowII1ohA0SaHIC/fzLCEc3g0ixQkV59PBVzywIWfccjrdvI
+        akYdDkyzF8RoWqy0qEGVubSdhMuySYZ9OYsMdySf2g==
+X-Google-Smtp-Source: AK7set9myMbUwY2oQoYCC6s/hiNjKYlL3tr83m91kF4ZOSzpcq9WlGrvx111fb4zpvHUxMc/iM2X6KckP/ZL7OtRtIk=
+X-Received: by 2002:a17:90a:64c5:b0:22b:ef05:ea5b with SMTP id
+ i5-20020a17090a64c500b0022bef05ea5bmr2696800pjm.50.1674891244385; Fri, 27 Jan
+ 2023 23:34:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-2-saravanak@google.com>
+ <Y9OXs9+uYi31dYJD@smile.fi.intel.com>
+In-Reply-To: <Y9OXs9+uYi31dYJD@smile.fi.intel.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 27 Jan 2023 23:33:28 -0800
+Message-ID: <CAGETcx_g8yKQQQVtNt+6cB8hS7OY9=dqm4tDhm1ZJZqG5nzSLg@mail.gmail.com>
+Subject: Re: [PATCH v2 01/11] driver core: fw_devlink: Don't purge child
+ fwnode's consumer links
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RISC-V host will have one guest external interrupt line for each
-VS-level IMSICs associated with a HART. The guest external interrupt
-lines are per-HART resources and hypervisor can use HGEIE, HGEIP, and
-HIE CSRs to manage these guest external interrupt lines.
+On Fri, Jan 27, 2023 at 1:22 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Jan 26, 2023 at 04:11:28PM -0800, Saravana Kannan wrote:
+> > When a device X is bound successfully to a driver, if it has a child
+> > firmware node Y that doesn't have a struct device created by then, we
+> > delete fwnode links where the child firmware node Y is the supplier. We
+> > did this to avoid blocking the consumers of the child firmware node Y
+> > from deferring probe indefinitely.
+> >
+> > While that a step in the right direction, it's better to make the
+> > consumers of the child firmware node Y to be consumers of the device X
+> > because device X is probably implementing whatever functionality is
+> > represented by child firmware node Y. By doing this, we capture the
+> > device dependencies more accurately and ensure better
+> > probe/suspend/resume ordering.
+>
+> ...
+>
+> >  static unsigned int defer_sync_state_count = 1;
+> >  static DEFINE_MUTEX(fwnode_link_lock);
+> >  static bool fw_devlink_is_permissive(void);
+> > +static void __fw_devlink_link_to_consumers(struct device *dev);
+> >  static bool fw_devlink_drv_reg_done;
+> >  static bool fw_devlink_best_effort;
+>
+> I'm wondering if may avoid adding more forward declarations...
+>
+> Perhaps it's a sign that devlink code should be split to its own
+> module?
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/include/asm/kvm_aia.h |  10 ++
- arch/riscv/kvm/aia.c             | 241 +++++++++++++++++++++++++++++++
- arch/riscv/kvm/main.c            |   3 +-
- arch/riscv/kvm/vcpu.c            |   2 +
- 4 files changed, 255 insertions(+), 1 deletion(-)
+I've thought about that before, but I'm not there yet. Maybe once my
+remaining refactors and TODOs are done, it'd be a good time to revisit
+this question.
 
-diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/kvm_aia.h
-index 1de0717112e5..0938e0cadf80 100644
---- a/arch/riscv/include/asm/kvm_aia.h
-+++ b/arch/riscv/include/asm/kvm_aia.h
-@@ -44,10 +44,15 @@ struct kvm_vcpu_aia {
- 
- #define irqchip_in_kernel(k)		((k)->arch.aia.in_kernel)
- 
-+extern unsigned int kvm_riscv_aia_nr_hgei;
- DECLARE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
- #define kvm_riscv_aia_available() \
- 	static_branch_unlikely(&kvm_riscv_aia_available)
- 
-+static inline void kvm_riscv_vcpu_aia_imsic_release(struct kvm_vcpu *vcpu)
-+{
-+}
-+
- #define KVM_RISCV_AIA_IMSIC_TOPEI	(ISELECT_MASK + 1)
- static inline int kvm_riscv_vcpu_aia_imsic_rmw(struct kvm_vcpu *vcpu,
- 					       unsigned long isel,
-@@ -119,6 +124,11 @@ static inline void kvm_riscv_aia_destroy_vm(struct kvm *kvm)
- {
- }
- 
-+int kvm_riscv_aia_alloc_hgei(int cpu, struct kvm_vcpu *owner,
-+			     void __iomem **hgei_va, phys_addr_t *hgei_pa);
-+void kvm_riscv_aia_free_hgei(int cpu, int hgei);
-+void kvm_riscv_aia_wakeon_hgei(struct kvm_vcpu *owner, bool enable);
-+
- void kvm_riscv_aia_enable(void);
- void kvm_riscv_aia_disable(void);
- int kvm_riscv_aia_init(void);
-diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
-index 3d68189e0bb1..f375069fdaf4 100644
---- a/arch/riscv/kvm/aia.c
-+++ b/arch/riscv/kvm/aia.c
-@@ -7,11 +7,46 @@
-  *	Anup Patel <apatel@ventanamicro.com>
-  */
- 
-+#include <linux/bitops.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
- #include <linux/kvm_host.h>
-+#include <linux/percpu.h>
-+#include <linux/spinlock.h>
- #include <asm/hwcap.h>
- 
-+struct aia_hgei_control {
-+	raw_spinlock_t lock;
-+	unsigned long free_bitmap;
-+	struct kvm_vcpu *owners[BITS_PER_LONG];
-+};
-+static DEFINE_PER_CPU(struct aia_hgei_control, aia_hgei);
-+static int hgei_parent_irq;
-+
-+unsigned int kvm_riscv_aia_nr_hgei;
- DEFINE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
- 
-+static int aia_find_hgei(struct kvm_vcpu *owner)
-+{
-+	int i, hgei;
-+	unsigned long flags;
-+	struct aia_hgei_control *hgctrl = this_cpu_ptr(&aia_hgei);
-+
-+	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-+
-+	hgei = -1;
-+	for (i = 1; i <= kvm_riscv_aia_nr_hgei; i++) {
-+		if (hgctrl->owners[i] == owner) {
-+			hgei = i;
-+			break;
-+		}
-+	}
-+
-+	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-+
-+	return hgei;
-+}
-+
- static void aia_set_hvictl(bool ext_irq_pending)
- {
- 	unsigned long hvictl;
-@@ -55,6 +90,7 @@ void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu *vcpu)
- 
- bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
- {
-+	int hgei;
- 	unsigned long seip;
- 
- 	if (!kvm_riscv_aia_available())
-@@ -72,6 +108,10 @@ bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
- 	if (!kvm_riscv_aia_initialized(vcpu->kvm) || !seip)
- 		return false;
- 
-+	hgei = aia_find_hgei(vcpu);
-+	if (hgei > 0)
-+		return (csr_read(CSR_HGEIP) & BIT(hgei)) ? true : false;
-+
- 	return false;
- }
- 
-@@ -343,6 +383,144 @@ int kvm_riscv_vcpu_aia_rmw_ireg(struct kvm_vcpu *vcpu, unsigned int csr_num,
- 	return KVM_INSN_EXIT_TO_USER_SPACE;
- }
- 
-+int kvm_riscv_aia_alloc_hgei(int cpu, struct kvm_vcpu *owner,
-+			     void __iomem **hgei_va, phys_addr_t *hgei_pa)
-+{
-+	int ret = -ENOENT;
-+	unsigned long flags;
-+	struct aia_hgei_control *hgctrl = per_cpu_ptr(&aia_hgei, cpu);
-+
-+	if (!kvm_riscv_aia_available())
-+		return -ENODEV;
-+	if (!hgctrl)
-+		return -ENODEV;
-+
-+	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-+
-+	if (hgctrl->free_bitmap) {
-+		ret = __ffs(hgctrl->free_bitmap);
-+		hgctrl->free_bitmap &= ~BIT(ret);
-+		hgctrl->owners[ret] = owner;
-+	}
-+
-+	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-+
-+	/* TODO: To be updated later by AIA in-kernel irqchip support */
-+	if (hgei_va)
-+		*hgei_va = NULL;
-+	if (hgei_pa)
-+		*hgei_pa = 0;
-+
-+	return ret;
-+}
-+
-+void kvm_riscv_aia_free_hgei(int cpu, int hgei)
-+{
-+	unsigned long flags;
-+	struct aia_hgei_control *hgctrl = per_cpu_ptr(&aia_hgei, cpu);
-+
-+	if (!kvm_riscv_aia_available() || !hgctrl)
-+		return;
-+
-+	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-+
-+	if (hgei > 0 && hgei <= kvm_riscv_aia_nr_hgei) {
-+		if (!(hgctrl->free_bitmap & BIT(hgei))) {
-+			hgctrl->free_bitmap |= BIT(hgei);
-+			hgctrl->owners[hgei] = NULL;
-+		}
-+	}
-+
-+	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-+}
-+
-+void kvm_riscv_aia_wakeon_hgei(struct kvm_vcpu *owner, bool enable)
-+{
-+	int hgei;
-+
-+	if (!kvm_riscv_aia_available())
-+		return;
-+
-+	hgei = aia_find_hgei(owner);
-+	if (hgei > 0) {
-+		if (enable)
-+			csr_set(CSR_HGEIE, BIT(hgei));
-+		else
-+			csr_clear(CSR_HGEIE, BIT(hgei));
-+	}
-+}
-+
-+static irqreturn_t hgei_interrupt(int irq, void *dev_id)
-+{
-+	int i;
-+	unsigned long hgei_mask, flags;
-+	struct aia_hgei_control *hgctrl = this_cpu_ptr(&aia_hgei);
-+
-+	hgei_mask = csr_read(CSR_HGEIP) & csr_read(CSR_HGEIE);
-+	csr_clear(CSR_HGEIE, hgei_mask);
-+
-+	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-+
-+	for_each_set_bit(i, &hgei_mask, BITS_PER_LONG) {
-+		if (hgctrl->owners[i])
-+			kvm_vcpu_kick(hgctrl->owners[i]);
-+	}
-+
-+	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int aia_hgei_init(void)
-+{
-+	int cpu, rc;
-+	struct irq_domain *domain;
-+	struct aia_hgei_control *hgctrl;
-+
-+	/* Initialize per-CPU guest external interrupt line management */
-+	for_each_possible_cpu(cpu) {
-+		hgctrl = per_cpu_ptr(&aia_hgei, cpu);
-+		raw_spin_lock_init(&hgctrl->lock);
-+		if (kvm_riscv_aia_nr_hgei) {
-+			hgctrl->free_bitmap =
-+				BIT(kvm_riscv_aia_nr_hgei + 1) - 1;
-+			hgctrl->free_bitmap &= ~BIT(0);
-+		} else
-+			hgctrl->free_bitmap = 0;
-+	}
-+
-+	/* Find INTC irq domain */
-+	domain = irq_find_matching_fwnode(riscv_get_intc_hwnode(),
-+					  DOMAIN_BUS_ANY);
-+	if (!domain) {
-+		kvm_err("unable to find INTC domain\n");
-+		return -ENOENT;
-+	}
-+
-+	/* Map per-CPU SGEI interrupt from INTC domain */
-+	hgei_parent_irq = irq_create_mapping(domain, IRQ_S_GEXT);
-+	if (!hgei_parent_irq) {
-+		kvm_err("unable to map SGEI IRQ\n");
-+		return -ENOMEM;
-+	}
-+
-+	/* Request per-CPU SGEI interrupt */
-+	rc = request_percpu_irq(hgei_parent_irq, hgei_interrupt,
-+				"riscv-kvm", &aia_hgei);
-+	if (rc) {
-+		kvm_err("failed to request SGEI IRQ\n");
-+		return rc;
-+	}
-+
-+	return 0;
-+}
-+
-+static void aia_hgei_exit(void)
-+{
-+	/* Free per-CPU SGEI interrupt */
-+	free_percpu_irq(hgei_parent_irq, &aia_hgei);
-+}
-+
- void kvm_riscv_aia_enable(void)
- {
- 	if (!kvm_riscv_aia_available())
-@@ -357,21 +535,79 @@ void kvm_riscv_aia_enable(void)
- 	csr_write(CSR_HVIPRIO1H, 0x0);
- 	csr_write(CSR_HVIPRIO2H, 0x0);
- #endif
-+
-+	/* Enable per-CPU SGEI interrupt */
-+	enable_percpu_irq(hgei_parent_irq,
-+			  irq_get_trigger_type(hgei_parent_irq));
-+	csr_set(CSR_HIE, BIT(IRQ_S_GEXT));
- }
- 
- void kvm_riscv_aia_disable(void)
- {
-+	int i;
-+	unsigned long flags;
-+	struct kvm_vcpu *vcpu;
-+	struct aia_hgei_control *hgctrl = this_cpu_ptr(&aia_hgei);
-+
- 	if (!kvm_riscv_aia_available())
- 		return;
- 
-+	/* Disable per-CPU SGEI interrupt */
-+	csr_clear(CSR_HIE, BIT(IRQ_S_GEXT));
-+	disable_percpu_irq(hgei_parent_irq);
-+
- 	aia_set_hvictl(false);
-+
-+	raw_spin_lock_irqsave(&hgctrl->lock, flags);
-+
-+	for (i = 0; i <= kvm_riscv_aia_nr_hgei; i++) {
-+		vcpu = hgctrl->owners[i];
-+		if (!vcpu)
-+			continue;
-+
-+		/*
-+		 * We release hgctrl->lock before notifying IMSIC
-+		 * so that we don't have lock ordering issues.
-+		 */
-+		raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-+
-+		/* Notify IMSIC */
-+		kvm_riscv_vcpu_aia_imsic_release(vcpu);
-+
-+		/*
-+		 * Wakeup VCPU if it was blocked so that it can
-+		 * run on other HARTs
-+		 */
-+		if (csr_read(CSR_HGEIE) & BIT(i)) {
-+			csr_clear(CSR_HGEIE, BIT(i));
-+			kvm_vcpu_kick(vcpu);
-+		}
-+
-+		raw_spin_lock_irqsave(&hgctrl->lock, flags);
-+	}
-+
-+	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
- }
- 
- int kvm_riscv_aia_init(void)
- {
-+	int rc;
-+
- 	if (!riscv_isa_extension_available(NULL, SxAIA))
- 		return -ENODEV;
- 
-+	/* Figure-out number of bits in HGEIE */
-+	csr_write(CSR_HGEIE, -1UL);
-+	kvm_riscv_aia_nr_hgei = fls_long(csr_read(CSR_HGEIE));
-+	csr_write(CSR_HGEIE, 0);
-+	if (kvm_riscv_aia_nr_hgei)
-+		kvm_riscv_aia_nr_hgei--;
-+
-+	/* Initialize guest external interrupt line management */
-+	rc = aia_hgei_init();
-+	if (rc)
-+		return rc;
-+
- 	/* Enable KVM AIA support */
- 	static_branch_enable(&kvm_riscv_aia_available);
- 
-@@ -380,4 +616,9 @@ int kvm_riscv_aia_init(void)
- 
- void kvm_riscv_aia_exit(void)
- {
-+	if (!kvm_riscv_aia_available())
-+		return;
-+
-+	/* Cleanup the HGEI state */
-+	aia_hgei_exit();
- }
-diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-index d8ff44eb04ca..5cf37dbe8a38 100644
---- a/arch/riscv/kvm/main.c
-+++ b/arch/riscv/kvm/main.c
-@@ -125,7 +125,8 @@ int kvm_arch_init(void *opaque)
- 	kvm_info("VMID %ld bits available\n", kvm_riscv_gstage_vmid_bits());
- 
- 	if (kvm_riscv_aia_available())
--		kvm_info("AIA available\n");
-+		kvm_info("AIA available with %d guest external interrupts\n",
-+			 kvm_riscv_aia_nr_hgei);
- 
- 	return 0;
- }
-diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-index 151b35b3b05f..1daa1936b642 100644
---- a/arch/riscv/kvm/vcpu.c
-+++ b/arch/riscv/kvm/vcpu.c
-@@ -240,10 +240,12 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu)
- 
- void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
- {
-+	kvm_riscv_aia_wakeon_hgei(vcpu, true);
- }
- 
- void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
- {
-+	kvm_riscv_aia_wakeon_hgei(vcpu, false);
- }
- 
- int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu)
--- 
-2.34.1
+But I don't think it should be done for the reason of forward
+declaration as we'd just end up moving these into base.h and we can do
+that even today.
 
+>
+> ...
+>
+> > -int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
+> > +static int __fwnode_link_add(struct fwnode_handle *con,
+> > +                          struct fwnode_handle *sup)
+>
+> I believe we tolerate a bit longer lines, so you may still have it on a single
+> line.
+
+That'd make it >80 cols. I'm going to leave it as is.
+
+>
+> ...
+>
+> > +int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
+> > +{
+>
+> > +     int ret = 0;
+>
+> Redundant assignment.
+
+Thanks. Will fix in v3.
+
+>
+> > +     mutex_lock(&fwnode_link_lock);
+> > +     ret = __fwnode_link_add(con, sup);
+> > +     mutex_unlock(&fwnode_link_lock);
+> >       return ret;
+> >  }
+>
+> ...
+>
+> >       if (dev->fwnode && dev->fwnode->dev == dev) {
+>
+> You may have above something like
+>
+>
+>         fwnode = dev_fwnode(dev);
+
+I'll leave it as-is for now. I see dev->fwnode vs dev_fwnode() don't
+always give the same results. I need to re-examine other places I use
+dev->fwnode in fw_devlink code before I start using that function. But
+in general it seems like a good idea. I'll add this to my TODOs.
+
+>         if (fwnode && fwnode->dev == dev) {
+>
+> >               struct fwnode_handle *child;
+> >               fwnode_links_purge_suppliers(dev->fwnode);
+> > +             mutex_lock(&fwnode_link_lock);
+> >               fwnode_for_each_available_child_node(dev->fwnode, child)
+> > -                     fw_devlink_purge_absent_suppliers(child);
+> > +                     __fw_devlink_pickup_dangling_consumers(child,
+> > +                                                            dev->fwnode);
+>
+>                         __fw_devlink_pickup_dangling_consumers(child, fwnode);
+
+I like the dev->fwnode->dev == dev check. It makes it super clear that
+I'm checking "The device's fwnode points back to the device". If I
+just use fwnode->dev == dev, then one will have to go back and read
+what fwnode is set to, etc. Also, when reading all these function
+calls it's easier to see that I'm working on the dev's fwnode (where
+dev is the device that was just bound to a driver) instead of some
+other fwnode.
+
+So I find it more readable as is and the compiler would optimize it
+anyway. If you feel strongly about this, I can change to use fwnode
+instead of dev->fwnode.
+
+Thanks,
+Saravana
