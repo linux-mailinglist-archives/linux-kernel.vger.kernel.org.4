@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F16467F35F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A587567F362
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjA1A4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:56:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S230515AbjA1A4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjA1A4L (ORCPT
+        with ESMTP id S231862AbjA1A4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:56:11 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F9583040
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:56:09 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id k18so6625975pll.5
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:56:09 -0800 (PST)
+        Fri, 27 Jan 2023 19:56:47 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881027C716
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:56:46 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id x5so3169530plr.2
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:56:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ozfLCO2npdrJynERlE33uFzCm7IMCruhdgNJtLeXOSI=;
-        b=mOnVOXg0Bg8trfHG/KI0XYEB10fh1pEhOaGWO4suWOZoD0uLkBx6cZvncWPeKhxWpl
-         s8JNOgbu3VVfb/i+VXrGQSfE84tyX6L1gCVea4RnHnKIJ6V61t2HbKBZQzmbNIWg4XWO
-         VxbM8NyFedZ+KeLXTNN0UhZX83jt/7WNcdBWtNJgCZSqfAYdjq87Zga+SwIot/sGUJBn
-         MJDUwp5dQUO+sKfNyb1U4n+uTVdr5MrWWrnydCxUC54OggxtAgKchqDfgKvw8cXnQVBP
-         AdXC5YrIu4cb/WiVErTzD5KDjcfLfMvUgvbuoMohvNScg35DvTkZ/MoR/x4OknZpWzIT
-         4uHg==
+        bh=rI2c99rcSfo6XNONmsHvFbfDglWETie8DloTdHfivvk=;
+        b=p8go5RAKjk+0e+oaFqXN0FR2I7+FTTYJEnAPgt6hFL+lY0R6cp2EFioBSzJF+6Lu0u
+         oUmHkfzMFGfYHb+CpRX3ITsRXEPmTifnvf73ftA6CRqy9RJMCVNLaKmj7OSYR47H2MXB
+         2ulmKjdrS8wRLf586AD0fqBtxIbNfEkpnHFvJBvsaYPsozlf7BHD97Ifh6JW6SWeKOQI
+         Nkbv+n5vwSF8JAhQHLBeeREs2Y/o2lfnR1hwx69SYzwXZ1ilM6n26IUGpqilwe7piEXt
+         QvEoPOWtUxcVT4TrDDchhiAK8mqwNk5ToSEpZJltF3+Hm5pDLTHGomtbwjrMs6u+ssrg
+         Uw3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ozfLCO2npdrJynERlE33uFzCm7IMCruhdgNJtLeXOSI=;
-        b=A7+X4+s29kY2qiEiRYU5hP2+DidpZZIeS0au45aRxcDvGugzu94wmPWm/GjfvuvUU0
-         JWJ5rJdaRhGZsEsIfP8kGN465Ws6UdiU/8bR1jpEsctZXuiqsbaVQ5fJrlsiYLRSw0Lw
-         X7b956mE7ex88ARQ9dP/6aTF2jkYu28WbuMmRTovhROMoCSkKN2bqLGXdrQd0eYg+xaM
-         fse7sHCXNzVek6M640YNAeFhqpk/I2PNGRzxUjABXJtQLLQK+T9JUwSSBLj4AISjO9AC
-         pc6Kz7bnYoCoTSvxvNXPKWb+KsplpRA0nSU4NNo1B5ZUEKIP1sR2kXgTrhxlEi9rneuu
-         PVdw==
-X-Gm-Message-State: AO0yUKVMaDvkzitQdPdUWvJkyJUHr6Jjr6dlmGy+1GIzmfJ9OCMCQWDG
-        PcoUChDbzBNoFqAnPupwfxsHuw==
-X-Google-Smtp-Source: AK7set9yz6vM0tEl3QtE4FycCZlMQAk2ym6nmhVybXzPJdelofjDNAX4kviO3aOqD4ycsfgrQ4VErw==
-X-Received: by 2002:a05:6a21:33aa:b0:b9:14e:184b with SMTP id yy42-20020a056a2133aa00b000b9014e184bmr239387pzb.3.1674867369011;
-        Fri, 27 Jan 2023 16:56:09 -0800 (PST)
+        bh=rI2c99rcSfo6XNONmsHvFbfDglWETie8DloTdHfivvk=;
+        b=DAKAb96P/bazMFj86nypf23Lx/vcN1/pBe50z3QJvvsZM5EOVITISEiBjfyFgbt4XF
+         MP3XUGwK6d9upMmR+RpKKtDI0Lq6QA0gJaTgLDFdokrzUAYGjOknHf2YeZgrY3iZaqh1
+         1JySYHxLj4bNtLhbhjshyhZfujX/NofVoatzLuhuRMNaHQL//mfpwr4bLlXk8tRUhgSB
+         n53eiRRGNKcovRG6tpUVhGSaKvd+ZTqvhCM5PS5A23AjPdMmA0rc49myp81WZawTb4K8
+         7eFgxY/6pkc81YkxO+YKnUyy10IMDD9SH0nE7rcjQPUB5Nq7MRWHPR+m/hcJQ0/LRnXk
+         wjNA==
+X-Gm-Message-State: AO0yUKU4SLidjD6oZwzmmUyksHLtvobRCRY0eixvFs7I5MBiM5uSTq3E
+        ePwZ2ErP/VWppF6lnU3nh5M4BQ==
+X-Google-Smtp-Source: AK7set8krNpzRJzicYHFKi93jEMrwpbzoRjimX3jZk+2Qog5M44S0ZJLGQeBdajigna7YUvZLYX77A==
+X-Received: by 2002:a05:6a20:6d15:b0:a4:efde:2ed8 with SMTP id fv21-20020a056a206d1500b000a4efde2ed8mr263956pzb.0.1674867405931;
+        Fri, 27 Jan 2023 16:56:45 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i67-20020a639d46000000b004cc95c9bd97sm2938564pgd.35.2023.01.27.16.56.08
+        by smtp.gmail.com with ESMTPSA id c9-20020a6566c9000000b0046ff3634a78sm2908265pgw.71.2023.01.27.16.56.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 16:56:08 -0800 (PST)
-Date:   Sat, 28 Jan 2023 00:56:05 +0000
+        Fri, 27 Jan 2023 16:56:45 -0800 (PST)
+Date:   Sat, 28 Jan 2023 00:56:42 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Maxim Levitsky <mlevitsk@redhat.com>
 Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
@@ -68,15 +68,14 @@ Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
         Jing Liu <jing2.liu@intel.com>,
         Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 03/11] KVM: nSVM: explicitly raise KVM_REQ_EVENT on
- nested VM exit if L1 doesn't intercept interrupts
-Message-ID: <Y9RypRsfpLteK51v@google.com>
+Subject: Re: [PATCH v2 04/11] KVM: SVM: drop the SVM specific H_FLAGS
+Message-ID: <Y9RyyvqKDqX3ZNY9@google.com>
 References: <20221129193717.513824-1-mlevitsk@redhat.com>
- <20221129193717.513824-4-mlevitsk@redhat.com>
+ <20221129193717.513824-5-mlevitsk@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129193717.513824-4-mlevitsk@redhat.com>
+In-Reply-To: <20221129193717.513824-5-mlevitsk@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -88,114 +87,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shortlog is too long, maybe this?
-
-  KVM: nSVM: Raise event on nested VM exit if L1 doesn't intercept IRQs
-
 On Tue, Nov 29, 2022, Maxim Levitsky wrote:
-> If the L2 doesn't intercept interrupts, then the KVM will use vmcb02's
-
-s/the L2/L2, though don't you mean L1?
-
-> V_IRQ for L1 (to detect the interrupt window)
-
-"an interrupt window", i.e. there's not just one window.
-
-> In this case on the nested VM exit KVM might need to copy the V_IRQ bit
-
-s/the nested/nested
-
-> from the vmcb02 to the vmcb01, to continue waiting for the
-> interrupt window.
-> 
-> To make it simple, just raise the KVM_REQ_EVENT request, which
-> execution will lead to the reenabling of the interrupt
-> window if needed.
-> 
-> Note that this is a theoretical bug because the KVM already does raise
-
-s/the KVM/KVM
-
-> the KVM_REQ_EVENT request one each nested VM exit because the nested
-
-s/the KVM_REQ_EVENT/KVM_REQ_EVENT, and s/one/on
-
-> VM exit resets RFLAGS and the kvm_set_rflags() raises the
-> KVM_REQ_EVENT request in the response.
-> 
-> However raising this request explicitly, together with
-> documenting why this is needed, is still preferred.
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/svm/nested.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index aad3145b2f62fe..e891318595113e 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -1016,6 +1016,31 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+> @@ -3580,7 +3583,7 @@ bool svm_nmi_blocked(struct kvm_vcpu *vcpu)
+>  		return false;
 >  
->  	svm_switch_vmcb(svm, &svm->vmcb01);
+>  	ret = (vmcb->control.int_state & SVM_INTERRUPT_SHADOW_MASK) ||
+> -	      (vcpu->arch.hflags & HF_NMI_MASK);
+> +	      (svm->nmi_masked);
+
+Unnecessary parantheses.
+
 >  
-> +	/* Note about synchronizing some of int_ctl bits from vmcb02 to vmcb01:
-
-	/*
-	 * Preferred block comment style...
-
-> +	 *
-> +	 * - V_IRQ, V_IRQ_VECTOR, V_INTR_PRIO_MASK, V_IGN_TPR:
-
-Drop the "-" to be consistent with the rest of the paragraphs.
-
-> +	 * If the L2 doesn't intercept interrupts, then
-> +	 * (even if the L2 does use virtual interrupt masking),
-
-KVM uses "L2" to refer to the thing running at L2.  I think what you are referring
-to here is vmcb12?  And that's controlled by L1.
-
-> +	 * KVM will use the vmcb02's V_INTR to detect interrupt window.
-
-s/the vmcb02/vmcb02
-
-Which of the V_INTR fields does this refer to?  Oooh, you're saying the KVM injects
-a virtual interrupt into L2 using vmcb02 in order to determine when L2 has IRQs
-enabled.
-
-Why does KVM do that?  Why not pend the actual IRQ directly?  
-
-> +	 *
-> +	 * In this case, the KVM raises the KVM_REQ_EVENT to ensure that interrupt window
-
-s/the KVM_REQ_EVENT/KVM_REQ_EVENT
-
-> +	 * is not lost and this implicitly copies these bits from vmcb02 to vmcb01
-
-Too many pronouns.  What do "this" and "these bits" refer to?
-
-> +	 *
-> +	 * V_TPR:
-> +	 * If the L2 doesn't use virtual interrupt masking, then the L1's vTPR
-> +	 * is stored in the vmcb02 but its value doesn't need to be copied from/to
-> +	 * vmcb01 because it is copied from/to the TPR APIC's register on
-> +	 * each VM entry/exit.
-> +	 *
-> +	 * V_GIF:
-> +	 * - If the nested vGIF is not used, KVM uses vmcb02's V_GIF for L1's V_GIF,
-
-Drop this "-" too.
-
-> +	 * however, the L1 vGIF is reset to false on each VM exit, thus
-> +	 * there is no need to copy it from vmcb02 to vmcb01.
-> +	 */
-> +
-> +	if (!nested_exit_on_intr(svm))
-> +		kvm_make_request(KVM_REQ_EVENT, &svm->vcpu);
-> +
->  	if (unlikely(svm->lbrv_enabled && (svm->nested.ctl.virt_ext & LBR_CTL_ENABLE_MASK))) {
->  		svm_copy_lbrs(vmcb12, vmcb02);
->  		svm_update_lbrv(vcpu);
-> -- 
-> 2.26.3
-> 
+>  	return ret;
+>  }
