@@ -2,285 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEABA67F5D3
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A37667F5D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233213AbjA1H5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        id S233464AbjA1H7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjA1H5f (ORCPT
+        with ESMTP id S229973AbjA1H7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:57:35 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B9733455
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:57:34 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id k6so7603699vsk.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:57:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5GG1joCTDrG1daBv7ONaT8p65pfMidBlu/KkNjb9RXU=;
-        b=AAzBLNxTk/X8s9ZFbo6BdVTOnsOkKQ0TFtEo+C68O4szWSMuGBgKfTArYjchjNXLyT
-         BEOarHTbkq6JOeIowm5Qrp8P/+LXXYo9VcdDwo8lGL8bQAAcXgjb1JR77/1Os5nNWPAh
-         l8N9BaB7JmK2/vfTsYptArBOJfunrVij21fGFlX+RhZro5dshbbvwflcemj2YlnfYqUY
-         Zgaxtq8u7gwVjnc/ZaQ2+VawTFr2ght+e/uVlG2u+lket5BHfyNxAFKtvVd7h4cTEEe4
-         p6B+oizr8XLJ2JMtYwoDc82S9gf8nQ8F5qYcAUMCZufjEN5tJzH3NixoyXJ6q1D73SvC
-         QITQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5GG1joCTDrG1daBv7ONaT8p65pfMidBlu/KkNjb9RXU=;
-        b=JA69FNkb/156n1LvB6yV5JRkxbP+oM4Yll9HDwOyfQFJ4ZUIM4/FaewHggtC781IDt
-         AUvrsrFEYsipLeHu+fuvtbPwHPew7tSLW7VhiMH+61K+a0bVDvfwo90jfgICPq+92UKU
-         uM5ZFV3dvGiNguC6iL664hJpr1n9x9rVaekH5Hjkf9Uk46+53RVepUd20Dt4zgWvpiRf
-         wLYJuXsgt9bcxLRhrNOhs/UHmzK9pigPkDyf3RPFBjrCgiac3ID6GRjQ1VA8QOCjmrgK
-         5lveE0e58TZQ1IwtepW4VXAJeY5jUABZkBq5LcJ88QIeB00XGFUYgO4ji5VFvSzPn96C
-         xjRQ==
-X-Gm-Message-State: AO0yUKVxcOvcqDOqtBj4oYbPlLyah04vfkTs07zrIC895guHBzHmslNv
-        +eGJw2L+kqF1jo4YzQ1oUYAoq9Nm1N43SUca513qUQ==
-X-Google-Smtp-Source: AK7set+iAC1O7VcJefkNLU+iAkowg6dLtYAv0wDfDSmWSjN0LAOMdOFF2U0W2cto4q6oFAOPlRj70oqd4400Vl3gCsU=
-X-Received: by 2002:a67:2686:0:b0:3eb:b8d8:6b3e with SMTP id
- m128-20020a672686000000b003ebb8d86b3emr1003951vsm.22.1674892653209; Fri, 27
- Jan 2023 23:57:33 -0800 (PST)
+        Sat, 28 Jan 2023 02:59:08 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1824616D;
+        Fri, 27 Jan 2023 23:59:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1674892733; bh=qMf+Xfzo+BufqPQ/JYYC7vZ8jwBEi6vlqKAvmk8x3H4=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=J6mT4L4ZQxGRbqR2dJy2cRxz+ACZgwokL5It6x0711QYr9Z39yyaEyLLK9dCssfmC
+         zFoB7QcWXieSioe6yKEH4+AktJidBhk7sZxxQaKpJVODvhNMF5sy69KDcsp61LlrBE
+         WAtzF2nT9HE1Jf6c8wmK3vLpOoS8B0aUty0i6Zgg=
+Received: by b-2.in.mailobj.net [192.168.90.12] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Sat, 28 Jan 2023 08:58:53 +0100 (CET)
+X-EA-Auth: AbVnrGizcFtzXuYqAw3Q9ExojJUsxcVdLH/fMIOfZgK/DtWWIjme5wpWUyT/MEz5Bt3cMParN9MS8TEqjwiWKARGs9R3Nu+I
+Date:   Sat, 28 Jan 2023 13:28:48 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] scsi: st: Use min/max helpers for comparison and assignment
+Message-ID: <Y9TVuM1az7ajhTlS@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-References: <20230127203950.781709-1-rmoar@google.com>
-In-Reply-To: <20230127203950.781709-1-rmoar@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 28 Jan 2023 15:57:21 +0800
-Message-ID: <CABVgOS=c5JhPT+GZ-f43ff5cGS3oR=NnL9K8vuk8nDv_jngHvA@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: fix bug in KUNIT_EXPECT_MEMEQ
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, dlatypov@google.com,
-        skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a7606205f34e55db"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a7606205f34e55db
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Simplify code by using min_t helper macro for logical evaluation
+and value assignment. Use the _t variant of min macro since the
+variable types are not same.
+This issue is identified by coccicheck using the minmax.cocci file.
 
-On Sat, 28 Jan 2023 at 04:40, Rae Moar <rmoar@google.com> wrote:
->
-> In KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ, add check if one of the
-> inputs is NULL and fail if this is the case.
->
-> Currently, the kernel crashes if one of the inputs is NULL. Instead,
-> fail the test and add an appropriate error message.
->
-> Fixes: b8a926bea8b1 ("kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPEC=
-T_MEMNEQ macros")
->
-> This was found by the kernel test robot:
-> https://lore.kernel.org/all/202212191448.D6EDPdOh-lkp@intel.com/
->
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
->
-> Changes since v1:
-> - Fix formatting of backslashes
-> - Add Fixes: ... statement to commit message
->
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+Please note: Proposed change is only compile/build tested.
 
-Looks good to me, now.
+ drivers/scsi/st.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Thanks.
-=E2=80=94 David
+diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
+index b90a440e135d..38aa59cba110 100644
+--- a/drivers/scsi/st.c
++++ b/drivers/scsi/st.c
+@@ -1574,8 +1574,7 @@ static int setup_buffering(struct scsi_tape *STp, const char __user *buf,
+ 
+ 	if (!STbp->do_dio) {
+ 		if (STp->block_size)
+-			bufsize = STp->block_size > st_fixed_buffer_size ?
+-				STp->block_size : st_fixed_buffer_size;
++			bufsize = max(STp->block_size, st_fixed_buffer_size);
+ 		else {
+ 			bufsize = count;
+ 			/* Make sure that data from previous user is not leaked even if
+@@ -2186,8 +2185,7 @@ st_read(struct file *filp, char __user *buf, size_t count, loff_t * ppos)
+ 					  STps->eof, STbp->buffer_bytes,
+ 					  (int)(count - total));
+ 			) /* end DEB */
+-			transfer = STbp->buffer_bytes < count - total ?
+-			    STbp->buffer_bytes : count - total;
++			transfer = min_t(size_t, STbp->buffer_bytes, (count - total));
+ 			if (!do_dio) {
+ 				i = from_buffer(STbp, buf, transfer);
+ 				if (i) {
+@@ -3996,7 +3994,7 @@ static int append_to_buffer(const char __user *ubp, struct st_buffer * st_bp, in
+ 	}
+ 	for (; i < st_bp->frp_segs && do_count > 0; i++) {
+ 		struct page *page = st_bp->reserved_pages[i];
+-		cnt = length - offset < do_count ? length - offset : do_count;
++		cnt = min((length - offset), do_count);
+ 		res = copy_from_user(page_address(page) + offset, ubp, cnt);
+ 		if (res)
+ 			return (-EFAULT);
+@@ -4028,7 +4026,7 @@ static int from_buffer(struct st_buffer * st_bp, char __user *ubp, int do_count)
+ 	}
+ 	for (; i < st_bp->frp_segs && do_count > 0; i++) {
+ 		struct page *page = st_bp->reserved_pages[i];
+-		cnt = length - offset < do_count ? length - offset : do_count;
++		cnt = min((length - offset), do_count);
+ 		res = copy_to_user(ubp, page_address(page) + offset, cnt);
+ 		if (res)
+ 			return (-EFAULT);
+-- 
+2.34.1
 
->  include/kunit/test.h |  5 +++--
->  lib/kunit/assert.c   | 40 +++++++++++++++++++++++++---------------
->  2 files changed, 28 insertions(+), 17 deletions(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 87ea90576b50..a20bff149bdf 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -683,8 +683,9 @@ do {                                                 =
-                              \
->                 .right_text =3D #right,                                  =
-        \
->         };                                                               =
-      \
->                                                                          =
-      \
-> -       if (likely(memcmp(__left, __right, __size) op 0))                =
-      \
-> -               break;                                                   =
-      \
-> +       if (likely(__left && __right))                                   =
-      \
-> +               if (likely(memcmp(__left, __right, __size) op 0))        =
-      \
-> +                       break;                                           =
-      \
->                                                                          =
-      \
->         _KUNIT_FAILED(test,                                              =
-      \
->                       assert_type,                                       =
-      \
-> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-> index f5b50babe38d..05a09652f5a1 100644
-> --- a/lib/kunit/assert.c
-> +++ b/lib/kunit/assert.c
-> @@ -241,24 +241,34 @@ void kunit_mem_assert_format(const struct kunit_ass=
-ert *assert,
->         mem_assert =3D container_of(assert, struct kunit_mem_assert,
->                                   assert);
->
-> -       string_stream_add(stream,
-> -                         KUNIT_SUBTEST_INDENT "Expected %s %s %s, but\n"=
-,
-> -                         mem_assert->text->left_text,
-> -                         mem_assert->text->operation,
-> -                         mem_assert->text->right_text);
-> +       if (!mem_assert->left_value) {
-> +               string_stream_add(stream,
-> +                                 KUNIT_SUBTEST_INDENT "Expected %s is no=
-t null, but is\n",
-> +                                 mem_assert->text->left_text);
-> +       } else if (!mem_assert->right_value) {
-> +               string_stream_add(stream,
-> +                                 KUNIT_SUBTEST_INDENT "Expected %s is no=
-t null, but is\n",
-> +                                 mem_assert->text->right_text);
-> +       } else {
-> +               string_stream_add(stream,
-> +                               KUNIT_SUBTEST_INDENT "Expected %s %s %s, =
-but\n",
-> +                               mem_assert->text->left_text,
-> +                               mem_assert->text->operation,
-> +                               mem_assert->text->right_text);
->
-> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s =3D=3D\n",
-> -                         mem_assert->text->left_text);
-> -       kunit_assert_hexdump(stream, mem_assert->left_value,
-> -                            mem_assert->right_value, mem_assert->size);
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s =3D=
-=3D\n",
-> +                               mem_assert->text->left_text);
-> +               kunit_assert_hexdump(stream, mem_assert->left_value,
-> +                                       mem_assert->right_value, mem_asse=
-rt->size);
->
-> -       string_stream_add(stream, "\n");
-> +               string_stream_add(stream, "\n");
->
-> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s =3D=3D\n",
-> -                         mem_assert->text->right_text);
-> -       kunit_assert_hexdump(stream, mem_assert->right_value,
-> -                            mem_assert->left_value, mem_assert->size);
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s =3D=
-=3D\n",
-> +                               mem_assert->text->right_text);
-> +               kunit_assert_hexdump(stream, mem_assert->right_value,
-> +                                       mem_assert->left_value, mem_asser=
-t->size);
->
-> -       kunit_assert_print_msg(message, stream);
-> +               kunit_assert_print_msg(message, stream);
-> +       }
->  }
->  EXPORT_SYMBOL_GPL(kunit_mem_assert_format);
->
-> base-commit: 5835ffc27381c2d32c3f0d7b575cb3397555ab47
-> --
-> 2.39.1.456.gfc5497dd1b-goog
->
 
---000000000000a7606205f34e55db
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCw
-CQVba67xjdrZzx8PR4MfUh+HMEWmTxKj4or546+7xjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMjgwNzU3MzNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAWPh9W9DvXoyMAay9sHlC
-IJAkjWcPxP8SyYZe2lKWxyAjKZU3+w1eDxysZpQlC3GvpJlkRfb7AMdPOODK6mj+1KbAvdNt27sl
-WsTHZxfll8kL2RO1v0FSNqQ2xps1M9OMRWrKjDmAvLLw/3qzs7sw7+1mrWsg/Imxi1SsywGsfRYO
-XQ7CdEG3uYEqvl0/sf7ujNDLJhWh5yucZcjGi704Hd7h60N/yAHym/jHpiXIuNOmLEyRD2S7xjYu
-82lXoXpScujmzLwItD39FI/stqAIGrXe+FHKuixBVVyCmQDzSgdTRLDbtIAxPJsjw9Y/AdRuD8B5
-5P01WItm24b7K0lDbQ==
---000000000000a7606205f34e55db--
