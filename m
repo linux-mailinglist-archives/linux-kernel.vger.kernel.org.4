@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2144767F59A
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FB367F59F
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjA1HeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S233648AbjA1HeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjA1HeH (ORCPT
+        with ESMTP id S233624AbjA1HeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:34:07 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AF23B0F1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:34:05 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id p24so7048709plw.11
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:34:05 -0800 (PST)
+        Sat, 28 Jan 2023 02:34:18 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4C042DFB
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:34:16 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id 5so7090281plo.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:34:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=48cPMwKfIB+JYXBPIFLFeL3uIHX0dr8TubcBcaVKSWg=;
-        b=eVNLr6tMgu58ayq3Ao3L3DJzKMEFfj2tbmldarzOO8OyCpMG/ZZ2rlLfICfMDBCo5+
-         VPYoXRhj8EtItKKFrhehPMIQ7V1tPMG99UpZlCDM+Mf1oyRyrBCvCMbMtihyB6F18Nao
-         9o2PNPcr9v3ZFB/7Z1DSqGc7acdqB66aVOInvkxBZPLNSmIILNTUYiDsDD+44ujq4lEd
-         cLTSvGeHYw69BwlArYctelJXJx5wZKHpPd5Qyzrkwm48CtOFvqXRpCvtFZ0A4kHJNfdv
-         wjR9G1GhyqmB7Hs2pnSNtyQ6eABh67bfwViZQ35v1D/NA5ofowoPu+IqSZmLzYz9vXhP
-         J71w==
+        bh=JmYzUfpePnB9x0ifwB4TcXSt5sKNdFWyl1mCK+EAt64=;
+        b=sv7EliM4oDY/KPMKE8veikhHJX+n9dLGSJXbCDuMHFjzqR7z9a2A2QV0Mh8ISNJelb
+         gtq6p0Fg/Nut/liGUX0fm5Rk2UCPdlMtAIeuzXuG81EhF5FN+1OT97xlFykF9szLWMS4
+         8oPe32ivIGTGX8kQAMo4euFp43ngRX7rwTwv/ZwMPigJ7gZe5wrGfY/gqQEhcnUf3Gyc
+         oh+BuS8UwHELgpD/F96tP8E+jrdU7YLguXAyMz81xKVFLTC1Gz5BcrUhBkvXAQQlijpA
+         0HbWPf1qfSqLRrt007E+Zwqukn5gwceaXzjcltqaIfqgwrNQ1c4yHM1y2KkqvVbTGVs0
+         wj6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=48cPMwKfIB+JYXBPIFLFeL3uIHX0dr8TubcBcaVKSWg=;
-        b=W7/GcMqmdmsFuJsM2rtl/qkIEz3p3MoEgiQHDLnX7O3eIeS0jQOMv/9MqgWdtVNzAa
-         44nUnE3cAhBuHYgADyWJg4oipw0IIuNJaaDby6T0GeUm5X29UpCWUxPfGBjjDHIyCHop
-         E4wufcgIgSQ5jAVErQlzQm7i514FnNQ7/3ceLLDJEQNoEKglsR6iG41p5S8GMZjYv9u4
-         knHcX0PSvzPcgr+JCPW5YsmZTkGK/0yvhQpoCMwZslniW3IVV5TOZoi/gnBJgY9FjdNA
-         /D2ubPqq80oO2o6CLoWy7tASJUEZE37bUf/0F8gFBGzp0is499Rnb76+Y3OMxM161qv1
-         iDpQ==
-X-Gm-Message-State: AO0yUKVQFowII1ohA0SaHIC/fzLCEc3g0ixQkV59PBVzywIWfccjrdvI
-        akYdDkyzF8RoWqy0qEGVubSdhMuySYZ9OYsMdySf2g==
-X-Google-Smtp-Source: AK7set9myMbUwY2oQoYCC6s/hiNjKYlL3tr83m91kF4ZOSzpcq9WlGrvx111fb4zpvHUxMc/iM2X6KckP/ZL7OtRtIk=
-X-Received: by 2002:a17:90a:64c5:b0:22b:ef05:ea5b with SMTP id
- i5-20020a17090a64c500b0022bef05ea5bmr2696800pjm.50.1674891244385; Fri, 27 Jan
- 2023 23:34:04 -0800 (PST)
+        bh=JmYzUfpePnB9x0ifwB4TcXSt5sKNdFWyl1mCK+EAt64=;
+        b=I1SggiKvApD0fSzDA/l9J+mIv+OIeiyG0zzIXVPzFQ8K4wKijC+lMNseVhraHno0F0
+         qHke24FiLQc+loP/131QRbQbCVSudhebEMTM83YZ+6B87SSPxFTBm8b2EHKW0t5gqQWi
+         7KT7ROZzwoST24KkV2bj56lxOYozfm1WiyP59doc6zmx/1X8wfHg5WwjHBLkG2QphEIV
+         XfQHbZZKgFkH8UkVU77o5alaKhVFwu/f/uk1hxl0HKbqJs5mPb/tcdbf89A8gL5F5ond
+         pEZ0L4ctcL6MDyMSX6kezLF3Pgsv56pCshi2MVytUtbAR0DZ4FY7szvCPR9vYpVEyfID
+         wjFA==
+X-Gm-Message-State: AFqh2kpyS9KsmSaKx+uFFy3eAgF47fQZBmSXEkBpFQBauq+67O0DTLpT
+        NxX5DwJPWi7WpyXj3/m/BQs8BCHrs08cVE+0xxxl3g==
+X-Google-Smtp-Source: AMrXdXuNSDnsr/Epdkz/K+Dti20l9M0DJ83VLBWJ4Gvg9ChW/l3gOz1X2smf3HJfp3CmcVkj9QCLVhHNnTBqoV7Qy3A=
+X-Received: by 2002:a17:902:8304:b0:194:6253:d685 with SMTP id
+ bd4-20020a170902830400b001946253d685mr4962773plb.3.1674891255033; Fri, 27 Jan
+ 2023 23:34:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-2-saravanak@google.com>
- <Y9OXs9+uYi31dYJD@smile.fi.intel.com>
-In-Reply-To: <Y9OXs9+uYi31dYJD@smile.fi.intel.com>
+References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-5-saravanak@google.com>
+ <Y9OY6pMwYtab1Avd@smile.fi.intel.com>
+In-Reply-To: <Y9OY6pMwYtab1Avd@smile.fi.intel.com>
 From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 27 Jan 2023 23:33:28 -0800
-Message-ID: <CAGETcx_g8yKQQQVtNt+6cB8hS7OY9=dqm4tDhm1ZJZqG5nzSLg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/11] driver core: fw_devlink: Don't purge child
- fwnode's consumer links
+Date:   Fri, 27 Jan 2023 23:33:38 -0800
+Message-ID: <CAGETcx_sm5Efy=80kc9gNTaZgvOQzBGxwWA1n+bPJYWg43OebA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/11] gpiolib: Clear the gpio_device's fwnode
+ initialized flag before adding
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -109,113 +109,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 1:22 AM Andy Shevchenko
+On Fri, Jan 27, 2023 at 1:27 AM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 >
-> On Thu, Jan 26, 2023 at 04:11:28PM -0800, Saravana Kannan wrote:
-> > When a device X is bound successfully to a driver, if it has a child
-> > firmware node Y that doesn't have a struct device created by then, we
-> > delete fwnode links where the child firmware node Y is the supplier. We
-> > did this to avoid blocking the consumers of the child firmware node Y
-> > from deferring probe indefinitely.
-> >
-> > While that a step in the right direction, it's better to make the
-> > consumers of the child firmware node Y to be consumers of the device X
-> > because device X is probably implementing whatever functionality is
-> > represented by child firmware node Y. By doing this, we capture the
-> > device dependencies more accurately and ensure better
-> > probe/suspend/resume ordering.
+> On Thu, Jan 26, 2023 at 04:11:31PM -0800, Saravana Kannan wrote:
+> > Registering an irqdomain sets the flag for the fwnode. But having the
+> > flag set when a device is added is interpreted by fw_devlink to mean the
+> > device has already been initialized and will never probe. This prevents
+> > fw_devlink from creating device links with the gpio_device as a
+> > supplier. So, clear the flag before adding the device.
 >
 > ...
 >
-> >  static unsigned int defer_sync_state_count = 1;
-> >  static DEFINE_MUTEX(fwnode_link_lock);
-> >  static bool fw_devlink_is_permissive(void);
-> > +static void __fw_devlink_link_to_consumers(struct device *dev);
-> >  static bool fw_devlink_drv_reg_done;
-> >  static bool fw_devlink_best_effort;
+> > +     /*
+> > +      * If fwnode doesn't belong to another device, it's safe to clear its
+> > +      * initialized flag.
+> > +      */
+> > +     if (!gdev->dev.fwnode->dev)
+> > +             fwnode_dev_initialized(gdev->dev.fwnode, false);
 >
-> I'm wondering if may avoid adding more forward declarations...
+> Do not dereference fwnode in struct device. Use dev_fwnode() for that.
 >
-> Perhaps it's a sign that devlink code should be split to its own
-> module?
+>         struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
+>
+>         if (!fwnode->dev)
+>                 fwnode_dev_initialized(fwnode, false);
 
-I've thought about that before, but I'm not there yet. Maybe once my
-remaining refactors and TODOs are done, it'd be a good time to revisit
-this question.
+Honestly, we should work towards NOT needing dev_fwnode(). The
+function literally dereferences dev->fwnode or the one inside of_node.
+So my dereference is fine. The whole "fwnode might not be set for
+devices with of_node" is wrong and we should fix that instead of
+writing wrappers to work around it.
 
-But I don't think it should be done for the reason of forward
-declaration as we'd just end up moving these into base.h and we can do
-that even today.
-
->
-> ...
->
-> > -int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
-> > +static int __fwnode_link_add(struct fwnode_handle *con,
-> > +                          struct fwnode_handle *sup)
->
-> I believe we tolerate a bit longer lines, so you may still have it on a single
-> line.
-
-That'd make it >80 cols. I'm going to leave it as is.
+Also, for now I'm going to leave this as if for the same reasons as I
+mentioned in Patch 1.
 
 >
-> ...
->
-> > +int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
-> > +{
->
-> > +     int ret = 0;
->
-> Redundant assignment.
+> + Blank line.
 
-Thanks. Will fix in v3.
+Ack.
+
+
+-Saravana
 
 >
-> > +     mutex_lock(&fwnode_link_lock);
-> > +     ret = __fwnode_link_add(con, sup);
-> > +     mutex_unlock(&fwnode_link_lock);
-> >       return ret;
-> >  }
+> >       ret = gcdev_register(gdev, gpio_devt);
+> >       if (ret)
+> >               return ret;
 >
-> ...
->
-> >       if (dev->fwnode && dev->fwnode->dev == dev) {
->
-> You may have above something like
+> --
+> With Best Regards,
+> Andy Shevchenko
 >
 >
->         fwnode = dev_fwnode(dev);
-
-I'll leave it as-is for now. I see dev->fwnode vs dev_fwnode() don't
-always give the same results. I need to re-examine other places I use
-dev->fwnode in fw_devlink code before I start using that function. But
-in general it seems like a good idea. I'll add this to my TODOs.
-
->         if (fwnode && fwnode->dev == dev) {
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
 >
-> >               struct fwnode_handle *child;
-> >               fwnode_links_purge_suppliers(dev->fwnode);
-> > +             mutex_lock(&fwnode_link_lock);
-> >               fwnode_for_each_available_child_node(dev->fwnode, child)
-> > -                     fw_devlink_purge_absent_suppliers(child);
-> > +                     __fw_devlink_pickup_dangling_consumers(child,
-> > +                                                            dev->fwnode);
->
->                         __fw_devlink_pickup_dangling_consumers(child, fwnode);
-
-I like the dev->fwnode->dev == dev check. It makes it super clear that
-I'm checking "The device's fwnode points back to the device". If I
-just use fwnode->dev == dev, then one will have to go back and read
-what fwnode is set to, etc. Also, when reading all these function
-calls it's easier to see that I'm working on the dev's fwnode (where
-dev is the device that was just bound to a driver) instead of some
-other fwnode.
-
-So I find it more readable as is and the compiler would optimize it
-anyway. If you feel strongly about this, I can change to use fwnode
-instead of dev->fwnode.
-
-Thanks,
-Saravana
