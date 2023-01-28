@@ -2,242 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C5767F49A
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 05:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF29467F4A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 05:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbjA1ELo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 23:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
+        id S231267AbjA1E0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 23:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbjA1ELR (ORCPT
+        with ESMTP id S229530AbjA1E0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 23:11:17 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570B47C33D;
-        Fri, 27 Jan 2023 20:11:14 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30S1XKLI008330;
-        Sat, 28 Jan 2023 04:10:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=liGK6Cfe7R3hLz9yjT29KaP2fem8h5ZkQP1LS4op+YU=;
- b=Wnrm6d8KZNWEGRLKXWvzNhzdfzjBduvIWOq6HWCeVLlDGn0dCAxnIK8vG+RuqHyLX0z6
- upF03A/bdJxUEazq88MBdFh6nyJIS7aR8QpINl2pNX7cxYQsKjGgI+zd5VnvOYLhIV5Z
- LiNn2o7Kt+sq6TUJEhJuOspp20cRkXSYPpOhBpU0DFFbQiGngUkZy6GF/Kbv2whMqvQ5
- oqacAMYe6XHjOlVYAOb7FiqaFilAzJWd6+VFMoI0qgEKLvBZ7WPEbkhuaW8e14y7APtn
- d+6mkoQUFbjAEj4B7vv0SL7yQ3pmTliSMR9ed5hSk8nJKz+wcExQaNsbt9bQm8tfltmI 9A== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3nct4d03ae-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 28 Jan 2023 04:10:47 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30S1XEmA019074;
-        Sat, 28 Jan 2023 04:10:46 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3nct52b29q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 28 Jan 2023 04:10:46 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iGeghwGJXBMzYzzkQMdPmkNjmFFs8kj0eoZ9PmK6oci+adEgplVNsMQNhtTNNy8apyyTooqAh+NugmX70xZv1Fqbriqjf9MG1tvyMjLaLSOdePivDMZkrxL9wfmXES8ytnr2w/KKuTCe1yTyhreoGzCSPS+GyWv5stkkMpFkkitTSW0Tavc8wRtkbhricJg+Gv1vvRA8vTxNmFejo1u0u1iBMbyR3TzRQwo6nvqRFCAsBnQUupWbNQ9PsLSY/mcDtJGFN/X2WS+m3KvCXhxM0vo0sqpcMWtGKgsm1FUBw7QtTTnYk8QRKYW7jvSmMH4n7SK7ZYt4CB5OAp1L6CPfcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=liGK6Cfe7R3hLz9yjT29KaP2fem8h5ZkQP1LS4op+YU=;
- b=eSGmJWApkJF//4cniE5tN/aeycLkncaCJIazs5KDSycsaWvshxgbmTh+Yyn7S48iqZ+IGL83Ue3VnMuoqZvvZ4Hbuz8CzQNlmKDUNS3ka3kxE/rFN67Z/cMsTxoTxwTcxE2rADIzUqr4PZRCu2z+OxhW4+WQTkkPolqW0NO1BsmjQs4ejQU9+fbkdC3P/S1IEvCrHzuUmOvMgwxjd8lJAq8RtOjdCBXNnQMIElXFxPs8kReQcr+suVMHNSGDeQtznVLR/Iu+RTIs/CP67RvVokqf4qJkMkERIjiBgt9iUEBybDz5w8UauWJgXmSeWkZDxkskbxhmaJM9BflY78Mrgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=liGK6Cfe7R3hLz9yjT29KaP2fem8h5ZkQP1LS4op+YU=;
- b=IQMI+Nzxl1C/W+u0fKk44q7X0GmWrZKNX6sILDx2Hl8FJIfBbj/uqIb2+J4zu/AQJ7M68L604dBNdHHMKM3TaYUPU4pIaXjRcYapRd6Pdfr1NDMsxIK7ZoswfkZyYyAlSarWMYvyMCMEwh4uL4c2+mt8L7+TrrSaWFuvBdIZDNw=
-Received: from BY5PR10MB3794.namprd10.prod.outlook.com (2603:10b6:a03:1b2::30)
- by CY8PR10MB7124.namprd10.prod.outlook.com (2603:10b6:930:75::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.22; Sat, 28 Jan
- 2023 04:10:44 +0000
-Received: from BY5PR10MB3794.namprd10.prod.outlook.com
- ([fe80::f37e:ad45:7d9e:d84d]) by BY5PR10MB3794.namprd10.prod.outlook.com
- ([fe80::f37e:ad45:7d9e:d84d%6]) with mapi id 15.20.6043.022; Sat, 28 Jan 2023
- 04:10:44 +0000
-From:   Tom Saeger <tom.saeger@oracle.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Rich Felker <dalias@libc.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dennis Gilmore <dennis@ausil.us>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Saeger <tom.saeger@oracle.com>, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org
-Subject: [PATCH 6.1 fix build id for arm64 5/5] sh: define RUNTIME_DISCARD_EXIT
-Date:   Fri, 27 Jan 2023 21:10:22 -0700
-Message-Id: <ffaafd3083a1738007a3043b698ec5ac6d8d83d6.1674876902.git.tom.saeger@oracle.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1674876902.git.tom.saeger@oracle.com>
-References: <cover.1674876902.git.tom.saeger@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SA9PR03CA0009.namprd03.prod.outlook.com
- (2603:10b6:806:20::14) To BY5PR10MB3794.namprd10.prod.outlook.com
- (2603:10b6:a03:1b2::30)
+        Fri, 27 Jan 2023 23:26:17 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEE147435
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 20:26:14 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230128042609epoutp040bb4624d94054582bdaa7bc371ca568c~_XnVkh87G0364703647epoutp04h
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:26:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230128042609epoutp040bb4624d94054582bdaa7bc371ca568c~_XnVkh87G0364703647epoutp04h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1674879969;
+        bh=8ccD9UJt6vKihn8EhsWbq86Y0nDtnM3sCEUaPwFJiyY=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=Q4VDD1aRT5iNBRyzm7O9HnNwWB/oaLMzcsrFU4YqBdsowQAYI7oTHNY3G4TkzSsjL
+         LGOGmZWCX9O9uo3kUr4xMF+sEz0uqY7CoUbO9pzWETweKISsF3bSxjuhhfiEB8FtZQ
+         l2/KfMvf5wUmvooPprnPVsUZalrmnLhKzGEQ3WOI=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20230128042608epcas5p42bd0fc3996d8056853cf9596a66eb05a~_XnUv-CJn3217632176epcas5p4P;
+        Sat, 28 Jan 2023 04:26:08 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4P3hG71fbtz4x9Pt; Sat, 28 Jan
+        2023 04:26:07 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A0.08.10528.FD3A4D36; Sat, 28 Jan 2023 13:26:07 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230128042606epcas5p4e110dea83182c0711f802656cb3db515~_XnSQ6yqC3202832028epcas5p4V;
+        Sat, 28 Jan 2023 04:26:06 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230128042606epsmtrp167298a1b9a1d3400cbb39caf1d2d948d~_XnSPwjbL1668016680epsmtrp1T;
+        Sat, 28 Jan 2023 04:26:06 +0000 (GMT)
+X-AuditID: b6c32a49-c17ff70000012920-9e-63d4a3df02d3
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.2D.05839.DD3A4D36; Sat, 28 Jan 2023 13:26:06 +0900 (KST)
+Received: from alimakhtar04 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230128042603epsmtip1b2b266661c2d2dfa10b55919285e0500~_XnPd7Wfm1209812098epsmtip1W;
+        Sat, 28 Jan 2023 04:26:03 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
+        "'Inki Dae'" <inki.dae@samsung.com>,
+        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
+        "'Kukjin Kim'" <kgene@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Cc:     <replicant@osuosl.org>, <phone-devel@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        =?utf-8?Q?'Martin_J=C3=BCcker'?= <martin.juecker@gmail.com>,
+        "'Henrik Grimler'" <henrik@grimler.se>
+In-Reply-To: <20230120155404.323386-2-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH 01/11] ARM: dts: exynos: correct wr-active property in
+ Exynos3250 Rinato
+Date:   Sat, 28 Jan 2023 09:56:01 +0530
+Message-ID: <000001d932d0$a3362000$e9a26000$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB3794:EE_|CY8PR10MB7124:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a4ff290-17e4-468c-6661-08db00e5a063
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J4IJThHhD3NXQBL+Xp7Cat4ur26Ad61jOwqPU97svN16zFATStxOseejqDFgfED7B2N1+d0URkGFICOxJZGb+IOKcL9q1C/91gfojL2PkhXZ5XeAgUFSWv7vCvGG4JcI1AMpOYRiuvWEbasAX5NsNTOdcT3YJ7jCvjysS5xbFdrFagu8gDF0bnJLlHG/8Lb97Ik8CYBgQp0gu7kEv7+8Hcw8SVYEbvgaIi2nNY5I3QhhmujEy8QcnPsLwi1tNKwN04+K+4tyk/pRhGFyJoOw/c43Dv9y/z4lrwIo9ds1vv9uV7zmCBbCCTTQERZCNxMKOJB58T1w+dB37TCEj1zXmfW99XCeTO+rUjaygVi0BTeAiv8hafPqqhtkgUkNBB/8ETXGme0AAenCKuP6X0odcznV/TuFAzvq0vD1cRJPLSS5gr9Gh7x1qjg7JwoWFw08YO17R8H02HlM3KmNLVtRusUWRzAfe4W6ndMC8/rtrk31Xv3mPpWogt4GXp0AQj9DVsHPvFF9vJrdFT3F/tOqnPQQIidUflwLlt98+9SQ4zsJCPhIdm+oled8BmDgaaKrkrnKMsO7ZMCwmX8ai1nHuA00YFqDxx/5TqUPeGJddtzGl8SYuGa+kYLTwqp4/fT7nn/GYdVpzqCquzQi+OJI6oANzr30kQrig3lJNPR3SWDMsEGFH50gLegf5cBK0ett4ugjiy7VXBvrS5ssKTnv/A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB3794.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39860400002)(136003)(346002)(376002)(396003)(451199018)(6666004)(186003)(8936002)(6512007)(6506007)(7416002)(54906003)(5660300002)(2906002)(36756003)(44832011)(86362001)(966005)(6486002)(478600001)(316002)(6916009)(8676002)(66556008)(66946007)(4326008)(66476007)(66899018)(41300700001)(2616005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LScoh7VaUbMhQdP6wscZfHLlqb3k3ejV8LZ2LQL0J34yj9kjtVLlcf0JJfeF?=
- =?us-ascii?Q?OCMAIP2YedDfuKGhJAJImiWshHNYAfX/zkFxLoMsXzkwebeglDv+Kj99OSpw?=
- =?us-ascii?Q?mEdVzpzzOLBkhXeH/ptodwedvOqZaCmIKly3PF3vfrEeLgGQuDww44MenaT2?=
- =?us-ascii?Q?IUzdA49/6ce4pL+OciXmVkFVkfrpqWH09kKe+5+DAxfxvmOJe8jNUkh8RtI+?=
- =?us-ascii?Q?8zOd2Pu/w5uCmGHQTjFqnLMfp4Ex9/s8KjpeKhQCLIW7fhcdSOcZRsHJ8uTK?=
- =?us-ascii?Q?8dqOPGbcs4RS5q3v8pUEbQtw1xco5Lqomz/X4wTQB/CiWHUAtd5c+geywaY2?=
- =?us-ascii?Q?0MerWXXpegrHp3A6yIPStSGfOVxZDQn+QzAUzhLxAGHIjask5tBlwjonLVmf?=
- =?us-ascii?Q?y81sOA0fy7e8nJ+DU/TTHaIJIv+hwXF8WtMYgSJuN6JOjSrlWBrKjWjnxNZP?=
- =?us-ascii?Q?wu5E1tDwYFHkTucP+wFVFph3FvIRjCTAaSgnJ5sXeaGXvB/CxbFvjKSJYPpu?=
- =?us-ascii?Q?8iH1rWvucwsA4M6jnqv1T8580iFL9EqRx23mB0kSPd03BZ/0baXalbHR0PXn?=
- =?us-ascii?Q?HXQvFJ/oMc4/8ljv0r+kXhHk/GPeJhaLClFlMpFVK8Fq2NlrH3J4M09wnCR/?=
- =?us-ascii?Q?jUSfegSbdRbvNi0DtwE3HXgdFUyE0vrD+kz7cFFSxCWFtbdk/VqPUBDrqljY?=
- =?us-ascii?Q?t+h+wQoyfJnwAoHT2BNq1pRJ8TErdXhla6y/7E3/fY+0P34RoFAmFTJwzlvA?=
- =?us-ascii?Q?JPVSVIUHuwXpgijsBb6L7mSMwiTnItUVz00HJWs0xOW7YV7W7EIrO6zIckpI?=
- =?us-ascii?Q?LvUTgUjpEKCcUE1HsJ5iyOKiczTwXInO9J/d3KyLDEQjem9SuaIto3ZznuiB?=
- =?us-ascii?Q?t5uIeEqT4W2skpaxdLc6ibXfgJ1QRBDYp5xHoqn8ddUYNgl0FE2gtvJlxZMd?=
- =?us-ascii?Q?HGMmgym2IQbCj0f7qXDbXQ5GMszKeJrFil0gJUiIZqpqsfhoUqjenTNA1CgH?=
- =?us-ascii?Q?x3z3kDRpBqPs4CJQ3b8qkghizvntR7idxyMlUcdLwZ6O/8+KhYj7MpJXw4xd?=
- =?us-ascii?Q?R3f/m5+dycKMM2S85f4JH1kH67WYJXTP9zJmwl7AaxXRo4c/5uEtTEzRXOnZ?=
- =?us-ascii?Q?gGsfbdJWtKeok/2N6n3pu81qoheXVQI3Zk8nVOQX4zs6ufgHygQo9Egu5l5K?=
- =?us-ascii?Q?I2GQKPBISMyEPbpB3kpgL88Iz+n/BJ7xcad9+vP0vTaTpLeq+HMdZ/q9KEsN?=
- =?us-ascii?Q?zUvptFNpw3n5pnBBuYmHTXCdCoXIDuD9OvT2e0/KPw7lJcT/0xdzD2uFGL/2?=
- =?us-ascii?Q?hhtqT81U7oATm2KzocOf8eL/AW9+qIf49IpOt0Lyn/MkXTWT+tP6FhOF4BCy?=
- =?us-ascii?Q?KqZhI5gUiMOD2uN4w0aTVRUHO/oApHHENHaHMiYpTt39gx2ZCSuepkl3ijbv?=
- =?us-ascii?Q?tzJYvxUMhP9aoHS4SoMljW8vol4r9/tPgpHCf1gs+IM+skjKubjhFa6MoZzs?=
- =?us-ascii?Q?0BJtxPlGJWzZypbrV5+P01msJGY+n5MLqsmZm6kZZeo/K1BpApK22YAWDaeG?=
- =?us-ascii?Q?9qQXpEM4k+/HYqOSPUzlq1+YUp/XFIvzie5e+0lhIGnpnwkZGsSBIzUuPKVx?=
- =?us-ascii?Q?0LRLSYBHvuAzIm5dcmAVc0M=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?1xsMPWja1iK6unUB/WP254kHvkJaZUcmIgT5vB92nf7MhG78w5O6bH/nhzMH?=
- =?us-ascii?Q?fM1gnKdoicspHHmSTNEr8krvLqRvIU7S7us4x6dly5xyyVq9KAsPgolNO96N?=
- =?us-ascii?Q?4EVchQPcSeYyYd65m+aYOLW8i8fbvepsos8KlpMq3EFPnGfg3+lm/akLmdTp?=
- =?us-ascii?Q?Ex9/n88LCqztHCDqoEBFcw61Q8qWmTw1O7XX77OB8Um/9vM92ixCzLzcmP5L?=
- =?us-ascii?Q?gT/CzJNfzkyEwBCswqv+scIMPmSlr7KP0usp2hxd2E3saG2VeqNhDXSt6rxC?=
- =?us-ascii?Q?hTCid/Iforp3oG0mlRsOcOxDQI0cuXCGMplbhfDj0v3SOr9+qD27PHDFW+X4?=
- =?us-ascii?Q?yola2VzlDKhJgoOimWQAcqcadAOHDPn7lPHVGlO5F3n8wkk083MSVDZVY2hE?=
- =?us-ascii?Q?8ODFGPK59hB2/BaRO2Bt13gw0KYmfBtFAcH23azPltwqNiBIbz4M13WfC29+?=
- =?us-ascii?Q?8DmUXBE9MmNwl2GXurdx+NfycU6JyghLUW/CDORGkFH6T+aX7ir8AQw1IsG0?=
- =?us-ascii?Q?P7Q7mhi8XarM6VMo1FjimLR9SqKTml5Xyv78TvxcdMFx3gDIuSpNlMQGMrmS?=
- =?us-ascii?Q?tW3Uo/EyYP6g3iPtfWVBiLKVPNiT2wekV+JaajibwmaMPS6sUtELUcMgXfkZ?=
- =?us-ascii?Q?n0jQUJ1P/AJwYrZ+Cge2/0N5SPqXGE16yaMvohvuxUOPR7SYOcOb89BT/tjr?=
- =?us-ascii?Q?+D10T5AZXZUNGPjRLtZCQiCSl80QrmZeFFkK23UBGBR4Aj1BvAX2flpYupIf?=
- =?us-ascii?Q?eVSJvDpF1XELvZ9AuUfU8+wmDebUJrFtJI8CUamCGcFbgOtMuJRfZ25LVMQK?=
- =?us-ascii?Q?nq7219AnpcRQ1Ifj8yGXkE9wnfZxW5AV5CU5HjxOtebKswEIaardQtWaToh/?=
- =?us-ascii?Q?iweP1WvL1rZlk51ZcA7pX9+Oez/wniBmX51CGrEKerW1SyxkEBEFxrhiivZe?=
- =?us-ascii?Q?5mtooiyFK51JUIsI6dJSbZeoEuXvsX+B9KynaqvDfosO26Rz6IHWtW4GBR06?=
- =?us-ascii?Q?SFtZmRsI/7wt4QTSxZKBZpo7PKDZg/wG4I+gktepVyl9/BfnXMj1diRxIeUY?=
- =?us-ascii?Q?rPMZw3f3VcE2KX8n3imPE2Ahehz8XA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a4ff290-17e4-468c-6661-08db00e5a063
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB3794.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2023 04:10:44.3155
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Nzo7yqXNVK6Y8INm8o9U48gfQ6bQFQcaK43TMFNa6Q2yZ8dB5162zzqQEuUTor+KT/N0ykpTBmkh4SIEPXXhBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB7124
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-28_01,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- suspectscore=0 mlxscore=0 spamscore=0 phishscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301280039
-X-Proofpoint-GUID: HQwOE0q3YeA2I65LaR6pD4HXMpuzmgnI
-X-Proofpoint-ORIG-GUID: HQwOE0q3YeA2I65LaR6pD4HXMpuzmgnI
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHNuRkKafHieBmUHCY1mc35yYPTTQKTfc43Ai4xyQmupCEE4A==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEJsWRmVeSWpSXmKPExsWy7bCmlu79xVeSDV6+4rCYf+Qcq8XbJbsY
+        LSbdn8Bi0f/4NbNF34uHzBZ7X29ltzjb9IbdYtPja6wWl3fNYbOYcX4fk8WZf1NZLBb8sbNY
+        t0bQonXvEXaLzd//Mjrwe+ycdZfd4+iVe6wem1Z1snncubaHzWPzknqP/3fWsnt8ae5m9ejb
+        sorR4/MmuQDOqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFslF58A
+        XbfMHKD7lRTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkFJgV6xYm5xaV56Xp5qSVW
+        hgYGRqZAhQnZGcd7pjIXbBWqaJh1lrWB8ZhgFyMnh4SAicSSXc/Yuxi5OIQEdjNKXHqymwkk
+        ISTwiVHi8XQziMQ3RomtB9cyw3RM/7yCEaJoL6PE4hOSEPZLRokVd4JAbDYBXYkdi9vYQJpF
+        BNYySxzYsg3MYRY4zShxZeU2sG5OAVeJw2/3sYDYwgJxEqc2fQKzWQRUJTpXgXRzcvAKWEpM
+        ff+bGcIWlDg58wlYDbOAtsSyha+hLlKQ+Pl0GSuILSLgJLFu3zcmiBpxiZdHj4D9JiHwhkPi
+        4dSNLBANLhKHD82BsoUlXh3fwg5hS0m87G8DsjmAbA+JRX+kIMIZEm+Xr2eEsO0lDlwBaeUA
+        mq8psX6XPsQqPone30+YIDp5JTrahCCqVSWa312FWiQtMbG7mxXC9pC4fmMXywRGxVlIHpuF
+        5LFZSB6YhbBsASPLKkbJ1ILi3PTUYtMCw7zUcnh0J+fnbmIEJ24tzx2Mdx980DvEyMTBeIhR
+        goNZSYR3q+OlZCHelMTKqtSi/Pii0pzU4kOMpsDQnsgsJZqcD8wdeSXxhiaWBiZmZmYmlsZm
+        hkrivOq2J5OFBNITS1KzU1MLUotg+pg4OKUamLbn+YftNXQ3Wvovob/lafbW6xfDf85x8zi4
+        +04C++H+3dOnpFQzzTabuvRSwK4ZD15dWX9Z65DIg4lsepxaJypLzHcF7+oznfd70nqfGbq5
+        Ztqza2T+XjGU0F75/LJ46Jyo9ecvsU14e+KJ+OFcO4WYmD2+am4LFFpNrTY+ucRUW7Hhi090
+        6q6a4+a/pt3kSm46krb4n0iAlF1LkmiEgmbqA84XEQs9zXLkeGOlNm/YlZX+zdt0b1QRv4i/
+        sUx+m93DbQ9i+z2iglbbSrHJ2zc5nSwySra8dWx2cJb01g+hLUJMRy1Zta2nMO3RE7zVupQ/
+        Lels5rRTz/qO7L3Y+1d75Q5Rk/Q3dfOU13CcUWIpzkg01GIuKk4EAKvd9WNlBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRmVeSWpSXmKPExsWy7bCSnO69xVeSDTZeZ7SYf+Qcq8XbJbsY
+        LSbdn8Bi0f/4NbNF34uHzBZ7X29ltzjb9IbdYtPja6wWl3fNYbOYcX4fk8WZf1NZLBb8sbNY
+        t0bQonXvEXaLzd//Mjrwe+ycdZfd4+iVe6wem1Z1snncubaHzWPzknqP/3fWsnt8ae5m9ejb
+        sorR4/MmuQDOKC6blNSczLLUIn27BK6MtV8TCmbyVTz/dY6xgbGTp4uRk0NCwERi+ucVjCC2
+        kMBuRomHzbIQcWmJ6xsnsEPYwhIr/z0HsrmAap4zSpzdeJkJJMEmoCuxY3EbG0hCRGAzs8Tx
+        SQeZQRxmgfOMEjdmHGCFaAFyzp+8xwzSwingKnH47T6WLkYODmGBGIk/nx1AwiwCqhKdq0Am
+        cXLwClhKTH3/mxnCFpQ4OfMJC4jNLKAt8fTmUzh72cLXzBDnKUj8fLqMFcQWEXCSWLfvGxNE
+        jbjEy6NH2CcwCs9CMmoWklGzkIyahaRlASPLKkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT8
+        3E2M4AjW0tzBuH3VB71DjEwcjIcYJTiYlUR4tzpeShbiTUmsrEotyo8vKs1JLT7EKM3BoiTO
+        e6HrZLyQQHpiSWp2ampBahFMlomDU6qBqWOhQtfluMaw2+7Xv6/Sk/kftfP17+3uedemX8+I
+        m5adx7zErn3RxEDm/69qUjY9DFjU6BHV8vNC2jtFllNKXI31x/4ciomq8vX+tGiVQFqdYnPa
+        2aPeUp87E8Jac2apXWVeoMs1NVez0q9n27FdM66+YeZaGzevIC3z08XYkr5Pzw6VrfrTnV/x
+        6pjq6yd3L2qtfXgs49HZn+vb5i+ac+5Qip1Q6dSyx2+DUuw10rnP20nz50jKnl5WVmNy77xN
+        oNJTzY22ejo6XSdnbauY0Oho9CdBied3+XcmmRv3YvsuhNscusH3J1Ozl1uKddukj3ERW6sr
+        Fn/XEt4kX2meX3jSoDU/WDJvpozUm0fdSizFGYmGWsxFxYkAWaF1VE8DAAA=
+X-CMS-MailID: 20230128042606epcas5p4e110dea83182c0711f802656cb3db515
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230120155418epcas5p1b9c0be73ebb6d20545208f45414ba861
+References: <20230120155404.323386-1-krzysztof.kozlowski@linaro.org>
+        <CGME20230120155418epcas5p1b9c0be73ebb6d20545208f45414ba861@epcas5p1.samsung.com>
+        <20230120155404.323386-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sh vmlinux fails to link with GNU ld < 2.40 (likely < 2.36) since
-commit 99cb0d917ffa ("arch: fix broken BuildID for arm64 and riscv").
 
-This is similar to fixes for powerpc and s390:
-commit 4b9880dbf3bd ("powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT").
-commit a494398bde27 ("s390: define RUNTIME_DISCARD_EXIT to fix link error
-with GNU ld < 2.36").
 
-  $ sh4-linux-gnu-ld --version | head -n1
-  GNU ld (GNU Binutils for Debian) 2.35.2
-
-  $ make ARCH=sh CROSS_COMPILE=sh4-linux-gnu- microdev_defconfig
-  $ make ARCH=sh CROSS_COMPILE=sh4-linux-gnu-
-
-  `.exit.text' referenced in section `__bug_table' of crypto/algboss.o:
-  defined in discarded section `.exit.text' of crypto/algboss.o
-  `.exit.text' referenced in section `__bug_table' of
-  drivers/char/hw_random/core.o: defined in discarded section
-  `.exit.text' of drivers/char/hw_random/core.o
-  make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
-  make[1]: *** [Makefile:1252: vmlinux] Error 2
-
-arch/sh/kernel/vmlinux.lds.S keeps EXIT_TEXT:
-
-	/*
-	 * .exit.text is discarded at runtime, not link time, to deal with
-	 * references from __bug_table
-	 */
-	.exit.text : AT(ADDR(.exit.text)) { EXIT_TEXT }
-
-However, EXIT_TEXT is thrown away by
-DISCARD(include/asm-generic/vmlinux.lds.h) because
-sh does not define RUNTIME_DISCARD_EXIT.
-
-GNU ld 2.40 does not have this issue and builds fine.
-This corresponds with Masahiro's comments in a494398bde27:
-"Nathan [Chancellor] also found that binutils
-commit 21401fc7bf67 ("Duplicate output sections in scripts") cured this
-issue, so we cannot reproduce it with binutils 2.36+, but it is better
-to not rely on it."
-
-Fixes: 99cb0d917ffa ("arch: fix broken BuildID for arm64 and riscv")
-Link: https://lore.kernel.org/all/Y7Jal56f6UBh1abE@dev-arch.thelio-3990X/
-Link: https://lore.kernel.org/all/20230123194218.47ssfzhrpnv3xfez@oracle.com/
-Signed-off-by: Tom Saeger <tom.saeger@oracle.com>
----
- arch/sh/kernel/vmlinux.lds.S | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/sh/kernel/vmlinux.lds.S b/arch/sh/kernel/vmlinux.lds.S
-index 3161b9ccd2a5..791c06b9a54a 100644
---- a/arch/sh/kernel/vmlinux.lds.S
-+++ b/arch/sh/kernel/vmlinux.lds.S
-@@ -4,6 +4,8 @@
-  * Written by Niibe Yutaka and Paul Mundt
-  */
- OUTPUT_ARCH(sh)
-+#define RUNTIME_DISCARD_EXIT
-+
- #include <asm/thread_info.h>
- #include <asm/cache.h>
- #include <asm/vmlinux.lds.h>
--- 
-2.39.1
-
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski=40linaro.org>
+> Sent: Friday, January 20, 2023 9:24 PM
+> To: Rob Herring <robh+dt=40kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt=40linaro.org>; Alim Akhtar
+> <alim.akhtar=40samsung.com>; Inki Dae <inki.dae=40samsung.com>; Kyungmin
+> Park <kyungmin.park=40samsung.com>; Kukjin Kim <kgene=40kernel.org>;
+> devicetree=40vger.kernel.org; linux-arm-kernel=40lists.infradead.org; lin=
+ux-
+> samsung-soc=40vger.kernel.org; linux-kernel=40vger.kernel.org
+> Cc: replicant=40osuosl.org; phone-devel=40vger.kernel.org;
+> =7Epostmarketos/upstreaming=40lists.sr.ht; Martin J=C3=BCcker=0D=0A>=20<m=
+artin.juecker=40gmail.com>;=20Henrik=20Grimler=20<henrik=40grimler.se>;=0D=
+=0A>=20Krzysztof=20Kozlowski=20<krzysztof.kozlowski=40linaro.org>=0D=0A>=20=
+Subject:=20=5BPATCH=2001/11=5D=20ARM:=20dts:=20exynos:=20correct=20wr-activ=
+e=20property=20in=0D=0A>=20Exynos3250=20Rinato=0D=0A>=20=0D=0A>=20The=20pro=
+perty=20is=20wr-active:=0D=0A>=20=0D=0A>=20=20=20exynos3250-rinato.dtb:=20f=
+imd=4011c00000:=20i80-if-timings:=20'wr-act'=20does=20not=0D=0A>=20match=20=
+any=20of=20the=20regexes:=20'pinctrl-=5B0-9=5D+'=0D=0A>=20=0D=0A>=20Fixes:=
+=20b59b3afb94d4=20(=22ARM:=20dts:=20add=20fimd=20device=20support=20for=20e=
+xynos3250-=0D=0A>=20rinato=22)=0D=0A>=20Signed-off-by:=20Krzysztof=20Kozlow=
+ski=20<krzysztof.kozlowski=40linaro.org>=0D=0A>=20---=0D=0A=0D=0AReviewed-b=
+y:=20Alim=20Akhtar=20<alim.akhtar=40samsung.com>=0D=0A=0D=0A>=20=20arch/arm=
+/boot/dts/exynos3250-rinato.dts=20=7C=202=20+-=0D=0A>=20=201=20file=20chang=
+ed,=201=20insertion(+),=201=20deletion(-)=0D=0A>=20=0D=0A>=20diff=20--git=
+=20a/arch/arm/boot/dts/exynos3250-rinato.dts=0D=0A>=20b/arch/arm/boot/dts/e=
+xynos3250-rinato.dts=0D=0A>=20index=206d2c7bb19184..2eb682009815=20100644=
+=0D=0A>=20---=20a/arch/arm/boot/dts/exynos3250-rinato.dts=0D=0A>=20+++=20b/=
+arch/arm/boot/dts/exynos3250-rinato.dts=0D=0A>=20=40=40=20-250,7=20+250,7=
+=20=40=40=20&fimd=20=7B=0D=0A>=20=20=09i80-if-timings=20=7B=0D=0A>=20=20=09=
+=09cs-setup=20=3D=20<0>;=0D=0A>=20=20=09=09wr-setup=20=3D=20<0>;=0D=0A>=20-=
+=09=09wr-act=20=3D=20<1>;=0D=0A>=20+=09=09wr-active=20=3D=20<1>;=0D=0A>=20=
+=20=09=09wr-hold=20=3D=20<0>;=0D=0A>=20=20=09=7D;=0D=0A>=20=20=7D;=0D=0A>=
+=20--=0D=0A>=202.34.1=0D=0A=0D=0A=0D=0A
