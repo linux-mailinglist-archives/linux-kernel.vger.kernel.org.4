@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B9867F560
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACC167F563
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 08:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbjA1HI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 02:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
+        id S233468AbjA1HKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 02:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjA1HI5 (ORCPT
+        with ESMTP id S233024AbjA1HKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 02:08:57 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF6883052
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:08:56 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4b718cab0e4so95290927b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:08:56 -0800 (PST)
+        Sat, 28 Jan 2023 02:10:17 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC0A8394D
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:10:15 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-507aac99fdfso78632377b3.11
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 23:10:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wvQgEzOS0zsXxzL1+rW7hK3SK4Cvwj9Xqt58axyFIk0=;
-        b=Scx4ZAXMjYGGlMP3a3EREoYq6yOTji2f+UbSlfjCgEUL9asm3lZFMd6fGSNeC2IGmU
-         jqulgqOLnH+qpUYEKHZ5fcUFjtgINHPse1I9WY2cOLv0kW1JYfrEs86Gp/xWz2oRTI4X
-         FhNVFc77RUMd4f7KFSGYTKp/7SlxDOPWmTfSPcI7xc5CGsGsu3EIDsKP4cUMTVZjNskw
-         DksCzG2eXzUhv8KcN6+aHdl5aRNi8ZKb44T41WcybSaCeft7/23ynh1EYHNFsbFkUQPI
-         NT7G3SBxbjYYJKcKcCeaAzoBGMx8Pjq/qgewkGLRseqZd9UZQhyH1dODt9SEOkZOwOZx
-         xPrQ==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/EMH0Ldd1TRcRRXQQGs+U4ISuantkAcuRVQFaojJ8SY=;
+        b=OpvNC/nRRZIMomGzk0lV9qkMFIz3snFXRTRU1Z0PL2k2g6gRfkf9cjnDCML6v1ZX4M
+         8wlTdTcayRsvkmccl05flVx7GALL3v3j5hp8l8A8Hmnh4RYq5GvJHVzC5dMlz3KgcQGB
+         aXtKLYMsJWyLfgMaN/nFhyRJERf4d1tpVHk+9JvqIL/Oy4MDFPsrP9tXLKKVPS62h+rS
+         /OjqsHj5L0VnvIlphp2wq94ZYy2H6Z9lyBWSOISgg7iNdCQTUlbxavBu7BZlHcHR63uz
+         aHnHBW/JFY0W0jfr80l/q0jD2zwPnbK5ZmZQFvd3siuB0K+PKkKBs1NXOrDwFOyN0Zge
+         2foA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wvQgEzOS0zsXxzL1+rW7hK3SK4Cvwj9Xqt58axyFIk0=;
-        b=rXDNaxsHd6ZwCcwTl+R0m5tH+k2bG769ap+tf3i5YIoBxwfMhSZQeJIeDCtmLK+lb0
-         kkjsgeLIbfmlAHy3tAG7aQTRrpmvEsZygTg9luj+BYbjNFQ/EvFYVLObaYMWlarCiS3U
-         blSy5DFv67uDO1kFi7xyx57LC6Pi1dHd2c94j9Pa5Jmbr8gEFpkcB4UAO927zGnM4kQX
-         WgZOsqOsasHBpvN8vdsfZ1KU32Hz4OWP7S+EC8uwAePPax8U0GiXFVj0BGaUwG/jm3Ld
-         QIhQW51i0/R5UBRjtLkuypfE7/6L7tD8MsmtATwf7Stt2IFED0dUDEsItSuCFQPsLSbH
-         DLDg==
-X-Gm-Message-State: AO0yUKXENnEAVItNf/n/8MFYKlAZQvvK3oe0ZxmrOwif9mnHt4z+IeBz
-        OIhW3rY3bUH/m/EaChh+Fcib7vVfolf+6z6G9T+eVQ==
-X-Google-Smtp-Source: AK7set9Y/tg7ZNIwLzYRWWvLExUU4fm3MZw+TRn/glva2Kgy6rEdDUEnewprInl/hGT0RyWAoA1G2S+OD0h4d2a7EM8=
-X-Received: by 2002:a81:ca0e:0:b0:508:8579:73fd with SMTP id
- p14-20020a81ca0e000000b00508857973fdmr1157732ywi.332.1674889735302; Fri, 27
- Jan 2023 23:08:55 -0800 (PST)
-MIME-Version: 1.0
-References: <04e27096-9ace-07eb-aa51-1663714a586d@nbd.name>
- <167475990764.1934330.11960904198087757911.stgit@localhost.localdomain>
- <cde24ed8-1852-ce93-69f3-ff378731f52c@huawei.com> <20230127212646.4cfeb475@kernel.org>
-In-Reply-To: <20230127212646.4cfeb475@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sat, 28 Jan 2023 08:08:43 +0100
-Message-ID: <CANn89iKgZU4Q+THXupzZi4hETuKuCOvOB=iHpp5JzQTNv_Fg_A@mail.gmail.com>
-Subject: Re: [net PATCH] skb: Do mix page pool and page referenced frags in GRO
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>, nbd@nbd.name,
-        davem@davemloft.net, hawk@kernel.org, ilias.apalodimas@linaro.org,
-        linux-kernel@vger.kernel.org, lorenzo@kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/EMH0Ldd1TRcRRXQQGs+U4ISuantkAcuRVQFaojJ8SY=;
+        b=Mx8SG5QBwatY11udmKP2YQM6D2cH+w/BhaadgDEMX2SqmI+4OmUy44Rywg5O5bmGfZ
+         3ZYWwm8AHYT9NtsRtU+Tt5mAteIi/kKj3RUdhXMiOaog819tvUvUSiV2+aMxkVprj6ho
+         NaV2k//U1WoovXfWSMWDTle4uHKn7gM/NzZN4bZHMwKbIqcOBwObtjUexO1PqFqHip3q
+         EVhR2FXT0cVa3WE/GQ0jdbCyZ3grjqfTZ9XYOIU5RSK+RV5GhEpn1Ng6asMzlT8VCXoq
+         sb8Jl0e22JJXIolpcA6MdG5dwWMHh1T6nMWIOPtFSU8WPMwi7+lwXHjxbOsQGNKaXP2z
+         htBQ==
+X-Gm-Message-State: AO0yUKUvdw9KnxruYVvmqSo+plGThLyQddybOjBFxFafHzJwnnmFG0zJ
+        aUo85yilFXQzduFzvJKe3lKp4H1sE/A2YQ==
+X-Google-Smtp-Source: AK7set+1rky1lVKTiFPCK30v3Mavdt0T1E/d05fs4/WI6IJc+Ftidyq+1yW6ePNKUAhyI3TodUOxqiMEXiilJQ==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a0d:d346:0:b0:50f:929a:878e with SMTP id
+ v67-20020a0dd346000000b0050f929a878emr39453ywd.217.1674889814763; Fri, 27 Jan
+ 2023 23:10:14 -0800 (PST)
+Date:   Sat, 28 Jan 2023 15:10:07 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230128071007.1134942-1-davidgow@google.com>
+Subject: [PATCH] kunit: Add "hooks" to call into KUnit when it's built as a module
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>
+Cc:     David Gow <davidgow@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,168 +70,322 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 6:26 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Sat, 28 Jan 2023 10:37:47 +0800 Yunsheng Lin wrote:
-> > If we are not allowing gro for the above case, setting NAPI_GRO_CB(p)->flush
-> > to 1 in gro_list_prepare() seems to be making more sense so that the above
-> > case has the same handling as skb_has_frag_list() handling?
-> > https://elixir.bootlin.com/linux/v6.2-rc4/source/net/core/gro.c#L503
-> >
-> > As it seems to avoid some unnecessary operation according to comment
-> > in tcp4_gro_receive():
-> > https://elixir.bootlin.com/linux/v6.2-rc4/source/net/ipv4/tcp_offload.c#L322
->
-> The frag_list case can be determined with just the input skb.
-> For pp_recycle we need to compare input skb's pp_recycle with
-> the pp_recycle of the skb already held by GRO.
->
-> I'll hold off with applying a bit longer tho, in case Eric
-> wants to chime in with an ack or opinion.
+KUnit has several macros and functions intended for use from non-test
+code. These hooks, currently the kunit_get_current_test() and
+kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
 
-We can say that we are adding in the fast path an expensive check
-about an unlikely condition.
+In order to support this case, the required functions and static data
+need to be available unconditionally, even when KUnit itself is not
+built-in. The new 'hooks.c' file is therefore always included, and has
+both the static key required for kunit_get_current_test(), and a table
+of function pointers in struct kunit_hooks_table. This is filled in with
+the real implementations by kunit_install_hooks(), which is kept in
+hooks-impl.h and called when the kunit module is loaded.
 
-GRO is by far the most expensive component in our stack.
+This can  be extended for future features which require similar
+"hook" behaviour, such as static stubs, by simply adding new entries to
+the struct, and the appropriate code to set them.
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
-I would at least make the extra checks conditional to CONFIG_PAGE_POOL=y
-Ideally all accesses to skb->pp_recycle should be done via a helper [1]
+This is basically a prerequisite for the stub features working when
+KUnit is built as a module, and should nicely make a few other tests
+work, too.
 
-I hope that we will switch later to a per-page marker, instead of a per-skb one.
+This version uses a struct, rather than a bunch of separate function
+pointers, to define the list of hooks in one place. It also doesn't use
+the macro magic from RFC v2 (which we could reintroduce later if we end
+up with enough hooks that it'd make sense). It does get rid of all of
+the nasty checkpatch.pl warnings, though, save for:
 
-( a la https://www.spinics.net/lists/netdev/msg874099.html )
+WARNING: EXPORT_SYMBOL(foo); should immediately follow its function/variable
+#230: FILE: lib/kunit/hooks.c:16:
++EXPORT_SYMBOL(kunit_running);
 
-[1] Problem is that CONFIG_PAGE_POOL=y is now forced because of
-net/bpf/test_run.c
+This is a false-positive, as the EXPORT_SYMBOL() immediately follows the
+DEFINE_STATIC_KEY_FALSE() macro, which checkpatch doesn't recognise as a
+definition.
 
-So... testing skb->pp_recycle seems needed for the time being
+Cheers,
+-- David
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Changes since RFC v2:
+https://lore.kernel.org/linux-kselftest/20230124080350.2275652-1-davidgow@google.com/
+- Get rid of the macro magic, and keep the function pointers in a
+  struct.
+  - Also, reset them to NULL using memset, so we don't need to loop
+    through all of them manually.
+  - Thanks Daniel!
+- Properly forward-declare all of the implementations, now in
+  "hooks-impl.h", so they can easily be split across different files.
+  (Needed for the stubs implementation.)
+- Extract the stub installation into a separate function,
+  kunit_install_hooks().
+  - Thanks Daniel!
 
-My tentative patch was something like:
+Changes since RFC v1:
+https://lore.kernel.org/all/20230117142737.246446-1-davidgow@google.com/
+- Major refit to auto-generate the hook code using macros.
+- (Note that previous Reviewed-by tags have not been added, as this is a
+  big enough change it probably needs a re-reviews. Thanks Rae for
+  reviewing RFC v1 previously, though!)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 4c8492401a101f1d6d43079fc70962210389763c..a53b176738b10f3b69b38c487e0c280f44990b6f
-100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -918,8 +918,10 @@ struct sk_buff {
-                                fclone:2,
-                                peeked:1,
-                                head_frag:1,
--                               pfmemalloc:1,
--                               pp_recycle:1; /* page_pool recycle indicator */
-+#ifdef CONFIG_PAGE_POOL
-+                               pp_recycle:1, /* page_pool recycle indicator */
-+#endif
-+                               pfmemalloc:1;
- #ifdef CONFIG_SKB_EXTENSIONS
-        __u8                    active_extensions;
- #endif
-@@ -3388,6 +3390,15 @@ static inline void __skb_frag_unref(skb_frag_t
-*frag, bool recycle)
-        put_page(page);
- }
+---
+ Documentation/dev-tools/kunit/usage.rst | 14 ++++++-------
+ include/kunit/test-bug.h                | 28 +++++++++----------------
+ lib/Makefile                            |  8 +++++++
+ lib/kunit/Makefile                      |  3 +++
+ lib/kunit/hooks-impl.h                  | 27 ++++++++++++++++++++++++
+ lib/kunit/hooks.c                       | 21 +++++++++++++++++++
+ lib/kunit/test.c                        | 14 ++++++-------
+ 7 files changed, 82 insertions(+), 33 deletions(-)
+ create mode 100644 lib/kunit/hooks-impl.h
+ create mode 100644 lib/kunit/hooks.c
 
-+static inline bool skb_pp_recycle(const struct sk_buff *skb)
-+{
-+#ifdef CONFIG_PAGE_POOL
-+       return skb->pp_recycle;
-+#else
-+       return false;
-+#endif
-+}
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index 48f8196d5aad..6424493b93cb 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -648,10 +648,9 @@ We can do this via the ``kunit_test`` field in ``task_struct``, which we can
+ access using the ``kunit_get_current_test()`` function in ``kunit/test-bug.h``.
+ 
+ ``kunit_get_current_test()`` is safe to call even if KUnit is not enabled. If
+-KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
+-running in the current task, it will return ``NULL``. This compiles down to
+-either a no-op or a static key check, so will have a negligible performance
+-impact when no test is running.
++KUnit is not enabled, or if no test is running in the current task, it will
++return ``NULL``. This compiles down to either a no-op or a static key check,
++so will have a negligible performance impact when no test is running.
+ 
+ The example below uses this to implement a "mock" implementation of a function, ``foo``:
+ 
+@@ -726,8 +725,7 @@ structures as shown below:
+ 	#endif
+ 
+ ``kunit_fail_current_test()`` is safe to call even if KUnit is not enabled. If
+-KUnit is not enabled, was built as a module (``CONFIG_KUNIT=m``), or no test is
+-running in the current task, it will do nothing. This compiles down to either a
+-no-op or a static key check, so will have a negligible performance impact when
+-no test is running.
++KUnit is not enabled, or if no test is running in the current task, it will do
++nothing. This compiles down to either a no-op or a static key check, so will
++have a negligible performance impact when no test is running.
+ 
+diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
+index c1b2e14eab64..2b505a95b641 100644
+--- a/include/kunit/test-bug.h
++++ b/include/kunit/test-bug.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
+- * KUnit API allowing dynamic analysis tools to interact with KUnit tests
++ * KUnit API providing hooks for non-test code to interact with tests.
+  *
+  * Copyright (C) 2020, Google LLC.
+  * Author: Uriel Guajardo <urielguajardo@google.com>
+@@ -9,7 +9,7 @@
+ #ifndef _KUNIT_TEST_BUG_H
+ #define _KUNIT_TEST_BUG_H
+ 
+-#if IS_BUILTIN(CONFIG_KUNIT)
++#if IS_ENABLED(CONFIG_KUNIT)
+ 
+ #include <linux/jump_label.h> /* For static branch */
+ #include <linux/sched.h>
+@@ -17,6 +17,11 @@
+ /* Static key if KUnit is running any tests. */
+ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ 
++/* Hooks table: a table of function pointers filled in when kunit loads */
++extern struct kunit_hooks_table {
++	__printf(3, 4) void (*fail_current_test)(const char*, int, const char*, ...);
++} kunit_hooks;
 +
  /**
-  * skb_frag_unref - release a reference on a paged fragment of an skb.
-  * @skb: the buffer
-@@ -3400,7 +3411,7 @@ static inline void skb_frag_unref(struct sk_buff
-*skb, int f)
-        struct skb_shared_info *shinfo = skb_shinfo(skb);
-
-        if (!skb_zcopy_managed(skb))
--               __skb_frag_unref(&shinfo->frags[f], skb->pp_recycle);
-+               __skb_frag_unref(&shinfo->frags[f], skb_pp_recycle(skb));
- }
-
- /**
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 180df58e85c72eaa16f5cb56b56d181a379b8921..7a2783a2c9608eec728a0adacea4619ab1c62791
-100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -801,19 +801,13 @@ static void skb_clone_fraglist(struct sk_buff *skb)
-                skb_get(list);
- }
-
--static bool skb_pp_recycle(struct sk_buff *skb, void *data)
--{
--       if (!IS_ENABLED(CONFIG_PAGE_POOL) || !skb->pp_recycle)
--               return false;
--       return page_pool_return_skb_page(virt_to_page(data));
--}
+  * kunit_get_current_test() - Return a pointer to the currently running
+  *			      KUnit test.
+@@ -43,33 +48,20 @@ static inline struct kunit *kunit_get_current_test(void)
+  * kunit_fail_current_test() - If a KUnit test is running, fail it.
+  *
+  * If a KUnit test is running in the current task, mark that test as failed.
+- *
+- * This macro will only work if KUnit is built-in (though the tests
+- * themselves can be modules). Otherwise, it compiles down to nothing.
+  */
+ #define kunit_fail_current_test(fmt, ...) do {					\
+ 		if (static_branch_unlikely(&kunit_running)) {			\
+-			__kunit_fail_current_test(__FILE__, __LINE__,		\
++			/* Guaranteed to be non-NULL when kunit_running true*/	\
++			kunit_hooks.fail_current_test(__FILE__, __LINE__,	\
+ 						  fmt, ##__VA_ARGS__);		\
+ 		}								\
+ 	} while (0)
+ 
 -
- static void skb_free_head(struct sk_buff *skb)
- {
-        unsigned char *head = skb->head;
-
-        if (skb->head_frag) {
--               if (skb_pp_recycle(skb, head))
-+               if (skb_pp_recycle(skb) &&
-+                   page_pool_return_skb_page(virt_to_page(head)))
-                        return;
-                skb_free_frag(head);
-        } else {
-@@ -840,7 +834,7 @@ static void skb_release_data(struct sk_buff *skb,
-enum skb_drop_reason reason)
-        }
-
-        for (i = 0; i < shinfo->nr_frags; i++)
--               __skb_frag_unref(&shinfo->frags[i], skb->pp_recycle);
-+               __skb_frag_unref(&shinfo->frags[i], skb_pp_recycle(skb));
-
- free_head:
-        if (shinfo->frag_list)
-@@ -857,7 +851,10 @@ static void skb_release_data(struct sk_buff *skb,
-enum skb_drop_reason reason)
-         * Eventually the last SKB will have the recycling bit set and it's
-         * dataref set to 0, which will trigger the recycling
-         */
-+#ifdef CONFIG_PAGE_POOL
-        skb->pp_recycle = 0;
-+#endif
-+       return;
- }
-
+-extern __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
+-						    const char *fmt, ...);
+-
+ #else
+ 
+ static inline struct kunit *kunit_get_current_test(void) { return NULL; }
+ 
+-/* We define this with an empty helper function so format string warnings work */
+-#define kunit_fail_current_test(fmt, ...) \
+-		__kunit_fail_current_test(__FILE__, __LINE__, fmt, ##__VA_ARGS__)
+-
+-static inline __printf(3, 4) void __kunit_fail_current_test(const char *file, int line,
+-							    const char *fmt, ...)
+-{
+-}
++#define kunit_fail_current_test(fmt, ...) do {} while (0)
+ 
+ #endif
+ 
+diff --git a/lib/Makefile b/lib/Makefile
+index 4d9461bfea42..55fd04a7d0fb 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -126,6 +126,14 @@ CFLAGS_test_fpu.o += $(FPU_CFLAGS)
+ obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
+ 
+ obj-$(CONFIG_KUNIT) += kunit/
++# Include the KUnit hooks unconditionally. They'll compile to nothing if
++# CONFIG_KUNIT=n, otherwise will be a small table of static data (static key,
++# function pointers) which need to be built-in even when KUnit is a module.
++ifeq ($(CONFIG_KUNIT), m)
++obj-y += kunit/hooks.o
++else
++obj-$(CONFIG_KUNIT) += kunit/hooks.o
++endif
+ 
+ ifeq ($(CONFIG_DEBUG_KOBJECT),y)
+ CFLAGS_kobject.o += -DDEBUG
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 29aff6562b42..deeb46cc879b 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -11,6 +11,9 @@ ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
+ kunit-objs +=				debugfs.o
+ endif
+ 
++# KUnit 'hooks' are built-in even when KUnit is built as a module.
++lib-y +=				hooks.o
++
+ obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
+ 
+ # string-stream-test compiles built-in only.
+diff --git a/lib/kunit/hooks-impl.h b/lib/kunit/hooks-impl.h
+new file mode 100644
+index 000000000000..d911f40f76db
+--- /dev/null
++++ b/lib/kunit/hooks-impl.h
+@@ -0,0 +1,27 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Declarations for hook implementations.
++ *
++ * These will be set as the function pointers in struct kunit_hook_table,
++ * found in include/kunit/test-bug.h.
++ *
++ * Copyright (C) 2023, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++
++#ifndef _KUNIT_HOOKS_IMPL_H
++#define _KUNIT_HOOKS_IMPL_H
++
++#include <kunit/test-bug.h>
++
++/* List of declarations. */
++void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...);
++
++/* Code to set all of the function pointers. */
++static inline void kunit_install_hooks(void)
++{
++	/* Install the KUnit hook functions. */
++	kunit_hooks.fail_current_test = __kunit_fail_current_test_impl;
++}
++
++#endif /* _KUNIT_HOOKS_IMPL_H */
+diff --git a/lib/kunit/hooks.c b/lib/kunit/hooks.c
+new file mode 100644
+index 000000000000..365d98d4953c
+--- /dev/null
++++ b/lib/kunit/hooks.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit 'Hooks' implementation.
++ *
++ * This file contains code / structures which should be built-in even when
++ * KUnit itself is built as a module.
++ *
++ * Copyright (C) 2022, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++
++
++#include <kunit/test-bug.h>
++
++DEFINE_STATIC_KEY_FALSE(kunit_running);
++EXPORT_SYMBOL(kunit_running);
++
++/* Function pointers for hooks. */
++struct kunit_hooks_table kunit_hooks;
++EXPORT_SYMBOL(kunit_hooks);
++
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c9ebf975e56b..51cae59d8aae 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -17,16 +17,14 @@
+ #include <linux/sched.h>
+ 
+ #include "debugfs.h"
++#include "hooks-impl.h"
+ #include "string-stream.h"
+ #include "try-catch-impl.h"
+ 
+-DEFINE_STATIC_KEY_FALSE(kunit_running);
+-
+-#if IS_BUILTIN(CONFIG_KUNIT)
  /*
-@@ -1292,7 +1289,9 @@ static struct sk_buff *__skb_clone(struct
-sk_buff *n, struct sk_buff *skb)
-        n->nohdr = 0;
-        n->peeked = 0;
-        C(pfmemalloc);
-+#ifdef CONFIG_PAGE_POOL
-        C(pp_recycle);
-+#endif
-        n->destructor = NULL;
-        C(tail);
-        C(end);
-@@ -3859,7 +3858,7 @@ int skb_shift(struct sk_buff *tgt, struct
-sk_buff *skb, int shiftlen)
-                fragto = &skb_shinfo(tgt)->frags[merge];
+- * Fail the current test and print an error message to the log.
++ * Hook to fail the current test and print an error message to the log.
+  */
+-void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
++void __kunit_fail_current_test_impl(const char *file, int line, const char *fmt, ...)
+ {
+ 	va_list args;
+ 	int len;
+@@ -53,8 +51,6 @@ void __kunit_fail_current_test(const char *file, int line, const char *fmt, ...)
+ 	kunit_err(current->kunit_test, "%s:%d: %s", file, line, buffer);
+ 	kunit_kfree(current->kunit_test, buffer);
+ }
+-EXPORT_SYMBOL_GPL(__kunit_fail_current_test);
+-#endif
+ 
+ /*
+  * Enable KUnit tests to run.
+@@ -777,6 +773,9 @@ EXPORT_SYMBOL_GPL(kunit_cleanup);
+ 
+ static int __init kunit_init(void)
+ {
++	/* Install the KUnit hook functions. */
++	kunit_install_hooks();
++
+ 	kunit_debugfs_init();
+ #ifdef CONFIG_MODULES
+ 	return register_module_notifier(&kunit_mod_nb);
+@@ -788,6 +787,7 @@ late_initcall(kunit_init);
+ 
+ static void __exit kunit_exit(void)
+ {
++	memset(&kunit_hooks, 0, sizeof(kunit_hooks));
+ #ifdef CONFIG_MODULES
+ 	unregister_module_notifier(&kunit_mod_nb);
+ #endif
+-- 
+2.39.1.456.gfc5497dd1b-goog
 
-                skb_frag_size_add(fragto, skb_frag_size(fragfrom));
--               __skb_frag_unref(fragfrom, skb->pp_recycle);
-+               __skb_frag_unref(fragfrom, skb_pp_recycle(skb));
-        }
-
-        /* Reposition in the original skb */
-@@ -5529,7 +5528,7 @@ bool skb_try_coalesce(struct sk_buff *to, struct
-sk_buff *from,
-         * references for cloned SKBs at the moment that would result in
-         * inconsistent reference counts.
-         */
--       if (to->pp_recycle != (from->pp_recycle && !skb_cloned(from)))
-+       if (skb_pp_recycle(to) != (skb_pp_recycle(from) && !skb_cloned(from)))
-                return false;
-
-        if (len <= skb_tailroom(to)) {
