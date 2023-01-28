@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362E467F77D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A10E67F783
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 12:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbjA1LPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 06:15:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
+        id S232463AbjA1LXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 06:23:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjA1LPo (ORCPT
+        with ESMTP id S231444AbjA1LXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 06:15:44 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E530FF17;
-        Sat, 28 Jan 2023 03:15:43 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id fi26so6861610edb.7;
-        Sat, 28 Jan 2023 03:15:43 -0800 (PST)
+        Sat, 28 Jan 2023 06:23:17 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9C320D21
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:23:10 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id d66so7842426vsd.9
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 03:23:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NblkQfp5UobRkkFY0Xa3j7JtUtj1KMEC5tKh7feD6wQ=;
-        b=QaphRaF0CjZse1VY5jxor5wjrjI0Re9lrfq6VU2GhZG/G3AWNo3wvmocYU5z2CmQK0
-         bvAN2Uq3P8FOvHYPmuRJN0IXsjehPANLAaU0JgSlGJ3Vc21hV0MDrTv7shEGnJpkvJ3V
-         IDIoozn7G+JpNfYh+JvFxgmujdhI2rYH0P8GdY/Yanm0W8gW2ZyKH+y04N9bcxeqH/ud
-         TpmNYUMw/i9Gf6gLgsiPiUNFAe4VbKcQV5teKAnVy5QJLtbP9mWP84ttGAqsPjGKVeUz
-         YYQXaeMKiXbqVsE7F1H1hG5Br81mv35ZQzfVxv2o0RojdBzXNxtaJdC39IwjZiHz2+Sa
-         IXfw==
+        bh=wOS2C+Pc5lRvy5tY8Ds1g0+sULUy/XgMmx38xtTIc5o=;
+        b=ar2/Wb2oJ4e+gcNKm2vX3Ibo1Y0AwZXg/eyJ/KCKuGZjn9ISSK+9XG5OsGJKyu0RiG
+         dWQcpPX3kpURUWFoZCLFAK84d2HtbyR5J4VMMma/BGVRdec+sLzvgYy2gZrp/0/L6GbM
+         REFj+G8uBZrIy4cC2ArTm1QZZMtox/+uWl+gi0Fc7Nvr8CCavhkGz4JD7WQ8jxfEdfHJ
+         MceYSaEZRLjtBYF424R3JgN4uOq/VL4x0EHwswXUJ8DxqYQRUWnXYzPNorp5Q1Yrp/Ie
+         nUqJPv7CdKdIkNnmUrqY9RXPHLDr8gQ1P12gb0Xbk/XeeTDAf/96iefjDuHoe0Sl+oaG
+         vBfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NblkQfp5UobRkkFY0Xa3j7JtUtj1KMEC5tKh7feD6wQ=;
-        b=tPJ1VeASvD511Xk4vragIT0lZrkStykOXltY2qyfqafa2skBE/oMSFlkd4rmZaqJy0
-         LvLsUWy7Mr7k5kb9uZQID7aczMZAw5k+/QzbEFgHh/YKrg6+Muwht6TO4njq21TSra4F
-         ahBJESDDulF9gWVUIAjapjmX5+vZVx5PgaRRAEGg2qoqWE6LhiFrgRVtTaOfiK1hKVUC
-         RhLtLFLsdSeGi7LdU7XBbUZIlDuUR5acfrqUfxg1VFtWBUqk3Htq7tdZQXm+QDj4jTRJ
-         +NLj/rlPDytGOkuRSWGAaP6elusGeiIoKlVO5JszLc/eNYUboURyRD7emJg3LCmLfuR1
-         mvtg==
-X-Gm-Message-State: AFqh2kq8EuFtBwJ5c4HxnNyLIBN7b4X6XpBZssVviXxP1OtDXFVBUy1i
-        /AmALrg6xDzFo4hb8kgS7m4=
-X-Google-Smtp-Source: AMrXdXvAbr1LdsmnFm8NQlq8Tg+exnS4E+q6qnKEgOhrOeO1rqyv1GdsFNUn+RfsLKvxOIqEjvko9A==
-X-Received: by 2002:a05:6402:3214:b0:49d:bc8c:c3eb with SMTP id g20-20020a056402321400b0049dbc8cc3ebmr52335717eda.15.1674904541584;
-        Sat, 28 Jan 2023 03:15:41 -0800 (PST)
-Received: from localhost ([2001:b07:5d37:537d:645c:8576:916a:8c99])
-        by smtp.gmail.com with ESMTPSA id e22-20020a17090658d600b0085214114218sm3736327ejs.185.2023.01.28.03.15.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Jan 2023 03:15:41 -0800 (PST)
-Mime-Version: 1.0
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wOS2C+Pc5lRvy5tY8Ds1g0+sULUy/XgMmx38xtTIc5o=;
+        b=CLKwtFO6qc15m9tdlBy/Aqji+Om8XagaRtuQ2oYBho1mmkG3NFU4GoRkYt+k+d5jZN
+         xipDBG9hHtrMW3g4LXNNzRCXsvkTTPPW3FLv8VkKhHSa4xPRPsyNrPJwJA4CzXpRwzBm
+         HDQkaHgyS3f4NexmEQHBE7ssh8feImCvX3bmExKto/AcZmwtHOaSTHs3JNvc3ZO3Z6YM
+         nfcLE4/RIpsH2AmYpdzru9qvKnPw3U2zKCXqa38LNry/hQ91c64e23cHP2p20bVhZNUd
+         fJNxasfWX6sM9Tq4lCcO4vydfMir0gEu++HfzFchmD9rDhxd8yM0QxZtYVHVsyTUrXCa
+         zOUA==
+X-Gm-Message-State: AO0yUKVKTmEtM5QkRcYgSCSI7cepJ9Y05gluYpwdQvWmV6iQQEz4yg5u
+        BogXCLRtBuYjFI2ofu8HASbBYkeBDp36Z6DExMx1ZghgvRF3Nv5x
+X-Google-Smtp-Source: AK7set9f2AlafEu+pnq1cQhww1WTz5nq7+zC/t0fzyBmIXjie2SP0/mWF4QJFiXIJTjPKBK5iXV3ACjUtWEY0FdTXZ4=
+X-Received: by 2002:a05:6102:10c1:b0:3f2:58c2:5358 with SMTP id
+ t1-20020a05610210c100b003f258c25358mr111725vsr.62.1674904989255; Sat, 28 Jan
+ 2023 03:23:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20230127192139.299228-1-brgl@bgdev.pl> <52508584-47c5-2497-68c8-2c0044911aca@linaro.org>
+ <CACMJSevqcaqjLQJ6_5Xn=hMbrsjdxGVM=9RYwYQ8hW_Uy-tRzA@mail.gmail.com> <8dba267b-62b4-1085-c307-3d2608ae5857@linaro.org>
+In-Reply-To: <8dba267b-62b4-1085-c307-3d2608ae5857@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Sat, 28 Jan 2023 12:22:58 +0100
+Message-ID: <CAMRc=MeL_sGhbEagdqriPecxLXs_ecXSgo5_0zAEr226PG2J5Q@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: firmware: qcom,scm: add qcom,scm-sa8775p compatible
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 28 Jan 2023 12:15:39 +0100
-Message-Id: <CQ3S3VEW6WEJ.1U8R1SIJAWHOY@vincent>
-Cc:     "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/5] rust: types: implement `ForeignOwnable` for
- `Arc<T>`
-From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
-To:     "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        <rust-for-linux@vger.kernel.org>
-X-Mailer: aerc 0.8.2
-References: <20230119174036.64046-1-wedsonaf@gmail.com>
- <20230119174036.64046-5-wedsonaf@gmail.com>
-In-Reply-To: <20230119174036.64046-5-wedsonaf@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,74 +75,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Jan 19, 2023 at 6:40 PM CET, Wedson Almeida Filho wrote:
-> This allows us to hand ownership of Rust ref-counted objects to
-> the C side of the kernel.
+On Sat, Jan 28, 2023 at 11:13 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> ---
-Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-
->  rust/kernel/sync/arc.rs | 32 +++++++++++++++++++++++++++++++-
->  1 file changed, 31 insertions(+), 1 deletion(-)
+> On 27/01/2023 22:22, Bartosz Golaszewski wrote:
+> > On Fri, 27 Jan 2023 at 20:56, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 27/01/2023 20:21, Bartosz Golaszewski wrote:
+> >>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >>>
+> >>> Add a compatible for the sa8775p platform's Secure Channel Manager
+> >>> firmware interface.
+> >>>
+> >>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >>> ---
+> >>>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+> >>>  1 file changed, 1 insertion(+)
+> >>
+> >> If you send bindings separately from DTS (which is fine), please provi=
+de
+> >> the link to the user - either DTS or driver for this compatible. Drive=
+r
+> >> does not use it, thus to the DTS.
+> >>
+> >> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> >
+> > Can you specify what kind of link you're expecting? I'm looking at
+> > previous commits for this file and not seeing anything. There's no
+> > upstream user of this compatible in any DTS yet.
 >
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index ff73f9240ca1..519a6ec43644 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -15,7 +15,11 @@
->  //!
->  //! [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
-> =20
-> -use crate::{bindings, error::Result, types::Opaque};
-> +use crate::{
-> +    bindings,
-> +    error::Result,
-> +    types::{ForeignOwnable, Opaque},
-> +};
->  use alloc::boxed::Box;
->  use core::{
->      marker::{PhantomData, Unsize},
-> @@ -189,6 +193,32 @@ impl<T: ?Sized> Arc<T> {
->      }
->  }
-> =20
-> +impl<T: 'static> ForeignOwnable for Arc<T> {
-> +    type Borrowed<'a> =3D ArcBorrow<'a, T>;
-> +
-> +    fn into_foreign(self) -> *const core::ffi::c_void {
-> +        ManuallyDrop::new(self).ptr.as_ptr() as _
-> +    }
-> +
-> +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> ArcBorrow<'a,=
- T> {
-> +        // SAFETY: By the safety requirement of this function, we know t=
-hat `ptr` came from
-> +        // a previous call to `Arc::into_foreign`.
-> +        let inner =3D NonNull::new(ptr as *mut ArcInner<T>).unwrap();
-> +
-> +        // SAFETY: The safety requirements of `from_foreign` ensure that=
- the object remains alive
-> +        // for the lifetime of the returned value. Additionally, the saf=
-ety requirements of
-> +        // `ForeignOwnable::borrow_mut` ensure that no new mutable refer=
-ences are created.
-> +        unsafe { ArcBorrow::new(inner) }
-> +    }
-> +
-> +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self {
-> +        // SAFETY: By the safety requirement of this function, we know t=
-hat `ptr` came from
-> +        // a previous call to `Arc::into_foreign`, which owned guarantee=
-s that `ptr` is valid and
-> +        // owns a reference.
-> +        unsafe { Self::from_inner(NonNull::new(ptr as _).unwrap()) }
-> +    }
-> +}
-> +
->  impl<T: ?Sized> Deref for Arc<T> {
->      type Target =3D T;
-> =20
-> --=20
-> 2.34.1
+>
+> I expect lore link to the patchset you sent using this binding, so we
+> can verify whether you used it correctly or not. If people were testing
+> their DTS against bindings they write, this would not be needed.
+> Unfortunately people do not do that...
+>
 
+Touch=C3=A9. I am making sure v2 passes dtbs_check though. :)
+
+v1 didn't have this compatible and used the fallback directly, hence
+this patch being sent before v2. There's no link yet, as I'm still
+polishing the dts for sa8775p-ride. Will remember to add one in the
+future.
+
+Bart
