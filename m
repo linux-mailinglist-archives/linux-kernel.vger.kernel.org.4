@@ -2,169 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC1E67F81F
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 14:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9786167F828
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 14:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbjA1Ng3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 08:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
+        id S234439AbjA1Nii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 08:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbjA1Ng0 (ORCPT
+        with ESMTP id S231528AbjA1Nig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 08:36:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F40814EAF
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 05:36:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1361060C03
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 13:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B03CC4339B;
-        Sat, 28 Jan 2023 13:36:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674912984;
-        bh=CxsGwxondKYbEH8oAkJtUvwrFSvm/Rfl3p6vmW1mWVc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SBbNprxWWv62MZNa2aRCFAtqYR+f0DdnMWqffMNVBJvKd8EpIwKGXCw3EISJfkJ4y
-         NxqkInP0g+ARTJdXYOFAokV2FHz0uut6vxsM6415+nPQKtj69SD6vr6nyCNdaK6w4N
-         CGQpGL5w8lA406XVjumWIcWSJHo3pbwgTvtw9+8PcvHr/vsL6JGwfbxOogJn7MPIzz
-         1M6Max7PgF+0wIvylK+/jhPgPwMG8DyZkXioLw8rkvB+loz6yeS2Ffuqp6y0PX0TJ8
-         ST+3V2FBd0SvIOoQx1ojxWKMf1iGOPW/a0qmfqA4iMeymlZ09hNrHk4ISECLT7hZOO
-         77pp3HOlGO3Yw==
-Received: by pali.im (Postfix)
-        id D8098639; Sat, 28 Jan 2023 14:36:23 +0100 (CET)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] powerpc/pci: Allow to disable filling deprecated pci-OF-bus-map
-Date:   Sat, 28 Jan 2023 14:34:59 +0100
-Message-Id: <20230128133459.32123-2-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230128133459.32123-1-pali@kernel.org>
-References: <20220817163927.24453-1-pali@kernel.org>
- <20230128133459.32123-1-pali@kernel.org>
+        Sat, 28 Jan 2023 08:38:36 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2356A1DB8B;
+        Sat, 28 Jan 2023 05:38:35 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id j5so7203809pjn.5;
+        Sat, 28 Jan 2023 05:38:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=oI2APnegFeFVqcu8G9tQYKXTxS90VVWctbcguXYfrxQ=;
+        b=Gvwk+EJXQDGb4Jv1jmrDlg56eNAkoVLc5Hl30vFIACswLRt1GmqdkkHT1ABr1Y02HY
+         w4+GsaEd1fTO9OG39Unx1ugbSBuA2f6rHdS0wXlx1pfj+PZXEDgKqpS4jrsIZEwVwMoz
+         3j0Uf+ZuIFsffQ++UsMxkegvgtIZ2C2FpSyr5srvCKvrtop/SuJjyOSZhRlxtsi9sris
+         iaeHJHA3CCr5VpLlctPFP6Onm3CaimGo7elxL36TQQIade4/nq6UX3wBBMOfoLuL/snW
+         Fpz5tW95X81w17JtHvUajVtHFs/MbM94Uz3dabqJJbD/PLm94D8ZFiTVlIoOkzoIxTpL
+         SU8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oI2APnegFeFVqcu8G9tQYKXTxS90VVWctbcguXYfrxQ=;
+        b=RYmbEyJhijtRbBJWY4NBuhikU1fTVWpPdL7N3nj0N8nGdtNcxDVoizBTU6Wqyox46o
+         DneV8p5+yjZNKkfIaolgBUzkRiYAIrOnA03+UXfBm6ljbULlUDV5cwV1LXsNkqJi1L9V
+         GpRz8+L7M4nIRaZ6qYCyWXU1MWiQJWi4FFrQUyENuS7EVJAoXvgrpHqyCv61WHkqEv+E
+         8FmROqcVx+u5X3C3ipYOc8TJounuAQqK6pa685KSoNvQk/1iU9Q8jqKu/K6l0amMC523
+         826inQmM6OaAHw3JLoGW+X8ClzDabef+CT2v3dNeY5Aj+MpR1ViE2bxjg5MAL9ShTQkc
+         2GKg==
+X-Gm-Message-State: AO0yUKVjh5aYfiN7NtWz5ad1c9aC6Az8tHqihoAiBxEc6lX3VIa6OsaE
+        Kgfc7Hof15aC7CuDc4tzY25xeUu/Zxo=
+X-Google-Smtp-Source: AK7set/0vBQG+NtXhM10Q+4wEzG/Yp4BrGfPUAFF9+oLD7/VHcbAUHHnrDrf77a8DEl9Oot2V1Ewaw==
+X-Received: by 2002:a05:6a20:698b:b0:b5:e639:2833 with SMTP id t11-20020a056a20698b00b000b5e6392833mr2718382pzk.20.1674913114209;
+        Sat, 28 Jan 2023 05:38:34 -0800 (PST)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id a69-20020a621a48000000b00590163e1762sm3604391pfa.200.2023.01.28.05.38.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Jan 2023 05:38:33 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: etas_es58x: do not send disable channel command if device is unplugged
+Date:   Sat, 28 Jan 2023 22:38:15 +0900
+Message-Id: <20230128133815.1796221-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Creating or filling pci-OF-bus-map property in the device-tree is
-deprecated since May 2006 [1]. Allow to disable filling this property by
-unsetting config option CONFIG_PPC_PCI_OF_BUS_MAP_FILL for remaining chrp
-and powermac code.
+When turning the network interface down, es58x_stop() is called and
+will send a command to the ES58x device to disable the channel
+c.f. es58x_ops::disable_channel().
 
-Disabling of pci-OF-bus-map property allows to enable new option
-CONFIG_PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT also for chrp and powermac.
+However, if the device gets unplugged while the network interface is
+still up, es58x_ops::disable_channel() will obviously fail to send the
+URB command and the driver emits below error message:
 
-[1] - https://lore.kernel.org/linuxppc-dev/1148016268.13249.14.camel@localhost.localdomain/
+  es58x_submit_urb: USB send urb failure: -ENODEV
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
+Check the usb device state before sending the disable channel command
+in order to silence above error message.
+
+Update the documentation of es58x_stop() accordingly.
+
+The check being added in es58x_stop() is:
+
+  	if (es58x_dev->udev->state >= USB_STATE_UNAUTHENTICATED)
+
+This is just the negation of the check done in usb_submit_urb()[1].
+
+[1] usb_submit_urb(), verify usb device's state.
+Link: https://elixir.bootlin.com/linux/v6.1/source/drivers/usb/core/urb.c#L384
+
+Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
-Changes in v2:
-* Provide stripped version of pci_device_from_OF_node() without
-  pci_to_OF_bus_map when compiling with CONFIG_PPC_PCI_OF_BUS_MAP_FILL=n
+As far as I know, there doesn't seem to be an helper function to check
+udev->state values. If anyone is aware of such helper function, let me
+know..
 ---
- arch/powerpc/Kconfig         | 12 +++++++++++-
- arch/powerpc/kernel/pci_32.c | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 41 insertions(+), 1 deletion(-)
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index fad25aa602c8..3f8499faa88a 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -388,9 +388,19 @@ config PPC_DCR
- 	depends on PPC_DCR_NATIVE || PPC_DCR_MMIO
- 	default y
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index 3e87f4c1547c..916bd9e2e9ea 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -1817,9 +1817,10 @@ static int es58x_open(struct net_device *netdev)
+  * es58x_stop() - Disable the network device.
+  * @netdev: CAN network device.
+  *
+- * Called when the network transitions to the down state. If all the
+- * channels of the device are closed, free the URB resources which are
+- * not needed anymore.
++ * Called when the network interface transitions to the down
++ * state. Send a disable command to the device if it is still
++ * connected. If all the channels of the device are closed, free the
++ * URB resources which are not needed anymore.
+  *
+  * Return: zero on success, errno when any error occurs.
+  */
+@@ -1830,9 +1831,12 @@ static int es58x_stop(struct net_device *netdev)
+ 	int ret;
  
-+config PPC_PCI_OF_BUS_MAP_FILL
-+	bool "Fill pci-OF-bus-map property in the device-tree"
-+	depends on PPC32
-+	depends on PPC_PMAC || PPC_CHRP
-+	default y
-+	help
-+	  This option creates and fills pci-OF-bus-map property in the
-+	  device-tree which is deprecated and is needed only for old
-+	  platforms.
+ 	netif_stop_queue(netdev);
+-	ret = es58x_dev->ops->disable_channel(priv);
+-	if (ret)
+-		return ret;
 +
- config PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT
- 	depends on PPC32
--	depends on !PPC_PMAC && !PPC_CHRP
-+	depends on !PPC_PCI_OF_BUS_MAP_FILL
- 	bool "Assign PCI bus numbers from zero individually for each PCI domain"
- 	default y
- 	help
-diff --git a/arch/powerpc/kernel/pci_32.c b/arch/powerpc/kernel/pci_32.c
-index 855b59892c5c..82a8981d4c47 100644
---- a/arch/powerpc/kernel/pci_32.c
-+++ b/arch/powerpc/kernel/pci_32.c
-@@ -64,6 +64,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_IBM,	PCI_DEVICE_ID_IBM_CPC710_PCI64,	fixu
++	if (es58x_dev->udev->state >= USB_STATE_UNAUTHENTICATED) {
++		ret = es58x_dev->ops->disable_channel(priv);
++		if (ret)
++			return ret;
++	}
  
- #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP)
- 
-+#ifdef CONFIG_PPC_PCI_OF_BUS_MAP_FILL
-+
- static u8* pci_to_OF_bus_map;
- static int pci_bus_count;
- 
-@@ -223,6 +225,32 @@ pci_create_OF_bus_map(void)
- }
- #endif
- 
-+#else /* CONFIG_PPC_PCI_OF_BUS_MAP_FILL */
-+
-+/*
-+ * Returns the PCI device matching a given OF node without pci_to_OF_bus_map
-+ */
-+int pci_device_from_OF_node(struct device_node *node, u8 *bus, u8 *devfn)
-+{
-+	const __be32 *reg;
-+	int size;
-+
-+	/* Check if it might have a chance to be a PCI device */
-+	if (!pci_find_hose_for_OF_device(node))
-+		return -ENODEV;
-+
-+	reg = of_get_property(node, "reg", &size);
-+	if (!reg || size < 5 * sizeof(u32))
-+		return -ENODEV;
-+
-+	*bus = (be32_to_cpup(&reg[0]) >> 16) & 0xff;
-+	*devfn = (be32_to_cpup(&reg[0]) >> 8) & 0xff;
-+
-+	return 0;
-+}
-+
-+#endif /* CONFIG_PPC_PCI_OF_BUS_MAP_FILL */
-+
- #endif /* defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP) */
- 
- void pcibios_setup_phb_io_space(struct pci_controller *hose)
-@@ -273,6 +301,7 @@ static int __init pcibios_init(void)
- 	}
- 
- #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP)
-+#ifdef CONFIG_PPC_PCI_OF_BUS_MAP_FILL
- 	pci_bus_count = next_busno;
- 
- 	/* OpenFirmware based machines need a map of OF bus
-@@ -281,6 +310,7 @@ static int __init pcibios_init(void)
- 	 */
- 	if (pci_assign_all_buses)
- 		pcibios_make_OF_bus_map();
-+#endif
- #endif
- 
- 	/* Call common code to handle resource allocation */
+ 	priv->can.state = CAN_STATE_STOPPED;
+ 	es58x_can_reset_echo_fifo(netdev);
 -- 
-2.20.1
+2.39.1
 
