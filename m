@@ -2,145 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2F167F99E
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 17:42:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6343767F9AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 17:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbjA1Qmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 11:42:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S234619AbjA1Qxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 11:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjA1Qmp (ORCPT
+        with ESMTP id S232579AbjA1Qxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 11:42:45 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561B328D12
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 08:42:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674924165; x=1706460165;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=iNQo/Crn33hzhewh1bTM0jq5j77xWFIa0JIRD/AapMw=;
-  b=macxsEulTdeUc4ZxENK48gh51vJiurDdBnz4iNmqvLmfqR6s+xrIINBN
-   f5rSgFQ8dlXlb4NFzPRvqEXROFcG0r9K4USzGeLI7ZIp5ssO859cfZS2z
-   7rq7MEmvrsefJCUtuwnsYyAtjL8WKTmjaNk2JJD06YQ7zPASzJ2ne6pHu
-   1O2/i2b636rV8WLzr0khrgWkpz5MlN5MAHGFbAgG56i0m3MAlECBUd7ib
-   Aqd6B8lVwSOPMyxlJRy3tvfhw77oVBWvCmqBM2Ru8GHxQ5T16saSchfFD
-   OO4kcoJXjMoF3iA3cbDmj9Fv1W5l+j4w7s3hl7pPVs6wPP2oOZTmQeaup
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="327323974"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="327323974"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 08:42:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="909005640"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="909005640"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Jan 2023 08:42:43 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLoHq-0000uz-2d;
-        Sat, 28 Jan 2023 16:42:42 +0000
-Date:   Sun, 29 Jan 2023 00:42:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cpu] BUILD SUCCESS
- 8c19b6f257fa71ed3a7a9df6ce466c6be31ca04c
-Message-ID: <63d5506c.+mOFNsFKiDcVkoMY%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 28 Jan 2023 11:53:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D7F25286;
+        Sat, 28 Jan 2023 08:53:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7729B8069D;
+        Sat, 28 Jan 2023 16:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 670D8C433D2;
+        Sat, 28 Jan 2023 16:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674924814;
+        bh=v/CtqhVfGpAQw4Ngw2O+HeRUmhaWbbQs7pcp4hkRZVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uesfwittlLwxxzvYiXZ3RbH4v5b9g6T3bULdwgrsZOe5aI1bGgmTH866m1QYGr29e
+         UvcnVUTEC5Tcj40kgA80NXRueJhBNW4wu0ERd8Gd/CvqKLU8BfR0Z0GmA4T6tR4Ssf
+         XVbLfXKxc+YToHraAAdWfzFzwS5fC/rA25U0/tY/d274QejgSOQqyiuXQODH7SyyiJ
+         PMsXMhk/Z/n5/FrPd4kcNs8guLE8DPDYTRB+4ojrM2Zks6JielSq5OnyKQz/83IleD
+         G3Na5QiegutOaOQDUmgOP+Yd6n+tFiyco9WsElprQQ9jaT9OVsZsXe/RHSu87ak/TY
+         ScuWQFzpu3+lQ==
+Date:   Sun, 29 Jan 2023 00:43:06 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 09/13] riscv: switch to relative alternative entries
+Message-ID: <Y9VQmprEF6Jg7A7S@xhacker>
+References: <20230115154953.831-1-jszhang@kernel.org>
+ <20230115154953.831-10-jszhang@kernel.org>
+ <20230120183418.ngdppppvwzysqtcr@orel>
+ <20230126070930.wvqsrrcmcuq5vv2x@orel>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230126070930.wvqsrrcmcuq5vv2x@orel>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
-branch HEAD: 8c19b6f257fa71ed3a7a9df6ce466c6be31ca04c  KVM: x86: Propagate the AMD Automatic IBRS feature to the guest
+On Thu, Jan 26, 2023 at 08:09:30AM +0100, Andrew Jones wrote:
+> On Fri, Jan 20, 2023 at 07:34:18PM +0100, Andrew Jones wrote:
+> > On Sun, Jan 15, 2023 at 11:49:49PM +0800, Jisheng Zhang wrote:
+> > ...
+> > >  #define ALT_ENTRY(oldptr, newptr, vendor_id, errata_id, newlen)		\
+> > > -	RISCV_PTR " " oldptr "\n"					\
+> > > -	RISCV_PTR " " newptr "\n"					\
+> > > -	REG_ASM " " vendor_id "\n"					\
+> > > -	REG_ASM " " newlen "\n"						\
+> > > -	".word " errata_id "\n"
+> > > +	".4byte	((" oldptr ") - .) \n"					\
+> > > +	".4byte	((" newptr ") - .) \n"					\
+> > > +	".2byte	" vendor_id "\n"					\
+> > > +	".2byte " newlen "\n"						\
+> > > +	".4byte	" errata_id "\n"
+> > >
+> > 
+> > Hi Jisheng,
+> > 
+> > This patch breaks loading the KVM module for me. I got "kvm: Unknown
+> > relocation type 34". My guess is that these 2 byte fields are inspiring
+> > the compiler to emit 16-bit relocation types. The patch below fixes
+> > things for me. If you agree with fixing it this way, rather than
+> > changing something in alternatives, like not using 2 byte fields,
+> > then please pick the below patch up in your series.
+> 
+> Hi Jisheng,
+> 
+> I'm poking again on this as I see this series is now working its way
+> to be merged into for-next. I'd rather avoid the bisection breakage
+> which will be present if we fix this issue afterwards by having a
+> v5 merged which addresses the issue in the correct patch order.
 
-elapsed time: 874m
+Hi Andrew,
 
-configs tested: 63
-configs skipped: 2
+Sorry for being late. I was on holiday in the past few days. I'm
+cooking v5 and will send out it soon.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks so much
 
-gcc tested configs:
-x86_64                            allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64               randconfig-a002-20230123
-x86_64               randconfig-a005-20230123
-x86_64               randconfig-a001-20230123
-x86_64               randconfig-a006-20230123
-x86_64               randconfig-a003-20230123
-x86_64               randconfig-a004-20230123
-i386                 randconfig-a004-20230123
-i386                 randconfig-a006-20230123
-i386                 randconfig-a005-20230123
-i386                 randconfig-a002-20230123
-i386                 randconfig-a003-20230123
-i386                 randconfig-a001-20230123
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-s390                                defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-ia64                             allmodconfig
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-x86_64               randconfig-a013-20230123
-x86_64               randconfig-a011-20230123
-x86_64               randconfig-a016-20230123
-x86_64               randconfig-a012-20230123
-x86_64               randconfig-a015-20230123
-x86_64               randconfig-a014-20230123
-riscv                randconfig-r042-20230123
-hexagon              randconfig-r041-20230123
-hexagon              randconfig-r045-20230123
-s390                 randconfig-r044-20230123
-i386                 randconfig-a013-20230123
-i386                 randconfig-a016-20230123
-i386                 randconfig-a012-20230123
-i386                 randconfig-a015-20230123
-i386                 randconfig-a011-20230123
-i386                 randconfig-a014-20230123
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Thanks,
+> drew
+> 
+> > 
+> > From 4d203697aa745a0cd3a9217d547a9fb7fa2a87c7 Mon Sep 17 00:00:00 2001
+> > From: Andrew Jones <ajones@ventanamicro.com>
+> > Date: Fri, 20 Jan 2023 19:05:44 +0100
+> > Subject: [PATCH] riscv: module: Add ADD16 and SUB16 rela types
+> > Content-type: text/plain
+> > 
+> > To prepare for 16-bit relocation types to be emitted in alternatives
+> > add support for ADD16 and SUB16.
+> > 
+> > Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+> > ---
+> >  arch/riscv/kernel/module.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> > 
+> > diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+> > index 76f4b9c2ec5b..7c651d55fcbd 100644
+> > --- a/arch/riscv/kernel/module.c
+> > +++ b/arch/riscv/kernel/module.c
+> > @@ -268,6 +268,13 @@ static int apply_r_riscv_align_rela(struct module *me, u32 *location,
+> >  	return -EINVAL;
+> >  }
+> >  
+> > +static int apply_r_riscv_add16_rela(struct module *me, u32 *location,
+> > +				    Elf_Addr v)
+> > +{
+> > +	*(u16 *)location += (u16)v;
+> > +	return 0;
+> > +}
+> > +
+> >  static int apply_r_riscv_add32_rela(struct module *me, u32 *location,
+> >  				    Elf_Addr v)
+> >  {
+> > @@ -282,6 +289,13 @@ static int apply_r_riscv_add64_rela(struct module *me, u32 *location,
+> >  	return 0;
+> >  }
+> >  
+> > +static int apply_r_riscv_sub16_rela(struct module *me, u32 *location,
+> > +				    Elf_Addr v)
+> > +{
+> > +	*(u16 *)location -= (u16)v;
+> > +	return 0;
+> > +}
+> > +
+> >  static int apply_r_riscv_sub32_rela(struct module *me, u32 *location,
+> >  				    Elf_Addr v)
+> >  {
+> > @@ -315,8 +329,10 @@ static int (*reloc_handlers_rela[]) (struct module *me, u32 *location,
+> >  	[R_RISCV_CALL]			= apply_r_riscv_call_rela,
+> >  	[R_RISCV_RELAX]			= apply_r_riscv_relax_rela,
+> >  	[R_RISCV_ALIGN]			= apply_r_riscv_align_rela,
+> > +	[R_RISCV_ADD16]			= apply_r_riscv_add16_rela,
+> >  	[R_RISCV_ADD32]			= apply_r_riscv_add32_rela,
+> >  	[R_RISCV_ADD64]			= apply_r_riscv_add64_rela,
+> > +	[R_RISCV_SUB16]			= apply_r_riscv_sub16_rela,
+> >  	[R_RISCV_SUB32]			= apply_r_riscv_sub32_rela,
+> >  	[R_RISCV_SUB64]			= apply_r_riscv_sub64_rela,
+> >  };
+> > -- 
+> > 2.39.0
+> > 
