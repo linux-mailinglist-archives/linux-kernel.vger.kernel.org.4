@@ -2,144 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9786167F828
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 14:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB9567F82C
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 14:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbjA1Nii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 08:38:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S234472AbjA1Nj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 08:39:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbjA1Nig (ORCPT
+        with ESMTP id S234480AbjA1Njv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 08:38:36 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2356A1DB8B;
-        Sat, 28 Jan 2023 05:38:35 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id j5so7203809pjn.5;
-        Sat, 28 Jan 2023 05:38:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oI2APnegFeFVqcu8G9tQYKXTxS90VVWctbcguXYfrxQ=;
-        b=Gvwk+EJXQDGb4Jv1jmrDlg56eNAkoVLc5Hl30vFIACswLRt1GmqdkkHT1ABr1Y02HY
-         w4+GsaEd1fTO9OG39Unx1ugbSBuA2f6rHdS0wXlx1pfj+PZXEDgKqpS4jrsIZEwVwMoz
-         3j0Uf+ZuIFsffQ++UsMxkegvgtIZ2C2FpSyr5srvCKvrtop/SuJjyOSZhRlxtsi9sris
-         iaeHJHA3CCr5VpLlctPFP6Onm3CaimGo7elxL36TQQIade4/nq6UX3wBBMOfoLuL/snW
-         Fpz5tW95X81w17JtHvUajVtHFs/MbM94Uz3dabqJJbD/PLm94D8ZFiTVlIoOkzoIxTpL
-         SU8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oI2APnegFeFVqcu8G9tQYKXTxS90VVWctbcguXYfrxQ=;
-        b=RYmbEyJhijtRbBJWY4NBuhikU1fTVWpPdL7N3nj0N8nGdtNcxDVoizBTU6Wqyox46o
-         DneV8p5+yjZNKkfIaolgBUzkRiYAIrOnA03+UXfBm6ljbULlUDV5cwV1LXsNkqJi1L9V
-         GpRz8+L7M4nIRaZ6qYCyWXU1MWiQJWi4FFrQUyENuS7EVJAoXvgrpHqyCv61WHkqEv+E
-         8FmROqcVx+u5X3C3ipYOc8TJounuAQqK6pa685KSoNvQk/1iU9Q8jqKu/K6l0amMC523
-         826inQmM6OaAHw3JLoGW+X8ClzDabef+CT2v3dNeY5Aj+MpR1ViE2bxjg5MAL9ShTQkc
-         2GKg==
-X-Gm-Message-State: AO0yUKVjh5aYfiN7NtWz5ad1c9aC6Az8tHqihoAiBxEc6lX3VIa6OsaE
-        Kgfc7Hof15aC7CuDc4tzY25xeUu/Zxo=
-X-Google-Smtp-Source: AK7set/0vBQG+NtXhM10Q+4wEzG/Yp4BrGfPUAFF9+oLD7/VHcbAUHHnrDrf77a8DEl9Oot2V1Ewaw==
-X-Received: by 2002:a05:6a20:698b:b0:b5:e639:2833 with SMTP id t11-20020a056a20698b00b000b5e6392833mr2718382pzk.20.1674913114209;
-        Sat, 28 Jan 2023 05:38:34 -0800 (PST)
-Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
-        by smtp.gmail.com with ESMTPSA id a69-20020a621a48000000b00590163e1762sm3604391pfa.200.2023.01.28.05.38.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 05:38:33 -0800 (PST)
-Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] can: etas_es58x: do not send disable channel command if device is unplugged
-Date:   Sat, 28 Jan 2023 22:38:15 +0900
-Message-Id: <20230128133815.1796221-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.39.1
+        Sat, 28 Jan 2023 08:39:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC22739CFD
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 05:39:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ABE08B8015B
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 13:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB10C433EF;
+        Sat, 28 Jan 2023 13:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1674913188;
+        bh=x+XPnNrnuwKcYEao81s6jVrH51ZwvEQ3aiNlN2uvP3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HY/KFUcihQWtl+8ikv/bmxp0HkcvV9gl5j5O6O8EH1FtqeIhcATR1fMpvY5iBZ1du
+         E+yNgf1bnEq4J9Z6o+XWDzpoPux6pG9OhwYdq0/ohaaMHfMIUwOt1mu9VVbSo4KFh/
+         cJfvNrS+54XebkJXHYnMOwh1Ta2tveut8V0eogD8=
+Date:   Sat, 28 Jan 2023 14:39:39 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/10] nvmem: fixes for 6.2
+Message-ID: <Y9Ulm3So08Fg308w@kroah.com>
+References: <20230127104015.23839-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127104015.23839-1-srinivas.kandagatla@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When turning the network interface down, es58x_stop() is called and
-will send a command to the ES58x device to disable the channel
-c.f. es58x_ops::disable_channel().
+On Fri, Jan 27, 2023 at 10:40:05AM +0000, Srinivas Kandagatla wrote:
+> Hi Greg,
+> 
+> Here are some nvmem core fixes around nvmem provider device register
+> and error paths.
+> Most of these patches have been in next for 2-3 weeks.
+> 
+> Am really not sure if you are taking fixes late in this cycle.
+> In case you are not could you please apply them for 6.3
 
-However, if the device gets unplugged while the network interface is
-still up, es58x_ops::disable_channel() will obviously fail to send the
-URB command and the driver emits below error message:
+When I apply them, I get the following errors from the scripts:
 
-  es58x_submit_urb: USB send urb failure: -ENODEV
+Commit: 36f5dbea16ad ("nvmem: core: fix return value")
+	Fixes tag: Fixes: 60c8b4aebd8e ("nvmem: core: fix cleanup after dev_set_name()")
+	Has these problem(s):
+		- Target SHA1 does not exist
+Commit: 7de8892c0527 ("nvmem: core: fix device node refcounting")
+	Fixes tag: Fixes: 69aba7948cbe("nvmem: Add a simple NVMEM framework for consumers")
+	Has these problem(s):
+		- missing space between the SHA1 and the subject
 
-Check the usb device state before sending the disable channel command
-in order to silence above error message.
+The first one is because you have your own git tree, that's fine.  But the
+second one should have given you an error when it was in linux-next, what
+happened?
 
-Update the documentation of es58x_stop() accordingly.
+Let me see if I can fix this up...
 
-The check being added in es58x_stop() is:
-
-  	if (es58x_dev->udev->state >= USB_STATE_UNAUTHENTICATED)
-
-This is just the negation of the check done in usb_submit_urb()[1].
-
-[1] usb_submit_urb(), verify usb device's state.
-Link: https://elixir.bootlin.com/linux/v6.1/source/drivers/usb/core/urb.c#L384
-
-Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
-As far as I know, there doesn't seem to be an helper function to check
-udev->state values. If anyone is aware of such helper function, let me
-know..
----
- drivers/net/can/usb/etas_es58x/es58x_core.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-index 3e87f4c1547c..916bd9e2e9ea 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-@@ -1817,9 +1817,10 @@ static int es58x_open(struct net_device *netdev)
-  * es58x_stop() - Disable the network device.
-  * @netdev: CAN network device.
-  *
-- * Called when the network transitions to the down state. If all the
-- * channels of the device are closed, free the URB resources which are
-- * not needed anymore.
-+ * Called when the network interface transitions to the down
-+ * state. Send a disable command to the device if it is still
-+ * connected. If all the channels of the device are closed, free the
-+ * URB resources which are not needed anymore.
-  *
-  * Return: zero on success, errno when any error occurs.
-  */
-@@ -1830,9 +1831,12 @@ static int es58x_stop(struct net_device *netdev)
- 	int ret;
- 
- 	netif_stop_queue(netdev);
--	ret = es58x_dev->ops->disable_channel(priv);
--	if (ret)
--		return ret;
-+
-+	if (es58x_dev->udev->state >= USB_STATE_UNAUTHENTICATED) {
-+		ret = es58x_dev->ops->disable_channel(priv);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	priv->can.state = CAN_STATE_STOPPED;
- 	es58x_can_reset_echo_fifo(netdev);
--- 
-2.39.1
-
+greg k-h
