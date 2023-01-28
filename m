@@ -2,166 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C33C67FA59
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3451367FA60
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbjA1TJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 14:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S233999AbjA1TMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 14:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjA1TI6 (ORCPT
+        with ESMTP id S231350AbjA1TME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 14:08:58 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5B924C99;
-        Sat, 28 Jan 2023 11:08:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674932937; x=1706468937;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jhxyAYLelEfckoe/PbY7Ef4L4nCPXQSheZkRYAjHAEs=;
-  b=fBBiGRmQ9qgkac44fSToAJtLT194iO/nbI3GxgDf+7zmMcoDCqraGGuS
-   Ps+fvfY1tgTso6dneYwUbVSXfCs11wMEXHxqUxojGFME5qK4gpDekredh
-   Uq4xOg4UY9Xnwro7SJNk224eMgGub/w72hj+pklKuF4ckHJkGZD5egG2a
-   Q234igauJ8tEd7izSSq+QFehmyApanOk0Z1F1Tl1Zzf2UhQ1aduh6827N
-   6xEPgkwY8LSo5ZNL0vFST39gAHn0lweU5R47/7x5DdcQX82o9cBvdZhs6
-   Ow5bAgGVTHQBbnMsKSK0jSUk+YsQ7K4xVGe+MVVlu36ucPBktKPQV/Lar
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="354634200"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="354634200"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 11:08:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="613562517"
-X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
-   d="scan'208";a="613562517"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2023 11:08:48 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pLqZD-00010e-11;
-        Sat, 28 Jan 2023 19:08:47 +0000
-Date:   Sun, 29 Jan 2023 03:07:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tejun Heo <tj@kernel.org>, torvalds@linux-foundation.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        Sat, 28 Jan 2023 14:12:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16992367B;
+        Sat, 28 Jan 2023 11:12:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 765EE60C43;
+        Sat, 28 Jan 2023 19:12:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6D15C433D2;
+        Sat, 28 Jan 2023 19:12:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674933122;
+        bh=JAvpqv7sY2XasJq2OWk4z5tSXd/xoeBkzfwvLfdegFg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=eV+YdRsoynZR5swD26PeqL/0k2eP0QoJM7/n+Wh6moGSSbQ6Leyu+3cyHT/tiAAdL
+         bGDKvdNzSEZnzKCD488xCPmT24p0FF3Kgh6rj3ymXn2C3b9N3lQEdAHmL2FEH4Y7yk
+         evwN+yIdGLYItTagvHiw3waJkXlIS+jMiprLRhQq0DA/Dk071qFs1xA7jAUtS8ocsE
+         7+BwLuA0Jrtu7A2Ze87BUL7v3pQv50Tudp6VBQ4bRgVYGFEXeGcB+03nh9KKVta2Zg
+         /awmWDP1XQdTYMXPM6rtOfAlI5Te6QNHmu1xnkp5gU49fYdxKZdcxUUvemo318drKQ
+         AoPYr/dLDj4CA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4B0425C089F; Sat, 28 Jan 2023 11:12:02 -0800 (PST)
+Date:   Sat, 28 Jan 2023 11:12:02 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>, mingo@kernel.org,
+        will@kernel.org, boqun.feng@gmail.com, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
+        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        joshdon@google.com, brho@google.com, pjt@google.com,
-        derkling@google.com, haoluo@google.com, dvernet@meta.com,
-        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@meta.com,
-        Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH 27/30] sched_ext: Implement core-sched support
-Message-ID: <202301290223.0qWZoY9T-lkp@intel.com>
-References: <20230128001639.3510083-28-tj@kernel.org>
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
+ is disabled
+Message-ID: <20230128191202.GB2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230123205009.790550642@infradead.org>
+ <20230123205515.059999893@infradead.org>
+ <20230123165304.370121e7@gandalf.local.home>
+ <20230123170753.7ac9419e@gandalf.local.home>
+ <Y8/u00WHGElMDjoo@hirez.programming.kicks-ass.net>
+ <Y9ARbgtYhxSuOIlZ@FVFF77S0Q05N>
+ <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
+ <20230125184658.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9JH0/Z06254ZJ2g@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230128001639.3510083-28-tj@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9JH0/Z06254ZJ2g@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tejun,
+On Thu, Jan 26, 2023 at 10:28:51AM +0100, Peter Zijlstra wrote:
+> On Wed, Jan 25, 2023 at 10:46:58AM -0800, Paul E. McKenney wrote:
+> 
+> > > Ofc. Paul might have an opinion on this glorious bodge ;-)
+> > 
+> > For some definition of the word "glorious", to be sure.  ;-)
+> > 
+> > Am I correct that you have two things happening here?  (1) Preventing
+> > trace recursion and (2) forcing RCU to pay attention when needed.
+> 
+> Mostly just (1), we're in an error situation, I'm not too worried about
+> (2).
+> 
+> > I cannot resist pointing out that you have re-invented RCU_NONIDLE(),
+> > though avoiding much of the overhead when not needed.  ;-)
+> 
+> Yeah, this was the absolute minimal bodge I could come up with that
+> shuts up the rcu_derefence warning thing.
+> 
+> > I would have objections if this ever leaks out onto a non-error code path.
+> 
+> Agreed.
+> 
+> > There are things that need doing when RCU starts and stops watching,
+> > and this approach omits those things.  Which again is OK in this case,
+> > where this code is only ever executed when something is already broken,
+> > but definitely *not* OK when things are not already broken.
+> 
+> And agreed.
+> 
+> Current version of the bodge looks like so (will repost the whole series
+> a little later today).
+> 
+> I managed to tickle the recursion so that it was a test-case for the
+> stack guard...
+> 
+> With this on, it prints just the one WARN and lives.
+> 
+> ---
+> Subject: bug: Disable rcu_is_watching() during WARN/BUG
+> From: Peter Zijlstra <peterz@infradead.org>
+> Date: Wed Jan 25 13:57:49 CET 2023
+> 
+> In order to avoid WARN/BUG from generating nested or even recursive
+> warnings, force rcu_is_watching() true during
+> WARN/lockdep_rcu_suspicious().
+> 
+> Notably things like unwinding the stack can trigger rcu_dereference()
+> warnings, which then triggers more unwinding which then triggers more
+> warnings etc..
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-I love your patch! Yet something to improve:
+From an RCU perspective:
 
-[auto build test ERROR on linux/master]
-[also build test ERROR on linus/master v6.2-rc5]
-[cannot apply to tip/sched/core tj-cgroup/for-next next-20230127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tejun-Heo/sched-Encapsulate-task-attribute-change-sequence-into-a-helper-macro/20230128-123001
-patch link:    https://lore.kernel.org/r/20230128001639.3510083-28-tj%40kernel.org
-patch subject: [PATCH 27/30] sched_ext: Implement core-sched support
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230129/202301290223.0qWZoY9T-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/750f973dd349cc5c3df29319b0ffae740738a9d2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Tejun-Heo/sched-Encapsulate-task-attribute-change-sequence-into-a-helper-macro/20230128-123001
-        git checkout 750f973dd349cc5c3df29319b0ffae740738a9d2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
-   In file included from kernel/sched/build_policy.c:58:
->> kernel/sched/ext.c:3349:25: error: initialization of 'int (*)(const struct btf_type *, const struct btf_member *)' from incompatible pointer type 'int (*)(const struct btf_type *, const struct btf_member *, const struct bpf_prog *)' [-Werror=incompatible-pointer-types]
-    3349 |         .check_member = bpf_scx_check_member,
-         |                         ^~~~~~~~~~~~~~~~~~~~
-   kernel/sched/ext.c:3349:25: note: (near initialization for 'bpf_sched_ext_ops.check_member')
-   kernel/sched/ext.c: In function 'scx_bpf_error_bstr':
->> kernel/sched/ext.c:3906:16: error: variable 'bprintf_data' has initializer but incomplete type
-    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
-         |                ^~~~~~~~~~~~~~~~
->> kernel/sched/ext.c:3906:51: error: 'struct bpf_bprintf_data' has no member named 'get_bin_args'
-    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
-         |                                                   ^~~~~~~~~~~~
->> kernel/sched/ext.c:3906:66: warning: excess elements in struct initializer
-    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
-         |                                                                  ^~~~
-   kernel/sched/ext.c:3906:66: note: (near initialization for 'bprintf_data')
->> kernel/sched/ext.c:3906:33: error: storage size of 'bprintf_data' isn't known
-    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
-         |                                 ^~~~~~~~~~~~
->> kernel/sched/ext.c:3927:71: warning: passing argument 4 of 'bpf_bprintf_prepare' makes pointer from integer without a cast [-Wint-conversion]
-    3927 |         ret = bpf_bprintf_prepare(fmt, UINT_MAX, bufs->data, data__sz / 8,
-         |                                                              ~~~~~~~~~^~~
-         |                                                                       |
-         |                                                                       u32 {aka unsigned int}
-   In file included from include/linux/bpf_verifier.h:7,
-                    from kernel/sched/ext.c:3193:
-   include/linux/bpf.h:2800:31: note: expected 'u32 **' {aka 'unsigned int **'} but argument is of type 'u32' {aka 'unsigned int'}
-    2800 |                         u32 **bin_buf, u32 num_args);
-         |                         ~~~~~~^~~~~~~
->> kernel/sched/ext.c:3936:9: error: too many arguments to function 'bpf_bprintf_cleanup'
-    3936 |         bpf_bprintf_cleanup(&bprintf_data);
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:2801:6: note: declared here
-    2801 | void bpf_bprintf_cleanup(void);
-         |      ^~~~~~~~~~~~~~~~~~~
-   kernel/sched/ext.c:3906:33: warning: unused variable 'bprintf_data' [-Wunused-variable]
-    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
-         |                                 ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +3349 kernel/sched/ext.c
-
-4c016c2bafb66b Tejun Heo 2023-01-27  3344  
-4c016c2bafb66b Tejun Heo 2023-01-27  3345  struct bpf_struct_ops bpf_sched_ext_ops = {
-4c016c2bafb66b Tejun Heo 2023-01-27  3346  	.verifier_ops = &bpf_scx_verifier_ops,
-4c016c2bafb66b Tejun Heo 2023-01-27  3347  	.reg = bpf_scx_reg,
-4c016c2bafb66b Tejun Heo 2023-01-27  3348  	.unreg = bpf_scx_unreg,
-4c016c2bafb66b Tejun Heo 2023-01-27 @3349  	.check_member = bpf_scx_check_member,
-4c016c2bafb66b Tejun Heo 2023-01-27  3350  	.init_member = bpf_scx_init_member,
-4c016c2bafb66b Tejun Heo 2023-01-27  3351  	.init = bpf_scx_init,
-4c016c2bafb66b Tejun Heo 2023-01-27  3352  	.name = "sched_ext_ops",
-4c016c2bafb66b Tejun Heo 2023-01-27  3353  };
-4c016c2bafb66b Tejun Heo 2023-01-27  3354  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  include/linux/context_tracking.h |   27 +++++++++++++++++++++++++++
+>  kernel/locking/lockdep.c         |    3 +++
+>  kernel/panic.c                   |    5 +++++
+>  lib/bug.c                        |   15 ++++++++++++++-
+>  4 files changed, 49 insertions(+), 1 deletion(-)
+> 
+> --- a/include/linux/context_tracking.h
+> +++ b/include/linux/context_tracking.h
+> @@ -130,9 +130,36 @@ static __always_inline unsigned long ct_
+>  	return arch_atomic_add_return(incby, this_cpu_ptr(&context_tracking.state));
+>  }
+>  
+> +static __always_inline bool warn_rcu_enter(void)
+> +{
+> +	bool ret = false;
+> +
+> +	/*
+> +	 * Horrible hack to shut up recursive RCU isn't watching fail since
+> +	 * lots of the actual reporting also relies on RCU.
+> +	 */
+> +	preempt_disable_notrace();
+> +	if (rcu_dynticks_curr_cpu_in_eqs()) {
+> +		ret = true;
+> +		ct_state_inc(RCU_DYNTICKS_IDX);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static __always_inline void warn_rcu_exit(bool rcu)
+> +{
+> +	if (rcu)
+> +		ct_state_inc(RCU_DYNTICKS_IDX);
+> +	preempt_enable_notrace();
+> +}
+> +
+>  #else
+>  static inline void ct_idle_enter(void) { }
+>  static inline void ct_idle_exit(void) { }
+> +
+> +static __always_inline bool warn_rcu_enter(void) { return false; }
+> +static __always_inline void warn_rcu_exit(bool rcu) { }
+>  #endif /* !CONFIG_CONTEXT_TRACKING_IDLE */
+>  
+>  #endif
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -55,6 +55,7 @@
+>  #include <linux/rcupdate.h>
+>  #include <linux/kprobes.h>
+>  #include <linux/lockdep.h>
+> +#include <linux/context_tracking.h>
+>  
+>  #include <asm/sections.h>
+>  
+> @@ -6555,6 +6556,7 @@ void lockdep_rcu_suspicious(const char *
+>  {
+>  	struct task_struct *curr = current;
+>  	int dl = READ_ONCE(debug_locks);
+> +	bool rcu = warn_rcu_enter();
+>  
+>  	/* Note: the following can be executed concurrently, so be careful. */
+>  	pr_warn("\n");
+> @@ -6595,5 +6597,6 @@ void lockdep_rcu_suspicious(const char *
+>  	lockdep_print_held_locks(curr);
+>  	pr_warn("\nstack backtrace:\n");
+>  	dump_stack();
+> +	warn_rcu_exit(rcu);
+>  }
+>  EXPORT_SYMBOL_GPL(lockdep_rcu_suspicious);
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/ratelimit.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/sysfs.h>
+> +#include <linux/context_tracking.h>
+>  #include <trace/events/error_report.h>
+>  #include <asm/sections.h>
+>  
+> @@ -679,6 +680,7 @@ void __warn(const char *file, int line,
+>  void warn_slowpath_fmt(const char *file, int line, unsigned taint,
+>  		       const char *fmt, ...)
+>  {
+> +	bool rcu = warn_rcu_enter();
+>  	struct warn_args args;
+>  
+>  	pr_warn(CUT_HERE);
+> @@ -693,11 +695,13 @@ void warn_slowpath_fmt(const char *file,
+>  	va_start(args.args, fmt);
+>  	__warn(file, line, __builtin_return_address(0), taint, NULL, &args);
+>  	va_end(args.args);
+> +	warn_rcu_exit(rcu);
+>  }
+>  EXPORT_SYMBOL(warn_slowpath_fmt);
+>  #else
+>  void __warn_printk(const char *fmt, ...)
+>  {
+> +	bool rcu = warn_rcu_enter();
+>  	va_list args;
+>  
+>  	pr_warn(CUT_HERE);
+> @@ -705,6 +709,7 @@ void __warn_printk(const char *fmt, ...)
+>  	va_start(args, fmt);
+>  	vprintk(fmt, args);
+>  	va_end(args);
+> +	warn_rcu_exit(rcu);
+>  }
+>  EXPORT_SYMBOL(__warn_printk);
+>  #endif
+> --- a/lib/bug.c
+> +++ b/lib/bug.c
+> @@ -47,6 +47,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/rculist.h>
+>  #include <linux/ftrace.h>
+> +#include <linux/context_tracking.h>
+>  
+>  extern struct bug_entry __start___bug_table[], __stop___bug_table[];
+>  
+> @@ -153,7 +154,7 @@ struct bug_entry *find_bug(unsigned long
+>  	return module_find_bug(bugaddr);
+>  }
+>  
+> -enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> +static enum bug_trap_type __report_bug(unsigned long bugaddr, struct pt_regs *regs)
+>  {
+>  	struct bug_entry *bug;
+>  	const char *file;
+> @@ -209,6 +210,18 @@ enum bug_trap_type report_bug(unsigned l
+>  	return BUG_TRAP_TYPE_BUG;
+>  }
+>  
+> +enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> +{
+> +	enum bug_trap_type ret;
+> +	bool rcu = false;
+> +
+> +	rcu = warn_rcu_enter();
+> +	ret = __report_bug(bugaddr, regs);
+> +	warn_rcu_exit(rcu);
+> +
+> +	return ret;
+> +}
+> +
+>  static void clear_once_table(struct bug_entry *start, struct bug_entry *end)
+>  {
+>  	struct bug_entry *bug;
