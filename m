@@ -2,188 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC7667F4C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 05:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE0E67F4C3
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 05:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbjA1Elx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 23:41:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S231158AbjA1Emo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 23:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjA1Elt (ORCPT
+        with ESMTP id S229712AbjA1Eml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 23:41:49 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6617DBCF
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 20:41:44 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-50660e2d2ffso93382627b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 20:41:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sk2uvbVYmWxZx30YmA9hD6P375aPkKMFnV8oJPYyEUE=;
-        b=ftR7bw3x0mcHGGqDiSMb6HSL2dkiA7QFwZUpGfCZzV0s37x8J3jC/iNgBp4oO1OOZi
-         Olr/Ci62jdkirbX0fCCC54YqKwP2BCBvfndYi9SMW7bVxzyWUiTc9vPlKYzIJjRvFonR
-         LLwPUcmsbQXtduywUQ6W2xMpa30ALxQCOAVRlIzdyw6cqPiyOA0cbEwxYN7xLb0paADs
-         KeDHmE78vOSXupmLsAcrRr+3LHyzY+yPk98UCSL7sAb/3cpwxXuuSfKs8n0Gznmz2sj+
-         apaf3Bn6X8hHOJoorNjbZS6+JAdNARekU6ah1erJn0Ynu+IIDaROKjAVBUXoFe6YlPe6
-         OFiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sk2uvbVYmWxZx30YmA9hD6P375aPkKMFnV8oJPYyEUE=;
-        b=CYwK12FzeB1YBTIM543+eIITIq6boiouZ55uKyr2bj7hRJpDCaxVi9YS5NggTmQL50
-         LeJ2T1EaDF5sFodkbDcwmxtJBhS+N+yU0FE+T70z/oc4N7psuJHe9za/Gx7hkfDhen4k
-         ApD3GQ20I9xCTZs604ts95+cwWt9GcAQgMssVmwaeMCk1Nvzk8qk3N0KzyQgxoehw7/A
-         egaeRqSM5PSal/Kr1YudZ2mT45eTWq2bFDOVMI0rBFuG3Hl1kzYG9tBv8NrHscwY0/LE
-         32Sb83vSRpkV5117TsRY9O7X2Md4ndoy9DkvfedxiEVBIjjDrR93loD1SzpDjO0TtT15
-         0s1Q==
-X-Gm-Message-State: AFqh2krcQ8Sj3oT/100FcP6znzKRWTG3Wg5r62+3B0dOwdOdcHRPoZI+
-        LvPjm2+BFQPv9k2caDHZyAP0IvuOL/UOVPz6aHds6P0ikGNZ2JNw
-X-Google-Smtp-Source: AMrXdXvJl+3i5ra24zoyj2IqtlDmcC26Np35O8vZad9nyF+r+ClApK8YDh2ZGveHDpktG78JfDs0lG3GnuKnYNzKcUM=
-X-Received: by 2002:a0d:f807:0:b0:477:b56e:e1d6 with SMTP id
- i7-20020a0df807000000b00477b56ee1d6mr5257138ywf.188.1674880903690; Fri, 27
- Jan 2023 20:41:43 -0800 (PST)
+        Fri, 27 Jan 2023 23:42:41 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91D51ADCC
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 20:42:39 -0800 (PST)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230128044238epoutp0442e35239043b9db543cb029080c273e4~_X1uQ3Rc22098120981epoutp04u
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 04:42:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230128044238epoutp0442e35239043b9db543cb029080c273e4~_X1uQ3Rc22098120981epoutp04u
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1674880958;
+        bh=A24HweFkUSJzyN4Yo+qXkWBWdpmC+tvDdXOuOBQIZU4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=DFtIYjnEo8efwH2xBm4FTK1WiHF7G3QnwSJAtQJzazGTvZQphEWKPm9e+1mfPLnzE
+         79BfqBWbmiZIHvVl4ynKMOQ07hN4JJ8TElXGmNLL16k+sxjbVNzphsgwi8CTMQngdT
+         aEfrKseLE7iSo2oa9errv3U6PzaIYxXMZDSsDEx0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20230128044237epcas5p26799a33f27b53c0bc4cec822a215dd70~_X1tFN9iM0594205942epcas5p2b;
+        Sat, 28 Jan 2023 04:42:37 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.183]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4P3hd72zYbz4x9Ps; Sat, 28 Jan
+        2023 04:42:35 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B5.0A.10528.BB7A4D36; Sat, 28 Jan 2023 13:42:35 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230128044234epcas5p1634f0515a882a185df14073c736bb6ae~_X1rFMq4q3040630406epcas5p16;
+        Sat, 28 Jan 2023 04:42:34 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230128044234epsmtrp1c636ffeacef5c62a65e8bf2ff43fdf22~_X1rETBD_2650226502epsmtrp1d;
+        Sat, 28 Jan 2023 04:42:34 +0000 (GMT)
+X-AuditID: b6c32a49-c17ff70000012920-1c-63d4a7bb8ec0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DE.3C.17995.AB7A4D36; Sat, 28 Jan 2023 13:42:34 +0900 (KST)
+Received: from alimakhtar04 (unknown [107.122.12.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230128044232epsmtip1b47310e3e88349f7d320858aa4f11c42~_X1orcCIf2407424074epsmtip1G;
+        Sat, 28 Jan 2023 04:42:32 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+        "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
+        "'Inki Dae'" <inki.dae@samsung.com>,
+        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
+        "'Kukjin Kim'" <kgene@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Cc:     <replicant@osuosl.org>, <phone-devel@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        =?utf-8?Q?'Martin_J=C3=BCcker'?= <martin.juecker@gmail.com>,
+        "'Henrik Grimler'" <henrik@grimler.se>
+In-Reply-To: <20230120155404.323386-10-krzysztof.kozlowski@linaro.org>
+Subject: RE: [PATCH 09/11] ARM: dts: exynos: correct SATA clocks in
+ Exynos5250
+Date:   Sat, 28 Jan 2023 10:12:29 +0530
+Message-ID: <000501d932d2$f077e310$d167a930$@samsung.com>
 MIME-Version: 1.0
-References: <20230118091122.2205452-1-dmitry.baryshkov@linaro.org>
- <CAL_JsqJ=0neiZ4wkPiMqJMT4E1O_xO0uLrTmEGUcnZMqxkw4UQ@mail.gmail.com>
- <CAGETcx8Xy5OzsbW3123esxsbQJq-SqDkP1S5g2mmwzoCz4shtQ@mail.gmail.com>
- <20230125190926.GA2697290-robh@kernel.org> <505fc434-c31f-726e-b1cb-0bbfd5f83490@linaro.org>
- <CAGETcx-f9vy7MDB2vFWP9CL26UY7W65oJArvhzksCu8QG6Y4nw@mail.gmail.com>
-In-Reply-To: <CAGETcx-f9vy7MDB2vFWP9CL26UY7W65oJArvhzksCu8QG6Y4nw@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 28 Jan 2023 06:41:32 +0200
-Message-ID: <CAA8EJpo-mFxq+eGW=YaMxea+zi2Z64QWocuO36aNsM7Wmtu3sA@mail.gmail.com>
-Subject: Re: [RESEND PATCH] of: property: do not create clocks device link for
- clock controllers
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHNuRkKafHieBmUHCY1mc35yYPTTQGAawZmAmWaUYGuqwNdwA==
+Content-Language: en-us
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrCJsWRmVeSWpSXmKPExsWy7bCmhu7u5VeSDdbMFbaYf+Qcq8XbJbsY
+        LSbdn8Bi0f/4NbNF34uHzBZ7X29ltzjb9IbdYtPja6wWl3fNYbOYcX4fk8WZf1NZLBb8sbNY
+        t0bQonXvEXaLzd//Mjrwe+ycdZfd4+iVe6wem1Z1snncubaHzWPzknqP/3fWsnt8ae5m9ejb
+        sorR4/MmuQDOqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFslF58A
+        XbfMHKD7lRTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkFJgV6xYm5xaV56Xp5qSVW
+        hgYGRqZAhQnZGdO69jMXrBGteNv2g72BcbNIFyMnh4SAicTfB49YQWwhgd2MEl8ma3cxcgHZ
+        nxglWg8uZYNwPjNK7Ln3mBWm48P2VywQiV2MEgv2N7JCOC8ZJaYs6WABqWIT0JXYsbgNrF1E
+        YC2zxIEt28AcZoHTjBJXVm5jBKniFHCTuNi9iA3EFhYIkJh0rg/MZhFQlZhyZzbYJF4BS4ll
+        t5+zQtiCEidnPgGLMwtoSyxb+JoZ4iYFiZ9Pl4HViAg4SbzcMpMNokZc4uXRI+wgiyUE3nBI
+        3O/7DdXgIvFv2XF2CFtY4tXxLVC2lMTL/jYgmwPI9pBY9EcKIpwh8Xb5ekYI217iwJU5LCAl
+        zAKaEut36UOs4pPo/f2ECaKTV6KjTQiiWlWi+d1VFghbWmJidzc0FD0kTj2/zziBUXEWksdm
+        IXlsFpIHZiEsW8DIsopRMrWgODc9tdi0wDAvtRwe4cn5uZsYwclby3MH490HH/QOMTJxMB5i
+        lOBgVhLh3ep4KVmINyWxsiq1KD++qDQntfgQoykwtCcyS4km5wPzR15JvKGJpYGJmZmZiaWx
+        maGSOK+67clkIYH0xJLU7NTUgtQimD4mDk6pBqbpoX+T307fG+qyq5i7PKlUyNmQT7owaONz
+        5dSEySkTVq9+27pK7M8yh3S9M5Pmz78849X0d/0cQYcvb1jzu+36QrNnHmJpreev/J4a++zW
+        S8u0TdWcYhy/z1zwkp5x/0yR8b99Co2sV6oZpy8T0brzbAHnjadxH7Zavg67bTGFc/Gqzb4K
+        R2rDFCw++s76ksFlp5vUu1JoY+c5S4N9SiIc6lrCUn533yeba+12jlXIdOrVW3jj8zrP2iK2
+        4rvhZ0xrWuJmLBMtlM9WXr57S9025ws3VlkwPu+r2SC++K86u9GJtf8FRN8byAcJFxxUnVmc
+        zFMq5nuihFlb6q2F3b+FNSIJ98VOVudPftC0Vk+JpTgj0VCLuag4EQDh8cwEZwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsWy7bCSnO6u5VeSDXo2GlrMP3KO1eLtkl2M
+        FpPuT2Cx6H/8mtmi78VDZou9r7eyW5xtesNusenxNVaLy7vmsFnMOL+PyeLMv6ksFgv+2Fms
+        WyNo0br3CLvF5u9/GR34PXbOusvucfTKPVaPTas62TzuXNvD5rF5Sb3H/ztr2T2+NHezevRt
+        WcXo8XmTXABnFJdNSmpOZllqkb5dAlfGhw2NLAUNAhU3+1YwNzDu5O1i5OSQEDCR+LD9FUsX
+        IxeHkMAORoll7zYxQySkJa5vnMAOYQtLrPz3nB2i6DmjxLVL7WBFbAK6EjsWt7GBJEQENjNL
+        HJ90kBnEYRY4zyhxY8YBVoiWC4wSJzc+YAVp4RRwk7jYvQiohYNDWMBP4tQVBZAwi4CqxJQ7
+        s1lAbF4BS4llt5+zQtiCEidnPgGLMwtoSzy9+RTOXrbwNdSpChI/ny4DqxcRcJJ4uWUmG0SN
+        uMTLo0fYJzAKz0IyahaSUbOQjJqFpGUBI8sqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS95Pzc
+        TYzgKNbS2sG4Z9UHvUOMTByMhxglOJiVRHi3Ol5KFuJNSaysSi3Kjy8qzUktPsQozcGiJM57
+        oetkvJBAemJJanZqakFqEUyWiYNTqoGJm+fv85pFNVcqXCsyDj79sFpk4hfJKxEHf+5R9YuV
+        Xifitmlix9r6F5++yX7Pr+F1aVqtlhIQVTCt5PmFCZ1XlThSrqgZGlh9+MK0t3ZZ/P5kh1zT
+        y/Pyjj1Lrv8z07slNUeCrX1WcG7ZV+Nl2iYrzsiGZK2aIXJ7380S+c0bLjR5v1R4JNLbEOI/
+        W1DEbK3W7o7J+tOfq86ZpS43d/OjR3v3s4cv/tMt7LxcU+iqNK/D8UOLu9enVbtPmPa811P1
+        mEX43i/cS958a/2/+NGq5Y0F/F/lfbPip2v+v7p377Rrx/q3H3llFDt5nc65psK9nNZSgRYm
+        xUdU/1VMkf2uk/0k4b/UVpPf+RUrZ0qeVGIpzkg01GIuKk4EABlLq5RRAwAA
+X-CMS-MailID: 20230128044234epcas5p1634f0515a882a185df14073c736bb6ae
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230120155429epcas5p11dadc6286c7de5f115ed9fc00cbefc9a
+References: <20230120155404.323386-1-krzysztof.kozlowski@linaro.org>
+        <CGME20230120155429epcas5p11dadc6286c7de5f115ed9fc00cbefc9a@epcas5p1.samsung.com>
+        <20230120155404.323386-10-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 at 01:12, Saravana Kannan <saravanak@google.com> wrote:
->
-> On Thu, Jan 26, 2023 at 2:51 PM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On 25/01/2023 21:09, Rob Herring wrote:
-> > > On Tue, Jan 24, 2023 at 06:12:15PM -0800, Saravana Kannan wrote:
-> > >> On Wed, Jan 18, 2023 at 5:35 AM Rob Herring <robh+dt@kernel.org> wrote:
-> > >>>
-> > >>> On Wed, Jan 18, 2023 at 3:11 AM Dmitry Baryshkov
-> > >>> <dmitry.baryshkov@linaro.org> wrote:
-> > >>>>
-> > >>>> Do not create device link for clock controllers. Some of the clocks
-> > >>>> provided to the device via OF can be the clocks that are just parents to
-> > >>>> the clocks provided by this clock controller. Clock subsystem already
-> > >>>> has support for handling missing clock parents correctly (clock
-> > >>>> orphans). Later when the parent clock is registered, clocks get
-> > >>>> populated properly.
-> > >>>>
-> > >>>> An example of the system where this matters is the SDM8450 MTP board
-> > >>>> (see arch/arm64/boot/dts/qcom/sdm845-mtp.dts). Here the dispcc uses
-> > >>>> clocks provided by dsi0_phy and dsi1_phy device tree nodes. However the
-> > >>>> dispcc itself provides clocks to both PHYs, to the PHY parent device,
-> > >>>> etc. With just dsi0_phy in place devlink is able to break the
-> > >>>> dependency, but with two PHYs, dispcc doesn't get probed at all, thus
-> > >>>> breaking display support.
-> > >>>>
-> > >>>> Cc: Bjorn Andersson <andersson@kernel.org>
-> > >>>> Cc: Stephen Boyd <sboyd@kernel.org>
-> > >>>> Cc: Saravana Kannan <saravanak@google.com>
-> > >>>> Cc: Abel Vesa <abel.vesa@linaro.org>
-> > >>>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > >>>> ---
-> > >>>>
-> > >>>> This patch has been posted a year ago in January 2022 ([1]). Since that time
-> > >>>> Saravana failed to produce patches to assist in debugging the issue
-> > >>>> ([2]) or to fix the issue ([3]). The issue we observe has been described
-> > >>>> by Abel at ([4]). As we work on adding support for Dual DSI
-> > >>>> configurations, the issue becomes more and more important, since binding
-> > >>>> the whole display subsystem fails.
-> > >>
-> > >> I did send out a patch series[1] to try and fix this. Heck I even
-> > >> talked about this in LPC 2022. So I don't think it's accurate to say I
-> > >> didn't help debug this or fix this. There's some email thread in lore
-> > >> where Abel gave more details and I figured out the issue and we didn't
-> > >> need any more debugging. And then I sent out [1]. Sorry I missed you
-> > >> in the cc lise for [1] -- I try to keep track of everyone to cc but
-> > >> things slip through the cracks sometimes. But at the same time, it's
-> > >> easy to check for emails from me before saying I didn't help or didn't
-> > >> send out fixes :)
-> > >>
-> > >> If you do try to give [1] a shot, there are a bunch of bugs that
-> > >> people pointed out for which I gave fixes on top of [1] in the
-> > >> replies. I was supposed to work on v2 over the holidays, but that
-> > >> didn't happen because of stuff outside my control.
-> > >>
-> > >>> That's ample time to fix this, so I intend to apply this. But I'll
-> > >>> give it a few days for comments.
-> > >>
-> > >> Rob, I'd recommend not applying this because it'll fix it for Dmitry
-> > >> but break someone else's use case. That's the whole reason it takes me
-> > >> a while to send out patches -- it's easy to fix it for a subset of
-> > >> devices, but fixing something without breaking someone else is harder
-> > >> (I still believe it's doable) and it takes a while to test them on all
-> > >> the devices I want to test before sending them out.
-> >
-> > This case is really simple, I think. Clock controllers (and
-> > clock-core-framework) are prepared to handle clock orphans properly.
-> > Moreover they have been supposed to work in such way for quite a while.
-> > In other words, I don't think we should save them from this
-> > -EPROBE_DEFERRED.
->
-> A clock controller can depend on other clock controllers for non clock
-> tree reasons. For example, it might need a clock ON to access its
-> registers. So, while the CCF can handle orphans properly, that's not
-> the only dependency. Also, fw_devlink is not just about probing
-> either. It also has to do with proper sync_state() callbacks.
 
-Just a question, please excuse if I'm misunderstanding it. Does
-fw_devlink created this way also impose any runtime PM dependencies?
 
->
-> Also, I already fixed the issue you are referring to while not
-> breaking the conditions I'm referring to. So, I don't know why you are
-> so opposed to that. See Abel's Tested-by here:
-> https://lore.kernel.org/lkml/YvonlAwXAoXTUTZe@linaro.org/
->
-> > Thus I think it is better to let them continue doing their job of
-> > handling probe deferrals on their own, at least for the time being.
->
-> I'm pretty sure your patch will break other Qualcomm platforms because
-> they depend on sync_state() callbacks to boot up properly when
-> all/most of their drivers are built as modules.
-
-Qualcomm platforms did not use sync state for clock controllers. Only
-for the icc drivers.
-
->
-> > And
-> > then, when your patches are finished, we can think about reenabling
-> > current behaviour. As a reminder, currently, all Qualcomm platforms
-> > trying to use double DSI configuration are broken and have to use
-> > fw_devlink= kernel params.
->
-> I'm/was working on sending out the v2 when I got your email. Hold
-> tight please. It shouldn't take too long.
-
-I'll give v2 a test next week, thank you!
-
--- 
-With best wishes
-Dmitry
+> -----Original Message-----
+> From: Krzysztof Kozlowski <krzysztof.kozlowski=40linaro.org>
+> Sent: Friday, January 20, 2023 9:24 PM
+> To: Rob Herring <robh+dt=40kernel.org>; Krzysztof Kozlowski
+> <krzysztof.kozlowski+dt=40linaro.org>; Alim Akhtar
+> <alim.akhtar=40samsung.com>; Inki Dae <inki.dae=40samsung.com>; Kyungmin
+> Park <kyungmin.park=40samsung.com>; Kukjin Kim <kgene=40kernel.org>;
+> devicetree=40vger.kernel.org; linux-arm-kernel=40lists.infradead.org; lin=
+ux-
+> samsung-soc=40vger.kernel.org; linux-kernel=40vger.kernel.org
+> Cc: replicant=40osuosl.org; phone-devel=40vger.kernel.org;
+> =7Epostmarketos/upstreaming=40lists.sr.ht; Martin J=C3=BCcker=0D=0A>=20<m=
+artin.juecker=40gmail.com>;=20Henrik=20Grimler=20<henrik=40grimler.se>;=0D=
+=0A>=20Krzysztof=20Kozlowski=20<krzysztof.kozlowski=40linaro.org>=0D=0A>=20=
+Subject:=20=5BPATCH=2009/11=5D=20ARM:=20dts:=20exynos:=20correct=20SATA=20c=
+locks=20in=20Exynos5250=0D=0A>=20=0D=0A>=20The=20DT=20schema=20expects=20cl=
+ock=20name=20matching=20certain=20patterns:=0D=0A>=20=0D=0A>=20=20=20exynos=
+5250-smdk5250.dtb:=20sata=40122f0000:=20clock-names:1:=20'oneOf'=0D=0A>=20c=
+onditional=20failed,=20one=20must=20be=20fixed:=0D=0A>=20=20=20=20=20'sclk_=
+sata'=20is=20not=20one=20of=20=5B'pclk',=20'aclk',=20'hclk',=20'sata'=5D=0D=
+=0A>=20=20=20=20=20'pmalive'=20was=20expected=0D=0A>=20=20=20=20=20'rxoob'=
+=20was=20expected=0D=0A>=20=20=20=20=20'ref'=20was=20expected=0D=0A>=20=0D=
+=0A>=20Signed-off-by:=20Krzysztof=20Kozlowski=20<krzysztof.kozlowski=40lina=
+ro.org>=0D=0A>=20---=0D=0A=0D=0AReviewed-by:=20Alim=20Akhtar=20<alim.akhtar=
+=40samsung.com>=0D=0A=0D=0A=0D=0A>=20=20arch/arm/boot/dts/exynos5250.dtsi=
+=20=7C=202=20+-=0D=0A>=20=201=20file=20changed,=201=20insertion(+),=201=20d=
+eletion(-)=0D=0A>=20=0D=0A>=20diff=20--git=20a/arch/arm/boot/dts/exynos5250=
+.dtsi=0D=0A>=20b/arch/arm/boot/dts/exynos5250.dtsi=0D=0A>=20index=20f82f82f=
+c803f..9225f3552837=20100644=0D=0A>=20---=20a/arch/arm/boot/dts/exynos5250.=
+dtsi=0D=0A>=20+++=20b/arch/arm/boot/dts/exynos5250.dtsi=0D=0A>=20=40=40=20-=
+390,7=20+390,7=20=40=40=20sata:=20sata=40122f0000=20=7B=0D=0A>=20=20=09=09=
+=09reg=20=3D=20<0x122F0000=200x1ff>;=0D=0A>=20=20=09=09=09interrupts=20=3D=
+=20<GIC_SPI=20115=20IRQ_TYPE_LEVEL_HIGH>;=0D=0A>=20=20=09=09=09clocks=20=3D=
+=20<&clock=20CLK_SATA>,=20<&clock=0D=0A>=20CLK_SCLK_SATA>;=0D=0A>=20-=09=09=
+=09clock-names=20=3D=20=22sata=22,=20=22sclk_sata=22;=0D=0A>=20+=09=09=09cl=
+ock-names=20=3D=20=22sata=22,=20=22pclk=22;=0D=0A>=20=20=09=09=09phys=20=3D=
+=20<&sata_phy>;=0D=0A>=20=20=09=09=09phy-names=20=3D=20=22sata-phy=22;=0D=
+=0A>=20=20=09=09=09ports-implemented=20=3D=20<0x1>;=0D=0A>=20--=0D=0A>=202.=
+34.1=0D=0A=0D=0A=0D=0A
