@@ -2,323 +2,389 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFE467F7FF
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 14:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABB767F821
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 14:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbjA1N0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 08:26:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S234408AbjA1NhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 08:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjA1N0l (ORCPT
+        with ESMTP id S234406AbjA1NhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 08:26:41 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8912A2E800;
-        Sat, 28 Jan 2023 05:26:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 28 Jan 2023 08:37:06 -0500
+X-Greylist: delayed 526 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 28 Jan 2023 05:36:52 PST
+Received: from proxima.lasnet.de (proxima.lasnet.de [78.47.171.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B709865EC2;
+        Sat, 28 Jan 2023 05:36:52 -0800 (PST)
+Received: from [192.168.2.51] (p4fe71212.dip0.t-ipconnect.de [79.231.18.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3308CCE0ADD;
-        Sat, 28 Jan 2023 13:26:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90FFEC4339B;
-        Sat, 28 Jan 2023 13:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674912395;
-        bh=8sTfmspWNrxkeaaJD+PTKLjxUW2F1n5lgYhmYXWgwss=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=deJNq9nAafXE+G7TxIzrakUsMW891/vlP7TGVYC5OMaav7z3Ryp0LFKFb80Seba+F
-         Gv/gsnCj5gZoAeWjWGA6B42y5NPMgRfUMCCBPl5/GL5Lfw61dliyKlQLxGNPj2ydJn
-         kZL5C1vGG8DwyeWtAVtBe1rrcI+ytrHixw8FkmA4=
-Date:   Sat, 28 Jan 2023 14:26:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
-        broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
-        robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-Subject: Re: [RFC PATCH v2 07/22] ASoC: Add SOC USB APIs for adding an USB
- backend
-Message-ID: <Y9UiiMbJFjkzyEol@kroah.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-8-quic_wcheng@quicinc.com>
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 070C7C04A2;
+        Sat, 28 Jan 2023 14:27:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1674912480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ky19NcsjgawcANcCAEb96R21hwRnQqrSnm0w+jSUA/I=;
+        b=YePOYenraPPCNQA919np5O/PXofzv75qO00p+GUC35SqV1vKdh3XR6adrdBCT8SBJfTX1+
+        Xf/kIFjPIyzUuu04UOIv80sVX9LnOD3GGQ+Dkxlo5f3XiHEHkm005WsGUKIpd27maqdlXM
+        893HnqRDWiYW1XPJmjpxaGOLLiWLKh0Dzj41ilznJ+HsC2pX8krOPzYzq8V2OEmaWLshNh
+        061+O+xaOPa26VQbjXZM8rKq0Xm/mRbVBvc1ndjCrjf3R5Cr3K7VE7Pp9os6pQlbGctkPP
+        US2uRsadXf9g+AzqxtYboqRe1bmrmN42r4sNCloiyiZ7apQr1x9cOJnsMNl5oQ==
+Message-ID: <4157fc1c-a785-aa0c-b9d6-8236c2792ce6@datenfreihafen.org>
+Date:   Sat, 28 Jan 2023 14:27:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126031424.14582-8-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] cc2520: move to gpio descriptors
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Varka Bhadram <varkabhadram@gmail.com>,
+        Alexander Aring <alex.aring@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org
+References: <20230126161658.2983292-1-arnd@kernel.org>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20230126161658.2983292-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 07:14:09PM -0800, Wesley Cheng wrote:
-> diff --git a/include/sound/soc-usb.h b/include/sound/soc-usb.h
-> new file mode 100644
-> index 000000000000..ec422a8a834f
-> --- /dev/null
-> +++ b/include/sound/soc-usb.h
-> @@ -0,0 +1,33 @@
-> +/* SPDX-License-Identifier: GPL-2.0
-> + *
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+Hello Arnd.
 
-It is now 2023 :)
+Thanks for doing this maintenance and API update work on the driver!
 
-> + */
-> +
-> +#ifndef __LINUX_SND_SOC_USB_H
-> +#define __LINUX_SND_SOC_USB_H
-> +
-> +/**
-> + * struct snd_soc_usb
-> + * @component - Reference to DAPM component
-> + * @connection_status_cb - callback to notify connection events
-> + * @priv_data - vendor data
+I think it is fair to assume there has been no use of the static 
+platform_data. I think this sneaked into all of the drivers and has been 
+copied around.
 
-You do not document all items in the structure so you will get build
-warnings :(
+Varka, are you still around as s driver maintainer to test this change?
+If not I will go and apply this patch in a few days as is. From a review 
+perspective it looks good.
 
-And what exactly is "vendor data"?  You use that term in a few places in
-this series, there is no such thing as a "vendor" in the kernel.  This
-could be a device or driver specific data, but not a "vendor".
-
-> --- /dev/null
-> +++ b/sound/soc/soc-usb.c
-> @@ -0,0 +1,202 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +#include <linux/of.h>
-> +#include <linux/usb.h>
-> +#include <sound/soc.h>
-> +#include <sound/soc-usb.h>
-> +#include "../usb/card.h"
-> +
-> +static DEFINE_MUTEX(ctx_mutex);
-> +static LIST_HEAD(usb_ctx_list);
-
-What is this a list of?  Why a list?  This should be dynamic and tied to
-the device itself somehow, not a separate list you have to walk.
-
-> +
-> +#define for_each_usb_ctx(ctx)			\
-> +	list_for_each_entry(ctx, &usb_ctx_list, list)
-
-No need for a #define like this, just spell it out.
+regards
+Stefan Schmidt
 
 
-> +
-> +static struct device_node *snd_soc_find_phandle(struct device *dev)
-> +{
-> +	struct device_node *node;
-> +
-> +	node = of_parse_phandle(dev->of_node, "usb-soc-be", 0);
-> +	if (!node)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	return node;
-> +}
-> +
-> +static struct snd_soc_usb *snd_soc_find_usb_ctx(struct device *dev)
-> +{
-> +	struct device_node *node;
-> +	struct snd_soc_usb *ctx = NULL;
-> +
-> +	node = snd_soc_find_phandle(dev);
-> +	if (IS_ERR(node))
-> +		return NULL;
-> +
-> +	mutex_lock(&ctx_mutex);
-> +	for_each_usb_ctx(ctx) {
-> +		if (ctx->dev->of_node == node) {
-> +			of_node_put(node);
-> +			mutex_unlock(&ctx_mutex);
-> +			return ctx;
-> +		}
-> +	}
-> +	of_node_put(node);
-> +	mutex_unlock(&ctx_mutex);
-> +
-> +	return NULL;
-> +}
-> +
-> +/**
-> + * snd_soc_usb_get_priv_data() - Retrieve private data stored
-> + * @usbdev: USB bus sysdev
-> + *
-> + * Fetch the private data stored in the USB SND SOC structure.  This is
-> + * intended to be called by the USB offloading class driver, in order to
-> + * attain parameters about the USB backend device.
-> + *
-> + */
-> +void *snd_soc_usb_get_priv_data(struct device *usbdev)
-> +{
-> +	struct snd_soc_usb *ctx;
-> +
-> +	if (!usbdev)
-> +		return NULL;
-
-How could usbdev ever be NULL?
-
-> +
-> +	ctx = snd_soc_find_usb_ctx(usbdev);
-> +
-> +	return ctx ? ctx->priv_data : NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(snd_soc_usb_get_priv_data);
-> +
-> +/**
-> + * snd_soc_usb_set_priv_data() - Set private data stored
-> + * @dev: USB backend device
-> + * @priv: private data to store
-> + *
-> + * Save data describing the USB backend device parameters.  This is intended
-> + * to be called by the ASoC USB backend driver.
-> + *
-> + */
-> +void snd_soc_usb_set_priv_data(struct device *dev, void *priv)
-> +{
-> +	struct snd_soc_usb *ctx;
-
-
-Why does this function take a "struct device" but the get function take
-a USB device?
-
-> +
-> +	mutex_lock(&ctx_mutex);
-> +	for_each_usb_ctx(ctx) {
-> +		if (dev->of_node == ctx->dev->of_node) {
-> +			ctx->priv_data = priv;
-> +			break;
-> +		}
-> +	}
-> +	mutex_unlock(&ctx_mutex);
-> +}
-> +EXPORT_SYMBOL_GPL(snd_soc_usb_set_priv_data);
-> +
-> +/**
-> + * snd_soc_usb_add_port() - Add a USB backend port
-> + * @dev: USB backend device
-> + * @connection_cb: connection status callback
-> + *
-> + * Register a USB backend device to the SND USB SOC framework.  Memory is
-> + * allocated as part of the USB backend device.
-> + *
-> + */
-> +struct snd_soc_usb *snd_soc_usb_add_port(struct device *dev,
-> +			int (*connection_cb)(struct snd_soc_usb *usb, int card_idx,
-> +			int connected))
-> +{
-> +	struct snd_soc_usb *usb;
-> +
-> +	usb = devm_kzalloc(dev, sizeof(*usb), GFP_KERNEL);
-> +	if (!usb)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	usb->connection_status_cb = connection_cb;
-> +	usb->dev = dev;
-> +
-> +	mutex_lock(&ctx_mutex);
-> +	list_add_tail(&usb->list, &usb_ctx_list);
-> +	mutex_unlock(&ctx_mutex);
-
-Again, why a list?
-
-
-> +
-> +	return usb;
-> +}
-> +EXPORT_SYMBOL_GPL(snd_soc_usb_add_port);
-> +
-> +/**
-> + * snd_soc_usb_remove_port() - Remove a USB backend port
-> + * @dev: USB backend device
-> + *
-> + * Remove a USB backend device from USB SND SOC.  Memory is freed when USB
-> + * backend is removed.
-> + *
-> + */
-> +int snd_soc_usb_remove_port(struct device *dev)
-> +{
-> +	struct snd_soc_usb *ctx, *tmp;
-> +
-> +	mutex_lock(&ctx_mutex);
-> +	list_for_each_entry_safe(ctx, tmp, &usb_ctx_list, list) {
-> +		if (ctx->dev == dev) {
-> +			list_del(&ctx->list);
-> +			break;
-> +		}
-> +	}
-> +	mutex_unlock(&ctx_mutex);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(snd_soc_usb_remove_port);
-> +
-> +/**
-> + * snd_soc_usb_connect() - Notification of USB device connection
-> + * @usbdev: USB bus device
-> + * @card_idx: USB SND card instance
-> + *
-> + * Notify of a new USB SND device connection.  The card_idx can be used to
-> + * handle how the USB backend selects, which device to enable offloading on.
-> + *
-> + */
-> +int snd_soc_usb_connect(struct device *usbdev, int card_idx)
-> +{
-> +	struct snd_soc_usb *ctx;
-> +
-> +	if (!usbdev)
-> +		return -ENODEV;
-> +
-> +	ctx = snd_soc_find_usb_ctx(usbdev);
-> +	if (!ctx)
-> +		return -ENODEV;
-> +
-> +	if (ctx->connection_status_cb)
-> +		ctx->connection_status_cb(ctx, card_idx, 1);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(snd_soc_usb_connect);
-> +
-> +/**
-> + * snd_soc_usb_connect() - Notification of USB device connection
-> + * @usbdev: USB bus device
-> + *
-> + * Notify of a new USB SND device disconnection to the USB backend.
-> + *
-> + */
-> +int snd_soc_usb_disconnect(struct device *usbdev)
-> +{
-> +	struct snd_soc_usb *ctx;
-> +
-> +	if (!usbdev)
-> +		return -ENODEV;
-> +
-> +	ctx = snd_soc_find_usb_ctx(usbdev);
-> +	if (!ctx)
-> +		return -ENODEV;
-> +
-> +	if (ctx->connection_status_cb)
-> +		ctx->connection_status_cb(ctx, -1, 0);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(snd_soc_usb_disconnect);
-
-Meta-comment, why are all of these in the sound directory?  They are
-only operating on USB devices, nothing else.  So why here?
-
-thanks,
-
-greg k-h
+On 26.01.23 17:15, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> cc2520 supports both probing from static platform_data and
+> from devicetree, but there have never been any definitions
+> of the platform data in the mainline kernel, so it's safe
+> to assume that only the DT path is used.
+> 
+> After folding cc2520_platform_data into the driver itself,
+> the GPIO handling can be simplified by moving to the modern
+> gpiod interface.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   MAINTAINERS                     |   1 -
+>   drivers/net/ieee802154/cc2520.c | 136 +++++++++-----------------------
+>   include/linux/spi/cc2520.h      |  21 -----
+>   3 files changed, 37 insertions(+), 121 deletions(-)
+>   delete mode 100644 include/linux/spi/cc2520.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index acda33cbd689..a36ead3ce7a3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4650,7 +4650,6 @@ L:	linux-wpan@vger.kernel.org
+>   S:	Maintained
+>   F:	Documentation/devicetree/bindings/net/ieee802154/cc2520.txt
+>   F:	drivers/net/ieee802154/cc2520.c
+> -F:	include/linux/spi/cc2520.h
+>   
+>   CCREE ARM TRUSTZONE CRYPTOCELL REE DRIVER
+>   M:	Gilad Ben-Yossef <gilad@benyossef.com>
+> diff --git a/drivers/net/ieee802154/cc2520.c b/drivers/net/ieee802154/cc2520.c
+> index edc769daad07..a94d8dd71aad 100644
+> --- a/drivers/net/ieee802154/cc2520.c
+> +++ b/drivers/net/ieee802154/cc2520.c
+> @@ -7,14 +7,13 @@
+>    */
+>   #include <linux/kernel.h>
+>   #include <linux/module.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>   #include <linux/delay.h>
+>   #include <linux/spi/spi.h>
+> -#include <linux/spi/cc2520.h>
+> +#include <linux/property.h>
+>   #include <linux/workqueue.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/skbuff.h>
+> -#include <linux/of_gpio.h>
+>   #include <linux/ieee802154.h>
+>   #include <linux/crc-ccitt.h>
+>   #include <asm/unaligned.h>
+> @@ -206,7 +205,7 @@ struct cc2520_private {
+>   	struct mutex buffer_mutex;	/* SPI buffer mutex */
+>   	bool is_tx;			/* Flag for sync b/w Tx and Rx */
+>   	bool amplified;			/* Flag for CC2591 */
+> -	int fifo_pin;			/* FIFO GPIO pin number */
+> +	struct gpio_desc *fifo_pin;	/* FIFO GPIO pin number */
+>   	struct work_struct fifop_irqwork;/* Workqueue for FIFOP */
+>   	spinlock_t lock;		/* Lock for is_tx*/
+>   	struct completion tx_complete;	/* Work completion for Tx */
+> @@ -875,7 +874,7 @@ static void cc2520_fifop_irqwork(struct work_struct *work)
+>   
+>   	dev_dbg(&priv->spi->dev, "fifop interrupt received\n");
+>   
+> -	if (gpio_get_value(priv->fifo_pin))
+> +	if (gpiod_get_value(priv->fifo_pin))
+>   		cc2520_rx(priv);
+>   	else
+>   		dev_dbg(&priv->spi->dev, "rxfifo overflow\n");
+> @@ -912,49 +911,11 @@ static irqreturn_t cc2520_sfd_isr(int irq, void *data)
+>   	return IRQ_HANDLED;
+>   }
+>   
+> -static int cc2520_get_platform_data(struct spi_device *spi,
+> -				    struct cc2520_platform_data *pdata)
+> -{
+> -	struct device_node *np = spi->dev.of_node;
+> -	struct cc2520_private *priv = spi_get_drvdata(spi);
+> -
+> -	if (!np) {
+> -		struct cc2520_platform_data *spi_pdata = spi->dev.platform_data;
+> -
+> -		if (!spi_pdata)
+> -			return -ENOENT;
+> -		*pdata = *spi_pdata;
+> -		priv->fifo_pin = pdata->fifo;
+> -		return 0;
+> -	}
+> -
+> -	pdata->fifo = of_get_named_gpio(np, "fifo-gpio", 0);
+> -	priv->fifo_pin = pdata->fifo;
+> -
+> -	pdata->fifop = of_get_named_gpio(np, "fifop-gpio", 0);
+> -
+> -	pdata->sfd = of_get_named_gpio(np, "sfd-gpio", 0);
+> -	pdata->cca = of_get_named_gpio(np, "cca-gpio", 0);
+> -	pdata->vreg = of_get_named_gpio(np, "vreg-gpio", 0);
+> -	pdata->reset = of_get_named_gpio(np, "reset-gpio", 0);
+> -
+> -	/* CC2591 front end for CC2520 */
+> -	if (of_property_read_bool(np, "amplified"))
+> -		priv->amplified = true;
+> -
+> -	return 0;
+> -}
+> -
+>   static int cc2520_hw_init(struct cc2520_private *priv)
+>   {
+>   	u8 status = 0, state = 0xff;
+>   	int ret;
+>   	int timeout = 100;
+> -	struct cc2520_platform_data pdata;
+> -
+> -	ret = cc2520_get_platform_data(priv->spi, &pdata);
+> -	if (ret)
+> -		goto err_ret;
+>   
+>   	ret = cc2520_read_register(priv, CC2520_FSMSTAT1, &state);
+>   	if (ret)
+> @@ -1071,7 +1032,11 @@ static int cc2520_hw_init(struct cc2520_private *priv)
+>   static int cc2520_probe(struct spi_device *spi)
+>   {
+>   	struct cc2520_private *priv;
+> -	struct cc2520_platform_data pdata;
+> +	struct gpio_desc *fifop;
+> +	struct gpio_desc *cca;
+> +	struct gpio_desc *sfd;
+> +	struct gpio_desc *reset;
+> +	struct gpio_desc *vreg;
+>   	int ret;
+>   
+>   	priv = devm_kzalloc(&spi->dev, sizeof(*priv), GFP_KERNEL);
+> @@ -1080,11 +1045,11 @@ static int cc2520_probe(struct spi_device *spi)
+>   
+>   	spi_set_drvdata(spi, priv);
+>   
+> -	ret = cc2520_get_platform_data(spi, &pdata);
+> -	if (ret < 0) {
+> -		dev_err(&spi->dev, "no platform data\n");
+> -		return -EINVAL;
+> -	}
+> +	/* CC2591 front end for CC2520 */
+> +	/* Assumption that CC2591 is not connected */
+> +	priv->amplified = false;
+> +	if (device_property_read_bool(&spi->dev, "amplified"))
+> +		priv->amplified = true;
+>   
+>   	priv->spi = spi;
+>   
+> @@ -1098,80 +1063,53 @@ static int cc2520_probe(struct spi_device *spi)
+>   	spin_lock_init(&priv->lock);
+>   	init_completion(&priv->tx_complete);
+>   
+> -	/* Assumption that CC2591 is not connected */
+> -	priv->amplified = false;
+> -
+>   	/* Request all the gpio's */
+> -	if (!gpio_is_valid(pdata.fifo)) {
+> +	priv->fifo_pin = devm_gpiod_get(&spi->dev, "fifo", GPIOD_IN);
+> +	if (IS_ERR(priv->fifo_pin)) {
+>   		dev_err(&spi->dev, "fifo gpio is not valid\n");
+> -		ret = -EINVAL;
+> +		ret = PTR_ERR(priv->fifo_pin);
+>   		goto err_hw_init;
+>   	}
+>   
+> -	ret = devm_gpio_request_one(&spi->dev, pdata.fifo,
+> -				    GPIOF_IN, "fifo");
+> -	if (ret)
+> -		goto err_hw_init;
+> -
+> -	if (!gpio_is_valid(pdata.cca)) {
+> +	cca = devm_gpiod_get(&spi->dev, "cca", GPIOD_IN);
+> +	if (IS_ERR(cca)) {
+>   		dev_err(&spi->dev, "cca gpio is not valid\n");
+> -		ret = -EINVAL;
+> +		ret = PTR_ERR(cca);
+>   		goto err_hw_init;
+>   	}
+>   
+> -	ret = devm_gpio_request_one(&spi->dev, pdata.cca,
+> -				    GPIOF_IN, "cca");
+> -	if (ret)
+> -		goto err_hw_init;
+> -
+> -	if (!gpio_is_valid(pdata.fifop)) {
+> +	fifop = devm_gpiod_get(&spi->dev, "fifop", GPIOD_IN);
+> +	if (IS_ERR(fifop)) {
+>   		dev_err(&spi->dev, "fifop gpio is not valid\n");
+> -		ret = -EINVAL;
+> +		ret = PTR_ERR(fifop);
+>   		goto err_hw_init;
+>   	}
+>   
+> -	ret = devm_gpio_request_one(&spi->dev, pdata.fifop,
+> -				    GPIOF_IN, "fifop");
+> -	if (ret)
+> -		goto err_hw_init;
+> -
+> -	if (!gpio_is_valid(pdata.sfd)) {
+> +	sfd = devm_gpiod_get(&spi->dev, "sfd", GPIOD_IN);
+> +	if (IS_ERR(sfd)) {
+>   		dev_err(&spi->dev, "sfd gpio is not valid\n");
+> -		ret = -EINVAL;
+> +		ret = PTR_ERR(sfd);
+>   		goto err_hw_init;
+>   	}
+>   
+> -	ret = devm_gpio_request_one(&spi->dev, pdata.sfd,
+> -				    GPIOF_IN, "sfd");
+> -	if (ret)
+> -		goto err_hw_init;
+> -
+> -	if (!gpio_is_valid(pdata.reset)) {
+> +	reset = devm_gpiod_get(&spi->dev, "reset", GPIOD_OUT_LOW);
+> +	if (IS_ERR(reset)) {
+>   		dev_err(&spi->dev, "reset gpio is not valid\n");
+> -		ret = -EINVAL;
+> +		ret = PTR_ERR(reset);
+>   		goto err_hw_init;
+>   	}
+>   
+> -	ret = devm_gpio_request_one(&spi->dev, pdata.reset,
+> -				    GPIOF_OUT_INIT_LOW, "reset");
+> -	if (ret)
+> -		goto err_hw_init;
+> -
+> -	if (!gpio_is_valid(pdata.vreg)) {
+> +	vreg = devm_gpiod_get(&spi->dev, "vreg", GPIOD_OUT_LOW);
+> +	if (IS_ERR(vreg)) {
+>   		dev_err(&spi->dev, "vreg gpio is not valid\n");
+> -		ret = -EINVAL;
+> +		ret = PTR_ERR(vreg);
+>   		goto err_hw_init;
+>   	}
+>   
+> -	ret = devm_gpio_request_one(&spi->dev, pdata.vreg,
+> -				    GPIOF_OUT_INIT_LOW, "vreg");
+> -	if (ret)
+> -		goto err_hw_init;
+> -
+> -	gpio_set_value(pdata.vreg, HIGH);
+> +	gpiod_set_value(vreg, HIGH);
+>   	usleep_range(100, 150);
+>   
+> -	gpio_set_value(pdata.reset, HIGH);
+> +	gpiod_set_value(reset, HIGH);
+>   	usleep_range(200, 250);
+>   
+>   	ret = cc2520_hw_init(priv);
+> @@ -1180,7 +1118,7 @@ static int cc2520_probe(struct spi_device *spi)
+>   
+>   	/* Set up fifop interrupt */
+>   	ret = devm_request_irq(&spi->dev,
+> -			       gpio_to_irq(pdata.fifop),
+> +			       gpiod_to_irq(fifop),
+>   			       cc2520_fifop_isr,
+>   			       IRQF_TRIGGER_RISING,
+>   			       dev_name(&spi->dev),
+> @@ -1192,7 +1130,7 @@ static int cc2520_probe(struct spi_device *spi)
+>   
+>   	/* Set up sfd interrupt */
+>   	ret = devm_request_irq(&spi->dev,
+> -			       gpio_to_irq(pdata.sfd),
+> +			       gpiod_to_irq(sfd),
+>   			       cc2520_sfd_isr,
+>   			       IRQF_TRIGGER_FALLING,
+>   			       dev_name(&spi->dev),
+> @@ -1241,7 +1179,7 @@ MODULE_DEVICE_TABLE(of, cc2520_of_ids);
+>   static struct spi_driver cc2520_driver = {
+>   	.driver = {
+>   		.name = "cc2520",
+> -		.of_match_table = of_match_ptr(cc2520_of_ids),
+> +		.of_match_table = cc2520_of_ids,
+>   	},
+>   	.id_table = cc2520_ids,
+>   	.probe = cc2520_probe,
+> diff --git a/include/linux/spi/cc2520.h b/include/linux/spi/cc2520.h
+> deleted file mode 100644
+> index 449bacf10700..000000000000
+> --- a/include/linux/spi/cc2520.h
+> +++ /dev/null
+> @@ -1,21 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-or-later */
+> -/* Header file for cc2520 radio driver
+> - *
+> - * Copyright (C) 2014 Varka Bhadram <varkab@cdac.in>
+> - *                    Md.Jamal Mohiuddin <mjmohiuddin@cdac.in>
+> - *                    P Sowjanya <sowjanyap@cdac.in>
+> - */
+> -
+> -#ifndef __CC2520_H
+> -#define __CC2520_H
+> -
+> -struct cc2520_platform_data {
+> -	int fifo;
+> -	int fifop;
+> -	int cca;
+> -	int sfd;
+> -	int reset;
+> -	int vreg;
+> -};
+> -
+> -#endif
