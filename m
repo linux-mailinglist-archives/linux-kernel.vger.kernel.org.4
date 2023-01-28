@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A8A67FB5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 23:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C89EE67FB60
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 23:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234853AbjA1WbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 17:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S234872AbjA1Wf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 17:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjA1WbM (ORCPT
+        with ESMTP id S229637AbjA1WfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 17:31:12 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E8123866;
-        Sat, 28 Jan 2023 14:31:09 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id m199so10094121ybm.4;
-        Sat, 28 Jan 2023 14:31:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gq3UXuY96IZ2a/ozeYCG10SAJUx0PEg/adXlBHwr8e8=;
-        b=eIAhUQ1nNA2M/sdDSFQfpRPBbPGWVJPKwENHe8GqyOMTuJ0pn2A6rJwnWzb2Pgqf4C
-         YlmZn3aSHmJPt5bTI0DTwBTn1WVi0/NsrsdaIqesNY+ZgOsQwRc84bXIbxEWj3+ByORK
-         wjgF6OU5a6RXvg1M08LkTpbFdXkpKn4tYYh1UeGewKSUdKRpKBIxClmbPLGn2bLKglul
-         b0KMJyqWdrJgNTW5RFtiN6Yw61eXu1pPm9qQn11v2M3h8lamlvDjgSq+6nBBwzdVPawD
-         qggCVJgytLQp4g8zCJqAJjLuJUlxO+ZoxfIr9+s9yIeldOXV2iVHPJgnQdqjtUNP8K+v
-         GOxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gq3UXuY96IZ2a/ozeYCG10SAJUx0PEg/adXlBHwr8e8=;
-        b=gOFx9uUjaqgoRj4+5eqLiyt6zirUR3/2MPFqCJXngTTggzM09X2RoDWtWRwZc5x03m
-         WcYBB4b1bxgUHvsrTsAIwkrwNxhV+jmdqZ3/UGFhLSHeu2mJKQV1gGUisL6JB3dNppbK
-         xNKF0oo18/AYSm++VcqtWh4AX711WwCdeHeAHN03RaSmG7dF4RwSiyLBPhKi93uSD4E4
-         bODJJBAbAW8GOU7oAQMG4OHfjRX57yeGvN7ErqYXv6/WTy1sjbW/0fRfy/W3ASgtn5r1
-         aqVzo5cYwOTM1/0ZBj6eHiyh1NT/aVc8ftrWvkgQScjsZEcELq+J1qGA+lW6kTz1ajBB
-         spFQ==
-X-Gm-Message-State: AFqh2kroCwuwb/3Cz8dRxtwyQpPvwgmyvAjrlT+sPxHOsceWf2rAS7JJ
-        8aM+HiR5N0b7HAjUqDCiT7KSfEpfMBGMTQD3678=
-X-Google-Smtp-Source: AMrXdXudUBRygvpqBA/djU59Mnt9ZklHyflmHzzXm8ltVAxQCE0xGNZEx4bYcQEUYVA7PBOG5YuKBN2fHYVKxY9tJm0=
-X-Received: by 2002:a25:8d03:0:b0:7bb:3a71:263d with SMTP id
- n3-20020a258d03000000b007bb3a71263dmr2993234ybl.425.1674945068778; Sat, 28
- Jan 2023 14:31:08 -0800 (PST)
+        Sat, 28 Jan 2023 17:35:25 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA63B3A93
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 14:35:23 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-113-5yLzffXWPLWbScFAP9AvvQ-1; Sat, 28 Jan 2023 22:35:20 +0000
+X-MC-Unique: 5yLzffXWPLWbScFAP9AvvQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Sat, 28 Jan
+ 2023 22:35:20 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Sat, 28 Jan 2023 22:35:20 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andy Shevchenko' <andy.shevchenko@gmail.com>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        "Rasmus Villemoes" <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: RE: [PATCH v1 1/1] lib/string: Use strchr() in strpbrk()
+Thread-Topic: [PATCH v1 1/1] lib/string: Use strchr() in strpbrk()
+Thread-Index: AQHZMmcwwuoXGWmDc06Jaw4hqxFhbK6z5+FwgABYDACAACoagA==
+Date:   Sat, 28 Jan 2023 22:35:19 +0000
+Message-ID: <d36a45b689e84ae7b9c1079221e054da@AcuMS.aculab.com>
+References: <20230127155135.27153-1-andriy.shevchenko@linux.intel.com>
+ <a903947619f94dfa88d3dd147b7a5e95@AcuMS.aculab.com>
+ <CAHp75VcZgkuOA3pSrg7cN36EAB4Y0jV2xFNfj-sGp_C17J2yAQ@mail.gmail.com>
+In-Reply-To: <CAHp75VcZgkuOA3pSrg7cN36EAB4Y0jV2xFNfj-sGp_C17J2yAQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230128055214.33648-1-jamiemdouglass@gmail.com> <f8590655-3869-d905-ebad-347b8c9ae8dd@linaro.org>
-In-Reply-To: <f8590655-3869-d905-ebad-347b8c9ae8dd@linaro.org>
-From:   Jamie Douglass <jamiemdouglass@gmail.com>
-Date:   Sun, 29 Jan 2023 09:30:57 +1100
-Message-ID: <CAETzdaEjfCbaGj8UeBsAZGbZnvOHgMP9KTCyxsY46qL5MxUhzg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: qcom: msm8992-lg-bullhead: Correct memory
- overlap with SMEM region
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Dominik Kobinski <dominikkobinski314@gmail.com>,
-        Konrad Dybico <konrad.dybico@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My apologies, I completely forgot that I did that!
+RnJvbTogQW5keSBTaGV2Y2hlbmtvDQo+IFNlbnQ6IDI4IEphbnVhcnkgMjAyMyAxOTo1NQ0KPiAN
+Cj4gT24gU2F0LCBKYW4gMjgsIDIwMjMgYXQgNDo1MSBQTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxh
+aWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPg0KPiA+IEZyb206IEFuZHkgU2hldmNoZW5rbw0K
+PiA+ID4gU2VudDogMjcgSmFudWFyeSAyMDIzIDE1OjUyDQo+ID4gPg0KPiA+ID4gVXNlIHN0cmNo
+cigpIGluc3RlYWQgb2Ygb3BlbiBjb2RpbmcgaXQgYXMgaXQncyBkb25lIGVsc2V3aGVyZSBpbg0K
+PiA+ID4gdGhlIHNhbWUgZmlsZS4gRWl0aGVyIHdlIHdpbGwgaGF2ZSBzaW1pbGFyIHRvIHdoYXQg
+aXQgd2FzIG9yIHBvc3NpYmx5DQo+ID4gPiBiZXR0ZXIgcGVyZm9ybWFuY2UgaW4gY2FzZSBhcmNo
+aXRlY3R1cmUgaW1wbGVtZW50cyBpdHMgb3duIHN0cmNocigpLg0KPiA+DQo+ID4gRXhjZXB0IHRo
+YXQgeW91IGdldCBhIHdob2xlIGxvYWQgb2YgY2FsbHMgdG8gc3RyY2hyKCkgZm9yICh0eXBpY2Fs
+bHkpDQo+ID4gdmVyeSBmZXcgY2hhcmFjdGVycy4NCj4gPiBTbyB0aGUgY29zdCBvZiB0aGUgY2Fs
+bHMgZG9taW5hdGVzLCBhbnl0aGluZyB0aGF0IHRyaWVzIHRvIHNwZWVkIHVwDQo+ID4gc3RyY2hy
+KCkgZm9yIGxvbmcgc3RyaW5ncyB3aWxsIGFsc28gc2xvdyB0aGluZ3MgZG93bi4NCj4gDQo+IEht
+bS4uLiBJIGhhdmVuJ3Qgc2VlbiB0aGUgY2FsbHMsIEkgYXNzdW1lIGdjYyBzaW1wbHkgaW5saW5l
+ZCBhIGNvcHkgb2YgdGhhdC4NCg0KQW55dGhpbmcgZ2NjIGl0c2VsZiBpbmxpbmVzIGlzIGxpa2Vs
+eSB0byBiZSBvcHRpbWlzZWQgZm9yIGxvbmcgc3RyaW5ncw0KKHdoZXJlIGlubGluaW5nIHByb2Jh
+Ymx5IG1ha2VzIGxlc3MgZGlmZmVyZW5jZSkuDQpJbiBhbnkgY2FzZSB0aGF0IHdpbGwgYmxvYXQg
+dGhlIGZ1bmN0aW9uIC0gYW5kIHlvdSBzYXcgYSBzaXplIHJlZHVjdGlvbi4NCg0KQWJvdXQgdGhl
+IHdvcnN0IHRoaW5nIHRoYXQgY2FuIGhhcHBlbiBoZXJlIGlzIHRoYXQgZ2NjIHJlYWxpc2VzIHRo
+ZSBvcGVuDQpjb2RlZCBsb29wIGlzIHN0cmNocigpIGFuZCB0aGVuIGlubGluZXMgaXRzIG93biAn
+ZmFzdCcgY29weS4NCldoaWNoIGlzIHRoZSBsYXN0IHRoaW5nIHlvdSB3YW50IGlmIHRoZSBzdHJp
+bmcgaXMgb25seSBhIGZldyBjaGFyYWN0ZXJzDQpsb25nLg0KDQo+IA0KPiAuLi4NCj4gDQo+ID4g
+QWx0aG91Z2ggSSB2ZXJ5IG11Y2ggZG91YnQgc3RycGJyaygpIGlzIHVzZWQgYW55d2hlcmUgd2hl
+cmUNCj4gPiBwZXJmb3JtYW5jZSBtYXR0ZXJzLg0KPiANCj4gc3Ryc2VwKCkvc3Ryc3BuKCkgYXJl
+IHRoZSB1c2Vycy4NCg0KSSBiZXQgdGhleSBhcmVuJ3QgY2FsbGVkIGFueXdoZXJlIHRoYXQgbWF0
+dGVycy4NClRoZXJlIGlzIGFsc28gYSBzaWduaWZpY2FudCBkaWZmZXJlbnQuDQpzdHJzZXAoKSBp
+cyBwcm9iYWJseSBsb29raW5nIGZvciBhIHZlcnkgc21hbGwgbnVtYmVyIG9mIGNoYXJhY3RlcnMu
+DQpzdHJzcG4oKSBjb3VsZCBlYXNpbHkgaGF2ZSBhbGwgYWxwaGFiZXRpY3MuDQoNCkZvciBsb25n
+IHN0cmluZ3MgeW91IGNhbiBhY3R1YWxseSB1c2UgYSBiaXRtYXAgb2YgdGhlIGNoYXJhY3RlcnMu
+DQpPbiA2NGJpdCB0aGlzIGNhbiwgd2l0aCBjYXJlLCBiZSBoZWxkIGluIDQgcmVnaXN0ZXJzLg0K
+MzJiaXQgaXMgbW9yZSBwcm9ibGVtYXRpYy4NCkJ1dCBpcyB5b3UgYXJlIGp1c3QgbG9va2luZyBm
+b3IgIiBcdCIgdGhlIG92ZXJoZWFkcyBhcmUgbWFzc2l2ZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lz
+dGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24g
+S2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-That change was necessary, because extending the reserved region
-past 0x7000000 creates another memory overlap, this time with the
-mpss_mem region:
-               OF: reserved mem: OVERLAP DETECTED!
-               reserved@6c00000 (0x0000000006c00000--0x0000000007200000)
-               overlaps with memory@7000000
-               (0x0000000007000000--0x000000000ca00000)
-
-So my original patch is correct.
-
-Thanks,
-Jamie
-
-
-On Sun, 29 Jan 2023 at 01:30, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 28.01.2023 06:52, Jamie Douglass wrote:
-> > A previously committed reserved memory region was overlapping with the
-> > SMEM memory region, causing an error message in dmesg:
-> >       OF: reserved mem: OVERLAP DETECTED!
-> >       reserved@5000000 (0x0000000005000000--0x0000000007200000)
-> >       overlaps with smem_region@6a00000
-> >       (0x0000000006a00000--0x0000000006c00000)
-> > This patch splits the previous reserved memory region into two
-> > reserved sections either side of the SMEM memory region.
-> >
-> > Signed-off-by: Jamie Douglass <jamiemdouglass@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-> > index 79de9cc395c4..5e375ea73c79 100644
-> > --- a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
-> > @@ -53,8 +53,13 @@ cont_splash_mem: memory@3400000 {
-> >                       no-map;
-> >               };
-> >
-> > -             removed_region: reserved@5000000 {
-> > -                     reg = <0 0x05000000 0 0x2200000>;
-> > +             reserved@5000000 {
-> > +                     reg = <0x0 0x05000000 0x0 0x1a00000>;
-> > +                     no-map;
-> > +             };
-> > +
-> > +             reserved@6c00000 {
-> > +                     reg = <0x0 0x06c00000 0x0 0x400000>;
-> I think you made this 0x200000 too small, unless there
-> is supposed to be functional change.
->
-> Konrad
-> >                       no-map;
-> >               };
-> >       };
