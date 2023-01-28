@@ -2,84 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B909967F2A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A09E67F2A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 01:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbjA1AGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 27 Jan 2023 19:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54548 "EHLO
+        id S231354AbjA1AHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 27 Jan 2023 19:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjA1AGU (ORCPT
+        with ESMTP id S229575AbjA1AG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:06:20 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8246687364
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:06:19 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id h8-20020a170902f54800b00194b9e80861so3530163plf.9
-        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:06:19 -0800 (PST)
+        Fri, 27 Jan 2023 19:06:58 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F98B7A4
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:06:40 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso6199152pjp.3
+        for <linux-kernel@vger.kernel.org>; Fri, 27 Jan 2023 16:06:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UoBXGNyHS8VSlGwyH24PBy3LiUpM7j95hK4CPmoboMo=;
-        b=gfVdO9VMiW0XGf2NY9slCD+xg6P87ql5hYRPUiwqCzX+kIVmA8+dRcjYpbFDarxq6E
-         HlyjmxuG4zp/XoOhco+EMo01ah2Y6eyDor41wTZ5OreB5ZWscpF0JlaY7Yo39yI6WNJf
-         m6SEFPQ2aHONs+FGaGw8OpUI9R3ErfAqvpIhSWIXX9EERsbUPAyLLZzjAnO+weGCOp6u
-         01fzOLHAITB8ycwo0NUpCoLiRibEeh1Fa4UtVZkIiVX98fdrmCmcKCGsnYTsBhWyEjby
-         mm5eiSRgeeOiwIfRcIfi6JzuKFRxVuU5uncSKrVAcrOYWwuiJfC+KMOEaJWagbAG9TBx
-         2WrQ==
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8g/ThgcNbD2/aX07jf+/YqhhYrBFTriZoMIQ/MFUbWI=;
+        b=eqFtSh1QLj+acU2gwXnpxbAelvLB58DPeB4DQAski2quWDZzuDDp9OPNjo0x7PfRkL
+         vxvKQ6AcUSbD9BqrQCnovg4LVVxN2voFYwt2Oom/gUHLAys4N4VdIZLmWuHHo78/oQMe
+         wfZu6/kE0w2HGoJ/mmSVAeqxyk0FpRY2SMLAufOLipcWNSTWOMIhOhXBJSJ1eE86T9fY
+         DHnBL+Rvox8zzYn+VugXoB2athS7utYT0LgF2MDmBWP6LONR+IjVl0F9Qgy1yteUF8yQ
+         IvzDKeY/gy/ED2IvlSgXCYIKkbD1AYwESob6Z4B+xNPd6CgQ2CZtYFyq47G6W4jU+Vyj
+         +hnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UoBXGNyHS8VSlGwyH24PBy3LiUpM7j95hK4CPmoboMo=;
-        b=z/2xxB+tUWMePfB7MugY3nb0Nvecc8xTrGgOQdJ/Z8cWiUNBeO+KeNMtOM080MtgqM
-         l+SeKU0gpwnk8jbdbOXbIQpqKtkoaEH4aFo+etrYgyjiFJrG468+1IbI0rbXtZzbgCIE
-         c/UZR1Uspky1sf4W1EVx3OgtS3UCPah2/l0olHMlcpx7/KpBHkvJRkRlW/uOiikc8AKj
-         GOkha0p3g4iIdIuixgoDZQrZsTFCHlzCylM6CxW6R72jZivvBB7Rjz152zXjfmCp0uTv
-         pyosKxmQRYCvM3RBhz7oATPfV3dZKi1VFYb20o9TWCVZb7B7CsQX/pzGK7ATUKJ8lxLf
-         ChgA==
-X-Gm-Message-State: AFqh2koPp7Ivz3dfdtrU9iRhgKnArUbyEOPjQ3wmGmshxuKwqRg4tNwQ
-        qOB1Ni3l6PGkuwhPZHJNyg6Ak55RlqQ=
-X-Google-Smtp-Source: AMrXdXtUCOjJ76PKa4ftdjizrS/4JFMcUqZv8WAN2YI0XFNoFeJ9dUNzwYw+asU1JemGkWcIDZ23jsORf68=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:9c0c:b0:227:213d:4564 with SMTP id
- h12-20020a17090a9c0c00b00227213d4564mr4606147pjp.50.1674864378987; Fri, 27
- Jan 2023 16:06:18 -0800 (PST)
-Date:   Sat, 28 Jan 2023 00:05:51 +0000
-In-Reply-To: <202211161718436948912@zte.com.cn>
-Mime-Version: 1.0
-References: <202211161718436948912@zte.com.cn>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <167458628707.3464739.1003587396919853689.b4-ty@google.com>
-Subject: Re: [PATCH linux-next] KVM: x86: Replace IS_ERR() with IS_ERR_VALUE()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>, ye.xingchen@zte.com.cn
-Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8g/ThgcNbD2/aX07jf+/YqhhYrBFTriZoMIQ/MFUbWI=;
+        b=lK2Z4AA1qETmkIqxgme5/HpTGfmZDNU6+fGXKtcEeKTBZOWXMbpaLY70md7bv0pwfk
+         fLEPkKPS2klzDlkMzseVYlwvmBZH3OzEI0N3YGAb9BUPE0uAJu44MyMSQAeP5l5lKtGF
+         mkh40JQAHFsrTaREbnbgubzO0cOXF2GRr7oMoZbBGO2reBFakaA7MTIWkXE+XqoACryn
+         FWWO7eAY752SMeZ7rM1N3/dtuuh6NoFuYd/PbpyMGIUj4vhlw+7KYzYxI282Oa3C01/m
+         YXFiiAUkjCkOimu93NB0yZ6QBWYedRTsr0xnHED0Xr2zPcHzwWOWfMFfIwoVmnFtb7F/
+         lEAA==
+X-Gm-Message-State: AFqh2ko9nzE73nkE6oL0SyH6daTJrUYDmAlzUkkzRmWEyy1cjs50kP4c
+        gRn4QatfrBm1QM9iu7+pgVpxgdFhuijoEbs+RE1N
+X-Google-Smtp-Source: AMrXdXvd2n9LymBXSkWurnSC6yLqKTNaVZHkRdO3cpr85aGd59eC4S1pbTeWxWCVZHBbNBrCPS7QoA7JXjF/sJC/xPU=
+X-Received: by 2002:a17:90a:5b0c:b0:223:fa07:7bfb with SMTP id
+ o12-20020a17090a5b0c00b00223fa077bfbmr5401548pji.38.1674864399412; Fri, 27
+ Jan 2023 16:06:39 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1674682056.git.rgb@redhat.com> <f602429ce0f419c2abc3ae5a0e705e1368ac5650.1674682056.git.rgb@redhat.com>
+ <CAHC9VhQiy9vP7BdQk+SXG7gQKAqOAqbYtU+c9R0_ym0h4bgG7g@mail.gmail.com> <Y9RX0QhHKfWv3TGL@madcap2.tricolour.ca>
+In-Reply-To: <Y9RX0QhHKfWv3TGL@madcap2.tricolour.ca>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 27 Jan 2023 19:06:28 -0500
+Message-ID: <CAHC9VhSN+XSYGh0TBsCPftNvVNBN1JHugrrsp3gbF-in5S1PoA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] io_uring,audit: do not log IORING_OP_*GETXATTR
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Nov 2022 17:18:43 +0800, ye.xingchen@zte.com.cn wrote:
-> Avoid type casts that are needed for IS_ERR() and use
-> IS_ERR_VALUE() instead.
-> 
-> 
+On Fri, Jan 27, 2023 at 6:01 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> On 2023-01-27 17:43, Paul Moore wrote:
+> > On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> > > Getting XATTRs is not particularly interesting security-wise.
+> > >
+> > > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > > Fixes: a56834e0fafe ("io_uring: add fgetxattr and getxattr support")
+> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > > ---
+> > >  io_uring/opdef.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> >
+> > Depending on your security policy, fetching file data, including
+> > xattrs, can be interesting from a security perspective.  As an
+> > example, look at the SELinux file/getattr permission.
+> >
+> > https://github.com/SELinuxProject/selinux-notebook/blob/main/src/object_classes_permissions.md#common-file-permissions
+>
+> The intent here is to lessen the impact of audit operations.  Read and
+> Write were explicitly removed from io_uring auditing due to performance
+> concerns coupled with the denial of service implications from sheer
+> volume of records making other messages harder to locate.  Those
+> operations are still possible for syscall auditing but they are strongly
+> discouraged for normal use.
 
-Applied to kvm-x86 misc, thanks!
+We need to balance security needs and performance needs.  You are
+correct that general read() and write() operations are not audited,
+and generally not checked from a LSM perspective as the auditing and
+access control happens at open() time instead (access to fds is
+revalidated when they are passed).  However, in the case of getxattr
+and fgetxattr, these are not normal file read operations, and do not
+go through the same code path in the kernel; there is a reason why we
+have xattr_permission() and security_inode_getxattr().
 
-[1/1] KVM: x86: Replace IS_ERR() with IS_ERR_VALUE()
-      https://github.com/kvm-x86/linux/commit/2eb398df77a1
+We need to continue to audit IORING_OP_FGETXATTR and IORING_OP_GETXATTR.
 
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+-- 
+paul-moore.com
