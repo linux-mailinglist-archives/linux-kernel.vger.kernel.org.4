@@ -2,155 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5DC67FA55
-	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C33C67FA59
+	for <lists+linux-kernel@lfdr.de>; Sat, 28 Jan 2023 20:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbjA1TGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 14:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S233379AbjA1TJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 14:09:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjA1TGj (ORCPT
+        with ESMTP id S230012AbjA1TI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 14:06:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60762618F
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 11:06:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF9EF60BAA
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 19:06:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D81EC433EF;
-        Sat, 28 Jan 2023 19:06:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674932795;
-        bh=xsLOU0qakVmaxu0sULZCDDb1Co+IWv8ABQ8CyhVQTOY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=NGx/XQqa/2RoIFwP5wuS79QFjfK8IufPPzpov42YrJSnW5hFmqV7dWMlPERyJ1nmQ
-         IvxCQalwauVoeVq7ihrebfTndaf5PaKu7c56bHRFuoQRFulpBK3vXNwi9biLJiISb5
-         g8pDLOkd6iWURzjk5guh5CtcOdoL8lBf9jcl5R3eOFjzvl+HZcNBxeWVXSDnOkWuc0
-         NozHa5LmtwheUxF4wDLul0KIXapUB1dEY8TUCtxeg+/Mvg5DaRkfll0ySTjMBffVB1
-         KZz0rlw9xYzwCzTMjDaDh4Wzbzj97xpAlf5T1VrK3289JTNtcHtDAfDE7O5TdHKthL
-         Yqgk9WaH9/Hzg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DAE4F5C089F; Sat, 28 Jan 2023 11:06:34 -0800 (PST)
-Date:   Sat, 28 Jan 2023 11:06:34 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, sfr@canb.auug.org.au,
-        linux-kernel@vger.kernel.org
-Subject: Re: objtool warning for next-20221118
-Message-ID: <20230128190634.GA1043262@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221121145215.GF4001@paulmck-ThinkPad-P17-Gen-1>
- <20221122051605.4hcbslwxez2trdvt@treble>
- <Y3yJxQJ9DwxTx7km@hirez.programming.kicks-ass.net>
- <20221123002258.GR4001@paulmck-ThinkPad-P17-Gen-1>
- <20221123014812.7gptbvvndzemt5nc@treble>
- <20221123174951.GZ4001@paulmck-ThinkPad-P17-Gen-1>
- <20221123181941.fh4hrr3pazelwtxc@treble>
- <20221123191242.GG4001@paulmck-ThinkPad-P17-Gen-1>
- <20221123223214.gxwyrakfj7nbs2fb@treble>
- <20221123230612.GM4001@paulmck-ThinkPad-P17-Gen-1>
+        Sat, 28 Jan 2023 14:08:58 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5B924C99;
+        Sat, 28 Jan 2023 11:08:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674932937; x=1706468937;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jhxyAYLelEfckoe/PbY7Ef4L4nCPXQSheZkRYAjHAEs=;
+  b=fBBiGRmQ9qgkac44fSToAJtLT194iO/nbI3GxgDf+7zmMcoDCqraGGuS
+   Ps+fvfY1tgTso6dneYwUbVSXfCs11wMEXHxqUxojGFME5qK4gpDekredh
+   Uq4xOg4UY9Xnwro7SJNk224eMgGub/w72hj+pklKuF4ckHJkGZD5egG2a
+   Q234igauJ8tEd7izSSq+QFehmyApanOk0Z1F1Tl1Zzf2UhQ1aduh6827N
+   6xEPgkwY8LSo5ZNL0vFST39gAHn0lweU5R47/7x5DdcQX82o9cBvdZhs6
+   Ow5bAgGVTHQBbnMsKSK0jSUk+YsQ7K4xVGe+MVVlu36ucPBktKPQV/Lar
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="354634200"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="354634200"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 11:08:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="613562517"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="613562517"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 28 Jan 2023 11:08:48 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLqZD-00010e-11;
+        Sat, 28 Jan 2023 19:08:47 +0000
+Date:   Sun, 29 Jan 2023 03:07:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tejun Heo <tj@kernel.org>, torvalds@linux-foundation.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, brho@google.com, pjt@google.com,
+        derkling@google.com, haoluo@google.com, dvernet@meta.com,
+        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@meta.com,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH 27/30] sched_ext: Implement core-sched support
+Message-ID: <202301290223.0qWZoY9T-lkp@intel.com>
+References: <20230128001639.3510083-28-tj@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221123230612.GM4001@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230128001639.3510083-28-tj@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 03:06:12PM -0800, Paul E. McKenney wrote:
-> On Wed, Nov 23, 2022 at 02:32:14PM -0800, Josh Poimboeuf wrote:
-> > On Wed, Nov 23, 2022 at 11:12:42AM -0800, Paul E. McKenney wrote:
-> > > On Wed, Nov 23, 2022 at 10:19:41AM -0800, Josh Poimboeuf wrote:
-> > > > On Wed, Nov 23, 2022 at 09:49:51AM -0800, Paul E. McKenney wrote:
-> > > > > > > > Perhaps the best way would be to stick a REACHABLE annotation in
-> > > > > > > > arch_cpu_idle_dead() or something?
-> > > > > > > 
-> > > > > > > When I apply this on -next, I still get the objtool complaint.
-> > > > > > > Is there something else I should also be doing?
-> > > > > > 
-> > > > > > Silly GCC is folding the inline asm.  This works (but still doesn't seem
-> > > > > > like the right approach):
-> > > > > > 
-> > > > > > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-> > > > > > index 26e8f57c75ad..128e7d78fedf 100644
-> > > > > > --- a/arch/x86/kernel/process.c
-> > > > > > +++ b/arch/x86/kernel/process.c
-> > > > > > @@ -702,7 +702,7 @@ static void (*x86_idle)(void);
-> > > > > >  #ifndef CONFIG_SMP
-> > > > > >  static inline void play_dead(void)
-> > > > > >  {
-> > > > > > -	BUG();
-> > > > > > +	_BUG_FLAGS(ASM_UD2, 0, ASM_REACHABLE);
-> > > > > >  }
-> > > > > >  #endif
-> > > > > 
-> > > > > I tried this, and still get:
-> > > > > 
-> > > > > vmlinux.o: warning: objtool: do_idle+0x156: unreachable instruction
-> > > > > 
-> > > > > Maybe my gcc is haunted?
-> > > > 
-> > > > Weird, it worked for me.  I have
-> > > > 
-> > > >   gcc version 12.2.1 20220819 (Red Hat 12.2.1-2) (GCC)
-> > > 
-> > > Me, I have these, so quite a bit older:
-> > > 
-> > > gcc version 8.5.0 20210514 (Red Hat 8.5.0-15) (GCC)
-> > > gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1)
-> > > 
-> > > > and I can't really fathom why that wouldn't work.  Maybe it's a
-> > > > different issue?  The "unreachable instruction" warning is limited to
-> > > > one, so when a first warning gets fixed, a second warning might suddenly
-> > > > become visible.
-> > > > 
-> > > > Can you attach arch/x86/kernel/process.o?
-> > > 
-> > > Attached!
-> > 
-> > Hm, for whatever reason, that .o file is indeed missing the reachable
-> > annotation.  <scratches head>
-> 
-> There are at least three definitions.  Might I be getting the wrong one?
-> 
-> I have CONFIG_DEBUG_BUGVERBOSE=y and CONFIG_GENERIC_BUG=y, so I would
-> expect to be using the first one:
-> 
-> #define _BUG_FLAGS(ins, flags, extra)					\
-> do {									\
-> 	asm_inline volatile("1:\t" ins "\n"				\
-> 		     ".pushsection __bug_table,\"aw\"\n"		\
-> 		     "2:\t" __BUG_REL(1b) "\t# bug_entry::bug_addr\n"	\
-> 		     "\t"  __BUG_REL(%c0) "\t# bug_entry::file\n"	\
-> 		     "\t.word %c1"        "\t# bug_entry::line\n"	\
-> 		     "\t.word %c2"        "\t# bug_entry::flags\n"	\
-> 		     "\t.org 2b+%c3\n"					\
-> 		     ".popsection\n"					\
-> 		     extra						\
-> 		     : : "i" (__FILE__), "i" (__LINE__),		\
-> 			 "i" (flags),					\
-> 			 "i" (sizeof(struct bug_entry)));		\
-> } while (0)
-> 
-> > I confirmed the patch also fixes the warning with:
-> > 
-> >   gcc version 8.5.0 20210514 (Red Hat 8.5.0-10) (GCC)
-> > 
-> > No idea why it's not working for you... but maybe it doesn't matter as
-> > I'm still thinking we should go with a different approach.
-> 
-> OK, then I will await your update.
+Hi Tejun,
 
-Sorry to be a nag, but I am still seeing this.  Not a huge problem because
-I now filter it out so that it does not get in the way of other bugs,
-but I figured that I should follow up.
+I love your patch! Yet something to improve:
 
-							Thanx, Paul
+[auto build test ERROR on linux/master]
+[also build test ERROR on linus/master v6.2-rc5]
+[cannot apply to tip/sched/core tj-cgroup/for-next next-20230127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tejun-Heo/sched-Encapsulate-task-attribute-change-sequence-into-a-helper-macro/20230128-123001
+patch link:    https://lore.kernel.org/r/20230128001639.3510083-28-tj%40kernel.org
+patch subject: [PATCH 27/30] sched_ext: Implement core-sched support
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230129/202301290223.0qWZoY9T-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/750f973dd349cc5c3df29319b0ffae740738a9d2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tejun-Heo/sched-Encapsulate-task-attribute-change-sequence-into-a-helper-macro/20230128-123001
+        git checkout 750f973dd349cc5c3df29319b0ffae740738a9d2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash kernel/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from kernel/sched/build_policy.c:58:
+>> kernel/sched/ext.c:3349:25: error: initialization of 'int (*)(const struct btf_type *, const struct btf_member *)' from incompatible pointer type 'int (*)(const struct btf_type *, const struct btf_member *, const struct bpf_prog *)' [-Werror=incompatible-pointer-types]
+    3349 |         .check_member = bpf_scx_check_member,
+         |                         ^~~~~~~~~~~~~~~~~~~~
+   kernel/sched/ext.c:3349:25: note: (near initialization for 'bpf_sched_ext_ops.check_member')
+   kernel/sched/ext.c: In function 'scx_bpf_error_bstr':
+>> kernel/sched/ext.c:3906:16: error: variable 'bprintf_data' has initializer but incomplete type
+    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
+         |                ^~~~~~~~~~~~~~~~
+>> kernel/sched/ext.c:3906:51: error: 'struct bpf_bprintf_data' has no member named 'get_bin_args'
+    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
+         |                                                   ^~~~~~~~~~~~
+>> kernel/sched/ext.c:3906:66: warning: excess elements in struct initializer
+    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
+         |                                                                  ^~~~
+   kernel/sched/ext.c:3906:66: note: (near initialization for 'bprintf_data')
+>> kernel/sched/ext.c:3906:33: error: storage size of 'bprintf_data' isn't known
+    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
+         |                                 ^~~~~~~~~~~~
+>> kernel/sched/ext.c:3927:71: warning: passing argument 4 of 'bpf_bprintf_prepare' makes pointer from integer without a cast [-Wint-conversion]
+    3927 |         ret = bpf_bprintf_prepare(fmt, UINT_MAX, bufs->data, data__sz / 8,
+         |                                                              ~~~~~~~~~^~~
+         |                                                                       |
+         |                                                                       u32 {aka unsigned int}
+   In file included from include/linux/bpf_verifier.h:7,
+                    from kernel/sched/ext.c:3193:
+   include/linux/bpf.h:2800:31: note: expected 'u32 **' {aka 'unsigned int **'} but argument is of type 'u32' {aka 'unsigned int'}
+    2800 |                         u32 **bin_buf, u32 num_args);
+         |                         ~~~~~~^~~~~~~
+>> kernel/sched/ext.c:3936:9: error: too many arguments to function 'bpf_bprintf_cleanup'
+    3936 |         bpf_bprintf_cleanup(&bprintf_data);
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/bpf.h:2801:6: note: declared here
+    2801 | void bpf_bprintf_cleanup(void);
+         |      ^~~~~~~~~~~~~~~~~~~
+   kernel/sched/ext.c:3906:33: warning: unused variable 'bprintf_data' [-Wunused-variable]
+    3906 |         struct bpf_bprintf_data bprintf_data = { .get_bin_args = true };
+         |                                 ^~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +3349 kernel/sched/ext.c
+
+4c016c2bafb66b Tejun Heo 2023-01-27  3344  
+4c016c2bafb66b Tejun Heo 2023-01-27  3345  struct bpf_struct_ops bpf_sched_ext_ops = {
+4c016c2bafb66b Tejun Heo 2023-01-27  3346  	.verifier_ops = &bpf_scx_verifier_ops,
+4c016c2bafb66b Tejun Heo 2023-01-27  3347  	.reg = bpf_scx_reg,
+4c016c2bafb66b Tejun Heo 2023-01-27  3348  	.unreg = bpf_scx_unreg,
+4c016c2bafb66b Tejun Heo 2023-01-27 @3349  	.check_member = bpf_scx_check_member,
+4c016c2bafb66b Tejun Heo 2023-01-27  3350  	.init_member = bpf_scx_init_member,
+4c016c2bafb66b Tejun Heo 2023-01-27  3351  	.init = bpf_scx_init,
+4c016c2bafb66b Tejun Heo 2023-01-27  3352  	.name = "sched_ext_ops",
+4c016c2bafb66b Tejun Heo 2023-01-27  3353  };
+4c016c2bafb66b Tejun Heo 2023-01-27  3354  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
