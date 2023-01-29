@@ -2,89 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B4D67FCAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 04:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC5A67FCB8
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 05:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjA2DrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 22:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
+        id S230302AbjA2EMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 23:12:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjA2DrN (ORCPT
+        with ESMTP id S229436AbjA2EMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 22:47:13 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B44126
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 19:47:12 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4P4HJS4DG6z16MZW;
-        Sun, 29 Jan 2023 11:45:12 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sun, 29 Jan 2023 11:47:09 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Shakeel Butt <shakeelb@google.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Ma Wupeng <mawupeng1@huawei.com>
-Subject: [PATCH resend] mm: memcg: fix NULL pointer in mem_cgroup_track_foreign_dirty_slowpath()
-Date:   Sun, 29 Jan 2023 12:09:45 +0800
-Message-ID: <20230129040945.180629-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230129024451.121590-1-wangkefeng.wang@huawei.com>
-References: <20230129024451.121590-1-wangkefeng.wang@huawei.com>
+        Sat, 28 Jan 2023 23:12:45 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A946820069
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 20:12:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674965563; x=1706501563;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2gbhL4C0dsuascfNB2Cf58aoG5ppAOxbOutSsyOfwpE=;
+  b=WsaoixNTriB2Wlc08zNqHqZkha6w6XqdIft/L0uHBMC9E0hLWhwWKs/T
+   K+7rD5gjUV0e/9l1zZo4eSrmR6a5Zv3GXByPW8pP7qD4k1BPPfNY1E0uE
+   peaKGMzptxge2Cixln/HZjd7gQboUzXTBZ7ZKMILt/yKkrNhLaojI9xiV
+   VKQCIEiunVxST15ydODQ+RUVN1B8qOWbfzhp7dgAdqoXW4hpuztr+PtFG
+   AHD+rP/daE4ksJ2WBthuYYmSOKjZ4t3O5DKYs1cScAd1/UABC666w24/C
+   G/XcKtLgzlcE6OYSj6oKVQBN+OFj7wQgs/x9qBAIeEJA1WgB0wapYA0gU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="310982871"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="310982871"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 20:12:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="752416786"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="752416786"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jan 2023 20:12:41 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pLz3Y-0002SM-2K;
+        Sun, 29 Jan 2023 04:12:40 +0000
+Date:   Sun, 29 Jan 2023 12:11:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Devarsh Thakkar <devarsht@ti.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Aswath Govindraju <a-govindraju@ti.com>
+Subject: drivers/gpio/gpio-davinci.c:704:1: sparse: sparse: symbol
+ 'davinci_gpio_dev_pm_ops' was not declared. Should it be static?
+Message-ID: <202301291241.d3xh6GiJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As commit 18365225f044 ("hwpoison, memcg: forcibly uncharge LRU pages"),
-hwpoison will forcibly uncharg a LRU hwpoisoned page, the folio_memcg
-could be NULl, then, mem_cgroup_track_foreign_dirty_slowpath() could
-occurs a NULL pointer dereference, let's do not record the foreign
-writebacks for folio memcg is null in mem_cgroup_track_foreign_dirty()
-to fix it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c96618275234ad03d44eafe9f8844305bb44fda4
+commit: 0651a730924b172476f67c7c6e01e898f84cd8f3 gpio: davinci: Add support for system suspend/resume PM
+date:   6 months ago
+config: arm64-randconfig-s051-20230129 (https://download.01.org/0day-ci/archive/20230129/202301291241.d3xh6GiJ-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0651a730924b172476f67c7c6e01e898f84cd8f3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 0651a730924b172476f67c7c6e01e898f84cd8f3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpio/
 
-Reported-by: Ma Wupeng <mawupeng1@huawei.com>
-Fixes: 97b27821b485 ("writeback, memcg: Implement foreign dirty flushing")
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-resend: correct function name
- include/linux/memcontrol.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index eb6e5b18e1ad..35478695cabf 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -1688,10 +1688,13 @@ void mem_cgroup_track_foreign_dirty_slowpath(struct folio *folio,
- static inline void mem_cgroup_track_foreign_dirty(struct folio *folio,
- 						  struct bdi_writeback *wb)
- {
-+	struct mem_cgroup *memcg;
-+
- 	if (mem_cgroup_disabled())
- 		return;
- 
--	if (unlikely(&folio_memcg(folio)->css != wb->memcg_css))
-+	memcg = folio_memcg(folio);
-+	if (unlikely(memcg && &memcg->css != wb->memcg_css))
- 		mem_cgroup_track_foreign_dirty_slowpath(folio, wb);
- }
- 
+sparse warnings: (new ones prefixed by >>)
+>> drivers/gpio/gpio-davinci.c:704:1: sparse: sparse: symbol 'davinci_gpio_dev_pm_ops' was not declared. Should it be static?
+
+vim +/davinci_gpio_dev_pm_ops +704 drivers/gpio/gpio-davinci.c
+
+   699	
+   700	DEFINE_SIMPLE_DEV_PM_OPS(davinci_gpio_dev_pm_ops, davinci_gpio_suspend,
+   701				 davinci_gpio_resume);
+   702	
+   703	static const struct of_device_id davinci_gpio_ids[] = {
+ > 704		{ .compatible = "ti,keystone-gpio", keystone_gpio_get_irq_chip},
+   705		{ .compatible = "ti,am654-gpio", keystone_gpio_get_irq_chip},
+   706		{ .compatible = "ti,dm6441-gpio", davinci_gpio_get_irq_chip},
+   707		{ /* sentinel */ },
+   708	};
+   709	MODULE_DEVICE_TABLE(of, davinci_gpio_ids);
+   710	
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
