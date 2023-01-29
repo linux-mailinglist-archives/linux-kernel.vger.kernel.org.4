@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DF167FFA7
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 15:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4DC67FFA8
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 15:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjA2O6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 09:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
+        id S231717AbjA2O64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 09:58:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235033AbjA2O6l (ORCPT
+        with ESMTP id S230076AbjA2O6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 09:58:41 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C01F18AA9
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:58:24 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso6527365wmq.5
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:58:23 -0800 (PST)
+        Sun, 29 Jan 2023 09:58:54 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ECD13D73
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:58:32 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bk16so8903320wrb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:58:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WMDHyvlfs7O/f9b0aUY8Mk44RRiJoj0uuEZqCuWERA0=;
-        b=U8qeYGmLBlCJYcOTVLISYohR2qxsDZ1bIGwMgo+ozYZisTCvdpTSOb+t/WMHoRR1xR
-         CIu0lhxN1GyLL7Adix2Na+kt1XMA9UWCiplJwRRzK1eHOw4SDJZxltOzFu7nwTMF8JDg
-         U/nY34BrQ9N4EQKCWyd0xYNUGK4DOoY2Mu0jwnROimBUWeGtEbde4p8e0RWkeSADfiOL
-         j6ve/Q1cwndyr/rS3VI5Qe5GWqY31T0es+MlK2mTSsDjoGuqu4tNTsh8H9DnHWuUhaaL
-         7FkJQyxSuTJUfTQFnrmcoPHlsQW2o78Od9icSoPJG6H7aMKfJcsUw6P8ydjUOAHmKfYK
-         W+lw==
+        bh=9kObtkesHDp3/jvTg21bOv7yEj2AdVjYtEj97EYzt4U=;
+        b=nn0+dCEGm10fKkUm78VcoLjWaZpJwjB4bHUDywbWtUJCDHsf9ZMfrZn7txLxgBs9Ya
+         YdPXo9SQ+k8eD1CjU27DoAvh2/vmPaoFkA277Qc0y2rg4Ewzsvr5sOk/laThLk4gAxBk
+         jym2s4C2NBr4aRrilPO8hRrkt7V3l0UnqccpY4lMoecjNiGraLBAa6+B3m955BcFiqAI
+         QBJfndZQBZq96BZofLXKZR/poud2Issp72OvQYWgLBpwbaVfpPy2INosxL1JHX/qWDvA
+         lVcEtre89LNAim+itY+jAsdDYWfFftOJXJN7h+Co+1BY2lk8LkhBvpawJ2jsaM+LLZgo
+         4NlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WMDHyvlfs7O/f9b0aUY8Mk44RRiJoj0uuEZqCuWERA0=;
-        b=UbVCqNb4fBN7TnNqJKJEo1HurgQJx7/suI9TCYHYFIyAg8+VFzyn2Wz7ln2Op81KBs
-         He4CTEiHvp59xDPlg/BUKk7bYDZ/wCoL0UWJzLQRWYmPT9R8BTYmsccsYmZUtmyPyEDO
-         rhNZ992uuhBn0o2COY8ecZFZfQtsqT4BTyMZSWp7NMvbNvow7zK/YJMn6lKjivIdNNkK
-         WoAAuhnoCZY0BZpZLYWBqUjiiFiTzx0FfeYqfiIZ/HNxSDC+rg9IMFgRhrUi0m7cxX1A
-         uQhlt7RguNAxhSlxWvXE1LZXUN5LFPSxIxPBoksFLjNyZEIPt8SJBspOzWal+PhiNNHC
-         xcew==
-X-Gm-Message-State: AFqh2krPM1F7TRScJ82j1ZyfNObaxJBC0PzZxHguO8dy+AJfl07btaiu
-        a3KR4B5aNRX94nQfmb978uaWcKhgqmw=
-X-Google-Smtp-Source: AMrXdXvYTZTjqlLz3EJJYwiJBw9BoA6b3l1bQ66eqnoy1Om4WnKvjoucU/asJUo8sN+ZGPDRUKzO5A==
-X-Received: by 2002:a05:600c:3b85:b0:3db:35e3:baf6 with SMTP id n5-20020a05600c3b8500b003db35e3baf6mr8664147wms.4.1675004303614;
-        Sun, 29 Jan 2023 06:58:23 -0800 (PST)
+        bh=9kObtkesHDp3/jvTg21bOv7yEj2AdVjYtEj97EYzt4U=;
+        b=pQWQLkduwJwDPDe/ogwWiTdtL7TcqZsBfE9jmRyx5fBvy9bTV+vm2niKR5GZBudhZk
+         zc3iQtcimdvwouBkAQZ/IamkBSjSKLcu8hHfFU9xMxdOpEaWrRGgDsxCzD1w7kRYaFry
+         6KhdMs4lY+IedoMbmYj7dpLbJFs+fE3Sb4eKKqNd8CeRrTbro4jA4vxmTUHPHvh7twtx
+         yNMBjQv8MF5qsjXeAoV+bxVrdgNc/DeftYUeOYDOaBrxoTjk9mxFxjB5ywVCfyrp+cWH
+         HsTeE8GJMmwdZg61iwITiTotMNUPrRM+gvUjjLD7u33uyP8iHA/0rTh+Lmir23SA46/R
+         0sdg==
+X-Gm-Message-State: AO0yUKUuUTne0c4+w3S00pbtwzJND45ar80NKRtJrIyqPZiRQ7qMt0Kv
+        gH6ODVFq7T+1jnfHSuNz9bQ=
+X-Google-Smtp-Source: AK7set8AHcPD4BiH1iMgc/5WOn6Ubc4u3IdJ3/2Oux877cLj7U+eeFDQzreKKiVTdpHqUxfPGzC7Tg==
+X-Received: by 2002:adf:ba4a:0:b0:2bf:dfd5:98c9 with SMTP id t10-20020adfba4a000000b002bfdfd598c9mr974249wrg.7.1675004312434;
+        Sun, 29 Jan 2023 06:58:32 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
-        by smtp.gmail.com with ESMTPSA id f7-20020a05600c44c700b003d995a704fdsm10008658wmo.33.2023.01.29.06.58.22
+        by smtp.gmail.com with ESMTPSA id o4-20020a05600c2e0400b003dc4ecfc4d7sm3892938wmf.29.2023.01.29.06.58.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 06:58:23 -0800 (PST)
-Date:   Sun, 29 Jan 2023 15:58:21 +0100
+        Sun, 29 Jan 2023 06:58:31 -0800 (PST)
+Date:   Sun, 29 Jan 2023 15:58:30 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 04/10] staging: rtl8192e: Remove unused constants from enum
- rt_customer_id
-Message-ID: <108d80f0ae1006b716205dce0ca9a7ee597ba1dd.1675003608.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 05/10] staging: rtl8192e: Rename BaseBand_Config_PHY_REG and
+ BaseBand_Config_AGC_TAB
+Message-ID: <6d26690c7c2c68cc7c766c981293bd8e40999ed0.1675003608.git.philipp.g.hortmann@gmail.com>
 References: <cover.1675003608.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,54 +71,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused constants from enum rt_customer_id. A part of the constants
-would need to be renamed because of CamelCase.
+Rename constants BaseBand_Config_PHY_REG to BB_CONFIG_PHY_REG and
+BaseBand_Config_AGC_TAB to BB_CONFIG_AGC_TAB to avoid CamelCase which is
+not accepted by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h | 22 --------------------
- 1 file changed, 22 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h  | 4 ++--
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index d0c88d68b60b..17fc69c839d3 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -145,35 +145,13 @@ enum rt_rf_type_819xu {
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+index 3e223151d4b7..858cfc203f13 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h
+@@ -8,8 +8,8 @@
+ #define R8180_HW
  
- enum rt_customer_id {
- 	RT_CID_DEFAULT	  = 0,
--	RT_CID_8187_ALPHA0      = 1,
--	RT_CID_8187_SERCOMM_PS  = 2,
--	RT_CID_8187_HW_LED      = 3,
--	RT_CID_8187_NETGEAR     = 4,
--	RT_CID_WHQL	     = 5,
- 	RT_CID_819x_CAMEO       = 6,
- 	RT_CID_819x_RUNTOP      = 7,
--	RT_CID_819x_Senao       = 8,
- 	RT_CID_TOSHIBA	  = 9,
- 	RT_CID_819X_NETCORE     = 10,
- 	RT_CID_Nettronix	= 11,
- 	RT_CID_DLINK	    = 12,
- 	RT_CID_PRONET	   = 13,
--	RT_CID_COREGA	   = 14,
--	RT_CID_819x_ALPHA       = 15,
--	RT_CID_819x_Sitecom     = 16,
--	RT_CID_CCX	      = 17,
--	RT_CID_819x_Lenovo      = 18,
--	RT_CID_819x_QMI	 = 19,
--	RT_CID_819x_Edimax_Belkin = 20,
--	RT_CID_819x_Sercomm_Belkin = 21,
--	RT_CID_819x_CAMEO1 = 22,
--	RT_CID_819x_MSI = 23,
--	RT_CID_819x_Acer = 24,
--	RT_CID_819x_HP	= 27,
--	RT_CID_819x_CLEVO = 28,
--	RT_CID_819x_Arcadyan_Belkin = 29,
--	RT_CID_819x_SAMSUNG = 30,
--	RT_CID_819x_WNC_COREGA = 31,
+ enum baseband_config {
+-	BaseBand_Config_PHY_REG = 0,
+-	BaseBand_Config_AGC_TAB = 1,
++	BB_CONFIG_PHY_REG = 0,
++	BB_CONFIG_AGC_TAB = 1,
  };
  
- enum reset_type {
+ #define	RTL8187_REQT_READ	0xc0
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+index 456b7ca73073..cbda027656dc 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+@@ -342,13 +342,13 @@ static void _rtl92e_phy_config_bb(struct net_device *dev, u8 ConfigType)
+ 		Rtl819XPHY_REGArray_Table = Rtl819XPHY_REG_1T2RArray;
+ 	}
+ 
+-	if (ConfigType == BaseBand_Config_PHY_REG) {
++	if (ConfigType == BB_CONFIG_PHY_REG) {
+ 		for (i = 0; i < PHY_REGArrayLen; i += 2) {
+ 			rtl92e_set_bb_reg(dev, Rtl819XPHY_REGArray_Table[i],
+ 					  bMaskDWord,
+ 					  Rtl819XPHY_REGArray_Table[i+1]);
+ 		}
+-	} else if (ConfigType == BaseBand_Config_AGC_TAB) {
++	} else if (ConfigType == BB_CONFIG_AGC_TAB) {
+ 		for (i = 0; i < AGCTAB_ArrayLen; i += 2) {
+ 			rtl92e_set_bb_reg(dev, Rtl819XAGCTAB_Array_Table[i],
+ 					  bMaskDWord,
+@@ -526,12 +526,12 @@ static bool _rtl92e_bb_config_para_file(struct net_device *dev)
+ 			return rtStatus;
+ 	}
+ 	rtl92e_set_bb_reg(dev, rFPGA0_RFMOD, bCCKEn|bOFDMEn, 0x0);
+-	_rtl92e_phy_config_bb(dev, BaseBand_Config_PHY_REG);
++	_rtl92e_phy_config_bb(dev, BB_CONFIG_PHY_REG);
+ 
+ 	dwRegValue = rtl92e_readl(dev, CPU_GEN);
+ 	rtl92e_writel(dev, CPU_GEN, (dwRegValue|CPU_GEN_BB_RST));
+ 
+-	_rtl92e_phy_config_bb(dev, BaseBand_Config_AGC_TAB);
++	_rtl92e_phy_config_bb(dev, BB_CONFIG_AGC_TAB);
+ 
+ 	if (priv->ic_cut  > VERSION_8190_BD) {
+ 		if (priv->rf_type == RF_2T4R)
 -- 
 2.39.1
 
