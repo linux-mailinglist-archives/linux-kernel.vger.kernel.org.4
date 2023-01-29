@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D86668004A
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D81F68004D
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235051AbjA2Qqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 11:46:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
+        id S234868AbjA2Qv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 11:51:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234832AbjA2Qqc (ORCPT
+        with ESMTP id S229549AbjA2Qv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 11:46:32 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F331F4B1;
-        Sun, 29 Jan 2023 08:46:31 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id bk15so25729125ejb.9;
-        Sun, 29 Jan 2023 08:46:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ipNjMFDOfKGLfHyf1k1golbZwgkTbBlkE21IcQ2tRhA=;
-        b=VcHpTdvwYeHSTBsKcMyw2IEfeHunmpFTD2YNYqRYPLipJVOB7zx3eTgVIhUksxZRMo
-         2FRszn+Y5hqHpyu8wseSQwwoAjiAvNoVAOMl/kYhtes3kukIb4wuYziLLj/xyzPOqodr
-         2i+ERpDojAzPmsLUqLtkDnE8WbMcNKT4mHkntLmGn24SdksMbWyjykLYx9x/k9VI3F0P
-         ZWd1QSkP51uARWtsU/QzuaC+EdGFihX/EKbJLC9lj6lhdM67BcxGyjVd43qzFuGvzVv/
-         0wADUw516+XebBZ0PalVS/kSG49S0fLEYV2JRs8e4DT1354pZTxxSJmlajCM5taVc3/g
-         uvjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ipNjMFDOfKGLfHyf1k1golbZwgkTbBlkE21IcQ2tRhA=;
-        b=IRHwsHxSpazUOsB1JaZjXSHoJ23McOTXUwBXCPu6JnGsl8uP7eBG6KGcget1oAakkm
-         RQdv/TgIoKEnmZzLpr3y8fjh+GXtu6eB5SncUNhCivCQcKLBHfgDuzAb8lBxBq0cSVTG
-         mLY3FqxCnwsvGCpvoZyHmms/u6ClJgiSNClID7q9XZ8SqeWSSsVsXsu0csSSpJX7xkRH
-         yI+gm2dO/bvnpXaonnRGxu7vC3Et54vh+O0nSLReSlXvOAJkaCsoEQMy6zDEYpR92hWK
-         LBCfSOrL4Ucw2n/NXjVnXzN74Ow4cJMNXJ7S+sfAyPcW9mA49kODmgfi63xlZr3S9WDH
-         wiFw==
-X-Gm-Message-State: AO0yUKUhY1WPbAyU0H2gxREiAA3LmZlTC/lqeg/RPVMYqbXVXmkuWqU2
-        /9TO+i2pTS1uJvKJlt7pvAw=
-X-Google-Smtp-Source: AK7set+cwaONDsO3l+ywOz/puIRUQg/y26+a+XYSIK4D93xEzD6pcdqrQ/2iZVHU282pyKUw53oiGg==
-X-Received: by 2002:a17:907:2a94:b0:882:123d:eed with SMTP id fl20-20020a1709072a9400b00882123d0eedmr4605902ejc.51.1675010790032;
-        Sun, 29 Jan 2023 08:46:30 -0800 (PST)
-Received: from [192.168.0.131] ([194.183.54.57])
-        by smtp.gmail.com with ESMTPSA id kk4-20020a170907766400b0087943d525e1sm4695080ejc.215.2023.01.29.08.46.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Jan 2023 08:46:29 -0800 (PST)
-Message-ID: <0a3ed159-1714-8982-6ca6-5e70bf1b7418@gmail.com>
-Date:   Sun, 29 Jan 2023 17:46:27 +0100
+        Sun, 29 Jan 2023 11:51:26 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C3112872;
+        Sun, 29 Jan 2023 08:51:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1675011067; bh=km46yd4qIJBVuNQprXNORGM4DbSKBCYP5qjK7u3Uo7U=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=LDB76N1ZFdvY3bHbDvaas79pQlyu7Em5GWPlssN48JqqYphO//qIpZBWmzUU+lDRA
+         ywsbhcQoHr7Xm/j/Mnc9RFeABo38ejNaQflGwKuRWN3HKhKDEnF0zATMZs5gpWzzkl
+         vjKsBDER+QOpOLDpmwjBM3nJvic2SLM8rjP5WAdmGNeVoAVVZDtkPkVLmguOYlttkU
+         18DUNvq2na9ZvZbUGSYm+aMQ0aTxQ3qd+qM8A36PAhTJb7VR5HTGdqUsUvWlrC8ZvQ
+         VKP5Z0MJTkFqRw5/y7fFV23zf92zWYD+Sqn+vF79eURhyO/p7btC05CzYmglQk6Mz9
+         vIiBCV54VYCtQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MuUjC-1oUkxd2f90-00rWTH; Sun, 29
+ Jan 2023 17:51:07 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-edac@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/amd81*1: Remove "\n" from MODULE_AUTHOR
+Date:   Sun, 29 Jan 2023 17:50:54 +0100
+Message-Id: <20230129165054.1675554-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v16 2/2] leds: flash: mt6370: Add MediaTek MT6370
- flashlight support
-Content-Language: en-US
-To:     ChiaEn Wu <chiaen@richtek.com>, pavel@ucw.cz, lee@kernel.org,
-        matthias.bgg@gmail.com, andriy.shevchenko@linux.intel.com
-Cc:     peterwu.pub@gmail.com, cy_huang@richtek.com,
-        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        szunichen@gmail.com, Alice Chen <alice_chen@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>
-References: <cover.1673886245.git.chiaen_wu@richtek.com>
- <7a6ac0051789831a7a53c2f3b66010fc0f1e5395.1673886245.git.chiaen_wu@richtek.com>
-From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
-In-Reply-To: <7a6ac0051789831a7a53c2f3b66010fc0f1e5395.1673886245.git.chiaen_wu@richtek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:XEQm93g/nsQ4EoQrU94Xx5wNw3FiUrqb9lqs0Cw2r+bE3ZAJyg5
+ 0MhNnirDszcv6TUrrNboJqeRTP/LWC9Qk1ZSmsPsUkjBSZxjoSiooziw2VsOO2GxIoVFNi2
+ uD8ebWPTqOs/TxSyS6F1TFJequsoDfWchDIPgwWiqp2THYYOMd7qwuTM5urlzlkfBP9BMmV
+ IhLfXqFMRzJzOBEkE71QQ==
+UI-OutboundReport: notjunk:1;M01:P0:zr5rt1gYX6g=;rSGxwWl/S/WqZbyg67Fw8I96Fux
+ jVLSeGC7lUsoBQgii8PA+Q+E/OAIUrCoYlVJXNZK4VIpe/TEpbminEgKTJUC01ZGNld3v1HFT
+ ux8xh42NG22y0ORCzph3gZIcA/YKgY3i/lg/oSvN9zq16LpPEdFvvIYgx+qTsnTVFn/N7otx4
+ MQ7AOIoxW8igKkY9fmoyd9oskWyTa3uBBy7+5pb7XPj5AAi+PKyk3yRIByIsfLFcQlTQBIefN
+ uOgshz+KAGD8Yfhnf+Pl9xpv3EDCA4mNiRnNL9L2GQgUQbf8PkdyZugP6cpjfaytBKqXWVSWX
+ V7ZcMdKwep8EJTzvKB/SeRyAk3mgExS+sa44eka+8oE2WBhB4MsaIVDsSJjUZ35QbxERiPbut
+ 1xq1CN8SFNrNTX+mR8pyF68vwASnzg0j46qvhZwbogePGmwEJ+ULdhFbQS0jqKvjruYDo5J5B
+ xVHryW57A5zXOyee8HNeDBQwjvF8UBYkbC9w/XhxEUYfQPgOedC7kUYsekLndeoHuMOT9HNhM
+ 4KDyFpiZDqMMPpKSQ/5JVITlLnfqoSR1Bdc2X3sW8p4C42c3CA4583PgrZOcBZgFtXKcfeOGP
+ /McnvHYtbw2Y8Bj0PaM+mhPfbbx0PLBkxsYIh4H5tqHXKkBWVfrv35763Ph8crfwfsGlec9+2
+ LfFfjG5Nfx+c6iOOsVFBXG7+bkmRHxBv0VOnTPm/osnx/vfFOiDaUwKLrzntPZXfVLm6tiSB2
+ s7wIZBgzMC1xOjEfYqWv1f7+2aJBAnzuRI7sR88DYQv/K9/ot9DJEyoX7NSpxKsPZlDRxA0du
+ Y+uJky1YM1Ccy8UaH5qVppP5We9+c9fykEgz1tAlTFNnJ7WyuUemxXLILaQYjhzi550+Uta8A
+ 2oBLgqED5zrCmBoO2siOA2KdV7hGVzLB2MhqH+fVHKBULTGuYVFSQZmo2UyXtRYhhWu+3bbuM
+ I63N3k6sWp/yKjVq5EH85BbxfLw=
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,28 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ChiaEn,
+MODULE_AUTHOR strings don't usually include a newline character.
 
-On 1/17/23 09:53, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> The MediaTek MT6370 is a highly-integrated smart power management IC,
-> which includes a single cell Li-Ion/Li-Polymer switching battery
-> charger, a USB Type-C & Power Delivery (PD) controller, dual Flash
-> LED current sources, a RGB LED driver, a backlight WLED driver,
-> a display bias driver and a general LDO for portable devices.
-> 
-> Add support for the MT6370 Flash LED driver. Flash LED in MT6370
-> has 2 channels and support torch/strobe mode.
-> 
-> Co-developed-by: Alice Chen <alice_chen@richtek.com>
-> Signed-off-by: Alice Chen <alice_chen@richtek.com>
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/edac/amd8111_edac.c | 2 +-
+ drivers/edac/amd8131_edac.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+diff --git a/drivers/edac/amd8111_edac.c b/drivers/edac/amd8111_edac.c
+index 7508aa416ddbd..ca718f63fcbcd 100644
+=2D-- a/drivers/edac/amd8111_edac.c
++++ b/drivers/edac/amd8111_edac.c
+@@ -593,5 +593,5 @@ module_init(amd8111_edac_init);
+ module_exit(amd8111_edac_exit);
 
--- 
-Best regards,
-Jacek Anaszewski
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>\n");
++MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>");
+ MODULE_DESCRIPTION("AMD8111 HyperTransport I/O Hub EDAC kernel module");
+diff --git a/drivers/edac/amd8131_edac.c b/drivers/edac/amd8131_edac.c
+index 1693537109826..28610ba514f4d 100644
+=2D-- a/drivers/edac/amd8131_edac.c
++++ b/drivers/edac/amd8131_edac.c
+@@ -354,5 +354,5 @@ module_init(amd8131_edac_init);
+ module_exit(amd8131_edac_exit);
+
+ MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>\n");
++MODULE_AUTHOR("Cao Qingtao <qingtao.cao@windriver.com>");
+ MODULE_DESCRIPTION("AMD8131 HyperTransport PCI-X Tunnel EDAC kernel modul=
+e");
+=2D-
+2.39.0
+
