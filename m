@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF27A67FEE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9DD67FEE9
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjA2MeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 07:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S232759AbjA2Meu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 07:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjA2MeQ (ORCPT
+        with ESMTP id S230240AbjA2Meq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 07:34:16 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7204121A3A
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:34:14 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id v10so8525229edi.8
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:34:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yC1ZVzAzDf/aBZibreOVSzWXlxaYIBd7WvOisdNT7VA=;
-        b=qioVjfNFel+z8e1jsIAR4Xn72T1hGd4nypq3J3AXlahG4IAoERmpJsKfTiv3WNQy7Z
-         zFFGaR6KrrVqWUgk+rKp0RMnYXaBgXq0vYc84MvZbatoTYzTPXM3sQv80LJmDF7yYFLI
-         i1wl08URz3cjse6mbslWFKmVAv70rWX7YVBBqNJQNnluaMiGzIG8nDFDUG1Op8KaPPU/
-         q8tgNLdeB+dgeCH9b+wcxduKrhCjb+ia9noW9SGr2L5Bj3CAMz4T00r/JNTo1kkueluR
-         +V6/bHItfKm0TJj7PEWwTK1bL/xtSgpaANpl9UIHzoIMGZmRCbOY9Akk7NVeiQ1MZ3SJ
-         EcFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yC1ZVzAzDf/aBZibreOVSzWXlxaYIBd7WvOisdNT7VA=;
-        b=reytFumc8YTCPnFjQwpeFH8ILIUnfX1s7PuBiN0p9G4qIUZVyQ//TYoblDZW3Tb2AU
-         kJ07S4GUvqE7ttkIlGCsndQeYCoYq0THocX/wyTk00DTFh0f6QHzfL/xc7E3AkZrztVZ
-         RhAgxMMz+DZ/zIaQ/4bvcmwmh+GDknyMhdwyfKMCQbcqFTENcbq9DOnxgMoqTfpGNOmM
-         CfYktEExW4AwItWU82aMTkm7ythC7tjq2x3nKruZtJQM1oUu+/gQE3vUzPmyMYyDyvQk
-         d9pPTR05aJVhykHoDUp5OIxetRWw9AVlhzRznhIoUOFFMi0sJRLoRHxZzAWIzcmcd5xo
-         hcyA==
-X-Gm-Message-State: AFqh2kqRO0Qs1fEkAU/mSrl1kUClj8qNBXR7Vdfzmlx6o1nck6Z6Ohnp
-        nZB2W4ec7zOM61C5auL32sQc22ozjXxI1jqLUV//Aw==
-X-Google-Smtp-Source: AMrXdXumZIj7SGhctuNfaDc2qWvtYehKUwqt8979HMLFD3CVyFWnjV0PLsHmeH1Uj9pYMdi3GForP1iAC/77hwhazLY=
-X-Received: by 2002:a05:6402:1008:b0:499:f0f:f788 with SMTP id
- c8-20020a056402100800b004990f0ff788mr8081610edu.25.1674995652901; Sun, 29 Jan
- 2023 04:34:12 -0800 (PST)
+        Sun, 29 Jan 2023 07:34:46 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4668422001
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:34:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1674995677; bh=gQt9VX1KvePgNEJAJdcWhPr0Jz5WN6TRoAAoW9znZzs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=SLpHvAsjJ3SNOYugkehJl3+gRnBB6gZXIN7L7DX9xyIxkNHxYXOROtXbqfQpEYBud
+         PkdAKQr7DxjmGg9CuZJaVWDYC/GvBLlTk+cd6jmMEDOsdkrwzoSf2Tj1o+Z8GuY59d
+         y0qfBWJRgOWnnAvC4sc9FF3P9L+6wBRouWiXM6psRUteq1nd6tHjwrACPQJ93p/MCo
+         RGvH+ylI7jvMq5iSanUQ8LSD/6/2PlKmU6Wsykks4ILXAlKm0OS10+xq+5vBcmi6km
+         kJjDlKJ48oM09EE6iH68fwGlvYzeQdLzFVW1DqS7YSkV/bvnxaCy0jfxSw2FliuQKf
+         wm/QDZCETm5pg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mz9Ux-1oQikB3vOt-00wE9X; Sun, 29
+ Jan 2023 13:34:37 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] checkpatch.pl: Relax commit ID check to allow more than 12 chars
+Date:   Sun, 29 Jan 2023 13:34:31 +0100
+Message-Id: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-9-atishp@rivosinc.com>
-In-Reply-To: <20230127182558.2416400-9-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sun, 29 Jan 2023 18:04:01 +0530
-Message-ID: <CAAhSdy1RK=ambgNYDdKYW-+qVE--Wv8=9vrxLe48u7_DL6gF1w@mail.gmail.com>
-Subject: Re: [PATCH v3 08/14] RISC-V: KVM: Add SBI PMU extension support
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:To8aw2cJRT9HKi99D3nDKzAF7HB6D3EVKkUCpVvmnu4s8/G9skO
+ 9B70RmrjYJKUhi7Cq1oIIPOgavukG58D2bG4pjslG1ylrMYIRtczTCW+uFzmhRB7m89+F+x
+ t5OOy7w5QfcO5ocAofHzlv3/ZuHksA3+pGvzEWGYuRHnx8V0vg5ZlvEjiIxfEsPBmKMgbo+
+ BQTa7776vfouTVrzMUHEQ==
+UI-OutboundReport: notjunk:1;M01:P0:Y8aGokvwFWc=;kCLUfMKfd2LdofXYZe7mqHXvUga
+ QJi5uKVtbXRUMmtsqDWJIdRfTkz+KrHFbMt8aigVlWkAvPwvEhwsIRH1LGDM9YFB5fDSGO/Yg
+ PZ8R3eaT4agmYz+spbIPlGLrQBmwL1Yw6Jm7jWrhUECL0+mycgd4+j3EJpZWzvCWTS7Kp+Xye
+ cSVJ0uA9RCTIF1q/upBId6PUvpJxVF2YF8s+mJHDUywSVTwNyBNC8KgDyoEXHsKGD5Ry35SDX
+ o1Q47g8gcXwzO5EitHiyzZlDiMFsPXWJMLrXPWE6aA0cKnSNZEm8+ZbdPJR+9NK3R2sTHC0T6
+ uvoByI7d988cJmv9d4pNLTVi0fChdgKA7WTsthT3T3z4cu4iX9KMlPBEQa9wNIrijLM2I5dpj
+ 7gk+ge+xtAbR1jczRJG3L0LSM1jP54da1r/OoH+he4/1k1awIdrauwsf+KH6yAAA3JN/6AQhn
+ cGFBKW/EriloXIMOKFBFt844knPm1cCLJfbmCYiIvKQqQP+Z1jWebux1FT5pnxxL8eSGwFrdl
+ KAzZq3N7BzN9IcX8a+sIh5W+qt+psNJzsJlADv9LoUwM53eq8CbekmdqTHorckQ3kwzUZPg8h
+ DUVP9nDjLHIOQ/wsV/mxA7BD86J6Ox1GZgbrpaajlEKh74tOLBKO6ABpqWnu6m7Af++0BCWCx
+ UN/uv6iNiEZ5St7Ma+RmT5ra7aP8iNCIGvCOm1A+YWudRwzSNywTqEYD6bVyrprUhvN/Qx1QB
+ gRt7hnXQsj+p4Y0nKs12uJGKYkF5r2TVMifQmsyF8jlteup07sy8vyqWC9zp/BkKlRFufvhdQ
+ 1pyt89R9G7f+lXl2tcFC/DKiZDtIkKWNgD02jerZzjLg1KeT5XW6roouhalvfWdblY0Md5DfJ
+ R2CLHFWJKs1QnBwNXP5r7LBPPeMr/J2jzb9WX9AtFHodqKzdK6W7FlTZ9JF49v30f3PYwkCXz
+ OsPPf7xnyFuC+R9ndPPpa6XGbmg=
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,160 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> SBI PMU extension allows KVM guests to configure/start/stop/query about
-> the PMU counters in virtualized enviornment as well.
->
-> In order to allow that, KVM implements the entire SBI PMU extension.
->
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+By now, `git log --pretty=3D%h` (on my copy of linux.git) prints commit
+hashes with 13 digits, because of the number of objects.
 
-Looks good to me.
+Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ scripts/checkpatch.pl | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Anup
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 78cc595b98ce1..3a2c8b5426191 100755
+=2D-- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3177,7 +3177,7 @@ sub process {
+ 				$tag_case =3D 0 if $tag eq "Fixes:";
+ 				$tag_space =3D 0 if ($line =3D~ /^fixes:? [0-9a-f]{5,} ($balanced_par=
+ens)/i);
 
-> ---
->  arch/riscv/kvm/Makefile       |  2 +-
->  arch/riscv/kvm/vcpu_sbi.c     | 11 +++++
->  arch/riscv/kvm/vcpu_sbi_pmu.c | 86 +++++++++++++++++++++++++++++++++++
->  3 files changed, 98 insertions(+), 1 deletion(-)
->  create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
->
-> diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
-> index 5de1053..278e97c 100644
-> --- a/arch/riscv/kvm/Makefile
-> +++ b/arch/riscv/kvm/Makefile
-> @@ -25,4 +25,4 @@ kvm-y += vcpu_sbi_base.o
->  kvm-y += vcpu_sbi_replace.o
->  kvm-y += vcpu_sbi_hsm.o
->  kvm-y += vcpu_timer.o
-> -kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
-> +kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o vcpu_sbi_pmu.o
-> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-> index aa42da6..04a3b4b 100644
-> --- a/arch/riscv/kvm/vcpu_sbi.c
-> +++ b/arch/riscv/kvm/vcpu_sbi.c
-> @@ -20,6 +20,16 @@ static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
->  };
->  #endif
->
-> +#ifdef CONFIG_RISCV_PMU_SBI
-> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
-> +#else
-> +static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
-> +       .extid_start = -1UL,
-> +       .extid_end = -1UL,
-> +       .handler = NULL,
-> +};
-> +#endif
-> +
->  static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
->         &vcpu_sbi_ext_v01,
->         &vcpu_sbi_ext_base,
-> @@ -28,6 +38,7 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
->         &vcpu_sbi_ext_rfence,
->         &vcpu_sbi_ext_srst,
->         &vcpu_sbi_ext_hsm,
-> +       &vcpu_sbi_ext_pmu,
->         &vcpu_sbi_ext_experimental,
->         &vcpu_sbi_ext_vendor,
->  };
-> diff --git a/arch/riscv/kvm/vcpu_sbi_pmu.c b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> new file mode 100644
-> index 0000000..73aab30
-> --- /dev/null
-> +++ b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> @@ -0,0 +1,86 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2023 Rivos Inc
-> + *
-> + * Authors:
-> + *     Atish Patra <atishp@rivosinc.com>
-> + */
-> +
-> +#include <linux/errno.h>
-> +#include <linux/err.h>
-> +#include <linux/kvm_host.h>
-> +#include <asm/csr.h>
-> +#include <asm/sbi.h>
-> +#include <asm/kvm_vcpu_sbi.h>
-> +
-> +static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> +                                  struct kvm_vcpu_sbi_ext_data *edata,
-> +                                  struct kvm_cpu_trap *utrap)
-> +{
-> +       int ret = 0;
-> +       struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +       unsigned long funcid = cp->a6;
-> +       uint64_t temp;
-> +
-> +       /* Return not supported if PMU is not initialized */
-> +       if (!kvpmu->init_done)
-> +               return -EINVAL;
-> +
-> +       switch (funcid) {
-> +       case SBI_EXT_PMU_NUM_COUNTERS:
-> +               ret = kvm_riscv_vcpu_pmu_num_ctrs(vcpu, edata);
-> +               break;
-> +       case SBI_EXT_PMU_COUNTER_GET_INFO:
-> +               ret = kvm_riscv_vcpu_pmu_ctr_info(vcpu, cp->a0, edata);
-> +               break;
-> +       case SBI_EXT_PMU_COUNTER_CFG_MATCH:
-> +#if defined(CONFIG_32BIT)
-> +               temp = ((uint64_t)cp->a5 << 32) | cp->a4;
-> +#else
-> +               temp = cp->a4;
-> +#endif
-> +               /*
-> +                * This can fail if perf core framework fails to create an event.
-> +                * Forward the error to the user space because its an error happened
-> +                * within host kernel. The other option would be convert this to
-> +                * an SBI error and forward to the guest.
-> +                */
-> +               ret = kvm_riscv_vcpu_pmu_ctr_cfg_match(vcpu, cp->a0, cp->a1,
-> +                                                      cp->a2, cp->a3, temp, edata);
-> +               break;
-> +       case SBI_EXT_PMU_COUNTER_START:
-> +#if defined(CONFIG_32BIT)
-> +               temp = ((uint64_t)cp->a4 << 32) | cp->a3;
-> +#else
-> +               temp = cp->a3;
-> +#endif
-> +               ret = kvm_riscv_vcpu_pmu_ctr_start(vcpu, cp->a0, cp->a1, cp->a2,
-> +                                                  temp, edata);
-> +               break;
-> +       case SBI_EXT_PMU_COUNTER_STOP:
-> +               ret = kvm_riscv_vcpu_pmu_ctr_stop(vcpu, cp->a0, cp->a1, cp->a2, edata);
-> +               break;
-> +       case SBI_EXT_PMU_COUNTER_FW_READ:
-> +               ret = kvm_riscv_vcpu_pmu_ctr_read(vcpu, cp->a0, edata);
-> +               break;
-> +       default:
-> +               edata->err_val = SBI_ERR_NOT_SUPPORTED;
-> +       }
-> +
-> +       return ret;
-> +}
-> +
-> +unsigned long kvm_sbi_ext_pmu_probe(struct kvm_vcpu *vcpu)
-> +{
-> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +
-> +       return kvpmu->init_done;
-> +}
-> +
-> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
-> +       .extid_start = SBI_EXT_PMU,
-> +       .extid_end = SBI_EXT_PMU,
-> +       .handler = kvm_sbi_ext_pmu_handler,
-> +       .probe = kvm_sbi_ext_pmu_probe,
-> +};
-> --
-> 2.25.1
->
+-				$id_length =3D 0 if ($orig_commit =3D~ /^[0-9a-f]{12}$/i);
++				$id_length =3D 0 if ($orig_commit =3D~ /^[0-9a-f]{12,16}$/i);
+ 				$id_case =3D 0 if ($orig_commit !~ /[A-F]/);
+
+ 				# Always strip leading/trailing parens then double quotes if existing
+@@ -3194,7 +3194,7 @@ sub process {
+ 			if ($ctitle ne $title || $tag_case || $tag_space ||
+ 			    $id_length || $id_case || !$title_has_quotes) {
+ 				if (WARN("BAD_FIXES_TAG",
+-				     "Please use correct Fixes: style 'Fixes: <12 chars of sha1> (\"<=
+title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
++				     "Please use correct Fixes: style 'Fixes: <12-16 chars of sha1> (=
+\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
+ 				    $fix) {
+ 					$fixed[$fixlinenr] =3D "Fixes: $cid (\"$ctitle\")";
+ 				}
+=2D-
+2.39.0
+
