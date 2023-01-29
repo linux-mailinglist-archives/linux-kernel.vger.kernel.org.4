@@ -2,48 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFF36802D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 00:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC556802BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 00:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235477AbjA2XLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 18:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
+        id S235203AbjA2XLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 18:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA2XLE (ORCPT
+        with ESMTP id S229476AbjA2XLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 18:11:04 -0500
+        Sun, 29 Jan 2023 18:11:02 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD181ABEE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB09D1ADC2;
         Sun, 29 Jan 2023 15:10:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=R2A7akXKvYokl+Oel/FVm+wy+mVQyUawn1NxgC81E2Q=; b=zSp0BbbBdQr9EfVSvgvP22raaU
-        3by1qWSActPJchHujFog9jq8U9bD09KWALit/PoDIWAXB62QJZJ7FqEV0cDK8NtPUqBY4euVkJm7C
-        5aZ6ygloTkJoZZeRFycGe7YG7eUgxn6dHifeRyGGC4j59taGhIqdN+bVKSSwdKo0d+znj30e3JG94
-        IE8+My/lfubfvwFpq9mBu0qC5BILedVg+M05sz4ObNr3Ra4JJKy1hxj70InMvlSZatYjk8jeZMBs9
-        sdfl1rVr2jluVTgYQhVtb31TtB3jQ6ZrbCYjDpkRCGZ2s3IQ7mYkXQmdXWG79I8we7VOAfQ5gEmLy
-        W3B9eVRg==;
+        bh=hSVWChRDN+7R1q+eUNK+va/B9M97WY52yd2h5OskBp0=; b=yUv0VVi7AzeHRNOF30ohLHw5zu
+        /EpIh2+vV2zjgdq1rrJGU4FU7Sqo3t43U7K9gOpKF2ubTcAqhQMdBAKf9YG61i3DRGLxb36dWzOn4
+        TXERwYxHRQiAAy1QS4TbBkPJjGjssSK0oXUUkhaBVLbi5lWSYk/zdo8NTqj2ZWLFRTJGDjfc9SXCo
+        hEyl0nMWxtlsPZdxJLXFFxiBry9YP3GQ2ymXTqnEEmFkjSyqg7W/xed6YUo1nzs/vQ3P3iMno43XC
+        fR+uzw5JFLfCHWvOnYuSJPKJh1y/QGWAtpfsfWLJYQRzO6RHZG7xApoodt05CnWQeQCNvBJpPuS5d
+        KUkWt7MA==;
 Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMGp7-0020M2-63; Sun, 29 Jan 2023 23:10:57 +0000
+        id 1pMGp7-0020M2-IK; Sun, 29 Jan 2023 23:10:57 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 2/9] Documentation: driver-api: correct spelling
-Date:   Sun, 29 Jan 2023 15:10:46 -0800
-Message-Id: <20230129231053.20863-3-rdunlap@infradead.org>
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH 3/9] Documentation: hwmon: correct spelling
+Date:   Sun, 29 Jan 2023 15:10:47 -0800
+Message-Id: <20230129231053.20863-4-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
 References: <20230129231053.20863-1-rdunlap@infradead.org>
@@ -58,324 +51,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/driver-api/ as reported
+Correct spelling problems for Documentation/hwmon/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: linux-media@vger.kernel.org
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Vishal Verma <vishal.l.verma@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: nvdimm@lists.linux.dev
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: dmaengine@vger.kernel.org
-Cc: Song Liu <song@kernel.org>
-Cc: linux-raid@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
 ---
- Documentation/driver-api/dma-buf.rst                  |    2 +-
- Documentation/driver-api/dmaengine/client.rst         |    2 +-
- Documentation/driver-api/dmaengine/dmatest.rst        |    2 +-
- Documentation/driver-api/hsi.rst                      |    4 ++--
- Documentation/driver-api/io-mapping.rst               |    4 ++--
- Documentation/driver-api/md/md-cluster.rst            |    2 +-
- Documentation/driver-api/md/raid5-cache.rst           |    2 +-
- Documentation/driver-api/media/drivers/vidtv.rst      |    2 +-
- Documentation/driver-api/media/dtv-demux.rst          |    2 +-
- Documentation/driver-api/media/v4l2-subdev.rst        |    4 ++--
- Documentation/driver-api/mei/nfc.rst                  |    2 +-
- Documentation/driver-api/nfc/nfc-hci.rst              |    2 +-
- Documentation/driver-api/nvdimm/nvdimm.rst            |    2 +-
- Documentation/driver-api/nvdimm/security.rst          |    2 +-
- Documentation/driver-api/pin-control.rst              |    2 +-
- Documentation/driver-api/pldmfw/index.rst             |    2 +-
- Documentation/driver-api/serial/driver.rst            |    2 +-
- Documentation/driver-api/surface_aggregator/ssh.rst   |    2 +-
- Documentation/driver-api/thermal/intel_powerclamp.rst |    2 +-
- Documentation/driver-api/usb/dwc3.rst                 |    2 +-
- Documentation/driver-api/usb/usb3-debug-port.rst      |    2 +-
- 21 files changed, 24 insertions(+), 24 deletions(-)
+ Documentation/hwmon/aht10.rst            |    2 +-
+ Documentation/hwmon/aspeed-pwm-tacho.rst |    2 +-
+ Documentation/hwmon/corsair-psu.rst      |    2 +-
+ Documentation/hwmon/gsc-hwmon.rst        |    6 +++---
+ Documentation/hwmon/hwmon-kernel-api.rst |    4 ++--
+ Documentation/hwmon/ltc2978.rst          |    2 +-
+ Documentation/hwmon/max6697.rst          |    2 +-
+ Documentation/hwmon/menf21bmc.rst        |    2 +-
+ Documentation/hwmon/pmbus-core.rst       |    2 +-
+ Documentation/hwmon/sht4x.rst            |    2 +-
+ Documentation/hwmon/smm665.rst           |    2 +-
+ Documentation/hwmon/stpddc60.rst         |    2 +-
+ Documentation/hwmon/vexpress.rst         |    2 +-
+ Documentation/hwmon/via686a.rst          |    2 +-
+ 14 files changed, 17 insertions(+), 17 deletions(-)
 
-diff -- a/Documentation/driver-api/dma-buf.rst b/Documentation/driver-api/dma-buf.rst
---- a/Documentation/driver-api/dma-buf.rst
-+++ b/Documentation/driver-api/dma-buf.rst
-@@ -264,7 +264,7 @@ through memory management dependencies w
- randomly hangs workloads until the timeout kicks in. Workloads, which from
- userspace's perspective, do not contain a deadlock.  In such a mixed fencing
- architecture there is no single entity with knowledge of all dependencies.
--Thefore preventing such deadlocks from within the kernel is not possible.
-+Therefore preventing such deadlocks from within the kernel is not possible.
+diff -- a/Documentation/hwmon/aspeed-pwm-tacho.rst b/Documentation/hwmon/aspeed-pwm-tacho.rst
+--- a/Documentation/hwmon/aspeed-pwm-tacho.rst
++++ b/Documentation/hwmon/aspeed-pwm-tacho.rst
+@@ -10,7 +10,7 @@ Authors:
+ Description:
+ ------------
+ This driver implements support for ASPEED AST2400/2500 PWM and Fan Tacho
+-controller. The PWM controller supports upto 8 PWM outputs. The Fan tacho
++controller. The PWM controller supports up to 8 PWM outputs. The Fan tacho
+ controller supports up to 16 tachometer inputs.
  
- The only solution to avoid dependencies loops is by not allowing indefinite
- fences in the kernel. This means:
-diff -- a/Documentation/driver-api/hsi.rst b/Documentation/driver-api/hsi.rst
---- a/Documentation/driver-api/hsi.rst
-+++ b/Documentation/driver-api/hsi.rst
-@@ -4,7 +4,7 @@ High Speed Synchronous Serial Interface
- Introduction
- ---------------
+ The driver provides the following sensor accesses in sysfs:
+diff -- a/Documentation/hwmon/gsc-hwmon.rst b/Documentation/hwmon/gsc-hwmon.rst
+--- a/Documentation/hwmon/gsc-hwmon.rst
++++ b/Documentation/hwmon/gsc-hwmon.rst
+@@ -31,7 +31,7 @@ Temperature Monitoring
  
--High Speed Syncronous Interface (HSI) is a fullduplex, low latency protocol,
-+High Speed Synchronous Interface (HSI) is a full duplex, low latency protocol,
- that is optimized for die-level interconnect between an Application Processor
- and a Baseband chipset. It has been specified by the MIPI alliance in 2003 and
- implemented by multiple vendors since then.
-@@ -52,7 +52,7 @@ hsi-char Device
+ Temperatures are measured with 12-bit or 10-bit resolution and are scaled
+ either internally or by the driver depending on the GSC version and firmware.
+-The values returned by the driver reflect millidegree Celcius:
++The values returned by the driver reflect millidegree Celsius:
+ 
+ tempX_input                Measured temperature.
+ tempX_label                Name of temperature input.
+@@ -41,8 +41,8 @@ PWM Output Control
  ------------------
  
- Each port automatically registers a generic client driver called hsi_char,
--which provides a charecter device for userspace representing the HSI port.
-+which provides a character device for userspace representing the HSI port.
- It can be used to communicate via HSI from userspace. Userspace may
- configure the hsi_char device using the following ioctl commands:
+ The GSC features 1 PWM output that operates in automatic mode where the
+-PWM value will be scalled depending on 6 temperature boundaries.
+-The tempeature boundaries are read-write and in millidegree Celcius and the
++PWM value will be scaled depending on 6 temperature boundaries.
++The tempeature boundaries are read-write and in millidegree Celsius and the
+ read-only PWM values range from 0 (off) to 255 (full speed).
+ Fan speed will be set to minimum (off) when the temperature sensor reads
+ less than pwm1_auto_point1_temp and maximum when the temperature sensor
+diff -- a/Documentation/hwmon/sht4x.rst b/Documentation/hwmon/sht4x.rst
+--- a/Documentation/hwmon/sht4x.rst
++++ b/Documentation/hwmon/sht4x.rst
+@@ -37,7 +37,7 @@ Sysfs entries
+ -------------
  
-diff -- a/Documentation/driver-api/mei/nfc.rst b/Documentation/driver-api/mei/nfc.rst
---- a/Documentation/driver-api/mei/nfc.rst
-+++ b/Documentation/driver-api/mei/nfc.rst
-@@ -3,7 +3,7 @@
- MEI NFC
- -------
+ =============== ============================================
+-temp1_input     Measured temperature in millidegrees Celcius
++temp1_input     Measured temperature in millidegrees Celsius
+ humidity1_input Measured humidity in %H
+ update_interval The minimum interval for polling the sensor,
+                 in milliseconds. Writable. Must be at least
+diff -- a/Documentation/hwmon/stpddc60.rst b/Documentation/hwmon/stpddc60.rst
+--- a/Documentation/hwmon/stpddc60.rst
++++ b/Documentation/hwmon/stpddc60.rst
+@@ -39,7 +39,7 @@ output voltage as a positive or negative
+ in 50mV steps. This means that the absolute values of the limits will change
+ when the commanded output voltage changes. Also, care should be taken when
+ writing to those limits since in the worst case the commanded output voltage
+-could change at the same time as the limit is written to, wich will lead to
++could change at the same time as the limit is written to, which will lead to
+ unpredictable results.
  
--Some Intel 8 and 9 Serieses chipsets supports NFC devices connected behind
-+Some Intel 8 and 9 Series chipsets support NFC devices connected behind
- the Intel Management Engine controller.
- MEI client bus exposes the NFC chips as NFC phy devices and enables
- binding with Microread and NXP PN544 NFC device driver from the Linux NFC
-diff -- a/Documentation/driver-api/nfc/nfc-hci.rst b/Documentation/driver-api/nfc/nfc-hci.rst
---- a/Documentation/driver-api/nfc/nfc-hci.rst
-+++ b/Documentation/driver-api/nfc/nfc-hci.rst
-@@ -150,7 +150,7 @@ LLC
  
- Communication between the CPU and the chip often requires some link layer
- protocol. Those are isolated as modules managed by the HCI layer. There are
--currently two modules : nop (raw transfert) and shdlc.
-+currently two modules : nop (raw transfer) and shdlc.
- A new llc must implement the following functions::
+diff -- a/Documentation/hwmon/smm665.rst b/Documentation/hwmon/smm665.rst
+--- a/Documentation/hwmon/smm665.rst
++++ b/Documentation/hwmon/smm665.rst
+@@ -180,7 +180,7 @@ in9_crit_alarm		AIN1 critical alarm
+ in10_crit_alarm		AIN2 critical alarm
  
-   struct nfc_llc_ops {
-diff -- a/Documentation/driver-api/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
---- a/Documentation/driver-api/serial/driver.rst
-+++ b/Documentation/driver-api/serial/driver.rst
-@@ -24,7 +24,7 @@ console support.
- Console Support
- ---------------
+ temp1_input		Chip temperature
+-temp1_min		Mimimum chip temperature
++temp1_min		Minimum chip temperature
+ temp1_max		Maximum chip temperature
+ temp1_crit		Critical chip temperature
+ temp1_crit_alarm	Temperature critical alarm
+diff -- a/Documentation/hwmon/via686a.rst b/Documentation/hwmon/via686a.rst
+--- a/Documentation/hwmon/via686a.rst
++++ b/Documentation/hwmon/via686a.rst
+@@ -58,7 +58,7 @@ representable value is around 2600 RPM.
  
--The serial core provides a few helper functions.  This includes identifing
-+The serial core provides a few helper functions.  This includes identifying
- the correct port structure (via uart_get_console()) and decoding command line
- arguments (uart_parse_options()).
+ Voltage sensors (also known as IN sensors) report their values in volts.
+ An alarm is triggered if the voltage has crossed a programmable minimum
+-or maximum limit. Voltages are internally scalled, so each voltage channel
++or maximum limit. Voltages are internally scaled, so each voltage channel
+ has a different resolution and range.
  
-diff -- a/Documentation/driver-api/surface_aggregator/ssh.rst b/Documentation/driver-api/surface_aggregator/ssh.rst
---- a/Documentation/driver-api/surface_aggregator/ssh.rst
-+++ b/Documentation/driver-api/surface_aggregator/ssh.rst
-@@ -77,7 +77,7 @@ after the frame structure and before the
- its own CRC (over all payload bytes). If the payload is not present (i.e.
- the frame has ``LEN=0``), the CRC of the payload is still present and will
- evaluate to ``0xffff``. The |LEN| field does not include any of the CRCs, it
--equals the number of bytes inbetween the CRC of the frame and the CRC of the
-+equals the number of bytes between the CRC of the frame and the CRC of the
- payload.
+ If an alarm triggers, it will remain triggered until the hardware register
+diff -- a/Documentation/hwmon/aht10.rst b/Documentation/hwmon/aht10.rst
+--- a/Documentation/hwmon/aht10.rst
++++ b/Documentation/hwmon/aht10.rst
+@@ -38,7 +38,7 @@ Sysfs entries
+ -------------
  
- Additionally, the following fixed two-byte sequences are used:
-diff -- a/Documentation/driver-api/nvdimm/nvdimm.rst b/Documentation/driver-api/nvdimm/nvdimm.rst
---- a/Documentation/driver-api/nvdimm/nvdimm.rst
-+++ b/Documentation/driver-api/nvdimm/nvdimm.rst
-@@ -82,7 +82,7 @@ LABEL:
-   Metadata stored on a DIMM device that partitions and identifies
-   (persistently names) capacity allocated to different PMEM namespaces. It
-   also indicates whether an address abstraction like a BTT is applied to
--  the namepsace.  Note that traditional partition tables, GPT/MBR, are
-+  the namespace.  Note that traditional partition tables, GPT/MBR, are
-   layered on top of a PMEM namespace, or an address abstraction like BTT
-   if present, but partition support is deprecated going forward.
+ =============== ============================================
+-temp1_input     Measured temperature in millidegrees Celcius
++temp1_input     Measured temperature in millidegrees Celsius
+ humidity1_input Measured humidity in %H
+ update_interval The minimum interval for polling the sensor,
+                 in milliseconds. Writable. Must be at
+diff -- a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+--- a/Documentation/hwmon/corsair-psu.rst
++++ b/Documentation/hwmon/corsair-psu.rst
+@@ -40,7 +40,7 @@ This driver implements the sysfs interfa
+ interface of the HXi and RMi series.
+ These power supplies provide access to a micro-controller with 2 attached
+ temperature sensors, 1 fan rpm sensor, 4 sensors for volt levels, 4 sensors for
+-power usage and 4 sensors for current levels and addtional non-sensor information
++power usage and 4 sensors for current levels and additional non-sensor information
+ like uptimes.
  
-diff -- a/Documentation/driver-api/nvdimm/security.rst b/Documentation/driver-api/nvdimm/security.rst
---- a/Documentation/driver-api/nvdimm/security.rst
-+++ b/Documentation/driver-api/nvdimm/security.rst
-@@ -83,7 +83,7 @@ passed in.
- 6. Freeze
- ---------
- The freeze operation does not require any keys. The security config can be
--frozen by a user with root privelege.
-+frozen by a user with root privilege.
+ Sysfs entries
+diff -- a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+--- a/Documentation/hwmon/hwmon-kernel-api.rst
++++ b/Documentation/hwmon/hwmon-kernel-api.rst
+@@ -57,7 +57,7 @@ register/unregister functions::
+ hwmon_device_register_with_groups registers a hardware monitoring device.
+ The first parameter of this function is a pointer to the parent device.
+ The name parameter is a pointer to the hwmon device name. The registration
+-function wil create a name sysfs attribute pointing to this name.
++function will create a name sysfs attribute pointing to this name.
+ The drvdata parameter is the pointer to the local driver data.
+ hwmon_device_register_with_groups will attach this pointer to the newly
+ allocated hwmon device. The pointer can be retrieved by the driver using
+@@ -360,7 +360,7 @@ functions is used.
+ The header file linux/hwmon-sysfs.h provides a number of useful macros to
+ declare and use hardware monitoring sysfs attributes.
  
- 7. Disable
- ----------
-diff -- a/Documentation/driver-api/thermal/intel_powerclamp.rst b/Documentation/driver-api/thermal/intel_powerclamp.rst
---- a/Documentation/driver-api/thermal/intel_powerclamp.rst
-+++ b/Documentation/driver-api/thermal/intel_powerclamp.rst
-@@ -85,7 +85,7 @@ migrated, unless the CPU is taken offlin
- belong to the offlined CPUs will be terminated immediately.
+-In many cases, you can use the exsting define DEVICE_ATTR or its variants
++In many cases, you can use the existing define DEVICE_ATTR or its variants
+ DEVICE_ATTR_{RW,RO,WO} to declare such attributes. This is feasible if an
+ attribute has no additional context. However, in many cases there will be
+ additional information such as a sensor index which will need to be passed
+diff -- a/Documentation/hwmon/ltc2978.rst b/Documentation/hwmon/ltc2978.rst
+--- a/Documentation/hwmon/ltc2978.rst
++++ b/Documentation/hwmon/ltc2978.rst
+@@ -333,7 +333,7 @@ temp[N]_input		Measured temperature.
+ 			- On LTC3883, temp1 reports an external temperature,
+ 			  and temp2 reports the chip temperature.
  
- Running as SCHED_FIFO and relatively high priority, also allows such
--scheme to work for both preemptable and non-preemptable kernels.
-+scheme to work for both preemptible and non-preemptible kernels.
- Alignment of idle time around jiffies ensures scalability for HZ
- values. This effect can be better visualized using a Perf timechart.
- The following diagram shows the behavior of kernel thread
-diff -- a/Documentation/driver-api/usb/dwc3.rst b/Documentation/driver-api/usb/dwc3.rst
---- a/Documentation/driver-api/usb/dwc3.rst
-+++ b/Documentation/driver-api/usb/dwc3.rst
-@@ -18,7 +18,7 @@ controller which can be configured in on
- 	4. Hub configuration
+-temp[N]_min		Mimimum temperature.
++temp[N]_min		Minimum temperature.
  
- Linux currently supports several versions of this controller. In all
--likelyhood, the version in your SoC is already supported. At the time
-+likelihood, the version in your SoC is already supported. At the time
- of this writing, known tested versions range from 2.02a to 3.10a. As a
- rule of thumb, anything above 2.02a should work reliably well.
+ 			LTC2972, LTC2974, LCT2977, LTM2980, LTC2978,
+ 			LTC2979, and LTM2987 only.
+diff -- a/Documentation/hwmon/max6697.rst b/Documentation/hwmon/max6697.rst
+--- a/Documentation/hwmon/max6697.rst
++++ b/Documentation/hwmon/max6697.rst
+@@ -73,7 +73,7 @@ Description
+ This driver implements support for several MAX6697 compatible temperature sensor
+ chips. The chips support one local temperature sensor plus four, six, or seven
+ remote temperature sensors. Remote temperature sensors are diode-connected
+-thermal transitors, except for MAX6698 which supports three diode-connected
++thermal transistors, except for MAX6698 which supports three diode-connected
+ thermal transistors plus three thermistors in addition to the local temperature
+ sensor.
  
-diff -- a/Documentation/driver-api/usb/usb3-debug-port.rst b/Documentation/driver-api/usb/usb3-debug-port.rst
---- a/Documentation/driver-api/usb/usb3-debug-port.rst
-+++ b/Documentation/driver-api/usb/usb3-debug-port.rst
-@@ -48,7 +48,7 @@ kernel boot parameter::
- 	"earlyprintk=xdbc"
+diff -- a/Documentation/hwmon/menf21bmc.rst b/Documentation/hwmon/menf21bmc.rst
+--- a/Documentation/hwmon/menf21bmc.rst
++++ b/Documentation/hwmon/menf21bmc.rst
+@@ -7,7 +7,7 @@ Supported chips:
  
- If there are multiple xHCI controllers in your system, you can
--append a host contoller index to this kernel parameter. This
-+append a host controller index to this kernel parameter. This
- index starts from 0.
+ 	  Prefix: 'menf21bmc_hwmon'
  
- Current design doesn't support DbC runtime suspend/resume. As
-diff -- a/Documentation/driver-api/dmaengine/client.rst b/Documentation/driver-api/dmaengine/client.rst
---- a/Documentation/driver-api/dmaengine/client.rst
-+++ b/Documentation/driver-api/dmaengine/client.rst
-@@ -175,7 +175,7 @@ The details of these operations are:
-     driver can ask for the pointer, maximum size and the currently used size of
-     the metadata and can directly update or read it.
+-	  Adresses scanned: -
++	  Addresses scanned: -
  
--    Becasue the DMA driver manages the memory area containing the metadata,
-+    Because the DMA driver manages the memory area containing the metadata,
-     clients must make sure that they do not try to access or get the pointer
-     after their transfer completion callback has run for the descriptor.
-     If no completion callback has been defined for the transfer, then the
-diff -- a/Documentation/driver-api/dmaengine/dmatest.rst b/Documentation/driver-api/dmaengine/dmatest.rst
---- a/Documentation/driver-api/dmaengine/dmatest.rst
-+++ b/Documentation/driver-api/dmaengine/dmatest.rst
-@@ -89,7 +89,7 @@ The following command returns the state
+ Author: Andreas Werner <andreas.werner@men.de>
  
-     % cat /sys/module/dmatest/parameters/run
+diff -- a/Documentation/hwmon/pmbus-core.rst b/Documentation/hwmon/pmbus-core.rst
+--- a/Documentation/hwmon/pmbus-core.rst
++++ b/Documentation/hwmon/pmbus-core.rst
+@@ -174,7 +174,7 @@ Read byte from page <page>, register <re
+   int (*read_word_data)(struct i2c_client *client, int page, int phase,
+                         int reg);
  
--To wait for test completion userpace can poll 'run' until it is false, or use
-+To wait for test completion userspace can poll 'run' until it is false, or use
- the wait parameter. Specifying 'wait=1' when loading the module causes module
- initialization to pause until a test run has completed, while reading
- /sys/module/dmatest/parameters/wait waits for any running test to complete
-diff -- a/Documentation/driver-api/io-mapping.rst b/Documentation/driver-api/io-mapping.rst
---- a/Documentation/driver-api/io-mapping.rst
-+++ b/Documentation/driver-api/io-mapping.rst
-@@ -44,7 +44,7 @@ This _wc variant returns a write-combini
- used with mappings created by io_mapping_create_wc()
+-Read word from page <page>, phase <pase>, register <reg>. If the chip does not
++Read word from page <page>, phase <phase>, register <reg>. If the chip does not
+ support multiple phases, the phase parameter can be ignored. If the chip
+ supports multiple phases, a phase value of 0xff indicates all phases.
  
- Temporary mappings are only valid in the context of the caller. The mapping
--is not guaranteed to be globaly visible.
-+is not guaranteed to be globally visible.
- 
- io_mapping_map_local_wc() has a side effect on X86 32bit as it disables
- migration to make the mapping code work. No caller can rely on this side
-@@ -78,7 +78,7 @@ variant, although this may be significan
- 				unsigned long offset)
- 
- This works like io_mapping_map_atomic/local_wc() except it has no side
--effects and the pointer is globaly visible.
-+effects and the pointer is globally visible.
- 
- The mappings are released with::
- 
-diff -- a/Documentation/driver-api/media/drivers/vidtv.rst b/Documentation/driver-api/media/drivers/vidtv.rst
---- a/Documentation/driver-api/media/drivers/vidtv.rst
-+++ b/Documentation/driver-api/media/drivers/vidtv.rst
-@@ -28,7 +28,7 @@ Currently, it consists of:
-   takes parameters at initialization that will dictate how the simulation
-   behaves.
- 
--- Code reponsible for encoding a valid MPEG Transport Stream, which is then
-+- Code responsible for encoding a valid MPEG Transport Stream, which is then
-   passed to the bridge driver. This fake stream contains some hardcoded content.
-   For now, we have a single, audio-only channel containing a single MPEG
-   Elementary Stream, which in turn contains a SMPTE 302m encoded sine-wave.
-diff -- a/Documentation/driver-api/media/dtv-demux.rst b/Documentation/driver-api/media/dtv-demux.rst
---- a/Documentation/driver-api/media/dtv-demux.rst
-+++ b/Documentation/driver-api/media/dtv-demux.rst
-@@ -24,7 +24,7 @@ unless this is fixed in the HW platform.
- 
- The demux kABI only controls front-ends regarding to their connections with
- demuxes; the kABI used to set the other front-end parameters, such as
--tuning, are devined via the Digital TV Frontend kABI.
-+tuning, are defined via the Digital TV Frontend kABI.
- 
- The functions that implement the abstract interface demux should be defined
- static or module private and registered to the Demux core for external
-diff -- a/Documentation/driver-api/pin-control.rst b/Documentation/driver-api/pin-control.rst
---- a/Documentation/driver-api/pin-control.rst
-+++ b/Documentation/driver-api/pin-control.rst
-@@ -836,7 +836,7 @@ hardware and shall be put into different
- 
- Depending on the exact HW register design, some functions exposed by the
- GPIO subsystem may call into the pinctrl subsystem in order to
--co-ordinate register settings across HW modules. In particular, this may
-+coordinate register settings across HW modules. In particular, this may
- be needed for HW with separate GPIO and pin controller HW modules, where
- e.g. GPIO direction is determined by a register in the pin controller HW
- module rather than the GPIO HW module.
-diff -- a/Documentation/driver-api/pldmfw/index.rst b/Documentation/driver-api/pldmfw/index.rst
---- a/Documentation/driver-api/pldmfw/index.rst
-+++ b/Documentation/driver-api/pldmfw/index.rst
-@@ -20,7 +20,7 @@ Overview of the ``pldmfw`` library
- 
- The ``pldmfw`` library is intended to be used by device drivers for
- implementing device flash update based on firmware files following the PLDM
--firwmare file format.
-+firmware file format.
- 
- It is implemented using an ops table that allows device drivers to provide
- the underlying device specific functionality.
-diff -- a/Documentation/driver-api/md/md-cluster.rst b/Documentation/driver-api/md/md-cluster.rst
---- a/Documentation/driver-api/md/md-cluster.rst
-+++ b/Documentation/driver-api/md/md-cluster.rst
-@@ -65,7 +65,7 @@ There are three groups of locks for mana
- 2.3 new-device management
- -------------------------
- 
-- A single lock: "no-new-dev" is used to co-ordinate the addition of
-+ A single lock: "no-new-dev" is used to coordinate the addition of
-  new devices - this must be synchronized across the array.
-  Normally all nodes hold a concurrent-read lock on this device.
- 
-diff -- a/Documentation/driver-api/md/raid5-cache.rst b/Documentation/driver-api/md/raid5-cache.rst
---- a/Documentation/driver-api/md/raid5-cache.rst
-+++ b/Documentation/driver-api/md/raid5-cache.rst
-@@ -81,7 +81,7 @@ The write-through and write-back cache u
- is organized as a simple write log. The log consists of 'meta data' and 'data'
- pairs. The meta data describes the data. It also includes checksum and sequence
- ID for recovery identification. Data can be IO data and parity data. Data is
--checksumed too. The checksum is stored in the meta data ahead of the data. The
-+checksummed too. The checksum is stored in the meta data ahead of the data. The
- checksum is an optimization because MD can write meta and data freely without
- worry about the order. MD superblock has a field pointed to the valid meta data
- of log head.
-diff -- a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
---- a/Documentation/driver-api/media/v4l2-subdev.rst
-+++ b/Documentation/driver-api/media/v4l2-subdev.rst
-@@ -321,7 +321,7 @@ response to video node operations. This
- hardware from applications. For complex devices, finer-grained control of the
- device than what the video nodes offer may be required. In those cases, bridge
- drivers that implement :ref:`the media controller API <media_controller>` may
--opt for making the subdevice operations directly accessible from userpace.
-+opt for making the subdevice operations directly accessible from userspace.
- 
- Device nodes named ``v4l-subdev``\ *X* can be created in ``/dev`` to access
- sub-devices directly. If a sub-device supports direct userspace configuration
-@@ -574,7 +574,7 @@ issues with subdevice drivers that let t
- as they expect to receive the appropriate state as a parameter. To help the
- conversion of subdevice drivers to a managed active state without having to
- convert all callers at the same time, an additional wrapper layer has been
--added to v4l2_subdev_call(), which handles the NULL case by geting and locking
-+added to v4l2_subdev_call(), which handles the NULL case by getting and locking
- the callee's active state with :c:func:`v4l2_subdev_lock_and_get_active_state()`,
- and unlocking the state after the call.
- 
+diff -- a/Documentation/hwmon/vexpress.rst b/Documentation/hwmon/vexpress.rst
+--- a/Documentation/hwmon/vexpress.rst
++++ b/Documentation/hwmon/vexpress.rst
+@@ -27,7 +27,7 @@ Versatile Express platform (http://www.a
+ reference & prototyping system for ARM Ltd. processors. It can be set up
+ from a wide range of boards, each of them containing (apart of the main
+ chip/FPGA) a number of microcontrollers responsible for platform
+-configuration and control. Theses microcontrollers can also monitor the
++configuration and control. These microcontrollers can also monitor the
+ board and its environment by a number of internal and external sensors,
+ providing information about power lines voltages and currents, board
+ temperature and power usage. Some of them also calculate consumed energy
