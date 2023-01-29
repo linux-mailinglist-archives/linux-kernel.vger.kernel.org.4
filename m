@@ -2,137 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A418767FC18
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9A467FC1C
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbjA2B2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 20:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S230138AbjA2BeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 20:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjA2B2E (ORCPT
+        with ESMTP id S229637AbjA2BeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 20:28:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CC983EC
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 17:28:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EABF4B80C74
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 01:27:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B394C4339C
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 01:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674955677;
-        bh=mIyF7jlWADkWw9AY8oz5e0Hg7GQ/xOB3nucuRUy5HDM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Ujw0AAvn3nhSz0pjY8obTtRU8u3SlS31u9V32QJI5IrFf7b8zy2BG74kDzvZWbnFI
-         Bh2ok86s6aBmi34Fysi5RwdnRQ0KMepnzh7xS9x5RXv9ns79G6n4UHBcht5JazzJL6
-         0TMGFQqeANrF5u1WdCtCtkAha6g+KnzFs3P6YAoaS9ctXUzvt/rva6oHOaRrKF5ljk
-         V/nC/iP/3jNlJg1NkRfirmgv4y+0o+0SVmGIXPeUUzclrmQlLfYf0v1a2Az1afpCbS
-         xSMg5xBaAAMf/mDQXm52WLBos3li9K2P92ZrWtg5dSG32kB4NHD2W8UTpj2IX8GG8m
-         bCuq0IXMeW+rg==
-Received: by mail-lf1-f49.google.com with SMTP id cf42so14118770lfb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 17:27:57 -0800 (PST)
-X-Gm-Message-State: AFqh2kqNYDOPfo6MOeLWdeq5cGeqyRazYbyZvOg6E1ryjScAFcY4niEY
-        1Vw/YGCXY3S41igBu5Y3fI6E+Lh1nAHe4yTzKQ==
-X-Google-Smtp-Source: AMrXdXvwYhYIje9oY6RR+/yUIKdNsbwcgB8kH63XKH4ThRsuXe9Yblb+SgpYteGwcOABD+DQnVzUyfOpuQg1MQrqk+Q=
-X-Received: by 2002:a05:6512:3f0c:b0:4b5:2aed:39be with SMTP id
- y12-20020a0565123f0c00b004b52aed39bemr5530009lfa.195.1674955675573; Sat, 28
- Jan 2023 17:27:55 -0800 (PST)
+        Sat, 28 Jan 2023 20:34:02 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1934E6E90;
+        Sat, 28 Jan 2023 17:34:00 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso7234327wmb.0;
+        Sat, 28 Jan 2023 17:34:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IRsgsFOkDL2GeFrKorEQKN10FPDAyCyhKXv2uU/88Ko=;
+        b=dxKQuht2s4U4X2KDPzAlSyw52WRimmYQVTovbxtRZQro32CD+XMb9O+yz8R7kpRa3y
+         VQR+CWM0j+VO1lMXcYPc79YRTGc39KJSRSXI0TRXwW9Xe+pPqwfmEz7wQ6nIzmobh9/u
+         nY4UVGcu7DDVxxlsfMef3JrHlHgY2U8+gKnTMdcg9zKICO85H9mZkEuoPo+x2oPlzQMx
+         Pd//E1ZX+lCLNnl3OvfYxzbb9pYAjXWvEB+MDmjzhJOl9PRPaa4R/leWIeOhU8lo0vEM
+         oWllPU3VOWJr4DmCK7iXDWBbwLo2dtLLzXC5/HZTi+3ui0vH7bWITd+9Ly2CSktBUbfK
+         ml5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IRsgsFOkDL2GeFrKorEQKN10FPDAyCyhKXv2uU/88Ko=;
+        b=PLrCtIrIQz4w/4a2wVvsZ2TlomKKIbe2VB3X18KbTfr87FOqATXgKBzCDh0iyNprJo
+         yxW7enWcx3m0T7EtbRgGnhnDqEpmJ0Ygjv5a6bFv4Yt+g5FpUIEeak6AVFKy6GEbNV4O
+         15fXfs0+Qtop3BmbPFDmaEFISns9UOjTTYECCwlCOezJYBcmFSpVlB82Tm6cAkqmla3O
+         F3L90GZaOMLhTO+31fyZHFcyokMgsS4v5YUuRqgrW54zcIyXmMrAGzyqyk+KzQ2bGuVN
+         30Qc336naWM7OkgJz7gq7que9Y7pi9DS/DbAI/gMrhslZ+cUrBSpcHFM2Q+X4eQkK0sh
+         mmYg==
+X-Gm-Message-State: AO0yUKVSL9x/9lhFgA9HI5RSvkeBEouXWGvOAgn3MLes9XzczGhhQBzD
+        peAhLVCuGZHm67mN385u+g2ajor0HN4=
+X-Google-Smtp-Source: AK7set/fhMPWeoK42Zs856R1cnCCgM97Pc3z2dRdP+FBZr1l7VtKrgLVMb81esrv8NGRSCJy2a3DDg==
+X-Received: by 2002:a7b:c85a:0:b0:3d2:813:138a with SMTP id c26-20020a7bc85a000000b003d20813138amr850568wml.35.1674956038257;
+        Sat, 28 Jan 2023 17:33:58 -0800 (PST)
+Received: from localhost.localdomain (143.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.143])
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c434700b003dc3f195abesm5197132wme.39.2023.01.28.17.33.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Jan 2023 17:33:57 -0800 (PST)
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     linux-iio@vger.kernel.org
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/7] Add support for pressure sensor Bosch BMP580
+Date:   Sun, 29 Jan 2023 02:33:02 +0100
+Message-Id: <cover.1674954271.git.ang.iglesiasg@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20221128-mtk-drm-v1-0-409e7f2352e4@chromium.org>
-In-Reply-To: <20221128-mtk-drm-v1-0-409e7f2352e4@chromium.org>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Sun, 29 Jan 2023 09:27:43 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_9=87WTtsYhjMKi+t8-ffu0FTw2vokzeVBOSsGsWCznjA@mail.gmail.com>
-Message-ID: <CAAOTY_9=87WTtsYhjMKi+t8-ffu0FTw2vokzeVBOSsGsWCznjA@mail.gmail.com>
-Subject: Re: [PATCH] drm/mediatek: Implement shutdown
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ricardo:
+This patchset adds support for the new pressure sensors BMP580 extending
+the bmp280 driver.
 
-Ricardo Ribalda <ribalda@chromium.org> =E6=96=BC 2022=E5=B9=B411=E6=9C=8828=
-=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=886:42=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> Poweroff the device properly, otherwise the device will not come back
-> from kexec().
->
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
-> To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> To: Philipp Zabel <p.zabel@pengutronix.de>
-> To: David Airlie <airlied@gmail.com>
-> To: Daniel Vetter <daniel@ffwll.ch>
-> To: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-mediatek@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/med=
-iatek/mtk_drm_drv.c
-> index 91f58db5915f..51dbd85796e9 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -829,6 +829,12 @@ static int mtk_drm_remove(struct platform_device *pd=
-ev)
->         return 0;
->  }
->
-> +static void mtk_drm_shutdown(struct platform_device *pdev)
-> +{
-> +       component_master_del(&pdev->dev, &mtk_drm_ops);
-> +       pm_runtime_disable(&pdev->dev);
-> +}
+Patch 1 introduces a minor refactor of the driver structure to change how
+the device matching and driver initialization is performed. In place of
+the chips ids, the driver_data now contains a pointer to its chip_info.
+To perform this change, a series of declarations previously on the core
+file were migrated to the shared header file, to allow access to specific
+fields on the chip_info on the I2C and SPI drivers. This change is
+required because BMP380 and BMP580 have the same chip_id and values would
+collide using the chip_id as the driver_data value.
+Patch 2 introduces new preinit callback and unifies init logic across all
+supported variants.
+Patch 3 made calibration callback function optional.
+Patch 4 deletes misleading i2c reference on bmp280 Kconfig entry.
+Patch 5 extends the bmp280 driver with the new logic to read measurements
+and configure the operation parameters for the BMP580 sensors.
+Patch 6 updates the devicetree binding docs with the new sensor id.
+Patch 7 adds the NVMEM operations to read and program the NVM user range
+contained in the non-volatile memory of the BMP580 sensors.
 
-Would it be better to implement like rockchip [1]?
+Changes in v3:
+* Refactor driver structure to use chip_info structs as driver_data and
+  updated i2c and spi implementations device match codepaths.
+* Deleted Kconfig driver title misleading i2c reference.
+* Made calibration reading optional as a prerequisite patch in preparation
+  for the bmp580 built in compensation.
+* Break command helper function in soft-reset helper function and NVM
+  operation helper.
+* Fixed minor styling issues thorough patches.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/gpu/drm/rockchip/rockchip_drm_drv.c?h=3Dv6.2-rc5#n462
+Changes in v2:
+* For patch 3, fixed missing retcodes reported by the kernel test robot.
+* For patch 5, fixed logic paths that left the sensor mutex locked
+  reported by the kernel test robot.
 
-Regards,
-Chun-Kuang.
+Angel Iglesias (7):
+  iio: pressure: bmp280: Use chip_info pointers for each chip as driver
+    data
+  iio: pressure: bmp280: Add preinit callback
+  iio: pressure: bmp280: Make read calibration callback optional
+  iio: pressure: Kconfig: Delete misleading I2C reference on bmp280
+    title
+  iio: pressure: bmp280: Add support for new sensor BMP580
+  dt-bindings: iio: pressure: bmp085: Add BMP580 compatible string
+  iio: pressure: bmp280: Add nvmem operations for BMP580
 
-> +
->  static int mtk_drm_sys_prepare(struct device *dev)
->  {
->         struct mtk_drm_private *private =3D dev_get_drvdata(dev);
-> @@ -856,6 +862,7 @@ static const struct dev_pm_ops mtk_drm_pm_ops =3D {
->  static struct platform_driver mtk_drm_platform_driver =3D {
->         .probe  =3D mtk_drm_probe,
->         .remove =3D mtk_drm_remove,
-> +       .shutdown =3D mtk_drm_shutdown,
->         .driver =3D {
->                 .name   =3D "mediatek-drm",
->                 .pm     =3D &mtk_drm_pm_ops,
->
-> ---
-> base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
-> change-id: 20221128-mtk-drm-ca6c5ac6b389
->
-> Best regards,
-> --
-> Ricardo Ribalda <ribalda@chromium.org>
+ .../bindings/iio/pressure/bmp085.yaml         |   2 +
+ drivers/iio/pressure/Kconfig                  |   6 +-
+ drivers/iio/pressure/bmp280-core.c            | 762 ++++++++++++++----
+ drivers/iio/pressure/bmp280-i2c.c             |  45 +-
+ drivers/iio/pressure/bmp280-regmap.c          |  60 ++
+ drivers/iio/pressure/bmp280-spi.c             |  47 +-
+ drivers/iio/pressure/bmp280.h                 | 273 ++++++-
+ 7 files changed, 958 insertions(+), 237 deletions(-)
+
+
+base-commit: 354f23ac2c8703d170354577738edad159a7d37b
+-- 
+2.39.1
+
