@@ -2,122 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBFC68006B
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE7E68006F
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235132AbjA2Rbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 12:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        id S235140AbjA2Rcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 12:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2Rba (ORCPT
+        with ESMTP id S235136AbjA2Rch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 12:31:30 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E021715A;
-        Sun, 29 Jan 2023 09:31:29 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDlkJd012236;
-        Sun, 29 Jan 2023 17:31:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=qdC0xyKLoaOTuMWEF/2CnwWlSq5XIkTv79tuQEfcKlM=;
- b=VW8nLNYK+paIbt6urRpNm/3q/sqocgSiDCsaTd1+HCCComNS+Rx0CRUoLxm+ajUV0hf0
- vXutvC0vvAd5GZv3SvwAcZK9E+BU/YlPbNmHhcKzYoB7TFX+VduXJ/hqY1SvBCZuexOY
- 4wkWDCMIIR0HCXZtbfhbkEMEssL4bjh/IhSrLfR8RvtH2t+Jv9SASBI2m603ke5mlzuG
- GsYaioAR+a03HINTT9NMvwDcp4quz214ULy13eTAcabQnpfgeWi0d/vUsGmiL0TUlxll
- L6KcaZ3riJg/CnuLsyAYll6bpwjmsWImFIyHp+Ed+S/+TwTAZGL7hlEINEoCJ1d0/DFx Lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddv1469e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 17:31:06 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30THV6S6030161;
-        Sun, 29 Jan 2023 17:31:06 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddv14699-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 17:31:06 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDR3Hh026758;
-        Sun, 29 Jan 2023 17:31:05 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3ncvtmpvar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 17:31:05 +0000
-Received: from b03ledav001.gho.boulder.ibm.com ([9.17.130.232])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30THV3Zw38994628
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 29 Jan 2023 17:31:04 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6B6B6E050;
-        Sun, 29 Jan 2023 17:33:07 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 31A7E6E04E;
-        Sun, 29 Jan 2023 17:33:05 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.211.110.248])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Sun, 29 Jan 2023 17:33:05 +0000 (GMT)
-Message-ID: <1b466057ed2e91b05388afbb5791639eb8abdd59.camel@linux.ibm.com>
-Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create
- block device
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Zhong Jinghua <zhongjinghua@huawei.com>,
-        gregkh@linuxfoundation.org, martin.petersen@oracle.com,
-        hare@suse.de, bvanassche@acm.org, emilne@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        yi.zhang@huawei.com, yukuai3@huawei.com
-Date:   Sun, 29 Jan 2023 12:30:30 -0500
-In-Reply-To: <20230128094146.205858-3-zhongjinghua@huawei.com>
-References: <20230128094146.205858-1-zhongjinghua@huawei.com>
-         <20230128094146.205858-3-zhongjinghua@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Sun, 29 Jan 2023 12:32:37 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60541C325
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:32:34 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id q10-20020a1cf30a000000b003db0edfdb74so7580971wmq.1
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:32:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=svBQPr2zX0vFiU+LA7iax7V/PhrzFNFTfrWbUoO2TSw=;
+        b=cR3YvBTaYwhGqCyjjGubNcmvmbO4XoRSValanLITu7buhqQUE07Yy8qvWafi+u1Elq
+         GuuvHyw/coGkwtUHZQOSxuot2090eSRZfC85Vuu0UHxH6EiQSo0m1Pw3TlZP5CLMI/25
+         +s42ZyK1f77GeMLJ9Jg7j2mOWym5CZ0mB0qvK0GEg9wUeFdYuY8CqRgF5+8nOIdQAKBN
+         LeQRliY446QZ2SbJOdK478vJf4Q4PLi6czHSLLO8Ojo9D6QyFNfYJzGIbyPWq1ZkniD4
+         3BuHH4hL9nQpJLw9R7MGQ320PAbI//jS2PsOcF7alUNrHSNygzcY+DoojF8eTTQW70dh
+         dp+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=svBQPr2zX0vFiU+LA7iax7V/PhrzFNFTfrWbUoO2TSw=;
+        b=OZHL7G//8KkiQ7bxZwDjUp9Fun6a/4F496dip0vBq2v7SkRir7an9P1lCmcsi1RiEz
+         Z6UViQ9WWxfqZk9VSrlLy9Qz+W00AG0fjY1u95DqMxC4Csus4+V52yyvwyk4MQeIJ0Dj
+         nNggEMGdIlQE4YZsaw9OFrjmdHrN8kiL5mm8UMRIGBsAYuw40mBV/xL2PN1yWJsBTRLK
+         rnREWVZhyARLVEV9LUJRsqwyv0bt7J12HHxfpDay5iYfTFoLONhblyzgpiJZPZgzqAzJ
+         LYbI6qSqwWTu8pR8qOOK14ZfKwLnnameGiSVJDUfvoobkliMGM//3DYGHeNG9YlI2mHW
+         kYqQ==
+X-Gm-Message-State: AFqh2kqhGFa9GKPiy3zyWiaaz4IOPj6NbcnlGZ7gMTCsCFVu6dTXi5+b
+        FcIOX8P/eaGd6tUadQsoEQFUoQ==
+X-Google-Smtp-Source: AMrXdXuCRWw0PhIRZDURJ2EcI4hCQ+5zmHLbibzPPtLZT+byUsUimkjL5sq3fKVpF0v/9rHAi9vGQA==
+X-Received: by 2002:a05:600c:c85:b0:3db:1a41:6629 with SMTP id fj5-20020a05600c0c8500b003db1a416629mr40964122wmb.22.1675013553228;
+        Sun, 29 Jan 2023 09:32:33 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u11-20020a05600c19cb00b003d9fb04f658sm15110616wmq.4.2023.01.29.09.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 09:32:32 -0800 (PST)
+Date:   Sun, 29 Jan 2023 19:32:31 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 15/19] clk: imx6ul: fix enet1 gate configuration
+Message-ID: <Y9atr+Gn60+m4nOg@linaro.org>
+References: <20230117061453.3723649-1-o.rempel@pengutronix.de>
+ <20230117061453.3723649-16-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uaOUbDbeIJ7bzyBQmbqB9mkUuaqfIdK-
-X-Proofpoint-GUID: tLV0rDBztqfXhwftHdWv4OmWn1a9UCGN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-29_09,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
- clxscore=1011 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301290169
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230117061453.3723649-16-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-01-28 at 17:41 +0800, Zhong Jinghua wrote:
-> This error will cause a warning:
-> kobject_add_internal failed for block (error: -2 parent: 1:0:0:1).
-> In the lower version (such as 5.10), there is no corresponding error
-> handling, continuing
-> to go down will trigger a kernel panic, so cc stable.
+On 23-01-17 07:14:49, Oleksij Rempel wrote:
+> According to the "i.MX 6UltraLite Applications Processor Reference Manual,
+> Rev. 2, 03/2017", BIT(13) is ENET1_125M_EN which is not controlling root
+> of PLL6. It is controlling ENET1 separately.
+> 
+> So, instead of this picture (implementation before this patch):
+> fec1 <- enet_ref (divider) <---------------------------,
+>                                                        |- pll6_enet (gate)
+> fec2 <- enet2_ref_125m (gate) <- enet2_ref (divider) <-´
+> 
+> we should have this one (after this patch):
+> fec1 <- enet1_ref_125m (gate) <- enet1_ref (divider) <-,
+>                                                        |- pll6_enet
+> fec2 <- enet2_ref_125m (gate) <- enet2_ref (divider) <-´
+> 
+> With this fix, the RMII reference clock will be turned off, after
+> setting network interface down on each separate interface
+> (ip l s dev eth0 down). Which was not working before, on system with both
+> FECs enabled.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Is this is important point and what you're saying is that this only
-panics on kernels before 5.10 or so because after that it's correctly
-failed by block device error handling so there's nothing to fix in
-later kernels?
+I'm OK with this. Maybe a fixes tag ?
 
-In that case, isn't the correct fix to look at backporting the block
-device error handling:
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
-commit 83cbce9574462c6b4eed6797bdaf18fae6859ab3
-Author: Luis Chamberlain <mcgrof@kernel.org>
-Date:   Wed Aug 18 16:45:40 2021 +0200
-
-    block: add error handling for device_add_disk / add_disk
-
-?
-
-James
-
+> ---
+>  drivers/clk/imx/clk-imx6ul.c             | 7 ++++---
+>  include/dt-bindings/clock/imx6ul-clock.h | 3 ++-
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c
+> index 67a7a77ca540..c3c465c1b0e7 100644
+> --- a/drivers/clk/imx/clk-imx6ul.c
+> +++ b/drivers/clk/imx/clk-imx6ul.c
+> @@ -176,7 +176,7 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
+>  	hws[IMX6UL_CLK_PLL3_USB_OTG]	= imx_clk_hw_gate("pll3_usb_otg",	"pll3_bypass", base + 0x10, 13);
+>  	hws[IMX6UL_CLK_PLL4_AUDIO]	= imx_clk_hw_gate("pll4_audio",	"pll4_bypass", base + 0x70, 13);
+>  	hws[IMX6UL_CLK_PLL5_VIDEO]	= imx_clk_hw_gate("pll5_video",	"pll5_bypass", base + 0xa0, 13);
+> -	hws[IMX6UL_CLK_PLL6_ENET]	= imx_clk_hw_gate("pll6_enet",	"pll6_bypass", base + 0xe0, 13);
+> +	hws[IMX6UL_CLK_PLL6_ENET]	= imx_clk_hw_fixed_factor("pll6_enet",	"pll6_bypass", 1, 1);
+>  	hws[IMX6UL_CLK_PLL7_USB_HOST]	= imx_clk_hw_gate("pll7_usb_host",	"pll7_bypass", base + 0x20, 13);
+>  
+>  	/*
+> @@ -205,12 +205,13 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
+>  	hws[IMX6UL_CLK_PLL3_PFD2] = imx_clk_hw_pfd("pll3_pfd2_508m", "pll3_usb_otg", base + 0xf0,	 2);
+>  	hws[IMX6UL_CLK_PLL3_PFD3] = imx_clk_hw_pfd("pll3_pfd3_454m", "pll3_usb_otg", base + 0xf0,	 3);
+>  
+> -	hws[IMX6UL_CLK_ENET_REF] = clk_hw_register_divider_table(NULL, "enet_ref", "pll6_enet", 0,
+> +	hws[IMX6UL_CLK_ENET_REF] = clk_hw_register_divider_table(NULL, "enet1_ref", "pll6_enet", 0,
+>  			base + 0xe0, 0, 2, 0, clk_enet_ref_table, &imx_ccm_lock);
+>  	hws[IMX6UL_CLK_ENET2_REF] = clk_hw_register_divider_table(NULL, "enet2_ref", "pll6_enet", 0,
+>  			base + 0xe0, 2, 2, 0, clk_enet_ref_table, &imx_ccm_lock);
+>  
+> -	hws[IMX6UL_CLK_ENET2_REF_125M] = imx_clk_hw_gate("enet_ref_125m", "enet2_ref", base + 0xe0, 20);
+> +	hws[IMX6UL_CLK_ENET1_REF_125M] = imx_clk_hw_gate("enet1_ref_125m", "enet1_ref", base + 0xe0, 13);
+> +	hws[IMX6UL_CLK_ENET2_REF_125M] = imx_clk_hw_gate("enet2_ref_125m", "enet2_ref", base + 0xe0, 20);
+>  	hws[IMX6UL_CLK_ENET_PTP_REF]	= imx_clk_hw_fixed_factor("enet_ptp_ref", "pll6_enet", 1, 20);
+>  	hws[IMX6UL_CLK_ENET_PTP]	= imx_clk_hw_gate("enet_ptp", "enet_ptp_ref", base + 0xe0, 21);
+>  
+> diff --git a/include/dt-bindings/clock/imx6ul-clock.h b/include/dt-bindings/clock/imx6ul-clock.h
+> index 79094338e6f1..b44920f1edb0 100644
+> --- a/include/dt-bindings/clock/imx6ul-clock.h
+> +++ b/include/dt-bindings/clock/imx6ul-clock.h
+> @@ -256,7 +256,8 @@
+>  #define IMX6UL_CLK_GPIO4		247
+>  #define IMX6UL_CLK_GPIO5		248
+>  #define IMX6UL_CLK_MMDC_P1_IPG		249
+> +#define IMX6UL_CLK_ENET1_REF_125M	250
+>  
+> -#define IMX6UL_CLK_END			250
+> +#define IMX6UL_CLK_END			251
+>  
+>  #endif /* __DT_BINDINGS_CLOCK_IMX6UL_H */
+> -- 
+> 2.30.2
+> 
