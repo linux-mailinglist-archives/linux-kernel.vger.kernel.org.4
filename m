@@ -2,106 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBB367FD54
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 08:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEB067FD58
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 08:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjA2HMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 02:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S230523AbjA2HXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 02:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjA2HMV (ORCPT
+        with ESMTP id S230413AbjA2HW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 02:12:21 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2444022A12
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 23:12:20 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id me3so23818150ejb.7
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 23:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HyQfDA5JQKapTqk95xlLXJ5aD/AVTOh+bnm0DaoViy4=;
-        b=K2UuqaPoyrF7fBhVXAhDDVH6+qOvl+2czNJo25FgymwJ4uxUh/D8hEUgCADqjEbMsA
-         uK34QZ6+nAAKDGOGv65kb4Xb+pN2C55bLRXu0z9i2/DytbIgjwF7V4/GexmyrJPs0TCf
-         hHMYNhznjuXTX+mdE3aV6K1Ibpq4y/1N021syQH8TbN96HqCEfdOZuJdxvxMpBCrgJSt
-         sieQsUgd2iOzXS326n27bXstyCqE40Wy2l4gFRLlb3LyFaM/HWrAVK9Dyo/y5jkhx3XL
-         LQmwMFRDm2pdkeXlioK0kIN/58JFUTwbzjqmKbCIwtmqIri+f0rGCH96EcVqXy1DDFXb
-         fU2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HyQfDA5JQKapTqk95xlLXJ5aD/AVTOh+bnm0DaoViy4=;
-        b=0F7TOBgiDh1gdbllRV7P6efXAqRLU34vftySsdSm6o5zhg1zfGtFOjqN8xQrXqxv0p
-         ZIYYCOd9AWCGJkcrwNSJ+Gq8XeMYlRLtgf85VrpV5rwfOBGJZagsRCC5zSEozsPBXE/g
-         a7o7hJSTbugOVaxGZve//eqZ73/R68EkX3eG7tnbDjYt5rhi39qv8M0qVMRc+oog2Mbh
-         pcHtwfSLw2scFdKB12SGNlm3qUkMxWP4Az6zvMVT+AhavC8OD5yTYGAjtdIN45c8P3/p
-         8j2g5KIRcxOrHtDA+GYEqImOtvaFUJapmVAeDoJEoPGwHVgKPUWqZ6MecUzSKFHF7hD/
-         s9jg==
-X-Gm-Message-State: AO0yUKWGrcKxVrq5zOuJzBPPgB5rhUoEnMdt/09XVK4CkLPh1ZCorccO
-        lfDm6oNImEdOi8vnAcceePjDNq05gCw3pt+HfiA=
-X-Google-Smtp-Source: AK7set+jmEx/u5NqPfXYVJvniNb97eMrHlJwVRL5RWsbNYBc63pMxmn7ya50Ow5eiIqA46uFmL4pojuM7wAaL0R1ksQ=
-X-Received: by 2002:a17:906:9ea3:b0:887:9adb:da53 with SMTP id
- fx35-20020a1709069ea300b008879adbda53mr80401ejc.166.1674976338323; Sat, 28
- Jan 2023 23:12:18 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a98:a106:0:b0:1a1:b8b9:fadd with HTTP; Sat, 28 Jan 2023
- 23:12:17 -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <harikunda1116@gmail.com>
-Date:   Sat, 28 Jan 2023 23:12:17 -0800
-Message-ID: <CAGEpkWrSWKqk5RUOrc5DhmTfeJ=vXMObvAfnaJJZQtWt3eCxhw@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,UNDISC_FREEM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:642 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [harikunda1116[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [harikunda1116[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+        Sun, 29 Jan 2023 02:22:59 -0500
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B145D6A55
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 23:22:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674976938; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SbuaVPs5muL+1IcJNZ3cOS7aT1nLCknhQim3ZxqklXlS3f5tZw8LQgZTuU4Ma7RfGxVUEM3FGxXl5Hz3m6Ks3c8TgzNRn/YXeyFc8DZTVc3mhJAb22G6Rh1wh3aS6wjxtu2XTBs891830IpB81wa3GwwMRsJMCG9x+9XqTE11l0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1674976938; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Wi6EVcjoZsMaB6/umatkP/TY7y+0TqR+26k4xlpikbg=; 
+        b=llxeGAuh06R6afTHGsEWSxPS3jAm9RN2iTfjLpJNaK00jhQImHNaVEUDvnfGAz0jPP/YV8JJmgegpmP2tX1s426fj1EI1+4RzlM6rnCjVr8LANbDguXRXfyHL9jbaXqKN3yLKGtBnweOHnu9NdP1AUCRAqkuOxvB68ZTlV0FJWw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1674976938;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:Message-ID:From:From:To:To:Cc:Cc:Subject:Subject:In-Reply-To:References:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=Wi6EVcjoZsMaB6/umatkP/TY7y+0TqR+26k4xlpikbg=;
+        b=CQQ11mDfCfD1TmTB1vy0z6lQGD9xS+bQFqstF4QH2agyduc/IquNvon/PQYffdHK
+        iFgL7DfGpuTwx0/7XiwMDnPdZSPp2T1ZpEjPhklL95sjA3Gl5iPOZavsM1RVU6JBxOJ
+        KSHOBIKUOOZ5S4SCAnz2Kbjxyj2pKA4hQm9BLAe8=
+Received: from sh-lchen.linux.beauty (180.169.129.130 [180.169.129.130]) by mx.zohomail.com
+        with SMTPS id 167497693659554.08413761409781; Sat, 28 Jan 2023 23:22:16 -0800 (PST)
+Date:   Sun, 29 Jan 2023 15:21:51 +0800
+Message-ID: <877cx59568.wl-me@linux.beauty>
+From:   Li Chen <me@linux.beauty>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        "Lubomir Rintel" <lkundrak@v3.sk>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        "Robert Jarzmik" <robert.jarzmik@free.fr>,
+        "Sven Peter" <sven@svenpeter.dev>,
+        "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+        "Brian Norris" <briannorris@chromium.org>,
+        "Hitomi Hasegawa" <hasegawa-hitomi@fujitsu.com>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Ambarella SoC support" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 06/15] soc: add Ambarella driver
+In-Reply-To: <8e404cef-52fb-49a2-a91b-8e3c60407ddd@app.fastmail.com>
+References: <20230123073305.149940-1-lchen@ambarella.com>
+        <20230123073305.149940-7-lchen@ambarella.com>
+        <85b86d06-c63c-4481-a3dd-16b72572a5ee@app.fastmail.com>
+        <871qnkicsi.wl-me@linux.beauty>
+        <8e404cef-52fb-49a2-a91b-8e3c60407ddd@app.fastmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-How are you doing.My name is DR. AVA SMITH from United States.
-I am a French and American national (dual) living in the U.S and
-sometimes in the U.K for the Purpose of Work.
-I hope you consider my friend request and consider me worthy to be your friend.
-I will share some of my pics and more details about my self when i get
-your response
-With love
-Dr. Ava
+Hi Arnd,
+
+Sorry for late reply.
+
+On Tue, 24 Jan 2023 23:46:06 +0800,
+Arnd Bergmann wrote:
+>
+> On Tue, Jan 24, 2023, at 08:58, Li Chen wrote:
+> > On Mon, 23 Jan 2023 16:29:06 +0800,
+> > Arnd Bergmann wrote:
+> >> On Mon, Jan 23, 2023, at 08:32, Li Chen wrote:
+> >> > +static struct ambarella_soc_id {
+> >> > +	unsigned int id;
+> >> > +	const char *name;
+> >> > +	const char *family;
+> >> > +} soc_ids[] = {
+> >> > +	{ 0x00483245, "s6lm",  "10nm", },
+> >> > +};
+> >>
+> >> I would suggest something more descriptive in the "family"
+> >> field to let users know they are on an Ambarella SoC.
+> >>
+> >> Maybe just "Ambarella 10nm".
+> >
+> > There is a "pr_info("Ambarella SoC %s detected\n",
+> > soc_dev_attr->soc_id);" in this file,
+> > I think this should be enough, right?
+>
+> The pr_info() can probably be removed here, or reworded
+> based on the changed contents, those are just meant for
+> humans reading through the log rather than parsed by
+> software.
+>
+> The soc_id fields on the other hand need to be parsable
+> by scripts looking at the sysfs files, in a way that lets
+> them identify the system. Usually the script would look
+> at the "family" as the primary key before looking up the
+> "name", so you have to make sure that the family uniquely
+> identifies this as one of yours rather than a 10nm chip
+> from some other company.
+
+Ok, I will add "Ambarella" prefix to ->family.
+
+> >> If there are other unrelated registers in there, the compatible
+> >> string should probably be changed to better describe the
+> >> entire area based on the name in the datasheet.
+> >
+> > Yeah, this block is only used for identification bits. In datasheet,
+> > it is also named "CPU ID".
+>
+> ok.
+>
+> > Other than cpuid_regmap, this driver also looks for "model" name as soc
+> > machine name:
+> > of_property_read_string(np, "model", &soc_dev_attr->machine);
+> >
+> > So I think it is not a good idea to conver it to into a platform driver.
+> I don't understand what you mean. A lot of soc_id drivers put
+> the model string into soc_dev_attr->machine, this makes no
+> difference here.
+
+Ok, I will switch to builtin platform driver. Which compatible do you prefer?
+
+compatible = "ambarella,cpuid"
+or
+compatible = "ambarella,<SoC>-cpuid"
+
+> > As for "syscon", I think it is still very helpful to get regmap easily.
+> > Generally speaking,
+> > I prefer regmap over void*, because it has debugfs support, so I can
+> > get its value more easily.
+>
+> What value would you get through debugfs that is not already in
+> the soc_device?
+
+Agree with you.
+
+> >> > +static unsigned int ambsys_config;
+> >> > +
+> >> > +unsigned int ambarella_sys_config(void)
+> >> > +{
+> >> > +	return ambsys_config;
+> >> > +}
+> >> > +EXPORT_SYMBOL(ambarella_sys_config);
+> >>
+> >> Which drivers use this bit? Can they be changed to
+> >> use soc_device_match() instead to avoid the export?
+> >
+> > sys_config is used by our nand and sd drivers. I also don't want to export,
+> > but struct soc_device_attribute/soc_device don't have private data to store it,
+> > I think there is no better way.
+>
+> The nand and sd drivers should not rely on any private data
+> from another driver.
+
+Agree.
+
+> What information do they actually
+> need here that is not already in their own DT nodes or
+> in the soc_device_attributes?
+
+sys_config from rct_regmap is not available for sd/nand node neither soc_device_attribute.
+
+But given that I will switch dts model to(see https://www.spinics.net/lists/arm-kernel/msg1043684.html):
+
+rct
+| nand
+| sd
+| ...
+
+Then I can easily and naturally get sys_config via syscon_node_to_regmap(of_get_parent(nand_np/sd_np)).
+
+So this is not a problem anymore and I will switch to builtin platform driver in v2.
+
+> >> > +static int __init ambarella_soc_init(void)
+> >> > +{
+> >> > +	struct regmap *rct_regmap;
+> >> > +	int ret;
+> >> > +
+> >> > +	rct_regmap = syscon_regmap_lookup_by_compatible("ambarella,rct");
+> >> > +	if (IS_ERR(rct_regmap)) {
+> >> > +		pr_err("failed to get ambarella rct regmap\n");
+> >> > +		return PTR_ERR(rct_regmap);
+> >> > +	}
+> >> ...
+> >> > +arch_initcall(ambarella_soc_init);
+> >>
+> >> It is not an error to use a chip from another manufacturer,
+> >> please drop the pr_err() and return success here.
+> >
+> > Ok, good to know, thanks. But we don't have other manufacturers at
+> > least for now,
+>
+> I care a lot about supporting multiple SoC vendors, it would seem
+> very rude to assume that we stop supporting everything else after
+> merging Ambarella support.
+>
+> > and rct_regmap is need to be updated here, like sys_config and soft
+> > reboot. So I think this rct regmap is still needed.
+>
+> It is certainly only needed on Ambarella SoCs, no other one
+> has this device at the moment.
+
+I'm really sorry that I forgot that this builtin arch_initcall code would run on SoCs
+other than Ambarella.
+
+I will remove the err output in v2.
+
+Regards,
+Li
