@@ -2,94 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA69567FC96
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 04:08:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F9367FC97
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 04:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjA2DIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 22:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S231998AbjA2DKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 22:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjA2DIm (ORCPT
+        with ESMTP id S229513AbjA2DKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 22:08:42 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1504122A08;
-        Sat, 28 Jan 2023 19:08:41 -0800 (PST)
-Received: from dggpeml500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P4GP875VWzJqDK;
-        Sun, 29 Jan 2023 11:04:12 +0800 (CST)
-Received: from [10.174.178.240] (10.174.178.240) by
- dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sun, 29 Jan 2023 11:08:38 +0800
-To:     Network Development <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     Julian Anastasov <ja@ssi.bg>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Denis V. Lunev" <den@openvz.org>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
-        YueHaibing <yuehaibing@huawei.com>
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-Subject: [Question] neighbor entry doesn't switch to the STALE state after the
- reachable timer expires
-Message-ID: <b1d8722e-5660-c38e-848f-3220d642889d@huawei.com>
-Date:   Sun, 29 Jan 2023 11:08:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.240]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 28 Jan 2023 22:10:16 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C3022A08
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 19:10:14 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4P4GX535wxz8R03x;
+        Sun, 29 Jan 2023 11:10:13 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl1.zte.com.cn with SMTP id 30T3A8Yq021450;
+        Sun, 29 Jan 2023 11:10:08 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Sun, 29 Jan 2023 11:10:09 +0800 (CST)
+Date:   Sun, 29 Jan 2023 11:10:09 +0800 (CST)
+X-Zmail-TransId: 2af963d5e3915a445b95
+X-Mailer: Zmail v1.0
+Message-ID: <202301291110098787982@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <akpm@linux-foundation.org>
+Cc:     <keescook@chromium.org>, <nathan@kernel.org>,
+        <ndesaulniers@google.com>, <peterz@infradead.org>,
+        <jpoimboe@kernel.org>, <rdunlap@infradead.org>,
+        <geert+renesas@glider.be>, <ojeda@kernel.org>,
+        <zhaoyang.huang@unisoc.com>, <vbabka@suse.cz>,
+        <dan.j.williams@intel.com>, <linux@rasmusvillemoes.dk>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBLY29uZmlnLmRlYnVnOiBmaXggdGhlIGRlcGVuZHMgYWJvdXQgY29uZmlnIFNDSEVEX0RFQlVH?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 30T3A8Yq021450
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63D5E395.000 by FangMail milter!
+X-FangMail-Envelope: 1674961813/4P4GX535wxz8R03x/63D5E395.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63D5E395.000/4P4GX535wxz8R03x
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-We got the following weird neighbor cache entry on a machine that's been running for over a year:
-172.16.1.18 dev bond0 lladdr 0a:0e:0f:01:12:01 ref 1 used 350521/15994171/350520 probes 4 REACHABLE
+Now, the right File Path about SCHED_DEBUG is /sys/kernel/debug/sched.
+So, SCHED_DEBUG should depend on DEBUG_FS, not PROC_FS.
 
-350520 seconds have elapsed since this entry was last updated, but it is still in the REACHABLE
-state (base_reachable_time_ms is 30000), preventing lladdr from being updated through probe.
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ lib/Kconfig.debug | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-After some analysis, we found a scenario that may cause such a neighbor entry:
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 520884f8f8e1..223b4459e710 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1143,7 +1143,7 @@ menu "Scheduler Debugging"
 
-          Entry used          	  DELAY_PROBE_TIME expired
-NUD_STALE ------------> NUD_DELAY ------------------------> NUD_PROBE
-                            |
-                            | DELAY_PROBE_TIME not expired
-                            v
-                      NUD_REACHABLE
-
-The neigh_timer_handler() use time_before_eq() to compare 'now' with 'neigh->confirmed +
-NEIGH_VAR(neigh->parms, DELAY_PROBE_TIME)', but time_before_eq() only works if delta < ULONG_MAX/2.
-
-This means that if an entry stays in the NUD_STALE state for more than ULONG_MAX/2 ticks, it enters
-the NUD_RACHABLE state directly when it is used again and cannot be switched to the NUD_STALE state
-(the timer is set too long).
-
-On 64-bit machines, ULONG_MAX/2 ticks are a extremely long time, but in my case (32-bit machine and
-kernel compiled with CONFIG_HZ=250), ULONG_MAX/2 ticks are about 99.42 days, which is possible in
-reality.
-
-Does anyone have a good idea to solve this problem? Or are there other scenarios that might cause
-such a neighbor entry?
-
------
-Best Regards,
-Changzhong Zhang
+ config SCHED_DEBUG
+ 	bool "Collect scheduler debugging info"
+-	depends on DEBUG_KERNEL && PROC_FS
++	depends on DEBUG_KERNEL && DEBUG_FS
+ 	default y
+ 	help
+ 	  If you say Y here, the /proc/sched_debug file will be provided
+-- 
+2.25.1
