@@ -2,105 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BE6680021
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69F4680022
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234449AbjA2QBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 11:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
+        id S234755AbjA2QDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 11:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbjA2QBi (ORCPT
+        with ESMTP id S229980AbjA2QDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 11:01:38 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2616D1F92B
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 08:01:35 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso1626868wms.5
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 08:01:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VaYQWv6xZ5TTyHoxaDqQOnl6+vxxWnFWLnikW3QAHTs=;
-        b=kk43o2FzJhQJ7hemG1HCrwhbWsQx3yXbIjyvGRa1pDOcYHaIK/MWoOAAc4k/LebWoC
-         JISrDyd2MM4KJTtVHcmQeiXcoF93eCcwt8uARRftYYhMD3TF6cz/LsDaBdDX2LnfRHP/
-         ysCeiWE8JF37GtafWbroiSir7rdZfI/wxVOzduAcc7CmijWeBoIWWYmoXwa4rXNJi0yX
-         y35V1m4T5LYtO1C1ct+EJQ0XUOMiRbiZs2bgvLZwkoZG26JXskX0yjrNFIFkf8kqKsHu
-         p3WP+qxkeNfKwpDESV3fADdF73/8v/6Gvp+HztEt6qC2buMWt1lecEi04sav/JGQZ3wk
-         S17g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VaYQWv6xZ5TTyHoxaDqQOnl6+vxxWnFWLnikW3QAHTs=;
-        b=Yjn7HBmXvQhTtc6yvGRwUCdGaSLVKIJqpcT9L5ClBATc9xTacdmni12ZmkOi1FdGjN
-         43aI0WU/ir9bmnJKHj9owph9xcTa3p+dWeQqTorwEMR/J60qrCNtOd25RR2INJ8dbsiR
-         Hnw3r6GZdhZa1K1lL/Xvd4rkmiSyYWZ93pE4UNxu3Fax2f31QlSjfn1CeLQVf9dPTcmf
-         iyS7aKvUHBJUMKbJ1d1+8OrP+ge7zvsB/JnjS1dQwL/M2SBqVTMdHrPegmz2291Cyx7P
-         bkfglnEPrZLcbFEvvevzIUHQFZvmUOESbSv52Kbh9zlXmnNMWxp9LFmRjamBthEiiZYN
-         ScTw==
-X-Gm-Message-State: AO0yUKV37ue8uTU+K+l+WPrPq6yR+x37qmDJEe7LK9eivs3Hoo+VXhtb
-        1F5ynHz1tBFBWY5WPVgAcjIGLg==
-X-Google-Smtp-Source: AK7set+6G9+19ovGlu+q2bRz/VGxfdK6a4Il3tekS0A66i+VUB4hNQIEctoGZkAxQZoo1P7L70Q2Ww==
-X-Received: by 2002:a7b:c44a:0:b0:3dc:4871:7b66 with SMTP id l10-20020a7bc44a000000b003dc48717b66mr5263226wmi.29.1675008093699;
-        Sun, 29 Jan 2023 08:01:33 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id k28-20020a05600c1c9c00b003a84375d0d1sm14862013wms.44.2023.01.29.08.01.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Jan 2023 08:01:33 -0800 (PST)
-Message-ID: <3c5b6ae1-387f-143c-691f-92b96fe78270@linaro.org>
-Date:   Sun, 29 Jan 2023 17:01:32 +0100
+        Sun, 29 Jan 2023 11:03:48 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1EB2F19F0C
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 08:03:47 -0800 (PST)
+Received: (qmail 374693 invoked by uid 1000); 29 Jan 2023 11:03:46 -0500
+Date:   Sun, 29 Jan 2023 11:03:46 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y9aY4hG3p+82vVIw@rowland.harvard.edu>
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+ <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+ <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+ <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
+ <Y9WeOTmGCCfjMUtG@andrea>
+ <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
+ <20230129051734.GE2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 3/3] gpio: mmio: Use new flag BGPIOF_NO_INPUT
-Content-Language: en-US
-To:     nl250060@ncr.com, Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230126-gpio-mmio-fix-v1-0-8a20ce0e8275@ncr.com>
- <20230126-gpio-mmio-fix-v1-3-8a20ce0e8275@ncr.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230126-gpio-mmio-fix-v1-3-8a20ce0e8275@ncr.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230129051734.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/01/2023 11:17, Niall Leonard via B4 Submission Endpoint wrote:
-> From: Niall Leonard <nl250060@ncr.com>
+On Sat, Jan 28, 2023 at 09:17:34PM -0800, Paul E. McKenney wrote:
+> On Sat, Jan 28, 2023 at 05:59:52PM -0500, Alan Stern wrote:
+> > On Sat, Jan 28, 2023 at 11:14:17PM +0100, Andrea Parri wrote:
+> > > > Evidently the plain-coherence check rules out x=1 at the 
+> > > > end, because when I relax that check, x=1 becomes a possible result.  
+> > > > Furthermore, the graphical output confirms that this execution has a 
+> > > > ww-incoh edge from Wx=2 to Wx=1.  But there is no ww-vis edge from Wx=1 
+> > > > to Wx=2!  How can this be possible?  It seems like a bug in herd7.
+> > > 
+> > > By default, herd7 performs some edges removal when generating the
+> > > graphical outputs.  The option -showraw can be useful to increase
+> > > the "verbosity", for example,
+> > > 
+> > >   [with "exists (x=2)", output in /tmp/T.dot]
+> > >   $ herd7 -conf linux-kernel.cfg T.litmus -show prop -o /tmp -skipchecks plain-coherence -doshow ww-vis -showraw ww-vis
+> > 
+> > Okay, thanks, that helps a lot.
+> > 
+> > So here's what we've got.  The litmus test:
+> > 
+> > 
+> > C hb-and-int
+> > {}
+> > 
+> > P0(int *x, int *y)
+> > {
+> >     *x = 1;
+> >     smp_store_release(y, 1);
+> > }
+> > 
+> > P1(int *x, int *y, int *dx, int *dy, spinlock_t *l)
+> > {
+> >     spin_lock(l);
+> >     int r1 = READ_ONCE(*dy);
+> >     if (r1==1)
+> >         spin_unlock(l);
+> > 
+> >     int r0 = smp_load_acquire(y);
+> >     if (r0 == 1) {
+> >         WRITE_ONCE(*dx,1);
+> >     }
 > 
-> Use the existing shadow data register 'bgpio_data' to allow
-> the last written value to be returned by the read operation
-> when BGPIOF_NO_INPUT flag is set.
+> The lack of a spin_unlock() when r1!=1 is intentional?
+
+I assume so.
+
+> It is admittedly a cute way to prevent P3 from doing anything
+> when r1!=1.  And P1 won't do anything if P3 runs first.
+
+Right.
+
+> > }
+> > 
+> > P2(int *dx, int *dy)
+> > {
+> >     WRITE_ONCE(*dy,READ_ONCE(*dx));
+> > }
+> > 
+> > 
+> > P3(int *x, spinlock_t *l)
+> > {
+> >     spin_lock(l);
+> >     smp_mb__after_unlock_lock();
+> >     *x = 2;
+> > }
+> > 
+> > exists (x=2)
+> > 
+> > 
+> > The reason why Wx=1 ->ww-vis Wx=2:
+> > 
+> > 	0:Wx=1 ->po-rel 0:Wy=1 and po-rel < fence < ww-post-bounded.
+> > 
+> > 	0:Wy=1 ->rfe 1:Ry=1 ->(hb* & int) 1:Rdy=1 and
+> > 		(rfe ; hb* & int) <= (rfe ; xbstar & int) <= vis.
+> > 
+> > 	1:Rdy=1 ->po 1:unlock ->rfe 3:lock ->po 3:Wx=2
+> > 		so 1:Rdy=1 ->po-unlock-lock-po 3:Wx=2
+> > 		and po-unlock-lock-po <= mb <= fence <= w-pre-bounded.
+> > 
+> > Finally, w-post-bounded ; vis ; w-pre-bounded <= ww-vis.
+> > 
+> > This explains why the memory model says there isn't a data race.  This 
+> > doesn't use the smp_mb__after_unlock_lock at all.
 > 
+> You lost me on this one.
+> 
+> Suppose that P3 starts first, then P0.  P1 is then stuck at the
+> spin_lock() because P3 does not release that lock.  P2 goes out for a
+> pizza.
 
-(...)
+That wouldn't be a valid execution.  One of the rules in lock.cat says 
+that a spin_lock() call must read from a spin_unlock() or from an 
+initial write, which rules out executions in which P3 acquires the lock 
+first.
 
->  	if (gc->set == bgpio_set_set &&
->  			!(flags & BGPIOF_UNREADABLE_REG_SET))
->  		gc->bgpio_data = gc->read_reg(gc->reg_set);
-> @@ -711,6 +723,9 @@ static struct bgpio_pdata *bgpio_parse_dt(struct platform_device *pdev,
->  	if (of_property_read_bool(pdev->dev.of_node, "no-output"))
->  		*flags |= BGPIOF_NO_OUTPUT;
->  
-> +	if (of_property_read_bool(pdev->dev.of_node, "no-input"))
+> Why can't the two stores to x by P0 and P3 conflict, resulting in a
+> data race?
 
-As pointed, this brings undocumented property to two other bindings.
-This needs to be fixed.
+That can't happen in executions where P1 acquires the lock first for the 
+reason outlined above (P0's store to x propagates to P3 before P3 writes 
+to x).  And there are no other executions -- basically, herd7 ignores 
+deadlock scenarios.
 
-Best regards,
-Krzysztof
-
+Alan
