@@ -2,44 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA5667FF71
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 14:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9DE67FF73
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 14:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbjA2NkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 08:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S234511AbjA2Nn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 08:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjA2Nj6 (ORCPT
+        with ESMTP id S231586AbjA2Nn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 08:39:58 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DD01E9E3
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 05:39:44 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E932A1EC0513;
-        Sun, 29 Jan 2023 14:39:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1674999579;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=S3E6d9bggce99ZWFbZqTLHy0NqUgzppz5mF+ID7UngE=;
-        b=edBMKuJW9KpqldI2iKRcOWXcPGZwm7rNOt72wioCvU7kmiGOoNJ9u50uU/n7M4qrDEEMnX
-        7aVZPJcpr5vi6AWPKs0dDfR2qSecr8AGZPnkkjClQIawGkzYee+BWIowG6Ip+xzhRrFhwf
-        t/zroLHsB7UOBTAkpPAIoXA9QqTPsqY=
-Date:   Sun, 29 Jan 2023 14:39:32 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/urgent for v6.2-rc6
-Message-ID: <Y9Z3FMceYzCQ1IXA@zn.tnic>
+        Sun, 29 Jan 2023 08:43:56 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92441F905;
+        Sun, 29 Jan 2023 05:43:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674999834; x=1706535834;
+  h=message-id:subject:from:to:cc:date:mime-version:
+   content-transfer-encoding;
+  bh=IvXmT10hHiA0X2ce3w2g38OlhPIqHmnyw3DcFPNVzco=;
+  b=O5xNT0r5VtKmILbn/Ma/CAF4kr8dR89AsjiZm/Vrdj0W1B86tl1a8gG5
+   /49/qPwq/9TmxjadpKX6FOIlCgSvEilM62alFPuN75kAJ6aJZBeiZTH8W
+   /cO89qwyHsQIeIohvjxLxwFCETG2gliY1yeiudvXVFlgBuecLR4WQ2ZOu
+   6sde45q8H2sgG9LK/yoGrCmZyaJ4NcYZgVE9nfpys4JAos82dK/DSwi7q
+   koTRSDjju4FlVRtZcxy+jK7wa0vAdXETKxnhmFc80Mu4dEkXedetSd5fM
+   pBUVofrIqw2aHFWJQkFBnWstl7RAhpIA53d2D1Dk/NUREbQWBp8O+PY7G
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="354711078"
+X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
+   d="scan'208";a="354711078"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 05:43:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="657154421"
+X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
+   d="scan'208";a="657154421"
+Received: from dperchan-mobl1.ger.corp.intel.com (HELO terminus) ([10.214.201.237])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 05:43:50 -0800
+Message-ID: <9001ccdec3e3234253cf2f93ea39745ed6f525f1.camel@intel.com>
+Subject: [PATCH] uvc: Intel PID enabling UVC Metadata attributes
+From:   Dmitry Perchanov <dmitry.perchanov@intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        linux-kernel@vger.kernel.org, evgeni.raikhel@intel.com,
+        demisrael@gmail.com
+Date:   Sun, 29 Jan 2023 15:43:38 +0200
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,84 +60,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Intel RealSense UVC cameras Metadata support.
 
-please pull a bunch of urgent x86 fixes for 6.2.
-
-The SEV-SNP patch looks a bit largish and perhaps, at a first glance, not really
-urgent material but the intent behind it is to fail gracefully when booting
-older kernels on newer hypervisors when latter support features which those
-older kernels do not know of yet.
-
-Therefore, it should go to stable so sending it now is as good a time as any.
-
-Please pull,
-thanks.
-
+Co-developed-by: Yu MENG <yu1.meng@intel.com>
+Co-developed-by: Evgeni Raikhel <evgeni.raikhel@intel.com>
+Signed-off-by: Dmitry Perchanov <dmitry.perchanov@intel.com>
 ---
+ drivers/media/usb/uvc/uvc_driver.c | 72 ++++++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-The following changes since commit 5dc4c995db9eb45f6373a956eb1f69460e69e6d4:
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc=
+_driver.c
+index e4bcb5011360..955f67d9a993 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -3000,6 +3000,78 @@ static const struct usb_device_id uvc_ids[] =3D {
+ 	  .bInterfaceSubClass	=3D 1,
+ 	  .bInterfaceProtocol	=3D 0,
+ 	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel D410/ASR depth camera */
++	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		=3D 0x8086,
++	  .idProduct		=3D 0x0ad2,
++	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	=3D 1,
++	  .bInterfaceProtocol	=3D 0,
++	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel D415/ASRC depth camera */
++	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		=3D 0x8086,
++	  .idProduct		=3D 0x0ad3,
++	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	=3D 1,
++	  .bInterfaceProtocol	=3D 0,
++	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel D430/AWG depth camera */
++	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		=3D 0x8086,
++	  .idProduct		=3D 0x0ad4,
++	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	=3D 1,
++	  .bInterfaceProtocol	=3D 0,
++	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel Fallback USB2 Descriptor */
++	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		=3D 0x8086,
++	  .idProduct		=3D 0x0ad6,
++	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	=3D 1,
++	  .bInterfaceProtocol	=3D 0,
++	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel D435/AWGC depth camera */
++	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		=3D 0x8086,
++	  .idProduct		=3D 0x0b07,
++	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	=3D 1,
++	  .bInterfaceProtocol	=3D 0,
++	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel D435i depth camera */
++	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		=3D 0x8086,
++	  .idProduct		=3D 0x0b3a,
++	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	=3D 1,
++	  .bInterfaceProtocol	=3D 0,
++	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel D405 Depth Camera */
++	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		=3D 0x8086,
++	  .idProduct		=3D 0x0b5b,
++	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	=3D 1,
++	  .bInterfaceProtocol	=3D 0,
++	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Intel D455 Depth Camera */
++	{ .match_flags		=3D USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		=3D 0x8086,
++	  .idProduct		=3D 0x0b5c,
++	  .bInterfaceClass	=3D USB_CLASS_VIDEO,
++	  .bInterfaceSubClass	=3D 1,
++	  .bInterfaceProtocol	=3D 0,
++	  .driver_info		=3D UVC_INFO_META(V4L2_META_FMT_D4XX) },
+ 	/* Generic USB Video Class */
+ 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_UNDEFINED) },
+ 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_15) },
+-- =
 
-  Linux 6.2-rc4 (2023-01-15 09:22:43 -0600)
+2.25.1
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_urgent_for_v6.2_rc6
+---------------------------------------------------------------------
+Intel Israel (74) Limited
 
-for you to fetch changes up to 27b5de622ea3fe0ad5a31a0ebd9f7a0a276932d1:
+This e-mail and any attachments may contain confidential material for
+the sole use of the intended recipient(s). Any review or distribution
+by others is strictly prohibited. If you are not the intended
+recipient, please contact the sender and delete all copies.
 
-  x86/build: Move '-mindirect-branch-cs-prefix' out of GCC-only block (2023-01-22 11:36:45 +0100)
-
-----------------------------------------------------------------
-- Start checking for -mindirect-branch-cs-prefix clang support too now that LLVM
-  16 will support it
-
-- Fix a NULL ptr deref when suspending with Xen PV
-
-- Have a SEV-SNP guest check explicitly for features enabled by the hypervisor
-  and fail gracefully if some are unsupported by the guest instead of failing in
-  a non-obvious and hard-to-debug way
-
-- Fix a MSI descriptor leakage under Xen
-
-- Mark Xen's MSI domain as supporting MSI-X
-
-- Prevent legacy PIC interrupts from being resent in software by marking them
-  level triggered, as they should be, which lead to a NULL ptr deref
-
-----------------------------------------------------------------
-David Woodhouse (1):
-      x86/pci/xen: Set MSI_FLAG_PCI_MSIX support in Xen MSI domain
-
-Juergen Gross (1):
-      acpi: Fix suspend with Xen PV
-
-Nathan Chancellor (1):
-      x86/build: Move '-mindirect-branch-cs-prefix' out of GCC-only block
-
-Nikunj A Dadhania (1):
-      x86/sev: Add SEV-SNP guest feature negotiation support
-
-Thomas Gleixner (2):
-      x86/i8259: Mark legacy PIC interrupts with IRQ_LEVEL
-      x86/pci/xen: Fixup fallout from the PCI/MSI overhaul
-
- Documentation/x86/amd-memory-encryption.rst | 36 +++++++++++++++
- arch/x86/Makefile                           |  2 +-
- arch/x86/boot/compressed/ident_map_64.c     |  6 +++
- arch/x86/boot/compressed/misc.h             |  2 +
- arch/x86/boot/compressed/sev.c              | 70 +++++++++++++++++++++++++++++
- arch/x86/include/asm/acpi.h                 |  8 ++++
- arch/x86/include/asm/msr-index.h            | 20 +++++++++
- arch/x86/include/uapi/asm/svm.h             |  6 +++
- arch/x86/kernel/i8259.c                     |  1 +
- arch/x86/kernel/irqinit.c                   |  4 +-
- arch/x86/pci/xen.c                          |  2 +
- drivers/acpi/sleep.c                        |  6 ++-
- 12 files changed, 160 insertions(+), 3 deletions(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
