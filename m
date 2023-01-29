@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB2568001E
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BE6680021
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjA2QBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 11:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S234449AbjA2QBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 11:01:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjA2QBO (ORCPT
+        with ESMTP id S232549AbjA2QBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 11:01:14 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F701C5BD
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 08:01:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1675008042; bh=ST8OOQg87jft8uBWiLegaKtj4NQH5sKdp3sJcQviw1s=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=ozbjeuxI+VbA6JOUUxFtJKOJpgwdtwT/hBzwmSJvShn0pMx/1NEU0lXrfKsa6bTwj
-         VltGN7Sxao9X+6ZUV3Rom4eF19SCwqnEyCOD0OhW5wjkTztxXgxLJ6s8rXldJv76e1
-         ZcewKHazaAuPzQcrAM7/P47AYSDiwqgjUDxAHkSZrN5tcobl8lqwsY1Eeag2AqMuSc
-         jiklzu4Ben9jjKkyVTL8/jsAGvNr0DtM0CGGHhr+kCkMkFV96fCzlGxZvCTstFAStH
-         0HjwVHAS9ghx5mHoe6WHmzLksE9DdS/MQVhrn7xeCfkY8GFYJoEEPcVpTmw1LILEI2
-         IjyvtHUD4fkQQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3UUy-1pLc8u24jS-000dJC; Sun, 29
- Jan 2023 17:00:42 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        William Zhang <william.zhang@broadcom.com>,
-        Michael Walle <michael@walle.cc>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: Allow DEBUG_UNCOMPRESS on ARCH_MULTIPLATFORM
-Date:   Sun, 29 Jan 2023 17:00:38 +0100
-Message-Id: <20230129160039.1598347-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.0
+        Sun, 29 Jan 2023 11:01:38 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2616D1F92B
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 08:01:35 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso1626868wms.5
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 08:01:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VaYQWv6xZ5TTyHoxaDqQOnl6+vxxWnFWLnikW3QAHTs=;
+        b=kk43o2FzJhQJ7hemG1HCrwhbWsQx3yXbIjyvGRa1pDOcYHaIK/MWoOAAc4k/LebWoC
+         JISrDyd2MM4KJTtVHcmQeiXcoF93eCcwt8uARRftYYhMD3TF6cz/LsDaBdDX2LnfRHP/
+         ysCeiWE8JF37GtafWbroiSir7rdZfI/wxVOzduAcc7CmijWeBoIWWYmoXwa4rXNJi0yX
+         y35V1m4T5LYtO1C1ct+EJQ0XUOMiRbiZs2bgvLZwkoZG26JXskX0yjrNFIFkf8kqKsHu
+         p3WP+qxkeNfKwpDESV3fADdF73/8v/6Gvp+HztEt6qC2buMWt1lecEi04sav/JGQZ3wk
+         S17g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VaYQWv6xZ5TTyHoxaDqQOnl6+vxxWnFWLnikW3QAHTs=;
+        b=Yjn7HBmXvQhTtc6yvGRwUCdGaSLVKIJqpcT9L5ClBATc9xTacdmni12ZmkOi1FdGjN
+         43aI0WU/ir9bmnJKHj9owph9xcTa3p+dWeQqTorwEMR/J60qrCNtOd25RR2INJ8dbsiR
+         Hnw3r6GZdhZa1K1lL/Xvd4rkmiSyYWZ93pE4UNxu3Fax2f31QlSjfn1CeLQVf9dPTcmf
+         iyS7aKvUHBJUMKbJ1d1+8OrP+ge7zvsB/JnjS1dQwL/M2SBqVTMdHrPegmz2291Cyx7P
+         bkfglnEPrZLcbFEvvevzIUHQFZvmUOESbSv52Kbh9zlXmnNMWxp9LFmRjamBthEiiZYN
+         ScTw==
+X-Gm-Message-State: AO0yUKV37ue8uTU+K+l+WPrPq6yR+x37qmDJEe7LK9eivs3Hoo+VXhtb
+        1F5ynHz1tBFBWY5WPVgAcjIGLg==
+X-Google-Smtp-Source: AK7set+6G9+19ovGlu+q2bRz/VGxfdK6a4Il3tekS0A66i+VUB4hNQIEctoGZkAxQZoo1P7L70Q2Ww==
+X-Received: by 2002:a7b:c44a:0:b0:3dc:4871:7b66 with SMTP id l10-20020a7bc44a000000b003dc48717b66mr5263226wmi.29.1675008093699;
+        Sun, 29 Jan 2023 08:01:33 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id k28-20020a05600c1c9c00b003a84375d0d1sm14862013wms.44.2023.01.29.08.01.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Jan 2023 08:01:33 -0800 (PST)
+Message-ID: <3c5b6ae1-387f-143c-691f-92b96fe78270@linaro.org>
+Date:   Sun, 29 Jan 2023 17:01:32 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 3/3] gpio: mmio: Use new flag BGPIOF_NO_INPUT
+Content-Language: en-US
+To:     nl250060@ncr.com, Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126-gpio-mmio-fix-v1-0-8a20ce0e8275@ncr.com>
+ <20230126-gpio-mmio-fix-v1-3-8a20ce0e8275@ncr.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230126-gpio-mmio-fix-v1-3-8a20ce0e8275@ncr.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:y0zPz2/jnU5cxEONk1thuk1kU48OxSyRLv3zPI9kf5biySYnbcD
- L6yPgyS1d/zwA2yyoLwQZnGq6+Bq+Z2m0a08gUGM/IQE3/B75IxMraejM9Yf7wdQetw9CD5
- cEbIUaBWl9jPmNgd6CqcvOV2mFxMV2Q8N7oJAf7YEIy4hepoY/T0gqo7ragSWRtMbOA81WK
- PU5jgBlGozAGgDfNyR+8w==
-UI-OutboundReport: notjunk:1;M01:P0:N6GIuGLhNBA=;PeIzAQ+tA8Qcn2no/E33dZNUyVr
- A/TdGiBCVPbXXR3RyTKzjq8lIbSzyIZ6PdQZMGKvL3wLgjZRrOfGl7VB+ZxNSeHSh2UXkuwAs
- YdPEFr8TbIUixWYvthJw8oiKpEI+5ewznagHNJk3+k/kN+cy8mD4SUvSFyZ27yUHByxdf14Cd
- 9TKpsfiEhDpyRGTy/JCjRvWD6gymquIT2DZxI9DiQm1p2be+RSdldEGHeaOjlJUOu3aTF84MJ
- MxsIj9xtpCo2UqcDq3QoTEDRIEkAYCM345JbYt7GyqnczAmGz2RPw8SoLl0ksEUW19Okxn47W
- 8cgdXBVkRi60Il5lTAMEE9xqmBLd76PPEQ5G/W6/9qkNdSSUL54X3zjFFLikTpkLGgfPtUoYb
- qC/+EaYJkFBZbpBsJqrDF0YROLBDCrMphUaje/4oD30DQYn9P5qCP49kK82BfMF7rjmxsOSgR
- lg0kGIJlJ1AhusTju3x6KhCHBSAK8rwAAjOMGxKm9yKa9td9zPB8k1YmVNIiOEmKSFrqzlME8
- jXr9mz752BbDp4JnRviNyo3gdfjwe304kK5A1eSbDCbLESMHqhfNW/rTULT98dAIdEYpe6D6P
- vvPyNPpO5chMa4vw5JfEDRP/nMkfJsC2wVONe4ggVYuzpzInPmz0F2gT/OpCv5ry47JR4Ot/S
- qn5LdTxVLo8jxVrJAdEdpV0iPenIuu1UAkIVZAFtVmUbUam/3hapVoPR3pBsgZnF2lpuE91Mn
- QnA96dUMUbV60vn+dxBZyelvo4FXtV+NX/foi1RWDh+WVDP+TNg1c7Jf1zk70Qc1qLI8+oDTN
- 1N01zg3CCs6Wx2HoRvdAOCGftcTORA1OgHXOwnEbXuvaLh757q5pDenDZnOj7qgY+34cuZVLi
- El2tTgjMJxdwxzG4xDDhp/pI8/yEDkghopbgdjRbiMtabv46U31j6NiGnAl070YCVoRM4nb0p
- iVytDIzIUGlHtQNtEHI6w/wPsVE=
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A kernel with DEBUG_UNCOMPRESS=3Dy will only work on one platform, but
-that is already the case with DEBUG_LL=3Dy (and documented in its help
-text), and DEBUG_UNCOMPRESS depends on DEBUG_LL. Therefore, I don't
-think users need to be prevented from enabling DEBUG_UNCOMPRESS on
-ARCH_MULTIPLATFORM kernels.
+On 26/01/2023 11:17, Niall Leonard via B4 Submission Endpoint wrote:
+> From: Niall Leonard <nl250060@ncr.com>
+> 
+> Use the existing shadow data register 'bgpio_data' to allow
+> the last written value to be returned by the read operation
+> when BGPIOF_NO_INPUT flag is set.
+> 
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- arch/arm/Kconfig.debug | 1 -
- 1 file changed, 1 deletion(-)
+(...)
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index c345775f035bc..655f84ada30f4 100644
-=2D-- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -1904,7 +1904,6 @@ config DEBUG_UART_8250_PALMCHIP
+>  	if (gc->set == bgpio_set_set &&
+>  			!(flags & BGPIOF_UNREADABLE_REG_SET))
+>  		gc->bgpio_data = gc->read_reg(gc->reg_set);
+> @@ -711,6 +723,9 @@ static struct bgpio_pdata *bgpio_parse_dt(struct platform_device *pdev,
+>  	if (of_property_read_bool(pdev->dev.of_node, "no-output"))
+>  		*flags |= BGPIOF_NO_OUTPUT;
+>  
+> +	if (of_property_read_bool(pdev->dev.of_node, "no-input"))
 
- config DEBUG_UNCOMPRESS
- 	bool "Enable decompressor debugging via DEBUG_LL output"
--	depends on !ARCH_MULTIPLATFORM
- 	depends on !(ARCH_FOOTBRIDGE || ARCH_RPC || ARCH_SA1100)
- 	depends on DEBUG_LL && !DEBUG_OMAP2PLUS_UART && \
- 		     (!DEBUG_TEGRA_UART || !ZBOOT_ROM) && \
-=2D-
-2.39.0
+As pointed, this brings undocumented property to two other bindings.
+This needs to be fixed.
+
+Best regards,
+Krzysztof
 
