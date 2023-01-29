@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AA267FDEA
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 10:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9010067FDF0
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 10:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234711AbjA2JnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 04:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S234618AbjA2JnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 04:43:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbjA2Jm6 (ORCPT
+        with ESMTP id S232515AbjA2Jm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 04:42:58 -0500
+        Sun, 29 Jan 2023 04:42:59 -0500
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E797683;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D7FA250;
         Sun, 29 Jan 2023 01:42:53 -0800 (PST)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 1997FCDE2A;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 52C50CDE2B;
         Sun, 29 Jan 2023 09:42:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1674985372; bh=wpSIFiFaQeJjpP8EjFtZNN2+bMm1UD9zAgvnDvRYovM=;
+        t=1674985372; bh=R963XiWG8I087EIGFoGr/eGgPVKChoDVSb6l1Zl4J0Q=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=l48RjCz+Cfmfm0bJfpsAWmWNGlylZQM+N2a+m5yTqO/S5SVwqCKHpK9bUuR+ME0kV
-         7lcOBpk/pP2AXdDHSGtQVyJhz91qZX7Pox432PdnN+Lzt8y3iRiVn3s2p5ewu6Zv3c
-         bQnlbJToe7mxGen7DZv44iR4jfRXNtPKCqG/gBOo=
+        b=DstNmFfp95SRGDa92uNqmd5yQrsVFsuidzdBloW+r035OXLeNNME4CP1bFq3Aluk/
+         VtwJ+2o7ePhRyctRSK/pmXjRwheISmhPlT4zBtxkp0OBQHP/LRp00i7SqBzj8BdNHn
+         9+RHvFeXH6kOa1gN0ucF0Wz53d7gQoIpJe+Os1H4=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Sun, 29 Jan 2023 10:42:37 +0100
-Subject: [PATCH 3/4] media: i2c: ov2685: Add controls from fwnode
+Date:   Sun, 29 Jan 2023 10:42:38 +0100
+Subject: [PATCH 4/4] media: i2c: ov2685: Add .get_selection() support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230129-ov2685-improvements-v1-3-f281bd49399c@z3ntu.xyz>
+Message-Id: <20230129-ov2685-improvements-v1-4-f281bd49399c@z3ntu.xyz>
 References: <20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz>
 In-Reply-To: <20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz>
 To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
@@ -40,19 +40,19 @@ To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Luca Weiss <luca@z3ntu.xyz>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1524; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=wpSIFiFaQeJjpP8EjFtZNN2+bMm1UD9zAgvnDvRYovM=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj1j+ZRG8/vFXpNlQCejfrorbGALJ4DzE5NPq2PhbN
- gmDYKE+JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY9Y/mQAKCRBy2EO4nU3XVqfMD/
- 9BlHLJDxQXyX2cvIcxslpCQxeF8y8lfwJcDX/CrSmPEhMdn6FEsJFLBC/VoWdYxj9n2F8Jjo8/hSA7
- bev0yJAnvZkB+YzYzJQ7/I+S15dRUdy9Y7KBQp5k1qxHdslgVy1TV2yXmXaYMdUWu3JxQbHFTUo0YJ
- WGV2jjBd96d+qgEjCojCrSouM3iDNVN0JLUd7QMtuNsSTw7lw6piceP9ovQwZTd90U1fV3rItn+bpQ
- Kvsu+2jBFol2KurLWre0YQUGu7TM29f9fIer0vzI49bXHxS8a3DEGt6GMmP62NPL1BXrjTYgdK8qtn
- r+ZClWu/t0XiTdi/2TtdQHQmgn4BMbN3SM6KLRL5qUDQd4/nAYENWACDlybU/XV194F14E7jXwuBc+
- TVb5IULaggBbhLsj7htcA3PQAzXpVwCmGxe0t5j6FiJyeZIl/z/OmfZ46F0ApOiiTSgA85qS/7NjnB
- 25exPZf7PYcjYKyNPmW6KVCV6RjJBNe3NvRW67JNusoXKbfGUDH57PkpqIBbwDLRmk37Vhwyrh4+NZ
- mUB+N3VYXfiSkHQZKG+1a27nbhIz3cfafnQM23SIVhJKcaaB+ttL79AnmUimuqoM8JveDbASgxznfG
- 47VpcdiPrlPWy35N9i36O3NcVDHeW7mra0+hOwReaPkdTE/uOSg52dv4sUTg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3319; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=R963XiWG8I087EIGFoGr/eGgPVKChoDVSb6l1Zl4J0Q=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBj1j+aqBXyjFkPdby91LLjF/yrKIZSCZpCNPcCKsav
+ /6FCtoyJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY9Y/mgAKCRBy2EO4nU3XVvgkD/
+ 9NpFgf8l4TLxIgs+R9/TAQlDzNPv5QDgG+gXK2m+S1tgZ4MufPtjAbO7LlF1SFJROrgEr6povkje5o
+ AgYamk0Jn5Ct6+7+HB6AL+Oqk24T9z1VzFuI/3XIGrIEPHUgabMpCvCcPe5EU4iWdo43/tK4vsRS4u
+ lsgRVMflNbUwwFpff1TWT055ruX8I17wVh/M90spfuY9Cyu23QibeldcBXolToLeiY346k6Z3zJ8i0
+ pwfHxock/kn51jo4u6xhONLjDW3a0JMMtWg98okaxhSgZZYwqnFE8wGXyNIvgHDoeHxxVA7SHrJt6l
+ 6T5kHnELqHeAN/YJaaE58Sbp7MtveS2o9ByjFwFmwbuYnmKf/WzxQIHswLRWBa44zp/B7c/YkoHIHg
+ TXPdoUZ2+OWkwtBXDvInALMzDNIlJxwtc8txA60FiFbFGg9MQteIKoSjOm2qvyoVa5rm8/pgWCsuki
+ FntIJMh9QOdw9SSDDc9O8y1pPVmHgxHuTXRUDjKFaBfH3wF4XPSoPBY6cfy4jgjZHwfiGXlSuK/Pld
+ usPXHEoR5kdGLrghO4NHxueDiICr/tBLKBC40hEri9E91nK0xsRw9q0Dsdj28ge/K5IhHYqhVWOB2K
+ MSckuuN+zbsY8QqPYfeMx6NtyA+Myqp3yUAgjZJaXASt4+dfsv5J5QaBz+AA==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,50 +65,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add V4L2_CID_CAMERA_ORIENTATION and V4L2_CID_CAMERA_SENSOR_ROTATION
-controls to the ov2685 driver by attempting to parse them from firmware.
+Add support for the .get_selection() pad operation to the ov2685 sensor
+driver.
+
+Report the native sensor size (pixel array), the crop bounds (readable
+pixel array area) and the current and default analog crop rectangles.
 
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- drivers/media/i2c/ov2685.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/i2c/ov2685.c | 61 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
 diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-index 844a91dbc8e5..bfced11b178b 100644
+index bfced11b178b..7ebf36d1a8cc 100644
 --- a/drivers/media/i2c/ov2685.c
 +++ b/drivers/media/i2c/ov2685.c
-@@ -17,6 +17,7 @@
- #include <media/media-entity.h>
- #include <media/v4l2-async.h>
- #include <media/v4l2-ctrls.h>
-+#include <media/v4l2-fwnode.h>
- #include <media/v4l2-subdev.h>
+@@ -56,6 +56,9 @@
+ #define OV2685_REG_VALUE_16BIT		2
+ #define OV2685_REG_VALUE_24BIT		3
  
- #define CHIP_ID				0x2685
-@@ -613,6 +614,7 @@ static int ov2685_initialize_controls(struct ov2685 *ov2685)
- 	const struct ov2685_mode *mode;
- 	struct v4l2_ctrl_handler *handler;
- 	struct v4l2_ctrl *ctrl;
-+	struct v4l2_fwnode_device_properties props;
- 	u64 exposure_max;
- 	u32 pixel_rate, h_blank;
- 	int ret;
-@@ -661,6 +663,15 @@ static int ov2685_initialize_controls(struct ov2685 *ov2685)
- 				ARRAY_SIZE(ov2685_test_pattern_menu) - 1,
- 				0, 0, ov2685_test_pattern_menu);
++#define OV2685_NATIVE_WIDTH		1616
++#define OV2685_NATIVE_HEIGHT		1216
++
+ #define OV2685_LANES			1
+ #define OV2685_BITS_PER_SAMPLE		10
  
-+	/* set properties from fwnode (e.g. rotation, orientation) */
-+	ret = v4l2_fwnode_device_parse(&ov2685->client->dev, &props);
-+	if (ret)
-+		goto err_free_handler;
+@@ -78,6 +81,7 @@ struct ov2685_mode {
+ 	u32 exp_def;
+ 	u32 hts_def;
+ 	u32 vts_def;
++	const struct v4l2_rect *analog_crop;
+ 	const struct regval *reg_list;
+ };
+ 
+@@ -231,6 +235,13 @@ static const int ov2685_test_pattern_val[] = {
+ 	OV2685_TEST_PATTERN_COLOR_SQUARE,
+ };
+ 
++static const struct v4l2_rect ov2685_analog_crop = {
++	.left	= 8,
++	.top	= 8,
++	.width	= 1600,
++	.height	= 1200,
++};
 +
-+	ret = v4l2_ctrl_new_fwnode_properties(handler, &ov2685_ctrl_ops, &props);
-+	if (ret)
-+		goto err_free_handler;
+ static const struct ov2685_mode supported_modes[] = {
+ 	{
+ 		.width = 1600,
+@@ -238,6 +249,7 @@ static const struct ov2685_mode supported_modes[] = {
+ 		.exp_def = 0x04ee,
+ 		.hts_def = 0x06a4,
+ 		.vts_def = 0x050e,
++		.analog_crop = &ov2685_analog_crop,
+ 		.reg_list = ov2685_1600x1200_regs,
+ 	},
+ };
+@@ -384,6 +396,53 @@ static int ov2685_enum_frame_sizes(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
++static const struct v4l2_rect *
++__ov2685_get_pad_crop(struct ov2685 *ov2685,
++		      struct v4l2_subdev_state *state, unsigned int pad,
++		      enum v4l2_subdev_format_whence which)
++{
++	const struct ov2685_mode *mode = ov2685->cur_mode;
 +
- 	if (handler->error) {
- 		ret = handler->error;
- 		dev_err(&ov2685->client->dev,
++	switch (which) {
++	case V4L2_SUBDEV_FORMAT_TRY:
++		return v4l2_subdev_get_try_crop(&ov2685->subdev, state, pad);
++	case V4L2_SUBDEV_FORMAT_ACTIVE:
++		return mode->analog_crop;
++	}
++
++	return NULL;
++}
++
++static int ov2685_get_selection(struct v4l2_subdev *sd,
++				struct v4l2_subdev_state *sd_state,
++				struct v4l2_subdev_selection *sel)
++{
++	struct ov2685 *ov2685 = to_ov2685(sd);
++
++	switch (sel->target) {
++	case V4L2_SEL_TGT_CROP:
++		mutex_lock(&ov2685->mutex);
++		sel->r = *__ov2685_get_pad_crop(ov2685, sd_state, sel->pad,
++				sel->which);
++		mutex_unlock(&ov2685->mutex);
++		break;
++	case V4L2_SEL_TGT_NATIVE_SIZE:
++	case V4L2_SEL_TGT_CROP_BOUNDS:
++		sel->r.top = 0;
++		sel->r.left = 0;
++		sel->r.width = OV2685_NATIVE_WIDTH;
++		sel->r.height = OV2685_NATIVE_HEIGHT;
++		break;
++	case V4L2_SEL_TGT_CROP_DEFAULT:
++		sel->r = ov2685_analog_crop;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ /* Calculate the delay in us by clock rate and clock cycles */
+ static inline u32 ov2685_cal_delay(u32 cycles)
+ {
+@@ -592,6 +651,8 @@ static const struct v4l2_subdev_pad_ops ov2685_pad_ops = {
+ 	.enum_frame_size = ov2685_enum_frame_sizes,
+ 	.get_fmt = ov2685_get_fmt,
+ 	.set_fmt = ov2685_set_fmt,
++	.get_selection = ov2685_get_selection,
++	.set_selection = ov2685_get_selection,
+ };
+ 
+ static const struct v4l2_subdev_ops ov2685_subdev_ops = {
 
 -- 
 2.39.1
