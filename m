@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F81F67FC25
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEE867FC28
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbjA2BfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 20:35:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S231624AbjA2BfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 20:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjA2Bem (ORCPT
+        with ESMTP id S232055AbjA2Bez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 20:34:42 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838536E90;
-        Sat, 28 Jan 2023 17:34:40 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so7812374wma.1;
-        Sat, 28 Jan 2023 17:34:40 -0800 (PST)
+        Sat, 28 Jan 2023 20:34:55 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D42227A7;
+        Sat, 28 Jan 2023 17:34:48 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so7824280wmb.0;
+        Sat, 28 Jan 2023 17:34:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AFBA6s5bUSQHKQZCR86FqzNyuwtdgl9QTJx6x9ni9F4=;
-        b=VH5GtG2GT8h1gDoyFtU+s0tcejchUSM7o9pZfktwqqMoncROB3KT271+9lnG8DvUlu
-         Z18QiusI/CkhwGksNq+j1M6fxmGmjfq48ji++DoLiqKvfl08R1M+THPACq0FjYXT+rM2
-         T/4Ep0s1MRJ+XF5sgeRTpuv/qwEPUb+Vi8L986VvpFkdR4da5oaUeE6BzkMtJsKjbGAu
-         RBxk7+r+fyRo+SNNvVkJpyIEdGVwH+tQGcH6zFufPH7c/pSMhwl44KwVQcgR8l2GKyot
-         WDb28KOtsZkdasgmJT+MXDs8CziuMBb6vFjo6lGNNVsiMDYt3VuSuFW9gJt8ir8ANhnK
-         OM7Q==
+        bh=bM0qucXfvVQKhID/FnUOMltEKs8rxZzOAPjYUvwbaic=;
+        b=c2y4WG3NAKhRDnoZCtb0LhLspsMfb7BhPNCSyhuDN8PtyRRjOSG3UYQHuty82opyEF
+         wN5ow9JvF1IGNTvVWZ6/VOcSQ22Dd6fAa1pyFxQXEqAMFCntjOaJijiWxiOd9vUyzX2k
+         iUIr0HXlL/1FwPeXNQ315OolktCjRYi1eoVNo58qmu12ZiaQTqNzq36EbHBcut1ctxXW
+         RGISl+tyJs3vLQPHJC0GxsdG6Mo8EcfvheDH+ikKju3ZR68x5O8fA9SXBUi1cdbh47Q4
+         XYtpHJ1gDOhqgS7+IY9FJMZk2Q661OYlJ0+GI2WtD1tqVkI7vTJpdR8BzYmV1AZoGdtx
+         SWVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AFBA6s5bUSQHKQZCR86FqzNyuwtdgl9QTJx6x9ni9F4=;
-        b=hlJ7N3Fimw8plmvJdXJW+948Pl03A9jOicnyavMs9j8+iylanIhu1BJ5D1/IaeY2Oc
-         lxJSoJ0E/89qY8cowA2oDoWaiFe/NYaUJgYLvrVeaahAC486Vp5rzjY84zjS+F6cvHeN
-         TdZHrneoiesS+I2zHcIH6Oykbj8oe/dJ5NTs+9dpOnpBMM75zIIROaYyx4Vk2Efvnhum
-         J9pbFAi8yG+jzGbA8HcPYzBjS4PDzEPLDw1r4DONCiDk4Ls/T8iHczf2iYuADxnxApfL
-         dCeMfcZw5yaGgX1VFD6p7WsFCTg3hHzYWBrvaDuArC7+/cTQKT//IiNWRfbuEkvPqtxC
-         qZkg==
-X-Gm-Message-State: AFqh2kryAxiFoNjgcAXNXh4VLAANiiZbZbL6O+H7QA5M2l364qKXrf0m
-        F9mFCiI/Go2GARyg9zS72a/F86Eud8Y=
-X-Google-Smtp-Source: AMrXdXsE73BjVrDiu1Be+/qn/WFA+vMxgCMo1PvaH0Id3EU6JhoDwuyzVYqPUQQCBV1cR7XoeCf63w==
-X-Received: by 2002:a05:600c:540d:b0:3d9:fb59:c16b with SMTP id he13-20020a05600c540d00b003d9fb59c16bmr41793830wmb.36.1674956078932;
-        Sat, 28 Jan 2023 17:34:38 -0800 (PST)
+        bh=bM0qucXfvVQKhID/FnUOMltEKs8rxZzOAPjYUvwbaic=;
+        b=p7Ia0cK/yZH2QHReeKcw+9XEYzX8Jy+K63FFNqb8AE9T2jHNhtQH5lQCLso/UeuRsv
+         RajumN8mGlQ4IRKX/2ampwc8huazZQq1ysaa6I3n8wOWVysE0yNKzOE8YdqqN/8BDRcK
+         fq+G99cSjNVny8j7BEvSCO/xEZaWrl4KKObcYx+3eeENl1TgTJrBKxRKSH49OT9PnLXa
+         KXihszGcVOyGGxdozd20uB/o5rP76yjUPc1qjxHPGx5iLYaNPPtxyAxDEXtllYOD636g
+         /aKLczhLHdlbFVp+n0J6w4R+hlhE5RoU5xmbr4xuDk206ROYudXLbPeZhmRFpYZxq1tj
+         xMZg==
+X-Gm-Message-State: AFqh2kqckW5gw9Wb9Bu8rgWJL7eqv6dUBsCRX6zKqbVUEQHKBsEmpNT5
+        HTslwed33V7gNHd9OnqqwDgjykceQtw=
+X-Google-Smtp-Source: AMrXdXtcfTfF8757XXTQ05Zqcx6IoSfu3Rpq0oy4KPBtmkV66FgUPcoBEUnL8Cosc8yIFU5WKZDzTg==
+X-Received: by 2002:a05:600c:2d08:b0:3cf:7dc1:f424 with SMTP id x8-20020a05600c2d0800b003cf7dc1f424mr44150800wmf.3.1674956088325;
+        Sat, 28 Jan 2023 17:34:48 -0800 (PST)
 Received: from localhost.localdomain (143.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.143])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c434700b003dc3f195abesm5197132wme.39.2023.01.28.17.34.38
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c434700b003dc3f195abesm5197132wme.39.2023.01.28.17.34.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 17:34:38 -0800 (PST)
+        Sat, 28 Jan 2023 17:34:48 -0800 (PST)
 From:   Angel Iglesias <ang.iglesiasg@gmail.com>
 To:     linux-iio@vger.kernel.org
 Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
@@ -60,9 +60,9 @@ Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/7] iio: pressure: bmp280: Make read calibration callback optional
-Date:   Sun, 29 Jan 2023 02:33:05 +0100
-Message-Id: <61b0aee1c4838caed97774dccd88ed9fae279f76.1674954271.git.ang.iglesiasg@gmail.com>
+Subject: [PATCH v3 4/7] iio: pressure: Kconfig: Delete misleading I2C reference on bmp280 title
+Date:   Sun, 29 Jan 2023 02:33:06 +0100
+Message-Id: <aa005a85c1b3ca69ae9bfe24f30beed258f98f29.1674954271.git.ang.iglesiasg@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1674954271.git.ang.iglesiasg@gmail.com>
 References: <cover.1674954271.git.ang.iglesiasg@gmail.com>
@@ -78,33 +78,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Newer models do not require read the calibration parameters and apply the
-compensation algorithms in the sensor.
+Title entry for BMP280 called the driver an I2C implementation, when the
+driver supports both I2C and SPI.
 
-Suggested-by: Jonathan Cameron <jic23@kernel.org>
 Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 
-diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index 6467034b1d3e..22addaaa5393 100644
---- a/drivers/iio/pressure/bmp280-core.c
-+++ b/drivers/iio/pressure/bmp280-core.c
-@@ -1631,10 +1631,12 @@ int bmp280_common_probe(struct device *dev,
- 	 * time once. They will not change.
- 	 */
+diff --git a/drivers/iio/pressure/Kconfig b/drivers/iio/pressure/Kconfig
+index c9453389e4f7..cec4b429cd64 100644
+--- a/drivers/iio/pressure/Kconfig
++++ b/drivers/iio/pressure/Kconfig
+@@ -17,7 +17,7 @@ config ABP060MG
+ 	  will be called abp060mg.
  
--	ret = data->chip_info->read_calib(data);
--	if (ret < 0)
--		return dev_err_probe(data->dev, ret,
--				     "failed to read calibration coefficients\n");
-+	if (data->chip_info->read_calib) {
-+		ret = data->chip_info->read_calib(data);
-+		if (ret < 0)
-+			return dev_err_probe(data->dev, ret,
-+					     "failed to read calibration coefficients\n");
-+	}
- 
- 	/*
- 	 * Attempt to grab an optional EOC IRQ - only the BMP085 has this
+ config BMP280
+-	tristate "Bosch Sensortec BMP180/BMP280/BMP380 pressure sensor I2C driver"
++	tristate "Bosch Sensortec BMP180/BMP280/BMP380 pressure sensor driver"
+ 	depends on (I2C || SPI_MASTER)
+ 	select REGMAP
+ 	select BMP280_I2C if (I2C)
 -- 
 2.39.1
 
