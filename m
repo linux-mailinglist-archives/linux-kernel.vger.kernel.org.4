@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729E567FD08
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 07:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7ED567FD0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 07:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjA2GDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 01:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S231648AbjA2GE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 01:04:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbjA2GDG (ORCPT
+        with ESMTP id S229513AbjA2GEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 01:03:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54EE22DE3
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 22:02:22 -0800 (PST)
+        Sun, 29 Jan 2023 01:04:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1ACA233CB
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 22:03:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674972142;
+        s=mimecast20190719; t=1674972205;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=G+y0lNUe2D3FZqvZZMcDdGneE6tCR0dFmD5Cj+Ac+co=;
-        b=YvIV1iewCrbw3wBYBARhLg0s9HQKXGUTeaBlhrMsgzTc/RDwnyG3PbIopdGvz75XY9IAef
-        aE1LR1mB2lzA1chcDA2nkbXaPZtVJwOaYhWl+/+FzvQjh2TXFwSQAvhULHvMwocm6J1Ol0
-        /z/Y8Ux0PIA6g3HVRpMO+5m7SzCjsH8=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=45bUkiep54tmBTJEkS/MNpluSkiEVK+TLNueCz5nf8c=;
+        b=Eyj9EzP7WkcTYLrbykQQmPyRwwTcLqpNZzJdS1FdxoBrpjQBjWRxYl9LzvFJbM7+HJSEWX
+        uBoxGDuyy2GzxrayVwV2O13RMmdDFCJcss1aHfAjU/gEeH68Z96s2yg5DMfhdwzA9MfEmH
+        LYc/k9vW10EOHH7BciHYOTo8wF2aAXw=
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
+ [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-219-t9me9Ip6O76NnNHTxN1WXw-1; Sun, 29 Jan 2023 01:02:20 -0500
-X-MC-Unique: t9me9Ip6O76NnNHTxN1WXw-1
-Received: by mail-oo1-f71.google.com with SMTP id g26-20020a4a755a000000b004dd8e8ace8bso1915447oof.9
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 22:02:20 -0800 (PST)
+ us-mta-20-YQM2rnvPMfaDDiddBI2sGA-1; Sun, 29 Jan 2023 01:03:23 -0500
+X-MC-Unique: YQM2rnvPMfaDDiddBI2sGA-1
+Received: by mail-oo1-f69.google.com with SMTP id n15-20020a4a954f000000b005176ac0674dso67179ooi.1
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 22:03:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G+y0lNUe2D3FZqvZZMcDdGneE6tCR0dFmD5Cj+Ac+co=;
-        b=DjnNUMV3DgMrLLrlvFLceBuG5UvflQ2E1QwtOmO+wBDWZ/u36498X1zZAEG9VCMPVM
-         v2+Pn2Q/2bL7DYw15F2KvWvCBPsTXU+KBe1OkyFCibwtpo9l8g6Cuvc/N0ZUK01UYg+E
-         Fmg+XYyuX4ycfky84h67JL48HP84MpYL4FeZW9Ud/7tjDccrke4qZbEqU1OexZdzeY/N
-         BMcG2eF7lgetKS/DaMGLhI7FepNY6FVuvJsW8SqIykOLLbRKZXJOGRSW57AeJ25352q/
-         BbqFbSehZXl6yhQes4B2OuwQBUvTZebIjo0x1ijT9TsRBc4SDx4dJldSVrM3Drba1oq9
-         J7eQ==
-X-Gm-Message-State: AO0yUKWvIJNzH4MbZBvGFS7GOk7wH0J/e87MS+pp8q/sOfpeBwAlNZBN
-        Gg6P77Y+Mx2zgqlzE732O8zqeSAQzTM2ZYX+Atnq+WZGLFFGNKebO4TA+4gh+5RrQQQMIkOzgY3
-        btH/4iFPwCo+D+jk/HihTtdYBmG9nN85noexih875
-X-Received: by 2002:a4a:3457:0:b0:517:7850:6483 with SMTP id n23-20020a4a3457000000b0051778506483mr946oof.3.1674972139679;
-        Sat, 28 Jan 2023 22:02:19 -0800 (PST)
-X-Google-Smtp-Source: AK7set8mW0JZ/n8lyZTTpcC67kMpT2Kinp8/MANimSerBoRFqCNzWu7WVdXpOca4BzGXE3JkgQMmFmJ+hFInW8+aXt4=
-X-Received: by 2002:a4a:3457:0:b0:517:7850:6483 with SMTP id
- n23-20020a4a3457000000b0051778506483mr940oof.3.1674972139474; Sat, 28 Jan
- 2023 22:02:19 -0800 (PST)
+        bh=45bUkiep54tmBTJEkS/MNpluSkiEVK+TLNueCz5nf8c=;
+        b=OCCV9TfbOn/dpmpvk4iJKUzhA8OoMiBmlnUWrejQaiE2qp9b8HpCaJWJgqZkzC//ph
+         piJT6k1E6op7oMuMVY51qcM5zSaR2urd8aQQAW5KUjpbcj4pT0xU5R4Agcg6qhdM/tNG
+         b9WsTWL9ftnVjQtkyT67HBj2rb9Tm5o+8N+uAXS3IlYPTM7K5zyx9qEulL/NSuiMqvBb
+         wW4uzryBROfuWlTOJP4ei3kUpeiM9rkxUdBIWBkqhH3EfQKU43J9juF9eWImOQMkGaKI
+         qGVvCyKeVHMmShkVLN+Mzz1UmCz0N1Et5bVJC5dQI9r0JNILJ0NGFZ601KlNuP18KSM6
+         QnPw==
+X-Gm-Message-State: AO0yUKVdbfZyHs8aAUM1IqZMo6/OYnPk+Nu3K51uNyFY6THj6fPUK6sC
+        J9ejNOXFbNIooy24DWHZRJVvZXwrb77JNjeqMd8sSX/v3ogFIlUMSVEwAaUYBh213eMGZte6UCo
+        DoMlAAkGwjtD6qy46lUZC9nrLtOACqH2pCjY18R1z
+X-Received: by 2002:a05:6870:959e:b0:163:9cea:eea7 with SMTP id k30-20020a056870959e00b001639ceaeea7mr116365oao.35.1674972202964;
+        Sat, 28 Jan 2023 22:03:22 -0800 (PST)
+X-Google-Smtp-Source: AK7set/OxwOzdOtXUfhziT4PTwF/YD77C6KS9ss0hcg3WVOqPDIPj+fm526ZXLHopV6orFx6BFjwUHOLW0de94q3pvs=
+X-Received: by 2002:a05:6870:959e:b0:163:9cea:eea7 with SMTP id
+ k30-20020a056870959e00b001639ceaeea7mr116360oao.35.1674972202797; Sat, 28 Jan
+ 2023 22:03:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20230128031740.166743-1-sunnanyong@huawei.com>
-In-Reply-To: <20230128031740.166743-1-sunnanyong@huawei.com>
+References: <20230129025034.2000-1-longpeng2@huawei.com> <20230129025034.2000-2-longpeng2@huawei.com>
+In-Reply-To: <20230129025034.2000-2-longpeng2@huawei.com>
 From:   Jason Wang <jasowang@redhat.com>
-Date:   Sun, 29 Jan 2023 14:02:08 +0800
-Message-ID: <CACGkMEtMAFMbhPnaaTwGRFofPM-p8ceKzAUbD2AFBz=fbR6hYQ@mail.gmail.com>
-Subject: Re: [PATCH] vhost/vdpa: Add MSI translation tables to iommu for
- software-managed MSI
-To:     Nanyong Sun <sunnanyong@huawei.com>
-Cc:     joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        mst@redhat.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        wangrong68@huawei.com
+Date:   Sun, 29 Jan 2023 14:03:11 +0800
+Message-ID: <CACGkMEuq=17Y6E6uSRdsRG8iuMrU6j9AeVS1s1EhnfHeoB+rkA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] vdpa: support specify the pgprot of vq
+ notification area
+To:     "Longpeng(Mike)" <longpeng2@huawei.com>
+Cc:     mst@redhat.com, stefanha@redhat.com, sgarzare@redhat.com,
+        arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, eperezma@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,121 +76,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 10:25 AM Nanyong Sun <sunnanyong@huawei.com> wrote:
+On Sun, Jan 29, 2023 at 10:51 AM Longpeng(Mike) <longpeng2@huawei.com> wrote:
 >
-> From: Rong Wang <wangrong68@huawei.com>
+> From: Longpeng <longpeng2@huawei.com>
 >
-> Once enable iommu domain for one device, the MSI
-> translation tables have to be there for software-managed MSI.
-> Otherwise, platform with software-managed MSI without an
-> irq bypass function, can not get a correct memory write event
-> from pcie, will not get irqs.
-> The solution is to obtain the MSI phy base address from
-> iommu reserved region, and set it to iommu MSI cookie,
-> then translation tables will be created while request irq.
->
-> Signed-off-by: Rong Wang <wangrong68@huawei.com>
-> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
-> ---
->  drivers/iommu/iommu.c |  1 +
->  drivers/vhost/vdpa.c  | 53 ++++++++++++++++++++++++++++++++++++++++---
->  2 files changed, 51 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-> index de91dd88705b..f6c65d5d8e2b 100644
-> --- a/drivers/iommu/iommu.c
-> +++ b/drivers/iommu/iommu.c
-> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, struct list_head *list)
->         if (ops->get_resv_regions)
->                 ops->get_resv_regions(dev, list);
->  }
-> +EXPORT_SYMBOL_GPL(iommu_get_resv_regions);
->
->  /**
->   * iommu_put_resv_regions - release resered regions
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index ec32f785dfde..31d3e9ed4cfa 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -1103,6 +1103,48 @@ static ssize_t vhost_vdpa_chr_write_iter(struct kiocb *iocb,
->         return vhost_chr_write_iter(dev, from);
->  }
->
-> +static bool vhost_vdpa_check_sw_msi(struct list_head *dev_resv_regions, phys_addr_t *base)
-> +{
-> +       struct iommu_resv_region *region;
-> +       bool ret = false;
-> +
-> +       list_for_each_entry(region, dev_resv_regions, list) {
-> +               /*
-> +                * The presence of any 'real' MSI regions should take
-> +                * precedence over the software-managed one if the
-> +                * IOMMU driver happens to advertise both types.
-> +                */
-> +               if (region->type == IOMMU_RESV_MSI) {
-> +                       ret = false;
-> +                       break;
-> +               }
-> +
-> +               if (region->type == IOMMU_RESV_SW_MSI) {
-> +                       *base = region->start;
-> +                       ret = true;
-> +               }
-> +       }
-> +
-> +       return ret;
-> +}
+> Adds get_vq_notification_pgprot operation to vdpa_config_ops to support
+> specify the pgprot of vq norification area. It's an optional operation,
+> the vdpa framework will treat the pgprot of vq notification area as
+> noncached as default as usual.
 
-Can we unify this with what VFIO had?
+Missing sob.
 
-> +
-> +static int vhost_vdpa_get_msi_cookie(struct iommu_domain *domain, struct device *dma_dev)
-> +{
-> +       struct list_head dev_resv_regions;
-> +       phys_addr_t resv_msi_base = 0;
-> +       int ret = 0;
-> +
-> +       INIT_LIST_HEAD(&dev_resv_regions);
-> +       iommu_get_resv_regions(dma_dev, &dev_resv_regions);
-> +
-> +       if (vhost_vdpa_check_sw_msi(&dev_resv_regions, &resv_msi_base))
-> +               ret = iommu_get_msi_cookie(domain, resv_msi_base);
-> +
-> +       iommu_put_resv_regions(dma_dev, &dev_resv_regions);
-> +
-> +       return ret;
-> +}
-> +
->  static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
->  {
->         struct vdpa_device *vdpa = v->vdpa;
-> @@ -1128,11 +1170,16 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
->
->         ret = iommu_attach_device(v->domain, dma_dev);
->         if (ret)
-> -               goto err_attach;
-> +               goto err_alloc_domain;
->
-> -       return 0;
-> +       ret = vhost_vdpa_get_msi_cookie(v->domain, dma_dev);
+Other than this.
 
-Do we need to check the overlap mapping and record it in the interval
-tree (as what VFIO did)?
+Acked-by: Jason Wang <jasowang@redhat.com>
 
 Thanks
 
-> +       if (ret)
-> +               goto err_attach_device;
+> ---
+>  drivers/vhost/vdpa.c | 4 +++-
+>  include/linux/vdpa.h | 9 +++++++++
+>  2 files changed, 12 insertions(+), 1 deletion(-)
 >
-> -err_attach:
-> +       return 0;
-> +err_attach_device:
-> +       iommu_detach_device(v->domain, dma_dev);
-> +err_alloc_domain:
->         iommu_domain_free(v->domain);
->         return ret;
->  }
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 166044642fd5..036fe88425c8 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -1263,7 +1263,9 @@ static vm_fault_t vhost_vdpa_fault(struct vm_fault *vmf)
+>
+>         notify = ops->get_vq_notification(vdpa, index);
+>
+> -       vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+> +       vma->vm_page_prot = ops->get_vq_notification_pgprot ?
+> +               ops->get_vq_notification_pgprot(vdpa, index, vma->vm_page_prot) :
+> +               pgprot_noncached(vma->vm_page_prot);
+>         if (remap_pfn_range(vma, vmf->address & PAGE_MASK,
+>                             PFN_DOWN(notify.addr), PAGE_SIZE,
+>                             vma->vm_page_prot))
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index 6d0f5e4e82c2..07fcf5e6abc8 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -169,6 +169,12 @@ struct vdpa_map_file {
+>   *                             @vdev: vdpa device
+>   *                             @idx: virtqueue index
+>   *                             Returns the notifcation area
+> + * @get_vq_notification_pgprot:        Get the pgprot of the vq's notification area (optional)
+> + *                             @vdev: vdpa device
+> + *                             @idx: virtqueue index
+> + *                             @prot: original page protection value of the
+> + *                                    notification area
+> + *                             Returns pgprot_t: the pgprot of the notification area
+>   * @get_vq_irq:                        Get the irq number of a virtqueue (optional,
+>   *                             but must implemented if require vq irq offloading)
+>   *                             @vdev: vdpa device
+> @@ -305,6 +311,9 @@ struct vdpa_config_ops {
+>                                    struct netlink_ext_ack *extack);
+>         struct vdpa_notification_area
+>         (*get_vq_notification)(struct vdpa_device *vdev, u16 idx);
+> +       pgprot_t (*get_vq_notification_pgprot)(struct vdpa_device *vdev,
+> +                                              u16 idx,
+> +                                              pgprot_t prot);
+>         /* vq irq is not expected to be changed once DRIVER_OK is set */
+>         int (*get_vq_irq)(struct vdpa_device *vdev, u16 idx);
+>
 > --
-> 2.25.1
+> 2.23.0
 >
 
