@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9410467FF8B
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 15:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B93267FF8C
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 15:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234976AbjA2OcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 09:32:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
+        id S234982AbjA2OcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 09:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234906AbjA2Ob7 (ORCPT
+        with ESMTP id S234930AbjA2OcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 09:31:59 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0C6166FF
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:31:58 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id kt14so25284323ejc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:31:58 -0800 (PST)
+        Sun, 29 Jan 2023 09:32:00 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6E7A5DF;
+        Sun, 29 Jan 2023 06:31:59 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id mc11so2755321ejb.10;
+        Sun, 29 Jan 2023 06:31:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h9M5VRC01DAZPfI0s5I19MARMALNHk/O6/g2Mh8se6M=;
-        b=GKQChDCG1pQ4JmYgLSffeC1uoGL4U/xz8U52slDhuyBih17z6meCRttz97n5TaAPeV
-         MBc2PIEEe3APf7vLjCjWZcnS6OZQFKUsLpv0h5DQjhbIha1jGH4QBPxbZqXbdH6AUWGR
-         yrZlb/uhY1jcEKwm53imUfH0dvjLFJrEVhToRBzg4FDBcQI4LQsEutHfinSRUeCeNZ9E
-         EpwxKQwIssyMZQIoxFhbGhX3SG7Qlue1DICVGuN7D9Jpb2buKQ1I9lqvXAMmxHNKmHch
-         CBkNJP6OhG6dAANgj0tOzWWNReQ4P3EQ9gcwc3dBfoMfMqUjzopQuJWzQuASniTEGMnC
-         oaoQ==
+        bh=SIsYvjDlZhXseIBbB+cVw5ndep5LtZPlaWmi5dbOsTU=;
+        b=MG0zYJDEuwdAIPlKTrUz/tAIjgDecO7da5aOjlPCt7ezTnZ3WgOceJliclMU9Pazqn
+         L5dGHo3y0fEB15rgAiisrsMFa+3jXGtLedc0ONf9sBkC0778amcL2vHCDKkUxC4jdhMT
+         L0rdAhvn8wVieQsB1oAkRsDJ3Nm+CF1BtUuyHf7VPOdNSRzLqHzgv/SclP4Frd+cOG6i
+         X2ENBpIDZWQgCSXsc7QISY2Rh49PaEbED3Zf2tNTKbt5TzReV7RmffSXlgodgbATqjEb
+         MHDIrbXq6HkYyWVfAE2XkUFSTeoREPo5WWPDuDI6ENlcV3w93U76jE0ms0yYIo2l/e8u
+         a3Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h9M5VRC01DAZPfI0s5I19MARMALNHk/O6/g2Mh8se6M=;
-        b=IjyAQJeGPMvwADuykgTBz3laKr7QKsK24gtbV1n1igOcKjrZCyVSRCmbEvfU6Wr7Sf
-         vXLeADmEaJN7UxFwZoHp+0nxn1O/wV2Jt73Sn3UDVKCv2V93GLzuHDR2Ly5EwZy8ReQ1
-         1gHXsvsBXof+SBmjyIJ4a/1prp5hCB24rVe5s/yr3XLo5zu9DgEj/03gQKQL5E1Z6Vno
-         knguWJEQtuSASm9v9anjKG41z+pgclPd8ku9nV90Z9qpfwlYQCSAgIEqQQ3lPLZ4d6RX
-         KByx2TgNYCYT6B1xELDWU9sErLSijkapki15qgQ8WxS668hkkGbODQ51jtrGPGqbCnMF
-         MAaw==
-X-Gm-Message-State: AFqh2kq82uWTE29dpZ7l9gIom9s6Ll4ILa807okjGbq6PUBC1qO1XCZl
-        RbMCgbwIEnieYpsEehrkuUU=
-X-Google-Smtp-Source: AMrXdXtlyTNhPlfvt+/MGH/iawBnMLip4b4VU687JDFjn1/LEWjQzZm+Ija2I/myfa/DFDViWhiNxQ==
-X-Received: by 2002:a17:906:57da:b0:872:5222:9024 with SMTP id u26-20020a17090657da00b0087252229024mr45172389ejr.67.1675002716932;
-        Sun, 29 Jan 2023 06:31:56 -0800 (PST)
+        bh=SIsYvjDlZhXseIBbB+cVw5ndep5LtZPlaWmi5dbOsTU=;
+        b=eNZ/LPmy6Syn9HfFVfk18QKFSYvwkMcqaERiZO7XwFXfzZh5Xz0wNuAudieDZBuIQ6
+         7NiTt4BrRZp1C1COF5eLqQCIlpjgfvzlowH2X9IqE2zMWh0gnLuY1uPitWenfO44B1Pz
+         72nZU3gIAVT4C9vdwXnArva6ND1zcOJ+qjOpO+6/PIbCRbPS3kWNUxV4r/d7qtkMpv/r
+         K1OqBmaiXk+ChYDkKHL+A3HY4MfB9A/kMTuwT81oN5HuJzdsC62gycCJ5ftoxhca6NRb
+         A0gF1lWsY6ZyzK6Nr8zYjDJ2UNGjoU1lOHyX3vKkrU6kNPAc8J8rolIBt4mFA8nc3PWJ
+         KVXA==
+X-Gm-Message-State: AO0yUKXCWCB+00PJ54V3h4DYqWPAqKh4Gq7KAPBXGoM0bkXHg299flOq
+        HihDs7DcBC4nB/Vlgox8ou0=
+X-Google-Smtp-Source: AK7set9Opdxx1Q5nZgj4I7SG11bJhP2LKEKpWGGYInJD7QBsb0eZzG8RWYkwDjUBL0J/cY+nvl432Q==
+X-Received: by 2002:a17:907:6e90:b0:887:915d:7502 with SMTP id sh16-20020a1709076e9000b00887915d7502mr2229039ejc.31.1675002717970;
+        Sun, 29 Jan 2023 06:31:57 -0800 (PST)
 Received: from localhost.localdomain (83.6.123.74.ipv4.supernova.orange.pl. [83.6.123.74])
-        by smtp.gmail.com with ESMTPSA id jr23-20020a170906515700b0086f4b8f9e42sm5410128ejc.65.2023.01.29.06.31.56
+        by smtp.gmail.com with ESMTPSA id jr23-20020a170906515700b0086f4b8f9e42sm5410128ejc.65.2023.01.29.06.31.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 06:31:56 -0800 (PST)
+        Sun, 29 Jan 2023 06:31:57 -0800 (PST)
 From:   Maya Matuszczyk <maccraft123mc@gmail.com>
-To:     Heiko Stuebner <heiko@sntech.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-rockchip@lists.infradead.org,
         dri-devel@lists.freedesktop.org,
         Maya Matuszczyk <maccraft123mc@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] drm: panel: Add Elida KD50T048A to Sitronix ST7701 driver
-Date:   Sun, 29 Jan 2023 15:31:40 +0100
-Message-Id: <20230129143141.173413-3-maccraft123mc@gmail.com>
+Subject: [PATCH 3/3] arm64: dts: rockchip: Add display support to Odroid Go Super
+Date:   Sun, 29 Jan 2023 15:31:41 +0100
+Message-Id: <20230129143141.173413-4-maccraft123mc@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230129143141.173413-1-maccraft123mc@gmail.com>
 References: <20230129143141.173413-1-maccraft123mc@gmail.com>
@@ -79,164 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add KD50T048A MIPI-DSI panel, which is based on ST7701 chip.
-Not sure what else to add to this commit message.
+Note that orientation property in ST7701 driver is currently missing,
+And that ST7701 panel driver uses different regulator names compared to
+driver for Elida KD35T133 driver.
 
 Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
 ---
- drivers/gpu/drm/panel/panel-sitronix-st7701.c | 125 ++++++++++++++++++
- 1 file changed, 125 insertions(+)
+ arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-sitronix-st7701.c b/drivers/gpu/drm/panel/panel-sitronix-st7701.c
-index 0b8cf65172ff..660c3f435008 100644
---- a/drivers/gpu/drm/panel/panel-sitronix-st7701.c
-+++ b/drivers/gpu/drm/panel/panel-sitronix-st7701.c
-@@ -397,6 +397,31 @@ static void dmt028vghmcmi_1a_gip_sequence(struct st7701 *st7701)
- 	ST7701_DSI(st7701, 0x3A, 0x70);
- }
- 
-+static void kd50t048a_gip_sequence(struct st7701 *st7701)
-+{
-+	/**
-+	 * ST7701_SPEC_V1.2 is unable to provide enough information above this
-+	 * specific command sequence, so grab the same from vendor BSP driver.
-+	 */
-+	ST7701_DSI(st7701, 0xE0, 0x00, 0x00, 0x02);
-+	ST7701_DSI(st7701, 0xE1, 0x08, 0x00, 0x0A, 0x00, 0x07, 0x00, 0x09,
-+		   0x00, 0x00, 0x33, 0x33);
-+	ST7701_DSI(st7701, 0xE2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-+		   0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
-+	ST7701_DSI(st7701, 0xE3, 0x00, 0x00, 0x33, 0x33);
-+	ST7701_DSI(st7701, 0xE4, 0x44, 0x44);
-+	ST7701_DSI(st7701, 0xE5, 0x0E, 0x60, 0xA0, 0xA0, 0x10, 0x60, 0xA0,
-+		   0xA0, 0x0A, 0x60, 0xA0, 0xA0, 0x0C, 0x60, 0xA0, 0xA0);
-+	ST7701_DSI(st7701, 0xE6, 0x00, 0x00, 0x33, 0x33);
-+	ST7701_DSI(st7701, 0xE7, 0x44, 0x44);
-+	ST7701_DSI(st7701, 0xE8, 0x0D, 0x60, 0xA0, 0xA0, 0x0F, 0x60, 0xA0,
-+		   0xA0, 0x09, 0x60, 0xA0, 0xA0, 0x0B, 0x60, 0xA0, 0xA0);
-+	ST7701_DSI(st7701, 0xEB, 0x02, 0x01, 0xE4, 0xE4, 0x44, 0x00, 0x40);
-+	ST7701_DSI(st7701, 0xEC, 0x02, 0x01);
-+	ST7701_DSI(st7701, 0xED, 0xAB, 0x89, 0x76, 0x54, 0x01, 0xFF, 0xFF,
-+		   0xFF, 0xFF, 0xFF, 0xFF, 0x10, 0x45, 0x67, 0x98, 0xBA);
-+}
-+
- static int st7701_prepare(struct drm_panel *panel)
- {
- 	struct st7701 *st7701 = panel_to_st7701(panel);
-@@ -700,6 +725,105 @@ static const struct st7701_panel_desc dmt028vghmcmi_1a_desc = {
- 	.gip_sequence = dmt028vghmcmi_1a_gip_sequence,
+diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts
+index 842efbaf1a6a..1b9769ccfdeb 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go3.dts
+@@ -142,7 +142,9 @@ button-sw22 {
  };
  
-+static const struct drm_display_mode kd50t048a_mode = {
-+	.clock          = 27500,
-+
-+	.hdisplay       = 480,
-+	.hsync_start    = 480 + 2,
-+	.hsync_end      = 480 + 2 + 10,
-+	.htotal         = 480 + 2 + 10 + 2,
-+
-+	.vdisplay       = 854, // was: 854 12 2 60
-+	.vsync_start    = 854 + 2,
-+	.vsync_end      = 854 + 2 + 2,
-+	.vtotal         = 854 + 2 + 2 + 17,
-+
-+	.width_mm       = 69,
-+	.height_mm      = 139,
-+
-+	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
-+};
-+
-+static const struct st7701_panel_desc kd50t048a_desc = {
-+	.mode = &kd50t048a_mode,
-+	.lanes = 2,
-+	.format = MIPI_DSI_FMT_RGB888,
-+	.panel_sleep_delay = 0,
-+
-+	.pv_gamma = {
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC0_MASK, 0),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC4_MASK, 0xd),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC8_MASK, 0x14),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC16_MASK, 0xd),
-+
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC24_MASK, 0x10),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC52_MASK, 0x5),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC80_MASK, 0x2),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC108_MASK, 0x8),
-+
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC147_MASK, 0x8),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC175_MASK, 0x1e),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC203_MASK, 0x5),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC231_MASK, 0x13),
-+
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC239_MASK, 0x11),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 2) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC247_MASK, 0x23),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC251_MASK, 0x29),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC255_MASK, 0x18)
-+	},
-+	.nv_gamma = {
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC0_MASK, 0),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC4_MASK, 0xc),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC8_MASK, 0x14),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC16_MASK, 0xc),
-+
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC24_MASK, 0x10),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC52_MASK, 0x5),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC80_MASK, 0x3),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC108_MASK, 0x8),
-+
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC147_MASK, 0x7),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC175_MASK, 0x20),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC203_MASK, 0x5),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC231_MASK, 0x13),
-+
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC239_MASK, 0x11),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 2) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC247_MASK, 0x24),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC251_MASK, 0x29),
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_AJ_MASK, 0) |
-+		CFIELD_PREP(DSI_CMD2_BK0_GAMCTRL_VC255_MASK, 0x18)
-+	},
-+	.nlinv = 1,
-+	.vop_uv = 4887500,
-+	.vcom_uv = 937500,
-+	.vgh_mv = 15000,
-+	.vgl_mv = -9510,
-+	.avdd_mv = 6600,
-+	.avcl_mv = -4400,
-+	.gamma_op_bias = OP_BIAS_MIDDLE,
-+	.input_op_bias = OP_BIAS_MIN,
-+	.output_op_bias = OP_BIAS_MIN,
-+	.t2d_ns = 1600,
-+	.t3d_ns = 10400,
-+	.eot_en = true,
-+	.gip_sequence = kd50t048a_gip_sequence,
-+};
-+
- static int st7701_dsi_probe(struct mipi_dsi_device *dsi)
- {
- 	const struct st7701_panel_desc *desc;
-@@ -776,6 +900,7 @@ static void st7701_dsi_remove(struct mipi_dsi_device *dsi)
- static const struct of_device_id st7701_of_match[] = {
- 	{ .compatible = "densitron,dmt028vghmcmi-1a", .data = &dmt028vghmcmi_1a_desc },
- 	{ .compatible = "techstar,ts8550b", .data = &ts8550b_desc },
-+	{ .compatible = "elida,kd50t048a", .data = &kd50t048a_desc },
- 	{ }
+ &internal_display {
+-	status = "disabled";
++	compatible = "elida,kd50t048a", "sitronix,st7701";
++	reset-gpios = <&gpio3 RK_PC0 GPIO_ACTIVE_HIGH>;
++	VCC-supply = <&vcc_lcd>;
  };
- MODULE_DEVICE_TABLE(of, st7701_of_match);
+ 
+ &rk817_charger {
 -- 
 2.39.1
 
