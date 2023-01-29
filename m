@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5CF680137
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 20:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC0468013A
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 20:47:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbjA2ToT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 14:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
+        id S233942AbjA2TrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 14:47:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjA2ToR (ORCPT
+        with ESMTP id S229760AbjA2TrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 14:44:17 -0500
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FBEC196B6;
-        Sun, 29 Jan 2023 11:44:14 -0800 (PST)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 920B23CD80;
-        Sun, 29 Jan 2023 21:44:12 +0200 (EET)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 1C8513CD35;
-        Sun, 29 Jan 2023 21:44:11 +0200 (EET)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 6A2123C0435;
-        Sun, 29 Jan 2023 21:44:00 +0200 (EET)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 30TJhtRl037792;
-        Sun, 29 Jan 2023 21:43:57 +0200
-Date:   Sun, 29 Jan 2023 21:43:55 +0200 (EET)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-cc:     Network Development <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Denis V. Lunev" <den@openvz.org>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: Re: [Question] neighbor entry doesn't switch to the STALE state
- after the reachable timer expires
-In-Reply-To: <b1d8722e-5660-c38e-848f-3220d642889d@huawei.com>
-Message-ID: <99532c7f-161e-6d39-7680-ccc1f20349@ssi.bg>
-References: <b1d8722e-5660-c38e-848f-3220d642889d@huawei.com>
+        Sun, 29 Jan 2023 14:47:05 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5070F1ABE0;
+        Sun, 29 Jan 2023 11:47:04 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1442977d77dso12733481fac.6;
+        Sun, 29 Jan 2023 11:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v8O/cRRsAjvRSUFWhqOftJSo8NlvCf8iVIgYQungJRY=;
+        b=FZw1I3XDHAlGQgXRR04Bf+xHf3qPGKQ6jSh9pCrGteruu452yZ2u5jAMpaU/FeLyE9
+         z77rgJ/H3zFIX6n2K8bGiYWOFvGGnFo4YV0B0PcOAZIoeeicE2pauwyXA1/ueJOWMYu/
+         1kphCeWB1YTY15aLLhBSY03JRA5TNiJa8B2YVD1sn7xoY2lpjBGcbCwTrysnyHZ95kbs
+         +AedOtgjaVn+93998WpNtRHZlUT7XZMNq3XGgx/Arap3z1KhzaWa3FzMBNa6H4vRYp9r
+         AqetUF3houBxQIBRVH2No+XrCzuBMN5O3HCX8wUpGhZN8uLRI/VNNU67r/scyNGTIrsn
+         /O7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v8O/cRRsAjvRSUFWhqOftJSo8NlvCf8iVIgYQungJRY=;
+        b=G0hkiAMofeUP9tsPpRnV4VjjxAUeZMFESwh3Q6PvUfHZMdJ7/AwoGavWMwcWXbRDUd
+         ZQj5Z7x+OFmd9DbmjSYObfZKKgiA4iZEYmHkfCdm8Kca7tYiI48/Ubn4HFt/14Vr8rnl
+         Aj33GrQVaAuc2ED8XaneUpJu5xU0lWyAFKQlpZdjQwtQGZx9aJMrvLumuHkMiQO41xCQ
+         L85nFq9YIaVjmkPaFn+ZNvtndyIINt2oH+XxSSoHIidmPIHhwqVw5FDev3ZlKlviAru0
+         mSh20jEyAO1IzgucPlfpUdAs7vGjnHkE/ZtLawtt3K4WtkSwq9ZBGvD9FPdIPf3QrsUA
+         R0vA==
+X-Gm-Message-State: AFqh2kqxNzWGblUChC9OfoA1bWJAdM806BqaIN+/4ZzJipNKzcUyNrFj
+        38ea0OILzTwraB4Y+ybmJAY=
+X-Google-Smtp-Source: AMrXdXuQIGGNUv0m9e9hWsi93lvGw9ADu/LxpBXvX2xcuoK+DdOJdZ+TkSxrRqDgmOr6LPiRnPBI5w==
+X-Received: by 2002:a05:6870:cd0f:b0:144:c95f:a305 with SMTP id qk15-20020a056870cd0f00b00144c95fa305mr26615075oab.29.1675021623636;
+        Sun, 29 Jan 2023 11:47:03 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x2-20020a4a2a42000000b0050dc3c2f77asm1253760oox.8.2023.01.29.11.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 11:47:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 29 Jan 2023 11:47:01 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: trivial-devices: Add Infineon
+ TDA38640 Voltage Regulator
+Message-ID: <20230129194701.GA1418791@roeck-us.net>
+References: <20230124202317.3704963-1-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230124202317.3704963-1-Naresh.Solanki@9elements.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-	Hello,
-
-On Sun, 29 Jan 2023, Zhang Changzhong wrote:
-
-> Hi,
+On Tue, Jan 24, 2023 at 09:23:16PM +0100, Naresh Solanki wrote:
+> Infineon TDA38640 is PMBUS compliant voltage regulator.
 > 
-> We got the following weird neighbor cache entry on a machine that's been running for over a year:
-> 172.16.1.18 dev bond0 lladdr 0a:0e:0f:01:12:01 ref 1 used 350521/15994171/350520 probes 4 REACHABLE
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-	confirmed time (15994171) is 13 days in the future, more likely
-185 days behind (very outdated), anything above 99 days is invalid
+Applied to hwmon-next.
 
-> 350520 seconds have elapsed since this entry was last updated, but it is still in the REACHABLE
-> state (base_reachable_time_ms is 30000), preventing lladdr from being updated through probe.
-> 
-> After some analysis, we found a scenario that may cause such a neighbor entry:
-> 
->           Entry used          	  DELAY_PROBE_TIME expired
-> NUD_STALE ------------> NUD_DELAY ------------------------> NUD_PROBE
->                             |
->                             | DELAY_PROBE_TIME not expired
->                             v
->                       NUD_REACHABLE
-> 
-> The neigh_timer_handler() use time_before_eq() to compare 'now' with 'neigh->confirmed +
-> NEIGH_VAR(neigh->parms, DELAY_PROBE_TIME)', but time_before_eq() only works if delta < ULONG_MAX/2.
-> 
-> This means that if an entry stays in the NUD_STALE state for more than ULONG_MAX/2 ticks, it enters
-> the NUD_RACHABLE state directly when it is used again and cannot be switched to the NUD_STALE state
-> (the timer is set too long).
-> 
-> On 64-bit machines, ULONG_MAX/2 ticks are a extremely long time, but in my case (32-bit machine and
-> kernel compiled with CONFIG_HZ=250), ULONG_MAX/2 ticks are about 99.42 days, which is possible in
-> reality.
-> 
-> Does anyone have a good idea to solve this problem? Or are there other scenarios that might cause
-> such a neighbor entry?
-
-	Is the neigh entry modified somehow, for example,
-with 'arp -s' or 'ip neigh change' ? Or is bond0 reconfigured
-after initial setup? I mean, 4 days ago?
-
-	Looking at __neigh_update, there are few cases that
-can assign NUD_STALE without touching neigh->confirmed:
-lladdr = neigh->ha should be called, NEIGH_UPDATE_F_ADMIN
-should be provided. Later, as you explain, it can wrongly
-switch to NUD_REACHABLE state for long time.
-
-	May be there should be some measures to keep
-neigh->confirmed valid during admin modifications.
-
-	What is the kernel version?
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
-
+Thanks,
+Guenter
