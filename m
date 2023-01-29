@@ -2,354 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5B167FC32
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADA667FC36
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjA2BgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 20:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S231268AbjA2BiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 20:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjA2Bfx (ORCPT
+        with ESMTP id S230008AbjA2BiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 20:35:53 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E0724109;
-        Sat, 28 Jan 2023 17:35:21 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so392522wms.1;
-        Sat, 28 Jan 2023 17:35:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t7EoOIyQeLcoH6apOH/p+8qL29vfGf4A8BXO8aUOa/8=;
-        b=RG7uxBvtPo8Vrp57nCfhqwOMrmgry9P8aMSO/97by2iC5Zr1J+bETTR6g36KReXqKi
-         e2LJPGKby1NwhYM6ZbsuqIPXxcLfUylDXiWMImFTrtHfOkv6PkO1PtLd7l2Ec5cTbIZh
-         7anYN3WZGnzdchvGCHXe0BiXS1BdJlh5PI7DhC45ZpWINi5YwtKS/D226+vaHuvUhaLZ
-         iYnvw5mReh7A0R/Y9jS1A6C54min5JnmKb7rljtSCAenZ6muhGqXWKAepCFUMw1xn/Gv
-         6sNS6+0o4QgqmvvlUMLxdBkfwBBwwZWtjJdEcCowUIMzrUjnGnu4++z0SzEnV8XSTPz0
-         xbdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t7EoOIyQeLcoH6apOH/p+8qL29vfGf4A8BXO8aUOa/8=;
-        b=QaRr3QuEUV0vaQPT6596oUfpdDQU0hbcZM16swZTdgs0kcklWagpx5Pj9OPBHUNRDR
-         N/yGId5F7Y123OkICguNe3wGcSLJZm/SSNfe3d/OgPSjq+VUXLPZVeNzuAC/RNZ+s6An
-         g/84vNN7tbeA1DTb6Hylyl33WXoxbqTpOaLtdRNwqeIEPTmvrR5KjDeg9a9zjOGIwr2o
-         gmb7hqU/lguB190rKy2ON7YB0hnu4ZLlho7lc1PLCAjnAHazfjBuBeOopHGidmxnN3rB
-         ZItgr6fSnihQZzEtjf/kHwuIgvJPoVjGuK5oXz8o0CH7dQdni0Isga1WnLiXvXZg6qfG
-         1PSw==
-X-Gm-Message-State: AFqh2kp8bJoVuSy5XTDLhHJmiD9VzTCrlPzbj25NPSG0mX+ixDjS5B7U
-        EwmtaN9wGNKZnflQyPRgso6okrkqbuY=
-X-Google-Smtp-Source: AMrXdXv7vZNjbfrNwFGSjOY9aFIOrYvtHPic/PBugevRUWg4bREcM01kNs/YMZotZL672gc2I5iCYg==
-X-Received: by 2002:a05:600c:4e05:b0:3db:1d8:9f25 with SMTP id b5-20020a05600c4e0500b003db01d89f25mr43422801wmq.2.1674956116740;
-        Sat, 28 Jan 2023 17:35:16 -0800 (PST)
-Received: from localhost.localdomain (143.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.143])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c434700b003dc3f195abesm5197132wme.39.2023.01.28.17.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 17:35:16 -0800 (PST)
-From:   Angel Iglesias <ang.iglesiasg@gmail.com>
-To:     linux-iio@vger.kernel.org
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 7/7] iio: pressure: bmp280: Add nvmem operations for BMP580
-Date:   Sun, 29 Jan 2023 02:33:09 +0100
-Message-Id: <013686653a60092227c842ae2fd0197f2509ad7c.1674954271.git.ang.iglesiasg@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1674954271.git.ang.iglesiasg@gmail.com>
-References: <cover.1674954271.git.ang.iglesiasg@gmail.com>
+        Sat, 28 Jan 2023 20:38:18 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D49CA08;
+        Sat, 28 Jan 2023 17:38:16 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P4DTt6vSmz4f3t0s;
+        Sun, 29 Jan 2023 09:38:10 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgCnUyEDztVjX9x2CQ--.33658S3;
+        Sun, 29 Jan 2023 09:38:13 +0800 (CST)
+Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+To:     jack@suse.cz, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        paolo.valente@linaro.org, shinichiro.kawasaki@wdc.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230113094410.2907223-1-yukuai3@huawei.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <4d3f6183-f9d4-b657-0205-fc240bc24c76@huaweicloud.com>
+Date:   Sun, 29 Jan 2023 09:38:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20230113094410.2907223-1-yukuai3@huawei.com>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgCnUyEDztVjX9x2CQ--.33658S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrW7CFyxAFyxXr1rtFyxZrb_yoW3Zrc_WF
+        sayFZ3Ww1UWF18t3W7t3W3CFWxG3yfXr18XryFyr1fXryUZrWxGa1kW34fXrW5WrZ29as3
+        Jr1kXw4UKr1rZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUba8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3
+        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pressure sensor BMP580 contains a non-volatile memory that stores
-trimming and configuration params. That memory provides an programmable
-user range of three 2-byte words.
+Hi, Jens
 
-Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+ÔÚ 2023/01/13 17:44, Yu Kuai Ð´µÀ:
+> After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"),
+> bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
+> bic->bfqq will be freed first, and bic_set_bfqq() is called with the freed
+> bic->bfqq.
+> 
+> Fix the problem by always freeing bfqq after bic_set_bfqq().
+> 
 
-diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
-index c65fb4025ad9..cc2811c9c6f4 100644
---- a/drivers/iio/pressure/bmp280-core.c
-+++ b/drivers/iio/pressure/bmp280-core.c
-@@ -28,6 +28,7 @@
- #include <linux/bitfield.h>
- #include <linux/device.h>
- #include <linux/module.h>
-+#include <linux/nvmem-provider.h>
- #include <linux/regmap.h>
- #include <linux/delay.h>
- #include <linux/iio/iio.h>
-@@ -1290,6 +1291,88 @@ static int bmp580_soft_reset(struct bmp280_data *data)
- 	return 0;
- }
- 
-+#define NVM_READ	false
-+#define NVM_WRITE	true
-+
-+/**
-+ * bmp580_nvm_operation() - Helper function to commit NVM memory operations
-+ * @data: sensor data struct
-+ * @is_write: flag to signal write operation
-+ */
-+static int bmp580_nvm_operation(struct bmp280_data *data, bool is_write)
-+{
-+	unsigned long deadline;
-+	unsigned int reg;
-+	int ret;
-+
-+	/* Check NVM ready flag */
-+	ret = regmap_read(data->regmap, BMP580_REG_STATUS, &reg);
-+	if (ret) {
-+		dev_err(data->dev, "failed to check nvm status\n");
-+		return ret;
-+	}
-+	if (!(reg & BMP580_STATUS_NVM_RDY_MASK)) {
-+		dev_err(data->dev, "sensor's nvm is not ready\n");
-+		return -EIO;
-+	}
-+
-+	/* Send NVM operation sequence */
-+	ret = regmap_write(data->regmap, BMP580_REG_CMD, BMP580_CMD_NVM_OP_SEQ_0);
-+	if (ret) {
-+		dev_err(data->dev, "failed to send nvm operation's first sequence\n");
-+		return ret;
-+	}
-+	if (is_write) {
-+		/* Send NVM write sequence */
-+		ret = regmap_write(data->regmap, BMP580_REG_CMD,
-+				   BMP580_CMD_NVM_WRITE_SEQ_1);
-+		if (ret) {
-+			dev_err(data->dev, "failed to send nvm write sequence\n");
-+			return ret;
-+		}
-+		/* Datasheet says on 4.8.1.2 it takes approximately 10ms */
-+		usleep_range(10000, 10500);
-+		deadline = jiffies + msecs_to_jiffies(10);
-+	} else {
-+		/* Send NVM read sequence */
-+		ret = regmap_write(data->regmap, BMP580_REG_CMD,
-+				   BMP580_CMD_NVM_READ_SEQ_1);
-+		if (ret) {
-+			dev_err(data->dev, "failed to send nvm read sequence\n");
-+			return ret;
-+		}
-+		/* Datasheet says on 4.8.1.1 it takes approximately 200us */
-+		usleep_range(200, 250);
-+		deadline = jiffies + usecs_to_jiffies(200);
-+	}
-+	if (ret) {
-+		dev_err(data->dev, "failed to write command sequence\n");
-+		return -EIO;
-+	}
-+
-+	/* Wait until NVM is ready again */
-+	do {
-+		ret = regmap_read(data->regmap, BMP580_REG_STATUS, &reg);
-+		if (ret) {
-+			dev_err(data->dev, "failed to check nvm status\n");
-+			reg &= ~BMP580_STATUS_NVM_RDY_MASK;
-+		}
-+	} while (time_before(jiffies, deadline) && !(reg & BMP580_STATUS_NVM_RDY_MASK));
-+	if (!(reg & BMP580_STATUS_NVM_RDY_MASK)) {
-+		dev_err(data->dev,
-+			"reached timeout waiting for nvm operation completion\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	/* Check NVM error flags */
-+	if ((reg & BMP580_STATUS_NVM_ERR_MASK) || (reg & BMP580_STATUS_NVM_CMD_ERR_MASK)) {
-+		dev_err(data->dev, "error processing nvm operation\n");
-+		return -EIO;
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * Contrary to previous sensors families, compensation algorithm is builtin.
-  * We are only required to read the register raw data and adapt the ranges
-@@ -1384,8 +1467,140 @@ static const int bmp580_odr_table[][2] = {
- 	[BMP580_ODR_0_125HZ] =	{0, 125000},
- };
- 
-+const int bmp580_nvmem_addrs[] = { 0x20, 0x21, 0x22 };
-+
-+static int bmp580_nvmem_read(void *priv, unsigned int offset, void *val,
-+			     size_t bytes)
-+{
-+	struct bmp280_data *data = priv;
-+	u16 *dst = val;
-+	int ret, addr;
-+
-+	pm_runtime_get_sync(data->dev);
-+	mutex_lock(&data->lock);
-+
-+	/* Set sensor in standby mode */
-+	ret = regmap_update_bits(data->regmap, BMP580_REG_ODR_CONFIG,
-+				 BMP580_MODE_MASK | BMP580_ODR_DEEPSLEEP_DIS,
-+				 BMP580_ODR_DEEPSLEEP_DIS |
-+				 FIELD_PREP(BMP580_MODE_MASK, BMP580_MODE_SLEEP));
-+	if (ret) {
-+		dev_err(data->dev, "failed to change sensor to standby mode\n");
-+		goto exit;
-+	}
-+	/* Wait standby transition time */
-+	usleep_range(2500, 3000);
-+
-+	while (bytes >= sizeof(u16)) {
-+		addr = bmp580_nvmem_addrs[offset / sizeof(u16)];
-+
-+		ret = regmap_write(data->regmap, BMP580_REG_NVM_ADDR,
-+				   FIELD_PREP(BMP580_NVM_ROW_ADDR_MASK, addr));
-+		if (ret) {
-+			dev_err(data->dev, "error writing nvm address\n");
-+			goto exit;
-+		}
-+
-+		ret = bmp580_nvm_operation(data, NVM_READ);
-+		if (ret)
-+			goto exit;
-+
-+		ret = regmap_bulk_read(data->regmap, BMP580_REG_NVM_DATA_LSB, &data->le16,
-+				       sizeof(data->le16));
-+		if (ret) {
-+			dev_err(data->dev, "error reading nvm data regs\n");
-+			goto exit;
-+		}
-+
-+		*dst++ = le16_to_cpu(data->le16);
-+		bytes -= sizeof(u16);
-+		offset += sizeof(u16);
-+	}
-+exit:
-+	/* Restore chip config */
-+	data->chip_info->chip_config(data);
-+	mutex_unlock(&data->lock);
-+	pm_runtime_mark_last_busy(data->dev);
-+	pm_runtime_put_autosuspend(data->dev);
-+	return ret;
-+}
-+
-+static int bmp580_nvmem_write(void *priv, unsigned int offset, void *val,
-+			      size_t bytes)
-+{
-+	struct bmp280_data *data = priv;
-+	u16 *buf = val;
-+	int ret, addr;
-+
-+	pm_runtime_get_sync(data->dev);
-+	mutex_lock(&data->lock);
-+
-+	/* Set sensor in standby mode */
-+	ret = regmap_update_bits(data->regmap, BMP580_REG_ODR_CONFIG,
-+				 BMP580_MODE_MASK | BMP580_ODR_DEEPSLEEP_DIS,
-+				 BMP580_ODR_DEEPSLEEP_DIS |
-+				 FIELD_PREP(BMP580_MODE_MASK, BMP580_MODE_SLEEP));
-+	if (ret) {
-+		dev_err(data->dev, "failed to change sensor to standby mode\n");
-+		goto exit;
-+	}
-+	/* Wait standby transition time */
-+	usleep_range(2500, 3000);
-+
-+	while (bytes >= sizeof(u16)) {
-+		addr = bmp580_nvmem_addrs[offset / sizeof(u16)];
-+
-+		ret = regmap_write(data->regmap, BMP580_REG_NVM_ADDR, BMP580_NVM_PROG_EN |
-+				   FIELD_PREP(BMP580_NVM_ROW_ADDR_MASK, addr));
-+		if (ret) {
-+			dev_err(data->dev, "error writing nvm address\n");
-+			goto exit;
-+		}
-+		data->le16 = cpu_to_le16(*buf++);
-+
-+		ret = regmap_bulk_write(data->regmap, BMP580_REG_NVM_DATA_LSB, &data->le16,
-+					sizeof(data->le16));
-+		if (ret) {
-+			dev_err(data->dev, "error writing LSB NVM data regs\n");
-+			goto exit;
-+		}
-+
-+		ret = bmp580_nvm_operation(data, NVM_WRITE);
-+		if (ret)
-+			goto exit;
-+
-+		/* Disable programming mode bit */
-+		ret = regmap_update_bits(data->regmap, BMP580_REG_NVM_ADDR,
-+					 BMP580_NVM_PROG_EN, 0);
-+		if (ret) {
-+			dev_err(data->dev, "error resetting nvm write\n");
-+			goto exit;
-+		}
-+
-+		bytes -= sizeof(u16);
-+		offset += sizeof(u16);
-+	}
-+exit:
-+	/* Restore chip config */
-+	data->chip_info->chip_config(data);
-+	mutex_unlock(&data->lock);
-+	pm_runtime_mark_last_busy(data->dev);
-+	pm_runtime_put_autosuspend(data->dev);
-+	return ret;
-+}
-+
- static int bmp580_preinit(struct bmp280_data *data)
- {
-+	struct nvmem_config config = {
-+		.dev = data->dev,
-+		.priv = data,
-+		.name = "bmp580_nvmem",
-+		.word_size = sizeof(u16),
-+		.stride = sizeof(u16),
-+		.size = 3 * sizeof(u16),
-+		.reg_read = bmp580_nvmem_read,
-+		.reg_write = bmp580_nvmem_write,
-+	};
- 	unsigned int reg;
- 	int ret;
- 
-@@ -1413,7 +1628,8 @@ static int bmp580_preinit(struct bmp280_data *data)
- 		return -EIO;
- 	}
- 
--	return 0;
-+	/* Register nvmem device */
-+	return PTR_ERR_OR_ZERO(devm_nvmem_register(config.dev, &config));
- }
- 
- static int bmp580_chip_config(struct bmp280_data *data)
-diff --git a/drivers/iio/pressure/bmp280.h b/drivers/iio/pressure/bmp280.h
-index f29d44b09efc..1c942b3dc384 100644
---- a/drivers/iio/pressure/bmp280.h
-+++ b/drivers/iio/pressure/bmp280.h
-@@ -104,6 +104,9 @@
- #define BMP580_FILTER_63X		6
- #define BMP580_FILTER_127X		7
- 
-+#define BMP580_NVM_ROW_ADDR_MASK	GENMASK(5, 0)
-+#define BMP580_NVM_PROG_EN		BIT(6)
-+
- #define BMP580_TEMP_SKIPPED		0x7f7f7f
- #define BMP580_PRESS_SKIPPED		0x7f7f7f
- 
--- 
-2.39.1
+Sorry that I send this patch will wrong email, and you might missed this
+patch.
+
+Can you apply this patch? This patch can't be applied directly to lower
+version due to Paolo's patchset, I'll send lts patch seperately.
+
+Thanks,
+Kuai
+> Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+> Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
