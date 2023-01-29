@@ -2,331 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B0F67FCB9
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 05:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D3C67FCBD
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 05:30:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjA2EQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 23:16:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S230014AbjA2Ean (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 23:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjA2EQX (ORCPT
+        with ESMTP id S229436AbjA2Eaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 23:16:23 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F94BB9E
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 20:16:21 -0800 (PST)
+        Sat, 28 Jan 2023 23:30:39 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52CD21969
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 20:30:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1674965753; bh=jB0GN6pjuGs4Y4RMBAJbchGMXgztVKQSjtZ4VfO96oQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=FQ86tk+/n3vS2NG2wS4sIkdRyhwf0JEVS8kazFfDccPjCvAa+7fm1R4y683le4GVl
-         JQIE1XBxyN0HsFdCpvZNkfho8/BqAhEHVqEKec8mL6zxC1D9zXaSCBSQ5dFXteV0Os
-         r9/RPf3EptLdVZlY3HXPZ1rzlayBuZmy6/v46ojLQLrxSZ/J1EkNBnr/EsJHcffU6h
-         PF4TSY4pP/h1CEtiamON73d6VDeuUH/28gH/ESBbV9RLL2laBPb6yUGjO3FCJlY5iA
-         O8pYGuCLwXz4uLwOpiAaLkJANUi3qnI+eTJ1APoX1yQbGV1MQvsgVj34v5RxAlpx1O
-         B0ZVo3TR9BC+w==
+        t=1674966614; bh=2oY9+vEjQVKgGXNs7di0tfK+ZaWMzVuGiWD8inZ5rTY=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=pQMVi8RdJlENMQPXvQ6yDNbsDAVg7FeZQy4vGUvp1msH0d34l6M50RIAMy3TwOwgb
+         a/bX9cKBwwIZi4W/OHrW+MlA76LLXFYdpUa5KlasnONYLLI5kCmictLhdoPAeAXK8M
+         WUib5xrLU6pAdCt4V9so6J2Dl0T3j1E0JdbgZQaQ+n/U3KaxzxnSMbZtfPvXm2sner
+         R0dzwwganJW37DebuibMXPOI2+ppqOjQG2HE538ctHbyZCEkVxdb6NZ6+d5PGePTA/
+         t1pVi46E7JFnQFJY5OYAivXwH9akYaMKw3kVw2QFJw9H1DtjUr6XIW3xfdiqeNtoFG
+         wDwvi8EOo09SQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N1OXT-1ogED40TAB-012tAQ; Sun, 29
- Jan 2023 05:15:53 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     openbmc@lists.ozlabs.org
-Cc:     Joel Stanley <joel@jms.id.au>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKsjH-1p59P11Hjh-00LDUz; Sun, 29
+ Jan 2023 05:30:14 +0100
+Date:   Sun, 29 Jan 2023 05:30:10 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
         Russell King <linux@armlinux.org.uk>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4] ARM: Add wpcm450_defconfig for Nuvoton WPCM450
-Date:   Sun, 29 Jan 2023 05:15:46 +0100
-Message-Id: <20230129041547.942335-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.0
+Subject: Re: [PATCH v4] ARM: Add wpcm450_defconfig for Nuvoton WPCM450
+Message-ID: <Y9X2Ur6oHTsFtCmW@probook>
+References: <20230129041547.942335-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:lOXVWiInWhf7ygVds21knl7DM9dxCYXcXiUQTVVs7iBA3eNJOR1
- J8x64A9zPjnIDRXiaHr5Rf4ZjJcaaIBQz1RagTSfBQxsuNrH5jiUs5Yy/e/KqN8tlRPMVeN
- Xmu+35Pjl8DLppdp0seAKeqE1/SDCdF9vJ52OuBKgE6WM977Fpt6Uk6ClKFJFx3ef+qitXc
- gZ8FktbU4y/+I2apzvE0w==
-UI-OutboundReport: notjunk:1;M01:P0:doqRukjZHko=;RAuPRbjAWvnr+3CVnDsbfssjIWZ
- e0HHX3MDjsOpC6w97AU5kkijBxo7mXdeWCMkht88O9CZG/8m3fUqzYWcqkLNz1lJwcEeRppv/
- B5m41qfEjee3EgCimXZqzP0E/ffEe1cRz+EJWzfnRMyxJB7o0DzuudEQ9iM6gHpFWUFXoLYmT
- WNTaCFmLy8aR7aVF0oiCcuuQU6YM+F+iZz12HR1lGZ8+ui5KXemnL+0vrvurUIqh7UXvjWNKn
- Fan7vmg/IIoZe8ugUSNYioZvMzSsjjbUMj5rDTXS51EEIeHaKM2f23S0V96GHu8+LGxELZIbQ
- LWefm4O4yjiQjtSF6vk1JNTwCjKqIV4x8x07THlTZI7k7Z7+MVXGSqdUkddTRaBB1IpCclvTw
- mnTtPwJikzzjFrT+r085EDuj8y6m7PFh0OwNrIXKwbFKwIVciy76pfJelaZApS+EFvonSP1JS
- qHFn6fS24/PY6OmbGUEP77GM1PcoE4cRbCXXeq/uksH/+gtGdTWQdnUcdaIFf/wbhZmXJJF1n
- zm5jyALe4k5igqCq3ES/dfcYRje4oBXLnhXCkVITGiC/+3Y1sFLDcozHy4mRwqyvCsKTK84gT
- 7sV0nw56sA1YaNh8vGpe9dy7/mxMMBlWMIH7VZRAKXf0crokwtDlsBrDmi7wbJrwYhPTlOpwt
- bSIojMwugoTq+HV6UTzH9glRhfkPu/FsJi+quhdxSLc2Vmk8wgsNm7HcpkWJVeUnEOR2B56AF
- jb2rHfjMqzLbmwGLPascBuG5AjC2CeaTOPozazVGeVbhOtn6ybXsLX7gGpONXadgGIN4W+oGR
- Brf1uQqLqc8IKV+6NYk0u4XFLuU1eXUwOWl3jaJKEcSAJBeOiYTVVpMx7oIuAaW59PfUCHSLq
- 5T6inutdoCF8OjzTHrqPJh5Atf+ZeSLu+4uAAFyNiXtDbz4Yz/LY+jtlw577JFVA+LEGyK5Sd
- mIUWqt7iX9p5Vo+fcdSnzwAqzX4=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mrgSoAscP93Rd3cj"
+Content-Disposition: inline
+In-Reply-To: <20230129041547.942335-1-j.neuschaefer@gmx.net>
+X-Provags-ID: V03:K1:XRzcDZoEzXh9V3LG35lDY5DBVCh1R2Im/UHyEglDLr5dYRZ7e3D
+ 0GXMWuYKavtpYBjBTvq6gTjPk+Xh7OVqQtPHkbJ1pqnYiBL/w/o+UG1F1rf1iTxoErIAWXW
+ TXoWV6X509LulYhvJQRDsxYpIcb5REZc1aG1Z6OVdEHOUk6hf5iUyRbrk+TZ6GuRUjZ5tqa
+ +ENCC6ZOTX1BtUXHuke9w==
+UI-OutboundReport: notjunk:1;M01:P0:nVGqwH7ZzTY=;AnFVMP5+RlVD7+n6a3Nrte32lwa
+ MLCR0I/YBoT+YoFDg9BkmCvEqwZlsOD/Jtltdvr1mJTMQj8sL9e9B8Fi4/N8Dk5JMAuVYaSAD
+ uUrGi4WTC8s65Gp9lzNYm5S8jm1SR5OqNhYmODx1QnhXFq+GtIxUBDMYgguZDzeHgFMW1aOx6
+ jD+bNGrTLsVe+Ts08npKa0LjjF4YkKeW/JdYIKwQMSnvJeNltfeoD5FZBz07+nlqVLDnGCEf7
+ CBOwanprmwTPX1X8CXjfsav5rlvCZ7zG4asHzw+UgDcDHyvOvx2fvSbaYiw8Kh8N0qw33BFjk
+ FerEl2lq5oSMrMeU68BI2+B66dyTGsfFvLzz8x2JhbcYjbF0qHq2ox814aPyLCYfdLvp45vlP
+ hg/KGGk1/n8N0kF615al353YVEvw9+oiWV8QNMSxLD169oNPKuhU2P8P5l+taZBtAZJrPFA85
+ VlDJXTALdyVzJ0pP4MCpeQp85rp5VuAzOhQqpQOh16Mv+52n9sq9AiJTT4hWjPLA8pTXwo4no
+ uilJwEy2HA7bdxBXigdg0NWHu9O6zbzC4bqwlJxrROUe5OUDFq51I/LY3FfT6PV1cgdrHfExU
+ Xs8JJEb1sWz0aOiZTHp2CrH5e+2jq3O1ga82Uz8NMDuoJ8hC0dXIReiyFrCmNxGWCXXf/+x9C
+ wvPIB6hB3CLBLOeGq+Nn1V6WdWyPx3eYpsPfix1dlFdptO0dG4pmhnuQikknZFlfftCi8BMHy
+ 0HwxM+LjViDDats7ixFkU3KF+54/3bBobEphO/7qVkERjeG2dOadXHuKfZPDyIUXjQpaWFUyN
+ lx+ks11pi046e+WsASxoZnbB5uf3Gt61L4GhuVBNhZiFfWtwPM8fGMJC1OJRuZXeEvnL68oTh
+ qk+oCX9HbDgA2QsXdDAkuC2uh0hZnS7hXudlqJ7j33mn2Mkw6xqZz+T7z5D6hmIC0IV7d7Pam
+ QcCpvNDSmRF/uI49SKmY+Eb1/k4=
 X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This defconfig aims to offer a reasonable set of defaults for all
-systems running on a Nuvoton WPCM450 chip.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-=2D--
-v4:
-- Add Joel's R-b
-- Disable CPU_FREQ
-- Update for Linux 6.2: Enable CONFIG_SPI_WPCM_FIU, disable
-  CONFIG_LEGACY_TIOCSTI
-- Disable CONFIG_KEXEC, which isn't generally useful for the BMC usecase
+--mrgSoAscP93Rd3cj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-v3:
-- https://lore.kernel.org/lkml/20221101112134.673869-1-j.neuschaefer@gmx.n=
-et/
-- Regenerate for 6.1-rc1 and enable a few Nuvoton-specific options as
-  well as the PECI subsystem
+On Sun, Jan 29, 2023 at 05:15:46AM +0100, Jonathan Neusch=C3=A4fer wrote:
+> This defconfig aims to offer a reasonable set of defaults for all
+> systems running on a Nuvoton WPCM450 chip.
+>=20
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> ---
 
-v2:
-- Regenerate for 5.19-rc1
-=2D--
- MAINTAINERS                        |   1 +
- arch/arm/configs/wpcm450_defconfig | 211 +++++++++++++++++++++++++++++
- 2 files changed, 212 insertions(+)
- create mode 100644 arch/arm/configs/wpcm450_defconfig
+Sorry, I hadn't noticed that v3 already made it into linux-next.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f781f936ae35b..a1268a252ce6e 100644
-=2D-- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2609,6 +2609,7 @@ S:	Maintained
- W:	https://github.com/neuschaefer/wpcm450/wiki
- F:	Documentation/devicetree/bindings/*/*wpcm*
- F:	arch/arm/boot/dts/nuvoton-wpcm450*
-+F:	arch/arm/configs/wpcm450_defconfig
- F:	arch/arm/mach-npcm/wpcm450.c
- F:	drivers/*/*/*wpcm*
- F:	drivers/*/*wpcm*
-diff --git a/arch/arm/configs/wpcm450_defconfig b/arch/arm/configs/wpcm450=
-_defconfig
-new file mode 100644
-index 0000000000000..45483deab034f
-=2D-- /dev/null
-+++ b/arch/arm/configs/wpcm450_defconfig
-@@ -0,0 +1,211 @@
-+CONFIG_SYSVIPC=3Dy
-+CONFIG_NO_HZ_IDLE=3Dy
-+CONFIG_HIGH_RES_TIMERS=3Dy
-+CONFIG_PREEMPT=3Dy
-+CONFIG_IKCONFIG=3Dy
-+CONFIG_IKCONFIG_PROC=3Dy
-+CONFIG_LOG_BUF_SHIFT=3D19
-+CONFIG_CGROUPS=3Dy
-+CONFIG_BLK_DEV_INITRD=3Dy
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy
-+CONFIG_PROFILING=3Dy
-+# CONFIG_ARCH_MULTI_V7 is not set
-+CONFIG_ARCH_NPCM=3Dy
-+CONFIG_ARCH_WPCM450=3Dy
-+CONFIG_CPU_DCACHE_WRITETHROUGH=3Dy
-+CONFIG_AEABI=3Dy
-+CONFIG_UACCESS_WITH_MEMCPY=3Dy
-+# CONFIG_ATAGS is not set
-+CONFIG_ARM_APPENDED_DTB=3Dy
-+CONFIG_CPU_IDLE=3Dy
-+CONFIG_KPROBES=3Dy
-+CONFIG_JUMP_LABEL=3Dy
-+CONFIG_STRICT_KERNEL_RWX=3Dy
-+CONFIG_MODULES=3Dy
-+CONFIG_MODULE_UNLOAD=3Dy
-+CONFIG_NET=3Dy
-+CONFIG_PACKET=3Dy
-+CONFIG_PACKET_DIAG=3Dy
-+CONFIG_UNIX=3Dy
-+CONFIG_UNIX_DIAG=3Dy
-+CONFIG_INET=3Dy
-+CONFIG_IP_MULTICAST=3Dy
-+CONFIG_IP_PNP=3Dy
-+CONFIG_IP_PNP_DHCP=3Dy
-+CONFIG_IP_PNP_BOOTP=3Dy
-+CONFIG_NET_DSA=3Dy
-+CONFIG_NET_DSA_TAG_DSA=3Dy
-+CONFIG_NET_DSA_TAG_EDSA=3Dy
-+CONFIG_NET_DSA_TAG_TRAILER=3Dy
-+CONFIG_NET_PKTGEN=3Dm
-+# CONFIG_WIRELESS is not set
-+CONFIG_DEVTMPFS=3Dy
-+CONFIG_DEVTMPFS_MOUNT=3Dy
-+CONFIG_MTD=3Dy
-+CONFIG_MTD_CMDLINE_PARTS=3Dy
-+CONFIG_MTD_BLOCK=3Dy
-+CONFIG_MTD_SPI_NOR=3Dy
-+CONFIG_MTD_UBI=3Dy
-+CONFIG_MTD_UBI_FASTMAP=3Dy
-+CONFIG_MTD_UBI_BLOCK=3Dy
-+CONFIG_BLK_DEV_LOOP=3Dy
-+CONFIG_SRAM=3Dy
-+CONFIG_EEPROM_AT24=3Dy
-+CONFIG_SCSI=3Dy
-+# CONFIG_SCSI_PROC_FS is not set
-+# CONFIG_SCSI_LOWLEVEL is not set
-+CONFIG_NETDEVICES=3Dy
-+# CONFIG_NET_VENDOR_ALACRITECH is not set
-+# CONFIG_NET_VENDOR_AMAZON is not set
-+# CONFIG_NET_VENDOR_AQUANTIA is not set
-+# CONFIG_NET_VENDOR_ARC is not set
-+# CONFIG_NET_VENDOR_BROADCOM is not set
-+# CONFIG_NET_VENDOR_CADENCE is not set
-+# CONFIG_NET_VENDOR_CAVIUM is not set
-+# CONFIG_NET_VENDOR_CIRRUS is not set
-+# CONFIG_NET_VENDOR_CORTINA is not set
-+# CONFIG_NET_VENDOR_EZCHIP is not set
-+# CONFIG_NET_VENDOR_FARADAY is not set
-+# CONFIG_NET_VENDOR_GOOGLE is not set
-+# CONFIG_NET_VENDOR_HISILICON is not set
-+# CONFIG_NET_VENDOR_HUAWEI is not set
-+# CONFIG_NET_VENDOR_INTEL is not set
-+# CONFIG_NET_VENDOR_MARVELL is not set
-+# CONFIG_NET_VENDOR_MELLANOX is not set
-+# CONFIG_NET_VENDOR_MICREL is not set
-+# CONFIG_NET_VENDOR_MICROCHIP is not set
-+# CONFIG_NET_VENDOR_MICROSEMI is not set
-+# CONFIG_NET_VENDOR_NI is not set
-+# CONFIG_NET_VENDOR_NATSEMI is not set
-+# CONFIG_NET_VENDOR_NETRONOME is not set
-+# CONFIG_NET_VENDOR_PENSANDO is not set
-+# CONFIG_NET_VENDOR_QUALCOMM is not set
-+# CONFIG_NET_VENDOR_RENESAS is not set
-+# CONFIG_NET_VENDOR_ROCKER is not set
-+# CONFIG_NET_VENDOR_SAMSUNG is not set
-+# CONFIG_NET_VENDOR_SEEQ is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
-+# CONFIG_NET_VENDOR_SMSC is not set
-+# CONFIG_NET_VENDOR_SOCIONEXT is not set
-+# CONFIG_NET_VENDOR_STMICRO is not set
-+# CONFIG_NET_VENDOR_SYNOPSYS is not set
-+# CONFIG_NET_VENDOR_VIA is not set
-+# CONFIG_NET_VENDOR_WIZNET is not set
-+# CONFIG_NET_VENDOR_XILINX is not set
-+CONFIG_REALTEK_PHY=3Dy
-+# CONFIG_WLAN is not set
-+CONFIG_INPUT_FF_MEMLESS=3Dy
-+CONFIG_INPUT_EVDEV=3Dy
-+CONFIG_KEYBOARD_QT1070=3Dm
-+CONFIG_KEYBOARD_GPIO=3Dy
-+# CONFIG_INPUT_MOUSE is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=3Dy
-+CONFIG_LEGACY_PTY_COUNT=3D16
-+# CONFIG_LEGACY_TIOCSTI is not set
-+CONFIG_SERIAL_8250=3Dy
-+CONFIG_SERIAL_8250_CONSOLE=3Dy
-+CONFIG_SERIAL_8250_NR_UARTS=3D6
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=3D6
-+CONFIG_SERIAL_8250_EXTENDED=3Dy
-+CONFIG_SERIAL_8250_MANY_PORTS=3Dy
-+CONFIG_SERIAL_OF_PLATFORM=3Dy
-+CONFIG_NPCM7XX_KCS_IPMI_BMC=3Dy
-+CONFIG_IPMI_KCS_BMC_CDEV_IPMI=3Dy
-+CONFIG_IPMI_KCS_BMC_SERIO=3Dy
-+CONFIG_HW_RANDOM=3Dy
-+# CONFIG_HW_RANDOM_NPCM is not set
-+CONFIG_I2C=3Dy
-+# CONFIG_I2C_COMPAT is not set
-+CONFIG_I2C_CHARDEV=3Dy
-+CONFIG_I2C_MUX=3Dy
-+CONFIG_I2C_NPCM=3Dy
-+CONFIG_SPI=3Dy
-+CONFIG_SPI_WPCM_FIU=3Dy
-+CONFIG_SPI_NPCM_PSPI=3Dy
-+CONFIG_PINCTRL_SINGLE=3Dy
-+CONFIG_PINCTRL_WPCM450=3Dy
-+CONFIG_POWER_SUPPLY=3Dy
-+CONFIG_SENSORS_NPCM7XX=3Dy
-+# CONFIG_THERMAL is not set
-+CONFIG_WATCHDOG=3Dy
-+CONFIG_NPCM7XX_WATCHDOG=3Dy
-+CONFIG_MFD_SYSCON=3Dy
-+CONFIG_REGULATOR=3Dy
-+CONFIG_REGULATOR_FIXED_VOLTAGE=3Dy
-+CONFIG_FB=3Dy
-+CONFIG_FB_MODE_HELPERS=3Dy
-+# CONFIG_HID is not set
-+CONFIG_USB_CHIPIDEA=3Dy
-+CONFIG_USB_CHIPIDEA_UDC=3Dy
-+CONFIG_USB_GADGET=3Dy
-+CONFIG_USB_CONFIGFS=3Dy
-+CONFIG_USB_CONFIGFS_SERIAL=3Dy
-+CONFIG_USB_CONFIGFS_ACM=3Dy
-+CONFIG_USB_CONFIGFS_EEM=3Dy
-+CONFIG_USB_CONFIGFS_MASS_STORAGE=3Dy
-+CONFIG_USB_CONFIGFS_F_FS=3Dy
-+CONFIG_USB_CONFIGFS_F_HID=3Dy
-+CONFIG_NEW_LEDS=3Dy
-+CONFIG_LEDS_CLASS=3Dy
-+CONFIG_LEDS_GPIO=3Dy
-+CONFIG_LEDS_TRIGGERS=3Dy
-+CONFIG_LEDS_TRIGGER_TIMER=3Dy
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=3Dy
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=3Dy
-+CONFIG_DMADEVICES=3Dy
-+CONFIG_SYNC_FILE=3Dy
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_VHOST_MENU is not set
-+CONFIG_STAGING=3Dy
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_PWM=3Dy
-+CONFIG_GENERIC_PHY=3Dy
-+CONFIG_PECI=3Dy
-+CONFIG_PECI_CPU=3Dy
-+CONFIG_MSDOS_FS=3Dy
-+CONFIG_VFAT_FS=3Dy
-+CONFIG_TMPFS=3Dy
-+CONFIG_UBIFS_FS=3Dy
-+CONFIG_SQUASHFS=3Dy
-+CONFIG_SQUASHFS_XZ=3Dy
-+CONFIG_SQUASHFS_ZSTD=3Dy
-+# CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=3Dy
-+CONFIG_NLS_CODEPAGE_850=3Dy
-+CONFIG_NLS_ISO8859_1=3Dy
-+CONFIG_NLS_ISO8859_2=3Dy
-+CONFIG_NLS_UTF8=3Dy
-+CONFIG_KEYS=3Dy
-+CONFIG_HARDENED_USERCOPY=3Dy
-+CONFIG_FORTIFY_SOURCE=3Dy
-+CONFIG_CRYPTO_RSA=3Dy
-+CONFIG_CRYPTO_AES=3Dy
-+CONFIG_CRYPTO_CBC=3Dm
-+CONFIG_CRYPTO_PCBC=3Dm
-+CONFIG_CRYPTO_CCM=3Dy
-+CONFIG_CRYPTO_GCM=3Dy
-+CONFIG_CRYPTO_CMAC=3Dy
-+CONFIG_CRYPTO_SHA256=3Dy
-+CONFIG_ASYMMETRIC_KEY_TYPE=3Dy
-+CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=3Dy
-+CONFIG_X509_CERTIFICATE_PARSER=3Dy
-+CONFIG_PKCS7_MESSAGE_PARSER=3Dy
-+CONFIG_SYSTEM_TRUSTED_KEYRING=3Dy
-+CONFIG_CRC_CCITT=3Dy
-+CONFIG_CRC_ITU_T=3Dm
-+CONFIG_LIBCRC32C=3Dy
-+CONFIG_PRINTK_TIME=3Dy
-+CONFIG_DEBUG_KERNEL=3Dy
-+CONFIG_MAGIC_SYSRQ=3Dy
-+CONFIG_DEBUG_FS=3Dy
-+# CONFIG_SCHED_DEBUG is not set
-+# CONFIG_DEBUG_PREEMPT is not set
-+# CONFIG_FTRACE is not set
-+CONFIG_IO_STRICT_DEVMEM=3Dy
-+CONFIG_DEBUG_USER=3Dy
-+CONFIG_DEBUG_LL=3Dy
-+CONFIG_DEBUG_LL_UART_8250=3Dy
-+CONFIG_DEBUG_UART_PHYS=3D0xb8000000
-+CONFIG_DEBUG_UART_VIRT=3D0x0ff000000
-+CONFIG_DEBUG_UART_8250_WORD=3Dy
-+CONFIG_EARLY_PRINTK=3Dy
-=2D-
-2.39.0
+@Joel: I'll leave it up to you to decide whether you keep v3 or replace
+it with v4 (although given the upcoming merge window, I guess keeping v3
+is safer).
 
+
+Best regards,
+Jonathan
+
+> v4:
+> - Add Joel's R-b
+> - Disable CPU_FREQ
+> - Update for Linux 6.2: Enable CONFIG_SPI_WPCM_FIU, disable
+>   CONFIG_LEGACY_TIOCSTI
+> - Disable CONFIG_KEXEC, which isn't generally useful for the BMC usecase
+>=20
+> v3:
+> - https://lore.kernel.org/lkml/20221101112134.673869-1-j.neuschaefer@gmx.=
+net/
+> - Regenerate for 6.1-rc1 and enable a few Nuvoton-specific options as
+>   well as the PECI subsystem
+>=20
+> v2:
+> - Regenerate for 5.19-rc1
+> ---
+>  MAINTAINERS                        |   1 +
+>  arch/arm/configs/wpcm450_defconfig | 211 +++++++++++++++++++++++++++++
+>  2 files changed, 212 insertions(+)
+>  create mode 100644 arch/arm/configs/wpcm450_defconfig
+[...]
+
+--mrgSoAscP93Rd3cj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmPV9ikACgkQCDBEmo7z
+X9vXWQ/+Ov8IS5JDDJmGLN3jT4vCLiqYEzQDg8K2iagvlwgbZcbHUFAPbANFt4qD
+kG5HH2QDOZhrUg9WwnbVs7hsEFaCxNcl3G7fVfEb6LZMbw2iEoh154sxIu3vbnzj
+HQBJACyvIfIKnAvgOUah2J9GhbS5iA75OouZsfOhLiDjTVPNLzpGmR8D4RmIk9xL
+1rzCSCxkYxJZTJGV9n0yZDTgXU+9mvxkPPqGo4Wgzte99NP4KRa5kJ5YMrybR/D7
+h8Q9RM/Dff6v1g1DawqINPU+sEdqKB4uqpK6uPF1ToKYDyvOq4yZ3J6Jzjq5Y9xm
+WzN3/O2WvJriRJ8bHG88SSprcP9d9qsAZjNzkqgj2bc5zrfncP2b57zntCBjL3on
+tV0wttFbqHsxCrJtppDraZBP0KqA5Az+VaTgIAzi8KkyQUXcd4F4zgrqp/6zd6hv
+slnXe9/pLlVZ+mtSjzkXHBvsPj3ca9VGku1rMCNUo3ROSTiTIL7ZvmFU8Yu+QQCP
+Hw4cvUFKLSXbwXP3ylkT2tc3X63Jm4M2Y8FEvHYEYBcvoaD+VVzV7P3luPElJwXA
+S43cfTOPBnKqAYlBIknc0AySnXp1teizejV1tEPLh71PYlLPpCBiLlCWgloa7lis
+nVyrnQzKgOk/6T9ACW081fB0akOkgRpii88qKZDQPQL/X2z2vwA=
+=D2LN
+-----END PGP SIGNATURE-----
+
+--mrgSoAscP93Rd3cj--
