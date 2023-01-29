@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1604B680145
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 20:55:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75107680147
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 21:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjA2Tze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 14:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S231190AbjA2UEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 15:04:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2Tzb (ORCPT
+        with ESMTP id S229492AbjA2UEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 14:55:31 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C27A1CF47;
-        Sun, 29 Jan 2023 11:55:30 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1636eae256cso8478225fac.0;
-        Sun, 29 Jan 2023 11:55:30 -0800 (PST)
+        Sun, 29 Jan 2023 15:04:04 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8CB1B57A
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 12:04:02 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id q10so9315880wrm.4
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 12:04:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iLbGoONm+xqkc97+A+Zml853XMzw+B9pcYL8n8StFtc=;
-        b=glgR4Glc5nCL8S38ROz9Eol5ou+EwE88pZMvzmg9G0C0UFLvFS9zx2l9qX35HD8X0c
-         Lt3jYr7P7Sim+CwD3YTqTRjQOTVZBYoRdp0K+fOV6NPvIuMoB6L3i2gn8glZF6vrkBp7
-         Kwr9/NNeqXlnrgJCq2Gnj30mG562pjU30JJn43C8wgjBh8O5MODomLHYaz1YFO4oZpPK
-         kAuVguFXqwmUnX1gKcp0FuAYAO3GlzNdZolhhxQ9TWLVQQs9sOPI68miGGt+oUGbyo+Z
-         dGwEqbxyWOyNbXsrr6EWoXo9pTknyxFz0Dcg58iTmOwRNI7BZHdW4wIfEIIOms2t1PER
-         h1Aw==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IJdSLrm62OXsHa1vS2UwymBoPitLjdvJ3yZjxHg8IsU=;
+        b=x7cAkHc8AmiRkUr5Kr57JzOaQui9GXrzM6lh6r+PphJ2vYQMBJzHgZ/4gxIeQezzJJ
+         urII0ETErVFlqt+SrEOzz5n6h4ICT+uY9hRLt8qxpWPpa/Zx7E4qMfUgWx4Ww/oAmCtp
+         +d+O3m7VjcDs2vIkLMz5n1q+wohgRPNv09eO1Nx380L0kpG3yDjq7xVO+396g55tB4y1
+         vZsVUPTLvPZ3dYW2hpz7nD1W2GOrVLMrjS242cGrWkrerDZtYmxyu007oqY1TaA+tZSg
+         S5bDACfWIvFsJoqZnybxImKrxBbNGe98xtr/rA+emQBfi90mCL6zfIWyB8ZDTZpRlKok
+         0wqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iLbGoONm+xqkc97+A+Zml853XMzw+B9pcYL8n8StFtc=;
-        b=4F/KeiAaVt7ap6w9kdcG5sJ39NrGPTXiTzHi+RSEMywynD9mjTciBOBQp/9Dumy0W7
-         GGSyXV3mqAArB4ZdDis3GD5H/HAlDdP1e/sprlxJYAPkGnu7MZoZwL/9CyfL6JrxK+2W
-         puBCB+q3IIzYjkVoU5Br6MdsOgf9dVWdIx5Ue2ztzbi4UohKd4lP+VWe9Z1nm1xSPCQm
-         U11tZuZqXLFSp4gsP7/+8iKSRJeZ+Yf1eS36FKp5MKWclRcyD60WQEQpI4p09aHpPI69
-         uCRpgOJrMJbnY4ldYE+GpztFY/YBhLJbwBV9R5fhvv6xWga0uzYdyy4oyafkyd9oN/TD
-         IQGg==
-X-Gm-Message-State: AO0yUKUOGp7PhP6saYOu8LAG+vfJnKd2sS4ZkoS1bMXggb7q6jszTbRg
-        xlS8Nn/pA1b95UkKtui9Zt+vxSpLlH8=
-X-Google-Smtp-Source: AK7set+okvx2usDN7KXb0eVoAYP+qVRqZ2yWIGMLR8EbD4Cr34aPvBS58WDLuGaWP1Mj3KYRBCcvZQ==
-X-Received: by 2002:a05:6870:42cc:b0:163:1568:bdc9 with SMTP id z12-20020a05687042cc00b001631568bdc9mr11214890oah.2.1675022129681;
-        Sun, 29 Jan 2023 11:55:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l11-20020a4ab2cb000000b004a3527e8279sm4206123ooo.0.2023.01.29.11.55.28
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IJdSLrm62OXsHa1vS2UwymBoPitLjdvJ3yZjxHg8IsU=;
+        b=8QGcKr+7MPqJ8BAA63Fhe+opgvdBMFHSAo0Q0xkKMs2r1x1dwUOpWbWCnTubUZOtq0
+         yMLCgw16f6hEmvV4TScKrAWyzRr8DbgVzsIorRIwqv9npOaVoIzA/f46hxhh7pRqjO2t
+         zYK3fvq8kaoGb+X5M2t4yrbkmVUW4nnv+rokq+zmWhUmqXSoRNfMZiZi+8/YA9JoF7bI
+         BrvrnBDiF/9dQBRdx8lsA38hFQGUFBaqGVvhr6V5FVyH6wLYfIib4zlCt0lrYL6QPdyN
+         9jnv3O38r2dCaGqw664KCDnURvYEDx1pwhnO1nMr/cZy7Ebrgx15mkF0lq1JJZw4MRhT
+         ungw==
+X-Gm-Message-State: AO0yUKWkEsL8AXH8eEn1U2zAcLzj5/sQoKGD9GMsibFh/5VUSQ/lQrbI
+        0v/y1DVWpUqrKDEb3XyGFQjlZQ==
+X-Google-Smtp-Source: AK7set913VYbEi/YORn7oXlOgK8lK6bnhDIkjPhHMWS8PL2EVR5snx5DEvJ7oB8HHs9/oEdtx2tSwA==
+X-Received: by 2002:a05:6000:1448:b0:2bf:decb:ecac with SMTP id v8-20020a056000144800b002bfdecbecacmr6989266wrx.11.1675022640893;
+        Sun, 29 Jan 2023 12:04:00 -0800 (PST)
+Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
+        by smtp.gmail.com with ESMTPSA id o6-20020adfe806000000b002bdf8dd6a8bsm9731963wrm.80.2023.01.29.12.03.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 11:55:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 29 Jan 2023 11:55:28 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jonathan Cormier <jcormier@criticallink.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>
-Subject: Re: [PATCH v4 5/5] hwmon: ltc2945: Convert division to
- DIV_ROUND_CLOSEST_ULL
-Message-ID: <20230129195528.GA1418977@roeck-us.net>
-References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
- <20230126-b4-ltc2945_shunt_resistor-v4-5-bb913470d8da@criticallink.com>
+        Sun, 29 Jan 2023 12:04:00 -0800 (PST)
+Date:   Sun, 29 Jan 2023 20:03:59 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [PATCH 1/3] sched/uclamp: Set max_spare_cap_cpu even if
+ max_spare_cap is 0
+Message-ID: <20230129200359.nkgi2aqreo5wx6c7@airbuntu>
+References: <20230129161444.1674958-1-qyousef@layalina.io>
+ <20230129161444.1674958-2-qyousef@layalina.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-5-bb913470d8da@criticallink.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20230129161444.1674958-2-qyousef@layalina.io>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,38 +77,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 05:32:27PM -0500, Jonathan Cormier wrote:
-> Convert division to DIV_ROUND_CLOSEST_ULL to match code
-> in same function.
+On 01/29/23 16:14, Qais Yousef wrote:
+> When uclamp_max is being used, the util of the task could be higher than
+> the spare capacity of the CPU, but due to uclamp_max value we force fit
+> it there.
 > 
-> Signed-off-by: Jonathan Cormier <jcormier@criticallink.comi
+> The way the condition for checking for max_spare_cap in
+> find_energy_efficient_cpu() was constructed; it ignored any CPU that has
+> its spare_cap less than or _equal_ to max_spare_cap. Since we initialize
+> max_spare_cap to 0; this lead to never setting max_spare_cap_cpu and
+> hence ending up never performing compute_energy() for this cluster and
+> missing an opportunity for a better energy efficient placement to honour
+> uclamp_max setting.
+> 
+> 	max_spare_cap = 0;
+> 	cpu_cap = capacity_of(cpu) - task_util(p);  // 0 if task_util(p) is high
+> 
+> 	...
+> 
+> 	util_fits_cpu(...);		// will return true if uclamp_max forces it to fit
+> 
+> 	...
+> 
+> 	// this logic will fail to update max_spare_cap_cpu if cpu_cap is 0
+> 	if (cpu_cap > max_spare_cap) {
+> 		max_spare_cap = cpu_cap;
+> 		max_spare_cap_cpu = cpu;
+> 	}
+> 
+> prev_spare_cap suffers from a similar problem.
+> 
+> Fix the logic by treating -1UL value as 'not populated' instead of
+> 0 which is a viable and correct spare capacity value.
+> 
+> Fixes: 1d42509e475c ("sched/fair: Make EAS wakeup placement consider uclamp restrictions")
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
 > ---
->  drivers/hwmon/ltc2945.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  kernel/sched/fair.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
-> index 0b5e448b4f12..33341d01f1f7 100644
-> --- a/drivers/hwmon/ltc2945.c
-> +++ b/drivers/hwmon/ltc2945.c
-> @@ -212,7 +212,7 @@ static long long ltc2945_val_to_reg(struct device *dev, u8 reg,
->  	case LTC2945_MAX_VIN_THRES_H:
->  	case LTC2945_MIN_VIN_THRES_H:
->  		/* 25 mV resolution. */
-> -		val /= 25;
-> +		val = DIV_ROUND_CLOSEST_ULL(val, 25);
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index e29e9ea4cde8..ca2c389d3180 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -7390,9 +7390,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  	for (; pd; pd = pd->next) {
+>  		unsigned long util_min = p_util_min, util_max = p_util_max;
+>  		unsigned long cpu_cap, cpu_thermal_cap, util;
+> -		unsigned long cur_delta, max_spare_cap = 0;
+> +		unsigned long cur_delta, max_spare_cap = -1UL;
+>  		unsigned long rq_util_min, rq_util_max;
+> -		unsigned long prev_spare_cap = 0;
+> +		unsigned long prev_spare_cap = -1UL;
+>  		int max_spare_cap_cpu = -1;
+>  		unsigned long base_energy;
+>  		int fits, max_fits = -1;
+> @@ -7457,7 +7457,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  				prev_spare_cap = cpu_cap;
+>  				prev_fits = fits;
+>  			} else if ((fits > max_fits) ||
+> -				   ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
+> +				   ((fits == max_fits) &&
+> +				   (cpu_cap > max_spare_cap || max_spare_cap == -1UL) {
 
-This needs to be combined with the previous patch since that patch changes
-'val' from unsigned long to unsigned long long, causing a compile failure
-on 32-bit builds.
+Oops. Sorry I just realized I bodged this while rebasing and preparing the
+patches for posting. There are missing termination parenthesis that will cause
+compilation errors.
 
-I'll do that unless some other 32 bit build failure shows up.
+Apologies..
 
-Guenter
 
->  		break;
->  	case LTC2945_ADIN_H:
->  	case LTC2945_MAX_ADIN_H:
-> 
+--
+Qais Yousef
+
+>  				/*
+>  				 * Find the CPU with the maximum spare capacity
+>  				 * among the remaining CPUs in the performance
+> @@ -7469,7 +7470,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  			}
+>  		}
+>  
+> -		if (max_spare_cap_cpu < 0 && prev_spare_cap == 0)
+> +		if (max_spare_cap_cpu < 0 && prev_spare_cap == -1UL)
+>  			continue;
+>  
+>  		eenv_pd_busy_time(&eenv, cpus, p);
+> @@ -7477,7 +7478,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  		base_energy = compute_energy(&eenv, pd, cpus, p, -1);
+>  
+>  		/* Evaluate the energy impact of using prev_cpu. */
+> -		if (prev_spare_cap > 0) {
+> +		if (prev_spare_cap != -1UL) {
+>  			prev_delta = compute_energy(&eenv, pd, cpus, p,
+>  						    prev_cpu);
+>  			/* CPU utilization has changed */
+> @@ -7489,7 +7490,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  		}
+>  
+>  		/* Evaluate the energy impact of using max_spare_cap_cpu. */
+> -		if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
+> +		if (max_spare_cap_cpu >= 0 &&
+> +		    (max_spare_cap > prev_spare_cap || prev_spare_cap == -1UL)) {
+>  			/* Current best energy cpu fits better */
+>  			if (max_fits < best_fits)
+>  				continue;
 > -- 
 > 2.25.1
 > 
