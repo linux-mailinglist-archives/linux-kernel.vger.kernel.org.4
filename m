@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3DB6802E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 00:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ED56802E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 00:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbjA2XMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 18:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S235183AbjA2XMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 18:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235535AbjA2XM3 (ORCPT
+        with ESMTP id S235540AbjA2XMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 18:12:29 -0500
+        Sun, 29 Jan 2023 18:12:30 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964151E9EC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C6E1ABF4;
         Sun, 29 Jan 2023 15:11:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
         To:From:Sender:Reply-To:Content-ID:Content-Description;
-        bh=+c5n36on1Jyue8jVj9riWe+bIRkB8cW88wYvTPi78Yc=; b=CfsWOQ+/AwuszLtNraNnswQGg+
-        UNdEsNYPOvEVHUOzT8qQE5WVOY/FV6lke3WxNK7WZwuG1AiJ2Pb3dG46AmUK7oVv8lO8urg4vZrhX
-        YuWvyP8XDyoz4Flhrx5I1ZZjOAWPVrXi5t+smsHP1qiajpZufGwI/5tYF77la5PA1iVEg2yjvl8qO
-        MXZEF43RavvJpw2+TgBNUbiIBbfF40F0kxechh70bRQrJDdFSJDR8es3Jsr5pjoVKjnXR0aMflrVe
-        SoAzeCxXMm5yj0sX7d1xTyVPsMfgwZju0crsRpf4tYy0wNuNT/v2lMngZFv5el56K3wNCFhfzdMoH
-        NCQ83vVg==;
+        bh=p1JHfxL2Hp0hAVhM60onR/hxbaqp3NJBLYWgv29llTw=; b=B9vd1HBpCHGTA2DyH9UL2IdYvL
+        dZQGdWpuK9MVndysL/b68XmSo1uYTweaw9Vy6bQsA5C9WdQd8CqVibz75WSk4FX4gtql1RsSZHs33
+        k4wK+HpBbDQqQaU4nN8TxhVNl5CKHbKA25AApPlZRCXwrslGpvb4no37NHooc7VMLIefwbimY8sbn
+        iUHWG1ojqn6qKigB9aTSioWgKTq9GIjseNKpsB0tiyNvzfK11hiVd3ofLhbJ00Q1u+mkQ+Hl6PTAu
+        owsGkbsUQLnQMzqgoqrTQTC2xu98a/lmzgoaI1CZpuXYtZ63XKdgvFc4LsRbzvSjPh/BfXsRvWxqh
+        omtShmAA==;
 Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMGpQ-0020M2-Rz; Sun, 29 Jan 2023 23:11:16 +0000
+        id 1pMGpR-0020M2-8M; Sun, 29 Jan 2023 23:11:17 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>, sparclinux@vger.kernel.org
-Subject: [PATCH 8/9] Documentation: sparc: correct spelling
-Date:   Sun, 29 Jan 2023 15:10:52 -0800
-Message-Id: <20230129231053.20863-9-rdunlap@infradead.org>
+        Sean Young <sean@mess.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: [PATCH 9/9] Documentation: userspace-api: correct spelling
+Date:   Sun, 29 Jan 2023 15:10:53 -0800
+Message-Id: <20230129231053.20863-10-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
 References: <20230129231053.20863-1-rdunlap@infradead.org>
@@ -44,195 +46,199 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/sparc/ as reported
+Correct spelling problems for Documentation/userspace-api/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
+Cc: Sean Young <sean@mess.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
 ---
- Documentation/sparc/adi.rst               |    4 -
- Documentation/sparc/oradax/dax-hv-api.txt |   44 ++++++++++----------
- 2 files changed, 24 insertions(+), 24 deletions(-)
+ Documentation/userspace-api/iommufd.rst                             |    2 +-
+ Documentation/userspace-api/media/drivers/st-vgxy61.rst             |    2 +-
+ Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst |    2 +-
+ Documentation/userspace-api/media/rc/rc-protos.rst                  |    2 +-
+ Documentation/userspace-api/media/rc/rc-tables.rst                  |    2 +-
+ Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst            |    2 +-
+ Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst |    2 +-
+ Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst            |    2 +-
+ Documentation/userspace-api/media/v4l/hist-v4l2.rst                 |    4 ++--
+ Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst           |    2 +-
+ Documentation/userspace-api/media/v4l/vidioc-cropcap.rst            |    2 +-
+ Documentation/userspace-api/seccomp_filter.rst                      |    2 +-
+ Documentation/userspace-api/sysfs-platform_profile.rst              |    2 +-
+ 13 files changed, 14 insertions(+), 14 deletions(-)
 
-diff -- a/Documentation/sparc/adi.rst b/Documentation/sparc/adi.rst
---- a/Documentation/sparc/adi.rst
-+++ b/Documentation/sparc/adi.rst
-@@ -38,7 +38,7 @@ virtual addresses that contain 0xa in bi
+diff -- a/Documentation/userspace-api/iommufd.rst b/Documentation/userspace-api/iommufd.rst
+--- a/Documentation/userspace-api/iommufd.rst
++++ b/Documentation/userspace-api/iommufd.rst
+@@ -165,7 +165,7 @@ Multiple io_pagetable-s, through their i
+ iopt_pages which avoids multi-pinning and double accounting of page
+ consumption.
  
- ADI is enabled on a set of pages using mprotect() with PROT_ADI flag.
- When ADI is enabled on a set of pages by a task for the first time,
--kernel sets the PSTATE.mcde bit fot the task. Version tags for memory
-+kernel sets the PSTATE.mcde bit for the task. Version tags for memory
- addresses are set with an stxa instruction on the addresses using
- ASI_MCD_PRIMARY or ASI_MCD_ST_BLKINIT_PRIMARY. ADI block size is
- provided by the hypervisor to the kernel.  Kernel returns the value of
-@@ -97,7 +97,7 @@ With ADI enabled, following new traps ma
- Disrupting memory corruption
- ----------------------------
+-iommufd_ioas is sharable between subsystems, e.g. VFIO and VDPA, as long as
++iommufd_ioas is shareable between subsystems, e.g. VFIO and VDPA, as long as
+ devices managed by different subsystems are bound to a same iommufd.
  
--	When a store accesses a memory localtion that has TTE.mcd=1,
-+	When a store accesses a memory location that has TTE.mcd=1,
- 	the task is running with ADI enabled (PSTATE.mcde=1), and the ADI
- 	tag in the address used (bits 63:60) does not match the tag set on
- 	the corresponding cacheline, a memory corruption trap occurs. By
-diff -- a/Documentation/sparc/oradax/dax-hv-api.txt b/Documentation/sparc/oradax/dax-hv-api.txt
---- a/Documentation/sparc/oradax/dax-hv-api.txt
-+++ b/Documentation/sparc/oradax/dax-hv-api.txt
-@@ -22,7 +22,7 @@ Chapter 36. Coprocessor services
-         functionality offered may vary by virtual machine implementation.
+ IOMMUFD User API
+diff -- a/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst b/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
+--- a/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
++++ b/Documentation/userspace-api/media/v4l/dev-sliced-vbi.rst
+@@ -490,7 +490,7 @@ struct v4l2_mpeg_vbi_fmt_ivtv
+       - An alternate form of the sliced VBI data payload used when 36
+ 	lines of sliced VBI data are present. No line masks are provided
+ 	in this form of the payload; all valid line mask bits are
+-	implcitly set.
++	implicitly set.
+     * - }
+       -
  
-         The DAX is a virtual device to sun4v guests, with supported data operations indicated by the virtual device
--        compatibilty property. Functionality is accessed through the submission of Command Control Blocks
-+        compatibility property. Functionality is accessed through the submission of Command Control Blocks
-         (CCBs) via the ccb_submit API function. The operations are processed asynchronously, with the status
-         of the submitted operations reported through a Completion Area linked to each CCB. Each CCB has a
-         separate Completion Area and, unless execution order is specifically restricted through the use of serial-
-@@ -313,7 +313,7 @@ bits set, and terminate at a CCB that ha
+diff -- a/Documentation/userspace-api/seccomp_filter.rst b/Documentation/userspace-api/seccomp_filter.rst
+--- a/Documentation/userspace-api/seccomp_filter.rst
++++ b/Documentation/userspace-api/seccomp_filter.rst
+@@ -274,7 +274,7 @@ value will be the injected file descript
+ The notifying process can be preempted, resulting in the notification being
+ aborted. This can be problematic when trying to take actions on behalf of the
+ notifying process that are long-running and typically retryable (mounting a
+-filesytem). Alternatively, at filter installation time, the
++filesystem). Alternatively, at filter installation time, the
+ ``SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV`` flag can be set. This flag makes it
+ such that when a user notification is received by the supervisor, the notifying
+ process will ignore non-fatal signals until the response is sent. Signals that
+diff -- a/Documentation/userspace-api/media/v4l/hist-v4l2.rst b/Documentation/userspace-api/media/v4l/hist-v4l2.rst
+--- a/Documentation/userspace-api/media/v4l/hist-v4l2.rst
++++ b/Documentation/userspace-api/media/v4l/hist-v4l2.rst
+@@ -47,7 +47,7 @@ Codec API was released.
+ 1998-11-08: Many minor changes. Most symbols have been renamed. Some
+ material changes to struct v4l2_capability.
  
-           Secondary           Input Description
-           Format Code
--          0                          Element is stored as value minus 1 (0 evalutes to 1, 1 evalutes
-+          0                          Element is stored as value minus 1 (0 evaluates to 1, 1 evaluates
-                                      to 2, etc)
-           1                          Element is stored as value
+-1998-11-12: The read/write directon of some ioctls was misdefined.
++1998-11-12: The read/write direction of some ioctls was misdefined.
  
-@@ -659,7 +659,7 @@ Offset         Size            Field Des
-                                             “Secondary Input Element Size”
-                                [13:10]      Output Format (see Section 36.2.1.1.6, “Output Format”)
-                                [9:5]        Operand size for first scan criteria value. In a scan value
--                                            operation, this is one of two potential extact match values.
-+                                            operation, this is one of two potential exact match values.
-                                             In a scan range operation, this is the size of the upper range
+ 1998-11-14: ``V4L2_PIX_FMT_RGB24`` changed to ``V4L2_PIX_FMT_BGR24``,
+ and ``V4L2_PIX_FMT_RGB32`` changed to ``V4L2_PIX_FMT_BGR32``. Audio
+@@ -145,7 +145,7 @@ common Linux driver API conventions.
+    ``VIDIOC_G_INFMT``, ``VIDIOC_S_OUTFMT``, ``VIDIOC_G_OUTFMT``,
+    ``VIDIOC_S_VBIFMT`` and ``VIDIOC_G_VBIFMT``. The image format
+    struct v4l2_format was renamed to struct v4l2_pix_format, while
+-   struct v4l2_format is now the envelopping structure
++   struct v4l2_format is now the enveloping structure
+    for all format negotiations.
  
+ 5. Similar to the changes above, the ``VIDIOC_G_PARM`` and
+diff -- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+@@ -1213,7 +1213,7 @@ FWHT Flags
+       - Luma AC coefficient table index.
+     * - __s8
+       - ``y_dc_delta``
+-      - Luma DC delta vaue.
++      - Luma DC delta value.
+     * - __s8
+       - ``y2_dc_delta``
+       - Y2 block DC delta value.
+diff -- a/Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-jpeg.rst
+@@ -8,7 +8,7 @@ JPEG Control Reference
  
-@@ -673,7 +673,7 @@ Offset   Size   Field Description
-                              operand, minus 1. Values 0xF-0x1E are reserved. A value of
-                              0x1F indicates this operand is not in use for this scan operation.
-                 [4:0]        Operand size for second scan criteria value. In a scan value
--                             operation, this is one of two potential extact match values.
-+                             operation, this is one of two potential exact match values.
-                              In a scan range operation, this is the size of the lower range
-                              boundary. The value of this field is the number of bytes in the
-                              operand, minus 1. Values 0xF-0x1E are reserved. A value of
-@@ -690,24 +690,24 @@ Offset   Size   Field Description
- 48       8      Output (same fields as Primary Input)
- 56       8      Symbol Table (if used by Primary Input). Same fields as Section 36.2.1.2,
-                 “Extract command”
--64       4      Next 4 most significant bytes of first scan criteria operand occuring after the
-+64       4      Next 4 most significant bytes of first scan criteria operand occurring after the
-                 bytes specified at offset 40, if needed by the operand size. If first operand
-                 is less than 8 bytes, the valid bytes are left-aligned to the lowest address.
--68       4      Next 4 most significant bytes of second scan criteria operand occuring after
-+68       4      Next 4 most significant bytes of second scan criteria operand occurring after
-                 the bytes specified at offset 44, if needed by the operand size. If second
-                 operand is less than 8 bytes, the valid bytes are left-aligned to the lowest
-                 address.
--72       4      Next 4 most significant bytes of first scan criteria operand occuring after the
-+72       4      Next 4 most significant bytes of first scan criteria operand occurring after the
-                 bytes specified at offset 64, if needed by the operand size. If first operand
-                 is less than 12 bytes, the valid bytes are left-aligned to the lowest address.
--76       4      Next 4 most significant bytes of second scan criteria operand occuring after
-+76       4      Next 4 most significant bytes of second scan criteria operand occurring after
-                 the bytes specified at offset 68, if needed by the operand size. If second
-                 operand is less than 12 bytes, the valid bytes are left-aligned to the lowest
-                 address.
--80       4      Next 4 most significant bytes of first scan criteria operand occuring after the
-+80       4      Next 4 most significant bytes of first scan criteria operand occurring after the
-                 bytes specified at offset 72, if needed by the operand size. If first operand
-                 is less than 16 bytes, the valid bytes are left-aligned to the lowest address.
--84       4      Next 4 most significant bytes of second scan criteria operand occuring after
-+84       4      Next 4 most significant bytes of second scan criteria operand occurring after
-                 the bytes specified at offset 76, if needed by the operand size. If second
-                 operand is less than 16 bytes, the valid bytes are left-aligned to the lowest
-                 address.
-@@ -721,10 +721,10 @@ Offset   Size   Field Description
- 
- 36.2.1.4. Translate commands
- 
--        The translate commands takes an input array of indicies, and a table of single bit values indexed by those
--        indicies, and outputs a bit vector or index array created by reading the tables bit value at each index in
-+        The translate commands takes an input array of indices, and a table of single bit values indexed by those
-+        indices, and outputs a bit vector or index array created by reading the tables bit value at each index in
-         the input array. The output should therefore contain exactly one bit per index in the input data stream,
--        when outputing as a bit vector. When outputing as an index array, the number of elements depends on the
-+        when outputting as a bit vector. When outputting as an index array, the number of elements depends on the
-         values read in the bit table, but will always be less than, or equal to, the number of input elements. Only
-         a restricted subset of the possible input format types are supported. No variable width or Huffman/OZIP
-         encoded input streams are allowed. The primary input data element size must be 3 bytes or less.
-@@ -742,7 +742,7 @@ Offset   Size   Field Description
-         code in the CCB header.
- 
-         There are two supported formats for the output stream: the bit vector and index array formats (codes 0x8,
--        0xD, and 0xE). The index array format is an array of indicies of bits which would have been set if the
-+        0xD, and 0xE). The index array format is an array of indices of bits which would have been set if the
-         output format was a bit array.
- 
-         The return value of the CCB completion area contains the number of bits set in the output bit vector,
-@@ -1254,7 +1254,7 @@ EUNAVAILABLE   The requested CCB operati
-                submitted CCB, or may apply to a larger scope. The status should not be
-                interpreted as permanent, and the guest should attempt to submit CCBs in
-                the future which had previously been unable to be performed. The status
--               data provides additional information about scope of the retricted availability
-+               data provides additional information about scope of the restricted availability
-                as follows:
-                Value       Description
-                0           Processing for the exact CCB instance submitted was unavailable,
-@@ -1330,20 +1330,20 @@ EUNAVAILABLE   The requested CCB operati
-          of other CCBs ahead of the requested CCB, to provide a relative estimate of when the CCB may execute.
- 
-          The dax return value is only valid when the state is ENQUEUED. The value returned is the DAX unit
--         instance indentifier for the DAX unit processing the queue where the requested CCB is located. The value
-+         instance identifier for the DAX unit processing the queue where the requested CCB is located. The value
-          matches the value that would have been, or was, returned by ccb_submit using the queue info flag.
- 
-          The queue return value is only valid when the state is ENQUEUED. The value returned is the DAX
--         queue instance indentifier for the DAX unit processing the queue where the requested CCB is located. The
-+         queue instance identifier for the DAX unit processing the queue where the requested CCB is located. The
-          value matches the value that would have been, or was, returned by ccb_submit using the queue info flag.
- 
- 36.3.2.1. Errors
- 
--          EOK                       The request was proccessed and the CCB state is valid.
-+          EOK                       The request was processed and the CCB state is valid.
-           EBADALIGN                 address is not on a 64-byte aligned.
-           ENORADDR                  The real address provided for address is not valid.
-           EINVAL                    The CCB completion area contents are not valid.
--          EWOULDBLOCK               Internal resource contraints prevented the CCB state from being queried at this
-+          EWOULDBLOCK               Internal resource constraints prevented the CCB state from being queried at this
-                                     time. The guest should retry the request.
-           ENOACCESS                 The guest does not have permission to access the coprocessor virtual device
-                                     functionality.
-@@ -1401,11 +1401,11 @@ EUNAVAILABLE   The requested CCB operati
- 
- 36.3.3.2. Errors
- 
--          EOK                        The request was proccessed and the result is valid.
-+          EOK                        The request was processed and the result is valid.
-           EBADALIGN                  address is not on a 64-byte aligned.
-           ENORADDR                   The real address provided for address is not valid.
-           EINVAL                     The CCB completion area contents are not valid.
--          EWOULDBLOCK                Internal resource contraints prevented the CCB from being killed at this time.
-+          EWOULDBLOCK                Internal resource constraints prevented the CCB from being killed at this time.
-                                      The guest should retry the request.
-           ENOACCESS                  The guest does not have permission to access the coprocessor virtual device
-                                      functionality.
-@@ -1423,7 +1423,7 @@ EUNAVAILABLE   The requested CCB operati
- 
- 36.3.4.1. Errors
- 
--          EOK                        The request was proccessed and the number of enabled/disabled DAX units
-+          EOK                        The request was processed and the number of enabled/disabled DAX units
-                                      are valid.
+ The JPEG class includes controls for common features of JPEG encoders
+ and decoders. Currently it includes features for codecs implementing
+-progressive baseline DCT compression process with Huffman entrophy
++progressive baseline DCT compression process with Huffman entropy
+ coding.
  
  
+diff -- a/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst b/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
+--- a/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
++++ b/Documentation/userspace-api/media/v4l/vidioc-cropcap.rst
+@@ -71,7 +71,7 @@ overlay devices.
+       - Default cropping rectangle, it shall cover the "whole picture".
+ 	Assuming pixel aspect 1/1 this could be for example a 640 × 480
+ 	rectangle for NTSC, a 768 × 576 rectangle for PAL and SECAM
+-	centered over the active picture area. The same co-ordinate system
++	centered over the active picture area. The same coordinate system
+ 	as for ``bounds`` is used.
+     * - struct :c:type:`v4l2_fract`
+       - ``pixelaspect``
+diff -- a/Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst b/Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst
+--- a/Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst
++++ b/Documentation/userspace-api/media/rc/lirc-set-wideband-receiver.rst
+@@ -43,7 +43,7 @@ reduced range of reception.
+ 
+ .. note::
+ 
+-    Wide band receiver might be implictly enabled if you enable
++    Wide band receiver might be implicitly enabled if you enable
+     carrier reports. In that case it will be disabled as soon as you disable
+     carrier reports. Trying to disable wide band receiver while carrier
+     reports are active will do nothing.
+diff -- a/Documentation/userspace-api/media/rc/rc-protos.rst b/Documentation/userspace-api/media/rc/rc-protos.rst
+--- a/Documentation/userspace-api/media/rc/rc-protos.rst
++++ b/Documentation/userspace-api/media/rc/rc-protos.rst
+@@ -75,7 +75,7 @@ protocol, or the manchester BPF decoder.
+      - Command
+ 
+ There is a variant of rc5 called either rc5x or extended rc5
+-where there the second stop bit is the 6th commmand bit, but inverted.
++where there the second stop bit is the 6th command bit, but inverted.
+ This is done so it the scancodes and encoding is compatible with existing
+ schemes. This bit is stored in bit 6 of the scancode, inverted. This is
+ done to keep it compatible with plain rc-5 where there are two start bits.
+diff -- a/Documentation/userspace-api/media/rc/rc-tables.rst b/Documentation/userspace-api/media/rc/rc-tables.rst
+--- a/Documentation/userspace-api/media/rc/rc-tables.rst
++++ b/Documentation/userspace-api/media/rc/rc-tables.rst
+@@ -628,7 +628,7 @@ the remote via /dev/input/event devices.
+ 
+        -  Put device into zoom/full screen mode
+ 
+-       -  ZOOM / FULL SCREEN / ZOOM+ / HIDE PANNEL / SWITCH
++       -  ZOOM / FULL SCREEN / ZOOM+ / HIDE PANEL / SWITCH
+ 
+     -  .. row 80
+ 
+diff -- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+--- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
++++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-luma.rst
+@@ -14,7 +14,7 @@ are often referred to as greyscale forma
+    - In all the tables that follow, bit 7 is the most significant bit in a byte.
+    - Formats are described with the minimum number of pixels needed to create a
+      byte-aligned repeating pattern. `...` indicates repetition of the pattern.
+-   - Y'\ :sub:`x`\ [9:2] denotes bits 9 to 2 of the Y' value for pixel at colum
++   - Y'\ :sub:`x`\ [9:2] denotes bits 9 to 2 of the Y' value for pixel at column
+      `x`.
+    - `0` denotes padding bits set to 0.
+ 
+diff -- a/Documentation/userspace-api/media/drivers/st-vgxy61.rst b/Documentation/userspace-api/media/drivers/st-vgxy61.rst
+--- a/Documentation/userspace-api/media/drivers/st-vgxy61.rst
++++ b/Documentation/userspace-api/media/drivers/st-vgxy61.rst
+@@ -18,7 +18,7 @@ The ST VGXY61 driver implements the foll
+     * - HDR linearize
+       - The merger outputs a long exposure capture as long as it is not
+         saturated.
+-    * - HDR substraction
++    * - HDR subtraction
+       - This involves subtracting the short exposure frame from the long
+         exposure frame.
+     * - No HDR
+diff -- a/Documentation/userspace-api/sysfs-platform_profile.rst b/Documentation/userspace-api/sysfs-platform_profile.rst
+--- a/Documentation/userspace-api/sysfs-platform_profile.rst
++++ b/Documentation/userspace-api/sysfs-platform_profile.rst
+@@ -37,6 +37,6 @@ representation onto this fixed set.
+ If there is no good match when mapping then a new profile name may be
+ added. Drivers which wish to introduce new profile names must:
+ 
+- 1. Explain why the existing profile names canot be used.
++ 1. Explain why the existing profile names cannot be used.
+  2. Add the new profile name, along with a clear description of the
+     expected behaviour, to the sysfs-platform_profile ABI documentation.
