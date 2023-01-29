@@ -2,95 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AE3680150
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 21:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18F268015C
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 21:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbjA2UQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 15:16:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S230365AbjA2UnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 15:43:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjA2UQJ (ORCPT
+        with ESMTP id S229863AbjA2UnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 15:16:09 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D761C586;
-        Sun, 29 Jan 2023 12:16:07 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id e12-20020a0568301e4c00b0068bc93e7e34so971085otj.4;
-        Sun, 29 Jan 2023 12:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QcUvGf3SnNJxJpngwgS9E38WXihDAHpNbeo4S+i2+60=;
-        b=cYD7YfYm0ILqmo0ok/tIMKHHzSl5YLmOYhTocxYL5rksY2xPX+uTYSGcUC3OCK7jdm
-         2REzNnZCJB8GEFqp1oSI6E8uSjf7GjO9n6eVtQ590WNwheyogkFr82/X/Rvu8gSsguaJ
-         fdF5f29h9dewTOX8xkLqrmf8yT4Iu6IqN9Z5HXc0R/h88R2pCcH8gYQ7j3dfqeG9Vg0B
-         EeRMCT7Pgl1Hi6XMWHcU1MpAjphreZ4fDdH/V39ktDJCzE7LX01HXyFsJn5gT7LQxX3t
-         yOT3sW1rQP7NTPdTPoWOWv20PLzFwGSVT/luUO+/HvNvAl5gPx+MZKpuTeY1jpWik2n8
-         a2gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QcUvGf3SnNJxJpngwgS9E38WXihDAHpNbeo4S+i2+60=;
-        b=CW76y+6U+5AgNJeDuN/DWxxBlrPKteAfaEuUdgutmkOYELEkai7t+nAXfs6kyZkdNV
-         C4orNTdB+OCbqDZdtd2l2FqpmTfHahL/bwKrWO84EbvIe2N2yb0hI6CFsZI7YHAFYSX9
-         QTpNfq5PSWGklyDBq/v6NOjc1EH5zNumbOsWAJtkegibv2aicGY+bZCEjIxCXrJb5hd4
-         jS6OS7DGFAoYbzkk9hf3WRXi7X85Nyc1RfMP1AEz9S/o+wlozYQ8pPgWEi2HFS2l6wvW
-         BljqeoWxf9iG9RJrFzKhbpAJrxuD0awUBxkFtXbYIYfbt9Dpb0g13cQtBHK5OJOuwsT1
-         FzFw==
-X-Gm-Message-State: AO0yUKXLI3FP8q47HWhcmaN4ODXkq/OocpZT/9YFBrKW6YKYEWDRuATK
-        6yg8uZvEGioXY1qDCY0igUvB0eO5T9k=
-X-Google-Smtp-Source: AK7set+GkYHlOmIsVlnTVKZnuTEDSVDrRNryjt+RdJ9ezxZnho6Hgqo1Wds3ZKfQckXmLzs7Pme0vQ==
-X-Received: by 2002:a05:6830:4d4:b0:670:9cff:64bf with SMTP id s20-20020a05683004d400b006709cff64bfmr2901235otd.21.1675023366301;
-        Sun, 29 Jan 2023 12:16:06 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c5-20020a9d75c5000000b006866a9b28eesm341103otl.18.2023.01.29.12.16.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 12:16:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 29 Jan 2023 12:16:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jonathan Cormier <jcormier@criticallink.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Sun, 29 Jan 2023 15:43:07 -0500
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97ED09EDA
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 12:43:05 -0800 (PST)
+Received: from [192.168.100.237] (cust-41-49-110-94.dyn.as47377.net [94.110.49.41])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 0E4A43744C0;
+        Sun, 29 Jan 2023 21:43:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1675024982;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GKCL4x5Txs5llaY7BYYY71zG1gIHojGBLbaJh42WF2U=;
+        b=fZiGVi8n69bRgrIt/cGwzR5qVM88nWhqbRDxoIxLxoImEPG0gvyW/l/tbvtJF+abPNt/yR
+        sIGDN2G/q6XR3/QU1WY47DI1hq2ozdiCvbERfeEN32h/UWEysKWKd8wRWNZJ+uIZQUqE8/
+        l3QdvM3j5RMspUG/ExKvneq4DnZI4+xzMKr2zqL560X6Crm9OhtfETYiuN3sbmoAGY64vU
+        0jtFSknqbvxBFeFqBGZN1ElZMsUvUeMJ/b7gcSnPnIGzslmS93Fzmrchii7xEHiq89f3lF
+        RTYA7y60bhhqVtY0trX1G4LvAB9ECvzSBhMzwSM46f0GACuf39qJB7VcDW9xWQ==
+Message-ID: <c609a7f865ab48f858adafdd9c1014dda8ec82d6.camel@svanheule.net>
+Subject: Re: [PATCH v7 11/11] dt-bindings: net: dsa: qca8k: add LEDs
+ definition example
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 1/5] dt-bindings: hwmon: adi,ltc2945: Add binding
-Message-ID: <20230129201604.GA1583293@roeck-us.net>
-References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
- <20230126-b4-ltc2945_shunt_resistor-v4-1-bb913470d8da@criticallink.com>
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Date:   Sun, 29 Jan 2023 21:43:00 +0100
+In-Reply-To: <63a30221.050a0220.16e5f.653a@mx.google.com>
+References: <20221214235438.30271-1-ansuelsmth@gmail.com>
+         <20221214235438.30271-12-ansuelsmth@gmail.com>
+         <20221220173958.GA784285-robh@kernel.org> <Y6JDOFmcEQ3FjFKq@lunn.ch>
+         <Y6JkXnp0/lF4p0N1@lunn.ch> <63a30221.050a0220.16e5f.653a@mx.google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-1-bb913470d8da@criticallink.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 05:32:23PM -0500, Jonathan Cormier wrote:
-> Create initial binding for the LTC2945 I2C power monitor.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
+Hi Christian,
 
-Series applied, after merging patch 4/5 and 5/5 of the series
-to avoid spurious 32-bit build failures, and after fixing a
-continuation line alignment.
+On Wed, 2022-12-21 at 13:54 +0100, Christian Marangi wrote:
+> For reg it's really specific to the driver... My idea was that since a
+> single phy can have multiple leds attached, reg will represent the led
+> number.
+>=20
+> This is an example of the dt implemented on a real device.
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0mdio {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0#ad=
+dress-cells =3D <1>;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0#si=
+ze-cells =3D <0>;
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0phy=
+_port1: phy@0 {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg =3D <0>;
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0leds {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0#address-cells =3D <1>;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0#size-cells =3D <0>;
+[...]
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
+[...]
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0};
+>=20
+> In the following implementation. Each port have 2 leds attached (out of
+> 3) one white and one amber. The driver parse the reg and calculate the
+> offset to set the correct option with the regs by also checking the phy
+> number.
 
-In the future, please run checkpatch --strict on your patches,
-and please provide change logs.
+With switch silicon allowing user control of the LEDs, vendors can (and wil=
+l)
+use the switch's LED peripheral to drive other LEDs (or worse). E.g. on a C=
+isco
+SG220-26 switch, using a Realtek RTL8382 SoC, the LEDs associated with some
+unused switch ports are used to display a global device status. My concern =
+here
+is that one would have to specify switch ports, that aren't connected to
+anything, just to describe those non-ethernet LEDs.
 
-Thanks,
-Guenter
+Would an alternative with a 'trigger-sources' property pointing to the righ=
+t phy
+be an option? The trade-off I see would be that extra port info has to be
+provided on a separate LED controller, which your example can avoid thanks =
+to
+the phy's reg property.
+
+Building on your example this may become:
+
+       switch {
+           mdio {
+                #address-cells =3D <1>;
+                #size-cells =3D <0>;
+               =20
+                switch_phy0: phy@0 {
+                    reg =3D <0>;
+                    #trigger-source-cells =3D <1>;
+                };
+            };
+
+            leds {
+                #address-cells =3D <2>;
+                #size-cells =3D <0>;
+
+                /* First port, first LED */
+                /* Port status, can be offloaded */
+                led@0.0 {
+                    reg =3D <0 0>;
+                    trigger-sources =3D <&switch_phy0 (NET_LINK | NET_SPEED=
+_1000)>;
+                    function =3D color =3D <LED_COLOR_ID_WHITE>;
+                    function =3D LED_FUNCTION_LAN;
+                    function-enumerator =3D <1>;
+                    linux,default-trigger =3D "netdev";
+                };
+
+                /* First port, first LED */
+                /* Port status, can be offloaded */
+                led@0.1 {
+                    reg =3D <0 1>;
+                    trigger-sources =3D <&switch_phy0 (NET_LINK | NET_SPEED=
+_100 | NET_SPEED_10)>;
+                    function =3D color =3D <LED_COLOR_ID_AMBER>;
+                    function =3D LED_FUNCTION_LAN;
+                    function-enumerator =3D <1>;
+                    linux,default-trigger =3D "netdev";
+                };
+
+                /* Last port (not used in hardware), first LED */
+                /* Device status, software controlled */
+                led@7.0 {
+                    reg =3D <7 0>;
+                    function =3D color =3D <LED_COLOR_ID_AMBER>;
+                    function =3D LED_FUNCTION_STATUS;
+                    linux,default-trigger =3D "default-on";
+                };
+            };
+        };
+
+
+To be a bit less verbose, the &switch_mdio node might serve as trigger prov=
+ider
+with a single cell, but the above would allow only defined phy-s to be
+referenced.
+
+The trigger-source cells could be used for a more fine grained control of w=
+hat
+should be offloaded (link up/down, Rx/Tx activity, link speed, ...). Althou=
+gh
+this selectivity is most likely runtime configurable, this could serve as a
+description of static device labeling (e.g. "LINK/ACT 1000").
+
+Switching to the implementation and driver side, the 'trigger-sources' prop=
+erty
+could be used by the netdev trigger to determine if a status LED can be
+offloaded. The netdev trigger could just hide the whole hardware/software
+control aspect then. Much like how the timer trigger always offloads if an
+implementation is provided, even when offloading is less flexible than the
+software implementation of the timer trigger.
+
+
+Best,
+Sander
