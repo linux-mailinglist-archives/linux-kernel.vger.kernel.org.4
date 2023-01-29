@@ -2,132 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BBA680088
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3412E680091
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235203AbjA2RpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 12:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S235216AbjA2RtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 12:49:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234992AbjA2RpB (ORCPT
+        with ESMTP id S235199AbjA2RtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 12:45:01 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1204D6EB5
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:44:59 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so8601350wmb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KDVqMwkXzQiwnLCIs/h43LafiVs1rZMTm8awi1qCCKc=;
-        b=w0aTvaIintJcu8HU7uxDd+368iaEn8jPDp5DkzPJFdRPAwMrnip0Y77XTRfcJBAdHj
-         VWTidx1OV9y+w7+urHB/D+3I3K17rwJZbw7QYHtpaaIAXdBALUARE+t7mgaI4Wfw3IUH
-         GxyVFgg73RVe1BnW83ZJvtaIDw2ts0ODJ+TICcSb13MDrOOt1AwvudgwTzv2jeHzwXS6
-         YLbt3dPHP6LYvyUikKHBn65VPT0Cau8k1DSzDEV8vHxgcc/PydLwMSZo3gCJewqhNU9X
-         Padm4pJxlO9d+5aaSaEb752vxypSJyeab7IMASNwwtHsQ62dE50IDtJITU0rUKtJ+rPu
-         Sx7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KDVqMwkXzQiwnLCIs/h43LafiVs1rZMTm8awi1qCCKc=;
-        b=plaZRjvTWVg5mdogbCStlwpf/2ePqE933YZwErlUdY0veUSRtA7zrcricS/NB0bI5O
-         IPTcTT+wKWgOyAQ/hwX5sA2uqGRVEORXz5VrP3BvrmVc0hh2Ww3uuNmZwk+omOJL28gj
-         j/FrsEzK+Cm75Rgjy2ldy0rb+j007ekJXiGjO81j0Qz2Wsr1pkk88IlgShIvWQ40SZc8
-         Pik2WsHAWTOVhEHfjy9E6XLJAttvDscdJPB57xx0+VwY9WyGbUN6y3eYnYMb9fUPhaVX
-         Rle/FKOasqemkQz577+bO+eiu1rsneOi1vaLUdRRDH7lBRCF//ODjfk4eBcihcgypTHG
-         Yj8g==
-X-Gm-Message-State: AO0yUKX9PdfYdTMVOLVccVpL/hr7rTYk2CesLm07Ckh/46TzoP/7TKEf
-        zYcxLx0fs3BKgG2W+GBAiRzsRg==
-X-Google-Smtp-Source: AK7set9OhOe4XHsV2+ozJ/7/aDfXe0ptogZxgvVXaITVWgOHypR3+G8KPJ7ocr022Dmi0R2srkRVIw==
-X-Received: by 2002:a05:600c:1e08:b0:3dc:58fb:c1eb with SMTP id ay8-20020a05600c1e0800b003dc58fbc1ebmr1126427wmb.8.1675014297663;
-        Sun, 29 Jan 2023 09:44:57 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id c1-20020a05600c0a4100b003d9fba3c7a4sm14899978wmq.16.2023.01.29.09.44.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 09:44:57 -0800 (PST)
-Date:   Sun, 29 Jan 2023 19:44:55 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v1 2/2] dt-bindings: imx8ulp: clock: no spaces
- before tabs
-Message-ID: <Y9awlwWhjoH77dM2@linaro.org>
-References: <20230119085421.102804-1-marcel@ziswiler.com>
- <20230119085421.102804-3-marcel@ziswiler.com>
+        Sun, 29 Jan 2023 12:49:17 -0500
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D361B550;
+        Sun, 29 Jan 2023 09:49:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1675014549;
+        bh=F9PpH+TDLDlueIEXS+EiVubPXgY46d3dQ43D7ug3jE8=;
+        h=From:To:Cc:Subject:Date;
+        b=WmbLuGKWL/ixF0BYP4TumTOK5+e/dIZVXaFi0kKy6q2YOXe7oH54e8+szXQELM0zY
+         H+kmihUKPX6Zo1tWOPlb9bb0YEqO24W4iDNYgfP81/OGYViMRe5WG7EraCJ8HXl0dp
+         aHJy6p5kKEhnVX1c5PrR8WWR9l1F82yZqEF1Y9Bo=
+Received: from wen-VirtualBox.lan ([222.182.118.145])
+        by newxmesmtplogicsvrsza2-0.qq.com (NewEsmtp) with SMTP
+        id BEC84CF4; Mon, 30 Jan 2023 01:47:44 +0800
+X-QQ-mid: xmsmtpt1675014464tep5mnyr1
+Message-ID: <tencent_426EBA1E33855FC0B362550EB554D0E6E406@qq.com>
+X-QQ-XMAILINFO: NKv2G1wnhDBnQL0jg3ka8wyk0jP5cKGE5x+J+DMIQTBlifB/YGNiy8IeMneMZk
+         +rRQLtzqkEqOrCpMGl6Sv5L2xDt6FxI5DE+pbf53+sUCqtbLfptuEl/NQmEknS35USI5/p6OWZ6u
+         LxyEHMJj69v86PjMMdCDGRIi2SUTxjPbhjO6JRfGXMiHL03BmGB9TlcbdJZNDWxAlDoQQVJdfcWE
+         /o/7Gnfp9bOzVmzm+Aub9HGnatGwynzB4+XEQ1FJ4FAuhWjxxXBjeBt2QV9e+1ANVQFUGphYfyvY
+         lNhRjZZJSm5PNr9tVood+q4CRW8GKRMwwYcWvpineeTn4X/+FBHhsuNv+5HRqp17fz5K+yE90JCz
+         /ntY8GO3GU8XslkL3LnAvmZtiVXXuHaSfGkfrLTXCmsNZg30Bk6FYMbuU2OoIK3lrVSQxZ47/mys
+         16nIRXrjN4kc4aO8avJaKDq9v/+dGYU1OIIngrj4ZKt8tIoufoYfKhTlFA8fhR5jsFIHmhwPUIHs
+         uJNr4NdXvO6NaxHx/d3M+O42rig21D+z6I8x4zWNzu+AXz4A6bOuKR8ZgTaUB59Fufdsd+1Uc9rk
+         ZduaQzC3O6rag0gBCwasoPgzjkC/WT+VNht8DhRgbabCC13HDwpuxuS6finJJWjvk5SVIbpq+4Cg
+         PjXU5awG6R5AfVBHuMV7fj/d6AGXYqr0EqZCiJh/CgSE3VmAgXHf4fl+lRCXRhkiArjOrGnga7+V
+         QoHLOxzcfQ1EGzb4jtSr3AXa8CmgOBO0gcU8oSgr+JiCueEN2vHKZuermOcVgIsnMlqLi7+pBRkh
+         3FxfiPymSyhCd9VyjG9GT8R4ffSKZWvTEWwVnbz0io6CsvFJZKvBj5DPusbBGtJMIVY7Cmw0tcsH
+         WFyCjvZsdEP4mD3kC2gxJRKVa1dYin45Zr2qVFghagVTfMPAB7EoWTUZpMg6bqrAvFdb4bLuqvkQ
+         ZoC5rp0HLAP0E+XlfvdYpmISk1bLARhZ2aQxk95ssw2PPKHzS4y4yak7rOVeWx
+From:   wenyang.linux@foxmail.com
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Wen Yang <wenyang.linux@foxmail.com>,
+        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] eventfd: use wait_event_interruptible_locked_irq() helper
+Date:   Mon, 30 Jan 2023 01:47:20 +0800
+X-OQ-MSGID: <20230129174721.18155-1-wenyang.linux@foxmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119085421.102804-3-marcel@ziswiler.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-19 09:54:21, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> This fixes the following warnings:
-> 
-> include/dt-bindings/clock/imx8ulp-clock.h:204: warning: please, no space
->  before tabs
-> include/dt-bindings/clock/imx8ulp-clock.h:215: warning: please, no space
->  before tabs
-> 
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+From: Wen Yang <wenyang.linux@foxmail.com>
 
-Applied both.
+Use wait_event_interruptible_locked_irq() in the eventfd_{write,read} to
+avoid the longer, open coded equivalent.
 
-Thanks.
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Dylan Yudaken <dylany@fb.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: David Woodhouse <dwmw@amazon.co.uk>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: kernel test robot <lkp@intel.com>
+Cc: Dan Carpenter <error27@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ fs/eventfd.c | 41 +++++++----------------------------------
+ 1 file changed, 7 insertions(+), 34 deletions(-)
 
-> 
-> ---
-> 
->  include/dt-bindings/clock/imx8ulp-clock.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/dt-bindings/clock/imx8ulp-clock.h b/include/dt-bindings/clock/imx8ulp-clock.h
-> index 953ecfe8ebcc..827404fadf5c 100644
-> --- a/include/dt-bindings/clock/imx8ulp-clock.h
-> +++ b/include/dt-bindings/clock/imx8ulp-clock.h
-> @@ -201,7 +201,7 @@
->  #define IMX8ULP_CLK_SAI7		2
->  #define IMX8ULP_CLK_SPDIF		3
->  #define IMX8ULP_CLK_ISI			4
-> -#define IMX8ULP_CLK_CSI_REGS 		5
-> +#define IMX8ULP_CLK_CSI_REGS		5
->  #define IMX8ULP_CLK_PCTLD		6
->  #define IMX8ULP_CLK_CSI			7
->  #define IMX8ULP_CLK_DSI			8
-> @@ -212,7 +212,7 @@
->  #define IMX8ULP_CLK_GPU2D		13
->  #define IMX8ULP_CLK_GPU3D		14
->  #define IMX8ULP_CLK_DC_NANO		15
-> -#define IMX8ULP_CLK_CSI_CLK_UI 		16
-> +#define IMX8ULP_CLK_CSI_CLK_UI		16
->  #define IMX8ULP_CLK_CSI_CLK_ESC		17
->  #define IMX8ULP_CLK_RGPIOD		18
->  #define IMX8ULP_CLK_DMA2_MP		19
-> -- 
-> 2.36.1
-> 
+diff --git a/fs/eventfd.c b/fs/eventfd.c
+index 249ca6c0b784..c5bda3df4a28 100644
+--- a/fs/eventfd.c
++++ b/fs/eventfd.c
+@@ -228,7 +228,6 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
+ 	struct file *file = iocb->ki_filp;
+ 	struct eventfd_ctx *ctx = file->private_data;
+ 	__u64 ucnt = 0;
+-	DECLARE_WAITQUEUE(wait, current);
+ 
+ 	if (iov_iter_count(to) < sizeof(ucnt))
+ 		return -EINVAL;
+@@ -239,23 +238,11 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
+ 			spin_unlock_irq(&ctx->wqh.lock);
+ 			return -EAGAIN;
+ 		}
+-		__add_wait_queue(&ctx->wqh, &wait);
+-		for (;;) {
+-			set_current_state(TASK_INTERRUPTIBLE);
+-			if (ctx->count)
+-				break;
+-			if (signal_pending(current)) {
+-				__remove_wait_queue(&ctx->wqh, &wait);
+-				__set_current_state(TASK_RUNNING);
+-				spin_unlock_irq(&ctx->wqh.lock);
+-				return -ERESTARTSYS;
+-			}
++
++		if (wait_event_interruptible_locked_irq(ctx->wqh, ctx->count)) {
+ 			spin_unlock_irq(&ctx->wqh.lock);
+-			schedule();
+-			spin_lock_irq(&ctx->wqh.lock);
++			return -ERESTARTSYS;
+ 		}
+-		__remove_wait_queue(&ctx->wqh, &wait);
+-		__set_current_state(TASK_RUNNING);
+ 	}
+ 	eventfd_ctx_do_read(ctx, &ucnt);
+ 	current->in_eventfd = 1;
+@@ -275,7 +262,6 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+ 	struct eventfd_ctx *ctx = file->private_data;
+ 	ssize_t res;
+ 	__u64 ucnt;
+-	DECLARE_WAITQUEUE(wait, current);
+ 
+ 	if (count < sizeof(ucnt))
+ 		return -EINVAL;
+@@ -288,23 +274,10 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
+ 	if (ULLONG_MAX - ctx->count > ucnt)
+ 		res = sizeof(ucnt);
+ 	else if (!(file->f_flags & O_NONBLOCK)) {
+-		__add_wait_queue(&ctx->wqh, &wait);
+-		for (res = 0;;) {
+-			set_current_state(TASK_INTERRUPTIBLE);
+-			if (ULLONG_MAX - ctx->count > ucnt) {
+-				res = sizeof(ucnt);
+-				break;
+-			}
+-			if (signal_pending(current)) {
+-				res = -ERESTARTSYS;
+-				break;
+-			}
+-			spin_unlock_irq(&ctx->wqh.lock);
+-			schedule();
+-			spin_lock_irq(&ctx->wqh.lock);
+-		}
+-		__remove_wait_queue(&ctx->wqh, &wait);
+-		__set_current_state(TASK_RUNNING);
++		res = wait_event_interruptible_locked_irq(ctx->wqh,
++							  ULLONG_MAX - ctx->count > ucnt);
++		if (!res)
++			res = sizeof(ucnt);
+ 	}
+ 	if (likely(res > 0)) {
+ 		ctx->count += ucnt;
+-- 
+2.37.2
+
