@@ -2,103 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF5F67FD11
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 07:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5244967FD19
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 07:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjA2GGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 01:06:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S231757AbjA2GU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 01:20:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjA2GGS (ORCPT
+        with ESMTP id S229637AbjA2GUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 01:06:18 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453531CACC;
-        Sat, 28 Jan 2023 22:06:17 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4P4LR65qgnz4f3nZ1;
-        Sun, 29 Jan 2023 14:06:10 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgA35CHTDNZjq3uBCQ--.42076S3;
-        Sun, 29 Jan 2023 14:06:13 +0800 (CST)
-Subject: Re: [PATCH -next v3 0/3] blk-cgroup: make sure pd_free_fn() is called
- in order
-To:     Jens Axboe <axboe@kernel.dk>, Yu Kuai <yukuai1@huaweicloud.com>,
-        tj@kernel.org, hch@lst.de, josef@toxicpanda.com
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230119110350.2287325-1-yukuai1@huaweicloud.com>
- <bd1c347b-cbf8-3917-401a-ed85c6ccb956@kernel.dk>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <0ddce9e4-d027-0bb0-d260-093ccc4c2d4d@huaweicloud.com>
-Date:   Sun, 29 Jan 2023 14:06:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 29 Jan 2023 01:20:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D118178
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 22:20:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674973205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uSc5kMQIrJoN9P5YHSL/hseG1HjiJRP/zsBSd2TqU6A=;
+        b=D61UlnSiY6rTc10kfr1CETIZb5nNONbX9byWMSMhbMsq1j4ZjmgrLTM08bnRFwMz7nVhTF
+        TId2NtMOJq3+Nd0e8wtZJkpyHgZfeGrk2jsI1R6yfIigp4y7PHdJt+pDBYGmg+l0NMUmAx
+        gWDEr/Nh+UuZXeBQKp+MIB8Ot7DGsV0=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-562-47B3A4wwMpOhHtqEC8aWXg-1; Sun, 29 Jan 2023 01:20:03 -0500
+X-MC-Unique: 47B3A4wwMpOhHtqEC8aWXg-1
+Received: by mail-oi1-f197.google.com with SMTP id w131-20020aca6289000000b003686285a4a8so3767429oib.7
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 22:20:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uSc5kMQIrJoN9P5YHSL/hseG1HjiJRP/zsBSd2TqU6A=;
+        b=WO41munphZ+sX5bn4HQocgNb/SSfTHRfwP2p8ZJA+eAbtMmIHWkbeIQrDqF1/THurl
+         TSt05U2F332xrWcHL+sxnzuhFkl4obAPFcK+4PR6dNHMwPce4vj/8KSS6mQ4dDBh64/K
+         Ke36HktmPUsUuyaDpMVcSkHKC0HiSfBnjtvvp1KbzxgjDLwnAGc/qjuct+M/7DCJKf3D
+         U/58/n5g4EbYIwl4bSVsyAQBYrD8KM3TFgYaY/LexRLw5L0jA9/qjJrPjuIvzF8jwZt6
+         LAal+IiO/IkedUwI/2KH0FifdO9MO+56WrevPkPPZS5bm0WnyPHdQq0x9yRVmeiajUqH
+         wNOQ==
+X-Gm-Message-State: AFqh2kqBMj1Ta8X9y37+54pBn33J4B4PoobJdaZTgPpI+KpbbjwPVQiT
+        hLFsXPLR/QcBX8gc0WHSfUAdVbkiwQljxajZweYDgEO0KyCjcVBRLXPeT1lmCGag0qo8qyLEgcJ
+        A5ewetonRLAfERSl6rIV0xmk7CyTLt8yQMp2r042B
+X-Received: by 2002:aca:3f84:0:b0:36e:f5f8:cce1 with SMTP id m126-20020aca3f84000000b0036ef5f8cce1mr791332oia.35.1674973202580;
+        Sat, 28 Jan 2023 22:20:02 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtMrkKhsCeRHW9oSWEo7doSfwG3bU6YTWnvW+eaZmM8AhcE5yYnBdXalocAY1Y10hzmMIJYfXvFvkx+RHLIPYc=
+X-Received: by 2002:aca:3f84:0:b0:36e:f5f8:cce1 with SMTP id
+ m126-20020aca3f84000000b0036ef5f8cce1mr791324oia.35.1674973202261; Sat, 28
+ Jan 2023 22:20:02 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <bd1c347b-cbf8-3917-401a-ed85c6ccb956@kernel.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgA35CHTDNZjq3uBCQ--.42076S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF4kuryDWFy7ur1ruryUKFg_yoWkArc_uF
-        Z8K3ykGa48JF1xCa1FyFs8ZFWFk3WDZ3y8XrWUJF4IqryUXay3GanrCFyxWa1rJFWFkryf
-        Arn0934Yq39FvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230129025034.2000-1-longpeng2@huawei.com> <20230129025034.2000-3-longpeng2@huawei.com>
+In-Reply-To: <20230129025034.2000-3-longpeng2@huawei.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Sun, 29 Jan 2023 14:19:51 +0800
+Message-ID: <CACGkMEvZsfxQW0fVdy0CpqxoWQzz6z=dYK__xFisncuSRms67A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] vdpasim: support doorbell mapping
+To:     "Longpeng(Mike)" <longpeng2@huawei.com>
+Cc:     mst@redhat.com, stefanha@redhat.com, sgarzare@redhat.com,
+        arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, eperezma@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jens
+On Sun, Jan 29, 2023 at 10:51 AM Longpeng(Mike) <longpeng2@huawei.com> wrote:
+>
+> From: Longpeng <longpeng2@huawei.com>
+>
+> Support doorbell mapping for vdpasim devices, then we can test the notify
+> passthrough feature even if there's no real hardware on hand.
+>
+> Allocates a dummy page which is used to emulate the notify page of the device,
+> all VQs share the same notify register  that initiated to 0xffff. A  periodic
+> work will check whether there're requests need to process ( the value of the
+> notify register is 0xffff or not ).
+> ---
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 65 ++++++++++++++++++++++++++++++++
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h |  3 ++
+>  2 files changed, 68 insertions(+)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> index b071f0d842fb..4fcfeb6e2fb8 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -39,6 +39,8 @@ MODULE_PARM_DESC(max_iotlb_entries,
+>  #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
+>  #define VDPASIM_QUEUE_MAX 256
+>  #define VDPASIM_VENDOR_ID 0
+> +#define VDPASIM_VRING_POLL_PERIOD 100 /* ms */
+> +#define VDPASIM_NOTIFY_DEFVAL 0xffff
+>
+>  static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
+>  {
+> @@ -246,6 +248,28 @@ static const struct dma_map_ops vdpasim_dma_ops = {
+>  static const struct vdpa_config_ops vdpasim_config_ops;
+>  static const struct vdpa_config_ops vdpasim_batch_config_ops;
+>
+> +static void vdpasim_notify_work(struct work_struct *work)
+> +{
+> +       struct vdpasim *vdpasim;
+> +       u16 *val;
+> +
+> +       vdpasim = container_of(work, struct vdpasim, notify_work.work);
+> +
+> +       if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
+> +               goto out;
+> +
+> +       if (!vdpasim->running)
+> +               goto out;
+> +
+> +       val = (u16 *)vdpasim->notify;
+> +       if (xchg(val, VDPASIM_NOTIFY_DEFVAL) != VDPASIM_NOTIFY_DEFVAL)
+> +               schedule_work(&vdpasim->work);
+> +
+> +out:
+> +       schedule_delayed_work(&vdpasim->notify_work,
+> +                             msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+> +}
+> +
+>  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+>                                const struct vdpa_dev_set_config *config)
+>  {
+> @@ -287,6 +311,13 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
+>         set_dma_ops(dev, &vdpasim_dma_ops);
+>         vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
+>
+> +       INIT_DELAYED_WORK(&vdpasim->notify_work, vdpasim_notify_work);
+> +
+> +       vdpasim->notify = __get_free_page(GFP_KERNEL | __GFP_ZERO);
+> +       if (!vdpasim->notify)
+> +               goto err_iommu;
 
-在 2023/01/20 2:54, Jens Axboe 写道:
-> On 1/19/23 4:03 AM, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Changes in v3:
->>   - add ack tag from Tejun for patch 1,2
->>   - as suggested by Tejun, update commit message and comments in patch 3
->>
->> The problem was found in iocost orignally([1]) that ioc can be freed in
->> ioc_pd_free(). And later we found that there are more problem in
->> iocost([2]).
->>
->> After some discussion, as suggested by Tejun([3]), we decide to fix the
->> problem that parent pd can be freed before child pd in cgroup layer
->> first. And the problem in [1] will be fixed later if this patchset is
->> applied.
-> 
-> Doesn't apply against for-6.3/block (or linux-next or my for-next, for
-> that matter). Can you resend a tested one against for-6.3/block?
-> 
+We can simply avoid the advertising notification area in this case.
 
-This is weird, I just test latest linux-next, and I can apply this
-patchset on the top of following commit:
+> +       *(u16 *)vdpasim->notify = VDPASIM_NOTIFY_DEFVAL;
 
-For latest for-6.3/block, this patch 2 can't be applied because
-following commit is not here:
+WRITE_ONCE()?
 
-e3ff8887e7db blk-cgroup: fix missing pd_online_fn() while activating policy
+> +
+>         vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
+>         if (!vdpasim->config)
+>                 goto err_iommu;
+> @@ -498,16 +529,21 @@ static u8 vdpasim_get_status(struct vdpa_device *vdpa)
+>  static void vdpasim_set_status(struct vdpa_device *vdpa, u8 status)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> +       bool started = vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK;
 
-But this patch is already merged into 6.2-rc5.
+Do we need to do the check under the vdpasim->lock?
 
-Thanks,
-Kuai
+>
+>         spin_lock(&vdpasim->lock);
+>         vdpasim->status = status;
+>         spin_unlock(&vdpasim->lock);
+> +       if (!started && (status & VIRTIO_CONFIG_S_DRIVER_OK))
+> +               schedule_delayed_work(&vdpasim->notify_work,
+> +                                     msecs_to_jiffies(VDPASIM_VRING_POLL_PERIOD));
+>  }
+>
+>  static int vdpasim_reset(struct vdpa_device *vdpa)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>
+> +       cancel_delayed_work_sync(&vdpasim->notify_work);
+
+Do we need to do this after setting running to zero? Otherwise it's racy.
+
+Thanks
+
+>         spin_lock(&vdpasim->lock);
+>         vdpasim->status = 0;
+>         vdpasim_do_reset(vdpasim);
+> @@ -672,11 +708,34 @@ static int vdpasim_dma_unmap(struct vdpa_device *vdpa, unsigned int asid,
+>         return 0;
+>  }
+>
+> +static pgprot_t vdpasim_get_vq_notification_pgprot(struct vdpa_device *vdpa,
+> +                                                  u16 qid, pgprot_t prot)
+> +{
+> +       /*
+> +        * We use normal RAM pages to emulate the vq notification area, so
+> +        * just keep the pgprot as it mmaped.
+> +        */
+> +       return prot;
+> +}
+> +
+> +static struct vdpa_notification_area
+> +vdpasim_get_vq_notification(struct vdpa_device *vdpa, u16 qid)
+> +{
+> +       struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+> +       struct vdpa_notification_area notify;
+> +
+> +       notify.addr = virt_to_phys((void *)vdpasim->notify);
+> +       notify.size = PAGE_SIZE;
+> +
+> +       return notify;
+> +}
+> +
+>  static void vdpasim_free(struct vdpa_device *vdpa)
+>  {
+>         struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
+>         int i;
+>
+> +       cancel_delayed_work_sync(&vdpasim->notify_work);
+>         cancel_work_sync(&vdpasim->work);
+>
+>         for (i = 0; i < vdpasim->dev_attr.nvqs; i++) {
+> @@ -693,6 +752,8 @@ static void vdpasim_free(struct vdpa_device *vdpa)
+>         vhost_iotlb_free(vdpasim->iommu);
+>         kfree(vdpasim->vqs);
+>         kfree(vdpasim->config);
+> +       if (vdpasim->notify)
+> +               free_page(vdpasim->notify);
+>  }
+>
+>  static const struct vdpa_config_ops vdpasim_config_ops = {
+> @@ -704,6 +765,8 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
+>         .get_vq_ready           = vdpasim_get_vq_ready,
+>         .set_vq_state           = vdpasim_set_vq_state,
+>         .get_vq_state           = vdpasim_get_vq_state,
+> +       .get_vq_notification    = vdpasim_get_vq_notification,
+> +       .get_vq_notification_pgprot = vdpasim_get_vq_notification_pgprot,
+>         .get_vq_align           = vdpasim_get_vq_align,
+>         .get_vq_group           = vdpasim_get_vq_group,
+>         .get_device_features    = vdpasim_get_device_features,
+> @@ -737,6 +800,8 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
+>         .get_vq_ready           = vdpasim_get_vq_ready,
+>         .set_vq_state           = vdpasim_set_vq_state,
+>         .get_vq_state           = vdpasim_get_vq_state,
+> +       .get_vq_notification    = vdpasim_get_vq_notification,
+> +       .get_vq_notification_pgprot = vdpasim_get_vq_notification_pgprot,
+>         .get_vq_align           = vdpasim_get_vq_align,
+>         .get_vq_group           = vdpasim_get_vq_group,
+>         .get_device_features    = vdpasim_get_device_features,
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> index 0e78737dcc16..0769ccbd3911 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> @@ -69,6 +69,9 @@ struct vdpasim {
+>         bool running;
+>         /* spinlock to synchronize iommu table */
+>         spinlock_t iommu_lock;
+> +       /* dummy notify page */
+> +       unsigned long notify;
+> +       struct delayed_work notify_work;
+>  };
+>
+>  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
+> --
+> 2.23.0
+>
 
