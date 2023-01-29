@@ -2,143 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F7767FEA1
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9917867FEA3
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232771AbjA2Lq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 06:46:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        id S234490AbjA2Lr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 06:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjA2Lqx (ORCPT
+        with ESMTP id S229637AbjA2LrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 06:46:53 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527AD212BE
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 03:46:52 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id m7so8704000wru.8
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 03:46:52 -0800 (PST)
+        Sun, 29 Jan 2023 06:47:24 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF33212BF
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 03:47:24 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id nn18-20020a17090b38d200b0022bfb584987so8660875pjb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 03:47:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q7mkqEU4uSNcC/souhhQCKfdHQR1f/GwKbFACfeiSw8=;
-        b=ZZiVMpPR4dCSS0JCrzqkIIP9+6EKR1VAw7I2B+SKearBzD6dhIhthOHbPJr6botL32
-         k2Wr11VSSmxu3YbPRhQ1B56kWn7xNCH9ftDdplBR34cXxHxo69Ma+2iS7iGhfiBoZXUR
-         CZfU+Be/5zIUahSgTsEDCn9x04J+F3h4c6KRNltlCdzsVV8Y4aDcx6W3UFuAdTKcaJSc
-         1UkxNk6ixU4DJqKa+M2AxATMSkIL9wf17NPXNQinQ4SAEDyIBhxYXaPJ0J2a6KpPI7f9
-         7FuZeeedlPvMcFYrCV4h+AeKkjvLcaNICDyV1lM5iCyGgwFTXXTGOhfPc9VhfqaWh2eP
-         EmKA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AoazifkbtFJztUrCUoGjKnW8RsZbWWLPaoGlneRqOrU=;
+        b=gAhBl7l4r9LqwU1ROb1AHTQLdmPa1gwLsyRd9OuSQCt5PZuD1JeR2j+AlOrEJjA5Ni
+         A7vtf5Br/Me7OqOkn9G1XT4tpCYqs8SvMhdVmSEcScHwcCPiNMaBJacoGKrdU9qPD5lP
+         VQW6b5bUVwrXcSSIp8xeV04PY2T/LDuBMJdIA01i9Z8aQWSdP4cuUNvbGghP6Gv1USVc
+         5sXCyeBBFJhS+UxlK5gGttCcRnsMnH2C/mp7xn3MYznzlmZPlKeBZ5ocDbsaEcQSqdLd
+         wrdciXYUzqk27RP8qt8BFNWG+ngN8Ld8mdf95xXEmyX26olo164K1rgIOdXxF5YZACuY
+         XbNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q7mkqEU4uSNcC/souhhQCKfdHQR1f/GwKbFACfeiSw8=;
-        b=jx37b4yRQPW1L/JdWocGLbaRqYiiZB5aQovCXDhuMGsUGXespQ8moEDabTH2vpskYg
-         50elRrTCVjhclIvYADOXuJL7Ln34DCl6U+5ojuQT/giEE7fkHupHs2zycJ0wG0YRg6R9
-         SkHczgLGrUvlbi6MKhdju51cM0IsJwGomTL7po4lNUpxKZ1lSkXIjdvf9W+CDXSrH0DQ
-         wDZMakZBor/BND5Zv6E5Gvg0N1ctVBsE+GzT0J5+H2gc3IFR5IMesffhyqnyYUM34/TR
-         e/NHa+RPATMc9Lis/QX/aTt4xAPXAAoHJEl8HXrGeKuixj9eLIgsCMP9J0XLq+ZAguRr
-         VuRA==
-X-Gm-Message-State: AFqh2kq6zVZ1HSPtrAuZaZdUM0IfgEKOnVf5KNrIm4r09laIXs6L1WsO
-        5MRhs7PcW58xaUFbGB2Wm06PYA==
-X-Google-Smtp-Source: AMrXdXssrHw6STGJ3GmPU/EnWu/3lii26xImgKRkdovDdo14zXU3VG6dhI/ytRUzw6RFBBRwulZPkg==
-X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr40432601wro.48.1674992810832;
-        Sun, 29 Jan 2023 03:46:50 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b11-20020adfe30b000000b002bfcc940014sm7736284wrj.82.2023.01.29.03.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Jan 2023 03:46:50 -0800 (PST)
-Message-ID: <3c07b9bd-1981-2945-9efe-80afb0195de8@linaro.org>
-Date:   Sun, 29 Jan 2023 12:46:47 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AoazifkbtFJztUrCUoGjKnW8RsZbWWLPaoGlneRqOrU=;
+        b=V463twUVs/tawpdbfkC9i045sZe03bqUSxe4CaI4Lf5U0jePc89zMqv+NdJmg/sPAB
+         F/LCjgED6XDbfJ2ouoW/b70dfFFz81viCstUjXpo5mlvCTGn2TR+sWBfvr8bjy0Weuu2
+         67iZPhsi0stUrrGZzBI8Uhn2ib+opkYx20h9SfdAiTZi4Ehscm8g8AnXQoePKEA2aNcr
+         KHNyevLyTKP9ssENmC19QmzzGGU6gVGeStWFetYCEuVfn+NJFEuXETSYb23k5f50noU7
+         bH5eQc47bJwJr/u4HiHncILUpkMblnKoG/H0MIHMZhLrNjO34JqWUFFcp7jqc6vG5+XP
+         Fnyw==
+X-Gm-Message-State: AO0yUKVgsMemWd+lzS9fcMc7yyf0MqhchusQme3XmMVdjarFtXL/bcO3
+        DqabcYS+CaysDDF1CaMfEiY=
+X-Google-Smtp-Source: AK7set9X6O15t8wm1mu6GVx5f4CuJYVjgkIDWUb1IvHqEO1cTzvq6FHxXO6IHi4n/1PG3AvIAWMWMA==
+X-Received: by 2002:a17:902:f392:b0:196:6ff8:69b8 with SMTP id f18-20020a170902f39200b001966ff869b8mr2702500ple.27.1674992843575;
+        Sun, 29 Jan 2023 03:47:23 -0800 (PST)
+Received: from mi-HP-ProDesk-680-G4-MT ([43.224.245.237])
+        by smtp.gmail.com with ESMTPSA id jo8-20020a170903054800b001946a3f4d9csm5851810plb.38.2023.01.29.03.47.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 03:47:22 -0800 (PST)
+Date:   Sun, 29 Jan 2023 19:47:17 +0800
+From:   qixiaoyu <qxy65535@gmail.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        xiongping1@xiaomi.com, qixiaoyu1@xiaomi.com,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: f2fs: set *_data_age_threshold according to user_block_count
+Message-ID: <Y9ZcxUjQs4Hb0ZoT@mi-HP-ProDesk-680-G4-MT>
+References: <20230117115702.GA12653@mi-HP-ProDesk-680-G4-MT>
+ <20230117133814.79508-1-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] dt-bindings: display: bridge: Add NXP i.MX93 parallel
- display format configuration
-Content-Language: en-US
-To:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com
-References: <20230128034713.1530218-1-victor.liu@nxp.com>
- <20230128034713.1530218-2-victor.liu@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230128034713.1530218-2-victor.liu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230117133814.79508-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/01/2023 04:47, Liu Ying wrote:
-> NXP i.MX93 mediamix blk-ctrl contains one DISPLAY_MUX register which
-> configures parallel display format by using the "PARALLEL_DISP_FORMAT"
-> field. Add device tree bindings for the display format configuration.
+On Tue, Jan 17, 2023 at 09:38:14PM +0800, Yangtao Li wrote:
+> Hi qixiaoyu,
 > 
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
->  .../display/bridge/nxp,imx93-pdfc.yaml        | 78 +++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/nxp,imx93-pdfc.yaml
+> > The block age here refers to total data blocks allocated of filesystem between two consecutive updates.
 > 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/nxp,imx93-pdfc.yaml b/Documentation/devicetree/bindings/display/bridge/nxp,imx93-pdfc.yaml
-> new file mode 100644
-> index 000000000000..a84bfb46b01d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/bridge/nxp,imx93-pdfc.yaml
-> @@ -0,0 +1,78 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/bridge/nxp,imx93-pdfc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP i.MX93 Parallel Display Format Configuration
-> +
-> +maintainers:
-> +  - Liu Ying <victor.liu@nxp.com>
-> +
-> +description: |
-> +  The i.MX93 mediamix blk-ctrl contains one DISPLAY_MUX register which
-> +  configures parallel display format by using the "PARALLEL_DISP_FORMAT"
-> +  field.
-> +
-> +properties:
-> +  compatible:
-> +    const: nxp,imx93-pdfc
+> Yes, you are right.
+> 
+> > So, it has nothing to do with storage size.
+> 
+> But I think that the total data blocks allocated of filesystem between two consecutive updates
+> has something to do with the storage size. For example, for a 60M f2fs image, the lifetime_write_kbytes
+> will hardly reach 10G, or even 1G.
+> 
+> Thx,
+> Yangtao
 
+Hi Yangtao,
 
-Based on description, I have doubts this is a separate bridge device.
-Why this is not part of display driver/bindings?
+Block update frequency may related to applications and usage patterns,
+not storage size. A 1G f2fs image may have a similar block age to a
+10G f2fs image when running the same program.
 
-We do not create usually devices for single registers, because they are
-not a devices. Devices are a bit more complex - have some pin
-inputs/outputs, not a register only. Of course there are exception, but
-this one does not look like one.
+So, it might not be a good idea to decide the *_data_age_threshold
+based on user_block_count.
 
-> +
-> +  reg:
-> +    maxItems: 1
-
-Your driver tells different story:
-
-syscon_node_to_regmap(dev->of_node->parent);
-
-(which also points to fact this is not a separate device)
-
-Best regards,
-Krzysztof
-
+Thanks,
