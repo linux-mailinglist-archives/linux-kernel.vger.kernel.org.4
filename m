@@ -2,216 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE80467FF34
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C79067FF3A
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235011AbjA2MpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 07:45:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S234619AbjA2Mth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 07:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235220AbjA2Mos (ORCPT
+        with ESMTP id S229605AbjA2Mtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 07:44:48 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49624241EE
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:44:31 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id kt14so24876520ejc.3
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:44:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hzvl/LqOmRuw2DLDajc9nmwbZP+g/NBX1KDunvAJzQY=;
-        b=fY2QFwBTKBZO8Qst6ZUPyMu24A/jtW4pov+KH93ZP6/BznpvqQcwmDLlU9AlvfKvHc
-         kx1xqrQiAdRu1gI52+5qnmtBBw15VMdkOECUlNhT3f8RgCEjtRC2sD9hx92S0IRA7UZb
-         dbuzIexlxY2xnBHPJSFzDxTOPcc6Woi6Hq1hant2sI9rU3oXS9qKpMHoAiAc/E8Rsm50
-         jF9blpDcxyN56OCp0mwJpQw9r5/Yp6W4WSPMHNQ/X+0RAf+3DoSPj0DDL4EpygJtbeHj
-         IH1nClRvnDmSkrauRgGR/vJ2W9/BRexsnmqgHAhLchQrqyGIyHcdyqbbXNqK9kcehZ/R
-         UZtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hzvl/LqOmRuw2DLDajc9nmwbZP+g/NBX1KDunvAJzQY=;
-        b=N9euvkI6qzyBxkOupCw1e08aqE1mvMKTWpcf9ZWwkoRhphJ6gE4p2/HX3vwTB393rF
-         OvfWwv5I481AhCncbq6l5SBByBWa1pBPTcWiRBlsjwiFEhKO4aHcKY3miluTOoAFULkj
-         FwgbdGNthJJ3g0cNx2IUl7exKgT6FMfGE7IBW/4ksW6hLY5Utvgd+atQaWVqwXD62TyE
-         +O9PhPbdsIIDfvJdVQDDcO0XMwERSizZMc5MloExfv3QPdrrkcem13pPn7UHz4P4j6fE
-         xyA8ZrW9ywVxRtNW17/V5vG9JhrEVuKQ8hWztyIUXY+SCZDH66KPLzARAxptW/AsQ0cW
-         PZtQ==
-X-Gm-Message-State: AO0yUKWtBROjyFOM8lkQHgDUCt2QD+68VZfEEvEaCkrmQkXkmpWLVIPm
-        7VbhlEwKtQCcr8DSl1T5lG1wlMDkhfR7yFmxdGymWQ==
-X-Google-Smtp-Source: AK7set+98zHjTjUCfz1Po+4TvGNEYBc/NoX6CxQ6nYhmE2sLz3ErpGLxfO2NEtvlVStSPaC/HwnxsOot12jRU9W6Y68=
-X-Received: by 2002:a17:906:e116:b0:881:4488:297c with SMTP id
- gj22-20020a170906e11600b008814488297cmr1198000ejb.129.1674996269674; Sun, 29
- Jan 2023 04:44:29 -0800 (PST)
+        Sun, 29 Jan 2023 07:49:36 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CCE1E2BC;
+        Sun, 29 Jan 2023 04:49:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1674996564; bh=JjSLd0m8cRytyvJTD2h8ilJ4qprOTJIhhPyxhW1Hs7M=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=WYhpWPQxOm7A8S4H4+YBbhRKOw/lEN0MzGaJzVaFzLAbwuu0qZOH70cCEYv3AzbDE
+         a31G6KvCyRMbea+br5jmmMQm0fFjdm1ljNOm0Id2OO1pvkcWKH5Xtk0wFpCaZ79okn
+         9ktF532/5WD4Hf5UHqGriGP4ZjwYk8y7DI8qJEP7BpREs/1EtFFpJ2dfF/ch/EV1Xi
+         bnquxJ41ALG1Jt7ovudZbWvKrsV5ghRwGZAeuTHuUjC2ZPzb/Ls79elts93xMwoskn
+         IB/g3SlSNR2JqvCILHa+LQM+xi0mFfQEw13ypsFzUrC17gnsVotFljBJPqtZOAUlXg
+         4ajGuV4/0T3Bg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mwwdl-1oSutz2s8Z-00yNTj; Sun, 29
+ Jan 2023 13:49:24 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-wireless@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] wl1251: Fix a typo ("boradcast")
+Date:   Sun, 29 Jan 2023 13:49:18 +0100
+Message-Id: <20230129124919.1305057-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-12-atishp@rivosinc.com>
-In-Reply-To: <20230127182558.2416400-12-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sun, 29 Jan 2023 18:14:18 +0530
-Message-ID: <CAAhSdy1+6AprOdzRRTG98p6swisNFO6MUKjXobxW3RWbixvjCg@mail.gmail.com>
-Subject: Re: [PATCH v3 11/14] RISC-V: KVM: Implement trap & emulate for hpmcounters
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ijQXBCwdC00JRP2C79RCUndGcFf6aXNCkRiUS+d0Xs4LzjmeRKr
+ eD2pc3hQsmGq/UedJfaTUTqxhaqN5bIcc+aA8jeHIWmBAm8D5SeXH7b4ay7ECwFFMyzFMgO
+ +bdOJPivDMhCDzxFmXGAYOynnEDESvhm5Zf4IHxPogw6m/cUw/WQnDSmT91dyp5shNxal56
+ mKoGl1BE0a0ZA5VE56Giw==
+UI-OutboundReport: notjunk:1;M01:P0:6HIQhe0tTsI=;wWunIsnufDb2HeOu1FgjQM8684R
+ elQTRIyDhTfDqtqdHBdTWh6HN8ifIT8q2h3aB1/lRqE69hUsm4fdf3MXEIn4gUbdAnM/QDl8W
+ 4VR3P9E2FSvN222u7MC9KbNs+CbNozdxU2QLktV4XdV18I5mysdtltCQ+hMgZ4M+HTLZ1wxiD
+ /b8UY/Kn0XYRwLisKacxhG9WhV0bmB1pZUFknRT6JNAGUXvZEV+eTeRQQacq/D4XmoaptHTst
+ UOHCaDVCx3c0OuMTgzRp8PNPWkZkGsfKL0c2xctfV5nAN4bg9k0byNYwjLdL6PTaTCKKXo6l7
+ E+N9foSKxvGs8IteCiYRQwTqseHg6j3Qmp/GHVmd4jMKD1UHFMNGetmdJu38bjigdbpv4HgJD
+ HtEC4g68bF+TnHXAhITfAGbsFHBCGM0JLQQzkc61gPdXkQ6j3yPMWGzbRu9CLMGeM1O2qrhHP
+ AwF5A0qTIhsT2lemGGO2yjikFa2oe0Silt5pqjgbT1Qdzoo6FUdioyCbgYoXuicy4jN3QYT8a
+ 0O+kiYc90wiUcItZFUzS7HhPtlhS/21zwIhNteh5rVwq7NX5jKmk6EB8+DHxENVyHpPfTmUX6
+ xhKyX0U6mwjXC+Xd6uK95A5yR1Uah7O1SI7zOuk4ndKLS7pPRIXKEn7FjFtHV/N6edj7xrd9C
+ xFhGXwLwH48TZ0GU/I770oWL3ueG9hxIFPA8+yJ6OiU8zVM9ASAVwahJawjlOmT7ArM3j4W1v
+ ZxCTMowDPXivIGAaWasf5gyfbptR09x5WA4tjqaJVtwzEXYE3KmVb3pD1270nvZcubyKrzqYZ
+ lO2NUDGr8hmPxkYiW1Q6hAHpqiETdxc4JbG2BX/rJdpKVF6nJht24cEJTxF525lsIYxjctLIu
+ QUM03/Xyn1+4hgFTHKkPZwibCDHSyx4pywm1rtdnnw9MGKvQMJMfzyedJPkI40zIMSgw+oYkW
+ OfhIgy+qDO0fgQxJb3coI2DP/jY=
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> As the KVM guests only see the virtual PMU counters, all hpmcounter
-> access should trap and KVM emulates the read access on behalf of guests.
->
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/include/asm/kvm_vcpu_pmu.h | 16 ++++++++++
->  arch/riscv/kvm/vcpu_insn.c            |  4 ++-
->  arch/riscv/kvm/vcpu_pmu.c             | 45 ++++++++++++++++++++++++++-
->  3 files changed, 63 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> index 3f43a43..022d45d 100644
-> --- a/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> @@ -43,6 +43,19 @@ struct kvm_pmu {
->  #define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu)
->  #define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
->
-> +#if defined(CONFIG_32BIT)
-> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
-> +{ .base = CSR_CYCLEH,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm }, \
-> +{ .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
-> +#else
-> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
-> +{ .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
-> +#endif
-> +
-> +int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
-> +                               unsigned long *val, unsigned long new_val,
-> +                               unsigned long wr_mask);
-> +
->  int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_ext_data *edata);
->  int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
->                                 struct kvm_vcpu_sbi_ext_data *edata);
-> @@ -65,6 +78,9 @@ void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
->  #else
->  struct kvm_pmu {
->  };
-> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
-> +{ .base = 0,      .count = 0, .func = NULL },
-> +
+It should be "broadcast".
 
-Redundant newline here.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/net/wireless/ti/wl1251/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->  static inline int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
->  {
-> diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
-> index 0bb5276..f689337 100644
-> --- a/arch/riscv/kvm/vcpu_insn.c
-> +++ b/arch/riscv/kvm/vcpu_insn.c
-> @@ -213,7 +213,9 @@ struct csr_func {
->                     unsigned long wr_mask);
->  };
->
-> -static const struct csr_func csr_funcs[] = { };
-> +static const struct csr_func csr_funcs[] = {
-> +       KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS
-> +};
->
->  /**
->   * kvm_riscv_vcpu_csr_return -- Handle CSR read/write after user space
-> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-> index 7713927..894053a 100644
-> --- a/arch/riscv/kvm/vcpu_pmu.c
-> +++ b/arch/riscv/kvm/vcpu_pmu.c
-> @@ -17,6 +17,44 @@
->
->  #define kvm_pmu_num_counters(pmu) ((pmu)->num_hw_ctrs + (pmu)->num_fw_ctrs)
->
-> +static int pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
-> +                       unsigned long *out_val)
-> +{
-> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +       struct kvm_pmc *pmc;
-> +       u64 enabled, running;
-> +
-> +       pmc = &kvpmu->pmc[cidx];
-> +       if (!pmc->perf_event)
-> +               return -EINVAL;
-> +
-> +       pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
-> +       *out_val = pmc->counter_val;
-> +
-> +       return 0;
-> +}
-> +
-> +int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
-> +                               unsigned long *val, unsigned long new_val,
-> +                               unsigned long wr_mask)
-> +{
-> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> +       int cidx, ret = KVM_INSN_CONTINUE_NEXT_SEPC;
-> +
-> +       if (!kvpmu || !kvpmu->init_done)
-> +               return KVM_INSN_EXIT_TO_USER_SPACE;
+diff --git a/drivers/net/wireless/ti/wl1251/init.c b/drivers/net/wireless/=
+ti/wl1251/init.c
+index a19cce3a7e6f0..5663f197ea69f 100644
+=2D-- a/drivers/net/wireless/ti/wl1251/init.c
++++ b/drivers/net/wireless/ti/wl1251/init.c
+@@ -373,7 +373,7 @@ int wl1251_hw_init(struct wl1251 *wl)
+ 	if (ret < 0)
+ 		goto out_free_data_path;
 
-As discussed previously, this should be KVM_INSN_ILLEGAL_TRAP.
+-	/* Beacons and boradcast settings */
++	/* Beacons and broadcast settings */
+ 	ret =3D wl1251_hw_init_beacon_broadcast(wl);
+ 	if (ret < 0)
+ 		goto out_free_data_path;
+=2D-
+2.39.0
 
-> +
-> +       if (wr_mask)
-> +               return KVM_INSN_ILLEGAL_TRAP;
-> +
-> +       cidx = csr_num - CSR_CYCLE;
-> +
-> +       if (pmu_ctr_read(vcpu, cidx, val) < 0)
-> +               return KVM_INSN_EXIT_TO_USER_SPACE;
-
-Same as above.
-
-> +
-> +       return ret;
-> +}
-> +
->  int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_ext_data *edata)
->  {
->         struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> @@ -69,7 +107,12 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
->  int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
->                                 struct kvm_vcpu_sbi_ext_data *edata)
->  {
-> -       /* TODO */
-> +       int ret;
-> +
-> +       ret = pmu_ctr_read(vcpu, cidx, &edata->out_val);
-> +       if (ret == -EINVAL)
-> +               edata->err_val = SBI_ERR_INVALID_PARAM;
-> +
->         return 0;
->  }
->
-> --
-> 2.25.1
->
-
-Regards,
-Anup
