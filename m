@@ -2,215 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C366800AC
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 19:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D129A6800D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 19:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235240AbjA2SKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 13:10:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S235092AbjA2Sf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 13:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2SKx (ORCPT
+        with ESMTP id S229605AbjA2Sf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 13:10:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38671BFC;
-        Sun, 29 Jan 2023 10:10:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68ACEB80D1C;
-        Sun, 29 Jan 2023 18:10:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C49F2C433EF;
-        Sun, 29 Jan 2023 18:10:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675015848;
-        bh=k0hsvYRx1ao42BSumJbzYaoT9YdkFlwNnK36l1XcopM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gLeeI3474urH2XJ+VNuFNcBx4mxPF8wQfpPnf9YN/flmxnOB+rwRITr/FF7qy5ic7
-         zZmDk3IHAKu9soQ508NuvW7W9zIrduScZ4xf7/ropGzDk6KHo/4ADpQc1c6j/5nabG
-         E6uexd1/CasW7oP1cicqFCzTYzIPp0yfKW+38TKPZ6+7Mg4Y+QiiO6ws16OojRRVRr
-         lE0brjAsVrJcg8Vb6RorB04wlbMSEYJe3qkoRuAwpdJZ4fcDy5mhbBxSSNintlxCzW
-         bZBUCp6uUwsXyOPG4GUMRAHIJCf8/cv6oTz5SvuzKyP+QlGXrUMbZoz8Z/C77tEh6t
-         /N8jMpt36oTtg==
-Date:   Sun, 29 Jan 2023 18:24:41 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Darrell Kavanagh <darrell.kavanagh@gmail.com>
-Cc:     lorenzo@kernel.org, lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, carnil@debian.org
-Subject: Re: Bug#1029850: linux: Driver not loaded for ST Microelectronics
- LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
-Message-ID: <20230129182441.082f29d0@jic23-huawei>
-In-Reply-To: <CAMxBKG1670TFuV3nHP7Yk8s6H+oBF7iiyiB-b=PvKv9hcH22xQ@mail.gmail.com>
-References: <167493679618.4533.12181720504943588640.reportbug@debian-duet>
-        <Y9WGmBc9HG4Tx9gf@eldamar.lan>
-        <CAMxBKG1670TFuV3nHP7Yk8s6H+oBF7iiyiB-b=PvKv9hcH22xQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Sun, 29 Jan 2023 13:35:26 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2094.outbound.protection.outlook.com [40.107.244.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F178196AC;
+        Sun, 29 Jan 2023 10:35:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NVBjt+zC8JvykZG9jg0VT0UT2q8k0qDquM0AVlJSulsWQ8LfmZdNRiQsg0hec5QqOs5MxfRAREi0WAvzBZxpuUcpNmWR52rgljbJ/tAZuTFQDeY49fysUsyPldXavAY/hkTYJ37kyx81G1rh9Was3s9j0cjHDKawnppdce6IEIaNwGyNCrcpzQQErPyvTPB/nnQi8oS/34+GbbfsNmP7UvfD79j53SO7jdQUWqw92sQybpzWc0RPWDhDXK9JaG/beajMQaY6JxdqX2fKNcetIy7Shqq+fqOPlGqB73Gg5Ymd62gyYoTx5Kp8usF87XW02ae6sPkvdv0cdP0XF9sL1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ykyTsM+iy8GvAP8iFmqak/909J/gLs3uehqeySLRqC8=;
+ b=RQhddmNyUgtliOcjIUKm1d94AfZVS6jctZmyM+cG/6FP5gouojBgrgEaBaM/j7g1/pX4hDDOXnCQiKiAk3v3Xwyf7Q0Onoz6DGjFn++jVeKDWUnVM4cBx30d9zPMrwiF+W+wVwZlYl12bqYaZOtwX9w94LfW4hScPGV77fXKKPbphzPImT0I8JFQ/88AMIYz3fZYUk677jpiAjH9q0ipNtt8gRaCcRj7Y4bpRS/jtJR9NWHzdy+e4hH1p2sIWQjXH3IiLOC/xH0cH9uvuoeNodpHLSngfN7VAH37T/5+l8z0davcTVQZmjxVZSuPQqIrIMjHlYNArOqQmOjhI3ud6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ykyTsM+iy8GvAP8iFmqak/909J/gLs3uehqeySLRqC8=;
+ b=eGLCEznKTUFAmS5B8qjvw8gQHgRxG20LRm6wuC2krromrA8yfdrua3Pp5eWHqWSnbbDdIQv4SPtOkV3mWDfTo5F3i22HafGGx5GKP3WFry+omk8XQIG1cshPzxy2IR23CLU/B3ztilq+Q5WbT9bawzJcCWUMLwCvg0UQpl8Q6Ko=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO1PR13MB4773.namprd13.prod.outlook.com (2603:10b6:303:fb::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Sun, 29 Jan
+ 2023 18:35:21 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb5c:910f:3730:fd65%6]) with mapi id 15.20.6043.033; Sun, 29 Jan 2023
+ 18:35:21 +0000
+Date:   Sun, 29 Jan 2023 19:35:15 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-parisc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: tulip: Fix a typo ("defualt")
+Message-ID: <Y9a8Y7BZ7wIIZFbm@corigine.com>
+References: <20230129154005.1567160-1-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230129154005.1567160-1-j.neuschaefer@gmx.net>
+X-ClientProxiedBy: AS4P195CA0026.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d6::12) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4773:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef972fc3-979f-4d12-bf75-08db022793e9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZURKAu3k0I60NDYZOxdrl23JseJkJfqklaPKeNZqzwPyhMVzq3ER6Nmc9UfgQDaaJLP/2BKs0TLjJVtnEtMdoo6hwW3D7fFKC31hPGAL7CSIL3q//ZzOvKgkg+y2eUyBCA+cxjtmeOBKeNIho8i+sfdKFacOzLVBszjrCEK6zRNNngRv0RSLmDCjToeeuZ+Ky2zZtsUAuiV2XdjUTRQjvW/m2jrqBACYNQzAVCh+y2Vab8VLcesrvs5vcXG27UTYLsNq9I1Kv2/aMAHTMWTcT1BSTME+/8quVmXFGKD3BMsRX9xjiUxk904H0uCAiSpP0l0WgCdTKuj8VowIMYls2UbFkc+pY7aCE2XPydTXz9dsW6R+31fM8+ww2edddPogcJIv7xxs31IVkW2+a8Fjto9X8p0rSOMWkPboFhFSpcGmM0M0YBfrQ4+GKUSRTcmkgzr1nAK0J9ek7mr4ejeLtCfT6AupwT4NlWWTfZKS+9NBiepsJmcmcBPQFxjbeag23r6OvoIKYdYukR1W7dajjFDJSM7stBViDVeoe9xeHMBIw1DUa6C7KEZ8Lp2xbcS5m64oJgYr0QvIY1hsC/jfRNwONguCi1DcawgvO/7a339MQDFcS76V+ukQyde7Fnv1FcVLpqpDYKGreNQk6GORAA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39830400003)(136003)(366004)(376002)(346002)(451199018)(5660300002)(44832011)(8936002)(41300700001)(2906002)(66946007)(4326008)(316002)(8676002)(66556008)(66476007)(6916009)(54906003)(6486002)(478600001)(6512007)(6506007)(6666004)(186003)(66574015)(83380400001)(86362001)(38100700002)(2616005)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ckxKaGNERUtsSVdEZXMzYllBOG0wbHlyQWYrbm1wRWtKbmROWHRyMUpOYW9k?=
+ =?utf-8?B?dldqVzlXT2FYdDNPcjZnalVlR2lVWnRnTUhYRGpIT3JvdmxaeFIwOGFwckhX?=
+ =?utf-8?B?QnNEQzVZOFZRQTNTZGxya2RaU3B6UmtyV0dabmRJa1htNVJqOGpEd3l6eWZB?=
+ =?utf-8?B?THJ3akgzT1Y3Y2ZrZWdSM2Z6dVBhZVlVSTVFOEdkREFJMGdDSFVOS3IzcnRs?=
+ =?utf-8?B?Mks2bXU3L2VBZFpOWEVIS2NLQmxUajdCcmhJR0RSSnJwc0g3K1pNTm1KZEQv?=
+ =?utf-8?B?cmVMcVQwN2NrNFkrMFlmejd0T2MzZFVSRDJYWDczbWVxNlNpRklSMlYzaWp1?=
+ =?utf-8?B?YkFyRmg4Q0tpZW1obnJnSHNOODR4N2Z1aFpTc0lvTkZkcHlTZ25HM084QnVM?=
+ =?utf-8?B?Ui9xaWZ5aVcwSUZTNVJLL2tGZ294VStadVV6VWpQMHZDMXBlaVNqazdPU2N1?=
+ =?utf-8?B?OStKdzZSeG9taHAwdXBZTzVxM0lRNTZERmFoMnNsMWdmbEVGYi94ZGtBTi9l?=
+ =?utf-8?B?M3czUFZlUDZZQWNYVUhpNXJVK2hNVzcvbHFJaThYR3ZKQXNNdGdFYUlXZ1Ux?=
+ =?utf-8?B?WkFTVldwUUdzeGtEemE0a2lmYmNQczBxNDhUVWRMWkVQQU1DUHMvOVlOQzd4?=
+ =?utf-8?B?UU9EWWVUb1VKcWN2eU9CMTlmbEFEM3B0eGhPdGZuZ2d5VXZzZFBuR2tGWTZO?=
+ =?utf-8?B?RUVVK2JHWkFwTGRjWiticXlsd25pQisveW5OU3lBbGdkblBmalJqSkdxdFMw?=
+ =?utf-8?B?K2ViZ3VSNmpwNGhwL2RjK05RN0VmbnBZTHRSRWlEbUZva1o4dkhVUjFRTnNR?=
+ =?utf-8?B?bUd4dUtLZXU2UzYxbXpTSmdYcWE1eVRVemZuNXBTcUZiTzQvZ25COHpMMDVF?=
+ =?utf-8?B?YXVtdTNjVTN5RGJQVWhoK0lDMEprTDNQU1kreDk5R1FuL2UrWGZDRkN4MkZZ?=
+ =?utf-8?B?ZnlqUGZWSHhLU1h6NXJLT3FyaWtBYldJYmg1K2VxU1lOeUdKUCtBcUJmN3F5?=
+ =?utf-8?B?Q3plMGFvMTF4STJvNXNmRXhMT1hvRHpER1BCeWVXQ3pLeUpOaDE5a1dZcTgr?=
+ =?utf-8?B?eVQ5OWRUNzBBdHhVMjVHNzdNK1dQOThBY3dzYjJSb0I2a0tzMVhaU2swa28x?=
+ =?utf-8?B?YmN4ZXhRMktScE9PM2R3WElBaVJBNkRWOWZhQnFxTE1RNUFaSnlvMURaaWpp?=
+ =?utf-8?B?c2Nxa08zckVmSEV6S0FpS0hZeGZBa3BqRk80QUxVRnFHUElTaVEwMTJBVXVx?=
+ =?utf-8?B?dlBSSUhjbHB3c0NCa2xQYTJJRmU0UURKdGVsNWVzRUkzL2ord3NaaWlJZ3hM?=
+ =?utf-8?B?TTJzM0RlWWtHT3cyNEVJYkNhZUtqOS9QVUVKclpKZWRGRmFTb25HNWtaVWJS?=
+ =?utf-8?B?d3JMT0R5QnZEbldXZGZ4aEZoOUJ3Mjc5blJZYUZsK1lXVFFDSjdENUFPdDZ3?=
+ =?utf-8?B?M201NjBIWnVNaWtMRExab1ord1RMQmFzZkFxd1ZlNHBJZ1F4aXVORnd0dUtU?=
+ =?utf-8?B?cDBIdkFmRDdKSFZGQjNBcHAvemtTZlFhQTVONVJReHpxQUpSa05pVkZwVE9Q?=
+ =?utf-8?B?WHZPU0pSNnc0RCs4bklmdEV5VGptTWhIa21QWDVHdm1OTDZ0YWVCMUFicmdD?=
+ =?utf-8?B?Q1F1bDVia2loRmJKaWRwT2dTWVE2eVdzN3UvRnZ5bURmR05HZVdOeWNqdmJS?=
+ =?utf-8?B?ZkJuNW95bk5hd1M4V3d2YjI5ZHhaU0ZBdS9aR2lpRSt4NnVoUE8wUkZDa0pm?=
+ =?utf-8?B?WFVxb0VobkFzL2VhdnNqZnNjWGxwVnpvNWRZeU5rQlhPQnFDb1FocXc3bGRp?=
+ =?utf-8?B?bk5rMVpqY25OWTd0bWlVM1ZZSlFNOEwrTURIdXNIVkJJYllMMzhCWmlJUGFl?=
+ =?utf-8?B?YVpGdzdwb0h4RDhiK0tlbS9LcGsyZFE0L29tSml2Q1ljTVZaT0VXZUFPL01n?=
+ =?utf-8?B?TC83N21zOXFpZ0d2YW9MaGIxS1U2SjJoSEZwVzZQWFdSR2Q4eVhaRFFnTHQz?=
+ =?utf-8?B?SDBuOVV0cVdZbGJBeThQNEl5SXRzQXVUbk5mSkV0L3p1ZjZ6dExqaW5wK1Mw?=
+ =?utf-8?B?NnRDZnNoRjR0NmVKZnFuMTJZOUI1N3JCcTY2Yzl0dWZSaVRsYWIwSFQ3aWd6?=
+ =?utf-8?B?UnhDMTZKQmNaSHgyMy81Z1ZSR003YzJRaDdDdzdYOXVRcGxVbkVUTXd2d1po?=
+ =?utf-8?B?UE15WjNTVGtmQWVrK0w5WTJhaUVsZ2hVRE5zd2lyNXo4NFJCUFl2NURZYmN6?=
+ =?utf-8?B?cFhPRlNnZFovL3RQT3RGY3dOK0lnPT0=?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef972fc3-979f-4d12-bf75-08db022793e9
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2023 18:35:21.5356
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N5Uh5Qt/mdZIRmgS43FUnXE/LX2SSbud5lm9kg2w4eIs+CJF8noQu+mDMTRWUznmzilQ1mlaXVdQxaDj8hgLSYNCYI+gOIAtuetJNJ5skg4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4773
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 Jan 2023 17:03:51 +0000
-Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
+On Sun, Jan 29, 2023 at 04:40:05PM +0100, Jonathan Neuschäfer wrote:
+> Spell it as "default".
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-> Hi,
-> 
-> I raised this bug in Debian, and have been asked to raise it upstream and
-> was given your addresses to do so. Will this email be OK, or should I raise
-> it in a bug tracking system somewhere?
+Looks good :)
 
-Email is the right option.
+There also seems to be a misspelling of heartbeat (as hearbeat) on line 277.
+Perhaps it would be good to fix that at the same time?
 
+> ---
+>  drivers/net/ethernet/dec/tulip/tulip.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Many thanks,
-> Darrell
+> diff --git a/drivers/net/ethernet/dec/tulip/tulip.h b/drivers/net/ethernet/dec/tulip/tulip.h
+> index 0ed598dc7569c..0aed3a1d8fe4b 100644
+> --- a/drivers/net/ethernet/dec/tulip/tulip.h
+> +++ b/drivers/net/ethernet/dec/tulip/tulip.h
+> @@ -250,7 +250,7 @@ enum t21143_csr6_bits {
+>  	csr6_ttm = (1<<22),  /* Transmit Threshold Mode, set for 10baseT, 0 for 100BaseTX */
+>  	csr6_sf = (1<<21),   /* Store and forward. If set ignores TR bits */
+>  	csr6_hbd = (1<<19),  /* Heart beat disable. Disables SQE function in 10baseT */
+> -	csr6_ps = (1<<18),   /* Port Select. 0 (defualt) = 10baseT, 1 = 100baseTX: can't be set */
+> +	csr6_ps = (1<<18),   /* Port Select. 0 (default) = 10baseT, 1 = 100baseTX: can't be set */
+>  	csr6_ca = (1<<17),   /* Collision Offset Enable. If set uses special algorithm in low collision situations */
+>  	csr6_trh = (1<<15),  /* Transmit Threshold high bit */
+>  	csr6_trl = (1<<14),  /* Transmit Threshold low bit */
+> --
+> 2.39.0
 > 
-> 
-> 
-> 
-> ---------- Forwarded message ---------
-> From: Salvatore Bonaccorso <carnil@debian.org>
-> Date: Sat, 28 Jan 2023 at 20:33
-> Subject: Re: Bug#1029850: linux: Driver not loaded for ST Microelectronics
-> LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
-> To: Darrell Kavanagh <darrell.kavanagh@gmail.com>, <1029850@bugs.debian.org>
-> 
-> 
-> Hi Darrell,
-> 
-> On Sat, Jan 28, 2023 at 08:13:16PM +0000, Darrell Kavanagh wrote:
-> > Package: src:linux
-> > Version: 6.1.4-1
-> > Severity: normal
-> > File: linux
-> > X-Debbugs-Cc: darrell.kavanagh@gmail.com
-> >
-> > Dear Maintainer,
-> >
-> > This is a convertable touchscreen tablet/laptop. The rotation sensor  
-> device
-> > ST Microelectronics LSM6DS3TR-C does not work. It is detected via ACPI  
-> and the
-> > sysfs trees are created at  
-> devices/pci0000:00/0000:00:17.1/i2c_designware.3/i2c-4/i2c-SMO8B30:00
-> > and devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:3c/SMO8B30:00 with
-> > symlinks bus/acpi/devices/SMO8B30:00 and bus/i2c/devices/i2c-SMO8B30:00,  
-> but
-> > no driver is loaded.
-
-At least this is using the ST PNP ID which is better than average
-(long story!)
-
-The driver in question (ultimately drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
-does not currently have an ACPI support.  It should be straight forwards
-to add though the driver first needs converting to use
-device_get_match_data() with appropriate fallback so that it will match on
-ACPI, OF or original spi_device_id tables
-
-Completely untested but something like the following
-(the offset in the enum is needed to allow us to tell if we got a result when
-calling device_get_match_data() as it returns NULL on failure IIRC)
-
-I'm not sure how sucessful the driver will be at finding any interrupts etc, but
-it may get you basic functionality.
-
-Good luck and others more familiar with the driver may well tell me what I forgot
-when hacking the below ;)
-
-diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-index 499fcf8875b4..2617ce236ddc 100644
---- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-+++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-@@ -39,7 +39,7 @@
- #define ST_ISM330IS_DEV_NAME   "ism330is"
- 
- enum st_lsm6dsx_hw_id {
--       ST_LSM6DS3_ID,
-+       ST_LSM6DS3_ID = 1,
-        ST_LSM6DS3H_ID,
-        ST_LSM6DSL_ID,
-        ST_LSM6DSM_ID,
-diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
-index df5f60925260..ecfceb2fb3db 100644
---- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
-+++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
-@@ -23,10 +23,15 @@ static const struct regmap_config st_lsm6dsx_i2c_regmap_config = {
- 
- static int st_lsm6dsx_i2c_probe(struct i2c_client *client)
- {
--       const struct i2c_device_id *id = i2c_client_get_device_id(client);
--       int hw_id = id->driver_data;
-+       int hw_id;
-        struct regmap *regmap;
- 
-+       hw_id = (kernel_ulong_t)device_get_match_data(&client->dev);
-+       if (!hw_id)
-+               hw_id = i2c_client_get_device_id(client)->driver_data;
-+       if (!hw_id)
-+               return -EINVAL;
-+
-        regmap = devm_regmap_init_i2c(client, &st_lsm6dsx_i2c_regmap_config);
-        if (IS_ERR(regmap)) {
-                dev_err(&client->dev, "Failed to register i2c regmap %ld\n", PTR_ERR(regmap));
-@@ -129,6 +134,10 @@ static const struct of_device_id st_lsm6dsx_i2c_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, st_lsm6dsx_i2c_of_match);
- 
-+static const struct acpi_device_id st_lsm6dsx_i2c_acpi_match[] = {
-+       { "SMO8B30", ST_LSM6DS3TRC_ID, },
-+};
-+
- static const struct i2c_device_id st_lsm6dsx_i2c_id_table[] = {
-        { ST_LSM6DS3_DEV_NAME, ST_LSM6DS3_ID },
-        { ST_LSM6DS3H_DEV_NAME, ST_LSM6DS3H_ID },
-@@ -161,6 +170,7 @@ static struct i2c_driver st_lsm6dsx_driver = {
-                .name = "st_lsm6dsx_i2c",
-                .pm = pm_sleep_ptr(&st_lsm6dsx_pm_ops),
-                .of_match_table = st_lsm6dsx_i2c_of_match,
-+               .acpi_match_table = st_lsm6dsx_i2c_acpi_match,
-        },
-        .probe_new = st_lsm6dsx_i2c_probe,
-        .id_table = st_lsm6dsx_i2c_id_table,
-
-
-> >
-> > The device is identifying itself to the kernel with PNP id SMO8B30:
-> > physical_node:
-> >       modalias=acpi:SMO8B30:SMO8B30:
-> >       name=SMO8B30:00
-> >       uevent=MODALIAS=acpi:SMO8B30:SMO8B30:
-> >       waiting_for_supplier=0
-> > firmware_node:
-> >       hid=SMO8B30
-> >       modalias=acpi:SMO8B30:SMO8B30:
-> >       path=\_SB_.PCI0.I2C5.DEV_
-> >       status=15
-> >       uevent=MODALIAS=acpi:SMO8B30:SMO8B30:
-> >       uid=0
-> >
-> > The kernel module for the appropriate driver (st_lsm6dsx_i2c) is not  
-> loaded on boot.
-> > Modprobing it does not associate it with the device, as I would expect as
-> > the module does not provide an alias for the above acpi/pnp id.  
-> 
-> Can you report this issue upstream? Gues to reach out are according to
-> get_maintainers.pl script:
-> 
-> Lorenzo Bianconi <lorenzo@kernel.org> (maintainer:ST LSM6DSx IMU IIO DRIVER)
-> Jonathan Cameron <jic23@kernel.org> (maintainer:IIO SUBSYSTEM AND DRIVERS)
-> Lars-Peter Clausen <lars@metafoo.de> (reviewer:IIO SUBSYSTEM AND DRIVERS)
-> linux-iio@vger.kernel.org (open list:ST LSM6DSx IMU IIO DRIVER)
-> linux-kernel@vger.kernel.org (open list)
-> 
-> Please keep us in the loop.
-> 
-> Regards,
-> Salvatore
-
