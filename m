@@ -2,88 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17AD67FD5F
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 08:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1D467FD61
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 08:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjA2HbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 02:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
+        id S232698AbjA2Hdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 02:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjA2HbA (ORCPT
+        with ESMTP id S232476AbjA2Hda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 02:31:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D425219F01
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 23:30:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674977410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ov+1IIBAWUO4cVMGk1jfLqe88PNWYaRlwb1nxeeSoz8=;
-        b=cwTPQVEZHEM2t+/HF0Oa12n4Ip6JWPHduaDIsZQNoOppZupEfyBVlorOcVF5V8Gy2rdV4c
-        Vj2mFUgdn9YvISqbGrAB0OwtSD4ct/vB/PzadSjXRMUIiZ8OBkR1uTKogx928QW8jxljTQ
-        cA4Pan3QaMwP1opKZkZwv3JyoaeStSE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-223-Uuo5DFDwM_OKPueqbRyF_Q-1; Sun, 29 Jan 2023 02:30:08 -0500
-X-MC-Unique: Uuo5DFDwM_OKPueqbRyF_Q-1
-Received: by mail-wm1-f70.google.com with SMTP id r15-20020a05600c35cf00b003d9a14517b2so7392812wmq.2
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 23:30:08 -0800 (PST)
+        Sun, 29 Jan 2023 02:33:30 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0DF1C33E
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 23:33:29 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id bk15so23854018ejb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 23:33:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Khnf0tXeS7m38nFYQvDT/lNBrPynSjLK/zhidtRBTI=;
+        b=Lf/xVkaeaMDwt7Zm+kxcMtYJVmn29ApHwgVM7VnG6guuj4kpruR287Bc9XQHGCRT4s
+         bSU786g1S6qyfZRavQmyLBTKUa8OdxXm4koUdbrEMw/rQMYvviXC8ELK1exIHa7ANu7A
+         N/rwegXubp8BVXJaLR2uYkFrSB2/WQ1TWObp0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ov+1IIBAWUO4cVMGk1jfLqe88PNWYaRlwb1nxeeSoz8=;
-        b=gdPkuzA+S/PS/whYM66D9jOBrH4b+lveH2N7ZGwPH9IMj1DO2QDBqb0YvUk0wY0Opq
-         2dUhKnlpNLHUcVSyonTLdQ4Fy6RwlbvF3RsDDv7HJKaWjJclFbE3tzgejci334LK2Y5B
-         1TMylRZig78JDtdYrItxg8ZxEgPlkf5VkP9jRTGGPzmc+I/0ggUi/uuOl8gLr/k2PnTL
-         3pAsrjHbmq/1FJDJ0pMdo5raH/KRf4VfD4rPzcsg1y6rYF3iuzr6QNq46/2P8bi5+ewv
-         7tgo2wwBIlvBu2LDoul2yKEOSCJO0hrtQ9y1Ff6c0MSwkj6ugKYJE9UY8/BeKe1Xt1JX
-         TEMg==
-X-Gm-Message-State: AO0yUKUwIkQmrK8dMVZ7FuakaKJCVNGmJ1q3txX1KeCwnlWnRFm4xVvw
-        tUdgirlu7g0k8mi4OtbgT8EXPkE2+wLADpOuYrDJiRF/peZY+AijBJH7+XrePDZqH36Gj6v4eml
-        342ejMKlHo92ZnCDk0TFkhwwv
-X-Received: by 2002:a5d:6088:0:b0:2bf:e533:3158 with SMTP id w8-20020a5d6088000000b002bfe5333158mr1886321wrt.20.1674977407430;
-        Sat, 28 Jan 2023 23:30:07 -0800 (PST)
-X-Google-Smtp-Source: AK7set9LsUvsi2F0Rhe6agjXYMxH1Bd/kDEDU1j0Zr9SlfykK9KgWHLBzwN6kTKcmrPBAf0LiiWnSA==
-X-Received: by 2002:a5d:6088:0:b0:2bf:e533:3158 with SMTP id w8-20020a5d6088000000b002bfe5333158mr1886305wrt.20.1674977407110;
-        Sat, 28 Jan 2023 23:30:07 -0800 (PST)
-Received: from redhat.com ([2.52.20.248])
-        by smtp.gmail.com with ESMTPSA id z2-20020a5d6542000000b00267bcb1bbe5sm8398974wrv.56.2023.01.28.23.30.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 23:30:06 -0800 (PST)
-Date:   Sun, 29 Jan 2023 02:30:03 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
-        eperezma@redhat.com
-Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
-Message-ID: <20230129022809-mutt-send-email-mst@kernel.org>
-References: <d77bc1ce-b73f-1ba8-f04f-b3bffeb731c3@redhat.com>
- <20221227043148-mutt-send-email-mst@kernel.org>
- <0d9f1b89-9374-747b-3fb0-b4b28ad0ace1@redhat.com>
- <CACGkMEv=+D+Es4sfde_X7F0zspVdy4Rs1Wi9qfCudsznsUrOTQ@mail.gmail.com>
- <20221229020553-mutt-send-email-mst@kernel.org>
- <CACGkMEs5s3Muo+4OfjaLK_P76rTdPhjQdTwykRNGOecAWnt+8g@mail.gmail.com>
- <20221229030633-mutt-send-email-mst@kernel.org>
- <CACGkMEukqZX=6yz1yCj+psHp5c+ZGVVuEYTUssfRCTQZgVWS6g@mail.gmail.com>
- <20230127053112-mutt-send-email-mst@kernel.org>
- <CACGkMEsZs=6TaeSUnu_9Rf+38uisi6ViHyM50=2+ut3Wze2S1g@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6Khnf0tXeS7m38nFYQvDT/lNBrPynSjLK/zhidtRBTI=;
+        b=fDQLH7Dah0Qbx0RDNK80h5idA5/yoJ/sTM45qXeCHdMdRJmJF2WJX5DE9E+yyJIu4b
+         4VbLV9FkwUCj5etZnZjqntw0fKUhAwOQ01q4T3ly/FcomFZDntKI5OoN2WCa0D/dJTv6
+         svB7uQefv3DvgC5S5kk5mznzns4KRao+cgnF3veNWIzHsIJQ9C7dah4mvPzScAdjlex0
+         OuE+fjMCrsiHK1Jss7JMYRTPyKd7ppN6UwH5M16M81Lq3nRD/tRqEHyTHQS7Z7U05dwY
+         ycmKkOHv/OdbAA1pgFR0z9DqN//fiE511Bh8xE+9iAQs79wwx8DnDxxBChavih4WfdDI
+         IdFg==
+X-Gm-Message-State: AO0yUKV/C8LsXAjV5EWlHvtTjxWXIYfdxpeERDvsMoT3D6jAwD8m1Hn4
+        rN7BP0HnKtQym98xgWwlF9oac8QawbUVjqOzkSk=
+X-Google-Smtp-Source: AK7set+/DsRZ46ca45kzZYJo2hYXIoXYt1P5ptFDxPMiAt8IGwDc165CqD2B0D8sKKWP6mQu9s918Q==
+X-Received: by 2002:a17:906:c20e:b0:885:dd71:89b5 with SMTP id d14-20020a170906c20e00b00885dd7189b5mr2084588ejz.41.1674977606775;
+        Sat, 28 Jan 2023 23:33:26 -0800 (PST)
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com. [209.85.218.54])
+        by smtp.gmail.com with ESMTPSA id e13-20020a170906248d00b0087a9f699effsm3934595ejb.173.2023.01.28.23.33.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Jan 2023 23:33:25 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id p26so12650640ejx.13
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 23:33:25 -0800 (PST)
+X-Received: by 2002:a17:906:add6:b0:878:51a6:ff35 with SMTP id
+ lb22-20020a170906add600b0087851a6ff35mr3051378ejb.43.1674977604915; Sat, 28
+ Jan 2023 23:33:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEsZs=6TaeSUnu_9Rf+38uisi6ViHyM50=2+ut3Wze2S1g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230129060452.7380-1-zhanghongchen@loongson.cn>
+In-Reply-To: <20230129060452.7380-1-zhanghongchen@loongson.cn>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 28 Jan 2023 23:33:08 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
+Message-ID: <CAHk-=wjw-rrT59k6VdeLu4qUarQOzicsZPFGAO5J8TKM=oukUw@mail.gmail.com>
+Subject: Re: [PATCH v4] pipe: use __pipe_{lock,unlock} instead of spinlock
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maobibo <maobibo@loongson.cn>,
+        Matthew Wilcox <willy@infradead.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,154 +85,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 01:48:49PM +0800, Jason Wang wrote:
-> On Fri, Jan 27, 2023 at 6:35 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Fri, Dec 30, 2022 at 11:43:08AM +0800, Jason Wang wrote:
-> > > On Thu, Dec 29, 2022 at 4:10 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> > > > On Thu, Dec 29, 2022 at 04:04:13PM +0800, Jason Wang wrote:
-> > > > > On Thu, Dec 29, 2022 at 3:07 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > >
-> > > > > > On Wed, Dec 28, 2022 at 07:53:08PM +0800, Jason Wang wrote:
-> > > > > > > On Wed, Dec 28, 2022 at 2:34 PM Jason Wang <jasowang@redhat.com> wrote:
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > 在 2022/12/27 17:38, Michael S. Tsirkin 写道:
-> > > > > > > > > On Tue, Dec 27, 2022 at 05:12:58PM +0800, Jason Wang wrote:
-> > > > > > > > >> 在 2022/12/27 15:33, Michael S. Tsirkin 写道:
-> > > > > > > > >>> On Tue, Dec 27, 2022 at 12:30:35PM +0800, Jason Wang wrote:
-> > > > > > > > >>>>> But device is still going and will later use the buffers.
-> > > > > > > > >>>>>
-> > > > > > > > >>>>> Same for timeout really.
-> > > > > > > > >>>> Avoiding infinite wait/poll is one of the goals, another is to sleep.
-> > > > > > > > >>>> If we think the timeout is hard, we can start from the wait.
-> > > > > > > > >>>>
-> > > > > > > > >>>> Thanks
-> > > > > > > > >>> If the goal is to avoid disrupting traffic while CVQ is in use,
-> > > > > > > > >>> that sounds more reasonable. E.g. someone is turning on promisc,
-> > > > > > > > >>> a spike in CPU usage might be unwelcome.
-> > > > > > > > >>
-> > > > > > > > >> Yes, this would be more obvious is UP is used.
-> > > > > > > > >>
-> > > > > > > > >>
-> > > > > > > > >>> things we should be careful to address then:
-> > > > > > > > >>> 1- debugging. Currently it's easy to see a warning if CPU is stuck
-> > > > > > > > >>>      in a loop for a while, and we also get a backtrace.
-> > > > > > > > >>>      E.g. with this - how do we know who has the RTNL?
-> > > > > > > > >>>      We need to integrate with kernel/watchdog.c for good results
-> > > > > > > > >>>      and to make sure policy is consistent.
-> > > > > > > > >>
-> > > > > > > > >> That's fine, will consider this.
-> > > > > > >
-> > > > > > > So after some investigation, it seems the watchdog.c doesn't help. The
-> > > > > > > only export helper is touch_softlockup_watchdog() which tries to avoid
-> > > > > > > triggering the lockups warning for the known slow path.
-> > > > > >
-> > > > > > I never said you can just use existing exporting APIs. You'll have to
-> > > > > > write new ones :)
-> > > > >
-> > > > > Ok, I thought you wanted to trigger similar warnings as a watchdog.
-> > > > >
-> > > > > Btw, I wonder what kind of logic you want here. If we switch to using
-> > > > > sleep, there won't be soft lockup anymore. A simple wait + timeout +
-> > > > > warning seems sufficient?
-> > > > >
-> > > > > Thanks
-> > > >
-> > > > I'd like to avoid need to teach users new APIs. So watchdog setup to apply
-> > > > to this driver. The warning can be different.
-> > >
-> > > Right, so it looks to me the only possible setup is the
-> > > watchdog_thres. I plan to trigger the warning every watchdog_thres * 2
-> > > second (as softlockup did).
-> > >
-> > > And I think it would still make sense to fail, we can start with a
-> > > very long timeout like 1 minutes and break the device. Does this make
-> > > sense?
-> > >
-> > > Thanks
-> >
-> > I'd say we need to make this manageable then.
-> 
-> Did you mean something like sysfs or module parameters?
+On Sat, Jan 28, 2023 at 10:05 PM Hongchen Zhang
+<zhanghongchen@loongson.cn> wrote:
+>
+> Use spinlock in pipe_{read,write} cost too much time,IMO
+> pipe->{head,tail} can be protected by __pipe_{lock,unlock}.
+> On the other hand, we can use __pipe_{lock,unlock} to protect
+> the pipe->{head,tail} in pipe_resize_ring and
+> post_one_notification.
 
-No I'd say pass it with an ioctl.
+No, we really can't.
 
-> > Can't we do it normally
-> > e.g. react to an interrupt to return to userspace?
-> 
-> I didn't get the meaning of this. Sorry.
-> 
-> Thanks
+post_one_notification() is called under the RCU lock held, *and* with
+a spinlock held.
 
-Standard way to handle things that can timeout and where userspace
-did not supply the time is to block until an interrupt
-then return EINTR. Userspace controls the timeout by
-using e.g. alarm(2).
+It simply cannot do a sleeping lock like __pipe_lock().
 
+So that patch is simply fundamentally buggy, I'm afraid.
 
-> >
-> >
-> >
-> > > >
-> > > >
-> > > > > >
-> > > > > > > And before the patch, we end up with a real infinite loop which could
-> > > > > > > be caught by RCU stall detector which is not the case of the sleep.
-> > > > > > > What we can do is probably do a periodic netdev_err().
-> > > > > > >
-> > > > > > > Thanks
-> > > > > >
-> > > > > > Only with a bad device.
-> > > > > >
-> > > > > > > > >>
-> > > > > > > > >>
-> > > > > > > > >>> 2- overhead. In a very common scenario when device is in hypervisor,
-> > > > > > > > >>>      programming timers etc has a very high overhead, at bootup
-> > > > > > > > >>>      lots of CVQ commands are run and slowing boot down is not nice.
-> > > > > > > > >>>      let's poll for a bit before waiting?
-> > > > > > > > >>
-> > > > > > > > >> Then we go back to the question of choosing a good timeout for poll. And
-> > > > > > > > >> poll seems problematic in the case of UP, scheduler might not have the
-> > > > > > > > >> chance to run.
-> > > > > > > > > Poll just a bit :) Seriously I don't know, but at least check once
-> > > > > > > > > after kick.
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > I think it is what the current code did where the condition will be
-> > > > > > > > check before trying to sleep in the wait_event().
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > >
-> > > > > > > > >>> 3- suprise removal. need to wake up thread in some way. what about
-> > > > > > > > >>>      other cases of device breakage - is there a chance this
-> > > > > > > > >>>      introduces new bugs around that? at least enumerate them please.
-> > > > > > > > >>
-> > > > > > > > >> The current code did:
-> > > > > > > > >>
-> > > > > > > > >> 1) check for vq->broken
-> > > > > > > > >> 2) wakeup during BAD_RING()
-> > > > > > > > >>
-> > > > > > > > >> So we won't end up with a never woke up process which should be fine.
-> > > > > > > > >>
-> > > > > > > > >> Thanks
-> > > > > > > > >
-> > > > > > > > > BTW BAD_RING on removal will trigger dev_err. Not sure that is a good
-> > > > > > > > > idea - can cause crashes if kernel panics on error.
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > Yes, it's better to use __virtqueue_break() instead.
-> > > > > > > >
-> > > > > > > > But consider we will start from a wait first, I will limit the changes
-> > > > > > > > in virtio-net without bothering virtio core.
-> > > > > > > >
-> > > > > > > > Thanks
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > >
-> > > > > > > > >>>
-> > > > > >
-> > > >
-> >
-
+                Linus
