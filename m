@@ -2,100 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7F567FFD2
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 16:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD2767FFD5
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 16:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbjA2PRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 10:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S235097AbjA2PSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 10:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbjA2PRo (ORCPT
+        with ESMTP id S230191AbjA2PSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 10:17:44 -0500
-Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF5D1F484;
-        Sun, 29 Jan 2023 07:17:42 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id 9241720101;
-        Sun, 29 Jan 2023 16:17:41 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vuEAmnVOOigS; Sun, 29 Jan 2023 16:17:41 +0100 (CET)
-Received: from begin (lfbn-bor-1-1163-184.w92-158.abo.wanadoo.fr [92.158.138.184])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 69BB6200F3;
-        Sun, 29 Jan 2023 16:17:41 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pM9R7-00GylW-03;
-        Sun, 29 Jan 2023 16:17:41 +0100
-Date:   Sun, 29 Jan 2023 16:17:40 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     gregkh@linuxfoundation.org, Daniel Vetter <daniel@ffwll.ch>,
-        Helge Deller <deller@gmx.de>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-Subject: [PATCHv2] fbcon: Check font dimension limits
-Message-ID: <20230129151740.x5p7jj2pbuilpzzt@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        gregkh@linuxfoundation.org, Daniel Vetter <daniel@ffwll.ch>,
-        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
+        Sun, 29 Jan 2023 10:18:07 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047D7A25B
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 07:18:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1675005479; bh=Qq27hLNazqH6IS+M8JNjhsN17IYOdE9EIDZkEI6lmRQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=oaGcEF25MVLWvpj9LSN33dXSWNdRumAqNqKMDM1pxOPQ7uSE9BOsvjHQqwYVWRTuJ
+         X0xtkIWaGU1oXwLE6ggdUFQdnXk+IsAQ3tI1aEQXXpdCDCEB9tbRkA+P7GfKA/CK3p
+         qyVRy5aypRa8fzlI04xJ8uQ93nba1k7ECvW7e9mQo3lRrvtItArAqfdTUxyADuEwml
+         mxWOIYWrfLVa96inwpBvUrB00dFLd8klmQr62cJo9NuXv3d51uHwgp3hQrNdwt1699
+         MV2jNFi2P1eHWRzE52fHjNdvi58tCpU+e0n9W2oN0SyQbTvYU77YDybu8lKpRhKBGz
+         2BU4kz3KLUUng==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4Qwg-1ocSpc3fxG-011VXG; Sun, 29
+ Jan 2023 16:17:58 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     amd-gfx@lists.freedesktop.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Evan Quan <evan.quan@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdgpu: Fix a typo ("boradcast")
+Date:   Sun, 29 Jan 2023 16:17:52 +0100
+Message-Id: <20230129151752.1531144-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xA1iziq1qDckbUx7DYH0baOF/Vz4I/NB3FFlnQfCBb3BQrDRP8l
+ 5m3hjte8K/tgYs9o/DN6oqtO+oGEoOBkdNexPlWO99DMjOqqNWIbYM0gfPfEcvzChPmsmW2
+ B99/WPZZwCqAJZ+U/zRPWDl8FFp1I93BEEKVN+p9Ue8IUB0jzqVRo29j84b1wxaA9Kviumr
+ t08iOcW1c7bqIc9WedRUQ==
+UI-OutboundReport: notjunk:1;M01:P0:eTk6eCX3x2s=;tecDAsgsvgPjd+fgAz8NtozAi6T
+ wpr85IP/1M7zQdspO1A+t5hJE9dQ/BRzM1AW1yl8qgejive8BRFM2hYblISQFwslC+cuiS/st
+ VwZ3OvKdCLXouUKdmOwrR4Q+edsAM3CcXgTbcyu8rFwYzFxNFyVjCXeiQmdHCELGjanhkGElz
+ lh7z/IrfLPeK1NrDO161iRgcdRwVxA4SefTaqW8bliYU1FZV9Ri5HPwfYdgXlD91ioe+D+iRG
+ IJLhyRN8o6ukxPXkEnVmqaijlp4ARI7yX9V0o19D+oJSD0kv77+e9cwu+vR0gFEzEV0rZ9yvR
+ me0uuoDxRYwJ5PkJ+9LGqnfeRjCnfUKG6YTZufnakDPxvn4VliwJthfgOKZyw26z8DKtt/Fgg
+ kLyxgEJyX2ankdPas1BGlzrhmL8D9KeZq4YXpZ1jFCm79e5ZkouLF298UiPWg8X9+9I2hixUX
+ 3qAek6Ka86FmTXf4iYzIpxGOQCcXEYlFnsNhkcCmR3sP3XMVPndQGqO4aNIjFY+WpufIeOgtg
+ 58wpN89gCVfK85izhYHVbAcpIQ+soLXNtScIY6FPmb/t2JdKI+snQZSr6WFPNFhJAKTT/bM5d
+ 14Km2IX6TKyENfpNWS/zrpoRJS2f5pUWKruEoHnljTQKTADpJ9qEtcBXh9PeuaDeW0wtHysJk
+ NQ4tyqFdry9uV7vsht2TsXpxGzi5gZ/Lg07rQ0/GQTGp81Ple8cz31FsCnl3MrrLSgkAsx8Yd
+ 1Oo/GEhtFjNtX86I7bHnypb/1fWXP2C4JZ9UcAmsk20y1o2gTdkflKyLNYs7Duu/czs9zaqLW
+ 7USzxyMBPvH+C4dwe3vO5a5DDMqvCiWp/o+sZs6wAorZw5FfxZbyGzp95vcLINKuUMETDf1QC
+ 7sXP/PKB4mZ65+greqznVrqD+E2E2mfm5L6r0XQsHgLnnk7ZBbD3heSJhQI15+9vNFfB1nCtl
+ dIyVkvo9vQ76GfERETec4y2nSq0=
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-blit_x and blit_y are u32, so fbcon currently cannot support fonts
-larger than 32x32.
+Spell it as "broadcast".
 
-The 32x32 case also needs shifting an unsigned int, to properly set bit
-31, otherwise we get "UBSAN: shift-out-of-bounds in fbcon_set_font",
-as reported on:
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/gpu/drm/amd/amdgpu/df_v1_7.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-http://lore.kernel.org/all/IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR07MB9830.namprd07.prod.outlook.com
-Kernel Branch: 6.2.0-rc5-next-20230124
-Kernel config: https://drive.google.com/file/d/1F-LszDAizEEH0ZX0HcSR06v5q8FPl2Uv/view?usp=sharing
-Reproducer: https://drive.google.com/file/d/1mP1jcLBY7vWCNM60OMf-ogw-urQRjNrm/view?usp=sharing
+diff --git a/drivers/gpu/drm/amd/amdgpu/df_v1_7.c b/drivers/gpu/drm/amd/am=
+dgpu/df_v1_7.c
+index b991609f46c10..5dfab80ffff21 100644
+=2D-- a/drivers/gpu/drm/amd/amdgpu/df_v1_7.c
++++ b/drivers/gpu/drm/amd/amdgpu/df_v1_7.c
+@@ -94,7 +94,7 @@ static void df_v1_7_update_medium_grain_clock_gating(str=
+uct amdgpu_device *adev,
+ 		WREG32_SOC15(DF, 0, mmDF_PIE_AON0_DfGlobalClkGater, tmp);
+ 	}
 
-Reported-by: Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
-Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
-Fixes: 2d2699d98492 ("fbcon: font setting should check limitation of driver")
-Cc: stable@vger.kernel.org
+-	/* Exit boradcast mode */
++	/* Exit broadcast mode */
+ 	adev->df.funcs->enable_broadcast_mode(adev, false);
+ }
 
----
-v1 -> v2:
-- Use BIT macro instead of fixing bit test by hand.
-- Add Fixes and Cc: stable headers.
+=2D-
+2.39.0
 
-Index: linux-6.0/drivers/video/fbdev/core/fbcon.c
-===================================================================
---- linux-6.0.orig/drivers/video/fbdev/core/fbcon.c
-+++ linux-6.0/drivers/video/fbdev/core/fbcon.c
-@@ -2489,9 +2489,12 @@ static int fbcon_set_font(struct vc_data
- 	    h > FBCON_SWAP(info->var.rotate, info->var.yres, info->var.xres))
- 		return -EINVAL;
- 
-+	if (font->width > 32 || font->height > 32)
-+		return -EINVAL;
-+
- 	/* Make sure drawing engine can handle the font */
--	if (!(info->pixmap.blit_x & (1 << (font->width - 1))) ||
--	    !(info->pixmap.blit_y & (1 << (font->height - 1))))
-+	if (!(info->pixmap.blit_x & BIT(font->width - 1)) ||
-+	    !(info->pixmap.blit_y & BIT(font->height - 1)))
- 		return -EINVAL;
- 
- 	/* Make sure driver can handle the font length */
