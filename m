@@ -2,389 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB6F67FD73
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 08:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5264567FD77
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 08:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233952AbjA2Hun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 02:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S230128AbjA2HyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 02:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbjA2Huk (ORCPT
+        with ESMTP id S229436AbjA2HyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 02:50:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFF321950;
-        Sat, 28 Jan 2023 23:50:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98113B808CB;
-        Sun, 29 Jan 2023 07:50:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D082C4339B;
-        Sun, 29 Jan 2023 07:50:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674978635;
-        bh=xo0XfQEBGUn7tJDASw7xd+ynPvHY4wSjZm8sVyCBFCI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XBiPPIlMlpsnSL4rcGcgwM1q3fhQDDKuaCySvjXM1lLfA1eTK92zG7BpPvE7oL+qL
-         1Iq0QvjmhbSK93LoK7dcelzTwVItoRhQiraRKT0gfCDRdOOXkEDINSsGMT+2uXPHC2
-         2QuAquN9yg396w7g900CBIIWS47xBJ1QhiDlA1DjaWSvf6V4x2J+FnmqJjz+eeOYA2
-         BOg1BwUaGBW5J1G0yDb6WQjJB1aEjbQPIsJ57mEhJG+OzwPAqz9W2Cw1OxaL9Vi1VC
-         QIzJyXa+jOAT/U8Ft9ShqbithtGWVReWcYSruFcv4NEfTtG86DythIYCfeHDl1V5/5
-         6nO7Fa25x0aqw==
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, "Mike Rapoport (IBM)" <rppt@kernel.org>
-Subject: [PATCH 2/2] docs/mm: remove useless markup
-Date:   Sun, 29 Jan 2023 09:50:18 +0200
-Message-Id: <20230129075018.207678-3-rppt@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230129075018.207678-1-rppt@kernel.org>
-References: <20230129075018.207678-1-rppt@kernel.org>
+        Sun, 29 Jan 2023 02:54:23 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D2613D45;
+        Sat, 28 Jan 2023 23:54:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674978862; x=1706514862;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=4/fkcOS1HUG83yA4dSpdbe/xoypshhSLLEAGJKEuXqc=;
+  b=Zb6GwGIqAL+SbZe7G7y+Lu8DIMJyLoYsIyhmZNtk3gA3duAnc9SgMLo7
+   697X3Ykbi43CW/al09oX4QY6NL0AMbISK4XPL4zfH/ONybwEujnMWGhC0
+   ECUYbAM6NruFt4YIjNTjZGibjXI7kqEkGSMLBbIQvgfgZhNVoyL7Tw9y7
+   ftZBjzDZXGJpm0GKyXeiGMC2l5ezpm1bkQxLoqLaA14mndTS1vsQGrfIy
+   uIhyln2aBBrO3dYn3rBPDVp6pZOyLJBJEzlqhrzicjWVA+xQyIigkabiX
+   CFCyIWhRKdVq5klWpQ+Sewt6pWuHjtyG8UvaSKVeAhm6XqdMTQwxMcyYe
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="315329931"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="315329931"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 23:54:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="665724081"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="665724081"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Jan 2023 23:54:20 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 28 Jan 2023 23:54:20 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Sat, 28 Jan 2023 23:54:19 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Sat, 28 Jan 2023 23:54:19 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.170)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Sat, 28 Jan 2023 23:54:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kirtZRtqdJKmE/bVOIiiNLj2C+WiTldvBBoKeUPahcn9qpSsa33OSguCfDxz/0PHCyLtxcHDJTIOYKbFaT8EV2Gun3w66m0ac6Z853639wZPxlMDDzHZbrYI/B4LJLUt1AkhCRQCFWT7Q0XKk6B27NDzX6o/FpApH59lCX5aix3GU2jRutXyXQBFx+8TItbRPUiqvSPt5gWPtXYOhVajBBTp7eHyUIlTeZ+Lf5qza4lWJgK+fxswqtDrlGXb0npDIA3THvgX5Jhaa7L5sfSTCtLuTrghO8awvJHo+aVSiwAlEv4xIxhRoQmx2SYVEjjqPz64/JaCe7pGKeklb/16kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=twji0Ccuz+Uj1s8PHghBs8z/OzuBT2G/Msd+5MIBHgo=;
+ b=l4rBGEdIkeCnSrxrzuemrKwIGZDLk4mH2sHEzzMb1IQ4trxAEMLx3HVt55n9YJ9HBnikU46pTiV7dEybGxqXyaJsQsc5d2FHvZklk4u+ADEwUF8hiPr5oTDcjOC+9RG7GJkNbyHnK6ZOa24dKyuUHybW5JI+ljMitNYun+Z3hyX8dPZNkaAoMDlDGZbMZpOTXJTCPkPMGHIULgkMQkSVKT0ZjTuiihBJF74wPAdrR2+YKi72Jilx+sgD7jSyebi6sSggBax0bxs6pJ4BrXcmdIRG7vVWcxkahWZiEmG9Impf6UYBMJpA+4LJasp2c/U+wveFUw5OCui92EhhwLknTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
+ by CH0PR11MB5377.namprd11.prod.outlook.com (2603:10b6:610:b8::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Sun, 29 Jan
+ 2023 07:54:18 +0000
+Received: from BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::2caf:11b5:858d:2978]) by BL1PR11MB5271.namprd11.prod.outlook.com
+ ([fe80::2caf:11b5:858d:2978%9]) with mapi id 15.20.6043.033; Sun, 29 Jan 2023
+ 07:54:18 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
+        "yong.wu@mediatek.com" <yong.wu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>
+CC:     "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: RE: [PATCH 1/4] iommu: Add a broken_unmanaged_domain flag in
+ iommu_ops
+Thread-Topic: [PATCH 1/4] iommu: Add a broken_unmanaged_domain flag in
+ iommu_ops
+Thread-Index: AQHZMoqzsVwORV4fDkqb25GPYvi+2K61B+1Q
+Date:   Sun, 29 Jan 2023 07:54:17 +0000
+Message-ID: <BL1PR11MB5271DFD1D9D60E0021D8BCE18CD29@BL1PR11MB5271.namprd11.prod.outlook.com>
+References: <cover.1674849118.git.nicolinc@nvidia.com>
+ <0875479d24a53670e17db8a11945664a6bb4a25b.1674849118.git.nicolinc@nvidia.com>
+In-Reply-To: <0875479d24a53670e17db8a11945664a6bb4a25b.1674849118.git.nicolinc@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5271:EE_|CH0PR11MB5377:EE_
+x-ms-office365-filtering-correlation-id: 8ed51b07-17a7-4d91-09b0-08db01ce061f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xCe2ceuO/4qfdPDUUecTeFNgmShAkiNqIUdrTTiEcQUtpSRRHgJ9bfCOHj119tck3S6e0XcR5qOdsnNF920PWQP6uCzmzmvEPUL2Z69xar8AmOOyRll+DMOV4iKdTh8zgmcpLfZ1GTwjnPrtrQNUe8rIWfI7Bs4abo4LEuSzMuE09HD6XfQwApBBTlgkjphuuxr7W3gu/3Ge2muOuySvNKFdXoujvkTn3Srxzwwtf/hG/cdVEsPX6LqUgWNRqVpxAfwmX6HBlH8fGkTT6gJ1JyUXKCM8PFdXONcX9jZxubaroB1RSkuAO/2nM3KIvBGyUi+KJVp9Uct0U3yViQ0P18wGzv66sp6K0iVZjYfFagqyPyKn+K9F1l5LXtrPAZFRdzvJADNzy6l4lRM/jWpEuBi1iB0gomLsbhCf2jaU6SJIehcQP98ng3Mxh5twEFuk8gT0N+fXBC8LwW/7EgSr5roTFLRJroE0yiq1OtUk3GAIhVM+3s5RS6A5eJ/EQXXTwnf2awmFOVD9ypFtFQVbSsBSkm5ArPFNieYmT7U6pp7tWhhnm02hoKoK3cnbs4TS6yyBMLUx2v2yjsQNYkr20dHg+jNS8E7NtwItdAQjOUbRhuT8/wuVC4BKjVcehrWQA6f3Z7ZTJ6b4Mq4ith9slOjwqL2mRSe7u1ndQhMkqRk1bu4gDsW+5//NxDbODE9EqOg6bDu+k+QdKRG/P5KvQ5r6R/CDNqNKMm/7xYPFZ7M=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(346002)(376002)(366004)(396003)(136003)(451199018)(2906002)(5660300002)(7416002)(55016003)(82960400001)(186003)(122000001)(38100700002)(26005)(9686003)(52536014)(8676002)(86362001)(4326008)(66946007)(76116006)(110136005)(54906003)(316002)(66476007)(66556008)(66446008)(8936002)(41300700001)(33656002)(64756008)(921005)(6506007)(38070700005)(71200400001)(7696005)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?K6FLrZ8GWrsbhFI9wmxkoLgOIh5eKhvKxF3ZYDaOIPRZ9co4M8y5xDEwWW1N?=
+ =?us-ascii?Q?arEoGRCQIGV5v9y6K9WTMRj9PVnKc4NH/zNy4rn4QXTf1iaLtt+jX3C3ekx2?=
+ =?us-ascii?Q?J7+ic4hWWk9DOMstfUyGIhUEfJ+kelgs/ts9iMmDLubrsHnPflV+HDRt4jt9?=
+ =?us-ascii?Q?rnqCR3KrB5rzz4sJ7gPzmLQCgtrB+PZ+xszfB4ZCJDwDJWY9R4t+45K4LT+v?=
+ =?us-ascii?Q?nTpy69idI4rgca90qhNZRX6AW1x/hGfJXiGxqJd/0hNIypR9d+ThyR9ExBZJ?=
+ =?us-ascii?Q?UWXloJdDQK61EIcY4/0FvPMGMiXetw3bT+zyTyXIIWtqpNSK4U7UJCgnn9oR?=
+ =?us-ascii?Q?mu6nxTTxBzhzREEu3jQ8Nmhn7ZExCU+OT8n91OrfDBQOmLNAe0gt9sskinoi?=
+ =?us-ascii?Q?uPr7pWsmDOMPWpB9ppfygjQUAFl2bGBdzgoXDfb3UYUJLdw17gz6W3p+Tt9B?=
+ =?us-ascii?Q?BeoMLoFiM/n+U/4Hv76juJVRZxTTSAkBfia9Vm+Ze0Kojc96WCSRU4qmfXsK?=
+ =?us-ascii?Q?cQjFRDj0gBHAfk9sF1yhYTOLXdi7HUw2e3+FKC8LvPxDnGFAhpzjpuPi3JaU?=
+ =?us-ascii?Q?JV0Z0Z8Euq0Ep/0u0wV7dszkKyKcKh/m3xXjl5Ymp4l5ZcLdRRhWz/s/Kbhk?=
+ =?us-ascii?Q?uIeLgA0QFbG3UeMV6LME4NCjNbzLQPIfybi+44GxdRMebgZbw2QkOEA9V93E?=
+ =?us-ascii?Q?AJa0n/llausGCtCCHKx9Bx6hkJD6YoHsspL3dvwgKMJtam95hpH+4gWdO8l0?=
+ =?us-ascii?Q?9GbPO03/LXCwtNFCO1wOd4KgWac+lHmsuLwqSY2ap33vnp4J/cK9mB7H3K+3?=
+ =?us-ascii?Q?x96jQHn3i2IffuKZDNW1Aoumk3h3LJ5oM4Uwm9S81+2WfHhLDxJ8OQHoAuw6?=
+ =?us-ascii?Q?W3C+ImICd7UO9Ai7p56oVSUrI1iKAQvT92jDrEk3WcXpBdvwPfgprL/ZhtmR?=
+ =?us-ascii?Q?kvDOjmF6Eco6mglWDyGUCOmStl0Kgi2OVtyx8u2NfvNwpGW/eKF7zbSwAcHF?=
+ =?us-ascii?Q?UJFEGXd7SFN8lGF6s1H/fuBp3mLHREm52ydaX45uOgoBuJA3CjEG8Xw7Upom?=
+ =?us-ascii?Q?ar9UEitsMzSLoWyZWbQB3XQE0xjb+0+GsMpMZZN6RIgJJU2Ss3HVndrQNNTh?=
+ =?us-ascii?Q?orvUIyLt3E4KoR2huT6J/EZ/pa79Ib61rkXVeag1v4uj8gkGbQJx81dtoAj4?=
+ =?us-ascii?Q?3szwatq97AbQ7FLNi4xR9oV/VZXVdlqknzb/RskME8zgPeFXrNrO8Xvz+fIP?=
+ =?us-ascii?Q?cshhMZbk3KkhDNHdf4O61WL/QPTE/7rVSFvxN5tRYqCsdglNm1DXrTzQ8Q60?=
+ =?us-ascii?Q?zZ6q4AD89FJ/bZ3bKrPQhGKEinC5Gq2fb08ykCsMM3XSejRI4Hjaw7B2DTEw?=
+ =?us-ascii?Q?p5Quh+fYX+jXWgdqAitxmnwV60f2hDBQIH7yWi1iCOrIBDNaXxavz2SQ+wFI?=
+ =?us-ascii?Q?6NcVQQsuuMZoXXys0K4QppBvTtBz3lluuLue9Enob3unwQfm/xXQcpeuI+VF?=
+ =?us-ascii?Q?OkGLIIrenKA9c0bNrCZ9oYHbjpA31l2eJ4tlXGzJvdajuqDQqVmrhRFSLJsM?=
+ =?us-ascii?Q?qTOsXjU8n67yYMM7DT62vtPuZg/SGwfN94VdOxpG?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ed51b07-17a7-4d91-09b0-08db01ce061f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jan 2023 07:54:18.0020
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FFwc4QDwyNEtRuydPwp9PJIYmIpOJ0IOHoWldRrRHc6WzoZMO0I/RcgaeqC1pW3SZFgu8CojhPufY4ytBmdP9Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5377
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Saturday, January 28, 2023 4:04 AM
+>=20
+> Both IOMMU_DOMAIN_UNMANAGED and IOMMU_DOMAIN_DMA require
+> the support
+> of __IOMMU_DOMAIN_PAGING capability, i.e. iommu_map/unmap.
+> However,
+> some older iommu drivers do not fully support that, and these drivers
+> also do not advertise support for dma-iommu.c via IOMMU_DOMAIN_DMA,
+> or use arm_iommu_create_mapping(), so largely their implementations
+> of IOMMU_DOMAIN_UNMANAGED are untested. This means that a user like
+> vfio/iommufd does not likely work with them.
+>=20
+> Several of them have obvious problems:
+>   * fsl_pamu_domain.c
+>     Without map/unmap ops in the default_domain_ops, it isn't an
+>     unmanaged domain at all.
+>   * mtk_iommu_v1.c
+>     With a fixed 4M "pagetable", it can only map exactly 4G of
+>     memory, but doesn't set the aperture.
+>   * tegra-gart.c
+>     Its notion of attach/detach and groups has to be a complete lie to
+>     get around all the other API expectations.
+>=20
+> Some others might work but have never been tested with vfio/iommufd:
+>   * msm_iommu.c
+>   * omap-iommu.c
+>   * tegra-smmu.c
+>=20
 
-It is enough to use a file name to cross-reference another rst document.
+Do we have a link where all drivers tested with vfio/iommufd have been
+listed?
 
-Jon says:
-  The right things will happen in the HTML output, readers of the
-  plain-text will know immediately where to go, and we don't have to add
-  the label clutter.
-
-Drop reference markup and unnecessary labels and use plain file names.
-
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- Documentation/mm/active_mm.rst             | 2 --
- Documentation/mm/arch_pgtable_helpers.rst  | 2 --
- Documentation/mm/balance.rst               | 2 --
- Documentation/mm/free_page_reporting.rst   | 2 --
- Documentation/mm/frontswap.rst             | 2 --
- Documentation/mm/highmem.rst               | 2 --
- Documentation/mm/hmm.rst                   | 4 +---
- Documentation/mm/hugetlbfs_reserv.rst      | 4 +---
- Documentation/mm/hwpoison.rst              | 2 --
- Documentation/mm/ksm.rst                   | 4 +---
- Documentation/mm/memory-model.rst          | 2 --
- Documentation/mm/mmu_notifier.rst          | 2 --
- Documentation/mm/numa.rst                  | 4 +---
- Documentation/mm/page_frags.rst            | 2 --
- Documentation/mm/page_migration.rst        | 6 ++----
- Documentation/mm/page_owner.rst            | 2 --
- Documentation/mm/page_table_check.rst      | 2 --
- Documentation/mm/remap_file_pages.rst      | 2 --
- Documentation/mm/slub.rst                  | 2 --
- Documentation/mm/split_page_table_lock.rst | 2 --
- Documentation/mm/transhuge.rst             | 2 --
- Documentation/mm/unevictable-lru.rst       | 2 --
- Documentation/mm/z3fold.rst                | 2 --
- Documentation/mm/zsmalloc.rst              | 2 --
- 24 files changed, 6 insertions(+), 54 deletions(-)
-
-diff --git a/Documentation/mm/active_mm.rst b/Documentation/mm/active_mm.rst
-index 6f8269c284ed..45d89f8fb3a8 100644
---- a/Documentation/mm/active_mm.rst
-+++ b/Documentation/mm/active_mm.rst
-@@ -1,5 +1,3 @@
--.. _active_mm:
--
- =========
- Active MM
- =========
-diff --git a/Documentation/mm/arch_pgtable_helpers.rst b/Documentation/mm/arch_pgtable_helpers.rst
-index fd2a19df884e..30d9a09f01f4 100644
---- a/Documentation/mm/arch_pgtable_helpers.rst
-+++ b/Documentation/mm/arch_pgtable_helpers.rst
-@@ -1,7 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--.. _arch_page_table_helpers:
--
- ===============================
- Architecture Page Table Helpers
- ===============================
-diff --git a/Documentation/mm/balance.rst b/Documentation/mm/balance.rst
-index 6a1fadf3e173..6cd0127154ac 100644
---- a/Documentation/mm/balance.rst
-+++ b/Documentation/mm/balance.rst
-@@ -1,5 +1,3 @@
--.. _balance:
--
- ================
- Memory Balancing
- ================
-diff --git a/Documentation/mm/free_page_reporting.rst b/Documentation/mm/free_page_reporting.rst
-index 8c05e62d8b2b..1468f71c261f 100644
---- a/Documentation/mm/free_page_reporting.rst
-+++ b/Documentation/mm/free_page_reporting.rst
-@@ -1,5 +1,3 @@
--.. _free_page_reporting:
--
- =====================
- Free Page Reporting
- =====================
-diff --git a/Documentation/mm/frontswap.rst b/Documentation/mm/frontswap.rst
-index feecc5e24477..c892412988af 100644
---- a/Documentation/mm/frontswap.rst
-+++ b/Documentation/mm/frontswap.rst
-@@ -1,5 +1,3 @@
--.. _frontswap:
--
- =========
- Frontswap
- =========
-diff --git a/Documentation/mm/highmem.rst b/Documentation/mm/highmem.rst
-index 0f731d9196b0..bb3f90e195fa 100644
---- a/Documentation/mm/highmem.rst
-+++ b/Documentation/mm/highmem.rst
-@@ -1,5 +1,3 @@
--.. _highmem:
--
- ====================
- High Memory Handling
- ====================
-diff --git a/Documentation/mm/hmm.rst b/Documentation/mm/hmm.rst
-index f2a59ed82ed3..9aa512c3a12c 100644
---- a/Documentation/mm/hmm.rst
-+++ b/Documentation/mm/hmm.rst
-@@ -1,5 +1,3 @@
--.. _hmm:
--
- =====================================
- Heterogeneous Memory Management (HMM)
- =====================================
-@@ -304,7 +302,7 @@ devm_memunmap_pages(), and devm_release_mem_region() when the resources can
- be tied to a ``struct device``.
- 
- The overall migration steps are similar to migrating NUMA pages within system
--memory (see :ref:`Page migration <page_migration>`) but the steps are split
-+memory (see Documentation/mm/page_migration.rst) but the steps are split
- between device driver specific code and shared common code:
- 
- 1. ``mmap_read_lock()``
-diff --git a/Documentation/mm/hugetlbfs_reserv.rst b/Documentation/mm/hugetlbfs_reserv.rst
-index f143954e0d05..05a44760da32 100644
---- a/Documentation/mm/hugetlbfs_reserv.rst
-+++ b/Documentation/mm/hugetlbfs_reserv.rst
-@@ -1,5 +1,3 @@
--.. _hugetlbfs_reserve:
--
- =====================
- Hugetlbfs Reservation
- =====================
-@@ -7,7 +5,7 @@ Hugetlbfs Reservation
- Overview
- ========
- 
--Huge pages as described at :ref:`hugetlbpage` are typically
-+Huge pages as described at Documentation/mm/hugetlbpage.rst are typically
- preallocated for application use.  These huge pages are instantiated in a
- task's address space at page fault time if the VMA indicates huge pages are
- to be used.  If no huge page exists at page fault time, the task is sent
-diff --git a/Documentation/mm/hwpoison.rst b/Documentation/mm/hwpoison.rst
-index b9d5253c1305..ba48a441feed 100644
---- a/Documentation/mm/hwpoison.rst
-+++ b/Documentation/mm/hwpoison.rst
-@@ -1,5 +1,3 @@
--.. hwpoison:
--
- ========
- hwpoison
- ========
-diff --git a/Documentation/mm/ksm.rst b/Documentation/mm/ksm.rst
-index f83cfbc12f4c..2806e3e4a10e 100644
---- a/Documentation/mm/ksm.rst
-+++ b/Documentation/mm/ksm.rst
-@@ -1,5 +1,3 @@
--.. _ksm:
--
- =======================
- Kernel Samepage Merging
- =======================
-@@ -8,7 +6,7 @@ KSM is a memory-saving de-duplication feature, enabled by CONFIG_KSM=y,
- added to the Linux kernel in 2.6.32.  See ``mm/ksm.c`` for its implementation,
- and http://lwn.net/Articles/306704/ and https://lwn.net/Articles/330589/
- 
--The userspace interface of KSM is described in :ref:`Documentation/admin-guide/mm/ksm.rst <admin_guide_ksm>`
-+The userspace interface of KSM is described in Documentation/admin-guide/mm/ksm.rst
- 
- Design
- ======
-diff --git a/Documentation/mm/memory-model.rst b/Documentation/mm/memory-model.rst
-index 3779e562dc76..5f3eafbbc520 100644
---- a/Documentation/mm/memory-model.rst
-+++ b/Documentation/mm/memory-model.rst
-@@ -1,7 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--.. _physical_memory_model:
--
- =====================
- Physical Memory Model
- =====================
-diff --git a/Documentation/mm/mmu_notifier.rst b/Documentation/mm/mmu_notifier.rst
-index df5d7777fc6b..c687bea4922f 100644
---- a/Documentation/mm/mmu_notifier.rst
-+++ b/Documentation/mm/mmu_notifier.rst
-@@ -1,5 +1,3 @@
--.. _mmu_notifier:
--
- When do you need to notify inside page table lock ?
- ===================================================
- 
-diff --git a/Documentation/mm/numa.rst b/Documentation/mm/numa.rst
-index 99fdeca917ca..04648d26ffd1 100644
---- a/Documentation/mm/numa.rst
-+++ b/Documentation/mm/numa.rst
-@@ -1,5 +1,3 @@
--.. _numa:
--
- Started Nov 1999 by Kanoj Sarcar <kanoj@sgi.com>
- 
- =============
-@@ -110,7 +108,7 @@ to improve NUMA locality using various CPU affinity command line interfaces,
- such as taskset(1) and numactl(1), and program interfaces such as
- sched_setaffinity(2).  Further, one can modify the kernel's default local
- allocation behavior using Linux NUMA memory policy. [see
--:ref:`Documentation/admin-guide/mm/numa_memory_policy.rst <numa_memory_policy>`].
-+Documentation/admin-guide/mm/numa_memory_policy.rst].
- 
- System administrators can restrict the CPUs and nodes' memories that a non-
- privileged user can specify in the scheduling or NUMA commands and functions
-diff --git a/Documentation/mm/page_frags.rst b/Documentation/mm/page_frags.rst
-index 7d6f9385d129..a81617e688a8 100644
---- a/Documentation/mm/page_frags.rst
-+++ b/Documentation/mm/page_frags.rst
-@@ -1,5 +1,3 @@
--.. _page_frags:
--
- ==============
- Page fragments
- ==============
-diff --git a/Documentation/mm/page_migration.rst b/Documentation/mm/page_migration.rst
-index 11493bad7112..313dce18893e 100644
---- a/Documentation/mm/page_migration.rst
-+++ b/Documentation/mm/page_migration.rst
-@@ -1,5 +1,3 @@
--.. _page_migration:
--
- ==============
- Page migration
- ==============
-@@ -9,8 +7,8 @@ nodes in a NUMA system while the process is running. This means that the
- virtual addresses that the process sees do not change. However, the
- system rearranges the physical location of those pages.
- 
--Also see :ref:`Heterogeneous Memory Management (HMM) <hmm>`
--for migrating pages to or from device private memory.
-+Also see Documentation/mm/hmm.rst for migrating pages to or from device
-+private memory.
- 
- The main intent of page migration is to reduce the latency of memory accesses
- by moving pages near to the processor where the process accessing that memory
-diff --git a/Documentation/mm/page_owner.rst b/Documentation/mm/page_owner.rst
-index 127514955a5e..fc8b5f2ef173 100644
---- a/Documentation/mm/page_owner.rst
-+++ b/Documentation/mm/page_owner.rst
-@@ -1,5 +1,3 @@
--.. _page_owner:
--
- ==================================================
- page owner: Tracking about who allocated each page
- ==================================================
-diff --git a/Documentation/mm/page_table_check.rst b/Documentation/mm/page_table_check.rst
-index 1a09472f10a3..cfd8f4117cf3 100644
---- a/Documentation/mm/page_table_check.rst
-+++ b/Documentation/mm/page_table_check.rst
-@@ -1,7 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--.. _page_table_check:
--
- ================
- Page Table Check
- ================
-diff --git a/Documentation/mm/remap_file_pages.rst b/Documentation/mm/remap_file_pages.rst
-index 7bef6718e3a9..297091ce257c 100644
---- a/Documentation/mm/remap_file_pages.rst
-+++ b/Documentation/mm/remap_file_pages.rst
-@@ -1,5 +1,3 @@
--.. _remap_file_pages:
--
- ==============================
- remap_file_pages() system call
- ==============================
-diff --git a/Documentation/mm/slub.rst b/Documentation/mm/slub.rst
-index 7f652216dabe..fa01cdfd7d3a 100644
---- a/Documentation/mm/slub.rst
-+++ b/Documentation/mm/slub.rst
-@@ -1,5 +1,3 @@
--.. _slub:
--
- ==========================
- Short users guide for SLUB
- ==========================
-diff --git a/Documentation/mm/split_page_table_lock.rst b/Documentation/mm/split_page_table_lock.rst
-index c08919662704..50ee0dfc95be 100644
---- a/Documentation/mm/split_page_table_lock.rst
-+++ b/Documentation/mm/split_page_table_lock.rst
-@@ -1,5 +1,3 @@
--.. _split_page_table_lock:
--
- =====================
- Split page table lock
- =====================
-diff --git a/Documentation/mm/transhuge.rst b/Documentation/mm/transhuge.rst
-index ec3dc5b04226..9d924b651c61 100644
---- a/Documentation/mm/transhuge.rst
-+++ b/Documentation/mm/transhuge.rst
-@@ -1,5 +1,3 @@
--.. _transhuge:
--
- ============================
- Transparent Hugepage Support
- ============================
-diff --git a/Documentation/mm/unevictable-lru.rst b/Documentation/mm/unevictable-lru.rst
-index 4a0e158aa9ce..b5dc98cd1ba8 100644
---- a/Documentation/mm/unevictable-lru.rst
-+++ b/Documentation/mm/unevictable-lru.rst
-@@ -1,5 +1,3 @@
--.. _unevictable_lru:
--
- ==============================
- Unevictable LRU Infrastructure
- ==============================
-diff --git a/Documentation/mm/z3fold.rst b/Documentation/mm/z3fold.rst
-index 224e3c61d686..25b5935d06c7 100644
---- a/Documentation/mm/z3fold.rst
-+++ b/Documentation/mm/z3fold.rst
-@@ -1,5 +1,3 @@
--.. _z3fold:
--
- ======
- z3fold
- ======
-diff --git a/Documentation/mm/zsmalloc.rst b/Documentation/mm/zsmalloc.rst
-index 6e79893d6132..24616a7c115a 100644
---- a/Documentation/mm/zsmalloc.rst
-+++ b/Documentation/mm/zsmalloc.rst
-@@ -1,5 +1,3 @@
--.. _zsmalloc:
--
- ========
- zsmalloc
- ========
--- 
-2.35.1
-
+In a quick glance at least exynos-iommu.c and apple-dart.c both support
+UNMANAGED with map/unmap ops. They are not mentioned in above
+list but I doubt they are tested for vfio/iommufd.
