@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC7B680142
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 20:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1604B680145
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 20:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234780AbjA2Txe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 14:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S229878AbjA2Tze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 14:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2Txc (ORCPT
+        with ESMTP id S229617AbjA2Tzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 14:53:32 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67351CF65;
-        Sun, 29 Jan 2023 11:53:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1675021994; bh=JYuBTGiyir1VWLkuLl5Eav+ldGQ3cPIiwUvVAojr1Aw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=OqPA+33d0cpLMalpPQcqXICXxjkdeNrcjukFgJigDUUN71QE1VtwqjGU79a+AlSwn
-         Hzd4SuOujaM/CGmMsIwl/OOQ6/ojhZ1iXHQqrm9dt4SR4CZGcRzMaJLG8JobAw8UFa
-         uvFz87c0H5cJRWLZaQb0S1NbUEf7y4D9/fO4e7HdBT+OgHI40M5zAwOZ8Dd4HXlKSW
-         y5GdzE3EFiEy8XOCbjxLkBUISs8ng6Gt/r9JUqXIadd3Yo1Z6Bg9E6xCGOr/fypRR6
-         dpuIXbBD3o1hHhWzvCYfZf4H/R0x4Jl8MzKKeBucH7HS9ckvRuYjfg/VUJVynwzGBe
-         Uts5IBV5BmO+g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbRk3-1opLtI3ZP7-00bsfq; Sun, 29
- Jan 2023 20:53:13 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     netdev@vger.kernel.org
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-parisc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] net: tulip: Fix typos ("defualt" and "hearbeat")
-Date:   Sun, 29 Jan 2023 20:53:08 +0100
-Message-Id: <20230129195309.1941497-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.0
+        Sun, 29 Jan 2023 14:55:31 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C27A1CF47;
+        Sun, 29 Jan 2023 11:55:30 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1636eae256cso8478225fac.0;
+        Sun, 29 Jan 2023 11:55:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iLbGoONm+xqkc97+A+Zml853XMzw+B9pcYL8n8StFtc=;
+        b=glgR4Glc5nCL8S38ROz9Eol5ou+EwE88pZMvzmg9G0C0UFLvFS9zx2l9qX35HD8X0c
+         Lt3jYr7P7Sim+CwD3YTqTRjQOTVZBYoRdp0K+fOV6NPvIuMoB6L3i2gn8glZF6vrkBp7
+         Kwr9/NNeqXlnrgJCq2Gnj30mG562pjU30JJn43C8wgjBh8O5MODomLHYaz1YFO4oZpPK
+         kAuVguFXqwmUnX1gKcp0FuAYAO3GlzNdZolhhxQ9TWLVQQs9sOPI68miGGt+oUGbyo+Z
+         dGwEqbxyWOyNbXsrr6EWoXo9pTknyxFz0Dcg58iTmOwRNI7BZHdW4wIfEIIOms2t1PER
+         h1Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iLbGoONm+xqkc97+A+Zml853XMzw+B9pcYL8n8StFtc=;
+        b=4F/KeiAaVt7ap6w9kdcG5sJ39NrGPTXiTzHi+RSEMywynD9mjTciBOBQp/9Dumy0W7
+         GGSyXV3mqAArB4ZdDis3GD5H/HAlDdP1e/sprlxJYAPkGnu7MZoZwL/9CyfL6JrxK+2W
+         puBCB+q3IIzYjkVoU5Br6MdsOgf9dVWdIx5Ue2ztzbi4UohKd4lP+VWe9Z1nm1xSPCQm
+         U11tZuZqXLFSp4gsP7/+8iKSRJeZ+Yf1eS36FKp5MKWclRcyD60WQEQpI4p09aHpPI69
+         uCRpgOJrMJbnY4ldYE+GpztFY/YBhLJbwBV9R5fhvv6xWga0uzYdyy4oyafkyd9oN/TD
+         IQGg==
+X-Gm-Message-State: AO0yUKUOGp7PhP6saYOu8LAG+vfJnKd2sS4ZkoS1bMXggb7q6jszTbRg
+        xlS8Nn/pA1b95UkKtui9Zt+vxSpLlH8=
+X-Google-Smtp-Source: AK7set+okvx2usDN7KXb0eVoAYP+qVRqZ2yWIGMLR8EbD4Cr34aPvBS58WDLuGaWP1Mj3KYRBCcvZQ==
+X-Received: by 2002:a05:6870:42cc:b0:163:1568:bdc9 with SMTP id z12-20020a05687042cc00b001631568bdc9mr11214890oah.2.1675022129681;
+        Sun, 29 Jan 2023 11:55:29 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l11-20020a4ab2cb000000b004a3527e8279sm4206123ooo.0.2023.01.29.11.55.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 11:55:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 29 Jan 2023 11:55:28 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jonathan Cormier <jcormier@criticallink.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bob Duke <bduke@criticallink.com>,
+        John Pruitt <jpruitt@criticallink.com>
+Subject: Re: [PATCH v4 5/5] hwmon: ltc2945: Convert division to
+ DIV_ROUND_CLOSEST_ULL
+Message-ID: <20230129195528.GA1418977@roeck-us.net>
+References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
+ <20230126-b4-ltc2945_shunt_resistor-v4-5-bb913470d8da@criticallink.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:+wsdahg7Mws6ODWFiGbtbV9FJzvOvKiRKERY/CAueVT8dS+c+QJ
- AzOxNLULMVXFNyLhDEH4wjfTo454RpUVgFCgbKw9PSv2F1FCzwbPmZX6U3bNauBT4mHZbOp
- e+8qsp2hImzNoncgITXOiHc+SHNGRIf2xOBsrjPIkh6x6s53Ec42/PcJVrEdfQBwgZH2RI5
- VTZ2c4Wat7tOC4tHSIKLQ==
-UI-OutboundReport: notjunk:1;M01:P0:/O8x6w9sjM4=;otpRr11BCPUEGzeMvDiGWX08toM
- SBefsuv15bZJW1rHfI8gBprcNdOP5Otv/wcqpOBUj9cHd5znmFdZ9j1uQoCbDdrKRhy7tPSan
- UVnYVDGiYyAnDQFZsK81wDKXY+gKxFOSLLG6QZBv2DZKb3ewgMpgVdkBpUFZ6zGFfqeqRokTH
- SQvi5/iQlniSDAHqQpcpaTo4abzC+WMdCu3qpRc1YUvm/ws64EggQ3Qb6S/LVFQENFt7OwMyf
- eM92AfEFWneZqQT9P49Y//3y/PWdZ44iIdY564Qv3/koSUasnFKAuY4SNe07SK7rNT/MJNW11
- 6Cc3GJm9Mjin8/wsJ80WbWvBAo64zEfYbUBoeWC+n3FTT2GMclwpMh6tpIWeVszWOIk19DKtW
- osLm9f5531yZwKJEGArpoAtIZsyJSS3ZCPKS1ZMpxOAxRiXr+bOdfjPdr8iGCFFqUtc1OXbLt
- mTeWo68isvHxd0Js2zF4pBuuTlhGkp6Dig3pUlBbBk1JM2Ht/ZyUOBWAw84KLz7HEh8I21K1t
- qsodYmoFO6dwGLS58656WlpPIwJyUwmSyDWo4vhp7XiJUGFT8gw8djvtDoonv5yMhMEFAuqsE
- CDrXniD1kcGcYxiPGYovvt1IuCGjQCL76AnosRNBCazUjTUDrYsCEy7jtySpUemUX7GfnjeaO
- +zx4ANiOKARCdWpsM8/RkQLkLSPGy4BEBgx4rZhEI5SqsUcwo4FbyCttSlGS2kvcyA1teqEtv
- AwdWy0tBTfNy50y8UJr5wsrh4CAcbjxfnUkbbkebxu+vXKGLo4PlrLyimQdBk1Z6JUZk0Wbcq
- ELrpCMdhRJlIUciexC9qB3jWDLZ5qGGX45GNWaFjiv47MJNVNSBJ8XtkBnUthRj4Dl/zpx9Gz
- X9dyPThOAEV80YowKQxvZfMirqS0XaEtQN+7ll1y9732P5mQeqyDWkmSB22Ljy5JleaqFvsCt
- OTh7PSepA2+XLMvg8hg+s4js1kI=
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126-b4-ltc2945_shunt_resistor-v4-5-bb913470d8da@criticallink.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,47 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spell them as "default" and "heartbeat".
+On Thu, Jan 26, 2023 at 05:32:27PM -0500, Jonathan Cormier wrote:
+> Convert division to DIV_ROUND_CLOSEST_ULL to match code
+> in same function.
+> 
+> Signed-off-by: Jonathan Cormier <jcormier@criticallink.comi
+> ---
+>  drivers/hwmon/ltc2945.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/ltc2945.c b/drivers/hwmon/ltc2945.c
+> index 0b5e448b4f12..33341d01f1f7 100644
+> --- a/drivers/hwmon/ltc2945.c
+> +++ b/drivers/hwmon/ltc2945.c
+> @@ -212,7 +212,7 @@ static long long ltc2945_val_to_reg(struct device *dev, u8 reg,
+>  	case LTC2945_MAX_VIN_THRES_H:
+>  	case LTC2945_MIN_VIN_THRES_H:
+>  		/* 25 mV resolution. */
+> -		val /= 25;
+> +		val = DIV_ROUND_CLOSEST_ULL(val, 25);
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+This needs to be combined with the previous patch since that patch changes
+'val' from unsigned long to unsigned long long, causing a compile failure
+on 32-bit builds.
 
-v2:
-- also fix "hearbeat", as suggested by Simon Horman
-=2D--
- drivers/net/ethernet/dec/tulip/tulip.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I'll do that unless some other 32 bit build failure shows up.
 
-diff --git a/drivers/net/ethernet/dec/tulip/tulip.h b/drivers/net/ethernet=
-/dec/tulip/tulip.h
-index 0ed598dc7569c..10d7d8de93660 100644
-=2D-- a/drivers/net/ethernet/dec/tulip/tulip.h
-+++ b/drivers/net/ethernet/dec/tulip/tulip.h
-@@ -250,7 +250,7 @@ enum t21143_csr6_bits {
- 	csr6_ttm =3D (1<<22),  /* Transmit Threshold Mode, set for 10baseT, 0 fo=
-r 100BaseTX */
- 	csr6_sf =3D (1<<21),   /* Store and forward. If set ignores TR bits */
- 	csr6_hbd =3D (1<<19),  /* Heart beat disable. Disables SQE function in 1=
-0baseT */
--	csr6_ps =3D (1<<18),   /* Port Select. 0 (defualt) =3D 10baseT, 1 =3D 10=
-0baseTX: can't be set */
-+	csr6_ps =3D (1<<18),   /* Port Select. 0 (default) =3D 10baseT, 1 =3D 10=
-0baseTX: can't be set */
- 	csr6_ca =3D (1<<17),   /* Collision Offset Enable. If set uses special a=
-lgorithm in low collision situations */
- 	csr6_trh =3D (1<<15),  /* Transmit Threshold high bit */
- 	csr6_trl =3D (1<<14),  /* Transmit Threshold low bit */
-@@ -274,7 +274,7 @@ enum t21143_csr6_bits {
- 	csr6_om_int_loop =3D (1<<10), /* internal (FIFO) loopback flag */
- 	csr6_om_ext_loop =3D (1<<11), /* external (PMD) loopback flag */
- 	/* set both and you get (PHY) loopback */
--	csr6_fd =3D (1<<9),    /* Full duplex mode, disables hearbeat, no loopba=
-ck */
-+	csr6_fd =3D (1<<9),    /* Full duplex mode, disables heartbeat, no loopb=
-ack */
- 	csr6_pm =3D (1<<7),    /* Pass All Multicast */
- 	csr6_pr =3D (1<<6),    /* Promiscuous mode */
- 	csr6_sb =3D (1<<5),    /* Start(1)/Stop(0) backoff counter */
-=2D-
-2.39.0
+Guenter
 
+>  		break;
+>  	case LTC2945_ADIN_H:
+>  	case LTC2945_MAX_ADIN_H:
+> 
+> -- 
+> 2.25.1
+> 
