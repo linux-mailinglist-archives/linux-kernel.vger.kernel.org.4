@@ -2,89 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899F567FFC1
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 16:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1368B67FFCA
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 16:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234974AbjA2PGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 10:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        id S235066AbjA2PNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 10:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjA2PGN (ORCPT
+        with ESMTP id S229999AbjA2PNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 10:06:13 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F24C1E9D8
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 07:06:09 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pM9Fp-0005Y7-PE; Sun, 29 Jan 2023 16:06:01 +0100
-Message-ID: <633ee51b-7f81-c38a-7543-34df69480f1d@leemhuis.info>
-Date:   Sun, 29 Jan 2023 16:06:00 +0100
+        Sun, 29 Jan 2023 10:13:11 -0500
+Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E691315556;
+        Sun, 29 Jan 2023 07:13:10 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 9978F20105;
+        Sun, 29 Jan 2023 16:13:09 +0100 (CET)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Na_C0tx8wxZ8; Sun, 29 Jan 2023 16:13:09 +0100 (CET)
+Received: from begin (lfbn-bor-1-1163-184.w92-158.abo.wanadoo.fr [92.158.138.184])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 6FF1E20103;
+        Sun, 29 Jan 2023 16:13:09 +0100 (CET)
+Received: from samy by begin with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1pM9Mi-00GyeU-2G;
+        Sun, 29 Jan 2023 16:13:08 +0100
+Date:   Sun, 29 Jan 2023 16:13:07 +0100
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
+Subject: Re: [PATCH] fbcon: Check font dimension limits
+Message-ID: <20230129151307.o4lsqgmnr2u2k3za@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
+References: <20230126004911.869923511@ens-lyon.org>
+ <20230126004921.616264824@ens-lyon.org>
+ <Y9IvBoAbmh27xl4B@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: INFO: [BISECTED] Regression: A Problem with
- /sys/kernel/debug/kmemleak output: backtrace not printed since 6.2.0-rc1
-Content-Language: en-US, de-DE
-To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        linux-kernel@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-References: <5272a819-ef74-65ff-be61-4d2d567337de@alu.unizg.hr>
- <4c467851-8080-44d3-d017-b0e283896119@alu.unizg.hr>
- <53c2d558-c6a1-38e5-5739-28fff023558d@alu.unizg.hr>
-From:   "Linux kernel regression tracking (#adding)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <53c2d558-c6a1-38e5-5739-28fff023558d@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675004769;c51ba84b;
-X-HE-SMSGID: 1pM9Fp-0005Y7-PE
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9IvBoAbmh27xl4B@kroah.com>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
-
-On 12.01.23 20:50, Mirsad Todorovac wrote:
-> Hi all,
+Greg KH, le jeu. 26 janv. 2023 08:43:02 +0100, a ecrit:
+> On Thu, Jan 26, 2023 at 01:49:12AM +0100, Samuel Thibault wrote:
+> > blit_x and blit_y are uint32_t, so fbcon currently cannot support fonts
+> > larger than 32x32.
 > 
-> there seems to be a problem with the output of /sys/kernel/debug/kmemleak:
+> "u32" you mean, right?
+
+Right :)
+
+> > The 32x32 case also needs shifting an unsigned int, to properly set bit
+> > 31, otherwise we get "UBSAN: shift-out-of-bounds in fbcon_set_font",
+> > as reported on
+> > 
+> > http://lore.kernel.org/all/IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR07MB9830.namprd07.prod.outlook.com
 > 
-> [root@pc-mtodorov ~]# cat /sys/kernel/debug/kmemleak
-> unreferenced object 0xffff951c118568b0 (size 16):
->   comm "kworker/u12:2", pid 56, jiffies 4294893952 (age 4356.548s)
->   hex dump (first 16 bytes):
->     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
->   backtrace:
-> [root@pc-mtodorov ~]#
+> Odd blank line?
+
+Not sure what you mean? I found it easier to read to put a blank line
+between the text and the references.
+
+> > Kernel Branch: 6.2.0-rc5-next-20230124
+> > Kernel config: https://drive.google.com/file/d/1F-LszDAizEEH0ZX0HcSR06v5q8FPl2Uv/view?usp=sharing
+> > Reproducer: https://drive.google.com/file/d/1mP1jcLBY7vWCNM60OMf-ogw-urQRjNrm/view?usp=sharing
 > 
-> Apparently, backtrace of called functions on the stack is no longer
-> printed with the list of memory leaks.
-> [...]
+> What are all of these lines for?
 
-This is already close to being fixed, but I want to have it in this week
-report, hence I'm adding it (better late than never):
+They provide the references that were set in the original report
 
-#regzbot ^introduced 56a61617dd22
-#regzbot title mm: stack_depot: Failure during Stack Depot allocating
-hash table
-#regzbot monitor: https://lore.kernel.org/all/Y8Fq5m0CLfcFLCOY@zn.tnic/
-#regzbot fix: mm: use stack_depot_early_init for kmemleak
-#regzbot ignore-activity
+http://lore.kernel.org/all/IA1PR07MB98308653E259A6F2CE94A4AFABCE9@IA1PR07MB9830.namprd07.prod.outlook.com
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Arguably the "branch" and "config" are not that useful since the bug has
+been there for more than a dozen years, but notably the "Reproducer" is
+useful to provide a userland program that triggers the UB.
+
+> > Reported-by: Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>
+> > Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+> 
+> What commit id does this fix?
+
+I though it was there forever, but it seems the check was added in 2007,
+so I'll add it in next version.
+
+> Should it go to stable kernels?
+
+Yes. I added stable in Cc of the mail but missed adding it in the text,
+I will add it.
+
+> > Index: linux-6.0/drivers/video/fbdev/core/fbcon.c
+> > ===================================================================
+> > --- linux-6.0.orig/drivers/video/fbdev/core/fbcon.c
+> > +++ linux-6.0/drivers/video/fbdev/core/fbcon.c
+> > @@ -2489,9 +2489,12 @@ static int fbcon_set_font(struct vc_data
+> >  	    h > FBCON_SWAP(info->var.rotate, info->var.yres, info->var.xres))
+> >  		return -EINVAL;
+> >  
+> > +	if (font->width > 32 || font->height > 32)
+> > +		return -EINVAL;
+> > +
+> >  	/* Make sure drawing engine can handle the font */
+> > -	if (!(info->pixmap.blit_x & (1 << (font->width - 1))) ||
+> > -	    !(info->pixmap.blit_y & (1 << (font->height - 1))))
+> > +	if (!(info->pixmap.blit_x & (1U << (font->width - 1))) ||
+> > +	    !(info->pixmap.blit_y & (1U << (font->height - 1))))
+> 
+> Are you sure this is still needed with the above check added?  If so,
+> why?  What is the difference in the compiled code?
+
+As mentioned by Jiri, yes in the 32 case it's needed otherwise it's UB.
+
+Samuel
