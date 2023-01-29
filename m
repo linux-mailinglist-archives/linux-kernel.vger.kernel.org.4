@@ -2,218 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989AD6802F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 00:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6892A6802FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 00:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233637AbjA2Xb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 18:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S233308AbjA2XiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 18:38:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjA2Xby (ORCPT
+        with ESMTP id S230220AbjA2XiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 18:31:54 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021C01CF64;
-        Sun, 29 Jan 2023 15:31:51 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4ndf41TXz4x1h;
-        Mon, 30 Jan 2023 10:31:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675035110;
-        bh=MeK0MWegMnTL5j08BS6OVCn91+RP6fBtwkizE8TegEU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cBJtMT9kj8v5ayVfMgpEq9dSAfOHSIVqcntyksWhceX09PAaZJao54gT20yW34tW0
-         S51g07hrclpLmM/LJRJ3Ns11VS35JmOT0xFZXmU8v5j7bZF0af12NGZ4cpQbX7wxrm
-         AZSTwfSICAM4zQxZBV6hqlrDNdUDNqWrlffMsaUV5Hvz14uj6LGLyOrfnzjhEYdqvw
-         aOY8oXPs6jwIBOQTEdfgRMwONK1c7UhcEUvP9TFh37D5dvWdSURCcSisxxt6K0E83E
-         Ej4Is45mP3FQS6wo+TGS291t5Err4YVyglEfWXlJHwkPHWeoGh9T34ictgjXQ48aPs
-         pvb1cJSCfScJg==
-Date:   Mon, 30 Jan 2023 10:31:49 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfs-idmapping tree with Linus' tree
-Message-ID: <20230130103149.7d09e239@canb.auug.org.au>
+        Sun, 29 Jan 2023 18:38:00 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A96B7ED3
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 15:37:58 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id 88so9579848pjo.3
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 15:37:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ii9FzGVPdJKeqmlVk6BfPihf+mnXJKtSNMOOo2LczXo=;
+        b=TdgwbBC2khseugaXjKoePaiFnVk+3hmdfhoOgQhBmGp24IfmiXIB/zhxGUtbeiumye
+         KD/8lQiZ4YKXlLpjiUVdOu/V+L76VEz5FsUjeSpl0roQ06tGt08zDJZ1qDk9LjL8BK3A
+         S17nyOm8kfYvc29tifWLBmFROGdyKcn44vIu3q1QY4BO+eWmMsk6AGslSJXQqU7Z3HR6
+         l2yN3byEwuqPLTTLGbV37kYcvb/Fv97d/2PEHxgwcvkLWLu/A5VlYw6I9IkS+v4s7/Ji
+         FAGlNPG2Rl8M2j6ROepL2M2yIjaQWttTHXnp31FtgS4HvXAzXL2itgTd2Oyo1UP4EvcB
+         b/Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ii9FzGVPdJKeqmlVk6BfPihf+mnXJKtSNMOOo2LczXo=;
+        b=TuJezOqrHEpfU3Z/4K05k1YpFJonpR5kwDkVlDwSzR/H/mlsnHoekLcBaMZ5dxpj/A
+         zmAjwD3utXx9CvXozIb3ZmPdFeKNb1vl8Q9aEINzTeiOxx1fKql/YE5JHTHsVbbwGMxm
+         QagbkSItsDRKoiLxY7L8rxiEBt7PJvRK1rTkeE2woQdbVUX25enmAacXhUjJG9GtGgSl
+         /CIcbilW3HlmYwtwfM0c+rZeLE1GQshEaKKc8FygthK/LkrPOiJRxHlX5d/4CgisGuAC
+         b5oheTUWjuZViAtvmwqgMH2jxfFjae8fj8IqNXIPWm1HXgW7knymRFu4/85TzPvUv48s
+         xE5g==
+X-Gm-Message-State: AO0yUKVcIAJd2JL+0gSDR2CIOgUaIvdADPfXGYE5xm2qSrXO/BpDHGob
+        cst3Rpnn9dOZe70mNWCC41oJ9Mcyjv9iCZT3Bm5+
+X-Google-Smtp-Source: AK7set9i6kPMbxYMLoRoKdYNnrxmH+/Q1k10jefV7aKr2PmLgJDp7B1Q7hjCwqAcpxG54WssPx5U8ncUkGb/WCFxaLA=
+X-Received: by 2002:a17:90a:19c8:b0:22c:b70b:15ba with SMTP id
+ 8-20020a17090a19c800b0022cb70b15bamr13988pjj.193.1675035477513; Sun, 29 Jan
+ 2023 15:37:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ADAmrXeNq_nWtc_qwTwmyXx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1674682056.git.rgb@redhat.com> <f602429ce0f419c2abc3ae5a0e705e1368ac5650.1674682056.git.rgb@redhat.com>
+ <CAHC9VhQiy9vP7BdQk+SXG7gQKAqOAqbYtU+c9R0_ym0h4bgG7g@mail.gmail.com> <13202484.uLZWGnKmhe@x2>
+In-Reply-To: <13202484.uLZWGnKmhe@x2>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Sun, 29 Jan 2023 18:37:46 -0500
+Message-ID: <CAHC9VhRXUe_RiTT1VqkA_Jv08MFCMvYytZkjKcf77EqyVLi-Tw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] io_uring,audit: do not log IORING_OP_*GETXATTR
+To:     Steve Grubb <sgrubb@redhat.com>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        Eric Paris <eparis@parisplace.org>, Stefan Roesch <shr@fb.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ADAmrXeNq_nWtc_qwTwmyXx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sat, Jan 28, 2023 at 12:26 PM Steve Grubb <sgrubb@redhat.com> wrote:
+> On Friday, January 27, 2023 5:43:02 PM EST Paul Moore wrote:
+> > On Fri, Jan 27, 2023 at 12:24 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> > > Getting XATTRs is not particularly interesting security-wise.
+> > >
+> > > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > > Fixes: a56834e0fafe ("io_uring: add fgetxattr and getxattr support")
+> > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > > ---
+> > > io_uring/opdef.c | 2 ++
+> > > 1 file changed, 2 insertions(+)
+> >
+> > Depending on your security policy, fetching file data, including
+> > xattrs, can be interesting from a security perspective.  As an
+> > example, look at the SELinux file/getattr permission.
+> >
+> > https://github.com/SELinuxProject/selinux-notebook/blob/main/src/object_cla
+> > sses_permissions.md#common-file-permissions
+>
+> We're mostly interested in setting attributes because that changes policy.
+> Reading them is not interesting unless the access fails with EPERM.
 
-Hi all,
+See my earlier comments, SELinux does have provisions for caring about
+reading xattrs, and now that I look at the rest of the LSMs it looks
+like Smack cares about reading xattrs too.  Regardless of whether a
+given security policy cares about xattr access, the LSMs support
+enforcing access on reading xattrs so we need to ensure the audit is
+setup properly in these cases.
 
-Today's linux-next merge of the vfs-idmapping tree got conflicts in:
+> I was updating the user space piece recently and saw there was a bunch of
+> "new" operations. I was commenting that we need to audit 5 or 6 of the "new"
+> operations such as IORING_OP_MKDIRATor IORING_OP_SETXATTR. But now that I see
+> the patch, it looks like they are auditable and we can just let a couple be
+> skipped. IORING_OP_MADVISE is not interesting as it just gives hiints about
+> the expected access patterns of memory. If there were an equivalent of
+> mprotect, that would be of interest, but not madvise.
 
-  fs/fuse/acl.c
-  fs/fuse/fuse_i.h
-  fs/fuse/xattr.c
+Once again, as discussed previously, it is likely that skipping
+auditing for IORING_OP_MADVISE is okay, but given that several of the
+changes in this patchset were incorrect, I'd like a little more
+thorough investigation before we skip auditing on madvise.
 
-between commit:
+> There are some I'm not sure about such as IORING_OP_MSG_RING and
+> IORING_OP_URING_CMD. What do they do?
 
-  facd61053cff ("fuse: fixes after adapting to new posix acl api")
+Look at 4f57f06ce218 ("io_uring: add support for IORING_OP_MSG_RING
+command") for the patch which added IORING_OP_MSG_RING as it has a
+decent commit description.  As for IORING_OP_URING_CMD, there were
+lengthy discussions about it on the mailing lists (including audit)
+back in March 2022 and then later in August on the LSM, SELinux, etc.
+mailing lists when we landed some patches for it (there were no audit
+changes).  I also covered the IORING_OP_URING_CMD, albeit briefly, in
+a presentation at LSS-EU last year:
 
-from Linus' tree and various commits from the vfs-idmapping tree.
+https://www.youtube.com/watch?v=AaaH6skUEI8
+https://www.paul-moore.com/docs/2022-lss_eu-iouring_lsm-pcmoore-r3.pdf
 
-Christian: thanks for supplying the resolution.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/fuse/acl.c
-index ad670369955f,23d1c263891f..000000000000
---- a/fs/fuse/acl.c
-+++ b/fs/fuse/acl.c
-@@@ -11,10 -11,9 +11,10 @@@
-  #include <linux/posix_acl.h>
-  #include <linux/posix_acl_xattr.h>
- =20
- -struct posix_acl *fuse_get_acl(struct inode *inode, int type, bool rcu)
- +static struct posix_acl *__fuse_get_acl(struct fuse_conn *fc,
-- 					struct user_namespace *mnt_userns,
-++					struct mnt_idmap *idmap,
- +					struct inode *inode, int type, bool rcu)
-  {
- -	struct fuse_conn *fc =3D get_fuse_conn(inode);
-  	int size;
-  	const char *name;
-  	void *value =3D NULL;
-@@@ -54,47 -53,7 +54,47 @@@
-  	return acl;
-  }
- =20
- +static inline bool fuse_no_acl(const struct fuse_conn *fc,
- +			       const struct inode *inode)
- +{
- +	/*
- +	 * Refuse interacting with POSIX ACLs for daemons that
- +	 * don't support FUSE_POSIX_ACL and are not mounted on
- +	 * the host to retain backwards compatibility.
- +	 */
- +	return !fc->posix_acl && (i_user_ns(inode) !=3D &init_user_ns);
- +}
- +
-- struct posix_acl *fuse_get_acl(struct user_namespace *mnt_userns,
-++struct posix_acl *fuse_get_acl(struct mnt_idmap *idmap,
- +			       struct dentry *dentry, int type)
- +{
- +	struct inode *inode =3D d_inode(dentry);
- +	struct fuse_conn *fc =3D get_fuse_conn(inode);
- +
- +	if (fuse_no_acl(fc, inode))
- +		return ERR_PTR(-EOPNOTSUPP);
- +
-- 	return __fuse_get_acl(fc, mnt_userns, inode, type, false);
-++	return __fuse_get_acl(fc, idmap, inode, type, false);
- +}
- +
- +struct posix_acl *fuse_get_inode_acl(struct inode *inode, int type, bool =
-rcu)
- +{
- +	struct fuse_conn *fc =3D get_fuse_conn(inode);
- +
- +	/*
- +	 * FUSE daemons before FUSE_POSIX_ACL was introduced could get and set
- +	 * POSIX ACLs without them being used for permission checking by the
- +	 * vfs. Retain that behavior for backwards compatibility as there are
- +	 * filesystems that do all permission checking for acls in the daemon
- +	 * and not in the kernel.
- +	 */
- +	if (!fc->posix_acl)
- +		return NULL;
- +
-- 	return __fuse_get_acl(fc, &init_user_ns, inode, type, rcu);
-++	return __fuse_get_acl(fc, &nop_mnt_idmap, inode, type, rcu);
- +}
- +
-- int fuse_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
-+ int fuse_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
-  		 struct posix_acl *acl, int type)
-  {
-  	struct inode *inode =3D d_inode(dentry);
-@@@ -140,14 -99,8 +140,14 @@@
-  			return ret;
-  		}
- =20
- -		if (!vfsgid_in_group_p(i_gid_into_vfsgid(&nop_mnt_idmap, inode)) &&
- +		/*
- +		 * Fuse daemons without FUSE_POSIX_ACL never changed the passed
- +		 * through POSIX ACLs. Such daemons don't expect setgid bits to
- +		 * be stripped.
- +		 */
- +		if (fc->posix_acl &&
-- 		    !vfsgid_in_group_p(i_gid_into_vfsgid(&init_user_ns, inode)) &&
-- 		    !capable_wrt_inode_uidgid(&init_user_ns, inode, CAP_FSETID))
-++		    !vfsgid_in_group_p(i_gid_into_vfsgid(&nop_mnt_idmap, inode)) &&
-+ 		    !capable_wrt_inode_uidgid(&nop_mnt_idmap, inode, CAP_FSETID))
-  			extra_flags |=3D FUSE_SETXATTR_ACL_KILL_SGID;
- =20
-  		ret =3D fuse_setxattr(inode, name, value, size, 0, extra_flags);
-diff --cc fs/fuse/fuse_i.h
-index 46797a171a84,ee084cead402..000000000000
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@@ -1264,12 -1264,12 +1264,12 @@@ ssize_t fuse_getxattr(struct inode *ino
-  ssize_t fuse_listxattr(struct dentry *entry, char *list, size_t size);
-  int fuse_removexattr(struct inode *inode, const char *name);
-  extern const struct xattr_handler *fuse_xattr_handlers[];
- -extern const struct xattr_handler *fuse_acl_xattr_handlers[];
- -extern const struct xattr_handler *fuse_no_acl_xattr_handlers[];
- =20
-  struct posix_acl;
- -struct posix_acl *fuse_get_acl(struct inode *inode, int type, bool rcu);
- +struct posix_acl *fuse_get_inode_acl(struct inode *inode, int type, bool =
-rcu);
-- struct posix_acl *fuse_get_acl(struct user_namespace *mnt_userns,
-++struct posix_acl *fuse_get_acl(struct mnt_idmap *idmap,
- +			       struct dentry *dentry, int type);
-- int fuse_set_acl(struct user_namespace *mnt_userns, struct dentry *dentry,
-+ int fuse_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
-  		 struct posix_acl *acl, int type);
- =20
-  /* readdir.c */
-diff --cc fs/fuse/xattr.c
-index 9fe571ab569e,30aaaa4b3bfb..000000000000
---- a/fs/fuse/xattr.c
-+++ b/fs/fuse/xattr.c
-
---Sig_/ADAmrXeNq_nWtc_qwTwmyXx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXAeUACgkQAVBC80lX
-0GzrgggAglqNpT91F1+bwu0VIAgD04hjm2h2rZI6pCvKQTqW4ttHOOrAbyDFkVVk
-3KS3lLV6x3AU64XAqOHCpQJmgGzIXxjDNQ4WoJo8mQcgQumu/n8a+el2g+myBhNW
-SA5wsRlemu/dWnPfleekL9szVGr8K4YNIpnlBf9ds2d9FXSNG6Af1Lus0eG6wPnS
-4zzHTt7pTr2YePo6wxkCOp3yDsaRZJYI28L6brTZKE1kh9p/kp5N84i+YEGr4P9i
-Us53oxJ5Zj5X+q0mbzD4+D4aZu/3k1zcDfWPqYiHNkMOWDN/LOFoo49WBGvL6HWf
-wA7g2gzOf7XdYW/5PBUWz+jOPA6CHQ==
-=ULwG
------END PGP SIGNATURE-----
-
---Sig_/ADAmrXeNq_nWtc_qwTwmyXx--
+--
+paul-moore.com
