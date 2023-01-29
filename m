@@ -2,98 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FC767FF05
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE80467FF34
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233622AbjA2MnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 07:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S235011AbjA2MpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 07:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234912AbjA2MnK (ORCPT
+        with ESMTP id S235220AbjA2Mos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 07:43:10 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D034B126C1;
-        Sun, 29 Jan 2023 04:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1674996183; bh=9fz4xL5G7vsXInxpDkUGRVGvDGpzYQnWOzaC+5JEBTs=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=n6m/cqeG3XzHmL9G0YAqZAmlElFYKw1S1b78nQku4K4p4vmTYU2MBDip1Iinj+X55
-         so6gxLqvS/eS7qDpcXnnORKv2C0MsVZ8sNkZoBwUtrWLb9iZrK2rIKxKk0ZbItRXGP
-         4Y5udD/XgHuKlZAvUdwN9w1Dlrt5DWdzmZEEMVBVX9rz4CncdrytXGGeK5WKbLMPVM
-         qIewoFGJUhhKDhDuYEgAYFNn9KF2f6ENn3yvKNq/G0Z8aFf/4MKwOKYlH1t/znXAq2
-         mc0G1wLTzdhoheDgYlVVwMwtbFrnMsG0da/uCKWq1nZpFRJSwBqin6+2hEX4VUSvIl
-         +5vBZT2DPb/dw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5GE1-1odKL40QEP-0117hr; Sun, 29
- Jan 2023 13:43:03 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     devicetree@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: phy: nop: Fix a typo ("specifiy")
-Date:   Sun, 29 Jan 2023 13:42:58 +0100
-Message-Id: <20230129124258.1295503-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.0
+        Sun, 29 Jan 2023 07:44:48 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49624241EE
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:44:31 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id kt14so24876520ejc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:44:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hzvl/LqOmRuw2DLDajc9nmwbZP+g/NBX1KDunvAJzQY=;
+        b=fY2QFwBTKBZO8Qst6ZUPyMu24A/jtW4pov+KH93ZP6/BznpvqQcwmDLlU9AlvfKvHc
+         kx1xqrQiAdRu1gI52+5qnmtBBw15VMdkOECUlNhT3f8RgCEjtRC2sD9hx92S0IRA7UZb
+         dbuzIexlxY2xnBHPJSFzDxTOPcc6Woi6Hq1hant2sI9rU3oXS9qKpMHoAiAc/E8Rsm50
+         jF9blpDcxyN56OCp0mwJpQw9r5/Yp6W4WSPMHNQ/X+0RAf+3DoSPj0DDL4EpygJtbeHj
+         IH1nClRvnDmSkrauRgGR/vJ2W9/BRexsnmqgHAhLchQrqyGIyHcdyqbbXNqK9kcehZ/R
+         UZtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hzvl/LqOmRuw2DLDajc9nmwbZP+g/NBX1KDunvAJzQY=;
+        b=N9euvkI6qzyBxkOupCw1e08aqE1mvMKTWpcf9ZWwkoRhphJ6gE4p2/HX3vwTB393rF
+         OvfWwv5I481AhCncbq6l5SBByBWa1pBPTcWiRBlsjwiFEhKO4aHcKY3miluTOoAFULkj
+         FwgbdGNthJJ3g0cNx2IUl7exKgT6FMfGE7IBW/4ksW6hLY5Utvgd+atQaWVqwXD62TyE
+         +O9PhPbdsIIDfvJdVQDDcO0XMwERSizZMc5MloExfv3QPdrrkcem13pPn7UHz4P4j6fE
+         xyA8ZrW9ywVxRtNW17/V5vG9JhrEVuKQ8hWztyIUXY+SCZDH66KPLzARAxptW/AsQ0cW
+         PZtQ==
+X-Gm-Message-State: AO0yUKWtBROjyFOM8lkQHgDUCt2QD+68VZfEEvEaCkrmQkXkmpWLVIPm
+        7VbhlEwKtQCcr8DSl1T5lG1wlMDkhfR7yFmxdGymWQ==
+X-Google-Smtp-Source: AK7set+98zHjTjUCfz1Po+4TvGNEYBc/NoX6CxQ6nYhmE2sLz3ErpGLxfO2NEtvlVStSPaC/HwnxsOot12jRU9W6Y68=
+X-Received: by 2002:a17:906:e116:b0:881:4488:297c with SMTP id
+ gj22-20020a170906e11600b008814488297cmr1198000ejb.129.1674996269674; Sun, 29
+ Jan 2023 04:44:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zHsQwgpM2Z+0Eg0oMK+ANH/cRXMlp6tk0QIf/ZQVQzuwJTQa3A7
- 1lGx91ypYIDskOgxiE+gCxZ76fcm1xcB6BxDUFvqRGM3pGZMpxB/sZLwJ8+eyp6r2dZ32kC
- gKQLS51jLmEHQVC07K0veAF2KYB5Y3rGyM7KOD6zFCNkuWo8wH66MVyXpFT9N6ZbtiD5KvI
- hagCaGjxoSCaxuJX3VDlQ==
-UI-OutboundReport: notjunk:1;M01:P0:bQnWwKzea9A=;4GqUWPFs7Rxokjhxrb3SuQFz7P3
- P+Lgdd9ASs2gV09av6uOlx8hqjcSDO7JrFqhwtY6ElyEuB8ao7LBvHcxDppwDQ8kTKDpfMoFz
- YzJNkUjeb9I2B15Q+Q8Rde0+JzT0rLvAa1q+6dRrBHTYXWrri3jhGLjcX6+Pa8RHW2i+pV0r0
- ebMKY4aB1zRiIKCQ5/E+IpfatLKtoBXlaBR+4N6ZLSrOXLt7YfWm68drQU7WDk2ZwOfAe4zqP
- +l4yLq0f28QegryhT86SGzzxXClQyRR7TZ+NVQvFIniqxCKxAjGWou1iQpY6rfjez3p90Y/Dr
- sTXxIwxBzbEXOCmkSnl/5BDRNAOWvONFKyzW+TZ1dzo0MuvkOzMg6k4tyQ/Yk9RO/IPioyL1+
- qQtCkoNbS/G+vRSepSExMkwiKc6YgPPkUOp5EB9f0Ay5wOVoIsx/VutQPFWKlpz1Vjl4QyA20
- mN8kL6gaE/2eGo1mJtqv9FILfHdXTANOQk8mhia+omCWJonfcxWLczGMspAhM0PULp76WKoUu
- rSTlNlijkabj2pbS7SMhjxELri3oswXakaLKOzZH8GiDzGOoGqAU2siAIcD8YV89aTLereDhq
- yO0X26QW74q/Jr0f7+FHctRDmnEdIbcmDGhoR9L6RDHAIyQYLEPJqWpI+K1CF6TICoWkj01Oc
- LQpmAIc5OIf0Dvo9t/O2hc49PUKK2EvpBlw0+ygWaJy2jqOawr2GpIChK4Ey9ChWIVwMKJaWB
- GI7iRYvhCRwK66gTgQ48+GNvZn6seL9dmFTGIebPMQb5FiYxhFJZIKvl2yVt944/edu1HRGZA
- Or7et6KHDFJdYGMczXGzRe70qgBFk9nnv1BNwYees0ku6VhMcO4E1A+SJL35pqAoK58QMRtuO
- cmH7nXPzGRCz9Y3WNLCFRoTm/0MM6Nq8MmJigsHFlKq48vBO/nnZXQC0uacse6DiNsHD7mAHE
- 6ouhUw==
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-12-atishp@rivosinc.com>
+In-Reply-To: <20230127182558.2416400-12-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Sun, 29 Jan 2023 18:14:18 +0530
+Message-ID: <CAAhSdy1+6AprOdzRRTG98p6swisNFO6MUKjXobxW3RWbixvjCg@mail.gmail.com>
+Subject: Re: [PATCH v3 11/14] RISC-V: KVM: Implement trap & emulate for hpmcounters
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spell it correctly as "specify".
+On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
+>
+> As the KVM guests only see the virtual PMU counters, all hpmcounter
+> access should trap and KVM emulates the read access on behalf of guests.
+>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  arch/riscv/include/asm/kvm_vcpu_pmu.h | 16 ++++++++++
+>  arch/riscv/kvm/vcpu_insn.c            |  4 ++-
+>  arch/riscv/kvm/vcpu_pmu.c             | 45 ++++++++++++++++++++++++++-
+>  3 files changed, 63 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> index 3f43a43..022d45d 100644
+> --- a/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
+> @@ -43,6 +43,19 @@ struct kvm_pmu {
+>  #define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu)
+>  #define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
+>
+> +#if defined(CONFIG_32BIT)
+> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
+> +{ .base = CSR_CYCLEH,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm }, \
+> +{ .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
+> +#else
+> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
+> +{ .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
+> +#endif
+> +
+> +int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
+> +                               unsigned long *val, unsigned long new_val,
+> +                               unsigned long wr_mask);
+> +
+>  int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_ext_data *edata);
+>  int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
+>                                 struct kvm_vcpu_sbi_ext_data *edata);
+> @@ -65,6 +78,9 @@ void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
+>  #else
+>  struct kvm_pmu {
+>  };
+> +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
+> +{ .base = 0,      .count = 0, .func = NULL },
+> +
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Redundant newline here.
 
-diff --git a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml b/Do=
-cumentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
-index 326131dcf14d7..921b986adc477 100644
-=2D-- a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
-+++ b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml
-@@ -35,7 +35,7 @@ properties:
-     maxItems: 1
+>
+>  static inline int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+>  {
+> diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
+> index 0bb5276..f689337 100644
+> --- a/arch/riscv/kvm/vcpu_insn.c
+> +++ b/arch/riscv/kvm/vcpu_insn.c
+> @@ -213,7 +213,9 @@ struct csr_func {
+>                     unsigned long wr_mask);
+>  };
+>
+> -static const struct csr_func csr_funcs[] = { };
+> +static const struct csr_func csr_funcs[] = {
+> +       KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS
+> +};
+>
+>  /**
+>   * kvm_riscv_vcpu_csr_return -- Handle CSR read/write after user space
+> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+> index 7713927..894053a 100644
+> --- a/arch/riscv/kvm/vcpu_pmu.c
+> +++ b/arch/riscv/kvm/vcpu_pmu.c
+> @@ -17,6 +17,44 @@
+>
+>  #define kvm_pmu_num_counters(pmu) ((pmu)->num_hw_ctrs + (pmu)->num_fw_ctrs)
+>
+> +static int pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+> +                       unsigned long *out_val)
+> +{
+> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> +       struct kvm_pmc *pmc;
+> +       u64 enabled, running;
+> +
+> +       pmc = &kvpmu->pmc[cidx];
+> +       if (!pmc->perf_event)
+> +               return -EINVAL;
+> +
+> +       pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
+> +       *out_val = pmc->counter_val;
+> +
+> +       return 0;
+> +}
+> +
+> +int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
+> +                               unsigned long *val, unsigned long new_val,
+> +                               unsigned long wr_mask)
+> +{
+> +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> +       int cidx, ret = KVM_INSN_CONTINUE_NEXT_SEPC;
+> +
+> +       if (!kvpmu || !kvpmu->init_done)
+> +               return KVM_INSN_EXIT_TO_USER_SPACE;
 
-   vbus-regulator:
--    description: Should specifiy the regulator supplying current drawn fr=
-om
-+    description: Should specify the regulator supplying current drawn fro=
-m
-       the VBus line.
-     $ref: /schemas/types.yaml#/definitions/phandle
+As discussed previously, this should be KVM_INSN_ILLEGAL_TRAP.
 
-=2D-
-2.39.0
+> +
+> +       if (wr_mask)
+> +               return KVM_INSN_ILLEGAL_TRAP;
+> +
+> +       cidx = csr_num - CSR_CYCLE;
+> +
+> +       if (pmu_ctr_read(vcpu, cidx, val) < 0)
+> +               return KVM_INSN_EXIT_TO_USER_SPACE;
 
+Same as above.
+
+> +
+> +       return ret;
+> +}
+> +
+>  int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_ext_data *edata)
+>  {
+>         struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+> @@ -69,7 +107,12 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
+>  int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
+>                                 struct kvm_vcpu_sbi_ext_data *edata)
+>  {
+> -       /* TODO */
+> +       int ret;
+> +
+> +       ret = pmu_ctr_read(vcpu, cidx, &edata->out_val);
+> +       if (ret == -EINVAL)
+> +               edata->err_val = SBI_ERR_INVALID_PARAM;
+> +
+>         return 0;
+>  }
+>
+> --
+> 2.25.1
+>
+
+Regards,
+Anup
