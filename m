@@ -2,252 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4158267FD87
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 09:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E54067FD85
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 09:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbjA2IIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 03:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        id S230496AbjA2IIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 03:08:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjA2IIM (ORCPT
+        with ESMTP id S229741AbjA2IIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 03:08:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6D318B34;
-        Sun, 29 Jan 2023 00:08:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8663460C1E;
-        Sun, 29 Jan 2023 08:08:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5369C433D2;
-        Sun, 29 Jan 2023 08:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674979689;
-        bh=Do6LjpDaodPNp3HrcKOeUhxTwV4BHrDlrnMcJaSM8oA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b4FH8ZX2uiLgrRZE7QP0LmsnM5A4ZyPTkQ4sXv+IIljmmy8RSak50wT6OkmsrYVmX
-         ViiSAtxRg8fFg26a5na+RjPIL1jOYwfYcd1sC/GxMD4Au+dWRTOMwtX1YZvGOljJe4
-         7bgsCWWUOZ8r3fq/0QWYbPLMJXxbM/4Wh13e4w39Sb0MOICUeOOCd/ZnbHJ7itEGOF
-         Ue96+zqI06fWTqZ95Wsae9vXPwR731fc4LlYFGPwWGI8HOU5FLs2/gdt5MCzH/r4+P
-         KdPr2UPdftr4jnd14Z1zLXvON7uKp/d2vKnudwf83/GJi4+vwTvfSdHzLhiN7wY2K7
-         S89SSLtwHsfvw==
-Received: by mail-ot1-f49.google.com with SMTP id cm26-20020a056830651a00b00684e5c0108dso3719627otb.9;
-        Sun, 29 Jan 2023 00:08:09 -0800 (PST)
-X-Gm-Message-State: AFqh2kqE2l/t9cMU22Grtj5S/xnzvc+3Qe43DiIGsm6bOjXhHw6Va8yk
-        Bf1if6ilMg+rCA33yVyDMVJMpr7mUvcSFWpv5Fs=
-X-Google-Smtp-Source: AMrXdXsbioBwFqbi/k/WVph3+5mklCpGoxSAOdLuObXPAvcluduHxNT8e3ZXQwmgTclQY9jX4DmVMReLFqH9x8sBSsE=
-X-Received: by 2002:a9d:7446:0:b0:686:8d12:772a with SMTP id
- p6-20020a9d7446000000b006868d12772amr2159668otk.153.1674979689159; Sun, 29
- Jan 2023 00:08:09 -0800 (PST)
+        Sun, 29 Jan 2023 03:08:07 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BBC12F24;
+        Sun, 29 Jan 2023 00:08:03 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id d14so8456001wrr.9;
+        Sun, 29 Jan 2023 00:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lfLvX+h7dXHOBDCZOU5BYDr/d44mVPnFEAIaaBtTNZ4=;
+        b=HyVwwWfU8Ll50zyC1wvl0OKDx170Y7xZxKQwMToKvkqboqnQ1W6ZLDXgwPiqp7YuUK
+         fmAKg8T/D/3ROlqGy7SA61kapillDEmpYVPt8OybaXp/OSOsLsQezTyUrHiyN1fDoM3e
+         EMu4YUTn6ocUnXjDTVd9Slb1N4HDb2nAbr7oGL4vli+BNST04RTir/tVHVSPvoOQl6mf
+         ONf2EzdLP6wg5bcoCK04bOJKFOXoA0vEYIbK3/AC3Spm9JEkYei8fBFDXUrIUcMowBqd
+         +Z/CbiLYoXxa7kfz53T6FqSwixqEmh5k8G9EvkEaKg++O+ksyX5MZEnr60jxkayadloN
+         SkeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lfLvX+h7dXHOBDCZOU5BYDr/d44mVPnFEAIaaBtTNZ4=;
+        b=xEGBeoHRG4SNgS0gQDoDOJh8+FwpuQKpv25jFJj7TQVqHd5Yxbgk3d1UeYzGrP+46v
+         17qRKhO092GdFuZKrSeT0oqXDJTAS6qnyKE6Ujo4dD27tJCWJTFtX6ScVYmq0Uwv7K7N
+         rJDZma8pSNZLBxXxQ553/rnHju6jMPSZ6YGVCslns8QMM5OC/pnQfrTREd7qedzKxshI
+         Hb4z+bGWVf4EVRsc3/Q0Z8i11CyQ/MP7KIhxR+2g7AkXiyxjYbKY/oI4If3QRreYHthJ
+         +efSjg4kB/gCOoq0H3ry1Q1pZ40CJOcobz8B73EF+dHC0Qvt27Sr96GW7K2CwyIEMsdP
+         pijQ==
+X-Gm-Message-State: AFqh2kpR6arAdD61FkWDX0HLN74M9Am+IGt3Nf/RuZ/+ziEQnaaQCFTF
+        6b0Lj3Wwlm0u7g71ukuVPTI=
+X-Google-Smtp-Source: AMrXdXuQ2DLZwgyUgnmklx1KxRouHizUxMiWIQHG9FtBZ8QWbiK7lW5/sM2Q0SGTw4fZIdPaUSZbOQ==
+X-Received: by 2002:a05:6000:1708:b0:2bd:db1c:8dfe with SMTP id n8-20020a056000170800b002bddb1c8dfemr45534383wrc.48.1674979682420;
+        Sun, 29 Jan 2023 00:08:02 -0800 (PST)
+Received: from [192.168.0.106] ([77.126.163.156])
+        by smtp.gmail.com with ESMTPSA id q4-20020adff944000000b002bfae3f6802sm8469044wrr.58.2023.01.29.00.07.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Jan 2023 00:08:01 -0800 (PST)
+Message-ID: <4fa5d53d-d614-33b6-2d33-156281420507@gmail.com>
+Date:   Sun, 29 Jan 2023 10:07:58 +0200
 MIME-Version: 1.0
-References: <20230128173843.765212-1-masahiroy@kernel.org> <20230128173843.765212-2-masahiroy@kernel.org>
- <CA+icZUWTdAihUVSjEgV2BVOVCktUYccd--9y3bv18PrJDX5nhw@mail.gmail.com>
-In-Reply-To: <CA+icZUWTdAihUVSjEgV2BVOVCktUYccd--9y3bv18PrJDX5nhw@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 29 Jan 2023 17:07:32 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQSLCPEKcxJBzaGkR8xMYM0zgQrQOJpYMnodcfjy2vumQ@mail.gmail.com>
-Message-ID: <CAK7LNAQSLCPEKcxJBzaGkR8xMYM0zgQrQOJpYMnodcfjy2vumQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kbuild: deb-pkg: create source package without cleaning
-To:     sedat.dilek@gmail.com
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH RESEND 0/9] sched: cpumask: improve on
+ cpumask_local_spread() locality
+Content-Language: en-US
+To:     Valentin Schneider <vschneid@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Haniel Bristot de Oliveira <bristot@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Lafreniere <peter@n8pjl.ca>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <20230121042436.2661843-1-yury.norov@gmail.com>
+ <4dc2a367-d3b1-e73e-5f42-166e9cf84bac@gmail.com>
+ <xhsmhv8kxh8tk.mognet@vschneid.remote.csb>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <xhsmhv8kxh8tk.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 8:31 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Sat, Jan 28, 2023 at 6:40 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > If you run 'make deb-pkg', all objects are lost due to 'make clean',
-> > which makes the incremental builds impossible.
-> >
-> > Instead of cleaning, pass the exclude list to tar's --exclude-from
-> > option.
-> >
-> > Previously, *.diff.gz contained some check-in files such as
-> > .clang-format, .cocciconfig.
-> >
-> > With this commit, *.diff.gz will only contain the .config and debian/.
-> > The other source files will go into the tarball.
-> >
->
-> Thanks for the patch.
->
-> While at this...
->
-> ...why not switch over to Debian's packaging default XZ compressor:
-> *.orig.xz and *.diff.xz (or *.debian.tar.xz)?
 
 
-Does debian support *.diff.xz?
-I do not think so.
+On 23/01/2023 11:57, Valentin Schneider wrote:
+> On 22/01/23 14:57, Tariq Toukan wrote:
+>> On 21/01/2023 6:24, Yury Norov wrote:
+>>>
+>>> This series was supposed to be included in v6.2, but that didn't happen. It
+>>> spent enough in -next without any issues, so I hope we'll finally see it
+>>> in v6.3.
+>>>
+>>> I believe, the best way would be moving it with scheduler patches, but I'm
+>>> OK to try again with bitmap branch as well.
+>>
+>> Now that Yury dropped several controversial bitmap patches form the PR,
+>> the rest are mostly in sched, or new API that's used by sched.
+>>
+>> Valentin, what do you think? Can you take it to your sched branch?
+>>
+> 
+> I would if I had one :-)
+> 
 
-*.debian.tar.xz requires "Format: 3.0 (quilt)" migration.
+Oh I see :)
 
+> Peter/Ingo, any objections to stashing this in tip/sched/core?
+> 
 
-See scripts/package/mkdebian.
-We use "Format: 1.0", which only supports gzip.
+Hi Peter and Ingo,
 
+Can you please look into it? So we'll have enough time to act (in 
+case...) during this kernel.
 
-It is true the Debian kernel uses "Format: 3.0 (quilt)",
-but I do not think it will fit to the upstream kernel.
+We already missed one kernel...
 
-Rather, I want to use the Native format since I do not
-see much sense in the *.orig.tar.gz / *.diff.gz split
-for the upstream project.
-
-
-My plan is to stop cleaning first,
-then change the source format if it is desirable.
-
-
-
-
-
->
-> EXAMPLE binutils:
->
-> DSC: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40-2.dsc
-
-This is "Format: 3.0 (quilt)".
-
-
-> TAR: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40.orig.tar.xz
-> DIFF: http://deb.debian.org/debian/pool/main/b/binutils/binutils_2.40-2.debian.tar.xz
-
-
-This is not a diff.  It is a tarball of the debian/ directory.
-Real diffs are stored in debian/patches/.
-
-
-
-
-
->
-> -Sedat-
->
-> [1] https://packages.debian.org/sid/binutils
->
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/Makefile.package | 27 ++++++++++++++++++++++-----
-> >  scripts/package/mkdebian | 27 +++++++++++++++++++++++++++
-> >  2 files changed, 49 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-> > index dfbf40454a99..cb135c99a273 100644
-> > --- a/scripts/Makefile.package
-> > +++ b/scripts/Makefile.package
-> > @@ -50,6 +50,21 @@ fi ; \
-> >  tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
-> >         --transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
-> >
-> > +# Source Tarball
-> > +# ---------------------------------------------------------------------------
-> > +
-> > +quiet_cmd_exclude_list = GEN     $@
-> > +      cmd_exclude_list = $(srctree)/scripts/gen-exclude.py --prefix=./ --rootdir=$(srctree) > $@; echo "./$@" >> $@
-> > +
-> > +.exclude-list: FORCE
-> > +       $(call cmd,exclude_list)
-> > +
-> > +quiet_cmd_tar = TAR     $@
-> > +      cmd_tar = tar -I $(KGZIP) -c -f $@ -C $(srctree) --exclude-from=$< --exclude=./$@ --transform 's:^\.:linux:S' .
-> > +
-> > +%.tar.gz: .exclude-list
-> > +       $(call cmd,tar)
-> > +
-> >  # rpm-pkg
-> >  # ---------------------------------------------------------------------------
-> >  PHONY += rpm-pkg
-> > @@ -81,12 +96,11 @@ binrpm-pkg:
-> >
-> >  PHONY += deb-pkg
-> >  deb-pkg:
-> > -       $(MAKE) clean
-> >         $(CONFIG_SHELL) $(srctree)/scripts/package/mkdebian
-> > -       $(call cmd,src_tar,$(KDEB_SOURCENAME))
-> > -       origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
-> > -               mv $(KDEB_SOURCENAME).tar.gz ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
-> > -       +dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) --source-option=-sP -i.git -us -uc
-> > +       $(Q)origversion=$$(dpkg-parsechangelog -SVersion |sed 's/-[^-]*$$//');\
-> > +               $(MAKE) -f $(srctree)/scripts/Makefile.package ../$(KDEB_SOURCENAME)_$${origversion}.orig.tar.gz
-> > +       +dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
-> > +               --build=source,binary --source-option=-sP -nc -us -uc
-> >
-> >  PHONY += bindeb-pkg
-> >  bindeb-pkg:
-> > @@ -174,4 +188,7 @@ help:
-> >         @echo '  perf-tarxz-src-pkg  - Build $(perf-tar).tar.xz source tarball'
-> >         @echo '  perf-tarzst-src-pkg - Build $(perf-tar).tar.zst source tarball'
-> >
-> > +PHONY += FORCE
-> > +FORCE:
-> > +
-> >  .PHONY: $(PHONY)
-> > diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-> > index c3bbef7a6754..12c057ffbe6e 100755
-> > --- a/scripts/package/mkdebian
-> > +++ b/scripts/package/mkdebian
-> > @@ -84,6 +84,8 @@ set_debarch() {
-> >         fi
-> >  }
-> >
-> > +rm -rf debian
-> > +
-> >  # Some variables and settings used throughout the script
-> >  version=$KERNELRELEASE
-> >  if [ -n "$KDEB_PKGVERSION" ]; then
-> > @@ -135,6 +137,31 @@ fi
-> >  mkdir -p debian/source/
-> >  echo "1.0" > debian/source/format
-> >
-> > +cat<<'EOF' > debian/source/local-options
-> > +#
-> > +# Ugly: ignore anything except .config or debian/
-> > +# (is there a cleaner way to do this?)
-> > +#
-> > +diff-ignore
-> > +
-> > +extend-diff-ignore = ^[^.d]
-> > +
-> > +extend-diff-ignore = ^\.[^c]
-> > +extend-diff-ignore = ^\.c($|[^o])
-> > +extend-diff-ignore = ^\.co($|[^n])
-> > +extend-diff-ignore = ^\.con($|[^f])
-> > +extend-diff-ignore = ^\.conf($|[^i])
-> > +extend-diff-ignore = ^\.confi($|[^g])
-> > +extend-diff-ignore = ^\.config.
-> > +
-> > +extend-diff-ignore = ^d($|[^e])
-> > +extend-diff-ignore = ^de($|[^b])
-> > +extend-diff-ignore = ^deb($|[^i])
-> > +extend-diff-ignore = ^debi($|[^a])
-> > +extend-diff-ignore = ^debia($|[^n])
-> > +extend-diff-ignore = ^debian[^/]
-> > +EOF
-> > +
-> >  echo $debarch > debian/arch
-> >  extra_build_depends=", $(if_enabled_echo CONFIG_UNWINDER_ORC libelf-dev:native)"
-> >  extra_build_depends="$extra_build_depends, $(if_enabled_echo CONFIG_SYSTEM_TRUSTED_KEYRING libssl-dev:native)"
-> > --
-> > 2.34.1
-> >
-
-
-
---
-Best Regards
-Masahiro Yamada
+Thanks,
+Tariq
