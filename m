@@ -2,184 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DF367FE90
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D81A67FE96
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbjA2L3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 06:29:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50792 "EHLO
+        id S230501AbjA2Ld4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 06:33:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjA2L3d (ORCPT
+        with ESMTP id S230076AbjA2Ldy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 06:29:33 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A551E2B7;
-        Sun, 29 Jan 2023 03:29:32 -0800 (PST)
-Received: from ideasonboard.com (host-212-171-97-20.pool212171.interbusiness.it [212.171.97.20])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C528E327;
-        Sun, 29 Jan 2023 12:29:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1674991771;
-        bh=fI5Fo1OzTqItExBmXaJCOk7Wu73AfLqMybxnBI02GOA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AaS/+I9kw4VX/OhrpS7Wgxm2xZRNxs0muLeFpeWYn/idb6ZWBqjt9QcUvjeeErmYW
-         A11swFtHd+flY/j6zESMMeTtBN5w+99qdnjMtn51jV5InJcoeWh22t8CvVL0ckxwJV
-         vNzmTsU4Ezg5QPHrwGrJ89613mKKdP8BcBMhzdK0=
-Date:   Sun, 29 Jan 2023 12:29:27 +0100
-From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] media: i2c: ov2685: Add .get_selection() support
-Message-ID: <20230129112927.jyx3c2hxkhwvqmyq@uno.localdomain>
-References: <20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz>
- <20230129-ov2685-improvements-v1-4-f281bd49399c@z3ntu.xyz>
+        Sun, 29 Jan 2023 06:33:54 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02571448A;
+        Sun, 29 Jan 2023 03:33:52 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id mf7so5851728ejc.6;
+        Sun, 29 Jan 2023 03:33:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7DeF/Im5Ox/EC8aY91BfzAVcVX2OaqPeNjgRIOWyYlo=;
+        b=qher80ixuhNYiAm65L77Ie+Xe1m7zKiEpiceSOHBvZWm8iPx3lTRavImzkl4iFS43n
+         m7e6yb6q8dXPr2MRNr7g8GkyvTstbGrIkLEsJ5/dJtaBoGXMUOKP8WPqFyb/DxiJAA8D
+         YRjcZbXnJdl8bky2iTRfXoVwVqZ63HIxYiqaE/bFQuknncER2u6b5S1SuNeQ5DVWbUIM
+         f4DiBcGGlxIFLeomnCBddw9bTfJ5WU6lgoTXHCti9DVRTkJLN7F1GHRmTpS4k9e2YDst
+         nBbjz9df1jnuF4f/kV2vX4L/Un4OCoaf8i4yr5otQunsxrH0sxl++qPxRqclbSCGjx4H
+         rd3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7DeF/Im5Ox/EC8aY91BfzAVcVX2OaqPeNjgRIOWyYlo=;
+        b=v+rfJvbG4FJzNVgtsKBSFAqnLPxck+YcaCg1jiVjS7+a8TGnfro2KpDRoleMs78h5r
+         2wLYozp2D1t13ozJsmBdvsz8ZmZnxlx/z3iLeZf8a78OxjiD7PrjG5bS9OafornFbaAk
+         +taQGMJSmWtNtyQEnFK0F8Hux/fUf8g/v3/ZBGKYkH2pz8eqHQerFuvMp+NW+CEJZkn8
+         Y2EuD915a3ty4FDISmMCqr8pl6AwdydP/OFg3207lvZeNXJizPRhdSF9D2urG3F3Oead
+         UcZnDfnMjlC/tJBnXrWB2W69TcHVn1Iu+8oWiVICiLRQ5FBxT/XWeUSbBe8IRjzdUvse
+         2ghg==
+X-Gm-Message-State: AO0yUKVftw3T6r/ALTtRt3t1vNuEuvoFtQqsmDEOBTAz+vYfzKWWeVZ4
+        tuOjGYa8POlX6AZMiMNRhZY=
+X-Google-Smtp-Source: AK7set8tkB+4AG0XBVkn/oUh87SFkhEebpfBV2rtvTsx7eOG3IgsqeqnA4HGkhbpJ9rfDTstLP6kxg==
+X-Received: by 2002:a17:907:93d6:b0:87b:a1ed:4a57 with SMTP id cp22-20020a17090793d600b0087ba1ed4a57mr8555069ejc.16.1674992031588;
+        Sun, 29 Jan 2023 03:33:51 -0800 (PST)
+Received: from sakura.myxoz.lan (90-224-45-44-no2390.tbcn.telia.com. [90.224.45.44])
+        by smtp.gmail.com with ESMTPSA id v14-20020a170906564e00b0081bfc79beaesm5172715ejr.75.2023.01.29.03.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 03:33:51 -0800 (PST)
+Message-ID: <4bca96c7614eefa5e46959dc46bcb25165fd28cf.camel@gmail.com>
+Subject: Re: [PATCH v2] fbdev: Fix invalid page access after closing
+ deferred I/O devices
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     Takashi Iwai <tiwai@suse.de>, Helge Deller <deller@gmx.de>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Patrik Jakobsson <pjakobsson@suse.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Date:   Sun, 29 Jan 2023 12:33:50 +0100
+In-Reply-To: <20230129082856.22113-1-tiwai@suse.de>
+References: <20230129082856.22113-1-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230129-ov2685-improvements-v1-4-f281bd49399c@z3ntu.xyz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca
-
-On Sun, Jan 29, 2023 at 10:42:38AM +0100, Luca Weiss wrote:
-> Add support for the .get_selection() pad operation to the ov2685 sensor
-> driver.
->
-> Report the native sensor size (pixel array), the crop bounds (readable
-> pixel array area) and the current and default analog crop rectangles.
->
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-
-As the driver supports a single mode you could have hard-coded
-the rectangle sizes in get_selection(), but this way is much better as
-it prepares for adding more modes to the driver eventually.
-
-Thanks
-Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-
+On Sun, 2023-01-29 at 09:28 +0100, Takashi Iwai wrote:
+> When a fbdev with deferred I/O is once opened and closed, the dirty
+> pages still remain queued in the pageref list, and eventually later
+> those may be processed in the delayed work.=C2=A0 This may lead to a
+> corruption of pages, hitting an Oops.
+>=20
+> This patch makes sure to cancel the delayed work and clean up the
+> pageref list at closing the device for addressing the bug.=C2=A0 A part o=
+f
+> the cleanup code is factored out as a new helper function that is
+> called from the common fb_release().
+>=20
+> Reviewed-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 > ---
->  drivers/media/i2c/ov2685.c | 61 ++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
->
-> diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
-> index bfced11b178b..7ebf36d1a8cc 100644
-> --- a/drivers/media/i2c/ov2685.c
-> +++ b/drivers/media/i2c/ov2685.c
-> @@ -56,6 +56,9 @@
->  #define OV2685_REG_VALUE_16BIT		2
->  #define OV2685_REG_VALUE_24BIT		3
->
-> +#define OV2685_NATIVE_WIDTH		1616
-> +#define OV2685_NATIVE_HEIGHT		1216
-> +
->  #define OV2685_LANES			1
->  #define OV2685_BITS_PER_SAMPLE		10
->
-> @@ -78,6 +81,7 @@ struct ov2685_mode {
->  	u32 exp_def;
->  	u32 hts_def;
->  	u32 vts_def;
-> +	const struct v4l2_rect *analog_crop;
->  	const struct regval *reg_list;
->  };
->
-> @@ -231,6 +235,13 @@ static const int ov2685_test_pattern_val[] = {
->  	OV2685_TEST_PATTERN_COLOR_SQUARE,
->  };
->
-> +static const struct v4l2_rect ov2685_analog_crop = {
-> +	.left	= 8,
-> +	.top	= 8,
-> +	.width	= 1600,
-> +	.height	= 1200,
-> +};
-> +
->  static const struct ov2685_mode supported_modes[] = {
->  	{
->  		.width = 1600,
-> @@ -238,6 +249,7 @@ static const struct ov2685_mode supported_modes[] = {
->  		.exp_def = 0x04ee,
->  		.hts_def = 0x06a4,
->  		.vts_def = 0x050e,
-> +		.analog_crop = &ov2685_analog_crop,
->  		.reg_list = ov2685_1600x1200_regs,
->  	},
->  };
-> @@ -384,6 +396,53 @@ static int ov2685_enum_frame_sizes(struct v4l2_subdev *sd,
->  	return 0;
->  }
->
-> +static const struct v4l2_rect *
-> +__ov2685_get_pad_crop(struct ov2685 *ov2685,
-> +		      struct v4l2_subdev_state *state, unsigned int pad,
-> +		      enum v4l2_subdev_format_whence which)
-> +{
-> +	const struct ov2685_mode *mode = ov2685->cur_mode;
-> +
-> +	switch (which) {
-> +	case V4L2_SUBDEV_FORMAT_TRY:
-> +		return v4l2_subdev_get_try_crop(&ov2685->subdev, state, pad);
-> +	case V4L2_SUBDEV_FORMAT_ACTIVE:
-> +		return mode->analog_crop;
-> +	}
-> +
-> +	return NULL;
+> v1->v2: Fix build error without CONFIG_FB_DEFERRED_IO
+>=20
+> =C2=A0drivers/video/fbdev/core/fb_defio.c | 10 +++++++++-
+> =C2=A0drivers/video/fbdev/core/fbmem.c=C2=A0=C2=A0=C2=A0 |=C2=A0 4 ++++
+> =C2=A0include/linux/fb.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
+> =C2=A03 files changed, 14 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/video/fbdev/core/fb_defio.c
+> b/drivers/video/fbdev/core/fb_defio.c
+> index c730253ab85c..583cbcf09446 100644
+> --- a/drivers/video/fbdev/core/fb_defio.c
+> +++ b/drivers/video/fbdev/core/fb_defio.c
+> @@ -313,7 +313,7 @@ void fb_deferred_io_open(struct fb_info *info,
+> =C2=A0}
+> =C2=A0EXPORT_SYMBOL_GPL(fb_deferred_io_open);
+> =C2=A0
+> -void fb_deferred_io_cleanup(struct fb_info *info)
+> +void fb_deferred_io_release(struct fb_info *info)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct fb_deferred_io *fb=
+defio =3D info->fbdefio;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct page *page;
+> @@ -327,6 +327,14 @@ void fb_deferred_io_cleanup(struct fb_info
+> *info)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0page =3D fb_deferred_io_page(info, i);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0page->mapping =3D NULL;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
 > +}
+> +EXPORT_SYMBOL_GPL(fb_deferred_io_release);
 > +
-> +static int ov2685_get_selection(struct v4l2_subdev *sd,
-> +				struct v4l2_subdev_state *sd_state,
-> +				struct v4l2_subdev_selection *sel)
+> +void fb_deferred_io_cleanup(struct fb_info *info)
 > +{
-> +	struct ov2685 *ov2685 = to_ov2685(sd);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct fb_deferred_io *fbdefio=
+ =3D info->fbdefio;
 > +
-> +	switch (sel->target) {
-> +	case V4L2_SEL_TGT_CROP:
-> +		mutex_lock(&ov2685->mutex);
-> +		sel->r = *__ov2685_get_pad_crop(ov2685, sd_state, sel->pad,
-> +				sel->which);
-> +		mutex_unlock(&ov2685->mutex);
-> +		break;
-> +	case V4L2_SEL_TGT_NATIVE_SIZE:
-> +	case V4L2_SEL_TGT_CROP_BOUNDS:
-> +		sel->r.top = 0;
-> +		sel->r.left = 0;
-> +		sel->r.width = OV2685_NATIVE_WIDTH;
-> +		sel->r.height = OV2685_NATIVE_HEIGHT;
-> +		break;
-> +	case V4L2_SEL_TGT_CROP_DEFAULT:
-> +		sel->r = ov2685_analog_crop;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /* Calculate the delay in us by clock rate and clock cycles */
->  static inline u32 ov2685_cal_delay(u32 cycles)
->  {
-> @@ -592,6 +651,8 @@ static const struct v4l2_subdev_pad_ops ov2685_pad_ops = {
->  	.enum_frame_size = ov2685_enum_frame_sizes,
->  	.get_fmt = ov2685_get_fmt,
->  	.set_fmt = ov2685_set_fmt,
-> +	.get_selection = ov2685_get_selection,
-> +	.set_selection = ov2685_get_selection,
->  };
->
->  static const struct v4l2_subdev_ops ov2685_subdev_ops = {
->
-> --
-> 2.39.1
->
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0fb_deferred_io_release(info);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kvfree(info->pagerefs);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_destroy(&fbdefio->l=
+ock);
+> diff --git a/drivers/video/fbdev/core/fbmem.c
+> b/drivers/video/fbdev/core/fbmem.c
+> index 3a6c8458eb8d..ab3545a00abc 100644
+> --- a/drivers/video/fbdev/core/fbmem.c
+> +++ b/drivers/video/fbdev/core/fbmem.c
+> @@ -1454,6 +1454,10 @@ __releases(&info->lock)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct fb_info * const in=
+fo =3D file->private_data;
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0lock_fb_info(info);
+> +#if IS_ENABLED(CONFIG_FB_DEFERRED_IO)
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (info->fbdefio)
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0fb_deferred_io_release(info);
+> +#endif
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (info->fbops->fb_relea=
+se)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0info->fbops->fb_release(info,1);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0module_put(info->fbops->o=
+wner);
+> diff --git a/include/linux/fb.h b/include/linux/fb.h
+> index 96b96323e9cb..73eb1f85ea8e 100644
+> --- a/include/linux/fb.h
+> +++ b/include/linux/fb.h
+> @@ -662,6 +662,7 @@ extern int=C2=A0 fb_deferred_io_init(struct fb_info
+> *info);
+> =C2=A0extern void fb_deferred_io_open(struct fb_info *info,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct inode *inode,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct file *file);
+> +extern void fb_deferred_io_release(struct fb_info *info);
+> =C2=A0extern void fb_deferred_io_cleanup(struct fb_info *info);
+> =C2=A0extern int fb_deferred_io_fsync(struct file *file, loff_t start,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0loff_t end, int datasync);
+
+Tested-by: Miko Larsson <mikoxyzzz@gmail.com>
+--=20
+~miko
