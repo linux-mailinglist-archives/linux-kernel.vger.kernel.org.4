@@ -2,90 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A134068002E
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325CD680030
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjA2QQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 11:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S232986AbjA2QQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 11:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjA2QQP (ORCPT
+        with ESMTP id S229605AbjA2QQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 11:16:15 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941651E5D9;
-        Sun, 29 Jan 2023 08:16:00 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TD0t7Z025302;
-        Sun, 29 Jan 2023 16:15:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=URrOyJCAjBT3JsvzEQ6ZyO6KGrdq8bFCX68xtip+8v8=;
- b=Hd6BN9JlPiaSYAQLcMLePQckWju+3yIpgx6S03F+HaENjJ8Czy8O9sj0C1knTHXMvAKD
- VcDuYKKJgk3XDoSLYD16uqA5m/kPsrTGvPDg1vxwc4rdaNo2QXw9tsGGkNMx6Hhu09Sw
- 0Rk+KT6zpxpeqRukLBErDsQ55IgDyiR3kspzCx7anAs6L/pRB0VBRlQ4LvJDIdkLZWuR
- BJfl4Sk3LnfwVLcN+wUFEy+mVpJ0mLLUs+Y6qwBsoVHGZRPgP4XZynwoVe8YInpslswI
- U8T74ZCdBmkYuIEq7+j0PtscYowXH3uSAEsLponfJh43Mj978DtPEzXEzQHPeyx3IPCk 1g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ndd5gutda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 16:15:51 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30TG7Hc4026844;
-        Sun, 29 Jan 2023 16:15:51 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ndd5gutd2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 16:15:51 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30TEljO8008390;
-        Sun, 29 Jan 2023 16:15:50 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ncvw288ec-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 16:15:49 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30TGFmot5964390
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 29 Jan 2023 16:15:49 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 987525804E;
-        Sun, 29 Jan 2023 16:15:48 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8BBB5803F;
-        Sun, 29 Jan 2023 16:15:47 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.14.97])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Sun, 29 Jan 2023 16:15:47 +0000 (GMT)
-Message-ID: <a7f1324e88023a86c3489d53268bde17069ece1f.camel@linux.ibm.com>
-Subject: Re: [PATCH -next] evm: call dump_security_xattr() in all cases to
- remove code duplication
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 29 Jan 2023 11:15:47 -0500
-In-Reply-To: <20230129004637.191106-1-xiujianfeng@huawei.com>
-References: <20230129004637.191106-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 798lgcHa5bewfYNkGljzN29QR9Oi4EUB
-X-Proofpoint-ORIG-GUID: RNAGRCTZ2osP1NXI-54T_NxPGGio80yo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-29_09,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=761 priorityscore=1501 clxscore=1015 suspectscore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 mlxscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301290158
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sun, 29 Jan 2023 11:16:38 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D3F1E2B6;
+        Sun, 29 Jan 2023 08:16:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1675008982; bh=urxmFyOj59HOKLixvBBRQqIlv7zJ5t7JlEJfrmi2bUM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=ipygiERTJfX/xiEYJoybYiPCCSnkksblihYnjBdew2yvHLCLLFP0xxbOQcnfkqOIS
+         dHJqoKB5tbravgHAF2deuHJ393XyAUs4jByQdJjBrouMcezw+4YYL4GVtTtO+nyo62
+         XFmgyggco619zdZ9MCuOUGBCEw41dI0xUDTqKWCXYSDVh8ALzOEL0m/lzjYS+8WH9h
+         R2q5ZJKIC6M72rOAlwxVPfwxdEOjkIFS3tR8jP31Oi+mxmFnpHsojS6h7FAvNlPys4
+         014FcKQplExRo7f+UDQAQMLWU0UkJF6/gNFNR1loy42FO8mKOCeYq2HRbzbmRADkJ1
+         WlV+i3VpDPvRw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MGhyS-1pQ1yR3RzO-00Dq1m; Sun, 29
+ Jan 2023 17:16:21 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-media@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] media: dvb-frontends: Fix a typo ("Unknow sleep mode")
+Date:   Sun, 29 Jan 2023 17:16:18 +0100
+Message-Id: <20230129161619.1621869-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:97XDzuNMG3RkYiarUOisY/cT9NekfsIE18aZDknDljmPbrGoWcZ
+ G6MD3V/Ae03DxBnvt+2Ad6sz6V+bXPA/7kuvyQSWlFIVV69aR60t62MzFKzs190mPeqYu6S
+ iY9MgMBD9tYVTAHGC3ZIwPywYerHfSeCnyTSsRAxIBhOhiJEJyde9ZvopxHQMtbHbO6N2q8
+ SntAcMlhuivlUmWmvA0gw==
+UI-OutboundReport: notjunk:1;M01:P0:oUTbO46JV6M=;3CzPWs8NHjbJrclgsZsb5rEL4tG
+ ScpyAGhTOLNGGTt2X39SxKGibj7DFr9UJNmNBx7yL+9hr2KKOjKGTXLlHLoFZ0YhgUhH7+VHC
+ Ru88AhrqbnvmI3i4UQyH3quBjwVzVnm1MwHbE0mL/IpfEP1qaXp5vBk5ldG3NvS5PRb17fuht
+ UKjhfOON6dZNyQFW7kwjt574oieCaLl5fyKb3r16IKU6tXBDgZUuV5leDhiSadQgBlItzTD1e
+ vBl4v0pIjz+Y1t6mxiajekHqP4zLMgtartsjnkikwyxGVfEPXmBaZQAg6cmgMXRml581NPHTU
+ itegBKZD3wlMIkwQDRo7W5Gj3bdd55Gp9vWsfq/ADF5MCBH2AICobmpFJmPhyC4yb9WFXNrw+
+ Vsb8y7EgH6/7n3YnXXL2m507WaiXplEZt1wb71tZAcHSp68BqtsBlH1tHxi2ht2CNcoi6hNJe
+ RI65aTIlLBwi8PEgEwR6IwQVxvQsil0kjaGIU+dhsSNKuc84bNPwjx9BtgJ6lCoB535KjUwWR
+ 8uec9v065AFKyjZeOgISD8t1BXYS3faoRaLsUmVmLFZeuOlR4utIdjQWXlQynPlw7EF59ebR3
+ G/AsYssPMEQ/l+B/PbtCijzXSqybb9FNPXoMT4rUNQug2V6ZKvH+8KsDiiVFuWuqHVRDJL2K0
+ 0RXtSffuW3Ah4AOgREsnuVMryJ9VuGFXjlGl1+UrZhOchTvYYMalAtIkdtrPTSVJACOh345K3
+ VhLeFKhBac+fCzMC0TfXPzfLLski7+pOg4vFoVgbFE8+LL6ab2aNzESUWNGlIJ5gymb3DxyhU
+ Q3PijoTXQS5E7UewyMEFSakU3UI4d5jJE22ecqNj4Jj3W9xr7DqtNeGTZbnQM6Fu6EqUfdbkQ
+ BK+pHS4UFMebmLrb/FEfEKUdzXf/gOlcHcsH9dRvx11F8ay5OGt2OVte9bjBn6RNaNNaDvcR0
+ Uhp6n0nKQWlIlf+C1LPlxjDZ6KY=
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,28 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> @@ -254,15 +264,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
->  			if (is_ima)
->  				ima_present = true;
->  
-> -			if (req_xattr_value_len < 64)
-> -				pr_debug("%s: (%zu) [%*phN]\n", req_xattr_name,
-> -					 req_xattr_value_len,
-> -					 (int)req_xattr_value_len,
-> -					 req_xattr_value);
-> -			else
-> -				dump_security_xattr(req_xattr_name,
-> -						    req_xattr_value,
-> -						    req_xattr_value_len);
-> +			dump_security_xattr(req_xattr_name,
-> +					    req_xattr_value,
-> +					    req_xattr_value_len);
->  			continue;
->  		}
->  		size = vfs_getxattr_alloc(&nop_mnt_idmap, dentry, xattr->name,
+Spell "unknown" correctly.
 
-Hm, this patch doesn't apply properly.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ drivers/media/dvb-frontends/drx39xyj/drxj.c | 2 +-
+ drivers/media/dvb-frontends/drxk_hard.c     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Mimi
+diff --git a/drivers/media/dvb-frontends/drx39xyj/drxj.c b/drivers/media/d=
+vb-frontends/drx39xyj/drxj.c
+index 1dff59ca21a17..637e428e71ee5 100644
+=2D-- a/drivers/media/dvb-frontends/drx39xyj/drxj.c
++++ b/drivers/media/dvb-frontends/drx39xyj/drxj.c
+@@ -11068,7 +11068,7 @@ ctrl_power_mode(struct drx_demod_instance *demod, =
+enum drx_power_mode *mode)
+ 		sio_cc_pwd_mode =3D SIO_CC_PWD_MODE_LEVEL_OSC;
+ 		break;
+ 	default:
+-		/* Unknow sleep mode */
++		/* Unknown sleep mode */
+ 		return -EINVAL;
+ 	}
 
+diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-f=
+rontends/drxk_hard.c
+index 9807f54119965..3301ef75d4417 100644
+=2D-- a/drivers/media/dvb-frontends/drxk_hard.c
++++ b/drivers/media/dvb-frontends/drxk_hard.c
+@@ -1585,7 +1585,7 @@ static int ctrl_power_mode(struct drxk_state *state,=
+ enum drx_power_mode *mode)
+ 		sio_cc_pwd_mode =3D SIO_CC_PWD_MODE_LEVEL_OSC;
+ 		break;
+ 	default:
+-		/* Unknow sleep mode */
++		/* Unknown sleep mode */
+ 		return -EINVAL;
+ 	}
+
+=2D-
+2.39.0
 
