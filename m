@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E65680096
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F28686800A0
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 19:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234963AbjA2Rwr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 29 Jan 2023 12:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S231143AbjA2SD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 13:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjA2Rwp (ORCPT
+        with ESMTP id S229617AbjA2SD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 12:52:45 -0500
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1F01ABDE
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:52:44 -0800 (PST)
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id E092116012A;
-        Sun, 29 Jan 2023 17:52:42 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id CE87720025;
-        Sun, 29 Jan 2023 17:52:39 +0000 (UTC)
-Message-ID: <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
-Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
- 12 chars
-From:   Joe Perches <joe@perches.com>
-To:     Jonathan =?ISO-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Sun, 29 Jan 2023 09:52:38 -0800
-In-Reply-To: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
-References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Sun, 29 Jan 2023 13:03:57 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8150318B00
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 10:03:56 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 297071FF79;
+        Sun, 29 Jan 2023 18:03:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1675015435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4N7XfFpKedbQUz8C79ouctf6fb3ifOCQOWuZ7/2i9ik=;
+        b=TWu/QjJa/vuYmhJ6uCa9UEZhGgdGLUBMAXE1zHqNKQx3eJWkRwgCPKVeIXSAGU3h6KaUhd
+        GxRtmZToHW3akE+Va71Px8f3DXPUwatZZSHsLfTHkYt99ywGkZJX3PDrt1ORm/NjqyXKDD
+        5rO+199Spf1tATfkpeCJLm2yY8a1lK4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1675015435;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4N7XfFpKedbQUz8C79ouctf6fb3ifOCQOWuZ7/2i9ik=;
+        b=hlzAkxKT0hXn7Hwrjk0+pQL7LPr0mf0fIRrhPDYRv90EOFHmcRyPoj/fJCqZuIWm4U5Rjk
+        OOJmbHjV+j6aJGBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8EF901358A;
+        Sun, 29 Jan 2023 18:03:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cKT0IAq11mMQGQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Sun, 29 Jan 2023 18:03:54 +0000
+Message-ID: <7ad2cbdc-8589-3aa2-b16a-41336f849f65@suse.cz>
+Date:   Sun, 29 Jan 2023 19:03:54 +0100
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: CE87720025
-X-Stat-Signature: dm3ndocb5wjp6mkwmb59oac1mgw8g7or
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19VyKuVUwfSDzGf2OkI84sXNWYWkDO0xus=
-X-HE-Tag: 1675014759-215580
-X-HE-Meta: U2FsdGVkX19NTmFS2xT8FjcwM/VUxzUUekRqXNfM/j9vTSMZtu7+q0M/tcC42/M03nwk/FBbIO8PjNGhG+XptA==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 0/4] Fix excessive CPU usage during compaction
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230125134434.18017-1-mgorman@techsingularity.net>
+ <20230125171159.355a770a2e34f78d7664e1f0@linux-foundation.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230125171159.355a770a2e34f78d7664e1f0@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neuschäfer wrote:
-> By now, `git log --pretty=%h` (on my copy of linux.git) prints commit
-> hashes with 13 digits, because of the number of objects.
+On 1/26/23 02:11, Andrew Morton wrote:
+> On Wed, 25 Jan 2023 13:44:30 +0000 Mel Gorman <mgorman@techsingularity.net> wrote:
 > 
-> Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
-
-NAK without updating the process docs first.
-
-Documentation/process/submitting-patches.rst-If your patch fixes a bug in a specific commit, e.g. you found an issue using
-Documentation/process/submitting-patches.rst:``git bisect``, please use the 'Fixes:' tag with the first 12 characters of
-Documentation/process/submitting-patches.rst-the SHA-1 ID, and the one line summary.  Do not split the tag across multiple
-Documentation/process/submitting-patches.rst-lines, tags are exempt from the "wrap at 75 columns" rule in order to simplify
-Documentation/process/submitting-patches.rst-parsing scripts.  For example::
-Documentation/process/submitting-patches.rst-
-Documentation/process/submitting-patches.rst-   Fixes: 54a4f0239f2e ("KVM: MMU: make kvm_mmu_zap_page() return the number of pages it actually fr>
-Documentation/process/submitting-patches.rst-
-Documentation/process/submitting-patches.rst-The following ``git config`` settings can be used to add a pretty format for
-Documentation/process/submitting-patches.rst-outputting the above style in the ``git log`` or ``git show`` commands::
-Documentation/process/submitting-patches.rst-
-Documentation/process/submitting-patches.rst-   [core]
-Documentation/process/submitting-patches.rst:           abbrev = 12
-Documentation/process/submitting-patches.rst-   [pretty]
-Documentation/process/submitting-patches.rst-           fixes = Fixes: %h (\"%s\")
-
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> @@ -3177,7 +3177,7 @@ sub process {
->  				$tag_case = 0 if $tag eq "Fixes:";
->  				$tag_space = 0 if ($line =~ /^fixes:? [0-9a-f]{5,} ($balanced_parens)/i);
+> If we drop Vlastimil's reversion and apply this, the whole series
+> should be cc:stable and it isn't really designed for that.
 > 
-> -				$id_length = 0 if ($orig_commit =~ /^[0-9a-f]{12}$/i);
-> +				$id_length = 0 if ($orig_commit =~ /^[0-9a-f]{12,16}$/i);
->  				$id_case = 0 if ($orig_commit !~ /[A-F]/);
+> So I think either
 > 
->  				# Always strip leading/trailing parens then double quotes if existing
-> @@ -3194,7 +3194,7 @@ sub process {
->  			if ($ctitle ne $title || $tag_case || $tag_space ||
->  			    $id_length || $id_case || !$title_has_quotes) {
->  				if (WARN("BAD_FIXES_TAG",
-> -				     "Please use correct Fixes: style 'Fixes: <12 chars of sha1> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
-> +				     "Please use correct Fixes: style 'Fixes: <12-16 chars of sha1> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
->  				    $fix) {
->  					$fixed[$fixlinenr] = "Fixes: $cid (\"$ctitle\")";
->  				}
-> --
-> 2.39.0
+> a) drop Vlastimil's reversion and persuade Mel to send us a minimal
+>    version of patch #4 for -stable consumption.  Patches 1-3 of this
+>    series come later.
 > 
+> b) go ahead with Vlastimil's revert for -stable, queue up this
+>    series for 6.3-rc1 and redo the original "fix set skip in
+>    fast_find_migrateblock" some time in the future.
+> 
+> If we go with b) then the Fixes: tag in "[PATCH 4/4] mm, compaction:
+> Finish pageblocks on complete migration failure" is inappropriate -
+> fixing a reverted commit which Vlastimil's revert already fixed.
+> 
+> I'll plan on b) for now.
 
+Agreed with the plan b). I couldn't review this yet due to being sick,
+but I doubt I would have enough confidence to fast-track the series to
+6.2 and 6.1-stable. It's subtle enough area and extra time in -next and
+full -rc cycle will help.
