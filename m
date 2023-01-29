@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A258167FCB7
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 05:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B4D67FCAC
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 04:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjA2EHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 23:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        id S229837AbjA2DrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 22:47:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjA2EG5 (ORCPT
+        with ESMTP id S229436AbjA2DrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 23:06:57 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96311CF5C
-        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 20:06:55 -0800 (PST)
-Received: from kwepemm600017.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P4Hl13WRHzRnvL;
-        Sun, 29 Jan 2023 12:04:45 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+        Sat, 28 Jan 2023 22:47:13 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B44126
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 19:47:12 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4P4HJS4DG6z16MZW;
+        Sun, 29 Jan 2023 11:45:12 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Sun, 29 Jan 2023 12:06:53 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>,
-        <wangkefeng.wang@huawei.com>, Guohanjun <guohanjun@huawei.com>
-Subject: [PATCH -next] memory tier: release the new_memtier in find_create_memory_tier()
-Date:   Sun, 29 Jan 2023 04:06:51 +0000
-Message-ID: <20230129040651.1329208-1-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.25.1
+ 15.1.2375.34; Sun, 29 Jan 2023 11:47:09 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, Shakeel Butt <shakeelb@google.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Ma Wupeng <mawupeng1@huawei.com>
+Subject: [PATCH resend] mm: memcg: fix NULL pointer in mem_cgroup_track_foreign_dirty_slowpath()
+Date:   Sun, 29 Jan 2023 12:09:45 +0800
+Message-ID: <20230129040945.180629-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20230129024451.121590-1-wangkefeng.wang@huawei.com>
+References: <20230129024451.121590-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600017.china.huawei.com (7.193.23.234)
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -47,30 +51,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In find_create_memory_tier(),  if failed to register device, then we should
-release new_memtier from the tier list and put device instead of memtier.
+As commit 18365225f044 ("hwpoison, memcg: forcibly uncharge LRU pages"),
+hwpoison will forcibly uncharg a LRU hwpoisoned page, the folio_memcg
+could be NULl, then, mem_cgroup_track_foreign_dirty_slowpath() could
+occurs a NULL pointer dereference, let's do not record the foreign
+writebacks for folio memcg is null in mem_cgroup_track_foreign_dirty()
+to fix it.
 
-Fixes: 9832fb87834e ("mm/demotion: expose memory tier details via sysfs")
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+Reported-by: Ma Wupeng <mawupeng1@huawei.com>
+Fixes: 97b27821b485 ("writeback, memcg: Implement foreign dirty flushing")
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- mm/memory-tiers.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+resend: correct function name
+ include/linux/memcontrol.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index c734658c6242..e593e56e530b 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -211,8 +211,8 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index eb6e5b18e1ad..35478695cabf 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -1688,10 +1688,13 @@ void mem_cgroup_track_foreign_dirty_slowpath(struct folio *folio,
+ static inline void mem_cgroup_track_foreign_dirty(struct folio *folio,
+ 						  struct bdi_writeback *wb)
+ {
++	struct mem_cgroup *memcg;
++
+ 	if (mem_cgroup_disabled())
+ 		return;
  
- 	ret = device_register(&new_memtier->dev);
- 	if (ret) {
--		list_del(&memtier->list);
--		put_device(&memtier->dev);
-+		list_del(&new_memtier->list);
-+		put_device(&new_memtier->dev);
- 		return ERR_PTR(ret);
- 	}
- 	memtier = new_memtier;
+-	if (unlikely(&folio_memcg(folio)->css != wb->memcg_css))
++	memcg = folio_memcg(folio);
++	if (unlikely(memcg && &memcg->css != wb->memcg_css))
+ 		mem_cgroup_track_foreign_dirty_slowpath(folio, wb);
+ }
+ 
 -- 
-2.25.1
+2.35.3
 
