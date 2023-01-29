@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A9967FC0E
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB74867FC12
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjA2BPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 20:15:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S229990AbjA2BSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 20:18:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjA2BN7 (ORCPT
+        with ESMTP id S229842AbjA2BSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 20:13:59 -0500
+        Sat, 28 Jan 2023 20:18:17 -0500
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E70F22DD6;
-        Sat, 28 Jan 2023 17:13:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9972516336;
+        Sat, 28 Jan 2023 17:18:14 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4P4Cxq28T3z4f3nYx;
-        Sun, 29 Jan 2023 09:13:51 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4P4D2n2YBLz4f3mJ6;
+        Sun, 29 Jan 2023 09:18:09 +0800 (CST)
 Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgC3YiBPyNVjsNp1CQ--.6849S3;
-        Sun, 29 Jan 2023 09:13:53 +0800 (CST)
-Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create block
- device
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Zhong Jinghua <zhongjinghua@huawei.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, hare@suse.de,
-        bvanassche@acm.org, emilne@redhat.com,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230128094146.205858-1-zhongjinghua@huawei.com>
- <20230128094146.205858-3-zhongjinghua@huawei.com>
- <Y9T8uQYEaGUZwpHO@kroah.com>
+        by APP3 (Coremail) with SMTP id _Ch0CgCHgR9SydVj2wd2CQ--.45901S3;
+        Sun, 29 Jan 2023 09:18:11 +0800 (CST)
+Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc:     "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
+        "josef@toxicpanda.com" <josef@toxicpanda.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "paolo.valente@linaro.org" <paolo.valente@linaro.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yukuai1@huaweicloud.com" <yukuai1@huaweicloud.com>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "yangerkun@huawei.com" <yangerkun@huawei.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230113094410.2907223-1-yukuai3@huawei.com>
+ <20230124000925.pfosl6pfuhjyggbp@shindev>
 From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b4927ca9-7330-3f32-f68f-1a449473a0ce@huaweicloud.com>
-Date:   Sun, 29 Jan 2023 09:13:55 +0800
+Message-ID: <38b5d9a6-bed6-c139-404b-94aca49f38c6@huaweicloud.com>
+Date:   Sun, 29 Jan 2023 09:18:14 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <Y9T8uQYEaGUZwpHO@kroah.com>
+In-Reply-To: <20230124000925.pfosl6pfuhjyggbp@shindev>
 Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgC3YiBPyNVjsNp1CQ--.6849S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZFW3WFWxZFy7WFyktrWxCrg_yoWDuFb_ur
-        WjyFZ7ur18Xw4rtayrAF1rZrWYqFnaqryxWF1Fqr1vvry7Xr4qqrW29Fy5ZrWDCwsayF15
-        Jr4UC3y3Krs5ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbIxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU1zuWJUUUUU==
+X-CM-TRANSID: _Ch0CgCHgR9SydVj2wd2CQ--.45901S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYq7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+        CFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxG
+        xcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
+        x2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
+        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DUUUU
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -68,38 +70,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Greg
+Hi,
 
-在 2023/01/28 18:45, Greg KH 写道:
->> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
->> index cac7c902cf70..a22109cdb8ef 100644
->> --- a/drivers/scsi/scsi_sysfs.c
->> +++ b/drivers/scsi/scsi_sysfs.c
->> @@ -1535,9 +1535,7 @@ static void __scsi_remove_target(struct scsi_target *starget)
->>   		if (sdev->channel != starget->channel ||
->>   		    sdev->id != starget->id)
->>   			continue;
->> -		if (sdev->sdev_state == SDEV_DEL ||
->> -		    sdev->sdev_state == SDEV_CANCEL ||
->> -		    !get_device(&sdev->sdev_gendev))
->> +		if (!get_device_unless_zero(&sdev->sdev_gendev))
+在 2023/01/24 8:09, Shinichiro Kawasaki 写道:
 > 
-> If sdev_gendev is 0 here, the object is gone and you are working with
-> memory that is already freed so something is _VERY_ wrong.
+> Yu, thanks for posting this fix, but it can not be applied to v6.2-rc5. The
+> hunk above looks different from the patch I tested. Could you take a look?
+> 
 
-In fact, this patch will work:
+This patch was rebased with following patch that add a new param for
+bic_set_bfqq():
 
-In __scsi_remove_target(), 'host_lock' is held to protect iterating
-siblings, and object will wait for this lock in
-scsi_device_dev_release() to remove siblings. Hence sdev will not be
-freed untill the lock is released.
+51ec2387623a block, bfq: split sync bfq_queues on a per-actuator basis
 
 Thanks,
 Kuai
-> 
-> This isn't ok, sorry.
-> 
-> greg k-h
-> .
-> 
 
