@@ -2,114 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73F868021B
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 23:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9B368021C
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 23:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235358AbjA2WCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 17:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S235367AbjA2WCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 17:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235341AbjA2WCg (ORCPT
+        with ESMTP id S229523AbjA2WCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 17:02:36 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7B51BD8;
-        Sun, 29 Jan 2023 14:02:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=2VZqotSR2lcZ3Dqkc+ZPLDnCbVMn7GmMbsJnsslN+nA=; b=QG
-        Mef1rPPK4SyrXTuHq3+GPkt5WTiWRS13HdWbmvwL9QoPD43ZWNXw5N9nCiKx1VWDptux1FNnaoqjJ
-        PbWlhmo+zcFqlzWY+GR54vFg4EfZTNa9PVMP6/h6q0BgRM4Ko+DzeHYo/3utp7e6Glk8+r8CDuqKq
-        aRI9TgjG5RoSRPo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pMFkd-003WUU-Os; Sun, 29 Jan 2023 23:02:15 +0100
-Date:   Sun, 29 Jan 2023 23:02:15 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sander Vanheule <sander@svanheule.net>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Subject: Re: [PATCH v7 11/11] dt-bindings: net: dsa: qca8k: add LEDs
- definition example
-Message-ID: <Y9bs53a9zyqEU9Xw@lunn.ch>
-References: <20221214235438.30271-1-ansuelsmth@gmail.com>
- <20221214235438.30271-12-ansuelsmth@gmail.com>
- <20221220173958.GA784285-robh@kernel.org>
- <Y6JDOFmcEQ3FjFKq@lunn.ch>
- <Y6JkXnp0/lF4p0N1@lunn.ch>
- <63a30221.050a0220.16e5f.653a@mx.google.com>
- <c609a7f865ab48f858adafdd9c1014dda8ec82d6.camel@svanheule.net>
+        Sun, 29 Jan 2023 17:02:37 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E2B211F;
+        Sun, 29 Jan 2023 14:02:36 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4lff337Pz4x1T;
+        Mon, 30 Jan 2023 09:02:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675029754;
+        bh=zCu9putZCOmDox5f+SfJrESoNX5BceeobEQ5dz8Xhpo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jhZPZtd4F6Snfko6CkoFT/OeUCP+mq/kzFBYmLpwhfEMGdnA9NrzpiEqXS9TwfCOi
+         JdcvK/5cpUMKHsYmJwU3PPoFfG1j0nZnzC2aRUX1qKw0/WA+kcD35LK0/9o4q1ov6T
+         y7eFwSmtlYHMW0qpRAkYzWkezcc9zKJFEKshiKq6RquwOO+3CcEfIB+zPD4kEAqYlG
+         o1XWkITAvIpe4lFccIUDk1uqYqRPERFmuGk4xPNRV2oEa5oyp9j69skliV1ibzluv4
+         ySXz9/tpbAo5mNEWY8JAsrbIEUA+uW2YKl8xl2MCg/lzjwh8exx3bFeB7se0VLXDIP
+         Uab/kOj9zCb1A==
+Date:   Mon, 30 Jan 2023 09:02:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Dan Johansen <strit@manjaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the rockchip tree
+Message-ID: <20230130090233.67f2c5f1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c609a7f865ab48f858adafdd9c1014dda8ec82d6.camel@svanheule.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/uXvIyiQ=byoW8INb9.XIBcI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > This is an example of the dt implemented on a real device.
-> > 
-> >                 mdio {
-> >                         #address-cells = <1>;
-> >                         #size-cells = <0>;
-> > 
-> >                         phy_port1: phy@0 {
-> >                                 reg = <0>;
-> > 
-> >                                 leds {
-> >                                         #address-cells = <1>;
-> >                                         #size-cells = <0>;
-> [...]
-> >                                 };
-> >                         };
-> [...]
-> >                 };
-> > 
-> > In the following implementation. Each port have 2 leds attached (out of
-> > 3) one white and one amber. The driver parse the reg and calculate the
-> > offset to set the correct option with the regs by also checking the phy
-> > number.
-> 
-> With switch silicon allowing user control of the LEDs, vendors can (and will)
-> use the switch's LED peripheral to drive other LEDs (or worse). E.g. on a Cisco
-> SG220-26 switch, using a Realtek RTL8382 SoC, the LEDs associated with some
-> unused switch ports are used to display a global device status. My concern here
-> is that one would have to specify switch ports, that aren't connected to
-> anything, just to describe those non-ethernet LEDs.
+--Sig_/uXvIyiQ=byoW8INb9.XIBcI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Note that the binding is adding properties to the PHY nodes, not the
-switch port nodes. Is this how the RTL8382 works? Marvell Switches
-have LED registers which are not in the PHY register space.
+Hi all,
 
-But the point is, the PHYs will probe if listed. They don't have to
-have a MAC pointing to them with a phandle. So the phydev will exist,
-and that should be enough to get the LED class device registered. If
-there is basic on/off support, that should be enough for you to attach
-the Morse code panic trigger, the heartbeat handler, or any other LED
-trigger.
+In commit
 
-	Andrew
+  96e908b46e65 ("arm64: dts: rockchip: set sdmmc0 speed to sd-uhs-sdr50 on =
+rock-3a")
+
+Fixes tag
+
+  Fixes: 22a442e6 ("arm64: dts: rockchip: add basic dts for the radxa rock3=
+ model a")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/uXvIyiQ=byoW8INb9.XIBcI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPW7PkACgkQAVBC80lX
+0GyPAAgAoA1o2E3pqKD0vBiq8sk3NiNBzgIC03sLTjDiD1/1sY3ie5w/vrvuUyuT
+TBy6Sihi1wTXgXBv0+VkoA8huPDErAuRNj+U3A6fkcMqE+Psgt/EDc83KWbkyNXY
+6u56nWey54TjwOw5EN5suLKjHckxJEjA1v+uUmYwJ5dcwzdSdtFUP5TU2qmpTagW
+DvP8LTPgx8wQK1OvuV8rLyGl+SwH7AtPWL50pWKyc4GqH0fSEAwJiXGhmJ+ut13C
+AnVeAqrvownibCiCplZhrgZv/QJRs3xRxAJ9NdPSAkx2xfVkZ4eSg7+W5ABBw4n2
+tBFgpylXmVwOzxssPsPUpb+GO1zYeQ==
+=7/nO
+-----END PGP SIGNATURE-----
+
+--Sig_/uXvIyiQ=byoW8INb9.XIBcI--
