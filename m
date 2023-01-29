@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBA467FFC0
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 16:04:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 899F567FFC1
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 16:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbjA2PEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 10:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S234974AbjA2PGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 10:06:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234449AbjA2PEn (ORCPT
+        with ESMTP id S230101AbjA2PGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 10:04:43 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283B61E9E9;
-        Sun, 29 Jan 2023 07:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1675004677; bh=4jrPQunuxuiB0eXyNSnLg5DAL4du4RKWiXJDWj48ScQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=ret9eSyrY4ldDebnL0lUtrtE/S7uFAmoF2LlozbctRQ6GyXLwbiM5tusM/9w0iG6G
-         pkahQ+a+wFat97al5vekNz9ixdOBarMF+PGuR57+/ypfddrhjONZXiiPY8SV6NEpzz
-         yRWRTMRDmirz5iW6PUxoJcOEIEQZjlROzFQETL+cfU93R7kcb+2zOUjkEaEYsfAc9F
-         Sawo/SYJtR30ZUiJ0laDjDbqg6IBshFeTNliLsJ0ReuJ9jpQPhVreP7QNuFF4+fOww
-         xxRnIBjxffqYi9yz6Q/EhxXunaj3F9gpMHyG8vHmYa5/D9bJoaj9YyDHdxrI+RVLZn
-         4E6wKimSEPmKg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MA7GM-1pWcZD1dVK-00BcTh; Sun, 29
- Jan 2023 16:04:37 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-doc@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org
-Subject: [PATCH] scripts: kernel-doc: Remove workaround for @param... syntax
-Date:   Sun, 29 Jan 2023 16:04:35 +0100
-Message-Id: <20230129150435.1510400-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.0
+        Sun, 29 Jan 2023 10:06:13 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F24C1E9D8
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 07:06:09 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pM9Fp-0005Y7-PE; Sun, 29 Jan 2023 16:06:01 +0100
+Message-ID: <633ee51b-7f81-c38a-7543-34df69480f1d@leemhuis.info>
+Date:   Sun, 29 Jan 2023 16:06:00 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: INFO: [BISECTED] Regression: A Problem with
+ /sys/kernel/debug/kmemleak output: backtrace not printed since 6.2.0-rc1
+Content-Language: en-US, de-DE
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        linux-kernel@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+References: <5272a819-ef74-65ff-be61-4d2d567337de@alu.unizg.hr>
+ <4c467851-8080-44d3-d017-b0e283896119@alu.unizg.hr>
+ <53c2d558-c6a1-38e5-5739-28fff023558d@alu.unizg.hr>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <53c2d558-c6a1-38e5-5739-28fff023558d@alu.unizg.hr>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9vZVQ0xybHF13EjRMUHbJl3XT9TEgx/ZUcDRfFJSFOnRWZuSYu3
- ggnTIE/TmhdsLD3ovH6TRkIHnYBl9K6UKaEyZ2yscnpgJI7XLd0ZqrNLBD0ZSuIPay1xxOf
- lwa4WuQIq3A67ShTWcQNydwbD6MZkfkNC4q8sQOGBu61BtTrYZvfckz9b1BiJju/1fKAvqK
- bt48BOsciEbWE2jgsdTJA==
-UI-OutboundReport: notjunk:1;M01:P0:X07j5CW3+E4=;gwAtE4sDFy2xg/jUx29Rdar6Txy
- /kNXmCr9NwkdAHuuBMPhQR3mhPl27T3oRHkhRBcY6WoN+Hcm/eJ55pId3tqS7+nOTWIrYkLup
- +ZuM60sVKKdMjgC4yjfmDdbyvrkqq5tH/PoMdNhzWA7/+xOxYRb4S6v+3V/km5YBI5OjaNArh
- CorSuHIHjTFgZ8wby5Fl8V1VgBeVGqwY3SrJTbyXx4dYsefFiUCDGLBvifG9fBTk35eA+WeZG
- q2bqx1TjV3RcKUv6Ue5AC6UUOGBjSKlHr1LTes55CMuXFudNtpTGqkpuqPYLxQksPc92zkeLT
- 5X3MDEzVXZjCbAeJ0FMGgNX9jbpToNGD6YC8PPKeYTRmDgAI69TWzx5FHW3FshFOollVm9QrO
- mG/UyfwzQOU6gTlR4e3uJ8kx5pgX+NH12TBuOzlw/g4QTT0NLG2R+ZdQQCkUElY5dt35v/TC3
- KPR70g8Ht6yuCDxmaNU2lKjrhKQMxg77UDT0KTReS2Tt444AYGUoh/1/o93hiGZgSV6jLXiDl
- Jkobhvd7YPT7pHXOm1VBX3fUYc+4R1HvbD0Pn0TmNxFTS0XVYufzTnFs0L1W1VHy6bt9ldJMa
- 4FQ+MKcOT7hkE/bUkuX69zFSMcEN+5swrHWhEt9aZHyPSvDO4yXdDkcrSY58J5kIlzS1vawRp
- FSieVzmbhc+4Ips2KIhhiy4dE0K02kPlG5Q1fcJUNscf1iR/frzsEImCxLglIahVkGZzJ+ObG
- 5iReV3imLjC8T/YKzISdw0Fd3Rdj/sNgmFn/fXstxbwBQtPL5jwH5BehakuOEXEbeM31ZDiQ5
- +1P9mRnh1gBa/CGPJp0KxFJ1CUBp3wRws1rjPkfAFmF/+F3tzdWi4X2eEybfbT+B1/KQdjwuT
- vhz103rJgR4X6lPaMOmsHD0YP5TC5iof19X53zR1rji5DzIOgSTyj4dXMqy9lZcnfOoMMj++D
- kvi54/9bSv9bNSRmdJLoureyES0=
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675004769;c51ba84b;
+X-HE-SMSGID: 1pM9Fp-0005Y7-PE
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,44 +51,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 43756e347f21 ("scripts/kernel-doc: Add support for named variable
-macro arguments") improved how named variable macro arguments are
-handled, and changed how they are documented in kerneldoc comments
-from "@param...", to "@param", deprecating the old syntax.
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-All users of the old syntax have since been converted, so this commit
-finally removes support for it.
+On 12.01.23 20:50, Mirsad Todorovac wrote:
+> Hi all,
+> 
+> there seems to be a problem with the output of /sys/kernel/debug/kmemleak:
+> 
+> [root@pc-mtodorov ~]# cat /sys/kernel/debug/kmemleak
+> unreferenced object 0xffff951c118568b0 (size 16):
+>   comm "kworker/u12:2", pid 56, jiffies 4294893952 (age 4356.548s)
+>   hex dump (first 16 bytes):
+>     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
+>   backtrace:
+> [root@pc-mtodorov ~]#
+> 
+> Apparently, backtrace of called functions on the stack is no longer
+> printed with the list of memory leaks.
+> [...]
 
-The output of "make htmldocs" is the same with and without this commit.
+This is already close to being fixed, but I want to have it in this week
+report, hence I'm adding it (better late than never):
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- scripts/kernel-doc | 11 -----------
- 1 file changed, 11 deletions(-)
+#regzbot ^introduced 56a61617dd22
+#regzbot title mm: stack_depot: Failure during Stack Depot allocating
+hash table
+#regzbot monitor: https://lore.kernel.org/all/Y8Fq5m0CLfcFLCOY@zn.tnic/
+#regzbot fix: mm: use stack_depot_early_init for kmemleak
+#regzbot ignore-activity
 
-diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-index 54b0893cae666..5cf38abdaf9da 100755
-=2D-- a/scripts/kernel-doc
-+++ b/scripts/kernel-doc
-@@ -2079,17 +2079,6 @@ sub process_name($$) {
- sub process_body($$) {
-     my $file =3D shift;
-
--    # Until all named variable macro parameters are
--    # documented using the bare name (`x`) rather than with
--    # dots (`x...`), strip the dots:
--    if ($section =3D~ /\w\.\.\.$/) {
--	$section =3D~ s/\.\.\.$//;
--
--	if ($verbose) {
--	    emit_warning("${file}:$.", "Variable macro arguments should be docum=
-ented without dots\n");
--	}
--    }
--
-     if ($state =3D=3D STATE_BODY_WITH_BLANK_LINE && /^\s*\*\s?\S/) {
- 	dump_section($file, $section, $contents);
- 	$section =3D $section_default;
-=2D-
-2.39.0
-
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
