@@ -2,92 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B512F67FEF6
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA74D67FF0E
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:43:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234881AbjA2Ml1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 07:41:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S234994AbjA2MnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 07:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjA2MlZ (ORCPT
+        with ESMTP id S232009AbjA2MnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 07:41:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650281ADD9;
-        Sun, 29 Jan 2023 04:41:24 -0800 (PST)
+        Sun, 29 Jan 2023 07:43:10 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8620125A7;
+        Sun, 29 Jan 2023 04:43:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05A4360D32;
-        Sun, 29 Jan 2023 12:41:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C1AFC433EF;
-        Sun, 29 Jan 2023 12:41:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C17B2CE09E5;
+        Sun, 29 Jan 2023 12:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E716EC433D2;
+        Sun, 29 Jan 2023 12:42:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674996083;
-        bh=dZD+rzOSjX42kmHVyg3LzYODAILdeEhb0jDAg6t0HgM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DbYOMZ0jEvOYocRi/x5k21whomnHqgCSD4ZSK9ztewy8okvbpTnV6HIj/9MHXwI7x
-         a0QL4swqSmACFyq4XyH5zZ0jHraKHP9G/JvnOaZEtouw8Kv0ExiLobXHHKuYij6u6U
-         LtRi14JoS2Py2avT0Yy+BXPCp38sJkynGdN7pisW9i1eIGxDblaD95cWcp7yI8OlOw
-         BYWCRXbEy7wOs8YvRFPvEaqy7YyPVDuzy6icUiFi3vYzbpHAUTD+V9nJ+WKerRVVRa
-         JsMhKQgW2Qge0bociQiOb2KYlj5YZaKVv5BJCldy1N6cDgqHM4n7WRYsiOUm3GKn48
-         7/xOEFbrLAXwA==
-Date:   Sun, 29 Jan 2023 14:41:18 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ratheesh Kannoth <rkannoth@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, sgoutham@marvell.com
-Subject: Re: [net PATCH] octeontx2-af: Fix devlink unregister
-Message-ID: <Y9ZpbqKmt7uNZVmF@unreal>
-References: <20230127094652.666693-1-rkannoth@marvell.com>
+        s=k20201202; t=1674996176;
+        bh=8RQZps3hA/u1mdRRQGYSzSx3iKFm4iTs/37kan3EXRs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nZUZmSKw7/syf9RrBIFurd/O3AkMNzmfegfK+1AS6FvCaH0OhJOzBAu3UXC6av8P5
+         uY9AOa46F/d5yj77Ho8Ndgvw8xxJHw4nNHTmwjtslAXWyegt5vS1IKaYW+Stnwyuiy
+         2a+kHtcUtcTQ5Rqh9d7F2WecpHec0CXwi5TSyt1qClHpJLOA2sydJTb6OF8VZPCNps
+         3fd8EBQ67Wgcl+xTfrf7oQnKtinBQv8tebZZGSc5tamZZbBvwb6yYhdPyn1uALV1nu
+         d2H6gUYCo1lWTN9F7fs+AKTM2279BJ7XhGhJhYj0+jZo3axy2AgunU1xbS8ZdbQ6oz
+         oCSDE8gtPikyw==
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, "Mike Rapoport (IBM)" <rppt@kernel.org>
+Subject: [PATCH v2 0/4] mm, arch: add generic implementation of pfn_valid() for FLATMEM
+Date:   Sun, 29 Jan 2023 14:42:31 +0200
+Message-Id: <20230129124235.209895-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127094652.666693-1-rkannoth@marvell.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 03:16:51PM +0530, Ratheesh Kannoth wrote:
-> Exact match devlink entry is only for CN10K-B.
-> Unregistration devlink should subtract this
-> entry before invoking devlink unregistration
-> 
-> Fixes: 87e4ea29b030 ("octeontx2-af: Debugsfs support for exact match.")
-> Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
-> ---
->  .../net/ethernet/marvell/octeontx2/af/rvu_devlink.c    | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
-> index bda1a6fa2ec4..d058eeadb23f 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
-> @@ -1603,10 +1603,16 @@ void rvu_unregister_dl(struct rvu *rvu)
->  {
->  	struct rvu_devlink *rvu_dl = rvu->rvu_dl;
->  	struct devlink *dl = rvu_dl->dl;
-> +	size_t size;
->  
->  	devlink_unregister(dl);
-> -	devlink_params_unregister(dl, rvu_af_dl_params,
-> -				  ARRAY_SIZE(rvu_af_dl_params));
-> +	/* Unregister exact match devlink only for CN10K-B */
-> +	size = ARRAY_SIZE(rvu_af_dl_params);
-> +	if (!rvu_npc_exact_has_match_table(rvu))
-> +		size -= 1;
-> +
-> +	devlink_params_unregister(dl, rvu_af_dl_params, size);
+From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-The code is ok, but it will be much better if you separate
-rvu_af_dl_params to two structs and call to devlink_params_register()
-twice with relevant parameters.
+Hi,
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Every architecture that supports FLATMEM memory model defines its own
+version of pfn_valid() that essentially compares a pfn to max_mapnr.
+
+Use mips/powerpc version implemented as static inline as a generic
+implementation of pfn_valid() and drop its per-architecture definitions
+
+v2:
+* fix build on ARM and xtensa
+* add Acked- and Reviewed-by, thanks everybody
+
+v1: https://lore.kernel.org/all/20230125190757.22555-1-rppt@kernel.org
+
+Mike Rapoport (IBM) (4):
+  arm: include asm-generic/memory_model.h from page.h rather than
+    memory.h
+  m68k: use asm-generic/memory_model.h for both MMU and !MMU
+  mips: drop definition of pfn_valid() for DISCONTIGMEM
+  mm, arch: add generic implementation of pfn_valid() for FLATMEM
+
+ arch/alpha/include/asm/page.h      |  4 ----
+ arch/arc/include/asm/page.h        |  1 -
+ arch/arm/include/asm/memory.h      |  2 --
+ arch/arm/include/asm/page.h        |  2 ++
+ arch/csky/include/asm/page.h       |  1 -
+ arch/hexagon/include/asm/page.h    |  1 -
+ arch/ia64/include/asm/page.h       |  4 ----
+ arch/loongarch/include/asm/page.h  | 13 -------------
+ arch/m68k/include/asm/page.h       |  6 +-----
+ arch/m68k/include/asm/page_mm.h    |  1 -
+ arch/m68k/include/asm/page_no.h    |  4 ----
+ arch/microblaze/include/asm/page.h |  1 -
+ arch/mips/include/asm/page.h       | 28 ----------------------------
+ arch/nios2/include/asm/page.h      |  9 ---------
+ arch/openrisc/include/asm/page.h   |  2 --
+ arch/parisc/include/asm/page.h     |  4 ----
+ arch/powerpc/include/asm/page.h    |  9 ---------
+ arch/riscv/include/asm/page.h      |  5 -----
+ arch/sh/include/asm/page.h         |  3 ---
+ arch/sparc/include/asm/page_32.h   |  1 -
+ arch/um/include/asm/page.h         |  1 -
+ arch/x86/include/asm/page_32.h     |  4 ----
+ arch/x86/include/asm/page_64.h     |  4 ----
+ arch/xtensa/include/asm/page.h     |  4 ++--
+ include/asm-generic/memory_model.h | 12 ++++++++++++
+ include/asm-generic/page.h         |  2 --
+ 26 files changed, 17 insertions(+), 111 deletions(-)
+
+
+base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+-- 
+2.35.1
+
