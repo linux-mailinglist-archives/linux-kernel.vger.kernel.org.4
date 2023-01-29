@@ -2,71 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C83680051
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA71680056
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 17:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235072AbjA2QwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 11:52:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S235079AbjA2Q4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 11:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjA2QwI (ORCPT
+        with ESMTP id S233855AbjA2Q4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 11:52:08 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C637199E4;
-        Sun, 29 Jan 2023 08:52:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=loe6zYoEnP/MUhESYQA4cmRuiS4ozpW2WWxXFcKEAC0=; b=6FxHhcpkpDR5txGRZKHeS2LSi5
-        kiGxT8C2VWCYMp3XeU6S23uLB7TU/+qdGDqAIYoxgePlfcFHXPlj1QCRI3GK/DeRM6OSM+QVWct/K
-        fw+iEC0AqgtAZyrxmmQMNGvqatDbbxKq/WCSQd8ovtQMtl/+foUVCQVeaSA4NfayQywg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pMAuL-003Vri-Si; Sun, 29 Jan 2023 17:51:57 +0100
-Date:   Sun, 29 Jan 2023 17:51:57 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Chris Healy <cphealy@gmail.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jeremy.wang@amlogic.com, Chris Healy <healych@amazon.com>
-Subject: Re: [PATCH 1/1] net: phy: meson-gxl: Add generic dummy stubs for MMD
- register access
-Message-ID: <Y9akLWJfigajMuQP@lunn.ch>
-References: <20230129022615.379711-1-cphealy@gmail.com>
+        Sun, 29 Jan 2023 11:56:08 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B61B551
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 08:56:06 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id m2so25325777ejb.8
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 08:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ACDU4kQxNu6BcX/kdRYpciYrt4iQOPv2Av6CD1oe0mo=;
+        b=sONIQ8Ju1ocXuq+s24/PKcuIZFLjmW+XXWa0sAGQoltZAdtVAYwC8eRRQbI2GCbat9
+         2ESmTjMDqW83uo00HVm1AQwRg2mGjPIjdIZGz/BcDA3cGbCR3IFHQ6ttO9rIHYOXXdTV
+         a37P2Bfp84R1pLG69KrgCX90E1BmwiBDnw7ENp4nNRJ6hjOUGWPBKqungj0Xty67Q2lS
+         x2lIiocrG5caxrmK+87iKc72FBOCP1G0gk1iICGk476f3F3oV86+BAj4XrkVw9y43cou
+         zCR+ylbpXTcYnXPLe8STidmZtz2jmFJFAvx31M8MvVmAXsL5LdAB2Zz4mwtj5zNjhr6G
+         XsLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ACDU4kQxNu6BcX/kdRYpciYrt4iQOPv2Av6CD1oe0mo=;
+        b=x7ZUOf4Ugppnr3b+r1VlqoF/QHdkV2hQ5BI3KkzS0mCG+AbxTbCLhIXoUGaxcImciK
+         +lnmruej7gE0CvL98t6mWKLXPkZi8W5qnlGio5xeinHbCh/FbSfLlWgfjnJe5fEQ47H3
+         m9bPjdS+LXeOZy3UYYjuRojJKYtOVl9I8FncFroGgH87c4pZhTUHMlPIAIhoJp3OTW44
+         Y16BmeJ+yJ5hEG/LbSg+7m6zZwOE43S4o+/oG2veb0ClICrBb82lJX+SGWigvxmMSg+9
+         RLP6kYg+yUs3A/f1H+SeVXQABUHlXu/SXcTjqJKFQw0piaXDRc36dQDdswVLcVaEZt1h
+         6iiQ==
+X-Gm-Message-State: AO0yUKXbdzB/18rFcLsZah9E5iuWPFYVGuahENRHVB0xuqmVxuPaM2L2
+        RWhqw2CRksPkd9ChEGvOYWtfnQ==
+X-Google-Smtp-Source: AK7set+e4Phc3CG3tK05FL/LKNzQWTMZ5CfV6fi5vOtdtBWURtBCGo09PZ5N4xNEqtk6STfu2QTGdQ==
+X-Received: by 2002:a17:906:344d:b0:878:a893:48db with SMTP id d13-20020a170906344d00b00878a89348dbmr10120544ejb.65.1675011364954;
+        Sun, 29 Jan 2023 08:56:04 -0800 (PST)
+Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
+        by smtp.gmail.com with ESMTPSA id z94-20020a509e67000000b0049df0f91b78sm5564744ede.78.2023.01.29.08.56.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 08:56:04 -0800 (PST)
+Date:   Sun, 29 Jan 2023 16:56:03 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>
+Subject: Re: [PATCH v2] sched: cpuset: Don't rebuild sched domains on
+ suspend-resume
+Message-ID: <20230129165603.cmcdbcydbado4yac@airbuntu>
+References: <20230120194822.962958-1-qyousef@layalina.io>
+ <c4c2dec6-a72b-d675-fb42-be40e384ea2c@redhat.com>
+ <20230125163546.pspvigh4groiwjy7@airbuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230129022615.379711-1-cphealy@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230125163546.pspvigh4groiwjy7@airbuntu>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 06:26:15PM -0800, Chris Healy wrote:
-> From: Chris Healy <healych@amazon.com>
+On 01/25/23 16:35, Qais Yousef wrote:
+> On 01/20/23 17:16, Waiman Long wrote:
+> > 
+> > On 1/20/23 14:48, Qais Yousef wrote:
+> > > Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
+> > > enabled rebuilding sched domain on cpuset and hotplug operations to
+> > > correct deadline accounting.
+> > > 
+> > > Rebuilding sched domain is a slow operation and we see 10+ ms delay on
+> > > suspend-resume because of that.
+> > > 
+> > > Since nothing is expected to change on suspend-resume operation; skip
+> > > rebuilding the sched domains to regain the time lost.
+> > > 
+> > > Debugged-by: Rick Yiu <rickyiu@google.com>
+> > > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> > > ---
+> > > 
+> > >      Changes in v2:
+> > >      	* Remove redundant check in update_tasks_root_domain() (Thanks Waiman)
+> > >      v1 link:
+> > >      	https://lore.kernel.org/lkml/20221216233501.gh6m75e7s66dmjgo@airbuntu/
+> > > 
+> > >   kernel/cgroup/cpuset.c  | 3 +++
+> > >   kernel/sched/deadline.c | 3 +++
+> > >   2 files changed, 6 insertions(+)
+> > > 
+> > > diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> > > index a29c0b13706b..9a45f083459c 100644
+> > > --- a/kernel/cgroup/cpuset.c
+> > > +++ b/kernel/cgroup/cpuset.c
+> > > @@ -1088,6 +1088,9 @@ static void rebuild_root_domains(void)
+> > >   	lockdep_assert_cpus_held();
+> > >   	lockdep_assert_held(&sched_domains_mutex);
+> > > +	if (cpuhp_tasks_frozen)
+> > > +		return;
+> > > +
+> > >   	rcu_read_lock();
+> > >   	/*
+> > > diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> > > index 0d97d54276cc..42c1143a3956 100644
+> > > --- a/kernel/sched/deadline.c
+> > > +++ b/kernel/sched/deadline.c
+> > > @@ -2575,6 +2575,9 @@ void dl_clear_root_domain(struct root_domain *rd)
+> > >   {
+> > >   	unsigned long flags;
+> > > +	if (cpuhp_tasks_frozen)
+> > > +		return;
+> > > +
+> > >   	raw_spin_lock_irqsave(&rd->dl_bw.lock, flags);
+> > >   	rd->dl_bw.total_bw = 0;
+> > >   	raw_spin_unlock_irqrestore(&rd->dl_bw.lock, flags);
+> > 
+> > cpuhp_tasks_frozen is set when thaw_secondary_cpus() or
+> > freeze_secondary_cpus() is called. I don't know the exact suspend/resume
+> > calling sequences, will cpuhp_tasks_frozen be cleared at the end of resume
+> > sequence? Maybe we should make sure that rebuild_root_domain() is called at
+> > least once at the end of resume operation.
 > 
-> The Meson G12A Internal PHY does not support standard IEEE MMD extended
-> register access, therefore add generic dummy stubs to fail the read and
-> write MMD calls. This is necessary to prevent the core PHY code from
-> erroneously believing that EEE is supported by this PHY even though this
-> PHY does not support EEE, as MMD register access returns all FFFFs.
+> Very good questions. It made me look at the logic again and I realize now that
+> the way force_build behaves is causing this issue.
+> 
+> I *think* we should just make the call rebuild_root_domains() only if
+> cpus_updated in cpuset_hotplug_workfn().
+> 
+> cpuset_cpu_active() seems to be the source of force_rebuild in my case; which
+> seems to be called only after the last cpu is back online (what you suggest).
+> In this case we can end up with cpus_updated = false, but force_rebuild = true.
+> 
+> Now you added a couple of new users to force_rebuild in 4b842da276a8a; I'm
+> trying to figure out what the conditions would be there. It seems we can have
+> corner cases for cpus_update might not trigger correctly?
+> 
+> Could the below be a good cure?
+> 
+> AFAICT we must rebuild the root domains if something has changed in cpuset.
+> Which should be captured by either having:
+> 
+> 	* cpus_updated = true
+> 	* force_rebuild && !cpuhp_tasks_frozen
+> 
+> /me goes to test the patch
 
-Hi Chris
+It works fine.
 
-This change in itself makes sense. But i wounder if we should also
-change phy_init_eee(). It reads the EEE Ability register. The 2018
-version of the standard indicates the top two bits are reserved and
-should be zero. We also don't have any PHY which supports 100GBase-R
-through to 100Base-TX. So a read of 0xffff suggests the PHY does not
-support EEE and returning -EPROTONOSUPPORT would be good.
+Can we assume cpus_udpated will always be false in suspend/resume cycle? I can
+then check for (force_rebuild && !cpuhp_tasks_frozen) directly in
+rebuild_root_domains().
 
-	Andrew
+
+Thanks!
+
+--
+Qais Yousef
+
+> 
+> --->8---
+> 
+> 	diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> 	index a29c0b13706b..363e4459559f 100644
+> 	--- a/kernel/cgroup/cpuset.c
+> 	+++ b/kernel/cgroup/cpuset.c
+> 	@@ -1079,6 +1079,8 @@ static void update_tasks_root_domain(struct cpuset *cs)
+> 		css_task_iter_end(&it);
+> 	 }
+> 
+> 	+static bool need_rebuild_rd = true;
+> 	+
+> 	 static void rebuild_root_domains(void)
+> 	 {
+> 		struct cpuset *cs = NULL;
+> 	@@ -1088,6 +1090,9 @@ static void rebuild_root_domains(void)
+> 		lockdep_assert_cpus_held();
+> 		lockdep_assert_held(&sched_domains_mutex);
+> 
+> 	+       if (!need_rebuild_rd)
+> 	+               return;
+> 	+
+> 		rcu_read_lock();
+> 
+> 		/*
+> 	@@ -3627,7 +3632,9 @@ static void cpuset_hotplug_workfn(struct work_struct *work)
+> 		/* rebuild sched domains if cpus_allowed has changed */
+> 		if (cpus_updated || force_rebuild) {
+> 			force_rebuild = false;
+> 	+               need_rebuild_rd = cpus_updated || (force_rebuild && !cpuhp_tasks_frozen);
+> 			rebuild_sched_domains();
+> 	+               need_rebuild_rd = true;
+> 		}
+> 
+> 		free_cpumasks(NULL, ptmp);
+> 
+> 
+> --->8---
+> 
+> Thanks!
+> 
+> --
+> Qais Yousef
