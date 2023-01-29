@@ -2,108 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28686800A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 19:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5246800ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 19:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjA2SD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 13:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S235270AbjA2Srl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 13:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2SD5 (ORCPT
+        with ESMTP id S229835AbjA2Srj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 13:03:57 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8150318B00
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 10:03:56 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 297071FF79;
-        Sun, 29 Jan 2023 18:03:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1675015435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4N7XfFpKedbQUz8C79ouctf6fb3ifOCQOWuZ7/2i9ik=;
-        b=TWu/QjJa/vuYmhJ6uCa9UEZhGgdGLUBMAXE1zHqNKQx3eJWkRwgCPKVeIXSAGU3h6KaUhd
-        GxRtmZToHW3akE+Va71Px8f3DXPUwatZZSHsLfTHkYt99ywGkZJX3PDrt1ORm/NjqyXKDD
-        5rO+199Spf1tATfkpeCJLm2yY8a1lK4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1675015435;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4N7XfFpKedbQUz8C79ouctf6fb3ifOCQOWuZ7/2i9ik=;
-        b=hlzAkxKT0hXn7Hwrjk0+pQL7LPr0mf0fIRrhPDYRv90EOFHmcRyPoj/fJCqZuIWm4U5Rjk
-        OOJmbHjV+j6aJGBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8EF901358A;
-        Sun, 29 Jan 2023 18:03:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cKT0IAq11mMQGQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Sun, 29 Jan 2023 18:03:54 +0000
-Message-ID: <7ad2cbdc-8589-3aa2-b16a-41336f849f65@suse.cz>
-Date:   Sun, 29 Jan 2023 19:03:54 +0100
+        Sun, 29 Jan 2023 13:47:39 -0500
+X-Greylist: delayed 2498 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 Jan 2023 10:47:07 PST
+Received: from mx.flying-snail.de (mx.flying-snail.de [IPv6:2a06:1c40:3::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EACE206A7;
+        Sun, 29 Jan 2023 10:47:07 -0800 (PST)
+Received: from [2a02:908:1b0:8800:2ff:ffff:fe11:2236] (helo=mondbasis.internal.flying-snail.de)
+        by mx.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pMC3S-000nCh-MC; Sun, 29 Jan 2023 19:05:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=feldner-bv.de; s=s1; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=2Ah3M2XYpBYD33vznQiby+cj6OhHC3L8o5U3S39YtlU=; b=o0duPuddPQgsHoe5+BV1gDXjzV
+        Sa04Me2rSAxmHP7q4vXwng99ZYMS6wVm47INK+POULYfmxC2Sm3AMqX0UTKRmxHUGRd9QxewTDuYt
+        KGi6tUJiF6n1hy9C3MCp4/TbgeoKkxfQ6rwwZXzQmYSit4TtYXg8x+GModfRMwDJq+VUs8/3EIuvH
+        v3kbGw47owUsdIfkP9/c9kColyzA/VWEcdoVMcqsClBXT5e5aF7Nqj2zwJhwBFVnjA+LkbnCt05kL
+        XbK0wgSFY0ndU4hvKwaQr3Nx3dJwpFBr5xSxWbNS+23sfBak0RJo3QRu264wwLxafSWqXwFtGwyEL
+        eOl8owYw==;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=flying-snail.de; s=s1; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To
+        :From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=2Ah3M2XYpBYD33vznQiby+cj6OhHC3L8o5U3S39YtlU=; b=mMeZ9l87VHB4RS7IEcuTjopjvF
+        r1lFDDgRHxSPZIUbtDAmd8epSCGJHrB46bO+1wi1dbfL5pJCapWufgv8BdEvNa+owVfXZIS4QP0gY
+        v75Q+D0UHICHf3qvCwhtwYi1H3xOwX0dRlMH2k4AcrMBFhB2K346Wd9+TETSs8uoU4I1HDtlpq+To
+        6gDuYRfrAEI2PRJuHm9OHuTG3lGFcow5D1ls3F+6aldA4aohljW2PZIb9G4DuJHP7iRN4R4eSGSVL
+        8jQ3ywtVpBY/3gGENrPWnsvt86Jmhzy2VjIZqJqNwKC5ncbUYx5CbHSvUVXsMdft3admedqRZyou4
+        w2txzg9w==;
+Received: from [2a02:908:1b0:8800:1400:2ed0:5344:b031] (helo=debian-qemu)
+        by mondbasis.internal.flying-snail.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <pelzi@flying-snail.de>)
+        id 1pMC3P-000U3k-Rp; Sun, 29 Jan 2023 19:05:25 +0100
+Date:   Sun, 29 Jan 2023 19:05:23 +0100
+From:   Andreas Feldner <pelzi@flying-snail.de>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iio: dht11: Read bit stream from IRQ on falling edges only
+Message-ID: <Y9a0RZ+inWs44Kn8@debian-qemu.internal.flying-snail.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 0/4] Fix excessive CPU usage during compaction
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chuyi Zhou <zhouchuyi@bytedance.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230125134434.18017-1-mgorman@techsingularity.net>
- <20230125171159.355a770a2e34f78d7664e1f0@linux-foundation.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230125171159.355a770a2e34f78d7664e1f0@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/26/23 02:11, Andrew Morton wrote:
-> On Wed, 25 Jan 2023 13:44:30 +0000 Mel Gorman <mgorman@techsingularity.net> wrote:
-> 
-> If we drop Vlastimil's reversion and apply this, the whole series
-> should be cc:stable and it isn't really designed for that.
-> 
-> So I think either
-> 
-> a) drop Vlastimil's reversion and persuade Mel to send us a minimal
->    version of patch #4 for -stable consumption.  Patches 1-3 of this
->    series come later.
-> 
-> b) go ahead with Vlastimil's revert for -stable, queue up this
->    series for 6.3-rc1 and redo the original "fix set skip in
->    fast_find_migrateblock" some time in the future.
-> 
-> If we go with b) then the Fixes: tag in "[PATCH 4/4] mm, compaction:
-> Finish pageblocks on complete migration failure" is inappropriate -
-> fixing a reverted commit which Vlastimil's revert already fixed.
-> 
-> I'll plan on b) for now.
+Currently, IRQs for both falling and raising edges of the GPIO
+line connected to the DHT11 device are requested. However, the
+low states do not carry information, it is possible to determine
+0 and 1 bits from the timing of two adjacent falling edges as
+well.
 
-Agreed with the plan b). I couldn't review this yet due to being sick,
-but I doubt I would have enough confidence to fast-track the series to
-6.2 and 6.1-stable. It's subtle enough area and extra time in -next and
-full -rc cycle will help.
+Doing so does no longer requires to read the GPIO line value
+within the IRQ handler, plus halves the number of IRQs to be
+handled at all.
+
+Signed-off-by: Andreas Feldner <pelzi@flying-snail.de>
+---
+ drivers/iio/humidity/dht11.c | 28 +++++++++++-----------------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/iio/humidity/dht11.c b/drivers/iio/humidity/dht11.c
+index c97e25448772..d1cd053c5dd4 100644
+--- a/drivers/iio/humidity/dht11.c
++++ b/drivers/iio/humidity/dht11.c
+@@ -30,13 +30,13 @@
+ 
+ #define DHT11_DATA_VALID_TIME	2000000000  /* 2s in ns */
+ 
+-#define DHT11_EDGES_PREAMBLE 2
++#define DHT11_EDGES_PREAMBLE 1
+ #define DHT11_BITS_PER_READ 40
+ /*
+  * Note that when reading the sensor actually 84 edges are detected, but
+  * since the last edge is not significant, we only store 83:
+  */
+-#define DHT11_EDGES_PER_READ (2 * DHT11_BITS_PER_READ + \
++#define DHT11_EDGES_PER_READ (DHT11_BITS_PER_READ + \
+ 			      DHT11_EDGES_PREAMBLE + 1)
+ 
+ /*
+@@ -46,6 +46,7 @@
+  * 1-bit: 68-75uS -- typically 70uS (AM2302)
+  * The acutal timings also depend on the properties of the cable, with
+  * longer cables typically making pulses shorter.
++ * Low time is constant 50uS.
+  *
+  * Our decoding depends on the time resolution of the system:
+  * timeres > 34uS ... don't know what a 1-tick pulse is
+@@ -63,7 +64,8 @@
+ #define DHT11_START_TRANSMISSION_MIN	18000  /* us */
+ #define DHT11_START_TRANSMISSION_MAX	20000  /* us */
+ #define DHT11_MIN_TIMERES	34000  /* ns */
+-#define DHT11_THRESHOLD		49000  /* ns */
++#define DHT11_LOW		50000  /* ns */
++#define DHT11_THRESHOLD		(49000 + DHT11_LOW)  /* ns */
+ #define DHT11_AMBIG_LOW		23000  /* ns */
+ #define DHT11_AMBIG_HIGH	30000  /* ns */
+ 
+@@ -83,7 +85,7 @@ struct dht11 {
+ 
+ 	/* num_edges: -1 means "no transmission in progress" */
+ 	int				num_edges;
+-	struct {s64 ts; int value; }	edges[DHT11_EDGES_PER_READ];
++	struct {s64 ts; }	edges[DHT11_EDGES_PER_READ];
+ };
+ 
+ #ifdef CONFIG_DYNAMIC_DEBUG
+@@ -99,7 +101,7 @@ static void dht11_edges_print(struct dht11 *dht11)
+ 	for (i = 1; i < dht11->num_edges; ++i) {
+ 		dev_dbg(dht11->dev, "%d: %lld ns %s\n", i,
+ 			dht11->edges[i].ts - dht11->edges[i - 1].ts,
+-			dht11->edges[i - 1].value ? "high" : "low");
++			"falling");
+ 	}
+ }
+ #endif /* CONFIG_DYNAMIC_DEBUG */
+@@ -125,14 +127,8 @@ static int dht11_decode(struct dht11 *dht11, int offset)
+ 	unsigned char temp_int, temp_dec, hum_int, hum_dec, checksum;
+ 
+ 	for (i = 0; i < DHT11_BITS_PER_READ; ++i) {
+-		t = dht11->edges[offset + 2 * i + 2].ts -
+-			dht11->edges[offset + 2 * i + 1].ts;
+-		if (!dht11->edges[offset + 2 * i + 1].value) {
+-			dev_dbg(dht11->dev,
+-				"lost synchronisation at edge %d\n",
+-				offset + 2 * i + 1);
+-			return -EIO;
+-		}
++		t = dht11->edges[offset + i + 1].ts -
++		    dht11->edges[offset + i].ts;
+ 		bits[i] = t > DHT11_THRESHOLD;
+ 	}
+ 
+@@ -174,9 +170,7 @@ static irqreturn_t dht11_handle_irq(int irq, void *data)
+ 	struct dht11 *dht11 = iio_priv(iio);
+ 
+ 	if (dht11->num_edges < DHT11_EDGES_PER_READ && dht11->num_edges >= 0) {
+-		dht11->edges[dht11->num_edges].ts = ktime_get_boottime_ns();
+-		dht11->edges[dht11->num_edges++].value =
+-						gpiod_get_value(dht11->gpiod);
++		dht11->edges[dht11->num_edges++].ts = ktime_get_boottime_ns();
+ 
+ 		if (dht11->num_edges >= DHT11_EDGES_PER_READ)
+ 			complete(&dht11->completion);
+@@ -224,7 +218,7 @@ static int dht11_read_raw(struct iio_dev *iio_dev,
+ 			goto err;
+ 
+ 		ret = request_irq(dht11->irq, dht11_handle_irq,
+-				  IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
++				  IRQF_TRIGGER_FALLING,
+ 				  iio_dev->name, iio_dev);
+ 		if (ret)
+ 			goto err;
+-- 
+2.30.2
+
