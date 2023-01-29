@@ -2,206 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C766801FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794326801E9
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbjA2Vwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 16:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
+        id S235203AbjA2Vvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 16:51:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbjA2Vwa (ORCPT
+        with ESMTP id S235221AbjA2Vvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 16:52:30 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2CD1EBCF
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:52:05 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id p133so8612624oig.8
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:52:05 -0800 (PST)
+        Sun, 29 Jan 2023 16:51:41 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C862819F06
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:51:40 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id nn18-20020a17090b38d200b0022bfb584987so9381657pjb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:51:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yz+FkVg3d7pGHf5kpyEB9/wRCprKyRRYjM/y0EJ+DBw=;
-        b=NO5FmqzTPfKQGSAJFuNQXcl2/Qwzk4V6Re/JvCoc2IjaRyulashjR8KWmE/UTwsoDd
-         HIVdOJs4TwzSlKFcRg+FdezQD/LAA/vlBxIgoIvrBqC2qLNt+7KYcL7J+Xytu95sr/wo
-         tRMx8V5RFrb6ew1gunJew1xwXwyEXUluGp/U7OIfTuTsUDeO74pms6YH6GQALgwbZAeP
-         xTD0onQAafrw0xKMlb6ufLPIAHACOQje2ciSL2/3Ya3gVY2sK9oeiLKp/oVAu4QS404C
-         Jqn12RYLi22IaL8XBhDhE95svQpiib+eCMduXy1lPLD4to1P/6d4KURs+RwHFJHkgBw4
-         hTZw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=10Pr4T3evkPPQKg3Z4WSUnPLk+n8TOgwlOyguzNlXvc=;
+        b=kQM+1CafTz4AifPNzW97tONzVLTLm+vEF8Iyye32LSIsoi36btod+M6SMhwuSjChID
+         zoAjW+MhRE5AHd/9nnVasiSpPfx2pFhRz3w2VPXdeyyOtvIb0S/9kAPn3cO7p/a5Bids
+         4i0kl0sV79hfhMzgfrww/yDdoYXYhA93VWWmIWzdY4wLIh8bCkz6sf4Dv0eT/eJBHJVw
+         CX1cNIeOco0O1UHvXPSnM9nKEC4GoupqFJ3XcRc641i547oql4Ae23OUNhxjPGAluSYA
+         vevkYAgoZjnI4OWp703RysiiS3knD9jAWzR/HP2wCXH/XmwtGDrxBiMBb9lx7oai85kP
+         Ny+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yz+FkVg3d7pGHf5kpyEB9/wRCprKyRRYjM/y0EJ+DBw=;
-        b=b8rm8D5cd9qnPXUPPeioK5CAk6wSl69Y0Q1cB6kIHwapx/FMcchLa9U9fqF9p6k9oV
-         tZ1EW3JK/rpB2P2SqIm2D4+OkWnhgEcqVAH5fvfRQhy+BVIHmdtVO5cdPWEwduOCLWnb
-         MbU4gpDOC3nCJ5FcQFLzEH7LWawRbP0FVAxN/pSYEkvOANsrQufARFkgPyR5KTG6Ax//
-         SNPRGtfdFPIMPtewL7QJ3oR3RtoHBEvY9Te2csVRKX3TV5OhLVVStiVzav415GH6fbcX
-         wPDjp0txv1eggRmN2EHYg73HwBqxh2cyEMgUrES9XUI3cr1lGLx/5Yp7BgjerKqQgRPC
-         2p7Q==
-X-Gm-Message-State: AFqh2kr+JfByYaB6SqIFQxZpjRtrwedLXz3x/y8K/Zk5zY+Ti0UeiMI8
-        K/A3BIC4Hj25wwsZt+OieDcgVw==
-X-Google-Smtp-Source: AMrXdXvoNs3Xkmc83sz5OAeNDxC7M6qRfUCSu1WdB6CBf96rnsNfFOfqoKDQXJVDudUDlt65txNtvA==
-X-Received: by 2002:a05:6808:1144:b0:35e:6a80:5e17 with SMTP id u4-20020a056808114400b0035e6a805e17mr30085582oiu.56.1675029119998;
-        Sun, 29 Jan 2023 13:51:59 -0800 (PST)
-Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
-        by smtp.gmail.com with ESMTPSA id f12-20020a9d7b4c000000b00660e833baddsm4667139oto.29.2023.01.29.13.51.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 13:51:59 -0800 (PST)
-From:   Steev Klimaszewski <steev@kali.org>
-To:     steev@kali.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Balakrishna Godavarthi <bgodavar@codeaurora.org>,
-        Rocky Liao <rjliao@codeaurora.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: qcom: thinkpad-x13s: Add bluetooth
-Date:   Sun, 29 Jan 2023 15:51:30 -0600
-Message-Id: <20230129215136.5557-5-steev@kali.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230129215136.5557-4-steev@kali.org>
-References: <20230129215136.5557-1-steev@kali.org>
- <20230129215136.5557-2-steev@kali.org>
- <20230129215136.5557-3-steev@kali.org>
- <20230129215136.5557-4-steev@kali.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=10Pr4T3evkPPQKg3Z4WSUnPLk+n8TOgwlOyguzNlXvc=;
+        b=Zk9kl2QzC36rX8Jdc4nz2y0pexeK4+YiuaHygoJfDembzGGW+nNhRLpx/o6VHzO59L
+         wrJDwAqK1yANy9TH16gLVsM3EYqqiSRvm3G7oecq7mdKB99daDl/xYcpeNXHB+Y7IZzr
+         HYy4fQ37iiWtrxVKA0YWly0iY7I9Ub+Ia5icc0kL6SDDPS14GuYtV0R61E98Tx/YMfRi
+         tQa9NW6MHSk0T+wCogA7Wo4UZySt6Zb8Yyi1+6CngQm1za0VtQ75fzC/7O6jY4bd+rB8
+         6VzSlGRJfpk8aApm2krpvauWC8KrQhSPPt7+wtBBh3q9Rn9kfFpo6Z70Gk2EjJfiaYlR
+         JPKA==
+X-Gm-Message-State: AO0yUKX5z+6C+qg4OcS3i5ZDF59H8dqJfKzRZuD4ZkGmXoGzNk2yFPSr
+        OClvF4qAicnTUJgcHD6KYJz89A==
+X-Google-Smtp-Source: AK7set9UwyyS480BvbwK2q/t9G/ERX1sK6n1yKDw4WAIvyBBQLF0ETzkHs48lSwH06DxKPhLr30o6w==
+X-Received: by 2002:a17:902:780a:b0:196:5640:b065 with SMTP id p10-20020a170902780a00b001965640b065mr2217816pll.6.1675029100217;
+        Sun, 29 Jan 2023 13:51:40 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c4-20020a170902b68400b0019644d4242dsm90993pls.82.2023.01.29.13.51.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Jan 2023 13:51:39 -0800 (PST)
+Message-ID: <7ae20fa2-d9b4-9e21-4209-81bf4845a3c5@kernel.dk>
+Date:   Sun, 29 Jan 2023 14:51:38 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>, jack@suse.cz, tj@kernel.org,
+        josef@toxicpanda.com, paolo.valente@linaro.org,
+        shinichiro.kawasaki@wdc.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230113094410.2907223-1-yukuai3@huawei.com>
+ <4d3f6183-f9d4-b657-0205-fc240bc24c76@huaweicloud.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <4d3f6183-f9d4-b657-0205-fc240bc24c76@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
----
- .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
+On 1/28/23 6:38 PM, Yu Kuai wrote:
+> Hi, Jens
+> 
+> 在 2023/01/13 17:44, Yu Kuai 写道:
+>> After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"),
+>> bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
+>> bic->bfqq will be freed first, and bic_set_bfqq() is called with the freed
+>> bic->bfqq.
+>>
+>> Fix the problem by always freeing bfqq after bic_set_bfqq().
+>>
+> 
+> Sorry that I send this patch will wrong email, and you might missed this
+> patch.
+> 
+> Can you apply this patch? This patch can't be applied directly to lower
+> version due to Paolo's patchset, I'll send lts patch seperately.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index e51f93476b8d..a9d653e02a2b 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -25,6 +25,8 @@ / {
- 	aliases {
- 		i2c4 = &i2c4;
- 		i2c21 = &i2c21;
-+		serial0 = &uart17;
-+		serial1 = &uart2;
- 	};
- 
- 	wcd938x: audio-codec {
-@@ -886,6 +888,32 @@ &qup0 {
- 	status = "okay";
- };
- 
-+&uart2 {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart2_state>;
-+
-+	bluetooth {
-+		compatible = "qcom,wcn6855-bt";
-+
-+/*
-+		vddio-supply = <&vreg_s4a_1p8>;
-+		vddxo-supply = <&vreg_l7a_1p8>;
-+		vddrf-supply = <&vreg_l17a_1p3>;
-+		vddch0-supply = <&vreg_l25a_3p3>;
-+		vddch1-supply = <&vreg_l23a_3p3>;
-+*/
-+		max-speed = <3200000>;
-+
-+		enable-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
-+		swctrl-gpios = <&tlmm 132 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&bt_en>;
-+	};
-+};
-+
- &qup1 {
- 	status = "okay";
- };
-@@ -894,6 +922,12 @@ &qup2 {
- 	status = "okay";
- };
- 
-+&uart17 {
-+	compatible = "qcom,geni-debug-uart";
-+
-+	status = "okay";
-+};
-+
- &remoteproc_adsp {
- 	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
- 
-@@ -1154,6 +1188,19 @@ hastings_reg_en: hastings-reg-en-state {
- &tlmm {
- 	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
- 
-+	bt_en: bt-en-state {
-+		hstp-sw-ctrl {
-+			pins = "gpio132";
-+			function = "gpio";
-+		};
-+
-+		hstp-bt-en {
-+			pins = "gpio133";
-+			function = "gpio";
-+			drive-strength = <16>;
-+		};
-+	};
-+
- 	edp_reg_en: edp-reg-en-state {
- 		pins = "gpio25";
- 		function = "gpio";
-@@ -1175,6 +1222,27 @@ i2c4_default: i2c4-default-state {
- 		bias-disable;
- 	};
- 
-+	uart2_state: uart2-state {
-+		cts {
-+			pins = "gpio122";
-+			function = "qup2";
-+			bias-disable;
-+		};
-+
-+		rts-tx {
-+			pins = "gpio122", "gpio123";
-+			function = "qup2";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		rx {
-+			pins = "gpio124";
-+			function = "qup2";
-+			bias-pull-up;
-+		};
-+	};
-+
- 	i2c21_default: i2c21-default-state {
- 		pins = "gpio81", "gpio82";
- 		function = "qup21";
+I'm confused... So this patch only applies to the 6.3 branch, yet we
+need it in 6.2 as far as I can tell. Why isn't it against block-6.2
+then?
+
 -- 
-2.39.0
+Jens Axboe
+
 
