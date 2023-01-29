@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9314D67FEF0
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6D067FEEC
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234832AbjA2MhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 07:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S234573AbjA2MgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 07:36:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjA2MhX (ORCPT
+        with ESMTP id S231796AbjA2MgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 07:37:23 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C2222017;
-        Sun, 29 Jan 2023 04:37:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1674995834; bh=QRPsmyE9hY4+eTuGgSF7yy6Em/Ww1XWsbL3ob97mB58=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=EbGyLSd1N77q6W1eb+b/y8xQPeuTipZbvzP2VjHYJGv3CC/b9eEECECDI3y/vib/y
-         B6ztV3BAR3+x0mRuyVDPKTCML0YC5MUkReVvimq+yEbYx5gCz5FKvBg4x9A1mDHgr4
-         ucAMee2p7IMuhTsTtumqT47D8vTdRf92W5rc28JedF+ymc+wUsUczQ9GYWIc9Rt8wG
-         N8CP1h97G0QsHWWZayFaJfXpR/dwRsONzuH3q9DawvY78ufgQgOt6XyBdRVYXBPnda
-         cdlwGxhnzxPy11hhiTGj79qcCbptRgzhcmzaxoEHJLi4I4G4JXLu5aYhxqwm1zN5bo
-         MCc3zKBGFNmXQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MmlXA-1ouAlI2CIg-00jqxS; Sun, 29
- Jan 2023 13:37:14 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     devicetree@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: bus: moxtet: Fix reference to SPI peripheral DT properties
-Date:   Sun, 29 Jan 2023 13:35:53 +0100
-Message-Id: <20230129123553.1284503-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.0
+        Sun, 29 Jan 2023 07:36:10 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5C622017
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:36:07 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id mc11so2319748ejb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:36:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pon3MbPPW13P0zNvYCd1smE05PP2P+jwr/geqehNzwE=;
+        b=NhkuOfB0ra/AVj6j2EVFceBuFWItZkPYikE2pzqJ6Zb0E9Y5TN/8qH2vVwbALlL/n2
+         XnWF7FqbsQrX8yG6z7gdiye1PfgdSRbBOUuzr5zYIXG5/HLudCCRaqut3pJOsPZXJc+G
+         G6QsqPS7Q4QvSuaKK5Pf4FwwPL91+uJPw7r26FceO4Dfpxk1tHvfHbpq+mVeMqDpheWb
+         CdC46mTCMan0NFCDEKcAEdxs5CKmqc3Q1YpUgg72vgO/6DCsywnKpDauA13yA6Vx/rhw
+         4p22AxAKKP6EhmJ5jwk/XP1c3SUu1ewaQjqmzwhC8UX3SX2hBNfaZPSqJf+oz8FmU5fB
+         /cww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pon3MbPPW13P0zNvYCd1smE05PP2P+jwr/geqehNzwE=;
+        b=clhRcwtS1b0vHQp2TTEACTeYjWVd6hpzgB8kPfo7emCMIdjeDftSWHo2ZalREj6UCP
+         4EU9M+JnhjpR4bAPxFtT8Xp6yOPnacksdvTun2YAM1quoYcitxbtgfssCYE7QC6/moZg
+         W7f0pJeBn4ps3vaZBKehbpx/u7E5N2UAIlYmFif4DNB7KE8WrGDJKoxXHhIVvVTFftC1
+         ovspq5U1jvBW8YMM2LMRu7kZEuERYJ42k8hmTvePzbnNCiVcEz1XR1tSTfVv2sh6qjUp
+         e0bSIa6hkzXVYqb+ctlN/nKloK9utzRODugxA4He4TsFtlS9u5DXuxO46exq6m+Wty8O
+         Libg==
+X-Gm-Message-State: AFqh2kr6ugIOcMfkVX4wlkpv8ohMspuiS29rWwDUuJXf5jO9Wfk3w02b
+        fvHev4NYLU5TTf+qmrUlrEcV2sL7Pkc+zVOGQhwlOg==
+X-Google-Smtp-Source: AMrXdXvB3OmLcvEfxFlWKF6yDJduujeg3HFdqoO8lqh4sAOeyWvSijhDyFKCWrJUJ1Xhhmu2uSm7mtH1XcFgoyIBMcg=
+X-Received: by 2002:a17:906:6a8e:b0:86e:3764:4f80 with SMTP id
+ p14-20020a1709066a8e00b0086e37644f80mr5739206ejr.239.1674995766162; Sun, 29
+ Jan 2023 04:36:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:b/AImXyzfz4phEg81jcR9HxbORyzvoYrvw6O1tPrYE1fM4VYvt3
- ZvdXP1tEbXAa+c0ybjhpwdEr79xvHUrJNhp6bRPnrEC8QiPF6YTOsQc+lZD4pRYRIMiXC1y
- stVg7dyvpbQY7+r4JrORz8yPWxbyKgmfLSWjs0f42lWwAaBOoVxUxzg8LxRwnmrn4cVQN6W
- 0CT6EUstm4CyawMPUE1pg==
-UI-OutboundReport: notjunk:1;M01:P0:AMGUonl3rdA=;+R99m5j6S+PzYh/yIJ7Spq3tMqN
- 6i9EKEnP5026bhc7V2PoeqYWWYjP+cnSPPkWMAPd13DzJCoyQZ2lqgepxn8ctdwDDi308w+rX
- Mt0BhoaA23OBv8f9zFH9AfareIVQEy/az1n7w+dVmMGxsdJ9t6AORD/fOTTwPjdb2nP+VfUNw
- f/0f+c4x8U0/2ht+wYQX3NpHeabxZodgC62fsc1oLRrdlrPIdmAYrSgQ/Ja2qJmOMpuQvjCQ0
- 2gXhrPYRXPW2wFjwuWZvGcYZsUCkV5NCHGg0v6cgE15MlNRQAHYyrLSmZEQsyDSaIHiL4og/p
- kCvhz8ZB914+/No7ljVQeK7bZVQuKCe188XvWwJdvReGtKluvVxkxQj7tCc52P/A8kS5kGNJu
- dCJOPFQZA7lPYo8jUDIJOpu/+zSj1/PnSTutV5ublO6+iQ5EfsxMpbQDIE6246OhAPOY9L+VK
- cNWOWpkgkQ7d3WiVb6aiqIhBvfkm3zyZIh8377jrDYoULmNP0/g6vZZMxdaxEgKjqtTeP/UG5
- mVeGhxNf/wKcG12X3tUOf5Uag5WTix9zeRYlG3GpfzLW6ae7ivIdH4KYCKNN/0/D/Ms/j8oEt
- BJJ9Yj1N2JN9lX13MleoFNKXviFzVhgZX3mjf7Bsp1ybBL4eg5jib2jbObv86JHCTWwcL5t8y
- sdoOVeiycDbk8jsEYIzxZvr084evwV8AOqLYbrfH/x2F6hzoV7FbPtit53ni+fFEYJCYjOPhZ
- V2D1rtKpPLBLYp4HUoYJHN0GF6QMsg6QmbqQq4QINA9E3/7D8qGyEG0KbF5AvoiiPZdRKi1KQ
- MfRDv3jRJZoE2HJmFkVexCMuPWy1FHWEbBoYZP7lj9+d7eNx0yx7QeU7MrLnxCiOb+1B2hChH
- SzLciZUokIB5p6CJkCKlW7LrlK7xUR40z26OzQXjSTYKZVFB0Rmr8lnjlyC/UWQwJbjCNBEM2
- xV4kg3s/N5Zw4+3Y4RBxLlIOQAk=
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-10-atishp@rivosinc.com>
+In-Reply-To: <20230127182558.2416400-10-atishp@rivosinc.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Sun, 29 Jan 2023 18:05:55 +0530
+Message-ID: <CAAhSdy086ftqg_WXoAJJuXF0WFRpdiM5ipkOG1=XodDa7cZAPg@mail.gmail.com>
+Subject: Re: [PATCH v3 09/14] RISC-V: KVM: Make PMU functionality depend on Sscofpmf
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-spi-bus.txt has been converted to YAML and the peripheral properties
-have been moved to spi-controller.yaml.
+On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
+>
+> The privilege mode filtering feature must be available in the host so
+> that the host can inhibit the counters while the execution is in HS mode.
+> Otherwise, the guests may have access to critical guest information.
+>
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
 
-Fixes: 0a1b929356830 ("spi: Add YAML schemas for the generic SPI options")
-Fixes: 8762b07c95c18 ("spi: dt-bindings: add schema listing peripheral-spe=
-cific properties")
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- Documentation/devicetree/bindings/bus/moxtet.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Looks good to me.
 
-diff --git a/Documentation/devicetree/bindings/bus/moxtet.txt b/Documentat=
-ion/devicetree/bindings/bus/moxtet.txt
-index fb50fc8653368..d6bf929c00c4e 100644
-=2D-- a/Documentation/devicetree/bindings/bus/moxtet.txt
-+++ b/Documentation/devicetree/bindings/bus/moxtet.txt
-@@ -11,7 +11,7 @@ Required properties:
-  - #interrupt-cells	: Has to be 1
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
- For other required and optional properties of SPI slave nodes please refe=
-r to
--../spi/spi-bus.txt.
-+../spi/spi-peripheral-props.yaml.
+Regards,
+Anup
 
- Required properties of subnodes:
-  - reg			: Should be position on the Moxtet bus (how many Moxtet
-=2D-
-2.39.0
-
+> ---
+>  arch/riscv/kvm/vcpu_pmu.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
+> index d3fd551..7713927 100644
+> --- a/arch/riscv/kvm/vcpu_pmu.c
+> +++ b/arch/riscv/kvm/vcpu_pmu.c
+> @@ -79,6 +79,14 @@ int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
+>         struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
+>         struct kvm_pmc *pmc;
+>
+> +       /*
+> +        * PMU functionality should be only available to guests if privilege mode
+> +        * filtering is available in the host. Otherwise, guest will always count
+> +        * events while the execution is in hypervisor mode.
+> +        */
+> +       if (!riscv_isa_extension_available(NULL, SSCOFPMF))
+> +               return 0;
+> +
+>         ret = riscv_pmu_get_hpm_info(&hpm_width, &num_hw_ctrs);
+>         if (ret < 0)
+>                 return ret;
+> --
+> 2.25.1
+>
