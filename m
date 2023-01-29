@@ -2,73 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E1068012F
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 20:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5CF680137
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 20:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjA2Tez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 14:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        id S233805AbjA2ToT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 14:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234860AbjA2Tew (ORCPT
+        with ESMTP id S229760AbjA2ToR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 14:34:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311DC13DCE;
-        Sun, 29 Jan 2023 11:34:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7E22B80C94;
-        Sun, 29 Jan 2023 19:34:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 761E4C433EF;
-        Sun, 29 Jan 2023 19:34:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675020890;
-        bh=1pgc2YcieceAZEUNE+ZwUtk1C1vBvvqOpgAi73FoknI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LwxZeeI6g6VQj5VF6g4JBLRfp+g3AHP0sB56q+pH/yPnnfqio6pc1BffhH83KdrhP
-         fSCdt0WkBpxW0sxBLogLVadNOHJkFlg6ozh2i2YifL/zH593w9+ISnsX337PtuoqNy
-         mmGPjNAcVQr4O44CVcKtm3iJysemGy8usCQcOgovBYQrkykGHpcGmtkBBIQ7unp9mK
-         RHCMa8tRAjdDTi8S+YQox020BXjdSLaHEuKb/tl7UlRCoD6nX6ysLbfxhMCTxoJrmy
-         ApWwbSq7X78Q9o3J2OuBbdZGewBwl5s6E1kMJFqwtF/AG6P/CHxCO9MfU0rP0wQJJS
-         S4W3H8y0bypMQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 62548E451B6;
-        Sun, 29 Jan 2023 19:34:50 +0000 (UTC)
-Subject: Re: [git pull] Input updates for v6.2-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y9XAv4p0H9aU4+yz@google.com>
-References: <Y9XAv4p0H9aU4+yz@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Y9XAv4p0H9aU4+yz@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.2-rc5
-X-PR-Tracked-Commit-Id: 9c445d2637c938a800fcc8b5f0b10e60c94460c7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 80826e9020afc7b8243df302a13521e0020fa9d8
-Message-Id: <167502089039.8980.1857518134361632101.pr-tracker-bot@kernel.org>
-Date:   Sun, 29 Jan 2023 19:34:50 +0000
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 29 Jan 2023 14:44:17 -0500
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FBEC196B6;
+        Sun, 29 Jan 2023 11:44:14 -0800 (PST)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 920B23CD80;
+        Sun, 29 Jan 2023 21:44:12 +0200 (EET)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 1C8513CD35;
+        Sun, 29 Jan 2023 21:44:11 +0200 (EET)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 6A2123C0435;
+        Sun, 29 Jan 2023 21:44:00 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 30TJhtRl037792;
+        Sun, 29 Jan 2023 21:43:57 +0200
+Date:   Sun, 29 Jan 2023 21:43:55 +0200 (EET)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+cc:     Network Development <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: [Question] neighbor entry doesn't switch to the STALE state
+ after the reachable timer expires
+In-Reply-To: <b1d8722e-5660-c38e-848f-3220d642889d@huawei.com>
+Message-ID: <99532c7f-161e-6d39-7680-ccc1f20349@ssi.bg>
+References: <b1d8722e-5660-c38e-848f-3220d642889d@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 28 Jan 2023 16:41:35 -0800:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.2-rc5
+	Hello,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/80826e9020afc7b8243df302a13521e0020fa9d8
+On Sun, 29 Jan 2023, Zhang Changzhong wrote:
 
-Thank you!
+> Hi,
+> 
+> We got the following weird neighbor cache entry on a machine that's been running for over a year:
+> 172.16.1.18 dev bond0 lladdr 0a:0e:0f:01:12:01 ref 1 used 350521/15994171/350520 probes 4 REACHABLE
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+	confirmed time (15994171) is 13 days in the future, more likely
+185 days behind (very outdated), anything above 99 days is invalid
+
+> 350520 seconds have elapsed since this entry was last updated, but it is still in the REACHABLE
+> state (base_reachable_time_ms is 30000), preventing lladdr from being updated through probe.
+> 
+> After some analysis, we found a scenario that may cause such a neighbor entry:
+> 
+>           Entry used          	  DELAY_PROBE_TIME expired
+> NUD_STALE ------------> NUD_DELAY ------------------------> NUD_PROBE
+>                             |
+>                             | DELAY_PROBE_TIME not expired
+>                             v
+>                       NUD_REACHABLE
+> 
+> The neigh_timer_handler() use time_before_eq() to compare 'now' with 'neigh->confirmed +
+> NEIGH_VAR(neigh->parms, DELAY_PROBE_TIME)', but time_before_eq() only works if delta < ULONG_MAX/2.
+> 
+> This means that if an entry stays in the NUD_STALE state for more than ULONG_MAX/2 ticks, it enters
+> the NUD_RACHABLE state directly when it is used again and cannot be switched to the NUD_STALE state
+> (the timer is set too long).
+> 
+> On 64-bit machines, ULONG_MAX/2 ticks are a extremely long time, but in my case (32-bit machine and
+> kernel compiled with CONFIG_HZ=250), ULONG_MAX/2 ticks are about 99.42 days, which is possible in
+> reality.
+> 
+> Does anyone have a good idea to solve this problem? Or are there other scenarios that might cause
+> such a neighbor entry?
+
+	Is the neigh entry modified somehow, for example,
+with 'arp -s' or 'ip neigh change' ? Or is bond0 reconfigured
+after initial setup? I mean, 4 days ago?
+
+	Looking at __neigh_update, there are few cases that
+can assign NUD_STALE without touching neigh->confirmed:
+lladdr = neigh->ha should be called, NEIGH_UPDATE_F_ADMIN
+should be provided. Later, as you explain, it can wrongly
+switch to NUD_REACHABLE state for long time.
+
+	May be there should be some measures to keep
+neigh->confirmed valid during admin modifications.
+
+	What is the kernel version?
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
