@@ -2,191 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CD06801C8
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB916801CB
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbjA2Voy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 16:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S235195AbjA2VpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 16:45:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjA2Vov (ORCPT
+        with ESMTP id S235183AbjA2VpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 16:44:51 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8B91420D
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:44:50 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id s4so8546535qtx.6
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:44:50 -0800 (PST)
+        Sun, 29 Jan 2023 16:45:20 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C3018B00
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:45:19 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 143so6393441pgg.6
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:45:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ccXGm88Lr7OU3cqWAubaK46qqzKiZyBK/VzlJfykCB8=;
-        b=oojcySu1JmpbzjjuinnoQkYrnDml2eNyFWcnHu5Jhy8Pi7r1c+plQSE+W+/S/PMIUX
-         MYPNsHFt5BOnBTZYudm8sgDQeOf8LWRffcYnB9pQt8SItCaGKviZhopR1IwjVyluGuBL
-         179ELrK8/wxr5AiXosARB2NZwxDJTAi44BkS+31POdjzPowulSDvTNvoFtfeSXbvySx6
-         104ffvxKCb63ChneedFg9TaBvaekEBA0H+rdCCi6LRn9jUOR8vncpuZtJtMIu7MqH7oU
-         siRkaN3Lr4rXhi/lE0mPIohFCm9h1hR1yN93h61k0OQx5BuVT7WA99krp9C40Sat24JJ
-         pOfA==
+        bh=+mlWGWk/xGZIts3NL177gYapbWeRI/F898dfij2bn5Y=;
+        b=VUpekjT4eobTtgSswm2s+LU/r9TV7s7D3lDG1sNT1jYByWNdh5CN5OPW1Tv7HVToxp
+         eXd2GHd79ERXvAQiXiSpgc3bYsW1zdr32gwYedjPB08H9RPe+CR/R793Pe5t37cIGa46
+         yeXQ6r26Hk3pN2sf2GlH/RpHmVlWyZfTA51hg7JSREf6w6woSa1m7hGt67FlUDJWNw9H
+         a44BTWOG0DFl68XvsvA/YtdTBEq+dVJeNhiHrx+oCEQXDvYzy/pShvVuNkRvP2Hw3cv0
+         +l300uvjTQvOkOQUhHP7T/Oj/cnGX26pjapjNmTv/eAenZGsGWAUDY13Ffmj9fJlouP7
+         D/4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ccXGm88Lr7OU3cqWAubaK46qqzKiZyBK/VzlJfykCB8=;
-        b=ex82LninwKetbyVkMORG7/Dw+10mkLQDOBcXpNwyjL04PQ8aerpmUlrb0K5ERZVZAV
-         eJmcPKh0PMDlvIKNsZHUXmZeda7cXvJ+o9za6vihhds3KVNgfP7U0ndIuKNCHDkg84Ls
-         79sxSP/vz3kaI6n8AtTGboNRrRDNTJJrc0MLsr0wmKVRg+RfojPs4O3nSNdEGAmgO0Ue
-         o540w+b4ir8mIU7Es15vT4flnsu2OENbaVEzNcrmzHlLFd7plAnmVv63eGn3Renqj4Ws
-         baa+af4Jby/xIIP67b99x/i9F8/xN21VHTaZaoVC2mPz1956sgZnlG5pHkAnNhRR1s7C
-         7iTg==
-X-Gm-Message-State: AFqh2krQGQzEwYzPGqlLJJeeWR5xiovIS21UXP46aj/fo5A3ODc6biat
-        sMUflEEkJ0sor7AEWOtxMUQ=
-X-Google-Smtp-Source: AMrXdXvcF80klqEio3hBF0RD+PYhOuNR5QYFl7CKeh7J9oMPeOcVF6H0uT7XfEcvky7zcpOL4qgHNA==
-X-Received: by 2002:ac8:48d9:0:b0:3b6:2f49:1acc with SMTP id l25-20020ac848d9000000b003b62f491accmr63132600qtr.16.1675028689070;
-        Sun, 29 Jan 2023 13:44:49 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id h189-20020a3753c6000000b006fbb4b98a25sm6961205qkb.109.2023.01.29.13.44.47
+        bh=+mlWGWk/xGZIts3NL177gYapbWeRI/F898dfij2bn5Y=;
+        b=an3AGdTYSfVJrgA78f3boX9lIGMjRkvHCZSYkZkzV7qCw7UlOt/YRt3PX3pOfDkoja
+         n8CBxQ682m6/yNpLtpevjQfaVKyYyZR3bynOqYa0YRn4PgQLm9nATfG4QOBO5iE7iZ3U
+         AjTN3JLKUtYnzdbwSJ/2R+Q1oTI79QAacs9oCFlQeIJr+pxs/yrxNu/WIw1Cg2gqORdU
+         Xe1ZIOe7PbO7aU/UoK+hqfw32GFgEYIFZL+STpH9JkIQlFfJa/Qrfh+WJtDDYZNG18q5
+         GjYeEArzzgbap0fDZMt2IKyTIjRHXImKdLuX1LoGbCWkXdZEXHY/yfZxjfLBhpGVjTpm
+         k5uw==
+X-Gm-Message-State: AFqh2krjJjnhGQrqqCjJqXCxCDm+adSMUHb1HkuipPD+ZBST/zBF8UQU
+        BIMZBQlLalVsiTXTJ2OA7XkcZw==
+X-Google-Smtp-Source: AMrXdXtsvnlhy1C1Bo22+pe5X20bbQRF+CKJjGRH+4jc3FrfRPhRtkK2qI0LPGwV3zDdJ4Bm/e7btg==
+X-Received: by 2002:aa7:9114:0:b0:57f:d5d1:41d0 with SMTP id 20-20020aa79114000000b0057fd5d141d0mr10615241pfh.3.1675028718976;
+        Sun, 29 Jan 2023 13:45:18 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id v66-20020a626145000000b005882b189a44sm6032360pfb.104.2023.01.29.13.45.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 13:44:48 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id C4C8727C0054;
-        Sun, 29 Jan 2023 16:44:47 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sun, 29 Jan 2023 16:44:47 -0500
-X-ME-Sender: <xms:zujWYwXt37PjcqqN-AQWxnc8wETxMVoxTY_bfJotg6O9ulm8qJVjuQ>
-    <xme:zujWY0mF3OP5XVxuLQDbRP3LsJGAzPxS1z-MDIfICeQnACL4SOk6S-cLk_PHUtp7x
-    elwJQBnTJcLNp2Y5A>
-X-ME-Received: <xmr:zujWY0auUEnc6a5P5XsijP0XjiTDc43UpJMVEeJW6hFDw4nthLpSge6asCI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeftddgudehhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:zujWY_WDWFX-15k7gr30eQtaIPJuX_A5poDGUyylscKx2eAIqkqOww>
-    <xmx:zujWY6kRXjXyO-1mwXPx3t6mPz9IAeXtqL5T4EQiFw0eRtJlEfAMHQ>
-    <xmx:zujWY0f3nZPsnSaIomkCZO5V0TxzUfdVCQ6vNFQ82JDyRqPE3NSbDA>
-    <xmx:z-jWY00aH-rUhG9WABOx1LdX87l48wvHLJmCOJzvD_IqTNDtfX6i5Q>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 29 Jan 2023 16:44:46 -0500 (EST)
-Date:   Sun, 29 Jan 2023 13:43:53 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        will@kernel.org, peterz@infradead.org, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <Y9bomciHJ/6WGYM0@boqun-archlinux>
-References: <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
- <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
- <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
- <Y9WeOTmGCCfjMUtG@andrea>
- <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
- <20230129051734.GE2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9aY4hG3p+82vVIw@rowland.harvard.edu>
- <20230129162156.GG2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9asu0CswZZ3yyls@andrea>
- <20230129184403.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
+        Sun, 29 Jan 2023 13:45:18 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Zhong Jinghua <zhongjinghua@huawei.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yukuai3@huawei.com
+In-Reply-To: <20230128030419.2780298-1-zhongjinghua@huawei.com>
+References: <20230128030419.2780298-1-zhongjinghua@huawei.com>
+Subject: Re: [PATCH-next v3] blk-mq: cleanup unused methods:
+ blk_mq_hw_sysfs_store
+Message-Id: <167502871809.54799.13535290595162039137.b4-ty@kernel.dk>
+Date:   Sun, 29 Jan 2023 14:45:18 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230129184403.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 10:44:03AM -0800, Paul E. McKenney wrote:
-> On Sun, Jan 29, 2023 at 06:28:27PM +0100, Andrea Parri wrote:
-> > > Why can't P3's spin_lock() read from that initial write?
-> > 
-> > Mmh, sounds like you want to play with something like below?
-> > 
-> >   Andrea
-> > 
-> > diff --git a/tools/memory-model/lock.cat b/tools/memory-model/lock.cat
-> > index 6b52f365d73ac..20c3af4511255 100644
-> > --- a/tools/memory-model/lock.cat
-> > +++ b/tools/memory-model/lock.cat
-> > @@ -74,7 +74,6 @@ flag ~empty UL \ range(critical) as unmatched-unlock
-> >  
-> >  (* Allow up to one unmatched LKW per location; more must deadlock *)
-> >  let UNMATCHED-LKW = LKW \ domain(critical)
-> > -empty ([UNMATCHED-LKW] ; loc ; [UNMATCHED-LKW]) \ id as unmatched-locks
-> >  
-> >  (* rfi for LF events: link each LKW to the LF events in its critical section *)
-> >  let rfi-lf = ([LKW] ; po-loc ; [LF]) \ ([LKW] ; po-loc ; [UL] ; po-loc)
-> > @@ -120,8 +119,7 @@ let rf-ru = rfe-ru | rfi-ru
-> >  let rf = rf | rf-lf | rf-ru
-> >  
-> >  (* Generate all co relations, including LKW events but not UL *)
-> > -let co0 = co0 | ([IW] ; loc ; [LKW]) |
-> > -	(([LKW] ; loc ; [UNMATCHED-LKW]) \ [UNMATCHED-LKW])
-> > +let co0 = co0 | ([IW] ; loc ; [LKW])
-> >  include "cos-opt.cat"
-> >  let W = W | UL
-> >  let M = R | W
-> 
-> No idea.  But the following litmus test gets no executions whatsoever,
-> so point taken about my missing at least one corner case.  ;-)
-> 
-> Adding a spin_unlock() to the end of either process allows both to
-> run.
-> 
-> One could argue that this is a bug, but one could equally well argue
-> that if you have a deadlock, you have a deadlock.
-> 
 
-in lock.cat: 
+On Sat, 28 Jan 2023 11:04:19 +0800, Zhong Jinghua wrote:
+> We found that the blk_mq_hw_sysfs_store interface has no place to use.
+> The object default_hw_ctx_attrs using blk_mq_hw_sysfs_ops only uses
+> the show method and does not use the store method.
+> 
+> Since this patch:
+> 4a46f05ebf99 ("blk-mq: move hctx and ctx counters from sysfs to debugfs")
+> moved the store method to debugfs, the store method is not used anymore.
+> 
+> [...]
 
-	(* Allow up to one unmatched LKW per location; more must deadlock *)
-	let UNMATCHED-LKW = LKW \ domain(critical)
-	empty ([UNMATCHED-LKW] ; loc ; [UNMATCHED-LKW]) \ id as unmatched-locks
+Applied, thanks!
 
-we rule out deadlocks from the execution candidates we care about.
+[1/1] blk-mq: cleanup unused methods: blk_mq_hw_sysfs_store
+      commit: 52627f3c2935342dbceb2ba6fd710f1deac627a1
 
-Regards,
-Boqun
+Best regards,
+-- 
+Jens Axboe
 
-> Thoughts?
-> 
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> C lock
-> 
-> {
-> }
-> 
-> 
-> P0(int *a, int *b, spinlock_t *l)
-> {
-> 	spin_lock(l);
-> 	WRITE_ONCE(*a, 1);
-> }
-> 
-> P1(int *a, int *b, spinlock_t *l)
-> {
-> 	spin_lock(l);
-> 	WRITE_ONCE(*b, 1);
-> }
-> 
-> exists (a=1 /\ b=1)
+
+
