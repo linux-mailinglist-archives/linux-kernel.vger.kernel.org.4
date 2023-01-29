@@ -2,117 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6D067FEEC
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E4C67FEEE
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234573AbjA2MgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 07:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S234654AbjA2Mgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 07:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjA2MgK (ORCPT
+        with ESMTP id S231796AbjA2Mgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 07:36:10 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5C622017
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:36:07 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id mc11so2319748ejb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 04:36:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pon3MbPPW13P0zNvYCd1smE05PP2P+jwr/geqehNzwE=;
-        b=NhkuOfB0ra/AVj6j2EVFceBuFWItZkPYikE2pzqJ6Zb0E9Y5TN/8qH2vVwbALlL/n2
-         XnWF7FqbsQrX8yG6z7gdiye1PfgdSRbBOUuzr5zYIXG5/HLudCCRaqut3pJOsPZXJc+G
-         G6QsqPS7Q4QvSuaKK5Pf4FwwPL91+uJPw7r26FceO4Dfpxk1tHvfHbpq+mVeMqDpheWb
-         CdC46mTCMan0NFCDEKcAEdxs5CKmqc3Q1YpUgg72vgO/6DCsywnKpDauA13yA6Vx/rhw
-         4p22AxAKKP6EhmJ5jwk/XP1c3SUu1ewaQjqmzwhC8UX3SX2hBNfaZPSqJf+oz8FmU5fB
-         /cww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pon3MbPPW13P0zNvYCd1smE05PP2P+jwr/geqehNzwE=;
-        b=clhRcwtS1b0vHQp2TTEACTeYjWVd6hpzgB8kPfo7emCMIdjeDftSWHo2ZalREj6UCP
-         4EU9M+JnhjpR4bAPxFtT8Xp6yOPnacksdvTun2YAM1quoYcitxbtgfssCYE7QC6/moZg
-         W7f0pJeBn4ps3vaZBKehbpx/u7E5N2UAIlYmFif4DNB7KE8WrGDJKoxXHhIVvVTFftC1
-         ovspq5U1jvBW8YMM2LMRu7kZEuERYJ42k8hmTvePzbnNCiVcEz1XR1tSTfVv2sh6qjUp
-         e0bSIa6hkzXVYqb+ctlN/nKloK9utzRODugxA4He4TsFtlS9u5DXuxO46exq6m+Wty8O
-         Libg==
-X-Gm-Message-State: AFqh2kr6ugIOcMfkVX4wlkpv8ohMspuiS29rWwDUuJXf5jO9Wfk3w02b
-        fvHev4NYLU5TTf+qmrUlrEcV2sL7Pkc+zVOGQhwlOg==
-X-Google-Smtp-Source: AMrXdXvB3OmLcvEfxFlWKF6yDJduujeg3HFdqoO8lqh4sAOeyWvSijhDyFKCWrJUJ1Xhhmu2uSm7mtH1XcFgoyIBMcg=
-X-Received: by 2002:a17:906:6a8e:b0:86e:3764:4f80 with SMTP id
- p14-20020a1709066a8e00b0086e37644f80mr5739206ejr.239.1674995766162; Sun, 29
- Jan 2023 04:36:06 -0800 (PST)
+        Sun, 29 Jan 2023 07:36:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE1222A24;
+        Sun, 29 Jan 2023 04:36:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81B8E60C70;
+        Sun, 29 Jan 2023 12:36:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18CF2C433EF;
+        Sun, 29 Jan 2023 12:36:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674995780;
+        bh=BnaDTaUpxxgmGNb6SekVLEnP5eTzdC3XaSBMXtPeRCI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GV5cwY4r1qe7uqw3mhqpwU+3cZLvmqFus5dbs3BfKsZpcyTBPifAUQDUYlYvNIlR7
+         ZsnNufK9D0eJuDrkseNa1dA1FoEJKoRUP+2ZPxgc5+z9/ygWJHQ0X5L6cLdT0PTpVg
+         E32X/wL6UMmjs09L3QrZyU7ZQJcnXzK0MKngCDhAReCe1Ndw7U7P4wlfPhXoM+FKDc
+         ywJmv4XX+qbHKCUrZhovhiXFkSZQY5zGpoVvXhikgdjVtHZWJLMRbR7sjYBHY2xRTJ
+         TK6xoJ7PyuNtTVoPT3AIwpph33Jj6eWtxfcUrWLJA/hk1At3BhAy7xu96hGAAxNDC+
+         FbjXGN11WjuQQ==
+Date:   Sun, 29 Jan 2023 14:36:16 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, sgoutham@marvell.com
+Subject: Re: [net PATCH] octeontx2-af: Removed unnecessary debug messages.
+Message-ID: <Y9ZoQP9gO53smbhj@unreal>
+References: <20230127094652.666693-1-rkannoth@marvell.com>
+ <20230127094652.666693-2-rkannoth@marvell.com>
 MIME-Version: 1.0
-References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-10-atishp@rivosinc.com>
-In-Reply-To: <20230127182558.2416400-10-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sun, 29 Jan 2023 18:05:55 +0530
-Message-ID: <CAAhSdy086ftqg_WXoAJJuXF0WFRpdiM5ipkOG1=XodDa7cZAPg@mail.gmail.com>
-Subject: Re: [PATCH v3 09/14] RISC-V: KVM: Make PMU functionality depend on Sscofpmf
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127094652.666693-2-rkannoth@marvell.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> The privilege mode filtering feature must be available in the host so
-> that the host can inhibit the counters while the execution is in HS mode.
-> Otherwise, the guests may have access to critical guest information.
->
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+On Fri, Jan 27, 2023 at 03:16:52PM +0530, Ratheesh Kannoth wrote:
+> From: Sunil Goutham <sgoutham@marvell.com>
+> 
+> NPC exact match feature is supported only on one silicon
+> variant, removed debug messages which print that this
+> feature is not available on all other silicon variants.
 
-Looks good to me.
+I would say that this is net-next patch and not net. 
+You simply remove debug prints.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
-
-Regards,
-Anup
-
+> 
+> Fixes: b747923afff8 ("octeontx2-af: Exact match support")
+> Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
 > ---
->  arch/riscv/kvm/vcpu_pmu.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-> index d3fd551..7713927 100644
-> --- a/arch/riscv/kvm/vcpu_pmu.c
-> +++ b/arch/riscv/kvm/vcpu_pmu.c
-> @@ -79,6 +79,14 @@ int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
->         struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
->         struct kvm_pmc *pmc;
->
-> +       /*
-> +        * PMU functionality should be only available to guests if privilege mode
-> +        * filtering is available in the host. Otherwise, guest will always count
-> +        * events while the execution is in hypervisor mode.
-> +        */
-> +       if (!riscv_isa_extension_available(NULL, SSCOFPMF))
-> +               return 0;
-> +
->         ret = riscv_pmu_get_hpm_info(&hpm_width, &num_hw_ctrs);
->         if (ret < 0)
->                 return ret;
-> --
+>  .../ethernet/marvell/octeontx2/af/rvu_npc_hash.c    | 13 ++-----------
+>  1 file changed, 2 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+> index f69102d20c90..2c832469229b 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+> @@ -200,10 +200,8 @@ void npc_config_secret_key(struct rvu *rvu, int blkaddr)
+>  	struct rvu_hwinfo *hw = rvu->hw;
+>  	u8 intf;
+>  
+> -	if (!hwcap->npc_hash_extract) {
+> -		dev_info(rvu->dev, "HW does not support secret key configuration\n");
+> +	if (!hwcap->npc_hash_extract)
+>  		return;
+> -	}
+>  
+>  	for (intf = 0; intf < hw->npc_intfs; intf++) {
+>  		rvu_write64(rvu, blkaddr, NPC_AF_INTFX_SECRET_KEY0(intf),
+> @@ -221,10 +219,8 @@ void npc_program_mkex_hash(struct rvu *rvu, int blkaddr)
+>  	struct rvu_hwinfo *hw = rvu->hw;
+>  	u8 intf;
+>  
+> -	if (!hwcap->npc_hash_extract) {
+> -		dev_dbg(rvu->dev, "Field hash extract feature is not supported\n");
+> +	if (!hwcap->npc_hash_extract)
+>  		return;
+> -	}
+>  
+>  	for (intf = 0; intf < hw->npc_intfs; intf++) {
+>  		npc_program_mkex_hash_rx(rvu, blkaddr, intf);
+> @@ -1854,16 +1850,12 @@ int rvu_npc_exact_init(struct rvu *rvu)
+>  	/* Check exact match feature is supported */
+>  	npc_const3 = rvu_read64(rvu, blkaddr, NPC_AF_CONST3);
+>  	if (!(npc_const3 & BIT_ULL(62))) {
+> -		dev_info(rvu->dev, "%s: No support for exact match support\n",
+> -			 __func__);
+>  		return 0;
+>  	}
+
+You need to remove { } brackets too.
+
+>  
+>  	/* Check if kex profile has enabled EXACT match nibble */
+>  	cfg = rvu_read64(rvu, blkaddr, NPC_AF_INTFX_KEX_CFG(NIX_INTF_RX));
+>  	if (!(cfg & NPC_EXACT_NIBBLE_HIT)) {
+> -		dev_info(rvu->dev, "%s: NPC exact match nibble not enabled in KEX profile\n",
+> -			 __func__);
+>  		return 0;
+>  	}
+
+Ditto.
+
+>  
+> @@ -2005,6 +1997,5 @@ int rvu_npc_exact_init(struct rvu *rvu)
+>  		(*drop_mcam_idx)++;
+>  	}
+>  
+> -	dev_info(rvu->dev, "initialized exact match table successfully\n");
+>  	return 0;
+>  }
+> -- 
 > 2.25.1
->
+> 
