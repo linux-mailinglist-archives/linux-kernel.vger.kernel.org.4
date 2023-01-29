@@ -2,192 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BE7680230
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 23:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E64680236
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 23:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbjA2WPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 17:15:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S235394AbjA2WUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 17:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235372AbjA2WPU (ORCPT
+        with ESMTP id S235130AbjA2WUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 17:15:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E97B1CAF4
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 14:14:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675030471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aQ2EG58lEBfBcoyGXMvMMXH2dCLi5wC9HNZTuXZVe0I=;
-        b=MLkmp4rUPZS5+UAt3pv7OBGIH/+gQ7eUT2qawYHDVnGzT9YMHXGGr6rY9EtfPbk3LJjvV3
-        1C4oYAGvEY8pDYHSo4/aTm0Sr43B/FQ8xmIdk4P/alxE/BF1BnSsC0Oj2OLggV4ZHwoMo+
-        fO5C3OAyOZnDofVWly0tqtaEdtT4hXQ=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-653-M7N1nViIMheAgwD-zRWXew-1; Sun, 29 Jan 2023 17:14:30 -0500
-X-MC-Unique: M7N1nViIMheAgwD-zRWXew-1
-Received: by mail-qt1-f200.google.com with SMTP id c16-20020ac85190000000b003b841d1118aso1260246qtn.17
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 14:14:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aQ2EG58lEBfBcoyGXMvMMXH2dCLi5wC9HNZTuXZVe0I=;
-        b=0XOjv/CrGgyT+g3CiEcJ52jL73E//ABhVKU7zvbYV0QShrsBD6TqpbwNX1KiXhx48O
-         CvsP4t4Vs7NWjjx0B+PCSSsvq4GTk+NeIv1D+DwKitfjje13HOZ5367ulZvFrGZ4xI23
-         BadM7aPSp/bm8BXN1A96+m0O0QO6K8xCIvKzv/ZpT/Cy4QEh9YNsTmcA8AOGUlaCSZVN
-         yKL7fWkZbOXD+2R0MoLzFGuhXaI6+Juo5vqzNyZciCF3G5cVexxDnzv7g3V/gRpHChFS
-         GBSVzOgYApMWVzLMjapZbCr7CVlQxgZn5OM9EHdgW5kS0u0KUAk8GJC4xQmOg8ZC9bGT
-         8Byw==
-X-Gm-Message-State: AO0yUKXR6AKr5+2+CzypSOoFA4Kt30Y6l0qDJUrXLmDZrKT91LedzlBI
-        +HJ+PJOM0M+CUZ2YmgLyptGkZV9uSZgTNGjaF310aW+VNql6no1KelyioqBdm7MQPmbixCGPn9s
-        Gk/3b6HeKGseAT8uqPA+vXFYg
-X-Received: by 2002:a05:622a:1d3:b0:3b6:2cc8:e120 with SMTP id t19-20020a05622a01d300b003b62cc8e120mr11266306qtw.39.1675030469743;
-        Sun, 29 Jan 2023 14:14:29 -0800 (PST)
-X-Google-Smtp-Source: AK7set/c8nGKoE4Pi+rMw4N7aF4GlFF+SuNMvKDIkWAl5IXNZZcNu/VR2VsrTBbWYqFYWWq3QARq4A==
-X-Received: by 2002:a05:622a:1d3:b0:3b6:2cc8:e120 with SMTP id t19-20020a05622a01d300b003b62cc8e120mr11266279qtw.39.1675030469392;
-        Sun, 29 Jan 2023 14:14:29 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id z18-20020ac83e12000000b003b8332f49e0sm3864086qtf.1.2023.01.29.14.14.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 14:14:28 -0800 (PST)
-Date:   Sun, 29 Jan 2023 17:14:27 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Nick Bowler <nbowler@draconx.ca>
-Cc:     linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
-        regressions@lists.linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: PROBLEM: sparc64 random crashes starting w/ Linux 6.1
- (regression)
-Message-ID: <Y9bvwz4FIOQ+D8c4@x1n>
-References: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
+        Sun, 29 Jan 2023 17:20:13 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAC81DBB4
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 14:20:11 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P4lsZ1l0qz9xGYC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:12:02 +0800 (CST)
+Received: from [10.81.212.248] (unknown [10.81.212.248])
+        by APP2 (Coremail) with SMTP id GxC2BwAn81n38NZjovnXAA--.7399S2;
+        Sun, 29 Jan 2023 23:19:46 +0100 (CET)
+Message-ID: <0da94668-c041-1d59-a46d-bd13562e385e@huaweicloud.com>
+Date:   Sun, 29 Jan 2023 23:19:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>
+Cc:     paulmck@kernel.org, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org, urezki@gmail.com,
+        quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+ <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+ <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+ <Y9V+CyKIjg8sgVAC@rowland.harvard.edu> <Y9WeOTmGCCfjMUtG@andrea>
+ <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwAn81n38NZjovnXAA--.7399S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtw1DGrW5Aw45GF15GFW7urg_yoWxKryrpF
+        Wrtan0kFWktrZ5Zw1Dtw1UXa4fCw4Fyw4Yvw18J3W8C3s8Xr92qF40grWj93srGrs2gayU
+        ZrWjyFZrZFyDZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 09:17:31PM -0500, Nick Bowler wrote:
-> Hi,
 
-Hi, Nick,
+Hi all, apologies on the confusion about the litmus test.
+I should have explained it better but it seems you mostly figured it out.
+As Alan said I'm tricking a little bit by not unlocking in certain 
+places to filter out all executions that aren't what I'm looking for.
+I didn't have much time when I sent it (hence also the lack of 
+explanation and why I haven't responded earlier), so I didn't have time 
+to play around with the filter feature to do this the "proper"/non-cute way.
+As such it really isn't about deadlocks.
 
-> 
-> Starting with Linux 6.1.y, my sparc64 (Sun Ultra 60) system is very
-> unstable, with userspace processes randomly crashing with all kinds of
-> different weird errors.  The same problem occurs on 6.2-rc5.  Linux
-> 6.0.y is OK.
-> 
-> Usually, it manifests with ssh connections just suddenly dropping out
-> like this:
-> 
->   malloc(): unaligned tcache chunk detected
->   Connection to alectrona closed.
-> 
-> but other kinds of failures (random segfaults, bus errors, etc.) are
-> seen too.
-> 
-> I have not ever seen the kernel itself oops or anything like that, there
-> are no abnormal kernel log messages of any kind; except for the normal
-> ones that get printed when processes segfault, like this one:
-> 
->   [  563.085851] zsh[2073]: segfault at 10 ip 00000000f7a7c09c (rpc
-> 00000000f7a7c0a0) sp 00000000ff8f5e08 error 1 in
-> libc.so.6[f7960000+1b2000]
-> 
-> I was able to reproduce this fairly reliably by using GNU ddrescue to
-> dump a disk from the dvd drive -- things usually go awry after a minute
-> or two.  So I was able to bisect to this commit:
-> 
->   2e3468778dbe3ec389a10c21a703bb8e5be5cfbc is the first bad commit
->   commit 2e3468778dbe3ec389a10c21a703bb8e5be5cfbc
->   Author: Peter Xu <peterx@redhat.com>
->   Date:   Thu Aug 11 12:13:29 2022 -0400
-> 
->       mm: remember young/dirty bit for page migrations
-> 
-> This does not revert cleanly on master, but I ran my test on the
-> immediately preceding commit (0ccf7f168e17: "mm/thp: carry over dirty
-> bit when thp splits on pmd") extra times and I am unable to get this
-> one to crash, so reasonably confident in this bisection result...
+I think one question is whether the distinction between the models could 
+be reproduced without using any kind of filtering at all.
+I have a feeling it should be possible but I haven't had time to think 
+up a litmus test that does that.
 
-There's a similar report previously but interestingly it was exactly
-reported against commit 0ccf7f168e17, which was the one you reported all
-good:
 
-https://lore.kernel.org/all/20221021160603.GA23307@u164.east.ru/
+On 1/28/2023 11:59 PM, Alan Stern wrote:
+> On Sat, Jan 28, 2023 at 11:14:17PM +0100, Andrea Parri wrote:
+>>> Evidently the plain-coherence check rules out x=1 at the
+>>> end, because when I relax that check, x=1 becomes a possible result.
+>>> Furthermore, the graphical output confirms that this execution has a
+>>> ww-incoh edge from Wx=2 to Wx=1.  But there is no ww-vis edge from Wx=1
+>>> to Wx=2!  How can this be possible?  It seems like a bug in herd7.
+>> By default, herd7 performs some edges removal when generating the
+>> graphical outputs.  The option -showraw can be useful to increase
+>> the "verbosity", for example,
+>>
+>>    [with "exists (x=2)", output in /tmp/T.dot]
+>>    $ herd7 -conf linux-kernel.cfg T.litmus -show prop -o /tmp -skipchecks plain-coherence -doshow ww-vis -showraw ww-vis
+> Okay, thanks, that helps a lot.
+>
+> So here's what we've got.  The litmus test:
+>
+>
+> C hb-and-int
+> {}
+>
+> P0(int *x, int *y)
+> {
+>      *x = 1;
+>      smp_store_release(y, 1);
+> }
+>
+> P1(int *x, int *y, int *dx, int *dy, spinlock_t *l)
+> {
+>      spin_lock(l);
+>      int r1 = READ_ONCE(*dy);
+>      if (r1==1)
+>          spin_unlock(l);
+>
+>      int r0 = smp_load_acquire(y);
+>      if (r0 == 1) {
+>          WRITE_ONCE(*dx,1);
+>      }
+> }
+>
+> P2(int *dx, int *dy)
+> {
+>      WRITE_ONCE(*dy,READ_ONCE(*dx));
+> }
+>
+>
+> P3(int *x, spinlock_t *l)
+> {
+>      spin_lock(l);
+>      smp_mb__after_unlock_lock();
+>      *x = 2;
+> }
+>
+> exists (x=2)
+>
+>
+> The reason why Wx=1 ->ww-vis Wx=2:
+>
+> 	0:Wx=1 ->po-rel 0:Wy=1 and po-rel < fence < ww-post-bounded.
+>
+> 	0:Wy=1 ->rfe 1:Ry=1 ->(hb* & int) 1:Rdy=1 and
+> 		(rfe ; hb* & int) <= (rfe ; xbstar & int) <= vis.
+>
+> 	1:Rdy=1 ->po 1:unlock ->rfe 3:lock ->po 3:Wx=2
+> 		so 1:Rdy=1 ->po-unlock-lock-po 3:Wx=2
+> 		and po-unlock-lock-po <= mb <= fence <= w-pre-bounded.
+>
+> [...]
+>
+> This explains why the memory model says there isn't a data race.  This
+> doesn't use the smp_mb__after_unlock_lock at all.
 
-It's probably because for some reason the thp split didn't really happen in
-your system (maybe thp disabled?) or it should break too. It also means
-624a2c94f5b7a didn't really fix all the issues.  So I assumed that's the
-only issue we had after verified with 624a2c94f5b7a on two existing
-reproducers and we assumed all issues fixed.
+Note as Andrea said that po-unlock-lock-po is generally not in mb (and 
+also not otherwise in fence).
+Only po-unlock-lock-po;[After-unlock-lock];po is in mb (resp. ...&int in 
+fence).
+While the example uses smp_mb__after_unlock_lock, the anomaly should 
+generally cover any extended fences.
 
-However then with this report I looked into the whole set and I did notice
-the page migration code actually has similar problem.  Sorry I should have
-noticed this even earlier.  So very likely the previous two reports came
-from environment where page migration is either rare or not enabled.  And
-now I suspect your system has page migration enabled.
 
-Could you try below patch to see whether it fixes your problem?  It should
-cover the last piece of possible issue with dirty bit on sparc after that
-patchset.  It's based on latest master branch (commit ab072681eabe1ce0).
+[Snipping in a part of an earlier e-mail you sent]
 
----8<---
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index abe6cfd92ffa..f15ea5b389f6 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -3272,15 +3272,17 @@ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
-        pmde = mk_huge_pmd(new, READ_ONCE(vma->vm_page_prot));
-        if (pmd_swp_soft_dirty(*pvmw->pmd))
-                pmde = pmd_mksoft_dirty(pmde);
--       if (is_writable_migration_entry(entry))
--               pmde = maybe_pmd_mkwrite(pmde, vma);
-        if (pmd_swp_uffd_wp(*pvmw->pmd))
--               pmde = pmd_wrprotect(pmd_mkuffd_wp(pmde));
-+               pmde = pmd_mkuffd_wp(pmde);
-        if (!is_migration_entry_young(entry))
-                pmde = pmd_mkold(pmde);
-        /* NOTE: this may contain setting soft-dirty on some archs */
-        if (PageDirty(new) && is_migration_entry_dirty(entry))
-                pmde = pmd_mkdirty(pmde);
-+       if (is_writable_migration_entry(entry))
-+               pmde = maybe_pmd_mkwrite(pmde, vma);
-+       else
-+               pmde = pmd_wrprotect(pmde);
- 
-        if (PageAnon(new)) {
-                rmap_t rmap_flags = RMAP_COMPOUND;
-diff --git a/mm/migrate.c b/mm/migrate.c
-index a4d3fc65085f..cc5455614e01 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -224,6 +224,8 @@ static bool remove_migration_pte(struct folio *folio,
-                        pte = maybe_mkwrite(pte, vma);
-                else if (pte_swp_uffd_wp(*pvmw.pte))
-                        pte = pte_mkuffd_wp(pte);
-+               else
-+                       pte = pte_wrprotect(pte);
- 
-                if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
-                        rmap_flags |= RMAP_EXCLUSIVE;
----8<---
 
-Thanks,
 
--- 
-Peter Xu
+> I think that herd7_should_  say there is a data race.
+>
+> On the other hand, I also think that the operational model says there
+> isn't.  This is a case where the formal model fails to match the
+> operational model.
+>
+> The operational model says that if W is a release-store on CPU C and W'
+> is another store which propagates to C before W executes, then W'
+> propagates to every CPU before W does.  (In other words, releases are
+> A-cumulative).  But the formal model enforces this rule only in cases
+> the event reading W' on C is po-before W.
+>
+> In your litmus test, the event reading y=1 on P1 is po-after the
+> spin_unlock (which is a release).  Nevertheless, any feasible execution
+> requires that P1 must execute Ry=1 before the unlock.  So the
+> operational model says that y=1 must propagate to P3 before the unlock
+> does, i.e., before P3 executes the spin_lock().  But the formal model
+> doesn't require this.
+
+
+I see now. Somehow I thought stores must execute in program order, but I 
+guess it doesn't make sense.
+In that sense, W ->xbstar&int X always means W propagates to X's CPU 
+before X executes.
+
+
+> Ideally we would fix this by changing the definition of po-rel to:
+>
+> 	[M] ; (xbstar & int) ; [Release]
+>
+> (This is closely related to the use of (xbstar & int) in the definition
+> of vis that you asked about.)
+
+This misses the property of release stores that any po-earlier store 
+must also execute before the release store.
+Perhaps it could be changed to the old  po-rel | [M] ; (xbstar & int) ; 
+[Release] but then one could instead move this into the definition of 
+cumul-fence.
+In fact you'd probably want this for all the propagation fences, so 
+cumul-fence and pb should be the right place.
+
+> Unfortunately we can't do this, because
+> po-rel has to be defined long before xbstar.
+
+You could do it, by turning the relation into one massive recursive 
+definition.
+
+Thinking about what the options are:
+1) accept the difference and run with it by making it consistent inside 
+the axiomatic model
+2) fix it through the recursive definition, which seems to be quite ugly 
+but also consistent with the power operational model as far as I can tell
+3) weaken the operational model... somehow
+4) just ignore the anomaly
+5) ???
+
+Currently my least favorite option is 4) since it seems a bit off that 
+the reasoning applies in one specific case of LKMM, more specifically 
+the data race definition which should be equivalent to "the order of the 
+two races isn't fixed", but here the order isn't fixed but it's a data race.
+I think the patch happens to almost do 1) because the xbstar&int at the 
+end should already imply ordering through the prop&int <= hb rule.
+What would remain is to also exclude rcu-fence somehow.
+
+2) seems the most correct choice but also to complicate LKMM a lot.
+
+Seems like being between a rock and hard place.
+jonas
+
+PS:
+>> The other cases of *-pre-bounded seem to work out: they all link stuff via
+>> xbstar to the instruction that is linked via po-unlock-lock-po ;
+>> [After-unlock-lock] ; po to the potentially racy access, and
+>> po-unlock-lock-po;po   is xbstar ; acq-po, which allows closing the gap.
+> I could not follow your arguments at all; the writing was too confusing.
+
+Sorry, I collapsed some cases. I'll show an example. I think all the 
+other cases are the same.
+Let's pick an edge that links two events with ww-vis through
+   w-post-bounded ; vis ; w-pre-bounded
+where the vis comes from
+   cumul-fence* ; rfe? ; [Marked] ;
+     (strong-fence ; [Marked] ; xbstar)  <= vis
+and the w-pre-bounded came from po-unlock-lock-po;[After-unlock-lock];po 
+but not po-unlock-lock-po & int.
+
+Note that such po-unlock-lock-po;[After-unlock-lock];po must come from
+   po-rel ; rfe ; acq-po
+
+So we have
+   w-post-bounded ;  cumul-fence* ; rfe? ; [Marked] ;
+      strong-fence ; [Marked] ; xbstar ; po-rel ; rfe ; acq-po
+<=
+   w-post-bounded ;  cumul-fence* ; rfe? ; [Marked] ;
+      strong-fence ; [Marked] ; xbstar ; hb ; hb ;  acq-po
+<=
+   w-post-bounded ;  cumul-fence* ; rfe? ; [Marked] ;
+      strong-fence ; [Marked] ; xbstar ;                fence
+<= ww-vis
+
+All the other cases where w-pre-bounded are used have the shape
+     ... ; xbstar ; w-pre-bounded
+which can all be handled in the same manner.
+
+
+
+
+
+
+
+
+
 
