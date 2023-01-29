@@ -2,27 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF15867FEBB
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 130DC67FEBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 13:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbjA2ME5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 07:04:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S234862AbjA2MFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 07:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjA2MEz (ORCPT
+        with ESMTP id S234813AbjA2MFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 07:04:55 -0500
+        Sun, 29 Jan 2023 07:05:00 -0500
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCB6212AD;
-        Sun, 29 Jan 2023 04:04:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4FF2201D;
+        Sun, 29 Jan 2023 04:04:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1674993889; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1674993890; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=FMxvNvScFeDpnWHOGLZpFA/TtqLA5G8GagZO9Tylivo=;
-        b=z3zESg1noeFor04quLxNTJchiE2tZxdyOECgsz5OgJvYLA+bF8+jkU0ok5W8dTsQRvQ/VB
-        LunP1AShAH8JSouVV+zirYDpXhIhqNZz1v01dJYpErYz3XNIwoPkafiNqd4QwNiwI1Yopy
-        HNQFPjHq5KcK6MnVKTuuYISdy7yKkcY=
+         in-reply-to:in-reply-to:references:references;
+        bh=KmzCO3n3U4/L50Mpe2KY2BIPAp1YjeA7+C44XKCNUsI=;
+        b=BUv8aLYI4kiwCnIZRxlhkKBg2BeXO+xipryTGl6AW5RoFe2JXGR8qP3aRk9VayGti023BR
+        t1g7UESAy7EHgpxI6hwoDUUepgu7qdTcXA26rjiTZAN2QUY9yAcjgi5Syi39mZC2VLTMZs
+        zWUAsTWYKWa1wdhGjz3se3w0lS/RoNk=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -31,9 +32,11 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
 Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
         list@opendingux.net, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 0/4] rtc: jz4740: Various updates
-Date:   Sun, 29 Jan 2023 12:04:38 +0000
-Message-Id: <20230129120442.22858-1-paul@crapouillou.net>
+Subject: [PATCH v3 1/4] dt-bindings: rtc: Add #clock-cells property
+Date:   Sun, 29 Jan 2023 12:04:39 +0000
+Message-Id: <20230129120442.22858-2-paul@crapouillou.net>
+In-Reply-To: <20230129120442.22858-1-paul@crapouillou.net>
+References: <20230129120442.22858-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -45,37 +48,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The RTC in the JZ4770 is compatible with the JZ4760, but has an extra
+register that permits to configure the behaviour of the CLK32K pin. The
+same goes for the RTC in the JZ4780.
 
-Here's a revised patchset that introduces a few updates to the
-jz4740-rtc driver.
+With this change, the RTC node is now also a clock provider on these
+SoCs, so a #clock-cells property is added.
 
-Patch [1/4] used to break ABI, it does not anymore.
-Patch [2/4] did not change, patch [3/4] is new.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Patch [3/4] has been updated to use dev_err_probe(), use __clk_hw_get()
-instead of looking up the parent's clock by name, and will now register
-the CLK32K clock when the #clock-cells device property is present
-instead of doing it based on the compatible string.
+---
+ v2: - add constraint on which SoCs can have the #clock-cells property
+     - add JZ4780 example which has a #clock-cells
+ v3: Don't break ABI anymore.
+---
+ .../devicetree/bindings/rtc/ingenic,rtc.yaml  | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-V2 had an extra patch to add support for fine-tuning the RTC; but since
-it was not tested enough I decided to drop it from the V3 until it's
-ready for prime time.
-
-Cheers,
--Paul
-
-Paul Cercueil (4):
-  dt-bindings: rtc: Add #clock-cells property
-  rtc: jz4740: Use readl_poll_timeout
-  rtc: jz4740: Use dev_err_probe()
-  rtc: jz4740: Register clock provider for the CLK32K pin
-
- .../devicetree/bindings/rtc/ingenic,rtc.yaml  | 29 ++++++
- drivers/rtc/Kconfig                           |  2 +-
- drivers/rtc/rtc-jz4740.c                      | 94 ++++++++++++++-----
- 3 files changed, 99 insertions(+), 26 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
+index af78b67b3da4..de9879bdb317 100644
+--- a/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
++++ b/Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
+@@ -11,6 +11,17 @@ maintainers:
+ 
+ allOf:
+   - $ref: rtc.yaml#
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - ingenic,jz4770-rtc
++                - ingenic,jz4780-rtc
++    then:
++      properties:
++        "#clock-cells": false
+ 
+ properties:
+   compatible:
+@@ -39,6 +50,9 @@ properties:
+   clock-names:
+     const: rtc
+ 
++  "#clock-cells":
++    const: 0
++
+   system-power-controller:
+     description: |
+       Indicates that the RTC is responsible for powering OFF
+@@ -83,3 +97,18 @@ examples:
+       clocks = <&cgu JZ4740_CLK_RTC>;
+       clock-names = "rtc";
+     };
++
++  - |
++    #include <dt-bindings/clock/ingenic,jz4780-cgu.h>
++    rtc: rtc@10003000 {
++      compatible = "ingenic,jz4780-rtc", "ingenic,jz4760-rtc";
++      reg = <0x10003000 0x4c>;
++
++      interrupt-parent = <&intc>;
++      interrupts = <32>;
++
++      clocks = <&cgu JZ4780_CLK_RTCLK>;
++      clock-names = "rtc";
++
++      #clock-cells = <0>;
++    };
 -- 
 2.39.0
 
