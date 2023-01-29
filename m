@@ -2,92 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488C067FFA1
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 15:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2017C67FFA3
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 15:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234654AbjA2Oxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 09:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        id S233999AbjA2O6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 09:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2Ox3 (ORCPT
+        with ESMTP id S229980AbjA2O55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 09:53:29 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B266E9D;
-        Sun, 29 Jan 2023 06:53:29 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TCv8Ib025247;
-        Sun, 29 Jan 2023 14:52:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=BTymnEY7PdY80oj3gRAnHrWAC+GyrmyhWWU2S+Zj73M=;
- b=RFoFGx9pwVVxGyIk1MddbV0KLfpN9U41KpQ9FxTmLnwqQI4sCebFLvbFp8hajQXLvYge
- aonnbfbixryzO+/n8WzpKkLR/e8HNlNEZcF24GOi5A08UzfqJrtUJQSGldzlGhvMtUzc
- UeI9pvf1yCdpdmXi/prILbmc5yHQURhl5rYhFGOplMI1NYy6K/9pZtl+IWBYJ/t4HDK0
- 5yrahFMspYjI3O30721zg0pRNb4xvw8f48GhMcq5O5p8RAwkG1CkZ81mB8tgX/e9lwsG
- Rh5M9vB8qXDCEVGnLOfvZ1d+er0GPTIKjMNwBZfU8pxTVV1OFaMNZNbyoyD4Q/ahVRVZ ew== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ndd5gtsu9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 14:52:56 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30TEqtQu003193;
-        Sun, 29 Jan 2023 14:52:55 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ndd5gtsu5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 14:52:55 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDoI61028521;
-        Sun, 29 Jan 2023 14:52:54 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuy6c2t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 14:52:54 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30TEqrV27144064
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 29 Jan 2023 14:52:53 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0DA3D5805C;
-        Sun, 29 Jan 2023 14:52:53 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5C10058051;
-        Sun, 29 Jan 2023 14:52:52 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.14.97])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Sun, 29 Jan 2023 14:52:52 +0000 (GMT)
-Message-ID: <89a7cc7efe1545e18c9af6c3ec53468d6f528a7a.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/2] ima: Introduce MMAP_CHECK_REQPROT hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
-        viro@zeniv.linux.org.uk, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Sun, 29 Jan 2023 09:52:51 -0500
-In-Reply-To: <20230126163812.1870942-2-roberto.sassu@huaweicloud.com>
-References: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
-         <20230126163812.1870942-2-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BS8bjdh3i4i2-dHgYMWyer4ug3yZgapU
-X-Proofpoint-ORIG-GUID: WUP_hBEkzHovIyANyxgtmqdLjZUXpGux
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-29_09,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 mlxscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301290143
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sun, 29 Jan 2023 09:57:57 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D757CBBAE
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:57:55 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso6526960wmq.5
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x3PIUhJJ2Js3C/6tt+mresOOSKw7x85c+zFM2rE/u0U=;
+        b=RcByp6Rs2We/gmOWyyrEZ+IXSaGFAeaQ/6SSTYW8z4OzUszNPVJZBd0XetBD+gv9+J
+         PnkF4igZXVKQTRrtpjunOnbo7vzys6/OGwtuS8i1+rXUDAVCHzcJ3+km5yUc+LduIlG9
+         h+jlOxNsvjz46Sr4bmV9uRBbaM/HUBeoLi3Xeslsozi1XTvQ6wurNDQlsGXJpgXo8RPS
+         L8cseUhE0LDuv7wVcDwP5jHl+QEspL5zTbUGKdRGYYyRi+yYH9HmtlJm2FsIzuy3yhJh
+         YsIM9um85wfZGFPPBrQLENpieiSeDapuXq2RmZWZuvGGX9fUYWtHJHkbsM+tG4VBZS6s
+         bqsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x3PIUhJJ2Js3C/6tt+mresOOSKw7x85c+zFM2rE/u0U=;
+        b=320IcZlFJYy/dZsegJJhDbbDeLOsnDEUcWIaiR/MUfmyc4l1lOXd1vBv61sJ3TH9PZ
+         WYw1XBdSd6dxCKOw6Xfk3zOqb7KrcK+U3Tb/dYSbAvsaJKmZ0RVNVtSys/iL316ortov
+         6YWG+5cK76Qn6Az84rNSGn+QSMyXzKj1U83CTJEB4TIqPsmaQaRtfElW4Iawp9+HqKfl
+         06zwLO8gdiXe22TdesoZF2iNXwSFf4bUeF8lOXFG6qiL+6zUVwTFZdy7a1xZrZ+OEYq1
+         3ferj4hoZ2qSmxrba+m6G4TYSJaKXp+Zm+qfGABn7MtgHxcYiOQBWBeQ4MO69IEznymk
+         PRag==
+X-Gm-Message-State: AFqh2kqD5gOvnOwFhFZyNX9etigMtmurOpkQ4RhepE0FhZk02mztd839
+        6zenu3vo/5fNRPDcG5Z0/1k=
+X-Google-Smtp-Source: AMrXdXsjVQh845slkNhByBaBVfoXw7J2mQdc6Pv+qb6C/k15/nHz1+lutQpeeBQWVaaaLPFoYiMf2g==
+X-Received: by 2002:a05:600c:3ba9:b0:3d2:231a:cb30 with SMTP id n41-20020a05600c3ba900b003d2231acb30mr10352358wms.3.1675004274089;
+        Sun, 29 Jan 2023 06:57:54 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p57935ca5.dip0.t-ipconnect.de. [87.147.92.165])
+        by smtp.gmail.com with ESMTPSA id s15-20020a05600c384f00b003d9de0c39fasm15567434wmr.36.2023.01.29.06.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 06:57:53 -0800 (PST)
+Date:   Sun, 29 Jan 2023 15:57:51 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/10] staging: rtl8192e: Remove unused constants and
+ variables from r8192E_hw.h
+Message-ID: <cover.1675003608.git.philipp.g.hortmann@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,51 +68,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-01-26 at 17:38 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Commit 98de59bfe4b2f ("take calculation of final prot in
-> security_mmap_file() into a helper") caused ima_file_mmap() to receive the
-> protections requested by the application and not those applied by the
-> kernel.
-> 
-> After restoring the original MMAP_CHECK behavior with a patch, existing
-> systems might be broken due to not being ready to handle new entries
-> (previously missing) in the IMA measurement list.
+Remove unused constants and variables from r8192E_hw.h 
+Fix checkpatch issues as CamelCase and missing spaces.
+Remove dead code.
 
-Is this a broken system or a broken attestation server?  The
-attestation server might not be able to handle the additional
-measurements, but the system, itself, is not broken.
+Tested with rtl8192e
+Transferred this patch over wlan connection of rtl8192e
 
-"with a patch" is unnecessary.
+Philipp Hortmann (10):
+  staging: rtl8192e: Rename TxBBGainTab.., CCKTxBBGainTab.. and
+    RT_CID_81..
+  staging: rtl8192e: Rename sCrcLng
+  staging: rtl8192e: Remove unused variable rxSNRdB
+  staging: rtl8192e: Remove unused constants from enum rt_customer_id
+  staging: rtl8192e: Rename BaseBand_Config_PHY_REG and
+    BaseBand_Config_AGC_TAB
+  staging: rtl8192e: Remove unused constants at beginning of r8192E_hw.h
+  staging: rtl8192e: Remove unused constants in _RTL8192Pci_HW
+  staging: rtl8192e: Remove used constants MSR_LINK_SH.. and
+    MSR_LINK_N..
+  staging: rtl8192e: Rename _RTL8192Pci_HW, MXDMA2_NoLimit and TPPoll
+  staging: rtl8192e: Rename TPPoll_CQ, AcmHwCtrl and AcmHw_BeqEn
 
-> 
-> Restore the original correct MMAP_CHECK behavior instead of keeping the
-
-^ add missing comma after "behavior"
-
-> current buggy one and introducing a new hook with the correct behavior. The
-> second option 
-
-^ The second option -> Otherwise,
-
-> would have had the risk of IMA users not noticing the problem
-> at all, as they would actively have to update the IMA policy, to switch to
-> the correct behavior.
-> 
-> Also, introduce the new MMAP_CHECK_REQPROT hook to keep the current
-> behavior, so that IMA users could easily fix a broken system, although this
-> approach is discouraged due to potentially missing measurements.
-
-Again, is this a broken system or a broken attestation server? 
-
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Otherwise, the patch looks good.
+ .../rtl8192e/rtl8192e/r8190P_rtl8256.c        |   2 +-
+ .../staging/rtl8192e/rtl8192e/r8192E_cmdpkt.c |   2 +-
+ .../staging/rtl8192e/rtl8192e/r8192E_dev.c    |  43 ++--
+ drivers/staging/rtl8192e/rtl8192e/r8192E_hw.h | 204 +-----------------
+ .../staging/rtl8192e/rtl8192e/r8192E_phy.c    |  16 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c  |   4 +-
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  31 +--
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    |  30 +--
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.h    |   6 +-
+ 9 files changed, 60 insertions(+), 278 deletions(-)
 
 -- 
-thanks,
-
-Mimi
+2.39.1
 
