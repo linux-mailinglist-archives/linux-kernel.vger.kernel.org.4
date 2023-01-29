@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9917867FEA3
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E9767FEA8
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbjA2Lr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 06:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        id S234706AbjA2Ltj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 06:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjA2LrY (ORCPT
+        with ESMTP id S229637AbjA2Lth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 06:47:24 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF33212BF
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 03:47:24 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id nn18-20020a17090b38d200b0022bfb584987so8660875pjb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 03:47:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AoazifkbtFJztUrCUoGjKnW8RsZbWWLPaoGlneRqOrU=;
-        b=gAhBl7l4r9LqwU1ROb1AHTQLdmPa1gwLsyRd9OuSQCt5PZuD1JeR2j+AlOrEJjA5Ni
-         A7vtf5Br/Me7OqOkn9G1XT4tpCYqs8SvMhdVmSEcScHwcCPiNMaBJacoGKrdU9qPD5lP
-         VQW6b5bUVwrXcSSIp8xeV04PY2T/LDuBMJdIA01i9Z8aQWSdP4cuUNvbGghP6Gv1USVc
-         5sXCyeBBFJhS+UxlK5gGttCcRnsMnH2C/mp7xn3MYznzlmZPlKeBZ5ocDbsaEcQSqdLd
-         wrdciXYUzqk27RP8qt8BFNWG+ngN8Ld8mdf95xXEmyX26olo164K1rgIOdXxF5YZACuY
-         XbNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AoazifkbtFJztUrCUoGjKnW8RsZbWWLPaoGlneRqOrU=;
-        b=V463twUVs/tawpdbfkC9i045sZe03bqUSxe4CaI4Lf5U0jePc89zMqv+NdJmg/sPAB
-         F/LCjgED6XDbfJ2ouoW/b70dfFFz81viCstUjXpo5mlvCTGn2TR+sWBfvr8bjy0Weuu2
-         67iZPhsi0stUrrGZzBI8Uhn2ib+opkYx20h9SfdAiTZi4Ehscm8g8AnXQoePKEA2aNcr
-         KHNyevLyTKP9ssENmC19QmzzGGU6gVGeStWFetYCEuVfn+NJFEuXETSYb23k5f50noU7
-         bH5eQc47bJwJr/u4HiHncILUpkMblnKoG/H0MIHMZhLrNjO34JqWUFFcp7jqc6vG5+XP
-         Fnyw==
-X-Gm-Message-State: AO0yUKVgsMemWd+lzS9fcMc7yyf0MqhchusQme3XmMVdjarFtXL/bcO3
-        DqabcYS+CaysDDF1CaMfEiY=
-X-Google-Smtp-Source: AK7set9X6O15t8wm1mu6GVx5f4CuJYVjgkIDWUb1IvHqEO1cTzvq6FHxXO6IHi4n/1PG3AvIAWMWMA==
-X-Received: by 2002:a17:902:f392:b0:196:6ff8:69b8 with SMTP id f18-20020a170902f39200b001966ff869b8mr2702500ple.27.1674992843575;
-        Sun, 29 Jan 2023 03:47:23 -0800 (PST)
-Received: from mi-HP-ProDesk-680-G4-MT ([43.224.245.237])
-        by smtp.gmail.com with ESMTPSA id jo8-20020a170903054800b001946a3f4d9csm5851810plb.38.2023.01.29.03.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 03:47:22 -0800 (PST)
-Date:   Sun, 29 Jan 2023 19:47:17 +0800
-From:   qixiaoyu <qxy65535@gmail.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        xiongping1@xiaomi.com, qixiaoyu1@xiaomi.com,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: f2fs: set *_data_age_threshold according to user_block_count
-Message-ID: <Y9ZcxUjQs4Hb0ZoT@mi-HP-ProDesk-680-G4-MT>
-References: <20230117115702.GA12653@mi-HP-ProDesk-680-G4-MT>
- <20230117133814.79508-1-frank.li@vivo.com>
+        Sun, 29 Jan 2023 06:49:37 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38D520D10;
+        Sun, 29 Jan 2023 03:49:36 -0800 (PST)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 605B5CD59C;
+        Sun, 29 Jan 2023 11:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1674992944; bh=+DytX3gjjZuPPIiQNsyksb2H8Iuk01FVUyWItEe4f34=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=AWFV76mIjxf9A7AfgNSZhN+k8xt5l2DNlywaRNbOGykObF/hxkcf/9evUNRSvaQYS
+         Ov8vw4p8W0KFn2TnPxPE5e2ymENJgHSFxDzOjrY+zccxkc9njbnRIBDwsjDSRWgMQb
+         QPtIOT3cnqJkPufWaCCKoyTCIFyJbPf9bCxEfFBs=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] media: i2c: ov2685: Make reset gpio optional
+Date:   Sun, 29 Jan 2023 12:49:03 +0100
+Message-ID: <2543677.Lt9SDvczpP@g550jk>
+In-Reply-To: <20230129112249.lf2vb7pthrv4nien@uno.localdomain>
+References: <20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz>
+ <20230129-ov2685-improvements-v1-1-f281bd49399c@z3ntu.xyz>
+ <20230129112249.lf2vb7pthrv4nien@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117133814.79508-1-frank.li@vivo.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FROM_SUSPICIOUS_NTLD,SPF_HELO_NONE,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 09:38:14PM +0800, Yangtao Li wrote:
-> Hi qixiaoyu,
-> 
-> > The block age here refers to total data blocks allocated of filesystem between two consecutive updates.
-> 
-> Yes, you are right.
-> 
-> > So, it has nothing to do with storage size.
-> 
-> But I think that the total data blocks allocated of filesystem between two consecutive updates
-> has something to do with the storage size. For example, for a 60M f2fs image, the lifetime_write_kbytes
-> will hardly reach 10G, or even 1G.
-> 
-> Thx,
-> Yangtao
+On Sonntag, 29. J=E4nner 2023 12:22:49 CET Jacopo Mondi wrote:
+> Hi Luca
+>=20
+> On Sun, Jan 29, 2023 at 10:42:35AM +0100, Luca Weiss wrote:
+> > In some setups XSHUTDOWN is connected to DOVDD when it's unused,
+> > therefore treat the reset gpio as optional.
+>=20
+> I don't have a datasheet for this sensor, but OV sensors usually have
+> to gpio lines to control powerdown and reset. Datasheets usually
+> suggest to hook one of the 2 to DOVDD and control the other from the
+> SoC. How is the sensor hooked up in your design ? No gpio lines is
+> controlled by the SoC ?
 
-Hi Yangtao,
+It looks like this sensor only has XSHUTDOWN pin and no extra reset pin.
 
-Block update frequency may related to applications and usage patterns,
-not storage size. A 1G f2fs image may have a similar block age to a
-10G f2fs image when running the same program.
+In my setup there's the normal I2C & CSI & mclk hookups, but the supply lin=
+es=20
+and shutdown line are all just connected to regulator-fixed, so gpio-
+controlled on/off regulators.
 
-So, it might not be a good idea to decide the *_data_age_threshold
-based on user_block_count.
+>=20
+> Another question is if we need to software-reset the sensor if no gpio
+> line is hooked up to XSHUTDOWN.
 
-Thanks,
+The datasheet mentions it resets itself during power up (so when the suppli=
+es=20
+are turned on), so I don't think we need to add anything.
+
+Regards
+Luca
+
+>=20
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > ---
+> >=20
+> >  drivers/media/i2c/ov2685.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
+> > index a3b524f15d89..a422f4c8a2eb 100644
+> > --- a/drivers/media/i2c/ov2685.c
+> > +++ b/drivers/media/i2c/ov2685.c
+> > @@ -734,7 +734,7 @@ static int ov2685_probe(struct i2c_client *client,
+> >=20
+> >  	if (clk_get_rate(ov2685->xvclk) !=3D OV2685_XVCLK_FREQ)
+> >  =09
+> >  		dev_warn(dev, "xvclk mismatched, modes are based on=20
+24MHz\n");
+> >=20
+> > -	ov2685->reset_gpio =3D devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+> > +	ov2685->reset_gpio =3D devm_gpiod_get_optional(dev, "reset",
+> > GPIOD_OUT_LOW);>=20
+> >  	if (IS_ERR(ov2685->reset_gpio)) {
+> >  =09
+> >  		dev_err(dev, "Failed to get reset-gpios\n");
+> >  		return -EINVAL;
+> >=20
+> > --
+> > 2.39.1
+
+
+
+
