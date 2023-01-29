@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6BD67FE70
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A2F67FE75
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbjA2LJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 06:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S230238AbjA2LSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 06:18:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjA2LJ3 (ORCPT
+        with ESMTP id S229519AbjA2LSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 06:09:29 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530541BAF0;
-        Sun, 29 Jan 2023 03:09:28 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TB127F012329;
-        Sun, 29 Jan 2023 11:09:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gU1WtSJOvhwTzCbkguNX6JpVqBEroAEsjBAyhD6rxBk=;
- b=FLpBTsYhB/hMBJ/q3/PIrNjzSbwE1tVD4UbSXUGLO5NTbRuIIc0gCejQSEzxesVtjpve
- lfOqzYVCRF2e9Ow+Ddw+BPBIEJAJT/b3znF8XN/+ITdKtXY/jnoWt2JtagMGkqlE40SC
- aF5tGbae8Vf5skTPUuqanW86xUJ6y6knHyCA6rWLfoFQbFvBE4R8IrSGYp0+UquQMjOr
- rYZ+IJX1hRA97BtZfWGcoaErAZNSQBtYgEK0uqtoMSfhfEfxd0vdCwXBnH2JQF3bFjXD
- 2v87GbQx+RxM66IFe9Y0S1DdpoXSBeE09I+GdJgtRllpbDA4Z6/+pshmt6b6AAezhjDp mQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncs2x21yy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 11:09:18 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30TB9HYN017902
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 29 Jan 2023 11:09:17 GMT
-Received: from [10.216.24.113] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 29 Jan
- 2023 03:09:14 -0800
-Message-ID: <3a4675f8-c182-a98c-38e8-be1b4480f612@quicinc.com>
-Date:   Sun, 29 Jan 2023 16:39:10 +0530
+        Sun, 29 Jan 2023 06:18:47 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7A81E9CE
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 03:18:44 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id r18so5830387pgr.12
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 03:18:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=omrJDSj6uak8lt7vSvDidr6zPPBb1t+NRol4udkHRtM=;
+        b=EyaWTcCn7Bsl/JXXTDTZjAdnoGEfWi3WfaZm+IoPJG4o0AqOPrBFPXNSCDbc5SJsq/
+         xy8Iuf5Z0eUFmNkuBrJDWxwQdUvVoTnTVp3qhM1ECcFv3AChBXa4wfVlUOtwofY2ULTH
+         0PEuzaNw6OtswmD07pCeacFQGL4ecVKTbwLIa4WmpnPVwX8Nn/2x4/jhcMHwdiVCYXtN
+         rMwjwJgdTCm99q1AyU/pXVX++bWznugJXUj3JEVWaWbxV+DOgfRMc1nyT5ujpOTiCXjU
+         Ivn40iydNry3dh60D2sBFOkS6ibFJIIOZ226R3mXkfSq9jsnaVnNvMnmBJay1DxgMgpz
+         +hag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=omrJDSj6uak8lt7vSvDidr6zPPBb1t+NRol4udkHRtM=;
+        b=EXUviYpVzqXcfS7cPv/Pnz9cPaGdK6zZUSRXuFiBJOpoCASKerdBqq9miesl/IHY44
+         fBqK9qBUXFdIIXAHCw4E8yW5z8aHWuuWMDOOUplL/agboV/bELzCvqUycsjnQrlzkRK3
+         h8xnA2Dv38afREEYMVHSuKbJhr7tZAXpqCYY4V4/I7s64iBQa5QalhnmMQHHpY2N522r
+         ao2AMpwRInpeRhehwXkOp8+w0+G2BXKQ86iaAnFdA7idzx0LBl8KnyXyzA6SEUJmt3K4
+         T9XZFRurpKEwv1A16LL7RKAsVc4UQZGGMEQgXwoqKYesh+HI+tPnQ2qYYuuLinRN/B+3
+         Fl6Q==
+X-Gm-Message-State: AO0yUKVjYoL3TUXE3/IYdeATljPPBXihaRE+ZROMWEG6J5MrhEKYL4RO
+        MqnAN5pCtCigxjYiN/5xfFU=
+X-Google-Smtp-Source: AK7set/z5jQFRQ4/hl+IlZ5xoVlXoweg5f07KqC/6rMEs7Uc5huhG0o2hdeSkM6GHB4Lq7WVgbgysw==
+X-Received: by 2002:a05:6a00:1949:b0:593:954e:1b09 with SMTP id s9-20020a056a00194900b00593954e1b09mr5327761pfk.8.1674991123815;
+        Sun, 29 Jan 2023 03:18:43 -0800 (PST)
+Received: from mi-HP-ProDesk-680-G4-MT ([43.224.245.237])
+        by smtp.gmail.com with ESMTPSA id y17-20020a626411000000b0058bbdaaa5e4sm5464492pfb.162.2023.01.29.03.18.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 03:18:43 -0800 (PST)
+Date:   Sun, 29 Jan 2023 19:18:37 +0800
+From:   qixiaoyu <qxy65535@gmail.com>
+To:     Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     xiongping1@xiaomi.com, qixiaoyu1@xiaomi.com,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 1/2 v2] f2fs: fix wrong calculation of block age
+Message-ID: <Y9ZWDVV3HJ431Fis@mi-HP-ProDesk-680-G4-MT>
+References: <20230113125859.15651-1-qixiaoyu1@xiaomi.com>
+ <20230116030850.20260-1-qixiaoyu1@xiaomi.com>
+ <7c12ebaa-4d3d-e475-dfb2-7b459cd26e64@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: mfd: qcom,tcsr: Add compatible for
- sm8450
-Content-Language: en-US
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <1673513697-30173-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: rXiT2MOt0SJdPP3-7b65_fu3kG4DgKqE
-X-Proofpoint-GUID: rXiT2MOt0SJdPP3-7b65_fu3kG4DgKqE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-29_09,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=825 impostorscore=0
- priorityscore=1501 bulkscore=0 clxscore=1011 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301290108
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7c12ebaa-4d3d-e475-dfb2-7b459cd26e64@kernel.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Jones
+On Sat, Jan 28, 2023 at 11:35:34AM +0800, Chao Yu wrote:
+> On 2023/1/16 11:08, qixiaoyu1 wrote:
+> > Currently we wrongly calculate the new block age to
+> > old * LAST_AGE_WEIGHT / 100.
+> > 
+> > Fix it to new * (100 - LAST_AGE_WEIGHT) / 100
+> >                  + old * LAST_AGE_WEIGHT / 100.
+> > 
+> > Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+> > Signed-off-by: xiongping1 <xiongping1@xiaomi.com>
+> > ---
+> > Change log v1 -> v2:
+> >   - fix udiv
+> > 
+> >   fs/f2fs/extent_cache.c | 7 ++-----
+> >   1 file changed, 2 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+> > index 342af24b2f8c..ad5533f178fd 100644
+> > --- a/fs/f2fs/extent_cache.c
+> > +++ b/fs/f2fs/extent_cache.c
+> > @@ -874,11 +874,8 @@ void f2fs_update_read_extent_tree_range_compressed(struct inode *inode,
+> >   static unsigned long long __calculate_block_age(unsigned long long new,
+> >   						unsigned long long old)
+> >   {
+> > -	unsigned long long diff;
+> > -
+> > -	diff = (new >= old) ? new - (new - old) : new + (old - new);
+> > -
+> > -	return div_u64(diff * LAST_AGE_WEIGHT, 100);
+> > +	return div_u64(new, 100) * (100 - LAST_AGE_WEIGHT)
+> > +		+ div_u64(old, 100) * LAST_AGE_WEIGHT;
+> 
+> How about updating as below to avoid lossing accuracy if new is less than 100?
+> 
+> return div_u64(new * (100 - LAST_AGE_WEIGHT), 100) +
+> 		div_u64(old * LAST_AGE_WEIGHT, 100);
+> 
+> Thanks,
+> 
 
-Jones,
+We want to avoid overflow by doing the division first. To keep the accuracy, how
+about updating as below:
 
-Can this patch be taken into your tree ?
+	res = div_u64_rem(new, 100, &rem_new) * (100 - LAST_AGE_WEIGHT)
+		+ div_u64_rem(old, 100, &rem_old) * LAST_AGE_WEIGHT;
+	res += rem_new * (100 - LAST_AGE_WEIGHT) / 100 + rem_old * LAST_AGE_WEIGHT / 100;
+	return res;
 
--Mukesh
+Thanks,
 
-On 1/12/2023 2:24 PM, Mukesh Ojha wrote:
-> Document the qcom,sm8450-tcsr compatible.
-> 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-> Change in v3:
->    - Align with new format mentioned at
->      Documentation/devicetree/bindings/arm/qcom-soc.yaml
-> 
-> Change in v2:
->    - Considering here it as v2 as this patch came out from comment
->      made on its v1 https://lore.kernel.org/lkml/c5dc8042-717b-22eb-79f6-d18ab10d6685@linaro.org/
-> 
-> 
->   Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-> index adcae6c..4290062 100644
-> --- a/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml
-> @@ -26,6 +26,7 @@ properties:
->             - qcom,sdm630-tcsr
->             - qcom,sdm845-tcsr
->             - qcom,sm8150-tcsr
-> +          - qcom,sm8450-tcsr
->             - qcom,tcsr-apq8064
->             - qcom,tcsr-apq8084
->             - qcom,tcsr-ipq6018
+> >   }
+> >   /* This returns a new age and allocated blocks in ei */
