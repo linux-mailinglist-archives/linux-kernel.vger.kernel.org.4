@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4537568015D
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 21:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9CA680164
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjA2UuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 15:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S233942AbjA2VAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 16:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjA2UuT (ORCPT
+        with ESMTP id S229523AbjA2VAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 15:50:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6C11BAC9
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 12:50:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F371FB80DBD
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D0BC433D2;
-        Sun, 29 Jan 2023 20:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1675025415;
-        bh=q2/HBKoBXD27IsM9BwIx6UYtt4IZ81bwAZpNuwPW1mI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Eq4biyfZVG2QI1zTo6yR+B4/q9iceaRN8JW4pzEX1aWvzA9v0v93OX7XiXRPwHIch
-         7UnnHGIio06rN1J1vtBXb2atgLTMw8bmHBR5gKOjOOZ12vyB5QelI/0NH+RKPkfJQi
-         cEyu9qHj1+CFd0zft2mv0CvFKXIbOYoJx+H6MNPk=
-Date:   Sun, 29 Jan 2023 12:50:14 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        linux-mm <linux-mm@kvack.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-Subject: Re: Failure during Stack Depot allocating hash table of 1048576
- entries with kvcalloc
-Message-Id: <20230129125014.fcd459335c9b8eae71067c1a@linux-foundation.org>
-In-Reply-To: <Y9UweHxSfPiAqgZx@zn.tnic>
-References: <Y8Fq5m0CLfcFLCOY@zn.tnic>
-        <07e42002-e78d-7947-19a7-0dd035466f50@alu.unizg.hr>
-        <Y9UBFNwBeuePPsk3@zn.tnic>
-        <d4871e70-c7c9-e638-d7c0-304ec8aea77b@leemhuis.info>
-        <Y9UweHxSfPiAqgZx@zn.tnic>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 29 Jan 2023 16:00:19 -0500
+Received: from outbound-smtp42.blacknight.com (outbound-smtp42.blacknight.com [46.22.139.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE661C5A3
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:00:17 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp42.blacknight.com (Postfix) with ESMTPS id EC9FD1CA0
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:00:14 +0000 (GMT)
+Received: (qmail 9970 invoked from network); 29 Jan 2023 21:00:14 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 29 Jan 2023 21:00:14 -0000
+Date:   Sun, 29 Jan 2023 21:00:12 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/4] Fix excessive CPU usage during compaction
+Message-ID: <20230129210012.ghvweg5kqlqeu3xu@techsingularity.net>
+References: <20230125134434.18017-1-mgorman@techsingularity.net>
+ <20230125171159.355a770a2e34f78d7664e1f0@linux-foundation.org>
+ <7ad2cbdc-8589-3aa2-b16a-41336f849f65@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <7ad2cbdc-8589-3aa2-b16a-41336f849f65@suse.cz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 28 Jan 2023 15:26:00 +0100 Borislav Petkov <bp@alien8.de> wrote:
-
-> On Sat, Jan 28, 2023 at 02:55:58PM +0100, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
-> > On 28.01.23 12:03, Borislav Petkov wrote:
-> > > On Sat, Jan 28, 2023 at 03:41:50AM +0100, Mirsad Goran Todorovac wrote:
-> > >> This appears to be a duplicate of the report:
-> > >> https://lore.kernel.org/linux-mm/2c677d85-820c-d41a-fc98-7d3974b49e42@alu.unizg.hr/raw
-> > > 
-> > > Yah, looks like
-> > > 
-> > > 56a61617dd22 ("mm: use stack_depot for recording kmemleak's backtrace")
-> > > 
-> > > needs to be reverted.
+On Sun, Jan 29, 2023 at 07:03:54PM +0100, Vlastimil Babka wrote:
+> On 1/26/23 02:11, Andrew Morton wrote:
+> > On Wed, 25 Jan 2023 13:44:30 +0000 Mel Gorman <mgorman@techsingularity.net> wrote:
 > > 
-> > Unless I'm missing something (which might easily be the case) there is a
-> > patch for that issue in -mm already:
+> > If we drop Vlastimil's reversion and apply this, the whole series
+> > should be cc:stable and it isn't really designed for that.
 > > 
-> > https://lore.kernel.org/all/20230119224022.80752C433F0@smtp.kernel.org/
+> > So I think either
 > > 
-> > Or where two different issues discussed in the thread Mirsad mentioned
-> > above?
+> > a) drop Vlastimil's reversion and persuade Mel to send us a minimal
+> >    version of patch #4 for -stable consumption.  Patches 1-3 of this
+> >    series come later.
+> > 
+> > b) go ahead with Vlastimil's revert for -stable, queue up this
+> >    series for 6.3-rc1 and redo the original "fix set skip in
+> >    fast_find_migrateblock" some time in the future.
+> > 
+> > If we go with b) then the Fixes: tag in "[PATCH 4/4] mm, compaction:
+> > Finish pageblocks on complete migration failure" is inappropriate -
+> > fixing a reverted commit which Vlastimil's revert already fixed.
+> > 
+> > I'll plan on b) for now.
 > 
-> Probably the same issue. This one fixes the issue on my machine - thanks!
-> 
-> Tested-by: Borislav Petkov (AMD) <bp@alien8.de>
-> 
+> Agreed with the plan b). I couldn't review this yet due to being sick,
+> but I doubt I would have enough confidence to fast-track the series to
+> 6.2 and 6.1-stable. It's subtle enough area and extra time in -next and
+> full -rc cycle will help.
 
-OK, thanks, I didn't realize this issue was so serious.
+I hope you feel better soon but for what it's worth, I think it also
+deserves a full -rc cycle. I've been running it on my own machine for the
+last few days using an openSUSE stable kernel with this series applied and
+I haven't had problems with kcompactd or khugepaged getting out of control
+(monitored via top -b -i). However, I have noticed at least one audio glitch
+and I'm not sure if that is related to the series or not. Compaction is
+more active than I would have expected from intuition but I've also never
+had reason to monitor compaction on my desktop so that's not very useful
+in itself. My desktop is a very basic environment (awesome WM, no fancy
+animations) and the times when my machine starts thrashing, I also expect
+it to because it's the weekly "run git gc on every git tree Friday evening
+if X is idle more than an hour".
 
-I reordered Zhaoyang Huang's series so that "mm: use
-stack_depot_early_init for kmemleak" comes ahead of "mm: move
-KMEMLEAK's Kconfig items from lib to mm" and I've staged "mm: use
-stack_depot_early_init for kmemleak" in the mm-hotfixes branch for
-upstream merging in this -rc cycle.
-
+-- 
+Mel Gorman
+SUSE Labs
