@@ -2,70 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F82768008D
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEC7680095
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbjA2RtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 12:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S235011AbjA2RvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 12:51:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjA2Rs5 (ORCPT
+        with ESMTP id S230082AbjA2RvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 12:48:57 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F206A1ABC0
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:48:55 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id l35-20020a05600c1d2300b003dc4634a466so2579894wms.4
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:48:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sr4fFy3dWRxDTNDNO8Ar7sH6BDFvsFVUwILCU9VcaZM=;
-        b=Z0b567v2zrQsZmZpB1usLpNIA7m9hlpZar2O/dXmouTBfEfnbZMHzkbfLlHsQk2Uhy
-         HnC3c5w79TJ9pQiKxIOexVvLBtukUNUBGqP12H3L3iqKO2lvIpU3/xIwrpD/f3F28wGV
-         u3aU228GVcc56ajSOULx6MnM4lOYEcYYxnlO7IjXliLJUC4feyTtR909XF6cRnsbnnY0
-         iGoIO1WoIJLsamXRacRiGmO61tFOx6BtVH+acMpzfMv8r+7vUnK3dWdnf+B6367cuoNe
-         RusKb/pLiaxfFIsTaOMu4XGBpYtqUx976toY8VzCVj7MS2LylpbaozwdcRr0lcZHZAE9
-         wNCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sr4fFy3dWRxDTNDNO8Ar7sH6BDFvsFVUwILCU9VcaZM=;
-        b=zB+wjrBHhJYk+K7A0jVy+9elcftZZAbV7/FeP0qXBCROCS3byFRAT2CajQ2JeWWVA3
-         gPn0EQtIkFNwmpiDJWAoColMDNErWqlJv8T1rZM1Fr8FMpbviH2eLLdzUy1njhHs0v0Y
-         hGN+7ewHs5s0PikSHwFs/e8RfUN1U8TN5JoyY8OcBAU5XAaMCWNZgUQqCxW712coorzd
-         igfyurq/v/YA7B25k4aGBZN5859PR0rVIrCMkDM6eO9eegF5hsBvUyvcFiTys3hz61Sg
-         Zr9PFIiCiGCA88Ip2dVCc4HpRtx/gxA8rqtIao5klfOff75ukyvEgsN9GfsiWvkMSYfi
-         BOkg==
-X-Gm-Message-State: AO0yUKUfGSqhF0TbzHvhKQFStZSUXNgHsN5SOTkYlzgJUhp6rHqPQDxQ
-        O8XSPtI3Od3Re+SkeFmgOXck2g==
-X-Google-Smtp-Source: AK7set8V03LwoICGduJRa2Bl27HyEiBCOlv3oVi6LLGhhTDf2BOMD2OtF6I5stna37Mo3ZDdkOdQTQ==
-X-Received: by 2002:a05:600c:54e6:b0:3dc:489e:1867 with SMTP id jb6-20020a05600c54e600b003dc489e1867mr5540037wmb.36.1675014534575;
-        Sun, 29 Jan 2023 09:48:54 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id v6-20020a05600c444600b003db09692364sm15200937wmn.11.2023.01.29.09.48.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 09:48:53 -0800 (PST)
-Date:   Sun, 29 Jan 2023 19:48:52 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        aford173@gmail.com, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 0/4] clk: imx: imx_register_uart_clocks update
-Message-ID: <Y9axhPF3h/kZEsGg@linaro.org>
-References: <20230104110032.1220721-1-peng.fan@oss.nxp.com>
+        Sun, 29 Jan 2023 12:51:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3493819F00;
+        Sun, 29 Jan 2023 09:51:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4E1160CEF;
+        Sun, 29 Jan 2023 17:51:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E301C433EF;
+        Sun, 29 Jan 2023 17:51:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675014681;
+        bh=l4hEyZpO2oJZa+cpND05u71/0f47fJcK1SCdHu0VA6A=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=jaY2H0zphpAB/4y7WSq+gtS9dUOd9004iuBraqeUUdS7K39qXPEO7c0ogJ0V5MNaz
+         q6TOEZ4J7JIwSpICLrpyWLQakrxLISOtFvkvrSL0i46UCmDxIMqWX7G+irkc38fj/W
+         TjVaTeG/FGk97WdWzeG7c78znCRAsCmd3LlKmf/mEp412371U20ZVmESE68osZSq8u
+         T3ngCFrBa/cZmAj85wzAZbw6IPEB8yfktgg16gPec+//ftW13cgoZdXCojbmdHB/8m
+         UactsGRGBq0eDHA+nHXgX9ySz09KoX2I+4jPlZ39jBZjJk8/9D+x4hwTzw049oFxt8
+         Z6bPGXkw0O0aw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id AB7E75C08B3; Sun, 29 Jan 2023 09:51:20 -0800 (PST)
+Date:   Sun, 29 Jan 2023 09:51:20 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com
+Subject: [PATCH memory-model] Add smp_mb__after_srcu_read_unlock()
+Message-ID: <20230129175120.GA1109244@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230104110032.1220721-1-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,43 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-04 19:00:28, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> This patchset is to cleanup the imx_register_uart_clocks usage, and
-> use this API for i.MX93 clk driver.
-> 
-> Peng Fan (4):
->   clk: imx: avoid memory leak
->   clk: imx: get stdout clk count from device tree
->   clk: imx: remove clk_count of imx_register_uart_clocks
->   clk: imx: imx93: invoke imx_register_uart_clocks
+This commit adds support for smp_mb__after_srcu_read_unlock(), which,
+when combined with a prior srcu_read_unlock(), implies a full memory
+barrier.  No ordering is guaranteed to accesses between the two, and
+placing accesses between is bad practice in any case.
 
-Applied all.
+Tests may be found at https://github.com/paulmckrcu/litmus in files
+matching manual/kernel/C-srcu-mb-*.litmus.
 
-Thanks.
+If we really do figure a way to weaken srcu_read_unlock() to release
+semantics, this functionality might play a greater role.
 
-> 
->  drivers/clk/imx/clk-imx25.c   |  2 +-
->  drivers/clk/imx/clk-imx27.c   |  2 +-
->  drivers/clk/imx/clk-imx35.c   |  2 +-
->  drivers/clk/imx/clk-imx5.c    |  6 +++---
->  drivers/clk/imx/clk-imx6q.c   |  2 +-
->  drivers/clk/imx/clk-imx6sl.c  |  2 +-
->  drivers/clk/imx/clk-imx6sll.c |  2 +-
->  drivers/clk/imx/clk-imx6sx.c  |  2 +-
->  drivers/clk/imx/clk-imx7d.c   |  2 +-
->  drivers/clk/imx/clk-imx7ulp.c |  4 ++--
->  drivers/clk/imx/clk-imx8mm.c  |  2 +-
->  drivers/clk/imx/clk-imx8mn.c  |  2 +-
->  drivers/clk/imx/clk-imx8mp.c  |  2 +-
->  drivers/clk/imx/clk-imx8mq.c  |  2 +-
->  drivers/clk/imx/clk-imx8ulp.c |  2 +-
->  drivers/clk/imx/clk-imx93.c   |  2 ++
->  drivers/clk/imx/clk.c         | 17 ++++++++++++-----
->  drivers/clk/imx/clk.h         |  4 ++--
->  18 files changed, 34 insertions(+), 25 deletions(-)
-> 
-> -- 
-> 2.37.1
-> 
+It can be argued that smp_mb__after_srcu_read_unlock() should instead
+be smp_mb__before_srcu_read_unlock() to make it more clear that the full
+memory barrier precedes the end of any ongoing grace period.  There are
+not that many uses of smp_mb__after_srcu_read_unlock(), so...
+
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
+index dc464854d28a4..b92fdf7f6eeb1 100644
+--- a/tools/memory-model/linux-kernel.bell
++++ b/tools/memory-model/linux-kernel.bell
+@@ -31,7 +31,8 @@ enum Barriers = 'wmb (*smp_wmb*) ||
+ 		'before-atomic (*smp_mb__before_atomic*) ||
+ 		'after-atomic (*smp_mb__after_atomic*) ||
+ 		'after-spinlock (*smp_mb__after_spinlock*) ||
+-		'after-unlock-lock (*smp_mb__after_unlock_lock*)
++		'after-unlock-lock (*smp_mb__after_unlock_lock*) ||
++		'after-srcu-read-unlock (*smp_mb__after_srcu_read_unlock*)
+ instructions F[Barriers]
+ 
+ (* SRCU *)
+diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+index 6e531457bb738..3a4d3b49e85cb 100644
+--- a/tools/memory-model/linux-kernel.cat
++++ b/tools/memory-model/linux-kernel.cat
+@@ -49,7 +49,8 @@ let mb = ([M] ; fencerel(Mb) ; [M]) |
+  * also affected by the fence.
+  *)
+ 	([M] ; po-unlock-lock-po ;
+-		[After-unlock-lock] ; po ; [M])
++		[After-unlock-lock] ; po ; [M]) |
++	([M] ; po? ; [Srcu-unlock] ; fencerel(After-srcu-read-unlock) ; [M])
+ let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+ let strong-fence = mb | gp
+ 
+diff --git a/tools/memory-model/linux-kernel.def b/tools/memory-model/linux-kernel.def
+index ef0f3c1850dee..a6b6fbc9d0b24 100644
+--- a/tools/memory-model/linux-kernel.def
++++ b/tools/memory-model/linux-kernel.def
+@@ -24,6 +24,7 @@ smp_mb__before_atomic() { __fence{before-atomic}; }
+ smp_mb__after_atomic() { __fence{after-atomic}; }
+ smp_mb__after_spinlock() { __fence{after-spinlock}; }
+ smp_mb__after_unlock_lock() { __fence{after-unlock-lock}; }
++smp_mb__after_srcu_read_unlock() { __fence{after-srcu-read-unlock}; }
+ barrier() { __fence{barrier}; }
+ 
+ // Exchange
