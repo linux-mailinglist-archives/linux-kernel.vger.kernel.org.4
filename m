@@ -2,87 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB74867FC12
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D021367FC14
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 02:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjA2BSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 28 Jan 2023 20:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        id S230026AbjA2B1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 28 Jan 2023 20:27:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjA2BSR (ORCPT
+        with ESMTP id S229749AbjA2B1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 28 Jan 2023 20:18:17 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9972516336;
-        Sat, 28 Jan 2023 17:18:14 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4P4D2n2YBLz4f3mJ6;
-        Sun, 29 Jan 2023 09:18:09 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgCHgR9SydVj2wd2CQ--.45901S3;
-        Sun, 29 Jan 2023 09:18:11 +0800 (CST)
-Subject: Re: [PATCH] block, bfq: fix uaf for bfqq in bic_set_bfqq()
-To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc:     "jack@suse.cz" <jack@suse.cz>, "tj@kernel.org" <tj@kernel.org>,
-        "josef@toxicpanda.com" <josef@toxicpanda.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "paolo.valente@linaro.org" <paolo.valente@linaro.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "yukuai1@huaweicloud.com" <yukuai1@huaweicloud.com>,
-        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
-        "yangerkun@huawei.com" <yangerkun@huawei.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230113094410.2907223-1-yukuai3@huawei.com>
- <20230124000925.pfosl6pfuhjyggbp@shindev>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <38b5d9a6-bed6-c139-404b-94aca49f38c6@huaweicloud.com>
-Date:   Sun, 29 Jan 2023 09:18:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sat, 28 Jan 2023 20:27:13 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03FF21A17
+        for <linux-kernel@vger.kernel.org>; Sat, 28 Jan 2023 17:27:09 -0800 (PST)
+Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4P4DBt1Swpz16Mgj;
+        Sun, 29 Jan 2023 09:25:10 +0800 (CST)
+Received: from [10.67.111.186] (10.67.111.186) by
+ dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Sun, 29 Jan 2023 09:27:07 +0800
+Message-ID: <8a2e400f-868c-1d98-3c9b-de2e0d41f55c@huawei.com>
+Date:   Sun, 29 Jan 2023 09:27:07 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230124000925.pfosl6pfuhjyggbp@shindev>
-Content-Type: text/plain; charset=gbk; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH] sched/fair: sanitize vruntime of entity being placed
+To:     Chen Yu <yu.c.chen@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, Roman Kagan <rkagan@amazon.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Juri Lelli <juri.lelli@redhat.com>
+References: <20230127163230.3339408-1-rkagan@amazon.de>
+ <Y9Va5HJgEDteceg3@chenyu5-mobl1>
+From:   Zhang Qiao <zhangqiao22@huawei.com>
+In-Reply-To: <Y9Va5HJgEDteceg3@chenyu5-mobl1>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCHgR9SydVj2wd2CQ--.45901S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYq7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2js
-        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
-        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
-        CFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxG
-        xcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxK
-        x2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-Originating-IP: [10.67.111.186]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500018.china.huawei.com (7.185.36.186)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, Chenyu,
 
-ÔÚ 2023/01/24 8:09, Shinichiro Kawasaki Ð´µÀ:
+åœ¨ 2023/1/29 1:27, Chen Yu å†™é“:
+> Hi Roman, Qiao,
+> On 2023-01-27 at 17:32:30 +0100, Roman Kagan wrote:
+>> From: Zhang Qiao <zhangqiao22@huawei.com>
+>>
+>> When a scheduling entity is placed onto cfs_rq, its vruntime is pulled
+>> to the base level (around cfs_rq->min_vruntime), so that the entity
+>> doesn't gain extra boost when placed backwards.
+>>
+>> However, if the entity being placed wasn't executed for a long time, its
+>> vruntime may get too far behind (e.g. while cfs_rq was executing a
+>> low-weight hog), which can inverse the vruntime comparison due to s64
+>> overflow.  This results in the entity being placed with its original
+>> vruntime way forwards, so that it will effectively never get to the cpu.
+>>
+> Looks interesting,
+> case 1:
+>   se->vruntime = 1, cfs_rq->min_vruntime = ULONG_MAX
+>   ==> max = 1
+> case 2:
+>   se->vruntime = 1, cfs_rq->min_vruntime = LONG_MAX
+>   ==> max = LONG_MAX
 > 
-> Yu, thanks for posting this fix, but it can not be applied to v6.2-rc5. The
-> hunk above looks different from the patch I tested. Could you take a look?
+> May I know if the issue you described above is in case 1? We want
+> the max to be ULONG_MAX but it returns 1 because of s64
+> comparison? Then max = 1 is incorrectly used as se's vruntime?
+> Could you please elaborate a little more about this issue?
+
+Yes, the issue is in case 1.
+
+For more detailed discussion, can see https://lkml.org/lkml/2022/12/21/435.
+
+>> To prevent that, ignore the vruntime of the entity being placed if it
+>> didn't execute for much longer than the characteristic sheduler time
+>> scale.
+>>
+>> [rkagan: formatted, adjusted commit log, comments, cutoff value]
+>> Co-developed-by: Roman Kagan <rkagan@amazon.de>
+>> Signed-off-by: Roman Kagan <rkagan@amazon.de>
+>> ---
+>> @zhangqiao22, I took the liberty to put you as the author of the patch,
+>> as this is essentially what you posted for discussion, with minor
+>> tweaks.  Please stamp with your s-o-b if you're ok with it.
+>>
+>>  kernel/sched/fair.c | 15 +++++++++++++--
+>>  1 file changed, 13 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index 0f8736991427..d6cf131ebb0b 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -4656,6 +4656,7 @@ static void
+>>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>>  {
+>>  	u64 vruntime = cfs_rq->min_vruntime;
+>> +	u64 sleep_time;
+>>  
+>>  	/*
+>>  	 * The 'current' period is already promised to the current tasks,
+>> @@ -4685,8 +4686,18 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>>  		vruntime -= thresh;
+>>  	}
+>>  
+>> -	/* ensure we never gain time by being placed backwards. */
+>> -	se->vruntime = max_vruntime(se->vruntime, vruntime);
+>> +	/*
+>> +	 * Pull vruntime of the entity being placed to the base level of
+>> +	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
+>> +	 * slept for a long time, don't even try to compare its vruntime with
+>> +	 * the base as it may be too far off and the comparison may get
+>> +	 * inversed due to s64 overflow.
+>> +	 */
+>> +	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> If I understand correctly, se->exec_start is just updated by enqueue_entity()->update_curr(cfs_rq),
+
+When a task go to sleep, se->exec_start will update at dequeue_entity()->update_curr(cfs_rq).
+And enqueue_entity()->update_curr(cfs_rq) just update current se.
+
+Thank,
+Qiao.
+
+> then place_entity() in invoked here, I'm not sure if sleep_time above
+> could reflect the real sleep time. Maybe something like:
+> rq_clock_task(rq_of(cfs_rq)) - se->time_stamp_dequeued ?
 > 
-
-This patch was rebased with following patch that add a new param for
-bic_set_bfqq():
-
-51ec2387623a block, bfq: split sync bfq_queues on a per-actuator basis
-
-Thanks,
-Kuai
-
+> thanks,
+> Chenyu
+> .
+> 
