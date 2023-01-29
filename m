@@ -2,219 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18F268015C
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 21:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4537568015D
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 21:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjA2UnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 15:43:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S232278AbjA2UuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 15:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjA2UnH (ORCPT
+        with ESMTP id S229835AbjA2UuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 15:43:07 -0500
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97ED09EDA
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 12:43:05 -0800 (PST)
-Received: from [192.168.100.237] (cust-41-49-110-94.dyn.as47377.net [94.110.49.41])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sun, 29 Jan 2023 15:50:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6C11BAC9
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 12:50:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 0E4A43744C0;
-        Sun, 29 Jan 2023 21:43:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1675024982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GKCL4x5Txs5llaY7BYYY71zG1gIHojGBLbaJh42WF2U=;
-        b=fZiGVi8n69bRgrIt/cGwzR5qVM88nWhqbRDxoIxLxoImEPG0gvyW/l/tbvtJF+abPNt/yR
-        sIGDN2G/q6XR3/QU1WY47DI1hq2ozdiCvbERfeEN32h/UWEysKWKd8wRWNZJ+uIZQUqE8/
-        l3QdvM3j5RMspUG/ExKvneq4DnZI4+xzMKr2zqL560X6Crm9OhtfETYiuN3sbmoAGY64vU
-        0jtFSknqbvxBFeFqBGZN1ElZMsUvUeMJ/b7gcSnPnIGzslmS93Fzmrchii7xEHiq89f3lF
-        RTYA7y60bhhqVtY0trX1G4LvAB9ECvzSBhMzwSM46f0GACuf39qJB7VcDW9xWQ==
-Message-ID: <c609a7f865ab48f858adafdd9c1014dda8ec82d6.camel@svanheule.net>
-Subject: Re: [PATCH v7 11/11] dt-bindings: net: dsa: qca8k: add LEDs
- definition example
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-leds@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Date:   Sun, 29 Jan 2023 21:43:00 +0100
-In-Reply-To: <63a30221.050a0220.16e5f.653a@mx.google.com>
-References: <20221214235438.30271-1-ansuelsmth@gmail.com>
-         <20221214235438.30271-12-ansuelsmth@gmail.com>
-         <20221220173958.GA784285-robh@kernel.org> <Y6JDOFmcEQ3FjFKq@lunn.ch>
-         <Y6JkXnp0/lF4p0N1@lunn.ch> <63a30221.050a0220.16e5f.653a@mx.google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id F371FB80DBD
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D0BC433D2;
+        Sun, 29 Jan 2023 20:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1675025415;
+        bh=q2/HBKoBXD27IsM9BwIx6UYtt4IZ81bwAZpNuwPW1mI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Eq4biyfZVG2QI1zTo6yR+B4/q9iceaRN8JW4pzEX1aWvzA9v0v93OX7XiXRPwHIch
+         7UnnHGIio06rN1J1vtBXb2atgLTMw8bmHBR5gKOjOOZ12vyB5QelI/0NH+RKPkfJQi
+         cEyu9qHj1+CFd0zft2mv0CvFKXIbOYoJx+H6MNPk=
+Date:   Sun, 29 Jan 2023 12:50:14 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        linux-mm <linux-mm@kvack.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Subject: Re: Failure during Stack Depot allocating hash table of 1048576
+ entries with kvcalloc
+Message-Id: <20230129125014.fcd459335c9b8eae71067c1a@linux-foundation.org>
+In-Reply-To: <Y9UweHxSfPiAqgZx@zn.tnic>
+References: <Y8Fq5m0CLfcFLCOY@zn.tnic>
+        <07e42002-e78d-7947-19a7-0dd035466f50@alu.unizg.hr>
+        <Y9UBFNwBeuePPsk3@zn.tnic>
+        <d4871e70-c7c9-e638-d7c0-304ec8aea77b@leemhuis.info>
+        <Y9UweHxSfPiAqgZx@zn.tnic>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+On Sat, 28 Jan 2023 15:26:00 +0100 Borislav Petkov <bp@alien8.de> wrote:
 
-On Wed, 2022-12-21 at 13:54 +0100, Christian Marangi wrote:
-> For reg it's really specific to the driver... My idea was that since a
-> single phy can have multiple leds attached, reg will represent the led
-> number.
->=20
-> This is an example of the dt implemented on a real device.
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0mdio {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0#ad=
-dress-cells =3D <1>;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0#si=
-ze-cells =3D <0>;
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0phy=
-_port1: phy@0 {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg =3D <0>;
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0leds {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0#address-cells =3D <1>;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0#size-cells =3D <0>;
-[...]
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-[...]
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0};
->=20
-> In the following implementation. Each port have 2 leds attached (out of
-> 3) one white and one amber. The driver parse the reg and calculate the
-> offset to set the correct option with the regs by also checking the phy
-> number.
+> On Sat, Jan 28, 2023 at 02:55:58PM +0100, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+> > On 28.01.23 12:03, Borislav Petkov wrote:
+> > > On Sat, Jan 28, 2023 at 03:41:50AM +0100, Mirsad Goran Todorovac wrote:
+> > >> This appears to be a duplicate of the report:
+> > >> https://lore.kernel.org/linux-mm/2c677d85-820c-d41a-fc98-7d3974b49e42@alu.unizg.hr/raw
+> > > 
+> > > Yah, looks like
+> > > 
+> > > 56a61617dd22 ("mm: use stack_depot for recording kmemleak's backtrace")
+> > > 
+> > > needs to be reverted.
+> > 
+> > Unless I'm missing something (which might easily be the case) there is a
+> > patch for that issue in -mm already:
+> > 
+> > https://lore.kernel.org/all/20230119224022.80752C433F0@smtp.kernel.org/
+> > 
+> > Or where two different issues discussed in the thread Mirsad mentioned
+> > above?
+> 
+> Probably the same issue. This one fixes the issue on my machine - thanks!
+> 
+> Tested-by: Borislav Petkov (AMD) <bp@alien8.de>
+> 
 
-With switch silicon allowing user control of the LEDs, vendors can (and wil=
-l)
-use the switch's LED peripheral to drive other LEDs (or worse). E.g. on a C=
-isco
-SG220-26 switch, using a Realtek RTL8382 SoC, the LEDs associated with some
-unused switch ports are used to display a global device status. My concern =
-here
-is that one would have to specify switch ports, that aren't connected to
-anything, just to describe those non-ethernet LEDs.
+OK, thanks, I didn't realize this issue was so serious.
 
-Would an alternative with a 'trigger-sources' property pointing to the righ=
-t phy
-be an option? The trade-off I see would be that extra port info has to be
-provided on a separate LED controller, which your example can avoid thanks =
-to
-the phy's reg property.
+I reordered Zhaoyang Huang's series so that "mm: use
+stack_depot_early_init for kmemleak" comes ahead of "mm: move
+KMEMLEAK's Kconfig items from lib to mm" and I've staged "mm: use
+stack_depot_early_init for kmemleak" in the mm-hotfixes branch for
+upstream merging in this -rc cycle.
 
-Building on your example this may become:
-
-       switch {
-           mdio {
-                #address-cells =3D <1>;
-                #size-cells =3D <0>;
-               =20
-                switch_phy0: phy@0 {
-                    reg =3D <0>;
-                    #trigger-source-cells =3D <1>;
-                };
-            };
-
-            leds {
-                #address-cells =3D <2>;
-                #size-cells =3D <0>;
-
-                /* First port, first LED */
-                /* Port status, can be offloaded */
-                led@0.0 {
-                    reg =3D <0 0>;
-                    trigger-sources =3D <&switch_phy0 (NET_LINK | NET_SPEED=
-_1000)>;
-                    function =3D color =3D <LED_COLOR_ID_WHITE>;
-                    function =3D LED_FUNCTION_LAN;
-                    function-enumerator =3D <1>;
-                    linux,default-trigger =3D "netdev";
-                };
-
-                /* First port, first LED */
-                /* Port status, can be offloaded */
-                led@0.1 {
-                    reg =3D <0 1>;
-                    trigger-sources =3D <&switch_phy0 (NET_LINK | NET_SPEED=
-_100 | NET_SPEED_10)>;
-                    function =3D color =3D <LED_COLOR_ID_AMBER>;
-                    function =3D LED_FUNCTION_LAN;
-                    function-enumerator =3D <1>;
-                    linux,default-trigger =3D "netdev";
-                };
-
-                /* Last port (not used in hardware), first LED */
-                /* Device status, software controlled */
-                led@7.0 {
-                    reg =3D <7 0>;
-                    function =3D color =3D <LED_COLOR_ID_AMBER>;
-                    function =3D LED_FUNCTION_STATUS;
-                    linux,default-trigger =3D "default-on";
-                };
-            };
-        };
-
-
-To be a bit less verbose, the &switch_mdio node might serve as trigger prov=
-ider
-with a single cell, but the above would allow only defined phy-s to be
-referenced.
-
-The trigger-source cells could be used for a more fine grained control of w=
-hat
-should be offloaded (link up/down, Rx/Tx activity, link speed, ...). Althou=
-gh
-this selectivity is most likely runtime configurable, this could serve as a
-description of static device labeling (e.g. "LINK/ACT 1000").
-
-Switching to the implementation and driver side, the 'trigger-sources' prop=
-erty
-could be used by the netdev trigger to determine if a status LED can be
-offloaded. The netdev trigger could just hide the whole hardware/software
-control aspect then. Much like how the timer trigger always offloads if an
-implementation is provided, even when offloading is less flexible than the
-software implementation of the timer trigger.
-
-
-Best,
-Sander
