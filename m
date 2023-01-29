@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB916801CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A626801D5
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbjA2VpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 16:45:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
+        id S234924AbjA2VsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 16:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235183AbjA2VpU (ORCPT
+        with ESMTP id S229617AbjA2VsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 16:45:20 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C3018B00
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:45:19 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 143so6393441pgg.6
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:45:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+mlWGWk/xGZIts3NL177gYapbWeRI/F898dfij2bn5Y=;
-        b=VUpekjT4eobTtgSswm2s+LU/r9TV7s7D3lDG1sNT1jYByWNdh5CN5OPW1Tv7HVToxp
-         eXd2GHd79ERXvAQiXiSpgc3bYsW1zdr32gwYedjPB08H9RPe+CR/R793Pe5t37cIGa46
-         yeXQ6r26Hk3pN2sf2GlH/RpHmVlWyZfTA51hg7JSREf6w6woSa1m7hGt67FlUDJWNw9H
-         a44BTWOG0DFl68XvsvA/YtdTBEq+dVJeNhiHrx+oCEQXDvYzy/pShvVuNkRvP2Hw3cv0
-         +l300uvjTQvOkOQUhHP7T/Oj/cnGX26pjapjNmTv/eAenZGsGWAUDY13Ffmj9fJlouP7
-         D/4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+mlWGWk/xGZIts3NL177gYapbWeRI/F898dfij2bn5Y=;
-        b=an3AGdTYSfVJrgA78f3boX9lIGMjRkvHCZSYkZkzV7qCw7UlOt/YRt3PX3pOfDkoja
-         n8CBxQ682m6/yNpLtpevjQfaVKyYyZR3bynOqYa0YRn4PgQLm9nATfG4QOBO5iE7iZ3U
-         AjTN3JLKUtYnzdbwSJ/2R+Q1oTI79QAacs9oCFlQeIJr+pxs/yrxNu/WIw1Cg2gqORdU
-         Xe1ZIOe7PbO7aU/UoK+hqfw32GFgEYIFZL+STpH9JkIQlFfJa/Qrfh+WJtDDYZNG18q5
-         GjYeEArzzgbap0fDZMt2IKyTIjRHXImKdLuX1LoGbCWkXdZEXHY/yfZxjfLBhpGVjTpm
-         k5uw==
-X-Gm-Message-State: AFqh2krjJjnhGQrqqCjJqXCxCDm+adSMUHb1HkuipPD+ZBST/zBF8UQU
-        BIMZBQlLalVsiTXTJ2OA7XkcZw==
-X-Google-Smtp-Source: AMrXdXtsvnlhy1C1Bo22+pe5X20bbQRF+CKJjGRH+4jc3FrfRPhRtkK2qI0LPGwV3zDdJ4Bm/e7btg==
-X-Received: by 2002:aa7:9114:0:b0:57f:d5d1:41d0 with SMTP id 20-20020aa79114000000b0057fd5d141d0mr10615241pfh.3.1675028718976;
-        Sun, 29 Jan 2023 13:45:18 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id v66-20020a626145000000b005882b189a44sm6032360pfb.104.2023.01.29.13.45.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 13:45:18 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Zhong Jinghua <zhongjinghua@huawei.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yukuai3@huawei.com
-In-Reply-To: <20230128030419.2780298-1-zhongjinghua@huawei.com>
-References: <20230128030419.2780298-1-zhongjinghua@huawei.com>
-Subject: Re: [PATCH-next v3] blk-mq: cleanup unused methods:
- blk_mq_hw_sysfs_store
-Message-Id: <167502871809.54799.13535290595162039137.b4-ty@kernel.dk>
-Date:   Sun, 29 Jan 2023 14:45:18 -0700
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        Sun, 29 Jan 2023 16:48:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FFA1630C
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:48:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1F2D60C44
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:48:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6D9C433EF;
+        Sun, 29 Jan 2023 21:48:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1675028896;
+        bh=rhFf7uedNxdey8EUF7LX7Ea/PKGhbbJ0ekQViXUqr0g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rOHfC31UD2cUvJGxuNujV60wU4nBKmcOyjITFlE0VdHO+5d7EhJE4Nocfc/xpXTyV
+         UKQeqUPQ3vb8vSXg2/FkEveP20SQUNe2UUF7ZamH4DaC+lsKYERxgU3PlLPwMWASMa
+         DLz3xAeXJt7ieD/rQy9thZr3cRksofKSWFmYzUCY=
+Date:   Sun, 29 Jan 2023 13:48:15 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, Shakeel Butt <shakeelb@google.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Ma Wupeng <mawupeng1@huawei.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH] mm: memcg: fix NULL pointer in
+ mem_cgroup_track_foreign_dirty()
+Message-Id: <20230129134815.21083b65ef3ae4c3e7fae8eb@linux-foundation.org>
+In-Reply-To: <20230129024451.121590-1-wangkefeng.wang@huawei.com>
+References: <20230129024451.121590-1-wangkefeng.wang@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 29 Jan 2023 10:44:51 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 
-On Sat, 28 Jan 2023 11:04:19 +0800, Zhong Jinghua wrote:
-> We found that the blk_mq_hw_sysfs_store interface has no place to use.
-> The object default_hw_ctx_attrs using blk_mq_hw_sysfs_ops only uses
-> the show method and does not use the store method.
+> As commit 18365225f044 ("hwpoison, memcg: forcibly uncharge LRU pages"),
+
+Merged in 2017.
+
+> hwpoison will forcibly uncharg a LRU hwpoisoned page, the folio_memcg
+> could be NULl, then, mem_cgroup_track_foreign_dirty_slowpath() could
+> occurs a NULL pointer dereference, let's do not record the foreign
+> writebacks for folio memcg is null in mem_cgroup_track_foreign() to
+> fix it.
 > 
-> Since this patch:
-> 4a46f05ebf99 ("blk-mq: move hctx and ctx counters from sysfs to debugfs")
-> moved the store method to debugfs, the store method is not used anymore.
-> 
-> [...]
+> Reported-by: Ma Wupeng <mawupeng1@huawei.com>
+> Fixes: 97b27821b485 ("writeback, memcg: Implement foreign dirty flushing")
 
-Applied, thanks!
+Merged in 2019.
 
-[1/1] blk-mq: cleanup unused methods: blk_mq_hw_sysfs_store
-      commit: 52627f3c2935342dbceb2ba6fd710f1deac627a1
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1688,10 +1688,13 @@ void mem_cgroup_track_foreign_dirty_slowpath(struct folio *folio,
+>  static inline void mem_cgroup_track_foreign_dirty(struct folio *folio,
+>  						  struct bdi_writeback *wb)
+>  {
+> +	struct mem_cgroup *memcg;
+> +
+>  	if (mem_cgroup_disabled())
+>  		return;
+>  
+> -	if (unlikely(&folio_memcg(folio)->css != wb->memcg_css))
+> +	memcg = folio_memcg(folio);
+> +	if (unlikely(memcg && &memcg->css != wb->memcg_css))
+>  		mem_cgroup_track_foreign_dirty_slowpath(folio, wb);
+>  }
 
-Best regards,
--- 
-Jens Axboe
+Has this null deref actually been observed, or is this from code
+inspection?  (This is why it's nice to include the Link: after a
+Reported-by!)
+
+Do we have any theories why this took so many years to surface?
+
+I'm confused about the mention of 18365225f044, but the Fixes: target
+is a different commit.  Please explain this?
+
+Do you think the fix should be backported into earlier -stable kernels?
+If so, it will need some rework due to the subsequent folio
+conversion.
 
 
 
