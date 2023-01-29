@@ -2,90 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BB76801BD
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB6E6801C1
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 22:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbjA2Vly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 16:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        id S233308AbjA2Vns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 16:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbjA2Vlw (ORCPT
+        with ESMTP id S229741AbjA2Vnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 16:41:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F06144BB
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:41:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 693FEB80DBE
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:41:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93234C433D2;
-        Sun, 29 Jan 2023 21:41:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1675028508;
-        bh=hqXHTO4VkNQRccP0ht1WlUlKvTkgK5Dy4nZapxrAJPw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XIojVudBxrOJhjBRRvRiy+4k16/u4kp1zbQwV9TS/l210sipQl1kb+pKGFKMiqcwl
-         nn6Uzusfp1gjNyW518MN8oXHnXMQWooV3x57CK0cSuaZLDD7RzynjNZ/iPqbaLHUcs
-         MQnptE2bVS1qXGchZq62tR8LUM+dkbUTAybnrL8o=
-Date:   Sun, 29 Jan 2023 13:41:47 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-Subject: Re: [PATCH RFC] arm64/vmalloc: use module region only for
- module_alloc() if CONFIG_RANDOMIZE_BASE is set
-Message-Id: <20230129134147.f19ca0641f1133f3e3bc185b@linux-foundation.org>
-In-Reply-To: <b93ec55c-f6f0-274a-e7d6-edb419b4be8a@huawei.com>
-References: <20221227092634.445212-1-liushixin2@huawei.com>
-        <b93ec55c-f6f0-274a-e7d6-edb419b4be8a@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 29 Jan 2023 16:43:46 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F341420D
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 13:43:45 -0800 (PST)
+Date:   Sun, 29 Jan 2023 21:43:39 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1675028622;
+        bh=S/w7Cd8ZnH2/JT+ndz/P2lEfwmpwBVVa5brv/chn+SI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oD5BP/nxsyTlf7vfb7NKQRq7ypb3/RVIHsgki1w6ajKkE4uCp8HJW33CU+BUB69a3
+         NqyEbysMvyNeV7oRiMpzKDV1Ibpcu28LcMTjNZawsigIgvCZgrcrWPLlSa4C3iyeFe
+         q+jVMclwKMV90d6XKR3bZ9ucMhB8n3ZfFJMF/iPo=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/8] objtool: reduce maximum memory usage
+Message-ID: <20230129214339.76hyytrllggbvuat@t-8ch.de>
+References: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 Jan 2023 10:44:31 +0800 Liu Shixin <liushixin2@huawei.com> wrote:
+On Tue, Dec 27, 2022 at 04:00:57PM +0000, Thomas Weiﬂschuh wrote:
+> The processing of vmlinux.o with objtool is the most memory-intensive step
+> of a kernel build. By reducing the maximum memory usage here we can reduce
+> the maximum memory usage of the whole kernel build.
+> Therefore memory pressure on memory starved machines is relieved during
+> kernel builds and the build is faster as less swapping has to occur.
 
-> Hi,
-> 
-> 
-> This patch seems to have been lost in the corner. Recently I've meet this problem again
-> 
-> on v6.1, so I would like to propose this patch again.
-> 
-> 
-> Thanks,
-> 
-> 
-> On 2022/12/27 17:26, Liu Shixin wrote:
-> > After I add a 10GB pmem device, I got the following error message when
-> > insert module:
-> >
-> >  insmod: vmalloc error: size 16384, vm_struct allocation failed,
-> >  mode:0xcc0(GFP_KERNEL), nodemask=(null),cpuset=/,mems_allowed=0
-> >
-> > If CONFIG_RANDOMIZE_BASE is set, the module region can be located in the
-> > vmalloc region entirely. Although module_alloc() can fall back to a 2GB
-> > window if ARM64_MODULE_PLTS is set, the module region is still easily
-> > exhausted because the module region is located at bottom of vmalloc region
-> > and the vmalloc region is allocated from bottom to top.
-> >
-> > Skip module region if not calling from module_alloc().
-> >
+Friendly ping.
 
-I'll assume this is for the arm tree.
+These patches can also applied one by one, the only dependency is from
+patch 5 to patch 4.
 
-Acked-by: Andrew Morton <akpm@linux-foundation.org>
+Thanks,
+Thomas
+
+> To: Josh Poimboeuf <jpoimboe@kernel.org>
+> To: Peter Zijlstra <peterz@infradead.org>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> 
+> ---
+> Changes in v2:
+> - Warn on out of range values for reloc->type
+> - Also reduce size of struct special_alt
+> - Note: v1 did not make it to the lists, only to individual recipients
+> 
+> ---
+> Thomas Weiﬂschuh (8):
+>       objtool: make struct entries[] static and const
+>       objtool: make struct check_options static
+>       objtool: allocate multiple structures with calloc()
+>       objtool: introduce function elf_reloc_set_type
+>       objtool: reduce memory usage of struct reloc
+>       objtool: optimize layout of struct symbol
+>       objtool: optimize layout of struct special_alt
+>       objtool: explicitly cleanup resources on success
+> 
+>  tools/objtool/builtin-check.c           |  4 ++-
+>  tools/objtool/check.c                   |  6 ++--
+>  tools/objtool/elf.c                     | 56 +++++++++++++++++++--------------
+>  tools/objtool/include/objtool/builtin.h |  2 --
+>  tools/objtool/include/objtool/elf.h     | 13 +++++---
+>  tools/objtool/include/objtool/special.h |  2 +-
+>  tools/objtool/special.c                 |  6 ++--
+>  7 files changed, 51 insertions(+), 38 deletions(-)
+> ---
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> change-id: 20221216-objtool-memory-06db3b8bf111
+> 
+> Best regards,
+> -- 
+> Thomas Weiﬂschuh <linux@weissschuh.net>
