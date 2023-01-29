@@ -2,99 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290CA67FE88
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 914DE67FE8A
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 12:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjA2L0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 06:26:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S234571AbjA2L0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 06:26:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjA2L03 (ORCPT
+        with ESMTP id S230240AbjA2L0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 06:26:29 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF427DA0;
-        Sun, 29 Jan 2023 03:26:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1674991580; bh=iE0ml3o/oeykLX0bNAtwyLIVpBJx2KBOrIqSvWHF1do=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=GynCDDkKmhcGUaN9MK8UWc3dy7lPbOBSqhzOGjfgcIoHE0M6t19yd1V9UiuxNAdLZ
-         HBkWIIM52j29IhfV2evtTxIZlK6KKZzzCgvHB20EEPdoj/W3AyrgKOQpEMo6MV01G6
-         OdT808lSMIr6oJI1acGmK0+r+j55GEnWXbypa6f0CUqOckH6Ph9hrSgQZ9kMKQlHpw
-         Sw4X+eM4gQotvXIMfru2zc0+ulyhGehEc5n2+0Q+FIm/6UPoWeYxD1W/KoKuT6KDjP
-         Al+fiy1kp2/ojkzPZlRhqfxymOFNY4XA7CNOux4Y9HcJVRuXWLGfNahEqB0s4IroAa
-         4YQC5ZDIIBs5A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mo6qp-1otNaB1pvf-00pbQZ; Sun, 29
- Jan 2023 12:26:20 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     openbmc@lists.ozlabs.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: wpcm450: Add nuvoton,shm = <&shm> to FIU node
-Date:   Sun, 29 Jan 2023 12:26:11 +0100
-Message-Id: <20230129112611.1176517-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.0
+        Sun, 29 Jan 2023 06:26:34 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B451E9ED;
+        Sun, 29 Jan 2023 03:26:33 -0800 (PST)
+Received: from ideasonboard.com (host-212-171-97-20.pool212171.interbusiness.it [212.171.97.20])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 95C22327;
+        Sun, 29 Jan 2023 12:26:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1674991591;
+        bh=7+gAWNuSUUownB9Iy5YqVG3A2mVpXMNfNAiYiMY2Rs4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N2JZPHVQ7wR1xBfBwPRnGBu2xBmnGdfHv6+SVZ1PGoMhRwGqMD57EA3FG+imPZi4x
+         aAI9Pfn4y15gU8IKsy+kwxBi3G86GArDtNxWpVZKmIiL7M4LjuGk/lXHm42YWugwEr
+         H/n9zD/k/fEAUVZdYjSx70fQ1/f3XqDXfRnysY70=
+Date:   Sun, 29 Jan 2023 12:26:28 +0100
+From:   Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] media: i2c: ov2685: Add controls from fwnode
+Message-ID: <20230129112628.rb6h4xdfwvs3hbl7@uno.localdomain>
+References: <20230129-ov2685-improvements-v1-0-f281bd49399c@z3ntu.xyz>
+ <20230129-ov2685-improvements-v1-3-f281bd49399c@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:oE5K8PVURUUYTJFsmav1i8mDxxB09kKS7hWEFYnsvBPy3yMxFww
- ZLeShVJgizXDtn7hol9iccrI9YaMJQVBMtV1gtiwVNniZ8sblVFMZV5QX8UvH/4/iaBm6KR
- 9lT9qtS+kNGQWA5N8zthoSQc+eHMbhWSOwlZGCeZ4DCkBmEBEWjFHU7bnbKGWz7kjasYK0o
- 8qOfFFXgOw4dPe15BUXaA==
-UI-OutboundReport: notjunk:1;M01:P0:BK9mXZXVw0E=;nPW1XgAKKaWHZmKKlrsRPgtnXG8
- 9te/AMCjG66kvLGJK0YdotC4OTHYMS+S8vsSMnVvK2nwjnUXRWEpLtnr+wFiEIEXnxpMcTsDQ
- KuWtmYp62qU+Ya5KntZSkhpp095pZAqwQplw6YeBvF2ndfMz8KcmLeVuHnc5EsIJSlb/aK6iZ
- GP/Q1oksf7qJ4X4YSCtCt+HbZdbEVee31tXUUTWoH2UbTMqxUFDBpTyD2SnPsFDRXU2e5coOK
- 4slVuzSVzJkEBaqBHd9eneu1+9frBoRMgUBOMMF5l2OUEHaVznFtDWB2wbIDYg+7EbNCT+gAV
- i4BVI1pRssqy38Pg8qPnXZWjPFCc7olOyzYtsudcNSazxvMB4iH986q0oewUVSHKRFYUnBjFn
- B11zhHBoEMFB11ADNTZgkAMG0PNDjHvsT9xyjZW/uP0ckz0MdyfGZ+j+NZ0x/Oo31jrB9JUf/
- o/pY2SDdNV7dhjCSIXIKTiETnTAZaBIQM1sPZlc2Yb/xXoFus/0GZBHECkBR58dXTNr5EUkZa
- e7iUr+/xlzIo2q73kzCAAbDzets+zdDz/y8wRgc2gqKrp4/i9R7Xe75aajN5YKoKMdNs6VgKi
- Mg2s1PtFgXKn9LzRdhAiX3CG3RPoYtMbhBrc1vMbLs10j31UkhZVamHqeIwEc9UjIHwrfqRKl
- S4ZnLq0tN4NHLTy2yN1WksvpyNq3Le1Z8HPhB+tKXaMBs3vgDKl1+y6J/HhoBQyWY7M0rFqny
- fdeKTANd5wN/KoIR0fFZnFNME73jmtarImVAlOu3T/Q9q8GeCcaNOltMlNKL1LdmWdYmzpVRC
- P4GklNg83Lbno2J5leRHKavVZ67Hq++3BpUrQQFWdm/pJDXrVjBPuV9zIHcdTyTyWGX48Dj53
- 3B6UL0fF3Xvt7SFNw5y3P/gsyuNYR/exAaDbqYrC5DhFw0JC67eePvx5stWHOgpBY8tJ2k4s3
- DYnb/1ZC79fXOe7v35eT8qJij1U=
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230129-ov2685-improvements-v1-3-f281bd49399c@z3ntu.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Flash Interface Unit (FIU) should have a reference to the Shared
-Memory controller (SHM) so that flash access from the host (x86 computer
-managed by the WPCM450 BMC) can be blocked during flash access by the
-FIU driver.
+Hi Luca,
 
-Fixes: 38abcb0d68767 ("ARM: dts: wpcm450: Add FIU SPI controller node")
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, Jan 29, 2023 at 10:42:37AM +0100, Luca Weiss wrote:
+> Add V4L2_CID_CAMERA_ORIENTATION and V4L2_CID_CAMERA_SENSOR_ROTATION
+> controls to the ov2685 driver by attempting to parse them from firmware.
+>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>  drivers/media/i2c/ov2685.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/drivers/media/i2c/ov2685.c b/drivers/media/i2c/ov2685.c
+> index 844a91dbc8e5..bfced11b178b 100644
+> --- a/drivers/media/i2c/ov2685.c
+> +++ b/drivers/media/i2c/ov2685.c
+> @@ -17,6 +17,7 @@
+>  #include <media/media-entity.h>
+>  #include <media/v4l2-async.h>
+>  #include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-fwnode.h>
+>  #include <media/v4l2-subdev.h>
+>
+>  #define CHIP_ID				0x2685
+> @@ -613,6 +614,7 @@ static int ov2685_initialize_controls(struct ov2685 *ov2685)
+>  	const struct ov2685_mode *mode;
+>  	struct v4l2_ctrl_handler *handler;
+>  	struct v4l2_ctrl *ctrl;
+> +	struct v4l2_fwnode_device_properties props;
+>  	u64 exposure_max;
+>  	u32 pixel_rate, h_blank;
+>  	int ret;
+> @@ -661,6 +663,15 @@ static int ov2685_initialize_controls(struct ov2685 *ov2685)
+>  				ARRAY_SIZE(ov2685_test_pattern_menu) - 1,
+>  				0, 0, ov2685_test_pattern_menu);
+>
 
-diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nu=
-voton-wpcm450.dtsi
-index 299fcbba3089b..fda2f13093f98 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-@@ -478,6 +478,7 @@ fiu: spi-controller@c8000000 {
- 			reg =3D <0xc8000000 0x1000>, <0xc0000000 0x4000000>;
- 			reg-names =3D "control", "memory";
- 			clocks =3D <&clk WPCM450_CLK_FIU>;
-+			nuvoton,shm =3D <&shm>;
- 			status =3D "disabled";
- 		};
+As the below function can register up to 2 controls, you should also
+reserve space for them when initializing the control handler to avoid
+relocations
 
-=2D-
-2.39.0
+-       ret = v4l2_ctrl_handler_init(handler, 8);
++       ret = v4l2_ctrl_handler_init(handler, 10);
 
+
+> +	/* set properties from fwnode (e.g. rotation, orientation) */
+> +	ret = v4l2_fwnode_device_parse(&ov2685->client->dev, &props);
+> +	if (ret)
+> +		goto err_free_handler;
+> +
+> +	ret = v4l2_ctrl_new_fwnode_properties(handler, &ov2685_ctrl_ops, &props);
+> +	if (ret)
+> +		goto err_free_handler;
+> +
+>  	if (handler->error) {
+>  		ret = handler->error;
+>  		dev_err(&ov2685->client->dev,
+>
+> --
+> 2.39.1
+>
