@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003D0680098
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F82768008D
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 18:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbjA2Ry2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 12:54:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
+        id S232967AbjA2RtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 12:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjA2Ry1 (ORCPT
+        with ESMTP id S230300AbjA2Rs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 12:54:27 -0500
-X-Greylist: delayed 356 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 Jan 2023 09:54:25 PST
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30DA1BEF;
-        Sun, 29 Jan 2023 09:54:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675014501; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=nEv2Qjex5GrWowG4Tg2/4TJVTzLYTIcr8lE7dLcoLejZpSUxZlaL+MyLsAXwBke0dA
-    LdDX1YKPYWsHDSdwihLuG50+y+nlcUB6pjN0O3ZB99hZk158j7Ac5W5ZOl8wrlxAaa2D
-    ch2NKCcEwRFdKd337RUsB/x44/d3ich7P9WIuQ3NBlKZg2VQhAibOC1RAFbBkCLupGea
-    gXqdGcNrDN/KrRB1L/Ezut8nfaPM8MY6HM7kwodXdl1ynPiLgwYz111gdO0xvWiAuqxt
-    f/t3mMudYL8pKiJw3MitUZ7pOngnKLiJePhIzdssTFZQ9YAKdT8p6wJxqWEvgeO3dsa/
-    WdGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1675014501;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=yGRM7cEfo5aFqSY1gp1TMJFXgu2PUQKG5rOicfC2/UM=;
-    b=Ubxu5ZB2rt/ZvfyyeiCisvS8yfUt1Bzp8/KU7Rkv+dTy02cr7cWGXkkd7xz5bqTTG0
-    9UuisNmN9WKlSIJGf1wspIAhhZpdMcVrONCpCeU8abxZ1JFy8R9M9sf3DHZCwHUn6uwL
-    JikBlaHih4d/0P+c+LCJBLUFX/df5XJZoVl/IIe/DtkuQQT08qs3LIvWp3P1nYrcwsgE
-    O9uy9+kjZANSCPJHYIHkkDBtSJ01UxoOP1b8SUan0gNYmIshn2m9jM9M/Q2xXWfySFCn
-    HPitcJnM8pOtYWFdy20vXv3QeE85bOffFu535T9gtR1d5fjOIxzvNj8Sto9iW+SzxBKe
-    YCyw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1675014501;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=yGRM7cEfo5aFqSY1gp1TMJFXgu2PUQKG5rOicfC2/UM=;
-    b=YGgxX1rZkRfkfhsomTXlfklMo3l8Zp1Nhf75BARGaQ+UPfWUZ5f8VhF/vgj5grWvTg
-    5UGfMx+do+BhUeIfKPgJ04r1ENzjWTQMYqavts/CHPdqRMkEuXVhYJWo54YEBg6zMW/K
-    ypyFoAVsrA/K1GS5osDkyowWE2AJ2Q61aM3dPHgFmC+6FULVI5jc/89+x9D8kHZVPGr5
-    wLoSlKMs7HVEXpw0UpUoqpsL9lMFG3htTB68j1HpOzU02UeytGKu6tnoIYW45WrDKSMZ
-    +O1dx0E1SML60oa+nRoPTCoz37Ej45GYXgdYe3t2N+fGw0ZFKhaq1BpwOgfE+BRt5mkT
-    /xqg==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1iTDUhfN4hi3qVZrW/J"
-Received: from iMac.fritz.box
-    by smtp.strato.de (RZmta 49.2.2 SBL|AUTH)
-    with ESMTPSA id e4ab20z0THmKHyv
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 29 Jan 2023 18:48:20 +0100 (CET)
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0?= <zhouyanjie@wanyeetech.com>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
-        "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH] MIPS: DTS: CI20: fix otg power gpio
-Date:   Sun, 29 Jan 2023 18:48:15 +0100
-Message-Id: <1e102159b4be526af88883374d112d558e3ac3f5.1675014494.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.38.1
+        Sun, 29 Jan 2023 12:48:57 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F206A1ABC0
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:48:55 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id l35-20020a05600c1d2300b003dc4634a466so2579894wms.4
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 09:48:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sr4fFy3dWRxDTNDNO8Ar7sH6BDFvsFVUwILCU9VcaZM=;
+        b=Z0b567v2zrQsZmZpB1usLpNIA7m9hlpZar2O/dXmouTBfEfnbZMHzkbfLlHsQk2Uhy
+         HnC3c5w79TJ9pQiKxIOexVvLBtukUNUBGqP12H3L3iqKO2lvIpU3/xIwrpD/f3F28wGV
+         u3aU228GVcc56ajSOULx6MnM4lOYEcYYxnlO7IjXliLJUC4feyTtR909XF6cRnsbnnY0
+         iGoIO1WoIJLsamXRacRiGmO61tFOx6BtVH+acMpzfMv8r+7vUnK3dWdnf+B6367cuoNe
+         RusKb/pLiaxfFIsTaOMu4XGBpYtqUx976toY8VzCVj7MS2LylpbaozwdcRr0lcZHZAE9
+         wNCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sr4fFy3dWRxDTNDNO8Ar7sH6BDFvsFVUwILCU9VcaZM=;
+        b=zB+wjrBHhJYk+K7A0jVy+9elcftZZAbV7/FeP0qXBCROCS3byFRAT2CajQ2JeWWVA3
+         gPn0EQtIkFNwmpiDJWAoColMDNErWqlJv8T1rZM1Fr8FMpbviH2eLLdzUy1njhHs0v0Y
+         hGN+7ewHs5s0PikSHwFs/e8RfUN1U8TN5JoyY8OcBAU5XAaMCWNZgUQqCxW712coorzd
+         igfyurq/v/YA7B25k4aGBZN5859PR0rVIrCMkDM6eO9eegF5hsBvUyvcFiTys3hz61Sg
+         Zr9PFIiCiGCA88Ip2dVCc4HpRtx/gxA8rqtIao5klfOff75ukyvEgsN9GfsiWvkMSYfi
+         BOkg==
+X-Gm-Message-State: AO0yUKUfGSqhF0TbzHvhKQFStZSUXNgHsN5SOTkYlzgJUhp6rHqPQDxQ
+        O8XSPtI3Od3Re+SkeFmgOXck2g==
+X-Google-Smtp-Source: AK7set8V03LwoICGduJRa2Bl27HyEiBCOlv3oVi6LLGhhTDf2BOMD2OtF6I5stna37Mo3ZDdkOdQTQ==
+X-Received: by 2002:a05:600c:54e6:b0:3dc:489e:1867 with SMTP id jb6-20020a05600c54e600b003dc489e1867mr5540037wmb.36.1675014534575;
+        Sun, 29 Jan 2023 09:48:54 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id v6-20020a05600c444600b003db09692364sm15200937wmn.11.2023.01.29.09.48.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 09:48:53 -0800 (PST)
+Date:   Sun, 29 Jan 2023 19:48:52 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        aford173@gmail.com, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 0/4] clk: imx: imx_register_uart_clocks update
+Message-ID: <Y9axhPF3h/kZEsGg@linaro.org>
+References: <20230104110032.1220721-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230104110032.1220721-1-peng.fan@oss.nxp.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to schematics it is PF15 and not PF14 (MIC_SW_EN).
-Seems as if it was hidden and not noticed during testing since
-there is no sound DT node.
+On 23-01-04 19:00:28, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> This patchset is to cleanup the imx_register_uart_clocks usage, and
+> use this API for i.MX93 clk driver.
+> 
+> Peng Fan (4):
+>   clk: imx: avoid memory leak
+>   clk: imx: get stdout clk count from device tree
+>   clk: imx: remove clk_count of imx_register_uart_clocks
+>   clk: imx: imx93: invoke imx_register_uart_clocks
 
-Fixes: 158c774d3c64 ("MIPS: Ingenic: Add missing nodes for Ingenic SoCs and boards.")
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- arch/mips/boot/dts/ingenic/ci20.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied all.
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index 9819abb2465dd..a276488c0f752 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -115,7 +115,7 @@ otg_power: fixedregulator@2 {
- 		regulator-min-microvolt = <5000000>;
- 		regulator-max-microvolt = <5000000>;
- 
--		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
-+		gpio = <&gpf 15 GPIO_ACTIVE_LOW>;
- 		enable-active-high;
- 	};
- };
--- 
-2.38.1
+Thanks.
 
+> 
+>  drivers/clk/imx/clk-imx25.c   |  2 +-
+>  drivers/clk/imx/clk-imx27.c   |  2 +-
+>  drivers/clk/imx/clk-imx35.c   |  2 +-
+>  drivers/clk/imx/clk-imx5.c    |  6 +++---
+>  drivers/clk/imx/clk-imx6q.c   |  2 +-
+>  drivers/clk/imx/clk-imx6sl.c  |  2 +-
+>  drivers/clk/imx/clk-imx6sll.c |  2 +-
+>  drivers/clk/imx/clk-imx6sx.c  |  2 +-
+>  drivers/clk/imx/clk-imx7d.c   |  2 +-
+>  drivers/clk/imx/clk-imx7ulp.c |  4 ++--
+>  drivers/clk/imx/clk-imx8mm.c  |  2 +-
+>  drivers/clk/imx/clk-imx8mn.c  |  2 +-
+>  drivers/clk/imx/clk-imx8mp.c  |  2 +-
+>  drivers/clk/imx/clk-imx8mq.c  |  2 +-
+>  drivers/clk/imx/clk-imx8ulp.c |  2 +-
+>  drivers/clk/imx/clk-imx93.c   |  2 ++
+>  drivers/clk/imx/clk.c         | 17 ++++++++++++-----
+>  drivers/clk/imx/clk.h         |  4 ++--
+>  18 files changed, 34 insertions(+), 25 deletions(-)
+> 
+> -- 
+> 2.37.1
+> 
