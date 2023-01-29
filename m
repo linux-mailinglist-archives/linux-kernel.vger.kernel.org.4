@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADAC6802C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 00:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFF36802D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 00:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235394AbjA2XLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 18:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S235477AbjA2XLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 18:11:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235148AbjA2XLD (ORCPT
+        with ESMTP id S229476AbjA2XLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 18:11:03 -0500
+        Sun, 29 Jan 2023 18:11:04 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFF01ADC1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD181ABEE;
         Sun, 29 Jan 2023 15:10:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=/PJ/XxDYnr0Vr0KrPaECQtmCxxakt2A8iHz8jVHmKTw=; b=GXuJxDJyrPPzjInmF/6YYKS6Nt
-        722qOgTqqvydS8P/yGykQxz2h0a/AGQ3Y72HbgXpDnCEZjVEYs2FJHrS+gRtRkU3X8rpzhDNt4IGE
-        1OeTeM24RirBGrsAwecK6w/DzP0gaOvgsFdiL+JeRfA4p/xrRWxQSE7K5XM2CdQjsCKdnbcELq+YQ
-        zA26v+2DcjRITmrkaBXS33142WCg7UHHyZam/BgCWT6v/7bYEazYABQBwSH0zTszBTXDWf2QeGn8t
-        0EvC5jn6j8Xa18ovJ6eZ/QdxETF7S03tbZ81pHY7ZXK2Ltw1eJ25sGryHoYSi1tTAQZ0zsXLwstBm
-        QRdUx25g==;
+        bh=R2A7akXKvYokl+Oel/FVm+wy+mVQyUawn1NxgC81E2Q=; b=zSp0BbbBdQr9EfVSvgvP22raaU
+        3by1qWSActPJchHujFog9jq8U9bD09KWALit/PoDIWAXB62QJZJ7FqEV0cDK8NtPUqBY4euVkJm7C
+        5aZ6ygloTkJoZZeRFycGe7YG7eUgxn6dHifeRyGGC4j59taGhIqdN+bVKSSwdKo0d+znj30e3JG94
+        IE8+My/lfubfvwFpq9mBu0qC5BILedVg+M05sz4ObNr3Ra4JJKy1hxj70InMvlSZatYjk8jeZMBs9
+        sdfl1rVr2jluVTgYQhVtb31TtB3jQ6ZrbCYjDpkRCGZ2s3IQ7mYkXQmdXWG79I8we7VOAfQ5gEmLy
+        W3B9eVRg==;
 Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMGp6-0020M2-FM; Sun, 29 Jan 2023 23:10:56 +0000
+        id 1pMGp7-0020M2-63; Sun, 29 Jan 2023 23:10:57 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 1/9] Documentation: admin-guide: correct spelling
-Date:   Sun, 29 Jan 2023 15:10:45 -0800
-Message-Id: <20230129231053.20863-2-rdunlap@infradead.org>
+        linux-media@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, nvdimm@lists.linux.dev,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 2/9] Documentation: driver-api: correct spelling
+Date:   Sun, 29 Jan 2023 15:10:46 -0800
+Message-Id: <20230129231053.20863-3-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230129231053.20863-1-rdunlap@infradead.org>
 References: <20230129231053.20863-1-rdunlap@infradead.org>
@@ -55,459 +58,324 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling problems for Documentation/admin-guide/ as reported
+Correct spelling problems for Documentation/driver-api/ as reported
 by codespell.
 
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Cc: linux-doc@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Zefan Li <lizefan.x@bytedance.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: cgroups@vger.kernel.org
-Cc: Alasdair Kergon <agk@redhat.com>
-Cc: Mike Snitzer <snitzer@kernel.org>
-Cc: dm-devel@redhat.com
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc: linux-media@vger.kernel.org
-Cc: linux-mm@kvack.org
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: nvdimm@lists.linux.dev
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+Cc: Song Liu <song@kernel.org>
+Cc: linux-raid@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 ---
- Documentation/admin-guide/bcache.rst                       |    2 +-
- Documentation/admin-guide/cgroup-v1/blkio-controller.rst   |    2 +-
- Documentation/admin-guide/cgroup-v2.rst                    |   10 +++++-----
- Documentation/admin-guide/cifs/usage.rst                   |    4 ++--
- Documentation/admin-guide/device-mapper/cache-policies.rst |    2 +-
- Documentation/admin-guide/device-mapper/dm-ebs.rst         |    2 +-
- Documentation/admin-guide/device-mapper/dm-zoned.rst       |    2 +-
- Documentation/admin-guide/device-mapper/unstriped.rst      |   10 +++++-----
- Documentation/admin-guide/dynamic-debug-howto.rst          |    2 +-
- Documentation/admin-guide/gpio/gpio-sim.rst                |    2 +-
- Documentation/admin-guide/hw-vuln/mds.rst                  |    4 ++--
- Documentation/admin-guide/kernel-parameters.txt            |    8 ++++----
- Documentation/admin-guide/laptops/thinkpad-acpi.rst        |    2 +-
- Documentation/admin-guide/md.rst                           |    2 +-
- Documentation/admin-guide/media/bttv.rst                   |    2 +-
- Documentation/admin-guide/media/building.rst               |    2 +-
- Documentation/admin-guide/media/si476x.rst                 |    2 +-
- Documentation/admin-guide/media/vivid.rst                  |    2 +-
- Documentation/admin-guide/mm/hugetlbpage.rst               |    2 +-
- Documentation/admin-guide/mm/numa_memory_policy.rst        |    4 ++--
- Documentation/admin-guide/perf/hns3-pmu.rst                |    2 +-
- Documentation/admin-guide/pm/amd-pstate.rst                |    2 +-
- Documentation/admin-guide/spkguide.txt                     |    4 ++--
- Documentation/admin-guide/sysctl/vm.rst                    |    4 ++--
- Documentation/admin-guide/sysrq.rst                        |    2 +-
- 25 files changed, 41 insertions(+), 41 deletions(-)
+ Documentation/driver-api/dma-buf.rst                  |    2 +-
+ Documentation/driver-api/dmaengine/client.rst         |    2 +-
+ Documentation/driver-api/dmaengine/dmatest.rst        |    2 +-
+ Documentation/driver-api/hsi.rst                      |    4 ++--
+ Documentation/driver-api/io-mapping.rst               |    4 ++--
+ Documentation/driver-api/md/md-cluster.rst            |    2 +-
+ Documentation/driver-api/md/raid5-cache.rst           |    2 +-
+ Documentation/driver-api/media/drivers/vidtv.rst      |    2 +-
+ Documentation/driver-api/media/dtv-demux.rst          |    2 +-
+ Documentation/driver-api/media/v4l2-subdev.rst        |    4 ++--
+ Documentation/driver-api/mei/nfc.rst                  |    2 +-
+ Documentation/driver-api/nfc/nfc-hci.rst              |    2 +-
+ Documentation/driver-api/nvdimm/nvdimm.rst            |    2 +-
+ Documentation/driver-api/nvdimm/security.rst          |    2 +-
+ Documentation/driver-api/pin-control.rst              |    2 +-
+ Documentation/driver-api/pldmfw/index.rst             |    2 +-
+ Documentation/driver-api/serial/driver.rst            |    2 +-
+ Documentation/driver-api/surface_aggregator/ssh.rst   |    2 +-
+ Documentation/driver-api/thermal/intel_powerclamp.rst |    2 +-
+ Documentation/driver-api/usb/dwc3.rst                 |    2 +-
+ Documentation/driver-api/usb/usb3-debug-port.rst      |    2 +-
+ 21 files changed, 24 insertions(+), 24 deletions(-)
 
-diff -- a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -624,7 +624,7 @@ and is an example of this type.
- Limits
- ------
+diff -- a/Documentation/driver-api/dma-buf.rst b/Documentation/driver-api/dma-buf.rst
+--- a/Documentation/driver-api/dma-buf.rst
++++ b/Documentation/driver-api/dma-buf.rst
+@@ -264,7 +264,7 @@ through memory management dependencies w
+ randomly hangs workloads until the timeout kicks in. Workloads, which from
+ userspace's perspective, do not contain a deadlock.  In such a mixed fencing
+ architecture there is no single entity with knowledge of all dependencies.
+-Thefore preventing such deadlocks from within the kernel is not possible.
++Therefore preventing such deadlocks from within the kernel is not possible.
  
--A child can only consume upto the configured amount of the resource.
-+A child can only consume up to the configured amount of the resource.
- Limits can be over-committed - the sum of the limits of children can
- exceed the amount of resource available to the parent.
+ The only solution to avoid dependencies loops is by not allowing indefinite
+ fences in the kernel. This means:
+diff -- a/Documentation/driver-api/hsi.rst b/Documentation/driver-api/hsi.rst
+--- a/Documentation/driver-api/hsi.rst
++++ b/Documentation/driver-api/hsi.rst
+@@ -4,7 +4,7 @@ High Speed Synchronous Serial Interface
+ Introduction
+ ---------------
  
-@@ -642,11 +642,11 @@ on an IO device and is an example of thi
- Protections
- -----------
+-High Speed Syncronous Interface (HSI) is a fullduplex, low latency protocol,
++High Speed Synchronous Interface (HSI) is a full duplex, low latency protocol,
+ that is optimized for die-level interconnect between an Application Processor
+ and a Baseband chipset. It has been specified by the MIPI alliance in 2003 and
+ implemented by multiple vendors since then.
+@@ -52,7 +52,7 @@ hsi-char Device
+ ------------------
  
--A cgroup is protected upto the configured amount of the resource
-+A cgroup is protected up to the configured amount of the resource
- as long as the usages of all its ancestors are under their
- protected levels.  Protections can be hard guarantees or best effort
- soft boundaries.  Protections can also be over-committed in which case
--only upto the amount available to the parent is protected among
-+only up to the amount available to the parent is protected among
- children.
+ Each port automatically registers a generic client driver called hsi_char,
+-which provides a charecter device for userspace representing the HSI port.
++which provides a character device for userspace representing the HSI port.
+ It can be used to communicate via HSI from userspace. Userspace may
+ configure the hsi_char device using the following ioctl commands:
  
- Protections are in the range [0, max] and defaults to 0, which is
-@@ -1079,7 +1079,7 @@ All time durations are in microseconds.
+diff -- a/Documentation/driver-api/mei/nfc.rst b/Documentation/driver-api/mei/nfc.rst
+--- a/Documentation/driver-api/mei/nfc.rst
++++ b/Documentation/driver-api/mei/nfc.rst
+@@ -3,7 +3,7 @@
+ MEI NFC
+ -------
  
- 	  $MAX $PERIOD
+-Some Intel 8 and 9 Serieses chipsets supports NFC devices connected behind
++Some Intel 8 and 9 Series chipsets support NFC devices connected behind
+ the Intel Management Engine controller.
+ MEI client bus exposes the NFC chips as NFC phy devices and enables
+ binding with Microread and NXP PN544 NFC device driver from the Linux NFC
+diff -- a/Documentation/driver-api/nfc/nfc-hci.rst b/Documentation/driver-api/nfc/nfc-hci.rst
+--- a/Documentation/driver-api/nfc/nfc-hci.rst
++++ b/Documentation/driver-api/nfc/nfc-hci.rst
+@@ -150,7 +150,7 @@ LLC
  
--	which indicates that the group may consume upto $MAX in each
-+	which indicates that the group may consume up to $MAX in each
- 	$PERIOD duration.  "max" for $MAX indicates no limit.  If only
- 	one number is written, $MAX is updated.
+ Communication between the CPU and the chip often requires some link layer
+ protocol. Those are isolated as modules managed by the HCI layer. There are
+-currently two modules : nop (raw transfert) and shdlc.
++currently two modules : nop (raw transfer) and shdlc.
+ A new llc must implement the following functions::
  
-@@ -2289,7 +2289,7 @@ Cpuset Interface Files
- 	For a valid partition root with the sibling cpu exclusivity
- 	rule enabled, changes made to "cpuset.cpus" that violate the
- 	exclusivity rule will invalidate the partition as well as its
--	sibiling partitions with conflicting cpuset.cpus values. So
-+	sibling partitions with conflicting cpuset.cpus values. So
- 	care must be taking in changing "cpuset.cpus".
+   struct nfc_llc_ops {
+diff -- a/Documentation/driver-api/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
+--- a/Documentation/driver-api/serial/driver.rst
++++ b/Documentation/driver-api/serial/driver.rst
+@@ -24,7 +24,7 @@ console support.
+ Console Support
+ ---------------
  
- 	A valid non-root parent partition may distribute out all its CPUs
-diff -- a/Documentation/admin-guide/laptops/thinkpad-acpi.rst b/Documentation/admin-guide/laptops/thinkpad-acpi.rst
---- a/Documentation/admin-guide/laptops/thinkpad-acpi.rst
-+++ b/Documentation/admin-guide/laptops/thinkpad-acpi.rst
-@@ -1488,7 +1488,7 @@ Example of command to set keyboard langu
- Text corresponding to keyboard layout to be set in sysfs are: be(Belgian),
- cz(Czech), da(Danish), de(German), en(English), es(Spain), et(Estonian),
- fr(French), fr-ch(French(Switzerland)), hu(Hungarian), it(Italy), jp (Japan),
--nl(Dutch), nn(Norway), pl(Polish), pt(portugese), sl(Slovenian), sv(Sweden),
-+nl(Dutch), nn(Norway), pl(Polish), pt(portuguese), sl(Slovenian), sv(Sweden),
- tr(Turkey)
+-The serial core provides a few helper functions.  This includes identifing
++The serial core provides a few helper functions.  This includes identifying
+ the correct port structure (via uart_get_console()) and decoding command line
+ arguments (uart_parse_options()).
  
- WWAN Antenna type
-diff -- a/Documentation/admin-guide/md.rst b/Documentation/admin-guide/md.rst
---- a/Documentation/admin-guide/md.rst
-+++ b/Documentation/admin-guide/md.rst
-@@ -317,7 +317,7 @@ All md devices contain:
-      suspended (not supported yet)
-          All IO requests will block. The array can be reconfigured.
+diff -- a/Documentation/driver-api/surface_aggregator/ssh.rst b/Documentation/driver-api/surface_aggregator/ssh.rst
+--- a/Documentation/driver-api/surface_aggregator/ssh.rst
++++ b/Documentation/driver-api/surface_aggregator/ssh.rst
+@@ -77,7 +77,7 @@ after the frame structure and before the
+ its own CRC (over all payload bytes). If the payload is not present (i.e.
+ the frame has ``LEN=0``), the CRC of the payload is still present and will
+ evaluate to ``0xffff``. The |LEN| field does not include any of the CRCs, it
+-equals the number of bytes inbetween the CRC of the frame and the CRC of the
++equals the number of bytes between the CRC of the frame and the CRC of the
+ payload.
  
--         Writing this, if accepted, will block until array is quiessent
-+         Writing this, if accepted, will block until array is quiescent
+ Additionally, the following fixed two-byte sequences are used:
+diff -- a/Documentation/driver-api/nvdimm/nvdimm.rst b/Documentation/driver-api/nvdimm/nvdimm.rst
+--- a/Documentation/driver-api/nvdimm/nvdimm.rst
++++ b/Documentation/driver-api/nvdimm/nvdimm.rst
+@@ -82,7 +82,7 @@ LABEL:
+   Metadata stored on a DIMM device that partitions and identifies
+   (persistently names) capacity allocated to different PMEM namespaces. It
+   also indicates whether an address abstraction like a BTT is applied to
+-  the namepsace.  Note that traditional partition tables, GPT/MBR, are
++  the namespace.  Note that traditional partition tables, GPT/MBR, are
+   layered on top of a PMEM namespace, or an address abstraction like BTT
+   if present, but partition support is deprecated going forward.
  
-      readonly
-          no resync can happen.  no superblocks get written.
-diff -- a/Documentation/admin-guide/cgroup-v1/blkio-controller.rst b/Documentation/admin-guide/cgroup-v1/blkio-controller.rst
---- a/Documentation/admin-guide/cgroup-v1/blkio-controller.rst
-+++ b/Documentation/admin-guide/cgroup-v1/blkio-controller.rst
-@@ -106,7 +106,7 @@ Proportional weight policy files
-           see Documentation/block/bfq-iosched.rst.
+diff -- a/Documentation/driver-api/nvdimm/security.rst b/Documentation/driver-api/nvdimm/security.rst
+--- a/Documentation/driver-api/nvdimm/security.rst
++++ b/Documentation/driver-api/nvdimm/security.rst
+@@ -83,7 +83,7 @@ passed in.
+ 6. Freeze
+ ---------
+ The freeze operation does not require any keys. The security config can be
+-frozen by a user with root privelege.
++frozen by a user with root privilege.
  
-   blkio.bfq.weight_device
--          Specifes per cgroup per device weights, overriding the default group
-+          Specifies per cgroup per device weights, overriding the default group
-           weight. For more details, see Documentation/block/bfq-iosched.rst.
+ 7. Disable
+ ----------
+diff -- a/Documentation/driver-api/thermal/intel_powerclamp.rst b/Documentation/driver-api/thermal/intel_powerclamp.rst
+--- a/Documentation/driver-api/thermal/intel_powerclamp.rst
++++ b/Documentation/driver-api/thermal/intel_powerclamp.rst
+@@ -85,7 +85,7 @@ migrated, unless the CPU is taken offlin
+ belong to the offlined CPUs will be terminated immediately.
  
- 	  Following is the format::
-diff -- a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -403,7 +403,7 @@ Unit Tests for amd-pstate
+ Running as SCHED_FIFO and relatively high priority, also allows such
+-scheme to work for both preemptable and non-preemptable kernels.
++scheme to work for both preemptible and non-preemptible kernels.
+ Alignment of idle time around jiffies ensures scalability for HZ
+ values. This effect can be better visualized using a Perf timechart.
+ The following diagram shows the behavior of kernel thread
+diff -- a/Documentation/driver-api/usb/dwc3.rst b/Documentation/driver-api/usb/dwc3.rst
+--- a/Documentation/driver-api/usb/dwc3.rst
++++ b/Documentation/driver-api/usb/dwc3.rst
+@@ -18,7 +18,7 @@ controller which can be configured in on
+ 	4. Hub configuration
  
-  * We can introduce more functional or performance tests to align the result together, it will benefit power and performance scale optimization.
+ Linux currently supports several versions of this controller. In all
+-likelyhood, the version in your SoC is already supported. At the time
++likelihood, the version in your SoC is already supported. At the time
+ of this writing, known tested versions range from 2.02a to 3.10a. As a
+ rule of thumb, anything above 2.02a should work reliably well.
  
--1. Test case decriptions
-+1. Test case descriptions
+diff -- a/Documentation/driver-api/usb/usb3-debug-port.rst b/Documentation/driver-api/usb/usb3-debug-port.rst
+--- a/Documentation/driver-api/usb/usb3-debug-port.rst
++++ b/Documentation/driver-api/usb/usb3-debug-port.rst
+@@ -48,7 +48,7 @@ kernel boot parameter::
+ 	"earlyprintk=xdbc"
  
-     1). Basic tests
+ If there are multiple xHCI controllers in your system, you can
+-append a host contoller index to this kernel parameter. This
++append a host controller index to this kernel parameter. This
+ index starts from 0.
  
-diff -- a/Documentation/admin-guide/spkguide.txt b/Documentation/admin-guide/spkguide.txt
---- a/Documentation/admin-guide/spkguide.txt
-+++ b/Documentation/admin-guide/spkguide.txt
-@@ -1105,8 +1105,8 @@ speakup load
- Alternatively, you can add the above line to your file
- ~/.bashrc or ~/.bash_profile.
+ Current design doesn't support DbC runtime suspend/resume. As
+diff -- a/Documentation/driver-api/dmaengine/client.rst b/Documentation/driver-api/dmaengine/client.rst
+--- a/Documentation/driver-api/dmaengine/client.rst
++++ b/Documentation/driver-api/dmaengine/client.rst
+@@ -175,7 +175,7 @@ The details of these operations are:
+     driver can ask for the pointer, maximum size and the currently used size of
+     the metadata and can directly update or read it.
  
--If your system administrator ran himself the script, all the users will be able
--to change from English to the language choosed by root and do directly
-+If your system administrator himself ran the script, all the users will be able
-+to change from English to the language chosen by root and do directly
- speakupconf load (or add this to the ~/.bashrc or
- ~/.bash_profile file). If there are several languages to handle, the
- administrator (or every user) will have to run the first steps until speakupconf
-diff -- a/Documentation/admin-guide/device-mapper/cache-policies.rst b/Documentation/admin-guide/device-mapper/cache-policies.rst
---- a/Documentation/admin-guide/device-mapper/cache-policies.rst
-+++ b/Documentation/admin-guide/device-mapper/cache-policies.rst
-@@ -70,7 +70,7 @@ the entries (each hotspot block covers a
- cache block).
+-    Becasue the DMA driver manages the memory area containing the metadata,
++    Because the DMA driver manages the memory area containing the metadata,
+     clients must make sure that they do not try to access or get the pointer
+     after their transfer completion callback has run for the descriptor.
+     If no completion callback has been defined for the transfer, then the
+diff -- a/Documentation/driver-api/dmaengine/dmatest.rst b/Documentation/driver-api/dmaengine/dmatest.rst
+--- a/Documentation/driver-api/dmaengine/dmatest.rst
++++ b/Documentation/driver-api/dmaengine/dmatest.rst
+@@ -89,7 +89,7 @@ The following command returns the state
  
- All this means smq uses ~25bytes per cache block.  Still a lot of
--memory, but a substantial improvement nontheless.
-+memory, but a substantial improvement nonetheless.
+     % cat /sys/module/dmatest/parameters/run
  
- Level balancing
- ^^^^^^^^^^^^^^^
-diff -- a/Documentation/admin-guide/device-mapper/dm-ebs.rst b/Documentation/admin-guide/device-mapper/dm-ebs.rst
---- a/Documentation/admin-guide/device-mapper/dm-ebs.rst
-+++ b/Documentation/admin-guide/device-mapper/dm-ebs.rst
-@@ -31,7 +31,7 @@ Mandatory parameters:
+-To wait for test completion userpace can poll 'run' until it is false, or use
++To wait for test completion userspace can poll 'run' until it is false, or use
+ the wait parameter. Specifying 'wait=1' when loading the module causes module
+ initialization to pause until a test run has completed, while reading
+ /sys/module/dmatest/parameters/wait waits for any running test to complete
+diff -- a/Documentation/driver-api/io-mapping.rst b/Documentation/driver-api/io-mapping.rst
+--- a/Documentation/driver-api/io-mapping.rst
++++ b/Documentation/driver-api/io-mapping.rst
+@@ -44,7 +44,7 @@ This _wc variant returns a write-combini
+ used with mappings created by io_mapping_create_wc()
  
- Optional parameter:
+ Temporary mappings are only valid in the context of the caller. The mapping
+-is not guaranteed to be globaly visible.
++is not guaranteed to be globally visible.
  
--    <underyling sectors>:
-+    <underlying sectors>:
-         Number of sectors defining the logical block size of <dev path>.
-         2^N supported, e.g. 8 = emulate 8 sectors of 512 bytes = 4KiB.
-         If not provided, the logical block size of <dev path> will be used.
-diff -- a/Documentation/admin-guide/device-mapper/dm-zoned.rst b/Documentation/admin-guide/device-mapper/dm-zoned.rst
---- a/Documentation/admin-guide/device-mapper/dm-zoned.rst
-+++ b/Documentation/admin-guide/device-mapper/dm-zoned.rst
-@@ -46,7 +46,7 @@ just like conventional zones.
- The zones of the device(s) are separated into 2 types:
+ io_mapping_map_local_wc() has a side effect on X86 32bit as it disables
+ migration to make the mapping code work. No caller can rely on this side
+@@ -78,7 +78,7 @@ variant, although this may be significan
+ 				unsigned long offset)
  
- 1) Metadata zones: these are conventional zones used to store metadata.
--Metadata zones are not reported as useable capacity to the user.
-+Metadata zones are not reported as usable capacity to the user.
+ This works like io_mapping_map_atomic/local_wc() except it has no side
+-effects and the pointer is globaly visible.
++effects and the pointer is globally visible.
  
- 2) Data zones: all remaining zones, the vast majority of which will be
- sequential zones used exclusively to store user data. The conventional
-diff -- a/Documentation/admin-guide/device-mapper/unstriped.rst b/Documentation/admin-guide/device-mapper/unstriped.rst
---- a/Documentation/admin-guide/device-mapper/unstriped.rst
-+++ b/Documentation/admin-guide/device-mapper/unstriped.rst
-@@ -35,7 +35,7 @@ An example of undoing an existing dm-str
+ The mappings are released with::
  
- This small bash script will setup 4 loop devices and use the existing
- striped target to combine the 4 devices into one.  It then will use
--the unstriped target ontop of the striped device to access the
-+the unstriped target on top of the striped device to access the
- individual backing loop devices.  We write data to the newly exposed
- unstriped devices and verify the data written matches the correct
- underlying device on the striped array::
-@@ -110,8 +110,8 @@ to get a 92% reduction in read latency u
- Example dmsetup usage
- =====================
+diff -- a/Documentation/driver-api/media/drivers/vidtv.rst b/Documentation/driver-api/media/drivers/vidtv.rst
+--- a/Documentation/driver-api/media/drivers/vidtv.rst
++++ b/Documentation/driver-api/media/drivers/vidtv.rst
+@@ -28,7 +28,7 @@ Currently, it consists of:
+   takes parameters at initialization that will dictate how the simulation
+   behaves.
  
--unstriped ontop of Intel NVMe device that has 2 cores
-------------------------------------------------------
-+unstriped on top of Intel NVMe device that has 2 cores
-+------------------------------------------------------
+-- Code reponsible for encoding a valid MPEG Transport Stream, which is then
++- Code responsible for encoding a valid MPEG Transport Stream, which is then
+   passed to the bridge driver. This fake stream contains some hardcoded content.
+   For now, we have a single, audio-only channel containing a single MPEG
+   Elementary Stream, which in turn contains a SMPTE 302m encoded sine-wave.
+diff -- a/Documentation/driver-api/media/dtv-demux.rst b/Documentation/driver-api/media/dtv-demux.rst
+--- a/Documentation/driver-api/media/dtv-demux.rst
++++ b/Documentation/driver-api/media/dtv-demux.rst
+@@ -24,7 +24,7 @@ unless this is fixed in the HW platform.
  
- ::
+ The demux kABI only controls front-ends regarding to their connections with
+ demuxes; the kABI used to set the other front-end parameters, such as
+-tuning, are devined via the Digital TV Frontend kABI.
++tuning, are defined via the Digital TV Frontend kABI.
  
-@@ -124,8 +124,8 @@ respectively::
-   /dev/mapper/nvmset0
-   /dev/mapper/nvmset1
+ The functions that implement the abstract interface demux should be defined
+ static or module private and registered to the Demux core for external
+diff -- a/Documentation/driver-api/pin-control.rst b/Documentation/driver-api/pin-control.rst
+--- a/Documentation/driver-api/pin-control.rst
++++ b/Documentation/driver-api/pin-control.rst
+@@ -836,7 +836,7 @@ hardware and shall be put into different
  
--unstriped ontop of striped with 4 drives using 128K chunk size
----------------------------------------------------------------
-+unstriped on top of striped with 4 drives using 128K chunk size
-+---------------------------------------------------------------
+ Depending on the exact HW register design, some functions exposed by the
+ GPIO subsystem may call into the pinctrl subsystem in order to
+-co-ordinate register settings across HW modules. In particular, this may
++coordinate register settings across HW modules. In particular, this may
+ be needed for HW with separate GPIO and pin controller HW modules, where
+ e.g. GPIO direction is determined by a register in the pin controller HW
+ module rather than the GPIO HW module.
+diff -- a/Documentation/driver-api/pldmfw/index.rst b/Documentation/driver-api/pldmfw/index.rst
+--- a/Documentation/driver-api/pldmfw/index.rst
++++ b/Documentation/driver-api/pldmfw/index.rst
+@@ -20,7 +20,7 @@ Overview of the ``pldmfw`` library
  
- ::
+ The ``pldmfw`` library is intended to be used by device drivers for
+ implementing device flash update based on firmware files following the PLDM
+-firwmare file format.
++firmware file format.
  
-diff -- a/Documentation/admin-guide/hw-vuln/mds.rst b/Documentation/admin-guide/hw-vuln/mds.rst
---- a/Documentation/admin-guide/hw-vuln/mds.rst
-+++ b/Documentation/admin-guide/hw-vuln/mds.rst
-@@ -64,8 +64,8 @@ architecture section: :ref:`Documentatio
- Attack scenarios
- ----------------
+ It is implemented using an ops table that allows device drivers to provide
+ the underlying device specific functionality.
+diff -- a/Documentation/driver-api/md/md-cluster.rst b/Documentation/driver-api/md/md-cluster.rst
+--- a/Documentation/driver-api/md/md-cluster.rst
++++ b/Documentation/driver-api/md/md-cluster.rst
+@@ -65,7 +65,7 @@ There are three groups of locks for mana
+ 2.3 new-device management
+ -------------------------
  
--Attacks against the MDS vulnerabilities can be mounted from malicious non
--priviledged user space applications running on hosts or guest. Malicious
-+Attacks against the MDS vulnerabilities can be mounted from malicious non-
-+privileged user space applications running on hosts or guest. Malicious
- guest OSes can obviously mount attacks as well.
+- A single lock: "no-new-dev" is used to co-ordinate the addition of
++ A single lock: "no-new-dev" is used to coordinate the addition of
+  new devices - this must be synchronized across the array.
+  Normally all nodes hold a concurrent-read lock on this device.
  
- Contrary to other speculation based vulnerabilities the MDS vulnerability
-diff -- a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -356,7 +356,7 @@ The lowmem_reserve_ratio is an array. Yo
+diff -- a/Documentation/driver-api/md/raid5-cache.rst b/Documentation/driver-api/md/raid5-cache.rst
+--- a/Documentation/driver-api/md/raid5-cache.rst
++++ b/Documentation/driver-api/md/raid5-cache.rst
+@@ -81,7 +81,7 @@ The write-through and write-back cache u
+ is organized as a simple write log. The log consists of 'meta data' and 'data'
+ pairs. The meta data describes the data. It also includes checksum and sequence
+ ID for recovery identification. Data can be IO data and parity data. Data is
+-checksumed too. The checksum is stored in the meta data ahead of the data. The
++checksummed too. The checksum is stored in the meta data ahead of the data. The
+ checksum is an optimization because MD can write meta and data freely without
+ worry about the order. MD superblock has a field pointed to the valid meta data
+ of log head.
+diff -- a/Documentation/driver-api/media/v4l2-subdev.rst b/Documentation/driver-api/media/v4l2-subdev.rst
+--- a/Documentation/driver-api/media/v4l2-subdev.rst
++++ b/Documentation/driver-api/media/v4l2-subdev.rst
+@@ -321,7 +321,7 @@ response to video node operations. This
+ hardware from applications. For complex devices, finer-grained control of the
+ device than what the video nodes offer may be required. In those cases, bridge
+ drivers that implement :ref:`the media controller API <media_controller>` may
+-opt for making the subdevice operations directly accessible from userpace.
++opt for making the subdevice operations directly accessible from userspace.
  
- But, these values are not used directly. The kernel calculates # of protection
- pages for each zones from them. These are shown as array of protection pages
--in /proc/zoneinfo like followings. (This is an example of x86-64 box).
-+in /proc/zoneinfo like the following. (This is an example of x86-64 box).
- Each zone has an array of protection pages like this::
+ Device nodes named ``v4l-subdev``\ *X* can be created in ``/dev`` to access
+ sub-devices directly. If a sub-device supports direct userspace configuration
+@@ -574,7 +574,7 @@ issues with subdevice drivers that let t
+ as they expect to receive the appropriate state as a parameter. To help the
+ conversion of subdevice drivers to a managed active state without having to
+ convert all callers at the same time, an additional wrapper layer has been
+-added to v4l2_subdev_call(), which handles the NULL case by geting and locking
++added to v4l2_subdev_call(), which handles the NULL case by getting and locking
+ the callee's active state with :c:func:`v4l2_subdev_lock_and_get_active_state()`,
+ and unlocking the state after the call.
  
-   Node 0, zone      DMA
-@@ -433,7 +433,7 @@ a 2bit error in a memory module) is dete
- that cannot be handled by the kernel. In some cases (like the page
- still having a valid copy on disk) the kernel will handle the failure
- transparently without affecting any applications. But if there is
--no other uptodate copy of the data it will kill to prevent any data
-+no other up-to-date copy of the data it will kill to prevent any data
- corruptions from propagating.
- 
- 1: Kill all processes that have the corrupted and not reloadable page mapped
-diff -- a/Documentation/admin-guide/bcache.rst b/Documentation/admin-guide/bcache.rst
---- a/Documentation/admin-guide/bcache.rst
-+++ b/Documentation/admin-guide/bcache.rst
-@@ -204,7 +204,7 @@ For example::
- This should present your unmodified backing device data in /dev/loop0
- 
- If your cache is in writethrough mode, then you can safely discard the
--cache device without loosing data.
-+cache device without losing data.
- 
- 
- E) Wiping a cache device
-diff -- a/Documentation/admin-guide/sysrq.rst b/Documentation/admin-guide/sysrq.rst
---- a/Documentation/admin-guide/sysrq.rst
-+++ b/Documentation/admin-guide/sysrq.rst
-@@ -138,7 +138,7 @@ Command	    Function
- ``v``	    Forcefully restores framebuffer console
- ``v``	    Causes ETM buffer dump [ARM-specific]
- 
--``w``	    Dumps tasks that are in uninterruptable (blocked) state.
-+``w``	    Dumps tasks that are in uninterruptible (blocked) state.
- 
- ``x``	    Used by xmon interface on ppc/powerpc platforms.
-             Show global PMU Registers on sparc64.
-diff -- a/Documentation/admin-guide/cifs/usage.rst b/Documentation/admin-guide/cifs/usage.rst
---- a/Documentation/admin-guide/cifs/usage.rst
-+++ b/Documentation/admin-guide/cifs/usage.rst
-@@ -399,7 +399,7 @@ A partial list of the supported mount op
-   sep
- 		if first mount option (after the -o), overrides
- 		the comma as the separator between the mount
--		parms. e.g.::
-+		parameters. e.g.::
- 
- 			-o user=myname,password=mypassword,domain=mydom
- 
-@@ -765,7 +765,7 @@ cifsFYI			If set to non-zero value, addi
- 			Some debugging statements are not compiled into the
- 			cifs kernel unless CONFIG_CIFS_DEBUG2 is enabled in the
- 			kernel configuration. cifsFYI may be set to one or
--			nore of the following flags (7 sets them all)::
-+			more of the following flags (7 sets them all)::
- 
- 			  +-----------------------------------------------+------+
- 			  | log cifs informational messages		  | 0x01 |
-diff -- a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
---- a/Documentation/admin-guide/dynamic-debug-howto.rst
-+++ b/Documentation/admin-guide/dynamic-debug-howto.rst
-@@ -330,7 +330,7 @@ Examples
- 
-   // boot-args example, with newlines and comments for readability
-   Kernel command line: ...
--    // see whats going on in dyndbg=value processing
-+    // see what's going on in dyndbg=value processing
-     dynamic_debug.verbose=3
-     // enable pr_debugs in the btrfs module (can be builtin or loadable)
-     btrfs.dyndbg="+p"
-diff -- a/Documentation/admin-guide/mm/hugetlbpage.rst b/Documentation/admin-guide/mm/hugetlbpage.rst
---- a/Documentation/admin-guide/mm/hugetlbpage.rst
-+++ b/Documentation/admin-guide/mm/hugetlbpage.rst
-@@ -86,7 +86,7 @@ by increasing or decreasing the value of
- 
- Note: When the feature of freeing unused vmemmap pages associated with each
- hugetlb page is enabled, we can fail to free the huge pages triggered by
--the user when ths system is under memory pressure.  Please try again later.
-+the user when the system is under memory pressure.  Please try again later.
- 
- Pages that are used as huge pages are reserved inside the kernel and cannot
- be used for other purposes.  Huge pages cannot be swapped out under
-diff -- a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Documentation/admin-guide/mm/numa_memory_policy.rst
---- a/Documentation/admin-guide/mm/numa_memory_policy.rst
-+++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
-@@ -246,7 +246,7 @@ MPOL_INTERLEAVED
- 	interleaved system default policy works in this mode.
- 
- MPOL_PREFERRED_MANY
--	This mode specifices that the allocation should be preferrably
-+	This mode specifies that the allocation should be preferably
- 	satisfied from the nodemask specified in the policy. If there is
- 	a memory pressure on all nodes in the nodemask, the allocation
- 	can fall back to all existing numa nodes. This is effectively
-@@ -360,7 +360,7 @@ and NUMA nodes.  "Usage" here means one
- 2) examination of the policy to determine the policy mode and associated node
-    or node lists, if any, for page allocation.  This is considered a "hot
-    path".  Note that for MPOL_BIND, the "usage" extends across the entire
--   allocation process, which may sleep during page reclaimation, because the
-+   allocation process, which may sleep during page reclamation, because the
-    BIND policy nodemask is used, by reference, to filter ineligible nodes.
- 
- We can avoid taking an extra reference during the usages listed above as
-diff -- a/Documentation/admin-guide/gpio/gpio-sim.rst b/Documentation/admin-guide/gpio/gpio-sim.rst
---- a/Documentation/admin-guide/gpio/gpio-sim.rst
-+++ b/Documentation/admin-guide/gpio/gpio-sim.rst
-@@ -123,7 +123,7 @@ Each simulated GPIO chip creates a separ
- directory for each exposed line
- (e.g. ``/sys/devices/platform/gpio-sim.X/gpiochipY/``). The name of each group
- is of the form: ``'sim_gpioX'`` where X is the offset of the line. Inside each
--group there are two attibutes:
-+group there are two attributes:
- 
-     ``pull`` - allows to read and set the current simulated pull setting for
-                every line, when writing the value must be one of: ``'pull-up'``,
-diff -- a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -676,7 +676,7 @@
- 			Sets the size of kernel per-numa memory area for
- 			contiguous memory allocations. A value of 0 disables
- 			per-numa CMA altogether. And If this option is not
--			specificed, the default value is 0.
-+			specified, the default value is 0.
- 			With per-numa CMA enabled, DMA users on node nid will
- 			first try to allocate buffer from the pernuma area
- 			which is located in node nid, if the allocation fails,
-@@ -946,7 +946,7 @@
- 			driver code when a CPU writes to (or reads from) a
- 			random memory location. Note that there exists a class
- 			of memory corruptions problems caused by buggy H/W or
--			F/W or by drivers badly programing DMA (basically when
-+			F/W or by drivers badly programming DMA (basically when
- 			memory is written at bus level and the CPU MMU is
- 			bypassed) which are not detectable by
- 			CONFIG_DEBUG_PAGEALLOC, hence this option will not help
-@@ -1732,7 +1732,7 @@
- 			boot-time allocation of gigantic hugepages is skipped.
- 
- 	hugetlb_free_vmemmap=
--			[KNL] Reguires CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-+			[KNL] Requires CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 			enabled.
- 			Control if HugeTLB Vmemmap Optimization (HVO) is enabled.
- 			Allows heavy hugetlb users to free up some more
-@@ -3693,7 +3693,7 @@
- 			implementation; requires CONFIG_GENERIC_IDLE_POLL_SETUP
- 			to be effective. This is useful on platforms where the
- 			sleep(SH) or wfi(ARM,ARM64) instructions do not work
--			correctly or when doing power measurements to evalute
-+			correctly or when doing power measurements to evaluate
- 			the impact of the sleep instructions. This is also
- 			useful when using JTAG debugger.
- 
-diff -- a/Documentation/admin-guide/perf/hns3-pmu.rst b/Documentation/admin-guide/perf/hns3-pmu.rst
---- a/Documentation/admin-guide/perf/hns3-pmu.rst
-+++ b/Documentation/admin-guide/perf/hns3-pmu.rst
-@@ -53,7 +53,7 @@ two events have same value of bits 0~15
- event pair. And the bit 16 of config indicates getting counter 0 or
- counter 1 of hardware event.
- 
--After getting two values of event pair in usersapce, the formula of
-+After getting two values of event pair in userspace, the formula of
- computation to calculate real performance data is:::
- 
-   counter 0 / counter 1
-diff -- a/Documentation/admin-guide/media/bttv.rst b/Documentation/admin-guide/media/bttv.rst
---- a/Documentation/admin-guide/media/bttv.rst
-+++ b/Documentation/admin-guide/media/bttv.rst
-@@ -909,7 +909,7 @@ DE hat diverse Treiber fuer diese Modell
-   - TVPhone98 (Bt878)
-   - AVerTV und TVCapture98 w/VCR (Bt 878)
-   - AVerTVStudio und TVPhone98 w/VCR (Bt878)
--  - AVerTV GO Serie (Kein SVideo Input)
-+  - AVerTV GO Series (Kein SVideo Input)
-   - AVerTV98 (BT-878 chip)
-   - AVerTV98 mit Fernbedienung (BT-878 chip)
-   - AVerTV/FM98 (BT-878 chip)
-diff -- a/Documentation/admin-guide/media/building.rst b/Documentation/admin-guide/media/building.rst
---- a/Documentation/admin-guide/media/building.rst
-+++ b/Documentation/admin-guide/media/building.rst
-@@ -137,7 +137,7 @@ The ``LIRC user interface`` option adds
- from remote controllers.
- 
- The ``Support for eBPF programs attached to lirc devices`` option allows
--the usage of special programs (called eBPF) that would allow aplications
-+the usage of special programs (called eBPF) that would allow applications
- to add extra remote controller decoding functionality to the Linux Kernel.
- 
- The ``Remote controller decoders`` option allows selecting the
-diff -- a/Documentation/admin-guide/media/si476x.rst b/Documentation/admin-guide/media/si476x.rst
---- a/Documentation/admin-guide/media/si476x.rst
-+++ b/Documentation/admin-guide/media/si476x.rst
-@@ -142,7 +142,7 @@ The drivers exposes following files:
- 				  indicator
-   0x18		 lassi		  Signed Low side adjacent Channel
- 				  Strength indicator
--  0x19		 hassi		  ditto fpr High side
-+  0x19		 hassi		  ditto for High side
-   0x20		 mult		  Multipath indicator
-   0x21		 dev		  Frequency deviation
-   0x24		 assi		  Adjacent channel SSI
-diff -- a/Documentation/admin-guide/media/vivid.rst b/Documentation/admin-guide/media/vivid.rst
---- a/Documentation/admin-guide/media/vivid.rst
-+++ b/Documentation/admin-guide/media/vivid.rst
-@@ -580,7 +580,7 @@ Metadata Capture
- ----------------
- 
- The Metadata capture generates UVC format metadata. The PTS and SCR are
--transmitted based on the values set in vivid contols.
-+transmitted based on the values set in vivid controls.
- 
- The Metadata device will only work for the Webcam input, it will give
- back an error for all other inputs.
