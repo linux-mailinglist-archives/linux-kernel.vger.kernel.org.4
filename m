@@ -2,93 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B67367FF9E
-	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 15:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488C067FFA1
+	for <lists+linux-kernel@lfdr.de>; Sun, 29 Jan 2023 15:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjA2OvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 09:51:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
+        id S234654AbjA2Oxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 09:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjA2OvJ (ORCPT
+        with ESMTP id S229617AbjA2Ox3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 09:51:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB80E1C5BC
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 06:51:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4091760D57
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 14:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223F7C433EF;
-        Sun, 29 Jan 2023 14:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675003866;
-        bh=lCnGajDczmgjdfaOaigtlGKys56hqbLDWWrpKImZVQI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J9liH0mmRLx7j3YSfhxlIGHTXOIbsjhwWxrlUml/4CFcGmfwCIZGylUUfveJMhPEA
-         WpteS9BJH/b3mnhdpzzThQc/zHlniwKln5qCvbSr/DLjAK61Wg64ZONPWIcf7QcsgV
-         hhR/+9nLCWevQsrxrDmiqxXQevO9hFF6LU8hhHNuiBbDf5+LqAbtsuZNpAMbUNDM1i
-         3TEz99Bv6fjscFhJ72WyG31a9fZvk9TMsQLa1pSuNfB+I7/8C87RjvZjFxlhi2a9cU
-         TLX2gOhG5XOywyWt2nKg8Omsfevxris2wbEOKKnOfJS7FoJQV0WB3g8IOK0LfLDZt8
-         LAdU+0Pt6bUFg==
-Date:   Sun, 29 Jan 2023 07:51:04 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-Message-ID: <Y9aH2AzDpwQXFlx+@dev-arch.thelio-3990X>
-References: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
- <1206e990-23b3-44c8-97c9-869ec0aeead0@app.fastmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1206e990-23b3-44c8-97c9-869ec0aeead0@app.fastmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 29 Jan 2023 09:53:29 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B266E9D;
+        Sun, 29 Jan 2023 06:53:29 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30TCv8Ib025247;
+        Sun, 29 Jan 2023 14:52:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=BTymnEY7PdY80oj3gRAnHrWAC+GyrmyhWWU2S+Zj73M=;
+ b=RFoFGx9pwVVxGyIk1MddbV0KLfpN9U41KpQ9FxTmLnwqQI4sCebFLvbFp8hajQXLvYge
+ aonnbfbixryzO+/n8WzpKkLR/e8HNlNEZcF24GOi5A08UzfqJrtUJQSGldzlGhvMtUzc
+ UeI9pvf1yCdpdmXi/prILbmc5yHQURhl5rYhFGOplMI1NYy6K/9pZtl+IWBYJ/t4HDK0
+ 5yrahFMspYjI3O30721zg0pRNb4xvw8f48GhMcq5O5p8RAwkG1CkZ81mB8tgX/e9lwsG
+ Rh5M9vB8qXDCEVGnLOfvZ1d+er0GPTIKjMNwBZfU8pxTVV1OFaMNZNbyoyD4Q/ahVRVZ ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ndd5gtsu9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 14:52:56 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30TEqtQu003193;
+        Sun, 29 Jan 2023 14:52:55 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ndd5gtsu5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 14:52:55 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30TDoI61028521;
+        Sun, 29 Jan 2023 14:52:54 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuy6c2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 14:52:54 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30TEqrV27144064
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 29 Jan 2023 14:52:53 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DA3D5805C;
+        Sun, 29 Jan 2023 14:52:53 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5C10058051;
+        Sun, 29 Jan 2023 14:52:52 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.14.97])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Sun, 29 Jan 2023 14:52:52 +0000 (GMT)
+Message-ID: <89a7cc7efe1545e18c9af6c3ec53468d6f528a7a.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/2] ima: Introduce MMAP_CHECK_REQPROT hook
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
+        viro@zeniv.linux.org.uk, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Sun, 29 Jan 2023 09:52:51 -0500
+In-Reply-To: <20230126163812.1870942-2-roberto.sassu@huaweicloud.com>
+References: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
+         <20230126163812.1870942-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BS8bjdh3i4i2-dHgYMWyer4ug3yZgapU
+X-Proofpoint-ORIG-GUID: WUP_hBEkzHovIyANyxgtmqdLjZUXpGux
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-29_09,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1015 suspectscore=0
+ bulkscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301290143
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 10:56:06PM +0100, Arnd Bergmann wrote:
-> On Wed, Jan 18, 2023, at 20:22, Nathan Chancellor wrote:
-> > Commit 6a7ee50f8f56 ("ARM: disallow pre-ARMv5 builds with ld.lld")
-> > prevented v4 or v4t kernels when ld.lld will link the kernel due to
-> > inserting unsupported blx instructions.
-> >
-> > ld.lld has been fixed in current main (16.0.0) to avoid inserting these
-> > instructions by inserting position independent thunks instead. Allow
-> > these configurations to be enabled when ld.lld 16.0.0 is used to link
-> > the kernel.
-> >
-> > Additionally, add a link to the upstream LLVM issue so that the reason
-> > for this dependency is clearly documented.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/964
-> > Link: 
-> > https://github.com/llvm/llvm-project/commit/6f9ff1beee9d12aca0c9caa9ae0051dc6d0a718c
-> > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Thu, 2023-01-26 at 17:38 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> Thanks a lot for getting this fixed!
+> Commit 98de59bfe4b2f ("take calculation of final prot in
+> security_mmap_file() into a helper") caused ima_file_mmap() to receive the
+> protections requested by the application and not those applied by the
+> kernel.
 > 
-> I gave this a spin on my randconfig build setup, which showed
-> nothing unusual.
-> 
-> Tested-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Please add this to Russell's patch tracker.
+> After restoring the original MMAP_CHECK behavior with a patch, existing
+> systems might be broken due to not being ready to handle new entries
+> (previously missing) in the IMA measurement list.
 
-Done, thanks for testing!
+Is this a broken system or a broken attestation server?  The
+attestation server might not be able to handle the additional
+measurements, but the system, itself, is not broken.
 
-https://www.armlinux.org.uk/developer/patches/viewpatch.php?id=9289/1
+"with a patch" is unnecessary.
 
-Cheers,
-Nathan
+> 
+> Restore the original correct MMAP_CHECK behavior instead of keeping the
+
+^ add missing comma after "behavior"
+
+> current buggy one and introducing a new hook with the correct behavior. The
+> second option 
+
+^ The second option -> Otherwise,
+
+> would have had the risk of IMA users not noticing the problem
+> at all, as they would actively have to update the IMA policy, to switch to
+> the correct behavior.
+> 
+> Also, introduce the new MMAP_CHECK_REQPROT hook to keep the current
+> behavior, so that IMA users could easily fix a broken system, although this
+> approach is discouraged due to potentially missing measurements.
+
+Again, is this a broken system or a broken attestation server? 
+
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Otherwise, the patch looks good.
+
+-- 
+thanks,
+
+Mimi
+
