@@ -2,110 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2761681AD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5805681AD8
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237237AbjA3TwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S237931AbjA3Txa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjA3TwR (ORCPT
+        with ESMTP id S237598AbjA3TxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:52:17 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A59C4617A;
-        Mon, 30 Jan 2023 11:52:16 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id m2so34654471ejb.8;
-        Mon, 30 Jan 2023 11:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sSc4g7nvJKandIv/rMf9SszIbfj3jQh7I5IHKjdlPVs=;
-        b=SxEpUCfK9Oqj2XYYB6c/P+mZcr9oXylUbJfrvqrAQg5TAe8djCKBliswqP8D3jelkZ
-         aKLAkv0SkyDGkJsSniATXnyYwGQ9KfGpDNTrILlxXuluFsVT2epqbtqnN3XTD4/JaMO+
-         uWJ0HsRUPFe5n2YBimAivCTYEUZjgNmshaMlLeZsoN9h/EGh9snc6KMOolS0WNgMWywt
-         4YdaeoyqFRTcQ5rJmF4i1sNOYLv5GgDA+KWcynfsXComcdsNisou7TydkMIzJ+f87rrx
-         qUZ9DprgLB+x70vv18//RVhmE2O/c+OVeqSPXS3Z8j/uO2/2Ps9+MzIdylqYBRIjUM0s
-         Dwtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sSc4g7nvJKandIv/rMf9SszIbfj3jQh7I5IHKjdlPVs=;
-        b=oWsAbo8ik8l6ozlV5te2hVQnjGlw/Xun7x8XWtSO3TyQTXF0V2Rc3TsAH8XwqmZ4Q4
-         /B242/A8T4H903pv1BQaWMfn9nW1RIVi3ynQJrfHlly3mXFO+hVYO1/yMkbBCGgCThyK
-         uMYoLv3IATEiI3tuw7MbQie9Z+fnzuG8DfRe7hmKkH5oMkwY3h81d4nAx8XyzEqNp+Zq
-         OzIEoo+LBsce4pcUn7VXOh4D0m+Y8m5wbfShZut+ARgSBy4wMzMnPpvgY5w2AF2bXECu
-         wlnkLmeNY6yNFZ9QB5XkQ5gsQ89g238JznnZ2hkq3gp2TLb9reAxnG63hw1HIQHviSvc
-         +vMw==
-X-Gm-Message-State: AFqh2kpFZ9jRAMGE2wfgC0GPM2pw0aHS2vOR5KGx3mp9HSh036iECKdk
-        ZLqaSxusFkmT0zIOYaeUtLfS0ouGMVau4nhfXManNDVm4zk=
-X-Google-Smtp-Source: AMrXdXudTqgdM3+I8mgvgkYxiO4cmG/GpQA2LBqWtWyKEb7WoFRmj1FeTe8fWoVxZ92AbUm1q4YUsT92cIYd2WqVcM0=
-X-Received: by 2002:a17:906:380e:b0:877:5b9b:b426 with SMTP id
- v14-20020a170906380e00b008775b9bb426mr8031462ejc.12.1675108334423; Mon, 30
- Jan 2023 11:52:14 -0800 (PST)
+        Mon, 30 Jan 2023 14:53:25 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142AE3E630
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:53:23 -0800 (PST)
+Received: from dslb-188-097-040-029.188.097.pools.vodafone-ip.de ([188.97.40.29] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1pMaDM-0007S2-0D; Mon, 30 Jan 2023 20:53:16 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 0/9] staging: r8188eu: another round of xmit cleanups
+Date:   Mon, 30 Jan 2023 20:52:54 +0100
+Message-Id: <20230130195303.138941-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230130181915.1113313-1-zwisler@google.com> <20230130181915.1113313-4-zwisler@google.com>
-In-Reply-To: <20230130181915.1113313-4-zwisler@google.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 30 Jan 2023 11:52:03 -0800
-Message-ID: <CAADnVQJ7KxEK92qOz0Ya4MrACHpxngSpG4W38xuGEgZmXEG-vQ@mail.gmail.com>
-Subject: Re: [PATCH 3/9] selftests/bpf: use canonical ftrace path
-To:     Ross Zwisler <zwisler@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 10:19 AM Ross Zwisler <zwisler@chromium.org> wrote:
->
-> The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
->
-> But, from Documentation/trace/ftrace.rst:
->
->   Before 4.1, all ftrace tracing control files were within the debugfs
->   file system, which is typically located at /sys/kernel/debug/tracing.
->   For backward compatibility, when mounting the debugfs file system,
->   the tracefs file system will be automatically mounted at:
->
->   /sys/kernel/debug/tracing
->
-> Many tests in the bpf selftest code still refer to this older debugfs
-> path, so let's update them to avoid confusion.
+Here's some more cleanups for the xmit code. Amongst other things, there's
+one more __queue that can be replaced with a list_head.
 
-I wish that was the case, but in reality there are still systems
-out there where tracefs is only mounted in that old location.
-For example in one my VMs:
+Martin Kaiser (9):
+  staging: r8188eu: rtw_free_xmitframe_queue needs no spinlock
+  staging: r8188eu: change function param from __queue to list_head
+  staging: r8188eu: change another function param from __queue to
+    list_head
+  staging: r8188eu: make sta_pending a list_head
+  staging: r8188eu: use kernel helper to iterate over a list
+  staging: r8188eu: legacy_dz is initialised but never used
+  staging: r8188eu: apsd is initialised but never used
+  staging: r8188eu: option in struct sta_xmit_priv is not used
+  staging: r8188eu: replace switch-case with if
 
-$ cat /proc/mounts |grep tracefs
-tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
-$ ls /sys/kernel/tracing/
-$ uname -r
-6.2.0-rc5-01030-gc1a3daf7363b
+ drivers/staging/r8188eu/core/rtw_sta_mgt.c    | 10 +++---
+ drivers/staging/r8188eu/core/rtw_xmit.c       | 31 +++++--------------
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c  |  4 +--
+ drivers/staging/r8188eu/include/rtw_xmit.h    |  8 ++---
+ .../staging/r8188eu/os_dep/usb_ops_linux.c    |  8 +----
+ 5 files changed, 18 insertions(+), 43 deletions(-)
 
-So this change will break the tests. We cannot do it.
+-- 
+2.30.2
+
