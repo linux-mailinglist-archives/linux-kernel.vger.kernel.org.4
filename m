@@ -2,68 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16026806C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FD96806CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbjA3H44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 02:56:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S230464AbjA3H7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 02:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjA3H4z (ORCPT
+        with ESMTP id S229653AbjA3H7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 02:56:55 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17853279AA;
-        Sun, 29 Jan 2023 23:56:54 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id o12so11710042ljp.11;
-        Sun, 29 Jan 2023 23:56:54 -0800 (PST)
+        Mon, 30 Jan 2023 02:59:37 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D5055A9
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 23:59:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pxjejnf+qHKVQ1YQcmwOkN18hl/Nwiz0oq4H7oGqOVc=;
-        b=ifbLiIwx1QkjeNx4VZUd7c/9Ix9+6W76OsYE4tFo9MEGqrgzWgmdmxMyISn2y9Bq2z
-         Av6mgrwEczL5nbgHCmYTbSYzU65n8GHfV/RW83oC9pglKDw1ogpJWqeJwbtFDRwop+hn
-         Blvz6ae3YaON6Bx0/voPe/5uMDX3p/mgoPZWVSJ6LJI8m/Teen9tZuuhu+6ZGe8x3nmv
-         UAgUMuxxeFwld8omz4boagZ7UQbVYw7itSOYlbXs4qPzY/R59wenWoj29KCakXVwscM3
-         Bv03aRCw9CTpycfuRvNdYKmA73xN2mTiox1Pj7Fjb2fQzP2bHzIPogtfX/kCAeL1cd8R
-         htCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pxjejnf+qHKVQ1YQcmwOkN18hl/Nwiz0oq4H7oGqOVc=;
-        b=bNWBtPY6aaBwYT+6dwJvsLxKpKcaODAK0AaHR0eqNIAooKyI3F54tJpcSG9RC7ZvGv
-         0NEzhTQffORLK6y67d0VQ4aVA88eihJ1wSArGoVLLcmGh5M5v5lMroOSZVIkGs2vfIzv
-         8W/g8xIvZjhI1ul7sbuJJZNVxTtYFkWARRo7yI1kFaq5N5OlN7G4g0atJIPzCErEcaIU
-         pMpWtycZXsV1WIIS77V7K40sRv42J1P60XcbZjpgxWKc6kseZ3slwj0Jdyb7aHFNsgpw
-         H202yfVdLY3Zw0A4pQs72rPNGNqODNEsgSldfOoYt/dy8O3T3HjUzm3LX9ajIDmnYT8l
-         6DvQ==
-X-Gm-Message-State: AO0yUKVOzmR3fRZpOxENqEdU6h87fcd4fea2IxuBuksQVhTFiq2zeS0e
-        bKEtQ2fNW05Ay7SmiUXrECZlu2JE3xE=
-X-Google-Smtp-Source: AMrXdXt2UFDcrXI0Shm47v8sKGf2D+KdwABvPpv8QquopCYW43xOw2FHor6i1oOWHOyQocqVchI+tQ==
-X-Received: by 2002:a17:906:60d0:b0:877:612e:516e with SMTP id f16-20020a17090660d000b00877612e516emr145029435ejk.61.1675065401916;
-        Sun, 29 Jan 2023 23:56:41 -0800 (PST)
-Received: from felia.fritz.box ([2a02:810d:2a40:1104:893:4a0f:7898:3492])
-        by smtp.gmail.com with ESMTPSA id jo17-20020a170906f6d100b008785b914883sm6481176ejb.116.2023.01.29.23.56.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 23:56:41 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        Can Guo <quic_cang@quicinc.com>, linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] scsi: ufs: qcom: include specific ops when GENERIC_MSI_IRQ is set
-Date:   Mon, 30 Jan 2023 08:56:15 +0100
-Message-Id: <20230130075615.17108-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/wdUzQl36Iu2VK5SbxqISsiHtJoNcLhLCTKQmxCJJbY=;
+  b=rP2I+Q2YPs6kIcE402J66lkFzMA5aMdxHHBhbZlkFHeKANxQRJ/VElGa
+   9EwXDJtuBwAxZdzNdbIyw+NhfrYqYysim4Mi+YgcpA2ERy8d5P/jq7A5m
+   D9vApj/HF00NQnhsHICqtplb3/SxdXahgrP8bYEZl5d6I2bKac6piATgR
+   4=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.97,257,1669071600"; 
+   d="scan'208";a="89979550"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 08:59:34 +0100
+Date:   Mon, 30 Jan 2023 08:59:34 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev
+Subject: drivers/infiniband/ulp/ipoib/ipoib_main.c:333:2-10: WARNING: NULL
+ check before dev_{put, hold} functions is not needed. (fwd)
+Message-ID: <26215e5-3195-ab2e-f51c-4daf2a8c7f60@inria.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,35 +47,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 13e7accb81d6 ("genirq: Get rid of GENERIC_MSI_IRQ_DOMAIN") removes
-the config GENERIC_MSI_IRQ_DOMAIN and replaces all references with
-GENERIC_MSI_IRQ.
+Please check lines 333 and 2007 as noted below.
 
-Probably due to concurrent development, commit 519b6274a777 ("scsi: ufs:
-qcom: Add MCQ ESI config vendor specific ops") adds an ifdef block
-conditional under the config GENERIC_MSI_IRQ_DOMAIN.
+julia
 
-Make this code conditional under the existing config GENERIC_MSI_IRQ.
+---------- Forwarded message ----------
+Date: Mon, 30 Jan 2023 14:45:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: oe-kbuild@lists.linux.dev
+Cc: lkp@intel.com, Julia Lawall <julia.lawall@inria.fr>
+Subject: drivers/infiniband/ulp/ipoib/ipoib_main.c:333:2-10: WARNING: NULL check
+     before dev_{put, hold} functions is not needed.
 
-Fixes: 519b6274a777 ("scsi: ufs: qcom: Add MCQ ESI config vendor specific ops")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- drivers/ufs/host/ufs-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+BCC: lkp@intel.com
+CC: oe-kbuild-all@lists.linux.dev
+CC: linux-kernel@vger.kernel.org
+TO: Ziyang Xuan <william.xuanziyang@huawei.com>
+CC: Julia Lawall <julia.lawall@inria.fr>
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 681da3ea7154..14283f6dc3f7 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1538,7 +1538,7 @@ static int ufs_qcom_get_outstanding_cqs(struct ufs_hba *hba,
- 	return 0;
- }
- 
--#ifdef CONFIG_GENERIC_MSI_IRQ_DOMAIN
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- static void ufs_qcom_write_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
- {
- 	struct device *dev = msi_desc_to_dev(desc);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6d796c50f84ca79f1722bb131799e5a5710c4700
+commit: bbd5c96850d9de535a83a3a3842dec2169cb31d1 scripts/coccinelle/free: add NULL test before dev_{put, hold} functions
+date:   7 months ago
+:::::: branch date: 9 hours ago
+:::::: commit date: 7 months ago
+config: powerpc-randconfig-c034-20230129 (https://download.01.org/0day-ci/archive/20230130/202301301452.jacYfrpm-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+
+cocci warnings: (new ones prefixed by >>)
+>> drivers/infiniband/ulp/ipoib/ipoib_main.c:333:2-10: WARNING: NULL check before dev_{put, hold} functions is not needed.
+   drivers/infiniband/ulp/ipoib/ipoib_main.c:2007:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
