@@ -2,189 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A2F681D28
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA25D681D30
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjA3Vqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:46:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S231414AbjA3Vt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231472AbjA3Vqk (ORCPT
+        with ESMTP id S229476AbjA3VtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:46:40 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423353ABD;
-        Mon, 30 Jan 2023 13:46:39 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h12so12486261wrv.10;
-        Mon, 30 Jan 2023 13:46:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A+625/Bqulur4KZ1EHmL5p6cKcEZr14ZlhksM8ID3dw=;
-        b=p+hvsKVA1pgF0YWyAPK11sFss7+qh1Wmy17xOH6Qcnr8zSWWDP/QGJi/1he8hhDNg2
-         /Ph1XMIhZrN1IVY+IOWgjVyxJz+CN7dOfVCUKoim/5bbfUvRECNeJxpg1VkyOO9tyz97
-         fEMNOHz93ah2opok6hXhd+OAVTs1EQmJ7yFWt+rIHjVdpz9vhxMyRFrPnHlKzTXBOiD1
-         9Uda97uAFM2Bko6yFeW19YXabY2ph+dnl9AJD2qfQrGOLTg25DBDbZt/ctbdDdrYF537
-         XD6DhBbFTquf+im6V4BwbA2Q/hA/mLUoYPQjBlVLk71mQjl1OD4fLPaIyzyil99sIAlz
-         lyzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A+625/Bqulur4KZ1EHmL5p6cKcEZr14ZlhksM8ID3dw=;
-        b=xakXeDuwYlpYTb+jQDmowHG3phpMKu9w/qywfjOfPjy5DD1jmLOTBeTtb8GV2/x/Oi
-         SGVFnWUejA4lI9qzpAtlgy2kNo98oKhhLiRnceZiYFymLRI1Vu0C2SJOzv6pRDoQeViT
-         n64gMJtbkpWUHGObHv5XcxzLUwnhIJF5UYEoYGPg5iGH6nACLtdnUgEGdQryG0YqDzpj
-         G/BA5nWu58pzLmid9Tdd7PREWXEsuObHZHgLZZRALQBCdmkH5l7N+vffMDlN6q3GvDgq
-         yyEHAAKg+ihLtUB92T+IUruyF5o5QPnTcYcFEO9/ne3VUisdeq712NnXiDf1lqcybYFT
-         6wwA==
-X-Gm-Message-State: AFqh2krcwQWSWApv6CyXuVROadYkNR1vd8xye2YMIPBC2I5DFo/2sshA
-        af4Pu2Jjai1pzfKNdb8acjxcQQIGZDw=
-X-Google-Smtp-Source: AMrXdXvqxKrlRFU3eDZXIZ7VniVxT3C2s7LBCag2aCeQ1jeZQNTvj4KLzXpD+Z7hdY5EqwON6cUO3w==
-X-Received: by 2002:adf:f242:0:b0:2b2:1db6:a6bb with SMTP id b2-20020adff242000000b002b21db6a6bbmr44545475wrp.20.1675115197635;
-        Mon, 30 Jan 2023 13:46:37 -0800 (PST)
-Received: from [192.168.2.202] (p5487b129.dip0.t-ipconnect.de. [84.135.177.41])
-        by smtp.gmail.com with ESMTPSA id o9-20020adfeac9000000b002bfebe2d67esm5488027wrn.9.2023.01.30.13.46.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 13:46:36 -0800 (PST)
-Message-ID: <1459147d-8944-b01b-6f45-65a7fb7018c4@gmail.com>
-Date:   Mon, 30 Jan 2023 22:46:35 +0100
+        Mon, 30 Jan 2023 16:49:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC0C72B0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:49:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB8D8B8169F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 21:49:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA69BC433D2;
+        Mon, 30 Jan 2023 21:49:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675115361;
+        bh=CeFUjt1qi5cKN9n5135B7q6JriZX4WQ5PfaYh6IzHlM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XSGnSoSJmHmWMBcJL26Y/a/Qjynrpse+xHoQ1tZddfwIMjmAyA4aXHxAUILnJVrhb
+         ocS7+ydtWz02tmR36c6QURDWz8ciMBGcuOgo1oUN8Ft0dj3AalzCDjWHFpcsnXZHHO
+         j3yYxikggkmbFVub5fNafgWrsVsYF930niOqj6ialkRAZb6dtAt6rhL9PBvhLhz0Hp
+         zVmE4/exYbDVayHy2FAJZf1jyJU7tzjycHRD1zPlsEvTyuEDzvRltMlNTcvJ38lbYi
+         ekE4ZOdQAeNLFXTeFKtXk2BtOoEhq3wMem3WHs3pFKW6nhFwGN+Oc33aWs8e6VQzxp
+         sn1YFg4qHiM9w==
+Date:   Mon, 30 Jan 2023 21:49:17 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Sia Jee Heng <jeeheng.sia@starfivetech.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, leyfoon.tan@starfivetech.com,
+        mason.huo@starfivetech.com
+Subject: Re: [PATCH v3 2/4] RISC-V: Factor out common code of
+ __cpu_resume_enter()
+Message-ID: <Y9g7XeTbWjCxB3BT@spud>
+References: <20230127091051.1465278-1-jeeheng.sia@starfivetech.com>
+ <20230127091051.1465278-3-jeeheng.sia@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 3/4] dt-bindings: firmware: Add Qualcomm QSEECOM
- interface
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230127184650.756795-1-luzmaximilian@gmail.com>
- <20230127184650.756795-4-luzmaximilian@gmail.com>
- <20230130210530.GA3339716-robh@kernel.org>
-Content-Language: en-US
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <20230130210530.GA3339716-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Hb+0kK26SmitlXYB"
+Content-Disposition: inline
+In-Reply-To: <20230127091051.1465278-3-jeeheng.sia@starfivetech.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 22:05, Rob Herring wrote:
-> On Fri, Jan 27, 2023 at 07:46:49PM +0100, Maximilian Luz wrote:
->> Add bindings for the Qualcomm Secure Execution Environment interface
->> (QSEECOM).
->>
->> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
->> ---
->>
->> Changes in v2:
->>   - Replaces uefisecapp bindings.
->>   - Fix various dt-checker complaints.
->>
->> ---
->>   .../bindings/firmware/qcom,qseecom.yaml       | 49 +++++++++++++++++++
->>   MAINTAINERS                                   |  1 +
->>   2 files changed, 50 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/firmware/qcom,qseecom.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/firmware/qcom,qseecom.yaml b/Documentation/devicetree/bindings/firmware/qcom,qseecom.yaml
->> new file mode 100644
->> index 000000000000..540a604f81bc
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/firmware/qcom,qseecom.yaml
->> @@ -0,0 +1,49 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/firmware/qcom,qseecom.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Secure Execution Environment Communication Interface
->> +
->> +maintainers:
->> +  - Maximilian Luz <luzmaximilian@gmail.com>
->> +
->> +description: |
->> +  QSEECOM provides an interface to Qualcomm's Secure Execution Environment
->> +  (SEE) running in the Trust Zone via SCM calls. In particular, it allows
-> 
-> SCM is SMCCC or something else?
 
-It's whatever qcom-scm.c uses. I'm not too familiar with the specifics,
-so maybe someone else can answer this better.
+--Hb+0kK26SmitlXYB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> +  communication with secure applications running therein.
->> +
->> +  Applications running in this environment can, for example, include
->> +  'uefisecapp', which is required for accessing UEFI variables on certain
->> +  systems as these cannot be accessed directly.
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - qcom,qseecom-sc8280xp
->> +      - const: qcom,qseecom
->> +
->> +  qcom,scm:
->> +    $ref: '/schemas/types.yaml#/definitions/phandle'
->> +    description:
->> +      A phandle pointing to the QCOM SCM device (see ./qcom,scm.yaml).
->> +
->> +required:
->> +  - compatible
->> +  - qcom,scm
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    firmware {
->> +        scm {
->> +            compatible = "qcom,scm-sc8280xp", "qcom,scm";
->> +        };
->> +        qseecom {
->> +            compatible = "qcom,qseecom-sc8280xp", "qcom,qseecom";
->> +            qcom,scm = <&scm>;
-> 
-> Why do you need this in DT? If you already know you have a firmware
-> interface (via "qcom,scm"), then query the firmware to see if the SEE is
-> there.
+On Fri, Jan 27, 2023 at 05:10:49PM +0800, Sia Jee Heng wrote:
+> The cpu_resume() function is very similar for the suspend to disk and
+> suspend to ram cases. Factor out the common code into restore_csr macro
+> and restore_reg macro.
+>=20
+> Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
+> ---
+>  arch/riscv/include/asm/assembler.h | 62 ++++++++++++++++++++++++++++++
+>  arch/riscv/kernel/suspend_entry.S  | 34 ++--------------
+>  2 files changed, 65 insertions(+), 31 deletions(-)
+>  create mode 100644 arch/riscv/include/asm/assembler.h
+>=20
+> diff --git a/arch/riscv/include/asm/assembler.h b/arch/riscv/include/asm/=
+assembler.h
+> new file mode 100644
+> index 000000000000..ef1283d04b70
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/assembler.h
+> @@ -0,0 +1,62 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
+> + *
+> + * Author: Jee Heng Sia <jeeheng.sia@starfivetech.com>
+> + */
+> +
+> +#ifndef __ASSEMBLY__
+> +#error "Only include this from assembly code"
+> +#endif
+> +
+> +#ifndef __ASM_ASSEMBLER_H
+> +#define __ASM_ASSEMBLER_H
+> +
+> +#include <asm/asm.h>
+> +#include <asm/csr.h>
+> +#include <asm/asm-offsets.h>
+> +
+> +/**
+> + * restore_csr - restore hart's CSR value
+> + */
+> +	.macro restore_csr
+> +		REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_EPC)(a0)
+> +		csrw	CSR_EPC, t0
+> +		REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_STATUS)(a0)
+> +		csrw	CSR_STATUS, t0
+> +		REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_BADADDR)(a0)
+> +		csrw	CSR_TVAL, t0
+> +		REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_CAUSE)(a0)
+> +		csrw	CSR_CAUSE, t0
+> +	.endm
+> +
+> +/**
+> + * restore_reg - Restore registers (except A0 and T0-T6)
 
-Unfortunately I don't know of any way to query this, but please let me
-know if you do.
+arch/riscv/include/asm/assembler.h:34: warning: Incorrect use of kernel-doc=
+ format:  * restore_reg - Restore registers (except A0 and T0-T6)
 
-As I've briefly mentioned in the cover letter: There are two interfaces
-to manage secure apps. QSEECOM (on older and current-gen laptop devices)
-and scminvoke (on newer and some current-gen mobile devices if I
-understood right). ACPI also uses a separate device for this
-(QCOM0476), so it seemed like the best option to follow that.
+Otherwise, LGTM.
 
-Ideally, scminvoke would be preferred since that can be integrated as
-TEE driver, but I've been told that on platforms where apps (like
-uefisecapp) are loaded via QSEECOM by firmware, we can only use QSEECOM
-to communicate with those.
+> + */
+> +	.macro restore_reg
+> +		REG_L	ra, (SUSPEND_CONTEXT_REGS + PT_RA)(a0)
+> +		REG_L	sp, (SUSPEND_CONTEXT_REGS + PT_SP)(a0)
+> +		REG_L	gp, (SUSPEND_CONTEXT_REGS + PT_GP)(a0)
+> +		REG_L	tp, (SUSPEND_CONTEXT_REGS + PT_TP)(a0)
+> +		REG_L	s0, (SUSPEND_CONTEXT_REGS + PT_S0)(a0)
+> +		REG_L	s1, (SUSPEND_CONTEXT_REGS + PT_S1)(a0)
+> +		REG_L	a1, (SUSPEND_CONTEXT_REGS + PT_A1)(a0)
+> +		REG_L	a2, (SUSPEND_CONTEXT_REGS + PT_A2)(a0)
+> +		REG_L	a3, (SUSPEND_CONTEXT_REGS + PT_A3)(a0)
+> +		REG_L	a4, (SUSPEND_CONTEXT_REGS + PT_A4)(a0)
+> +		REG_L	a5, (SUSPEND_CONTEXT_REGS + PT_A5)(a0)
+> +		REG_L	a6, (SUSPEND_CONTEXT_REGS + PT_A6)(a0)
+> +		REG_L	a7, (SUSPEND_CONTEXT_REGS + PT_A7)(a0)
+> +		REG_L	s2, (SUSPEND_CONTEXT_REGS + PT_S2)(a0)
+> +		REG_L	s3, (SUSPEND_CONTEXT_REGS + PT_S3)(a0)
+> +		REG_L	s4, (SUSPEND_CONTEXT_REGS + PT_S4)(a0)
+> +		REG_L	s5, (SUSPEND_CONTEXT_REGS + PT_S5)(a0)
+> +		REG_L	s6, (SUSPEND_CONTEXT_REGS + PT_S6)(a0)
+> +		REG_L	s7, (SUSPEND_CONTEXT_REGS + PT_S7)(a0)
+> +		REG_L	s8, (SUSPEND_CONTEXT_REGS + PT_S8)(a0)
+> +		REG_L	s9, (SUSPEND_CONTEXT_REGS + PT_S9)(a0)
+> +		REG_L	s10, (SUSPEND_CONTEXT_REGS + PT_S10)(a0)
+> +		REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
+> +	.endm
+> +
+> +#endif	/* __ASM_ASSEMBLER_H */
+> diff --git a/arch/riscv/kernel/suspend_entry.S b/arch/riscv/kernel/suspen=
+d_entry.S
+> index aafcca58c19d..74a8fab8e0f6 100644
+> --- a/arch/riscv/kernel/suspend_entry.S
+> +++ b/arch/riscv/kernel/suspend_entry.S
+> @@ -7,6 +7,7 @@
+>  #include <linux/linkage.h>
+>  #include <asm/asm.h>
+>  #include <asm/asm-offsets.h>
+> +#include <asm/assembler.h>
+>  #include <asm/csr.h>
+>  #include <asm/xip_fixup.h>
+> =20
+> @@ -83,39 +84,10 @@ ENTRY(__cpu_resume_enter)
+>  	add	a0, a1, zero
+> =20
+>  	/* Restore CSRs */
+> -	REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_EPC)(a0)
+> -	csrw	CSR_EPC, t0
+> -	REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_STATUS)(a0)
+> -	csrw	CSR_STATUS, t0
+> -	REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_BADADDR)(a0)
+> -	csrw	CSR_TVAL, t0
+> -	REG_L	t0, (SUSPEND_CONTEXT_REGS + PT_CAUSE)(a0)
+> -	csrw	CSR_CAUSE, t0
+> +	restore_csr
+> =20
+>  	/* Restore registers (except A0 and T0-T6) */
+> -	REG_L	ra, (SUSPEND_CONTEXT_REGS + PT_RA)(a0)
+> -	REG_L	sp, (SUSPEND_CONTEXT_REGS + PT_SP)(a0)
+> -	REG_L	gp, (SUSPEND_CONTEXT_REGS + PT_GP)(a0)
+> -	REG_L	tp, (SUSPEND_CONTEXT_REGS + PT_TP)(a0)
+> -	REG_L	s0, (SUSPEND_CONTEXT_REGS + PT_S0)(a0)
+> -	REG_L	s1, (SUSPEND_CONTEXT_REGS + PT_S1)(a0)
+> -	REG_L	a1, (SUSPEND_CONTEXT_REGS + PT_A1)(a0)
+> -	REG_L	a2, (SUSPEND_CONTEXT_REGS + PT_A2)(a0)
+> -	REG_L	a3, (SUSPEND_CONTEXT_REGS + PT_A3)(a0)
+> -	REG_L	a4, (SUSPEND_CONTEXT_REGS + PT_A4)(a0)
+> -	REG_L	a5, (SUSPEND_CONTEXT_REGS + PT_A5)(a0)
+> -	REG_L	a6, (SUSPEND_CONTEXT_REGS + PT_A6)(a0)
+> -	REG_L	a7, (SUSPEND_CONTEXT_REGS + PT_A7)(a0)
+> -	REG_L	s2, (SUSPEND_CONTEXT_REGS + PT_S2)(a0)
+> -	REG_L	s3, (SUSPEND_CONTEXT_REGS + PT_S3)(a0)
+> -	REG_L	s4, (SUSPEND_CONTEXT_REGS + PT_S4)(a0)
+> -	REG_L	s5, (SUSPEND_CONTEXT_REGS + PT_S5)(a0)
+> -	REG_L	s6, (SUSPEND_CONTEXT_REGS + PT_S6)(a0)
+> -	REG_L	s7, (SUSPEND_CONTEXT_REGS + PT_S7)(a0)
+> -	REG_L	s8, (SUSPEND_CONTEXT_REGS + PT_S8)(a0)
+> -	REG_L	s9, (SUSPEND_CONTEXT_REGS + PT_S9)(a0)
+> -	REG_L	s10, (SUSPEND_CONTEXT_REGS + PT_S10)(a0)
+> -	REG_L	s11, (SUSPEND_CONTEXT_REGS + PT_S11)(a0)
+> +	restore_reg
+> =20
+>  	/* Return zero value */
+>  	add	a0, zero, zero
+> --=20
+> 2.34.1
+>=20
 
-Regards,
-Max
+--Hb+0kK26SmitlXYB
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9g7XQAKCRB4tDGHoIJi
+0gfTAP94o9Bp9hjJ9nyX1uAV0kJl3St5aJLTOE4jHIfw7w0AbQEA36tFzpX/hj8T
+eFWNhYi0dCzk90b9EkfBFpnoG3Zr8gs=
+=San3
+-----END PGP SIGNATURE-----
+
+--Hb+0kK26SmitlXYB--
