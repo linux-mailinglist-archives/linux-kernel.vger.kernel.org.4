@@ -2,120 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C586816E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6981D6816EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237782AbjA3QvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:51:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S237787AbjA3Qvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:51:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237651AbjA3QvW (ORCPT
+        with ESMTP id S237786AbjA3Qv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:51:22 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2313E0A8
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:51:14 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id w13so1275127ilv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:51:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L4+NGVtQcxQHnP5AnyWUVuA7rVFG+isSqEi52ETwsuU=;
-        b=B5T2nwTCHfcs88l2bKIgSjjRUGjb/i+ybCHRbsjSPwdB8KvsLaz3O0Lijw+hVQuA6o
-         AAwidKzyQBCoNKDPjw7zhgmYCsnvZsh0BBOS426a9b/eL4lENjVccPEiHB5eM1+nvdBe
-         kSxVb5aBvv+pnRxK0R2OXPjhV299l2x1zXVQc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L4+NGVtQcxQHnP5AnyWUVuA7rVFG+isSqEi52ETwsuU=;
-        b=DyrUStm4lJob5Lcmz5DqHRcC/0q+oag5omLIbDm9KtKKVsxOWxnWIaFi44x8tAYvm+
-         uBkDmT7Oh+xhTNfN1mAPR0yB+nRT1lVpZvDMmNtrNIGa7NOMyMtWk1pdDQI9nO0sK1V0
-         3xTudxs5B/+8xBwTHTnHM2x+/FNpJ4Dktn/8DaSi//tCd6fyfbVK2+dS6W8hSa9rkKgb
-         JRuqz+Y/L+1i6sw934q4dUsyvBRCcmHIJVzVXVfTBSp3DD1xdE7ZQe58XtB6Tq1fb0Id
-         pl4qJAAut8OAO1sMSdLPiTDjyY1PRK65SKher2swF//HVfKA/Kgk0n6DmxYWGcGwPLdP
-         QhLg==
-X-Gm-Message-State: AO0yUKVdp01NgrvLR5WnwydM+1BrwF/d9nm50lfIGFGAzavIP8TEafMO
-        brU0hey53Gkrm8XXYP+a/DJc+A==
-X-Google-Smtp-Source: AK7set8KQL/sK8y39rETcNiJ+KPIoI2Qi/10KmCTmE2Vx17U8Sdq0cTtfHgBqRQpobshNQ95ti9gwA==
-X-Received: by 2002:a05:6e02:12e1:b0:310:ff8c:6844 with SMTP id l1-20020a056e0212e100b00310ff8c6844mr312128iln.2.1675097473487;
-        Mon, 30 Jan 2023 08:51:13 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id c1-20020a92bd01000000b0030f5796e89fsm4076969ile.48.2023.01.30.08.51.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 08:51:12 -0800 (PST)
-Message-ID: <5283d88f-624a-b6a0-d89b-64eda6f33770@linuxfoundation.org>
-Date:   Mon, 30 Jan 2023 09:51:11 -0700
+        Mon, 30 Jan 2023 11:51:29 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9860D3D924;
+        Mon, 30 Jan 2023 08:51:28 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1112)
+        id 545E520E9F90; Mon, 30 Jan 2023 08:51:28 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 545E520E9F90
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675097488;
+        bh=Rre807gZOD8p3UjEPIEDW03aOt59zeNQl9BBuzqfJEk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cVGOuGrQcD9FeB99Y2w7DhbLdk5fP+8qpcUKdTU62R8tBsyKuLpz6sI4v6/NlW8dX
+         NvQGyCzW1L4zCTqRT1ktmHEXfdOWqW+AaoCg3UPP5xdzq4J0wOpDs2KBkhI2mMAKTl
+         +T7ZzjIP0llz6bMj7OBnHGBplAF96j6oXZ4cpPmM=
+Date:   Mon, 30 Jan 2023 08:51:28 -0800
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [RFC PATCH v1 3/6] x86/sev: Maintain shadow rmptable on Hyper-V
+Message-ID: <20230130165128.GC27645@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20230123165128.28185-1-jpiotrowski@linux.microsoft.com>
+ <20230123165128.28185-4-jpiotrowski@linux.microsoft.com>
+ <BYAPR21MB1688B068954CEB8A2B4DEA73D7D29@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 26/34] selftests: sync: Fix incorrect kernel headers
- search path
-Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
- <20230127135755.79929-27-mathieu.desnoyers@efficios.com>
- <1a1b86bc-10e4-bcb9-66dd-3aa599ecadc3@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <1a1b86bc-10e4-bcb9-66dd-3aa599ecadc3@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR21MB1688B068954CEB8A2B4DEA73D7D29@BYAPR21MB1688.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 09:44, Shuah Khan wrote:
-> On 1/27/23 06:57, Mathieu Desnoyers wrote:
->> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
->> building against kernel headers from the build environment in scenarios
->> where kernel headers are installed into a specific output directory
->> (O=...).
->>
->> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: linux-kselftest@vger.kernel.org
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: <stable@vger.kernel.org>    [5.18+]
->> ---
->>   tools/testing/selftests/sync/Makefile | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/sync/Makefile b/tools/testing/selftests/sync/Makefile
->> index d0121a8a3523..df0f91bf6890 100644
->> --- a/tools/testing/selftests/sync/Makefile
->> +++ b/tools/testing/selftests/sync/Makefile
->> @@ -1,6 +1,6 @@
->>   # SPDX-License-Identifier: GPL-2.0
->>   CFLAGS += -O2 -g -std=gnu89 -pthread -Wall -Wextra
->> -CFLAGS += -I../../../../usr/include/
->> +CFLAGS += $(KHDR_INCLUDES)
->>   LDFLAGS += -pthread
->>   .PHONY: all clean
+On Sun, Jan 29, 2023 at 04:37:24AM +0000, Michael Kelley (LINUX) wrote:
+> From: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> Sent: Monday, January 23, 2023 8:51 AM
+> > 
+> > Hyper-V can expose the SEV-SNP feature to guests, and manages the
+> > system-wide RMP (Reverse Map) table. The SNP implementation in the
+> > kernel needs access to the rmptable for tracking pages and deciding
+> > when/how to issue rmpupdate/psmash.  When running as a Hyper-V guest
+> > with SNP support, an rmptable is allocated by the kernel during boot for
+> > this purpose. Keep the table in sync with issued rmpupdate/psmash
+> > instructions.
+> > 
+> > The logic for how to update the rmptable comes from "AMD64 Architecture
+> > Programmer’s Manual, Volume 3" which describes the psmash and rmpupdate
+> > instructions. To ensure correctness of the SNP host code, the most
+> > important fields are "assigned" and "page size".
+> > 
+> > Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+> > ---
+> >  arch/x86/kernel/sev.c | 59 +++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 59 insertions(+)
+> > 
+> > diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> > index 95404c7e5150..edec1ccb80b1 100644
+> > --- a/arch/x86/kernel/sev.c
+> > +++ b/arch/x86/kernel/sev.c
+> > @@ -26,6 +26,7 @@
+> >  #include <linux/iommu.h>
+> >  #include <linux/amd-iommu.h>
+> > 
+> > +#include <asm/mshyperv.h>
 > 
-> Adding seccomp maintainers:
+> The code in sev.c should be generic and appropriate for use with any
+> hypervisor.  As such, I think we want to avoid sev.c having a dependency
+> on Hyper-V specific code, such as the <asm/mshyperv.h> include file
+> and the ms_hyperv.nested_features variable as used below.
 > 
-> kees,
+> Instead, create a boolean static variable in the sev.c module along with
+> a wrapper function to set it.  The logic that tests hv_no_rmp_table()
+> should test this static variable instead, which would default to "false".
+> Hypervisor-specific initialization code can call the wrapper function
+> to set the variable to "true" based on whatever logic is appropriate for
+> the hypervisor.  This approach reverses the dependency and hopefully
+> is usable by other hypervisors that want to offer nested SNP support.
 > 
-> I plan to take this through kselftest unless there are conflicts.
-> In case there are conflicts and you want to take this through yours
-> 
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-Sorry wrong message. I am taking this one through mine.
 
--- Shuah
+ok, this makes sense. I've added a call to the wrapper to the init_mem_mapping
+callback added before so that it is enabled together with allocating the
+rmptable.
 
