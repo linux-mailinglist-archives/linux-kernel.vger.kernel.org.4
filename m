@@ -2,143 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CD1681375
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FB768137A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237645AbjA3Ogb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S236875AbjA3Ohg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbjA3Og3 (ORCPT
+        with ESMTP id S235123AbjA3Ohf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:36:29 -0500
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1DC13F;
-        Mon, 30 Jan 2023 06:36:28 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-16332831ed0so15182887fac.10;
-        Mon, 30 Jan 2023 06:36:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9D5+mOa+V6zLZUsgo8fYk9qa1TaSMliGQ0eIaxr9+OE=;
-        b=ujvaDeOyxdEPQBM6LHJVbeVJzeIjTEh9A/RQkWgete8QeKRXzDf6lksCF5XFXvlRIF
-         sqk7bEMlKpmHhE4I0N+xxQpp5B8PTyz6+mEACJb6aLo9yon60800epD5UdpJItIxVRxj
-         CJJNxjQCyUqKEO0VDMYVfjby/d+CxF9C2hApUXWhrqwVhR4GJm+UC8aU0phkTUqfWBFR
-         i4sjMVimjD6U5pV4DQE3HFykUJnzSY269VGf/jfex8SbC12Qv1o2pNBcqCuJUStF0Xq1
-         /OdEWJhrPvNLKP8UEy/y2wRXhApi+0enrQ3gwRfRmrTT8IzRvNF/Q3phcnlvox3FtWvs
-         6Obw==
-X-Gm-Message-State: AO0yUKWPgNA4nWSqacZuUcTbGrw1m+e0tSsD52xYCrX5lba17YfXEzk6
-        b0LDnLBRsED4pSwutqe2K7GVOnbokkU2UQ==
-X-Google-Smtp-Source: AK7set+8OYk4njLoOMTUhSZWHB6oaLJyCVrpGEBDZSVs11tu5z653ZnqxL02nNp6sEBftIRrarFWSA==
-X-Received: by 2002:a05:6870:204c:b0:163:cd39:5f1f with SMTP id l12-20020a056870204c00b00163cd395f1fmr847394oad.40.1675089387661;
-        Mon, 30 Jan 2023 06:36:27 -0800 (PST)
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com. [209.85.210.43])
-        by smtp.gmail.com with ESMTPSA id f64-20020a9d2c46000000b0068bcd2b0bfasm1873405otb.65.2023.01.30.06.36.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 06:36:27 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id v24-20020a05683011d800b0068bdd29b160so116756otq.13;
-        Mon, 30 Jan 2023 06:36:27 -0800 (PST)
-X-Received: by 2002:a25:ab30:0:b0:80b:8247:e8b1 with SMTP id
- u45-20020a25ab30000000b0080b8247e8b1mr1966130ybi.604.1675089376546; Mon, 30
- Jan 2023 06:36:16 -0800 (PST)
-MIME-Version: 1.0
-References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-9-saravanak@google.com>
- <Y9OcqGTocu8ZlFqy@smile.fi.intel.com> <CAGETcx-PiV12pKnVuKyvNcjYbHA=YFJG1QUa-o-G1cL3iMHgcA@mail.gmail.com>
- <Y9e09qUa9CDxHFcb@smile.fi.intel.com>
-In-Reply-To: <Y9e09qUa9CDxHFcb@smile.fi.intel.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 30 Jan 2023 15:36:04 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXSgS-hu1xV_vmJZi_kr6ypiS=a-e0p7Hb75HKDfz9k-g@mail.gmail.com>
-Message-ID: <CAMuHMdXSgS-hu1xV_vmJZi_kr6ypiS=a-e0p7Hb75HKDfz9k-g@mail.gmail.com>
-Subject: Re: [PATCH v2 08/11] driver core: fw_devlink: Make cycle detection
- more robust
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Saravana Kannan <saravanak@google.com>,
+        Mon, 30 Jan 2023 09:37:35 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2129.outbound.protection.outlook.com [40.107.215.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1351AF;
+        Mon, 30 Jan 2023 06:37:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SG9hDITvLtNPgKgQ7AUbj7D/fy/aCFPWia1sJ0jxsBNxbbii6gkeVWTCo+PZJU2WTzlRIfROlKK4K/aSDEPnFe889Hmohv7WMo7X31qWzwLtjFLOdv48aTx1/nZ4qrzxI8EvkTPs0Vc8ea0ChPFnPNmi2tNrkDNWPpEGGC+30fTndzS1K8XuKelKvU13Ok2fmn+ERL1RXaK2I8FwyDcJJnr61CYMJU7esoCV5SX82t274I+2f0b0j1V82r4huG7s884s1xK4PJP/Mmo386AeWtVGtPK/m+U0l3TNfE2luG8wjo1nmKLwfU0Ma0GCstfPYAv4uhY7ia1C691J+JNQ/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qvn/xcYgPT0SfzaBSDbKjZfZxVwhUWu7kCGV29T+08M=;
+ b=eNtJ6sMwrmfxjlcAv48QPFgmEQJdmrs7MGzgQ3s5tsg0PWPme73SXKNu9SBbVEQtezQNnDaph6xxV55LunQgruT7E8I42VumXvVVU3eBpky8HHM0M6Frd8PyNGDDo7pU82TPDyMy8Be43I6aubHCdcD6sumj9KTAirEmuCZVdfeAsxauLOSE6OcuxRWig35GVjzwh8Vsm1UeKgeIPQ1Pbwwl186tx/W97+c3HRdcUnH3zeMwl0kUI7PwZmEubwQUYmuU+pZyafw+fFqQq9C9HlVlc031ncyV4BHrkGekb8L1kgU3b/pKj6w1jU3DgdrGYGMwfUGR1ESlkrVEifXZow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qvn/xcYgPT0SfzaBSDbKjZfZxVwhUWu7kCGV29T+08M=;
+ b=LwxHQmPLNDTU7IfblIBz1bBArDUT0++LiKn/SsGDwSL6ZtwALYlgDsUFKmn3u5huzEUYGrr4yGNTOboLGr12+gZcjqLoNBzkXy4yxTjeGyZvJKbYSXz80HFMgwk9at1qREC49BkXOQ2XZdbvaPa1g8JiboWoBwvjEFs5OzLfpm4=
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
+ by TYCPR01MB8677.jpnprd01.prod.outlook.com (2603:1096:400:13b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 14:37:30 +0000
+Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
+ ([fe80::343d:7339:78e5:a46e%8]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
+ 14:37:30 +0000
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Arnd Bergmann <arnd@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+CC:     Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: RE: [PATCH] xhci: host: renesas: drop excessive Kconfig selects
+Thread-Topic: [PATCH] xhci: host: renesas: drop excessive Kconfig selects
+Thread-Index: AQHZNKtnQ0HXj9mKKUmvHjl/Dm7Wq6628aiQ
+Date:   Mon, 30 Jan 2023 14:37:30 +0000
+Message-ID: <OS0PR01MB592264B5D8BB98A1B2F759C086D39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+References: <20230130130425.310410-1-arnd@kernel.org>
+In-Reply-To: <20230130130425.310410-1-arnd@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB8677:EE_
+x-ms-office365-filtering-correlation-id: 2a91514b-e18a-40c5-0d2a-08db02cf8427
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: v/q3zeIIb5MLkZQnBjTh0XMHI3mQbcf29jD5q9vyjFYJhxl6KtOwrCLVXF21PChJhdms/KQ5DmiHWhaeFkEXXK7XGphekfOu1xwtDw3T6ZeaeVmIcbgTWySSq09u5kPU7pYbLhjn0ciDxWzxr8WhdUtyzOLBbHTYgjDHs7V1chdTaZG9RaAqKN81XMRvIug9b4StfJ+HMjPLuvNr5m0s1aFz6tA0yR/KiYsBFuco9JH7RYhJHwTGV5pSBEIWvgyYyKhR8aVszgixnq1UAD5rGUCxOaxvtr96ptDR63/OfzlMFcvPhViKH4rK5KiNZs9oICM1uydhZN5Exed1Q6z4+VIiRHybutSLJidWpA43ewVa1LHVjd8k4K0Qq2KPIyRj5/kg1hCWzx9BbBFWshImR0P9fXUmZ2ngMocMvSN185VnewI973fhQeAI6PEVtOyGjmoQYFag6kXsdcjl4iXjJM4ZIieVrWwCOF9Vq1wTjKrrvtwAwxwWu7E6wZDbRiteQYo82NuUqHCqMWidP1PD3UCJjAqehQVUcVQEb+R87kdrKzjEOSe8Ve6Y7LwgqOhVYUgHe6mpdggZbBwQUmX+g2g6sQqFwHuAbp0WosjVTER20dfe3X5AtwVlAqngUCCgSzHbLmb/8bf+Y04w0kl2IIhROUJCgKrqy7DaZlPkeLCKMcdkEc9+1mvUwbh1Bk5fGXx2GJz+/f6qs6FR6VtIdw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(346002)(376002)(366004)(451199018)(52536014)(5660300002)(7416002)(8936002)(41300700001)(38100700002)(122000001)(38070700005)(55016003)(33656002)(86362001)(2906002)(110136005)(54906003)(186003)(478600001)(26005)(9686003)(7696005)(71200400001)(6506007)(316002)(76116006)(4326008)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(83380400001)(107886003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UDbNypZdUemAAZ1yLEIuAvmbaBzCJZj51kLVn6UkUtkF9vMvN5qAMmaQ0Vq1?=
+ =?us-ascii?Q?jUg0XHo9tXWKk9rPs0bLvFFffM+PovPk/3jpmvEPJyqh4LffkoJomuW5H0za?=
+ =?us-ascii?Q?1NyDrheq48jhKMfNwoGQ1bx/yMOkneGlK8rXQhuvDKEq/OyBm4PMRCuqZS92?=
+ =?us-ascii?Q?L2irnh+90GrERTO5Uu5B985kdMYZ2WklfcRYPvLmZHSvFDUATPw9wJ5SUrBz?=
+ =?us-ascii?Q?zO8ZQm+HOxdfR270bAEFVrrsFSGm/MSM0d0xzOkO68Y9UN0rNXBW7svElWYX?=
+ =?us-ascii?Q?lUGu5k0HdyGAt3vTv68dWxHYU3n3TLDDJadfSYKxhDYS+jcGT09TAlxNhyHs?=
+ =?us-ascii?Q?9MR3YnopPY+sR9JWlyWRLI77GFLdSRFkYIzzhNgz+0aebSnYp/x4XVMK2XPD?=
+ =?us-ascii?Q?JZSWm7OfnQPrk+vzIa3z3DZ/2aTGviBAZgRpJ1EuCYjdE8NxwjODUNUmBdx/?=
+ =?us-ascii?Q?XGkV1fiiL1oKdjWxJ03Nd45UQ7CkchitqQIoKxz4uN/s56W5fbsH8GoOqGPz?=
+ =?us-ascii?Q?wcn+vtNrj4t3lnmQltBRe+YwzN3CwQw8D/yV8j5My12s6hSqApF7IiYiwsty?=
+ =?us-ascii?Q?/fNjKN5vq5vv0s8t5h292IsRGXx2ezAGMerFNFBRwXvtRaToxJtjALb/2YDU?=
+ =?us-ascii?Q?DxnHDMr/YznLX4w7I1fdQB9TBnPR0G9AlPMD2Y9G+aYCK95NV/1WktuaM42d?=
+ =?us-ascii?Q?rlgZ6HWu//V1ERuk6L+g5cTWl01ngb0qhCys5Yo+0FpoO9NcHAujRPJ8ccib?=
+ =?us-ascii?Q?2ZB+JUjYA/EUTocXRbUXeHrRvWTP5c4n2JYviDbH95e9sAK/5aDCdlxm2BZd?=
+ =?us-ascii?Q?oehD6siYK4nMLtLo0Eg7CUwqS4LUg2n7lUwt8SfRTCZlLQKCqdouU0IGcrpC?=
+ =?us-ascii?Q?wA/H/0uTyl3Kq8pzGojfBjD3Uezq0qUtZKDneOMVP3R32pm13jIMcF9HpShj?=
+ =?us-ascii?Q?c4FHH5ZTZocKpyOOsgdKLMq9jogFTti6IiLwEbBoecqyUPTlIA7oLNapv0la?=
+ =?us-ascii?Q?hTri0zJ9ji1Q4m0DDkOnT6St8uzMLSz7d79WyODcGgGHJ1H81CGAJIpgngjr?=
+ =?us-ascii?Q?atkuNsvHY+zPft721F8ONcIx5Q6OTpw3AIeQ8kVOV3u/4lk8PQ87vrcnNust?=
+ =?us-ascii?Q?gHpJ9JvQRmtvy9QN0JKDCpl0qBNILRBc3wXPd/oe2goePthTmGG4lCpjzdzA?=
+ =?us-ascii?Q?E17bnsBdkrA08GJV94SsP6SOQNmje6OBJ7lGgU34Dxdw3fEdJWCzBtIWiIZX?=
+ =?us-ascii?Q?C1D/UBAtgq5BokinATsmGVv+xRPwLckFTkeQpCZXNqLKnjJPzmNFmXi4OD6f?=
+ =?us-ascii?Q?asUyqf87BZfzoxdhMaYYOC2UKBbXjQQUDgvDCJLLRxBGN/dXzaO5+FqWsiVD?=
+ =?us-ascii?Q?ZBOc9K88jeIWR0Cuu+mhZS6IgX5IKI2EyHfssh7Y7Odu5BgCbx3PrcHhysDF?=
+ =?us-ascii?Q?gEer/2LGq8wmyUDpaFGFT/C11rEvWklc6llZgD83m6F/6bW7HeaYR6x+Zaku?=
+ =?us-ascii?Q?BL3i0618K27kmsk4Imwdc7IukBeQvmagQthUEQWONoF5KGGHOj/Uvx+wXHA6?=
+ =?us-ascii?Q?oLqSs5nDqjcKKbyz9Ho/Md3HfnGeNFW+Onb3D+h4GfpL5N7ARyEXZaR8HUVa?=
+ =?us-ascii?Q?mQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a91514b-e18a-40c5-0d2a-08db02cf8427
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 14:37:30.1538
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 914X9qYnuyMQO8Kw0FaKhxCWMiWSxsY/VY/7hNeQCrghgT9DmsZmjRgKu2Q66owPtEymg6USgMdg9v8vQEiQGW/Cbt+s4nprwfI04pv2XlE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8677
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Hi Arnd Bergmann,
 
-On Mon, Jan 30, 2023 at 1:16 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Fri, Jan 27, 2023 at 11:34:28PM -0800, Saravana Kannan wrote:
-> > On Fri, Jan 27, 2023 at 1:43 AM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Thu, Jan 26, 2023 at 04:11:35PM -0800, Saravana Kannan wrote:
-> > > > +static bool __fw_devlink_relax_cycles(struct device *con,
-> > > > +                              struct fwnode_handle *sup_handle)
-> > > > +{
-> > > > +     struct fwnode_link *link;
-> > > > +     struct device_link *dev_link;
-> > >
-> > > > +     struct device *sup_dev = NULL, *par_dev = NULL;
-> > >
-> > > You can put it the first line since it's long enough.
-> >
-> > Wait, is that a style guideline to have the longer lines first?
->
-> No, but it's easier to read.
+Thanks for the patch.
 
-Yes it is, "reverse xmas tree" local variable ordering:
-https://elixir.bootlin.com/linux/v6.2-rc6/source/Documentation/process/maintainer-netdev.rst#L272
++ renesas-soc.
 
-Gr{oetje,eeting}s,
+> Subject: [PATCH] xhci: host: renesas: drop excessive Kconfig selects
+>=20
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The USB_XHCI_RZV2M and USB_RENESAS_USB3 select other drivers based on the
+> enabled SoC types, which leads to build failures when the dependencies ar=
+e
+> not met:
+>=20
+> WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD
+>   Depends on [n]: USB_SUPPORT [=3Dy] && USB_GADGET [=3Dn] && (ARCH_R9A09G=
+011
+> [=3Dn] || COMPILE_TEST [=3Dy])
+>   Selected by [m]:
+>   - USB_XHCI_RZV2M [=3Dm] && USB_SUPPORT [=3Dy] && USB [=3Dy] && USB_XHCI=
+_HCD [=3Dm]
+> && USB_XHCI_PLATFORM [=3Dm] && (ARCH_R9A09G011 [=3Dn] || COMPILE_TEST [=
+=3Dy])
+> ERROR: modpost: "rzv2m_usb3drd_reset" [drivers/usb/host/xhci-plat-hcd.ko]
+> undefined!
+>=20
+> All the selected symbols are actually user visible, so the correct approa=
+ch
+> here is to drop the incorrect 'select' statements and have users turn on
+> those drivers during kernel configuration as they would for any other
+> driver.
 
-                        Geert
+Both Host and device controller need USB3DRD driver to work.
+ie, the reason, added select statement to explicitly enable "USB_RZV2M_USB3=
+DRD"
+by default.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+I have tested this patch with below configurations in ARM64 defconfig.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
++CONFIG_USB_XHCI_RZV2M=3Dy
++CONFIG_USB_RZV2M_USB3DRD=3Dy
+
+>=20
+> Fixes: c52c9acc415e ("xhci: host: Add Renesas RZ/V2M SoC support")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/usb/gadget/udc/Kconfig | 1 -
+>  drivers/usb/host/Kconfig       | 3 ---
+>  2 files changed, 4 deletions(-)
+>=20
+> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kcon=
+fig
+> index 9b7a1681550f..1821004dd325 100644
+> --- a/drivers/usb/gadget/udc/Kconfig
+> +++ b/drivers/usb/gadget/udc/Kconfig
+> @@ -195,7 +195,6 @@ config USB_RENESAS_USB3
+>  	tristate 'Renesas USB3.0 Peripheral controller'
+>  	depends on ARCH_RENESAS || COMPILE_TEST
+>  	depends on EXTCON
+> -	select USB_RZV2M_USB3DRD if ARCH_R9A09G011
+>  	select USB_ROLE_SWITCH
+>  	help
+>  	   Renesas USB3.0 Peripheral controller is a USB peripheral controller
+> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig index
+> 4b5c5b1feb40..b975178b38bf 100644
+> --- a/drivers/usb/host/Kconfig
+> +++ b/drivers/usb/host/Kconfig
+> @@ -53,8 +53,6 @@ config USB_XHCI_PCI_RENESAS
+>=20
+>  config USB_XHCI_PLATFORM
+>  	tristate "Generic xHCI driver for a platform device"
+> -	select USB_XHCI_RCAR if ARCH_RENESAS
+
+This change has nothing to do with RZ/V2M fixes. Currently USB_XHCI_RCAR is=
+ enabled
+by default, with this change user has to enable it separately.
+
+Maybe keep it here or add a separate patch for dropping it here and add it =
+to the defconfig??
+
+Cheers,
+Biju
+
+> -	select USB_XHCI_RZV2M if ARCH_R9A09G011
+>  	help
+>  	  Adds an xHCI host driver for a generic platform device, which
+>  	  provides a memory space and an irq.
+> @@ -100,7 +98,6 @@ config USB_XHCI_RZV2M
+>  	tristate "xHCI support for Renesas RZ/V2M SoC"
+>  	depends on USB_XHCI_PLATFORM
+>  	depends on ARCH_R9A09G011 || COMPILE_TEST
+> -	select USB_RZV2M_USB3DRD
+>  	help
+>  	  Say 'Y' to enable the support for the xHCI host controller
+>  	  found in Renesas RZ/V2M SoC.
+> --
+> 2.39.0
+
