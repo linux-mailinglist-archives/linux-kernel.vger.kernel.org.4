@@ -2,178 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0F9681627
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EA168162C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237444AbjA3QPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S235466AbjA3QRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbjA3QPv (ORCPT
+        with ESMTP id S229522AbjA3QRS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:15:51 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F0E9EE6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:15:49 -0800 (PST)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 30 Jan 2023 11:17:18 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD372137
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:17:16 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 746E53F2D1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675095346;
-        bh=PhHq+Ycbej3d4KYhLJP72cMynQrcbDuGLZK2reA+9Qc=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=KB+cI2s7czhIKx9ZhMPL3+nxSk4tAcKD38br48QNBG/TkMH/O2AK+CqPRRNaZioWk
-         dxy7zN3Feoarhxyt7j8eMeY25S3OHbHlK/aL/xZTMvIop4WAJFuhrWIoKfKelXriDm
-         C2/BkjSravZqG8NlKID5PmbsYQmnRLJYTyRS8DWbV6t1rT1adoV6ZKe9WozX1wbm1w
-         zz3fNalBM1B15U6RX4JSyscWEi4IqmU45nFES8XrQ8AQaqez8RX634pvb+aTlCITw1
-         dENG69+9YHC3jWnuhUz0QIFr1zg8h977F9zIF4R6hsrzMcD0wM+db5vJ1u0WTxN0U4
-         Y6murrpzuEW7g==
-Received: by mail-wm1-f70.google.com with SMTP id z22-20020a7bc7d6000000b003daf671f7b2so4572518wmk.9
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:15:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PhHq+Ycbej3d4KYhLJP72cMynQrcbDuGLZK2reA+9Qc=;
-        b=y6nzOyltly06p1w86bs5U/HpjL/upFinILF9B2jXubJ2KOQ4r6VdEmj3Wyz5ZbMqST
-         4vOBh4OmJyVu1qb+Hxk4aAzrSnsXnX5Q5O3fCV8bgqIfRxrOoVNC8tqeId5Mv5JN9ZLw
-         22FL0cL5Bk4Izmt1DQ21CiIKKQwMzcEogtyfZYLMAr4MWHxiyqtv3AGf8Thzfc5t9MPg
-         SUbtxoHUarve9JE5BKtICUs2CzaQ0q3xSQcG4WaCHyPvvDfV/qL1L24PDJ6ged2Ftse8
-         bM63E3ymF4x/d3+W6vqIAw+B1TXvOI8FrlBpXVaNqL4+8fB+8T0mcht1jfTryFrOrlLL
-         ULdw==
-X-Gm-Message-State: AO0yUKXEhG5or7i9KrueScIuTdH4uz8frFu3WPbGdYLdUiWWbqQMkOQH
-        bqgVQKnctqJkGxMfFwZLXc2hUdPzK1ZB4z4471RJDsU3s4Rk4s+baBfx8237fgCyHwgI4CkHj72
-        CzkjtWH6jD3qDR4aAbyYLdTomn7jzauI07RXgEfA06A==
-X-Received: by 2002:a05:600c:ad4:b0:3dc:47d4:58d2 with SMTP id c20-20020a05600c0ad400b003dc47d458d2mr5110wmr.25.1675095346209;
-        Mon, 30 Jan 2023 08:15:46 -0800 (PST)
-X-Google-Smtp-Source: AK7set9fyJTl68upM4rfOAOBzxTOsPvwzOjZLDdq0b4y3tuA36UHt2WfvdM1Z7LBWRpq9EvqbsBWRA==
-X-Received: by 2002:a05:600c:ad4:b0:3dc:47d4:58d2 with SMTP id c20-20020a05600c0ad400b003dc47d458d2mr5091wmr.25.1675095346028;
-        Mon, 30 Jan 2023 08:15:46 -0800 (PST)
-Received: from qwirkle ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id m14-20020a5d6a0e000000b002bfd09f2ca6sm10363418wru.3.2023.01.30.08.15.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 08:15:45 -0800 (PST)
-Date:   Mon, 30 Jan 2023 16:15:43 +0000
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     Willem de Bruijn <willemb@google.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
- back-off retries
-Message-ID: <Y9ftL5c4klThCi9Q@qwirkle>
-References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
- <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
- <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
- <Y9e9S3ENl0oszAH/@qwirkle>
- <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
- <Y9fT+LABhW+/3Nal@qwirkle>
- <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 93DE21EC0644;
+        Mon, 30 Jan 2023 17:17:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675095435;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=cAdgbpzn0eknmmug36VtvpQWaeyU4NiY1E5GmYpwRno=;
+        b=D4X7ygigmfYq+SpLaDwCzSGfaf9YddH95mXagzDO6Qck57cvRlVDaru4ScMr7mFNyRBtzG
+        RDzLbsHGKpOnSr4QjokUJ8QtahikwSwgvx+cYDitSbNnpIY2uu5nE3D8fNhp3/Y8nunJGD
+        rrqOaWs/Ie/SArtR/B8IYj30cjuFv04=
+From:   Borislav Petkov <bp@alien8.de>
+To:     X86 ML <x86@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/4] x86/microcode: Some fixes
+Date:   Mon, 30 Jan 2023 17:17:05 +0100
+Message-Id: <20230130161709.11615-1-bp@alien8.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/30 11:03AM, Willem de Bruijn wrote:
-> On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
-> <andrei.gherzan@canonical.com> wrote:
-> >
-> > On 23/01/30 08:35AM, Willem de Bruijn wrote:
-> > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
-> > > <andrei.gherzan@canonical.com> wrote:
-> > > >
-> > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
-> > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
-> > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
-> > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > >
-> > > > > > > The tx and rx test programs are used in a couple of test scripts including
-> > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-> > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
-> > > > > > > accept socket connections. This racing bug could fail the test with at
-> > > > > > > least one of the following:
-> > > > > > >
-> > > > > > > ./udpgso_bench_tx: connect: Connection refused
-> > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
-> > > > > > > ./udpgso_bench_tx: write: Connection refused
-> > > > > > >
-> > > > > > > This change addresses this by adding routines that retry the socket
-> > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
-> > > > > > >
-> > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-> > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > > >
-> > > > > > Synchronizing the two processes is indeed tricky.
-> > > > > >
-> > > > > > Perhaps more robust is opening an initial TCP connection, with
-> > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
-> > > > > > go.
-> > > > >
-> > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
-> > > > > socket to show up in 'ss' output before firing-up the client - quite
-> > > > > alike what mptcp self-tests are doing.
-> > > >
-> > > > I like this idea. I have tested it and it works as expected with the
-> > > > exeception of:
-> > > >
-> > > > ./udpgso_bench_tx: sendmsg: No buffer space available
-> > > >
-> > > > Any ideas on how to handle this? I could retry and that works.
-> > >
-> > > This happens (also) without the zerocopy flag, right? That
-> > >
-> > > It might mean reaching the sndbuf limit, which can be adjusted with
-> > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
-> > > expect this test to bump up against that limit.
-> > >
-> > > A few zerocopy specific reasons are captured in
-> > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
-> >
-> > I have dug a bit more into this, and it does look like your hint was in
-> > the right direction. The fails I'm seeing are only with the zerocopy
-> > flag.
-> >
-> > From the reasons (doc) above I can only assume optmem limit as I've
-> > reproduced it with unlimited locked pages and the fails are transient.
-> > That leaves optmem limit. Bumping the value I have by default (20480) to
-> > (2048000) made the sendmsg succeed as expected. On the other hand, the
-> > tests started to fail with something like:
-> >
-> > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
-> > expected    773707 received
-> 
-> More zerocopy completions than number of sends. I have not seen this before.
-> 
-> The completions are ranges of IDs, one per send call for datagram sockets.
-> 
-> Even with segmentation offload, the counter increases per call, not per segment.
-> 
-> Do you experience this without any other changes to udpgso_bench_tx.c.
-> Or are there perhaps additional sendmsg calls somewhere (during
-> initial sync) that are not accounted to num_sends?
+From: "Borislav Petkov (AMD)" <bp@alien8.de>
 
-Indeed, that looks off. No, I have run into this without any changes in
-the tests (besides the retry routine in the shell script that waits for
-rx to come up). Also, as a data point.
+Hi,
 
-As an additional data point, this was only seen on the IPv6 tests. I've
-never been able to replicate it on the IPv4 run.
+here's a small set of fixes which materialized from me staring at the
+AMD side of the loader code in recent times.
+
+Comments and suggestions are always appreciated.
+
+Thx.
+
+[ TODO for self: Add patches 1 and 2 in patch 3's stable field as
+   prerequisites for backporting. ]
+
+Borislav Petkov (AMD) (4):
+  x86/microcode/amd: Remove load_microcode_amd()'s bsp parameter
+  x86/microcode/AMD: Add a @cpu parameter to the reloading functions
+  x86/microcode/AMD: Fix mixed steppings support
+  x86/microcode/core: Return an error only when necessary
+
+ arch/x86/include/asm/microcode.h     |  4 +-
+ arch/x86/include/asm/microcode_amd.h |  4 +-
+ arch/x86/kernel/cpu/microcode/amd.c  | 55 +++++++++++++---------------
+ arch/x86/kernel/cpu/microcode/core.c | 12 +++---
+ 4 files changed, 36 insertions(+), 39 deletions(-)
 
 -- 
-Andrei Gherzan
+2.35.1
+
