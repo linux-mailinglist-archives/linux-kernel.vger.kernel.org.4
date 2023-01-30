@@ -2,140 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63A4680B97
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7B0680BA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236412AbjA3LGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 06:06:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
+        id S235871AbjA3LKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 06:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236472AbjA3LFY (ORCPT
+        with ESMTP id S229815AbjA3LKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 06:05:24 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EF016ACA;
-        Mon, 30 Jan 2023 03:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675076670; x=1706612670;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0h0zHmH8o9/zwwr3cv/ujF3OJpLPSvSFjp9kwMeCR9I=;
-  b=dIZE/58+h9mA7eJs0+XQ5irLrX1U2fkotiRNsdLvcTlx3z5v/HGaj+gU
-   LdzRhb0DNLZdvNBy3RF9boPFQGP2GC966ad4OayWXy/i7BunEsS3dzJIE
-   kyZ/arO0H8+/wRgVcA9wXp19ZLocZckwEj3s3f61D9E4GkRLrqmHnsoIS
-   PcOcxMFTnxgbV7VOh6i8UR235hguWnhXKheE75Z95znw4nTYcjzRfI4dl
-   XUSnjDWvcY03PMLZNuyd4K1zmAEFOY11OSKPUgq02o5UiB2dTliGFZibw
-   POFFJWKobCwMeu/01XLRNW8TxhD2rAxqB5AKrPz+GUhs8ZFdb2ObPK/US
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="325228095"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="325228095"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 03:04:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="727461051"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="727461051"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jan 2023 03:04:28 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D1EF7337; Mon, 30 Jan 2023 13:05:05 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] dmaengine: Make an order in struct dma_device definition
-Date:   Mon, 30 Jan 2023 13:05:03 +0200
-Message-Id: <20230130110503.52250-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+        Mon, 30 Jan 2023 06:10:12 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60427689;
+        Mon, 30 Jan 2023 03:10:10 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pMS36-0001VD-5k; Mon, 30 Jan 2023 12:10:08 +0100
+Message-ID: <0b9537d1-837e-e728-34ef-7b2ce543c442@leemhuis.info>
+Date:   Mon, 30 Jan 2023 12:10:07 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [Regression] Bug 216885 - HID++ Logitech G903 generates full
+ scroll wheel events with every hi-res tick when attached via USB
+Content-Language: en-US, de-DE
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Bastien Nocera <hadess@hadess.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        David Roth <davidroth9@gmail.com>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linus <luna+bugzilla@cosmos-ink.net>
+References: <1bb93259-1c9f-5335-a0bf-fc8641b26650@leemhuis.info>
+ <be545e72-8312-f213-0250-86a128b7b629@leemhuis.info>
+ <CAO-hwJJtK3B2x8CAAYsB41X8D=1EpEYK+nSuVA+fXuz1LHkmSg@mail.gmail.com>
+ <Y9efj49RfzZRIDGY@skade.schwarzvogel.de>
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <Y9efj49RfzZRIDGY@skade.schwarzvogel.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675077010;c3e6c657;
+X-HE-SMSGID: 1pMS36-0001VD-5k
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make an order in struct dma_device:
-- added missing kernel doc descriptions
-- put descriptions in the order of appearance in the code
-- updated indentation where it makes sense
+On 30.01.23 11:44, Tobias Klausmann wrote:
+> On Mon, 30 Jan 2023, Benjamin Tissoires wrote:
+> 
+>> On Mon, Jan 30, 2023 at 10:56 AM Linux kernel regression tracking
+>> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
+>>>
+>>> [ccing a few people that CCed to the bug]
+>>>
+>>> Hi, this is your Linux kernel regression tracker.
+>>>
+>>> On 05.01.23 09:12, Thorsten Leemhuis wrote:
+>>>> [...] Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216885 :
+>>>>
+>>>>>  David Roth 2023-01-04 20:37:22 UTC
+>>>>>
+>>>>> Created attachment 303526 [details]
+>>>>> Libinput record with G903 attached directly to USB
+>>>>>
+>>>>> Since
+>>>>> https://lore.kernel.org/linux-input/20220914132146.6435-1-hadess@hadess.net/T/#u
+>>>>> my Logitech G903 has gained hi res support. While normally a good
+>>>>> thing, it seems that in this case it leads to generating one normal
+>>>>> REL_WHEEL with each REL_WHEEL_HI_RES event instead of just a couple
+>>>>> of REL_WHEEL_HI_RES, followed by the standard REL_WHEEL once a
+>>>>> notch/tick is reached. This leads to overly sensitive scrolling and
+>>>>> makes the wheel basically useless.
+>>>
+>>> Bastien, Benjamin, Jiri, that problem was reported 25 days ago now and
+>>> there is still no fix in sight afaics (please correct me if I'm wrong)
+>>> -- and based on the reports I've seen it seem quite a few people are
+>>> hitting it. Hence please allow me to ask:
+>>>
+>>> Wouldn't it be best to revert that change for now (both in mainline and
+>>> stable of course) and then reapply it once a fix for this problem is
+>>> available? Or
+>>
+>> Last I heard was that Bastien was actively trying to understand the
+>> problem.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/dmaengine.h | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+Yup, no complains there. Thx for your work on this, Bastien.
 
-diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
-index 0c020682d894..c3656e590213 100644
---- a/include/linux/dmaengine.h
-+++ b/include/linux/dmaengine.h
-@@ -773,6 +773,7 @@ struct dma_filter {
- 
- /**
-  * struct dma_device - info on the entity supplying DMA services
-+ * @ref: reference is taken and put every time a channel is allocated or freed
-  * @chancnt: how many DMA channels are supported
-  * @privatecnt: how many DMA channels are requested by dma_request_channel
-  * @channels: the list of struct dma_chan
-@@ -789,6 +790,7 @@ struct dma_filter {
-  * @dev_id: unique device ID
-  * @dev: struct device reference for dma mapping api
-  * @owner: owner module (automatically set based on the provided dev)
-+ * @chan_ida: unique channel ID
-  * @src_addr_widths: bit mask of src addr widths the device supports
-  *	Width is specified in bytes, e.g. for a device supporting
-  *	a width of 4 the mask should have BIT(4) set.
-@@ -802,6 +804,7 @@ struct dma_filter {
-  * @max_sg_burst: max number of SG list entries executed in a single burst
-  *	DMA tansaction with no software intervention for reinitialization.
-  *	Zero value means unlimited number of entries.
-+ * @descriptor_reuse: a submitted transfer can be resubmitted after completion
-  * @residue_granularity: granularity of the transfer residue reported
-  *	by tx_status
-  * @device_alloc_chan_resources: allocate resources and return the
-@@ -839,7 +842,6 @@ struct dma_filter {
-  *	struct with auxiliary transfer status information, otherwise the call
-  *	will just return a simple status code
-  * @device_issue_pending: push pending transactions to hardware
-- * @descriptor_reuse: a submitted transfer can be resubmitted after completion
-  * @device_release: called sometime atfer dma_async_device_unregister() is
-  *     called and there are no further references to this structure. This
-  *     must be implemented to free resources however many existing drivers
-@@ -847,6 +849,7 @@ struct dma_filter {
-  * @dbg_summary_show: optional routine to show contents in debugfs; default code
-  *     will be used when this is omitted, but custom code can show extra,
-  *     controller specific information.
-+ * @dbg_dev_root: the root folder in debugfs for this device
-  */
- struct dma_device {
- 	struct kref ref;
-@@ -855,7 +858,7 @@ struct dma_device {
- 	struct list_head channels;
- 	struct list_head global_node;
- 	struct dma_filter filter;
--	dma_cap_mask_t  cap_mask;
-+	dma_cap_mask_t cap_mask;
- 	enum dma_desc_metadata_mode desc_metadata_modes;
- 	unsigned short max_xor;
- 	unsigned short max_pq;
-@@ -924,10 +927,8 @@ struct dma_device {
- 		struct dma_chan *chan, dma_addr_t dst, u64 data,
- 		unsigned long flags);
- 
--	void (*device_caps)(struct dma_chan *chan,
--			    struct dma_slave_caps *caps);
--	int (*device_config)(struct dma_chan *chan,
--			     struct dma_slave_config *config);
-+	void (*device_caps)(struct dma_chan *chan, struct dma_slave_caps *caps);
-+	int (*device_config)(struct dma_chan *chan, struct dma_slave_config *config);
- 	int (*device_pause)(struct dma_chan *chan);
- 	int (*device_resume)(struct dma_chan *chan);
- 	int (*device_terminate_all)(struct dma_chan *chan);
--- 
-2.39.0
+But that debugging has already taken some time and it seem more is
+needed. And apparently it's more than just a single user or two that is
+affected by this. That's why I think it would be better to revert this
+temporarily[1], unless a fix suddenly comes into sight.
 
+[1] as strongly suggested by
+https://docs.kernel.org/process/handling-regressions.html , which states
+that a regression like this should ideally be fixed within a few days
+after the report; we are long past this...
+
+>> I do have a G903 here but it is lacking the feature the
+>> reporters have, and so I can not reproduce (there is likely a new
+>> firmware/model around).
+>>
+>> After a quick search on
+>> https://support.logi.com/hc/en-us/search#q=G903&s=all it seems that
+>> there are 2 G903: M-R0081 and M-R0068. I only own the 68 one which
+>> explains why I can not reproduce it. :(
+> 
+> I have an affected mouse and am willing to try patches/fixes, but my
+> kernel coding fu is weak. 
+
+Thx for your help, too.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
