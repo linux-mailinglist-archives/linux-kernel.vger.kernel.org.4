@@ -2,101 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5F36816E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C586816E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236890AbjA3Quq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S237782AbjA3QvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:51:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237403AbjA3Quk (ORCPT
+        with ESMTP id S237651AbjA3QvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:50:40 -0500
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC77442C8;
-        Mon, 30 Jan 2023 08:50:36 -0800 (PST)
-Received: by mail-oi1-f172.google.com with SMTP id p185so10577376oif.2;
-        Mon, 30 Jan 2023 08:50:36 -0800 (PST)
+        Mon, 30 Jan 2023 11:51:22 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2313E0A8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:51:14 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id w13so1275127ilv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:51:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L4+NGVtQcxQHnP5AnyWUVuA7rVFG+isSqEi52ETwsuU=;
+        b=B5T2nwTCHfcs88l2bKIgSjjRUGjb/i+ybCHRbsjSPwdB8KvsLaz3O0Lijw+hVQuA6o
+         AAwidKzyQBCoNKDPjw7zhgmYCsnvZsh0BBOS426a9b/eL4lENjVccPEiHB5eM1+nvdBe
+         kSxVb5aBvv+pnRxK0R2OXPjhV299l2x1zXVQc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jNHGc+FYLfWuI0WyP8cgi2QoONQjOUTwM6TUqLZs8f4=;
-        b=3u+Uur5pykfJmGIRkOgRpgj1oa6+hhy7WBqhnePD6ct0NyWJSxJd8Ad+HpovVmg8JS
-         WdW7y/V4gizL1EKPgE/4EYznxQLzWgBFCXo+iuNmq/y1hTyzZyBu1x5a/xLzgin99KwD
-         0Zr5zMliq0XoKAWO6QVsQkpSmm0diuRpLv3vw1tymgZgu9K82hmwg1HMxbjtnnMXlwK2
-         SzYTeGUhLyV5BQ2dw3UGlqe+DdgvfUqhCoiwLgqst89cg9nL5PEg0S7yRzXuFF+6o6Xg
-         DAWZS05E5KeKVQ+608od0X0Ef+uiiBrmOOXQl6SZb4c/GLzvRRW979RQo5c6+anGoMe+
-         t1tQ==
-X-Gm-Message-State: AFqh2krXsVwrmaAFn9kjGWbCRaW+IFUxUWR5sMFfN2ljnVOyJOp94wpN
-        gg0sJSj5Igv4DDK704Gu1w==
-X-Google-Smtp-Source: AMrXdXti2G0mwexjQfuiuQB27g1A+0HBQf48DMV3lRqSFJr1OJsLGzadxFlqI5+H0l2a2gHK/KRN6g==
-X-Received: by 2002:a05:6808:1495:b0:364:3de2:bfd1 with SMTP id e21-20020a056808149500b003643de2bfd1mr27752455oiw.32.1675097436054;
-        Mon, 30 Jan 2023 08:50:36 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z11-20020aca330b000000b003458d346a60sm4899521oiz.25.2023.01.30.08.50.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 08:50:35 -0800 (PST)
-Received: (nullmailer pid 2794298 invoked by uid 1000);
-        Mon, 30 Jan 2023 16:50:34 -0000
-Date:   Mon, 30 Jan 2023 10:50:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Michal Suchanek <msuchanek@suse.de>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
-        <devicetree@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Erhard F." <erhard_f@mailbox.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Subject: Re: [PATCH v3] of: Make of framebuffer devices unique
-Message-ID: <167509742194.2793991.9757556857543301296.robh@kernel.org>
-References: <20230120180958.30798-1-msuchanek@suse.de>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L4+NGVtQcxQHnP5AnyWUVuA7rVFG+isSqEi52ETwsuU=;
+        b=DyrUStm4lJob5Lcmz5DqHRcC/0q+oag5omLIbDm9KtKKVsxOWxnWIaFi44x8tAYvm+
+         uBkDmT7Oh+xhTNfN1mAPR0yB+nRT1lVpZvDMmNtrNIGa7NOMyMtWk1pdDQI9nO0sK1V0
+         3xTudxs5B/+8xBwTHTnHM2x+/FNpJ4Dktn/8DaSi//tCd6fyfbVK2+dS6W8hSa9rkKgb
+         JRuqz+Y/L+1i6sw934q4dUsyvBRCcmHIJVzVXVfTBSp3DD1xdE7ZQe58XtB6Tq1fb0Id
+         pl4qJAAut8OAO1sMSdLPiTDjyY1PRK65SKher2swF//HVfKA/Kgk0n6DmxYWGcGwPLdP
+         QhLg==
+X-Gm-Message-State: AO0yUKVdp01NgrvLR5WnwydM+1BrwF/d9nm50lfIGFGAzavIP8TEafMO
+        brU0hey53Gkrm8XXYP+a/DJc+A==
+X-Google-Smtp-Source: AK7set8KQL/sK8y39rETcNiJ+KPIoI2Qi/10KmCTmE2Vx17U8Sdq0cTtfHgBqRQpobshNQ95ti9gwA==
+X-Received: by 2002:a05:6e02:12e1:b0:310:ff8c:6844 with SMTP id l1-20020a056e0212e100b00310ff8c6844mr312128iln.2.1675097473487;
+        Mon, 30 Jan 2023 08:51:13 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c1-20020a92bd01000000b0030f5796e89fsm4076969ile.48.2023.01.30.08.51.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 08:51:12 -0800 (PST)
+Message-ID: <5283d88f-624a-b6a0-d89b-64eda6f33770@linuxfoundation.org>
+Date:   Mon, 30 Jan 2023 09:51:11 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120180958.30798-1-msuchanek@suse.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 26/34] selftests: sync: Fix incorrect kernel headers
+ search path
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+ <20230127135755.79929-27-mathieu.desnoyers@efficios.com>
+ <1a1b86bc-10e4-bcb9-66dd-3aa599ecadc3@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <1a1b86bc-10e4-bcb9-66dd-3aa599ecadc3@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 1/30/23 09:44, Shuah Khan wrote:
+> On 1/27/23 06:57, Mathieu Desnoyers wrote:
+>> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+>> building against kernel headers from the build environment in scenarios
+>> where kernel headers are installed into a specific output directory
+>> (O=...).
+>>
+>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Cc: linux-kselftest@vger.kernel.org
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: <stable@vger.kernel.org>    [5.18+]
+>> ---
+>>   tools/testing/selftests/sync/Makefile | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/sync/Makefile b/tools/testing/selftests/sync/Makefile
+>> index d0121a8a3523..df0f91bf6890 100644
+>> --- a/tools/testing/selftests/sync/Makefile
+>> +++ b/tools/testing/selftests/sync/Makefile
+>> @@ -1,6 +1,6 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   CFLAGS += -O2 -g -std=gnu89 -pthread -Wall -Wextra
+>> -CFLAGS += -I../../../../usr/include/
+>> +CFLAGS += $(KHDR_INCLUDES)
+>>   LDFLAGS += -pthread
+>>   .PHONY: all clean
+> 
+> Adding seccomp maintainers:
+> 
+> kees,
+> 
+> I plan to take this through kselftest unless there are conflicts.
+> In case there are conflicts and you want to take this through yours
+> 
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+Sorry wrong message. I am taking this one through mine.
 
-On Fri, 20 Jan 2023 19:09:57 +0100, Michal Suchanek wrote:
-> Since Linux 5.19 this error is observed:
-> 
-> sysfs: cannot create duplicate filename '/devices/platform/of-display'
-> 
-> This is because multiple devices with the same name 'of-display' are
-> created on the same bus.
-> 
-> Update the code to create numbered device names for the non-boot
-> disaplay.
-> 
-> cc: linuxppc-dev@lists.ozlabs.org
-> References: https://bugzilla.kernel.org/show_bug.cgi?id=216095
-> Fixes: 52b1b46c39ae ("of: Create platform devices for OF framebuffers")
-> Reported-by: Erhard F. <erhard_f@mailbox.org>
-> Suggested-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> ---
-> v3:
-> - merge fix into original patch
-> - Update the device name format
-> - add missing const
-> - do not continue with iterating display devices when formatting device
->   name fails
-> ---
->  drivers/of/platform.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
-> 
+-- Shuah
 
-Applied, thanks!
