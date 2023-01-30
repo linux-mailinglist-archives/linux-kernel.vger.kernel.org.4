@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C3E68067E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55910680685
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235915AbjA3Had (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 02:30:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S235438AbjA3Hdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 02:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235532AbjA3HaY (ORCPT
+        with ESMTP id S235522AbjA3Hdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 02:30:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9E319F0E;
-        Sun, 29 Jan 2023 23:30:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 995EECE126E;
-        Mon, 30 Jan 2023 07:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 89408C4339B;
-        Mon, 30 Jan 2023 07:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675063816;
-        bh=rg9irJegOw5SWfJITeliDo5z7rjer8uzyKSZn2A5JlQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=h4aXTZo8h0vny9BjBFbV1JJ1acsVL4Tiq8fCb0kD7qp3Mst+7NDpFL2VQqbKwH6+H
-         CcsH+NT7CnvvDXb5YmWk5u7DK1zK1ZmV5SJyYD4ShU2CSdOUc3xT2DmlFZUbyNbto1
-         HXsExQpkmqYiwKDoukKihIbsElvufomWgsCrBogva/Stiv2zuK+9uV6qCBq9ihGPiT
-         gwYw+TH0aEp8NlIgFRi3dZGPD5PQX7MB2jMCiuMuDq2iPh/ZolbW6D99nFKdKWzG8o
-         /X32SfRPNJYhhe4QNnAAygBR8d1TRFSQb2k4A4+IwWkHJJXNnI5kLU3lyK04XcgFE5
-         3uTiRXHAbEDEw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E71FE21ED8;
-        Mon, 30 Jan 2023 07:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/1] net: stmmac: do not stop RX_CLK in Rx LPI state for
- qcs404 SoC
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167506381644.14069.1519780033829172123.git-patchwork-notify@kernel.org>
-Date:   Mon, 30 Jan 2023 07:30:16 +0000
-References: <20230126213539.166298-1-andrey.konovalov@linaro.org>
-In-Reply-To: <20230126213539.166298-1-andrey.konovalov@linaro.org>
-To:     Andrey Konovalov <andrey.konovalov@linaro.org>
-Cc:     vkoul@kernel.org, bhupesh.sharma@linaro.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        andrew@lunn.ch, robh@kernel.org, alexandre.torgue@foss.st.com,
-        peppe.cavallaro@st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 30 Jan 2023 02:33:40 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670EC23840;
+        Sun, 29 Jan 2023 23:33:36 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id m2so28611097ejb.8;
+        Sun, 29 Jan 2023 23:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GqQ934JWSGPRtN10m9jH2L8S8kM1Q6Pi2aTaTuPesk0=;
+        b=YYeZg554V3NqyL6dwLyNgBhyrgk8MXV//FB3Kjsbx7B6ok8MBRkxBJgTnoY84SDvMG
+         9y4kbKdrVw10Ek6MBlXG2FnFUWfkHZxiMsrLlpNpO64T7GE1VrWoLiKqArDq6vkrLqHx
+         DtV3UwSIHrErWaZPQJiVZhT77bj+T5StutazyD+gddecuyPMbD8Yt01C/iW8K221K0S6
+         795FAvGnUDpAa7DhZ/EOWhzg3EWf/oudStUxvtAP4oPgtf2vSQLM8QFH/Rp7CHu2lMaL
+         75b/qvQ37/NxV4N4MgFce2c5bqvxCm8iPyTZxfkScbG98GbdUAGgvjsTmnOIDa2DNL/C
+         JW1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GqQ934JWSGPRtN10m9jH2L8S8kM1Q6Pi2aTaTuPesk0=;
+        b=5MY4sXvQJJYhwVjCUAIOzLjJjFb4l3+hpTKCst/fPyxiJViy78pHi7TlHDrSgHf4BH
+         VQb+CSnsILLKBdYnDsfuF5qCt9ilKDyQb9mkL2NQLkSYDMEmCHRfnfOY5fblBZHR8Wvf
+         HthjQrZABRJnARv8QjoTN9n/6nA5e5tNV8jIjWg3bnAf3kVOxycE423SzE01uri4ESXW
+         iCHVZWdKHJeVJ3I9nKQJviLLvfLIsUsS2ZqEiC0+VIi5H6p/7m4w8TexNLzlhsMm3P5G
+         kv1wt/EwcIyDCZWgh3ZAm8KuidVXj1ARhiqeYfI46SR3/W/5xiQkvryP/Ae5UJtFNUOo
+         URJg==
+X-Gm-Message-State: AO0yUKVfv8LgKMLsK2hhkj6SDtsc7PyQEHFGevN/eyMQIAVd0B//PXHz
+        YCzHFNmvo3wLJLiDnrwNaF0=
+X-Google-Smtp-Source: AK7set92Dsb90ymDMZDctLBT9JmHOpG2cC7hczPLPI0Y8mfE06+zWE+OVpzP7XOjN8ZrcC2TYTiLFg==
+X-Received: by 2002:a17:907:6f1b:b0:887:2320:57e5 with SMTP id sy27-20020a1709076f1b00b00887232057e5mr4870130ejc.46.1675064014778;
+        Sun, 29 Jan 2023 23:33:34 -0800 (PST)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:893:4a0f:7898:3492])
+        by smtp.gmail.com with ESMTPSA id z2-20020a170906714200b00888161349desm1505532ejj.182.2023.01.29.23.33.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 23:33:34 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Jenny Zhang <jenny.zhang@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Olivia Mackall <olivia@selenic.com>,
+        linux-crypto@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: repair file entry for STARFIVE TRNG DRIVER
+Date:   Mon, 30 Jan 2023 08:31:09 +0100
+Message-Id: <20230130073109.32025-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Commit c388f458bc34 ("hwrng: starfive - Add TRNG driver for StarFive SoC")
+adds the STARFIVE TRNG DRIVER section to MAINTAINERS, but refers to the
+non-existing file drivers/char/hw_random/starfive-trng.c rather than to the
+actually added file drivers/char/hw_random/jh7110-trng.c in this commit.
 
-This patch was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken reference.
 
-On Fri, 27 Jan 2023 00:35:38 +0300 you wrote:
-> This is a different, for one SoC only solution to the issue described below
-> vs a generic one submitted earlier [1].
-> 
-> On my qcs404 based board the ethernet MAC has issues with handling
-> Rx LPI exit / Rx LPI entry interrupts.
-> 
-> When in LPI mode the "refresh transmission" is received, the driver may
-> see both "Rx LPI exit", and "Rx LPI entry" bits set in the single read from
-> GMAC4_LPI_CTRL_STATUS register (vs "Rx LPI exit" first, and "Rx LPI entry"
-> then). In this case an interrupt storm happens: the LPI interrupt is
-> triggered every few microseconds - with all the status bits in the
-> GMAC4_LPI_CTRL_STATUS register being read as zeros. This interrupt storm
-> continues until a normal non-zero status is read from GMAC4_LPI_CTRL_STATUS
-> register (single "Rx LPI exit", or "Tx LPI exit").
-> 
-> [...]
+Repair this file entry in STARFIVE TRNG DRIVER.
 
-Here is the summary with links:
-  - [1/1] net: stmmac: do not stop RX_CLK in Rx LPI state for qcs404 SoC
-    https://git.kernel.org/netdev/net/c/54aa39a513db
+Fixes: c388f458bc34 ("hwrng: starfive - Add TRNG driver for StarFive SoC")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Jia Jie, please ack this patch.
 
-You are awesome, thank you!
+Herbert, please pick this minor fix patch on top of the commit above. Thanks.
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b615c8418e80..7d87a78446cd 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19845,7 +19845,7 @@ STARFIVE TRNG DRIVER
+ M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
+ S:	Supported
+ F:	Documentation/devicetree/bindings/rng/starfive*
+-F:	drivers/char/hw_random/starfive-trng.c
++F:	drivers/char/hw_random/jh7110-trng.c
+ 
+ STATIC BRANCH/CALL
+ M:	Peter Zijlstra <peterz@infradead.org>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.17.1
 
