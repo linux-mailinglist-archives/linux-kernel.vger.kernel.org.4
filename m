@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EB868163D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C38681640
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjA3QYO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 30 Jan 2023 11:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
+        id S236583AbjA3QYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233265AbjA3QYL (ORCPT
+        with ESMTP id S236434AbjA3QYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:24:11 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E093A853;
-        Mon, 30 Jan 2023 08:24:10 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id e8so10547105qts.1;
-        Mon, 30 Jan 2023 08:24:10 -0800 (PST)
+        Mon, 30 Jan 2023 11:24:31 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8D93B0C2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:24:30 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id y8so13104350vsq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:24:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=criticallink.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TNjcl9ue4Yo+C3qXNF3I2IXLdPdV2VfDLb5UgrGwaNI=;
+        b=WtpdVSeOyj3NqmS8x1J7iyhRv/V7ha9AnHL68DNjFluRRqNbJK88sYdxcMnhkY8t6X
+         IFa4EfhuyatIkNKRKGkm9n+gDO0OX36QOSZ+tNcPWDzSffM3emrKCn8Da45DzuF8dJUT
+         ZmZlwopPfGtyO1AJaR6YCWLepNYkHtk3IFMrqL8qZfnPi86PsUI6yQ0X3Z9Lf7Fdgw4B
+         J6p5P3SBEf8maYUzvmVH64dIuvoot3NyC4rVF+MRJ+jiqD9lVJN7osAxX7oQ5ZEChSJX
+         Fisw6C68uToeMVoQj26/eL1mp7XloiMme5kZB+/UcvnYm07/ovfa4VCRT31K7f3vvLZJ
+         BrtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QTSPMIlZAe730mTLIHGZJqCvmbGIHUoU+DViCsATefM=;
-        b=4y2VBJlFA6onx4P9VMpsZyxCJrwSHlyF/9yj4JVfjmzQnmSRTMXGvwFAPk4mo/Dz5n
-         SKXFDNB+Pqw6Ryosbx/AGAbFlsSRdoTjfr+tFB17HICz4Tx4SrpC2dAyssoAfC0D8I34
-         gByH1+Jf2ws1tzQ9Rye7LELKwQHkjoDKKnAPrswInGvVvPvD4tBpbR5/pcn99hVBukGZ
-         ku9ypKc89iZfF0WHj97XV3rOX7mys9KJ5HNi3ase7B5Wydf08Y7ncEDCzijsCMs5X06U
-         Iqo9hrSITu0a5ikpxB+o/7Sd4r0VXrsGROeSFvoqtAcd99nX6oDrsqCuQU6bFgq/xpqi
-         CgyA==
-X-Gm-Message-State: AO0yUKXD7+T5hep6Am7t2t3HBoipj2LXeHJ8/G20MRlmah7a4BcMKhbM
-        rGzKbRL9z5J5g/whewwxEzx8EiTmWTMy2A==
-X-Google-Smtp-Source: AK7set9HsotzwRrhC8JOXW/xsBDCAshJ24jkakHL5qmaDXYZkSHtkzAsc29W7SXVWq88PaDh+rUXlQ==
-X-Received: by 2002:a05:622a:1042:b0:3b8:461c:12ed with SMTP id f2-20020a05622a104200b003b8461c12edmr13554804qte.8.1675095849762;
-        Mon, 30 Jan 2023 08:24:09 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id q26-20020a05620a025a00b0071de2b6d439sm3070481qkn.49.2023.01.30.08.24.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 08:24:09 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-50aa54cc7c0so139033647b3.8;
-        Mon, 30 Jan 2023 08:24:09 -0800 (PST)
-X-Received: by 2002:a81:5204:0:b0:507:86ae:c733 with SMTP id
- g4-20020a815204000000b0050786aec733mr2915037ywb.358.1675095849069; Mon, 30
- Jan 2023 08:24:09 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TNjcl9ue4Yo+C3qXNF3I2IXLdPdV2VfDLb5UgrGwaNI=;
+        b=6/QnpjcfiZg22vayScr6Ri29xMFNVlvieeu01oh1P/FTN+1gGA0ozxkBzlG0gOh8+5
+         QcoTQciZJ5HyhNWHaQAsGX89LxF6POrwc5rDV7+YFrAJ+5XlIlvnILi3xo8qpQrDQr+y
+         56/7HeD8Zkpk5624s595hU9h8/LTtZGh06cTe8E3HBaXp7opY2f/YcmCvSJMa8YI+Kmn
+         az0qoOSyDRdg4mQaHHYrFbNduhiGL4mwjflSa3/LCiVlTm3r+M8xK+2MEaMhtwqfzIzI
+         2xicfB4eFazMDxhPRUBe22IlS9F6qCAZ3UmYkDNqAe6BYlN54XZ5ex6sDCx3N+EJX/8/
+         QngA==
+X-Gm-Message-State: AFqh2ko69W9sq+3opHWHrP6DsS/6ubLIAItvHYoUxdQivSK1NpCm0q3/
+        RAKmIMETeCNCFd8GYf0NRCXt7dGcjrphbgDXnU7jSw==
+X-Google-Smtp-Source: AMrXdXvS2Xawh4TMY7nGcG42X6+jgpIxV+dRdppy1YUwAh+MSFiMtT/oSRraGGu4VgjT0QR7HOIsuVThWjRInNDG+YU=
+X-Received: by 2002:a05:6102:5587:b0:3d1:2167:11ad with SMTP id
+ dc7-20020a056102558700b003d1216711admr6493306vsb.2.1675095869214; Mon, 30 Jan
+ 2023 08:24:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20230130152818.03c00ea3@canb.auug.org.au> <Y9fpvZCPlqTSvu1O@kroah.com>
-In-Reply-To: <Y9fpvZCPlqTSvu1O@kroah.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 30 Jan 2023 17:23:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWOtVZKyn_k-ojXZDbSZ8Y-dSxHBhftCzTYQfWnQH564Q@mail.gmail.com>
-Message-ID: <CAMuHMdWOtVZKyn_k-ojXZDbSZ8Y-dSxHBhftCzTYQfWnQH564Q@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-To:     Greg KH <greg@kroah.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230125-tfp410_i2c-v1-4-66a4d4e390b7@criticallink.com> <202301290803.ouS19eab-lkp@intel.com>
+In-Reply-To: <202301290803.ouS19eab-lkp@intel.com>
+From:   Jon Cormier <jcormier@criticallink.com>
+Date:   Mon, 30 Jan 2023 11:24:18 -0500
+Message-ID: <CADL8D3bxCOwXU7NJ+jvN530LQByJCMRCGrH+HrGzCxR3+imZ2Q@mail.gmail.com>
+Subject: Re: [PATCH 4/4] DRM: BRIDGE: TFP410: If connected, use I2C for polled
+ HPD status.
+To:     kernel test robot <lkp@intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Jyri Sarha <jsarha@ti.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Williamson <michael.williamson@criticallink.com>,
+        Bob Duke <bduke@criticallink.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Jan 30, 2023 at 5:08 PM Greg KH <greg@kroah.com> wrote:
-> On Mon, Jan 30, 2023 at 03:28:18PM +1100, Stephen Rothwell wrote:
-> > After merging the driver-core tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
-> >
-> > arch/powerpc/platforms/ps3/system-bus.c:472:19: error: initialization of 'int (*)(const struct device *, struct kobj_uevent_env *)' from incompatible pointer type 'int (*)(struct device *, struct kobj_uevent_env *)' [-Werror=incompatible-pointer-types]
-> >   472 |         .uevent = ps3_system_bus_uevent,
-> >       |                   ^~~~~~~~~~~~~~~~~~~~~
-> > arch/powerpc/platforms/ps3/system-bus.c:472:19: note: (near initialization for 'ps3_system_bus_type.uevent')
-> > arch/powerpc/platforms/pseries/ibmebus.c:436:22: error: initialization of 'int (*)(const struct device *, struct kobj_uevent_env *)' from incompatible pointer type 'int (*)(struct device *, struct kobj_uevent_env *)' [-Werror=incompatible-pointer-types]
-> >   436 |         .uevent    = ibmebus_bus_modalias,
-> >       |                      ^~~~~~~~~~~~~~~~~~~~
-> > arch/powerpc/platforms/pseries/ibmebus.c:436:22: note: (near initialization for 'ibmebus_bus_type.uevent')
-> >
-> > Caused by commit
-> >
-> >   2a81ada32f0e ("driver core: make struct bus_type.uevent() take a const *")
+On Sat, Jan 28, 2023 at 7:47 PM kernel test robot <lkp@intel.com> wrote:
 >
-> Ick, 0-day didn't catch this, which is odd, it must not build those
-> arches :(
-
-It does, but the bot seems to have some issues, as I didn't receive
-any reports for a few days.
-Last report of a ps3_defconfig build is 5 days old...
-
-etje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Hi Jonathan,
+>
+> Thank you for the patch! Perhaps something to improve:
+Good bot.
+>
+> [auto build test WARNING on 93f875a8526a291005e7f38478079526c843cbec]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cormier/dt-bindings-display-bridge-tfp410-Add-tfp410-i2c-example/20230128-183627
+> base:   93f875a8526a291005e7f38478079526c843cbec
+> patch link:    https://lore.kernel.org/r/20230125-tfp410_i2c-v1-4-66a4d4e390b7%40criticallink.com
+> patch subject: [PATCH 4/4] DRM: BRIDGE: TFP410: If connected, use I2C for polled HPD status.
+> config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20230129/202301290803.ouS19eab-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/c4659fa4c02b62087c095ca99978e5eac8b490de
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Jonathan-Cormier/dt-bindings-display-bridge-tfp410-Add-tfp410-i2c-example/20230128-183627
+>         git checkout c4659fa4c02b62087c095ca99978e5eac8b490de
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/bridge/
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/gpu/drm/bridge/ti-tfp410.c:111:6: warning: unused variable 'val' [-Wunused-variable]
+>            u32 val;
+>                ^
+>    1 warning generated.
+This has already been fixed in V2 of the patch series.
+>
+>
+> vim +/val +111 drivers/gpu/drm/bridge/ti-tfp410.c
+>
+>    106
+>    107  static enum drm_connector_status
+>    108  tfp410_connector_detect(struct drm_connector *connector, bool force)
+>    109  {
+>    110          struct tfp410 *dvi = drm_connector_to_tfp410(connector);
+>  > 111          u32 val;
+>    112          unsigned int ret;
+>    113
+>    114          if (dvi->i2c) {
+>    115                  ret = regmap_test_bits(dvi->regmap, TFP410_REG_CTL_2_MODE, TFP410_BIT_HTPLG);
+>    116                  if (ret < 0)
+>    117                          dev_err(dvi->dev, "%s failed to read HTPLG bit : %d\n", __func__, ret);
+>    118                  else
+>    119                          return ret ? connector_status_connected : connector_status_disconnected;
+>    120          }
+>    121
+>    122          return drm_bridge_detect(dvi->next_bridge);
+>    123  }
+>    124
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
