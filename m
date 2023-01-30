@@ -2,110 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C02680A66
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21DE0680A67
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235998AbjA3KG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:06:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
+        id S236032AbjA3KHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbjA3KGx (ORCPT
+        with ESMTP id S235974AbjA3KGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 Jan 2023 05:06:53 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777B730B27
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:06:43 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3D4395C012C;
-        Mon, 30 Jan 2023 05:06:40 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 30 Jan 2023 05:06:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675073200; x=1675159600; bh=DzCynmJzDJ
-        BsJr4TPTwVJFXYpQYfrCi6entST/qT0lo=; b=HreAV8/dz/Osn8r5rU0CQmFCeB
-        dxCjKnkA1XkQ/feo3wdhQy3CfwqwarGRTjMb+UULSwV9WAS6lEh5bRe5VMwT27YT
-        0IrQ9b1JasVJ47ZmyQF8ZtgdC510+Vx5DA2MXbgebHkxcOROGOYcTwPSXw50WR7F
-        TuxCqPRthpzrZSkWChH8uTWN3CJINGL49h46V8aI/31BXb2MzS/oAnYYqpcrckKd
-        lVcor8JvngZ8SKE+uI/YkDfVD4+6u5HABQNmRVW4QK36VDpg8ch5RKXc3Zu4v+su
-        4JMdDOm+ik7H9ShSidGWHpZ3RgnMe+u3jKK0qd1DL/boxiPxQ/12FsY5y0NA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675073200; x=1675159600; bh=DzCynmJzDJBsJr4TPTwVJFXYpQYf
-        rCi6entST/qT0lo=; b=g7gyNDo7PWY6mJkGsHEQmqKozXaO5GebOnFT1FODitar
-        KBKNvZq0/DmhC2jZY6cXRMhw4XJvsPcyB2YawHQQ429EkKoL1F7GBGuq55LaCzDy
-        W5SUQqrIyHgUIK9ZlqkQIIdnT9O91BWPias+c7yLzrooFb7rnUpw5PaVa9cWizfS
-        8mj6T1U7s7UYmyQn0X0YxHSQYHthDAVzGbqgbq6XAf1zoPk2vm9bHRYDEkjKNVqe
-        TohaoELNMRVSEapT3YRevjWI9xSl1AM50vyU5PiEWYdYx6ocgcpZN1kO545YzppF
-        uYw1cEtBD3Q2wfAPoHyOXDbzFEmo8QKpRLp7uG+nQQ==
-X-ME-Sender: <xms:sJbXYziIViw5SLi14qPIXVNqZZRg2D1rirBL3qm4Tm8aJcDY1CXhCw>
-    <xme:sJbXYwBs0AqlalZqC0oF0Vk_7SyiHvKbyeuUu1hD95HghBPUTk9kWJpKk6nAC7Wne
-    OO5raXDfJYe2skA8W8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddgudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepueejfeefvdefhedtgfdtkeekfeelgeduteejgeetvdeiudeivdeuuddufeei
-    iefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthhhusg
-    drtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:sJbXYzFUJmNCbKgJMH-54yqCYARQyjwJMpCZO9RTWAaq25MeUJ8JYA>
-    <xmx:sJbXYwRLBQfjva6YCwErnxHimRlXS8rukTXhCi4LFtr3Ag2vzHH4vw>
-    <xmx:sJbXYwxNmpo-fYMxlYagru55yvIwgEMvwooNK7KuBBAfPxkcNzSiOA>
-    <xmx:sJbXY6tceBmiau9ObecTycfhCceRjuHEuJ1F1K9eUVmT4JCpe5ssKw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EC90FB60086; Mon, 30 Jan 2023 05:06:39 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <7c25f24f-4acf-404e-88d0-65b55c017f34@app.fastmail.com>
-In-Reply-To: <202301300732.QfTDtiab-lkp@intel.com>
-References: <202301300732.QfTDtiab-lkp@intel.com>
-Date:   Mon, 30 Jan 2023 11:06:20 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "kernel test robot" <lkp@intel.com>,
-        "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, "Vinod Koul" <vkoul@kernel.org>,
-        "Hans de Goede" <hdegoede@redhat.com>
-Subject: Re: error: Undefined temporary symbol .LBB5_-1
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C6B30E83
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:06:44 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id i14-20020a056e020d8e00b003034b93bd07so7112054ilj.14
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:06:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HHBorJxtb8OOdvReJ/cspDu7cb80E+hJP4zqgvf9eJU=;
+        b=rnBOcAV7N/Riz2ZE9KdKO9sGGf6p4vKIbV+lEl7Fl3kGoO9OCsxPFKQD++/QJOHG8l
+         yNRRNkn4aOWCcc+vc2/gLd01TBA7uECxHoMbaswKX+fIUeaFgFHEQZaXRGPDdWYnx713
+         xHjjof7mV6RKrgLT0dVLVA8pbbqqAvsvTzljiHxtJcZ+sADBs4AUqtGHU29zPifBZBkW
+         /755N3RX24uiVXyhWnNI5XeUrFSKH0arO6/9lsh/3ppfGfvM07mubKtWomBBO5gvdxfF
+         TGJQ8fRDeg9usMhlgli71BIXnpT85hcbv5HqfJ+rJaUA/7++qc29vm3Qzw5tSSmWBaB7
+         4SbQ==
+X-Gm-Message-State: AO0yUKVgjt5kjpx21zaL2TMGw2OeaeN0ZgatyHs3UA7pbhZYcj0wxAEt
+        X9Dbjqw1S6E27X47npRRC77766I7/H+De670X5ysoWM7078F
+X-Google-Smtp-Source: AK7set8QVvDE6Gzy4hHO8QvS/BqWwaHgQl6GdJ1EY5X9b6fjYAZywnh0zbGaU9rQ7PgnFR/LWwXICJmwpBQa4CnRQVXqL3xblwvl
+MIME-Version: 1.0
+X-Received: by 2002:a92:b512:0:b0:311:136:7727 with SMTP id
+ f18-20020a92b512000000b0031101367727mr114568ile.112.1675073203474; Mon, 30
+ Jan 2023 02:06:43 -0800 (PST)
+Date:   Mon, 30 Jan 2023 02:06:43 -0800
+In-Reply-To: <000000000000b960c00594598949@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000441c7d05f3785ff7@google.com>
+Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
+From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
+        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        stable-commits@vger.kernel.org, stable@vger.kernel.org,
+        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023, at 00:48, kernel test robot wrote:
-> Hi Christophe,
->
-> FYI, the error/warning still remains.
->
-> tree:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
-> master
-> head:   6d796c50f84ca79f1722bb131799e5a5710c4700
-> commit: a9f17d0c0778dd971dc9770fa0a2085a41d8c5e4 phy: ti: tusb1210: Fix 
-> an error handling path in tusb1210_probe()
-> date:   10 months ago
-> config: arm-randconfig-r006-20230130 
-> (https://download.01.org/0day-ci/archive/20230130/202301300732.QfTDtiab-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 
-> 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-> reproduce (this is a W=1 build):
+This bug is marked as fixed by commit:
+net: core: netlink: add helper refcount dec and lock function
+net: sched: add helper function to take reference to Qdisc
+net: sched: extend Qdisc with rcu
+net: sched: rename qdisc_destroy() to qdisc_put()
+net: sched: use Qdisc rcu API instead of relying on rtnl lock
 
-I reported this as a clang-16 regression, the tusb code looks fine:
+But I can't find it in the tested trees[1] for more than 90 days.
+Is it a correct commit? Please update it by replying:
 
-https://github.com/llvm/llvm-project/issues/60346
+#syz fix: exact-commit-title
 
-     Arnd
+Until then the bug is still considered open and new crashes with
+the same signature are ignored.
+
+Kernel: Linux 4.19
+Dashboard link: https://syzkaller.appspot.com/bug?extid=5f229e48cccc804062c0
+
+---
+[1] I expect the commit to be present in:
+
+1. linux-4.19.y branch of
+git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
