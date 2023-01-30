@@ -2,163 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62744681781
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07052681788
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237718AbjA3RWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 12:22:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S237228AbjA3RZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 12:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237836AbjA3RWT (ORCPT
+        with ESMTP id S236200AbjA3RZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 12:22:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11D434C15;
-        Mon, 30 Jan 2023 09:22:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AF14B815CC;
-        Mon, 30 Jan 2023 17:22:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F310CC4339C;
-        Mon, 30 Jan 2023 17:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675099335;
-        bh=03hSL6acGWc0Byt9YYZSo2iTHRm7bOfdYaaKNojuozo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bJdjq/Iqt8KuT+RD0iDH/Oyahjfy5w8RxkYBX4s17uO0tmB2m+90k2TkG3nTj81gq
-         iVvvpVB9V9swAyoF0PhJq9JUJlWl7Yrg93aNwGkEXwCT7BfkTUwY06SRwDtzbUXZsf
-         bdWnlr3uWz0UeEiRWAEmUMqR2L6/c7XFZ4GcQE7kkWDdkU24gMz6CDyV2yAUTyG+VP
-         Ryf9pYRb+HOebrO6it7WrMdJtdVcgSzA9aL9nsABJA/H10OX9HJgT8vTBjWzUZGKfD
-         XxPKHNgd/TRYEL+prrGJvJ1c8YU4M+VvLIW3ZlW0zUU6Y6UcOBW01uiQoeznwBu631
-         MNpep+xdHnTKw==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-15fe106c7c7so15912374fac.8;
-        Mon, 30 Jan 2023 09:22:14 -0800 (PST)
-X-Gm-Message-State: AO0yUKVc3m1qKJI8lAPVvz7NZHjkp3/+2co2uhCB0euGz4GjTHI/Lp8j
-        vTuiY//vsMwHwL5NChQDUP3qW5RJ79psEV+ypHg=
-X-Google-Smtp-Source: AK7set/fOymBqDlqF808yExuXiQ1MXOc/8RuMw5/irGSyjWkwyxyZu30ome2C0UCd2NPabNyQ6vshdtvUa+Kvz7S6FA=
-X-Received: by 2002:a05:6870:330b:b0:163:a45a:9e41 with SMTP id
- x11-20020a056870330b00b00163a45a9e41mr393587oae.194.1675099334181; Mon, 30
- Jan 2023 09:22:14 -0800 (PST)
+        Mon, 30 Jan 2023 12:25:03 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11C0C35258;
+        Mon, 30 Jan 2023 09:25:03 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1112)
+        id C675C20E9F9B; Mon, 30 Jan 2023 09:25:02 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C675C20E9F9B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675099502;
+        bh=U3zmQVd/dV9CbqtTiwKT+tUVvaEDxb3+DucgApEqQBQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G7YKSdqWlnYUSasIO1a7qkmzrFRPDsxDhkovl/M6v27qJtKu4E54BiqHUoYe/lYes
+         4AZFFqhzINAyGLs8R5bqYazuYqBo7QqP5wnF9o3ecz8UhwmvkSGH+dJ5rVYtOcKpUU
+         kvgQD1gfeBJepNyq+T3Vg00f5FDClval7hQakqU8=
+Date:   Mon, 30 Jan 2023 09:25:02 -0800
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jeremi Piotrowski <jpiotrowski@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [RFC PATCH v1 4/6] x86/amd: Configure necessary MSRs for SNP
+ during CPU init when running as a guest
+Message-ID: <20230130172502.GD27645@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20230123165128.28185-1-jpiotrowski@linux.microsoft.com>
+ <20230123165128.28185-5-jpiotrowski@linux.microsoft.com>
+ <BYAPR21MB1688094AE8B2D0EA02A17335D7D29@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230130141553.3825449-1-jlu@pengutronix.de> <20230130141553.3825449-2-jlu@pengutronix.de>
- <CAK7LNAReD_97qWRT8f47VKx9cScTWUJcHNkUyhXQoMAYPwAPUQ@mail.gmail.com> <faf0b767d910f11c0e9b458614e002534880e12a.camel@pengutronix.de>
-In-Reply-To: <faf0b767d910f11c0e9b458614e002534880e12a.camel@pengutronix.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 31 Jan 2023 02:21:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATa8jxRzbf7Wec3WYtBW7-DF2c+uMi+wjJddHziWquQ3g@mail.gmail.com>
-Message-ID: <CAK7LNATa8jxRzbf7Wec3WYtBW7-DF2c+uMi+wjJddHziWquQ3g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] certs: Fix build error when PKCS#11 URI contains semicolon
-To:     =?UTF-8?Q?Jan_L=C3=BCbbe?= <jlu@pengutronix.de>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB1688094AE8B2D0EA02A17335D7D29@BYAPR21MB1688.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 1:43 AM Jan L=C3=BCbbe <jlu@pengutronix.de> wrote:
->
-> On Tue, 2023-01-31 at 00:18 +0900, Masahiro Yamada wrote:
-> > On Mon, Jan 30, 2023 at 11:16 PM Jan Luebbe <jlu@pengutronix.de> wrote:
-> > >
-> > > When CONFIG_MODULE_SIG_KEY is PKCS#11 URI (pkcs11:*) and contains a
-> > > semicolon, signing_key.x509 fails to build:
-> > >
-> > >   certs/extract-cert pkcs11:token=3Dfoo;object=3Dbar;pin-value=3D1111=
- certs/signing_key.x509
-> > >   Usage: extract-cert <source> <dest>
-> > >
-> > > Add quotes to the PKCS11_URI variable to avoid splitting by the shell=
-.
-> > >
-> > > Fixes: 129ab0d2d9f3 ("kbuild: do not quote string values in include/c=
-onfig/auto.conf")
-> > > Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
-> > > ---
-> > >  certs/Makefile | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/certs/Makefile b/certs/Makefile
-> > > index 9486ed924731..cda21811ed88 100644
-> > > --- a/certs/Makefile
-> > > +++ b/certs/Makefile
-> > > @@ -67,7 +67,7 @@ $(obj)/system_certificates.o: $(obj)/signing_key.x5=
-09
-> > >
-> > >  PKCS11_URI :=3D $(filter pkcs11:%, $(CONFIG_MODULE_SIG_KEY))
-> > >  ifdef PKCS11_URI
-> > > -$(obj)/signing_key.x509: extract-cert-in :=3D $(PKCS11_URI)
-> > > +$(obj)/signing_key.x509: extract-cert-in :=3D "$(PKCS11_URI)"
-> > >  endif
-> > >
-> > >  $(obj)/signing_key.x509: $(filter-out $(PKCS11_URI),$(CONFIG_MODULE_=
-SIG_KEY)) $(obj)/extract-cert FORCE
-> > > --
-> > > 2.30.2
-> > >
-> >
-> > Instead, how about this?
-> >
-> >
-> >
-> >
-> > diff --git a/certs/Makefile b/certs/Makefile
-> > index 9486ed924731..799ad7b9e68a 100644
-> > --- a/certs/Makefile
-> > +++ b/certs/Makefile
-> > @@ -23,8 +23,8 @@ $(obj)/blacklist_hash_list:
-> > $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORCE
-> >  targets +=3D blacklist_hash_list
-> >
-> >  quiet_cmd_extract_certs  =3D CERT    $@
-> > -      cmd_extract_certs  =3D $(obj)/extract-cert $(extract-cert-in) $@
-> > -extract-cert-in =3D $(or $(filter-out $(obj)/extract-cert, $(real-prer=
-eqs)),"")
-> > +      cmd_extract_certs  =3D $(obj)/extract-cert "$(extract-cert-in)" =
-$@
-> > +extract-cert-in =3D $(filter-out $(obj)/extract-cert, $(real-prereqs))
-> >
-> >  $(obj)/system_certificates.o: $(obj)/x509_certificate_list
->
-> Thanks, this works im my tests, too.
+On Sun, Jan 29, 2023 at 04:44:05AM +0000, Michael Kelley (LINUX) wrote:
+> From: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> Sent: Monday, January 23, 2023 8:51 AM
+> > 
+> > Hyper-V may expose the SEV/SEV-SNP CPU features to the guest, but it is
+> > up to the guest to use them. early_detect_mem_encrypt() checks
+> > SYSCFG[MEM_ENCRYPT] and HWCR[SMMLOCK] and if these are not set the
+> > SEV-SNP features are cleared.  Check if we are running under a
+> > hypervisor and if so - update SYSCFG and skip the HWCR check.
+> > 
+> > It would be great to make this check more specific (checking for
+> > Hyper-V) but this code runs before hypervisor detection on the boot cpu.
+> 
+> Could you elaborate on why we would want this check to be Hyper-V
+> specific?   Per my comments on Patch 3 of this series, I would think the
+> opposite.  If possible, we want code like this to work on any hypervisor,
+> and not have Hyper-V specific behavior in code outside of the Hyper-V
+> modules.  But I don't know this code well at all, so maybe there's an
+> aspect I'm missing.
+> 
+> Michael
+> 
 
+This patch would work for any hypervisor, but I'm not sure every hypervisor
+would chose to do things this way. Take the MSR_AMD64_SYSCFG_MEM_ENCRYPT
+setting. It could be done like on baremetal with VM BIOS settings, which
+wouldn't work well for Hyper-V. The VMM could also simply always return
+MSR_AMD64_SYSCFG_MEM_ENCRYPT when it exposes SEV/-ES/-SNP flags to a non-SNP
+guest (KVM always returns 0 in SYSCFG right now, and doesn't allow it to be
+set).
 
+But ultimately all this function does is mask off SEV/-ES/-SNP CPU flags based
+on an assumption that no longer holds, so I think this approach to fixing it is
+acceptable. The only thing I would check is whether it's possible to check the
+coco attr here as well so that this definitely doesn't run for SNP guests
+(provided this information is available at this point).
 
-Can you send v2, please?
-
-I do not come up with a cleaner way for 2/2,
-so I am fine with it.
-
-
-
-
-
-
-
->
-> Regards,
-> Jan
-> --
-> Pengutronix e.K.                           |                             =
-|
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  =
-|
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
-|
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
-|
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+> > 
+> > Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+> > ---
+> >  arch/x86/kernel/cpu/amd.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+> > index c7884198ad5b..17d91ac62937 100644
+> > --- a/arch/x86/kernel/cpu/amd.c
+> > +++ b/arch/x86/kernel/cpu/amd.c
+> > @@ -565,6 +565,12 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+> >  	 *   don't advertise the feature under CONFIG_X86_32.
+> >  	 */
+> >  	if (cpu_has(c, X86_FEATURE_SME) || cpu_has(c, X86_FEATURE_SEV)) {
+> > +		if (cpu_has(c, X86_FEATURE_HYPERVISOR)) {
+> > +			rdmsrl(MSR_AMD64_SYSCFG, msr);
+> > +			msr |= MSR_AMD64_SYSCFG_MEM_ENCRYPT;
+> > +			wrmsrl(MSR_AMD64_SYSCFG, msr);
+> > +		}
+> > +
+> >  		/* Check if memory encryption is enabled */
+> >  		rdmsrl(MSR_AMD64_SYSCFG, msr);
+> >  		if (!(msr & MSR_AMD64_SYSCFG_MEM_ENCRYPT))
+> > @@ -584,7 +590,7 @@ static void early_detect_mem_encrypt(struct cpuinfo_x86 *c)
+> >  			setup_clear_cpu_cap(X86_FEATURE_SME);
+> > 
+> >  		rdmsrl(MSR_K7_HWCR, msr);
+> > -		if (!(msr & MSR_K7_HWCR_SMMLOCK))
+> > +		if (!(msr & MSR_K7_HWCR_SMMLOCK) && !cpu_has(c, X86_FEATURE_HYPERVISOR))
+> >  			goto clear_sev;
+> > 
+> >  		return;
+> > --
+> > 2.25.1
