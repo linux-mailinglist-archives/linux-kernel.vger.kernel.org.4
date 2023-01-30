@@ -2,88 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4977680DF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3D4680D93
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:26:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236527AbjA3Mlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S236729AbjA3MZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235583AbjA3Mlx (ORCPT
+        with ESMTP id S229965AbjA3MZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:41:53 -0500
-X-Greylist: delayed 1047 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 Jan 2023 04:41:52 PST
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C72526D;
-        Mon, 30 Jan 2023 04:41:52 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P56bk1kf1z9v7Zc;
-        Mon, 30 Jan 2023 20:16:18 +0800 (CST)
-Received: from [10.206.134.221] (unknown [10.206.134.221])
-        by APP1 (Coremail) with SMTP id LxC2BwBHw_7Cttdj8WfcAA--.8512S2;
-        Mon, 30 Jan 2023 13:23:47 +0100 (CET)
-Message-ID: <2f4717b3-268f-8db3-e380-4af0a5479901@huaweicloud.com>
-Date:   Mon, 30 Jan 2023 13:23:28 +0100
+        Mon, 30 Jan 2023 07:25:57 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8B5206AB
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:25:55 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ml19so7657786ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:25:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zkR3BTFY1oVomQa8hlX0b7MVFpByHTMAOSPu+tHlr70=;
+        b=HYqm4Lnvsdlbv3LS6+g7g7LaI/wMYzZNjyxH6SbiQb8jVCybdLwquBujoW+BuUUcku
+         Cl1jpTdXxfSOCetzfSTfiwEoS6zj1yiXdsJcAs1hFMLMCIx4uRaGIimgHmwhbxa224jB
+         KnINr7J1KWa3SGk/aEGQZiYimUlfvXeOJdmU9V0WPOs/qi1QHmFzjj/oX7YVpLElmPar
+         lhOZhadpMMPF5ZuaGDUsCRSdDOTGSipaHsOz+/ZZ30oYbHktPlJAHSt4+rzxIbedgBSp
+         h8Kt1XSS9ci2uTLxzWlWsgT2N1xDv5y7dTEmSWBd84Fb3bNWuJ2X0YNQ6/QJVPHJ/o7v
+         +nBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zkR3BTFY1oVomQa8hlX0b7MVFpByHTMAOSPu+tHlr70=;
+        b=0kgurMjI05Kwrct25VjY5Z4psQPMU8Nl0468e3jdH84sBqb0jS7xWwP5QsFBSfadfp
+         7dIogCMmyWjZireaaOpx4ss9lNOULMCq70r9z28Lw8q14Hl3AQJHnSOknd0Z3x9mSmGT
+         mpvA7aLLsxO+XH9APhv+aa/Y73sFcXpEERu9dq5iIKs+bErU6pU+0D0lGlQqxd8SclqI
+         j1qcBwA6RFPk+eu9Ynb067lB+Krw9ismD+a8JWLqSOoKt2TU8AAN7n3LW20kBfVtjt2m
+         Yskh7w/ik6EzbHdiKPueCB0zp0QIvsTc9jQP2d+NVTx5v7Vhp1O+cQ+seepUcxCHfu/0
+         mErA==
+X-Gm-Message-State: AFqh2kpgvw6Ie+7iWXpuKFDyKw9CkOa4i3qzQK5Pcem1mqoc+QfvIFJx
+        dyj5VqDK7NAfyp+6kDETlUoxhg==
+X-Google-Smtp-Source: AMrXdXvr7lbfBr/0aAPcw/lRc7A3Gxq6jzYwol6WZi9K5FbXJFqpTlQyqukpZJ8FgA920AjDdCNJvg==
+X-Received: by 2002:a17:906:a058:b0:84d:4e9b:ace5 with SMTP id bg24-20020a170906a05800b0084d4e9bace5mr47899987ejb.67.1675081554102;
+        Mon, 30 Jan 2023 04:25:54 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id g9-20020a170906394900b00872a726783dsm6766163eje.217.2023.01.30.04.25.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 04:25:53 -0800 (PST)
+Message-ID: <1d8777f7-ec11-b68c-629e-b17d5772396b@linaro.org>
+Date:   Mon, 30 Jan 2023 13:25:50 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
- generic atomic ops
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
-        =?UTF-8?Q?Paul_Heidekr=c3=bcger?= <paul.heidekrueger@in.tum.de>,
-        Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230126173354.13250-1-jmaselbas@kalray.eu>
- <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
- <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
- <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
- <Y9RLpYGmzW1KPksE@boqun-archlinux>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y9RLpYGmzW1KPksE@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBHw_7Cttdj8WfcAA--.8512S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw47WF45ZFWrWryDtFy5urg_yoWruFy8pF
-        WSka13GF4DXF1Sq34kJa1xu3WFyw40y3y5Jr95KrykuF1Y9ryftr4xtr4YgFy7Cws7trW2
-        qr1DK34DCa45ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUojjgUUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V2 8/9] arm64: dts: qcom: add IPQ5332 SoC and MI01.2 board
+ support
+Content-Language: en-US
+To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        arnd@arndb.de, dmitry.baryshkov@linaro.org,
+        marcel.ziswiler@toradex.com, nfraprado@collabora.com,
+        robimarko@gmail.com, quic_gurus@quicinc.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230130114702.20606-1-quic_kathirav@quicinc.com>
+ <20230130114702.20606-9-quic_kathirav@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230130114702.20606-9-quic_kathirav@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,103 +87,204 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/27/2023 11:09 PM, Boqun Feng wrote:
-> On Fri, Jan 27, 2023 at 03:34:33PM +0100, Peter Zijlstra wrote:
->>> I also noticed that GCC has some builtin/extension to do such things,
->>> __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
->>> can be used in the kernel.
->> On a per-architecture basis only, the C/C++ memory model does not match
->> the Linux Kernel memory model so using the compiler to generate the
->> atomic ops is somewhat tricky and needs architecture audits.
-> Hijack this thread a little bit, but while we are at it, do you think it
-> makes sense that we have a config option that allows archs to
-> implement LKMM atomics via C11 (volatile) atomics? I know there are gaps
-> between two memory models, but the option is only for fallback/generic
-> implementation so we can put extra barriers/orderings to make things
-> guaranteed to work.
->
-> It'll be a code version of this document:
->
-> 	https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0124r7.html
->
-> (although I realise there may be a few mistakes in that doc since I
-> wasn't familiar with C11 memory model when I wrote part of the doc, but
-> these can be fixed)
->
-> Another reason I ask is that since Rust is coming, we need to provide
-> our LKMM atomics in Rust so that C code and Rust code can talk via same
-> atomic variables, since both sides need to use the same memory model.
-> My choices are:
->
-> 1.	Using FFI to call Linux atomic APIs: not inline therefore not
-> 	efficient.
->
-> 2.	Implementing Rust LKMM atomics in asm: much more work although
-> 	I'm OK if we have to do it.
->
-> 3.	Implementing Rust LKMM atomics with standard atomics (i.e. C/C++
-> 	atomics):
->
-> 	*	Requires Rust has "volatile" atomics, which is WIP but
-> 		looks promising
-> 	
-> 	*	Less efficient compared to choice #2 but more efficient
-> 		compared to choice #1
->
-> Ideally, choice #2 is the best option for all architectures, however, if
-> we have the generic implementation based on choice #3, for some archs it
-> may be good enough.
->
-> Thoughts?
+On 30.01.2023 12:47, Kathiravan Thirumoorthy wrote:
+> From: Kathiravan T <quic_kathirav@quicinc.com>
+> 
+> Add initial device tree support for the Qualcomm IPQ5332 SoC and
+> MI01.2 board.
+> 
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> ---
+[...]
 
-Thanks for adding me to the discussion!
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		tz_mem: tz@4a600000 {
+> +			no-map;
+> +			reg = <0x0 0x4a600000 0x0 0x200000>;
+reg should come before no-map
 
-One reason not to rely on C11 is that old compilers don't support it, 
-and there may be application scenarios in which new compilers haven't 
-been certified.
-I don't know if this is something that affects linux, but linux is so 
-big and versatile I'd be surprised if that's irrelevant.
 
-Another is that the C11 model is more about atomic locations than atomic 
-accesses, and there are several places in the kernel where a location is 
-accessed both atomically and non-atomically. This API mismatch is more 
-severe than the semantic differences in my opinion, since you don't have 
-guarantees of what the layout of atomics is going to be.
+> +		};
+> +	};
+> +
+> +	soc@0 {
+> +		compatible = "simple-bus";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		ranges = <0 0 0 0xffffffff>;
+> +
+> +		tlmm: pinctrl@1000000 {
+> +			compatible = "qcom,ipq5332-tlmm";
+> +			reg = <0x01000000 0x300000>;
+> +			interrupts = <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>;
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +			gpio-ranges = <&tlmm 0 0 53>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +
+> +			serial_0_pins: serial0-state {
+> +				pins = "gpio18", "gpio19";
+> +				function = "blsp0_uart0";
+> +				drive-strength = <8>;
+> +				bias-pull-up;
+> +			};
+> +		};
+> +
+> +		gcc: clock-controller@1800000 {
+> +			compatible = "qcom,ipq5332-gcc";
+> +			reg = <0x01800000 0x80000>;
+> +			#clock-cells = <1>;
+> +			#reset-cells = <1>;
+> +			#power-domain-cells = <1>;
+> +			clock-names = "xo",
+> +				      "sleep_clk",
+> +				      "pcie_2lane_phy_pipe_clk",
+> +				      "pcie_2lane_phy_pipe_clk_x1",
+> +				      "usb_pcie_wrapper_pipe_clk";
+> +			clocks = <&xo_board>,
+> +				 <&sleep_clk>,
+> +				 <0>,
+> +				 <0>,
+> +				 <0>;
+> +		};
+> +
+> +		sdhc: mmc@7804000 {
+> +			compatible = "qcom,ipq5332-sdhci", "qcom,sdhci-msm-v5";
+> +			reg = <0x07804000 0x1000>, <0x07805000 0x1000>;
+> +
+> +			interrupts = <GIC_SPI 313 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "hc_irq", "pwr_irq";
+> +
+> +			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
+> +				 <&gcc GCC_SDCC1_APPS_CLK>,
+> +				 <&xo_board>;
+> +			clock-names = "iface", "core", "xo";
+> +			mmc-ddr-1_8v;
+> +			mmc-hs200-1_8v;
+> +			max-frequency = <192000000>;
+> +			bus-width = <4>;
+> +			status = "disabled";
+> +		};
+> +
+> +		blsp1_uart0: serial@78af000 {
+> +			compatible = "qcom,msm-uartdm-v1.4", "qcom,msm-uartdm";
+> +			reg = <0x078af000 0x200>;
+> +			interrupts = <GIC_SPI 290 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&gcc GCC_BLSP1_UART1_APPS_CLK>,
+> +				 <&gcc GCC_BLSP1_AHB_CLK>;
+> +			clock-names = "core", "iface";
+> +			status = "disabled";
+> +		};
+> +
+> +		intc: interrupt-controller@b000000 {
+> +			compatible = "qcom,msm-qgic2";
+> +			reg = <0x0b000000 0x1000>,	/* GICD */
+> +			      <0x0b002000 0x1000>,	/* GICC */
+> +			      <0x0b001000 0x1000>,	/* GICH */
+> +			      <0x0b004000 0x1000>;	/* GICV */
+> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <3>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges = <0 0x0b00c000 0x3000>;
+> +
+> +			v2m0: v2m@0 {
+> +				compatible = "arm,gic-v2m-frame";
+> +				reg = <0x00000000 0xffd>;
+> +				msi-controller;
+> +			};
+> +
+> +			v2m1: v2m@1 {
+> +				compatible = "arm,gic-v2m-frame";
+> +				reg = <0x00001000 0xffd>;
+The unit address does not match the address part of the reg
+property, dtbs_check will not succeed..
 
-Perhaps you could instead rely on the compiler builtins? Note that this 
-may invalidate some progress properties, e.g., ticket locks become 
-unfair if the increment (for taking a ticket) is implemented with a CAS 
-loop (because a thread can fail forever to get a ticket if the ticket 
-counter is contended, and thus starve). There may be some linux atomics 
-that don't map to any compiler builtins and need to implemented with 
-such CAS loops, potentially leading to such problems.
+The rest lgtm
 
-I'm also curious whether link time optimization can resolve the inlining 
-issue?
-
-I think another big question for me is to which extent it makes sense 
-anyways to have shared memory concurrency between the Rust code and the 
-C code. It seems all the bad concurrency stuff from the C world would 
-flow into the Rust world, right?
-If you can live without shared Rust & C concurrency, then perhaps you 
-can get away without using LKMM in Rust at all, and just rely on its 
-(C11-like) memory model internally and talk to the C code through 
-synchronous, safer ways.
-
-I'm not against having a fallback builtin-based implementation of LKMM, 
-and I don't think that it really needs architecture audits. What it 
-needs is some additional compiler barriers and memory barriers, to 
-ensure that the arguments about dependencies and non-atomics still hold. 
-E.g., a release store may not just be "builtin release store" but may 
-need to have a compiler barrier to prevent the release store being moved 
-in program order. And a "full barrier" exchange may need an mb() infront 
-of the operation to avoid "roach motel ordering" (i.e.,  x=1 ; "full 
-barrier exchange"; y = 1 allows y=1 to execute before x=1 in the 
-compiler builtins as far as I remember). And there may be some other 
-cases like this.
-
-But I currently don't see that this implementation would be noticeably 
-faster than paying the overhead of lack of inline.
-
-Best wishes, jonas
-
+Konrad
+> +				msi-controller;
+> +			};
+> +
+> +			v2m2: v2m@2 {
+> +				compatible = "arm,gic-v2m-frame";
+> +				reg = <0x00002000 0xffd>;
+> +				msi-controller;
+> +			};
+> +		};
+> +
+> +		timer@b120000 {
+> +			compatible = "arm,armv7-timer-mem";
+> +			reg = <0x0b120000 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			frame@b120000 {
+> +				reg = <0x0b121000 0x1000>,
+> +				      <0x0b122000 0x1000>;
+> +				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> +					     <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +				frame-number = <0>;
+> +			};
+> +
+> +			frame@b123000 {
+> +				reg = <0x0b123000 0x1000>;
+> +				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+> +				frame-number = <1>;
+> +				status = "disabled";
+> +			};
+> +
+> +			frame@b124000 {
+> +				reg = <0x0b124000 0x1000>;
+> +				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+> +				frame-number = <2>;
+> +				status = "disabled";
+> +			};
+> +
+> +			frame@b125000 {
+> +				reg = <0x0b125000 0x1000>;
+> +				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> +				frame-number = <3>;
+> +				status = "disabled";
+> +			};
+> +
+> +			frame@b126000 {
+> +				reg = <0x0b126000 0x1000>;
+> +				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+> +				frame-number = <4>;
+> +				status = "disabled";
+> +			};
+> +
+> +			frame@b127000 {
+> +				reg = <0x0b127000 0x1000>;
+> +				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+> +				frame-number = <5>;
+> +				status = "disabled";
+> +			};
+> +
+> +			frame@b128000 {
+> +				reg = <0x0b128000 0x1000>;
+> +				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+> +				frame-number = <6>;
+> +				status = "disabled";
+> +			};
+> +		};
+> +	};
+> +
+> +	timer {
+> +		compatible = "arm,armv8-timer";
+> +		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+> +			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+> +	};
+> +};
