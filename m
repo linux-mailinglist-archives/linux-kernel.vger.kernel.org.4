@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E56681DDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E88681DD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjA3WNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:13:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S230370AbjA3WM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjA3WNc (ORCPT
+        with ESMTP id S230106AbjA3WMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:13:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0779B4A1F2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:12:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675116747;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=f/esCj1MNnOe1fnqJrap230ikN63PqOGL5vL8Wutmq8=;
-        b=UYZw6yzXQOUEkZVMRyBG+K162S/l9Enxh3NbDnvaW+TqEI4ZffGXW3IAm0fb844qDzND6s
-        xcVOuJD2N0y+SseFsjSCeWP8Z//MFX/+WpZggAKu4v8H7faW1WeARQsxES/xzgHLNAd+Pk
-        IcohUZmOyasTMhnM+Q93KFXwUyNKMAY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-O5GrhKaEPI-knDkSOqp-UQ-1; Mon, 30 Jan 2023 17:12:23 -0500
-X-MC-Unique: O5GrhKaEPI-knDkSOqp-UQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D10A882822;
-        Mon, 30 Jan 2023 22:12:22 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ABC721121314;
-        Mon, 30 Jan 2023 22:12:20 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
-References: <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com> <3351099.1675077249@warthog.procyon.org.uk> <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk> <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk> <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        "David Hildenbrand" <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "Logan Gunthorpe" <logang@deltatee.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
+        Mon, 30 Jan 2023 17:12:53 -0500
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C4E3CE1F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:12:49 -0800 (PST)
+Received: by mail-vk1-xa33.google.com with SMTP id u199so5980050vkb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:12:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=B9uCs7d9bI8X6lNKZ7ZR4tAOVN8haO7ZbwgyLwils8A=;
+        b=bBK8lpvjAA41DqZ3plICiMl3eMYmkkVlJF9BXvs0Y6RBHdZpV5VmOonUO0Ugg2/7eW
+         8IQ6hcinRGaoaFO5YrGiw0HdCCCccVzJEr2tQWmrhiIWXVL0NsbyGPwOyYAM111zg6kg
+         LmO0YZi+BJe+XxOYB7xueKoe3RP9VTxa2x2sni3h4zaMHMP0QIYnOsGXgRiosdMlwzwQ
+         bDznp4aMJ8ck5Lk5Hw4Jj645rH8zpX1jPxkBv1g+S7FFmCEHezLLz5WaTQU1+fz8ozDB
+         iryboxvBPYqswC/eI+2gpez0YF2ysgQB40zaaaAX9FNgvJUBKY2WSRLy2naUj65fDdvE
+         dT9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B9uCs7d9bI8X6lNKZ7ZR4tAOVN8haO7ZbwgyLwils8A=;
+        b=tcZ8W5URWIVOMVun2s656z9FiFH1hpbBG4a0SaafDGTLxWL+1MVmQ8QTXhfwlPNVxv
+         tIEcaFtLm3f87HidzuQvUmMOl9m6YvkjOcDphvf9lumzPMB26hoJrXJtG1hnuRxUKE/Z
+         drK5ifiYtcznd9ML+u3iZYrKfkiFTgwXeXxpKseVtXWreWFoa0Ve78ZBn1RF38m112GX
+         h0c58+76uxo0JiJU2JM1IpJZIb3w64qlyqdjqMMyG2NVqBtp9YJmW2zFaw/McjSNTX4I
+         lm9HdCA4O9o6xACeWHCSjdOmiLJUK/5qQsmPuZyWKIehCVdKwRAAJIHv1jAUjSN7B3OQ
+         xWdg==
+X-Gm-Message-State: AO0yUKXs5MaXt3k1JwK32ma++7kv5VMe9EwaMH7ZDAYZU5ML/pTl1CDt
+        qobGLa/SUG01fCNwygblEnll9zn4icK9Y2TWYRsygsyFhnTUSQq/
+X-Google-Smtp-Source: AK7set/nIru8D9r0Imi8xjLhSPk9CL3OX61Jk+PPQ2BfDXQZJrSj0fuAsdF+LH8C2V6KpcKTmacoFwcw7/c2FevfBYs=
+X-Received: by 2002:a05:6122:1810:b0:3e9:ec45:c2d7 with SMTP id
+ ay16-20020a056122181000b003e9ec45c2d7mr1594742vkb.24.1675116768134; Mon, 30
+ Jan 2023 14:12:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3520517.1675116740.1@warthog.procyon.org.uk>
-Date:   Mon, 30 Jan 2023 22:12:20 +0000
-Message-ID: <3520518.1675116740@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230125213857.824959-1-vipinsh@google.com> <Y9GmiyRQ6sULCjEG@google.com>
+ <CANgfPd9T7jdh1Cjjo4y6DcxC2poTaGhQ7wNLf6OgGtStg-yKJg@mail.gmail.com> <Y9HcHRBShQgjxsQb@google.com>
+In-Reply-To: <Y9HcHRBShQgjxsQb@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 30 Jan 2023 14:12:21 -0800
+Message-ID: <CALzav=fkmS0U4tb4trDtbCmDxo27EcJeOWbiwb+meagj9+PFiw@mail.gmail.com>
+Subject: Re: [Patch] KVM: x86/mmu: Make optimized __handle_changed_spte() for
+ clear dirty log
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Ben Gardon <bgardon@google.com>, Vipin Sharma <vipinsh@google.com>,
+        pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,14 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-John Hubbard <jhubbard@nvidia.com> wrote:
+On Wed, Jan 25, 2023 at 5:49 PM Sean Christopherson <seanjc@google.com> wrote:
+[...]
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 92 ++++++++++----------------------------
+>  1 file changed, 24 insertions(+), 68 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index bba33aea0fb0..2f78ca43a276 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+[...]
+> @@ -1289,8 +1244,7 @@ static bool age_gfn_range(struct kvm *kvm, struct tdp_iter *iter,
+>                 new_spte = mark_spte_for_access_track(new_spte);
+>         }
+>
+> -       tdp_mmu_set_spte_no_acc_track(kvm, iter, new_spte);
+> -
+> +       kvm_tdp_mmu_write_spte(iter->sptep, iter->old_spte, new_spte, iter->level);
 
-> This is something that we say when adding pin_user_pages_fast(),
-> yes. I doubt that I can quickly find the email thread, but we
-> measured it and weren't immediately able to come up with a way
-> to make it faster.
+This can race with fast_page_fault() setting the W-bit and the CPU
+setting the D-bit. i.e. This call to kvm_tdp_mmu_write_spte() could
+clear the W-bit or D-bit.
 
-percpu counters maybe - add them up at the point of viewing?
+> @@ -1703,9 +1657,11 @@ static void clear_dirty_pt_masked(struct kvm *kvm, struct kvm_mmu_page *root,
+>                                 new_spte = iter.old_spte & ~shadow_dirty_mask;
+>                         else
+>                                 continue;
+> +
+> +                       kvm_set_pfn_dirty(spte_to_pfn(iter.old_spte));
+>                 }
+>
+> -               tdp_mmu_set_spte_no_dirty_log(kvm, &iter, new_spte);
+> +               kvm_tdp_mmu_write_spte(iter.sptep, iter.old_spte, new_spte, iter.level);
 
-David
+Similar issue here. This call to kvm_tdp_mmu_write_spte() could clear
+the A-bit or mark the SPTE for access-tracking.
 
+> --
+>
