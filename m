@@ -2,141 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC31680571
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:12:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031BE68057C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235200AbjA3FMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 00:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S235575AbjA3FPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 00:15:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjA3FMd (ORCPT
+        with ESMTP id S235532AbjA3FOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 00:12:33 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BED23845
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:12:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MS+Rl30LKC38gIgaEPBq9Y744hbvgXHkTTwFaNB2Z2k=; b=QNdah6QKy+fPpeNSIHVQ4PzJOu
-        kZI1oBvm6NEf/LPSMGgVsDmqhZHbeIxOkFZvP7deHvCja4Qn+GbBO3Uhx2bu6jTI9tbTtqEaj74ie
-        BunXceY8RNH29YEm32oF7/cYRZtJ3HTk5cAtk1M/RkqTDLNg4AuAIP5sH8akYCqoml/oaimpRw5XF
-        V/SIzi6OxH6vdl6g+twfTYUwbOXgRYcf1XoaQ4MuJ3EMav4ReJIW8hZWWjigh1Iab48kNqhAIgoGV
-        CRlYRp01GNd+i4B7qtrg75MHTHQZsn+UZZ4Ov4oyl+rHojUmau8sBvAemjxmnfQ3hNzPQalOy207r
-        /v2+Gqqg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMMSK-00A3xt-5q; Mon, 30 Jan 2023 05:11:48 +0000
-Date:   Mon, 30 Jan 2023 05:11:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        HORIGUCHI =?utf-8?B?TkFPWUEo5aCA5Y+jIOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>, Joe Perches <joe@perches.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [RFC v3 2/4] mm: move PG_slab flag to page_type
-Message-ID: <Y9dRlNhh6O99tg4E@casper.infradead.org>
-References: <20221218101901.373450-1-42.hyeyoo@gmail.com>
- <20221218101901.373450-3-42.hyeyoo@gmail.com>
- <15fda061-72d9-2ee9-0e9f-6f0f732a7382@suse.cz>
- <Y9dI88l2YJZfZ8ny@hyeyoo>
+        Mon, 30 Jan 2023 00:14:44 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C239323C76;
+        Sun, 29 Jan 2023 21:14:43 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U39JgS022614;
+        Mon, 30 Jan 2023 05:14:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=Pw6dA7lXBfHsLc86fXrX1AniFEhG2jBSh7rS/QpUxAU=;
+ b=OGKrr9COMKwE8hbmiEEyDoDsFutl8JuVcPBZmRKeIyEZ4f57ZtVPUHfTM7DWgTdbdWO3
+ /7G0mdm4YBDFelDM74NpyzvgIrBbayw7rej3MsT5ImZg6wKMCY9cj71J1hMAiaHHEX7f
+ WpI3T174Is25i+HsdIoY1S67KWXzFdRAEzxhP953DigjtBwTAezjwmNxpH7/d+CQ1A/Q
+ TEU7vsseI7/DLuzVXNu1nBg64jWCTW+R/i7BwPDtwpRkdyBozF1A0JTU+o07TRf+jIx+
+ RPbkR7YlnlKz7OlWfOi2F+LGoBDeEahgL0YLLwCLfbT4HxQZ169qhWgFP9fMLiFHbD5j oA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncut2jxge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 05:14:30 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30U5ETce020637
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 05:14:29 GMT
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Sun, 29 Jan 2023 21:14:25 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Alex Elder" <elder@ieee.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        "Rajendra Nayak" <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V3 0/3] Add QAD, Cti-trigger and Bootconfig support for Data Capture and Compare(DCC)
+Date:   Mon, 30 Jan 2023 10:43:54 +0530
+Message-ID: <cover.1675054375.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9dI88l2YJZfZ8ny@hyeyoo>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4-PwPm6x6OvvCgSrCUignqm3sk3Mjnvp
+X-Proofpoint-ORIG-GUID: 4-PwPm6x6OvvCgSrCUignqm3sk3Mjnvp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_03,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0 spamscore=0
+ suspectscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300048
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 01:34:59PM +0900, Hyeonggon Yoo wrote:
-> > Seems like quite some changes to page_type to accomodate SLAB, which is
-> > hopefully going away soon(TM). Could we perhaps avoid that?
-> 
-> If it could be done with less changes, I'll try to avoid that.
+This patch adds the Bootconfig, QAD and CTI-Trigger support for DCC.
 
-Let me outline the idea I had for removing PG_slab:
+1.Bootconfig
 
-Observe that PG_reserved and PG_slab are mutually exclusive.  Also,
-if PG_reserved is set, no other flags are set.  If PG_slab is set, only
-PG_locked is used.  Many of the flags are only for use by anon/page
-cache pages (eg referenced, uptodate, dirty, lru, active, workingset,
-waiters, error, owner_priv_1, writeback, mappedtodisk, reclaim,
-swapbacked, unevictable, mlocked).
+Bootconfig parser has been added to DCC driver so that the register addresses
+can be configured during boot-time. This is used to debug crashes that can happen
+during boot-time. The expected format of a bootconfig is as follows:-
 
-Redefine PG_reserved as PG_kernel.  Now we can use the other _15_
-flags to indicate pagetype, as long as PG_kernel is set.  So, eg
-PageSlab() can now be (page->flags & PG_type) == PG_slab where
+dcc_config {
+	link_list_<The list number to configure> {
+		id = <The list number to configure>
+		items =  <Address as same format as dcc separated by '_'>,
+	}
+}
 
-#define PG_kernel	0x00001
-#define PG_type		(PG_kernel | 0x7fff0)
-#define PG_slab		(PG_kernel | 0x00010)
-#define PG_reserved	(PG_kernel | 0x00020)
-#define PG_buddy	(PG_kernel | 0x00030)
-#define PG_offline	(PG_kernel | 0x00040)
-#define PG_table	(PG_kernel | 0x00050)
-#define PG_guard	(PG_kernel | 0x00060)
+Example:
 
-That frees up the existing PG_slab, lets us drop the page_type field
-altogether and gives us space to define all the page types we might
-want (eg PG_vmalloc)
+dcc_config {
+	link_list_6 {
+		id = 6
+		items = R_0x1781005c_1_apb,
+			R_0x1782005c_1_apb
+	}
+	link_list_5 {
+		id = 5
+		items = R_0x1784005c_1_apb
+	}
+}
 
-We'll want to reorganise all the flags which are for anon/file pages
-into a contiguous block.  And now that I think about it, vmalloc pages
-can be mapped to userspace, so they can get marked dirty, so only
-14 bits are available.  Maybe rearrange to ...
+2.QAD
 
-PG_locked	0x000001
-PG_writeback	0x000002
-PG_head		0x000004
-PG_dirty	0x000008
-PG_owner_priv_1	0x000010
-PG_arch_1	0x000020
-PG_private	0x000040
-PG_waiters	0x000080
-PG_kernel	0x000100
-PG_referenced	0x000200
-PG_uptodate	0x000400
-PG_lru		0x000800
-PG_active	0x001000
-PG_workingset	0x002000
-PG_error	0x004000
-PG_private_2	0x008000
-PG_mappedtodisk	0x010000
-PG_reclaim	0x020000
-PG_swapbacked	0x040000
-PG_unevictable	0x080000
-PG_mlocked	0x100000
+QAD can be enabled as a part of debugfs file under each individual list folder.
+QAD is used to specify the access control for DCC configurations, on enabling
+it the access control to dcc configuration space is restricted.  On setting the
+QAD value, the list gets locked out for a particular component and cannot be
+used by the rest.
 
-... or something.  There are a number of constraints and it may take
-a few iterations to get this right.  Oh, and if this is the layout
-we use, then:
+3.CTI-trigger
 
-PG_type		0x1fff00
-PG_reserved	(PG_kernel | 0x200)
-PG_slab		(PG_kernel | 0x400)
-PG_buddy	(PG_kernel | 0x600)
-PG_offline	(PG_kernel | 0x800)
-PG_table	(PG_kernel | 0xa00)
-PG_guard	(PG_kernel | 0xc00)
-PG_vmalloc	(PG_kernel | 0xe00)
+CTI trigger is used to enable the Cross trigger interface for DCC. On enabling
+CTI trigger the dcc software trigger can be done by writing to CTI trig-out.
+Also the hwtrigger debugfs file is created which needs to be disabled for enabling
+CTI-trigger. Hwtrigger needs to be disabled for components to be able to write to
+CTI-trig-out.
 
-This is going to make show_page_flags() more complex :-P
+Changes in V3
 
-Oh, and while we're doing this, we should just make PG_mlocked
-unconditional.  NOMMU doesn't need the extra space in page flags
-(for what?  their large number of NUMA nodes?)
+*Fixed the module build error in V2 of the patch
+
+Souradeep Chowdhury (3):
+  soc: qcom: dcc: Add bootconfig support for DCC
+  soc: qcom: dcc: Add CTI-trigger support for DCC
+  soc: qcom: dcc: Add QAD support for DCC
+
+ Documentation/ABI/testing/debugfs-driver-dcc |  24 +++
+ drivers/soc/qcom/Kconfig                     |   3 +-
+ drivers/soc/qcom/dcc.c                       | 290 ++++++++++++++++++++++++++-
+ 3 files changed, 309 insertions(+), 8 deletions(-)
+
+--
+2.7.4
+
