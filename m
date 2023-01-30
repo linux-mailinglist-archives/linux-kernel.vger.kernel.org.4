@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BF7680B64
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74231680B5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbjA3K5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
+        id S236036AbjA3K45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236360AbjA3K5H (ORCPT
+        with ESMTP id S235715AbjA3K4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:57:07 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CD331E27;
-        Mon, 30 Jan 2023 02:57:04 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P54rB511Xz4f3jZL;
-        Mon, 30 Jan 2023 18:56:58 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP1 (Coremail) with SMTP id cCh0CgAXgSt4otdjy_MHCg--.30573S2;
-        Mon, 30 Jan 2023 18:56:59 +0800 (CST)
-Subject: Re: [PATCH v3 0/2] Fixes for fscache volume operations
-To:     linux-cachefs@redhat.com, David Howells <dhowells@redhat.com>
-Cc:     Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        "houtao1@huawei.com" <houtao1@huawei.com>
-References: <20230113115211.2895845-1-houtao@huaweicloud.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <70586435-8c17-6da7-2971-3fbb3ebe6036@huaweicloud.com>
-Date:   Mon, 30 Jan 2023 18:56:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 30 Jan 2023 05:56:54 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBBB917CCD;
+        Mon, 30 Jan 2023 02:56:53 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8750016F2;
+        Mon, 30 Jan 2023 02:57:35 -0800 (PST)
+Received: from [10.57.46.210] (unknown [10.57.46.210])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E9AA23F71E;
+        Mon, 30 Jan 2023 02:56:50 -0800 (PST)
+Message-ID: <43ff6d3d-2047-1b2f-12ab-849a915a6e2f@arm.com>
+Date:   Mon, 30 Jan 2023 10:56:49 +0000
 MIME-Version: 1.0
-In-Reply-To: <20230113115211.2895845-1-houtao@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/4] perf intel-pt: Fix the pipe mode (v1)
 Content-Language: en-US
-X-CM-TRANSID: cCh0CgAXgSt4otdjy_MHCg--.30573S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWkXw1xXw4UAFWUJw1UJrb_yoW8Gr1rpF
-        ZxCwsIqFW8G3sayws7Ja17Z34v9FW8J397Wr15Jw4UAr4YvFWjqay5K3WY93W7C395Aayx
-        XF1Utw4Sq34jkFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Denis Nikitin <denik@chromium.org>,
+        Stephane Eranian <eranian@google.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>
+References: <20230127001951.3432374-1-namhyung@kernel.org>
+ <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
+ <317a91ff-70c5-57a5-8447-7543057e4055@arm.com>
+ <CAM9d7chU6kTdG0y65_UaD_hW75GezzNJF1ZwjNWq8BUpACAGTA@mail.gmail.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <CAM9d7chU6kTdG0y65_UaD_hW75GezzNJF1ZwjNWq8BUpACAGTA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
 
-Could you please pick it up for v6.2 ?
 
-On 1/13/2023 7:52 PM, Hou Tao wrote:
-> From: Hou Tao <houtao1@huawei.com>
->
-> Hi,
->
-> The patchset includes two fixes for fscache volume operations: patch 1
-> fixes the hang problem during volume acquisition when the volume
-> acquisition process waits for the freeing of relinquished volume, patch
-> 2 adds the missing memory barrier in fscache_create_volume_work() and it
-> is spotted through code review when checking whether or not these is
-> missing smp_mb() before invoking wake_up_bit().
->
-> Comments are always welcome.
->
-> Chang Log:
-> v3:
->  * Use clear_and_wake_up_bit() helper (Suggested by Jingbo Xu)
->  * Tidy up commit message and add Reviewed-by tag
->
-> v2: https://listman.redhat.com/archives/linux-cachefs/2022-December/007402.html
->  * rebased on v6.1-rc1
->  * Patch 1: use wait_on_bit() instead (Suggested by David)
->  * Patch 2: add the missing smp_mb() in fscache_create_volume_work()
->
-> v1: https://listman.redhat.com/archives/linux-cachefs/2022-December/007384.html
->
->
-> Hou Tao (2):
->   fscache: Use wait_on_bit() to wait for the freeing of relinquished
->     volume
->   fscache: Use clear_and_wake_up_bit() in fscache_create_volume_work()
->
->  fs/fscache/volume.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
+On 27/01/2023 23:08, Namhyung Kim wrote:
+> Hi James,
+> 
+> On Fri, Jan 27, 2023 at 6:42 AM James Clark <james.clark@arm.com> wrote:
+>>
+>>
+>>
+>> On 27/01/2023 07:22, Adrian Hunter wrote:
+>>> On 27/01/23 02:19, Namhyung Kim wrote:
+>>>> Hello,
+>>>>
+>>>> I found some problems in Intel-PT and auxtrace in general with pipe.
+>>>> In the past it used to work with pipe, but recent code fails.
+>>>
+>>> Pipe mode is a problem for Intel PT and possibly other auxtrace users.
+>>
+>> Just some info from my side: For Arm Coresight we ended up deprecating
+>> pipe mode, then not supporting it altogether. First was when we added an
+>> optional step to peek through all of the data to help with an edge case.
+>> Then we added a requirement to receive a HW_ID packet before decoding
+>> which necessitated the peek. You can't peek in pipe mode because you
+>> need to be able to seek, so it's not supported at all anymore.
+>>
+>> For Arm SPE I never tested it with piped data. I suppose I could add a
+>> test at some point, but I don't really see the usecase.
+> 
+> Yeah, it'd be great if we can have a test for Arm SPE.
+> 
 
+Ok thanks I will put it on the list of things to do.
+
+> Anyway, my work env (Google) requires the pipe mode due to the
+> restriction in disk usage.  Without the pipe support, it's not possible
+> to run `perf record` in production.
+> 
+
+Makes sense. Unfortunately at the moment with Coresight, because of the
+lack of appropriate timestamps we're waiting for the end of the file
+before starting decoding. So you're not really any better off using
+piped mode, unless you have a lot more memory than disk space?
+
+Since this commit [1] and Arm v8.4 we can actually start making use of
+the timestamps and do a streaming decode again. So I will also add it to
+the list to look into that for Coresight again. Are you using an old
+version of Perf or not using Coresight at all? I know Denis at Google is
+using Coresight, but only with files rather than pipes.
+
+One other thing, have you used the --switch-output mode to perf record
+before? I would have said it would give you some of the benefits of
+piped mode, but is more likely to work with Coresight. But last time I
+checked it's not working either. Not very helpful I know, but something
+to keep in mind.
+
+James
+
+[1]:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=perf/core&id=a7fe9a443b6064c68f86a2ee09bdfa7736660ef3
