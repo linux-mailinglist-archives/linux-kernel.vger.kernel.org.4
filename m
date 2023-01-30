@@ -2,104 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019DF68034A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 01:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F3468034F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 01:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjA3A1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 19:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
+        id S231278AbjA3AjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 19:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA3A1n (ORCPT
+        with ESMTP id S229476AbjA3AjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 19:27:43 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A521DBBF
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 16:27:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675038461; x=1706574461;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=KzFBc20kahb9wi4J9Tti65MZDEEv3GXOS2/dFTGZ8tc=;
-  b=bOxG3y/UbF+E1tWSkdXhlzw1aXzmdU2ywTUMmHhkeurD82XzUax4T2vn
-   b9uy0RxEP2to4/FTT3FOIZvYYI+jG5DfTR8q6EcsynC6nA97bISH2/A/L
-   xUzWJisyeL6ZpIC/NFsX+IuZYYZEA/s/L2hEDKDx7mrRgEXmAKlCPSU24
-   CZH6F6lK0JqV57ZZF4wQS2W9u79Vr8nrwFBqN4/QpWNO2svwjIAeWjA1X
-   nI9xxw3CYBwPe8lf/hrQuIMKVKIli/NLZuZIyJjVGo5w8/YBO2kCrNSLe
-   eW1xDybYktSJC/FDXq5uYBZ8Ad98bfxBgJtY7ct9aeYYw/Pm1I8k1NI+P
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="392005390"
-X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="392005390"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 16:27:40 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="663915024"
-X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="663915024"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 16:27:38 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Longlong Xia <xialonglong1@huawei.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <chenwandun@huawei.com>,
-        <wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>
-Subject: Re: [PATCH] mm/swapfile: add cond_resched() in get_swap_pages()
-References: <20230128094757.1060525-1-xialonglong1@huawei.com>
-        <20230129130320.7e2e4445ecc4b172c61c7b9c@linux-foundation.org>
-Date:   Mon, 30 Jan 2023 08:26:41 +0800
-In-Reply-To: <20230129130320.7e2e4445ecc4b172c61c7b9c@linux-foundation.org>
-        (Andrew Morton's message of "Sun, 29 Jan 2023 13:03:20 -0800")
-Message-ID: <87wn54c1fi.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 29 Jan 2023 19:39:17 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DD51CF41;
+        Sun, 29 Jan 2023 16:39:16 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1442977d77dso13255205fac.6;
+        Sun, 29 Jan 2023 16:39:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eQdDfBq+vMF/O7FM4LZuZL7r34CL6O59Wnl755Km6vU=;
+        b=l8ipMy4pGRnmFzWMy34EV5s6qCA0dnFvcV1WLPYwuDAQ+YddGB2zNSOgkvAXkoB7oO
+         9d2foK6XKFbc6GuRwa/zyw0na72IN6jphiv+6326y4Xqz8O+zqcKc2GQfaZIEwoXbySs
+         /7jIwYIcxFSAZ1SfEYlJid5m8TgqZebvd5EL+rBP1EMmqmpm11wYF9vMyPnf83WJ6hgt
+         MT2lBXCjNyTjer5or8HnMWmHhu1m/8WaezQNUzciD4MPwZPEtZruOWIroEXso48NAN3/
+         xmr/eBGIT51nD4iKCctsTk6+gzOOtfACyWv0GVQ0rFcuFJ9cYptmEGT/UfOwWQMDVarV
+         cL1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eQdDfBq+vMF/O7FM4LZuZL7r34CL6O59Wnl755Km6vU=;
+        b=0raitiX0cxhaERlnzuQ/ZSQBskdM/vR6qhE869tIaT9f2UuRxoaONWmoF4iM7lYiW/
+         Mf4qwU/ktKGS+zmyk0U0oueBD5PnZvI3or3/f+OjP69aZq4Ra35GOy5z49JpStu6kKNM
+         HmRs4xSOrRsRimmrp9dPTEHR/87Lbnq1VzRjasyDpvcce7HLj1ahRze3gDQqJmLXJHWU
+         QGUSrljfPvrFPb0xre09wuBBaV24uxxrwZwnndgXU/ieflSxagJtXE7GeFoQhRa2y8gc
+         a9gP6NWWmXbawg/KY7nmBbnSCGOKqX2iKsxv3aA47+noP4O5EZCjlzK6q2LXMrjIUFno
+         tSzg==
+X-Gm-Message-State: AO0yUKWPTq2tw8SJw5K4i9ejX4uj0VOr8RGVVuAXfIkuGcFzETjwXF4B
+        Svxg/BAmwo7v+tSJ3fud62w=
+X-Google-Smtp-Source: AK7set8m5admbPwz4sasitoVVR4miMIKzg4X7vK3ORG1mDwTWn0RYkMMpJR4KaFUvGXHSI58z1ReRw==
+X-Received: by 2002:a05:6870:7014:b0:15b:b523:3299 with SMTP id u20-20020a056870701400b0015bb5233299mr3432682oae.28.1675039155910;
+        Sun, 29 Jan 2023 16:39:15 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x8-20020a056870e38800b00144e18d8525sm4608589oad.25.2023.01.29.16.39.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 16:39:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 29 Jan 2023 16:39:13 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 3/9] Documentation: hwmon: correct spelling
+Message-ID: <20230130003913.GA384090@roeck-us.net>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+ <20230129231053.20863-4-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230129231053.20863-4-rdunlap@infradead.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> writes:
+On Sun, Jan 29, 2023 at 03:10:47PM -0800, Randy Dunlap wrote:
+> Correct spelling problems for Documentation/hwmon/ as reported
+> by codespell.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
 
-> On Sat, 28 Jan 2023 09:47:57 +0000 Longlong Xia <xialonglong1@huawei.com> wrote:
->
->> The softlockup still occurs in get_swap_pages() under memory pressure.
->> 64 CPU cores, 64GB memory, and 28 zram devices, the disksize of each
->> zram device is 50MB with same priority as si. Use the stress-ng tool
->> to increase memory pressure, causing the system to oom frequently.
->> 
->> The plist_for_each_entry_safe() loops in get_swap_pages() could reach
->> tens of thousands of times to find available space (extreme case:
->> cond_resched() is not called in scan_swap_map_slots()). Let's add
->> cond_resched() into get_swap_pages() when failed to find available
->> space to avoid softlockup.
->> 
->> ...
->>
->> --- a/mm/swapfile.c
->> +++ b/mm/swapfile.c
->> @@ -1100,6 +1100,7 @@ int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
->>  			goto check_out;
->>  		pr_debug("scan_swap_map of si %d failed to find offset\n",
->>  			si->type);
->> +		cond_resched();
->>  
->>  		spin_lock(&swap_avail_lock);
->>  nextsi:
->
-> This must be pretty rare?  My googling for "scan_swap_map of si %d
-> failed to find offset" turns up zero reports, but I guess few people
-> enable pr_debug.
->
-> I wonder if we should remove that pr_debug().  I mean, it's known that
-> this happens, what value does the printk add?
+Applied to hwmon-next.
 
-Sounds reasonable to me.  And if we want to debug, we can use bpf too.
-
-> I'm thinking this fix should be backported into -stable kernels.
-
-Best Regards,
-Huang, Ying
+Thanks,
+Guenter
