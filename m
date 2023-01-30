@@ -2,85 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7ED6818A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDFB6818B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238018AbjA3SUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:20:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
+        id S237739AbjA3SWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237418AbjA3ST5 (ORCPT
+        with ESMTP id S238021AbjA3SWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:19:57 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4BF7DAE
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:50 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 896635C00A9;
-        Mon, 30 Jan 2023 13:19:49 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 30 Jan 2023 13:19:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675102789; x=1675189189; bh=8FutbuCl/D
-        NR6Qsqy22oynbrQgR9pREAJal0Upg9trQ=; b=QVVyRlo9wMicMWSz+RpRPUi5j1
-        aOeVdg+ZgqkfmxSpvHIBB4EJSroOwPVaRMYGAyivkZbHJ8yruyBKBZNvUiginpw6
-        nu+0c6Ftuj2g5Et50cRwHNDOCo8ejiWv/PKMlPKQW2pmdHflq3Zbu+PAD45BjWpj
-        FfXW5ara1qmk1ME2VGYj0pXx7dZJigVu/izAZ0IPKe6DRnoiG2bY9iJHE5YsBJkj
-        9RtCx5ciQLzJ8RMy6OxBtBkKrm1LOu6K4EsCKKyvKe/nbyolOIFColtPJcmjwVEb
-        ZsxHjP50NisVKMbdhteeF8J1v/Swvx1WzRUgFOpwGYmbwrH8qAuXh5+0pDZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675102789; x=1675189189; bh=8FutbuCl/DNR6Qsqy22oynbrQgR9
-        pREAJal0Upg9trQ=; b=EX9Y8/kVjckmt9+F81BT0c82vP2qkKpVWNwxOYUdRc+h
-        iwhGbWsiWwftaqsbKW+YvIELYEk3BgNhphf7t8stt2EpFG96LsMcY+bsK0cL2YBb
-        E5ydnC9xNEj0q7bi7drA6P9QuW5DIs057sJR2TCXZRmSwtg67hcuC8dqZj6j3lWE
-        LNh8HDu0i4q7vm+Ft29mZgVmlFv915ohRNi7Vtt2NlBLDqTr0XGtYEUch+06H5rb
-        ZWYAyOczliCWgA1JY9YNK2PY6RY6YJTL4gmRKUITjKM3P6GJn9WEuTN9clGhkPX1
-        JvGh0COOiI9wlopWlyFCL1D9RsXsmZhLPVaACXWKew==
-X-ME-Sender: <xms:RQrYYyAl0tyXfvr0RqyDj_HXhhDkw0qJB4CzrYpPmT-alAjd5U1vxg>
-    <xme:RQrYY8iqShS-BJVesOlWH6tqeKJ34jOYYlrwJqjRlrJAyIWnv-UIu5YdtTLhyX4V0
-    kJUNfohb3xs0zDIdtI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeejvddvvdduleduheejiedtheehiedvjefgleelffeigfevhffhueduhfeg
-    feefheenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RQrYY1m_-pDAvLiREiFxn_w0vRAbam-L7479rXhFXoPTgsymfpK8yA>
-    <xmx:RQrYYwzbnNtyVg1XwWrq23IrB4QHcE2FAqcEpA0usRTVwQrRk4do_g>
-    <xmx:RQrYY3TQ6QHpSvsKQ0StC7Um4ah5Exlg-wgNaCKzDSzOdksA8J6jlg>
-    <xmx:RQrYYwR3VBGEYOfemcsuO7BKA4tC_WjKuqg-KQCwquf7n7aXEB93og>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 426DCB60086; Mon, 30 Jan 2023 13:19:49 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-106-gfe3ab13a96-fm-20230124.001-gfe3ab13a
-Mime-Version: 1.0
-Message-Id: <a40df1e3-ed92-4662-bb9e-106becce63d7@app.fastmail.com>
-In-Reply-To: <202301310149.euWWUSrD-lkp@intel.com>
-References: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
- <202301310149.euWWUSrD-lkp@intel.com>
-Date:   Mon, 30 Jan 2023 19:19:28 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "kernel test robot" <lkp@intel.com>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        "Russell King" <linux@armlinux.org.uk>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        "Tom Rix" <trix@redhat.com>, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Mon, 30 Jan 2023 13:22:01 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F064945885
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:21:18 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id h19so11683927vsv.13
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:21:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=T5TU1Iff8wOSYIuihsNLjPZPQxnxZG9F/TEcr2cj9sU=;
+        b=ti93R0Fc+NvDLWspUHxQEogucx+0FOTiB/H+4cAOJk5vRHgTA7R5pB9E87KnZH5zmt
+         2Zx24EluskG4k/8wp8c8SVN9Q1AyigP7DPeCw2v2FkUg10GrzBX1QhNGIKEy/wD9hzVI
+         8RzOiiRJln9o6Ad4J3BirxJ8qn6YQTuGU9zDmnx+ehyzoZvp/hkavk8GWZCrf/7CVhAY
+         c5EGWAY+gVUDThSD99rRS/BmtLeZW3RSneYxS3JagdrdtQsV7YTwAtgJuAfFpv8IvIoU
+         aSrNSQRShvPrmE83AVu7AJfOUmyQd4dYaxWglelJwX6G/Tm+UW8R/wVB1PTmtrr/KGq4
+         fYsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T5TU1Iff8wOSYIuihsNLjPZPQxnxZG9F/TEcr2cj9sU=;
+        b=C3BReQXMsMuf3S0lHoMvwG3rz10Neng2M/AGP/ZrkIIVYwq5c1qZ4tAiakaLmkprSA
+         J5+ornrlNXpxXynYSTjlAwuksc7T/83vMD2Sr+MjmV6wzIIUIgI9GX6H9kR3BMwSM9XJ
+         9kdrt7c+ZN3OcZFBkdFfcjNv5PgU5L3yDyWYhUbks2e1EqMkCr7zfIjws3ZVvERzoTfO
+         CcL7l/ZYkr+2ZtihMdmpAAHIVDNz+fMo8fR7ohpbDBw+kzqkV+AFLU0pT091gj6rvcCv
+         Po/OzS4Oe3/bEJwrQZOIUrKEPCo/ZuF9XUg5lDFYw5wkCc5+hxqOArxGIbmi0h9GQvn8
+         NkbQ==
+X-Gm-Message-State: AO0yUKX3xoVeExylNu/L2Q+F0bI+n/OXSMYviY+JnV+mcM4eym8E6i5I
+        a0bHgK8f08icpRdzgJNv3LSSUZh8XuwgIzGSrPqM4Q==
+X-Google-Smtp-Source: AK7set/kXv07zOZU7pYxD8+0imoIgDvYa7wyC6q6DaDs/59rlPuju1HxyaH4+qurTW60HvGhSi/gpCmFSKrTyxp42VM=
+X-Received: by 2002:a67:c31e:0:b0:3ed:1e92:a87f with SMTP id
+ r30-20020a67c31e000000b003ed1e92a87fmr1878200vsj.1.1675102876842; Mon, 30 Jan
+ 2023 10:21:16 -0800 (PST)
+MIME-Version: 1.0
+References: <20230130130739.563628-1-arnd@kernel.org> <Y9fITnjnIuDz8NYw@dhcp22.suse.cz>
+ <Y9f0tkiXUoQexGsS@casper.infradead.org>
+In-Reply-To: <Y9f0tkiXUoQexGsS@casper.infradead.org>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 30 Jan 2023 19:20:40 +0100
+Message-ID: <CAG_fn=XaOnr5n2UoT5xzYXYPvgGXwJD_1+u-BFDo=Mv17V=-NA@mail.gmail.com>
+Subject: Re: [PATCH] mm: extend max struct page size for kmsan
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Michal Hocko <mhocko@suse.com>, Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Hildenbrand <david@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Hugh Dickins <hughd@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pasha.tatashin@soleen.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,34 +79,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023, at 19:10, kernel test robot wrote:
-> Hi Nathan,
+> > I haven't really followed KMSAN development but I would have expected
+> > that it would, like other debugging tools, add its metadata to page_ext
+> > rather than page directly.
 >
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on 5dc4c995db9eb45f6373a956eb1f69460e69e6d4]
->
-> url:    
-> https://github.com/intel-lab-lkp/linux/commits/Nathan-Chancellor/ARM-Allow-pre-ARMv5-builds-with-ld-lld-16-0-0-and-newer/20230119-032402
-> base:   5dc4c995db9eb45f6373a956eb1f69460e69e6d4
->>> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
->    int __init sa11x0_pm_init(void)
->               ^
->    arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the 
-> function is not intended to be used outside of this translation unit
->    int __init sa11x0_pm_init(void)
->    ^
->    static 
->    1 warning generated.
-> --
+> Yes, that would have been preferable.  Also, I don't understand why we
+> need an entire page to store whether each "bit" of a page is initialised.
+> There are no CPUs which have bit-granularity stores; either you initialise
+> an entire byte or not.  So that metadata can shrink from 4096 bytes
+> to 512.
 
+It's not about bit-granularity stores, it's about bits being
+uninitialized or not.
 
-For refernece, these are all known problems, the patch just allowed
-the code to be built by clang/lld when that was previously not
-possible.
+Consider the following struct:
 
-After the 6.3 merge window, we can probably go through the much
-smaller set of board files are address most of the W=1 warnings that
-were previously overwhelming.
+  struct foo {
+    char a:4;
+    char b:4;
+  } f;
 
-      Arnd
+- if the user initializes f.a and then tries to use f.b, this is still
+undefined behavior that KMSAN is able to catch thanks to bit-to-bit
+shadow, but would not have been able to detect if we only stored one
+bit per byte.
+Another example is bit flags or bit masks, where you can set a single
+bit in an int32, but that wouldn't necessarily mean the rest of that
+variable is initialized.
+
+It's worth mentioning that even if we choose to shrink the shadows
+from 4096 to 512 bytes, there'd still be four-byte origin IDs, which
+are allocated for every four bytes of program memory.
+So a whole page of origins will still be required in addition to those
+512 bytes of shadow.
+
+(Origins are handy when debugging KMSAN reports, because a single
+uninit value can be copied or modified multiple times before it is
+used in a branch or passed to the userspace.
+Shrinking origins further would render them useless for e.g. 32-bit
+local variables, which is a quite common use case).
