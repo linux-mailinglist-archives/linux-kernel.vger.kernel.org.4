@@ -2,174 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BE56813A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F62D6813BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237827AbjA3OoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S236233AbjA3Oru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237815AbjA3OoM (ORCPT
+        with ESMTP id S233505AbjA3Ors (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:44:12 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5677C178
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:44:11 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id d3so11802782plr.10
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:44:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ZGho2u6YM0rz1TL72zvwzMowIZDbxTUZ0o5oNDAiBQ=;
-        b=CbpF8QLkYosO9tTKBxxdC4YVhhreVPrD773gi9bsJkMmQKsuoTVMcGSDIZd/UCCESp
-         aYOHgXamc1oaigVA6UhDkqfyJQao/5RjE/yvZdlCr5aotYRN3VkioY2y8LhWS5k1TIE2
-         4DJC7YbhPwf4zOaneh8vL/ueRp3eKUvCtpKV6yyjSSm5/VwRXxM6XAg4LToPuDTBuIgp
-         AZXTAG+f+mKStc3rGM2DPpWPeV6rMKDsL7p/I34jVVyihHtsa1UEFIa2j8vz+Irhxcw1
-         JwVqI4xJLqK/AMPHELEHk9m2KGDglg75PY8DJTdfgNR1kEHgAA2SCHm0o4SkeaWkS1r2
-         R2Vw==
+        Mon, 30 Jan 2023 09:47:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5146583
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:47:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675090021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbdGAd5Gc+CeSR09L2sHX0L7qLtN8UTW5GUeq3iWb2o=;
+        b=F28sKGqsuNIb+C9F7TDk6XGELZg3KmFVIVEyZR3fsiQ5Z8wOzUbZDAayOpxmzQEse97gJF
+        rCk0Od4u9Vm34tZyxTNrivxc2omGEkbpXF5O8HcEefjXrdT4BgA08cHiiNFcX2pDz7AM4f
+        witNisun6tN/EdH9FyDYwYxQUarJ3WY=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-608-bBKUAFOFNYKZlj8G1IGydg-1; Mon, 30 Jan 2023 09:46:59 -0500
+X-MC-Unique: bBKUAFOFNYKZlj8G1IGydg-1
+Received: by mail-qv1-f69.google.com with SMTP id q17-20020a056214019100b004b1d3c9f3acso6564395qvr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:46:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4ZGho2u6YM0rz1TL72zvwzMowIZDbxTUZ0o5oNDAiBQ=;
-        b=7MaIoRsqI8o7rr5ek5F6EUJELu9v9JsXc2FMW5rZjtqBnTN7YMyVTIReaY2UBXBpik
-         tDfvmbpq3aRjABPGVTsXVG5F+d8M+NUUjw1ST0FYA91ydS84vNU5RPo926U6JFtwh5yh
-         8VYjAq12FrkLt5M97fgA+up7shmb71cx8XZVhoTBawXxnE3qawTOaSvNFms+lUAzDEg1
-         h9a5rEr3VPmWjR9KeMOdKwaDxeOS8pa4ovZUCeJxwzv1T/dw6lDkCzuqRQOHG2i/+HF4
-         bJHRY8GiEIiSUbk0uNLO3xEf6nfKuQwfk7PSvPhNqzqsgQ2gdjY3aheIF5zLKM+bwUS3
-         uclQ==
-X-Gm-Message-State: AO0yUKUqH+vekTfhJqstY6MyNn65rKCXUyMl9XnlmkSG0fMiQKEn25ym
-        x6/DWqIRjm9NGH+bdNTRzekuMH+ywa0Ae6ihP7gb2A==
-X-Google-Smtp-Source: AK7set/TKqP3sGcVaHkkt/2gWgmMAorASV9wxECMMiQria4/4ZsW+pLv8ksRzz+6LCRqrSV37zBnYypn6JD6+hwtIF0=
-X-Received: by 2002:a17:902:c945:b0:196:63c8:6a92 with SMTP id
- i5-20020a170902c94500b0019663c86a92mr1176284pla.10.1675089851305; Mon, 30 Jan
- 2023 06:44:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20230129161444.1674958-1-qyousef@layalina.io> <20230129161444.1674958-2-qyousef@layalina.io>
-In-Reply-To: <20230129161444.1674958-2-qyousef@layalina.io>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 30 Jan 2023 15:44:00 +0100
-Message-ID: <CAKfTPtCstN-oJ=UsDJrwacj8fm_cq-5N3LAWc_zz32E2FCJgBg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] sched/uclamp: Set max_spare_cap_cpu even if
- max_spare_cap is 0
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mbdGAd5Gc+CeSR09L2sHX0L7qLtN8UTW5GUeq3iWb2o=;
+        b=ZnfHyRlUYksfNdkxjThjTKTJI8YbLtGkmaCZ0LlMIlFe4bGHMotrEfYWCtpQLAlnF8
+         30lhs9KnKu844q0ghzFIjcx7vxP3ZjHM2TTBqW0cDGtN/vdq/QEaJrUChHZj+j2Ym5jo
+         9zj7jBLgUhXJKZ92jAy9twGPs48LwEfniQDt7zLo7o6nF1xBuGZGX3bebVAof25qiL00
+         2V+DuTLoC6C8nnxL2sAYfADqBYHTMTs1x4jzZmMj2FOFt7yYOxwuZ1ujpYa4Ot538vFN
+         k0nLwyjCJtzXE4dReQCzoZFpcdg/GRzw/qPMQLXb+UuRdiSI9KXqAl46MFLGmAIiJK9U
+         7Chw==
+X-Gm-Message-State: AO0yUKVDrK+kK+3+vcauKSHWb2TfCNDnoQJvzx+eIu46zEYBaZSJiSBB
+        nSaQxFRgfNxoc3DWS/3mo1O+yK0ezMRkf4pGkZwwhH6TbqOss5r+dMYS7xJsrI8cGI+XKVsvGqb
+        ddbyZGyl9NsXWp0XIcj+XBRGQ
+X-Received: by 2002:ac8:580c:0:b0:3b8:683c:40f with SMTP id g12-20020ac8580c000000b003b8683c040fmr8271995qtg.30.1675090019354;
+        Mon, 30 Jan 2023 06:46:59 -0800 (PST)
+X-Google-Smtp-Source: AK7set/JA1nw/SruzHK0Oqe75jBaibxmHMmBwxTRKffVdT24iWr4NBK+0Bz5m/p5UKLMUcYU+hO3lQ==
+X-Received: by 2002:ac8:580c:0:b0:3b8:683c:40f with SMTP id g12-20020ac8580c000000b003b8683c040fmr8271956qtg.30.1675090019110;
+        Mon, 30 Jan 2023 06:46:59 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id b25-20020ac844d9000000b003b82cb8748dsm5701627qto.96.2023.01.30.06.46.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 06:46:58 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Wander Lairson Costa <wander@redhat.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Paul McKenney <paulmck@kernel.org>
+Subject: Re: [PATCH v2 1/4] sched/task: Add the put_task_struct_atomic_safe
+ function
+In-Reply-To: <CAAq0SUnUH6DEjwEs2RxRCtkTU121JXpdsV_rZky1d0Bo04=fiQ@mail.gmail.com>
+References: <20230120150246.20797-1-wander@redhat.com>
+ <20230120150246.20797-2-wander@redhat.com>
+ <20230123163002.GB6268@redhat.com>
+ <CAAq0SUk1vfNDuzGbXNftgW4wq4PC_EzMhpq4E=RBQNkOB3f4YQ@mail.gmail.com>
+ <xhsmhbkmkdla4.mognet@vschneid.remote.csb>
+ <CAAq0SUnUH6DEjwEs2RxRCtkTU121JXpdsV_rZky1d0Bo04=fiQ@mail.gmail.com>
+Date:   Mon, 30 Jan 2023 14:46:54 +0000
+Message-ID: <xhsmh357sdqqp.mognet@vschneid.remote.csb>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 Jan 2023 at 17:14, Qais Yousef <qyousef@layalina.io> wrote:
+On 30/01/23 08:49, Wander Lairson Costa wrote:
+> On Fri, Jan 27, 2023 at 12:55 PM Valentin Schneider <vschneid@redhat.com> wrote:
+>>
+>> On 23/01/23 14:24, Wander Lairson Costa wrote:
+>> > Therefore (if I am correct in my assumption), it would make sense for
+>> > only some call sites to pay the overhead price for it. But this is
+>> > just a guess, and I have no evidence to support my claim.
+>>
+>> My worry here is that it's easy to miss problematic callgraphs, and it's
+>> potentially easy for new ones to creep in. Having a solution within
+>> put_task_struct() itself would prevent that.
+>>
 >
-> When uclamp_max is being used, the util of the task could be higher than
-> the spare capacity of the CPU, but due to uclamp_max value we force fit
-> it there.
+> We could add a WARN_ON statement in put_task_struct() to detect such cases.
 >
-> The way the condition for checking for max_spare_cap in
-> find_energy_efficient_cpu() was constructed; it ignored any CPU that has
-> its spare_cap less than or _equal_ to max_spare_cap. Since we initialize
-> max_spare_cap to 0; this lead to never setting max_spare_cap_cpu and
-> hence ending up never performing compute_energy() for this cluster and
-> missing an opportunity for a better energy efficient placement to honour
-> uclamp_max setting.
->
->         max_spare_cap = 0;
->         cpu_cap = capacity_of(cpu) - task_util(p);  // 0 if task_util(p) is high
->
->         ...
->
->         util_fits_cpu(...);             // will return true if uclamp_max forces it to fit
->
->         ...
->
->         // this logic will fail to update max_spare_cap_cpu if cpu_cap is 0
->         if (cpu_cap > max_spare_cap) {
->                 max_spare_cap = cpu_cap;
->                 max_spare_cap_cpu = cpu;
->         }
->
-> prev_spare_cap suffers from a similar problem.
->
-> Fix the logic by treating -1UL value as 'not populated' instead of
-> 0 which is a viable and correct spare capacity value.
->
-> Fixes: 1d42509e475c ("sched/fair: Make EAS wakeup placement consider uclamp restrictions")
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> ---
->  kernel/sched/fair.c | 14 ++++++++------
->  1 file changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index e29e9ea4cde8..ca2c389d3180 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -7390,9 +7390,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->         for (; pd; pd = pd->next) {
->                 unsigned long util_min = p_util_min, util_max = p_util_max;
->                 unsigned long cpu_cap, cpu_thermal_cap, util;
-> -               unsigned long cur_delta, max_spare_cap = 0;
-> +               unsigned long cur_delta, max_spare_cap = -1UL;
->                 unsigned long rq_util_min, rq_util_max;
-> -               unsigned long prev_spare_cap = 0;
-> +               unsigned long prev_spare_cap = -1UL;
->                 int max_spare_cap_cpu = -1;
->                 unsigned long base_energy;
->                 int fits, max_fits = -1;
-> @@ -7457,7 +7457,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->                                 prev_spare_cap = cpu_cap;
->                                 prev_fits = fits;
->                         } else if ((fits > max_fits) ||
-> -                                  ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
-> +                                  ((fits == max_fits) &&
-> +                                  (cpu_cap > max_spare_cap || max_spare_cap == -1UL) {
 
-Can't we use a signed comparison to include the case of max_spare_cap
-== -1 in cpu_cap > max_spare_cap ?
+Anyone running their kernel with DEBUG_ATOMIC_SLEEP should be able to
+detect misuse, but it doesn't change that some callgraphs will only
+materialize under certain hardware/configuration combos.
 
->                                 /*
->                                  * Find the CPU with the maximum spare capacity
->                                  * among the remaining CPUs in the performance
-> @@ -7469,7 +7470,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->                         }
->                 }
+>> Another thing, if you look at release_task_stack(), it either caches the
+>> outgoing stack for later use, or frees it via RCU (regardless of
+>> PREEMPT_RT). Perhaps we could follow that and just always punt the freeing
+>> of the task struct to RCU?
+>>
 >
-> -               if (max_spare_cap_cpu < 0 && prev_spare_cap == 0)
-> +               if (max_spare_cap_cpu < 0 && prev_spare_cap == -1UL)
->                         continue;
->
->                 eenv_pd_busy_time(&eenv, cpus, p);
-> @@ -7477,7 +7478,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->                 base_energy = compute_energy(&eenv, pd, cpus, p, -1);
->
->                 /* Evaluate the energy impact of using prev_cpu. */
-> -               if (prev_spare_cap > 0) {
-> +               if (prev_spare_cap != -1UL) {
->                         prev_delta = compute_energy(&eenv, pd, cpus, p,
->                                                     prev_cpu);
->                         /* CPU utilization has changed */
-> @@ -7489,7 +7490,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->                 }
->
->                 /* Evaluate the energy impact of using max_spare_cap_cpu. */
-> -               if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
-> +               if (max_spare_cap_cpu >= 0 &&
-> +                   (max_spare_cap > prev_spare_cap || prev_spare_cap == -1UL)) {
->                         /* Current best energy cpu fits better */
->                         if (max_fits < best_fits)
->                                 continue;
-> --
-> 2.25.1
->
+> That's a point. Do you mean doing that even for !PREEMPT_RT?
+
+Could be worth a try? I think because of the cache thing the task stack is
+a bit less aggressive wrt RCU callback processing, but at a quick glance I
+don't see any fundamental reason why the task_struct itself can't be given
+the same treatment.
+
