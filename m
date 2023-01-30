@@ -2,65 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D74E68080F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC35680814
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235944AbjA3JBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S236006AbjA3JBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:01:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbjA3JB3 (ORCPT
+        with ESMTP id S235950AbjA3JBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:01:29 -0500
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735191E1FB;
-        Mon, 30 Jan 2023 01:01:28 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pMQ2P-005WQh-HO; Mon, 30 Jan 2023 17:01:18 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 30 Jan 2023 17:01:17 +0800
-Date:   Mon, 30 Jan 2023 17:01:17 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH] crypto: arm64/sm4 - Fix possible crash in GCM cryption
-Message-ID: <Y9eHXVyiSk0b+ovp@gondor.apana.org.au>
-References: <20230118141928.48136-1-tianjia.zhang@linux.alibaba.com>
- <Y8gIC8Yn/E8Kwtf0@gondor.apana.org.au>
- <c7dbadbf-dade-fb1e-bda3-d23d567c620f@linux.alibaba.com>
- <Y9d8pfRQADxIhLIB@gondor.apana.org.au>
+        Mon, 30 Jan 2023 04:01:53 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F4A2799F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:01:52 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id o20so17968975lfk.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:01:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UZj9/cvDapyg3C3XeyJ8O7FcL+Q9vTGYpiiZhybQ3/Y=;
+        b=YpZPybRH2g6b5MNlae882cJyQH3+GhaRS1KtkQ1ic4U9DQ1wAksC7l424HEbF+ADxN
+         fmcDLTrktBtYMQMPkMUDNQIZxVM+BtAxgcnyQJWwaWpP0v1je0i2oRgTSbR2VLze9BqV
+         1BnxymwS2i52LfRIyveXklR4p0oebRBpofJZomFe9/cTpunIeKSf8raZU6JTf07/dnv1
+         GIZ2nHXbEouap68BiQOwnezKzLYrtAAmNMjYXfQejCOEfAY1k18W3dL3Q8XvBXm1rPms
+         898HEjlsuc2LbxFm0rngcEx5mQIZU7LN/4ANBG5/WrHIlhPovrw4VKPZT7M4zGDb1FxL
+         uzPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UZj9/cvDapyg3C3XeyJ8O7FcL+Q9vTGYpiiZhybQ3/Y=;
+        b=bnpmJt9XF5WqnR3sSq38bpp69H9AWwnzWHeqHMe25XJ1qqs6SAfHbdqWmH7wwdUJLO
+         krlKyIUdOO4e4kSYayEe4R9FXY/UI3vnERJa1zlTOCBnlSIpruIJh+jyqJNdWptQjM1/
+         nPAT8GFSY7L+SNaBBQNq46aJWQ8KBoDMo3BvYpwCA1FtCcFelCaQqQWBJHIeSDvUBkLz
+         GE9O8sp/ZNF3FaLVRUnUW0tRyhsZX7GaTb3iIBsAWc71VYWRl04tjca68aVvZ3qi8/vD
+         pKdGxBcI+TGRicnI51X0Ho29jpsolUHNTt0RDGalQA2sZjylPErR8rJiLRfettqnm174
+         bqaQ==
+X-Gm-Message-State: AFqh2kpWKvS8Vf0UC5Z/tqp4kFU2Y9ZQi2PoEqL3X8bI+enALrfJPoRI
+        5LSxWDVaETIcxS4a98B7Nk7o/ZRKKBqBUEau5hlbvg==
+X-Google-Smtp-Source: AMrXdXuWZiiyZkf/64VNhp78eRnhB3/NmfVKBBNmIECUtn74jpbV7QLgFX3t7cQcj0HXz/vx4Vtw1n340djOaOQFYX0=
+X-Received: by 2002:a05:6512:2115:b0:4cb:1d3e:685b with SMTP id
+ q21-20020a056512211500b004cb1d3e685bmr4243828lfr.126.1675069310153; Mon, 30
+ Jan 2023 01:01:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9d8pfRQADxIhLIB@gondor.apana.org.au>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000021e6b05b0ea60bd@google.com> <000000000000d47cbe05f375a0f1@google.com>
+In-Reply-To: <000000000000d47cbe05f375a0f1@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 30 Jan 2023 10:01:37 +0100
+Message-ID: <CACT4Y+b6Uu4vcuQX+dcmiyzGRX8jnDq3v3SU94Lm2-miB1hBxg@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in hif_usb_send/usb_submit_urb
+To:     syzbot <syzbot+f5378bcf0f0cab45c1c6@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        ca@plazainn.com.qa, davem@davemloft.net, edumazet@google.com,
+        eli.billauer@gmail.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        khoroshilov@ispras.ru, kuba@kernel.org, kvalo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        oneukum@suse.com, pabeni@redhat.com, pchelkin@ispras.ru,
+        quic_kvalo@quicinc.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.de, toke@toke.dk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 04:15:33PM +0800, Herbert Xu wrote:
+On Mon, 30 Jan 2023 at 07:50, syzbot
+<syzbot+f5378bcf0f0cab45c1c6@syzkaller.appspotmail.com> wrote:
 >
-> Actually I think there is a serious bug here.  If you're doing an
-> empty message, you must not call skcipher_walk_done as that may
-> then free random uninitialised stack memory.
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 16ef02bad239f11f322df8425d302be62f0443ce
+> Author: Fedor Pchelkin <pchelkin@ispras.ru>
+> Date:   Sat Oct 8 21:15:32 2022 +0000
+>
+>     wifi: ath9k: verify the expected usb_endpoints are present
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1162ac2d480000
+> start commit:   274a2eebf80c Merge tag 'for_linus' of git://git.kernel.org..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f267ed4fb258122a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f5378bcf0f0cab45c1c6
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1343a8eb080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17dc40eb080000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: wifi: ath9k: verify the expected usb_endpoints are present
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Hah, I had forgotten that this thread started with your patch
-to fix this exact bug :)
+Looks reasonable, let's close the bug:
 
-Could you confirm that you did copy this from ccm?
-
-It would be nice if you could rewrite your loop in a form similar
-to my patch to ccm.
-
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+#syz fix: wifi: ath9k: verify the expected usb_endpoints are present
