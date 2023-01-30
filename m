@@ -2,255 +2,553 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA2B6809A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6043C6809F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236448AbjA3JgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:36:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S235835AbjA3JwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:52:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236953AbjA3Jfi (ORCPT
+        with ESMTP id S235393AbjA3JwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:35:38 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E73125B2;
-        Mon, 30 Jan 2023 01:34:54 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U8sZRW026749;
-        Mon, 30 Jan 2023 09:34:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- from : subject : cc : to : content-type : content-transfer-encoding :
- mime-version; s=corp-2022-7-12;
- bh=/GcjR9poDff4SbzLKXa2SuCbPlqGI27TSL1uWa6ZqDU=;
- b=S6DyzgFwp5ydL9Bv83mSn+pSQXWGJFWudupDa2kijIA8ZkHdVanoIRCyBn0JM+a7pR48
- NH5r1/XOm0GPJjAIyLA7S4o2PQnx7l7LYHjRbOQaTOiQatr1H91AlYmPNNDlDIFC6fQx
- f7wZnlzOucfUtVbk6fIEvUsiKh5BFu6jZFbbTmzYn1k2hqJzZK7va8kSc5lGmFRnIWau
- kBMs/+HYipPSz7PN8lS5WaR6sjj7bJx56w2RpsMTWedIWvBKRK0sDeTwo/t6Oz7LI619
- R8nOa4r4gJQfEZD39XDolqF0A6Hs/hqRLhkTMWyAfr2A8Hr37DVnqbPoJS/GyTndRuW/ 9w== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ncvrjtdha-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Jan 2023 09:34:31 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30U9UejM019132;
-        Mon, 30 Jan 2023 09:34:30 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2046.outbound.protection.outlook.com [104.47.57.46])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3nct543xgk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Jan 2023 09:34:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NGXfn8cVSO2kTZ1MoYtVB5gT5HvhzHF4TAHuztRk3tmXffGViTbJTgMEirJvJkCgmP+Bz/OEAy47NBAeI7W5XlTa9ylUf9k/FR9Vf5G2IGAosyRoGHE5aEPglWLcx1RioBX9yE/PEC8ZDiS7Qlwf2VfQ6H4YFjV0W/U1NPZtx9/cvv0PrIiflZvMkwTEWaACwpS3TWhgo79jSymJbg+BHOIqLJ2MiJo209EarfrGAurnmwkf8BpEzO4GsZPmeYHpNtHcowXM97jz4cQ7s0ge4onvVaRl5XP+XdHoZy+1eouTQqR+Mgpwq9+IdSpIDBJTTtXYTqUH10uagWqe4H3ZeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/GcjR9poDff4SbzLKXa2SuCbPlqGI27TSL1uWa6ZqDU=;
- b=BDQCnpK9J5Q7R5Ho1TB52FKJzUA77y6DpUldtWvZWO4bsuTF9SDE3a3PXwBHnzMg49GGTZsGGVlaGn13jUmNFdRqzNqI5NmoFThrw4SMzGX77Rap/XSWWaCcvA2LiBTYdenR2y0iCfPXR3TzkDuPx0fzz/CVKI6JncDmawoYYIaGWIkZKTAKjz8i9iOK2QJEfl2PJ7/70q6eFXHO+QSX4lqIBBiHRH8KYs/D8+LzNjbCfNnwv+IigWWfMFQ7Wnjv74WSxFPLsFgkVmJfwkJyUJ4x1sRwoLEdwUrDzEENlNV+6UJXqWPrI9vaMt1YNoxexu59+TIEtHt+X99F5vLoiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/GcjR9poDff4SbzLKXa2SuCbPlqGI27TSL1uWa6ZqDU=;
- b=RWjZdFRun9mh//PvUkotc82WhBvqpYqsSRPQJtWZDsjNEj491spe154m6QOVT9G6/LGt6PcDApEYJ6j2Npn1j+ZF/G95G9JzXrbu5VrzRb4aO5y/RhtHu2gGqHBSp39MWTn64T2L2bMrUgPlo4xOEhmx76jIWHP23tfC8ftjmgk=
-Received: from SN7PR10MB6287.namprd10.prod.outlook.com (2603:10b6:806:26d::14)
- by CH0PR10MB7498.namprd10.prod.outlook.com (2603:10b6:610:18e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.19; Mon, 30 Jan
- 2023 09:34:26 +0000
-Received: from SN7PR10MB6287.namprd10.prod.outlook.com
- ([fe80::6c1:eae9:196d:f601]) by SN7PR10MB6287.namprd10.prod.outlook.com
- ([fe80::6c1:eae9:196d:f601%9]) with mapi id 15.20.6064.020; Mon, 30 Jan 2023
- 09:34:25 +0000
-Message-ID: <31eb3b12-3350-90a4-a0d9-d1494db7cf74@oracle.com>
-Date:   Mon, 30 Jan 2023 15:04:09 +0530
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Content-Language: en-US
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [bug-report] rasdaemon doesnot report new records.
-Cc:     William ROCHE <william.roche@oracle.com>,
-        Darren Kenny <darren.kenny@oracle.com>, rostedt@goodmis.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "harshit.m.mogalapalli@gmail.com" <harshit.m.mogalapalli@gmail.com>
-To:     linux-edac@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TYCP286CA0080.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:2b3::10) To SN7PR10MB6287.namprd10.prod.outlook.com
- (2603:10b6:806:26d::14)
+        Mon, 30 Jan 2023 04:52:02 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F099E196AD;
+        Mon, 30 Jan 2023 01:51:58 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U7J079005362;
+        Mon, 30 Jan 2023 09:35:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=EgIetR2ttgQDRApYCdiX6h713CiWCva2/xEif2Sriog=;
+ b=IiasoAp9PzY7MtC9gudCNZWnb4/1TBg4PZ2kSDiZUQuDLlgKKQDC8HMQnxFTr3+WcQzM
+ AoTVUhlycMgvWnCKvO98+gdAcBCE+fkkvu6wauIhIgeBDVKbGZDtE99T5Ud49Rv2KSjE
+ mPb2bdtmPjVnvd2MhySvwnFQ3txF73/k2v8aynwdi8srpoBb1fcseYvo7RLN+X80ibbE
+ R8TwdyHn2cKEyvHLzJVByGvme4j5SRP4XrFP+N9LhqTvv8RZSEV5KeH2lMT6ltMF8LpQ
+ qy9A6dvcP3JhgyKZMOMcf3oNAx6m2xfmOz0tvMjVh/DLX5hhUyQadoucpY9o1mi8fpWJ iw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncs2x3qm2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 09:35:29 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30U9ZSo9010215
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 09:35:28 GMT
+Received: from [10.216.24.235] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
+ 2023 01:35:23 -0800
+Message-ID: <85c11895-6036-c34b-1134-9103c45fcce3@quicinc.com>
+Date:   Mon, 30 Jan 2023 15:05:20 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR10MB6287:EE_|CH0PR10MB7498:EE_
-X-MS-Office365-Filtering-Correlation-Id: 097de91a-1f79-4186-26a6-08db02a52d39
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mss+IzKsfkyXNVMl3TphqEb3ALl5RhtiCqFUIpacHyqb8DnG0dPkAZ26Owl64UIpteS4U/ALK7uObnWiCHkAZDr2XCN/4bm7sFjwCW0FBM22jofjbvKBVL1yTY5Q+j9zOlD/u0Lgbbi3O3OGKFoLdM7J1uSe3wbpWtM2GuytyTrH2hMV3irozBv3ZzhJo3uEQrq3hmkOinC9JsJk75ZwVC3MQw7psMOQQwjOw0qpow8pSwMXYM2s4rFOImbP6L/rOB7+rBPTpxtbbunwDcSMatTPsd4F0A6vJAY7PcOzUjVmxHOX/OLTOXnI1qwDja75fyy6rvmzb4AaAjqoADeYeqGna88UieEjI8fG0syBwtJqzP59XBVsgrbrri08iz0VxpLhLTOYrnDmUeM9YF1YlLo18T+86/N4Y+3uMp/NExZiaxyKmwgQKOnPjf9QWDrYBm6+g0c3987Bgoqygd0T1gjHDqhdKYcqC1Syc+azdz5IaEQdBFmJGEiM1sDHJPieyiBjQKvWuU+DTU3Ka+2OGNzKh+bWyakMDe6Pi8tdTL0kj2/dBVqJBa1niLZzQrQz8Of0YEclLqXg3gXLnnouiyarO0jL0x5PQIGz3uWUFO/ilGMeGQ5a82HZxSNLdxX6pKFta6bd/CDLIUigBHQmNW+t4ukjMYBHJcddRcavxfy/fIZ5CfEneaNSFKAAXnIbmQRZbu2WwdUCdDe0vQmw2l4gv1uFi+fqxysHpGbvC3ukaz70QXefz5rT+0IEKxEWkTB15Gi7njC4CU9zgO9B8g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR10MB6287.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(396003)(346002)(366004)(39860400002)(451199018)(8676002)(41300700001)(4326008)(66476007)(66556008)(6666004)(6506007)(8936002)(66946007)(316002)(31686004)(5660300002)(54906003)(83380400001)(2906002)(36756003)(26005)(966005)(478600001)(6486002)(6512007)(186003)(86362001)(31696002)(2616005)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S1grRWQ3azFOc2Yza1RHRlFPMWxmOEN4YXJ6cFBxS3RMdndtb3VMRjVGT0Fo?=
- =?utf-8?B?WDFCcVVPVVl2Y1M1OURaTFBEZ2cwa3pFUDhPUnludEFYejJTdGpXeE40Ny9u?=
- =?utf-8?B?ZkZWeWVlSEFyeHJuTUR2bTVGSXdYS2FnT1FjdXVtMC80SUp5M3g1Z2FHd20y?=
- =?utf-8?B?b3JyeWMxNDNzZ056ZFlGWkF5SFdualNHSVNoMnNRTTJYYU1xVDJUTHhKSFpO?=
- =?utf-8?B?dTBJK3RkOElCRk0rTzFLZHZrd1Z6L2hRMGM0OGhXZkxXeC9GUTBrWTNjeGQw?=
- =?utf-8?B?R1MvN0s2MSt4Nmd5czk0K1hDRnZ5Vmo1YlFXSUlDZnZSY1NLTzJqOWh6R0FZ?=
- =?utf-8?B?d2YzUVlQREt0dGdlZmhpV2FvTUxONFBaNlBicVRFRU1oNG10UlMxZmwzYjNS?=
- =?utf-8?B?M1p1TXNSeFVGZXQvNzQ3OVg2VWhndFBrQUxQNDJhd2REbjcwdVJCZ2I5Y3A0?=
- =?utf-8?B?RTJOeS9wdHlVekhHOHRxMVFhSGFiS3MrTWVGNWxucFdCSWFPWThPQnVyWWVu?=
- =?utf-8?B?VHd1NWxkM3dHeGZFZXlTYldVek5sYWxMeDVnK08wWGdkVVVsUEZCeFgxRmNn?=
- =?utf-8?B?a0NwRklPMURHdmpaR0o5bE9OT3RGblpHVWcrMENSWFpPL2R4V1pUQTZGcTR2?=
- =?utf-8?B?VnBsc080OEw5cmhEcHArMjlXS2lCNW9yMXF3c1JobTU4Z242L1VIODdrNS9o?=
- =?utf-8?B?ZVJFeEVCenpNY01vdEZrTlhZN3NqY21MT3VHS0pqSkZuUXRpbUlZSlJxNVdm?=
- =?utf-8?B?SmJXRUZCWC9ZUlhmdWxNczUzRHN0bGpSczhxNy9VN09hVEZWSXBsVk1QVyta?=
- =?utf-8?B?Nm9pZjU2VjdwbTgrZWpnT0JZWnUzOU1FWFQ0S1FYdytjK1lhT2FnVDdPTkVP?=
- =?utf-8?B?WDlhYkZvYlB0VlBsSWg5cldTcWdNaTdackVJSWVsQ1NsMWNSM1pLZXh1MDZS?=
- =?utf-8?B?S3l2bjdYQTM0K21LSlk3WUtGdDRsMVhTd0xaczFwcXIvNnRIMHhSRVQ1Y2RO?=
- =?utf-8?B?N1VsV3pPa2E3U0s3c2taelZVb1VseUlRdFlVMXdOY2VMK0JKdWhSMlpYdWxm?=
- =?utf-8?B?cE5WdWpmM2dUNmRwaHkxQXZ1N1FtQ09GSjNSMUVMOW5ZMmljL3NEam1tdXNT?=
- =?utf-8?B?dGsxTDdqS0RUcTRBM1ZDOFNPSmVYRWVtUm9ZUHlVaUxsVkpGaGxibVRDcnpa?=
- =?utf-8?B?dW9EbUFUSVJiQ0p3Q0pxNmc1LzlCb0tJTlU5NlZRSUV3b1JTNzlGOUs3b25V?=
- =?utf-8?B?WmYyR3E1RnR3Zis2dHhGbS9COFB3YVlIMStQRGNMUnhQWThob3RHaXVVa0NU?=
- =?utf-8?B?NVl4WW1vclRQcEhxOGFHTmROU2NKTTJJR3JReGdXWi9zNWU1bVdiaFpqVW82?=
- =?utf-8?B?a0RDRjkrMk9Ic0pKMWNHdlZpdWRJaWJkcFZBKzdnM2E1WFo2R3hQYndmaTRZ?=
- =?utf-8?B?YjAvOHA3VkthMzNvR2VWSzY4TktVM3NiSzZWYTRpSEVhZm55ZVFQUjgzak02?=
- =?utf-8?B?Qm1wYU8zWG5LVUs4bllGTmNRZ1dpbmRjcU55TzhvYTFvbDZ6SUVjZ1ZPNlBj?=
- =?utf-8?B?L05udmxZMXo5NlB1bHhjZXlMR25CRWdVM04rQitmUWJWeEdkQ05DQ1FsQTcz?=
- =?utf-8?B?VW5uWk5RTXU3ZjRtLzZZeFROY3VtcThwWitoeDZ2MzdzZ1lBWWVUaTlSdlRj?=
- =?utf-8?B?WWhkakx4cWVPRWpQaU9DRkFsWlBKOXdhV3R1Q2NtMXdBbVpsMVFBUkFPQjZY?=
- =?utf-8?B?SllBcmwybEtLbnEwWTVVKzdpYStQK21iR3lCbHNGT1ZRbWhpQ1BlbEpRaXJl?=
- =?utf-8?B?OVpyd250Y3l3RUgwUHJGb213NTNkK3prVDNKaXdGRktJaDJqSlhDMFBraUlU?=
- =?utf-8?B?QXVkUHlBWmw3aVkwcE51TnhEWFFqVEVFTjlBaFpubXZDakliVnZtUXViVGRk?=
- =?utf-8?B?Ym1oMzc1MG1nSHRxOHAvMW9tMEZreDA1SmhmM1hvcno3VXJ2M1NKWUpMemE2?=
- =?utf-8?B?RnZwMUFSejlFRjVrT21hWVc1RUE5RldoMThqdWc5c0lYcGk2TllaT0IvVDAx?=
- =?utf-8?B?S29KUzlWOVpYVjJlVnBObmF0K2ZEVmwwTzVxbFp5RklQcVdQWDdRcVd2RUxE?=
- =?utf-8?B?aE1oTzRpQjk3OGJielpqZjdaRXVoUnlhM01tVW14dGhTU1BMNnQ3MnZKbUl2?=
- =?utf-8?Q?jWYNVrk3ZyYlhdOhiF70VwU=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: B0Ks1NQyhVPpavzhTVVG34VT3cy+zR6kM1kqHifptQBfpQECFnugS3AiC/mQIptiUXpHZzuSZrRxRM2hb0sV8HW53SSkchnMPkYzQLnwlA41X2ddo73l0F0Jqpbj+tNvOOtTBSSGRJeac5IAxT2Az95ielBnKNIgVtmCR2uqsnK57TCP6TcHFiDC0khn20A0cO5NxIeAYOHePWy6kxSzyT5Rn5utXNAD9qwvXHtkC88z10qB9cl2wquXr6R0urMiTBvit2eBDmCoLlxjxXGDbuyXClbcOjENXWps6Kuo14HL18uvRT2Uy2nyJECMpLWt5DDWNAV0uynZIoDz5Gn3q4AgCnRYdL07vMM3QoECMTk9Pbn8ZZL24ouxf1D9s3a62qiSdvh/wfv9bwt3oZHdrzxmpaPJ8eDSoLvU/B0NNkV9wHaHrnaBYFtj8gQuKvulrYplFijLRE2pv4xP23+P/LT1AT3MdyaDR62Ak9qiMxPzkLlKcbGkzLunoyTAdB97KgUnyuvnw4esc3Di7DGdeDEWyHMN0khYDs1mZSwWYBE8OJeDcgvXPsbKXlqPuxO6MeuAvTSULpapRZHuAsCwnPM1DPnh0pHZJU3CCi3VsM6/WyS6wq0LCBoYiXRsNTLWKlktaN3yX5hdlVTNa0O84MBL87BNYwiCS+EkVXUJLlgmcXFQOthp3fLdw5PufT9lz9Ot/mFx3yQ+ks0cJnE5GqajYc9CTQmg1/9wJRnAVnQfEin0zvFg1S4eYZiIun6ioB1qoCNyWwPjCmFJgP3G2TNW0LIUYh+NEnlymGcqldlC5fzggfVol7BQrkCFeB3e
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 097de91a-1f79-4186-26a6-08db02a52d39
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR10MB6287.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 09:34:25.6835
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: My8sfIof06b+SWEEykDt6kRskZzI/HM2qCwaIPYtt+taF+sEEaV+pLHc5PHxVSD6JN8hBQGV7IM4BH2wfNF87W7g+cCfhHotwkCaH6nNoAJ7x3MhJ1ABZnYP7tcO4J4a
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB7498
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH 1/9] Documentation: admin-guide: correct spelling
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        <cgroups@vger.kernel.org>, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, <dm-devel@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-mm@kvack.org>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+ <20230129231053.20863-2-rdunlap@infradead.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230129231053.20863-2-rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: mAQ3E3_x1c5yzC8DeBrzCM_Tjes2TWZS
+X-Proofpoint-GUID: mAQ3E3_x1c5yzC8DeBrzCM_Tjes2TWZS
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-30_07,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- suspectscore=0 mlxscore=0 spamscore=0 phishscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300091
-X-Proofpoint-GUID: 5I1TprOEGOCqo3ghTPmiUKzldbe1JMA6
-X-Proofpoint-ORIG-GUID: 5I1TprOEGOCqo3ghTPmiUKzldbe1JMA6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1011 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301300090
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Since kernel 6.1-rc6 rasdaemon fails to update the summary of the records.
-
-When we inject MCE errors, generally ras-mc-ctl --summary should be able
-to read new errors, but starting from 6.1-rc6 the summary(count on
-number of MCE records) doesnot udpate when we inject new mce errors.
-
-This started happening after this commit
-42fb0a1e84ff525ebe560e2baf9451ab69127e2b ("tracing/ring-buffer: Have
-polling block on watermark") -- Commit landed first in 6.1-rc6, 6.1-rc5 
-kernel doesnot have this problem.
-
-On reverting this commit, rasdaemon works good(i.e It is able to read
-the new mce records).
-
-This continues to happen on latest kernel(v6.2-rc6) as well.
-
-In a Good case -- 6.2-rc6 + revert of 42fb0a1e84ff 
-("tracing/ring-buffer: Have polling block on watermark"), post poll read 
-happens without being stuck.
-
-openat(AT_FDCWD, 
-"/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/cpu0/trace_pipe_raw", 
-O_RDONLY) = 4
-openat(AT_FDCWD, 
-"/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/cpu1/trace_pipe_raw", 
-O_RDONLY) = 5
-openat(AT_FDCWD, 
-"/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/cpu2/trace_pipe_raw", 
-O_RDONLY) = 6
-openat(AT_FDCWD, 
-"/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/cpu3/trace_pipe_raw", 
-O_RDONLY) = 7
-[...]
-poll([{fd=4, events=POLLIN}, {fd=5, events=POLLIN}, {fd=6, 
-events=POLLIN}, {fd=7, events=POLLIN}, {fd=8, events=POLLIN}], 5, -1) = 
-1 ([{fd=4, revents=POLLIN}])
-read(4, 
-"\215~\0\0\0\0\0\0t\0\0\0\0\0\0\0\34\t\2\0\263\0\0\0#\0\0\0\n\1\0\t"..., 
-4096) = 4096
-newfstatat(AT_FDCWD, "/etc/localtime", {st_mode=S_IFREG|0644, 
-st_size=114, ...}, 0) = 0
-write(2, "rasdaemon: ", 11rasdaemon: )             = 11
-write(2, "mce_record store: 0x56047b270008"..., 33mce_record store: 
-0x56047b270008
-) = 33
 
 
-In a case where new records are not updated in summary: -- 6.2-rc6
-The reason why the database of records isn't populated, is simply 
-because rasdaemon doesn't get notified anymore by the kernel:
+On 1/30/2023 4:40 AM, Randy Dunlap wrote:
+> Correct spelling problems for Documentation/admin-guide/ as reported
+> by codespell.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Zefan Li <lizefan.x@bytedance.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: cgroups@vger.kernel.org
+> Cc: Alasdair Kergon <agk@redhat.com>
+> Cc: Mike Snitzer <snitzer@kernel.org>
+> Cc: dm-devel@redhat.com
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> ---
+>   Documentation/admin-guide/bcache.rst                       |    2 +-
+>   Documentation/admin-guide/cgroup-v1/blkio-controller.rst   |    2 +-
+>   Documentation/admin-guide/cgroup-v2.rst                    |   10 +++++-----
+>   Documentation/admin-guide/cifs/usage.rst                   |    4 ++--
+>   Documentation/admin-guide/device-mapper/cache-policies.rst |    2 +-
+>   Documentation/admin-guide/device-mapper/dm-ebs.rst         |    2 +-
+>   Documentation/admin-guide/device-mapper/dm-zoned.rst       |    2 +-
+>   Documentation/admin-guide/device-mapper/unstriped.rst      |   10 +++++-----
+>   Documentation/admin-guide/dynamic-debug-howto.rst          |    2 +-
+>   Documentation/admin-guide/gpio/gpio-sim.rst                |    2 +-
+>   Documentation/admin-guide/hw-vuln/mds.rst                  |    4 ++--
+>   Documentation/admin-guide/kernel-parameters.txt            |    8 ++++----
+>   Documentation/admin-guide/laptops/thinkpad-acpi.rst        |    2 +-
+>   Documentation/admin-guide/md.rst                           |    2 +-
+>   Documentation/admin-guide/media/bttv.rst                   |    2 +-
+>   Documentation/admin-guide/media/building.rst               |    2 +-
+>   Documentation/admin-guide/media/si476x.rst                 |    2 +-
+>   Documentation/admin-guide/media/vivid.rst                  |    2 +-
+>   Documentation/admin-guide/mm/hugetlbpage.rst               |    2 +-
+>   Documentation/admin-guide/mm/numa_memory_policy.rst        |    4 ++--
+>   Documentation/admin-guide/perf/hns3-pmu.rst                |    2 +-
+>   Documentation/admin-guide/pm/amd-pstate.rst                |    2 +-
+>   Documentation/admin-guide/spkguide.txt                     |    4 ++--
+>   Documentation/admin-guide/sysctl/vm.rst                    |    4 ++--
+>   Documentation/admin-guide/sysrq.rst                        |    2 +-
+>   25 files changed, 41 insertions(+), 41 deletions(-)
+> 
+> diff -- a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -624,7 +624,7 @@ and is an example of this type.
+>   Limits
+>   ------
+>   
+> -A child can only consume upto the configured amount of the resource.
+> +A child can only consume up to the configured amount of the resource.
+>   Limits can be over-committed - the sum of the limits of children can
+>   exceed the amount of resource available to the parent.
+>   
+> @@ -642,11 +642,11 @@ on an IO device and is an example of thi
+>   Protections
+>   -----------
+>   
+> -A cgroup is protected upto the configured amount of the resource
+> +A cgroup is protected up to the configured amount of the resource
+>   as long as the usages of all its ancestors are under their
+>   protected levels.  Protections can be hard guarantees or best effort
+>   soft boundaries.  Protections can also be over-committed in which case
+> -only upto the amount available to the parent is protected among
+> +only up to the amount available to the parent is protected among
+>   children.
+>   
+>   Protections are in the range [0, max] and defaults to 0, which is
+> @@ -1079,7 +1079,7 @@ All time durations are in microseconds.
+>   
+>   	  $MAX $PERIOD
+>   
+> -	which indicates that the group may consume upto $MAX in each
+> +	which indicates that the group may consume up to $MAX in each
+>   	$PERIOD duration.  "max" for $MAX indicates no limit.  If only
+>   	one number is written, $MAX is updated.
+>   
+> @@ -2289,7 +2289,7 @@ Cpuset Interface Files
+>   	For a valid partition root with the sibling cpu exclusivity
+>   	rule enabled, changes made to "cpuset.cpus" that violate the
+>   	exclusivity rule will invalidate the partition as well as its
+> -	sibiling partitions with conflicting cpuset.cpus values. So
+> +	sibling partitions with conflicting cpuset.cpus values. So
+>   	care must be taking in changing "cpuset.cpus".
+>   
+>   	A valid non-root parent partition may distribute out all its CPUs
+> diff -- a/Documentation/admin-guide/laptops/thinkpad-acpi.rst b/Documentation/admin-guide/laptops/thinkpad-acpi.rst
+> --- a/Documentation/admin-guide/laptops/thinkpad-acpi.rst
+> +++ b/Documentation/admin-guide/laptops/thinkpad-acpi.rst
+> @@ -1488,7 +1488,7 @@ Example of command to set keyboard langu
+>   Text corresponding to keyboard layout to be set in sysfs are: be(Belgian),
+>   cz(Czech), da(Danish), de(German), en(English), es(Spain), et(Estonian),
+>   fr(French), fr-ch(French(Switzerland)), hu(Hungarian), it(Italy), jp (Japan),
+> -nl(Dutch), nn(Norway), pl(Polish), pt(portugese), sl(Slovenian), sv(Sweden),
+> +nl(Dutch), nn(Norway), pl(Polish), pt(portuguese), sl(Slovenian), sv(Sweden),
+>   tr(Turkey)
+>   
+>   WWAN Antenna type
+> diff -- a/Documentation/admin-guide/md.rst b/Documentation/admin-guide/md.rst
+> --- a/Documentation/admin-guide/md.rst
+> +++ b/Documentation/admin-guide/md.rst
+> @@ -317,7 +317,7 @@ All md devices contain:
+>        suspended (not supported yet)
+>            All IO requests will block. The array can be reconfigured.
+>   
+> -         Writing this, if accepted, will block until array is quiessent
+> +         Writing this, if accepted, will block until array is quiescent
+>   
+>        readonly
+>            no resync can happen.  no superblocks get written.
+> diff -- a/Documentation/admin-guide/cgroup-v1/blkio-controller.rst b/Documentation/admin-guide/cgroup-v1/blkio-controller.rst
+> --- a/Documentation/admin-guide/cgroup-v1/blkio-controller.rst
+> +++ b/Documentation/admin-guide/cgroup-v1/blkio-controller.rst
+> @@ -106,7 +106,7 @@ Proportional weight policy files
+>             see Documentation/block/bfq-iosched.rst.
+>   
+>     blkio.bfq.weight_device
+> -          Specifes per cgroup per device weights, overriding the default group
+> +          Specifies per cgroup per device weights, overriding the default group
+>             weight. For more details, see Documentation/block/bfq-iosched.rst.
+>   
+>   	  Following is the format::
+> diff -- a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+> @@ -403,7 +403,7 @@ Unit Tests for amd-pstate
+>   
+>    * We can introduce more functional or performance tests to align the result together, it will benefit power and performance scale optimization.
+>   
+> -1. Test case decriptions
+> +1. Test case descriptions
+>   
+>       1). Basic tests
+>   
+> diff -- a/Documentation/admin-guide/spkguide.txt b/Documentation/admin-guide/spkguide.txt
+> --- a/Documentation/admin-guide/spkguide.txt
+> +++ b/Documentation/admin-guide/spkguide.txt
+> @@ -1105,8 +1105,8 @@ speakup load
+>   Alternatively, you can add the above line to your file
+>   ~/.bashrc or ~/.bash_profile.
+>   
+> -If your system administrator ran himself the script, all the users will be able
+> -to change from English to the language choosed by root and do directly
+> +If your system administrator himself ran the script, all the users will be able
+> +to change from English to the language chosen by root and do directly
+>   speakupconf load (or add this to the ~/.bashrc or
+>   ~/.bash_profile file). If there are several languages to handle, the
+>   administrator (or every user) will have to run the first steps until speakupconf
+> diff -- a/Documentation/admin-guide/device-mapper/cache-policies.rst b/Documentation/admin-guide/device-mapper/cache-policies.rst
+> --- a/Documentation/admin-guide/device-mapper/cache-policies.rst
+> +++ b/Documentation/admin-guide/device-mapper/cache-policies.rst
+> @@ -70,7 +70,7 @@ the entries (each hotspot block covers a
+>   cache block).
+>   
+>   All this means smq uses ~25bytes per cache block.  Still a lot of
+> -memory, but a substantial improvement nontheless.
+> +memory, but a substantial improvement nonetheless.
+>   
+>   Level balancing
+>   ^^^^^^^^^^^^^^^
+> diff -- a/Documentation/admin-guide/device-mapper/dm-ebs.rst b/Documentation/admin-guide/device-mapper/dm-ebs.rst
+> --- a/Documentation/admin-guide/device-mapper/dm-ebs.rst
+> +++ b/Documentation/admin-guide/device-mapper/dm-ebs.rst
+> @@ -31,7 +31,7 @@ Mandatory parameters:
+>   
+>   Optional parameter:
+>   
+> -    <underyling sectors>:
+> +    <underlying sectors>:
+>           Number of sectors defining the logical block size of <dev path>.
+>           2^N supported, e.g. 8 = emulate 8 sectors of 512 bytes = 4KiB.
+>           If not provided, the logical block size of <dev path> will be used.
+> diff -- a/Documentation/admin-guide/device-mapper/dm-zoned.rst b/Documentation/admin-guide/device-mapper/dm-zoned.rst
+> --- a/Documentation/admin-guide/device-mapper/dm-zoned.rst
+> +++ b/Documentation/admin-guide/device-mapper/dm-zoned.rst
+> @@ -46,7 +46,7 @@ just like conventional zones.
+>   The zones of the device(s) are separated into 2 types:
+>   
+>   1) Metadata zones: these are conventional zones used to store metadata.
+> -Metadata zones are not reported as useable capacity to the user.
+> +Metadata zones are not reported as usable capacity to the user.
+>   
+>   2) Data zones: all remaining zones, the vast majority of which will be
+>   sequential zones used exclusively to store user data. The conventional
+> diff -- a/Documentation/admin-guide/device-mapper/unstriped.rst b/Documentation/admin-guide/device-mapper/unstriped.rst
+> --- a/Documentation/admin-guide/device-mapper/unstriped.rst
+> +++ b/Documentation/admin-guide/device-mapper/unstriped.rst
+> @@ -35,7 +35,7 @@ An example of undoing an existing dm-str
+>   
+>   This small bash script will setup 4 loop devices and use the existing
+>   striped target to combine the 4 devices into one.  It then will use
+> -the unstriped target ontop of the striped device to access the
+> +the unstriped target on top of the striped device to access the
+>   individual backing loop devices.  We write data to the newly exposed
+>   unstriped devices and verify the data written matches the correct
+>   underlying device on the striped array::
+> @@ -110,8 +110,8 @@ to get a 92% reduction in read latency u
+>   Example dmsetup usage
+>   =====================
+>   
+> -unstriped ontop of Intel NVMe device that has 2 cores
+> ------------------------------------------------------
+> +unstriped on top of Intel NVMe device that has 2 cores
+> +------------------------------------------------------
+>   
+>   ::
+>   
+> @@ -124,8 +124,8 @@ respectively::
+>     /dev/mapper/nvmset0
+>     /dev/mapper/nvmset1
+>   
+> -unstriped ontop of striped with 4 drives using 128K chunk size
+> ---------------------------------------------------------------
+> +unstriped on top of striped with 4 drives using 128K chunk size
+> +---------------------------------------------------------------
+>   
+>   ::
+>   
+> diff -- a/Documentation/admin-guide/hw-vuln/mds.rst b/Documentation/admin-guide/hw-vuln/mds.rst
+> --- a/Documentation/admin-guide/hw-vuln/mds.rst
+> +++ b/Documentation/admin-guide/hw-vuln/mds.rst
+> @@ -64,8 +64,8 @@ architecture section: :ref:`Documentatio
+>   Attack scenarios
+>   ----------------
+>   
+> -Attacks against the MDS vulnerabilities can be mounted from malicious non
+> -priviledged user space applications running on hosts or guest. Malicious
+> +Attacks against the MDS vulnerabilities can be mounted from malicious non-
+> +privileged user space applications running on hosts or guest. Malicious
+>   guest OSes can obviously mount attacks as well.
+>   
+>   Contrary to other speculation based vulnerabilities the MDS vulnerability
+> diff -- a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+> --- a/Documentation/admin-guide/sysctl/vm.rst
+> +++ b/Documentation/admin-guide/sysctl/vm.rst
+> @@ -356,7 +356,7 @@ The lowmem_reserve_ratio is an array. Yo
+>   
+>   But, these values are not used directly. The kernel calculates # of protection
+>   pages for each zones from them. These are shown as array of protection pages
+> -in /proc/zoneinfo like followings. (This is an example of x86-64 box).
+> +in /proc/zoneinfo like the following. (This is an example of x86-64 box).
+>   Each zone has an array of protection pages like this::
+>   
+>     Node 0, zone      DMA
+> @@ -433,7 +433,7 @@ a 2bit error in a memory module) is dete
+>   that cannot be handled by the kernel. In some cases (like the page
+>   still having a valid copy on disk) the kernel will handle the failure
+>   transparently without affecting any applications. But if there is
+> -no other uptodate copy of the data it will kill to prevent any data
+> +no other up-to-date copy of the data it will kill to prevent any data
+>   corruptions from propagating.
+>   
+>   1: Kill all processes that have the corrupted and not reloadable page mapped
+> diff -- a/Documentation/admin-guide/bcache.rst b/Documentation/admin-guide/bcache.rst
+> --- a/Documentation/admin-guide/bcache.rst
+> +++ b/Documentation/admin-guide/bcache.rst
+> @@ -204,7 +204,7 @@ For example::
+>   This should present your unmodified backing device data in /dev/loop0
+>   
+>   If your cache is in writethrough mode, then you can safely discard the
+> -cache device without loosing data.
+> +cache device without losing data.
+>   
+>   
+>   E) Wiping a cache device
+> diff -- a/Documentation/admin-guide/sysrq.rst b/Documentation/admin-guide/sysrq.rst
+> --- a/Documentation/admin-guide/sysrq.rst
+> +++ b/Documentation/admin-guide/sysrq.rst
+> @@ -138,7 +138,7 @@ Command	    Function
+>   ``v``	    Forcefully restores framebuffer console
+>   ``v``	    Causes ETM buffer dump [ARM-specific]
+>   
+> -``w``	    Dumps tasks that are in uninterruptable (blocked) state.
+> +``w``	    Dumps tasks that are in uninterruptible (blocked) state.
+>   
+>   ``x``	    Used by xmon interface on ppc/powerpc platforms.
+>               Show global PMU Registers on sparc64.
+> diff -- a/Documentation/admin-guide/cifs/usage.rst b/Documentation/admin-guide/cifs/usage.rst
+> --- a/Documentation/admin-guide/cifs/usage.rst
+> +++ b/Documentation/admin-guide/cifs/usage.rst
+> @@ -399,7 +399,7 @@ A partial list of the supported mount op
+>     sep
+>   		if first mount option (after the -o), overrides
+>   		the comma as the separator between the mount
+> -		parms. e.g.::
+> +		parameters. e.g.::
+>   
+>   			-o user=myname,password=mypassword,domain=mydom
+>   
+> @@ -765,7 +765,7 @@ cifsFYI			If set to non-zero value, addi
+>   			Some debugging statements are not compiled into the
+>   			cifs kernel unless CONFIG_CIFS_DEBUG2 is enabled in the
+>   			kernel configuration. cifsFYI may be set to one or
+> -			nore of the following flags (7 sets them all)::
+> +			more of the following flags (7 sets them all)::
+>   
+>   			  +-----------------------------------------------+------+
+>   			  | log cifs informational messages		  | 0x01 |
+> diff -- a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
+> --- a/Documentation/admin-guide/dynamic-debug-howto.rst
+> +++ b/Documentation/admin-guide/dynamic-debug-howto.rst
+> @@ -330,7 +330,7 @@ Examples
+>   
+>     // boot-args example, with newlines and comments for readability
+>     Kernel command line: ...
+> -    // see whats going on in dyndbg=value processing
+> +    // see what's going on in dyndbg=value processing
+>       dynamic_debug.verbose=3
+>       // enable pr_debugs in the btrfs module (can be builtin or loadable)
+>       btrfs.dyndbg="+p"
+> diff -- a/Documentation/admin-guide/mm/hugetlbpage.rst b/Documentation/admin-guide/mm/hugetlbpage.rst
+> --- a/Documentation/admin-guide/mm/hugetlbpage.rst
+> +++ b/Documentation/admin-guide/mm/hugetlbpage.rst
+> @@ -86,7 +86,7 @@ by increasing or decreasing the value of
+>   
+>   Note: When the feature of freeing unused vmemmap pages associated with each
+>   hugetlb page is enabled, we can fail to free the huge pages triggered by
+> -the user when ths system is under memory pressure.  Please try again later.
+> +the user when the system is under memory pressure.  Please try again later.
 
-openat(AT_FDCWD, 
-"/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/cpu0/trace_pipe_raw", 
-O_RDONLY) = 4
-openat(AT_FDCWD, 
-"/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/cpu1/trace_pipe_raw", 
-O_RDONLY) = 5
-openat(AT_FDCWD, 
-"/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/cpu2/trace_pipe_raw", 
-O_RDONLY) = 6
-openat(AT_FDCWD, 
-"/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/cpu3/trace_pipe_raw", 
-O_RDONLY) = 7
-[...]
-poll([{fd=4, events=POLLIN}, {fd=5, events=POLLIN}, {fd=6, 
-events=POLLIN}, {fd=7, events=POLLIN}, {fd=8, events=POLLIN}], 5, -1
+My eye almost missed 'ths' :-)
 
---- Stuck here even when we inject MCE-errors.
+>   
+>   Pages that are used as huge pages are reserved inside the kernel and cannot
+>   be used for other purposes.  Huge pages cannot be swapped out under
+> diff -- a/Documentation/admin-guide/mm/numa_memory_policy.rst b/Documentation/admin-guide/mm/numa_memory_policy.rst
+> --- a/Documentation/admin-guide/mm/numa_memory_policy.rst
+> +++ b/Documentation/admin-guide/mm/numa_memory_policy.rst
+> @@ -246,7 +246,7 @@ MPOL_INTERLEAVED
+>   	interleaved system default policy works in this mode.
+>   
+>   MPOL_PREFERRED_MANY
+> -	This mode specifices that the allocation should be preferrably
+> +	This mode specifies that the allocation should be preferably
+>   	satisfied from the nodemask specified in the policy. If there is
+>   	a memory pressure on all nodes in the nodemask, the allocation
+>   	can fall back to all existing numa nodes. This is effectively
+> @@ -360,7 +360,7 @@ and NUMA nodes.  "Usage" here means one
+>   2) examination of the policy to determine the policy mode and associated node
+>      or node lists, if any, for page allocation.  This is considered a "hot
+>      path".  Note that for MPOL_BIND, the "usage" extends across the entire
+> -   allocation process, which may sleep during page reclaimation, because the
+> +   allocation process, which may sleep during page reclamation, because the
+>      BIND policy nodemask is used, by reference, to filter ineligible nodes.
+>   
+>   We can avoid taking an extra reference during the usages listed above as
+> diff -- a/Documentation/admin-guide/gpio/gpio-sim.rst b/Documentation/admin-guide/gpio/gpio-sim.rst
+> --- a/Documentation/admin-guide/gpio/gpio-sim.rst
+> +++ b/Documentation/admin-guide/gpio/gpio-sim.rst
+> @@ -123,7 +123,7 @@ Each simulated GPIO chip creates a separ
+>   directory for each exposed line
+>   (e.g. ``/sys/devices/platform/gpio-sim.X/gpiochipY/``). The name of each group
+>   is of the form: ``'sim_gpioX'`` where X is the offset of the line. Inside each
+> -group there are two attibutes:
+> +group there are two attributes:
+>   
+>       ``pull`` - allows to read and set the current simulated pull setting for
+>                  every line, when writing the value must be one of: ``'pull-up'``,
+> diff -- a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -676,7 +676,7 @@
+>   			Sets the size of kernel per-numa memory area for
+>   			contiguous memory allocations. A value of 0 disables
+>   			per-numa CMA altogether. And If this option is not
+> -			specificed, the default value is 0.
+> +			specified, the default value is 0.
+>   			With per-numa CMA enabled, DMA users on node nid will
+>   			first try to allocate buffer from the pernuma area
+>   			which is located in node nid, if the allocation fails,
+> @@ -946,7 +946,7 @@
+>   			driver code when a CPU writes to (or reads from) a
+>   			random memory location. Note that there exists a class
+>   			of memory corruptions problems caused by buggy H/W or
+> -			F/W or by drivers badly programing DMA (basically when
+> +			F/W or by drivers badly programming DMA (basically when
+>   			memory is written at bus level and the CPU MMU is
+>   			bypassed) which are not detectable by
+>   			CONFIG_DEBUG_PAGEALLOC, hence this option will not help
+> @@ -1732,7 +1732,7 @@
+>   			boot-time allocation of gigantic hugepages is skipped.
+>   
+>   	hugetlb_free_vmemmap=
+> -			[KNL] Reguires CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> +			[KNL] Requires CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>   			enabled.
+>   			Control if HugeTLB Vmemmap Optimization (HVO) is enabled.
+>   			Allows heavy hugetlb users to free up some more
+> @@ -3693,7 +3693,7 @@
+>   			implementation; requires CONFIG_GENERIC_IDLE_POLL_SETUP
+>   			to be effective. This is useful on platforms where the
+>   			sleep(SH) or wfi(ARM,ARM64) instructions do not work
+> -			correctly or when doing power measurements to evalute
+> +			correctly or when doing power measurements to evaluate
+>   			the impact of the sleep instructions. This is also
+>   			useful when using JTAG debugger.
+>   
+> diff -- a/Documentation/admin-guide/perf/hns3-pmu.rst b/Documentation/admin-guide/perf/hns3-pmu.rst
+> --- a/Documentation/admin-guide/perf/hns3-pmu.rst
+> +++ b/Documentation/admin-guide/perf/hns3-pmu.rst
+> @@ -53,7 +53,7 @@ two events have same value of bits 0~15
+>   event pair. And the bit 16 of config indicates getting counter 0 or
+>   counter 1 of hardware event.
+>   
+> -After getting two values of event pair in usersapce, the formula of
+> +After getting two values of event pair in userspace, the formula of
+>   computation to calculate real performance data is:::
+>   
+>     counter 0 / counter 1
+> diff -- a/Documentation/admin-guide/media/bttv.rst b/Documentation/admin-guide/media/bttv.rst
+> --- a/Documentation/admin-guide/media/bttv.rst
+> +++ b/Documentation/admin-guide/media/bttv.rst
+> @@ -909,7 +909,7 @@ DE hat diverse Treiber fuer diese Modell
+>     - TVPhone98 (Bt878)
+>     - AVerTV und TVCapture98 w/VCR (Bt 878)
+>     - AVerTVStudio und TVPhone98 w/VCR (Bt878)
+> -  - AVerTV GO Serie (Kein SVideo Input)
+> +  - AVerTV GO Series (Kein SVideo Input)
+>     - AVerTV98 (BT-878 chip)
+>     - AVerTV98 mit Fernbedienung (BT-878 chip)
+>     - AVerTV/FM98 (BT-878 chip)
+> diff -- a/Documentation/admin-guide/media/building.rst b/Documentation/admin-guide/media/building.rst
+> --- a/Documentation/admin-guide/media/building.rst
+> +++ b/Documentation/admin-guide/media/building.rst
+> @@ -137,7 +137,7 @@ The ``LIRC user interface`` option adds
+>   from remote controllers.
+>   
+>   The ``Support for eBPF programs attached to lirc devices`` option allows
+> -the usage of special programs (called eBPF) that would allow aplications
+> +the usage of special programs (called eBPF) that would allow applications
+>   to add extra remote controller decoding functionality to the Linux Kernel.
+>   
+>   The ``Remote controller decoders`` option allows selecting the
+> diff -- a/Documentation/admin-guide/media/si476x.rst b/Documentation/admin-guide/media/si476x.rst
+> --- a/Documentation/admin-guide/media/si476x.rst
+> +++ b/Documentation/admin-guide/media/si476x.rst
+> @@ -142,7 +142,7 @@ The drivers exposes following files:
+>   				  indicator
+>     0x18		 lassi		  Signed Low side adjacent Channel
+>   				  Strength indicator
+> -  0x19		 hassi		  ditto fpr High side
+> +  0x19		 hassi		  ditto for High side
+>     0x20		 mult		  Multipath indicator
+>     0x21		 dev		  Frequency deviation
+>     0x24		 assi		  Adjacent channel SSI
+> diff -- a/Documentation/admin-guide/media/vivid.rst b/Documentation/admin-guide/media/vivid.rst
+> --- a/Documentation/admin-guide/media/vivid.rst
+> +++ b/Documentation/admin-guide/media/vivid.rst
+> @@ -580,7 +580,7 @@ Metadata Capture
+>   ----------------
+>   
+>   The Metadata capture generates UVC format metadata. The PTS and SCR are
+> -transmitted based on the values set in vivid contols.
+> +transmitted based on the values set in vivid controls.
+>   
+>   The Metadata device will only work for the Webcam input, it will give
+>   back an error for all other inputs.
 
 
-Before the Commit 42fb0a1e84ff ("tracing/ring-buffer: Have polling block 
-on watermark"), an error injection could wake the poll() call on the 
-above special files, and I can confirm that the subsequent read() call 
-did not hang. With the Commit 42fb0a1e84ff, an error injection doesn't 
-wake the poll() call anymore.
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-We need to let rasdaemon (or any other trace consumer using the per_cpu 
-files) retrieve the available information as soon as it is available.
-
-Additional info:
-1. 
-https://github.com/mchehab/rasdaemon/blob/master/ras-events.c#:~:text=ready%20%3D%20poll(fds%2C%20(n_cpus%20%2B%201)%2C%20%2D1)%3B 
-this is the code which is getting hit on rasdaemon side.
-
-2. Changing the buffer_percent to a lower value didnot change the behaviour.
-
-
-Thanks,
-Harshit
-
-
-
-
-
+-Mukesh
