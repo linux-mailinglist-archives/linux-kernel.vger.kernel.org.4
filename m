@@ -2,124 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D30D68084D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F742680856
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236155AbjA3JPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:15:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S236161AbjA3JRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbjA3JPv (ORCPT
+        with ESMTP id S231455AbjA3JRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:15:51 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD39166D4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:15:50 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 05786100018;
-        Mon, 30 Jan 2023 09:15:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675070147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6BWT3DtZUD21Vj0byUAWzym0jsiIgka9xlCtmwIUodA=;
-        b=kXsHWFroYaLbogha0t2iQo6Q//M18cxcE83JL2mmZ63MDHnyoF3WU2vgK31UlI8a09IMZj
-        b8IPW4bLcJAGzzL6gTNxJTpNq9W5A3z6q1Em9MtwjWvuZBFLwIqUOMoVqQQulvvtDK1uaW
-        XSrmq2rREt9vQIPsfSFbeTT8DJExzdaNHks+YnR32kr7J2cPrKy/n53WkF4QZJqntd4CX4
-        jy5ilzT/UQoZOvzO+FMXEN/UHM4zc0Do9UFSGo57RuGUJW8wbbaterpt91Q7EBS4UQMadn
-        r+0t78oghDm0jBUXwOewt5Fe85MnW/cUVa3lYTkVUAwpkSLuNbPkRa3SnX7VEQ==
-Date:   Mon, 30 Jan 2023 10:15:44 +0100
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     dri-devel@lists.freedesktop.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH RESEND] drm/logicvc: Drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <Y9eKwMoK4EyqfEMK@aptenodytes>
-References: <20230127120135.293dfc60@endymion.delvare>
+        Mon, 30 Jan 2023 04:17:39 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F9F0166D4;
+        Mon, 30 Jan 2023 01:17:35 -0800 (PST)
+Received: from 8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id 18F7C2200F6;
+        Mon, 30 Jan 2023 10:17:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1675070254;
+        bh=NdvnNtJBmKggBnVTC20VlVWcPnkhTXkX4lMw5E2q6fw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SQbpOt7SgrJmEl39TNMMzQHHBQ2en4WNAymTD0e0U6iuiRzcaqQXPJKzd/QS+l8eH
+         IRsOo/hmLutpBSsd+izIVLJJO7GOrvAKR0f0/7tsV0v8rygMy2PjxKxTH9zXBVLod/
+         mIIFCxUgHhcxl9TsLcJDXMXpQCt8aOkPqAmhCse2/RR03dWskEdOc+DKeLJ8L/jAtf
+         LGJ1cmqA8fgsXncho3nkN/jdtuqEG3Rmeb0Cq4v9shjKUohQcSP+KLlDlQSz3+mivB
+         6FVj/JjvuanISAZ+WODsSuyfSOk98YL9u83t6WtHN87PgMOcxQT2vC2wB9DGkVoKk8
+         JqFBi0Memi3XQ==
+Date:   Mon, 30 Jan 2023 10:17:32 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, kvm@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Jiri Kosina <jkosina@suse.cz>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [Question PATCH kernel] x86/amd/sev/nmi+vc: Fix stack handling
+ (why is this happening?)
+Message-ID: <Y9eLLGug11f+kOb+@8bytes.org>
+References: <20230127035616.508966-1-aik@amd.com>
+ <Y9OUfofjxDtTmwyV@hirez.programming.kicks-ass.net>
+ <Y9OpcoSacyOkPkvl@8bytes.org>
+ <b7880f0b-a592-cf2d-03b9-1ccfd83f8223@amd.com>
+ <Y9QI9JwCVvRmtbr+@8bytes.org>
+ <3bb3e080-caee-8bc8-7de9-f44969f16e75@amd.com>
+ <Y9UolYXFzvocxIcn@8bytes.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="sl7/F0umg8bAHEwZ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127120135.293dfc60@endymion.delvare>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9UolYXFzvocxIcn@8bytes.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jan 28, 2023 at 02:52:23PM +0100, Joerg Roedel wrote:
+> Yeah, something like this will be the fix. I am still thinking about
+> the right place to put the volatile to make it explicit to the situation
+> we are encountering here (which is SEV-ES specific).
+> 
+> Best would be an explicit barrier in C code between sev_es_ist_enter()
+> and the DR7 read, but all barriers I tried to far only seem to affect
+> memory instructions and had no influence on the DR7 read (which is
+> obviously not considered as a memory read by the compiler).
+> 
+> The best place to put the barrier is in the sev_es_ist_enter() inline
+> function, right after the static_call to __sev_es_ist_enter().
 
---sl7/F0umg8bAHEwZ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Okay, after some investigation I was not able to find a compiler barrier
+which affects DR7 read ordering. This leaves us with the only solution
+of directly forbidding DR7 register access re-ordering by adding a
+volatile to the asm, like you did before.
 
-Hi Jean,
+I will send a fix later today.
 
-On Fri 27 Jan 23, 12:01, Jean Delvare wrote:
-> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-> is possible to test-build any driver which depends on OF on any
-> architecture by explicitly selecting OF. Therefore depending on
-> COMPILE_TEST as an alternative is no longer needed.
->=20
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
+Regards,
 
-Sounds good to me!
-
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-
-Cheers,
-
-Paul
-
-> ---
->  drivers/gpu/drm/logicvc/Kconfig |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> --- linux-6.1.orig/drivers/gpu/drm/logicvc/Kconfig
-> +++ linux-6.1/drivers/gpu/drm/logicvc/Kconfig
-> @@ -1,7 +1,7 @@
->  config DRM_LOGICVC
->  	tristate "LogiCVC DRM"
->  	depends on DRM
-> -	depends on OF || COMPILE_TEST
-> +	depends on OF
->  	select DRM_KMS_HELPER
->  	select DRM_KMS_DMA_HELPER
->  	select DRM_GEM_DMA_HELPER
->=20
->=20
-> --=20
-> Jean Delvare
-> SUSE L3 Support
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---sl7/F0umg8bAHEwZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmPXisAACgkQ3cLmz3+f
-v9HiPAf9HrNj1WqpkW6wKvRTPQO2OnUSwVpdBEpu+Y1MO9LKHp3FWxAY5OwfE9xn
-IQoGGaV9PIT2cQpzvU3CiogMa+X2m2qEU+z2AiGT7qWMyMRsJjdl3OwPx4eV9J36
-g43GN8dP8NUeUq1q371/FeTLIzvnsqWGUXfUomP2lS7TL85agnAfuJOifPWcxSOe
-V02r5ZYu/5og/MQHoPS79ChHS0w09lbATWAXYK8G6jSciPVmLnXBEbk2wjZD28mv
-KLqx7sQVNu9xeoDsBb+r1D3xZz+kuNtTC2Z67IvmqUmpOtYdLRtp3IlMA1ffZlrq
-DkMWvCpELUseXQKhkJKtXL8GIA0C+A==
-=uzNH
------END PGP SIGNATURE-----
-
---sl7/F0umg8bAHEwZ--
+	Joerg
