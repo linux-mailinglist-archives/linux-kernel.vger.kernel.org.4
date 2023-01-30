@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61ED8681DC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C2B681DC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjA3WLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S229895AbjA3WLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjA3WLW (ORCPT
+        with ESMTP id S231272AbjA3WLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:11:22 -0500
-Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917D730E83;
-        Mon, 30 Jan 2023 14:11:17 -0800 (PST)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Tue, 31 Jan
- 2023 01:11:09 +0300
-Received: from KANASHIN1.fintech.ru (10.0.253.125) by Ex16-01.fintech.ru
- (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Tue, 31 Jan
- 2023 01:11:09 +0300
-From:   Natalia Petrova <n.petrova@fintech.ru>
-To:     <stable@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Natalia Petrova <n.petrova@fintech.ru>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
-Subject: [PATCH v2] i40e: Add checking for null for nlmsg_find_attr()
-Date:   Tue, 31 Jan 2023 01:11:06 +0300
-Message-ID: <20230130221106.19267-1-n.petrova@fintech.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230125141328.8479-1-n.petrova@fintech.ru>
-References: 
+        Mon, 30 Jan 2023 17:11:46 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346A936442
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:11:42 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id l7so2613095ioa.7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:11:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QDmWTfugN+KPnRJSF8VFqZVl7659BFN6n85PK3By/Nc=;
+        b=nlmOc4WiFbAADi0988MPCHfj5QF4EnG9I8vaKRc2e6p1wgBDvQN8K85rsfHPq3bnzz
+         +5Wpk2M14PHX4sLLXYbWPiNqjt5hNOjGnF0A0G7FcIUQhsUE7yp4WCS9ksaGv4X6PXuS
+         TGw+Pnf5qwEw6KIrYBzOEok93sqvMiIvEBShjP1ZhXRg902LS2o4ZW1MHKIYzN43uKWR
+         ETbp6zE6TY3BdA52DLjHc0etLXeq+J7Q1N22iMvAvtAOqF+xuRz7R9/ChivDlPnSg4mX
+         p+bXJIJ59idbqVY+PP5h9kLZRWy8uR/o4OByjm8W/b8sF63cFmEMRB8lJRzLh4Hoh5SH
+         6+Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QDmWTfugN+KPnRJSF8VFqZVl7659BFN6n85PK3By/Nc=;
+        b=0kBxwGm3aF1kkvmliLoBG75fhV9VV/G8g5R73yKZDS/924gUM+tsYpx0WYQ91N9ZUK
+         ndcGmjaS3oJsWgjYOtlbpswQqVBjakKYGGRlZgxm7jWMIPIQgQyoqauv8gYnAqu4nddq
+         xDthbavgdGRHGtUJyrj1LLOJV4eDv3psFPvW6FlwApVnzOGc25GFANo1SGmFHW+kuVFp
+         BEfq3VYZj0VLVCmp2JWbckJcC6xEA01KAcHql6HIH6o8PjTj2quNC2BHFsfSCnpzeS5J
+         +MsKVElt2JOiFR5Uc0A9+Qh0OxVu6tNM798fo3+dS7glwaF1YH8zYwYLKuA9NexzV2aF
+         xaKQ==
+X-Gm-Message-State: AO0yUKVtpGxspw2L8cgqGkACn7Hq7WmRQ1yslyk4xzG4fb7DyvVeVuG/
+        +MdckBVtIJ3hojEBVXTe9najFQ==
+X-Google-Smtp-Source: AK7set9lGPWLFsiulveNFHus1v4u4pnnWzF0DBa0qziScPlEkynj8aHMSJd2IdwJIecjeXz0X86ddw==
+X-Received: by 2002:a05:6602:88f:b0:719:6a2:99d8 with SMTP id f15-20020a056602088f00b0071906a299d8mr1396318ioz.0.1675116701027;
+        Mon, 30 Jan 2023 14:11:41 -0800 (PST)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id m4-20020a056638224400b003a958f51423sm5018787jas.167.2023.01.30.14.11.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 14:11:40 -0800 (PST)
+Message-ID: <088e40fd-3fc7-77dd-a3de-0a2b097d3717@kernel.dk>
+Date:   Mon, 30 Jan 2023 15:11:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.253.125]
-X-ClientProxiedBy: Ex16-01.fintech.ru (10.0.10.18) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <3351099.1675077249@warthog.procyon.org.uk>
+ <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
+ <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk>
+ <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
+ <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The result of nlmsg_find_attr() 'br_spec' is dereferenced in
-nla_for_each_nested(), but it can take null value in nla_find() function,
-which will result in an error.
+On 1/30/23 3:02?PM, John Hubbard wrote:
+> On 1/30/23 13:57, Jens Axboe wrote:
+>>> This does cause about a 2.7% regression for me, using O_DIRECT on a raw
+>>> block device. Looking at a perf diff, here's the top:
+>>>
+>>>                 +2.71%  [kernel.vmlinux]  [k] mod_node_page_state
+>>>                 +2.22%  [kernel.vmlinux]  [k] iov_iter_extract_pages
+>>>
+>>> and these two are gone:
+>>>
+>>>       2.14%             [kernel.vmlinux]  [k] __iov_iter_get_pages_alloc
+>>>       1.53%             [kernel.vmlinux]  [k] iov_iter_get_pages
+>>>
+>>> rest is mostly in the noise, but mod_node_page_state() sticks out like
+>>> a sore thumb. They seem to be caused by the node stat accounting done
+>>> in gup.c for FOLL_PIN.
+>>
+>> Confirmed just disabling the node_stat bits in mm/gup.c and now the
+>> performance is back to the same levels as before.
+>>
+>> An almost 3% regression is a bit hard to swallow...
+> 
+> This is something that we say when adding pin_user_pages_fast(),
+> yes. I doubt that I can quickly find the email thread, but we
+> measured it and weren't immediately able to come up with a way
+> to make it faster.
+> 
+> At this point, it's a good time to consider if there is any
+> way to speed it up. But I wanted to confirm that you're absolutely
+> right: the measurement sounds about right, and that's also the
+> hotspot that we say, too.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+From spending all of 5 minutes on this, it must be due to exceeding the
+pcp stat_threashold, as we then end up doing two atomic_long_adds().
+Looking at proc, looks like it's 108. And with this test, then we're
+hitting that slow path ~80k/second. Uhm...
 
-Fixes: 51616018dd1b ("i40e: Add support for getlink, setlink ndo ops")
-Signed-off-by: Natalia Petrova <n.petrova@fintech.ru>
-Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
----
-v2: The remark about the error code by Simon Horman <simon.horman@corigine.com> 
-was taken into account; return value -ENOENT was changed to -EINVAL.
- drivers/net/ethernet/intel/i40e/i40e_main.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 53d0083e35da..4626d2a1af91 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -13167,6 +13167,8 @@ static int i40e_ndo_bridge_setlink(struct net_device *dev,
- 	}
- 
- 	br_spec = nlmsg_find_attr(nlh, sizeof(struct ifinfomsg), IFLA_AF_SPEC);
-+	if (!br_spec)
-+		return -EINVAL;
- 
- 	nla_for_each_nested(attr, br_spec, rem) {
- 		__u16 mode;
 -- 
-2.34.1
+Jens Axboe
 
