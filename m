@@ -2,100 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0388468142C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507CD681430
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237963AbjA3PLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
+        id S237977AbjA3PMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236713AbjA3PLL (ORCPT
+        with ESMTP id S235854AbjA3PL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:11:11 -0500
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9D39282;
-        Mon, 30 Jan 2023 07:11:10 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id r9so10285680oig.12;
-        Mon, 30 Jan 2023 07:11:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1lHdh1CkCtIdFTXxL0MnkKjoUkZTHAxzc6MiEiiVEVU=;
-        b=OpGvB8hT5gecMjpBgt8xQtyc0v6FByV2BugfTvXxJcR+0ppB8wqzgWc5e8o1PemL+V
-         ksC/uLec7i01ia0ECT7LZuZqQ52wxwcqKnNsxtYWSJltHWZUxMAW1gunci/Vr9OhZirp
-         7jXLyWGDwH1PatYB91uFXpmFnyK2hsbC+QH0Zt+Q1II66OQE2qTeIZTaG3SvGl3eFAxt
-         5gQg9CGP8/f4jNMUk+9T5nz1Z6WKQXJLMBe8ZOfda8XOnwoRjsj1Cdny2XUfMSyt+mTz
-         wLVN1af0KhMoFfBtvEVsdwXBM5XHXHNcu6nTxhvP3ajvnjqQwZNLmc8Bm1u/q9YheJtO
-         iVzQ==
-X-Gm-Message-State: AFqh2koc56n2sSONs8eRpbGg7bBmH0Mr7o7EthJ8/Un3yoCRFV0gekum
-        uBtZbTULhGe1MEJo96YUFA==
-X-Google-Smtp-Source: AMrXdXtih+BIOtVOCT9uywHOqVTZZLIqiwGALi32V+KKFVD5odraFJnotVWrWvyiMnBWA25gnXCZQA==
-X-Received: by 2002:aca:c2c6:0:b0:363:a5fd:9cc7 with SMTP id s189-20020acac2c6000000b00363a5fd9cc7mr21476755oif.13.1675091469441;
-        Mon, 30 Jan 2023 07:11:09 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s9-20020acadb09000000b00363ea5be014sm4839405oig.3.2023.01.30.07.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 07:11:09 -0800 (PST)
-Received: (nullmailer pid 2585826 invoked by uid 1000);
-        Mon, 30 Jan 2023 15:11:08 -0000
-Date:   Mon, 30 Jan 2023 09:11:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-remoteproc@vger.kernel.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mathieu.poirier@linaro.org, mani@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: remoteproc: qcom: Add sm6115 pas yaml
- file
-Message-ID: <20230130151108.GA2548714-robh@kernel.org>
-References: <20230128053504.2099620-1-bhupesh.sharma@linaro.org>
- <20230128053504.2099620-2-bhupesh.sharma@linaro.org>
- <167491555142.2364868.11831106421472878617.robh@kernel.org>
- <8c954218-bba4-54c8-59a2-86371610aa03@linaro.org>
+        Mon, 30 Jan 2023 10:11:58 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828E527D51;
+        Mon, 30 Jan 2023 07:11:57 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UDc17O008176;
+        Mon, 30 Jan 2023 15:11:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=x0P9ZdjnUmV1DEV6b+XWVl6+WW81J1cG0Z+0IAdDGk8=;
+ b=jhSLgezS6h9afCSKyThiVRi+sn4XM5RXJF7zU/dg6Lg78sppoSmV/ms0w6au0CN0QUPz
+ VeYYdEgw34X1xzbxALL1iHn+Y0dHuadKb7svKGeTM7EewRt3eYwZpUc87HP3qEYHHnQM
+ BEsJuQrbOzGtZ8GWOSlqb5qxQEJdaMZnDQqAjOtIATnqdVMq8CmFOb3Y8sJ6m1ymAR9I
+ xMhtZ51d8Jqhna4ZYec6a3+N0R0Eo1INHrlZiy3iDhVBugQm8RBNot5oEvUCx7V6CZdh
+ uyU1vqi/B19EmhZlmjAqlV1BlfVBErZh24QHC55FkqIrDkgKV8bkTLs3lQkyr68CEGNx iA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncvvu3sxa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 15:11:54 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UFBrGR019585
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 15:11:53 GMT
+Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 30 Jan 2023 07:11:48 -0800
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
+CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <robdclark@gmail.com>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <quic_kalyant@quicinc.com>, <dmitry.baryshkov@linaro.org>,
+        <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
+        <quic_bjorande@quicinc.com>, <quic_abhinavk@quicinc.com>,
+        <quic_sbillaka@quicinc.com>
+Subject: [PATCH v12 00/14] Add PSR support for eDP 
+Date:   Mon, 30 Jan 2023 20:41:20 +0530
+Message-ID: <1675091494-13988-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8c954218-bba4-54c8-59a2-86371610aa03@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4nxlRaH7EGn0DNHWY4rfn2jFdtS83XWN
+X-Proofpoint-ORIG-GUID: 4nxlRaH7EGn0DNHWY4rfn2jFdtS83XWN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_14,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 mlxscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301300147
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 12:08:34PM +0100, Krzysztof Kozlowski wrote:
-> On 28/01/2023 15:20, Rob Herring wrote:
-> > 
-> > On Sat, 28 Jan 2023 11:05:04 +0530, Bhupesh Sharma wrote:
-> >> This documents the aDSP, cDSP and MPSS DSPs present
-> >> on the SM6115 SoC.
-> >>
-> >> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> >> ---
-> >>  .../bindings/remoteproc/qcom,sm6115-pas.yaml  | 143 ++++++++++++++++++
-> >>  1 file changed, 143 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml
-> >>
-> > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > 
-> > yamllint warnings/errors:
-> > 
-> > dtschema/dtc warnings/errors:
-> > ./Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/remoteproc/qcom,pas-common.yaml
-> 
-> This is expected - the qcom,pas-common.yaml is in remoteproc repo.
+Changes in v2:
+  - Use dp bridge to set psr entry/exit instead of dpu_enocder.
+  - Don't modify whitespaces.
+  - Set self refresh aware from atomic_check.
+  - Set self refresh aware only if psr is supported.
+  - Provide a stub for msm_dp_display_set_psr.
+  - Move dp functions to bridge code.
 
-Where is that dependency mentioned in this patch? If not mentioned, I 
-will mention it for you with the error report.
+Changes in v3:
+  - Change callback names to reflect atomic interfaces.
+  - Move bridge callback change to separate patch as suggested by Dmitry.
+  - Remove psr function declaration from msm_drv.h.
+  - Set self_refresh_aware flag only if psr is supported.
+  - Modify the variable names to simpler form.
+  - Define bit fields for PSR settings.
+  - Add comments explaining the steps to enter/exit psr.
+  - Change DRM_INFO to drm_dbg_db. 
 
-Rob
+Changes in v4:
+  - Move the get crtc functions to drm_atomic.
+  - Add atomic functions for DP bridge too.
+  - Add ternary operator to choose eDP or DP ops.
+  - Return true/false instead of 1/0.
+  - mode_valid missing in the eDP bridge ops.
+  - Move the functions to get crtc into drm_atomic.c.
+  - Fix compilation issues.
+  - Remove dpu_assign_crtc and get crtc from drm_enc instead of dpu_enc.
+  - Check for crtc state enable while reserving resources.
+
+Changes in v5:
+  - Move the mode_valid changes into a different patch.
+  - Complete psr_op_comp only when isr is set.
+  - Move the DP atomic callback changes to a different patch.
+  - Get crtc from drm connector state crtc.
+  - Move to separate patch for check for crtc state enable while
+reserving resources.
+
+Changes in v6:
+  - Remove crtc from dpu_encoder_virt struct.
+  - fix crtc check during vblank toggle crtc.
+  - Misc changes. 
+
+Changes in v7:
+  - Add fix for underrun issue on kasan build.
+
+Changes in v8:
+  - Drop the enc spinlock as it won't serve any purpose in
+protetcing conn state.(Dmitry/Doug)
+
+Changes in v9:
+  - Update commit message and fix alignment using spaces.(Marijn)
+  - Misc changes.(Marijn)
+
+Changes in v10:
+  - Get crtc cached in dpu_enc during obj init.(Dmitry)
+
+Changes in v11:
+  - Remove crtc cached in dpu_enc during obj init.
+  - Update dpu_enc crtc state on crtc enable/disable during self refresh.
+
+Changes in v12:
+  - Update sc7180 intf mask to get intf timing gen status
+based on DPU_INTF_STATUS_SUPPORTED bit.(Dmitry)
+  - Remove "clear active interface in the datapath cleanup" change
+as it is already included.
+  - Move core changes to top of the series.(Dmitry)
+
+Sankeerth Billakanti (1):
+  drm/msm/dp: disable self_refresh_aware after entering psr
+
+Vinod Polimera (13):
+  drm/msm/disp/dpu: check for crtc enable rather than crtc active to
+    release shared resources
+  drm/msm/disp/dpu: get timing engine status from intf status register
+  drm/msm/disp/dpu: wait for extra vsync till timing engine status is
+    disabled
+  drm/msm/disp/dpu: reset the datapath after timing engine disable
+  drm: add helper functions to retrieve old and new crtc
+  drm/msm/dp: use atomic callbacks for DP bridge ops
+  drm/msm/dp: Add basic PSR support for eDP
+  drm/msm/dp: use the eDP bridge ops to validate eDP modes
+  drm/bridge: use atomic enable/disable callbacks for panel bridge
+  drm/bridge: add psr support for panel bridge callbacks
+  drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
+    functions
+  drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
+  drm/msm/disp/dpu: update dpu_enc crtc state on crtc enable/disable
+    during self refresh
+
+ drivers/gpu/drm/bridge/panel.c                     |  68 +++++++-
+ drivers/gpu/drm/drm_atomic.c                       |  60 +++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c           |  40 ++++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  26 ++-
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  22 +++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  12 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        |   8 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   2 +-
+ drivers/gpu/drm/msm/dp/dp_catalog.c                |  80 +++++++++
+ drivers/gpu/drm/msm/dp/dp_catalog.h                |   4 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  80 +++++++++
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   3 +
+ drivers/gpu/drm/msm/dp/dp_display.c                |  36 ++--
+ drivers/gpu/drm/msm/dp/dp_display.h                |   2 +
+ drivers/gpu/drm/msm/dp/dp_drm.c                    | 194 ++++++++++++++++++++-
+ drivers/gpu/drm/msm/dp/dp_drm.h                    |   9 +-
+ drivers/gpu/drm/msm/dp/dp_link.c                   |  36 ++++
+ drivers/gpu/drm/msm/dp/dp_panel.c                  |  22 +++
+ drivers/gpu/drm/msm/dp/dp_panel.h                  |   6 +
+ drivers/gpu/drm/msm/dp/dp_reg.h                    |  27 +++
+ include/drm/drm_atomic.h                           |   7 +
+ 22 files changed, 706 insertions(+), 44 deletions(-)
+
+-- 
+2.7.4
 
