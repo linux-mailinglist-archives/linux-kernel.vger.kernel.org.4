@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B543568155E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 142D6681563
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjA3Pou convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 30 Jan 2023 10:44:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S230202AbjA3PpO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 30 Jan 2023 10:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbjA3Pot (ORCPT
+        with ESMTP id S236923AbjA3PpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:44:49 -0500
+        Mon, 30 Jan 2023 10:45:11 -0500
 Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB05E3EC74;
-        Mon, 30 Jan 2023 07:44:44 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2BD2BECE;
+        Mon, 30 Jan 2023 07:45:03 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 7455F24E02F;
-        Mon, 30 Jan 2023 23:44:35 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 30 Jan
- 2023 23:44:35 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E64E524E154;
+        Mon, 30 Jan 2023 23:45:01 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 30 Jan
+ 2023 23:45:01 +0800
 Received: from ubuntu.localdomain (202.190.105.77) by EXMBX168.cuchost.com
  (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 30 Jan
- 2023 23:43:07 +0800
+ 2023 23:44:35 +0800
 From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S . Miller" <davem@davemloft.net>,
@@ -35,10 +35,12 @@ To:     Herbert Xu <herbert@gondor.apana.org.au>,
         Conor Dooley <conor.dooley@microchip.com>
 CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v2 0/4] crypto: starfive - Add drivers for crypto engine
-Date:   Mon, 30 Jan 2023 23:42:38 +0800
-Message-ID: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
+Subject: [PATCH v2 1/4] dt-bindings: crypto: Add StarFive crypto module
+Date:   Mon, 30 Jan 2023 23:42:39 +0800
+Message-ID: <20230130154242.112613-2-jiajie.ho@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
+References: <20230130154242.112613-1-jiajie.ho@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [202.190.105.77]
@@ -54,51 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds kernel driver support for StarFive JH7110 crypto
-engine. The first patch add Documentations for the device and Patch 2
-adds device probe and DMA init for the module. Patch 3 adds crypto and
-DMA dts node for VisionFive 2 board. Patch 4 adds hash/hmac support to
-the module.
+Add documentation to describe StarFive cryptographic engine.
 
-Patch 3 needs to be applied on top of:
-https://patchwork.kernel.org/project/linux-riscv/patch/20221220011247.35560-7-hal.feng@starfivetech.com/
-https://patchwork.kernel.org/project/linux-riscv/cover/20230120024445.244345-1-xingyu.wu@starfivetech.com/
-
-Changes v1->v2:
-- Fixed yaml filename and format (Krzysztof)
-- Removed unnecessary property names in yaml (Krzysztof)
-- Moved of_device_id table close to usage (Krzysztof)
-- Use dev_err_probe for error returns (Krzysztof)
-- Dropped redundant readl and writel wrappers (Krzysztof)
-- Updated commit signed offs (Conor)
-- Dropped redundant node in dts, module set to on in dtsi (Conor)
-
-Jia Jie Ho (4):
-  dt-bindings: crypto: Add StarFive crypto module
-  crypto: starfive - Add crypto engine support
-  riscv: dts: starfive: Add crypto and DMA node for VisionFive 2
-  crypto: starfive - Add hash and HMAC support
-
- .../crypto/starfive,jh7110-crypto.yaml        |   70 ++
- MAINTAINERS                                   |    7 +
- arch/riscv/boot/dts/starfive/jh7110.dtsi      |   27 +
- drivers/crypto/Kconfig                        |    1 +
- drivers/crypto/Makefile                       |    1 +
- drivers/crypto/starfive/Kconfig               |   20 +
- drivers/crypto/starfive/Makefile              |    4 +
- drivers/crypto/starfive/starfive-cryp.c       |  238 ++++
- drivers/crypto/starfive/starfive-hash.c       | 1095 +++++++++++++++++
- drivers/crypto/starfive/starfive-regs.h       |   71 ++
- drivers/crypto/starfive/starfive-str.h        |   99 ++
- 11 files changed, 1633 insertions(+)
+Co-developed-by: Huan Feng <huan.feng@starfivetech.com>
+Signed-off-by: Huan Feng <huan.feng@starfivetech.com>
+Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
+---
+ .../crypto/starfive,jh7110-crypto.yaml        | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/crypto/starfive,jh7110-crypto.yaml
- create mode 100644 drivers/crypto/starfive/Kconfig
- create mode 100644 drivers/crypto/starfive/Makefile
- create mode 100644 drivers/crypto/starfive/starfive-cryp.c
- create mode 100644 drivers/crypto/starfive/starfive-hash.c
- create mode 100644 drivers/crypto/starfive/starfive-regs.h
- create mode 100644 drivers/crypto/starfive/starfive-str.h
 
+diff --git a/Documentation/devicetree/bindings/crypto/starfive,jh7110-crypto.yaml b/Documentation/devicetree/bindings/crypto/starfive,jh7110-crypto.yaml
+new file mode 100644
+index 000000000000..71a2876bd6e4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/crypto/starfive,jh7110-crypto.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/crypto/starfive,jh7110-crypto.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: StarFive Cryptographic Module
++
++maintainers:
++  - Jia Jie Ho <jiajie.ho@starfivetech.com>
++  - William Qiu <william.qiu@starfivetech.com>
++
++properties:
++  compatible:
++    const: starfive,jh7110-crypto
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Hardware reference clock
++      - description: AHB reference clock
++
++  clock-names:
++    items:
++      - const: hclk
++      - const: ahb
++
++  interrupts:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  dmas:
++    items:
++      - description: TX DMA channel
++      - description: RX DMA channel
++
++  dma-names:
++    items:
++      - const: tx
++      - const: rx
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - resets
++  - dmas
++  - dma-names
++
++additionalProperties: false
++
++examples:
++  - |
++    crypto: crypto@16000000 {
++        compatible = "starfive,jh7110-crypto";
++        reg = <0x16000000 0x4000>;
++        clocks = <&clk 15>, <&clk 16>;
++        clock-names = "hclk", "ahb";
++        interrupts = <28>;
++        resets = <&reset 3>;
++        dmas = <&dma 1 2>,
++               <&dma 0 2>;
++        dma-names = "tx", "rx";
++    };
++...
 -- 
 2.25.1
 
