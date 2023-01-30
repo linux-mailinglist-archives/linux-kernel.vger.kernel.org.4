@@ -2,107 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25089681CC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C495681CC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjA3Vaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
+        id S231202AbjA3Vat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:30:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjA3VaZ (ORCPT
+        with ESMTP id S231282AbjA3Vah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:30:25 -0500
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C494D38B4C;
-        Mon, 30 Jan 2023 13:30:22 -0800 (PST)
-Received: by mail-ot1-f49.google.com with SMTP id v24-20020a05683011d800b0068bdd29b160so499860otq.13;
-        Mon, 30 Jan 2023 13:30:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hiqzkzUxt8/xNcC+60X48Uy9vsc/Fvpd3yplhrNClzI=;
-        b=Ne4yJs5hDgAvZp3W2tHqfVA+fzw1guibnqbxUUdwLiAQkT/CRGWOlM8yvDYpfCsodH
-         +e9z7sJFqjLZ5PGho2FBoYWnQI7244/dNyOyowrfat3Sb8opgFLeUbjD76ameWQVQ0li
-         WTZc2C2Mxxs49sJH0FtFHBdQdT8u7iQZW4pQGpuPPrtjmp6M8sUzqpjqrAS3J+Davw9Z
-         PjMLq/qm3LAStxcyissX8eFJHaMX7DSg3bZHKJk2cSA1PxqJNuD4BcHKiAEUosp4SyW1
-         impD1anRkawkPKlS1l0AofQ08fPZRNdZXOUXcWTQEEfwp0ueOiz4l0q4QDTUsgvWssU3
-         RYdA==
-X-Gm-Message-State: AO0yUKWKgFh51bP4i32g8erf05yxyM6jCi0AnaitiOEzGYl1weAqMmPx
-        bxIDcTNDVvlcdp8c91qhWg==
-X-Google-Smtp-Source: AK7set+6elnwmrJx/eaOfyIFc6WxpSKhpCfomvw9nxGz714z5NUpgPl/HV2aAEHWF/qfxPSAKsxSfA==
-X-Received: by 2002:a9d:6f93:0:b0:684:c309:def3 with SMTP id h19-20020a9d6f93000000b00684c309def3mr4545109otq.12.1675114222006;
-        Mon, 30 Jan 2023 13:30:22 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id df17-20020a056830479100b006884c42a38asm4331361otb.41.2023.01.30.13.30.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 13:30:21 -0800 (PST)
-Received: (nullmailer pid 3563341 invoked by uid 1000);
-        Mon, 30 Jan 2023 21:30:20 -0000
-Date:   Mon, 30 Jan 2023 15:30:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sean Young <sean@mess.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] media: rc: add keymap for Beelink Mini MXIII remote
-Message-ID: <20230130213020.GA3541260-robh@kernel.org>
-References: <20230128034117.3983105-1-christianshewitt@gmail.com>
- <6e953652-4a24-6f3c-74e7-07c25fa1c6c1@linaro.org>
- <Y9YwbiJz9vOBejdL@gofer.mess.org>
+        Mon, 30 Jan 2023 16:30:37 -0500
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A0954955D
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:30:32 -0800 (PST)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id F1F5E92009D; Mon, 30 Jan 2023 22:30:31 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id EAB4392009B;
+        Mon, 30 Jan 2023 21:30:31 +0000 (GMT)
+Date:   Mon, 30 Jan 2023 21:30:31 +0000 (GMT)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] x86: Use `get_random_u8' for kernel stack offset
+ randomization
+Message-ID: <alpine.DEB.2.21.2301302011150.55843@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9YwbiJz9vOBejdL@gofer.mess.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,HDRS_LCASE,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 08:38:06AM +0000, Sean Young wrote:
-> On Sat, Jan 28, 2023 at 11:11:32AM +0100, Krzysztof Kozlowski wrote:
-> > On 28/01/2023 04:41, Christian Hewitt wrote:
-> > > Add a keymap and bindings for the simple IR (NEC) remote used with
-> > > the Beelink Mini MXIII Android STB device.
-> > > 
-> > > Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> > > ---
-> > >  .../devicetree/bindings/media/rc.yaml         |  1 +
-> > >  drivers/media/rc/keymaps/Makefile             |  1 +
-> > >  drivers/media/rc/keymaps/rc-beelink-mxiii.c   | 54 +++++++++++++++++++
-> > >  include/media/rc-map.h                        |  1 +
-> > >  4 files changed, 57 insertions(+)
-> > >  create mode 100644 drivers/media/rc/keymaps/rc-beelink-mxiii.c
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/media/rc.yaml b/Documentation/devicetree/bindings/media/rc.yaml
-> > > index 266f1d5cae51..f390a5d2c82d 100644
-> > > --- a/Documentation/devicetree/bindings/media/rc.yaml
-> > > +++ b/Documentation/devicetree/bindings/media/rc.yaml
-> > > @@ -39,6 +39,7 @@ properties:
-> > >        - rc-avertv-303
-> > >        - rc-azurewave-ad-tu700
-> > >        - rc-beelink-gs1
-> > > +      - rc-beelink-mxiii
-> > 
-> > Bindings are separate patches. Didn't you get such feedback already?
-> 
-> The only change for new keymaps is an added entry to the rc-map-name enum.
-> In the past, new keymaps have been accepted with that single line in the
-> same commit.
+For x86 kernel stack offset randomization uses the RDTSC instruction, 
+which according to H. Peter Anvin is not a secure source of entropy:
 
-It's been a checkpatch.pl warning since 2018. The separation is so that 
-commit messages in the DT only repo[1] make sense.
+"RDTSC isn't a super fast instruction either, but what is *way* more
+significant is that this use of RDTSC is NOT safe: in certain power states
+it may very well be that stone number of lower bits of TSC contain no
+entropy at all."
 
-Rob
+It also causes an invalid opcode exception with hardware that does not 
+implement this instruction:
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/devicetree/devicetree-rebasing.git/
+process '/sbin/init' started with executable stack
+invalid opcode: 0000 [#1]
+CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc4+ #1
+EIP: exit_to_user_mode_prepare+0x90/0xe1
+Code: 30 02 00 75 ad 0f ba e3 16 73 05 e8 a7 a5 fc ff 0f ba e3 0e 73 05 e8 3e af fc ff a1 c4 c6 51 c0 85 c0 7e 13 8b 0d ac 01 53 c0 <0f> 31 0f b6 c0 31 c1 89 0d ac 01 53 c0 83 3d 30 ed 62 c0 00 75 33
+EAX: 00000001 EBX: 00004000 ECX: 00000000 EDX: 000004ff
+ESI: c10253c0 EDI: 00000000 EBP: c1027f98 ESP: c1027f8c
+DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010002
+CR0: 80050033 CR2: bfe8659b CR3: 012e0000 CR4: 00000000
+Call Trace:
+ ? rest_init+0x72/0x72
+ syscall_exit_to_user_mode+0x15/0x27
+ ret_from_fork+0x10/0x30
+EIP: 0xb7f74800
+Code: Unable to access opcode bytes at 0xb7f747d6.
+EAX: 00000000 EBX: 00000000 ECX: 00000000 EDX: 00000000
+ESI: 00000000 EDI: 00000000 EBP: 00000000 ESP: bfe864b0
+DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 007b EFLAGS: 00000200
+---[ end trace 0000000000000000 ]---
+EIP: exit_to_user_mode_prepare+0x90/0xe1
+Code: 30 02 00 75 ad 0f ba e3 16 73 05 e8 a7 a5 fc ff 0f ba e3 0e 73 05 e8 3e af fc ff a1 c4 c6 51 c0 85 c0 7e 13 8b 0d ac 01 53 c0 <0f> 31 0f b6 c0 31 c1 89 0d ac 01 53 c0 83 3d 30 ed 62 c0 00 75 33
+EAX: 00000001 EBX: 00004000 ECX: 00000000 EDX: 000004ff
+ESI: c10253c0 EDI: 00000000 EBP: c1027f98 ESP: c1027f8c
+DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010002
+CR0: 80050033 CR2: b7f747d6 CR3: 012e0000 CR4: 00000000
+Kernel panic - not syncing: Fatal exception
+
+Therefore switch to our generic entropy source and use `get_random_u8' 
+instead, which according to Jason A. Donenfeld is supposed to be fast 
+enough:
+
+"Generally it's very very fast, as most cases wind up being only a
+memcpy -- in this case, a single byte copy. So by and large it should
+be suitable. It's fast enough now that most networking things are able
+to use it. And lots of other places where you'd want really high
+performance. So I'd expect it's okay to use here too. And if it is too
+slow, we should figure out how to make it faster. But I don't suspect
+it'll be too slow."
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Fixes: fe950f602033 ("x86/entry: Enable random_kstack_offset support")
+Cc: stable@vger.kernel.org # v5.13+
+---
+Changes from v2:
+
+- Use `get_random_u8' rather than `rdtsc', universally; update the heading 
+  (was: "x86: Disable kernel stack offset randomization for !TSC") and the 
+  description accordingly.
+
+- As a security concern mark for backporting.
+
+Changes from v1:
+
+- Disable randomization at run time rather than in configuration.
+---
+ arch/x86/include/asm/entry-common.h |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+linux-x86-randomize-kstack-offset-random-u8.diff
+Index: linux-macro/arch/x86/include/asm/entry-common.h
+===================================================================
+--- linux-macro.orig/arch/x86/include/asm/entry-common.h
++++ linux-macro/arch/x86/include/asm/entry-common.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_X86_ENTRY_COMMON_H
+ #define _ASM_X86_ENTRY_COMMON_H
+ 
++#include <linux/random.h>
+ #include <linux/randomize_kstack.h>
+ #include <linux/user-return-notifier.h>
+ 
+@@ -85,7 +86,7 @@ static inline void arch_exit_to_user_mod
+ 	 * Therefore, final stack offset entropy will be 5 (x86_64) or
+ 	 * 6 (ia32) bits.
+ 	 */
+-	choose_random_kstack_offset(rdtsc() & 0xFF);
++	choose_random_kstack_offset(get_random_u8());
+ }
+ #define arch_exit_to_user_mode_prepare arch_exit_to_user_mode_prepare
+ 
