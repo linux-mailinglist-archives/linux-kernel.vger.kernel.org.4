@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622A3681BF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C9C681C1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjA3VAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
+        id S229823AbjA3VCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjA3VAG (ORCPT
+        with ESMTP id S229768AbjA3VCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:00:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02AE460BF
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:00:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4702A61254
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 21:00:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82846C433D2;
-        Mon, 30 Jan 2023 21:00:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675112404;
-        bh=NsVV/5BOHPQc7islZ776I/OBWFeiI6BU7PrKDMsT53s=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=hVcfNtoqQFaAvMlN86W+G+JFHvTTXTPL47Gv8a6laBz0AZ54YaCO7qb4S0EebiZmQ
-         fKWa+Gw7aqGOCzdbHZCzXvu1jNXmL5j4m0subvQ1gbpDWTfd9yNMb7tPVDaHGtxzxZ
-         Z+bEM+wTL5xFk2TpsCeB51cANz24fYaOHUZbe8uHwLzJNPaZjTPpwZL3A2siB5xdRb
-         ZPMx/R0k5qACRsNq9VIIyJckB8j/wKmO1SMu0R1EfCeKKglK1hUxWOlSZuSAB24lMJ
-         8EvVTrQRUhPkYvCH1wdxTe4a8XKSNFq6Vnt1sLxotobs7lRrlTGU0hdfBR4bVeYhG9
-         f4rNUNyHTtMNw==
-From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org,
-        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
-Cc:     vsujithkumar.reddy@amd.com, Vijendar.Mukunda@amd.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        ssabakar@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>
-In-Reply-To: <20230130100104.4076640-1-venkataprasad.potturu@amd.com>
-References: <20230130100104.4076640-1-venkataprasad.potturu@amd.com>
-Subject: Re: [PATCH] ASoC: amd: acp: Refactor bit width calculation
-Message-Id: <167511240124.2141894.6369090225666254370.b4-ty@kernel.org>
-Date:   Mon, 30 Jan 2023 21:00:01 +0000
+        Mon, 30 Jan 2023 16:02:31 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C134614A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:02:27 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id r6so2463472ioj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:02:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tqiYGrAmfasm6lQ8vFsVNt3ikeeBgKSbwzGX4HertYY=;
+        b=GOVd6u2ieN8ZGU8y66kFT6PF7W6+SfL4LTPkS+jmZR4QDvpgdbiLuiJpwS6fY9WTad
+         ldCcWhlgbHnzm/JZEJhXeB5mga8Vi/07XPX4FVSqAoctajjwX7/BLgHM4/jfcuFeiZf7
+         HrWH0bP4vnnLQmTqE30k40fR6+sdx8JrSPhZQ+zPcXnFaDpAR/JPRk/0RtHtcIMrla74
+         Nqu011nqmcKmUoaJVlZADdltOp8mGTKqAwzXtkc9zqMwhil3olfyHNhDD979rotGmWCj
+         pJ29pICkOFd/Ll9AlDtCt6dgUwq89L/nr3kKYJvpmVXtsuxv/blcbsa5ur11u3BY0dJg
+         QFyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tqiYGrAmfasm6lQ8vFsVNt3ikeeBgKSbwzGX4HertYY=;
+        b=AccMKJy5oskUM28rG9Qcyu3lZTBhXvTxvAg+1t9sORxnYg9lKnxM5nrTHEsOcW/w9X
+         W+rwmzMsC6QgAYvECPvjksI8R0GMchA75nu7LRpJzuIeeCOkKN4xgTfV7r75PmkkGCoC
+         byjUjft+YuE4Q8FZ82/XwZTMAJkmQwvZa/7U9lkXtlPc6LUNFQHhpwt5If4l2WRIsTEl
+         AiOHLKwpJzgPp6xe+zETqJ2S1j7sIiU4mNmKKFjKakDgbovjPXmSIK34pIjAf4Zwr5hW
+         V/Fw1yCnfjqHafs0sGVXYG4FHbXOeb2FmraVUKsZebdChAnvo27u2NGdYpj7PRAXGVkJ
+         Vdag==
+X-Gm-Message-State: AO0yUKVx6ObcEg8vrbUDYUx91DHJaERpYIeIU1d33xcwmAOMJzaRVrHT
+        /WwJMZmBYQyTvECYv4fJHSz4og==
+X-Google-Smtp-Source: AK7set/L4+20oXstDi7/0z2f8rHrqw8wonXy2WYYfxVyB1zXBMeRcBS0lAtlXiUReQtK4ONZmXBHWQ==
+X-Received: by 2002:a05:6602:370d:b0:716:948a:8871 with SMTP id bh13-20020a056602370d00b00716948a8871mr7157020iob.1.1675112547060;
+        Mon, 30 Jan 2023 13:02:27 -0800 (PST)
+Received: from presto.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id a30-20020a02735e000000b003aef8fded9asm1992046jae.127.2023.01.30.13.02.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 13:02:11 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/8] net: ipa: remaining IPA v5.0 support
+Date:   Mon, 30 Jan 2023 15:01:50 -0600
+Message-Id: <20230130210158.4126129-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 15:31:00 +0530, Venkata Prasad Potturu wrote:
-> Refactor bit width calculation using params_physical_width()
-> instead hard-code values.
-> 
-> 
+This series includes almost all remaining IPA code changes required
+to support IPA v5.0.  IPA register definitions and configuration
+data for IPA v5.0 will be sent later (soon).  Note that the GSI
+register definitions still require work.  GSI for IPA v5.0 supports
+up to 256 (rather than 32) channels, and this changes the way GSI
+register offsets are calculated.  A few GSI register fields also
+change.
 
-Applied to
+The first patch in this series increases the number of IPA endpoints
+supported by the driver, from 32 to 36.  The next updates the width
+of the destination field for the IP_PACKET_INIT immediate command so
+it can represent up to 256 endpoints rather than just 32.  The next
+adds a few definitions of some IPA registers and fields that are
+first available in IPA v5.0.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+The next two patches update the code that handles router and filter
+table caches.  Previously these were referred to as "hashed" tables,
+and the IPv4 and IPv6 tables are now combined into one "unified"
+table.  The sixth and seventh patches add support for a new pulse
+generator, which allows time periods to be specified with a wider
+range of clock resolution.  And the last patch just defines two new
+memory regions that were not previously used.
 
-Thanks!
+					-Alex
 
-[1/1] ASoC: amd: acp: Refactor bit width calculation
-      commit: 55e681c950d89bcc9dc13bc15f5b64393ef58897
+Alex Elder (8):
+  net: ipa: support more endpoints
+  net: ipa: extend endpoints in packet init command
+  net: ipa: define IPA v5.0+ registers
+  net: ipa: update table cache flushing
+  net: ipa: support zeroing new cache tables
+  net: ipa: greater timer granularity options
+  net: ipa: support a third pulse register
+  net: ipa: define two new memory regions
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+ drivers/net/ipa/ipa_cmd.c      |  32 ++++++++---
+ drivers/net/ipa/ipa_endpoint.c | 102 ++++++++++++++++++---------------
+ drivers/net/ipa/ipa_endpoint.h |   4 +-
+ drivers/net/ipa/ipa_main.c     |  14 ++++-
+ drivers/net/ipa/ipa_mem.c      |   8 ++-
+ drivers/net/ipa/ipa_mem.h      |   8 ++-
+ drivers/net/ipa/ipa_reg.h      |  43 ++++++++++++--
+ drivers/net/ipa/ipa_table.c    |  61 ++++++++++++++------
+ 8 files changed, 187 insertions(+), 85 deletions(-)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.34.1
 
