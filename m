@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D238168053D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7BB68053F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235739AbjA3Et3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:49:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S235659AbjA3Etl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235728AbjA3Esx (ORCPT
+        with ESMTP id S235650AbjA3EtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:48:53 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6E513DEB;
-        Sun, 29 Jan 2023 20:48:37 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id q9so6791369pgq.5;
-        Sun, 29 Jan 2023 20:48:37 -0800 (PST)
+        Sun, 29 Jan 2023 23:49:04 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84CD4202;
+        Sun, 29 Jan 2023 20:48:54 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id cl23-20020a17090af69700b0022c745bfdc3so3347484pjb.3;
+        Sun, 29 Jan 2023 20:48:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wjU6vQ2reF1QaFmnV6OzBgk2jZ+1LG7bM7VzcqOvsb0=;
-        b=Ru2zriJFMRr6cN7hIcrPrz8bufyHE7ZzfmKctioQ2Obre6QpmQCJScMQOqZzzNMoRG
-         V8FYQc+GPHH0f5FpwunOWyCUfIuo13CfZTUzHLk3eM/Q3n3JlLgo5ChJh7PVWo1Zshl0
-         W5kdMkwDsw1w9Z9PPTP7lTVlTfW/Cx2kNg6o3SdsICs4fD7d/A9v42oirEQnrR+lbzmJ
-         NHCE9ppf33R9w7lI4GyQK8yhw3ciD2bwdNqNMlocj+gvvDtTHYTowGi+ZNlDZsXeew5O
-         Zn7JOsdSlQg68XmCOxEBG419VZaYxBPTLsHX8OTy1zWCe3qYZ5FnmKhljPlbdGEtG3J/
-         VoaQ==
+        bh=vuf6VTUpaXKxqyw7z5c5+cecbJFnnXUt9dyG097kBRA=;
+        b=jp51xFQtFLKcrYVfoLOejT5oUazpBjx+EwbIYrYqdqmMXDKmFSoOOB2WXcfxD63h+F
+         etSplpJUlkTQOSZdOC36/oMrVBqXK12t4YQHNDbCZ2jdzDstfPOexfDiIL+uRZo/JYUv
+         YIaHqm5SdF5WgPZji/KWwE9ldjIj1V8qvBraSiSn69Fk4WI1LPyhVtcNr0IjOrjlvhPR
+         Jeou3hou9LsimA4PN8HHZLnOIq8cspauzGeGpk+RpZe9E06nvRbxp70h6x8Gx3djAsxB
+         0eIm8Ioe665AO8QwRnj06waEi3GmdZ2xjgLaRdi6mYaNT5z/H4GTvTOXQf9Om9KUr/hi
+         K2NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wjU6vQ2reF1QaFmnV6OzBgk2jZ+1LG7bM7VzcqOvsb0=;
-        b=zRk7dIPKg1sDDuz6nXAC8p5BllruCANHIiX+UqxCkWaqkChP6u5e7a2rQyOVTKfJXb
-         B4LQyxRKrsQkyoKb5QrLAgOcvnqcGhuebupCKiLmyAK4wDkz4CbwwToBeG0D5XmhMXFl
-         olmuLXx5CeX5vJzmls/IJUj6ixMY75OkvAUJ5FYm4OpvztdwgvQB4qxOTvGxOupeOH4N
-         EyUfnXPE6Lsv4GAAy0d3CQzsjDs6cnJP4eal/19SuvTdQDz46v14vS/gPaIWJNaeJ9Jq
-         iaRwUpFmvSbW2Gk5ZtX4R6UbG+A9StHQkAunPVpdYwaphM3cN7h60aYi/DbLFJ9eYncB
-         OwCw==
-X-Gm-Message-State: AO0yUKXZ+Tq0QDwyFvc/nvnvgnzJdvJOgvIkI/SGgXLDY2UxXrJiWcVF
-        4D4woce/gOo5MQ+CRl2hBrM=
-X-Google-Smtp-Source: AK7set9MKoy3+TEPICzgmKgLpK/H/pjbuNAE13suLHY5SN1THxBwPk29+KPgNif9rfBwM1VBpFyaJg==
-X-Received: by 2002:a05:6a00:815:b0:592:d313:b26e with SMTP id m21-20020a056a00081500b00592d313b26emr11884645pfk.17.1675054117307;
-        Sun, 29 Jan 2023 20:48:37 -0800 (PST)
+        bh=vuf6VTUpaXKxqyw7z5c5+cecbJFnnXUt9dyG097kBRA=;
+        b=rOWroAcWW3nhxK4A+6gkJNq8UPWVMkz1TeB8y85kHUOXSoH56+zDM7ghV718c2O1hN
+         3HsvzFL7LzzdSc4Eb9I/tDzq9PxUCSi2Pj2cEMIuoUqPVTcehQsuhXraqtPDQiJRjTtN
+         PDLRsV6A8V95SMf7XKMnmqrLQ1DQkbO7upfFHsQqn1ZIFHo2DeNxOLxG2hucjSTBlc4T
+         yTs74QYap6PovqwmmvBY5Ffe+7E8xdBMB1NdKK24zd5KdyQIoMXm2WcJOZlNG+FlCeKH
+         iPXdRfeaXvS2saloYCb0zd44M6U29Bxyh4ftS9WOZ3G4QvoZL65+ec9lhhri/MqbJlHG
+         H95w==
+X-Gm-Message-State: AO0yUKVw3MXcA50+FmngMTxs/xe4Aao0v9s2eaPRwzzyFxOZmMYXbj9l
+        cZ1T3MYzjLdqpqwcLhFsmrG8Vi7F9dE=
+X-Google-Smtp-Source: AK7set/t8n+5AoxPx92KpJTLhDs3oOya92cDC79HKsUoAfWqru9C1l/loor7GL54hY8lsU9m52yLaw==
+X-Received: by 2002:a05:6a20:ce45:b0:b9:2df:7ef6 with SMTP id id5-20020a056a20ce4500b000b902df7ef6mr16369316pzb.31.1675054134322;
+        Sun, 29 Jan 2023 20:48:54 -0800 (PST)
 Received: from google.com ([2620:15c:9d:2:6882:174b:bc70:101])
-        by smtp.gmail.com with ESMTPSA id h8-20020a056a00230800b0058e08796e98sm6305769pfh.196.2023.01.29.20.48.35
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902bd8500b00194caf3ccc4sm6631099pls.285.2023.01.29.20.48.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 20:48:36 -0800 (PST)
-Date:   Sun, 29 Jan 2023 20:48:33 -0800
+        Sun, 29 Jan 2023 20:48:53 -0800 (PST)
+Date:   Sun, 29 Jan 2023 20:48:50 -0800
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     ye.xingchen@zte.com.cn
-Cc:     ldewangan@nvidia.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-input@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: =?iso-8859-1?Q?tegra-kb?=
- =?iso-8859-1?Q?c_-_Use=A0devm=5Fplatform=5Fget=5Fand=5Fioremap=5Fresource?=
- =?iso-8859-1?B?KCk=?=
-Message-ID: <Y9dMIW7xXabY2Fqn@google.com>
-References: <202301281613032191431@zte.com.cn>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH] Input: edt-ft5x06 - fix typo in a comment
+Message-ID: <Y9dMMnD/I1u4mAiy@google.com>
+References: <20230128162325.64467-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202301281613032191431@zte.com.cn>
+In-Reply-To: <20230128162325.64467-1-dario.binacchi@amarulasolutions.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,14 +76,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 04:13:03PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On Sat, Jan 28, 2023 at 05:23:25PM +0100, Dario Binacchi wrote:
+> Replace 'firmares' with 'firmwares'.
 > 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Applied, thank you.
 
