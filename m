@@ -2,127 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C0E6804F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFC06804FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbjA3E0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:26:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36734 "EHLO
+        id S234978AbjA3E2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235449AbjA3EZ5 (ORCPT
+        with ESMTP id S229578AbjA3E2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:25:57 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B98234F9
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:25:50 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id z1so3842581pfg.12
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:25:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7+2uSEts9I7Ewx+xS7afTWjlA6S/QLMMkQDB6ml0kj0=;
-        b=hKdHkX186An3SlPIdCV6Z762EQ3Mp+tUKDZoyrcHW4XH0L3AXgSWzAsinGVxCJr3iL
-         o7ET8OmEff0FDqiWcyWz2HksAKY0eqrS2JhdnHs4xoHvbxotnBAsJDlH4cFwn9sZ5uPJ
-         Mx6zVjix4c6pHAUF30Zhvibm1eolctdmqCeeqMYN/dqDEtywpaIczX7OifZ3R+jRG6hd
-         CFeZohdbVbwh5Ahc31iEbp95nM8NbxoCnAIVR6icduxEirkVOZLncYjoVM7XKzfO6oEr
-         b9KjhqYvZnMA66sE9SRqYxYTOhNRiff2Vh/hylLUBahbTvtYNv9HOoVtpVuwM8uNWJT2
-         rbcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7+2uSEts9I7Ewx+xS7afTWjlA6S/QLMMkQDB6ml0kj0=;
-        b=TPmWPt7n+YQ7P0P+PdTLAW1/pdoLe3LvGocSe/dD9mVWj9xIdyTPpLHeXG9Bb9GPAV
-         8gScJGbRIHM4GwN1rYyNkG5STXqctDrB6Oa+rwBZJIudeitjkh3vBIgTOQMqudICMY1g
-         ibfRFzkBt3vfYDuTCXTVwArTC4Cx1fxDBkElIUZ5FGU1Im4uO9ROw0TXeeLpCtka2X/D
-         PxSdDXN5dTf3+GnnCMY2XI31s1xv1383VUKjl0VvKLQG5IYfpJPhpiivjpChZFFQsd/F
-         Q17flcnThgE1AafhfMIz9ENm5PUe+itxZXZmUg9mxdThyUyW/daJPcC81x7rJ5cGRCQg
-         qwHQ==
-X-Gm-Message-State: AFqh2koXsOCAE78Y5Wn0WiTOVoIFcvqstjyHj+U0uMLgHcs6z1qJ8rTY
-        zqkYoonqSTAdmu/U24/0Ka8=
-X-Google-Smtp-Source: AMrXdXt/vTOJEaTIid9fdett6eIQmY9527OXjpDlZK3RUh7rX89GJQs62AZMfIi62ZnaGn5d/ZYSpQ==
-X-Received: by 2002:a05:6a00:3315:b0:582:294d:f465 with SMTP id cq21-20020a056a00331500b00582294df465mr49045478pfb.13.1675052749382;
-        Sun, 29 Jan 2023 20:25:49 -0800 (PST)
-Received: from localhost.localdomain ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id 138-20020a621790000000b0059312530b54sm4275969pfx.180.2023.01.29.20.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 20:25:48 -0800 (PST)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Joe Perches <joe@perches.com>, Petr Mladek <pmladek@suse.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew WilCox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH mm-unstable v4 3/3] mm/debug: use %pGt to display page_type in dump_page()
-Date:   Mon, 30 Jan 2023 13:25:14 +0900
-Message-Id: <20230130042514.2418-4-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230130042514.2418-1-42.hyeyoo@gmail.com>
-References: <20230130042514.2418-1-42.hyeyoo@gmail.com>
+        Sun, 29 Jan 2023 23:28:44 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AA81E1C6;
+        Sun, 29 Jan 2023 20:28:41 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4wD43bP5z4x2c;
+        Mon, 30 Jan 2023 15:28:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675052916;
+        bh=YjC6K6QpDKe3K+cfREHXDGRhuZDP9c7JpW1LNdDhQ8M=;
+        h=Date:From:To:Cc:Subject:From;
+        b=chsvB7e6obfm5fcl78Y7AoyImL0brqetSLv/vGHtRGqhW9Wqiwen3SwD5d83GHEA7
+         oVinGqpyvVKvzJXFYHPyQyN6dkGv5JeFv+1E4y0PnR67s98hDHPYg5lg91KrlpaGxo
+         hj39lcK6SMBtNcJ9CQG992M4ScySU1aynFM/l71BgiDvd+LzZXj3QMg5JBviaIfiyk
+         B2UVGdN9UU37vr1Hmsfax8eZiPab0QblVXCoPow23Hy7K0qXgIig5FbTU/SXVtLX4E
+         YWeQN0HfGxi6761HOKzaRzR3QL1imAZsRzv1t9bpnCezkZF/AlvUptx6fNB0qrh/cm
+         lfCgHrqmk3KjQ==
+Date:   Mon, 30 Jan 2023 15:28:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the driver-core tree
+Message-ID: <20230130152818.03c00ea3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/RiJQuUm6dju4GrgJ3u7dm1H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some page flags are stored in page_type rather than ->flags field.
-Use newly introduced page type %pGt in dump_page().
+--Sig_/RiJQuUm6dju4GrgJ3u7dm1H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Below are some examples:
+Hi all,
 
-page:00000000da7184dd refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x101cb3
-flags: 0x2ffff0000000000(node=0|zone=2|lastcpupid=0xffff)
-page_type: 0xffffffff()
-raw: 02ffff0000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: newly allocated page
+After merging the driver-core tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-page:00000000da7184dd refcount:0 mapcount:-128 mapping:0000000000000000 index:0x0 pfn:0x101cb3
-flags: 0x2ffff0000000000(node=0|zone=2|lastcpupid=0xffff)
-page_type: 0xffffff7f(buddy)
-raw: 02ffff0000000000 ffff88813fff8e80 ffff88813fff8e80 0000000000000000
-raw: 0000000000000000 0000000000000000 00000000ffffff7f 0000000000000000
-page dumped because: freed page
+arch/powerpc/platforms/ps3/system-bus.c:472:19: error: initialization of 'i=
+nt (*)(const struct device *, struct kobj_uevent_env *)' from incompatible =
+pointer type 'int (*)(struct device *, struct kobj_uevent_env *)' [-Werror=
+=3Dincompatible-pointer-types]
+  472 |         .uevent =3D ps3_system_bus_uevent,
+      |                   ^~~~~~~~~~~~~~~~~~~~~
+arch/powerpc/platforms/ps3/system-bus.c:472:19: note: (near initialization =
+for 'ps3_system_bus_type.uevent')
+arch/powerpc/platforms/pseries/ibmebus.c:436:22: error: initialization of '=
+int (*)(const struct device *, struct kobj_uevent_env *)' from incompatible=
+ pointer type 'int (*)(struct device *, struct kobj_uevent_env *)' [-Werror=
+=3Dincompatible-pointer-types]
+  436 |         .uevent    =3D ibmebus_bus_modalias,
+      |                      ^~~~~~~~~~~~~~~~~~~~
+arch/powerpc/platforms/pseries/ibmebus.c:436:22: note: (near initialization=
+ for 'ibmebus_bus_type.uevent')
 
-page:0000000042202316 refcount:3 mapcount:2 mapping:0000000000000000 index:0x7f634722a pfn:0x11994e
-memcg:ffff888100135000
-anon flags: 0x2ffff0000080024(uptodate|active|swapbacked|node=0|zone=2|lastcpupid=0xffff)
-page_type: 0x1()
-raw: 02ffff0000080024 0000000000000000 dead000000000122 ffff8881193398f1
-raw: 00000007f634722a 0000000000000000 0000000300000001 ffff888100135000
-page dumped because: user-mapped page
+Caused by commit
 
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+  2a81ada32f0e ("driver core: make struct bus_type.uevent() take a const *")
+
+I have applied the following merge fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 30 Jan 2023 14:31:49 +1100
+Subject: [PATCH] driver core: fixup for "driver core: make struct bus_type.=
+uevent() take a const *"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- mm/debug.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/powerpc/include/asm/ps3.h           | 2 +-
+ arch/powerpc/platforms/ps3/system-bus.c  | 2 +-
+ arch/powerpc/platforms/pseries/ibmebus.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/mm/debug.c b/mm/debug.c
-index 01cf0435723b..c7b228097bd9 100644
---- a/mm/debug.c
-+++ b/mm/debug.c
-@@ -120,6 +120,8 @@ static void __dump_page(struct page *page)
- 
- 	pr_warn("%sflags: %pGp%s\n", type, &head->flags,
- 		page_cma ? " CMA" : "");
-+	pr_warn("page_type: %pGt\n", &head->page_type);
-+
- 	print_hex_dump(KERN_WARNING, "raw: ", DUMP_PREFIX_NONE, 32,
- 			sizeof(unsigned long), page,
- 			sizeof(struct page), false);
--- 
-2.39.1
+diff --git a/arch/powerpc/include/asm/ps3.h b/arch/powerpc/include/asm/ps3.h
+index d503dbd7856c..a5f36546a052 100644
+--- a/arch/powerpc/include/asm/ps3.h
++++ b/arch/powerpc/include/asm/ps3.h
+@@ -396,7 +396,7 @@ static inline struct ps3_system_bus_driver *ps3_drv_to_=
+system_bus_drv(
+ 	return container_of(_drv, struct ps3_system_bus_driver, core);
+ }
+ static inline struct ps3_system_bus_device *ps3_dev_to_system_bus_dev(
+-	struct device *_dev)
++	const struct device *_dev)
+ {
+ 	return container_of(_dev, struct ps3_system_bus_device, core);
+ }
+diff --git a/arch/powerpc/platforms/ps3/system-bus.c b/arch/powerpc/platfor=
+ms/ps3/system-bus.c
+index 38a7e02295c8..d6b5f5ecd515 100644
+--- a/arch/powerpc/platforms/ps3/system-bus.c
++++ b/arch/powerpc/platforms/ps3/system-bus.c
+@@ -439,7 +439,7 @@ static void ps3_system_bus_shutdown(struct device *_dev)
+ 	dev_dbg(&dev->core, " <- %s:%d\n", __func__, __LINE__);
+ }
+=20
+-static int ps3_system_bus_uevent(struct device *_dev, struct kobj_uevent_e=
+nv *env)
++static int ps3_system_bus_uevent(const struct device *_dev, struct kobj_ue=
+vent_env *env)
+ {
+ 	struct ps3_system_bus_device *dev =3D ps3_dev_to_system_bus_dev(_dev);
+=20
+diff --git a/arch/powerpc/platforms/pseries/ibmebus.c b/arch/powerpc/platfo=
+rms/pseries/ibmebus.c
+index 58b798a0e879..bb9c18682783 100644
+--- a/arch/powerpc/platforms/pseries/ibmebus.c
++++ b/arch/powerpc/platforms/pseries/ibmebus.c
+@@ -426,7 +426,7 @@ static struct attribute *ibmebus_bus_device_attrs[] =3D=
+ {
+ };
+ ATTRIBUTE_GROUPS(ibmebus_bus_device);
+=20
+-static int ibmebus_bus_modalias(struct device *dev, struct kobj_uevent_env=
+ *env)
++static int ibmebus_bus_modalias(const struct device *dev, struct kobj_ueve=
+nt_env *env)
+ {
+ 	return of_device_uevent_modalias(dev, env);
+ }
+--=20
+2.35.1
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RiJQuUm6dju4GrgJ3u7dm1H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXR2IACgkQAVBC80lX
+0GzIbQf+Jdkp6HUarSmsKYH9ZmarcnRrs4Zxv28qKm+XHaYYwCWq+J0HCa9iYomZ
+Yej3VVhbs3MySrwTzjxb46BJzpChMwFWRSLyOnfGYiWWEXr9ocQHFaNu6pTvjotO
+rZTq8NWOpmeO0bliZWvI1oNifBxthXhMQmzzjTJM9sgZ8rKbr9zBcIulGPTmL/hi
+5e3QuQXq58HB8N9Fnr/rozF2bALzPjKRch1YOtXgw8si72y7QtL/Hk45nk3rJhrh
+ATLm2FmiISKiNmmbE4lFc3kR/g67H3NqhE5DBEKfR0exBdg7KKl8aG4MDKHnvsMR
+lHwKsjamMt7eSQYJlU59rq1rpH2WqA==
+=tMYT
+-----END PGP SIGNATURE-----
+
+--Sig_/RiJQuUm6dju4GrgJ3u7dm1H--
