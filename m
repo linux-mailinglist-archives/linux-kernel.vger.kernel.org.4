@@ -2,208 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51365680BD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CED680BBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236568AbjA3LZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 06:25:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S236482AbjA3LSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 06:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236565AbjA3LZJ (ORCPT
+        with ESMTP id S236422AbjA3LRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 06:25:09 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A171F48B;
-        Mon, 30 Jan 2023 03:24:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c/xWjjlo24/hDcLSh0m5+iFWOjholfC9hlnCWrMjQJrl9OkDcabwtiX6YsDqV/Cr6BDIznoHr9IBzFYMIMZwAQluMeRTEChyVQWV4Y/m7h0esf73wjxPuPUEZofF2E4vNiLiwmOTBONpE4zPfJ4eFgy+V83d/cFyYE5kPcgMIBBj+9XSqcVtDYHEWtVVDDnuCu760yDq6VipTaNXyD1J7bWE5HNY+uhOCzwIg/IietxzKPRcW1Y5aDr5IGoLFLu8crePMOubXMpBEQQUwiy8AQmizfcovdoIlqDAtCV2bUme5gY/m9temQdh3tZbe4Lak/qNoHvHZHs8eGpZ6otvsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qi0a1JXB1cGcFPTt3q22VNEdnLnaDTHalmup7TcwS7U=;
- b=gsRbWeZl2y2VRxAxEyr46DPhFetWYI+vWPYOJJXM4JFilsTnyoBGfvTmUs6yQ4aroZO0PqTG8Or8vT3dTPw3rTf9jEaJje0FQwuVJoy0lUmrgQI438+6Veqc9YUPrIW9yT+iyvhp7koEuk/x4mlELiayCIsX6WPYoq6MI9GhQCRQ1QVN8XwXRB+Ni1/l6VJfHx97w9oRMfh9cinf6duF6PNUVCp96R1SzoItUi5vFRxNrMyMPapQ0iW3NRBCqRYX3lGmemSgC1mtrgb8RIc0+GnoYvRpMIX/c06w1Fd2HxUwRSguiA+5Fytu6YrEaAjmX2XSXOMBShR2N+h1DeS3fQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qi0a1JXB1cGcFPTt3q22VNEdnLnaDTHalmup7TcwS7U=;
- b=X+an6WzZ/iO4RB0FQnOau/akl79bJyMymk+3YsWFT1+K/hpUMrD5f+Ad7K90+bFU7nQPCb++Oum/c9VNwmRbJt138IVFBGoDqQzkTi3/X2t12X+9bqD/w8PTM5vSaMSjyVW2ll2QmtTcHymnVOlrhoEGuFbVY2Eu6rAGiXZMASydiXfv3rJOPXkoEgoNoRfO0akLB5Qf5llJzFEVvaxD2oMgCgD9oNLvgvj7GnY0J3HVptIrGPUGXslQLwAuLRU38ijDZaOyK8oLAEocOYma1wx83YJl1kIEhSuWw0TP0d5aUjpOp5DAz7FzCK1r2GX9iR9ITaeRj4vpprjA4qJ3/g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by DM8PR12MB5432.namprd12.prod.outlook.com (2603:10b6:8:32::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 11:24:52 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::465a:6564:6198:2f4e]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::465a:6564:6198:2f4e%4]) with mapi id 15.20.6043.023; Mon, 30 Jan 2023
- 11:24:52 +0000
-References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
- <9b54eef0b41b678cc5f318bd5ae0917bba5b8e21.1674538665.git-series.apopple@nvidia.com>
- <Y8/wWTOOjyfGBrP0@nvidia.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jhubbard@nvidia.com,
-        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
-        mkoutny@suse.com, daniel@ffwll.ch, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com
-Subject: Re: [RFC PATCH 10/19] net: skb: Switch to using vm_account
-Date:   Mon, 30 Jan 2023 22:17:18 +1100
-In-reply-to: <Y8/wWTOOjyfGBrP0@nvidia.com>
-Message-ID: <87pmawz2ma.fsf@nvidia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SY5PR01CA0032.ausprd01.prod.outlook.com
- (2603:10c6:10:1f8::9) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|DM8PR12MB5432:EE_
-X-MS-Office365-Filtering-Correlation-Id: 65205dcd-8944-4c62-da33-08db02b49adf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ACZdb4BpPVFp7h3wQtnPhQL6KlqB/82JMiX6s5CabgbGiycwIk0cK+pvksUv37K4cVk4s5bGlD/e5bPgVf4YnYAegMWnafwLu+I2UvMz1wDClGMXhPx3bQykHupOIukD2yczLCAIw/Dwzzo5dBlbqgg2GvRI3Lxwi0Mc0kFOMRMIJpPwJk2a7Xd2Zwv6BUeYX3aXpbzq7TlPrlBCtm/47Z2/o7Kr46bObLZUADgwBKYIc651/Cbgc0qIjzL849mMKtbiT/sTjf5SwN6B0uuiWjGE5PrqjM/JllEHCmSQ94ZE2VpcIl1XLCUP8Cec+mek4OCgfBW+f7S4u7eXb4Vmnb9SXJlgNkBcLvsAtLcOhPrAnlxnJtk03vdUvn3zRDnpvmbyFoao4YduqC/dRLquuCGv2hdjcnLK/7XOd2rOpj8AGEwp91PDXWmdPT79pHuH0suBv9JKXfsHJJFASHcTYfbjtM/v2ck463P6oQeSRGIirADMKPxvfSP79eeIrcuPOr2ZczZQXiml0zBMJCyvae7hnD+gMRlldS4LBh90oBYRPwdiJspYZZVr3yNg+B+Yam/a9RRltUhVfLmxxgvo8gF8b1x6bnsKnnKutQIdpRd7aTLjuYkqyQtb/P61OXRr3IAblsc0gvNhP8zRW6yk6g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(366004)(346002)(396003)(136003)(451199018)(8936002)(6862004)(41300700001)(86362001)(5660300002)(7416002)(83380400001)(2616005)(37006003)(6636002)(316002)(66556008)(66476007)(66946007)(38100700002)(4326008)(8676002)(6666004)(6512007)(26005)(186003)(6506007)(36756003)(6486002)(478600001)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qzRZ62TLk/RG5NoGVprRSUMF0w/KSBts6RhMaXHJvv2icjVGHFfSDcJKQmrQ?=
- =?us-ascii?Q?RfZndqH556LBxWXDAVBu6BxS+X39T7P6WGFeULrupmXsIwmyfnrWhXC3v433?=
- =?us-ascii?Q?XUzXUpYqnfCBZUbj+eLedI/Via5Nwyl+ahovb+x1CyOJA5mvOf515vZxz/Bj?=
- =?us-ascii?Q?r60AvZ/jN6wckCyOBpxbejjb+yGINwh0dyAyf6gBs0psmpTiE4YILHKTljS6?=
- =?us-ascii?Q?0SQbY43R553wMHAdi6PIAb6X+UasbZDjeDlF4X6PnI3VadqMVREBE9FT4ZDL?=
- =?us-ascii?Q?4Uc5bzDrQ0Dv7N/t/9kGSGQrqcG+tJKb8wSh2AdWJHeWQq4EfGMlyA8VWSQw?=
- =?us-ascii?Q?12Fz/eod2iwtRtp6o54/Ua81pFYQdXQYXQhGbQNXZCaZWKQr5lmwoYFDm5Zw?=
- =?us-ascii?Q?BjoX+N0/o5VyVaakBWG4s9EcOy/pckv2dvmScc6Lc1/TBRTxKtjhK+U4R1mh?=
- =?us-ascii?Q?X1dqyjNu0W++so+PkqjP9K5SDmuQyRjJVTTbiXDN7tkV+f99AWZGtRjnmb+y?=
- =?us-ascii?Q?UPHP5MY8HwIaI7qkLDh2iBT5PGZ+nwl1QVkcHDDiXBa70v7HH3ThRUNWXMmH?=
- =?us-ascii?Q?u51AJihDt+x5Reva8W6EcHiojoqqQLAwltvvMXnrEzD3GU5VNTyE7lyObsDS?=
- =?us-ascii?Q?Ac2Y6lEwXKSZiIqslIJQkorgXx8JKxPqrCTeNtSX/RNhmInTAaAm2UdCJ2YJ?=
- =?us-ascii?Q?OEJ24EFVPybBq0kYDPP3t12/nRl5JEYLYUr2uyHe9dzJ4Qq8vHyPfcKmh2FM?=
- =?us-ascii?Q?I+0D6hoDZuX5FerVCji8lvHFVD0EDJg/YMZMw62GG/zIHE7twOx7i7/I8uOK?=
- =?us-ascii?Q?gGk8iAH1wA4pt09lwCLEnzhaYfBFdQIex7bj3bxEP1EVJIGtbB6QHYmI4AMQ?=
- =?us-ascii?Q?yrKvi1pbF/gJmhgaO+uVN/ytBPjhxXddBJKdc3/12gUGxD53bJMlCrPWrSZE?=
- =?us-ascii?Q?xWMjlpKmeK5z3l1q1WohxISiscZmhJblm1EBVclJ3eOcO8WRWdWY6PfJTH5z?=
- =?us-ascii?Q?Gh5HmQOcBY3IMkGnWeo5PNeC2ZQjaGb8IUHiUCIZTRGLQ0gpSkPvGVzrCSA8?=
- =?us-ascii?Q?VqPF7G//CrfZq5rn14s4gGrZebFFNG24oGQONAPVF3tmMOlIen0zcUREmazJ?=
- =?us-ascii?Q?8RrGurwQ60raQpk2Yg6dZVu7Ngh3ONqcx/dqO4x3nOEMGHU440zu4rwwaHy8?=
- =?us-ascii?Q?pn/5lvv7589VBhiBOHbCGu8pCMuQd6KNNu3tJBsrhg8hCINaXUn27Pks6JlJ?=
- =?us-ascii?Q?CsWr6HdonfZQOLEbNn6o4QvfG9y8OEGEgbpPSAsxGSb9r++cT+0NYz0cBdJC?=
- =?us-ascii?Q?21SlT2IRVjyYP6yGDKdCyj5XWnYDVF53nA1IpZXHMDIIEJw3XbDRd+8oDJ+z?=
- =?us-ascii?Q?m24kEvnYKPthky0fHTZ/m2/Xv558m5VLdwxkJ2Zu3Hf/W3z8dT274YfbrGxJ?=
- =?us-ascii?Q?MXKqth9s4/QRYm3kLzJDnp0seWVWP6nnozmhjJy6TT0rhif1LMbHTrA5uVYe?=
- =?us-ascii?Q?gKts4M/r7aq7P7yJQomW+fWJeJHOIX+MJUUlX5+cYidFbzeOfwmviJ7qh85J?=
- =?us-ascii?Q?L+iaftOoKbnqzlavjsEHUGdb+4qgfAiz5kvA8WvZ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65205dcd-8944-4c62-da33-08db02b49adf
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 11:24:52.0506
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C2zgMmggG2blBDeGhjtB4VNuSc8n2YQmzzDI+jEmYrTQRVBIgs6GYZHvUba5K3fs5k2MhCw25qoz7GBsBNIxBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5432
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 30 Jan 2023 06:17:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D75655B2;
+        Mon, 30 Jan 2023 03:17:43 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CB7D8218F4;
+        Mon, 30 Jan 2023 11:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675077461; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8nPez/BkWiDH6w05WzgICwx43Pc8SmkTGo86ahIuckA=;
+        b=w3pSZYtplqDraVGfW6cPCWXSDDQlmuD/V4IPwzcvi5XBwDuBPguRL5YXoFSUsTlwxp63zt
+        MZbZQ8QgBeU0hzCLJtOYZmpSPdU8M+QudnENfXC45vf+Y9uhLF2lvAwuCgAknRd7jCG/0v
+        eAMCAaQgDyQ+3FdAZ+nx6cy+yQuFUOc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675077461;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8nPez/BkWiDH6w05WzgICwx43Pc8SmkTGo86ahIuckA=;
+        b=pzos9t3J4XXZjfn6nClqFTooRXJNhe3OfsBFU9ZXF7DgomPfMxUgwEMY2WaAQQ7+spjZDv
+        gs1sn7VTd0ERtiBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 71C8613A06;
+        Mon, 30 Jan 2023 11:17:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iQmbGlWn12OhHwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 30 Jan 2023 11:17:41 +0000
+Date:   Mon, 30 Jan 2023 12:17:40 +0100
+Message-ID: <87o7qgqnjf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Takashi Iwai <tiwai@suse.de>, Helge Deller <deller@gmx.de>,
+        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Patrik Jakobsson <pjakobsson@suse.de>
+Subject: Re: [PATCH v2] fbdev: Fix invalid page access after closing deferred I/O devices
+In-Reply-To: <f20d6df8-5ff6-f63e-1747-5fecdf83cfd9@suse.de>
+References: <20230129082856.22113-1-tiwai@suse.de>
+        <2a5b5059-9f60-a5bc-cbb7-8267349b2eac@suse.de>
+        <87y1pkqu90.wl-tiwai@suse.de>
+        <f20d6df8-5ff6-f63e-1747-5fecdf83cfd9@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 30 Jan 2023 10:28:16 +0100,
+Thomas Zimmermann wrote:
+> 
+> Hi
+> 
+> Am 30.01.23 um 09:52 schrieb Takashi Iwai:
+> > On Mon, 30 Jan 2023 09:28:36 +0100,
+> > Thomas Zimmermann wrote:
+> >> 
+> >> Hi
+> >> 
+> >> Am 29.01.23 um 09:28 schrieb Takashi Iwai:
+> >>> When a fbdev with deferred I/O is once opened and closed, the dirty
+> >>> pages still remain queued in the pageref list, and eventually later
+> >>> those may be processed in the delayed work.  This may lead to a
+> >>> corruption of pages, hitting an Oops.
+> >> 
+> >> Do you have more information on this problem?
+> > 
+> > The details are in SUSE bugzilla, but that's an internal bug entry
+> > (and you know the number :)  It happens at the following at least:
+> > 
+> > - A VM is started with VGA console, no fb, on the installer
+> > - VM is switched to bochs drm
+> > - Start fbiterm on VT1, switching to the graphics mode on VT
+> > - Exit fbiterm, going back to the text mode on VT;
+> >    at this moment, it gets Oops like:
+> > 
+> > [   42.338319][  T122] BUG: unable to handle page fault for address:
+> > ffffe570c1000030
+> > [   42.340063][  T122] #PF: supervisor read access in kernel mode
+> > [   42.340519][  T122] #PF: error_code(0x0000) - not-present page
+> > [   42.340979][  T122] PGD 34c38067 P4D 34c38067 PUD 34c37067 PMD 0
+> > [   42.341456][  T122] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> > [   42.341853][  T122] CPU: 1 PID: 122 Comm: kworker/1:2 Not tainted
+> > 5.14.21-150500.5.g2ad24ee-default #1 SLE15-SP5 (unreleased)
+> > b7a28d028376a517e888a7ff28c5e5dede93267c
+> > [   42.343000][  T122] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+> > BIOS rel-1.16.0-0-gd239552-rebuilt.opensuse.org 04/01/2014
+> > [   42.343929][  T122] Workqueue: events fb_deferred_io_work
+> > [   42.344355][  T122] RIP: 0010:page_mapped+0x5e/0x90
+> > [   42.344743][  T122] Code: a8 01 75 d7 8b 47 30 f7 d0 c1 e8 1f c3 cc cc cc cc
+> > 48 89 df e8 33 9c 05 00 89 c1 31 c0 85 c9 74 13 eb d3 48 c1 e2 06 48 01 da <8b>
+> > 42 30 85 c0 79 c0 83 c1 01 48 8b 33 48 63 d1 b8 01 00 00 00 f7
+> > [   42.346285][  T122] RSP: 0018:ffffb68640207e08 EFLAGS: 00010286
+> > [   42.346749][  T122] RAX: 00000000b3aea8f0 RBX: ffffe570c0f00000 RCX:
+> > 0000000000004000
+> > [   42.347355][  T122] RDX: ffffe570c1000000 RSI: 000fffffc0010009 RDI:
+> > ffffe570c0f00000
+> > [   42.347960][  T122] RBP: ffffffffc0503050 R08: 0000000000000000 R09:
+> > 0000000000000001
+> > [   42.348568][  T122] R10: 0000000000000000 R11: ffffb68640207c88 R12:
+> > ffffffffc0503020
+> > [   42.349180][  T122] R13: ffff921281dcdc00 R14: ffff9212bcf08000 R15:
+> > ffffe570c0f00000
+> > [   42.349789][  T122] FS:  0000000000000000(0000) GS:ffff9212b3b00000(0000)
+> > knlGS:0000000000000000
+> > [   42.350471][  T122] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [   42.350975][  T122] CR2: ffffe570c1000030 CR3: 000000001b810000 CR4:
+> > 00000000000006e0
+> > [   42.351588][  T122] Call Trace:
+> > [   42.351845][  T122]  <TASK>
+> > [   42.352069][  T122]  page_mkclean+0x6e/0xc0
+> > [   42.352400][  T122]  ? page_referenced_one+0x190/0x190
+> > [   42.353714][  T122]  ? pmdp_collapse_flush+0x60/0x60
+> > [   42.354106][  T122]  fb_deferred_io_work+0x13d/0x190
+> > [   42.354496][  T122]  process_one_work+0x267/0x440
+> > [   42.354866][  T122]  ? process_one_work+0x440/0x440
+> > [   42.355247][  T122]  worker_thread+0x2d/0x3d0
+> > [   42.355590][  T122]  ? process_one_work+0x440/0x440
+> > [   42.355972][  T122]  kthread+0x156/0x180
+> > [   42.356281][  T122]  ? set_kthread_struct+0x50/0x50
+> > [   42.356662][  T122]  ret_from_fork+0x22/0x30
+> > [   42.357006][  T122]  </TASK>
+> > 
+> > The page info shows that it's a compound page but it's somehow
+> > broken.  On VM, it's triggered reliably with the scenario above,
+> > always at the same position.
+> > 
+> > FWIW, the Oops is hit even if there is no rewrite on the screen.
+> > That is, another procedure is:
+> > - Start VM, run fbiterm on VT1
+> > - Switch to VT2, text mode
+> > - On VT2, kill fbiterm; the crash still happens even if no screen
+> >    change is performed
+> > 
+> >> The mmap'ed buffer of the fbdev device comes from a vmalloc call. That
+> >> memory's location never changes; even across pairs of open/close on
+> >> the device file. I'm surprised that a page entry becomes invalid.
+> >> 
+> >> In drm_fbdev_cleanup(), we first remove the fbdefio at [1] and then
+> >> vfree() the shadow buffer. So the memory should still be around until
+> >> fbdevio is gone.
+> > 
+> > Yes, that's the puzzling part, too.  Also, another thing is that the
+> > bug couldn't be triggered easily when the fb is started in a different
+> > way.  e.g. when you run fbiterm & exit on the VM that had efifb, it
+> > didn't hit.
+> > 
+> > So, overall, it might be that I'm scratching a wrong surface.  But at
+> > least it "fixes" the problem above apparently, and the deferred io
+> > base code itself has certainly the potential problem in general as my
+> > patch suggests.
+> 
+> Are there multiple graphics devices? There's just recently been a
+> bugfix where graphics devices accidentally shared the same list of
+> deferred pages. See
+> 
+> 
+> https://lore.kernel.org/dri-devel/20230121192418.2814955-4-javierm@redhat.com/
 
-Jason Gunthorpe <jgg@nvidia.com> writes:
+No, it's a KVM with a single VGA.
 
-> On Tue, Jan 24, 2023 at 04:42:39PM +1100, Alistair Popple wrote:
->> diff --git a/include/net/sock.h b/include/net/sock.h
->> index dcd72e6..bc3a868 100644
->> --- a/include/net/sock.h
->> +++ b/include/net/sock.h
->> @@ -334,6 +334,7 @@ struct sk_filter;
->>    *	@sk_security: used by security modules
->>    *	@sk_mark: generic packet mark
->>    *	@sk_cgrp_data: cgroup data for this cgroup
->> +  *	@sk_vm_account: data for pinned memory accounting
->>    *	@sk_memcg: this socket's memory cgroup association
->>    *	@sk_write_pending: a write to stream socket waits to start
->>    *	@sk_state_change: callback to indicate change in the state of the sock
->> @@ -523,6 +524,7 @@ struct sock {
->>  	void			*sk_security;
->>  #endif
->>  	struct sock_cgroup_data	sk_cgrp_data;
->> +	struct vm_account       sk_vm_account;
->>  	struct mem_cgroup	*sk_memcg;
->>  	void			(*sk_state_change)(struct sock *sk);
->>  	void			(*sk_data_ready)(struct sock *sk);
+> >> [1]
+> >> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_fb_helper.c#L2146
+> >> 
+> >>> 
+> >>> This patch makes sure to cancel the delayed work and clean up the
+> >>> pageref list at closing the device for addressing the bug.  A part of
+> >>> the cleanup code is factored out as a new helper function that is
+> >>> called from the common fb_release().
+> >> 
+> >> The delayed work is required to copy the framebuffer to the device
+> >> output. So if it's just canceled, could this result in missing
+> >> updates?
+> >> 
+> >> There's a call to cancel_delayed_work_sync() in the new helper
+> >> fb_deferred_io_release(). Is this the right function? Maybe
+> >> flush_delayed_work() is a better choice.
+> > 
+> > I thought of that, but took a shorter path.
+> > OK, let's check whether this keeps working with that change.
+> 
+> I read that cancel_() is not enough and needs to be followed by a
+> flush_() to ensure quiescence.
+
+That's not the case, I believe.  As long as the code after that cleans
+up the pending pages, the cancel_sync alone must be fine.
+(Otherwise so many other code paths would hit the problem.)
+
+> So maybe we should call that flush_
+> unconditionally.
 >
-> I'm not sure this makes sense in a sock - each sock can be shared with
-> different proceses..
+> >>> Reviewed-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+> >>> Cc: <stable@vger.kernel.org>
+> >>> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> >> 
+> >> This could use a Fixes tag. It's not exactly clear to me when this
+> >> problem got originally introduced, but the recent refactoring seems a
+> >> candidate.
+> >> 
+> >> Fixes: 56c134f7f1b5 ("fbdev: Track deferred-I/O pages in pageref struct")
+> > 
+> > Hrm, this might be.  Maybe Patrik can test with the revert of this?
+> 
+> That's not easily revertable.
 
-TBH it didn't feel right to me either so was hoping for some
-feedback. Will try your suggestion below.
+Indeed.
 
->> diff --git a/net/rds/message.c b/net/rds/message.c
->> index b47e4f0..2138a70 100644
->> --- a/net/rds/message.c
->> +++ b/net/rds/message.c
->> @@ -99,7 +99,7 @@ static void rds_rm_zerocopy_callback(struct rds_sock *rs,
->>  	struct list_head *head;
->>  	unsigned long flags;
->>  
->> -	mm_unaccount_pinned_pages(&znotif->z_mmp);
->> +	mm_unaccount_pinned_pages(&rs->rs_sk.sk_vm_account, &znotif->z_mmp);
->>  	q = &rs->rs_zcookie_queue;
->>  	spin_lock_irqsave(&q->lock, flags);
->>  	head = &q->zcookie_head;
->> @@ -367,6 +367,7 @@ static int rds_message_zcopy_from_user(struct rds_message *rm, struct iov_iter *
->>  	int ret = 0;
->>  	int length = iov_iter_count(from);
->>  	struct rds_msg_zcopy_info *info;
->> +	struct vm_account *vm_account = &rm->m_rs->rs_sk.sk_vm_account;
->>  
->>  	rm->m_inc.i_hdr.h_len = cpu_to_be32(iov_iter_count(from));
->>  
->> @@ -380,7 +381,9 @@ static int rds_message_zcopy_from_user(struct rds_message *rm, struct iov_iter *
->>  		return -ENOMEM;
->>  	INIT_LIST_HEAD(&info->rs_zcookie_next);
->>  	rm->data.op_mmp_znotifier = &info->znotif;
->> -	if (mm_account_pinned_pages(&rm->data.op_mmp_znotifier->z_mmp,
->> +	vm_account_init(vm_account, current, current_user(), VM_ACCOUNT_USER);
->> +	if (mm_account_pinned_pages(vm_account,
->> +				    &rm->data.op_mmp_znotifier->z_mmp,
->>  				    length)) {
->>  		ret = -ENOMEM;
->>  		goto err;
->> @@ -399,7 +402,7 @@ static int rds_message_zcopy_from_user(struct rds_message *rm, struct iov_iter *
->>  			for (i = 0; i < rm->data.op_nents; i++)
->>  				put_page(sg_page(&rm->data.op_sg[i]));
->>  			mmp = &rm->data.op_mmp_znotifier->z_mmp;
->> -			mm_unaccount_pinned_pages(mmp);
->> +			mm_unaccount_pinned_pages(vm_account, mmp);
->>  			ret = -EFAULT;
->>  			goto err;
->>  		}
->
-> I wonder if RDS should just not be doing accounting? Usually things
-> related to iov_iter are short term and we don't account for them.
+> >> Cc: Thomas Zimmermann <tzimmermann@suse.de>
+> >> Cc: Javier Martinez Canillas <javierm@redhat.com>
+> >> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> >> Cc: Maxime Ripard <mripard@kernel.org>
+> >> Cc: Zack Rusin <zackr@vmware.com>
+> >> Cc: VMware Graphics Reviewers <linux-graphics-maintainer@vmware.com>
+> >> Cc: Jaya Kumar <jayalk@intworks.biz>
+> >> Cc: Daniel Vetter <daniel@ffwll.ch>
+> >> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+> >> Cc: Haiyang Zhang <haiyangz@microsoft.com>
+> >> Cc: Wei Liu <wei.liu@kernel.org>
+> >> Cc: Dexuan Cui <decui@microsoft.com>
+> >> Cc: Steve Glendinning <steve.glendinning@shawell.net>
+> >> Cc: Bernie Thompson <bernie@plugable.com>
+> >> Cc: Helge Deller <deller@gmx.de>
+> >> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >> Cc: Stephen Kitt <steve@sk2.org>
+> >> Cc: Peter Suti <peter.suti@streamunlimited.com>
+> >> Cc: Sam Ravnborg <sam@ravnborg.org>
+> >> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> >> Cc: ye xingchen <ye.xingchen@zte.com.cn>
+> >> Cc: Petr Mladek <pmladek@suse.com>
+> >> Cc: John Ogness <john.ogness@linutronix.de>
+> >> Cc: Tom Rix <trix@redhat.com>
+> >> Cc: dri-devel@lists.freedesktop.org
+> >> Cc: linux-fbdev@vger.kernel.org
+> >> Cc: linux-hyperv@vger.kernel.org
+> >> Cc: <stable@vger.kernel.org> # v5.19+
+> > 
+> > Nah, please don't.  Too many Cc's, literally a spam.
+> 
+> Ok.
+> 
+> > 
+> >>> ---
+> >>> v1->v2: Fix build error without CONFIG_FB_DEFERRED_IO
+> >>> 
+> >>>    drivers/video/fbdev/core/fb_defio.c | 10 +++++++++-
+> >>>    drivers/video/fbdev/core/fbmem.c    |  4 ++++
+> >>>    include/linux/fb.h                  |  1 +
+> >>>    3 files changed, 14 insertions(+), 1 deletion(-)
+> >>> 
+> >>> diff --git a/drivers/video/fbdev/core/fb_defio.c b/drivers/video/fbdev/core/fb_defio.c
+> >>> index c730253ab85c..583cbcf09446 100644
+> >>> --- a/drivers/video/fbdev/core/fb_defio.c
+> >>> +++ b/drivers/video/fbdev/core/fb_defio.c
+> >>> @@ -313,7 +313,7 @@ void fb_deferred_io_open(struct fb_info *info,
+> >>>    }
+> >>>    EXPORT_SYMBOL_GPL(fb_deferred_io_open);
+> >>>    -void fb_deferred_io_cleanup(struct fb_info *info)
+> >>> +void fb_deferred_io_release(struct fb_info *info)
+> >>>    {
+> >>>    	struct fb_deferred_io *fbdefio = info->fbdefio;
+> >>>    	struct page *page;
+> >>> @@ -327,6 +327,14 @@ void fb_deferred_io_cleanup(struct fb_info *info)
+> >>>    		page = fb_deferred_io_page(info, i);
+> >>>    		page->mapping = NULL;
+> >>>    	}
+> >>> +}
+> >>> +EXPORT_SYMBOL_GPL(fb_deferred_io_release);
+> >> 
+> >> It's all in the same module. No need to export this symbol.
+> > 
+> > I noticed it, too, but just keep the same style as other functions :)
+> > That said, the other exported symbols are also useless.  I can prepare
+> > another patch to clean it up.
+> 
+> Your choice, but appreciated.
 
-Yeah, I couldn't easily figure out why these were accounted for in the
-first place either.
+Rather a choice by the maintainer, I'd say.
 
-> But then I don't really know how RDS works, Santos?
->
-> Regardless, maybe the vm_account should be stored in the
-> rds_msg_zcopy_info ?
 
-On first glance that looks like a better spot. Thanks for the
-idea.
+thanks,
 
-> Jason
-
+Takashi
