@@ -2,146 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E977681F6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B17681F76
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjA3XLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S230062AbjA3XOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:14:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjA3XLM (ORCPT
+        with ESMTP id S230058AbjA3XOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:11:12 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE33B8A5C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:11:09 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-4c131bede4bso181230427b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:11:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LDfQZoGlwUK+kzxRXSbyFi2jPNk3BphEmmNBP0GjF0Q=;
-        b=OQ5btj3qyNunRkWa/eT2Rf1e2qqvSRm/L4uLNC8PepSZPzxTIskzOaRby8IxSTJK1a
-         A4DJcRTNXP9feNHl9aBq3x7WgYKKrBMUhPFJnfmAVFoIPC834tDKXunaB9jtZTz7COHt
-         0CEAmfvG6UfZMEo1bA7Vi/L8t9/tNunOZ521l7rvupZa9n0rxe/9e3WsAcas95BatZDb
-         MIoeWvtgMjugIfsqKyMQ+ZA8rY0LX3Daz7lN92Ul91r1riwqf6MML/jEAbnuhIER77tt
-         LeWz2X9ZYld81ddZiBXddfLmU2YIzWZ7r+qzxfr8K3QK7yj02Um4UZPadN7qmXoWkXP1
-         U1jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LDfQZoGlwUK+kzxRXSbyFi2jPNk3BphEmmNBP0GjF0Q=;
-        b=oiV9lTVYN5oJs7DPFm3fjRB12S+amqCEqoWVkvIRnDXVCA74AqWGtSv1GIkXUmLt3p
-         29E4Xjmx+FAiXEb2Jtql+sxCvpfn/mvCXkZAHW96X7+ImHSKz6w1JRdr1/J3Zo8Og1Eq
-         iKK8tNKFuvwVQLeOlxBzvUOkPQjL8uezCMFmc+jsjViScFvATw7BjrriHsBMOl0l0dRX
-         UzjSU5VIzfQzwDAC2g7aoStqVVDT9GTNgTPmO0BvVOGPOOfSiePfDk+RVJuPQJ/ufSCv
-         dbXy7AEfw8HNkq5fmQRN9kG+YqOD5qn4GshFr/WdR+8DW7CFuWel01p/f91txGmOAFmZ
-         Neig==
-X-Gm-Message-State: AFqh2kpLphJpj1gnmE1EyIYnIgoJGLTtm8hk5aFG7f1CilrLEwBSwD8K
-        TuFWzwc60+jnxQcPG21UGPRCk9tlFuF9ktolEfduzQ==
-X-Google-Smtp-Source: AMrXdXtRz1bfZDc0Sl8udmgePKD2SUPlDJ5rqBwH5lFq8s8CAawhOWc+wuDT5y9DNmCpcoDn2Xrf/+ydTkvzsK2sjQE=
-X-Received: by 2002:a81:1a0a:0:b0:4dc:818f:f9f2 with SMTP id
- a10-20020a811a0a000000b004dc818ff9f2mr5170823ywa.469.1675120268932; Mon, 30
- Jan 2023 15:11:08 -0800 (PST)
+        Mon, 30 Jan 2023 18:14:38 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDD81CAEF;
+        Mon, 30 Jan 2023 15:14:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5PC95lNtz4x1d;
+        Tue, 31 Jan 2023 10:14:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675120470;
+        bh=1NPCECl8cFvSKrhix1qJjN0ZBmuleVasqwSfFxjJOQc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IsR3sChAJkHQFoG60SBLza3p6WGbXEESoICU7jTuaRqZ6mN03MACFwGIpki3O/uU0
+         AVEwMpKEgCG/qqoT4dzZXkTKUnLt4ZQiaShzJZZSKZ0TT+XcKVu5Uh7Y8GPvQe/nak
+         Mb67Z6LiYm6FGMjoTdrvOKyDlBrH12nOzk+0JUhals3ESpkkNiBeYsj0No+4qpa0tw
+         Nosh9mfXimwPfbokIRerFiEvanq0IjuT6h58GK0VqFVzZrfxizwZu7KFMyCYjPd1hl
+         j1N1oMjkhywPKIFSkS8Omdp6cOf1puX/FNEh2b0drHmLkU3zKyyr6oVvFDO1rlVybn
+         7gMcHULAa6Jzg==
+Date:   Tue, 31 Jan 2023 10:12:44 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>
+Cc:     Chao Yu <chao@kernel.org>, Christian Brauner <brauner@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the f2fs tree with the vfs-idmapping
+ tree
+Message-ID: <20230131101244.26f85f35@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230130165435.2347569-1-konrad.dybcio@linaro.org>
-In-Reply-To: <20230130165435.2347569-1-konrad.dybcio@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 31 Jan 2023 00:10:57 +0100
-Message-ID: <CACRpkdZjAyLUg3V7ZTzeMfUOTrndLrRX_gTFdO+amSmZkzB72Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] dt-bindings: pincfg-node: Introduce an
- overridable way to set bias on pins
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Jy=oOH1dTIlGK12s8WfgmxL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 5:54 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+--Sig_/Jy=oOH1dTIlGK12s8WfgmxL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> We came to a point where we sometimes we support a few dozen boards
-> with a given SoC. Sometimes, we have to take into consideration
-> configurations which deviate rather significatly from the reference
-> or most common designs. In the context of pinctrl, this often comes
-> down to wildly different pin configurations. While pins, function and
-> drive-strength are easily overridable, the (mostly) boolean properties
-> associated with setting bias, aren't. This wouldn't be much of a
-> problem if they didn't differ between boards so often, preventing us
-> from having a "nice" baseline setup without inevitably having to go
-> with an ugly /delete-property/.
+Hi all,
 
-I see what the problem is.
+Today's linux-next merge of the f2fs tree got a conflict in:
 
-Have you considered pulling out *all* the pin config for a certain
-reference design into its own .dtsi file, simply? And then not include
-that to the next product.
+  fs/f2fs/namei.c
 
-This pattern is pretty common.
+between commit:
 
-> Introduce bias-type, a bias-type-
-> specific property and clone the pinconf-generic type enum into
-> dt-bindings to allow for setting the bias in an easily overridable
-> manner such as:
->
-> // SoC DT
-> i2c0_pin: i2c0-pin-state {
->         pins = "gpio10";
->         function = "gpio";
->         bias-type = <BIAS_PULL_UP>;
-> };
->
-> // Deviant board DT
-> &i2c0_pin {
->         bias-type = <BIAS_HIGH_IMPEDANCE>;
-> };
->
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+  f2d40141d5d9 ("fs: port inode_init_owner() to mnt_idmap")
 
-The idea is pretty straight-forward.
+from the vfs-idmapping tree and commit:
 
-But it applies to systems already using the bool flags. So what do
-we do the day we manage to have:
+  8abe4be45132 ("f2fs: remove unneeded f2fs_cp_error() in f2fs_create_white=
+out()")
 
-{
-    bias-type = <BIAS_HIGH_IMPEDANCE>;
-    bias-pull-up;
-};
+from the f2fs tree.
 
-As you see this makes it necessary to author some really nasty
-YAML to make sure this cannot happen or everyone has to make
-a runtime check for it.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Another problem is that I was just discussing with Bjorn for some
-specific i2c pull-up, was actually using the argument for
-bias-pull-up with a parameter:
+--=20
+Cheers,
+Stephen Rothwell
 
-bias-pull-up = <8000000>;  // 8kOhm pull-up
+diff --cc fs/f2fs/namei.c
+index d8e01bbbf27f,82923273f4bb..000000000000
+--- a/fs/f2fs/namei.c
++++ b/fs/f2fs/namei.c
+@@@ -923,13 -923,10 +923,10 @@@ static int f2fs_tmpfile(struct mnt_idma
+  	return finish_open_simple(file, err);
+  }
+ =20
+ -static int f2fs_create_whiteout(struct user_namespace *mnt_userns,
+ +static int f2fs_create_whiteout(struct mnt_idmap *idmap,
+  				struct inode *dir, struct inode **whiteout)
+  {
+- 	if (unlikely(f2fs_cp_error(F2FS_I_SB(dir))))
+- 		return -EIO;
+-=20
+ -	return __f2fs_tmpfile(mnt_userns, dir, NULL,
+ +	return __f2fs_tmpfile(idmap, dir, NULL,
+  				S_IFCHR | WHITEOUT_MODE, true, whiteout);
+  }
+ =20
 
-Not to mention that other platforms than qcom use this and
-qcom use it for drive-strength I think?
+--Sig_/Jy=oOH1dTIlGK12s8WfgmxL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-+#define DRIVE_STRENGTH                 9
-+#define DRIVE_STRENGTH_UA              10
+-----BEGIN PGP SIGNATURE-----
 
-drive-strength = <8>; // 8mA drive strength
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYTuwACgkQAVBC80lX
+0GwBagf/TGt9UbacvbykFcjl7F9l9hxIQmz028e7wYvp1YX5thIU8sK4rI/VZcCA
+7GfzNxj5xzBW7GkMJN1Lnb62VW9N39Y1891h/1b2neQQb8MG6COK1tEvCVYFmUoQ
+DN42Ili9ryjpwNkXl3VwTljuDw4eXRjS0oeKftYIAP6NBRrkWSY6jz6VCMbuvc8j
+x8q/tVve8ooNztrxHPTnHNQGl1Dba+dO9xg07o/kj7QmX+gLBhRFIsoqlwQ0EuLI
+rbe3YZtRCCLR3AekEhxryhoecEAiqRvqLds2jwDCjnNUVvza83gJX8KwW5WWrhDO
+ZXgWJc+rZ64cUX7z1sX3vAO4ozkD5w==
+=KBPc
+-----END PGP SIGNATURE-----
 
-bias-type = <DRIVE_STRENGTH>;
-
-OK where do I put my 8 mA now?
-
-Yours,
-Linus Walleij
+--Sig_/Jy=oOH1dTIlGK12s8WfgmxL--
