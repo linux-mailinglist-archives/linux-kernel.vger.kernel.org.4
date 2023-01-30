@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780E56803C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 03:14:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0118A6803C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 03:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235428AbjA3COB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 21:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S235431AbjA3CQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 21:16:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjA3COA (ORCPT
+        with ESMTP id S229644AbjA3CQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 21:14:00 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D44413D50
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 18:13:59 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id v23so10160966plo.1
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 18:13:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fd9O/tR7VekNHZVuIxvEglh3Auv4HgbQ30VX5q49uEs=;
-        b=d/ceRODYDTq6388o2Sj48+kUXOFYULwGnarz33zqwylf/zJkz0Bge4T7BLscO506ai
-         jLUbnxaUH71+oPw308UmtNlkQTqzaDudjlP58CDyjEmXnX/6oMQfZJu5nWFNbUuNJJu2
-         Sqn9oSKGDSyKZ9lyLpy7yz4uf4tWJWdUufX2sch4xsDg9qLw1lA9Dpk1qkv3Ldfw1/qN
-         bInHry90CD0sWv9xg4ELRBAA7ZKIlwKBc3d4OHNwsGBlpTmVE1yodXWEdYMqdh488xlL
-         kkNcmywNOklRxzmIM6YFR7FrBXJBzi0dz48n5X9SxqfjASHvrGnClC0xt5Pm5oyHC060
-         fHOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fd9O/tR7VekNHZVuIxvEglh3Auv4HgbQ30VX5q49uEs=;
-        b=Xit+V2/dHXy51suJlsE+yiHp9YCSGBL+M3uxAEDI2a5STfAN0r3bEQw0UOcNUh3LI0
-         FIOrkPE9PZoSWCHT1szThLoJkesepgjZ5fmO2D5n7jPWUjRvJVrq/T/paQFw4rrCuP+S
-         ioLbg0Q6Wk56X91W1XuSXqg/kp+YcLd1OhtsPnN8s1LK8Id1thVWTtbXkY8Zv4nhowfE
-         gjW11QCJEhQ/ced/BQWaZV9o6pZprgYqdw0N9XQbZH6kquhkaCN1TX6jmbpC8/lOohTT
-         YORyKCQ6vZLnJRBWchCKR5YKm2r8Llr7MsgIvHOkuPjymUdCMNoa8J115XSF6PfFGyQP
-         tVwg==
-X-Gm-Message-State: AO0yUKXtV2oVv97QdaODWgmK4eSjjAZDfm68k4HzUuAM9tgrrzIjBxef
-        2/+P+s8BQefpili3tC3QpL7RJw==
-X-Google-Smtp-Source: AK7set+SgtT6XMWy7cDFb1dkQK0NVFq/QUJ9BPIeOHt8108rRMeCoMgAdS2eyaIWzDM5ZebZnePAlw==
-X-Received: by 2002:a17:903:1c7:b0:196:682a:b3db with SMTP id e7-20020a17090301c700b00196682ab3dbmr8566682plh.38.1675044838787;
-        Sun, 29 Jan 2023 18:13:58 -0800 (PST)
-Received: from leoy-yangtze.lan (211-23-48-221.hinet-ip.hinet.net. [211.23.48.221])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170902b28b00b00177efb56475sm6513067plr.85.2023.01.29.18.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 18:13:58 -0800 (PST)
-Date:   Mon, 30 Jan 2023 10:13:52 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf arm-spe: Only warn once for each unsupported
- address packet
-Message-ID: <Y9cn4NYvI6+XW302@leoy-yangtze.lan>
-References: <20230127205546.667740-1-robh@kernel.org>
+        Sun, 29 Jan 2023 21:16:00 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9382B12593;
+        Sun, 29 Jan 2023 18:15:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=VUKkxOPVexeiOjL1SwDi/VTAaFCwLQcis/ITIft8mAs=; b=WQ5VRDYbPPNR7mazbzXFURKCqb
+        /oiZgBvOVBXp93JfiQTmVQeKhU2wPMr4KdRjWA94RzfnrZDQEommDZK84jRLJtHGiDJ5epM/fHWpy
+        Z+C9XXXo2NHvSQ2khZwuJd0xfN/I+sQkFlAQOujROHspzZTHpWfEfT1+OpMCAQOgqAdn5yok7r15q
+        7JE1OV+bKIj+ie6wkgsLT9OU7g4rbO8T7sZ5F9UHyUPN4jm8nrnqHNTHNInAgyfRMz0DEV+YMbguo
+        GkXjDnDGkmp9PQdJx95HXXMTG/S7TpGgmy9caco9WLOC48eRP0544FopgHtAqlwpDb6MTMSmMtaVR
+        T4d7D5Ug==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pMJi4-004w5f-24;
+        Mon, 30 Jan 2023 02:15:52 +0000
+Date:   Mon, 30 Jan 2023 02:15:52 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Richard Weinberger <richard@nod.at>
+Cc:     chuck lever <chuck.lever@oracle.com>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>, anna <anna@kernel.org>,
+        trond myklebust <trond.myklebust@hammerspace.com>,
+        raven <raven@themaw.net>,
+        chris chilvers <chris.chilvers@appsbroker.com>,
+        david young <david.young@appsbroker.com>,
+        luis turcitu <luis.turcitu@appsbroker.com>,
+        david <david@sigma-star.at>, benmaynard <benmaynard@google.com>
+Subject: Re: [PATCH 2/3] namei: Allow follow_down() to uncover auto mounts
+Message-ID: <Y9coWGadefHY6ZEJ@ZenIV>
+References: <20221207084309.8499-1-richard@nod.at>
+ <20221207084309.8499-3-richard@nod.at>
+ <EAE9AF79-93B8-4366-8672-20D407694E7E@oracle.com>
+ <68008696.79813.1675006959005.JavaMail.zimbra@nod.at>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230127205546.667740-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <68008696.79813.1675006959005.JavaMail.zimbra@nod.at>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,URIBL_ABUSE_SURBL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 02:55:46PM -0600, Rob Herring wrote:
-> Unknown address packet indexes are not an error as the Arm architecture
-> can (and has with SPEv1.2) define new ones and implementation defined
-> ones are also allowed. The error message for every occurrence of the
-> packet is needlessly noisy as well. Change the message to print just
-> once for each unknown index.
+On Sun, Jan 29, 2023 at 04:42:39PM +0100, Richard Weinberger wrote:
+> ----- Ursprüngliche Mail -----
+> > Von: "chuck lever" <chuck.lever@oracle.com>
+> >> On Dec 7, 2022, at 3:43 AM, Richard Weinberger <richard@nod.at> wrote:
+> >> 
+> >> This function is only used by NFSD to cross mount points.
+> >> If a mount point is of type auto mount, follow_down() will
+> >> not uncover it. Add LOOKUP_AUTOMOUNT to the lookup flags
+> >> to have ->d_automount() called when NFSD walks down the
+> >> mount tree.
+> >> 
+> >> Signed-off-by: Richard Weinberger <richard@nod.at>
+> > 
+> > Hello Al, you are top of the maintainers listed for fs/namei.c.
+> > I'd like to take this series for v6.3 via the nfsd tree. Can
+> > I get your Acked-by: for this one?
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> ping?
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
+modulo clumsy wording ("mount point is of type auto mount")
 
-> ---
->  tools/perf/util/arm-spe-decoder/arm-spe-decoder.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-> index 091987dd3966..40dcedfd75cd 100644
-> --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-> +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-> @@ -68,7 +68,11 @@ static u64 arm_spe_calc_ip(int index, u64 payload)
->  		/* Clean highest byte */
->  		payload = SPE_ADDR_PKT_ADDR_GET_BYTES_0_6(payload);
->  	} else {
-> -		pr_err("unsupported address packet index: 0x%x\n", index);
-> +		static u32 seen_idx = 0;
-> +		if (!(seen_idx & BIT(index))) {
-> +			seen_idx |= BIT(index);
-> +			pr_warning("ignoring unsupported address packet index: 0x%x\n", index);
-> +		}
->  	}
->  
->  	return payload;
-> -- 
-> 2.39.0
-> 
+Acked-by: Al Viro <viro@zeniv.linux.org.uk>
+
+Commit message sounds as if it refered to autofs, rather than NFS referrals
+et.al. and AFAICS those are the cases it's really about...
