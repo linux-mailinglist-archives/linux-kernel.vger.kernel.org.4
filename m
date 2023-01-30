@@ -2,134 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF29681534
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F02768152F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbjA3PhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:37:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S235600AbjA3Pgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:36:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjA3PhJ (ORCPT
+        with ESMTP id S229694AbjA3Pgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:37:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1C230E6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:36:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675092983;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RBmhX41BoXlyvE9x/O8OKKatZjRg7MheACF8SvOJv6k=;
-        b=C+w+sWqiF71S7n0mPRtvPc3zpgSKaYYHTR+JLSaGsSIMrujO5Dq/jLk3zx412YZ2B1mtHu
-        k3H6cUiyAWh1wsQHhrxE0tMOivnd3b+CeyZ8tSpW9qvIYNcLJ2pYULS7k1wuunwmzJ52yR
-        ECcOi+bhncqDVva82bMfqOfS+h3lcWU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-385-sIj5oArnM0KGAbb-XpSN9Q-1; Mon, 30 Jan 2023 10:36:21 -0500
-X-MC-Unique: sIj5oArnM0KGAbb-XpSN9Q-1
-Received: by mail-ed1-f72.google.com with SMTP id l17-20020a056402255100b00472d2ff0e59so8486273edb.19
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:36:20 -0800 (PST)
+        Mon, 30 Jan 2023 10:36:36 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C35E3B4;
+        Mon, 30 Jan 2023 07:36:35 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso3461701wms.5;
+        Mon, 30 Jan 2023 07:36:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4dOXRUmBXFiifXvzPC8imf6hOLL/T6qZBqV64N2nOgU=;
+        b=fTQ3P9YCjeLCmcnsVKhrpsPP8aZsKY6HBgLCPuqzSrFWX/iT8Sp44LdM2UB/fyhNMV
+         E66b241sIzZeZ4NCpropV3vUUcZSTPL7mSKjBAx833SMSi7MJqfX8PZWt0+sF5JLx9A3
+         ufIdnyL1VLNXgDPn7Ef9iNvj9t7ZkYeNfFyGlc8OGvuKjuVEGVgwMvACU2gt+bciF8t2
+         sYbfj5SgBQ27AasRjJ2BFXK1cEFTtMG2zXkRWyXJo/J25nesB4xWs26L47z7P39NYVkN
+         EoVaVqbNL8HQ0mwhDPgA6jIC21Rc+xjWhJ2HZJZwtZZUJ9P9xPN0pS57zmHm3e6fS4Ld
+         1jrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBmhX41BoXlyvE9x/O8OKKatZjRg7MheACF8SvOJv6k=;
-        b=Idm+hzmNndyAY62XnbrLdmEoAu8rAwW6d4NM3i5tRo6JHhDFWVif/oNf9JfYjP5rN1
-         hK5jWbpS/wXNq0r5/Ollht+XmEdgRZue4Qu6DPd53BHUZ3tkB8tdUhbtelzHirzdX+a0
-         NbQZxunaxAcsETVRzUDSaUza+egArKRzVg1c3XY4kW3UQUGaz3G6R6vPgkpxYt7Octwa
-         f8Ry0VdST7Qmwi+5eDhlf8rKNpTfiUyR9dGZLrY1G+RGi/CRMDFUDDSjMUvEziZeta5+
-         VQ927wCFjXMdiCOL2AdqTvGlkwU4h85OYs/yfEtPcEmSnnKBqY9vbllboCjgpreyJQAn
-         teww==
-X-Gm-Message-State: AO0yUKUdTwooHfKveX/7rGsmUs/V7X7aWJL2zfJyv9wRofE5QTJAnC/0
-        bKiKqdFAgL3Xc22zVz5s/HXPIF9YSNe0n7MJTXhdbwr2nlITKMB75hggUzB9Q1Dybm0upqEckwO
-        3z+lG8kmNAooqleM3xbiGtQiF
-X-Received: by 2002:a17:906:4a59:b0:886:ec6e:4c1 with SMTP id a25-20020a1709064a5900b00886ec6e04c1mr6454894ejv.59.1675092980080;
-        Mon, 30 Jan 2023 07:36:20 -0800 (PST)
-X-Google-Smtp-Source: AK7set+iwFqcC78NFurgo3bhkb5NPKHsAOZddnvdfeU+KEBISZuuSpVuTjQaU3Y4xTKUT0U0sl7I8g==
-X-Received: by 2002:a17:906:4a59:b0:886:ec6e:4c1 with SMTP id a25-20020a1709064a5900b00886ec6e04c1mr6454876ejv.59.1675092979905;
-        Mon, 30 Jan 2023 07:36:19 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id b14-20020a1709062b4e00b00880d9530761sm4417556ejg.209.2023.01.30.07.36.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 07:36:19 -0800 (PST)
-Message-ID: <506d3a5d-45f3-3c2c-ad2e-b6609814dc5c@redhat.com>
-Date:   Mon, 30 Jan 2023 16:36:18 +0100
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4dOXRUmBXFiifXvzPC8imf6hOLL/T6qZBqV64N2nOgU=;
+        b=db/xycjH2ZVlVPQ1kBRxfIyckkWsS01zO5zUXtCUz3C6LAR5P5BewE6LbXTNvq/9a5
+         bLXGcqIgsYiOImX7VaXKH351wL/rbzCStQ7RJM0HOkwG5qD5fuBHRcVz1mzum0FCv/6u
+         uMWPp3bgh0hMyDLsTpJ/Ju57gfbZ2/zT8vHcj2XqXG79EU5RQKUt1xEZ7uIAqnwa4kVn
+         r8C36Wq5cN9/EvGQnwzRBrrqWw7JDowForu6Q+FmHS1i5R8WkEC6agaLeUYfomMuoIAX
+         nks8Eebbfunb2JWlwpNBFdT+jxZj6vhWSRpQ065fFekhnLtwN1Q+mbw+7JZ+4YiGTmrF
+         o8PA==
+X-Gm-Message-State: AO0yUKUW0KMPQK9SX83ZKjm+q5dzruDEuu1Ek/mknoeAg3oTywHO6333
+        VyH9vI9DiQnUY5AlWk5ZiL4=
+X-Google-Smtp-Source: AK7set/4JeVm2sUMgE7ALABnOi8bhC2azYZoYx20b9heveQtDktZVPMBf2tjCnHNbw8+1PRZTZeMhQ==
+X-Received: by 2002:a05:600c:3595:b0:3dc:1054:3acd with SMTP id p21-20020a05600c359500b003dc10543acdmr23270906wmq.17.1675092993971;
+        Mon, 30 Jan 2023 07:36:33 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id w16-20020a05600c099000b003daf681d05dsm13068005wmp.26.2023.01.30.07.36.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 07:36:33 -0800 (PST)
+Date:   Mon, 30 Jan 2023 16:36:31 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        "Wesley W. Terpstra" <wesley@sifive.com>,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] pwm: sifive: Always let the first pwm_apply_state
+ succeed
+Message-ID: <Y9fj/72Tl5FN+HSf@orome>
+References: <20221109113724.519021-1-emil.renner.berthing@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] platform/x86: dell-smo8800: Use min_t() for comparison
- and assignment
-Content-Language: en-US
-To:     Deepak R Varma <drv@mailo.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>
-References: <Y9P8debIztOZXazW@ubun2204.myguest.virtualbox.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Y9P8debIztOZXazW@ubun2204.myguest.virtualbox.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ir6Gg7F9FhCRM+tI"
+Content-Disposition: inline
+In-Reply-To: <20221109113724.519021-1-emil.renner.berthing@canonical.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 1/27/23 17:31, Deepak R Varma wrote:
-> Simplify code by using min_t helper macro for logical evaluation
-> and value assignment. Use the _t variant of min macro since the
-> variable types are not same.
-> This issue is identified by coccicheck using the minmax.cocci file.
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+--ir6Gg7F9FhCRM+tI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
+On Wed, Nov 09, 2022 at 12:37:24PM +0100, Emil Renner Berthing wrote:
+> Commit 2cfe9bbec56ea579135cdd92409fff371841904f added support for the
+> RGB and green PWM controlled LEDs on the HiFive Unmatched board
+> managed by the leds-pwm-multicolor and leds-pwm drivers respectively.
+> All three colours of the RGB LED and the green LED run from different
+> lines of the same PWM, but with the same period so this works fine when
+> the LED drivers are loaded one after the other.
+>=20
+> Unfortunately it does expose a race in the PWM driver when both LED
+> drivers are loaded at roughly the same time. Here is an example:
+>=20
+>   |          Thread A           |          Thread B           |
+>   |  led_pwm_mc_probe           |  led_pwm_probe              |
+>   |    devm_fwnode_pwm_get      |                             |
+>   |      pwm_sifive_request     |                             |
+>   |        ddata->user_count++  |                             |
+>   |                             |    devm_fwnode_pwm_get      |
+>   |                             |      pwm_sifive_request     |
+>   |                             |        ddata->user_count++  |
+>   |         ...                 |          ...                |
+>   |    pwm_state_apply          |    pwm_state_apply          |
+>   |      pwm_sifive_apply       |      pwm_sifive_apply       |
+>=20
+> Now both calls to pwm_sifive_apply will see that ddata->approx_period,
+> initially 0, is different from the requested period and the clock needs
+> to be updated. But since ddata->user_count >=3D 2 both calls will fail
+> with -EBUSY, which will then cause both LED drivers to fail to probe.
+>=20
+> Fix it by letting the first call to pwm_sifive_apply update the clock
+> even when ddata->user_count !=3D 1.
+>=20
+> Fixes: 9e37a53eb051 ("pwm: sifive: Add a driver for SiFive SoC PWM")
+> Signed-off-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 > ---
->  drivers/platform/x86/dell/dell-smo8800.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/dell/dell-smo8800.c b/drivers/platform/x86/dell/dell-smo8800.c
-> index 3385e852104c..8d6b7a83cf24 100644
-> --- a/drivers/platform/x86/dell/dell-smo8800.c
-> +++ b/drivers/platform/x86/dell/dell-smo8800.c
-> @@ -67,10 +67,7 @@ static ssize_t smo8800_misc_read(struct file *file, char __user *buf,
->  
->  	retval = 1;
->  
-> -	if (data < 255)
-> -		byte_data = data;
-> -	else
-> -		byte_data = 255;
-> +	byte_data = min_t(u32, data, 255);
->  
->  	if (put_user(byte_data, buf))
->  		retval = -EFAULT;
+>  drivers/pwm/pwm-sifive.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
+I've applied this as-is for now. What I'm wondering is if perhaps we
+want to implement something into the PWM core to deal with this, now
+fairly common, situation.
+
+Thierry
+
+--ir6Gg7F9FhCRM+tI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPX4/wACgkQ3SOs138+
+s6GN+Q/9GErvttbzCfQ8UlLEkSt6ZyC2QIVVZhEDF7LoH4jprLifKAEsGMR9BK5y
+XS2nldqcUtb9q/p6hVdnGcMjyDmoH9OLoVeM3PX56BaeKYaEBdUeg97uFAwsIJU4
+TdcFpAzIVKNCsPyK0wwPw2P4bWyiEs1+rf6Go4jNu7aZE77yI11TrhjUxXBc++9g
+EcDChQ2pu3PJgCaBx16GZ4RQ5CgkR7JSL50ZohmKbdO/8asYi3aGEBxo5YN6BTaV
+NKI2H1n1XH1KKC6m/3/eIC2fM3bv9q+JqRe7vJ9kalxTdYnwZKglRv2WyFsA0kF1
+e1bTJrq3P3fpZVfY+dH1SfddToqGftPOc5vBd+NnK/brfmX+uCpg+vDoo/YeP+jU
+TDh9FZkWGMJ7XhZh1A65QQazsKfo67gyG5xKZZU/XtT6U9vUXBAffpzWryeS+ulr
+iDo6WjhtqBw+7hk57paDn5f49wVJIRijvNU0dAVIGGxaZceiAo1WJsaC7zUxrvq+
+9fCZb/o7bfsnFd+/QG8tVcuZ41dKTrqlXHU70qzhXJ4tBxE8NVrk0hG8AmghyGt3
+oQiyNw4LJE777ES/OVpkndtr4DMaERL7+e6ZAqJ8w/YQNHEedacHM8KopOrGUTHp
+f33dJEjjcqFU3r0PWfo9mRRaxLF7AeWJxOdlMUK28f1k5fQo+V4=
+=oOaj
+-----END PGP SIGNATURE-----
+
+--ir6Gg7F9FhCRM+tI--
