@@ -2,193 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AA6680C13
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A6A680C25
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235530AbjA3LgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 06:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S235722AbjA3Lnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 06:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjA3LgP (ORCPT
+        with ESMTP id S229728AbjA3Lni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 06:36:15 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2045.outbound.protection.outlook.com [40.107.94.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1C43AB4;
-        Mon, 30 Jan 2023 03:36:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KFYxqSY+OrbBB0qdfTxxyZ6SSw9LCqdXCgHHI/N3tzZ8papnnqckm1LyCAHqrDGmmVyGuB22UOT/xQyoqbKPgIwgfhZUnxmx9WreqDd8EPjSa8ZfqvTc/8mQJQ8DDnHLYLcJMl6YukBWSA4ubsCpNOtvSckrEEgzbFA0/8P4U9UmcA6bjpBmaXAp4jTh/c677z8ZR6VM7Gvru99sDmB25JZb1EEPfoQtaR5wrJALqiw9UGlJSbEdamkRSaznspEZzd9AClh+3sSjNhJbEb1qwMdiEPE92fC5R1Qaq4qqBHobZKcaOn5VgTjQrIzGLnr/so7v+YBlIqrfIee0XU3reA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tIiPdkfZ/fZE2PAtlhpufWZGeI6OlvxeJR6i/u8E6ZE=;
- b=L7nGwiU0yf+gEVaV9lOUMSZuydguua8HOQ4FjKh7dk7n5dSv+ZGU3dCclAT0uz2VWss+aBz1UwvzCGFQF9mKkJu8W15bhNrIzsU9mLhTk3KZYlkZpOIZ/klPlnjNIsp+GnSi53qm1BGCQnxzAI6CAaJFdQZB5bw353gDMCzim8KIPgZznk5w8R/zcQNSHpNv6ZSiqYHqkju10kmnoB7olrKGATlZ95L8iOAOtbCTYcQxM3AIJefQjD0C/J3XthN9BH9SgoVaK1d8821Et8PDC0dYzeoTR1s0zRHsUT5yX5LHAgW0boPCBmrQCJdOwqCMHjT4oj1HD6VS1fF8wVb/FQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tIiPdkfZ/fZE2PAtlhpufWZGeI6OlvxeJR6i/u8E6ZE=;
- b=IKmcfYZIzTzE+FOa9C3ZcvcOQ5+xrQCUSqHncijXIwvBmirsKytj0A7M/kwsE7d/H/D19ZWtknuMw8Zcn6PeNfD4aQOeqkZVRtX/5fxpsayNRTWOq3QcRb4abf3aI7FogIC0ECl984cN6FLW06FSxKS1A53E6zVpuPRFfOV2f5TblTaswez8dsHlGu2Z8JeSVOc+pyQynxbv2BVY0xQnqq8qN9xrx2lz+SqrBor/sYenCC3RLXJXWElmoXlGiYyijpHLNKUEo33AUSsVhgLbrxtj/J6ubVFc1SdJ9lmNjlQe80TlXgDRtMZ5H6r5XFDoB4kiNV/vAI7X8/BxsOl/2w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by LV2PR12MB5893.namprd12.prod.outlook.com (2603:10b6:408:175::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 11:36:12 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::465a:6564:6198:2f4e]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::465a:6564:6198:2f4e%4]) with mapi id 15.20.6043.023; Mon, 30 Jan 2023
- 11:36:12 +0000
-References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
- <4f8b1d54ab5d6909c46ba5470065f8326f9fcc62.1674538665.git-series.apopple@nvidia.com>
- <Y8/tGIeg5mI9bDOa@nvidia.com>
- <SA0PR15MB3919F0CCF1D878DE8B243B0199C99@SA0PR15MB3919.namprd15.prod.outlook.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Bernard Metzler <BMT@zurich.ibm.com>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "surenb@google.com" <surenb@google.com>,
-        "mkoutny@suse.com" <mkoutny@suse.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: [RFC PATCH 05/19] RMDA/siw: Convert to use vm_account
-Date:   Mon, 30 Jan 2023 22:34:50 +1100
-In-reply-to: <SA0PR15MB3919F0CCF1D878DE8B243B0199C99@SA0PR15MB3919.namprd15.prod.outlook.com>
-Message-ID: <87lelkz23e.fsf@nvidia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SYXPR01CA0096.ausprd01.prod.outlook.com
- (2603:10c6:0:2e::29) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Mon, 30 Jan 2023 06:43:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3FA2BF11
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:42:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675078968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E9Hg0TbdjCWbFmrRsJTCwS8aIGYfDhQHhp2E2ViuLn0=;
+        b=ZOSAgwhYK8l+PmoDecOwjIdGP/GNTycSBGSVbYovAzuiwY80bguDLGCZsnYR7q4P3gp3e4
+        s2R+SwAudRuBWWT2qkLeI6jf5LDhs5D1DHSG7uzTr0RoQnLTnvt4AbYbTQ+dMtcT6sRn3W
+        FqtlywcxARf58bS7+i7JJgGWf+UOu6E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-KNAt9Q__PRiXwg4J8RrNlg-1; Mon, 30 Jan 2023 06:42:45 -0500
+X-MC-Unique: KNAt9Q__PRiXwg4J8RrNlg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5285A3C0F42B;
+        Mon, 30 Jan 2023 11:42:44 +0000 (UTC)
+Received: from ptitbras (unknown [10.39.195.43])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B38B3140EBF5;
+        Mon, 30 Jan 2023 11:42:40 +0000 (UTC)
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+User-agent: mu4e 1.8.0; emacs 28.2
+From:   Christophe de Dinechin <dinechin@redhat.com>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Date:   Mon, 30 Jan 2023 12:36:34 +0100
+In-reply-to: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+Message-ID: <m2pmaw5jv4.fsf@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|LV2PR12MB5893:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c58427c-5a16-4fed-e146-08db02b6306c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bXgfrjh0f9stgD0aR78zVAg3Y4wQW2zDICgg4FHoK4MVjIKs71nXxUy3npUte3LmzkDDGRIOwEjdyHL5iKmpX3l2emZl41d4lKyHHfMXrCL6nhdJnA6rV7i90JWqejLSsngWxmfMbzOet6yaybz2mnIQsUIDLZS2eQmtXSYY/7GTXKrwjhoebNLZW0fodwMOKKHLzDQUCl2Wa9DqP0spFKrR/rwR9Ji0t5a4s3dhoJGOwVeF9SQMZnbDsIcsBLcJ5ZY17DkuNw3P5Q/OGyFH+ysBiuX6u7JoMrR6Kqet5glmtkiMEMNB+eWv0Kn2M5P6imQeSNEaD31woYtt9/KoAvYJq+4rn9nPyb0eHjV5dWbYkyW5vGwvHmVdslEN3zEb+JztRZeEbdVV3D2uPeu/GCfdcRmN7yWLWe/YQYhniw3H1KYfjy1JBQxCCiOH9XhLiDQF2PR2WneeKkjLG7MB4eu2Nm4Dj2p+O3vFSxskD0veTvNFFa0zOiqgcqYcBH3CBpsZ4vkYhcaMMLyxwWuoRL5vkuoK+I2IhnZGwWYWW8vpfTAoQagFSJulwUIIzAak6z01q0mR6jeUUWwchPziPBEcgcHip7nEeBDfcoGYgSQs0+eVZdJKHNgFxAt3gc57p7eSs0cmCl3LGjkj/8E0LA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(376002)(346002)(136003)(396003)(451199018)(41300700001)(38100700002)(86362001)(54906003)(8936002)(7416002)(5660300002)(316002)(2616005)(36756003)(2906002)(83380400001)(53546011)(6506007)(6486002)(6512007)(6916009)(4326008)(26005)(478600001)(186003)(6666004)(66476007)(66556008)(8676002)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ny/smdHJMuFK+nvuNNyX5LrDyB8sHIgTNntb0rrU9xQS1kCPAsCf609Nh8vU?=
- =?us-ascii?Q?x8rrgs2YHRo+Tw5zq0WmsFHlZ8k+2agxsZWDJdSQhULRjwNgI+YCojuuR9Ci?=
- =?us-ascii?Q?Vmg/qOSrCa/yZA8lt5rzu0iOB2NNQISGrWuUHsihPktZ91P4/m55VeG8MYzW?=
- =?us-ascii?Q?9TWyD3GEyxLgrgM2NuhO6lQTkicaGEtMj8a4P41Brzuom55M+AMF82udc8PG?=
- =?us-ascii?Q?hRfG2Z90kdmI63Z9K8/OLF2XG6jqUi2oc9LNrqgGZYVhYzxiwOj7KA7YT8ay?=
- =?us-ascii?Q?uYWlbEY2SDRccX7IjOWmjxDuWhq4tgUxtjeD0hfvQA5nPY5Wus8ZidqAmDjB?=
- =?us-ascii?Q?/K5cMn8wCT84ZNGFHv2HSi6H4s/okDH1vY/AlBCm+hJFYwZaL4d15fhd3XLW?=
- =?us-ascii?Q?E8ItGmRWYYPO/ecRfkL2eVzVzwWwFhinoiTuYXXo+u819yfuBPkS/YWl8OJ4?=
- =?us-ascii?Q?OMQlej4jL6KvNF9UzDBqin+me4af6oa3IAO6Sy5PUdD6S9FRn3nDdXlr6/58?=
- =?us-ascii?Q?vFEy9UzAFEyA9IGncMPX3nAa4upZiV3NNxvdUCZj1Fgk5o+voqm/ozWf7ijy?=
- =?us-ascii?Q?atV4R6bumuY1H1AnQbG63/H+vP+VORCd0H1KlyWaHQRKHrz95H4HsUFM4XgJ?=
- =?us-ascii?Q?jsmkYUZrutbl5sjWSu0bNnjPqyGQwRwY9bZtD7nP3wEjFRZzdTmC1FNt4fl1?=
- =?us-ascii?Q?QR/0IOHZ38D4AJDbN3KroJbNV7jeUGb74sEKYbx239PBI1rd7KopA1HalRmI?=
- =?us-ascii?Q?WsUlj/wG76SvsqoomivkOOtow4MSfdfjuvAKxg8lohrHls07Fb3EWwb9OA/7?=
- =?us-ascii?Q?2EW26cbCQmxnwxhweFZ9B7/Yxm2DYLmzePV+dA6PAs8/79ZMGpVSS+6AuzBy?=
- =?us-ascii?Q?4qJq47TEcTKCjSxEoscLl2Zhu4iXBq8k2gU8n6Hbn+5ZgOT1K7woglZY+Vib?=
- =?us-ascii?Q?qjPjvgSjCagUUwFgCWrhBD4AwM59WwZAELe1llNesWonIsfO8TrRWreewjJ1?=
- =?us-ascii?Q?TSv+C/ZhWdQU7mcgxdQHByjgqdLqYCVZ4O4B3fKlaI1CX/hGZp1mDZJseg14?=
- =?us-ascii?Q?lJqp1m/QGkD0PN/pM5RyuELCVZgHiObPXF8YM6D1Q1jclwREB1TXqlB4qYDp?=
- =?us-ascii?Q?+iiSNZRt+nDM7MNayL0pEeaJGErBAkZcU4LFkx3oa6vjKGJ2uSTqxcGmpamK?=
- =?us-ascii?Q?ZCgGJ0qLKFzWBOlqzzQlp2JBMPkDNaiMx90LgTKf63PlyN8PVkNf963mauqS?=
- =?us-ascii?Q?txaDs3RttzxoMgbD9pSBBcwUExVAncmV/jQckD+bIvHr8zJpfQGUh1B2IM4Z?=
- =?us-ascii?Q?gqoWia9boUwk1VFJpoaItIepnVpAyK3ml8afiijp0+xcKfc42VRNfVg/xfzK?=
- =?us-ascii?Q?cApVYbP681+0PgTeHnbx2rLwyl88oAJBErcZTfiUEBtih6Z4/i6VodilqW3D?=
- =?us-ascii?Q?YDX9wTOPKXd6LBLOay0aDILuPFF7K98mbBv7BcN0NCpTcsiKJzo79qHh+5Lt?=
- =?us-ascii?Q?siSpkBx0vPwiYdlsE0/LUBuF1MfBpz/uJFSOYi4M18N2yRcCNK4K+L7CcPlT?=
- =?us-ascii?Q?lYO5McCSzxaQimdA46DQsx7adldnmvCPo2JQEBR5?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c58427c-5a16-4fed-e146-08db02b6306c
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 11:36:12.4677
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rQjdkUOlO9LmFpQKEhaNwWuyd2zyZsG/8qA6pNnjwTAnnY4uCtNcmjB0dFZRHiAzgumUo2M5ZWGRworOeUJDiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5893
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Elena,
 
-Bernard Metzler <BMT@zurich.ibm.com> writes:
-
->> -----Original Message-----
->> From: Jason Gunthorpe <jgg@nvidia.com>
->> Sent: Tuesday, 24 January 2023 15:37
->> To: Alistair Popple <apopple@nvidia.com>
->> Cc: linux-mm@kvack.org; cgroups@vger.kernel.org; linux-
->> kernel@vger.kernel.org; jhubbard@nvidia.com; tjmercier@google.com;
->> hannes@cmpxchg.org; surenb@google.com; mkoutny@suse.com; daniel@ffwll.ch;
->> Bernard Metzler <BMT@zurich.ibm.com>; Leon Romanovsky <leon@kernel.org>;
->> linux-rdma@vger.kernel.org
->> Subject: [EXTERNAL] Re: [RFC PATCH 05/19] RMDA/siw: Convert to use
->> vm_account
->> 
->> On Tue, Jan 24, 2023 at 04:42:34PM +1100, Alistair Popple wrote:
->> 
->> > @@ -385,20 +382,16 @@ struct siw_umem *siw_umem_get(u64 start, u64 len,
->> bool writable)
->> >  	if (!umem)
->> >  		return ERR_PTR(-ENOMEM);
->> >
->> > -	mm_s = current->mm;
->> > -	umem->owning_mm = mm_s;
->> >  	umem->writable = writable;
->> >
->> > -	mmgrab(mm_s);
->> > +	vm_account_init_current(&umem->vm_account);
->> >
->> >  	if (writable)
->> >  		foll_flags |= FOLL_WRITE;
->> >
->> > -	mmap_read_lock(mm_s);
->> > +	mmap_read_lock(current->mm);
->> >
->> > -	mlock_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
->> > -
->> > -	if (num_pages + atomic64_read(&mm_s->pinned_vm) > mlock_limit) {
->> > +	if (vm_account_pinned(&umem->vm_account, num_pages)) {
->> >  		rv = -ENOMEM;
->> >  		goto out_sem_up;
->> >  	}
->> > @@ -429,7 +422,6 @@ struct siw_umem *siw_umem_get(u64 start, u64 len,
->> bool writable)
->> >  				goto out_sem_up;
->> >
->> >  			umem->num_pages += rv;
->> > -			atomic64_add(rv, &mm_s->pinned_vm);
->> 
->> Also fixes the race bug
+On 2023-01-25 at 12:28 UTC, "Reshetova, Elena" <elena.reshetova@intel.com> =
+wrote...
+> Hi Greg,
 >
-> But introduces another one. In that loop, umem->num_pages keeps the
-> number of pages currently pinned, not the target number. The current
-> patch uses that umem->num_pages to call vm_unaccount_pinned() in
-> siw_umem_release(). Bailing out before all pages are pinned would
-> mess up that accounting during release. Maybe introduce another
-> parameter to siw_umem_release(), or better have another umem member
-> 'umem->num_pages_accounted' for correct accounting during release.
+> You mentioned couple of times (last time in this recent thread:
+> https://lore.kernel.org/all/Y80WtujnO7kfduAZ@kroah.com/) that we ought to=
+ start
+> discussing the updated threat model for kernel, so this email is a start =
+in this direction.
+>
+> (Note: I tried to include relevant people from different companies, as we=
+ll as linux-coco
+> mailing list, but I hope everyone can help by including additional people=
+ as needed).
+>
+> As we have shared before in various lkml threads/conference presentations
+> ([1], [2], [3] and many others), for the Confidential Computing guest ker=
+nel, we have a
+> change in the threat model where guest kernel doesn=E2=80=99t anymore tru=
+st the hypervisor.
+> This is a big change in the threat model and requires both careful assess=
+ment of the
+> new (hypervisor <-> guest kernel) attack surface, as well as careful desi=
+gn of mitigations
+> and security validation techniques. This is the activity that we have sta=
+rted back at Intel
+> and the current status can be found in
+>
+> 1) Threat model and potential mitigations:
+> https://intel.github.io/ccc-linux-guest-hardening-docs/security-spec.html
 
-Yes, I see the problem thanks for pointing it out. Will fix for the next
-version.
+I only looked at this one so far. Here are a few quick notes:
 
-> Bernard.
->> 
->> Jason
+DoS attacks are out of scope. What about timing attacks, which were the
+basis of some of the most successful attacks in the past years? My
+understanding is that TDX relies on existing mitigations, and does not
+introduce anythign new in that space. Worth mentioning in that "out of
+scope" section IMO.
+
+Why are TDVMCALL hypercalls listed as an "existing" communication interface?
+That seems to exclude the TDX module from the TCB. Also, "shared memory for
+I/Os" seems unnecessarily restrictive, since it excludes interrupts, timing
+attacks, network or storage attacks, or devices passed through to the guest.
+The latter category seems important to list, since there are separate
+efforts to provide confidential computing capabilities e.g. to PCI devices,
+which were discussed elsewhere in this thread.
+
+I suspect that my question above is due to ambiguous wording. What I
+initially read as "this is out of scope for TDX" morphs in the next
+paragraph into "we are going to explain how to mitigate attacks through
+TDVMCALLS and shared memory for I/O". Consider rewording to clarify the
+intent of these paragraphs.
+
+Nit: I suggest adding bullets to the items below "between host/VMM and the
+guest"
+
+You could count the "unique code locations" that can consume malicious input
+in drivers, why not in core kernel? I think you write elsewhere that the
+drivers account for the vast majority, so I suspect you have the numbers.
+
+"The implementation of the #VE handler is simple and does not require an
+in-depth security audit or fuzzing since it is not the actual consumer of
+the host/VMM supplied untrusted data": The assumption there seems to be that
+the host will never be able to supply data (e.g. through a bounce buffer)
+that it can trick the guest into executing. If that is indeed the
+assumption, it is worth mentioning explicitly. I suspect it is a bit weak,
+since many earlier attacks were based on executing the wrong code. Notably,
+it is worth pointing out that I/O buffers are _not_ encrypted with the CPU
+key (as opposed to any device key e.g. for PCI encryption) in either
+TDX or SEV. Is there for example anything that precludes TDX or SEV from
+executing code in the bounce buffers?
+
+"We only care about users that read from MMIO": Why? My guess is that this
+is the only way bad data could be fed to the guest. But what if a bad MMIO
+write due to poisoned data injected earlier was a necessary step to open the
+door to a successful attack?
+
+
+>
+> 2) One of the described in the above doc mitigations is "hardening of the=
+ enabled
+> code". What we mean by this, as well as techniques that are being used are
+> described in this document:
+> https://intel.github.io/ccc-linux-guest-hardening-docs/tdx-guest-hardenin=
+g.html
+>
+> 3) All the tools are open-source and everyone can start using them right =
+away even
+> without any special HW (readme has description of what is needed).
+> Tools and documentation is here:
+> https://github.com/intel/ccc-linux-guest-hardening
+>
+> 4) all not yet upstreamed linux patches (that we are slowly submitting) c=
+an be found
+> here: https://github.com/intel/tdx/commits/guest-next
+>
+> So, my main question before we start to argue about the threat model, mit=
+igations, etc,
+> is what is the good way to get this reviewed to make sure everyone is ali=
+gned?
+> There are a lot of angles and details, so what is the most efficient meth=
+od?
+> Should I split the threat model from https://intel.github.io/ccc-linux-gu=
+est-hardening-docs/security-spec.html
+> into logical pieces and start submitting it to mailing list for discussio=
+n one by one?
+> Any other methods?
+>
+> The original plan we had in mind is to start discussing the relevant piec=
+es when submitting the code,
+> i.e. when submitting the device filter patches, we will include problem s=
+tatement, threat model link,
+> data, alternatives considered, etc.
+>
+> Best Regards,
+> Elena.
+>
+> [1] https://lore.kernel.org/all/20210804174322.2898409-1-sathyanarayanan.=
+kuppuswamy@linux.intel.com/
+> [2] https://lpc.events/event/16/contributions/1328/
+> [3] https://events.linuxfoundation.org/archive/2022/linux-security-summit=
+-north-america/program/schedule/
+
+
+--
+Cheers,
+Christophe de Dinechin (https://c3d.github.io)
+Theory of Incomplete Measurements (https://c3d.github.io/TIM)
 
