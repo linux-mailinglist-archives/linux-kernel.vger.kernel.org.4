@@ -2,362 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C091681152
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BF7681144
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237179AbjA3OMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S237216AbjA3OLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:11:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237223AbjA3OMH (ORCPT
+        with ESMTP id S237170AbjA3OLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:12:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA943B66A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:11:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675087882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zIrqd3J5hRsnQaxBAafMrajK/fmCqm3/aeryUUviUsA=;
-        b=auFxvu3yXVK6biIdtZHm6zTys8Bjnc4OKC6JpdNcR1ivVyM543hcBdNcd4Jymv/JEbL9xY
-        Uh2zGJNJlDnU995vJsX+YOtO5WCDq8aFzcnGg+UTFseZGj9GuZ9QPPTKGeA5rg85YJYWZ0
-        XU61hRMn84hSsqiZGKnRmvOHf4vL3zI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-252-mHzjNHWMNqaArCiWVE2XjA-1; Mon, 30 Jan 2023 09:11:13 -0500
-X-MC-Unique: mHzjNHWMNqaArCiWVE2XjA-1
-Received: by mail-ed1-f69.google.com with SMTP id w16-20020a056402129000b004a1f1a2e79dso6113200edv.23
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:11:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zIrqd3J5hRsnQaxBAafMrajK/fmCqm3/aeryUUviUsA=;
-        b=a5d/QqnmCFnPduJ0T90Lwgpn3+BrEhs9fZHr9zmYuQ5/WDGANqDzgX2LiSCYBcRr44
-         F/ukagqNfJ811raKxOc/QhgXXrL3KBorpinjqgjhLpLn7yphrw/LUuBN6rnKhs04DMaw
-         +SCcfKJIB71Sf5XfqAdq6815ieOY9LkNBBhvhztKn+V32Zj+9Dh/8tPe2cqKG4mBSKhx
-         x542/IJ9F1XgxBAA8PsLQFWugvBTu9jnpc4UX8IPCDk0pb2PPzcxdDIFBRnjb03nsTqE
-         OLwXEAjpf4aO3ECCEdOLgCnRsd/sZgf+gGnvtW3Ii3vPZQ7LHW1Omy9qThpFir7SlGdv
-         x2fg==
-X-Gm-Message-State: AFqh2kpW4gM/47ZMdra8dnPuuArhJ6HLjz569nqCtJCtsPSd1dPdyXln
-        FbgBmdNvFuFDR3l8x3QJUTZHclpKaJqdZfIYinq8mJmnz52fzh0Kagz7NB+cAVTWiDH22OpG/V7
-        yoCogamC+SCj//WfpB/sXQ0BW
-X-Received: by 2002:a17:906:299b:b0:84d:4394:e8e with SMTP id x27-20020a170906299b00b0084d43940e8emr48389157eje.41.1675087872340;
-        Mon, 30 Jan 2023 06:11:12 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuqPG49wfvFC3h6jqcZgdUPPVo3OUxrW3eUglGHXJH9+EpdftpsyFeYkN9nlgN3xVbzc28dZg==
-X-Received: by 2002:a17:906:299b:b0:84d:4394:e8e with SMTP id x27-20020a170906299b00b0084d43940e8emr48389132eje.41.1675087872019;
-        Mon, 30 Jan 2023 06:11:12 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id d27-20020a170906041b00b00887f6c39ac0sm2074694eja.98.2023.01.30.06.11.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 06:11:11 -0800 (PST)
-Message-ID: <908026af-de39-8475-b8a5-ceb82ab819cd@redhat.com>
-Date:   Mon, 30 Jan 2023 15:11:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2] platform/x86: hp-wmi: Support omen backlight control
- wmi-acpi methods
+        Mon, 30 Jan 2023 09:11:32 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29CA3B660
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:11:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675087890; x=1706623890;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=tRs/FH7PiGpDnQN/fXnA9aKW1wNwcq0Pch2fPdjGPOo=;
+  b=Vz4jeub0wpm6Yr0k5yFdMMOnEPzEMApdKrNTydnDcQZh92uKICY10xf6
+   qwvACSFOxQCy0ldJhw6S1gnVOyf9/AzmdmRu8ZBxGrCTMfWcPLovcs6LB
+   ScNFjYhMOyCMXDgsW8EKwGrEKnUc9n3CFCKmdMzSTrDQOJpRVAv7kQwGN
+   StV4KtqvCeN5qzBKjuvhHDf9dMga8LdVNDlLbZltaD6+0dQV9jogVhCmY
+   LEpS+zcHtkuKS1fjlNTVPrVGfb6tEMj/p3LrOUlak+kojMUtTdbdIX3Eu
+   bVM9RLSI+0CgZ+53+Yz0bKuHiVsmorkh9Xl+pIKyZl/ZptpZwFf3Z9UkE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="354879833"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="354879833"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 06:11:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="641553701"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="641553701"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2023 06:11:30 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 06:11:29 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 30 Jan 2023 06:11:29 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 30 Jan 2023 06:11:28 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aYQ6+X5whWYUGcdw78zhzipyl/THSt91EiGydSF12MRjXmEa1tGyODFQ9WSXtNn7t/uhsg2P82HVhzQH5591fZ27/Y3nY4Vb8lqcVrzM6WbpIZagi12hHYYLtcO2DRfDAEvuuj4mPnWX7FWC/Z+QIC23sOCp8JfsukeCiT/xXPdldhSPoNUf/HPNk/2ZkE84hRpAxyVe3OIEU5J9rYsC/wl8CrmMVwPhcD0+pnZKC1ZEneY3OMl3EhUEtijhvPS1LE84O6zTKGMjRzMl7HxnqbjKMD7s/tiwNcJURZkuQ6rlu5F18KrtavTt0sZJcsBPeaZyOj468itWcBtMrPmLTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tRs/FH7PiGpDnQN/fXnA9aKW1wNwcq0Pch2fPdjGPOo=;
+ b=M7Q5DhSRg5hHPgEaRPK1v+UKPAvtyrF6dhAzVEC2OKOOP/LA5aa92coDgKYBMWNeNl3hbyY+gOTGYUKdEpC1Wr1bHqiMyZ3Y6P8xtiqz009AIih5HN82sC5T1GBfMMOnbQOByufB4SLDtzsAZdJikYlo4DGqGYi0ZDtYJXo2/lRPdejkNVcRHd/+ehgpQ5biiT2B0uIKy+Tj/wpchdNpsJNWMY+FPWJjpGme37gXOTWxBWpLR0oW7w1uLYdGsWtZnBsyuIit6sGByOrUvKWIhhKlRr6wzfeDCNc8fT8Q82vNBGpky9uWLQj/heBBtmmMbTvH/Htl14W4gri9nMgp8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BYAPR11MB3240.namprd11.prod.outlook.com (2603:10b6:a03:18::19)
+ by SA0PR11MB4640.namprd11.prod.outlook.com (2603:10b6:806:9b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 14:11:26 +0000
+Received: from BYAPR11MB3240.namprd11.prod.outlook.com
+ ([fe80::c42:6379:b57f:4a59]) by BYAPR11MB3240.namprd11.prod.outlook.com
+ ([fe80::c42:6379:b57f:4a59%7]) with mapi id 15.20.6043.021; Mon, 30 Jan 2023
+ 14:11:26 +0000
+From:   "N, Pandith" <pandith.n@intel.com>
+To:     Rodolfo Giometti <giometti@enneenne.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>,
+        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
+        "T R, Thejesh Reddy" <thejesh.reddy.t.r@intel.com>,
+        "Hall, Christopher S" <christopher.s.hall@intel.com>
+Subject: RE: PPS functionality for Intel Timed I/O
+Thread-Topic: PPS functionality for Intel Timed I/O
+Thread-Index: Adk0qfZfZVvAvtJ8SP+qSzpYuQsN4wAByXCAAACHHGA=
+Date:   Mon, 30 Jan 2023 14:11:26 +0000
+Message-ID: <BYAPR11MB3240801F21598EEFAEA79605E1D39@BYAPR11MB3240.namprd11.prod.outlook.com>
+References: <BYAPR11MB3240A86B426158623DB9983EE1D39@BYAPR11MB3240.namprd11.prod.outlook.com>
+ <fa3f1765-eb59-bf69-7f7b-14621caef6ea@enneenne.com>
+In-Reply-To: <fa3f1765-eb59-bf69-7f7b-14621caef6ea@enneenne.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Rishit Bansal <rishitbansal0@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230120223908.28678-1-rishitbansal0@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230120223908.28678-1-rishitbansal0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR11MB3240:EE_|SA0PR11MB4640:EE_
+x-ms-office365-filtering-correlation-id: a75b190e-3aef-47b5-f8df-08db02cbe004
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tU+eGWLVyPUmB6GE/Vb9klMC01fu7MI+3uUcvNZVC87dcTt61kDiFJPLFC5zRmrwgKKv+OIPFSgR9NsADmjjrYtvzw6Ohl7dRHYR1E+AN7QVDs51K8K0+XJS2Sy1IMSIeqrlQ03jC8XWP3F0STrdEg7kUjLnQnK73GImGOX1rpLHMl9mGhBQPl7EtwzhN3ATjmzOKzliF6d/eHmuDZKNl/NhgMurbvAUl3X2TY5Oph4h4sTMwKcKAVPHQTdyGkgCwmTwWFTVWt/ZZvCMhStof3S1zg6Bh4BHGFNnT42FyQ1TrE0VCHcT5GF/wJcpe/MJx5T7nsUHoKGDWY2nfieJtSN7QOlkU3UNsFFtEk2Ou+lXc05BoRRZJfp5E3oh/QFmVVfjXTI/tBCexpO5rS9fUb6KbnsH4SE7csoGZTNzDT8b66JJ6HxIAdmD/P8sXPd8Fcm2IOXVum3BW/bu4Q5786rHrnfSxOZIK0+9oyIHaNOZIi8m1WQWLM81qhH5UIRTisC9090VGqdiGHK66KibOayqO/vj7y2BnWtFI2wuJ66VLUVJGVIk/N8ms8khrNZW4zZe7rH2gR/BZ7s8s9WByGl5C0I17GvhuYdqhSFtVxxj819PL17Zud5Jd+Nvad2qUX/0oUHjHM8hLm5lsdk8OtY89FeSUX++oR/39k6Npy2wP1wWXa6TJjfRbF+YLBOyTujyfVaaDcmhlR7cr3NSfhYqNpobXRVQWfIze1kF2Uc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3240.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(376002)(136003)(39860400002)(346002)(451199018)(86362001)(38070700005)(82960400001)(38100700002)(122000001)(33656002)(478600001)(2906002)(54906003)(7696005)(107886003)(966005)(41300700001)(55016003)(26005)(71200400001)(52536014)(8936002)(5660300002)(66946007)(316002)(66446008)(8676002)(76116006)(6916009)(4326008)(83380400001)(66556008)(66476007)(64756008)(9686003)(186003)(6506007)(53546011);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?LzlZM1RvanFYUHVkVGQ2L3lLaTYvdnhiQjJ1TXRVUzA5QlpEeEFMS0lwVW5q?=
+ =?utf-8?B?VUpCbWtHYlpOaXBkekh2TCtwWkVKcENVSHB4SHdoTWhDS1BQcEZSWVNZL1h6?=
+ =?utf-8?B?eGY0ekZ0Z3VvNGpwSlluMmNNaHB1ZThaNmlwZkxNMjNNdXpadyt6bkJneStK?=
+ =?utf-8?B?UGR1QVRlcmVCZVN1cURUWmdtd004R1A1Y0JEbTM5amJBQ0lrblNQeWF4WDBK?=
+ =?utf-8?B?RTlub0Z2RFliOVBPWm13Y0hwWHVHekFrTFcvQ041SlVmekdEUEJpYzlEb0h1?=
+ =?utf-8?B?SGVqc2RQV0JpT0hoMVk3bWlyYjk0Vk1ldjB5MHVGUll2RXJ1Rk1zL1oxYkd2?=
+ =?utf-8?B?VlRVMnREb3ZnelF2eWJvaExOOXRtdmFoRDAvVi9nWFZLTnVXTzg0NmVBNVB6?=
+ =?utf-8?B?dVVyZFNtZGZKUGZuTmY5a2tNNExUUlZHczJhcWFQUlJ3NksxdVMvTWx5UGF0?=
+ =?utf-8?B?YVFtdUJWcUdXOXJiUjJQZkY3c2RxV2k3dCtMTytSbGt0WCszSFJuQjlRRXF3?=
+ =?utf-8?B?NVJ0eGdQbWNxdFlvVEs4VjF6Uk1Bd0s3bTUzYndVZ0xramRFcGJSbVBhZEJM?=
+ =?utf-8?B?V1Y4S28wUmZ4SmZhTHFjbFUzSFVkVDVkS1hHWXQ2emNwek5POC8wZWkyR1dQ?=
+ =?utf-8?B?Zy9mMmJ2T1B6aVVBVTcveXgvUDZqZmJIdEZVMWwyWEpCa1drTGYvWFNVMjlM?=
+ =?utf-8?B?RE4yODhUK09ETytWSkpNcld5ZTNtRDAwYk9OZU85NUpJbzF1bmRDdGozbkFs?=
+ =?utf-8?B?ZS93MHRXSmNlNC83VjZjT0ZrNTJYSGVaOUVKcXk4M3dad0V4dURoMkZNTkpI?=
+ =?utf-8?B?dm9tSytSVjVWNi9hdXFZcXpZdjVyUWFrSElaOVJXdzVoQStNdDV5dzJlQWx3?=
+ =?utf-8?B?VWhYQlRSSE5yWnNJR0VCSjU1UEFDaVJBcEVUbDZVbUZpaDNudjV5Qlc1RzVI?=
+ =?utf-8?B?bldqWHppRUhUQXVRNlpNZlV4VlNFWnhhMGtqbTdOekF3WUtITHhwY3crUmFl?=
+ =?utf-8?B?Tk9OYUgrTHMrL05WR29PSmtGcW9uZWhnWEkybWcxWkVNa0FPaVk4cWNpQ1By?=
+ =?utf-8?B?NlhDQzJMZ09nd2ZkbERISTEwOVdqV1VoRjRvTmJ1RkxWK0JLbGJWaTFHOW1G?=
+ =?utf-8?B?KzVRZklPT09MYThTUUJDUW94WG9IMmxqdWtTbnR1bjBPTEZLeWFKaFEwYlVV?=
+ =?utf-8?B?V0Zxb2NGRGtNMTlUTkxSUU56SWFaODZRMmRmODVDMG1yTmVBaFFmSU9tUjZS?=
+ =?utf-8?B?aGRtMWFyYUdMbVhkNHh5Y2dJbTBnWGZFZGJDejJUaGNzQzBQQWxOLzFiVG9k?=
+ =?utf-8?B?Y1NMaHJRdGdYZGE4YVU5YVB2WXBhS1FHendJVHhFUEhDRXhMYThHbmdiKzFq?=
+ =?utf-8?B?UVR1d0tKRTZNbWQxSXArWitNcWNWNUw2VE1iNDV2NXRrdGJuMGIyT2hib0hR?=
+ =?utf-8?B?MmM2L0xpVmluUU9leVVkSHRmRWo5UEU2MWlNMC8xUWJhUUFCTFNpTTJEQW9C?=
+ =?utf-8?B?WGdDMFQyUGJxMC9abVkwWnBHSXJ1YjBPcVYyV2srWTBWY2tBTEtGTDNzVUdn?=
+ =?utf-8?B?ZkZtaWVXNHpTT3g3UGR4anYzcjdVV2hyVFl5a29tUGZDUW1JdDNWTFd0dHFi?=
+ =?utf-8?B?VVVMSmxOejFoMXZ4R3lkazN5R1NXaCs5VTNDdzVpdXFRZ3lLeVVkWlFINFJV?=
+ =?utf-8?B?Zit3ck5aYnJFT1IwZTJPVC9UcEVCZyt4SFNSOEdmYXJPZGR3VnoyTHoyS2Zm?=
+ =?utf-8?B?SnQxQytKZDFDRVVxWWEwa1UxZ1lhcStlOFlTMlREQ0NyQUI0b0l4eHRVTStu?=
+ =?utf-8?B?aldjMTloMVhuQzhSTlFwNXVibFdzOGxPQTNnVUZGZ1NWaC9RTEM5eUpuODM5?=
+ =?utf-8?B?OSswbjRxU01VOEJJVVE4OHBLREF2SmxRbXpwVGw2bThTVDJGc0NZZ1oxdmhN?=
+ =?utf-8?B?ek51OExsUGJ6R0hRZTVjRnZ0TE5SemtDUTFGTDl1dWwrNlVMcCs0cHdPY1oy?=
+ =?utf-8?B?R2x6K3pycWtnOEkxMUR0WE44UmxScWZETUdOQWs0WGZEdTlxTkExZ0k5Mjdu?=
+ =?utf-8?B?aVZEYVgxblF5RzZJbUErUzR5UzUwZGt0cEg2Nm9YOWErZUpMY3FzSVJNc1la?=
+ =?utf-8?Q?048+CS3DOBPetOKYnlWccB3Yx?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3240.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a75b190e-3aef-47b5-f8df-08db02cbe004
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 14:11:26.2627
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EOtu+K2xGGe649EceyhSq6HlIZAulLEq9ZhJtxi/oHoBiZ65b9TLO3JT+0Rlt6kZpKsg3JeZ2pRNPzEpsOMLWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4640
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 1/20/23 23:39, Rishit Bansal wrote:
-> The HP Omen Command Studio application includes a Light Studio feature
-> which can be used to control various features related to the keyboard
-> backlight via the 0x20009 command.
-> 
-> The command supports the following queries:
-> 
-> - 0x1: Checks if keyboard lighting is supported
-> - 0x2: Get the zone colors of each of the 4 zones on the keyboard
-> - 0x3: Set the zone colors of each of the 4 zones on the keyboard
-> - 0x4: Gets the state (on/off) of the backlight
-> - 0x5: Sets the state (on/off) of the backlight
-> 
-> This patch introduces a new sysfs led class called
-> "hp_omen::kbd_backlight" which can be used to control the state of the
-> backlight. It also includes a sysfs RW attribute called "kbd_rgb"
-> which can be used to get/set the current color of each zone.
-> 
-> Additionally, it also maps the backlight event to the KEY_KBDILLUMTOGGLE
-> key so it shows the correct notification on userspace.
-> 
-> The patch has been tested on an HP Omen 15-en0037AX (AMD) laptop.
-> 
-> Signed-off-by: Rishit Bansal <rishitbansal0@gmail.com>
-> ---
-> Changes since v1:
->  - Map backlight key to KEY_KBDILLUMTOGGLE
-> ---
->  drivers/platform/x86/hp/hp-wmi.c | 113 +++++++++++++++++++++++++++++++
->  1 file changed, 113 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-> index 0a99058be813..a9e2634a9d46 100644
-> --- a/drivers/platform/x86/hp/hp-wmi.c
-> +++ b/drivers/platform/x86/hp/hp-wmi.c
-> @@ -27,6 +27,7 @@
->  #include <linux/rfkill.h>
->  #include <linux/string.h>
->  #include <linux/dmi.h>
-> +#include <linux/leds.h>
->  
->  MODULE_AUTHOR("Matthew Garrett <mjg59@srcf.ucam.org>");
->  MODULE_DESCRIPTION("HP laptop WMI hotkeys driver");
-> @@ -136,6 +137,7 @@ enum hp_wmi_command {
->  	HPWMI_WRITE	= 0x02,
->  	HPWMI_ODM	= 0x03,
->  	HPWMI_GM	= 0x20008,
-> +	HPWMI_KB    = 0x20009,
->  };
->  
->  enum hp_wmi_hardware_mask {
-> @@ -219,6 +221,7 @@ static const struct key_entry hp_wmi_keymap[] = {
->  	{ KE_KEY, 0x21a9,  { KEY_TOUCHPAD_OFF } },
->  	{ KE_KEY, 0x121a9, { KEY_TOUCHPAD_ON } },
->  	{ KE_KEY, 0x231b,  { KEY_HELP } },
-> +	{ KE_KEY, KEY_KBDILLUMTOGGLE, { KEY_KBDILLUMTOGGLE }},
-
-Please drop this entry (also see the comment about this below).
-
->  	{ KE_END, 0 }
->  };
->  
-> @@ -734,12 +737,56 @@ static ssize_t postcode_store(struct device *dev, struct device_attribute *attr,
->  	return count;
->  }
->  
-> +static ssize_t kbd_rgb_show(struct device *dev,
-> +				    struct device_attribute *attr, char *buf)
-> +{
-> +	u8 val[128];
-> +
-> +	int ret = hp_wmi_perform_query(HPWMI_HDDTEMP_QUERY, HPWMI_KB, &val,
-> +				       zero_if_sup(val), sizeof(val));
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	strncat(buf, &val[25], 12);
-> +
-> +	return strlen(buf);
-
-strncat requires that the buffer is pre-zeroed which I'm not
-sure is always the case. Instead you should problably just do something
-like this:
-
-	strscpy(buf, 12, &val[25]);
-
-	return strlen(buf);
-
-Alos may I ask what the output of reading the new kbd_rgb file
-actually looks like ?
-
-And can you please start a new Documentation file:
-
-Documentation/ABI/testing/sysfs-platform-hp-wmi
-
-and document this new kbd_rgb file there?
-
-See for example:
-
-Documentation/ABI/testing/sysfs-platform-asus-wmi
-
-for what this file should look like.
-
-Bonus points if you also do a follow-up patch documenting more
-of the sysfs attributes used by this driver, but at a minimum
-lets start documenting any new files we add.
-
-
-
-> +}
-> +
-> +static ssize_t kbd_rgb_store(struct device *dev,
-> +				     struct device_attribute *attr,
-> +				     const char *buf, size_t count)
-> +{
-> +	u8 val[128];
-> +	int ret;
-> +
-> +	ret = hp_wmi_perform_query(HPWMI_HDDTEMP_QUERY, HPWMI_KB, &val,
-> +				   zero_if_sup(val), sizeof(val));
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (count != 12)
-> +		return -1;
-
-So what is the exact format here? and should we not do more error
-checking? Also we want 12 chars, then the show code above should use 13,
-so that the buffer gets 12 chars + a terminating 0.
-
-Also maybe add defines for the offset value of 25 and the buflen of 12 ?
-
-> +
-> +	strncpy(&val[25], buf, count);
-> +
-> +	ret = hp_wmi_perform_query(HPWMI_ALS_QUERY, HPWMI_KB, &val, sizeof(val),
-> +				   0);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +
->  static DEVICE_ATTR_RO(display);
->  static DEVICE_ATTR_RO(hddtemp);
->  static DEVICE_ATTR_RW(als);
->  static DEVICE_ATTR_RO(dock);
->  static DEVICE_ATTR_RO(tablet);
->  static DEVICE_ATTR_RW(postcode);
-> +static DEVICE_ATTR_RW(kbd_rgb);
->  
->  static struct attribute *hp_wmi_attrs[] = {
->  	&dev_attr_display.attr,
-> @@ -748,6 +795,7 @@ static struct attribute *hp_wmi_attrs[] = {
->  	&dev_attr_dock.attr,
->  	&dev_attr_tablet.attr,
->  	&dev_attr_postcode.attr,
-> +	&dev_attr_kbd_rgb.attr,
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(hp_wmi);
-> @@ -853,6 +901,8 @@ static void hp_wmi_notify(u32 value, void *context)
->  	case HPWMI_PROXIMITY_SENSOR:
->  		break;
->  	case HPWMI_BACKLIT_KB_BRIGHTNESS:
-> +		sparse_keymap_report_event(hp_wmi_input_dev,
-> +						KEY_KBDILLUMTOGGLE, 1, true);
-
-Please just directly report the key instead of inserting a fake scancode into
-the parse-map:
-
-		input_report_key(hp_wmi_input_dev, KEY_KBDILLUMTOGGLE, true);
-		input_sync(hp_wmi_input_dev);
-		input_report_key(hp_wmi_input_dev, KEY_KBDILLUMTOGGLE, false);
-		input_sync(hp_wmi_input_dev);
->  		break;
->  	case HPWMI_PEAKSHIFT_PERIOD:
->  		break;
-> @@ -1294,6 +1344,63 @@ static int thermal_profile_setup(void)
->  
->  static int hp_wmi_hwmon_init(void);
->  
-> +static struct led_classdev omen_kbd_led;
-> +
-> +static enum led_brightness get_omen_backlight_brightness(struct led_classdev *cdev)
-> +{
-> +	u8 val;
-> +
-> +	int ret = hp_wmi_perform_query(HPWMI_HARDWARE_QUERY, HPWMI_KB, &val, zero_if_sup(val), sizeof(val));
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	return (val & 0x80) ? LED_ON : LED_OFF;
-> +}
-> +
-> +static void set_omen_backlight_brightness(struct led_classdev *cdev, enum led_brightness value)
-> +{
-> +	char buffer[4] = { (value == LED_OFF) ? 0x64 : 0xe4, 0, 0, 0 };
-> +
-> +	hp_wmi_perform_query(HPWMI_WIRELESS_QUERY, HPWMI_KB, &buffer,
-> +				       sizeof(buffer), 0);
-> +}
-> +
-> +
-> +static bool is_omen_lighting_supported(void)
-> +{
-> +	u8 val;
-> +
-> +	int ret = hp_wmi_perform_query(HPWMI_DISPLAY_QUERY, HPWMI_KB, &val, zero_if_sup(val), sizeof(val));
-> +
-> +	if (ret)
-> +		return false;
-> +
-> +	return (val & 1) == 1;
-> +}
-> +
-> +static int omen_backlight_init(struct device *dev)
-> +{
-> +	int ret;
-> +
-> +	omen_kbd_led.name = "hp_omen::kbd_backlight";
-> +	omen_kbd_led.brightness_set = set_omen_backlight_brightness;
-> +	omen_kbd_led.brightness_get = get_omen_backlight_brightness;
-> +	omen_kbd_led.max_brightness = 1;
-> +
-> +	ret = devm_led_classdev_register(dev, &omen_kbd_led);
-> +
-> +	if (ret < 0)
-> +		return -1;
-> +
-> +	return 0;
-> +}
-> +
-> +static void omen_backlight_exit(struct device *dev)
-> +{
-> +	devm_led_classdev_unregister(dev, &omen_kbd_led);
-> +}
-> +
-
-This is not necessary, the whole idea behin devm is that this
-will automatically get unegistered on driver unbind.
-
->  static int __init hp_wmi_bios_setup(struct platform_device *device)
->  {
->  	int err;
-> @@ -1321,6 +1428,9 @@ static int __init hp_wmi_bios_setup(struct platform_device *device)
->  
->  	thermal_profile_setup();
->  
-> +	if (is_omen_lighting_supported())
-> +		omen_backlight_init(&device->dev);
-> +
->  	return 0;
->  }
->  
-> @@ -1349,6 +1459,9 @@ static int __exit hp_wmi_bios_remove(struct platform_device *device)
->  	if (platform_profile_support)
->  		platform_profile_remove();
->  
-> +	if (is_omen_lighting_supported())
-> +		omen_backlight_exit(&device->dev);
-> +
-
-And this likewise thus is not necessary.
-
->  	return 0;
->  }
->  
-
-Regards,
-
-Hans
-
+SGksDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUm9kb2xmbyBHaW9t
+ZXR0aSA8Z2lvbWV0dGlAZW5uZWVubmUuY29tPg0KPiBTZW50OiBNb25kYXksIEphbnVhcnkgMzAs
+IDIwMjMgNzoxNSBQTQ0KPiBUbzogTiwgUGFuZGl0aCA8cGFuZGl0aC5uQGludGVsLmNvbT4NCj4g
+Q2M6IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFNhbmdhbm5hdmFyLCBNYWxsaWthcmp1
+bmFwcGENCj4gPG1hbGxpa2FyanVuYXBwYS5zYW5nYW5uYXZhckBpbnRlbC5jb20+OyBELCBMYWtz
+aG1pIFNvd2phbnlhDQo+IDxsYWtzaG1pLnNvd2phbnlhLmRAaW50ZWwuY29tPjsgVCBSLCBUaGVq
+ZXNoIFJlZGR5DQo+IDx0aGVqZXNoLnJlZGR5LnQuckBpbnRlbC5jb20+OyBIYWxsLCBDaHJpc3Rv
+cGhlciBTDQo+IDxjaHJpc3RvcGhlci5zLmhhbGxAaW50ZWwuY29tPg0KPiBTdWJqZWN0OiBSZTog
+UFBTIGZ1bmN0aW9uYWxpdHkgZm9yIEludGVsIFRpbWVkIEkvTw0KPiANCj4gT24gMzAvMDEvMjMg
+MTM6NTUsIE4sIFBhbmRpdGggd3JvdGU6DQo+ID4gSGkgUm9kb2xmbyBHaW9tZXR0aSwNCj4gDQo+
+IEhlbGxvLg0KPiANCj4gPiBUaGlzIGlzIHJlZ2FyZGluZyBJbnRlbCBUaW1lZCBJL08gZGV2aWNl
+IGFzIFBQUy4NCj4gPg0KPiA+IEludGVsIFRpbWVkIEkvTyBpcyBhIHByZWNpc2UgZGV2aWNlICgx
+MHMgb2YgbmFub3NlY29uZHMpLCB0aGF0IGNhbiBzZW5kIG91dA0KPiBwdWxzZXMuDQo+ID4gVGhp
+cyBpcyBuZWVkZWQgaW4gSW9UIGFuZCBzZXJ2ZXIgYXBwbGljYXRpb25zIHRvIG1lYXN1cmUgb2Zm
+c2V0DQo+ID4gYmV0d2VlbiBzeXN0ZW0gY2xvY2tzIG9uIG11bHRpcGxlIGRldmljZXMNCj4gDQo+
+IENhbiB5b3UgcGxlYXNlIHByb3ZpZGUgc29tZSBVUkxzIHdoZXJlIHRvIGdldCBmdXJ0aGVyIGlu
+Zm8gZnJvbSBhYm91dCB0aGlzDQo+IGRldmljZT8gSSdkIGxpa2UgdG8ga25vdyBob3cgdGhpcyBk
+ZXZpY2Ugd29ya3MgYW5kIGl0cyBpbnRlcmZhY2VzIHRvd2FyZHMgdGhlDQo+IENQVS4NCj4gDQpI
+ZXJlIGlzIGEgcHJlc2VudGF0aW9uIGxpbmsgZm9yIFRpbWVkIEkvTyBkZXZpY2UgDQpodHRwczov
+L2xwYy5ldmVudHMvZXZlbnQvMTYvY29udHJpYnV0aW9ucy8xMzg3L2F0dGFjaG1lbnRzLzEwNTEv
+MjAxMC9UaW1lZF9JT19MUEMucGRmDQoNCj4gPiBXZSBhcmUgcGxhbm5pbmcgdG8gaW1wbGVtZW50
+IGEgZHJpdmVyLCBmb3IgUFBTIG91dHB1dCBmdW5jdGlvbmFsaXR5IHVzaW5nDQo+IFRpbWVkIEkv
+TyBkZXZpY2UuDQo+IA0KPiBHcmVhdCEgOikNCj4gDQo+ID4gCTEuIElzIHRoZXJlIGFueSBzdXBw
+b3J0IGZyb20gUFBTIGZyYW1ld29yayB0byBzdGFydC9zdG9wIHB1bHNlDQo+IGdlbmVyYXRpb24u
+DQo+ID4gCUlmIHllcywgY2FuIHdlIGdldCB0aGUgUGluIG51bWJlciwgb2Zmc2V0KHN0YXJ0IHRp
+bWUpIGZyb20gdXNlciBzcGFjZQ0KPiA/DQo+IA0KPiBOb3BlLCBQUFMgc2lnbmFscyBhcmUgc3Vw
+cG9zZWQgdG8gYmUgYWx3YXlzIG9uLiBIb3dldmVyIHlvdSBjYW4gc3RhcnQvc3RvcA0KPiBwdWxz
+ZXMgZ2VuZXJhdGlvbiB3aXRoaW4gdGhlIG1haW4gZHJpdmVyIG9mIHlvdXIgZGV2aWNlLg0KPiAN
+Ck9LLiBXYW50ZWQgdG8gY2hlY2sgZnJvbSBQUFMgZnJhbWV3b3JrIGlmIGNhbiBwcm92aWRlIGFu
+eSB1c2VyIGNvbnRyb2wgZm9yIHN0YXJ0L3N0b3AuDQoNCj4gPiAJMi4gRnVydGhlciwgdGhpcyBk
+ZXZpY2UgaGFzIHRoZSBjYXBhYmlsaXR5IHRvIGNhcHR1cmUgdGhlIGlucHV0IGV2ZW50cw0KPiAo
+cHVsc2VzLCBuYW5vc2Vjb25kIHByZWNpc2lvbikuDQo+ID4gCVRoZSBzYW1lIFBJTiBjYW4gd29y
+ayBpbiBlaXRoZXIgaW5wdXQgb3Igb3V0cHV0IG1vZGUuDQo+ID4gCUNhbiB0aGVyZSBiZSBhbiBQ
+UFMgY2xpZW50IGRyaXZlciBzdXBwb3J0aW5nIGJvdGggbW9kZXMgPw0KPiANCj4gSSdtIG5vdCBz
+dXJlIHRvIHdlbGwgdW5kZXJzdGFuZCB3aGF0IHlvdSBtZWFuLCBob3dldmVyIGEgUFBTIGNsaWVu
+dCBpcyBhDQo+IHBpZWNlIG9mIGNvZGUgdGhhdCBjYXB0dXJlcyBQUFMgcHVsc2VzIGFuZCBhZGQg
+YSB0aW1lc3RhbXAgdG8gdGhlbSwgd2hpbGUgYQ0KPiBQUFMgZ2VuZXJhdG9yIGlzIGEgcGllY2Ug
+b2YgY29kZSB0aGF0IChwcmVjaXNlbHkpIGdlbmVyYXRlcyBhIFBQUyBzb3VyY2UNCj4gYWNjb3Jk
+aW5nIHRvIHRoZSBzeXN0ZW0ncyBtYWluIGNsb2NrIChhbmQgbm90IGFjY29yZGluZyB0byBhIHBl
+cmlwaGVyYWwncw0KPiBjbG9jaykuIEhvcGUgSSd2ZSBhbnN3ZXJlZCB0byB5b3VyIHF1ZXN0aW9u
+cywgaWYgbm90IGZlZWwgZnJlZSB0byBhc2sgbW9yZS4NCj4gDQpJbnRlbCBUaW1lZCBJL08gUElO
+IGhhcyBib3RoIGdlbmVyYXRvciBmdW5jdGlvbmFsaXR5IGFuZCBpbnB1dCBjYXBhYmlsaXR5Lg0K
+V2FudGVkIHRvIGFzayBpZiBpdOKAmXMgYmV0dGVyIHRvIGhhdmUgdHdvIHNlcGFyYXRlIGRyaXZl
+cnMsIG9uZSB1bmRlciBjbGllbnQNCmZvciBpbnB1dCBhbmQgb3RoZXIgYXMgZ2VuZXJhdG9yIGRy
+aXZlciBmb3IgUFBTIG91dHB1dC4NCk9SDQpIYXZlIGEgc2luZ2xlIGNsaWVudCBkcml2ZXIgYW5k
+IHVzZXIgY2FuIGNob29zZSB0aGUgZnVuY3Rpb25hbGl0eSAoZWl0aGVyDQpQUFMgb3V0cHV0IG9y
+IGFzIFBQUyBzb3VyY2UgdG8gY2FwdHVyZSBwdWxzZXMgd2l0aCB0aW1lc3RhbXBzKS4gDQoNCj4g
+Q2lhbywNCj4gDQo+IFJvZG9sZm8NCj4gDQo+IC0tDQo+IEdOVS9MaW51eCBTb2x1dGlvbnMgICAg
+ICAgICAgICAgICAgICBlLW1haWw6IGdpb21ldHRpQGVubmVlbm5lLmNvbQ0KPiBMaW51eCBEZXZp
+Y2UgRHJpdmVyICAgICAgICAgICAgICAgICAgICAgICAgICBnaW9tZXR0aUBsaW51eC5pdA0KPiBF
+bWJlZGRlZCBTeXN0ZW1zICAgICAgICAgICAgICAgICAgICAgcGhvbmU6ICArMzkgMzQ5IDI0MzIx
+MjcNCj4gVU5JWCBwcm9ncmFtbWluZyAgICAgICAgICAgICAgICAgICAgIHNreXBlOiAgcm9kb2xm
+by5naW9tZXR0aQ0KDQo=
