@@ -2,123 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECB1680F45
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85B1680F49
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236159AbjA3NsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
+        id S236287AbjA3Nsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbjA3NsW (ORCPT
+        with ESMTP id S231191AbjA3Nsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:48:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517D12941D;
-        Mon, 30 Jan 2023 05:48:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1105B81116;
-        Mon, 30 Jan 2023 13:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E29C4339E;
-        Mon, 30 Jan 2023 13:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675086497;
-        bh=+iz7/0m+hEIPyBQg3I/82VjHc01NMeldbSQt2dqGcSg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R9sDP955tHpJ1QqsR0L3i+gv+cjOVpaU84PSIDDhw30Zfl75NL7qlIA2Ek9QCOvOs
-         f+80E8rQ53TD2AN3Y/fjhXCl/P394lhf7L+pmSgNTulhP9LTLp6wF6rENXVPR99t4q
-         P7PT9uexAhtg0aTWMcOYFA3CSWm9/gLd1V6rPdGhjNkwjeN/4nwM9wJRlxmuhyahod
-         oB/uATlvf3mMQn1UmbUNCfzcUWCJKUY9gGnL/RqnIJP6gJ9vUwQcc9VGeaLhCHOMJe
-         qUvl/iPosG3dy0T8Zw5/MXdW5+nM7hxAjDtIxxYz/Dkt76O6zY7CAxhzYf6xfll6wU
-         3fXZBoZjE6a5g==
-Received: by mail-vs1-f44.google.com with SMTP id s24so5118292vsi.12;
-        Mon, 30 Jan 2023 05:48:17 -0800 (PST)
-X-Gm-Message-State: AFqh2kr+v+o3ek47rwjxnLP3xhK7Lxq54kmW6KFPxT6FOBhAl32Qur7i
-        FQndBs0XLHw5FxhNwniM85ZYZR829H23CPw2Bg==
-X-Google-Smtp-Source: AMrXdXvWFxwf7o8XYdZZzxKLXqR1OblZ1Jf42fyF9cWbecmrBhoaNv2NX636Gi1FINWWYnmBotKarycuGbTuFd70diw=
-X-Received: by 2002:a05:6102:5490:b0:3b5:1fe4:f1c2 with SMTP id
- bk16-20020a056102549000b003b51fe4f1c2mr6746365vsb.0.1675086496230; Mon, 30
- Jan 2023 05:48:16 -0800 (PST)
+        Mon, 30 Jan 2023 08:48:30 -0500
+Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF8739B8E;
+        Mon, 30 Jan 2023 05:48:27 -0800 (PST)
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Mon, 30 Jan
+ 2023 16:48:24 +0300
+Received: from Ex16-01.fintech.ru (10.0.10.18) by Ex16-01.fintech.ru
+ (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 30 Jan
+ 2023 16:48:24 +0300
+Received: from Ex16-01.fintech.ru ([fe80::2534:7600:5275:d3f9]) by
+ Ex16-01.fintech.ru ([fe80::2534:7600:5275:d3f9%7]) with mapi id
+ 15.01.2242.004; Mon, 30 Jan 2023 16:48:24 +0300
+From:   =?utf-8?B?0JbQsNC90LTQsNGA0L7QstC40Ycg0J3QuNC60LjRgtCwINCY0LPQvtGA0LU=?=
+         =?utf-8?B?0LLQuNGH?= <n.zhandarovich@fintech.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Alexey Khoroshilov" <khoroshilov@ispras.ru>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: RE: [PATCH 5.10 1/1] mt76: fix mt7615_init_tx_queues() return value
+Thread-Topic: [PATCH 5.10 1/1] mt76: fix mt7615_init_tx_queues() return value
+Thread-Index: AQHZNKePV9Tuf82zRk2tMrTfyN8UZK62u2sAgAA3O6D//9G7AIAANNZg
+Date:   Mon, 30 Jan 2023 13:48:24 +0000
+Message-ID: <e17c785dbacf4605a726cc939bee6533@fintech.ru>
+References: <20230130123655.86339-1-n.zhandarovich@fintech.ru>
+ <20230130123655.86339-2-n.zhandarovich@fintech.ru>
+ <Y9fAkt/5BRist//g@kroah.com> <b945bd5f3d414ac5bc589d65cf439f7b@fintech.ru>
+ <Y9fIFirNHNP06e1L@kroah.com>
+In-Reply-To: <Y9fIFirNHNP06e1L@kroah.com>
+Accept-Language: ru-RU, en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.0.253.138]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230123112803.817534-1-alexghiti@rivosinc.com>
- <20230123142554.f22ajf6upfk2ybxk@orel> <20230125104102.2thvourt3lx2p36a@orel> <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
-In-Reply-To: <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 30 Jan 2023 07:48:04 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ8JtkOBLpdf3hU9JWcdRTFr3Ss1Hd+yFpMqs7ujUiyCQ@mail.gmail.com>
-Message-ID: <CAL_JsqJ8JtkOBLpdf3hU9JWcdRTFr3Ss1Hd+yFpMqs7ujUiyCQ@mail.gmail.com>
-Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 6:13 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->
-> On Wed, Jan 25, 2023 at 11:41 AM Andrew Jones <ajones@ventanamicro.com> wrote:
-> >
-> > On Mon, Jan 23, 2023 at 03:25:54PM +0100, Andrew Jones wrote:
-> > > On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
-> > > > During the early page table creation, we used to set the mapping for
-> > > > PAGE_OFFSET to the kernel load address: but the kernel load address is
-> > > > always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-> > > > pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-> > > > PAGE_OFFSET is).
-
-[...]
-
-> > > > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> > > > index f08b25195ae7..58107bd56f8f 100644
-> > > > --- a/drivers/of/fdt.c
-> > > > +++ b/drivers/of/fdt.c
-> > > > @@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
-> > > >  static void __early_init_dt_declare_initrd(unsigned long start,
-> > > >                                        unsigned long end)
-> > > >  {
-> > > > -   /* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
-> > > > -    * enabled since __va() is called too early. ARM64 does make use
-> > > > -    * of phys_initrd_start/phys_initrd_size so we can skip this
-> > > > -    * conversion.
-> > > > +   /*
-> > > > +    * __va() is not yet available this early on some platforms. In that
-> > > > +    * case, the platform uses phys_initrd_start/phys_initrd_size instead
-> > > > +    * and does the VA conversion itself.
-> > > >      */
-> > > > -   if (!IS_ENABLED(CONFIG_ARM64)) {
-> > > > +   if (!IS_ENABLED(CONFIG_ARM64) &&
-> > > > +       !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
-> > >
-> > > There are now two architectures, so maybe it's time for a new config
-> > > symbol which would be selected by arm64 and riscv64 and then used here,
-> > > e.g.
-> > >
-> > >   if (!IS_ENABLED(CONFIG_NO_EARLY_LINEAR_MAP)) {
-> >
-> > I see v5 left this as it was. Any comment on this suggestion?
->
-> Introducing a config for this only use case sounds excessive to me,
-> but I'll let Rob decide what he wants to see here.
-
-Agreed. Can we just keep it as is here.
-
-> > > >             initrd_start = (unsigned long)__va(start);
-> > > >             initrd_end = (unsigned long)__va(end);
-
-I think long term, we should just get rid of needing to do this part
-in the DT code and let the initrd code do this.
-
-Rob
+PiBPbiBNb24sIEphbiAzMCwgMjAyMyBhdCAwMToyNzoyNlBNICswMDAwLCDQltCw0L3QtNCw0YDQ
+vtCy0LjRhyDQndC40LrQuNGC0LAg0JjQs9C+0YDQtdCy0LjRhw0KPiB3cm90ZToNCj4gPiA+IFdo
+YXQgaXMgdGhlIGdpdCBjb21taXQgaWQgb2YgdGhpcyB1cHN0cmVhbT8NCj4gPiA+DQo+ID4gPiBB
+bmQgSSBjYW4ndCBhcHBseSB0aGlzIGFzLWlzIGZvciB0aGUgb2J2aW91cyByZWFzb24gaXQgd291
+bGQgbWVzcyB1cA0KPiA+ID4gdGhlIGNoYW5nZWxvZywgaG93IGRpZCB5b3UgY3JlYXRlIHRoaXM/
+DQo+ID4gPg0KPiA+ID4gY29uZnVzZWQsDQo+ID4gPg0KPiA+ID4gZ3JlZyBrLWgNCj4gPg0KPiA+
+IENvbW1pdCBpbiBxdWVzdGlvbiBpcyBiNjcxZGEzM2QxYzU5NzNmOTBmMDk4ZmY2NmE5MTk1MzY5
+MWRmNTgyDQo+ID4gdXBzdHJlYW0uIEkgd2Fzbid0IGNlcnRhaW4gaXQgbWFrZXMgc2Vuc2UgdG8g
+YmFja3BvcnQgdGhlIHdob2xlIHBhdGNoDQo+ID4gYXMgb25seSBhIHNtYWxsIHBvcnRpb24gb2Yg
+aXQgcGVydGFpbnMgdG8gdGhlIGZhdWx0IGF0IHF1ZXN0aW9uLg0KPiANCj4gV2hhdCBpcyB0aGUg
+ImZhdWx0Ij8NCg0KSW4gNS4xMC55ICJtdDc2MTVfaW5pdF90eF9xdWV1ZXMoKSByZXR1cm5zIDAg
+cmVnYXJkbGVzcyBvZiBob3cgZmluYWwNCm10NzYxNV9pbml0X3R4X3F1ZXVlKCkgcGVyZm9ybXMu
+IElmIG10NzYxNV9pbml0X3R4X3F1ZXVlKCkgZmFpbHMgKGR1ZSB0bw0KbWVtb3J5IGlzc3Vlcywg
+Zm9yIGluc3RhbmNlKSwgcGFyZW50IGZ1bmN0aW9uIHdpbGwgc3RpbGwgZXJyb25lb3VzbHkNCnJl
+dHVybiAwLiINCg0KVGhpcyB3YXMgZml4ZWQgdXBzdHJlYW0sIGFsdGhvdWdoIHRoYXQgcGFydGlj
+dWxhciBjb21taXQncyBzY29wZSB3YXMgYnJvYWRlci4NCg0KPiBBbmQgd2h5IG5vdCB0YWtlIHRo
+ZSB3aG9sZSB0aGluZz8gIFdoYXQncyB3cm9uZyB3aXRoIHRoYXQ/ICBXZSBhbG1vc3QNCj4gYWx3
+YXlzIHdhbnQgdG8gdGFrZSB3aGF0ZXZlciBpcyBpbiBMaW51cydzIHRyZWUgYmVjYXVzZSB3aGVu
+IHdlIGRvIG5vdCwgd2UNCj4gYWxtb3N0IGFsd2F5cyBjYXVzZSBidWdzIG9yIG90aGVyIHByb2Js
+ZW1zIChsYXRlciBtZXJnZSBpc3N1ZXMuKQ0KPiANCj4gU28gYWx3YXlzIHRha2UgdGhlIG9yaWdp
+bmFsIGZpeCBwbGVhc2UuDQo+IA0KPiB0aGFua3MsDQo+IA0KPiBncmVnIGstaA0KDQpUaGF0IG1h
+a2VzIHNlbnNlLCBvZiBjb3Vyc2UuIFRoYW5rcyBmb3IgeW91ciBwYXRpZW5jZSwgd2lsbCB3b3Jr
+IHRvd2FyZCBiYWNrcG9ydGluZyB0aGUgd2hvbGUgdGhpbmcuDQoNCnJlZ2FyZHMsDQoNCk5pa2l0
+YQ0K
