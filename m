@@ -2,83 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0226C680512
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0287E680514
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235492AbjA3EgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S235273AbjA3Egv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjA3EgA (ORCPT
+        with ESMTP id S230187AbjA3Egs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:36:00 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7106410A;
-        Sun, 29 Jan 2023 20:35:59 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id c124so6835076pfb.8;
-        Sun, 29 Jan 2023 20:35:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5+JwJ2M5LnegZU3pg7JX4aEC8AFeBV1IQ1z0IKVMJEE=;
-        b=YYTvw4Cn4u6EcZjW6eGJvR4r4ir1yAnYTsTB3a/RAr/aSPz+r8gg/9G8ZssXXNlBd7
-         Jy5oSoX2R1NlrpVkq0cK/EMs4k0RuvpvsaAQBvxWe7DTnmMfYZL29ItdFelywcBfCkrO
-         O3FQU9D62QjRAE1sdpofo9mWAiB6bSDDGxNfPuiJmd8PtuRBgoU/6R9Hm9CodwRS13z4
-         0rHKn+wGyfaiYDctPHdw/dOV3YcVdBG1Z6/3tT2DjY01y2UnQK+eNaS0mnWy4qNGR0yj
-         TjojXZDrskz4sppT2r91AqNQ/o3UwBQp52tNfdDU5uejEO6odyKpj/Sm5lbicPtdWKjh
-         6MIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5+JwJ2M5LnegZU3pg7JX4aEC8AFeBV1IQ1z0IKVMJEE=;
-        b=D6JJ7HDR+/q8rXH2WtqDRaYAYly2OLi2Ra1rn7ncVvg7iQy3vcDgtymwJHL2LEW67f
-         1I1RxgUmdcuhlZ0FXng0lbPvdqN8WAV8c9ZyibaUdwN1wDp6wJ/cLPgFHyHLc4XLMpd8
-         nipqecEfYwO4GL1FbkxVFnelqEyjVEuZArsCVhAT2UaXUKKLC8cPvsm/AZZ92zgBBAZQ
-         bbsXr8rXdrK+RWH7FVfmeAghat/UXeikiMGGSh/MJOuKxNVzlhp1PoRSmFCvD39T8rY0
-         Dp9ONBVSHoXCjNh51BYZRqkuGRFQb+ociCxaMn5IDLSWPhFhPVa9YYGOPsI1r0ExMEQa
-         EMEg==
-X-Gm-Message-State: AO0yUKXJpaa3LYwJOLWMELjgxRnIxLvJT0Lad/wt7C69s76JHd8++Rct
-        WIXEhQ03HrUF2WvRNpWjL9Y=
-X-Google-Smtp-Source: AK7set9bNwZvB7+bN1dOI8ZuzSeOWhzNGdZ6nxIgW/oSb/pGnDRna0UmUnSZGjlH7himeadwb+JVRA==
-X-Received: by 2002:aa7:8e01:0:b0:593:9265:3963 with SMTP id c1-20020aa78e01000000b0059392653963mr6517976pfr.31.1675053358760;
-        Sun, 29 Jan 2023 20:35:58 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:6882:174b:bc70:101])
-        by smtp.gmail.com with ESMTPSA id i13-20020a62870d000000b00593adfa8694sm1994666pfe.37.2023.01.29.20.35.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 20:35:58 -0800 (PST)
-Date:   Sun, 29 Jan 2023 20:35:54 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Luca Ellero <l.ellero@asem.it>
-Cc:     daniel@zonque.org, m.felsch@pengutronix.de,
-        andriy.shevchenko@linux.intel.com, u.kleine-koenig@pengutronix.de,
-        mkl@pengutronix.de, miquel.raynal@bootlin.com, imre.deak@nokia.com,
-        luca.ellero@brickedbrain.com, linux-input@vger.kernel.org,
+        Sun, 29 Jan 2023 23:36:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3603769C
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:36:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D03F60EBC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:36:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0618C433EF;
+        Mon, 30 Jan 2023 04:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675053405;
+        bh=Jw9oe6kjPrddDFxEkme2lYJy6zog54y/sVk4BBq8Zx0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=eHPSudZoghJqnlCLsiJ4EIfWXWXVNEueH797ut1ED07b6fu472PQeuRW5Q9vgHkvU
+         M99CAC+huxZuXuZHD9xdUnzFXocdOgBHEC00GA18KUojBQXN05FqRwdiss6spM7Gqu
+         B2reQrHuVmvPB+rOmE7HgaMnlitdoa2jztPHRKHHuESdlaBTbjsNdxM+ntUcKwd4yl
+         JCFAYuspgV+ttWde9JN1CnOmMF7XhaCkLfq/ulDLQYjbijMLHeGGpgyqfhJxmm45Wo
+         EJnRyGHk7/bPoZ3DwvW8kKvJxJf0QJxiCI2HkShuKdlfsiIXoI+I4RkYFVvoFMhsZu
+         HhPcVhW6ISLfw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6CE455C0326; Sun, 29 Jan 2023 20:36:45 -0800 (PST)
+Date:   Sun, 29 Jan 2023 20:36:45 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] Input: ads7846 - fix support for ADS7845
-Message-ID: <Y9dJKkAFybkVn0FY@google.com>
-References: <20230126105227.47648-1-l.ellero@asem.it>
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <20230130043645.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+ <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+ <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+ <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
+ <Y9WeOTmGCCfjMUtG@andrea>
+ <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
+ <0da94668-c041-1d59-a46d-bd13562e385e@huaweicloud.com>
+ <Y9ct1aAnOTGCy9n2@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230126105227.47648-1-l.ellero@asem.it>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9ct1aAnOTGCy9n2@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:52:24AM +0100, Luca Ellero wrote:
-> ADS7845 support is buggy in this driver.
-> These patches fix various issues to get it work properly.
+On Sun, Jan 29, 2023 at 09:39:17PM -0500, Alan Stern wrote:
+> On Sun, Jan 29, 2023 at 11:19:32PM +0100, Jonas Oberhauser wrote:
+> > I see now. Somehow I thought stores must execute in program order, but I
+> > guess it doesn't make sense.
+> > In that sense, W ->xbstar&int X always means W propagates to X's CPU before
+> > X executes.
+> 
+> It also means any write that propagates to W's CPU before W executes 
+> also propagates to X's CPU before X executes (because it's the same CPU 
+> and W executes before X).
+> 
+> > > Ideally we would fix this by changing the definition of po-rel to:
+> > > 
+> > > 	[M] ; (xbstar & int) ; [Release]
+> > > 
+> > > (This is closely related to the use of (xbstar & int) in the definition
+> > > of vis that you asked about.)
+> > 
+> > This misses the property of release stores that any po-earlier store must
+> > also execute before the release store.
+> 
+> I should have written:
+> 
+> 	[M] ; (po | (xbstar & int)) ; [Release]
+> 
+> > Perhaps it could be changed to the old  po-rel | [M] ; (xbstar & int) ;
+> > [Release] but then one could instead move this into the definition of
+> > cumul-fence.
+> > In fact you'd probably want this for all the propagation fences, so
+> > cumul-fence and pb should be the right place.
+> > 
+> > > Unfortunately we can't do this, because
+> > > po-rel has to be defined long before xbstar.
+> > 
+> > You could do it, by turning the relation into one massive recursive
+> > definition.
+> 
+> Which would make pretty much the entire memory model one big recursion.  
+> I do not want to do that.
+> 
+> > Thinking about what the options are:
+> > 1) accept the difference and run with it by making it consistent inside the
+> > axiomatic model
+> > 2) fix it through the recursive definition, which seems to be quite ugly but
+> > also consistent with the power operational model as far as I can tell
+> > 3) weaken the operational model... somehow
+> > 4) just ignore the anomaly
+> > 5) ???
+> > 
+> > Currently my least favorite option is 4) since it seems a bit off that the
+> > reasoning applies in one specific case of LKMM, more specifically the data
+> > race definition which should be equivalent to "the order of the two races
+> > isn't fixed", but here the order isn't fixed but it's a data race.
+> > I think the patch happens to almost do 1) because the xbstar&int at the end
+> > should already imply ordering through the prop&int <= hb rule.
+> > What would remain is to also exclude rcu-fence somehow.
+> 
+> IMO 1) is the best choice.
+> 
+> Alan
+> 
+> PS: For the record, here's a simpler litmus test to illustrates the 
+> failing.  The idea is that Wz=1 is reordered before the store-release, 
+> so it ought to propagate before Wy=1.  The LKMM does not require this.
 
-Applied the lot, thank you.
+In PowerPC terms, would this be like having the Wz=1 being reorders
+before the Wy=1, but not before the lwsync instruction preceding the
+Wy=1 that made it be a release store?
 
--- 
-Dmitry
+If so, we might have to keep this quirk.
+
+							Thanx, Paul
+
+> C before-release
+> 
+> {}
+> 
+> P0(int *x, int *y, int *z)
+> {
+> 	int r1;
+> 
+> 	r1 = READ_ONCE(*x);
+> 	smp_store_release(y, 1);
+> 	WRITE_ONCE(*z, 1);
+> }
+> 
+> P1(int *x, int *y, int *z)
+> {
+> 	int r2;
+> 
+> 	r2 = READ_ONCE(*z);
+> 	WRITE_ONCE(*x, r2);
+> }
+> 
+> P2(int *x, int *y, int *z)
+> {
+> 	int r3;
+> 	int r4;
+> 
+> 	r3 = READ_ONCE(*y);
+> 	smp_rmb();
+> 	r4 = READ_ONCE(*z);
+> }
+> 
+> exists (0:r1=1 /\ 2:r3=1 /\ 2:r4=0)
