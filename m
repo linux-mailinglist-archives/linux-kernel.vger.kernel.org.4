@@ -2,160 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BA06813EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEC26813F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237911AbjA3O6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:58:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
+        id S236468AbjA3O7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:59:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjA3O6Q (ORCPT
+        with ESMTP id S230073AbjA3O7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:58:16 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550F818158
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:58:14 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id p26so21282797ejx.13
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:58:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HiGrD1dyHCsxNZSafiiQouritp32iJwUHx6VOOxAvoU=;
-        b=6TyF+8emNxzziWsWUGWqM4UZYfylE0d3H0jPQQo9Ldg+ZbpryIRFo9jTjTrSyX2A9c
-         eXwx+jB+Z2Ytwg4EvHwJD66FjOVkG04QYF/AmsuuoXcwHa3yQThODcqd11Ga2xMyJGgz
-         xsPwN2A4qKINz5jWIdfqUfauE+mjjMVHejGYpVXXf905/B92aW5qo1w6fz5nk+YawpEN
-         KbkvniIuSjt3o+HNjxabCsZrdoc9/0kyj2EDLvqsvix61rTMQ6BaFSuIulHF7ORRNjDI
-         TRb8j20IoT7NIlnwSw2hhdkY7PyGFzpREQvSnoBMNJXhSDqRjbIvsu7yqvlAJU7qe+lq
-         g5JA==
+        Mon, 30 Jan 2023 09:59:01 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3CE18ABA;
+        Mon, 30 Jan 2023 06:59:00 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id gr7so7905991ejb.5;
+        Mon, 30 Jan 2023 06:59:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HiGrD1dyHCsxNZSafiiQouritp32iJwUHx6VOOxAvoU=;
-        b=sz4PEFy2QPts2uGHdcZ1Nn9Yr5T33q3MUjG7Id9idoHZEE+sgNkZB1wfQxXi+bn19c
-         nPqSW0v8cMfk06sF6i03/unvCKVuf2gNGgECdx8y6uG5BU5xwB6hV4dgH0AAo5y/v+tg
-         KQje1OjjDPcdGNrL0/+lmHTrctPiaPE1vw7GL6zpnu/UpwYSq1CreGlbwgBGqhPaF+cN
-         R2qrjafZp0yQ2qKogXiIvnJdgP2DFr6yLDt1Kz8kJkpwzWNKBDZY6abFuCsJw58A+v5N
-         dAKfeKJHk1V1C8U2zN7AJc+Mrsx4+ip/Ga9DfUiFXY3fR6ZvMW2hxEoEphrjklTeXhBs
-         BDMQ==
-X-Gm-Message-State: AO0yUKXgK58zVy9URv1TcKXMhRb1HJwjrHBleoMCqjmNR8e2x+DGLc0f
-        hBI4vsvuGdNRkDKtElpHLATmKQ==
-X-Google-Smtp-Source: AK7set9jWVEhwPAGmMP1q6mxH37JVc79+diom5D7Nq0GQOgWQNwmTt77Z+rZGJCp4VHPL8QeLHwHZg==
-X-Received: by 2002:a17:906:4999:b0:87d:f1f9:a2fb with SMTP id p25-20020a170906499900b0087df1f9a2fbmr11258498eju.29.1675090692825;
-        Mon, 30 Jan 2023 06:58:12 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id rh16-20020a17090720f000b0084c7029b24dsm7036658ejb.151.2023.01.30.06.58.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 06:58:11 -0800 (PST)
-Date:   Mon, 30 Jan 2023 15:58:10 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     John Hickey <jjh@daedalian.us>
-Cc:     anthony.l.nguyen@intel.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] ixgbe: Panic during XDP_TX with > 64 CPUs
-Message-ID: <Y9fbAqR+BDhlPb6I@nanopsycho>
-References: <20230128011213.150171-1-jjh@daedalian.us>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HXpn0pvpxd/hsTOS/Zxnka5NhAaFb1JpHZULVuihYL0=;
+        b=riTrcH9Sv6Hqpc9OC0FUXm2ykvr9/FruKK+w/dNHussYZtzo3Rib1naPNr4FE4c4m/
+         cOVbN5uPI3QZT+pD8F4HzPicPw2o2tWNruNgT8a6DIIoAacNt4WuPEKy51thm9p42Z7p
+         n0v1kiq5H8hwV94EvxduEdo4UhA/4nUFnhVIWmEGT10vqjWUK4jUh/5W6nCOww2IbS0J
+         yBv/hmGGbrQxch2vkwdglnFHV1u/LMFwyPqPsYY96myoDNs2o2VSGzk+GWl33+lFKqIg
+         1D7YKdDmSm+Q/ghVNHCbho7FdcaSiQxQZiisfwwfPFPW/NuL1C6HnJT1H0by5PY+K/N4
+         4skA==
+X-Gm-Message-State: AO0yUKUBu96QT3d4G0ZBx4zrskm3F72JVYctkZ3lhn3m1wPoj0MA/CD4
+        2qMSRCxmxFTnnTC3ZPIvZRkklC9I2OGOyDcySuY=
+X-Google-Smtp-Source: AK7set9qw9Mc3nCBkoXqXHHY3ekTjdcOGuVO/iIRdcNKDMjis+Lmxf5OWPNnF2YvbljAJSVsHpdfkDWpYZaW2nZ5UG0=
+X-Received: by 2002:a17:906:1dcd:b0:87f:575a:9b67 with SMTP id
+ v13-20020a1709061dcd00b0087f575a9b67mr2531895ejh.274.1675090739222; Mon, 30
+ Jan 2023 06:58:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128011213.150171-1-jjh@daedalian.us>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <12138067.O9o76ZdvQC@kreacher> <12124970.O9o76ZdvQC@kreacher>
+ <mafs0sfgybc3q.fsf_-_@amazon.de> <CAJZ5v0hAjKvinPqX2VuCv1jVu50jrnDpECaO=sA2CQZFHZpJdA@mail.gmail.com>
+ <mafs0zga0ds30.fsf_-_@amazon.de>
+In-Reply-To: <mafs0zga0ds30.fsf_-_@amazon.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Jan 2023 15:58:47 +0100
+Message-ID: <CAJZ5v0j1CBe7Hjhg7Tzm3HkuinA9zgtPffMtd96ZaOds=US+xQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] ACPI: processor: perflib: Use the "no limit"
+ frequency QoS
+To:     Pratyush Yadav <ptyadav@amazon.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sat, Jan 28, 2023 at 02:12:12AM CET, jjh@daedalian.us wrote:
->In commit 'ixgbe: let the xdpdrv work with more than 64 cpus'
->(4fe815850bdc8d4cc94e06fe1de069424a895826), support was added to allow
->XDP programs to run on systems with more than 64 CPUs by locking the
->XDP TX rings and indexing them using cpu % 64 (IXGBE_MAX_XDP_QS).
+On Mon, Jan 30, 2023 at 3:18 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
 >
->Upon trying this out patch via the Intel 5.18.6 out of tree driver
->on a system with more than 64 cores, the kernel paniced with an
->array-index-out-of-bounds at the return in ixgbe_determine_xdp_ring in
->ixgbe.h, which means ixgbe_determine_xdp_q_idx was just returning the
->cpu instead of cpu % IXGBE_MAX_XDP_QS.
+> Hi Rafael,
 >
->I think this is how it happens:
+> On Thu, Dec 29 2022, Rafael J. Wysocki wrote:
 >
->Upon loading the first XDP program on a system with more than 64 CPUs,
->ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
->immediately after this, the rings are reconfigured by ixgbe_setup_tc.
->ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
->ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
->ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if
->it is non-zero.  Commenting out the decrement in ixgbe_free_q_vector
->stopped my system from panicing.
+> > On Thu, Dec 29, 2022 at 1:58 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
+> >>
+> >> Hi Rafael,
+> >>
+> >> On Wed, Dec 28 2022, Rafael J. Wysocki wrote:
+> >> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> >
+> >> > When _PPC returns 0, it means that the CPU frequency is not limited by
+> >> > the platform firmware, so make acpi_processor_get_platform_limit()
+> >> > update the frequency QoS request used by it to "no limit" in that case.
+> >> >
+> >> > This addresses a problem with limiting CPU frequency artificially on
+> >> > some systems after CPU offline/online to the frequency that corresponds
+> >> > to the first entry in the _PSS return package.
+> >> >
+> >> > Reported-by: Pratyush Yadav <ptyadav@amazon.de>
+> >> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> > ---
+> [...]
+> >>
+> >> One small thing I noticed: in acpi_processor_ppc_init() "no limit" value
+> >> is set to INT_MAX and here it is set to FREQ_QOS_MAX_DEFAULT_VALUE. Both
+> >> should evaluate to the same value but I think it would be nice if the
+> >> same thing is used in both places. Perhaps you can fix that up when
+> >> applying?
+> >
+> > Yes, I'll do that.
 >
->I suspect to make the original patch work, I would need to load an XDP
->program and then replace it in order to get ixgbe_xdp_locking_key back
->above 0 since ixgbe_setup_tc is only called when transitioning between
->XDP and non-XDP ring configurations, while ixgbe_xdp_locking_key is
->incremented every time ixgbe_xdp_setup is called.
+> Following up on this series. I do not see it queued anywhere in the
+> linux-pm [0] tree. I would like to have this in the v6.3 merge window if
+> possible.
 >
->Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this
->becomes another path to decrement ixgbe_xdp_locking_key to 0 on systems
->with greater than 64 CPUs.
->
->For this patch, I have changed static_branch_inc to static_branch_enable
->in ixgbe_setup_xdp.  We aren't counting references and I don't see any
->reason to turn it off, since all the locking appears to be in the XDP_TX
->path, which isn't run if a XDP program isn't loaded.
->
->Signed-off-by: John Hickey <jjh@daedalian.us>
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
 
-This is missing "Fixes" tag and "net" keyword in "[patch]" subject
-section.
+It's already in the mainline:
 
-
->---
-> drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
-> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 2 +-
-> 2 files changed, 1 insertion(+), 4 deletions(-)
->
->diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
->index f8156fe4b1dc..0ee943db3dc9 100644
->--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
->+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
->@@ -1035,9 +1035,6 @@ static void ixgbe_free_q_vector(struct ixgbe_adapter *adapter, int v_idx)
-> 	adapter->q_vector[v_idx] = NULL;
-> 	__netif_napi_del(&q_vector->napi);
-> 
->-	if (static_key_enabled(&ixgbe_xdp_locking_key))
->-		static_branch_dec(&ixgbe_xdp_locking_key);
->-
-> 	/*
-> 	 * after a call to __netif_napi_del() napi may still be used and
-> 	 * ixgbe_get_stats64() might access the rings on this vector,
->diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
->index ab8370c413f3..cd2fb72c67be 100644
->--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
->+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
->@@ -10283,7 +10283,7 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
-> 	if (nr_cpu_ids > IXGBE_MAX_XDP_QS * 2)
-> 		return -ENOMEM;
-> 	else if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
->-		static_branch_inc(&ixgbe_xdp_locking_key);
->+		static_branch_enable(&ixgbe_xdp_locking_key);
-> 
-> 	old_prog = xchg(&adapter->xdp_prog, prog);
-> 	need_reset = (!!prog != !!old_prog);
->-- 
->2.37.2
->
+e8a0e30b742f cpufreq: intel_pstate: Drop ACPI _PSS states table patching
+99387b016022 ACPI: processor: perflib: Avoid updating frequency QoS
+unnecessarily
+c02d5feb6e2f ACPI: processor: perflib: Use the "no limit" frequency QoS
