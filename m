@@ -2,189 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969A9681583
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D0D68158B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235938AbjA3Ptc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60072 "EHLO
+        id S237597AbjA3PuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:50:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237438AbjA3Pss (ORCPT
+        with ESMTP id S237507AbjA3Ptl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:48:48 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F47141B4C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:48:25 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id mf7so14258732ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:48:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6cSvTtaPluKjivYl4UrQE4bipaF+IzwEg2ePwmyFKRo=;
-        b=Cedm42tTIOsEhgfb6LgujmAeg6lfxqPfaBVz3TYK7+w0tf3BR9jHq71TeBjS9VhyA8
-         QRyokjxnWJIrBYox+pVP0IuDxAAD4Hu672xbY9vLkpfYucxS2qf/8GRsogStfI81OYUF
-         +4sLUq1RvN6H2RZs/rWAMYvs3z777/zbgdnMBfcbuXX8Ee78rGU9TRoMLI5thuAczQpS
-         j3UphqgjtUAjLoxDqskm/zgV5dT/6ox45G+R6n6XLYZBRcFg+jrt+8YWQLqvBGUdCLQl
-         C7FVjavrW8bPUtIuo0WnZRMfstKiFhIaXtlbrfW5w567w+k/6xRH8/6KMwc0O8edcR7r
-         doBA==
+        Mon, 30 Jan 2023 10:49:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C32C902B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:48:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675093735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=iK+zUbg3IfyivImjOtAAZPRNA3nl2U9KaOpRKvRLj9U=;
+        b=UlyUQ59KOtvY/saXdl6iBL+KaksE2NhMulbKO3pRiLgvetOjirmg7nnWj9HjWRJS0KfB2O
+        xIiTpuKpYXUQYXYW6XpsBLW3lRk8Sw8XPHnGqtDyqWkufYcG8fe2JX3Sv6aiiNDDWozSV0
+        pmxwclABHXVfOLMxt+s8diozCuLVkm0=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-582-9xZ7q4JcPXqamX6Vy4mZwg-1; Mon, 30 Jan 2023 10:48:48 -0500
+X-MC-Unique: 9xZ7q4JcPXqamX6Vy4mZwg-1
+Received: by mail-ot1-f71.google.com with SMTP id bx22-20020a056830601600b00684958cb0b9so5789911otb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:48:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6cSvTtaPluKjivYl4UrQE4bipaF+IzwEg2ePwmyFKRo=;
-        b=teRMyStQqAi/wzOosGFdaDRQQPa5HzR1AXFw0sUO043CX4ySPDzq0IdT+QxuiIw5q1
-         J2ITwKgUCnzRwZBLZaL2LZHrMsCKcicE+O6D6FONXQb3zAvJaQP05GLK39w+sGBV0APo
-         Wg+T3VZpATstecgc5a42IwSMTgVchIbDS8mYhOauzaF4JEhR+fak90ssPTTU3iXTVRaT
-         UDwnLExeOlmmnRXT4NBP5MvaURpZjDsQk6NPDsvAgr/XVSZ1HMmDzM3YmsCsxFCMwMWQ
-         1B5unYysH8HxZb8orAmn0jwmrK7KDJMtiPmtYBum9elpr6IM0Pj82VBU0YCu6Dv8ioyZ
-         fr5A==
-X-Gm-Message-State: AO0yUKUDSWNLiWH3U6zvRX7SRoBE01zPQ2BBjA/5CQfs9jF3+meeyr+i
-        k4TYDOLPNEq8tdQPfaVxDbC2mC7os4KHatKh88bxvw==
-X-Google-Smtp-Source: AK7set9qVB5OX6ni0Lk55dQYAPF5FY9x1JC11OZle5po67AkILOWqlwslRl3M2sAdorBp77iVCghti5lhVQF6GMNHlg=
-X-Received: by 2002:a17:906:88f:b0:88a:7cf5:5d33 with SMTP id
- n15-20020a170906088f00b0088a7cf55d33mr617944eje.100.1675093703810; Mon, 30
- Jan 2023 07:48:23 -0800 (PST)
+        bh=iK+zUbg3IfyivImjOtAAZPRNA3nl2U9KaOpRKvRLj9U=;
+        b=QmIHkjkIC8Dw9fQlojxx9TUk127xe8Zj1CYVX1kftavw9CvEQfLEU+03Ed6khPQNU4
+         RWYRsKlHtqreRmUf/2YzIKymLknlJOTKKBUBKOxd8SuJnu8G6IFL29jU7bUSUrFVJfbV
+         WrKHZ4ZtUkw6d0XFqS8pbPOI3zFREYW19rn3Kn0whcl+Ul1MZqH8exAziqgL2m+/Dlgu
+         y7TSaa7rNXKG6rEFgbr1wxE3+xX0Yd5xyc5NKvtqNjmU4Zc4bwgJBnRdPAsWwGOjXfeJ
+         BBI3wonsyLSuoc9CxOsHUvqUwug3H5Xjjk1M0lslm9+chniaxiILfXxkLjBcsd8vuRCH
+         xFUA==
+X-Gm-Message-State: AFqh2kqKBs6I3Qd3B2d8zj4fbbnHZg4VQBUX5NPNYbaew/7ju17/spDE
+        cy5WH0NfqvfM2Wbcmh3TEFgbg8QCILNdt0vt4ear/Oec1pNpH/3i4mWwvhuq4VzCSGIt459nFDI
+        lXj//3Y0YoRq7cxq+svrWLkQB
+X-Received: by 2002:a4a:8c68:0:b0:4a3:aa96:23c7 with SMTP id v37-20020a4a8c68000000b004a3aa9623c7mr21645479ooj.6.1675093728223;
+        Mon, 30 Jan 2023 07:48:48 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXsZlKsW4UmOUh6zsAp22dbVWH2s79oinxhwudtqXjMDouXPUguT+G2PrV8znXbFRgCyFddmFQ==
+X-Received: by 2002:a4a:8c68:0:b0:4a3:aa96:23c7 with SMTP id v37-20020a4a8c68000000b004a3aa9623c7mr21645469ooj.6.1675093727973;
+        Mon, 30 Jan 2023 07:48:47 -0800 (PST)
+Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::41])
+        by smtp.gmail.com with ESMTPSA id h3-20020a4ad743000000b0051763fef75fsm2137688oot.37.2023.01.30.07.48.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 07:48:47 -0800 (PST)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     andersson@kernel.org
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bmasney@redhat.com, quic_shazhuss@quicinc.com,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH v2 1/2] arm64: dts: qcom: sa8540p-ride: Fix some i2c pinctrl settings
+Date:   Mon, 30 Jan 2023 09:48:22 -0600
+Message-Id: <20230130154823.117542-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-15-atishp@rivosinc.com>
-In-Reply-To: <20230127182558.2416400-15-atishp@rivosinc.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 30 Jan 2023 21:18:10 +0530
-Message-ID: <CAAhSdy1C1wKDBwRbyx=i63_AyGBsgN881_E-fxR=8qqYgwUtGw@mail.gmail.com>
-Subject: Re: [PATCH v3 14/14] RISC-V: KVM: Increment firmware pmu events
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
->
-> KVM supports firmware events now. Invoke the firmware event increment
-> function from appropriate places.
->
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+Some of the pinctrl groups were invalid for the selected pins. Select
+the proper qup group to fix these warnings:
 
-Looks good to me.
+[    6.523566] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio135" for function "qup15"
+[    6.535042] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio136" for function "qup15"
+[    6.597536] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio158" for function "qup15"
+[    6.597544] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio159" for function "qup15"
+[    6.597991] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio0" for function "qup15"
+[    6.597996] sc8280xp-tlmm f100000.pinctrl: invalid group "gpio1" for function "qup15"
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+Fixes: e073899ec3e1 ("arm64: dts: qcom: sa8540p-ride: add i2c nodes")
+Reviewed-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Brian Masney <bmasney@redhat.com>
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+---
 
-Regards,
-Anup
+Changes since v1:
+	* collected Reviewed-by tags
 
-> ---
->  arch/riscv/kvm/tlb.c              | 4 ++++
->  arch/riscv/kvm/vcpu_sbi_replace.c | 7 +++++++
->  2 files changed, 11 insertions(+)
->
-> diff --git a/arch/riscv/kvm/tlb.c b/arch/riscv/kvm/tlb.c
-> index 309d79b..b797f7c 100644
-> --- a/arch/riscv/kvm/tlb.c
-> +++ b/arch/riscv/kvm/tlb.c
-> @@ -181,6 +181,7 @@ void kvm_riscv_local_tlb_sanitize(struct kvm_vcpu *vcpu)
->
->  void kvm_riscv_fence_i_process(struct kvm_vcpu *vcpu)
->  {
-> +       kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_FENCE_I_RCVD);
->         local_flush_icache_all();
->  }
->
-> @@ -264,15 +265,18 @@ void kvm_riscv_hfence_process(struct kvm_vcpu *vcpu)
->                                                 d.addr, d.size, d.order);
->                         break;
->                 case KVM_RISCV_HFENCE_VVMA_ASID_GVA:
-> +                       kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_RCVD);
->                         kvm_riscv_local_hfence_vvma_asid_gva(
->                                                 READ_ONCE(v->vmid), d.asid,
->                                                 d.addr, d.size, d.order);
->                         break;
->                 case KVM_RISCV_HFENCE_VVMA_ASID_ALL:
-> +                       kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_RCVD);
->                         kvm_riscv_local_hfence_vvma_asid_all(
->                                                 READ_ONCE(v->vmid), d.asid);
->                         break;
->                 case KVM_RISCV_HFENCE_VVMA_GVA:
-> +                       kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_RCVD);
->                         kvm_riscv_local_hfence_vvma_gva(
->                                                 READ_ONCE(v->vmid),
->                                                 d.addr, d.size, d.order);
-> diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
-> index abeb55f..71a671e 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_replace.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_replace.c
-> @@ -11,6 +11,7 @@
->  #include <linux/kvm_host.h>
->  #include <asm/sbi.h>
->  #include <asm/kvm_vcpu_timer.h>
-> +#include <asm/kvm_vcpu_pmu.h>
->  #include <asm/kvm_vcpu_sbi.h>
->
->  static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> @@ -25,6 +26,7 @@ static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->                 return 0;
->         }
->
-> +       kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_SET_TIMER);
->  #if __riscv_xlen == 32
->         next_cycle = ((u64)cp->a1 << 32) | (u64)cp->a0;
->  #else
-> @@ -57,6 +59,7 @@ static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->                 return 0;
->         }
->
-> +       kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_IPI_SENT);
->         kvm_for_each_vcpu(i, tmp, vcpu->kvm) {
->                 if (hbase != -1UL) {
->                         if (tmp->vcpu_id < hbase)
-> @@ -67,6 +70,7 @@ static int kvm_sbi_ext_ipi_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->                 ret = kvm_riscv_vcpu_set_interrupt(tmp, IRQ_VS_SOFT);
->                 if (ret < 0)
->                         break;
-> +               kvm_riscv_vcpu_pmu_incr_fw(tmp, SBI_PMU_FW_IPI_RECVD);
->         }
->
->         return ret;
-> @@ -90,6 +94,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
->         switch (funcid) {
->         case SBI_EXT_RFENCE_REMOTE_FENCE_I:
->                 kvm_riscv_fence_i(vcpu->kvm, hbase, hmask);
-> +               kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_FENCE_I_SENT);
->                 break;
->         case SBI_EXT_RFENCE_REMOTE_SFENCE_VMA:
->                 if (cp->a2 == 0 && cp->a3 == 0)
-> @@ -97,6 +102,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
->                 else
->                         kvm_riscv_hfence_vvma_gva(vcpu->kvm, hbase, hmask,
->                                                   cp->a2, cp->a3, PAGE_SHIFT);
-> +               kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_SENT);
->                 break;
->         case SBI_EXT_RFENCE_REMOTE_SFENCE_VMA_ASID:
->                 if (cp->a2 == 0 && cp->a3 == 0)
-> @@ -107,6 +113,7 @@ static int kvm_sbi_ext_rfence_handler(struct kvm_vcpu *vcpu, struct kvm_run *run
->                                                        hbase, hmask,
->                                                        cp->a2, cp->a3,
->                                                        PAGE_SHIFT, cp->a4);
-> +               kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_HFENCE_VVMA_ASID_SENT);
->                 break;
->         case SBI_EXT_RFENCE_REMOTE_HFENCE_GVMA:
->         case SBI_EXT_RFENCE_REMOTE_HFENCE_GVMA_VMID:
-> --
-> 2.25.1
->
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+index a43f831f9018..6ab4b435c49e 100644
+--- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
++++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+@@ -318,21 +318,21 @@ &xo_board_clk {
+ &tlmm {
+ 	i2c0_default: i2c0-default-state {
+ 		pins = "gpio135", "gpio136";
+-		function = "qup15";
++		function = "qup0";
+ 		drive-strength = <2>;
+ 		bias-pull-up;
+ 	};
+ 
+ 	i2c1_default: i2c1-default-state {
+ 		pins = "gpio158", "gpio159";
+-		function = "qup15";
++		function = "qup1";
+ 		drive-strength = <2>;
+ 		bias-pull-up;
+ 	};
+ 
+ 	i2c12_default: i2c12-default-state {
+ 		pins = "gpio0", "gpio1";
+-		function = "qup15";
++		function = "qup12";
+ 		drive-strength = <2>;
+ 		bias-pull-up;
+ 	};
+-- 
+2.39.1
+
