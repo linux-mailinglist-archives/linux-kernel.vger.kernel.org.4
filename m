@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A0A680ADF
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01DEC680A7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236128AbjA3KdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S235922AbjA3KJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236347AbjA3KdN (ORCPT
+        with ESMTP id S230434AbjA3KJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:33:13 -0500
-X-Greylist: delayed 1412 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 Jan 2023 02:33:08 PST
-Received: from mail.schwarzvogel.de (unknown [IPv6:2a01:4f8:252:1806::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0B59B;
-        Mon, 30 Jan 2023 02:33:07 -0800 (PST)
-Received: from klausman by mail.schwarzvogel.de with local (Exim 4.96)
-        (envelope-from <klausman@schwarzvogel.de>)
-        id 1pMR6I-001Gpf-1w;
-        Mon, 30 Jan 2023 11:09:22 +0100
-Date:   Mon, 30 Jan 2023 11:09:22 +0100
-From:   Tobias Klausmann <klausman@schwarzvogel.de>
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        David Roth <davidroth9@gmail.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus <luna+bugzilla@cosmos-ink.net>
-Subject: Re: [Regression] =?iso-8859-1?Q?Bug=A02168?=
- =?iso-8859-1?Q?85_-_HID++_Logitech_G903_generates_full_scroll_whee?=
- =?iso-8859-1?Q?l?= events with every hi-res tick when attached via USB
-Message-ID: <Y9eXUl6ShjMeH/gO@skade.schwarzvogel.de>
-Mail-Followup-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-        Bastien Nocera <hadess@hadess.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, David Roth <davidroth9@gmail.com>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus <luna+bugzilla@cosmos-ink.net>
-References: <1bb93259-1c9f-5335-a0bf-fc8641b26650@leemhuis.info>
- <be545e72-8312-f213-0250-86a128b7b629@leemhuis.info>
+        Mon, 30 Jan 2023 05:09:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD1E6E8D;
+        Mon, 30 Jan 2023 02:09:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEF1660F07;
+        Mon, 30 Jan 2023 10:09:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51E23C433EF;
+        Mon, 30 Jan 2023 10:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675073396;
+        bh=iRiohGImpM7+iZyoX34cqfFy6JrKajK0MOcAclH+Q8Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cZhqIe6HGqndVECg+DN2eucBKOxPzb77WLvR7uBb64W5dCp3M7riy+CPpWPcwCi9o
+         5saaiNnYIbYYGNKMH6GeOdv1nnbQZ6e+FQklERhNr3rI+/0GH9jRQBx8n8D8/qLSY9
+         HqjjSKsHZ7y0hf6SyAMJM6YFhTOYxhitoxxFKfyG7qNi4SKgLTx6mBYigNiHgR5Gt1
+         Vw2tzjPl4rrXCsX7O9NXLshhl+YTZYjYXYhQGwkRfq2rq79I+OBTOuZgjGnJ9I4CUz
+         M5xShiyh8jpaCdLaHTsiYyphskZYt0pSlWBUaalVVicrpKYDhW79/LB9pwpjCHz77t
+         oWf7EDBMOGWBw==
+Date:   Mon, 30 Jan 2023 12:09:51 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, maxime@cerno.tech,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] net: bcmgenet: Add a check for oversized packets
+Message-ID: <Y9eXb+ZYanvxfq2E@unreal>
+References: <20230127000819.3934-1-f.fainelli@gmail.com>
+ <Y9Y/jMZZbS4HNpCC@unreal>
+ <7cbbb800-9999-302a-5ea9-b93020a1e9e8@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <be545e72-8312-f213-0250-86a128b7b629@leemhuis.info>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <7cbbb800-9999-302a-5ea9-b93020a1e9e8@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi! 
-
-On Mon, 30 Jan 2023, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
-> [ccing a few people that CCed to the bug]
+On Sun, Jan 29, 2023 at 01:17:43PM -0800, Florian Fainelli wrote:
 > 
-> Hi, this is your Linux kernel regression tracker.
 > 
-> On 05.01.23 09:12, Thorsten Leemhuis wrote:
-> > [...] Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216885 :
+> On 1/29/2023 1:42 AM, Leon Romanovsky wrote:
+> > On Thu, Jan 26, 2023 at 04:08:19PM -0800, Florian Fainelli wrote:
+> > > Occasionnaly we may get oversized packets from the hardware which
+> > > exceed the nomimal 2KiB buffer size we allocate SKBs with. Add an early
+> > > check which drops the packet to avoid invoking skb_over_panic() and move
+> > > on to processing the next packet.
+> > > 
+> > > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> > > ---
+> > >   drivers/net/ethernet/broadcom/genet/bcmgenet.c | 8 ++++++++
+> > >   1 file changed, 8 insertions(+)
+> > > 
+> > > diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> > > index 21973046b12b..d937daa8ee88 100644
+> > > --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> > > +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> > > @@ -2316,6 +2316,14 @@ static unsigned int bcmgenet_desc_rx(struct bcmgenet_rx_ring *ring,
+> > >   			  __func__, p_index, ring->c_index,
+> > >   			  ring->read_ptr, dma_length_status);
+> > > +		if (unlikely(len > RX_BUF_LENGTH)) {
+> > > +			netif_err(priv, rx_status, dev, "oversized packet\n");
 > > 
-> >>  David Roth 2023-01-04 20:37:22 UTC
-> >>
-> >> Created attachment 303526 [details]
-> >> Libinput record with G903 attached directly to USB
-> >>
-> >> Since
-> >> https://lore.kernel.org/linux-input/20220914132146.6435-1-hadess@hadess.net/T/#u
-> >> my Logitech G903 has gained hi res support. While normally a good
-> >> thing, it seems that in this case it leads to generating one normal
-> >> REL_WHEEL with each REL_WHEEL_HI_RES event instead of just a couple
-> >> of REL_WHEEL_HI_RES, followed by the standard REL_WHEEL once a
-> >> notch/tick is reached. This leads to overly sensitive scrolling and
-> >> makes the wheel basically useless.
+> > I don't think that it is wise move to print to dmesg something that can
+> > be triggered by user over network.
 > 
-> Bastien, Benjamin, Jiri, that problem was reported 25 days ago now and
-> there is still no fix in sight afaics (please correct me if I'm wrong)
-> -- and based on the reports I've seen it seem quite a few people are
-> hitting it. Hence please allow me to ask:
-> 
-> Wouldn't it be best to revert that change for now (both in mainline and
-> stable of course) and then reapply it once a fix for this problem is
-> available? Or
+> A frame larger than RX_BUF_LENGTH intentionally received would be segmented
+> by the MAC, we have seen this happen however while playing with unsafe clock
+> ratios for instance or when there are insufficient credits given to the
+> Ethernet MAC to write frames into DRAM. The print is consistent with other
+> errors that are captured and is only enabled if the appropriate ethtool
+> message level bitmask is set.
 
-I think there was something cut off or that `Or` is leftovers.
+I saw other prints in that function, but you add new one.
+Won't netif_err() be printed by default in almost all distro?
 
-As for no fix: correct, there is no fix yet, though the workaround of
-blacklisting the module sortof works. _Not_ having hires support usually
-doesn't break anything, as it's a relatively new feature/functionality,
-and so many pieces of userland (GTK+, Qt etc) need to be explicitly
-configured to use it, and fall back to lowres in a benign way. I would
-have never noticed this if I didn't use a distro kernel on one machine
-(my hand-built ones omit the module entirely).
+Thanks
 
-That said, figuring out what is going on and what to do is not trivial,
-since most people won't think "kernel" when they notice their mouse's
-behavior has changed. My liberal reporting of bugs with Debian, libinput
-and then the kernel (and linking them) was a deliberate attempt in
-leaving breadcrumbs for people to find.
-
-Best,
-Tobias
+> -- 
+> Florian
