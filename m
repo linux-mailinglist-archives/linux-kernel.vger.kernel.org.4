@@ -2,72 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A287680B42
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA1C680B47
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236096AbjA3KtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S236098AbjA3KtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236098AbjA3KtF (ORCPT
+        with ESMTP id S236129AbjA3KtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:49:05 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F82305CB
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:49:03 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso1711245wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:49:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SaqOey6takqXeZ8f0/kRCVEhlQpWs2nzQX4ec1B7cGw=;
-        b=AZJbWWO1gFB7jtxzXSoG06CX5t1F9m7wuJQaTL25u0qZSfjmlTN8zFIp3n9uCrVfiZ
-         JRNavrjnrkEIGNNcT1YMWdUT7z5m17mFK/3gGERCqIPpGgpL5YUbRYZ/01OPmRvnd+tZ
-         NdbDUkL9Qy5UAfS1QoONoX2eg+CB2fxuDqR4O2SH4+vvBSa4DQHSHTZW+le49dnVlcxY
-         2Or3crt25V4t+roMEsh9CxJsWysT2ya2BurNrtaYOMbQkzFnwDCkX7Hnd+3+rxGPWnf4
-         vwpKV3iTV6yUYPxMARk3i9O4Msv5rbbBuKSl1lE5yyExkkB6qywuBPfuQsUhwD2oGqMr
-         aFbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SaqOey6takqXeZ8f0/kRCVEhlQpWs2nzQX4ec1B7cGw=;
-        b=or+pP5BPsR4m4rqKjwHBjxY/tJ9H91muOne4oCpN83RIVDxfzNjy0T35WLQgPT4A0P
-         XiqGxGx5MwTZDz2dLLNNWmb5Yn7swzz1cGCI1kiRqOkVC8qy91MDcdaKm6pis+ZnaoQv
-         giawLVarB3Cfdc4Z/tTjO0qYnDUPbImX7/kZcMiiJKS55Ib9SQcIBCLVKK8IsinExyEI
-         300t5+676oCbHIwpTmI1b2ZHsGKUX9KFWUzXY/YWSefGbrPR5V3ZO1cPtFDD/Bb/9EVw
-         Dwo0TVpb9xXIoP56h4OrVwjX8Fl/OOWUVLVBOo/Pj4wg6TTGTh/acxkzEDkwpOCgEShk
-         j3tA==
-X-Gm-Message-State: AO0yUKUchPkBCeOGWF3pivIO33bcoRjmwl56aUu3VUb5eMlC5CxP9CgQ
-        aDTsG9raqlO0toOgL3cz97KkLQ==
-X-Google-Smtp-Source: AK7set+jzH5DbXimXIu/PLpv0ONHG0IeYaZOzibiKULpjUegqIkW8pznBX7JLvV6A6P125z8hVfdhA==
-X-Received: by 2002:a05:600c:1e0d:b0:3dc:3f1b:6757 with SMTP id ay13-20020a05600c1e0d00b003dc3f1b6757mr10561869wmb.15.1675075741688;
-        Mon, 30 Jan 2023 02:49:01 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id bi5-20020a05600c3d8500b003db0bb81b6asm12927057wmb.1.2023.01.30.02.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 02:49:01 -0800 (PST)
-Date:   Mon, 30 Jan 2023 11:49:00 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Jinyu Tang <tjytimi@163.com>, palmer@rivosinc.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com, yuzhao@google.com,
-        conor.dooley@microchip.com, guoren@kernel.org,
-        tongtiangen@huawei.com, anup@brainfault.org,
-        akpm@linux-foundation.org, falcon@tinylab.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] riscv: support arch_has_hw_pte_young()
-Message-ID: <20230130104900.muwgikgkvkn2byna@orel>
-References: <20230129064956.143664-1-tjytimi@163.com>
- <CAK9=C2VaxNezv+M=s=ZSA-YDf_17+hcom_z1=_j2YkRHg-yg7Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK9=C2VaxNezv+M=s=ZSA-YDf_17+hcom_z1=_j2YkRHg-yg7Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Mon, 30 Jan 2023 05:49:15 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB46F30E8B;
+        Mon, 30 Jan 2023 02:49:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 145B760F1F;
+        Mon, 30 Jan 2023 10:49:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6FFC433D2;
+        Mon, 30 Jan 2023 10:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675075751;
+        bh=wCu0zevkwF5n8KQD6jAt1pkBKCPzPzPbWvTExkh/QQM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pQ3VOZEn2aYW6E9PfhkAi9z7TyHlR5qe3jcekvvPt8GgeMg2QImdSeKRJj+q6Oy+p
+         0DU28ix1eGi5KSioZYVv8IHIl/5cPXchDDhsnZZ6Xe81MTmV5ceBeKtFnFmb3BT26J
+         iYpfBQFzBAsz7NRoZjyEBKN69inTzEHXICbFAnliEUY+FC2glIL1MDEF+luHu36ta8
+         wvWhb0c7HfiY9XJNdGxt+9wP3ZTA3MAok5Qk9XRcoxdvOe6MyEki/YBamVtyN9zFCZ
+         vh1SIOxT0VL8ljlbdopj5W7WMNESASq0tpBd/g4d1V3ADHAo8tszlsAoFupyZf6AKt
+         j38nD/WjKDM1w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pMRim-005nJE-Kj;
+        Mon, 30 Jan 2023 10:49:08 +0000
+Date:   Mon, 30 Jan 2023 10:49:04 +0000
+Message-ID: <86k0141en3.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     saravanak@google.com, abel.vesa@linaro.org,
+        alexander.stein@ew.tq-group.com, andriy.shevchenko@linux.intel.com,
+        bigunclemax@gmail.com, brgl@bgdev.pl,
+        colin.foster@in-advantage.com, cristian.marussi@arm.com,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        djrscally@gmail.com, dmitry.baryshkov@linaro.org,
+        festevam@gmail.com, fido_max@inbox.ru, frowand.list@gmail.com,
+        geert+renesas@glider.be, geert@linux-m68k.org,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        jpb@kernel.org, jstultz@google.com, kernel-team@android.com,
+        kernel@pengutronix.de, lenb@kernel.org, linus.walleij@linaro.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux@roeck-us.net, lkft@linaro.org, luca.weiss@fairphone.com,
+        magnus.damm@gmail.com, martin.kepplinger@puri.sm,
+        miquel.raynal@bootlin.com, rafael@kernel.org, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, sakari.ailus@linux.intel.com,
+        shawnguo@kernel.org, sudeep.holla@arm.com, tglx@linutronix.de,
+        tony@atomide.com
+Subject: Re: [PATCH v2 00/11] fw_devlink improvements
+In-Reply-To: <20230130085542.38546-1-naresh.kamboju@linaro.org>
+References: <20230127001141.407071-1-saravanak@google.com>
+        <20230130085542.38546-1-naresh.kamboju@linaro.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: naresh.kamboju@linaro.org, saravanak@google.com, abel.vesa@linaro.org, alexander.stein@ew.tq-group.com, andriy.shevchenko@linux.intel.com, bigunclemax@gmail.com, brgl@bgdev.pl, colin.foster@in-advantage.com, cristian.marussi@arm.com, devicetree@vger.kernel.org, dianders@chromium.org, djrscally@gmail.com, dmitry.baryshkov@linaro.org, festevam@gmail.com, fido_max@inbox.ru, frowand.list@gmail.com, geert+renesas@glider.be, geert@linux-m68k.org, gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com, jpb@kernel.org, jstultz@google.com, kernel-team@android.com, kernel@pengutronix.de, lenb@kernel.org, linus.walleij@linaro.org, linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, linux-imx@nxp.com, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux@roeck-us.net, lkft@linaro.org, luca.weiss@fairphone.com, magnus.damm@gmail.com, martin.kepplinger@puri.sm, miquel.raynal@bootlin.com, rafael@kernel.org, robh+dt@k
+ ernel.org, s.hauer@pengutronix.de, sakari.ailus@linux.intel.com, shawnguo@kernel.org, sudeep.holla@arm.com, tglx@linutronix.de, tony@atomide.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,82 +85,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 03:55:55PM +0530, Anup Patel wrote:
-> On Sun, Jan 29, 2023 at 12:21 PM Jinyu Tang <tjytimi@163.com> wrote:
-> >
-> > The arch_has_hw_pte_young() is false for riscv by default. If it's
-> > false, page table walk is almost skipped for MGLRU reclaim. And it
-> > will also cause useless step in __wp_page_copy_user().
-> >
-> > RISC-V Privileged Book says that riscv have two schemes to manage A
-> > and D bit.
-> >
-> > So add a config for selecting, the default is true. For simple
-> > implementation riscv CPU which just generate page fault, unselect it.
+On Mon, 30 Jan 2023 08:55:42 +0000,
+Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 > 
-> I totally disagree with this approach.
+> Build test pass on arm, arm64, i386, mips, parisc, powerpc, riscv, s390, sh,
+> sparc and x86_64.
 > 
-> Almost all existing RISC-V platforms don't have HW support
-> PTE.A and PTE.D updates.
+> Boot and LTP smoke pass on qemu-arm64, qemu-armv7, qemu-i386 and qemu-x86_64.
+> Boot failed on FVP.
 > 
-> We want the same kernel image to run HW with/without PTE.A
-> and PTE.D updates so kconfig based approach is not going to
-> fly.
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 > 
-> >
-> > Signed-off-by: Jinyu Tang <tjytimi@163.com>
-> > ---
-> >  arch/riscv/Kconfig               | 10 ++++++++++
-> >  arch/riscv/include/asm/pgtable.h |  7 +++++++
-> >  2 files changed, 17 insertions(+)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index e2b656043abf..17c82885549c 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -180,6 +180,16 @@ config PAGE_OFFSET
-> >         default 0x80000000 if 64BIT && !MMU
-> >         default 0xff60000000000000 if 64BIT
-> >
-> > +config ARCH_HAS_HARDWARE_PTE_YOUNG
-> > +       bool "Hardware Set PTE Access Bit"
-> > +       default y
-> > +       help
-> > +         Select if hardware set A bit when PTE is accessed. The default is
-> > +         'Y', because most RISC-V CPU hardware can manage A and D bit.
-> > +         But RISC-V may have simple implementation that do not support
-> > +         hardware set A bit but only generate page fault, for that case just
-> > +         unselect it.
-> > +
-> >  config KASAN_SHADOW_OFFSET
-> >         hex
-> >         depends on KASAN_GENERIC
-> > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> > index 4eba9a98d0e3..1db54ab4e1ba 100644
-> > --- a/arch/riscv/include/asm/pgtable.h
-> > +++ b/arch/riscv/include/asm/pgtable.h
-> > @@ -532,6 +532,13 @@ static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
-> >          */
-> >         return ptep_test_and_clear_young(vma, address, ptep);
-> >  }
-> > +#ifdef CONFIG_ARCH_HAS_HARDWARE_PTE_YOUNG
+> Please refer following link for details of testing.
+> FVP boot log failed.
+> https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-devicetree_20230127001141_407071-1-saravanak_google_com/testrun/14389034/suite/boot/test/gcc-12-lkftconfig-64k_page_size/details/
 > 
-> > +#define arch_has_hw_pte_young arch_has_hw_pte_young
-> > +static inline bool arch_has_hw_pte_young(void)
-> > +{
-> > +       return true;
 > 
-> Drop the kconfig option ARCH_HAS_HARDWARE_PTE_YOUNG
-> and instead use code patching to return true only when Svadu
-> ISA extension is available in DT ISA string.
+> [    2.613437] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+> [    2.613628] Mem abort info:
+> [    2.613756]   ESR = 0x0000000096000005
+> [    2.613904]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    2.614071]   SET = 0, FnV = 0
+> [    2.614215]   EA = 0, S1PTW = 0
+> [    2.614358]   FSC = 0x05: level 1 translation fault
+> [    2.614517] Data abort info:
+> [    2.614647]   ISV = 0, ISS = 0x00000005
+> [    2.614792]   CM = 0, WnR = 0
+> [    2.614934] [0000000000000010] user address but active_mm is swapper
+> [    2.615105] Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+> [    2.615219] Modules linked in:
+> [    2.615310] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.2.0-rc5 #1
+> [    2.615445] Hardware name: FVP Base RevC (DT)
+> [    2.615533] pstate: 61400009 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+> [    2.615685] pc : gpiochip_setup_dev (include/linux/err.h:41 include/linux/fwnode.h:201 drivers/gpio/gpiolib.c:586) 
+> [    2.615816] lr : gpiochip_add_data_with_key (drivers/gpio/gpiolib.c:871) 
+> [    2.615970] sp : ffff8000081af5e0
+> [    2.616051] x29: ffff8000081af5e0 x28: 0000000000000000 x27: ffff0008027cb5a0
+> [    2.616261] x26: 0000000000000000 x25: ffffd7c5d6745910 x24: ffff0008027f4800
+> [    2.616472] x23: 0000000000000000 x22: ffffd7c5d62b99a8 x21: 0000000000000202
+> [    2.616679] x20: 0000000000000000 x19: ffff0008027f4800 x18: ffffffffffffffff
+> [    2.616890] x17: ffffd7c5d6467928 x16: 0000000013e3690a x15: ffff8000081af3b0
+> [    2.617102] x14: ffff00080275cd8a x13: ffff00080275cd88 x12: 0000000000000001
+> [    2.617312] x11: 62726568746f6d3a x10: 0000000000000000 x9 : ffffd7c5d3b3ebe0
+> [    2.617522] x8 : ffff8000081af548 x7 : 0000000000000000 x6 : 0000000000000001
+> [    2.617727] x5 : 0000000000000000 x4 : ffff000800640000 x3 : ffffd7c5d62b99c8
+> [    2.617933] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+> [    2.618138] Call trace:
+> [    2.618204] gpiochip_setup_dev (include/linux/err.h:41 include/linux/fwnode.h:201 drivers/gpio/gpiolib.c:586) 
+> [    2.618337] gpiochip_add_data_with_key (drivers/gpio/gpiolib.c:871) 
+> [    2.618493] devm_gpiochip_add_data_with_key (drivers/gpio/gpiolib-devres.c:478) 
+> [    2.618654] bgpio_pdev_probe (drivers/gpio/gpio-mmio.c:793) 
+> [    2.618785] platform_probe (drivers/base/platform.c:1401) 
+> [    2.618928] really_probe (drivers/base/dd.c:560 drivers/base/dd.c:639) 
+> [    2.619056] __driver_probe_device (drivers/base/dd.c:778) 
+> [    2.619193] driver_probe_device (drivers/base/dd.c:808) 
+> [    2.619329] __device_attach_driver (drivers/base/dd.c:937) 
+> [    2.619464] bus_for_each_drv (drivers/base/bus.c:427) 
+> [    2.619590] __device_attach (drivers/base/dd.c:1010) 
+> [    2.619722] device_initial_probe (drivers/base/dd.c:1058) 
+> [    2.619861] bus_probe_device (drivers/base/bus.c:489) 
+> [    2.619988] device_add (drivers/base/core.c:3637) 
+> [    2.620102] platform_device_add (drivers/base/platform.c:717) 
+> [    2.620251] mfd_add_device (drivers/mfd/mfd-core.c:297) 
+> [    2.620397] devm_mfd_add_devices (drivers/mfd/mfd-core.c:351 drivers/mfd/mfd-core.c:449) 
+> [    2.620548] vexpress_sysreg_probe (drivers/mfd/vexpress-sysreg.c:115) 
+> [    2.620672] platform_probe (drivers/base/platform.c:1401) 
+> [    2.620814] really_probe (drivers/base/dd.c:560 drivers/base/dd.c:639) 
+> [    2.620940] __driver_probe_device (drivers/base/dd.c:778) 
+> [    2.621080] driver_probe_device (drivers/base/dd.c:808) 
+> [    2.621216] __driver_attach (drivers/base/dd.c:1195) 
+> [    2.621344] bus_for_each_dev (drivers/base/bus.c:301) 
+> [    2.621467] driver_attach (drivers/base/dd.c:1212) 
+> [    2.621596] bus_add_driver (drivers/base/bus.c:618) 
+> [    2.621720] driver_register (drivers/base/driver.c:246) 
+> [    2.621859] __platform_driver_register (drivers/base/platform.c:868) 
+> [    2.622012] vexpress_sysreg_driver_init (drivers/mfd/vexpress-sysreg.c:134) 
+> [    2.622145] do_one_initcall (init/main.c:1306) 
+> [    2.622269] kernel_init_freeable (init/main.c:1378 init/main.c:1395 init/main.c:1414 init/main.c:1634) 
+> [    2.622394] kernel_init (init/main.c:1526) 
+> [    2.622531] ret_from_fork (arch/arm64/kernel/entry.S:864) 
+> [ 2.622692] Code: 910003fd a90153f3 aa0003f3 f9414c00 (f9400801)
+> All code
+> ========
+>    0:*	fd                   	std    		<-- trapping instruction
+>    1:	03 00                	add    (%rax),%eax
+>    3:	91                   	xchg   %eax,%ecx
+>    4:	f3 53                	repz push %rbx
+>    6:	01 a9 f3 03 00 aa    	add    %ebp,-0x55fffc0d(%rcx)
+>    c:	00 4c 41 f9          	add    %cl,-0x7(%rcx,%rax,2)
+>   10:	01 08                	add    %ecx,(%rax)
+>   12:	40 f9                	rex stc
 
-Indeed. I should have checked if there was an extension for this
-first. It crossed my mind that we should only be enabling features
-when the extensions are present, but looking at the privileged manual
-isn't sufficient to learn about the Svadu extension. I should have
-checked https://wiki.riscv.org/display/HOME/Specification+Status
-
-Anyway, I retract my r-b and agree with Anup.
+Could you please fix your scripts so that they report something that
+matches the tested architecture? I like x86 asm as much as the next
+guy, but this is an arm64 crash... :-/
 
 Thanks,
-drew
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
