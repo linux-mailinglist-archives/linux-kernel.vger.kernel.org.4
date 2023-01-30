@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A967681668
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069D7681665
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237516AbjA3QaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S236319AbjA3QaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:30:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237479AbjA3QaL (ORCPT
+        with ESMTP id S235983AbjA3Q35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:30:11 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D20E37568
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:30:09 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id m199so14718027ybm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:30:09 -0800 (PST)
+        Mon, 30 Jan 2023 11:29:57 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8037A3EC46
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:29:53 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id e10so7988902pgc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:29:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TPFC8cMkklXYROXSktfu+SUe+7hNbiwoBvUWNNZQCno=;
-        b=DRdqm1G7sz3+3jrt8fpDzB2z7HSSV6gtQFBIYiP27otecjCpAmCJ/txHXrv9KVYa3x
-         qVj0/ioZFHZGG0RhY2RjIU28alJdx8PK+cAYA1NUX2cyWAbaK7ulvOeyxepPdGoeQ82O
-         dRXQmKtn/U1k9bpYrXfzqNOYAV2R6Wb7CPrHLhqEU/pau7bAEhEx0vcfQjLOa8bbe83l
-         LcLbDvELQwmwyhT1qWefL4Ckg+4Y9Eg3x50x6A5AqDYk3uEkwwNxPvIUhQdeGvcWsYHm
-         5lBZqjmgpLBFt3p0go1gf+N/n4spXoV+piyg05OZslsUTAb1Hu9ExSw4CG4zK+riUDDG
-         w7fA==
+        bh=DCJsC41WTA2Nb50A59T+Svhhje166vY6Y2FIvFXfkhQ=;
+        b=omWAmCYOFTjlyeKuVcOLF/g9MigvZFVMIfHMF7gww41fzEkp0D8jt95LUNIypO7+ou
+         pjhptiRYrBrAsaR8Xvf+KithypDPLb923bOqPte6b2b82ZIuocElMx1v22pKEx7GwAa0
+         BqiKJLfJoe+o2pJUi8FuIMphYk1ny8i0A85RmTCYwZ64djbH73TER2Zqu6bmTHwg5QqB
+         IMSzmQ5TO1TGnk9ZP39z6WK9hqqctqjOsxYslCGtTC8IDNldGwIm0UNFkXPMRPmJovQt
+         LHRVZB1ENz73f87E3JXJTg1Q61v1CgaAOG2VLe+PFaVfG8zgaquuFftZntfwjYNW7szc
+         laow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TPFC8cMkklXYROXSktfu+SUe+7hNbiwoBvUWNNZQCno=;
-        b=nx+xMF/s7UJ5bGNcATsVcdUTrpRZB7nztN1NkM7omPEISLj1JzcBDDpHT1/ewMF4Ar
-         /SxX1QqH4RqbWQ5NguqZZXH0PFun33SxZ4ozdtvvdLgflMY5wxfHCmTxHpqcB3hTtzQk
-         dZm2dB09OYJjP+t8dOOkgqmo15z9S3QUUHfXqqvKTy8cnBe2vHaiu8d9Cwv7mwDNmsPH
-         x8eOAoe45CVfM7GljQoiAXENrTm7+ofE+I70mJ9d0UoWmSyHJwiw3ivz8UVD6XeihgQ2
-         3OFEI7ssEi83Q07Jfl1+E31bkoZ2X6IzVm3XCl/q0eFBHzObTzJ0+Yc7nq/RycdzBOU3
-         pFAg==
-X-Gm-Message-State: AFqh2krKCoHciyhesSjmUBlBQ3f6+MQNji5CsxsThEaRW6/LeapduYYf
-        xq/Wx+GOQAVvIA1cWkxAUs7a6W/hyvLN/5UPOr/rtA==
-X-Google-Smtp-Source: AMrXdXtJPRSD2nJpeETSjyTWb9N9nQlXe9LDLFV+Yj2ibrJyK6JgNXl7Kct1hYSFYMK2S6UcEpqYAjYsGida7vX8NDA=
-X-Received: by 2002:a25:84ce:0:b0:7b7:c7ed:eee9 with SMTP id
- x14-20020a2584ce000000b007b7c7edeee9mr4700617ybm.334.1675096208397; Mon, 30
- Jan 2023 08:30:08 -0800 (PST)
+        bh=DCJsC41WTA2Nb50A59T+Svhhje166vY6Y2FIvFXfkhQ=;
+        b=44+kM9BbBs10CKGvC0J7elncqY/W4CQAyVZczYhcnevHHWHBsCNGgozbZRZV3gwj+J
+         JCJeJszaNbQMB3P0L6QgW+7V7HJHl+flgW21yExnrTGYPvtyXQuI9xuJuE+2kGrilBrN
+         SAM4Q48iaH61Oc5vb2yDSylx5AxKyarsyhiVftOItVUk+Ukg7ir3BiIoohLdEcM/K9Ld
+         c2HkeLiKOliaSuBYkibFGjpHuidJfFKm86g41jrAWQH7jw9vk3yOxGPvTrcnOMeBFS3c
+         qzJ0ZI6MWSlPBn2AObCujmYTiv3N5iR3Zwq1MnVBQLUiwOz0TVbj8nedeCbo6D0V3PzO
+         qhZA==
+X-Gm-Message-State: AO0yUKWuXJhCPiRVtaj5/7mQVZvqMU8/9RcZSnhiYF7wuLjKOcH9uNis
+        WK31GKURUAhvZ2qvR/JL0kEq/YDV48dTiaCfHZq7d1f6hMU=
+X-Google-Smtp-Source: AK7set+go3Xqpm0FoM/LSmfC/xJ8FAfFE40vdewv1suyrUoGUHZYEderoGE5WRdJvXORuGIbvwujwFT8yKJDHYvW4vw=
+X-Received: by 2002:a62:830d:0:b0:592:7c9a:1236 with SMTP id
+ h13-20020a62830d000000b005927c9a1236mr2110205pfe.26.1675096192769; Mon, 30
+ Jan 2023 08:29:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
- <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
- <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
- <Y9e9S3ENl0oszAH/@qwirkle> <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
- <Y9fT+LABhW+/3Nal@qwirkle> <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
- <Y9ftL5c4klThCi9Q@qwirkle> <Y9fu7TR5VC33j+EP@qwirkle>
-In-Reply-To: <Y9fu7TR5VC33j+EP@qwirkle>
-From:   Willem de Bruijn <willemb@google.com>
-Date:   Mon, 30 Jan 2023 11:29:31 -0500
-Message-ID: <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
- back-off retries
-To:     Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230130130739.563628-1-arnd@kernel.org>
+In-Reply-To: <20230130130739.563628-1-arnd@kernel.org>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Mon, 30 Jan 2023 08:29:41 -0800
+Message-ID: <CAKgT0Ufh7bGh360GUgbSCwysmd=L2B_V2X8SGtF94CzAqCA9_Q@mail.gmail.com>
+Subject: Re: [PATCH] mm: extend max struct page size for kmsan
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Pavel Tatashin <pavel.tatashin@microsoft.com>,
+        Alexander Potapenko <glider@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Hugh Dickins <hughd@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,118 +79,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
-<andrei.gherzan@canonical.com> wrote:
+On Mon, Jan 30, 2023 at 5:07 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> On 23/01/30 04:15PM, Andrei Gherzan wrote:
-> > On 23/01/30 11:03AM, Willem de Bruijn wrote:
-> > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
-> > > <andrei.gherzan@canonical.com> wrote:
-> > > >
-> > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
-> > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
-> > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > >
-> > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
-> > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
-> > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
-> > > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > > >
-> > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
-> > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-> > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
-> > > > > > > > > accept socket connections. This racing bug could fail the test with at
-> > > > > > > > > least one of the following:
-> > > > > > > > >
-> > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
-> > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
-> > > > > > > > > ./udpgso_bench_tx: write: Connection refused
-> > > > > > > > >
-> > > > > > > > > This change addresses this by adding routines that retry the socket
-> > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
-> > > > > > > > >
-> > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-> > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > > > > >
-> > > > > > > > Synchronizing the two processes is indeed tricky.
-> > > > > > > >
-> > > > > > > > Perhaps more robust is opening an initial TCP connection, with
-> > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
-> > > > > > > > go.
-> > > > > > >
-> > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
-> > > > > > > socket to show up in 'ss' output before firing-up the client - quite
-> > > > > > > alike what mptcp self-tests are doing.
-> > > > > >
-> > > > > > I like this idea. I have tested it and it works as expected with the
-> > > > > > exeception of:
-> > > > > >
-> > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
-> > > > > >
-> > > > > > Any ideas on how to handle this? I could retry and that works.
-> > > > >
-> > > > > This happens (also) without the zerocopy flag, right? That
-> > > > >
-> > > > > It might mean reaching the sndbuf limit, which can be adjusted with
-> > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
-> > > > > expect this test to bump up against that limit.
-> > > > >
-> > > > > A few zerocopy specific reasons are captured in
-> > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
-> > > >
-> > > > I have dug a bit more into this, and it does look like your hint was in
-> > > > the right direction. The fails I'm seeing are only with the zerocopy
-> > > > flag.
-> > > >
-> > > > From the reasons (doc) above I can only assume optmem limit as I've
-> > > > reproduced it with unlimited locked pages and the fails are transient.
-> > > > That leaves optmem limit. Bumping the value I have by default (20480) to
-> > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
-> > > > tests started to fail with something like:
-> > > >
-> > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
-> > > > expected    773707 received
-> > >
-> > > More zerocopy completions than number of sends. I have not seen this before.
-> > >
-> > > The completions are ranges of IDs, one per send call for datagram sockets.
-> > >
-> > > Even with segmentation offload, the counter increases per call, not per segment.
-> > >
-> > > Do you experience this without any other changes to udpgso_bench_tx.c.
-> > > Or are there perhaps additional sendmsg calls somewhere (during
-> > > initial sync) that are not accounted to num_sends?
-> >
-> > Indeed, that looks off. No, I have run into this without any changes in
-> > the tests (besides the retry routine in the shell script that waits for
-> > rx to come up). Also, as a data point.
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Actually wait. I don't think that is the case here. "expected" is the
-> number of sends. In this case we sent 1076 more messages than
-> completions. Am I missing something obvious?
-
-Oh indeed.
-
-Receiving fewer completions than transmission is more likely.
-
-This should be the result of datagrams still being somewhere in the
-system. In a qdisc, or waiting for the network interface to return a
-completion notification, say.
-
-Does this remain if adding a longer wait before the final flush_errqueue?
-
-Or, really, the right fix is to keep polling there until the two are
-equal, up to some timeout. Currently flush_errqueue calls poll only
-once.
-
-
+> After x86 has enabled support for KMSAN, it has become possible
+> to have larger 'struct page' than was expected when commit
+> 5470dea49f53 ("mm: use mm_zero_struct_page from SPARC on all 64b
+> architectures") was merged:
 >
-> >
-> > As an additional data point, this was only seen on the IPv6 tests. I've
-> > never been able to replicate it on the IPv4 run.
+> include/linux/mm.h:156:10: warning: no case matching constant switch condition '96'
+>         switch (sizeof(struct page)) {
 >
-> I was also fast to send this but it is not correct. I managed to
-> reproduce it on both IPv4 and IPv6.
+> Extend the maximum accordingly.
 >
-> --
-> Andrei Gherzan
+> Fixes: 5470dea49f53 ("mm: use mm_zero_struct_page from SPARC on all 64b architectures")
+> Fixes: 4ca8cc8d1bbe ("x86: kmsan: enable KMSAN builds for x86")
+
+Rather than saying this fixes the code that enables the config flags I
+might be more comfortable with listing the commit that added the two
+pointers to the struct:
+Fixes: f80be4571b19 ("kmsan: add KMSAN runtime core")
+
+It will make it easier to identify where the lines where added that
+actually increased the size of the page struct.
+
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> This seems to show up extremely rarely in randconfig builds, but
+> enough to trigger my build machine.
+>
+> I saw a related discussion at [1] about raising MAX_STRUCT_PAGE_SIZE,
+> but as I understand it, that needs to be addressed separately.
+>
+> [1] https://lore.kernel.org/lkml/20220701142310.2188015-11-glider@google.com/
+> ---
+>  include/linux/mm.h | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index b73ba2e5cfd2..aa39d5ddace1 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -137,7 +137,7 @@ extern int mmap_rnd_compat_bits __read_mostly;
+>   * define their own version of this macro in <asm/pgtable.h>
+>   */
+>  #if BITS_PER_LONG == 64
+> -/* This function must be updated when the size of struct page grows above 80
+> +/* This function must be updated when the size of struct page grows above 96
+>   * or reduces below 56. The idea that compiler optimizes out switch()
+>   * statement, and only leaves move/store instructions. Also the compiler can
+>   * combine write statements if they are both assignments and can be reordered,
+> @@ -148,12 +148,18 @@ static inline void __mm_zero_struct_page(struct page *page)
+>  {
+>         unsigned long *_pp = (void *)page;
+>
+> -        /* Check that struct page is either 56, 64, 72, or 80 bytes */
+> +        /* Check that struct page is either 56, 64, 72, 80, 88 or 96 bytes */
+>         BUILD_BUG_ON(sizeof(struct page) & 7);
+>         BUILD_BUG_ON(sizeof(struct page) < 56);
+> -       BUILD_BUG_ON(sizeof(struct page) > 80);
+> +       BUILD_BUG_ON(sizeof(struct page) > 96);
+>
+>         switch (sizeof(struct page)) {
+> +       case 96:
+> +               _pp[11] = 0;
+> +               fallthrough;
+> +       case 88:
+> +               _pp[10] = 0;
+> +               fallthrough;
+>         case 80:
+>                 _pp[9] = 0;
+>                 fallthrough;
+
+Otherwise the code itself looks good to me.
+
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
