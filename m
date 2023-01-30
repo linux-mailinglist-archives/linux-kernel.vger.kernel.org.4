@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D232681B79
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93901681CDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjA3U2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S230149AbjA3Vh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:37:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjA3U16 (ORCPT
+        with ESMTP id S229578AbjA3VhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:27:58 -0500
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6214ACC1E;
-        Mon, 30 Jan 2023 12:27:55 -0800 (PST)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C07CE1F526;
-        Mon, 30 Jan 2023 21:27:52 +0100 (CET)
-Date:   Mon, 30 Jan 2023 21:27:51 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 09/14] drm/msm/dsi: export struct msm_compression_info
- to dpu encoder
-Message-ID: <20230130202751.jnodgfo252pmlusq@SoMainline.org>
-References: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
- <1674498274-6010-10-git-send-email-quic_khsieh@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1674498274-6010-10-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 30 Jan 2023 16:37:25 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFCD35B0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:37:24 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UL3rF1010564;
+        Mon, 30 Jan 2023 21:37:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2022-7-12;
+ bh=0s4y1MDssHKhpvnOleVZPgAoMVzvrH7+LhP7fjbqZEo=;
+ b=ZopwcV24m1pgerC5QsSEzz9rW2SOOsfVG7xb1+hyeisgZVzBPUqmj570OegT0luA8yyu
+ IaSNGU+n3UfI75RTuIcGn7yK7MSxvgQazoiZcYNnqggNa06EAs+7jrVHGxLzC2O7T8Sd
+ Jr18c/u6q3XDP5RiAoB/7/vjaoapuZEG6QlS6NJ7OYUVin80anVrYpkxc+fVgTI8c3gP
+ YWLn5YMPQBIW2HBRJLeMhfJ/JT930bo/J8tniEzU2FsIdo5PJ+UcPsXxgdJgm1EofT2W
+ 6Asq+m0Ij2ziYsy72f8dCRAzO0JNtjjrbs+eKqIUCu5aww/w9ZMXTQ6LJRKwIgN86f8B AA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ncvrjv1vw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 Jan 2023 21:37:19 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30UK8hpv031798;
+        Mon, 30 Jan 2023 21:37:19 GMT
+Received: from ban25x6uut24.us.oracle.com (ban25x6uut24.us.oracle.com [10.153.73.24])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3nct54qa7f-1;
+        Mon, 30 Jan 2023 21:37:18 +0000
+From:   Si-Wei Liu <si-wei.liu@oracle.com>
+To:     mst@redhat.com, jasowang@redhat.com, parav@nvidia.com,
+        elic@nvidia.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] features provisioning fixes and mlx5_vdpa support
+Date:   Mon, 30 Jan 2023 12:30:37 -0800
+Message-Id: <1675110643-28143-1-git-send-email-si-wei.liu@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_17,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 malwarescore=0
+ spamscore=0 phishscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301300200
+X-Proofpoint-GUID: LpeTCHa7klMpYoBGyUBxgmOJTK6HsRdn
+X-Proofpoint-ORIG-GUID: LpeTCHa7klMpYoBGyUBxgmOJTK6HsRdn
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-23 10:24:29, Kuogee Hsieh wrote:
-<snip>
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index d612419..70a74ed 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-<snip>
-> @@ -892,6 +894,10 @@ static void dpu_kms_mdp_snapshot(struct msm_disp_state *disp_state, struct msm_k
->  
->  	pm_runtime_get_sync(&dpu_kms->pdev->dev);
->  
-> +	for (i = 0; i < cat->dsc_count; i++)
-> +		msm_disp_snapshot_add_block(disp_state, cat->dsc[i].len,
-> +				dpu_kms->mmio + cat->dsc[i].base, "dsc_%d", i);
-> +
+This patchset is pre-requisite to export and provision device
+config attributes and features for vdpa live migration, in a way
+backward and forward compatibility can be retained. The follow up
+work [1] will need to be built around the new feature provisioning
+uAPI, with which it's easier to formalize migration compatibility
+support at the driver level.
 
-Note that we've landed snapshotting of the DSC block in [1] because we
-need it now, and - as discussed elsewhere - is perfect material to be
-submitted in a standalone, appropriately described/titled patch (fine to
-be part of a series, as long as that patch comprises this single diff).
+Thanks,
+-Siwei
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=a7efe60e36b9c0e966d7f82ac90a89b591d984e9
+[1] [PATCH v3 0/4] vDPA: initial config export via "vdpa dev show"
+https://lore.kernel.org/virtualization/1666392237-4042-1-git-send-email-si-wei.liu@oracle.com/
 
-Keep in mind that it was added at the bottom of dpu_kms_mdp_snapshot()
-instead of the top, so git might not clean it up or mark it as conflict
-during a rebase; don't forget to drop it from v2 :)
+---
 
->  	/* dump CTL sub-blocks HW regs info */
->  	for (i = 0; i < cat->ctl_count; i++)
->  		msm_disp_snapshot_add_block(disp_state, cat->ctl[i].len,
+Si-Wei Liu (6):
+  vdpa: fix improper error message when adding vdpa dev
+  vdpa: conditionally read STATUS in config space
+  vdpa: validate provisioned device features against specified attribute
+  virtio: VIRTIO_DEVICE_F_MASK for all per-device features
+  vdpa: validate device feature provisioning against supported class
+  vdpa/mlx5: support device features provisioning
 
-<snip>
+ drivers/vdpa/mlx5/net/mlx5_vnet.c  | 72 ++++++++++++++++++++++------
+ drivers/vdpa/vdpa.c                | 98 ++++++++++++++++++++++++++++++++------
+ include/uapi/linux/virtio_config.h |  8 ++++
+ 3 files changed, 149 insertions(+), 29 deletions(-)
 
-- Marijn
+-- 
+1.8.3.1
+
