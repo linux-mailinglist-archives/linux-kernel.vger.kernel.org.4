@@ -2,232 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56BA680E4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A248680E52
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236975AbjA3M6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S236048AbjA3M7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:59:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236938AbjA3M6t (ORCPT
+        with ESMTP id S236987AbjA3M7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:58:49 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DE934304;
-        Mon, 30 Jan 2023 04:58:18 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x7so7615732edr.0;
-        Mon, 30 Jan 2023 04:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jSgexImJFvbllsb2hR3ybobUUI/wwigUcBhRfKkOfog=;
-        b=WnI3TvSl212FavxWOkWMzASf/zIj1UOOD3xLh8tKgY0jr9lubQgLZHuu+NelEDy+T3
-         wJLtc2WTm1v87TuE1IhPmaV403HE4Tkx0rN5In1UMSwlwgTMuRLYoR6E2lTnIykggiUw
-         ezlwKOg2+r3YPwr2GfXiCyfkDYrvpjiidG4yhqBVXRJ6Gp1YvzuyQ34zt8mib6A8T0r6
-         GhD3B05WMRm7Eg/SgH+HSle7CE/z/IvqLQCm61NkKxrvLfu6x0kcyyW1HHkBiMUh6lbx
-         bJ19TrC9eh0mOqj+hudtHkIV7HHSxlj9a2i4H8atMIuWaJJYiFFRM841mgKZM4MNO+dP
-         GA3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jSgexImJFvbllsb2hR3ybobUUI/wwigUcBhRfKkOfog=;
-        b=R18PCTvc32WSeJvqMivLWud70i6O0zqF9znbyASGRjxZw70fw/IZfLpQ3G5emxuuhm
-         F9nKY7DbvJITdKUCGzbZNUEl94Jr2TGfHKxF3B9JhHWWz1/yKmBaVf5h69nOeSkTsxGx
-         VkvaO3fB3DF1CyubmqOmrbhOuc4szDOzJX3LSB009vbd9BVGUxklwyoDXEf47BKzz9XG
-         /JPT0qzqsPRID/g7AgrNT5sWHkyWCLyWaPPoHowRktUpsWh5FkZv7Q5sypGRizID3lUN
-         /H2R3sWb6p0hf+pb3lKnaYAMWI5LVQ2B3AmPd4ytP3E3gjyq/GXUqESSAQq/+6nFi5NP
-         olcg==
-X-Gm-Message-State: AO0yUKWs78SrfDHgOX2h6+ny5uf3JSwWBTSTSsvY0ZBBFVBl4Zyimm4v
-        b/NwwGpfifDklk31pZtolKI=
-X-Google-Smtp-Source: AK7set9JkJt7Zz6KHjv7o/kgAl8hsm7AuCNxAD+p1Qxe5KFXyl5rE/TM1/tzqi2oSQTtcNqdA8YEwQ==
-X-Received: by 2002:a05:6402:4003:b0:4a2:2fa:ead4 with SMTP id d3-20020a056402400300b004a202faead4mr14839532eda.17.1675083496377;
-        Mon, 30 Jan 2023 04:58:16 -0800 (PST)
-Received: from skbuf ([188.26.57.205])
-        by smtp.gmail.com with ESMTPSA id c20-20020aa7df14000000b00499b3d09bd2sm2351700edy.91.2023.01.30.04.58.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 04:58:15 -0800 (PST)
-Date:   Mon, 30 Jan 2023 14:58:13 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: Re: [BUG] vlan-aware bridge breaks vlan on another port on same gmac
-Message-ID: <20230130125813.asx5qtm6ttuwdobo@skbuf>
-References: <trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36>
- <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
- <trinity-b0df6ff8-cceb-4aa5-a26f-41bc04dc289c-1674303103108@3c-app-gmx-bap60>
- <20230121122223.3kfcwxqtqm3b6po5@skbuf>
- <trinity-7c2af652-d3f8-4086-ba12-85cd18cd6a1a-1674304362789@3c-app-gmx-bap60>
- <20230121133549.vibz2infg5jwupdc@skbuf>
- <trinity-cbf3ad23-15c0-4c77-828b-94c76c1785a1-1674310370120@3c-app-gmx-bap60>
+        Mon, 30 Jan 2023 07:59:35 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2047.outbound.protection.outlook.com [40.107.102.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2A038B57;
+        Mon, 30 Jan 2023 04:58:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QcHXOkQzSL+xYONxlDm9puAMo17w4EDKUNYnYp7PEvxgPJlucQAq8j4+6wnUusNHLP9H3xeoHV9dSK9pFFBd2lwaUKUP+cUxjUkPH5HRu6uDIFGbm3pgF7cfklvKs20TVBLFK3mjRMNbgdwnWXc1Ymr9JaAQwNxcGDqQ4X9439y1JH4cEjxIJthTGuUOqkMOwqZlQ0pg6gE2hXphrO7JB0ffwreHbJZP0Ym/Cspe37w5MptP2ZCXkamvOnyVDCWtryJVaoS/Yattu53OBFzluHSJaxnHl7R3WD0x6rBAYJ/GwjRYB8r3za8ro3QOvKqiFTyvH7rLnsk7O473PoS8yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ImxAlzuQ4sUZpeX60QiCXG3d0rOR+4ISnYFb4s0J1FU=;
+ b=VSE/OU2VjaaA5xwywH1GExT/Gg0h2fwB2ugfTvYd8CSY5jdJHy/cvZcw0LqRfxUuZLKlkUGZDqPxLhyw4oulDdwr0oar0ocdVpkmJ767GRkgO8i2MmQdfYVZwixbgfzLXwUTrk6uPe5Oz+68uXW6slLa6yM1Wm6sGf7iJQfCeMrzBhpRhVl5LXlDI+RbZHSGTyt7FeCFfbJBxzhwKV1aXJ6oEiGUsv4uZ8iEzRezGC1JP/wO8YTmmoeqWBU/DceeA2g5mzviGFkCtWS9UtTfh4q4Jt09QnlcVug8cUhIOELGB9ZQ/VgyXWqwHZ3DjOSAsICb2b8HmROak5qPrO8noQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ImxAlzuQ4sUZpeX60QiCXG3d0rOR+4ISnYFb4s0J1FU=;
+ b=qxtHOkAOtZYUwgCaXXUkU8gK3/D1s04QA15RsNwISLVck6Hmb2NfAtzHmCm+SLxj6U/crDrXaaqx33MDuBSNpA2izi29whCIAtDI6kcVwgUfARkPk7qMKUR1RAdifAJHmW2/B0L0dakSrPOY6XkfSpViu+MhaK+JZGU4kGxz8y8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SN7PR12MB7156.namprd12.prod.outlook.com (2603:10b6:806:2a7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Mon, 30 Jan
+ 2023 12:58:35 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::2e4f:4041:28be:ba7a%6]) with mapi id 15.20.6043.030; Mon, 30 Jan 2023
+ 12:58:35 +0000
+Message-ID: <5e415baf-94d9-2723-3770-9a35f9fa6278@amd.com>
+Date:   Mon, 30 Jan 2023 13:58:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi interfaces
+Content-Language: en-US
+To:     David Airlie <airlied@redhat.com>
+Cc:     Danilo Krummrich <dakr@redhat.com>,
+        Matthew Brost <matthew.brost@intel.com>, daniel@ffwll.ch,
+        bskeggs@redhat.com, jason@jlekstrand.net, tzimmermann@suse.de,
+        mripard@kernel.org, corbet@lwn.net, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org
+References: <20230118061256.2689-1-dakr@redhat.com>
+ <20230118061256.2689-6-dakr@redhat.com>
+ <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
+ <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
+ <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com>
+ <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
+ <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
+ <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
+ <49ac3f95-6eda-9009-4b28-0167213301b2@amd.com>
+ <CAMwc25oGap_hEg5AquM_L2eH42PcG=pM3KPS6HNTNj-SzeHu+g@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAMwc25oGap_hEg5AquM_L2eH42PcG=pM3KPS6HNTNj-SzeHu+g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0014.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a::24) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-cbf3ad23-15c0-4c77-828b-94c76c1785a1-1674310370120@3c-app-gmx-bap60>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SN7PR12MB7156:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb9d9079-9e2b-449b-df7c-08db02c1b276
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mALIb9AIdMTPzbNclxCYXXM1+y1pFiz5y2l9BeTkBAGMSo+13Z4lXs/mU94nh9DFBYZKL5Z+P/tEulVHbgmh2TzLZIPMbBP+EkAe5TlyivW8gIsEYBymPqKc0A7MiFtEzP4b/8veqxscr1etVgvrLNEDxXPOJ4BgkLZaeyjyt6SerDCrUf+55T5W9AAtIfc7hHeNWHvj9018r5UGr9IqxthLtNjmsHaVp7sPEvshlzRLLmjkprCvSv4Lo2/7HdaTYumpoKtKGDi0Xx6UIcMJbBa27RzRYJ7MFCUlREFvGabevIrbUN9S6lbgz18qrrXOHejA8hYYP4zJF7VO1PoosB6VvfEqSvv1BmZOQZj4GczJIsaxy8L16fQiAhtoi7lV9hUOgoYmvHwW/xebMXYcYDkyj7t1164VUKaWeC+cH1FTvvv3VTRveqtE4NQhT6OCcXH/jcT1pJwZDA31yCfPA9FVXJHhQV1Ym9pWnMUb/ZZP/lbUs1eK3r40NZjYmXzhbknbWXwuxWXWkJ/He4CYfgIOCG0g/qJwsCsA1AJ48yUirhfwFEtGIoqVMYIbakqW6x0ZkUUsT3T8c1CFEg//y/BRCv3gv4Y70Lc3p539HAbC57Z0mZ3UNfFrnVdr3VNRTjFXBzNp7r+lFuByN6Vu5LXvo9Gx6hN7mNvU4mUY4GJgvj/4mCAnYZCL71Ej8ltCtZaqVp/+J1fw5T0rF8oHAFWglij9q+OEzR7gUknxq6s=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(451199018)(38100700002)(8936002)(66556008)(8676002)(6916009)(4326008)(66946007)(66476007)(36756003)(41300700001)(86362001)(2906002)(31696002)(5660300002)(7416002)(54906003)(83380400001)(316002)(6486002)(478600001)(186003)(31686004)(6506007)(6666004)(6512007)(26005)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eWNGZFFVbE5MUmsrc1lPWVlZaEl3dVVoWmRNamdDL3Z6KzdLVWJXV3h4QXEv?=
+ =?utf-8?B?ZGpGMWRtNEMvMHAxL0p4TzJFQ21Db1BpTWJRajJ5QUNNMkZGRU5ibGlhQ3I2?=
+ =?utf-8?B?SFNkdGk3R3VFZld5SHROSk8zQyt0ZHhVbjdkdGVIRzdDZ1BQbFNCSDRCbnEy?=
+ =?utf-8?B?NXVCNFRGTDJreVpjQWl5TW85bUE0REpYdWJ5OG5qOGljNlpVK0RxUFVuckRJ?=
+ =?utf-8?B?TG9OaGphWmFqSkt5Q2RYSXo3Sy9qbCtRRml6Q1lqZzdaRDNtVEtXNTlNckYy?=
+ =?utf-8?B?ay9tN3c4TEtuYVlzcXpNRURTS29JQmMyZlNhQy9yMUkxTGdJRzUrSEpmVmJ4?=
+ =?utf-8?B?b1ovTmhIdzhzNVBlVWFySWhGM0FENnluOXMrVUxRYUoyN3JaaXN2ampmbENQ?=
+ =?utf-8?B?U1ZiRUtMd1duNWpodVF4K3lQdVNvbzc0UldYV3hrVDBSZjdmYldLRW8vejlk?=
+ =?utf-8?B?VzhhRlVtcks0SlRmYmdpQXVSdmUyUDdPd2g0aldINHZpclByTWVkcFlUd2FY?=
+ =?utf-8?B?ZmZZQjd3K3BZdmZ4YnFRR1Ftb2tOcTdtLzh5TEt5S0EzZHRUUzdaSEJFdnVF?=
+ =?utf-8?B?OWs0UTlibDBYSFhTQW8rajlDekp1NnV1ZG1rU3Q4d0FEYUJzU3RneHE1emVs?=
+ =?utf-8?B?VUZSRVd6djNxdDZiQWVFOHB1MC9sMStzQ2xSNWFVYVlxOU1GWVRtSHZNaFhF?=
+ =?utf-8?B?SGI3TXpoczAycGFoYXNXdmUycktUcWN4c3FhdGJkQ0Zib0UwM0FGaU9BWnps?=
+ =?utf-8?B?V204bmJYWUJsZHpGOGhjcGdNUzZsNEhlRWJxTEN4WStweG5YaCtCQ0N6SjVV?=
+ =?utf-8?B?QkFhZS9hVDRweEJvS3h2OFBsSnhFRTd3OG5WUG5VYncxZjYva0tTeUxHenI4?=
+ =?utf-8?B?MTZkczlzbm56UTU1TUwwb0pDajdPVGJDbzFPQkZKOEM1azVKTWZFOWFOekdR?=
+ =?utf-8?B?MlREWUVHcEZESmRBVmZoZ0krTzFsMFk4anV3YU9rbWJ1K1AvZzdMbTZDWDZm?=
+ =?utf-8?B?ZjZqQWx0QXYwb1hpNVlGaHFqZTZVT2tSV3M4WDY0VFR6UzBOenQ3MEwzaW5p?=
+ =?utf-8?B?OHJ0ekVJa2VlWTcycElscUpta3ZzUERHaVVJMU5UdlBtTVdJYmVLa2I5V09M?=
+ =?utf-8?B?TEZ6YWFlZDE5SjZUVElFbVE2QjAyQk5LM25hWTBIMFFXaWxENWZsOFlPQXFu?=
+ =?utf-8?B?TkIzS3VJYjZvOFZJUEVTbWdWa1V0d2dsa2hUa0Z2ZGtabzVyUE1ZdE1MR1lz?=
+ =?utf-8?B?YnYxV1ZyNnVFL0hvQldoRitKYVdVMCtSTXdiQ29uRzZlRHVlQ0pzWksxN25m?=
+ =?utf-8?B?NlpVRGRzV1NyZzFFZThKQWIyaGJDL2FzWU15bitJODdkT0VJWjFrQy9UK3M2?=
+ =?utf-8?B?U0RCR3JqOUozQ1JyN1ZLK0hGNjZJdWdQKzZ0bkdHQWtZb1B6VytJSFUwRXNV?=
+ =?utf-8?B?d3hndjVTZXl2RVhid3o3Tm5aMVBDTUdwYlhhYmlWak11a2llams1cEdMeC9D?=
+ =?utf-8?B?Yzd2TU9PMzk2UzYzV3h4Y1hxdjFOWjFmSVltd01CMDZtUS9OUVd1REN2b1lG?=
+ =?utf-8?B?UzY1VXJObldzazNSM05hQzc4aDN5YzF3WUNjSk1STzlTS0ZoTnBaZVk1Ryto?=
+ =?utf-8?B?YjVYR1pERUM2REw2K1IxN3NBVkJvL1JJakNnY1lvNUwrRk8yUmtCTWhjODVI?=
+ =?utf-8?B?aFFvbnRERWErWVdqMGRFOU9LUy9RUStnTUtHTndmZUVqdG1wNnBDcWFIT3cv?=
+ =?utf-8?B?SzBkUERVZEJLVlJXNEV0SnlnTG0wa2xtNkJSUUU5clZMeHk2MDZmNW8yeElO?=
+ =?utf-8?B?WEp1U2hOZEtXdndINUR3aUlKUmNSMTFTcFM0b1hSN2hmTlRwOW1jMSt1SlJG?=
+ =?utf-8?B?VzFJUitXYWFmMittSHRaYVF3Wm1MUGp6bFQzMG5sMVVhYTl1MnZIa1BuRWVz?=
+ =?utf-8?B?NWNKbGVFSjZHSEMvanFYYkpsdEtTYTNSZVRXV25pbzZGeHgxM0JYdmtRbEVH?=
+ =?utf-8?B?MXpyOXR1dVZBRjlZL3pVWGlJOGI4WFMwSmh2UnZoYW9mUWJxT3dGRFNqUHFF?=
+ =?utf-8?B?M2F3MWVZYmNVTEp5VFdlM0FubmhnQkxPYTZ1R3cwckM1NnpiZ1RoWUtGTVhy?=
+ =?utf-8?Q?ocDLiPnK9y8pRfyt5nGjjc08E?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb9d9079-9e2b-449b-df7c-08db02c1b276
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 12:58:35.1166
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IAIsQ9NKq8gCQBOKhgz4sT+k+o6TJ9kmF4mvJWu7ofpp2j+ru4AnGZbromQLOcCk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7156
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+Am 27.01.23 um 21:25 schrieb David Airlie:
+> [SNIP]
+>> What we have inside the kernel is the information what happens if an
+>> address X is accessed. On AMD HW this can be:
+>>
+>> 1. Route to the PCIe bus because the mapped BO is stored in system memory.
+>> 2. Route to the internal MC because the mapped BO is stored in local memory.
+>> 3. Route to other GPUs in the same hive.
+>> 4. Route to some doorbell to kick of other work.
+>> ...
+>> x. Ignore write, return 0 on reads (this is what is used for sparse
+>> mappings).
+>> x+1. Trigger a recoverable page fault. This is used for things like SVA.
+>> x+2. Trigger a non-recoverable page fault. This is used for things like
+>> unmapped regions where access is illegal.
+>>
+>> All this is plus some hw specific caching flags.
+>>
+>> When Vulkan allocates a sparse VKBuffer what should happen is the following:
+>>
+>> 1. The Vulkan driver somehow figures out a VA region A..B for the
+>> buffer. This can be in userspace (libdrm_amdgpu) or kernel (drm_mm), but
+>> essentially is currently driver specific.
+> There are NO plans to have drm_mm do VA region management, VA region
+> management will be in userspace in Mesa. Can we just not bring that up again?
 
-On Sat, Jan 21, 2023 at 03:12:50PM +0100, Frank Wunderlich wrote:
-> Hi
-> 
-> > Gesendet: Samstag, 21. Januar 2023 um 14:35 Uhr
-> > Von: "Vladimir Oltean" <olteanv@gmail.com>
-> > An: "Frank Wunderlich" <frank-w@public-files.de>
-> > Cc: "Andrew Lunn" <andrew@lunn.ch>, "Florian Fainelli" <f.fainelli@gmail.com>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, "Landen Chao" <Landen.Chao@mediatek.com>, "Sean Wang" <sean.wang@mediatek.com>, "DENG Qingfang" <dqfext@gmail.com>, "Matthias Brugger" <matthias.bgg@gmail.com>, "Daniel Golle" <daniel@makrotopia.org>
-> > Betreff: Re: [BUG] vlan-aware bridge breaks vlan on another port on same gmac
-> >
-> > On Sat, Jan 21, 2023 at 01:32:42PM +0100, Frank Wunderlich wrote:
-> > > so first patch fixes the behaviour on bpi-r3 (mt7531)...but maybe mt7530 need the tagging on cpu-port
-> > >
-> > > > Can you try the second patch instead of the first one? Without digging
-> > > > deeply into mt7530 hardware docs, that's the best chance of making
-> > > > things work without changing how the hardware operates.
-> > >
-> > > second patch works for wan, but vlan on bridge is broken, no packets receiving my laptop (also no untagged ones).
-> >
-> > It's hard for me to understand how applying only patch "tag_mtk only
-> > combine VLAN tag with MTK tag is user port is VLAN aware" can produce
-> > the results you describe... For packets sent to port lan0, nothing
-> > should have been changed by that patch, because dsa_port_is_vlan_filtering(dp)
-> > should return true.
-> >
-> > If you can confirm there isn't any mistake in the testing procedure,
-> > I'll take a look later today at the hardware documentation and try to
-> > figure out why the CPU port is configured the way it is.
-> 
-> ok, booted again the kernel with first patch ("mt7530 don't make the CPU port a VLAN user port")
-> and yes lan0-vlan is broken...
-> seems i need to reboot after each lan/wan test to at least clean arp-cache.
-> 
-> but patch2 ("tag_mtk only combine VLAN tag with MTK tag is user port is VLAN aware") still not
-> works on lanbridge vlan (no packet received on target).
-> 
-> regards Frank
+If we are talking about Mesa drivers then yes that should work because 
+they can then implement all the hw specific quirks you need for VA 
+allocation. If the VA allocation should be hw independent then we have a 
+major problem here.
 
-Sorry for the delay and thanks again for testing.
+At least on AMD hw we have four different address spaces and even if you 
+know of hand from which one you want to allocate you need to share your 
+address space between Vulkan, VA-API and potentially even things like 
+ROCm/OpenCL.
 
-I simply didn't have time to sit down with the hardware documentation
-and (re)understand the concepts governing this switch.
+If we don't properly do that then the AMD user space tools for debugging 
+and profiling (RMV, UMR etc...) won't work any more.
 
-I now have the patch below which should have everything working. Would
-you mind testing it?
+> This is for GPU VA tracking not management if that makes it easier we
+> could rename it.
+>
+>> 2. The kernel gets a request to map the VA range A..B as sparse, meaning
+>> that it updates the page tables from A..B with the sparse setting.
+>>
+>> 3. User space asks kernel to map a couple of memory backings at location
+>> A+1, A+10, A+15 etc....
+> 3.5?
+>
+> Userspace asks the kernel to unmap A+1 so it can later map something
+> else in there?
+>
+> What happens in that case, with a set of queued binds, do you just do
+> a new sparse mapping for A+1, does userspace decide that?
 
-From 9110460832d99c3b3e86ffcda472a27a52cdf259 Mon Sep 17 00:00:00 2001
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-Date: Mon, 30 Jan 2023 14:31:17 +0200
-Subject: [PATCH] net: dsa: mt7530: don't change PVC_EG_TAG when CPU port
- becomes VLAN-aware
+Yes, exactly that. Essentially there are no unmap operation from the 
+kernel pov.
 
-Frank reports that in a mt7530 setup where some ports are standalone and
-some are in a VLAN-aware bridge, 8021q uppers of the standalone ports
-lose their VLAN tag on xmit, as seen by the link partner.
+You just tell the kernel what should happen when the hw tries to resolve 
+address X.
 
-This seems to occur because once the other ports join the VLAN-aware
-bridge, mt7530_port_vlan_filtering() also calls
-mt7530_port_set_vlan_aware(ds, cpu_dp->index), and this affects the way
-that the switch processes the traffic of the standalone port.
+This what can happen can potentially be resolve to some buffer memory, 
+ignored for sparse binding or generate a fault. This is stuff which is 
+most likely common to all drivers.
 
-Relevant is the PVC_EG_TAG bit. The MT7530 documentation says about it:
+But then at least on newer AMD hardware we also have things like raise a 
+debug trap on access, wait forever until a debugger tells you to 
+continue.....
 
-EG_TAG: Incoming Port Egress Tag VLAN Attribution
-0: disabled (system default)
-1: consistent (keep the original ingress tag attribute)
+It would be great if we could have the common stuff for a VA update 
+IOCTL common for all drivers, e.g. in/out fences, range description 
+(start, offset, end....), GEM handle in a standardized structure while 
+still be able to handle all that hw specific stuff as well.
 
-My interpretation is that this setting applies on the ingress port, and
-"disabled" is basically the normal behavior, where the egress tag format
-of the packet (tagged or untagged) is decided by the VLAN table
-(MT7530_VLAN_EGRESS_UNTAG or MT7530_VLAN_EGRESS_TAG).
+Christian.
 
-But there is also an option of overriding the system default behavior,
-and for the egress tagging format of packets to be decided not by the
-VLAN table, but simply by copying the ingress tag format (if ingress was
-tagged, egress is tagged; if ingress was untagged, egress is untagged;
-aka "consistent). This is useful in 2 scenarios:
-
-- VLAN-unaware bridge ports will always encounter a miss in the VLAN
-  table. They should forward a packet as-is, though. So we use
-  "consistent" there. See commit e045124e9399 ("net: dsa: mt7530: fix
-  tagged frames pass-through in VLAN-unaware mode").
-
-- Traffic injected from the CPU port. The operating system is in god
-  mode; if it wants a packet to exit as VLAN-tagged, it sends it as
-  VLAN-tagged. Otherwise it sends it as VLAN-untagged*.
-
-*This is true only if we don't consider the bridge TX forwarding offload
-feature, which mt7530 doesn't support.
-
-So for now, make the CPU port always stay in "consistent" mode to allow
-software VLANs to be forwarded to their egress ports with the VLAN tag
-intact, and not stripped.
-
-Link: https://lore.kernel.org/netdev/trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36/
-Fixes: e045124e9399 ("net: dsa: mt7530: fix tagged frames pass-through in VLAN-unaware mode")
-Reported-by: Frank Wunderlich <frank-w@public-files.de>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
- drivers/net/dsa/mt7530.c | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index 616b21c90d05..3a15015bc409 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -1302,14 +1302,26 @@ mt7530_port_set_vlan_aware(struct dsa_switch *ds, int port)
- 		if (!priv->ports[port].pvid)
- 			mt7530_rmw(priv, MT7530_PVC_P(port), ACC_FRM_MASK,
- 				   MT7530_VLAN_ACC_TAGGED);
--	}
- 
--	/* Set the port as a user port which is to be able to recognize VID
--	 * from incoming packets before fetching entry within the VLAN table.
--	 */
--	mt7530_rmw(priv, MT7530_PVC_P(port), VLAN_ATTR_MASK | PVC_EG_TAG_MASK,
--		   VLAN_ATTR(MT7530_VLAN_USER) |
--		   PVC_EG_TAG(MT7530_VLAN_EG_DISABLED));
-+		/* Set the port as a user port which is to be able to recognize
-+		 * VID from incoming packets before fetching entry within the
-+		 * VLAN table.
-+		 */
-+		mt7530_rmw(priv, MT7530_PVC_P(port),
-+			   VLAN_ATTR_MASK | PVC_EG_TAG_MASK,
-+			   VLAN_ATTR(MT7530_VLAN_USER) |
-+			   PVC_EG_TAG(MT7530_VLAN_EG_DISABLED));
-+	} else {
-+		/* Also set CPU ports to the "user" VLAN port attribute, to
-+		 * allow VLAN classification, but keep the EG_TAG attribute as
-+		 * "consistent" (i.o.w. don't change its value) for packets
-+		 * received by the switch from the CPU, so that tagged packets
-+		 * are forwarded to user ports as tagged, and untagged as
-+		 * untagged.
-+		 */
-+		mt7530_rmw(priv, MT7530_PVC_P(port), VLAN_ATTR_MASK,
-+			   VLAN_ATTR(MT7530_VLAN_USER));
-+	}
- }
- 
- static void
--- 
-2.34.1
+>
+> Dave.
+>
+>> 4. The VKBuffer is de-allocated, userspace asks kernel to update region
+>> A..B to not map anything (usually triggers a non-recoverable fault).
+>>
+>> When you want to unify this between hw drivers I strongly suggest to
+>> completely start from scratch once more.
+>>
+>> First of all don't think about those mappings as VMAs, that won't work
+>> because VMAs are usually something large. Think of this as individual
+>> PTEs controlled by the application. similar how COW mappings and struct
+>> pages are handled inside the kernel.
+>>
+>> Then I would start with the VA allocation manager. You could probably
+>> base that on drm_mm. We handle it differently in amdgpu currently, but I
+>> think this is something we could change.
+>>
+>> Then come up with something close to the amdgpu VM system. I'm pretty
+>> sure that should work for Nouveau and Intel XA as well. In other words
+>> you just have a bunch of very very small structures which represents
+>> mappings and a larger structure which combine all mappings of a specific
+>> type, e.g. all mappings of a BO or all sparse mappings etc...
+>>
+>> Merging of regions is actually not mandatory. We don't do it in amdgpu
+>> and can live with the additional mappings pretty well. But I think this
+>> can differ between drivers.
+>>
+>> Regards,
+>> Christian.
+>>
 
