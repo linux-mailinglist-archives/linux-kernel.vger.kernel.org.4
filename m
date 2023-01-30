@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E72680360
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 01:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF193680361
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 01:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbjA3A56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 19:57:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S235128AbjA3A6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 19:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234996AbjA3A5s (ORCPT
+        with ESMTP id S233396AbjA3A5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 29 Jan 2023 19:57:48 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2066.outbound.protection.outlook.com [40.107.237.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B841D921
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 16:57:43 -0800 (PST)
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2072.outbound.protection.outlook.com [40.107.94.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A614C1D907
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 16:57:45 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jBUJLkbl/woOAMEqQVF7QKVm+VvxjqCGzOCDjenWwT7L4IpS2hHOzhcyyecWUsBIWJ6qoMm6/tFB670YOAqyL4ZlNL2kQbbT+PqOCEuStNHMoTkGdW7bomIZkfASAEUo1QFa7sXbxIwb4uKrJSklkmiqf9ysEyViMXD1Q1PoKzpBXLwxNbbarbRcI3Mvd72at18Ieu6olotLV0O8UvOp2Y3QTEduv4+OKQqcA3e6Fxxs815S52eFdvetisgN/xiQqNgIEq4v0h7WXnmYzzJDXymp9zFlHGdME8gdNWB2laP5T5wYYm82+lflTQUyssau1c50hWMho9URjRAMkOpGmA==
+ b=Bdif9+gC+YqED77/z7Prh9voqo+l5TZRqvfwhaHK8eK3nKAApHCEPok47Obx/4jYywoAVXwEmKeSdzKB5dfVgw8IxRO4AzvsX4Tt6wTEQXgQvZSQLlun+3ieSpCSM7eWZttoxJ/bTjhmEKbdvrxNBk9QjNYbxrhqty5sUu+sduPixdZWSQNUzA+SJYHYZMP7zmysOWS5vYFsXFYKk1L4OdrzqneG6YFhAZZPpiwMylomdPV4Lb7BKkG4vZapAFFyTth6glvbZkOffQGld/ihGVGyZJ5YBeBRCBuzo2xuWuQKriUB0kCxWDY7KbBgn8TqXE5KMuk0nXihdrJOOspC8A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aul/Qf7cN6yY2oVjkqrNPbt3USVR3a1xYMDesa8HJDM=;
- b=OgnCxD52agt6+5Xl9VUtVTpX7nv2yB9aiwBN5j6K+OOcIsVcc7Ar8EOElGn9Yw/NCeMMiXuDpomzqvbaMJb/F+17gp2EZ2OLjusJJDIi0TAWI4L5zE6uVVFCEH9C2K0XYygPfNrRAM3KGz0AgO6MYlNdxgokMiSClBlz/Tq0nHv+kdHRvPPHSD1hKYoGGDWtnNezD37hLWJpI051xRGGi4jzDx3V1Z8h9aV6tMZxjnn/MgZF59F8qhxRqctVDv7cmrxfesFuxqkhFeDfCpwjMddmSjvprLT6fBuQwri2alpq2NqVvA8L19u2grCv/ffogr49HKuueJJWAihtUJzjtA==
+ bh=9v9WfyT8WB4VHt8ZMWtIo74b8GKNJCGheVaBwTRAisw=;
+ b=ZpT1FfnL+mpOjyOmV2v4l+jTba1MaCrzBTgoXxydtzQ05kkSN6dPNdYaNt08fHrfNAyN4+XRFpAXh2Bh7TSe/hMMUbIF54uAuMkxCGiWJRdy/B6wQTA/Aptxu1peiFaXOUJo2q+SFO3GWtLCehq8DF6P5n+0g81FngGB4OLjCaw32jdY9MxAJee+1CaL3DzNdR2lOP+zs2B6man7yM/5sJVgUuSIthEpBzsWg+PofW0/QY6gyvQt6IaXoukOQ2+C+no8mPTmC/LL5vQ4YhP7rJZq90kgtraYM2BxjX5941PeCeSJtW/lLMbGdCAUpG+HQ4z5gxHQ76LqS51un4DpKA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=linutronix.de smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -29,18 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aul/Qf7cN6yY2oVjkqrNPbt3USVR3a1xYMDesa8HJDM=;
- b=KqJqmywARmeZVCOzD+RCgdqT6myLHoVIsM86wNcCIH97dv/toVn5nOEWNL4t3+syOf7z7xg1+SgJwN0AzcOBGqtbZs4p8DMarHnLQWlrNf6SdlSorVoF5foHzUFSWdQ6iEwRfSztcllWk8ZaL0z1MfrYY8kwCaX0kAHRG1kr55v9WySYbLZ9bEISHm2brYaWEKDhXNnNYIpYv7BWar+O7ew30BgL2tOC3OodVfBInjILop6mgddEsK/pZxa6/Wyu4Ui6+EiwFpBOwso3Jd6m7B294CeU/nZevfhRw9zwf4yFp4a5SE0/h0dUV2+3Dt6elPyAqrg+SHky5p8jp71K/Q==
-Received: from MW2PR16CA0037.namprd16.prod.outlook.com (2603:10b6:907:1::14)
- by BL1PR12MB5320.namprd12.prod.outlook.com (2603:10b6:208:314::17) with
+ bh=9v9WfyT8WB4VHt8ZMWtIo74b8GKNJCGheVaBwTRAisw=;
+ b=jqnTxu+IZZ86sZPJnrEILMXU4dZcYOMrCA/y+Ctkydbi8g/b4lnEXvWrlEN9/M92y32efRarSguwPUCOLdp3W2dJLdE8xQOl0Bs8a2xggXhnISd+Bvw7BODZ6fJglhBkHgRgsAWkZ3tm9hwmJuOp2C16oqNzTKeJH925KWof/4bSVY5zjLpqB19KT6NDfFHkQ2yUZWlEey8OQNOPyhWqPyiTPxsxZShMrz2evhmNgjU8xAYJirWnN7HR1bC6qbqDHh0AI2qaNthHxqXkLWwiX8uGLbElVkO0FJEnLd9qZg7EEjeogBkWOQZVaec0TjuBmADli5RCJStkRA0a/RXl6Q==
+Received: from MW2PR16CA0070.namprd16.prod.outlook.com (2603:10b6:907:1::47)
+ by MN2PR12MB4254.namprd12.prod.outlook.com (2603:10b6:208:1d0::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 00:57:39 +0000
+ 2023 00:57:42 +0000
 Received: from CO1NAM11FT079.eop-nam11.prod.protection.outlook.com
- (2603:10b6:907:1:cafe::4a) by MW2PR16CA0037.outlook.office365.com
- (2603:10b6:907:1::14) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:907:1:cafe::6c) by MW2PR16CA0070.outlook.office365.com
+ (2603:10b6:907:1::47) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36 via Frontend
- Transport; Mon, 30 Jan 2023 00:57:39 +0000
+ Transport; Mon, 30 Jan 2023 00:57:42 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -50,18 +50,18 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
 Received: from mail.nvidia.com (216.228.117.161) by
  CO1NAM11FT079.mail.protection.outlook.com (10.13.175.134) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.22 via Frontend Transport; Mon, 30 Jan 2023 00:57:39 +0000
+ 15.20.6043.22 via Frontend Transport; Mon, 30 Jan 2023 00:57:41 +0000
 Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 29 Jan
- 2023 16:57:30 -0800
+ 2023 16:57:31 -0800
 Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
  (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 29 Jan
- 2023 16:57:30 -0800
+ 2023 16:57:31 -0800
 Received: from SDONTHINENI-DESKTOP.nvidia.com (10.127.8.9) by mail.nvidia.com
  (10.129.68.7) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Sun, 29 Jan 2023 16:57:29 -0800
+ Transport; Sun, 29 Jan 2023 16:57:30 -0800
 From:   Shanker Donthineni <sdonthineni@nvidia.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>, Michael Walle <michael@walle.cc>
@@ -70,9 +70,9 @@ CC:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Shanker Donthineni <sdonthineni@nvidia.com>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4/5] genirq: Use the common function irq_expand_nr_irqs()
-Date:   Sun, 29 Jan 2023 18:57:24 -0600
-Message-ID: <20230130005725.3517597-5-sdonthineni@nvidia.com>
+Subject: [PATCH 5/5] genirq: Use the maple tree for IRQ descriptors management
+Date:   Sun, 29 Jan 2023 18:57:25 -0600
+Message-ID: <20230130005725.3517597-6-sdonthineni@nvidia.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230130005725.3517597-1-sdonthineni@nvidia.com>
 References: <20230130005725.3517597-1-sdonthineni@nvidia.com>
@@ -82,23 +82,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT079:EE_|BL1PR12MB5320:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5de7dc50-5068-417b-4c0c-08db025cfc12
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT079:EE_|MN2PR12MB4254:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85e95a8d-3bdd-4ca5-ccf8-08db025cfdc1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0PaGkUZoQGUsYUv1Nj0TpS9ej/NnLbCSHwFbcCSijbU23z/KXh7Tuq16KJT39Aty42cJITeJp37JDkCunyEsdBOzypKgXwb1mJGA7VTWFoPH9tZOKnfZFPX6n5vCqghLj4zOx6ILZSk+VDDahmepHLbzcQlfK9JWUH097y7xT9H6ACEUzHgPcsN+Yl9CzH75YfLQKkksLdCujspsqBDKnMTSZRQ0efAQ7t/rPwmI4bbBZKe2X65fCRmEsdmg+4Bx3yk3/XzWe7cSaaE7vC3UT/ZgFaWtC3FOTXFiE5z2Osrchfwe/s8NlahRUDwHRqsebBvba8RMuQvVaRHEgOVsYQ8n/fRNvXeJm2RCIxfmn2P3byVa8pbK6brUX7MTAX7yFQC4STTmXRfwclH63Jl3ciDAmTEhMZ2oUpVwpIyEnivWKrWqe13SqUSv1dT+UyI/9wnvhwCC1nujnJo/ycvQA+wY3v7nR598mgz0n1z1/0eDJxVCk5VJceballtH5FVq6VWPVuGUWwUBUszwrxlTuAfbH+yE6A420urwA+laDG3A/zJ8AwY2f31zJyfQEPWbrQvFD2Koq9jYPWAIb+oPsljylI6taaXlb2VZTq/MUqNFjGZcNfD9o701trkeG2McK1d1N9uYVD9MlJPfEgBgcGH7q9RyuGOfU55pYwl6/e8RlOBYuOvMB053Fz7agxJe+3T39vA3QoEYzN7Iv035tw==
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(136003)(396003)(39860400002)(451199018)(36840700001)(46966006)(40470700004)(36756003)(40460700003)(2906002)(47076005)(316002)(82310400005)(426003)(336012)(2616005)(8676002)(83380400001)(26005)(478600001)(7696005)(186003)(110136005)(1076003)(54906003)(86362001)(40480700001)(7636003)(356005)(5660300002)(41300700001)(8936002)(6666004)(4326008)(36860700001)(82740400003)(70206006)(70586007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: eyBzXCOFx4874txF1QFpaPsq9WoAWrin6p9Of9ZOo3RP8oqIYzx1ezQZMY6jrPKYG17mqFknYeuUzB2KfkeCX6YHsJeZ3u5dMedbhL0YpDoocQy9V2EaQ+dvyb3BLUm7IlrCaeb0R3tWMFapR+nz4huaFvkwy7Q2obfQ49XNoo+viS6jwbodgqoqW3GK1quI8A6EIMeU5TrFgDhycGTpG+auMhE4i8/+PjTTgQ9Fs0vG1edbY+U7nN/JhwvdlIWKTSq2YJpeyYb2U+pksHLAVUGk8ZGNkLbySPz0YfDgYTA5RKltIW7RifJZGkwVBWPrQahIOeoVZjtA+mYgnPj+8Bh76FZ/nwfayHDMtST9MVW1apWXuzA6lsDZiKq3+PeTG33EkWVA6hHvGR2v8SShGmd4lmTTU0eekOJIYbOAH8pz4p3au65Hk80hp0y1abraiceYYcehGl/Zq7cEQMFAT91RAIJzf6bth6YHnFKnj6En2blx8J29m9nL7hP9tVGBvs2GBkrmLCX3nUSq1g+1xetM1gLdYX2hU8P/VMnMMFyeGocpHM114p7hRp4VVMWJH/84Z6eVdCqIceC8AlzM+c1GwIsUbNEjPXBu2TqsZ/FiGmQrDGgiyVydQKBIZwMdj94PuE3ZrOvAagCkIKaElNzVhDxjmduLb9G6R0dUDcQr/7sSmFc1Fc943DohUstgwt/CU78j57Wq7rKA3t5hzg==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(136003)(376002)(451199018)(36840700001)(40470700004)(46966006)(36756003)(54906003)(110136005)(316002)(70586007)(4326008)(8676002)(70206006)(8936002)(41300700001)(5660300002)(36860700001)(86362001)(82740400003)(356005)(7636003)(1076003)(6666004)(186003)(26005)(66899018)(336012)(82310400005)(2906002)(40460700003)(40480700001)(47076005)(478600001)(7696005)(426003)(83380400001)(2616005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 00:57:39.0642
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 00:57:41.8921
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5de7dc50-5068-417b-4c0c-08db025cfc12
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85e95a8d-3bdd-4ca5-ccf8-08db025cfdc1
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT079.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5320
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4254
 X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -109,62 +109,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the !SPARSEIRQ code path is executed, the function
-irq_expand_nr_irqs() returns -ENOMEM. However, the SPARSEIRQ
-version of the function can be safely used in both cases, as
-nr_irqs = MAX_SPARSE_IRQS = NR_IRQS.
+The current implementation uses a static bitmap and a radix tree
+to manage IRQ allocation and irq_desc pointer store respectively.
+However, the size of the bitmap is constrained by the build time
+macro MAX_SPARSE_IRQS, which may not be sufficient to support the
+high-end servers, particularly those with GICv4.1 hardware, which
+require a large interrupt space to cover LPIs and vSGIs
+
+The maple tree is a highly efficient data structure for storing
+non-overlapping ranges and can handle a large number of entries,
+up to ULONG_MAX. It can be utilized for both storing IRQD and
+identifying available free spaces.
+
+The IRQD management can be simplified by switching to a maple tree
+data structure, which offers greater flexibility and scalability.
+To support modern servers, the maximum number of IRQs has been
+increased to INT_MAX, which provides a more adequate value than
+the previous limit of NR_IRQS+8192.
 
 Signed-off-by: Shanker Donthineni <sdonthineni@nvidia.com>
 ---
- kernel/irq/irqdesc.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ kernel/irq/internals.h |  2 +-
+ kernel/irq/irqdesc.c   | 51 ++++++++++++++++++++++++------------------
+ 2 files changed, 30 insertions(+), 23 deletions(-)
 
+diff --git a/kernel/irq/internals.h b/kernel/irq/internals.h
+index 5d741b0e7d5e..e35de737802c 100644
+--- a/kernel/irq/internals.h
++++ b/kernel/irq/internals.h
+@@ -12,7 +12,7 @@
+ #include <linux/sched/clock.h>
+ 
+ #ifdef CONFIG_SPARSE_IRQ
+-# define MAX_SPARSE_IRQS	(NR_IRQS + 8196)
++# define MAX_SPARSE_IRQS	INT_MAX
+ #else
+ # define MAX_SPARSE_IRQS	NR_IRQS
+ #endif
 diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
-index aacfb4826c5e..247a0718d028 100644
+index 247a0718d028..06be5f924a7c 100644
 --- a/kernel/irq/irqdesc.c
 +++ b/kernel/irq/irqdesc.c
-@@ -144,6 +144,14 @@ static unsigned int irq_find_next_irq(unsigned int offset)
- 	return find_next_bit(allocated_irqs, nr_irqs, offset);
+@@ -15,6 +15,7 @@
+ #include <linux/radix-tree.h>
+ #include <linux/bitmap.h>
+ #include <linux/irqdomain.h>
++#include <linux/maple_tree.h>
+ #include <linux/sysfs.h>
+ 
+ #include "internals.h"
+@@ -131,17 +132,37 @@ int nr_irqs = NR_IRQS;
+ EXPORT_SYMBOL_GPL(nr_irqs);
+ 
+ static DEFINE_MUTEX(sparse_irq_lock);
+-static DECLARE_BITMAP(allocated_irqs, MAX_SPARSE_IRQS);
++static struct maple_tree sparse_irqs = MTREE_INIT_EXT(sparse_irqs,
++					MT_FLAGS_ALLOC_RANGE |
++					MT_FLAGS_LOCK_EXTERN |
++					MT_FLAGS_USE_RCU, sparse_irq_lock);
+ 
+ static int irq_find_free_area(unsigned int from, unsigned int cnt)
+ {
+-	return bitmap_find_next_zero_area(allocated_irqs, MAX_SPARSE_IRQS,
+-					  from, cnt, 0);
++	MA_STATE(mas, &sparse_irqs, 0, 0);
++
++	if (mas_empty_area(&mas, from, MAX_SPARSE_IRQS, cnt))
++		return -ENOSPC;
++	return mas.index;
  }
  
-+static int irq_expand_nr_irqs(unsigned int nr)
-+{
-+	if (nr > MAX_SPARSE_IRQS)
-+		return -ENOMEM;
-+	nr_irqs = nr;
-+	return 0;
+ static unsigned int irq_find_next_irq(unsigned int offset)
+ {
+-	return find_next_bit(allocated_irqs, nr_irqs, offset);
++	struct irq_desc *desc = mt_next(&sparse_irqs, offset, nr_irqs);
++
++	return desc ? irq_desc_get_irq(desc) : nr_irqs;
 +}
 +
- #ifdef CONFIG_SPARSE_IRQ
- 
- static void irq_kobj_release(struct kobject *kobj);
-@@ -528,14 +536,6 @@ static int alloc_descs(unsigned int start, unsigned int cnt, int node,
- 	return -ENOMEM;
++static void irq_insert_desc(unsigned int irq, struct irq_desc *desc)
++{
++	MA_STATE(mas, &sparse_irqs, irq, irq);
++	WARN_ON(mas_store_gfp(&mas, desc, GFP_KERNEL) != 0);
++}
++
++static void delete_irq_desc(unsigned int irq)
++{
++	MA_STATE(mas, &sparse_irqs, irq, irq);
++	mas_erase(&mas);
  }
  
--static int irq_expand_nr_irqs(unsigned int nr)
+ static int irq_expand_nr_irqs(unsigned int nr)
+@@ -363,26 +384,14 @@ static void irq_sysfs_del(struct irq_desc *desc) {}
+ 
+ #endif /* CONFIG_SYSFS */
+ 
+-static RADIX_TREE(irq_desc_tree, GFP_KERNEL);
+-
+-static void irq_insert_desc(unsigned int irq, struct irq_desc *desc)
 -{
--	if (nr > MAX_SPARSE_IRQS)
--		return -ENOMEM;
--	nr_irqs = nr;
--	return 0;
+-	radix_tree_insert(&irq_desc_tree, irq, desc);
 -}
 -
- int __init early_irq_init(void)
+ struct irq_desc *irq_to_desc(unsigned int irq)
  {
- 	int i, initcnt, node = first_online_node;
-@@ -630,11 +630,6 @@ static inline int alloc_descs(unsigned int start, unsigned int cnt, int node,
+-	return radix_tree_lookup(&irq_desc_tree, irq);
++	return mtree_load(&sparse_irqs, irq);
+ }
+ #ifdef CONFIG_KVM_BOOK3S_64_HV_MODULE
+ EXPORT_SYMBOL_GPL(irq_to_desc);
+ #endif
+ 
+-static void delete_irq_desc(unsigned int irq)
+-{
+-	radix_tree_delete(&irq_desc_tree, irq);
+-}
+-
+ #ifdef CONFIG_SMP
+ static void free_masks(struct irq_desc *desc)
+ {
+@@ -527,7 +536,6 @@ static int alloc_descs(unsigned int start, unsigned int cnt, int node,
+ 		irq_sysfs_add(start + i, desc);
+ 		irq_add_debugfs_entry(start + i, desc);
+ 	}
+-	bitmap_set(allocated_irqs, start, cnt);
+ 	return start;
+ 
+ err:
+@@ -559,7 +567,6 @@ int __init early_irq_init(void)
+ 
+ 	for (i = 0; i < initcnt; i++) {
+ 		desc = alloc_desc(i, node, 0, NULL, NULL);
+-		set_bit(i, allocated_irqs);
+ 		irq_insert_desc(i, desc);
+ 	}
+ 	return arch_early_irq_init();
+@@ -613,6 +620,7 @@ static void free_desc(unsigned int irq)
+ 	raw_spin_lock_irqsave(&desc->lock, flags);
+ 	desc_set_defaults(irq, desc, irq_desc_get_node(desc), NULL, NULL);
+ 	raw_spin_unlock_irqrestore(&desc->lock, flags);
++	delete_irq_desc(irq);
+ }
+ 
+ static inline int alloc_descs(unsigned int start, unsigned int cnt, int node,
+@@ -625,15 +633,15 @@ static inline int alloc_descs(unsigned int start, unsigned int cnt, int node,
+ 		struct irq_desc *desc = irq_to_desc(start + i);
+ 
+ 		desc->owner = owner;
++		irq_insert_desc(start + i, desc);
+ 	}
+-	bitmap_set(allocated_irqs, start, cnt);
  	return start;
  }
  
--static int irq_expand_nr_irqs(unsigned int nr)
--{
--	return -ENOMEM;
--}
--
  void irq_mark_irq(unsigned int irq)
  {
  	mutex_lock(&sparse_irq_lock);
+-	bitmap_set(allocated_irqs, irq, 1);
++	irq_insert_desc(irq, irq_descs + irq);
+ 	mutex_unlock(&sparse_irq_lock);
+ }
+ 
+@@ -777,7 +785,6 @@ void irq_free_descs(unsigned int from, unsigned int cnt)
+ 	for (i = 0; i < cnt; i++)
+ 		free_desc(from + i);
+ 
+-	bitmap_clear(allocated_irqs, from, cnt);
+ 	mutex_unlock(&sparse_irq_lock);
+ }
+ EXPORT_SYMBOL_GPL(irq_free_descs);
 -- 
 2.25.1
 
