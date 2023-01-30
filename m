@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAED9680D7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6D2680D85
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236600AbjA3MUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:20:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
+        id S236658AbjA3MWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbjA3MUV (ORCPT
+        with ESMTP id S230327AbjA3MW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:20:21 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EA3B74D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:20:19 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P56b96w7MzJqcy;
-        Mon, 30 Jan 2023 20:15:49 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 30 Jan 2023 20:20:16 +0800
-Message-ID: <13e4e6ee-414e-7e36-5ac1-fa0fa555ba41@huawei.com>
-Date:   Mon, 30 Jan 2023 20:20:16 +0800
+        Mon, 30 Jan 2023 07:22:28 -0500
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448C21165C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:22:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1675081348; x=1706617348;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IZENi4qwURaFTGnTC1AN+BYamxiUSoV3AazWj7gWB9k=;
+  b=cedyAKEOrpUWgH4TliFSQbycNUwFTmOjP1GJrWfTtSXKQgCBMf7tl0oo
+   K4AA8smmDTWimrF5EM7Im+IjiStxNIr5DXhLOBRT0DTELZzFXPKh7PuQe
+   eG8JwNXbyNXAa2yugCVDL7M3VTifGAd6hQWeXL9R69AoqhqOI43pa2OuP
+   8=;
+X-IronPort-AV: E=Sophos;i="5.97,257,1669075200"; 
+   d="scan'208";a="293443713"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 12:22:24 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com (Postfix) with ESMTPS id 06F2C60FC4;
+        Mon, 30 Jan 2023 12:22:21 +0000 (UTC)
+Received: from EX19D024UWB004.ant.amazon.com (10.13.138.96) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Mon, 30 Jan 2023 12:22:21 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D024UWB004.ant.amazon.com (10.13.138.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.24; Mon, 30 Jan 2023 12:22:21 +0000
+Received: from u40bc5e070a0153.ant.amazon.com (10.1.212.21) by
+ mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.45 via Frontend Transport; Mon, 30 Jan 2023 12:22:18 +0000
+From:   Roman Kagan <rkagan@amazon.de>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Juri Lelli <juri.lelli@redhat.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: [PATCH v2] sched/fair: sanitize vruntime of entity being placed
+Date:   Mon, 30 Jan 2023 13:22:16 +0100
+Message-ID: <20230130122216.3555094-1-rkagan@amazon.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] mm: memcg: fix NULL pointer in
- mem_cgroup_track_foreign_dirty()
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Jan Kara <jack@suse.cz>, Shakeel Butt <shakeelb@google.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Ma Wupeng <mawupeng1@huawei.com>, <shy828301@gmail.com>
-References: <20230129024451.121590-1-wangkefeng.wang@huawei.com>
- <20230129134815.21083b65ef3ae4c3e7fae8eb@linux-foundation.org>
- <568c10e8-c225-b3c4-483a-5bb3329de4c5@huawei.com>
- <Y9eEbTXNm0x0IZem@dhcp22.suse.cz>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <Y9eEbTXNm0x0IZem@dhcp22.suse.cz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,45 +73,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Zhang Qiao <zhangqiao22@huawei.com>
+
+When a scheduling entity is placed onto cfs_rq, its vruntime is pulled
+to the base level (around cfs_rq->min_vruntime), so that the entity
+doesn't gain extra boost when placed backwards.
+
+However, if the entity being placed wasn't executed for a long time, its
+vruntime may get too far behind (e.g. while cfs_rq was executing a
+low-weight hog), which can inverse the vruntime comparison due to s64
+overflow.  This results in the entity being placed with its original
+vruntime way forwards, so that it will effectively never get to the cpu.
+
+To prevent that, ignore the vruntime of the entity being placed if it
+didn't execute for much longer than the characteristic sheduler time
+scale.
+
+Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+[rkagan: formatted, adjusted commit log, comments, cutoff value]
+Co-developed-by: Roman Kagan <rkagan@amazon.de>
+Signed-off-by: Roman Kagan <rkagan@amazon.de>
+---
+v1 -> v2:
+- add Zhang Qiao's s-o-b
+- fix constant promotion on 32bit
+
+ kernel/sched/fair.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 0f8736991427..717c3ca970e1 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4656,6 +4656,7 @@ static void
+ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+ {
+ 	u64 vruntime = cfs_rq->min_vruntime;
++	u64 sleep_time;
+ 
+ 	/*
+ 	 * The 'current' period is already promised to the current tasks,
+@@ -4685,8 +4686,18 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+ 		vruntime -= thresh;
+ 	}
+ 
+-	/* ensure we never gain time by being placed backwards. */
+-	se->vruntime = max_vruntime(se->vruntime, vruntime);
++	/*
++	 * Pull vruntime of the entity being placed to the base level of
++	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
++	 * slept for a long time, don't even try to compare its vruntime with
++	 * the base as it may be too far off and the comparison may get
++	 * inversed due to s64 overflow.
++	 */
++	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
++	if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
++		se->vruntime = vruntime;
++	else
++		se->vruntime = max_vruntime(se->vruntime, vruntime);
+ }
+ 
+ static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
+-- 
+2.34.1
 
 
-On 2023/1/30 16:48, Michal Hocko wrote:
-> On Mon 30-01-23 09:16:13, Kefeng Wang wrote:
->>
->>
->> On 2023/1/30 5:48, Andrew Morton wrote:
->>> On Sun, 29 Jan 2023 10:44:51 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->>>
->>>> As commit 18365225f044 ("hwpoison, memcg: forcibly uncharge LRU pages"),
->>>
->>> Merged in 2017.
->>>
->>>> hwpoison will forcibly uncharg a LRU hwpoisoned page, the folio_memcg
->>>> could be NULl, then, mem_cgroup_track_foreign_dirty_slowpath() could
->>>> occurs a NULL pointer dereference, let's do not record the foreign
->>>> writebacks for folio memcg is null in mem_cgroup_track_foreign() to
->>>> fix it.
->>>>
->>>> Reported-by: Ma Wupeng <mawupeng1@huawei.com>
->>>> Fixes: 97b27821b485 ("writeback, memcg: Implement foreign dirty flushing")
->>>
->>> Merged in 2019.
->>>
-...
-> 
-> Just to make sure I understand. The page has been hwpoisoned, uncharged
-> but stayed in the page cache so a next page fault on the address has blowned
-> up?
-> 
-> Say we address the NULL memcg case. What is the resulting behavior?
-> Doesn't userspace access a poisoned page and get a silend memory
-> corruption?
-
-+ Yang Shi
-
-Check previous link[1], seems that it is a known issue, and there is a 
-TODO list for storage backed filesystems from Yang.
 
 
-[1] 
-https://lore.kernel.org/all/20211020210755.23964-6-shy828301@gmail.com/T/#m1d40559ca2dcf94396df5369214288f69dec379b
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
