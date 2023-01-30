@@ -2,116 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20014681652
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F4B681654
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236812AbjA3Q04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:26:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S237167AbjA3Q1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236952AbjA3Q0w (ORCPT
+        with ESMTP id S237042AbjA3Q1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:26:52 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA6442BDC;
-        Mon, 30 Jan 2023 08:26:50 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id kt14so33404211ejc.3;
-        Mon, 30 Jan 2023 08:26:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aeL1yKKafH0YF5Q9OP+rEdMznPKqMD6znWn+lV0SJEE=;
-        b=Hd3fnaNoOTxaUp7Hq7bKAOE66/ain081O4hQYqaTrsOR60rRpoZf8zKh05Jxr+4Jae
-         wpcBsw49wYdU8cFlbeYJ3DjXNFfwWqc+LpDpUaOQeTsuC/qRdsMKFqfaPMficR//d1QK
-         VIIiUTHHh30frPyYu6By4gbLFQQxKM9iYI73zJwXtyx/Ngu1pDIwQdhEDO1mqJouhGgQ
-         Gu3sLUWgMoezlBmVxy7zVSwh4BN/0idG6PGJR1pCkRTZx4m6Y9BAOWDIj45f1+Adm5gA
-         sSxTB9Uf//WEO8AdELFVpU5nYssq5JCrIBx7b1NMopRpiGgIUSQtej23Qg4d3+1fJog/
-         rGBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aeL1yKKafH0YF5Q9OP+rEdMznPKqMD6znWn+lV0SJEE=;
-        b=CHEVDpjCNah6Sb3uamRsFjCZiIXIyVXnxpX8bjwS23MoP+CFXyne6aXiJBo48CNu+y
-         Kz8eQQ+w0b4TJ20GCawVm/uHOdhwmfxoXTiQcI4H/p9gL/fQiFZNUzWuzycJpO/wmQ5Z
-         /U/ypZlp07llGJueSbakAkxP83GKDQ2xtqNKoJW1RTZzTHKSAs44vAheYJuSTdOVdl2i
-         kqCmJFFIh/WXkkUMDJiaKx2fObCvRGqtNFRzNvXeJ1Bbb+2uSV1bvjRosPcqcVfMbENS
-         CK0C0awMe1CzVCrmwtH5+sqo3zd6u7U8AN/ae6Tc/vwF8PTOG/8fMBmV8kIepe9op6vP
-         9Z/Q==
-X-Gm-Message-State: AFqh2kpkKlMHwkJzPCGhVifL5QhnW9W3ANE535PWHxphFQ+AxRB6zaiC
-        c6IFtG/8+HMt1lbV9Kqf2uSDdSt3nysNZl5G/6TLBUCV
-X-Google-Smtp-Source: AMrXdXuSbqX5vKm2qlcpbVVGoqd5LbtVnloM1xeupFRm7Uq1v6/dKga5nvw3NPtU0WopYiPJzQ2qNhbkGqnBxbKys4k=
-X-Received: by 2002:a17:906:7ac2:b0:86e:429b:6a20 with SMTP id
- k2-20020a1709067ac200b0086e429b6a20mr7769751ejo.247.1675096008450; Mon, 30
- Jan 2023 08:26:48 -0800 (PST)
+        Mon, 30 Jan 2023 11:27:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887BA4345A;
+        Mon, 30 Jan 2023 08:26:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22ED7611DE;
+        Mon, 30 Jan 2023 16:26:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72978C433D2;
+        Mon, 30 Jan 2023 16:26:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675096016;
+        bh=J9MQ1F4rdXhR7D6bdFdyFE6EtY/SjbE8uHtkoXC5Xoo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YOaGeeNx/5e09Vt1TQt/htw2Jk2gnEQoraaBsG4Kuxan/ZTMS1zZyHtonom96a4u1
+         Z35DE8WkkTvc6kzoMGNMql/rwtVqUx5OKhgBjD7RtsHrDG4VfQevFBMl6XH0X9Ht6A
+         phoUT6qc/G+GFVMfwOQWe7b8KdFg5y/okfY9XcgPZoR34HkKTLJ0RSmrejF5w0zW0n
+         KB28Kl7/tzfiZulOKKT66BrE7eLKBavrWUw2df0MkiiLboLP3HfeWTYe6Mx2Y0UbxF
+         by1k99hlW/tcrKyHZH6MPSBzLdUrzXzx5q+U0umDm+jR9TzSjhvsh3SbLFjscN4NrS
+         6Y9XwId+nha0w==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: [PATCH] dt-bindings: rename .yamllint to yamllint
+Date:   Tue, 31 Jan 2023 01:26:50 +0900
+Message-Id: <20230130162650.399490-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
- <20230127135755.79929-3-mathieu.desnoyers@efficios.com> <4defb04e-ddcb-b344-6e9f-35023dee0d2a@linuxfoundation.org>
-In-Reply-To: <4defb04e-ddcb-b344-6e9f-35023dee0d2a@linuxfoundation.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 30 Jan 2023 08:26:37 -0800
-Message-ID: <CAADnVQ+1hB-1B_-2LrYC3XvMiEyA2yZv9fz51dDrMABG3dsQ_g@mail.gmail.com>
-Subject: Re: [PATCH 02/34] selftests: bpf: Fix incorrect kernel headers search path
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 8:12 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 1/27/23 06:57, Mathieu Desnoyers wrote:
-> > Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
-> > building against kernel headers from the build environment in scenarios
-> > where kernel headers are installed into a specific output directory
-> > (O=...).
-> >
-> > Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: linux-kselftest@vger.kernel.org
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: <stable@vger.kernel.org>    [5.18+]
-> > ---
-> >   tools/testing/selftests/bpf/Makefile | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index c22c43bbee19..6998c816afef 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -327,7 +327,7 @@ endif
-> >   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-> >   BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)               \
-> >            -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)                   \
-> > -          -I$(abspath $(OUTPUT)/../usr/include)
-> > +          $(KHDR_INCLUDES)
-> >
-> >   CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
-> >              -Wno-compare-distinct-pointer-types
->
->
->
-> Adding bpf maintainers - bpf patches usually go through bpf tree.
->
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+This file is ignored by git by the '.*' rule in the top .gitignore.
 
-Please resubmit as separate patch with [PATCH bpf-next] subj
-and cc bpf@vger, so that BPF CI can test it on various architectures
-and config combinations.
+I do not see a good reason why this should be a hidden file.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+I think many people are aware of this issue
+since this is now W=1 warning due to this patch:
+ https://lore.kernel.org/all/20221229074310.906556-2-masahiroy@kernel.org/
+
+
+ Documentation/devicetree/bindings/Makefile                | 4 ++--
+ Documentation/devicetree/bindings/{.yamllint => yamllint} | 0
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename Documentation/devicetree/bindings/{.yamllint => yamllint} (100%)
+
+diff --git a/Documentation/devicetree/bindings/Makefile b/Documentation/devicetree/bindings/Makefile
+index bf2d8a8ced77..edc65522072b 100644
+--- a/Documentation/devicetree/bindings/Makefile
++++ b/Documentation/devicetree/bindings/Makefile
+@@ -34,7 +34,7 @@ CHK_DT_DOCS := $(shell $(find_cmd))
+ quiet_cmd_yamllint = LINT    $(src)
+       cmd_yamllint = ($(find_cmd) | \
+                      xargs -n200 -P$$(nproc) \
+-		     $(DT_SCHEMA_LINT) -f parsable -c $(srctree)/$(src)/.yamllint >&2) || true
++		     $(DT_SCHEMA_LINT) -f parsable -c $(srctree)/$(src)/yamllint >&2) || true
+ 
+ quiet_cmd_chk_bindings = CHKDT   $@
+       cmd_chk_bindings = ($(find_cmd) | \
+@@ -64,7 +64,7 @@ override DTC_FLAGS := \
+ # Disable undocumented compatible checks until warning free
+ override DT_CHECKER_FLAGS ?=
+ 
+-$(obj)/processed-schema.json: $(DT_DOCS) $(src)/.yamllint check_dtschema_version FORCE
++$(obj)/processed-schema.json: $(DT_DOCS) $(src)/yamllint check_dtschema_version FORCE
+ 	$(call if_changed_rule,chkdt)
+ 
+ always-y += processed-schema.json
+diff --git a/Documentation/devicetree/bindings/.yamllint b/Documentation/devicetree/bindings/yamllint
+similarity index 100%
+rename from Documentation/devicetree/bindings/.yamllint
+rename to Documentation/devicetree/bindings/yamllint
+-- 
+2.34.1
+
