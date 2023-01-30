@@ -2,127 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20E0680F37
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2782680F3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235612AbjA3NnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S235927AbjA3Nng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233324AbjA3NnI (ORCPT
+        with ESMTP id S235703AbjA3Nnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:43:08 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871069EE5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:43:07 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id mf7so13088613ejc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:43:07 -0800 (PST)
+        Mon, 30 Jan 2023 08:43:33 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4386214E8C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:43:32 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso5358307wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:43:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TDPn44BeAHxZKOTUZDOsKOvKzPPbsKRicdKnFkutGSs=;
-        b=KkOIolv7vz8zPBu47iB5hQbKRMdTq2W6IeqYYqTAJ4Kvh8/tHKDfbQ++11ihBqV6O8
-         XA2mU3sI2Ia8m+HGBq7CDGIsh1m7qfldALQRjJm+Sy5AF0kL2h1D68sMm4Ab/8OIzMu1
-         kCQZSDU94GC11KeFVfr792ToEcBppL7JQn/MAbsb57QlDVDK4MpmcqtIM9sX5VWCfJYB
-         1dbt6vG29w6jQL3ujLnRpQpGHsYbYL9FKcCETuDIEJR0l1d+CzDHKrj+kuD3RL5SXEi4
-         N2UTU9VGF1SuXtlI0CjiHtMhueFZ2KLjUw+WM+ged3XNLA+XUHlrXOsmI27Dd64IyAIG
-         wzjQ==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0dzAvNhqbLHD8Qqr5U4HkMhu9d4Ko8KZtdb+p3yzQqo=;
+        b=r3+O9ok547RbwEpeaTLhkg2nhQik6ojXy+fTq+Mnx7azfKGPocnjWfqHgTANTMmRRi
+         Ga7BrBfT6JMqxyyLMGSRQGNZWeS/0obKNdiOuurdTQfR+4PLPos4/1ZQ7Lrt6uEn6siU
+         mXpsUovrCJCA6CmoF6tql2U5NHvmyJxWbUQtFpIa1/YnhFNS9efyClfxEwebL08zPvOw
+         SExuyJGXGdar9XV2X8crhizmga9Wi/Mh0H1rRXTsBeOkK2Qsnk+qHb0V1vVsQYGpWtLx
+         vAwsDI3vaM0mJSi6vBtY+oyJKFvojk84NRYYDuVRU4DAqvyl5WGPE3dT9ddYNJc4hv2j
+         d0og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TDPn44BeAHxZKOTUZDOsKOvKzPPbsKRicdKnFkutGSs=;
-        b=AqK1oJ1aGe20He+g1NUZyfcFQwtqVfHvOjJf9E1O8vnYt2BxD/R7Ocq0kciw04ZiTL
-         fY9YFRYtCTwoEephm9w6HQbMWbZw9865IjX5bviXHehem0ZwhnmG6LKjyeXkuAsxocr7
-         p8xjRcdii5sNISPd9MjaeUewwrBJ0QNez+LPv4dl6R4LKtQEGufENpQFUm4h09yI/Ld6
-         y1k9qvlsuVavJ5YmZJBvUEXNhXna8mMSC6NEnSztKImL8u+beF2OEr7MZzpZKhzphRkA
-         p34pfRUs82BRiGx48gmfZ5o8g69+2kIrQ8ffiyc42Xtd6/W6ISxooWusqm0t/tnsqAbh
-         mK4w==
-X-Gm-Message-State: AO0yUKUz8qToSnU5VueqmhKQG4pFzr1KlDbOo2ggkJ+SHh2cKTZnb19x
-        vlB5s2oWkm+7qloV015nctI=
-X-Google-Smtp-Source: AK7set9NwCqZxXn2P0I1LTRGaCVgmrHQ+HW9RGNXgt4RkbJA48YgTw2Obpk0zPgDRQmrJgZnJSr0/g==
-X-Received: by 2002:a17:906:4793:b0:87b:db62:d659 with SMTP id cw19-20020a170906479300b0087bdb62d659mr13583848ejc.19.1675086185991;
-        Mon, 30 Jan 2023 05:43:05 -0800 (PST)
-Received: from gmail.com ([31.46.245.95])
-        by smtp.gmail.com with ESMTPSA id os25-20020a170906af7900b008874c903ec5sm2350495ejb.43.2023.01.30.05.43.04
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0dzAvNhqbLHD8Qqr5U4HkMhu9d4Ko8KZtdb+p3yzQqo=;
+        b=qcNmWKYA1XHFegderd+7Qg3Mh3jQTlKraWUgY2PvvIegHi/O/ZPS5l8esIb/pbbw37
+         CLHd4UB99WhQ12kDLrND+AeT1qkrwU7jdBRHgig/n2M9SjFGyzJsP8trl6U+9S4vQqON
+         IDgkHoRhCs8Z4MXU7E87BqkOsdjpcw3XthtpSbqHi8VZzvtEd9CzpYUWsyxmzw11GMBw
+         unPXkDS0SoO3THoPnoOFzgtchH4NZWXhblx0mcE343aD+BKZy9n2AsTpbpnDC7l3km3p
+         RxqM+Tnj/mWxeLVcfi14hx5PQ+0VpKL2FqNZg0v1zqa06PIxivxq9Uo7iVBxNYzVPuc2
+         WYTQ==
+X-Gm-Message-State: AO0yUKUIUKsnx0RIoTxP/FFWOP/n9yaG01wSfXyb/ekjehIi7I7Fd+bw
+        rn9yTEYeM5CFllQZRTC2jvHuew==
+X-Google-Smtp-Source: AK7set97xlKmmDBvKPBmRQ17fPHhyiyadsOAAP+bSHsQR+a7netx9q1OsYsNQSaB7yg2FcxInSshMQ==
+X-Received: by 2002:a05:600c:3545:b0:3dd:1ac2:989 with SMTP id i5-20020a05600c354500b003dd1ac20989mr256851wmq.39.1675086210825;
+        Mon, 30 Jan 2023 05:43:30 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:b9a5:a1fe:d3ab:6b40])
+        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003db012d49b7sm27403410wmo.2.2023.01.30.05.43.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 05:43:05 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 30 Jan 2023 14:43:01 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Pietro Borrello <borrello@diag.uniroma1.it>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dmitry Adamushko <dmitry.adamushko@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched: pick_next_rt_entity(): checked list_entry
-Message-ID: <Y9fJZdMYbc4gRVJ+@gmail.com>
-References: <20230128-list-entry-null-check-sched-v1-1-c93085ee0055@diag.uniroma1.it>
+        Mon, 30 Jan 2023 05:43:30 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] dt-bindings: watchdog: qcom-wdt: add the interrupts property
+Date:   Mon, 30 Jan 2023 14:43:28 +0100
+Message-Id: <20230130134328.178591-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128-list-entry-null-check-sched-v1-1-c93085ee0055@diag.uniroma1.it>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-* Pietro Borrello <borrello@diag.uniroma1.it> wrote:
+The interrupts property is used in all nodes using this binding but not
+defined in the document itself - hence dtbs_check fails for them. Add
+the property and update the example.
 
-> Commit 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
-> removed any path which could make pick_next_rt_entity() return NULL.
-> However, BUG_ON(!rt_se) in _pick_next_task_rt() (the only caller of
-> pick_next_rt_entity()) still checks the error condition, which can
-> never happen, since list_entry() never returns NULL. Return
-> list_first_entry_or_null(queue, ...) to allow BUG to check the only
-> possible error condition here: the queue being empty which should
-> never happen.
-> 
-> Fixes: 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
-> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
-> ---
->  kernel/sched/rt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-> index ed2a47e4ddae..6088d5d83b75 100644
-> --- a/kernel/sched/rt.c
-> +++ b/kernel/sched/rt.c
-> @@ -1777,7 +1777,7 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
->  	BUG_ON(idx >= MAX_RT_PRIO);
->  
->  	queue = array->queue + idx;
-> -	next = list_entry(queue->next, struct sched_rt_entity, run_list);
-> +	next = list_first_entry_or_null(queue, struct sched_rt_entity, run_list);
->  
->  	return next;
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml        | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-I'd much rather have something like this:
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index 27fb484d5f8d..45940d643b92 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -46,6 +46,10 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  interrupts:
++    minItems: 1
++    maxItems: 5
++
+ required:
+   - compatible
+   - reg
+@@ -55,9 +59,16 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
+     watchdog@208a038 {
+       compatible = "qcom,kpss-wdt-ipq8064";
+       reg = <0x0208a038 0x40>;
+       clocks = <&sleep_clk>;
+       timeout-sec = <10>;
++      interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
++                   <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
++                   <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
++                   <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
++                   <GIC_PPI 5 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>;
+     };
+-- 
+2.37.2
 
-	SCHED_WARN_ON(list_empty(next));
-
-So the debug check is part of CONFIG_SCHED_DEBUG=y, and not if it's turned 
-off. Also, this makes sure we don't crash (BUG_ON()) on the error 
-condition, in the hope of getting debug info out of the system.
-
-Thanks,
-
-	Ingo
