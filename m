@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F283A6815D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D7A6815DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236200AbjA3QBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40602 "EHLO
+        id S235730AbjA3QDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:03:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236123AbjA3QBI (ORCPT
+        with ESMTP id S235441AbjA3QDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:01:08 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4934B13529;
-        Mon, 30 Jan 2023 08:01:07 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id B6F0C5C024E;
-        Mon, 30 Jan 2023 11:01:06 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 30 Jan 2023 11:01:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675094466; x=1675180866; bh=jrCNG/L10m
-        2bCPDDClIWddYCrrD5yIk/wZPGea4Pa2Q=; b=jutPnCIuWdPjpVJIc+bwacB6YE
-        WcJanFNw8fQZuAXSMqtaF5HueN89p3hsoUCn3dt23LevmWPl4ImuvTzgz4F7OLzP
-        Yj+K9odJYh5IGUcrfrl8BJe+842BPyn+R4WoX795/FRJkKzQJR87Gii8m85hoy0J
-        xAh5sKKV1m3k0VyIKCXGlpCSMxNP1sPJwUxSyh8EFagp6LovC7ZlRCFq+k68W/LO
-        OleN7WR66EQvlisrOqJbJHrtYE+Ou6yMhawAPj3ZGpjhG8sf0fvDTsr+vKgZs0ZN
-        ht3T8G5Q3IxB/L3EGtgkm8r1/dJ9XbeUcR2lNcaLf3Cx/wqRSJoj2anmxCKQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675094466; x=1675180866; bh=jrCNG/L10m2bCPDDClIWddYCrrD5
-        yIk/wZPGea4Pa2Q=; b=VGFcZrBXVcEYYVKYaRUlBizWSVowk9cfSpgyKFV+kNau
-        qsilNlO4ZIbIq3Rwxyz+32xAs6X90sPClVSAxdT3A5xFaTSYthGXxAIjB1ry7NLL
-        5NJmcycNFgFWyTD2CGktMyYAIn9tclYAkafK9R28cJ0cU2tRbj3kvoTU+onGkKkM
-        iGSlK2HvZqTYhJxcFsatUUcQxhXis/ZClBRRZchJ+H/65R7SXzWP02taiGTDdg9l
-        xYUZxpNuuskK400QxCUePyDMNOSnvFnCagwJLORFHxVKjRfG1VOuI8ak+cIM+6RI
-        Fj7NDKSMiSyR2XKU+7SZVpGCuRy0kK9X3OkWSzWI1Q==
-X-ME-Sender: <xms:wenXY-pwauXd1tB_i9JyVQFVkxOWc9NZWK5UUTwMBp1mVVnSPxawxw>
-    <xme:wenXY8prcptxOxfYZlPnXQD1eVoFacH2aAkE8JH8SN6J--7AufBIrUGfG8vv-2Tow
-    mU9h-W-_AJC1w>
-X-ME-Received: <xmr:wenXYzO5J37DrmOff9b_jXTkUYpxJRwkXxmPP0_87Pp7LKxqOEdNdMAaKcH1s227p26cpoxoauxBob_zb9M293s4ZAWzk6phucWC-g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:wenXY94YNaF11JczY3jWp5GygXE-OZvRlDjnus-N8_fxSWingJmYhA>
-    <xmx:wenXY97O3gQmNIW6bS9YJeOBzrKa5YwuXg2NTw4FO9WGRPdMYPx8NA>
-    <xmx:wenXY9gkSPrU14psvxDLJNldJ8WG_ZWzoYXeVhc0cXnnjxaqahpWIw>
-    <xmx:wunXYw1SPu_WlsnQ420DnZ1HNeIAfIbmieo1KBywKvOOjwjf_qQbnw>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 30 Jan 2023 11:01:04 -0500 (EST)
-Date:   Mon, 30 Jan 2023 17:01:01 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <Y9fpvZCPlqTSvu1O@kroah.com>
-References: <20230130152818.03c00ea3@canb.auug.org.au>
+        Mon, 30 Jan 2023 11:03:45 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8ACAD17
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:03:43 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-501c3a414acso165647297b3.7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:03:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kRnVG2nFTl4BwwenWUJgDtW21KKjiHwQU7q0KoM8lwU=;
+        b=fmy99mpVYplzHItVV0gIU7OdiZlttPxcrt/KnNdXQNOWmWxYmnB/WCKhz4K8EBEGXt
+         a5igaK3FNXLKMzHBEzfPPeYeV/IVcNeJuZOldRgf4WXt2Uc4Ytfa8IgUocobC9ryhrgQ
+         /Y5aWaietYFmNytacnPCjqKzBhfhyOSph6Ff5EIiLvSXOR8p+5kNRKrZA86ji2oUKd0b
+         KXSDTV/lz2YYzW+b9PnnlP6VUWiOnrK6JyLRWpuxGDlmjFQsofaF+iqkh7EBvrUXXVnn
+         edUwAZIwEcc3QwYD7LdiYWvtDcWWe+L2Lzit10SscOUAvTC5CCwQnc3EdBjjeHuLWnsy
+         H1rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kRnVG2nFTl4BwwenWUJgDtW21KKjiHwQU7q0KoM8lwU=;
+        b=TQ0ZWDeVrbtbvlaJ1RoHCAPMA+/hR3UyUa5Qbp9OaI05F/CB8b7FvwGTB7E9Jiibq8
+         +FpXyaaFZsyCoOaFFmbSzjrp4wX6T9aLHMr+SZP5C9lj1aDzplWMTvgAd4Ac41O7uG5M
+         h9H/KRhSw9ZJtWHrIq8j321zUtiTK88DOt4R7IsniiqpqNEEmgrmMx+ny2b/ONIjHPFd
+         sqnDpqSvmA9nQiR9xhYJu2ygiSy/bXd9KqRn5yuTE7THsG0AVZlekjhoansC1JvHfn6r
+         fMuHwt/Zzpn5XK04sSaz/YTcuQqqx/WxF8ELkXhoi+0NWjihfzIFm3+anKjO6xfZl0e4
+         wBqQ==
+X-Gm-Message-State: AFqh2kpCX0XbGOFpkd6ovLLAd504ZvidOP3jvzZi7Lddbjy7tB7GXY30
+        dr+5ulL2oUtZVN369s8DIOSXjQI3MvnhxLtY34p3Xw==
+X-Google-Smtp-Source: AMrXdXvILrB2xzvcs4JWtChQeHtXR/03YwCUY753A7xYVSr+kSIcmJU0sRWmI+QKZ2CoZyM0GDYqqeq1Y8umluN2zW0=
+X-Received: by 2002:a81:4006:0:b0:46b:c07c:c1d9 with SMTP id
+ l6-20020a814006000000b0046bc07cc1d9mr3775924ywn.56.1675094622259; Mon, 30 Jan
+ 2023 08:03:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130152818.03c00ea3@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
+ <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
+ <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
+ <Y9e9S3ENl0oszAH/@qwirkle> <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
+ <Y9fT+LABhW+/3Nal@qwirkle>
+In-Reply-To: <Y9fT+LABhW+/3Nal@qwirkle>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Mon, 30 Jan 2023 11:03:06 -0500
+Message-ID: <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
+Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
+ back-off retries
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,84 +77,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 03:28:18PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the driver-core tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> arch/powerpc/platforms/ps3/system-bus.c:472:19: error: initialization of 'int (*)(const struct device *, struct kobj_uevent_env *)' from incompatible pointer type 'int (*)(struct device *, struct kobj_uevent_env *)' [-Werror=incompatible-pointer-types]
->   472 |         .uevent = ps3_system_bus_uevent,
->       |                   ^~~~~~~~~~~~~~~~~~~~~
-> arch/powerpc/platforms/ps3/system-bus.c:472:19: note: (near initialization for 'ps3_system_bus_type.uevent')
-> arch/powerpc/platforms/pseries/ibmebus.c:436:22: error: initialization of 'int (*)(const struct device *, struct kobj_uevent_env *)' from incompatible pointer type 'int (*)(struct device *, struct kobj_uevent_env *)' [-Werror=incompatible-pointer-types]
->   436 |         .uevent    = ibmebus_bus_modalias,
->       |                      ^~~~~~~~~~~~~~~~~~~~
-> arch/powerpc/platforms/pseries/ibmebus.c:436:22: note: (near initialization for 'ibmebus_bus_type.uevent')
-> 
-> Caused by commit
-> 
->   2a81ada32f0e ("driver core: make struct bus_type.uevent() take a const *")
-> 
-> I have applied the following merge fix patch.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 30 Jan 2023 14:31:49 +1100
-> Subject: [PATCH] driver core: fixup for "driver core: make struct bus_type.uevent() take a const *"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  arch/powerpc/include/asm/ps3.h           | 2 +-
->  arch/powerpc/platforms/ps3/system-bus.c  | 2 +-
->  arch/powerpc/platforms/pseries/ibmebus.c | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/ps3.h b/arch/powerpc/include/asm/ps3.h
-> index d503dbd7856c..a5f36546a052 100644
-> --- a/arch/powerpc/include/asm/ps3.h
-> +++ b/arch/powerpc/include/asm/ps3.h
-> @@ -396,7 +396,7 @@ static inline struct ps3_system_bus_driver *ps3_drv_to_system_bus_drv(
->  	return container_of(_drv, struct ps3_system_bus_driver, core);
->  }
->  static inline struct ps3_system_bus_device *ps3_dev_to_system_bus_dev(
-> -	struct device *_dev)
-> +	const struct device *_dev)
->  {
->  	return container_of(_dev, struct ps3_system_bus_device, core);
->  }
-> diff --git a/arch/powerpc/platforms/ps3/system-bus.c b/arch/powerpc/platforms/ps3/system-bus.c
-> index 38a7e02295c8..d6b5f5ecd515 100644
-> --- a/arch/powerpc/platforms/ps3/system-bus.c
-> +++ b/arch/powerpc/platforms/ps3/system-bus.c
-> @@ -439,7 +439,7 @@ static void ps3_system_bus_shutdown(struct device *_dev)
->  	dev_dbg(&dev->core, " <- %s:%d\n", __func__, __LINE__);
->  }
->  
-> -static int ps3_system_bus_uevent(struct device *_dev, struct kobj_uevent_env *env)
-> +static int ps3_system_bus_uevent(const struct device *_dev, struct kobj_uevent_env *env)
->  {
->  	struct ps3_system_bus_device *dev = ps3_dev_to_system_bus_dev(_dev);
->  
-> diff --git a/arch/powerpc/platforms/pseries/ibmebus.c b/arch/powerpc/platforms/pseries/ibmebus.c
-> index 58b798a0e879..bb9c18682783 100644
-> --- a/arch/powerpc/platforms/pseries/ibmebus.c
-> +++ b/arch/powerpc/platforms/pseries/ibmebus.c
-> @@ -426,7 +426,7 @@ static struct attribute *ibmebus_bus_device_attrs[] = {
->  };
->  ATTRIBUTE_GROUPS(ibmebus_bus_device);
->  
-> -static int ibmebus_bus_modalias(struct device *dev, struct kobj_uevent_env *env)
-> +static int ibmebus_bus_modalias(const struct device *dev, struct kobj_uevent_env *env)
->  {
->  	return of_device_uevent_modalias(dev, env);
->  }
-> -- 
-> 2.35.1
-> 
+On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
+>
+> On 23/01/30 08:35AM, Willem de Bruijn wrote:
+> > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
+> > <andrei.gherzan@canonical.com> wrote:
+> > >
+> > > On 23/01/30 09:26AM, Paolo Abeni wrote:
+> > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
+> > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
+> > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > >
+> > > > > > The tx and rx test programs are used in a couple of test scripts including
+> > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
+> > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
+> > > > > > accept socket connections. This racing bug could fail the test with at
+> > > > > > least one of the following:
+> > > > > >
+> > > > > > ./udpgso_bench_tx: connect: Connection refused
+> > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
+> > > > > > ./udpgso_bench_tx: write: Connection refused
+> > > > > >
+> > > > > > This change addresses this by adding routines that retry the socket
+> > > > > > operations with an exponential back off algorithm from 100ms to 2s.
+> > > > > >
+> > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > >
+> > > > > Synchronizing the two processes is indeed tricky.
+> > > > >
+> > > > > Perhaps more robust is opening an initial TCP connection, with
+> > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
+> > > > > go.
+> > > >
+> > > > Another option would be waiting for the listener(tcp)/receiver(udp)
+> > > > socket to show up in 'ss' output before firing-up the client - quite
+> > > > alike what mptcp self-tests are doing.
+> > >
+> > > I like this idea. I have tested it and it works as expected with the
+> > > exeception of:
+> > >
+> > > ./udpgso_bench_tx: sendmsg: No buffer space available
+> > >
+> > > Any ideas on how to handle this? I could retry and that works.
+> >
+> > This happens (also) without the zerocopy flag, right? That
+> >
+> > It might mean reaching the sndbuf limit, which can be adjusted with
+> > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
+> > expect this test to bump up against that limit.
+> >
+> > A few zerocopy specific reasons are captured in
+> > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
+>
+> I have dug a bit more into this, and it does look like your hint was in
+> the right direction. The fails I'm seeing are only with the zerocopy
+> flag.
+>
+> From the reasons (doc) above I can only assume optmem limit as I've
+> reproduced it with unlimited locked pages and the fails are transient.
+> That leaves optmem limit. Bumping the value I have by default (20480) to
+> (2048000) made the sendmsg succeed as expected. On the other hand, the
+> tests started to fail with something like:
+>
+> ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
+> expected    773707 received
 
-Ick, 0-day didn't catch this, which is odd, it must not build those
-arches :(
+More zerocopy completions than number of sends. I have not seen this before.
 
-I'll go queue this up now, thanks for the fix!
+The completions are ranges of IDs, one per send call for datagram sockets.
 
-greg k-h
+Even with segmentation offload, the counter increases per call, not per segment.
+
+Do you experience this without any other changes to udpgso_bench_tx.c.
+Or are there perhaps additional sendmsg calls somewhere (during
+initial sync) that are not accounted to num_sends?
+
+> Also, this audit fail is transient as with the buffer limit one.
