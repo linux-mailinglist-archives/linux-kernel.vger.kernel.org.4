@@ -2,58 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC1F68064B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 07:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40ED368064D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 07:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235868AbjA3Gx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 01:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        id S235876AbjA3GyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 01:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbjA3Gx0 (ORCPT
+        with ESMTP id S234930AbjA3GyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 01:53:26 -0500
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E34113CB;
-        Sun, 29 Jan 2023 22:53:23 -0800 (PST)
-Received: from [10.59.106.37] (unknown [77.235.169.38])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4030661CC457B;
-        Mon, 30 Jan 2023 07:53:21 +0100 (CET)
-Message-ID: <8d61fb12-eec4-0bc4-f1f4-87fdb7c5407f@molgen.mpg.de>
-Date:   Mon, 30 Jan 2023 07:53:20 +0100
+        Mon, 30 Jan 2023 01:54:05 -0500
+Received: from mx0a-00176a03.pphosted.com (mx0b-00176a03.pphosted.com [67.231.157.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A5214227;
+        Sun, 29 Jan 2023 22:54:04 -0800 (PST)
+Received: from pps.filterd (m0048206.ppops.net [127.0.0.1])
+        by m0048206.ppops.net-00176a03. (8.17.1.19/8.17.1.19) with ESMTP id 30U4gqFf015753;
+        Mon, 30 Jan 2023 01:54:03 -0500
+Date:   Mon, 30 Jan 2023 08:53:59 +0200
+From:   Ian Ray <ian.ray@ge.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: EXT: Re: [PATCH] drivers: iio: adc: ltc2497: fix LSB shift
+Message-ID: <20230130065359.GA21081@zoo6.em.health.ge.com>
+References: <20230127125714.44608-1-ian.ray@ge.com>
+ <20230127174756.00007299@Huawei.com>
+ <20230128180032.2905cee7@jic23-huawei>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/4] Attempt at adding WCN6855 BT support
-Content-Language: en-US
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Balakrishna Godavarthi <bgodavar@codeaurora.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org
-References: <20230129215136.5557-1-steev@kali.org>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230129215136.5557-1-steev@kali.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230128180032.2905cee7@jic23-huawei>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-ORIG-GUID: N6zcZv5kl4eDebs8WHqBMCtrhehwvaeY
+X-Proofpoint-GUID: N6zcZv5kl4eDebs8WHqBMCtrhehwvaeY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_05,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301300065
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,107 +53,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc: Remove undeliverable rjliao@codeaurora.org]
+On Sat, Jan 28, 2023 at 06:00:32PM +0000, Jonathan Cameron wrote:
+> 
+> On Fri, 27 Jan 2023 17:47:56 +0000
+> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> 
+> > On Fri, 27 Jan 2023 14:57:14 +0200
+> > Ian Ray <ian.ray@ge.com> wrote:
+> > 
+> > > Correct the "sub_lsb" shift for both ltc2497 and ltc2499.  
+> 
+> I dropped the ltc2499 mention here as that one seems to be unaffected
+> by this patch (beyond as a simplification)
 
-Am 29.01.23 um 22:51 schrieb Steev Klimaszewski:
-> This patchset is somewhat of an RFC/RFT, and also just something to get this out
-> there.
+Makes sense.
+
+
 > 
-> First things first, I do not have access to the specs nor the schematics, so a
-> lot of this was done via guess work, looking at the acpi tables, and looking at
-> how a similar device (wcn6750) was added.
+> > 
+> > Hi Iain, Thanks for the patch.
+> > 
+> > > 
+> > > An earlier version of the code shifted by 14 but this was a consequence
+> > > of reading three bytes into a __be32 buffer and using be32_to_cpu(), so
+> > > eight extra bits needed to be skipped.  Now we use get_unaligned_be24()
+> > > and thus the additional skip is wrong.
+> > > 
+> > > Fixes 2187cfe ("drivers: iio: adc: ltc2497: LTC2499 support")  
+> > 
+> > This isn't in standard Fixes tag format.  If nothing else comes
+> > up I'll fix up whilst applying.
+> > 
+> > > Signed-off-by: Ian Ray <ian.ray@ge.com>
 > 
-> There are definitely checkpatch warnings, and I do apologize to those who won't
-> review things until there are no warnings for wasting your time.
+> Fix looks good to me.  (I noted my reasoning below on basis someone might
+> find it useful) 
 > 
-> One example is that I have the vregs commented out, the dt-bindings say that
-> they are required since it's based on the wcn6750 work but also like the 6750,
-> I've added defaults into the driver, and those seem to work, at least for the
-> initial testing.
+> Applied to the fixes-togreg branch of iio.git with fixes tag fixed and
+> marked for stable.
 > 
-> The end result is that we do have a working device, but not entirely reliable.
+> Please take a look at:
+> https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?h=fixes-togreg&id=6327a930ab7bfa1ab33bcdffd5f5f4b1e7131504
+> to check I didn't mess anything up.
+
+lgtm
+
+Many thanks!
+
+
 > 
-> Hopefully by getting this out there, people who do have access to the specs or
-> schematics can see where the improvements or fixes need to come.
+> Thanks,
 > 
-> There are a few things that I am not sure why they happen, and don't have the
-> knowledge level to figure out why they happen or debugging it.
-> 
-> Bluetooth: hci0: setting up wcn6855
-> Bluetooth: hci0: Frame reassembly failed (-84)
-> Bluetooth: hci0: QCA Product ID   :0x00000013
-> Bluetooth: hci0: QCA SOC Version  :0x400c0210
-> Bluetooth: hci0: QCA ROM Version  :0x00000201
-> Bluetooth: hci0: QCA Patch Version:0x000038e6
-> Bluetooth: hci0: QCA controller version 0x02100201
-> Bluetooth: hci0: unexpected event for opcode 0xfc48
-> Bluetooth: hci0: Sending QCA Patch config failed (-110)
-> Bluetooth: hci0: QCA Downloading qca/hpbtfw21.tlv
-> Bluetooth: hci0: QCA Downloading qca/hpnv21g.bin
-> Bluetooth: hci0: QCA setup on UART is completed
-> 
-> I do not know why the Frame assembly failed, nor the unexpected event.
-> 
-> Likewise, I'm not entirely sure why it says the patch config send times out, and
-> *then* seems to send it?
-> 
-> The BD Address also seems to be incorrect, and I'm not sure what is going on
-> there either.
-> 
-> Additionally, I've tried with an additional patch that I'm not including that is
-> based on commit 059924fdf6c1 ("Bluetooth: btqca: Use NVM files based on SoC ID
-> for WCN3991") to try using the hpnv21g.bin or hpnv21.bin, and the firmware acted
-> the same regardless, so I am assuming I don't truly need the "g" firmware on my
-> Thinkpad X13s.
-> 
-> Testing was done by connecting a Razer Orochi bluetooth mouse, and using it, as
-> well as connecting to and using an H2GO bluetooth speaker and playing audio out
-> via canberra-gtk-play as well as a couple of YouTube videos in a browser.
-> 
-> The mouse only seems to work when < 2 ft. from the laptop, and for the speaker, only
-> "A2DP Sink, codec SBC" would provide audio output, and while I could see that
-> data was being sent to the speaker, it wasn't always outputting, and going >
-> 4ft. away, would often disconnect.
-> 
-> steev@wintermute:~$ hciconfig -a
-> hci0:   Type: Primary  Bus: UART
->          BD Address: 00:00:00:00:5A:AD  ACL MTU: 1024:8  SCO MTU: 240:4
->          UP RUNNING PSCAN
->          RX bytes:1492 acl:0 sco:0 events:126 errors:0
->          TX bytes:128743 acl:0 sco:0 commands:597 errors:0
->          Features: 0xff 0xfe 0x8f 0xfe 0xd8 0x3f 0x5b 0x87
->          Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3
->          Link policy: RSWITCH HOLD SNIFF
->          Link mode: PERIPHERAL ACCEPT
->          Name: 'wintermute'
->          Class: 0x0c010c
->          Service Classes: Rendering, Capturing
->          Device Class: Computer, Laptop
->          HCI Version:  (0xc)  Revision: 0x0
->          LMP Version:  (0xc)  Subversion: 0x46f7
->          Manufacturer: Qualcomm (29)
-> 
-> steev@wintermute:~$ dmesg | grep Razer
-> [ 3089.235440] input: Razer Orochi as /devices/virtual/misc/uhid/0005:1532:0056.0003/input/input11
-> [ 3089.238580] hid-generic 0005:1532:0056.0003: input,hidraw2: BLUETOOTH HID v0.01 Mouse [Razer Orochi] on 00:00:00:00:5a:ad
-> steev@wintermute:~$ dmesg | grep H2GO
-> [ 3140.959947] input: H2GO Speaker (AVRCP) as /devices/virtual/input/input12
-> 
-> Bjorn Andersson (1):
->    arm64: dts: qcom: sc8280xp: Enable BT
-> 
-> Steev Klimaszewski (3):
->    dt-bindings: net: Add WCN6855 Bluetooth bindings
->    Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6855
->    arm64: dts: qcom: thinkpad-x13s: Add bluetooth
-> 
->   .../net/bluetooth/qualcomm-bluetooth.yaml     |  2 +
->   .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
->   arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 14 ++++
->   drivers/bluetooth/btqca.c                     | 24 ++++++-
->   drivers/bluetooth/btqca.h                     | 10 +++
->   drivers/bluetooth/hci_qca.c                   | 59 ++++++++++++----
->   6 files changed, 162 insertions(+), 15 deletions(-)
+> Jonathan
 > 
 > 
-> base-commit: e2f86c02fdc96ca29ced53221a3cbf50aa6f8b49
+> > > ---
+> > >  drivers/iio/adc/ltc2497.c | 6 ++----
+> > >  1 file changed, 2 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/iio/adc/ltc2497.c b/drivers/iio/adc/ltc2497.c
+> > > index 17370c5..ec198c6 100644
+> > > --- a/drivers/iio/adc/ltc2497.c
+> > > +++ b/drivers/iio/adc/ltc2497.c
+> > > @@ -28,7 +28,6 @@ struct ltc2497_driverdata {
+> > >  	struct ltc2497core_driverdata common_ddata;
+> > >  	struct i2c_client *client;
+> > >  	u32 recv_size;
+> > > -	u32 sub_lsb;
+> > >  	/*
+> > >  	 * DMA (thus cache coherency maintenance) may require the
+> > >  	 * transfer buffers to live in their own cache lines.
+> > > @@ -65,10 +64,10 @@ static int ltc2497_result_and_measure(struct ltc2497core_driverdata *ddata,
+> > >  		 * equivalent to a sign extension.
+> > >  		 */
+> > >  		if (st->recv_size == 3) {
+> > > -			*val = (get_unaligned_be24(st->data.d8) >> st->sub_lsb)
+> > > +			*val = (get_unaligned_be24(st->data.d8) >> 6)
+> Prior to the buggy patch.
+> 
+> 1) Read into top 3 bytes of BE32 which corresponds to 8 bits high.
+> 2) Shift by 14.
+> 
+> Before this patch
+> 1) Read only 3 bytes
+> 2) shift by  (31 - (resolution + 1) where resolution is 16 so shift by 14.
+> Indeed bug.
+> 
+> After this patch.
+> 1) Read 3 bytes
+> 2) shift by 6 
+> 
+> Matches original behaviour - fix is correct.
+> 
+> 
+> > >  				- BIT(ddata->chip_info->resolution + 1);
+> > >  		} else {
+> > > -			*val = (be32_to_cpu(st->data.d32) >> st->sub_lsb)
+> > > +			*val = (be32_to_cpu(st->data.d32) >> 6)
+> 
+> Prior to this patch
+> sub_lsb = 31 - (resolution + 1) where in this case resolution is 24
+> 31 - 25 = 6 so this change is a noop change, so this is good.
+> 
+> > >  				- BIT(ddata->chip_info->resolution + 1);
+> > >  		}
+> > >  
+> > > @@ -122,7 +121,6 @@ static int ltc2497_probe(struct i2c_client *client)
+> > >  	st->common_ddata.chip_info = chip_info;
+> > >  
+> > >  	resolution = chip_info->resolution;
+> > > -	st->sub_lsb = 31 - (resolution + 1);
+> > >  	st->recv_size = BITS_TO_BYTES(resolution) + 1;
+> > >  
+> > >  	return ltc2497core_probe(dev, indio_dev);  
+> > 
+> 
+> 
