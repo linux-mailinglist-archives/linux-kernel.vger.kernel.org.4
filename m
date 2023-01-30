@@ -2,214 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB0A681B2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A9E681B2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbjA3UQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        id S229542AbjA3UQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:16:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjA3UQJ (ORCPT
+        with ESMTP id S229472AbjA3UQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:16:09 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3877B34C32
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:16:07 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id l15so1817792ilj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:16:07 -0800 (PST)
+        Mon, 30 Jan 2023 15:16:17 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490DF3757F;
+        Mon, 30 Jan 2023 12:16:16 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id hx15so15771556ejc.11;
+        Mon, 30 Jan 2023 12:16:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4eXu+jCcimRhhwZE4jUuYTcHZvv/qVsf+cVU9nJDDVE=;
-        b=IbarBvZp/PTHo0ndaS0Luk+j8lTgZ36nfRwHV3I83r12yZDaE6lLHgbnjVV0Bsbden
-         /9tDgbls8LztVBI4ZLUU7Ktw5DN/sGwy1VrnvUNX8wyIP6kH+mTZuGaeZoWhzTbc0TIY
-         pKg/NDK1yPXVmYZbpnNdFIioZYQeUOsbjRT7JUkEDLV+eXiZZ0UbfVk73s6hF0ERd/8Z
-         6SrIFeMjWnQ05T+SHTF7DeMZT9Q7+TY4h+9mnJwnNGBlKpKYiceTNtsswX3zgeAUhVoc
-         X6oHJAKt7+sg7qMnLdF3R6W9MC2GJFnLqvc3lb0ZDamdIvoQIw1sdBz3/gTOQozGL2z2
-         B22w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uPkPZ9hXb0YMQ9faHMJ8j8JGYXj5rWLnlmb1qb1codI=;
+        b=WIJw0SxW2vsP9TRRknDb2FY31vDOZgEWggYys5sjxOFiZibWs2TKug6ZNVKVM0ijVi
+         5clmtMicO0cMGzi+QAUZaQC8pFWRB3FfSnvPgOB5hGcWG/1eVvT7TG8RWdG/rLp1maA4
+         2YusTbQ1V3t3AgT/FDNsE6N83zQVqU5x8aOa+uTYs6Mfn5HqUJzNUUByenEZuoKxjK72
+         PUR2KIKcInpU+2koT99kYNC7WjgGh7juflxgHl5ruF2ols1qRD7FTLqhUr/CfWnK5BCN
+         GgIIPsNRntsUWtZVRqHwrzEMpGBlgMdaJE+wZERFwkDktRL9KXvNqoUgeSA5r3dIex8u
+         CEaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4eXu+jCcimRhhwZE4jUuYTcHZvv/qVsf+cVU9nJDDVE=;
-        b=c7RR4CXtLWKvdq1N9CoXYiaENZWxkacYqeH+Jx1FIsry0uTHy6LDE4Z83VF2sC+XGu
-         t6SlKGr2IaRcxgmO3hTxAc91dFZ5Jc1SVXeXfU34YkAsjUqD/x2eaxV71fk1yX9A0RuA
-         8S/IiI9kZzMe/8pGL+vQk/SSdM6jFCjRMSj07FhjtNmy7tUQKEoRdCKpxvOfXCJbs/LH
-         e4Fu6t5KK8dmaiMR8njbfX7eSANI45eeasLiUsQ+bKe0xkwV9RkipGSuhPeWe2jQVxcq
-         +YaJhoWOsHKOUvvs6uLnPX3U6CidGQHUR25KK5LptZfNronruMH7mqnL8RSRXbGt2zUY
-         ub3Q==
-X-Gm-Message-State: AO0yUKU4bcoV/QyG/PdFh/4wnngbiV/0n2w0wBQ0yJ11YpxGz7GzWaFS
-        JjQvhxmSJ4eNbqyu1tArNn08Mg0rAzpaOoJ9UO/gDQ==
-X-Google-Smtp-Source: AK7set8gBbFtRo8dKJFsa1xtqoX+VGuMj2YLv9v5HZyiXu157OnIhFVb0Ius/x+2MpHc6VOqfJ7Nwg0wYrPDNxL7HdU=
-X-Received: by 2002:a92:2610:0:b0:310:a9aa:3b74 with SMTP id
- n16-20020a922610000000b00310a9aa3b74mr2838060ile.31.1675109766287; Mon, 30
- Jan 2023 12:16:06 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uPkPZ9hXb0YMQ9faHMJ8j8JGYXj5rWLnlmb1qb1codI=;
+        b=OjJ0qzbOMDxOb7kv7U8isbSpa+KRJdZkHrsgI+uLK/DOvBUrjPDiP2IyDsv7FDRrOO
+         xIC6S9mo/il6XGBqvbna6L2aRcug7VHsIhe9lf54Mhv5TLn9SVke42Kj+i6wsfLS0ipA
+         6xF4TTU5hCtFrdPgPY7or1REGI42cR1J13ArSjPDZapkGHtaz9Xg4VvvYCM8FEOmG1Wb
+         CzrQNT6wALDtbYVBQAPCilIVsEt/gxWwj8Ow2aPY5TR1auxAF5QjFcuVzUhx0zelZZuD
+         xo5k+qaa9oTGAIUv1FgFgVdtvvQYE8F9FWDp43gACN1q8NRtBtNeSzsK3TgypNrOGrUB
+         6zdg==
+X-Gm-Message-State: AO0yUKUA9Fm4wzj2XNgsZhy3cCE57lP7TuUanagTGneZoFBaXqFJgjeV
+        6SoMy0CdCBuT4UAugFeWZS7mEwAEa5A=
+X-Google-Smtp-Source: AK7set/iisSzpF5vyGzXWeKEJ9SOXJV/hMny8Yz/vbZ7Y7oBrWg2V1eTmKTsaWJW0ik2OkN3038pKw==
+X-Received: by 2002:a17:906:8444:b0:879:ab3:2864 with SMTP id e4-20020a170906844400b008790ab32864mr12057736ejy.24.1675109774600;
+        Mon, 30 Jan 2023 12:16:14 -0800 (PST)
+Received: from ?IPV6:2a01:c23:c074:7400:d941:3cb5:fa86:8ec8? (dynamic-2a01-0c23-c074-7400-d941-3cb5-fa86-8ec8.c23.pool.telefonica.de. [2a01:c23:c074:7400:d941:3cb5:fa86:8ec8])
+        by smtp.googlemail.com with ESMTPSA id k16-20020a170906579000b0087bdae33badsm5772981ejq.56.2023.01.30.12.16.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 12:16:14 -0800 (PST)
+Message-ID: <0489ac03-ff79-adf1-104d-72523ace9701@gmail.com>
+Date:   Mon, 30 Jan 2023 21:16:10 +0100
 MIME-Version: 1.0
-References: <20230128074918.1180523-1-davidgow@google.com>
-In-Reply-To: <20230128074918.1180523-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 30 Jan 2023 15:15:54 -0500
-Message-ID: <CAFd5g47G23c-FuPjiy_NVsep2juvcwgWh-6bY7uuVmx+fZgFJA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kunit: Expose 'static stub' API to redirect functions
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joe Fradley <joefradley@google.com>,
-        Steve Muckle <smuckle@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] net: phy: meson-gxl: Add generic dummy stubs for MMD
+ register access
+Content-Language: en-US
+To:     Chris Healy <cphealy@gmail.com>, andrew@lunn.ch,
+        linux@armlinux.org.uk, davem@davemloft.net,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jeremy.wang@amlogic.com
+Cc:     Chris Healy <healych@amazon.com>
+References: <20230130200352.462548-1-cphealy@gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <20230130200352.462548-1-cphealy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 2:49 AM David Gow <davidgow@google.com> wrote:
->
-> Add a simple way of redirecting calls to functions by including a
-> special prologue in the "real" function which checks to see if the
-> replacement function should be called (and, if so, calls it).
->
-> To redirect calls to a function, make the first (non-declaration) line
-> of the function:
->
->         KUNIT_STATIC_STUB_REDIRECT(function_name, [function arguments]);
->
-> (This will compile away to nothing if KUnit is not enabled, otherwise it
-> will check if a redirection is active, call the replacement function,
-> and return. This check is protected by a static branch, so has very
-> little overhead when there are no KUnit tests running.)
->
-> Calls to the real function can be redirected to a replacement using:
->
->         kunit_activate_static_stub(test, real_fn, replacement_fn);
->
-> The redirection will only affect calls made from within the kthread of
-> the current test, and will be automatically disabled when the test
-> completes. It can also be manually disabled with
-> kunit_deactivate_static_stub().
->
-> The 'example' KUnit test suite has a more complete example.
->
-> Co-developed-by: Daniel Latypov <dlatypov@google.com>
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> Signed-off-by: David Gow <davidgow@google.com>
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-
-Still looks good overall to me, but I see one nit:
-
+On 30.01.2023 21:03, Chris Healy wrote:
+> From: Chris Healy <healych@amazon.com>
+> 
+> The Meson G12A Internal PHY does not support standard IEEE MMD extended
+> register access, therefore add generic dummy stubs to fail the read and
+> write MMD calls. This is necessary to prevent the core PHY code from
+> erroneously believing that EEE is supported by this PHY even though this
+> PHY does not support EEE, as MMD register access returns all FFFFs.
+> 
+> Fixes: 5c3407abb338 ("net: phy: meson-gxl: add g12a support")
+> Signed-off-by: Chris Healy <healych@amazon.com>
 > ---
->
-> This patch depends upon the 'hooks' implementation in
-> https://lore.kernel.org/linux-kselftest/20230128071007.1134942-1-davidgow@google.com/
->
-> Note that checkpatch.pl does warn about control flow in the
-> KUNIT_STATIC_STUB_REDIRECT() macro. This is an intentional design choice
-> (we think it makes the feature easier to use), though if there are
-> strong objections, we can of course reconsider.
->
-> Changes since v1:
-> https://lore.kernel.org/all/20221208061841.2186447-2-davidgow@google.com/
-> - Adapted to use the "hooks" mechanism
->   - See: https://lore.kernel.org/linux-kselftest/20230128071007.1134942-1-davidgow@google.com/
->   - Now works when KUnit itself is compiled as a module (CONFIG_KUNIT=m)
->
-> Changes since RFC v2:
-> https://lore.kernel.org/linux-kselftest/20220910212804.670622-2-davidgow@google.com/
-> - Now uses the kunit_get_current_test() function, which uses the static
->   key to reduce overhead.
->   - Thanks Kees for the suggestion.
->   - Note that this does prevent redirections from working when
->     CONFIG_KUNIT=m -- this is a restriction of kunit_get_current_test()
->     which will be removed in a future patch.
-> - Several tidy-ups to the inline documentation.
->
-> Changes since RFC v1:
-> https://lore.kernel.org/lkml/20220318021314.3225240-2-davidgow@google.com/
-> - Use typecheck_fn() to fix typechecking in some cases (thanks Brendan)
->
-> ---
->  include/kunit/static_stub.h    | 113 ++++++++++++++++++++++++++++++
->  include/kunit/test-bug.h       |   1 +
->  lib/kunit/Makefile             |   1 +
->  lib/kunit/hooks-impl.h         |   2 +
->  lib/kunit/kunit-example-test.c |  38 ++++++++++
->  lib/kunit/static_stub.c        | 123 +++++++++++++++++++++++++++++++++
->  6 files changed, 278 insertions(+)
->  create mode 100644 include/kunit/static_stub.h
->  create mode 100644 lib/kunit/static_stub.c
->
-> diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
-> new file mode 100644
-> index 000000000000..047b68d65f1a
-> --- /dev/null
-> +++ b/include/kunit/static_stub.h
-> @@ -0,0 +1,113 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * KUnit function redirection (static stubbing) API.
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + * Author: David Gow <davidgow@google.com>
-> + */
-> +#ifndef _KUNIT_STATIC_STUB_H
-> +#define _KUNIT_STATIC_STUB_H
-> +
-> +#if !IS_ENABLED(CONFIG_KUNIT)
-> +
-> +/* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
-> +#define KUNIT_TRIGGER_STATIC_STUB(real_fn_name, args...) do {} while (0)
-> +
-> +#else
-> +
-> +#include <kunit/test.h>
-> +#include <kunit/test-bug.h>
-> +
-> +#include <linux/compiler.h> /* for {un,}likely() */
-> +#include <linux/sched.h> /* for task_struct */
-> +
-> +
-> +/**
-> + * KUNIT_STATIC_STUB_REDIRECT() - call a replacement 'static stub' if one exists
-> + * @real_fn_name: The name of this function (as an identifier, not a string)
-> + * @args: All of the arguments passed to this function
-> + *
-> + * This is a function prologue which is used to allow calls to the current
-> + * function to be redirected by a KUnit test. KUnit tests can call
-> + * kunit_activate_static_stub() to pass a replacement function in. The
-> + * replacement function will be called by KUNIT_TRIGGER_STATIC_STUB(), which
-> + * will then return from the function. If the caller is not in a KUnit context,
-> + * the function will continue execution as normal.
-> + *
-> + * Example:
-> + *
-> + * .. code-block:: c
-> + *
-> + *     int real_func(int n)
-> + *     {
-> + *             KUNIT_STATIC_STUB_REDIRECT(real_func, n);
-> + *             return 0;
-> + *     }
-> + *
-> + *     void replacement_func(int n)
+> 
+> Change in v2:
+> * Add fixes tag
+> 
+Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
 
-nit: Pretty sure the return type should be `int`
 
-> + *     {
-> + *             return 42;
-> + *     }
-[...]
