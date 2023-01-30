@@ -2,150 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA2968082F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D20168082C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbjA3JHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
+        id S235541AbjA3JHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:07:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235692AbjA3JHk (ORCPT
+        with ESMTP id S233090AbjA3JHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:07:40 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86E82CFD2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:07:38 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id q5so10380565wrv.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:07:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=lsYDdEUERNa3haOuJCyAm4JNnP3W5R6kzY4+GKk1/bQ=;
-        b=BcPcAmLYez/2WbtfoRyE4Tmt4L6RHSzHIyQHIxkGShoJ8nsggaHJo/hwm2rGInqlBY
-         TOd96pVmLH5CSkR0ZpjrrTbvm2nHG3lPJ2QuHgFFzzNcV9xsgqhyJgEKP2jh1wih3R0x
-         rHNeicYddOa1OfTbdn6h8Cuu0f80lXvIkp4d3WXn2ZPz4ZcHFX0Adcfpd/WPHXKWJK8w
-         aYW8w9p6UJOHYCcRhB7K8KfU1z3HL7YoMjMMUT7ROa/ei1AM3yNX3GfNGYS9wHK76lS7
-         sUDri8lcLIE+vQRuLMTizVOcbcxD7rF3PPnNVxxoOEqkxUHtH2CNO5XnuQF5b3RolWi6
-         APZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lsYDdEUERNa3haOuJCyAm4JNnP3W5R6kzY4+GKk1/bQ=;
-        b=GCo2e6g2NBbBN1SoeIC5gH3W47UjBxDSDmUobldpLK1aPy47gXEfHKqk0S3FyQmc1u
-         p2HebUen91FD/ek1uI6FEBSFBob8LcGxGdsY0RZOH1G7TiB0Q3HReJZ+fvF+OSyo0R8e
-         TuAXTJdzBhnA7YJZjf+pPyDsuBNDLunGQEVITIuaxONMK5a+AVEodmA3b4a1/Wuw68Ok
-         wPeDxfIdqBDW730umg562ASWavw6eZ1SXKZJ9kaho6IHcQT6YAwbUrrW272sp4/6Hx+S
-         Si87PgvZenF7jyfERvJk8wBLXZzCRIOitwsNX/XNZMiwHg0HMkFPE8xcTulk1a0ofJBL
-         7Vug==
-X-Gm-Message-State: AFqh2kqxG+bJnJwnX2kFZBGTjqMNISsge4CI3Dvgu76Q0ohRgva6E2OA
-        7Ekmk4isEjU62pZVmzkYLtIiq+YTA3ydQzN1
-X-Google-Smtp-Source: AMrXdXtLM5yCOsKxBBWj+DH7khxMs+DnILPh4por/ncjDzW//iFJ0t2Qxjhu8HVdGwvrrSuBjQGabQ==
-X-Received: by 2002:adf:c78b:0:b0:2bd:dd13:170f with SMTP id l11-20020adfc78b000000b002bddd13170fmr52501442wrg.26.1675069657414;
-        Mon, 30 Jan 2023 01:07:37 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id t4-20020a05600001c400b002bdcce37d31sm12691897wrx.99.2023.01.30.01.07.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 01:07:36 -0800 (PST)
-References: <20230116074214.2326-1-yu.tu@amlogic.com>
- <20230116074214.2326-4-yu.tu@amlogic.com>
- <1ja62eybrv.fsf@starbuckisacylon.baylibre.com>
- <aedb0764-b5cb-7f49-f279-51dbec070e80@amlogic.com>
- <1jwn5hwn0w.fsf@starbuckisacylon.baylibre.com>
- <a4ad6ac6-60c2-8f7b-fdb0-509de31db282@amlogic.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Mon, 30 Jan 2023 04:07:11 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2114.outbound.protection.outlook.com [40.107.21.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1439429429;
+        Mon, 30 Jan 2023 01:07:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N924+oO7TWmS+zuFQv5SxUsJ8PnuXUlk6Zfm/I9IeBqyXK+Mh/3N39wPJ2TH/O5qLKZEQSyLFQKOi1tPCYb2uLNoNAJf9L0j0Z27wLd3H7oklHdXzNdhXmtDqHkrVhN+uFr+4MlTWhz1mwxdqfrNeQGAxAjPTlitPjamahkJQqHRV48g5c99EvX5Im2rlk9UeynkUYoIwO6XghWbgi2iLki0rolXdUR9pinhzRvxBsN5yzCzgmFvckFRnlWBWOzctJwbLg5d/0gndWQGSR6XQPEJqV2bMQeM8sdn3t5XSuseddF/1Xb2JgDxzfRWn6LSjnkqFZxfjGM9kwPUGNX2mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rqo8KMIO/IFqQXAQ9BPOwHboqk/gUomZ71uJ/kXbGLE=;
+ b=Nv9dThGlsQZLnODkOV6NNWZOzqgu5RqFPhD3SZ9lFUskf69uL4thZiVe3k1fkEsnfE7rAXrKbwr//NFVZV40HYag/ad4o3E/1hXlURIHiw/j1jBovr0/GPs49dafUt8peJ20LfS9oNcAU+aOImvWqFp84UlCH9slJDLUGOO8Es0Z/myb4QyuOXUclYtezwZxfC03gkO4wLeSl7UdTyBe+iWFvh3Cd4tg0hBXCqN/TWNI/NRraX/fuNhqVBMn49GZhJToChpUgcy/2kWKHClNZ3jyf8AKAkjZ6GPmaDzG6YA4XPOh3VRI9lIiOSLqYHifatXV0FwxNKNe5mGuHFZlDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rqo8KMIO/IFqQXAQ9BPOwHboqk/gUomZ71uJ/kXbGLE=;
+ b=L8dLSk+a3RtPitI9bK+xFEvN3lS9kQ+DU91BnXBiD39FDTCsZ9TSzllWXvmkSvkmnVEZGgVdeE1ORmj4PLiZYXjO8IaTWUFc6sUioTm6IY4/pHdxVW3cfhyskzgDXxy3kttDd+gCbqSi4OuS5CV7nLfpE+E8lhnxQIOPL9daFTs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kontron.de;
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::10)
+ by AS2PR10MB6615.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:55e::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Mon, 30 Jan
+ 2023 09:07:07 +0000
+Received: from PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::59e9:ea90:b6ea:3863]) by PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::59e9:ea90:b6ea:3863%9]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
+ 09:07:07 +0000
+Message-ID: <b169157e-3477-3bc3-b4dd-92b3a69798b7@kontron.de>
+Date:   Mon, 30 Jan 2023 10:07:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v8 5/5] input: pwm-beeper: handle module unloading
+ properly
+Content-Language: en-US
+To:     Manuel Traut <manuel.traut@mt.com>, linux-kernel@vger.kernel.org
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     "kelvin . zhang" <Kelvin.Zhang@amlogic.com>,
-        "qi . duan" <qi.duan@amlogic.com>
-Subject: Re: [PATCH V6 3/3] clk: meson: s4: add support for Amlogic S4 SoC
- peripheral clock controller
-Date:   Mon, 30 Jan 2023 10:06:49 +0100
-In-reply-to: <a4ad6ac6-60c2-8f7b-fdb0-509de31db282@amlogic.com>
-Message-ID: <1jy1pko0fc.fsf@starbuckisacylon.baylibre.com>
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230126091825.220646-1-manuel.traut@mt.com>
+ <20230126091825.220646-6-manuel.traut@mt.com>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+In-Reply-To: <20230126091825.220646-6-manuel.traut@mt.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0179.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:45::19) To PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:263::10)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5681:EE_|AS2PR10MB6615:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c3edced-3be7-46f7-42a8-08db02a15ceb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m/Evr6GXqlkr4JJyYJKRWWfRH9NBmKROs/YvyuLQzT1czCXPAXjXPpz9cbve5NfyIOnbQJJiHfgJTa5xvA/9Qp1FH6hg2s95wHd3Jr7ofBzC+2njNsqRPS98ghOqn6pNEkx31UDndKGmYDa81s++6xz4RWxQZdgFcAsa5vwksfaeTsX/RuKj/7gjB51f5cotauwTnIIj/ynqxMZx1DtTc8+4ZNXksW/ezqvh1u7GeS9+9aF5UEkoDiezWsdUJO4Hr/feVlIUFYzgBAvOLH1XPUcnUWdIeK1QREBWH7HDtngokdjuMX6ZpN7ogDiNg02Ic3jZ6dvcLu1eQhJ3nsEok1K/fdA//QHrPL/1ahJG3WUSQiYclAApLMISPhKwu3EvAzCw4tqG38JhDaGeG0MU8Iyd3thvqAuHi0kcsP+CVsleYShGC8eyiW+oplZLvcchTP7ouRyN3sFYDlL3P6CFsUCV25nJ7AZBXK9iBfYEnoNzvTzkuZGbX9C3cwu3Ksl0WnpRv7HpUNkey80bhzw32QaNoYnMrNXnbClt6XzuUq++eIy4xTssHYabpPUZsqm2kowtMrwxPOTYqaEtqD2HQlLCgLFjiNsJJxj/oIeOy82MVzGEYhIiCOvNqsFTjoOoY2EKcOR9Atp1gMl3MRkhAoG27RpYNDxCcNMo/oS4K3gvtFfcfDUDcfPwwSb9iH9IMM+s3u22g07xIr0xwWkql67J6KSN9sv7cYAOGsQjMyw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199018)(4326008)(41300700001)(8676002)(66556008)(66476007)(31686004)(316002)(66946007)(8936002)(5660300002)(54906003)(44832011)(4744005)(36756003)(2906002)(6512007)(186003)(26005)(6486002)(478600001)(6506007)(53546011)(31696002)(86362001)(2616005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlJmQWZseGgwaXV4NEhJVjBVQmJUcTJVbWFsS3E5eXRNS3F4bVYvaXZMNzUv?=
+ =?utf-8?B?UHM0TStmSTZPTUN0RitreERkUFIzU3NzVUJpNUJxTitxY0FEb1U1OW1WUjVw?=
+ =?utf-8?B?b0RzU0hwTFErd2dmdngzS2JLY0RhV1IrUkdENlFzS293VzhJZzg5RXFzTUNG?=
+ =?utf-8?B?dGRwdHRSeWV4VDh4U2E2TGtIWWM3UzZiM0tnZEZTUEtKcEs5QnZMZW9VZmdZ?=
+ =?utf-8?B?UUl6R2VKVTdIWTZPUHMvc2M5S3c0Ym84SFI0QTlYaGFsc0wya3p2M3dJSGg4?=
+ =?utf-8?B?TFdmQWhSVHdiMDJMaU9pZWxmMHVVV28vKzM4RzlQYjk4a0U4Wld1ZC92UWFV?=
+ =?utf-8?B?M0dGVWtiQVBxWTNjTXpFNGV0QXVwd0VJTmd6V2VhbVd0bVA0T28yNTFRNkt6?=
+ =?utf-8?B?YzBlTjYyTjdMcFNpeUU5Y1ZCSGlMU0xQdXFVdCtFbWxwS1drb1FPUkNDUHRl?=
+ =?utf-8?B?bWFyd0E0a2xuOGJPcmNQbURhOHYxTVhQU1I1M1VKb2dwVVIrbFJ2UTRsYVRV?=
+ =?utf-8?B?Q0VyY3VWb0dJMWNpZGZmWmtwbFlIYUVKZ04wdVo3NzJBVVRUc0ErcURhbHdK?=
+ =?utf-8?B?QkdPRjV2Nk5oYWlOVEtHei9FbS9lYkZOb21DeTlzTHFBSWJvWUppVkgweEdY?=
+ =?utf-8?B?WnBaUWZzOVY0ZXFENVdRRjArTWNlNEp0eE5iRTRJU0VHQzJXQ2k1dkE0ekkr?=
+ =?utf-8?B?T3lWbEFXbW5UdFAwUTJlTFVBT3RMemhaNnNCR0xFTHRNUlQ2S2FFUWFVQmR5?=
+ =?utf-8?B?RE1neVRub2Vmd3lMWVUwcCsvWXNuRTByWnF4WmtKSktIRng4N3pQQ2psbklo?=
+ =?utf-8?B?ekU3Y1JxdENlZUh5ZEwyRnZNSWFpMlUxV08xOElPVGFiMmdSK0JjU3I2aTFI?=
+ =?utf-8?B?SGZlMWZLVmJkRUZySDF3MGFqcW81QllKT3BFd2xOb0VhN1dkV2g0aVZpOWRs?=
+ =?utf-8?B?UW1NWlNyK2J2M1hKOEt4c2VKbnFKZ01pS1E3cGZabTF3N3FKRHNXQzZoanVw?=
+ =?utf-8?B?MmFLN0c3cXlrZnlYN0JLVXJZcGpjUjJCbk5HcEFhRmcrSlNSRmV0d2Nxd0J3?=
+ =?utf-8?B?SlpvMEJwTk9tMDlyM1V4KzJHRVAveXZqalQ4N0JFOU1SY2xtQnBGOEJtRGkz?=
+ =?utf-8?B?Z0wyV2JuRjN6eEs3WHZZYzlMTkJRb1VEYU02NGllTEJ1MWk3YU5uUEQ5SGZN?=
+ =?utf-8?B?Wm9yN1pvUEhOdm1wTHhkWkd4UldSQ0E4SlJPalVna1BpOHV4aWlETkhEcWc3?=
+ =?utf-8?B?TWEzWTRlLzNvY1lwb3J2c2UvNko4SWo2aHZ5UXg4aDViT05CdCt6VlVKS3JC?=
+ =?utf-8?B?Z01HWWRFMnJ6SnVuL3Zqc0ZNNXNiWDJhWlY1bjc2MTVrbzdvY3ZnZmVsQkVq?=
+ =?utf-8?B?a0lJUVpCeDZUZnBZQTMrNlVLSmo2YTFHbjhlMEIzR05NckRWYWhKbzJSZ3M1?=
+ =?utf-8?B?bE5GYmhPN2NMYkpMckgwN09SUzhCWEs0YUtUUWVWL3NNWkdwTitQNUF0QVF2?=
+ =?utf-8?B?VjlQakIramEyTXRabEhiRkRnNkxXNnlBZHlBODRuY0xVUmdISEdEem05eGdC?=
+ =?utf-8?B?MGw3Ynh3eDFkclorWDA0NU5IckpQK0ZtRGh4VFBwT2IzMjlzOUZWbDY3WHJP?=
+ =?utf-8?B?ekdHOEdvYzJ6SmdjazRiWDBHdG9kcmdINFMvZnRSZGpjOFgwWnBQcDArVm1V?=
+ =?utf-8?B?blZ3bUZaZE5CaWoraTJvWFBSU3lIaTNMa0R2eU12ZjgxTmxwVkVpTlQ1dFpC?=
+ =?utf-8?B?R0Y2S2xjMDhRemNtRTFHMWllUzd6U3NGNHpEREpxVnJhdTVJcTUrVW5DRzlT?=
+ =?utf-8?B?K1diWGsxQlBiRFBNcnNqeDlYZ1JtQ0xZYW45TFZsOWJQcXNla3VaOHlyWHIy?=
+ =?utf-8?B?RWI3emlvRk9qank2UGdLbVFEZXV0QjNkcTd6bzZoY0RMcUQvd0RYOUNCNmpN?=
+ =?utf-8?B?Q1g2SlJjejVuVEhYd1VsR3dkMmR3QTVUUUY1bTIxZ1FGNlZrSFNNclFIeVBC?=
+ =?utf-8?B?MHluYjBES3hpVFljRVpjTlV0eEppakxNbmRPZ3BINStib1hmd2JzVHdrdGxU?=
+ =?utf-8?B?MitYbU5McHFWcWZxbnUxdmpOZnhONHRDTnJYY2hyQ2krQ3BGaVhlN1h2SWlV?=
+ =?utf-8?B?MjZMSG9NYUI2UWRERk44Rnp2SUplUlFkZy9URVYzQ2s5OGkvVXdqWkI5WU44?=
+ =?utf-8?B?a2c9PQ==?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c3edced-3be7-46f7-42a8-08db02a15ceb
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5681.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 09:07:07.6375
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: peORFSvU7S7Pvrj2JKXojWt9nlE70jdOigLTDxZ4rqwit5kYwv1DUsjzURLJhQtJS3XeBVuLnlg2V1fllk7zryGLNQfOmMjfA3M7diaKUR0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR10MB6615
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Manuel,
 
-On Sat 28 Jan 2023 at 18:17, Yu Tu <yu.tu@amlogic.com> wrote:
+On 26.01.23 10:18, Manuel Traut wrote:
+> 'input: pwm-beeper: add feature to set volume via sysfs' adds device
+> attributes without removing them on error or if the module is unloaded.
+> 
+> If the module will be unloaded and loaded again it fails:
+> [ 1007.918180] sysfs: cannot create duplicate filename '/devices/platform/buzzer/volume'
+> 
+> Therefore remove device attributes on module unloading and in case
+> registration at the input subsystem fails.
+> 
+> Signed-off-by: Manuel Traut <manuel.traut@mt.com>
 
-> On 2023/1/20 17:47, Jerome Brunet wrote:
->> [ EXTERNAL EMAIL ]
->> On Fri 20 Jan 2023 at 11:33, Yu Tu <yu.tu@amlogic.com> wrote:
->> 
->>> Hi
->>> On 2023/1/19 19:37, Jerome Brunet wrote:
->>>> [ EXTERNAL EMAIL ]
->>>> On Mon 16 Jan 2023 at 15:42, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>
->>>>> Add the peripherals clock controller driver in the s4 SoC family.
->>>>>
->>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>> [...]
->>>>
->>>>> +
->>>>> +/* Video Clocks */
->>>>> +static struct clk_regmap s4_vid_pll_div = {
->>>>> +	.data = &(struct meson_vid_pll_div_data){
->>>>> +		.val = {
->>>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
->>>>> +			.shift   = 0,
->>>>> +			.width   = 15,
->>>>> +		},
->>>>> +		.sel = {
->>>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
->>>>> +			.shift   = 16,
->>>>> +			.width   = 2,
->>>>> +		},
->>>>> +	},
->>>>> +	.hw.init = &(struct clk_init_data) {
->>>>> +		.name = "vid_pll_div",
->>>>> +		/*
->>>>> +		 * The frequency division from the hdmi_pll clock to the vid_pll_div
->>>>> +		 * clock is the default value of this register. When designing the
->>>>> +		 * video module of the chip, a default value that can meet the
->>>>> +		 * requirements of the video module will be solidified according
->>>>> +		 * to the usage requirements of the chip, so as to facilitate chip
->>>>> +		 * simulation. So this is ro_ops.
->>>>> +		 * It is important to note that this clock is not used on this
->>>>> +		 * chip and is described only for the integrity of the clock tree.
->>>>> +		 */
->>>> If it is reset value and will be applicable to all the design, regarless
->>>> of the use-case, then yes RO ops is OK
->>>>
->>>> >From what I understand here, the value will depend on the use-case requirements.
->>>> This is a typical case where the DT prop "assigned-rate" should be used, not RO ops.
->>>
->>> Check the previous chip history, the actual scene is not used at all,
->>> basically is used in simulation. So the previous SOC was "ro_ops" without
->>> any problems.  This S4 SOC is not actually useful either.
->>>
->>> So when you were upstream, you had no problem making "ro_ops". I wonder if
->>> I could delete this useless clock, so you don't have to worry about it.
->> I don't know what to make of this. What is the point of adding a useless
->> clock ?
->
-> As explained earlier this "vid_pll_div" is actually used in chip
-> emulation. So next I'd like to know what you suggest to do with the clock?
->
+Thanks for picking up these old patches!
+I think you need to merge this fixup patch 5/5 into patch 2/5 of this
+series.
 
-If it does not exist in the actual SoC, please remove it
+Thanks
+Frieder
