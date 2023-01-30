@@ -2,120 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138D3680CB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FE6680CB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235573AbjA3MAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S230416AbjA3MBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235917AbjA3MAa (ORCPT
+        with ESMTP id S229578AbjA3MBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:00:30 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851F22701;
-        Mon, 30 Jan 2023 04:00:19 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id d8so11720895ybe.9;
-        Mon, 30 Jan 2023 04:00:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1HbguGHpB5FjqpATPjgOHDIrWn/kBKd6drXFRcfzVNs=;
-        b=B38If1QkuwWtrB4fFeIOZ0mF+gcyvYWCVzpQ+7uNh2WDW6E8cIParAuMk9w3aDI7dS
-         re0rwuXk38QKY7cLUiqX8uy2GzVRkA0mcOnE5nN6RGWXJ84p8jmIcN+8zJ1NvgRkTLgC
-         R4b0Cltat49eq4rl9aq1trm0dl99CqKk+fp8+die9j4ol5A9opeKkHxaLnfHIdwfJsbC
-         ukD0lyyLI3PVFkOUS+3XpqTrsMks5Aa6rOPWKVCgPPB3uW5qzdHhlaDX+38icxdW+5dM
-         k4GD7HkvDn0/bUHBJ3nc4jkqcwsoD2JCw3oJM93jnFw88N1nW1BPhu/jfjjBGUlS0fG2
-         +ZZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1HbguGHpB5FjqpATPjgOHDIrWn/kBKd6drXFRcfzVNs=;
-        b=2w7m86FJZcscKt4qsHjjnnRpm0nw7HYoh5PQnC5x0r+i9R5o8ZbzNHSfjPeiCDP3Wp
-         QTS4CMX6uu5S3TiSq2VcJE06vksjobPwzHIcXq/ph54GPMon2/VL/BsH+cPOZYg8s/TM
-         nZl8E8jKNl//SNtiSHS/6ot9j2jv5qkikpIruaaB67dWG72IbmsAhHK7ySjHVJ8+we9J
-         6uH0H6hWe0tXqjrKwWLJOJ1nyKL0AsIxN5P8MD7ziHTy1lnGBN4nxJpQN7rqa0cr9wTR
-         xRn0wt/OpK3X1jdwQVIjMmJ9CltAlSWlqFlGFNuRdV3PU+0XVfpH7DvVgcLEjLJl28jL
-         9S7g==
-X-Gm-Message-State: AFqh2kqBH4rTYW2COo0ftN6mF+fXDedKGjNpcLZ7EDDUs/w8RC73rzRC
-        DE3noBOLyOD/qckkAT+IBhi1xcX7UszJeIvGXKQ=
-X-Google-Smtp-Source: AMrXdXtZMmt5G/oSVrrJr7dHDHlsu+PaGz9sWWvSC9nqJy48wlwExCnPYy3D7LATlmfiivbrUYiAU+/+8iAdRc00MNc=
-X-Received: by 2002:a25:24c4:0:b0:803:197f:3f41 with SMTP id
- k187-20020a2524c4000000b00803197f3f41mr4140563ybk.489.1675080018737; Mon, 30
- Jan 2023 04:00:18 -0800 (PST)
+        Mon, 30 Jan 2023 07:01:07 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B68F10C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:01:02 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 2411E32002D8;
+        Mon, 30 Jan 2023 07:00:57 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 30 Jan 2023 07:00:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1675080056; x=1675166456; bh=TD
+        MULWl8K42gFGxXXkhM9aDVobr1p0cNzN+gUZU3mzI=; b=a1RqhclrB/UVRDFaX/
+        ABUUVNlvRQblwffKWZGbAPAFWktuBCvNeLm/GCHrgnblaGoduh2SUOXHl5dZJ0po
+        KDcUHSSq28Q16PKse5EzeZfaWTwkoA/Go8HVJqyX4DXmWgYQ3M6AtWb8gsP/y6Bv
+        tV3Yn2lLyaogk62/SKjxMUD4IazMpcACNoPYPt8h/JW6FHzfuhMn+yUsHiSd4JGg
+        70P15/h0za9fOXvBfjK0Ljeb9MVPAldOIpu2lpY6PuDeXv5mR6EjoVqh/JJOjZRC
+        bN87/M0Ubsh5/vhPvhKa1jgjvg76Z1DqlatZHaw+qRZqBW4qr9t0p6+H1W3rPGt2
+        OPlA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675080056; x=1675166456; bh=TDMULWl8K42gFGxXXkhM9aDVobr1
+        p0cNzN+gUZU3mzI=; b=ctjHXfIO5Ph8xWu/paabAmHoAbptx7O8uCgIGXOgV0Ms
+        o0xsHE4wQ+0Wt38i6PW2cviAgEAMUm/3ExG3TEQKhhRv3Fl+0ChKjbxVcfeEnoYV
+        K7t+nE/+ayC+g6SM2wblCPWW2XGrLdFl4anFYk9qJOcFzECnGO38YmXO0pgIogw1
+        1GtthGCX8qIoTpLmodhDXl21g8V1lVMCaKFoaEf8YJD9GJRFMy4TT/xvy76Wv7TC
+        gusxPqQgdj82tK8+KaBKQ8OJe/2MXuluZUQwVeUQXmD8aGffotu+uXadEvgK0su8
+        6P8xD/p0qAhaqYPbZ5pRJg2VjXK5w9t8ZYTlScwc1Q==
+X-ME-Sender: <xms:eLHXY3cxkmQwr2vNdUlrnRWB1VMXssSklU4by6qrNcw_-MHltTdiZQ>
+    <xme:eLHXY9MVWj6nv1bBg6djIdZdsRvxWLlisbKwamL5RGH6VnN1TDioZmUuU6WxgUEcJ
+    HSjP2BWTR69GPkcSes>
+X-ME-Received: <xmr:eLHXYwg124tzT2-FZXrUBd1RicH5ZxS0FNGLEiLRG6aFWNi4jxX3BUu8g-CqWR6pUp2waA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddgfeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:eLHXY48wPpZNpRNidDJkiHEnNQgKkRamoZn8aOfY3wkoFELPyJ25tw>
+    <xmx:eLHXYzvrMtrE7L1oUudGqznK1M_bwqZ5qwfJbiad0f5rqnjZe0GvWw>
+    <xmx:eLHXY3HGTyyUcJhcO1fiXbe-VZRrOc5APVSjvQvHOXzQlhSlNbfVGw>
+    <xmx:eLHXYy876Ul1Ewvgg4ljN1TkvDeK642I0yR3ilthECvGFXgAjQV9zw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 30 Jan 2023 07:00:55 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id D9458104B96; Mon, 30 Jan 2023 15:00:52 +0300 (+03)
+Date:   Mon, 30 Jan 2023 15:00:52 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Christophe de Dinechin <dinechin@redhat.com>
+Cc:     "Reshetova, Elena" <elena.reshetova@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230130120052.7wfb5i2vql5ibkso@box.shutemov.name>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <m2pmaw5jv4.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20230129184602.3974058-1-masahiroy@kernel.org>
- <20230129184602.3974058-4-masahiroy@kernel.org> <CANiq72=BRW9TunjKQmeMthm7Esc_YKM++NmWh-Dqc9Av13SNow@mail.gmail.com>
- <CAK7LNAQttb=qc5vsZNudYwTxmn=y3HZzVqZwAzMvLfUJXa4OFQ@mail.gmail.com>
-In-Reply-To: <CAK7LNAQttb=qc5vsZNudYwTxmn=y3HZzVqZwAzMvLfUJXa4OFQ@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 30 Jan 2023 13:00:07 +0100
-Message-ID: <CANiq72miWD_MtTrC0Ua7o4Tk5oDbQSFefwmYCsGx3Y=85ziJfQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] kbuild: srcrpm-pkg: create source package without cleaning
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <m2pmaw5jv4.fsf@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 2:29 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> I guess you are talking about kernel-devel-*.rpm
-> (and linux-headers-.deb).
->
-> They are not useful for building external modules
-> written in Rust since they do not contain *.rmeta etc.
-> I am not caring about that because Rust support is not
-> mature enough yet.
+On Mon, Jan 30, 2023 at 12:36:34PM +0100, Christophe de Dinechin wrote:
+> Is there for example anything that precludes TDX or SEV from executing
+> code in the bounce buffers?
 
-Yeah, that is what I meant, i.e. since the Rust ML was Cc'd, I checked
-and wanted to say removing `rust` from there was OK (an `Acked-by`
-seemed too much for just that line :).
+In TDX, attempt to fetch instructions from shared memory (i.e. bounce
+buffer) will cause #GP, only data fetch is allowed. Page table also cannot
+be placed there and will cause the same #GP.
 
-> I stopped hard-coding the top-level directories.
-> The resulting source package still contains all check-in files
-> under rust/, so it is good from the source package perspective.
-
-Sounds good to me.
-
-> 5/5 changed the behavior because rpm-pkg re-uses the
-> *.src.rpm generated by srcrpm-pkg.
-
-(3/5?)
-
-> Having *.src.rpm in the kernel tree seems Redhat's preference.
-> Commit 8818039f959b2efc0d6f2cb101f8061332f0c77e
-> added --define='_srcrpmdir $(srctree)'.
-
-Thanks for the details! I just noticed it, so I thought I would let
-you know just in case.
-
-(Perhaps it could be useful to mention this change in the output in
-the commit message.)
-
-> In contrast, binary rpm files are generated under rpmbuild/RPMS/.
-> I want to fix this inconsistency, though.
-
-That would be nice.
-
-Cheers,
-Miguel
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
