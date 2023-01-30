@@ -2,134 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC223680A99
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02093680AB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236277AbjA3KRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S236363AbjA3KWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:22:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236065AbjA3KRa (ORCPT
+        with ESMTP id S229578AbjA3KWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:17:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1C91630A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:17:29 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pMRDx-0005mI-Sc; Mon, 30 Jan 2023 11:17:17 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pMRDp-001RYw-MJ; Mon, 30 Jan 2023 11:17:08 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pMRDo-00H0dV-5B; Mon, 30 Jan 2023 11:17:08 +0100
-Date:   Mon, 30 Jan 2023 11:17:07 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Nylon Chen <nylon.chen@sifive.com>
-Cc:     aou@eecs.berkeley.edu, conor@kernel.org,
-        emil.renner.berthing@canonical.com, geert+renesas@glider.be,
-        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nylon7717@gmail.com,
-        zong.li@sifive.com, greentime.hu@sifive.com,
-        vincent.chen@sifive.com
-Subject: Re: [PATCH v2 2/2] pwm: sifive: change the PWM controlled LED
- algorithm
-Message-ID: <20230130101707.pdvabl3na2wpwxqu@pengutronix.de>
-References: <20230130093229.27489-1-nylon.chen@sifive.com>
- <20230130093229.27489-3-nylon.chen@sifive.com>
+        Mon, 30 Jan 2023 05:22:32 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2044.outbound.protection.outlook.com [40.107.102.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B497EB5B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:22:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iiBpx+QDTOhoOc+UiGmONDNFxpTZzi1lywjER/qpL55fSgD1hrTX9uyrVovSFPHMJ6DiSb8EBcxPy0QV2kjQiBk7kexkWSgfuAOetwcvKxmOVSuLpH/4ZqYZNqxRpTbcPEAaeaj+1nksRPLi9IabvvmJKkhlmY3diqWpY5nNDmbClCDGotdevZpbZeSWw64+dCvNMxku5A/cPDgqA5KGKbD9CTnyq+z5JPNujwfL0A0l8VmUm0F4X5k5nqTSEl2qrXJzH7aPrpEHxqvKpmz9W3/0iYGrlaGwHi4noqjl/SWaHAI/aV9CrBquaTlQjY5rYhO4V1n2vVQlBFVF3MH+Fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6HmNeLlROC//UVgE8HBNviQ8yiQdGmzDNIJiqx0t7Go=;
+ b=BBhEmVAP5dOh7GocRemtpcOQvCZLFjnYEkVupB8f7Et77FrxUBhxKA+R4C/EaCq0mFJUKMbwHAX5FMG3uFDVuMEQEYEA1R115hcuLmrC0Udh+/72i1eugpxnkc8H08WYc1AiUcVzThJwW+RjDF+D5Bf8IW5Ng+WWMKb2q5LPhceJS31NWuo4emQ9RXvdA8jRfpiNuwsIPJD8jeZZEjh+9o6LthBMM2IsBdFIfJpWXEiAnjGsR1FcUI+lp2pCYCc8YFVH162u06ThD/Tv/gQ0pLTfprEFhHcFdFtAlDEIJKMnB5Y1IkIQbLnYuNNaa1Zwhyg41zjm7Uf1Q0PR/1ya4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6HmNeLlROC//UVgE8HBNviQ8yiQdGmzDNIJiqx0t7Go=;
+ b=jfOHj6Yl6zOOBvp87On5AmGpnifAtX7frZQQg0JHBc0BC8iN8tAQATlIJj43R86QeRLDOrTCO0hRfxX1adKXOxjOnmw9qTg+HpxKriO9sIAtp87cl+bRfJ8QoK2aF55zwCmlxQDrtUwOoORTT5gqQLxgWmPUtA0inq0G0ua1azUxFfrEXHP/spVbsrI7R7jF7kToEaSkgKz2pe59BNdS3ofHzvNeHiSMZSbjsaZyjF2LhDe2SlvlkRlp4bqNAjzduXb10vMaYGsGNejFXCj9IlsZFvWv7/Yv26+LC0leWrDlXv4d76ZBjTiBQdRlYCRjsDWei3fOLk+17cfg62pg2A==
+Received: from DM6PR06CA0045.namprd06.prod.outlook.com (2603:10b6:5:54::22) by
+ CY8PR12MB7364.namprd12.prod.outlook.com (2603:10b6:930:50::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.36; Mon, 30 Jan 2023 10:22:29 +0000
+Received: from DS1PEPF0000B079.namprd05.prod.outlook.com
+ (2603:10b6:5:54:cafe::fa) by DM6PR06CA0045.outlook.office365.com
+ (2603:10b6:5:54::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36 via Frontend
+ Transport; Mon, 30 Jan 2023 10:22:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ DS1PEPF0000B079.mail.protection.outlook.com (10.167.17.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.17 via Frontend Transport; Mon, 30 Jan 2023 10:22:29 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
+ 2023 02:22:19 -0800
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 30 Jan 2023 02:22:18 -0800
+Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
+ (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
+ Transport; Mon, 30 Jan 2023 02:22:18 -0800
+Date:   Mon, 30 Jan 2023 02:22:17 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "jgg@nvidia.com" <jgg@nvidia.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/3] iommufd/device: Change
+ iommufd_hw_pagetable_has_group to device centric
+Message-ID: <Y9eaLpD1XIvE/3Nh@Asurada-Nvidia>
+References: <cover.1674939002.git.nicolinc@nvidia.com>
+ <002911839dd30990d5e3135f8a0f8d41f14e856b.1674939002.git.nicolinc@nvidia.com>
+ <BN9PR11MB527697E1E24784576C3FB7628CD29@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <Y9ZMulxEyGvnvW0X@Asurada-Nvidia>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jlahpnwnp2we3m5x"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230130093229.27489-3-nylon.chen@sifive.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y9ZMulxEyGvnvW0X@Asurada-Nvidia>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000B079:EE_|CY8PR12MB7364:EE_
+X-MS-Office365-Filtering-Correlation-Id: bff0a183-b0a4-486d-1fdc-08db02abe475
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Di+I/lEKIdqqSjcjLO6xwGUqwpL9/kBOmkOoyTxbgIGRTZ6ulOtFP/lru+o9OUi79UIPES1qsrV7TUEugd8RRSF75aMuRdI04d50+fAaw3JeajOIbfiHYWv0Cam9iy9gwbBHRS9o7ppLqAd6rlBn8zPwQCtl3fTX1F152UPDY/h4OYA5MZqAWquDSvaPYSix62OfhFPf911AzB4OWObK9/3T5CAz+oPJywhpsY8zeSX8/o/HnUjvr+rZlGj06PMolg7LiAfdwnaTyRAN8Fv2LoknyQqQuJA7bDiRtlX0kYQWUgGu4Vs2lV9dxI7nQmIae0sJrNE5wI1dN1K/PCCIv1zjdvMYnkxWB21VI9WrJ2kAYZnqZag1ndOYEajPz7goFfMKl+q+atiNS4TpCvO1RcguuxfaEwZ9chCmYBIYg6w7FADAVKTnZL2cPYu5bfLl1pxkgazFMax5akGELkxGb9RjoJ8y542CN+WQZ6cHPLb5/A0Ae7+7n3LtVih4d+S9QRCHd1jLHADwLpyOwdQbY0PSv9LiZJtjmfAvCLj4JTxHN4A6w4N9+fM2XaBlHvSukqb6hahxJLnNcEdN5fN6A6+yWP3OM/L6i9mmxP0f0a2tInlwoLP9HrIWnv1Rz/OOD/zzR6rpyyoedEDhdaKfQ1pdZ6WQt+JVFMf6lwSkZCwrGXcxnbswWtVEfro/P1qGeJC2t+KCEDpgKC13dF7JzQ==
+X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(396003)(376002)(346002)(451199018)(36840700001)(40470700004)(46966006)(7636003)(2906002)(82740400003)(316002)(5660300002)(186003)(356005)(9686003)(26005)(110136005)(40460700003)(54906003)(82310400005)(55016003)(40480700001)(47076005)(33716001)(426003)(83380400001)(336012)(86362001)(478600001)(4326008)(8676002)(70206006)(70586007)(8936002)(36860700001)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 10:22:29.7195
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bff0a183-b0a4-486d-1fdc-08db02abe475
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B079.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7364
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Jan 29, 2023 at 02:38:55AM -0800, Nicolin Chen wrote:
+ 
+> > > @@ -385,10 +372,8 @@ void iommufd_device_detach(struct
+> > > iommufd_device *idev)
+> > >       struct iommufd_hw_pagetable *hwpt = idev->hwpt;
+> > >
+> > >       mutex_lock(&hwpt->ioas->mutex);
+> > > -     mutex_lock(&hwpt->devices_lock);
+> > >       refcount_dec(hwpt->devices_users);
+> > > -     list_del(&idev->devices_item);
+> > > -     if (!iommufd_hw_pagetable_has_group(hwpt, idev->group)) {
+> > > +     if (iommufd_hw_pagetable_has_device(hwpt, idev->dev)) {
+> > >               if (refcount_read(hwpt->devices_users) == 1) {
+> > >                       iopt_table_remove_domain(&hwpt->ioas->iopt,
+> > >                                                hwpt->domain);
+> > > @@ -397,7 +382,6 @@ void iommufd_device_detach(struct iommufd_device
+> > > *idev)
+> > >               iommu_detach_group(hwpt->domain, idev->group);
+> > >       }
+> > 
+> > emmm how do we track last device detach in a group? Here the first
+> > device detach already leads to group detach...
+> 
+> Oh no. That's a bug. Thanks for catching it.
+> 
+> We need an additional refcount somewhere to track the number of
+> attached devices in the iommu_group.
 
---jlahpnwnp2we3m5x
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wondering if we can let iommu_attach/detach_device handle this:
 
-On Mon, Jan 30, 2023 at 05:32:29PM +0800, Nylon Chen wrote:
-> The `frac` variable represents the pulse inactive time, and the result of
-> this algorithm is the pulse active time. Therefore, we must reverse the
-> result.
->=20
-> The reference is SiFive FU740-C000 Manual[0].
->=20
-> [0]: https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-86ed8b1=
-6acba_fu740-c000-manual-v1p6.pdf
->=20
-> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
-> ---
->  drivers/pwm/pwm-sifive.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> index 62b6acc6373d..a5eda165d071 100644
-> --- a/drivers/pwm/pwm-sifive.c
-> +++ b/drivers/pwm/pwm-sifive.c
-> @@ -158,6 +158,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, st=
-ruct pwm_device *pwm,
->  	frac =3D DIV64_U64_ROUND_CLOSEST(num, state->period);
->  	/* The hardware cannot generate a 100% duty cycle */
->  	frac =3D min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
-> +	frac =3D (1U << PWM_SIFIVE_CMPWIDTH) - 1 - frac;
-
-The same problem exists in pwm_sifive_get_state(), doesn't it?
-
-As fixing this is an interruptive change anyhow, this is the opportunity
-to align the driver to the rules tested by PWM_DEBUG.
-
-The problems I see in the driver (only checked quickly, so I might be
-wrong):
-
- - state->period !=3D ddata->approx_period isn't necessarily a problem. If
-   state->period > ddata->real_period that's fine and the driver should
-   continue
-
- - frac =3D DIV64_U64_ROUND_CLOSEST(num, state->period);
-   is wrong for two reasons:
-   it should round down and use the real period.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---jlahpnwnp2we3m5x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPXmSAACgkQwfwUeK3K
-7AleyggAkGDMZYle0TOKBmbhKP3cCv66Lspwhkit9fvzLF+u5WV9aZ2Hhh18MHLj
-MH8UhAepKUC7oy5vd5eCo5fafKOOr71uJvkxg6W6IJncOMbphNH9K55LeAktSDg6
-AAk4bHiUx9AW1UEhnyu+9SqTl/SS6UoRzWBB8naxQil/YPJpvP6kUM/MnWDthd5r
-1HM4iovyCbXcWYhdG4asGUvA4lQnK92UO47apHnOW7VL9ivVgmfE6N6m5Q4ELy8e
-KarTUp8nG5N5Ki/+2LlpZYWY6w3t27CQJ0UegXxcn3Igu44a0hpYbpeHgi4kYIME
-Su9cOg8cW7mP2GIhIiVZ+63s+pTWqQ==
-=uHqH
------END PGP SIGNATURE-----
-
---jlahpnwnp2we3m5x--
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index d0d7c2177ad6..b38f71e92e2a 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -57,6 +57,7 @@ struct iommu_group {
+ 	struct iommu_domain *domain;
+ 	struct list_head entry;
+ 	unsigned int owner_cnt;
++	unsigned int attached_cnt;
+ 	void *owner;
+ };
+ 
+@@ -64,6 +65,7 @@ struct group_device {
+ 	struct list_head list;
+ 	struct device *dev;
+ 	char *name;
++	bool attached;
+ };
+ 
+ struct iommu_group_attribute {
+@@ -2035,6 +2037,7 @@ static int __iommu_attach_device(struct iommu_domain *domain,
+  */
+ int iommu_attach_device(struct iommu_domain *domain, struct device *dev)
+ {
++	struct group_device *grp_dev;
+ 	struct iommu_group *group;
+ 	int ret;
+ 
+@@ -2042,16 +2045,22 @@ int iommu_attach_device(struct iommu_domain *domain, struct device *dev)
+ 	if (!group)
+ 		return -ENODEV;
+ 
+-	/*
+-	 * Lock the group to make sure the device-count doesn't
+-	 * change while we are attaching
+-	 */
+ 	mutex_lock(&group->mutex);
+-	ret = -EINVAL;
+-	if (iommu_group_device_count(group) != 1)
++
++	list_for_each_entry(grp_dev, &group->devices, list)
++		if (grp_dev->dev == dev)
++			break;
++	if (grp_dev->attached)
+ 		goto out_unlock;
+ 
+-	ret = __iommu_attach_group(domain, group);
++	/* Attach the group when attaching the first device in the group */
++	if (group->attached_cnt == 0) {
++		ret = __iommu_attach_group(domain, group);
++		if (ret)
++			goto out_unlock;
++	}
++	grp_dev->attached = true;
++	group->attached_cnt++;
+ 
+ out_unlock:
+ 	mutex_unlock(&group->mutex);
+@@ -2071,6 +2080,7 @@ int iommu_deferred_attach(struct device *dev, struct iommu_domain *domain)
+ 
+ void iommu_detach_device(struct iommu_domain *domain, struct device *dev)
+ {
++	struct group_device *grp_dev;
+ 	struct iommu_group *group;
+ 
+ 	group = iommu_group_get(dev);
+@@ -2078,10 +2088,20 @@ void iommu_detach_device(struct iommu_domain *domain, struct device *dev)
+ 		return;
+ 
+ 	mutex_lock(&group->mutex);
+-	if (WARN_ON(domain != group->domain) ||
+-	    WARN_ON(iommu_group_device_count(group) != 1))
++	if (WARN_ON(domain != group->domain))
+ 		goto out_unlock;
+-	__iommu_group_set_core_domain(group);
++
++	list_for_each_entry(grp_dev, &group->devices, list)
++		if (grp_dev->dev == dev)
++			break;
++	if (!grp_dev->attached)
++		goto out_unlock;
++
++	grp_dev->attached = false;
++	group->attached_cnt--;
++	/* Detach the group when detaching the last device in the group */
++	if (group->attached_cnt == 0)
++		__iommu_group_set_core_domain(group);
+ 
+ out_unlock:
+ 	mutex_unlock(&group->mutex);
