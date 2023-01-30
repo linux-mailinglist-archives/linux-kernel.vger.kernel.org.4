@@ -2,116 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880C8681AC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6D2681AC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236465AbjA3Tsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:48:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S237424AbjA3Tsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbjA3Ts3 (ORCPT
+        with ESMTP id S236032AbjA3Tsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:48:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EF72DE69;
+        Mon, 30 Jan 2023 14:48:30 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB459460A0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:48:29 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id u21so12106244edv.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/epT0HthGo9idR6/JygM4Ut5nxd0mtqhcl73FuFnvd0=;
+        b=7ljygM0/w5DNcasAIz5MI5w4X5iB/ltvNZmvQySKVYguKptUKrtlzinPn+xu+Sy6rJ
+         Vmd10HamiCKQqveQDxwxcR3lkoBkHDt3kskrpVIYosLqwsOZdlzOHuC9TP8VVy2btYhk
+         W8mHyEvXBcyCfLFFxNR0VMAeM8s2952pu0M/y51/qt6+tJohzDLZCPXiDGXefiwqTQC9
+         +QJB5VA68w5pYfvRW/UZCvBzytpl9aanZeo5Ynbblp/nxXgvDXMYydOipM0t2v3HsqyQ
+         AXenRldr5bFR7o/f45HcJvu+D3h29A5fkCKVxpL4vPI63yjJCxdMXmD4aUzs7pEgETA6
+         3URw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/epT0HthGo9idR6/JygM4Ut5nxd0mtqhcl73FuFnvd0=;
+        b=nmCF+w/guAA8ifGb38+tyIJwXJvRQ+a1gurnQyr1xqAy8jdhfKMvVzvDng58dGAzLz
+         V0ejQmMqcJ88NSYRgOTEylqbUwwH6Dgs9Aj/9xrg9UfUWIZ2HVg7P5818H87jyCQz4dg
+         IrdvfA8ZzStnzRcuFv90uSqL0kY8NGrCQy/NfXlGVyIL+aFNgh3d1P9tgkIfOdE8viJb
+         JvxuJ2zJFyZiNFws+xddTqf853SzfztuHZxCnYAGv3R3dkCjhgw1DTAF1sZ9Lr5F8ZK2
+         gzVrZLBT5N+yHOg7MRR1Hwu/tG6nyd3FmSYXjfBzeFupYlP6R1gWs2mXlhLjFDm5uje5
+         keng==
+X-Gm-Message-State: AFqh2kpBhBJHzE+YcUdvYg7+oByvDLbl9pWw0tKFIP2ZftNGE+wHkgvi
+        ZY9tpskEj9P+dbtVYEEqWtMUwQ==
+X-Google-Smtp-Source: AMrXdXuHigsktqMYOylLlxDD8w+OZZVmBwn48RRn9LL4W9fvKG5cwx0H51Bbnh5LjWPsBTqUs2BeJw==
+X-Received: by 2002:a05:6402:1946:b0:48b:c8de:9d20 with SMTP id f6-20020a056402194600b0048bc8de9d20mr57848750edz.32.1675108108503;
         Mon, 30 Jan 2023 11:48:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B87EB8168A;
-        Mon, 30 Jan 2023 19:48:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60D00C433D2;
-        Mon, 30 Jan 2023 19:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675108105;
-        bh=wGv8sCcgO6nt+OXIB6jBJsAXkbfr6IKEvPeBfyQ78EY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g5MDjYEACiFey5Qm6YKt6DRhuFh8Q0STasW5zJummRj/RJbXsvo3RGQUbZXDKWCmR
-         VgCA42DCeIdk8PMCA3pZDiA123yfvw+nrqlcHEO0lhZpQPMMqnKcjJW05pAZfvvEbF
-         h+E/BLT08CiJpbedmZA6w/o3zWpxyviK1RR9YP2ll/i8DiUsDHvSUSsAFdOOm3bUbz
-         vfH+aiYrxsqi2tYtKptwnQQWB4ZiqfxwtHZkDke+Dc2B4Osx8PGFab5zVosZTvfN/d
-         pL/7xvw8p1IqqMdS6nlvlrUDzZgdCTtjUpci9ciB5c88uQM6Wj2cKoMqqxUjy2mqZo
-         90twlMDFKwedQ==
-Date:   Mon, 30 Jan 2023 11:48:23 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
+Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
+        by smtp.gmail.com with ESMTPSA id t26-20020a17090616da00b007aee7ca1199sm7391442ejd.10.2023.01.30.11.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 11:48:28 -0800 (PST)
+Date:   Mon, 30 Jan 2023 19:48:26 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Waiman Long <longman@redhat.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>, kvm@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>,
-        live-patching@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
- loaded vhost worker kthreads
-Message-ID: <20230130194823.6y3rc227bvsgele4@treble>
-References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
- <Y9KyVKQk3eH+RRse@alley>
- <Y9LswwnPAf+nOVFG@do-x1extreme>
- <20230127044355.frggdswx424kd5dq@treble>
- <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
- <20230127165236.rjcp6jm6csdta6z3@treble>
- <20230127170946.zey6xbr4sm4kvh3x@treble>
- <20230127221131.sdneyrlxxhc4h3fa@treble>
- <Y9e6ssSHUt+MUvum@hirez.programming.kicks-ass.net>
- <Y9gOMCWGmoc5GQMj@FVFF77S0Q05N>
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>
+Subject: Re: [PATCH v2] sched: cpuset: Don't rebuild sched domains on
+ suspend-resume
+Message-ID: <20230130194826.rxwk4ryvpyxemflm@airbuntu>
+References: <20230120194822.962958-1-qyousef@layalina.io>
+ <c4c2dec6-a72b-d675-fb42-be40e384ea2c@redhat.com>
+ <20230125163546.pspvigh4groiwjy7@airbuntu>
+ <45e0f8ea-d229-1ae7-5c12-7f0a64c6767a@redhat.com>
+ <20230130130038.2qx3pkzut6ypqdub@airbuntu>
+ <253ced33-c3a8-269f-90cc-b69e66b10370@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y9gOMCWGmoc5GQMj@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <253ced33-c3a8-269f-90cc-b69e66b10370@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 06:36:32PM +0000, Mark Rutland wrote:
-> On Mon, Jan 30, 2023 at 01:40:18PM +0100, Peter Zijlstra wrote:
-> > On Fri, Jan 27, 2023 at 02:11:31PM -0800, Josh Poimboeuf wrote:
-> > > @@ -8500,8 +8502,10 @@ EXPORT_STATIC_CALL_TRAMP(might_resched);
-> > >  static DEFINE_STATIC_KEY_FALSE(sk_dynamic_cond_resched);
-> > >  int __sched dynamic_cond_resched(void)
-> > >  {
-> > > -	if (!static_branch_unlikely(&sk_dynamic_cond_resched))
-> > > +	if (!static_branch_unlikely(&sk_dynamic_cond_resched)) {
-> > > +		klp_sched_try_switch();
-> > >  		return 0;
-> > > +	}
-> > >  	return __cond_resched();
-> > >  }
-> > >  EXPORT_SYMBOL(dynamic_cond_resched);
-> > 
-> > I would make the klp_sched_try_switch() not depend on
-> > sk_dynamic_cond_resched, because __cond_resched() is not a guaranteed
-> > pass through __schedule().
-> > 
-> > But you'll probably want to check with Mark here, this all might
-> > generate crap code on arm64.
+On 01/30/23 11:29, Waiman Long wrote:
+> On 1/30/23 08:00, Qais Yousef wrote:
 > 
-> IIUC here klp_sched_try_switch() is a static call, so on arm64 this'll generate
-> at least a load, a conditional branch, and an indirect branch. That's not
-> ideal, but I'd have to benchmark it to find out whether it's a significant
-> overhead relative to the baseline of PREEMPT_DYNAMIC.
+>         just skip the call here if the condition is right? Like
 > 
-> For arm64 it'd be a bit nicer to have another static key check, and a call to
-> __klp_sched_try_switch(). That way the static key check gets turned into a NOP
-> in the common case, and the call to __klp_sched_try_switch() can be a direct
-> call (potentially a tail-call if we made it return 0).
+>                 /* rebuild sched domains if cpus_allowed has changed */
+>                 if (cpus_updated || (force_rebuild && !cpuhp_tasks_frozen)) {
+>                         force_rebuild = false;
+>                         rebuild_sched_domains();
+>                 }
+> 
+>         Still, we will need to confirm that cpuhp_tasks_frozen will be cleared
+>         outside of the suspend/resume cycle.
+> 
+>     I think it's fine to use this variable from the cpuhp callback context only.
+>     Which I think this cpuset workfn is considered an extension of.
+> 
+>     But you're right, I can't use cpuhp_tasks_frozen directly in
+>     rebuild_root_domains() as I did in v1 because it doesn't get cleared after
+>     calling the last _cpu_up().
+> 
+> That is what I suspect. So we can't use that cpuhp_tasks_frozen variable here
+> in cpuset.
+> 
+>      force_rebuild will only be set after the last cpu
+>     is brought online though - so this should happen once at the end.
+> 
+> Perhaps you can add another tracking variable for detecting if suspend/resume
+> is in progress.
 
-Hm, it might be nice if our out-of-line static call implementation would
-automatically do a static key check as part of static_call_cond() for
-NULL-type static calls.
+I think cpuhp_tasks_frozen is meant for that. All users who cared so far
+belonged to the cpuhp callback. I think reading it from cpuset_hotplug_workfn()
+is fine too as this function will only run as a consequence of the cpuhp
+callback AFAICS. cpuset_cpu_active() takes care of not forcing a rebuild of
+sched_domains until the last cpu becomes active - so the part of it being done
+once at the end at resume is handled too.
 
-But the best answer is probably to just add inline static calls to
-arm64.  Is the lack of objtool the only thing blocking that?
+It's just rebuild_sched_domains() will always assume it needs to clear and
+rebuild deadline accounting - which is not true for suspend/resume case. But
+now looking at other users of rebuild_sched_domains(), others might be getting
+the hit too. For example rebuild_sched_domains_locked() is called on
+update_relax_domain_level() which AFAIU should not impact dl accounting.
 
-Objtool is now modular, so all the controversial CFG reverse engineering
-is now optional, so it shouldn't be too hard to just enable objtool for
-static call inlines.
+FWIW, I did capture a worst case scenario of 21ms because of
+rebuild_root_domains().
 
--- 
-Josh
+/me thinks rebuild_root_domains() is a misleading name too as it just fixes
+dl accounting but not rebuild the rd itself.
+
+What makes sense to me now is to pass whether dl accounting requires updating
+to rebuild_sched_domains() as an arg so that the caller can decide whether the
+reason can affect dl accounting.
+
+Or maybe pull rebuild_root_domains() out of the chain and let the caller call
+it directly. And probably rename it to update_do_rd_accounting() or something.
+
+I'll continue to dig more..
+
+
+Thanks!
+
+--
+Qais Yousef
