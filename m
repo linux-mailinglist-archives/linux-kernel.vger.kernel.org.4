@@ -2,157 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DB7681D9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0F3681D98
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjA3WDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:03:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
+        id S229812AbjA3WDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:03:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjA3WDN (ORCPT
+        with ESMTP id S229464AbjA3WDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:03:13 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA5230E96;
-        Mon, 30 Jan 2023 14:03:12 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ULsVXN017941;
-        Mon, 30 Jan 2023 22:02:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ILW2ve8L0jEt9qEsEsaaeIOpHW9pUVZIoAQxIT5Y2Eg=;
- b=CM53rTJIuODJJOlNE7LUXbBP8s4euiMXtzMlkTYKN8kPKs8MgoojnVD+6VCXib/OT9/N
- 680mb4xbAEH5FO6msq9EvwSj2WsN7dhXU02av1zpTFYfiAnOQ4p42kftehfS+qnpgj/B
- BLTgL7yXgB5z8APTqsmgP+iZlhTexvqJCF/YipUhzM5aoco8/HnCOq7R6CwMs3iqi4hx
- mOMJZ43I1Hul9fXslk16Sc1PL5+jKXfBZrXXHLuwmT+ZOyqpBYib2MFkK/TjV41b+9UW
- M70rp6COAyl8hsJ8czOJvipO47kZGd5a0u1OfpsEsAdpxmV2xMVqi/AODs3U/u4kSSxY xQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nefmfrwp3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 22:02:52 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UM2psh025299
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 22:02:51 GMT
-Received: from [10.110.113.14] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 30 Jan 2023 17:03:09 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A872765A2;
+        Mon, 30 Jan 2023 14:03:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q+Kwljf2WCSKEeosc+sOTA/5z4ly+9BqjVzPD82PVf5bq0amoY8Jk2FcupFA7tRB8TvmgN6zhxWNokas5k8EWwE7MuwH4DcfUuWvM67GaD83QZvGraPa7Ew/OJ0E2X/baKoo2m7lQvfh8va0p3x25fn0eQpMVMRDH0mdymZmHQAR3cHK5EBRyLLJZSDf25iBQDpO8bK+D3Sl/Np6C1al4USovUu37iIVTtqXTQ/Q2pJqsu5PfTrQn9dUa5eT7CUGliaQIrcu4yhYp1bzrr8TqXz73/3XC94kXMR6wyM1GduhFOvXR+TgDDrSE48lyNGjcs40zXyAWtdp0P+xG3KbAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DXAm94rFtUuWhRp2cGRoX1FTQ2ITp12frpJsJrwhaTc=;
+ b=fJxEfe2h0vyghw9e0Ucbqa6gkPXOjDOuj4+lSrZFDU4wpXf2q6+Aj0Lzmw2RumOK+fDq3WTa2+V+OrLkCDUK6CufI8NXkLylTGVEB6ZqdGQ/IZP22hEFq+rUs1xTaUWsl34ffbGAyPWBxCr/+EmYvzNQ7+3s3VW2wPHSxL/su7pzs9IP0wcLdf/tokgsWzlrAhYqsVmprPHP7a5G09zek7+rwBz9EiIk7V27BwYwUEn1x5vQU9mN8AffmNp7AlgAeX8fEy+8FLevWchPxodFYV0AAIeyMl9mn6k5fXzoaqIQ+NmabVSYgxhRzSIdAXiWS8R2RKw9tuZiUuU5f+ZiAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.dk smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DXAm94rFtUuWhRp2cGRoX1FTQ2ITp12frpJsJrwhaTc=;
+ b=Mt44U1LjBkVMmR1OxIsyQxsrIKNSf1WgU1wZlRCPG6y4m7D5z5+ymQNMOoPLEdqmMfzHMaURXjWNeCTZwDwQPeBKdyVbQZk8WBUjXQkFuaoR08Kiu7WsQZC2u2WHcJiLXnCG01EVX0Jcez0SRpKadeuxeT8G3nmgXYUYQdbSece5l6fnCOU+QSVY5qMher7MGKJgdaP4f2iTOz8+JJEAONIx6GMHuqrU0O4tKSJKnyW+1l8T4ACapDGjUKJ89fo4K2IHOduJn9ZLe7ysuNntf90xro2vMa7yQbX+4i2O0pCAXv7FqSoTWAzBm1vSFz/OlCG4FQFpFTfZ5brKeVjOzA==
+Received: from MW4P222CA0005.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::10)
+ by BY5PR12MB4870.namprd12.prod.outlook.com (2603:10b6:a03:1de::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 22:03:06 +0000
+Received: from CO1NAM11FT100.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:114:cafe::4b) by MW4P222CA0005.outlook.office365.com
+ (2603:10b6:303:114::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36 via Frontend
+ Transport; Mon, 30 Jan 2023 22:03:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT100.mail.protection.outlook.com (10.13.175.133) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.36 via Frontend Transport; Mon, 30 Jan 2023 22:03:06 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 14:02:50 -0800
-Message-ID: <6655bd97-61e8-e03b-b782-bcfcc2138717@quicinc.com>
-Date:   Mon, 30 Jan 2023 14:02:49 -0800
+ 2023 14:02:53 -0800
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
+ 2023 14:02:53 -0800
+Message-ID: <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
+Date:   Mon, 30 Jan 2023 14:02:52 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v2 14/22] dt-bindings: usb: dwc3: Add
- snps,num-hc-interrupters definition
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <lgirdwood@gmail.com>, <andersson@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
-        <bgoswami@quicinc.com>, <tiwai@suse.com>, <robh+dt@kernel.org>,
-        <agross@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
-        <quic_plai@quicinc.com>
-References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
- <20230126031424.14582-15-quic_wcheng@quicinc.com>
- <05e55db1-5181-8025-8aee-e398200b047c@linaro.org>
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <05e55db1-5181-8025-8aee-e398200b047c@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>, David Howells <dhowells@redhat.com>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        "David Hildenbrand" <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Logan Gunthorpe" <logang@deltatee.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <3351099.1675077249@warthog.procyon.org.uk>
+ <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
+ <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk>
+ <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Yz_E4BLFiZ2GtEA--tQbffoSRNPjd3yO
-X-Proofpoint-GUID: Yz_E4BLFiZ2GtEA--tQbffoSRNPjd3yO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_17,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- priorityscore=1501 mlxlogscore=353 suspectscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301300202
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT100:EE_|BY5PR12MB4870:EE_
+X-MS-Office365-Filtering-Correlation-Id: f44794c7-033e-4685-b9d7-08db030dc462
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6akK+Y1w1567USTqZjaYtz7OZJN2fBpkiRIG5MMHbi0U+0Yl9G0YskCiM42J2K0TnclRltu304qiHnAITbGc9B7e9yqKkR5TCM0AxFk9uN1tll4RMkiLEa7+tOlTBNUdqK5LgGP3EPNArK/hJd/kiCJSBzyKCs3bdIimtI5I15sCSzYtpVo9vjanSF8ExZjAkpyZ+x1c6I9M3qiomm6IBsx4JZ3kCuI12G38t462P+x9D0TIwzukzIiCPOn2aWizyuFarnO5LRNtuC9pfB/PS8EFEaY8d/TjhX0dXgJp/LRZGhWTFfMw/I5fFPWAfhJCcvcwJ98Cog729r8XraXn4eG/ezKP0tcqvtEMiarmy4c+/GcnAjtjxEgEqPkvl93+7sQUz6VqxKaHnD100okcsAZnzstxYlx1aJf4NAN0gyHdl1+ilOCNi8TPyUXM0DQ/le9qVrdSWytws/ZcuubLH+Bd7a1j5yhNpk2OKeRvPy0/KExWaQ5p9t3LZUPr4zqdMyqwkGG/kHP4fSG7m2KGY1ptQX3fWQYV17GmCKYStxr8ZvkF052Jw/kUkKdq9KTLvtD/Zl1QyM6pJgtHCemNkwje5kLIZOMVKAbtnj2h8jfbIM03QLEUx3pZ2QBly7u8S/lHCuVdzEY5YvlCH1HADGWe5h5/YJodnrKY8FIzh6H5H8uqIsqHRGRPLuwDd1867lOcm4BGoVrTofIIvSP8ibAOwtwJtkprhQxNWKP6gUk=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199018)(36840700001)(40470700004)(46966006)(82310400005)(31686004)(2906002)(5660300002)(86362001)(47076005)(336012)(426003)(7416002)(83380400001)(8936002)(40460700003)(41300700001)(31696002)(356005)(36756003)(478600001)(26005)(186003)(53546011)(82740400003)(2616005)(36860700001)(7636003)(110136005)(54906003)(4326008)(70206006)(8676002)(40480700001)(70586007)(16576012)(316002)(16526019)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 22:03:06.5757
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f44794c7-033e-4685-b9d7-08db030dc462
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT100.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4870
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On 1/26/2023 4:01 AM, Krzysztof Kozlowski wrote:
-> On 26/01/2023 04:14, Wesley Cheng wrote:
->> Add a new definition for specifying how many XHCI secondary interrupters
->> can be allocated.  XHCI in general can potentially support up to 1024
->> interrupters, which some uses may want to limit depending on how many
->> users utilize the interrupters.
-> 
-> I cannot find in the code any user of this. Your next patch stores it,
-> but which other patch uses stored value?
-> 
-> What I still don't get how is this exactly hardware property, not policy
-> or driver choice.
-> 
-
-Sorry I must have missed that patchset when rebasing over Mathias' xHCI 
-changes.  It was there previously in my initial submission where the 
-property is carried over into xhci-plat from dwc3/host.c.
-
-So the xHC controller has a HCSPARAMs field that defines the number of 
-interrupters it can support.  It does potentially have the capability of 
-having 1024 interrupters.  Each interrupter has to have its own set of 
-interrupt register sets, which depending on the vendor implementing it 
-could limit the maximum.  For example, as stated below, DWC3 only allows 
-for 8 interrupters to be allocated.
-
-The purpose for this property is to allow the user/driver to not have to 
-allocate memory for supporting 1024 event rings, if they are only going 
-to utilize one.  Likewise, if the user attempts to allocate more than 
-what is supported by the HW, then Mathias' SW will cross check to ensure 
-that isn't allowed. (by checking the HCSPARAMs against the DT property 
-below)
-
+On 1/30/23 13:57, Jens Axboe wrote:
+>> This does cause about a 2.7% regression for me, using O_DIRECT on a raw
+>> block device. Looking at a perf diff, here's the top:
 >>
->> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
+>>                 +2.71%  [kernel.vmlinux]  [k] mod_node_page_state
+>>                 +2.22%  [kernel.vmlinux]  [k] iov_iter_extract_pages
 >>
->> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> index 6d78048c4613..4faaec9655e0 100644
->> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->> @@ -349,6 +349,18 @@ properties:
->>       items:
->>         enum: [1, 4, 8, 16, 32, 64, 128, 256]
->>   
->> +  snps,num-hc-interrupters:
->> +    description:
->> +      Defines the maximum number of XHCI host controller interrupters that can
->> +      be supported.  The XHCI host controller has support to allocate multiple
->> +      event rings, which can be assigned to different clients/users.  The DWC3
->> +      controller has a maximum of 8 interrupters.  If this is not defined then
->> +      the value will be defaulted to 1.  This parameter is used only when
->> +      operating in host mode.
->> +    $ref: /schemas/types.yaml#/definitions/uint8
->> +    minimum: 1
->> +    maximum: 8
+>> and these two are gone:
+>>
+>>       2.14%             [kernel.vmlinux]  [k] __iov_iter_get_pages_alloc
+>>       1.53%             [kernel.vmlinux]  [k] iov_iter_get_pages
+>>
+>> rest is mostly in the noise, but mod_node_page_state() sticks out like
+>> a sore thumb. They seem to be caused by the node stat accounting done
+>> in gup.c for FOLL_PIN.
 > 
-> default: 1
+> Confirmed just disabling the node_stat bits in mm/gup.c and now the
+> performance is back to the same levels as before.
 > 
+> An almost 3% regression is a bit hard to swallow...
 
-Got it.
+This is something that we say when adding pin_user_pages_fast(),
+yes. I doubt that I can quickly find the email thread, but we
+measured it and weren't immediately able to come up with a way
+to make it faster.
 
-Thanks
-Wesley Cheng
+At this point, it's a good time to consider if there is any
+way to speed it up. But I wanted to confirm that you're absolutely
+right: the measurement sounds about right, and that's also the
+hotspot that we say, too.
+  
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
