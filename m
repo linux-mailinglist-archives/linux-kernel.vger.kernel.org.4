@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157B1682018
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAC1682010
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjA3XxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S231157AbjA3Xwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjA3XxE (ORCPT
+        with ESMTP id S230494AbjA3Xwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:53:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DE02F79A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:52:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675122741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TS4HpeCNM0XvAPtszjmqpefmkBNe2MR5KD9S6Iwx0h8=;
-        b=dBLIQ0YjxQz4nMj4ISOV08W3BvtZXXNMnn0f3NZCH4cGziMRMM2cDYTV7VKqywjPvLJsek
-        xsfhKFS1YQdGal7t4ZD1LvyhbfPOiOV6k4nZWj9YB0TjlR4zJ8NzxCWGCxGJAg9m5QKQKY
-        IVX4b+Hm8BtYCpcgL6pAfaLQXasS1BY=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-49-ieev-PH9OLeHhYMj80zHqA-1; Mon, 30 Jan 2023 18:52:18 -0500
-X-MC-Unique: ieev-PH9OLeHhYMj80zHqA-1
-Received: by mail-il1-f199.google.com with SMTP id x9-20020a056e021ca900b0030f177273c3so8236605ill.8
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:52:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TS4HpeCNM0XvAPtszjmqpefmkBNe2MR5KD9S6Iwx0h8=;
-        b=PO1DtC4nsEzqBkT5zjkq+cO+s5JsACg0blQE9BfjeQHOCHdQZR+TM49BymMBHmcYvp
-         CAgKuru3pY8aCBqeVAWlRqA3yA1gAGq7dUnzlcFcFdp8S6Mq66yYh719N4F50vD2yIeJ
-         LCxPgi44lLs2eZhWEyM2CqJ0PAt5OWuPea/0jGRL1OvRQiNNuzHDqy657khGQfVP0wBV
-         HneKlyF2mXoIqRujkxjq5s7tFMOzZtHzjjQ6uv9jfWZ2Gtg4QuNAmMDvbD7uwbaqy1FW
-         wTVVhH+jJvovqccqlZXwMHwn0a+vvCLlvUhfRaGczpsvb7S42fi3Xds9SYyY34FKvJVj
-         gxCA==
-X-Gm-Message-State: AO0yUKUjhnFD40ZixAEf7Na5bgVKTAwsFosZF1X+hp3X7+6XinwI2mU6
-        GtUxA/mh19UMX/PlLFIH0RC0yqQFrFyB7AysNQmq02kF/QQdaq1AodQitvGsBycbkWIWqsc1gDl
-        wlTu461d8UERzrvQLptMmBwxi
-X-Received: by 2002:a05:6e02:12ed:b0:310:9821:cb3c with SMTP id l13-20020a056e0212ed00b003109821cb3cmr7393423iln.25.1675122737759;
-        Mon, 30 Jan 2023 15:52:17 -0800 (PST)
-X-Google-Smtp-Source: AK7set87D+MlDDa91Vu1Yko+c/K5kSqcubT59knSAb3ceK0juTeSNvQ8d8ohGk/gqepJgx4IpTGphg==
-X-Received: by 2002:a05:6e02:12ed:b0:310:9821:cb3c with SMTP id l13-20020a056e0212ed00b003109821cb3cmr7393413iln.25.1675122737514;
-        Mon, 30 Jan 2023 15:52:17 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id q14-20020a02b04e000000b0039decb5b452sm5271432jah.65.2023.01.30.15.52.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 15:52:16 -0800 (PST)
-Date:   Mon, 30 Jan 2023 16:52:15 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     <kwankhede@nvidia.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] vfio/mdev: Use sysfs_emit() to instead of sprintf()
-Message-ID: <20230130165215.068a4c26.alex.williamson@redhat.com>
-In-Reply-To: <20230129084117.2384-1-liubo03@inspur.com>
-References: <20230129084117.2384-1-liubo03@inspur.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Mon, 30 Jan 2023 18:52:34 -0500
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2772B28A;
+        Mon, 30 Jan 2023 15:52:32 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 84D886E2;
+        Mon, 30 Jan 2023 23:52:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 84D886E2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1675122751; bh=6cM/5l8yxa9TBrASucAMh3wX/O29p+Di+yDhLyRd/+U=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=aywlhFlQfze9crdMnaM2QoYgsrl4orc1gjt4b4xbYodqNrOQVHztPxR4oO7gSr+Nm
+         GWs4pCX4ZjBBrpZuKdBftiK2XtONfVIx7FjVCgyTT1nu42cbcnkccLJoL6YJloSJna
+         DTd0OZm9Gitx0aXi7cB0sHhUv1NxAwDofOPm0U+UDMkP9ZSwGg9obgyS/nEyA19R2u
+         mnG5FPZ7PAA9lOA2i6dFQYcFFwvambsorf7gofGzibgtfbZQjVeA10MoWZBmkAW9LR
+         hSj/R6zXhZ4iXK6MmJ0N/aEA4/JuQRBfaeGgs4uFCzzFlV3gEBknDb0A7p9m3IUhPN
+         1xk2396uPexfA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     sshefali021@gmail.com, kstewart@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2] docs: add workload-tracing document to admin-guide
+In-Reply-To: <021776e6-b37f-0a2e-41e0-5c09f9582c57@linuxfoundation.org>
+References: <20230127234616.55137-1-skhan@linuxfoundation.org>
+ <f48e8dab-2a68-88d2-7917-f8f34a39e322@leemhuis.info>
+ <021776e6-b37f-0a2e-41e0-5c09f9582c57@linuxfoundation.org>
+Date:   Mon, 30 Jan 2023 16:52:30 -0700
+Message-ID: <87o7qf4m2p.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 Jan 2023 03:41:17 -0500
-Bo Liu <liubo03@inspur.com> wrote:
+Shuah Khan <skhan@linuxfoundation.org> writes:
 
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
-> 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-> ---
->  drivers/vfio/mdev/mdev_sysfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vfio/mdev/mdev_sysfs.c b/drivers/vfio/mdev/mdev_sysfs.c
-> index abe3359dd477..e4490639d383 100644
-> --- a/drivers/vfio/mdev/mdev_sysfs.c
-> +++ b/drivers/vfio/mdev/mdev_sysfs.c
-> @@ -96,7 +96,7 @@ static MDEV_TYPE_ATTR_RO(device_api);
->  static ssize_t name_show(struct mdev_type *mtype,
->  			 struct mdev_type_attribute *attr, char *buf)
->  {
-> -	return sprintf(buf, "%s\n",
-> +	return sysfs_emit(buf, "%s\n",
->  		mtype->pretty_name ? mtype->pretty_name : mtype->sysfs_name);
->  }
->  
+> On 1/28/23 01:35, Thorsten Leemhuis wrote:
+>> Adding another section that doesn't seem to a be a good fit feels a bit
+>> like "making things worse than better".  So wouldn't this maybe be a
+>> good opportunity to create a totally new top-level section for
+>> application developers and system integrators, even if it's tiny for
+>> now? The audience is likely big enough to justify that -- and the topics
+>> are likely different enough, too (of course sometimes there will be
+>> overlap, as always). Any maybe it will help to bring other stuff over
+>> from admin guide that is more targeted for application developers and
+>> system integrators, which will help to get more structure into the
+>> admin-guide.
+>> 
+>
+> I like the idea of creating a new top-level section for application developers
+> and system integrators. I foresee this section growing and also we can look
+> at other documents that are a good fit under this category and move them over.
+>
+> Jon, Thoughts on this.
 
-Applied to vfio next branch for v6.3.  Thanks,
+The fit with the admin guide caught my attention as well, but I didn't
+immediately have a better place to suggest.  I am somewhat resistant to
+creating another top-level directory; I really want to have *fewer* of
+them.  I certainly don't want to create one for a single document.  My
+inclination would be to leave it where it is for now; we can always
+revisit this if it turns out we have a lot of material that justifies a
+new book.
 
-Alex
+Thanks,
 
+jon
