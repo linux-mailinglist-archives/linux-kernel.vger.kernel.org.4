@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49A6681414
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18D1681419
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237827AbjA3PGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:06:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S237867AbjA3PHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237784AbjA3PGs (ORCPT
+        with ESMTP id S237784AbjA3PHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:06:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D8617140
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:05:59 -0800 (PST)
+        Mon, 30 Jan 2023 10:07:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6B027D6A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:06:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675091158;
+        s=mimecast20190719; t=1675091181;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=u8UBrsW791ANKIZLkk9Wg2fhlw6FmVWSXIe4mUfTd40=;
-        b=HMoPArzN8cehhhdVpg7VCo2lOaynM3ghwQcaeDlbPY2IbI5/rT35wXJLVE4UEk/kC7q1IK
-        eTdBTUwQ3GfiE0jZjoJDIYI1CKN0hU9kkyerO7p3b30/f+2M3syWKHctKSELy7kawN0BHn
-        tPsPyBK6QIM7Mxb39GlxGrfrDfjc3oQ=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5CVJu2EH78w77h5RT2FTQTyWVRR8gsDPBHuNXqm811E=;
+        b=SW3UVH6pmxU5qh4wZx4Dz1XiJRYF8yIqAPQx8UsXj1Vvu3Ju/RU6jzI8oPtMAmymoUuZqm
+        lL7iaWMW8R2oI47ORVv8Th+ZzllEs1gqHnXDh+nXkkWH+sHmkp7ozERdBiwTgSm6twFm/4
+        uwm44o2j2PCONetrMNKNK7GEtDVo3Yg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-393-Iq_SbwgrMeSOpcp6QCVVFw-1; Mon, 30 Jan 2023 10:05:55 -0500
-X-MC-Unique: Iq_SbwgrMeSOpcp6QCVVFw-1
-Received: by mail-ed1-f70.google.com with SMTP id j10-20020a05640211ca00b0049e385d5830so8485179edw.22
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:05:55 -0800 (PST)
+ us-mta-542-nSzGxRcsM3i_T3zJCPAStA-1; Mon, 30 Jan 2023 10:06:20 -0500
+X-MC-Unique: nSzGxRcsM3i_T3zJCPAStA-1
+Received: by mail-ed1-f72.google.com with SMTP id b6-20020aa7c906000000b004a25542075eso1352893edt.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:06:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u8UBrsW791ANKIZLkk9Wg2fhlw6FmVWSXIe4mUfTd40=;
-        b=18YOd6zDpex0y57srnRJvXy8FDf/5sSc+HXQl9us5AzCMJn10vROclP780GSy9wmWm
-         fknJAzmOTc4BRa76I9DwhfkmZZV1hLZqhq/1Wyo6stLy0dRTfIvqPSKhIAtxrJJbHCpf
-         90U8/ycMfpC8WCYVU5PHts3I83Y59AI2FtuZSJeaVwJQmwyitwRdBNeQB3LqeeIcz4GI
-         M9cD3yfWENTBH0AQoPe25Ym38Ta8XQAibJKJZLIIC9Y1PrKzYXLkLBflFWrg8FKTtvI6
-         JGvail5kowf0VTStt28nGEZp2bXuxggkvw5M3TnAGb92iYKvO2FSfD7wpglk3DuwxIfC
-         NkzQ==
-X-Gm-Message-State: AO0yUKXWNzMgjjLQSq5Gi//hzWpi6gQpEx+xcU+6aB3FM62nLVNNddzN
-        jqAuoD2NopUWa3egd6cLTcXbKM3KxFBjtfxD6QtMhlp+f566+NF0xf3Ux16B3gyy8R/4POrrB11
-        MCPv1Fqo/8S1neCg83Tsc2DXE
-X-Received: by 2002:a17:906:3991:b0:878:46ed:6a29 with SMTP id h17-20020a170906399100b0087846ed6a29mr20823497eje.3.1675091154843;
-        Mon, 30 Jan 2023 07:05:54 -0800 (PST)
-X-Google-Smtp-Source: AK7set+M8H6/btJef9MAU3wiesmw8IQmNvnJHDjvDsh87w+A3bvgME+Oqdzx0HYQEKqQoFX3yS2j8g==
-X-Received: by 2002:a17:906:3991:b0:878:46ed:6a29 with SMTP id h17-20020a170906399100b0087846ed6a29mr20823485eje.3.1675091154658;
-        Mon, 30 Jan 2023 07:05:54 -0800 (PST)
+        bh=5CVJu2EH78w77h5RT2FTQTyWVRR8gsDPBHuNXqm811E=;
+        b=vQbLNk7AizmtvHWHE9Xzi962uIcDClQh+ZIJLK3j9S4gdTLrHJcfLWh/F8yMIGYjPq
+         Z0J5Z/l4tDtkoTXrXkl6VyFswR73XLH1oPgpm1gsA4Mr3F3IItPpr0UJ4Ypq0TY54FOj
+         S9AlCwgAiige76URL4QvGTt6AvGe3/FnnHRpqZ1E+8umY/dyhndbSgKTK5PGj37tcVW6
+         r+SUcMP5UlCu6h0g0xConMbjymaJjkAQlMBoUpcuI4hBCLPOX9dbMAI85c2hQwkxqm1a
+         SLLvczeCulPnbCCPYWaxBePhztpGUL14B7kh9Or6IkG+LuPPoBVv+NublL3Cs4tV3J9g
+         Vm7w==
+X-Gm-Message-State: AO0yUKXoLq0y75sX3C81uCd93vg7zc+PwWE90TN5sOZkyRBk+oJen0f4
+        9R1AP8RxlSo6h1Hffe1MouRMRkSZr8FldcexNc/9brjAMIaav3mVTdAMIArERGPU4ptZqMtd3l7
+        YV5W/fZqEbfqVzEm1UxwQokPp
+X-Received: by 2002:a17:906:1651:b0:878:45e9:6f96 with SMTP id n17-20020a170906165100b0087845e96f96mr19038791ejd.49.1675091179021;
+        Mon, 30 Jan 2023 07:06:19 -0800 (PST)
+X-Google-Smtp-Source: AK7set/pWbyTVsCwUzmoscsNJcBsnhDO03WOS2srLwGgUlMlRx89m0LKnN0ZDK8pNpbPFojbf8zgHg==
+X-Received: by 2002:a17:906:1651:b0:878:45e9:6f96 with SMTP id n17-20020a170906165100b0087845e96f96mr19038773ejd.49.1675091178843;
+        Mon, 30 Jan 2023 07:06:18 -0800 (PST)
 Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id f17-20020a1709064dd100b0087853fbb55dsm6863912ejw.40.2023.01.30.07.05.53
+        by smtp.gmail.com with ESMTPSA id ov9-20020a170906fc0900b0087bdae9a1ebsm5425686ejb.94.2023.01.30.07.06.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 07:05:54 -0800 (PST)
-Message-ID: <94ae8042-89f7-9210-1bda-a22dd9fe7d4d@redhat.com>
-Date:   Mon, 30 Jan 2023 16:05:53 +0100
+        Mon, 30 Jan 2023 07:06:18 -0800 (PST)
+Message-ID: <c425d613-80d7-221c-20de-f03191cb1b59@redhat.com>
+Date:   Mon, 30 Jan 2023 16:06:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH 2/5] platform/x86: dell-ddv: Return error if buffer is
- empty
+Subject: Re: [PATCH 3/5] platform/x86: dell-ddv: Replace EIO with ENOMSG
 Content-Language: en-US
 To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
 Cc:     jdelvare@suse.com, linux@roeck-us.net,
         platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230126194021.381092-1-W_Armin@gmx.de>
- <20230126194021.381092-3-W_Armin@gmx.de>
+ <20230126194021.381092-4-W_Armin@gmx.de>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230126194021.381092-3-W_Armin@gmx.de>
+In-Reply-To: <20230126194021.381092-4-W_Armin@gmx.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -87,10 +86,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Hi,
 
 On 1/26/23 20:40, Armin Wolf wrote:
-> In several cases, the DDV WMI interface can return buffers
-> with a length of zero. Return -ENODATA in such a case for
-> proper error handling. Also replace some -EIO errors with
-> more specialized ones.
+> When the ACPI WMI interface returns a valid ACPI object
+> which has the wrong type, then ENOMSG instead of EIO
+> should be returned, since the WMI method was still
+> successfully evaluated.
 > 
 > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
@@ -112,62 +111,22 @@ Hans
 
 
 > ---
->  drivers/platform/x86/dell/dell-wmi-ddv.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> index 9cb6ae42dbdc..f99c4cb686fd 100644
+> index f99c4cb686fd..58fadb74e86a 100644
 > --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
 > +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
-> @@ -11,6 +11,7 @@
->  #include <linux/debugfs.h>
->  #include <linux/device.h>
->  #include <linux/dev_printk.h>
-> +#include <linux/errno.h>
->  #include <linux/kernel.h>
->  #include <linux/kstrtox.h>
->  #include <linux/math.h>
-> @@ -125,21 +126,27 @@ static int dell_wmi_ddv_query_buffer(struct wmi_device *wdev, enum dell_ddv_meth
->  	if (ret < 0)
->  		return ret;
+> @@ -87,7 +87,7 @@ static int dell_wmi_ddv_query_type(struct wmi_device *wdev, enum dell_ddv_method
 > 
-> -	if (obj->package.count != 2)
-> -		goto err_free;
-> +	if (obj->package.count != 2 ||
-> +	    obj->package.elements[0].type != ACPI_TYPE_INTEGER ||
-> +	    obj->package.elements[1].type != ACPI_TYPE_BUFFER) {
-> +		ret = -ENOMSG;
-> 
-> -	if (obj->package.elements[0].type != ACPI_TYPE_INTEGER)
->  		goto err_free;
-> +	}
-> 
->  	buffer_size = obj->package.elements[0].integer.value;
-> 
-> -	if (obj->package.elements[1].type != ACPI_TYPE_BUFFER)
-> +	if (!buffer_size) {
-> +		ret = -ENODATA;
-> +
->  		goto err_free;
-> +	}
-> 
->  	if (buffer_size > obj->package.elements[1].buffer.length) {
->  		dev_warn(&wdev->dev,
->  			 FW_WARN "WMI buffer size (%llu) exceeds ACPI buffer size (%d)\n",
->  			 buffer_size, obj->package.elements[1].buffer.length);
-> +		ret = -EMSGSIZE;
-> 
->  		goto err_free;
+>  	if (obj->type != type) {
+>  		kfree(obj);
+> -		return -EIO;
+> +		return -ENOMSG;
 >  	}
-> @@ -151,7 +158,7 @@ static int dell_wmi_ddv_query_buffer(struct wmi_device *wdev, enum dell_ddv_meth
->  err_free:
->  	kfree(obj);
 > 
-> -	return -EIO;
-> +	return ret;
->  }
-> 
->  static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_method method,
+>  	*result = obj;
 > --
 > 2.30.2
 > 
