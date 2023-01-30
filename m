@@ -2,75 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB336681A53
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2106D681A79
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236328AbjA3TZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:25:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
+        id S237498AbjA3T1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236213AbjA3TZA (ORCPT
+        with ESMTP id S238137AbjA3T1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:25:00 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E52D15548
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:24:58 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id z11so12054917ede.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:24:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R0GBVXlF6AKiZTyNS4sARHEHNtZZQ3Cs73WzNr0/VSs=;
-        b=7JWtwh9VAZ1RnVYQtd5BY4DOcu4JAz7SifByGFUmET7rD/+my2nyfMrR7oCTkP1jf+
-         4DGgpCbyQPrlo7Si9M7mjA76g009Ddrv174FBiKKOEq9TwZ5cm5gJC/Wo6U2mbRSkSWG
-         3G1ZOgcWzjI9Ks0pU1EsKz8dd2Rpnsc/QS4ReWNfW6/Ns25DxLxI0n3PSn2ZmBwMWz6S
-         xPnP/Nb0YYDEXpNY575kSYyOoK4Jq+ooIM/Nyc7CIv/QaZYUODtuMOuLapEzjjSQ66QO
-         3wQtVsuQNL9r5X7SBRFKAd8K8YrttvFnlaaxw525qoduDFXccY/itmxzFjEF1dUGqFQb
-         GeCA==
+        Mon, 30 Jan 2023 14:27:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACF73EC60
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675106776;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lxRPh/paZX5a/mJDhNvLvYnOtz1Fnppz2zZO/ehY1gY=;
+        b=U95HQXeZxqsPumu/gpogtkGnTWlCU6P0uDMv4GK8KFAqXDEc+BHTxHRGR1kPaBSKjyBUV4
+        20hbiHYgE3QUe3sBA6DWfNsDKxjEAgCHl9ONaNGtyMbzJAVZkMoWhRnyEKxfhPt8ho5wjr
+        rlVsiSgQMfkoCYp6nf9y+PQZM9GByoE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-390-J_-U239XOUyFm6qbRfRsKQ-1; Mon, 30 Jan 2023 14:26:15 -0500
+X-MC-Unique: J_-U239XOUyFm6qbRfRsKQ-1
+Received: by mail-wr1-f72.google.com with SMTP id t20-20020adfba54000000b002be0eb97f4fso2150037wrg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:26:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R0GBVXlF6AKiZTyNS4sARHEHNtZZQ3Cs73WzNr0/VSs=;
-        b=mUOz+AkkvNQQ8z1po3xzCklXacvU3sBOwxtcTbs9waKttaptIodrMvxCSMDtz5ymdZ
-         78A+Eqwr1lMR+gde13421/5Lc6gKhuioTqnMfmslSPreqE0eTv0mGh5PTUviS5vpE0bt
-         v+K98PNtMI30+3KkEAleHWDXo/B/akJ7e0fwGqcl0GH9xMuyyqnCDdfH6Hy/xowa29XB
-         Q0gBFqkP1604/KdIjYzIQgrikc+iLAmclnqjmnQjfYEsvFli3zGSR+E0OVuuIqD31HV/
-         zDzWlfR706iCCDjsnA5GKtJkQNuwmz7rPjnS8DqhxdH5fug7ld809mwpL4CNmABFN9/m
-         Qptw==
-X-Gm-Message-State: AO0yUKWFQ6qQ5r083uL4MvQwmlfSQ0e6+bugTqp5l1Q9WK8OkCAt2BsU
-        BXdmqPWuPZ40sg6rYcgidfUVsw==
-X-Google-Smtp-Source: AK7set+TrLBlUXkOcES0STjoQK4g6+IypkXYAP0xFap0BvJd6X5eJafw5LctEbFtO/btDCIDiAto+g==
-X-Received: by 2002:a05:6402:28cf:b0:499:b320:fc2d with SMTP id ef15-20020a05640228cf00b00499b320fc2dmr3737678edb.33.1675106696881;
-        Mon, 30 Jan 2023 11:24:56 -0800 (PST)
-Received: from airbuntu (host86-163-35-10.range86-163.btcentralplus.com. [86.163.35.10])
-        by smtp.gmail.com with ESMTPSA id w25-20020aa7d299000000b0048789661fa2sm7174994edq.66.2023.01.30.11.24.55
+        bh=lxRPh/paZX5a/mJDhNvLvYnOtz1Fnppz2zZO/ehY1gY=;
+        b=L+nVQ3deFl1mrTcvPzKxttxWzQNW9g3vb9IUqQBQEp06PBTJkZgoAYPbjf9rbKWbmP
+         /2maCRvDLUXXV0yTInrGfthYRPEo9H0CEoa7CVDnCe62MJxPEkRjL4JfGB4K8iiFYefN
+         OfqimPPHaj2SYtuueekntXhsAh64hBEYgtnoMhAixuNvvb//LxW0AvMOGmAeo2cyEwjc
+         CypaWDCAfnNLV0gT5fWf23FzxP2Jm2MaOrJNPNohKn8RI2rKJvvj+ruIzzvLs55PmvAE
+         U21KAsAIeoh/kKBkbw9bnGRo4xk+jzMfn7ujSaSBPw4AyL28HbZ5hnMJ2Xoe11jRJhg8
+         nuUw==
+X-Gm-Message-State: AO0yUKWaTH7H+ZmMH9RxIr4u6VM0hUP9WqPKBDPDEim+dhe3+R/+9HtC
+        WFffLhwPenrME5Uxom0VyQhXi5y6mhZTlYHQJo5YnHn4eNdz++kvMPw9i2IKZcS8tvzCqatctfz
+        5v/XGhqsV2t2rF5cSlpdwjV5W
+X-Received: by 2002:a5d:5908:0:b0:2bf:f027:3c30 with SMTP id v8-20020a5d5908000000b002bff0273c30mr3314139wrd.56.1675106774159;
+        Mon, 30 Jan 2023 11:26:14 -0800 (PST)
+X-Google-Smtp-Source: AK7set+eycYJ8p0mkRD8mPxEc0uaHr5C6uQOIksxyy+K6HKOMMdutlQSlkQGNzjc/g2dbWuMCMCRzg==
+X-Received: by 2002:a5d:5908:0:b0:2bf:f027:3c30 with SMTP id v8-20020a5d5908000000b002bff0273c30mr3314130wrd.56.1675106773965;
+        Mon, 30 Jan 2023 11:26:13 -0800 (PST)
+Received: from redhat.com ([2.52.144.173])
+        by smtp.gmail.com with ESMTPSA id c17-20020adffb11000000b002bc8130cca7sm12742836wrr.23.2023.01.30.11.26.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 11:24:56 -0800 (PST)
-Date:   Mon, 30 Jan 2023 19:24:54 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
+        Mon, 30 Jan 2023 11:26:13 -0800 (PST)
+Date:   Mon, 30 Jan 2023 14:26:06 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Ross Zwisler <zwisler@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Ross Zwisler <zwisler@google.com>,
+        "Tobin C. Harding" <me@tobin.cc>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Huang Rui <ray.huang@amd.com>,
+        Ingo Molnar <mingo@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jason Wang <jasowang@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        Wei Wang <wvw@google.com>, Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Subject: Re: [PATCH 1/3] sched/uclamp: Set max_spare_cap_cpu even if
- max_spare_cap is 0
-Message-ID: <20230130192454.ohau23v74agz7nol@airbuntu>
-References: <20230129161444.1674958-1-qyousef@layalina.io>
- <20230129161444.1674958-2-qyousef@layalina.io>
- <CAKfTPtCstN-oJ=UsDJrwacj8fm_cq-5N3LAWc_zz32E2FCJgBg@mail.gmail.com>
+        Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Todd E Brandt <todd.e.brandt@linux.intel.com>,
+        Tycho Andersen <tycho@tycho.pizza>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/9] use canonical ftrace path whenever possible
+Message-ID: <20230130142555-mutt-send-email-mst@kernel.org>
+References: <20230130181915.1113313-1-zwisler@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtCstN-oJ=UsDJrwacj8fm_cq-5N3LAWc_zz32E2FCJgBg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230130181915.1113313-1-zwisler@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,119 +107,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/30/23 15:44, Vincent Guittot wrote:
-> On Sun, 29 Jan 2023 at 17:14, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > When uclamp_max is being used, the util of the task could be higher than
-> > the spare capacity of the CPU, but due to uclamp_max value we force fit
-> > it there.
-> >
-> > The way the condition for checking for max_spare_cap in
-> > find_energy_efficient_cpu() was constructed; it ignored any CPU that has
-> > its spare_cap less than or _equal_ to max_spare_cap. Since we initialize
-> > max_spare_cap to 0; this lead to never setting max_spare_cap_cpu and
-> > hence ending up never performing compute_energy() for this cluster and
-> > missing an opportunity for a better energy efficient placement to honour
-> > uclamp_max setting.
-> >
-> >         max_spare_cap = 0;
-> >         cpu_cap = capacity_of(cpu) - task_util(p);  // 0 if task_util(p) is high
-> >
-> >         ...
-> >
-> >         util_fits_cpu(...);             // will return true if uclamp_max forces it to fit
-> >
-> >         ...
-> >
-> >         // this logic will fail to update max_spare_cap_cpu if cpu_cap is 0
-> >         if (cpu_cap > max_spare_cap) {
-> >                 max_spare_cap = cpu_cap;
-> >                 max_spare_cap_cpu = cpu;
-> >         }
-> >
-> > prev_spare_cap suffers from a similar problem.
-> >
-> > Fix the logic by treating -1UL value as 'not populated' instead of
-> > 0 which is a viable and correct spare capacity value.
-> >
-> > Fixes: 1d42509e475c ("sched/fair: Make EAS wakeup placement consider uclamp restrictions")
-> > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> > ---
-> >  kernel/sched/fair.c | 14 ++++++++------
-> >  1 file changed, 8 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index e29e9ea4cde8..ca2c389d3180 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -7390,9 +7390,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >         for (; pd; pd = pd->next) {
-> >                 unsigned long util_min = p_util_min, util_max = p_util_max;
-> >                 unsigned long cpu_cap, cpu_thermal_cap, util;
-> > -               unsigned long cur_delta, max_spare_cap = 0;
-> > +               unsigned long cur_delta, max_spare_cap = -1UL;
-> >                 unsigned long rq_util_min, rq_util_max;
-> > -               unsigned long prev_spare_cap = 0;
-> > +               unsigned long prev_spare_cap = -1UL;
-> >                 int max_spare_cap_cpu = -1;
-> >                 unsigned long base_energy;
-> >                 int fits, max_fits = -1;
-> > @@ -7457,7 +7457,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                                 prev_spare_cap = cpu_cap;
-> >                                 prev_fits = fits;
-> >                         } else if ((fits > max_fits) ||
-> > -                                  ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
-> > +                                  ((fits == max_fits) &&
-> > +                                  (cpu_cap > max_spare_cap || max_spare_cap == -1UL) {
+On Mon, Jan 30, 2023 at 11:19:06AM -0700, Ross Zwisler wrote:
+> The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+
+
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+
+> But, from Documentation/trace/ftrace.rst:
 > 
-> Can't we use a signed comparison to include the case of max_spare_cap
-> == -1 in cpu_cap > max_spare_cap ?
-
-By converting max_spare_cap to long, right?
-
-My memory could be failing me, but I seem to remember we had mixed usage and
-consolidated into unsigned long. That's why I didn't want to break the trend.
-
-Anyway. If no one shouts against that, I don't mind going for that.
-
-
-Thanks
-
---
-Qais Yousef
-
+>   Before 4.1, all ftrace tracing control files were within the debugfs
+>   file system, which is typically located at /sys/kernel/debug/tracing.
+>   For backward compatibility, when mounting the debugfs file system,
+>   the tracefs file system will be automatically mounted at:
 > 
-> >                                 /*
-> >                                  * Find the CPU with the maximum spare capacity
-> >                                  * among the remaining CPUs in the performance
-> > @@ -7469,7 +7470,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                         }
-> >                 }
-> >
-> > -               if (max_spare_cap_cpu < 0 && prev_spare_cap == 0)
-> > +               if (max_spare_cap_cpu < 0 && prev_spare_cap == -1UL)
-> >                         continue;
-> >
-> >                 eenv_pd_busy_time(&eenv, cpus, p);
-> > @@ -7477,7 +7478,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                 base_energy = compute_energy(&eenv, pd, cpus, p, -1);
-> >
-> >                 /* Evaluate the energy impact of using prev_cpu. */
-> > -               if (prev_spare_cap > 0) {
-> > +               if (prev_spare_cap != -1UL) {
-> >                         prev_delta = compute_energy(&eenv, pd, cpus, p,
-> >                                                     prev_cpu);
-> >                         /* CPU utilization has changed */
-> > @@ -7489,7 +7490,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                 }
-> >
-> >                 /* Evaluate the energy impact of using max_spare_cap_cpu. */
-> > -               if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
-> > +               if (max_spare_cap_cpu >= 0 &&
-> > +                   (max_spare_cap > prev_spare_cap || prev_spare_cap == -1UL)) {
-> >                         /* Current best energy cpu fits better */
-> >                         if (max_fits < best_fits)
-> >                                 continue;
-> > --
-> > 2.25.1
-> >
+>   /sys/kernel/debug/tracing
+> 
+> There are many places where this older debugfs path is still used in
+> code comments, selftests, examples and tools, so let's update them to
+> avoid confusion.
+> 
+> I've broken up the series as best I could by maintainer or directory,
+> and I've only sent people the patches that I think they care about to
+> avoid spamming everyone.
+> 
+> Ross Zwisler (9):
+>   tracing: always use canonical ftrace path
+>   bpf: use canonical ftrace path
+>   selftests/bpf: use canonical ftrace path
+>   perf docs: use canonical ftrace path
+>   tools/power: use canonical ftrace path
+>   selftests: use canonical ftrace path
+>   tools/virtio: use canonical ftrace path
+>   leaking_addresses: also skip canonical ftrace path
+>   tools/kvm_stat: use canonical ftrace path
+> 
+>  include/linux/kernel.h                        |  2 +-
+>  include/linux/tracepoint.h                    |  4 ++--
+>  include/uapi/linux/bpf.h                      |  8 ++++----
+>  kernel/trace/Kconfig                          | 20 +++++++++----------
+>  kernel/trace/kprobe_event_gen_test.c          |  2 +-
+>  kernel/trace/ring_buffer.c                    |  2 +-
+>  kernel/trace/synth_event_gen_test.c           |  2 +-
+>  kernel/trace/trace.c                          |  2 +-
+>  samples/bpf/cpustat_kern.c                    |  4 ++--
+>  samples/bpf/hbm.c                             |  4 ++--
+>  samples/bpf/ibumad_kern.c                     |  4 ++--
+>  samples/bpf/lwt_len_hist.sh                   |  2 +-
+>  samples/bpf/offwaketime_kern.c                |  2 +-
+>  samples/bpf/task_fd_query_user.c              |  4 ++--
+>  samples/bpf/test_lwt_bpf.sh                   |  2 +-
+>  samples/bpf/test_overhead_tp_kern.c           |  4 ++--
+>  samples/user_events/example.c                 |  4 ++--
+>  scripts/leaking_addresses.pl                  |  1 +
+>  scripts/tracing/draw_functrace.py             |  6 +++---
+>  scripts/tracing/ftrace-bisect.sh              |  4 ++--
+>  tools/include/uapi/linux/bpf.h                |  8 ++++----
+>  tools/kvm/kvm_stat/kvm_stat                   |  2 +-
+>  tools/lib/api/fs/tracing_path.c               |  4 ++--
+>  tools/lib/traceevent/event-parse.c            |  8 ++++----
+>  tools/perf/Documentation/perf-list.txt        |  2 +-
+>  tools/perf/Documentation/perf-script-perl.txt |  2 +-
+>  .../perf/Documentation/perf-script-python.txt |  4 ++--
+>  tools/power/pm-graph/sleepgraph.py            |  4 ++--
+>  .../x86/amd_pstate_tracer/amd_pstate_trace.py |  4 ++--
+>  .../intel_pstate_tracer.py                    | 10 +++++-----
+>  .../selftests/bpf/get_cgroup_id_user.c        |  2 +-
+>  .../bpf/prog_tests/kprobe_multi_test.c        |  2 +-
+>  .../bpf/prog_tests/task_fd_query_tp.c         |  2 +-
+>  .../bpf/prog_tests/tp_attach_query.c          |  2 +-
+>  .../selftests/bpf/prog_tests/trace_printk.c   |  2 +-
+>  .../selftests/bpf/prog_tests/trace_vprintk.c  |  2 +-
+>  .../selftests/bpf/progs/test_stacktrace_map.c |  2 +-
+>  .../selftests/bpf/progs/test_tracepoint.c     |  2 +-
+>  tools/testing/selftests/bpf/test_ftrace.sh    |  2 +-
+>  tools/testing/selftests/bpf/test_tunnel.sh    |  8 ++++----
+>  tools/testing/selftests/bpf/trace_helpers.c   |  4 ++--
+>  .../testing/selftests/user_events/dyn_test.c  |  2 +-
+>  .../selftests/user_events/ftrace_test.c       | 10 +++++-----
+>  .../testing/selftests/user_events/perf_test.c |  8 ++++----
+>  tools/testing/selftests/vm/protection_keys.c  |  4 ++--
+>  tools/tracing/latency/latency-collector.c     |  2 +-
+>  tools/virtio/virtio-trace/README              |  2 +-
+>  tools/virtio/virtio-trace/trace-agent.c       |  2 +-
+>  48 files changed, 96 insertions(+), 95 deletions(-)
+> 
+> -- 
+> 2.39.1.456.gfc5497dd1b-goog
+
