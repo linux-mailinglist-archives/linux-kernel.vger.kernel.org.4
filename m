@@ -2,209 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B39E681CD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A804681CE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjA3VgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
+        id S229605AbjA3VjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjA3VgC (ORCPT
+        with ESMTP id S229653AbjA3Vi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:36:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0720C153
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:36:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35B6661262
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 21:36:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C9BC433EF;
-        Mon, 30 Jan 2023 21:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675114559;
-        bh=LoNYLv7wzq9BmFzK1bqKIFgAt25dyfZUGPVl4aH06Gk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bcTWyeJyMNJSuJ9h8Ce3QhifwSr7JqV27lJrk9TVZOFVwHjUYncY8H6QAcz30aRTK
-         BxLUB/gg7A6xBVMqJY++akNvpHz05wxWCWGS6GhAesxwSj91WfOvQKxFqiR9Vy33U3
-         i67Y2JAg5LQXNqiKW+NN5OIhyzOWnezT1nLUgfWqrSQEirz7xqDuHxZOUtySBaGKK/
-         JjzE9k4QGGMsZFi3eDgxq89uzvgM6C1Mzdq3SJdmS2rxWc1ZH1c5MA1AJ6qkvCbL1A
-         L1I9P9bsesgU2iJrOoMTa0HQZDyDpalci8aCnJ2YekZAZb6ug7Rx3X4AJUe2ImJ3Ak
-         dYI8FmZiH0QlA==
-Date:   Mon, 30 Jan 2023 13:35:57 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] f2fs: use iostat_lat_type directly as a parameter in the
- iostat_update_and_unbind_ctx()
-Message-ID: <Y9g4PcQvsCOj1d0r@google.com>
-References: <20230105042240.24738-1-frank.li@vivo.com>
- <8ab26acd-4df6-8330-8e82-1d258d9f0d6d@kernel.org>
+        Mon, 30 Jan 2023 16:38:59 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D563C6E80
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:38:28 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id c124so8818093pfb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:38:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tyddJd7/BDQFLiv0W0jcUssj4knaaFKB0Era7s1QU18=;
+        b=Rz7BYoxkZNb2J3PQRCPuMSGc03TpKkC0DOxZUQ+brwxmwQy+r693FhqU0xtiZFThot
+         6kEKyjqAo+HkeVRpvyTJ9wnSUR4OUff/ya55KORFjhA40180cp9Zdeg2obRv7Hgy4NLQ
+         VX2jJuTnqdQjJdQrxQIaY3hTdeAIHd2teefPOwlY8pPKauPIkJrxRbtE5QhFxeqvTsK+
+         BIaHPBwaxmogXVTH6TR3YAGI6j+40TB/PRdIZJAzdYdvmx9K0pTiD5CahDZn/ai/5ohj
+         0Ga0+uj6/6VtEnmkmdCqzMP/pS7o0gDeibfbaxrCKvde1WrYQC74+tDjmzc7K0qhwXah
+         nKiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tyddJd7/BDQFLiv0W0jcUssj4knaaFKB0Era7s1QU18=;
+        b=x1/q7r2VFgN/7RbgO08QO+9vUpuXxH4fbDGyB2VOgPJIVHKoUMZvyjYcYwRuY2pJh3
+         xZth1ApZMzUbySaYVjMRtDCWQRyqD4rKSWOfE+rjQ3A3jh2UlAMzoqchIaWvKmPb8SCk
+         A1ys0eEO1Fnq+1W3BRAH2tTD8vrcNtJiK2obZJmYEojFJLx4YajGTVBMMGUssHQsbblX
+         d+TysucQJFt7JtGLY92eCbF520BXrzgcSHQeuIxDWW6k38n2ULreCrYcsI49ZZR7aFEQ
+         a3Hjy0x0OM2FH/ayryTretW+u5NVOJIdtTNj1fatroCvGrT6B48A9Ivn/eprdpsDsAn3
+         Q8Fg==
+X-Gm-Message-State: AO0yUKXm43b8/CmiQLQ85RIkNiNi0t4UEb5/fIZvVFs8LVXAde0eyBAY
+        0jzBCsT+j+eVBm0S+nTo9YLF1Ukju9V/GiIFQyUhuQ==
+X-Google-Smtp-Source: AK7set8vR38uMnC+hyU9xXQ6edkPkt2qNJB11lb7sd89FUPmn/s5vSIbZS5NbN5wxGICNf/MTA+KbuUD2D7USnCNfOw=
+X-Received: by 2002:aa7:9792:0:b0:593:de7:3303 with SMTP id
+ o18-20020aa79792000000b005930de73303mr1850852pfp.66.1675114707927; Mon, 30
+ Jan 2023 13:38:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ab26acd-4df6-8330-8e82-1d258d9f0d6d@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230128001639.3510083-1-tj@kernel.org> <20230128001639.3510083-28-tj@kernel.org>
+In-Reply-To: <20230128001639.3510083-28-tj@kernel.org>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 30 Jan 2023 13:38:15 -0800
+Message-ID: <CABk29Nt2-CCGnogpfEgJ3ZDk5Esk04n6EwsAqpw_vdeVfKuFUQ@mail.gmail.com>
+Subject: Re: [PATCH 27/30] sched_ext: Implement core-sched support
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        brho@google.com, pjt@google.com, derkling@google.com,
+        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
+        dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/28, Chao Yu wrote:
-> On 2023/1/5 12:22, Yangtao Li wrote:
-> > Convert to use iostat_lat_type as parameter instead of raw number.
-> > BTW, move NUM_PREALLOC_IOSTAT_CTXS to the header file, and rename
-> > iotype to page_type to match the definition.
-> > 
-> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > ---
-> >   fs/f2fs/data.c   |  5 +++--
-> >   fs/f2fs/iostat.c | 34 +++++++++++-----------------------
-> >   fs/f2fs/iostat.h | 19 ++++++++++---------
-> >   3 files changed, 24 insertions(+), 34 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> > index c940da1c540f..4e8fd5697c42 100644
-> > --- a/fs/f2fs/data.c
-> > +++ b/fs/f2fs/data.c
-> > @@ -292,7 +292,7 @@ static void f2fs_read_end_io(struct bio *bio)
-> >   	struct bio_post_read_ctx *ctx;
-> >   	bool intask = in_task();
-> > -	iostat_update_and_unbind_ctx(bio, 0);
-> > +	iostat_update_and_unbind_ctx(bio, READ_IO);
-> >   	ctx = bio->bi_private;
-> >   	if (time_to_inject(sbi, FAULT_READ_IO))
-> > @@ -330,7 +330,8 @@ static void f2fs_write_end_io(struct bio *bio)
-> >   	struct bio_vec *bvec;
-> >   	struct bvec_iter_all iter_all;
-> > -	iostat_update_and_unbind_ctx(bio, 1);
-> > +	iostat_update_and_unbind_ctx(bio, bio->bi_opf & REQ_SYNC ? WRITE_SYNC_IO :
-> > +										WRITE_ASYNC_IO);
-> 
-> We can use op_is_write(bio_op(bio)) to check IO's rw type, why not just
-> passing bio arguement, and parse rw/sync types from bio inside
-> iostat_update_and_unbind_ctx(), it can avoid passing unneeded arguements.
+Hi Tejun,
 
-Chao, let's write another patch to clean up, if you're interested in.
+On Fri, Jan 27, 2023 at 4:17 PM Tejun Heo <tj@kernel.org> wrote:
+>
+> The core-sched support is composed of the following parts:
 
-> 
-> Thanks,
-> 
-> >   	sbi = bio->bi_private;
-> >   	if (time_to_inject(sbi, FAULT_WRITE_IO))
-> > diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
-> > index 59c72f92191a..20944c4a683a 100644
-> > --- a/fs/f2fs/iostat.c
-> > +++ b/fs/f2fs/iostat.c
-> > @@ -14,7 +14,6 @@
-> >   #include "iostat.h"
-> >   #include <trace/events/f2fs.h>
-> > -#define NUM_PREALLOC_IOSTAT_CTXS	128
-> >   static struct kmem_cache *bio_iostat_ctx_cache;
-> >   static mempool_t *bio_iostat_ctx_pool;
-> > @@ -210,49 +209,38 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
-> >   }
-> >   static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
-> > -				int rw, bool is_sync)
-> > +				enum iostat_lat_type type)
-> >   {
-> >   	unsigned long ts_diff;
-> > -	unsigned int iotype = iostat_ctx->type;
-> > +	unsigned int page_type = iostat_ctx->type;
-> >   	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
-> >   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
-> > -	int idx;
-> >   	unsigned long flags;
-> >   	if (!sbi->iostat_enable)
-> >   		return;
-> >   	ts_diff = jiffies - iostat_ctx->submit_ts;
-> > -	if (iotype >= META_FLUSH)
-> > -		iotype = META;
-> > -
-> > -	if (rw == 0) {
-> > -		idx = READ_IO;
-> > -	} else {
-> > -		if (is_sync)
-> > -			idx = WRITE_SYNC_IO;
-> > -		else
-> > -			idx = WRITE_ASYNC_IO;
-> > -	}
-> > +	if (page_type >= META_FLUSH)
-> > +		page_type = META;
-> >   	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
-> > -	io_lat->sum_lat[idx][iotype] += ts_diff;
-> > -	io_lat->bio_cnt[idx][iotype]++;
-> > -	if (ts_diff > io_lat->peak_lat[idx][iotype])
-> > -		io_lat->peak_lat[idx][iotype] = ts_diff;
-> > +	io_lat->sum_lat[type][page_type] += ts_diff;
-> > +	io_lat->bio_cnt[type][page_type]++;
-> > +	if (ts_diff > io_lat->peak_lat[type][page_type])
-> > +		io_lat->peak_lat[type][page_type] = ts_diff;
-> >   	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
-> >   }
-> > -void iostat_update_and_unbind_ctx(struct bio *bio, int rw)
-> > +void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type)
-> >   {
-> >   	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
-> > -	bool is_sync = bio->bi_opf & REQ_SYNC;
-> > -	if (rw == 0)
-> > +	if (type == READ_IO)
-> >   		bio->bi_private = iostat_ctx->post_read_ctx;
-> >   	else
-> >   		bio->bi_private = iostat_ctx->sbi;
-> > -	__update_iostat_latency(iostat_ctx, rw, is_sync);
-> > +	__update_iostat_latency(iostat_ctx, type);
-> >   	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
-> >   }
-> > diff --git a/fs/f2fs/iostat.h b/fs/f2fs/iostat.h
-> > index 2c048307b6e0..1f827a2fe6b2 100644
-> > --- a/fs/f2fs/iostat.h
-> > +++ b/fs/f2fs/iostat.h
-> > @@ -8,20 +8,21 @@
-> >   struct bio_post_read_ctx;
-> > +enum iostat_lat_type {
-> > +	READ_IO = 0,
-> > +	WRITE_SYNC_IO,
-> > +	WRITE_ASYNC_IO,
-> > +	MAX_IO_TYPE,
-> > +};
-> > +
-> >   #ifdef CONFIG_F2FS_IOSTAT
-> > +#define NUM_PREALLOC_IOSTAT_CTXS	128
-> >   #define DEFAULT_IOSTAT_PERIOD_MS	3000
-> >   #define MIN_IOSTAT_PERIOD_MS		100
-> >   /* maximum period of iostat tracing is 1 day */
-> >   #define MAX_IOSTAT_PERIOD_MS		8640000
-> > -enum {
-> > -	READ_IO,
-> > -	WRITE_SYNC_IO,
-> > -	WRITE_ASYNC_IO,
-> > -	MAX_IO_TYPE,
-> > -};
-> > -
-> >   struct iostat_lat_info {
-> >   	unsigned long sum_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* sum of io latencies */
-> >   	unsigned long peak_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* peak io latency */
-> > @@ -57,7 +58,7 @@ static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
-> >   	return iostat_ctx->post_read_ctx;
-> >   }
-> > -extern void iostat_update_and_unbind_ctx(struct bio *bio, int rw);
-> > +extern void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type);
-> >   extern void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
-> >   		struct bio *bio, struct bio_post_read_ctx *ctx);
-> >   extern int f2fs_init_iostat_processing(void);
-> > @@ -67,7 +68,7 @@ extern void f2fs_destroy_iostat(struct f2fs_sb_info *sbi);
-> >   #else
-> >   static inline void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
-> >   		enum iostat_type type, unsigned long long io_bytes) {}
-> > -static inline void iostat_update_and_unbind_ctx(struct bio *bio, int rw) {}
-> > +static inline void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type) {}
-> >   static inline void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
-> >   		struct bio *bio, struct bio_post_read_ctx *ctx) {}
-> >   static inline void iostat_update_submit_ctx(struct bio *bio,
+Thanks, this looks pretty reasonable overall.
+
+One meta comment is that I think we can shortcircuit from
+touch_core_sched when we have sched_core_disabled().
+
+Reviewed-by: Josh Don <joshdon@google.com>
+
+> +                       /*
+> +                        * While core-scheduling, rq lock is shared among
+> +                        * siblings but the debug annotations and rq clock
+> +                        * aren't. Do pinning dance to transfer the ownership.
+> +                        */
+> +                       WARN_ON_ONCE(__rq_lockp(rq) != __rq_lockp(srq));
+> +                       rq_unpin_lock(rq, rf);
+> +                       rq_pin_lock(srq, &srf);
+> +
+> +                       update_rq_clock(srq);
+
+Unfortunate that we have to do this superfluous update; maybe we can
+save/restore the clock flags from before the pinning shenanigans?
+
+> +static struct task_struct *pick_task_scx(struct rq *rq)
+> +{
+> +       struct task_struct *curr = rq->curr;
+> +       struct task_struct *first = first_local_task(rq);
+> +
+> +       if (curr->scx.flags & SCX_TASK_QUEUED) {
+> +               /* is curr the only runnable task? */
+> +               if (!first)
+> +                       return curr;
+> +
+> +               /*
+> +                * Does curr trump first? We can always go by core_sched_at for
+> +                * this comparison as it represents global FIFO ordering when
+> +                * the default core-sched ordering is in used and local-DSQ FIFO
+> +                * ordering otherwise.
+> +                */
+> +               if (curr->scx.slice && time_before64(curr->scx.core_sched_at,
+> +                                                    first->scx.core_sched_at))
+> +                       return curr;
+
+So is this to handle the case where we have something running on 'rq'
+to match the cookie of our sibling (which had priority), but now we
+want to switch to running the first thing in the local queue, which
+has a different cookie (and is now the highest priority entity)? Maybe
+being slightly more specific in the comment would help :)
