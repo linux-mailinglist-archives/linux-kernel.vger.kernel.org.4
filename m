@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CEE6819F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 992AC6819EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238266AbjA3TIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:08:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
+        id S238262AbjA3THs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238200AbjA3THn (ORCPT
+        with ESMTP id S238142AbjA3THm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:07:43 -0500
+        Mon, 30 Jan 2023 14:07:42 -0500
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82483B3F7;
-        Mon, 30 Jan 2023 11:07:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2333A867;
+        Mon, 30 Jan 2023 11:07:36 -0800 (PST)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 122e913e5c33ba76; Mon, 30 Jan 2023 20:07:36 +0100
+ id f1e5e01fe10671b7; Mon, 30 Jan 2023 20:07:34 +0100
 Received: from kreacher.localnet (unknown [213.134.169.112])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 35ED32528287;
-        Mon, 30 Jan 2023 20:07:35 +0100 (CET)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 9535D2528287;
+        Mon, 30 Jan 2023 20:07:33 +0100 (CET)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     Zhang Rui <rui.zhang@intel.com>,
@@ -31,9 +31,9 @@ Cc:     Zhang Rui <rui.zhang@intel.com>,
         Linux ACPI <linux-acpi@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         David Box <david.e.box@linux.intel.com>
-Subject: [PATCH v1 2/8] thermal: intel: intel_pch: Eliminate redundant return pointers
-Date:   Mon, 30 Jan 2023 19:59:48 +0100
-Message-ID: <1847763.CQOukoFCf9@kreacher>
+Subject: [PATCH v1 3/8] thermal: intel: intel_pch: Rename device operations callbacks
+Date:   Mon, 30 Jan 2023 20:00:48 +0100
+Message-ID: <2546853.Lt9SDvczpP@kreacher>
 In-Reply-To: <1751684.VLH7GnMWUR@kreacher>
 References: <1751684.VLH7GnMWUR@kreacher>
 MIME-Version: 1.0
@@ -55,111 +55,114 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Both pch_wpt_init() and pch_wpt_get_temp() can return the proper
-result via their return values, so they do not need to use return
-pointers.
+Because the same device operations callbacks are used for all supported
+boards, they are in fact generic, so rename them to reflect that.
 
-Modify them accordingly.
+Also rename the operations object itself for consistency.
 
 No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/intel/intel_pch_thermal.c |   40 +++++++++++++-----------------
- 1 file changed, 18 insertions(+), 22 deletions(-)
+ drivers/thermal/intel/intel_pch_thermal.c |   34 ++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 18 deletions(-)
 
 Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
 +++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -118,12 +118,11 @@ static int pch_wpt_add_acpi_psv_trip(str
+@@ -118,7 +118,7 @@ static int pch_wpt_add_acpi_psv_trip(str
  }
  #endif
  
--static int pch_wpt_init(struct pch_thermal_device *ptd, int *nr_trips)
-+static int pch_wpt_init(struct pch_thermal_device *ptd)
+-static int pch_wpt_init(struct pch_thermal_device *ptd)
++static int pch_hw_init(struct pch_thermal_device *ptd)
  {
--	u8 tsel;
-+	int nr_trips = 0;
+ 	int nr_trips = 0;
  	u16 trip_temp;
--
--	*nr_trips = 0;
-+	u8 tsel;
- 
- 	/* Check if BIOS has already enabled thermal sensor */
- 	if (WPT_TSEL_ETS & readb(ptd->hw_base + WPT_TSEL)) {
-@@ -151,29 +150,23 @@ read_trips:
- 	trip_temp = readw(ptd->hw_base + WPT_CTT);
- 	trip_temp &= 0x1FF;
- 	if (trip_temp) {
--		ptd->trips[*nr_trips].temperature = GET_WPT_TEMP(trip_temp);
--		ptd->trips[*nr_trips].type = THERMAL_TRIP_CRITICAL;
--		++(*nr_trips);
-+		ptd->trips[nr_trips].temperature = GET_WPT_TEMP(trip_temp);
-+		ptd->trips[nr_trips++].type = THERMAL_TRIP_CRITICAL;
- 	}
- 
- 	trip_temp = readw(ptd->hw_base + WPT_PHL);
- 	trip_temp &= 0x1FF;
- 	if (trip_temp) {
--		ptd->trips[*nr_trips].temperature = GET_WPT_TEMP(trip_temp);
--		ptd->trips[*nr_trips].type = THERMAL_TRIP_HOT;
--		++(*nr_trips);
-+		ptd->trips[nr_trips].temperature = GET_WPT_TEMP(trip_temp);
-+		ptd->trips[nr_trips++].type = THERMAL_TRIP_HOT;
- 	}
- 
--	*nr_trips += pch_wpt_add_acpi_psv_trip(ptd, *nr_trips);
--
--	return 0;
-+	return nr_trips + pch_wpt_add_acpi_psv_trip(ptd, nr_trips);
+@@ -164,13 +164,13 @@ read_trips:
+ 	return nr_trips + pch_wpt_add_acpi_psv_trip(ptd, nr_trips);
  }
  
--static int pch_wpt_get_temp(struct pch_thermal_device *ptd, int *temp)
-+static int pch_wpt_get_temp(struct pch_thermal_device *ptd)
+-static int pch_wpt_get_temp(struct pch_thermal_device *ptd)
++static int pch_get_temp(struct pch_thermal_device *ptd)
  {
--	*temp = GET_WPT_TEMP(WPT_TEMP_TSR & readw(ptd->hw_base + WPT_TEMP));
--
--	return 0;
-+	return GET_WPT_TEMP(WPT_TEMP_TSR & readw(ptd->hw_base + WPT_TEMP));
+ 	return GET_WPT_TEMP(WPT_TEMP_TSR & readw(ptd->hw_base + WPT_TEMP));
  }
  
  /* Cool the PCH when it's overheat in .suspend_noirq phase */
-@@ -259,8 +252,8 @@ static int pch_wpt_resume(struct pch_the
+-static int pch_wpt_suspend(struct pch_thermal_device *ptd)
++static int pch_suspend(struct pch_thermal_device *ptd)
+ {
+ 	u8 tsel;
+ 	int pch_delay_cnt = 0;
+@@ -237,7 +237,7 @@ static int pch_wpt_suspend(struct pch_th
+ 	return 0;
  }
  
- struct pch_dev_ops {
--	int (*hw_init)(struct pch_thermal_device *ptd, int *nr_trips);
--	int (*get_temp)(struct pch_thermal_device *ptd, int *temp);
-+	int (*hw_init)(struct pch_thermal_device *ptd);
-+	int (*get_temp)(struct pch_thermal_device *ptd);
- 	int (*suspend)(struct pch_thermal_device *ptd);
+-static int pch_wpt_resume(struct pch_thermal_device *ptd)
++static int pch_resume(struct pch_thermal_device *ptd)
+ {
+ 	u8 tsel;
+ 
+@@ -258,13 +258,11 @@ struct pch_dev_ops {
  	int (*resume)(struct pch_thermal_device *ptd);
  };
-@@ -278,7 +271,8 @@ static int pch_thermal_get_temp(struct t
- {
- 	struct pch_thermal_device *ptd = tzd->devdata;
  
--	return	ptd->ops->get_temp(ptd, temp);
-+	*temp = ptd->ops->get_temp(ptd);
-+	return 0;
- }
+-
+-/* dev ops for Wildcat Point */
+-static const struct pch_dev_ops pch_dev_ops_wpt = {
+-	.hw_init = pch_wpt_init,
+-	.get_temp = pch_wpt_get_temp,
+-	.suspend = pch_wpt_suspend,
+-	.resume = pch_wpt_resume,
++static const struct pch_dev_ops pch_dev_ops = {
++	.hw_init = pch_hw_init,
++	.get_temp = pch_get_temp,
++	.suspend = pch_suspend,
++	.resume = pch_resume,
+ };
  
- static void pch_critical(struct thermal_zone_device *tzd)
-@@ -372,9 +366,11 @@ static int intel_pch_thermal_probe(struc
- 		goto error_release;
- 	}
+ static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
+@@ -301,31 +299,31 @@ static const struct board_info {
+ } board_info[] = {
+ 	[board_hsw] = {
+ 		.name = "pch_haswell",
+-		.ops = &pch_dev_ops_wpt,
++		.ops = &pch_dev_ops,
+ 	},
+ 	[board_wpt] = {
+ 		.name = "pch_wildcat_point",
+-		.ops = &pch_dev_ops_wpt,
++		.ops = &pch_dev_ops,
+ 	},
+ 	[board_skl] = {
+ 		.name = "pch_skylake",
+-		.ops = &pch_dev_ops_wpt,
++		.ops = &pch_dev_ops,
+ 	},
+ 	[board_cnl] = {
+ 		.name = "pch_cannonlake",
+-		.ops = &pch_dev_ops_wpt,
++		.ops = &pch_dev_ops,
+ 	},
+ 	[board_cml] = {
+ 		.name = "pch_cometlake",
+-		.ops = &pch_dev_ops_wpt,
++		.ops = &pch_dev_ops,
+ 	},
+ 	[board_lwb] = {
+ 		.name = "pch_lewisburg",
+-		.ops = &pch_dev_ops_wpt,
++		.ops = &pch_dev_ops,
+ 	},
+ 	[board_wbg] = {
+ 		.name = "pch_wellsburg",
+-		.ops = &pch_dev_ops_wpt,
++		.ops = &pch_dev_ops,
+ 	},
+ };
  
--	err = ptd->ops->hw_init(ptd, &nr_trips);
--	if (err)
-+	nr_trips = ptd->ops->hw_init(ptd);
-+	if (nr_trips < 0) {
-+		err = nr_trips;
- 		goto error_cleanup;
-+	}
- 
- 	ptd->tzd = thermal_zone_device_register_with_trips(bi->name, ptd->trips,
- 							   nr_trips, 0, ptd,
 
 
 
