@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323616814BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 555036814AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237987AbjA3PUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S237854AbjA3PTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236479AbjA3PTn (ORCPT
+        with ESMTP id S238112AbjA3PT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:19:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6D036094;
-        Mon, 30 Jan 2023 07:19:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B878DCE177D;
-        Mon, 30 Jan 2023 15:19:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15AD2C4339E;
-        Mon, 30 Jan 2023 15:19:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675091974;
-        bh=tMOEgqH5sdYs3wJI3azBMLp95TQD+BWGUsNFr2sCEvY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QE4DhhI9dqA9dIg6VjvJEp081kUDC2zXANgrd+ImH2J9rf3gxJg11Pwmd4Ky8asB8
-         R3pPogBPzkBRzn5H0wf3sWMe04x2Ko85UuYA1IF2+Y4Yhg1p7Ai1K2didr1cinVdtE
-         74PJSyOyR9oiijJWa7NFolWqEHRFQgwlUacVAN/P6rMkYR5nyHOlisTBUCn8M5Aypl
-         Xfi1ZBpM0wThwz0q0CNK6vQs+LKitamhJGBivXq3vsHgwCgfxoRRiEeGQ+qsQ+IYN0
-         pqY3gx1SP9VwE+MUrE+zr4sp8eMhqPOOSKj6R3SQW9FdzQlIYOGKoJ6C1HzLXfo8Zp
-         H7xM/Tp6yLvEQ==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-163bd802238so3220194fac.1;
-        Mon, 30 Jan 2023 07:19:34 -0800 (PST)
-X-Gm-Message-State: AFqh2koOmJPVxxX2ef2wOu5OkbLCz/M/mAIE+Q1Euwfsed8ILATcPUFE
-        k8OZIyyJD0mIcUh4Ak44fWI3jFLnr24RJg4Jl1Y=
-X-Google-Smtp-Source: AK7set+gmAtuKgSfLSV9b6u8l0NDviT2HPJq3rzM6TDit+PHUBzQGycEsbMNPqCUYD3Uz4zqBS8xv+GV2BKu4eGJe3U=
-X-Received: by 2002:a05:6870:110f:b0:160:3296:a9b9 with SMTP id
- 15-20020a056870110f00b001603296a9b9mr2272953oaf.287.1675091973278; Mon, 30
- Jan 2023 07:19:33 -0800 (PST)
+        Mon, 30 Jan 2023 10:19:27 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F370DA5CB
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:19:18 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id v81so5891163vkv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:19:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=criticallink.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xlsuOCO1YI2MMlgCHeBWLiVMGsqzeJfOwez6+D5kqBc=;
+        b=Rx5ZT27gjdzWRwbX0Tyc/+dk5vjX0+wrDP1QTezFRqJJliSPoDMBhicfLS5bNaQ2qK
+         oAFH1dCV4eJSERNzDTgg015uP6W+Myq6XEpgVlgjYt91G5QsrCTqG67NFFHak1/Vq2i2
+         rxPmR3u+KvTqx/Z2heyy+LjQjzJhCcgo9WgbNJWcgCvTfJl5eUaDIQKLoph1lS3PoQ6V
+         EBr8Xne388w6RWcCwaEMLVtXJWsyarXvwhsHDcofkrUNNWG/R2yKqA1mOhKU9TdzR4Bc
+         DSRbEESte6R1DvsTknnDSwoPwzu3XNPYg/71uHT/tLNNE4cur/vEdDSBDUxhbfoxGMjA
+         Sjwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xlsuOCO1YI2MMlgCHeBWLiVMGsqzeJfOwez6+D5kqBc=;
+        b=kV0zEh+0hvoQYPKIViSrL4eR1816z9h2VuUmLkLxRga2Piw8HmygruYTV3JaM1U6bf
+         AMxyGXfVo7iilfhjag8rONEPAPqw1jyNPT8oIw/mCRpeuF6TyORReRI90InJBovPgPIZ
+         5b/SHstRuGXI+U1pwhd5T0E7z4VD4Gg1315YSVbExtbAzTGO2YQDuXhUUU4fsKJNV/YT
+         TIfNLSQvU1CoiEZAima2Z2u8NShEnLmwzOllEzKwoOquvAYw35dPxbCU85uJbo9HfALn
+         lLWE4V8QcEiK6KOgWrpuZNtrQsm1n/52xBNIYgMfghvtlnTDIbWysqoAxpqX1Gh8j3EZ
+         3KNQ==
+X-Gm-Message-State: AFqh2kpSE+000VQv+Sh0XqP6Epmoj3XsniVDd5g2cSJl9sm/z+K0VWLp
+        blmBx3W7s4uTLlvZ9+afmO0+e3+eBAW6f+/2nILsrw==
+X-Google-Smtp-Source: AMrXdXvrpSfest9Nz2ELy3kyAiLAnfRzOnJ1Y3sWUJTC0FxkcDwpmweJu+nCWsskihnhNOiqk4hiEqyl+u72iE7URSg=
+X-Received: by 2002:a1f:9b4d:0:b0:3e1:722f:9a6f with SMTP id
+ d74-20020a1f9b4d000000b003e1722f9a6fmr6572750vke.1.1675091958079; Mon, 30 Jan
+ 2023 07:19:18 -0800 (PST)
 MIME-Version: 1.0
-References: <20230130141553.3825449-1-jlu@pengutronix.de> <20230130141553.3825449-2-jlu@pengutronix.de>
-In-Reply-To: <20230130141553.3825449-2-jlu@pengutronix.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 31 Jan 2023 00:18:57 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAReD_97qWRT8f47VKx9cScTWUJcHNkUyhXQoMAYPwAPUQ@mail.gmail.com>
-Message-ID: <CAK7LNAReD_97qWRT8f47VKx9cScTWUJcHNkUyhXQoMAYPwAPUQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] certs: Fix build error when PKCS#11 URI contains semicolon
-To:     Jan Luebbe <jlu@pengutronix.de>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
+ <20230126-b4-ltc2945_shunt_resistor-v4-1-bb913470d8da@criticallink.com> <20230129201604.GA1583293@roeck-us.net>
+In-Reply-To: <20230129201604.GA1583293@roeck-us.net>
+From:   Jon Cormier <jcormier@criticallink.com>
+Date:   Mon, 30 Jan 2023 10:19:06 -0500
+Message-ID: <CADL8D3ZkGT51FX5UrCQ8afzFxPNGHbi09EdXqE+cQyGRnHR2mw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] dt-bindings: hwmon: adi,ltc2945: Add binding
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bob Duke <bduke@criticallink.com>,
+        John Pruitt <jpruitt@criticallink.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,65 +71,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 11:16 PM Jan Luebbe <jlu@pengutronix.de> wrote:
+On Sun, Jan 29, 2023 at 3:16 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> When CONFIG_MODULE_SIG_KEY is PKCS#11 URI (pkcs11:*) and contains a
-> semicolon, signing_key.x509 fails to build:
+> On Thu, Jan 26, 2023 at 05:32:23PM -0500, Jonathan Cormier wrote:
+> > Create initial binding for the LTC2945 I2C power monitor.
+> >
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
 >
->   certs/extract-cert pkcs11:token=foo;object=bar;pin-value=1111 certs/signing_key.x509
->   Usage: extract-cert <source> <dest>
+> Series applied,
+Great
+> after merging patch 4/5 and 5/5 of the series
+> to avoid spurious 32-bit build failures,
+Huh, I split these per request, curious why they'd cause build
+failures when separated...
+> and after fixing a continuation line alignment.
 >
-> Add quotes to the PKCS11_URI variable to avoid splitting by the shell.
+> In the future, please run checkpatch --strict on your patches,
+Will do. I didn't know about this option.
+> and please provide change logs.
+This I did do in every cover letter.
 >
-> Fixes: 129ab0d2d9f3 ("kbuild: do not quote string values in include/config/auto.conf")
-> Signed-off-by: Jan Luebbe <jlu@pengutronix.de>
-> ---
->  certs/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/certs/Makefile b/certs/Makefile
-> index 9486ed924731..cda21811ed88 100644
-> --- a/certs/Makefile
-> +++ b/certs/Makefile
-> @@ -67,7 +67,7 @@ $(obj)/system_certificates.o: $(obj)/signing_key.x509
->
->  PKCS11_URI := $(filter pkcs11:%, $(CONFIG_MODULE_SIG_KEY))
->  ifdef PKCS11_URI
-> -$(obj)/signing_key.x509: extract-cert-in := $(PKCS11_URI)
-> +$(obj)/signing_key.x509: extract-cert-in := "$(PKCS11_URI)"
->  endif
->
->  $(obj)/signing_key.x509: $(filter-out $(PKCS11_URI),$(CONFIG_MODULE_SIG_KEY)) $(obj)/extract-cert FORCE
-> --
-> 2.30.2
->
+> Thanks,
+> Guenter
 
-Instead, how about this?
+-- 
+Jonathan Cormier
+Software Engineer
+
+Voice:  315.425.4045 x222
 
 
 
-
-diff --git a/certs/Makefile b/certs/Makefile
-index 9486ed924731..799ad7b9e68a 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -23,8 +23,8 @@ $(obj)/blacklist_hash_list:
-$(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORCE
- targets += blacklist_hash_list
-
- quiet_cmd_extract_certs  = CERT    $@
--      cmd_extract_certs  = $(obj)/extract-cert $(extract-cert-in) $@
--extract-cert-in = $(or $(filter-out $(obj)/extract-cert, $(real-prereqs)),"")
-+      cmd_extract_certs  = $(obj)/extract-cert "$(extract-cert-in)" $@
-+extract-cert-in = $(filter-out $(obj)/extract-cert, $(real-prereqs))
-
- $(obj)/system_certificates.o: $(obj)/x509_certificate_list
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+http://www.CriticalLink.com
+6712 Brooklawn Parkway, Syracuse, NY 13211
