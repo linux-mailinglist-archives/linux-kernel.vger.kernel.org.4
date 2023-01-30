@@ -2,48 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E38C3680675
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B47681F9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235345AbjA3H2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 02:28:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
+        id S230336AbjA3X2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:28:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjA3H2V (ORCPT
+        with ESMTP id S230261AbjA3X2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 02:28:21 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C7318A82
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 23:28:19 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P508v0DprzRqHG;
-        Mon, 30 Jan 2023 15:26:07 +0800 (CST)
-Received: from M910t.huawei.com (10.110.54.157) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 30 Jan 2023 15:28:16 +0800
-From:   Changbin Du <changbin.du@huawei.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     Hui Wang <hw.huiwang@huawei.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Changbin Du <changbin.du@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Zong Li <zong.li@sifive.com>,
-        Changbin Du <changbin.du@huawei.com>
-Subject: [PATCH v3] riscv: patch: Fixup lockdep warning in stop_machine
-Date:   Tue, 31 Jan 2023 07:26:59 +0800
-Message-ID: <20230130232659.3374212-1-changbin.du@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 30 Jan 2023 18:28:10 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2EB29E10
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:28:07 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id d13so10031600qvj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:28:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bmBE85HsciAbIIMS0yOe3l7FgaHGQXtcytfZQJSmxO0=;
+        b=S0uq6kVOcVxXjbSrSgERLfItROwiDvkdWRHnN2GdDsQRuqeyQ7177xQJhPsIKqho56
+         Fo1Vk4z/X8u/F+LOUPIlH1foeDJQ2GXsLkaBmL3O1iNPMD4oMIEcD4zl+NQq+gMUMYPa
+         fHkd+/iDTKHlmDIC+7EkIojMdYdwlRGRfnBykTZzurvxQ27gj+7zPrxNUoK4OWgzJHdG
+         i1IlkmiPLbqabThOF1jCgwfm4ba+p3F19MOMdmC32ITYqM00NXC231RnxO1VSA4h8c8j
+         m4ToedpT1zsTm1gDtVZzhgSJ2xKLrGZ7baEd1OlZCAJm2EuAX9wCUpWP0yCZtfFBbtEb
+         GW7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bmBE85HsciAbIIMS0yOe3l7FgaHGQXtcytfZQJSmxO0=;
+        b=VuBzsgb1ERkcL+7PR+uF3YeaAp3VvRmJRAtp4sb6wsG7AoLVjDwL5QLLREcFUJHC9y
+         a+Pq8WXNnrHqPqpmo/5KfT2Ii+qvXRR31QD57eQTG+y7fCrNtRAqqmstvtkYcM+VLUGK
+         koRWmF+RDfjRM2AG8EtM2EFkFNB7bAt6+0FQUGHNCbnzx0GXKLp6lJsnbwrp3KX78Z47
+         lRHz+nUUO8fi6UjiRYJ8zfWqzpftkTpcn2h2VI0qObOvjpLkegYWhJpMEIOrGNXkJIsf
+         FxQU9JTNjZoGRFfJTuZt38hXxZ1mrL3eyt9M8fR6hzsAqXMWliIORoHR82K7hRXPolvH
+         qJ/g==
+X-Gm-Message-State: AO0yUKWyA611FZ99ABjfVRzsz/PnOEG7Zw+vVS1eXRcHGUX8SPLdqrnM
+        xe6lc0MFN5mqWq+ySzf+nYWhPlzmphhkT/4YfMxC9QR21T8=
+X-Google-Smtp-Source: AK7set9or4XA7meh3Hg8ca4eIDcBBKeqU6thMY4tegDekaLTVqEMt8XXBu9cHQZoNCthUBN3zU2lm+DakWHrVo4U13s=
+X-Received: by 2002:a05:6214:11b0:b0:53b:f96b:4e20 with SMTP id
+ u16-20020a05621411b000b0053bf96b4e20mr409435qvv.27.1675121287028; Mon, 30 Jan
+ 2023 15:28:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.110.54.157]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info> <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
+ <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com> <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
+ <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com> <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
+ <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com> <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
+In-Reply-To: <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
+From:   Ben Skeggs <skeggsb@gmail.com>
+Date:   Tue, 31 Jan 2023 09:27:54 +1000
+Message-ID: <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+To:     Chris Clayton <chris2553@googlemail.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,103 +75,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changbin Du <changbin.du@gmail.com>
+On Tue, 31 Jan 2023 at 09:09, Chris Clayton <chris2553@googlemail.com> wrote:
+>
+> Hi again.
+>
+> On 30/01/2023 20:19, Chris Clayton wrote:
+> > Thanks, Ben.
+>
+> <snip>
+>
+> >> Hey,
+> >>
+> >> This is a complete shot-in-the-dark, as I don't see this behaviour on
+> >> *any* of my boards.  Could you try the attached patch please?
+> >
+> > Unfortunately, the patch made no difference.
+> >
+> > I've been looking at how the graphics on my laptop is set up, and have a bit of a worry about whether the firmware might
+> > be playing a part in this problem. In order to offload video decoding to the NVidia TU117 GPU, it seems the scrubber
+> > firmware must be available, but as far as I know,that has not been released by NVidia. To get it to work, I followed
+> > what ubuntu have done and the scrubber in /lib/firmware/nvidia/tu117/nvdec/ is a symlink to
+> > ../../tu116/nvdev/scrubber.bin. That, of course, means that some of the firmware loaded is for a different card is being
+> > loaded. I note that processing related to firmware is being changed in the patch. Might my set up be at the root of my
+> > problem?
+> >
+> > I'll have a fiddle an see what I can work out.
+> >
+> > Chris
+> >
+> >>
+> >> Thanks,
+> >> Ben.
+> >>
+> >>>
+>
+> Well, my fiddling has got my system rebooting and shutting down successfully again. I found that if I delete the symlink
+> to the scrubber firmware, reboot and shutdown work again. There are however, a number of other files in the tu117
+> firmware directory tree that that are symlinks to actual files in its tu116 counterpart. So I deleted all of those too.
+> Unfortunately, the absence of one or more of those symlinks causes Xorg to fail to start. I've reinstated all the links
+> except scrubber and I now have a system that works as it did until I tried to run a kernel that includes the bad commit
+> I identified in my bisection. That includes offloading video decoding to the NVidia card, so what ever I read that said
+> the scrubber firmware was needed seems to have been wrong. I get a new message that (nouveau 0000:01:00.0: fb: VPR
+> locked, but no scrubber binary!), but, hey, we can't have everything.
+>
+> If you still want to get to the bottom of this, let me know what you need me to provide and I'll do my best. I suspect
+> you might want to because there will a n awful lot of Ubuntu-based systems out there with that scrubber.bin symlink in
+> place. On the other hand,m it could but quite a while before ubuntu are deploying 6.2 or later kernels.
+The symlinks are correct - whole groups of GPUs share the same FW, and
+we use symlinks in linux-firmware to represent this.
 
-The task of ftrace_arch_code_modify(_post)_prepare() caller is
-stop_machine, whose caller and work thread are of different tasks. The
-lockdep checker needs the same task context, or it's wrong. That means
-it's a bug here to use lockdep_assert_held because we don't guarantee
-the same task context.
+I don't really have any ideas how/why this patch causes issues with
+shutdown - it's a path that only gets executed during initialisation.
+Can you try and capture the kernel log during shutdown ("dmesg -w"
+over ssh? netconsole?), and see if there's any relevant messages
+providing a hint at what's going on?  Alternatively, you could try
+unloading the module (you will have to stop X/wayland/gdm/etc/etc
+first) and seeing if that hangs too.
 
-kernel/locking/lockdep.c:
-int __lock_is_held(const struct lockdep_map *lock, int read)
-{
-        struct task_struct *curr = current;
-        int i;
+Ben.
 
-        for (i = 0; i < curr->lockdep_depth; i++) {
-			^^^^^^^^^^^^^^^^^^^
-                struct held_lock *hlock = curr->held_locks + i;
-					  ^^^^^^^^^^^^^^^^
-                if (match_held_lock(hlock, lock)) {
-                        if (read == -1 || !!hlock->read == read)
-                                return LOCK_STATE_HELD;
-
-The __lock_is_held depends on current held_locks records; if
-stop_machine makes the checker runing on another task, that's wrong.
-
-Here is the log:
-[   15.761523] ------------[ cut here ]------------
-[   15.762125] WARNING: CPU: 0 PID: 15 at arch/riscv/kernel/patch.c:63 patch_insn_write+0x72/0x364
-[   15.763258] Modules linked in:
-[   15.764154] CPU: 0 PID: 15 Comm: migration/0 Not tainted 6.1.0-rc1-00014-g66924be85884-dirty #377
-[   15.765339] Hardware name: riscv-virtio,qemu (DT)
-[   15.765985] Stopper: multi_cpu_stop+0x0/0x192 <- stop_cpus.constprop.0+0x90/0xe2
-[   15.766711] epc : patch_insn_write+0x72/0x364
-[   15.767011]  ra : patch_insn_write+0x70/0x364
-[   15.767276] epc : ffffffff8000721e ra : ffffffff8000721c sp : ff2000000067bca0
-[   15.767622]  gp : ffffffff81603f90 tp : ff60000002432a00 t0 : 7300000000000000
-[   15.767919]  t1 : 0000000000000000 t2 : 73695f6b636f6c5f s0 : ff2000000067bcf0
-[   15.768238]  s1 : 0000000000000008 a0 : 0000000000000000 a1 : 0000000000000000
-[   15.768537]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
-[   15.768837]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
-[   15.769139]  s2 : ffffffff80009faa s3 : ff2000000067bd10 s4 : ffffffffffffffff
-[   15.769447]  s5 : 0000000000000001 s6 : 0000000000000001 s7 : 0000000000000003
-[   15.769740]  s8 : 0000000000000002 s9 : 0000000000000004 s10: 0000000000000003
-[   15.770027]  s11: 0000000000000002 t3 : 0000000000000000 t4 : ffffffff819af097
-[   15.770323]  t5 : ffffffff819af098 t6 : ff2000000067ba28
-[   15.770574] status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
-[   15.771102] [<ffffffff80007520>] patch_text_nosync+0x10/0x3a
-[   15.771421] [<ffffffff80009c66>] ftrace_update_ftrace_func+0x74/0x10a
-[   15.771704] [<ffffffff800fa17e>] ftrace_modify_all_code+0xb0/0x16c
-[   15.771958] [<ffffffff800fa24c>] __ftrace_modify_code+0x12/0x1c
-[   15.772196] [<ffffffff800e110e>] multi_cpu_stop+0x14a/0x192
-[   15.772454] [<ffffffff800e0a34>] cpu_stopper_thread+0x96/0x14c
-[   15.772699] [<ffffffff8003f4ea>] smpboot_thread_fn+0xf8/0x1cc
-[   15.772945] [<ffffffff8003ac9c>] kthread+0xe2/0xf8
-[   15.773160] [<ffffffff80003e98>] ret_from_exception+0x0/0x14
-[   15.773471] ---[ end trace 0000000000000000 ]---
-
-By the way, this also fixes the same issue for patch_text().
-
-Fixes: 0ff7c3b33127 ("riscv: Use text_mutex instead of patch_lock")
-Co-developed-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Zong Li <zong.li@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
----
-Changes in v3:
- - denote this also fixes function patch_text().
-
-Changes in v2:
- - Rewrite commit log with lockdep explanation [Guo Ren]
- - Rebase on v6.1 [Guo Ren]
-
-v1:
-https://lore.kernel.org/linux-riscv/20210417023532.354714-1-changbin.du@gmail.com/
----
- arch/riscv/kernel/patch.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-index 765004b60513..8619706f8dfd 100644
---- a/arch/riscv/kernel/patch.c
-+++ b/arch/riscv/kernel/patch.c
-@@ -55,13 +55,6 @@ static int patch_insn_write(void *addr, const void *insn, size_t len)
- 	bool across_pages = (((uintptr_t) addr & ~PAGE_MASK) + len) > PAGE_SIZE;
- 	int ret;
- 
--	/*
--	 * Before reaching here, it was expected to lock the text_mutex
--	 * already, so we don't need to give another lock here and could
--	 * ensure that it was safe between each cores.
--	 */
--	lockdep_assert_held(&text_mutex);
--
- 	if (across_pages)
- 		patch_map(addr + len, FIX_TEXT_POKE1);
- 
--- 
-2.25.1
-
+>
+> Thanks,
+>
+> Chris
+>
+> <snip>
