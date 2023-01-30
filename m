@@ -2,140 +2,700 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C613A681504
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD3468150B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236039AbjA3PaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        id S237167AbjA3Pbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbjA3P36 (ORCPT
+        with ESMTP id S237210AbjA3Pbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:29:58 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2054.outbound.protection.outlook.com [40.107.92.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE24C22A03;
-        Mon, 30 Jan 2023 07:29:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H8rpgnS4B3j5d/emUy2i4aYgIeNn9KQXXLzqCey1xE/O28/nmmx7uiGidYKpRvsX0pFuDEmZ+V3FnZfHSQWfDj8wFEb9TjQGRvgUWuy1a8bRpWJHGrxBl7Zw5zTWriuAOKNuobWpJgpNi9B7UxMMe4VXhcJ924s8nH5BDMU1rq7GMJH/im4ck42Mv5ErQvFaDl4UaNOLb8TLn5IlKfJQD0bto+NfKOkf7+ZpncKeXgS9P2buU3fgCnZezOWEo0AtTQJ5HLA6KVsrwMINwDl0MgECPGnv60sonclw7/xwNE7desAvPX3dfY0698vPpOOnfaqSPvqnSx73z6J52W98gA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2LuNC+FHxpAR1quUaVW5JbLdMX3X/wF+kITrzszLIRU=;
- b=ipQlxptVvoM8ocf3LDCF14W+9OwAqbAG7SVMjrOnaLGfFOc2fpT3viXqEp4AfX82B4BEzjZJg8TBlmaALI9A+MxuohciGkMZrysw5l0E305rSz1kxpk19+b3k3VAiEF8CqvfPAnolOP2nN3PHy6CTGuB2UgobCyuTxpAt/4RgtgcVlU3pl/6jBnd0YZoM/2uDqZZ245yxBYij3YjbYFw5vNm8dg4A7HGTVbksy3u9SSNjk4A38jRkJnNvwGANKgUpVMuHOR5Vpq8c7RkjzyKDytOgvG491k0Xu1p/wjiWCUM96TBFXQYl8p8VCtfeD9/Gwucy/40dy1LO/qyhA4eBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2LuNC+FHxpAR1quUaVW5JbLdMX3X/wF+kITrzszLIRU=;
- b=tfkRBn9nCs978JA6ZfcTkvetXkw49/oRn3Goh4tpH+isNnLU9PucTwVyM2iazbU7wxTC8/2gu/7xg63pYS5QVpYAdmGw18pcvbaQ0ojrY05MDo1LnCLY1JYG/nAiORjHzbN5myKUDs9i6Oj/RUpHWhRrPeh/yzVdFXW8AUi7/6XX6XNZItBgkq2NP66Ottg65he6yUeGp+T3Mi2hPeRmNCI93QmpdxXinp55ApirCKhaWPZBn1qye8Oso2Tkm6D2QPamfy/dKdFtAdPBiWXir1gzMMhRSU03vaC6nP4ByoaHgCY6jpBHXDRH7KTwsR8rFebhinLHfT+9mohqMQZXUg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CY5PR12MB6228.namprd12.prod.outlook.com (2603:10b6:930:20::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.30; Mon, 30 Jan
- 2023 15:29:54 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6043.033; Mon, 30 Jan 2023
- 15:29:54 +0000
-Date:   Mon, 30 Jan 2023 11:29:52 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Subject: Re: [PATCH v5 5/7] iommu/dma: Allow a single FQ in addition to
- per-CPU FQs
-Message-ID: <Y9ficPosWtGqbDit@nvidia.com>
-References: <20230124125037.3201345-1-schnelle@linux.ibm.com>
- <20230124125037.3201345-6-schnelle@linux.ibm.com>
- <1e016926-b965-3b71-07e1-1f63bc45f1a0@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1e016926-b965-3b71-07e1-1f63bc45f1a0@arm.com>
-X-ClientProxiedBy: BL1P222CA0006.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:208:2c7::11) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 30 Jan 2023 10:31:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E0110AB2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:30:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675092647;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7W1MuWAjR0OB0X+7FKdl8QDF939WLO0Ry5A9KV0FdU4=;
+        b=DYhSt92TOGtSwHXiF2Q1a/22BLJOcuVnA8PMjnXuONyCCJWLl5DeqKPnNOhiPXJFVB1LyI
+        dr3H4EsTDukExjy3RAlTBEnSpX8MsnYx0yF7ibqhEQMT8ILrOXCsC/aBUP5VWXIhW8IQ5M
+        xL1W3KVMwgsrsBz8R2IYZPbcfmweKxA=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-130--UvV_YcwORWDPuKqYUr0xg-1; Mon, 30 Jan 2023 10:30:46 -0500
+X-MC-Unique: -UvV_YcwORWDPuKqYUr0xg-1
+Received: by mail-ej1-f72.google.com with SMTP id d10-20020a170906640a00b008787d18c373so6559388ejm.17
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:30:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7W1MuWAjR0OB0X+7FKdl8QDF939WLO0Ry5A9KV0FdU4=;
+        b=WdP88lA+rQT2zTW258t/fH9LkSy1PtDqm8l+pc4u5g/jZGOA7AlylkWhR+Y+AbePf4
+         O6+Jl+YJ3BJe3VKNfl+xafWSfkJy4NXF9uOmuqHtj7WCTJYolsWD0xxVz311rDxPiXi1
+         iMucj7iBNuMQ3IDf0VYlE6qfZK5BJxQGxNIuUFxchXCXGqLnlHoN+tk63e9Yw1CQ1bJQ
+         66oP+FlS4/JPykUIyP2f827AktGEjnIsjLizWWfSYjd7IzwkGnIxgeUNj+7uanETi9af
+         BgDWLp5/7wsp/aIIUQEZTRUDcGEVIqcLzLR811sqHCduiDHjVXqrMhztSm84w3FjF6mI
+         DdCw==
+X-Gm-Message-State: AFqh2kqm/eUUdSr7LkwU82hI5BuJkDJcM3TiRfPTN54g8UhZEXR7p8EM
+        QT11vTz26ZqoP8iW/W1JEPL1A2tVxk6hSfaNRcGsULe2ZKcCbcKbubCg8AeAe4iPmCrZQwZFWm0
+        bh8+h16aMv1OiQOqg8gC2eMe+
+X-Received: by 2002:a05:6402:528b:b0:49e:28c1:9375 with SMTP id en11-20020a056402528b00b0049e28c19375mr53987199edb.10.1675092645230;
+        Mon, 30 Jan 2023 07:30:45 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXukQme/Sec8I/w0YypnYiTaMAM1stJuuJK4kkO0erwe5I8WKCX+den1Mk9JE9Hwn9WzKXagkw==
+X-Received: by 2002:a05:6402:528b:b0:49e:28c1:9375 with SMTP id en11-20020a056402528b00b0049e28c19375mr53987170edb.10.1675092644929;
+        Mon, 30 Jan 2023 07:30:44 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id n3-20020a05640204c300b004a23609fab4sm2792267edw.70.2023.01.30.07.30.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 07:30:44 -0800 (PST)
+Message-ID: <aaf3e646-b117-3ddf-444e-fabc12d76543@redhat.com>
+Date:   Mon, 30 Jan 2023 16:30:43 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY5PR12MB6228:EE_
-X-MS-Office365-Filtering-Correlation-Id: b82e132c-f321-4193-96d3-08db02d6d614
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uGyvfns5XpMjsjuti7Hy6h6rTux+xEuhcV7JE9l9AKPfRqeJeObMZYGMM2/SHDlTGToS9a1TbKnoGbdlrG2BwlJNnHmZs0o3eQRpiTK8C5h854+jm89CDwYZJ88IsF6mh/QeMwiLGeTll+iYwWS4EpbQkiIgRsh8V7Arlzj9OYwOMEnGorPyMhY0fJ2oGlCH702EyC4WkZ33ItqTjF5kjf+o7cePjub8IpwEsAMIRQr86aDPMxas8vJjf4iouiEbR9CFSLU0R5TfdbuC45xro0YZ/4EtZxXL/NQEizwQdkU6RE/sIZ+eeVXIUnFiqVRaZfzbbr6QIZN4tIte83eqCJL9r887//8hgNNcvecWQL8w3kVoCpIMBRH/kLjE6u2v0/JlGtwBTxN81Qd4zPFsawfqqXvuEbRLQ+WwJ5zOXWpRaB4pLnQnJ9/hTaDNh/tHNTvFpRalgzmL5GV/Cf2FT/675rSKr9RdUcqr9QdxHmzljOG3Fwd9RTrxthezHLPKT9FLYSzEuvx9TqHFKxUNiEIjize2uBPaoNM1eFK0i7yqQK4T+ihMCEnFDDcuFzLx6aKL69PL/1yVrVvcQr5DeMtZVQ7yLpzwkm+N42A2+kGgf/mKx9BDxBLTgRTs9fD9I9yr4QQnjoCNn272U0tTlw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(451199018)(2616005)(7416002)(36756003)(6506007)(4744005)(186003)(26005)(6512007)(38100700002)(2906002)(6486002)(86362001)(478600001)(316002)(54906003)(5660300002)(66946007)(6916009)(66476007)(41300700001)(66556008)(4326008)(8676002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PMg+BPUPRlkSRv4/QQ+2082KRShyi6NsGsMGTZwIdLNes76XozZQNc/TotCt?=
- =?us-ascii?Q?C4M2tfJ2FdmefsprrHbfbZn5N1f4j4DHM08mrmCAL00bVsdQEmN6LRPDXft3?=
- =?us-ascii?Q?I33VMIZLWZS7KY7VtLmZACIULLquRfDwyGMIQLnbMIyJP1GqawhZOd8ALAGs?=
- =?us-ascii?Q?vLTZjpkWJejgKtJik9pUjZb74rfcBlDNtxdS5pGiqPhHcK4RIXvyhuF5Tae2?=
- =?us-ascii?Q?mlUQsShvKMe8moEIuLvC7bHbxSY2r5US77rsvNYySGTqr/HXUdG9PFUdnC2A?=
- =?us-ascii?Q?/NbDynRGmJfKA6Vqc3zSZqiTVwPtHzGyI4DCn+kcFQt0pyAKC9Yr89uMuMSK?=
- =?us-ascii?Q?htw64lj3JrtS2naBsEUhEha2xvC5PntrioP+e6GNMSsHq2/dCtWhjRrm8jMv?=
- =?us-ascii?Q?j+XOIRwNvofDrWwWWW7UNop05nEn7FO3lilx+HkNFESApeHeDKf6A0EQn1hh?=
- =?us-ascii?Q?uS5s077hy0PZGgNTr3aASt4E0lVnHnpwo5m5De1wehLij3HYBh+lW5SIhxtu?=
- =?us-ascii?Q?3u+4Ja9Is3rfFezbp6dk5PE3NBxcNOVUNXTY3nQns3Y/D2aD6ZgCzDowj+R8?=
- =?us-ascii?Q?vz4ZK84O9Y0N9ZsW7MhBlI4mG40NNS0oMDjNHiD6nbgYmZD208GamdUtqrO/?=
- =?us-ascii?Q?AYt74IHsz9LgD3q2DTNNHiHNcsYCAnK8vyZ8ojOipyy/CJj1eTD/9nrSNky0?=
- =?us-ascii?Q?5BYMWO0FlOim87qK1OoKWMSBO+lfOA3zIhH3gxd3QWdJRKHDcLL/h+f9Q/AI?=
- =?us-ascii?Q?Xo7w0JAPMFwga/5HJdOiakzbzK1rgdYyFKBAcaqopU7AS2uhf+vBzrs+EO8g?=
- =?us-ascii?Q?dBryX7J27E7Wo+iGv0wHsNv7BZHnLd5P5hW+/Y+phUNnFJkDKXeA1NBay64P?=
- =?us-ascii?Q?d/RUR2CYxk4jUg4RMKcmqVZ5Qyi5lmc/9kLt6FA+s0Ji/nFWXMxod7KiDKs0?=
- =?us-ascii?Q?SaTAeRgpd9JVi3/GjyvlGGSzQSa7oyIYYSQm0zo6s5MSKmd+7McmBkUYQezg?=
- =?us-ascii?Q?OpMD5U/LnukDg9G1OLcMfMpVYfk/ljYM/w4VWuv0D7a7g8BpJdr+Y1aqESyl?=
- =?us-ascii?Q?ltV3gCFcw5Y8KV2cnG/UFJL6m6VtjIc92l77zuJUzBgfTckXrgKhsEIepuYn?=
- =?us-ascii?Q?RHqNiqnDFbiQSBu6hgPZ/PVtR1IyPGPSxeO4t91211VMQegpOD5ZEeNWyEDT?=
- =?us-ascii?Q?4S7TfkbxJcteGkmkf8wMszcMKpH3trPtBWA7n9Q/KDTftgIMsWh8jQNA6KPS?=
- =?us-ascii?Q?5DItOkzGwwrOLg7iqYE3Zz1suvrUobet8WGtuUla60DXUKrKBvmRQ1KDW9uT?=
- =?us-ascii?Q?9a6ElHQsNmxqRxeSKM+YDh+uyXaRaWL+eadw2cXHMscNG4ObQd1YZuSTphp3?=
- =?us-ascii?Q?EbtdvlNu3jXgNzWbSdBMCM006O/LNPMsn93j338DmdQYIBH4HM0wm+vJREjn?=
- =?us-ascii?Q?Cs6ZxL18Skx6mgraLIzUp5NWeauoricTbuyCf7xJpVkyvaILLNBsgAayVOhM?=
- =?us-ascii?Q?LPOO2OiuDc8UvAQA+ihq0dyX0F2Ceu9ux0PRW/WRw/CFvwe/aVpmggyReIDG?=
- =?us-ascii?Q?5TGNCW9chgwY8EQcZTsfR/1FpjSwCzN+SAKYirNj?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b82e132c-f321-4193-96d3-08db02d6d614
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 15:29:54.2549
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: h+S2NvtnKp39Rrs8BmaHANX6cFsxh/NSBm9Q/SmDzaC4Pb96YJ1t+fu7dF1y0Gg6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6228
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 5/5] platform/x86: dell-ddv: Add hwmon support
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126194021.381092-1-W_Armin@gmx.de>
+ <20230126194021.381092-6-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230126194021.381092-6-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 03:13:22PM +0000, Robin Murphy wrote:
+Hi Armin,
 
-> Either way, the more I think about this the more I'm starting to agree that
-> adding more domain types for iommu-dma policy is a step in the wrong
-> direction. If I may, I'd like to fall back on the "or at least some definite
-> internal flag" part of my original suggestion :)
+On 1/26/23 20:40, Armin Wolf wrote:
+> Thanks to bugreport 216655 on bugzilla triggered by the
+> dell-smm-hwmon driver, the contents of the sensor buffers
+> could be almost completely decoded.
+> Add an hwmon interface for exposing the fan and thermal
+> sensor values. The debugfs interface remains in place to
+> aid in reverse-engineering of unknown sensor types
+> and the thermal buffer.
+> 
+> Tested-by: Antonín Skala <skala.antonin@gmail.com>
+> Tested-by: Gustavo Walbon <gustavowalbon@gmail.com>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> ---
+>  drivers/platform/x86/dell/Kconfig        |   1 +
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 435 ++++++++++++++++++++++-
+>  2 files changed, 435 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/dell/Kconfig b/drivers/platform/x86/dell/Kconfig
+> index d319de8f2132..21a74b63d9b1 100644
+> --- a/drivers/platform/x86/dell/Kconfig
+> +++ b/drivers/platform/x86/dell/Kconfig
+> @@ -194,6 +194,7 @@ config DELL_WMI_DDV
+>  	default m
+>  	depends on ACPI_BATTERY
+>  	depends on ACPI_WMI
+> +	depends on HWMON
+>  	help
+>  	  This option adds support for WMI-based sensors like
+>  	  battery temperature sensors found on some Dell notebooks.
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index 9695bf493ea6..5b30bb85199e 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/dev_printk.h>
+>  #include <linux/errno.h>
+>  #include <linux/kernel.h>
+> +#include <linux/hwmon.h>
+>  #include <linux/kstrtox.h>
+>  #include <linux/math.h>
+>  #include <linux/module.h>
+> @@ -21,10 +22,13 @@
+>  #include <linux/printk.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/sysfs.h>
+> +#include <linux/types.h>
+>  #include <linux/wmi.h>
+> 
+>  #include <acpi/battery.h>
+> 
+> +#include <asm/unaligned.h>
+> +
+>  #define DRIVER_NAME	"dell-wmi-ddv"
+> 
+>  #define DELL_DDV_SUPPORTED_VERSION_MIN	2
+> @@ -63,6 +67,29 @@ enum dell_ddv_method {
+>  	DELL_DDV_THERMAL_SENSOR_INFORMATION	= 0x22,
+>  };
+> 
+> +struct fan_sensor_entry {
+> +	u8 type;
+> +	__le16 rpm;
+> +} __packed;
+> +
+> +struct thermal_sensor_entry {
+> +	u8 type;
+> +	s8 now;
+> +	s8 min;
+> +	s8 max;
+> +	u8 unknown;
+> +} __packed;
+> +
+> +struct combined_channel_info {
+> +	struct hwmon_channel_info info;
+> +	u32 config[];
+> +};
+> +
+> +struct combined_chip_info {
+> +	struct hwmon_chip_info chip;
+> +	const struct hwmon_channel_info *info[];
+> +};
+> +
+>  struct dell_wmi_ddv_data {
+>  	struct acpi_battery_hook hook;
+>  	struct device_attribute temp_attr;
+> @@ -70,6 +97,24 @@ struct dell_wmi_ddv_data {
+>  	struct wmi_device *wdev;
+>  };
+> 
+> +static const char * const fan_labels[] = {
+> +	"CPU Fan",
+> +	"Chassis Motherboard Fan",
+> +	"Video Fan",
+> +	"Power Supply Fan",
+> +	"Chipset Fan",
+> +	"Memory Fan",
+> +	"PCI Fan",
+> +	"HDD Fan",
+> +};
+> +
+> +static const char * const fan_dock_labels[] = {
+> +	"Docking Chassis/Motherboard Fan",
+> +	"Docking Video Fan",
+> +	"Docking Power Supply Fan",
+> +	"Docking Chipset Fan",
+> +};
+> +
+>  static int dell_wmi_ddv_query_type(struct wmi_device *wdev, enum dell_ddv_method method, u32 arg,
+>  				   union acpi_object **result, acpi_object_type type)
+>  {
+> @@ -171,6 +216,386 @@ static int dell_wmi_ddv_query_string(struct wmi_device *wdev, enum dell_ddv_meth
+>  	return dell_wmi_ddv_query_type(wdev, method, arg, result, ACPI_TYPE_STRING);
+>  }
+> 
+> +static int dell_wmi_ddv_query_sensors(struct wmi_device *wdev, enum dell_ddv_method method,
+> +				      size_t entry_size, union acpi_object **result, u64 *count)
+> +{
+> +	union acpi_object *obj;
+> +	u64 buffer_size;
+> +	u8 *buffer;
+> +	int ret;
+> +
+> +	ret = dell_wmi_ddv_query_buffer(wdev, method, 0, &obj);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	buffer_size = obj->package.elements[0].integer.value;
+> +	buffer = obj->package.elements[1].buffer.pointer;
+> +	if (buffer_size % entry_size != 1 || buffer[buffer_size - 1] != 0xff) {
+> +		kfree(obj);
+> +
+> +		return -ENOMSG;
+> +	}
+> +
+> +	*count = (buffer_size - 1) / entry_size;
+> +	*result = obj;
+> +
+> +	return 0;
+> +}
+> +
+> +static umode_t dell_wmi_ddv_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
+> +				       int channel)
+> +{
+> +	return 0444;
+> +}
+> +
+> +static int dell_wmi_ddv_fan_read_channel(struct dell_wmi_ddv_data *data, u32 attr, int channel,
+> +					 long *val)
+> +{
+> +	struct fan_sensor_entry *entry;
+> +	union acpi_object *obj;
+> +	u64 count;
+> +	int ret;
+> +
+> +	ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
+> +					 sizeof(*entry), &obj, &count);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	entry = (struct fan_sensor_entry *)obj->package.elements[1].buffer.pointer;
+> +	if (count > channel) {
+> +		switch (attr) {
+> +		case hwmon_fan_input:
+> +			*val = get_unaligned_le16(&entry[channel].rpm);
+> +
+> +			break;
+> +		default:
+> +			ret = -EOPNOTSUPP;
+> +		}
+> +	} else {
+> +		ret = -ENXIO;
+> +	}
+> +
+> +	kfree(obj);
+> +
+> +	return ret;
+> +}
+> +
+> +static int dell_wmi_ddv_temp_read_channel(struct dell_wmi_ddv_data *data, u32 attr, int channel,
+> +					  long *val)
+> +{
+> +	struct thermal_sensor_entry *entry;
+> +	union acpi_object *obj;
+> +	u64 count;
+> +	int ret;
+> +
+> +	ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
+> +					 sizeof(*entry), &obj, &count);
 
-Yes please, lets try to remove IOMMU_DOMAIN_DMA, not add more :)
+Previously we discussed how expensive some of these calls are. I assume that this
+call also is not really "free" to make. Even if it does a fast read from some hw
+buffer it still needs to go through the ACPI interpreter and then actually read
+from the hw.
 
-At this point we should probably just sort of hackily add a ops flag
-to indicate single queue and when we fixup the policy logic we can
-make it a user selectable policy as well.
+It seems that there are just 2 sort of calls made to dell_wmi_ddv_query_sensors:
 
-Jason
+1. DELL_DDV_THERMAL_SENSOR_INFORMATION
+2. DELL_DDV_FAN_SENSOR_INFORMATION
+
+Userspace apps using hwmon will typically have some periodically refreshing
+display and when the refresh timer expires they will read all hwmon
+attributes in one go.
+
+To avoid this causing unnecessary overhead many hwmon drivers use a driver
+based cache and they then refresh the cache if the cache is older then 30 seconds
+when userspace does its next read of an attribute.
+
+See e.g. drivers/hwmon/f71882fg.c and the use of the update_lock, valid and
+last_updated members of struct f71882fg_data.
+
+Below I see that the return value of a single dell_wmi_ddv_query_sensors() call
+returns data for 3 different attributes * count-channels = 3, 6 or 9 read
+calls. So to me this sounds like it is worthwhile caching the result.
+
+You can just store a pointer to the returned ACPI-obj and free the old
+ACPI obj when it is time to refresh the cache, instead of immidiately
+free-ing the obj when the read function returns.
+
+You can use either separate last_updated timestamps for 
+DELL_DDV_THERMAL_SENSOR_INFORMATION + DELL_DDV_FAN_SENSOR_INFORMATION,
+or just update both at once when the cache is stale. Either way works for me.
+
+This way we gain a significant amount of efficiency wrt not doing the
+expensive WMI call multiple times for naught and we avoid userspace
+being able to "hammer" the underlying hw with repeated requests (userspace
+can still burn 100% CPU on one core of course).
+
+
+
+
+
+
+
+
+
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	entry = (struct thermal_sensor_entry *)obj->package.elements[1].buffer.pointer;
+> +	if (count > channel) {
+
+As Guenter already sorta said, please do error handling first,
+change this to something like this:
+
+	if (channel >= count) {
+		ret = -ENXIO;
+		goto out_free;
+	}
+
+
+And then reduce the indentation the switch case by 1 tab / level.
+
+Generally speaking we want the straight (no errors) path to be
+indentend by only 1 tab so that if you just read all the lines at
+that 1 tab indentation level you are actually reading the normal /
+no-errors code path.
+
+Also note that if you switch to a cache as suggested above,
+you no longer need the kfree() since that is now done in your
+cache-refresh helper.
+
+And then the error check changes to just:
+
+	if (channel >= data->thermal_sensor_count)
+		return -ENXIO;
+
+
+
+
+> +		switch (attr) {
+> +		case hwmon_temp_input:
+> +			*val = entry[channel].now * 1000;
+> +
+> +			break;
+> +		case hwmon_temp_min:
+> +			*val = entry[channel].min * 1000;
+> +
+> +			break;
+> +		case hwmon_temp_max:
+> +			*val = entry[channel].max * 1000;
+> +
+> +			break;
+> +		default:
+> +			ret = -EOPNOTSUPP;
+> +		}
+> +	} else {
+> +		ret = -ENXIO;
+> +	}
+> +
+> +	kfree(obj);
+> +
+> +	return ret;
+> +}
+> +
+> +static int dell_wmi_ddv_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +			     int channel, long *val)
+> +{
+> +	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		return dell_wmi_ddv_fan_read_channel(data, attr, channel, val);
+> +	case hwmon_temp:
+> +		return dell_wmi_ddv_temp_read_channel(data, attr, channel, val);
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static int dell_wmi_ddv_fan_read_string(struct dell_wmi_ddv_data *data, int channel,
+> +					const char **str)
+> +{
+> +	struct fan_sensor_entry *entry;
+> +	union acpi_object *obj;
+> +	u64 count;
+> +	u8 type;
+> +	int ret;
+> +
+> +	ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
+> +					 sizeof(*entry), &obj, &count);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	entry = (struct fan_sensor_entry *)obj->package.elements[1].buffer.pointer;
+> +	if (count > channel) {
+> +		type = entry[channel].type;
+> +
+> +		switch (type) {
+> +		case 0x00 ... 0x07:
+> +			*str = fan_labels[type];
+> +
+> +			break;
+> +		case 0x11 ... 0x14:
+> +			*str = fan_dock_labels[type - 0x11];
+> +
+> +			break;
+> +		default:
+> +			*str = "Unknown Fan";
+> +		}
+> +	} else {
+> +		ret = -ENXIO;
+> +	}
+> +
+> +	kfree(obj);
+> +
+> +	return ret;
+> +}
+> +
+> +static int dell_wmi_ddv_temp_read_string(struct dell_wmi_ddv_data *data, int channel,
+> +					 const char **str)
+> +{
+> +	struct thermal_sensor_entry *entry;
+> +	union acpi_object *obj;
+> +	u64 count;
+> +	int ret;
+> +
+> +	ret = dell_wmi_ddv_query_sensors(data->wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
+> +					 sizeof(*entry), &obj, &count);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	entry = (struct thermal_sensor_entry *)obj->package.elements[1].buffer.pointer;
+> +	if (count > channel) {
+> +		switch (entry[channel].type) {
+> +		case 0x00:
+> +			*str = "CPU";
+> +
+> +			break;
+> +		case 0x11:
+> +			*str = "Video";
+> +
+> +			break;
+> +		case 0x22:
+> +			*str = "Memory"; // sometimes called DIMM
+> +
+> +			break;
+> +		case 0x33:
+> +			*str = "Other";
+> +
+> +			break;
+> +		case 0x44:
+> +			*str = "Ambient"; // sometimes called SKIN
+> +
+> +			break;
+> +		case 0x52:
+> +			*str = "SODIMM";
+> +
+> +			break;
+> +		case 0x55:
+> +			*str = "HDD";
+> +
+> +			break;
+> +		case 0x62:
+> +			*str = "SODIMM 2";
+> +
+> +			break;
+> +		case 0x73:
+> +			*str = "NB";
+> +
+> +			break;
+> +		case 0x83:
+> +			*str = "Charger";
+> +
+> +			break;
+> +		case 0xbb:
+> +			*str = "Memory 3";
+> +
+> +			break;
+> +		default:
+> +			*str = "Unknown";
+> +		}
+> +	} else {
+> +		ret = -ENXIO;
+> +	}
+> +
+> +	kfree(obj);
+> +
+> +	return ret;
+> +}
+> +
+> +static int dell_wmi_ddv_read_string(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +				    int channel, const char **str)
+> +{
+> +	struct dell_wmi_ddv_data *data = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_fan:
+> +		switch (attr) {
+> +		case hwmon_fan_label:
+> +			return dell_wmi_ddv_fan_read_string(data, channel, str);
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_temp:
+> +		switch (attr) {
+> +		case hwmon_temp_label:
+> +			return dell_wmi_ddv_temp_read_string(data, channel, str);
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_ops dell_wmi_ddv_ops = {
+> +	.is_visible = dell_wmi_ddv_is_visible,
+> +	.read = dell_wmi_ddv_read,
+> +	.read_string = dell_wmi_ddv_read_string,
+> +};
+> +
+> +static struct hwmon_channel_info *dell_wmi_ddv_channel_create(struct device *dev, u64 count,
+> +							      enum hwmon_sensor_types type,
+> +							      u32 config)
+> +{
+> +	struct combined_channel_info *cinfo;
+> +	int i;
+> +
+> +	cinfo = devm_kzalloc(dev, struct_size(cinfo, config, count + 1), GFP_KERNEL);
+> +	if (!cinfo)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	cinfo->info.type = type;
+> +	cinfo->info.config = cinfo->config;
+> +
+> +	for (i = 0; i < count; i++)
+> +		cinfo->config[i] = config;
+> +
+> +	return &cinfo->info;
+> +}
+> +
+> +static struct hwmon_channel_info *dell_wmi_ddv_channel_init(struct wmi_device *wdev,
+> +							    enum dell_ddv_method method,
+> +							    size_t entry_size,
+> +							    enum hwmon_sensor_types type,
+> +							    u32 config)
+> +{
+> +	union acpi_object *obj;
+> +	u64 count;
+> +	int ret;
+> +
+> +	ret = dell_wmi_ddv_query_sensors(wdev, method, entry_size, &obj, &count);
+> +	if (ret < 0)
+> +		return ERR_PTR(ret);
+> +
+> +	kfree(obj);
+> +
+> +	if (!count)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	return dell_wmi_ddv_channel_create(&wdev->dev, count, type, config);
+> +}
+> +
+> +static int dell_wmi_ddv_hwmon_add(struct dell_wmi_ddv_data *data)
+> +{
+> +	struct wmi_device *wdev = data->wdev;
+> +	struct combined_chip_info *cinfo;
+> +	struct device *hdev;
+> +	int index = 0;
+> +	int ret;
+> +
+> +	if (!devres_open_group(&wdev->dev, dell_wmi_ddv_hwmon_add, GFP_KERNEL))
+> +		return -ENOMEM;
+> +
+> +	cinfo = devm_kzalloc(&wdev->dev, struct_size(cinfo, info, 4), GFP_KERNEL);
+> +	if (!cinfo) {
+> +		ret = -ENOMEM;
+> +
+> +		goto err_release;
+> +	}
+> +
+> +	cinfo->chip.ops = &dell_wmi_ddv_ops;
+> +	cinfo->chip.info = cinfo->info;
+> +
+> +	cinfo->info[index] = dell_wmi_ddv_channel_create(&wdev->dev, 1, hwmon_chip,
+> +							 HWMON_C_REGISTER_TZ);
+> +
+> +	if (IS_ERR(cinfo->info[index])) {
+> +		ret = PTR_ERR(cinfo->info[index]);
+> +
+> +		goto err_release;
+> +	}
+> +
+> +	index++;
+> +
+> +	cinfo->info[index] = dell_wmi_ddv_channel_init(wdev, DELL_DDV_FAN_SENSOR_INFORMATION,
+> +						       sizeof(struct fan_sensor_entry), hwmon_fan,
+> +						       (HWMON_F_INPUT | HWMON_F_LABEL));
+> +	if (!IS_ERR(cinfo->info[index]))
+> +		index++;
+> +
+> +	cinfo->info[index] = dell_wmi_ddv_channel_init(wdev, DELL_DDV_THERMAL_SENSOR_INFORMATION,
+> +						       sizeof(struct thermal_sensor_entry),
+> +						       hwmon_temp, (HWMON_T_INPUT | HWMON_T_MIN |
+> +						       HWMON_T_MAX | HWMON_T_LABEL));
+> +	if (!IS_ERR(cinfo->info[index]))
+> +		index++;
+> +
+> +	if (!index) {
+> +		ret = -ENODEV;
+> +
+> +		goto err_release;
+> +	}
+> +
+> +	cinfo->info[index] = NULL;
+> +
+> +	hdev = devm_hwmon_device_register_with_info(&wdev->dev, "dell_ddv", data, &cinfo->chip,
+> +						    NULL);
+> +	if (IS_ERR(hdev)) {
+> +		ret = PTR_ERR(hdev);
+> +
+> +		goto err_release;
+> +	}
+> +
+> +	devres_close_group(&wdev->dev, dell_wmi_ddv_hwmon_add);
+> +
+> +	return 0;
+> +
+> +err_release:
+> +	devres_release_group(&wdev->dev, dell_wmi_ddv_hwmon_add);
+> +
+> +	return ret;
+> +}
+> +
+>  static int dell_wmi_ddv_battery_index(struct acpi_device *acpi_dev, u32 *index)
+>  {
+>  	const char *uid_str;
+> @@ -370,7 +795,15 @@ static int dell_wmi_ddv_probe(struct wmi_device *wdev, const void *context)
+> 
+>  	dell_wmi_ddv_debugfs_init(wdev);
+> 
+> -	return dell_wmi_ddv_battery_add(data);
+> +	ret = dell_wmi_ddv_hwmon_add(data);
+> +	if (ret < 0)
+> +		dev_dbg(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
+
+I'm fine with not making either _add failing an error, but can we make this a dev_warn,
+dev_dbg is a bit too low of a log-level for something which is not supposed to happen.
+
+E.g. change this to:
+
+	ret = dell_wmi_ddv_hwmon_add(data);
+	if (ret && ret != -ENODEV)
+		dev_warn(&wdev->dev, "Unable to register hwmon interface: %d\n", ret);
+
+
+
+> +
+> +	ret = dell_wmi_ddv_battery_add(data);
+> +	if (ret < 0)
+> +		dev_dbg(&wdev->dev, "Unable to register acpi battery hook: %d\n", ret);
+
+And the same here.
+
+Regards,
+
+Hans
+
+
+> +
+> +	return 0;
+>  }
+> 
+>  static const struct wmi_device_id dell_wmi_ddv_id_table[] = {
+> --
+> 2.30.2
+> 
+
