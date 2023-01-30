@@ -2,137 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5E3681F60
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FE1681F6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjA3XJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:09:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        id S229651AbjA3XLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:11:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjA3XJY (ORCPT
+        with ESMTP id S229895AbjA3XL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:09:24 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92BE6189
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:09:14 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id bk16so12655982wrb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:09:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nBJSf0ujnLSINj9vtVqCPIJUNHNqvfxIwQaQ2Pf5QPI=;
-        b=fXcEGnHpuTMxqjF81LzYGEjxdrRIVQpkK8XSxfBNzkMdookleOEbuAVmp9Z5ZVCotS
-         axdeMivX2doj/9+R0+xbQz1Y1nF9wfApIhaw3QTUcBdcDbrHYmxBs1Exl0zeZLk/3DM3
-         /uxGpyKWy8DgAJTo4Y8kw8495ulb/GEnvszPW1ranocA8TLjhYyKQ17IdCAdAmQHPFSM
-         /CSNJn6eXTvZ71KVMXEWliE05kW9VLLJr8XOYXMnFdECSqrJr49SqN5WEPdU7Ml6FUld
-         J32j1DVQ1agb1+2fdR5OQeoAHj+CIZKsiIx23H6y6/lbYHW2bsDA0TCIw8+Qa21nqqZv
-         mLcg==
+        Mon, 30 Jan 2023 18:11:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8E04EE5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:10:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675120237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p+K8e/zfLN4jZoxJoefnBbSYk/h9sMX4+P4UDlH6in4=;
+        b=DQ2LJ2MiLsMltMQSt40LtFtsF5p5stsa8K9exOpXdmIq4rXSzeqrwF6acP+0Re1AjEycRT
+        teQne9BNOILQygs1K16Ygw7TNEcxsce2iNksa/3OvXPKrZ0JK9q+mXQLpJOaSjozZ6VSiL
+        aUCIxv3OhkHrHp7/huI2+4JNVy19xnc=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-359-sNuVavMqO1iiSJuUxQnCkw-1; Mon, 30 Jan 2023 18:10:36 -0500
+X-MC-Unique: sNuVavMqO1iiSJuUxQnCkw-1
+Received: by mail-qt1-f199.google.com with SMTP id c16-20020ac85190000000b003b841d1118aso2805873qtn.17
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:10:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBJSf0ujnLSINj9vtVqCPIJUNHNqvfxIwQaQ2Pf5QPI=;
-        b=FQS3u3IsqImyq2c5CVUdL/G8Gcvcyam25fd1gkuESrBHjrsY+HEt7M55Bf9ZBWlI6n
-         VaHoV6WdrzzXaoQnXXT7Z09tJotpcePG/GMg9hEXJCJ6TuM9tlBqf1hq98C6am5zlyVx
-         Z9Y8wNpCJqEQL4s3qXPr70ixl6jZvxN6xg76RQNRSw+Q1IkmDIj9gH1ICkq/wgM4NGa1
-         Eu6pTMU/3zSTfNVwzZqZd1UV2jwKXvCcksdK35e+bfwa+XHOHTgBhBkD7Ry3s+MbormW
-         shaOQsH4QceAALL2moMLneZeYUsaUPhXmvO8U6XTXrL2GADAWIOQbsNPj49YCYH3Zfly
-         AA9w==
-X-Gm-Message-State: AFqh2koUdydUi9V2F7ajStup35ueQ2SO2xyw6ArnjVWE4XgT7hPIAE6l
-        eNSu2DvT7Bglod2vv59UkdY=
-X-Google-Smtp-Source: AMrXdXstvNWA6suGxYdZtreTUdrAXIng9NTIHs6qOi5zxQJ73BED5Zi8z5jOZvFUQJs+vVi5Hs9OsA==
-X-Received: by 2002:a5d:6282:0:b0:2bf:9516:d295 with SMTP id k2-20020a5d6282000000b002bf9516d295mr30547069wru.22.1675120153156;
-        Mon, 30 Jan 2023 15:09:13 -0800 (PST)
-Received: from [192.168.1.10] (97e09f27.skybroadband.com. [151.224.159.39])
-        by smtp.googlemail.com with ESMTPSA id g2-20020a5d4882000000b002bdf3809f59sm12707867wrq.38.2023.01.30.15.09.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 15:09:12 -0800 (PST)
-Message-ID: <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
-Date:   Mon, 30 Jan 2023 23:09:08 +0000
+        bh=p+K8e/zfLN4jZoxJoefnBbSYk/h9sMX4+P4UDlH6in4=;
+        b=W3L4oMsUris/PIZrTq2FeUhE2HaKLJZ8frgz1lFOzG3wQH81rakuDWofE1TgAEMTqk
+         odkC1Ylc8tYIRfvqICJ8k9YrKqxs/ks4pBCgo61vCp48UuXs0alXOh0HrAdv7XxgDHPw
+         P+tuENYEO8M4Zg6UWmNLV/nhWifX7UcxlxR70F3M+LVF5becIhRhGCNBLhfCSNZFZjPa
+         Ba/XiW1J+eJSXoUiUKfHjM9/t/z0mghWWW6kgGAX1UnLyVjNY+ClMgA+2pNEPjTCTWQI
+         OlA2rTwcr1vi7mkXxI1GtllU492VTNm/NJ9oMVdZXxJtidtxJdjcmAYI/r+H/q7CQf4E
+         rWgA==
+X-Gm-Message-State: AO0yUKX4xY7S+J5UiiTjdMORMLjECob8ZEjiNN+LK5f3sB5tJYLjOxXL
+        iGrJwD0pxauCOAFjx4lvwXQLbSzGxC7ALuxnLn+qHDCO6/2654qlbRZmaf8HdZ47wVu5r392RqA
+        8cYDzd7mHm977D2kIy+K2P9PC
+X-Received: by 2002:a05:622a:180e:b0:3b4:2b61:da32 with SMTP id t14-20020a05622a180e00b003b42b61da32mr15365898qtc.59.1675120235945;
+        Mon, 30 Jan 2023 15:10:35 -0800 (PST)
+X-Google-Smtp-Source: AK7set89917aaMWXfx8H2M6z2jsMBTb17FVp8nR3WX9yHmkqkhPUzBHVr8SFkLh0Wpt7DzxdggBhnA==
+X-Received: by 2002:a05:622a:180e:b0:3b4:2b61:da32 with SMTP id t14-20020a05622a180e00b003b42b61da32mr15365872qtc.59.1675120235657;
+        Mon, 30 Jan 2023 15:10:35 -0800 (PST)
+Received: from ?IPv6:2600:4040:5c68:6800::feb? ([2600:4040:5c68:6800::feb])
+        by smtp.gmail.com with ESMTPSA id k22-20020a05620a139600b0071f17af8733sm2954494qki.64.2023.01.30.15.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 15:10:35 -0800 (PST)
+Message-ID: <e620862840bcac9dcd46dd63e247966424af060f.camel@redhat.com>
+Subject: Re: [PATCH v9 0/9] Register Type-C mode-switch in DP bridge
+ endpoints
+From:   Lyude Paul <lyude@redhat.com>
+To:     Pin-yen Lin <treapking@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Stephen Boyd <swboyd@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Xin Ji <xji@analogixsemi.com>, linux-acpi@vger.kernel.org,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Allen Chen <allen.chen@ite.com.tw>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?ISO-8859-1?Q?N=EDcolas?= "F . R . A . Prado" 
+        <nfraprado@collabora.com>, linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Imre Deak <imre.deak@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Jim Cromie <jim.cromie@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>
+Date:   Mon, 30 Jan 2023 18:10:33 -0500
+In-Reply-To: <20230109084101.265664-1-treapking@chromium.org>
+References: <20230109084101.265664-1-treapking@chromium.org>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-From:   Chris Clayton <chris2553@googlemail.com>
-To:     Ben Skeggs <skeggsb@gmail.com>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info>
- <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
- <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com>
- <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
- <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com>
- <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
- <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com>
-Content-Language: en-GB
-In-Reply-To: <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again.
+Don't know if this still needs reviews from me (feel free to respond if it
+does!), but I wanted to say nice work! This is something I've wanted to see
+added to DRM for a while =E2=99=A5
 
-On 30/01/2023 20:19, Chris Clayton wrote:
-> Thanks, Ben.
 
-<snip>
+On Mon, 2023-01-09 at 16:40 +0800, Pin-yen Lin wrote:
+> This series introduces bindings for anx7625/it6505 to register Type-C
+> mode-switch in their output endpoints, and use data-lanes property to
+> describe the pin connections.
+>=20
+> The first two patch modifies fwnode_graph_devcon_matches and
+> cros_typec_init_ports to enable the registration of the switches.
+>=20
+> Patch 4~6 introduce the bindings for anx7625 and the corresponding driver
+> modifications.
+>=20
+> Patch 7~9 add similar bindings and driver changes for it6505.
+>=20
+> v7: https://lore.kernel.org/all/20230105132457.4125372-1-treapking@chromi=
+um.org/
+> v6: https://lore.kernel.org/all/20221124102056.393220-1-treapking@chromiu=
+m.org/
+> v5: https://lore.kernel.org/linux-usb/20220622173605.1168416-1-pmalani@ch=
+romium.org/
+>=20
+> Changes in v9:
+> - Collected Reviewed-by tag
+> - Fixed subject prefix again
+> - Changed the naming of the example node for it6505
+>=20
+> Changes in v8:
+> - Fixed the build issue when CONFIG_TYPEC=3Dm
+> - Fixed some style issues
+> - Fixed the subject prefixes for the bindings patch
+> - Fixed the bindings for data-lanes properties
+>=20
+> Changes in v7:
+> - Fix the long comment lines
+> - Extracted the common codes to a helper function
+> - Fixed style issues in anx7625 driver
+> - Removed DT property validation in anx7625 driver.
+> - Fixed style issues in it6505 driver
+> - Removed the redundant sleep in it6505 driver
+> - Removed DT property validation in it6505 driver
+> - Rebased to drm-misc-next
+> - Fixed indentations in bindings patches
+> - Added a new patch to fix indentations in Kconfig
+>=20
+> Changes in v6:
+> - Changed it6505_typec_mux_set callback function to accommodate with
+>   the latest drm-misc patches
+> - Changed the driver implementation to accommodate with the new binding
+> - Dropped typec-switch binding and use endpoints and data-lanes propertie=
+s
+>   to describe the pin connections
+> - Added new patches (patch 1,2,4) to fix probing issues
+> - Changed the bindings of it6505/anx7625 and modified the drivers
+>   accordingly
+> - Merged it6505/anx7625 driver changes into a single patch
+>=20
+> Pin-yen Lin (7):
+>   drm/display: Add Type-C switch helpers
+>   dt-bindings: display: bridge: anx7625: Add mode-switch support
+>   drm/bridge: anx7625: Check for Type-C during panel registration
+>   drm/bridge: anx7625: Register Type C mode switches
+>   dt-bindings: display: bridge: it6505: Add mode-switch support
+>   drm/bridge: it6505: Fix Kconfig indentation
+>   drm/bridge: it6505: Register Type C mode switches
+>=20
+> Prashant Malani (2):
+>   device property: Add remote endpoint to devcon matcher
+>   platform/chrome: cros_ec_typec: Purge blocking switch devlinks
+>=20
+>  .../display/bridge/analogix,anx7625.yaml      |  99 ++++++++++++-
+>  .../bindings/display/bridge/ite,it6505.yaml   |  93 ++++++++++--
+>  drivers/base/property.c                       |  15 ++
+>  drivers/gpu/drm/bridge/Kconfig                |  21 +--
+>  drivers/gpu/drm/bridge/analogix/Kconfig       |   1 +
+>  drivers/gpu/drm/bridge/analogix/anx7625.c     | 101 +++++++++++++-
+>  drivers/gpu/drm/bridge/analogix/anx7625.h     |  13 ++
+>  drivers/gpu/drm/bridge/ite-it6505.c           | 119 +++++++++++++++-
+>  drivers/gpu/drm/display/drm_dp_helper.c       | 132 ++++++++++++++++++
+>  drivers/platform/chrome/cros_ec_typec.c       |  10 ++
+>  include/drm/display/drm_dp_helper.h           |  16 +++
+>  11 files changed, 591 insertions(+), 29 deletions(-)
+>=20
 
->> Hey,
->>
->> This is a complete shot-in-the-dark, as I don't see this behaviour on
->> *any* of my boards.  Could you try the attached patch please?
-> 
-> Unfortunately, the patch made no difference.
-> 
-> I've been looking at how the graphics on my laptop is set up, and have a bit of a worry about whether the firmware might
-> be playing a part in this problem. In order to offload video decoding to the NVidia TU117 GPU, it seems the scrubber
-> firmware must be available, but as far as I know,that has not been released by NVidia. To get it to work, I followed
-> what ubuntu have done and the scrubber in /lib/firmware/nvidia/tu117/nvdec/ is a symlink to
-> ../../tu116/nvdev/scrubber.bin. That, of course, means that some of the firmware loaded is for a different card is being
-> loaded. I note that processing related to firmware is being changed in the patch. Might my set up be at the root of my
-> problem?
-> 
-> I'll have a fiddle an see what I can work out.
-> 
-> Chris
-> 
->>
->> Thanks,
->> Ben.
->>
->>>
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-Well, my fiddling has got my system rebooting and shutting down successfully again. I found that if I delete the symlink
-to the scrubber firmware, reboot and shutdown work again. There are however, a number of other files in the tu117
-firmware directory tree that that are symlinks to actual files in its tu116 counterpart. So I deleted all of those too.
-Unfortunately, the absence of one or more of those symlinks causes Xorg to fail to start. I've reinstated all the links
-except scrubber and I now have a system that works as it did until I tried to run a kernel that includes the bad commit
-I identified in my bisection. That includes offloading video decoding to the NVidia card, so what ever I read that said
-the scrubber firmware was needed seems to have been wrong. I get a new message that (nouveau 0000:01:00.0: fb: VPR
-locked, but no scrubber binary!), but, hey, we can't have everything.
-
-If you still want to get to the bottom of this, let me know what you need me to provide and I'll do my best. I suspect
-you might want to because there will a n awful lot of Ubuntu-based systems out there with that scrubber.bin symlink in
-place. On the other hand,m it could but quite a while before ubuntu are deploying 6.2 or later kernels.
-
-Thanks,
-
-Chris
-
-<snip>
