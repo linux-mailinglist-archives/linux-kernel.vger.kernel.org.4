@@ -2,269 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF9F68037A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 02:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3D268037D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 02:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235273AbjA3BUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 20:20:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S235278AbjA3BVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 20:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA3BU3 (ORCPT
+        with ESMTP id S229476AbjA3BVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 20:20:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACD415C84
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 17:20:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 29 Jan 2023 20:21:00 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDD0125B4;
+        Sun, 29 Jan 2023 17:20:58 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96E65B80DD3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D2E7C433EF;
-        Mon, 30 Jan 2023 01:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675041625;
-        bh=/LdlnZLafbb8r9iszLz7XEPV/RToyYsM0QbXk0IBXL4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Irjh3ataYAzB8xrhAKN9BVrXmZAtrOU+PnAcb7SCd6akfMuXlzh1xbU5zPrCqPm2q
-         4x1w9HM0tB/zhXZGrY1G57TYar4P7eqvGS3AXQel3QfICmZMGaHuUQ9CemgoHfb2CX
-         T9TQ6ty02gYhMs6j79mWhgKJxLR/0AQLyOE8hWxBCWEPhKv++qgnAmT3jNTNrfV1f5
-         XCMGIWQycfzweDgmzjrrJUDxEQc1NJT4FJ7bBen2PsqQ6o+ussCm2x9dUz532Upckf
-         zbJRe5rKcYitfhMM4YyKbTIgMRv8dItlW6lxxZJJ41ELYWM/sZaSICMcmkpftk3TYn
-         UDZsn3CsLyEjg==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
-Subject: [PATCH v2] f2fs: reduce stack memory cost by using bitfield in struct f2fs_io_info
-Date:   Mon, 30 Jan 2023 09:20:12 +0800
-Message-Id: <20230130012012.2078978-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4r3S4Nxsz4x1h;
+        Mon, 30 Jan 2023 12:20:52 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675041653;
+        bh=Mo9cLCon1qChV1ovQ96SPfDPFc2MVpnp4JX+fy0Rg+4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dqBw1TDEPgf1t6oc1ceM3wl3JYXrgwrOmTnxKfkdEUCZPJSb55ATwdsAb2jlaDFMU
+         /tUGe8XkdkXHwyrhx5SXpgTZ1YhjDCsS5rk5K2t7AasRIMigt1/UjnQwB5WuhHpJIk
+         RPsdrNSSHl18fz1/yBvzO8BMaDHPxIoBPw67J8GiBywWF3hUiKBiUd0U0H8KJOMauS
+         e0t29BbUwWA8IfEsoTWK4Q2nd4LBhyqQ64ajtpeC19xlrlp8ai693WAeCUQJA8HV1k
+         02qvoP85AWXSQVx0ETHntnjb7Ak7kBqDutnfiPkLTBmEKhaqj18l8vTsKtqK0MWDfE
+         ZYtOawbCJiGfA==
+Date:   Mon, 30 Jan 2023 12:20:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Dave Airlie <airlied@redhat.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20230130122051.534df03e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/oZ6/VeSi9o45OZtcVD/duRF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch tries to use bitfield in struct f2fs_io_info to improve
-memory usage.
+--Sig_/oZ6/VeSi9o45OZtcVD/duRF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-struct f2fs_io_info {
-...
-	int need_lock:8;	/* indicate we need to lock cp_rwsem */
-	int version:8;		/* version of the node */
-	int submitted:1;	/* indicate IO submission */
-	int in_list:1;		/* indicate fio is in io_list */
-	int is_por:1;		/* indicate IO is from recovery or not */
-	int retry:1;		/* need to reallocate block address */
-	int encrypted:1;	/* indicate file is encrypted */
-	int post_read:1;	/* require post read */
-...
-};
+Hi all,
 
-After this patch, size of struct f2fs_io_info reduces from 136 to 120.
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Signed-off-by: Chao Yu <chao@kernel.org>
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'a=
+mdgpu_dm_atomic_check':
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9706:41: error:=
+ redeclaration of 'mgr' with no linkage
+ 9706 |         struct drm_dp_mst_topology_mgr *mgr;
+      |                                         ^~~
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9697:41: note: =
+previous declaration of 'mgr' with type 'struct drm_dp_mst_topology_mgr *'
+ 9697 |         struct drm_dp_mst_topology_mgr *mgr;
+      |                                         ^~~
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9707:43: error:=
+ redeclaration of 'mst_state' with no linkage
+ 9707 |         struct drm_dp_mst_topology_state *mst_state;
+      |                                           ^~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:9698:43: note: =
+previous declaration of 'mst_state' with type 'struct drm_dp_mst_topology_s=
+tate *'
+ 9698 |         struct drm_dp_mst_topology_state *mst_state;
+      |                                           ^~~~~~~~~
+
+Caused by commit
+
+  c689e1e362ea ("drm/amdgpu/display/mst: Fix mst_state->pbn_div and slot co=
+unt assignments")
+
+interacting with commits
+
+  1119e1f9636b ("drm/amdgpu/display/mst: Fix mst_state->pbn_div and slot co=
+unt assignments")
+  f439a959dcfb ("amdgpu: fix build on non-DCN platforms.")
+
+from Linus' tree.
+
+Please can you guys think about your bug fixing process?
+
+I have applied the following merge fix for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 30 Jan 2023 12:12:21 +1100
+Subject: [PATCH] amdgpu: fix up for "drm/amdgpu/display/mst: Fix mst_state-=
+>pbn_div and slot count assignments"
+
+This appears as a commit in Linus tree and again in the amdgpu tree,
+but there is a following fix commit in Linus' tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-v2:
-- fix compile warning caused by assigning bool type value to bitfield variable.
- fs/f2fs/checkpoint.c |  6 +++---
- fs/f2fs/compress.c   |  5 +++--
- fs/f2fs/data.c       | 10 +++++-----
- fs/f2fs/f2fs.h       | 16 ++++++++--------
- fs/f2fs/gc.c         |  8 ++++----
- fs/f2fs/node.c       |  2 +-
- fs/f2fs/segment.c    |  6 +++---
- 7 files changed, 27 insertions(+), 26 deletions(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index b442e72fcefd..359b245920e1 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -67,7 +67,7 @@ static struct page *__get_meta_page(struct f2fs_sb_info *sbi, pgoff_t index,
- 		.old_blkaddr = index,
- 		.new_blkaddr = index,
- 		.encrypted_page = NULL,
--		.is_por = !is_meta,
-+		.is_por = !is_meta ? 1 : 0,
- 	};
- 	int err;
- 
-@@ -234,8 +234,8 @@ int f2fs_ra_meta_pages(struct f2fs_sb_info *sbi, block_t start, int nrpages,
- 		.op = REQ_OP_READ,
- 		.op_flags = sync ? (REQ_META | REQ_PRIO) : REQ_RAHEAD,
- 		.encrypted_page = NULL,
--		.in_list = false,
--		.is_por = (type == META_POR),
-+		.in_list = 0,
-+		.is_por = (type == META_POR) ? 1 : 0,
- 	};
- 	struct blk_plug plug;
- 	int err;
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index 365ee074d3b3..89b344e28ca6 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -1237,10 +1237,11 @@ static int f2fs_write_compressed_pages(struct compress_ctx *cc,
- 		.page = NULL,
- 		.encrypted_page = NULL,
- 		.compressed_page = NULL,
--		.submitted = false,
-+		.submitted = 0,
- 		.io_type = io_type,
- 		.io_wbc = wbc,
--		.encrypted = fscrypt_inode_uses_fs_layer_crypto(cc->inode),
-+		.encrypted = fscrypt_inode_uses_fs_layer_crypto(cc->inode) ?
-+									1 : 0,
- 	};
- 	struct dnode_of_data dn;
- 	struct node_info ni;
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index 04a7bb4d4cdf..bcb88ae84fa8 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -992,7 +992,7 @@ void f2fs_submit_page_write(struct f2fs_io_info *fio)
- 		bio_page = fio->page;
- 
- 	/* set submitted = true as a return value */
--	fio->submitted = true;
-+	fio->submitted = 1;
- 
- 	inc_page_count(sbi, WB_DATA_TYPE(bio_page));
- 
-@@ -1008,7 +1008,7 @@ void f2fs_submit_page_write(struct f2fs_io_info *fio)
- 				(fio->type == DATA || fio->type == NODE) &&
- 				fio->new_blkaddr & F2FS_IO_SIZE_MASK(sbi)) {
- 			dec_page_count(sbi, WB_DATA_TYPE(bio_page));
--			fio->retry = true;
-+			fio->retry = 1;
- 			goto skip;
- 		}
- 		io->bio = __bio_alloc(fio, BIO_MAX_VECS);
-@@ -2792,10 +2792,10 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
- 		.old_blkaddr = NULL_ADDR,
- 		.page = page,
- 		.encrypted_page = NULL,
--		.submitted = false,
-+		.submitted = 0,
- 		.compr_blocks = compr_blocks,
- 		.need_lock = LOCK_RETRY,
--		.post_read = f2fs_post_read_required(inode),
-+		.post_read = f2fs_post_read_required(inode) ? 1 : 0,
- 		.io_type = io_type,
- 		.io_wbc = wbc,
- 		.bio = bio,
-@@ -2916,7 +2916,7 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
- 	}
- 
- 	if (submitted)
--		*submitted = fio.submitted ? 1 : 0;
-+		*submitted = fio.submitted;
- 
- 	return 0;
- 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index bd22f8fd09ef..71d864854802 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1212,19 +1212,19 @@ struct f2fs_io_info {
- 	struct page *encrypted_page;	/* encrypted page */
- 	struct page *compressed_page;	/* compressed page */
- 	struct list_head list;		/* serialize IOs */
--	bool submitted;		/* indicate IO submission */
--	int need_lock;		/* indicate we need to lock cp_rwsem */
--	bool in_list;		/* indicate fio is in io_list */
--	bool is_por;		/* indicate IO is from recovery or not */
--	bool retry;		/* need to reallocate block address */
- 	int compr_blocks;	/* # of compressed block addresses */
--	bool encrypted;		/* indicate file is encrypted */
--	bool post_read;		/* require post read */
-+	int need_lock:8;	/* indicate we need to lock cp_rwsem */
-+	int version:8;		/* version of the node */
-+	int submitted:1;	/* indicate IO submission */
-+	int in_list:1;		/* indicate fio is in io_list */
-+	int is_por:1;		/* indicate IO is from recovery or not */
-+	int retry:1;		/* need to reallocate block address */
-+	int encrypted:1;	/* indicate file is encrypted */
-+	int post_read:1;	/* require post read */
- 	enum iostat_type io_type;	/* io type */
- 	struct writeback_control *io_wbc; /* writeback control */
- 	struct bio **bio;		/* bio for ipu */
- 	sector_t *last_block;		/* last block number in bio */
--	unsigned char version;		/* version of the node */
- };
- 
- struct bio_entry {
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index d2f27b15287d..8f2224e1dc61 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1156,8 +1156,8 @@ static int ra_data_block(struct inode *inode, pgoff_t index)
- 		.op = REQ_OP_READ,
- 		.op_flags = 0,
- 		.encrypted_page = NULL,
--		.in_list = false,
--		.retry = false,
-+		.in_list = 0,
-+		.retry = 0,
- 	};
- 	int err;
- 
-@@ -1245,8 +1245,8 @@ static int move_data_block(struct inode *inode, block_t bidx,
- 		.op = REQ_OP_READ,
- 		.op_flags = 0,
- 		.encrypted_page = NULL,
--		.in_list = false,
--		.retry = false,
-+		.in_list = 0,
-+		.retry = 0,
- 	};
- 	struct dnode_of_data dn;
- 	struct f2fs_summary sum;
-diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-index fbd1d25fecc2..19a1fee88a36 100644
---- a/fs/f2fs/node.c
-+++ b/fs/f2fs/node.c
-@@ -1586,7 +1586,7 @@ static int __write_node_page(struct page *page, bool atomic, bool *submitted,
- 		.op_flags = wbc_to_write_flags(wbc),
- 		.page = page,
- 		.encrypted_page = NULL,
--		.submitted = false,
-+		.submitted = 0,
- 		.io_type = io_type,
- 		.io_wbc = wbc,
- 	};
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index a007f5084e84..660196b52ae5 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -3344,10 +3344,10 @@ void f2fs_allocate_data_block(struct f2fs_sb_info *sbi, struct page *page,
- 		struct f2fs_bio_info *io;
- 
- 		if (F2FS_IO_ALIGNED(sbi))
--			fio->retry = false;
-+			fio->retry = 0;
- 
- 		INIT_LIST_HEAD(&fio->list);
--		fio->in_list = true;
-+		fio->in_list = 1;
- 		io = sbi->write_io[fio->type] + fio->temp;
- 		spin_lock(&io->io_lock);
- 		list_add_tail(&fio->list, &io->io_list);
-@@ -3428,7 +3428,7 @@ void f2fs_do_write_meta_page(struct f2fs_sb_info *sbi, struct page *page,
- 		.new_blkaddr = page->index,
- 		.page = page,
- 		.encrypted_page = NULL,
--		.in_list = false,
-+		.in_list = 0,
- 	};
- 
- 	if (unlikely(page->index >= MAIN_BLKADDR(sbi)))
--- 
-2.25.1
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gp=
+u/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index 8965071f595b..e1d63826927a 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -9694,8 +9694,6 @@ static int amdgpu_dm_atomic_check(struct drm_device *=
+dev,
+ 	struct drm_connector_state *old_con_state, *new_con_state;
+ 	struct drm_crtc *crtc;
+ 	struct drm_crtc_state *old_crtc_state, *new_crtc_state;
+-	struct drm_dp_mst_topology_mgr *mgr;
+-	struct drm_dp_mst_topology_state *mst_state;
+ 	struct drm_plane *plane;
+ 	struct drm_plane_state *old_plane_state, *new_plane_state;
+ 	enum dc_status status;
+--=20
+2.35.1
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/oZ6/VeSi9o45OZtcVD/duRF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXG3MACgkQAVBC80lX
+0GwNgQf/YzDeiGMqMoVAloE8+I2BN73pE9UqNHH4cEw6pXfOmkhXRx+qWSUPduOP
+zJekPIEtedEb9da/i5TbvCEUJ5VMvkzfXkFvItDeaJsKZLguX6t/ZDCke5oTCR+P
+bb+PoSkFPF9Fsvgcw/RVo6KlvuzL7ncA3vEmaFIak7DYgGJSfT0rzLsfKL4hPG3a
+tmRdMnKtmt/7eIHT8nDP5Fy2RFakzO9cxMxuG2pG72eX9c7lhMLBFY8JSCTjvgP7
+EvnthNttwwE4iejdvybSQO4XBQ2HD3TXuZp6dq/HcS+h88sWY2bqwDkFIzLm4Wcz
+Ep5yIaGc7DozKVWYwsw/rE2oKV/z2g==
+=TFFb
+-----END PGP SIGNATURE-----
+
+--Sig_/oZ6/VeSi9o45OZtcVD/duRF--
