@@ -2,294 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F78681981
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB09681979
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237807AbjA3SkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S237510AbjA3SjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:39:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238256AbjA3Sji (ORCPT
+        with ESMTP id S238322AbjA3SjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:39:38 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9679714212;
-        Mon, 30 Jan 2023 10:39:06 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id j9so11029437qtv.4;
-        Mon, 30 Jan 2023 10:39:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1w+tbBWEaA0E2RmuugzUMyNc2sljY7KRsFQbXG9DuEY=;
-        b=Zc/g1ZDm0jtFAYTeTbkjvU+lEAgWm79NKe3IDDJp+FYozoxjHpxfHUDVNTijMA8Sgi
-         LCQoAAV1oXxRTFsF8NMROne0DHf1wmKdKPlJvOqry6aNTkROGn34Cbe4Vj/0hC+ZdSus
-         ZTcJl9/tUVcDg7nvkioI1NBl5fDNjvQeJIAwiRBZM/FCafiJOvzSWs+PPdeisXFRZFQ7
-         FIhup5g8Fs3HiHuE2FkgCgOzcp4Im3TE0+HweoV9hI+csba0TZTWjIhNLCH/+doAVi33
-         hRFZhTL/41yUCS7ZXacoqNQ1HBFP6F+eN7W50Rsejz7INRCjCEvAgJ1j+7UKwOfciCYp
-         PN4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1w+tbBWEaA0E2RmuugzUMyNc2sljY7KRsFQbXG9DuEY=;
-        b=pPdThLBWsT8lV/koiyWK+GZofCEi50pwrJYq+hp0ZvyE+7eHlrLz9Ib8qCsaQx3yJS
-         ITbuzxqKn6vWVTDSax/VCkrXDM3ng+s4MavJsQAJdlgPIGxCTrYqwcECglDnEwpq4n8i
-         v1MMr0TNl6CCuclCBOada/gfavIdigDWPcSXLytB3lKEa/R1OFsMXhB7ZeZ1bIkwDZZv
-         ZeQBZDZjjNmkb6Aiyu1K2X5o5MofPMFRnwCV/NTdYhRP6fZ66ZxsjQCFiQGESoRvheqc
-         4JqPjdOjeE1Exb6v2hyagQtOMiQES8VvMotjdPLJ/3l7r6Ui/1JXNsFH5miKaeFkqmFc
-         PO5w==
-X-Gm-Message-State: AFqh2kpbkkdpZExgBoi8aOHmAuHekyVFeQtzftOpl3z1w6fB+8xpZeNG
-        63/IqFXbMsFXv8XQtpeNprwI85+Xdoc=
-X-Google-Smtp-Source: AMrXdXsaFlF4Z/8mfUnxqPOn6QGTEg1RtZFEBW6V5bpVS4uopngy3sXy1dd/ilvC4WwuW4ece/ZeOQ==
-X-Received: by 2002:ac8:454e:0:b0:3a8:fdf:8ff8 with SMTP id z14-20020ac8454e000000b003a80fdf8ff8mr68979799qtn.36.1675103945541;
-        Mon, 30 Jan 2023 10:39:05 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id t9-20020a05620a034900b007194ea5c715sm6287166qkm.77.2023.01.30.10.39.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 10:39:04 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id AC2D827C0054;
-        Mon, 30 Jan 2023 13:39:03 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 30 Jan 2023 13:39:03 -0500
-X-ME-Sender: <xms:xg7YYwUJIhe2a_K64a9c4TTrwqY2SmTRM-4yW8QJzBVkVfCXFrm_Xg>
-    <xme:xg7YY0lxKlw9bVgwDq8LzWPYxl5908dx4zhCCLOuHPnu4LWf63kc4h3GAPN3eXrTH
-    j9X_VymMbPMAnsPLQ>
-X-ME-Received: <xmr:xg7YY0YqhhRtdPR3P2GNbRGPvMwU8ePuxBDJZY3nhZ5mW6yuJXFtWV5JlJ8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepueho
-    qhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtf
-    frrghtthgvrhhnpeeftddvudetgfettdevfeekgfevleetjeduhffgleefhfdtheeuueet
-    jeehhfdtfeenucffohhmrghinhepohhpvghnqdhsthgurdhorhhgpdhgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegs
-    ohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeige
-    dqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihig
-    mhgvrdhnrghmvg
-X-ME-Proxy: <xmx:xw7YY_VPhjjnLEAQATj1T39g61JWVIF_k9_YcKw-mBxE5Rc20XYA8Q>
-    <xmx:xw7YY6ntJSX8TNltxvNfYPjc8Xno3kUbj7kBKCygzovhUHq_KL9GBQ>
-    <xmx:xw7YY0ejXgsW4TDqKvPZULKCRpbey6KI5H9p7g4Lwga4GuZgjIUzMQ>
-    <xmx:xw7YY2P0HYBkuKiD4t_1nAWAE1zjdyTtlNFJmHudnmUQXLl5-gG0lw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 30 Jan 2023 13:39:02 -0500 (EST)
-Date:   Mon, 30 Jan 2023 10:38:07 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
-        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
- generic atomic ops
-Message-ID: <Y9gOjzGaWy2hIAmu@boqun-archlinux>
-References: <20230126173354.13250-1-jmaselbas@kalray.eu>
- <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
- <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
- <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
- <Y9RLpYGmzW1KPksE@boqun-archlinux>
- <2f4717b3-268f-8db3-e380-4af0a5479901@huaweicloud.com>
+        Mon, 30 Jan 2023 13:39:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8173A34C03;
+        Mon, 30 Jan 2023 10:38:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C710E6121E;
+        Mon, 30 Jan 2023 18:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E0AC433D2;
+        Mon, 30 Jan 2023 18:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675103892;
+        bh=PTMzmxQ4JcPyLK3GX6Ihg8/o4WwLIyzxGJcEQJC4KwY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=c5Qjg9ucC3+lotDRqBtfnRo2T2uE8zAtlCe6+mH97EjC0NYu+o0tMXQCA4XihyoKu
+         sFWZ08a7LEMCQcNZ8LLTyiFknVrP7U8fZeKbz5OmvrcN1S47SXrcfrocehYmzlhlxg
+         NNOpmhLtUaQlkCJzu0ZrAn9lH/sJisDRmk/EGC1xC7NoxGQlQBv+hiHMC4/A6TnC32
+         ucNo0yHgAN3JwVJgAaRE3vRPEAo1h+UUlypYrPl0UyyS+/d02lR4AB/HQbR8+ihF5d
+         uKt7ujmBrDFxUWJT52uWP1PjEg1fN/DMfliuLbrLUDdA/Fn35E1oOpix+QC/ev1+W4
+         UDrRr4ksEJgAQ==
+Date:   Mon, 30 Jan 2023 12:38:10 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
+ pci_enable_pasid()
+Message-ID: <20230130183810.GA1692786@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2f4717b3-268f-8db3-e380-4af0a5479901@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <647de371-fe11-15b4-5e11-8ca43a754180@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 01:23:28PM +0100, Jonas Oberhauser wrote:
-> 
-> 
-> On 1/27/2023 11:09 PM, Boqun Feng wrote:
-> > On Fri, Jan 27, 2023 at 03:34:33PM +0100, Peter Zijlstra wrote:
-> > > > I also noticed that GCC has some builtin/extension to do such things,
-> > > > __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
-> > > > can be used in the kernel.
-> > > On a per-architecture basis only, the C/C++ memory model does not match
-> > > the Linux Kernel memory model so using the compiler to generate the
-> > > atomic ops is somewhat tricky and needs architecture audits.
-> > Hijack this thread a little bit, but while we are at it, do you think it
-> > makes sense that we have a config option that allows archs to
-> > implement LKMM atomics via C11 (volatile) atomics? I know there are gaps
-> > between two memory models, but the option is only for fallback/generic
-> > implementation so we can put extra barriers/orderings to make things
-> > guaranteed to work.
+On Sun, Jan 29, 2023 at 04:42:32PM +0800, Baolu Lu wrote:
+> On 2023/1/28 1:30, Bjorn Helgaas wrote:
+> > On Sat, Jan 14, 2023 at 03:34:20PM +0800, Lu Baolu wrote:
+> > > The PCIe fabric routes Memory Requests based on the TLP address, ignoring
+> > > the PASID. In order to ensure system integrity, commit 201007ef707a ("PCI:
+> > > Enable PASID only when ACS RR & UF enabled on upstream path") requires
+> > > some ACS features being supported on device's upstream path when enabling
+> > > PCI/PASID.
+> > > 
+> > > One alternative is ATS/PRI which lets the device resolve the PASID + addr
+> > > pair before a memory request is made into a routeable TLB address through
+> > > the translation agent.
 > > 
-> > It'll be a code version of this document:
+> > This sounds like "ATS/PRI" is a solution to a problem, but we haven't
+> > stated the problem yet.
 > > 
-> > 	https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0124r7.html
+> > > Those resolved addresses are then cached on the
+> > > device instead of in the IOMMU TLB and the device always sets translated
+> > > bit for PASID. One example of those devices are AMD graphic devices that
+> > > always have ACS or ATS/PRI enabled together with PASID.
+> > > 
+> > > This adds a flag parameter in the pci_enable_pasid() helper, with which
+> > > the device driver could opt-in the fact that device always sets the
+> > > translated bit for PASID.
+> > >
+> > > It also applies this opt-in for AMD graphic devices. Without this change,
+> > > kernel boots to black screen on a system with below AMD graphic device:
+> > > 
+> > > 00:01.0 VGA compatible controller: Advanced Micro Devices, Inc.
+> > >          [AMD/ATI] Wani [Radeon R5/R6/R7 Graphics] (rev ca)
+> > >          (prog-if 00 [VGA controller])
+> > > 	DeviceName: ATI EG BROADWAY
+> > > 	Subsystem: Hewlett-Packard Company Device 8332
 > > 
-> > (although I realise there may be a few mistakes in that doc since I
-> > wasn't familiar with C11 memory model when I wrote part of the doc, but
-> > these can be fixed)
-> > 
-> > Another reason I ask is that since Rust is coming, we need to provide
-> > our LKMM atomics in Rust so that C code and Rust code can talk via same
-> > atomic variables, since both sides need to use the same memory model.
-> > My choices are:
-> > 
-> > 1.	Using FFI to call Linux atomic APIs: not inline therefore not
-> > 	efficient.
-> > 
-> > 2.	Implementing Rust LKMM atomics in asm: much more work although
-> > 	I'm OK if we have to do it.
-> > 
-> > 3.	Implementing Rust LKMM atomics with standard atomics (i.e. C/C++
-> > 	atomics):
-> > 
-> > 	*	Requires Rust has "volatile" atomics, which is WIP but
-> > 		looks promising
-> > 	
-> > 	*	Less efficient compared to choice #2 but more efficient
-> > 		compared to choice #1
-> > 
-> > Ideally, choice #2 is the best option for all architectures, however, if
-> > we have the generic implementation based on choice #3, for some archs it
-> > may be good enough.
-> > 
-> > Thoughts?
+> > What is the underlying failure here?  "Black screen" is useful but we
+> > should say *why* that happens, e.g., transactions went the wrong place
+> > or whatever.
+
+> > I guess PCI_PASID_XLATED_REQ_ONLY is something only the driver knows,
+> > right?  We can't deduce from architected config space that the device
+> > will produce PASID prefixes for every Memory Request, can we?
 > 
-> Thanks for adding me to the discussion!
+> No, we can't. That's the reason why we need a flag here.
+
+Sorry, I'm still confused.  PCI_PASID_XLATED_REQ_ONLY is a
+device-specific property, and you want to opt-in AMD graphics devices.
+Where's the AMD graphics-specific change?  The current patch does
+this:
+
+  pdev_pri_ats_enable
+    pci_enable_pasid(pdev, 0, PCI_PASID_XLATED_REQ_ONLY)
+
+which looks like it does it for *all* devices below an AMD IOMMU,
+without any device or driver input.
+
+PCIe r6.0, sec 6.20.1:
+
+  A Function is not permitted to generate Requests using Translated
+  Addresses and a PASID unless both PASID Enable and Translated
+  Requests with PASID Enable are Set.
+
+You want AMD graphics devices to do DMA with translated addresses and
+PASID, right?  pci_enable_pasid() sets PASID Enable
+(PCI_PASID_CTRL_ENABLE), but I don't see where "Translated Requests
+with PASID Enable" is set.  We don't even have a #define for it.
+
+I would think we should check "Translated Requests with PASID
+Supported" before setting "Translated Requests with PASID Enable",
+too?
+
+> PCI: Add translated request only flag for pci_enable_pasid()
 > 
-> One reason not to rely on C11 is that old compilers don't support it, and
-> there may be application scenarios in which new compilers haven't been
-> certified.
-> I don't know if this is something that affects linux, but linux is so big
-> and versatile I'd be surprised if that's irrelevant.
+> The PCIe fabric routes Memory Requests based on the TLP address, ignoring
+> the PASID. In order to ensure system integrity, commit 201007ef707a ("PCI:
+> Enable PASID only when ACS RR & UF enabled on upstream path") requires
+> some ACS features being supported on device's upstream path when enabling
+> PCI/PASID.
 > 
+> However, above change causes the Linux kernel boots to black screen on a
+> system with below graphic device:
 
-We are gnu11 since last year:
+We need a PCIe concept-level description of the issue first, i.e., in
+terms of DMA, PASID, ACS, etc.  Then we can mention the AMD GPU issue
+as an instance.
 
-	e8c07082a810 ("Kbuild: move to -std=gnu11")
-
-, so at least for mainline I don't see a problem to use c11 atomics.
-
-> Another is that the C11 model is more about atomic locations than atomic
-> accesses, and there are several places in the kernel where a location is
-> accessed both atomically and non-atomically. This API mismatch is more
-> severe than the semantic differences in my opinion, since you don't have
-> guarantees of what the layout of atomics is going to be.
+> 00:01.0 VGA compatible controller: Advanced Micro Devices, Inc.
+>         [AMD/ATI] Wani [Radeon R5/R6/R7 Graphics] (rev ca)
+>         (prog-if 00 [VGA controller])
+>         DeviceName: ATI EG BROADWAY
+>         Subsystem: Hewlett-Packard Company Device 8332
 > 
-
-True, but the same problem for our asm implemented atomics, right? My
-plan is to do (volatile atomic_int *) casts on these locations.
-
-> Perhaps you could instead rely on the compiler builtins? Note that this may
-
-These are less formal/defined to me, and not much research on them I
-assume, I'd rather not use them.
-
-> invalidate some progress properties, e.g., ticket locks become unfair if the
-> increment (for taking a ticket) is implemented with a CAS loop (because a
-> thread can fail forever to get a ticket if the ticket counter is contended,
-> and thus starve). There may be some linux atomics that don't map to any
-> compiler builtins and need to implemented with such CAS loops, potentially
-> leading to such problems.
+> The kernel trace looks like below:
 > 
-> I'm also curious whether link time optimization can resolve the inlining
-> issue?
+>  Call Trace:
+>   <TASK>
+>   amd_iommu_attach_device+0x2e0/0x300
+>   __iommu_attach_device+0x1b/0x90
+>   iommu_attach_group+0x65/0xa0
+>   amd_iommu_init_device+0x16b/0x250 [iommu_v2]
+>   kfd_iommu_resume+0x4c/0x1a0 [amdgpu]
+>   kgd2kfd_resume_iommu+0x12/0x30 [amdgpu]
+>   kgd2kfd_device_init.cold+0x346/0x49a [amdgpu]
+>   amdgpu_amdkfd_device_init+0x142/0x1d0 [amdgpu]
+>   amdgpu_device_init.cold+0x19f5/0x1e21 [amdgpu]
+>   ? _raw_spin_lock_irqsave+0x23/0x50
+>   amdgpu_driver_load_kms+0x15/0x110 [amdgpu]
+>   amdgpu_pci_probe+0x161/0x370 [amdgpu]
+>   local_pci_probe+0x41/0x80
+>   pci_device_probe+0xb3/0x220
+>   really_probe+0xde/0x380
+>   ? pm_runtime_barrier+0x50/0x90
+>   __driver_probe_device+0x78/0x170
+>   driver_probe_device+0x1f/0x90
+>   __driver_attach+0xce/0x1c0
+>   ? __pfx___driver_attach+0x10/0x10
+>   bus_for_each_dev+0x73/0xa0
+>   bus_add_driver+0x1ae/0x200
+>   driver_register+0x89/0xe0
+>   ? __pfx_init_module+0x10/0x10 [amdgpu]
+>   do_one_initcall+0x59/0x230
+>   do_init_module+0x4a/0x200
+>   __do_sys_init_module+0x157/0x180
+>   do_syscall_64+0x5b/0x80
+>   ? handle_mm_fault+0xff/0x2f0
+>   ? do_user_addr_fault+0x1ef/0x690
+>   ? exc_page_fault+0x70/0x170
+>   entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+The stack trace doesn't seem like it shows a failure, so I'm not sure
+it's useful this time.  If it is, we can at least strip out the
+irrelevant pieces.
+
+> The AMD iommu driver allocates a new domain (called v2 domain) for the
+
+"v2 domain" needs to be something greppable -- an identifier,
+filename, etc.
+
+> amdgpu device and enables its PCI PASID/ATS/PRI before attaching the
+> v2 domain to it. The failure of pci_enable_pasid() due to lack of ACS
+> causes the domain attaching device to fail. The amdgpu device is unable
+> to DMA normally, resulting in a black screen of the system.
 > 
-
-For Rust case, cross-language LTO is needed I think, and last time I
-tried, it didn't work.
-
-> I think another big question for me is to which extent it makes sense
-> anyways to have shared memory concurrency between the Rust code and the C
-> code. It seems all the bad concurrency stuff from the C world would flow
-> into the Rust world, right?
-
-What do you mean by "bad" ;-) ;-) ;-)
-
-> If you can live without shared Rust & C concurrency, then perhaps you can
-> get away without using LKMM in Rust at all, and just rely on its (C11-like)
-> memory model internally and talk to the C code through synchronous, safer
-> ways.
+> However, this device is special as it relies on ATS/PRI to resolve the
+> PASID + addr pair before a memory request is made into a routeable TLB
+> address through the translation agent. Those resolved addresses are then
+> cached on the device instead of in the IOMMU TLB and the device always
+> uses translated memory request for PASID.
 > 
-
-First I don't think I can avoid using LKMM in Rust, besides the
-communication from two sides, what if kernel developers just want to
-use the memory model they learn and understand (i.e. LKMM) in a new Rust
-driver? They probably already have a working parallel algorithm based on
-LKMM.
-
-Further, let's say we make C and Rust talk without shared memory
-concurrency, what would that be? Will it more defined/formal the LKMM?
-How's the cost if we use synchronous ways? I personally think there are
-places in core kernel where Rust can be tried, whatever the mechanism is
-used, it cannot sarcrifed.
-
-> I'm not against having a fallback builtin-based implementation of LKMM, and
-> I don't think that it really needs architecture audits. What it needs is
-
-Fun fact, there exist some "optimizations" that don't generate the asm
-code as you want:
-
-	https://github.com/llvm/llvm-project/issues/56450
-
-Needless to say, they are bugs, and will be fixed, besides making atomic
-volatile seems to avoid these "optimizations"
-
-> some additional compiler barriers and memory barriers, to ensure that the
-> arguments about dependencies and non-atomics still hold. E.g., a release
-> store may not just be "builtin release store" but may need to have a
-> compiler barrier to prevent the release store being moved in program order.
-> And a "full barrier" exchange may need an mb() infront of the operation to
-> avoid "roach motel ordering" (i.e.,  x=1 ; "full barrier exchange"; y = 1
-> allows y=1 to execute before x=1 in the compiler builtins as far as I
-> remember). And there may be some other cases like this.
+> ACS is not necessary for the devices that always use translated memory
+> request for PASID. But this is device specific and only device driver
+> knows this. We can't deduce this from architected config space.
 > 
-
-Agreed. And this is another reason I want to do it: I'm curious about
-how far C11 memory model and LKMM are different, and whether there is a
-way to implement one by another, what are the gaps (theorical and
-pratical), whether the ordering we have in LKMM can be implemented by
-compilers (mostly dependencies). More importantly, we could improve both
-to get something better? With the ability to exactly express the
-programmers' intention yet still allow optimization by the compilers.
-
-> But I currently don't see that this implementation would be noticeably
-> faster than paying the overhead of lack of inline.
+> Add a flag for pci_enable_pasid(), with which the device drivers could
+> opt-in the fact that device always uses translated memory requests for
+> PASID hence the ACS is not a necessity. Apply this opt-in for above AMD
+> graphic device.
 > 
-
-You are not wrong, surely we will need to real benchmark to know. But my
-rationale is 1) in theory this is faster, 2) we also get a chance to try
-out code based on LKMM with C11 atomics to see where it hurts. Therefore
-I asked ;-)
-
-Regards,
-Boqun
-
-> Best wishes, jonas
+> At present, it is a common practice to enable/disable PCI PASID in the
+> iommu drivers. Considering that the device driver knows more about the
+> specific device, it's better to move pci_enable_pasid() into the specific
+> device drivers.
+> [-- end --]
 > 
+> --
+> Best regards,
+> baolu
