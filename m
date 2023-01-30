@@ -2,147 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E9668199F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:48:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D414D68198D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237649AbjA3SsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S236368AbjA3SnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:43:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237196AbjA3SsF (ORCPT
+        with ESMTP id S236209AbjA3SnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:48:05 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAB529157;
-        Mon, 30 Jan 2023 10:48:01 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 2e3b141596fad6a6; Mon, 30 Jan 2023 19:47:59 +0100
-Received: from kreacher.localnet (unknown [213.134.169.112])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 11B0525258B8;
-        Mon, 30 Jan 2023 19:47:59 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v2 1/4] thermal: intel: int340x: Assorted minor cleanups
-Date:   Mon, 30 Jan 2023 19:42:16 +0100
-Message-ID: <3220135.44csPzL39Z@kreacher>
-In-Reply-To: <2133431.irdbgypaU6@kreacher>
-References: <2133431.irdbgypaU6@kreacher>
+        Mon, 30 Jan 2023 13:43:01 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F996768D
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:42:57 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id ud5so34566848ejc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O4zOFPnvQUmjBeGtP4FRB6E8V1HsYTwI97ynNzQTKWY=;
+        b=Uhe4ruEuvSLU4qUidpD7D9Dbo1APlS5ywKHhmCuiSOsmpi3104yLei87Aux25C2AjX
+         4NvydmzCtR6VesJYdLcnk80OsNKjoVmUQcTJpR+NIFmvlyaInT9CPJAS1/87rQEiNP43
+         z8m+eeujfsxMBSMDkgSI0+ciwqEsDs8wGBm3QqRiX153o4Bd3U8+R3jwgV4eYLFYi2EW
+         GAxJuhCaTwPCYohJC32D1BDxECrQk/lgGhyA8T/FHe9iVlWTnHNJrogGofWrjx62UFfI
+         gh2M2gZFhKbe2jR1ui+0tchbC24A44c+s4KTV4b8D6y/4RVYh0eC10unln2ZPWfpwQR8
+         Kr3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4zOFPnvQUmjBeGtP4FRB6E8V1HsYTwI97ynNzQTKWY=;
+        b=DB1D0UhDZFVr6LOhBSuUR9LoTilYBDhrpR/CGNuyRdaFbEvI53PqJ2Q5Wms61vicsw
+         oUPLytJ8dWRlaZgAzRH+GrvV255xR3C2R71g2mcFG31uQgTLJUZ5KshbRBOHhwcw4cV3
+         W1z5k3Za4lKplQDutdDei1TMIdenDesuEwVZF9HVKNNvqL4p4f2zYl3OC1c7j8EKplOa
+         nPQhMU29PG64pQKDaxf1b5DdEoJUFYGnqWugY02erIqjc6fZO3aDftB0FkXxg1NHXyvm
+         grR05Xhr6CLDfUK0W1CtHo9wLuclcjk1xRmnMAH4CPbY9cp6xcnSDzGqMIa1HTRw8re9
+         SMGA==
+X-Gm-Message-State: AFqh2kpcJEtHqWpiU709sV75RC2WePEyEw6C/W0CLzQz/xJbj2zUEKol
+        eMCZKNd5nhEsF1XIYlNCdg3+yQ==
+X-Google-Smtp-Source: AMrXdXt/DpQYzmUqt9gbZ81bMlze+ik6dIP4e0KF3Bl1YyJAG4gy45/wqekGbHqLE/oWmgxQBsdfJQ==
+X-Received: by 2002:a17:906:60d2:b0:872:6bd0:d2b with SMTP id f18-20020a17090660d200b008726bd00d2bmr46720484ejk.45.1675104175927;
+        Mon, 30 Jan 2023 10:42:55 -0800 (PST)
+Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id f19-20020a170906391300b0088452ca0666sm3744462eje.196.2023.01.30.10.42.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 10:42:54 -0800 (PST)
+Message-ID: <568ebb75-5cb2-af97-bfae-c1e1e6174a45@linaro.org>
+Date:   Mon, 30 Jan 2023 19:42:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.169.112
-X-CLIENT-HOSTNAME: 213.134.169.112
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddulecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeiledrudduvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieelrdduuddvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhu
- gidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH] ARM: dts: qcom: msm8974: correct qfprom node reg
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Craig Tatlor <ctatlor97@gmail.com>
+References: <20230130-msm8974-qfprom-v1-1-975aa0e5e083@z3ntu.xyz>
+ <3112b531-45df-672c-c0a7-aefbdcceb727@linaro.org> <1886214.taCxCBeP46@g550jk>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1886214.taCxCBeP46@g550jk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Improve some inconsistent usage of white space in int340x_thermal_zone.c,
-fix up one coding style issue in it (missing braces around an else
-branch of a conditional) and while at it replace a !ACPI_FAILURE()
-check with an equivalent ACPI_SUCCESS() one.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v1 -> v2:
-   * Rebase
-   * Skip trip_cnt update
-   * More white space adjustments
-
----
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c |   16 ++++-------
- 1 file changed, 7 insertions(+), 9 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -30,15 +30,16 @@ static int int340x_thermal_get_zone_temp
- 			return conv_temp;
- 
- 		*temp = (unsigned long)conv_temp * 10;
--	} else
-+	} else {
- 		/* _TMP returns the temperature in tenths of degrees Kelvin */
- 		*temp = deci_kelvin_to_millicelsius(tmp);
-+	}
- 
- 	return 0;
- }
- 
- static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
--				      int trip, int temp)
-+					 int trip, int temp)
- {
- 	struct int34x_thermal_zone *d = zone->devdata;
- 	acpi_status status;
-@@ -46,7 +47,7 @@ static int int340x_thermal_set_trip_temp
- 
- 	snprintf(name, sizeof(name), "PAT%d", trip);
- 	status = acpi_execute_simple_method(d->adev->handle, name,
--			millicelsius_to_deci_kelvin(temp));
-+					    millicelsius_to_deci_kelvin(temp));
- 	if (ACPI_FAILURE(status))
- 		return -EIO;
- 
-@@ -92,7 +93,6 @@ static int int340x_thermal_read_trips(st
- 	}
- 
- 	for (i = 0; i < INT340X_THERMAL_MAX_ACT_TRIP_COUNT; i++) {
--
- 		ret = thermal_acpi_active_trip_temp(zone_adev, i,
- 						    &zone_trips[trip_cnt].temperature);
- 		if (ret)
-@@ -121,8 +121,7 @@ struct int34x_thermal_zone *int340x_ther
- 	acpi_status status;
- 	int i, ret;
- 
--	int34x_thermal_zone = kzalloc(sizeof(*int34x_thermal_zone),
--				      GFP_KERNEL);
-+	int34x_thermal_zone = kzalloc(sizeof(*int34x_thermal_zone), GFP_KERNEL);
- 	if (!int34x_thermal_zone)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -139,7 +138,7 @@ struct int34x_thermal_zone *int340x_ther
- 		int34x_thermal_zone->ops->get_temp = get_temp;
- 
- 	status = acpi_evaluate_integer(adev->handle, "PATC", NULL, &trip_cnt);
--	if (!ACPI_FAILURE(status)) {
-+	if (ACPI_SUCCESS(status)) {
- 		int34x_thermal_zone->aux_trip_nr = trip_cnt;
- 		trip_mask = BIT(trip_cnt) - 1;
- 	}
-@@ -169,8 +168,7 @@ struct int34x_thermal_zone *int340x_ther
- 
- 	int34x_thermal_zone->trips = zone_trips;
- 
--	int34x_thermal_zone->lpat_table = acpi_lpat_get_conversion_table(
--								adev->handle);
-+	int34x_thermal_zone->lpat_table = acpi_lpat_get_conversion_table(adev->handle);
- 
- 	int34x_thermal_zone->zone = thermal_zone_device_register_with_trips(
- 						acpi_device_bid(adev),
 
 
+On 30.01.2023 19:36, Luca Weiss wrote:
+> On Montag, 30. Jänner 2023 19:30:04 CET Konrad Dybcio wrote:
+>> On 30.01.2023 19:20, luca@z3ntu.xyz wrote:
+>>> From: Craig Tatlor <ctatlor97@gmail.com>
+>>>
+>>> The qfprom actually starts at 0xfc4b8000 instead of 0xfc4bc000 as
+>>> defined previously. Adjust the tsens offsets accordingly.
+>>>
+>>> [luca@z3ntu.xyz: extract to standalone patch]
+>>>
+>>> Fixes: c59ffb519357 ("arm: dts: msm8974: Add thermal zones, tsens and
+>>> qfprom nodes") Signed-off-by: Craig Tatlor <ctatlor97@gmail.com>
+>>> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+>>> ---
+>>
+>> Isn't this a raw vs ecc-corrected values problem?
+> 
+> Not quite sure what you mean.
+The QFPROM is split into two parts: one where raw values
+are stored, and the other one where ECC-corrected copies
+of them reside. Usually it's at offset of 0x4000. We should
+generally be using the ECC-corrected ones, because.. well..
+they are ECC-corrected.. You may want to check if the
+fuse you're adding reads the same value at +0x4000.
 
+Konrad
+> 
+> The original intention behind this patch is to allow to use the pvs fuse at 
+> (now) 0xb0 which was inaccessible with the former definition.
+> 
+>     pvs: pvs@b0 {
+>         reg = <0xb0 0x8>;
+>     };
+> 
+> Regards
+> Luca
+> 
+>>
+>> Konrad
+>>
+>>>  arch/arm/boot/dts/qcom-msm8974.dtsi | 12 ++++++------
+>>>  1 file changed, 6 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi
+>>> b/arch/arm/boot/dts/qcom-msm8974.dtsi index 8d216a3c0851..922d235c6065
+>>> 100644
+>>> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
+>>> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+>>> @@ -1132,16 +1132,16 @@ restart@fc4ab000 {
+>>>
+>>>  			reg = <0xfc4ab000 0x4>;
+>>>  		
+>>>  		};
+>>>
+>>> -		qfprom: qfprom@fc4bc000 {
+>>> +		qfprom: qfprom@fc4b8000 {
+>>>
+>>>  			compatible = "qcom,msm8974-qfprom", 
+> "qcom,qfprom";
+>>>
+>>> -			reg = <0xfc4bc000 0x1000>;
+>>> +			reg = <0xfc4b8000 0x7000>;
+>>>
+>>>  			#address-cells = <1>;
+>>>  			#size-cells = <1>;
+>>>
+>>> -			tsens_calib: calib@d0 {
+>>> -				reg = <0xd0 0x18>;
+>>> +			tsens_calib: calib@40d0 {
+>>> +				reg = <0x40d0 0x18>;
+>>>
+>>>  			};
+>>>
+>>> -			tsens_backup: backup@440 {
+>>> -				reg = <0x440 0x10>;
+>>> +			tsens_backup: backup@4440 {
+>>> +				reg = <0x4440 0x10>;
+>>>
+>>>  			};
+>>>  		
+>>>  		};
+>>>
+>>> ---
+>>> base-commit: 6d796c50f84ca79f1722bb131799e5a5710c4700
+>>> change-id: 20230130-msm8974-qfprom-619c0e8f26eb
+>>>
+>>> Best regards,
+> 
+> 
+> 
+> 
