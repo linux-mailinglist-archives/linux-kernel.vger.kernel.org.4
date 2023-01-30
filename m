@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD1268048A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2238F68049B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjA3D7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 22:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S235354AbjA3EAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjA3D7t (ORCPT
+        with ESMTP id S234930AbjA3EAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 22:59:49 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9AE241EA
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 19:59:22 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U35CdC008228;
-        Mon, 30 Jan 2023 03:59:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=TE8ds2RYF8W+18i7g6Iedlx3bXoIktMKdH7PSgyNdvc=;
- b=Dp7CxUc/Wa9BYjp4cYKX70WZ+5P2PuYSAXTzPd4YLdUDRtZ8yOHfrtYujKuwEWSthnzm
- h22fE8HP510B/Xwz6aDaCN7tOBgWAhlYnpW9siwU990Ooq+y+Ef1bM5pLTbGm+gRnE3X
- HpxjwFuzpn8LURhRsfj5D1QCfDq5gWeHVS291FiNWwxTDhWZ4t8i9kFX9l89hroP+9M7
- ZEhQy42OV4g/pEl3L4pTNVp6U/eB9NFqoR2iTqWGoyMPNg75QJY6c9dnqEHIuT9xpI3t
- BujlbkoZz9dXx24KKjGdD1jQSM16JzARfU6NYCwqY+n3XcvU1aTb1tQyChBkFhW3ynjJ 6Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncuxajnvm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 03:59:13 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30U3xCQ5012760
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 03:59:12 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Sun, 29 Jan 2023 19:59:12 -0800
-Date:   Sun, 29 Jan 2023 19:59:10 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     <broonie@kernel.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] regulator: max20411: Directly include bitfield.h
-Message-ID: <20230130035910.GC464800@hu-bjorande-lv.qualcomm.com>
-References: <20230126225403.522121-1-broonie@kernel.org>
+        Sun, 29 Jan 2023 23:00:03 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49991448D;
+        Sun, 29 Jan 2023 19:59:49 -0800 (PST)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1675051187;
+        bh=iX47upW85gfJMHXCNpRtaH9985qjJ/jS5RtXWPSoIgg=;
+        h=From:Subject:Date:To:Cc:From;
+        b=URXQEDOMQ30evZignf53zq4fcP+gjLYiP8q4WOrWjvftKlFLN5pDksPfGwtSfKYfj
+         7GWr6NC6zgSyblLQuOIz5ROb9kgxN5qjcg/vtbb8/nGH4iqPDPmGC6k7CazHH/9ZSm
+         P7AyjEgkp8JEVtwfP3uF4ruicpBanmnISCxFI87I=
+Subject: [PATCH 0/9] HID: Constify lowlevel HID drivers
+Date:   Mon, 30 Jan 2023 03:59:36 +0000
+Message-Id: <20230130-hid-const-ll-driver-v1-0-3fc282b3b1d0@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230126225403.522121-1-broonie@kernel.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: IzTGTy8zI5_i_YXRzBd6IsoGGmCm6_S9
-X-Proofpoint-GUID: IzTGTy8zI5_i_YXRzBd6IsoGGmCm6_S9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_01,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- malwarescore=0 bulkscore=0 clxscore=1015 priorityscore=1501 adultscore=0
- lowpriorityscore=0 mlxlogscore=642 impostorscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301300037
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKhA12MC/x2NQQoCMQwAv7LkbKDdXsSviIe2SW2gZCXRRVj27
+ xaPMzDMAc4m7HBbDjDexWXTCfGyQO1Zn4xCk2ENawoxBexCWDf1N46BZLKzYauNKOUWY7nCLEt
+ 2xmJZa5+tfsaY8mXc5Ptf3R/n+QNb+Cy3egAAAA==
+To:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675051184; l=1428;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=iX47upW85gfJMHXCNpRtaH9985qjJ/jS5RtXWPSoIgg=;
+ b=wUViSb0tGQR60ua/5uXJ4ubJuesnlmDI25uiARSVmgdEPgnthqmmTYYrXBbv5el7sWYGYDodKxYP
+ cdNZVeuGB1p0HWiMJ6mcEVfNyvmNoYYYAXwfHnGmb5Jg7ff6SGQI
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 10:54:03PM +0000, broonie@kernel.org wrote:
-> From: Mark Brown <broonie@kernel.org>
-> 
-> The max20411 driver uses bitfield.h but does not directly include
-> it, add an inclusion to avoid build errors in configurations
-> which do not result in an implicit inclusion.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+Since 52d225346904 ("HID: Make lowlevel driver structs const") the
+lowlevel HID drivers are only exposed as const.
 
-Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Take advantage of this to constify the underlying structures, too.
 
-> ---
->  drivers/regulator/max20411-regulator.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/regulator/max20411-regulator.c b/drivers/regulator/max20411-regulator.c
-> index 69f04cbe69f1..b4faad54c458 100644
-> --- a/drivers/regulator/max20411-regulator.c
-> +++ b/drivers/regulator/max20411-regulator.c
-> @@ -4,6 +4,7 @@
->   * Copyright (c) 2022, Linaro Ltd.
->   */
->  
-> +#include <linux/bitfield.h>
->  #include <linux/gpio/consumer.h>
->  #include <linux/i2c.h>
->  #include <linux/module.h>
-> -- 
-> 2.34.1
-> 
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (9):
+      HID: amd_sfh: Constify lowlevel HID driver
+      HID: hyperv: Constify lowlevel HID driver
+      HID: logitech-dj: Constify lowlevel HID driver
+      HID: steam: Constify lowlevel HID driver
+      HID: intel-ish-hid: Constify lowlevel HID driver
+      HID: surface-hid: Constify lowlevel HID driver
+      platform/x86: asus-tf103c-dock: Constify lowlevel HID driver
+      platform/x86: asus-tf103c-dock: Constify toprow keymap
+      staging: greybus: hid: Constify lowlevel HID driver
+
+ drivers/hid/amd-sfh-hid/amd_sfh_hid.c      | 2 +-
+ drivers/hid/hid-hyperv.c                   | 2 +-
+ drivers/hid/hid-logitech-dj.c              | 4 ++--
+ drivers/hid/hid-steam.c                    | 2 +-
+ drivers/hid/intel-ish-hid/ishtp-hid.c      | 2 +-
+ drivers/hid/surface-hid/surface_hid_core.c | 2 +-
+ drivers/platform/x86/asus-tf103c-dock.c    | 4 ++--
+ drivers/staging/greybus/hid.c              | 2 +-
+ 8 files changed, 10 insertions(+), 10 deletions(-)
+---
+base-commit: e04955db6a7c3fc4a1e6978649b61a6f5f8028e3
+change-id: 20230130-hid-const-ll-driver-fcfdd3af11b8
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
