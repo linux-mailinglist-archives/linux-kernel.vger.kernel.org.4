@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDBE681F81
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFEB681F87
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjA3XT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
+        id S230072AbjA3XUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjA3XTv (ORCPT
+        with ESMTP id S230255AbjA3XUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:19:51 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F9E144A9
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:19:50 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id l128so1114524iof.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:19:50 -0800 (PST)
+        Mon, 30 Jan 2023 18:20:34 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE10C144A9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:20:33 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id q6so2383171ior.12
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:20:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XMcPwu5SiIWveNVrDQNoDl9A6srhkjO0Si1Imvta0bU=;
-        b=DuJ+v8ysOfolKNGr0VRytffDtQzmOKicJIouxufYi9tJAulc15ID9MwKQqhJJR6lbK
-         iARF5XTCP4B1vER/x7UztGYvII1vYhmAl9h6lGKxAIo9o6eNv4eaqXgiM0Zbn9nONVQo
-         +64DGx4VISVvfzcruo5/6HzYukXQ/yMcXLNMs=
+        bh=QoWJBPlhONEo27DBkPSJxofFyjuxznuCdFDDNuIYoVA=;
+        b=K2eGncq5rm8WUagXiXHcL9i2X7JWgHlub+RvFMn2ALoI6HP73WLm4haHMRafCzbO47
+         l8ZDxzZNsqqGXbKsbCv086D1hGfCqwp3KZk+8L6vbQpDcvRsYyQeq7kYsHZM6tzNFXtm
+         7rRCtxdMr9qwRUHVQEUl0K7MGB20Ad6/mrGIg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XMcPwu5SiIWveNVrDQNoDl9A6srhkjO0Si1Imvta0bU=;
-        b=DFbuhonXepWH1218DqvoQQZGRcas5Aqf2sBsoJl1/Cb0VHKU6qeh+VUiboKMHfBpRe
-         G06gFk4KynQBoKFDqgo/DwqFNa8Xqm50D+HQrsCz/9DpBCz9aQfdDenh8qZPNZLrfpmU
-         dby9vPanTcqMZFl/NEWQeOgWT0WBKgKp6gx+kyLVTLFVfXFVfnPKL/e201en0h7WfINV
-         bOtKajIhu0gajiMWT56UYl5qUSsaakHA28Mfjx2Et8emA1IATCPE24Q3liJWPcwwDo0j
-         B50klT4DiAoTeQqYykxGuIKr6DddIIlNOjNKiq2cAQk7tui1qYfBw6xJ7lb5JjLvzs7v
-         2Ieg==
-X-Gm-Message-State: AO0yUKU4ZUOIyJkjRmGNdiOjH/IuIrGXNYDYD8sm0/1zYWaDXKH7v/b2
-        Z6nnsGZtEeqNv4QOXTE/qGMfig==
-X-Google-Smtp-Source: AK7set+xCMfnO8UwnHAL2ENPa+W72PezgD9lGzCIj1F5JbYGEO0ibR/3BTrwW2TjhD4lteSSurk4OQ==
-X-Received: by 2002:a5e:a50f:0:b0:71d:63e5:7b5f with SMTP id 15-20020a5ea50f000000b0071d63e57b5fmr923535iog.2.1675120790010;
-        Mon, 30 Jan 2023 15:19:50 -0800 (PST)
+        bh=QoWJBPlhONEo27DBkPSJxofFyjuxznuCdFDDNuIYoVA=;
+        b=fhlxiIPJAXGOHYgAcioSMpwdX+iNedjOz1CXOf1nRs8sbKLwzq/KOPQ+uUrYji2vbS
+         V4lyhUDgeC9A8fKb3Z1QQZhv19/7o7fcZeJnt+exS/nWe+X4lzgVpG85Tvn0Q5tNQAR5
+         QKl9Kc3jl+bSwe3eB+s5kImjACrObhpCwpOQ2h2M/lzrrmN5HOI00hBzOc6DV4Ga3JzI
+         YdcYkbfjgZRTrBioSL1Q5l9Tipvm0GjFP9YRWbqDEWHMRlJUyngi+5G3kOz9nZoPSMUm
+         7KCUGtQFvdq8UXaJbkU/t2eKhH6euvoNFaDDS7bzX3DLqI/dnvEMoF59z0gEnPX9RFry
+         zu4A==
+X-Gm-Message-State: AFqh2koeVoFtgF27siBfTIxlIW4Ez+iYwNiwg58qlmOFsViGEXCBSxHc
+        xAp7RyycByeeZ7FYqhyunyU+Ww==
+X-Google-Smtp-Source: AMrXdXvQAGzB2SQuB2Udtkj3pF9mBQbBcfaP1Vnr1bkh3W45zfQsX2tCVAfrJZPxB33Uhs1zcGLKvA==
+X-Received: by 2002:a05:6602:341a:b0:704:d91f:9932 with SMTP id n26-20020a056602341a00b00704d91f9932mr8807276ioz.0.1675120833103;
+        Mon, 30 Jan 2023 15:20:33 -0800 (PST)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m8-20020a5d9688000000b0071b08c66155sm1817068ion.38.2023.01.30.15.19.48
+        by smtp.gmail.com with ESMTPSA id h13-20020a056638062d00b003a970f21f9asm4210310jar.78.2023.01.30.15.20.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 15:19:49 -0800 (PST)
-Message-ID: <d532dc0c-4a5d-986e-19d4-1c90071d2cdb@linuxfoundation.org>
-Date:   Mon, 30 Jan 2023 16:19:48 -0700
+        Mon, 30 Jan 2023 15:20:32 -0800 (PST)
+Message-ID: <68594f1d-25e3-4eab-98cb-8691d01719c7@linuxfoundation.org>
+Date:   Mon, 30 Jan 2023 16:20:31 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
 Subject: Re: [PATCH v2] docs: add workload-tracing document to admin-guide
 Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, corbet@lwn.net
+To:     Randy Dunlap <rdunlap@infradead.org>, corbet@lwn.net
 Cc:     sshefali021@gmail.com, kstewart@linuxfoundation.org,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <skhan@linuxfoundation.org>
 References: <20230127234616.55137-1-skhan@linuxfoundation.org>
- <Y9STCwt2FnYf4/X4@debian.me>
+ <25089707-b037-4cce-367b-819ddd239b17@infradead.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <Y9STCwt2FnYf4/X4@debian.me>
+In-Reply-To: <25089707-b037-4cce-367b-819ddd239b17@infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -74,31 +74,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 20:14, Bagas Sanjaya wrote:
-> On Fri, Jan 27, 2023 at 04:46:16PM -0700, Shuah Khan wrote:
->> +strace tool can be used to trace system calls made by a process and signals
->> +it receives. a process to the perf, stress-ng, paxtest workloads. System
+On 1/27/23 22:40, Randy Dunlap wrote:
+> Hi--
 > 
-> "... to trace system calls made by a process (which can be perf, stress-ng,
-> paxtest workloads, or neither)."
-> 
->> +Before we can get started we will have to get our system ready. We assume
-> 
-> "Before we can get started the system must be prepared first."
-> 
->> +Browsing kernel sources ::
-> 
-> "To browse kernel sources, you will need:"
-> 
->> +Workload overview
->> +=================
->> +
->> +We used strace to trace perf bench, stress-ng and paxtest workloads to
-> 
-> "In this section, we use strace to trace ..."
+> On 1/27/23 15:46, Shuah Khan wrote:
+>> Add a new section to the admin-guide with information of interest to
+>> application developers and system integrators doing analysis of the
+>> Linux kernel for safety critical applications.
+>>
+>> This section will contain documents supporting analysis of kernel
+>> interactions with applications, and key kernel subsystems expectations.
+>>
+>> Add a new workload-tracing document to this new section.
+>>
+>> Signed-off-by: Shefali Sharma <sshefali021@gmail.com>
+>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>> ---
+>> Changes since v1:
+>> - Addressed review comments on v1 on long lines, rst syntax, license
+>>
+>>   Documentation/admin-guide/index.rst           |  11 +
+>>   .../admin-guide/workload-tracing.rst          | 591 ++++++++++++++++++
+>>   2 files changed, 602 insertions(+)
+>>   create mode 100644 Documentation/admin-guide/workload-tracing.rst
+>>
 > 
 
-Thank you for the review. I will address them in v3.
+Thank you for the review. I will send v3 to address them.
 
 thanks,
 -- Shuah
