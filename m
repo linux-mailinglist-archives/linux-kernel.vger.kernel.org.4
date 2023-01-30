@@ -2,115 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2536C6816F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4332D681703
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237792AbjA3QwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
+        id S236292AbjA3Qy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236704AbjA3QwE (ORCPT
+        with ESMTP id S229728AbjA3Qyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:52:04 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2610C3D92D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:52:03 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id w13so1276225ilv.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:52:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H5RCrcNjRn0IHRfMfm1ZofUiFxm+I7DHJWe0ZUOClTY=;
-        b=Gss3kq48HUmg1lFEIIGPE+n74X2HZ8Qn6l4VCT1b1vA/Xq70VoFL5kb1aa+8bYPp5e
-         8bo1zqDYhO+KO9u2V+8CXQoQWPagVQHzWr/owccHj5SX4UoFehliDsPVk2aNETFcCLzE
-         YqkztDfGbWS2AweNQuuidJNKeHuf3fyPExL2g=
+        Mon, 30 Jan 2023 11:54:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EA33D0A4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:54:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675097642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kkgm+GawpEMj0/b8bomXaQOPdUfNkg30jmt/yNSamL8=;
+        b=gxfCEfelJYttzTDwKYcr9oLndeowUI3Nyy6eHe0dR7dZGMRNi5Ld5QyP5rZwxaxwAwpEzH
+        +yWm/t4+V25oPzsfN0b2QrWYjKIQ+miYsig96xbXGhxqhp1iEaDuXEI4cm4YCnbDcLgL+8
+        60VjfVTgNOuD7bMu5LwygHXp/izuk1E=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-74-gBqYfPvaPYWf0LOucDsunA-1; Mon, 30 Jan 2023 11:53:55 -0500
+X-MC-Unique: gBqYfPvaPYWf0LOucDsunA-1
+Received: by mail-wm1-f72.google.com with SMTP id l5-20020a1ced05000000b003db300f2e1cso4630856wmh.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:53:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H5RCrcNjRn0IHRfMfm1ZofUiFxm+I7DHJWe0ZUOClTY=;
-        b=k2IwTmH01Me4YWvTi8rRoXtRAw9mVMY8KyTX3yxM3xhaN5/4NkWztENzBtT5UEfBhA
-         9UOqCX/YJdtgZkjE8imSICye0IFFxwzDzY52LGXyHslzKqO3PYppmFhkMS6XdLsPyAZE
-         VgpyhExI2zWOGdSMJzPq9soKGWG/TKOhUBRiEniwf9wwmVr531x/ogUGj9Dp3IVip+Ck
-         Uo2y4z31SMI6aaiiaTUWMCymaBkCouNfmsZ6UEyF+U9PSu3PZyRvIHKiIkI/D/W81I35
-         sA/olwuxh49FiSJHhJUpRK45Tal2a1Nl10aGlLnVIr4ddJx8o+g5AesQ+ONyXZPShl1u
-         egDw==
-X-Gm-Message-State: AFqh2krZEtQ/uTTttpIL0lGZ3ImKP6V9+21uWmbvE2yW8YH9+Zyg+vRF
-        lwgg6c+d2R55BFJs1GuaXzAV13X8ZUnkm3w4
-X-Google-Smtp-Source: AMrXdXtIme1NJywHulBEJer3W+W3TG6mt5R9QJ9SD81kV6tJ0FkgbffaOPaqyVBHA80kVHjwcrlY6Q==
-X-Received: by 2002:a92:6e11:0:b0:304:c683:3c8a with SMTP id j17-20020a926e11000000b00304c6833c8amr7062908ilc.3.1675097522508;
-        Mon, 30 Jan 2023 08:52:02 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p3-20020a92d283000000b0030efa122291sm4185286ilp.56.2023.01.30.08.52.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 08:52:01 -0800 (PST)
-Message-ID: <e65bb0dd-fb9b-68e0-3a4f-4cc71ce3f886@linuxfoundation.org>
-Date:   Mon, 30 Jan 2023 09:52:01 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kkgm+GawpEMj0/b8bomXaQOPdUfNkg30jmt/yNSamL8=;
+        b=ZjJfq3od+aIN1SZrFJytLWG7H0sOgicyimDbEP0fnpYvJ3NKuzIroPWii/Tmh7VXCD
+         EQRIQaTnlTqrdGB7rw5JZsi9YtXJI7eiWsqdMFEj9xW3Dd4epkomhI8RJWfpZPLzhpRC
+         HDGUysVjzMpTIUSrsbdPN924YwoA71zo2OyRWshX9hUCZ6lvBbIbC8SybfeapPWCYUnY
+         1iQEjZ28U7VDZdJs3yUAbQo3hlCVnw4efwiPvIhyBqFs9uKC9t5lOzMic8YLzKXVNfjB
+         RJb+0GC2F98KcCWf+RalhwrDB6xgNKK9y3Zma5cER+V7JvUjhJlYMPvduJ9O44jfwbc5
+         YZYw==
+X-Gm-Message-State: AFqh2krzppWkv7ZIQKxU0oydUP5/4i/R+NGsKkfwf47lUYG9awSL2hF/
+        qZn0fmZVTSlOjhCPWipcwSYc1UUzxwR2xojt/rf3d8HddEX/tPnks2OEZaIm6aBUXlXwzwv+t1z
+        by/Qt4BfJzTDzRKTzUzO4F6g6
+X-Received: by 2002:a05:600c:3586:b0:3da:fb3c:c1ab with SMTP id p6-20020a05600c358600b003dafb3cc1abmr48909708wmq.0.1675097634459;
+        Mon, 30 Jan 2023 08:53:54 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtAfoRcm7NT4ZYC0o5cofJixnO/hgW2tQbP0lBvYL7zDDtE7psgWTMQUvqDIedKwjr+ouHdog==
+X-Received: by 2002:a05:600c:3586:b0:3da:fb3c:c1ab with SMTP id p6-20020a05600c358600b003dafb3cc1abmr48909693wmq.0.1675097634291;
+        Mon, 30 Jan 2023 08:53:54 -0800 (PST)
+Received: from p1.. ([77.75.244.146])
+        by smtp.gmail.com with ESMTPSA id n20-20020a05600c465400b003dc43a10fa5sm8677422wmo.13.2023.01.30.08.53.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 08:53:53 -0800 (PST)
+From:   Eric Curtin <ecurtin@redhat.com>
+To:     asahi@lists.linux.dev
+Cc:     Eric Curtin <ecurtin@redhat.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/APPLE MACHINE
+        SUPPORT), iommu@lists.linux.dev (open list:IOMMU SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] iommu: dart: DART_T8110_ERROR range should be 0 to 5
+Date:   Mon, 30 Jan 2023 16:53:50 +0000
+Message-Id: <20230130165350.58533-1-ecurtin@redhat.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 25/34] selftests: seccomp: Fix incorrect kernel headers
- search path
-Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
- <20230127135755.79929-26-mathieu.desnoyers@efficios.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230127135755.79929-26-mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/27/23 06:57, Mathieu Desnoyers wrote:
-> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
-> building against kernel headers from the build environment in scenarios
-> where kernel headers are installed into a specific output directory
-> (O=...).
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: <stable@vger.kernel.org>    [5.18+]
-> ---
->   tools/testing/selftests/seccomp/Makefile | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
-> index f017c382c036..584fba487037 100644
-> --- a/tools/testing/selftests/seccomp/Makefile
-> +++ b/tools/testing/selftests/seccomp/Makefile
-> @@ -1,5 +1,5 @@
->   # SPDX-License-Identifier: GPL-2.0
-> -CFLAGS += -Wl,-no-as-needed -Wall -isystem ../../../../usr/include/
-> +CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
->   LDFLAGS += -lpthread
->   LDLIBS += -lcap
->   
+This was detected by smatch as one "else if" statement could never be
+reached. Confirmed bit order by comparing with python implementation [1].
 
-Now the right one.
+drivers/iommu/apple-dart.c:991 apple_dart_t8110_irq()
+warn: duplicate check 'error_code == ((((1))) << (3))'
+  (previous on line 989)
 
-Kees,
+Link: https://github.com/AsahiLinux/m1n1/commit/96b2d584feec1e3f7bfa [1]
 
-I plan to take this through kselftest unless there are conflicts.
-In case there are conflicts and you want to take this through yours
+Fixes: d8bcc870d99d ("iommu: dart: Add t8110 DART support")
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Eric Curtin <ecurtin@redhat.com>
+---
+ drivers/iommu/apple-dart.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+index efe877842f72..3adacf4094d7 100644
+--- a/drivers/iommu/apple-dart.c
++++ b/drivers/iommu/apple-dart.c
+@@ -112,15 +112,15 @@
+ 
+ #define DART_T8110_ERROR_MASK 0x104
+ 
+-#define DART_T8110_ERROR_READ_FAULT BIT(4)
+-#define DART_T8110_ERROR_WRITE_FAULT BIT(3)
++#define DART_T8110_ERROR_READ_FAULT BIT(5)
++#define DART_T8110_ERROR_WRITE_FAULT BIT(4)
+ #define DART_T8110_ERROR_NO_PTE BIT(3)
+ #define DART_T8110_ERROR_NO_PMD BIT(2)
+ #define DART_T8110_ERROR_NO_PGD BIT(1)
+ #define DART_T8110_ERROR_NO_TTBR BIT(0)
+ 
+ #define DART_T8110_ERROR_ADDR_LO 0x170
+-#define DART_T8110_ERROR_ADDR_HI 0x174
++#define DART_T8110_ERROR_ADDR_HI 0x175
+ 
+ #define DART_T8110_PROTECT 0x200
+ #define DART_T8110_UNPROTECT 0x204
+-- 
+2.39.1
 
-thanks,
--- Shuah
