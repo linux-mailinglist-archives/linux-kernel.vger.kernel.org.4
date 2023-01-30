@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9066818CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B760C6818D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:24:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238073AbjA3SX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
+        id S236368AbjA3SYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:24:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbjA3SXi (ORCPT
+        with ESMTP id S236653AbjA3SXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:23:38 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E751555A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:23:03 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id b10so11890389pjo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:23:03 -0800 (PST)
+        Mon, 30 Jan 2023 13:23:41 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D11029433
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:23:08 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id nn18-20020a17090b38d200b0022bfb584987so11964361pjb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:23:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pahRB1MQHdCryYbha4Boa/nOVNVdk2R7FujvNvjh3AA=;
-        b=MhntFhnnMEzAvogxVHxPm1ax6jj4kTjw7Mv8WB8wpdq0EadJKSqRi+JWbLAiaBWgHE
-         nmaNa5u6uSit/eEY4w0SO2GUfD++fOi8VH0Oc2EDk7WJc6Nv3YvcqtRgWVKM9VLpB9Nj
-         mSus2Rkr0kylLFTxhIksaWe7VgnvSSJv88L1F4hGUKgoXdWYzedJcox0eXrjSFQuC578
-         q+NqUdyarrhti8297ImRLl8MTLG2XUgqGw1CZzRhwV+/TYsemNH1KO6mXMqSDmcPQLhS
-         imY6dqAFs3Qwc6osGZ3o9vmVG6PFdVLuow4jDWQBu9Ww6spn8DK4hw+KoSK6FAVU944N
-         dSVQ==
+        bh=ez9zOMlap25JS09j6G2VSm957wPlmGGDqcc/YOqCD/M=;
+        b=ZALYsSd6QGZRuTtO53OYR7dsp9VVOw/W/YNYZ9/vVpK3xUlcx/wL651WUsOjDp9t7/
+         WwA7Cv9udLCB6QweFEHYqFxxXznTkUUVYOPxtnUXVHNn2KMirZ7uFyDqj1LJ4zFgjvi+
+         fLS+1TAT6YQG0vQo/kdBhwE5haBA8y/K+49TFsBnd5cfI+tlhBXXEZ9rRRXPpQIiqDCV
+         W+4FpfdUqZyfoBklcJDVXTxZHlupNdKZOqtb1VvKGrvNySMlWdR+xWmUslkHuxTikP13
+         2S9NebTlIk+0VjZ5RTL2EpZZQ33E5/sD3TJXbejwgpmb00P/iX3S1LwGxM0dJOxRha3B
+         FGgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pahRB1MQHdCryYbha4Boa/nOVNVdk2R7FujvNvjh3AA=;
-        b=1VQ+7o2DJlqL3Fwd9+YA8+0GvRlvUcSco4pa9n80p14QOlcQx1K6YSBV0oKbHIXOWD
-         EzGmlAUUWSnpmp9UVpMvSRtnNStCs67UBFLhdxoH6ya/vReUwK0pTVe9nfCBaeVqlD/q
-         gDjAbxRPOuIVHFhopygYrdKyOaXqvE+5ay6LXi+Mbsd8H19QQjv5IQ6db71c6mGHVyDZ
-         /S5BrQq4texouLssM66IkKZMHA0NPRwTxnIrblMQa8FeNzc1X7WS9ickF6UeS9K7ZS6v
-         jVla5cFdDE502Y33fe+qcQC/Z1EMgUuIGkgoatjlvRgxa/z2hVmKJRkLzMBTSpl3liE4
-         GsKg==
-X-Gm-Message-State: AFqh2kroNHJrudkzj522IAzNFz2BD5xP0vU/847xZZp9x4oCSHaeSyRG
-        LZ7sGkMoaU8m5y35RBDKcD3Npg==
-X-Google-Smtp-Source: AMrXdXtWe6SJ3kB3Dyaj6wRK9SbGThF/dnr0Ny0A90SETwEQypf8SaWiy1gHIn9GRTTcFlgmkbamBA==
-X-Received: by 2002:a05:6a21:3987:b0:af:be2a:208f with SMTP id ad7-20020a056a21398700b000afbe2a208fmr53223873pzc.33.1675102977093;
-        Mon, 30 Jan 2023 10:22:57 -0800 (PST)
+        bh=ez9zOMlap25JS09j6G2VSm957wPlmGGDqcc/YOqCD/M=;
+        b=bFleF/HinDZb/3oezxtJqFcRKVT+Odh7UG7nqOXlppFyof8HVI7SqjADu05UcNlvNy
+         zHd/fCERKtpo72lMI2xAjEYZIscwthEgH6WG+okQbJVe6Eu+KFdmfq4+B++VAolXLnbz
+         Szu9CvCv3G0nTiZlOOsRhkof2Z+XxoTuDEa7bekqPLdeO6Ziu9DG1U9p7EyoIyOgdzzC
+         8lzXnPd+hV6djTWfNEB3ugj2c8u3D+kHyDm/K9/d/ZpSwhuZuVVhV0zLlckXKMl6gtP4
+         /tZLeIkq0+kgXZPPo4vPtBrn1tO5GFgxqork59FMP6PMY8HaT9BRcLm7Jc7muk/cneRU
+         m+AQ==
+X-Gm-Message-State: AO0yUKXxrVTmejcr4DWTM9LjBNHhBmGjleNP+3D91GXgqAowYehRKD8q
+        4n2bYp3+LqtK0EevJgImcTLZAA==
+X-Google-Smtp-Source: AK7set+hs3F+v3tOHd/3gMihfw9zgIr4f+ZWLQ0nZzTPXFNry0CAa3JQqlMOykw+1FPSzHeMdZ3O/Q==
+X-Received: by 2002:a17:90b:3148:b0:22c:9a54:fea with SMTP id ip8-20020a17090b314800b0022c9a540feamr5483511pjb.48.1675102981886;
+        Mon, 30 Jan 2023 10:23:01 -0800 (PST)
 Received: from kerodipc.Dlink ([49.206.9.96])
-        by smtp.gmail.com with ESMTPSA id j193-20020a638bca000000b00478162d9923sm7000291pge.13.2023.01.30.10.22.52
+        by smtp.gmail.com with ESMTPSA id j193-20020a638bca000000b00478162d9923sm7000291pge.13.2023.01.30.10.22.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 10:22:56 -0800 (PST)
+        Mon, 30 Jan 2023 10:23:01 -0800 (PST)
 From:   Sunil V L <sunilvl@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -65,9 +65,9 @@ Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
         Andrew Jones <ajones@ventanamicro.com>,
         Atish Patra <atishp@rivosinc.com>,
         Sunil V L <sunilvl@ventanamicro.com>
-Subject: [PATCH 05/24] RISC-V: ACPI: Add basic functions to build ACPI core
-Date:   Mon, 30 Jan 2023 23:52:06 +0530
-Message-Id: <20230130182225.2471414-6-sunilvl@ventanamicro.com>
+Subject: [PATCH 06/24] RISC-V: ACPI: Add PCI functions to build ACPI core
+Date:   Mon, 30 Jan 2023 23:52:07 +0530
+Message-Id: <20230130182225.2471414-7-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
 References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
@@ -83,285 +83,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce acpi.c and its related header files to provide
-fundamental needs of extern variables and functions for ACPI core.
-	- asm/acpi.h for arch specific variables and functions needed by
-	  ACPI driver core;
-	- acpi.c - Add function to initialize ACPI tables.
-	- acpi.c for RISC-V related ACPI implementation for ACPI driver
-	  core;
-
-Code is mostly leveraged from ARM64.
+When CONFIG_PCI is enabled, ACPI core expects few arch
+functions related to PCI. Add those functions so that
+ACPI core gets build. These are levraged from arm64.
 
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 ---
- arch/riscv/include/asm/acpi.h |  60 ++++++++++++
- arch/riscv/kernel/Makefile    |   2 +
- arch/riscv/kernel/acpi.c      | 178 ++++++++++++++++++++++++++++++++++
- 3 files changed, 240 insertions(+)
- create mode 100644 arch/riscv/include/asm/acpi.h
- create mode 100644 arch/riscv/kernel/acpi.c
+ arch/riscv/kernel/Makefile |   1 +
+ arch/riscv/kernel/pci.c    | 173 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 174 insertions(+)
+ create mode 100644 arch/riscv/kernel/pci.c
 
-diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
-new file mode 100644
-index 000000000000..8b9babaf3f25
---- /dev/null
-+++ b/arch/riscv/include/asm/acpi.h
-@@ -0,0 +1,60 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ *  Copyright (C) 2013-2014, Linaro Ltd.
-+ *	Author: Al Stone <al.stone@linaro.org>
-+ *	Author: Graeme Gregory <graeme.gregory@linaro.org>
-+ *	Author: Hanjun Guo <hanjun.guo@linaro.org>
-+ *
-+ *  Copyright (C) 2021-2023, Ventana Micro Systems Inc.
-+ *	Author: Sunil V L <sunilvl@ventanamicro.com>
-+ */
-+
-+#ifndef _ASM_ACPI_H
-+#define _ASM_ACPI_H
-+
-+/* Basic configuration for ACPI */
-+#ifdef CONFIG_ACPI
-+
-+/* ACPI table mapping after acpi_permanent_mmap is set */
-+void *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
-+#define acpi_os_ioremap acpi_os_ioremap
-+
-+#define acpi_strict 1   /* No out-of-spec workarounds on RISC-V */
-+extern int acpi_disabled;
-+extern int acpi_noirq;
-+extern int acpi_pci_disabled;
-+static inline void disable_acpi(void)
-+{
-+	acpi_disabled = 1;
-+	acpi_pci_disabled = 1;
-+	acpi_noirq = 1;
-+}
-+
-+static inline void enable_acpi(void)
-+{
-+	acpi_disabled = 0;
-+	acpi_pci_disabled = 0;
-+	acpi_noirq = 0;
-+}
-+
-+/*
-+ * The ACPI processor driver for ACPI core code needs this macro
-+ * to find out this cpu was already mapped (mapping from CPU hardware
-+ * ID to CPU logical ID) or not.
-+ */
-+#define cpu_physical_id(cpu) cpuid_to_hartid_map(cpu)
-+
-+/*
-+ * It's used from ACPI core in kdump to boot UP system with SMP kernel.
-+ * Since MADT must provide at least one IMSIC structure for AIA
-+ * initialization, CPU will be always available in MADT on RISC-V.
-+ */
-+static inline bool acpi_has_cpu_in_madt(void)
-+{
-+	return true;
-+}
-+
-+static inline void arch_fix_phys_package_id(int num, u32 slot) { }
-+#endif
-+
-+#endif /*_ASM_ACPI_H*/
 diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 67f542be1bea..f979dc8cf47d 100644
+index f979dc8cf47d..e9d37639751d 100644
 --- a/arch/riscv/kernel/Makefile
 +++ b/arch/riscv/kernel/Makefile
-@@ -90,3 +90,5 @@ obj-$(CONFIG_EFI)		+= efi.o
- obj-$(CONFIG_COMPAT)		+= compat_syscall_table.o
- obj-$(CONFIG_COMPAT)		+= compat_signal.o
+@@ -92,3 +92,4 @@ obj-$(CONFIG_COMPAT)		+= compat_signal.o
  obj-$(CONFIG_COMPAT)		+= compat_vdso/
-+
-+obj-$(CONFIG_ACPI)              += acpi.o
-diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+ 
+ obj-$(CONFIG_ACPI)              += acpi.o
++obj-$(CONFIG_PCI)               += pci.o
+diff --git a/arch/riscv/kernel/pci.c b/arch/riscv/kernel/pci.c
 new file mode 100644
-index 000000000000..9c1aa57bf4f7
+index 000000000000..3388af3a67a0
 --- /dev/null
-+++ b/arch/riscv/kernel/acpi.c
-@@ -0,0 +1,178 @@
++++ b/arch/riscv/kernel/pci.c
+@@ -0,0 +1,173 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ *  RISC-V Specific Low-Level ACPI Boot Support
++ * Code borrowed from ARM64
 + *
-+ *  Copyright (C) 2013-2014, Linaro Ltd.
-+ *	Author: Al Stone <al.stone@linaro.org>
-+ *	Author: Graeme Gregory <graeme.gregory@linaro.org>
-+ *	Author: Hanjun Guo <hanjun.guo@linaro.org>
-+ *	Author: Tomasz Nowicki <tomasz.nowicki@linaro.org>
-+ *	Author: Naresh Bhat <naresh.bhat@linaro.org>
-+ *
-+ *  Copyright (C) 2021-2023, Ventana Micro Systems Inc.
-+ *	Author: Sunil V L <sunilvl@ventanamicro.com>
++ * Copyright (C) 2003 Anton Blanchard <anton@au.ibm.com>, IBM
++ * Copyright (C) 2014 ARM Ltd.
++ * Copyright (C) 2022-2023 Ventana Micro System Inc.
 + */
 +
 +#include <linux/acpi.h>
-+#include <linux/efi.h>
-+#include <linux/efi-bgrt.h>
++#include <linux/init.h>
 +#include <linux/io.h>
-+#include <linux/of_fdt.h>
-+#include <linux/serial_core.h>
++#include <linux/kernel.h>
++#include <linux/mm.h>
++#include <linux/pci.h>
++#include <linux/pci-acpi.h>
++#include <linux/pci-ecam.h>
 +
-+int acpi_noirq = 1;		/* skip ACPI IRQ initialization */
-+int acpi_disabled = 1;
-+EXPORT_SYMBOL(acpi_disabled);
-+
-+int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
-+EXPORT_SYMBOL(acpi_pci_disabled);
-+
-+static bool param_acpi_off __initdata;
-+static bool param_acpi_on __initdata;
-+static bool param_acpi_force __initdata;
-+
-+static int __init parse_acpi(char *arg)
-+{
-+	if (!arg)
-+		return -EINVAL;
-+
-+	/* "acpi=off" disables both ACPI table parsing and interpreter */
-+	if (strcmp(arg, "off") == 0)
-+		param_acpi_off = true;
-+	else if (strcmp(arg, "on") == 0) /* prefer ACPI over DT */
-+		param_acpi_on = true;
-+	else if (strcmp(arg, "force") == 0) /* force ACPI to be enabled */
-+		param_acpi_force = true;
-+	else
-+		return -EINVAL;	/* Core will print when we return error */
-+
-+	return 0;
-+}
-+early_param("acpi", parse_acpi);
++#ifdef CONFIG_ACPI
 +
 +/*
-+ * __acpi_map_table() will be called before page_init(), so early_ioremap()
-+ * or early_memremap() should be called here to for ACPI table mapping.
++ * raw_pci_read/write - Platform-specific PCI config space access.
 + */
-+void __init __iomem *__acpi_map_table(unsigned long phys, unsigned long size)
++int raw_pci_read(unsigned int domain, unsigned int bus,
++		  unsigned int devfn, int reg, int len, u32 *val)
 +{
-+	if (!size)
++	struct pci_bus *b = pci_find_bus(domain, bus);
++
++	if (!b)
++		return PCIBIOS_DEVICE_NOT_FOUND;
++	return b->ops->read(b, devfn, reg, len, val);
++}
++
++int raw_pci_write(unsigned int domain, unsigned int bus,
++		unsigned int devfn, int reg, int len, u32 val)
++{
++	struct pci_bus *b = pci_find_bus(domain, bus);
++
++	if (!b)
++		return PCIBIOS_DEVICE_NOT_FOUND;
++	return b->ops->write(b, devfn, reg, len, val);
++}
++
++
++struct acpi_pci_generic_root_info {
++	struct acpi_pci_root_info	common;
++	struct pci_config_window	*cfg;	/* config space mapping */
++};
++
++int acpi_pci_bus_find_domain_nr(struct pci_bus *bus)
++{
++	struct pci_config_window *cfg = bus->sysdata;
++	struct acpi_device *adev = to_acpi_device(cfg->parent);
++	struct acpi_pci_root *root = acpi_driver_data(adev);
++
++	return root->segment;
++}
++
++static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
++{
++	struct resource_entry *entry, *tmp;
++	int status;
++
++	status = acpi_pci_probe_root_resources(ci);
++	resource_list_for_each_entry_safe(entry, tmp, &ci->resources) {
++		if (!(entry->res->flags & IORESOURCE_WINDOW))
++			resource_list_destroy_entry(entry);
++	}
++	return status;
++}
++
++/*
++ * Lookup the bus range for the domain in MCFG, and set up config space
++ * mapping.
++ */
++static struct pci_config_window *
++pci_acpi_setup_ecam_mapping(struct acpi_pci_root *root)
++{
++	struct device *dev = &root->device->dev;
++	struct resource *bus_res = &root->secondary;
++	u16 seg = root->segment;
++	const struct pci_ecam_ops *ecam_ops;
++	struct resource cfgres;
++	struct acpi_device *adev;
++	struct pci_config_window *cfg;
++	int ret;
++
++	ret = pci_mcfg_lookup(root, &cfgres, &ecam_ops);
++	if (ret) {
++		dev_err(dev, "%04x:%pR ECAM region not found\n", seg, bus_res);
++		return NULL;
++	}
++
++	adev = acpi_resource_consumer(&cfgres);
++	if (adev)
++		dev_info(dev, "ECAM area %pR reserved by %s\n", &cfgres,
++			 dev_name(&adev->dev));
++	else
++		dev_warn(dev, FW_BUG "ECAM area %pR not reserved in ACPI namespace\n",
++			 &cfgres);
++
++	cfg = pci_ecam_create(dev, &cfgres, bus_res, ecam_ops);
++	if (IS_ERR(cfg)) {
++		dev_err(dev, "%04x:%pR error %ld mapping ECAM\n", seg, bus_res,
++			PTR_ERR(cfg));
++		return NULL;
++	}
++
++	return cfg;
++}
++
++/* release_info: free resources allocated by init_info */
++static void pci_acpi_generic_release_info(struct acpi_pci_root_info *ci)
++{
++	struct acpi_pci_generic_root_info *ri;
++
++	ri = container_of(ci, struct acpi_pci_generic_root_info, common);
++	pci_ecam_free(ri->cfg);
++	kfree(ci->ops);
++	kfree(ri);
++}
++
++
++/* Interface called from ACPI code to setup PCI host controller */
++struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root)
++{
++	struct acpi_pci_generic_root_info *ri;
++	struct pci_bus *bus, *child;
++	struct acpi_pci_root_ops *root_ops;
++	struct pci_host_bridge *host;
++
++	ri = kzalloc(sizeof(*ri), GFP_KERNEL);
++	if (!ri)
 +		return NULL;
 +
-+	return early_memremap(phys, size);
-+}
-+
-+void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
-+{
-+	if (!map || !size)
-+		return;
-+
-+	early_memunmap(map, size);
-+}
-+
-+void *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
-+{
-+	return memremap(phys, size, MEMREMAP_WB);
-+}
-+
-+/*
-+ * acpi_fadt_sanity_check() - Check FADT presence and carry out sanity
-+ *			      checks on it
-+ *
-+ * Return 0 on success,  <0 on failure
-+ */
-+static int __init acpi_fadt_sanity_check(void)
-+{
-+	struct acpi_table_header *table;
-+	struct acpi_table_fadt *fadt;
-+	acpi_status status;
-+	int ret = 0;
-+
-+	/*
-+	 * FADT is required on riscv; retrieve it to check its presence
-+	 * and carry out revision and ACPI HW reduced compliancy tests
-+	 */
-+	status = acpi_get_table(ACPI_SIG_FADT, 0, &table);
-+	if (ACPI_FAILURE(status)) {
-+		const char *msg = acpi_format_exception(status);
-+
-+		pr_err("Failed to get FADT table, %s\n", msg);
-+		return -ENODEV;
++	root_ops = kzalloc(sizeof(*root_ops), GFP_KERNEL);
++	if (!root_ops) {
++		kfree(ri);
++		return NULL;
 +	}
 +
-+	fadt = (struct acpi_table_fadt *)table;
-+
-+	/*
-+	 * TODO: Should we add FADT version checks?
-+	 */
-+
-+	if (!(fadt->flags & ACPI_FADT_HW_REDUCED)) {
-+		pr_err("FADT not ACPI hardware reduced compliant\n");
-+		ret = -EINVAL;
++	ri->cfg = pci_acpi_setup_ecam_mapping(root);
++	if (!ri->cfg) {
++		kfree(ri);
++		kfree(root_ops);
++		return NULL;
 +	}
 +
++	root_ops->release_info = pci_acpi_generic_release_info;
++	root_ops->prepare_resources = pci_acpi_root_prepare_resources;
++	root_ops->pci_ops = (struct pci_ops *)&ri->cfg->ops->pci_ops;
++	bus = acpi_pci_root_create(root, root_ops, &ri->common, ri->cfg);
++	if (!bus)
++		return NULL;
++
++	/* If we must preserve the resource configuration, claim now */
++	host = pci_find_host_bridge(bus);
++	if (host->preserve_config)
++		pci_bus_claim_resources(bus);
++
 +	/*
-+	 * acpi_get_table() creates FADT table mapping that
-+	 * should be released after parsing and before resuming boot
++	 * Assign whatever was left unassigned. If we didn't claim above,
++	 * this will reassign everything.
 +	 */
-+	acpi_put_table(table);
-+	return ret;
++	pci_assign_unassigned_root_bus_resources(bus);
++
++	list_for_each_entry(child, &bus->children, node)
++		pcie_bus_configure_settings(child);
++
++	return bus;
 +}
 +
-+/*
-+ * acpi_boot_table_init() called from setup_arch(), always.
-+ *	1. find RSDP and get its address, and then find XSDT
-+ *	2. extract all tables and checksums them all
-+ *	3. check ACPI FADT revision
-+ *	4. check ACPI FADT HW reduced flag
-+ *
-+ * We can parse ACPI boot-time tables such as MADT after
-+ * this function is called.
-+ *
-+ * On return ACPI is enabled if either:
-+ *
-+ * - ACPI tables are initialized and sanity checks passed
-+ * - acpi=force was passed in the command line and ACPI was not disabled
-+ *   explicitly through acpi=off command line parameter
-+ *
-+ * ACPI is disabled on function return otherwise
-+ */
-+void __init acpi_boot_table_init(void)
-+{
-+	/*
-+	 * Enable ACPI instead of device tree unless
-+	 * - ACPI has been disabled explicitly (acpi=off), or
-+	 * - firmware has not populated ACPI ptr in EFI system table
-+	 */
-+
-+	if (param_acpi_off || (efi.acpi20 == EFI_INVALID_TABLE_ADDR))
-+		goto done;
-+	/*
-+	 * ACPI is disabled at this point. Enable it in order to parse
-+	 * the ACPI tables and carry out sanity checks
-+	 */
-+	enable_acpi();
-+
-+	/*
-+	 * If ACPI tables are initialized and FADT sanity checks passed,
-+	 * leave ACPI enabled and carry on booting; otherwise disable ACPI
-+	 * on initialization error.
-+	 * If acpi=force was passed on the command line it forces ACPI
-+	 * to be enabled even if its initialization failed.
-+	 */
-+	if (acpi_table_init() || acpi_fadt_sanity_check()) {
-+		pr_err("Failed to init ACPI tables\n");
-+		if (!param_acpi_force)
-+			disable_acpi();
-+	}
-+
-+done:
-+	if (acpi_disabled) {
-+		if (earlycon_acpi_spcr_enable)
-+			early_init_dt_scan_chosen_stdout();
-+	} else {
-+		acpi_parse_spcr(earlycon_acpi_spcr_enable, true);
-+		if (IS_ENABLED(CONFIG_ACPI_BGRT))
-+			acpi_table_parse(ACPI_SIG_BGRT, acpi_parse_bgrt);
-+	}
-+}
++#endif
 -- 
 2.38.0
 
