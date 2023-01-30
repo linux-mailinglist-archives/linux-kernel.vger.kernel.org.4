@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95ECC681BD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9194A681BDF
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbjA3UwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:52:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S230152AbjA3Uyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjA3UwJ (ORCPT
+        with ESMTP id S230158AbjA3Uyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:52:09 -0500
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BB12B297
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:51:53 -0800 (PST)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-163ba2b7c38so4936963fac.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:51:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/IB0oD7j6geI//ci/tiy0+ABQ2OwEHH45LjNSZJhYPQ=;
-        b=FW9lX520twsG5jJ0zxY/6IfRSq59UShuLTRn6bR70IoKtt6Z2M9AolzsdfSyyO7VJu
-         sz4NftgVz8UjuAx3a23Vjvj+W0ifh5QRTJ1A2GHJS4Sb3UUptQitnPLKz1TPrNmpfa/M
-         qzl/mGjGG9imOoiuIERZMB4ehIEHte4+bgEB4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/IB0oD7j6geI//ci/tiy0+ABQ2OwEHH45LjNSZJhYPQ=;
-        b=UB7AASrM56ZIDF9I4+zLdQq2s2gcI3OnVj2c8VJEXTmTb5+YX/tcHl6MsrkuEBn0x+
-         r6lWv9I202GiVSPw4BUmTQR8ODgjDYwDW4rrpyPb6izd6Po21XhGhIrIv4EYtFjry/gn
-         eFN0lVX5Ju/VHNblGY+5ix3Yhm+//hB54l//N2TwQuAMuxDfKpNMmYL95PPYVOYSSy73
-         QgLoANigGVj3fZxuKugRzNvz2LhrAJ+JrcG9XkGaqhUvYvmslWFc4O5LDRpXhMynZ+yF
-         dWp8wlKPXcxS/MvtXsrFI887rAAExSuU2XF92qaJdLIyjGKf2LOV+XI6b8ZXQ2RPGB60
-         sU1w==
-X-Gm-Message-State: AO0yUKUsUDXMhWA8dpHDB1Oc7U1Lsz/bqiWtp3O19V3m69SD4zKxyAKl
-        ZGgWPDaQ/lsoBKbV9DeNUvoWMg==
-X-Google-Smtp-Source: AK7set8cdQ9A4QfoqBd5ctwoFW8HQtfRnJVCnRQ8c19mPc4aApku3LxRhuIDZRejZuRpZgON5tN4Dg==
-X-Received: by 2002:a05:6870:82aa:b0:163:419b:3a90 with SMTP id q42-20020a05687082aa00b00163419b3a90mr6700740oae.17.1675111912755;
-        Mon, 30 Jan 2023 12:51:52 -0800 (PST)
-Received: from debian (108-213-68-242.lightspeed.sntcca.sbcglobal.net. [108.213.68.242])
-        by smtp.gmail.com with ESMTPSA id hj15-20020a056870c90f00b001631c5f7404sm5675094oab.22.2023.01.30.12.51.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 12:51:52 -0800 (PST)
-Date:   Mon, 30 Jan 2023 12:51:48 -0800
-From:   Yan Zhai <yan@cloudflare.com>
-To:     netdev@vger.kernel.org
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        davem@davemloft.net, asml.silence@gmail.com, imagedong@tencent.com,
-        keescook@chromium.org, jbenc@redhat.com, richardbgobert@gmail.com,
-        willemb@google.com, steffen.klassert@secunet.com,
-        daniel@iogearbox.net, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: fix NULL pointer in skb_segment_list
-Message-ID: <Y9gt5EUizK1UImEP@debian>
+        Mon, 30 Jan 2023 15:54:43 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13FB47094;
+        Mon, 30 Jan 2023 12:54:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1675112039; bh=bfFcOrFbHGSJZOWyBtjJIaGYLkbNQlO/HXEzfdCL/Z8=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=NPE+T1eMlbAH+D0Jo9yKQXLorxTS033etNTja+viPr4XJKvLancAuQNB25fKYtXlN
+         LoembH9yE48g+fixD+TJJNI3A5BB+vMuGEvJhLmR4o0IDfItCe/s1oY+b6R+eCP2wX
+         8GfClIxYBCNO7q+AvVdFPT2+zDaGdFQh+I7ZjrYQ=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Mon, 30 Jan 2023 21:53:54 +0100 (CET)
+X-EA-Auth: 2KrLQiI3TtiSULUBE7lRV/apfvNhZ1NXjTW6KXqza+vYvgiL2sY3VY5lm0Dm88hooY8qgPAL1l/zXkh2EvEmTJCiEIWmAnKx
+Date:   Tue, 31 Jan 2023 02:23:48 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     HighPoint Linux Team <linux@highpoint-tech.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH] scsi: hptiop: Use sysfs_emit in show function callback
+Message-ID: <Y9guXK+b/5DM+Y8f@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3a1296a38d0c ("net: Support GRO/GSO fraglist chaining.")
-introduced UDP listifyed GRO. The segmentation relies on frag_list being
-untouched when passing through the network stack. This assumption can be
-broken sometimes, where frag_list itself gets pulled into linear area,
-leaving frag_list being NULL. When this happens it can trigger
-following NULL pointer dereference, and panic the kernel. Reverse the
-test condition should fix it.
+According to Documentation/filesystems/sysfs.rst, show() callback
+function should only use sysfs_emit() or sysfs_emit_at() instead
+of sprint() family functions when formatting the device attribute
+values to be returned to user space.
+Issue identified using the device_attr_show.cocci Coccinelle script.
 
-[19185.577801][    C1] BUG: kernel NULL pointer dereference, address:
-...
-[19185.663775][    C1] RIP: 0010:skb_segment_list+0x1cc/0x390
-...
-[19185.834644][    C1] Call Trace:
-[19185.841730][    C1]  <TASK>
-[19185.848563][    C1]  __udp_gso_segment+0x33e/0x510
-[19185.857370][    C1]  inet_gso_segment+0x15b/0x3e0
-[19185.866059][    C1]  skb_mac_gso_segment+0x97/0x110
-[19185.874939][    C1]  __skb_gso_segment+0xb2/0x160
-[19185.883646][    C1]  udp_queue_rcv_skb+0xc3/0x1d0
-[19185.892319][    C1]  udp_unicast_rcv_skb+0x75/0x90
-[19185.900979][    C1]  ip_protocol_deliver_rcu+0xd2/0x200
-[19185.910003][    C1]  ip_local_deliver_finish+0x44/0x60
-[19185.918757][    C1]  __netif_receive_skb_one_core+0x8b/0xa0
-[19185.927834][    C1]  process_backlog+0x88/0x130
-[19185.935840][    C1]  __napi_poll+0x27/0x150
-[19185.943447][    C1]  net_rx_action+0x27e/0x5f0
-[19185.951331][    C1]  ? mlx5_cq_tasklet_cb+0x70/0x160 [mlx5_core]
-[19185.960848][    C1]  __do_softirq+0xbc/0x25d
-[19185.968607][    C1]  irq_exit_rcu+0x83/0xb0
-[19185.976247][    C1]  common_interrupt+0x43/0xa0
-[19185.984235][    C1]  asm_common_interrupt+0x22/0x40
-...
-[19186.094106][    C1]  </TASK>
-
-Fixes: 3a1296a38d0c ("net: Support GRO/GSO fraglist chaining.")
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Yan Zhai <yan@cloudflare.com>
+Signed-off-by: Deepak R Varma <drv@mailo.com>
 ---
- net/core/skbuff.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/scsi/hptiop.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 4a0eb5593275..a31ff4d83ecc 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -4100,7 +4100,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+diff --git a/drivers/scsi/hptiop.c b/drivers/scsi/hptiop.c
+index 7e8903718245..a92998dd77a6 100644
+--- a/drivers/scsi/hptiop.c
++++ b/drivers/scsi/hptiop.c
+@@ -1111,7 +1111,7 @@ static int hptiop_adjust_disk_queue_depth(struct scsi_device *sdev,
+ static ssize_t hptiop_show_version(struct device *dev,
+ 				   struct device_attribute *attr, char *buf)
+ {
+-	return snprintf(buf, PAGE_SIZE, "%s\n", driver_ver);
++	return sysfs_emit(buf, "%s\n", driver_ver);
+ }
  
- 	skb_shinfo(skb)->frag_list = NULL;
+ static ssize_t hptiop_show_fw_version(struct device *dev,
+@@ -1120,11 +1120,11 @@ static ssize_t hptiop_show_fw_version(struct device *dev,
+ 	struct Scsi_Host *host = class_to_shost(dev);
+ 	struct hptiop_hba *hba = (struct hptiop_hba *)host->hostdata;
  
--	do {
-+	while (list_skb) {
- 		nskb = list_skb;
- 		list_skb = list_skb->next;
+-	return snprintf(buf, PAGE_SIZE, "%d.%d.%d.%d\n",
+-				hba->firmware_version >> 24,
+-				(hba->firmware_version >> 16) & 0xff,
+-				(hba->firmware_version >> 8) & 0xff,
+-				hba->firmware_version & 0xff);
++	return sysfs_emit(buf, "%d.%d.%d.%d\n",
++			  hba->firmware_version >> 24,
++			  (hba->firmware_version >> 16) & 0xff,
++			  (hba->firmware_version >> 8) & 0xff,
++			  hba->firmware_version & 0xff);
+ }
  
-@@ -4146,8 +4146,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
- 		if (skb_needs_linearize(nskb, features) &&
- 		    __skb_linearize(nskb))
- 			goto err_linearize;
--
--	} while (list_skb);
-+	}
- 
- 	skb->truesize = skb->truesize - delta_truesize;
- 	skb->data_len = skb->data_len - delta_len;
+ static struct device_attribute hptiop_attr_version = {
 -- 
-2.39.0
+2.34.1
+
+
 
