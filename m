@@ -2,136 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F346813D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8AC6813D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237875AbjA3Oxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
+        id S237867AbjA3Oxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbjA3Oxl (ORCPT
+        with ESMTP id S237427AbjA3Oxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:53:41 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6692C648
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:53:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675090418; x=1706626418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Czf/YBL+D6Dyg2RaowmFYj1S+DBEIS4soS9huRGqHSs=;
-  b=i4zN+c/eoOTlyflWDjNX2SRodxs31/lv21uym6FYY4YLNiPmyRs1TZ8/
-   ndzeRbC3S9A8MAbrCtusJlJBPar62GE1LetgXCRllG9+kwFZOwLXK76QT
-   VBgiBO/y64TuRNDOnz/XcbycEq0+dDfElkN27Xxcg2C/L7Z8jnPtcEXae
-   /G9A/aiocT3VOzL5scH+bM0Hiv3IY1ssM6Hw1se79pHAOs/t0M5LFHgij
-   Gr8rM++QU6BL+w38IoKGL3rJ7eARE8CV+3VsnJjJREK8RqgDCjDi7k+ss
-   4t1GAxc/Uf+VkoX1D5+hd/0lNy7mdBI51L1CUHqk09jwL6iHTEqDoLf1G
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,258,1669100400"; 
-   d="asc'?scan'208";a="209809235"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jan 2023 07:53:38 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 30 Jan 2023 07:53:39 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 30 Jan 2023 07:53:37 -0700
-Date:   Mon, 30 Jan 2023 14:53:13 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Liao Chang <liaochang1@huawei.com>
-CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <heiko.stuebner@vrull.eu>,
-        <ajones@ventanamicro.com>,
-        <prabhakar.mahadev-lad.rj@bp.renesas.com>, <jszhang@kernel.org>,
-        <vincent.chen@sifive.com>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] riscv: Add header include guards to insn.h
-Message-ID: <Y9fZ2ZxdMmXgO5aB@wendy>
-References: <20230129094242.282620-1-liaochang1@huawei.com>
+        Mon, 30 Jan 2023 09:53:34 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887A513DCB
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:53:33 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id l8so8187773wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:53:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ySyb+9DeL5fJ0AqcUKPoABZaZNyjzAc//xSJ1ODmiuU=;
+        b=JvdL81gB+V5vx6+HLY85U0rgTxjMwC0gvfTyDTmtTOCx8xh8EBdnu0pDspLJV0HZo3
+         TCnPIi9tr+cFIbjmt9foLdiGqiM9fP2CawjIdBHp+Mhqe3vhIQkikf7wyGAl+/kubDrB
+         ZESx1z6oMb2R3Z0IHUCuVtiIoCSFaJl4jhG2U6wsawPJc645tVzoKjA931jFvdwA0J18
+         zVtKMlc4GvWnjskN2h5TwVqKB4/AtbB1SUeVT58cpfhGZbk3r/lswQQx78G9muEkvoCa
+         KhviC8rbuAH1qpRjMjIcSDaIdqKE3UWLoWEMFZIhYiqAQc5a+8jgVzSKx8tBpnb2+OpH
+         yjgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ySyb+9DeL5fJ0AqcUKPoABZaZNyjzAc//xSJ1ODmiuU=;
+        b=OGsdbEbYZP4e+35Jpiio4IEp9rKjY/BsDXy7jrbR4iFKBs2Fyxib3KcxJ62Hj/1g3l
+         FZubi8C1mFuJ1s1zzMCsJHLX59YM7KcCfcqt4+6dRJObyGgjcMeCROtNrLXbdjaAiIam
+         tqO+U6/Or/T9psEmyec4LI3WyhmFRFfbYq9TsaiNJJHqImggRjkOyC59f+qnLzAoGFJ+
+         PuMzNc+ibi2F5W0O19L6PM+z1OtaQ7EEOeNIt9/YH1vvRVb/QFueNvlw/kEiCX9jHAaD
+         hyFVYuNSwoxV0uWrBK4T8f3CvcT9Vy9C1Auurr1ZBUqS6+RgPKT5/pmxm8h3liIFOjm/
+         YFrA==
+X-Gm-Message-State: AO0yUKV5Q++yhoMUmPQHdfjmOaL8D+YBp32flSIyXkUzhEPlM9kG1cMQ
+        D/dbryK3GJeB2kPnerNbt1udiA==
+X-Google-Smtp-Source: AK7set+7061y1dLtcQauJpeIRhWsE/OPFF1N/OwHvBvzWw6ZsTiAcij0rsvYYsbhx/z3ZiOR6whsfw==
+X-Received: by 2002:a05:600c:5008:b0:3d9:f559:1f7e with SMTP id n8-20020a05600c500800b003d9f5591f7emr6446029wmr.20.1675090412131;
+        Mon, 30 Jan 2023 06:53:32 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id x7-20020a5d6b47000000b002bbed1388a5sm12167977wrw.15.2023.01.30.06.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 06:53:30 -0800 (PST)
+Date:   Mon, 30 Jan 2023 16:53:28 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Peng Fan <peng.fan@nxp.com>, djakov@kernel.org
+Cc:     Mike Tipton <quic_mdtipton@quicinc.com>,
+        Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org,
+        quic_okukatla@quicinc.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "abel >> Philipp Zabel" <p.zabel@pengutronix.de>,
+        abelvesa@kernel.org, Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
+ zero
+Message-ID: <Y9fZ6GUzWsCMXzba@linaro.org>
+References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
+ <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
+ <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
+ <151790dd-02e5-a1f5-aab5-360f39e21c57@quicinc.com>
+ <35dcb764-e340-5fe7-6637-cdb5f84266ce@linaro.org>
+ <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
+ <742ff9cd-e7be-11b8-3805-5b60aba6b2f1@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AzdEm1gDjGAuOQcP"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230129094242.282620-1-liaochang1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <742ff9cd-e7be-11b8-3805-5b60aba6b2f1@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---AzdEm1gDjGAuOQcP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 23-01-23 22:58:49, Bryan O'Donoghue wrote:
+> On 23/01/2023 20:37, Mike Tipton wrote:
+> > 
+> > This isn't actually changing it for all providers. Only for those that
+> > define the get_bw() callback. Right now that's only qcom/msm8974 and
+> > imx/imx. If get_bw() isn't defined, then icc_node_add() defaults to
+> > INT_MAX. So, the logical behavior in that case is unchanged. Which means
+> > this isn't even changing the behavior for rpmh yet, either.
+> 
+> Yes that adds up.
+> 
+> Looking at the commit for get_bw() for the 8974, I think this change would
+> be OK with the intent of this commit
+> 
+> commit 9caf2d956cfa254c6d89c5f4d7b3f8235d75b28f
+> Author: Georgi Djakov <georgi.djakov@linaro.org>
+> Date:   Mon Nov 9 14:45:12 2020 +0200
+> 
+> @Abel what effect will skipping pre->aggregation() have on i.MX ?
 
-Hey!
+I don't think there is any impact on i.MX platforms.
 
-On Sun, Jan 29, 2023 at 05:42:42PM +0800, Liao Chang wrote:
-> Add header include guards to insn.h to prevent repeating declaration of
-> any identifiers in insn.h.
+Peng, any input?
 
-I'm curious, did you spot this "by hand" while doing other work, or do
-you have a tool that found it for you?
-
-> Fixes: edde5584c7ab ("riscv: Add SW single-step support for KDB")
-
-Heh, I appreciate you going back to the file's original name to find the
-correct fixes tag!
-I figure that it's probably worth adding a fixes tag for the rename too,
-so that the stable bots don't get confused? That would be:
-Fixes: c9c1af3f186a ("RISC-V: rename parse_asm.h to insn.h")
-
-Probably overkill when you have Drew's already for something so trivial,
-but:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> 
 > ---
->  arch/riscv/include/asm/insn.h | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/arch/riscv/include/asm/insn.h b/arch/riscv/include/asm/insn.h
-> index 25ef9c0b19e7..22c7613bfda3 100644
-> --- a/arch/riscv/include/asm/insn.h
-> +++ b/arch/riscv/include/asm/insn.h
-> @@ -3,6 +3,9 @@
->   * Copyright (C) 2020 SiFive
->   */
-> =20
-> +#ifndef _ASM_RISCV_INSN_H
-> +#define _ASM_RISCV_INSN_H
-> +
->  #include <linux/bits.h>
-> =20
->  #define RV_INSN_FUNCT3_MASK	GENMASK(14, 12)
-> @@ -365,3 +368,4 @@ static inline void riscv_insn_insert_utype_itype_imm(=
-u32 *utype_insn, u32 *itype
->  	*utype_insn |=3D (imm & RV_U_IMM_31_12_MASK) + ((imm & BIT(11)) << 1);
->  	*itype_insn |=3D ((imm & RV_I_IMM_11_0_MASK) << RV_I_IMM_11_0_OPOFF);
->  }
-> +#endif /* _ASM_RISCV_INSN_H */
-> --=20
-> 2.25.1
->=20
->=20
-
---AzdEm1gDjGAuOQcP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9fZ2QAKCRB4tDGHoIJi
-0jcTAQCHHURF4z6oLYFKaGltvgSzuPy9uEujy8ANEz83DTBUPwEAw9mBDZLjxIxY
-UyY2jby9nKah10WaHWzGUtn7AOofUgY=
-=wEl5
------END PGP SIGNATURE-----
-
---AzdEm1gDjGAuOQcP--
+> bod
