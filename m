@@ -2,136 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C495681CC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5D5681CC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjA3Vat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:30:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
+        id S231182AbjA3Vbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:31:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjA3Vah (ORCPT
+        with ESMTP id S230035AbjA3Vba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:30:37 -0500
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A0954955D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:30:32 -0800 (PST)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id F1F5E92009D; Mon, 30 Jan 2023 22:30:31 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id EAB4392009B;
-        Mon, 30 Jan 2023 21:30:31 +0000 (GMT)
-Date:   Mon, 30 Jan 2023 21:30:31 +0000 (GMT)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] x86: Use `get_random_u8' for kernel stack offset
- randomization
-Message-ID: <alpine.DEB.2.21.2301302011150.55843@angie.orcam.me.uk>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Mon, 30 Jan 2023 16:31:30 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C48E7A81
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:31:29 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 141so8671398pgc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:31:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t3DGLS6aiN2haRQRmmZBIBnI3OUSAOT+GVNpjSj7IVI=;
+        b=swoStqpnzaDcsLLq3p6Foz1OK+scWwFGMhGJHCEGy1ZVxsIy5nGbpMH+5RL8iJfzkY
+         cFeNC/bfYu6xT05Hkd0Cn173lLcZ0t823ihlYMAvo/w+yg+ltyplmfhcW3w57Xe6LzhD
+         Ktd1da4tPuRvhRe5ieMnKrKdHWT9MYfee5QkqQ2mE0SQmjSZEkLRomflmLCdycOXPmRN
+         4/eeHf6Z1TGDSrA9/H1Vpmtm4Wc3o7VUAK8tHqBu/Jx7zB/orQGzTF0Pg5yyunFZUIS3
+         o0yl8ewSLqJkl/0PtPf8+/6kekjp+Te4i2HGe7W0sd7n/rAwq3sgrseeAETWARElimMN
+         1uUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t3DGLS6aiN2haRQRmmZBIBnI3OUSAOT+GVNpjSj7IVI=;
+        b=5C8RkWVh3Y3IYEfv7XV8+XDadnVkCUxFII6CoKLYar88rpI5X2rOrt3ZozffPUWrSy
+         sk2qeVwkKucBXh2wVt2tDLGq/CwKnMbp6xAQvMBvDk21F2EAa2cHgq80aYCxlkgQcR9s
+         xM+4L8Pad4LWZB/3XJgYtY77LOpSYwkiMxOBxCit6/l6Tv2JP/9kLrGHbXcXlSu5BPff
+         c6waKKUue+pb6RE2FKAdLiCinvKRo4TPWPudO8jEXHMAdPeBO1Yp+trX9r7+De69Ejp9
+         MUjSQaDfD77SncCwepzY6d30zhG6VPRk6TKgTtaMwOw12RSaxO3ooZZVrSLgVBTx9Xct
+         i2JQ==
+X-Gm-Message-State: AFqh2koUnimtNjwLFuPSBZ0MjLqzS3AbraPVw5rTdBQItPqqSFoAMNzn
+        IB0B9anz9koFonOWbS+vfschtMq9xBbHAj1KY6PyQw==
+X-Google-Smtp-Source: AMrXdXt1VPRf5Qrcdy3mk9H7780cdO6g1p3VIEb2Iaqi3/NvNnSWViMH0oG2iS2J8ac4puLS4z8TluhGi/+NvlgT5BY=
+X-Received: by 2002:a63:1706:0:b0:497:3785:812e with SMTP id
+ x6-20020a631706000000b004973785812emr5230436pgl.13.1675114288305; Mon, 30 Jan
+ 2023 13:31:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,HDRS_LCASE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <202301300732.QfTDtiab-lkp@intel.com> <7c25f24f-4acf-404e-88d0-65b55c017f34@app.fastmail.com>
+In-Reply-To: <7c25f24f-4acf-404e-88d0-65b55c017f34@app.fastmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 30 Jan 2023 13:31:16 -0800
+Message-ID: <CAKwvOdkeM6bNaXds7YpHbVBBZvwGq-Jky32+88PzoBxCpsDHcw@mail.gmail.com>
+Subject: Re: error: Undefined temporary symbol .LBB5_-1
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kernel test robot <lkp@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For x86 kernel stack offset randomization uses the RDTSC instruction, 
-which according to H. Peter Anvin is not a secure source of entropy:
+On Mon, Jan 30, 2023 at 2:06 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Jan 30, 2023, at 00:48, kernel test robot wrote:
+> > Hi Christophe,
+> >
+> > FYI, the error/warning still remains.
+> >
+> > tree:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > master
+> > head:   6d796c50f84ca79f1722bb131799e5a5710c4700
+> > commit: a9f17d0c0778dd971dc9770fa0a2085a41d8c5e4 phy: ti: tusb1210: Fix
+> > an error handling path in tusb1210_probe()
+> > date:   10 months ago
+> > config: arm-randconfig-r006-20230130
+> > (https://download.01.org/0day-ci/archive/20230130/202301300732.QfTDtiab-lkp@intel.com/config)
+> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project
+> > 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
+> > reproduce (this is a W=1 build):
+>
+> I reported this as a clang-16 regression, the tusb code looks fine:
+>
+> https://github.com/llvm/llvm-project/issues/60346
 
-"RDTSC isn't a super fast instruction either, but what is *way* more
-significant is that this use of RDTSC is NOT safe: in certain power states
-it may very well be that stone number of lower bits of TSC contain no
-entropy at all."
+Thanks for the report.  I think I have a fix for this.
+https://github.com/llvm/llvm-project/issues/60346#issuecomment-1409326875
+clang-16 just branched, so once the fixes land, I'll make sure to
+cherry-pick them to the clang-16 branch so that this issue is avoided
+before the initial clang-16 release.
 
-It also causes an invalid opcode exception with hardware that does not 
-implement this instruction:
+>
+>      Arnd
+>
 
-process '/sbin/init' started with executable stack
-invalid opcode: 0000 [#1]
-CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc4+ #1
-EIP: exit_to_user_mode_prepare+0x90/0xe1
-Code: 30 02 00 75 ad 0f ba e3 16 73 05 e8 a7 a5 fc ff 0f ba e3 0e 73 05 e8 3e af fc ff a1 c4 c6 51 c0 85 c0 7e 13 8b 0d ac 01 53 c0 <0f> 31 0f b6 c0 31 c1 89 0d ac 01 53 c0 83 3d 30 ed 62 c0 00 75 33
-EAX: 00000001 EBX: 00004000 ECX: 00000000 EDX: 000004ff
-ESI: c10253c0 EDI: 00000000 EBP: c1027f98 ESP: c1027f8c
-DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010002
-CR0: 80050033 CR2: bfe8659b CR3: 012e0000 CR4: 00000000
-Call Trace:
- ? rest_init+0x72/0x72
- syscall_exit_to_user_mode+0x15/0x27
- ret_from_fork+0x10/0x30
-EIP: 0xb7f74800
-Code: Unable to access opcode bytes at 0xb7f747d6.
-EAX: 00000000 EBX: 00000000 ECX: 00000000 EDX: 00000000
-ESI: 00000000 EDI: 00000000 EBP: 00000000 ESP: bfe864b0
-DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 007b EFLAGS: 00000200
----[ end trace 0000000000000000 ]---
-EIP: exit_to_user_mode_prepare+0x90/0xe1
-Code: 30 02 00 75 ad 0f ba e3 16 73 05 e8 a7 a5 fc ff 0f ba e3 0e 73 05 e8 3e af fc ff a1 c4 c6 51 c0 85 c0 7e 13 8b 0d ac 01 53 c0 <0f> 31 0f b6 c0 31 c1 89 0d ac 01 53 c0 83 3d 30 ed 62 c0 00 75 33
-EAX: 00000001 EBX: 00004000 ECX: 00000000 EDX: 000004ff
-ESI: c10253c0 EDI: 00000000 EBP: c1027f98 ESP: c1027f8c
-DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010002
-CR0: 80050033 CR2: b7f747d6 CR3: 012e0000 CR4: 00000000
-Kernel panic - not syncing: Fatal exception
 
-Therefore switch to our generic entropy source and use `get_random_u8' 
-instead, which according to Jason A. Donenfeld is supposed to be fast 
-enough:
-
-"Generally it's very very fast, as most cases wind up being only a
-memcpy -- in this case, a single byte copy. So by and large it should
-be suitable. It's fast enough now that most networking things are able
-to use it. And lots of other places where you'd want really high
-performance. So I'd expect it's okay to use here too. And if it is too
-slow, we should figure out how to make it faster. But I don't suspect
-it'll be too slow."
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Fixes: fe950f602033 ("x86/entry: Enable random_kstack_offset support")
-Cc: stable@vger.kernel.org # v5.13+
----
-Changes from v2:
-
-- Use `get_random_u8' rather than `rdtsc', universally; update the heading 
-  (was: "x86: Disable kernel stack offset randomization for !TSC") and the 
-  description accordingly.
-
-- As a security concern mark for backporting.
-
-Changes from v1:
-
-- Disable randomization at run time rather than in configuration.
----
- arch/x86/include/asm/entry-common.h |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-linux-x86-randomize-kstack-offset-random-u8.diff
-Index: linux-macro/arch/x86/include/asm/entry-common.h
-===================================================================
---- linux-macro.orig/arch/x86/include/asm/entry-common.h
-+++ linux-macro/arch/x86/include/asm/entry-common.h
-@@ -2,6 +2,7 @@
- #ifndef _ASM_X86_ENTRY_COMMON_H
- #define _ASM_X86_ENTRY_COMMON_H
- 
-+#include <linux/random.h>
- #include <linux/randomize_kstack.h>
- #include <linux/user-return-notifier.h>
- 
-@@ -85,7 +86,7 @@ static inline void arch_exit_to_user_mod
- 	 * Therefore, final stack offset entropy will be 5 (x86_64) or
- 	 * 6 (ia32) bits.
- 	 */
--	choose_random_kstack_offset(rdtsc() & 0xFF);
-+	choose_random_kstack_offset(get_random_u8());
- }
- #define arch_exit_to_user_mode_prepare arch_exit_to_user_mode_prepare
- 
+-- 
+Thanks,
+~Nick Desaulniers
