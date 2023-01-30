@@ -2,157 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AE468158C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:50:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E08681584
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:49:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237571AbjA3PuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S237544AbjA3Ptm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:49:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237369AbjA3Ptn (ORCPT
+        with ESMTP id S237166AbjA3PtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:49:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748B1172F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:49:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675093741;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fRlDyXKPLMeNzgtxy7Fw1k/Ln61yLUxV1SRBoDuWD4Q=;
-        b=Wcj5E2UEpndKyB7dxMxsoHY14MoSxA2pkB3JcfkPwZ1zk2BZWzKwZ8eQDL340NARWYOjGX
-        J39vKFH8/xTrVPXjfX2+l/pYXVWgLgXSMfWGVU3bMmZRMvrfI8lF1PdSl/B9IB/XUoQzAK
-        Bj4kKSvCpMEQVS+lDFKGotZuIlF1Axs=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-508-js981MfuPROiEGaujnmh7g-1; Mon, 30 Jan 2023 10:49:00 -0500
-X-MC-Unique: js981MfuPROiEGaujnmh7g-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-15fe7396eb4so4211488fac.12
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:49:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fRlDyXKPLMeNzgtxy7Fw1k/Ln61yLUxV1SRBoDuWD4Q=;
-        b=ifGiQUpOhmDHihv0oofDcwBf8st0lNKns3VXwJ/YW//JnrV7aje53RDeF2Ob+IF3UO
-         jwqv2et3cKpAjhMoGpuaInQQ0krRgL1o+SJYr8p24qBpGgINPaKxGM9OMNJm9kwZ/Roz
-         qIeRLOthfQphkHgtfaEnWX36mUUzBqraETiZBOCtwcLljwAnVQFXtnTtsQ5o/HBI5Q7T
-         yShWrGmltiEyGRIKtQGIkbY0202XbpdIudzkjFjXlWwqugCfgcsvwh40YdwVELDUvghT
-         Onahsdh7iBWJBtEcCjcm/yySIuIrPSvfSUx87j+VUwvAS82bWb7SxXF0nRlcQAtntMhS
-         Cciw==
-X-Gm-Message-State: AFqh2kqh1BqabTOaN4wby+ixl+u1P0eUDBfIwwQq0qb19O29tayYkVTX
-        9HyxMy6fZYAzsdec+5FDiBJ3btkx+y7b2tMpWtUt1Fw5vPxnkMJga5KZOo5ZKgTUoeRRAsuzS7d
-        1DIx7euWKF8y30MiHE8WyOanf
-X-Received: by 2002:a4a:c305:0:b0:49f:8941:ffed with SMTP id c5-20020a4ac305000000b0049f8941ffedmr21754429ooq.9.1675093739562;
-        Mon, 30 Jan 2023 07:48:59 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtF/MHLgvMCX+knJ4UvMho4BjyD1571KGt8hCsvHeghOqHWHjJDyISzjJkMZy6DLoylQR5e1Q==
-X-Received: by 2002:a4a:c305:0:b0:49f:8941:ffed with SMTP id c5-20020a4ac305000000b0049f8941ffedmr21754421ooq.9.1675093739348;
-        Mon, 30 Jan 2023 07:48:59 -0800 (PST)
-Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::41])
-        by smtp.gmail.com with ESMTPSA id h3-20020a4ad743000000b0051763fef75fsm2137688oot.37.2023.01.30.07.48.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 07:48:58 -0800 (PST)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     andersson@kernel.org
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bmasney@redhat.com, quic_shazhuss@quicinc.com,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sa8540p-ride: Document i2c busses
-Date:   Mon, 30 Jan 2023 09:48:23 -0600
-Message-Id: <20230130154823.117542-2-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230130154823.117542-1-ahalaney@redhat.com>
-References: <20230130154823.117542-1-ahalaney@redhat.com>
+        Mon, 30 Jan 2023 10:49:23 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6EC86A54
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:49:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AD5C19F0;
+        Mon, 30 Jan 2023 07:50:04 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.10.155])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B45653F882;
+        Mon, 30 Jan 2023 07:49:20 -0800 (PST)
+Date:   Mon, 30 Jan 2023 15:49:15 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     Guo Ren <guoren@kernel.org>,
+        "liaochang (A)" <liaochang1@huawei.com>, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mhiramat@kernel.org,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
+Message-ID: <Y9fm+6LPXgtDSma/@FVFF77S0Q05N>
+References: <20230126161559.1467374-1-guoren@kernel.org>
+ <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
+ <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
+ <87r0vc9h4g.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <87r0vc9h4g.fsf@all.your.base.are.belong.to.us>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It isn't obvious in the current devicetree what is connected. Go ahead
-and document what's on the other end.
+Hi Bjorn,
 
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
+On Mon, Jan 30, 2023 at 04:28:15PM +0100, Björn Töpel wrote:
+> Guo Ren <guoren@kernel.org> writes:
+> 
+> >> In the serie of RISCV OPTPROBES [1], it patches a long-jump instructions pair
+> >> AUIPC/JALR in kernel text, so in order to ensure other CPUs does not execute
+> >> in the instructions that will be modified, it is still need to stop other CPUs
+> >> via patch_text API, or you have any better solution to achieve the purpose?
+> >  - The stop_machine is an expensive way all architectures should
+> > avoid, and you could keep that in your OPTPROBES implementation files
+> > with static functions.
+> >  - The stop_machine couldn't work with PREEMPTION, so your
+> > implementation needs to work with !PREEMPTION.
+> 
+> ...and stop_machine() with !PREEMPTION is broken as well, when you're
+> replacing multiple instructions (see Mark's post at [1]). The
+> stop_machine() dance might work when you're replacing *one* instruction,
+> not multiple as in the RISC-V case. I'll expand on this in a comment in
+> the OPTPROBES v6 series.
 
-Changes since v1:
-	* Document i2c12 having a max20411 (Shazad)
+Just to clarify, my comments in [1] were assuming that stop_machine() was not
+used, in which case there is a problem with or without PREEMPTION.
 
-In v1 I said i2c12 was not connected, that's not true though (I just
-have a board schematic which shows it not connected, but it _is_
-connected on the SIP/SOM, which I verified with series [0]).
+I believe that when using stop_machine(), the !PREEMPTION case is fine, since
+stop_machine() schedules work rather than running work in IRQ context on the
+back of an IPI, so no CPUs should be mid-sequnce during the patching, and it's
+not possible for there to be threads which are preempted mid-sequence.
 
-I debated waiting for Bjorn to sort out appropriate label names over at
-[0] (and follow suit in a third patch here), but decided to get this
-series out again to clean up the current warnings while that's worked
-out. Once [0] is resubmitted I'll submit a separate patch to enable the
-max20411 on this board as well!
-
-[0] https://lore.kernel.org/linux-arm-msm/20230130035642.GA464800@hu-bjorande-lv.qualcomm.com/
+That all said, IIUC optprobes is going to disappear once fprobe is ready
+everywhere, so that might be moot.
 
 Thanks,
-Andrew
+Mark.
 
- arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-index 6ab4b435c49e..8b7555f22528 100644
---- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-@@ -317,6 +317,7 @@ &xo_board_clk {
-
- &tlmm {
- 	i2c0_default: i2c0-default-state {
-+		/* To USB7002T-I/KDXVA0 USB hub (SIP1 only) */
- 		pins = "gpio135", "gpio136";
- 		function = "qup0";
- 		drive-strength = <2>;
-@@ -324,6 +325,7 @@ i2c0_default: i2c0-default-state {
- 	};
-
- 	i2c1_default: i2c1-default-state {
-+		/* To PM40028B-F3EI PCIe switch */
- 		pins = "gpio158", "gpio159";
- 		function = "qup1";
- 		drive-strength = <2>;
-@@ -331,6 +333,7 @@ i2c1_default: i2c1-default-state {
- 	};
-
- 	i2c12_default: i2c12-default-state {
-+		/* To Maxim max20411 */
- 		pins = "gpio0", "gpio1";
- 		function = "qup12";
- 		drive-strength = <2>;
-@@ -338,6 +341,7 @@ i2c12_default: i2c12-default-state {
- 	};
-
- 	i2c15_default: i2c15-default-state {
-+		/* To display connector (SIP1 only) */
- 		pins = "gpio36", "gpio37";
- 		function = "qup15";
- 		drive-strength = <2>;
-@@ -345,6 +349,7 @@ i2c15_default: i2c15-default-state {
- 	};
-
- 	i2c18_default: i2c18-default-state {
-+		/* To ASM330LHH IMU (SIP1 only) */
- 		pins = "gpio66", "gpio67";
- 		function = "qup18";
- 		drive-strength = <2>;
---
-2.39.1
-
+> >> >  static void __kprobes arch_prepare_simulate(struct kprobe *p)
+> >> > @@ -114,16 +120,23 @@ void *alloc_insn_page(void)
+> >> >  /* install breakpoint in text */
+> >> >  void __kprobes arch_arm_kprobe(struct kprobe *p)
+> >> >  {
+> >> > -     if ((p->opcode & __INSN_LENGTH_MASK) == __INSN_LENGTH_32)
+> >> > -             patch_text(p->addr, __BUG_INSN_32);
+> >> > -     else
+> >> > -             patch_text(p->addr, __BUG_INSN_16);
+> >> > +#ifdef CONFIG_RISCV_ISA_C
+> >> > +     u32 opcode = __BUG_INSN_16;
+> >> > +#else
+> >> > +     u32 opcode = __BUG_INSN_32;
+> >> > +#endif
+> >> > +     patch_text_nosync(p->addr, &opcode, GET_INSN_LENGTH(opcode));
+> >>
+> >> Sounds good, but it will leave some RVI instruction truncated in kernel text,
+> >> i doubt kernel behavior depends on the rest of the truncated instruction, well,
+> >> it needs more strict testing to prove my concern :)
+> > I do this on purpose, and it doesn't cause any problems. Don't worry;
+> > IFU hw must enforce the fetch sequence, and there is no way to execute
+> > broken instructions even in the speculative execution path.
+> 
+> This is stretching reality a bit much. ARMv8, e.g., has a chapter in the
+> Arm ARM [2] Appendix B "Concurrent modification and execution of
+> instructions" (CMODX). *Some* instructions can be replaced concurrently,
+> and others cannot without caution. Assuming that that all RISC-V
+> implementations can, is a stretch. RISC-V hasn't even specified the
+> behavior of CMODX (which is problematic).
+> 
+> If anything it would be more likely that the existing
+> "stop_machine()-to-replace-with-ebreak" works (again, replacing one
+> instruction does not have the !PREEMPTION issues). Then again, no spec,
+> so mostly guessing from my side. :-(
+> 
+> Oh, but the existing "ebreak replace" might be broken like [3].
+> 
+> 
+> Björn
+> 
+> 
+> [1] https://lore.kernel.org/linux-riscv/Y7%2F6AtX5X0+5qF6Y@FVFF77S0Q05N/
+> [2] https://developer.arm.com/documentation/ddi0487/latest
+> [3] https://lore.kernel.org/linux-riscv/20230126170607.1489141-2-guoren@kernel.org/
