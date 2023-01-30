@@ -2,142 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC816804BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E89168046E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235132AbjA3EFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
+        id S235148AbjA3Dqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 22:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjA3EFb (ORCPT
+        with ESMTP id S230392AbjA3Dq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:05:31 -0500
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 29 Jan 2023 20:05:29 PST
-Received: from trent.utfs.org (trent.utfs.org [94.185.90.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A16A10E8;
-        Sun, 29 Jan 2023 20:05:29 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by trent.utfs.org (Postfix) with ESMTPS id 3F8785F76C;
-        Mon, 30 Jan 2023 04:46:02 +0100 (CET)
-Date:   Mon, 30 Jan 2023 04:46:02 +0100 (CET)
-From:   Christian Kujau <lists@nerdbynature.de>
-To:     linux-kernel@vger.kernel.org
-cc:     stable@vger.kernel.org
-Subject: External USB disks not recognized with v6.1.8 when using Xen
-Message-ID: <4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de>
+        Sun, 29 Jan 2023 22:46:28 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0151D900;
+        Sun, 29 Jan 2023 19:46:26 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P4vHJ3gmRz4f3v4f;
+        Mon, 30 Jan 2023 11:46:20 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgDX0R+MPddjoCS0CQ--.41891S3;
+        Mon, 30 Jan 2023 11:46:22 +0800 (CST)
+Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create block
+ device
+To:     jejb@linux.ibm.com, Yu Kuai <yukuai1@huaweicloud.com>,
+        Zhong Jinghua <zhongjinghua@huawei.com>,
+        gregkh@linuxfoundation.org, martin.petersen@oracle.com,
+        hare@suse.de, bvanassche@acm.org, emilne@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230128094146.205858-1-zhongjinghua@huawei.com>
+ <20230128094146.205858-3-zhongjinghua@huawei.com>
+ <1b466057ed2e91b05388afbb5791639eb8abdd59.camel@linux.ibm.com>
+ <c3e58056-942a-f829-ecf6-1342c65b6865@huaweicloud.com>
+ <7c5c38f128910f89f20533b7fd51453a32ff4f5c.camel@linux.ibm.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <19ad8dd7-482e-dad0-8465-f78f7f9c154d@huaweicloud.com>
+Date:   Mon, 30 Jan 2023 11:46:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7c5c38f128910f89f20533b7fd51453a32ff4f5c.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgDX0R+MPddjoCS0CQ--.41891S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4rAr15KF4xXr15CrykXwb_yoW8Kw4kpF
+        WfKFZIkrWkGwn3Jw1vyayrZw10yw4kAw45JF15Kr17Ja4UCF9aqrW5Ka9Y9FyUWryxX3WY
+        qF4rGa9Ik34qyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[CC stable as I only tested the stable tree for now]
+Hi,
 
-I'm running a current Alpine Linux with linux-edge-6.1.8-r0 installed on a 
-Lenovo Thinkpad L540 where an external disk enclosure with two disks is 
-attached via USB. The Alpine Linux kernel appears to track Linux stable 
-and is more or less vanilla. Also, the machine boots into Xen 4.17.0 and 
-then starts a few headless VMs, nothing too exotic here.
+在 2023/01/30 11:29, James Bottomley 写道:
+> On Mon, 2023-01-30 at 11:07 +0800, Yu Kuai wrote:
+>> Hi,
+>>
+>> 在 2023/01/30 1:30, James Bottomley 写道:
+>>> On Sat, 2023-01-28 at 17:41 +0800, Zhong Jinghua wrote:
+>>>> This error will cause a warning:
+>>>> kobject_add_internal failed for block (error: -2 parent:
+>>>> 1:0:0:1). In the lower version (such as 5.10), there is no
+>>>> corresponding error handling, continuing to go down will trigger
+>>>> a kernel panic, so cc stable.
+>>>
+>>> Is this is important point and what you're saying is that this only
+>>> panics on kernels before 5.10 or so because after that it's
+>>> correctly failed by block device error handling so there's nothing
+>>> to fix in later kernels?
+>>>
+>>> In that case, isn't the correct fix to look at backporting the
+>>> block device error handling:
+>>
+>> This is the last commit that support error handling, and there are
+>> many relied patches, and there are lots of refactor in block layer.
+>> It's not a good idea to backport error handling to lower version.
+>>
+>> Althrough error handling can prevent kernel crash in this case, I
+>> still think it make sense to make sure kobject is deleted in order,
+>> parent should not be deleted before child.
+> 
+> Well, look, you've created a very artificial situation where a create
+> closely followed by a delete of the underlying sdev races with the
+> create of the block gendisk devices of sd that bind asynchronously to
+> the created sdev.  The asynchronous nature of the bind gives the
+> elongated race window so the only real fix is some sort of check that
+> the sdev is still viable by the time the bind occurs ... probably in
+> sd_probe(), say a scsi_device_get of sdp at the top which would ensure
+> viability of the sdev for the entire bind or fail the probe if the sdev
+> can't be got.
 
-But when updating from Linux 6.1.1 to 6.1.8, the disks from the external 
-enclosure did not show up. Unplug, replug, no dice, and this is 100% 
-reproducable. dmesg has new these lines now:
+Sorry, I don't follow here. 😟
 
-+ioremap error for 0xf2520000-0xf2530000, requested 0x2, got 0x0
-+ioremap error for 0xf2520000-0xf2530000, requested 0x2, got 0x0
-+xhci_hcd 0000:00:14.0: init 0000:00:14.0 fail, -14
-+ioremap error for 0xfed1f000-0xfed20000, requested 0x2, got 0x0
-+iTCO_wdt iTCO_wdt.1.auto: ioremap failed for resource [mem 0xfed1f410-0xfed1f414]
+I agree this is a very artificial situation, however I can't tell our
+tester not to test this way...
 
-I'm not sure if the ioremap error is related here (booted with 
-early_ioremap_debug but then dmesg was filled with WARNINGS for both 
-versions, so I disabled it again), but that xhci_hcd error looks 
-suspicious.
+The problem is that kobject session is deleted and then sd_probe() tries
+to create a new kobject under hostx/sessionx/x:x:x:x/. I don't see how
+scsi_device_get() can prevent that, it only get a kobject reference and
+can prevent kobject to be released, however, kobject_del() can still be
+done.
 
-Curiously 6.1.8 works just fine when NOT booted via Xen. I booted into 
-Xen + vanilla 6.1.8 now and was able to reproduce this issue. Xen + 
-vanilla 6.1.1 works fine.
-
-From v6.1.1 to v6.1.8 there's only one commit in drivers/xen, but 54 
-commits in drivers/usb. Compiling takes time because the distribution 
-kernel has almost everything enabled and I still need to cut down enabled 
-options to be able to attempt a git biset in a reasonable time, but I 
-still wanted to report this, maybe someone has an idea about this.
-
-Full dmesg and lshw outputs: https://nerdbynature.de/bits/usb_v6.1.8/
+In this patch, we make sure remove session and sd_probe() won't
+concurrent, remove session will wait for all child kobject to be
+deleted, what do you think?
 
 Thanks,
-Christian.
+Kuai
+> 
+> James
+> 
+> 
+> .
+> 
 
-PS: I found this workaround on the interwebs[0] to force the USB ports 
-of that machine to USB 2.0 and then the missing disks magically appear:
-
-$ lspci -nn | grep -i usb
-00:14.0 USB controller [0c03]: Intel Corporation 8 Series/C220 Series Chipset Family USB xHCI [8086:8c31] (rev 05)  <=== !!!
-00:1a.0 USB controller [0c03]: Intel Corporation 8 Series/C220 Series Chipset Family USB EHCI #2 [8086:8c2d] (rev 05)
-00:1d.0 USB controller [0c03]: Intel Corporation 8 Series/C220 Series Chipset Family USB EHCI #1 [8086:8c26] (rev 05)
-
-$ setpci -H1 -d 8086:8c31 d8.l=0
-$ setpci -H1 -d 8086:8c31 d0.l=0
-
-$ dmesg 
-usb 1-1.3: new full-speed USB device number 3 using ehci-pci
-usb 2-1.3: new high-speed USB device number 3 using ehci-pci
-usb 1-1.3: New USB device found, idVendor=138a, idProduct=0011, bcdDevice=0.78
-usb 1-1.3: New USB device strings: Mfr=0, Product=0, SerialNumber=1
-usb 1-1.3: SerialNumber: aa32bf84ed47
-usb 1-1.5: new full-speed USB device number 4 using ehci-pci
-usb 2-1.3: New USB device found, idVendor=1e91, idProduct=a3a8, bcdDevice=2.07
-usb 2-1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=5
-usb 2-1.3: Product: Elite Pro Dual
-usb 2-1.3: Manufacturer: OWC
-usb 2-1.3: SerialNumber: RANDOM__1E359879645F
-usb 2-1.3: UAS is ignored for this device, using usb-storage instead
-usb-storage 2-1.3:1.0: USB Mass Storage device detected
-usb-storage 2-1.3:1.0: Quirks match for vid 1e91 pid a3a8: 800000
-scsi host5: usb-storage 2-1.3:1.0
-usb 1-1.5: New USB device found, idVendor=8087, idProduct=07dc, bcdDevice=0.01
-usb 1-1.5: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-Bluetooth: hci0: Legacy ROM 2.5 revision 8.0 build 1 week 45 2013
-Bluetooth: hci0: Intel Bluetooth firmware file: intel/ibt-hw-37.7.10-fw-1.80.1.2d.d.bseq
-usb 1-1.6: new high-speed USB device number 5 using ehci-pci
-usb 1-1.6: New USB device found, idVendor=04f2, idProduct=b398, bcdDevice=39.98
-usb 1-1.6: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-usb 1-1.6: Product: Integrated Camera
-usb 1-1.6: Manufacturer: Vimicro corp.
-Bluetooth: hci0: Intel BT fw patch 0x2a completed & activated
-scsi 5:0:0:0: Direct-Access     ElitePro Dual U3FW-1      0207 PQ: 0 ANSI: 6
-scsi 5:0:0:1: Direct-Access     ElitePro Dual U3FW-2      0207 PQ: 0 ANSI: 6
-sd 5:0:0:0: [sdc] Very big device. Trying to use READ CAPACITY(16).
-sd 5:0:0:0: [sdc] 7814037168 512-byte logical blocks: (4.00 TB/3.64 TiB)
-sd 5:0:0:1: [sdd] Very big device. Trying to use READ CAPACITY(16).
-sd 5:0:0:1: [sdd] 7814037168 512-byte logical blocks: (4.00 TB/3.64 TiB)
-sd 5:0:0:1: [sdd] Write Protect is off
-sd 5:0:0:1: [sdd] Mode Sense: 47 00 10 08
-sd 5:0:0:0: [sdc] Write Protect is off
-sd 5:0:0:0: [sdc] Mode Sense: 47 00 10 08
-sd 5:0:0:0: [sdc] No Caching mode page found
-sd 5:0:0:0: [sdc] Assuming drive cache: write through
-sd 5:0:0:1: [sdd] No Caching mode page found
-sd 5:0:0:1: [sdd] Assuming drive cache: write through
-sd 5:0:0:0: [sdc] Attached SCSI disk
-sd 5:0:0:1: [sdd] Attached SCSI disk
-
-$ lsblk /dev/sd[cd]
-NAME MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
-sdc    8:32   0  3.6T  0 disk 
-sdd    8:48   0  3.6T  0 disk 
-
-
-[0] https://superuser.com/a/875863/218574
--- 
-BOFH excuse #135:
-
-You put the disk in upside down.
