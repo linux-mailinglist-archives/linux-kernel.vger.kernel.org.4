@@ -2,73 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB59680652
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7378D680657
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235456AbjA3HAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 02:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S235694AbjA3HDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 02:03:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjA3HAJ (ORCPT
+        with ESMTP id S231258AbjA3HDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 02:00:09 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21359144BE
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 23:00:07 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id h5so12812494ybj.8
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 23:00:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YevmuFxSkxWTJZuYLK3auP/ln6gsEkZmPuZuK5JXHz4=;
-        b=HL6O2If/EMA+SEG6je5PgALJBHlr/+R+3PY2wdrQCU3wvO9mnmNvsh9aaO61I3fyRc
-         3ARc+UhmJQykTUsq3E314Br0WN3CblaHfMif44cYVUTS+SeHQMrM9XVnK8DE0ZU4tt+c
-         xxyxHwQ/LuwXZ12Fd5RGe53VTMYoc582L0SYAWF1qL1mqMeyWwiMTeQ7jRKgBB7/MM6r
-         mTEyRdG5YraqNhOi8rU1PoD2EKphgFISOD+8sAlVbWuME75/xSKv2YwfFINjanPqjbjs
-         1O9IfN0C9E8ZEQ7ZGjuazrp69RKxYInh728ZYOt3cbbL1sm+BZjy3Mic68SyTtVzrAtG
-         9jGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YevmuFxSkxWTJZuYLK3auP/ln6gsEkZmPuZuK5JXHz4=;
-        b=nemo5o4YZhpFNXXi43F/uVEmR1N8b8QmVptNDqu5znXB4ZzoDM5EsHG7963W20ht2I
-         dUacxMx0h9LWeqVrD7aMmbGhOlyR/DXuZ6gXgBZpDLlm3aXiH6HwefCCi1UedLmw5NNl
-         UViy1SvXO1+lgfklNK/kFgctn8OylAF5nz67MpMYB0/dip2PS/8ROgs6zzr9VDElbaP6
-         v//HySwuekH3IPsp/YeMoZrf2cIQCc/9Bas34ph1fXXZ4RVyNHgFLHUK9UqzB6+N6Q67
-         PLykmjd3JI4wKyFcX35uHG2v/xSt5Pew/4CbeOk51O5CuiGaMsTGnIg7sdfV/tAaGFZC
-         l/1A==
-X-Gm-Message-State: AO0yUKWavzG8gbOjaQtBmf2faZgmP1kZ3InOQc1DuQ3FczY37uE/hTXd
-        Cq1+FdUdXketidtBeerbOvwYHEZvZdwmTwJSnCWjdw==
-X-Google-Smtp-Source: AK7set/6nLkKwtzlCdEbCgY14b7QoEWPAMsdcvj1ZwHpsPZB0mZjRgHUb2s7USI9RwXd/4jaqZH9cAJsNT+VZ7eeSbQ=
-X-Received: by 2002:a5b:92:0:b0:80b:d161:ace9 with SMTP id b18-20020a5b0092000000b0080bd161ace9mr1690523ybp.143.1675062005661;
- Sun, 29 Jan 2023 23:00:05 -0800 (PST)
+        Mon, 30 Jan 2023 02:03:39 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63113532;
+        Sun, 29 Jan 2023 23:03:37 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30U730CA127759;
+        Mon, 30 Jan 2023 01:03:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675062180;
+        bh=r3d1MXzMmUq1pqlvkbJrJzaucSVl+EC6aoJjD3D5ck8=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=fSwXnnOuAVK5ztoI3nOhC2nwv1V96uV1POYYttesAVNRba/Tb8cEU/6VNxrZqEaxI
+         CS4lwLhV9CGA7BieLlpMJ2Bk9l6avZchHA8bz/Hf8+ovdUZOOd/0LPoJQIJts6qMNS
+         sQRdsIU9T7px0REgKYr1Myh9nyh131KnZodgdc4U=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30U72xq4095577
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 30 Jan 2023 01:03:00 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 30
+ Jan 2023 01:02:59 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 30 Jan 2023 01:02:59 -0600
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30U72rmo067753;
+        Mon, 30 Jan 2023 01:02:54 -0600
+Message-ID: <fe54244c-3d05-2d70-6bdb-f4cde9448ae5@ti.com>
+Date:   Mon, 30 Jan 2023 12:32:53 +0530
 MIME-Version: 1.0
-References: <20230127162409.2505312-1-elver@google.com> <Y9QUi7oU3nbdIV1J@FVFF77S0Q05N>
-In-Reply-To: <Y9QUi7oU3nbdIV1J@FVFF77S0Q05N>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 30 Jan 2023 08:00:00 +0100
-Message-ID: <CANpmjNNGCf_NqS96iB+YLU1M+JSFy2tRRbuLfarkUchfesk2=A@mail.gmail.com>
-Subject: Re: [PATCH v2] perf: Allow restricted kernel breakpoints on user addresses
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        Jann Horn <jannh@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrey Konovalov <andreyknvl@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [EXTERNAL] Re: [PATCH v3 1/2] dt-bindings: net: Add ICSSG
+ Ethernet Driver bindings
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        "Md Danish Anwar" <danishanwar@ti.com>
+CC:     "Andrew F. Davis" <afd@ti.com>, Tero Kristo <t-kristo@ti.com>,
+        Suman Anna <s-anna@ti.com>, YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, <nm@ti.com>,
+        <ssantosh@kernel.org>, <srk@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221223110930.1337536-1-danishanwar@ti.com>
+ <20221223110930.1337536-2-danishanwar@ti.com> <Y6W7FNzJEHYt6URg@lunn.ch>
+ <620ce8e6-2b40-1322-364a-0099a6e2af26@kernel.org> <Y7Mjx8ZEVEcU2mK8@lunn.ch>
+ <b55dec4b-4fd5-71fa-4073-b5793cafdee7@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <b55dec4b-4fd5-71fa-4073-b5793cafdee7@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,105 +83,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 at 19:14, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Marco,
->
-> Apologies for having not replies on v1...
->
-> On Fri, Jan 27, 2023 at 05:24:09PM +0100, Marco Elver wrote:
-> > Allow the creation of restricted breakpoint perf events that also fire
-> > in the kernel (perf_event_attr::exclude_kernel=0), if:
-> >
-> >   1. No sample information is requested; samples may contain IPs,
-> >      registers, or other information that may disclose kernel addresses.
-> >
-> >   2. The breakpoint (viz. data watchpoint) is on a user address.
->
-> I think there's a potential problem here w.r.t. what constitutes a "user
-> address". Below, the patch assumes that any address which access_ok() is happy
-> with is a user address, but that's not always the case, and it's not
-> necessarily always safe to allow watchpoints on such addresses.
+Hi Roger,
 
-Isn't that a deficiency with access_ok()?
+On 05/01/23 17:03, Roger Quadros wrote:
+> On 02/01/2023 20:34, Andrew Lunn wrote:
+>> On Mon, Jan 02, 2023 at 03:04:19PM +0200, Roger Quadros wrote:
+>>>
+>>>
+>>> On 23/12/2022 16:28, Andrew Lunn wrote:
+>>>>> +        ethernet-ports {
+>>>>> +            #address-cells = <1>;
+>>>>> +            #size-cells = <0>;
+>>>>> +            pruss2_emac0: port@0 {
+>>>>> +                reg = <0>;
+>>>>> +                phy-handle = <&pruss2_eth0_phy>;
+>>>>> +                phy-mode = "rgmii-rxid";
+>>>>
+>>>> That is unusual. Where are the TX delays coming from?
+>>>
+>>> >From the below property
+>>>
+>>> +                ti,syscon-rgmii-delay = <&scm_conf 0x4120>;
+>>>
+>>> The TX delay can be enabled/disabled from within the ICSSG block.
+>>>
+>>> If this property exists and PHY mode is neither PHY_INTERFACE_MODE_RGMII_ID
+>>> nor PHY_INTERFACE_MODE_RGMII_TXID then the internal delay is enabled.
+>>>
+>>> This logic is in prueth_config_rgmiidelay() function in the introduced driver.
+>>
+>> What nearly every other MAC driver does is pass the phy-mode to the
+>> PHY and lets the PHY add the delays. I would recommend you do that,
+>> rather than be special and different.
+> 
+> 
+> If I remember right we couldn't disable MAC TX delay on some earlier silicon
+> so had to take this route. I don't remember why we couldn't disable it though.
+> 
+> In more recent Silicon Manuals I do see that MAC TX delay can be enabled/disabled.
+> If this really is the case then we should change to
+> 
+>  phy-mode = "rgmii-id";
+> 
+> And let PHY handle the TX+RX delays.
+> 
+> Danish,
+> could you please make the change and test if it works on current silicon?
+> 
 
-https://www.kernel.org/doc/html/latest/core-api/mm-api.html#c.access_ok
-"Checks if a pointer to a block of memory in user space is valid. [...]"
+I changed the phy-mode to "rgmii-id" instead of "rgmii-rxid". I did the testing
+on current silicon (AM654x SR 2.0) and it is working fine.
 
-> For example, UEFI runtime services may live in low adddresses below
-> TASK_SIZE_MAX, and there are times when we run code in an idmap (or other
-> low-half mapping) when we cannot safely take an exception for things like idle,
-> suspend, kexec, pagetable rewriting on arm64, etc.
->
-> So I think this may introduce functional issues (e.g. a mechanism to crash the
-> kernel) in addition to any potential information disclosure, and I would not
-> want this to be generally available to unprivileged users.
->
-> Most of those happen in kernel threads, but they can also happen in the context
-> of user threads (e.g. if triggering suspend/idle via sysfs), so special care
-> will be needed, as above.
+> cheers,
+> -roger
 
-These are good points.
-
-> > The rules constrain the allowable perf events such that no sensitive
-> > kernel information can be disclosed.
-> >
-> > Despite no explicit kernel information disclosure, the following
-> > questions may need answers:
-> >
-> >  1. Q: Is obtaining information that the kernel accessed a particular
-> >     user's known memory location revealing new information?
-> >
-> >     A: Given the kernel's user space ABI, there should be no "surprise
-> >     accesses" to user space memory in the first place.
->
-> I think that may be true for userspace, but not true for other transient
-> mappings in the low half of the address space. Ignoring the functional concern
-> above, for idmap'd code this would at least provide a mechanism to probe for
-> the phyiscal address of that code (and by extension, reveal the phyiscal
-> location of the entire kernel).
-
-This again feels like a deficiency with access_ok(). Is there a better
-primitive than access_ok(), or can we have something that gives us the
-guarantee that whatever it says is "ok" is a userspace address?
-
-> >  2. Q: Does causing breakpoints on user memory accesses by the kernel
-> >     potentially impact timing in a sensitive way?
-> >
-> >     A: Since hardware breakpoints trigger regardless of the state of
-> >     perf_event_attr::exclude_kernel, but are filtered in the perf
-> >     subsystem, this possibility already exists independent of the
-> >     proposed change.
->
-> Hmm... arm64's HW breakpoints and watchpoints have HW privilege filters, so I'm
-> not sure the above statement is generally/necessarily true.
-
-Right, I can see this being a valid concern on those architectures
-that do support HW privilege filters.
-
-> > Motivation:  Data breakpoints on user addresses that also fire in the
-> > kernel provide complete coverage to track and debug accesses, not just
-> > in user space but also through the kernel. For example, tracking where
-> > user space invokes syscalls with pointers to specific memory.
-> >
-> > Breakpoints can be used for more complex dynamic analysis, such as race
-> > detection, memory-safety error detection, or data-flow analysis. Larger
-> > deployment by linking such dynamic analysis into binaries in production
-> > only becomes possible when no additional capabilities are required by
-> > unprivileged users. To improve coverage, it should then also be possible
-> > to enable breakpoints on user addresses that fire in the kernel with no
-> > additional capabilities.
->
-> I can understand the argument for watchpoints (modulo my concerns above), but
-> there's no need to support instruction breakpoints, right? i.e. there's no
-> legitimate reason for a user to want to monitor a given user address
-> system-wide, regardless of what's running?
->
-> IIUC this only makes sense for watchpoints, and only in the context of a given
-> task.
-
-Right, there shouldn't be a need for instruction breakpoints, the
-kernel shouldn't be executing user code.
-
-Thanks,
--- Marco
+Thanks and Regards,
+Danish.
