@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9D068124A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDB9681277
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237638AbjA3OTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:19:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S237608AbjA3OVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237635AbjA3OTU (ORCPT
+        with ESMTP id S237513AbjA3OVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:19:20 -0500
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F5C3B0EE;
-        Mon, 30 Jan 2023 06:18:17 -0800 (PST)
+        Mon, 30 Jan 2023 09:21:01 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887573FF30;
+        Mon, 30 Jan 2023 06:19:49 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id f7so3849461edw.5;
+        Mon, 30 Jan 2023 06:19:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1675088298; x=1706624298;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=C5oru7Dbvy/1R6SKKLx3znkVOYm2h1iV1BR520o60ms=;
-  b=R3O7ERFqbE/QrrXsxdwb80zo+aP0HTnq9h/Zh+1xUfKdtHNoF99m7DYb
-   mIe7tNReN7St8wmr8GhPhhpjC5Yvh2E71CTY3EIQsnYkTGAoa6gqG/2Dm
-   IXua7jEaKqyuIqD9Ph2e7gxRNfg5WxRMyexU9dCLW7X5akVIzLRMGes1D
-   U=;
-X-IronPort-AV: E=Sophos;i="5.97,258,1669075200"; 
-   d="scan'208";a="293479665"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 14:18:02 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com (Postfix) with ESMTPS id 6FE4FAC40E;
-        Mon, 30 Jan 2023 14:17:59 +0000 (UTC)
-Received: from EX19D014UEC003.ant.amazon.com (10.252.135.249) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Mon, 30 Jan 2023 14:17:55 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX19D014UEC003.ant.amazon.com (10.252.135.249) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
- Mon, 30 Jan 2023 14:17:55 +0000
-Received: from dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (10.15.11.255)
- by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP Server id
- 15.0.1497.45 via Frontend Transport; Mon, 30 Jan 2023 14:17:55 +0000
-Received: by dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (Postfix, from userid 23027615)
-        id 34AC120D34; Mon, 30 Jan 2023 15:17:55 +0100 (CET)
-From:   Pratyush Yadav <ptyadav@amazon.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH v2 1/3] ACPI: processor: perflib: Use the "no limit"
- frequency QoS
-References: <12138067.O9o76ZdvQC@kreacher> <12124970.O9o76ZdvQC@kreacher>
-        <mafs0sfgybc3q.fsf_-_@amazon.de>
-        <CAJZ5v0hAjKvinPqX2VuCv1jVu50jrnDpECaO=sA2CQZFHZpJdA@mail.gmail.com>
-Date:   Mon, 30 Jan 2023 15:17:55 +0100
-In-Reply-To: <CAJZ5v0hAjKvinPqX2VuCv1jVu50jrnDpECaO=sA2CQZFHZpJdA@mail.gmail.com>       (Rafael
- J. Wysocki's message of "Thu, 29 Dec 2022 20:26:07 +0100")
-Message-ID: <mafs0zga0ds30.fsf_-_@amazon.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=k+Oo1lodryIMqmzr2Eid+QVBl9SbaXzX/i9lxIpx/ls=;
+        b=oXRSmtI7+kfluXGdPzqgmBsbEWnYVqqktepEU2DT5aRYKXgkWk97ysBAT/yIBkLn5N
+         02rOO8XRU2AqISiVjhdev9VemPfygs1waGbWjr4hQM4gbG3lOYecqInCwlIcGP5Pbv7K
+         BalUX+njkzDmx9hMpk9g6wCeerLR+6w5dyv+c5wlpSMsdq9rcJZX+lYvb2IiOQmDz+iv
+         XdcWqfYKGIKym5yM/de/9e9RL8z60ulpoO3iJ2dxo/BgRNXC0T2F+ImbiErLfXAv1zV0
+         s3LNP3CW2hCO9VQOw1ZlsprwcURflX8YpG9XKxTEh9KNZm7+v11onOb7QN+HCZPMAovr
+         FNqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k+Oo1lodryIMqmzr2Eid+QVBl9SbaXzX/i9lxIpx/ls=;
+        b=CgPvrSNJFQyLXWfqp7k/69EPBMVDqu0kXFQsdoLfvydOTYflUA3eRcbISkFDHjvk5C
+         AIopJzxOEFAtxt05cVHm4J94dZOQkI3svXWKnK+93XRnjIwFNS+E+ia/SEZIHZiWK97F
+         R6kx1q8zkCnSQ7HUSwLQFyNFC9ciJVWdtdM83g5BFvfSHNzITLixGSEtoy3vnfIKkca1
+         kiAVRICvya21g7EM5kE4vsFWn0KG32500uzuep0xmURQBnTO3r0FSUyWhRX4iLdL3iTV
+         REud5CxExig9CiW92jKn/wEcic59yfiCL8oZQF6J//9/kWFCZJky7H2eNWBuLArs1kc1
+         z23w==
+X-Gm-Message-State: AO0yUKVtlG3wHgqi7thkF71s2F+vQ8QjSKGI7iHwxL2VsaVRlZWClF4w
+        ErTzGSoxx1Bn7Z6Or1SahOAzSy1PZzNlA271agc=
+X-Google-Smtp-Source: AK7set+M9ZVT6Rum3TxEEYVfIbKhmyXDZsfxkzsnuc6uFqbZ5gm2rsCy5XTxNLlEPxG9EavNpdslbi7JY/S5m7AG/go=
+X-Received: by 2002:aa7:cd85:0:b0:4a2:ea2:4f38 with SMTP id
+ x5-20020aa7cd85000000b004a20ea24f38mr3242518edv.20.1675088355597; Mon, 30 Jan
+ 2023 06:19:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230128055214.33648-1-jamiemdouglass@gmail.com>
+In-Reply-To: <20230128055214.33648-1-jamiemdouglass@gmail.com>
+From:   Petr Vorel <petr.vorel@gmail.com>
+Date:   Mon, 30 Jan 2023 15:19:03 +0100
+Message-ID: <CAB1t1CwzUCEL1josABxfyqX91Z6DsrbEuopsDYsgq-eNxh6Btw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: msm8992-lg-bullhead: Correct memory
+ overlap with SMEM region
+To:     Jamie Douglass <jamiemdouglass@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Dominik Kobinski <dominikkobinski314@gmail.com>,
+        Konrad Dybico <konrad.dybico@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,57 +76,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+Hi Jamie,
 
-On Thu, Dec 29 2022, Rafael J. Wysocki wrote:
-
-> On Thu, Dec 29, 2022 at 1:58 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
->>
->> Hi Rafael,
->>
->> On Wed, Dec 28 2022, Rafael J. Wysocki wrote:
->> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> >
->> > When _PPC returns 0, it means that the CPU frequency is not limited by
->> > the platform firmware, so make acpi_processor_get_platform_limit()
->> > update the frequency QoS request used by it to "no limit" in that case.
->> >
->> > This addresses a problem with limiting CPU frequency artificially on
->> > some systems after CPU offline/online to the frequency that corresponds
->> > to the first entry in the _PSS return package.
->> >
->> > Reported-by: Pratyush Yadav <ptyadav@amazon.de>
->> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> > ---
-[...]
->>
->> One small thing I noticed: in acpi_processor_ppc_init() "no limit" value
->> is set to INT_MAX and here it is set to FREQ_QOS_MAX_DEFAULT_VALUE. Both
->> should evaluate to the same value but I think it would be nice if the
->> same thing is used in both places. Perhaps you can fix that up when
->> applying?
+On Sat, 28 Jan 2023 at 06:53, Jamie Douglass <jamiemdouglass@gmail.com> wrote:
 >
-> Yes, I'll do that.
+> A previously committed reserved memory region was overlapping with the
 
-Following up on this series. I do not see it queued anywhere in the
-linux-pm [0] tree. I would like to have this in the v6.3 merge window if
-possible.
+IMHO there should be marked commit which you're fixing:
+Fixes: 22c7e1a0fa45 ("arm64: dts: msm8992-bullhead: add memory hole region")
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/
+> SMEM memory region, causing an error message in dmesg:
+>         OF: reserved mem: OVERLAP DETECTED!
+>         reserved@5000000 (0x0000000005000000--0x0000000007200000)
+>         overlaps with smem_region@6a00000
+>         (0x0000000006a00000--0x0000000006c00000)
+> This patch splits the previous reserved memory region into two
+> reserved sections either side of the SMEM memory region.
 
--- 
-Regards,
-Pratyush Yadav
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
+Tested-by: Petr Vorel <pvorel@suse.cz>
+...
+> +++ b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
+> @@ -53,8 +53,13 @@ cont_splash_mem: memory@3400000 {
+>                         no-map;
+>                 };
+>
+> -               removed_region: reserved@5000000 {
+> -                       reg = <0 0x05000000 0 0x2200000>;
+> +               reserved@5000000 {
+Can we keep "removed_region:" ?
+removed_region: reserved@5000000 {
 
+> +                       reg = <0x0 0x05000000 0x0 0x1a00000>;
+> +                       no-map;
+> +               };
+> +
+> +               reserved@6c00000 {
+Not sure which label to add, maybe append 2?
+removed_region2: reserved@6c00000 {
+@Konrad @Krzysztof WDYT?
 
+Kind regards,
+Petr
 
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
-
+> +                       reg = <0x0 0x06c00000 0x0 0x400000>;
+>                         no-map;
+>                 };
+>         };
