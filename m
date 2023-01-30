@@ -2,51 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915FA681C4B
+	by mail.lfdr.de (Postfix) with ESMTP id E534B681C4C
 	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbjA3VGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        id S230290AbjA3VGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjA3VF7 (ORCPT
+        with ESMTP id S229501AbjA3VF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 Jan 2023 16:05:59 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243E0474F8;
-        Mon, 30 Jan 2023 13:05:39 -0800 (PST)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pMbLC-000NMm-Ba; Mon, 30 Jan 2023 22:05:26 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pMbLB-000BBl-TF; Mon, 30 Jan 2023 22:05:25 +0100
-Subject: Re: [PATCH] net: fix NULL pointer in skb_segment_list
-To:     Yan Zhai <yan@cloudflare.com>, netdev@vger.kernel.org
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        davem@davemloft.net, asml.silence@gmail.com, imagedong@tencent.com,
-        keescook@chromium.org, jbenc@redhat.com, richardbgobert@gmail.com,
-        willemb@google.com, steffen.klassert@secunet.com,
-        linux-kernel@vger.kernel.org
-References: <Y9gt5EUizK1UImEP@debian>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0e41673f-457d-1685-ea47-0166ca71ff97@iogearbox.net>
-Date:   Mon, 30 Jan 2023 22:05:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAFA49006;
+        Mon, 30 Jan 2023 13:05:37 -0800 (PST)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1631b928691so16791574fac.11;
+        Mon, 30 Jan 2023 13:05:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3bDd1jgGPleNHLSh/W4VrKXbMGb3ktlbueVN9qKBZG4=;
+        b=2nOABbYcEvw1N/2dIe0umGsl1eCE9s7+ZKKIp91bZVvt0cDk9mR8vGCjMlGV7Djs/V
+         akIoYsgQYLmAaYO5KifjBaarV+0zFT6nxzo7eRYXREgxMR9Utmle9OUZ+5x6dXd5bk39
+         b7pqUdyas+rFpB7TIy0wbnE9cdPZsxH6GGytpmfsVmOioQZtnMJXE6pqNfWfKDCEDwex
+         xKJ8BHzx/UsPXHi04yHxdQ1and5TWOEJkhvFJ9QJMlDyrjrRIDCLlnhrEMvvzUXl7+gm
+         7i8OM8z6CInUpbQYS9MrU/xMJnb/bjjKTEbGAtIPW2z/09ee95zayu7WnPAqfLmV676D
+         iSdQ==
+X-Gm-Message-State: AO0yUKWZzMZFDyHuaVFVJLRe5yGyRq6jL7O2kPrO0yNUk/t5WeBeZOQ8
+        d0VETRrgoRF7bSPsoZ/FFQ==
+X-Google-Smtp-Source: AK7set8W5VSaITyoezV5/0tyHz+aNDmkc87eJvP+VEyOzUsiTylWRDvv7advZGMcm8ohCJ5LGJO+dQ==
+X-Received: by 2002:a05:6870:8089:b0:163:1f0b:d84c with SMTP id q9-20020a056870808900b001631f0bd84cmr6115127oab.1.1675112732231;
+        Mon, 30 Jan 2023 13:05:32 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a7-20020a056870e0c700b001636786f7absm4811365oab.43.2023.01.30.13.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 13:05:31 -0800 (PST)
+Received: (nullmailer pid 3351739 invoked by uid 1000);
+        Mon, 30 Jan 2023 21:05:30 -0000
+Date:   Mon, 30 Jan 2023 15:05:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] dt-bindings: firmware: Add Qualcomm QSEECOM
+ interface
+Message-ID: <20230130210530.GA3339716-robh@kernel.org>
+References: <20230127184650.756795-1-luzmaximilian@gmail.com>
+ <20230127184650.756795-4-luzmaximilian@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Y9gt5EUizK1UImEP@debian>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.7/26797/Mon Jan 30 09:24:58 2023)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127184650.756795-4-luzmaximilian@gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,73 +76,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 9:51 PM, Yan Zhai wrote:
-> Commit 3a1296a38d0c ("net: Support GRO/GSO fraglist chaining.")
-> introduced UDP listifyed GRO. The segmentation relies on frag_list being
-> untouched when passing through the network stack. This assumption can be
-> broken sometimes, where frag_list itself gets pulled into linear area,
-> leaving frag_list being NULL. When this happens it can trigger
-> following NULL pointer dereference, and panic the kernel. Reverse the
-> test condition should fix it.
+On Fri, Jan 27, 2023 at 07:46:49PM +0100, Maximilian Luz wrote:
+> Add bindings for the Qualcomm Secure Execution Environment interface
+> (QSEECOM).
 > 
-> [19185.577801][    C1] BUG: kernel NULL pointer dereference, address:
-> ...
-> [19185.663775][    C1] RIP: 0010:skb_segment_list+0x1cc/0x390
-> ...
-> [19185.834644][    C1] Call Trace:
-> [19185.841730][    C1]  <TASK>
-> [19185.848563][    C1]  __udp_gso_segment+0x33e/0x510
-> [19185.857370][    C1]  inet_gso_segment+0x15b/0x3e0
-> [19185.866059][    C1]  skb_mac_gso_segment+0x97/0x110
-> [19185.874939][    C1]  __skb_gso_segment+0xb2/0x160
-> [19185.883646][    C1]  udp_queue_rcv_skb+0xc3/0x1d0
-> [19185.892319][    C1]  udp_unicast_rcv_skb+0x75/0x90
-> [19185.900979][    C1]  ip_protocol_deliver_rcu+0xd2/0x200
-> [19185.910003][    C1]  ip_local_deliver_finish+0x44/0x60
-> [19185.918757][    C1]  __netif_receive_skb_one_core+0x8b/0xa0
-> [19185.927834][    C1]  process_backlog+0x88/0x130
-> [19185.935840][    C1]  __napi_poll+0x27/0x150
-> [19185.943447][    C1]  net_rx_action+0x27e/0x5f0
-> [19185.951331][    C1]  ? mlx5_cq_tasklet_cb+0x70/0x160 [mlx5_core]
-> [19185.960848][    C1]  __do_softirq+0xbc/0x25d
-> [19185.968607][    C1]  irq_exit_rcu+0x83/0xb0
-> [19185.976247][    C1]  common_interrupt+0x43/0xa0
-> [19185.984235][    C1]  asm_common_interrupt+0x22/0x40
-> ...
-> [19186.094106][    C1]  </TASK>
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+> ---
 > 
-> Fixes: 3a1296a38d0c ("net: Support GRO/GSO fraglist chaining.")
-> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Yan Zhai <yan@cloudflare.com>
+> Changes in v2:
+>  - Replaces uefisecapp bindings.
+>  - Fix various dt-checker complaints.
+> 
+> ---
+>  .../bindings/firmware/qcom,qseecom.yaml       | 49 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/qcom,qseecom.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/qcom,qseecom.yaml b/Documentation/devicetree/bindings/firmware/qcom,qseecom.yaml
+> new file mode 100644
+> index 000000000000..540a604f81bc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/firmware/qcom,qseecom.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/firmware/qcom,qseecom.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Secure Execution Environment Communication Interface
+> +
+> +maintainers:
+> +  - Maximilian Luz <luzmaximilian@gmail.com>
+> +
+> +description: |
+> +  QSEECOM provides an interface to Qualcomm's Secure Execution Environment
+> +  (SEE) running in the Trust Zone via SCM calls. In particular, it allows
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+SCM is SMCCC or something else?
 
->   net/core/skbuff.c | 5 ++---
->   1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 4a0eb5593275..a31ff4d83ecc 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -4100,7 +4100,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
->   
->   	skb_shinfo(skb)->frag_list = NULL;
->   
-> -	do {
-> +	while (list_skb) {
->   		nskb = list_skb;
->   		list_skb = list_skb->next;
->   
-> @@ -4146,8 +4146,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
->   		if (skb_needs_linearize(nskb, features) &&
->   		    __skb_linearize(nskb))
->   			goto err_linearize;
-> -
-> -	} while (list_skb);
-> +	}
->   
->   	skb->truesize = skb->truesize - delta_truesize;
->   	skb->data_len = skb->data_len - delta_len;
-> 
+> +  communication with secure applications running therein.
+> +
+> +  Applications running in this environment can, for example, include
+> +  'uefisecapp', which is required for accessing UEFI variables on certain
+> +  systems as these cannot be accessed directly.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,qseecom-sc8280xp
+> +      - const: qcom,qseecom
+> +
+> +  qcom,scm:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +    description:
+> +      A phandle pointing to the QCOM SCM device (see ./qcom,scm.yaml).
+> +
+> +required:
+> +  - compatible
+> +  - qcom,scm
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    firmware {
+> +        scm {
+> +            compatible = "qcom,scm-sc8280xp", "qcom,scm";
+> +        };
+> +        qseecom {
+> +            compatible = "qcom,qseecom-sc8280xp", "qcom,qseecom";
+> +            qcom,scm = <&scm>;
 
+Why do you need this in DT? If you already know you have a firmware 
+interface (via "qcom,scm"), then query the firmware to see if the SEE is 
+there.
+
+Rob
