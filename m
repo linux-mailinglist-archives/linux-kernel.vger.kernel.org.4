@@ -2,228 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D201681424
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63061681428
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237958AbjA3PKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
+        id S237961AbjA3PLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237906AbjA3PKU (ORCPT
+        with ESMTP id S236713AbjA3PLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:10:20 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF2A2C64E
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:10:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1675091417; x=1706627417;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JQuw/Va9NkBBHclCJT2RtjcVIN8WT+CObEhnifAP11E=;
-  b=nmz2nDv2yeyw3g5S+R+E5rHGQCep4qE0rruMZLkffWs2lKnVCjWN0VWM
-   IWh59TT1SoCebTM10CtKBUpvat13DbnV4Uwbpn0ti4u684FR6LNYlt2ph
-   w0N69ePT2oAdh/vHPR7HDvGJLev7mryZru2ymIYUXGW7H720GYofxvmfd
-   0HPHL8OI/buUYxd4/i9i2NQnVErOUot0KUbDRg47emxo25bU9RMJlSq5D
-   PbV8blP0cT/SYcpNU6WykXKV6bQx82kVf/Kt/rQTISvonXmHB9zDvGBpE
-   SY4SbiddkSZTqdaGuddSr/f4pRcrThNCyl4vq1P4/r0mH+7GyiaMDaOHt
-   A==;
-X-IronPort-AV: E=Sophos;i="5.97,258,1669100400"; 
-   d="asc'?scan'208";a="134635086"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jan 2023 08:10:15 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 30 Jan 2023 08:10:07 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
- Transport; Mon, 30 Jan 2023 08:10:05 -0700
-Date:   Mon, 30 Jan 2023 15:09:41 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Changbin Du <changbin.du@huawei.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hui Wang <hw.huiwang@huawei.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Changbin Du <changbin.du@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH v3] riscv: patch: Fixup lockdep warning in stop_machine
-Message-ID: <Y9fdtcoh8POLZ6CD@wendy>
-References: <20230130232659.3374212-1-changbin.du@huawei.com>
+        Mon, 30 Jan 2023 10:11:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BCC3433B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:10:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675091417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LXaa3DxLrmj9P5CFA6+P4O7CQaN/r3DN91sytM0riZA=;
+        b=Gdm38pDeJo4+LTy7TutvKybXMYZ1B/5AtO060MyWIbqcxUlPIEAEvae5x9SPzc3egXE4i1
+        DUb9Nw9ItkUouZs6nuaQhYMx0xRxxG4j1CujsDlT7mepaxzo/A5V6SfmEu2oiMQB291nGL
+        oE/WgrhuhNkHlMHE1K5q+Zundm7t7xc=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-441-TGhZ-yHEN2O0pJlbXLgI-w-1; Mon, 30 Jan 2023 10:09:59 -0500
+X-MC-Unique: TGhZ-yHEN2O0pJlbXLgI-w-1
+Received: by mail-ej1-f72.google.com with SMTP id wz4-20020a170906fe4400b0084c7e7eb6d0so7635213ejb.19
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:09:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LXaa3DxLrmj9P5CFA6+P4O7CQaN/r3DN91sytM0riZA=;
+        b=6L3RAQwY6w13DHJbDxrUw44oVa4zTNXSecKV/8Q1gsRBnIx4s2wb5QmqaEZxt5rCgC
+         4gmz8elaCF3Yx2P3ewOBo7XbUSJhKfpgcDgqM2Vo8ejqHDvoIJdmuKNUMB7nq+pmczc5
+         2kJFu2jIucBPqGu03wS0cGygpN/gW6b/IElnq9GURG4lT116yrI83FcnVDSbGuFUTv6z
+         nXcuYFEbfQLKAx5a2bzQmn66AhXpEpO9/KYUXvZd4d8+sTyBeeOBqFplU/Ax6QDFqO41
+         wEpWbZRFOyEmxvju310aAPV8iJqvLeCGPD0rOasCtvMclbAMKy6GBxNUUq3sv0/Am57w
+         4gWw==
+X-Gm-Message-State: AO0yUKVCCvw+koDicj5NBsiam4el6w/i5pzI/H0DsgYRnFQ+6SGx1oN2
+        TpIjXJb704gQPgw7PY6Z5H1piwuCqSDqAEVryHxY1PX8Mk0sbdTQmhRJ18WmrC43Zd1XRHG5ECE
+        YRZK2C+qwAsE5510bhgwm6dcB
+X-Received: by 2002:a17:907:a42a:b0:881:277:b77a with SMTP id sg42-20020a170907a42a00b008810277b77amr13917619ejc.65.1675091393854;
+        Mon, 30 Jan 2023 07:09:53 -0800 (PST)
+X-Google-Smtp-Source: AK7set+m64JOYL+W8N2xStqLCn2LIri/OxzmCve7tq3poUgaFHI1YtYrom+bRDUx2q7haW+ByFQuQQ==
+X-Received: by 2002:a17:907:a42a:b0:881:277:b77a with SMTP id sg42-20020a170907a42a00b008810277b77amr13917600ejc.65.1675091393673;
+        Mon, 30 Jan 2023 07:09:53 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id i16-20020a17090639d000b008711cab8875sm6874138eje.216.2023.01.30.07.09.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 07:09:53 -0800 (PST)
+Message-ID: <f163ef7e-41ee-cfa4-67c5-4325d1381110@redhat.com>
+Date:   Mon, 30 Jan 2023 16:09:52 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZHJ8mDdLEgO7bBXq"
-Content-Disposition: inline
-In-Reply-To: <20230130232659.3374212-1-changbin.du@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 4/5] platform/x86: dell-ddv: Add "force" module param
+Content-Language: en-US
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126194021.381092-1-W_Armin@gmx.de>
+ <20230126194021.381092-5-W_Armin@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230126194021.381092-5-W_Armin@gmx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---ZHJ8mDdLEgO7bBXq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi again,
 
-Hey Changbin,
-
-On Tue, Jan 31, 2023 at 07:26:59AM +0800, Changbin Du wrote:
-> From: Changbin Du <changbin.du@gmail.com>
->=20
-> The task of ftrace_arch_code_modify(_post)_prepare() caller is
-> stop_machine, whose caller and work thread are of different tasks. The
-> lockdep checker needs the same task context, or it's wrong. That means
-> it's a bug here to use lockdep_assert_held because we don't guarantee
-> the same task context.
->=20
-> kernel/locking/lockdep.c:
-> int __lock_is_held(const struct lockdep_map *lock, int read)
-> {
->         struct task_struct *curr =3D current;
->         int i;
->=20
->         for (i =3D 0; i < curr->lockdep_depth; i++) {
-> 			^^^^^^^^^^^^^^^^^^^
->                 struct held_lock *hlock =3D curr->held_locks + i;
-> 					  ^^^^^^^^^^^^^^^^
->                 if (match_held_lock(hlock, lock)) {
->                         if (read =3D=3D -1 || !!hlock->read =3D=3D read)
->                                 return LOCK_STATE_HELD;
->=20
-> The __lock_is_held depends on current held_locks records; if
-> stop_machine makes the checker runing on another task, that's wrong.
->=20
-> Here is the log:
-> [   15.761523] ------------[ cut here ]------------
-> [   15.762125] WARNING: CPU: 0 PID: 15 at arch/riscv/kernel/patch.c:63 pa=
-tch_insn_write+0x72/0x364
-> [   15.763258] Modules linked in:
-> [   15.764154] CPU: 0 PID: 15 Comm: migration/0 Not tainted 6.1.0-rc1-000=
-14-g66924be85884-dirty #377
-> [   15.765339] Hardware name: riscv-virtio,qemu (DT)
-> [   15.765985] Stopper: multi_cpu_stop+0x0/0x192 <- stop_cpus.constprop.0=
-+0x90/0xe2
-> [   15.766711] epc : patch_insn_write+0x72/0x364
-> [   15.767011]  ra : patch_insn_write+0x70/0x364
-> [   15.767276] epc : ffffffff8000721e ra : ffffffff8000721c sp : ff200000=
-0067bca0
-> [   15.767622]  gp : ffffffff81603f90 tp : ff60000002432a00 t0 : 73000000=
-00000000
-> [   15.767919]  t1 : 0000000000000000 t2 : 73695f6b636f6c5f s0 : ff200000=
-0067bcf0
-> [   15.768238]  s1 : 0000000000000008 a0 : 0000000000000000 a1 : 00000000=
-00000000
-> [   15.768537]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 00000000=
-00000000
-> [   15.768837]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 00000000=
-00000000
-> [   15.769139]  s2 : ffffffff80009faa s3 : ff2000000067bd10 s4 : ffffffff=
-ffffffff
-> [   15.769447]  s5 : 0000000000000001 s6 : 0000000000000001 s7 : 00000000=
-00000003
-> [   15.769740]  s8 : 0000000000000002 s9 : 0000000000000004 s10: 00000000=
-00000003
-> [   15.770027]  s11: 0000000000000002 t3 : 0000000000000000 t4 : ffffffff=
-819af097
-> [   15.770323]  t5 : ffffffff819af098 t6 : ff2000000067ba28
-> [   15.770574] status: 0000000200000100 badaddr: 0000000000000000 cause: =
-0000000000000003
-> [   15.771102] [<ffffffff80007520>] patch_text_nosync+0x10/0x3a
-> [   15.771421] [<ffffffff80009c66>] ftrace_update_ftrace_func+0x74/0x10a
-> [   15.771704] [<ffffffff800fa17e>] ftrace_modify_all_code+0xb0/0x16c
-> [   15.771958] [<ffffffff800fa24c>] __ftrace_modify_code+0x12/0x1c
-> [   15.772196] [<ffffffff800e110e>] multi_cpu_stop+0x14a/0x192
-> [   15.772454] [<ffffffff800e0a34>] cpu_stopper_thread+0x96/0x14c
-> [   15.772699] [<ffffffff8003f4ea>] smpboot_thread_fn+0xf8/0x1cc
-> [   15.772945] [<ffffffff8003ac9c>] kthread+0xe2/0xf8
-> [   15.773160] [<ffffffff80003e98>] ret_from_exception+0x0/0x14
-> [   15.773471] ---[ end trace 0000000000000000 ]---
-
-FWIW, you can always crop the [15.192321] stuff out of commit messages,
-as it just adds noise.
-
-> By the way, this also fixes the same issue for patch_text().
->=20
-> Fixes: 0ff7c3b33127 ("riscv: Use text_mutex instead of patch_lock")
-> Co-developed-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Zong Li <zong.li@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
+On 1/26/23 20:40, Armin Wolf wrote:
+> Until now, the dell-wmi-ddv driver needs to be manually
+> patched and compiled to test compatibility with unknown
+> DDV WMI interface versions.
+> Add a module param to allow users to force loading even
+> when a unknown interface version was detected. Since this
+> might cause various unwanted side effects, the module param
+> is marked as unsafe.
+> Also update kernel-parameters.txt.
+> 
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 > ---
-> Changes in v3:
->  - denote this also fixes function patch_text().
->=20
-> Changes in v2:
->  - Rewrite commit log with lockdep explanation [Guo Ren]
->  - Rebase on v6.1 [Guo Ren]
->=20
-> v1:
-> https://lore.kernel.org/linux-riscv/20210417023532.354714-1-changbin.du@g=
-mail.com/
-> ---
->  arch/riscv/kernel/patch.c | 7 -------
->  1 file changed, 7 deletions(-)
->=20
-> diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-> index 765004b60513..8619706f8dfd 100644
-> --- a/arch/riscv/kernel/patch.c
-> +++ b/arch/riscv/kernel/patch.c
-> @@ -55,13 +55,6 @@ static int patch_insn_write(void *addr, const void *in=
-sn, size_t len)
->  	bool across_pages =3D (((uintptr_t) addr & ~PAGE_MASK) + len) > PAGE_SI=
-ZE;
->  	int ret;
-> =20
-> -	/*
-> -	 * Before reaching here, it was expected to lock the text_mutex
-> -	 * already, so we don't need to give another lock here and could
-> -	 * ensure that it was safe between each cores.
-> -	 */
-> -	lockdep_assert_held(&text_mutex);
+>  Documentation/admin-guide/kernel-parameters.txt |  3 +++
+>  drivers/platform/x86/dell/dell-wmi-ddv.c        | 13 +++++++++++--
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 6cfa6e3996cf..9bbff5113427 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1024,6 +1024,9 @@
+>  	dell_smm_hwmon.fan_max=
+>  			[HW] Maximum configurable fan speed.
+> 
+> +	dell_wmi_ddv.force=
+> +			[HW] Do not check for supported WMI interface versions.
+> +
+>  	dfltcc=		[HW,S390]
+>  			Format: { on | off | def_only | inf_only | always }
+>  			on:       s390 zlib hardware support for compression on
 
-I must admit, patches like this do concern me a little, as a someone
-unfamiliar with the world of probing and tracing.
-Seeing an explicit check that the lock was held, leads me to believe
-that the original author (Zong Li I think) thought that the text_mutex
-lock was insufficient.
-Do you think that their fear is unfounded? Explaining why it is safe to
-remove this assertion in the commit message would go a long way towards
-easing my anxiety!
+In my previous email I forgot to add that I have dropped this bit. I appreciate
+the effort to document this parameter, but if we add documentation for all
+existing parameters to Documentation/admin-guide/kernel-parameters.txt then
+the file will become quite unyielding / unusable.
 
-Also, why delete the comment altogether? The comment provides some
-information that doesn't appear to become invalid, even with the
-assertion removed?
+So in general we only add new parameters which we expect to be important for
+a large group of users or necessary to debug serious problems like machines
+not booting.
 
-Thanks,
-Conor.
+I realize that a bunch of parameters in there do not match this, like
+e.g. dell_smm_hwmon.fan_max, these are just from older times when
+there were just less parameters, so listing them all was still ok.
 
-> -
->  	if (across_pages)
->  		patch_map(addr + len, FIX_TEXT_POKE1);
-> =20
-> --=20
-> 2.25.1
->=20
->=20
+So I have merged this patch, but with the Documentation/admin-guide/kernel-parameters.txt
+bit dropped.
 
---ZHJ8mDdLEgO7bBXq
-Content-Type: application/pgp-signature; name="signature.asc"
+Regards,
 
------BEGIN PGP SIGNATURE-----
+Hans
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9fdtQAKCRB4tDGHoIJi
-0sslAP49Nvkw+3fXSSaHe03RLitfwfj3l8d8kcrLGD0hdLYxywEAgXyRn/9IxdRM
-CufK52dxbWa8JP2SttW8REey/iqxxgU=
-=GXtU
------END PGP SIGNATURE-----
 
---ZHJ8mDdLEgO7bBXq--
+
+
+
+
+> diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> index 58fadb74e86a..9695bf493ea6 100644
+> --- a/drivers/platform/x86/dell/dell-wmi-ddv.c
+> +++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+> @@ -34,6 +34,10 @@
+>  #define DELL_EPPID_LENGTH	20
+>  #define DELL_EPPID_EXT_LENGTH	23
+> 
+> +static bool force;
+> +module_param_unsafe(force, bool, 0);
+> +MODULE_PARM_DESC(force, "Force loading without checking for supported WMI interface versions");
+> +
+>  enum dell_ddv_method {
+>  	DELL_DDV_BATTERY_DESIGN_CAPACITY	= 0x01,
+>  	DELL_DDV_BATTERY_FULL_CHARGE_CAPACITY	= 0x02,
+> @@ -349,8 +353,13 @@ static int dell_wmi_ddv_probe(struct wmi_device *wdev, const void *context)
+>  		return ret;
+> 
+>  	dev_dbg(&wdev->dev, "WMI interface version: %d\n", version);
+> -	if (version < DELL_DDV_SUPPORTED_VERSION_MIN || version > DELL_DDV_SUPPORTED_VERSION_MAX)
+> -		return -ENODEV;
+> +	if (version < DELL_DDV_SUPPORTED_VERSION_MIN || version > DELL_DDV_SUPPORTED_VERSION_MAX) {
+> +		if (!force)
+> +			return -ENODEV;
+> +
+> +		dev_warn(&wdev->dev, "Loading despite unsupported WMI interface version (%u)\n",
+> +			 version);
+> +	}
+> 
+>  	data = devm_kzalloc(&wdev->dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> --
+> 2.30.2
+> 
+
