@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97080681B0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A31681B0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237898AbjA3UEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
+        id S237956AbjA3UEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237645AbjA3UEI (ORCPT
+        with ESMTP id S229694AbjA3UEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:04:08 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167B835B7;
-        Mon, 30 Jan 2023 12:04:05 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id n6so9511989edo.9;
-        Mon, 30 Jan 2023 12:04:05 -0800 (PST)
+        Mon, 30 Jan 2023 15:04:04 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85E935B7;
+        Mon, 30 Jan 2023 12:04:02 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id k13so12899414plg.0;
+        Mon, 30 Jan 2023 12:04:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=olCbTPRXfVI/d5f5dYzmhROECDXee3XQ0Xd1Jkwcjdg=;
-        b=giiQUd/PcQXaAaDEtKJ8nFqWiHes8vTYVZheg46V/YfQXXmHlIov5DxvNfiJxpIdul
-         Ym2z3k9300SYM64DgFlTShS9E9nx+KllVjo7kytdaw31ptDNlrSpGvS/DaRtW4hTYHUl
-         U4jf1IWJMrwXiMDCTQ42ebEqH6e+8ZyjaxWSuiOIyG5t8oN4WSu32stj7UFUQ/4uyP6G
-         8UqQ8BLtr6BRfQipRqckRanx3EAopELr5rmg5iiQx/uBQjDAftpz+u+b4rRbUh4BcNGd
-         wAVOQFCTiLAc1zRrL57xZ8zBOalk33Gyo2D+rO4PiM4TyPCVjvRGfJpt72wGcTnVThiy
-         sCxw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oJ4P0/7Fp0wCRDTr6k9aNwM0pDSN8y8lOMVT0a0hr+M=;
+        b=GMguhGR/5KzGoCcT+asTn+uaWzS2OXmm62BHl7SR+mlawkTkIqPq7ROdAN3adybGQ0
+         PrnLmLD0QfXMrw4ppvxnvNifH4X/RlAKxdtMWFzawFYe915XuvuzImHj4WGauXGNCqH4
+         wPhNBQsRWtsjsAG+GUh43c00/8Mcysrcdc/hnWsgwXAPTWYYZaYovUhsjuf/h0A6Ip5f
+         Z/h3P7k0K9TFNFtQBcM+JEmr57M/XORBaP9Nk26e2TgydY6ZoGZUXxbZQyWPyOKBtTKK
+         kHFMNfOJFQ8aOKCtWOZXwWE3ZEZqRHdA2RS9c3kAB1fDdsse0Ew6Kj0MaJiQ7jVUjsju
+         A85w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=olCbTPRXfVI/d5f5dYzmhROECDXee3XQ0Xd1Jkwcjdg=;
-        b=3XgtZerFuUoWcZy5bTaTZ7hfpVvKt5UNQBOgy2DYkSL+by0YU+oHnfUUb69yW5jbRv
-         IYZtw9b87mPLH2BiXoLidXH+AH3K36+8H/g9Nm0nWblQRunKjNXdlxHg2pN8SWhZTox/
-         7IAGZT7gJnmkFZTtkTHJVURHHeocjICjwME6mZeMxUsALdpYzim6QMN4CgmxYOLvYkHP
-         zmrf75+PhzHiuREx2TCF/zPX3VTQZtlwgW2JExuAVEgbRzRS+Ip4z/VSfdSSNyg+qPgT
-         l1yUaoEyAZ4cR9ZzdCQBR0MSOEmSLq8PkUPA0sfvm7fp35w4JOR5gt6tk+m0wKu84HhM
-         3kOQ==
-X-Gm-Message-State: AFqh2kpRVXvWnf1mmG1jlKIMlsCBYAXpsCRnINaiHh69BPj50P/na8gc
-        I3qeuZl3Iz9hs+LP7fGoLxsnGzy1oy+l+YEoMT8=
-X-Google-Smtp-Source: AMrXdXvRXTIs3H82Aw6Swuv79C57I8Tz49/T2Qn3nWRd6oDp3CI9Ma0LOXy9if2iVNg8LVP3q3fxKimM3FaTUMNJjlc=
-X-Received: by 2002:a05:6402:4494:b0:49e:89e:c7b4 with SMTP id
- er20-20020a056402449400b0049e089ec7b4mr9001785edb.1.1675109043516; Mon, 30
- Jan 2023 12:04:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20230130181915.1113313-1-zwisler@google.com> <20230130181915.1113313-4-zwisler@google.com>
- <CAADnVQJ7KxEK92qOz0Ya4MrACHpxngSpG4W38xuGEgZmXEG-vQ@mail.gmail.com> <20230130145932.37cf6b73@gandalf.local.home>
-In-Reply-To: <20230130145932.37cf6b73@gandalf.local.home>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+        bh=oJ4P0/7Fp0wCRDTr6k9aNwM0pDSN8y8lOMVT0a0hr+M=;
+        b=xZFbZRiPkc/o9BbQbfE/otS/MP/YKxx8zwUnNqvYIztkpbFwH1OCH7M3gvnxNL+FlP
+         oEsCEuxq7DUfazes4racpLCGKm4Tw3KY3sr2szBorsSzKFH87HsKwf1O00UtvZYIJ1tW
+         p5CKOAljQHO+FTdjN6xeyNlDHwFFuMsdRM+d4UENUxFk/4SkPh++GP4XjIk3xk4X2vir
+         /VoXjiEiBQCF0AVL4ZOddmuUFr03A2I4PxYnU5EMp1BrXyPmP0smz0QLKC5+AhUISKH8
+         786He5mnwiCW80QkSN0aMGN/uy3I7jM+9DpFsB5uwPQNnFS3CKKeMlibqwZdAEWxAO4+
+         ROZA==
+X-Gm-Message-State: AO0yUKUtrSvilKUJ1V+2f0I/+qs92gNcxG2K4EVUjzhOYK3uV6THvZo5
+        PE2XmtPmpasCvjT8NYXVfCKie/jY0N2V+w==
+X-Google-Smtp-Source: AK7set/WTkUIa6Te+NDPxbvH6Wa2PH2/VOn6lWITCpx9lMT062pLD5IOdnoFxxeGfBW4aB267/9ELQ==
+X-Received: by 2002:a05:6a20:54a6:b0:bd:b81:2bc3 with SMTP id i38-20020a056a2054a600b000bd0b812bc3mr5689786pzk.2.1675109042023;
+        Mon, 30 Jan 2023 12:04:02 -0800 (PST)
+Received: from localhost.localdomain.com (2603-8001-4200-6311-92a0-3d53-9224-b276.res6.spectrum.com. [2603:8001:4200:6311:92a0:3d53:9224:b276])
+        by smtp.gmail.com with ESMTPSA id o7-20020a17090a55c700b002300fe83a4fsm98684pjm.20.2023.01.30.12.04.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 12:04:01 -0800 (PST)
+From:   Chris Healy <cphealy@gmail.com>
+To:     cphealy@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jeremy.wang@amlogic.com
+Cc:     Chris Healy <healych@amazon.com>
+Subject: [PATCH v2] net: phy: meson-gxl: Add generic dummy stubs for MMD register access
 Date:   Mon, 30 Jan 2023 12:03:52 -0800
-Message-ID: <CAADnVQ+F3Z70mu3-QyyNFyJ2qCkDXnMJCW-o+fcnZo=LWj5d9g@mail.gmail.com>
-Subject: Re: [PATCH 3/9] selftests/bpf: use canonical ftrace path
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ross Zwisler <zwisler@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <20230130200352.462548-1-cphealy@gmail.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -83,57 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 11:59 AM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Mon, 30 Jan 2023 11:52:03 -0800
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
-> > On Mon, Jan 30, 2023 at 10:19 AM Ross Zwisler <zwisler@chromium.org> wrote:
-> > >
-> > > The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
-> > >
-> > > But, from Documentation/trace/ftrace.rst:
-> > >
-> > >   Before 4.1, all ftrace tracing control files were within the debugfs
-> > >   file system, which is typically located at /sys/kernel/debug/tracing.
-> > >   For backward compatibility, when mounting the debugfs file system,
-> > >   the tracefs file system will be automatically mounted at:
-> > >
-> > >   /sys/kernel/debug/tracing
-> > >
-> > > Many tests in the bpf selftest code still refer to this older debugfs
-> > > path, so let's update them to avoid confusion.
-> >
-> > I wish that was the case, but in reality there are still systems
-> > out there where tracefs is only mounted in that old location.
-> > For example in one my VMs:
-> >
-> > $ cat /proc/mounts |grep tracefs
-> > tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
-> > $ ls /sys/kernel/tracing/
-> > $ uname -r
-> > 6.2.0-rc5-01030-gc1a3daf7363b
-> >
-> > So this change will break the tests. We cannot do it.
->
-> Could we add a way to try to mount it?
->
-> If anything, the tests should not have the path hard coded. It should then
-> look to see if it is mounted and use the path that is found. Otherwise it
-> should try mounting it at the correct location.
->
-> Feel free to take the code from libtracefs (and modify it):
->
-> https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tree/src/tracefs-utils.c#n89
->
-> It will make the test code much more robust.
+From: Chris Healy <healych@amazon.com>
 
-The point is not about tests. The point is that this change might break
-some users that are working today with /sys/kernel/debug/tracing.
-It also might be mounted differently.
-For example from another system:
-cat /proc/mounts|grep trace
-tracefs /sys/kernel/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0
-tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
+The Meson G12A Internal PHY does not support standard IEEE MMD extended
+register access, therefore add generic dummy stubs to fail the read and
+write MMD calls. This is necessary to prevent the core PHY code from
+erroneously believing that EEE is supported by this PHY even though this
+PHY does not support EEE, as MMD register access returns all FFFFs.
 
-So I suggest leaving the code as-is.
+Fixes: 5c3407abb338 ("net: phy: meson-gxl: add g12a support")
+Signed-off-by: Chris Healy <healych@amazon.com>
+---
+
+Change in v2:
+* Add fixes tag
+
+ drivers/net/phy/meson-gxl.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
+index c49062ad72c6..5e41658b1e2f 100644
+--- a/drivers/net/phy/meson-gxl.c
++++ b/drivers/net/phy/meson-gxl.c
+@@ -271,6 +271,8 @@ static struct phy_driver meson_gxl_phy[] = {
+ 		.handle_interrupt = meson_gxl_handle_interrupt,
+ 		.suspend        = genphy_suspend,
+ 		.resume         = genphy_resume,
++		.read_mmd	= genphy_read_mmd_unsupported,
++		.write_mmd	= genphy_write_mmd_unsupported,
+ 	},
+ };
+ 
+-- 
+2.39.1
+
