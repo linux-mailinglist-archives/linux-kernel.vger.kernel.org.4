@@ -2,147 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A0B680D56
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2871A680D5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbjA3MPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S235349AbjA3MPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbjA3MPS (ORCPT
+        with ESMTP id S235876AbjA3MPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:15:18 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0CF110F4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:15:16 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F7691756;
-        Mon, 30 Jan 2023 04:15:58 -0800 (PST)
-Received: from a077893.arm.com (unknown [10.163.51.124])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3BD2A3F71E;
-        Mon, 30 Jan 2023 04:15:13 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, will@kernel.org,
-        catalin.marinas@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3] arm64/mm: Intercept pfn changes in set_pte_at()
-Date:   Mon, 30 Jan 2023 17:44:57 +0530
-Message-Id: <20230130121457.1607675-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 30 Jan 2023 07:15:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8BB59F2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:15:42 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pMT4N-0003qm-24; Mon, 30 Jan 2023 13:15:31 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pMT4M-0002HO-A1; Mon, 30 Jan 2023 13:15:30 +0100
+Date:   Mon, 30 Jan 2023 13:15:30 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Richard Cochran <richardcochran@gmail.com>,
+        devicetree@vger.kernel.org, kernel@pengutronix.de,
+        Stephen Boyd <sboyd@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-clk@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Abel Vesa <abelvesa@kernel.org>
+Subject: Re: [PATCH v2 15/19] clk: imx6ul: fix enet1 gate configuration
+Message-ID: <20230130121530.GA10978@pengutronix.de>
+References: <20230117061453.3723649-1-o.rempel@pengutronix.de>
+ <20230117061453.3723649-16-o.rempel@pengutronix.de>
+ <Y9atr+Gn60+m4nOg@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9atr+Gn60+m4nOg@linaro.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changing pfn on a user page table mapped entry, without first going through
-break-before-make (BBM) procedure is unsafe. This just updates set_pte_at()
-to intercept such changes, via an updated pgattr_change_is_safe(). This new
-check happens via __check_racy_pte_update(), which has now been renamed as
-__check_safe_pte_update().
+On Sun, Jan 29, 2023 at 07:32:31PM +0200, Abel Vesa wrote:
+> On 23-01-17 07:14:49, Oleksij Rempel wrote:
+> > According to the "i.MX 6UltraLite Applications Processor Reference Manual,
+> > Rev. 2, 03/2017", BIT(13) is ENET1_125M_EN which is not controlling root
+> > of PLL6. It is controlling ENET1 separately.
+> > 
+> > So, instead of this picture (implementation before this patch):
+> > fec1 <- enet_ref (divider) <---------------------------,
+> >                                                        |- pll6_enet (gate)
+> > fec2 <- enet2_ref_125m (gate) <- enet2_ref (divider) <-´
+> > 
+> > we should have this one (after this patch):
+> > fec1 <- enet1_ref_125m (gate) <- enet1_ref (divider) <-,
+> >                                                        |- pll6_enet
+> > fec2 <- enet2_ref_125m (gate) <- enet2_ref (divider) <-´
+> > 
+> > With this fix, the RMII reference clock will be turned off, after
+> > setting network interface down on each separate interface
+> > (ip l s dev eth0 down). Which was not working before, on system with both
+> > FECs enabled.
+> > 
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+> I'm OK with this. Maybe a fixes tag ?
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v6.2-rc6
+Hm. Initial commit was:
+Fixes: 787b4271a6a0 ("clk: imx: add imx6ul clk tree support")
+but this patch will not apply on top of it.
+Next possible commit would be:
+Fixes: 1487b60dc2d2 ("clk: imx6ul: Switch to clk_hw based API")
+But this patch didn't introduce this issue, it was just refactoring.
 
-Changes in V3:
+What do you prefer?
 
-- Changed pgattr_change_is_safe() as suggested by Mark
-
-Changes in V2:
-
-https://lore.kernel.org/all/20230109052816.405335-1-anshuman.khandual@arm.com/
-
-Changes in V1:
-
-https://lore.kernel.org/all/20221116031001.292236-1-anshuman.khandual@arm.com/
-
- arch/arm64/include/asm/pgtable.h | 8 ++++++--
- arch/arm64/mm/mmu.c              | 8 ++++++--
- 2 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 65e78999c75d..27455bfd64bc 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -275,6 +275,7 @@ static inline void set_pte(pte_t *ptep, pte_t pte)
- }
- 
- extern void __sync_icache_dcache(pte_t pteval);
-+bool pgattr_change_is_safe(u64 old, u64 new);
- 
- /*
-  * PTE bits configuration in the presence of hardware Dirty Bit Management
-@@ -292,7 +293,7 @@ extern void __sync_icache_dcache(pte_t pteval);
-  *   PTE_DIRTY || (PTE_WRITE && !PTE_RDONLY)
-  */
- 
--static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
-+static inline void __check_safe_pte_update(struct mm_struct *mm, pte_t *ptep,
- 					   pte_t pte)
- {
- 	pte_t old_pte;
-@@ -318,6 +319,9 @@ static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
- 	VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
- 		     "%s: racy dirty state clearing: 0x%016llx -> 0x%016llx",
- 		     __func__, pte_val(old_pte), pte_val(pte));
-+	VM_WARN_ONCE(!pgattr_change_is_safe(pte_val(old_pte), pte_val(pte)),
-+		     "%s: unsafe attribute change: 0x%016llx -> 0x%016llx",
-+		     __func__, pte_val(old_pte), pte_val(pte));
- }
- 
- static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
-@@ -346,7 +350,7 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
- 			mte_sync_tags(old_pte, pte);
- 	}
- 
--	__check_racy_pte_update(mm, ptep, pte);
-+	__check_safe_pte_update(mm, ptep, pte);
- 
- 	set_pte(ptep, pte);
- }
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index d77c9f56b7b4..6f9d8898a025 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -133,7 +133,7 @@ static phys_addr_t __init early_pgtable_alloc(int shift)
- 	return phys;
- }
- 
--static bool pgattr_change_is_safe(u64 old, u64 new)
-+bool pgattr_change_is_safe(u64 old, u64 new)
- {
- 	/*
- 	 * The following mapping attributes may be updated in live
-@@ -142,9 +142,13 @@ static bool pgattr_change_is_safe(u64 old, u64 new)
- 	pteval_t mask = PTE_PXN | PTE_RDONLY | PTE_WRITE | PTE_NG;
- 
- 	/* creating or taking down mappings is always safe */
--	if (old == 0 || new == 0)
-+	if (!pte_valid(__pte(old)) || !pte_valid(__pte(new)))
- 		return true;
- 
-+	/* A live entry's pfn should not change */
-+	if (pte_pfn(__pte(old)) != pte_pfn(__pte(new)))
-+		return false;
-+
- 	/* live contiguous mappings may not be manipulated at all */
- 	if ((old | new) & PTE_CONT)
- 		return false;
+Regards,
+Oleksij
 -- 
-2.30.2
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
