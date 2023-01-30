@@ -2,152 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F49681AFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB64681B04
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238010AbjA3UAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S237469AbjA3UAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238143AbjA3T7r (ORCPT
+        with ESMTP id S236260AbjA3UAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:59:47 -0500
-Received: from out-145.mta0.migadu.com (out-145.mta0.migadu.com [IPv6:2001:41d0:1004:224b::91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6A9470B0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:59:44 -0800 (PST)
-Date:   Mon, 30 Jan 2023 20:59:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=grimler.se; s=key1;
-        t=1675108779;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oDXEr4tevG+VL9CgJZUG91in/A0kV3NohS4+eilPyY0=;
-        b=Dk9hrcKLg6J15nt1uvUwiH2WNSHjrXjxdfBe9kav2HVwNfuGuB46meRfLu0ATP714SBYmM
-        5mBixVUdN+gnXm6mmBATYA/VwWWbAEmbE6WbEpiM4B990lSV3N0zbh4iQvVDa7TcAl/DR6
-        H3y/OSaK96QSmwwFPqc3M8TBzdbTXNg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Henrik Grimler <henrik@grimler.se>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        alim.akhtar@samsung.com, jenneron@protonmail.com,
-        markuss.broks@gmail.com, martin.juecker@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 0/2] ARM: dts: add mmc aliases for Exynos devices
-Message-ID: <Y9ghpylhwvB54E0w@localhost>
-References: <CGME20230128133213eucas1p274ea3393199fe711fba8f542197e1dea@eucas1p2.samsung.com>
- <20230128133151.29471-1-henrik@grimler.se>
- <e41a0a4c-b9c6-e396-313e-ea2990b2dd6f@samsung.com>
+        Mon, 30 Jan 2023 15:00:49 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A267945F65
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:00:47 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so16722365pjq.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:00:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oYPPhRQH7ubPQanie/vKOvvHKXQgtOiqcTGLviBDhmA=;
+        b=VuIJDnbFxTUIxWa8L1VWYdb9MI+Uw4XrbLFKat84mMs9afmGaZW62Y8sKNZY5LBIF4
+         +Ul6XxbH/vm/jWs4c0ZPc3jWE3uAo28avKQqTO/OylcU85C+pB8xolsbJyGsGs/rL36V
+         ZSGY0QiNRBwyMe6LPf8vVH/qahQuHtl7YMtCVevzTZ34CA2joFRibts3ttJxVgZaxcTx
+         l/FqMCCgujpobwNcfJfN4c6OBuaJYFlasSYS1viKL0qQV/M1/KYatfFCLgEyymahIMwl
+         4hVV55hFljOlpo+yPWWpOYotAjaJ3htnES4ajEtyGZ/W45QNCPKfgFhg3OCpw5z0Gfbg
+         1ESw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oYPPhRQH7ubPQanie/vKOvvHKXQgtOiqcTGLviBDhmA=;
+        b=BsXE+U1XjXR2XXMiUWQTWwHdvN5nobUHBPIe1t1J907u03si6xrNnstMGQMedaqQFA
+         ILXxvpeWfWAUCW+OaEEq9qxc1MqK+wHf0bqGpDlzt8GOWl7xWyGuBo9T88+hZDn15ce2
+         AkGkIxvBIIdc3L2vgLOQko6DBbFZtoGwCuDQ/awOd/UNnsQX5B8RPrd69PvO8BjDNEpW
+         7ZHV//grm36bhUwUwi+06DR3s8NezDw9kO52LkBUMAGmCbXe0CCc+Ge7pNK+LMlcG9rO
+         r/uMrWKUZwRdgWqtWFou2RF3jbdAqCWRHGmKjV5vCbuA92QNrvHriUjBL0bLrD415PSu
+         JSEg==
+X-Gm-Message-State: AO0yUKV7Vdwk95Dl8DH8iXARJruoIXi42xWVTFcORc2i2uHxTfPJPPRF
+        gZDLEfu/VSI7cwua55EakbVAEONY4eeJ5aDffQQ3tg==
+X-Google-Smtp-Source: AK7set+H0YyjCWkJd7M+yIj4eRkqAmXNub+KUOd2n+yHCGliVqKml+ieu+Re/d5tqMId+oQWqascMv0yHsacweeoFCU=
+X-Received: by 2002:a17:902:d64d:b0:196:7c6e:eb8d with SMTP id
+ y13-20020a170902d64d00b001967c6eeb8dmr912246plh.12.1675108846782; Mon, 30 Jan
+ 2023 12:00:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e41a0a4c-b9c6-e396-313e-ea2990b2dd6f@samsung.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-4-saravanak@google.com>
+ <CAMuHMdV4B49OM7S-UAxJtfAR8OvG_-S526fGnTA+t+-orytrTw@mail.gmail.com>
+ <CAGETcx9EXkbAfEX6pBL84DBr3SEwiJe7N4xh91TspLn8CwZ+LQ@mail.gmail.com> <CAMuHMdUFeSim2gvmiBuPbAajbK6ybh67gBmbLLqRhG1T5+v0JA@mail.gmail.com>
+In-Reply-To: <CAMuHMdUFeSim2gvmiBuPbAajbK6ybh67gBmbLLqRhG1T5+v0JA@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 30 Jan 2023 12:00:10 -0800
+Message-ID: <CAGETcx-TSrjFnmxV02TMaGN6Au4f9SuLgzjMPOqAOTqx_bqLhA@mail.gmail.com>
+Subject: Re: [PATCH v2 03/11] soc: renesas: Move away from using OF_POPULATED
+ for fw_devlink
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marek,
+On Mon, Jan 30, 2023 at 12:43 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
+> Hi Saravana,
+>
+> On Sat, Jan 28, 2023 at 8:19 AM Saravana Kannan <saravanak@google.com> wrote:
+> > On Fri, Jan 27, 2023 at 12:11 AM Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> > > On Fri, Jan 27, 2023 at 1:11 AM Saravana Kannan <saravanak@google.com> wrote:
+> > > > The OF_POPULATED flag was set to let fw_devlink know that the device
+> > > > tree node will not have a struct device created for it. This information
+> > > > is used by fw_devlink to avoid deferring the probe of consumers of this
+> > > > device tree node.
+> > > >
+> > > > Let's use fwnode_dev_initialized() instead because it achieves the same
+> > > > effect without using OF specific flags. This allows more generic code to
+> > > > be written in driver core.
+> > > >
+> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > >
+> > > Thanks for your patch!
+> > >
+> > > > --- a/drivers/soc/renesas/rcar-sysc.c
+> > > > +++ b/drivers/soc/renesas/rcar-sysc.c
+> > > > @@ -437,7 +437,7 @@ static int __init rcar_sysc_pd_init(void)
+> > > >
+> > > >         error = of_genpd_add_provider_onecell(np, &domains->onecell_data);
+> > > >         if (!error)
+> > > > -               of_node_set_flag(np, OF_POPULATED);
+> > > > +               fwnode_dev_initialized(&np->fwnode, true);
+> > >
+> > > As drivers/soc/renesas/rmobile-sysc.c is already using this method,
+> > > it should work fine.
+> > >
+> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > i.e. will queue in renesas-devel for v6.4.
 
-On Mon, Jan 30, 2023 at 02:28:27PM +0100, Marek Szyprowski wrote:
-> On 28.01.2023 14:31, Henrik Grimler wrote:
-> > It is convenient to have fixed mmcblk numbering of the eMMC and sdcard
-> > so that assigned numbers will not change from boot-to-boot or
-> > depending on if storage devices are actually attached or not.
-> >
-> > Anton Bambura has done the work for the chromebooks while I have
-> > looked at the other devices.  On the chromebooks, mmc0 is used for
-> > eMMC and mmc1 for sdcard, while mmc0 is used for eMMC and mmc2 for
-> > sdcard on the other boards, simply because Anton and I had different
-> > preferences.
-> >
-> > Also remove mshc aliases, as they should not be needed after [1] as
-> > I understand it.
-> 
-> Thanks for this patchset. Long time ago I've tried to submit something 
-> similar, but that time it has been rejected:
-> 
-> https://lore.kernel.org/all/20201105114804.18326-1-m.szyprowski@samsung.com/
+I hope you meant queue it up for 6.3 and not 6.4?
 
-Thanks for testing!  I missed that you had sent it before, Krzysztof
-pointed it out in v1 as well.
+> >
+> > Thanks! Does that mean I should drop this from this series? If two
+> > maintainers pick the same patch up, will it cause problems? I'm
+> > eventually expecting this series to be picked up by Greg into
+> > driver-core-next.
+>
+> Indeed. Patches for drivers/soc/renesas/ are supposed to go upstream
+> through the renesas-devel and soc trees. This patch has no dependencies
+> on anything else in the series (or vice versa), so there is no reason
+> to deviate from that, and possibly cause conflicts later.
 
-> I hope that the mshc alias removal will help here.
-> 
-> BTW, similar patchset is needed for arch/arm64/boot/dts/exynos
+This series is supposed to fix a bunch of issues and I vaguely think
+the series depends on this patch to work correctly on some Renesas
+systems. You are my main renesas person, so it's probably some issue
+you hit. Is you pick it up outside of this series I need to keep
+asking folks to pick up two different patch threads. I don't have a
+strong opinion, just a FYI. If you can take this patch soon, I don't
+have any concerns.
 
-Sure, I do not have any of the currently supported arm64 boards to
-test with, but can send the same type of patch for arm64 as well.
+> BTW, I will convert to of_node_to_fwnode() while applying.
 
-[1] 
+Sounds good.
 
-Best regards,
-Henrik Grimler
-
-> > [1] https://lkml.kernel.org/lkml/20211124184603.3897245-1-john@metanate.com
-> >
-> > ---
-> >
-> > Changes since v1:
-> > * Move mshc alias cleanup to a separate commit
-> > * Use mmc0 and mmc1 (instead of mmc0 and mmc2) for eMMC and sdcard on
-> >    chromebooks
-> > * Address Krzysztof's review comments:
-> >   - Make changes per device rather than in soc dtsi
-> >
-> >
-> > Henrik Grimler (2):
-> >    ARM: dts: exynos: drop mshc aliases
-> >    ARM: dts: exynos: add mmc aliases
-> >
-> >   arch/arm/boot/dts/exynos3250-artik5-eval.dts        | 5 +++++
-> >   arch/arm/boot/dts/exynos3250-artik5.dtsi            | 5 +++++
-> >   arch/arm/boot/dts/exynos3250-monk.dts               | 1 +
-> >   arch/arm/boot/dts/exynos3250-rinato.dts             | 2 ++
-> >   arch/arm/boot/dts/exynos3250.dtsi                   | 3 ---
-> >   arch/arm/boot/dts/exynos4210-i9100.dts              | 6 ++++++
-> >   arch/arm/boot/dts/exynos4210-origen.dts             | 5 +++++
-> >   arch/arm/boot/dts/exynos4210-smdkv310.dts           | 4 ++++
-> >   arch/arm/boot/dts/exynos4210-trats.dts              | 6 ++++++
-> >   arch/arm/boot/dts/exynos4210-universal_c210.dts     | 6 ++++++
-> >   arch/arm/boot/dts/exynos4412-itop-elite.dts         | 5 +++++
-> >   arch/arm/boot/dts/exynos4412-midas.dtsi             | 3 +++
-> >   arch/arm/boot/dts/exynos4412-odroid-common.dtsi     | 5 +++++
-> >   arch/arm/boot/dts/exynos4412-origen.dts             | 5 +++++
-> >   arch/arm/boot/dts/exynos4412-p4note.dtsi            | 6 ++++++
-> >   arch/arm/boot/dts/exynos4412-smdk4412.dts           | 4 ++++
-> >   arch/arm/boot/dts/exynos4412-tiny4412.dts           | 4 ++++
-> >   arch/arm/boot/dts/exynos4412.dtsi                   | 1 -
-> >   arch/arm/boot/dts/exynos5250-arndale.dts            | 5 +++++
-> >   arch/arm/boot/dts/exynos5250-smdk5250.dts           | 2 ++
-> >   arch/arm/boot/dts/exynos5250-snow-common.dtsi       | 3 +++
-> >   arch/arm/boot/dts/exynos5250-spring.dts             | 5 +++++
-> >   arch/arm/boot/dts/exynos5250.dtsi                   | 4 ----
-> >   arch/arm/boot/dts/exynos5260-xyref5260.dts          | 5 +++++
-> >   arch/arm/boot/dts/exynos5410-odroidxu.dts           | 2 ++
-> >   arch/arm/boot/dts/exynos5410-smdk5410.dts           | 5 +++++
-> >   arch/arm/boot/dts/exynos5420-arndale-octa.dts       | 5 +++++
-> >   arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi | 5 +++++
-> >   arch/arm/boot/dts/exynos5420-peach-pit.dts          | 3 +++
-> >   arch/arm/boot/dts/exynos5420-smdk5420.dts           | 5 +++++
-> >   arch/arm/boot/dts/exynos5420.dtsi                   | 3 ---
-> >   arch/arm/boot/dts/exynos5422-odroid-core.dtsi       | 5 +++++
-> >   arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi  | 4 ++++
-> >   arch/arm/boot/dts/exynos5422-samsung-k3g.dts        | 4 ++++
-> >   arch/arm/boot/dts/exynos5800-peach-pi.dts           | 3 +++
-> >   35 files changed, 133 insertions(+), 11 deletions(-)
-> >
-> >
-> > base-commit: 9ca5a7ce492d182c25ea2e785eeb72cee1d5056b
-> 
-> Best regards
-> -- 
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
-> 
+-Saravana
