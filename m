@@ -2,430 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692F0681B33
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 834F4681B8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjA3UR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:17:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S229851AbjA3UcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjA3URX (ORCPT
+        with ESMTP id S229546AbjA3UcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:17:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4579302B5;
-        Mon, 30 Jan 2023 12:17:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74FC3B815DF;
-        Mon, 30 Jan 2023 20:17:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE8DC433D2;
-        Mon, 30 Jan 2023 20:17:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675109836;
-        bh=BW1MwabsMq5gwKtS2OGI3Ga7toP+lOo5FAEpPysgNGk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IfWAeQH1XCHBFYbwir3mK+8Zs1964DSMJF6oxz4RMHikBGqz6aofjfIGFqFDJ90y8
-         5bLsBi+S2FjmQyxSVCvoCG2O4CKeRjpoz607r36lX1hCj7x+e/6BUBs0i8e83T60Me
-         eNb24KTAI4ScNDUqwSfok3Wv8momk0b8xqwHt3D0wxV74DnzZNrH99J/friyzLGmj+
-         8rJEvJ7zhWfzS8pXKsMXstQyJKZZvOO9z4/3II02kbvtn0Mymiz2M+Sm2B64C0CXpn
-         D0Uj94aAS8+hzuNW1qr8MwIaLDyQhi+mK7A/gUa9t80muuzjS9vrE0hKS0gWjY8AeQ
-         R0lZS9FDrIOvw==
-Date:   Mon, 30 Jan 2023 20:31:10 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Darrell Kavanagh <darrell.kavanagh@gmail.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>
-Subject: Re: Bug#1029850: linux: Driver not loaded for ST Microelectronics
- LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
-Message-ID: <20230130203110.60c96f37@jic23-huawei>
-In-Reply-To: <CAMxBKG3S6aJSrO-BAPCAhVpg2qF2kWfRJ9d0n2EmOY=JGNid-A@mail.gmail.com>
-References: <167493679618.4533.12181720504943588640.reportbug@debian-duet>
-        <Y9WGmBc9HG4Tx9gf@eldamar.lan>
-        <CAMxBKG1670TFuV3nHP7Yk8s6H+oBF7iiyiB-b=PvKv9hcH22xQ@mail.gmail.com>
-        <20230129182441.082f29d0@jic23-huawei>
-        <CAMxBKG0tyLSpaDPGBXsJbqgHSG9rH6owtSJsLw_ekmTA3Kyvdw@mail.gmail.com>
-        <CAMxBKG3zL_yvw=dHK+Gqd3EHWzvJmiLHVvKnf6UsYbMgcS6nrg@mail.gmail.com>
-        <20230130123113.00002c3f@Huawei.com>
-        <CAMxBKG3xOEj1gEs9pGzKb+rDjTLPqAq1YOp4bEFas4tQMzGZ+Q@mail.gmail.com>
-        <20230130173525.0000418d@huawei.com>
-        <CAMxBKG1yKcodDD2kvfwKvpYnPrXmgaOk9rTztRPFzKMCZ5F=tA@mail.gmail.com>
-        <20230130194110.256144e7@jic23-huawei>
-        <CAMxBKG3S6aJSrO-BAPCAhVpg2qF2kWfRJ9d0n2EmOY=JGNid-A@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Mon, 30 Jan 2023 15:32:07 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E9F3586;
+        Mon, 30 Jan 2023 12:32:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675110726; x=1706646726;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=Q6BsgQoL05nE8fGPWD0o8Tv32N81pwOo2gnXB2++Nzc=;
+  b=VDomGFV8v3fy21LHtvqT02xs23RzHYz37Z+zxVxu42puWIEqrM8rb0U/
+   rdgtGw2xC2RT6f6wIGcbNsgUNSepREfHf4Oq23UWaYhXxpEwenKZJC/bH
+   U3DDB23B+QZP93GcPlykwMo2+WHpDozQMw66azLOGWslgVSI5pxO+Tgnc
+   C1Ec9da7tW/K8nwRQQ4kWJBvQlJP4y+0fsBzGcyESBe/8LmeLSrRWILWp
+   rZMYN//xuPDPLj4KGjsd3h2rx9DMOgS0M+Hg7Pz8ZsbhaB42JaY88Q+gr
+   DzntZE+hnLDqi21sV14xFwAb2sJHo7C8GYv3RGSTQ4QaKiDGT/5ew9yKA
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="326329497"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="326329497"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 12:31:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="838092864"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="838092864"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 30 Jan 2023 12:31:51 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 12:31:51 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 12:31:50 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 30 Jan 2023 12:31:50 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 30 Jan 2023 12:31:49 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cftXHfH05zzGECjN57Fy9OHs5EAJGWbkMqQmNzTVbEL7VQJwP8I8WNVeRw86WHTQL1DEzM4ghoqiUpglh1uxhexR5dxW+GsWLWjjbgWRRZKYOmUDRm1bX21IPZW8fV3SIumeuQRbwIHYpydJwSh8ReIFJzbGT9vWru5q4KILAIgOQ8k6tkaF1TmUI7gbBmbYKbsopMMYQNLjgyopNVNtYhewlYLwP8GvRHBcgaOCJSwwmb/F9bvI2C82qm/6Qu5liFCHPm8uTwenJEN3byJgFeUYrwydslL1BBj9rXPr7GdbE7iwr+XwN/C+clqbRyXfn8FwLczxfdUUNrySegVhSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MLzlcALtEMkuKCswE6NFOwQSrn+rJK1a4UKfz9eYTMs=;
+ b=nywQRhmjTSI6xe4YERK6htrPGwGa4yegem/zMb4k4q3dGvsqBjUBKNSBnoGwdZU3o9d0AtpGAmFpwKKC97kUNPuKqNdXpAfzjkw4QPIg/I/iuvh8dLlOM1P+hSj+lRkZLYHPW/E3DSdpxwbgrHb9XM74HluCNqYe/cvr+lx3mighFMYX2RRMv86GQhL1ZjSTwOltC7eG2LEjdh17T2lMQk2CyF/rj3ncsQG+HhLroOQI9wsc+fyyYUKB1k9OIcWfjVjd9OQ4bUyyQq3pfroMFNwscTbbTNKd9DUohKkU47su5nYQxIrWQ+NVn62N4jHWZLirTOsX9N07S8fenPXfMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SA0PR11MB4557.namprd11.prod.outlook.com (2603:10b6:806:96::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 20:31:46 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%5]) with mapi id 15.20.6043.022; Mon, 30 Jan 2023
+ 20:31:46 +0000
+Date:   Mon, 30 Jan 2023 12:31:43 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Shesha Bhushan Sreenivasamurthy <sheshas@marvell.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        <linux-cxl@vger.kernel.org>
+CC:     Dan Williams <dan.j.williams@intel.com>
+Subject: Re: Hot ADD using CXL1.1 host
+Message-ID: <63d8292f70918_ea22229465@dwillia2-xfh.jf.intel.com.notmuch>
+References: <DM6PR18MB28441B6B542B2A59CF39BF6DAFCE9@DM6PR18MB2844.namprd18.prod.outlook.com>
+ <DM6PR18MB2844505042F7EDCF69CE08DBAFD39@DM6PR18MB2844.namprd18.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DM6PR18MB2844505042F7EDCF69CE08DBAFD39@DM6PR18MB2844.namprd18.prod.outlook.com>
+X-ClientProxiedBy: SJ0PR05CA0062.namprd05.prod.outlook.com
+ (2603:10b6:a03:332::7) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SA0PR11MB4557:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae9a8b7f-16f4-4ccb-8fbe-08db03010172
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hx9rWM4mxNElJI4FUwsnQJlgRAE64oVVorbWoIkZYPcv1cRF1YJqDLPYKygQaANGRJ3DYOxGYkPykaApiw5SV/5Ioy93n2OuefXK7c9/Sr2os6zaw6W5GKwNv9iv2zukT+ewWkd7Hntp3Eu0+saHZq8qW/tIYpwxY8BLro9YiHmaIcaVN/RWjTkXA0K0ryPqpo62SRhLaGewG1kiZZEzyIaXJ4rVU/FkXV8/zVqWlpkA9m5WlDIa55PLmtw0trf9w+cYZLTzoDtCdqw7LvA4Y+JfoJLR4jU96J/2Is47L7Fp+FGfn9ixY0E2MYFAiCcE3Ud9tuscKPAzZ49Xj7llHyxsiX3C+6J0RzF94jyVkPizwCTNFR7gR3s0svW0dXeqmfiE+gWgucZjrU/WKK778QnpZ54gXQxYMhXNj9UVfQB5Z/rjriV+JlIZn/zM6CCZC5aE9ZxXji9FiGNHmbupn8i/kVJ18EY7P68g0yxrNsQULrCETEvITjEE7xOSDZLbOATKDNvI4r9D5Onn+DzuBZScRdkp/s0z6qYUOl3a+UAdJvaQRLB7okzd/qnAwIx8jgVkpb+4a1XqLZ7g/8H3DH40TDe/0zBoMC4g6Ugu4yCTK6NgAoBCk7mcRVMInyVh6aSGZbob/lCUT4JxXyiQP/gZtXZuLSJeU9NrhXeKLiQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(396003)(39860400002)(376002)(346002)(451199018)(2906002)(316002)(82960400001)(186003)(26005)(6512007)(5660300002)(6506007)(53546011)(110136005)(966005)(9686003)(6666004)(38100700002)(107886003)(6486002)(83380400001)(86362001)(478600001)(4326008)(8676002)(66556008)(66476007)(8936002)(66946007)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UU9SblpMZmhnb1RmK2UxbjFaWVpyUmV3VFZBV0NQc2NPR0ZKVUdtWldNbnpr?=
+ =?utf-8?B?T09xcWM0T0poTUNWNjFiNDFMbGNQSWh2dUg1NyttUkVjKytuUUUyS2RjTTZU?=
+ =?utf-8?B?ZE4wZDM0YU8rQUJ4L2tZcXRlZ3diNkZ2Um04VzhnYTJlYWVxWWdQcWk4L3Ux?=
+ =?utf-8?B?ODRlRDdkaWorSDdHdzBCeUZ4cjRrT0hiM3FBSjNZQ1VJYk5pZ3dFRkxvSW5T?=
+ =?utf-8?B?WUptNWZwMEk1OExHcnBYY2dQZ1lDZ1FkdXdDZllKc0t0Q0FOb0NVSFdmT1Uy?=
+ =?utf-8?B?amV2a3plLzNwQUVZaERzbGRaTFQ4K1UwMm5aTE5hb0RqbkVSMGNEdXkvZVc3?=
+ =?utf-8?B?NkxUNXZJUmVHeE9RaEZnTGFaM2hEa3NxREw3dnZiZDZLQXJXUGxTUTJmN3Bz?=
+ =?utf-8?B?aU1LVm9oVEQ4akJ4UGZNWVRTYlFMUHZidlZkeFo3NWlLVDEwUGxpcVd5YUl4?=
+ =?utf-8?B?UmFhaHhHYUVWeThJUnMxWGEvZzNSSDJjbXNkZnFQZGE0Zjk5VTJzRHRPQWta?=
+ =?utf-8?B?aFdadnRmL2xmY0RUU1N5aG1vRVRxUzA0Z0NZTWt4NG5XNUlaOHYxRDFSeHlJ?=
+ =?utf-8?B?UVhwaWlLN1ZHTElSZUlVaysvNjBZWWk1cVZwd3lwVEk3RHhMMUZ0amtGeS9m?=
+ =?utf-8?B?aXhkeHBSVlYzbU11K2h0SElqMmNPNU5pZkhwUzNvTHdxSzA3d2VScjY5bFJq?=
+ =?utf-8?B?SkU3d0Evd0lsVHZUbjR3Q3k2cTkyQktrbHk4Rnh5VXh5SWc0WmFXZ3hURk1L?=
+ =?utf-8?B?TUE0L0hxbTV6dmMzb3crcWxBbmFZM0NMS05qWnhXeGZ0eGZ2MjRpR0gxeU1W?=
+ =?utf-8?B?Q0JvVmJsUEJ1QzNUcHM3Z1BqQm9SKzVmNEFUL3FtenhSRUs5cTRiVGFPOGV0?=
+ =?utf-8?B?clhUb0FqWWNDc1ZSVFJiZGdnR0t3d3Y2RjRnUXJnQjZVQXNycFpJVnJRQjFG?=
+ =?utf-8?B?REdjWEJtWStxamx3a1dOdElTbkFybjhtZkp5dTM2MERtdUJYWEdDQVNZeFNR?=
+ =?utf-8?B?UnhLZ0JBWStIM3NNdHB6cCtrUVpIeWJhcTFvcmd0aTVibDh1THJDeXhmeWk1?=
+ =?utf-8?B?V3ZDa013cW4zdHlUKy94d3J5VHRmaTlTTU1qaHBFOWxweE1LRVBTdWY5NS83?=
+ =?utf-8?B?Yk1Wd2szbFFuS3h1dW9UY0oyVmJvbllNNStXUnhwbzBRVG0wRnJSY3o5dWQ2?=
+ =?utf-8?B?MGJVTENTa0xFWjNVOWt3ZmRyU1NjMUdnTXowTzlUb3hUZmtlNW1sclFwSWJh?=
+ =?utf-8?B?MG1EUURheENHR2FQc242RVlrT1VxeFI2c3UzcE03YWRRU2QzT0FmNEVvcUdJ?=
+ =?utf-8?B?UzVOa0swWDZ4RHBsYncvQ3AxNW5UNXhBOWIwV0traXNCVmtKVTA1TEYzS2FI?=
+ =?utf-8?B?NWxOcDJrdHc1ektWVy9FeVhKaVJkM3hFQ1h1ZHNtQWJxNndQaERKa1BqUmdo?=
+ =?utf-8?B?YmNFRXBJMlZLYVlkWGY3YXkwcytoOFBpdzdqT0Jwc0hjRTNsa256QWdwalVL?=
+ =?utf-8?B?bllRODRrNEdHNE1VNW5aUlNSN3hVQkhVU2g5cDY3d3B2SXozYXlXVUxmRHBS?=
+ =?utf-8?B?d2lRZTdGTFZsa1FzcEhrZ3RDdHhYOE5IdXg2OTFMdGM5RlQ0L1VjU01paEVk?=
+ =?utf-8?B?Q0xNMUU3SVlTVHV0ZXRuRi80V0grN0tTNzczWjBFc0JleU15STU1SGQzc0VE?=
+ =?utf-8?B?UWhOcFVFeHNmbHJWM1l3YkgwYmpKS1I2cDhKMFBiR0lCeUp5L29LTk5YR1h4?=
+ =?utf-8?B?ck5UMlR2RWlaVWJuTFZKUGMxQUlyOXNUckswbkVKR3BJd1hvMUZzNDhIckFs?=
+ =?utf-8?B?UVhMWVpuT2RCN3B4RHBhekRYQU4rcm52Vnp1VXlJekpiVE1Fd0ljWEl0aHho?=
+ =?utf-8?B?QU14djRZZk5pTjVjc3RVL0d0ZWF4YVhPeG54WlVkVFQxb293TlhQN0E0ZEhu?=
+ =?utf-8?B?a2p5OXFnUFRROXFVTXZVeEZaU3FDc242cmdMRjEvanVLSS95V1ZsaWdaYzN5?=
+ =?utf-8?B?N21xaS94V3dNWTBKbU5rQUpBc3VwSkl3K09DYUkveUcwUVFPd3pYdlJ5ZVBp?=
+ =?utf-8?B?Wm9qQ2pwSUJ4NzRlbU1TVUNLRHN2cCtLc3Zpb3ZxekZEM09mNnhLTGErOGZv?=
+ =?utf-8?B?bFhoZUtMU0Y2Z2Z6K21naUJXcEo4ZllpYWtUdlBieVhxYjJUU3loVFl3cUp3?=
+ =?utf-8?B?ZlE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae9a8b7f-16f4-4ccb-8fbe-08db03010172
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 20:31:45.8755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HN88whqGKLz2wy8GiDhK10GhP+nsWJ3zDi1fdqZN7NvXnPKMPCs/YMN0rqxyOFqNRGN5bWS53aB1WRQ6e4Z21bQHsOYFCxXv3pdJi+GgtGw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4557
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 20:02:31 +0000
-Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
+[ add linux-cxl@vger.kernel.org ]
 
-> Thanks. To be clear, before I changed the grub command line, the
-> system always booted up "sideways", even when the sensor was not being
-> detected. This was true for everything, not just Gnome, except grub
-> itself.
+Hi Shesha, I missed this earlier because it does not appear in my
+"linux-cxl" filter. In general, mail to linux-kernel does not get great
+response from domain-specific experts, so I recommend going to the
+domain specific list like linux-cxl@ in this. Comments below:
+
+Shesha Bhushan Sreenivasamurthy wrote:
+> From: Shesha Bhushan Sreenivasamurthy <sheshas@marvell.com>
+> Date: Thursday, January 26, 2023 at 6:05 PM
+> To: linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
+> Subject: Hot ADD using CXL1.1 host
+> Hi All,
 > 
-> I added:
+> In our setup, the host is a CXL1.1 running fedora 6.1 kernel. This is
+> connected to a Marvell CXL 2.0 Type-3 memory pooling device. The goal
+> for me is to dynamically change the memory configuration without
+> rebooting the host or the memory device.
 > 
-> GRUB_CMDLINE_LINUX_DEFAULT="fbcon=rotate:1
-> video=DSI-1:panel_orientation=right_side_up quiet splash"
+> The approach that I am currently taking is to use dax. I configured
+> the memory device to export 8G and the host sees 8G. I am successful
+> to convert the memory from ‘devdax’ to ‘system-ram’ mode so that
+> general application can use it. At this time, I modify the memory on
+> our memory device to export 16G and host crashes in few mins. The
+> steps I followed are the following
 > 
-> This fixed the orientation for pre-splash boot messages, the splash
-> screen and the desktop environment. But not, for example (as I saw
-> after adding my own module signing key for testing your fixes), the
-> MOK validation screens.
 > 
-> Does this make sense?
+>   1.  Configure my memory device to export 8G
+>   2.  Boot host. BIOS populates SRAT table with size 8G.
+>   3.  daxctl list --regions --devices -u // Shows 8G
+>   4.  sudo daxctl reconfigure-device --mode=system-ram dax0.0 -f
+>   5.  Use memory in my application
+
+Ok up to this point, no interaction with the CXL enabling. This is just
+the default kernel behavior with a BIOS that applies the EFI_MEMORY_SP
+attribute to an address range.
+
+>   6.  ---- RECONFIGURATION PART ----
+>   7.  sudo daxctl offline-memory dax0.0
+>   8.  sudo daxctl destroy-device  dax0.0 -f // All numa node memory mappings are gone
+>   9.  sudo sh -c "echo 1 > /sys/bus/pci/devices/0000\:38\:00.0/remove"
+
+Note that this only takes care of the software side, the CXL hardware /
+decoder side is not touched.
+
+>   10. Reconfigure memory device to be 16G
+
+Does this reset the device?
+
+>   11. sudo sh -c "echo 1 > /sys/bus/pci/rescan"
+>      *   CXL DEVSEC (Cap ID 0x23, DVSEC VendorID 0x1E98, DVSEC-ID: 0x0) shows size to be 16G 😊
+>   12. daxctl list --regions --devices -u
+>      *   This still shows 8G ☹
+
+Yes, because there is currently no hookup between the CXL subsystem and
+device-dax, but I am working on that:
+
+https://lore.kernel.org/linux-cxl/63d21ce66e5c_ea22229446@dwillia2-xfh.jf.intel.com.notmuch/
+
+>   13. System crashes
 > 
-> Does what you are proposing act at a lower level than changing the
-> systemd hwdb orientation matrix?
+> There is a mismatch between what DXL is seeing and what PCI DVSEC is
+> saying. Looks like I am missing some step so that old 8G information
+> is removed from the system. Can someone advise ?
 
-I'm not sure on the userspace side of things, but intent is that
-it will provide the orientation data to any users - though only after
-the kernel boots and software needs to be aware of it.  Give it a go,
-and if not Bastien (IIRC wrote iio-sensor-proxy) may be able to advise.
+So you need to dynamically recreate the region, especially if your step
+10 above resets the device.
 
-For Bastien - patches for kernel side are: 
-https://lore.kernel.org/linux-iio/20230130201018.981024-1-jic23@kernel.org/T/#t
-
-Darrell is going to test them after back porting to 6.1.
-With the first patch he gets the right result in gnome but we weren't
-picking up the rotation matrix at that point (ROTM in ACPI).
-
-Thanks,
-
-Jonathan
-
+> Now, I can try the following
 > 
-> Thanks,
-> Darrell
+>   1.  Power off memory device
+>   2.  Power on and boot my host
+>   3.  Power on memory device
+>   4.  Configure the memory device to have 8G
+>   5.  Follow the above 5-12 commands
 > 
-> On Mon, 30 Jan 2023 at 19:27, Jonathan Cameron <jic23@kernel.org> wrote:
-> >
-> > On Mon, 30 Jan 2023 18:32:02 +0000
-> > Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
-> >  
-> > > On Mon, 30 Jan 2023 at 17:35, Jonathan Cameron
-> > > <Jonathan.Cameron@huawei.com> wrote:
-> > >  
-> > > > That certainly looks like suitable matrix.
-> > > >
-> > > > If we are lucky it matches the handling in bmc150-accel-core.c for an identically
-> > > > named method.  That is going to swap the x and y axis which is I'd have thought would
-> > > > be rather bad if what you have is currently working well.
-> > > >  
-> > >
-> > > Actually, that would be good, because at present I have to rotate 90
-> > > degrees in my grub command line.  
-> > :)
-> >
-> > I'll see if I can roll a suitable patch.
-> >
-> > Jonathan
-> >  
-> > >
-> > > Darrell
-> > >  
-> > > > >             }
-> > > > >
-> > > > >             Method (PRIM, 0, NotSerialized)
-> > > > >             {
-> > > > >                 Name (RBUF, Buffer (One)
-> > > > >                 {
-> > > > >                      0x01                                             // .
-> > > > >                 })
-> > > > >                 Return (RBUF) /* \_SB_.PCI0.I2C5.DEV_.PRIM.RBUF */
-> > > > >             }
-> > > > >
-> > > > >             Method (_STA, 0, NotSerialized)  // _STA: Status
-> > > > >             {
-> > > > >                 If ((GAVT == 0x6A))
-> > > > >                 {
-> > > > >                     Return (0x0F)
-> > > > >                 }
-> > > > >                 Else
-> > > > >                 {
-> > > > >                     Return (Zero)
-> > > > >                 }
-> > > > >             }
-> > > > >
-> > > > >             Method (CALS, 1, NotSerialized)
-> > > > >             {
-> > > > >                 Local0 = Arg0
-> > > > >                 If (((Local0 == Zero) || (Local0 == Ones)))
-> > > > >                 {
-> > > > >                     Local0 = BAC1 /* \BAC1 */
-> > > > >                     Return (Local0)
-> > > > >                 }
-> > > > >                 Else
-> > > > >                 {
-> > > > >                     BAC1 = Local0
-> > > > >                     BACS = Local0
-> > > > >                     BSCA (0xB0)
-> > > > >                 }
-> > > > >             }
-> > > > >         }
-> > > > >     }
-> > > > >
-> > > > >
-> > > > > Thanks,
-> > > > > Darrell
-> > > > >
-> > > > > On Mon, 30 Jan 2023 at 12:31, Jonathan Cameron
-> > > > > <Jonathan.Cameron@huawei.com> wrote:  
-> > > > > >
-> > > > > > On Mon, 30 Jan 2023 03:37:23 +0000
-> > > > > > Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
-> > > > > >  
-> > > > > > > Forwarding because original html messages were rejected by the server...
-> > > > > > >
-> > > > > > > ---------- Forwarded message ---------
-> > > > > > > From: Darrell Kavanagh <darrell.kavanagh@gmail.com>
-> > > > > > > Date: Mon, 30 Jan 2023 at 02:52
-> > > > > > > Subject: Re: Bug#1029850: linux: Driver not loaded for ST
-> > > > > > > Microelectronics LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
-> > > > > > > To: Jonathan Cameron <jic23@kernel.org>
-> > > > > > > Cc: <lorenzo@kernel.org>, <lars@metafoo.de>,
-> > > > > > > <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-> > > > > > > <carnil@debian.org>
-> > > > > > >
-> > > > > > >
-> > > > > > > Hi Jonathan,
-> > > > > > >
-> > > > > > > Thank you. The driver has evolved quite a bit in 6.2 (I read somewhere
-> > > > > > > that 6.2 includes some i2c enhancements), but I adapted your changes
-> > > > > > > to fit my Debian 6.1 kernel and it works. Two IIO devices are created
-> > > > > > > in sysfs, iio-sensor-proxy.service starts up and automatic screen
-> > > > > > > rotation in Gnome just works.
-> > > > > > >
-> > > > > > > To get the modules to load on boot, I made a small change to your code
-> > > > > > > in st_lsm6dsx_i2c to add the acpi alias to modules.alias:
-> > > > > > >
-> > > > > > > adding a null element to st_lsm6dsx_i2c_acpi_match:
-> > > > > > >     static const struct acpi_device_id st_lsm6dsx_i2c_acpi_match[] = {
-> > > > > > >          { "SMO8B30", ST_LSM6DS3TRC_ID, },
-> > > > > > >          { },
-> > > > > > >     };
-> > > > > > > then:
-> > > > > > >    MODULE_DEVICE_TABLE(acpi, st_lsm6dsx_i2c_acpi_match);  
-> > > > > >
-> > > > > > doh! That was indeed sloppy of me to miss even for an untested hack.
-> > > > > >
-> > > > > >
-> > > > > >  
-> > > > > > >
-> > > > > > >
-> > > > > > > dmesg shows:
-> > > > > > >
-> > > > > > > [ 7366.120208] st_lsm6dsx_i2c i2c-SMO8B30:00: supply vdd not found,
-> > > > > > > using dummy regulator
-> > > > > > > [ 7366.120260] st_lsm6dsx_i2c i2c-SMO8B30:00: supply vddio not found,
-> > > > > > > using dummy regulator
-> > > > > > > [ 7366.650839] st_lsm6dsx_i2c i2c-SMO8B30:00: mounting matrix not
-> > > > > > > found: using identity...
-> > > > > > >
-> > > > > > > Is this a problem?  
-> > > > > >
-> > > > > > Those are all fine. For regulators that's expected on ACPI and should
-> > > > > > be harmless as it's up to the firmware to manage power (in DT it may
-> > > > > > be up to the kernel).
-> > > > > > For the mounting matrix, there is often something in ACPI DSDT
-> > > > > > (non standard though).  Could you
-> > > > > > cat /sys/firmware/acpi/tables/DSDT > ~/dsdt
-> > > > > > then run through iasl from acpitools
-> > > > > > iasl -d ~/dsdt
-> > > > > > and find the bit related to this device.
-> > > > > >
-> > > > > > If you can then share that there may be a _DSM or similar in there that
-> > > > > > is effectively the mounting matrix.  If we are lucky it will look like
-> > > > > > some existing versions we have code to handle and can add that support
-> > > > > > as well.
-> > > > > >
-> > > > > > Either way - I'll spin a formal patch with your fixes above and we can
-> > > > > > get this upstream for future kernels.  Mounting matrix can follow
-> > > > > > later if needed.
-> > > > > >
-> > > > > > Thanks,
-> > > > > >
-> > > > > > Jonathan
-> > > > > >
-> > > > > >  
-> > > > > > >
-> > > > > > > Thanks again.
-> > > > > > >
-> > > > > > > Darrell
-> > > > > > >
-> > > > > > >
-> > > > > > > On Sun, 29 Jan 2023 at 18:10, Jonathan Cameron <jic23@kernel.org> wrote:  
-> > > > > > > >
-> > > > > > > > On Sun, 29 Jan 2023 17:03:51 +0000
-> > > > > > > > Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
-> > > > > > > >  
-> > > > > > > > > Hi,
-> > > > > > > > >
-> > > > > > > > > I raised this bug in Debian, and have been asked to raise it upstream and
-> > > > > > > > > was given your addresses to do so. Will this email be OK, or should I raise
-> > > > > > > > > it in a bug tracking system somewhere?  
-> > > > > > > >
-> > > > > > > > Email is the right option.
-> > > > > > > >  
-> > > > > > > > >
-> > > > > > > > > Many thanks,
-> > > > > > > > > Darrell
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > ---------- Forwarded message ---------
-> > > > > > > > > From: Salvatore Bonaccorso <carnil@debian.org>
-> > > > > > > > > Date: Sat, 28 Jan 2023 at 20:33
-> > > > > > > > > Subject: Re: Bug#1029850: linux: Driver not loaded for ST Microelectronics
-> > > > > > > > > LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
-> > > > > > > > > To: Darrell Kavanagh <darrell.kavanagh@gmail.com>, <1029850@bugs.debian.org>
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Hi Darrell,
-> > > > > > > > >
-> > > > > > > > > On Sat, Jan 28, 2023 at 08:13:16PM +0000, Darrell Kavanagh wrote:  
-> > > > > > > > > > Package: src:linux
-> > > > > > > > > > Version: 6.1.4-1
-> > > > > > > > > > Severity: normal
-> > > > > > > > > > File: linux
-> > > > > > > > > > X-Debbugs-Cc: darrell.kavanagh@gmail.com
-> > > > > > > > > >
-> > > > > > > > > > Dear Maintainer,
-> > > > > > > > > >
-> > > > > > > > > > This is a convertable touchscreen tablet/laptop. The rotation sensor  
-> > > > > > > > > device  
-> > > > > > > > > > ST Microelectronics LSM6DS3TR-C does not work. It is detected via ACPI  
-> > > > > > > > > and the  
-> > > > > > > > > > sysfs trees are created at  
-> > > > > > > > > devices/pci0000:00/0000:00:17.1/i2c_designware.3/i2c-4/i2c-SMO8B30:00  
-> > > > > > > > > > and devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:3c/SMO8B30:00 with
-> > > > > > > > > > symlinks bus/acpi/devices/SMO8B30:00 and bus/i2c/devices/i2c-SMO8B30:00,  
-> > > > > > > > > but  
-> > > > > > > > > > no driver is loaded.  
-> > > > > > > >
-> > > > > > > > At least this is using the ST PNP ID which is better than average
-> > > > > > > > (long story!)
-> > > > > > > >
-> > > > > > > > The driver in question (ultimately drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
-> > > > > > > > does not currently have an ACPI support.  It should be straight forwards
-> > > > > > > > to add though the driver first needs converting to use
-> > > > > > > > device_get_match_data() with appropriate fallback so that it will match on
-> > > > > > > > ACPI, OF or original spi_device_id tables
-> > > > > > > >
-> > > > > > > > Completely untested but something like the following
-> > > > > > > > (the offset in the enum is needed to allow us to tell if we got a result when
-> > > > > > > > calling device_get_match_data() as it returns NULL on failure IIRC)
-> > > > > > > >
-> > > > > > > > I'm not sure how sucessful the driver will be at finding any interrupts etc, but
-> > > > > > > > it may get you basic functionality.
-> > > > > > > >
-> > > > > > > > Good luck and others more familiar with the driver may well tell me what I forgot
-> > > > > > > > when hacking the below ;)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-> > > > > > > > index 499fcf8875b4..2617ce236ddc 100644
-> > > > > > > > --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-> > > > > > > > +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-> > > > > > > > @@ -39,7 +39,7 @@
-> > > > > > > >  #define ST_ISM330IS_DEV_NAME   "ism330is"
-> > > > > > > >
-> > > > > > > >  enum st_lsm6dsx_hw_id {
-> > > > > > > > -       ST_LSM6DS3_ID,
-> > > > > > > > +       ST_LSM6DS3_ID = 1,
-> > > > > > > >         ST_LSM6DS3H_ID,
-> > > > > > > >         ST_LSM6DSL_ID,
-> > > > > > > >         ST_LSM6DSM_ID,
-> > > > > > > > diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
-> > > > > > > > index df5f60925260..ecfceb2fb3db 100644
-> > > > > > > > --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
-> > > > > > > > +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
-> > > > > > > > @@ -23,10 +23,15 @@ static const struct regmap_config st_lsm6dsx_i2c_regmap_config = {
-> > > > > > > >
-> > > > > > > >  static int st_lsm6dsx_i2c_probe(struct i2c_client *client)
-> > > > > > > >  {
-> > > > > > > > -       const struct i2c_device_id *id = i2c_client_get_device_id(client);
-> > > > > > > > -       int hw_id = id->driver_data;
-> > > > > > > > +       int hw_id;
-> > > > > > > >         struct regmap *regmap;
-> > > > > > > >
-> > > > > > > > +       hw_id = (kernel_ulong_t)device_get_match_data(&client->dev);
-> > > > > > > > +       if (!hw_id)
-> > > > > > > > +               hw_id = i2c_client_get_device_id(client)->driver_data;
-> > > > > > > > +       if (!hw_id)
-> > > > > > > > +               return -EINVAL;
-> > > > > > > > +
-> > > > > > > >         regmap = devm_regmap_init_i2c(client, &st_lsm6dsx_i2c_regmap_config);
-> > > > > > > >         if (IS_ERR(regmap)) {
-> > > > > > > >                 dev_err(&client->dev, "Failed to register i2c regmap %ld\n", PTR_ERR(regmap));
-> > > > > > > > @@ -129,6 +134,10 @@ static const struct of_device_id st_lsm6dsx_i2c_of_match[] = {
-> > > > > > > >  };
-> > > > > > > >  MODULE_DEVICE_TABLE(of, st_lsm6dsx_i2c_of_match);
-> > > > > > > >
-> > > > > > > > +static const struct acpi_device_id st_lsm6dsx_i2c_acpi_match[] = {
-> > > > > > > > +       { "SMO8B30", ST_LSM6DS3TRC_ID, },
-> > > > > > > > +};
-> > > > > > > > +
-> > > > > > > >  static const struct i2c_device_id st_lsm6dsx_i2c_id_table[] = {
-> > > > > > > >         { ST_LSM6DS3_DEV_NAME, ST_LSM6DS3_ID },
-> > > > > > > >         { ST_LSM6DS3H_DEV_NAME, ST_LSM6DS3H_ID },
-> > > > > > > > @@ -161,6 +170,7 @@ static struct i2c_driver st_lsm6dsx_driver = {
-> > > > > > > >                 .name = "st_lsm6dsx_i2c",
-> > > > > > > >                 .pm = pm_sleep_ptr(&st_lsm6dsx_pm_ops),
-> > > > > > > >                 .of_match_table = st_lsm6dsx_i2c_of_match,
-> > > > > > > > +               .acpi_match_table = st_lsm6dsx_i2c_acpi_match,
-> > > > > > > >         },
-> > > > > > > >         .probe_new = st_lsm6dsx_i2c_probe,
-> > > > > > > >         .id_table = st_lsm6dsx_i2c_id_table,
-> > > > > > > >
-> > > > > > > >  
-> > > > > > > > > >
-> > > > > > > > > > The device is identifying itself to the kernel with PNP id SMO8B30:
-> > > > > > > > > > physical_node:
-> > > > > > > > > >       modalias=acpi:SMO8B30:SMO8B30:
-> > > > > > > > > >       name=SMO8B30:00
-> > > > > > > > > >       uevent=MODALIAS=acpi:SMO8B30:SMO8B30:
-> > > > > > > > > >       waiting_for_supplier=0
-> > > > > > > > > > firmware_node:
-> > > > > > > > > >       hid=SMO8B30
-> > > > > > > > > >       modalias=acpi:SMO8B30:SMO8B30:
-> > > > > > > > > >       path=\_SB_.PCI0.I2C5.DEV_
-> > > > > > > > > >       status=15
-> > > > > > > > > >       uevent=MODALIAS=acpi:SMO8B30:SMO8B30:
-> > > > > > > > > >       uid=0
-> > > > > > > > > >
-> > > > > > > > > > The kernel module for the appropriate driver (st_lsm6dsx_i2c) is not  
-> > > > > > > > > loaded on boot.  
-> > > > > > > > > > Modprobing it does not associate it with the device, as I would expect as
-> > > > > > > > > > the module does not provide an alias for the above acpi/pnp id.  
-> > > > > > > > >
-> > > > > > > > > Can you report this issue upstream? Gues to reach out are according to
-> > > > > > > > > get_maintainers.pl script:
-> > > > > > > > >
-> > > > > > > > > Lorenzo Bianconi <lorenzo@kernel.org> (maintainer:ST LSM6DSx IMU IIO DRIVER)
-> > > > > > > > > Jonathan Cameron <jic23@kernel.org> (maintainer:IIO SUBSYSTEM AND DRIVERS)
-> > > > > > > > > Lars-Peter Clausen <lars@metafoo.de> (reviewer:IIO SUBSYSTEM AND DRIVERS)
-> > > > > > > > > linux-iio@vger.kernel.org (open list:ST LSM6DSx IMU IIO DRIVER)
-> > > > > > > > > linux-kernel@vger.kernel.org (open list)
-> > > > > > > > >
-> > > > > > > > > Please keep us in the loop.
-> > > > > > > > >
-> > > > > > > > > Regards,
-> > > > > > > > > Salvatore  
-> > > > > > > >  
-> > > > > >  
-> > > >  
-> >  
+> With this, the question I have is – will the host recognize the PCI
+> device as CXL device and run cxl.mem protocol or will it just see it
+> as PCIe device ? Note that the host is CXL1.1.
 
+Does your device support the HDM decoder capability? As it stands the
+driver expects to use HDM decoders for region creation rather than CXL
+DVSEC range registers.
+
+My expectation is that once the ram-region creation work is done you
+should be able to do something like:
+
+cxl disable-region $region
+cxl disable-memdev $memdev
+modprobe -r cxl_pci
+<reconfigure device>
+modprobe cxl_pci
+cxl create-region ...
+
+...and be back up and running with a new region with the update size.
