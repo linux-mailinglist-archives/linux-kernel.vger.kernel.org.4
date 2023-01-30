@@ -2,124 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578AE6814F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AE16814F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238186AbjA3PZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:25:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
+        id S238191AbjA3PZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238177AbjA3PZY (ORCPT
+        with ESMTP id S235737AbjA3PZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:25:24 -0500
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDC53347D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:25:22 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id u199so5379747vkb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=criticallink.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FWq5l4TyEr8IR7mmSeMUsAGTq3ylCBFM2oZg8br9OhA=;
-        b=UFHiCIIsGs8Y1dofmWtBxUWLG9G4bGklIGTNgM/q7Z0JbVPv0kvnHwyO6hYOLt+V/5
-         NNeLsyzgMcXEnX3A2BZMPNgzBv2Ct3akhx3iK80twtV4vxpZkgrrxGco7BKNjn4E5HAs
-         eoNRsBW//jq2ghehiAQFnBcocgkqtrxo2DNJC6jBUUxT3ta8Aj0VPqXDpsvmgBx3Zn4G
-         9q4GkeLTN7MFnlq2BDuMHm39RGfBY9U3+BLguEJqe31hKRIe1XVV1DOeSQ7HEPivmwqh
-         rU7txLTnCU7vJspKbJdxTj4xG2G3dxj6WpMUO1lWiguQrt0rhE4u1dxJDiSELOHlHhGL
-         /gXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FWq5l4TyEr8IR7mmSeMUsAGTq3ylCBFM2oZg8br9OhA=;
-        b=tMfo8neMu6vXsF263zNyFihyp3eigqlT4TJHT8JnPcTE52si2yz6buVeagxIla310K
-         AozpxVd9Y603EbMzVgTGI3VduIG7HEQQJbopmRtxTlWmnX7sunLNj+qSEomNQ5puqtxL
-         QVWcdopRyYZBYQxzzY0z3Q3OtRIftX8Ciq9by7cOSSZfRCfLwWLRv0wnIKfIiGZ4nK00
-         6/hLOJYeXFQVSFMS3BgP1C+lQnngbKbYrOkkulj6RgkjHjhgbIMDjT4Hd2V+hiHHqKWU
-         WJ0Jq9AOVMSa8ZgGAEIBNkKVqDulj5enp+y4LadZsL7sHEPKSZRnZPaKpydyXKUxKwyk
-         +z/w==
-X-Gm-Message-State: AFqh2koN6XzC82NqgW4I0MGL8rRxunnvHRMmCRFqHdA264LRzst+GWzM
-        sP50jaPV+o4wuCLP+Oet1ai0/JgrDgRb/A1MxaUjQA==
-X-Google-Smtp-Source: AMrXdXv4PC6wQP9hoqOOsDo+zisJ9tSxzJa5oPFAdqYJ10Hx4wmMt1IlFQHk7m3XYCJCfuFLsJkFOQKqeiiD5cbbZpk=
-X-Received: by 2002:a1f:1b8f:0:b0:3d8:d753:56bb with SMTP id
- b137-20020a1f1b8f000000b003d8d75356bbmr6392583vkb.39.1675092321847; Mon, 30
- Jan 2023 07:25:21 -0800 (PST)
+        Mon, 30 Jan 2023 10:25:56 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 990DFCDC6;
+        Mon, 30 Jan 2023 07:25:55 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1112)
+        id 63D0F20E9F8D; Mon, 30 Jan 2023 07:25:55 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 63D0F20E9F8D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675092355;
+        bh=bGi+RJN59kO3g6+Cd8jXPvBoBF+THRp7NH5eM0/2kE4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hW4PyYBbWTE2zdCNUzGzmKrzB0O4Yv2jrjBJBJJ+SdNBNgTbEazKf+REZ5fSBZ4Y/
+         I7ZHUJzmx+IXkr8OPOG7ZtJ2JOnLAZO8FpqYiF/Z/6W1Dsf7WtrC6/gddS84V3zUt1
+         0HC3BS1kJGK7NJ8udimTOrx+0ELGcn7i+EwFlGiQ=
+Date:   Mon, 30 Jan 2023 07:25:55 -0800
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [RFC PATCH v1 2/6] x86/sev: Add support for NestedVirtSnpMsr
+Message-ID: <20230130152555.GB27645@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20230123165128.28185-1-jpiotrowski@linux.microsoft.com>
+ <20230123165128.28185-3-jpiotrowski@linux.microsoft.com>
+ <SN6PR2101MB169362990E4BB621A5A27D13D7CD9@SN6PR2101MB1693.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230126-b4-ltc2945_shunt_resistor-v4-0-bb913470d8da@criticallink.com>
- <20230126-b4-ltc2945_shunt_resistor-v4-1-bb913470d8da@criticallink.com>
- <20230129201604.GA1583293@roeck-us.net> <CADL8D3ZkGT51FX5UrCQ8afzFxPNGHbi09EdXqE+cQyGRnHR2mw@mail.gmail.com>
-In-Reply-To: <CADL8D3ZkGT51FX5UrCQ8afzFxPNGHbi09EdXqE+cQyGRnHR2mw@mail.gmail.com>
-From:   Jon Cormier <jcormier@criticallink.com>
-Date:   Mon, 30 Jan 2023 10:25:10 -0500
-Message-ID: <CADL8D3b0QznFarombRPuAH_iR+PJYqK2c-Rp4TDeD7WtvwWgPg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] dt-bindings: hwmon: adi,ltc2945: Add binding
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bob Duke <bduke@criticallink.com>,
-        John Pruitt <jpruitt@criticallink.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SN6PR2101MB169362990E4BB621A5A27D13D7CD9@SN6PR2101MB1693.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 10:19 AM Jon Cormier <jcormier@criticallink.com> wrote:
->
-> On Sun, Jan 29, 2023 at 3:16 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > On Thu, Jan 26, 2023 at 05:32:23PM -0500, Jonathan Cormier wrote:
-> > > Create initial binding for the LTC2945 I2C power monitor.
-> > >
-> > > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-> >
-> > Series applied,
-> Great
-> > after merging patch 4/5 and 5/5 of the series
-> > to avoid spurious 32-bit build failures,
-> Huh, I split these per request, curious why they'd cause build
-> failures when separated...
-Nevermind, I see your other response.
-> > and after fixing a continuation line alignment.
-> >
-> > In the future, please run checkpatch --strict on your patches,
-> Will do. I didn't know about this option.
-> > and please provide change logs.
-> This I did do in every cover letter.
-> >
-> > Thanks,
-> > Guenter
->
-> --
-> Jonathan Cormier
-> Software Engineer
->
-> Voice:  315.425.4045 x222
->
->
->
-> http://www.CriticalLink.com
-> 6712 Brooklawn Parkway, Syracuse, NY 13211
+On Sat, Jan 28, 2023 at 07:48:27PM +0000, Michael Kelley (LINUX) wrote:
+> From: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> Sent: Monday, January 23, 2023 8:51 AM
+> > 
+> > The rmpupdate and psmash instructions, which are used in AMD's SEV-SNP
+> > to update the RMP (Reverse Map) table, can't be trapped. For nested
+> > scenarios, AMD defined MSR versions of these instructions which can be
+> 
+> s/can be/must be/  ??
+> 
 
+yes indeed
 
+> > emulated by the top-level hypervisor. One instance where these MSRs are
+> 
+> And by "top-level", I think you are referring the hypervisor running at L1, right?
+> Using the L0/L1/L2 terminology would probably help make the description
+> more precise.
 
--- 
-Jonathan Cormier
-Software Engineer
+These instructions are called by the L1 hypervisor and are emulated by the L0
+hypervisor which controls the actual rmp table. I'll rephrase the commit
+message to make that clearer.
 
-Voice:  315.425.4045 x222
+> 
+> > used are Hyper-V VMs which expose SNP isolation features to the guest.
+> > 
+> > The MSRs are defined in "AMD64 Architecture Programmer’s Manual, Volume 2:
+> > System Programming", section 15.36.19.
+> > 
+> > Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+> > ---
+> >  arch/x86/include/asm/cpufeatures.h |  1 +
+> >  arch/x86/include/asm/msr-index.h   |  2 +
+> >  arch/x86/kernel/sev.c              | 62 +++++++++++++++++++++++++-----
+> >  3 files changed, 55 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> > index 480b4eaef310..e6e2e824f67b 100644
+> > --- a/arch/x86/include/asm/cpufeatures.h
+> > +++ b/arch/x86/include/asm/cpufeatures.h
+> > @@ -423,6 +423,7 @@
+> >  #define X86_FEATURE_SEV_SNP		(19*32+ 4) /* AMD Secure Encrypted Virtualization - Secure Nested Paging */
+> >  #define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
+> >  #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
+> > +#define X86_FEATURE_NESTED_VIRT_SNP_MSR	(19*32+29) /* Virtualizable RMPUPDATE and PSMASH MSR available */
+> > 
+> >  /*
+> >   * BUG word(s)
+> > diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> > index 35100c630617..d6103e607896 100644
+> > --- a/arch/x86/include/asm/msr-index.h
+> > +++ b/arch/x86/include/asm/msr-index.h
+> > @@ -567,6 +567,8 @@
+> >  #define MSR_AMD64_SEV_SNP_ENABLED
+> > 	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
+> >  #define MSR_AMD64_RMP_BASE		0xc0010132
+> >  #define MSR_AMD64_RMP_END		0xc0010133
+> > +#define MSR_AMD64_VIRT_RMPUPDATE	0xc001f001
+> > +#define MSR_AMD64_VIRT_PSMASH		0xc001f002
+> > 
+> >  #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
+> > 
+> > diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> > index 7fa39dc17edd..95404c7e5150 100644
+> > --- a/arch/x86/kernel/sev.c
+> > +++ b/arch/x86/kernel/sev.c
+> > @@ -2566,6 +2566,24 @@ int snp_lookup_rmpentry(u64 pfn, int *level)
+> >  }
+> >  EXPORT_SYMBOL_GPL(snp_lookup_rmpentry);
+> > 
+> > +static bool virt_snp_msr(void)
+> > +{
+> > +	return boot_cpu_has(X86_FEATURE_NESTED_VIRT_SNP_MSR);
+> > +}
+> > +
+> > +static u64 virt_psmash(u64 paddr)
+> > +{
+> > +	int ret;
+> > +
+> > +	asm volatile(
+> > +		"wrmsr\n\t"
+> > +		: "=a"(ret)
+> > +		: "a"(paddr), "c"(MSR_AMD64_VIRT_PSMASH)
+> > +		: "memory", "cc"
+> > +	);
+> > +	return ret;
+> > +}
+> 
+> From checking the AMD spec, I can see that the above use
+> of wrmsr is non-conventional.  Could you capture the basics
+> of the usage paradigm in a comment?  I.e., the expected
+> inputs and outputs, and the core assumption that the
+> MSR isn't implemented in hardware, but must trap
+> to the hypervisor.
 
+ok, how does this sound:
 
+/*
+ * This version of rmpupdate is not implemented in hardware but always
+ * traps to L0 hypervisor. It doesn't follow usual wrmsr conventions.
+ * Inputs:
+ *   rax: 4KB aligned GPA
+ *   rdx: bytes 7:0 of new rmp entry
+ *   r8:  bytes 15:8 of new rmp entry
+ * Outputs:
+ *   rax: rmpupdate return code
+ */
 
-http://www.CriticalLink.com
-6712 Brooklawn Parkway, Syracuse, NY 13211
+and similar for psmash.
+
+> 
+> > +
+> >  /*
+> >   * psmash is used to smash a 2MB aligned page into 4K
+> >   * pages while preserving the Validated bit in the RMP.
+> > @@ -2581,11 +2599,15 @@ int psmash(u64 pfn)
+> >  	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
+> >  		return -ENXIO;
+> > 
+> > -	/* Binutils version 2.36 supports the PSMASH mnemonic. */
+> > -	asm volatile(".byte 0xF3, 0x0F, 0x01, 0xFF"
+> > -		      : "=a"(ret)
+> > -		      : "a"(paddr)
+> > -		      : "memory", "cc");
+> > +	if (virt_snp_msr()) {
+> > +		ret = virt_psmash(paddr);
+> > +	} else {
+> > +		/* Binutils version 2.36 supports the PSMASH mnemonic. */
+> > +		asm volatile(".byte 0xF3, 0x0F, 0x01, 0xFF"
+> > +			      : "=a"(ret)
+> > +			      : "a"(paddr)
+> > +			      : "memory", "cc");
+> > +	}
+> > 
+> >  	return ret;
+> >  }
+> > @@ -2601,6 +2623,21 @@ static int invalidate_direct_map(unsigned long pfn, int npages)
+> >  	return set_memory_np((unsigned long)pfn_to_kaddr(pfn), npages);
+> >  }
+> > 
+> > +static u64 virt_rmpupdate(unsigned long paddr, struct rmp_state *val)
+> > +{
+> > +	int ret;
+> > +	register u64 hi asm("r8") = ((u64 *)val)[1];
+> > +	register u64 lo asm("rdx") = ((u64 *)val)[0];
+> > +
+> > +	asm volatile(
+> > +		"wrmsr\n\t"
+> > +		: "=a"(ret)
+> > +		: "a"(paddr), "c"(MSR_AMD64_VIRT_RMPUPDATE), "r"(lo), "r"(hi)
+> > +		: "memory", "cc"
+> > +	);
+> > +	return ret;
+> > +}
+> 
+> Same here about a comment capturing the expected inputs
+> and outputs.
+
+ok
+
+> 
+> > +
+> >  static int rmpupdate(u64 pfn, struct rmp_state *val)
+> >  {
+> >  	unsigned long paddr = pfn << PAGE_SHIFT;
+> > @@ -2626,11 +2663,16 @@ static int rmpupdate(u64 pfn, struct rmp_state *val)
+> >  	}
+> > 
+> >  retry:
+> > -	/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
+> > -	asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
+> > -		     : "=a"(ret)
+> > -		     : "a"(paddr), "c"((unsigned long)val)
+> > -		     : "memory", "cc");
+> > +
+> > +	if (virt_snp_msr()) {
+> > +		ret = virt_rmpupdate(paddr, val);
+> > +	} else {
+> > +		/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
+> > +		asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
+> > +			     : "=a"(ret)
+> > +			     : "a"(paddr), "c"((unsigned long)val)
+> > +			     : "memory", "cc");
+> > +	}
+> > 
+> >  	if (ret) {
+> >  		if (!retries) {
+> > --
+> > 2.25.1
+> 
