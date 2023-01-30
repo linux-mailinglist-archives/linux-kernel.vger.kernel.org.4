@@ -2,135 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCA96817DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD9C6817E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbjA3RkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 12:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
+        id S237928AbjA3Rnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 12:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238114AbjA3RkM (ORCPT
+        with ESMTP id S237855AbjA3Rnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 12:40:12 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEA2CDEA
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:40:10 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id r8so5546148pls.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:40:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xV8DppwJAf9tyNq0/SZILKbSGVT5eHp+lhWdWpdE0Vk=;
-        b=mwsV2U6E9NIQdJcV7qSqHab8lmPcC5Z0K5lAUoXsHYv2dQk0ZFHU3POun/qJsGT/WB
-         9HI0P5uN2YUCbrJKL8BH+UY6+YW1tUoQcwXoEvaAGI0bmm/zh0eKHkCfQ75Xdd8h5giI
-         e/VZCIQUVfzmlUtBeEoP+vOf5lQyWNpu3K8xG9v64ESTgKD9/vcZg/+nm1wPkUgY7pGB
-         jNuSxxiQNnRF8876+H6ps23UMaKO4MWLbqfnFKfGEcmgDJaqs+IZmFVaqBXp1WjIJltS
-         TEvOrSV2RwdRbefArY8l6xmVsSLOnJpKrmgFszxWuoxhLOysZs5WJFRiHHLADkusTVz6
-         yNbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xV8DppwJAf9tyNq0/SZILKbSGVT5eHp+lhWdWpdE0Vk=;
-        b=2V2r1xLuhg8s5E9DRqts6FumLTrri5UDMLXIYlLl6wZIFbqv2R/3I0DTeyZQ16ZGJx
-         eFRcfS9f9xeTx5UAQ7/V3uQlY3Fahxcd3IG130XyLNh33jtc2YIRYDNhzHBgwy3ipLtO
-         ua622wrQ7MWTrLK8MSyyzUllXFzdq7whXSFREbdkRPu6MOR58upHTgyrtGfOPZNp1BJW
-         JKkg98aESgIAVt4MtNKgcK8sgf0bYuwWpI6pWWzVwACfL5l4rI8tvDzixFlm/JspLRw1
-         i+5gpWtlvASMtNoMTLSerJ6SEBb9T7+tuBWog2tGT+AoVQ7S4zld4z8lyAVWdNKGsJ4s
-         xFqA==
-X-Gm-Message-State: AO0yUKVeLoksNgN+ki4+J4V4+arARKwOtgxIZjZm3XrLwdJhSfCETb/E
-        Sba65sH9mnSHV6o0dGRcnkpuBw==
-X-Google-Smtp-Source: AK7set/Fz1pK27zp9EA5Qozm1kbJ1bo3+FAAuIBSU6H65HIx7r+dP1VQwD6Ok2yxDLU++C0IjZyTkg==
-X-Received: by 2002:a17:902:d70a:b0:193:256d:8afe with SMTP id w10-20020a170902d70a00b00193256d8afemr842607ply.2.1675100409274;
-        Mon, 30 Jan 2023 09:40:09 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id bg6-20020a1709028e8600b00189a50d2a3esm8070156plb.241.2023.01.30.09.40.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 09:40:08 -0800 (PST)
-Date:   Mon, 30 Jan 2023 17:40:05 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] KVM: x86/pmu: Disable guest PEBS on hybird cpu
- due to heterogeneity
-Message-ID: <Y9gA9aZNxYAZGgPh@google.com>
-References: <20221109082802.27543-1-likexu@tencent.com>
- <20221109082802.27543-2-likexu@tencent.com>
- <Y8nknyxfKl4p/0GY@google.com>
- <9b422d58-72ab-051f-e317-02b4d8e7211d@gmail.com>
+        Mon, 30 Jan 2023 12:43:47 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C03412861;
+        Mon, 30 Jan 2023 09:43:45 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UDc0N1003605;
+        Mon, 30 Jan 2023 17:43:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=SMg5fZWjmH7Mss820pAqb7ZUrjtwWWTAwGNzWfphj+U=;
+ b=ZAZL35vHMZGVKqbsfViWruO5O8Qc73AyanoN1S4v+Cv59UKDG1CMK4x4GN6p4YgvRN9E
+ +/OIBACsDAIfrDCGPPrMypyTPa+WdPBTMVPWOFataB9jW4xVQutVYWCblWKJowMIu06q
+ SH519zU0HzzB53PNdVw//jk1qsIQzvS3o77u3thczrdL1qTeS19lGqIPOEOanDF/3X5+
+ 7U/asP8khvMyEBpw1f+WSH12qWQkTB0saPVp/PRWgrZIfBFmSQqFjgU58A8KqNxQhSkX
+ lZ2KTnrex+wZnFUZhYl7bxWIH3PDP6iPyjrryMhussSVcR31heEPtBEU1vzEkg94Rokg kw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncsdpvg7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 17:43:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UHhbAM005333
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 17:43:37 GMT
+Received: from [10.47.234.156] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
+ 2023 09:43:37 -0800
+Subject: Re: [PATCH] remoteproc: sysfs: fix race while updating recovery flag
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, <andersson@kernel.org>,
+        <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20230129225106.10606-1-quic_satyap@quicinc.com>
+ <d9708f4b-e533-e400-acbf-3d8e816f242e@quicinc.com>
+From:   Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
+Message-ID: <941b8600-9f7c-b646-9f8a-c30a2a332e37@quicinc.com>
+Date:   Mon, 30 Jan 2023 09:43:37 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b422d58-72ab-051f-e317-02b4d8e7211d@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d9708f4b-e533-e400-acbf-3d8e816f242e@quicinc.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NwER8QJqwMNSBBQHF_SmcEdJJl8CW-KI
+X-Proofpoint-ORIG-GUID: NwER8QJqwMNSBBQHF_SmcEdJJl8CW-KI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_16,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0 mlxlogscore=914
+ spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300171
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023, Like Xu wrote:
-> On 20/1/2023 8:47 am, Sean Christopherson wrote:
-> > On Wed, Nov 09, 2022, Like Xu wrote:
-> > > From: Like Xu <likexu@tencent.com>
-> > > 
-> > >  From vPMU enabling perspective, KVM does not have proper support for
-> > > hybird x86 core. The reported perf_capabilities value (e.g. the format
-> > > of pebs record) depends on the type of cpu the kvm-intel module is init.
-> > > When a vcpu of one pebs format migrates to a vcpu of another pebs format,
-> > > the incorrect parsing of pebs records by guest can make profiling data
-> > > analysis extremely problematic.
-> > > 
-> > > The safe way to fix this is to disable this part of the support until the
-> > > guest recognizes that it is running on the hybird cpu, which is appropriate
-> > > at the moment given that x86 hybrid architectures are not heavily touted
-> > > in the data center market.
-> > > 
-> > > Signed-off-by: Like Xu <likexu@tencent.com>
-> > > ---
-> > >   arch/x86/kvm/vmx/capabilities.h | 4 +++-
-> > >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-> > > index cd2ac9536c99..ea0498684048 100644
-> > > --- a/arch/x86/kvm/vmx/capabilities.h
-> > > +++ b/arch/x86/kvm/vmx/capabilities.h
-> > > @@ -392,7 +392,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
-> > >   static inline bool vmx_pebs_supported(void)
-> > >   {
-> > > -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
-> > > +	return boot_cpu_has(X86_FEATURE_PEBS) &&
-> > > +	       !boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
-> > > +	       kvm_pmu_cap.pebs_ept;
-> > 
-> > I assume the patch I just posted[*] to disable the vPMU entirely is sufficient, or
-> 
-> AFAI, some developers doing client-side virtualization on a hybrid cpu will
-> specifically want vPMU,
-> in which case it makes perfect sense for KVM to expose common pmu
-> capabilities (not PEBS at the current) of big and little cores, such as the
-> most basic performance counter.
-> 
-> > do we need this as well in order to hide X86_FEATURE_DS and X86_FEATURE_DTES64?
-> 
-> I think we still need this diff. Better to prioritize this minor feature a
-> little bit for hungry users.
 
-That wasn't my question.  My question was whether or not wholesale disabling vPMU
-is sufficient to prevent issues with PEBS.  Unless we need this patch on top of
-disabling the vPMU, my strong preference is to disable vPMU, or at the very least
-make it off-by-default and require a explicit override.
 
-I agree that there are users that want to enable vPMU for hybrid CPUs, but as
-stated in the link below, that needs to be a dedicated enabling effort.  I don't
-see any reason to exempt PEBS from that.  E.g. isn't PEBS usable if userspace pins
-vCPUs to pCPUs and enumerates an accurate topology to the guest?
+On 1/30/23 12:03 AM, Mukesh Ojha wrote:
+>
+> On 1/30/2023 4:21 AM, Satya Durga Srinivasu Prabhala wrote:
+>> When multiple clients try to update the recovery flag, it is
+>
+> Multiple user-space clients ?
+>
+Yes, on SMP systems, it is possible that there can be multiple user 
+space clients (can simply be fuzzing kind of scripts) which could be 
+updating the recovery flag.
+>> possible that, race condition would lead to undesired results
+>> as updates to recovery flag isn't protected by any mechanism
+>> today. To avoid such issues, take remoteproc mutex lock before
+>> updating recovery flag and release the lock once done.
+>
+> But your patch also adds locks for the case which does not update
+> recovery flag..
+Yes, was trying to cover entire function, can be restricted to only when 
+recovery flag is being updated as well.
+>>
+>> Signed-off-by: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
+>> ---
+>>   drivers/remoteproc/remoteproc_sysfs.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_sysfs.c 
+>> b/drivers/remoteproc/remoteproc_sysfs.c
+>> index 8c7ea8922638..ec37176e1589 100644
+>> --- a/drivers/remoteproc/remoteproc_sysfs.c
+>> +++ b/drivers/remoteproc/remoteproc_sysfs.c
+>> @@ -48,16 +48,21 @@ static ssize_t recovery_store(struct device *dev,
+>>   {
+>>       struct rproc *rproc = to_rproc(dev);
+>>
+>> +    mutex_lock(&rproc->lock);
+>>       if (sysfs_streq(buf, "enabled")) {
+>>           /* change the flag and begin the recovery process if needed */
+>>           rproc->recovery_disabled = false;
+>> +        mutex_unlock(&rproc->lock);
+>>           rproc_trigger_recovery(rproc);
+>>       } else if (sysfs_streq(buf, "disabled")) {
+>>           rproc->recovery_disabled = true;
+>> +        mutex_unlock(&rproc->lock);
+>>       } else if (sysfs_streq(buf, "recover")) {
+>>           /* begin the recovery process without changing the flag */
+>> +        mutex_unlock(&rproc->lock);
+>
+> is it really needed for this case?
+As mentioned above, was trying to cover entire function. Not really 
+needed in this case as such.
+>
+>>           rproc_trigger_recovery(rproc);
+>>       } else {
+>> +        mutex_unlock(&rproc->lock);
+>
+> same here..
+>
+>>           return -EINVAL;
+>>       }
+>>
+>
+> Do you also need to add lock for rproc_recovery_write in
+> drivers/remoteproc/remoteproc_debugfs.c ?
+>
+Thanks, yes. Debug FS needs to be updated too.
+> -Mukesh
 
-> > [*] https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com
