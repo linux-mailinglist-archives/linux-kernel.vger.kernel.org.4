@@ -2,140 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7378D680657
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA9168065B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235694AbjA3HDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 02:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S231246AbjA3HK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 02:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjA3HDj (ORCPT
+        with ESMTP id S229578AbjA3HKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 02:03:39 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63113532;
-        Sun, 29 Jan 2023 23:03:37 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30U730CA127759;
-        Mon, 30 Jan 2023 01:03:00 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675062180;
-        bh=r3d1MXzMmUq1pqlvkbJrJzaucSVl+EC6aoJjD3D5ck8=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=fSwXnnOuAVK5ztoI3nOhC2nwv1V96uV1POYYttesAVNRba/Tb8cEU/6VNxrZqEaxI
-         CS4lwLhV9CGA7BieLlpMJ2Bk9l6avZchHA8bz/Hf8+ovdUZOOd/0LPoJQIJts6qMNS
-         sQRdsIU9T7px0REgKYr1Myh9nyh131KnZodgdc4U=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30U72xq4095577
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 30 Jan 2023 01:03:00 -0600
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 30
- Jan 2023 01:02:59 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 30 Jan 2023 01:02:59 -0600
-Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30U72rmo067753;
-        Mon, 30 Jan 2023 01:02:54 -0600
-Message-ID: <fe54244c-3d05-2d70-6bdb-f4cde9448ae5@ti.com>
-Date:   Mon, 30 Jan 2023 12:32:53 +0530
+        Mon, 30 Jan 2023 02:10:54 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3D624135
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 23:10:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1675062652; x=1706598652;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PL8Lnq9pEFeL1Z1v5KoXHjGiWf+Wd0+HxXQ5TzyyMB4=;
+  b=WQnLTLK2WW5O4zsNhv/UJQThYWpuXza79lY23pn7idHcAijf+XgGyni8
+   6d6Un6XIZR6hnRHBrHZQ036yG/6xBkJABCoOOZ1/WOZd+UKWAH9EcBP6C
+   dFlJ6ph4q+7Owd9wKZ/p4M6XahqT0OEmjDuIwQfsY+8hkjDJbJ4yR+OJM
+   KCA+AI8emV1zwzRd667BIpRwPuGqUtlYvvam5n3bEuFD7rIzf+j6gVScz
+   OAiYfxSlaU+aVZh14RlFZmqDXQ8rjLUvgBokSwqPKFz9lJt0EpMp4YMl9
+   ZnUX8Jxz2txaTxocQkbSd5x7Wfjye2ZvbQg2MjCc+kMEJWKSmozdtmxeG
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,257,1669046400"; 
+   d="scan'208";a="334022332"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Jan 2023 15:10:52 +0800
+IronPort-SDR: lhU90do8CTsmeAm8T9YIfzYnLK5UmVYj1E9B6OHaPiWgp7iTePaGexS8gVONZotFDqllIndynb
+ hJbhH5I6ezXSR0398xplgJRfsV+0t9jCOMDWgbvxTOsK8WCJLYERyQ2krlvVfcGaNBykHurAhE
+ Sx/EZz+DmnqlQ8IakGBkfgr5Ow8/Tq3uph7oY8O/VCQfde0N0An33bw67L3a+GkIJkNQgEmxXQ
+ pNJX0RJYzwqN37eRcKT1OmRrCx0ItwC2tCUid8a6qV9GwWJee/jD00bOetkCeTQprVfEv8MTCc
+ P1U=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Jan 2023 22:28:18 -0800
+IronPort-SDR: dwrhhEDDXHvQr54Wm750B7xKWSS1Q9vMoqGEndODV3pfvKExRhFpbMDbdvL+InVHI8elYdMt9r
+ xzJ44EpkKNIPeOD4pxhQ9ALkWzAZ88Id6CY0UcyorbC1HoKzdqs6GbdbI0NANiED6+brenG7fq
+ Fth5fxlW2m8x+M5WQ8iVN/knAazid7e7q4tuPImu+wb+klrCG2IXlCGkuRAKW0QQOctmQOKFxy
+ 2QzSzDIGo6qMn12QSApYErjQ4QX2unItV8iNoiwWuqkm1/d6NfpA+k1TPq1kJbJm6BpF+VT6kH
+ Bxo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 29 Jan 2023 23:10:53 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P4zqH5fGMz1RvTr
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 23:10:51 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1675062651; x=1677654652; bh=PL8Lnq9pEFeL1Z1v5KoXHjGiWf+Wd0+HxXQ
+        5TzyyMB4=; b=opqERaEqJ150TbkCWlAbq11jv+vVl4igNIi3xPZN0mdfGACuZvp
+        vBaxbEBjz+85TyLe2FlUDTN5BlP6/JzXbjokz7Ax96xBdxjCRL3yJlTRzQpsug+l
+        FmuuYzHE+jWq2nwaX797vVOQlIU75z5D92QTQHe11kdTZsQSJFEeyb2Z3scqSi1u
+        DBppLgTWFy9wKxQfhtE9rtW26fmOXCvzwAUF/d3cVHSbQQLrL6wZKIvPIVolmm2J
+        UbWVqXVBeroP5T/oHKGUGWYgxkxIq6k6ano2r5jPgmg2d8Nk3U9BDnCTKKNymeL5
+        y71gnjVdectGeRG1sVV+oJ2itDKKMlBtyyg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XUFytgdlWf7V for <linux-kernel@vger.kernel.org>;
+        Sun, 29 Jan 2023 23:10:51 -0800 (PST)
+Received: from [10.225.163.66] (unknown [10.225.163.66])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P4zqF6KkRz1RvLy;
+        Sun, 29 Jan 2023 23:10:49 -0800 (PST)
+Message-ID: <569cb9ba-52d6-da73-dba0-cc62c91f6db2@opensource.wdc.com>
+Date:   Mon, 30 Jan 2023 16:10:48 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [EXTERNAL] Re: [PATCH v3 1/2] dt-bindings: net: Add ICSSG
- Ethernet Driver bindings
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3] pata_parport: add driver (PARIDE replacement)
 Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        "Md Danish Anwar" <danishanwar@ti.com>
-CC:     "Andrew F. Davis" <afd@ti.com>, Tero Kristo <t-kristo@ti.com>,
-        Suman Anna <s-anna@ti.com>, YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, <nm@ti.com>,
-        <ssantosh@kernel.org>, <srk@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20221223110930.1337536-1-danishanwar@ti.com>
- <20221223110930.1337536-2-danishanwar@ti.com> <Y6W7FNzJEHYt6URg@lunn.ch>
- <620ce8e6-2b40-1322-364a-0099a6e2af26@kernel.org> <Y7Mjx8ZEVEcU2mK8@lunn.ch>
- <b55dec4b-4fd5-71fa-4073-b5793cafdee7@kernel.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <b55dec4b-4fd5-71fa-4073-b5793cafdee7@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc:     Ondrej Zary <linux@zary.sk>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
+        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <425b5646-23e2-e271-5ca6-0f3783d39a3b@opensource.wdc.com>
+ <20230123190954.5085-1-linux@zary.sk>
+ <d4f7ebd5-d90d-fb96-0fad-bd129ac162dc@opensource.wdc.com>
+ <e843fde8-7295-dd30-6d98-a62f63d7753c@kernel.dk>
+ <20230130064815.GA31925@lst.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230130064815.GA31925@lst.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
-
-On 05/01/23 17:03, Roger Quadros wrote:
-> On 02/01/2023 20:34, Andrew Lunn wrote:
->> On Mon, Jan 02, 2023 at 03:04:19PM +0200, Roger Quadros wrote:
->>>
->>>
->>> On 23/12/2022 16:28, Andrew Lunn wrote:
->>>>> +        ethernet-ports {
->>>>> +            #address-cells = <1>;
->>>>> +            #size-cells = <0>;
->>>>> +            pruss2_emac0: port@0 {
->>>>> +                reg = <0>;
->>>>> +                phy-handle = <&pruss2_eth0_phy>;
->>>>> +                phy-mode = "rgmii-rxid";
->>>>
->>>> That is unusual. Where are the TX delays coming from?
->>>
->>> >From the below property
->>>
->>> +                ti,syscon-rgmii-delay = <&scm_conf 0x4120>;
->>>
->>> The TX delay can be enabled/disabled from within the ICSSG block.
->>>
->>> If this property exists and PHY mode is neither PHY_INTERFACE_MODE_RGMII_ID
->>> nor PHY_INTERFACE_MODE_RGMII_TXID then the internal delay is enabled.
->>>
->>> This logic is in prueth_config_rgmiidelay() function in the introduced driver.
+On 1/30/23 15:48, Christoph Hellwig wrote:
+> On Sun, Jan 29, 2023 at 08:44:06PM -0700, Jens Axboe wrote:
+>> I would prefer if we just delete it after merging this one, in the same
+>> release. I don't think there's any point in delaying, as we're not
+>> removing any functionality.
 >>
->> What nearly every other MAC driver does is pass the phy-mode to the
->> PHY and lets the PHY add the delays. I would recommend you do that,
->> rather than be special and different.
+>> You could just queue that up too when adding this patch.
 > 
-> 
-> If I remember right we couldn't disable MAC TX delay on some earlier silicon
-> so had to take this route. I don't remember why we couldn't disable it though.
-> 
-> In more recent Silicon Manuals I do see that MAC TX delay can be enabled/disabled.
-> If this really is the case then we should change to
-> 
->  phy-mode = "rgmii-id";
-> 
-> And let PHY handle the TX+RX delays.
-> 
-> Danish,
-> could you please make the change and test if it works on current silicon?
-> 
+> I'd prefer to just deprecate.  But most importantly I want this patch
+> in ASAP in some form.
 
-I changed the phy-mode to "rgmii-id" instead of "rgmii-rxid". I did the testing
-on current silicon (AM654x SR 2.0) and it is working fine.
+I will queue it. But I think it needs a follow up to result in something
+consistent with KConfig. So either deprecate or delete PARPORT. I can queue the
+deprecate patch and delete in 6.4, even though I share Jen's opinion to simply
+delete directly. I am still fine either way.
 
-> cheers,
-> -roger
+Jens,
 
-Thanks and Regards,
-Danish.
+If you are OK with that, can I get your ack for the deprecate patch ? Unless you
+prefer taking it through the block tree. Either way is fine with me.
+
+-- 
+Damien Le Moal
+Western Digital Research
+
