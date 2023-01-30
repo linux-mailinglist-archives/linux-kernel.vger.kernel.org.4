@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4BAC6809E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D606809BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbjA3JuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:50:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
+        id S235485AbjA3Jiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235556AbjA3JuJ (ORCPT
+        with ESMTP id S235037AbjA3Jiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:50:09 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED2E1BAF2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:50:08 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pMQbl-0003Hy-BJ; Mon, 30 Jan 2023 10:37:49 +0100
-Message-ID: <3d5f1e39-0ee7-0b5c-afa7-ef31b87bd1ef@leemhuis.info>
-Date:   Mon, 30 Jan 2023 10:37:48 +0100
+        Mon, 30 Jan 2023 04:38:52 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A999C1027B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:38:24 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id m2so29461467ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:38:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mzQMMKcx09uqvwkgBAEJEp/XB8h4L/XPIaqj+sdWOGo=;
+        b=aFnPqKDiZvokU1Ld9YVGuCQmLju46h8Ps4IdtGRs35c417o8G3yZFWbdUuURbsUUV6
+         LPBbq1Zxb4S0wZJSHzgwzOtBcymhxWyplCdw+SFy5H087tb++iLOl7ekhob+0ljxV8My
+         HDroHVCds5UyDOdGNNdpiQwFjkIPzQoBGbFdJgsCk1UlZIueccMNs94n19FwJsMY1MbS
+         q/EtADGLM/NqgBOvx7qZThR6/g16OZJDzakdg50b9VNHm/ursOvTgY98Sblg2ipKtfJg
+         p1GFcQOu71B7AnN9uSTt6pMyY1wjkCkFwoVE5TL9fR2/s3typ5Re1t8jqTGywYGlgY6a
+         Rpcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mzQMMKcx09uqvwkgBAEJEp/XB8h4L/XPIaqj+sdWOGo=;
+        b=dp3D2YNDkz1fyd97dMGDyPLouAcHdvXlYVsYl+Wqp8yIe1Bkf8zlsvvTTO3vlZU3t3
+         +5Jxa4igtliLkLxF0glYA99RPZLDSN/OUFoftHx2X7MhgHQM7Tin2Yud+NjG6KfAgaPd
+         /slE2ddmFV+zbvo31aUGFGHj1qxeaKa694BGwbq9A0W4GoQEz13B6Y38BZx6QCFZYnKr
+         67YTwAbzm1egCS01CrQ4g3qtDmRe2mdh1Cp/3i/2UnNf5DySrmNKAyEsDsCv1qROhkgK
+         EVv1gB//JcX1dsQLkuUSCkB8/iv+4FczwHohJ888PLvWXB+ez0lmBSuL4kF2S3fMcSjt
+         X1zA==
+X-Gm-Message-State: AO0yUKValCV2qsv9wZTzA23Bjb1Gzrp16ksLXF0nOsohobMOp3D6WWBP
+        DyiPMte8kGxXFXizuSwDwp66SA==
+X-Google-Smtp-Source: AK7set/Q8cFkx1KpIuuzDQfTJlgcFrvMRn26TPdEPM4KQ4E1HvWKmTFvnJdOiF00VXMaNhm6FU3idw==
+X-Received: by 2002:a17:907:3ea1:b0:87b:1be:a8bf with SMTP id hs33-20020a1709073ea100b0087b01bea8bfmr15030746ejc.30.1675071493555;
+        Mon, 30 Jan 2023 01:38:13 -0800 (PST)
+Received: from localhost.localdomain (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id a26-20020a170906685a00b008878909859bsm1951398ejs.152.2023.01.30.01.38.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 01:38:13 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/msm/a3xx: Implement .gpu_busy
+Date:   Mon, 30 Jan 2023 10:38:09 +0100
+Message-Id: <20230130093809.2079314-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: PROBLEM: sparc64 random crashes starting w/ Linux 6.1
- (regression)
-Content-Language: en-US, de-DE
-To:     Nick Bowler <nbowler@draconx.ca>, linux-kernel@vger.kernel.org,
-        sparclinux@vger.kernel.org, regressions@lists.linux.dev
-Cc:     Peter Xu <peterx@redhat.com>
-References: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
-From:   "Linux kernel regression tracking (#adding)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675072208;99282e28;
-X-HE-SMSGID: 1pMQbl-0003Hy-BJ
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
+Add support for gpu_busy on a3xx, which is required for devfreq
+support.
 
-On 29.01.23 03:17, Nick Bowler wrote:
-> 
-> Starting with Linux 6.1.y, my sparc64 (Sun Ultra 60) system is very
-> unstable, with userspace processes randomly crashing with all kinds of
-> different weird errors.  The same problem occurs on 6.2-rc5.  Linux
-> 6.0.y is OK.
-> 
-> Usually, it manifests with ssh connections just suddenly dropping out
-> like this:
-> 
->   malloc(): unaligned tcache chunk detected
->   Connection to alectrona closed.
-> 
-> but other kinds of failures (random segfaults, bus errors, etc.) are
-> seen too.
-> 
-> I have not ever seen the kernel itself oops or anything like that, there
-> are no abnormal kernel log messages of any kind; except for the normal
-> ones that get printed when processes segfault, like this one:
-> 
->   [  563.085851] zsh[2073]: segfault at 10 ip 00000000f7a7c09c (rpc
-> 00000000f7a7c0a0) sp 00000000ff8f5e08 error 1 in
-> libc.so.6[f7960000+1b2000]
-> 
-> I was able to reproduce this fairly reliably by using GNU ddrescue to
-> dump a disk from the dvd drive -- things usually go awry after a minute
-> or two.  So I was able to bisect to this commit:
-> 
->   2e3468778dbe3ec389a10c21a703bb8e5be5cfbc is the first bad commit
->   commit 2e3468778dbe3ec389a10c21a703bb8e5be5cfbc
->   Author: Peter Xu <peterx@redhat.com>
->   Date:   Thu Aug 11 12:13:29 2022 -0400
-> 
->       mm: remember young/dirty bit for page migrations
-> 
-> This does not revert cleanly on master, but I ran my test on the
-> immediately preceding commit (0ccf7f168e17: "mm/thp: carry over dirty
-> bit when thp splits on pmd") extra times and I am unable to get this
-> one to crash, so reasonably confident in this bisection result...
-> 
-> Let me know if you need any more info!
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/gpu/drm/msm/adreno/a3xx_gpu.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
+diff --git a/drivers/gpu/drm/msm/adreno/a3xx_gpu.c b/drivers/gpu/drm/msm/adreno/a3xx_gpu.c
+index 948785ed07bb..1923388eacd8 100644
+--- a/drivers/gpu/drm/msm/adreno/a3xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a3xx_gpu.c
+@@ -477,6 +477,16 @@ static struct msm_gpu_state *a3xx_gpu_state_get(struct msm_gpu *gpu)
+ 	return state;
+ }
+ 
++static u64 a3xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
++{
++	u64 busy_cycles;
++
++	busy_cycles = gpu_read64(gpu, REG_A3XX_RBBM_PERFCTR_RBBM_0_LO);
++	*out_sample_rate = clk_get_rate(gpu->core_clk);
++
++	return busy_cycles;
++}
++
+ static u32 a3xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
+ {
+ 	ring->memptrs->rptr = gpu_read(gpu, REG_AXXX_CP_RB_RPTR);
+@@ -498,6 +508,7 @@ static const struct adreno_gpu_funcs funcs = {
+ #if defined(CONFIG_DEBUG_FS) || defined(CONFIG_DEV_COREDUMP)
+ 		.show = adreno_show,
+ #endif
++		.gpu_busy = a3xx_gpu_busy,
+ 		.gpu_state_get = a3xx_gpu_state_get,
+ 		.gpu_state_put = adreno_gpu_state_put,
+ 		.create_address_space = adreno_create_address_space,
+-- 
+2.39.1
 
-#regzbot ^introduced 2e3468778dbe3ec3
-#regzbot title sparc64: random crashes
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
