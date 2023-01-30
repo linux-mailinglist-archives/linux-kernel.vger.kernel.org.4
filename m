@@ -2,91 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C2D681056
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B138681078
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236945AbjA3OCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
+        id S236942AbjA3ODq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237044AbjA3OCW (ORCPT
+        with ESMTP id S236926AbjA3ODi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:02:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AFA3B0E8;
-        Mon, 30 Jan 2023 06:02:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B9BD8B8114D;
-        Mon, 30 Jan 2023 14:02:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05641C433D2;
-        Mon, 30 Jan 2023 14:02:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675087331;
-        bh=6tA93H1Tk/wXbdlyFNn8xOAv7o+DOjEyIt6ZwZlTS/g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=lXM+eeR1gUyS9lgFEhe3pbRMkHnGaXl11XPCNctbljg9skgaRfkrzsRc7d63qTi/2
-         gVyv3NFRhYpBvau3YnETqSd+TQgXh7KLRFPa9XpZJwHN0/P4GNLSUBZIHJ9CPhUzeJ
-         8IFsmqVJy8vKTHpTm2Hp4MVlRjvIKrMzdDwGhpHtIYmFboQBu/R0La2sqze/cjYDvA
-         6jeOCNHpvxf0bLoUDqyY2c4MA7cv+hNqZp2gQ76JBQVonNrwt4n4yqzIZIXKoWx7gh
-         fVQo9DolPP7wzqJdskSSQ2KPD3UNrCma5U9gb2nK0+UpzjtKU0ls7bgxBsseFa9NQb
-         kGP1MjJXa7YmA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] spi: dw_bt1: fix MUX_MMIO dependencies
-Date:   Mon, 30 Jan 2023 15:01:40 +0100
-Message-Id: <20230130140156.3620863-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Mon, 30 Jan 2023 09:03:38 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EA2EFA2;
+        Mon, 30 Jan 2023 06:03:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=+dcVmBh/YrZikxbQul2St0hAP9i18wzWPSEXSugLB+g=; b=L8crlSmcCwacP4KkCGW/RCDNhB
+        UZt9ps7sWD2D/3K5chSD2r5lUGg60MsXPNYIa5tv2ddN3TeElp7Mc5K0ne8WLulUN/LYuOCTL10Km
+        Qw7N53A9p5rb35WjXXXC0oxsOrr7oebVB01JhV4DUwoD6R5qqCruE9YenaJDMA56PtQ0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pMUkZ-003a28-Vp; Mon, 30 Jan 2023 15:03:11 +0100
+Date:   Mon, 30 Jan 2023 15:03:11 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Frank Sae <Frank.Sae@motor-comm.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        yanhong.wang@starfivetech.com, xiaogang.fan@motor-comm.com,
+        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/5] dt-bindings: net: Add Motorcomm yt8xxx
+ ethernet phy
+Message-ID: <Y9fOHxn8rdIHuDbn@lunn.ch>
+References: <20230130063539.3700-1-Frank.Sae@motor-comm.com>
+ <20230130063539.3700-2-Frank.Sae@motor-comm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130063539.3700-2-Frank.Sae@motor-comm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Jan 30, 2023 at 02:35:35PM +0800, Frank Sae wrote:
+>  Add a YAML binding document for the Motorcom yt8xxx Ethernet phy driver.
+>  
+> Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
+> ---
+>  .../bindings/net/motorcomm,yt8xxx.yaml        | 102 ++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  MAINTAINERS                                   |   1 +
+>  3 files changed, 105 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> new file mode 100644
+> index 000000000000..8527576c15b3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/motorcomm,yt8xxx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MotorComm yt8xxx Ethernet PHY
+> +
+> +maintainers:
+> +  - frank sae <frank.sae@motor-comm.com>
+> +
+> +allOf:
+> +  - $ref: ethernet-phy.yaml#
+> +
+> +properties:
+> +  rx-internal-delay-ps:
+> +    description: |
+> +      RGMII RX Clock Delay used only when PHY operates in RGMII mode with
+> +      internal delay (phy-mode is 'rgmii-id' or 'rgmii-rxid') in pico-seconds.
+> +    enum: [ 0, 150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1500, 1650,
+> +            1800, 1900, 1950, 2050, 2100, 2200, 2250, 2350, 2500, 2650, 2800,
+> +            2950, 3100, 3250, 3400, 3550, 3700, 3850, 4000, 4150 ]
+> +    default: 1950
 
-Selecting a symbol with additional dependencies requires
-adding the same dependency here:
+Ah! There has been a misunderstand. Yes, this changes does make sense, but ....
 
-WARNING: unmet direct dependencies detected for MUX_MMIO
-  Depends on [n]: MULTIPLEXER [=y] && OF [=n]
-  Selected by [y]:
-  - SPI_DW_BT1 [=y] && SPI [=y] && SPI_MASTER [=y] && SPI_DESIGNWARE [=y] && (MIPS_BAIKAL_T1 || COMPILE_TEST [=y])
+> +
+> +  tx-internal-delay-ps:
+> +    description: |
+> +      RGMII TX Clock Delay used only when PHY operates in RGMII mode with
+> +      internal delay (phy-mode is 'rgmii-id' or 'rgmii-txid') in pico-seconds.
+> +    enum: [ 0, 150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1500, 1650, 1800,
+> +            1950, 2100, 2250 ]
+> +    default: 150
 
-Drop the 'select' here to avoid the problem. Anyone using
-the dw-bt1 SPI driver should make sure they include the
-mux driver as well now.
+... i was actually trying to say this 150 is odd. Why is this not
+1950?
 
-Fixes: 7218838109fe ("spi: dw-bt1: Fix undefined devm_mux_control_get symbol")
-Fixes: abf00907538e ("spi: dw: Add Baikal-T1 SPI Controller glue driver")
-Link: https://lore.kernel.org/all/20221218192523.c6vnfo26ua6xqf26@mobilestation/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/spi/Kconfig | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 61fffc8eecc7..711c1c3bbd78 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -295,7 +295,6 @@ config SPI_DW_BT1
- 	tristate "Baikal-T1 SPI driver for DW SPI core"
- 	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
- 	select MULTIPLEXER
--	select MUX_MMIO
- 	help
- 	  Baikal-T1 SoC is equipped with three DW APB SSI-based MMIO SPI
- 	  controllers. Two of them are pretty much normal: with IRQ, DMA,
--- 
-2.39.0
-
+	Andrew
