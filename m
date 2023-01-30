@@ -2,371 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559286820C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A250F681FC4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjAaAen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 19:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S229651AbjA3Xiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjAaAel (ORCPT
+        with ESMTP id S229527AbjA3Xix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:34:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72480166CA
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:33:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675125237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=53MHgWs7Ugbg3eJ3sGE2EYx1+FLlBrKb6XWoMq74u/c=;
-        b=DOX6p8kiwfMqy/6QGdMAlRyHCh9vr3BLRUwzk5EUa5tmsA6DbBNzk+sNWKg5OU107I2Y9E
-        jgL4iizpu4Oqi4DDYlrqGsy4WGATx4pG7TtvxtY3IjzkKP1mDSEnTUmgpKLiB3IBQUgNT3
-        rEk1jqwov5P3SFiujE/5cGHhQdHmI18=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-435-kcHYX4nSPFCncx2ywePWaA-1; Mon, 30 Jan 2023 19:33:56 -0500
-X-MC-Unique: kcHYX4nSPFCncx2ywePWaA-1
-Received: by mail-ed1-f72.google.com with SMTP id c12-20020a05640227cc00b0049e2c079aabso9229682ede.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:33:56 -0800 (PST)
+        Mon, 30 Jan 2023 18:38:53 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F6D2B610
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:38:51 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h16so12688709wrz.12
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:38:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c0D2OAkoPSuqGKjYfRL/XBDXMIK40xEQA3Iqq9uVH7g=;
+        b=WNM+LzlDInSIM5aAM0uVfSzBnlnhI/kYDKYv5CNfmyIolHk9byTBwn8hNONJ458Cay
+         bZ9Jh/qgcbj8wXhylJWvOFPtm06jFcgcdKZktxHVThzvXSr6mMLV3vk5Xt3p9C20khjb
+         KUS/jzF3LNa/VAZMBQWpJBNOPWQYqdXyzPmzEivpTUaKthQkq4Zv6vN3gKjC30bAId0e
+         q+YN1i3wGluxuqNaCbYHi2JLfL0Oju/PdPt0vbeRiJYdkTgB1qvRK+BwBee/O2HcAFTr
+         u3wqgWnn6DVfyIuCib0tK2Cs56yqZYtBKsBSODr4CKIDAb6TxrLnWo6+oxDGlKIl1Rcm
+         DaCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=53MHgWs7Ugbg3eJ3sGE2EYx1+FLlBrKb6XWoMq74u/c=;
-        b=z3kmpvezRi2b0dy7l6bLActmIzL2bmzs6A7w6FNeVUFP1KyRNlp4zIK7yAScISMXL1
-         ZyrHCw5gjwRBTigLaZRKz60JC3n1jaVwigNVbfZo6Cf83Zjn8tDVyPkxtE2pSmEXy2ga
-         TSGGJ9wlbj2VyKzXntmN74ypq1WXrJg5qQLxUi0KCnP1RxO63Dp1Jt/w4tG30LObXUax
-         VmlWcqUdyW+xGxOy2QrmxJ7lbZAmWg0V7tTlJTwpb3SAGxtV+Deov/u6BeI9RSjEtFvD
-         b3nbVfSvMTrRvUgcXRZKZqCAgPM/JjgqUiGgvZcuo1x7eIvznY8c/sKc7GbliViXdkx8
-         ePBg==
-X-Gm-Message-State: AO0yUKV/InhUug4o9z6unHTFuvgICB2HRg83leU2fkbL4oVXuXfCb81o
-        3s0I9S1PLCQPUHr1I/9ORiXr9hSygiAN+W/xlpLaew1HlIdarWmjpejmGUu5ivTh7M6Gmvj9rBi
-        IzQDcRunPZ1pkmpdbBNpBuiUU
-X-Received: by 2002:a17:906:71d7:b0:885:5682:7e52 with SMTP id i23-20020a17090671d700b0088556827e52mr8714919ejk.13.1675125235048;
-        Mon, 30 Jan 2023 16:33:55 -0800 (PST)
-X-Google-Smtp-Source: AK7set/wO+8MYY08YltsC1hKa6IHEpmDv7/lMdXNXozmLAGC2hPQ+we1ncHkUOY0TTO/pO6pkvhy0Q==
-X-Received: by 2002:a17:906:71d7:b0:885:5682:7e52 with SMTP id i23-20020a17090671d700b0088556827e52mr8714892ejk.13.1675125234722;
-        Mon, 30 Jan 2023 16:33:54 -0800 (PST)
-Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id w20-20020a170906d21400b008897858bb06sm1879634ejz.119.2023.01.30.16.33.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 16:33:54 -0800 (PST)
-Message-ID: <f93559f3-7c46-789a-8340-aa0138de2469@redhat.com>
-Date:   Tue, 31 Jan 2023 00:38:18 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi interfaces
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Matthew Brost <matthew.brost@intel.com>
-Cc:     daniel@ffwll.ch, airlied@redhat.com, bskeggs@redhat.com,
-        jason@jlekstrand.net, tzimmermann@suse.de, mripard@kernel.org,
-        corbet@lwn.net, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org
-References: <20230118061256.2689-1-dakr@redhat.com>
- <20230118061256.2689-6-dakr@redhat.com>
- <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com>
- <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
- <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com>
- <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
- <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com>
- <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
- <49ac3f95-6eda-9009-4b28-0167213301b2@amd.com>
- <bc523c5c-efe6-1a7f-b49a-e0867dc1413d@redhat.com>
- <15fb0179-c7c5-8a64-ed08-841189919f5e@redhat.com>
- <1840e9fb-fd1b-79b7-4238-54ae97333d0b@amd.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <1840e9fb-fd1b-79b7-4238-54ae97333d0b@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c0D2OAkoPSuqGKjYfRL/XBDXMIK40xEQA3Iqq9uVH7g=;
+        b=gPJrqkDiartp9dCfm/cmlkN6TeOQvkj5bMjQzFo7HE2lWBctNj8wPoeeOsMir8/jCr
+         xGJZHfiKPAZrPRGWR7knvJKCdWnR46YfC6sHd4KtzHy4SLfiUM3nccfi7+1ZhFPm6oOl
+         CGMYiXuquWxKJiSCs6NUo/80Xni97s9gpRXMy4VDSUfItTEY14euYSuolLFRAXtSw2cN
+         zh5uYo3y2lRPCfzs2NjIBC2Nt352H2uZ+8No2Wvj379iOHiX84qZBti3i/fgSLfH6BzJ
+         ka11MMnDDfHQ9s6KqXLaBBP3tqpqfakxtqaSo6+NAC92y2fJAuE+AxFWE1hzMQ9kplvJ
+         qV4A==
+X-Gm-Message-State: AO0yUKXWKnUsP9PDyuqsIPPElQaiUsEn9O8Sty2Y7hpHkXPDzep5NK+d
+        8JaImKlaoCXZB5oiv4daa/TrgQ==
+X-Google-Smtp-Source: AK7set+th+iU4+VT+YyfX3TofjLEq/2pqNCe2nCL1a5FI7ePffNwYAI1KUnTm18azN07is2Is689Tg==
+X-Received: by 2002:adf:e702:0:b0:2bf:b765:7a13 with SMTP id c2-20020adfe702000000b002bfb7657a13mr1001880wrm.5.1675121930175;
+        Mon, 30 Jan 2023 15:38:50 -0800 (PST)
+Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
+        by smtp.gmail.com with ESMTPSA id o6-20020adfe806000000b002bdf8dd6a8bsm12909713wrm.80.2023.01.30.15.38.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 Jan 2023 15:38:49 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH 11/24] RISC-V: ACPI: irqchip/riscv-intc: Add ACPI support
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <20230130182225.2471414-12-sunilvl@ventanamicro.com>
+Date:   Mon, 30 Jan 2023 23:38:49 +0000
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-doc@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Andrew Jones <ajones@ventanamicro.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <AFDD5897-27A3-4418-B08B-9650B543692D@jrtc27.com>
+References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
+ <20230130182225.2471414-12-sunilvl@ventanamicro.com>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 14:02, Christian König wrote:
-> Am 29.01.23 um 19:46 schrieb Danilo Krummrich:
->> On 1/27/23 22:09, Danilo Krummrich wrote:
->>> On 1/27/23 16:17, Christian König wrote:
->>>> Am 27.01.23 um 15:44 schrieb Danilo Krummrich:
->>>>> [SNIP]
->>>>>>>>
->>>>>>>> What you want is one component for tracking the VA allocations 
->>>>>>>> (drm_mm based) and a different component/interface for tracking 
->>>>>>>> the VA mappings (probably rb tree based).
->>>>>>>
->>>>>>> That's what the GPUVA manager is doing. There are gpuva_regions 
->>>>>>> which correspond to VA allocations and gpuvas which represent the 
->>>>>>> mappings. Both are tracked separately (currently both with a 
->>>>>>> separate drm_mm, though). However, the GPUVA manager needs to 
->>>>>>> take regions into account when dealing with mappings to make sure 
->>>>>>> the GPUVA manager doesn't propose drivers to merge over region 
->>>>>>> boundaries. Speaking from userspace PoV, the kernel wouldn't 
->>>>>>> merge mappings from different VKBuffer objects even if they're 
->>>>>>> virtually and physically contiguous.
->>>>>>
->>>>>> That are two completely different things and shouldn't be handled 
->>>>>> in a single component.
->>>>>
->>>>> They are different things, but they're related in a way that for 
->>>>> handling the mappings (in particular merging and sparse) the GPUVA 
->>>>> manager needs to know the VA allocation (or region) boundaries.
->>>>>
->>>>> I have the feeling there might be a misunderstanding. Userspace is 
->>>>> in charge to actually allocate a portion of VA space and manage it. 
->>>>> The GPUVA manager just needs to know about those VA space 
->>>>> allocations and hence keeps track of them.
->>>>>
->>>>> The GPUVA manager is not meant to be an allocator in the sense of 
->>>>> finding and providing a hole for a given request.
->>>>>
->>>>> Maybe the non-ideal choice of using drm_mm was implying something 
->>>>> else.
->>>>
->>>> Uff, well long story short that doesn't even remotely match the 
->>>> requirements. This way the GPUVA manager won't be usable for a whole 
->>>> bunch of use cases.
->>>>
->>>> What we have are mappings which say X needs to point to Y with this 
->>>> and hw dependent flags.
->>>>
->>>> The whole idea of having ranges is not going to fly. Neither with 
->>>> AMD GPUs and I strongly think not with Intels XA either.
->>>
->>> A range in the sense of the GPUVA manager simply represents a VA 
->>> space allocation (which in case of Nouveau is taken in userspace). 
->>> Userspace allocates the portion of VA space and lets the kernel know 
->>> about it. The current implementation needs that for the named 
->>> reasons. So, I think there is no reason why this would work with one 
->>> GPU, but not with another. It's just part of the design choice of the 
->>> manager.
->>>
->>> And I'm absolutely happy to discuss the details of the manager 
->>> implementation though.
->>>
->>>>
->>>>>> We should probably talk about the design of the GPUVA manager once 
->>>>>> more when this should be applicable to all GPU drivers.
->>>>>
->>>>> That's what I try to figure out with this RFC, how to make it 
->>>>> appicable for all GPU drivers, so I'm happy to discuss this. :-)
->>>>
->>>> Yeah, that was really good idea :) That proposal here is really far 
->>>> away from the actual requirements.
->>>>
->>>
->>> And those are the ones I'm looking for. Do you mind sharing the 
->>> requirements for amdgpu in particular?
->>>
->>>>>>> For sparse residency the kernel also needs to know the region 
->>>>>>> boundaries to make sure that it keeps sparse mappings around.
->>>>>>
->>>>>> What?
->>>>>
->>>>> When userspace creates a new VKBuffer with the 
->>>>> VK_BUFFER_CREATE_SPARSE_BINDING_BIT the kernel may need to create 
->>>>> sparse mappings in order to ensure that using this buffer without 
->>>>> any memory backed mappings doesn't fault the GPU.
->>>>>
->>>>> Currently, the implementation does this the following way:
->>>>>
->>>>> 1. Userspace creates a new VKBuffer and hence allocates a portion 
->>>>> of the VA space for it. It calls into the kernel indicating the new 
->>>>> VA space region and the fact that the region is sparse.
->>>>>
->>>>> 2. The kernel picks up the region and stores it in the GPUVA 
->>>>> manager, the driver creates the corresponding sparse mappings / 
->>>>> page table entries.
->>>>>
->>>>> 3. Userspace might ask the driver to create a couple of memory 
->>>>> backed mappings for this particular VA region. The GPUVA manager 
->>>>> stores the mapping parameters, the driver creates the corresponding 
->>>>> page table entries.
->>>>>
->>>>> 4. Userspace might ask to unmap all the memory backed mappings from 
->>>>> this particular VA region. The GPUVA manager removes the mapping 
->>>>> parameters, the driver cleans up the corresponding page table 
->>>>> entries. However, the driver also needs to re-create the sparse 
->>>>> mappings, since it's a sparse buffer, hence it needs to know the 
->>>>> boundaries of the region it needs to create the sparse mappings in.
->>>>
->>>> Again, this is not how things are working. First of all the kernel 
->>>> absolutely should *NOT* know about those regions.
->>>>
->>>> What we have inside the kernel is the information what happens if an 
->>>> address X is accessed. On AMD HW this can be:
->>>>
->>>> 1. Route to the PCIe bus because the mapped BO is stored in system 
->>>> memory.
->>>> 2. Route to the internal MC because the mapped BO is stored in local 
->>>> memory.
->>>> 3. Route to other GPUs in the same hive.
->>>> 4. Route to some doorbell to kick of other work.
->>>> ...
->>>> x. Ignore write, return 0 on reads (this is what is used for sparse 
->>>> mappings).
->>>> x+1. Trigger a recoverable page fault. This is used for things like 
->>>> SVA.
->>>> x+2. Trigger a non-recoverable page fault. This is used for things 
->>>> like unmapped regions where access is illegal.
->>>>
->>>> All this is plus some hw specific caching flags.
->>>>
->>>> When Vulkan allocates a sparse VKBuffer what should happen is the 
->>>> following:
->>>>
->>>> 1. The Vulkan driver somehow figures out a VA region A..B for the 
->>>> buffer. This can be in userspace (libdrm_amdgpu) or kernel (drm_mm), 
->>>> but essentially is currently driver specific.
->>>
->>> Right, for Nouveau we have this in userspace as well.
->>>
->>>>
->>>> 2. The kernel gets a request to map the VA range A..B as sparse, 
->>>> meaning that it updates the page tables from A..B with the sparse 
->>>> setting.
->>>>
->>>> 3. User space asks kernel to map a couple of memory backings at 
->>>> location A+1, A+10, A+15 etc....
->>>>
->>>> 4. The VKBuffer is de-allocated, userspace asks kernel to update 
->>>> region A..B to not map anything (usually triggers a non-recoverable 
->>>> fault).
->>>
->>> Until here this seems to be identical to what I'm doing.
->>>
->>> It'd be interesting to know how amdgpu handles everything that 
->>> potentially happens between your 3) and 4). More specifically, how 
->>> are the page tables changed when memory backed mappings are mapped on 
->>> a sparse range? What happens when the memory backed mappings are 
->>> unmapped, but the VKBuffer isn't de-allocated, and hence sparse 
->>> mappings need to be re-deployed?
->>>
->>> Let's assume the sparse VKBuffer (and hence the VA space allocation) 
->>> is pretty large. In Nouveau the corresponding PTEs would have a 
->>> rather huge page size to cover this. Now, if small memory backed 
->>> mappings are mapped to this huge sparse buffer, in Nouveau we'd 
->>> allocate a new PT with a corresponding smaller page size overlaying 
->>> the sparse mappings PTEs.
->>>
->>> How would this look like in amdgpu?
->>>
->>>>
->>>> When you want to unify this between hw drivers I strongly suggest to 
->>>> completely start from scratch once more.
->>>>
->>
->> I just took some time digging into amdgpu and, surprisingly, aside 
->> from the gpuva_regions it seems like amdgpu basically does exactly the 
->> same as I do in the GPU VA manager. As explained, those region 
->> boundaries are needed for merging only and, depending on the driver, 
->> might be useful for sparse mappings.
->>
->> For drivers that don't intend to merge at all and (somehow) are 
->> capable of dealing with sparse regions without knowing the sparse 
->> region's boundaries, it'd be easy to make those gpuva_regions optional.
-> 
-> Yeah, but this then defeats the approach of having the same hw 
-> independent interface/implementation for all drivers.
+On 30 Jan 2023, at 18:22, Sunil V L <sunilvl@ventanamicro.com> wrote:
+>=20
+> Add support for initializing the RISC-V INTC driver on ACPI based
+> platforms.
+>=20
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> ---
+> drivers/irqchip/irq-riscv-intc.c | 79 +++++++++++++++++++++++++++-----
+> 1 file changed, 67 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/irqchip/irq-riscv-intc.c =
+b/drivers/irqchip/irq-riscv-intc.c
+> index f229e3e66387..044ec92fcba7 100644
+> --- a/drivers/irqchip/irq-riscv-intc.c
+> +++ b/drivers/irqchip/irq-riscv-intc.c
+> @@ -6,6 +6,7 @@
+>  */
+>=20
+> #define pr_fmt(fmt) "riscv-intc: " fmt
+> +#include <linux/acpi.h>
+> #include <linux/atomic.h>
+> #include <linux/bits.h>
+> #include <linux/cpu.h>
+> @@ -112,6 +113,30 @@ static struct fwnode_handle =
+*riscv_intc_hwnode(void)
+> 	return intc_domain->fwnode;
+> }
+>=20
+> +static int __init riscv_intc_init_common(struct fwnode_handle *fn)
+> +{
+> +	int rc;
+> +
+> +	intc_domain =3D irq_domain_create_linear(fn, BITS_PER_LONG,
+> +					       &riscv_intc_domain_ops, =
+NULL);
+> +	if (!intc_domain) {
+> +		pr_err("unable to add IRQ domain\n");
+> +		return -ENXIO;
+> +	}
+> +
+> +	rc =3D set_handle_irq(&riscv_intc_irq);
+> +	if (rc) {
+> +		pr_err("failed to set irq handler\n");
+> +		return rc;
+> +	}
+> +
+> +	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
+> +
+> +	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
+> +
+> +	return 0;
+> +}
+> +
+> static int __init riscv_intc_init(struct device_node *node,
+> 				  struct device_node *parent)
+> {
+> @@ -133,24 +158,54 @@ static int __init riscv_intc_init(struct =
+device_node *node,
+> 	if (riscv_hartid_to_cpuid(hartid) !=3D smp_processor_id())
+> 		return 0;
+>=20
+> -	intc_domain =3D irq_domain_add_linear(node, BITS_PER_LONG,
+> -					    &riscv_intc_domain_ops, =
+NULL);
+> -	if (!intc_domain) {
+> -		pr_err("unable to add IRQ domain\n");
+> -		return -ENXIO;
+> -	}
+> -
+> -	rc =3D set_handle_irq(&riscv_intc_irq);
+> +	rc =3D riscv_intc_init_common(of_node_to_fwnode(node));
+> 	if (rc) {
+> -		pr_err("failed to set irq handler\n");
+> +		pr_err("failed to initialize INTC\n");
+> 		return rc;
+> 	}
+>=20
+> -	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
+> +	return 0;
+> +}
+>=20
+> -	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
+> +IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
+> +
+> +#ifdef CONFIG_ACPI
+> +
+> +static int __init
+> +riscv_intc_acpi_init(union acpi_subtable_headers *header,
+> +		     const unsigned long end)
+> +{
+> +	int rc;
+> +	struct fwnode_handle *fn;
+> +	struct acpi_madt_rintc *rintc;
+> +
+> +	rintc =3D (struct acpi_madt_rintc *)header;
+> +
+> +	/*
+> +	 * The ACPI MADT will have one INTC for each CPU (or HART)
+> +	 * so riscv_intc_acpi_init() function will be called once
+> +	 * for each INTC. We only need to do INTC initialization
+> +	 * for the INTC belonging to the boot CPU (or boot HART).
+> +	 */
+> +	if (riscv_hartid_to_cpuid(rintc->hart_id) !=3D =
+smp_processor_id())
+> +		return 0;
 
-That's probably a question of interpretation and I'd rather see it as an 
-optional feature. Probably 80% to 90% of the code is for tracking 
-mappings, generating split / merge steps on bind / unbind and connect 
-the mappings to GEM objects. This would be the same for all the drivers 
-and some might opt-in for using the feature of additionally tracking 
-regions on top and other won't.
+Why are we carrying forward this mess to ACPI? The DT bindings are
+awful and a complete pain to deal with, as evidenced by how both Linux
+and FreeBSD have to go out of their way to do special things to only
+look at one of the many copies of the same thing.
 
-> 
-> Let me ask the other way around how does the hw implementation of a 
-> sparse mapping looks like for NVidia based hardware?
-> 
-> For newer AMD hw its a flag in the page tables, for older hw its a 
-> register where you can specify ranges A..B. We don't really support the 
-> later with AMDGPU any more, but from this interface I would guess you 
-> have the second variant, right?
+Jess
 
-No, it's a flag in the PTEs as well.
-
-However, for a rather huge sparse region the sparse PTEs might have a 
-different (larger) page size than the PTEs of the (smaller) memory 
-backed mappings. Hence, it might be that when trying to map a small 
-memory backed mapping within a huge sparse region, we can *not* just 
-change the sparse PTE to point to actual memory, but rather create a new 
-PT with a smaller page size kind of overlaying the page table containing 
-the sparse PTEs with a greater page size.
-
-In such a situation, tracking the whole (sparse) region (representing 
-the whole VA allocation) separately comes in handy.
-
-And of course, as mentioned, tracking regions gives us the bounds for 
-merging, which e.g. might be useful to pick a greater page size for 
-merged mappings. It might also keep the amount of mappings to track down 
-by a little bit, however, this would probably only be relevant if we 
-actually have quite a few to merge.
-
-> 
-> Christian.
-> 
->>
->>>> First of all don't think about those mappings as VMAs, that won't 
->>>> work because VMAs are usually something large. Think of this as 
->>>> individual PTEs controlled by the application. similar how COW 
->>>> mappings and struct pages are handled inside the kernel.
->>>
->>> Why do you consider tracking single PTEs superior to tracking VMAs? 
->>> All the properties for a page you mentioned above should be equal for 
->>> the entirety of pages of a whole (memory backed) mapping, aren't they?
->>>
->>>>
->>>> Then I would start with the VA allocation manager. You could 
->>>> probably base that on drm_mm. We handle it differently in amdgpu 
->>>> currently, but I think this is something we could change.
->>>
->>> It was not my intention to come up with an actual allocator for the 
->>> VA space in the sense of actually finding a free and fitting hole in 
->>> the VA space.
->>>
->>> For Nouveau (and XE, I think) we have this in userspace and from what 
->>> you've written previously I thought the same applies for amdgpu?
->>>
->>>>
->>>> Then come up with something close to the amdgpu VM system. I'm 
->>>> pretty sure that should work for Nouveau and Intel XA as well. In 
->>>> other words you just have a bunch of very very small structures 
->>>> which represents mappings and a larger structure which combine all 
->>>> mappings of a specific type, e.g. all mappings of a BO or all sparse 
->>>> mappings etc...
->>>
->>> Considering what you wrote above I assume that small structures / 
->>> mappings in this paragraph refer to PTEs.
->>>
->>> Immediately, I don't really see how this fine grained resolution of 
->>> single PTEs would help implementing this in Nouveau. Actually, I 
->>> think it would even complicate the handling of PTs, but I would need 
->>> to think about this a bit more.
->>>
->>>>
->>>> Merging of regions is actually not mandatory. We don't do it in 
->>>> amdgpu and can live with the additional mappings pretty well. But I 
->>>> think this can differ between drivers.
->>>>
->>>> Regards,
->>>> Christian.
->>>>
->>
-> 
+> +
+> +	fn =3D irq_domain_alloc_named_fwnode("RISCV-INTC");
+> +	WARN_ON(fn =3D=3D NULL);
+> +	if (!fn) {
+> +		pr_err("unable to allocate INTC FW node\n");
+> +		return -1;
+> +	}
+> +
+> +	rc =3D riscv_intc_init_common(fn);
+> +	if (rc) {
+> +		pr_err("failed to initialize INTC\n");
+> +		return rc;
+> +	}
+>=20
+> 	return 0;
+> }
+>=20
+> -IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
+> +IRQCHIP_ACPI_DECLARE(riscv_intc, ACPI_MADT_TYPE_RINTC,
+> +		     NULL, 1, riscv_intc_acpi_init);
+> +#endif
+> --=20
+> 2.38.0
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
