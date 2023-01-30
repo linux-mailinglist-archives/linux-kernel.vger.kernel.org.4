@@ -2,301 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1676805B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D0D6805BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbjA3FoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 00:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35154 "EHLO
+        id S235627AbjA3FtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 00:49:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjA3FoS (ORCPT
+        with ESMTP id S229744AbjA3FtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 00:44:18 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10olkn2097.outbound.protection.outlook.com [40.92.40.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4B510265
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:44:16 -0800 (PST)
+        Mon, 30 Jan 2023 00:49:23 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2047.outbound.protection.outlook.com [40.107.93.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DDE3A86;
+        Sun, 29 Jan 2023 21:49:22 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JQ+kumFN84m2wr2eDOyi47mJ2nPl6439JaCQ3U30g8sv5Wh3sISj2+TQKhdS23v4NSyrKGmzky0ToHZmi2xzPhIWM7Njtp9UvqJzucqPphTDKB9HjU/+e5gLvkbth/nlsrHJp4830eHqj3vlv3kesHjxr8eay0OcaCUsFNuFMd025UK3TqmWVqT16fXlxGEet/uf1ICVGyT9XLW4soObSJOykUjZMo2dFauuYoCR/TA8NmVrkIqSr9/yaba5urLo2FBY0RBj61R/U1vUV89Sgtsi2SPBxeAzGt5VHgjymHcwm6qXEeM225ov5nN56ovfMBDFqOX0ETENxL7GMOgvCA==
+ b=fonMIBt1yP7YCMBfnD6BnTBucoCI7BaWJIpL0cWPI8D+xmkitgr01m3YS0m01CGXqwF9viYN+msF7YzmiqH0Zrpl+DiHilAsXSEy0V9OMT5a0yd4z1nnnx8qDbsu2r8yU9GT8fpOjAJ9cNeIXveZ6C4iO8aq66e2On1I9LSafsrD/p1i5XVeQ+wadVjoB7OfcW9dQUPwxw3KFxaF/FYhVmWWJl5u6GVbX5Ckm3N7rz5mbuEc2v4SDEPZVL5ktH2ezLtO922Q/gK6XxEGXcBKwJ+JCr7aBBCJ7HE7BRaXqSVxhXj78ZfmwBUoZ98r1hEjh5YcOh+9rbsYoE9sTZs+pg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dDJxxfhJIVfHH1Rnvl9w3n+eno3Kfyn2He0dmwiAQXw=;
- b=Kjg4ytZLg1aPwpUtFuWsYDYJ3hkrL92tpYVsuHDBTObeAFecp2JTLbw+C6AubLsdMBXhzt1mQO1NQkfbz0C+12YEtaCYAVelhBXZQFUsnlgxFP/NqijTlho0dO+UYsqbqS1zXChUgCOgk5cp9naM+utfWfJP3BLPUyGKlh5yry32Ih0vr+7vSf0ACHjkXG8eMeSxpBg8kdpedFGVxSm2rhTOpwbPJSx/oih1apLB5s88bEut43GyA9fUKdPge/w2xXB3+VwHT184QOY3pvvKv8mGLYwHoMrU9yp7tVd3EbX9KgzenmMDQUJEpGJbFLAxO91OlO5Xc20WXt/fWans1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=/m27PHhmgLI6k1k5GtC2gNu12WqxA4VqoTOePD0gnqQ=;
+ b=ExHBe5iWawpQI8PEqlUG18WG2KUzgh4dGsz+6BqMCwEAYVPWg0dCBur7iKsgsfrmf087KY6LjpIpuvnHpt5MQiceiXZXtA+xzIqqdCll+/yR2l3jGuRQ0NCf3YBYSUKWznOpJN3ZqT+DybrEK3aSrptTxO5AICmEC90q3dKibEB2lQdDqMJkBJ1Wvw7kGGvK4lZEunycbRR/ObPAfJhXLV/5My9IHr8ajlFugAyUOK4xUBPzvIVRThWY6w91mUMxBqpam56GTl7vKIDwoO4Q45jQOAvBVtcITgGEZb5NMyhsyjOd/NG/AuV/XCLKwcvRY4NpfoNZ2OE6f7LzAK3zsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dDJxxfhJIVfHH1Rnvl9w3n+eno3Kfyn2He0dmwiAQXw=;
- b=btW8jzYfnqumNcS/gY2sXEHmp9zaKrs19CF6bilJFJNa7jOHdS/mVP1JfvVM79Aq62Y/VAlOoR7oFfchxv3FHQxWNAk1EvSiXQivI5OjyzVFcAQdXL3LXPYCrXyujYazbSujGybxrGkbzHnBDWgF5ltbEAUfsRrr4scnujC2dPvkjP0fjoIUM6EohWAysRBTRXhdUTzSLQNv3tpaq2HhVCPJyCASF1N8cABZ8l+WE1/vQ8OodveAcHrGxACRtALUFuj4j/pg6Q9WujFG2eL9yteJyz2BPnpLSTnLMf3f8lmhTG05XO4SNAoeegi55KS8bwH0dFqKmQH0g+1XafL9jw==
-Received: from BY5PR19MB3333.namprd19.prod.outlook.com (2603:10b6:a03:188::23)
- by DS7PR19MB6230.namprd19.prod.outlook.com (2603:10b6:8:9a::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.36; Mon, 30 Jan 2023 05:44:14 +0000
-Received: from BY5PR19MB3333.namprd19.prod.outlook.com
- ([fe80::2f9f:773e:b1da:5087]) by BY5PR19MB3333.namprd19.prod.outlook.com
- ([fe80::2f9f:773e:b1da:5087%4]) with mapi id 15.20.6043.031; Mon, 30 Jan 2023
- 05:44:14 +0000
-From:   "katiyar26@outlook.com" <katiyar26@outlook.com>
-To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Mellanox interrupts are not load balanced
-Thread-Topic: Mellanox interrupts are not load balanced
-Thread-Index: AQHZMjMkUEeiz2tn4ECAxfc0bz4HOq62b/ZKgAABt+CAAAVmYw==
-Date:   Mon, 30 Jan 2023 05:44:14 +0000
-Message-ID: <BY5PR19MB333362AF364F23C398DC351BA5D39@BY5PR19MB3333.namprd19.prod.outlook.com>
-References: <BY5PR19MB3333BC15B1D33E89A679D7A7A5CC9@BY5PR19MB3333.namprd19.prod.outlook.com>
- <BY5PR19MB333326E6CB47FA6946DAF7DDA5D39@BY5PR19MB3333.namprd19.prod.outlook.com>
- <BY5PR19MB333337F4EF2491D440453F74A5D39@BY5PR19MB3333.namprd19.prod.outlook.com>
-In-Reply-To: <BY5PR19MB333337F4EF2491D440453F74A5D39@BY5PR19MB3333.namprd19.prod.outlook.com>
-Accept-Language: en-US
+ bh=/m27PHhmgLI6k1k5GtC2gNu12WqxA4VqoTOePD0gnqQ=;
+ b=KGyXvBfUisQriRZI6MwE7D0FYPKt6mPwe3lYfu+933utxOCoiLLdfa1G37lrV5ZUY7SuQU0LyUhBAtTDVzaztWz+h2yfQJAq4kE/81oFFkRb249Py6XICmrzNInwpLSxVhs4sBLVqSo0iCrNYCtiZfgzVTyzIC0aMDJJufx2Dy0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by CH2PR12MB4264.namprd12.prod.outlook.com (2603:10b6:610:a4::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 05:49:18 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::a0e2:652:d7bd:58f]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::a0e2:652:d7bd:58f%7]) with mapi id 15.20.6043.023; Mon, 30 Jan 2023
+ 05:49:17 +0000
+Message-ID: <2cb6bb4b-fd04-556e-0790-524bf174cf89@amd.com>
+Date:   Mon, 30 Jan 2023 11:19:01 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/1] perf: Fix warning from concurrent read/write of
+ perf_event_pmu_context
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-tmn:  [tbj4r1yat+3t0KUHDN0gX52ZApGjLmS/]
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BY5PR19MB3333:EE_|DS7PR19MB6230:EE_
-x-ms-office365-filtering-correlation-id: dd41cdeb-fca1-4a7c-5637-08db0285057c
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XU9Dz/8NZaGIxaTngym3Kw6rIGOyO4+9QNtyPozAdJHfRTqy3dB6R4AKslVvYyCnc3cNw2aTPV8cP0l/sz36Su8S2mWqNw/8iqycqDXJOpwRZZr4QHMavPAWQrgTDXyYBZlyn26TbVRWev56kWnrQtr8Xq30SoqDzKspEeHwOk80O21j4Q2krbDfkoZwkALHu2eJYl1keLbTZXGhhjBzzJTp5neY+rDbfZEkzk8uEbKyKFNwYC+O3gKA7W45eN39gT2Y1z5Zhdd/SFku/M3S1TUiS6nKR45Yu5pe4PYkdWmb54OAyDJsha/ZO0uPHNEukYiDrDu2BCjFBLH7lktkeDdXBghkxi/s5nHEIi2R5+cJQSBKVCVIV/mTaT+kEo8ZUoLrcYOaPB8lLXZ4GXmsiD5ooT3fy4Rean5K3FzoP0fTcv2XWneGZrqGOPRJRGApFo/Vsucvj6S+SJARoyS44lQigS2odg2CqTQoa0ecgwr4Ru/XSJWRymPDVtjr2g2Laduc2997Q9rpOkk1yTcKmfDpuRuzRQ9qtYMzbd987Ob4qT5GXWbz1r5d8Tjp8eqmJBotsi+RMG2NhpqVQ9cIfkCHmwCGuTlEhld9lb+9ymg=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?FNjZi6OYZngYnJkYjVXgSXYbZtHB6S0JHC0b+lmgC2i/kaVb+z7RUph0pL?=
- =?iso-8859-1?Q?zvSF8j+VHvBANGiXcbCM3+odzr+NwG9b1UPPNJ32zTLC0rxxGnEBtxgJUp?=
- =?iso-8859-1?Q?/E4xV9BDiPKqh2WbmMv6pZUvRZfPnh+FDc9QwCX6ZowaY5fzrnh5YEKtgT?=
- =?iso-8859-1?Q?YQYT83OZlh65UfqsDEVA2M9OuFfYrZnuGJ5xK6+cMVb1rrAHv1yrhzKQyO?=
- =?iso-8859-1?Q?XdTd6DRODH6+bC/8YGMLf6HzCtmGvi8CSHd9vMcnjcPtRazS/04cDoWJn7?=
- =?iso-8859-1?Q?WYI168pV3XwSTt4RAQl7GfzRe3WSZe7newjkos/ZPLDqUA3K5KCA+LDmHq?=
- =?iso-8859-1?Q?o5iR86XSK/1AoSlHlLwNL9N2omXSU7JhMpcXBlMwzNT5OkLtgJ23+mOIui?=
- =?iso-8859-1?Q?ZJ9hVHlq85qPGXCb4RbBaNQ52YPQNMmI7CASIK2HCz3Fy4q+FNBfqw7GGU?=
- =?iso-8859-1?Q?J+RAvLkU4yK0qBkqK/lmMubxFf5g49+7/G6fDgrcCku7oqZsOSn5o0oiEZ?=
- =?iso-8859-1?Q?+XJXBG4RKFJzTjbe8Cudc7S9y7qU2LptbEZ6SBDP5Ze1yAM9lzEqoPad8l?=
- =?iso-8859-1?Q?2q4kmm4OQvn2yK3/Uk6C4YGXIzAYjjtHgetvKFtgZqDSnXMuZv0SDhuknt?=
- =?iso-8859-1?Q?WaSFPJ4KyJimAgPXGNsl8KtZlzMZupxnEqWB+RhXwvtdShp3smaHRBMDko?=
- =?iso-8859-1?Q?qvZ6TIF6GUcPkPBe232jFBkagHvEJ3FElF57S0+S5pD/HEikdrt6N3R6yL?=
- =?iso-8859-1?Q?JUbAxOmNSzeBEl1X4XyB98sQ2r4WbZqgXk6r076BBCalnVKYHfbc7LxqfT?=
- =?iso-8859-1?Q?Nnm1KSQfO86+jLpyY6Kzm8f8yWOjqE3tJz7oY4te/eDRRVfqlVsKHidjjL?=
- =?iso-8859-1?Q?F/IlK9aSe9TeXDPacKSELyML9AW1Ab4aeejpEjTZiYOkmkxuEPxHEkv7oD?=
- =?iso-8859-1?Q?Az8uWDp3wQfvJtsGY1yleUbI4hmC9jlqqkQUQA3rKc8OiC1MqYqd00XWkw?=
- =?iso-8859-1?Q?5Z9Cx1PPBOBxoDjf+MYxOmH9bj+v9ZyRidC9XFfEOkblV1N5QBM52JJ0XP?=
- =?iso-8859-1?Q?wtPby9jFqR5CLMBR57PxoFn7aRNzfdDgWt9RvuT+vzmqzvzrs5svneAPYM?=
- =?iso-8859-1?Q?VUJZXnLRlTyb+6xezwC48YvETrzIP0KIAUpl4kBeIj3t5GEDUvTjnuozvT?=
- =?iso-8859-1?Q?5vgGufsJWto43kvCPtjgBIiXdPIUWXwSEoUvA0SIliOYQvu9WNXFWvT+Rd?=
- =?iso-8859-1?Q?8r598o6QjuRwriLMjd4u+RpSQljzF1/0hrEiQqbF7DF8m0fulIHJ/h/VFh?=
- =?iso-8859-1?Q?wEU9?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+To:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, peterz@infradead.org
+Cc:     syzbot+697196bc0265049822bd@syzkaller.appspotmail.com,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Thomas Richter <tmricht@linux.ibm.com>
+References: <20230127143141.1782804-1-james.clark@arm.com>
+ <20230127143141.1782804-2-james.clark@arm.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <20230127143141.1782804-2-james.clark@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0013.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::9) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|CH2PR12MB4264:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ab1cab0-f02a-44cf-c691-08db0285b9cc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /8Z2ByTSQMh0fhluFQHJX/TnIXuLJHkfilI1W4rB6q2xryYldHFx7qiSSpO7fpJCUAxsmXGy8q3RTROsozDC0qFETN4Z6Y9HS8BxL+0cUlsZzxQNQ5Rz+RcHlgBvnU8kyoK0GWA8AoENVToY3CyCKuM3DH58coznS0hC9EQASFcS5QOktvIPGy7MiYDiyk0M+pI2SRFpQY/un41fKBx6HXQKGWlL8GxdsdUWeVKZ3SEZXtGntjZfhv9mPtI0SOTVdvgBOa72KC+6uDltSo34Z0wHT20tOSeBoGMRRTzMFuEJr2MwNjZ6SsfaSkjpH6CpNwyEUV4r+rAFFKi6BnlsIuEW6xcGe4KJMtGKNU0JJI6DF17FgUPcXsfSsplUu0SV6qtgLWvbMgdo7z7Ol0q1c8ubykraPaHeGtKnpZawP+sonwy8s9dmTG6Sl/qRdaFAfwp4wr8+Y/Gzko+zKOuo/xSPrL4xP+u0IeDG6fQoYboQrsKwhfsm5laYlnDw40qtJUiYmx+twNnCpteuLa7rOVnJOITXRLtvEJKs9/15n6mb36BE4ZcEGE04AmbfVn3hU4Qs+ms1jhmnRS3vwY7o4LjH8VPCUqfPeZYPPsmhSlX4nAH5szVl1NiXTp3K3DnKRplRdi0BkpwnUmUyekiOGce8C/rbTWtzVervf3dpjzflA72VXtbS4fHcEEF3w/xczG3yk4YB8Z9unZA7je6ve4DrKraai2yNeNyL0gxf0HiGog2hJ5I2kkFPJjNZgKXxKU6bk2BHXcSPc2pTs6j9XB4aRzyNNYxsIu0FgO6S/kw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(396003)(136003)(39860400002)(346002)(451199018)(8936002)(41300700001)(31696002)(44832011)(86362001)(5660300002)(7416002)(83380400001)(2616005)(45080400002)(316002)(54906003)(66946007)(38100700002)(66556008)(66476007)(4326008)(8676002)(6666004)(6512007)(26005)(186003)(6506007)(966005)(53546011)(36756003)(6486002)(478600001)(31686004)(2906002)(99710200001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDN5cHFnODVjWlY4VGZDYW9rbWR1WXd0bmlUamZlTGh6VGVybG5pRi9mZEcv?=
+ =?utf-8?B?eUJ1T2U2SWZvbkdBU0dwOVJMa0s2QkU4MVQ2SkpZY1dQS3JycC8xS1ptSDE2?=
+ =?utf-8?B?bkt5MElnWkhxOUYra2I0TmlMaHkvaEUvek10QjRLaTFMZ1A4eVpzaHZKSjlY?=
+ =?utf-8?B?S1Z1bFBlUkt3bC9WVFNERW96UHZZMjgwNFFkc1UrWTdMZGdUcjF0NjBqK0x1?=
+ =?utf-8?B?K0VwbUlleUpySjRsR2lPcnoveWdLUW1KRExRYkpMbUh1K1ROU2g2U0N3MjNU?=
+ =?utf-8?B?TjE2YVAxc0lxR3pzVlRxdFpiT210d21WS1QwV09RY0pqNGt0cUErK0ZiR25a?=
+ =?utf-8?B?cEdDZ3RtQzc1Qzl0bUpYY2xVQVhjZklqbTJCbWtyUGVSLzhLaVpCL0VzWVR2?=
+ =?utf-8?B?SjR3TEVnb09FQVdYcStMM3R6M2tua0FqSGxsRjZoSUlqanRZQ1pNS2szVTJt?=
+ =?utf-8?B?dDVtclFTSU14Q0Zvc2dRZGJTUFVlaG55SHJsSDlXYmpsNXo3UDgyWXh5WUhz?=
+ =?utf-8?B?bWZ3cEk4bmZVRE5FNVl6S1FKb0NFMmZhZ3dBOFJpTGRYTGpDZC9VOG1ORWx0?=
+ =?utf-8?B?N3NwYmg3OVBQSkQwYVI4OW1ycVBhcWg4WHFQSnlFZTNQaUttUnh1V0w2MEla?=
+ =?utf-8?B?ZFNPSGdsalg4N3NIM0hvZkZsUzFMNGFmcmdlTjdUY2lBRnhXcUFrMjFtNEk4?=
+ =?utf-8?B?NUFYWExSQ2xoL04wa2JrblFoUU1tUEtTbjhCTDV3WnBNVnRPYUVNOHZaeFVh?=
+ =?utf-8?B?SzViS0YyZ2RrMkxET1FxL2FLd2FBWjVSd1BYNkdFOUF0OUJTZVRkMXA5OCtU?=
+ =?utf-8?B?REdxTGlFaW8vNTBqRmtwK3ROZWQwNGRnZHdrWEJMdUJvUEV4MjVaV1lGdXdH?=
+ =?utf-8?B?NS9Jay9zeGRtTHN2NlJ5NjJlM0lBYW9XMXBIcVcxMDI0WDNQL0lSUkNNckRu?=
+ =?utf-8?B?VjFrQUlRSVdmRjA3TFNDREZrdG1OUjZjMldDK2RVbHA0VWxTbWRISi95VDM1?=
+ =?utf-8?B?WU9VZlBrd3RCT2x1cEdlZFFLOGJWdlpYTDI1b0tqS0gxVXRxcnBDUVc2ZFRR?=
+ =?utf-8?B?RUc5UUJMYmVuRzgyNWFpNXV1ZXVVUlRIbDU4MnJleVhEdUdvREQ3ckphYXpi?=
+ =?utf-8?B?WEdkc3NrM1FVN3R5UElxc2hrNXFPVlZhSTVJSU53d0dYOVZDK0ozODE5NTlG?=
+ =?utf-8?B?ZHpUMEhwdGo5M3YvWWRnSW55WmUrazAvL2Ric21TcVg1cFdxUm1VZTJYcW5z?=
+ =?utf-8?B?aDBiUUUwOXowSW9uYm9WYVFpVDI3OFFrME9kYkw1c2VRcW5PNmtYaXUzS3do?=
+ =?utf-8?B?OXJWelVITkRFUkp0aVYvMk55cXIxU3dxOUl1dWM1bWxPTDdjWXNNeCtpVXRq?=
+ =?utf-8?B?STVxTkYwbXlISU5EZVVzQ2VQY29vOEU3ZmJXZVFMdnNWWXlCM1RGaVVLMjl5?=
+ =?utf-8?B?MWk1ZVBaRzZ6citBMmJFT2xxZmlhdTNDVEtSd1ZrSTNwVW1lYjlQelRYQk9x?=
+ =?utf-8?B?R1dFbkM0dkh1UTFZNWQyTk1wNTE1ZGxxZlNsckZPZDYxMC82YkxJUFhpUzJK?=
+ =?utf-8?B?LzRzRlFydjBNdFQwSE5FL0IwZjluSWk4a1AwY2ttTktCWW1BQ1JCOFM0eVQy?=
+ =?utf-8?B?NEt6WWV3TUF0WEVCVnY3aXp4dnVGaWZtYlRzTXFNWXJxa1lLc0hHbm1URGQx?=
+ =?utf-8?B?ZkMrOVJFem5kUjNqczZURmgvVVMzTmxsUkQ5ZWw2S3psT2tYaXBadmU4RzZ1?=
+ =?utf-8?B?blRZRTU4UVZpOTJVNnZFY21QcDg4NFIvUGhkUmNDVkRJYXhvOTFkbUtTZ003?=
+ =?utf-8?B?czA3KzBFZmR4bXR6VjlLUWZTaXNvRC9TNnhXVU1TOHFaU3daTDByb3paWndS?=
+ =?utf-8?B?Zm41WVpURTdaaWhrMlFza1lSeklqQTdYYkdTYzhIWldMUTRubVRHT1pEZHhP?=
+ =?utf-8?B?NjRtMlZ2Q2lZUHJDb1l0WkZyYkp4ck0rbGlJVzZpZktSdjl2Nlg5R0pndXBv?=
+ =?utf-8?B?NWtJWW1tMlg4YmZBNG5taUM3Ty9NenY3WGc5QU9KK281cHNpOFBaUnh3QWZ2?=
+ =?utf-8?B?UG13L012MW9IdStvalhXSE5xeXZnZ0Y4ZEp4YlRiK3krZ0NXREhoOEZrWGpk?=
+ =?utf-8?Q?y1vX/hZ/MFSag4b3RXDe+FhZ2?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ab1cab0-f02a-44cf-c691-08db0285b9cc
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR19MB3333.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd41cdeb-fca1-4a7c-5637-08db0285057c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 05:44:14.8841
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 05:49:17.7604
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR19MB6230
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ty4xgf1T9CZtqAHE9gqG1hJgD6h3C8uBWa6WeuFkw2BGTKOV2m/fUN20dC3H/WISE33BZOYAkUz4pN0JJq++Mw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4264
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,=0A=
-I am running centos 7.7 VM in azure with Mellanox (mlx5_core) driver for NI=
-C. It is running customized 3.10.0-1062.18.1.el7 kernel image with some min=
-or changes in net directory. =0A=
-=0A=
-It has created as many queues and irqs as the number of CPUs in VM but all =
-the interrupts are being processed by CPU0 only. Irqbalance service is also=
- running and smp_affinity is set differently for different irqs. I tried se=
-tting it manually after stopping the irqbalance service but still all the i=
-nterrupts were targeted to CPU0 as can be seen from below output.=0A=
-=0A=
-> cat /proc/interrupts =0A=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 CPU0=A0=A0=A0=A0=A0=A0 CPU1=A0=A0=A0=A0=A0=
-=A0 CPU2=A0=A0=A0=A0=A0=A0 CPU3=A0=A0=A0=A0=A0=A0 CPU4=A0=A0=A0=A0=A0=A0 CP=
-U5=A0=A0=A0=A0=A0=A0 CPU6=A0=A0=A0=A0=A0=A0 CPU7=A0=A0=A0=A0=A0=A0 =0A=
-=A0 0:=A0=A0=A0=A0=A0=A0 9881=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 0=A0=A0 IO-APIC-edge=A0=A0=A0=A0=A0 timer=0A=
-=A0 1:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 9=A0=A0 IO-APIC-edge=A0=A0=A0=A0=A0 i8042=0A=
-=A0 3:=A0=A0=A0=A0=A0=A0=A0=A0 21=A0=A0=A0=A0=A0=A0=A0=A0 25=A0=A0=A0=A0=A0=
-=A0=A0=A0 13=A0=A0=A0=A0=A0=A0=A0=A0 19=A0=A0=A0=A0=A0=A0=A0=A0=A0 2=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0 2=A0=A0=A0=A0=A0=A0=A0=A0=A0 3=A0=A0=A0=A0=A0=A0=A0 8=
-56=A0=A0 IO-APIC-edge=A0=A0=A0 =0A=
-=A0 4:=A0=A0=A0=A0=A0=A0=A0=A0 68=A0=A0=A0=A0=A0=A0=A0=A0=A0 6=A0=A0=A0=A0=
-=A0=A0=A0=A0 25=A0=A0=A0=A0=A0=A0=A0=A0 22=A0=A0=A0=A0=A0=A0=A0=A0 21=A0=A0=
-=A0=A0=A0=A0=A0=A0 10=A0=A0=A0=A0=A0=A0=A0=A0 19=A0=A0=A0=A0=A0=A0=A0 360=
-=A0=A0 IO-APIC-edge=A0=A0=A0=A0=A0 serial=0A=
-=A0 8:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0 IO-APIC-edge=A0=A0=A0=A0=A0 rtc0=0A=
-=A0 9:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0 IO-APIC-fasteoi=A0=A0 acpi=0A=
-12:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 5=A0=A0 IO-APIC-edge=A0=A0=A0=A0=A0 i8042=0A=
-14:=A0=A0=A0=A0=A0=A0=A0 602=A0=A0=A0=A0=A0=A0=A0 318=A0=A0=A0=A0=A0=A0=A0 =
-226=A0=A0=A0=A0=A0=A0=A0 232=A0=A0=A0=A0=A0=A0=A0 278=A0=A0=A0=A0=A0=A0=A0 =
-205=A0=A0=A0=A0=A0=A0=A0=A0 69=A0=A0=A0=A0=A0=A0 8917=A0=A0 IO-APIC-edge=A0=
-=A0=A0=A0=A0 ata_piix=0A=
-15:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 IO-APIC-edge=A0=A0=A0=A0=A0 ata_piix=0A=
-24:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_pages_eq@pci:8b76:00:=
-02.0=0A=
-25:=A0=A0=A0=A0=A0 19694=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_cmd_eq@pci:8b76:00:02.0=0A=
-26:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_async_eq@pci:8b76:00:=
-02.0=0A=
-28:=A0=A0=A0=A0 123648=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp0@pci:8b76:00:02.0=0A=
-29:=A0=A0=A0=A0 152455=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp1@pci:8b76:00:02.0=0A=
-30:=A0=A0=A0=A0 102308=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp2@pci:8b76:00:02.0=0A=
-31:=A0=A0=A0=A0=A0 89403=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp3@pci:8b76:00:02.0=0A=
-32:=A0=A0=A0=A0=A0 86793=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp4@pci:8b76:00:02.0=0A=
-33:=A0=A0=A0=A0 107817=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp5@pci:8b76:00:02.0=0A=
-34:=A0=A0=A0=A0 117091=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp6@pci:8b76:00:02.0=0A=
-35:=A0=A0=A0=A0=A0 59714=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp7@pci:8b76:00:02.0=0A=
-36:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_pages_eq@pci:83a4:00:=
-02.0=0A=
-37:=A0=A0=A0=A0=A0 12427=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_cmd_eq@pci:83a4:00:02.0=0A=
-38:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_async_eq@pci:83a4:00:=
-02.0=0A=
-40:=A0=A0=A0=A0=A0 35520=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp0@pci:83a4:00:02.0=0A=
-41:=A0=A0=A0=A0=A0=A0=A0 576=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp1@pci:83a4:00:02.0=0A=
-42:=A0=A0=A0=A0=A0 34139=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp2@pci:83a4:00:02.0=0A=
-43:=A0=A0=A0=A0=A0 19951=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp3@pci:83a4:00:02.0=0A=
-44:=A0=A0=A0=A0=A0 41038=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp4@pci:83a4:00:02.0=0A=
-45:=A0=A0=A0=A0=A0 36569=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp5@pci:83a4:00:02.0=0A=
-46:=A0=A0=A0=A0=A0 42023=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp6@pci:83a4:00:02.0=0A=
-47:=A0=A0=A0=A0=A0 12610=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 0=A0=A0 PCI-MSI-edge=A0=A0=A0=A0=A0 mlx5_comp7@pci:83a4:00:02.0=0A=
-NMI:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 Non-maskable interrupts=0A=
-LOC:=A0=A0=A0=A0=A0=A0 1536=A0=A0=A0=A0=A0=A0 1224=A0=A0=A0=A0=A0=A0 1240=
-=A0=A0=A0=A0=A0=A0 1107=A0=A0=A0=A0=A0=A0 1299=A0=A0=A0=A0=A0=A0 1379=A0=A0=
-=A0=A0=A0=A0 1171=A0=A0=A0=A0=A0=A0 2152=A0=A0 Local timer interrupts=0A=
-SPU:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 Spurious interrupts=0A=
-PMI:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 Performance monitoring interrupts=0A=
-IWI:=A0=A0=A0=A0=A0=A0=A0 726=A0=A0=A0=A0=A0=A0=A0 143=A0=A0=A0=A0=A0=A0=A0=
- 776=A0=A0=A0=A0=A0=A0=A0 309=A0=A0=A0=A0=A0=A0=A0 780=A0=A0=A0=A0=A0=A0=A0=
- 370=A0=A0=A0=A0=A0=A0=A0 748=A0=A0=A0=A0=A0=A0 1047=A0=A0 IRQ work interru=
-pts=0A=
-RTR:=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0 0=A0=A0 APIC ICR read retries=0A=
-RES:=A0=A0=A0=A0=A0 59746=A0=A0=A0=A0=A0 34162=A0=A0=A0=A0 150579=A0=A0=A0=
-=A0=A0 45146=A0=A0=A0=A0 149421=A0=A0=A0=A0=A0 87954=A0=A0=A0=A0 149095=A0=
-=A0=A0=A0=A0 47137=A0=A0 Rescheduling interrupts=0A=
-CAL:=A0=A0=A0=A0=A0=A0 2562=A0=A0=A0=A0=A0=A0 2717=A0=A0=A0=A0=A0=A0 2601=
-=A0=A0=A0=A0=A0=A0 2590=A0=A0=A0=A0=A0=A0 2577=A0=A0=A0=A0=A0=A0 2649=A0=A0=
-=A0=A0=A0=A0 2572=A0=A0=A0=A0=A0=A0 2557=A0=A0 Function call interrupts=0A=
-=0A=
-Mellanox driver version is :=0A=
-version:=A0=A0=A0=A0=A0=A0=A0 5.0-0=0A=
-license:=A0=A0=A0=A0=A0=A0=A0 Dual BSD/GPL=0A=
-description:=A0=A0=A0 Mellanox 5th generation network adapters (ConnectX se=
-ries) core driver=0A=
-author:=A0=A0=A0=A0=A0=A0=A0=A0 Eli Cohen <eli@mellanox.com>=0A=
-rhelversion:=A0=A0=A0 7.7=0A=
-srcversion:=A0=A0=A0=A0 7D9FFD656B0EB1000804CB2=0A=
-=0A=
-Same kernel with different NIC driver (in AWS) and igb driver in physical s=
-erver works fine.=0A=
-I tried centos7.9 (3.10.0-1160.76.1.el7) available in Azure market place an=
-d there I don't see the issue.=0A=
-=0A=
-Please help in debugging/resolving this issue.=0A=
-=0A=
-Please CC to katiyar26@outlook.com while replying.=0A=
-=0A=
-regards,=0A=
-Nitin=
+Hi James,
+
+On 27-Jan-23 8:01 PM, James Clark wrote:
+> When running two Perf sessions, the following warning can appear:
+> 
+>   WARNING: CPU: 1 PID: 2245 at kernel/events/core.c:4925 put_pmu_ctx+0x1f0/0x278
+>   Modules linked in: xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_reject_ipv4 xt_tcpudp ip6table_mangle ip6table_nat iptable_mangle iptable_nat nf_nat nf_conntrack libcrc32c nf_defrag_ipv6 nf_defrag_ipv4 ip6table_filter ip6_tables iptable_filter bridge stp llc coresight_stm stm_core coresight_etm4x coresight_tmc coresight_replicator coresight_funnel coresight_tpiu coresight arm_spe_pmu ip_tables x_tables ipv6 xhci_pci xhci_pci_renesas r8169
+>   CPU: 1 PID: 2245 Comm: perf Not tainted 6.2.0-rc4+ #1
+>   pstate: 20400009 (nzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   pc : put_pmu_ctx+0x1f0/0x278
+>   lr : put_pmu_ctx+0x1b4/0x278
+>   sp : ffff80000dfcbc20
+>   x29: ffff80000dfcbca0 x28: ffff008004f00000 x27: ffff00800763a928
+>   x26: ffff00800763a928 x25: 00000000000000c0 x24: 0000000000000000
+>   x23: 00000000000a0003 x22: ffff00837df74088 x21: ffff80000dfcbd18
+>   x20: 0000000000000000 x19: ffff00800763a6c0 x18: 0000000000000000
+>   x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+>   x14: 0000000000000000 x13: ffff80000dfc8000 x12: ffff80000dfcc000
+>   x11: be58ab6d2939e700 x10: be58ab6d2939e700 x9 : 0000000000000000
+>   x8 : 0000000000000001 x7 : 0000000000000000 x6 : 0000000000000000
+>   x5 : ffff00800093c9c0 x4 : 0000000000000000 x3 : ffff80000dfcbca0
+>   x2 : ffff008004f00000 x1 : ffff8000082403c4 x0 : 0000000000000000
+>   Call trace:
+>    put_pmu_ctx+0x1f0/0x278
+>    _free_event+0x2bc/0x3d0
+>    perf_event_release_kernel+0x444/0x4bc
+>    perf_release+0x20/0x30
+>    __fput+0xe4/0x25c
+>    ____fput+0x1c/0x28
+>    task_work_run+0xc4/0xe8
+>    do_notify_resume+0x10c/0x164
+>    el0_svc+0xb4/0xdc
+>    el0t_64_sync_handler+0x84/0xf0
+>    el0t_64_sync+0x190/0x194
+> 
+> This is because there is no locking around the access of "if
+> (!epc->ctx)" in find_get_pmu_context() and when it is set to NULL in
+> put_pmu_ctx().
+> 
+> The decrement of the reference count in put_pmu_ctx() also happens
+> outside of the spinlock, leading to the possibility of this order of
+> events, and the context being cleared in put_pmu_ctx(), after its
+> refcount is non zero:
+> 
+>  CPU0                                   CPU1
+>  find_get_pmu_context()
+>    if (!epc->ctx) == false
+>                                         put_pmu_ctx()
+>                                         atomic_dec_and_test(&epc->refcount) == true
+>                                         epc->refcount == 0
+>      atomic_inc(&epc->refcount);
+>      epc->refcount == 1
+>                                         list_del_init(&epc->pmu_ctx_entry);
+> 	                                      epc->ctx = NULL;
+> 
+> Another issue is that WARN_ON for no active PMU events in put_pmu_ctx()
+> is outside of the lock. If the perf_event_pmu_context is an embedded
+> one, even after clearing it, it won't be deleted and can be re-used. So
+> the warning can trigger. For this reason it also needs to be moved
+> inside the lock.
+> 
+> The above warning is very quick to trigger on Arm by running these two
+> commands at the same time:
+> 
+>   while true; do perf record -- ls; done
+>   while true; do perf record -- ls; done
+
+These dose not trigger WARN_ON on my x86 machine, however, the C reproducer
+provided by syzbot[1] does trigger it.
+
+[1]: https://syzkaller.appspot.com/text?tag=ReproC&x=17beacbc480000
+
+Thanks,
+Ravi
