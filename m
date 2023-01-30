@@ -2,149 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20D6680E9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F240B680E9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236074AbjA3NOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S236125AbjA3NPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235989AbjA3NOG (ORCPT
+        with ESMTP id S235989AbjA3NPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:14:06 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AB012870;
-        Mon, 30 Jan 2023 05:13:53 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-4fda31c3351so158403597b3.11;
-        Mon, 30 Jan 2023 05:13:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yuIsIC5WkjlnYbFhp4do2Gvm2A9ljg1sUa4uVtjOdgU=;
-        b=IKBdjSrJ4VJn2rHtWs60QnO5mRjsEER3YCBTtAIeZiTrCvdG2vBjbcpf0pxp6uQ0xX
-         8gATo3iO6H84h0x2ry2SDtyvA8Mjk/i1AZPF/PaXsiPUTARNirqPoQuJ156nzKRbqqLh
-         iDxHhNsecBReJ8CzDc4F9lWk3QWPfMl49KzYVoYX6GRusgCIia2MRrYyWRMzJ+QTHhay
-         xWfptfUX5EFM1pbj7JT7RPR/fVzhZT9nCxK7rtUKW30xHlZ8NnrD6+Ap8SFrNTp2dWhp
-         Ed4DXSQjJixwgUCqhs9w7APNmHcJfT+jPbQBeBraCktRAlz2w8nUVz/us5O6IexCT/g/
-         sbwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yuIsIC5WkjlnYbFhp4do2Gvm2A9ljg1sUa4uVtjOdgU=;
-        b=5BNbNoghTqt7ofKg+g24opvaApZSSFXejQTSVVYgu7nI1n286w0hbtldB4FFXvTEDu
-         pkRp93YQJLkeQpRUITuvV/KTz93utgr+Q7JiZ633O2HfYNBMa8vVzOO+YIv3h87eH/DV
-         Ua+K/IhaTgVYsEMzDN84sv3D8p4v/U40X7OXjnUbps061KRD3kgVGaScBzLDnwQjcAVu
-         KMw/bPluOPT8O1UAUwHGuMyWb+YQV8Y2i775+F5e8JbH7x4k+KqAf5/rFcD6JK/zCyUk
-         D5YTb0A0F4M8vB/F8wIkYMOZOLjXiV1O/yFdM9Rb3EseHclJA3KUYu4AHBqVjxlxlwHN
-         L+tw==
-X-Gm-Message-State: AFqh2kpjw2SIDsgWe1HpTZeVMZhCBmDEAkzQ7V6xIcNj0UuWZMIfpu2K
-        9s1dzlkihsmgbk3a4B/Xk1gTJFHSwyTgsoI0oto=
-X-Google-Smtp-Source: AMrXdXvyV4vHU4lm4qhXJxoTcPF2urcHfYEtL9TUBmeWZ/fYbZf+ZAfC9QTyp+bogQscsTO7ydYqVZ8jHchtCG5QYzo=
-X-Received: by 2002:a81:e801:0:b0:500:5624:904c with SMTP id
- a1-20020a81e801000000b005005624904cmr4374481ywm.258.1675084432986; Mon, 30
- Jan 2023 05:13:52 -0800 (PST)
+        Mon, 30 Jan 2023 08:15:39 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F143A1167D;
+        Mon, 30 Jan 2023 05:15:37 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UBOr8a003745;
+        Mon, 30 Jan 2023 13:15:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=JnLlhli1VXmVZTlNuU4xDDq71lJUtL1G7CheKas9FKk=;
+ b=jI2r9YLc/cH7KsC8qVqwtJAuaAIAFCz150jE4jyy+O1IQpyii4d0V25i3cH84plH3rrj
+ QF97VnodO7WchdSFkGhvMWMYQd5L2Ah5L+hfcCZPbbJoFPfkbDWYg20X4L55/I/NXGdd
+ Muds/CXhcLtoyj4CQB3oMqChkkoq9J3NcuUa+OqcEb+xbU+sKM50ZiaW4eOm7rMcjA76
+ eWMuJNPPJN0NMijTCEs4Al4hkDvpYh8z4Ea0Br/Zem00oNv/6nBtnr6VkvHdX4eHorI8
+ xXMne2UvblIq6JiV1MFoMZGjnWF7W3J2YdsxBiSIYlRJWQp25X0h7RSByG49B5ZhRvxK Ow== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncu1tv0jg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 13:15:33 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UDFWd3002172
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 13:15:32 GMT
+Received: from [10.253.10.209] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
+ 2023 05:15:31 -0800
+Message-ID: <28cd9aca-1945-ceed-2756-162132d576ef@quicinc.com>
+Date:   Mon, 30 Jan 2023 21:14:01 +0800
 MIME-Version: 1.0
-References: <20230127174014.251539-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB592258905AC3979803C473D786CC9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8s+cZpuUXWRa573a373n7YPsHrdLnUVXHjez6O101oneQ@mail.gmail.com>
- <OS0PR01MB5922943C1E1D9329691DB02F86CC9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdWHE3wAYd7TSamN77Xy7CSxnEd8QHW8xm9ng4opsBEapg@mail.gmail.com>
-In-Reply-To: <CAMuHMdWHE3wAYd7TSamN77Xy7CSxnEd8QHW8xm9ng4opsBEapg@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 30 Jan 2023 13:13:26 +0000
-Message-ID: <CA+V-a8vBFSKbFJo1nEX7eN+S8eJazDDfCrzO7oFHsiF5yvpZ+g@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: renesas: r9a07g044: Add Cortex-A55 PMU node
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: Re: [PATCH v5] trace: acquire buffer from temparary trace sequence
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>
+References: <1675065249-23368-1-git-send-email-quic_linyyuan@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <1675065249-23368-1-git-send-email-quic_linyyuan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: VEozPtO-Kxex201uv30qrgLcHdVr-1d_
+X-Proofpoint-ORIG-GUID: VEozPtO-Kxex201uv30qrgLcHdVr-1d_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_12,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300127
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
 
-On Mon, Jan 30, 2023 at 10:05 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> On Fri, Jan 27, 2023 at 10:48 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > Subject: Re: [PATCH] arm64: dts: renesas: r9a07g044: Add Cortex-A55 PMU node
-> > > On Fri, Jan 27, 2023 at 6:38 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > > > Subject: [PATCH] arm64: dts: renesas: r9a07g044: Add Cortex-A55 PMU
-> > > > > node
-> > > > >
-> > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > >
-> > > > > Enable the performance monitor unit for the Cortex-A55 cores on the
-> > > > > RZ/G2L
-> > > > > (r9a07g044) SoC.
-> > > > >
-> > > > > Signed-off-by: Lad Prabhakar
-> > > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > ---
-> > > > >  arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 5 +++++
-> > > > >  1 file changed, 5 insertions(+)
-> > > > >
-> > > > > diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > > > > b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > > > > index 80b2332798d9..ff9bdc03a3ed 100644
-> > > > > --- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > > > > +++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > > > > @@ -161,6 +161,11 @@ opp-50000000 {
-> > > > >               };
-> > > > >       };
-> > > > >
-> > > > > +     pmu_a55 {
-> > > > > +             compatible = "arm,cortex-a55-pmu";
-> > > > > +             interrupts-extended = <&gic GIC_PPI 7
-> > > > > + IRQ_TYPE_LEVEL_HIGH>;
-> > > >
-> > > > Just a question, Is it tested?
-> > > Yes this was tested with perf test
-> > >
-> > > > timer node[1] defines irq type as LOW, here it is high.
-> > > You are right looking at the RZG2L_InterruptMapping_rev01.xlsx this should
-> > > be LOW. (I followed the SPI IRQS where all the LEVEL interrupts are HIGH)
-> > >
-> > > > Also do we need to define (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_LEVEL_LOW) as
-> > > it has 2 cores??
-> > > >
-> > > No this is not required for example here [0] where it has 6 cores.
-> >
-> > I may be wrong, That is the only example[1], where the A55 PMU per cpu interrupts and number of a55 cores in the DT
-> > are not matching.
-> >
-> > [1]
-> > https://elixir.bootlin.com/linux/latest/B/ident/arm%2Ccortex-a55-pmu
->
-> Indeed, this looks like an omission, propagated through
-> arch/arm64/boot/dts/renesas/r8a779[afg]0.dtsi.
->
-> And doesn't this apply to all PPI interrupts, i.e. shouldn't the GIC
-> in arch/arm64/boot/dts/renesas/r9a07g0{43u,44u,54}.dtsi specify the
-> mask in their interrupts properties, too?
->
-I was under the impression that the GIC_CPU_MASK_SIMPLE(x) was only
-needed if the driver handled per-cpu stuff.
+@Steven current design is not safe, as user still can write to buffer 
+which have no enough space.
 
-Marc, what should be the correct usage?
+do you think it is better to improve dwc3 trace in fast assign path ?
 
-Cheers,
-Prabhakar
+
+On 1/30/2023 3:54 PM, Linyu Yuan wrote:
+> there is one dwc3 trace event declare as below,
+> DECLARE_EVENT_CLASS(dwc3_log_event,
+> 	TP_PROTO(u32 event, struct dwc3 *dwc),
+> 	TP_ARGS(event, dwc),
+> 	TP_STRUCT__entry(
+> 		__field(u32, event)
+> 		__field(u32, ep0state)
+> 		__dynamic_array(char, str, DWC3_MSG_MAX)
+> 	),
+> 	TP_fast_assign(
+> 		__entry->event = event;
+> 		__entry->ep0state = dwc->ep0state;
+> 	),
+> 	TP_printk("event (%08x): %s", __entry->event,
+> 			dwc3_decode_event(__get_str(str), DWC3_MSG_MAX,
+> 				__entry->event, __entry->ep0state))
+> );
+> the problem is when trace function called, it will allocate up to
+> DWC3_MSG_MAX bytes from trace event buffer, but never fill the buffer
+> during fast assignment, it only fill the buffer when output function are
+> called, so this means if output function are not called, the buffer will
+> never used.
+>
+> add __get_buf(len) which acquiree buffer from iter->tmp_seq when trace
+> output function called, it allow user write string to acquired buffer.
+>
+> the mentioned dwc3 trace event will changed as below,
+> DECLARE_EVENT_CLASS(dwc3_log_event,
+> 	TP_PROTO(u32 event, struct dwc3 *dwc),
+> 	TP_ARGS(event, dwc),
+> 	TP_STRUCT__entry(
+> 		__field(u32, event)
+> 		__field(u32, ep0state)
+> 	),
+> 	TP_fast_assign(
+> 		__entry->event = event;
+> 		__entry->ep0state = dwc->ep0state;
+> 	),
+> 	TP_printk("event (%08x): %s", __entry->event,
+> 		dwc3_decode_event(__get_buf(DWC3_MSG_MAX), DWC3_MSG_MAX,
+> 				__entry->event, __entry->ep0state))
+> );.
+>
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+>
+> v5: move WARN_ON_ONCE into function
+> v4: no change
+> v3: fix comment from maintainer in v2
+>
+>   include/linux/trace_seq.h                  |  5 +++++
+>   include/trace/stages/stage3_trace_output.h |  3 +++
+>   include/trace/stages/stage7_class_define.h |  1 +
+>   kernel/trace/trace_seq.c                   | 23 +++++++++++++++++++++++
+>   4 files changed, 32 insertions(+)
+>
+> diff --git a/include/linux/trace_seq.h b/include/linux/trace_seq.h
+> index 0c4c758..6be92bf 100644
+> --- a/include/linux/trace_seq.h
+> +++ b/include/linux/trace_seq.h
+> @@ -95,6 +95,7 @@ extern void trace_seq_bitmask(struct trace_seq *s, const unsigned long *maskp,
+>   extern int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
+>   			      int prefix_type, int rowsize, int groupsize,
+>   			      const void *buf, size_t len, bool ascii);
+> +char *trace_seq_acquire(struct trace_seq *s, unsigned int len);
+>   
+>   #else /* CONFIG_TRACING */
+>   static inline __printf(2, 3)
+> @@ -139,6 +140,10 @@ static inline int trace_seq_path(struct trace_seq *s, const struct path *path)
+>   {
+>   	return 0;
+>   }
+> +static inline char *trace_seq_acquire(struct trace_seq *s, unsigned int len)
+> +{
+> +	return NULL;
+> +}
+>   #endif /* CONFIG_TRACING */
+>   
+>   #endif /* _LINUX_TRACE_SEQ_H */
+> diff --git a/include/trace/stages/stage3_trace_output.h b/include/trace/stages/stage3_trace_output.h
+> index 66374df..c1fb135 100644
+> --- a/include/trace/stages/stage3_trace_output.h
+> +++ b/include/trace/stages/stage3_trace_output.h
+> @@ -139,3 +139,6 @@
+>   		u64 ____val = (u64)(value);		\
+>   		(u32) do_div(____val, NSEC_PER_SEC);	\
+>   	})
+> +
+> +#undef __get_buf
+> +#define __get_buf(len)		trace_seq_acquire(p, (len))
+> diff --git a/include/trace/stages/stage7_class_define.h b/include/trace/stages/stage7_class_define.h
+> index 8795429..bcb960d 100644
+> --- a/include/trace/stages/stage7_class_define.h
+> +++ b/include/trace/stages/stage7_class_define.h
+> @@ -23,6 +23,7 @@
+>   #undef __get_rel_sockaddr
+>   #undef __print_array
+>   #undef __print_hex_dump
+> +#undef __get_buf
+>   
+>   /*
+>    * The below is not executed in the kernel. It is only what is
+> diff --git a/kernel/trace/trace_seq.c b/kernel/trace/trace_seq.c
+> index 9c90b3a..e5e2992 100644
+> --- a/kernel/trace/trace_seq.c
+> +++ b/kernel/trace/trace_seq.c
+> @@ -403,3 +403,26 @@ int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
+>   	return 1;
+>   }
+>   EXPORT_SYMBOL(trace_seq_hex_dump);
+> +
+> +/*
+> + * trace_seq_acquire - acquire seq buffer with size len
+> + * @s: trace sequence descriptor
+> + * @len: size of buffer to be acquired
+> + *
+> + * acquire buffer with size of @len from trace_seq for output usage,
+> + * user can fill string into that buffer.
+> + *
+> + * Returns start address of acquired buffer.
+> + *
+> + * it allow multiple usage in one trace output function call.
+> + */
+> +char *trace_seq_acquire(struct trace_seq *s, unsigned int len)
+> +{
+> +	char *ret = trace_seq_buffer_ptr(s);
+> +
+> +	if (!WARN_ON_ONCE(seq_buf_buffer_left(&s->seq) < len))
+> +		seq_buf_commit(&s->seq, len);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(trace_seq_acquire);
