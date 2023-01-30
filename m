@@ -2,130 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FB44680DAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:31:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA06680DAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236844AbjA3Mb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58634 "EHLO
+        id S236845AbjA3MbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:31:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbjA3MbW (ORCPT
+        with ESMTP id S236458AbjA3MbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:31:22 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4546B2685F;
-        Mon, 30 Jan 2023 04:31:21 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U7wH3n003313;
-        Mon, 30 Jan 2023 04:31:16 -0800
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nd442he2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 04:31:16 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YP0QPjw4DkiBIopX+2znZxB+S9Dfj0k/I4o/AtBBshZC8Ax1yzZCMqQg4iDoF674XlafcjnAAwjd2r9ghwLZFQBBVI7iveyc8gGVQG8WpmfUotnOBzMkxaEgj8AsdffV8qTrONO8ML4FyrusxDnKmJOI644zSjm4u8D1MG6YX9nnMMq67AdDr21qCjJudso+09pVyo9t5nOw6S+fkf2/Ej3gZdU6usBYraagnXqjMPGIRfwcZuaiavfVCcOqsOQgHmw9OI37RTobQ0+A5xScXN6xIxtaDFt0+PABY6dqeFbb63vT22sdYzycGm9/aJ8QZST1BHj8hqsvpgDYj+bDcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IKgITQXr3rBO7b/YvLNyh8qnaz2+vjYL8abkJXEJJpw=;
- b=PupoAo7PoiVI0RZR1xVamD1RAZ+m5703R8KVigYJtmOPQQqiY5NvFUtn7dJH50tHb5O5wj3sS4XY/mI6h6a8tQrECdWFBhQjdAJovCgRKjSE2hFNuhkwgPlBGh7Pu8pofRbYeps2cpjjCE0ifmyKlgUQ6Z0HFWA2ThzcwtPEX/h0PnlMVLk8Z0gyjBYMrLhKPemicRXtpTh45V9MnJXeo1SWIsQ1BNDzwnzjB+MQ8he8t9yZvOLhMCa9RoJebajVYXc9C+SvI4077usn5B3vbB4rX2cbCdyONhZhCM7G25C8B7gpA7k48xcbtRiT3nEmVgVDZWGzXbBleov3/5CXnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IKgITQXr3rBO7b/YvLNyh8qnaz2+vjYL8abkJXEJJpw=;
- b=aCadRNGzFxtuXY9EvseTlJ9avUXglN9biiTYJWA1R8xhaWFFNrJT6PQn1/zoDCGiRTGa2DHJuJ0aVqXmfIdXccD4r9W0+X9DijbH18Wd9/vnGRVTpc/L2/24sAivFNGoyyGHh3mNJQQlxt2nTzZxUZHuMiYGBtrHkO3B9b9Bo0I=
-Received: from DM4PR18MB4368.namprd18.prod.outlook.com (2603:10b6:5:39d::6) by
- SJ0PR18MB4493.namprd18.prod.outlook.com (2603:10b6:a03:3bb::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 12:31:12 +0000
-Received: from DM4PR18MB4368.namprd18.prod.outlook.com
- ([fe80::3117:f51c:37c2:fa05]) by DM4PR18MB4368.namprd18.prod.outlook.com
- ([fe80::3117:f51c:37c2:fa05%9]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
- 12:31:11 +0000
-From:   Tomasz Duszynski <tduszynski@marvell.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "open list:VFIO PLATFORM DRIVER" <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     Jerin Jacob Kollanukkaran <jerinj@marvell.com>
-Subject: RE: [PATCH] vfio: platform: ignore missing reset if disabled at
- module init
-Thread-Topic: [PATCH] vfio: platform: ignore missing reset if disabled at
- module init
-Thread-Index: AQHZMNewpePFVSldhUyVc0kESdCwdq62slYAgAA5LyA=
-Date:   Mon, 30 Jan 2023 12:31:11 +0000
-Message-ID: <DM4PR18MB43687D458F4EE8EEABBB3A24D2D39@DM4PR18MB4368.namprd18.prod.outlook.com>
-References: <20230125161115.1356233-1-tduszynski@marvell.com>
- <BN9PR11MB527630B903EC14BC61351C668CD39@BN9PR11MB5276.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB527630B903EC14BC61351C668CD39@BN9PR11MB5276.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR18MB4368:EE_|SJ0PR18MB4493:EE_
-x-ms-office365-filtering-correlation-id: e41dde4e-588a-4563-7275-08db02bddf08
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QXfWR6aW/6YRz52mdv8zhO4lfJgbgZzH4F3C+UT87SkRfZz1JqnQ/Ae5z4pLfukud/Ycud1VBWNdgyeyUrt6vOBT2XJOa95QWReh7G/TAiYYqHMP/UccIZeMxy1+gS6UXh8opNpc8dm1E2OwBYtBMvH7GKusjFNudpBSMF8EzWnZ8OxhqOmp1DcuuhYjFmGn+XzVEFKmGRdQeg6yzKOIQYb72irQQuYMP+5Shbhn86EWdQn0q8IYNm6jlRFsWpDT+ZdlGMury6o39sY4A2ifEbbCDEmFr1ZLPuGEZr9oVIaG5EM/mWrvRZEL0imTY0nPNiZ8/2maybhs+rbKMQlpwH65ejcb8Pi0xSGa6ONY9XAmtx2iAs/qCRx0NiUuvl6Q5ReiBQeHCTGxFKRGZaLHsoklSSRLdJpbjTPezagCfOun1jF7hGbHsEbvKB8Hu1nWc1hyCJrzVnf3A2mN+oZlkuHIzy8cLRQeB3yDqEeA7MjNfqi2XsXxmXiNTUIk8WoADPUbnWwavjy8Gfy397x+ZmqFMD72A74Q+aot718WnuJj/qR8sn4gd2lvFl0mML4hi8KD0M5yXZ0nUkUCujaNNhCA0qjyzdjqax9QvHUd07oAFByE/m96AFHHJtaxxVgB3iS6UVZhFtb2mATwritJcdWcv6cvM4HdPVXLVIGib6FMDev6Fg3O6xQ2MtNS7RlvS8O7uk0pKHqLicwRjUawpg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR18MB4368.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(376002)(136003)(366004)(396003)(451199018)(86362001)(33656002)(38070700005)(122000001)(38100700002)(5660300002)(8936002)(52536014)(66946007)(66476007)(110136005)(316002)(66446008)(76116006)(64756008)(4326008)(8676002)(66556008)(55016003)(2906002)(4744005)(83380400001)(7696005)(478600001)(41300700001)(71200400001)(26005)(6506007)(186003)(9686003)(107886003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GuLdr7/o3j8QNlrWLaJUq36ByR7JAgh+0iWYwq/yaRPMJGr17OIIyfdlnwN7?=
- =?us-ascii?Q?pBO6gNm1rEZw1Y1qKacQ+Xplz4E0hV7S5MGN7N1w14JeQ3XeRiUKochhVxre?=
- =?us-ascii?Q?A+RodJAeuz3tcZJkTYRli7fJGefYLd8+G0SvxsN6tZYGuvMlqND1MZj6A5E0?=
- =?us-ascii?Q?Zifr6B4GCCnFe85C8xCFBWU6wGeBJZND77mDHho0C0EZMfrdduTF6U+mJPRP?=
- =?us-ascii?Q?Q2A1ic6Z4/QftnUb2ZqbXI79MmoiHN+WLf0Mu0BtwYvSEdDDR1E4N3hQpUeT?=
- =?us-ascii?Q?OXTABGlaQcs/S4LK5CGoUk0hjtX7e4f7t4i5lyd9vANEaHmVqWt9AFkDKYKR?=
- =?us-ascii?Q?eUHnTVgS+EAqOhozQkrJPB4c6naygAywdKgGbpONUnyPDuuD5I4p55JARU+n?=
- =?us-ascii?Q?+q2uvnmPMnLBT6mRmxah6zQiAMy58/rLTqSBflUMPchnOkm28DjVGYUyr0Gu?=
- =?us-ascii?Q?qPT0SCoSmg8OVfUV9XXNwsodtLqwzn7mcnjhCApGlK4l4KaWCf9ZDX4vaqSi?=
- =?us-ascii?Q?XmLZimA/+lobeEvKdPkyAzO+Mc2xbXCUaEIhIbGMZQp5xi7bhAXSr5itNpY+?=
- =?us-ascii?Q?NdrotZsVe543UtZeIOuc6Pgixx0M87wfIibnRtfMpbBe5h6X6vZuX3d577fV?=
- =?us-ascii?Q?J/sW74KmXw3f8qAz0OHwMTc13dUE/o3dX+sNotl6j/AQDlTeXsXBViZhkMuH?=
- =?us-ascii?Q?Tbo6WnYyyGoqksPj6YYou0YYnLwNWPQ71Ch3AHCe1Ue7vNnOnz2d6dbt15bm?=
- =?us-ascii?Q?b1D7vhEKhvAULDlcKQhGhZE4dLsiuByMdLMXR3J3wIiRYYFlN0DuRifgdFny?=
- =?us-ascii?Q?46g5g+/Xgq2FnhxWICURY3h75sbwMwd1IDZiJKpBFAbyOkZEHxVtEzZjL+/1?=
- =?us-ascii?Q?b+C1U1DlZyUfCpbOsZnzPF8LNKe6lQuXCFarxYQxU4AamOsYSCBfNKyp42Hp?=
- =?us-ascii?Q?PuT208ZKpN+X5O+lXgkpmv3vEWVcsPbiSmBgbYjWIjydtT3JfOcSVxMYfaqo?=
- =?us-ascii?Q?OcqF+KqznptrNO7xcCkgBvmQ1F1mQEUvhrgtTfElEpukQbakLhnXortVyDRf?=
- =?us-ascii?Q?oVoiyaBCTfCiVsIBgGeS9AfCGR2sscGRMzpdJv6zvku62wT83RD92iVWOAfs?=
- =?us-ascii?Q?ldUXSx61BwkSncfmIGsU0AOOkqxSLUSVoxKrMuJxqNQg0i+hs/N86UUJFhGC?=
- =?us-ascii?Q?ZSZ53hjzNkKIt4Is7KKrxJKd1y1NzJixIr3DyA3jBcv8rxbOJgj5h8X2QQyZ?=
- =?us-ascii?Q?p8UMdukM+fzYMBTmK1AGX6lfTA2oY9dqrcYa54sKFmwy5mTychRZdEGFmX4j?=
- =?us-ascii?Q?2jWZH/ml27NnZe5AdQr/7m5Jis7w8/Ka08l6UUQpHoV2LLJm0QzUxGMXSOQ4?=
- =?us-ascii?Q?C9e16jURVG7umvTqzDDe68Jlq1ib97Api8YsVuYOEW8UfxOER1m6LluoRjmd?=
- =?us-ascii?Q?F+7G8cDAvWrUxBNkcX2xb518pLyB8CfoPN/vMMVRAYwP9+Uj0LaNw+Md/fcO?=
- =?us-ascii?Q?DVxm5L7H9Fz68y1QIx1cW6iuE2eqR04ayp17xIVnCG35rwDe8H0NZAdRit4O?=
- =?us-ascii?Q?6v1BdPJ0ajupYqT60alsTqGvE2Jtr1VGUObq+iE0?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 30 Jan 2023 07:31:18 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB07B2BF13;
+        Mon, 30 Jan 2023 04:31:16 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P56r60s2xz6J7ds;
+        Mon, 30 Jan 2023 20:27:02 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 30 Jan
+ 2023 12:31:14 +0000
+Date:   Mon, 30 Jan 2023 12:31:13 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Darrell Kavanagh <darrell.kavanagh@gmail.com>
+CC:     <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: Bug#1029850: linux: Driver not loaded for ST Microelectronics
+ LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
+Message-ID: <20230130123113.00002c3f@Huawei.com>
+In-Reply-To: <CAMxBKG3zL_yvw=dHK+Gqd3EHWzvJmiLHVvKnf6UsYbMgcS6nrg@mail.gmail.com>
+References: <167493679618.4533.12181720504943588640.reportbug@debian-duet>
+        <Y9WGmBc9HG4Tx9gf@eldamar.lan>
+        <CAMxBKG1670TFuV3nHP7Yk8s6H+oBF7iiyiB-b=PvKv9hcH22xQ@mail.gmail.com>
+        <20230129182441.082f29d0@jic23-huawei>
+        <CAMxBKG0tyLSpaDPGBXsJbqgHSG9rH6owtSJsLw_ekmTA3Kyvdw@mail.gmail.com>
+        <CAMxBKG3zL_yvw=dHK+Gqd3EHWzvJmiLHVvKnf6UsYbMgcS6nrg@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR18MB4368.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e41dde4e-588a-4563-7275-08db02bddf08
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 12:31:11.6379
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4xh/l91C/IiGGuZbgYBfPAfhCX4ipkxy/KMGGhyM8QxJAq81oGk408v/lttwCbVeui6RKbYj0D1dXxqx/pek8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR18MB4493
-X-Proofpoint-GUID: wpcsnUgce4nEsHELBuiLqNvI8SctJ87e
-X-Proofpoint-ORIG-GUID: wpcsnUgce4nEsHELBuiLqNvI8SctJ87e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_10,2023-01-30_01,2022-06-22_01
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,41 +54,245 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->-----Original Message-----
->From: Tian, Kevin <kevin.tian@intel.com>
->Sent: Monday, January 30, 2023 10:06 AM
->To: Tomasz Duszynski <tduszynski@marvell.com>; Eric Auger <eric.auger@redh=
-at.com>; Alex Williamson
-><alex.williamson@redhat.com>; Cornelia Huck <cohuck@redhat.com>; Jason Gun=
-thorpe <jgg@ziepe.ca>;
->open list:VFIO PLATFORM DRIVER <kvm@vger.kernel.org>; open list <linux-ker=
-nel@vger.kernel.org>
->Cc: Jerin Jacob Kollanukkaran <jerinj@marvell.com>
->Subject: [EXT] RE: [PATCH] vfio: platform: ignore missing reset if disable=
-d at module init
->
->External Email
->
->----------------------------------------------------------------------
->> From: Tomasz Duszynski <tduszynski@marvell.com>
->> Sent: Thursday, January 26, 2023 12:11 AM @@ -653,7 +653,8 @@ int
->> vfio_platform_init_common(struct vfio_platform_device *vdev)
->>  	if (ret && vdev->reset_required)
->>  		dev_err(dev, "No reset function found for device %s\n",
->>  			vdev->name);
->> -	return ret;
->> +
->> +	return vdev->reset_required ? ret : 0;
->>  }
->>  EXPORT_SYMBOL_GPL(vfio_platform_init_common);
->
->It reads slightly better to me as below:
->
->	if (ret & vdev->reset_required) {
->		dev_err(...);
->		return ret;
->	}
->
->	return 0;
+On Mon, 30 Jan 2023 03:37:23 +0000
+Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
 
-Sure no problem.=20
+> Forwarding because original html messages were rejected by the server...
+> 
+> ---------- Forwarded message ---------
+> From: Darrell Kavanagh <darrell.kavanagh@gmail.com>
+> Date: Mon, 30 Jan 2023 at 02:52
+> Subject: Re: Bug#1029850: linux: Driver not loaded for ST
+> Microelectronics LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
+> To: Jonathan Cameron <jic23@kernel.org>
+> Cc: <lorenzo@kernel.org>, <lars@metafoo.de>,
+> <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+> <carnil@debian.org>
+> 
+> 
+> Hi Jonathan,
+> 
+> Thank you. The driver has evolved quite a bit in 6.2 (I read somewhere
+> that 6.2 includes some i2c enhancements), but I adapted your changes
+> to fit my Debian 6.1 kernel and it works. Two IIO devices are created
+> in sysfs, iio-sensor-proxy.service starts up and automatic screen
+> rotation in Gnome just works.
+> 
+> To get the modules to load on boot, I made a small change to your code
+> in st_lsm6dsx_i2c to add the acpi alias to modules.alias:
+> 
+> adding a null element to st_lsm6dsx_i2c_acpi_match:
+>     static const struct acpi_device_id st_lsm6dsx_i2c_acpi_match[] = {
+>          { "SMO8B30", ST_LSM6DS3TRC_ID, },
+>          { },
+>     };
+> then:
+>    MODULE_DEVICE_TABLE(acpi, st_lsm6dsx_i2c_acpi_match);
+
+doh! That was indeed sloppy of me to miss even for an untested hack.
+
+
+
+> 
+> 
+> dmesg shows:
+> 
+> [ 7366.120208] st_lsm6dsx_i2c i2c-SMO8B30:00: supply vdd not found,
+> using dummy regulator
+> [ 7366.120260] st_lsm6dsx_i2c i2c-SMO8B30:00: supply vddio not found,
+> using dummy regulator
+> [ 7366.650839] st_lsm6dsx_i2c i2c-SMO8B30:00: mounting matrix not
+> found: using identity...
+> 
+> Is this a problem?
+
+Those are all fine. For regulators that's expected on ACPI and should
+be harmless as it's up to the firmware to manage power (in DT it may
+be up to the kernel).
+For the mounting matrix, there is often something in ACPI DSDT
+(non standard though).  Could you
+cat /sys/firmware/acpi/tables/DSDT > ~/dsdt
+then run through iasl from acpitools
+iasl -d ~/dsdt
+and find the bit related to this device.
+
+If you can then share that there may be a _DSM or similar in there that
+is effectively the mounting matrix.  If we are lucky it will look like
+some existing versions we have code to handle and can add that support
+as well.
+
+Either way - I'll spin a formal patch with your fixes above and we can
+get this upstream for future kernels.  Mounting matrix can follow
+later if needed.
+
+Thanks,
+
+Jonathan
+
+
+> 
+> Thanks again.
+> 
+> Darrell
+> 
+> 
+> On Sun, 29 Jan 2023 at 18:10, Jonathan Cameron <jic23@kernel.org> wrote:
+> >
+> > On Sun, 29 Jan 2023 17:03:51 +0000
+> > Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
+> >  
+> > > Hi,
+> > >
+> > > I raised this bug in Debian, and have been asked to raise it upstream and
+> > > was given your addresses to do so. Will this email be OK, or should I raise
+> > > it in a bug tracking system somewhere?  
+> >
+> > Email is the right option.
+> >  
+> > >
+> > > Many thanks,
+> > > Darrell
+> > >
+> > >
+> > >
+> > >
+> > > ---------- Forwarded message ---------
+> > > From: Salvatore Bonaccorso <carnil@debian.org>
+> > > Date: Sat, 28 Jan 2023 at 20:33
+> > > Subject: Re: Bug#1029850: linux: Driver not loaded for ST Microelectronics
+> > > LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
+> > > To: Darrell Kavanagh <darrell.kavanagh@gmail.com>, <1029850@bugs.debian.org>
+> > >
+> > >
+> > > Hi Darrell,
+> > >
+> > > On Sat, Jan 28, 2023 at 08:13:16PM +0000, Darrell Kavanagh wrote:  
+> > > > Package: src:linux
+> > > > Version: 6.1.4-1
+> > > > Severity: normal
+> > > > File: linux
+> > > > X-Debbugs-Cc: darrell.kavanagh@gmail.com
+> > > >
+> > > > Dear Maintainer,
+> > > >
+> > > > This is a convertable touchscreen tablet/laptop. The rotation sensor  
+> > > device  
+> > > > ST Microelectronics LSM6DS3TR-C does not work. It is detected via ACPI  
+> > > and the  
+> > > > sysfs trees are created at  
+> > > devices/pci0000:00/0000:00:17.1/i2c_designware.3/i2c-4/i2c-SMO8B30:00  
+> > > > and devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:3c/SMO8B30:00 with
+> > > > symlinks bus/acpi/devices/SMO8B30:00 and bus/i2c/devices/i2c-SMO8B30:00,  
+> > > but  
+> > > > no driver is loaded.  
+> >
+> > At least this is using the ST PNP ID which is better than average
+> > (long story!)
+> >
+> > The driver in question (ultimately drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
+> > does not currently have an ACPI support.  It should be straight forwards
+> > to add though the driver first needs converting to use
+> > device_get_match_data() with appropriate fallback so that it will match on
+> > ACPI, OF or original spi_device_id tables
+> >
+> > Completely untested but something like the following
+> > (the offset in the enum is needed to allow us to tell if we got a result when
+> > calling device_get_match_data() as it returns NULL on failure IIRC)
+> >
+> > I'm not sure how sucessful the driver will be at finding any interrupts etc, but
+> > it may get you basic functionality.
+> >
+> > Good luck and others more familiar with the driver may well tell me what I forgot
+> > when hacking the below ;)
+> >
+> > diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
+> > index 499fcf8875b4..2617ce236ddc 100644
+> > --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
+> > +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
+> > @@ -39,7 +39,7 @@
+> >  #define ST_ISM330IS_DEV_NAME   "ism330is"
+> >
+> >  enum st_lsm6dsx_hw_id {
+> > -       ST_LSM6DS3_ID,
+> > +       ST_LSM6DS3_ID = 1,
+> >         ST_LSM6DS3H_ID,
+> >         ST_LSM6DSL_ID,
+> >         ST_LSM6DSM_ID,
+> > diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
+> > index df5f60925260..ecfceb2fb3db 100644
+> > --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
+> > +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
+> > @@ -23,10 +23,15 @@ static const struct regmap_config st_lsm6dsx_i2c_regmap_config = {
+> >
+> >  static int st_lsm6dsx_i2c_probe(struct i2c_client *client)
+> >  {
+> > -       const struct i2c_device_id *id = i2c_client_get_device_id(client);
+> > -       int hw_id = id->driver_data;
+> > +       int hw_id;
+> >         struct regmap *regmap;
+> >
+> > +       hw_id = (kernel_ulong_t)device_get_match_data(&client->dev);
+> > +       if (!hw_id)
+> > +               hw_id = i2c_client_get_device_id(client)->driver_data;
+> > +       if (!hw_id)
+> > +               return -EINVAL;
+> > +
+> >         regmap = devm_regmap_init_i2c(client, &st_lsm6dsx_i2c_regmap_config);
+> >         if (IS_ERR(regmap)) {
+> >                 dev_err(&client->dev, "Failed to register i2c regmap %ld\n", PTR_ERR(regmap));
+> > @@ -129,6 +134,10 @@ static const struct of_device_id st_lsm6dsx_i2c_of_match[] = {
+> >  };
+> >  MODULE_DEVICE_TABLE(of, st_lsm6dsx_i2c_of_match);
+> >
+> > +static const struct acpi_device_id st_lsm6dsx_i2c_acpi_match[] = {
+> > +       { "SMO8B30", ST_LSM6DS3TRC_ID, },
+> > +};
+> > +
+> >  static const struct i2c_device_id st_lsm6dsx_i2c_id_table[] = {
+> >         { ST_LSM6DS3_DEV_NAME, ST_LSM6DS3_ID },
+> >         { ST_LSM6DS3H_DEV_NAME, ST_LSM6DS3H_ID },
+> > @@ -161,6 +170,7 @@ static struct i2c_driver st_lsm6dsx_driver = {
+> >                 .name = "st_lsm6dsx_i2c",
+> >                 .pm = pm_sleep_ptr(&st_lsm6dsx_pm_ops),
+> >                 .of_match_table = st_lsm6dsx_i2c_of_match,
+> > +               .acpi_match_table = st_lsm6dsx_i2c_acpi_match,
+> >         },
+> >         .probe_new = st_lsm6dsx_i2c_probe,
+> >         .id_table = st_lsm6dsx_i2c_id_table,
+> >
+> >  
+> > > >
+> > > > The device is identifying itself to the kernel with PNP id SMO8B30:
+> > > > physical_node:
+> > > >       modalias=acpi:SMO8B30:SMO8B30:
+> > > >       name=SMO8B30:00
+> > > >       uevent=MODALIAS=acpi:SMO8B30:SMO8B30:
+> > > >       waiting_for_supplier=0
+> > > > firmware_node:
+> > > >       hid=SMO8B30
+> > > >       modalias=acpi:SMO8B30:SMO8B30:
+> > > >       path=\_SB_.PCI0.I2C5.DEV_
+> > > >       status=15
+> > > >       uevent=MODALIAS=acpi:SMO8B30:SMO8B30:
+> > > >       uid=0
+> > > >
+> > > > The kernel module for the appropriate driver (st_lsm6dsx_i2c) is not  
+> > > loaded on boot.  
+> > > > Modprobing it does not associate it with the device, as I would expect as
+> > > > the module does not provide an alias for the above acpi/pnp id.  
+> > >
+> > > Can you report this issue upstream? Gues to reach out are according to
+> > > get_maintainers.pl script:
+> > >
+> > > Lorenzo Bianconi <lorenzo@kernel.org> (maintainer:ST LSM6DSx IMU IIO DRIVER)
+> > > Jonathan Cameron <jic23@kernel.org> (maintainer:IIO SUBSYSTEM AND DRIVERS)
+> > > Lars-Peter Clausen <lars@metafoo.de> (reviewer:IIO SUBSYSTEM AND DRIVERS)
+> > > linux-iio@vger.kernel.org (open list:ST LSM6DSx IMU IIO DRIVER)
+> > > linux-kernel@vger.kernel.org (open list)
+> > >
+> > > Please keep us in the loop.
+> > >
+> > > Regards,
+> > > Salvatore  
+> >  
+
