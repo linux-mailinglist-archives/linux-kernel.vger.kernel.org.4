@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C88BA681DE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231F9681DE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjA3WQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
+        id S231549AbjA3WRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjA3WQ3 (ORCPT
+        with ESMTP id S229573AbjA3WRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:16:29 -0500
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF5428D21;
-        Mon, 30 Jan 2023 14:16:28 -0800 (PST)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-15ff0a1f735so17067019fac.5;
-        Mon, 30 Jan 2023 14:16:28 -0800 (PST)
+        Mon, 30 Jan 2023 17:17:46 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4AE1B563;
+        Mon, 30 Jan 2023 14:17:46 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id g21-20020a9d6495000000b0068bb336141dso3106378otl.11;
+        Mon, 30 Jan 2023 14:17:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1gAy2MsPL1mgeMVyNEjNqoU5MoZko0cfwbJx1Ivk1cU=;
-        b=mVUEGd8+iGJJVtEmJeQDoCZSbEHJfFS6KoApsYP2/jH8gfZuMFy4IMvTTKJ8fYJRj9
-         C/KeCtQ72Bb3w2FuLV6X5llgr4SAEsjt66svyuglhYIyRXxYVkUOtxWn0MOxNVR2U1Ao
-         S8zN91p+69xTZ6V3B7A01AHLei22ndxzcmIvmK6ppfg96jAJgOgKekMrv6FoCslMsnyD
-         QRoSgngGyLLfbYtYBD3MxModGXmqvtTtqBIIqNAkZEcgcpn8gPTtpgnWp/we1/zvFBG3
-         fov0tuKfGah0pA83xYdrC70eesrAcfBRMAxjuq7AwTd4Jkh2VGb79kus83rNXzWnfE0I
-         /bpw==
-X-Gm-Message-State: AO0yUKW0s3GB2tkoaCj2iTzBruCJ9kqFoDbT77JKcnU359BxPpOj1WdC
-        7Ydx/RWoeACufKEayowCtw==
-X-Google-Smtp-Source: AK7set/xrtAWmQ7TIWn6uKPbZVhxNrg/+u+ntuu4cMuNwq8xXSrcZXbauq2QJnggWgmLNxDOx0VppQ==
-X-Received: by 2002:a05:6870:9607:b0:163:416e:a549 with SMTP id d7-20020a056870960700b00163416ea549mr11486315oaq.51.1675116987671;
-        Mon, 30 Jan 2023 14:16:27 -0800 (PST)
+        bh=sxkc34nw9NakpfF2w3ZNxT+rUUgjADCyMtUMUVCKK2k=;
+        b=rPddJsvljaOJ12UuCR0NLHXJ+JXUSyWBwxFRxgwUR7YuNtZMZrckChTjNBKGkIYfKP
+         qo2EH6yXFYn4Pfd0LTHh0Hej/6wwyNDq+DKzDKcp7+6n1Sin5PJvEyMrhM3ABR498WWF
+         1ItTFAhkm55czGm5kzoPrpmH4AsgHwP+fVb0HDzt0sfOnYgC/kT+X3QGCuFBEh3xPCGy
+         Rib4l/nD3SmBpY0yp/DP/RkY+EsMD2PjbPKZ8Nc9LpZTiNjLQP1IyW0fqDTbaEZ5iRXE
+         +W0EI1zoD/k+SFadT+G+UO5H9Hvs5i7o7Dmv6AI70dy67uj01N4zFO2suLr+NGCwnlDg
+         Pd2Q==
+X-Gm-Message-State: AFqh2kqOQTGoBxLU1XR5LkZzDXWDDDVhtgeuaycxLR9XT4W7lWJXn2HR
+        76p9pJdvDXA0atx/uHI9Pw==
+X-Google-Smtp-Source: AMrXdXv/tN1MqqC7568LA2s4569AU6e8d7ISb2XpF76WsCbozrLujaQajfsgpCmIFTa/VdU5T0Etjw==
+X-Received: by 2002:a9d:5e84:0:b0:684:ccc3:1569 with SMTP id f4-20020a9d5e84000000b00684ccc31569mr11524701otl.0.1675117065580;
+        Mon, 30 Jan 2023 14:17:45 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id pa13-20020a0568701d0d00b0015f9cc16ef7sm5724355oab.46.2023.01.30.14.16.26
+        by smtp.gmail.com with ESMTPSA id k96-20020a9d19e9000000b0068bb3a9e2b9sm4343048otk.77.2023.01.30.14.17.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 14:16:27 -0800 (PST)
-Received: (nullmailer pid 3624482 invoked by uid 1000);
-        Mon, 30 Jan 2023 22:16:26 -0000
-Date:   Mon, 30 Jan 2023 16:16:26 -0600
+        Mon, 30 Jan 2023 14:17:45 -0800 (PST)
+Received: (nullmailer pid 3626287 invoked by uid 1000);
+        Mon, 30 Jan 2023 22:17:44 -0000
+Date:   Mon, 30 Jan 2023 16:17:44 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     devicetree@vger.kernel.org,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+Cc:     linux-usb@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: bus: moxtet: Fix reference to SPI
- peripheral DT properties
-Message-ID: <20230130221626.GA3618337-robh@kernel.org>
-References: <20230129123553.1284503-1-j.neuschaefer@gmx.net>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: usb: phy: nop: Fix a typo ("specifiy")
+Message-ID: <167511706397.3626248.6621009863447665163.robh@kernel.org>
+References: <20230129124258.1295503-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230129123553.1284503-1-j.neuschaefer@gmx.net>
+In-Reply-To: <20230129124258.1295503-1-j.neuschaefer@gmx.net>
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -69,19 +67,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 01:35:53PM +0100, Jonathan Neuschäfer wrote:
-> spi-bus.txt has been converted to YAML and the peripheral properties
-> have been moved to spi-controller.yaml.
+
+On Sun, 29 Jan 2023 13:42:58 +0100, Jonathan Neuschäfer wrote:
+> Spell it correctly as "specify".
 > 
-> Fixes: 0a1b929356830 ("spi: Add YAML schemas for the generic SPI options")
-> Fixes: 8762b07c95c18 ("spi: dt-bindings: add schema listing peripheral-specific properties")
 > Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 > ---
->  Documentation/devicetree/bindings/bus/moxtet.txt | 2 +-
+>  Documentation/devicetree/bindings/usb/usb-nop-xceiv.yaml | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-I'm not really interested in fixes to .txt bindings. Fix it by 
-converting to schema if you want to. By my count, there's 37 other 
-cases, why just this one?
-
-Rob
+Acked-by: Rob Herring <robh@kernel.org>
