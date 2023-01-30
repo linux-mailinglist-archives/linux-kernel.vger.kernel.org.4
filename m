@@ -2,65 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8ACC681D07
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2ADE681D0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjA3Vn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:43:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S230043AbjA3Vnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:43:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjA3Vn1 (ORCPT
+        with ESMTP id S229769AbjA3Vnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:43:27 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47CAFF1C;
-        Mon, 30 Jan 2023 13:43:20 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id e12-20020a0568301e4c00b0068bc93e7e34so1890298otj.4;
-        Mon, 30 Jan 2023 13:43:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8SejxQqdFgMkhj6Xj4Gy/52IxSsmOXAM8Ok+nGPQVBI=;
-        b=ZBPZbisc5Ou6YKOHhSvg9qEjcXqxn7gOpxlztZH8bcAwnQNhZraN9sibv433lP5iAs
-         nY5jfmQ8KmpFrNK+h8uAJgKpAQI10pDbY5CqxUjrccwpvfqnKv6GemcGA8ePXAv3tF3Z
-         LwIVPOceyQW0W7nDln/+bjmdi3j2FXLJ1K4LMFULwq5h2wxghQIf+AAY+KSRRIQcGPeK
-         0frPQMtuguNO+dCmUFg1hRt5cXEARifTN8ZemO9sR5l88S/q6QmdyMvDVeOXT1F+QwU9
-         b8rlGbAbgbwUW8Dc/KDRBP9V3x9vJgeAlfeMFfs1Udw+ufuJuzsvO1TkNTGxZsprTEXv
-         jyjg==
-X-Gm-Message-State: AO0yUKUXl0mUyjTQ8I3zzpy22hrgFd5JaMDXmfYGoimaBCjpAb/HIcle
-        hafN9zs1AE+x923bL9extQ==
-X-Google-Smtp-Source: AK7set+Zq4Zg9iwgDcwGz6H3CDNxFCGs9k7j0KgtqNRnUgu9UcLA6H/1SgxLFO7Fsy+N/+OIzsvkwA==
-X-Received: by 2002:a9d:822:0:b0:68b:c9a2:4d79 with SMTP id 31-20020a9d0822000000b0068bc9a24d79mr4492277oty.33.1675115000207;
-        Mon, 30 Jan 2023 13:43:20 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 31-20020a9d0622000000b0068bb1b235f1sm4418585otn.76.2023.01.30.13.43.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 13:43:19 -0800 (PST)
-Received: (nullmailer pid 3580713 invoked by uid 1000);
-        Mon, 30 Jan 2023 21:43:19 -0000
-Date:   Mon, 30 Jan 2023 15:43:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        993612@bugs.debian.org,
-        Luca Di Stefano <luca.distefano@linaro.org>,
-        stable@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] of/address: Return an error when no valid dma-ranges
- are found
-Message-ID: <167511499566.3580584.7454212476889148702.robh@kernel.org>
-References: <20230126-synquacer-boot-v2-1-cb80fd23c4e2@kernel.org>
+        Mon, 30 Jan 2023 16:43:47 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A95C768E;
+        Mon, 30 Jan 2023 13:43:42 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ULPRQ7019525;
+        Mon, 30 Jan 2023 21:43:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=J9CFGVL6rsoTrkTF9qPIzObggqcrRWiKnHc9DU+7ZE4=;
+ b=WEIK9zmNlP1nvCtp3g6RtjTwBY9V0/TW7zeRSTFjp0AifK/SyoqC9DAbSW+TEaqW/6Zl
+ W50hSGosGNnm9Z0ch+QTRjxlvkUABksuVUZx36wEo03tYRUXmPVdstwVTDu7yAEMeHBn
+ JAHfNdjsd68gtgO/IMQ/dmnXMMSO1FfVHyAawC5L02+47M6wSPX62qwgRf+huHf3x4Zs
+ nB6xGlI6kZTA7pTVurW0Ma20XgYYulybdsY4zy36TTiiG3KgLGpIBt11+eUzXC62imBw
+ +CUPakto6nBQRJ+OS+ulV81AAJxzzU4wseg+VPDv4sfiAybRgaS7V/nlLCmx3xGz/Qa6 tw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncw0g4kra-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 21:43:30 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30ULhT6E012092
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 21:43:29 GMT
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
+ 2023 13:43:29 -0800
+Message-ID: <0d201cd9-320a-173e-1f90-5d6b3fc373a9@quicinc.com>
+Date:   Mon, 30 Jan 2023 13:43:28 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230126-synquacer-boot-v2-1-cb80fd23c4e2@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 10/27] gunyah: rsc_mgr: Add VM lifecycle RPC
+Content-Language: en-US
+To:     Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-11-quic_eberman@quicinc.com>
+ <20230125060929.GA3779774@quicinc.com>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <20230125060929.GA3779774@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zBERMXMths14wZs_iBcJVS40yuelQe__
+X-Proofpoint-ORIG-GUID: zBERMXMths14wZs_iBcJVS40yuelQe__
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_17,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ bulkscore=0 clxscore=1015 impostorscore=0 mlxlogscore=789
+ priorityscore=1501 spamscore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301300201
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,34 +99,26 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Sat, 28 Jan 2023 17:47:50 +0000, Mark Brown wrote:
-> Commit 7a8b64d17e35 ("of/address: use range parser for of_dma_get_range")
-> converted the parsing of dma-range properties to use code shared with the
-> PCI range parser. The intent was to introduce no functional changes however
-> in the case where we fail to translate the first resource instead of
-> returning -EINVAL the new code we return 0. Restore the previous behaviour
-> by returning an error if we find no valid ranges, the original code only
-> handled the first range but subsequently support for parsing all supplied
-> ranges was added.
+
+On 1/24/2023 10:12 PM, Srivatsa Vaddagiri wrote:
+> * Elliot Berman <quic_eberman@quicinc.com> [2023-01-20 14:46:09]:
 > 
-> This avoids confusing code using the parsed ranges which doesn't expect to
-> successfully parse ranges but have only a list terminator returned, this
-> fixes breakage with so far as I can tell all DMA for on SoC devices on the
-> Socionext Synquacer platform which has a firmware supplied DT. A bisect
-> identified the original conversion as triggering the issues there.
+>> +int gh_rm_vm_stop(struct gh_rm *rm, u16 vmid)
+>> +{
+>> +	struct gh_vm_stop_req req_payload = {
+>> +		.vmid = cpu_to_le16(vmid),
+>> +	};
+>> +	void *resp;
+>> +	size_t resp_size;
+>> +	int ret;
+>> +
+>> +	ret = gh_rm_call(rm, GH_RM_RPC_VM_STOP, &req_payload, sizeof(req_payload),
+>> +			&resp, &resp_size);
 > 
-> Fixes: 7a8b64d17e35 ("of/address: use range parser for of_dma_get_range")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Cc: Luca Di Stefano <luca.distefano@linaro.org>
-> Cc: 993612@bugs.debian.org
-> Cc: stable@kernel.org
-> ---
-> Changes in v2:
-> - Don't leak parsed resources.
-> - Link to v1: https://lore.kernel.org/r/20230126-synquacer-boot-v1-1-94ed0eb1011f@kernel.org
-> ---
->  drivers/of/address.c | 21 +++++++++++++++------
->  1 file changed, 15 insertions(+), 6 deletions(-)
+> Why not use gh_rm_common_vmid_call() here as well?
+> 
+>          return gh_rm_common_vmid_call(rm, GH_RM_RPC_VM_STOP, vmid);
+> 
 > 
 
-Applied, thanks!
+gh_vm_stop_req isn't the same as the common payload.
