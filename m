@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5D5681CC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9596B681CCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjA3Vbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:31:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S231160AbjA3Vdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjA3Vba (ORCPT
+        with ESMTP id S230035AbjA3Vde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:31:30 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C48E7A81
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:31:29 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 141so8671398pgc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:31:29 -0800 (PST)
+        Mon, 30 Jan 2023 16:33:34 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D91C9743
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:33:32 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id m15so1103840ilh.9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:33:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t3DGLS6aiN2haRQRmmZBIBnI3OUSAOT+GVNpjSj7IVI=;
-        b=swoStqpnzaDcsLLq3p6Foz1OK+scWwFGMhGJHCEGy1ZVxsIy5nGbpMH+5RL8iJfzkY
-         cFeNC/bfYu6xT05Hkd0Cn173lLcZ0t823ihlYMAvo/w+yg+ltyplmfhcW3w57Xe6LzhD
-         Ktd1da4tPuRvhRe5ieMnKrKdHWT9MYfee5QkqQ2mE0SQmjSZEkLRomflmLCdycOXPmRN
-         4/eeHf6Z1TGDSrA9/H1Vpmtm4Wc3o7VUAK8tHqBu/Jx7zB/orQGzTF0Pg5yyunFZUIS3
-         o0yl8ewSLqJkl/0PtPf8+/6kekjp+Te4i2HGe7W0sd7n/rAwq3sgrseeAETWARElimMN
-         1uUA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6IuS+AlPvW98Qt+RMCpyKlCvmTcjIyk1rKVSn77FnZk=;
+        b=yutfnYWYTGL9rvqX9NK8NKW0cYY1hX6qXFvfmsUjgbZzZlfTmeiQ+WZ1gCOYaVgPyi
+         Pz/6HGBp3mi6cissYy/vIVKG5aVQsq/WyK6fieAf5449c9Urv+p074X4Ki6OVXo7jUyp
+         aczEWVRjWJ1Jr9wtK6YtDx4v5S99KitRsYKMEldZWFZlIunlQhrJg0nMsHkIzgL19OW9
+         6elz4Lc07w6dTF8bGvvfTe9wvV5bokfctyQLf/ZK5Ve8ZnPVP5WVjlp1Hde8tpUd+A/O
+         kIA/p4fvRiLydBA6uj5pnMYN6Udlh/N9Wq5FImMKIDtWt1uxA3m4v9b7Xggll/Krpes+
+         rzpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t3DGLS6aiN2haRQRmmZBIBnI3OUSAOT+GVNpjSj7IVI=;
-        b=5C8RkWVh3Y3IYEfv7XV8+XDadnVkCUxFII6CoKLYar88rpI5X2rOrt3ZozffPUWrSy
-         sk2qeVwkKucBXh2wVt2tDLGq/CwKnMbp6xAQvMBvDk21F2EAa2cHgq80aYCxlkgQcR9s
-         xM+4L8Pad4LWZB/3XJgYtY77LOpSYwkiMxOBxCit6/l6Tv2JP/9kLrGHbXcXlSu5BPff
-         c6waKKUue+pb6RE2FKAdLiCinvKRo4TPWPudO8jEXHMAdPeBO1Yp+trX9r7+De69Ejp9
-         MUjSQaDfD77SncCwepzY6d30zhG6VPRk6TKgTtaMwOw12RSaxO3ooZZVrSLgVBTx9Xct
-         i2JQ==
-X-Gm-Message-State: AFqh2koUnimtNjwLFuPSBZ0MjLqzS3AbraPVw5rTdBQItPqqSFoAMNzn
-        IB0B9anz9koFonOWbS+vfschtMq9xBbHAj1KY6PyQw==
-X-Google-Smtp-Source: AMrXdXt1VPRf5Qrcdy3mk9H7780cdO6g1p3VIEb2Iaqi3/NvNnSWViMH0oG2iS2J8ac4puLS4z8TluhGi/+NvlgT5BY=
-X-Received: by 2002:a63:1706:0:b0:497:3785:812e with SMTP id
- x6-20020a631706000000b004973785812emr5230436pgl.13.1675114288305; Mon, 30 Jan
- 2023 13:31:28 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6IuS+AlPvW98Qt+RMCpyKlCvmTcjIyk1rKVSn77FnZk=;
+        b=Wc9l2pdZR+mz5vTwWfmsUb+g60380mPcOovcckr9AmAECvW+Udp6Pbdlgy9JZmlJAV
+         CScAkCP7d3Rx/m861sKVcjCA4gOZNS9X8owL7koNzqjnPueILhQvi5mseztYX7zu9+Ej
+         kwNMnEl/I7+rjxQ/Pc2waD4b6OFn6C/nTe1f/K5I9q6cFy9cNGW/clfOc+ghJ/HmqXHR
+         AhewK/4uyCYZB499RyVjcaAsAoZh66y0qp7x2pWwxbaVeh7AVO1wtvuLMoRwkmtX1P4z
+         RmqUo9V7QIq6iLVRDxUEYLmH8qiiicUTIwtJ2Zj4McN14FFXNKm+esVuYHHf5Z3tGA/L
+         H97Q==
+X-Gm-Message-State: AFqh2kprIYLfj1zZwNI6iyrOOQY1WlusAAJ2cielsY1lQPKOle7R1rUu
+        T7PegoJ/xZn1Xr4jsmCRWX6XTg==
+X-Google-Smtp-Source: AMrXdXtNX89kIh+cJlv4D5se7EwlFyXWSnsI7waS+BCn54d+KKimODStx80DZ9GZTS40+VrkqquNvw==
+X-Received: by 2002:a92:6e11:0:b0:304:c683:3c8a with SMTP id j17-20020a926e11000000b00304c6833c8amr7247424ilc.3.1675114411605;
+        Mon, 30 Jan 2023 13:33:31 -0800 (PST)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 10-20020a056e0211aa00b00310f9a0f8a7sm990514ilj.76.2023.01.30.13.33.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 13:33:31 -0800 (PST)
+Message-ID: <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
+Date:   Mon, 30 Jan 2023 14:33:29 -0700
 MIME-Version: 1.0
-References: <202301300732.QfTDtiab-lkp@intel.com> <7c25f24f-4acf-404e-88d0-65b55c017f34@app.fastmail.com>
-In-Reply-To: <7c25f24f-4acf-404e-88d0-65b55c017f34@app.fastmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 30 Jan 2023 13:31:16 -0800
-Message-ID: <CAKwvOdkeM6bNaXds7YpHbVBBZvwGq-Jky32+88PzoBxCpsDHcw@mail.gmail.com>
-Subject: Re: error: Undefined temporary symbol .LBB5_-1
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kernel test robot <lkp@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <3351099.1675077249@warthog.procyon.org.uk>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <3351099.1675077249@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 2:06 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Jan 30, 2023, at 00:48, kernel test robot wrote:
-> > Hi Christophe,
-> >
-> > FYI, the error/warning still remains.
-> >
-> > tree:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > master
-> > head:   6d796c50f84ca79f1722bb131799e5a5710c4700
-> > commit: a9f17d0c0778dd971dc9770fa0a2085a41d8c5e4 phy: ti: tusb1210: Fix
-> > an error handling path in tusb1210_probe()
-> > date:   10 months ago
-> > config: arm-randconfig-r006-20230130
-> > (https://download.01.org/0day-ci/archive/20230130/202301300732.QfTDtiab-lkp@intel.com/config)
-> > compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project
-> > 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-> > reproduce (this is a W=1 build):
->
-> I reported this as a clang-16 regression, the tusb code looks fine:
->
-> https://github.com/llvm/llvm-project/issues/60346
+On 1/30/23 4:14 AM, David Howells wrote:
+> Hi Jens,
+> 
+> Could you consider pulling this patchset into the block tree?  I think that
+> Al's fears wrt to pinned pages being removed from page tables causing deadlock
+> have been answered.  Granted, there is still the issue of how to handle
+> vmsplice and a bunch of other places to fix, not least skbuff handling.
+> 
+> I also have patches to fix cifs in a separate branch that I would also like to
+> push in this merge window - and that requires the first two patches from this
+> series also, so would it be possible for you to merge at least those two
+> rather than manually applying them?
 
-Thanks for the report.  I think I have a fix for this.
-https://github.com/llvm/llvm-project/issues/60346#issuecomment-1409326875
-clang-16 just branched, so once the fixes land, I'll make sure to
-cherry-pick them to the clang-16 branch so that this issue is avoided
-before the initial clang-16 release.
-
->
->      Arnd
->
-
+I've pulled this into a separate branch, but based on the block branch,
+for-6.3/iov-extract. It's added to for-next as well.
 
 -- 
-Thanks,
-~Nick Desaulniers
+Jens Axboe
+
+
