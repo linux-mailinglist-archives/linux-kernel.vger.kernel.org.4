@@ -2,115 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74231680B5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E15A680B61
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236036AbjA3K45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:56:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S235715AbjA3K5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbjA3K4y (ORCPT
+        with ESMTP id S236236AbjA3K5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:56:54 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBBB917CCD;
-        Mon, 30 Jan 2023 02:56:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8750016F2;
-        Mon, 30 Jan 2023 02:57:35 -0800 (PST)
-Received: from [10.57.46.210] (unknown [10.57.46.210])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E9AA23F71E;
-        Mon, 30 Jan 2023 02:56:50 -0800 (PST)
-Message-ID: <43ff6d3d-2047-1b2f-12ab-849a915a6e2f@arm.com>
-Date:   Mon, 30 Jan 2023 10:56:49 +0000
+        Mon, 30 Jan 2023 05:57:02 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05A4303CF;
+        Mon, 30 Jan 2023 02:56:58 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 53506C0005;
+        Mon, 30 Jan 2023 10:56:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675076217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tb+knWc8+xa2/HboMdrehqj8n7prrLHVDVYJpjds7L0=;
+        b=dx0eBt2DUT9QA1cUStZpuihlEBjkczXXHUN7eU6qohkq9uyVgu99pZNPUks9lSEf3INjMe
+        Yk8daT6J86YqnA/B749t+i0aoTWOFeYnHU6r5y/0fJJSOUi3MRXDw9D9SQn4vEPv7ob+Iv
+        HClmkGs85gjGN4KrO/JLMUoCIivBRYhtPZEfCX/7fDzyFJm8cjHrFsSgJSqWAiToFduHke
+        g+yQgy/o2aFDXLO0kePwXPqFG0xQCGm/wtZ2TqApAzolFZqEWmE+5URoKMtHkCwBTruRE2
+        Onu1MugaQI9Bkiq1OP9apqs4rDufSuPPP/CDM4Iriyr7tOq0h/tR04GnMRsqPw==
+Date:   Mon, 30 Jan 2023 11:56:54 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        u-boot@lists.denx.de,
+        =?UTF-8?B?UmFmYcWC?= =?UTF-8?B?IE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V3 1/6] nvmem: core: add nvmem_dev_size() helper
+Message-ID: <20230130115654.0041716d@xps-13>
+In-Reply-To: <20230127125709.32191-1-zajec5@gmail.com>
+References: <20230127125709.32191-1-zajec5@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 0/4] perf intel-pt: Fix the pipe mode (v1)
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Denis Nikitin <denik@chromium.org>,
-        Stephane Eranian <eranian@google.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>
-References: <20230127001951.3432374-1-namhyung@kernel.org>
- <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
- <317a91ff-70c5-57a5-8447-7543057e4055@arm.com>
- <CAM9d7chU6kTdG0y65_UaD_hW75GezzNJF1ZwjNWq8BUpACAGTA@mail.gmail.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <CAM9d7chU6kTdG0y65_UaD_hW75GezzNJF1ZwjNWq8BUpACAGTA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rafa=C5=82,
 
+zajec5@gmail.com wrote on Fri, 27 Jan 2023 13:57:04 +0100:
 
-On 27/01/2023 23:08, Namhyung Kim wrote:
-> Hi James,
-> 
-> On Fri, Jan 27, 2023 at 6:42 AM James Clark <james.clark@arm.com> wrote:
->>
->>
->>
->> On 27/01/2023 07:22, Adrian Hunter wrote:
->>> On 27/01/23 02:19, Namhyung Kim wrote:
->>>> Hello,
->>>>
->>>> I found some problems in Intel-PT and auxtrace in general with pipe.
->>>> In the past it used to work with pipe, but recent code fails.
->>>
->>> Pipe mode is a problem for Intel PT and possibly other auxtrace users.
->>
->> Just some info from my side: For Arm Coresight we ended up deprecating
->> pipe mode, then not supporting it altogether. First was when we added an
->> optional step to peek through all of the data to help with an edge case.
->> Then we added a requirement to receive a HW_ID packet before decoding
->> which necessitated the peek. You can't peek in pipe mode because you
->> need to be able to seek, so it's not supported at all anymore.
->>
->> For Arm SPE I never tested it with piped data. I suppose I could add a
->> test at some point, but I don't really see the usecase.
-> 
-> Yeah, it'd be great if we can have a test for Arm SPE.
-> 
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>=20
+> This is required by layouts that need to read whole NVMEM space. It
+> applies to NVMEM devices without hardcoded layout (like U-Boot
+> environment data block).
+>=20
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> ---
+> V2: Drop "const" from "const size_t"
 
-Ok thanks I will put it on the list of things to do.
+It would be good if you could always add a cover-letter, just so that
+we can reply to the whole series. In my case I wanted to add a global
 
-> Anyway, my work env (Google) requires the pipe mode due to the
-> restriction in disk usage.  Without the pipe support, it's not possible
-> to run `perf record` in production.
-> 
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-Makes sense. Unfortunately at the moment with Coresight, because of the
-lack of appropriate timestamps we're waiting for the end of the file
-before starting decoding. So you're not really any better off using
-piped mode, unless you have a lot more memory than disk space?
+Because I gave this series a quick review and it looks good to me.
 
-Since this commit [1] and Arm v8.4 we can actually start making use of
-the timestamps and do a streaming decode again. So I will also add it to
-the list to look into that for Coresight again. Are you using an old
-version of Perf or not using Coresight at all? I know Denis at Google is
-using Coresight, but only with files rather than pipes.
+Thanks,
+Miqu=C3=A8l
 
-One other thing, have you used the --switch-output mode to perf record
-before? I would have said it would give you some of the benefits of
-piped mode, but is more likely to work with Coresight. But last time I
-checked it's not working either. Not very helpful I know, but something
-to keep in mind.
+> ---
+>  drivers/nvmem/core.c           | 13 +++++++++++++
+>  include/linux/nvmem-consumer.h |  1 +
+>  2 files changed, 14 insertions(+)
+>=20
+> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+> index 38a5728bc65c..9e77af0164aa 100644
+> --- a/drivers/nvmem/core.c
+> +++ b/drivers/nvmem/core.c
+> @@ -2063,6 +2063,19 @@ void nvmem_del_cell_lookups(struct nvmem_cell_look=
+up *entries, size_t nentries)
+>  }
+>  EXPORT_SYMBOL_GPL(nvmem_del_cell_lookups);
+> =20
+> +/**
+> + * nvmem_dev_size() - Get the size of a given nvmem device.
+> + *
+> + * @nvmem: nvmem device.
+> + *
+> + * Return: size of the nvmem device.
+> + */
+> +size_t nvmem_dev_size(struct nvmem_device *nvmem)
+> +{
+> +	return nvmem->size;
+> +}
+> +EXPORT_SYMBOL_GPL(nvmem_dev_size);
+> +
+>  /**
+>   * nvmem_dev_name() - Get the name of a given nvmem device.
+>   *
+> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consume=
+r.h
+> index fa030d93b768..c3005ab6cc4f 100644
+> --- a/include/linux/nvmem-consumer.h
+> +++ b/include/linux/nvmem-consumer.h
+> @@ -78,6 +78,7 @@ ssize_t nvmem_device_cell_read(struct nvmem_device *nvm=
+em,
+>  int nvmem_device_cell_write(struct nvmem_device *nvmem,
+>  			    struct nvmem_cell_info *info, void *buf);
+> =20
+> +size_t nvmem_dev_size(struct nvmem_device *nvmem);
+>  const char *nvmem_dev_name(struct nvmem_device *nvmem);
+> =20
+>  void nvmem_add_cell_lookups(struct nvmem_cell_lookup *entries,
 
-James
-
-[1]:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=perf/core&id=a7fe9a443b6064c68f86a2ee09bdfa7736660ef3
