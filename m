@@ -2,136 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222E7680699
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6B568069F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbjA3HkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 02:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
+        id S235464AbjA3Hk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 02:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjA3HkK (ORCPT
+        with ESMTP id S235365AbjA3HkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 02:40:10 -0500
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4A919F09;
-        Sun, 29 Jan 2023 23:40:07 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VaPc4LJ_1675064403;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VaPc4LJ_1675064403)
-          by smtp.aliyun-inc.com;
-          Mon, 30 Jan 2023 15:40:04 +0800
-Message-ID: <1675064346.4139252-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH] vhost-net: support VIRTIO_F_RING_RESET
-Date:   Mon, 30 Jan 2023 15:39:06 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, kvm@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hengqi@linux.alibaba.com,
-        Kangjie Xu <kangjie.xu@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org
-References: <20220825085610.80315-1-kangjie.xu@linux.alibaba.com>
- <10630d99-e0bd-c067-8766-19266b38d2fe@redhat.com>
-In-Reply-To: <10630d99-e0bd-c067-8766-19266b38d2fe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 30 Jan 2023 02:40:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4EE29153;
+        Sun, 29 Jan 2023 23:40:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E79560D3A;
+        Mon, 30 Jan 2023 07:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 804AFC4339C;
+        Mon, 30 Jan 2023 07:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675064418;
+        bh=9Fwc85MZMhR2yS2+ET9itw5LJtEX8IquDh3uMOoxktg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HHVMSfoHhp2/c9k2v0KSMSrYNQhRsHUog6EDm0dm8hNp2pPIHIT6r+WRxQuq009wN
+         Z1/LFjjFNbNRRfIRK3vijUxiwYVuidykXqE9im055gedQbIk0Ek5xG2O+FXQUlV599
+         QQ9QUELGRXDIwpyPsioAlG0F/4t6UonAwPzMWx3S6M0gW+L0m2yPR7uOj2PMI5MQLO
+         MJsuOoJ5Z6D7glVr5be7TQI3K4+WU8o1BXsjpvg+UbYuBUVJk2+dcjWevOi1gxaQ3E
+         qp5wlCuffg6Hna7tg+WOLxW9u/xoKBeukRWf+zgn+km0wVwKqGSS9JtKmo55up1rLH
+         mkvjAqTv+gDMg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5F24BC4314C;
+        Mon, 30 Jan 2023 07:40:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/8] Adding Sparx5 ES2 VCAP support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167506441838.19672.6690813495078695286.git-patchwork-notify@kernel.org>
+Date:   Mon, 30 Jan 2023 07:40:18 +0000
+References: <20230127130830.1481526-1-steen.hegelund@microchip.com>
+In-Reply-To: <20230127130830.1481526-1-steen.hegelund@microchip.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
+        rdunlap@infradead.org, casper.casan@gmail.com,
+        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, horatiu.vultur@microchip.com,
+        lars.povlsen@microchip.com, error27@gmail.com, michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Sep 2022 16:32:19 +0800, Jason Wang <jasowang@redhat.com> wrote:
->
-> =E5=9C=A8 2022/8/25 16:56, Kangjie Xu =E5=86=99=E9=81=93:
-> > Add VIRTIO_F_RING_RESET, which indicates that the driver can reset a
-> > queue individually.
-> >
-> > VIRTIO_F_RING_RESET feature is added to virtio-spec 1.2. The relevant
-> > information is in
-> >      oasis-tcs/virtio-spec#124
-> >      oasis-tcs/virtio-spec#139
-> >
-> > The implementation only adds the feature bit in supported features. It
-> > does not require any other changes because we reuse the existing vhost
-> > protocol.
-> >
-> > The virtqueue reset process can be concluded as two parts:
-> > 1. The driver can reset a virtqueue. When it is triggered, we use the
-> > set_backend to disable the virtqueue.
-> > 2. After the virtqueue is disabled, the driver may optionally re-enable
-> > it. The process is basically similar to when the device is started,
-> > except that the restart process does not need to set features and set
-> > mem table since they do not change. QEMU will send messages containing
-> > size, base, addr, kickfd and callfd of the virtqueue in order.
-> > Specifically, the host kernel will receive these messages in order:
-> >      a. VHOST_SET_VRING_NUM
-> >      b. VHOST_SET_VRING_BASE
-> >      c. VHOST_SET_VRING_ADDR
-> >      d. VHOST_SET_VRING_KICK
-> >      e. VHOST_SET_VRING_CALL
-> >      f. VHOST_NET_SET_BACKEND
-> > Finally, after we use set_backend to attach the virtqueue, the virtqueue
-> > will be enabled and start to work.
-> >
-> > Signed-off-by: Kangjie Xu <kangjie.xu@linux.alibaba.com>
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
->
->
-> Acked-by: Jason Wang <jasowang@redhat.com>
+Hello:
 
-@mst
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Do we miss this?
+On Fri, 27 Jan 2023 14:08:22 +0100 you wrote:
+> This provides the Egress Stage 2 (ES2) VCAP (Versatile Content-Aware
+> Processor) support for the Sparx5 platform.
+> 
+> The ES2 VCAP is an Egress Access Control VCAP that uses frame keyfields and
+> previously classified keyfields to apply e.g. policing, trapping or
+> mirroring to frames.
+> 
+> [...]
 
-Thanks.
+Here is the summary with links:
+  - [net-next,1/8] net: microchip: sparx5: Add support for getting keysets without a type id
+    https://git.kernel.org/netdev/net-next/c/c02b19edc78d
+  - [net-next,2/8] net: microchip: sparx5: Improve the IP frame key match for IPv6 frames
+    https://git.kernel.org/netdev/net-next/c/4114ef2ce273
+  - [net-next,3/8] net: microchip: sparx5: Improve error message when parsing CVLAN filter
+    https://git.kernel.org/netdev/net-next/c/a5300724ce73
+  - [net-next,4/8] net: microchip: sparx5: Add ES2 VCAP model and updated KUNIT VCAP model
+    https://git.kernel.org/netdev/net-next/c/9d712b8ddbb4
+  - [net-next,5/8] net: microchip: sparx5: Add ES2 VCAP keyset configuration for Sparx5
+    https://git.kernel.org/netdev/net-next/c/b95d9e2c20c9
+  - [net-next,6/8] net: microchip: sparx5: Add ingress information to VCAP instance
+    https://git.kernel.org/netdev/net-next/c/e7e3f514713e
+  - [net-next,7/8] net: microchip: sparx5: Add TC support for the ES2 VCAP
+    https://git.kernel.org/netdev/net-next/c/7b911a5311b8
+  - [net-next,8/8] net: microchip: sparx5: Add KUNIT tests for enabling/disabling chains
+    https://git.kernel.org/netdev/net-next/c/1f741f001160
 
->
->
-> > ---
-> >
-> > Test environment and method:
-> >      Host: 5.19.0-rc3
-> >      Qemu: QEMU emulator version 7.0.50 (With vq rset support)
-> >      Guest: 5.19.0-rc3 (With vq reset support)
-> >      Test Cmd: ethtool -g eth1; ethtool -G eth1 rx $1 tx $2; ethtool -g=
- eth1;
-> >
-> >      The drvier can resize the virtio queue, then virtio queue reset fu=
-nction should
-> >      be triggered.
-> >
-> >      The default is split mode, modify Qemu virtio-net to add PACKED fe=
-ature to
-> >      test packed mode.
-> >
-> > Guest Kernel Patch:
-> >      https://lore.kernel.org/bpf/20220801063902.129329-1-xuanzhuo@linux=
-.alibaba.com/
-> >
-> > QEMU Patch:
-> >      https://lore.kernel.org/qemu-devel/cover.1661414345.git.kangjie.xu=
-@linux.alibaba.com/
-> >
-> > Looking forward to your review and comments. Thanks.
-> >
-> >   drivers/vhost/net.c | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-> > index 68e4ecd1cc0e..8a34928d4fef 100644
-> > --- a/drivers/vhost/net.c
-> > +++ b/drivers/vhost/net.c
-> > @@ -73,7 +73,8 @@ enum {
-> >   	VHOST_NET_FEATURES =3D VHOST_FEATURES |
-> >   			 (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
-> >   			 (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-> > -			 (1ULL << VIRTIO_F_ACCESS_PLATFORM)
-> > +			 (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
-> > +			 (1ULL << VIRTIO_F_RING_RESET)
-> >   };
-> >
-> >   enum {
->
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
