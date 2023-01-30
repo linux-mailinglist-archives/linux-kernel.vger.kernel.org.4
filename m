@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE154681BB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24146681BB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjA3UpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S229969AbjA3UsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:48:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjA3UpY (ORCPT
+        with ESMTP id S230081AbjA3UsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:45:24 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35BD302BC
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:45:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675111522; x=1706647522;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DPU2EaU7E1g5BYtizsrQ9hTF2+OtkywjNWM0UMaDqGI=;
-  b=ID6vdmricUFTJbtx3ChDqjmWbzuDLFeHqprgleuvyUQHifgu6SLN4GNY
-   FhmkXQzYArN6tk6nVINNwF89iQ/iOwmosG5EBIgXraQ8O1Ms1tosFlwHb
-   9nVnfrxnvof5HnonbERviDa0lWnMEAsEHXymCeolzvgYJIhZU9xQofgmm
-   nBIyDzAGhj8btsLVxCw/gSuaMO1RowbP0n+JATMOE3Ba8vAjm29Mwn0hF
-   gzgJO9MRiYS4a7PE68bYMs3fvxH0FBcXa/I1H4jHf91aAo8yMPftJXN4J
-   dmTJE1rjYdbUMSwZTSFnxsqhOxgPeMWnN8gpuVJwXlbctzQdBAhhr6DuK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="325367027"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="325367027"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 12:45:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="641695648"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="641695648"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2023 12:45:20 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMb1j-0003te-14;
-        Mon, 30 Jan 2023 20:45:19 +0000
-Date:   Tue, 31 Jan 2023 04:44:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: arch/m68k/kernel/uboot.c:67:43: warning: variable 'uboot_initrd_end'
- set but not used
-Message-ID: <202301310414.Dil9Y3dI-lkp@intel.com>
+        Mon, 30 Jan 2023 15:48:03 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C57413E0AE;
+        Mon, 30 Jan 2023 12:46:51 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 60F753F307;
+        Mon, 30 Jan 2023 20:46:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675111609;
+        bh=RXq2UM0+WksUOmibUuTIAvL8Lbl2rVqMKpgMUhz1XeM=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ZXDgPGfEC8pCqG7c2Nm0foAQ7q+/b2tORV74ptp1ctfm/vxQARMlBskLaMjKWTjpY
+         GMJVpi21mhw9NFbHsRFuWis3hQ/86sx3V4kLpTK2FsjGkxQMwMiCrnSsbB9wHVXQF6
+         SwZmPQWQermRBQ7ODwuaeMSBQPsDch/QfX0oU8QxhcW8Knxm/xnPlFN7JtpGG/RVIz
+         RZDrjT9BzegIJUEjd2qT05WyY9yvu1uX7+HoeQPiUzveAGOi/t44wJN+KEwf28WYc+
+         9aceCaeUeSnbeOVGzH1K7T0wntnTVzvyUXv4BpK/WEty1hlaj1i/HNW7H+NS2Hzm8j
+         IgP3Yf0Vhdn7A==
+Message-ID: <94ba4bd9-5aaf-2469-457c-196b864c76f1@canonical.com>
+Date:   Mon, 30 Jan 2023 12:46:44 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1] apparmor: fix use of strcpy in policy_unpack_test
+Content-Language: en-US
+To:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
+        davidgow@google.com, dlatypov@google.com
+Cc:     apparmor@lists.ubuntu.com, skhan@linuxfoundation.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20230127201219.775410-1-rmoar@google.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20230127201219.775410-1-rmoar@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,114 +60,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6d796c50f84ca79f1722bb131799e5a5710c4700
-commit: a2a9d67a26ec94a99ed29efbd61cf5be0a575678 bootconfig: Support embedding a bootconfig file in kernel
-date:   9 months ago
-config: m68k-randconfig-r005-20230131 (https://download.01.org/0day-ci/archive/20230131/202301310414.Dil9Y3dI-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a2a9d67a26ec94a99ed29efbd61cf5be0a575678
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a2a9d67a26ec94a99ed29efbd61cf5be0a575678
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/kernel/
+On 1/27/23 12:12, Rae Moar wrote:
+> Replace the use of strcpy() in build_aa_ext_struct() in
+> policy_unpack_test.c with strscpy().
+> 
+> strscpy() is the safer method to use to ensure the buffer does not
+> overflow. This was found by kernel test robot:
+> https://lore.kernel.org/all/202301040348.NbfVsXO0-lkp@intel.com/.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Signed-off-by: Rae Moar <rmoar@google.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+lgtm
 
-All warnings (new ones prefixed by >>):
+I have pulled this into apparmor-next
 
-   arch/m68k/kernel/uboot.c: In function 'parse_uboot_commandline':
->> arch/m68k/kernel/uboot.c:67:43: warning: variable 'uboot_initrd_end' set but not used [-Wunused-but-set-variable]
-      67 |         unsigned long uboot_initrd_start, uboot_initrd_end;
-         |                                           ^~~~~~~~~~~~~~~~
->> arch/m68k/kernel/uboot.c:67:23: warning: variable 'uboot_initrd_start' set but not used [-Wunused-but-set-variable]
-      67 |         unsigned long uboot_initrd_start, uboot_initrd_end;
-         |                       ^~~~~~~~~~~~~~~~~~
-   arch/m68k/kernel/uboot.c:66:23: warning: variable 'uboot_kbd' set but not used [-Wunused-but-set-variable]
-      66 |         unsigned long uboot_kbd;
-         |                       ^~~~~~~~~
-   arch/m68k/kernel/uboot.c: At top level:
-   arch/m68k/kernel/uboot.c:90:13: warning: no previous prototype for 'process_uboot_commandline' [-Wmissing-prototypes]
-      90 | __init void process_uboot_commandline(char *commandp, int size)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+> ---
+> 
+> Note: This patch is based on the apparmor-next branch. However, the
+> patch should also apply cleanly to the kselftest/kunit branch.
+> 
+>   security/apparmor/policy_unpack_test.c | 13 ++++++-------
+>   1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+> index e1bfdab524b7..5c9bde25e56d 100644
+> --- a/security/apparmor/policy_unpack_test.c
+> +++ b/security/apparmor/policy_unpack_test.c
+> @@ -69,31 +69,30 @@ static struct aa_ext *build_aa_ext_struct(struct policy_unpack_fixture *puf,
+>   
+>   	*buf = AA_NAME;
+>   	*(buf + 1) = strlen(TEST_STRING_NAME) + 1;
+> -	strcpy(buf + 3, TEST_STRING_NAME);
+> +	strscpy(buf + 3, TEST_STRING_NAME, e->end - (void *)(buf + 3));
+>   
+>   	buf = e->start + TEST_STRING_BUF_OFFSET;
+>   	*buf = AA_STRING;
+>   	*(buf + 1) = strlen(TEST_STRING_DATA) + 1;
+> -	strcpy(buf + 3, TEST_STRING_DATA);
+> -
+> +	strscpy(buf + 3, TEST_STRING_DATA, e->end - (void *)(buf + 3));
+>   	buf = e->start + TEST_NAMED_U32_BUF_OFFSET;
+>   	*buf = AA_NAME;
+>   	*(buf + 1) = strlen(TEST_U32_NAME) + 1;
+> -	strcpy(buf + 3, TEST_U32_NAME);
+> +	strscpy(buf + 3, TEST_U32_NAME, e->end - (void *)(buf + 3));
+>   	*(buf + 3 + strlen(TEST_U32_NAME) + 1) = AA_U32;
+>   	*((u32 *)(buf + 3 + strlen(TEST_U32_NAME) + 2)) = TEST_U32_DATA;
+>   
+>   	buf = e->start + TEST_NAMED_U64_BUF_OFFSET;
+>   	*buf = AA_NAME;
+>   	*(buf + 1) = strlen(TEST_U64_NAME) + 1;
+> -	strcpy(buf + 3, TEST_U64_NAME);
+> +	strscpy(buf + 3, TEST_U64_NAME, e->end - (void *)(buf + 3));
+>   	*(buf + 3 + strlen(TEST_U64_NAME) + 1) = AA_U64;
+>   	*((u64 *)(buf + 3 + strlen(TEST_U64_NAME) + 2)) = TEST_U64_DATA;
+>   
+>   	buf = e->start + TEST_NAMED_BLOB_BUF_OFFSET;
+>   	*buf = AA_NAME;
+>   	*(buf + 1) = strlen(TEST_BLOB_NAME) + 1;
+> -	strcpy(buf + 3, TEST_BLOB_NAME);
+> +	strscpy(buf + 3, TEST_BLOB_NAME, e->end - (void *)(buf + 3));
+>   	*(buf + 3 + strlen(TEST_BLOB_NAME) + 1) = AA_BLOB;
+>   	*(buf + 3 + strlen(TEST_BLOB_NAME) + 2) = TEST_BLOB_DATA_SIZE;
+>   	memcpy(buf + 3 + strlen(TEST_BLOB_NAME) + 6,
+> @@ -102,7 +101,7 @@ static struct aa_ext *build_aa_ext_struct(struct policy_unpack_fixture *puf,
+>   	buf = e->start + TEST_NAMED_ARRAY_BUF_OFFSET;
+>   	*buf = AA_NAME;
+>   	*(buf + 1) = strlen(TEST_ARRAY_NAME) + 1;
+> -	strcpy(buf + 3, TEST_ARRAY_NAME);
+> +	strscpy(buf + 3, TEST_ARRAY_NAME, e->end - (void *)(buf + 3));
+>   	*(buf + 3 + strlen(TEST_ARRAY_NAME) + 1) = AA_ARRAY;
+>   	*((u16 *)(buf + 3 + strlen(TEST_ARRAY_NAME) + 2)) = TEST_ARRAY_SIZE;
+>   
+> 
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
 
-
-vim +/uboot_initrd_end +67 arch/m68k/kernel/uboot.c
-
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  30  
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  31  /*
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  32   * parse_uboot_commandline
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  33   *
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  34   * Copies u-boot commandline arguments and store them in the proper linux
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  35   * variables.
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  36   *
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  37   * Assumes:
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  38   *	_init_sp global contains the address in the stack pointer when the
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  39   *	kernel starts (see head.S::_start)
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  40   *
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  41   *	U-Boot calling convention:
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  42   *	(*kernel) (kbd, initrd_start, initrd_end, cmd_start, cmd_end);
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  43   *
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  44   *	_init_sp can be parsed as such
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  45   *
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  46   *	_init_sp+00 = u-boot cmd after jsr into kernel (skip)
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  47   *	_init_sp+04 = &kernel board_info (residual data)
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  48   *	_init_sp+08 = &initrd_start
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  49   *	_init_sp+12 = &initrd_end
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  50   *	_init_sp+16 = &cmd_start
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  51   *	_init_sp+20 = &cmd_end
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  52   *
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  53   *	This also assumes that the memory locations pointed to are still
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  54   *	unmodified. U-boot places them near the end of external SDRAM.
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  55   *
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  56   * Argument(s):
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  57   *	commandp = the linux commandline arg container to fill.
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  58   *	size     = the sizeof commandp.
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  59   *
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  60   * Returns:
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  61   */
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  62  static void __init parse_uboot_commandline(char *commandp, int size)
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  63  {
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  64  	extern unsigned long _init_sp;
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  65  	unsigned long *sp;
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  66  	unsigned long uboot_kbd;
-aa5ac789bd96c7a Greg Ungerer       2016-09-05 @67  	unsigned long uboot_initrd_start, uboot_initrd_end;
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  68  	unsigned long uboot_cmd_start, uboot_cmd_end;
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  69  
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  70  	sp = (unsigned long *)_init_sp;
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  71  	uboot_kbd = sp[1];
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  72  	uboot_initrd_start = sp[2];
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  73  	uboot_initrd_end = sp[3];
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  74  	uboot_cmd_start = sp[4];
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  75  	uboot_cmd_end = sp[5];
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  76  
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  77  	if (uboot_cmd_start && uboot_cmd_end)
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  78  		strncpy(commandp, (const char *)uboot_cmd_start, size);
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  79  #if defined(CONFIG_BLK_DEV_INITRD)
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  80  	if (uboot_initrd_start && uboot_initrd_end &&
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  81  	    (uboot_initrd_end > uboot_initrd_start)) {
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  82  		initrd_start = uboot_initrd_start;
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  83  		initrd_end = uboot_initrd_end;
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  84  		ROOT_DEV = Root_RAM0;
-7c79e1eef8c9a72 Geert Uytterhoeven 2016-12-06  85  		pr_info("initrd at 0x%lx:0x%lx\n", initrd_start, initrd_end);
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  86  	}
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  87  #endif /* if defined(CONFIG_BLK_DEV_INITRD) */
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  88  }
-aa5ac789bd96c7a Greg Ungerer       2016-09-05  89  
-
-:::::: The code at line 67 was first introduced by commit
-:::::: aa5ac789bd96c7a6628a8167de562fa660f1f481 m68k: generalize uboot command line support
-
-:::::: TO: Greg Ungerer <gerg@linux-m68k.org>
-:::::: CC: Greg Ungerer <gerg@linux-m68k.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
