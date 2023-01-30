@@ -2,121 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2782680F3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D41680F40
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235927AbjA3Nng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:43:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
+        id S236034AbjA3NpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235703AbjA3Nnd (ORCPT
+        with ESMTP id S233899AbjA3NpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:43:33 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4386214E8C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:43:32 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso5358307wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:43:32 -0800 (PST)
+        Mon, 30 Jan 2023 08:45:03 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC64436FE4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:44:59 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id k12so8883699qvj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:44:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0dzAvNhqbLHD8Qqr5U4HkMhu9d4Ko8KZtdb+p3yzQqo=;
-        b=r3+O9ok547RbwEpeaTLhkg2nhQik6ojXy+fTq+Mnx7azfKGPocnjWfqHgTANTMmRRi
-         Ga7BrBfT6JMqxyyLMGSRQGNZWeS/0obKNdiOuurdTQfR+4PLPos4/1ZQ7Lrt6uEn6siU
-         mXpsUovrCJCA6CmoF6tql2U5NHvmyJxWbUQtFpIa1/YnhFNS9efyClfxEwebL08zPvOw
-         SExuyJGXGdar9XV2X8crhizmga9Wi/Mh0H1rRXTsBeOkK2Qsnk+qHb0V1vVsQYGpWtLx
-         vAwsDI3vaM0mJSi6vBtY+oyJKFvojk84NRYYDuVRU4DAqvyl5WGPE3dT9ddYNJc4hv2j
-         d0og==
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ugVZtlJMCbul+ClapxlnTF/ez9y96CVsPXS5bV38BZw=;
+        b=EiKFryFIGfCmSmvtYHlBOMtKPK2BbUFcv/jf3HYk2xXd4Q77rxF1byFZcJ8TKgGTUn
+         Gya8eU2rsGvfDVcX84YRQix3PH4l0wjs92ntHgyxQW6xSPHBKkWUrV/+NbZFZTvJ/WWN
+         Td8kte7yJFezx+cdg17At23Y68hrrKY0LPJ56CEYx12gh5pRhzTxUhUDCqQbOC1QIgXN
+         Fwgndb30t7vQ/CwHYCw6Z33JK38cgTOOI76yJGGk55SvgUHq6wbS97TlK+JbBXl0YhGw
+         aZrC4X36zLFtyoyarfOqLHhjnUAbVYhwT8swpQS4NXwuIEcQXbGgdzeOaQFKLy6dM/uK
+         NHVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0dzAvNhqbLHD8Qqr5U4HkMhu9d4Ko8KZtdb+p3yzQqo=;
-        b=qcNmWKYA1XHFegderd+7Qg3Mh3jQTlKraWUgY2PvvIegHi/O/ZPS5l8esIb/pbbw37
-         CLHd4UB99WhQ12kDLrND+AeT1qkrwU7jdBRHgig/n2M9SjFGyzJsP8trl6U+9S4vQqON
-         IDgkHoRhCs8Z4MXU7E87BqkOsdjpcw3XthtpSbqHi8VZzvtEd9CzpYUWsyxmzw11GMBw
-         unPXkDS0SoO3THoPnoOFzgtchH4NZWXhblx0mcE343aD+BKZy9n2AsTpbpnDC7l3km3p
-         RxqM+Tnj/mWxeLVcfi14hx5PQ+0VpKL2FqNZg0v1zqa06PIxivxq9Uo7iVBxNYzVPuc2
-         WYTQ==
-X-Gm-Message-State: AO0yUKUIUKsnx0RIoTxP/FFWOP/n9yaG01wSfXyb/ekjehIi7I7Fd+bw
-        rn9yTEYeM5CFllQZRTC2jvHuew==
-X-Google-Smtp-Source: AK7set97xlKmmDBvKPBmRQ17fPHhyiyadsOAAP+bSHsQR+a7netx9q1OsYsNQSaB7yg2FcxInSshMQ==
-X-Received: by 2002:a05:600c:3545:b0:3dd:1ac2:989 with SMTP id i5-20020a05600c354500b003dd1ac20989mr256851wmq.39.1675086210825;
-        Mon, 30 Jan 2023 05:43:30 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:b9a5:a1fe:d3ab:6b40])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05600c310c00b003db012d49b7sm27403410wmo.2.2023.01.30.05.43.30
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ugVZtlJMCbul+ClapxlnTF/ez9y96CVsPXS5bV38BZw=;
+        b=33VYiZCoguWEj64CfJchBwGwQr3vUISpxt+XKr7k1U+rxeUq7fvxn4Zx4E0k5CK+mV
+         NjbO/9OV85TqVPVQFYchbjFBdWU9oPSimTrqJFPMEoXRlfcSkith/fJwrO4BqaW6DsD8
+         by9C3ilMk/Phg5NwTB23PzPGRh6E+K8ap8uDYiTWfyL9gfXLlzKBOPDn8aa5q1saqdb+
+         MeRp9v6yhrwEOwEdu1xsULnM/H2UNtG0FTCrGzRu6a0ncABWPexhAhbW7RwOtChPFBgq
+         UbM3hRik8rL73CUlRrPmBPhX8bBAXeV/qV5WLKXokD2D+KvW6CUpaF3crXvcoHcQKtsp
+         Wvcw==
+X-Gm-Message-State: AO0yUKWQSTol+Bn8Ka6RqTp7TKel96gagxUvxDX3VmZTZmE5GHVZmHyp
+        Kgbv0UxmuHLFY7CvfWjunYVnPA==
+X-Google-Smtp-Source: AK7set9gcZ/WoKw2vDlmeneWLKn01zzwOxlTjosfcIVY0YinesBDnBToObheHTTHr+4m1+l1ZFdVLQ==
+X-Received: by 2002:a05:6214:ca2:b0:537:7819:c274 with SMTP id s2-20020a0562140ca200b005377819c274mr12112202qvs.36.1675086298974;
+        Mon, 30 Jan 2023 05:44:58 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-167-59-176.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.59.176])
+        by smtp.gmail.com with ESMTPSA id i26-20020a05620a151a00b0071ac0c6df4csm4944495qkk.75.2023.01.30.05.44.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 05:43:30 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH] dt-bindings: watchdog: qcom-wdt: add the interrupts property
-Date:   Mon, 30 Jan 2023 14:43:28 +0100
-Message-Id: <20230130134328.178591-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        Mon, 30 Jan 2023 05:44:58 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1pMUSv-001GaV-JV;
+        Mon, 30 Jan 2023 09:44:57 -0400
+Date:   Mon, 30 Jan 2023 09:44:57 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Finn Behrens <me@kloenk.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vfio-mdev: add back CONFIG_VFIO dependency
+Message-ID: <Y9fJ2Wg+9uRp5TDc@ziepe.ca>
+References: <20230126163719.3585002-1-arnd@kernel.org>
+ <20230126103811.56d71351.alex.williamson@redhat.com>
+ <20230126174044.GA15999@lst.de>
+ <20230126104515.3fcb3abf.alex.williamson@redhat.com>
+ <20230130073324.GA590@lst.de>
+ <a870060c-9438-4383-97e3-e77d1c361b51@app.fastmail.com>
+ <b6333b49-ab8e-4f1b-9da5-454dd7d6d6bc@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6333b49-ab8e-4f1b-9da5-454dd7d6d6bc@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Mon, Jan 30, 2023 at 02:39:36PM +0100, Arnd Bergmann wrote:
+> On Mon, Jan 30, 2023, at 14:34, Arnd Bergmann wrote:
+> > On Mon, Jan 30, 2023, at 08:33, Christoph Hellwig wrote:
+> >> On Thu, Jan 26, 2023 at 10:45:15AM -0700, Alex Williamson wrote:
+> >>> The culprit is already in my next branch, we just need a fix that
+> >>> includes all the cases.  A respin of Arnd's patch would be preferable
+> >>> to keep the fixes in one place.  Thanks,
+> >>
+> >> Arnd, do you plan to resend the patch, or should I take care of it?
+> >
+> > I sent the v2 last week, it looks like I forgot to add you to Cc there:
+> >
+> > https://lore.kernel.org/all/20230126211211.1762319-1-arnd@kernel.org/
+> 
+> I just tried again and see that neither my own script nor the
+> normal scripts/get_maintainer.pl picks up the hch@lst.de address
+> from the Signed-off-by line in the "Fixes" commit, though it does
+> pick up the addresses from Jason, Tony and Alex. I have no idea
+> what is going on there.
 
-The interrupts property is used in all nodes using this binding but not
-defined in the document itself - hence dtbs_check fails for them. Add
-the property and update the example.
+Christoph is in .get_maintainer.ignore
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- .../devicetree/bindings/watchdog/qcom-wdt.yaml        | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-index 27fb484d5f8d..45940d643b92 100644
---- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-@@ -46,6 +46,10 @@ properties:
-   clocks:
-     maxItems: 1
- 
-+  interrupts:
-+    minItems: 1
-+    maxItems: 5
-+
- required:
-   - compatible
-   - reg
-@@ -55,9 +59,16 @@ unevaluatedProperties: false
- 
- examples:
-   - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-     watchdog@208a038 {
-       compatible = "qcom,kpss-wdt-ipq8064";
-       reg = <0x0208a038 0x40>;
-       clocks = <&sleep_clk>;
-       timeout-sec = <10>;
-+      interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-+                   <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-+                   <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-+                   <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-+                   <GIC_PPI 5 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>;
-     };
--- 
-2.37.2
-
+Jason
