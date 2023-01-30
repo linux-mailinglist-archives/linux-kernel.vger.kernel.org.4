@@ -2,206 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682F6680615
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 07:42:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E12C68061A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 07:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbjA3GmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 01:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S235675AbjA3Gnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 01:43:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjA3GmA (ORCPT
+        with ESMTP id S230024AbjA3Gnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 01:42:00 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323C111C;
-        Sun, 29 Jan 2023 22:41:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675060919; x=1706596919;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=VjLIbrqx+Ff2ABc64jc6qgSg6Ppq+n1wj8Bg1DjClLY=;
-  b=kl4Jve7cupBO3sBjoHu9n2WHORkLLK8B2j7D5AO29w71ySQitC2g1pqs
-   jTGwMB6mJeJ5UQFdadhjRtnHqMyqoMmmPb++kI+7Lkvg0jKU+uTZANGi4
-   4S3R8Mwjrw5Tx9bhzTS42hpzMGTN4p2NgCcIetnCv69ZJLYa2TlaVRcwe
-   +UOUqC4RYsmJOdcDDPrk0cMpdG06vfUYMI5ttBWwSIUGZXfyLZxmoCWqW
-   r/M1RrjRHyFGylEj7jit0AFPjn3YMA1xWQq92+nakTxcskJwobij8x3OA
-   DoQT1h0d+Lgai35KyqRJ7rC3qt0wMyAzdLl2ugUeFD0CCRd+yA8X9OQiL
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="315444602"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="315444602"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 22:41:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="694459274"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="694459274"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga008.jf.intel.com with ESMTP; 29 Jan 2023 22:41:58 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 29 Jan 2023 22:41:58 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Sun, 29 Jan 2023 22:41:58 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sun, 29 Jan 2023 22:41:58 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P/2QqWKnB3hpZpfhDGnntETR0ZUqb2CXXEXufRxQANIWu1Srk9FrP7z5WQGE13SOPsh3rR+fPOJM+tDKoF83YLL8VwKoKumO60UarylkE0N4qpiTZ1dZMaMOWIMugCnPWcphN2FziquKjkM6Zdof5Y/Fx1q4f44FYbiZS4ZrTruC316lw7cUKTMRGKqCt42RV7yMHA1qHEPMOzX5g0zvpaV4v+rEJlJl//MdXw6DxMz3wu1kBSw7NilrKIBgUAouNzziHuGDiQIYDILK4fR0o2GJjKmEGVRdks112S6DtjZcp0rGNndji16nBaROpJzvw63dDOqxFGCr4MK3fOe1VA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1kfVNtxvWb+Swzfkg2neKcJuDSYDL/UszZApo+o4VkY=;
- b=UnlfpxGpkymcoXHpjJPcV7e95WJ/t5cE7LXd9HaewPULF5bmQ8UNdgBi3ufNSrwMnlfrlBp41OO1glNXShfnpuvm0FwIfnhvBLU2b/AWuXB9h4iKnl9GwojTYZp+KOO7yTGVoUA+C6CjnJh4jYfVdOhoWmCsS666P+qUKuu4XF92esfVT0xCfX2CNdQUIiP7eRhgOHS7jx+kLWNzBO2y3ZzRs/QmSV5ZEru1F+Wvw8uu+6HIhGBdQqfL8/+InNakP347Syt9rCuo2bC1vAQhjfHAVJQaDoQI38hcqVNvxTUcqvN8SmLf63CIxMw1rlN3B0vm23MrBzOkbWWF9XrW3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com (2603:10b6:510:1cb::11)
- by BL1PR11MB5238.namprd11.prod.outlook.com (2603:10b6:208:313::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 06:41:54 +0000
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::ba40:b444:6a6c:38ee]) by PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::ba40:b444:6a6c:38ee%2]) with mapi id 15.20.6043.033; Mon, 30 Jan 2023
- 06:41:54 +0000
-Date:   Mon, 30 Jan 2023 14:42:09 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Kechen Lu <kechenl@nvidia.com>
-CC:     <kvm@vger.kernel.org>, <seanjc@google.com>, <pbonzini@redhat.com>,
-        <zhi.wang.linux@gmail.com>, <shaoqin.huang@intel.com>,
-        <vkuznets@redhat.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v6 5/6] KVM: x86: add vCPU scoped toggling for
- disabled exits
-Message-ID: <Y9dmwQNS1qufVwYZ@gao-cwp>
-References: <20230121020738.2973-1-kechenl@nvidia.com>
- <20230121020738.2973-6-kechenl@nvidia.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230121020738.2973-6-kechenl@nvidia.com>
-X-ClientProxiedBy: SG2PR02CA0003.apcprd02.prod.outlook.com
- (2603:1096:3:17::15) To PH8PR11MB6780.namprd11.prod.outlook.com
- (2603:10b6:510:1cb::11)
+        Mon, 30 Jan 2023 01:43:31 -0500
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4C213DEF;
+        Sun, 29 Jan 2023 22:43:28 -0800 (PST)
+Received: from [10.59.106.37] (unknown [77.235.169.38])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 51C6561CC457B;
+        Mon, 30 Jan 2023 07:43:24 +0100 (CET)
+Message-ID: <b55d06ad-5031-791c-b79c-6a5014020aec@molgen.mpg.de>
+Date:   Mon, 30 Jan 2023 07:43:20 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6780:EE_|BL1PR11MB5238:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3129ccdc-3542-4944-814c-08db028d13a7
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 72BXMFLZogU4yMWOZJsyEP5vuGEINq6gAL3CZTlSTgxqOZ30oTzXK5qEnk2O4bI5onJuo5ea3mLQwjFkUSMzg7qAN2X7cwzTKTpGm5kJVt5654Al9ZYvQz+pURP0Z67WtaszL0A0j9l6XWRgXmt94TmriSE55X+D6ixV4HreHAbZQDVCQIfkPZhngUsARGpiq7a8Tozu/NY7Gh+aypzsSliSHSAkx6fWYO/rggZwO5lRn2elP13eHn9sao0vwukl5TNyXnF90eGfg+cwGaIMJPMxg3+qYD2DD+LQZ6MXXtTFCAFkfsno+V3ZwBDLlU08xof8VGuBQYrZflYT7t3AD2EMcqNuCnWM9T4CMhb+/rigSvyh9LZ8mVa6muOdyrWzDbAtW576BkljSJdbVdi+FT9Cih7r+L5Tnev0XC4oT3yDoQVyyoErWhxThfrWVYnkqkGvQF4JHb/ICviwP+z7mzwVndyXyNB/PkAjQWqCatLIZ01qbWJuP3cetOSVmSuc4LZm07ZEVhimWeb4x+bGQyFJghRh8NJpk5wh5ja0JFjGlFrz8J/dujwugsgbztlFoE4awjutusdyToWdfFONzYFZUJqlQ0jxmvjEb+u4t4BUW19WvvYPmAo3RCvbn40D9VW0e9ClKAPpZloX23gtew==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6780.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(136003)(39860400002)(376002)(366004)(396003)(346002)(451199018)(316002)(66946007)(66476007)(8676002)(4326008)(66556008)(6916009)(8936002)(5660300002)(38100700002)(86362001)(82960400001)(41300700001)(6666004)(33716001)(9686003)(26005)(6506007)(6512007)(186003)(44832011)(2906002)(478600001)(6486002)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oQ6LZ0cY7JG2VqNmKJpGx79HjCUEm22Xp5OTEPfydGCmgthhcjmhkrZtSaCP?=
- =?us-ascii?Q?SupdpWlEZAoa8NogyUnwLegF7yfe2hmHisQHp3iOsfjEFwODU15eNRnjhD2R?=
- =?us-ascii?Q?gu/+LpWNKVt+YKagd6RtYuqMUsn8tgvDW+8HOWyxpTX6daNNX3gmrYdl/YA2?=
- =?us-ascii?Q?R0Qf+rI/9KrW9Hbrjo0YjnIifrcWbWElzCDfdH8X8F0/3oXtCm2ynaJOYty6?=
- =?us-ascii?Q?Qvy4EM3m1G0JTw34ghboTO/t5QQ8idMlWJoBJk0+wBYHhEPRpL5x3+vI6iUf?=
- =?us-ascii?Q?83NFCZCjaBQC2Qzl5kn/abITcUWDysTSHkUBorMdbHGoqP/Ihp7AD5wKYFhm?=
- =?us-ascii?Q?fOcBoAWfrocSl8uAg29vpp7RP9af0fxiKajY+vZ+7JIv9MdO7l55dhJ++bld?=
- =?us-ascii?Q?n+JhfaJrBi39ssNlcTXUimfeqoxz4o1yeankri7tUQFuMkSNICaRzifklNUu?=
- =?us-ascii?Q?5QB279B52d9kZP0mzBCyQfOR9OaWs9gn4lO1Rx9H58SqqV0k4DQ1Fkd/z+vs?=
- =?us-ascii?Q?RM5nTUWIJMxWKaAaGi5ZxqkxtOg/ImwI46e86eA6Vj8+EMXlo4fa4a+0sS34?=
- =?us-ascii?Q?vpcrEBUcGhwKeEa8Z77tHF9XWxY3xZKmtwTMAnyCVNUmB2bBh7wMYIESv9XF?=
- =?us-ascii?Q?WHpMqpONeEU+YNVdjor/JJXxLlwnzK9890eRQOuN4gcXtoRJKb2w+M9vbKLH?=
- =?us-ascii?Q?aQpshKPt8ZdX2FJL11GKWHr2YLN1uJM08ntwVP2xHFU7JROHAUCI/0fulgQm?=
- =?us-ascii?Q?k7dPMunL2Iol+HdN0eBZAZg7uenGuJS253uTTBpgXRGNUoMD3vVKBvEcEWWv?=
- =?us-ascii?Q?FeDwgQgcjVWegyWufhww2GQsvXwgnBo6v5Ue2/9t1TnGJkToPNcaAbvzde/r?=
- =?us-ascii?Q?Xu6AjFFqNNbsF9r2aSqwvCvsalFJyOqWWUn2C2RYFqZgZANY3xLdlMXyyKHs?=
- =?us-ascii?Q?C3U/mK/56xc35TzHGUiKDFt60l3X8NzzXNL8hFtcpaSxyEhkd31HRMZDV6pb?=
- =?us-ascii?Q?PlhlazYaKKkb5S6ocfOF0ApVuZYPaie2SiaRo4A+SFYw+PguyCN09O/h8KAq?=
- =?us-ascii?Q?+gDpsrBpocU/LL5DZ+nuXfJq6o/R5W2UbmW7yyvX8qgfZlus2xPA/nF7UQ8u?=
- =?us-ascii?Q?e2VS2/Jo+whnxAhPbEYxJO4/hDx7GI9FW3kz4xk1TyCRFmFzwVQfhcAjw1RE?=
- =?us-ascii?Q?S1EOYad+adjh34sb3UZOk0UDkwsit3xhxFmjA+KIuKFvCUfcmZNSriftmQDc?=
- =?us-ascii?Q?4aGxL9vseEGLwcXapiPwaeiRA6M3WrDRstp4jpv+Ms+qme5MGbfXVUUuJ5gM?=
- =?us-ascii?Q?pQJBk2XnoU8XNP9xWFjhL7pw49rg9jbD2T/DnINKj/0MChYOPFUDMZnUvto3?=
- =?us-ascii?Q?sBO54tsoYYwdpvFh0Eks/aePgt+1lx7+CY+RtFppPQ/nK0/nl97v8xpEgYKe?=
- =?us-ascii?Q?hoIx2d8yPDeMJZdVuhXOa3BI5qPTQGohRkD+emBF1U3/yJZRfWvucSkiiv4y?=
- =?us-ascii?Q?QWkNdOfr6UyyxatYqf1tBFkReA6aCTEkXP4mLt5GQvyjhj8vTi14Jtoz8kkG?=
- =?us-ascii?Q?A3hNrBzhcDzkCyh+duhpXOB4Ml//KmDnCvRS6gqB?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3129ccdc-3542-4944-814c-08db028d13a7
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6780.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 06:41:54.7708
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HjLLqR+b8YtUjPZK70MrXoKgC1jd+ZQ3PKXxKGIXVZ6SCWnZtoR80swIsoCqNeDY8lQSZbGp5XWbKq+gC5y1Iw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5238
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/4] Attempt at adding WCN6855 BT support
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Balakrishna Godavarthi <bgodavar@codeaurora.org>,
+        Rocky Liao <rjliao@codeaurora.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+References: <20230129215136.5557-1-steev@kali.org>
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230129215136.5557-1-steev@kali.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 02:07:37AM +0000, Kechen Lu wrote:
->+static void svm_update_disabled_exits(struct kvm_vcpu *vcpu)
+[Cc: +Mark Pearson]
 
-Is it possible to call this function on vCPU creation, i.e., consolidate
-initialization and runtime toggling?
+Dear Steev,
 
->+{
->+	struct vcpu_svm *svm = to_svm(vcpu);
->+	struct vmcb_control_area *control = &svm->vmcb->control;
->+
->+	if (kvm_hlt_in_guest(vcpu))
->+		svm_clr_intercept(svm, INTERCEPT_HLT);
->+	else
->+		svm_set_intercept(svm, INTERCEPT_HLT);
->+
->+	if (kvm_mwait_in_guest(vcpu)) {
->+		svm_clr_intercept(svm, INTERCEPT_MONITOR);
->+		svm_clr_intercept(svm, INTERCEPT_MWAIT);
->+	} else {
->+		svm_set_intercept(svm, INTERCEPT_MONITOR);
->+		svm_set_intercept(svm, INTERCEPT_MWAIT);
->+	}
->+
->+	if (kvm_pause_in_guest(vcpu)) {
->+		svm_clr_intercept(svm, INTERCEPT_PAUSE);
->+	} else {
->+		control->pause_filter_count = pause_filter_count;
->+		if (pause_filter_thresh)
->+			control->pause_filter_thresh = pause_filter_thresh;
->+	}
->+}
->+
-> static void svm_vm_destroy(struct kvm *kvm)
-> {
-> 	avic_vm_destroy(kvm);
->@@ -4825,7 +4852,10 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
-> 	.complete_emulated_msr = svm_complete_emulated_msr,
-> 
-> 	.vcpu_deliver_sipi_vector = svm_vcpu_deliver_sipi_vector,
->+
-> 	.vcpu_get_apicv_inhibit_reasons = avic_vcpu_get_apicv_inhibit_reasons,
->+
->+	.update_disabled_exits = svm_update_disabled_exits,
-> };
-> 
-> /*
->diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->index 019a20029878..f5137afdd424 100644
->--- a/arch/x86/kvm/vmx/vmx.c
->+++ b/arch/x86/kvm/vmx/vmx.c
->@@ -8070,6 +8070,41 @@ static void vmx_vm_destroy(struct kvm *kvm)
-> 	free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_order(kvm));
-> }
-> 
->+static void vmx_update_disabled_exits(struct kvm_vcpu *vcpu)
 
-ditto.
+Am 29.01.23 um 22:51 schrieb Steev Klimaszewski:
+> This patchset is somewhat of an RFC/RFT, and also just something to get this out
+> there.
+> 
+> First things first, I do not have access to the specs nor the schematics, so a
+> lot of this was done via guess work, looking at the acpi tables, and looking at
+> how a similar device (wcn6750) was added.
+> 
+> There are definitely checkpatch warnings, and I do apologize to those who won't
+> review things until there are no warnings for wasting your time.
+> 
+> One example is that I have the vregs commented out, the dt-bindings say that
+> they are required since it's based on the wcn6750 work but also like the 6750,
+> I've added defaults into the driver, and those seem to work, at least for the
+> initial testing.
+> 
+> The end result is that we do have a working device, but not entirely reliable.
+> 
+> Hopefully by getting this out there, people who do have access to the specs or
+> schematics can see where the improvements or fixes need to come.
+
+Thank you for the patches. Reading until the end and seeing patch 4/4, 
+this is related to the Lenovo Thinkpad X13s. I am adding Mark Pearson to 
+the Cc list. No idea if GNU/Linux is officially supported by Lenovo, but 
+even if not, maybe Mark is able to get you access to the specifications 
+and schematics.
+
+
+Kind regards,
+
+Paul
+
+
+> There are a few things that I am not sure why they happen, and don't have the
+> knowledge level to figure out why they happen or debugging it.
+> 
+> Bluetooth: hci0: setting up wcn6855
+> Bluetooth: hci0: Frame reassembly failed (-84)
+> Bluetooth: hci0: QCA Product ID   :0x00000013
+> Bluetooth: hci0: QCA SOC Version  :0x400c0210
+> Bluetooth: hci0: QCA ROM Version  :0x00000201
+> Bluetooth: hci0: QCA Patch Version:0x000038e6
+> Bluetooth: hci0: QCA controller version 0x02100201
+> Bluetooth: hci0: unexpected event for opcode 0xfc48
+> Bluetooth: hci0: Sending QCA Patch config failed (-110)
+> Bluetooth: hci0: QCA Downloading qca/hpbtfw21.tlv
+> Bluetooth: hci0: QCA Downloading qca/hpnv21g.bin
+> Bluetooth: hci0: QCA setup on UART is completed
+> 
+> I do not know why the Frame assembly failed, nor the unexpected event.
+> 
+> Likewise, I'm not entirely sure why it says the patch config send times out, and
+> *then* seems to send it?
+> 
+> The BD Address also seems to be incorrect, and I'm not sure what is going on
+> there either.
+> 
+> Additionally, I've tried with an additional patch that I'm not including that is
+> based on commit 059924fdf6c1 ("Bluetooth: btqca: Use NVM files based on SoC ID
+> for WCN3991") to try using the hpnv21g.bin or hpnv21.bin, and the firmware acted
+> the same regardless, so I am assuming I don't truly need the "g" firmware on my
+> Thinkpad X13s.
+> 
+> Testing was done by connecting a Razer Orochi bluetooth mouse, and using it, as
+> well as connecting to and using an H2GO bluetooth speaker and playing audio out
+> via canberra-gtk-play as well as a couple of YouTube videos in a browser.
+> 
+> The mouse only seems to work when < 2 ft. from the laptop, and for the speaker, only
+> "A2DP Sink, codec SBC" would provide audio output, and while I could see that
+> data was being sent to the speaker, it wasn't always outputting, and going >
+> 4ft. away, would often disconnect.
+> 
+> steev@wintermute:~$ hciconfig -a
+> hci0:   Type: Primary  Bus: UART
+>          BD Address: 00:00:00:00:5A:AD  ACL MTU: 1024:8  SCO MTU: 240:4
+>          UP RUNNING PSCAN
+>          RX bytes:1492 acl:0 sco:0 events:126 errors:0
+>          TX bytes:128743 acl:0 sco:0 commands:597 errors:0
+>          Features: 0xff 0xfe 0x8f 0xfe 0xd8 0x3f 0x5b 0x87
+>          Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3
+>          Link policy: RSWITCH HOLD SNIFF
+>          Link mode: PERIPHERAL ACCEPT
+>          Name: 'wintermute'
+>          Class: 0x0c010c
+>          Service Classes: Rendering, Capturing
+>          Device Class: Computer, Laptop
+>          HCI Version:  (0xc)  Revision: 0x0
+>          LMP Version:  (0xc)  Subversion: 0x46f7
+>          Manufacturer: Qualcomm (29)
+> 
+> steev@wintermute:~$ dmesg | grep Razer
+> [ 3089.235440] input: Razer Orochi as /devices/virtual/misc/uhid/0005:1532:0056.0003/input/input11
+> [ 3089.238580] hid-generic 0005:1532:0056.0003: input,hidraw2: BLUETOOTH HID v0.01 Mouse [Razer Orochi] on 00:00:00:00:5a:ad
+> steev@wintermute:~$ dmesg | grep H2GO
+> [ 3140.959947] input: H2GO Speaker (AVRCP) as /devices/virtual/input/input12
+> 
+> Bjorn Andersson (1):
+>    arm64: dts: qcom: sc8280xp: Enable BT
+> 
+> Steev Klimaszewski (3):
+>    dt-bindings: net: Add WCN6855 Bluetooth bindings
+>    Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6855
+>    arm64: dts: qcom: thinkpad-x13s: Add bluetooth
+> 
+>   .../net/bluetooth/qualcomm-bluetooth.yaml     |  2 +
+>   .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
+>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 14 ++++
+>   drivers/bluetooth/btqca.c                     | 24 ++++++-
+>   drivers/bluetooth/btqca.h                     | 10 +++
+>   drivers/bluetooth/hci_qca.c                   | 59 ++++++++++++----
+>   6 files changed, 162 insertions(+), 15 deletions(-)
+> 
+> 
+> base-commit: e2f86c02fdc96ca29ced53221a3cbf50aa6f8b49
