@@ -2,261 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B397B681AF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6878A681AF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbjA3T6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S237449AbjA3T6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234818AbjA3T6b (ORCPT
+        with ESMTP id S237028AbjA3T6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:58:31 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE61A3B3C5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:58:29 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-50aa54cc7c0so147497477b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:58:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i03ptR9fFLW5fJH/wPMLlxTLMbIyvVbZn3SkcwYrQcQ=;
-        b=h6MFIKg7fj6u5OaxCTbe48QrqZ0u9cN6VLysxptuK+Kqer56MahV7CjI0JTVFB7kpb
-         rBaWQWvRu5aXlSh9BruBKkUp3A3zH59k13A5wAgFAjilytkzbTwsYPlIZE8ZdjpFVHXO
-         r2Jpn8Btx/a9kycJESwKJ03IiD4In3f8gJjeA/FTV2tTdHWtAgI1gRZFrx4ZRBRty3CZ
-         168sBvYd+mSFh8DSsKZL3H+QJBBg8zCC5aDgy1hKHRS4fuXNjuxHUeFV54MSFYq5mJMt
-         qEJvKmTROBgRjB2CQA1a6IQ0w+trzu3pG9Vyj1Udqu6j5b1kVUHGsoDbpFtJOpmjdjTo
-         tUNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i03ptR9fFLW5fJH/wPMLlxTLMbIyvVbZn3SkcwYrQcQ=;
-        b=RYaNDuJL7NCTqD6iajC5nPsQ40EQQA3AKULfXBkjg4iTSZMgp2E/BN83L3qnWyMels
-         HjZtJg42cufT401ORcyaePxHN3cdy6xRx7Bw1qWKupCJ7w2nvp7lpTEJQJZh1rO5a50V
-         f5CD53F29stnaETh878uqOpWQqd5gT7Yf4Ef3mMSbDHOE/Jj23iih4eLfWdJbtlgWpj5
-         IsYsawJPM4UqPAIf/aVPKLc6Q0ytSEZLlmdY2BR2rLIiVn/JNMAEyZA1IGXOp+NIfQAk
-         SWreKZW7ajaX4Z364cabll+LcdN4zixLO03JFkkLwqGwpWB3UMuwyTlp05lp5vKkFKOB
-         yDEw==
-X-Gm-Message-State: AO0yUKUAPWTmK9PzMRhqfl/V5TYyZe7Qrfnu7Wf3TglRhUg/ZmUT1wBr
-        dRuXkSo/qzrvmMhPXboYAwXW9vEVyXOY08qnkMv38JntUOVU/PPc
-X-Google-Smtp-Source: AK7set+84QqUVzPLTgiujO7cFK7Mj/KcKfR0HfahV7rS2yXkT9qnaCG6qVPvGnsQLBs759QmRN/eDZLWvB/s8zvlrlo=
-X-Received: by 2002:a81:254b:0:b0:519:6acb:f25a with SMTP id
- l72-20020a81254b000000b005196acbf25amr313652ywl.480.1675108708820; Mon, 30
- Jan 2023 11:58:28 -0800 (PST)
+        Mon, 30 Jan 2023 14:58:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F49D29435
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675108680;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XFzo0SjIoUeHUUad6uKtgnkYXlNez2WsK0EUt/zmXC8=;
+        b=WybJXil4nSn6GsnU0D610wbRMxK21qVCP3CqvKOH8xWN+5EtTVwY/IcVZFRZlGnTsnuF9g
+        wG9fMiB6sZXOdp0VnIbOSJLmj7uECrOO9MTnbOLZPkPT4rYey35PYUIRCmN58q15n4UQmP
+        oPpVBMR/Ng2B5+eH78ebNfXRY6TGWug=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-76-2z3evavvMD6QWxQ7aQ4Wsg-1; Mon, 30 Jan 2023 14:57:57 -0500
+X-MC-Unique: 2z3evavvMD6QWxQ7aQ4Wsg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D00B93C025D3;
+        Mon, 30 Jan 2023 19:57:56 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AE984140EBF5;
+        Mon, 30 Jan 2023 19:57:55 +0000 (UTC)
+Message-ID: <17537d7f-8734-2186-b27c-f39f3110ffe5@redhat.com>
+Date:   Mon, 30 Jan 2023 14:57:55 -0500
 MIME-Version: 1.0
-References: <Y9e9S3ENl0oszAH/@qwirkle> <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
- <Y9fT+LABhW+/3Nal@qwirkle> <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
- <Y9ftL5c4klThCi9Q@qwirkle> <Y9fu7TR5VC33j+EP@qwirkle> <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
- <Y9f+7tMWMtPACLz9@qwirkle> <CA+FuTScThEWVevZ+KVgLOZ6zb4Ush6RtKL4FmC2cFMg+Q-OWpw@mail.gmail.com>
- <Y9gLeNqorZNQ1gjp@qwirkle> <Y9gfpa7vks5Ndl8q@qwirkle>
-In-Reply-To: <Y9gfpa7vks5Ndl8q@qwirkle>
-From:   Willem de Bruijn <willemb@google.com>
-Date:   Mon, 30 Jan 2023 14:57:52 -0500
-Message-ID: <CA+FuTSckAeDGSBYE3bv2qR9cXpqac8Vmu6YxC1HTJx7YLY7gnQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
- back-off retries
-To:     Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] sched: cpuset: Don't rebuild sched domains on
+ suspend-resume
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>
+References: <20230120194822.962958-1-qyousef@layalina.io>
+ <c4c2dec6-a72b-d675-fb42-be40e384ea2c@redhat.com>
+ <20230125163546.pspvigh4groiwjy7@airbuntu>
+ <45e0f8ea-d229-1ae7-5c12-7f0a64c6767a@redhat.com>
+ <20230130130038.2qx3pkzut6ypqdub@airbuntu>
+ <253ced33-c3a8-269f-90cc-b69e66b10370@redhat.com>
+ <20230130194826.rxwk4ryvpyxemflm@airbuntu>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230130194826.rxwk4ryvpyxemflm@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 2:51 PM Andrei Gherzan
-<andrei.gherzan@canonical.com> wrote:
+On 1/30/23 14:48, Qais Yousef wrote:
+> On 01/30/23 11:29, Waiman Long wrote:
+>> On 1/30/23 08:00, Qais Yousef wrote:
+>>
+>>          just skip the call here if the condition is right? Like
+>>
+>>                  /* rebuild sched domains if cpus_allowed has changed */
+>>                  if (cpus_updated || (force_rebuild && !cpuhp_tasks_frozen)) {
+>>                          force_rebuild = false;
+>>                          rebuild_sched_domains();
+>>                  }
+>>
+>>          Still, we will need to confirm that cpuhp_tasks_frozen will be cleared
+>>          outside of the suspend/resume cycle.
+>>
+>>      I think it's fine to use this variable from the cpuhp callback context only.
+>>      Which I think this cpuset workfn is considered an extension of.
+>>
+>>      But you're right, I can't use cpuhp_tasks_frozen directly in
+>>      rebuild_root_domains() as I did in v1 because it doesn't get cleared after
+>>      calling the last _cpu_up().
+>>
+>> That is what I suspect. So we can't use that cpuhp_tasks_frozen variable here
+>> in cpuset.
+>>
+>>       force_rebuild will only be set after the last cpu
+>>      is brought online though - so this should happen once at the end.
+>>
+>> Perhaps you can add another tracking variable for detecting if suspend/resume
+>> is in progress.
+> I think cpuhp_tasks_frozen is meant for that. All users who cared so far
+> belonged to the cpuhp callback. I think reading it from cpuset_hotplug_workfn()
+> is fine too as this function will only run as a consequence of the cpuhp
+> callback AFAICS. cpuset_cpu_active() takes care of not forcing a rebuild of
+> sched_domains until the last cpu becomes active - so the part of it being done
+> once at the end at resume is handled too.
+
+Well we will have to add code to clear cpuhp_tasks_frozen at the end of 
+resume then. We don't want to affect other callers unless we are sure 
+that it won't affect them.
+
 >
-> On 23/01/30 06:24PM, Andrei Gherzan wrote:
-> > On 23/01/30 12:35PM, Willem de Bruijn wrote:
-> > > On Mon, Jan 30, 2023 at 12:31 PM Andrei Gherzan
-> > > <andrei.gherzan@canonical.com> wrote:
-> > > >
-> > > > On 23/01/30 11:29AM, Willem de Bruijn wrote:
-> > > > > On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
-> > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > >
-> > > > > > On 23/01/30 04:15PM, Andrei Gherzan wrote:
-> > > > > > > On 23/01/30 11:03AM, Willem de Bruijn wrote:
-> > > > > > > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
-> > > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
-> > > > > > > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
-> > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
-> > > > > > > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
-> > > > > > > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
-> > > > > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
-> > > > > > > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
-> > > > > > > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
-> > > > > > > > > > > > > > accept socket connections. This racing bug could fail the test with at
-> > > > > > > > > > > > > > least one of the following:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
-> > > > > > > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
-> > > > > > > > > > > > > > ./udpgso_bench_tx: write: Connection refused
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > This change addresses this by adding routines that retry the socket
-> > > > > > > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-> > > > > > > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Synchronizing the two processes is indeed tricky.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Perhaps more robust is opening an initial TCP connection, with
-> > > > > > > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
-> > > > > > > > > > > > > go.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
-> > > > > > > > > > > > socket to show up in 'ss' output before firing-up the client - quite
-> > > > > > > > > > > > alike what mptcp self-tests are doing.
-> > > > > > > > > > >
-> > > > > > > > > > > I like this idea. I have tested it and it works as expected with the
-> > > > > > > > > > > exeception of:
-> > > > > > > > > > >
-> > > > > > > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
-> > > > > > > > > > >
-> > > > > > > > > > > Any ideas on how to handle this? I could retry and that works.
-> > > > > > > > > >
-> > > > > > > > > > This happens (also) without the zerocopy flag, right? That
-> > > > > > > > > >
-> > > > > > > > > > It might mean reaching the sndbuf limit, which can be adjusted with
-> > > > > > > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
-> > > > > > > > > > expect this test to bump up against that limit.
-> > > > > > > > > >
-> > > > > > > > > > A few zerocopy specific reasons are captured in
-> > > > > > > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
-> > > > > > > > >
-> > > > > > > > > I have dug a bit more into this, and it does look like your hint was in
-> > > > > > > > > the right direction. The fails I'm seeing are only with the zerocopy
-> > > > > > > > > flag.
-> > > > > > > > >
-> > > > > > > > > From the reasons (doc) above I can only assume optmem limit as I've
-> > > > > > > > > reproduced it with unlimited locked pages and the fails are transient.
-> > > > > > > > > That leaves optmem limit. Bumping the value I have by default (20480) to
-> > > > > > > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
-> > > > > > > > > tests started to fail with something like:
-> > > > > > > > >
-> > > > > > > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
-> > > > > > > > > expected    773707 received
-> > > > > > > >
-> > > > > > > > More zerocopy completions than number of sends. I have not seen this before.
-> > > > > > > >
-> > > > > > > > The completions are ranges of IDs, one per send call for datagram sockets.
-> > > > > > > >
-> > > > > > > > Even with segmentation offload, the counter increases per call, not per segment.
-> > > > > > > >
-> > > > > > > > Do you experience this without any other changes to udpgso_bench_tx.c.
-> > > > > > > > Or are there perhaps additional sendmsg calls somewhere (during
-> > > > > > > > initial sync) that are not accounted to num_sends?
-> > > > > > >
-> > > > > > > Indeed, that looks off. No, I have run into this without any changes in
-> > > > > > > the tests (besides the retry routine in the shell script that waits for
-> > > > > > > rx to come up). Also, as a data point.
-> > > > > >
-> > > > > > Actually wait. I don't think that is the case here. "expected" is the
-> > > > > > number of sends. In this case we sent 1076 more messages than
-> > > > > > completions. Am I missing something obvious?
-> > > > >
-> > > > > Oh indeed.
-> > > > >
-> > > > > Receiving fewer completions than transmission is more likely.
-> > > >
-> > > > Exactly, yes.
-> > > >
-> > > > > This should be the result of datagrams still being somewhere in the
-> > > > > system. In a qdisc, or waiting for the network interface to return a
-> > > > > completion notification, say.
-> > > > >
-> > > > > Does this remain if adding a longer wait before the final flush_errqueue?
-> > > >
-> > > > Yes and no. But not realiably unless I go overboard.
-> > > >
-> > > > > Or, really, the right fix is to keep polling there until the two are
-> > > > > equal, up to some timeout. Currently flush_errqueue calls poll only
-> > > > > once.
-> > > >
-> > > > That makes sense. I have implemented a retry and this ran for a good
-> > > > while now.
-> > > >
-> > > > -               flush_errqueue(fd, true);
-> > > > +               while (true) {
-> > > > +                       flush_errqueue(fd, true);
-> > > > +                       if ((stat_zcopies == num_sends) || (delay >= MAX_DELAY))
-> > > > +                               break;
-> > > > +                       usleep(delay);
-> > > > +                       delay *= 2;
-> > > > +               }
-> > > >
-> > > > What do you think?
-> > >
-> > > Thanks for running experiments.
-> > >
-> > > We can avoid the unconditional sleep, as the poll() inside
-> > > flush_errqueue already takes a timeout.
-> > >
-> > > One option is to use start_time = clock_gettime(..) or gettimeofday
-> > > before poll, and restart poll until either the exit condition or
-> > > timeout is reached, with timeout = orig_time - elapsed_time.
-> >
-> > Yes, this was more of a quick draft. I was thinking to move it into the
-> > flush function (while making it aware of num_sends via a parameter):
-> >
-> > if (do_poll) {
-> >   struct pollfd fds = {0};
-> >   int ret;
-> >   unsigned long tnow, tstop;
-> >
-> >   fds.fd = fd;
-> >   tnow = gettimeofday_ms();
-> >   tstop = tnow + POLL_LOOP_TIMEOUT_MS;
-> >   while ((stat_zcopies != num_sends) && (tnow < tstop)) {
-
-The new condition to loop until stat_zcopies == num_sends should only
-be tested on the final call. This likely needs to become a separate
-boolean. Or a separate flush_errqueue_last() function, and leave the
-existing one as is.
-
-We can probably merge the outer for and inner while loops
-
-> >     ret = poll(&fds, 1, 500);
-
-Instead of 500, this becomes tstop - tnow.
-
-> >     if (ret == 0) {
-> >       if (cfg_verbose)
-> >         fprintf(stderr, "poll timeout\n");
-
-Poll timeouts are now expected to an extent. Only report once at the
-end of the function if the poll was only called once and timed out.
-> >       } else if (ret < 0) {
-> >         error(1, errno, "poll");
-> >     }
-> >     tnow = gettimeofday_ms();
-> >   }
-> > }
-> >
-> > Does this make more sense?
+> It's just rebuild_sched_domains() will always assume it needs to clear and
+> rebuild deadline accounting - which is not true for suspend/resume case. But
+> now looking at other users of rebuild_sched_domains(), others might be getting
+> the hit too. For example rebuild_sched_domains_locked() is called on
+> update_relax_domain_level() which AFAIU should not impact dl accounting.
 >
-> Obviously, this should be a do/while. Anyway, this works as expected
-> after leaving it for a around two hours.
+> FWIW, I did capture a worst case scenario of 21ms because of
+> rebuild_root_domains().
+>
+> /me thinks rebuild_root_domains() is a misleading name too as it just fixes
+> dl accounting but not rebuild the rd itself.
+>
+> What makes sense to me now is to pass whether dl accounting requires updating
+> to rebuild_sched_domains() as an arg so that the caller can decide whether the
+> reason can affect dl accounting.
+>
+> Or maybe pull rebuild_root_domains() out of the chain and let the caller call
+> it directly. And probably rename it to update_do_rd_accounting() or something.
+>
+> I'll continue to dig more..
 
-Great to hear you found the cause.
+Looking forward to see that.
+
+Cheers,
+Longman
+
