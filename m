@@ -2,129 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14268680508
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2F068050A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235325AbjA3Eci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S235351AbjA3Edk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjA3Ece (ORCPT
+        with ESMTP id S229578AbjA3Edi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:32:34 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBD91E1C6;
-        Sun, 29 Jan 2023 20:32:33 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4wJZ4Vb8z4x1f;
-        Mon, 30 Jan 2023 15:32:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675053152;
-        bh=qq6xvOd8VyDYmmN8rzItfldinb4S9ccSOEOIMcbibWs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Br+WfmZTMnK/cTC78C+ELEHKT/f3WDOiXEe3MKxhKDtNIvAv4Le3JB6u5bLigNs+U
-         xebHdsul3LN7iywObAm9Md60Lo77LMHlTsKMJjP6fwnxQJcziqmCDaiNOZ0/tbgbvq
-         Fcbdyx07qoKCkB23XtuJGEYZVblbgl5LQYkGM6uUGMXEZqtktc3V5HbcSUw/++IyuU
-         apOSbtUxyM14YayJruJCoSH+LQtXFa/t3a9RTihnOeaWyVK0gWnelDtkmVbE+RyMPK
-         DecPf4SEtowFvz8ayNt7Loni+82jqtqFEmFcHdtcRt6BCe9408i2JT3QQd5iFo4uz4
-         2KoxUtYJ47AxA==
-Date:   Mon, 30 Jan 2023 15:32:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the driver-core tree with the net-next
- tree
-Message-ID: <20230130153229.6cb70418@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/M/=bRrUv34WkpC=80dQlqK0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 29 Jan 2023 23:33:38 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E381AB;
+        Sun, 29 Jan 2023 20:33:37 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 154963200988;
+        Sun, 29 Jan 2023 23:33:35 -0500 (EST)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Sun, 29 Jan 2023 23:33:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1675053215; x=1675139615; bh=GKe/s222U3
+        vhZPpA2bjaG3/g7LC6X493Rq+JpuLEb/s=; b=rideqGucVqU9+ISCq1qjg/TOVa
+        YIeI1nCSG2a51Z+bkOgCncmysDlaMVPHzckj3SpSnrdfvNGJ0BO+QuwdfWm69ti8
+        YRQGcSmrBQSTADNwnOwoSaTH5LKTQFfGaNIa4jV9wev4J29WdBfyk3qK9QGvbyKN
+        BvMVlSMRBoBzecSDF6fzku+OocDFRaxJTgfbzk+QmX1nNvsXVlNWQqPUxpDWX+og
+        Etnwk+FRCr9DC1IiDfEwJEXRH/ZAi1i9vNQ4czuy32PZD5Y2+X5lhjgB+pmPK+dp
+        U8cuz9NKMXt16fA1HUtnIv8H3tN0O52aw+w/IzGXEN6TFkbFLAVzyJRQDuoA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675053215; x=1675139615; bh=GKe/s222U3vhZPpA2bjaG3/g7LC6
+        X493Rq+JpuLEb/s=; b=Sv0dun/8c+A4fA1/5Y0T1+jOq7qanTLe6W+XY8/ewUNi
+        gTX8rE50Wo9UAiGrJRiv8k6xoABZ6Ws8TRrMeupzYM3niMtUylMZK6CXO0caRngD
+        GPfKbHW9S3zPqvVyPyKgm6RPpS4+MEgfIIHnxg+ZqgKuiruPcl3PEkc/SnUCPh6I
+        yghOoyRveZ9rtH6RhM6Mn+LeGIT964rfKvwWs7p1uum45pp8510GMKXzd6JhjYKR
+        vmMrS5nStvh4kQ4T/aEulcF346wHRcWUG6lYm1GrEPbrx6Wznri03GpVhmH2SdEF
+        9dOHNxmk1n1qlrgzq+qQGxZVG/fdRx8rxqPQlqgqkw==
+X-ME-Sender: <xms:n0jXY_4CcZPM1xjPFTQPyB8zDCu4rZw7ZiffjK10pSKpva84tQecYQ>
+    <xme:n0jXY06W7J1C2Zgx3NS0_LxbHANTA7pM47Lhvx2kTRXipTUYFKYMfZTIJRfXg2RGZ
+    ksHL0ecdeMHNws5vA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefuddgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
+    feetkeeiteenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:n0jXY2drDvgDR_a8M0wUPdxCBMKe6cDuVPzDqs1RdFn7Gh03xVqB9Q>
+    <xmx:n0jXYwKxeSyQwAZy1ctNhbs9B_AhGtI3RWnVv_P7zBe2DiUrJNlLXg>
+    <xmx:n0jXYzLu82pChH6yMic68slIVodPaUiSSfHLbuBCwHT6djKeq7WRZg>
+    <xmx:n0jXY5jyI4WHyXtTWrmFoUoilsrc5PX1q7hEI7XRCfzh5M_C89zTug>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5E2F81700089; Sun, 29 Jan 2023 23:33:35 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <2fe78085-2ae1-42dc-ad96-b16703ca3abd@app.fastmail.com>
+In-Reply-To: <CACPK8XcL-T_zv0aoeM5DJzGirp6dqD9UOn6=enSZDLao6hg2bg@mail.gmail.com>
+References: <20220818101839.28860-1-billy_tsai@aspeedtech.com>
+ <CACRpkdYpp_1JJQmuX27pECxN0cjzciCuETLPTrSYKqpX0FPABQ@mail.gmail.com>
+ <e501d2fb-aaa0-470d-a8d5-5f8e97898df7@beta.fastmail.com>
+ <CACPK8XfQ=uarsOgJ7LaXqLyGG2vSF-47RkAEV=T2gruapx-yfg@mail.gmail.com>
+ <CACRpkdZPxZgWJ3jjiesOFGXmwzZFqeByZyx1VCy5pDWyVQHy+A@mail.gmail.com>
+ <CACPK8XcL-T_zv0aoeM5DJzGirp6dqD9UOn6=enSZDLao6hg2bg@mail.gmail.com>
+Date:   Mon, 30 Jan 2023 15:03:15 +1030
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Joel Stanley" <joel@jms.id.au>,
+        "Linus Walleij" <linus.walleij@linaro.org>
+Cc:     "Billy Tsai" <billy_tsai@aspeedtech.com>,
+        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: aspeed: Force to disable the function's signal
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/M/=bRrUv34WkpC=80dQlqK0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the driver-core tree got a conflict in:
+On Mon, 30 Jan 2023, at 13:36, Joel Stanley wrote:
+> On Fri, 27 Jan 2023 at 12:39, Linus Walleij <linus.walleij@linaro.org> wrote:
+>>
+>> On Thu, Jan 19, 2023 at 2:54 AM Joel Stanley <joel@jms.id.au> wrote:
+>>
+>> > As foreseen by Andrew, this caused a regression. On the Romulus
+>> > machine the device tree contains a gpio hog for GPIO S7. With the
+>> > patch applied:
+>>
+>> OK shall I just revert the patch?
+>
+> Yep! I was going to send a revert but I thought I should write up a
+> commit message. If you're happy just putting a revert in with a note
+> that it caused a regression that's enough for me.
 
-  include/linux/acpi.h
+Agree, let's revert this one for now.
 
-between commit:
-
-  1b94ad7ccc21 ("ACPI: utils: Add acpi_evaluate_dsm_typed() and acpi_check_=
-dsm() stubs")
-
-from the net-next tree and commit:
-
-  162736b0d71a ("driver core: make struct device_type.uevent() take a const=
- *")
-
-from the driver-core tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/acpi.h
-index 4b12dad5a8a4,564b62f13bd0..000000000000
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@@ -964,16 -958,7 +964,16 @@@ static inline union acpi_object *acpi_e
-  	return NULL;
-  }
- =20
- +static inline union acpi_object *acpi_evaluate_dsm_typed(acpi_handle hand=
-le,
- +							 const guid_t *guid,
- +							 u64 rev, u64 func,
- +							 union acpi_object *argv4,
- +							 acpi_object_type type)
- +{
- +	return NULL;
- +}
- +
-- static inline int acpi_device_uevent_modalias(struct device *dev,
-+ static inline int acpi_device_uevent_modalias(const struct device *dev,
-  				struct kobj_uevent_env *env)
-  {
-  	return -ENODEV;
-
---Sig_/M/=bRrUv34WkpC=80dQlqK0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXSF0ACgkQAVBC80lX
-0GxaRggAnQ2YULPRCsPJiKqJF4MBOvvVm19mF55sqWZ6VSBH1ZvYPITxAwTvZTKy
-bnCoOUO8v0H6dDo/TpNwzE2HUOaKcUiX7ITfFlyRpAca3vdxvgF/ypLSNbTo8unw
-Xu40yZXU1qscT9KRX3XzTj1uNxCNb+9xIYhKEUlTSFoaX/cIldPzcBK//ZkZ/qd0
-tCs7nWvduU+6crjLHQYaiH5RcL6IyCyMx5acfDtH6hXCfoojEz8Ko/MZJQtrF0JE
-M6llofQIjn6uaipmwBQ6egVtvmxFsNXDoMenPVgEP2RRr7Z2gWo3d5x2VACZwSGa
-nazsNDC/L88SPjQSQhx3TJ1Rt09zEw==
-=2uE7
------END PGP SIGNATURE-----
-
---Sig_/M/=bRrUv34WkpC=80dQlqK0--
+Andrew
