@@ -2,95 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18115680B95
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A63A4680B97
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236048AbjA3LFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 06:05:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S236412AbjA3LGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 06:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236321AbjA3LFQ (ORCPT
+        with ESMTP id S236472AbjA3LFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 06:05:16 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B2633466
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:04:25 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pMRxX-00009o-UI; Mon, 30 Jan 2023 12:04:23 +0100
-Message-ID: <62fb7c9a-179a-f3f0-93b6-5e74f88dad63@leemhuis.info>
-Date:   Mon, 30 Jan 2023 12:04:23 +0100
+        Mon, 30 Jan 2023 06:05:24 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EF016ACA;
+        Mon, 30 Jan 2023 03:04:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675076670; x=1706612670;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0h0zHmH8o9/zwwr3cv/ujF3OJpLPSvSFjp9kwMeCR9I=;
+  b=dIZE/58+h9mA7eJs0+XQ5irLrX1U2fkotiRNsdLvcTlx3z5v/HGaj+gU
+   LdzRhb0DNLZdvNBy3RF9boPFQGP2GC966ad4OayWXy/i7BunEsS3dzJIE
+   kyZ/arO0H8+/wRgVcA9wXp19ZLocZckwEj3s3f61D9E4GkRLrqmHnsoIS
+   PcOcxMFTnxgbV7VOh6i8UR235hguWnhXKheE75Z95znw4nTYcjzRfI4dl
+   XUSnjDWvcY03PMLZNuyd4K1zmAEFOY11OSKPUgq02o5UiB2dTliGFZibw
+   POFFJWKobCwMeu/01XLRNW8TxhD2rAxqB5AKrPz+GUhs8ZFdb2ObPK/US
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="325228095"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="325228095"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 03:04:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="727461051"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="727461051"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Jan 2023 03:04:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D1EF7337; Mon, 30 Jan 2023 13:05:05 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] dmaengine: Make an order in struct dma_device definition
+Date:   Mon, 30 Jan 2023 13:05:03 +0200
+Message-Id: <20230130110503.52250-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: CIFS NTLM regression still annoying people (was: Re: Linux
- regressions report for mainline [2023-01-29])
-Content-Language: en-US, de-DE
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>
-References: <167501403214.1314424.14370223374691112185@leemhuis.info>
- <CAHk-=wgnBBJ7hDSz5T+2FMF0JhE1Jmf6=tZEytQ6n1jZ4m2s=w@mail.gmail.com>
-From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <CAHk-=wgnBBJ7hDSz5T+2FMF0JhE1Jmf6=tZEytQ6n1jZ4m2s=w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675076665;76f21fbb;
-X-HE-SMSGID: 1pMRxX-00009o-UI
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.01.23 20:32, Linus Torvalds wrote:
-> On Sun, Jan 29, 2023 at 9:42 AM Regzbot (on behalf of Thorsten
-> Leemhuis) <regressions@leemhuis.info> wrote:
->>
->> * Andrew afaics didn’t sent a revert[1] from Vlastimir your way
-> Ok, I applied this one as tiny and clear and hitting actual user loads.
+Make an order in struct dma_device:
+- added missing kernel doc descriptions
+- put descriptions in the order of appearance in the code
+- updated indentation where it makes sense
 
-Great, many thx!
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/dmaengine.h | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
->> * A fix[1] for a stack_depot/kmemleak issue is in next for a while already too[2]
-> This one I left alone, since it's a bit more involved and the use-case
-> is more esoteric too.
+diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+index 0c020682d894..c3656e590213 100644
+--- a/include/linux/dmaengine.h
++++ b/include/linux/dmaengine.h
+@@ -773,6 +773,7 @@ struct dma_filter {
+ 
+ /**
+  * struct dma_device - info on the entity supplying DMA services
++ * @ref: reference is taken and put every time a channel is allocated or freed
+  * @chancnt: how many DMA channels are supported
+  * @privatecnt: how many DMA channels are requested by dma_request_channel
+  * @channels: the list of struct dma_chan
+@@ -789,6 +790,7 @@ struct dma_filter {
+  * @dev_id: unique device ID
+  * @dev: struct device reference for dma mapping api
+  * @owner: owner module (automatically set based on the provided dev)
++ * @chan_ida: unique channel ID
+  * @src_addr_widths: bit mask of src addr widths the device supports
+  *	Width is specified in bytes, e.g. for a device supporting
+  *	a width of 4 the mask should have BIT(4) set.
+@@ -802,6 +804,7 @@ struct dma_filter {
+  * @max_sg_burst: max number of SG list entries executed in a single burst
+  *	DMA tansaction with no software intervention for reinitialization.
+  *	Zero value means unlimited number of entries.
++ * @descriptor_reuse: a submitted transfer can be resubmitted after completion
+  * @residue_granularity: granularity of the transfer residue reported
+  *	by tx_status
+  * @device_alloc_chan_resources: allocate resources and return the
+@@ -839,7 +842,6 @@ struct dma_filter {
+  *	struct with auxiliary transfer status information, otherwise the call
+  *	will just return a simple status code
+  * @device_issue_pending: push pending transactions to hardware
+- * @descriptor_reuse: a submitted transfer can be resubmitted after completion
+  * @device_release: called sometime atfer dma_async_device_unregister() is
+  *     called and there are no further references to this structure. This
+  *     must be implemented to free resources however many existing drivers
+@@ -847,6 +849,7 @@ struct dma_filter {
+  * @dbg_summary_show: optional routine to show contents in debugfs; default code
+  *     will be used when this is omitted, but custom code can show extra,
+  *     controller specific information.
++ * @dbg_dev_root: the root folder in debugfs for this device
+  */
+ struct dma_device {
+ 	struct kref ref;
+@@ -855,7 +858,7 @@ struct dma_device {
+ 	struct list_head channels;
+ 	struct list_head global_node;
+ 	struct dma_filter filter;
+-	dma_cap_mask_t  cap_mask;
++	dma_cap_mask_t cap_mask;
+ 	enum dma_desc_metadata_mode desc_metadata_modes;
+ 	unsigned short max_xor;
+ 	unsigned short max_pq;
+@@ -924,10 +927,8 @@ struct dma_device {
+ 		struct dma_chan *chan, dma_addr_t dst, u64 data,
+ 		unsigned long flags);
+ 
+-	void (*device_caps)(struct dma_chan *chan,
+-			    struct dma_slave_caps *caps);
+-	int (*device_config)(struct dma_chan *chan,
+-			     struct dma_slave_config *config);
++	void (*device_caps)(struct dma_chan *chan, struct dma_slave_caps *caps);
++	int (*device_config)(struct dma_chan *chan, struct dma_slave_config *config);
+ 	int (*device_pause)(struct dma_chan *chan);
+ 	int (*device_resume)(struct dma_chan *chan);
+ 	int (*device_terminate_all)(struct dma_chan *chan);
+-- 
+2.39.0
 
-Totally fine with me and yeah, a bit esoteric. But when somebody bisects
-and report a problem (in this case: Boris) that already fixed in next
-for a few days, my mind yells "what a waste or energy, this could have
-been prevented by mainlining the fix a bit more quickly" -- that's why I
-brought it up.
-
-> And in other news, the input regression revert you mentioned earlier
-> got pulled this morning.
-
-Ahh, great.
-
-BTW, there is one thing that still bugs me: every few weeks there is yet
-somebody new[1] complaining about the removal of support for NTLM and
-weaker authentication algorithms from cifs some time ago in
-76a3c92ec9e0. The situation[2] was improved slightly in 2f6f19c7aaad
-("cifs: fix regression in very old smb1 mounts"), but it seems some
-users of Apple Time Capsules or some Epson printer/scanner still can't
-access their devices which apparently still work fine in Windows and
-macOS[1].
-
-Yes, the issue is tricky, as there are security implications here and we
-have nobody that tests this, as you pointed out [3]. Is there
-nevertheless something somebody committed could do? Would we even be
-willing to add that support back in, in case someone commits to maintain
-and regularly test that codepath?
-
-Ciao, Thorsten
-
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=216682
-[2] https://bugzilla.kernel.org/show_bug.cgi?id=215375
-[3]
-https://lore.kernel.org/all/CAHk-=wjSBvRk-ksUBOiQzJd=e19UZKvOSZs1UHahK5U0QVh6RQ@mail.gmail.com/
