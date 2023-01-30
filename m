@@ -2,251 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AE16814F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 142AB6814FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238191AbjA3PZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S238193AbjA3P2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:28:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235737AbjA3PZ4 (ORCPT
+        with ESMTP id S238140AbjA3P2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:25:56 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 990DFCDC6;
-        Mon, 30 Jan 2023 07:25:55 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id 63D0F20E9F8D; Mon, 30 Jan 2023 07:25:55 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 63D0F20E9F8D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675092355;
-        bh=bGi+RJN59kO3g6+Cd8jXPvBoBF+THRp7NH5eM0/2kE4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hW4PyYBbWTE2zdCNUzGzmKrzB0O4Yv2jrjBJBJJ+SdNBNgTbEazKf+REZ5fSBZ4Y/
-         I7ZHUJzmx+IXkr8OPOG7ZtJ2JOnLAZO8FpqYiF/Z/6W1Dsf7WtrC6/gddS84V3zUt1
-         0HC3BS1kJGK7NJ8udimTOrx+0ELGcn7i+EwFlGiQ=
-Date:   Mon, 30 Jan 2023 07:25:55 -0800
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [RFC PATCH v1 2/6] x86/sev: Add support for NestedVirtSnpMsr
-Message-ID: <20230130152555.GB27645@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20230123165128.28185-1-jpiotrowski@linux.microsoft.com>
- <20230123165128.28185-3-jpiotrowski@linux.microsoft.com>
- <SN6PR2101MB169362990E4BB621A5A27D13D7CD9@SN6PR2101MB1693.namprd21.prod.outlook.com>
+        Mon, 30 Jan 2023 10:28:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8664367E4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:28:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2540361180
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403F8C433EF;
+        Mon, 30 Jan 2023 15:28:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675092497;
+        bh=AcZ+6LQcfJ+3FmwU9zsCTeQShF/vTWZBT8hNMdtfOgM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=t771CfotsgOeet6SsmHZxofnxjF5IgLLG7iA5r5z06iAMCbpJjnIyIG+MOEehuAqJ
+         fk/Oi5NXadt6VvUNOjbA24vloE8vYk8pZ4mSmGiJfygmDZKkoiGsXW3e90hNeREC4d
+         1TGJYEYi9hori0Slb9aFavWLBEGX2KUtuSG9DhyH5DTqq2AHeBvcBPdKZK9laSIiXW
+         MNaBmm6Ijjuy/RZvasrEfpj1h1WWWN8vkiYUIWqOxpxGESDsNi2DOMnhDEPv8Uhnmi
+         k7kPebQbV1CnYeTTgP+jV3dPzgBJqPGSRfbm017Bvcw0OdKeTESp8JK8/MlqYYDM7E
+         6stLWoytBxhPQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Guo Ren <guoren@kernel.org>,
+        "liaochang (A)" <liaochang1@huawei.com>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com, mhiramat@kernel.org,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        mark.rutland@arm.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
+In-Reply-To: <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
+References: <20230126161559.1467374-1-guoren@kernel.org>
+ <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
+ <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
+Date:   Mon, 30 Jan 2023 16:28:15 +0100
+Message-ID: <87r0vc9h4g.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <SN6PR2101MB169362990E4BB621A5A27D13D7CD9@SN6PR2101MB1693.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 07:48:27PM +0000, Michael Kelley (LINUX) wrote:
-> From: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> Sent: Monday, January 23, 2023 8:51 AM
-> > 
-> > The rmpupdate and psmash instructions, which are used in AMD's SEV-SNP
-> > to update the RMP (Reverse Map) table, can't be trapped. For nested
-> > scenarios, AMD defined MSR versions of these instructions which can be
-> 
-> s/can be/must be/  ??
-> 
+Guo Ren <guoren@kernel.org> writes:
 
-yes indeed
+>> In the serie of RISCV OPTPROBES [1], it patches a long-jump instructions=
+ pair
+>> AUIPC/JALR in kernel text, so in order to ensure other CPUs does not exe=
+cute
+>> in the instructions that will be modified, it is still need to stop othe=
+r CPUs
+>> via patch_text API, or you have any better solution to achieve the purpo=
+se?
+>  - The stop_machine is an expensive way all architectures should
+> avoid, and you could keep that in your OPTPROBES implementation files
+> with static functions.
+>  - The stop_machine couldn't work with PREEMPTION, so your
+> implementation needs to work with !PREEMPTION.
 
-> > emulated by the top-level hypervisor. One instance where these MSRs are
-> 
-> And by "top-level", I think you are referring the hypervisor running at L1, right?
-> Using the L0/L1/L2 terminology would probably help make the description
-> more precise.
+...and stop_machine() with !PREEMPTION is broken as well, when you're
+replacing multiple instructions (see Mark's post at [1]). The
+stop_machine() dance might work when you're replacing *one* instruction,
+not multiple as in the RISC-V case. I'll expand on this in a comment in
+the OPTPROBES v6 series.
 
-These instructions are called by the L1 hypervisor and are emulated by the L0
-hypervisor which controls the actual rmp table. I'll rephrase the commit
-message to make that clearer.
+>> >  static void __kprobes arch_prepare_simulate(struct kprobe *p)
+>> > @@ -114,16 +120,23 @@ void *alloc_insn_page(void)
+>> >  /* install breakpoint in text */
+>> >  void __kprobes arch_arm_kprobe(struct kprobe *p)
+>> >  {
+>> > -     if ((p->opcode & __INSN_LENGTH_MASK) =3D=3D __INSN_LENGTH_32)
+>> > -             patch_text(p->addr, __BUG_INSN_32);
+>> > -     else
+>> > -             patch_text(p->addr, __BUG_INSN_16);
+>> > +#ifdef CONFIG_RISCV_ISA_C
+>> > +     u32 opcode =3D __BUG_INSN_16;
+>> > +#else
+>> > +     u32 opcode =3D __BUG_INSN_32;
+>> > +#endif
+>> > +     patch_text_nosync(p->addr, &opcode, GET_INSN_LENGTH(opcode));
+>>
+>> Sounds good, but it will leave some RVI instruction truncated in kernel =
+text,
+>> i doubt kernel behavior depends on the rest of the truncated instruction=
+, well,
+>> it needs more strict testing to prove my concern :)
+> I do this on purpose, and it doesn't cause any problems. Don't worry;
+> IFU hw must enforce the fetch sequence, and there is no way to execute
+> broken instructions even in the speculative execution path.
 
-> 
-> > used are Hyper-V VMs which expose SNP isolation features to the guest.
-> > 
-> > The MSRs are defined in "AMD64 Architecture Programmer’s Manual, Volume 2:
-> > System Programming", section 15.36.19.
-> > 
-> > Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-> > ---
-> >  arch/x86/include/asm/cpufeatures.h |  1 +
-> >  arch/x86/include/asm/msr-index.h   |  2 +
-> >  arch/x86/kernel/sev.c              | 62 +++++++++++++++++++++++++-----
-> >  3 files changed, 55 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> > index 480b4eaef310..e6e2e824f67b 100644
-> > --- a/arch/x86/include/asm/cpufeatures.h
-> > +++ b/arch/x86/include/asm/cpufeatures.h
-> > @@ -423,6 +423,7 @@
-> >  #define X86_FEATURE_SEV_SNP		(19*32+ 4) /* AMD Secure Encrypted Virtualization - Secure Nested Paging */
-> >  #define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* "" Virtual TSC_AUX */
-> >  #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced cache coherency */
-> > +#define X86_FEATURE_NESTED_VIRT_SNP_MSR	(19*32+29) /* Virtualizable RMPUPDATE and PSMASH MSR available */
-> > 
-> >  /*
-> >   * BUG word(s)
-> > diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> > index 35100c630617..d6103e607896 100644
-> > --- a/arch/x86/include/asm/msr-index.h
-> > +++ b/arch/x86/include/asm/msr-index.h
-> > @@ -567,6 +567,8 @@
-> >  #define MSR_AMD64_SEV_SNP_ENABLED
-> > 	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
-> >  #define MSR_AMD64_RMP_BASE		0xc0010132
-> >  #define MSR_AMD64_RMP_END		0xc0010133
-> > +#define MSR_AMD64_VIRT_RMPUPDATE	0xc001f001
-> > +#define MSR_AMD64_VIRT_PSMASH		0xc001f002
-> > 
-> >  #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
-> > 
-> > diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> > index 7fa39dc17edd..95404c7e5150 100644
-> > --- a/arch/x86/kernel/sev.c
-> > +++ b/arch/x86/kernel/sev.c
-> > @@ -2566,6 +2566,24 @@ int snp_lookup_rmpentry(u64 pfn, int *level)
-> >  }
-> >  EXPORT_SYMBOL_GPL(snp_lookup_rmpentry);
-> > 
-> > +static bool virt_snp_msr(void)
-> > +{
-> > +	return boot_cpu_has(X86_FEATURE_NESTED_VIRT_SNP_MSR);
-> > +}
-> > +
-> > +static u64 virt_psmash(u64 paddr)
-> > +{
-> > +	int ret;
-> > +
-> > +	asm volatile(
-> > +		"wrmsr\n\t"
-> > +		: "=a"(ret)
-> > +		: "a"(paddr), "c"(MSR_AMD64_VIRT_PSMASH)
-> > +		: "memory", "cc"
-> > +	);
-> > +	return ret;
-> > +}
-> 
-> From checking the AMD spec, I can see that the above use
-> of wrmsr is non-conventional.  Could you capture the basics
-> of the usage paradigm in a comment?  I.e., the expected
-> inputs and outputs, and the core assumption that the
-> MSR isn't implemented in hardware, but must trap
-> to the hypervisor.
+This is stretching reality a bit much. ARMv8, e.g., has a chapter in the
+Arm ARM [2] Appendix B "Concurrent modification and execution of
+instructions" (CMODX). *Some* instructions can be replaced concurrently,
+and others cannot without caution. Assuming that that all RISC-V
+implementations can, is a stretch. RISC-V hasn't even specified the
+behavior of CMODX (which is problematic).
 
-ok, how does this sound:
+If anything it would be more likely that the existing
+"stop_machine()-to-replace-with-ebreak" works (again, replacing one
+instruction does not have the !PREEMPTION issues). Then again, no spec,
+so mostly guessing from my side. :-(
 
-/*
- * This version of rmpupdate is not implemented in hardware but always
- * traps to L0 hypervisor. It doesn't follow usual wrmsr conventions.
- * Inputs:
- *   rax: 4KB aligned GPA
- *   rdx: bytes 7:0 of new rmp entry
- *   r8:  bytes 15:8 of new rmp entry
- * Outputs:
- *   rax: rmpupdate return code
- */
+Oh, but the existing "ebreak replace" might be broken like [3].
 
-and similar for psmash.
 
-> 
-> > +
-> >  /*
-> >   * psmash is used to smash a 2MB aligned page into 4K
-> >   * pages while preserving the Validated bit in the RMP.
-> > @@ -2581,11 +2599,15 @@ int psmash(u64 pfn)
-> >  	if (!cpu_feature_enabled(X86_FEATURE_SEV_SNP))
-> >  		return -ENXIO;
-> > 
-> > -	/* Binutils version 2.36 supports the PSMASH mnemonic. */
-> > -	asm volatile(".byte 0xF3, 0x0F, 0x01, 0xFF"
-> > -		      : "=a"(ret)
-> > -		      : "a"(paddr)
-> > -		      : "memory", "cc");
-> > +	if (virt_snp_msr()) {
-> > +		ret = virt_psmash(paddr);
-> > +	} else {
-> > +		/* Binutils version 2.36 supports the PSMASH mnemonic. */
-> > +		asm volatile(".byte 0xF3, 0x0F, 0x01, 0xFF"
-> > +			      : "=a"(ret)
-> > +			      : "a"(paddr)
-> > +			      : "memory", "cc");
-> > +	}
-> > 
-> >  	return ret;
-> >  }
-> > @@ -2601,6 +2623,21 @@ static int invalidate_direct_map(unsigned long pfn, int npages)
-> >  	return set_memory_np((unsigned long)pfn_to_kaddr(pfn), npages);
-> >  }
-> > 
-> > +static u64 virt_rmpupdate(unsigned long paddr, struct rmp_state *val)
-> > +{
-> > +	int ret;
-> > +	register u64 hi asm("r8") = ((u64 *)val)[1];
-> > +	register u64 lo asm("rdx") = ((u64 *)val)[0];
-> > +
-> > +	asm volatile(
-> > +		"wrmsr\n\t"
-> > +		: "=a"(ret)
-> > +		: "a"(paddr), "c"(MSR_AMD64_VIRT_RMPUPDATE), "r"(lo), "r"(hi)
-> > +		: "memory", "cc"
-> > +	);
-> > +	return ret;
-> > +}
-> 
-> Same here about a comment capturing the expected inputs
-> and outputs.
+Bj=C3=B6rn
 
-ok
 
-> 
-> > +
-> >  static int rmpupdate(u64 pfn, struct rmp_state *val)
-> >  {
-> >  	unsigned long paddr = pfn << PAGE_SHIFT;
-> > @@ -2626,11 +2663,16 @@ static int rmpupdate(u64 pfn, struct rmp_state *val)
-> >  	}
-> > 
-> >  retry:
-> > -	/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
-> > -	asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
-> > -		     : "=a"(ret)
-> > -		     : "a"(paddr), "c"((unsigned long)val)
-> > -		     : "memory", "cc");
-> > +
-> > +	if (virt_snp_msr()) {
-> > +		ret = virt_rmpupdate(paddr, val);
-> > +	} else {
-> > +		/* Binutils version 2.36 supports the RMPUPDATE mnemonic. */
-> > +		asm volatile(".byte 0xF2, 0x0F, 0x01, 0xFE"
-> > +			     : "=a"(ret)
-> > +			     : "a"(paddr), "c"((unsigned long)val)
-> > +			     : "memory", "cc");
-> > +	}
-> > 
-> >  	if (ret) {
-> >  		if (!retries) {
-> > --
-> > 2.25.1
-> 
+[1] https://lore.kernel.org/linux-riscv/Y7%2F6AtX5X0+5qF6Y@FVFF77S0Q05N/
+[2] https://developer.arm.com/documentation/ddi0487/latest
+[3] https://lore.kernel.org/linux-riscv/20230126170607.1489141-2-guoren@ker=
+nel.org/
