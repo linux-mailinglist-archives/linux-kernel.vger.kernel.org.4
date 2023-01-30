@@ -2,87 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD006804D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5006804E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235537AbjA3EPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:15:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60650 "EHLO
+        id S230367AbjA3EUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235228AbjA3EPl (ORCPT
+        with ESMTP id S229592AbjA3EUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:15:41 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5398F3A8C
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:15:40 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id s67so6774480pgs.3
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:15:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=58GLUmzTwYb3qKKyCXh7E1D5tYRikGavhnZW7KqYzpE=;
-        b=gSPhxMatcRxlJNQTaNoO6CpIY0C7E++sw3LR0QtT3JAJaIXywGAEKdedJ5mzQrPKpX
-         hazv2Hq785/5a8RQj1APm1FzRM2DYSuOVaMIRKisKUIl7RSzrQfpMVqW+ZJrMmJ4Gkh4
-         XwxHhvWHx88Wpwr7InkhRg6JQfR1nh+eEO+2E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=58GLUmzTwYb3qKKyCXh7E1D5tYRikGavhnZW7KqYzpE=;
-        b=M25tGrxLtF0gJN7yr/gqmJfrP4QNNemy0ZnnccXefuliMM+4NuhzYbf7fDTuI8eNxQ
-         MsbsmV8HgrIDKu3vvkTOMJ6W7698kx3c4KhQ9mttBf20LEKghJMxLqby8JUR5/NZrLdF
-         eWqc+FYe+Kaxc3qdXSl4LSU/pLKwWawPGX5+k42raFiY3jYhQwJHgC5H67hZqzAnuZjx
-         LCtfVwE8HyIydw+ou54JknOmM0iCh05tSeXUUUyYxBFjhLHbHJ3CnkLlhEpVJFlJ82wX
-         L2eOo7V/kRehhovQzoZ59D2/ZHylVlbaC1UUQkN2n3K5yxgoey+iafxOpa085ObRljrP
-         QjuQ==
-X-Gm-Message-State: AFqh2krV9UxjFhFR63NcOR1BUUtWBzR5lfJ3J2+jYFflLDsqEfRTF9Vj
-        SkXs69s+qxsFTF+RU6LSPXBW1A==
-X-Google-Smtp-Source: AMrXdXtSroPaEaFc2L+7weTBDxXFdF7qQ0tQjiHbzWP9rqBjgIaTTgNfvbGeseX41UKAeS8rD65aQA==
-X-Received: by 2002:a05:6a00:24d4:b0:57e:866d:c095 with SMTP id d20-20020a056a0024d400b0057e866dc095mr58185827pfv.25.1675052139722;
-        Sun, 29 Jan 2023 20:15:39 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id z2-20020aa79f82000000b00593c679d405sm809537pfr.78.2023.01.29.20.15.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 20:15:39 -0800 (PST)
-Date:   Mon, 30 Jan 2023 13:15:35 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Dawei Li <set_pte_at@outlook.com>
-Cc:     linkinjeon@kernel.org, sfrench@samba.org, senozhatsky@chromium.org,
-        tom@talpey.com, hyc.lee@gmail.com, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] ksmbd: replace rwlock with rcu for concurrenct
- access on conn list
-Message-ID: <Y9dEZ5IgfwpZNlVm@google.com>
-References: <20230115103209.146002-1-set_pte_at@outlook.com>
- <TYCP286MB23235FDD8102162698EF3154CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+        Sun, 29 Jan 2023 23:20:14 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F001E1E1;
+        Sun, 29 Jan 2023 20:20:12 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U4CTM0027449;
+        Mon, 30 Jan 2023 04:20:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=uvCdY5WfHdYLfMg4AdvYMpcg0rtYRAIkcx2+qGh2+tE=;
+ b=mBem7715x9ik5srTCjiDPbMpROdMYbKefhYiyK0KnE4ZXlTowz018Qpk4djKy1UPyYok
+ vhIJ3AiNnxGzhnGS1gxBkrEg3atRSL3Zl0fTjXl2pVEj59bTeh9tpNil/xi8NV5C5Rlp
+ o+Cs+sINYY6BElSaGUCfpqzSlkYByfi8DsaHAMJZ7TkrO4akRHofUPw2YfwfHRiCdjx4
+ w9JO/XV4hVo+CWCkxB7um8g53oKz4b9DFSclR4AIOhN8y3ZUH0u2gHEYUZ3n0yLxd2Hd
+ v2aj9nbzZr0DsuqR9RSODiEju0gfDXsn6zKzE9eft6hA2nMYfo30gKEt8iJ5dgThbB9l pg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncvvu2mfq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 04:20:09 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30U4K81T004396
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 04:20:08 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Sun, 29 Jan 2023 20:20:08 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v3 0/4] soc: qcom: Introduce PMIC GLINK
+Date:   Sun, 29 Jan 2023 20:19:59 -0800
+Message-ID: <20230130042003.577063-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCP286MB23235FDD8102162698EF3154CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: hqS1Jm6R81dEKodPSW7_aFx02gQV1zc2
+X-Proofpoint-ORIG-GUID: hqS1Jm6R81dEKodPSW7_aFx02gQV1zc2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_02,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=842 suspectscore=0 spamscore=0 mlxscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301300040
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/01/15 18:32), Dawei Li wrote:
-> 
->  void ksmbd_conn_free(struct ksmbd_conn *conn)
->  {
-> -	write_lock(&conn_list_lock);
-> -	list_del(&conn->conns_list);
-> -	write_unlock(&conn_list_lock);
-> +	spin_lock(&conn_list_lock);
-> +	list_del_rcu(&conn->conns_list);
-> +	spin_unlock(&conn_list_lock);
->  
->  	xa_destroy(&conn->sessions);
->  	kvfree(conn->request_buf);
+This implements the base PMIC GLINK driver, a power_supply driver and a
+driver for the USB Type-C altmode protocol. This has been tested and
+shown to provide battery information, USB Type-C switch and mux requests
+and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
 
-From a quick look this does not seem like a correct RCU usage. E.g.
-where do you wait for grace periods and synchronize readers/writers?
+Bjorn Andersson (4):
+  dt-bindings: soc: qcom: Introduce PMIC GLINK binding
+  soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
+  soc: qcom: pmic_glink: Introduce altmode support
+  power: supply: Introduce Qualcomm PMIC GLINK power supply
+
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml    |  105 ++
+ drivers/power/supply/Kconfig                  |    9 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/qcom_battmgr.c           | 1421 +++++++++++++++++
+ drivers/soc/qcom/Kconfig                      |   15 +
+ drivers/soc/qcom/Makefile                     |    2 +
+ drivers/soc/qcom/pmic_glink.c                 |  336 ++++
+ drivers/soc/qcom/pmic_glink_altmode.c         |  478 ++++++
+ include/linux/soc/qcom/pmic_glink.h           |   32 +
+ 9 files changed, 2399 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+ create mode 100644 drivers/power/supply/qcom_battmgr.c
+ create mode 100644 drivers/soc/qcom/pmic_glink.c
+ create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
+ create mode 100644 include/linux/soc/qcom/pmic_glink.h
+
+-- 
+2.25.1
+
