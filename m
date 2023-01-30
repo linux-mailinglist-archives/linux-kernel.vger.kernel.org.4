@@ -2,94 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89656815B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0DD6815C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236715AbjA3P6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S236753AbjA3P7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236351AbjA3P6T (ORCPT
+        with ESMTP id S237603AbjA3P7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:58:19 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DF61287E;
-        Mon, 30 Jan 2023 07:58:17 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UFuUHN016154;
-        Mon, 30 Jan 2023 15:58:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=DzCFf31liEnJkW9Xw8x3a1M1MvPxqDhF5FHxXmHBWpE=;
- b=USFQUQk+5TxxWb0dtdgZeXTcTdPvO3qMfO7DdcTBfLEzdn8KzE5utbLmaEuCha77mpm3
- aFu7U1TJF7Taya3bWnC2PxKflHHrxamx7BuAlSA3QEQzbWRbsUMJtoJOr2epsu+ukeub
- 1rq2L6EZsxM5r0OWqHHprVEVZDs/qoUlKuuyDZDh89tBECSFprrzpGpmJXNv2cLhC1U8
- xezYoZp1LYV4npyEDKub2R1M2A33ba0TBHkYw1mC9U1o/ltIFVlVYGLno9rZeluFgDqr
- nFwBoBeR+WtuQ/zg7Kapii46tkPiPZPenSNJtOPP/eP3W9+Dp2vZhApIia1Ozjlos2g5 lg== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nebxf0gjw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 15:58:04 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30U5KK5Z012873;
-        Mon, 30 Jan 2023 15:58:02 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3ncvtyaefc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 15:58:02 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30UFvwtI16319196
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Jan 2023 15:57:58 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6BD722004B;
-        Mon, 30 Jan 2023 15:57:58 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3654920040;
-        Mon, 30 Jan 2023 15:57:57 +0000 (GMT)
-Received: from [9.171.38.212] (unknown [9.171.38.212])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 30 Jan 2023 15:57:57 +0000 (GMT)
-Message-ID: <8209c172aaa415eace9dcd4b5675ef8506a34538.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 5/7] iommu/dma: Allow a single FQ in addition to
- per-CPU FQs
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Date:   Mon, 30 Jan 2023 16:57:56 +0100
-In-Reply-To: <Y9ficPosWtGqbDit@nvidia.com>
-References: <20230124125037.3201345-1-schnelle@linux.ibm.com>
-         <20230124125037.3201345-6-schnelle@linux.ibm.com>
-         <1e016926-b965-3b71-07e1-1f63bc45f1a0@arm.com>
-         <Y9ficPosWtGqbDit@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Mon, 30 Jan 2023 10:59:35 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E218E1287E;
+        Mon, 30 Jan 2023 07:59:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675094365; x=1706630365;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=q5HsqRtPq/dIauttz5f5LztplpWajnZaxKxHyHDhqRI=;
+  b=K6IrPi6xUD9FbtVt4JLu9+YVfdhaXmjesDdCVEQGZjD0l+KffWfIYgOW
+   NNThwofmnVRF8+52s1AYAuIr5Zp1769+Sw+F5lPz7AAHMVzSTdNUfUb/H
+   WOfFiqz6h0Iu6Zn3jQJ9YENVtQmtBqltYlu/uz1uvB4kINBqt21ET8A0Q
+   NTOCE08NuodjITnQrhyBtDSKreFgufqomzfyEC4v92LWnr2lmBmOmRuBm
+   F10cOtFYxgCK762PVKz1RT//nW/6n/P02HDt/Ev1yFc3GSwpVbVWEisSb
+   b8NwAFPWfNhJ8gleTHZcobrCJwqOLQa8bnmPQN6MMBAMiNvsRpzzhWtjw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="307937868"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="307937868"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 07:59:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="788073651"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="788073651"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.33.106])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 07:59:17 -0800
+Message-ID: <2463a92b-c180-87d4-0c96-2f549a397164@intel.com>
+Date:   Mon, 30 Jan 2023 17:59:12 +0200
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 9rPIUMDXBzv6yaFTQkv6a_30SpWJWZQP
-X-Proofpoint-ORIG-GUID: 9rPIUMDXBzv6yaFTQkv6a_30SpWJWZQP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_14,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 clxscore=1015 adultscore=0
- phishscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 spamscore=1 impostorscore=0 mlxscore=1 mlxlogscore=213
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300151
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH] mmc:mmc-cqhci:support interrupt coalescing
+To:     Michael Wu <michael@allwinnertech.com>, riteshh@codeaurora.org,
+        asutoshd@codeaurora.org, ulf.hansson@linaro.org,
+        chaotian.jing@mediatek.com, matthias.bgg@gmail.com,
+        kdasu.kdev@gmail.com, alcooperx@gmail.com, f.fainelli@gmail.com,
+        haibo.chen@nxp.com, shawnguo@kernel.org, agross@kernel.org,
+        andersson@kernel.org, michal.simek@xilinx.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     bcm-kernel-feedback-list@broadcom.com, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, konrad.dybcio@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20230130064656.106793-1-michael@allwinnertech.com>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230130064656.106793-1-michael@allwinnertech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,39 +75,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-01-30 at 11:29 -0400, Jason Gunthorpe wrote:
-> On Mon, Jan 30, 2023 at 03:13:22PM +0000, Robin Murphy wrote:
->=20
-> > Either way, the more I think about this the more I'm starting to agree =
-that
-> > adding more domain types for iommu-dma policy is a step in the wrong
-> > direction. If I may, I'd like to fall back on the "or at least some def=
-inite
-> > internal flag" part of my original suggestion :)
->=20
-> Yes please, lets try to remove IOMMU_DOMAIN_DMA, not add more :)
->=20
-> At this point we should probably just sort of hackily add a ops flag
-> to indicate single queue and when we fixup the policy logic we can
-> make it a user selectable policy as well.
->=20
-> Jason
+On 30/01/23 08:46, Michael Wu wrote:
+> Support interrupt coalescing to reduce the frequency of mmc interrupts
 
-Ok yeah I did like the policy idea you brought up a while back. If we
-want to do the conversion to dma-iommu before that we do need an
-interim solution though. So if I'm reading your ops flag idea right I
-think it could even re-use much of the logic in this series and just
-not introduce a new domain type.
+There doesn't seem to be any users.  The new parameter to
+cqhci_init() is always false.  New features are not usually
+accepted without users.
 
-I'm wondering if maybe instead of plain flag bits it makes more sense
-to have a dma_iommu_options struct that contains the queue size and a
-flags value which indicates whether a single or per-CPU queue is used.
-Then I could add an iommu_ops callback that takes a device and a
-pointer to the dma_iommu_options. That way we can still set the options
-per device but don't need a whole extra domain type. This callback
-would then just be called during initialization of the DMA-FQ domain
-and not having the callback just leaves the defaults unchanged. Does
-that go in the right direction?
+There needs to be an explanation of why the change is being made.
 
-Thanks,
-Niklas
+Also there doesn't seem to be any configuration of the CQIC
+register.
+
+> 
+> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> ---
+>  drivers/mmc/host/cqhci-core.c      | 20 +++++++++++++++-----
+>  drivers/mmc/host/cqhci.h           |  5 ++++-
+>  drivers/mmc/host/mtk-sd.c          |  2 +-
+>  drivers/mmc/host/sdhci-brcmstb.c   |  2 +-
+>  drivers/mmc/host/sdhci-esdhc-imx.c |  2 +-
+>  drivers/mmc/host/sdhci-msm.c       |  2 +-
+>  drivers/mmc/host/sdhci-of-arasan.c |  2 +-
+>  drivers/mmc/host/sdhci-pci-core.c  |  2 +-
+>  drivers/mmc/host/sdhci-pci-gli.c   |  2 +-
+>  drivers/mmc/host/sdhci-tegra.c     |  2 +-
+>  drivers/mmc/host/sdhci_am654.c     |  2 +-
+>  11 files changed, 28 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
+> index b3d7d6d8d654..f9cdf9f04bfc 100644
+> --- a/drivers/mmc/host/cqhci-core.c
+> +++ b/drivers/mmc/host/cqhci-core.c
+> @@ -420,7 +420,7 @@ static void cqhci_disable(struct mmc_host *mmc)
+>  }
+>  
+>  static void cqhci_prep_task_desc(struct mmc_request *mrq,
+> -				 struct cqhci_host *cq_host, int tag)
+> +				 struct cqhci_host *cq_host, int tag, int intr)
+>  {
+>  	__le64 *task_desc = (__le64 __force *)get_desc(cq_host, tag);
+>  	u32 req_flags = mrq->data->flags;
+> @@ -428,7 +428,7 @@ static void cqhci_prep_task_desc(struct mmc_request *mrq,
+>  
+>  	desc0 = CQHCI_VALID(1) |
+>  		CQHCI_END(1) |
+> -		CQHCI_INT(1) |
+> +		CQHCI_INT(intr) |
+>  		CQHCI_ACT(0x5) |
+>  		CQHCI_FORCED_PROG(!!(req_flags & MMC_DATA_FORCED_PRG)) |
+>  		CQHCI_DATA_TAG(!!(req_flags & MMC_DATA_DAT_TAG)) |
+> @@ -621,7 +621,7 @@ static int cqhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
+>  	}
+>  
+>  	if (mrq->data) {
+> -		cqhci_prep_task_desc(mrq, cq_host, tag);
+> +		cqhci_prep_task_desc(mrq, cq_host, tag, (cq_host->intr_clsc ? 0 : 1));
+>  
+>  		err = cqhci_prep_tran_desc(mrq, cq_host, tag);
+>  		if (err) {
+> @@ -812,7 +812,7 @@ static void cqhci_finish_mrq(struct mmc_host *mmc, unsigned int tag)
+>  irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>  		      int data_error)
+>  {
+> -	u32 status;
+> +	u32 status, rval;
+>  	unsigned long tag = 0, comp_status;
+>  	struct cqhci_host *cq_host = mmc->cqe_private;
+>  
+> @@ -856,6 +856,15 @@ irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>  		spin_unlock(&cq_host->lock);
+>  	}
+>  
+> +	if (cq_host->intr_clsc) {
+> +		rval = cqhci_readl(cq_host, CQHCI_IC);
+> +		rval |= CQHCI_IC_RESET;
+> +		cqhci_writel(cq_host, rval, CQHCI_IC);
+> +		rval = cqhci_readl(cq_host, CQHCI_IC);
+> +		rval &= (~CQHCI_IC_RESET);
+> +		cqhci_writel(cq_host, rval, CQHCI_IC);
+> +	}
+> +
+>  	if (status & CQHCI_IS_TCL)
+>  		wake_up(&cq_host->wait_queue);
+>  
+> @@ -1172,11 +1181,12 @@ static unsigned int cqhci_ver_minor(struct cqhci_host *cq_host)
+>  }
+>  
+>  int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc,
+> -	      bool dma64)
+> +	      bool dma64, bool intr_clsc)
+>  {
+>  	int err;
+>  
+>  	cq_host->dma64 = dma64;
+> +	cq_host->intr_clsc = intr_clsc;
+>  	cq_host->mmc = mmc;
+>  	cq_host->mmc->cqe_private = cq_host;
+>  
+> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+> index ba9387ed90eb..acf90773c30a 100644
+> --- a/drivers/mmc/host/cqhci.h
+> +++ b/drivers/mmc/host/cqhci.h
+> @@ -227,6 +227,9 @@ struct cqhci_host {
+>  
+>  	/* 64 bit DMA */
+>  	bool dma64;
+> +
+> +	/* interrupt coalescing*/
+> +	bool intr_clsc;
+>  	int num_slots;
+>  	int qcnt;
+>  
+> @@ -312,7 +315,7 @@ struct platform_device;
+>  
+>  irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>  		      int data_error);
+> -int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc, bool dma64);
+> +int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc, bool dma64, bool intr_clsc);
+>  struct cqhci_host *cqhci_pltfm_init(struct platform_device *pdev);
+>  int cqhci_deactivate(struct mmc_host *mmc);
+>  static inline int cqhci_suspend(struct mmc_host *mmc)
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index edade0e54a0c..2c18f954d4b8 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -2796,7 +2796,7 @@ static int msdc_drv_probe(struct platform_device *pdev)
+>  		host->cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>  		host->cq_host->mmio = host->base + 0x800;
+>  		host->cq_host->ops = &msdc_cmdq_ops;
+> -		ret = cqhci_init(host->cq_host, mmc, true);
+> +		ret = cqhci_init(host->cq_host, mmc, true, false);
+>  		if (ret)
+>  			goto host_free;
+>  		mmc->max_segs = 128;
+> diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
+> index f2cf3d70db79..4aeaeddbbf25 100644
+> --- a/drivers/mmc/host/sdhci-brcmstb.c
+> +++ b/drivers/mmc/host/sdhci-brcmstb.c
+> @@ -231,7 +231,7 @@ static int sdhci_brcmstb_add_host(struct sdhci_host *host,
+>  		cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>  	}
+>  
+> -	ret = cqhci_init(cq_host, host->mmc, dma64);
+> +	ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>  	if (ret)
+>  		goto cleanup;
+>  
+> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+> index 9e73c34b6401..7aef7abe71f1 100644
+> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
+> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+> @@ -1712,7 +1712,7 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
+>  		cq_host->mmio = host->ioaddr + ESDHC_CQHCI_ADDR_OFFSET;
+>  		cq_host->ops = &esdhc_cqhci_ops;
+>  
+> -		err = cqhci_init(cq_host, host->mmc, false);
+> +		err = cqhci_init(cq_host, host->mmc, false, false);
+>  		if (err)
+>  			goto disable_ahb_clk;
+>  	}
+> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+> index 4ac8651d0b29..b6549d1e43ec 100644
+> --- a/drivers/mmc/host/sdhci-msm.c
+> +++ b/drivers/mmc/host/sdhci-msm.c
+> @@ -2153,7 +2153,7 @@ static int sdhci_msm_cqe_add_host(struct sdhci_host *host,
+>  	if (ret)
+>  		goto cleanup;
+>  
+> -	ret = cqhci_init(cq_host, host->mmc, dma64);
+> +	ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>  	if (ret) {
+>  		dev_err(&pdev->dev, "%s: CQE init: failed (%d)\n",
+>  				mmc_hostname(host->mmc), ret);
+> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+> index 89c431a34c43..811f8686532d 100644
+> --- a/drivers/mmc/host/sdhci-of-arasan.c
+> +++ b/drivers/mmc/host/sdhci-of-arasan.c
+> @@ -1610,7 +1610,7 @@ static int sdhci_arasan_add_host(struct sdhci_arasan_data *sdhci_arasan)
+>  	if (dma64)
+>  		cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>  
+> -	ret = cqhci_init(cq_host, host->mmc, dma64);
+> +	ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>  	if (ret)
+>  		goto cleanup;
+>  
+> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+> index c359f867df0a..6f6cae6355a7 100644
+> --- a/drivers/mmc/host/sdhci-pci-core.c
+> +++ b/drivers/mmc/host/sdhci-pci-core.c
+> @@ -964,7 +964,7 @@ static int glk_emmc_add_host(struct sdhci_pci_slot *slot)
+>  	if (dma64)
+>  		cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>  
+> -	ret = cqhci_init(cq_host, host->mmc, dma64);
+> +	ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>  	if (ret)
+>  		goto cleanup;
+>  
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index 633a8ee8f8c5..6917ba339aa9 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -908,7 +908,7 @@ static int gl9763e_add_host(struct sdhci_pci_slot *slot)
+>  	if (dma64)
+>  		cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>  
+> -	ret = cqhci_init(cq_host, host->mmc, dma64);
+> +	ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>  	if (ret)
+>  		goto cleanup;
+>  
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+> index bff084f178c9..f98a468e8f43 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -1620,7 +1620,7 @@ static int sdhci_tegra_add_host(struct sdhci_host *host)
+>  	if (dma64)
+>  		cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>  
+> -	ret = cqhci_init(cq_host, host->mmc, dma64);
+> +	ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>  	if (ret)
+>  		goto cleanup;
+>  
+> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+> index 7ef828942df3..8e7fbee70e16 100644
+> --- a/drivers/mmc/host/sdhci_am654.c
+> +++ b/drivers/mmc/host/sdhci_am654.c
+> @@ -568,7 +568,7 @@ static int sdhci_am654_cqe_add_host(struct sdhci_host *host)
+>  
+>  	host->mmc->caps2 |= MMC_CAP2_CQE;
+>  
+> -	return cqhci_init(cq_host, host->mmc, 1);
+> +	return cqhci_init(cq_host, host->mmc, 1, false);
+>  }
+>  
+>  static int sdhci_am654_get_otap_delay(struct sdhci_host *host,
+
