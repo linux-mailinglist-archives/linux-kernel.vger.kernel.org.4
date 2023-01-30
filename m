@@ -2,111 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDF06814A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9BD6814A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236220AbjA3PTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        id S237857AbjA3PS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238127AbjA3PSq (ORCPT
+        with ESMTP id S238121AbjA3PSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:18:46 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619193D92C;
-        Mon, 30 Jan 2023 07:18:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675091899; x=1706627899;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=92LbvsRwBB+FsQXF+k+MJ2NaG025JyCEXU4mtLMGezM=;
-  b=In+dspDEH5iRsY8r8V8JDntwbrpVenyxNDBSydO2WPOGu8RPgYTVxRLm
-   6vCYin9z6rynMkf00SiQ6eXnf7pJqIgOpZbnlc+C6p1lV+fmlZyKGGelE
-   G8K1nBj+Y2JPyZThzyo0Xd0LtDX53hsG1NxPBstbWfZeSNHNmkoLgBipj
-   98ztUZPsIM+wQ67ykMgninBPZS9AmSKI7B4yS1+4xOwfsZmCCFx3nxFUv
-   YhVbgkgAN2Pr6vUwTMR8jQC9Snx9x4Cx/WpzjDVe9wiON17ALoIu4wjIB
-   QtCfzSVBzvv/kz9sdhMisv27FxQEgjS200NGqKv8O+TJsPFtNwK1wJ8Yn
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="307233097"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="307233097"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 07:17:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="837994822"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="837994822"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 30 Jan 2023 07:17:13 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 2DECF152; Mon, 30 Jan 2023 17:17:50 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Viresh Kumar <vireshk@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v1 1/1] dmaengine: dw: Move check for paused channel to dwc_get_residue()
-Date:   Mon, 30 Jan 2023 17:17:47 +0200
-Message-Id: <20230130151747.20704-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
+        Mon, 30 Jan 2023 10:18:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2C876AC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:18:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FB62B81185
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:18:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4717C433EF;
+        Mon, 30 Jan 2023 15:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675091888;
+        bh=cetnjI2pIEvb88AtbDqKJWriBmwrANJ8A5ZPKyKWqZA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kIyCwwil78M1e388tlGTouqOIRBa3us8+y8ZgiZbYp2pTDQEezh3G+zwikJKpEL4O
+         mycxSyZ5CORESO+o/yQcn/x5dG3XFDiEYNh1tJnKnHXEOEy0cA9tCRa9jf3Gy+4046
+         rBQZ4NqJ54Epc0u8StrBzzBaP+uvmbQs1Dcb2+Bs=
+Date:   Mon, 30 Jan 2023 16:18:05 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jongwoo Han <jongwooo.han@gmail.com>
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vc04_services: mmal-vchiq: fix typo in comment
+Message-ID: <Y9ffrfjQ6ElhV3/Z@kroah.com>
+References: <20230130145400.40890-1-jongwooo.han@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130145400.40890-1-jongwooo.han@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move check for paused channel to dwc_get_residue() and rename the latter
-to dwc_get_residue_and_status().
+On Mon, Jan 30, 2023 at 11:54:00PM +0900, Jongwoo Han wrote:
+> Signed-off-by: Jongwoo Han <jongwooo.han@gmail.com>
+> ---
+>  drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This improves data integrity as residue and DMA channel status are set
-in the same function under the same conditions.
+I can not take patches without any changelog text at all, sorry.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/dma/dw/core.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/dma/dw/core.c b/drivers/dma/dw/core.c
-index 97ba3bfc10b1..5f7d690e3dba 100644
---- a/drivers/dma/dw/core.c
-+++ b/drivers/dma/dw/core.c
-@@ -889,7 +889,8 @@ static struct dw_desc *dwc_find_desc(struct dw_dma_chan *dwc, dma_cookie_t c)
- 	return NULL;
- }
- 
--static u32 dwc_get_residue(struct dw_dma_chan *dwc, dma_cookie_t cookie)
-+static u32 dwc_get_residue_and_status(struct dw_dma_chan *dwc, dma_cookie_t cookie,
-+				      enum dma_status *status)
- {
- 	struct dw_desc *desc;
- 	unsigned long flags;
-@@ -903,6 +904,8 @@ static u32 dwc_get_residue(struct dw_dma_chan *dwc, dma_cookie_t cookie)
- 			residue = desc->residue;
- 			if (test_bit(DW_DMA_IS_SOFT_LLP, &dwc->flags) && residue)
- 				residue -= dwc_get_sent(dwc);
-+			if (test_bit(DW_DMA_IS_PAUSED, &dwc->flags))
-+				*status = DMA_PAUSED;
- 		} else {
- 			residue = desc->total_len;
- 		}
-@@ -932,11 +935,7 @@ dwc_tx_status(struct dma_chan *chan,
- 	if (ret == DMA_COMPLETE)
- 		return ret;
- 
--	dma_set_residue(txstate, dwc_get_residue(dwc, cookie));
--
--	if (test_bit(DW_DMA_IS_PAUSED, &dwc->flags) && ret == DMA_IN_PROGRESS)
--		return DMA_PAUSED;
--
-+	dma_set_residue(txstate, dwc_get_residue_and_status(dwc, cookie, &ret));
- 	return ret;
- }
- 
--- 
-2.39.0
-
+greg k-h
