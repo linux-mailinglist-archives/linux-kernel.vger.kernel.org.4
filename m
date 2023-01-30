@@ -2,90 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404BD680C7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F0A680C7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbjA3LyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 06:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S235609AbjA3Lxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 06:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235835AbjA3LyB (ORCPT
+        with ESMTP id S231127AbjA3Lxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 06:54:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863FD16AE4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:53:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675079592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UorKXiYhOLzx8w7FOKgdDJJdKg4bn3M6MkxAIFes/DA=;
-        b=GmnsHWGo/RXDJ0ZwhClOOhsoZE4AJLy/HHuxfizymFEPzowtV/SHd7ruytyqHYSs6u0Qs8
-        0nCzGUe5tj6DSqteZEd0IsbjKCC/pCZ/OOkfiDVb6vt7kFvpWuNSQ9dy22hKgAXK6i2dKm
-        a7N6H9C4l5RZF7Q/aNWTDaqANRsMW8M=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-299-4WKcmglfMzaCJAAVso8RLg-1; Mon, 30 Jan 2023 06:50:01 -0500
-X-MC-Unique: 4WKcmglfMzaCJAAVso8RLg-1
-Received: by mail-pj1-f71.google.com with SMTP id c8-20020a17090a674800b0022cb9c81fb0so660060pjm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:50:01 -0800 (PST)
+        Mon, 30 Jan 2023 06:53:53 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47EC1350C;
+        Mon, 30 Jan 2023 03:53:51 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id t7so2446694wrp.5;
+        Mon, 30 Jan 2023 03:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hGloNujiL0CsgogRLovAVVyc6KEZFVadDdcOWuMAQsQ=;
+        b=DV8o93oCQ73nQnF6DKwI5AzadrxQNopoi9mYTUm8VXhAF/qN4J/4O5a5pBBbHw9+dy
+         ZtqDU02mUJOTkEW3lXS3R4n610Pein98fCIAQDcPn38n+/aaJTet9MP1WMw6Ww+6CLjl
+         5+F6klm8htSBwuIFCZuPNW8wrPHaMMr5XyxIO55Z5H/9Xdgn0JQLD7q/ME/fr/X2RCIK
+         mPYzzMe8sPJBT6nzlF/rTs46FncTH6ZMAuUjEgDxMl/Zh2q7TeWkqSU5R2ip/hnPFhMB
+         8SAFIo3GB6loDpJxArn2vu8S4eiM5GYSaLAh0+spfd730xZq+zplUPNsNfLeEnYM21aw
+         t2yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UorKXiYhOLzx8w7FOKgdDJJdKg4bn3M6MkxAIFes/DA=;
-        b=Z5UZGTaYcxbeLdtFRTOq9YnuUIkLW490LKvD25CKUJ70MCMvcr5IWKqo0jIaD2O6vS
-         CHaugurWH3BE0ZsRVl6uDkQb7avD79yaBfJcOF8Mq+U+ZTmsCQpdCveHvQI2fgjadHnL
-         hOanM26ly3Wtt/aTToSBnuBDfZsGhWKEm8n2JSKmjUe+Oh+gPpQETNDaSZyK5aNmR/3d
-         8VhrvkXIoU4h6lNy9b2xMFnlBGapoIQiKm2iBtay1w0j2/Nzz/dBrvmeevfw5RPPU9QQ
-         05a680nSdExx5Q7C7X8J9sSxWQjtPgdyWF/IjuDallsOFRnMa+wgfiCl8sHhcNij0HpY
-         PAYg==
-X-Gm-Message-State: AFqh2kr6eQqO3ifnxEGT3rYG2isMI2gvvi4qf7z072irg0KoOUN9MjfN
-        O134xd1HihDVOkyOAseEH9xMnbZcXbfRG1kC8bYhKMLtn+wOjLY5bKAdQ/9ANu9a0YhMxLIXf++
-        6wI9f0O53SZuzS3QMlgYaB5rSKBvCfgEDc5Ly9tjF
-X-Received: by 2002:aa7:910c:0:b0:58d:bb12:2da5 with SMTP id 12-20020aa7910c000000b0058dbb122da5mr6008248pfh.27.1675079400126;
-        Mon, 30 Jan 2023 03:50:00 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtALu5mFTBsxu/YnMlq0ZBLgbSfN1s0qraym/tkAVGjH1oXxeyJbSP9OuU5xYe+OFfLGyeFgGcuo2qk4atro5o=
-X-Received: by 2002:aa7:910c:0:b0:58d:bb12:2da5 with SMTP id
- 12-20020aa7910c000000b0058dbb122da5mr6008230pfh.27.1675079399855; Mon, 30 Jan
- 2023 03:49:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hGloNujiL0CsgogRLovAVVyc6KEZFVadDdcOWuMAQsQ=;
+        b=f4N3SEpF4Mcj+lF7xc9uwHbUUos5kW2fYJvXxdPMVkZFMHbxWaZrvnuw1gK3qgKHmM
+         V2/vyAntBKyu3L5saSNee6mVH8CP7pqQWQsM9SWEnXrML9BVbNPaQFya5KTH5FDAyqwP
+         n+Mwe/FXYbGVTZgkfHd7QMDkxE7H4ghtn0AcNWGPaJhWf/0KU/oN7rKs3GhnCkhV0mRG
+         d7P70Tb9zlEOwb2XD0BI6b6nsdbIieIppafHDwC4SAciKux6njudZ1n6TTDxw8OJv/Ze
+         QGWcrCLdDES1KYS2B+UN9kEUUIOj0hD+5LRSzP+L4uk8bxRlHUXRVdUliHsxp4B0eXW9
+         QasA==
+X-Gm-Message-State: AO0yUKX3QQb7GO+IT5McX7rRE4nuwhm2rlQZxxpfSQhquLv4v+d4xDSo
+        zKQATo6G9X/pAzX2pFGMpvQ=
+X-Google-Smtp-Source: AK7set99aypYxsMEBlz2WZVjweCmV/hwIdnZNU+KENU9bagNUuU2UXoj/aDRU6yeJuS1ze7BTzlhow==
+X-Received: by 2002:adf:f8cb:0:b0:2bf:b047:d4af with SMTP id f11-20020adff8cb000000b002bfb047d4afmr19424812wrq.5.1675079630213;
+        Mon, 30 Jan 2023 03:53:50 -0800 (PST)
+Received: from [192.168.2.202] (pd9ea3cac.dip0.t-ipconnect.de. [217.234.60.172])
+        by smtp.gmail.com with ESMTPSA id t27-20020adfa2db000000b002366553eca7sm11594342wra.83.2023.01.30.03.53.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 03:53:49 -0800 (PST)
+Message-ID: <4a196e8f-cbc9-7453-6e36-aad458549e25@gmail.com>
+Date:   Mon, 30 Jan 2023 12:53:48 +0100
 MIME-Version: 1.0
-References: <20230120150246.20797-1-wander@redhat.com> <20230120150246.20797-2-wander@redhat.com>
- <20230123163002.GB6268@redhat.com> <CAAq0SUk1vfNDuzGbXNftgW4wq4PC_EzMhpq4E=RBQNkOB3f4YQ@mail.gmail.com>
- <xhsmhbkmkdla4.mognet@vschneid.remote.csb>
-In-Reply-To: <xhsmhbkmkdla4.mognet@vschneid.remote.csb>
-From:   Wander Lairson Costa <wander@redhat.com>
-Date:   Mon, 30 Jan 2023 08:49:48 -0300
-Message-ID: <CAAq0SUnUH6DEjwEs2RxRCtkTU121JXpdsV_rZky1d0Bo04=fiQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] sched/task: Add the put_task_struct_atomic_safe function
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 6/9] HID: surface-hid: Constify lowlevel HID driver
+To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev
+References: <20230130-hid-const-ll-driver-v1-0-3fc282b3b1d0@weissschuh.net>
+ <20230130-hid-const-ll-driver-v1-6-3fc282b3b1d0@weissschuh.net>
+Content-Language: en-US
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20230130-hid-const-ll-driver-v1-6-3fc282b3b1d0@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,70 +92,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 12:55 PM Valentin Schneider <vschneid@redhat.com> wrote:
->
-> On 23/01/23 14:24, Wander Lairson Costa wrote:
-> > On Mon, Jan 23, 2023 at 1:30 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> >>
-> >> On 01/20, Wander Lairson Costa wrote:
-> >> >
-> >> > +static inline void put_task_struct_atomic_safe(struct task_struct *task)
-> >> > +{
-> >> > +     if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
-> >> > +             /*
-> >> > +              * Decrement the refcount explicitly to avoid unnecessarily
-> >> > +              * calling call_rcu.
-> >> > +              */
-> >> > +             if (refcount_dec_and_test(&task->usage))
-> >> > +                     /*
-> >> > +                      * under PREEMPT_RT, we can't call put_task_struct
-> >> > +                      * in atomic context because it will indirectly
-> >> > +                      * acquire sleeping locks.
-> >> > +                      */
-> >> > +                     call_rcu(&task->rcu, __delayed_put_task_struct);
-> >>                                   ^^^^^^^^^
-> >> I am not sure the usage of task->rcu is safe...
-> >>
-> >> Suppose that, before __delayed_put_task_struct() is called by RCU, this task
-> >> does the last schedule and calls put_task_struct_rcu_user().
-> >>
-> >> And, can't we simply turn put_task_struct() into something like
-> >>
-> >>         put_task_struct(struct task_struct *t)
-> >>         {
-> >>                 if (refcount_dec_and_test(&t->usage)) {
-> >>                         if (IS_ENABLED(CONFIG_PREEMPT_RT)
-> >>                             && (in_atomic() || irqs_disabled()))
-> >>                                 call_rcu(...);
-> >>                         else
-> >>                                 __put_task_struct(t);
-> >>                 }
-> >>         }
-> >>
-> >> ?
-> >
-> > Yeah, that was one approach I thought about. I chose to use an
-> > explicit function because I assumed calling __put_task_struct() from a
-> > non-preemptable context should be the exception, not the rule.
->
-> I'd tend to agree.
->
-> > Therefore (if I am correct in my assumption), it would make sense for
-> > only some call sites to pay the overhead price for it. But this is
-> > just a guess, and I have no evidence to support my claim.
->
-> My worry here is that it's easy to miss problematic callgraphs, and it's
-> potentially easy for new ones to creep in. Having a solution within
-> put_task_struct() itself would prevent that.
->
+On 1/30/23 04:59, Thomas Weißschuh wrote:
+> Since commit 52d225346904 ("HID: Make lowlevel driver structs const")
+> the lowlevel HID drivers are only exposed as const.
+> 
+> Take advantage of this to constify the underlying structure, too.
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-We could add a WARN_ON statement in put_task_struct() to detect such cases.
+Looks good to me.
 
-> Another thing, if you look at release_task_stack(), it either caches the
-> outgoing stack for later use, or frees it via RCU (regardless of
-> PREEMPT_RT). Perhaps we could follow that and just always punt the freeing
-> of the task struct to RCU?
->
+Reviewed-by: Maximilian Luz <luzmaximilian@gmail.com>
 
-That's a point. Do you mean doing that even for !PREEMPT_RT?
-
+> ---
+>   drivers/hid/surface-hid/surface_hid_core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/surface-hid/surface_hid_core.c b/drivers/hid/surface-hid/surface_hid_core.c
+> index 87637f813de2..a3e9cceddfac 100644
+> --- a/drivers/hid/surface-hid/surface_hid_core.c
+> +++ b/drivers/hid/surface-hid/surface_hid_core.c
+> @@ -174,7 +174,7 @@ static int surface_hid_raw_request(struct hid_device *hid, unsigned char reportn
+>   	return -EIO;
+>   }
+>   
+> -static struct hid_ll_driver surface_hid_ll_driver = {
+> +static const struct hid_ll_driver surface_hid_ll_driver = {
+>   	.start       = surface_hid_start,
+>   	.stop        = surface_hid_stop,
+>   	.open        = surface_hid_open,
+> 
