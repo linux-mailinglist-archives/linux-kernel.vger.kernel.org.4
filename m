@@ -2,82 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9A168059B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BE06805A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235672AbjA3F0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 00:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
+        id S235437AbjA3Fej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 00:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235630AbjA3F0j (ORCPT
+        with ESMTP id S229614AbjA3Feh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 00:26:39 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACBF24126
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:26:35 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id o1-20020a252801000000b0080b8600bdc9so11827677ybo.3
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:26:34 -0800 (PST)
+        Mon, 30 Jan 2023 00:34:37 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890E923C6F
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:34:34 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id br9so17369130lfb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:34:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=b/vIkIPl5nRj/3hPy3c/U0PXxxrhFi67btaNOzIv4hA=;
-        b=D7SxTMVpdE8OPU4Q8lhHRcsgMpDnY1lwmr2KK3l7i/bP6j+o5A3rsWdRpR2th82Tw7
-         3Na5KNK1Stogf6axURA9XxIaCe3/IFgJehhOLeBTGm9/p382ok+02Xo2ovXAwG+kGbvD
-         BmYmXY5hlLXG+XKrP7NNkk58y3fUL7ev3IABImxVQG/7/RdSHdFyuSpnpPb537H0OIPo
-         ixo6e9FQ/K1A5UG1StdJkIVOHUhcREtuoRy1Ik+eIze4N8mllpTjrSq6abcsckZ7nOZ/
-         sLroSxpo5sn2CdacRJ1G0xOA8ivhouUqU9Hqwci7GILS79bIuTqIG+D9QA2CHtpK2oXX
-         ScUA==
+        d=miraclelinux-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=h2DAn1cDWhS4hWbAX5+FKv8Yf9kS0lfsICMw7GzgTVs=;
+        b=Oa6bpA0CeS9crFBiT3tsWK1F958FAFINFWMutxHYPjSfQO41s5btefoXXLK9TT29RI
+         E6Lz/kDDEertuiGLTGrLVQKuxp9pCsqJWPbEHo46Zs701fVNPtYKAseKbM7Y/Xjd5kut
+         zsmZ1ynbiLhqerrBIIpkrPXpUVSELucFhKgl7/fI1NBPLdzi5KB4x/SoAn3QOQAa5ykE
+         VRmz9xmlNWZHl2SKLVyH9osfMBXdHrU+ZEpeYNp19P+tgR6pclqZOWGTApyQ04OwQ4W5
+         wCzCzdHj9hnQjq6QBQj/quyeSAQhvid7JPG9cUvT2tr+rRzkQ5BNBSCBcSxV+hjM1cr2
+         nBjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b/vIkIPl5nRj/3hPy3c/U0PXxxrhFi67btaNOzIv4hA=;
-        b=2RoaI2Kv70/UAVrQR3H1BOBRXy7yudJTDT7gquCDCt3Z1XXHi6uKvzBU4iPubr4W71
-         VR4JMnjWTD4LizdfteSsDBITCc+P+kxIYzr8/6TrlNfGcrkVVzel3/E/QMw1Sm786n7s
-         OfaYYuewokSSumEiwlqaDHu7vt7jCMlb0pFz1JApgjC3PBohIATD/metDFjcbJSUIDzy
-         UeXpeJY70K4NTT8aUtPL+jQY4JvUHS2H8YB4Da+PgvCuHCQvzBEVozzZ5x4O7mPvYg85
-         pRd5qAfuqt7oeXil5xQKvoZn4hNGZ5gpjsXS76JIsMPkjvCwmdIoXVDCKHeULyP+hgiL
-         7xpQ==
-X-Gm-Message-State: AO0yUKVACLZHvmfcN/22PbWT4Jk8+DgJ1AzrfZ54r/beTRZtXBwhKwm1
-        KHU54KL2N9zzAF5l/BQrU8Vtadczc+3qnFsrCg==
-X-Google-Smtp-Source: AK7set+JlXdd4+lvDMPsWLbQWxCgCdL1TWQEwkw9Zl36rvKxocVcw2BCVuEm0lbxbrZEdORCPWSOnhc/TSAGSF3Dag==
-X-Received: from ackerleytng-cloudtop-sg.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:b30])
- (user=ackerleytng job=sendgmr) by 2002:a81:77d6:0:b0:506:348b:88a2 with SMTP
- id s205-20020a8177d6000000b00506348b88a2mr3119463ywc.400.1675056394197; Sun,
- 29 Jan 2023 21:26:34 -0800 (PST)
-Date:   Mon, 30 Jan 2023 05:26:29 +0000
-In-Reply-To: <20221202061347.1070246-2-chao.p.peng@linux.intel.com> (message
- from Chao Peng on Fri,  2 Dec 2022 14:13:39 +0800)
-Mime-Version: 1.0
-Message-ID: <diqzzga0fv96.fsf@ackerleytng-cloudtop-sg.c.googlers.com>
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        pbonzini@redhat.com, corbet@lwn.net, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
-        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        vannapurve@google.com, yu.c.zhang@linux.intel.com,
-        chao.p.peng@linux.intel.com, kirill.shutemov@linux.intel.com,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com, qperret@google.com,
-        tabba@google.com, michael.roth@amd.com, mhocko@suse.com,
-        wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h2DAn1cDWhS4hWbAX5+FKv8Yf9kS0lfsICMw7GzgTVs=;
+        b=3zIuVQ49UsB87FGeVvnHSE7D+rpjK8e6GO91O8++Z4xNIk/+ntm06eVZKWTz9MQcCW
+         ZyK+7W/sNOiZY0mcZnOrMkMxw/MluAetrMCqBM4Tg58g7VK+0vIE9nBJlsOtk+ykg2o1
+         O586izH3m62yANsVLQCOBGjsTPPp9wdYUBYrWmKGr9kMlNKZ71G7kBKFL01Ma5ElkfkQ
+         bdkMdVQMYuwe6+LMkUPiCUOJLdDJ9hqhcQlgG0xu5luZZ9SgNaqizPOaJeHcts0ktRgC
+         UsSR8sFCbszcynotMQkmFvvVOAMWyM8jL2LwXJotOkVDGmRxA7ASnspW1qkkhRV1Mbup
+         ty7Q==
+X-Gm-Message-State: AFqh2kosfXvmZBAakEYXe8goeCFSY59U3ZBXvHx8Qcp3Fab4JXxDMUH4
+        4mZ9DoOsNPXBEoy3sHiSCFzlISk1ZZJ6HIbwxHz46HngD4sMN64=
+X-Google-Smtp-Source: AMrXdXtEdkOYXuOyxZRMxkgDYx46tbObgIxk9ho161qExqZpoelxez3nzvioAqUeoze5GshAQlI6B+HtJBfXHmf0UWo=
+X-Received: by 2002:a19:ae14:0:b0:4cc:8589:595b with SMTP id
+ f20-20020a19ae14000000b004cc8589595bmr6144264lfc.0.1675056872897; Sun, 29 Jan
+ 2023 21:34:32 -0800 (PST)
+MIME-Version: 1.0
+References: <20230119174036.64046-1-wedsonaf@gmail.com> <20230119174036.64046-3-wedsonaf@gmail.com>
+In-Reply-To: <20230119174036.64046-3-wedsonaf@gmail.com>
+From:   Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>
+Date:   Mon, 30 Jan 2023 14:33:47 +0900
+Message-ID: <CANgtXuPjovOGH7yeM28uRXOUX04KSTrzthqG_s+-77CBVdCCuw@mail.gmail.com>
+Subject: Re: [PATCH 3/5] rust: types: implement `ForeignOwnable` for `Box<T>`
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,66 +69,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 20, 2023 at 2:41 AM Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+>
+> This allows us to hand ownership of Rust dynamically allocated
+> objects to the C side of the kernel.
+>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> ---
 
-> +static int restrictedmem_getattr(struct user_namespace *mnt_userns,
-> +				 const struct path *path, struct kstat *stat,
-> +				 u32 request_mask, unsigned int query_flags)
-> +{
-> +	struct inode *inode = d_inode(path->dentry);
-> +	struct restrictedmem_data *data = inode->i_mapping->private_data;
-> +	struct file *memfd = data->memfd;
-> +
-> +	return memfd->f_inode->i_op->getattr(mnt_userns, path, stat,
-> +					     request_mask, query_flags);
+Reviewed-by: Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>
 
-Instead of calling shmem's getattr() with path, we should be using the
-the memfd's path.
-
-Otherwise, shmem's getattr() will use restrictedmem's inode instead of
-shmem's inode. The private fields will be of the wrong type, and the
-host will crash when shmem_is_huge() does SHMEM_SB(inode->i_sb)->huge),
-since inode->i_sb->s_fs_info is NULL for the restrictedmem's superblock.
-
-Here's the patch:
-
-diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-index 37191cd9eed1..06b72d593bd8 100644
---- a/mm/restrictedmem.c
-+++ b/mm/restrictedmem.c
-@@ -84,7 +84,7 @@ static int restrictedmem_getattr(struct user_namespace  
-*mnt_userns,
-  	struct restrictedmem *rm = inode->i_mapping->private_data;
-  	struct file *memfd = rm->memfd;
-
--	return memfd->f_inode->i_op->getattr(mnt_userns, path, stat,
-+	return memfd->f_inode->i_op->getattr(mnt_userns, &memfd->f_path, stat,
-  					     request_mask, query_flags);
-  }
-
-> +}
-> +
-> +static int restrictedmem_setattr(struct user_namespace *mnt_userns,
-> +				 struct dentry *dentry, struct iattr *attr)
-> +{
-> +	struct inode *inode = d_inode(dentry);
-> +	struct restrictedmem_data *data = inode->i_mapping->private_data;
-> +	struct file *memfd = data->memfd;
-> +	int ret;
-> +
-> +	if (attr->ia_valid & ATTR_SIZE) {
-> +		if (memfd->f_inode->i_size)
-> +			return -EPERM;
-> +
-> +		if (!PAGE_ALIGNED(attr->ia_size))
-> +			return -EINVAL;
-> +	}
-> +
-> +	ret = memfd->f_inode->i_op->setattr(mnt_userns,
-> +					    file_dentry(memfd), attr);
-> +	return ret;
-> +}
-> +
-> +static const struct inode_operations restrictedmem_iops = {
-> +	.getattr = restrictedmem_getattr,
-> +	.setattr = restrictedmem_setattr,
-> +};
+-- 
+======================================
+Cybertrust Japan Co.,Ltd.
+Alice Ferrazzi
+alice.ferrazzi@miraclelinux.com
+======================================
