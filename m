@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B503B680709
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 09:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB2A6806D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 09:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235958AbjA3IJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 03:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S235183AbjA3ID5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 03:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235919AbjA3IIa (ORCPT
+        with ESMTP id S230024AbjA3IDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 03:08:30 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4842B29C;
-        Mon, 30 Jan 2023 00:07:43 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 5065024E1ED;
-        Mon, 30 Jan 2023 16:07:36 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 30 Jan
- 2023 16:07:36 +0800
-Received: from [192.168.125.128] (183.27.97.127) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 30 Jan
- 2023 16:07:35 +0800
-Message-ID: <5a34660f-63b3-e6c8-c25c-6bd74b6dd99d@starfivetech.com>
-Date:   Mon, 30 Jan 2023 16:03:28 +0800
+        Mon, 30 Jan 2023 03:03:55 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE2312F3B;
+        Mon, 30 Jan 2023 00:03:54 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U7CEnm019701;
+        Mon, 30 Jan 2023 08:03:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=wUEmNGtY5YBXH0Iwf0vKCRpxgYtWM4Y6TFuANozd8as=;
+ b=CvG7swZbFO20g1stkWC7haQXLYZKqLNbC+RhEPkm6LaeeB3GCkj7a1YlFM6a+4celj+m
+ FvEvkHHwlSiUMoJ30v5hirICE0I0/h5xVb3WI32rOdYCpxNWC2wauruWzDUqyBYhkpM4
+ HWT0fg4MtIdM/kP0dTFgZMeg8AiXZIVJMfjOssbkO2sIkd8nEn5TxOW3p+7s0Zf9Lulu
+ kFqyCIjBHu2a0WHR1dggpsDup0Lg2A8nt1+CCAgUHmF+/3nDaKEbuTAoctiiSSH2m1u9
+ /jdCUikGxlFeK/2X/yJ8s/XUcxTBU4Ivb4HkzF3ZUxMKowXr7SdZklx64mKH0dvxUaLO lA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncvfpax72-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 08:03:49 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30U83mjQ018349
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 08:03:48 GMT
+Received: from [10.216.24.235] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
+ 2023 00:03:45 -0800
+Message-ID: <d9708f4b-e533-e400-acbf-3d8e816f242e@quicinc.com>
+Date:   Mon, 30 Jan 2023 13:33:42 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v1 04/11] dt-bindings: clock: Add StarFive JH7110
- Image-Signal-Process clock and reset generator
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH] remoteproc: sysfs: fix race while updating recovery flag
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>
-CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230120024445.244345-1-xingyu.wu@starfivetech.com>
- <20230120024445.244345-5-xingyu.wu@starfivetech.com>
- <f85f5283-98b2-46b1-5a91-64ae708a6353@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <f85f5283-98b2-46b1-5a91-64ae708a6353@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        <andersson@kernel.org>, <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20230129225106.10606-1-quic_satyap@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230129225106.10606-1-quic_satyap@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.127]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PFfgtZ5PI_aMMULWC5h9AeWpLcjoPgCJ
+X-Proofpoint-ORIG-GUID: PFfgtZ5PI_aMMULWC5h9AeWpLcjoPgCJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_06,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=921 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300075
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,164 +79,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/20 16:12, Krzysztof Kozlowski wrote:
-> On 20/01/2023 03:44, Xingyu Wu wrote:
->> Add bindings for the Image-Signal-Process clock and reset
->> generator (ISPCRG) on the JH7110 RISC-V SoC by StarFive Ltd.
->> 
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> ---
->>  .../clock/starfive,jh7110-ispcrg.yaml         | 97 +++++++++++++++++++
->>  .../dt-bindings/clock/starfive,jh7110-crg.h   | 18 ++++
->>  .../dt-bindings/reset/starfive,jh7110-crg.h   | 16 +++
->>  3 files changed, 131 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-ispcrg.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-ispcrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-ispcrg.yaml
->> new file mode 100644
->> index 000000000000..32794f809364
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-ispcrg.yaml
->> @@ -0,0 +1,97 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/starfive,jh7110-ispcrg.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: StarFive JH7110 Image-Signal-Process Clock and Reset Generator
->> +
->> +maintainers:
->> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: starfive,jh7110-ispcrg
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: ISP Top core
->> +      - description: ISP Top Axi
->> +      - description: NOC ISP Bus
->> +      - description: external DVP
->> +
->> +  clock-names:
->> +    items:
->> +      - const: isp_top_core
->> +      - const: isp_top_axi
->> +      - const: noc_bus_isp_axi
->> +      - const: dvp_clk
->> +
->> +  resets:
->> +    items:
->> +      - description: ISP Top core
->> +      - description: ISP Top Axi
->> +      - description: NOC ISP Bus
->> +
->> +  reset-names:
->> +    items:
->> +      - const: isp_top_core
->> +      - const: isp_top_axi
->> +      - const: noc_bus_isp_axi
->> +
->> +  '#clock-cells':
->> +    const: 1
->> +    description:
->> +      See <dt-bindings/clock/starfive,jh7110-crg.h> for valid indices.
->> +
->> +  '#reset-cells':
->> +    const: 1
->> +    description:
->> +      See <dt-bindings/reset/starfive,jh7110-crg.h> for valid indices.
->> +
->> +  power-domains:
->> +    maxItems: 1
->> +    description:
->> +      ISP domain power
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - clocks
->> +  - clock-names
->> +  - resets
->> +  - reset-names
->> +  - '#clock-cells'
->> +  - '#reset-cells'
->> +  - power-domains
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/starfive,jh7110-crg.h>
->> +    #include <dt-bindings/power/starfive,jh7110-pmu.h>
->> +    #include <dt-bindings/reset/starfive,jh7110-crg.h>
->> +
->> +    ispcrg: clock-controller@19810000 {
->> +        compatible = "starfive,jh7110-ispcrg";
->> +        reg = <0x19810000 0x10000>;
->> +        clocks = <&syscrg JH7110_SYSCLK_ISP_TOP_CORE>,
->> +                 <&syscrg JH7110_SYSCLK_ISP_TOP_AXI>,
->> +                 <&syscrg JH7110_SYSCLK_NOC_BUS_ISP_AXI>,
->> +                 <&dvp_clk>;
->> +        clock-names = "isp_top_core", "isp_top_axi",
->> +                      "noc_bus_isp_axi", "dvp_clk";
->> +        resets = <&syscrg JH7110_SYSRST_ISP_TOP>,
->> +                 <&syscrg JH7110_SYSRST_ISP_TOP_AXI>,
->> +                 <&syscrg JH7110_SYSRST_NOC_BUS_ISP_AXI>;
->> +        reset-names = "isp_top_core",
->> +                      "isp_top_axi",
->> +                      "noc_bus_isp_axi";
->> +        #clock-cells = <1>;
->> +        #reset-cells = <1>;
->> +        power-domains = <&pwrc JH7110_PD_ISP>;
->> +    };
->> diff --git a/include/dt-bindings/clock/starfive,jh7110-crg.h b/include/dt-bindings/clock/starfive,jh7110-crg.h
->> index 5ac8a4d90a7a..91ee589809c3 100644
->> --- a/include/dt-bindings/clock/starfive,jh7110-crg.h
->> +++ b/include/dt-bindings/clock/starfive,jh7110-crg.h
->> @@ -256,4 +256,22 @@
->>  
->>  #define JH7110_STGCLK_END			29
->>  
->> +/* ISPCRG clocks */
->> +#define JH7110_ISPCLK_DOM4_APB_FUNC		0
->> +#define JH7110_ISPCLK_MIPI_RX0_PXL		1
->> +#define JH7110_ISPCLK_DVP_INV			2
->> +#define JH7110_ISPCLK_M31DPHY_CFGCLK_IN		3
->> +#define JH7110_ISPCLK_M31DPHY_REFCLK_IN		4
->> +#define JH7110_ISPCLK_M31DPHY_TXCLKESC_LAN0	5
->> +#define JH7110_ISPCLK_VIN_PCLK			6
->> +#define JH7110_ISPCLK_VIN_SYS_CLK		7
->> +#define JH7110_ISPCLK_VIN_PIXEL_CLK_IF0		8
->> +#define JH7110_ISPCLK_VIN_PIXEL_CLK_IF1		9
->> +#define JH7110_ISPCLK_VIN_PIXEL_CLK_IF2		10
->> +#define JH7110_ISPCLK_VIN_PIXEL_CLK_IF3		11
->> +#define JH7110_ISPCLK_VIN_CLK_P_AXIWR		12
->> +#define JH7110_ISPCLK_ISPV2_TOP_WRAPPER_CLK_C	13
->> +
->> +#define JH7110_ISPCLK_END			14
->> +
->>  #endif /* __DT_BINDINGS_CLOCK_STARFIVE_JH7110_CRG_H__ */
->> diff --git a/include/dt-bindings/reset/starfive,jh7110-crg.h b/include/dt-bindings/reset/starfive,jh7110-crg.h
->> index cb70a1759482..1b40df62cdac 100644
->> --- a/include/dt-bindings/reset/starfive,jh7110-crg.h
->> +++ b/include/dt-bindings/reset/starfive,jh7110-crg.h
->> @@ -179,4 +179,20 @@
->>  
->>  #define JH7110_STGRST_END			23
->>  
->> +/* ISPCRG resets */
->> +#define	JH7110_ISPRST_ISPV2_TOP_WRAPPER_P	0
+
+On 1/30/2023 4:21 AM, Satya Durga Srinivasu Prabhala wrote:
+> When multiple clients try to update the recovery flag, it is
+
+Multiple user-space clients ?
+
+> possible that, race condition would lead to undesired results
+> as updates to recovery flag isn't protected by any mechanism
+> today. To avoid such issues, take remoteproc mutex lock before
+> updating recovery flag and release the lock once done.
+
+But your patch also adds locks for the case which does not update 
+recovery flag..
+
 > 
-> Drop weird indentation.
+> Signed-off-by: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
+> ---
+>   drivers/remoteproc/remoteproc_sysfs.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+> index 8c7ea8922638..ec37176e1589 100644
+> --- a/drivers/remoteproc/remoteproc_sysfs.c
+> +++ b/drivers/remoteproc/remoteproc_sysfs.c
+> @@ -48,16 +48,21 @@ static ssize_t recovery_store(struct device *dev,
+>   {
+>   	struct rproc *rproc = to_rproc(dev);
+>   
+> +	mutex_lock(&rproc->lock);
+>   	if (sysfs_streq(buf, "enabled")) {
+>   		/* change the flag and begin the recovery process if needed */
+>   		rproc->recovery_disabled = false;
+> +		mutex_unlock(&rproc->lock);
+>   		rproc_trigger_recovery(rproc);
+>   	} else if (sysfs_streq(buf, "disabled")) {
+>   		rproc->recovery_disabled = true;
+> +		mutex_unlock(&rproc->lock);
+>   	} else if (sysfs_streq(buf, "recover")) {
+>   		/* begin the recovery process without changing the flag */
+> +		mutex_unlock(&rproc->lock);
 
-Will fix.
+is it really needed for this case?
 
-Best regards,
-Xingyu Wu
+>   		rproc_trigger_recovery(rproc);
+>   	} else {
+> +		mutex_unlock(&rproc->lock);
 
+same here..
+
+>   		return -EINVAL;
+>   	}
+>   
+
+Do you also need to add lock for rproc_recovery_write in 
+drivers/remoteproc/remoteproc_debugfs.c ?
+
+-Mukesh
