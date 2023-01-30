@@ -2,71 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4014F681D70
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF86A681D69
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjA3Vxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
+        id S231513AbjA3Vxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjA3Vxp (ORCPT
+        with ESMTP id S230015AbjA3Vx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:53:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078E83586
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:52:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675115573;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jWqwrq0XlGsW8ySWeVmnvrSlFmLC23Ffi26+Gl59DIw=;
-        b=Ti+EOIJ5mWV1IW3uqyzx56JUKfxHY6ByitsiFUHFKBFv9J1Ziyu80En3qkdjYchlMQr9bh
-        6VAcO3pz2zL5UEO3gyxqtGOjEqtc1WltN74tI1koufxDjgHBoSyrepSrW0zQ1FLda76MQ1
-        AxBpz3tmYOwmnnlWireU1jmHztXr7tA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-627-cfv8DK96NrqRPAR1dYLiXQ-1; Mon, 30 Jan 2023 16:52:46 -0500
-X-MC-Unique: cfv8DK96NrqRPAR1dYLiXQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 85CFB800DA6;
-        Mon, 30 Jan 2023 21:52:43 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BD77E140EBF5;
-        Mon, 30 Jan 2023 21:52:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
-References: <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk> <3351099.1675077249@warthog.procyon.org.uk>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3519100.1675115561.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 30 Jan 2023 21:52:41 +0000
-Message-ID: <3519101.1675115561@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        Mon, 30 Jan 2023 16:53:28 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262F61815B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:53:27 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 6BCE03200907;
+        Mon, 30 Jan 2023 16:53:26 -0500 (EST)
+Received: from imap46 ([10.202.2.96])
+  by compute3.internal (MEProxy); Mon, 30 Jan 2023 16:53:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verbum.org; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675115605; x=1675202005; bh=1XKg+Z/4M4
+        CsxP/X7lFM7Hqn1f3t0iIehbPq7o2x3Zo=; b=kkik7kSPQ65Xu+d/xlKBOriwUE
+        1Refz3a9hxyy51tVmduHKS1uVWq6cXa2N4AqSkbX6WUbxLJsH2/jA5e0TKeKMIOf
+        5n1XM/Sabfp2uHCjXC9+DnfXAoyprvPvMYlbsBLCf4tmMZ8+6SRDY3AgKw2A7d0i
+        NeZMbOxhaeTo1n/taOoVY4UY6m/rm7ZO9tcQgan7H33z20YtuOUNmumP31GeNFrU
+        eGc/erCZWgITH1yYAhpJyLQUdwXkPIUkEXczjG9sY5jzo5z+e6xSlJvSJaDVH0tf
+        NxouTWsV0KBUjzW2KygY6cmGvYMu8tm5+f+LpyTmLl1dY0WJcTgFgcGjCZTw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675115605; x=1675202005; bh=1XKg+Z/4M4CsxP/X7lFM7Hqn1f3t
+        0iIehbPq7o2x3Zo=; b=hhmTVTEko0Scvzb0ksrF7+MUAh08So+TA6/B6UoJ0DTM
+        V6enfm7I6CMEdGu/eE4XCR9TQav7Tq122SS8L/bh6Qg3JcvKWwnVrdiNssWGZucy
+        OaumP/dCfa8cLPQT/XTvUU8RB6aP+Syaa7OpuvJ2zImfVpkm/7sEyRnv4jeMnRel
+        V0opqIVQrt4Hbqd+xQlD9+P+W1dSaXp1F4DRg2eOfuXpouUv6g4IM1MPP5vmZP1k
+        gXOfeM+i7GhsELF6VByObNXti5/D0NOgcA5lWolHi4dsLrhmhZUm3nf3uxSZeSST
+        8yvKvQTn8pHryAzJf3jI30x8gGGjYJf/s7gniXbv3Q==
+X-ME-Sender: <xms:VTzYY1iLvD0xSoU7kbhul1WPKoSPBPOCVZzv99E4YcMq6eZSvbwTGA>
+    <xme:VTzYY6CAjrsAsbwJNxKd1TWIQeECmJQwGrYcFwE3YUI3RUmASK4dsUTtmtoObiNfo
+    8KT_SjbLd8sQAiZ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddgudehiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdev
+    ohhlihhnucghrghlthgvrhhsfdcuoeifrghlthgvrhhssehvvghrsghumhdrohhrgheqne
+    cuggftrfgrthhtvghrnhepleejueevieffuedvfefhkefgueffjefguefhkedtuedvffdv
+    geevvdegteelleefnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvg
+    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeifrghlthgvrhhssehvvghr
+    sghumhdrohhrgh
+X-ME-Proxy: <xmx:VTzYY1HcHC6NDxg_UIHCP2YVEUT3BzxhSPS4IK_XbnYaQdxLibHFnw>
+    <xmx:VTzYY6QAyi0FBJSvJoqCWBUF0-t8mG5_JKwih4R8hwu-WvKpRyGqiA>
+    <xmx:VTzYYyxiCQf_w7ZqnOnaLGpa0TKDqG6ffRixL4DTrs1bNgGIRTNcgg>
+    <xmx:VTzYYxl7b1ufLnpdMjCEX6vKpc4CtU4ZiGCKHOm3CtJG0FKLAcTlwA>
+Feedback-ID: ibe7c40e9:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 61EF52A20085; Mon, 30 Jan 2023 16:53:25 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-106-gfe3ab13a96-fm-20230124.001-gfe3ab13a
+Mime-Version: 1.0
+Message-Id: <1557ec53-2d9b-4f5d-b144-01ed0dd3c7a6@app.fastmail.com>
+In-Reply-To: <20230130100602.elyvs6oorfzukjwh@wittgenstein>
+References: <20230120102512.3195094-1-gscrivan@redhat.com>
+ <20230124015348.6rvic5g6ymsfvj4e@senku> <87h6wgcrv6.fsf@redhat.com>
+ <20230125152847.wr443tggzb3no6mg@senku> <871qnibmqa.fsf@redhat.com>
+ <ceac106b-ddac-4ee6-bfdf-1505cc699eaa@app.fastmail.com>
+ <20230129165812.sqypj6nzam7o33lf@wittgenstein>
+ <e637b476-6cc4-4d7f-bab2-4f623617a8ee@app.fastmail.com>
+ <20230130095324.p2gnsvdnpgfehgqt@wittgenstein>
+ <20230130100602.elyvs6oorfzukjwh@wittgenstein>
+Date:   Mon, 30 Jan 2023 16:52:55 -0500
+From:   "Colin Walters" <walters@verbum.org>
+To:     "Christian Brauner" <brauner@kernel.org>
+Cc:     "Giuseppe Scrivano" <gscrivan@redhat.com>,
+        "Aleksa Sarai" <cyphar@cyphar.com>, linux-kernel@vger.kernel.org,
+        "Kees Cook" <keescook@chromium.org>, bristot@redhat.com,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Al Viro" <viro@zeniv.linux.org.uk>,
+        "Alexander Larsson" <alexl@redhat.com>,
+        "Peter Zijlstra" <peterz@infradead.org>, bmasney@redhat.com
+Subject: Re: [PATCH v3 1/2] exec: add PR_HIDE_SELF_EXE prctl
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +96,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jens Axboe <axboe@kernel.dk> wrote:
 
-> > Hi Jens,
-> > =
 
-> > Could you consider pulling this patchset into the block tree?  I think=
- that
-> > Al's fears wrt to pinned pages being removed from page tables causing =
-deadlock
-> > have been answered.  Granted, there is still the issue of how to handl=
-e
-> > vmsplice and a bunch of other places to fix, not least skbuff handling=
-.
-> > =
+On Mon, Jan 30, 2023, at 5:06 AM, Christian Brauner wrote:
 
-> > I also have patches to fix cifs in a separate branch that I would also=
- like to
-> > push in this merge window - and that requires the first two patches fr=
-om this
-> > series also, so would it be possible for you to merge at least those t=
-wo
-> > rather than manually applying them?
-> =
+> The good thing is that - even if it will take a longer - that Aleksa's
+> patchset will provide a more general solution by making it possible for
+> runc/crun/lxc to open the target binary with a restricted upgrade mask
+> making it impossible to open the binary read-write again. This won't
+> break criu and will fix this issue and is generally useful.
 
-> I've pulled this into a separate branch, but based on the block branch,
-> for-6.3/iov-extract. It's added to for-next as well.
+Had to go back up thread more carefully; looking at the referenced commits now in
+https://github.com/cyphar/linux/commits/magiclink/open_how-reopen
+I do agree that that direction is the most elegant.  The main downside I can think of is the potential blast radius is larger, and more nontrivial code.  
 
-Many thanks!
+But...in practice I guess today for the runc/crun type attacks today there are commonly multiple mitigations (e.g. read-only rootfs, multiple LSMs, and finally the memfd copy fallback) so we can probably wait for that patchset to land.
 
-David
+In short: agreed!
+
 
