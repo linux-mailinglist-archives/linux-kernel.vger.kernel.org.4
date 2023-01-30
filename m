@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBB0681CF5
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0BD681CF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjA3VkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjA3VkP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230399AbjA3VkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 30 Jan 2023 16:40:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229963AbjA3VkO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 30 Jan 2023 16:40:14 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09D11BDD
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:40:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81B01BDD
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:40:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675114814; x=1706650814;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=po+hm6syr+s5qGUoV/Tr6ngou/rZmwoyEYw4cRv2gog=;
-  b=f4VMYbalw4yCh+QGTAgtRH4+GPZQXJUyAe+g+YDc5dbGDxRLymiOZ+Ox
-   axu7SWgvLz4/VJ2SAvuBRSZtp+Yw+Kks1lLIgnwYnUn7Izw+1I86TI2Qo
-   2NTZHq9XvxrumvNq6JRx4h1zuM86D8WcV+E0i1pU56XmH5R41nqpeuZAP
-   Z2SGreJdpcKzZgy0WaSK9w/ZzM6ZRtZIiTcV/ZVxAcglv/hhNNy3+TBnH
-   PYbv/3nCuIozUKudmgTtkMWYQO/5FqKDAD04lYMF/vX9xhAylbI9kM6RZ
-   4pVtsdNCLR5iYlQulx6R17s3FearJXuRKvmEYVQdBLqWjua8wqvV5JuJt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="328955467"
+  t=1675114813; x=1706650813;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=TFZOhQupMCyhWl530Dlvg8nqRMsH2GVlEz63WCWbwRI=;
+  b=SX+jIj1QJrEkquhHr4DStUzH1VPzQ8DjADtvPk64+b3tKGBstOKXr5TI
+   ScoLb3mqoJNHYkVB/JCl493x3GY9JjK2MmO54cXe4RvY2w24c3z8jC7JF
+   INS1yO1GjmmctFQntOJdkfKAGmUhQOlXQ1vrlZgEOoNx2LsS+4SMdV+3n
+   Z/+k3DWuheSfQj/c/eW7IyFvsZHNexxEuf/+2jzvMgwGHQvQVWtKc2a6z
+   a3E8XDRKWvAN5+VCy9NKIl9QMS2R8VRn/u6I+HVWxDjQNOKvzXfmcHxkE
+   JawMsHOU5RjS14qJZ6cLCxARzDwhFQsL7Y3ApIHgNtLY7RgwXmOEXVzvY
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="328955479"
 X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="328955467"
+   d="scan'208";a="328955479"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 13:40:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="696571853"
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="696571856"
 X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="696571853"
+   d="scan'208";a="696571856"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 13:40:12 -0800
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -59,10 +59,12 @@ Cc:     Ashok Raj <ashok.raj@intel.com>,
         Andrew Cooper <Andrew.Cooper3@citrix.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Martin Pohlack <mpohlack@amazon.de>
-Subject: [Patch v3 Part2 0/9] x86/microcode: Declare microcode safe for late loading
-Date:   Mon, 30 Jan 2023 13:39:46 -0800
-Message-Id: <20230130213955.6046-1-ashok.raj@intel.com>
+Subject: [Patch v3 Part2 1/9] x86/microcode: Taint kernel only if microcode loading was successful
+Date:   Mon, 30 Jan 2023 13:39:47 -0800
+Message-Id: <20230130213955.6046-2-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230130213955.6046-1-ashok.raj@intel.com>
+References: <20230130213955.6046-1-ashok.raj@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,112 +77,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boris,
+Currently when late loading is aborted due to check_online_cpu(), kernel
+still ends up tainting the kernel.
 
-Here is v3 of part2. v1 Part2 is here[1]
-These address feedback from Thomas here [2] posted as "Part2 v2[cleanup]"
+Taint only when microcode loading was successful.
 
-Thanks Thomas for the feedback, and Tony for fixes to my commit logs adding
-more clarity!
-
-This series  should apply on top of tip/x86/microcode.
-
-Please help with review and apply.
-
-Patch 1-4:
-	Cleanup patches that were in response to comments from
-	Thomas[2].
-
-Patch 5: Preparatory patch to keep warning and taint in same function.
-Patch 6: Add minimum revision ID for Intel microcode
-Patch 7: Add a generic mechanism to declare safe late loading.
-Patch 8: Drop the unneeded wbinvd() after the minimum rev update
-Patch 9: Optional - Allows testing with override minrev.
-
-Tests Done:
-
-1. For values other than 1 to reload file, will not report an error.
-   For e.g. 
-
-   echo 2 > reload
-   bash: echo: write error: Invalid argument
-
-2. In cases where there is no file OR no new update found, echo 1 will not
-   report an error
-
-   echo 1 > reload
-
-3. When trying to load a file with minrev=0, there will be a log in dmesg
-   and will also return -EINVAL in response to the write to "reload".
-
-[105682.501898] microcode: Late loading denied: Microcode header does not specify a required min version
-
-root@araj-ucode:/sys/devices/system/cpu/microcode# cat /proc/sys/kernel/tainted
-0
-
-4. Offline a primary CPU and attempt to load, must not taint the kernel.
-
-# echo 0 > cpu2/online
-
-[  378.725868] smpboot: CPU 2 is now offline
-
-#echo 1 > /sys/devices/system/cpu/microcode/reload
-
-[  388.024968] microcode: Not all CPUs online, aborting microcode update.
-
-#cat /proc/sys/kernel/tainted
-0
-# echo 1 cpu2/online
-
-[  398.664452] smpboot: Booting Node 0 Processor 2 APIC 0x4
-
-5. When using the optional patch 9 to override minrev, kernel will be
-   tainted.
-
-root@araj-ucode:/sys/devices/system/cpu/microcode# cat /proc/sys/kernel/tainted
-0
-   echo Y > /sys/kernel/debug/microcode/override_minrev
-   echo 1 > /sys/devices/system/cpu/microcode/reload
-
-[  491.489986] microcode: Bypassing minrev enforcement via debugfs
-[  491.649550] microcode: updated to revision 0x2b000070, date = 2022-08-22
-[  493.595267] microcode: Reload succeeded, microcode revision: 0x2b000041 -> 0x2b000070
-[  493.595360] microcode: Microcode late loading tainted the kernel
-
-root@araj-ucode:/sys/devices/system/cpu/microcode# cat /proc/sys/kernel/tainted
-4
-
-[1] https://lore.kernel.org/lkml/20230113172920.113612-1-ashok.raj@intel.com/
-[2] https://lore.kernel.org/lkml/87y1pygiyf.ffs@tglx/
-
-Cheers,
-Ashok
-
-Ashok Raj (9):
-  x86/microcode: Taint kernel only if microcode loading was successful
-  x86/microcode: Report invalid writes to reload sysfs file
-  x86/microcode/intel: Fix collect_cpu_info() to reflect current
-    microcode
-  x86/microcode: Do not call apply_microcode() on sibling threads
-  x86/microcode: Move late load warning to the same function that taints
-    kernel
-  x86/microcode/intel: Add minimum required revision to microcode header
-  x86/microcode: Add a generic mechanism to declare support for minrev
-  x86/microcode/intel: Drop wbinvd() from microcode loading
-  x86/microcode: Provide an option to override minrev enforcement
-
- arch/x86/include/asm/microcode.h       |  4 ++
- arch/x86/include/asm/microcode_intel.h |  3 +-
- arch/x86/kernel/cpu/microcode/core.c   | 71 +++++++++++++++++++-------
- arch/x86/kernel/cpu/microcode/intel.c  | 71 +++++++++++++++++++++-----
- arch/x86/Kconfig                       |  7 +--
- 5 files changed, 119 insertions(+), 37 deletions(-)
-
-
-base-commit: a9a5cac225b0830d1879640e25231a37e537f0da
--- 
-2.37.2
-
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 Cc: LKML <linux-kernel@vger.kernel.org>
 Cc: x86 <x86@kernel.org>
 Cc: Ingo Molnar <mingo@kernel.org>
@@ -200,3 +103,60 @@ Cc: Andy Lutomirski <luto@kernel.org>
 Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
 Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Cc: Martin Pohlack <mpohlack@amazon.de>
+---
+v1->v2: (Thomas)
+	- Remove unnecessary assignment of ret that's being overwritten.
+	- Taint kernel only of loading was successful
+---
+ arch/x86/kernel/cpu/microcode/core.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 61d57d9b93ee..1c6831b8b244 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -472,7 +472,8 @@ static ssize_t reload_store(struct device *dev,
+ 	enum ucode_state tmp_ret = UCODE_OK;
+ 	int bsp = boot_cpu_data.cpu_index;
+ 	unsigned long val;
+-	ssize_t ret = 0;
++	int load_ret = -1;
++	ssize_t ret;
+ 
+ 	ret = kstrtoul(buf, 0, &val);
+ 	if (ret)
+@@ -488,20 +489,26 @@ static ssize_t reload_store(struct device *dev,
+ 		goto put;
+ 
+ 	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
+-	if (tmp_ret != UCODE_NEW)
++	if (tmp_ret != UCODE_NEW) {
++		ret = size;
+ 		goto put;
++	}
+ 
+ 	mutex_lock(&microcode_mutex);
+-	ret = microcode_reload_late();
++	load_ret = microcode_reload_late();
+ 	mutex_unlock(&microcode_mutex);
+ 
+ put:
+ 	cpus_read_unlock();
+ 
+-	if (ret == 0)
++	/*
++	 * Taint only when loading was successful
++	 */
++	if (load_ret == 0) {
+ 		ret = size;
+-
+-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++		pr_warn("Microcode late loading tainted the kernel\n");
++	}
+ 
+ 	return ret;
+ }
+-- 
+2.37.2
+
