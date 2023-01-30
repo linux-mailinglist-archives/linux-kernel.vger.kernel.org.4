@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F3468034F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 01:39:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E81D1680356
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 01:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjA3AjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 19:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S232986AbjA3Alg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 19:41:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA3AjR (ORCPT
+        with ESMTP id S229476AbjA3Ale (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 19:39:17 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DD51CF41;
-        Sun, 29 Jan 2023 16:39:16 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1442977d77dso13255205fac.6;
-        Sun, 29 Jan 2023 16:39:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eQdDfBq+vMF/O7FM4LZuZL7r34CL6O59Wnl755Km6vU=;
-        b=l8ipMy4pGRnmFzWMy34EV5s6qCA0dnFvcV1WLPYwuDAQ+YddGB2zNSOgkvAXkoB7oO
-         9d2foK6XKFbc6GuRwa/zyw0na72IN6jphiv+6326y4Xqz8O+zqcKc2GQfaZIEwoXbySs
-         /7jIwYIcxFSAZ1SfEYlJid5m8TgqZebvd5EL+rBP1EMmqmpm11wYF9vMyPnf83WJ6hgt
-         MT2lBXCjNyTjer5or8HnMWmHhu1m/8WaezQNUzciD4MPwZPEtZruOWIroEXso48NAN3/
-         xmr/eBGIT51nD4iKCctsTk6+gzOOtfACyWv0GVQ0rFcuFJ9cYptmEGT/UfOwWQMDVarV
-         cL1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eQdDfBq+vMF/O7FM4LZuZL7r34CL6O59Wnl755Km6vU=;
-        b=0raitiX0cxhaERlnzuQ/ZSQBskdM/vR6qhE869tIaT9f2UuRxoaONWmoF4iM7lYiW/
-         Mf4qwU/ktKGS+zmyk0U0oueBD5PnZvI3or3/f+OjP69aZq4Ra35GOy5z49JpStu6kKNM
-         HmRs4xSOrRsRimmrp9dPTEHR/87Lbnq1VzRjasyDpvcce7HLj1ahRze3gDQqJmLXJHWU
-         QGUSrljfPvrFPb0xre09wuBBaV24uxxrwZwnndgXU/ieflSxagJtXE7GeFoQhRa2y8gc
-         a9gP6NWWmXbawg/KY7nmBbnSCGOKqX2iKsxv3aA47+noP4O5EZCjlzK6q2LXMrjIUFno
-         tSzg==
-X-Gm-Message-State: AO0yUKWPTq2tw8SJw5K4i9ejX4uj0VOr8RGVVuAXfIkuGcFzETjwXF4B
-        Svxg/BAmwo7v+tSJ3fud62w=
-X-Google-Smtp-Source: AK7set8m5admbPwz4sasitoVVR4miMIKzg4X7vK3ORG1mDwTWn0RYkMMpJR4KaFUvGXHSI58z1ReRw==
-X-Received: by 2002:a05:6870:7014:b0:15b:b523:3299 with SMTP id u20-20020a056870701400b0015bb5233299mr3432682oae.28.1675039155910;
-        Sun, 29 Jan 2023 16:39:15 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x8-20020a056870e38800b00144e18d8525sm4608589oad.25.2023.01.29.16.39.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 16:39:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 29 Jan 2023 16:39:13 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 3/9] Documentation: hwmon: correct spelling
-Message-ID: <20230130003913.GA384090@roeck-us.net>
-References: <20230129231053.20863-1-rdunlap@infradead.org>
- <20230129231053.20863-4-rdunlap@infradead.org>
+        Sun, 29 Jan 2023 19:41:34 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2CD1CF42;
+        Sun, 29 Jan 2023 16:41:32 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4qB14Pf6z4x1f;
+        Mon, 30 Jan 2023 11:41:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675039290;
+        bh=vfw0KuP4GDs2rhjBZ9/klSU5e/SY+spjjpZcGGCs5h4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=R8v5/y/Z4uZopN5AzRIp9WkJyccE+xvXoAEtfuzKg8mUUOKTP5tIzYTdFT4gilsdt
+         u04xp4pDTtFhg9RuFYwG6LrVa7wZS7xv9CBoll4umRkH5KU7q5RvKrwoE/6ai2f9e9
+         cdTee/zOQWaUwYqQ9VLri18RlHjM/jkOH2W00Tx2I6CB4NgEveROUw011F9rDh+sr7
+         as5lZFJvnPjYx1vV1jBKBRfRT03SNJb3LNbVgcccmVO9AnYLHcsiLKDPlHVIx4/i8Z
+         GuVoWFJf2z+vPUNDZg9hBL0gdRH1EUE4AnqmDNX/xzM3S/b9Yymm2GrbAejOVHga4e
+         HaVLdpPLCxIxw==
+Date:   Mon, 30 Jan 2023 11:41:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Conor Dooley <Conor.Dooley@microchip.com>
+Cc:     Jenny Zhang <jenny.zhang@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>
+Subject: linux-next: manual merge of the crypto tree with the riscv-soc tree
+Message-ID: <20230130114128.692c7961@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230129231053.20863-4-rdunlap@infradead.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: multipart/signed; boundary="Sig_/KH5DK6QNIZ/KCUvB7fAl+/w";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,18 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 03:10:47PM -0800, Randy Dunlap wrote:
-> Correct spelling problems for Documentation/hwmon/ as reported
-> by codespell.
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
+--Sig_/KH5DK6QNIZ/KCUvB7fAl+/w
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied to hwmon-next.
+Hi all,
 
-Thanks,
-Guenter
+Today's linux-next merge of the crypto tree got a conflict in:
+
+  MAINTAINERS
+
+between commit:
+
+  08b9a94e8654 ("soc: starfive: Add StarFive JH71XX pmu driver")
+
+from the riscv-soc tree and commit:
+
+  c388f458bc34 ("hwrng: starfive - Add TRNG driver for StarFive SoC")
+
+from the crypto tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+Note, please keep MAINTAINERS file entries in alphabetical order.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 3855c1b47e4b,4f59559597ab..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -19771,19 -19905,12 +19771,25 @@@ F:	Documentation/devicetree/bindings/=
+re
+  F:	drivers/reset/reset-starfive-jh7100.c
+  F:	include/dt-bindings/reset/starfive-jh7100.h
+ =20
+ +STARFIVE SOC DRIVERS
+ +M:	Conor Dooley <conor@kernel.org>
+ +S:	Maintained
+ +T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
+ +F:	drivers/soc/starfive/
+ +
+ +STARFIVE JH71XX PMU CONTROLLER DRIVER
+ +M:	Walker Chen <walker.chen@starfivetech.com>
+ +S:	Supported
+ +F:	Documentation/devicetree/bindings/power/starfive*
+ +F:	drivers/soc/starfive/jh71xx_pmu.c
+ +F:	include/dt-bindings/power/starfive,jh7110-pmu.h
+ +
++ STARFIVE TRNG DRIVER
++ M:	Jia Jie Ho <jiajie.ho@starfivetech.com>
++ S:	Supported
++ F:	Documentation/devicetree/bindings/rng/starfive*
++ F:	drivers/char/hw_random/starfive-trng.c
++=20
+  STATIC BRANCH/CALL
+  M:	Peter Zijlstra <peterz@infradead.org>
+  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+
+--Sig_/KH5DK6QNIZ/KCUvB7fAl+/w
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXEjgACgkQAVBC80lX
+0Gwr9Qf7Bcprcfh4uYoEF82I1tYi5zMBZGMCxWP8+1FHwAAdcR0j1BkCg5RMhaOS
+b5fycuDjxwsrhNPHu8Ry8/y5nfN/XIZywrSv+Xh8aIBKsN4/lSd3sg77wNMcFAdJ
+4PS9zJiciOGRpTtsmqQzkodIhvWIaeVm26JCOshOMjU0dqfDlDRJk4MQP2rQ6OQA
+QVjkFhNWwfCCLRuEsHEML3IdDgOydWDqbk27xcqPSPmk/hbtP9z0chKIIb4d79fc
+GQW/bqVeEH7DD5QLeFHsy2aUmIXZ4DGnBRcb07+ZKflCSFBVgYLVwbZptJoiiLv4
+a6njJZc0Bumb/nIaHC/qX4Oiu16g6A==
+=aa7N
+-----END PGP SIGNATURE-----
+
+--Sig_/KH5DK6QNIZ/KCUvB7fAl+/w--
