@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5488468100A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FE4681022
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236938AbjA3N7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:59:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
+        id S236853AbjA3OAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236800AbjA3N65 (ORCPT
+        with ESMTP id S236838AbjA3OAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:58:57 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE4B36FEA;
-        Mon, 30 Jan 2023 05:58:37 -0800 (PST)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:e655:2335:9172:6e39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 30 Jan 2023 09:00:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5D3CDD7;
+        Mon, 30 Jan 2023 06:00:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 996E96602F10;
-        Mon, 30 Jan 2023 13:58:13 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1675087094;
-        bh=R5a/mEpnxaqGwC3EbPKXrQNBPFEzTc0n/5f90KTNBzU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UbeFUDJNjH+boCT1h8uJhzuLeqp2wTx96eCbu0JLaU1/SUDFSJmZWNun3sKp/eTq4
-         Z9JlKRyaD57WcD78uF34AkuL4sOnpO5Z3MVZlamrTDr3tmzPTyw1YWl+KIXuCgTAI6
-         7lb3WaYZMzVrkEqbZnpujWMWiVShNEVwqWfIJrQiEqXE97N6tfcj43R564dC3ItQcx
-         zmy2wZlIUVs8qj+36vV8mwiqHQsXgvKW60WolHykjBDgCSiOPQDdciKy+YeU2pzgMn
-         6GkT3nEOV3N1sa53CZ1kdGaYOR+kP0PBQDNN6853mzqZbgKcxeOgP7l8+EIpYjtX4E
-         PszSStAJgWSZg==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.co.uk
-Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: [PATCH v6 5/5] media: verisilicon: HEVC: Only propose 10 bitscompatible pixels formats
-Date:   Mon, 30 Jan 2023 14:58:02 +0100
-Message-Id: <20230130135802.744743-6-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230130135802.744743-1-benjamin.gaignard@collabora.com>
-References: <20230130135802.744743-1-benjamin.gaignard@collabora.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0F0EB81181;
+        Mon, 30 Jan 2023 14:00:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392C7C433D2;
+        Mon, 30 Jan 2023 13:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675087199;
+        bh=quv2gJS96/kOS1MFut+Kr8y2xgXp9TjMtnbVARKYfnA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uzvOKTqQcQtzIIYAvD3n65utmLEdbE58vLC9z8CbeuI/5qddveBKaGeXNbT4OaHgZ
+         YimHeCEjCEiFBh8l1MMolnCghKtIA450S8/uzLCwajTPROvYYcelpreaYahekalF5d
+         EzDvzS7i8xsGStq90NxuXGM40m9mWlVXXx22AlcVijXSi0TmjpDhjSaI2M3xo/262F
+         +aNSjnUO7vpKBEInm90075StyXYX4cqGAmu8ZJFPQL2iInWCAVGwYs3QUdXlbNe3Er
+         CO10wLAfbhGO8OmCkcyqrHWL8UALZfAkhApa59UQeAK6S6CHsXyt7lCNNsLD6dLZZC
+         B0lzuMnILBFjg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 00BFC405BE; Mon, 30 Jan 2023 10:59:54 -0300 (-03)
+Date:   Mon, 30 Jan 2023 10:59:54 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Mike Leach <mike.leach@linaro.org>,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, Ian Rogers <irogers@google.com>
+Subject: Re: [PATCH] perf: cs-etm: Update decoder code for OpenCSD version 1.4
+Message-ID: <Y9fNWrBIN8o1Ww25@kernel.org>
+References: <20230120153706.20388-1-mike.leach@linaro.org>
+ <77f9eab5-4fb2-cf96-9628-2a816d519d61@arm.com>
+ <CAP-5=fWNT9XXMN+97TcprxWA+FRJpAy4T=XC9RHrOdKfcKi8_w@mail.gmail.com>
+ <f17a40d4-2a37-fe7a-eac9-4ac1215e2c20@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f17a40d4-2a37-fe7a-eac9-4ac1215e2c20@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When decoding a 10bits bitstreams HEVC driver should only expose
-10bits pixel formats.
-To fulfill this requirement it is needed to call hantro_reset_raw_fmt()
-when bit depth change and to correctly set match_depth in pixel formats
-enumeration.
+Em Mon, Jan 30, 2023 at 12:05:53PM +0000, James Clark escreveu:
+> On 24/01/2023 21:50, Ian Rogers wrote:
+> > On Fri, Jan 20, 2023 at 7:47 AM James Clark <james.clark@arm.com> wrote:
+> >> On 20/01/2023 15:37, Mike Leach wrote:
+> >>> OpenCSD version 1.4 is released with support for FEAT_ITE.
+> >>> This adds a new packet type, with associated output element ID in
+> >>> the packet type enum - OCSD_GEN_TRC_ELEM_INSTRUMENTATION.
+> >>>
+> >>> As we just ignore this packet in perf, add to the switch statement
+> >>> to avoid the "enum not handled in switch error", but conditionally
+> >>> so as not to break the perf build for older OpenCSD installations.
+> >>>
+> >>> Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> >>> ---
+> >>>  tools/perf/util/cs-etm-decoder/cs-etm-decoder.c | 3 +++
+> >>>  1 file changed, 3 insertions(+)
+> >>>
+> >>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+> >>> index fa3aa9c0fb2e..48e7121880a9 100644
+> >>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+> >>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+> >>> @@ -604,6 +604,9 @@ static ocsd_datapath_resp_t cs_etm_decoder__gen_trace_elem_printer(
+> >>>       case OCSD_GEN_TRC_ELEM_CUSTOM:
+> >>>       case OCSD_GEN_TRC_ELEM_SYNC_MARKER:
+> >>>       case OCSD_GEN_TRC_ELEM_MEMTRANS:
+> >>> +#if (OCSD_VER_NUM >= 0x010400)
+> >>> +     case OCSD_GEN_TRC_ELEM_INSTRUMENTATION:
+> >>> +#endif
+> >>>       default:
+> >>>               break;
+> >>>       }
+> >>
+> >> Checked the build with both old and new versions of OpenCSD and it's ok:
+> >>
+> >> Reviewed-by: James Clark <james.clark@arm.com>
+> > 
+> > Acked-by: Ian Rogers <irogers@google.com>
+> > 
+> > Thanks,
+> > Ian
+> 
+> Hi Arnaldo,
+> 
+> Is it ok to merge this change? If anyone is building with the latest
+> OpenCSD they will get a build error on the unhandled switch case, and we
+> just got it in our CI too.
+> 
+> I suppose we could disable the warning around this switch, but it's
+> pretty rare to add new packets so might be best to leave it.
 
-Fixes: dc39473d0340 ("media: hantro: imx8m: Enable 10bit decoding")
+Thanks, applied.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
- drivers/media/platform/verisilicon/hantro_drv.c  | 16 ++++++++++++++--
- .../media/platform/verisilicon/imx8m_vpu_hw.c    |  2 ++
- 2 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-index 715075f15596..e3656649c717 100644
---- a/drivers/media/platform/verisilicon/hantro_drv.c
-+++ b/drivers/media/platform/verisilicon/hantro_drv.c
-@@ -331,8 +331,20 @@ static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
- 
- 	switch (ctrl->id) {
- 	case V4L2_CID_STATELESS_HEVC_SPS:
--		ctx->bit_depth = ctrl->p_new.p_hevc_sps->bit_depth_luma_minus8 + 8;
--		break;
-+	{
-+		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
-+		int bit_depth = sps->bit_depth_luma_minus8 + 8;
-+		int ret;
-+
-+		if (ctx->bit_depth == bit_depth)
-+			return 0;
-+
-+		ret = hantro_reset_raw_fmt(ctx, bit_depth);
-+		if (!ret)
-+			ctx->bit_depth = bit_depth;
-+
-+		return ret;
-+	}
- 	default:
- 		return -EINVAL;
- 	}
-diff --git a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-index b390228fd3b4..f850d8bddef6 100644
---- a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-+++ b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-@@ -152,6 +152,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_NV12,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
- 		.postprocessed = true,
- 		.frmsize = {
- 			.min_width = FMT_MIN_WIDTH,
-@@ -165,6 +166,7 @@ static const struct hantro_fmt imx8m_vpu_g2_postproc_fmts[] = {
- 	{
- 		.fourcc = V4L2_PIX_FMT_P010,
- 		.codec_mode = HANTRO_MODE_NONE,
-+		.match_depth = true,
- 		.postprocessed = true,
- 		.frmsize = {
- 			.min_width = FMT_MIN_WIDTH,
--- 
-2.34.1
-
+- Arnaldo
