@@ -2,91 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80C86809D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA97968098E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235759AbjA3JnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
+        id S236440AbjA3Jc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235507AbjA3JnR (ORCPT
+        with ESMTP id S236312AbjA3Jch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:43:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D486646A5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:43:15 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U8Cn6S027799;
-        Mon, 30 Jan 2023 09:29:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=YD5SaBBJIl2JTApqS/3OmKQbvVL4iVvdHb/6vCkTGpE=;
- b=UN2CnTQlxXaP+Z7C4karaizW9Q2TdWoD2vEtyX1wd0UCAVX/+yOM6Jl9aVa2cwNuXufU
- TLI7l1VxB3QBmhbGyv2PKN3KrTdUHG0MYoWA0gut3DOgCR929X1o9HBjJo88Re3Hx3zt
- ajnIpdIBCKRtGs5L3nwUTuKyG7BVF50Ep9XQqAYjlc/pDPASJDdPqcrASecJaEjdtCKc
- 17xVFFLayacx6Yw2V/f1W9bkWSk3fanV70GraE/P309I/7QBLbNNAqZwpnp8d5xkh5s5
- tiQ1DO2j818AyioazD9p+jIZP9tl2rcTcCRsNF5sJpcNWuJ28/s+dBu1C6tczv7mBHWI FA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nea669quq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 09:29:27 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30U92HYS004659;
-        Mon, 30 Jan 2023 09:29:27 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nea669quc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 09:29:27 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30U9FNv2025829;
-        Mon, 30 Jan 2023 09:29:26 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3ncvtrcfna-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 09:29:26 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30U9TOfc61145520
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Jan 2023 09:29:25 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFB9358052;
-        Mon, 30 Jan 2023 09:29:24 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1173958045;
-        Mon, 30 Jan 2023 09:29:22 +0000 (GMT)
-Received: from [9.171.57.35] (unknown [9.171.57.35])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 30 Jan 2023 09:29:21 +0000 (GMT)
-Message-ID: <1844e345-eb71-3b0b-aa1d-7b71575e534d@linux.ibm.com>
-Date:   Mon, 30 Jan 2023 10:29:17 +0100
+        Mon, 30 Jan 2023 04:32:37 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033ED12F3C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:30:41 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 248DB3BE;
+        Mon, 30 Jan 2023 10:29:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1675070985;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x2NVG7YDMSDNU+ofFZZvrPtVz7CsCGJovYbM5A6XIjY=;
+        b=lKzfmsOZUqeuSgxgQ3ouQtAUobADm1fDWqv0fouLGPYVMbPOA1PI/Tp0ESutJGup+zum2c
+        mVR5mmJpr7xfvKsec3YtbQduy7XID+2O7tP81leC+FRxaJqR7WIqTCQm1f29Y/O5mfO24F
+        IJOv1+BE8aXptK9x7TkCqaXPks4UuO3vVY9DMVjdilqI5EldUWDCpKsV4hikD6eyMiZpSq
+        5jtdUcaVQ07Ag5UQ0dO72xBrvb8H2LopO+iF/ODIwsOc89WH6z7ngK+sNfpo9Q+sVb2QmQ
+        LIV0ObchNJhNvsLBujUGnTxLra2bMjAsHAUYMyoATMSp8l/37OEnTuYB6zkFCg==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] lib/zlib: remove redundation assignement of avail_in
- dfltcc_gdht()
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, akpm@linux-foundation.org,
-        iii@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20230128165048.1245792-1-trix@redhat.com>
-From:   Zaslonko Mikhail <zaslonko@linux.ibm.com>
-In-Reply-To: <20230128165048.1245792-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 30 Jan 2023 10:29:44 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Heyi Guo <guoheyi@linux.alibaba.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH] drivers/spi-nor: add support for Winbond w25q01jv
+In-Reply-To: <20230128033957.125853-1-guoheyi@linux.alibaba.com>
+References: <20230128033957.125853-1-guoheyi@linux.alibaba.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <c7c3c4cf5dd477953e366053859df08f@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: idOeDkqhtDYZDJVAYwQnFRR3fq3ZW1pG
-X-Proofpoint-GUID: 0vcbq0PiCz2vweO8tpEe9d8XNZ41VRuI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_07,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 spamscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
- bulkscore=0 clxscore=1015 phishscore=0 mlxlogscore=999 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300086
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,33 +62,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 28.01.2023 17:50, Tom Rix wrote:
-> cppcheck reports
-> lib/zlib_dfltcc/dfltcc_deflate.c:65:21: warning: Redundant assignment of 'avail_in' to itself. [selfAssignment]
->     size_t avail_in = avail_in = strm->avail_in;
+> Winbond W25Q01JV is a 128MB SPI-NOR flash chip.
 > 
-> Only setting avail_in once is needed.
+> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
 > 
-> Fixes: aa5b395b69b6 ("lib/zlib: add s390 hardware support for kernel zlib_deflate")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> --
+> Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Cc: Pratyush Yadav <pratyush@kernel.org>
+> Cc: Michael Walle <michael@walle.cc>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: linux-mtd@lists.infradead.org
 > ---
->  lib/zlib_dfltcc/dfltcc_deflate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/mtd/spi-nor/winbond.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/lib/zlib_dfltcc/dfltcc_deflate.c b/lib/zlib_dfltcc/dfltcc_deflate.c
-> index 80924f067c24..b732b6d9e35d 100644
-> --- a/lib/zlib_dfltcc/dfltcc_deflate.c
-> +++ b/lib/zlib_dfltcc/dfltcc_deflate.c
-> @@ -62,7 +62,7 @@ static void dfltcc_gdht(
->  {
->      deflate_state *state = (deflate_state *)strm->state;
->      struct dfltcc_param_v0 *param = &GET_DFLTCC_STATE(state)->param;
-> -    size_t avail_in = avail_in = strm->avail_in;
-> +    size_t avail_in = strm->avail_in;
->  
->      dfltcc(DFLTCC_GDHT,
->             param, NULL, NULL,
+> diff --git a/drivers/mtd/spi-nor/winbond.c 
+> b/drivers/mtd/spi-nor/winbond.c
+> index ca39acf4112c8..0cd49f534bf8d 100644
+> --- a/drivers/mtd/spi-nor/winbond.c
+> +++ b/drivers/mtd/spi-nor/winbond.c
+> @@ -142,6 +142,9 @@ static const struct flash_info winbond_nor_parts[] 
+> = {
+>  	{ "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024)
+>  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+>  			      SPI_NOR_QUAD_READ) },
+> +	{ "w25q01jv", INFO(0xef4021, 0, 64 * 1024, 2048)
+> +		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
+> +			      SPI_NOR_QUAD_READ) },
 
-Acked-by: Mikhail Zaslonko <zaslonko@linux.ibm.com>
+I'd guess this flash has SFDP support, correct? In this case,
+could you please try the latest next (or -rc) kernel without
+this change? In the meantime we have a generic spi-nor driver [1]
+so you don't need a new entry in most cases.
+
+Apart from that, it would be nice if you could dump the
+SFDP tables, see [2].
+
+-michael
+
+[1] 
+https://elixir.bootlin.com/linux/v6.2-rc5/source/drivers/mtd/spi-nor/core.c#L1638
+[2] https://lore.kernel.org/r/4304e19f3399a0a6e856119d01ccabe0@walle.cc/
