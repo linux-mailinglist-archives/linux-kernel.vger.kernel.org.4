@@ -2,86 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40212681984
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2286C681988
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbjA3Slq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S234744AbjA3Slz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234744AbjA3Sld (ORCPT
+        with ESMTP id S234878AbjA3Slk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:41:33 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946EF14235
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:41:24 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id nm12-20020a17090b19cc00b0022c2155cc0bso11985908pjb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:41:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pMghoIK65PM21gBRzt5p+NP2NarTeHArU4fe9Np3EMM=;
-        b=RgUboakthKgaIXLyoWrNSG2Qv+J4K4JVomfyOYRELSvc5h9W2XdiM6x29P9pBoUF4u
-         FuefKa87xQLhJqo174kgnXIhDIBqKpjuHKSEm8GQY1vsujPrMdEr+oih2XdcLeMBoHSN
-         /DzRzjUdxrmeEF9SsiIOWIRP+i2fwXSPrONAY2rfB6JAKM4u5SuPV2Gnle5+hxGhdIyg
-         CeEWU+kqvAPuLpF1NWpgd3T9Zs6+kh1pKBDvywm1ku+M1m+2cd/SAGUfGpjjDj3k0z/a
-         keybctHpc1Mf6LAfVm2XgrSmRowAknVTrXv8TT+F+GAxGNOFQtv9Jx63nHffhwPIrSSa
-         +80g==
+        Mon, 30 Jan 2023 13:41:40 -0500
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9BDFD;
+        Mon, 30 Jan 2023 10:41:40 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id f5-20020a9d5f05000000b00684c0c2eb3fso4775864oti.10;
+        Mon, 30 Jan 2023 10:41:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pMghoIK65PM21gBRzt5p+NP2NarTeHArU4fe9Np3EMM=;
-        b=PQ/tHv7TlcmjjK0s16nCmuVx340itOOQlbXM9kIedV3GL6eHneyTeVH50uzWnng0lP
-         kVjPRaYifnE7hsQAqY3gPlK4WbD8Am7AdY/GjYisrsPJlq4tQj6p2BNeUAyn23kSxsDM
-         XCMQohXrAFbFC6ACofWS+dMEWbFmVULH1NeSixkzqhDE6c6sUTaAbG0JbOzu+/EjoZVm
-         H6iaSll7KpNCCrWBazAiY2T+MOHKr5Iq6RV72n9Mk6b/MMZlc7eMEha5StxDRfqh8zBe
-         kqEfGkfEHsfrNNo2ndwsx2fgzTqp++8vSe6m5BT1aaq1YEczy579p+Eq483vPz7GohlA
-         HOrw==
-X-Gm-Message-State: AO0yUKWh4ttdwE7dcwQkt4vWvu+v8JDwrloRPPudUECY+PtyvohTBvzp
-        So+0e4JOpTxv9papTRpaiQ/sLQ==
-X-Google-Smtp-Source: AK7set93e70967TnM9xQUAufViAl7AKeAOmHVIVJKjWAzb0Q/qRJgbxj/GDWc5BGkhuUv0igh5SXqQ==
-X-Received: by 2002:a17:902:d70a:b0:193:256d:8afe with SMTP id w10-20020a170902d70a00b00193256d8afemr873089ply.2.1675104083967;
-        Mon, 30 Jan 2023 10:41:23 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m3-20020a170902c44300b00186f0f59c85sm8141000plm.235.2023.01.30.10.41.23
+        bh=uU2+lFL8KXnb9RT45XBhXq8ZrCERZRKmVeI/JNeDdKQ=;
+        b=XNBiVuMbHGwlyWwHPSGnA9OdaOW6ovcYwWYuqaZbDPNtsc7nKeV5ZA9874fkNtBRyy
+         boTJtkuj5W4wDZTeIJdkGfqkECHYK5dMKxxy52teFgUEpk5lecj/N1XFzlboAjxmkbCI
+         wweZF/tegHGvFfjwna/zmsyobR6/pIx2ALjccO8/sQdgnKUiPr8HdukyGGtetFLnJJRA
+         48YJZGQhFG2Mqd/42VYOra6DB99e3rJNy4hVeAmeh5RGtOI8zWz6oGq+XEnlmV5dchbF
+         zxpiQfENh/5ELvjCC/mJxRdmNcR0U0WvKQXDd9YKO/TKRftAaB4X8KTbLGrRtBnL3KyN
+         g07g==
+X-Gm-Message-State: AO0yUKVX6Z+BDlXQWQfeuwnlNaPw6WbmBn94VKFDF7KX5FnrwBP2shG8
+        t6hFMjUSzOziKI1FgG1x2kvphMqGrg==
+X-Google-Smtp-Source: AK7set/uLbNflW1cFghxIZz5MH8dz6piD9fmGR1Yw/at6BG3CTVUtPBg5w/AMqTWqSqeuODiozv89A==
+X-Received: by 2002:a9d:6f17:0:b0:68b:df3e:c40f with SMTP id n23-20020a9d6f17000000b0068bdf3ec40fmr185279otq.23.1675104099536;
+        Mon, 30 Jan 2023 10:41:39 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j1-20020a9d7d81000000b00684c9c77754sm5670709otn.69.2023.01.30.10.41.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 10:41:23 -0800 (PST)
-Date:   Mon, 30 Jan 2023 18:41:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 03/11] KVM: nSVM: explicitly raise KVM_REQ_EVENT on
- nested VM exit if L1 doesn't intercept interrupts
-Message-ID: <Y9gPT709jG/9SpSq@google.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
- <20221129193717.513824-4-mlevitsk@redhat.com>
- <Y9RypRsfpLteK51v@google.com>
+        Mon, 30 Jan 2023 10:41:38 -0800 (PST)
+Received: (nullmailer pid 3094271 invoked by uid 1000);
+        Mon, 30 Jan 2023 18:41:38 -0000
+Date:   Mon, 30 Jan 2023 12:41:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v3 3/8] dt-bindings: phy: qcom,qmp-usb: Document SM8550
+ compatible
+Message-ID: <167510409756.3094208.17002699446729168546.robh@kernel.org>
+References: <20230126131415.1453741-1-abel.vesa@linaro.org>
+ <20230126131415.1453741-4-abel.vesa@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9RypRsfpLteK51v@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20230126131415.1453741-4-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,21 +74,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023, Sean Christopherson wrote:
-> > +	 * If the L2 doesn't intercept interrupts, then
-> > +	 * (even if the L2 does use virtual interrupt masking),
-> 
-> KVM uses "L2" to refer to the thing running at L2.  I think what you are referring
-> to here is vmcb12?  And that's controlled by L1.
-> 
-> > +	 * KVM will use the vmcb02's V_INTR to detect interrupt window.
-> 
-> s/the vmcb02/vmcb02
-> 
-> Which of the V_INTR fields does this refer to?  Oooh, you're saying the KVM injects
-> a virtual interrupt into L2 using vmcb02 in order to determine when L2 has IRQs
-> enabled.
-> 
-> Why does KVM do that?  Why not pend the actual IRQ directly?
 
-Duh, because KVM needs to gain control in if there are multiple pending events.
+On Thu, 26 Jan 2023 15:14:10 +0200, Abel Vesa wrote:
+> Add the SM8550 compatible to the list.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> The v2 version of this patch was here:
+> https://lore.kernel.org/all/20230126124651.1362533-4-abel.vesa@linaro.org/
+> 
+> Changes since v2:
+>  * none
+> 
+> Changes since v1:
+>  * moved to sc8280xp bindings
+> 
+>  .../devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml   | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>
