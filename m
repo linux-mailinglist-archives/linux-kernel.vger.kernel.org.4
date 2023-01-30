@@ -2,100 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77EB681B4E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA0F681B4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjA3UWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34968 "EHLO
+        id S229700AbjA3UWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjA3UWN (ORCPT
+        with ESMTP id S229486AbjA3UWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:22:13 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CB2470AF;
-        Mon, 30 Jan 2023 12:22:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1675110125; bh=pOqor3QSVU7vfogPUbrnGNPF65OQgfQ9DubvQZ9Hg8M=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=oIor9ak8pXR65QOhYfff4SGTjzd8NjsqAidXb6hPH3/c/hPb8GC6mUuTz07lgAmHR
-         ATfwb6Iw3xE0NZdPdsbFCsAPGF1jvUlioZhAViDU8ELRGndonDJjfNVNykgBibD+sU
-         v6I5FcaNbe/+KxNLL7arAN2liBKq2KjM5TT4AZLc=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon, 30 Jan 2023 21:22:04 +0100 (CET)
-X-EA-Auth: KFh5ORkxrJaJFJViVaNy7TAPZFh6u5OSl1mCjUOG+bGhs8BMAdxOJnykaGc6EMAivV1gucpipKqF6rQ4YTZLNwZDKnAQ1nKt
-Date:   Tue, 31 Jan 2023 01:52:00 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Praveen Kumar <kumarpraveen@linux.microsoft.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] scsi: pmcraid: Use sysfs_emit in show function callback
-Message-ID: <Y9gm6F6TINrlEPPo@ubun2204.myguest.virtualbox.org>
+        Mon, 30 Jan 2023 15:22:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951B8470B6;
+        Mon, 30 Jan 2023 12:22:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AB06B8168C;
+        Mon, 30 Jan 2023 20:22:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77452C433EF;
+        Mon, 30 Jan 2023 20:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675110128;
+        bh=2amaQBzxTLZAx/R22ao8Phymmp5xGE1DaFtSYzJHbrE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HBGugDWrPykzyvqC7IIOk71SVz6xABUkxS12I6+QHtxmBweGJZ9rp7MfHe408Hn+V
+         N+ZuH1ueJ6zUi+BgQPUIYcG6IcKnbkwGAv6Let4QA2e183dWowI5r9OwqBpURt2R2e
+         7XaV6ML2TNcBH26pg1vPS/YNNHhkydZPHxhLtLyyNYPZCH+1wVIhPqlrXYQBSehGlj
+         4EFiwvC9zT02MCQPlYuSlVOrJzYJoIoS2ZRJu6SazOGnMR6uIJU9iD/faeHHLWHjWq
+         rANd/dc+piV+P2LApLcuvh1/7w+JDMmG5Fc5h45mGbPUiDi5YM1w7ASvowAurKICM9
+         AbbNxsoSTAc9w==
+Date:   Mon, 30 Jan 2023 12:22:06 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Tariq Toukan <ttoukan.linux@gmail.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Haniel Bristot de Oliveira <bristot@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Lafreniere <peter@n8pjl.ca>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH RESEND 0/9] sched: cpumask: improve on
+ cpumask_local_spread() locality
+Message-ID: <20230130122206.3b55a0a7@kernel.org>
+In-Reply-To: <4fa5d53d-d614-33b6-2d33-156281420507@gmail.com>
+References: <20230121042436.2661843-1-yury.norov@gmail.com>
+        <4dc2a367-d3b1-e73e-5f42-166e9cf84bac@gmail.com>
+        <xhsmhv8kxh8tk.mognet@vschneid.remote.csb>
+        <4fa5d53d-d614-33b6-2d33-156281420507@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to Documentation/filesystems/sysfs.rst, show() callback
-function should only use sysfs_emit() or sysfs_emit_at() instead
-of sprint() family functions when formatting the device attribute
-values to be returned to user space.
-Issue identified using the device_attr_show.cocci Coccinelle script.
+On Sun, 29 Jan 2023 10:07:58 +0200 Tariq Toukan wrote:
+> > Peter/Ingo, any objections to stashing this in tip/sched/core?
+> 
+> Can you please look into it? So we'll have enough time to act (in 
+> case...) during this kernel.
+> 
+> We already missed one kernel...
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/scsi/pmcraid.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index 836ddc476764..2705dcaa7798 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -3493,7 +3493,7 @@ static ssize_t pmcraid_show_log_level(
- 	struct Scsi_Host *shost = class_to_shost(dev);
- 	struct pmcraid_instance *pinstance =
- 		(struct pmcraid_instance *)shost->hostdata;
--	return snprintf(buf, PAGE_SIZE, "%d\n", pinstance->current_log_level);
-+	return sysfs_emit(buf, "%d\n", pinstance->current_log_level);
- }
- 
- /**
-@@ -3554,8 +3554,7 @@ static ssize_t pmcraid_show_drv_version(
- 	char *buf
- )
- {
--	return snprintf(buf, PAGE_SIZE, "version: %s\n",
--			PMCRAID_DRIVER_VERSION);
-+	return sysfs_emit(buf, "version: %s\n", PMCRAID_DRIVER_VERSION);
- }
- 
- static struct device_attribute pmcraid_driver_version_attr = {
-@@ -3588,9 +3587,8 @@ static ssize_t pmcraid_show_adapter_id(
- 		pinstance->pdev->devfn;
- 	u32 aen_group = pmcraid_event_family.id;
- 
--	return snprintf(buf, PAGE_SIZE,
--			"adapter id: %d\nminor: %d\naen group: %d\n",
--			adapter_id, MINOR(pinstance->cdev.dev), aen_group);
-+	return sysfs_emit(buf, "adapter id: %d\nminor: %d\naen group: %d\n",
-+			  adapter_id, MINOR(pinstance->cdev.dev), aen_group);
- }
- 
- static struct device_attribute pmcraid_adapter_id_attr = {
--- 
-2.34.1
-
-
-
+We really need this in linux-next by the end of the week. PTAL.
