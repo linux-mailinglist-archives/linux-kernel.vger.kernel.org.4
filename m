@@ -2,185 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A5E6803CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 03:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B466803D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 03:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbjA3CW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 21:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
+        id S235477AbjA3CZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 21:25:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjA3CW1 (ORCPT
+        with ESMTP id S229614AbjA3CZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 21:22:27 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C2A166D3
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 18:22:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675045345; x=1706581345;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=wJRspG/0Zlciabon2Ho/pqOhZi4qvUUCzxdG+FKt+x0=;
-  b=WyMo6kFVd487iiS4JM23MnCRWPImJQtIb/yMJN6iviVwsFiwrrlvzV2B
-   e6DtYstjqu1RjU+luPQ8eTQa1kA3KDpomhZm8M2gn6AQWEo8LbsppSu8/
-   2Myh4MPBTrjdvzca4x59oWNzJ6C6WTqg+TPw5I0ekOHgpROIXc0AEYphw
-   EYWxS88MXbeGYCnAY7lhwB60R6iIeLJuGl7ZJksmflN+DfqP5jZOioS2Y
-   nbPmWfnIVHsULsGfLP1fFljoTIDYUaFQPzhYR+Aii38dzkVNJj8e8Rc0Z
-   wbq+HRNdRevrAnRYHRh22BuzgNHuzLPBeK2RUrWu1k2tPqTNtpVEeLMyr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="328738630"
-X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="328738630"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 18:22:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="992723736"
-X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
-   d="scan'208";a="992723736"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jan 2023 18:22:24 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Sun, 29 Jan 2023 18:22:24 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Sun, 29 Jan 2023 18:22:24 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Sun, 29 Jan 2023 18:22:22 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C+Hf/ZSUGOHepIyObZk+jrdrdoYUooKTrwQASdtft1nS+gB/ALT1wS9/kHYUnZe3D+QCGnyba6h9IdERrd9T7K7tNQImAHbJv50sjQ6KqFBj27Q9rHCC5ZTahoUNOXjFCinb5J+1Mxp0XOIq7/9NFKUov4AMC6nub5xe3QiHCFxwpy2qQL2PybVaIDrzPvTbjGWZ6YED9kO1BH0eVbyNbUSlYzkLzbzzyUsfXBavYai/gVTN80rqoUsHHdKvW6WBgaU7RJNRGwO2dEv49FpNInVymZUMm9XIITULiGoXpMcjwNzICueBGQ+qpuiCjmtMc0Eef/rLMUgiL9MoVJIRRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wJRspG/0Zlciabon2Ho/pqOhZi4qvUUCzxdG+FKt+x0=;
- b=a55dsXxmELJCqrogIYU571iY22g5dZglnTdPxWt8kgarJQX1Ln5UjQcFaSJm1sbKrgvPSANNJ/WwKQ17wOH8QFOm1akpESINfrbBqfQJAZjT//7h9iMMlBTnBPdgtzIk7zls2ljNdA3PLrS243AUr/vTYPw9AtEd/GViY6AQgqJ7gKpbIUF+Vg5ZftLif84o1q4NJeUYvU8/EBUWtT/SCDPFTqKi780ffI+7nOtWRd6MZZRBU4JUP3VvCgPA1DqYMSG3NkIrLRyBsPmDHauBTrIIwTPjDPjhEof2vxY2XqcCOwwm37ZQ/Cjc3QHvB5kRRMiXLNxr4c32J9XcopNTNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by LV2PR11MB6021.namprd11.prod.outlook.com (2603:10b6:408:17e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Mon, 30 Jan
- 2023 02:22:20 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e1fa:abbe:2009:b0a3]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e1fa:abbe:2009:b0a3%3]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
- 02:22:20 +0000
-From:   "Liu, Yi L" <yi.l.liu@intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>
-CC:     "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/3] iommufd: Add devices_users to track the
- hw_pagetable usage by device
-Thread-Topic: [PATCH v2 1/3] iommufd: Add devices_users to track the
- hw_pagetable usage by device
-Thread-Index: AQHZM14a8sLMOu4lm0Wu+eywCVc4o661H9mAgAEcENA=
-Date:   Mon, 30 Jan 2023 02:22:20 +0000
-Message-ID: <DS0PR11MB7529E920AE8F2CF39135CFE9C3D39@DS0PR11MB7529.namprd11.prod.outlook.com>
-References: <cover.1674939002.git.nicolinc@nvidia.com>
- <c1c65ce093a3b585546dd17a77949efbe03a81d9.1674939002.git.nicolinc@nvidia.com>
- <BN9PR11MB52764F6D34C9252A58DDA69D8CD29@BN9PR11MB5276.namprd11.prod.outlook.com>
-In-Reply-To: <BN9PR11MB52764F6D34C9252A58DDA69D8CD29@BN9PR11MB5276.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7529:EE_|LV2PR11MB6021:EE_
-x-ms-office365-filtering-correlation-id: e5aab976-ec6c-450e-d4a3-08db0268d0aa
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QBU7+AFkfu8FFqQi88ocWHqcgYX5WYknIzJi7I1dheofZLjLxf+wh+GtvMdDl/4S7d76z+FZADAXFSqHXTIDbBrnQP3SnQnHPaLEVNqNAWyyVYLyhZJGl3RJpFH8BH8XwPqeV/6jk7vYj8ZHhOcryCuPbuaI6jv+z2zYSGFOIfynf7BE7iC9WPxSA1MkymY0sXvuS5BuqlUT/KJA6IVDXDtipH/spUsOj7ej1qGl2PsM9UMAlVDVQcaEBpsOQI5hQAFfjF6cR2mnvcFAiQQgY0tj37r1FxXkUFTPBk7uRZ1nWvYgbrliEuyGN+DrVZAatHTBovMtOy11xcsf3jvR4uHfCTei1jcioJ4FkxePUGTdZVJX9gwZgN3vueZDnZzilf1OKCl2JgeE4AB+VVjg9i2N2afwgpqtSVxDeh2OuSC5sSgvQWvWlsb9oHYUlLKDYARF+w0U3BGep/NVWW1tBTg7ArjlqPorEEBoKLMc+0iU7/vok7w/Icf8eg+RQEtpYgRM6wMxns6i4gv6vQTzUjm3zRsAOK3OEhG+xVYOciBXBm70hGRoBeuiDEoUjSwV9CZfPPywm7DJgkQBJHaFTf5p48hkonvIGGNYHcXx5vI22mHH31mlsGK5fM3M0qrhr3sHmKeMjq2Y6mDMJcLn+jut+4+6nmb1H+2XRXNb7K5e7xFBPHDX86bFXJ2eSMjSS51DF+evklq72CLEUDTuQrsZy5VpHnA2bCf7yGAjL+PwfBcHcX3U5XAg/n5YF8ZA
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(396003)(376002)(39860400002)(346002)(136003)(451199018)(55016003)(82960400001)(26005)(9686003)(122000001)(38100700002)(186003)(5660300002)(2906002)(966005)(71200400001)(38070700005)(478600001)(7696005)(52536014)(66946007)(76116006)(8676002)(86362001)(4326008)(110136005)(64756008)(66476007)(66446008)(54906003)(316002)(66556008)(41300700001)(6506007)(8936002)(33656002)(13296009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pBAQOkWzZeDMZ9UBcIgGzdPYkjQndg1+knX0ahRg2BCfCoG4w/tEUPYAe0kQ?=
- =?us-ascii?Q?oBP94P1hkf1tSQL9sLpq22xUwgJU+K5Lkc5DHlsbR6BFHy2OwHW1ra/CkP15?=
- =?us-ascii?Q?eQSXEs8a8rnNl4yqtJYjpdoQUmtHfPeRZhXAfl5VmxYixotKP3ZI4AxZE45G?=
- =?us-ascii?Q?9WUj+0TRCa0AHzyFIFox7iKwgbc/WONVe5T8rY7v/8TS+ZICC6ciKUT/L6qc?=
- =?us-ascii?Q?NuvsWPAGFTxrvNSX1lCs+moGD9kljrgUCDeLFHYuix/6qJr25mBTpzbKRgti?=
- =?us-ascii?Q?XsuejB4D40sxqIemkK+2QxMjV5dMYey3B7WpoBqA/R/y4FXq9y9Rvqqw0gaT?=
- =?us-ascii?Q?cWO7555Mnqu5opT73OvldemIAYvtNKu7KMskfRKZJ10dqkfdUQAbierF6Evi?=
- =?us-ascii?Q?ZBapKZl5/6kgIM3JVSVCEpGKnEohrQN8saQddjf5DzZdXkX+gSSLXAULGBB+?=
- =?us-ascii?Q?QXf4WMBbC8PUK0jMaT3m8dcD3/ebnb7shyMlJ2KOCENI/3rXJkfdO0Rs9WIu?=
- =?us-ascii?Q?qP9AVOF3KTuk3IqiqOVoS/+WFxBxuKbOE2P/5cCX12g4sXUWk2BdTC3XRFwb?=
- =?us-ascii?Q?oqJ/NF1lujYYS7b4k+NN9eFomvnPC51rBoNH+0BQteZLC1JMj0o6Ri0VMhoZ?=
- =?us-ascii?Q?QoZZ1u44f606SKk5sLq5njCrPBcITx9zhpro8CMQ25ze+vqmSJJLvw8DJLQw?=
- =?us-ascii?Q?WBk7aTo+yuoVoAvDPI3UeoCzxc3C9xfoDzqEEwTCmWb8v7WPSka0xeQC/bjh?=
- =?us-ascii?Q?2QRQy6OlAmlnwEtTH9dRfZZEcGmkkZkauekCpyAyyHEY72s6zWgzfQB+UtCQ?=
- =?us-ascii?Q?0jB2PxFYTuHvYXrOGSJ3vQ+plMU26dzMEQHq3Vdwxffmf442Ln+UbHoNpDP8?=
- =?us-ascii?Q?nvTSGzymyHbJM220mnJiBl6Nf/hQCUFnWLJh6KdlTCZLRqsG3A6S3qxxntUj?=
- =?us-ascii?Q?ecrs2XntxeaiR4X/ZysAI/IinMdIFMOSXNYgQZWtRXy+uJH34MF7AvlbpxCK?=
- =?us-ascii?Q?EGLhqDc7VnJNuCsMO6FH51bkWdj493lm72hqmQrXow0QX7wCkFkFWDFGsX6H?=
- =?us-ascii?Q?g4Qd6snRlnJcjtfL7R53d0Lh7xQL5loGDeGZWHw4v7s9iinBIWvfLPKVOoj7?=
- =?us-ascii?Q?ZXFzVJcRwrcVQGdkkzCAjo1Ns8xCLG9+avM66VxZWCsWcwRjjqpJpukh9p1s?=
- =?us-ascii?Q?T7U+qol76oZfxuTmJMrLB8UPYHfAR5kqw4S2Zy6+HJKsah8ilNCMfVWHjRET?=
- =?us-ascii?Q?jZLjSsowNveg3kf39pRgb2oSwvVuAb3jOS5Qqa9G1qtGCYr1KHfh1Mn0Magk?=
- =?us-ascii?Q?ZQxLbkMS5F5K9CEE9euBHAJm7nqCS4CtNVrZt4tI8zgikZHTTqGCaD+svpLJ?=
- =?us-ascii?Q?3GCAu3PaGZVM+m32nMgwwpM6XlndV1dDAKo4iQdY8Q4j+Rp6VnP3sEcntX0W?=
- =?us-ascii?Q?QVloX02cWUf66OJqkBWgJuu7GrxlFbjzTPtXcF8O9j7wOhVF1yGusvpjZ/RM?=
- =?us-ascii?Q?fcnL5wLIqw+Zi/POuiqJiWD3+PIo8mn8R7U+3BZMCybs3OzmfLhET2IOw574?=
- =?us-ascii?Q?9O0gmFzcPXfqAksXomwoCCOoeK/IKve6vLyO2xRr?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 29 Jan 2023 21:25:24 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18F01D900;
+        Sun, 29 Jan 2023 18:25:20 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id b3so17023253lfv.2;
+        Sun, 29 Jan 2023 18:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vBuiJBVm2tNm0T5Xjj3NOb3iR5h5QCN0pN0vFZkrcBc=;
+        b=iLEAeHz90s4RrfB9u0qjxHhTom4GpA1Rb46JcmZP77Gq9y6Utj1bTHmgNdDJS6VB73
+         qyf6bVvf2j/okvngGYVW3WYPiWfpZqzEh9UxE9qQYXBpog+SmxpD0AQNojvO0ty4X2Fq
+         5kXakLaU0OMHObhvTgziH1jsbssG101RSiKJE1QulvObcZtNN/vfboyUp0lLK4PrL8E+
+         XgWYwPLuY4lyNi3LCfYgAXB4zQ+ydbW1wolbYCEmEVykimgOW/Y8qzLFXq9poxtVtZY7
+         6e2Vpobh8cMWJr630dSL2gojqNPTifJEER5c/tKSGWogGwrrExbaPkxkAjN2E50QEBlX
+         3TQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vBuiJBVm2tNm0T5Xjj3NOb3iR5h5QCN0pN0vFZkrcBc=;
+        b=aegdyqAPfYb3h+B+hvR3CT5y8t72r+1g/CnYnm6xXBl0vQIXKjLOcXxeNCxFOovUlV
+         39P/TSpYydPEoj/9U/OM4Lj6WJcr3Wvm8rEl23S6LhMmmLsI9LOjMQBACe5fSkBJuLaN
+         1C/CJfCbPaJ617ihEwNtsP5It9mEM7a87KCF/fmjohFBUHelZZYj2I9TnElmL0fTZr/T
+         5QNgYRBm4KbXrpXu3+EL1JyDyJHGyKrsN50pSgwjYONPlZLM+9uKmUuPKOyxob27rnqU
+         vX2ONR9HYgbaqWzahWiM8aoMLOks7TkPKIoBFrCCoIcwYNjwDt3JfKCPwQtCkYP7eGRx
+         X8VA==
+X-Gm-Message-State: AFqh2krCe0DyntQJrSVcbfZQiIU7ePIfUktP821HJiU/SbBUeTQcx835
+        m7Pg0mvPGQIYaYR+ti+UgN0FTiYFKzHowPg70hA=
+X-Google-Smtp-Source: AMrXdXt4gybyDRlvFlysn8lG7/slFK+PNcqRWxMlse6IWC/t668XMPgiODUqdnMZvaBPWektkErybg8DHl9YL9UERWg=
+X-Received: by 2002:a19:6901:0:b0:4d5:af91:f3e9 with SMTP id
+ e1-20020a196901000000b004d5af91f3e9mr2241585lfc.269.1675045518709; Sun, 29
+ Jan 2023 18:25:18 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5aab976-ec6c-450e-d4a3-08db0268d0aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 02:22:20.3611
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fMPk+o98ERHXq9fFh3w/8uImXbxXBtLuDZUhaJpy3JboFfD/sCIsIRx07IWKsICfxbF9LgWa+NMYJZJCu9+wfQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR11MB6021
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
+ <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
+In-Reply-To: <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Mon, 30 Jan 2023 03:24:41 +0100
+Message-ID: <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
+Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        llvm@lists.linux.dev, Ben Hutchings <benh@debian.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Tian, Kevin <kevin.tian@intel.com>
-> Sent: Sunday, January 29, 2023 5:23 PM
+?
+
+On Mon, Jan 30, 2023 at 12:21 AM Ian Rogers <irogers@google.com> wrote:
 >
-> > hw_pagetable by the attached devices. Make this field as a pointer, onl=
-y
-> > allocate for a stage-2 hw_pagetable. A stage-1 hw_pagetable should
-> reuse
-> > the stage-2 hw_pagetable's devices_users, because when a device
-> attaches
-> > to a stage-1 hw_pagetable, linking the stage-2 hwpt to the IOAS is stil=
-l
-> > required. So, with a nested configuration, increase the devices_users o=
-n
-> > the stage-2 (parent) hwpt, no matter a device is attached to the stage-=
-1
-> > or the stage-2 hwpt.
->=20
-> Above is very confusing w/o seeing the full series of nesting support.
->=20
-> As a preparatory step this should focus on existing code and what this
-> series tries to achieve. e.g. I'd not make device_users a pointer here.
-> Do that incrementally when the nesting support comes.
+> On Sun, Jan 29, 2023 at 1:59 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > [ CC LLVM linux folks + Ben from Debian kernel team ]
+> >
+> > Hi,
+> >
+> > I am playing with LLVM version 16.0.0-rc1 which was released yesterday and PERF.
+> >
+> > After building my selfmade LLVM toolchain, I built perf and run some
+> > perf tests here on my Intel SandyBridge CPU (details see below).
+> >
+> > perf all metrics test: FAILED!
+> >
+> > ...with both Debian's perf version 6.1.7 and my selfmade version 6.2-rc5.
+> >
+> > Just noticed:
+> >
+> > Couldn't bump rlimit(MEMLOCK), failures may take place when creating
+> > BPF maps, etc
+> >
+> > Run the below tests with `sudo` - made this go away - still FAILED.
+> >
+> > But maybe I am missing to activate some sysfs/debug or whatever other stuff?
+>
+> Hi Sedat,
+>
+> things have been improving wrt metrics and so this failure may have
+> just been because of the addition of a previously missing metric. The
+> rlimit thing shouldn't affect things but maybe file descriptors?
+> Looking at the test output the issue is:
+>
+> ```
+> Metric 'tma_dram_bound' not printed in:
+> # Running 'internals/synthesize' benchmark:
+> Computing performance of single threaded perf event synthesis by
+> synthesizing events on the perf process itself:
+>   Average synthesis took: 207.680 usec (+- 0.176 usec)
+>   Average num. events: 30.000 (+- 0.000)
+>   Average time per event 6.923 usec
+>   Average data synthesis took: 217.833 usec (+- 0.202 usec)
+>   Average num. events: 161.000 (+- 0.000)
+>   Average time per event 1.353 usec
+>
+>  Performance counter stats for 'perf bench internals synthesize':
+>
+>      <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+>                          (0,00%)
+>      <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+>                          (0,00%)
+>      <not counted>      CPU_CLK_UNHALTED.THREAD
+>                          (0,00%)
+>      <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+>                             (0,00%)
+> ```
+>
+> So the test was checking to see whether the tma_dram_bound metric
+> could be computed on your Sandybridge and it failed. The event counts
+> below show that every event came back "<not counted>" which is usually
+> indicative of a permissions problem - it is also not surprising given
+> this that the metric wasn't computed. You could try repeating the
+> command the test is trying with something like "perf stat -M
+> tma_dram_bound -a sleep 1", but running as root should have resolved
+> that issue. Does that give you enough to keep exploring?
+>
 
-Yes, in the below branch, I've moved this patch to be together with the nes=
-ting
-commits. Maybe I can send out the nesting RFC.
+Hi Ian,
 
-https://github.com/yiliu1765/iommufd/commits/wip/iommufd-v6.2-rc4-nesting
+Thanks for your feedback!
 
-Regards,
-Yi Liu
+I booted into my Debian kernel - just to see what happens.
+
+# cat /proc/version
+Linux version 6.1.0-2-amd64 (debian-kernel@lists.debian.org) (gcc-12
+(Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1
+SMP PREEMPT_DYNAMIC Debian 6.1.7-1 (2023-01-18)
+
+All things run as root...
+
+# echo 0 | tee /proc/sys/kernel/kptr_restrict
+/proc/sys/kernel/perf_event_paranoid
+0
+
+# /usr/bin/perf test 10 92 98 99 100 101
+10: PMU events                                                      :
+10.1: PMU event table sanity                                        : Ok
+10.2: PMU event map aliases                                         : Ok
+10.3: Parsing of PMU event table metrics                            : Ok
+10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+92: perf record tests                                               : Ok
+98: perf stat tests                                                 : Ok
+99: perf all metricgroups test                                      : Ok
+100: perf all metrics test                                           : FAILED!
+101: perf all PMU test                                               : Ok
+
+# perf stat -M tma_dram_bound -a sleep 1
+
+Performance counter stats for 'system wide':
+
+    <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+                  (0,00%)
+    <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+                     (0,00%)
+    <not counted>      CPU_CLK_UNHALTED.THREAD
+              (0,00%)
+    <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+                        (0,00%)
+
+      1,002148600 seconds time elapsed
+
+Hmm... looking at... Metric 'tma_l3_bound' ...
+
+Running...
+
+# perf stat --verbose -M tma_l3_bound -a sleep 1
+Using CPUID GenuineIntel-6-2A-7
+metric expr (MEM_LOAD_UOPS_RETIRED.LLC_HIT /
+(MEM_LOAD_UOPS_RETIRED.LLC_HIT + 7 *
+MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS)) *
+CYCLE_ACTIVITY.STALLS_L2_PENDING / CLKS for tma_l3_bound
+metric expr CPU_CLK_UNHALTED.THREAD for CLKS
+
+found event MEM_LOAD_UOPS_RETIRED.LLC_HIT
+found event CYCLE_ACTIVITY.STALLS_L2_PENDING
+found event CPU_CLK_UNHALTED.THREAD
+found event MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+
+Parsing metric events
+'{MEM_LOAD_UOPS_RETIRED.LLC_HIT/metric-id=MEM_LOAD_UOPS_RETIRED.LLC_HIT/,CYCLE_ACTIVITY.STALLS_L2_PENDING/metric-id=CYCLE_ACTIVITY.STALLS_L2_PEND
+ING/,CPU_CLK_UNHALTED.THREAD/metric-id=CPU_CLK_UNHALTED.THREAD/,MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS/metric-id=MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS/}:W'
+MEM_LOAD_UOPS_RETIRED.LLC_HIT -> cpu/event=0xd1,period=0xc365,umask=0x4/
+CYCLE_ACTIVITY.STALLS_L2_PENDING ->
+cpu/event=0xa3,cmask=0x5,period=0x1e8483,umask=0x5/
+CPU_CLK_UNHALTED.THREAD -> cpu/event=0x3c,period=0x1e8483/
+MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS -> cpu/event=0xd4,period=0x186a7,umask=0x2/
+
+Control descriptor is not initialized
+
+MEM_LOAD_UOPS_RETIRED.LLC_HIT: 0 4007421228 0
+CYCLE_ACTIVITY.STALLS_L2_PENDING: 0 4007421228 0
+CPU_CLK_UNHALTED.THREAD: 0 4007421228 0
+MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS: 0 4007421228 0
+
+Performance counter stats for 'system wide':
+
+    <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+                  (0,00%)
+    <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+                     (0,00%)
+    <not counted>      CPU_CLK_UNHALTED.THREAD
+              (0,00%)
+    <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+                        (0,00%)
+
+      1,002310013 seconds time elapsed
+
+So those events/metric-ids resulting in "<not counted>" are all found.
+
+What means "Control descriptor is not initialized"?
+
+To summarize:
+
+Those two tests in "100: perf all metrics test" FAILED:
+
+1. tma_dram_bound
+2. tma_l3_bound
+
+Best regards,
+-Sedat-
+
+> Thanks,
+> Ian
+>
+> > Last perf version which was OK:
+> >
+> > ~/bin/perf -v
+> > perf version 6.0.0
+> >
+> > echo "linux-perf: Adjust limited access to performance monitoring and
+> > observability operations"
+> > echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> > /proc/sys/kernel/perf_event_paranoid
+> > 0
+> >
+> > ~/bin/perf test 10 86 92 93 94 95
+> > 10: PMU events                                                      :
+> > 10.1: PMU event table sanity                                        : Ok
+> > 10.2: PMU event map aliases                                         : Ok
+> > 10.3: Parsing of PMU event table metrics                            : Ok
+> > 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> > 86: perf record tests                                               : Ok
+> > 92: perf stat tests                                                 : Ok
+> > 93: perf all metricgroups test                                      : Ok
+> > 94: perf all metrics test                                           : Ok
+> > 95: perf all PMU test                                               : Ok
+> >
+> > echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+> > /proc/sys/kernel/perf_event_paranoid
+> > echo "linux-perf: Reset limited access to performance monitoring and
+> > observability operations"
+> >
+> > If you need further information, please let me know.
+> >
+> > Thanks.
+> >
+> > Regards,
+> > -Sedat-
+> >
+> > P.S. Instructions
+> >
+> > [ REPRODUCER ]
+> >
+> > LLVM_MVER="16"
+> >
+> > # Debian LLVM
+> > ##LLVM_TOOLCHAIN_PATH="/usr/lib/llvm-${LLVM_MVER}/bin"
+> > # Selfmade LLVM
+> > LLVM_TOOLCHAIN_PATH="/opt/llvm/bin"
+> > if [ -d ${LLVM_TOOLCHAIN_PATH} ]; then
+> >    export PATH="${LLVM_TOOLCHAIN_PATH}:${PATH}"
+> > fi
+> >
+> > PYTHON_VER="3.11"
+> > MAKE="make"
+> > MAKE_OPTS="V=1 -j1 HOSTCC=clang-$LLVM_MVER HOSTLD=ld.lld
+> > HOSTAR=llvm-ar CC=clang-$LLVM_MVER LD=ld.lld AR=llvm-ar
+> > STRIP=llvm-strip"
+> >
+> > echo "LLVM MVER ........ $LLVM_MVER"
+> > echo "Path settings .... $PATH"
+> > echo "Python version ... $PYTHON_VER"
+> > echo "make line ........ $MAKE $MAKE_OPTS"
+> >
+> > LANG=C LC_ALL=C make -C tools/perf clean 2>&1 | tee ../make-log_perf-clean.txt
+> >
+> > LANG=C LC_ALL=C $MAKE $MAKE_OPTS -C tools/perf
+> > PYTHON=python${PYTHON_VER} install-bin 2>&1 | tee
+> > ../make-log_perf-install_bin_python${PYTHON_VER}_llvm${LLVM_MVER}.txt
+> >
+> >
+> > [ TESTS ]
+> >
+> > [ TESTS - START ]
+> >
+> > echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> > /proc/sys/kernel/perf_event_paranoid
+> >
+> > [ TESTS - DEBIAN ]
+> >
+> > /usr/bin/perf -v
+> > perf version 6.1.7
+> >
+> > /usr/bin/perf test 10 92 98 99 100 101
+> >
+> >  10: PMU events                                                      :
+> >  10.1: PMU event table sanity                                        : Ok
+> >  10.2: PMU event map aliases                                         : Ok
+> >  10.3: Parsing of PMU event table metrics                            : Ok
+> >  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> >  92: perf record tests                                               : Ok
+> >  98: perf stat tests                                                 : Ok
+> >  99: perf all metricgroups test                                      : Ok
+> > 100: perf all metrics test                                           : FAILED!
+> > 101: perf all PMU test                                               : Ok
+> >
+> > [ TESTS - DILEKS ]
+> >
+> > ~/bin/perf -v
+> > perf version 6.2.0-rc5
+> >
+> > ~/bin/perf test 7 87 93 94 95 96
+> >
+> >   7: PMU events                                                      :
+> >   7.1: PMU event table sanity                                        : Ok
+> >   7.2: PMU event map aliases                                         : Ok
+> >   7.3: Parsing of PMU event table metrics                            : Ok
+> >   7.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> >  87: perf record tests                                               : Ok
+> >  93: perf stat tests                                                 : Ok
+> >  94: perf all metricgroups test                                      : Ok
+> >  95: perf all metrics test                                           : FAILED!
+> >  96: perf all PMU test                                               : Ok
+> >
+> > [ TESTS - FAILED ]
+> >
+> > /usr/bin/perf test --verbose 100 2>&1 | tee
+> > perf-test-verbose-100-perf-all-metrics-test_debian-perf-6-1-7.txt
+> >
+> > ~/bin/perf test --verbose 95 2>&1 | tee
+> > perf-test-verbose-95-perf-all-metrics-test_dileks-perf-6-2-rc5.txt
+> >
+> > [ TESTS - STOP ]
+> >
+> > echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+> > /proc/sys/kernel/perf_event_paranoid
+> >
+> > - EOT -
