@@ -2,68 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1169E680DEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F57D680DF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbjA3Mkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S235451AbjA3MmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjA3Mkr (ORCPT
+        with ESMTP id S230291AbjA3MmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:40:47 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3947F135;
-        Mon, 30 Jan 2023 04:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BFYWJkXqjJPJpFT0wydjtQXbF5F3b4P+HfuG4t2+TMg=; b=QkGJFOeWp2gXOe6u+zph8KHMLb
-        rUEhBDEFyUZk4EcT9oGZLIdZxF7YjnkwkWHpvbnke74J8GVbpFHFJjoXO18NdGalTTBsN5MwjjPHG
-        6pwDXBQRsqUEigvaGYU5Pc8I8ani9xlvbugcErUyu3yFyqEyHyl5dz9ncjiGtwbPXt0XBnENbIJcM
-        xCRGDvY9VuB6p7D0/ba+Hpqmr3kuHr1mhDq2zGrleo7GL131HPSQKgb+XbBVz7ExZoiK4/jvtUNOU
-        Df9wYUkjvVDPD9R2FvDO0TxmLUOeyUj/kE01k4wpD9KW7AKsJrLidNicO8w2NYvQaCQALeDwuuyN+
-        JeYAGvpQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pMTRr-003wMy-2V;
-        Mon, 30 Jan 2023 12:39:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 39B2A3002BF;
-        Mon, 30 Jan 2023 13:40:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 14FA920BD2C90; Mon, 30 Jan 2023 13:40:19 +0100 (CET)
-Date:   Mon, 30 Jan 2023 13:40:18 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>, kvm@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>,
-        live-patching@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
- loaded vhost worker kthreads
-Message-ID: <Y9e6ssSHUt+MUvum@hirez.programming.kicks-ass.net>
-References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
- <Y9KyVKQk3eH+RRse@alley>
- <Y9LswwnPAf+nOVFG@do-x1extreme>
- <20230127044355.frggdswx424kd5dq@treble>
- <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
- <20230127165236.rjcp6jm6csdta6z3@treble>
- <20230127170946.zey6xbr4sm4kvh3x@treble>
- <20230127221131.sdneyrlxxhc4h3fa@treble>
+        Mon, 30 Jan 2023 07:42:18 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5D45B97
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:42:17 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UC9b6d016462;
+        Mon, 30 Jan 2023 12:41:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=SmLzzuerEoq5t9Gzjsx9QeubJiRT4pgArGq5OrlmHf0=;
+ b=DHN6SLq/v1laThhBazkHeqiPESPsxOUzaWU1bQuWApwnIHNzb8aj0M+COFKeuaxj+2Th
+ Bk0hV1IsbSJmLZi+PG9W3YVo0vTLg+v1HcYMTOSS9/P4CAay1NGUXNvyMrni9X0LxVWT
+ 4sM4hUTv+WMUzitTrRjBi+6eHCHagh4ln/gOvLjdXOLNG2cd/mJ+tGMzJWDthmGs83Ez
+ 9NS/OshMfRKwSVOfohm53gfD2kimNYGuQlMcyot/dZK2GhYScFFlfMesW66Mwnnw0dP4
+ 7NJonTPMHu5SC/xGBFB201GfQ25tYEusR7MMmHFSgnDbZoCGhfdf2X0jf3Av9dOXIap/ iA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nebxeu3es-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 12:41:26 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30UCAHxE021192;
+        Mon, 30 Jan 2023 12:41:26 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nebxeu3ea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 12:41:25 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30UBnhSr025436;
+        Mon, 30 Jan 2023 12:41:24 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3ncvtrdb8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 12:41:24 +0000
+Received: from b03ledav001.gho.boulder.ibm.com ([9.17.130.232])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30UCfNhq8258214
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 Jan 2023 12:41:23 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 673BB6E050;
+        Mon, 30 Jan 2023 12:43:28 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7F6F66E04E;
+        Mon, 30 Jan 2023 12:43:24 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.110.248])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 30 Jan 2023 12:43:24 +0000 (GMT)
+Message-ID: <220b0be95a8c733f0a6eeddc08e37977ee21d518.camel@linux.ibm.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Date:   Mon, 30 Jan 2023 07:40:47 -0500
+In-Reply-To: <DM8PR11MB5750F939C0B70939AD3CBC37E7D39@DM8PR11MB5750.namprd11.prod.outlook.com>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <Y9EkCvAfNXnJ+ATo@kroah.com>
+         <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <Y9Jh2x9XJE1KEUg6@unreal>
+         <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <Y9JyW5bUqV7gWmU8@unreal>
+         <DM8PR11MB57507D9C941D77E148EE9E87E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <702f22df28e628d41babcf670c909f1fa1bb3c0c.camel@linux.ibm.com>
+         <DM8PR11MB5750F939C0B70939AD3CBC37E7D39@DM8PR11MB5750.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TrOy0LamtMjgCzcx9x7_zhBWtk8LM61g
+X-Proofpoint-ORIG-GUID: IWo7cP949gYF6c-daYAgZ_ZxUF3I4s-s
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127221131.sdneyrlxxhc4h3fa@treble>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_10,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ phishscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300121
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,116 +124,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 02:11:31PM -0800, Josh Poimboeuf wrote:
+On Mon, 2023-01-30 at 07:42 +0000, Reshetova, Elena wrote:
+[...]
+> > The big threat from most devices (including the thunderbolt
+> > classes) is that they can DMA all over memory.  However, this isn't
+> > really a threat in CC (well until PCI becomes able to do encrypted
+> > DMA) because the device has specific unencrypted buffers set aside
+> > for the expected DMA. If it writes outside that CC integrity will
+> > detect it and if it reads outside that it gets unintelligible
+> > ciphertext.  So we're left with the device trying to trick secrets
+> > out of us by returning unexpected data.
+> 
+> Yes, by supplying the input that hasn’t been expected. This is
+> exactly the case we were trying to fix here for example:
+> https://lore.kernel.org/all/20230119170633.40944-2-alexander.shishkin@linux.intel.com/
+> I do agree that this case is less severe when others where memory
+> corruption/buffer overrun can happen, like here:
+> https://lore.kernel.org/all/20230119135721.83345-6-alexander.shishkin@linux.intel.com/
+> But we are trying to fix all issues we see now (prioritizing the
+> second ones though). 
 
+I don't see how MSI table sizing is a bug in the category we've
+defined.  The very text of the changelog says "resulting in a kernel
+page fault in pci_write_msg_msix()."  which is a crash, which I thought
+we were agreeing was out of scope for CC attacks?
 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 4df2b3e76b30..fbcd3acca25c 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -36,6 +36,7 @@
->  #include <linux/seqlock.h>
->  #include <linux/kcsan.h>
->  #include <linux/rv.h>
-> +#include <linux/livepatch_sched.h>
->  #include <asm/kmap_size.h>
->  
->  /* task_struct member predeclarations (sorted alphabetically): */
-> @@ -2074,6 +2075,9 @@ DECLARE_STATIC_CALL(cond_resched, __cond_resched);
->  
->  static __always_inline int _cond_resched(void)
->  {
-> +	//FIXME this is a bit redundant with preemption disabled
-> +	klp_sched_try_switch();
-> +
->  	return static_call_mod(cond_resched)();
->  }
+> > 
+> > If I set this as the problem, verifying device correct operation is
+> > a possible solution (albeit hugely expensive) but there are likely
+> > many other cheaper ways to defeat or detect a device trying to
+> > trick us into revealing something.
+> 
+> What do you have in mind here for the actual devices we need to
+> enable for CC cases?
 
-Right, I was thinking you'd do something like:
+Well, the most dangerous devices seem to be the virtio set a CC system
+will rely on to boot up.  After that, there are other ways (like SPDM)
+to verify a real PCI device is on the other end of the transaction.
 
-	static_call_update(cond_resched, klp_cond_resched);
+> We have been using here a combination of extensive fuzzing and static
+> code analysis.
 
-With:
+by fuzzing, I assume you mean fuzzing from the PCI configuration space?
+Firstly I'm not so sure how useful a tool fuzzing is if we take Oopses
+off the table because fuzzing primarily triggers those so its hard to
+see what else it could detect given the signal will be smothered by
+oopses and secondly I think the PCI interface is likely the wrong place
+to begin and you should probably begin on the virtio bus and the
+hypervisor generated configuration space.
 
-static int klp_cond_resched(void)
-{
-	klp_try_switch_task(current);
-	return __cond_resched();
-}
-
-That would force cond_resched() into doing the transition thing,
-irrespective of the preemption mode at hand. And then, when KLP be done,
-re-run sched_dynamic_update() to reset it to whatever it ought to be.
-
-> @@ -401,8 +421,10 @@ void klp_try_complete_transition(void)
->  	 */
->  	read_lock(&tasklist_lock);
->  	for_each_process_thread(g, task)
-> -		if (!klp_try_switch_task(task))
-> +		if (!klp_try_switch_task(task)) {
-> +			set_tsk_need_resched(task);
->  			complete = false;
-> +		}
-
-Yeah, no, that's broken -- preemption state live in more than just the
-TIF bit.
-
->  	read_unlock(&tasklist_lock);
->  
->  	/*
-> @@ -413,6 +435,7 @@ void klp_try_complete_transition(void)
->  		task = idle_task(cpu);
->  		if (cpu_online(cpu)) {
->  			if (!klp_try_switch_task(task)) {
-> +				set_tsk_need_resched(task);
->  				complete = false;
->  				/* Make idle task go through the main loop. */
->  				wake_up_if_idle(cpu);
-
-Idem.
-
-Also, I don't see the point of this and the __schedule() hook here:
-
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 3a0ef2fefbd5..01e32d242ef6 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -6506,6 +6506,8 @@ static void __sched notrace __schedule(unsigned int sched_mode)
->  	struct rq *rq;
->  	int cpu;
->  
-> +	klp_sched_try_switch();
-> +
->  	cpu = smp_processor_id();
->  	rq = cpu_rq(cpu);
->  	prev = rq->curr;
-
-If it schedules, you'll get it with the normal switcheroo, because it'll
-be inactive some of the time. If it doesn't schedule, it'll run into
-cond_resched().
-
-> @@ -8500,8 +8502,10 @@ EXPORT_STATIC_CALL_TRAMP(might_resched);
->  static DEFINE_STATIC_KEY_FALSE(sk_dynamic_cond_resched);
->  int __sched dynamic_cond_resched(void)
->  {
-> -	if (!static_branch_unlikely(&sk_dynamic_cond_resched))
-> +	if (!static_branch_unlikely(&sk_dynamic_cond_resched)) {
-> +		klp_sched_try_switch();
->  		return 0;
-> +	}
->  	return __cond_resched();
->  }
->  EXPORT_SYMBOL(dynamic_cond_resched);
-
-I would make the klp_sched_try_switch() not depend on
-sk_dynamic_cond_resched, because __cond_resched() is not a guaranteed
-pass through __schedule().
-
-But you'll probably want to check with Mark here, this all might
-generate crap code on arm64.
-
-Both ways this seems to make KLP 'depend' (or at least work lots better)
-when PREEMPT_DYNAMIC=y. Do we want a PREEMPT_DYNAMIC=n fallback for
-_cond_resched() too?
-
+James
 
