@@ -2,142 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2DE6813E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59BA06813EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237906AbjA3O6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S237911AbjA3O6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjA3O6N (ORCPT
+        with ESMTP id S230073AbjA3O6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:58:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E744D10409;
+        Mon, 30 Jan 2023 09:58:16 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550F818158
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:58:14 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id p26so21282797ejx.13
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HiGrD1dyHCsxNZSafiiQouritp32iJwUHx6VOOxAvoU=;
+        b=6TyF+8emNxzziWsWUGWqM4UZYfylE0d3H0jPQQo9Ldg+ZbpryIRFo9jTjTrSyX2A9c
+         eXwx+jB+Z2Ytwg4EvHwJD66FjOVkG04QYF/AmsuuoXcwHa3yQThODcqd11Ga2xMyJGgz
+         xsPwN2A4qKINz5jWIdfqUfauE+mjjMVHejGYpVXXf905/B92aW5qo1w6fz5nk+YawpEN
+         KbkvniIuSjt3o+HNjxabCsZrdoc9/0kyj2EDLvqsvix61rTMQ6BaFSuIulHF7ORRNjDI
+         TRb8j20IoT7NIlnwSw2hhdkY7PyGFzpREQvSnoBMNJXhSDqRjbIvsu7yqvlAJU7qe+lq
+         g5JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HiGrD1dyHCsxNZSafiiQouritp32iJwUHx6VOOxAvoU=;
+        b=sz4PEFy2QPts2uGHdcZ1Nn9Yr5T33q3MUjG7Id9idoHZEE+sgNkZB1wfQxXi+bn19c
+         nPqSW0v8cMfk06sF6i03/unvCKVuf2gNGgECdx8y6uG5BU5xwB6hV4dgH0AAo5y/v+tg
+         KQje1OjjDPcdGNrL0/+lmHTrctPiaPE1vw7GL6zpnu/UpwYSq1CreGlbwgBGqhPaF+cN
+         R2qrjafZp0yQ2qKogXiIvnJdgP2DFr6yLDt1Kz8kJkpwzWNKBDZY6abFuCsJw58A+v5N
+         dAKfeKJHk1V1C8U2zN7AJc+Mrsx4+ip/Ga9DfUiFXY3fR6ZvMW2hxEoEphrjklTeXhBs
+         BDMQ==
+X-Gm-Message-State: AO0yUKXgK58zVy9URv1TcKXMhRb1HJwjrHBleoMCqjmNR8e2x+DGLc0f
+        hBI4vsvuGdNRkDKtElpHLATmKQ==
+X-Google-Smtp-Source: AK7set9jWVEhwPAGmMP1q6mxH37JVc79+diom5D7Nq0GQOgWQNwmTt77Z+rZGJCp4VHPL8QeLHwHZg==
+X-Received: by 2002:a17:906:4999:b0:87d:f1f9:a2fb with SMTP id p25-20020a170906499900b0087df1f9a2fbmr11258498eju.29.1675090692825;
         Mon, 30 Jan 2023 06:58:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A82B6108D;
-        Mon, 30 Jan 2023 14:58:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3774C4339B;
-        Mon, 30 Jan 2023 14:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675090691;
-        bh=Dy66gCGzyPJcLshQJwfc5AQ29gXjKkXX0fJ1HpNtqwk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gYqf0JfKAi2YFZvsQKEL8rfw9E+3lUBZ8U+ovluM5yP0y4/2CFeGC0dvsrc6zn/I2
-         Z1301CJFV09w/xcFhLBEUsY8oTIbDfVHSakHdpEsPet7yTcztpc3Z8xx6vnw4KtRZA
-         g2CgMl/0BLDVWXLA1qvBkPBvZaVyfbH1HUmCWP0V6Vh27xMFFMpGrszh7JW8KHuOvW
-         YiZTBWMIhxUoOAwfQpitjqXC1Od8m2KhVek31DeUnT9TAo/k58HBORyLR3VBywLkqN
-         HE1oUX9hcbDWGbPdZg/3xeo/ABOFuEjg8mxy0btEE9mbxQTg1ayWF4rQ+pGqXz6t85
-         /qSYKvDC4/l/A==
-Received: by mail-vk1-f171.google.com with SMTP id bs10so5854893vkb.3;
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id rh16-20020a17090720f000b0084c7029b24dsm7036658ejb.151.2023.01.30.06.58.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 30 Jan 2023 06:58:11 -0800 (PST)
-X-Gm-Message-State: AO0yUKVFuQ6nE68B1sz/ABscFhQQFjONWLWAbvBM58+/m3l4XM6J6HoI
-        /wa6n3p9Kd/ej81hdqW7Sgwfm6Pq8xRFfnp2UQ==
-X-Google-Smtp-Source: AK7set9svEjsdOnCKyk10Z9orQXpAu0MQ19gFzSd4yUat7bVea/0tlPfgDkyR8ht9EtvCpLlVMcChGgiQFZ47mwWGzg=
-X-Received: by 2002:a1f:eec2:0:b0:3ea:1a72:aad6 with SMTP id
- m185-20020a1feec2000000b003ea1a72aad6mr899057vkh.15.1675090690804; Mon, 30
- Jan 2023 06:58:10 -0800 (PST)
+Date:   Mon, 30 Jan 2023 15:58:10 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     John Hickey <jjh@daedalian.us>
+Cc:     anthony.l.nguyen@intel.com,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] ixgbe: Panic during XDP_TX with > 64 CPUs
+Message-ID: <Y9fbAqR+BDhlPb6I@nanopsycho>
+References: <20230128011213.150171-1-jjh@daedalian.us>
 MIME-Version: 1.0
-References: <20230123112803.817534-1-alexghiti@rivosinc.com>
- <20230123142554.f22ajf6upfk2ybxk@orel> <20230125104102.2thvourt3lx2p36a@orel>
- <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
- <CAL_JsqJ8JtkOBLpdf3hU9JWcdRTFr3Ss1Hd+yFpMqs7ujUiyCQ@mail.gmail.com> <20230130141933.wuikrruh2svkcfv4@orel>
-In-Reply-To: <20230130141933.wuikrruh2svkcfv4@orel>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 30 Jan 2023 08:57:58 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJdBGAOELLTQbfi6Q3r-AnS5Wf8VNf94BP6Y9TNvPHS-w@mail.gmail.com>
-Message-ID: <CAL_JsqJdBGAOELLTQbfi6Q3r-AnS5Wf8VNf94BP6Y9TNvPHS-w@mail.gmail.com>
-Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230128011213.150171-1-jjh@daedalian.us>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 8:19 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+Sat, Jan 28, 2023 at 02:12:12AM CET, jjh@daedalian.us wrote:
+>In commit 'ixgbe: let the xdpdrv work with more than 64 cpus'
+>(4fe815850bdc8d4cc94e06fe1de069424a895826), support was added to allow
+>XDP programs to run on systems with more than 64 CPUs by locking the
+>XDP TX rings and indexing them using cpu % 64 (IXGBE_MAX_XDP_QS).
 >
-> On Mon, Jan 30, 2023 at 07:48:04AM -0600, Rob Herring wrote:
-> > On Wed, Jan 25, 2023 at 6:13 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
-> > >
-> > > On Wed, Jan 25, 2023 at 11:41 AM Andrew Jones <ajones@ventanamicro.com> wrote:
-> > > >
-> > > > On Mon, Jan 23, 2023 at 03:25:54PM +0100, Andrew Jones wrote:
-> > > > > On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
-> > > > > > During the early page table creation, we used to set the mapping for
-> > > > > > PAGE_OFFSET to the kernel load address: but the kernel load address is
-> > > > > > always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-> > > > > > pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-> > > > > > PAGE_OFFSET is).
-> >
-> > [...]
-> >
-> > > > > > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> > > > > > index f08b25195ae7..58107bd56f8f 100644
-> > > > > > --- a/drivers/of/fdt.c
-> > > > > > +++ b/drivers/of/fdt.c
-> > > > > > @@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
-> > > > > >  static void __early_init_dt_declare_initrd(unsigned long start,
-> > > > > >                                        unsigned long end)
-> > > > > >  {
-> > > > > > -   /* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
-> > > > > > -    * enabled since __va() is called too early. ARM64 does make use
-> > > > > > -    * of phys_initrd_start/phys_initrd_size so we can skip this
-> > > > > > -    * conversion.
-> > > > > > +   /*
-> > > > > > +    * __va() is not yet available this early on some platforms. In that
-> > > > > > +    * case, the platform uses phys_initrd_start/phys_initrd_size instead
-> > > > > > +    * and does the VA conversion itself.
-> > > > > >      */
-> > > > > > -   if (!IS_ENABLED(CONFIG_ARM64)) {
-> > > > > > +   if (!IS_ENABLED(CONFIG_ARM64) &&
-> > > > > > +       !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
-> > > > >
-> > > > > There are now two architectures, so maybe it's time for a new config
-> > > > > symbol which would be selected by arm64 and riscv64 and then used here,
-> > > > > e.g.
-> > > > >
-> > > > >   if (!IS_ENABLED(CONFIG_NO_EARLY_LINEAR_MAP)) {
-> > > >
-> > > > I see v5 left this as it was. Any comment on this suggestion?
-> > >
-> > > Introducing a config for this only use case sounds excessive to me,
-> > > but I'll let Rob decide what he wants to see here.
-> >
-> > Agreed. Can we just keep it as is here.
-> >
-> > > > > >             initrd_start = (unsigned long)__va(start);
-> > > > > >             initrd_end = (unsigned long)__va(end);
-> >
-> > I think long term, we should just get rid of needing to do this part
-> > in the DT code and let the initrd code do this.
+>Upon trying this out patch via the Intel 5.18.6 out of tree driver
+>on a system with more than 64 cores, the kernel paniced with an
+>array-index-out-of-bounds at the return in ixgbe_determine_xdp_ring in
+>ixgbe.h, which means ixgbe_determine_xdp_q_idx was just returning the
+>cpu instead of cpu % IXGBE_MAX_XDP_QS.
 >
-> initrd code provides reserve_initrd_mem() for this and riscv calls
-> it later on. afaict, this early setting in OF code is a convenience
-> which architectures could be taught not to depend on, and then it
-> could be removed. But, until then, some architectures will need to
-> avoid it. As I commented downthread, I also don't want to go with
-> a config anymore, but it'd be nice to keep arch-specifics out of
-> here, so I've posted a patch changing __early_init_dt_declare_initrd
-> to be a weak function.
+>I think this is how it happens:
+>
+>Upon loading the first XDP program on a system with more than 64 CPUs,
+>ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
+>immediately after this, the rings are reconfigured by ixgbe_setup_tc.
+>ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
+>ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
+>ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if
+>it is non-zero.  Commenting out the decrement in ixgbe_free_q_vector
+>stopped my system from panicing.
+>
+>I suspect to make the original patch work, I would need to load an XDP
+>program and then replace it in order to get ixgbe_xdp_locking_key back
+>above 0 since ixgbe_setup_tc is only called when transitioning between
+>XDP and non-XDP ring configurations, while ixgbe_xdp_locking_key is
+>incremented every time ixgbe_xdp_setup is called.
+>
+>Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this
+>becomes another path to decrement ixgbe_xdp_locking_key to 0 on systems
+>with greater than 64 CPUs.
+>
+>For this patch, I have changed static_branch_inc to static_branch_enable
+>in ixgbe_setup_xdp.  We aren't counting references and I don't see any
+>reason to turn it off, since all the locking appears to be in the XDP_TX
+>path, which isn't run if a XDP program isn't loaded.
+>
+>Signed-off-by: John Hickey <jjh@daedalian.us>
 
-If this was *always* going to be architecture specific, then I'd
-agree. But I think there are better paths to refactor this. I don't
-want to go back to a weak function and encourage more implementations
-of __early_init_dt_declare_initrd().
+This is missing "Fixes" tag and "net" keyword in "[patch]" subject
+section.
 
-Rob
+
+>---
+> drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
+> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 2 +-
+> 2 files changed, 1 insertion(+), 4 deletions(-)
+>
+>diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+>index f8156fe4b1dc..0ee943db3dc9 100644
+>--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+>+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+>@@ -1035,9 +1035,6 @@ static void ixgbe_free_q_vector(struct ixgbe_adapter *adapter, int v_idx)
+> 	adapter->q_vector[v_idx] = NULL;
+> 	__netif_napi_del(&q_vector->napi);
+> 
+>-	if (static_key_enabled(&ixgbe_xdp_locking_key))
+>-		static_branch_dec(&ixgbe_xdp_locking_key);
+>-
+> 	/*
+> 	 * after a call to __netif_napi_del() napi may still be used and
+> 	 * ixgbe_get_stats64() might access the rings on this vector,
+>diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+>index ab8370c413f3..cd2fb72c67be 100644
+>--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+>+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+>@@ -10283,7 +10283,7 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
+> 	if (nr_cpu_ids > IXGBE_MAX_XDP_QS * 2)
+> 		return -ENOMEM;
+> 	else if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
+>-		static_branch_inc(&ixgbe_xdp_locking_key);
+>+		static_branch_enable(&ixgbe_xdp_locking_key);
+> 
+> 	old_prog = xchg(&adapter->xdp_prog, prog);
+> 	need_reset = (!!prog != !!old_prog);
+>-- 
+>2.37.2
+>
