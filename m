@@ -2,110 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FE4680F31
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20E0680F37
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236474AbjA3NkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:40:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S235612AbjA3NnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbjA3NkC (ORCPT
+        with ESMTP id S233324AbjA3NnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:40:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB132798E
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:40:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A262B8111C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:40:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E6A7C433D2;
-        Mon, 30 Jan 2023 13:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675085998;
-        bh=ZzMJHiJqebQ4kw2ICADhTnCs7qv1ooggE4O4Ys2so2A=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=kkcfAE4xV2OwZvZNAvnlTSdqRlG7NZuDW360eUuImqzOenxJ7F/xCdZnz01Nx+Dn1
-         FjWlaLA+i9gIdp3y+Ivag/A44HAAqlhusKcw86pXqZzbjYqSF+QBqQMGKsEIZyh2YW
-         nZYNeensFF1z9DXFVebGL4j8tAd0+bDARyq2kwIzTkG/cKOKaQ91FxHmhSqpRa4kRT
-         8vxplFkRgneROPalvQ6BDQYGxVNYfRCNmTbNdboncb8OQ23L49Y/PHBsExetngTAh/
-         Unf8HCjVVms1/WxirkX5TktYV/QlFp2HHHJ5baQpYvTtdTwOn42Ruc5CCd7Rst89K1
-         5HqvN8UokyTTQ==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 19B5027C005A;
-        Mon, 30 Jan 2023 08:39:57 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 30 Jan 2023 08:39:57 -0500
-X-ME-Sender: <xms:rMjXYx4zrqbuOBbDysFcZf448EGOhOqy164N3jEES50nNqJMQrr02A>
-    <xme:rMjXY-7TtuVhbVrjXb7TmZw7KUOvmRYdIV_aQtLjpj12667PB5XJlq08Pi4rZUaQ0
-    h8gy0imPaiVkrpj5Oo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
-    grthhtvghrnhepleevgfduieehfeeltdettdfhfffgkedugeeklefftdeivdfgveeiteet
-    keehffevnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugdomhgvshhmthhprghuthhh
-    phgvrhhsohhnrghlihhthidquddvkeehudejtddvgedqvdekjedttddvieegqdgrrhhnug
-    eppehkvghrnhgvlhdrohhrghesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:rMjXY4doCMzzAy0JUwcM74XsJUmJ9ZgDqJWwe4ykZZyJcYFPjcyk6A>
-    <xmx:rMjXY6I31SBiHtZK2sgRRQbJR_rDc8gNbJA7cOzGsfnrDlw7nXnj9g>
-    <xmx:rMjXY1IAYIzB6OV_3oIqAXaXiNNUzB6XhSgnKD78Z1UbmArW6WjpNw>
-    <xmx:rcjXY6o1VfsA1BB3-XxVxD7t4wnVZE0DasIfsilqm5cj39nq3WatGA>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EEE14B60086; Mon, 30 Jan 2023 08:39:55 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <b6333b49-ab8e-4f1b-9da5-454dd7d6d6bc@app.fastmail.com>
-In-Reply-To: <a870060c-9438-4383-97e3-e77d1c361b51@app.fastmail.com>
-References: <20230126163719.3585002-1-arnd@kernel.org>
- <20230126103811.56d71351.alex.williamson@redhat.com>
- <20230126174044.GA15999@lst.de>
- <20230126104515.3fcb3abf.alex.williamson@redhat.com>
- <20230130073324.GA590@lst.de>
- <a870060c-9438-4383-97e3-e77d1c361b51@app.fastmail.com>
-Date:   Mon, 30 Jan 2023 14:39:36 +0100
-From:   "Arnd Bergmann" <arnd@kernel.org>
-To:     "Arnd Bergmann" <arnd@arndb.de>, "Christoph Hellwig" <hch@lst.de>,
-        "Alex Williamson" <alex.williamson@redhat.com>
-Cc:     "Tony Krowiak" <akrowiak@linux.ibm.com>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Finn Behrens" <me@kloenk.de>, "Miguel Ojeda" <ojeda@kernel.org>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vfio-mdev: add back CONFIG_VFIO dependency
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 30 Jan 2023 08:43:08 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871069EE5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:43:07 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id mf7so13088613ejc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:43:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TDPn44BeAHxZKOTUZDOsKOvKzPPbsKRicdKnFkutGSs=;
+        b=KkOIolv7vz8zPBu47iB5hQbKRMdTq2W6IeqYYqTAJ4Kvh8/tHKDfbQ++11ihBqV6O8
+         XA2mU3sI2Ia8m+HGBq7CDGIsh1m7qfldALQRjJm+Sy5AF0kL2h1D68sMm4Ab/8OIzMu1
+         kCQZSDU94GC11KeFVfr792ToEcBppL7JQn/MAbsb57QlDVDK4MpmcqtIM9sX5VWCfJYB
+         1dbt6vG29w6jQL3ujLnRpQpGHsYbYL9FKcCETuDIEJR0l1d+CzDHKrj+kuD3RL5SXEi4
+         N2UTU9VGF1SuXtlI0CjiHtMhueFZ2KLjUw+WM+ged3XNLA+XUHlrXOsmI27Dd64IyAIG
+         wzjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TDPn44BeAHxZKOTUZDOsKOvKzPPbsKRicdKnFkutGSs=;
+        b=AqK1oJ1aGe20He+g1NUZyfcFQwtqVfHvOjJf9E1O8vnYt2BxD/R7Ocq0kciw04ZiTL
+         fY9YFRYtCTwoEephm9w6HQbMWbZw9865IjX5bviXHehem0ZwhnmG6LKjyeXkuAsxocr7
+         p8xjRcdii5sNISPd9MjaeUewwrBJ0QNez+LPv4dl6R4LKtQEGufENpQFUm4h09yI/Ld6
+         y1k9qvlsuVavJ5YmZJBvUEXNhXna8mMSC6NEnSztKImL8u+beF2OEr7MZzpZKhzphRkA
+         p34pfRUs82BRiGx48gmfZ5o8g69+2kIrQ8ffiyc42Xtd6/W6ISxooWusqm0t/tnsqAbh
+         mK4w==
+X-Gm-Message-State: AO0yUKUz8qToSnU5VueqmhKQG4pFzr1KlDbOo2ggkJ+SHh2cKTZnb19x
+        vlB5s2oWkm+7qloV015nctI=
+X-Google-Smtp-Source: AK7set9NwCqZxXn2P0I1LTRGaCVgmrHQ+HW9RGNXgt4RkbJA48YgTw2Obpk0zPgDRQmrJgZnJSr0/g==
+X-Received: by 2002:a17:906:4793:b0:87b:db62:d659 with SMTP id cw19-20020a170906479300b0087bdb62d659mr13583848ejc.19.1675086185991;
+        Mon, 30 Jan 2023 05:43:05 -0800 (PST)
+Received: from gmail.com ([31.46.245.95])
+        by smtp.gmail.com with ESMTPSA id os25-20020a170906af7900b008874c903ec5sm2350495ejb.43.2023.01.30.05.43.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 05:43:05 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 30 Jan 2023 14:43:01 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dmitry Adamushko <dmitry.adamushko@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched: pick_next_rt_entity(): checked list_entry
+Message-ID: <Y9fJZdMYbc4gRVJ+@gmail.com>
+References: <20230128-list-entry-null-check-sched-v1-1-c93085ee0055@diag.uniroma1.it>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230128-list-entry-null-check-sched-v1-1-c93085ee0055@diag.uniroma1.it>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023, at 14:34, Arnd Bergmann wrote:
-> On Mon, Jan 30, 2023, at 08:33, Christoph Hellwig wrote:
->> On Thu, Jan 26, 2023 at 10:45:15AM -0700, Alex Williamson wrote:
->>> The culprit is already in my next branch, we just need a fix that
->>> includes all the cases.  A respin of Arnd's patch would be preferable
->>> to keep the fixes in one place.  Thanks,
->>
->> Arnd, do you plan to resend the patch, or should I take care of it?
->
-> I sent the v2 last week, it looks like I forgot to add you to Cc there:
->
-> https://lore.kernel.org/all/20230126211211.1762319-1-arnd@kernel.org/
 
-I just tried again and see that neither my own script nor the
-normal scripts/get_maintainer.pl picks up the hch@lst.de address
-from the Signed-off-by line in the "Fixes" commit, though it does
-pick up the addresses from Jason, Tony and Alex. I have no idea
-what is going on there.
+* Pietro Borrello <borrello@diag.uniroma1.it> wrote:
 
-       arnd
+> Commit 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
+> removed any path which could make pick_next_rt_entity() return NULL.
+> However, BUG_ON(!rt_se) in _pick_next_task_rt() (the only caller of
+> pick_next_rt_entity()) still checks the error condition, which can
+> never happen, since list_entry() never returns NULL. Return
+> list_first_entry_or_null(queue, ...) to allow BUG to check the only
+> possible error condition here: the queue being empty which should
+> never happen.
+> 
+> Fixes: 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+> ---
+>  kernel/sched/rt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> index ed2a47e4ddae..6088d5d83b75 100644
+> --- a/kernel/sched/rt.c
+> +++ b/kernel/sched/rt.c
+> @@ -1777,7 +1777,7 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
+>  	BUG_ON(idx >= MAX_RT_PRIO);
+>  
+>  	queue = array->queue + idx;
+> -	next = list_entry(queue->next, struct sched_rt_entity, run_list);
+> +	next = list_first_entry_or_null(queue, struct sched_rt_entity, run_list);
+>  
+>  	return next;
+
+I'd much rather have something like this:
+
+	SCHED_WARN_ON(list_empty(next));
+
+So the debug check is part of CONFIG_SCHED_DEBUG=y, and not if it's turned 
+off. Also, this makes sure we don't crash (BUG_ON()) on the error 
+condition, in the hope of getting debug info out of the system.
+
+Thanks,
+
+	Ingo
