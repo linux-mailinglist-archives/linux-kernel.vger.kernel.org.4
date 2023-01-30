@@ -2,118 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2DC681D9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D68681DAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjA3WDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
+        id S229826AbjA3WFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjA3WDe (ORCPT
+        with ESMTP id S229868AbjA3WFo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:03:34 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E3C41B75
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:03:26 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id k13so13190742plg.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:03:26 -0800 (PST)
+        Mon, 30 Jan 2023 17:05:44 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF0434C30
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:05:42 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id bk16so12522848wrb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:05:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQY9unmzOV7TCZ96aU2p1l97OntyBK2gZGuBkFiwM9A=;
-        b=kQ5/LBE4EPmy0MTjOLRhc7F+4NC2emrrWOeOsFIdDMoM6TY4QMWar6RfJKJvMjsYxf
-         5aGron06eS18nyIgvaYuvNjXzAW9psgcktCwJlm6XwmaTc2k/ECsXNAjasvPiENdvkMM
-         8sWFPzniRelG8krBvqHTNtdpxdqNSjGrONOHCYImQ/iZHfiMly0NDoypeYmfSQqYs+Kd
-         XE+DisN7vEDdePh/OQQ0v/6WCUY9QKF0yPRien8ylSn4Qu5UUYxciPC/mPumeOjcqHDc
-         Zr3x8WTqi23teJmdjv3iwTSuCfbzkUgswKW1D/epr7IQYPSoPbVVYVXwRVkMzFUzNtp/
-         nqRA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=emChjJeed1eKpYwI+TZyrMB77/b+qmQePLis86Dn8K8=;
+        b=fF4QBHq/CayAljWbeGvBRmwAVeRYHWdRGWTDW5oc0VA+rNzgrWKPB6l4dTTecYOF/1
+         f5RSzyYBEYaptwLCzcr7Znh4DPP0IKOYRwHL52HFfJgLIUTshE61h4ln6W+sjiE0QETr
+         J5s742TG3xlskH4NKaRZhQTpIHroJPQh4uWffpNdpBLuUG/bqiP5ENz+1rX/3QNZXTHA
+         9xtimiVFck9WH4GC8meOxr6KXR4167WaVm6e1IYdEIhvh3yMhik2yqwKi9VNWbhgtfNz
+         5xS8D6GdmxoBR4FtOub17+v8o8lJiIiPoyzU8cb4pFZg106naVfFkWDVz3CKu8CQaWCR
+         RxDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BQY9unmzOV7TCZ96aU2p1l97OntyBK2gZGuBkFiwM9A=;
-        b=K2J8H1/cDNNhinhjIsGEBX6d42+LBa+1akqKu/nOgjyHfNI6+VdQ/cHvnYm+LXprsP
-         05FCVeU1VlhquBvmuOf6j1nPAqhOXxKUj2YmAxxxTx5XoKx3LpDIt7w91V4AXC+euYaD
-         4aFkzzzyGhe4ANS0pn9zgdl8wtXh9vFpB4S3H7epkU3xR2VC6ZF/QgvS+7+uxxpjG6JL
-         5Gfrj5Chu2CtVhjAFCM2hav9g5hi9SS8WWFGhUdRVFDX2mhyAIxO/XJpK1eGbfx0F5MM
-         u79NkgFmG4KutbEeSI8u5fBqxHBxxOtBG5YZPn7ibNBFq986lM9iF4GgzmNoRyQJNqcu
-         mnDA==
-X-Gm-Message-State: AO0yUKVyh8A9sRNO4DWyhXGWBvMysr3m4XRKeiNF+3bm8s4fSnpNNmMo
-        ygAHovZJ25KPJO9dgW8oNliWckB4RE0qsUZ/E8+BLQ==
-X-Google-Smtp-Source: AK7set/bVllA+pXLc5bfi4Hr1MjNdTVvmsxv0RI7/gPQMOGYUc7EXoUGxxPyg9Z429Lxw5P7MYpHCt7QsgZFWpVdr5U=
-X-Received: by 2002:a17:90a:9c1:b0:22c:816f:3203 with SMTP id
- 59-20020a17090a09c100b0022c816f3203mr1221685pjo.28.1675116206022; Mon, 30 Jan
- 2023 14:03:26 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=emChjJeed1eKpYwI+TZyrMB77/b+qmQePLis86Dn8K8=;
+        b=6Nqyp0JeOwQ95i9knXKP83ZNXfqx6G/7Z7jOUNWY9uqOJwGo0myJ3fAAaqJEGmDvpW
+         MVVzLgzyjc0urb+DBAR1SKayB4toeNF3ChBrpBuKHqxPzmbM0mQ/UZYCryyzCGDlvAMQ
+         O08N5I4hKd5xcxefBHOUIXwpsE9rE+oF1C4miR67D9SMy2kvW/z1FqAn1u9G7Vu7DAqj
+         r1vZnOVFtHngeZTcm3kG5XsuXsS1PGUFSuGFD9HNFzAV8O5tRPOVrqJJLwQXJPG4dHsT
+         7re5+gHZ/Ws48jgguiqX2+v9CF//SRBp97j4Eco+0vqALFWxLKnGqHjkPuvIG/guhwrc
+         QxDg==
+X-Gm-Message-State: AO0yUKUgLZjrzv1pwCjypPl+fKtTZge6gseRbOlJD2bs9FD01XxdyNgg
+        TqrLSyx5RDBpdxSSnPnKfmAJFQ==
+X-Google-Smtp-Source: AK7set/q/q0k9a9lQBsL6bgV46xu7DFQ7Ahv4AtNiE/p5jjyWJWrbre/yVqDiB0Onvne9eV6NvNyoA==
+X-Received: by 2002:adf:f041:0:b0:2bf:e45d:8e06 with SMTP id t1-20020adff041000000b002bfe45d8e06mr5871579wro.70.1675116341060;
+        Mon, 30 Jan 2023 14:05:41 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u13-20020a5d514d000000b002be2f18938csm12847786wrt.41.2023.01.30.14.05.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 14:05:40 -0800 (PST)
+Date:   Tue, 31 Jan 2023 00:05:38 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Lee Jones <lee@kernel.org>, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 16/19] clk: imx6ul: add ethernet refclock mux support
+Message-ID: <Y9g/Mpt+MywfJ6bx@linaro.org>
+References: <20230117061453.3723649-1-o.rempel@pengutronix.de>
+ <20230117061453.3723649-17-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <20230118-v4-v4t-lld-16-v1-1-e3d9a00ae47c@kernel.org>
- <202301310149.euWWUSrD-lkp@intel.com> <a40df1e3-ed92-4662-bb9e-106becce63d7@app.fastmail.com>
-In-Reply-To: <a40df1e3-ed92-4662-bb9e-106becce63d7@app.fastmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 30 Jan 2023 14:03:14 -0800
-Message-ID: <CAKwvOd=GbixTFko8aGzPQiq8QBtDY0ZZncHKag-gjsgqUM_diA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Russell King <linux@armlinux.org.uk>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, Tom Rix <trix@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230117061453.3723649-17-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 10:19 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Mon, Jan 30, 2023, at 19:10, kernel test robot wrote:
-> > Hi Nathan,
-> >
-> > I love your patch! Perhaps something to improve:
-> >
-> > [auto build test WARNING on 5dc4c995db9eb45f6373a956eb1f69460e69e6d4]
-> >
-> > url:
-> > https://github.com/intel-lab-lkp/linux/commits/Nathan-Chancellor/ARM-Allow-pre-ARMv5-builds-with-ld-lld-16-0-0-and-newer/20230119-032402
-> > base:   5dc4c995db9eb45f6373a956eb1f69460e69e6d4
-> >>> arch/arm/mach-sa1100/pm.c:122:12: warning: no previous prototype for function 'sa11x0_pm_init' [-Wmissing-prototypes]
-> >    int __init sa11x0_pm_init(void)
-> >               ^
-> >    arch/arm/mach-sa1100/pm.c:122:1: note: declare 'static' if the
-> > function is not intended to be used outside of this translation unit
-> >    int __init sa11x0_pm_init(void)
-> >    ^
-> >    static
-> >    1 warning generated.
-> > --
->
->
-> For refernece, these are all known problems, the patch just allowed
-> the code to be built by clang/lld when that was previously not
-> possible.
->
-> After the 6.3 merge window, we can probably go through the much
-> smaller set of board files are address most of the W=1 warnings that
-> were previously overwhelming.
+On 23-01-17 07:14:50, Oleksij Rempel wrote:
+> Add ethernet refclock mux support and set it to internal clock by
+> default. This configuration will not affect existing boards.
+> 
+> clock tree before this patch:
+> fec1 <- enet1_ref_125m (gate) <- enet1_ref (divider) <-,
+>                                                        |- pll6_enet
+> fec2 <- enet2_ref_125m (gate) <- enet2_ref (divider) <-´
+> 
+> after this patch:
+> fec1 <- enet1_ref_sel(mux) <- enet1_ref_125m (gate) <- ...
+>                `--<> enet1_ref_pad                      |- pll6_enet
+> fec2 <- enet2_ref_sel(mux) <- enet2_ref_125m (gate) <- ...
+>                `--<> enet2_ref_pad
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Acked-by: Lee Jones <lee@kernel.org>
 
-Yeah! I've filed
-https://github.com/ClangBuiltLinux/continuous-integration2/issues/509
-too so that we can wire up an ARMv4 test in our CI as well.
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
->
->       Arnd
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+> ---
+>  drivers/clk/imx/clk-imx6ul.c                | 26 +++++++++++++++++++++
+>  include/dt-bindings/clock/imx6ul-clock.h    |  6 ++++-
+>  include/linux/mfd/syscon/imx6q-iomuxc-gpr.h |  6 +++--
+>  3 files changed, 35 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c
+> index c3c465c1b0e7..2836adb817b7 100644
+> --- a/drivers/clk/imx/clk-imx6ul.c
+> +++ b/drivers/clk/imx/clk-imx6ul.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+> +#include <linux/mfd/syscon/imx6q-iomuxc-gpr.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_irq.h>
+> @@ -94,6 +95,17 @@ static const struct clk_div_table video_div_table[] = {
+>  	{ }
+>  };
+>  
+> +static const char * enet1_ref_sels[] = { "enet1_ref_125m", "enet1_ref_pad", };
+> +static const u32 enet1_ref_sels_table[] = { IMX6UL_GPR1_ENET1_TX_CLK_DIR,
+> +					    IMX6UL_GPR1_ENET1_CLK_SEL };
+> +static const u32 enet1_ref_sels_table_mask = IMX6UL_GPR1_ENET1_TX_CLK_DIR |
+> +					     IMX6UL_GPR1_ENET1_CLK_SEL;
+> +static const char * enet2_ref_sels[] = { "enet2_ref_125m", "enet2_ref_pad", };
+> +static const u32 enet2_ref_sels_table[] = { IMX6UL_GPR1_ENET2_TX_CLK_DIR,
+> +					    IMX6UL_GPR1_ENET2_CLK_SEL };
+> +static const u32 enet2_ref_sels_table_mask = IMX6UL_GPR1_ENET2_TX_CLK_DIR |
+> +					     IMX6UL_GPR1_ENET2_CLK_SEL;
+> +
+>  static u32 share_count_asrc;
+>  static u32 share_count_audio;
+>  static u32 share_count_sai1;
+> @@ -472,6 +484,17 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
+>  	/* mask handshake of mmdc */
+>  	imx_mmdc_mask_handshake(base, 0);
+>  
+> +	hws[IMX6UL_CLK_ENET1_REF_PAD] = imx_obtain_fixed_of_clock(ccm_node, "enet1_ref_pad", 0);
+> +
+> +	hws[IMX6UL_CLK_ENET1_REF_SEL] = imx_clk_gpr_mux("enet1_ref_sel", "fsl,imx6ul-iomuxc-gpr",
+> +				IOMUXC_GPR1, enet1_ref_sels, ARRAY_SIZE(enet1_ref_sels),
+> +				enet1_ref_sels_table, enet1_ref_sels_table_mask);
+> +	hws[IMX6UL_CLK_ENET2_REF_PAD] = imx_obtain_fixed_of_clock(ccm_node, "enet2_ref_pad", 0);
+> +
+> +	hws[IMX6UL_CLK_ENET2_REF_SEL] = imx_clk_gpr_mux("enet2_ref_sel", "fsl,imx6ul-iomuxc-gpr",
+> +				IOMUXC_GPR1, enet2_ref_sels, ARRAY_SIZE(enet2_ref_sels),
+> +				enet2_ref_sels_table, enet2_ref_sels_table_mask);
+> +
+>  	imx_check_clk_hws(hws, IMX6UL_CLK_END);
+>  
+>  	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
+> @@ -516,6 +539,9 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
+>  		clk_set_parent(hws[IMX6ULL_CLK_EPDC_PRE_SEL]->clk, hws[IMX6UL_CLK_PLL3_PFD2]->clk);
+>  
+>  	clk_set_parent(hws[IMX6UL_CLK_ENFC_SEL]->clk, hws[IMX6UL_CLK_PLL2_PFD2]->clk);
+> +
+> +	clk_set_parent(hws[IMX6UL_CLK_ENET1_REF_SEL]->clk, hws[IMX6UL_CLK_ENET_REF]->clk);
+> +	clk_set_parent(hws[IMX6UL_CLK_ENET2_REF_SEL]->clk, hws[IMX6UL_CLK_ENET2_REF]->clk);
+>  }
+>  
+>  CLK_OF_DECLARE(imx6ul, "fsl,imx6ul-ccm", imx6ul_clocks_init);
+> diff --git a/include/dt-bindings/clock/imx6ul-clock.h b/include/dt-bindings/clock/imx6ul-clock.h
+> index b44920f1edb0..66239ebc0e23 100644
+> --- a/include/dt-bindings/clock/imx6ul-clock.h
+> +++ b/include/dt-bindings/clock/imx6ul-clock.h
+> @@ -257,7 +257,11 @@
+>  #define IMX6UL_CLK_GPIO5		248
+>  #define IMX6UL_CLK_MMDC_P1_IPG		249
+>  #define IMX6UL_CLK_ENET1_REF_125M	250
+> +#define IMX6UL_CLK_ENET1_REF_SEL	251
+> +#define IMX6UL_CLK_ENET1_REF_PAD	252
+> +#define IMX6UL_CLK_ENET2_REF_SEL	253
+> +#define IMX6UL_CLK_ENET2_REF_PAD	254
+>  
+> -#define IMX6UL_CLK_END			251
+> +#define IMX6UL_CLK_END			255
+>  
+>  #endif /* __DT_BINDINGS_CLOCK_IMX6UL_H */
+> diff --git a/include/linux/mfd/syscon/imx6q-iomuxc-gpr.h b/include/linux/mfd/syscon/imx6q-iomuxc-gpr.h
+> index d4b5e527a7a3..09c6b3184bb0 100644
+> --- a/include/linux/mfd/syscon/imx6q-iomuxc-gpr.h
+> +++ b/include/linux/mfd/syscon/imx6q-iomuxc-gpr.h
+> @@ -451,8 +451,10 @@
+>  #define IMX6SX_GPR12_PCIE_RX_EQ_2			(0x2 << 0)
+>  
+>  /* For imx6ul iomux gpr register field define */
+> -#define IMX6UL_GPR1_ENET1_CLK_DIR		(0x1 << 17)
+> -#define IMX6UL_GPR1_ENET2_CLK_DIR		(0x1 << 18)
+> +#define IMX6UL_GPR1_ENET2_TX_CLK_DIR		BIT(18)
+> +#define IMX6UL_GPR1_ENET1_TX_CLK_DIR		BIT(17)
+> +#define IMX6UL_GPR1_ENET2_CLK_SEL		BIT(14)
+> +#define IMX6UL_GPR1_ENET1_CLK_SEL		BIT(13)
+>  #define IMX6UL_GPR1_ENET1_CLK_OUTPUT		(0x1 << 17)
+>  #define IMX6UL_GPR1_ENET2_CLK_OUTPUT		(0x1 << 18)
+>  #define IMX6UL_GPR1_ENET_CLK_DIR		(0x3 << 17)
+> -- 
+> 2.30.2
+> 
