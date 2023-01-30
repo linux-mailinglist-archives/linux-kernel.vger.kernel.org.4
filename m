@@ -2,142 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E6B6811E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:17:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C80B681209
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237400AbjA3ORH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S237497AbjA3OSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237441AbjA3OQv (ORCPT
+        with ESMTP id S237436AbjA3ORe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:16:51 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2050.outbound.protection.outlook.com [40.92.53.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44743D095;
-        Mon, 30 Jan 2023 06:16:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gTMqYQtZaJ6J7u70pQRH+v1jQezjaZtrNhxI8wAk37a8VDByp3NMNWwxV12QKG2INrg7SYTbIRWzN52PSO34yWNgDozuEkE05iAkpG4stUJl/hRiBN6gBCZVHm/VelyyBbDSIFAoofbPCooK69pGq3/yDfTWT2q9uJTYJTj7Kw4WjJk9BaDkhfVnBRAazxasStsTnZ5m/z5cAZ39c35IXStXBSPN9+BP46M8xUzAj1pAjI49mfDipOQXakCdmhk8hjY9xEK7lpwQmJtABbd2e3o8XjYV8x5Ea7ERJWTYsupVxb3rHCHjDwnEcyCPfCZVGqYf3SeVgsY4LePM4iGWZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BzpPyPfEXniWkVtvhKJlmojzKDdIDw5q0GYvzOkQSaQ=;
- b=MEh+8IQT+zMLTQrXyYg/ZN6xTbL7Lay95AFcSCkaL9OgngtPw24yVbt6sasHE7Q3IU89ugs4gvtJWvT/RuyyYnEMciDpwdnmeycDxYs8fn3d7t7QFvSAwsciHiqSjCl+Xdyxzvdn0cp6PS21CQ9dYdmHQk+CleDWv4PKJ+QOU9RuNxOl6oQMb4e+VQAkINv5QUSgB1FLSZ2Smlcyyzbl3Avq09erCKhUBPnNgJIZ/aZ3SnRhzrk/94NLisaNNK7lphbp/qBrbG8KdBKYR5PqPC/ecSGvJEUptQyjvXTzA6Jl6fnBrDPop7ozStHjQSmrAp+XZB/B8ilEHH+JOT2r5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BzpPyPfEXniWkVtvhKJlmojzKDdIDw5q0GYvzOkQSaQ=;
- b=jlco/IMEA74eCKaCtKgsZgo1cGK1GjfNIR4Mt6m6h9DWbRdkkRReOzE+yrNsoqnOLc2lLx6dm+vaGp/VHC9J2k3RAX2+KHox/UClV+xFpk7r1u4ZCbPwg6E8wZ2Q410sD2hbPSf9nGdVuj3t0k/CJ6hmVkXcJdYCNwfxoRjjg6M/nibd5UvvSxRjjL9wdhqAUdfIOJRm9G8cb5i3n0ovypiJjTee0jFeUR2I9WuhpldzjUDM/bkmF9mK1A+PD+4SHoLFxMnTutkbyoIrtZF1/TvnoNwyuJUlN8ADathIjGEwsk5n7pgj+5/Mz4PoC4RSFx4Z/8JehK6TIE0QTAMerA==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by TYWP286MB2420.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:167::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 14:16:42 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::82ce:8498:c0e9:4760]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::82ce:8498:c0e9:4760%9]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
- 14:16:42 +0000
-Date:   Mon, 30 Jan 2023 22:16:37 +0800
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     linkinjeon@kernel.org, sfrench@samba.org, tom@talpey.com,
-        hyc.lee@gmail.com, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] ksmbd: replace rwlock with rcu for concurrenct
- access on conn list
-Message-ID: <TYCP286MB23230E29CC81F5C0590C59C9CAD39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-References: <20230115103209.146002-1-set_pte_at@outlook.com>
- <TYCP286MB23235FDD8102162698EF3154CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
- <Y9dEZ5IgfwpZNlVm@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9dEZ5IgfwpZNlVm@google.com>
-X-TMN:  [LV7WQ88WmJdLUoLKVWToCPQ5WOs0JIgw]
-X-ClientProxiedBy: SI2PR04CA0007.apcprd04.prod.outlook.com
- (2603:1096:4:197::19) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20230130141637.GA53949@wendao-VirtualBox>
+        Mon, 30 Jan 2023 09:17:34 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51D43E60D
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:17:05 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 141so7746643pgc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mRwdu/dL23sAX4GUbLudkiV8yolykSJAycZpmDdjnSs=;
+        b=HqvfqH9bQzTp8HwQsEAvnNdSvs1y78eyVrB0kTZw6Vl9UD7EEDgvG9xM73S6GXdjW9
+         VI/ZiLzWZ/7Q4hZKZWooQR02UCvBVC1NF5yJ0+cJPF1XgrdeoMitvUUYbquAddApZx4l
+         TOf5k7cxxe1AqZcuDzrHvyPwY6tF6qFK+3D5xAJymR3xhZzgdsrRY1Q3ioTCqWEnAahC
+         SA94rqZZVuSE/pYZHU0nITly+3CQSaljUyWYm5DDjwyXsUghLpv7hCa9UrfAhveYgxiJ
+         2ulf+25vA3/uJEz2iU7mOpmOh6sSEnyFTj5Ej/R7tyeKtpUfHiUdT3CMWFUDtIDxnNZK
+         HWmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mRwdu/dL23sAX4GUbLudkiV8yolykSJAycZpmDdjnSs=;
+        b=kNTnD3Q087bZk6fzPTp20FEmQ1otpg/iOi8aqYBc/rcwB66wpwN5JaGuBh79dxH4Cx
+         mnlZLQjPiE/k8BLRd6gcQxiu+5ugJG/MemFM4ao+8D2w67rIU5MU/ZRQevFxwZB63m9f
+         JdxZ71zTVtRvLBQDYi3G8LVJXF3Dzf/6iAEQWBhCtuIZbo+wkhZRVz9tBl6oxPiq9s+g
+         1GLpBkMLHJA7KAuxsO8/VR7pgApF+nRUNUrbsOnJ0TJ2gTZimdzBLC8FnPU1rGaIF5NG
+         xTK+U0lTV048FRuFGAvn0ObJzOyYpdmf1cKOIPRofT6A2LtH7f3VOUki9HPoTaCT+TaV
+         1xPg==
+X-Gm-Message-State: AFqh2kr8wgIFhKPnI96gN4Ek2iurh2YGqsz87jCauOweOXv2677Jj6e0
+        t6BJPkyobiT97XE47rMFA7Q=
+X-Google-Smtp-Source: AMrXdXu0MJlQDCJ/dCJBjtavv4sf3AZYd3C1pvb0fPN5ftVGm1U9l483FcC/b32mt1cuB8r9zulu6A==
+X-Received: by 2002:a05:6a00:f91:b0:583:319a:4413 with SMTP id ct17-20020a056a000f9100b00583319a4413mr49510062pfb.24.1675088224838;
+        Mon, 30 Jan 2023 06:17:04 -0800 (PST)
+Received: from [172.30.1.94] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id p25-20020aa78619000000b00592d16e9a12sm5931908pfn.135.2023.01.30.06.17.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 06:17:03 -0800 (PST)
+Message-ID: <d2b63765-d497-8938-95f0-68d0cc4c2efd@gmail.com>
+Date:   Mon, 30 Jan 2023 23:17:04 +0900
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYWP286MB2420:EE_
-X-MS-Office365-Filtering-Correlation-Id: ae2aa354-3084-4703-de15-08db02cc9c2d
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YlvTYXz6GOXl0PygYbp1nLeWD59THtqRcxQOeeNapKwtyjeVRw0oKLB1hppXmkIRqE5xE1r/JWysWrYJc5dbnRW+nSJskj3oioJNW15/oDt6Wl+dKSQ4XfAGpxlU/e3koS0O+93UGPZHzVa0PKGaD0nvOoqrDMA3DXc4nwt4kPYRe0ndIwUmjE1j8NsL5KQILIhxn7LCmDwm5zdRPW4iEhyamMeUcEBwr9o4TPyL9YkqCcVdgo28tfJkeyh9PzCrhgBb3ZIhKeXLbEPpGwoBWNKWxQQZ1oSQK7fXK9U6wJMdG7aAex9AZwaCr15OXjb4ZFB3iYnDzO4g1ns+rn9pXYfr/EIVftWO6mGTp08md1lVgILCIaztmKVgDClvgJYm5eyjzcmYxATpQCsNBbxgZdd472ZyynJlT+KIJX+4PQFbCRfnhzbob4O+hcJDDsMwwoqDldIZPzI5EU6OEcfX0urwlDipvTOTv0P0n56aE8W7Y7hzFQAavWIJmLM4wL/ucsDTzH/K8T0TQi0umujztFLBVDKiKqfxuDEmoJLraB/2m+dN+SgcnQehwd9P0wKtqyL8EyX1Q54s7VRcvbQiwBi40tw1khDD7vcvzWX6dsxdjdvuBwXuOOSK5qi2mKQt9AqdJBhxmd2UAve5t0bn5g==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/5HKLHLgTAdMfWGDDH1gjyXC5XQF7npTlwaWeB32lto+4lRB5voyIafJpwnE?=
- =?us-ascii?Q?r57UN4e44srWoDZjnhse7Rad0l1hbCNYy6PuZn6qEcBItrFCAr5DFhKbi7+/?=
- =?us-ascii?Q?74cTAVF8d2Ydd9kNmX3m5ih1FtmjNh6djGwtK5lZS+NekcgReHt+2/jKiO78?=
- =?us-ascii?Q?C7G5qDhJZSwHkyFWKDCXabs+TRWE7dx3kA7Eb3LKrsrJqKfystlGlTNEH/Rm?=
- =?us-ascii?Q?cuRN4Xh4SaX1kQSI2pB2gHoK8NKU3KzN0CW3aJKhVDIWme8KuYpvFfMGQjYw?=
- =?us-ascii?Q?ZiRxGg+aENr1VkB0FQyygpqxynuGPxCDKsdm/8iKgNGds1MojiWAJ+2xwUqE?=
- =?us-ascii?Q?WkbGP7/wVT55E8uZ2Vxf6rbMOHiSsLCsCo5xGF5WRj/6hI3ljitvMckRJ55K?=
- =?us-ascii?Q?b31ElMiuYND0Q/XfMB6O1iXhe5bZI/6u2Juw0uRCQIWB4tXlKPVZE1HZUtLb?=
- =?us-ascii?Q?OvS/ACZDe6u4guyc/n/qxg67nXMU4JxI1OpJf5M2VBBjaZFPwJceV+S8YwWj?=
- =?us-ascii?Q?S2X/AESuEHKDR5tGy1MF4rJx+P09UR/6knMT2JjWnwVKHEFJ5q9e0Be9lxiX?=
- =?us-ascii?Q?NFRLoOTGC+a4FRNIqFHwtLSfj8h117mLLlaDKIrQbfcwug2Mt43yEIcKikVi?=
- =?us-ascii?Q?eMouKGdU01P5EYGZLbQwJ023z47G9uuzHt5A+DEBqKxDDylCiZV+Dvy5epug?=
- =?us-ascii?Q?QZcB9kqnKbMZPHpXSh/g9kHHsqL266xmaCnOHAEqkT+YkcRMgkOQbZ3JcXRB?=
- =?us-ascii?Q?ti4lrJyWYeMOdBovr64XDmpr/DNvpZu22Bx4mThEnaeZwoxkL8qWqH2VWpwQ?=
- =?us-ascii?Q?G4cm7aTj9i+N78msnveQIlJlLBV8EuoRTBLe/DtiDtBob7pN9EA/ac5dn+Mc?=
- =?us-ascii?Q?pLSdozWOsywyKpz+0fOdJsv9www4SdlG3/Bdf07z9X08JKBIDA3Z+j9jE8E6?=
- =?us-ascii?Q?wbxqE9lGL3EhDue1c4zzsSVVrLf6alJNhigvSXULG5UugKp9O6x9DS8q2sCx?=
- =?us-ascii?Q?Hy4D3wR1YaPdjiPCgKFG3x785ethKYzq3R5eieZvtk/Vz2fWR7G0YT7R/dL3?=
- =?us-ascii?Q?XX3JwbEvYGnRdkBIWjaq7SuqmGp4waHw8oU+e3e10iUjl4b8nWw/bEGM+tch?=
- =?us-ascii?Q?Yz2KLhJMArHQOVyUEgnXfFbTDcq8lyKg3XgsMQ8MWv1emnaDI8BRuGMh+LA9?=
- =?us-ascii?Q?0GHwQbF+m1dI0GKnpZZyQrj5GrnfM/3uOez3X/cH0v/qiJmx6grCCVGNDX9q?=
- =?us-ascii?Q?yYiqkHQoW7CwYhA2NDyjISIIeL01XMiZxvPpSy2V5w=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae2aa354-3084-4703-de15-08db02cc9c2d
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 14:16:42.3954
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB2420
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] extcon: Add EXTCON_BATTERY type for battery presence
+Content-Language: en-US
+To:     Andrew Lien/WHQ/Wistron <Andrew_Lien@wistron.com>,
+        "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>
+Cc:     "cw00.choi@samsung.com" <cw00.choi@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230110023656.1334114-1-andrew_lien@wistron.com>
+ <dc62d036-dcab-532b-1c3c-fbebcd1705fa@gmail.com>
+ <SEYPR02MB62308AE65824DC7F372EFCA585FC9@SEYPR02MB6230.apcprd02.prod.outlook.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <SEYPR02MB62308AE65824DC7F372EFCA585FC9@SEYPR02MB6230.apcprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
-
-Thanks for reviewing,
-
-On Mon, Jan 30, 2023 at 01:15:35PM +0900, Sergey Senozhatsky wrote:
-> On (23/01/15 18:32), Dawei Li wrote:
-> > 
-> >  void ksmbd_conn_free(struct ksmbd_conn *conn)
-> >  {
-> > -	write_lock(&conn_list_lock);
-> > -	list_del(&conn->conns_list);
-> > -	write_unlock(&conn_list_lock);
-> > +	spin_lock(&conn_list_lock);
-> > +	list_del_rcu(&conn->conns_list);
-> > +	spin_unlock(&conn_list_lock);
-        synchronize_rcu(); 
-> >  
-> >  	xa_destroy(&conn->sessions);
-> >  	kvfree(conn->request_buf);
+On 23. 1. 11. 18:00, Andrew Lien/WHQ/Wistron wrote:
+> Sorry I didn't describe it in detail enough
 > 
-> From a quick look this does not seem like a correct RCU usage. E.g.
-> where do you wait for grace periods and synchronize readers/writers?
+> we have a standalone driver to do battery detection, this driver is separate from power_supply device driver
+> and not just report uevet to userspace, we also need a method to notify other kernel driver "battery removal event"
 
-Nice catch, I totally mess it up. Thanks!
+As I commented, it is not good to detect the battery status by extcon
+which only handle the external connector.
+It means that you just try to use extcon subsystem to support 'publisher - subscriber'.
 
-At first glance, I assume synchronize_rcu() will do the job if sleeping
-is OK?
 
-Steve, Namjae,
-Please drop this buggy patch from ksmbd-for-next.
+> it will be better if using same battery detection driver to support different platform charger driver.
+> 
+> by the way, swappable battery usually have 4 pin connector (power / ground / ID / THERMAL)
+> you can find some phone that support battery swap feature (like Samsung xcover 6 pro)
+> 
+> -----Original Message-----
+> From: Chanwoo Choi <cwchoi00@gmail.com> 
+> Sent: Tuesday, January 10, 2023 9:40 PM
+> To: Andrew Lien/WHQ/Wistron <Andrew_Lien@wistron.com>; myungjoo.ham@samsung.com
+> Cc: cw00.choi@samsung.com; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] extcon: Add EXTCON_BATTERY type for battery presence
+> 
+> On 23. 1. 10. 11:36, andrew lien/WHQ/Wistron wrote:
+>> This information can be useful to device that support battery swap, 
+>> for example allowing them to indicate that a battery is present or 
+>> not, so provide a standard way to report it to userspace.
+>>
+>> Signed-off-by: andrew lien/WHQ/Wistron <andrew_lien@wistron.com>
+>> ---
+>>  drivers/extcon/extcon.c | 5 +++++
+>>  include/linux/extcon.h  | 3 ++-
+>>  2 files changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c index 
+>> b4df4372f097..6c47d23244c3 100644
+>> --- a/drivers/extcon/extcon.c
+>> +++ b/drivers/extcon/extcon.c
+>> @@ -184,6 +184,11 @@ static const struct __extcon_info {
+>>  		.id = EXTCON_MECHANICAL,
+>>  		.name = "MECHANICAL",
+>>  	},
+>> +	[EXTCON_BATTERY] = {
+>> +		.type = EXTCON_TYPE_MISC,
+>> +		.id = EXTCON_BATTERY,
+>> +		.name = "BATTERY",
+>> +	},
+>>  
+>>  	{ /* sentinel */ }
+>>  };
+>> diff --git a/include/linux/extcon.h b/include/linux/extcon.h index 
+>> b0b4abb018ee..88210b481b6c 100644
+>> --- a/include/linux/extcon.h
+>> +++ b/include/linux/extcon.h
+>> @@ -81,8 +81,9 @@
+>>  #define EXTCON_DOCK		60
+>>  #define EXTCON_JIG		61
+>>  #define EXTCON_MECHANICAL	62
+>> +#define EXTCON_BATTERY		63
+>>  
+>> -#define EXTCON_NUM		63
+>> +#define EXTCON_NUM		64
+>>  
+>>  /*
+>>   * Define the properties of supported external connectors.
+> 
+> Actually, battery is not external connector. The power_supply subsystem already provided the POWER_SUPPLY_PROP_PRESENT for the battery present. You have to develop the power_supply device driver and then use power_supply_changed() to send the uevent to user-space.
+> 
+> --
+> Best Regards,
+> Samsung Electronics
+> Chanwoo Choi
+> 
+> 
+> ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+> This email contains confidential or legally privileged information and is for the sole use of its intended recipient.
+> Any unauthorized review, use, copying or distribution of this email or the content of this email is strictly prohibited.
+> If you are not the intended recipient, you may reply to the sender and should delete this e-mail immediately.
+> ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Thanks,
-     Dawei
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
+
