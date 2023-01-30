@@ -2,193 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65531680828
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB446680826
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbjA3JFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
+        id S236043AbjA3JFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:05:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235919AbjA3JFv (ORCPT
+        with ESMTP id S235509AbjA3JFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:05:51 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345242D17E;
-        Mon, 30 Jan 2023 01:05:46 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id f34so17918643lfv.10;
-        Mon, 30 Jan 2023 01:05:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tLCAXpHbS1+35cXDsfgnrrYIidUGSDznuqt+LFz2Kpo=;
-        b=B93D20grY8ixaFD84MbroYvYkrqlmHstoeTfuwxzoODbajqVlY28+EUIJCnZGL3eYM
-         huRAq630DBO8DkJI6595oYyicBYF8Eh6mS7+ouJG9r8dRrx1F2dTzgzT5l8HC/kMFk2W
-         69UrEapRmtkfe2j99vXYup/YdMx/nETF3d8JZtB5JUWs8NRF4R+0buMXfZJF0H3d4UwX
-         GWvIv+fXLsdjY5al0DWqmYPhyI2V476WdgxwZR52vVQLF2MjC5zwXpXrKg8KZ7833KDb
-         fDFTg02zuDc0vXqkRjXHuJpaRRkd15yy405valAeKVNxY4E5lIsPKwRP89yJ4gz6tGz0
-         Nquw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tLCAXpHbS1+35cXDsfgnrrYIidUGSDznuqt+LFz2Kpo=;
-        b=QmLkkuJxrX142BouRiXeyjbATfGvTuxSTcizPpiyrCpUJpKTj+86r7n4Uqrtsohvgj
-         J0WMJH8SilYtke5kTZnymgmcaMihU7P5GTxTIUedQxszvPdugQzqNr0eU7kvGs6USgMa
-         iKU/LLJTM+XRYfwpgsYOttsQTw0wZRllmr3j5KwSJ6wuL8TH99IJU6QHXwqOZFyf7PQu
-         oeKSC47jgm4k4Teu6yErmCzxe2lEXwrP93180X7PitWKFEn5OvUrbSsmdJqA1oMC6Fer
-         AcPxL+qIULjfDnCs3SPTIq4OxWhtUbnmLkRF3jq0CjgEBDNzUwkiOUD0d6L1WFuD91ZF
-         FMAQ==
-X-Gm-Message-State: AFqh2kr9rJhyHzkYhmtXpZPXjjIHL6zCVp9yIbxGw4BFi17/ziJCBMkK
-        PMGg7ryQFzLabKfjcaAGK2icwbEg3rk6NW9lqnFmz+ra+IMl2w==
-X-Google-Smtp-Source: AMrXdXt3tKUbF9CKwfmvskIYVhEVt8Sq7L1zFIeZ/3VPbZhmSyZMbTOSjYPcurdivSyy8lMZuEV1XCFm5QAX+7vvXp0=
-X-Received: by 2002:a19:ae09:0:b0:4b5:2830:8998 with SMTP id
- f9-20020a19ae09000000b004b528308998mr2860087lfc.267.1675069544247; Mon, 30
- Jan 2023 01:05:44 -0800 (PST)
-MIME-Version: 1.0
-References: <Y9Tm1FiKBPKA2Tcx@localhost.localdomain>
-In-Reply-To: <Y9Tm1FiKBPKA2Tcx@localhost.localdomain>
-From:   Alex Shi <seakeel@gmail.com>
-Date:   Mon, 30 Jan 2023 17:05:07 +0800
-Message-ID: <CAJy-Am=qNEDUMi-K679a+uAZgegWmAgQS5_wKtbXX1ecX=ai4Q@mail.gmail.com>
-Subject: Re: [PATCH] Doc/damon: fix the data path error
-To:     Hui Su <suhui_kernel@163.com>
-Cc:     sj@kernel.org, corbet@lwn.net, alexs@kernel.org,
-        siyanteng@loongson.cn, rppt@kernel.org, bobwxc@email.cn,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 30 Jan 2023 04:05:43 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA57829429;
+        Mon, 30 Jan 2023 01:05:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675069542; x=1706605542;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=OBNJbBVd/Imt8W/uVwT1cIU4SRTgC/hC/EgWw++FpL8=;
+  b=YHYKccUbub3LfVb4CA1bgtWN1ztD4XzsRo+f/AHYWzj14GGEXCY2vJWK
+   2gbaUG4uHDOQP6VhYaHkXE4QLWzJIaHjwqDKztRgnS4JrtWXjHQnycFhz
+   RiAbeIfDyQI/KvQO2Nno728W0w41JG+z3T7XhS0OrBynIYydEAtjTgji/
+   SRxarKOM7B0v8TpZl7issLn4AUyWwnj2UbvAVmeRDCWLKvHuWsP6Wn6bX
+   HA39P7GXeqWmul0mx7Cj1bAKznAfB/0rm9J/cch1HudLdbu09ZGQEGX+o
+   iTviuW7KbPd9AjJAreRdqCgFtl9Y4KVHbv7PSdLNFRsDuTG1WKbN2glgx
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="326176891"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="326176891"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 01:05:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="665999942"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="665999942"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga007.fm.intel.com with ESMTP; 30 Jan 2023 01:05:38 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 01:05:37 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 01:05:37 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 30 Jan 2023 01:05:37 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.41) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 30 Jan 2023 01:05:36 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H4/njP3xQb7WZ1TICeHRaZe5OsmK1WZjLrLCmo/nnuqhDV/XYb0/9FXrdeIEcpDfWX3W6fOjpXMMKjvtu7xLay8ZnXLbycvmQ74nTA0zBtgK3QmtJz9nFQg56zX53PsVWjpYxYfFwnbOyzZFyoMeZCUXDfpjAETGHVOWN26uyB7Ca70Az76qLLk7xneQulfcKSqDO0q/NRFfF7RgyHlqvERqKMADS8VM+hQF3s5CF+T/yDasd3RNRkFQMThMqnMtt0kjs+jF4nuUM8TXodXfO2mB1Oq421INmE9UfMIiOtmv8yWHe2hChLGpWdLU3p8DF+0CZkZRGyXFc5aWOA4S7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ginebk/E+Uz4nS6LOExtvyZjhhJZCesZ0xah70KUXcc=;
+ b=ULlOLHfh62R8tD4EXbr+hP+Vgg2dpFCPGwpQz4L+44fJn2GwBzryK96Wnja6ufXk3wMDcCn4mt/XzpjyuK62QctsZFpOZHKxE+w/YjRkJzBAORi05FFVRhYTEid61DAkAumJx0qqgpaI2I1oK6SlHK1mdObsF++eWCIgQpZCttf1Qr1sQF0aZjRHmDuY4L0LfZpJfquhwoA4SkeIZqrXF1VHuV0fe61437Py7IwsLdiLqD9Zj2ROMmqNQGnDXGb0SFbNBMoos9w7P/uQyXwqzT4M9CVt79DB5LGAEP35pr2U3KhZXH6s4/MT4AeTi5Ph6lu3hYlcectI//k07lgtHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Mon, 30 Jan
+ 2023 09:05:34 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::6a8d:b95:e1b5:d79d%9]) with mapi id 15.20.6043.033; Mon, 30 Jan 2023
+ 09:05:34 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Tomasz Duszynski <tduszynski@marvell.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "open list:VFIO PLATFORM DRIVER" <kvm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     "jerinj@marvell.com" <jerinj@marvell.com>
+Subject: RE: [PATCH] vfio: platform: ignore missing reset if disabled at
+ module init
+Thread-Topic: [PATCH] vfio: platform: ignore missing reset if disabled at
+ module init
+Thread-Index: AQHZMNe4jRMwBM/EwUqhr5u7XKzShK62sPAQ
+Date:   Mon, 30 Jan 2023 09:05:34 +0000
+Message-ID: <BN9PR11MB527630B903EC14BC61351C668CD39@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230125161115.1356233-1-tduszynski@marvell.com>
+In-Reply-To: <20230125161115.1356233-1-tduszynski@marvell.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SJ2PR11MB7573:EE_
+x-ms-office365-filtering-correlation-id: 9e11a048-4911-4788-f0e5-08db02a1256d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Dibk/WoPqdLk4ZgxlYg3Oewdh99DwTrsC65lFOQmKRIZm6jG+6tKcJa4prxl0VLQ789DuyKg+4xXNm17iE1d9NGslykn68IonMsyX1UxfAqj4BDEw9YDnFC/mftPz7rloghJAZDpKHaZVqRJNzYWGv+bBbn1Nor98VXvEQv0MUohu6lpO5yi8ZD26Iara9c2UTscdJqYLx3/s5uOtrivFRsndznAXoMjLYMZsHQMO0nzpPZ7U8FA+D9SQ44KFPoOHg5FfxjlpNcAsJV36ov3P4a8ooTcYMjcU6+GVkA8rvOfOrXe6HEUKF/KgZ5k96Dzm//rKf7LgzY++KWP11emk0AoQ4eIBrX2w/4+3AyG/WClCq8Na772HJCONGptc7j3n+iCTKq1edCsoG2ysb5MqPQr7cRSei/ojkxnnX0v3mf7m+OZrx4mPkgj1pBRpwhflE/plvELcsDUwgdKOpTSzry1VyJYFArkOyyASrVkl7VZiXpdUmj4sNBmrMq2qpCflNfL584UHY61glCfDATapAM6WyjSf7XP0tF2V+5bWyxNSmcPR+4Lj2VZMfnCqr4aqCH8GVakQqvpYMQaTvGVtHxChdhWY11FHMDBGQFUU9kFrEqjEXA6tuL9U+AwTxjhe24sN4PVJV7Y88S8ykvU2d+uS6iSbYJ6+cBGrbQEzNL3LTmgRD4hAG+gR9Si5Qm6TuUoV9unKJ3Te9c4QyuukA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(39860400002)(346002)(396003)(366004)(451199018)(2906002)(33656002)(86362001)(26005)(186003)(9686003)(64756008)(66556008)(66476007)(66946007)(76116006)(4326008)(66446008)(71200400001)(7696005)(8676002)(316002)(38100700002)(110136005)(6506007)(478600001)(122000001)(4744005)(38070700005)(5660300002)(82960400001)(55016003)(41300700001)(8936002)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AtgnvmaNq46ZENP+gWq4m0tTZkBXVXKEYH+ZqgVTxPmblar8nhsugv3fZdqf?=
+ =?us-ascii?Q?A2znNkF8VG3yU0ZqaU8xOfhAyoa3/GN2jSBx+QAWrjWoyiFIQ06nfKUp36Gx?=
+ =?us-ascii?Q?Fyhe2QvsAzAkzxp7VCQFmwStKbYEOiXizSZuYIQuaIcPMV9eiePwZ3cHQeKU?=
+ =?us-ascii?Q?c0LB9xQUYrzVETKEt7uD2+EzUxg3KaJuaRr1gNX59UWgGxobbzqMOgCB2ASP?=
+ =?us-ascii?Q?GbKRH9dPmfctjcvrElXTtYzEbGRx13I2+YyiklT/4cO3ED6DDsOT/szi5Ng8?=
+ =?us-ascii?Q?vJ3YUuE1qKhOIGNF01ugDpKunj6kGVrGlFU3FD1cNx+4F/fXotU8eUZ0psWh?=
+ =?us-ascii?Q?3y0nW5x9h6hGg6iPghed+F9bA7vNy2r5dCYtDR3b7jGnvVKvtcDwWHHs690B?=
+ =?us-ascii?Q?bQPmtuoxZuV8B6YuZ0uvXchjeWA/OEf81BGtsE9w6SGQ75g+7GO1gnLTPgWz?=
+ =?us-ascii?Q?jJwwToQ5BINxdPYSsSsAlnFkOCNIR7LZDUij61UU7GYhSh8UyYGf5L21xKyH?=
+ =?us-ascii?Q?8ZmuD1MHLESgzXfkC1UFgTvMpaM+ozXYua6CdWsaQvQ83fpgUzssKnsl95sr?=
+ =?us-ascii?Q?w5Z8IR61w8nz5d3U3cSvPveHOU+BcD8gtR5S0saPGtzpuULaXQ+zXuMr+W/w?=
+ =?us-ascii?Q?6okHos8PCCvu9vaes6sveR8WlMjLjqC69LLJ+mCwVBfiZdYJGKbnc2ve7+P2?=
+ =?us-ascii?Q?qKvAG/cWSFatNaR3IYGJC5t5UWCrNUZzsT17TQ2d1pXgw55L+FY+MCQkb4dr?=
+ =?us-ascii?Q?Sv08hDgZLy+8oQiImKA+IK8Cfc8kfTtFM8R9IcXnvjWVx4C3Eo3lLTSdlShU?=
+ =?us-ascii?Q?5S9D2ptV9syhF6VAqG5QCdp2L+eQxu4EA9k9SsBFINhJhM4KV2E5tGG1eL8t?=
+ =?us-ascii?Q?j/72lIJfKAblvZIIR+gw2L6xRRxpbKt8Qqy0y3p8reyMLHtyj5iVnlvd1cqY?=
+ =?us-ascii?Q?bvtut3OTMqnqn2EmkFtaDa0uuuvv8uxbs+kyq4AA0x8fOsZOuYaCDb5UuNwC?=
+ =?us-ascii?Q?aHXF3tiGWOb1QnV3Wc3gDl9Go8MDrl+d6+k4S5tCyrJ5807ZQr+imIHKayGz?=
+ =?us-ascii?Q?JzG/Bvh7jku2e3sTYCDk0LMWx5ZGGxpTQiMPww3VvoJA8sZY07dbZUHspX1F?=
+ =?us-ascii?Q?He+Pir9KMYsMQZzWr3TzDvPbZBubhUM7QufqQuKp/kGFz760Vl1gG7C3vyhl?=
+ =?us-ascii?Q?p7Mfqg/SfLrzp8XZAEi9ZjRowe4oL9BlZF8d0QafkomgtPxPE6WuMNta/g8W?=
+ =?us-ascii?Q?e2QDSV2gY8KzLVrbX/Je/KUN31TRTvMvmKOiPWlrl3A0ALNbgc9Wsek8lqsQ?=
+ =?us-ascii?Q?fI2U9LhcSJkT8D/xbSGaPxRCVV8Ljc4k7pPdoeaDc3ZvJsPd7oZ3Do1o6ROj?=
+ =?us-ascii?Q?4yybOKRIYuRa0oB0exSNlN2MGw1J/1Yv/uhP9mWEK21HTGMEOjHSdJHsoA2M?=
+ =?us-ascii?Q?E98iGRYFG7gcBYuL6tXBQqWJTVuG7MeEfeesgrJtO+K6N3vrDDbNDFHPie+x?=
+ =?us-ascii?Q?t/eUYJ8BWvhXm4iW4XXtwvlhqCoOUf5xWvRB2CMLzak/KGKOZs3iMj+4tQ6B?=
+ =?us-ascii?Q?6EEtQjFiZTKmaui5LvbyUshKB4hlTljCgAqZZRYX?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e11a048-4911-4788-f0e5-08db02a1256d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 09:05:34.3540
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 204MUcsZsWNRBQ+lT9fJSrXK+ftwZzqslllE6okv6jrxjMt60O8Es7+5PooSh1geUDwN8l+QU//+72exNzBbQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7573
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Alex Shi <alexsshi@kernel.org>
+> From: Tomasz Duszynski <tduszynski@marvell.com>
+> Sent: Thursday, January 26, 2023 12:11 AM
+> @@ -653,7 +653,8 @@ int vfio_platform_init_common(struct
+> vfio_platform_device *vdev)
+>  	if (ret && vdev->reset_required)
+>  		dev_err(dev, "No reset function found for device %s\n",
+>  			vdev->name);
+> -	return ret;
+> +
+> +	return vdev->reset_required ? ret : 0;
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_platform_init_common);
 
-On Sat, Jan 28, 2023 at 5:12 PM Hui Su <suhui_kernel@163.com> wrote:
->
-> %s/modules/module/
->
-> Signed-off-by: Hui Su <suhui_kernel@163.com>
-> ---
->  Documentation/admin-guide/mm/damon/lru_sort.rst               | 4 ++--
->  Documentation/admin-guide/mm/damon/reclaim.rst                | 4 ++--
->  .../translations/zh_CN/admin-guide/mm/damon/reclaim.rst       | 4 ++--
->  3 files changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/Documentation/admin-guide/mm/damon/lru_sort.rst b/Documentat=
-ion/admin-guide/mm/damon/lru_sort.rst
-> index c09cace80651..7b0775d281b4 100644
-> --- a/Documentation/admin-guide/mm/damon/lru_sort.rst
-> +++ b/Documentation/admin-guide/mm/damon/lru_sort.rst
-> @@ -54,7 +54,7 @@ that is built with ``CONFIG_DAMON_LRU_SORT=3Dy``.
->  To let sysadmins enable or disable it and tune for the given system,
->  DAMON_LRU_SORT utilizes module parameters.  That is, you can put
->  ``damon_lru_sort.<parameter>=3D<value>`` on the kernel boot command line=
- or write
-> -proper values to ``/sys/modules/damon_lru_sort/parameters/<parameter>`` =
-files.
-> +proper values to ``/sys/module/damon_lru_sort/parameters/<parameter>`` f=
-iles.
->
->  Below are the description of each parameter.
->
-> @@ -283,7 +283,7 @@ doesn't make progress and therefore the free memory r=
-ate becomes lower than
->  20%, it asks DAMON_LRU_SORT to do nothing again, so that we can fall bac=
-k to
->  the LRU-list based page granularity reclamation. ::
->
-> -    # cd /sys/modules/damon_lru_sort/parameters
-> +    # cd /sys/module/damon_lru_sort/parameters
->      # echo 500 > hot_thres_access_freq
->      # echo 120000000 > cold_min_age
->      # echo 10 > quota_ms
-> diff --git a/Documentation/admin-guide/mm/damon/reclaim.rst b/Documentati=
-on/admin-guide/mm/damon/reclaim.rst
-> index 4f1479a11e63..d2ccd9c21b9a 100644
-> --- a/Documentation/admin-guide/mm/damon/reclaim.rst
-> +++ b/Documentation/admin-guide/mm/damon/reclaim.rst
-> @@ -46,7 +46,7 @@ that is built with ``CONFIG_DAMON_RECLAIM=3Dy``.
->  To let sysadmins enable or disable it and tune for the given system,
->  DAMON_RECLAIM utilizes module parameters.  That is, you can put
->  ``damon_reclaim.<parameter>=3D<value>`` on the kernel boot command line =
-or write
-> -proper values to ``/sys/modules/damon_reclaim/parameters/<parameter>`` f=
-iles.
-> +proper values to ``/sys/module/damon_reclaim/parameters/<parameter>`` fi=
-les.
->
->  Below are the description of each parameter.
->
-> @@ -251,7 +251,7 @@ therefore the free memory rate becomes lower than 20%=
-, it asks DAMON_RECLAIM to
->  do nothing again, so that we can fall back to the LRU-list based page
->  granularity reclamation. ::
->
-> -    # cd /sys/modules/damon_reclaim/parameters
-> +    # cd /sys/module/damon_reclaim/parameters
->      # echo 30000000 > min_age
->      # echo $((1 * 1024 * 1024 * 1024)) > quota_sz
->      # echo 1000 > quota_reset_interval_ms
-> diff --git a/Documentation/translations/zh_CN/admin-guide/mm/damon/reclai=
-m.rst b/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
-> index c976f3e33ffd..d15a2f20bb11 100644
-> --- a/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
-> +++ b/Documentation/translations/zh_CN/admin-guide/mm/damon/reclaim.rst
-> @@ -45,7 +45,7 @@ DAMON_RECLAIM=E6=89=BE=E5=88=B0=E5=9C=A8=E7=89=B9=E5=AE=
-=9A=E6=97=B6=E9=97=B4=E5=86=85=E6=B2=A1=E6=9C=89=E8=A2=AB=E8=AE=BF=E9=97=AE=
-=E7=9A=84=E5=86=85=E5=AD=98=E5=8C=BA=E5=9F=9F=E5=B9=B6=E5=88=86=E9=A1=B5=E3=
-=80=82
->
->  =E4=B8=BA=E4=BA=86=E8=AE=A9=E7=B3=BB=E7=BB=9F=E7=AE=A1=E7=90=86=E5=91=98=
-=E5=90=AF=E7=94=A8=E6=88=96=E7=A6=81=E7=94=A8=E5=AE=83=EF=BC=8C=E5=B9=B6=E4=
-=B8=BA=E7=BB=99=E5=AE=9A=E7=9A=84=E7=B3=BB=E7=BB=9F=E8=BF=9B=E8=A1=8C=E8=B0=
-=83=E6=95=B4=EF=BC=8CDAMON_RECLAIM=E5=88=A9=E7=94=A8=E4=BA=86=E6=A8=A1=E5=
-=9D=97=E5=8F=82=E6=95=B0=E3=80=82=E4=B9=9F=E5=B0=B1
->  =E6=98=AF=E8=AF=B4=EF=BC=8C=E4=BD=A0=E5=8F=AF=E4=BB=A5=E6=8A=8A ``damon_=
-reclaim.<parameter>=3D<value>`` =E6=94=BE=E5=9C=A8=E5=86=85=E6=A0=B8=E5=90=
-=AF=E5=8A=A8=E5=91=BD=E4=BB=A4=E8=A1=8C=E4=B8=8A=EF=BC=8C=E6=88=96=E8=80=85=
-=E6=8A=8A
-> -=E9=80=82=E5=BD=93=E7=9A=84=E5=80=BC=E5=86=99=E5=85=A5 ``/sys/modules/da=
-mon_reclaim/parameters/<parameter>`` =E6=96=87=E4=BB=B6=E3=80=82
-> +=E9=80=82=E5=BD=93=E7=9A=84=E5=80=BC=E5=86=99=E5=85=A5 ``/sys/module/dam=
-on_reclaim/parameters/<parameter>`` =E6=96=87=E4=BB=B6=E3=80=82
->
->  =E6=B3=A8=E6=84=8F=EF=BC=8C=E9=99=A4 ``=E5=90=AF=E7=94=A8`` =E5=A4=96=E7=
-=9A=84=E5=8F=82=E6=95=B0=E5=80=BC=E5=8F=AA=E5=9C=A8DAMON_RECLAIM=E5=90=AF=
-=E5=8A=A8=E6=97=B6=E5=BA=94=E7=94=A8=E3=80=82=E5=9B=A0=E6=AD=A4=EF=BC=8C=E5=
-=A6=82=E6=9E=9C=E4=BD=A0=E6=83=B3=E5=9C=A8=E8=BF=90=E8=A1=8C=E6=97=B6=E5=BA=
-=94=E7=94=A8=E6=96=B0
->  =E7=9A=84=E5=8F=82=E6=95=B0=E5=80=BC=EF=BC=8C=E8=80=8CDAMON_RECLAIM=E5=
-=B7=B2=E7=BB=8F=E8=A2=AB=E5=90=AF=E7=94=A8=EF=BC=8C=E4=BD=A0=E5=BA=94=E8=AF=
-=A5=E9=80=9A=E8=BF=87 ``=E5=90=AF=E7=94=A8`` =E7=9A=84=E5=8F=82=E6=95=B0=E6=
-=96=87=E4=BB=B6=E7=A6=81=E7=94=A8=E5=92=8C=E9=87=8D=E6=96=B0=E5=90=AF=E7=94=
-=A8=E5=AE=83=E3=80=82
-> @@ -218,7 +218,7 @@ nr_quota_exceeds
->  =E5=B0=B1=E5=BC=80=E5=A7=8B=E7=9C=9F=E6=AD=A3=E7=9A=84=E5=B7=A5=E4=BD=9C=
-=E3=80=82=E5=A6=82=E6=9E=9CDAMON_RECLAIM=E6=B2=A1=E6=9C=89=E5=8F=96=E5=BE=
-=97=E8=BF=9B=E5=B1=95=EF=BC=8C=E5=9B=A0=E6=AD=A4=E7=A9=BA=E9=97=B2=E5=86=85=
-=E5=AD=98=E7=8E=87=E4=BD=8E=E4=BA=8E20%=EF=BC=8C=E5=AE=83=E4=BC=9A=E8=A6=81=
-=E6=B1=82
->  DAMON_RECLAIM=E5=86=8D=E6=AC=A1=E4=BB=80=E4=B9=88=E9=83=BD=E4=B8=8D=E5=
-=81=9A=EF=BC=8C=E8=BF=99=E6=A0=B7=E6=88=91=E4=BB=AC=E5=B0=B1=E5=8F=AF=E4=BB=
-=A5=E9=80=80=E5=9B=9E=E5=88=B0=E5=9F=BA=E4=BA=8ELRU=E5=88=97=E8=A1=A8=E7=9A=
-=84=E9=A1=B5=E9=9D=A2=E7=B2=92=E5=BA=A6=E5=9B=9E=E6=94=B6=E4=BA=86::
->
-> -    # cd /sys/modules/damon_reclaim/parameters
-> +    # cd /sys/module/damon_reclaim/parameters
->      # echo 30000000 > min_age
->      # echo $((1 * 1024 * 1024 * 1024)) > quota_sz
->      # echo 1000 > quota_reset_interval_ms
-> --
-> 2.34.1
->
+It reads slightly better to me as below:
+
+	if (ret & vdev->reset_required) {
+		dev_err(...);
+		return ret;
+	}
+
+	return 0;
