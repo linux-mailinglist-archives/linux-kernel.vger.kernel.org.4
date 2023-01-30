@@ -2,119 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44540680B0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9A6680B16
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236450AbjA3Khu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:37:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S235759AbjA3Kkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjA3Khs (ORCPT
+        with ESMTP id S235790AbjA3Kkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:37:48 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07275170C;
-        Mon, 30 Jan 2023 02:37:46 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P54Df4Wx4z9xFPt;
-        Mon, 30 Jan 2023 18:29:38 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCHDQnlnddjABXcAA--.26027S2;
-        Mon, 30 Jan 2023 11:37:33 +0100 (CET)
-Message-ID: <08ad72c3ddebb829acd66697c14e9bb5fadc6f97.camel@huaweicloud.com>
-Subject: Re: [PATCH v3 2/2] ima: Introduce MMAP_CHECK_REQPROT hook
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
-        viro@zeniv.linux.org.uk, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 30 Jan 2023 11:37:17 +0100
-In-Reply-To: <89a7cc7efe1545e18c9af6c3ec53468d6f528a7a.camel@linux.ibm.com>
-References: <20230126163812.1870942-1-roberto.sassu@huaweicloud.com>
-         <20230126163812.1870942-2-roberto.sassu@huaweicloud.com>
-         <89a7cc7efe1545e18c9af6c3ec53468d6f528a7a.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 30 Jan 2023 05:40:41 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247EB31E34
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:40:40 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id mc11so7920656ejb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:40:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fdNUPffFvmZrBuodDbaQxrLCKtYnZUu/RnBAFeTehl4=;
+        b=a2NRjekX1BfZ9QTLs6Qgo7mu/qYSpCZY4kuWbHpJX4+D72h350igExn6viCpYRlecV
+         /0pWnosUN9yVKUm0jdvVypK0arvG4GaSstEAinU7aaigbVStLP0fRzhcmTb9nIsU9HVb
+         6uLOjsBjJzkpqRR3XDhRnb1H6E+TgUx9ctWBsVkwCB9J5S51f0myvsf0Sc4Sbw+eG1X6
+         m/I3QqddCot7i5eOcL2PMn3nkrIkneB09Y606dBle5CUM5W09FrhIhZFGQcw8+NBM8Wu
+         c+Q7SjByjaUg94IRP9xDkz+vAJCRocnaXZ2MXSDQonUdK9SzOeYI6kzN/3msG/ZX4u6E
+         GAkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fdNUPffFvmZrBuodDbaQxrLCKtYnZUu/RnBAFeTehl4=;
+        b=rdP46kvRc6aRQ8qgpvJ2TOVMwQC3BjxJBH7Civ0WHdSsfMi8DPYvb7zFtQ/aStnQ24
+         yNrXpR4Umc1XGEISMwW7rsBE13P25iy0sYA72SJTp1XzyTioTq6BC0AbYn+2XJdbSqXP
+         Du5/5+ZVbWjXkPWIzPfSSga19RRd7jg7ClBpIq2jPk+vuDm42DuNl50ORV4uo1ZAEN1k
+         bwZWQibGAwSi4IBE4N55kD2F9l4s8uoz3znQpS2RUcBMO3Cp7qLaQV8wB4Se8vegBF1a
+         TGu8WaIQHkO1noxJlyfSi68azPtlZB5OdNt+Jck2dYLFvPkRkbZqeSvONFzjk0OFyidU
+         o3rg==
+X-Gm-Message-State: AFqh2koU+fqetwYsY3Rxqj1vRGX0ZE9GuPuzX9cKiuQ18O2+OA3IQPas
+        m7yayPs7Ediiflyn3SAWnwYoJ4fI6xardk2D4auUDA==
+X-Google-Smtp-Source: AMrXdXschNa1yyE4yyXfnHt7bxuX8pZDNHXkMneEpkjyfpKCpzB4G3AuW7kler2jR3lAb6d0ud+riMwnij52Z0VjIV4=
+X-Received: by 2002:a17:906:30c1:b0:877:4531:b133 with SMTP id
+ b1-20020a17090630c100b008774531b133mr8032986ejb.37.1675075239722; Mon, 30 Jan
+ 2023 02:40:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwCHDQnlnddjABXcAA--.26027S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr15JrWDJFyfWF1DurWrAFb_yoW8AF13pF
-        W8Ca4kKa1vqF15Arnagw17ZayrG393Kw1UXryDA34UZrs8XF9Y9r4S9FWYgFyIkr1kCw1Y
-        vrZ8Kayfuw4DAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQANBF1jj4hCEwABsh
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124131717.128660-3-bchihi@baylibre.com> <20230126161048.94089-1-bchihi@baylibre.com>
+ <5ec49108-6ad8-daf7-54ec-104f0923a31d@linaro.org>
+In-Reply-To: <5ec49108-6ad8-daf7-54ec-104f0923a31d@linaro.org>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Mon, 30 Jan 2023 11:40:03 +0100
+Message-ID: <CAGuA+opQboxH8qoNv4GG+raX=ZZAyRVLC9VLjVCzbT_cUQWWTA@mail.gmail.com>
+Subject: Re: [PATCH v12 2/6] dt-bindings: thermal: mediatek: Add LVTS thermal
+ controllers dt-binding definition
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-01-29 at 09:52 -0500, Mimi Zohar wrote:
-> On Thu, 2023-01-26 at 17:38 +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Commit 98de59bfe4b2f ("take calculation of final prot in
-> > security_mmap_file() into a helper") caused ima_file_mmap() to receive the
-> > protections requested by the application and not those applied by the
-> > kernel.
-> > 
-> > After restoring the original MMAP_CHECK behavior with a patch, existing
-> > systems might be broken due to not being ready to handle new entries
-> > (previously missing) in the IMA measurement list.
-> 
-> Is this a broken system or a broken attestation server?  The
-> attestation server might not be able to handle the additional
-> measurements, but the system, itself, is not broken.
+Hi Krzysztof,
 
-Ok, wasn't clear. I meant attestation server. The system itself is not
-broken.
+Thank you for the feedback.
 
-> "with a patch" is unnecessary.
+On Sat, Jan 28, 2023 at 11:48 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 26/01/2023 17:10, bchihi@baylibre.com wrote:
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+> > Add LVTS thermal controllers dt-binding definition for mt8195.
+>
+> Subject: drop second/last, redundant "dt-binding definition". The
+> "dt-bindings" prefix is already stating that these are bindings.
 
-Ok.
+fixed.
+The patch title has been fixed as you suggested :
+"dt-bindings: thermal: mediatek: Add LVTS thermal controllers"
 
-> > Restore the original correct MMAP_CHECK behavior instead of keeping the
-> 
-> ^ add missing comma after "behavior"
-> 
-> > current buggy one and introducing a new hook with the correct behavior. The
-> > second option 
-> 
-> ^ The second option -> Otherwise,
-> 
-> > would have had the risk of IMA users not noticing the problem
-> > at all, as they would actively have to update the IMA policy, to switch to
-> > the correct behavior.
-> > 
-> > Also, introduce the new MMAP_CHECK_REQPROT hook to keep the current
-> > behavior, so that IMA users could easily fix a broken system, although this
-> > approach is discouraged due to potentially missing measurements.
-> 
-> Again, is this a broken system or a broken attestation server? 
-> 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Otherwise, the patch looks good.
+>
+> Plus two comments at the end.
+>
+> >
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > ---
+> > Changelog:
+> >   v12:
+> >      - Fixed subject prefix
+> >      - Fixed licences GPL-2.0+ to GPL-2.0
+> >      - Added dual licenses
+>
+>
+> > +    };
+> > diff --git a/include/dt-bindings/thermal/mediatek-lvts.h b/include/dt-bindings/thermal/mediatek-lvts.h
+> > new file mode 100644
+> > index 000000000000..902d5b1e4f43
+> > --- /dev/null
+> > +++ b/include/dt-bindings/thermal/mediatek-lvts.h
+>
+> Same filename as bindings.
 
-Ok, will make the changes.
+fixed.
+rename :
+include/dt-bindings/thermal/mediatek-lvts.h =>
+include/dt-bindings/thermal/mediatek-lvts-thermal.h
 
-Thanks
+>
+> > @@ -0,0 +1,19 @@
+> > +/* SPDX-License-Identifier: (GPL-2.0 or MIT) */
+>
+> Although this is correct, any reason why not using exactly the same
+> license as bindings?
 
-Roberto
+fixed.
+both files are now using the same license :
+"SPDX-License-Identifier: (GPL-2.0 or MIT)"
 
+>
+> > +/*
+> > + * Copyright (c) 2023 MediaTek Inc.
+> > + * Author: Balsam CHIHI <bchihi@baylibre.com>
+> > + */
+>
+> Best regards,
+> Krzysztof
+>
+
+I'll send the changes soon.
+
+Best regards,
+Balsam
