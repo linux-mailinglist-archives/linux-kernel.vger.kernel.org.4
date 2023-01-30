@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B47681F9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08788681FA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjA3X2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S230364AbjA3XaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjA3X2K (ORCPT
+        with ESMTP id S229832AbjA3XaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:28:10 -0500
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2EB29E10
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:28:07 -0800 (PST)
-Received: by mail-qv1-xf2e.google.com with SMTP id d13so10031600qvj.8
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:28:07 -0800 (PST)
+        Mon, 30 Jan 2023 18:30:18 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882792A161
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:30:13 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id e2so2362785iot.11
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:30:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bmBE85HsciAbIIMS0yOe3l7FgaHGQXtcytfZQJSmxO0=;
-        b=S0uq6kVOcVxXjbSrSgERLfItROwiDvkdWRHnN2GdDsQRuqeyQ7177xQJhPsIKqho56
-         Fo1Vk4z/X8u/F+LOUPIlH1foeDJQ2GXsLkaBmL3O1iNPMD4oMIEcD4zl+NQq+gMUMYPa
-         fHkd+/iDTKHlmDIC+7EkIojMdYdwlRGRfnBykTZzurvxQ27gj+7zPrxNUoK4OWgzJHdG
-         i1IlkmiPLbqabThOF1jCgwfm4ba+p3F19MOMdmC32ITYqM00NXC231RnxO1VSA4h8c8j
-         m4ToedpT1zsTm1gDtVZzhgSJ2xKLrGZ7baEd1OlZCAJm2EuAX9wCUpWP0yCZtfFBbtEb
-         GW7A==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1nynTv2Ukmore8oJy9kp+YA0Zu6nVdeunqSuZlsLFu4=;
+        b=IihrPV91c0txs5z5kc9WvcNMFOFdzExEY9PtT9Xawn3cICGDXVnqxwuQDoXJwSca51
+         M6LRLiBn9Nwa9qTLeJyiyzZ4qiziMDXBH2mmxADPHG3XTJdjavj1QAcIy6HWvTIPB/eh
+         paFeDxYdkHV28EcJiI70rcS3NxJY5NNW19dyA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bmBE85HsciAbIIMS0yOe3l7FgaHGQXtcytfZQJSmxO0=;
-        b=VuBzsgb1ERkcL+7PR+uF3YeaAp3VvRmJRAtp4sb6wsG7AoLVjDwL5QLLREcFUJHC9y
-         a+Pq8WXNnrHqPqpmo/5KfT2Ii+qvXRR31QD57eQTG+y7fCrNtRAqqmstvtkYcM+VLUGK
-         koRWmF+RDfjRM2AG8EtM2EFkFNB7bAt6+0FQUGHNCbnzx0GXKLp6lJsnbwrp3KX78Z47
-         lRHz+nUUO8fi6UjiRYJ8zfWqzpftkTpcn2h2VI0qObOvjpLkegYWhJpMEIOrGNXkJIsf
-         FxQU9JTNjZoGRFfJTuZt38hXxZ1mrL3eyt9M8fR6hzsAqXMWliIORoHR82K7hRXPolvH
-         qJ/g==
-X-Gm-Message-State: AO0yUKWyA611FZ99ABjfVRzsz/PnOEG7Zw+vVS1eXRcHGUX8SPLdqrnM
-        xe6lc0MFN5mqWq+ySzf+nYWhPlzmphhkT/4YfMxC9QR21T8=
-X-Google-Smtp-Source: AK7set9or4XA7meh3Hg8ca4eIDcBBKeqU6thMY4tegDekaLTVqEMt8XXBu9cHQZoNCthUBN3zU2lm+DakWHrVo4U13s=
-X-Received: by 2002:a05:6214:11b0:b0:53b:f96b:4e20 with SMTP id
- u16-20020a05621411b000b0053bf96b4e20mr409435qvv.27.1675121287028; Mon, 30 Jan
- 2023 15:28:07 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1nynTv2Ukmore8oJy9kp+YA0Zu6nVdeunqSuZlsLFu4=;
+        b=J8IzWFSTPgQZPsOvGSEhR9wvVlgdBzS/Qz4B9KUI7BA3Q/glDEJJIzmNWREzXNArwJ
+         qMp+TmPX4GSskJgZ4zTb9qiH4JLaV40Btqkei1BXZKixnTV1jEptgRvJXuTARNRlrCd2
+         jzw6FypfuCtq/kBgIp+rdEJzpENXj9RgOBGoNjFmne2fvD2P34ArL43TiuHeGddyxKKL
+         5p9qn6TJIdcHejpmAsyLwzUZuJjKT7WIpSP5Xaob3z0/zWnDztHMGIwe0BcZ1KqDVmvV
+         zuDbhJrCWNI/dvK1w0oPRK/iLfFVSmNyi+PMewapxj03MTL26uzzst0fSex3QRS8PGJY
+         QG9A==
+X-Gm-Message-State: AO0yUKWb1283ts5W7r9mro/equ/3aoqzNYgkt/MTVY9lC4WAl90eunfA
+        UVusDZt55IC2yvPaKvZF8oZuEw==
+X-Google-Smtp-Source: AK7set+Ka7jWFMTaHswsuPRZzqYl8P0nsaklr15XgXcATVEP11vHn9J9rdDkVExRCdnRcbC/xyDn9g==
+X-Received: by 2002:a05:6602:88f:b0:719:6a2:99d8 with SMTP id f15-20020a056602088f00b0071906a299d8mr1515994ioz.0.1675121412814;
+        Mon, 30 Jan 2023 15:30:12 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id g1-20020a5ec741000000b0071dc7b4d0c7sm1098260iop.6.2023.01.30.15.30.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 15:30:12 -0800 (PST)
+Message-ID: <021776e6-b37f-0a2e-41e0-5c09f9582c57@linuxfoundation.org>
+Date:   Mon, 30 Jan 2023 16:30:11 -0700
 MIME-Version: 1.0
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <fcec3c78-b5d9-eb48-0fc0-d1f27de87f23@leemhuis.info> <b21fa1f6-a71d-5657-8596-ee0be73185ea@leemhuis.info>
- <3ab28896-70e9-6f90-5b97-e5397b06e715@googlemail.com> <a163dd7b-c5d1-a07b-a816-7a2dfd3edfd4@leemhuis.info>
- <ab1b0f73-6b4e-8602-2999-b7bec25d92db@googlemail.com> <CACAvsv4sOtPjCVnEcKd2RCUqYWxSn5XKyksbS-Bds2qCqyusVw@mail.gmail.com>
- <1cdb84ac-f7a8-66ba-98fc-3db302b49a5a@googlemail.com> <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
-In-Reply-To: <dab6eb81-db3f-8fa1-84ad-9b40e209514b@googlemail.com>
-From:   Ben Skeggs <skeggsb@gmail.com>
-Date:   Tue, 31 Jan 2023 09:27:54 +1000
-Message-ID: <CACAvsv5iYdF3P8AbyrbYo3zGmYRYhxDWn7WbAR5V9qHpbgBXRA@mail.gmail.com>
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-To:     Chris Clayton <chris2553@googlemail.com>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        bskeggs@redhat.com, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] docs: add workload-tracing document to admin-guide
+Content-Language: en-US
+To:     Thorsten Leemhuis <linux@leemhuis.info>, corbet@lwn.net
+Cc:     sshefali021@gmail.com, kstewart@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230127234616.55137-1-skhan@linuxfoundation.org>
+ <f48e8dab-2a68-88d2-7917-f8f34a39e322@leemhuis.info>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <f48e8dab-2a68-88d2-7917-f8f34a39e322@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,68 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 Jan 2023 at 09:09, Chris Clayton <chris2553@googlemail.com> wrote:
->
-> Hi again.
->
-> On 30/01/2023 20:19, Chris Clayton wrote:
-> > Thanks, Ben.
->
-> <snip>
->
-> >> Hey,
-> >>
-> >> This is a complete shot-in-the-dark, as I don't see this behaviour on
-> >> *any* of my boards.  Could you try the attached patch please?
-> >
-> > Unfortunately, the patch made no difference.
-> >
-> > I've been looking at how the graphics on my laptop is set up, and have a bit of a worry about whether the firmware might
-> > be playing a part in this problem. In order to offload video decoding to the NVidia TU117 GPU, it seems the scrubber
-> > firmware must be available, but as far as I know,that has not been released by NVidia. To get it to work, I followed
-> > what ubuntu have done and the scrubber in /lib/firmware/nvidia/tu117/nvdec/ is a symlink to
-> > ../../tu116/nvdev/scrubber.bin. That, of course, means that some of the firmware loaded is for a different card is being
-> > loaded. I note that processing related to firmware is being changed in the patch. Might my set up be at the root of my
-> > problem?
-> >
-> > I'll have a fiddle an see what I can work out.
-> >
-> > Chris
-> >
-> >>
-> >> Thanks,
-> >> Ben.
-> >>
-> >>>
->
-> Well, my fiddling has got my system rebooting and shutting down successfully again. I found that if I delete the symlink
-> to the scrubber firmware, reboot and shutdown work again. There are however, a number of other files in the tu117
-> firmware directory tree that that are symlinks to actual files in its tu116 counterpart. So I deleted all of those too.
-> Unfortunately, the absence of one or more of those symlinks causes Xorg to fail to start. I've reinstated all the links
-> except scrubber and I now have a system that works as it did until I tried to run a kernel that includes the bad commit
-> I identified in my bisection. That includes offloading video decoding to the NVidia card, so what ever I read that said
-> the scrubber firmware was needed seems to have been wrong. I get a new message that (nouveau 0000:01:00.0: fb: VPR
-> locked, but no scrubber binary!), but, hey, we can't have everything.
->
-> If you still want to get to the bottom of this, let me know what you need me to provide and I'll do my best. I suspect
-> you might want to because there will a n awful lot of Ubuntu-based systems out there with that scrubber.bin symlink in
-> place. On the other hand,m it could but quite a while before ubuntu are deploying 6.2 or later kernels.
-The symlinks are correct - whole groups of GPUs share the same FW, and
-we use symlinks in linux-firmware to represent this.
+On 1/28/23 01:35, Thorsten Leemhuis wrote:
+> Lo! One small quick question.
+> 
+> On 28.01.23 00:46, Shuah Khan wrote:
+>> Add a new section to the admin-guide with information of interest to
+>> application developers and system integrators doing analysis of the
+>> Linux kernel for safety critical applications.
+> 
+> That intro made my mind go "neither 'application developers' or 'system
+> integrators' are admins, so why is this added to the 'admin guide' then?"
+> 
 
-I don't really have any ideas how/why this patch causes issues with
-shutdown - it's a path that only gets executed during initialisation.
-Can you try and capture the kernel log during shutdown ("dmesg -w"
-over ssh? netconsole?), and see if there's any relevant messages
-providing a hint at what's going on?  Alternatively, you could try
-unloading the module (you will have to stop X/wayland/gdm/etc/etc
-first) and seeing if that hangs too.
+I see what you are saying.
 
-Ben.
+> That made me look up the into for the admin guide, which is
+> ```
+> The Linux kernel user’s and administrator’s guide
+> 
+> The following is a collection of user-oriented documents that have been
+> added to the kernel over time. There is, as yet, little overall order or
+> organization here — this material was not written to be a single,
+> coherent document! With luck things will improve quickly over time.
+> ```
+> 
+> Adding another section that doesn't seem to a be a good fit feels a bit
+> like "making things worse than better".  So wouldn't this maybe be a
+> good opportunity to create a totally new top-level section for
+> application developers and system integrators, even if it's tiny for
+> now? The audience is likely big enough to justify that -- and the topics
+> are likely different enough, too (of course sometimes there will be
+> overlap, as always). Any maybe it will help to bring other stuff over
+> from admin guide that is more targeted for application developers and
+> system integrators, which will help to get more structure into the
+> admin-guide.
+> 
 
->
-> Thanks,
->
-> Chris
->
-> <snip>
+I like the idea of creating a new top-level section for application developers
+and system integrators. I foresee this section growing and also we can look
+at other documents that are a good fit under this category and move them over.
+
+Jon, Thoughts on this.
+
+thanks,
+-- Shuah
