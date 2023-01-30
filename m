@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3278568095A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2867E6809E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236545AbjA3J1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        id S235524AbjA3JuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:50:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236297AbjA3J0o (ORCPT
+        with ESMTP id S229694AbjA3JuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:26:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1592F7A1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:25:03 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1pMQOd-0006qs-0A; Mon, 30 Jan 2023 10:24:15 +0100
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1pMQOa-0006aL-S6; Mon, 30 Jan 2023 10:24:12 +0100
-Date:   Mon, 30 Jan 2023 10:24:12 +0100
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marcel Ziswiler <marcel@ziswiler.com>,
-        linux-media@vger.kernel.org, kernel@pengutronix.de,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] media: i2c: ov5640: Implement get_mbus_config
-Message-ID: <20230130092412.GA8319@pengutronix.de>
-References: <20230127151245.46732-1-marcel@ziswiler.com>
- <20230127175003.6ofmfaqovbqu54hg@uno.localdomain>
- <Y9QZH2/jDbFbew2D@pendragon.ideasonboard.com>
- <20230128100611.7ulsfqqqgscg54gy@uno.localdomain>
+        Mon, 30 Jan 2023 04:50:07 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5F41A487;
+        Mon, 30 Jan 2023 01:50:05 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pMQPS-0000FW-LW; Mon, 30 Jan 2023 10:25:06 +0100
+Message-ID: <33e30bc9-60d2-3cc1-d6ee-870310db9b54@leemhuis.info>
+Date:   Mon, 30 Jan 2023 10:25:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128100611.7ulsfqqqgscg54gy@uno.localdomain>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [regression] Bug 216977 - asus t100 touchpad registered but not
+ working
+Content-Language: en-US, de-DE
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Linux kernel regressions list <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        jessegodfroy@gmail.com
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <2f4dc626-5287-6ec7-a31d-335e5dbb9119@leemhuis.info>
+In-Reply-To: <2f4dc626-5287-6ec7-a31d-335e5dbb9119@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675072205;167cf484;
+X-HE-SMSGID: 1pMQPS-0000FW-LW
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacopo,
+[resent with Benjamin's proper email address; sorry for the noise]
 
-On Sat, Jan 28, 2023 at 11:06:11AM +0100, Jacopo Mondi wrote:
-> Hi Laurent
+On 30.01.23 10:22, Linux kernel regression tracking (Thorsten Leemhuis)
+wrote:
+> Hi, this is your Linux kernel regression tracker.
 > 
-> On Fri, Jan 27, 2023 at 08:34:07PM +0200, Laurent Pinchart wrote:
-> > On Fri, Jan 27, 2023 at 06:50:03PM +0100, Jacopo Mondi wrote:
-> > > On Fri, Jan 27, 2023 at 04:12:44PM +0100, Marcel Ziswiler wrote:
-> > > > From: Aishwarya Kothari <aishwarya.kothari@toradex.com>
-> > > >
-> > > > Implement the introduced get_mbus_config operation to report the
-> > > > number of used data lanes on the MIPI CSI-2 interface.
-> > > >
-> > >
-> > > OV5640 can operate in parallel mode too.
-> > >
-> > > You can check how it currently configured with ov5640_is_csi2() and
-> > > populate struct v4l2_mbus_config accordingly.
-> >
-> > I'm also wondering which CSI-2 receiver needs .get_mbus_config() for the
-> > ov5640. The number of lanes is usually specified in DT, on both sides of
-> > the link. It's only when selecting a number of lanes dynamically at
-> > runtime that .get_mbus_config() is needed.
-> >
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216977 :
 > 
-> iirc Aishwarya and Marcel reported issues on i.MX6 so I presume they
-> need get_mbus_config as a drivers in staging/media/imx/ requires
-> that:
+>>  jessegodfroy@gmail.com 2023-01-29 15:44:34 UTC
+>>
+>> After upgrading the kernel from 6.0 series to the 6.1 the touchpad on my asus t100 no longer works. 
+>>
+>> The device is registered in dmesg. I believe hid_asus is responsible for the keyboard and touchpad.  The keyboard continues to function, but the touchpad does not. 
+>>
+>> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0001: input,hidraw0: USB HID v1.11 Keyboard [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input0
+>> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0002: Fixing up Asus T100 keyb report descriptor
+>> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0002: input,hiddev96,hidraw1: USB HID v1.11 Device [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input1
+>> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0003: input,hiddev97,hidraw2: USB HID v1.11 Mouse [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input2
+>>
+>> I do not see any changes to hid_asus that should be responsible for the change in performance.
+> See the ticket for more details.
 > 
-> drivers/staging/media/imx/imx6-mipi-csi2.c
-> Fetches the remote mbus config to get the number of lanes and make
-> sure the bus type is CSI-2
 > 
-> drivers/staging/media/imx/imx-media-csi.c
-> Fetches the remote mbus config to deduce the bus type in use
+> [TLDR for the rest of this mail: I'm adding this report to the list of
+> tracked Linux kernel regressions; the text you find below is based on a
+> few templates paragraphs you might have encountered already in similar
+> form.]
 > 
-> In both cases I concur the callers can be fixed to parse their
-> endpoints but looking at commit 7318abface486d6a6389731810f5b60650daedb5
-> it seems that was not the plan (reason not clear to me)
-
-The tc358743 driver dynamically changes the number of active lanes
-depending on bandwidth requirements.
-
-regards
-Philipp
+> BTW, let me use this mail to also add the report to the list of tracked
+> regressions to ensure it's doesn't fall through the cracks:
+> 
+> #regzbot introduced: v6.0..v6.1
+> https://bugzilla.kernel.org/show_bug.cgi?id=216977
+> #regzbot title: input: hid: asus t100 touchpad registered but not working
+> #regzbot ignore-activity
+> 
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
+> 
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+> this thread sees some discussion). See page linked in footer for details.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
