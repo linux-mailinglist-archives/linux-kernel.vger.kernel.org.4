@@ -2,80 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130D368178E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A5868178F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237447AbjA3R1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 12:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
+        id S237730AbjA3R1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 12:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjA3R1W (ORCPT
+        with ESMTP id S229887AbjA3R1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 12:27:22 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616DD3EC66
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:27:21 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so8733795wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:27:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j2VAOUAnZrrTaW8atAzm2YZfzH9NyPYsAl1667ENi80=;
-        b=YZTDascVmQZqB3c/4sRTKFl51YdSOobEpQyYvVWJDHxbdr+51HsOvDbWgZDJAlwxxU
-         1kW0GCyqsz+7tLBi0O19obgVdFbV3SyWwgdHJTYbcLxMhiYKB9C4AiKhdTAIMAnjDHWE
-         4zIyP7EyHlc3wUvPuiQ+RWaXwPpz8Z1yNRJJSewe0/SfODzqbcWw+PDSF0muUS9wbbtR
-         ZUIB/jdEJoZGh4jCWZ2sWAbF8cYS9j5I2nrBXyLGPUDcXCRMF8urMyaedKIjjgUQxyCy
-         vQOjU+S7H1JC5iilU9CIq69NnS0Fap4Cx6gJqvfbdxSXSRb+jcPrhkNHJjA2iM9Deozq
-         R4pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j2VAOUAnZrrTaW8atAzm2YZfzH9NyPYsAl1667ENi80=;
-        b=TE2t+Y7xg8Rs1iZ5emM1hK3pQN7VELNQGJH5eEB3HHHC7oKUoNY6IP6Z2Jt2wsiFZ+
-         WIR+sLdqVpCeNxXwno0+lWE3mjcl+0d7IrkmenxuUYhWavHHFJU1na88lCr+pw9r36sy
-         79Ne96wwMa19kdImbf90FXWd9txpLgyY37ja2Nd1dVBD8ByEfNbVNyqQr1tJiXqRevGF
-         C6bRVkiFSvDAQlBsa2zpMvozc16vrNv2+Dg6dfUMzrMSTYzjtRVAUlDN/U4m4qI+fugq
-         if1+Qpvx9A1+nyiQr9rKnhuIas0I9MiWiTuRwFVPSdAJuhiWTphvqEMOA8UpsndB+CXm
-         hjaQ==
-X-Gm-Message-State: AFqh2krwR0yPbKes2h+TntxnVs3CDUGftdwoKfcaHVoNdJHOhqdq3yaU
-        LFkBmuoDc2dRKnO7W+ojzTUGzA==
-X-Google-Smtp-Source: AMrXdXviQFi3sihPpurt8rdcKqZfVzxFO3/bkpVeQGK/zf7LvG7QPjCQ8MMQgH9HLEbEA7amD+J8DQ==
-X-Received: by 2002:a05:600c:c05:b0:3db:3476:6f02 with SMTP id fm5-20020a05600c0c0500b003db34766f02mr36605938wmb.41.1675099639973;
-        Mon, 30 Jan 2023 09:27:19 -0800 (PST)
-Received: from smtpclient.apple (global-5-143.n-2.net.cam.ac.uk. [131.111.5.143])
-        by smtp.gmail.com with ESMTPSA id z24-20020a1cf418000000b003dc36981727sm11203411wma.14.2023.01.30.09.27.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Jan 2023 09:27:19 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v1] riscv: support arch_has_hw_pte_young()
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <20230130104900.muwgikgkvkn2byna@orel>
-Date:   Mon, 30 Jan 2023 17:27:18 +0000
-Cc:     Anup Patel <apatel@ventanamicro.com>, Jinyu Tang <tjytimi@163.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, yuzhao@google.com,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>, tongtiangen@huawei.com,
-        Anup Patel <anup@brainfault.org>,
-        Andrew Morton <akpm@linux-foundation.org>, falcon@tinylab.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+        Mon, 30 Jan 2023 12:27:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4303F286;
+        Mon, 30 Jan 2023 09:27:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AAF161207;
+        Mon, 30 Jan 2023 17:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF09BC433D2;
+        Mon, 30 Jan 2023 17:27:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675099651;
+        bh=quYfkLUImPhhTtzramxIW7HgG0blpWTUEF/+VmpVN/k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WqN/qBtk3iywU2wOP7/cN+HJQCcXmq0JtCKoY9t8D4gYEYKoPbZV9Zfh83nV3Q6Qn
+         EPTGv+M5hzGUJqivB7DlV8jTbvcNKN1h/0xW1rulITY1+E5MEMJY6eab4HmDD/Uc8O
+         P3kMrQEUzVr9h9J9YeQFAAopuPSRMXz8ZcgExYL/+MZ1Fj5hPb6eod4FTm7t4xRg3M
+         slNx6ReYUm8lV489LQHgJlEMeEKrCcW9nV2wr0AdEn2T30nPnirWR4hFhfrYhSWbLF
+         4+v6LDuv+8vZlcie1GCC5lPHBPF73lKEwej11/5pJAUO3VqaLSgJ6uAoWibYFdMWmq
+         mVQK9dEgOtQLQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5031B5C084D; Mon, 30 Jan 2023 09:27:31 -0800 (PST)
+Date:   Mon, 30 Jan 2023 09:27:31 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EBC27F74-6AB4-43B3-90B9-107C05467167@jrtc27.com>
-References: <20230129064956.143664-1-tjytimi@163.com>
- <CAK9=C2VaxNezv+M=s=ZSA-YDf_17+hcom_z1=_j2YkRHg-yg7Q@mail.gmail.com>
- <20230130104900.muwgikgkvkn2byna@orel>
-To:     Andrew Jones <ajones@ventanamicro.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] rcu: Register rcu-lazy shrinker only CONFIG_RCU_LAZY is
+ enabled
+Message-ID: <20230130172731.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230130071737.2806534-1-qiang1.zhang@intel.com>
+ <CAEXW_YRUV_P7oEbtkRdKyRGcrWjkr9331SD4ymw_7q-54Ggx7A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YRUV_P7oEbtkRdKyRGcrWjkr9331SD4ymw_7q-54Ggx7A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,99 +59,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30 Jan 2023, at 10:49, Andrew Jones <ajones@ventanamicro.com> wrote:
->=20
-> On Mon, Jan 30, 2023 at 03:55:55PM +0530, Anup Patel wrote:
->> On Sun, Jan 29, 2023 at 12:21 PM Jinyu Tang <tjytimi@163.com> wrote:
->>>=20
->>> The arch_has_hw_pte_young() is false for riscv by default. If it's
->>> false, page table walk is almost skipped for MGLRU reclaim. And it
->>> will also cause useless step in __wp_page_copy_user().
->>>=20
->>> RISC-V Privileged Book says that riscv have two schemes to manage A
->>> and D bit.
->>>=20
->>> So add a config for selecting, the default is true. For simple
->>> implementation riscv CPU which just generate page fault, unselect =
-it.
->>=20
->> I totally disagree with this approach.
->>=20
->> Almost all existing RISC-V platforms don't have HW support
->> PTE.A and PTE.D updates.
->>=20
->> We want the same kernel image to run HW with/without PTE.A
->> and PTE.D updates so kconfig based approach is not going to
->> fly.
->>=20
->>>=20
->>> Signed-off-by: Jinyu Tang <tjytimi@163.com>
->>> ---
->>> arch/riscv/Kconfig               | 10 ++++++++++
->>> arch/riscv/include/asm/pgtable.h |  7 +++++++
->>> 2 files changed, 17 insertions(+)
->>>=20
->>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->>> index e2b656043abf..17c82885549c 100644
->>> --- a/arch/riscv/Kconfig
->>> +++ b/arch/riscv/Kconfig
->>> @@ -180,6 +180,16 @@ config PAGE_OFFSET
->>>        default 0x80000000 if 64BIT && !MMU
->>>        default 0xff60000000000000 if 64BIT
->>>=20
->>> +config ARCH_HAS_HARDWARE_PTE_YOUNG
->>> +       bool "Hardware Set PTE Access Bit"
->>> +       default y
->>> +       help
->>> +         Select if hardware set A bit when PTE is accessed. The =
-default is
->>> +         'Y', because most RISC-V CPU hardware can manage A and D =
-bit.
->>> +         But RISC-V may have simple implementation that do not =
-support
->>> +         hardware set A bit but only generate page fault, for that =
-case just
->>> +         unselect it.
->>> +
->>> config KASAN_SHADOW_OFFSET
->>>        hex
->>>        depends on KASAN_GENERIC
->>> diff --git a/arch/riscv/include/asm/pgtable.h =
-b/arch/riscv/include/asm/pgtable.h
->>> index 4eba9a98d0e3..1db54ab4e1ba 100644
->>> --- a/arch/riscv/include/asm/pgtable.h
->>> +++ b/arch/riscv/include/asm/pgtable.h
->>> @@ -532,6 +532,13 @@ static inline int ptep_clear_flush_young(struct =
-vm_area_struct *vma,
->>>         */
->>>        return ptep_test_and_clear_young(vma, address, ptep);
->>> }
->>> +#ifdef CONFIG_ARCH_HAS_HARDWARE_PTE_YOUNG
->>=20
->>> +#define arch_has_hw_pte_young arch_has_hw_pte_young
->>> +static inline bool arch_has_hw_pte_young(void)
->>> +{
->>> +       return true;
->>=20
->> Drop the kconfig option ARCH_HAS_HARDWARE_PTE_YOUNG
->> and instead use code patching to return true only when Svadu
->> ISA extension is available in DT ISA string.
->=20
-> Indeed. I should have checked if there was an extension for this
-> first. It crossed my mind that we should only be enabling features
-> when the extensions are present, but looking at the privileged manual
-> isn't sufficient to learn about the Svadu extension. I should have
-> checked https://wiki.riscv.org/display/HOME/Specification+Status
->=20
-> Anyway, I retract my r-b and agree with Anup.
+On Mon, Jan 30, 2023 at 10:00:42AM -0500, Joel Fernandes wrote:
+> On Mon, Jan 30, 2023 at 2:12 AM Zqiang <qiang1.zhang@intel.com> wrote:
+> >
+> > The rcu-lazy shrinker is registered without CONFIG_RCU_LAZY enabled
+> > is meaningless, this commit therefore make rcu-lazy shrinker is
+> > registered only when CONFIG_RCU_LAZY is enabled.
+> >
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> 
+> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Svadu is a bit of a mess, for years it=E2=80=99s been legal to implement
-hardware A/D tracking and such implementations exist (it=E2=80=99s what =
-QEMU
-has done for many years, and I know of an FPGA-based implementation
-that does it too), yet RVA20S64 outlaws that by requiring what it calls
-Ssptead and Svadu gets introduced to re-allow that behaviour gated
-behind a CSR bit.
+Queued and pushed, thank you both!
 
-Jess
+Twice, actually.  I missed Joel's reviewed-by the first time around,
+fixed now.
 
+							Thanx, Paul
+
+> Thanks.
+> 
+> > ---
+> >  kernel/rcu/tree_nocb.h | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > index 9e1c8caec5ce..28c1c092817b 100644
+> > --- a/kernel/rcu/tree_nocb.h
+> > +++ b/kernel/rcu/tree_nocb.h
+> > @@ -1312,6 +1312,7 @@ int rcu_nocb_cpu_offload(int cpu)
+> >  }
+> >  EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
+> >
+> > +#ifdef CONFIG_RCU_LAZY
+> >  static unsigned long
+> >  lazy_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *sc)
+> >  {
+> > @@ -1360,6 +1361,7 @@ static struct shrinker lazy_rcu_shrinker = {
+> >         .batch = 0,
+> >         .seeks = DEFAULT_SEEKS,
+> >  };
+> > +#endif
+> >
+> >  void __init rcu_init_nohz(void)
+> >  {
+> > @@ -1391,8 +1393,10 @@ void __init rcu_init_nohz(void)
+> >         if (!rcu_state.nocb_is_setup)
+> >                 return;
+> >
+> > +#ifdef CONFIG_RCU_LAZY
+> >         if (register_shrinker(&lazy_rcu_shrinker, "rcu-lazy"))
+> >                 pr_err("Failed to register lazy_rcu shrinker!\n");
+> > +#endif
+> >
+> >         if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+> >                 pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+> > --
+> > 2.25.1
+> >
