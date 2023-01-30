@@ -2,107 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2867E6809E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62D60680A52
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235524AbjA3JuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
+        id S236245AbjA3KDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjA3JuH (ORCPT
+        with ESMTP id S235845AbjA3KDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:50:07 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5F41A487;
-        Mon, 30 Jan 2023 01:50:05 -0800 (PST)
-Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pMQPS-0000FW-LW; Mon, 30 Jan 2023 10:25:06 +0100
-Message-ID: <33e30bc9-60d2-3cc1-d6ee-870310db9b54@leemhuis.info>
-Date:   Mon, 30 Jan 2023 10:25:06 +0100
+        Mon, 30 Jan 2023 05:03:33 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAF717CCB;
+        Mon, 30 Jan 2023 02:03:32 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U8iKik030631;
+        Mon, 30 Jan 2023 09:25:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : to : cc : references : from : subject : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7fprBaYwOOCmXuJOkAQ5QMZkawuxe6OxrvBklOkDwp4=;
+ b=VT2OJCH83qwUtR2nCB+VoxZ35E9UGC8Uorro5rAVpYGEY6N2m41fldPyMCCp2rDQ7Unt
+ PNYM14yEUWMdK5ekxNbf2nsTORIbqpKKisHiADdSUiXV9ocLIet0A15b/gJWd6+bXh1l
+ Zee/VBYDLL+hUZIjsf/dC0ic37c7llZH0YE5/MnoZxq2X54Yd69nr1S3MlbIzFDuNg9i
+ cltAJusmn8WRg7uUYw0xIiqW/M9/Fv4vl/eby0KD0CMTIP9zu//7aq96H3j3DhWTRx+L
+ sr+aJTiULrZeSMehKeo2ic84cLkM36HsErlQXlCLpqMbRSGyT/gsyNA+/XU7k32NRyO2 5Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3neamygygs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 09:25:38 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30U8kCJR000988;
+        Mon, 30 Jan 2023 09:25:38 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3neamygygc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 09:25:38 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30T3EN37011107;
+        Mon, 30 Jan 2023 09:25:36 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3ncvv69ee5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 09:25:36 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30U9PWUX42336590
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 Jan 2023 09:25:32 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7C4220043;
+        Mon, 30 Jan 2023 09:25:32 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4514A20040;
+        Mon, 30 Jan 2023 09:25:32 +0000 (GMT)
+Received: from [9.171.8.15] (unknown [9.171.8.15])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 30 Jan 2023 09:25:32 +0000 (GMT)
+Message-ID: <0746a825-ca04-3746-a6ff-5289903a2843@linux.ibm.com>
+Date:   Mon, 30 Jan 2023 10:25:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [regression] Bug 216977 - asus t100 touchpad registered but not
- working
-Content-Language: en-US, de-DE
-From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Linux kernel regressions list <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        jessegodfroy@gmail.com
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <2f4dc626-5287-6ec7-a31d-335e5dbb9119@leemhuis.info>
-In-Reply-To: <2f4dc626-5287-6ec7-a31d-335e5dbb9119@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+To:     Nina Schoetterl-Glausch <nsg@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Huth <thuth@redhat.com>
+References: <20230127174552.3370169-1-nsg@linux.ibm.com>
+Content-Language: en-US
+From:   Janosch Frank <frankja@linux.ibm.com>
+Subject: Re: [RFC PATCH v1] KVM: selftests: Compile s390 tests with -march=z10
+In-Reply-To: <20230127174552.3370169-1-nsg@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675072205;167cf484;
-X-HE-SMSGID: 1pMQPS-0000FW-LW
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: vf_8CxvDOGmi9MSZ3bOC8w0-DH10hZoa
+X-Proofpoint-GUID: ry1WlnRGW5T7WMJDlJyHDe1k9w7gI4iE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_07,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 mlxscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300086
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[resent with Benjamin's proper email address; sorry for the noise]
+On 1/27/23 18:45, Nina Schoetterl-Glausch wrote:
+> The guest used in s390 kvm selftests is not be set up to handle all
+> instructions the compiler might emit, i.e. vector instructions, leading
+> to crashes.
+> Limit what the compiler emits to the oldest machine model currently
+> supported by Linux.
+> 
+> Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+> ---
 
-On 30.01.23 10:22, Linux kernel regression tracking (Thorsten Leemhuis)
-wrote:
-> Hi, this is your Linux kernel regression tracker.
+Technically it's a fix but as the tests have been running fine for years 
+I'm inclined to put it into a full release rather than a fix rc.
+
+Thanks for taking care of the fix:
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+
+> Should we also set -mtune?
+> Since it are vector instructions that caused the problem here, there
+> are some alternatives:
+>   * use -mno-vx
+>   * set the required guest control bit to enable vector instructions on
+>     models supporting them
 > 
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216977 :
-> 
->>  jessegodfroy@gmail.com 2023-01-29 15:44:34 UTC
->>
->> After upgrading the kernel from 6.0 series to the 6.1 the touchpad on my asus t100 no longer works. 
->>
->> The device is registered in dmesg. I believe hid_asus is responsible for the keyboard and touchpad.  The keyboard continues to function, but the touchpad does not. 
->>
->> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0001: input,hidraw0: USB HID v1.11 Keyboard [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input0
->> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0002: Fixing up Asus T100 keyb report descriptor
->> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0002: input,hiddev96,hidraw1: USB HID v1.11 Device [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input1
->> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0003: input,hiddev97,hidraw2: USB HID v1.11 Mouse [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input2
->>
->> I do not see any changes to hid_asus that should be responsible for the change in performance.
-> See the ticket for more details.
+> -march=z10 might prevent similar issues with other instructions, but I
+> don't know if there actually exist other relevant instructions, so it
+> could be needlessly restricting.
 > 
 > 
-> [TLDR for the rest of this mail: I'm adding this report to the list of
-> tracked Linux kernel regressions; the text you find below is based on a
-> few templates paragraphs you might have encountered already in similar
-> form.]
+>   tools/testing/selftests/kvm/Makefile | 3 +++
+>   1 file changed, 3 insertions(+)
 > 
-> BTW, let me use this mail to also add the report to the list of tracked
-> regressions to ensure it's doesn't fall through the cracks:
-> 
-> #regzbot introduced: v6.0..v6.1
-> https://bugzilla.kernel.org/show_bug.cgi?id=216977
-> #regzbot title: input: hid: asus t100 touchpad registered but not working
-> #regzbot ignore-activity
-> 
-> This isn't a regression? This issue or a fix for it are already
-> discussed somewhere else? It was fixed already? You want to clarify when
-> the regression started to happen? Or point out I got the title or
-> something else totally wrong? Then just reply and tell me -- ideally
-> while also telling regzbot about it, as explained by the page listed in
-> the footer of this mail.
-> 
-> Developers: When fixing the issue, remember to add 'Link:' tags pointing
-> to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-> this thread sees some discussion). See page linked in footer for details.
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 1750f91dd936..df0989949eb5 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -200,6 +200,9 @@ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+>   	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+>   	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. $(EXTRA_CFLAGS) \
+>   	$(KHDR_INCLUDES)
+> +ifeq ($(ARCH),s390)
+> +	CFLAGS += -march=z10
+> +endif
+>   
+>   no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
+>           $(CC) -Werror $(CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
+
