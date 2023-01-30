@@ -2,174 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8857B6811AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC45D6811D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237343AbjA3OPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S237478AbjA3OQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237341AbjA3OPv (ORCPT
+        with ESMTP id S237353AbjA3OQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:15:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386E13BDB8;
-        Mon, 30 Jan 2023 06:15:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B79F261047;
-        Mon, 30 Jan 2023 14:15:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E455EC433EF;
-        Mon, 30 Jan 2023 14:15:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675088149;
-        bh=1TPEq50BwTQPmWyFZ+PLnU1UmPOhK0Av22uGK6NAEVY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mTIuQ1Ob+B8K1/QzmPWSTUBK/9sEIJKaYsBabVNdrmJL3013Nlc0WBlOnplfAynCK
-         H+HcTHukJ8ndyNC80dpSmUzOGA5AUhkYv2CXHazlphU6M/7KYxNy8rkiCHSopP4YzJ
-         nw4qqrTEJO6PFWVHMuohQhaMio7E9avhj/rnOXA1nc5Y5AuN62WXvo5RkTemVE4LbJ
-         QCzQ8ew/311vXYIqMEeyICfc7YG8gKMXAXE0I5/VgDw54DZQNZhbIAyK2uRP+Sg1lf
-         xFbFSH8SaBwXKtmxXgj2uuVhDJF36bwN4eeN9+QoNq4dDwxA9DhW0yEd0RwIidGL2G
-         rEXXn93ZjY3PA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id C6865405BE; Mon, 30 Jan 2023 11:15:45 -0300 (-03)
-Date:   Mon, 30 Jan 2023 11:15:45 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 0/4] perf intel-pt: Fix the pipe mode (v1)
-Message-ID: <Y9fREY3BxROqYYBO@kernel.org>
-References: <20230127001951.3432374-1-namhyung@kernel.org>
- <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
- <CAM9d7cg_7LNKrXtBuo2QUR1Voi9NKM98qYLC+pznMf4-5yo4Dg@mail.gmail.com>
+        Mon, 30 Jan 2023 09:16:42 -0500
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA20F3CE3A;
+        Mon, 30 Jan 2023 06:16:38 -0800 (PST)
+Received: from booty.fritz.box (unknown [77.244.183.192])
+        (Authenticated sender: luca.ceresoli@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 4016E100002;
+        Mon, 30 Jan 2023 14:16:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675088197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iCnzSU9SA8/jWqoK96sIMGM1+kIb0sYFhLxz86NmmIE=;
+        b=Loxw6QPczl1SP1a63dLq0FjpPzWygh0PYzJ/DsBALowQseASoBfUcmok0nFYKDtnyqNY8e
+        pO92mVDXr3uwx/odoctE4Szo5UxNNuNecRawoQfka8f9vR5NIGjUHdB4FIFE33EQOABTqR
+        n9BT++mOc/zOmK7Get4I/S8IfJKwEj7I2glreJ4aAWweX6k1A5rO8N6tXQgo0+/x1fXiLj
+        IGuFIya9HEre5E2yEECkOlcIdb2MLVkLqAt/mGDVy1dbE8ck8t6EX1GYZ95z/zSkANSYQc
+        LGvwsyX5sLm6JosUodoGVT1pVQ24nY3u/KD5+B7aYFbvqMxhgrpFnAKuSc0NbA==
+From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+Subject: [PATCH v4 03/21] staging: media: tegra-video: fix .vidioc_enum_fmt_vid_cap to return all formats
+Date:   Mon, 30 Jan 2023 15:15:45 +0100
+Message-Id: <20230130141603.323221-4-luca.ceresoli@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230130141603.323221-1-luca.ceresoli@bootlin.com>
+References: <20230130141603.323221-1-luca.ceresoli@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cg_7LNKrXtBuo2QUR1Voi9NKM98qYLC+pznMf4-5yo4Dg@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Jan 27, 2023 at 02:54:36PM -0800, Namhyung Kim escreveu:
-> Hi Adrian,
-> 
-> On Thu, Jan 26, 2023 at 11:22 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >
-> > On 27/01/23 02:19, Namhyung Kim wrote:
-> > > Hello,
-> > >
-> > > I found some problems in Intel-PT and auxtrace in general with pipe.
-> > > In the past it used to work with pipe, but recent code fails.
-> >
-> > Pipe mode is a problem for Intel PT and possibly other auxtrace users.
-> > Essentially the auxtrace buffers do not behave like the regular perf
-> > event buffers.  That is because the head and tail are updated by
-> > software, but in the auxtrace case the data is written by hardware.
-> > So the head and tail do not get updated as data is written.  In the
-> > Intel PT case, the head and tail are updated only when the trace is
-> > disabled by software, for example:
-> >     - full-trace, system wide : when buffer passes watermark
-> >     - full-trace, not system-wide : when buffer passes watermark or
-> >     context switches
-> >     - snapshot mode : as above but also when a snapshot is made
-> >     - sample mode : as above but also when a sample is made
-> >
-> > That means finished-round ordering doesn't work.  An auxtrace buffer
-> > can turn up that has data that extends back in time, possibly to the
-> > very beginning of tracing.
-> 
-> Ok, IIUC we want to process the main buffer and auxtrace buffer
-> together in time order but there's no guarantee to get the auxtrace
-> data in time, right?
-> 
-> I wonder if it's possible to use 2 pass processing for pipe mode.
-> We may keep the events in the ordered queue and auxtrace queue
-> in the first pass, and process together from the beginning in the
-> second pass. But I guess the data size would be a problem.
-> 
-> Or, assuming that the auxtrace buffer comes later than (or equal to)
-> the main buffer, we may start processing the main buffer as soon as
-> every auxtrace queue gets some data.  Thoughts?
-> 
-> >
-> > For a perf.data file, that problem is solved by going through the trace
-> > and queuing up the auxtrace buffers in advance.
-> >
-> > For pipe mode, the order of events and timestamps can presumably
-> > be messed up.
-> >
-> > For Intel PT, it is a bit of a surprise that there is not
-> > validation to error out in pipe mode.
-> 
-> What kind of validation do you have in mind?  Checking pid/tid?
-> 
-> >
-> > At the least, a warning is needed, and the above explanation needs
-> > to be added to the documentation.
-> 
-> Thanks, I'll add it to the documentation.
+The .vidioc_enum_fmt_vid_cap (called tegra_channel_enum_format() here)
+should return all the supported formats. Instead the current implementation
+computes the intersection between the formats it supports and those
+supported by the first subdev in the stream (typically the image sensor).
 
-Ok, so I'll wait for v2 of this patch series, Adrian, apart from what
-you mentioned, are you ok with the patches, or a subset of them? The
-first ones looks ok, right?
+Remove all the unnecessary logic that supports such algorithm. In order to
+do this, also change the Tegra210 CSI TPG formats from the current
+open-coded implementation in vi_tpg_fmts_bitmap_init() to a const array in
+tegra210.c, just like the one that describes the regular formats.
 
-- Arnaldo
+Fixes: 3d8a97eabef0 ("media: tegra-video: Add Tegra210 Video input driver")
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+
+---
+
+Changed in v4:
+ - Added review tags
+
+No changes in v3
+No changes in v2
+---
+ drivers/staging/media/tegra-video/tegra210.c |   7 +-
+ drivers/staging/media/tegra-video/vi.c       | 103 +------------------
+ drivers/staging/media/tegra-video/vi.h       |   4 -
+ 3 files changed, 9 insertions(+), 105 deletions(-)
+
+diff --git a/drivers/staging/media/tegra-video/tegra210.c b/drivers/staging/media/tegra-video/tegra210.c
+index d58370a84737..eb19dd5107ce 100644
+--- a/drivers/staging/media/tegra-video/tegra210.c
++++ b/drivers/staging/media/tegra-video/tegra210.c
+@@ -683,8 +683,12 @@ enum tegra210_image_format {
+ 	V4L2_PIX_FMT_##FOURCC,						\
+ }
  
-> How about showing something like this for pipe mode?
-> 
->   WARNING: Intel-PT with pipe mode may not work correctly.
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> >
-> > >                                                                As it
-> > > also touches the generic code, other auxtrace users like ARM SPE will
-> > > be affected too.  I added a test case to verify it works with pipes.
-> > >
-> > > At last, I can run this command without a problem.
-> > >
-> > >   $ perf record -o- -e intel_pt// true | perf inject -b | perf report -i- --itrace=i1000
-> > >
-> > > The code is available at 'perf/auxtrace-pipe-v1' branch in
-> > >
-> > >   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> > >
-> > > Thanks,
-> > > Namhyung
-> > >
-> > > Namhyung Kim (4):
-> > >   perf inject: Use perf_data__read() for auxtrace
-> > >   perf intel-pt: Do not try to queue auxtrace data on pipe
-> > >   perf session: Avoid calling lseek(2) for pipe
-> > >   perf test: Add pipe mode test to the Intel PT test suite
-> > >
-> > >  tools/perf/builtin-inject.c             |  6 +++---
-> > >  tools/perf/tests/shell/test_intel_pt.sh | 17 +++++++++++++++++
-> > >  tools/perf/util/auxtrace.c              |  3 +++
-> > >  tools/perf/util/session.c               |  9 +++++++--
-> > >  4 files changed, 30 insertions(+), 5 deletions(-)
-> > >
-> > >
-> > > base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
-> > > prerequisite-patch-id: 4ccdf9c974a3909075051f4ffe498faecab7567b
-> >
-
+-/* Tegra210 supported video formats */
+ static const struct tegra_video_format tegra210_video_formats[] = {
++#if IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG)
++	/* VI only support 2 formats in TPG mode */
++	TEGRA210_VIDEO_FMT(RAW10,  10, SRGGB10_1X10,      2, T_R16_I,    SRGGB10),
++	TEGRA210_VIDEO_FMT(RGB888, 24, RGB888_1X32_PADHI, 4, T_A8B8G8R8, RGBX32),
++#else
+ 	/* RAW 8 */
+ 	TEGRA210_VIDEO_FMT(RAW8, 8, SRGGB8_1X8, 1, T_L8, SRGGB8),
+ 	TEGRA210_VIDEO_FMT(RAW8, 8, SGRBG8_1X8, 1, T_L8, SGRBG8),
+@@ -714,6 +718,7 @@ static const struct tegra_video_format tegra210_video_formats[] = {
+ 	TEGRA210_VIDEO_FMT(YUV422_8, 16, VYUY8_2X8, 2, T_V8_Y8__U8_Y8, YUYV),
+ 	TEGRA210_VIDEO_FMT(YUV422_8, 16, YUYV8_2X8, 2, T_Y8_U8__Y8_V8, VYUY),
+ 	TEGRA210_VIDEO_FMT(YUV422_8, 16, YVYU8_2X8, 2, T_Y8_V8__Y8_U8, UYVY),
++#endif
+ };
+ 
+ /* Tegra210 VI operations */
+diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
+index 11dd142c98c5..9dba6e97ebdd 100644
+--- a/drivers/staging/media/tegra-video/vi.c
++++ b/drivers/staging/media/tegra-video/vi.c
+@@ -3,7 +3,6 @@
+  * Copyright (C) 2020 NVIDIA CORPORATION.  All rights reserved.
+  */
+ 
+-#include <linux/bitmap.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/host1x.h>
+@@ -73,15 +72,6 @@ static int tegra_get_format_idx_by_code(struct tegra_vi *vi,
+ 	return -1;
+ }
+ 
+-static u32 tegra_get_format_fourcc_by_idx(struct tegra_vi *vi,
+-					  unsigned int index)
+-{
+-	if (index >= vi->soc->nformats)
+-		return -EINVAL;
+-
+-	return vi->soc->video_formats[index].fourcc;
+-}
+-
+ static const struct tegra_video_format *
+ tegra_get_format_by_fourcc(struct tegra_vi *vi, u32 fourcc)
+ {
+@@ -430,19 +420,12 @@ static int tegra_channel_enum_format(struct file *file, void *fh,
+ 				     struct v4l2_fmtdesc *f)
+ {
+ 	struct tegra_vi_channel *chan = video_drvdata(file);
+-	unsigned int index = 0, i;
+-	unsigned long *fmts_bitmap = chan->tpg_fmts_bitmap;
+-
+-	if (!IS_ENABLED(CONFIG_VIDEO_TEGRA_TPG))
+-		fmts_bitmap = chan->fmts_bitmap;
++	const struct tegra_vi_soc *soc = chan->vi->soc;
+ 
+-	if (f->index >= bitmap_weight(fmts_bitmap, MAX_FORMAT_NUM))
++	if (f->index >= soc->nformats)
+ 		return -EINVAL;
+ 
+-	for (i = 0; i < f->index + 1; i++, index++)
+-		index = find_next_bit(fmts_bitmap, MAX_FORMAT_NUM, index);
+-
+-	f->pixelformat = tegra_get_format_fourcc_by_idx(chan->vi, index - 1);
++	f->pixelformat = soc->video_formats[f->index].fourcc;
+ 
+ 	return 0;
+ }
+@@ -1059,78 +1042,6 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
+ 	return 0;
+ }
+ 
+-/* VI only support 2 formats in TPG mode */
+-static void vi_tpg_fmts_bitmap_init(struct tegra_vi_channel *chan)
+-{
+-	int index;
+-
+-	bitmap_zero(chan->tpg_fmts_bitmap, MAX_FORMAT_NUM);
+-
+-	index = tegra_get_format_idx_by_code(chan->vi,
+-					     MEDIA_BUS_FMT_SRGGB10_1X10, 0);
+-	bitmap_set(chan->tpg_fmts_bitmap, index, 1);
+-
+-	index = tegra_get_format_idx_by_code(chan->vi,
+-					     MEDIA_BUS_FMT_RGB888_1X32_PADHI,
+-					     0);
+-	bitmap_set(chan->tpg_fmts_bitmap, index, 1);
+-}
+-
+-static int vi_fmts_bitmap_init(struct tegra_vi_channel *chan)
+-{
+-	int index, ret, match_code = 0;
+-	struct v4l2_subdev *subdev;
+-	struct v4l2_subdev_mbus_code_enum code = {
+-		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+-	};
+-
+-	bitmap_zero(chan->fmts_bitmap, MAX_FORMAT_NUM);
+-
+-	/*
+-	 * Set the bitmap bits based on all the matched formats between the
+-	 * available media bus formats of sub-device and the pre-defined Tegra
+-	 * supported video formats.
+-	 */
+-	subdev = tegra_channel_get_remote_source_subdev(chan);
+-	while (1) {
+-		ret = v4l2_subdev_call(subdev, pad, enum_mbus_code,
+-				       NULL, &code);
+-		if (ret < 0)
+-			break;
+-
+-		index = tegra_get_format_idx_by_code(chan->vi, code.code, 0);
+-		while (index >= 0) {
+-			bitmap_set(chan->fmts_bitmap, index, 1);
+-			if (!match_code)
+-				match_code = code.code;
+-			/* look for other formats with same mbus code */
+-			index = tegra_get_format_idx_by_code(chan->vi,
+-							     code.code,
+-							     index + 1);
+-		}
+-
+-		code.index++;
+-	}
+-
+-	/*
+-	 * Set the bitmap bit corresponding to default tegra video format if
+-	 * there are no matched formats.
+-	 */
+-	if (!match_code) {
+-		match_code = tegra_default_format.code;
+-		index = tegra_get_format_idx_by_code(chan->vi, match_code, 0);
+-		if (WARN_ON(index < 0))
+-			return -EINVAL;
+-
+-		bitmap_set(chan->fmts_bitmap, index, 1);
+-	}
+-
+-	/* initialize channel format to the sub-device active format */
+-	tegra_channel_set_subdev_active_fmt(chan);
+-
+-	return 0;
+-}
+-
+ static void tegra_channel_host1x_syncpts_free(struct tegra_vi_channel *chan)
+ {
+ 	int i;
+@@ -1501,7 +1412,6 @@ int tegra_v4l2_nodes_setup_tpg(struct tegra_video_device *vid)
+ 			goto cleanup;
+ 
+ 		v4l2_set_subdev_hostdata(&csi_chan->subdev, vi_chan);
+-		vi_tpg_fmts_bitmap_init(vi_chan);
+ 		csi_chan = list_next_entry(csi_chan, list);
+ 	}
+ 
+@@ -1721,13 +1631,6 @@ static int tegra_vi_graph_notify_complete(struct v4l2_async_notifier *notifier)
+ 		goto unregister_video;
+ 	}
+ 
+-	ret = vi_fmts_bitmap_init(chan);
+-	if (ret < 0) {
+-		dev_err(vi->dev,
+-			"failed to initialize formats bitmap: %d\n", ret);
+-		goto unregister_video;
+-	}
+-
+ 	subdev = tegra_channel_get_remote_csi_subdev(chan);
+ 	if (!subdev) {
+ 		ret = -ENODEV;
+diff --git a/drivers/staging/media/tegra-video/vi.h b/drivers/staging/media/tegra-video/vi.h
+index a68e2c02c7b0..183796c8a46a 100644
+--- a/drivers/staging/media/tegra-video/vi.h
++++ b/drivers/staging/media/tegra-video/vi.h
+@@ -163,8 +163,6 @@ struct tegra_vi_graph_entity {
+  *
+  * @ctrl_handler: V4L2 control handler of this video channel
+  * @syncpt_timeout_retry: syncpt timeout retry count for the capture
+- * @fmts_bitmap: a bitmap for supported formats matching v4l2 subdev formats
+- * @tpg_fmts_bitmap: a bitmap for supported TPG formats
+  * @pg_mode: test pattern generator mode (disabled/direct/patch)
+  * @notifier: V4L2 asynchronous subdevs notifier
+  */
+@@ -205,8 +203,6 @@ struct tegra_vi_channel {
+ 
+ 	struct v4l2_ctrl_handler ctrl_handler;
+ 	unsigned int syncpt_timeout_retry;
+-	DECLARE_BITMAP(fmts_bitmap, MAX_FORMAT_NUM);
+-	DECLARE_BITMAP(tpg_fmts_bitmap, MAX_FORMAT_NUM);
+ 	enum tegra_vi_pg_mode pg_mode;
+ 
+ 	struct v4l2_async_notifier notifier;
 -- 
+2.34.1
 
-- Arnaldo
