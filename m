@@ -2,142 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2666E681401
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:02:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9EF681403
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbjA3PCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:02:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
+        id S237932AbjA3PDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:03:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjA3PCa (ORCPT
+        with ESMTP id S230469AbjA3PDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:02:30 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2055.outbound.protection.outlook.com [40.107.102.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5541C58D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:02:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y4rxFa53XZmQRV43BhweasB+pWSOCa0VFaO83vB6gibV+3rt8MvqD3p3fQVhD7FN1Om3FmaHaT1S0jxfzYtdjFKB+csLLluiWYSELesVQzjJxSyzlnOTEuv7qDV7VdBHJKDVjfiyudH//lDqA/F0pCxxyxE5ggJR1er5/5iZlQXbT/2Oue8SO2kofAoT3Pr034y6AOaELAf9c9HJw1S7zhwzHZwCvZsqyvCsd4cHuyCtHZwK3qNAGx7JS044RJ9V/IPaEHoVHEdd4GEnqSBjDYNcQjvDw0EoFka+BZ5ljFCh7JA52g9neKAJviPtzW917hNCuzBRoz7Lds3dEnxgTg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=syx3ArbCkDj9iTPNP22RYAaI9R5qJCaKs73fdrNZp5I=;
- b=JGp99EHwvraCioox0rRlWbqYhfCFJRKBJDx6VtzieQRicyYdJPhasSJwYSdXqbNGA/TkIj+7qnhj/5XYVBC7tzHbOXUYi+CdQnQvGJ+t5Mg2gWYXvVg0NdVYQOV621VfJiOs8jxpswdEEe4wZUoMeGb0CN1r6IFUNutRji9yBj54CALkePNaBaWkbpae0cU+/zyDHsaanxfqxByE+Sr4eGSmWWLOr89jTjRHJ38MxxSKfs63oFC0Gekqz6Cujbvxh1jD33gCVlKTqj3xfbAazRFKx/DLg73JUY3djQHBCKBOCugyNUVNfTCObfDIUVZmuVf0YsvdX6tRFhui9QfqXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=syx3ArbCkDj9iTPNP22RYAaI9R5qJCaKs73fdrNZp5I=;
- b=Abtgxpu3LSkeYcOPx0LEFGSoibtrm8ok3vH90hvrS/I0f7IsiI0U85Ak2QSG1w4y0ZEmi1XtKFvhWfTUhgMOJL2wXqWHbSVohiio2dHvoTmXxk+FIrgZIdg1KzU0IkBPl/ZWJel8ymJ+6Lob93Hz2m2MaSwVim9Ue7JCoARZInRFoqxeFSh2Q4sXDxHuemyT7nfLFhwNJSdtOTmUCXrAMbvIUSt+m18Cd2NTGiwb+cMLiLMy2D6iMb/PFkrw446mgB2mE9aEbAKzuIPoJed/X/Txw1F6ts7IWAouzXIMzSaLQ4lsFolpT9x+Xu5diEXABi7+mK2cj1OawjMdGru/PQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SA0PR12MB4446.namprd12.prod.outlook.com (2603:10b6:806:71::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 15:02:27 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6043.033; Mon, 30 Jan 2023
- 15:02:27 +0000
-Date:   Mon, 30 Jan 2023 11:02:25 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     kevin.tian@intel.com, yi.l.liu@intel.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] iommufd: Add devices_users to track the
- hw_pagetable usage by device
-Message-ID: <Y9fcAdFxl7GVSH9r@nvidia.com>
-References: <cover.1674939002.git.nicolinc@nvidia.com>
- <c1c65ce093a3b585546dd17a77949efbe03a81d9.1674939002.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1c65ce093a3b585546dd17a77949efbe03a81d9.1674939002.git.nicolinc@nvidia.com>
-X-ClientProxiedBy: MN2PR07CA0002.namprd07.prod.outlook.com
- (2603:10b6:208:1a0::12) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 30 Jan 2023 10:03:19 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4460917140;
+        Mon, 30 Jan 2023 07:03:18 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1112)
+        id 03ECC20E9F8A; Mon, 30 Jan 2023 07:03:18 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 03ECC20E9F8A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675090998;
+        bh=SzSx6WrPFT5+HVqIk4AWasOuf4rLyIQswZa2Nd3lE1s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m1bJHeFgodb9BnnMH3n4oIR30nlWPtv02O4UPWlKu/9b5o8Uh+d60hOX8LUip3OzP
+         hRzfV+uJV6NtNtMezN5+uNzrgc+qRW37mMFAeyTqMu+i2x3FkfeCCAoSoH7rPOQdSq
+         pO04HrfXAKH440hrCWcWoe85gCJs8aLX0t+b7IQI=
+Date:   Mon, 30 Jan 2023 07:03:17 -0800
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [RFC PATCH v1 1/6] x86/hyperv: Allocate RMP table during boot
+Message-ID: <20230130150317.GA27645@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20230123165128.28185-1-jpiotrowski@linux.microsoft.com>
+ <20230123165128.28185-2-jpiotrowski@linux.microsoft.com>
+ <SN6PR2101MB1693C405F2DA48F078D38CF3D7CD9@SN6PR2101MB1693.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA0PR12MB4446:EE_
-X-MS-Office365-Filtering-Correlation-Id: e2a6a529-3af2-4aec-8f0b-08db02d3003a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /phBPUzdQ3u9bnDhFZZR8kXz7jHuhgon6thOitN8ucwV4ZsGoExEDxpCN9DnLFm6Y8myISP11D6jtmv/Ueme05J+xRJkMDjPU34Y6fVDZbs78fKotcgc/tS3oNmq15d9+4FOdVGZ7BQOAcaYfZGBjGt+yT1Ci4HXU1zVeFApWIa8XuXDHVgicucAznnxS6lQDh/RbiaAfUHUhhWk8ijKx2quH+B+j8b7hQkfDqY6DteKjfdU9XcsUylJ4/tkgzdmEd481+9VWBEBgV8YP2Tt5WfNY3FGTJtsF9IVqw4tekkGTcH42klBhJfFYwmmmMGuJcxTinwTQJvq9+iKOD8YtdYs06eS7P3zHWB6uwPxcj0mwPCqVabMQWT5/P9oQZKuqmKTsDXwz2uvDk8rFLcP0vEc4YAvLqeKP4GS3z5QHPgZ7u8zCL8FOXy7XI0PGP2sChopCdkWGOBG6gQi4nRy6WUBotBua8FWOBSw6O+trkRfs/B69THoy0vW0OC0kBhTUiTnFbDG536+xWaZKihFHtvfBSes1ZiMfTGliVv69pkAfnNbly56XfF5SsCmYunSvfGyiJdXrNSlJd+q/YR/jBjKQUJqF+08wOXEtF/+r//GkIn822ezWNnLITF7hJjRXMsgXxY6M67ghz7jke44xA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(376002)(396003)(366004)(136003)(451199018)(4326008)(66946007)(41300700001)(66476007)(66556008)(8676002)(6862004)(8936002)(316002)(37006003)(6486002)(5660300002)(6636002)(83380400001)(36756003)(2906002)(26005)(6512007)(186003)(478600001)(6506007)(86362001)(2616005)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?C2/81enQStCZQVLLcx448Z07PT7mqmG0JUcJ3pB1QW/+MZXjQWzL9aL8yyOg?=
- =?us-ascii?Q?IJD6vVUpspUAQiAlxuOBaES77RkojwuOtjh6eY62nmsnD44gjmZiirzEbvGc?=
- =?us-ascii?Q?HrSjNSw5At9M0F/cm17R2VQKKdyxSpNcNb5oi4ZGQ0ly5aKJK/HhqFlMvdLS?=
- =?us-ascii?Q?wMgOlc7g8Ji2vvOfpH3odv6jsgaekn/6JMUX8/0fxPxuL3rIfVvxQN+M+Oiv?=
- =?us-ascii?Q?Mn0o/eHfrJZcm4h+03JAQAYhbP037lKrkgIMcik7c+6mph2MWwhrzarc8c1V?=
- =?us-ascii?Q?XkejZIw+v9C6Egy4vSEItZ/cEu+YwuZWMggP5tcy1K1aCAgx6Cku+gcdxVg5?=
- =?us-ascii?Q?zLLRFZXMop9hNuqZSf4XdwVGjuDxgpG2+ILJW7YqWqZd1wptrDheUTpHZtyE?=
- =?us-ascii?Q?rmEGXgo5htmxt7Wzz9C6TbHW90i58X8tFzp/oIgVAsM1oPwEZH+Z8aoefa8H?=
- =?us-ascii?Q?/u28Wl3VMhpEC31J7HjxQRVp8iwtmdlLb62SsEA0/jtL53HOLzS9IbeE+31s?=
- =?us-ascii?Q?LCcuvUpysuZQa+Qm1NltSItZKoMTTlP3oA2aOa7RcQ3r0+CIBErpkwyQniBn?=
- =?us-ascii?Q?sxsdiyIuSHl45ZdmhuaAK3/z7SbzDyihxLnTcFYSiUM83ZQxGN6PZhXbN0H8?=
- =?us-ascii?Q?tdKRvnlAulKCcuoPG5TR7duOrDrYokWJe3Z4VIBISQMYs3OR5eTIWuYTecQC?=
- =?us-ascii?Q?IaAurSEc5U9m8yU14g3/+yTlOpUJc/AiyrFRKuyUVhP3bNi93XY72WQHEGLK?=
- =?us-ascii?Q?dl/t2DbRNMSHR0Sdir3teVn4XY01LGFRAoWPoapKGZa39wEX/GUQUeRu8/UT?=
- =?us-ascii?Q?q61tEp6FkjnmmOXalZB+9nltpS/E0ruP0+PlmgCwD8qj6/NVYnYeC3G7vkrU?=
- =?us-ascii?Q?Ct8O0M7KSicbQPEWtS2KRNdQ8Q02eepwd4+cgDZTnaD7G8Sj6arlus3tCu49?=
- =?us-ascii?Q?H1I5sKBRR+HXhW/JH7rDEVhe1vl/ospwB+SporVxy77h9ugOSzNc0vgMscqJ?=
- =?us-ascii?Q?z46BPXkv7XWtiisHLCftdV2XIBAqAOoafOyb5aKozJnY9ch+VV6TSV2+L85G?=
- =?us-ascii?Q?T7PPG1/Bk9Xi8m1FK1r4ZBHPhScSSDIhG5XeJSJTBmxo3BB1npVOkq6J6ZJM?=
- =?us-ascii?Q?b8JE4n8+gU4onz+KfovGScb6hhPXPEUOum6udAVJ72v/Y1Orp5XISCI3FoPU?=
- =?us-ascii?Q?96zprahSdN4XAoXmkfpn+33deSjIocf+qKUXjBiBBU7QIT/VpLK8jNExZxD7?=
- =?us-ascii?Q?2q2Ova8ux6+BdtUlXOA1DSa0BiaGyDeqnuuz3i88CXNHiSw6RInuOLf9Q3vI?=
- =?us-ascii?Q?iGXXGSY1U3aBh5qjoSAZF5+NEQnoRtGw2YI8VH31cLPaophGwBHHwCqKgeSX?=
- =?us-ascii?Q?ED6/fYWM5w6Mb9QR+cSuA7NrCYEhmNEK9iANgibliWGfYPjhRIG7jdnowmyz?=
- =?us-ascii?Q?DvdfUMhedELja7h21U757oi4opIYQxXUcgvNfsx1gpmfcuzt9Ni9K0HkL4wd?=
- =?us-ascii?Q?TQrWWU7RcEmf+Ujc84wS7Hlg5hMpcRIU0dvHrsFlKHhkO85W0z14bmcOJOom?=
- =?us-ascii?Q?HJUySvexxyBdYl2bUSK2pCG9Dr4hbUcQzS4dSYhD?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2a6a529-3af2-4aec-8f0b-08db02d3003a
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 15:02:26.9812
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8bHlO+4SE2MNZelu9doaOWELncB4Dr7b1MGewgrv69qEJNjR8+2gaaMtJS7iMgvm
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4446
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SN6PR2101MB1693C405F2DA48F078D38CF3D7CD9@SN6PR2101MB1693.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 01:18:09PM -0800, Nicolin Chen wrote:
-> From: Yi Liu <yi.l.liu@intel.com>
+On Sat, Jan 28, 2023 at 07:26:05PM +0000, Michael Kelley (LINUX) wrote:
+> From: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> Sent: Monday, January 23, 2023 8:51 AM
+> > 
+> > Hyper-V VMs can be capable of hosting SNP isolated nested VMs on AMD
+> > CPUs. One of the pieces of SNP is the RMP (Reverse Map) table which
+> > tracks page assignment to firmware, hypervisor or guest. On bare-metal
+> > this table is allocated by UEFI, but on Hyper-V it is the respnsibility
 > 
-> Currently, hw_pagetable tracks the attached devices using a device list.
-> When attaching the first device to the kernel-managed hw_pagetable, it
-> should be linked to IOAS. When detaching the last device from this hwpt,
-> the link with IOAS should be removed too. And this first-or-last device
-> check is done with list_empty(hwpt->devices).
+> s/respnsibility/responsibility/
 > 
-> However, with a nested configuration, when a device is attached to the
-> user-managed stage-1 hw_pagetable, it will be added to this user-managed
-> hwpt's device list instead of the kernel-managed stage-2 hwpt's one. And
-> this breaks the logic for a kernel-managed hw_pagetable link/disconnect
-> to/from IOAS/IOPT. e.g. the stage-2 hw_pagetable would be linked to IOAS
-> multiple times if multiple device is attached, but it will become empty
-> as soon as one device detached.
 
-Why this seems really weird to say.
+ok
 
-The stage 2 is linked explicitly to the IOAS that drives it's
-map/unmap
+> > of the OS to allocate one if necessary. The nested_feature
+> > 'HV_X64_NESTED_NO_RMP_TABLE' will be set to communicate that no rmp is
+> > available. The actual RMP table is exclusively controlled by the Hyper-V
+> > hypervisor and is not virtualized to the VM. The SNP code in the kernel
+> > uses the RMP table for its own tracking and so it is necessary for init
+> > code to allocate one.
+> > 
+> > While not strictly necessary, follow the requirements defined by "SEV
+> > Secure Nested Paging Firmware ABI Specification" Rev 1.54, section 8.8.2
+> > when allocating the RMP:
+> > 
+> > - RMP_BASE and RMP_END must be set identically across all cores.
+> > - RMP_BASE must be 1 MB aligned
+> > - RMP_END – RMP_BASE + 1 must be a multiple of 1 MB
+> > - RMP is large enough to protect itself
+> > 
+> > The allocation is done in the init_mem_mapping() hook, which is the
+> > earliest hook I found that has both max_pfn and memblock initialized. At
+> > this point we are still under the
+> > memblock_set_current_limit(ISA_END_ADDRESS) condition, but explicitly
+> > passing the end to memblock_phys_alloc_range() allows us to allocate
+> > past that value.
+> > 
+> > Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+> > ---
+> >  arch/x86/hyperv/hv_init.c          |  5 ++++
+> >  arch/x86/include/asm/hyperv-tlfs.h |  3 +++
+> >  arch/x86/include/asm/mshyperv.h    |  3 +++
+> >  arch/x86/include/asm/sev.h         |  2 ++
+> >  arch/x86/kernel/cpu/mshyperv.c     | 41 ++++++++++++++++++++++++++++++
+> >  arch/x86/kernel/sev.c              |  1 -
+> >  6 files changed, 54 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> > index 29774126e931..e7f5ac075e6d 100644
+> > --- a/arch/x86/hyperv/hv_init.c
+> > +++ b/arch/x86/hyperv/hv_init.c
+> > @@ -117,6 +117,11 @@ static int hv_cpu_init(unsigned int cpu)
+> >  		}
+> >  	}
+> > 
+> > +	if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT) && hv_needs_snp_rmp()) {
+> 
+> Could the IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT) condition be
+> folded into the implementation of hv_needs_snp_rmp() so that only one
+> test is needed?
+> 
 
-Why is there any implicit activity here? There should be no implicit
-attach of the S2 to an IOAS ever.
+Yes, I'll fold it in. I originally kept this out because I was worried about
+dead-code elimination. I wanted to make hv_needs_snp_rmp() a static inline but
+I couldn't find the right place to put it:
 
-Jason
+- ms_hyperv is declared in include/asm-generic/mshyperv.h but I wouldn't
+  put something x86 specific there.
+- doesn't go in arch/x86/include/asm/hyperv-tlfs.h with the NESTED_NO_RMP_TABLE
+  definition.
+- arch/x86/include/asm/mshyperv.h would have been good but it would need to be
+  at the bottom of the file (after the asm-generic/mshyperv.h include) and
+  nothing else is there.
+
+> > +		wrmsrl(MSR_AMD64_RMP_BASE, rmp_res.start);
+> > +		wrmsrl(MSR_AMD64_RMP_END, rmp_res.end);
+> > +	}
+> > +
+> >  	return hyperv_init_ghcb();
+> >  }
+> > 
+> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> > index e3efaf6e6b62..01cc2c3f9f20 100644
+> > --- a/arch/x86/include/asm/hyperv-tlfs.h
+> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> > @@ -152,6 +152,9 @@
+> >   */
+> >  #define HV_X64_NESTED_ENLIGHTENED_TLB			BIT(22)
+> > 
+> > +/* Nested SNP on Hyper-V */
+> > +#define HV_X64_NESTED_NO_RMP_TABLE			BIT(23)
+> > +
+> 
+> Just for my clarification, is this flag always set in an SNP guest when
+> running on a version of Hyper-V that supports nested SNP?  I'm
+> presuming "yes".
+
+No, this is not set for SNP guests. I'll expand the cover letter but when I say
+"nested SNP" I mean "running an SNP guest as a nested guest", and not "running
+guests nested inside an SNP guest". SNP guests do not support any form of
+virtualization, and the L1 in this scenario is not SNP itself.
+
+> But there may be older versions of Hyper-V
+> that support SNP guests, but not nested SNP guests, in which case
+> this flag would be clear.
+
+These two cases are exclusive, so I'm adding a:
+
+!cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)
+
+Condition to make that clearer. The NO_RMP_TABLE flag would never be set for a
+"Hyper-V SNP guest" and is always set for a "Hyper-V guest that is capable of
+running SNP guests".
+
+> 
+> >  /* HYPERV_CPUID_ISOLATION_CONFIG.EAX bits. */
+> >  #define HV_PARAVISOR_PRESENT				BIT(0)
+> > 
+> > diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> > index 61f0c206bff0..3533b002cede 100644
+> > --- a/arch/x86/include/asm/mshyperv.h
+> > +++ b/arch/x86/include/asm/mshyperv.h
+> > @@ -190,6 +190,9 @@ static inline void hv_ghcb_terminate(unsigned int set, unsigned
+> > int reason) {}
+> > 
+> >  extern bool hv_isolation_type_snp(void);
+> > 
+> > +extern struct resource rmp_res;
+> > +bool hv_needs_snp_rmp(void);
+> > +
+> >  static inline bool hv_is_synic_reg(unsigned int reg)
+> >  {
+> >  	if ((reg >= HV_REGISTER_SCONTROL) &&
+> > diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> > index 2916f4150ac7..db5438663229 100644
+> > --- a/arch/x86/include/asm/sev.h
+> > +++ b/arch/x86/include/asm/sev.h
+> > @@ -83,6 +83,8 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
+> >  /* RMUPDATE detected 4K page and 2MB page overlap. */
+> >  #define RMPUPDATE_FAIL_OVERLAP		7
+> > 
+> > +#define RMPTABLE_CPU_BOOKKEEPING_SZ     0x4000
+> > +
+> >  /* RMP page size */
+> >  #define RMP_PG_SIZE_4K			0
+> >  #define RMP_PG_SIZE_2M			1
+> > diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> > index 831613959a92..e7f02412f3a1 100644
+> > --- a/arch/x86/kernel/cpu/mshyperv.c
+> > +++ b/arch/x86/kernel/cpu/mshyperv.c
+> > @@ -17,6 +17,7 @@
+> >  #include <linux/irq.h>
+> >  #include <linux/kexec.h>
+> >  #include <linux/i8253.h>
+> > +#include <linux/memblock.h>
+> >  #include <linux/random.h>
+> >  #include <linux/swiotlb.h>
+> >  #include <asm/processor.h>
+> > @@ -31,6 +32,7 @@
+> >  #include <asm/timer.h>
+> >  #include <asm/reboot.h>
+> >  #include <asm/nmi.h>
+> > +#include <asm/sev.h>
+> >  #include <clocksource/hyperv_timer.h>
+> >  #include <asm/numa.h>
+> >  #include <asm/coco.h>
+> > @@ -488,6 +490,44 @@ static bool __init ms_hyperv_msi_ext_dest_id(void)
+> >  	return eax & HYPERV_VS_PROPERTIES_EAX_EXTENDED_IOAPIC_RTE;
+> >  }
+> > 
+> > +struct resource rmp_res = {
+> > +	.name  = "RMP",
+> > +	.start = 0,
+> > +	.end   = 0,
+> > +	.flags = IORESOURCE_SYSTEM_RAM,
+> > +};
+> > +
+> > +bool hv_needs_snp_rmp(void)
+> > +{
+> > +	return boot_cpu_has(X86_FEATURE_SEV_SNP) &&
+> > +		(ms_hyperv.nested_features & HV_X64_NESTED_NO_RMP_TABLE);
+> > +}
+> > +
+> > +
+> > +static void __init ms_hyperv_init_mem_mapping(void)
+> > +{
+> > +	phys_addr_t addr;
+> > +	u64 calc_rmp_sz;
+> > +
+> > +	if (!IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
+> > +		return;
+> > +	if (!hv_needs_snp_rmp())
+> > +		return;
+> 
+> Another case where it would be cleaner if all the
+> conditions could be folded into hv_needs_snp_rmp().
+> 
+
+ok
+
+> > +
+> > +	calc_rmp_sz = (max_pfn << 4) + RMPTABLE_CPU_BOOKKEEPING_SZ;
+> > +	calc_rmp_sz = round_up(calc_rmp_sz, SZ_1M);
+> > +	addr = memblock_phys_alloc_range(calc_rmp_sz, SZ_1M, 0, max_pfn << PAGE_SHIFT);
+> > +	if (!addr) {
+> > +		pr_warn("Unable to allocate RMP table\n");
+> > +		return;
+> > +	}
+> > +	rmp_res.start = addr;
+> > +	rmp_res.end = addr + calc_rmp_sz - 1;
+> > +	wrmsrl(MSR_AMD64_RMP_BASE, rmp_res.start);
+> > +	wrmsrl(MSR_AMD64_RMP_END, rmp_res.end);
+> > +	insert_resource(&iomem_resource, &rmp_res);
+> > +}
+> > +
+> >  const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
+> >  	.name			= "Microsoft Hyper-V",
+> >  	.detect			= ms_hyperv_platform,
+> > @@ -495,4 +535,5 @@ const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
+> >  	.init.x2apic_available	= ms_hyperv_x2apic_available,
+> >  	.init.msi_ext_dest_id	= ms_hyperv_msi_ext_dest_id,
+> >  	.init.init_platform	= ms_hyperv_init_platform,
+> > +	.init.init_mem_mapping  = ms_hyperv_init_mem_mapping,
+> 
+> On versions of Hyper-V that support nested SNP guests, it appears that every
+> L1 SNP guest will allocate memory for the RMP, even if it never runs an L2 guest.
+> The amount of memory allocated is 16 bytes per 4K page, or 0.4% of the total
+> memory size of the L1 VM.  In most cases the memory will be unused.  For
+> example, that works out to be 256 Mbytes in a 64 Gbyte VM, which to me is
+> a fairly big chunk of memory to waste, even though the percentage isn't huge. 
+> Should we have a CONFIG option that controls whether the RMP is allocated?
+> L1 guests that intend to run their own L2 guests would need to be built with
+> this CONFIG option.   Presumably the allocation must be done early to ensure
+> the ability to get a big chunk of contiguous physical memory.  Allocating
+> the RMP later only if it is needed isn't an option.
+> 
+
+I clarified above - this table is not intended to be allocated on L1 SNP guests
+and I agree that doing so would be wasteful.
+
+Once we exclude L1 SNP guests, I don't think a CONFIG option is needed because
+the VMM can easily control whether to expose the SNP CPU flag to the guest or
+not. If it's exposed, the guest is going to need an RMP to do anything with
+SNP, if it's not exposed the RMP won't be allocated. It's also already behind
+CONFIG_AMD_MEM_ENCRYPT.
+
+The allocation needs to be done early to match the behavior the rmp handling
+code expects (big and physically contiguous). In an earlier version I had a big
+vmalloc allocation in 'fs_initcall(snp_rmptable_init)' which worked fine but I
+thought that would not be suitable for upstreaming.
+
+> >  };
+> > diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> > index 1dd1b36bdfea..7fa39dc17edd 100644
+> > --- a/arch/x86/kernel/sev.c
+> > +++ b/arch/x86/kernel/sev.c
+> > @@ -87,7 +87,6 @@ struct rmpentry {
+> >   * The first 16KB from the RMP_BASE is used by the processor for the
+> >   * bookkeeping, the range needs to be added during the RMP entry lookup.
+> >   */
+> > -#define RMPTABLE_CPU_BOOKKEEPING_SZ	0x4000
+> >  #define RMPENTRY_SHIFT			8
+> >  #define rmptable_page_offset(x)	(RMPTABLE_CPU_BOOKKEEPING_SZ + (((unsigned long)x) >> RMPENTRY_SHIFT))
+> > 
+> > --
+> > 2.25.1
+> 
