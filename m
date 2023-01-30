@@ -2,163 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2163681E40
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B43F681E3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjA3WmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S230008AbjA3WmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjA3WmL (ORCPT
+        with ESMTP id S229460AbjA3WmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:42:11 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F73265B4;
-        Mon, 30 Jan 2023 14:42:11 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UMaF8h021445;
-        Mon, 30 Jan 2023 22:41:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=x+Jg4pk2KwPXRbnKa3cON0sekeEe98pAtKmFWmRMaQs=;
- b=CS7zUPXF0Uy8odqAvSjd55n7HCtF/GJLTo3S32ChouU9P0y7s4BiS63fJj9wQDsRroMb
- r9updcUl+BdpFadiA8QrnyBKeYoNuLNjHHl7z1osemsJcR5b5haRVsm37C5rSoxEgpWH
- TXZM62O5e8hYSS+X0iUHV+cAgmdJJW01aDewDY+wrEQX+IxQ1sPuFc3DRXpdY6Rhqnq6
- k04Y8odglFu/k74xgV7PhQ5KIJT/BWnjbcCg+bE58SKu09G3pzmTl6kY5eAnz+WWJgc1
- iU5s/fArRd7a8hjX/BV/9maTikTqH/XVBw6OBA4Tb/b5fQmbPftSeHpzC16NYzlpwIjL cw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nctnymve6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 22:41:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UMdOO2015539
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 22:41:57 GMT
-Received: from [10.110.114.165] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 14:39:23 -0800
-Message-ID: <8e31a475-e856-ea78-5515-5dc7ff9d3dc6@quicinc.com>
-Date:   Mon, 30 Jan 2023 14:39:22 -0800
+        Mon, 30 Jan 2023 17:42:01 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0004E265B4;
+        Mon, 30 Jan 2023 14:42:00 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-15fe106c7c7so17140747fac.8;
+        Mon, 30 Jan 2023 14:42:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ibBkNrt7ktVHWeiGDYlTClifq+JfHHcCPsxu7WPEJgI=;
+        b=ycWxk6jjEy+ZYBWcbsEU4vfQmwQAXdxGHpa0WrcE9QSwuTJfmRUSqJmG0Dnho2/IkX
+         hKY8wpfvIO6oycH203ov0ZTO7jWJeg1pPb+O/tUOVWzqBmFUN9y9TEeb/uT2nEDcCuIq
+         12gsWcsPjAWvWNZDFS89ZsmbzDawEgzeS0H1BZN9jJxzjuf4xichWREq3WPPF7lDznBP
+         l8UqdT2NiCqst5x55J83JCNYgCP2BkVTuni/BsnRSFF7RURYnLRajyL7MlnXAqreqGsx
+         t4/5/v7QZNIROXLuhXy/TVkLa66iylUI2PG6jp6hSNPvXv3d2wgQY4Vn7X/eGAUV6Ku9
+         x8Gw==
+X-Gm-Message-State: AO0yUKU1X7AlffDY0Q2n/Tuo9V55XGtgaG2WMDHK7dhKQTp9B9dJ7YiX
+        sAALy5eE1meymb7SbMiOW+VqZx4Iag==
+X-Google-Smtp-Source: AK7set+rCl3GC2Rch2Ut9nseiBwG+KaWsmi/oz+U4ugBugGIpqGyxJe1Z2h7dhnMkW+MvynQsNgGPA==
+X-Received: by 2002:a05:6870:f20c:b0:163:154d:a591 with SMTP id t12-20020a056870f20c00b00163154da591mr12956079oao.4.1675118520223;
+        Mon, 30 Jan 2023 14:42:00 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b4-20020a4ab484000000b004fca8a11c61sm5400769ooo.3.2023.01.30.14.41.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 14:41:59 -0800 (PST)
+Received: (nullmailer pid 3658488 invoked by uid 1000);
+        Mon, 30 Jan 2023 22:41:58 -0000
+Date:   Mon, 30 Jan 2023 16:41:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Sae <Frank.Sae@motor-comm.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        yanhong.wang@starfivetech.com, xiaogang.fan@motor-comm.com,
+        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/5] dt-bindings: net: Add Motorcomm yt8xxx
+ ethernet phy
+Message-ID: <20230130224158.GA3655289-robh@kernel.org>
+References: <20230130063539.3700-1-Frank.Sae@motor-comm.com>
+ <20230130063539.3700-2-Frank.Sae@motor-comm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v1 10/14] drm/msm/disp/dpu: add supports of DSC encoder
- v1.2 engine
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1674498274-6010-1-git-send-email-quic_khsieh@quicinc.com>
- <1674498274-6010-11-git-send-email-quic_khsieh@quicinc.com>
- <20230123201133.zzt2zbyaw3pfkzi6@SoMainline.org>
- <926021c1-d9d1-4449-f01b-f405b48f326a@quicinc.com>
- <20230130201654.vlr7p7id3a7vxc2b@SoMainline.org>
- <0a0c3a12-51e9-b0d0-9307-847023dbe1f7@quicinc.com>
- <20230130223110.abjh7k32fjs4kola@SoMainline.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230130223110.abjh7k32fjs4kola@SoMainline.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Z7NsycVSZ4C-pF4_kUx8kOgTO6RokFuU
-X-Proofpoint-ORIG-GUID: Z7NsycVSZ4C-pF4_kUx8kOgTO6RokFuU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_17,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- bulkscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
- impostorscore=0 priorityscore=1501 phishscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300207
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130063539.3700-2-Frank.Sae@motor-comm.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 30, 2023 at 02:35:35PM +0800, Frank Sae wrote:
+>  Add a YAML binding document for the Motorcom yt8xxx Ethernet phy driver.
 
+Bindings are for h/w devices, not drivers.
 
-On 1/30/2023 2:31 PM, Marijn Suijten wrote:
-> Abhinav,
+>  
+> Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
+> ---
+>  .../bindings/net/motorcomm,yt8xxx.yaml        | 102 ++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  MAINTAINERS                                   |   1 +
+>  3 files changed, 105 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
 > 
-> On 2023-01-30 13:22:03, Abhinav Kumar wrote:
->> Hi Marijn
->>
->> On 1/30/2023 12:16 PM, Marijn Suijten wrote:
->>> On 2023-01-24 15:52:46, Kuogee Hsieh wrote:
->>>
->>> <snip>
->>>
->>> If only replying to a small chunk somewhere in the middle of a diff
->>> and/or large review, please cut out unnecessary bits to make your reply
->>> easier to find :)
->>>
->>>>>> +	data = (dsc->flatness_min_qp & 0x1f);
->>>>>> +	data |= (dsc->flatness_max_qp & 0x1f) << 5;
->>>>>> +	data |= (dsc_info->det_thresh_flatness & 0xff) << 10;
->>>>> dpu_hw_dsc.c computes this on the fly.  After removing that, and
->>>>> using initial_lines from the function parameters, only
->>>>> dsc_info->num_active_ss_per_enc remains.  Do you really need that
->>>>> msm_display_dsc_info struct here, do you need it at all?
->>>>
->>>> I ported these code from our down stream code base.
->>>>
->>>> I make it work first, then clean it up will follow.
->>>>
->>>> I submit it for review since it looks like you guy like to have code sooner.
->>>
->>> Correct, I was looking forward to these patches albeit complete with the
->>> promised DSI support from Jessica, which still seems to be pending.
->>>
->>
->> DSI support is still being worked upon.
->>
->> I dont think we promised DSC 1.2 will come with DSI together in the same
->> series. It was always going to be DSC 1.2 + DP followed by another
->> series from Jessica for DSI.
->>
->> Lets set the expectations right.
-> 
-> Not saying that these patches were promised as part of this series (as
-> said, "which still seem to be pending"), just making clear that this
-> series if of no use to me (no hurry to get the code in my hands sooner)
-> until the DSI patches are also shared which I would have started working
-> on myself if I didn't know QUIC was picking it up to distract from the
-> current v1.1 broken-ness on SM8150 and SM8250.
-> 
+> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> new file mode 100644
+> index 000000000000..8527576c15b3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/motorcomm,yt8xxx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MotorComm yt8xxx Ethernet PHY
+> +
+> +maintainers:
+> +  - frank sae <frank.sae@motor-comm.com>
+> +
+> +allOf:
+> +  - $ref: ethernet-phy.yaml#
 
-This is being by Quic for everyone's benefit. So that we can land a 
-working DSC 1.2 solution for DSI as a working example for all future 
-panels. We only took it up to help others like you and linaro team to 
-give a working example of a DSC 1.2 panel with command mode in upstream.
+This schema doesn't work because there is no way to determine whether to 
+apply it or not. You need a compatible for your phy.
 
-
-> To set my (and at least Neil's) expectations straight as well: DSC 1.2
-> HW support should come in a separate series without DP support.  Smaller
-> series (not to mention appropriately split-up patches) lead to a
-> decrease in scope, less dependencies and hopefully more efficient v2 -
-> for all involved.
-> 
-
-As I already wrote earlier, we will fix the mistakes of v1, make v2 
-better and it will be split up better. But DSC 1.2 HW support had to be 
-pushed along with DP or DSI to show its working. We chose DP to go with 
-it as it aligns better with our upstream plans.
-
-
-> - Marijn
+Rob
