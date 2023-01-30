@@ -2,56 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8208E68160D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5130681610
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237182AbjA3QMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:12:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
+        id S237265AbjA3QMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbjA3QMU (ORCPT
+        with ESMTP id S237196AbjA3QMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:12:20 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696D042BDC
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:12:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=23pAo9JSVshof/GsDAaXnVhq9lqul+f0c6BSy4eq+zo=; b=RZ/491jdGkmzMV6UR4tEokPjxM
-        QVrFJd0V0gIoQ7FxW5F5luq8VwZYRFhCIE/9XemzJbSdEcCpTIN3ORzitto9t4UrLfmsMNiwW6Bol
-        pYcdJxt5Sgwm1aW09OqkOLUifmGd0UPiFXTTMPRrGiPjSM+yB2fXaG/p6sZ4VMWhyr6tf8EIzvKOF
-        Lo1AQD/3Gu9wcYlHG5Z9jo8y44Km73kYM6rvonZ05p+p3CwM9r9uk6k7VlayaSjmUjSEBCRPz3M5k
-        ntD7DVRiigghw1u2/5tOqwFtUlY+h95iE4Gx8dGgUusav+Muo2muZIf0F11T8czDu4xCfdwmamnXp
-        vkdX+i4w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMWlC-00AUKR-PL; Mon, 30 Jan 2023 16:11:59 +0000
-Date:   Mon, 30 Jan 2023 16:11:58 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "contact@pgazz.com" <contact@pgazz.com>,
-        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>,
-        Huang Ying <ying.huang@intel.com>
-Subject: Re: kernel BUG in page_add_anon_rmap
-Message-ID: <Y9fsTqMPzi9EIUKH@casper.infradead.org>
-References: <IA1PR07MB983017D2FBA174D2FF78CEB6ABCE9@IA1PR07MB9830.namprd07.prod.outlook.com>
- <Y9LNCouUvsUFCYkT@casper.infradead.org>
- <adc9152e-c547-12ec-3538-006500619896@redhat.com>
- <713c6242-be65-c212-b790-2b908627c1b4@google.com>
- <9d8fb9c-1b81-67cd-e55b-34517388e1ab@google.com>
+        Mon, 30 Jan 2023 11:12:40 -0500
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2750A42BDC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:12:39 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id l15so1476039ilj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:12:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ghoRgfFqMCsRQPOK6Z87rokxeBUN/IZ6P29KfrQWstc=;
+        b=e5IZ9do1pfD6MUrNQcUKjhTDYhpG+gdXhD1LR6dKlzH811ohbZEAJMr13jaeF+ohcE
+         l0aNjghOjj1QffLtdPrX9lkSjrfE6XSu0mmOvdgzkdtfvBX5p0xJq2/DJFdxzHRO44fN
+         r45c95qg8Lj8i6rtaRiM8uwHDQ7Wb9/Ja/HfI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ghoRgfFqMCsRQPOK6Z87rokxeBUN/IZ6P29KfrQWstc=;
+        b=PktZ4PbGHgyhCWQZ6/xqEBOq3S10G1wOS2tQ2x74YvrTuZC0uYoXCVJ5OsnZW3pOQH
+         Ia//gZhGORdlhIUQaj6QONKQi7G5rl4K3oP+iZXRFWMX4HhUvp8/OvEZd4TSF2qlK11E
+         8tec+Q1Roimy5NRCzLzED0eiRWkLF5R7cprXRamK6ORvmcXqyoP+/EYJ4InfTxOHATFp
+         Jar6g4IlIvMTtrSt9e06QjN6JioHNXj8S+vaGsdfAg26uP/Vs6Xk3wIQ/rl1ZEAEzHKK
+         LcXVBwELJ9LYsirgEkkjpfamRhQAdRFdsGmZzAGbnkbcOWiphjCwlZHd+PWy7m+yn+OS
+         rrXQ==
+X-Gm-Message-State: AO0yUKXG+9A6IOOaZbWGpcM8qta6HQGAsMe3zQxw5kSNOjCpnlsqVFFB
+        OovSwymutTDx1kFngp1yYs2pbH5/gnZAsltp
+X-Google-Smtp-Source: AK7set/Qlfq1pQGWZOK81YRqIs6hOJ+QifenEqB0RrybDWb85kQCHFUi96YlZSmf54OF7eCNuGqYrw==
+X-Received: by 2002:a05:6e02:1a46:b0:310:ecea:b488 with SMTP id u6-20020a056e021a4600b00310eceab488mr988065ilv.3.1675095158488;
+        Mon, 30 Jan 2023 08:12:38 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v16-20020a056638009000b003ab21c8fa84sm3599666jao.121.2023.01.30.08.12.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 08:12:37 -0800 (PST)
+Message-ID: <4defb04e-ddcb-b344-6e9f-35023dee0d2a@linuxfoundation.org>
+Date:   Mon, 30 Jan 2023 09:12:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d8fb9c-1b81-67cd-e55b-34517388e1ab@google.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 02/34] selftests: bpf: Fix incorrect kernel headers search
+ path
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+ <20230127135755.79929-3-mathieu.desnoyers@efficios.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230127135755.79929-3-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,45 +79,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 10:49:31PM -0800, Hugh Dickins wrote:
-> I guess it will turn out not to be relevant to this particular syzbug,
-> but what do we expect an mbind() of just 0x1000 of a THP to do?
+On 1/27/23 06:57, Mathieu Desnoyers wrote:
+> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+> building against kernel headers from the build environment in scenarios
+> where kernel headers are installed into a specific output directory
+> (O=...).
 > 
-> It's a subject I've wrestled with unsuccessfully in the past: I found
-> myself arriving at one conclusion (split THP) in one place, and a contrary
-> conclusion (widen range) in another place, and never had time to work out
-> one unified answer.
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: <stable@vger.kernel.org>    [5.18+]
+> ---
+>   tools/testing/selftests/bpf/Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> So I do wonder what pte replaces the migration entry when the bug here
-> is fixed: is it a pte pointing into the THP as before, in which case
-> what was the point of "migration"? is it a Copy-On-Bind page?
-> or has the whole THP been migrated?
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index c22c43bbee19..6998c816afef 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -327,7 +327,7 @@ endif
+>   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
+>   BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 		\
+>   	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
+> -	     -I$(abspath $(OUTPUT)/../usr/include)
+> +	     $(KHDR_INCLUDES)
+>   
+>   CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+>   	       -Wno-compare-distinct-pointer-types
 
-I have an Opinion!
 
-The important thing about THP (IMO) is the Transparency part.
-Applications don't need to do anything special to get memory managed
-in larger chunks, the only difference is in performance.  That is, they
-get better performance if the kernel can do it, and thinks it worthwhile.
 
-The tradeoff with THP is that we treat all memory in this 2MB chunk the
-same way; we track its dirtiness and age as a single thing (position
-on LRU, etc).  That assumes we're doing no harm, or less harm than we
-would be tracking each page independently.
+Adding bpf maintainers - bpf patches usually go through bpf tree.
 
-If userspace gives us a hint like "I want this range of memory on that
-node", that's a strong signal that *this* range of memory is considered
-by userspace to be a single unit.  So my opinion is that userspace is
-letting us know that we previously made a bad decision and we should
-rectify it by splitting now.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Zi Yan has a patch to allow pages to be split to arbitrary orders instead
-of 0.  We should probably give that a review so that we're not making
-the opposite mistake of tracking at too fine a granularity.
-
-> I ought to read through those "estimated mapcount" threads more
-> carefully: might be relevant, but I've not paid enough attention.
-
-I'm not sure they're relevant to this, although obviously I'd love
-your thoughts on how we could handle mapcount more efficiently.
-
+thanks,
+-- Shuah
