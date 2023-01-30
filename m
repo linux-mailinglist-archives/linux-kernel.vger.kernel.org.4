@@ -2,44 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FD96806CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 08:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1906806E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 09:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjA3H7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 02:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
+        id S235557AbjA3IGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 03:06:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjA3H7h (ORCPT
+        with ESMTP id S229653AbjA3IGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 02:59:37 -0500
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D5055A9
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 23:59:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/wdUzQl36Iu2VK5SbxqISsiHtJoNcLhLCTKQmxCJJbY=;
-  b=rP2I+Q2YPs6kIcE402J66lkFzMA5aMdxHHBhbZlkFHeKANxQRJ/VElGa
-   9EwXDJtuBwAxZdzNdbIyw+NhfrYqYysim4Mi+YgcpA2ERy8d5P/jq7A5m
-   D9vApj/HF00NQnhsHICqtplb3/SxdXahgrP8bYEZl5d6I2bKac6piATgR
-   4=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.97,257,1669071600"; 
-   d="scan'208";a="89979550"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 08:59:34 +0100
-Date:   Mon, 30 Jan 2023 08:59:34 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-To:     Ziyang Xuan <william.xuanziyang@huawei.com>
-cc:     linux-kernel@vger.kernel.org, oe-kbuild-all@lists.linux.dev
-Subject: drivers/infiniband/ulp/ipoib/ipoib_main.c:333:2-10: WARNING: NULL
- check before dev_{put, hold} functions is not needed. (fwd)
-Message-ID: <26215e5-3195-ab2e-f51c-4daf2a8c7f60@inria.fr>
+        Mon, 30 Jan 2023 03:06:48 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8E718AA7;
+        Mon, 30 Jan 2023 00:06:44 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 1154F24E3A6;
+        Mon, 30 Jan 2023 16:06:37 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 30 Jan
+ 2023 16:06:37 +0800
+Received: from [192.168.125.128] (183.27.97.127) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 30 Jan
+ 2023 16:06:35 +0800
+Message-ID: <0e77bf23-b359-9884-6a8c-368e31d718a4@starfivetech.com>
+Date:   Mon, 30 Jan 2023 16:02:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 03/11] clk: starfive: Add StarFive JH7110
+ System-Top-Group clock driver
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230120024445.244345-1-xingyu.wu@starfivetech.com>
+ <20230120024445.244345-4-xingyu.wu@starfivetech.com>
+ <5bb5263d26b157548d7ba39f80989c69.sboyd@kernel.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <5bb5263d26b157548d7ba39f80989c69.sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.127]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,41 +66,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please check lines 333 and 2007 as noted below.
+On 2023/1/26 10:33, Stephen Boyd wrote:
+> Quoting Xingyu Wu (2023-01-19 18:44:37)
+>> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-stg.c b/drivers/clk/starfive/clk-starfive-jh7110-stg.c
+>> new file mode 100644
+>> index 000000000000..c2740f44e796
+>> --- /dev/null
+>> +++ b/drivers/clk/starfive/clk-starfive-jh7110-stg.c
+>> @@ -0,0 +1,180 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * StarFive JH7110 System-Top-Group Clock Driver
+>> + *
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> + */
+>> +
+>> +#include <linux/clk.h>
+> 
+> Is this include used? If not, please remove.
 
-julia
+Will drop in next patch.
 
----------- Forwarded message ----------
-Date: Mon, 30 Jan 2023 14:45:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: oe-kbuild@lists.linux.dev
-Cc: lkp@intel.com, Julia Lawall <julia.lawall@inria.fr>
-Subject: drivers/infiniband/ulp/ipoib/ipoib_main.c:333:2-10: WARNING: NULL check
-     before dev_{put, hold} functions is not needed.
 
-BCC: lkp@intel.com
-CC: oe-kbuild-all@lists.linux.dev
-CC: linux-kernel@vger.kernel.org
-TO: Ziyang Xuan <william.xuanziyang@huawei.com>
-CC: Julia Lawall <julia.lawall@inria.fr>
+> 
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/io.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +
+>> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
+>> +
+>> +#include "clk-starfive-jh71x0.h"
+>> +
+> [...]
+>> +static int jh7110_stgcrg_probe(struct platform_device *pdev)
+>> +{
+>> +       struct jh71x0_clk_priv *priv;
+>> +       unsigned int idx;
+>> +       int ret;
+>> +
+>> +       priv = devm_kzalloc(&pdev->dev,
+>> +                           struct_size(priv, reg, JH7110_STGCLK_END),
+>> +                           GFP_KERNEL);
+>> +       if (!priv)
+>> +               return -ENOMEM;
+>> +
+>> +       spin_lock_init(&priv->rmw_lock);
+>> +       priv->dev = &pdev->dev;
+>> +       priv->base = devm_platform_ioremap_resource(pdev, 0);
+>> +       if (IS_ERR(priv->base))
+>> +               return PTR_ERR(priv->base);
+>> +
+>> +       dev_set_drvdata(priv->dev, priv->base);
+>> +
+>> +       for (idx = 0; idx < JH7110_STGCLK_END; idx++) {
+>> +               u32 max = jh7110_stgclk_data[idx].max;
+>> +               struct clk_parent_data parents[4] = {};
+>> +               struct clk_init_data init = {
+>> +                       .name = jh7110_stgclk_data[idx].name,
+>> +                       .ops = starfive_jh71x0_clk_ops(max),
+>> +                       .parent_data = parents,
+>> +                       .num_parents =
+>> +                               ((max & JH71X0_CLK_MUX_MASK) >> JH71X0_CLK_MUX_SHIFT) + 1,
+>> +                       .flags = jh7110_stgclk_data[idx].flags,
+>> +               };
+>> +               struct jh71x0_clk *clk = &priv->reg[idx];
+>> +               unsigned int i;
+>> +
+>> +               for (i = 0; i < init.num_parents; i++) {
+>> +                       unsigned int pidx = jh7110_stgclk_data[idx].parents[i];
+>> +
+>> +                       if (pidx < JH7110_STGCLK_END)
+>> +                               parents[i].hw = &priv->reg[pidx].hw;
+>> +                       else if (pidx == JH7110_STGCLK_OSC)
+>> +                               parents[i].fw_name = "osc";
+>> +                       else if (pidx == JH7110_STGCLK_HIFI4_CORE)
+>> +                               parents[i].fw_name = "hifi4_core";
+>> +                       else if (pidx == JH7110_STGCLK_STG_AXIAHB)
+>> +                               parents[i].fw_name = "stg_axiahb";
+>> +                       else if (pidx == JH7110_STGCLK_USB_125M)
+>> +                               parents[i].fw_name = "usb_125m";
+>> +                       else if (pidx == JH7110_STGCLK_CPU_BUS)
+>> +                               parents[i].fw_name = "cpu_bus";
+>> +                       else if (pidx == JH7110_STGCLK_HIFI4_AXI)
+>> +                               parents[i].fw_name = "hifi4_axi";
+>> +                       else if (pidx == JH7110_STGCLK_NOCSTG_BUS)
+>> +                               parents[i].fw_name = "nocstg_bus";
+>> +                       else if (pidx == JH7110_STGCLK_APB_BUS)
+>> +                               parents[i].fw_name = "apb_bus";
+> 
+> Can this be an array lookup instead of a pile of conditions?
+> 
+> 	if (pidx < JH7110_STGCLK_END)
+> 		...
+> 	else
+> 		parents[i].fw_name = fw_table[pidx - JH7110_STGCLK_END];
+> 
+> Or even better, don't use strings at all and just make the 'pidx' number
+> (possibly minus the end constant) be the 'clocks' property index that
+> you want.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6d796c50f84ca79f1722bb131799e5a5710c4700
-commit: bbd5c96850d9de535a83a3a3842dec2169cb31d1 scripts/coccinelle/free: add NULL test before dev_{put, hold} functions
-date:   7 months ago
-:::::: branch date: 9 hours ago
-:::::: commit date: 7 months ago
-config: powerpc-randconfig-c034-20230129 (https://download.01.org/0day-ci/archive/20230130/202301301452.jacYfrpm-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
+It seen to be a good way that there uses an array.
+Based on the another way, can I use the 'pidx' number to get the 'clock-names' property
+to be the parent clock name?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+> 
+>> +               }
+>> +
+>> +               clk->hw.init = &init;
+>> +               clk->idx = idx;
+>> +               clk->max_div = max & JH71X0_CLK_DIV_MASK;
+>> +
+>> +               ret = devm_clk_hw_register(&pdev->dev, &clk->hw);
+>> +               if (ret)
+>> +                       return ret;
+>> +       }
+>> +
+>> +       ret = devm_of_clk_add_hw_provider(&pdev->dev, jh7110_stgclk_get, priv);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       return jh7110_reset_controller_register(priv, "reset-stg", 2);
+> 
+> Is this also devm-ified?
 
-cocci warnings: (new ones prefixed by >>)
->> drivers/infiniband/ulp/ipoib/ipoib_main.c:333:2-10: WARNING: NULL check before dev_{put, hold} functions is not needed.
-   drivers/infiniband/ulp/ipoib/ipoib_main.c:2007:2-9: WARNING: NULL check before dev_{put, hold} functions is not needed.
+No, it need to be freed actively. I will advise Hal Feng this.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+Best regards,
+Xingyu Wu
