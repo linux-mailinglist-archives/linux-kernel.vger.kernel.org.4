@@ -2,142 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463EB680D41
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D492680D44
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235441AbjA3MMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:12:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
+        id S236327AbjA3MMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236792AbjA3MLv (ORCPT
+        with ESMTP id S236074AbjA3MLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:11:51 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8093C37B58;
-        Mon, 30 Jan 2023 04:10:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675080649; x=1706616649;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F7kz/t7goqTvjK8l9cj5cpA+WN6lVLHQofCFYgKQjgM=;
-  b=Aub4vzzByvl995Nq/Eae36nOWF+39w2/pU82SLe6C9hmeMwOlfuI9b+O
-   Uf0bdncd29F7r7mkcdGN7MZvTOIAaU7O3G1sBo0PGndkh8foBDpb6UBCy
-   LBj9eM78iWKpFzdgYCnhGTyniLG6Wh7zGI2o4q1VqKKlVLXEb2dK/gGN2
-   +jMMpesFTQPK3Hk+RYm6ouuPvachQT+BDykaypjIYwn3jiLSNmPsB1RJf
-   DBTpoEVxPZMdhAKRePctHROFkVmPQTUI4aBSISSnlparUHiy8KKKabvwp
-   XYCtpqMsDQyeZ9yVDqtKyqaT06k2+d4s9uu63UceFZ4Zksx9fv2sl7BM/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="389906024"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="389906024"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 04:10:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="806649751"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="806649751"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jan 2023 04:09:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pMSyc-00HKzp-19;
-        Mon, 30 Jan 2023 14:09:34 +0200
-Date:   Mon, 30 Jan 2023 14:09:34 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 06/11] driver core: fw_devlink: Allow marking a fwnode
- link as being part of a cycle
-Message-ID: <Y9ezfr3xxFIUoXIF@smile.fi.intel.com>
-References: <20230127001141.407071-1-saravanak@google.com>
- <20230127001141.407071-7-saravanak@google.com>
- <Y9OaaC806Ywg7rM9@smile.fi.intel.com>
- <CAGETcx9XGq20kagmVXwEV6MF9mp9Ta5ra0+Ynhb7GiUKnxkWqg@mail.gmail.com>
+        Mon, 30 Jan 2023 07:11:53 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A857437B73;
+        Mon, 30 Jan 2023 04:10:58 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U9L4fJ020316;
+        Mon, 30 Jan 2023 12:10:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=H02OYIqYF0RL/cTxU6PmDoYttvm0j21J0dmxP2N/sYQ=;
+ b=Mg3fZJArHrPuxtp0T4DCbwnDnlYNAj5VrKxJ30dWER0b2nakdyc3U9y2EoL9QlKD7pKM
+ Br14AdRN5uISVP92Dmz+UEOWWaAguSWwN6EC6W9J78UZJnul0FwUoYNrijul0iPpcrye
+ U8WsCG0bI/Si9yc9jiukS8tPGUiDCGDcoac3hAoDQquceOD2srXEs2+3STvce7qJU+fZ
+ QmLGTs5geUTWpv50KkXzhObv6pOskb4u1+OJ3OmCFgYiK/sOszPPCwHjYttw5q+VE8Vf
+ xa0ZgH0Jpk1hOS63lnURZo0iX/J1QwGn8jCgBXFqVUwN4FS2hg2IvlhblIk/Di1yCUnz 3Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncvfpbcn6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 12:10:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UCAGcq002568
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 12:10:16 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 30 Jan 2023 04:10:13 -0800
+From:   Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+To:     <andersson@kernel.org>, <agross@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH] clk: qcom: ipq5332: mark GPLL4 as critical temporarily
+Date:   Mon, 30 Jan 2023 17:39:59 +0530
+Message-ID: <20230130120959.9457-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx9XGq20kagmVXwEV6MF9mp9Ta5ra0+Ynhb7GiUKnxkWqg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SyM2C95zJgOU4YOw8eioxI2nC6CAWs2o
+X-Proofpoint-ORIG-GUID: SyM2C95zJgOU4YOw8eioxI2nC6CAWs2o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_10,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=786 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300117
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:34:19PM -0800, Saravana Kannan wrote:
-> On Fri, Jan 27, 2023 at 1:33 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Thu, Jan 26, 2023 at 04:11:33PM -0800, Saravana Kannan wrote:
+From: Kathiravan T <quic_kathirav@quicinc.com>
 
-...
+Clock framework disables the GPLL4 source since there are no active users
+for this source currently. Some of the clocks initialized by the
+bootloaders uses the GPLL4 as the source. Due to this, when the GPLL4 is
+disabled by the clock framework, system is going for the reboot.
 
-> > > -     if (dev->fwnode && !list_empty(&dev->fwnode->suppliers) &&
-> > > -         !fw_devlink_is_permissive()) {
-> > > -             sup_fw = list_first_entry(&dev->fwnode->suppliers,
-> > > -                                       struct fwnode_link,
-> > > -                                       c_hook)->supplier;
-> > > +     sup_fw = fwnode_links_check_suppliers(dev->fwnode);
-> >
-> > dev_fwnode() ?
-> >
-> > ...
-> >
-> > > -     val = !list_empty(&dev->fwnode->suppliers);
-> > > +     mutex_lock(&fwnode_link_lock);
-> > > +     val = !!fwnode_links_check_suppliers(dev->fwnode);
-> >
-> > Ditto?
-> 
-> Similar response as Patch 1 and Patch 4.
+To avoid this, mark the GPLL4 as CRITICAL so that clock framework
+doesn't disable it. Once the users of this source is enabled, we can get
+rid of this flag.
 
-Same.
+Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+---
+Note: This patch depends on the IPQ5332 baseport series
+https://lore.kernel.org/linux-arm-msm/20230130114702.20606-1-quic_kathirav@quicinc.com/T/#t
 
+ drivers/clk/qcom/gcc-ipq5332.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/clk/qcom/gcc-ipq5332.c b/drivers/clk/qcom/gcc-ipq5332.c
+index a8ce618bb81b..6159d0e1e43f 100644
+--- a/drivers/clk/qcom/gcc-ipq5332.c
++++ b/drivers/clk/qcom/gcc-ipq5332.c
+@@ -127,6 +127,7 @@ static struct clk_alpha_pll gpll4_main = {
+ 			.parent_data = &gcc_parent_data_xo,
+ 			.num_parents = 1,
+ 			.ops = &clk_alpha_pll_stromer_ops,
++			.flags = CLK_IS_CRITICAL,
+ 		},
+ 	},
+ };
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
