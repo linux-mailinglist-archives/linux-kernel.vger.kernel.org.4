@@ -2,104 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367CB681956
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE740681962
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238181AbjA3SgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S238281AbjA3Shb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238010AbjA3SgI (ORCPT
+        with ESMTP id S238291AbjA3Sgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:36:08 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60A34C33;
-        Mon, 30 Jan 2023 10:35:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1675103755;
-        bh=MvodwzQDiD9u4tU1mzZzSTt7WoVE7au7QH14YGe8X4w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X2eDQDq1Br5CuoXxwGvcKHghIEOZa5ltoXKyrlJYa+ijydZX0c3MdwiMxAAuRau3A
-         0Ehm/wz8wFuiLL4EjcbgMT1P9Dp0IS3tLnnJjv8Thrm2LObJ6c4PoVOZ3PK4UVD06d
-         wvjV3lhfsQoE945Rvi06IkBM3kVpdyDIJ9natyRFLj9YxONZJl/zJ2iUfkoPm9PcXQ
-         QBbvzhbJyullgCGI7PrDLifV+XjvV3pQzJiVIbry4dShhTSwMzJMv505Q/CikIyodd
-         46kJWz3qHi+fr/bt8ZvrS/2XwU3Tk+TkRzANBYy0zGLnn8w7uaCugmGwL+5qWVLOgT
-         bra/PP4VDYkLg==
-Received: from localhost.localdomain (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P5H1l264mzhmY;
-        Mon, 30 Jan 2023 13:35:55 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Shuah Khan <skhan@linuxfoundation.org>, bpf@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>
-Subject: [PATCH bpf-next 2/2] selftests: bpf docs: Use installed kernel headers search path
-Date:   Mon, 30 Jan 2023 13:35:49 -0500
-Message-Id: <20230130183549.85471-2-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230130183549.85471-1-mathieu.desnoyers@efficios.com>
-References: <20230130183549.85471-1-mathieu.desnoyers@efficios.com>
+        Mon, 30 Jan 2023 13:36:36 -0500
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5F513D6C;
+        Mon, 30 Jan 2023 10:36:22 -0800 (PST)
+Received: from g550jk.localnet (unknown [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 705A3CD5B1;
+        Mon, 30 Jan 2023 18:36:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1675103780; bh=w7+XQVClETXGlfL757dC4kjjZ78YoUiBNlAl+eRVAD0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=bzTQoAHp/z69+jSIf9SrDybNnMQQWbWkbdUIQk/Q+iUUwgpKs3bO96N/sILAGW3EB
+         tPEaZoJCwp3fVxaWwUnRJ6koXJh639cxKs5UNP34wyUYcoHVrHu8hoZgxBHI5vXoaH
+         RCpblWn8pYkhC4cQVsa+A4oLF3fiOjzM1QQG1sDg=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Craig Tatlor <ctatlor97@gmail.com>
+Subject: Re: [PATCH] ARM: dts: qcom: msm8974: correct qfprom node reg
+Date:   Mon, 30 Jan 2023 19:36:19 +0100
+Message-ID: <1886214.taCxCBeP46@g550jk>
+In-Reply-To: <3112b531-45df-672c-c0a7-aefbdcceb727@linaro.org>
+References: <20230130-msm8974-qfprom-v1-1-975aa0e5e083@z3ntu.xyz>
+ <3112b531-45df-672c-c0a7-aefbdcceb727@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use $(KHDR_INCLUDES) as lookup path for installed kernel headers rather
-than using kernel headers in include/uapi from the source kernel tree
-kernel headers.
+On Montag, 30. J=E4nner 2023 19:30:04 CET Konrad Dybcio wrote:
+> On 30.01.2023 19:20, luca@z3ntu.xyz wrote:
+> > From: Craig Tatlor <ctatlor97@gmail.com>
+> >=20
+> > The qfprom actually starts at 0xfc4b8000 instead of 0xfc4bc000 as
+> > defined previously. Adjust the tsens offsets accordingly.
+> >=20
+> > [luca@z3ntu.xyz: extract to standalone patch]
+> >=20
+> > Fixes: c59ffb519357 ("arm: dts: msm8974: Add thermal zones, tsens and
+> > qfprom nodes") Signed-off-by: Craig Tatlor <ctatlor97@gmail.com>
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > ---
+>=20
+> Isn't this a raw vs ecc-corrected values problem?
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-Cc: <bpf@vger.kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mykola Lysenko <mykolal@fb.com>
----
- tools/testing/selftests/bpf/Makefile.docs | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not quite sure what you mean.
 
-diff --git a/tools/testing/selftests/bpf/Makefile.docs b/tools/testing/selftests/bpf/Makefile.docs
-index eb6a4fea8c79..0a538d873def 100644
---- a/tools/testing/selftests/bpf/Makefile.docs
-+++ b/tools/testing/selftests/bpf/Makefile.docs
-@@ -44,7 +44,7 @@ RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
- # $1 - target for scripts/bpf_doc.py
- # $2 - man page section to generate the troff file
- define DOCS_RULES =
--$(OUTPUT)bpf-$1.rst: ../../../../include/uapi/linux/bpf.h
-+$(OUTPUT)bpf-$1.rst: $(KHDR_INCLUDES)/linux/bpf.h
- 	$$(QUIET_GEN)../../../../scripts/bpf_doc.py $1 \
- 		--filename $$< > $$@
- 
--- 
-2.25.1
+The original intention behind this patch is to allow to use the pvs fuse at=
+=20
+(now) 0xb0 which was inaccessible with the former definition.
+
+    pvs: pvs@b0 {
+        reg =3D <0xb0 0x8>;
+    };
+
+Regards
+Luca
+
+>=20
+> Konrad
+>=20
+> >  arch/arm/boot/dts/qcom-msm8974.dtsi | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> >=20
+> > diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> > b/arch/arm/boot/dts/qcom-msm8974.dtsi index 8d216a3c0851..922d235c6065
+> > 100644
+> > --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
+> > +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+> > @@ -1132,16 +1132,16 @@ restart@fc4ab000 {
+> >=20
+> >  			reg =3D <0xfc4ab000 0x4>;
+> >  	=09
+> >  		};
+> >=20
+> > -		qfprom: qfprom@fc4bc000 {
+> > +		qfprom: qfprom@fc4b8000 {
+> >=20
+> >  			compatible =3D "qcom,msm8974-qfprom",=20
+"qcom,qfprom";
+> >=20
+> > -			reg =3D <0xfc4bc000 0x1000>;
+> > +			reg =3D <0xfc4b8000 0x7000>;
+> >=20
+> >  			#address-cells =3D <1>;
+> >  			#size-cells =3D <1>;
+> >=20
+> > -			tsens_calib: calib@d0 {
+> > -				reg =3D <0xd0 0x18>;
+> > +			tsens_calib: calib@40d0 {
+> > +				reg =3D <0x40d0 0x18>;
+> >=20
+> >  			};
+> >=20
+> > -			tsens_backup: backup@440 {
+> > -				reg =3D <0x440 0x10>;
+> > +			tsens_backup: backup@4440 {
+> > +				reg =3D <0x4440 0x10>;
+> >=20
+> >  			};
+> >  	=09
+> >  		};
+> >=20
+> > ---
+> > base-commit: 6d796c50f84ca79f1722bb131799e5a5710c4700
+> > change-id: 20230130-msm8974-qfprom-619c0e8f26eb
+> >=20
+> > Best regards,
+
+
+
 
