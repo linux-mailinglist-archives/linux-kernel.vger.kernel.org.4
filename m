@@ -2,284 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0C0681A34
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE37681A3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236074AbjA3TUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
+        id S237691AbjA3TWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234744AbjA3TUh (ORCPT
+        with ESMTP id S234744AbjA3TV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:20:37 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF8438655
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:20:35 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 36so8371558pgp.10
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:20:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fmO/JY9AimPZ9b7nQ0Peh1d3LQuWaqLK8tajlSI2VK4=;
-        b=gDkyBx+UtOY40DFc4SrV+c4ScAaEt1lzPGLSBFrXGOYeM2/PF/vuhD/H+eBidJE3lP
-         6rhudVbxvpE5rpdS5LY9SY2uzbanVIL+/pSajS/7CSYcNtntJWNVQ+79qm80/shFhylM
-         55wdpy56H2xL54nz56Hfr54Tw6ZXbghpG0pBS8Hv0OshpU2xX45NFbqYaCoH0Fb+2B3q
-         cDci7lK6Kaz2eXhOrPC86DcmaaflkyCxhAqgPBrXvsrNOXEB4kYA2gGhIiw2AtksjDgt
-         r3rm4Ihw2K42TX3ughkQjPDUR5ltoz34Uegy3yu07KAsnuPlIEhfzY65F+TOSdgqOSMm
-         b1xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fmO/JY9AimPZ9b7nQ0Peh1d3LQuWaqLK8tajlSI2VK4=;
-        b=UfunGMcweMzbkJIuGjVgVf5ufdp7rsvdzTZyFWgOuFkPV+PmidSPNKITIRTRV4ldx8
-         RDpYOITUN/zN1RrXVEbJ4n00t9jNnl04bxos4A30eUjGlafV9wHDbnVgBv4hcfwD9Tw7
-         zBJPnQgYcI0rtHpTMZMHqxh20eG8IHLULcraZpEymKmb9upDKjIheqp5YqEcIQLs6/iX
-         SdiZAOUNgW9SxW5DCXmEI0ZVkLpIssQ3mQrpacnRWAbh6hwZoAnCsUJxjvBFe+iZYU5q
-         JQ7oUoEXh4myXeYZ+jX+pNELlUv+jAnUftwxVjngsvhBbISiLVl+IOvKPvUouYtJxkTu
-         39uw==
-X-Gm-Message-State: AFqh2kr9u/2lLHnTxxOVog6hO0bR2M16NMohmaYJj+eC4pNOeDS2IAWF
-        pIoUGMNeei8uE7GRXtxk4j89qEnNpWgr/DN6lN4=
-X-Google-Smtp-Source: AMrXdXuzOns0YXnoZ0SM5MBVUIMLJg2fIbDXjwDzC9WQRe3PO0RJX+q+x6+tdmKew0LFFHoKj5wDnYuOY8U2s2EKR0I=
-X-Received: by 2002:aa7:8249:0:b0:58b:c29a:87a6 with SMTP id
- e9-20020aa78249000000b0058bc29a87a6mr6880236pfn.13.1675106435188; Mon, 30 Jan
- 2023 11:20:35 -0800 (PST)
-MIME-Version: 1.0
-References: <IA1PR07MB983017D2FBA174D2FF78CEB6ABCE9@IA1PR07MB9830.namprd07.prod.outlook.com>
- <Y9LNCouUvsUFCYkT@casper.infradead.org> <adc9152e-c547-12ec-3538-006500619896@redhat.com>
- <713c6242-be65-c212-b790-2b908627c1b4@google.com> <9d8fb9c-1b81-67cd-e55b-34517388e1ab@google.com>
-In-Reply-To: <9d8fb9c-1b81-67cd-e55b-34517388e1ab@google.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 30 Jan 2023 11:20:23 -0800
-Message-ID: <CAHbLzkpctht-CJkczcZv7svN1UUbLVa0xsMPFdoo3obc74ugrA@mail.gmail.com>
-Subject: Re: kernel BUG in page_add_anon_rmap
-To:     Hugh Dickins <hughd@google.com>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Mon, 30 Jan 2023 14:21:59 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCF83B0F8;
+        Mon, 30 Jan 2023 11:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675106518; x=1706642518;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=hezGOJtThAyX03R6N7y7EfWYTqIfF2BxaMnZaOOt+Wk=;
+  b=EzLjlreYYN6g2+FHhcVT7/c1OYEIjC/NkpPRdVPVJTO1KaLGQO6Kch2y
+   cDtNlIHTHf0XtMeVoA/hkpaJS50gGCJlUnawQ09EhOMnPHj73HdjZsV9g
+   IY73AzXeSlXoYQnMEJBu4IwzVrdWRP8xV4SYddKUKzcFpQ5e10uFQ/5vh
+   wPLrkxQXFpds7/Pojr6iRueYdPAJUzWxLGS4EkdJ4JZRJWjtV38Q+4jhb
+   UsO27WSQo1+rFRZLUCcKGTnSEL+C0D0BCk7SHQ1ckqle7V+JtczkV/UMs
+   prlcGfcvcYpIpTONOK4JjV3SUD3m/xKgO0EXFHI2C8SE0FXPFjk7mO9K4
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="311274103"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="311274103"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 11:21:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="993004389"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="993004389"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jan 2023 11:21:20 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 11:21:20 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 11:21:19 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 30 Jan 2023 11:21:19 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 30 Jan 2023 11:21:17 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mp8e/dtDm2uTm6FSVDbp3FQmqThns7TFYIG5sQtOFFKCf11s3f8ly2sGyRv+yNkEo8fWxVPjMHKICTdzAIVT+RknxYVq+PZPEYhdhy+oDjP+QurevsYOLz6AWZlDFq9VWl+sZEVgSCeIj0XYmyxA/eyJvmfoCJoxTtRWethlmFxJmjxabWI8zCRtBIo5mFbzZrAwKmYQ5BUNDjZkUkbIsGxR0V+970Odz9ObFULhzG9GLS3BzpLwqhWN0PoUfawihKIjlkmPCqGmuiTtL5UN6G+uN5YSk3F8aBd6/FGVA5ZtAJ5ewyXZls3t81z+aWerpF0S3nkEFO0EsmCHTdeiDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hezGOJtThAyX03R6N7y7EfWYTqIfF2BxaMnZaOOt+Wk=;
+ b=CwjvVpJGfARQvZLQMwRVUlAu3gw9sKqUdjV9u3ssSiOexM9sMX+VR7/q+XWWCwXJIm8G7bAJf0+4qBpCtzpFjCoCD0QaFoM+VIBLD7Q2HeHL+5v8KZ1+dmuUMJ0Ux8WQAVMywdq+IEemFlRqdbripFnZjt2/AdrH/KW5E+j3lPvjDFlWr3Aj+w9PScHfliSOP9CXrUAliwz1TUMOxQV8YXpN+75AnHeRNA0Y3tS+wOa3WAG9T6BGkpu1y/os7/amZK64dR7wIMELTBuIlOVUs1Zq+YJQIxK3ZHTEqRFvzNc8wFZ4g4CsnxTBEY/6JIbvQ8eP4itUs8mEbqb3cYnQXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by SN7PR11MB7090.namprd11.prod.outlook.com (2603:10b6:806:299::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Mon, 30 Jan
+ 2023 19:21:15 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::ee6a:b9b2:6f37:86a1]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::ee6a:b9b2:6f37:86a1%9]) with mapi id 15.20.6043.030; Mon, 30 Jan 2023
+ 19:21:15 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>
+CC:     Borislav Petkov <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "contact@pgazz.com" <contact@pgazz.com>,
-        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>,
-        Huang Ying <ying.huang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Li, Zhiquan1" <zhiquan1.li@intel.com>,
+        "Song, Youquan" <youquan.song@intel.com>
+Subject: RE: [PATCH] x86/mce: Set PG_hwpoison page flag to avoid the capture
+ kernel panic
+Thread-Topic: [PATCH] x86/mce: Set PG_hwpoison page flag to avoid the capture
+ kernel panic
+Thread-Index: AQHZMfHGxxBtYLGsIUOyOnx26oRfnq62QkyAgAEYxYA=
+Date:   Mon, 30 Jan 2023 19:21:15 +0000
+Message-ID: <SJ1PR11MB6083B06E5B75E429E5143B76FCD39@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20230127015030.30074-1-tony.luck@intel.com>
+ <20230130023226.GA3955454@hori.linux.bs1.fc.nec.co.jp>
+In-Reply-To: <20230130023226.GA3955454@hori.linux.bs1.fc.nec.co.jp>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|SN7PR11MB7090:EE_
+x-ms-office365-filtering-correlation-id: faab2200-a10d-4b64-c7f6-08db02f7280c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zeAGfhz/YMzjth76AiPltPJSu9JHIs7Dg17126JhqnrD0tRt+4n25cvmrW0xVfUF/7KXGwEI74Gm0TD6PnKx/RX8g+0G3R2MNK86Qr9nsdgx0SsPolrkv+Vs7viWIq1cBkZezRfTcGtD/cwEy7WPpm5Ium8TjzwmU/P1mU4hQftZoa1ZIbWmyed7kgAoa0zjqvPpi3v2/3L6c0vFMCq+ueNnWcKsKbjcU4kLxX0DGSaadsIey16RNpEdlER88WW70UxeVg3HUHmCSrA1d96u0ungZ7SkU6moqGUwLxQG6dk22KuF7yzh3dbYbHQ12pxaTO4x10k8xwFPX7E/eUqY4Lp1NKHJ1WEFHTfp3pdVE5nHPALSSUAcILbLANciClZBiqVCfMSVjzbW6aOiVIal1sYNRNKoCcK045o2EFDaDXhKPnO/trSHyLJzANACGc4AY1nPPjnGoga5mTIHzfHsqwn1SP9PlPXxY2wHFXSMm6jfTI3tIQ9ln1WWhcw7kugdaABzWmfJwAvmsj6N6Ap1i1mpTe0xTmrvTSQkYxEyJhfSuJGBT+zd4hHZG8nPPMrevQ/adngD01pcoSoxfoc7Zrb17yjnzN1/zKfzFhFMtrU0Ip+va31vghd5s938b6K3WW529yvy5fifFEcoU2fVXJSD+U4Sg7859xVrDA8J78NlK5XcepgCen7L/n3am8Xgud8WCIcAksngDLRdjyborg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(366004)(346002)(376002)(396003)(136003)(451199018)(33656002)(316002)(54906003)(41300700001)(66556008)(76116006)(4326008)(8676002)(66476007)(52536014)(8936002)(66946007)(55016003)(66446008)(64756008)(6916009)(38070700005)(86362001)(122000001)(82960400001)(38100700002)(6506007)(107886003)(9686003)(26005)(71200400001)(7696005)(186003)(4744005)(478600001)(5660300002)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NXF4aXRINnFUMlhOTlhuSmtuazhuOE52NjRDZksyWlFJQU56elREQzRCZ25M?=
+ =?utf-8?B?TlZONE5KM3o1UnliVHJOQnpYeWx3YVcwL3RNYzVYVEE3TjNzdnhQbWFwWWZm?=
+ =?utf-8?B?dCt0OXJBZXcyNnJaOWU5bEpGektnZG9HU1JMeE9qZmhPeStYNm01Q3pxOFJV?=
+ =?utf-8?B?b2VzaEc0bVZQeHR6bFNzMzErNXdXY2UvbVJuSmgwbmZXdWpoMTUvUnRoTDMy?=
+ =?utf-8?B?UFhSWHorYk9wK1UrZDNPeDFrdnFpY2lESXNXWWhyMFBtdEJWalZnYndVd2lZ?=
+ =?utf-8?B?M3daNXpHRnBRZk1pZ1J2S0dZeDFNNlhZb0NBOW5Rd2JDVm9JM0xQckRGQm1U?=
+ =?utf-8?B?RjNoYjZSaHlhRHBmMUFRZE53WW02MzJyYXFMSDNWKy9aUWpPdTBzNE5jVFgv?=
+ =?utf-8?B?VWRZZXNqZEhEZFhNd21kelF6Z0ZTWWU4WEdKUmk1SDBNblE2Y0Y5UkxhdEZN?=
+ =?utf-8?B?SEFuL08rbFhKenNpWkNmQXZtWVNHVTh2TStaR0Z0Tko1bStRa2VNRUFXRDJU?=
+ =?utf-8?B?UFpwSDV4emtSRzlWb2VEMDRySHVoNFZVVG15NElTQ1JRRzBVKzVwVzZQNjFC?=
+ =?utf-8?B?Sldld09BMXVBR3pnd0MxQTdTVjAwTWRXbytvdXN1T2JJbDY2c0NYc2poYkNG?=
+ =?utf-8?B?V3R1NHpiZzVibW5DK3B2aE1PVWtBMWxJUVFRbjdoUG5YSXF2RFRjN1BlUk8v?=
+ =?utf-8?B?bXNPM2JzQjNIMEFFU21oU0s5QVhMWEE4OVc2OGFNTEJ2WnF1SVpqQ2xyUE94?=
+ =?utf-8?B?dTRpdE8ybUpuNFVSWHdBSFZ3eS9wbVlDRXVQV0FLTjlGeWJ3QlppUmJCdzNx?=
+ =?utf-8?B?aDF1NUxBa1Y4bGRXVkMvS29OUVM0bTFPckwzK2ptQ2V6U0JNbjVRNnA1eS9m?=
+ =?utf-8?B?Mkg3bEQ0SEptU3YwVDB2Q0VRdjRjc1k3blFScWJWcnRYbCtDVEo3R29rK3dG?=
+ =?utf-8?B?K1NxNEtJcUR6UTREY21WYTE4ck1YcFJsUllMZzVkU3E0Ny9DOFFucXFDVUVC?=
+ =?utf-8?B?T0dkbzdSYm53VHlTcGdMLy8rdjVvSkNXdkNwWlUvcCs0aXdEeVczUGM1MXFa?=
+ =?utf-8?B?TlY1R0FkSmtycG55TjgxM2JYdkN3UVBXc2dvM2k3ZnNjNVNWSGRRL3lPQk1V?=
+ =?utf-8?B?aHZXWGNENFZubnNHNWlnbnhrWFdEY29aTzZKYlNaQnd5V2pBWG81dUVHU3kw?=
+ =?utf-8?B?SGYvcVZiM2JPU0tteTV5R2ZlS3pIb1J4Ukl0cGVrVU1FZlJUV1I5TU5qSEZv?=
+ =?utf-8?B?MkRrWmxnR3BRaVpJcWxpSzFTNTNHUkRjQUxQTitwc3BIaWdxNzdPYWxyVUJW?=
+ =?utf-8?B?QW1EN2JVLzVieDJmRWN1L1VoMVE1MzV6eEdQZHVObGFTaGdNQmFMZ2Z1NXdv?=
+ =?utf-8?B?clBYTWJpUjBJOWJoU05EeGZnWHNSNG1GYjFVTklHTVRDcE1KK0NPSVhsV2xq?=
+ =?utf-8?B?bXZLQlROQjdYeHI4aWtSdVNHQktrRWRFZFZDUW5TdGJxa2o4MVBzZTdoMmFh?=
+ =?utf-8?B?Y0ZTazVhU1pzdEt4c2NQRzFubFNxTXFlUVJ5TWRHZlZ5L0xOZHVPSk1VZEY1?=
+ =?utf-8?B?YkFjVy8yQW8wcFBpakIwbVBLdjFQNlRMRjQ5TCtmRDZrWHlmMDJ5a1haRW9T?=
+ =?utf-8?B?TVR3bjJFejFvVHo5ckpWNEZMSFkxRGFyQjg0bzFITFVPMDFVYVVXVzJBdFha?=
+ =?utf-8?B?TFRrYW5GUnJVYlh2NFhaVXdCV0NxelZUbnVCaVkzcDArQU1ObnFCMXgwUGpn?=
+ =?utf-8?B?aFNNcWlmOEJGdXpyNG5xUEQzT0pOQTBDalNXa2U0NG84ZWw4dDNEOCs5MUdE?=
+ =?utf-8?B?a0JodEd2NzNGM1pCS2ZwVDZ6WDVtT2NaWVByRGI0d2Q2Q1RDYWdIQlRaaDYy?=
+ =?utf-8?B?cFJsV1pkU211M3N0NGN3bGRaUzdRZUJ1NTBrNWFjcGkrWnllUTdnVzl6UlIr?=
+ =?utf-8?B?TTFSNkxGcEdobWRpNzZGbCtkcHhmTnUyamdiVFVKUk5wUy9sT1Q5eFJ4SVlH?=
+ =?utf-8?B?QjJZZDZwa0d4OEZ1QlRKc0Fac0FYWkZBYlp1WGdiYXV3MGNMcUg3bDN3cjRF?=
+ =?utf-8?B?eXVwQi94Tloyd2toVVp4TnJGWTRiWmREd0NuZ0h4aFFRWDhMT042c1ZEdnZG?=
+ =?utf-8?Q?7QMtk678gGm+7863yZNjNWjMl?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: faab2200-a10d-4b64-c7f6-08db02f7280c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 19:21:15.4536
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0AFzRfh/wW1BKc94YxrXwwHz+16jAQzW6qlTJINjvT8NVG8DThKc0f7rUSlfWnuBmCfyqugv2uHAUYp8EY1TTg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7090
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 10:49 PM Hugh Dickins <hughd@google.com> wrote:
->
-> On Fri, 27 Jan 2023, Hugh Dickins wrote:
-> > On Fri, 27 Jan 2023, David Hildenbrand wrote:
-> > > On 26.01.23 19:57, Matthew Wilcox wrote:
-> > > > On Wed, Jan 25, 2023 at 11:59:16PM +0000, Sanan Hasanov wrote:
-> > > >> Good day, dear maintainers,
-> > > >>
-> > > >> We found a bug using a modified kernel configuration file used by syzbot.
-> > > >>
-> > > >> We enhanced the coverage of the configuration file using our tool,
-> > > >> klocalizer.
-> > > >>
-> > > >> Kernel Branch: 6.2.0-rc5-next-20230124
-> > > >> Kernel
-> > > >> config: https://drive.google.com/file/d/1MZSgIF4R9QfikEuF5siUIZVPce-GiJQK/view?usp=sharing
-> > > >> Reproducer: https://drive.google.com/file/d/1H5KWkT9VVMWTUVVgIaZi6J-fmukRx-BM/view?usp=sharing
-> > > >>
-> > > >> Thank you!
-> > > >>
-> > > >> Best regards,
-> > > >> Sanan Hasanov
->
-> This is a very interesting find: the thanks go to you.
->
-> > > >>
-> > > >> head: 0000000000020000 0000000000000000 00000004ffffffff ffff8881002b8000
-> > > >> page dumped because: VM_BUG_ON_PAGE(!first && (flags & (( rmap_t)((((1UL)))
-> > > >> << (0)))))
-> > > >> ------------[ cut here ]------------
-> > > >
-> > > > I know it says "cut here" and you did that, but including just a few
-> > > > lines above that would be so much more helpful.  I can infer that this
-> > > > is a multi-page folio, but more than that is hard to tell.
-> > > >
-> > > >> kernel BUG at mm/rmap.c:1248!
-> > > >
-> > > > That tracks with VM_BUG_ON_PAGE(!first && (flags & RMAP_EXCLUSIVE), page);
-> > > >
-> > > >> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> > > >> CPU: 7 PID: 14932 Comm: syz-executor.1 Not tainted 6.2.0-rc5-next-20230124
-> > > >> #1
-> > > >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1
-> > > >> 04/01/2014
-> > > >> RIP: 0010:page_add_anon_rmap+0xddd/0x11c0 mm/rmap.c:1248
-> > > >> Code: c0 ff 48 8b 34 24 48 89 df e8 1f ff 07 00 49 89 c6 e9 85 f6 ff ff e8
-> > > >> 52 73 c0 ff 48 c7 c6 c0 3c d8 89 48 89 ef e8 b3 23 f8 ff <0f> 0b e8 3c 73
-> > > >> c0 ff 48 c7 c6 00 3b d8 89 48 89 ef e8 9d 23 f8 ff
-> > > >> RSP: 0018:ffffc9000c56f7b0 EFLAGS: 00010293
-> > > >> RAX: 0000000000000000 RBX: ffff88807efc6f30 RCX: 0000000000000000
-> > > >> RDX: ffff8880464fd7c0 RSI: ffffffff81be733d RDI: fffff520018adedb
-> > > >> RBP: ffffea0000c68080 R08: 0000000000000056 R09: 0000000000000000
-> > > >> R10: 0000000000000001 R11: 0000000000000001 R12: ffffea0000c68000
-> > > >> R13: 0000000000000001 R14: ffffea0000c68088 R15: 0000000000000000
-> > > >> FS:  00007f717898a700(0000) GS:ffff888119f80000(0000)
-> > > >> knlGS:0000000000000000
-> > > >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > >> CR2: 00007f7178947d78 CR3: 000000004a9e6000 CR4: 0000000000350ee0
-> > > >> Call Trace:
-> > > >>   <TASK>
-> > > >>   remove_migration_pte+0xaa6/0x1390 mm/migrate.c:261
-> > > >
-> > > >                          if (folio_test_anon(folio))
-> > > >                                  page_add_anon_rmap(new, vma, pvmw.address,
-> > > >                                                     rmap_flags);
-> > > >
-> > > > Earlier in that function, we had:
-> > > >                  if (folio_test_anon(folio) &&
-> > > >                  !is_readable_migration_entry(entry))
-> > > >                          rmap_flags |= RMAP_EXCLUSIVE;
-> > > >
-> > > > so that also makes sense.  We can also infer that RMAP_COMPOUND wasn't
-> > > > set, so we're trying to do just one page from the folio.
-> > > >
-> > > > All right, back to rmap.c:
-> > > >
-> > > >                  first = atomic_inc_and_test(&page->_mapcount);
-> > > >
-> > > > So first is clearly false (ie _mapcount was not -1), implying somebody
-> > > > else already mapped this page.  Not really sure what's going on at
-> > > > this point.  Seems unlikely that the folio changes in
-> > > > remove_migration_pte() are responsible since they're from last January.
-> > > > Huang has some more changes to migrate.c that I don't feel qualified
-> > > > to judge.
-> > > >
-> > > > Nothing's jumping out at me as obviously wrong.  Is it possible to
-> > > > do a bisect?
-> > >
-> > > I reproduced on next-20230127 (did not try upstream yet).
->
-> Upstream's fine; on next-20230127 (with David's repro) it bisects to
-> 5ddaec50023e ("mm/mmap: remove __vma_adjust()").  I think I'd better
-> hand on to Liam, rather than delay you by puzzling over it further myself.
->
-> > >
-> > > I think two key things are that a) THP are set to "always" and b) we have a
-> > > NUMA setup [I assume].
-> > >
-> > > The relevant bits:
-> > >
-> > > [  439.886738] page:00000000c4de9000 refcount:513 mapcount:2
-> > > mapping:0000000000000000 index:0x20003 pfn:0x14ee03
-> > > [  439.893758] head:000000003d5b75a4 order:9 entire_mapcount:0
-> > > nr_pages_mapped:511 pincount:0
-> > > [  439.899611] memcg:ffff986dc4689000
-> > > [  439.902207] anon flags:
-> > > 0x17ffffc009003f(locked|referenced|uptodate|dirty|lru|active|head|swapbacked|node=0|zone=2|lastcpupid=0x1fffff)
-> > > [  439.910737] raw: 0017ffffc0020000 ffffe952c53b8001 ffffe952c53b80c8
-> > > dead000000000400
-> > > [  439.916268] raw: 0000000000000000 0000000000000000 0000000000000001
-> > > 0000000000000000
-> > > [  439.921773] head: 0017ffffc009003f ffffe952c538b108 ffff986de35a0010
-> > > ffff98714338a001
-> > > [  439.927360] head: 0000000000020000 0000000000000000 00000201ffffffff
-> > > ffff986dc4689000
-> > > [  439.932341] page dumped because: VM_BUG_ON_PAGE(!first && (flags & ((
-> > > rmap_t)((((1UL))) << (0)))))
-> > >
-> > >
-> > > Indeed, the mapcount of the subpage is 2 instead of 1. The subpage is only
-> > > mapped into a single
-> > > page table (no fork() or similar).
->
-> Yes, that mapcount:2 is weird; and what's also weird is the index:0x20003:
-> what is remove_migration_pte(), in an mbind(0x20002000,...), doing with
-> index:0x20003?
->
-> My guess is that the remove-__vma_adjust() commit is not properly updating
-> vm_pgoff into non_vma in some case: so that when remove_migration_pte()
-> looks for where to insert the new pte, it's off by one page.
->
-> > >
-> > > I created this reduced reproducer that triggers 100%:
->
-> Very helpful, thank you.
->
-> > >
-> > >
-> > > #include <stdint.h>
-> > > #include <unistd.h>
-> > > #include <sys/mman.h>
-> > > #include <numaif.h>
-> > >
-> > > int main(void)
-> > > {
-> > >     mmap((void*)0x20000000ul, 0x1000000ul, PROT_READ|PROT_WRITE|PROT_EXEC,
-> > >          MAP_ANONYMOUS|MAP_FIXED|MAP_PRIVATE, -1, 0ul);
-> > >     madvise((void*)0x20000000ul, 0x1000000ul, MADV_HUGEPAGE);
-> > >
-> > >     *(uint32_t*)0x20000080 = 0x80000;
-> > >     mlock((void*)0x20001000ul, 0x2000ul);
-> > >     mlock((void*)0x20000000ul, 0x3000ul);
->
-> It's not an mlock() issue in particular: quickly established by
-> substituting madvise(,, MADV_NOHUGEPAGE) for those mlock() calls.
-> Looks like a vma splitting issue now.
->
-> > >     mbind((void*)0x20002000ul, 0x1000ul, MPOL_LOCAL, NULL, 0x7fful,
-> > >     MPOL_MF_MOVE);
->
-> I guess it will turn out not to be relevant to this particular syzbug,
-> but what do we expect an mbind() of just 0x1000 of a THP to do?
->
-> It's a subject I've wrestled with unsuccessfully in the past: I found
-> myself arriving at one conclusion (split THP) in one place, and a contrary
-> conclusion (widen range) in another place, and never had time to work out
-> one unified answer.
->
-> So I do wonder what pte replaces the migration entry when the bug here
-> is fixed: is it a pte pointing into the THP as before, in which case
-> what was the point of "migration"? is it a Copy-On-Bind page?
-> or has the whole THP been migrated?
-
-IIRC, mbind() for partial THP would migrate the whole THP as long as
-there is enough memory on the target node. mbind() doesn't split THP,
-but only split PMD, and PMD split is after the THP is queued for
-migration. So the migration actually migrates PTE-mapped THP.
-
->
-> I ought to read through those "estimated mapcount" threads more
-> carefully: might be relevant, but I've not paid enough attention.
->
-> Hugh
->
-> > >     return 0;
-> > > }
-> > >
-> > > We map a large-enough are for a THP and then populate a fresh anon THP (PMD
-> > > mapped)
-> > > to write to it.
-> > >
-> > > The first mlock() will trigger PTE-mapping the THP and mlocking that subpage.
-> > > The second mlock() seems to cause the issue. The final mbind() triggers page
-> > > migration.
-> > >
-> > > Removing one of the mlock() makes it work. Note that we do a double
-> > > mlock() of the same page -- the one we are then trying to migrate.
-> > >
-> > > Somehow, the double mlock() of the same page seems to affect our mapcount.
-> > >
-> > > CCing Hugh.
-> >
-> > Thanks David - most especially for the reproducer, not tried here yet.
-> > I'll assume this is my bug, and get into it later in the day.
-> >
-> > Hugh
+PiBBbHRob3VnaCBJJ20gbm90IHN1cmUgdGhhdCBTR1ggbWVtb3J5IG9yIFBNRU0gcGFnZXMgYXJl
+IGV4cGVjdGVkIHRvIGJlDQo+IGluY2x1ZGVkIGluIGtkdW1wLCBidXQgc2ltcGx5IHNldHRpbmcg
+UGFnZUhXUG9pc29uIGRvZXMgbm90IHdvcmsgZm9yIHRoZW0/DQo+IChNYXliZSB0aGF0IGRlcGVu
+ZHMgb24gaG93IGtkdW1wIGhhbmRsZXMgdGhlc2UgdHlwZXMgb2YgbWVtb3J5LikNCg0KU0dYL1RE
+WCBwYWdlcyBjYW4ndCBiZSBkdW1wZWQuIFRoZXkgYXJlIGVuY3J5cHRlZCB3aXRoIG5vIHdheSBm
+b3Iga2R1bXAgdG8NCmdldCB0aGUga2V5Lg0KDQpQTUVNIHNlZW1zIHBvaW50bGVzcyAoYnV0IEkg
+ZG9uJ3Qga25vdyB3aGF0IGtkdW1wIGRvZXMgaGVyZSkuDQoNCj4gQXMgZm9yIEh1Z2VUTEIsIGtk
+dW1wIHV0aWxpdHkgc2hvdWxkIHBhcnNlIHRoZSBzdHJ1Y3QgcGFnZSBhbmQgYmUgYXdhcmUgb2YN
+Cj4gSHVnZVRMQiBwYWdlcywgc28gbWF5YmUgc2V0dGluZyBQYWdlSFdQb2lzb24gb24gdGhlIGhl
+YWQgcGFnZSBjb3VsZCB3b3JrLg0KDQpPciBtYXliZSBrZHVtcCBjYW4gdGFrZSBub3Qgb2YgdGhl
+IFBhZ2VIV1BvaXNvbiBmbGFnIG9uIHRoZSBzdWItcGFnZSBvZiB0aGUNCmh1Z2UgcGFnZT8gSXQg
+ZGVwZW5kcyBvbiB3aGV0aGVyIHRoZXJlIGlzIGFueSBiZW5lZml0IHRvIHRoZSBkdW1wIHRvIGlu
+Y2x1ZGUgdGhlDQpub3QtcG9pc29uZWQgcGFydHMgb2YgYSBodWdlIHBhZ2UuDQoNCg0KPiBJIHRo
+aW5rIHRoYXQgc2V0dGluZyBQYWdlSFdQb2lzb24gb3V0c2lkZSBod3BvaXNvbiBzdWJzeXN0ZW0g
+aXMgT0sgaGVyZSwNCj4gYmVjYXVzZSB0aGlzIGlzIGNhbGxlZCBqdXN0IGJlZm9yZSBjYWxsaW5n
+IHBhbmljKCkgc28gaXQncyBleHBlY3RlZCB0byBub3QNCj4gY29uZmxpY3Qgd2l0aCBvdGhlciBo
+d3BvaXNvbi1yZWxhdGVkIGNvZGUuDQoNClRoYW5rcyBmb3IgdGhlIHJldmlldy4NCg0KLVRvbnkN
+Cg==
