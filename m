@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78118681FE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54335681FE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjA3Xqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
+        id S230237AbjA3Xqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjA3XqZ (ORCPT
+        with ESMTP id S230075AbjA3Xq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:46:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202602BF23;
-        Mon, 30 Jan 2023 15:46:14 -0800 (PST)
+        Mon, 30 Jan 2023 18:46:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED0C2B610;
+        Mon, 30 Jan 2023 15:46:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9D476130B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7FFBB80E7B;
+        Mon, 30 Jan 2023 23:46:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 505BFC433EF;
         Mon, 30 Jan 2023 23:46:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBDCC433D2;
-        Mon, 30 Jan 2023 23:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675122373;
-        bh=6CiSYBjoesluD+/5chzBuwYHxxi09E0qRpjcMY/XoCc=;
+        s=k20201202; t=1675122374;
+        bh=MrzmYuplehy47+jA2Yiiur0CaZV7d/G6CEmH37GtHDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XKE9BsNvuE0GjpcOpEqbs2SyYxQi1MMnfclArHK8SuekqZCwPhhlqiCUjLHfCTvjq
-         XzDHm58hq/RAgAKvgEEBBGJp+PiyN3ZeDkxZZH1y0R4bnQl6sYplp652vJ3LIjr7GG
-         tw1k8Dsjz+Duovs+JDCQDLsrKP0G97wFQHCU3y5J8jDCy+ua5Tanpqb4S12IVR6xrp
-         17E3pDef13AHn+wPlxSix+NQQ/2ub52+srs5JeZ1qE6aIeCphIzIz4KFQtasM9w+2V
-         Uydo0gU6hSEtPyswuMAjgpTAjeydNIbUWXHdtNy/p6sRSTo/whRn1GUakxBlx1ej+r
-         aSZWQXjgSUPCA==
+        b=OrmuO+15ACCEqvKhMq4ypFVtWcTzkeqlxW32fLL9B7Fvp6SCbDTyqxKFj7xXxtf6a
+         H9vg9lfkrxs2x4jjoJPuiE7cNBgamiHVjV5X2t592jqUh2Rli6rhiKWalJJRfGTs2o
+         IU2j69U7ehtsM9qTTO3rx6NOHAXkTAnLxw/Dhk5FjpAscYtAaUaqgeL1t4OQGIdBS3
+         WNZpVBLg6vueIZxv5p5XW+O1HO8LT7vMADDo8FJDiINE/PZiBrZMb3n+NT4nF1Pg34
+         q+E3z7h957jwtQBustKW5EckwWgkjhTlhlGDd+qww7ICxQ3m+T3wp2MVVGE3FIsQIo
+         GwqHw4Gyx/y2g==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     dmitry.baryshkov@linaro.org, Andy Gross <agross@kernel.org>,
-        konrad.dybcio@linaro.org, mturquette@baylibre.com, arnd@kernel.org,
-        sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] clk: qcom: gcc-qcs404: fix duplicate initializer warning
-Date:   Mon, 30 Jan 2023 17:46:09 -0600
-Message-Id: <167512236603.4092892.5518902407835115318.b4-ty@kernel.org>
+To:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        konrad.dybcio@linaro.org, krzysztof.kozlowski@linaro.org
+Cc:     neil.armstrong@linaro.org, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, dri-devel@lists.freedesktop.org,
+        airlied@gmail.com, robdclark@gmail.com,
+        freedreno@lists.freedesktop.org, marijn.suijten@somainline.org,
+        daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, quic_rajeevny@quicinc.com,
+        loic.poulain@linaro.org, quic_abhinavk@quicinc.com,
+        swboyd@chromium.org
+Subject: Re: (subset) [PATCH 1/8] drm/msm/dsi: Allow 2 CTRLs on v2.5.0
+Date:   Mon, 30 Jan 2023 17:46:10 -0600
+Message-Id: <167512236602.4092892.13590634993322919413.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230130135555.3268172-1-arnd@kernel.org>
-References: <20230130135555.3268172-1-arnd@kernel.org>
+In-Reply-To: <20230120210101.2146852-1-konrad.dybcio@linaro.org>
+References: <20230120210101.2146852-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,22 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 14:55:47 +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Fri, 20 Jan 2023 22:00:53 +0100, Konrad Dybcio wrote:
+> v2.5.0 support was originally added for SC7280, but this hw is also
+> present on SM8350, which has one more DSI host. Bump up the dsi count
+> and fill in the register of the secondary host to allow it to probe.
 > 
-> In one of the clocks, a redundant initialization for .num_parents
-> got left behind by a recent patch:
-> 
-> drivers/clk/qcom/gcc-qcs404.c:63:32: error: initialized field overwritten [-Werror=override-init]
->    63 |                 .num_parents = 1,
->       |                                ^
+> This should not have any adverse effects on SC7280, as the secondary
+> CTRL will only be touched if it's defined, anyway.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] clk: qcom: gcc-qcs404: fix duplicate initializer warning
-      commit: d4cb3e7113f82f7378527890aa7b4006234665fe
+[2/8] arm64: dts: qcom: sm8350: Add missing #address/size-cells to DSIn
+      commit: 6636818ecf0f1d448360835017473cf94a0ee967
+[3/8] arm64: dts: qcom: sm8350: Fix DSI1 interrupt
+      commit: 1eed7995d9da0489e5a46c13bd888ffa987ead98
+[4/8] arm64: dts: qcom: sm8350: Feed DSI1 PHY clocks to DISPCC
+      commit: 0af6a4012b3815ebca7b8080a286edc01e4a89e1
+[5/8] arm64: dts: qcom: sm8350: Fix DSI PHY compatibles
+      commit: 45cd807de14388010a279765486c13f8ac540dfa
+[6/8] arm64: dts: qcom: sm8350: Fix DSI PLL size
+      commit: e3e654ced376060d64ede8e2dfde0b1bac0f9086
+[7/8] arm64: dts: qcom: sm8350: Add mdss_ prefix to DSIn out labels
+      commit: 2a07efb8c08619888428cc8fd47643c438111f29
+[8/8] arm64: dts: qcom: sm8350: Hook up DSI1 to MDP
+      commit: b904227a4b693fbb9d5eabc9d7100dc01d9eb973
 
 Best regards,
 -- 
