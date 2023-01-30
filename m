@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA07680594
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA4D680596
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235665AbjA3FZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 00:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
+        id S229815AbjA3F0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 00:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjA3FZD (ORCPT
+        with ESMTP id S229503AbjA3F0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 00:25:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63AD1ABD9;
-        Sun, 29 Jan 2023 21:24:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7151760E9B;
-        Mon, 30 Jan 2023 05:24:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B62C433D2;
-        Mon, 30 Jan 2023 05:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675056298;
-        bh=6uMxXU94yhabkf9onzpToNr+qnadDqgPKnObNlZcFJ4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Ke1MDE64OaAlob3NnNJxsveYs3ePR7L1SfWuVZB3+Bj18fQq2FxgOYM3naBF4xhPw
-         gdMRbN+7H4WniiSa6IFiU/fzuXhRrEZWP/cPDfRtQxPbm63lSfWATuDQWVbA6sCdzP
-         MMEau9VqRr7egyNNZQXGoPxAf5OAFrsfQG5+QQ+iVXlFEqBledHx/JtPIStaIl15O5
-         dnPub/lWIoOFD5jmiXd7GGYEpdCKzDcGvuXnSj3QdkOWhTUrNUVnXHmTkFJZ/FzaYq
-         /ViXlbCM+ro4kQ7ueXvaCmlTyrLk+8I5t5M2qgSDj4zZOy/sQnxqy29JdS2+BRkuHL
-         TAvyxekNyw/yg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6C9055C0326; Sun, 29 Jan 2023 21:24:58 -0800 (PST)
-Date:   Sun, 29 Jan 2023 21:24:58 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH 5/9] Documentation: RCU: correct spelling
-Message-ID: <20230130052458.GQ2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230129231053.20863-1-rdunlap@infradead.org>
- <20230129231053.20863-6-rdunlap@infradead.org>
+        Mon, 30 Jan 2023 00:26:12 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8D11ABD9
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:26:07 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id d3so10393298plr.10
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:26:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=abPSnJ0qv/HtIbkQ/vHjvIngKoYVy2ykGn7xdx2ilGQ=;
+        b=L4XOuSnAQ7emyELz/pa59zwrXSfRDQ2Jj97bcn9ceG0qRT3A3x3oV0xi6K6b6OdYfJ
+         BFL3g6sm0gmGmLk+wKqCN2+eyDCDkq6dtJPst6j70AL1Zom6DzfR8vxGfAnJlhNm4qSx
+         AXGuTWD3vxQdF3B7OYhgEuKOOtfRJFLLqi1yU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=abPSnJ0qv/HtIbkQ/vHjvIngKoYVy2ykGn7xdx2ilGQ=;
+        b=HFem5ks7bzdWX3U8B9JyvtNj2Wy2adfR93RFkBUbz88Dt+z7sYDXq17tqezovGsrex
+         rEm139fQORFjmzMz42kV5XFjJxj/Y0+QZTMRqE8tY5hMtpM7NNL6UCNV32dX00lbfks1
+         NV9Z8UBCCeeHMZHE9cKMrPhQ8z/tLbIPocLQI69ACnXAzrt0ReHTQ+ayFzUQHf1j+ofn
+         X5S2TilsDB9hne+rD3XQnY0xANpzRrVkIjmON51Fl7byeA7gzhsZ3g4TlI5FPfFwcGZf
+         QVawr04fwrbU+q4LEl2f2qeOVdjrGtzASZ6s+RP4jnto36YUoObjZDBBR3mwDYW+Sblw
+         BQ4w==
+X-Gm-Message-State: AO0yUKUnqfDHs1XRZUqpwMcYekOByKIZZbMpFChs4JDxWqA4nPsrI8Bf
+        oWcFHQrZNMtKcF6pE3sfW5inMA==
+X-Google-Smtp-Source: AK7set/J85qx/tkKLqmFXicwMirou4KQJvFb8Y0criYYiN9RQH6TDnqnu1sUOsYrVkGaY6nq/6CfSw==
+X-Received: by 2002:a17:902:ecc1:b0:196:3e2c:4741 with SMTP id a1-20020a170902ecc100b001963e2c4741mr18360112plh.12.1675056366681;
+        Sun, 29 Jan 2023 21:26:06 -0800 (PST)
+Received: from localhost ([2401:fa00:8f:203:d32b:fdeb:5b29:c9c])
+        by smtp.gmail.com with UTF8SMTPSA id n12-20020a1709026a8c00b0019603cb63d4sm6677372plk.280.2023.01.29.21.26.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Jan 2023 21:26:06 -0800 (PST)
+From:   David Stevens <stevensd@chromium.org>
+X-Google-Original-From: David Stevens <stevensd@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Stevens <stevensd@chromium.org>
+Subject: [PATCH 4/3] KVM: x86/xen: Make runstate cache gpcs share a lock
+Date:   Mon, 30 Jan 2023 14:25:19 +0900
+Message-Id: <20230130052519.416881-1-stevensd@google.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+In-Reply-To: <2d421cb18dfa1b88e5025f2f9b94e146c0858960.camel@infradead.org>
+References: <2d421cb18dfa1b88e5025f2f9b94e146c0858960.camel@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230129231053.20863-6-rdunlap@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,177 +70,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 03:10:49PM -0800, Randy Dunlap wrote:
-> Correct spelling problems for Documentation/RCU/ as reported
-> by codespell.
-> 
-> Note: in RTFP.txt, there are other misspellings that are left as is
-> since they were used that way in email Subject: lines or in LWN.net
-> articles. [preemptable, Preemptable, synchonisation]
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: rcu@vger.kernel.org
+From: David Stevens <stevensd@chromium.org>
 
-Queued despite affinitied being a perfectly cromulent word.  ;-)
+Simplify locking in the case where the guest's runstate_info is split
+across two pages by sharing a single lock for the two gpcs.
 
-Thank you!
+Signed-off-by: David Stevens <stevensd@chromium.org>
+---
+I tested this patch with xen_shinfo_test as suggested, and it still
+passes. I agree that it makes sense to do this as a seperate patch. For
+the bot reported issue, looks like I forgot to build with lockdep
+enabled. I'll fix the issue with that patch in the next revision of the
+series, so that there aren't any commits which don't build.
 
-							Thanx, Paul
+ arch/x86/kvm/xen.c | 25 ++++---------------------
+ 1 file changed, 4 insertions(+), 21 deletions(-)
 
-> ---
->  .../Design/Expedited-Grace-Periods/Expedited-Grace-Periods.rst |    6 +++---
->  .../Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst        |    2 +-
->  .../RTFP.txt                                                   |   10 +++++-----
->  .../UP.rst                                                     |    4 ++--
->  .../lockdep.rst                                                |    2 +-
->  .../torture.rst                                                |    4 ++--
->  6 files changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff -- a/Documentation/RCU/Design/Expedited-Grace-Periods/Expedited-Grace-Periods.rst b/Documentation/RCU/Design/Expedited-Grace-Periods/Expedited-Grace-Periods.rst
-> --- a/Documentation/RCU/Design/Expedited-Grace-Periods/Expedited-Grace-Periods.rst
-> +++ b/Documentation/RCU/Design/Expedited-Grace-Periods/Expedited-Grace-Periods.rst
-> @@ -277,7 +277,7 @@ the following access functions:
->  
->  Again, only one request in a given batch need actually carry out a
->  grace-period operation, which means there must be an efficient way to
-> -identify which of many concurrent reqeusts will initiate the grace
-> +identify which of many concurrent requests will initiate the grace
->  period, and that there be an efficient way for the remaining requests to
->  wait for that grace period to complete. However, that is the topic of
->  the next section.
-> @@ -405,7 +405,7 @@ Use of Workqueues
->  In earlier implementations, the task requesting the expedited grace
->  period also drove it to completion. This straightforward approach had
->  the disadvantage of needing to account for POSIX signals sent to user
-> -tasks, so more recent implemementations use the Linux kernel's
-> +tasks, so more recent implementations use the Linux kernel's
->  workqueues (see Documentation/core-api/workqueue.rst).
->  
->  The requesting task still does counter snapshotting and funnel-lock
-> @@ -465,7 +465,7 @@ corresponding disadvantage that workqueu
->  initialized, which does not happen until some time after the scheduler
->  spawns the first task. Given that there are parts of the kernel that
->  really do want to execute grace periods during this mid-boot “dead
-> -zone”, expedited grace periods must do something else during thie time.
-> +zone”, expedited grace periods must do something else during this time.
->  
->  What they do is to fall back to the old practice of requiring that the
->  requesting task drive the expedited grace period, as was the case before
-> diff -- a/Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst b/Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst
-> --- a/Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst
-> +++ b/Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst
-> @@ -168,7 +168,7 @@ an ``atomic_add_return()`` of zero) to d
->  +-----------------------------------------------------------------------+
->  
->  The approach must be extended to handle one final case, that of waking a
-> -task blocked in ``synchronize_rcu()``. This task might be affinitied to
-> +task blocked in ``synchronize_rcu()``. This task might be affined to
->  a CPU that is not yet aware that the grace period has ended, and thus
->  might not yet be subject to the grace period's memory ordering.
->  Therefore, there is an ``smp_mb()`` after the return from
-> diff -- a/Documentation/RCU/lockdep.rst b/Documentation/RCU/lockdep.rst
-> --- a/Documentation/RCU/lockdep.rst
-> +++ b/Documentation/RCU/lockdep.rst
-> @@ -65,7 +65,7 @@ checking of rcu_dereference() primitives
->  	rcu_access_pointer(p):
->  		Return the value of the pointer and omit all barriers,
->  		but retain the compiler constraints that prevent duplicating
-> -		or coalescsing.  This is useful when testing the
-> +		or coalescing.  This is useful when testing the
->  		value of the pointer itself, for example, against NULL.
->  
->  The rcu_dereference_check() check expression can be any boolean
-> diff -- a/Documentation/RCU/RTFP.txt b/Documentation/RCU/RTFP.txt
-> --- a/Documentation/RCU/RTFP.txt
-> +++ b/Documentation/RCU/RTFP.txt
-> @@ -201,7 +201,7 @@ work looked at debugging uses of RCU [Se
->  In 2012, Josh Triplett received his Ph.D. with his dissertation
->  covering RCU-protected resizable hash tables and the relationship
->  between memory barriers and read-side traversal order:  If the updater
-> -is making changes in the opposite direction from the read-side traveral
-> +is making changes in the opposite direction from the read-side traversal
->  order, the updater need only execute a memory-barrier instruction,
->  but if in the same direction, the updater needs to wait for a grace
->  period between the individual updates [JoshTriplettPhD].  Also in 2012,
-> @@ -1245,7 +1245,7 @@ Oregon Health and Sciences University"
->  [Viewed September 5, 2005]"
->  ,annotation={
->  	First posting showing how RCU can be safely adapted for
-> -	preemptable RCU read side critical sections.
-> +	preemptible RCU read side critical sections.
->  }
->  }
->  
-> @@ -1888,7 +1888,7 @@ Revised:
->  \url{https://lore.kernel.org/r/20070910183004.GA3299@linux.vnet.ibm.com}
->  [Viewed October 25, 2007]"
->  ,annotation={
-> -	Final patch for preemptable RCU to -rt.  (Later patches were
-> +	Final patch for preemptible RCU to -rt.  (Later patches were
->  	to mainline, eventually incorporated.)
->  }
->  }
-> @@ -2275,7 +2275,7 @@ lot of {Linux} into your technology!!!"
->  \url{https://lore.kernel.org/r/20090724001429.GA17374@linux.vnet.ibm.com}
->  [Viewed August 15, 2009]"
->  ,annotation={
-> -	First posting of simple and fast preemptable RCU.
-> +	First posting of simple and fast preemptible RCU.
->  }
->  }
->  
-> @@ -2639,7 +2639,7 @@ lot of {Linux} into your technology!!!"
->  	RCU-protected hash tables, barriers vs. read-side traversal order.
->  	.
->  	If the updater is making changes in the opposite direction from
-> -	the read-side traveral order, the updater need only execute a
-> +	the read-side traversal order, the updater need only execute a
->  	memory-barrier instruction, but if in the same direction, the
->  	updater needs to wait for a grace period between the individual
->  	updates.
-> diff -- a/Documentation/RCU/torture.rst b/Documentation/RCU/torture.rst
-> --- a/Documentation/RCU/torture.rst
-> +++ b/Documentation/RCU/torture.rst
-> @@ -216,7 +216,7 @@ Kernel boot arguments can also be suppli
->  rcutorture's module parameters.  For example, to test a change to RCU's
->  CPU stall-warning code, use "--bootargs 'rcutorture.stall_cpu=30'".
->  This will of course result in the scripting reporting a failure, namely
-> -the resuling RCU CPU stall warning.  As noted above, reducing memory may
-> +the resulting RCU CPU stall warning.  As noted above, reducing memory may
->  require disabling rcutorture's callback-flooding tests::
->  
->  	kvm.sh --cpus 448 --configs '56*TREE04' --memory 128M \
-> @@ -370,5 +370,5 @@ You can also re-run a previous remote ru
->  		tools/testing/selftests/rcutorture/res/2022.11.03-11.26.28-remote \
->  		--duration 24h
->  
-> -In this case, most of the kvm-again.sh parmeters may be supplied following
-> +In this case, most of the kvm-again.sh parameters may be supplied following
->  the pathname of the old run-results directory.
-> diff -- a/Documentation/RCU/UP.rst b/Documentation/RCU/UP.rst
-> --- a/Documentation/RCU/UP.rst
-> +++ b/Documentation/RCU/UP.rst
-> @@ -107,7 +107,7 @@ UP systems, including PREEMPT SMP builds
->  
->  Quick Quiz #3:
->  	Why can't synchronize_rcu() return immediately on UP systems running
-> -	preemptable RCU?
-> +	preemptible RCU?
->  
->  .. _answer_quick_quiz_up:
->  
-> @@ -143,7 +143,7 @@ Answer to Quick Quiz #2:
->  
->  Answer to Quick Quiz #3:
->  	Why can't synchronize_rcu() return immediately on UP systems
-> -	running preemptable RCU?
-> +	running preemptible RCU?
->  
->  	Because some other task might have been preempted in the middle
->  	of an RCU read-side critical section.  If synchronize_rcu()
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index fa8ab23271d3..9251f88a4e0d 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -310,24 +310,10 @@ static void kvm_xen_update_runstate_guest(struct kvm_vcpu *v, bool atomic)
+ 			update_bit = ((void *)(&rs_times[1])) - 1;
+ 	} else {
+ 		/*
+-		 * The guest's runstate_info is split across two pages and we
+-		 * need to hold and validate both GPCs simultaneously. We can
+-		 * declare a lock ordering GPC1 > GPC2 because nothing else
+-		 * takes them more than one at a time. Set a subclass on the
+-		 * gpc1 lock to make lockdep shut up about it.
++		 * The GPCs for both pages which comprise the guest's
++		 * runstate_info share a lock, and it's already locked.
+ 		 */
+-		lock_set_subclass(gpc1->lock.dep_map, 1, _THIS_IP_);
+-		if (atomic) {
+-			if (!read_trylock(gpc2->lock)) {
+-				read_unlock_irqrestore(gpc1->lock, flags);
+-				return;
+-			}
+-		} else {
+-			read_lock(gpc2->lock);
+-		}
+-
+ 		if (!kvm_gpc_check(gpc2, user_len2)) {
+-			read_unlock(gpc2->lock);
+ 			read_unlock_irqrestore(gpc1->lock, flags);
+ 
+ 			/* When invoked from kvm_sched_out() we cannot sleep */
+@@ -427,9 +413,6 @@ static void kvm_xen_update_runstate_guest(struct kvm_vcpu *v, bool atomic)
+ 		smp_wmb();
+ 	}
+ 
+-	if (user_len2)
+-		read_unlock(gpc2->lock);
+-
+ 	read_unlock_irqrestore(gpc1->lock, flags);
+ 
+ 	mark_page_dirty_in_slot(v->kvm, gpc1->memslot, gpc1->gpa >> PAGE_SHIFT);
+@@ -2056,8 +2039,8 @@ void kvm_xen_init_vcpu(struct kvm_vcpu *vcpu)
+ 
+ 	kvm_gpc_init(&vcpu->arch.xen.runstate_cache, vcpu->kvm, NULL,
+ 		     KVM_HOST_USES_PFN);
+-	kvm_gpc_init(&vcpu->arch.xen.runstate2_cache, vcpu->kvm, NULL,
+-		     KVM_HOST_USES_PFN);
++	kvm_gpc_init_with_lock(&vcpu->arch.xen.runstate2_cache, vcpu->kvm, NULL,
++			       KVM_HOST_USES_PFN, vcpu->arch.xen.runstate_cache.lock);
+ 	kvm_gpc_init(&vcpu->arch.xen.vcpu_info_cache, vcpu->kvm, NULL,
+ 		     KVM_HOST_USES_PFN);
+ 	kvm_gpc_init(&vcpu->arch.xen.vcpu_time_info_cache, vcpu->kvm, NULL,
+-- 
+2.39.1.456.gfc5497dd1b-goog
+
