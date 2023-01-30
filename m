@@ -2,124 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AD3681FE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 684AA681FEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjA3Xro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S230135AbjA3XsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjA3Xrm (ORCPT
+        with ESMTP id S229475AbjA3XsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:47:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544A32B63F;
-        Mon, 30 Jan 2023 15:47:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E047E61302;
-        Mon, 30 Jan 2023 23:47:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33320C433EF;
-        Mon, 30 Jan 2023 23:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675122461;
-        bh=WoJeIgf/JQZhJHXDszCWgkHNzPbweY0aWYQ3iEPGhBI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QULFyBjTeeC1392caZNLBFUYEO05aNmt2qcr6HCpbQfJG2gU2FkCDLwIgYUjz18Q8
-         uChNcDCAt0lr57gFu+1jkgxml6xL7DE7LuDBWkog8j9Ivc837sGCjv0UpTOD5Snbp0
-         d8cxiAZHD24140/A9KBZxYbySlCqpCOnpFU+MgQbb1/Hfd02VQ1hxYoZ164EuA5e5E
-         1Tp/4WdqExpa5XLCnjzmcjtOSaA5WERxcbf1ShyECo1MsVWtSlNJMVpVRagSxdlT1h
-         7AQVsg2bu2pbk9IVx2gu4xU1FPlwj1iYAS/8j5MckNHeBucgBCo0GJ8Q4JoCNDywGU
-         ffrSlyJINLfRQ==
-Date:   Mon, 30 Jan 2023 23:47:35 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH 22/24] RISC-V: ACPI: Enable ACPI in defconfig
-Message-ID: <Y9hXF8RpNawkuTEN@spud>
-References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
- <20230130182225.2471414-23-sunilvl@ventanamicro.com>
+        Mon, 30 Jan 2023 18:48:22 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA062B28A;
+        Mon, 30 Jan 2023 15:48:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1675122499; bh=7QEUvsM6RZosABXoX68ZthMpS/pPOdW8RkhtKstwaLU=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=ohRb2+ryXS7nr9gMy8MDtyY+lm91nqndRcQA9dScoZOSPAozOsxsLGWId6d7po/Z9
+         0jJa9W4QET3izh3+5ANIbtqJTWlOMaKJYudepjP2JT+fZRb7Y7KHqlkh9C2l2sMrK5
+         hfOLOvNN9N15S2H733RjKw9+64MUX8dr+w97HkBeCu83QDaeOogpIJPR9hF6DzYCOM
+         ipUxd6/XclJgsGIhwvu+0QxQIv2moiDKO0Osj3HyI5O4ysbWtQUtwT3i3EQWyeIDx1
+         dZZWtxouoX+V56IUKycV2o2Z+wNrS2Nt3jZsfDpLv5JlpTqEbotJ5tOjNRM7qaQ7eh
+         RlVMLOvN+nnYg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.35.76]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvK0R-1oWBko0Qcb-00rG3q; Tue, 31
+ Jan 2023 00:48:19 +0100
+Message-ID: <4979610b-c445-109c-1ac8-02571227a41b@gmx.de>
+Date:   Tue, 31 Jan 2023 00:48:18 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zg0/95MUBwMtXXq2"
-Content-Disposition: inline
-In-Reply-To: <20230130182225.2471414-23-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE, en-US
+Subject: Re: [PATCH 6.1 000/313] 6.1.9-rc2 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Qitjl8AhBkSScIbauoQG3ym8tara+84uG2pyUDCeanpn7Kfhx86
+ kEyeZ3WVPwlj4AIBjKD6JDxJGb+OLbAacIlR1BziK610+gsantPvqw1EAlpk4zi9X5Ete/G
+ vNvTMCkXKwtblVu3tPYL0J4iDjICFGxbCxuKtlW5vr8nW/+Dub3M0/H4AXyC8l25GkRSUNl
+ Vu9ij90ZKS+EF/fRISfnQ==
+UI-OutboundReport: notjunk:1;M01:P0:SPSEKDKGqWY=;QemtszIiwCqnCXayO34EmY8Fn3k
+ D0bDngd1rsVYx3w0c19BO5+DKmZv0v38c4p99FF382jVJGAmmPdunPuCGcmwZSPJD+MoukP/a
+ QmjwLwGItNvRw8YUpLcSz7mrCxYca7eCYFj8l5iFWTGU1YdmUpw1Mkd5pmp3+LUfwM8Atrp6D
+ DBICVrljcqtAKVvj35yMuXJnuL8GLRlr3hmsEvySl97TntUUSkWDZkYaVAdiKUInga10LRNB5
+ DG/3IMlRW5qovC1DuAuefhZGucCkriOZ9ga4MFfBvDF9ql5Hu+ZwKa1WKIvFT6LbiHohFSh+T
+ nWE1y0VVpYoZj7SukW9sVZ6uq/p2WBqJRTds3T3ZRkiQf6R+RH29rTklOhbXJG9OrbHxMILFP
+ 9qHv96nzLSRR8eH8T9eB4LMkYjAcEd+9cx/hj2R19va9OBF40hINL4S7neJ3mzvAsMR5DsBUu
+ bS8rSnobrSZBE5C175UfGEHmEOVGJZdltSuog6P4U3XYs0qxbin2IYresvi906HB+Otq7Jjbw
+ yQqK9G9z1qRB2dmJBi+d061cxU3fXWu9D+ChxbcvWB9ZUEYUZx0ezj/cMRy/X0ZVY7uJ/Kp0X
+ ggXTHD3F03Lx474n+aVVGIdHvEdFANwcRpslqiMr2h9hsh/MhGednkFSWYD4RfkIYRKZQM4cB
+ qEA0JZC/pOzPIc4UnR4zcdVqm7Bx4n6/jFtUDErEHVR/TwQyu1CKWiZIty3lF0q8uXZ7WXJEL
+ bXJqQzaSi5f16amlhG6JT/hanM+M4Z2Pq6rk9MXht4nfLiWGO/sOW6JWApRwysZlrafLjYbng
+ m+Tl8DkzBuSl9gdRQMVnE2YqWdW5awfGn3IJmqhQ4NIWGWVkpbn4Z+I0hMEqY9Wnd7787xA/T
+ 8kpLWMzH3whA4F2HGf6LDgQjst1Be+5BATYlX23lsdjE9O43hmXC8IpfeRHR619z9h1wzggLN
+ o+bezA==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg
 
---zg0/95MUBwMtXXq2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+6.1.9-rc2
 
-Hey Sunil,
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37)
 
-Two quick comments while I think of them..
+Thanks
 
-On Mon, Jan 30, 2023 at 11:52:23PM +0530, Sunil V L wrote:
-> RISC-V: ACPI: Enable ACPI in defconfig
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
-btw, about half of this series redundantly puts "ACPI:" or "RISC-V:
-ACPI:" into $subject. None of commits that mention ACPI after the last :
-should mention ACPI in the prefix IMO, it's just noise.
-
-For example, this one should be something like:
-RISC-V: enable ACPI in defconfig
-
-> Add support to build ACPI subsystem in defconfig.
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> ---
->  arch/riscv/configs/defconfig | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-> index 128dcf4c0814..8ce06fb0dde8 100644
-> --- a/arch/riscv/configs/defconfig
-> +++ b/arch/riscv/configs/defconfig
-> @@ -218,3 +218,7 @@ CONFIG_RCU_EQS_DEBUG=3Dy
->  # CONFIG_FTRACE is not set
->  # CONFIG_RUNTIME_TESTING_MENU is not set
->  CONFIG_MEMTEST=3Dy
-> +CONFIG_ARCH_SUPPORTS_ACPI=3Dy
-
-This needs to go into the arch Kconfig file, where it will be selected.
-Check what arm64 does if you are not sure what I mean.
-
-Hopefully I'll get a chance to look at the rest of this this week
-sometime,
-Conor.
-
-
---zg0/95MUBwMtXXq2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9hXFwAKCRB4tDGHoIJi
-0jz5AP9T0B2MgLSmPbYSg1QODDZGfojq049zs7BQd+8I5h0xMQEAg7Tq0HANXXSF
-/wo06urL3IrFIJh1toI0j0c616zj5Q8=
-=lM2h
------END PGP SIGNATURE-----
-
---zg0/95MUBwMtXXq2--
