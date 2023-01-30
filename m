@@ -2,122 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9424680ECA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060DE680ECE
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235587AbjA3N02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S236435AbjA3N1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236340AbjA3N00 (ORCPT
+        with ESMTP id S229728AbjA3N13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:26:26 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA636FC1;
-        Mon, 30 Jan 2023 05:26:25 -0800 (PST)
-Date:   Mon, 30 Jan 2023 13:26:20 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1675085182;
-        bh=ptL42kkxlabkwB6ja2m2x9/4R6IOCc41SdJfgo/zr4E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NTlAkaqtUq9fYNH9hnK/XxoQR3ZGZD5BYnrj76N+NU9l/sbpSPHh6FXiR4bcJBG1L
-         MDnkq30tcdgNQ/GL1rIu0KlzJ/PqALKrvMIF2idkSKWrPm/SSVaxz52kUoCoEEZuo0
-         yKdXq7Hcjckys2QB4YIb26wFsLG4qhH7kLMX5adc=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Filipe =?utf-8?B?TGHDrW5z?= <lains@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH 0/9] HID: Constify lowlevel HID drivers
-Message-ID: <20230130132620.3cmmq5ga3uebazwf@t-8ch.de>
-References: <20230130-hid-const-ll-driver-v1-0-3fc282b3b1d0@weissschuh.net>
- <0937b9a5-0caa-2a73-33c4-82e6cab02ef0@redhat.com>
+        Mon, 30 Jan 2023 08:27:29 -0500
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F6A34004;
+        Mon, 30 Jan 2023 05:27:28 -0800 (PST)
+Received: from Ex16-02.fintech.ru (10.0.10.19) by exchange.fintech.ru
+ (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Mon, 30 Jan
+ 2023 16:27:26 +0300
+Received: from Ex16-01.fintech.ru (10.0.10.18) by Ex16-02.fintech.ru
+ (10.0.10.19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 30 Jan
+ 2023 16:27:26 +0300
+Received: from Ex16-01.fintech.ru ([fe80::2534:7600:5275:d3f9]) by
+ Ex16-01.fintech.ru ([fe80::2534:7600:5275:d3f9%7]) with mapi id
+ 15.01.2242.004; Mon, 30 Jan 2023 16:27:26 +0300
+From:   =?utf-8?B?0JbQsNC90LTQsNGA0L7QstC40Ycg0J3QuNC60LjRgtCwINCY0LPQvtGA0LU=?=
+         =?utf-8?B?0LLQuNGH?= <n.zhandarovich@fintech.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Alexey Khoroshilov" <khoroshilov@ispras.ru>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: RE: [PATCH 5.10 1/1] mt76: fix mt7615_init_tx_queues() return value
+Thread-Topic: [PATCH 5.10 1/1] mt76: fix mt7615_init_tx_queues() return value
+Thread-Index: AQHZNKePV9Tuf82zRk2tMrTfyN8UZK62u2sAgAA3O6A=
+Date:   Mon, 30 Jan 2023 13:27:26 +0000
+Message-ID: <b945bd5f3d414ac5bc589d65cf439f7b@fintech.ru>
+References: <20230130123655.86339-1-n.zhandarovich@fintech.ru>
+ <20230130123655.86339-2-n.zhandarovich@fintech.ru>
+ <Y9fAkt/5BRist//g@kroah.com>
+In-Reply-To: <Y9fAkt/5BRist//g@kroah.com>
+Accept-Language: ru-RU, en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.0.253.138]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0937b9a5-0caa-2a73-33c4-82e6cab02ef0@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
-
-On Mon, Jan 30, 2023 at 09:36:32AM +0100, Hans de Goede wrote:
-> Hi,
-> 
-> On 1/30/23 04:59, Thomas Weiﬂschuh wrote:
-> > Since 52d225346904 ("HID: Make lowlevel driver structs const") the
-> > lowlevel HID drivers are only exposed as const.
-> > 
-> > Take advantage of this to constify the underlying structures, too.
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> 
-> Thanks, series looks good to me:
-> 
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> I'll also pick up / merge patches 7 + 8 into pdx86/for-next
-> sometime this week.
-
-Please note that patch 7 depends on commit 52d225346904
-("HID: Make lowlevel driver structs const") which is not yet in Linus'
-tree, only in the HID tree (branch for-6.3/hid-core).
-
-Maybe it's better to take it via the HID tree or I can resend when the
-prerequisites are in Linus' tree.
-
-> Regards,
-> 
-> Hans
-> 
-> 
-> 
-> > ---
-> > Thomas Weiﬂschuh (9):
-> >       HID: amd_sfh: Constify lowlevel HID driver
-> >       HID: hyperv: Constify lowlevel HID driver
-> >       HID: logitech-dj: Constify lowlevel HID driver
-> >       HID: steam: Constify lowlevel HID driver
-> >       HID: intel-ish-hid: Constify lowlevel HID driver
-> >       HID: surface-hid: Constify lowlevel HID driver
-> >       platform/x86: asus-tf103c-dock: Constify lowlevel HID driver
-> >       platform/x86: asus-tf103c-dock: Constify toprow keymap
-> >       staging: greybus: hid: Constify lowlevel HID driver
-> > 
-> >  drivers/hid/amd-sfh-hid/amd_sfh_hid.c      | 2 +-
-> >  drivers/hid/hid-hyperv.c                   | 2 +-
-> >  drivers/hid/hid-logitech-dj.c              | 4 ++--
-> >  drivers/hid/hid-steam.c                    | 2 +-
-> >  drivers/hid/intel-ish-hid/ishtp-hid.c      | 2 +-
-> >  drivers/hid/surface-hid/surface_hid_core.c | 2 +-
-> >  drivers/platform/x86/asus-tf103c-dock.c    | 4 ++--
-> >  drivers/staging/greybus/hid.c              | 2 +-
-> >  8 files changed, 10 insertions(+), 10 deletions(-)
-> > ---
-> > base-commit: e04955db6a7c3fc4a1e6978649b61a6f5f8028e3
-> > change-id: 20230130-hid-const-ll-driver-fcfdd3af11b8
-> > 
-> > Best regards,
-> 
+PiBXaGF0IGlzIHRoZSBnaXQgY29tbWl0IGlkIG9mIHRoaXMgdXBzdHJlYW0/DQo+IA0KPiBBbmQg
+SSBjYW4ndCBhcHBseSB0aGlzIGFzLWlzIGZvciB0aGUgb2J2aW91cyByZWFzb24gaXQgd291bGQg
+bWVzcyB1cCB0aGUNCj4gY2hhbmdlbG9nLCBob3cgZGlkIHlvdSBjcmVhdGUgdGhpcz8NCj4gDQo+
+IGNvbmZ1c2VkLA0KPiANCj4gZ3JlZyBrLWgNCg0KQ29tbWl0IGluIHF1ZXN0aW9uIGlzIGI2NzFk
+YTMzZDFjNTk3M2Y5MGYwOThmZjY2YTkxOTUzNjkxZGY1ODIgdXBzdHJlYW0uIEkgd2Fzbid0IGNl
+cnRhaW4gaXQgbWFrZXMgc2Vuc2UgdG8gYmFja3BvcnQgdGhlIHdob2xlIHBhdGNoIGFzIG9ubHkg
+YSBzbWFsbCBwb3J0aW9uIG9mIGl0IHBlcnRhaW5zIHRvIHRoZSBmYXVsdCBhdCBxdWVzdGlvbi4N
+Cg0KV291bGQgYmUgZXh0cmVtZWx5IGdyYXRlZnVsIGZvciBkaXJlY3Rpb25zIGhvdyB0byBwcm9j
+ZWVkIGZyb20gaGVyZS4NCg0Kc29tZXdoYXQgZW1iYXJyYXNzZWQsDQoNCk5pa2l0YQ0K
