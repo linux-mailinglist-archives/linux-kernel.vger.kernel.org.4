@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1AD9681F5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353BB681F65
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjA3XFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S229868AbjA3XKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:10:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjA3XFH (ORCPT
+        with ESMTP id S229573AbjA3XKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:05:07 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E2F23C70
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:04:41 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id v3so8786993pgh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XdRC0OQkVR/ozB2hiuV32F6DVYjFM4/FcPLtjobz0Ao=;
-        b=KOIq9/jg3JX30yP8DPF9fmoHorPXLFxGtJPT1u5/kXCZ5Wt5bPI2asmD8niO9Kzx+M
-         xD/Gkd6Ql+W1ToFWl1AuhlyUhj1fMctfmUim7NRt+qXh55vestjQDdPLLcSGEPJx9aky
-         Q+jvP4IwoUr4OHtvt4ktlLD1cyo68+qD6H4pAKGW0w5OP+zvDrbdEQnKhUjkm/S22wc4
-         akUuTDIFYfeQ2UrLpFV4v7imYvCH2IP1HOrolUZ2yeLXBvcaC1R46c7+F7T0cBHs06qs
-         xvuwskMX+c+nWA7TqLVpnNKGR758TXg/Bh5hX5Ymehm0ObyejY5rxX4TLNZYqIQIfSem
-         Epsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XdRC0OQkVR/ozB2hiuV32F6DVYjFM4/FcPLtjobz0Ao=;
-        b=LyJh5chPmWBov51IkI+ekpT2PmozrcKABUH6+aKNaP2G/720y400O22NgloWjIjai9
-         P3h7yEO7GBBeFbtg5Rt2IQ2pLF+HwxGlO+dVkOUYucCBNuCaHuAIX8vq2IR/ySkSSK30
-         bQv3nIKtnz7NCb1K1JSbZUIRmvRvBrX2JVIq2WPJtd1YHRvJM0o3GoQHsmBqYJy8Or6L
-         dDOH8RmH1jS9czKdscvrU5JtYeIQJlQGNKeDw8zMHfBGobDcRafen43QS/DJ1yij+zZA
-         CKepWjnlc5woSS1Snr8dg5xtQq9sLCxE8ShNQyfGX2uOMQAQP9BPiWy37wnoqsbvllhe
-         5rwA==
-X-Gm-Message-State: AFqh2koD5VKsySY7UC5bSFTEegjVq4zp92BAwOII//xL0xfsL+O6eBLT
-        p962llRjjWA7sCpBrvqv00EhrK7zGhpOmH8RHxHjmQ==
-X-Google-Smtp-Source: AMrXdXu78ZNBFwh1Hdz7MGXxBugR+lKveWyplrZS/KbJUqwTgyFF8mtvAlEh8NiqWf32qu8rg8xqReGWQy5C+y8rEGM=
-X-Received: by 2002:aa7:820f:0:b0:58d:a713:d1dd with SMTP id
- k15-20020aa7820f000000b0058da713d1ddmr6673321pfi.59.1675119815929; Mon, 30
- Jan 2023 15:03:35 -0800 (PST)
+        Mon, 30 Jan 2023 18:10:10 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E587293;
+        Mon, 30 Jan 2023 15:10:03 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5P5y1gbLz4x1d;
+        Tue, 31 Jan 2023 10:09:58 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675120198;
+        bh=xXKRVa/x3vbppHXeb1afCumE2vg369DYRlNy9rhGf+A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AAFxoZTz4mxRTdDn6j1GqmFieD8qI7mh6L0eAWVmuLa8Mixqa7Seu9rcusXSL36UA
+         5hpKpKc1bOa5nGkaNsv4ZTs0tNWDdk3E08QKLDJb8LmQybxMc/CaiDzgYGYAmsfON/
+         GK2J1VkFG0XItnFB/iEFPGe+R+gtjTm1d6hhKtA7+f/nBEE9h5P8ABStwVAO864Sb3
+         YxE3vORv2h34DAIRzUrur1bLfPREyFp6OcAvhIcMtlke3X0vRTDiEgUB3wAO3/GdV8
+         jp5mUJ8L0xCeAnmxlG62AfkWK/JOcr8laIt+2i08DhOBaZgusdDFkc1Vvdmfwfyduu
+         K8NPzelKmHmWA==
+Date:   Tue, 31 Jan 2023 10:07:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Daeho Jeong <daehojeong@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the f2fs tree with the vfs-idmapping
+ tree
+Message-ID: <20230131100728.6efdb3c5@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230127001141.407071-1-saravanak@google.com> <20230130085542.38546-1-naresh.kamboju@linaro.org>
-In-Reply-To: <20230130085542.38546-1-naresh.kamboju@linaro.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 30 Jan 2023 15:03:01 -0800
-Message-ID: <CAGETcx_411fVxsM-ZMK7j2Bvkmi2TKPbzSuD+03M3cb7WKHfJw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/11] fw_devlink improvements
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     abel.vesa@linaro.org, alexander.stein@ew.tq-group.com,
-        andriy.shevchenko@linux.intel.com, bigunclemax@gmail.com,
-        brgl@bgdev.pl, colin.foster@in-advantage.com,
-        cristian.marussi@arm.com, devicetree@vger.kernel.org,
-        dianders@chromium.org, djrscally@gmail.com,
-        dmitry.baryshkov@linaro.org, festevam@gmail.com, fido_max@inbox.ru,
-        frowand.list@gmail.com, geert+renesas@glider.be,
-        geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com, jpb@kernel.org,
-        jstultz@google.com, kernel-team@android.com, kernel@pengutronix.de,
-        lenb@kernel.org, linus.walleij@linaro.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux@roeck-us.net, lkft@linaro.org, luca.weiss@fairphone.com,
-        magnus.damm@gmail.com, martin.kepplinger@puri.sm, maz@kernel.org,
-        miquel.raynal@bootlin.com, rafael@kernel.org, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, sakari.ailus@linux.intel.com,
-        shawnguo@kernel.org, sudeep.holla@arm.com, tglx@linutronix.de,
-        tony@atomide.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/m/=CYt.5H9XPjtvaJipS7Fe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 12:56 AM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> Build test pass on arm, arm64, i386, mips, parisc, powerpc, riscv, s390, sh,
-> sparc and x86_64.
->
-> Boot and LTP smoke pass on qemu-arm64, qemu-armv7, qemu-i386 and qemu-x86_64.
-> Boot failed on FVP.
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Please refer following link for details of testing.
-> FVP boot log failed.
-> https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-devicetree_20230127001141_407071-1-saravanak_google_com/testrun/14389034/suite/boot/test/gcc-12-lkftconfig-64k_page_size/details/
+--Sig_/m/=CYt.5H9XPjtvaJipS7Fe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sudeep pointed me to what the issue might be. But it's strange that
-you are hitting an issue now. I'm pretty sure I haven't changed this
-part since v1. I'd also expect the limited assumptions I made to have
-not been affected between v1 and v2.
+Hi all,
 
-Anyway, I'll look at this and fix it in v3.
+Today's linux-next merge of the f2fs tree got a conflict in:
 
--Saravana
+  fs/f2fs/file.c
+
+between commit:
+
+  f2d40141d5d9 ("fs: port inode_init_owner() to mnt_idmap")
+
+from the vfs-idmapping tree and commit:
+
+  81712a1f56dc ("f2fs: synchronize atomic write aborts")
+
+from the f2fs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/f2fs/file.c
+index b90617639743,3efb0852fd48..000000000000
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@@ -2087,19 -2090,28 +2090,28 @@@ static int f2fs_ioc_start_atomic_write(
+  		goto out;
+  	}
+ =20
+- 	/* Create a COW inode for atomic write */
+- 	pinode =3D f2fs_iget(inode->i_sb, fi->i_pino);
+- 	if (IS_ERR(pinode)) {
+- 		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+- 		ret =3D PTR_ERR(pinode);
+- 		goto out;
+- 	}
++ 	/* Check if the inode already has a COW inode */
++ 	if (fi->cow_inode =3D=3D NULL) {
++ 		/* Create a COW inode for atomic write */
++ 		pinode =3D f2fs_iget(inode->i_sb, fi->i_pino);
++ 		if (IS_ERR(pinode)) {
++ 			f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
++ 			ret =3D PTR_ERR(pinode);
++ 			goto out;
++ 		}
+ =20
+- 	ret =3D f2fs_get_tmpfile(idmap, pinode, &fi->cow_inode);
+- 	iput(pinode);
+- 	if (ret) {
+- 		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+- 		goto out;
+ -		ret =3D f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
+++		ret =3D f2fs_get_tmpfile(idmap, pinode, &fi->cow_inode);
++ 		iput(pinode);
++ 		if (ret) {
++ 			f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
++ 			goto out;
++ 		}
++=20
++ 		set_inode_flag(fi->cow_inode, FI_COW_FILE);
++ 		clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
++ 	} else {
++ 		/* Reuse the already created COW inode */
++ 		f2fs_do_truncate_blocks(fi->cow_inode, 0, true);
+  	}
+ =20
+  	f2fs_write_inode(inode, NULL);
+
+--Sig_/m/=CYt.5H9XPjtvaJipS7Fe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYTbAACgkQAVBC80lX
+0GzuVQf9FMT4XLNAAARH64bDGUySddufOR0b5g9cO2piyP2+3nO+zG3fp/TAjsaX
+5Pc3fS/+nXtBq0c+J+/Hmuo01oJYe4cXIeqK8g+KGUR73lrIDc9j/dUMt3MrhhjB
+P5cpgSzAUYgZX0zEA0Qmv21OuT/FQYY6RaccRG5f5Fj0GXtiIa109/na8OsBlo2X
+S9MotDAJqrIFXwg1T4KW6BUrJ6vRijnmA6AC462Ks4kzacbpeGMIpuRSt+aoWno8
+Bwd77bR5Xe1iFvKyX52pdYFyoVsLa4pDj6i21SXdJ6uj3bD+0V+rNIjg2rLftNcT
+mYNzD7294yl070T4xqmn5xnf9NT+cA==
+=ORrA
+-----END PGP SIGNATURE-----
+
+--Sig_/m/=CYt.5H9XPjtvaJipS7Fe--
