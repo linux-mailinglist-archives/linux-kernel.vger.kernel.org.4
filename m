@@ -2,91 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F706816D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671546816CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236250AbjA3Qs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:48:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S235530AbjA3Qrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:47:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236494AbjA3QsW (ORCPT
+        with ESMTP id S229522AbjA3Qrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:48:22 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A021126F0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:48:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=T4ILDFjJ+N5Z/VCjE/6Pce9EAA4WzpnG71+rjVJTl28=; b=MZCFM3QPR0ztw590R1onLnwXqi
-        Qk2GcULz0juuy1Bhy+QF9Avl28IFHU92EhZQLtLJ60RQtQUQpKcdDh7XL2g6CdN+vuKbDJ+Io4fgr
-        2KublRHNRox3RIOJQxPsHa7K2TS1jyY4BiZfymD/AiCsve9Kvkd51zwgeNxtCSfjBGitFoY7MWE3C
-        8L+g3DJCR9dfgefOqZn4g/AZTdtTHrG8DszanSFAra11kvgRZ6erXxjEpzVkyiQww1helbQpYEw3f
-        Lkb+Ip9TErALZ7UCWEfOZqhelQ8k3Ow2lUBFb9ATF8+eHnCdc5SKzprQc7G45ZU/5xqIcdw4ktPP8
-        4g4i7V9w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMXJu-00AVpI-2k; Mon, 30 Jan 2023 16:47:50 +0000
-Date:   Mon, 30 Jan 2023 16:47:50 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
-        Pavel Tatashin <pavel.tatashin@microsoft.com>,
-        Alexander Potapenko <glider@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>, linux-mm@kvack.org,
+        Mon, 30 Jan 2023 11:47:53 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id EDD13420D
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:47:51 -0800 (PST)
+Received: (qmail 414533 invoked by uid 1000); 30 Jan 2023 11:47:50 -0500
+Date:   Mon, 30 Jan 2023 11:47:50 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        Andrea Parri <parri.andrea@gmail.com>, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: extend max struct page size for kmsan
-Message-ID: <Y9f0tkiXUoQexGsS@casper.infradead.org>
-References: <20230130130739.563628-1-arnd@kernel.org>
- <Y9fITnjnIuDz8NYw@dhcp22.suse.cz>
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y9f0tlBSgtYeiaiL@rowland.harvard.edu>
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+ <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+ <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+ <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
+ <Y9WeOTmGCCfjMUtG@andrea>
+ <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
+ <0da94668-c041-1d59-a46d-bd13562e385e@huaweicloud.com>
+ <Y9ct1aAnOTGCy9n2@rowland.harvard.edu>
+ <20230130043645.GN2948950@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y9fITnjnIuDz8NYw@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230130043645.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 02:38:22PM +0100, Michal Hocko wrote:
-> On Mon 30-01-23 14:07:26, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
+On Sun, Jan 29, 2023 at 08:36:45PM -0800, Paul E. McKenney wrote:
+> On Sun, Jan 29, 2023 at 09:39:17PM -0500, Alan Stern wrote:
+> > On Sun, Jan 29, 2023 at 11:19:32PM +0100, Jonas Oberhauser wrote:
+> > > I see now. Somehow I thought stores must execute in program order, but I
+> > > guess it doesn't make sense.
+> > > In that sense, W ->xbstar&int X always means W propagates to X's CPU before
+> > > X executes.
 > > 
-> > After x86 has enabled support for KMSAN, it has become possible
-> > to have larger 'struct page' than was expected when commit
-> > 5470dea49f53 ("mm: use mm_zero_struct_page from SPARC on all 64b
-> > architectures") was merged:
+> > It also means any write that propagates to W's CPU before W executes 
+> > also propagates to X's CPU before X executes (because it's the same CPU 
+> > and W executes before X).
 > > 
-> > include/linux/mm.h:156:10: warning: no case matching constant switch condition '96'
-> >         switch (sizeof(struct page)) {
+> > > > Ideally we would fix this by changing the definition of po-rel to:
+> > > > 
+> > > > 	[M] ; (xbstar & int) ; [Release]
+> > > > 
+> > > > (This is closely related to the use of (xbstar & int) in the definition
+> > > > of vis that you asked about.)
+> > > 
+> > > This misses the property of release stores that any po-earlier store must
+> > > also execute before the release store.
 > > 
-> > Extend the maximum accordingly.
+> > I should have written:
 > > 
-> > Fixes: 5470dea49f53 ("mm: use mm_zero_struct_page from SPARC on all 64b architectures")
-> > Fixes: 4ca8cc8d1bbe ("x86: kmsan: enable KMSAN builds for x86")
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > 	[M] ; (po | (xbstar & int)) ; [Release]
+> > 
+> > > Perhaps it could be changed to the old  po-rel | [M] ; (xbstar & int) ;
+> > > [Release] but then one could instead move this into the definition of
+> > > cumul-fence.
+> > > In fact you'd probably want this for all the propagation fences, so
+> > > cumul-fence and pb should be the right place.
+> > > 
+> > > > Unfortunately we can't do this, because
+> > > > po-rel has to be defined long before xbstar.
+> > > 
+> > > You could do it, by turning the relation into one massive recursive
+> > > definition.
+> > 
+> > Which would make pretty much the entire memory model one big recursion.  
+> > I do not want to do that.
+> > 
+> > > Thinking about what the options are:
+> > > 1) accept the difference and run with it by making it consistent inside the
+> > > axiomatic model
+> > > 2) fix it through the recursive definition, which seems to be quite ugly but
+> > > also consistent with the power operational model as far as I can tell
+> > > 3) weaken the operational model... somehow
+> > > 4) just ignore the anomaly
+> > > 5) ???
+> > > 
+> > > Currently my least favorite option is 4) since it seems a bit off that the
+> > > reasoning applies in one specific case of LKMM, more specifically the data
+> > > race definition which should be equivalent to "the order of the two races
+> > > isn't fixed", but here the order isn't fixed but it's a data race.
+> > > I think the patch happens to almost do 1) because the xbstar&int at the end
+> > > should already imply ordering through the prop&int <= hb rule.
+> > > What would remain is to also exclude rcu-fence somehow.
+> > 
+> > IMO 1) is the best choice.
+> > 
+> > Alan
+> > 
+> > PS: For the record, here's a simpler litmus test to illustrates the 
+> > failing.  The idea is that Wz=1 is reordered before the store-release, 
+> > so it ought to propagate before Wy=1.  The LKMM does not require this.
 > 
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> 
-> I haven't really followed KMSAN development but I would have expected
-> that it would, like other debugging tools, add its metadata to page_ext
-> rather than page directly.
+> In PowerPC terms, would this be like having the Wz=1 being reorders
+> before the Wy=1, but not before the lwsync instruction preceding the
+> Wy=1 that made it be a release store?
 
-Yes, that would have been preferable.  Also, I don't understand why we
-need an entire page to store whether each "bit" of a page is initialised.
-There are no CPUs which have bit-granularity stores; either you initialise
-an entire byte or not.  So that metadata can shrink from 4096 bytes
-to 512.
+No, it would be like having the Wz=1 reordered before the Rx=1, 
+therefore before the lwsync.  Obviously this can't ever happen on 
+PowerPC.
+
+Alan
+
+> If so, we might have to keep this quirk.
+> 
+> 							Thanx, Paul
+> 
+> > C before-release
+> > 
+> > {}
+> > 
+> > P0(int *x, int *y, int *z)
+> > {
+> > 	int r1;
+> > 
+> > 	r1 = READ_ONCE(*x);
+> > 	smp_store_release(y, 1);
+> > 	WRITE_ONCE(*z, 1);
+> > }
+> > 
+> > P1(int *x, int *y, int *z)
+> > {
+> > 	int r2;
+> > 
+> > 	r2 = READ_ONCE(*z);
+> > 	WRITE_ONCE(*x, r2);
+> > }
+> > 
+> > P2(int *x, int *y, int *z)
+> > {
+> > 	int r3;
+> > 	int r4;
+> > 
+> > 	r3 = READ_ONCE(*y);
+> > 	smp_rmb();
+> > 	r4 = READ_ONCE(*z);
+> > }
+> > 
+> > exists (0:r1=1 /\ 2:r3=1 /\ 2:r4=0)
