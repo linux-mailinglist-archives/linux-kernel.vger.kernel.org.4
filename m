@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63627681C5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D433681C5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjA3VJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
+        id S230322AbjA3VKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjA3VJK (ORCPT
+        with ESMTP id S229607AbjA3VKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:09:10 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A733F28A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:09:09 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id b4so3328406ioj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:09:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I5FFyP1pwgAcJTSYXMdmc2wmxlAHasQAPTGxr28W5CA=;
-        b=O8oFQDSRasxJf9c5fc06EAjHPlFi1g/U5C954FGeGPSLDA86s8gS0RLxtkYxkLptrS
-         T1/mM7geMzxj0yXPFir6O+AsFxzDcjMXL2ZpnIhpQz4HQC7fLaTt48ah90WVOEJ30Aui
-         1DxXS2Xd6VU5xfM8MFokgDNcsYMrdauVEy+wE=
+        Mon, 30 Jan 2023 16:10:14 -0500
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88190F5;
+        Mon, 30 Jan 2023 13:10:13 -0800 (PST)
+Received: by mail-oi1-f178.google.com with SMTP id dt8so8124992oib.0;
+        Mon, 30 Jan 2023 13:10:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I5FFyP1pwgAcJTSYXMdmc2wmxlAHasQAPTGxr28W5CA=;
-        b=N7WCTE/0XL8Xs6Rdq5o/SROyEwVkLnR3B11xObn6BD7AlpoOjgKtyp6MR4QZeftqnx
-         jNscTQXw+rJmL2a5dPvN3WjOvnIcPwdKXctZI7N41LBvd6rI01NNonMpRm8DiX33nP6+
-         PO8bkGBmKkc1TMLgNF6PphZ6zGMxYiklYawfqEh6Yx6bMTdrt/TZr+k2mKFv1fG4w6q8
-         Bn6Iz8tlSidJD3ZZcq+xnkfawoXTPq4BmniBuUt38FaWfHGnt6/E179zovOiMWrbJ86i
-         +ejPdsR/gm9tELZQ17BN7v4XEBMSSZlzhRC2HZrYCQMIuS1T1kAgnNGcywHdMcC6qNhB
-         0WCA==
-X-Gm-Message-State: AO0yUKXFGfILiYCeYup28nzquabUn2ZXNZm7Dm2JZPQ70VETFW31WOyl
-        P05dyk5fYVOg/tTdBkaBIgSreQ==
-X-Google-Smtp-Source: AK7set+FmzYByEq+Ec1/MOcNI87kKOBFwxgvGlNVWFYtOs1Z2FaVqx/pN7V1kz8PsZUMkqHKeQkBuQ==
-X-Received: by 2002:a6b:bb05:0:b0:716:8f6a:f480 with SMTP id l5-20020a6bbb05000000b007168f6af480mr1490463iof.0.1675112948672;
-        Mon, 30 Jan 2023 13:09:08 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t11-20020a02ccab000000b0038a760ab9a4sm4982930jap.161.2023.01.30.13.09.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 13:09:07 -0800 (PST)
-Message-ID: <84908e0d-54d0-30aa-54e7-acde8c661f24@linuxfoundation.org>
-Date:   Mon, 30 Jan 2023 14:09:06 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RBJKJ6/VwgSwHP7G7YqO0kzXMj6xYtW6R7DRznC2l3M=;
+        b=UxLCh5yl6DWLtSmSHeBezWWl9A0S+CdNCW/sHMNU2tmI6rcaDayd7ZY8Ko6JgVifZN
+         ioeD1EdlijmkSP95jm2ElvH83l/5LV+ZTtYp2a3fS3gq+SQXjRRxnFG3sjdbKsX/eGCP
+         iIsrsa3LYs6AWYlNVSP2GOt4vqSsXcqERMk5pqAHFZLuj7KXaQoq355hWUFWjqS3D1Xq
+         x39NkalLKNEWDYfJueecTMkGNt96LAwvFpF2dKjvZ81VnJPygchKQl159lTbZnx6RASJ
+         iYwWvhq+x7p6df/nUTLv+1sjrZWP7UnUlBWkMYHacGyRCEbaqErpZUnZQ+HMeNFd3NMY
+         LjEw==
+X-Gm-Message-State: AFqh2kpKZZ+QRd/4yQ0+lpoUVNGLtQAfiZU/nkefztiJJXbGgiZ44WGl
+        ctOMMM0NXh1slRDN/qTZyQ==
+X-Google-Smtp-Source: AMrXdXs7D5y8n3+ciZ786qs+JrNTBM8YTqr6YzZmzb6oCf8bW+j3DjUmah8tL0zpZi65IxFG9lHDkA==
+X-Received: by 2002:a05:6808:2103:b0:36a:7d3c:b423 with SMTP id r3-20020a056808210300b0036a7d3cb423mr31345506oiw.21.1675113012814;
+        Mon, 30 Jan 2023 13:10:12 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ca26-20020a056808331a00b003436fa2c23bsm5096053oib.7.2023.01.30.13.10.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 13:10:12 -0800 (PST)
+Received: (nullmailer pid 3377252 invoked by uid 1000);
+        Mon, 30 Jan 2023 21:10:11 -0000
+Date:   Mon, 30 Jan 2023 15:10:11 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, UNGLinuxDriver@microchip.com,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v5 net-next 10/13] dt-bindings: net: mscc,vsc7514-switch:
+ add dsa binding for the vsc7512
+Message-ID: <167511300714.3376362.12441778266739540601.robh@kernel.org>
+References: <20230127193559.1001051-1-colin.foster@in-advantage.com>
+ <20230127193559.1001051-11-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.10 000/143] 5.10.166-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230130134306.862721518@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230130134306.862721518@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127193559.1001051-11-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 06:50, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.166 release.
-> There are 143 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+
+On Fri, 27 Jan 2023 11:35:56 -0800, Colin Foster wrote:
+> The VSC7511, VSC7512, VSC7513 and VSC7514 all have the ability to be
+> controlled either internally by a memory-mapped CPU, or externally via
+> interfaces like SPI and PCIe. The internal CPU of the VSC7511 and 7512
+> don't have the resources to run Linux, so must be controlled via these
+> external interfaces in a DSA configuration.
 > 
-> Responses should be made by Wed, 01 Feb 2023 13:42:39 +0000.
-> Anything received after that time might be too late.
+> Add mscc,vsc7512-switch compatible string to indicate that the chips are
+> being controlled externally in a DSA configuration.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.166-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
 > 
-> thanks,
+> v5
+>     * New patch after a documentation overhaul series
 > 
-> greg k-h
+> ---
+>  .../bindings/net/mscc,vsc7514-switch.yaml     | 113 ++++++++++++++----
+>  1 file changed, 90 insertions(+), 23 deletions(-)
 > 
 
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Reviewed-by: Rob Herring <robh@kernel.org>
