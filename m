@@ -2,190 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A753681FFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 474D7682014
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjA3Xur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
+        id S230494AbjA3Xwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjA3Xup (ORCPT
+        with ESMTP id S230513AbjA3Xwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:50:45 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AD32E0F8
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:50:40 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ud5so36898057ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:50:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CdvsgrA7Oj6v+pII1HiNSeqEHAP6/ZI2lwGFyGvAsVo=;
-        b=tVYM9mla89v6h9OfFJ28dH2M4ZDks3lAvzO9SVJu1Ka6s/vkom70IHE0p5q49UOCFF
-         lcan7e2Gj5FSDUDe2P24iDG8tXKJK4xIldHuQXaBUZR8D8e2aSW9xfFPy/vRgfJ2Zbv5
-         WlmReiaewmzxqZg6myB8M6amgfobV8b09t2C7G/uZnKexMDy6fz8Jfcjmii33nUgzWA3
-         8hW9Ih1KamU9QEUl0rLPXbzqPG0fBg1FLI9Q2tfo3EsA0uK7jC+/VJi7tz9cLmVuH9/9
-         uryy7MUv/uPnQN1totDd2kaiTGpSyHKD9zDuFnqD99oJt7Y7yDnVN45hhWiX+M9IcEnD
-         hobw==
+        Mon, 30 Jan 2023 18:52:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DFF2DE61
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:52:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675122722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PAdTklmEDyAgRNbObsy/Ygo6Kv9vgqHE1ov2RCXdrFg=;
+        b=cooegUOTAGO7rvWFTc16Uakzm1X1He/Fo5jchbeFU4XcMuxZvOA3iR4BIVOQR9h7+Ojjx2
+        5jr2Bqb5N3dbsSsoGH1wn3cu7w4E0NUlS/+vn2lXQ1TBr13bo7X6lwVZM/qf+eLpw74p5P
+        rVD/mtgnoszOKOjcL4Fy/tUSZIpmI0A=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-204-4aUFJjgFMxyzHn8l97Y27A-1; Mon, 30 Jan 2023 18:52:00 -0500
+X-MC-Unique: 4aUFJjgFMxyzHn8l97Y27A-1
+Received: by mail-io1-f71.google.com with SMTP id x12-20020a5d990c000000b00707d2f838acso7590218iol.21
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:52:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CdvsgrA7Oj6v+pII1HiNSeqEHAP6/ZI2lwGFyGvAsVo=;
-        b=a9dVNOCw8iaLG3Jx+EuJkwoTsA5aZXtC77WzBDukEkQd3Nk8r0en/1W0WN7uv0U6sh
-         he1BPbwF7/dhar6De8FFm0YKrraxji91blVmNcy45O71B+3bjQA/VCnpe+q+K8h54rYu
-         Ie7zM+PKuu5G0412H+wE3lr3vzHpA+TvErFJfChp0W3e4Q5dxFruUK+XTHiaEW7KC/Vp
-         AQAvpxhRXlXtCwzCAUglHQ+bsuO6yL3g5Mzwd2bgxR1/BX1358iRjeSxfvs9fDuqrHly
-         qbWcymQwhTwDZ+Y+EdYeeCDhDKJdnkZQsiS/aoVRBUMY1Mo6HJSUdVMK3sqVXi3ip9sa
-         0CAQ==
-X-Gm-Message-State: AO0yUKXcJJxOTmEngaeJSGu8SQVGGznd2HMB2+JibWmULRPudx5nc/XR
-        HegCeM0y1DHrYBfW/alK6ivNMA==
-X-Google-Smtp-Source: AK7set/R03RcQsWZDYsuBbf4+cDKPgc0v65LKBW157TWbbBEU6KqM2q+lfaQITm6rV7drKYB4ApuwQ==
-X-Received: by 2002:a17:906:58d6:b0:878:5372:a34b with SMTP id e22-20020a17090658d600b008785372a34bmr25791758ejs.45.1675122639006;
-        Mon, 30 Jan 2023 15:50:39 -0800 (PST)
-Received: from [192.168.1.101] (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
-        by smtp.gmail.com with ESMTPSA id w9-20020a170906184900b007c0f217aadbsm7421143eje.24.2023.01.30.15.50.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 15:50:38 -0800 (PST)
-Message-ID: <f3f70ac2-d097-b6ee-22d3-92fcfdd7c53f@linaro.org>
-Date:   Tue, 31 Jan 2023 00:50:36 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PAdTklmEDyAgRNbObsy/Ygo6Kv9vgqHE1ov2RCXdrFg=;
+        b=jLymSfLjg9lskfhY3ycoWu/9U7gKwkAtR9lI1KCiBR6CJHg7ILnqGjHAjwJDoN61ru
+         qQCxU+zCMZ5VVCCdplvCLoH4AzCB+yhKaI1HUt5Gh2a6JaTu5YZ4pgrUpPfrDWC+T2XQ
+         f7X6jKGjUYYs9UwA/v8FwhNXqogl4LYBbIHU9qp+L7m/41Tzyt255w4a4tgMs/ongfmk
+         ez3KxVqgSmbgAuKOUraxqzNx0nQf7brmGTdog7xaY6S6izOGEloz92+i73KgD+hVKZKR
+         lxwbZwL9OcFlH5MzedCHtlPGQHthPEsw/1/R/zG+43o89KLW0R0AJMIXyOLzia0sSirw
+         HZaQ==
+X-Gm-Message-State: AO0yUKWONvjXvNfqi4ovV19bemlLgmlq7SBZDUepnZD3SrJO2R3GLwUK
+        26L3fZSKothNX0PoB2eadntsHdRuxGVBh8TLm329wTSgTPchlszDknWaRJ6Lw1hCSErZuUKTMlS
+        00KlwO3vcIlBroQ21nwhb+NEQ
+X-Received: by 2002:a05:6e02:190f:b0:310:eb55:3856 with SMTP id w15-20020a056e02190f00b00310eb553856mr6886965ilu.9.1675122720173;
+        Mon, 30 Jan 2023 15:52:00 -0800 (PST)
+X-Google-Smtp-Source: AK7set+Tjuh/QLV5ACoKjB78BPy3FHiMPojdoqjURp7yFxxmHnP5uajB9G0cNMY2hpBpgzJz6u+eCQ==
+X-Received: by 2002:a05:6e02:190f:b0:310:eb55:3856 with SMTP id w15-20020a056e02190f00b00310eb553856mr6886951ilu.9.1675122719932;
+        Mon, 30 Jan 2023 15:51:59 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id w65-20020a025d44000000b0039deb26853csm5227538jaa.10.2023.01.30.15.51.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 15:51:59 -0800 (PST)
+Date:   Mon, 30 Jan 2023 16:51:58 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        dri-devel@lists.freedesktop.org,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        "Steven Rostedt \(Google\)" <rostedt@goodmis.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH] [v2] vfio-mdev: add back CONFIG_VFIO dependency
+Message-ID: <20230130165158.6993fc28.alex.williamson@redhat.com>
+In-Reply-To: <20230126211211.1762319-1-arnd@kernel.org>
+References: <20230126211211.1762319-1-arnd@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [RFC PATCH 1/2] dt-bindings: pincfg-node: Introduce an
- overridable way to set bias on pins
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230130165435.2347569-1-konrad.dybcio@linaro.org>
- <CACRpkdZjAyLUg3V7ZTzeMfUOTrndLrRX_gTFdO+amSmZkzB72Q@mail.gmail.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CACRpkdZjAyLUg3V7ZTzeMfUOTrndLrRX_gTFdO+amSmZkzB72Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 26 Jan 2023 22:08:31 +0100
+Arnd Bergmann <arnd@kernel.org> wrote:
 
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> CONFIG_VFIO_MDEV cannot be selected when VFIO itself is
+> disabled, otherwise we get a link failure:
+> 
+> WARNING: unmet direct dependencies detected for VFIO_MDEV
+>   Depends on [n]: VFIO [=n]
+>   Selected by [y]:
+>   - SAMPLE_VFIO_MDEV_MTTY [=y] && SAMPLES [=y]
+>   - SAMPLE_VFIO_MDEV_MDPY [=y] && SAMPLES [=y]
+>   - SAMPLE_VFIO_MDEV_MBOCHS [=y] && SAMPLES [=y]
+> /home/arnd/cross/arm64/gcc-13.0.1-nolibc/x86_64-linux/bin/x86_64-linux-ld: samples/vfio-mdev/mdpy.o: in function `mdpy_remove':
+> mdpy.c:(.text+0x1e1): undefined reference to `vfio_unregister_group_dev'
+> /home/arnd/cross/arm64/gcc-13.0.1-nolibc/x86_64-linux/bin/x86_64-linux-ld: samples/vfio-mdev/mdpy.o: in function `mdpy_probe':
+> mdpy.c:(.text+0x149e): undefined reference to `_vfio_alloc_device'
+> 
+> Fixes: 8bf8c5ee1f38 ("vfio-mdev: turn VFIO_MDEV into a selectable symbol")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> v2: fix the s390 and drm drivers as well, in addition to the
+> sample code.
+> ---
+>  arch/s390/Kconfig            | 4 +++-
+>  drivers/gpu/drm/i915/Kconfig | 1 +
+>  samples/Kconfig              | 3 +++
+>  3 files changed, 7 insertions(+), 1 deletion(-)
 
-On 31.01.2023 00:10, Linus Walleij wrote:
-> On Mon, Jan 30, 2023 at 5:54 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> 
->> We came to a point where we sometimes we support a few dozen boards
->> with a given SoC. Sometimes, we have to take into consideration
->> configurations which deviate rather significatly from the reference
->> or most common designs. In the context of pinctrl, this often comes
->> down to wildly different pin configurations. While pins, function and
->> drive-strength are easily overridable, the (mostly) boolean properties
->> associated with setting bias, aren't. This wouldn't be much of a
->> problem if they didn't differ between boards so often, preventing us
->> from having a "nice" baseline setup without inevitably having to go
->> with an ugly /delete-property/.
-> 
-> I see what the problem is.
-> 
-> Have you considered pulling out *all* the pin config for a certain
-> reference design into its own .dtsi file, simply? And then not include
-> that to the next product.
-> 
-> This pattern is pretty common.
-It's *a* solution, but we already have some soc-pmics.dtsi-s which
-include PMICs and reference regulator-to-peripherals assignments.
-Adding another soc-reference-pins.dtsi would open the doors for
-other soc-abcxyz.dtsi-s which would in turn lead to exchanging the
-problem of redefining the same sets of properties 50 times to
-having to include 20 device trees for each and every device. Allow
-that and we basically have msm-3.10 except in torvalds/linux.
+Applied to vfio next branch for v6.3.  Thanks,
 
-Adding to that, some devices are 98% compliant with the reference
-designs, but randomly swap out one pin etc.
+Alex
 
-> 
->> Introduce bias-type, a bias-type-
->> specific property and clone the pinconf-generic type enum into
->> dt-bindings to allow for setting the bias in an easily overridable
->> manner such as:
->>
->> // SoC DT
->> i2c0_pin: i2c0-pin-state {
->>         pins = "gpio10";
->>         function = "gpio";
->>         bias-type = <BIAS_PULL_UP>;
->> };
->>
->> // Deviant board DT
->> &i2c0_pin {
->>         bias-type = <BIAS_HIGH_IMPEDANCE>;
->> };
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> The idea is pretty straight-forward.
-> 
-> But it applies to systems already using the bool flags. So what do
-> we do the day we manage to have:
-> 
-> {
->     bias-type = <BIAS_HIGH_IMPEDANCE>;
->     bias-pull-up;
-> };
-> 
-> As you see this makes it necessary to author some really nasty
-> YAML to make sure this cannot happen or everyone has to make
-> a runtime check for it.
-oneOf:
-- bias-type
-- enum:
-    - bias-pull-down
-    - bias-...
-
-Doesn't seem really nasty to me.. And a runtime check is basically
-in place, as I made sure the code in 2/2 prefers bias-type and falls
-back to the existing mechanism if it's not found.
-
-> 
-> Another problem is that I was just discussing with Bjorn for some
-> specific i2c pull-up, was actually using the argument for
-> bias-pull-up with a parameter:
-> 
-> bias-pull-up = <8000000>;  // 8kOhm pull-up
-This is an easy fix. Count the elements and if there's more than
-one, pass the second one as a value. Both of these things already
-have common of_ functions made just for that.
-
-> 
-> Not to mention that other platforms than qcom use this and
-> qcom use it for drive-strength I think?
-> 
-> +#define DRIVE_STRENGTH                 9
-> +#define DRIVE_STRENGTH_UA              10
-> 
-> drive-strength = <8>; // 8mA drive strength
-> 
-> bias-type = <DRIVE_STRENGTH>;
-> 
-> OK where do I put my 8 mA now?
-If you look at the 2/2 patch, this property only reads BIAS_
-values, which can't coexist anyway. I copied the entire enum
-for completeness. But if we were to go with this approach,
-having one for (in|out)put-*, where only having one of them
-at a time makes sense could be beneficial too..
-
-Konrad
-> 
-> Yours,
-> Linus Walleij
