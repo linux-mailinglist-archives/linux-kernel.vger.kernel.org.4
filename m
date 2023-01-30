@@ -2,159 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0F5681D10
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4248681D14
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjA3VoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S229452AbjA3VpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:45:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjA3VoA (ORCPT
+        with ESMTP id S230249AbjA3VpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:44:00 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B613AAD
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:43:59 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id z1so5550570plg.6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:43:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4UBov3sv7172TVhYTWoSlpD7u+6AtPn48Pn1/2ZA2fU=;
-        b=GGZic+SgYRe3M4jfPhEI4uBwZjpwo1LVgsuMKjaYJEcaof28Rdl8bIcKFRGFMOo/v1
-         vp0jipI83f4E8yLw84AyXoFw7/AEoOEMI+BoFH6TyK7yw5bqlH0Folia7f0LDUPXUSJE
-         sY+zofDSWUUjnW10KVNYHPtOqTI6aPq7W30CZzkt0G3OGeXkeyWsvPP7iC9ue60m7d00
-         bjlF3UiLdcksT0VkBZi8djwpFJHz2Xc6LE1uP9ILm9lxEvvt1RGL5cpq++cvkTHcL/Vo
-         SYDFpZ+xHAZLbBBZjx6hjNav9fmIUKe+EZvnLPpHqhYQ6AeAvHnAJyrSodxo/+yBRygT
-         JotA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4UBov3sv7172TVhYTWoSlpD7u+6AtPn48Pn1/2ZA2fU=;
-        b=t+5wMWVY9ONes9fF9rI1a2KC5kknt4XR+En4nIteiPedlfFH32nC0Nwbg83ygdkkaT
-         K3f/9abFziniQYc/Z8vgl4SgtMNchOxwBx7dPQuBCr9E71tSxwd4/7NEa8TZZtROjoKw
-         VA98fjgL4GZjezYNoyxhqQaVwuSJZEJ4s+Cz9mfhcZUZfZOKULyLUsemhDfYr33aSWGL
-         X3u7FoyMm6jkli1f/3RFtBwRtd5aqLaCl7voOFGJBerXnkJVM1oduL0V1U09ByM6ZV5y
-         x0SQqm0kTqoopKwxKCncscq/+2CS8RRiDmNl6Rj6aSD6RDRG0UzemGdeFIXzZQI8Ud1D
-         zoDQ==
-X-Gm-Message-State: AO0yUKW7wpSluv8qYZIun7xMFw0z+ji68kHGZ71xeWb/7TzCGZXIHY7b
-        ZHWyzk4cT/xT3jEWh73xGh26AUxtbO4=
-X-Google-Smtp-Source: AK7set/TKhPV3YcjWGwxjEFSpRV7C5X/JGvIQRGhQ6P+HCTujOoxc+xfB2YEufD5hkNCey2k4eu/Tw==
-X-Received: by 2002:a17:90b:1b48:b0:22c:59c3:869a with SMTP id nv8-20020a17090b1b4800b0022c59c3869amr11510265pjb.21.1675115038671;
-        Mon, 30 Jan 2023 13:43:58 -0800 (PST)
-Received: from fedora.hsd1.ca.comcast.net ([2601:644:937f:7f20::a8cd])
-        by smtp.googlemail.com with ESMTPSA id d5-20020a17090a628500b0022bbad75af6sm25156403pjj.1.2023.01.30.13.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 13:43:58 -0800 (PST)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        linux-kernel@vger.kernel.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH mm-unstable v2 4/4] mm/migrate: Convert putback_movable_pages() to use folios
-Date:   Mon, 30 Jan 2023 13:43:52 -0800
-Message-Id: <20230130214352.40538-5-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230130214352.40538-1-vishal.moola@gmail.com>
-References: <20230130214352.40538-1-vishal.moola@gmail.com>
+        Mon, 30 Jan 2023 16:45:02 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7115349558;
+        Mon, 30 Jan 2023 13:44:36 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ULdJJn001722;
+        Mon, 30 Jan 2023 21:44:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=lGxbMhMD8s7bPOoVUWZIpU08/aeqZt6TLXnddebbCSA=;
+ b=CWXZld7gjG3dwZQhSBRtWee56cb/08IrwPIRRwwf1j5gE9zxbRqDgXAMFbAXDQUyZhKq
+ hjZzuyi23mhHd7XA2moMSlBd2jsWs2UUCePhxdAjJinxXYVzSCc7untcnfjmf1GDC8Jn
+ aqNuMAGWDCBUWgdGxClm6wKJyGe7ZeDIckpdDw2BI3N2ZeVHWy2OGtEwA7lO7ofliMe9
+ NtrqnzzG7xJxqzZeKHikwFWq2b30O9kSqCTXZtF3ewwTbJGMEjKWaLDFeRgNXo+q9357
+ 13vJu2Qn6/KA8BstyKN+92nDx512AUw4OGOxlsVkGGGpmTMKRH3w4wyzcNPT/zczmrVS gQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nctnyms89-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 21:44:24 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30ULiNck031891
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 21:44:23 GMT
+Received: from [10.134.67.48] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
+ 2023 13:44:22 -0800
+Message-ID: <3fd29474-eed2-3651-15d6-f1725500d7b9@quicinc.com>
+Date:   Mon, 30 Jan 2023 13:44:21 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v9 14/27] gunyah: vm_mgr: Add ioctls to support basic
+ non-proxy VM boot
+Content-Language: en-US
+To:     Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Alex Elder <elder@linaro.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-15-quic_eberman@quicinc.com>
+ <20230130085359.GC4169015@quicinc.com>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <20230130085359.GC4169015@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: z4HZ0__IZmizFgXrPqucd0WAFq9liLD_
+X-Proofpoint-ORIG-GUID: z4HZ0__IZmizFgXrPqucd0WAFq9liLD_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_17,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ bulkscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
+ impostorscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301300201
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removes 6 calls to compound_head(), and replaces putback_movable_page()
-with putback_movable_folio() as well.
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- mm/migrate.c | 46 +++++++++++++++++++++++-----------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index c20d9f531db4..db480dc08bac 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -129,12 +129,12 @@ int isolate_movable_page(struct page *page, isolate_mode_t mode)
- 	return -EBUSY;
- }
- 
--static void putback_movable_page(struct page *page)
-+static void putback_movable_folio(struct folio *folio)
- {
--	const struct movable_operations *mops = page_movable_ops(page);
-+	const struct movable_operations *mops = folio_movable_ops(folio);
- 
--	mops->putback_page(page);
--	ClearPageIsolated(page);
-+	mops->putback_page(&folio->page);
-+	folio_clear_isolated(folio);
- }
- 
- /*
-@@ -147,33 +147,33 @@ static void putback_movable_page(struct page *page)
-  */
- void putback_movable_pages(struct list_head *l)
- {
--	struct page *page;
--	struct page *page2;
-+	struct folio *folio;
-+	struct folio *folio2;
- 
--	list_for_each_entry_safe(page, page2, l, lru) {
--		if (unlikely(PageHuge(page))) {
--			folio_putback_active_hugetlb(page_folio(page));
-+	list_for_each_entry_safe(folio, folio2, l, lru) {
-+		if (unlikely(folio_test_hugetlb(folio))) {
-+			folio_putback_active_hugetlb(folio);
- 			continue;
- 		}
--		list_del(&page->lru);
-+		list_del(&folio->lru);
- 		/*
--		 * We isolated non-lru movable page so here we can use
--		 * __PageMovable because LRU page's mapping cannot have
-+		 * We isolated non-lru movable folio so here we can use
-+		 * __PageMovable because LRU folio's mapping cannot have
- 		 * PAGE_MAPPING_MOVABLE.
- 		 */
--		if (unlikely(__PageMovable(page))) {
--			VM_BUG_ON_PAGE(!PageIsolated(page), page);
--			lock_page(page);
--			if (PageMovable(page))
--				putback_movable_page(page);
-+		if (unlikely(__folio_test_movable(folio))) {
-+			VM_BUG_ON_FOLIO(!folio_test_isolated(folio), folio);
-+			folio_lock(folio);
-+			if (folio_test_movable(folio))
-+				putback_movable_folio(folio);
- 			else
--				ClearPageIsolated(page);
--			unlock_page(page);
--			put_page(page);
-+				folio_clear_isolated(folio);
-+			folio_unlock(folio);
-+			folio_put(folio);
- 		} else {
--			mod_node_page_state(page_pgdat(page), NR_ISOLATED_ANON +
--					page_is_file_lru(page), -thp_nr_pages(page));
--			putback_lru_page(page);
-+			node_stat_mod_folio(folio, NR_ISOLATED_ANON +
-+					folio_is_file_lru(folio), -folio_nr_pages(folio));
-+			folio_putback_lru(folio);
- 		}
- 	}
- }
--- 
-2.38.1
+On 1/30/2023 12:53 AM, Srivatsa Vaddagiri wrote:
+> * Elliot Berman <quic_eberman@quicinc.com> [2023-01-20 14:46:13]:
+> 
+>> +static int gh_vm_start(struct gunyah_vm *ghvm)
+>> +{
+>> +	struct gunyah_vm_memory_mapping *mapping;
+>> +	u64 dtb_offset;
+>> +	u32 mem_handle;
+>> +	int ret;
+>> +
+>> +	down_write(&ghvm->status_lock);
+>> +	if (ghvm->vm_status != GH_RM_VM_STATUS_NO_STATE) {
+>> +		up_write(&ghvm->status_lock);
+>> +		return 0;
+> 
+> return -EINVAL in this case.
+> 
+> Additionally check if its already GH_RM_VM_STATUS_READY and return 0 in that
+> case.
+> 
+> [snip]
+> 
 
+Caller can use gh_vm_ensure_started for this behavior. I'll move this to 
+be used in the GH_VM_RUN ioctl as well.
+
+> 
+>> +	mem_handle = mapping->parcel.mem_handle;
+>> +	dtb_offset = ghvm->dtb_config.gpa - mapping->guest_phys_addr;
+>> +
+>> +	ret = gh_rm_vm_configure(ghvm->rm, ghvm->vmid, ghvm->auth, mem_handle,
+>> +				0, 0, dtb_offset, ghvm->dtb_config.size);
+> 
+> Default value of auth is 0 (GH_RM_VM_AUTH_NONE). Is that what you wanted here?
+> Perhaps initialize default value of auth to be GH_RM_VM_AUTH_QCOM_PIL_ELF?
+> 
+
+Yes, default VM is GH_RM_VM_AUTH_NONE.
