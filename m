@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785196819AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:51:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B11A6819AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:51:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237961AbjA3SvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S235869AbjA3Sve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:51:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237937AbjA3SvK (ORCPT
+        with ESMTP id S237541AbjA3Sv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:51:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E885C2C65B;
-        Mon, 30 Jan 2023 10:51:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A74661216;
-        Mon, 30 Jan 2023 18:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53EE7C433EF;
-        Mon, 30 Jan 2023 18:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675104665;
-        bh=stmljKudyEFFluMAGIJvUJoacI+Yf44SQf2dOTbzvZ4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ufCBQ9n2J9TX1VYyZ55mqURRQJ7lfY6bBvDnwfeM27kNWPGd8/7ndUTcDeB3koazM
-         quW1HkujWecFZfJG7ZaiP3bqb8iFsLfgE3DDPf/VXJknp7CnIc1fsYnsE70CADAq8h
-         Hh/dsyZlbkmTRfbNzCEOOTWiTL8xyxNQbC5LANQ7YC2ILmdIdj+YeNGD2eefUyPUHa
-         K0dc/PnrqKEuA1OaA6Qfid+OV7CIZ4FgVZUksJjBIniz1bYFyKxwCS5kjhP0FXuKLW
-         2x0s4/NzlfPwaRWl3vr3KdZiNGu7uwCm6Seiug+vbGWfN4i3Kdfp1CxHfLlst/Rszp
-         ybi5bdIgb4ZAg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Frank Li <Frank.Li@nxp.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] [v2] dmaengine: dw-edma: reduce stack usage after debugfs rework
-Date:   Mon, 30 Jan 2023 19:50:42 +0100
-Message-Id: <20230130185101.2883245-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        Mon, 30 Jan 2023 13:51:29 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63ED7303D7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:51:24 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id p26so23400480ejx.13
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:51:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iBkAm4zVJTkI3qBxAXOEQ1EcRECNJLIbKTv33w41KUw=;
+        b=6hImNi5y9+HbavaiLhfzhSmHuu69foTET7ZxMDVWwRehdai1xhy5dymInWtE/xJiZt
+         IZccKmZfaaFScoyNc0mAvMoAOVq3POCg5Ajr94fB8JVMvcHCXL0XcrDVD2RA4huxz7h+
+         F0eLdcWdS13nTsyTpSb6gyxq83rGfmOeJDuUHeJolthUUJOegWW2BJxbTIJbC3NVhFmU
+         +dCazKM0QGc2nXJNOa7JcDUbsNEOwfDmzKfc/uExA+ajcscIR6RQmDM7q/R05ncrMxF7
+         tKvrAoTgUTYenUDibOW+Dt2w8mXi5DShvMZ4E6UAJRpq1jJVctMIlxK2lWVpZNVa2sq5
+         1PDQ==
+X-Gm-Message-State: AO0yUKWsmJNxjmoyzY9dpPeFgFePN7VXgquXvB1S5HbHD7ei0X/iMUQZ
+        HeCwaW3euW5iUcB3zc8fpRYzjGrvfgyELLOGgFz6+tI9
+X-Google-Smtp-Source: AK7set8BeGxBKY/GvU+XVYJX/VkZoH6wP7dK4M8sgqfc+Xq3bHzA8G6kogPHfWNGu9g/xE0hdWgZaDBhAv3fzMmNVhs=
+X-Received: by 2002:a17:906:95d7:b0:88a:30dc:5730 with SMTP id
+ n23-20020a17090695d700b0088a30dc5730mr902001ejy.25.1675104682790; Mon, 30 Jan
+ 2023 10:51:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230130171059.1784057-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20230130171059.1784057-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Jan 2023 19:51:11 +0100
+Message-ID: <CAJZ5v0jjSoNchvdDacQjakscsSK6d535Ruqd=OR_nYz4nMNwVQ@mail.gmail.com>
+Subject: Re: [PATCH] driver core: soc: remove layering violation for the soc_bus
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Jan 30, 2023 at 7:49 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> The soc_bus code pokes around in the internal bus structures assuming
+> that it "knows" if a field is not set that it has not been registered
+> yet.  That isn't a safe assumption, so just remove the layering
+> violation entirely and keep track if the bus has been registered or not
+> ourselves.
+>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-After the dw_edma_debugfs_entry arrays are no longer compile-time
-constant, they take up space on the stack, which exceeds the warning
-limit after inlining:
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-drivers/dma/dw-edma/dw-edma-v0-debugfs.c:280:6: error: stack frame size (1784) exceeds limit (1400) in 'dw_edma_v0_debugfs_on' [-Werror,-Wframe-larger-than]
-void dw_edma_v0_debugfs_on(struct dw_edma *dw)
-
-Work around this by preventing dw_edma_debugfs_regs_{wr,rd} from both
-being inlined together, which cuts the stack frame size in half and
-makes it fit below the warning limit.
-
-Fixes: 5c0373eafd83 ("dmaengine: dw-edma: Move eDMA data pointer to debugfs node descriptor")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v2: rebase on top of dmaengine tree
----
- drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-index 42380bf64a70..6542060bd01a 100644
---- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-+++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-@@ -136,7 +136,8 @@ static void dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
- 	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
- }
- 
--static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
-+static noinline_for_stack void
-+dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
- {
- 	const struct dw_edma_debugfs_entry debugfs_regs[] = {
- 		/* eDMA global registers */
-@@ -197,7 +198,8 @@ static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
- 	}
- }
- 
--static void dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
-+static noinline_for_stack void
-+dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
- {
- 	const struct dw_edma_debugfs_entry debugfs_regs[] = {
- 		/* eDMA global registers */
--- 
-2.39.0
-
+> ---
+>  drivers/base/soc.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/soc.c b/drivers/base/soc.c
+> index 22130b5f789d..0fb1d4ab9d8a 100644
+> --- a/drivers/base/soc.c
+> +++ b/drivers/base/soc.c
+> @@ -30,6 +30,7 @@ struct soc_device {
+>  static struct bus_type soc_bus_type = {
+>         .name  = "soc",
+>  };
+> +static bool soc_bus_registered;
+>
+>  static DEVICE_ATTR(machine,            0444, soc_info_show,  NULL);
+>  static DEVICE_ATTR(family,             0444, soc_info_show,  NULL);
+> @@ -117,7 +118,7 @@ struct soc_device *soc_device_register(struct soc_device_attribute *soc_dev_attr
+>         const struct attribute_group **soc_attr_groups;
+>         int ret;
+>
+> -       if (!soc_bus_type.p) {
+> +       if (!soc_bus_registered) {
+>                 if (early_soc_dev_attr)
+>                         return ERR_PTR(-EBUSY);
+>                 early_soc_dev_attr = soc_dev_attr;
+> @@ -183,6 +184,7 @@ static int __init soc_bus_register(void)
+>         ret = bus_register(&soc_bus_type);
+>         if (ret)
+>                 return ret;
+> +       soc_bus_registered = true;
+>
+>         if (early_soc_dev_attr)
+>                 return PTR_ERR(soc_device_register(early_soc_dev_attr));
+> --
+> 2.39.1
+>
