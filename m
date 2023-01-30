@@ -2,232 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA10681B15
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4216B681B18
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237976AbjA3UI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:08:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S238071AbjA3UIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235029AbjA3UIW (ORCPT
+        with ESMTP id S238021AbjA3UIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:08:22 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DCD29E3A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:08:20 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id ud5so35269174ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:08:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=HRBQoh6B7sYIybNlEBFtI8T4nCU7rmO2MKkpScOfGy4=;
-        b=TRrxch5hIhM31zmQreuDt4jC8nRnoTUSCLUc7VaLQAA/I5Bpb7mG+waayszGE3b5fH
-         TVnbhyYcfEJFBEld4bWV3pogocjsSvITMR7I9ltyEKqRfDCfnMgg0VvIUAa1IA2ugJSm
-         tXy3phLsCcaKWd77dBHWNFVUOI6Lv8kGD8CCmzpvwbCslB9s55nQ0KCGugXv9AVJ7yaV
-         PD/Lfq8KuLGhl3QTvL7n0dyetncSLkDaS7KHqk5TMDBMoO0vDy72Fn5piaN603sK55rM
-         Pz9M9JaCQBhN1mdb9TGDhBOB6kj/6eDFaUgHkngCCaYrlAmKYlIsuMEebGq2uyGDgkfP
-         D9Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HRBQoh6B7sYIybNlEBFtI8T4nCU7rmO2MKkpScOfGy4=;
-        b=c1DmXG9Dy4FZGF+mJgoRK0SqAAz0UQ4+5jhqWECdz8/cI7W2MWuiG7VdDQmI4qjVX/
-         73loeK/s5Exh8kRhPr/ij+amihwAtmvOvEutJv3VeF4UiNZdcXwFy/ieVaeGK4XClS2T
-         SR5d9swZK/MiYF6kzI9wBRFMc20KD0+t4069u2F16Y53wtzntHPWMplasGymQAbcVwuO
-         glrPyQoJNeCzFxU0PQytwY8i5vijoRap8KIOkcac8pYd5LHMk3cCi68NEfSYCOvXpchF
-         BhL0A1DRQBNrXe/VXmP2tw1RRQQ+HzB11KYITvlrgefDg/afGO8vQFAxXr/DEkLxbrzy
-         KL7A==
-X-Gm-Message-State: AO0yUKVYmTeOhnv6ND2JXBARVUaJ9tkId9oMnukmzmT9syKadElknJQZ
-        qGwMlDYdgKtXwFurLjUuivkxkQ==
-X-Google-Smtp-Source: AK7set+rWb/b/YnRhyssTrsY0m2qSDuTMKItzlmnaDYmUn0ZqSPrtON0Tvy+SFsMZWK+TujtPV5OUA==
-X-Received: by 2002:a17:907:8b95:b0:887:7871:2b2f with SMTP id tb21-20020a1709078b9500b0088778712b2fmr6581336ejc.61.1675109299034;
-        Mon, 30 Jan 2023 12:08:19 -0800 (PST)
-Received: from localhost ([79.142.230.49])
-        by smtp.gmail.com with ESMTPSA id p6-20020a170906784600b0088ad82a8de4sm883045ejm.34.2023.01.30.12.08.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 12:08:18 -0800 (PST)
-References: <20230130064404.744600-1-wedsonaf@gmail.com>
-User-agent: mu4e 1.8.14; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>
-Subject: Re: [PATCH v2 1/5] rust: types: introduce `ScopeGuard`
-Date:   Mon, 30 Jan 2023 21:07:07 +0100
-In-reply-to: <20230130064404.744600-1-wedsonaf@gmail.com>
-Message-ID: <87v8knlr9q.fsf@metaspace.dk>
+        Mon, 30 Jan 2023 15:08:34 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA7A366B6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:08:31 -0800 (PST)
+Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C19F6602E5A;
+        Mon, 30 Jan 2023 20:08:27 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675109309;
+        bh=B4uoOtz6gOfMsHt8JQXZYxlOkPZK9Oz/Xurop3tOPg4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IF1qp/wcesWvAENUYS0mCVti28rHE+qzchvFdWwaM2N4IBA5RjKtju8pozOT+6xZL
+         gHCVgfgxkjgXUM8ZG72nGW9zWk3TZEzXhncWUCpU7kQPe9ocjdEzIBVtSvI/nw9+/c
+         EVypdUmvSQA09RDT5awMovjc/bPPO/dH4q4ZFQngL6qcRlwYvJLBVIpVqkpx65N4Ta
+         YKsxRXyrvZumzE5xNw57q0H+SviKEzoSIcCin34CGMBxNAerCOm2RHXnQLmmf/QTUX
+         u42B58d08Jli08+1mu72ucYrD2tgz2akz3h4kktBJZYln1d/AeLmdezbsKJSzmSPc3
+         kxmXNkiFG1cFw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] arm64: defconfig: Enable missing configs for mt8192-asurada
+Date:   Mon, 30 Jan 2023 15:08:19 -0500
+Message-Id: <20230130200820.82084-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Enable missing configs in the arm64 defconfig to get all devices probing
+on mt8192-asurada based machines.
 
-Wedson Almeida Filho <wedsonaf@gmail.com> writes:
+The devices enabled are: MediaTek Bluetooth USB controller, MediaTek
+PCIe Gen3 MAC controller, MT7921E wireless adapter, Elan I2C Trackpad,
+MediaTek SPI NOR flash controller, Mediatek SPMI Controller, ChromeOS EC
+regulators, MT6315 PMIC, MediaTek Video Codec, MT8192 sound cards,
+ChromeOS EC rpmsg communication, all MT8192 clocks.
 
-> This allows us to run some code when the guard is dropped (e.g.,
-> implicitly when it goes out of scope). We can also prevent the
-> guard from running by calling its `dismiss()` method.
->
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-> ---
+REGULATOR_CROS_EC is enabled as builtin since it powers the MMC
+controller for the SD card, making it required for booting on some
+setups.
 
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+The MT8192 clocks are enabled as builtin for now since their Kconfigs
+are bool, and will be changed to modules after those Kconfigs are
+reworked.
 
-> v1 -> v2: Simpler type for `ScopeGuard::new()` impl block
->
->  rust/kernel/types.rs | 126 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 125 insertions(+), 1 deletion(-)
->
-> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> index e84e51ec9716..dd834bfcb57b 100644
-> --- a/rust/kernel/types.rs
-> +++ b/rust/kernel/types.rs
-> @@ -2,7 +2,131 @@
->  
->  //! Kernel types.
->  
-> -use core::{cell::UnsafeCell, mem::MaybeUninit};
-> +use core::{
-> +    cell::UnsafeCell,
-> +    mem::MaybeUninit,
-> +    ops::{Deref, DerefMut},
-> +};
-> +
-> +/// Runs a cleanup function/closure when dropped.
-> +///
-> +/// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
-> +///
-> +/// # Examples
-> +///
-> +/// In the example below, we have multiple exit paths and we want to log regardless of which one is
-> +/// taken:
-> +/// ```
-> +/// # use kernel::ScopeGuard;
-> +/// fn example1(arg: bool) {
-> +///     let _log = ScopeGuard::new(|| pr_info!("example1 completed\n"));
-> +///
-> +///     if arg {
-> +///         return;
-> +///     }
-> +///
-> +///     pr_info!("Do something...\n");
-> +/// }
-> +///
-> +/// # example1(false);
-> +/// # example1(true);
-> +/// ```
-> +///
-> +/// In the example below, we want to log the same message on all early exits but a different one on
-> +/// the main exit path:
-> +/// ```
-> +/// # use kernel::ScopeGuard;
-> +/// fn example2(arg: bool) {
-> +///     let log = ScopeGuard::new(|| pr_info!("example2 returned early\n"));
-> +///
-> +///     if arg {
-> +///         return;
-> +///     }
-> +///
-> +///     // (Other early returns...)
-> +///
-> +///     log.dismiss();
-> +///     pr_info!("example2 no early return\n");
-> +/// }
-> +///
-> +/// # example2(false);
-> +/// # example2(true);
-> +/// ```
-> +///
-> +/// In the example below, we need a mutable object (the vector) to be accessible within the log
-> +/// function, so we wrap it in the [`ScopeGuard`]:
-> +/// ```
-> +/// # use kernel::ScopeGuard;
-> +/// fn example3(arg: bool) -> Result {
-> +///     let mut vec =
-> +///         ScopeGuard::new_with_data(Vec::new(), |v| pr_info!("vec had {} elements\n", v.len()));
-> +///
-> +///     vec.try_push(10u8)?;
-> +///     if arg {
-> +///         return Ok(());
-> +///     }
-> +///     vec.try_push(20u8)?;
-> +///     Ok(())
-> +/// }
-> +///
-> +/// # assert_eq!(example3(false), Ok(()));
-> +/// # assert_eq!(example3(true), Ok(()));
-> +/// ```
-> +///
-> +/// # Invariants
-> +///
-> +/// The value stored in the struct is nearly always `Some(_)`, except between
-> +/// [`ScopeGuard::dismiss`] and [`ScopeGuard::drop`]: in this case, it will be `None` as the value
-> +/// will have been returned to the caller. Since  [`ScopeGuard::dismiss`] consumes the guard,
-> +/// callers won't be able to use it anymore.
-> +pub struct ScopeGuard<T, F: FnOnce(T)>(Option<(T, F)>);
-> +
-> +impl<T, F: FnOnce(T)> ScopeGuard<T, F> {
-> +    /// Creates a new guarded object wrapping the given data and with the given cleanup function.
-> +    pub fn new_with_data(data: T, cleanup_func: F) -> Self {
-> +        // INVARIANT: The struct is being initialised with `Some(_)`.
-> +        Self(Some((data, cleanup_func)))
-> +    }
-> +
-> +    /// Prevents the cleanup function from running and returns the guarded data.
-> +    pub fn dismiss(mut self) -> T {
-> +        // INVARIANT: This is the exception case in the invariant; it is not visible to callers
-> +        // because this function consumes `self`.
-> +        self.0.take().unwrap().0
-> +    }
-> +}
-> +
-> +impl ScopeGuard<(), fn(())> {
-> +    /// Creates a new guarded object with the given cleanup function.
-> +    pub fn new(cleanup: impl FnOnce()) -> ScopeGuard<(), impl FnOnce(())> {
-> +        ScopeGuard::new_with_data((), move |_| cleanup())
-> +    }
-> +}
-> +
-> +impl<T, F: FnOnce(T)> Deref for ScopeGuard<T, F> {
-> +    type Target = T;
-> +
-> +    fn deref(&self) -> &T {
-> +        // The type invariants guarantee that `unwrap` will succeed.
-> +        &self.0.as_ref().unwrap().0
-> +    }
-> +}
-> +
-> +impl<T, F: FnOnce(T)> DerefMut for ScopeGuard<T, F> {
-> +    fn deref_mut(&mut self) -> &mut T {
-> +        // The type invariants guarantee that `unwrap` will succeed.
-> +        &mut self.0.as_mut().unwrap().0
-> +    }
-> +}
-> +
-> +impl<T, F: FnOnce(T)> Drop for ScopeGuard<T, F> {
-> +    fn drop(&mut self) {
-> +        // Run the cleanup function if one is still present.
-> +        if let Some((data, cleanup)) = self.0.take() {
-> +            cleanup(data)
-> +        }
-> +    }
-> +}
->  
->  /// Stores an opaque value.
->  ///
+Restricted DMA pool support is also required to get working WiFi, but
+it is enabled in a separate commit since it alters behavior of other
+platforms and devices.
+
+By enabling the support for all of this platform's devices on the
+defconfig we make it effortless to test the relevant hardware both by
+developers as well as CI systems like KernelCI.
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+---
+
+Changes in v3:
+- Split DMA_RESTRICTED_POOL to separate patch
+
+ arch/arm64/configs/defconfig | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index f3053e7018fe..be40004a0259 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -196,6 +196,7 @@ CONFIG_BT_HIDP=m
+ CONFIG_BT_LEDS=y
+ # CONFIG_BT_DEBUGFS is not set
+ CONFIG_BT_HCIBTUSB=m
++CONFIG_BT_HCIBTUSB_MTK=y
+ CONFIG_BT_HCIUART=m
+ CONFIG_BT_HCIUART_LL=y
+ CONFIG_BT_HCIUART_BCM=y
+@@ -231,6 +232,7 @@ CONFIG_PCIE_ALTERA_MSI=y
+ CONFIG_PCI_HOST_THUNDER_PEM=y
+ CONFIG_PCI_HOST_THUNDER_ECAM=y
+ CONFIG_PCIE_ROCKCHIP_HOST=m
++CONFIG_PCIE_MEDIATEK_GEN3=m
+ CONFIG_PCIE_BRCMSTB=m
+ CONFIG_PCI_IMX6=y
+ CONFIG_PCI_LAYERSCAPE=y
+@@ -403,6 +405,7 @@ CONFIG_BRCMFMAC=m
+ CONFIG_MWIFIEX=m
+ CONFIG_MWIFIEX_SDIO=m
+ CONFIG_MWIFIEX_PCIE=m
++CONFIG_MT7921E=m
+ CONFIG_WL18XX=m
+ CONFIG_WLCORE_SDIO=m
+ CONFIG_INPUT_EVDEV=y
+@@ -411,6 +414,7 @@ CONFIG_KEYBOARD_GPIO=y
+ CONFIG_KEYBOARD_SNVS_PWRKEY=m
+ CONFIG_KEYBOARD_IMX_SC_KEY=m
+ CONFIG_KEYBOARD_CROS_EC=y
++CONFIG_MOUSE_ELAN_I2C=m
+ CONFIG_INPUT_TOUCHSCREEN=y
+ CONFIG_TOUCHSCREEN_ATMEL_MXT=m
+ CONFIG_TOUCHSCREEN_GOODIX=m
+@@ -513,6 +517,7 @@ CONFIG_SPI_FSL_DSPI=y
+ CONFIG_SPI_MESON_SPICC=m
+ CONFIG_SPI_MESON_SPIFC=m
+ CONFIG_SPI_MT65XX=y
++CONFIG_SPI_MTK_NOR=m
+ CONFIG_SPI_ORION=y
+ CONFIG_SPI_PL022=y
+ CONFIG_SPI_ROCKCHIP=y
+@@ -528,6 +533,7 @@ CONFIG_SPI_TEGRA210_QUAD=m
+ CONFIG_SPI_TEGRA114=m
+ CONFIG_SPI_SPIDEV=m
+ CONFIG_SPMI=y
++CONFIG_SPMI_MTK_PMIF=m
+ CONFIG_PINCTRL_MAX77620=y
+ CONFIG_PINCTRL_SINGLE=y
+ CONFIG_PINCTRL_OWL=y
+@@ -674,6 +680,7 @@ CONFIG_REGULATOR_FIXED_VOLTAGE=y
+ CONFIG_REGULATOR_AXP20X=y
+ CONFIG_REGULATOR_BD718XX=y
+ CONFIG_REGULATOR_BD9571MWV=y
++CONFIG_REGULATOR_CROS_EC=y
+ CONFIG_REGULATOR_FAN53555=y
+ CONFIG_REGULATOR_GPIO=y
+ CONFIG_REGULATOR_HI6421V530=y
+@@ -681,6 +688,7 @@ CONFIG_REGULATOR_HI655X=y
+ CONFIG_REGULATOR_MAX77620=y
+ CONFIG_REGULATOR_MAX8973=y
+ CONFIG_REGULATOR_MP8859=y
++CONFIG_REGULATOR_MT6315=m
+ CONFIG_REGULATOR_MT6358=y
+ CONFIG_REGULATOR_MT6359=y
+ CONFIG_REGULATOR_MT6360=y
+@@ -714,6 +722,7 @@ CONFIG_V4L_PLATFORM_DRIVERS=y
+ CONFIG_SDR_PLATFORM_DRIVERS=y
+ CONFIG_V4L_MEM2MEM_DRIVERS=y
+ CONFIG_VIDEO_MEDIATEK_JPEG=m
++CONFIG_VIDEO_MEDIATEK_VCODEC=m
+ CONFIG_VIDEO_QCOM_CAMSS=m
+ CONFIG_VIDEO_QCOM_VENUS=m
+ CONFIG_VIDEO_RCAR_ISP=m
+@@ -827,6 +836,8 @@ CONFIG_SND_SOC_IMX_AUDMIX=m
+ CONFIG_SND_SOC_MT8183=m
+ CONFIG_SND_SOC_MT8183_MT6358_TS3A227E_MAX98357A=m
+ CONFIG_SND_SOC_MT8183_DA7219_MAX98357A=m
++CONFIG_SND_SOC_MT8192=m
++CONFIG_SND_SOC_MT8192_MT6359_RT1015_RT5682=m
+ CONFIG_SND_MESON_AXG_SOUND_CARD=m
+ CONFIG_SND_MESON_GX_SOUND_CARD=m
+ CONFIG_SND_SOC_QCOM=m
+@@ -1070,6 +1081,7 @@ CONFIG_VIDEO_MAX96712=m
+ CONFIG_CHROME_PLATFORMS=y
+ CONFIG_CROS_EC=y
+ CONFIG_CROS_EC_I2C=y
++CONFIG_CROS_EC_RPMSG=m
+ CONFIG_CROS_EC_SPI=y
+ CONFIG_CROS_EC_CHARDEV=m
+ CONFIG_COMMON_CLK_RK808=y
+@@ -1092,6 +1104,18 @@ CONFIG_CLK_IMX8QXP=y
+ CONFIG_CLK_IMX8ULP=y
+ CONFIG_CLK_IMX93=y
+ CONFIG_TI_SCI_CLK=y
++CONFIG_COMMON_CLK_MT8192_AUDSYS=y
++CONFIG_COMMON_CLK_MT8192_CAMSYS=y
++CONFIG_COMMON_CLK_MT8192_IMGSYS=y
++CONFIG_COMMON_CLK_MT8192_IMP_IIC_WRAP=y
++CONFIG_COMMON_CLK_MT8192_IPESYS=y
++CONFIG_COMMON_CLK_MT8192_MDPSYS=y
++CONFIG_COMMON_CLK_MT8192_MFGCFG=y
++CONFIG_COMMON_CLK_MT8192_MMSYS=y
++CONFIG_COMMON_CLK_MT8192_MSDC=y
++CONFIG_COMMON_CLK_MT8192_SCP_ADSP=y
++CONFIG_COMMON_CLK_MT8192_VDECSYS=y
++CONFIG_COMMON_CLK_MT8192_VENCSYS=y
+ CONFIG_COMMON_CLK_QCOM=y
+ CONFIG_QCOM_A53PLL=y
+ CONFIG_QCOM_CLK_APCS_MSM8916=y
+-- 
+2.39.1
 
