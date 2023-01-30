@@ -2,135 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB871681E03
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:26:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A99681E07
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjA3W0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:26:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
+        id S230477AbjA3W1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:27:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA3W0b (ORCPT
+        with ESMTP id S229476AbjA3W1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:26:31 -0500
-Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E791125B8
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:26:28 -0800 (PST)
-Received: from mail1.perex.cz (localhost [127.0.0.1])
-        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id C981511DA;
-        Mon, 30 Jan 2023 23:26:25 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz C981511DA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
-        t=1675117585; bh=M4Gc6X96kuFeaN6aP2ubqI+ZhC4pG+m2LQpyGmQp4Uw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L/K1K0E/eziEKfW0/IosOyrHlbL86sGfNH8av5e79xqbURoYGPhE1Z04XIQXuUGuY
-         QFPCBeBoutLiZUxMZjAHBFv51VrG8t1sw+ACSu5iHm5+EeZkdyeNN6HSrQhlA59KJL
-         3w5xn+Z6j/7rwhRXNP/y9jxZW/iFOJFkxxrBlwuw=
-Received: from [192.168.100.98] (unknown [192.168.100.98])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: perex)
-        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
-        Mon, 30 Jan 2023 23:26:14 +0100 (CET)
-Message-ID: <0670df68-ccc0-6806-cc78-15187481b973@perex.cz>
-Date:   Mon, 30 Jan 2023 23:26:14 +0100
+        Mon, 30 Jan 2023 17:27:30 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3770C1ADCE;
+        Mon, 30 Jan 2023 14:27:30 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id u8so5774519ilq.13;
+        Mon, 30 Jan 2023 14:27:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=91APSBQRASxyaUot6kel5HH01cdUZFzcVWQ89+jE+NE=;
+        b=f4B72CIJYqfo0g21cgdQmSuwU5oOqTM8jlthi0qxLzM3Fk/kk9HkIhzJDCUyu6skOq
+         BaQaPz0ZcBSW+GmBCCz6rcujJz4i+b1XJvMQLUGBEg6UW5IEWDIwlNHf49nUm+L75aHj
+         1r+ki1l0TApiKasfibpSpgM6SgIMATUKu/ebFHWFcNCdtJaPfeUu5qJvI4gXhRxEZ28m
+         Sirzm44ry4gL3GhcD/9fUtbBebaFCMd3mkFpztU9RvU4WRzE+UygPPMdcvq/40OPetqt
+         KWkBdWujvyHYoXPITiTBecar0+jX7Z+49pO9uLLJSPSBmmq9ApAzPztSuzn+MPRH0ewX
+         34Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=91APSBQRASxyaUot6kel5HH01cdUZFzcVWQ89+jE+NE=;
+        b=jkcCfCSeJ2ScLNqwvnFqE6lux0PtuttHLHxMlf1wNSbUqSsFEJ25u93Ns7VSnL/0qM
+         01tPiyGbYiH4UGfG4WbSbnLFLWhwK4mldgY4IYV3DKvmczzqWTxiCCYtBKN5X95aXg9X
+         tzKgXN7MDtqgtuH/qOL8b1CiYh20VoEtp4e0+Oj1iP0YznGeLThplnVZ5Fxp072FurEV
+         vYylQ44DKEuUdBuuOEWwITuo1GPtVIZF3SAO/lUTfjIXv14bYA7A6UqM1B/mxvto+Q7n
+         vQ/Fkl13kyk8kscShz5TA9VVYd8H8t/ju8iH+JosImeKFKDqPu5kJ6M3pIi+VxWXM7bq
+         3GSw==
+X-Gm-Message-State: AO0yUKXwUBoHf4jW3PEqTgsJ+/3EQBkIOND1e7SNjHgDlSyUALdDGgsr
+        dW5l886YlRzrPFV1l4UEQfU=
+X-Google-Smtp-Source: AK7set+2wJM21/vUhqZKljfebmcjKs1hj2P8FB6BSF+IR4mJCpcim0cnQkXDA3k3kvhEr/KeiyT6Zw==
+X-Received: by 2002:a05:6e02:1c45:b0:310:fb90:b61b with SMTP id d5-20020a056e021c4500b00310fb90b61bmr3315825ilg.10.1675117649557;
+        Mon, 30 Jan 2023 14:27:29 -0800 (PST)
+Received: from localhost ([2607:fea8:a2df:3d00::11ab])
+        by smtp.gmail.com with ESMTPSA id p4-20020a056e0206c400b002fc323a2902sm4370778ils.62.2023.01.30.14.27.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 14:27:28 -0800 (PST)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Escande <thierry.escande@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Richard Acayan <mailingradian@gmail.com>
+Subject: [PATCH 0/2] misc: fastrpc: Fixes for issues in userspace
+Date:   Mon, 30 Jan 2023 17:27:14 -0500
+Message-Id: <20230130222716.7016-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/6] ASoC: amd: yc: Add a module parameter to influence
- pdm_gain
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mukunda Vijendar <Vijendar.Mukunda@amd.com>,
-        Saba Kareem Syed <Syed.SabaKareem@amd.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Pananchikkal Renjith <Renjith.Pananchikkal@amd.com>,
-        Mark Pearson <mpearson@lenovo.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-References: <20230130220754.8379-1-mario.limonciello@amd.com>
- <20230130220754.8379-3-mario.limonciello@amd.com>
-From:   Jaroslav Kysela <perex@perex.cz>
-In-Reply-To: <20230130220754.8379-3-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30. 01. 23 23:07, Mario Limonciello wrote:
-> In case of regressions for any users that the new pdm_gain value is
-> too high and for additional debugging, introduce a module parameter
-> that would let them configure it.
-> 
-> This parameter should be removed in the future:
->   * If it's determined that the parameter is not needed, just hardcode
->     the correct value as before
->   * If users do end up using it to debug and report different values
->     we should introduce a config knob that can have policy set by ucm.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> v1->v2:
->   * Add a guard for values > 3 to overflow the FIELD_PREP
->   * Clear ACP_WOV_GAIN_CONTROL before setting it
-> ---
->   sound/soc/amd/yc/acp6x-pdm-dma.c | 10 +++++++++-
->   sound/soc/amd/yc/acp6x.h         |  2 +-
->   2 files changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/sound/soc/amd/yc/acp6x-pdm-dma.c b/sound/soc/amd/yc/acp6x-pdm-dma.c
-> index acecd6a4ec4b1..2bb3ea14bae9c 100644
-> --- a/sound/soc/amd/yc/acp6x-pdm-dma.c
-> +++ b/sound/soc/amd/yc/acp6x-pdm-dma.c
-> @@ -7,6 +7,7 @@
->   
->   #include <linux/platform_device.h>
->   #include <linux/module.h>
-> +#include <linux/bitfield.h>
->   #include <linux/err.h>
->   #include <linux/io.h>
->   #include <sound/pcm_params.h>
-> @@ -18,6 +19,10 @@
->   
->   #define DRV_NAME "acp_yc_pdm_dma"
->   
-> +static int pdm_gain = 3;
-> +module_param(pdm_gain, int, 0644);
-> +MODULE_PARM_DESC(pdm_gain, "Gain control (0-3)");
-> +
->   static const struct snd_pcm_hardware acp6x_pdm_hardware_capture = {
->   	.info = SNDRV_PCM_INFO_INTERLEAVED |
->   		SNDRV_PCM_INFO_BLOCK_TRANSFER |
-> @@ -55,7 +60,10 @@ static void acp6x_enable_pdm_clock(void __iomem *acp_base)
->   
->   	acp6x_writel(pdm_clk_enable, acp_base + ACP_WOV_CLK_CTRL);
->   	pdm_ctrl = acp6x_readl(acp_base + ACP_WOV_MISC_CTRL);
-> -	pdm_ctrl |= ACP_WOV_MISC_CTRL_MASK;
-> +	pdm_ctrl &= FIELD_PREP(ACP_WOV_GAIN_CONTROL, 0);
+Hi everyone,
 
-It should be 'pdm_ctrl &= ~ACP_WOV_GAIN_CONTROL' see include/linux/bitfield.h 
-(Modify: comment).
+I've been playing around a bit with the FastRPC ioctl interface on the
+Pixel 3a with some device tree patches. Since the ADSP crashes every 10
+seconds, the inconvenience caused by related bugs encouraged me to write
+a few fixes. A demonstration is provided in patch 2.
 
-> +	if (pdm_gain > 3)
-> +		pdm_gain = 3;
+Please enjoy and review these patches for better userspace while remote
+processors crash.
 
-Negative values are not handled. Use clamp(pdm_gain, 0, 3) - see 
-include/linux/minmax.h.
+Richard Acayan (2):
+  misc: fastrpc: return -EPIPE to invocations on device removal
+  misc: fastrpc: reject new invocations during device removal
 
-> +	pdm_ctrl |= FIELD_PREP(ACP_WOV_GAIN_CONTROL, pdm_gain);
->   	acp6x_writel(pdm_ctrl, acp_base + ACP_WOV_MISC_CTRL);
-
-					Jaroslav
+ drivers/misc/fastrpc.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 -- 
-Jaroslav Kysela <perex@perex.cz>
-Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+2.39.1
 
