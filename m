@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5102B680E83
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C58680E87
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbjA3NIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
+        id S236200AbjA3NIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:08:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235575AbjA3NIS (ORCPT
+        with ESMTP id S235425AbjA3NIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:08:18 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF18A2ED61
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:08:01 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso5282177wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:08:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Se5Q1lXw9K+Pz2pZOS2n30yDozh7nMIeUh0ec9tbew=;
-        b=sYqkr9eqZ0fdxEVtcBLHAy5FfbUAp/4Dsxxuvd6alsL9M67rKWmCLdl1LxFH9debQg
-         d3kfUYXnQzX9UE3tW0P9hIWpYc0X8IY4pccYCoQy6eLfXZEB9X/03KtRhbxWxLaWSbxh
-         XHMVnDvJU5xX2qjHLN4SApu3NSYBRaWFsmDP6GXAgJMTtE5jS9uXRfWMop3JO1v97a1A
-         kXuXZzZSVoqLpFWLEnokjmj71dCa79fpVHfPBUGEtHyapRnOATYxNIrjaHd/cTjH7uw6
-         SUZpq/NZPF1bDP/94tz5hkHz0d699Iq6M8JzCi6e3nSRzz6f3wiN3DPcbaU72OfgwQ88
-         2YRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Se5Q1lXw9K+Pz2pZOS2n30yDozh7nMIeUh0ec9tbew=;
-        b=csJM3NRYxZ878BzZY2fH6rOJa7jt6V1Wdn31/qPhrEvpCEc6KkGWO6HDIor+Kkc9c2
-         BmUXGwfUlJ1prsubXu/AyA0ZtUbUH54YHilZTGgN7Z4tK/FUZIFgLgvuc+5cEjNVWvSz
-         eOxEJJ7Rn5963PmgKeqm4gw7Ao155w+G/O7Z6Hs6PoWA1qZ2xUM0eqxoVVeUqEFfaG7B
-         B2n2oInvse95SVnVzoEJhsmzbLoqimyb1vj3pZcmT4bK7eC3cdrUtxxr7EWHk3E8QAoC
-         ywntdQO0Eob4J0ECNWq6Agr+kpQC2jXDeRGUVTNpry7Jr8vP5g2KUvVNImV/nNxbRBWO
-         cp7g==
-X-Gm-Message-State: AO0yUKUXPJqG42vdMB6Lp0iULTgpz3DArmsZyfuK5w9popKivYefqbD/
-        Ay+qGyeXdg2zIsMTMNgtAohQng==
-X-Google-Smtp-Source: AK7set8GSjb0s93vkK1fliYHVJS234DkIT5hqqeHwHaj3yMD9zznVEh8poWvWYbSp0ttOIg1ksF6/g==
-X-Received: by 2002:a05:600c:1d12:b0:3dc:58a6:bbe6 with SMTP id l18-20020a05600c1d1200b003dc58a6bbe6mr4007541wms.31.1675084079443;
-        Mon, 30 Jan 2023 05:07:59 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:b9a5:a1fe:d3ab:6b40])
-        by smtp.gmail.com with ESMTPSA id l21-20020a05600c4f1500b003b47b80cec3sm17776021wmq.42.2023.01.30.05.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 05:07:58 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH] dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-sa8775p compatible
-Date:   Mon, 30 Jan 2023 14:07:56 +0100
-Message-Id: <20230130130756.144160-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        Mon, 30 Jan 2023 08:08:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D327360B3;
+        Mon, 30 Jan 2023 05:08:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 265A1B810B2;
+        Mon, 30 Jan 2023 13:08:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE29C4339B;
+        Mon, 30 Jan 2023 13:08:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675084109;
+        bh=h51fw2q7nVcSq+z7R5MTF0ybkYUQSW5xbCVY+5yyiYE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XsSoin7jduGK6g60Ugb2ioUf4CLCE6Boh6CSTHonx0N8EBV3Rw/xd4HScm32tTpNM
+         ecdwLuUdGrQfiIaHMKtU/802xf350L0K3R0/AOdtBtp4NtBPnZ1ERuAFDWj6xN2aH8
+         uCv5/Mxcekl09GwEdlsCNd3KJh1Y0/MQ8Yw1pcJWjYj+J4amlypkV5QG5WG7ihKhx+
+         EZ9oZIpUP3LfwI0NKL/VusU64tFKdGLR5NxN0sFjhTStUjkEnkaOBR0GVhZW29mkGN
+         /IHREe+TTPylV2ju+y2qmmX9uvzfL8EjclfDoy3Fbo7lbKGGYACReoXzAq5Zf8Odc8
+         ckVhPmbixiAtg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Frank Li <Frank.Li@nxp.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: dw-edma: reduce stack usage after debugfs rework
+Date:   Mon, 30 Jan 2023 14:08:10 +0100
+Message-Id: <20230130130826.596171-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Add a compatible for the sa8775p platform's KPSS watchdog.
+After the dw_edma_debugfs_entry arrays are no longer compile-time
+constant, they take up space on the stack, which exceeds the
+warning limit after inlining:
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+drivers/dma/dw-edma/dw-edma-v0-debugfs.c:280:6: error: stack frame size (1784) exceeds limit (1400) in 'dw_edma_v0_debugfs_on' [-Werror,-Wframe-larger-than]
+void dw_edma_v0_debugfs_on(struct dw_edma *dw)
+
+Work around this by marking the functions with the largest arrays
+as 'noinline_for_stack' to make them not use up space on the same
+stack together.
+
+Fixes: 5c0373eafd83 ("dmaengine: dw-edma: Move eDMA data pointer to debugfs node descriptor")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-Krzysztof: I'm now adding any link here as the v1 of the sa8775p DTS patch
-did not use this compatible and v2 is still WiP.
+ drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
- Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-index d8ac0be36e6c..27fb484d5f8d 100644
---- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-@@ -18,6 +18,7 @@ properties:
-       - items:
-           - enum:
-               - qcom,apss-wdt-qcs404
-+              - qcom,apss-wdt-sa8775p
-               - qcom,apss-wdt-sc7180
-               - qcom,apss-wdt-sc7280
-               - qcom,apss-wdt-sc8180x
+diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+index 7be23c26ac88..9dfcbbdfb27b 100644
+--- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
++++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+@@ -116,7 +116,8 @@ static void dw_edma_debugfs_create_x32(struct dw_edma *dw,
+ 	}
+ }
+ 
+-static void dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
++static noinline_for_stack void
++dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
+ 				    u16 ch, struct dentry *dent)
+ {
+ 	struct dw_edma_debugfs_entry debugfs_regs[] = {
+@@ -136,9 +137,10 @@ static void dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
+ 	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
+ }
+ 
+-static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
++static noinline_for_stack void
++dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+ {
+-	static const struct dw_edma_debugfs_entry debugfs_regs[] = {
++	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+ 		/* eDMA global registers */
+ 		WR_REGISTER(dw, engine_en),
+ 		WR_REGISTER(dw, doorbell),
+@@ -159,7 +161,7 @@ static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+ 		WR_REGISTER(dw, ch67_imwr_data),
+ 		WR_REGISTER(dw, linked_list_err_en),
+ 	};
+-	static const struct dw_edma_debugfs_entry debugfs_unroll_regs[] = {
++	const struct dw_edma_debugfs_entry debugfs_unroll_regs[] = {
+ 		/* eDMA channel context grouping */
+ 		WR_REGISTER_UNROLL(dw, engine_chgroup),
+ 		WR_REGISTER_UNROLL(dw, engine_hshake_cnt.lsb),
+@@ -197,7 +199,8 @@ static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+ 	}
+ }
+ 
+-static void dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
++static noinline void
++dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+ {
+ 	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+ 		/* eDMA global registers */
 -- 
-2.37.2
+2.39.0
 
