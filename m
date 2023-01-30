@@ -2,108 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1BC6818A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B53681890
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238012AbjA3SU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
+        id S237377AbjA3ST1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237431AbjA3ST4 (ORCPT
+        with ESMTP id S237469AbjA3STY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:19:56 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018F33D096
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:47 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id l7so3610651ilf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Zzfg2bQz7c4Lu8nEbe0ztijhF1MDO6gwSQkkAUdaXs=;
-        b=dmwVKpndVGSPOlMA/VgslRy1ADofot5yp07aOLyY9jXTSZcsSneVlwFSDFj0CE5724
-         oI/cyicC+vcD2yb/HjemHEX5yLv5dEBWoEL3jle5pKfIh0+mwcKT9uIb12rZGMz4s4SU
-         E3EM3F019eEjjTS1fosUInp5XbLpSSmqRMmi8=
+        Mon, 30 Jan 2023 13:19:24 -0500
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C576B75E;
+        Mon, 30 Jan 2023 10:19:16 -0800 (PST)
+Received: by mail-pf1-f180.google.com with SMTP id g9so8454815pfo.5;
+        Mon, 30 Jan 2023 10:19:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Zzfg2bQz7c4Lu8nEbe0ztijhF1MDO6gwSQkkAUdaXs=;
-        b=qdHTmjBFtYXE3HTvuM3R+9NDuSj6XmJu0ZUBEPX3fmpDgy+yRIvpjcMdUY51znIlD/
-         WdavjOrefvHfu2VcPIAE1tOQ2I16CSFBduy0huBG7vKl2BUnwWjvFLN3CxsF6XXEDMxk
-         d8leujR2LjyBOKS9dDcXjjEhClp95otxz0lnlkvSNRuBuJg/odgYwa7SXP25xJ7XZBvo
-         AXXE6dYroO338ChiwAIt5+pThxRGXikeYDc3EknYMfcXj544k01b6v0IPNDOP778rHK9
-         Ow76wmt+elDX60sG+F09yHgOCzaIOqmaRUO+RHnOmvCCkBtkhkjFz5daZgG1DWAjDVgy
-         H7Pw==
-X-Gm-Message-State: AO0yUKWMXSs76Pn4QDrQ2G9EyDuOeDn4s6dhP6+VPW5MtoAmliOme/p4
-        wi+v2Fw/YTSyBNa7BnW4ruVxfyi768gl63RI
-X-Google-Smtp-Source: AK7set+ky9CHQsy21ct37ZLpWjENrtFy5wpnLexQn1n3RC31YGc9290nOHzz+0kP9SR0o/XTPU1x7Q==
-X-Received: by 2002:a05:6e02:144c:b0:311:478:f273 with SMTP id p12-20020a056e02144c00b003110478f273mr1692297ilo.11.1675102787162;
-        Mon, 30 Jan 2023 10:19:47 -0800 (PST)
-Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:fc8a:dd2f:5914:df14])
-        by smtp.gmail.com with ESMTPSA id o16-20020a056e02115000b002f139ba4135sm4189801ill.86.2023.01.30.10.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 10:19:46 -0800 (PST)
-From:   Ross Zwisler <zwisler@chromium.org>
-X-Google-Original-From: Ross Zwisler <zwisler@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ross Zwisler <zwisler@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH 9/9] tools/kvm_stat: use canonical ftrace path
-Date:   Mon, 30 Jan 2023 11:19:15 -0700
-Message-Id: <20230130181915.1113313-10-zwisler@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-In-Reply-To: <20230130181915.1113313-1-zwisler@google.com>
-References: <20230130181915.1113313-1-zwisler@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MCTnt4UHkjh+KturpG+BgNEdB7rIfLkxoGG9uQQNS2M=;
+        b=0zIXcIFwr0W4hOtTB4q1yX1RJRqm/CVALduKqZj03HJGN8rzzcKf8BO0o9Te4y/hPI
+         tk2oc5MW0h79B1ur+O/bjKyspGAHr2icdOFVgTbfW8KJ4ZWDEFzY56tvTF4i7t5hJa5j
+         XVtN+ok+Bsgb26y8GMj4q93FEm3G8Ympp9AxYELoM6sZGTObQ9RN4U0iprM2ZxReXVcf
+         GL6f4pQDYBkclPdeXFi9D3oxA2b+/Sn3drCOJO0NJMvrS+4Y9RYNwJ0eMUmfyfr6AwGm
+         XtUJRNDtmka1+pcY2XYhaEgq24SauLeH45/cEhTxhTF/5VeGQjkvOCRuj2PYaczT1ppM
+         ZGjA==
+X-Gm-Message-State: AO0yUKUSkBCwY7o/7eqBA8oiISyT1PWACVoHvdCPdwniovYeVmoeFZa/
+        sr5ZGuoPFTiOJw76qMS4q/U=
+X-Google-Smtp-Source: AK7set9F7OxYYf5cUUJPaSciocvf9756iNTgzNVxnnMshrlLCyF6v4L+p7tO0TYs0+bJjYol+1Ztwg==
+X-Received: by 2002:a05:6a00:450e:b0:593:b2b2:9544 with SMTP id cw14-20020a056a00450e00b00593b2b29544mr6190700pfb.0.1675102755589;
+        Mon, 30 Jan 2023 10:19:15 -0800 (PST)
+Received: from ?IPV6:2620:0:1000:2514:4774:59fa:531b:5f22? ([2620:0:1000:2514:4774:59fa:531b:5f22])
+        by smtp.gmail.com with ESMTPSA id m14-20020a056a00164e00b0058bc1a13ffcsm7757697pfc.25.2023.01.30.10.19.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 10:19:14 -0800 (PST)
+Message-ID: <4504517a-25f0-5626-7dc3-50e96f392c84@acm.org>
+Date:   Mon, 30 Jan 2023 10:19:16 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] scsi: aacraid: Allocate cmd_priv with scsicmd
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230128000409.never.976-kees@kernel.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230128000409.never.976-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+On 1/27/23 16:04, Kees Cook wrote:
+> The aac_priv() helper assumes that the private cmd area immediately
+> follows struct scsi_cmnd. Allocate this space as part of scsicmd,
+> else there is a risk of heap overflow. Seen with GCC 13: [ ... ]
 
-But, from Documentation/trace/ftrace.rst:
-
-  Before 4.1, all ftrace tracing control files were within the debugfs
-  file system, which is typically located at /sys/kernel/debug/tracing.
-  For backward compatibility, when mounting the debugfs file system,
-  the tracefs file system will be automatically mounted at:
-
-  /sys/kernel/debug/tracing
-
-A comment in kvm_stat still refers to this older debugfs path, so let's
-update it to avoid confusion.
-
-Signed-off-by: Ross Zwisler <zwisler@google.com>
----
- tools/kvm/kvm_stat/kvm_stat | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/kvm/kvm_stat/kvm_stat b/tools/kvm/kvm_stat/kvm_stat
-index 6f28180ffeea..15bf00e79e3f 100755
---- a/tools/kvm/kvm_stat/kvm_stat
-+++ b/tools/kvm/kvm_stat/kvm_stat
-@@ -627,7 +627,7 @@ class TracepointProvider(Provider):
-         name)'.
- 
-         All available events have directories under
--        /sys/kernel/debug/tracing/events/ which export information
-+        /sys/kernel/tracing/events/ which export information
-         about the specific event. Therefore, listing the dirs gives us
-         a list of all available events.
- 
--- 
-2.39.1.456.gfc5497dd1b-goog
+Bart Van Assche <bvanassche@acm.org>
 
