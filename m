@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E6F6681CF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:40:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BFF681CF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjA3VkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S231434AbjA3Vka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjA3VkP (ORCPT
+        with ESMTP id S231300AbjA3VkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:40:15 -0500
+        Mon, 30 Jan 2023 16:40:17 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04011727
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:40:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3616A61
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:40:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675114814; x=1706650814;
+  t=1675114815; x=1706650815;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VdG1GGA8W0DfnPFwDcohOqulqfW3saP77d/Ow4pY9zI=;
-  b=KNTZ9IGxF0iuFD3oUdMIY02uE6iRC9MsJXJY5Khs8hbwe4wgOO7weLpu
-   1wwdPGPRjCCfGIhphPK4YYhoOhjGLudy5PW5tTuwJLQ92k2orEtg+wxR5
-   IdCAThhuFhbqYHPdnEKsnpFOaj1W2tExpmGdSQgvW3h84gk9EQqOjC59m
-   kD02y9abNJWRVNf5ROwRGULrmE4b+JBgf6/5HSZD7rDqc5Yb7EjulYFbc
-   5H0k0IkgLBVyqTeL/xXmMq+yOY+WTneH7TV+6VkNLj8yiYwFIuU0KO7om
-   E1XlWtIf+Ni4wyRvYi9MMRdiQECWjvhR7piM6B2R/ywqGOqSjb3QPJ7m9
+  bh=1ribreiqlw4yvFYe7h9+NZncTm/1TctmT/8aknEK0LI=;
+  b=OzKVkUvVnKeg3UpOE7lkzX6YYuk9bYTzvOPhiI62JK7ADrPzk5AAscOG
+   tDeNwm1Y1SyBjGxiLswsMvFjlXIokpN84w9UQAB4WUaiSDOL+SA2wrVLj
+   2gvJDu+G1MY0z38YOqeupWKzizGdJ1WJcN2GxkJYvjJcgcS0pykFUTTQj
+   44xV6MPI8ZHcExcvGdj4JcohvJnj3sez+iMgbD56Y+/idHB7L+RUkJU8Z
+   pMt1X2jYi6ET1dgm47ityTx043TE64Lg+wkDugmUt23DAEMO/D8OFz3JC
+   XvF+fUI+d7N5ZWcNI9BfA7NYc9AtfKi1EraX7bR0i9ydOoofHjTCAZFqB
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="328955492"
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="328955504"
 X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="328955492"
+   d="scan'208";a="328955504"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 13:40:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="696571860"
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 13:40:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="696571863"
 X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="696571860"
+   d="scan'208";a="696571863"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 13:40:12 -0800
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -59,9 +59,9 @@ Cc:     Ashok Raj <ashok.raj@intel.com>,
         Andrew Cooper <Andrew.Cooper3@citrix.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Martin Pohlack <mpohlack@amazon.de>
-Subject: [Patch v3 Part2 2/9] x86/microcode: Report invalid writes to reload sysfs file
-Date:   Mon, 30 Jan 2023 13:39:48 -0800
-Message-Id: <20230130213955.6046-3-ashok.raj@intel.com>
+Subject: [Patch v3 Part2 3/9] x86/microcode/intel: Fix collect_cpu_info() to reflect current microcode
+Date:   Mon, 30 Jan 2023 13:39:49 -0800
+Message-Id: <20230130213955.6046-4-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230130213955.6046-1-ashok.raj@intel.com>
 References: <20230130213955.6046-1-ashok.raj@intel.com>
@@ -77,13 +77,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Semantics of the microcode reload file are only defined if a "1" is
-written. But the code silently treats any other unsigned integer as a
-successful write even though no actions are performed to load microcode.
+Currently collect_cpu_info() is only returning what was cached earlier
+instead of reading the current revision from the proper MSR.
 
-Report those erroneous writes back to user.
+Collect the current revision and report that value instead of reflecting
+what was cached in the past.
 
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+[TBD:
+    Need to change microcode/amd.c. I didn't quite follow the logic since
+    it reports the revision from the patch file, instead of reporting the
+    real PATCH_LEVEL MSR.
+
+    Untested on AMD.
+]
+
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 Cc: LKML <linux-kernel@vger.kernel.org>
 Cc: x86 <x86@kernel.org>
@@ -105,27 +112,38 @@ Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
 Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Cc: Martin Pohlack <mpohlack@amazon.de>
 ---
- arch/x86/kernel/cpu/microcode/core.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ arch/x86/kernel/cpu/microcode/intel.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 1c6831b8b244..e4b4dfcf2d18 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -476,11 +476,8 @@ static ssize_t reload_store(struct device *dev,
- 	ssize_t ret;
+diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
+index 467cf37ea90a..de8e591c42cd 100644
+--- a/arch/x86/kernel/cpu/microcode/intel.c
++++ b/arch/x86/kernel/cpu/microcode/intel.c
+@@ -542,6 +542,13 @@ static int collect_cpu_info(int cpu_num, struct cpu_signature *csig)
+ {
+ 	struct cpuinfo_x86 *c = &cpu_data(cpu_num);
+ 	unsigned int val[2];
++	int rev;
++
++	/*
++	 * intel_get_microcode_revision() reads a per-core MSR
++	 * to read the revision (MSR_IA32_UCODE_REV).
++	 */
++	WARN_ON_ONCE(cpu_num != smp_processor_id());
  
- 	ret = kstrtoul(buf, 0, &val);
--	if (ret)
--		return ret;
--
--	if (val != 1)
--		return size;
-+	if (ret || val != 1)
-+		return -EINVAL;
+ 	memset(csig, 0, sizeof(*csig));
  
- 	cpus_read_lock();
+@@ -553,7 +560,9 @@ static int collect_cpu_info(int cpu_num, struct cpu_signature *csig)
+ 		csig->pf = 1 << ((val[1] >> 18) & 7);
+ 	}
  
+-	csig->rev = c->microcode;
++	rev = intel_get_microcode_revision();
++	c->microcode = rev;
++	csig->rev = rev;
+ 
+ 	return 0;
+ }
 -- 
 2.37.2
 
