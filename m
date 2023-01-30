@@ -2,202 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724AF6817C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4597681801
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:48:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237741AbjA3Rg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 12:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S236046AbjA3RsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 12:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237818AbjA3RgA (ORCPT
+        with ESMTP id S235687AbjA3RsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 12:36:00 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7C9BB80;
-        Mon, 30 Jan 2023 09:35:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675100158; x=1706636158;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RdadY7n7+q4UkWkrD7WyOBDORBaYWzj8UsjFJAsxf84=;
-  b=NJFFNNBxMZqGdldWonbOl2EnUn2i0WrEr5Vua2lls5rPcZH0IhqclgoA
-   2Z7v1fCQ68EtjCUG2riSa3EzOoVHysYz9embo7J1hG8oqgQx55Mkn/sxz
-   c4D67OD+awUINXKL6eGWKHogK/VUXH1229rXwnXkhko/s9fcmeD4l8wN7
-   gMfow5pZNWMHbRCsNaeR9oyfEJN1IBBxymDLxabOLD62Wtc2IyfY+qrEm
-   Uo9NeftNlPLOfVhf7cnBIqV+8ZYTj+8KujidmyGAOZiK1ELv1lbcl+e54
-   r6Y76oAcKfdPiInb2L7UWdhFnbjb88Lybm9UIkdIjfdYYAeELC0312Xwc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="311246854"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="311246854"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 09:35:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="788105520"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="788105520"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.33.106])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 09:35:48 -0800
-Message-ID: <5676a1b7-885c-e8d9-1809-8bedcf1ff995@intel.com>
-Date:   Mon, 30 Jan 2023 19:35:39 +0200
+        Mon, 30 Jan 2023 12:48:06 -0500
+Received: from sonic305-27.consmr.mail.ne1.yahoo.com (sonic305-27.consmr.mail.ne1.yahoo.com [66.163.185.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF593BD9A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:48:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1675100884; bh=moAPiiVybO80wdbNQN6df55vtTM4eGnDIXPikO4ozG8=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=IuwOsJfc8MR1mH/8c+Z9QaCmUc3/V6TFETzArHGFBnhPMzoA+9BoK2cF/M4iZFNkw5yJw5bdi3J6RHNoJXYJqop0/hv+jUTyXIjT27/vKhWW1qOeqKmHkzPrWJHCwHK32jElwPu3kZsyLJUQJbsedHSrQGLyPzFojpX7ikhgrzgpXaU80+PU+PsuseWu4AEFOR/LNj2umfeABmZBjqukjJ0jYdPLasSRlrAwMSAknhPBse4FGd6Iam7KCeIo73j/KENeJ/nlNap2zf/ZX66So4ptwVia1Pq2yl8EnN+jB3FSRuXeZyu70CC7aZTLOEMIoferMdr55MHNVodXgJMYUA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1675100884; bh=km2ndC9GLa1L59ROKmqZFeGfjCNHrvx77Ntna7ni2Cs=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=W3Ii1yze3v1B1YxIbIRWnqMEBtuzHz5Z1e9nDKn3hqpgEEgDRjjQb6M1UELL12kHuCXgxG0F8riqNJKyMfgm9Zfes1Ee3TsdZS6XlI65iejYQWICYuuCxa1js4Q+Lpp+exr8JveWP/25q0KJMLyEhVraA0sUNfn7/C1hUfnTazGEUl2Dyjzj+JQ896XcZ1UU7SzkYtX0XAIJCSm2vDILC97P+E576luGHMXLKUcOYJumpoFdE5akQT3IOgovYSytnx45x8E5KaWxIwCygjjHORcQWOJw0PkE7U1BDmkolmgWS/8ULHxxL92CO0DjONBhCGGaIbYSsjcAwqXeTqS1bw==
+X-YMail-OSG: gpgP09kVM1l58mr.TaNQy9b2L2shsPQ.j_72nz6O3JvxFJOWH8IHNRKonMnyjmx
+ 4ovL3Ye1d4qoeRbCpgIaC1vp7gRmjZplA4melq4lYKjSgt4x4.qSvWDVMJuoQaJbDuO0h.DHD4Gy
+ GqxLz6qcnngIgvgVHowhV0h_21X6Ho9wv.W_3XT1AO9N_JSXGAY.Hggg.fvv5wWFrYP6Egx61JNW
+ XE3eD2G80iv8anPXXZQEIaP9QZgGqiSmK7HafQ.dJGalNgo.rP0b4bFbwdX_8NIMykYwhXAaKwCs
+ WBkIazYLEvLPkeTNfhhc4_rt56a8.1PSgbRCrAxOtg3XdwfXOvTGw.PCyieGOTD_t.JOKo1AQW.6
+ snhMcy9Hs.GDXvvLkZWdOllevzQnCwCNsSRZ9kWjCgRfhNoJz8cODcLdV8Xn_.lWrUTWd2EuUPBN
+ xsFaV7iAPirH_ezkWXVP3LPM5tDNlaakzt4g9xOTfw1I.a5xoqaBmukDQFh6iPkp4kWjAz8MSHou
+ 3L4GgQTWZvsk7x0lbyrKrS3l0OXNQVrs4tgIYM4feFzZZ6Na.Mk2j5uzrUuX9C1icN2NF6s6qT5C
+ ebevLFcxejPEE9R4qR0bdXahlL5skt2kyW1C92y49RKYwub3rw2MTba9gW5mYsBUp._SDsAx3QIV
+ 8zwwDymil71XFGDPUr.7NIRFyQLqFxTWVjXrJ.z9mGkTFT3uub04zudbxCQPe1QECvVQnnpXFl4b
+ aklvcSuY8USeiZKxDctI3MLWGenXBYOS8SN1oaSdPPqZsWmXjS33pvMtiTRgcawcg4LHIKtvGJI2
+ s3jPc0sn3iADBrraFGw5QDOzLc4fO1G6Ll.3P.KBtkAlgBwaHTd7cFU8RtKU7maLg01tsHPX3Tld
+ CaiNRMlFazt_QJQ6RMhFHmQtZdfKlprU0eNkLhepaxbYJ3fB0FlVj2HnHLoWleq0MI6OiqMwaODm
+ qu_R7_7F5dU0RkoBlOnmOLm1WhJ90IYI9q5Ek2KW06XH2QMR3B4mL_N6b229reCaFl5VENZb_YzY
+ qKtKUxrSHG_8Dgl2TgVI84ri.Pt1cPhIWjxvXUGcMxlRy1kemNcMMedubelQGU6ikPdoGl8pnEf7
+ CwYJybh2lbgSy.KAUm._jXLj_46capGSp.vO6uO6tmG22z3ZnEZsOGa08ftjqVGmXDwiatFkIjmn
+ G9UpycQcj7s2RoY8URw0CYff0zDeg5qPQENNpXBOHMtcbEcIZssUPwWTVpS0kColKXq8Jbg9XCOB
+ cDEjLwx7dJCdNHIoBKSw5.FJuZCIw2QBRx0rqWYiwj80hD4zkCxvJqoQ94eIxAH9hvAlrCqaHWM1
+ EUKmPAjDlujP4CqQg30ltH3cT0RKY2DOH2ACDZ58a5VZ_jMgL4CIVTT826EXUQQN67bjQWj.Dd0F
+ EL7iroPmmgUu_HFYr.lmdCZ43lK1HGhZeDdG_Oqap.rtHcf4n4nxqo8QingYR_6Nob.2bGi0w5Yq
+ QoEdaH5bgRyQU7MyWe61OQ9pb6nhzIT3Jrph25iGQF6JAm8Fyde9ij3krkimlp3uvRK7u_1Kj5uA
+ oDr9YGheZNrNamTKkq1kmcs31szedH15D8XUQi1THkdQtShTVIsU5_6y05seLK5rPr4Ejw0wzf..
+ C4oO24bdeWUmLlnRKV.ZBCgxDnellReJgKtd7S5XECOvZJigBivdXZEzFUZaqc5cnLoV89cQjKl3
+ lqT4TDsrxKgX2iJtn3Nv3s0CL5EffFFBmDVLW_8zRGgWXi35AwJT7tQWc97g0WqG8LQdXlOk_boP
+ .lCQchlqIrm8Lw1XGC9_b62_MbTHBwGWKoaKafXBxqoCjr2b2voRRWxL0rOiN8QXdRuLkysShIVS
+ YlZgEEcKXvX84NkoklI7Jz09_zXfSM85IoPvnk9xRBGDoGaCfs8g7Yen5NOZFq52yFhAzXdLU6Du
+ kzWsNdqQpwSOgCUikf1TXLPxvu7LCIETCd4Zi2Q2ipSYOrMoV1xflqdjtCyIVSnCQWZSSl3SxS5D
+ 19Dem1P5Lh6gJeE18sAoX5ycf93wBt9qoyK.B9v_0zfmW20rOl8PYMq0wvnYxRQEf16_gB75K4Gu
+ 5q171Dec.57Z2tj9RnancMBgG7Kyz5nfPqMESpKv83n4LRO_qxR4zc.EQpHUXSP1EYsRx9c2v2g3
+ eEmY05YWq.AI8hzgLIRGR_nVKD1SPtr50VxarrxICJqMUTVy4qeIRBct0PsEjuZsN_BBaYgH6Hxb
+ i9KLq1cU40.zX.SQ2lT48FA54Eczzjhvcm_2W2meQwL8h7T1Job0w5JwYCigkvytc45ZtFJzBSSp
+ i
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ne1.yahoo.com with HTTP; Mon, 30 Jan 2023 17:48:04 +0000
+Received: by hermes--production-bf1-57c96c66f6-d255s (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ccd982ac571b4ac95305b7af7091a009;
+          Mon, 30 Jan 2023 17:37:29 +0000 (UTC)
+Message-ID: <d0bff7d8-5d29-8841-908e-6b83932a4968@schaufler-ca.com>
+Date:   Mon, 30 Jan 2023 09:37:27 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH 0/4] perf intel-pt: Fix the pipe mode (v1)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] smackfs: Added check catlen
 Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>,
-        Stephane Eranian <eranian@google.com>
-References: <20230127001951.3432374-1-namhyung@kernel.org>
- <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
- <CAM9d7cg_7LNKrXtBuo2QUR1Voi9NKM98qYLC+pznMf4-5yo4Dg@mail.gmail.com>
- <Y9fREY3BxROqYYBO@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <Y9fREY3BxROqYYBO@kernel.org>
+To:     Denis Arefev <arefev@swemel.ru>
+Cc:     Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, trufanov@swemel.ru, vfh@swemel.ru,
+        casey@schaufler-ca.com
+References: <20230124105037.23108-1-arefev@swemel.ru>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20230124105037.23108-1-arefev@swemel.ru>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: WebService/1.1.21123 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/23 16:15, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Jan 27, 2023 at 02:54:36PM -0800, Namhyung Kim escreveu:
->> Hi Adrian,
->>
->> On Thu, Jan 26, 2023 at 11:22 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>
->>> On 27/01/23 02:19, Namhyung Kim wrote:
->>>> Hello,
->>>>
->>>> I found some problems in Intel-PT and auxtrace in general with pipe.
->>>> In the past it used to work with pipe, but recent code fails.
->>>
->>> Pipe mode is a problem for Intel PT and possibly other auxtrace users.
->>> Essentially the auxtrace buffers do not behave like the regular perf
->>> event buffers.  That is because the head and tail are updated by
->>> software, but in the auxtrace case the data is written by hardware.
->>> So the head and tail do not get updated as data is written.  In the
->>> Intel PT case, the head and tail are updated only when the trace is
->>> disabled by software, for example:
->>>     - full-trace, system wide : when buffer passes watermark
->>>     - full-trace, not system-wide : when buffer passes watermark or
->>>     context switches
->>>     - snapshot mode : as above but also when a snapshot is made
->>>     - sample mode : as above but also when a sample is made
->>>
->>> That means finished-round ordering doesn't work.  An auxtrace buffer
->>> can turn up that has data that extends back in time, possibly to the
->>> very beginning of tracing.
->>
->> Ok, IIUC we want to process the main buffer and auxtrace buffer
->> together in time order but there's no guarantee to get the auxtrace
->> data in time, right?
+On 1/24/2023 2:50 AM, Denis Arefev wrote:
+>   If the catlen is 0, the memory for the netlbl_lsm_catmap
+>   structure must be allocated anyway, otherwise the check of
+>   such rules is not completed correctly.
+>
+> Signed-off-by: Denis Arefev <arefev@swemel.ru>
 
-Yes
+Added to smack-next. Thank you.
 
->>
->> I wonder if it's possible to use 2 pass processing for pipe mode.
->> We may keep the events in the ordered queue and auxtrace queue
->> in the first pass, and process together from the beginning in the
->> second pass. But I guess the data size would be a problem.
->>
->> Or, assuming that the auxtrace buffer comes later than (or equal to)
->> the main buffer, we may start processing the main buffer as soon as
->> every auxtrace queue gets some data.  Thoughts?
-
-That sounds like it would require figuring out a timestamp up to
-which there is Intel PT trace data in all queues.  That would
-be very complicated.
-
->>
->>>
->>> For a perf.data file, that problem is solved by going through the trace
->>> and queuing up the auxtrace buffers in advance.
->>>
->>> For pipe mode, the order of events and timestamps can presumably
->>> be messed up.
->>>
->>> For Intel PT, it is a bit of a surprise that there is not
->>> validation to error out in pipe mode.
->>
->> What kind of validation do you have in mind?  Checking pid/tid?
-
-Validation to kill pipe mode for Intel PT entirely.  But a warning
-is ok.
-
->>
->>>
->>> At the least, a warning is needed, and the above explanation needs
->>> to be added to the documentation.
->>
->> Thanks, I'll add it to the documentation.
-> 
-> Ok, so I'll wait for v2 of this patch series, Adrian, apart from what
-> you mentioned, are you ok with the patches, or a subset of them? The
-> first ones looks ok, right?
-
-Yes they are ok.
-
-> 
-> - Arnaldo
+> ---
+>  security/smack/smackfs.c | 17 ++++++++++++++---
+>  1 file changed, 14 insertions(+), 3 deletions(-)
+>
+> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+> index 4b58526450d4..d45f4395a6ce 100644
+> --- a/security/smack/smackfs.c
+> +++ b/security/smack/smackfs.c
+> @@ -830,7 +830,7 @@ static int smk_open_cipso(struct inode *inode, struct file *file)
+>  static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
+>  				size_t count, loff_t *ppos, int format)
+>  {
+> -	struct netlbl_lsm_catmap *old_cat;
+> +	struct netlbl_lsm_catmap *old_cat, *new_cat = NULL;
+>  	struct smack_known *skp;
+>  	struct netlbl_lsm_secattr ncats;
+>  	char mapcatset[SMK_CIPSOLEN];
+> @@ -917,8 +917,19 @@ static ssize_t smk_set_cipso(struct file *file, const char __user *buf,
 >  
->> How about showing something like this for pipe mode?
->>
->>   WARNING: Intel-PT with pipe mode may not work correctly.
-
-Perhaps:
-
-WARNING: Intel PT with pipe mode is not recommended. The output cannot be relied upon. In particular, time stamps and the order of events may be incorrect.
-
->>
->> Thanks,
->> Namhyung
->>
->>
->>>
->>>>                                                                As it
->>>> also touches the generic code, other auxtrace users like ARM SPE will
->>>> be affected too.  I added a test case to verify it works with pipes.
->>>>
->>>> At last, I can run this command without a problem.
->>>>
->>>>   $ perf record -o- -e intel_pt// true | perf inject -b | perf report -i- --itrace=i1000
->>>>
->>>> The code is available at 'perf/auxtrace-pipe-v1' branch in
->>>>
->>>>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
->>>>
->>>> Thanks,
->>>> Namhyung
->>>>
->>>> Namhyung Kim (4):
->>>>   perf inject: Use perf_data__read() for auxtrace
->>>>   perf intel-pt: Do not try to queue auxtrace data on pipe
->>>>   perf session: Avoid calling lseek(2) for pipe
->>>>   perf test: Add pipe mode test to the Intel PT test suite
->>>>
->>>>  tools/perf/builtin-inject.c             |  6 +++---
->>>>  tools/perf/tests/shell/test_intel_pt.sh | 17 +++++++++++++++++
->>>>  tools/perf/util/auxtrace.c              |  3 +++
->>>>  tools/perf/util/session.c               |  9 +++++++--
->>>>  4 files changed, 30 insertions(+), 5 deletions(-)
->>>>
->>>>
->>>> base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
->>>> prerequisite-patch-id: 4ccdf9c974a3909075051f4ffe498faecab7567b
->>>
-> 
-
+>  		smack_catset_bit(cat, mapcatset);
+>  	}
+> -
+> -	rc = smk_netlbl_mls(maplevel, mapcatset, &ncats, SMK_CIPSOLEN);
+> +	ncats.flags = 0;
+> +	if (catlen == 0) {
+> +		ncats.attr.mls.cat = NULL;
+> +		ncats.attr.mls.lvl = maplevel;
+> +		new_cat = netlbl_catmap_alloc(GFP_ATOMIC);
+> +		if (new_cat)
+> +			new_cat->next = ncats.attr.mls.cat;
+> +		ncats.attr.mls.cat = new_cat;
+> +		skp->smk_netlabel.flags &= ~(1U << 3);
+> +		rc = 0;
+> +	} else {
+> +		rc = smk_netlbl_mls(maplevel, mapcatset, &ncats, SMK_CIPSOLEN);
+> +	}
+>  	if (rc >= 0) {
+>  		old_cat = skp->smk_netlabel.attr.mls.cat;
+>  		skp->smk_netlabel.attr.mls.cat = ncats.attr.mls.cat;
