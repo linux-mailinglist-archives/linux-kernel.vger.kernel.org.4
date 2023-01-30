@@ -2,136 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE55D680F62
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843CB680F6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235997AbjA3NwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S235678AbjA3Nx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjA3NwE (ORCPT
+        with ESMTP id S234171AbjA3NxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:52:04 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E003864D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:52:02 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so10074051wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:52:02 -0800 (PST)
+        Mon, 30 Jan 2023 08:53:24 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E583FF30;
+        Mon, 30 Jan 2023 05:53:22 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-16346330067so15054482fac.3;
+        Mon, 30 Jan 2023 05:53:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7n0PxcebcHmKgUAZTbAc0QU/gWAxsFXWO0xPIkTGuE=;
-        b=AzBN0CYjuUoXUor1L2wXmADp/jKdt1fLSUw4BXTQXmQIX8JJUXqU3bGFykXN7Dd0aK
-         kIh/5CAftp6r+yowWZ7oQxylHCcPunMtRLy4qtfyRE36wd8KbN3ATUNs75geIg6P0w1N
-         92yf9XvsW9OByiccT3P0fbfCCB27QBP0qT4PQxCbqxa1rhiEDslu2y4kc3wWgL5utpx3
-         r+E/icPV8wSFsjhpQAQZHmEJOdYXrUHdwMBf4WWJUXv2spJ/i8INt6nIxwUKu8bRxse7
-         nKAbLvE3ILORq54UE2EKe8aJ96//TnkSpCLRR3P5Wv1umcdIpdLkfnvVxgtTSNR0z0T5
-         j51w==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y+5GJJ8rF8aG9dI5EbSjlK95PxeFIXWfHHihmcthWAs=;
+        b=YCRjwoQh8w55DxFX7ywSf15CQ/HLQvuQHgEbEu2QNTlg/Vku7oaRNt/rSHcoTg8QJ2
+         /Wrvugdm/vWwL+ts1R0apxqa7C1QHD0JdtMTH6G5BKsikktGtFQ7F52nvB7CCyJSMOk0
+         +2x4LcJO5Z2uQ+/kp9GB9MU/x1Edauk5zFGuqAQQFhvAo5YWNE4boX6U3HoxGy3U8Kqg
+         DIaFqbYsC356z5nCO1/R6qHQ5OlECpOrkanzIk9eForSjPi9ABlxE9MzTneRzqLSANZl
+         6Rl3wa16NjlLXKDWpUomoZBcHyG/GbTmK8stiUFNelFz/VTC1KDvQdfztV5zNWp2WED6
+         nDew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a7n0PxcebcHmKgUAZTbAc0QU/gWAxsFXWO0xPIkTGuE=;
-        b=sW0CaQ1IbiFEEwogAa5OM4nfqfvkZ/8A4SW3R4YGp64OFBtB9/49kF8rGlPx5G8kZw
-         eiuktj9+Fa2sQSwxRKJ4OtTWxm3TO0ovU2cHy6Mr69lhcI5B8alPi+V+QDu6m2/N8Tja
-         jO74+dVA9J4CTAo27ZZCd+vBijdAfN7L6clMs4D+hfq5jHlGstTbXw4FXDdE0bMnRvf8
-         aQ0tsnndrr0nVxyIsXw44Xsc6P+PBE1EWWrQTxFPszrAE4tJUy2ujnjDUteLcn3Zw+Td
-         QZRQn2X9uec2lW1B2UQAZLTlmGm/3BBj0owaTHlQk2juu0MRLOTofjlALa0uITXi5aYV
-         GcpQ==
-X-Gm-Message-State: AO0yUKVa4Mcr+uuNclRP/645Rye0Wsc2owPzawr97Nrn9EXy92vIAa2W
-        EiHDziEaNrk/N5YI77MTtuNj2g==
-X-Google-Smtp-Source: AK7set83eYIYLeNX/W2zorUjCu7uQCvek/ASGg64yVz08SKysalxjaHTJ4xzGbNCKX3gfOe5UaTbHg==
-X-Received: by 2002:a05:600c:35d6:b0:3dc:443e:3a8b with SMTP id r22-20020a05600c35d600b003dc443e3a8bmr9419572wmq.16.1675086721024;
-        Mon, 30 Jan 2023 05:52:01 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:5f17:219:cb05:7cd? ([2a01:e0a:982:cbb0:5f17:219:cb05:7cd])
-        by smtp.gmail.com with ESMTPSA id hg6-20020a05600c538600b003dafbd859a6sm16320125wmb.43.2023.01.30.05.52.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 05:52:00 -0800 (PST)
-Message-ID: <a2c364da-16ba-2a9f-ec4b-507313c78477@linaro.org>
-Date:   Mon, 30 Jan 2023 14:51:59 +0100
+        bh=Y+5GJJ8rF8aG9dI5EbSjlK95PxeFIXWfHHihmcthWAs=;
+        b=MOTAT92Y1Wy6wO8njRc6lCx/eTu54aughqw6Z4FiuuVr18FXH8+3bQY12Sis9QGmgT
+         KFmBETkXkOklmIehyJFuulPfGZUV/i+SN8iZfoA88XCNxV7jc/yhjxp4RnaqA6yOQOO+
+         /PcypDTeLs+tZpmXyA77U2DHNAhlu0Jxc9Lryjn3t2ukS7sNPO0qCt9qvmnYJlSv3CR3
+         gax5WSvkWjDkLN4o/LR1oQnufivR9n1FKabNJqhfdej3+MzHufF3pm5FXR1ljyjAztRI
+         NPj1Tx1isH/gPqSqa03TnuPxTf+U2+gvTRCANnYJlQjZBHXI4Z6K1qC7THBSI0v2WKNe
+         RKBg==
+X-Gm-Message-State: AO0yUKXVpLk6IqfY/B/KV6+kFWd7jbwEkpsROX0e9Efz1ykPI3HIAtPy
+        SPY1p0/ZkGh/2mfkv/SGBAbggXbQJZoN7/+Rruo=
+X-Google-Smtp-Source: AK7set8HEtjjr43uCKJQ7ULAJehzLK+fcnNTlwlz4cpiMXvVOL918RIGhn69NbrifIDqtfn9qnyHzlnC7A98A43mURo=
+X-Received: by 2002:a05:6871:8a6:b0:163:9dc0:78f1 with SMTP id
+ r38-20020a05687108a600b001639dc078f1mr726478oaq.265.1675086801813; Mon, 30
+ Jan 2023 05:53:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2] usb: dwc3: qcom: enable vbus override when in OTG
- dr-mode
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230123-topic-sm8550-upstream-dwc3-qcom-otg-v2-1-2d400e598463@linaro.org>
- <5dee594f-b05f-1211-7444-c45691455b9c@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <5dee594f-b05f-1211-7444-c45691455b9c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230126135049.708524-1-rick.wertenbroek@gmail.com>
+ <20230126135049.708524-6-rick.wertenbroek@gmail.com> <871ab2c5-5f11-5ed8-9e2f-500e0cbcdb19@oracle.com>
+In-Reply-To: <871ab2c5-5f11-5ed8-9e2f-500e0cbcdb19@oracle.com>
+From:   Rick Wertenbroek <rick.wertenbroek@gmail.com>
+Date:   Mon, 30 Jan 2023 14:52:45 +0100
+Message-ID: <CAAEEuhqjv2VyTsPyHN10JE=5c-Jjgb_wNR8C+g5UsKxAYtcKyw@mail.gmail.com>
+Subject: Re: [PATCH 5/8] PCI: rockchip: Added dtsi entry for PCIe endpoint controller
+To:     ALOK TIWARI <alok.a.tiwari@oracle.com>
+Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
+        wenrui.li@rock-chips.com, rick.wertenbroek@heig-vd.ch,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 14:37, Konrad Dybcio wrote:
-> 
-> 
-> On 24.01.2023 09:31, Neil Armstrong wrote:
->> With vbus override enabled when in OTG dr_mode, Host<->Peripheral
->> switch now works on SM8550, otherwise the DWC3 seems to be stuck
->> in Host mode only.
->>
->> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver")
->> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
-> Required for SM6115P Lenovo Tab P11 to switch to peripheral
-> with otg dr_mode as well!
+On Fri, Jan 27, 2023 at 9:43 AM ALOK TIWARI <alok.a.tiwari@oracle.com> wrote:
+>
+>    DTC     arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dtb
+> ../arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi:460.3-52: Warning
+> (pci_device_reg): /pcie@f8000000/pcie@0,0:reg: PCI reg address is not
+> configuration space
+>    DTC arch/arm64/boot/dts/amlogic/meson-gxm-s912-libretech-pc.dtb
+> ../arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi:460.3-52: Warning
+> (pci_device_reg): /pcie@f8000000/pcie@0,0:reg: PCI reg address is not
+> configuration space
+>    HDRINST usr/include/linux/aio_abi.h
+>    HDRINST usr/include/linux/am437x-vpfe.h
+> ../arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi:460.3-52: Warning
+> (pci_device_reg): /pcie@f8000000/pcie@0,0:reg: PCI reg address is not
+> configuration space
+>    DTC     arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dtb
+>
+>
+> Thanks,
+>
+> Alok
 
-Thanks for testing, seems it was applied by Greg
+These warnings are for the pcie (host controller), I did not touch that entry.
+Plus they are for another file (arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi)
+They are related to "pci_device_reg" warnings (can be suppressed with
+"-Wno-pci_device_reg").
 
-Neil
+Sorry, but this does not seem to be related to my change and I don't know
+how to fix this.
 
-> 
-> Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Konrad
->> Changes in v2:
->> - Added Bryan's reviewed-by
->> - Added Fixes tag
->> - Link to v1: https://lore.kernel.org/r/20230123-topic-sm8550-upstream-dwc3-qcom-otg-v1-1-e287a418aa5f@linaro.org
->> ---
->>   drivers/usb/dwc3/dwc3-qcom.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->> index b0a0351d2d8b..959fc925ca7c 100644
->> --- a/drivers/usb/dwc3/dwc3-qcom.c
->> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->> @@ -901,7 +901,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->>   	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
->>   
->>   	/* enable vbus override for device mode */
->> -	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
->> +	if (qcom->mode != USB_DR_MODE_HOST)
->>   		dwc3_qcom_vbus_override_enable(qcom, true);
->>   
->>   	/* register extcon to override sw_vbus on Vbus change later */
->>
->> ---
->> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
->> change-id: 20230123-topic-sm8550-upstream-dwc3-qcom-otg-81795ea148db
->>
->> Best regards,
-
+Rick
