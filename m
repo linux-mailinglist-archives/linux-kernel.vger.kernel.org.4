@@ -2,152 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7746680CFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C718680D0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236442AbjA3MIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37952 "EHLO
+        id S236029AbjA3MJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:09:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236531AbjA3MID (ORCPT
+        with ESMTP id S236585AbjA3MIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:08:03 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D5130180;
-        Mon, 30 Jan 2023 04:07:19 -0800 (PST)
+        Mon, 30 Jan 2023 07:08:39 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD9A1CF68
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:08:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675080439; x=1706616439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L8oHpgiQkMSBM2SGo1lMty/TFLibAaBZaruIjfet5+o=;
-  b=RIbRL4iuurpmcGH98p+ohe9OYus1xtYMU81sSaKjTqpUbmuicuUM6kyJ
-   qoJvc2qm6kzjMk1Lo14TEy1Kl/r4zOf0YvVwcd18t5xIHnEQbGL7IN1Pc
-   wBdrfgcwPh+LbG4Ksc7gexro6QKTxD7qsiqV6RNXWni6knD+FBXR5apHV
-   yx/Yp6bqU0ttdOQnTlq5WuQHZ2DTrvzYM9M2p6UqZuPkKoXtJ7LVLndjO
-   R6XG59+67bdv9ZRVC2mBmV9Jq+IGkaO5Ec2qZ59nEtmfYyXqDsKCIfhtX
-   KItFak1Jb6oiRPM51+xMTELIOJ8/tc51fhKo9surCNHzmOvCGScomspMk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="311160688"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="311160688"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 04:06:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="909473739"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="909473739"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 30 Jan 2023 04:05:59 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pMSv5-00HKuX-01;
-        Mon, 30 Jan 2023 14:05:55 +0200
-Date:   Mon, 30 Jan 2023 14:05:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v2 04/11] gpiolib: Clear the gpio_device's fwnode
- initialized flag before adding
-Message-ID: <Y9eyohkI7EKOlHSX@smile.fi.intel.com>
-References: <20230127001141.407071-1-saravanak@google.com>
- <20230127001141.407071-5-saravanak@google.com>
- <Y9OY6pMwYtab1Avd@smile.fi.intel.com>
- <CAGETcx_sm5Efy=80kc9gNTaZgvOQzBGxwWA1n+bPJYWg43OebA@mail.gmail.com>
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1675080504; x=1706616504;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Nh6/usZ2THZBSY98qO/fgkA7zKcsohS6tiOaRuCPZGk=;
+  b=TbxPWJ4eoweYuSxWm4F/Jeh/OjEtIfX9GHaBMoz05i84nW3RDbuZZ7M7
+   gAERwrXHbNtBYe6BhEzCtw2vJsSo1pICFfvH8KLdMI1793CBCrsyehffM
+   YJUyIjuB+P3hXclKo9KHPLTT0h5ubZRvGjKtkV9dO+k+Dw9GvDOA4fc3Y
+   Et7SDFU5/0JQWjWqNtAm1yHlU38gCpdOSuuPMz1hidlkP3qPTmNRFrowX
+   mViWkh6Q6/C8qk14aWgYvGPEzkaIs3i9MrkF1kTzMImRh2ebjEss5v7XY
+   DDw5AN23qO9Cc4xvZp80aMwHUpu3l8VWXqQjXNSclU1MC+xKpeEco30Ap
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,257,1669100400"; 
+   d="scan'208";a="198784198"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jan 2023 05:07:21 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 05:07:20 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.16 via Frontend Transport; Mon, 30 Jan 2023 05:07:16 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>
+CC:     <alsa-devel@alsa-project.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH 0/8] ASoC: mchp-spdifrx: add runtime PM support and fixes
+Date:   Mon, 30 Jan 2023 14:06:39 +0200
+Message-ID: <20230130120647.638049-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGETcx_sm5Efy=80kc9gNTaZgvOQzBGxwWA1n+bPJYWg43OebA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:33:38PM -0800, Saravana Kannan wrote:
-> On Fri, Jan 27, 2023 at 1:27 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Thu, Jan 26, 2023 at 04:11:31PM -0800, Saravana Kannan wrote:
+Hi,
 
-...
+This series adds runtime PM support for Microchip SPDIFRX driver.
+Along with it I added few fixes identified while going though the code
+and playing with Microchip SPDIFRX controller.
 
-> > > +     /*
-> > > +      * If fwnode doesn't belong to another device, it's safe to clear its
-> > > +      * initialized flag.
-> > > +      */
-> > > +     if (!gdev->dev.fwnode->dev)
-> > > +             fwnode_dev_initialized(gdev->dev.fwnode, false);
-> >
-> > Do not dereference fwnode in struct device. Use dev_fwnode() for that.
-> >
-> >         struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
-> >
-> >         if (!fwnode->dev)
-> >                 fwnode_dev_initialized(fwnode, false);
-> 
-> Honestly, we should work towards NOT needing dev_fwnode().
+Thank you,
+Claudiu Beznea
 
-Honestly, it's that We SHOULD go to avoid any direct dereference of fwnode from
-the struct device. I explained you in the comment in the other patch.
+Claudiu Beznea (8):
+  ASoC: mchp-spdifrx: fix controls which rely on rsr register
+  ASoC: mchp-spdifrx: fix return value in case completion times out
+  ASoC: mchp-spdifrx: fix controls that works with completion mechanism
+  ASoC: mchp-spdifrx: disable all interrupts in
+    mchp_spdifrx_dai_remove()
+  ASoC: mchp-spdifrx: use unsigned long to store clk_get_rate() value
+  ASoC: mchp-spdifrx: remove struct mchp_spdifrx_dev::fmt member
+  ASoC: mchp-spdifrx: add runtime pm support
+  ASoC: mchp-spdifrx: document data structures
 
-> The
-> function literally dereferences dev->fwnode or the one inside of_node.
-> So my dereference is fine. The whole "fwnode might not be set for
-> devices with of_node" is wrong and we should fix that instead of
-> writing wrappers to work around it.
-> 
-> Also, for now I'm going to leave this as if for the same reasons as I
-> mentioned in Patch 1.
-
-Same.
-
+ sound/soc/atmel/mchp-spdifrx.c | 552 ++++++++++++++++++++++++---------
+ 1 file changed, 403 insertions(+), 149 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
