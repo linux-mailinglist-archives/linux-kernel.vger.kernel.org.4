@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926B06809B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BAC6809E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236464AbjA3JiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S235351AbjA3JuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:50:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235583AbjA3Jhr (ORCPT
+        with ESMTP id S235556AbjA3JuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:37:47 -0500
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D94591166A;
-        Mon, 30 Jan 2023 01:37:19 -0800 (PST)
-Received: from cap.home.8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 5CFF8223E53;
-        Mon, 30 Jan 2023 10:37:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1675071438;
-        bh=+oAA9MfHhwDJC0rP2bpO4Xv2wTnRt8z2HxFngauyjCI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=xlgWJyHOEx2dz8S8NCfvVRYSsLU12EjLQS1F4GnQaAWhCn/T/JaIb7Y+ACWSjb3+a
-         3YxbhOY1LN/A2n/XjN4VqYwlDE5sQ6PcFBFX0cUZNTfjk5Y/wQDk8phK2g9Jccp2X7
-         /PlMPXhi/cBzE8d6+5oIIWv5ELmGhh45CaoEro7rD5+6U+64EOAS8hkdiZcMK+Lfb/
-         +wcJsHxfnl3HAa5vegjVJ6q3Tg8yM9SRubdYgsWccoP8QZ1l2teUty5YkbJPAvrsdj
-         PCXSi0OSjlc9Y0SxTYDHUphqrEH1ct1RPZJlxic2zVNbbwcZm+n03OjUoaVmWWe0if
-         QfTGmNSvVCPSA==
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, hpa@zytor.com,
-        Sean Christopherson <seanjc@google.com>, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Joerg Roedel <jroedel@suse.de>,
-        Alexey Kardashevskiy <aik@amd.com>
-Subject: [PATCH] x86/debug: Fix stack recursion caused by DR7 accesses
-Date:   Mon, 30 Jan 2023 10:37:17 +0100
-Message-Id: <20230130093717.460-1-joro@8bytes.org>
-X-Mailer: git-send-email 2.39.0
+        Mon, 30 Jan 2023 04:50:09 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED2E1BAF2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:50:08 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pMQbl-0003Hy-BJ; Mon, 30 Jan 2023 10:37:49 +0100
+Message-ID: <3d5f1e39-0ee7-0b5c-afa7-ef31b87bd1ef@leemhuis.info>
+Date:   Mon, 30 Jan 2023 10:37:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: PROBLEM: sparc64 random crashes starting w/ Linux 6.1
+ (regression)
+Content-Language: en-US, de-DE
+To:     Nick Bowler <nbowler@draconx.ca>, linux-kernel@vger.kernel.org,
+        sparclinux@vger.kernel.org, regressions@lists.linux.dev
+Cc:     Peter Xu <peterx@redhat.com>
+References: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675072208;99282e28;
+X-HE-SMSGID: 1pMQbl-0003Hy-BJ
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-In kernels compiled with CONFIG_PARAVIRT=n the compiler re-orders the
-DR7 read in exc_nmi() to happen before the call to sev_es_ist_enter().
+On 29.01.23 03:17, Nick Bowler wrote:
+> 
+> Starting with Linux 6.1.y, my sparc64 (Sun Ultra 60) system is very
+> unstable, with userspace processes randomly crashing with all kinds of
+> different weird errors.  The same problem occurs on 6.2-rc5.  Linux
+> 6.0.y is OK.
+> 
+> Usually, it manifests with ssh connections just suddenly dropping out
+> like this:
+> 
+>   malloc(): unaligned tcache chunk detected
+>   Connection to alectrona closed.
+> 
+> but other kinds of failures (random segfaults, bus errors, etc.) are
+> seen too.
+> 
+> I have not ever seen the kernel itself oops or anything like that, there
+> are no abnormal kernel log messages of any kind; except for the normal
+> ones that get printed when processes segfault, like this one:
+> 
+>   [  563.085851] zsh[2073]: segfault at 10 ip 00000000f7a7c09c (rpc
+> 00000000f7a7c0a0) sp 00000000ff8f5e08 error 1 in
+> libc.so.6[f7960000+1b2000]
+> 
+> I was able to reproduce this fairly reliably by using GNU ddrescue to
+> dump a disk from the dvd drive -- things usually go awry after a minute
+> or two.  So I was able to bisect to this commit:
+> 
+>   2e3468778dbe3ec389a10c21a703bb8e5be5cfbc is the first bad commit
+>   commit 2e3468778dbe3ec389a10c21a703bb8e5be5cfbc
+>   Author: Peter Xu <peterx@redhat.com>
+>   Date:   Thu Aug 11 12:13:29 2022 -0400
+> 
+>       mm: remember young/dirty bit for page migrations
+> 
+> This does not revert cleanly on master, but I ran my test on the
+> immediately preceding commit (0ccf7f168e17: "mm/thp: carry over dirty
+> bit when thp splits on pmd") extra times and I am unable to get this
+> one to crash, so reasonably confident in this bisection result...
+> 
+> Let me know if you need any more info!
 
-This is problematic when running as an SEV-ES guest because in this
-environemnt the DR7 read might cause a #VC exception, and taking #VC
-exceptions is not safe in exc_nmi() before sev_es_ist_enter() has run.
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
 
-The result is stack recursion if the NMI was caused on the #VC IST
-stack, because a subsequent #VC exception in the NMI handler will
-overwrite the stack frame of the interrupted #VC handler.
+#regzbot ^introduced 2e3468778dbe3ec3
+#regzbot title sparc64: random crashes
+#regzbot ignore-activity
 
-As there are no compiler barriers affecting the ordering of DR7
-reads/writes, make the accesses to this register volatile, forbidding
-the compiler to re-order them.
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
 
-Cc: Alexey Kardashevskiy <aik@amd.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
- arch/x86/include/asm/debugreg.h | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
 
-diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
-index b049d950612f..eb6238a5f60c 100644
---- a/arch/x86/include/asm/debugreg.h
-+++ b/arch/x86/include/asm/debugreg.h
-@@ -39,7 +39,18 @@ static __always_inline unsigned long native_get_debugreg(int regno)
- 		asm("mov %%db6, %0" :"=r" (val));
- 		break;
- 	case 7:
--		asm("mov %%db7, %0" :"=r" (val));
-+		/*
-+		 * Make DR7 reads volatile to forbid re-ordering them with other
-+		 * code. This is needed because a DR7 access can cause a #VC
-+		 * exception when running under SEV-ES. But taking a #VC
-+		 * exception is not safe at everywhere in the code-flow and
-+		 * re-ordering might place the access into an unsafe place.
-+		 *
-+		 * This happened in the NMI handler, where the DR7 read was
-+		 * re-ordered to happen before the call to sev_es_ist_enter(),
-+		 * causing stack recursion.
-+		 */
-+		asm volatile ("mov %%db7, %0" : "=r" (val));
- 		break;
- 	default:
- 		BUG();
-@@ -66,7 +77,21 @@ static __always_inline void native_set_debugreg(int regno, unsigned long value)
- 		asm("mov %0, %%db6"	::"r" (value));
- 		break;
- 	case 7:
--		asm("mov %0, %%db7"	::"r" (value));
-+		/*
-+		 * Make DR7 writes volatile to forbid re-ordering them with
-+		 * other code. This is needed because a DR7 access can cause a
-+		 * #VC exception when running under SEV-ES.  But taking a #VC
-+		 * exception is not safe at everywhere in the code-flow and
-+		 * re-ordering might place the access into an unsafe place.
-+		 *
-+		 * This happened in the NMI handler, where the DR7 read was
-+		 * re-ordered to happen before the call to sev_es_ist_enter(),
-+		 * causing stack recursion.
-+		 *
-+		 * While is didn't happen with a DR7 write, add the volatile
-+		 * here too to avoid similar problems in the future.
-+		 */
-+		asm volatile ("mov %0, %%db7"	::"r" (value));
- 		break;
- 	default:
- 		BUG();
--- 
-2.39.0
-
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
