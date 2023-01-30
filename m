@@ -2,129 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C40E6813D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2DE6813E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237892AbjA3OzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
+        id S237906AbjA3O6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235737AbjA3OzJ (ORCPT
+        with ESMTP id S230073AbjA3O6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:55:09 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E69129435
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:55:07 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UDhMNo019849;
-        Mon, 30 Jan 2023 14:54:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : content-type : in-reply-to
- : mime-version; s=pp1; bh=Qd783FI+66KLV4KUVTHdqFl4rRs0Bb+0OylJCdv6snE=;
- b=dZg3lTDrpt3DqoMor/SdVaTsMOYva8EdKEPSTLWBhSWWyCTzZhfTFDULBaAxLzZJhKSG
- gCQe4iodbKS446jOJHJi76tpuOxezzknr6j3yTokpW9HTcbZm3XMPlqqmsDGILFRuRwG
- HA+JHI3BxakK2E8TdN4YPzmWmyYVyXuxtGbOVmpLgRe4viETycmbBWjx1LBjisEbwsns
- KPDNvyWfYzvHQs85tZRYdF+8tBwBkmfBTXk5fTCDpaQ9IaH7YTnJ9Ym9Xyd2lrvGR+MP
- OGzUjYVJR7E3DuM4WrgZS4eYZRanFVgzDFlRxGJQaYlLIukBJXgfrKgpSKk2aPnhWTVR NA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nef1a1xen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 14:54:58 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30UDiIf7022127;
-        Mon, 30 Jan 2023 14:54:58 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nef1a1xdv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 14:54:58 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30TKQZHp009758;
-        Mon, 30 Jan 2023 14:54:56 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3ncvt7hps1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 14:54:56 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30UEsrbi47645076
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Jan 2023 14:54:53 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C95A12004B;
-        Mon, 30 Jan 2023 14:54:53 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DD73620043;
-        Mon, 30 Jan 2023 14:54:51 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with SMTP;
-        Mon, 30 Jan 2023 14:54:51 +0000 (GMT)
-Date:   Mon, 30 Jan 2023 20:24:51 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        mingo@redhat.com, peterz@infradead.org, ritesh.list@gmail.com,
-        sshegde@linux.ibm.com, vincent.guittot@linaro.org,
-        vishalc@linux.vnet.ibm.com, vschneid@redhat.com
-Subject: Re: [PATCH v2] sched/debug: Put sched/domains files under the
- verbose flag
-Message-ID: <20230130145451.GB159593@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20230119150758.880189-1-pauld@redhat.com>
- <20230120163330.1334128-1-pauld@redhat.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <20230120163330.1334128-1-pauld@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5F67FU_FCzxA-D37xGwKQXxAQXZ1feEr
-X-Proofpoint-GUID: 8P6H9sz_QwJrbjcQGrqPnbKssUOLi3NK
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 30 Jan 2023 09:58:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E744D10409;
+        Mon, 30 Jan 2023 06:58:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A82B6108D;
+        Mon, 30 Jan 2023 14:58:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3774C4339B;
+        Mon, 30 Jan 2023 14:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675090691;
+        bh=Dy66gCGzyPJcLshQJwfc5AQ29gXjKkXX0fJ1HpNtqwk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gYqf0JfKAi2YFZvsQKEL8rfw9E+3lUBZ8U+ovluM5yP0y4/2CFeGC0dvsrc6zn/I2
+         Z1301CJFV09w/xcFhLBEUsY8oTIbDfVHSakHdpEsPet7yTcztpc3Z8xx6vnw4KtRZA
+         g2CgMl/0BLDVWXLA1qvBkPBvZaVyfbH1HUmCWP0V6Vh27xMFFMpGrszh7JW8KHuOvW
+         YiZTBWMIhxUoOAwfQpitjqXC1Od8m2KhVek31DeUnT9TAo/k58HBORyLR3VBywLkqN
+         HE1oUX9hcbDWGbPdZg/3xeo/ABOFuEjg8mxy0btEE9mbxQTg1ayWF4rQ+pGqXz6t85
+         /qSYKvDC4/l/A==
+Received: by mail-vk1-f171.google.com with SMTP id bs10so5854893vkb.3;
+        Mon, 30 Jan 2023 06:58:11 -0800 (PST)
+X-Gm-Message-State: AO0yUKVFuQ6nE68B1sz/ABscFhQQFjONWLWAbvBM58+/m3l4XM6J6HoI
+        /wa6n3p9Kd/ej81hdqW7Sgwfm6Pq8xRFfnp2UQ==
+X-Google-Smtp-Source: AK7set9svEjsdOnCKyk10Z9orQXpAu0MQ19gFzSd4yUat7bVea/0tlPfgDkyR8ht9EtvCpLlVMcChGgiQFZ47mwWGzg=
+X-Received: by 2002:a1f:eec2:0:b0:3ea:1a72:aad6 with SMTP id
+ m185-20020a1feec2000000b003ea1a72aad6mr899057vkh.15.1675090690804; Mon, 30
+ Jan 2023 06:58:10 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_13,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 mlxscore=0 impostorscore=0 adultscore=0 phishscore=0
- clxscore=1011 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300141
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123112803.817534-1-alexghiti@rivosinc.com>
+ <20230123142554.f22ajf6upfk2ybxk@orel> <20230125104102.2thvourt3lx2p36a@orel>
+ <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
+ <CAL_JsqJ8JtkOBLpdf3hU9JWcdRTFr3Ss1Hd+yFpMqs7ujUiyCQ@mail.gmail.com> <20230130141933.wuikrruh2svkcfv4@orel>
+In-Reply-To: <20230130141933.wuikrruh2svkcfv4@orel>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 30 Jan 2023 08:57:58 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJdBGAOELLTQbfi6Q3r-AnS5Wf8VNf94BP6Y9TNvPHS-w@mail.gmail.com>
+Message-ID: <CAL_JsqJdBGAOELLTQbfi6Q3r-AnS5Wf8VNf94BP6Y9TNvPHS-w@mail.gmail.com>
+Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Phil Auld <pauld@redhat.com> [2023-01-20 11:33:30]:
+On Mon, Jan 30, 2023 at 8:19 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+>
+> On Mon, Jan 30, 2023 at 07:48:04AM -0600, Rob Herring wrote:
+> > On Wed, Jan 25, 2023 at 6:13 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+> > >
+> > > On Wed, Jan 25, 2023 at 11:41 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> > > >
+> > > > On Mon, Jan 23, 2023 at 03:25:54PM +0100, Andrew Jones wrote:
+> > > > > On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
+> > > > > > During the early page table creation, we used to set the mapping for
+> > > > > > PAGE_OFFSET to the kernel load address: but the kernel load address is
+> > > > > > always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+> > > > > > pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
+> > > > > > PAGE_OFFSET is).
+> >
+> > [...]
+> >
+> > > > > > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> > > > > > index f08b25195ae7..58107bd56f8f 100644
+> > > > > > --- a/drivers/of/fdt.c
+> > > > > > +++ b/drivers/of/fdt.c
+> > > > > > @@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
+> > > > > >  static void __early_init_dt_declare_initrd(unsigned long start,
+> > > > > >                                        unsigned long end)
+> > > > > >  {
+> > > > > > -   /* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
+> > > > > > -    * enabled since __va() is called too early. ARM64 does make use
+> > > > > > -    * of phys_initrd_start/phys_initrd_size so we can skip this
+> > > > > > -    * conversion.
+> > > > > > +   /*
+> > > > > > +    * __va() is not yet available this early on some platforms. In that
+> > > > > > +    * case, the platform uses phys_initrd_start/phys_initrd_size instead
+> > > > > > +    * and does the VA conversion itself.
+> > > > > >      */
+> > > > > > -   if (!IS_ENABLED(CONFIG_ARM64)) {
+> > > > > > +   if (!IS_ENABLED(CONFIG_ARM64) &&
+> > > > > > +       !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
+> > > > >
+> > > > > There are now two architectures, so maybe it's time for a new config
+> > > > > symbol which would be selected by arm64 and riscv64 and then used here,
+> > > > > e.g.
+> > > > >
+> > > > >   if (!IS_ENABLED(CONFIG_NO_EARLY_LINEAR_MAP)) {
+> > > >
+> > > > I see v5 left this as it was. Any comment on this suggestion?
+> > >
+> > > Introducing a config for this only use case sounds excessive to me,
+> > > but I'll let Rob decide what he wants to see here.
+> >
+> > Agreed. Can we just keep it as is here.
+> >
+> > > > > >             initrd_start = (unsigned long)__va(start);
+> > > > > >             initrd_end = (unsigned long)__va(end);
+> >
+> > I think long term, we should just get rid of needing to do this part
+> > in the DT code and let the initrd code do this.
+>
+> initrd code provides reserve_initrd_mem() for this and riscv calls
+> it later on. afaict, this early setting in OF code is a convenience
+> which architectures could be taught not to depend on, and then it
+> could be removed. But, until then, some architectures will need to
+> avoid it. As I commented downthread, I also don't want to go with
+> a config anymore, but it'd be nice to keep arch-specifics out of
+> here, so I've posted a patch changing __early_init_dt_declare_initrd
+> to be a weak function.
 
-> The debug files under sched/domains can take a long time to regenerate,
-> especially when updates are done one at a time. Move these files under
-> the sched verbose debug flag. Allow changes to verbose to trigger
-> generation of the files. This lets a user batch the updates but still
-> have the information available.  The detailed topology printk messages
-> are also under verbose.
-> 
-> Discussion that lead to this approach can be found in the link below.
-> 
-> Simplified code to maintain use of debugfs bool routines suggested by
-> Michael Ellerman <mpe@ellerman.id.au>.
-> 
-> Signed-off-by: Phil Auld <pauld@redhat.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Link: https://lore.kernel.org/all/Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com/
-> ---
-> 
-Looks good to me.
+If this was *always* going to be architecture specific, then I'd
+agree. But I think there are better paths to refactor this. I don't
+want to go back to a weak function and encourage more implementations
+of __early_init_dt_declare_initrd().
 
-Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-
--- 
-Thanks and Regards
-Srikar Dronamraju
+Rob
