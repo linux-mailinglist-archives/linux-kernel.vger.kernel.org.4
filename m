@@ -2,145 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA71680573
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C6F68057F
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235394AbjA3FOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 00:14:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52866 "EHLO
+        id S235655AbjA3FPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 00:15:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbjA3FOT (ORCPT
+        with ESMTP id S235529AbjA3FO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 00:14:19 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5D321943;
-        Sun, 29 Jan 2023 21:14:18 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4xDm1nTBz4x1h;
-        Mon, 30 Jan 2023 16:14:16 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675055656;
-        bh=pTIsU8qmqRGy5BJELrtztF9nHTPffugyqjJ/xnBNj4Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IjMWF7zkNfiqVexAyP1fLVOtNNtilTnF3Z7SZG+Hlg3g84r9tmqq76IvIYAoCm8Nh
-         bK0UbgrWUZBiI3aCdPkcdZkWCPqiOvW6BmADphoqKq96aBab5gmiV8sEk4q+C54V4N
-         S65zAFrqrzYINFP2MQGWwDbS1WVtwAeC7Flxl8aZdAw8ZKgSw433+8ewHKH3cOGR4Q
-         uhXUheU7vHNmdLGdPYIkNf1KBHZae6/XOsdjSQ/zNQunASaDF+8IFFwpmM563I/AgP
-         gW3cws1hb85h0CTWA/9UfZRURG+oCjV7HUEIuzyLt4OzKzBw5yGwe/B7QAtneRMZ1Y
-         c+liKhKGzlxjg==
-Date:   Mon, 30 Jan 2023 16:14:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <christian@brauner.io>
-Cc:     Giuseppe Scrivano <gscrivan@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm tree
-Message-ID: <20230130161414.25a71a87@canb.auug.org.au>
+        Mon, 30 Jan 2023 00:14:59 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DAE23C71;
+        Sun, 29 Jan 2023 21:14:58 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U4C3qs019432;
+        Mon, 30 Jan 2023 05:14:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=M9KtfpmFVdbIRd/2qYLXC/lqTjcA85o9Am5EbHuy21w=;
+ b=fTOk1h5wZ2M65sVyrHeda7+QCislWfOlIL5+JBKtmeeyfiDCUfcNLO6SRJCCVOyrUuyf
+ +EhSjbTfDdeeswVC5Qmg2DT7biZCUUPyCBprP+/3FpT0Hqt6PTfPajHJCDSydlqjlvt9
+ do0m7KPt6XepOoaHgBmH9T4dr+DQ/o6/XhQRyb2VW5AZfCNYGnzNbHnR1KGBzEBGAMIf
+ gmJUrQX0JtDeYDcEK/T/pRv/VaDyg384r/sTtlcp5W0+PHmRpuPu0rmUTUDgJ+YzZO0n
+ Vd3PnqjGGP/yyfzHHX/s2dAS6HOjaeL9QhDIJ4EfM1sVBGewDYQ9RMjK5AISvk6lHshZ oQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncs2x35cw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 05:14:41 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30U5EeUs030359
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 05:14:40 GMT
+Received: from [10.216.24.235] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 29 Jan
+ 2023 21:14:37 -0800
+Message-ID: <343d8b2f-9b7e-85ba-6f68-13cef73e55d0@quicinc.com>
+Date:   Mon, 30 Jan 2023 10:44:32 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P_7JtmDy/=A0YLuPMx+9eXf";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v4 1/2] dt-bindings: ramoops: Inherit reserve memory
+ property
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-hardening@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Kees Cook <keescook@chromium.org>, Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <1674835252-31954-1-git-send-email-quic_mojha@quicinc.com>
+ <10097835-30fe-bbad-6c95-e5ec9dca3e2e@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <10097835-30fe-bbad-6c95-e5ec9dca3e2e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: udmzns9DRiekGpBmEu07sWQoqDSenRk-
+X-Proofpoint-GUID: udmzns9DRiekGpBmEu07sWQoqDSenRk-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_03,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=622 impostorscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1015 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301300048
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/P_7JtmDy/=A0YLuPMx+9eXf
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-After merging the mm tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+On 1/28/2023 1:34 AM, Krzysztof Kozlowski wrote:
+> On 27/01/2023 17:00, Mukesh Ojha wrote:
+>> The reserved memory region for ramoops is assumed to be at a
+>> fixed and known location when read from the devicetree. This
+>> is not desirable in an environment where it is preferred the
+>> region to be dynamically allocated at runtime, as opposed to
+>> being fixed at compile time.
+>>
+>> So, update the ramoops binding by inheriting some reserve memory
+>> property to allocate the ramoops region dynamically.
+>>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: Tony Luck <tony.luck@intel.com>
+>> Cc: Guilherme G. Piccoli <gpiccoli@igalia.com>
+>> Cc: Rob Herring <robh+dt@kernel.org>
+>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> 
+> Drop. There is no single need to store automated output of
+> get_maintainers.pl in the git log forever. It can be easily re-created
+> at any given time.
+> 
+> If you need it for your own patch management purposes, keep it under ---.
+> 
 
-kernel/sys.c: In function '__do_sys_prctl':
-kernel/sys.c:2664:9: error: duplicate case value
- 2664 |         case PR_SET_HIDE_SELF_EXE:
-      |         ^~~~
-kernel/sys.c:2655:9: note: previously used here
- 2655 |         case PR_SET_MDWE:
-      |         ^~~~
-kernel/sys.c:2669:9: error: duplicate case value
- 2669 |         case PR_GET_HIDE_SELF_EXE:
-      |         ^~~~
-kernel/sys.c:2658:9: note: previously used here
- 2658 |         case PR_GET_MDWE:
-      |         ^~~~
+Will drop, thanks.
 
-Caused by commit
+> Additionally:
+> where is patch number 2?
 
-  ab30677b499c ("mm: implement memory-deny-write-execute as a prctl")
+It was merged with 2/2 as it was not making sense to keep it as separate 
+patch
 
-interacting with commit
+-Mukesh
 
-  966eb1ba050d ("exec: add PR_HIDE_SELF_EXE prctl")
-
-from the pidfd tree.
-
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 30 Jan 2023 16:08:34 +1100
-Subject: [PATCH] mm: fixup for "mm: implement memory-deny-write-execute as =
-a prctl"
-
-interacting with
-
-  966eb1ba050d ("exec: add PR_HIDE_SELF_EXE prctl")
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/uapi/linux/prctl.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index ccc92b92037c..99b5592cf297 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -282,10 +282,10 @@ struct prctl_mm_map {
- # define PR_SME_VL_INHERIT		(1 << 17) /* inherit across exec */
-=20
- /* Memory deny write / execute */
--#define PR_SET_MDWE			65
-+#define PR_SET_MDWE			67
- # define PR_MDWE_REFUSE_EXEC_GAIN	1
-=20
--#define PR_GET_MDWE			66
-+#define PR_GET_MDWE			68
-=20
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
---=20
-2.35.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/P_7JtmDy/=A0YLuPMx+9eXf
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXUiYACgkQAVBC80lX
-0GzFWAf/bYwtNOF7FYQKoBYFNQuNkpBZX9225vmwfuzXZA7R3wcp3YAjyPhi5aDI
-eCn+9y306IFzVqBiLIawP+z36IshFyVKJUn9ygQHQ0GvLeLNp+rx0VWny61pvUoD
-74i4Rs9072wmBXF2jssP+10xkxSXhXL+IjY6IsnF7Z5Gr0nMDXmLA1fFqn8pMWqa
-tTJ19zi6uit6RujuXHpQleQRBy9oFUU3PZQhI/kepiQML2xnqprqQwHYDj6hC3Oh
-OXOyWPAuLca6E0WBdNd0l0mo+bkz3Y6oaHiBOZwhimCfbmsEWF+9O5ArZGTJx1k9
-LXLxTfWpXEa0Vo0LKk8IIj3CAhpCgQ==
-=6wEY
------END PGP SIGNATURE-----
-
---Sig_/P_7JtmDy/=A0YLuPMx+9eXf--
+> 
+> Best regards,
+> Krzysztof
+> 
