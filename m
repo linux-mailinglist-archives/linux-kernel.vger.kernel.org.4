@@ -2,163 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA833680523
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 998B5680527
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235497AbjA3EoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:44:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
+        id S235502AbjA3EqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:46:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235437AbjA3EoJ (ORCPT
+        with ESMTP id S232883AbjA3EqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:44:09 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2812199C1;
-        Sun, 29 Jan 2023 20:44:07 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U4h8Uw024946;
-        Mon, 30 Jan 2023 04:43:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=a1VbUdfCKkh85LqnWQgDBN3SbItROV7P6Ok7+fU7Lso=;
- b=bEjcx5Bg8/ylKWeysLb6XYsK8d035HRIrd5NEcSJC9iCMwurIz0dwl3Yq03TCTQ5uPe8
- 8VKB5hzr/UYk8V5/oUg5Ea293tMW+1golft8WeFGBnemnQqdSpGlJ/E9wzQZ/i82cMtJ
- xqigstn/8jFSoZ9DDQA2eBQ1+JWk8Z4KwslFEIa9JywPDndgCxF/jxUFKA5oCbzqYi5k
- tDlBgNNeGk3u4f+rViOTT7GbfFaaijuYKbG/u5POIn/ztxujb943p2RzMY7tsYZZnRcY
- y0SfwNInFhGHJ/m8WZX2cth8CFsxbcQ7IbLnPxy5+sSpIT8+tFkmYpGmluAM4E18T8ct uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddhpnaxe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 04:43:54 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30U4hCC8025867;
-        Mon, 30 Jan 2023 04:43:53 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddhpnawv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 04:43:53 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30THRS2Y012460;
-        Mon, 30 Jan 2023 04:43:51 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ncvs7hr3r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 04:43:51 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30U4hm7V49807708
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Jan 2023 04:43:48 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A546620040;
-        Mon, 30 Jan 2023 04:43:48 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9F30F20043;
-        Mon, 30 Jan 2023 04:43:47 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 30 Jan 2023 04:43:47 +0000 (GMT)
-Received: from [10.61.2.128] (haven.au.ibm.com [9.192.254.114])
+        Sun, 29 Jan 2023 23:46:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEC51F5C3
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:46:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id B0AE160151;
-        Mon, 30 Jan 2023 15:43:45 +1100 (AEDT)
-Message-ID: <63aaa01d1649f2905b3bff8009bb9c3a47c82e50.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 16/24] powerpc/pseries: Implement signed update for
- PLPKS objects
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-integrity@vger.kernel.org
-Cc:     sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        gjoyce@linux.ibm.com, ruscur@russell.cc, gcwilson@linux.ibm.com,
-        joel@jms.id.au
-Date:   Mon, 30 Jan 2023 15:43:45 +1100
-In-Reply-To: <CQ04OOT6CW1A.MCLZN2B4BTWK@bobo>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
-         <20230120074306.1326298-17-ajd@linux.ibm.com>
-         <CQ04OOT6CW1A.MCLZN2B4BTWK@bobo>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B600560EC5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16EEDC433D2;
+        Mon, 30 Jan 2023 04:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675053968;
+        bh=NGrl8WA9e6ZS2gic40qKN6qyWVwQZUSTRKLR+5l4xtU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=uAQ4mfGYVZVl/xaPyU5OmnHuZQHL4XbcASuvdFAx1aKzXpmia4HFVzPbzcKWn6rVb
+         yK3fcSmJD5igrcgE04gnmP62bhfvpNv2pRnXy4Sy7zbGKC8n7XQVEF7XLvzg+Dq4h4
+         aJZfTa6k/7IDWCZzF+aDE/pXRNb15SOnOmU0uLVdZ/ARpL9o1uAzdnA5LPnMnFX2O+
+         jEL4ZeV/IMXySJbOtJg3tprtuN3akHJaAHEufxdDsim+OuY3IILUsMNwDjlZK/Vilw
+         rKVRDUJyfWIEHE/3DynDqH7jh/Y2/5U+T+zAKKBDnXO0xEnhSgHMkkUqadg7XwFdhY
+         +E+MfaJDDSFgQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A0B1D5C089F; Sun, 29 Jan 2023 20:46:07 -0800 (PST)
+Date:   Sun, 29 Jan 2023 20:46:07 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <20230130044607.GP2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+ <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+ <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+ <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
+ <Y9WeOTmGCCfjMUtG@andrea>
+ <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
+ <0da94668-c041-1d59-a46d-bd13562e385e@huaweicloud.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zPrBAUej9z1KNEd5uLhd4M8Ldux6midO
-X-Proofpoint-GUID: PUADR4r-iCyJNKM07QEW5qCw8rIqU9ec
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_02,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=976 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 clxscore=1015
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0da94668-c041-1d59-a46d-bd13562e385e@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTAxLTI0IGF0IDE0OjE2ICsxMDAwLCBOaWNob2xhcyBQaWdnaW4gd3JvdGU6
-Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy9wc2VyaWVzL3BscGtzLmMK
-PiA+IGIvYXJjaC9wb3dlcnBjL3BsYXRmb3Jtcy9wc2VyaWVzL3BscGtzLmMKPiA+IGluZGV4IDEx
-ODkyNDZiMDNkYy4uNzk2ZWQ1NTQ0ZWU1IDEwMDY0NAo+ID4gLS0tIGEvYXJjaC9wb3dlcnBjL3Bs
-YXRmb3Jtcy9wc2VyaWVzL3BscGtzLmMKPiA+ICsrKyBiL2FyY2gvcG93ZXJwYy9wbGF0Zm9ybXMv
-cHNlcmllcy9wbHBrcy5jCj4gPiBAQCAtODEsNiArODEsMTIgQEAgc3RhdGljIGludCBwc2VyaWVz
-X3N0YXR1c190b19lcnIoaW50IHJjKQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBlcnIgPSAtRU5PRU5UOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVh
-azsKPiA+IMKgwqDCoMKgwqDCoMKgwqBjYXNlIEhfQlVTWToKPiA+ICvCoMKgwqDCoMKgwqDCoGNh
-c2UgSF9MT05HX0JVU1lfT1JERVJfMV9NU0VDOgo+ID4gK8KgwqDCoMKgwqDCoMKgY2FzZSBIX0xP
-TkdfQlVTWV9PUkRFUl8xMF9NU0VDOgo+ID4gK8KgwqDCoMKgwqDCoMKgY2FzZSBIX0xPTkdfQlVT
-WV9PUkRFUl8xMDBfTVNFQzoKPiA+ICvCoMKgwqDCoMKgwqDCoGNhc2UgSF9MT05HX0JVU1lfT1JE
-RVJfMV9TRUM6Cj4gPiArwqDCoMKgwqDCoMKgwqBjYXNlIEhfTE9OR19CVVNZX09SREVSXzEwX1NF
-QzoKPiA+ICvCoMKgwqDCoMKgwqDCoGNhc2UgSF9MT05HX0JVU1lfT1JERVJfMTAwX1NFQzoKPiA+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXJyID0gLUVCVVNZOwo+ID4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsKPiA+IMKgwqDCoMKgwqDCoMKgwqBjYXNl
-IEhfQVVUSE9SSVRZOgo+IAo+IFRoaXMgaXMgYSBiaXQgc2FkIHRvIG1haW50YWluIGhlcmUuIEl0
-J3MgZHVwbGljYXRpbmcgYml0cyB3aXRoCj4gaHZjc19jb252ZXJ0LCBhbmQgYSBidW5jaCBvZiBv
-cGVuIGNvZGVkIHBsYWNlcy4gUHJvYmFibHkgbm90IHRoZQo+IHNlcmllcyB0byBkbyBhbnl0aGlu
-ZyBhYm91dC4gV291bGQgYmUgbmljZSBpZiB3ZSBjb3VsZCBzdGFuZGFyZGlzZQo+IGl0IHRob3Vn
-aC4KCkFncmVlZCAtIHRob3VnaCB3ZSdyZSBub3QgZ29pbmcgdG8gdG91Y2ggaXQgaW4gdGhpcyBz
-ZXJpZXMuCgo+IAo+ID4gQEAgLTE4NCwxNCArMTkwLDE3IEBAIHN0YXRpYyBzdHJ1Y3QgbGFiZWwg
-KmNvbnN0cnVjdF9sYWJlbChjaGFyCj4gPiAqY29tcG9uZW50LCB1OCB2YXJvcywgdTggKm5hbWUs
-Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgdTE2IG5hbWVsZW4pCj4gPiDCoHsKPiA+IMKgwqDCoMKgwqDC
-oMKgwqBzdHJ1Y3QgbGFiZWwgKmxhYmVsOwo+ID4gLcKgwqDCoMKgwqDCoMKgc2l6ZV90IHNsZW47
-Cj4gPiArwqDCoMKgwqDCoMKgwqBzaXplX3Qgc2xlbiA9IDA7Cj4gPiDCoAo+ID4gwqDCoMKgwqDC
-oMKgwqDCoGlmICghbmFtZSB8fCBuYW1lbGVuID4gUExQS1NfTUFYX05BTUVfU0laRSkKPiA+IMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIEVSUl9QVFIoLUVJTlZBTCk7Cj4g
-PiDCoAo+ID4gLcKgwqDCoMKgwqDCoMKgc2xlbiA9IHN0cmxlbihjb21wb25lbnQpOwo+ID4gLcKg
-wqDCoMKgwqDCoMKgaWYgKGNvbXBvbmVudCAmJiBzbGVuID4gc2l6ZW9mKGxhYmVsLT5hdHRyLnBy
-ZWZpeCkpCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIEVSUl9QVFIo
-LUVJTlZBTCk7Cj4gPiArwqDCoMKgwqDCoMKgwqAvLyBTdXBwb3J0IE5VTEwgY29tcG9uZW50IGZv
-ciBzaWduZWQgdXBkYXRlcwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKGNvbXBvbmVudCkgewo+ID4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNsZW4gPSBzdHJsZW4oY29tcG9uZW50KTsK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoc2xlbiA+IHNpemVvZihsYWJl
-bC0+YXR0ci5wcmVmaXgpKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqByZXR1cm4gRVJSX1BUUigtRUlOVkFMKTsKPiA+ICvCoMKgwqDCoMKgwqDCoH0K
-PiAKPiBJcyB0aGlzIGFscmVhZHkgYSBidWc/IENvZGUgY2hlY2tzIGZvciBjb21wb25lbnQgIT0g
-TlVMTCBidXQKPiBwcmV2aW91c2x5Cj4gY2FsbHMgc3RybGVuIHdoaWNoIHdvdWxkIG9vcHMgb24g
-TlVMTCBjb21wb25lbnQgQUZBSUtTLiBHcmFudGVkCj4gbm90aGluZwo+IGlzIGFjdHVhbGx5IHVz
-aW5nIGFueSBvZiB0aGlzIHRoZXNlIGRheXMuCgpUcnVlLCBpdCBzaG91bGQgaGF2ZSBiZWVuIGNo
-ZWNraW5nIGZvciBOVUxMIGZpcnN0LCBidXQgYXMgeW91IHNheSBuby0Kb25lIGlzIHVzaW5nIGl0
-LgoKPiAKPiBJdCBhbHJlYWR5IHNlZW1zIGxpa2UgaXQncyBzdXBwb3NlZCB0byBiZSBhbGxvd2Vk
-IHRvIHJhZCBOVUxMCj4gY29tcG9uZW50Cj4gd2l0aCByZWFkX3ZhciB0aG91Z2g/IFdoeSB0aGUg
-ZGlmZmVyZW5jZXMsIHdoeSBub3QgYWx3YXlzIGFsbG93IE5VTEwKPiBjb21wb25lbnQ/IChJIGFz
-c3VtZSB0aGVyZSBpcyBzb21lIHJlYXNvbiwgSSBqdXN0IGRvbid0IGtub3cgYW55dGhpbmcKPiBh
-Ym91dCBzZWN2YXIgb3Igc2VjdXJlIGJvb3QpLgoKSSB0aGluayB0aGUgY29tbWVudCBjb25mdXNl
-cyBtb3JlIHRoYW4gaXQgY2xhcmlmaWVzLCBJJ2xsIHJlbW92ZSBpdC4KCkFzIHlvdSBzYXksIHJl
-YWRfdmFyKCkgc2hvdWxkIHdvcmsgZmluZSB3aXRoIGNvbXBvbmVudCA9PSBOVUxMLCB0aG91Z2gK
-d3JpdGVfdmFyKCkgY2hlY2tzIGl0LiBUaGUgb25seSBydWxlIEkgY2FuIGZpbmQgaW4gdGhlIHNw
-ZWMgaXMgdGhhdApzaWduZWQgdXBkYXRlIGNhbGxzICptdXN0KiBzZXQgdGhlIGNvbXBvbmVudCB0
-byBOVUxMLiBJJ20gc2Vla2luZwpjbGFyaWZpY2F0aW9uIG9uIHRoYXQuCgo+ID4gK0VYUE9SVF9T
-WU1CT0wocGxwa3Nfc2lnbmVkX3VwZGF0ZV92YXIpOwo+IAo+IFNvcnJ5IEkgbWlzc2VkIGl0IGJl
-Zm9yZSAtLSBjYW4gdGhpcyBiZSBhIF9HUEwgZXhwb3J0PwoKSW5kZWVkIGl0IHNob3VsZCBiZSAt
-IGFjdHVhbGx5LCBJIHNob3VsZCBjaGVjayBpZiBJIGNhbiBnZXQgcmlkIG9mIHRoZQpleHBvcnQg
-Y29tcGxldGVseS4uLgoKLS0gCkFuZHJldyBEb25uZWxsYW4gICAgT3pMYWJzLCBBREwgQ2FuYmVy
-cmEKYWpkQGxpbnV4LmlibS5jb20gICBJQk0gQXVzdHJhbGlhIExpbWl0ZWQK
+On Sun, Jan 29, 2023 at 11:19:32PM +0100, Jonas Oberhauser wrote:
+> 
+> Hi all, apologies on the confusion about the litmus test.
+> I should have explained it better but it seems you mostly figured it out.
+> As Alan said I'm tricking a little bit by not unlocking in certain places to
+> filter out all executions that aren't what I'm looking for.
+> I didn't have much time when I sent it (hence also the lack of explanation
+> and why I haven't responded earlier), so I didn't have time to play around
+> with the filter feature to do this the "proper"/non-cute way.
+> As such it really isn't about deadlocks.
 
+Not a problem!
+
+> I think one question is whether the distinction between the models could be
+> reproduced without using any kind of filtering at all.
+> I have a feeling it should be possible but I haven't had time to think up a
+> litmus test that does that.
+
+Here is an example litmus test using filter, if this helps.
+
+You put it right before the "exists" clause, and the condition is the
+same as in the "exists" clause.  If an execution does not satisfy the
+condition in the filter clause, it is tossed.
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+C C-srcu-nest-6
+
+(*
+ * Result: Never
+ *
+ * This would be valid for srcu_down_read() and srcu_up_read().
+ *)
+
+{}
+
+P0(int *x, int *y, struct srcu_struct *s1, int *idx, int *f)
+{
+	int r2;
+	int r3;
+
+	r3 = srcu_down_read(s1);
+	WRITE_ONCE(*idx, r3);
+	r2 = READ_ONCE(*y);
+	smp_store_release(f, 1);
+}
+
+P1(int *x, int *y, struct srcu_struct *s1, int *idx, int *f)
+{
+	int r1;
+	int r3;
+	int r4;
+
+	r4 = smp_load_acquire(f);
+	r1 = READ_ONCE(*x);
+	r3 = READ_ONCE(*idx);
+	srcu_up_read(s1, r3);
+}
+
+P2(int *x, int *y, struct srcu_struct *s1)
+{
+	WRITE_ONCE(*y, 1);
+	synchronize_srcu(s1);
+	WRITE_ONCE(*x, 1);
+}
+
+locations [0:r1]
+filter (1:r4=1)
+exists (1:r1=1 /\ 0:r2=0)
