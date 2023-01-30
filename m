@@ -2,91 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4B3681636
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D93068163B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235970AbjA3QUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:20:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
+        id S236158AbjA3QXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjA3QU2 (ORCPT
+        with ESMTP id S235054AbjA3QXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:20:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B599FE049
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:19:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675095584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dmuBGSidG6Nmq8f4XvQIj/jUDJBk2y6tQZ7DvgUNy9c=;
-        b=CHtksrmrgs88cZF2kys1kS0mN9S5PA071dA8XqZuFIBaZ2X1TQLlqwlXHACR3JxQCOVpGj
-        8/gnVfW9qGTa8YP/wNpUFPGdpbvfBGebJnKgfm5nO5iHFe6OnQY7P/yX7pd91jDq43lcz0
-        3yCBQ5rCIjBIbfjEkA0kWdDWDk5YT6M=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-DEhApBaDMHCSOB8Gy1IjMA-1; Mon, 30 Jan 2023 11:19:41 -0500
-X-MC-Unique: DEhApBaDMHCSOB8Gy1IjMA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 30 Jan 2023 11:23:14 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B2B3A587
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:23:13 -0800 (PST)
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3590382C96A;
-        Mon, 30 Jan 2023 16:19:40 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6ACEF492B05;
-        Mon, 30 Jan 2023 16:19:40 +0000 (UTC)
-Message-ID: <a48ce53c-5510-b779-c42d-b2e7367a442e@redhat.com>
-Date:   Mon, 30 Jan 2023 11:19:40 -0500
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BC7FF4421B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:23:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675095791;
+        bh=EKh99Av2dVI8br/juDJKkzbI27Y8Tv0MgpqioM20Ax8=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=d8qvpAuw3iuOJK5+LkUKDWhL0JS/Rb+wcI4C/JpdxK9uB6EHWHtKEUfkcsKeXwVT+
+         u5ac6TSWS6zAEcTi7BJcprR/a31NttZXlcCxiIR0YmQn4mj9VGheIaearPrmnBf2AW
+         LrjEOFF+BaP97LhKBChJBXQ+1mkFtusMxVmq0MxnhdEQRK2no9NreKRCC0J/04fsIa
+         g2k0PxDmvpGA5pQ7V17scsv/jJogNUz+tnsGM3B5/d4i53mxHwSEK+qQVQeouO6WKy
+         eyGLyFSOodhJYyzcz/KacczviL1g9j1SmXBY9iIUYdZGKVP5iqFrXrkZ972n7aZJMb
+         yd8h30aWaWZvQ==
+Received: by mail-wr1-f72.google.com with SMTP id o9-20020adfa109000000b002bfc062eaa8so2105997wro.20
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:23:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EKh99Av2dVI8br/juDJKkzbI27Y8Tv0MgpqioM20Ax8=;
+        b=mreAlNDdzaBeTBCIJIRpqawabn3znIwbDfxIh+mlu1Exv94RA8XJW4z92glZiqsYKZ
+         yFNeIt0P/jf5S5T2HB6gQEsOG8MveN9iImRmTPQQqoFxLwXFpMznV+MhfumgVboelxRw
+         4RyZ/L0pwq/VSShpHj1U6DG89ypLauCHoQkfRRjRh+88yovk3WUgYOwCiohGyfmZs1sa
+         KrYOKFfJ3epE/fjAK8eYjfZzX2X/Ti4vK9eA7eFxPgJ5Sw/pGLaQvMM2voaRo0iZT41l
+         Qa84uJBpTIB1augCA/SwmmD9t8fQtlc83sGiTSi0u8lDSlzKr7MyoQLHTDX7hjK8vxad
+         89YQ==
+X-Gm-Message-State: AFqh2kohdG2lk6j98/2By0hROHdnasFgtOucikM9qUDAIgzHvber5A+r
+        Bmmu9ekDowAMpuZMVxBe/NKHZddeo5jK3hb9wYDrucxbT1N52SrE3W8Cj8o0VcJKa3wJUVyvqyK
+        DOHIRL6xG9MOhoCGNTIbVqWuQu9f9K0sp4nibirp0TQ==
+X-Received: by 2002:a05:600c:34d1:b0:3db:1434:c51a with SMTP id d17-20020a05600c34d100b003db1434c51amr44052399wmq.40.1675095791479;
+        Mon, 30 Jan 2023 08:23:11 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXv94g3xcpSkCieUluATJV/IVwfPvR4IZ+IgwNWXiloi8TwBETu25mp6RUhJ8NieWs4+Q2LF9A==
+X-Received: by 2002:a05:600c:34d1:b0:3db:1434:c51a with SMTP id d17-20020a05600c34d100b003db1434c51amr44052387wmq.40.1675095791314;
+        Mon, 30 Jan 2023 08:23:11 -0800 (PST)
+Received: from qwirkle ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id l10-20020a05600c47ca00b003dc58637163sm4063283wmo.45.2023.01.30.08.23.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 08:23:10 -0800 (PST)
+Date:   Mon, 30 Jan 2023 16:23:09 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Willem de Bruijn <willemb@google.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
+ back-off retries
+Message-ID: <Y9fu7TR5VC33j+EP@qwirkle>
+References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
+ <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
+ <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
+ <Y9e9S3ENl0oszAH/@qwirkle>
+ <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
+ <Y9fT+LABhW+/3Nal@qwirkle>
+ <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
+ <Y9ftL5c4klThCi9Q@qwirkle>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] doc: locktorture fix
-Content-Language: en-US
-To:     Antonio Paolillo <antonio.paolillo@huawei.com>,
-        peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        boqun.feng@gmail.com, corbet@lwn.net
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20230130125538.20359-1-antonio.paolillo@huawei.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230130125538.20359-1-antonio.paolillo@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9ftL5c4klThCi9Q@qwirkle>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 23/01/30 04:15PM, Andrei Gherzan wrote:
+> On 23/01/30 11:03AM, Willem de Bruijn wrote:
+> > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
+> > <andrei.gherzan@canonical.com> wrote:
+> > >
+> > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
+> > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
+> > > > <andrei.gherzan@canonical.com> wrote:
+> > > > >
+> > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
+> > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
+> > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
+> > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > >
+> > > > > > > > The tx and rx test programs are used in a couple of test scripts including
+> > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
+> > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
+> > > > > > > > accept socket connections. This racing bug could fail the test with at
+> > > > > > > > least one of the following:
+> > > > > > > >
+> > > > > > > > ./udpgso_bench_tx: connect: Connection refused
+> > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
+> > > > > > > > ./udpgso_bench_tx: write: Connection refused
+> > > > > > > >
+> > > > > > > > This change addresses this by adding routines that retry the socket
+> > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
+> > > > > > > >
+> > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > > > >
+> > > > > > > Synchronizing the two processes is indeed tricky.
+> > > > > > >
+> > > > > > > Perhaps more robust is opening an initial TCP connection, with
+> > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
+> > > > > > > go.
+> > > > > >
+> > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
+> > > > > > socket to show up in 'ss' output before firing-up the client - quite
+> > > > > > alike what mptcp self-tests are doing.
+> > > > >
+> > > > > I like this idea. I have tested it and it works as expected with the
+> > > > > exeception of:
+> > > > >
+> > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
+> > > > >
+> > > > > Any ideas on how to handle this? I could retry and that works.
+> > > >
+> > > > This happens (also) without the zerocopy flag, right? That
+> > > >
+> > > > It might mean reaching the sndbuf limit, which can be adjusted with
+> > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
+> > > > expect this test to bump up against that limit.
+> > > >
+> > > > A few zerocopy specific reasons are captured in
+> > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
+> > >
+> > > I have dug a bit more into this, and it does look like your hint was in
+> > > the right direction. The fails I'm seeing are only with the zerocopy
+> > > flag.
+> > >
+> > > From the reasons (doc) above I can only assume optmem limit as I've
+> > > reproduced it with unlimited locked pages and the fails are transient.
+> > > That leaves optmem limit. Bumping the value I have by default (20480) to
+> > > (2048000) made the sendmsg succeed as expected. On the other hand, the
+> > > tests started to fail with something like:
+> > >
+> > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
+> > > expected    773707 received
+> > 
+> > More zerocopy completions than number of sends. I have not seen this before.
+> > 
+> > The completions are ranges of IDs, one per send call for datagram sockets.
+> > 
+> > Even with segmentation offload, the counter increases per call, not per segment.
+> > 
+> > Do you experience this without any other changes to udpgso_bench_tx.c.
+> > Or are there perhaps additional sendmsg calls somewhere (during
+> > initial sync) that are not accounted to num_sends?
+> 
+> Indeed, that looks off. No, I have run into this without any changes in
+> the tests (besides the retry routine in the shell script that waits for
+> rx to come up). Also, as a data point.
 
-On 1/30/23 07:55, Antonio Paolillo wrote:
-> The actual build option for rtmutex lock is `CONFIG_RT_MUTEXES`, not
-> `CONFIG_RT_MUTEX`.
->
-> Signed-off-by: Antonio Paolillo <antonio.paolillo@huawei.com>
-> ---
->   Documentation/locking/locktorture.rst | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/locking/locktorture.rst b/Documentation/locking/locktorture.rst
-> index dfaf9fc883f4..3f7b44e2c070 100644
-> --- a/Documentation/locking/locktorture.rst
-> +++ b/Documentation/locking/locktorture.rst
-> @@ -67,7 +67,7 @@ torture_type
->   
->   		     - "rtmutex_lock":
->   				rtmutex_lock() and rtmutex_unlock() pairs.
-> -				Kernel must have CONFIG_RT_MUTEX=y.
-> +				Kernel must have CONFIG_RT_MUTEXES=y.
->   
->   		     - "rwsem_lock":
->   				read/write down() and up() semaphore pairs.
-Acked-by: Waiman Long <longman@redhat.com>
+Actually wait. I don't think that is the case here. "expected" is the
+number of sends. In this case we sent 1076 more messages than
+completions. Am I missing something obvious?
 
+> 
+> As an additional data point, this was only seen on the IPv6 tests. I've
+> never been able to replicate it on the IPv4 run.
+
+I was also fast to send this but it is not correct. I managed to
+reproduce it on both IPv4 and IPv6.
+
+-- 
+Andrei Gherzan
