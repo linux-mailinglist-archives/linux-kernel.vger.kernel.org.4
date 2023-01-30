@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 626F86817DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCA96817DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237917AbjA3RkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 12:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
+        id S235545AbjA3RkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 12:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238131AbjA3RkO (ORCPT
+        with ESMTP id S238114AbjA3RkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 12:40:14 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CD5B444
+        Mon, 30 Jan 2023 12:40:12 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEA2CDEA
         for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:40:10 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-4fda31c3351so169566837b3.11
+Received: by mail-pl1-x62c.google.com with SMTP id r8so5546148pls.2
         for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:40:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tGuWP1c2Ds5NPIh/zwQX0rRX7oWK3Tt/K+KKpRm9lFs=;
-        b=bLNT/QTPehDZagVeImbJEqio8o2eeJIP0vl9E6HRjB40ND02/SFe+2ayMIhIURrphe
-         QEv7jfwYXe5owTN1bNfrb4qNdUuDeBcdqEfb/X3nYnNANtXFUCurlzgirDuC5dGnGJBr
-         GNEm5HP6nQZu7Q57xQq4t44uNsGLjqTdxsrov8uYbzDPwt94Wwahqb3pNgYvWiztFxgv
-         8l+9aB81wdR+tsdOJu9MqDNK4B/yvtD+11HAwqZ4faDqsmUokWsSOoo2pOXfSkUwVIJY
-         cqbL5eYb6CxrO33aLdxxF1sU+c2HFREWtcj2PMD+oRVSTDFE2zZivhH8NC6Ubh5V3nl2
-         TKcQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xV8DppwJAf9tyNq0/SZILKbSGVT5eHp+lhWdWpdE0Vk=;
+        b=mwsV2U6E9NIQdJcV7qSqHab8lmPcC5Z0K5lAUoXsHYv2dQk0ZFHU3POun/qJsGT/WB
+         9HI0P5uN2YUCbrJKL8BH+UY6+YW1tUoQcwXoEvaAGI0bmm/zh0eKHkCfQ75Xdd8h5giI
+         e/VZCIQUVfzmlUtBeEoP+vOf5lQyWNpu3K8xG9v64ESTgKD9/vcZg/+nm1wPkUgY7pGB
+         jNuSxxiQNnRF8876+H6ps23UMaKO4MWLbqfnFKfGEcmgDJaqs+IZmFVaqBXp1WjIJltS
+         TEvOrSV2RwdRbefArY8l6xmVsSLOnJpKrmgFszxWuoxhLOysZs5WJFRiHHLADkusTVz6
+         yNbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tGuWP1c2Ds5NPIh/zwQX0rRX7oWK3Tt/K+KKpRm9lFs=;
-        b=K2+30ApXmvVnNAmcCytvoW1A4JqkA/VIX/yWq14i8ODp6J/Rjt22rT7lDdV3v3B3T0
-         XexwLrZc4J77Xrr7oN40lu6rrqqXwBslTQdBnqcK1QLPxocpq10SkfIz7wwl4KQJMImg
-         10mY4viOrhdDtpZwRKtFHSZZ4VdmarC42sVlFsWCUZzmycx06c4H1hSlcBQfeQqHC4sc
-         y5kgnl6we3//4S1h5oWiNXCG1u4AI6y8H3EXPbzLLHvZ79fIpDpARzUMSnfmn/hQrPi1
-         zOmV/mDKzkyramww/IIyO7jRnfQ/bVGCQzNaNLzs5NrTi8qqLIT81Okt3q0BBe0W5qzf
-         LPWg==
-X-Gm-Message-State: AFqh2koOhPn0vVfvsF/yDM8NxyLtx10xQDpf7RSAo0W6wmIIhZx0zS8y
-        x8lUCNTtuK4qZbpt6vDpCw/BgT+BFzcmJTpse6EFFg==
-X-Google-Smtp-Source: AMrXdXspBnsvzUzzNRw7jPzFVqOiBRvIo9GZnPT8fQQktrocWK7H07IDSmTXyEGOcGtzaA/lMosiSf4CdAWiekzdLQs=
-X-Received: by 2002:a81:98c7:0:b0:501:2069:ffb2 with SMTP id
- p190-20020a8198c7000000b005012069ffb2mr4845466ywg.124.1675100409856; Mon, 30
- Jan 2023 09:40:09 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xV8DppwJAf9tyNq0/SZILKbSGVT5eHp+lhWdWpdE0Vk=;
+        b=2V2r1xLuhg8s5E9DRqts6FumLTrri5UDMLXIYlLl6wZIFbqv2R/3I0DTeyZQ16ZGJx
+         eFRcfS9f9xeTx5UAQ7/V3uQlY3Fahxcd3IG130XyLNh33jtc2YIRYDNhzHBgwy3ipLtO
+         ua622wrQ7MWTrLK8MSyyzUllXFzdq7whXSFREbdkRPu6MOR58upHTgyrtGfOPZNp1BJW
+         JKkg98aESgIAVt4MtNKgcK8sgf0bYuwWpI6pWWzVwACfL5l4rI8tvDzixFlm/JspLRw1
+         i+5gpWtlvASMtNoMTLSerJ6SEBb9T7+tuBWog2tGT+AoVQ7S4zld4z8lyAVWdNKGsJ4s
+         xFqA==
+X-Gm-Message-State: AO0yUKVeLoksNgN+ki4+J4V4+arARKwOtgxIZjZm3XrLwdJhSfCETb/E
+        Sba65sH9mnSHV6o0dGRcnkpuBw==
+X-Google-Smtp-Source: AK7set/Fz1pK27zp9EA5Qozm1kbJ1bo3+FAAuIBSU6H65HIx7r+dP1VQwD6Ok2yxDLU++C0IjZyTkg==
+X-Received: by 2002:a17:902:d70a:b0:193:256d:8afe with SMTP id w10-20020a170902d70a00b00193256d8afemr842607ply.2.1675100409274;
+        Mon, 30 Jan 2023 09:40:09 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id bg6-20020a1709028e8600b00189a50d2a3esm8070156plb.241.2023.01.30.09.40.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 09:40:08 -0800 (PST)
+Date:   Mon, 30 Jan 2023 17:40:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] KVM: x86/pmu: Disable guest PEBS on hybird cpu
+ due to heterogeneity
+Message-ID: <Y9gA9aZNxYAZGgPh@google.com>
+References: <20221109082802.27543-1-likexu@tencent.com>
+ <20221109082802.27543-2-likexu@tencent.com>
+ <Y8nknyxfKl4p/0GY@google.com>
+ <9b422d58-72ab-051f-e317-02b4d8e7211d@gmail.com>
 MIME-Version: 1.0
-References: <20230130130047.GA7913@debian> <20230130130752.GA8015@debian>
-In-Reply-To: <20230130130752.GA8015@debian>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 30 Jan 2023 18:39:58 +0100
-Message-ID: <CANn89i+Hs8837KvTrHE37NYrk=5vCYhDGYFu3MBm1dvXmS=KnQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] gro: optimise redundant parsing of packets
-To:     Richard Gobert <richardbgobert@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        steffen.klassert@secunet.com, lixiaoyan@google.com,
-        alexanderduyck@fb.com, leon@kernel.org, ye.xingchen@zte.com.cn,
-        iwienand@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b422d58-72ab-051f-e317-02b4d8e7211d@gmail.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,188 +76,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 2:08 PM Richard Gobert <richardbgobert@gmail.com> wrote:
->
-> Currently, the IPv6 extension headers are parsed twice: first in
-> ipv6_gro_receive, and then again in ipv6_gro_complete.
->
-> The field NAPI_GRO_CB(skb)->proto is used by GRO to hold the layer 4
-> protocol type that comes after the IPv6 layer. I noticed that it is set
-> in ipv6_gro_receive, but isn't used anywhere. By using this field, and
-> also storing the size of the network header, we can avoid parsing
-> extension headers a second time in ipv6_gro_complete.
->
-> The implementation had to handle both inner and outer layers in case of
-> encapsulation (as they can't use the same field).
->
-> I've applied this optimisation to all base protocols (IPv6, IPv4,
-> Ethernet). Then, I benchmarked this patch on my machine, using ftrace to
-> measure ipv6_gro_complete's performance, and there was an improvement.
+On Mon, Jan 30, 2023, Like Xu wrote:
+> On 20/1/2023 8:47 am, Sean Christopherson wrote:
+> > On Wed, Nov 09, 2022, Like Xu wrote:
+> > > From: Like Xu <likexu@tencent.com>
+> > > 
+> > >  From vPMU enabling perspective, KVM does not have proper support for
+> > > hybird x86 core. The reported perf_capabilities value (e.g. the format
+> > > of pebs record) depends on the type of cpu the kvm-intel module is init.
+> > > When a vcpu of one pebs format migrates to a vcpu of another pebs format,
+> > > the incorrect parsing of pebs records by guest can make profiling data
+> > > analysis extremely problematic.
+> > > 
+> > > The safe way to fix this is to disable this part of the support until the
+> > > guest recognizes that it is running on the hybird cpu, which is appropriate
+> > > at the moment given that x86 hybrid architectures are not heavily touted
+> > > in the data center market.
+> > > 
+> > > Signed-off-by: Like Xu <likexu@tencent.com>
+> > > ---
+> > >   arch/x86/kvm/vmx/capabilities.h | 4 +++-
+> > >   1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+> > > index cd2ac9536c99..ea0498684048 100644
+> > > --- a/arch/x86/kvm/vmx/capabilities.h
+> > > +++ b/arch/x86/kvm/vmx/capabilities.h
+> > > @@ -392,7 +392,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
+> > >   static inline bool vmx_pebs_supported(void)
+> > >   {
+> > > -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
+> > > +	return boot_cpu_has(X86_FEATURE_PEBS) &&
+> > > +	       !boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
+> > > +	       kvm_pmu_cap.pebs_ept;
+> > 
+> > I assume the patch I just posted[*] to disable the vPMU entirely is sufficient, or
+> 
+> AFAI, some developers doing client-side virtualization on a hybrid cpu will
+> specifically want vPMU,
+> in which case it makes perfect sense for KVM to expose common pmu
+> capabilities (not PEBS at the current) of big and little cores, such as the
+> most basic performance counter.
+> 
+> > do we need this as well in order to hide X86_FEATURE_DS and X86_FEATURE_DTES64?
+> 
+> I think we still need this diff. Better to prioritize this minor feature a
+> little bit for hungry users.
 
-It seems your patch adds a lot of conditional checks, which will
-alternate true/false
-for encapsulated protocols.
+That wasn't my question.  My question was whether or not wholesale disabling vPMU
+is sufficient to prevent issues with PEBS.  Unless we need this patch on top of
+disabling the vPMU, my strong preference is to disable vPMU, or at the very least
+make it off-by-default and require a explicit override.
 
-So please give us raw numbers, ftrace is too heavy weight for such claims.
+I agree that there are users that want to enable vPMU for hybrid CPUs, but as
+stated in the link below, that needs to be a dedicated enabling effort.  I don't
+see any reason to exempt PEBS from that.  E.g. isn't PEBS usable if userspace pins
+vCPUs to pCPUs and enumerates an accurate topology to the guest?
 
-
-
->
-> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
-> ---
->  include/net/gro.h      |  8 ++++++--
->  net/ethernet/eth.c     | 11 +++++++++--
->  net/ipv4/af_inet.c     |  8 +++++++-
->  net/ipv6/ip6_offload.c | 15 ++++++++++++---
->  4 files changed, 34 insertions(+), 8 deletions(-)
->
-> diff --git a/include/net/gro.h b/include/net/gro.h
-> index 7b47dd6ce94f..d364616cb930 100644
-> --- a/include/net/gro.h
-> +++ b/include/net/gro.h
-> @@ -41,8 +41,8 @@ struct napi_gro_cb {
->         /* Number of segments aggregated. */
->         u16     count;
->
-> -       /* Used in ipv6_gro_receive() and foo-over-udp */
-> -       u16     proto;
-> +       /* Used in eth_gro_receive() */
-> +       __be16  network_proto;
->
->  /* Used in napi_gro_cb::free */
->  #define NAPI_GRO_FREE             1
-> @@ -86,6 +86,10 @@ struct napi_gro_cb {
->
->         /* used to support CHECKSUM_COMPLETE for tunneling protocols */
->         __wsum  csum;
-> +
-> +       /* Used in inet and ipv6 _gro_receive() */
-> +       u16     network_len;
-> +       u8      transport_proto;
->  };
->
->  #define NAPI_GRO_CB(skb) ((struct napi_gro_cb *)(skb)->cb)
-> diff --git a/net/ethernet/eth.c b/net/ethernet/eth.c
-> index 2edc8b796a4e..d68ad90f0a9e 100644
-> --- a/net/ethernet/eth.c
-> +++ b/net/ethernet/eth.c
-> @@ -439,6 +439,9 @@ struct sk_buff *eth_gro_receive(struct list_head *head, struct sk_buff *skb)
->                 goto out;
->         }
->
-> +       if (!NAPI_GRO_CB(skb)->encap_mark)
-> +               NAPI_GRO_CB(skb)->network_proto = type;
-> +
->         skb_gro_pull(skb, sizeof(*eh));
->         skb_gro_postpull_rcsum(skb, eh, sizeof(*eh));
->
-> @@ -456,12 +459,16 @@ EXPORT_SYMBOL(eth_gro_receive);
->  int eth_gro_complete(struct sk_buff *skb, int nhoff)
->  {
->         struct ethhdr *eh = (struct ethhdr *)(skb->data + nhoff);
-
-Why initializing @eh here is needed ?
-Presumably, for !skb->encapsulation, @eh would not be used.
-
-> -       __be16 type = eh->h_proto;
-> +       __be16 type;
->         struct packet_offload *ptype;
->         int err = -ENOSYS;
->
-> -       if (skb->encapsulation)
-> +       if (skb->encapsulation) {
->                 skb_set_inner_mac_header(skb, nhoff);
-> +               type = eh->h_proto;
-> +       } else {
-> +               type = NAPI_GRO_CB(skb)->network_proto;
-> +       }
->
->         ptype = gro_find_complete_by_type(type);
->         if (ptype != NULL)
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index 6c0ec2789943..4401af7b3a15 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -1551,6 +1551,9 @@ struct sk_buff *inet_gro_receive(struct list_head *head, struct sk_buff *skb)
->          * immediately following this IP hdr.
->          */
->
-> +       if (!NAPI_GRO_CB(skb)->encap_mark)
-> +               NAPI_GRO_CB(skb)->transport_proto = proto;
-> +
->         /* Note : No need to call skb_gro_postpull_rcsum() here,
->          * as we already checked checksum over ipv4 header was 0
->          */
-> @@ -1621,12 +1624,15 @@ int inet_gro_complete(struct sk_buff *skb, int nhoff)
->         __be16 newlen = htons(skb->len - nhoff);
->         struct iphdr *iph = (struct iphdr *)(skb->data + nhoff);
->         const struct net_offload *ops;
-> -       int proto = iph->protocol;
-> +       int proto;
->         int err = -ENOSYS;
->
->         if (skb->encapsulation) {
->                 skb_set_inner_protocol(skb, cpu_to_be16(ETH_P_IP));
->                 skb_set_inner_network_header(skb, nhoff);
-> +               proto = iph->protocol;
-> +       } else {
-> +               proto = NAPI_GRO_CB(skb)->transport_proto;
-
-I really doubt this change is needed.
-We need to access iph->fields in the following lines.
-Adding an else {} branch is adding extra code, and makes your patch
-longer to review.
-
->         }
->
->         csum_replace2(&iph->check, iph->tot_len, newlen);
-> diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-> index 00dc2e3b0184..79ba5882f576 100644
-> --- a/net/ipv6/ip6_offload.c
-> +++ b/net/ipv6/ip6_offload.c
-> @@ -227,11 +227,14 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
->                 iph = ipv6_hdr(skb);
->         }
->
-> -       NAPI_GRO_CB(skb)->proto = proto;
-
-I guess you missed BIG  TCP ipv4 changes under review... ->proto is now used.
-
-> -
->         flush--;
->         nlen = skb_network_header_len(skb);
->
-> +       if (!NAPI_GRO_CB(skb)->encap_mark) {
-> +               NAPI_GRO_CB(skb)->transport_proto = proto;
-> +               NAPI_GRO_CB(skb)->network_len = nlen;
-> +       }
-> +
->         list_for_each_entry(p, head, list) {
->                 const struct ipv6hdr *iph2;
->                 __be32 first_word; /* <Version:4><Traffic_Class:8><Flow_Label:20> */
-> @@ -358,7 +361,13 @@ INDIRECT_CALLABLE_SCOPE int ipv6_gro_complete(struct sk_buff *skb, int nhoff)
->                 iph->payload_len = htons(payload_len);
->         }
->
-> -       nhoff += sizeof(*iph) + ipv6_exthdrs_len(iph, &ops);
-> +       if (!skb->encapsulation) {
-> +               ops = rcu_dereference(inet6_offloads[NAPI_GRO_CB(skb)->transport_proto]);
-> +               nhoff += NAPI_GRO_CB(skb)->network_len;
-> +       } else {
-> +               nhoff += sizeof(*iph) + ipv6_exthdrs_len(iph, &ops);
-
-IMO ipv6_exthdrs_len() is quite fast for the typical case where we
-have no extension headers.
-
-This new conditional check seems expensive to me.
-
-
-
-> +       }
-> +
->         if (WARN_ON(!ops || !ops->callbacks.gro_complete))
->                 goto out;
->
-> --
-> 2.36.1
->
+> > [*] https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com
