@@ -2,77 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D820680CCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791BE680CD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjA3MEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
+        id S236239AbjA3MEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbjA3MED (ORCPT
+        with ESMTP id S236069AbjA3MEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:04:03 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D9310ABF
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:04:02 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so7979905wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U4k/Nc+vbxM1mE6/adaioEXR7QTUOYEWnVbj4IhswtU=;
-        b=kUVVk0Qo3KVIzL0lbkWQGeoXMGZLnOmnIBkOywzB3qf6dCsF7RxVxMu4san75cEg/W
-         tUoXfvlDKLrDvVxvZDaXy7j+ZQXKjujcuBzMBbNnWILBMgjaQ2ZHvr1FJLCogUMo3MTQ
-         9/JqstAUzQzcK98MeszrwfL6oJDjtjC83cp8QTUqkWlbtJ8v5ufBAWafuTvO6azfZYVC
-         s58Rtf0pb4KbnPxnaKab5Vs3B5TjnCy4k8LwKEj/zysJaiLxSVdKJlsCCrxoiVjuRCil
-         V6L7TH50uTrB9qyN0y1dSHGxTW0dkMHyEgfvH5jcFRCq2sMTmWmHJazuUk4oUSUrpJY2
-         n6kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U4k/Nc+vbxM1mE6/adaioEXR7QTUOYEWnVbj4IhswtU=;
-        b=ekthXKgqRSb8F8EjuTWAMjpSmst7sp0mHXZyLiOzQgxPA8J706wtSYm72hubXL0VPb
-         HptU/q0xrzpfYaofAEZ9B2qfuzIntWFaRvkFLd7xoM1Wu2+Slz8ufMSQOndG8XYjpHUb
-         SykZoxm6vfuvQMwpc7N+0oQCL3kMXcEupJOkKK/chZOk2pZV6lGVubJqvgsYKkhYjSGG
-         Z7c+7QUkVftI6qNIWsIgb/nvvNt7hi5YIILy35kfMw0M2YbrGwOlmdW6hp6JHLhHMCmO
-         /h8B7tRIgE5/II+/qGlYRKFoSrWdUKGc34P6kmruQcj+YtmGUpiyid5n6vNDt+3ORM4Z
-         7PBQ==
-X-Gm-Message-State: AFqh2kqgG9bbQQtfbdm5wTXXdSmDlhrENEdKFGiOswnnL9W0yekHN9EJ
-        Mp4bIXmtcrPJY/2D8mU6Xe5Scw==
-X-Google-Smtp-Source: AMrXdXszvEIL/pKpL72DqLBqbSkAybsWNTlkDzADohEONJssb8T5yk+kO3rPc5tPFLreuiK5WEAq2A==
-X-Received: by 2002:a05:600c:5390:b0:3d9:a145:4d1a with SMTP id hg16-20020a05600c539000b003d9a1454d1amr46068952wmb.34.1675080241399;
-        Mon, 30 Jan 2023 04:04:01 -0800 (PST)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id n10-20020a05600c180a00b003daf672a616sm12320077wmp.22.2023.01.30.04.04.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 04:04:00 -0800 (PST)
-Message-ID: <30201eff-0339-da85-cf01-d0001af0d03f@baylibre.com>
-Date:   Mon, 30 Jan 2023 13:04:00 +0100
+        Mon, 30 Jan 2023 07:04:25 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6039914E8E;
+        Mon, 30 Jan 2023 04:04:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675080258; x=1706616258;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Rj5FdHRZxfvSxZ+bvMThiL/pa+WbSCwCmjvsd0eDOSg=;
+  b=YLUBHnwvSn57hEjyLjxTIM7//ulgDoDi6/LDYYn4ZoZKVMj794Dfh2CS
+   Fn1nas37hzoHCPmbWF820H0Bp6pMhn7QyiPJ1vbDa3xuHOyIcmQcOK2tm
+   MOVpQXonSugvcvPljgcDiOr7rAbK0QWCI6mz6umheUhgApFcO7eLg5d6a
+   0lCpgqPQrGx5Sz2gvzB3ACI1mc7rGsSavraIhNF+2IgNa07EoqlUB0BBn
+   cRVl4d886XWOBLRNHD1Z3of9SEyTaSqYdDla/bddOpUdEdYe3FmznSu72
+   ZUttda2rKz8GqZNxprwk7q7nrXo0tb/gUiY2IjdLJk5o8ncpWBQuFZL3j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="315499561"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="315499561"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 04:04:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="732674303"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="732674303"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Jan 2023 04:04:05 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pMStF-00HKsM-2X;
+        Mon, 30 Jan 2023 14:04:01 +0200
+Date:   Mon, 30 Jan 2023 14:04:01 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 01/11] driver core: fw_devlink: Don't purge child
+ fwnode's consumer links
+Message-ID: <Y9eyMck6rPRyfgrX@smile.fi.intel.com>
+References: <20230127001141.407071-1-saravanak@google.com>
+ <20230127001141.407071-2-saravanak@google.com>
+ <Y9OXs9+uYi31dYJD@smile.fi.intel.com>
+ <CAGETcx_g8yKQQQVtNt+6cB8hS7OY9=dqm4tDhm1ZJZqG5nzSLg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 2/3] iommu: mediatek: Add support of unmanaged iommu
- domain
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, yong.wu@mediatek.com,
-        joro@8bytes.org, will@kernel.org
-Cc:     robin.murphy@arm.com, matthias.bgg@gmail.com,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230130102722.133271-1-abailon@baylibre.com>
- <20230130102722.133271-3-abailon@baylibre.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230130102722.133271-3-abailon@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx_g8yKQQQVtNt+6cB8hS7OY9=dqm4tDhm1ZJZqG5nzSLg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,12 +109,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 11:27, Alexandre Bailon wrote:
-> Currently, the driver can allocate an unmanaged iommu domain.
-> But, this only works for SoC having multiple bank or multiple iova region.
-> This updates the driver to also support unmanaged iommu domain if
-> MTK_UNMANAGED_DEVICE is set in the iommu id.
-> 
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+On Fri, Jan 27, 2023 at 11:33:28PM -0800, Saravana Kannan wrote:
+> On Fri, Jan 27, 2023 at 1:22 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, Jan 26, 2023 at 04:11:28PM -0800, Saravana Kannan wrote:
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+...
+
+> > >  static unsigned int defer_sync_state_count = 1;
+> > >  static DEFINE_MUTEX(fwnode_link_lock);
+> > >  static bool fw_devlink_is_permissive(void);
+> > > +static void __fw_devlink_link_to_consumers(struct device *dev);
+> > >  static bool fw_devlink_drv_reg_done;
+> > >  static bool fw_devlink_best_effort;
+> >
+> > I'm wondering if may avoid adding more forward declarations...
+> >
+> > Perhaps it's a sign that devlink code should be split to its own
+> > module?
+> 
+> I've thought about that before, but I'm not there yet. Maybe once my
+> remaining refactors and TODOs are done, it'd be a good time to revisit
+> this question.
+> 
+> But I don't think it should be done for the reason of forward
+> declaration as we'd just end up moving these into base.h and we can do
+> that even today.
+
+What I meant is that the stacking up forward declarations is a good sign that
+something has to be done sooner than later.
+
+...
+
+> > > -int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup)
+> > > +static int __fwnode_link_add(struct fwnode_handle *con,
+> > > +                          struct fwnode_handle *sup)
+> >
+> > I believe we tolerate a bit longer lines, so you may still have it on a single
+> > line.
+> 
+> That'd make it >80 cols. I'm going to leave it as is.
+
+Is it a problem?
+
+...
+
+> > >       if (dev->fwnode && dev->fwnode->dev == dev) {
+> >
+> > You may have above something like
+> >
+> >         fwnode = dev_fwnode(dev);
+> 
+> I'll leave it as-is for now. I see dev->fwnode vs dev_fwnode() don't
+> always give the same results. I need to re-examine other places I use
+> dev->fwnode in fw_devlink code before I start using that function. But
+> in general it seems like a good idea. I'll add this to my TODOs.
+
+Please do, the rationale is to actually move the fwnode to the proper layer,
+now we have the single linked list defined in struct fwnode_handle and
+dereferencing fwnode from struct device without helper adds a lot of
+headache in the future. So, I really would like to see that we stopped doing
+that.
+
+> >         if (fwnode && fwnode->dev == dev) {
+> >
+> > >               struct fwnode_handle *child;
+> > >               fwnode_links_purge_suppliers(dev->fwnode);
+> > > +             mutex_lock(&fwnode_link_lock);
+> > >               fwnode_for_each_available_child_node(dev->fwnode, child)
+> > > -                     fw_devlink_purge_absent_suppliers(child);
+> > > +                     __fw_devlink_pickup_dangling_consumers(child,
+> > > +                                                            dev->fwnode);
+> >
+> >                         __fw_devlink_pickup_dangling_consumers(child, fwnode);
+> 
+> I like the dev->fwnode->dev == dev check. It makes it super clear that
+> I'm checking "The device's fwnode points back to the device". If I
+> just use fwnode->dev == dev, then one will have to go back and read
+> what fwnode is set to, etc. Also, when reading all these function
+> calls it's easier to see that I'm working on the dev's fwnode (where
+> dev is the device that was just bound to a driver) instead of some
+> other fwnode.
+> 
+> So I find it more readable as is and the compiler would optimize it
+> anyway. If you feel strongly about this, I can change to use fwnode
+> instead of dev->fwnode.
+
+Please, read above.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
