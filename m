@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175446814BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987E76814BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237887AbjA3PUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:20:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S238179AbjA3PUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238209AbjA3PUC (ORCPT
+        with ESMTP id S238211AbjA3PUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 Jan 2023 10:20:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E4238648;
-        Mon, 30 Jan 2023 07:19:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37814B81185;
-        Mon, 30 Jan 2023 15:19:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 150FDC433D2;
-        Mon, 30 Jan 2023 15:19:48 +0000 (UTC)
-Date:   Mon, 30 Jan 2023 10:19:47 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Pietro Borrello <borrello@diag.uniroma1.it>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing/probe: trace_probe_primary_from_call(): checked
- list_first_entry
-Message-ID: <20230130101947.311010c2@gandalf.local.home>
-In-Reply-To: <20230128-list-entry-null-check-v1-1-8bde6a3da2ef@diag.uniroma1.it>
-References: <20230128-list-entry-null-check-v1-1-8bde6a3da2ef@diag.uniroma1.it>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FA63D0B3;
+        Mon, 30 Jan 2023 07:19:53 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pMVwl-0002ep-OD; Mon, 30 Jan 2023 16:19:51 +0100
+Message-ID: <e8937ad0-624d-9edd-5e3d-ad510e45af27@leemhuis.info>
+Date:   Mon, 30 Jan 2023 16:19:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PULL] Networking for next-6.1 #forregzbot
+Content-Language: en-US, de-DE
+From:   "Linux kernel regression tracking (#update)" 
+        <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221004052000.2645894-1-kuba@kernel.org>
+ <6b971a4e-c7d8-411e-1f92-fda29b5b2fb9@kernel.org>
+ <d6c68083-25e3-3ff5-9b0d-8928d1e077f1@leemhuis.info>
+ <64800063-4728-6984-f1ee-f6e8c9978cb7@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <64800063-4728-6984-f1ee-f6e8c9978cb7@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675091993;0d061751;
+X-HE-SMSGID: 1pMVwl-0002ep-OD
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 28 Jan 2023 16:23:41 +0000
-Pietro Borrello <borrello@diag.uniroma1.it> wrote:
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
 
-> All callers of trace_probe_primary_from_call() check the return
-> value to be non NULL. However, the function returns
-> list_first_entry(&tpe->probes, ...) which can never be NULL.
-> Additionally, it does not check for the list being possibly empty,
-> possibly causing a type confusion on empty lists.
-> Use list_first_entry_or_null() which solves both problems.
-> 
-> Fixes: 60d53e2c3b75 ("tracing/probe: Split trace_event related data from trace_probe")
-> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
-> ---
->  kernel/trace/trace_probe.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index 23acfd1c3812..f6b565dced56 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -307,7 +307,7 @@ trace_probe_primary_from_call(struct trace_event_call *call)
->  {
->  	struct trace_probe_event *tpe = trace_probe_event_from_call(call);
->  
-> -	return list_first_entry(&tpe->probes, struct trace_probe, list);
-> +	return list_first_entry_or_null(&tpe->probes, struct trace_probe, list);
->  }
->  
->  static inline struct list_head *trace_probe_probe_list(struct trace_probe *tp)
+On 22.12.22 13:20, Thorsten Leemhuis wrote:
+> On 21.12.22 12:30, Thorsten Leemhuis wrote:
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>> On 16.12.22 11:49, Jiri Slaby wrote:
+>>>
+>>> On 04. 10. 22, 7:20, Jakub Kicinski wrote:
+>>>> Joanne Koong (7):
+>>>
+>>>>        net: Add a bhash2 table hashed by port and address
+>>>
+>>> This makes regression tests of python-ephemeral-port-reserve to fail.
+>>
+>> Thanks for the report. To be sure below issue doesn't fall through the
+>> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+>> tracking bot:
+>>
+>> #regzbot ^introduced 28044fc1d495
+>> #regzbot title new: regression tests of python-ephemeral-port-reserve fail
+>> #regzbot ignore-activity
 
--- Steve
+#regzbot fix: 936a192f9740
 
-> 
-> ---
-> base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
-> change-id: 20230128-list-entry-null-check-37778efda18c
-> 
-> Best regards,
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+#regzbot ignore-activity
