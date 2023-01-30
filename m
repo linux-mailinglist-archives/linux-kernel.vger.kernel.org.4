@@ -2,193 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA1F680B8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66D4680B8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbjA3LC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 06:02:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S236261AbjA3LDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 06:03:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236532AbjA3LC3 (ORCPT
+        with ESMTP id S236569AbjA3LCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 06:02:29 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6516134C3B
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:01:39 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id h12so10638923wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:01:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BmN+g/dAnuer7yOAtI/to5ZWjp6c/Vk223ZfFssWlmQ=;
-        b=bkrkwX1ZmtQHtKR46u2m3FuzsAUs+wp6w0S6i+OD33iRdckKm8yFLdsaeA5VIfiPkc
-         YHNgLa07djAT4QttWNg0ALSyHS0INYj3Qb61AQcnGIC3qn9RwRPf9HfYCKxOaXeTEc4S
-         y5N24BQZpldNrz7NyCJDXTaVuN4NKQbhSrxDR/4HpRJxRv8G6Miz9xDaO6oy5FD48/+c
-         ePn21hgP9E9+BTCI9CR7hajq8BzsqhWY2Ij5l4OkOAC8d+D0Fc3SHCeNUAbu0GO79gia
-         +5Saj5QEERgTRCl2GPtzDvwrcRkwALjp9+1b6zyZnwR8tsILhwdTwzeJHJdwhjBflGux
-         rUtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BmN+g/dAnuer7yOAtI/to5ZWjp6c/Vk223ZfFssWlmQ=;
-        b=X+P0aUgT1qn0Oj8PVORWZcDGRApHb5D97V/GR/MeQH2rxWjc9gVVDmmZgmjKsPCAbI
-         J2zr6wXlwm+hXCmjuh5/3qMImuVDz/qybGiymF9OBl+uT7Oo8QC67Rd8gAyFxG4dvZN8
-         iOVRxC6kKJwDTNqPSh/VcWpZzxk2m/HTL75KxvnkqxJbHlHNksnNKzlzpnJd5ItdJHtx
-         ei6PKjHI12eiwPXQdrUKkzoleenE3E2hUBPGYSIXad8oa2oR5zSPcgbLTNfrEi4QWYpu
-         bGZDl5tayyXtGJWYYGraHM0FlwOWRYwPqKcObaGcBUXf5c3Vfbfn5WUJZwE268ZNs2nA
-         L5WA==
-X-Gm-Message-State: AFqh2ko+crHIFma6TCe3JiB9832NBr9qEl4cw7Pt6BtPAkxtBvmSRBhF
-        bUDwMbcKGVCUDfX45oqm1Vug1g==
-X-Google-Smtp-Source: AMrXdXu1MHbaat0/kWk30g5Bk1GkRBZQXl4XwxezF2rlzOZtqzjFvEjyu/AID3ezJDgJcjQGh3Fqzg==
-X-Received: by 2002:a5d:5c07:0:b0:2bd:fa1d:5291 with SMTP id cc7-20020a5d5c07000000b002bdfa1d5291mr49366324wrb.67.1675076497821;
-        Mon, 30 Jan 2023 03:01:37 -0800 (PST)
-Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id k4-20020a5d4284000000b00241fde8fe04sm11614558wrq.7.2023.01.30.03.01.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 03:01:37 -0800 (PST)
-Message-ID: <ea95f4fb-ccbb-8078-ddac-5254e1dbfc85@linaro.org>
-Date:   Mon, 30 Jan 2023 12:01:36 +0100
+        Mon, 30 Jan 2023 06:02:32 -0500
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06D3514E99;
+        Mon, 30 Jan 2023 03:01:55 -0800 (PST)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id D8D943E7DD;
+        Mon, 30 Jan 2023 13:01:53 +0200 (EET)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 3602B3E7DC;
+        Mon, 30 Jan 2023 13:01:52 +0200 (EET)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 6FBC93C0435;
+        Mon, 30 Jan 2023 13:01:46 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 30UB1jpf044293;
+        Mon, 30 Jan 2023 13:01:45 +0200
+Date:   Mon, 30 Jan 2023 13:01:45 +0200 (EET)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+cc:     Network Development <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: [Question] neighbor entry doesn't switch to the STALE state
+ after the reachable timer expires
+In-Reply-To: <9ebd0210-a4bb-afda-8a4d-5041b8395d78@huawei.com>
+Message-ID: <9ac5f4f6-36cc-cc6b-1220-f45db141656c@ssi.bg>
+References: <b1d8722e-5660-c38e-848f-3220d642889d@huawei.com> <99532c7f-161e-6d39-7680-ccc1f20349@ssi.bg> <9ebd0210-a4bb-afda-8a4d-5041b8395d78@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 5/7] arm64: dts: qcom: sm8450-hdk: add pmic glink node
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230130-topic-sm8450-upstream-pmic-glink-v1-0-0b0acfad301e@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v1-5-0b0acfad301e@linaro.org>
- <1c3fa66b-651f-c3c1-1751-af3f43c86c49@linaro.org>
- <6cde6bce-ce28-2dd0-1f16-4868ae93fb3f@linaro.org>
- <51d1c4a3-60bf-72df-e1d5-91c69514c36b@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <51d1c4a3-60bf-72df-e1d5-91c69514c36b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 11:59, Konrad Dybcio wrote:
-> 
-> 
-> On 30.01.2023 11:58, Neil Armstrong wrote:
->> On 30/01/2023 11:40, Konrad Dybcio wrote:
->>>
->>>
->>> On 30.01.2023 10:54, Neil Armstrong wrote:
->>>> Add the pmic glink node linked with the DWC3 USB controller
->>>> switched to OTG mode and tagged with usb-role-switch.
->>>>
->>>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->>> Missing commit message
->>
->> ??
->>
->>>
->>>> ---
->>>>    arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 34 ++++++++++++++++++++++++++++++++-
->>>>    1 file changed, 33 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> index 5bdc2c1159ae..5ab12c911bfe 100644
->>>> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->>>> @@ -87,6 +87,31 @@ lt9611_3v3: lt9611-3v3-regulator {
->>>>            enable-active-high;
->>>>        };
->>>>    +    pmic-glink {
->>>> +        compatible = "qcom,sm8450-pmic-glink", "qcom,pmic-glink";
->>>> +
->>> You could remove this newline
->>>> +        #address-cells = <1>;
->>>> +        #size-cells = <0>;
->>>> +
->>>> +        connector@0 {
->>>> +            compatible = "usb-c-connector";
->>>> +            reg = <0>;
->>>> +            power-role = "dual";
->>>> +            data-role = "dual";
->>>> +
->>>> +            ports {
->>>> +                #address-cells = <1>;
->>>> +                #size-cells = <0>;
->>> And add one here
->>>
->>>> +                port@0 {
->>>> +                    reg = <0>;
->>> And here
->>>
->>
->> Ack
->>
->>>> +                    pmic_glink_dwc3_in: endpoint {
->>>> +                        remote-endpoint = <&usb_1_dwc3_out>;
->>>> +                    };
->>>> +                };
->>>> +            };
->>>> +        };
->>>> +    };
->>>> +
->>>>        vph_pwr: vph-pwr-regulator {
->>>>            compatible = "regulator-fixed";
->>>>            regulator-name = "vph_pwr";
->>>> @@ -724,7 +749,14 @@ &usb_1 {
->>>>    };
->>>>      &usb_1_dwc3 {
->>>> -    dr_mode = "peripheral";
->>>> +    dr_mode = "otg";
->>>> +    usb-role-switch;
->>>> +
->>>> +    port {
->>> Hm, maybe this could be moved to 8450 dtsi?
->>
->> Nop because it depends on the board layout, I think dr_mode
->> and eventual connector description should really stay in
->> the board dts.
-> I just meant the port definition, would it cause any side
-> effects to have it there?
 
-Right, I don't think so, I don't have an opinion on that so whatever
+	Hello,
 
-Neil
+On Mon, 30 Jan 2023, Zhang Changzhong wrote:
 
+> On 2023/1/30 3:43, Julian Anastasov wrote:
+> > 
+> >> Does anyone have a good idea to solve this problem? Or are there other scenarios that might cause
+> >> such a neighbor entry?
+> > 
+> > 	Is the neigh entry modified somehow, for example,
+> > with 'arp -s' or 'ip neigh change' ? Or is bond0 reconfigured
+> > after initial setup? I mean, 4 days ago?>
 > 
-> Konrad
->>
->> Thanks,
->> Neil
->>
->>>
->>> Konrad
->>>> +        usb_1_dwc3_out: endpoint {
->>>> +              remote-endpoint = <&pmic_glink_dwc3_in>;
->>>> +          };
->>>> +    };
->>>>    };
->>>>      &usb_1_hsphy {
->>>>
->>
+> So far, we haven't found any user-space program that modifies the neigh
+> entry or bond0.
+
+	Ouch, we do not need tools to hit the problem,
+thanks to gc_thresh1.
+
+> In fact, the neigh entry has been rarely used since initialization.
+> 4 days ago, our machine just needed to download files from 172.16.1.18.
+> However, the laddr has changed, and the neigh entry wrongly switched to
+> NUD_REACHABLE state, causing the laddr to fail to update.
+
+	Received ARP packets should be able to change
+the address. But we do not refresh the entry because
+its timer is scheduled days ahead.
+
+> > 	Looking at __neigh_update, there are few cases that
+> > can assign NUD_STALE without touching neigh->confirmed:
+> > lladdr = neigh->ha should be called, NEIGH_UPDATE_F_ADMIN
+> > should be provided. Later, as you explain, it can wrongly
+> > switch to NUD_REACHABLE state for long time.
+> > 
+> > 	May be there should be some measures to keep
+> > neigh->confirmed valid during admin modifications.
+> > 
+> 
+> This problem can also occur if the neigh entry stays in NUD_STALE state
+> for more than 99 days, even if it is not modified by the administrator.
+
+	I see.
+
+> > 	What is the kernel version?
+> > 
+> 
+> We encountered this problem in 4.4 LTS, and the mainline doesn't seem
+> to fix it yet.
+
+	Yep, kernel version is irrelevant.
+
+	Here is a change that you can comment/test but
+I'm not sure how many days (100?) are needed :) Not tested.
+
+: From: Julian Anastasov <ja@ssi.bg>
+Subject: [PATCH] neigh: make sure used and confirmed times are valid
+
+Entries can linger without timer for days, thanks to
+the gc_thresh1 limit. Later, on traffic, NUD_STALE entries
+can switch to NUD_DELAY and start the timer which can see
+confirmed time in the future causing switch to NUD_REACHABLE.
+But then timer is started again based on the wrong
+confirmed time, so days in the future. This is more
+visible on 32-bit platforms.
+
+Problem and the wrong state change reported by Zhang Changzhong:
+
+172.16.1.18 dev bond0 lladdr 0a:0e:0f:01:12:01 ref 1 used 350521/15994171/350520 probes 4 REACHABLE
+
+350520 seconds have elapsed since this entry was last updated, but it is
+still in the REACHABLE state (base_reachable_time_ms is 30000),
+preventing lladdr from being updated through probe.
+
+Fix it by ensuring timer is started with valid used/confirmed
+times. There are also places that need used/updated times to be
+validated.
+
+Reported-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Signed-off-by: Julian Anastasov <ja@ssi.bg>
+---
+ net/core/neighbour.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+index a77a85e357e0..f063e8b8fb7d 100644
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -269,7 +269,7 @@ static int neigh_forced_gc(struct neigh_table *tbl)
+ 			    (n->nud_state == NUD_NOARP) ||
+ 			    (tbl->is_multicast &&
+ 			     tbl->is_multicast(n->primary_key)) ||
+-			    time_after(tref, n->updated))
++			    !time_in_range(n->updated, tref, jiffies))
+ 				remove = true;
+ 			write_unlock(&n->lock);
+ 
+@@ -289,7 +289,13 @@ static int neigh_forced_gc(struct neigh_table *tbl)
+ 
+ static void neigh_add_timer(struct neighbour *n, unsigned long when)
+ {
++	unsigned long mint = jiffies - MAX_JIFFY_OFFSET + 86400 * HZ;
++
+ 	neigh_hold(n);
++	if (!time_in_range(n->confirmed, mint, jiffies))
++		n->confirmed = mint;
++	if (time_before(n->used, n->confirmed))
++		n->used = n->confirmed;
+ 	if (unlikely(mod_timer(&n->timer, when))) {
+ 		printk("NEIGH: BUG, double timer add, state is %x\n",
+ 		       n->nud_state);
+@@ -982,12 +988,14 @@ static void neigh_periodic_work(struct work_struct *work)
+ 				goto next_elt;
+ 			}
+ 
+-			if (time_before(n->used, n->confirmed))
++			if (time_before(n->used, n->confirmed) &&
++			    time_is_before_eq_jiffies(n->confirmed))
+ 				n->used = n->confirmed;
+ 
+ 			if (refcount_read(&n->refcnt) == 1 &&
+ 			    (state == NUD_FAILED ||
+-			     time_after(jiffies, n->used + NEIGH_VAR(n->parms, GC_STALETIME)))) {
++			     !time_in_range_open(jiffies, n->used,
++						 n->used + NEIGH_VAR(n->parms, GC_STALETIME)))) {
+ 				*np = n->next;
+ 				neigh_mark_dead(n);
+ 				write_unlock(&n->lock);
+-- 
+2.39.1
+
 
