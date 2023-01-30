@@ -2,171 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3695C680804
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 09:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52C0F680809
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235588AbjA3I7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 03:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
+        id S235798AbjA3JAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbjA3I7B (ORCPT
+        with ESMTP id S235333AbjA3JAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 03:59:01 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7554827991;
-        Mon, 30 Jan 2023 00:59:00 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U8dNVp003841;
-        Mon, 30 Jan 2023 08:58:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=JKrTBhIka4PJq34qWzVGBeakgXLIvGGhUIdQ2PtP3Wo=;
- b=SgoI9+ylsM5DZmsM+QsWoOiyXjm6hWRmi2a64xadLvOFKCpJFN21eWs+Q+idRrDEAU/4
- rJZBa0L2iVkgzE1Dn3Tcvs0YlHho+yts+rFfHzY4PvCRnYYmqG1R9NpsrWGt05T8rv5X
- lEc1RsNym/VVo/FeDW+QTK/1gyA3wCyp8rDtAfbaNTTNEmp3L7bL3ii03vM2MjRbXhs5
- wPsIeye1L/WlVnswc1sNVH0UMygvirfypCYjePIo7IALoDf6ABJNUh9j+EmqWmb1zKMv
- kXxqTl1+QvDwFUoyvBMSvvapvLkXo/7ZVNpLdZI9mISSmeZDDVqJuWOtX3Wrc0SKZX5b dg== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nddgsjuqy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 08:58:57 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30U4vO8S026916;
-        Mon, 30 Jan 2023 08:58:55 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ncvs7hyt2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 08:58:55 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30U8wruI43254210
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 30 Jan 2023 08:58:53 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 501BA20040;
-        Mon, 30 Jan 2023 08:58:53 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F194820043;
-        Mon, 30 Jan 2023 08:58:50 +0000 (GMT)
-Received: from [9.43.101.243] (unknown [9.43.101.243])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 30 Jan 2023 08:58:50 +0000 (GMT)
-Message-ID: <70b60459-2e7a-1944-77dc-54fef2e00975@linux.ibm.com>
-Date:   Mon, 30 Jan 2023 14:28:49 +0530
+        Mon, 30 Jan 2023 04:00:17 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8138F1C58C;
+        Mon, 30 Jan 2023 01:00:16 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso14732272pjj.1;
+        Mon, 30 Jan 2023 01:00:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PYvxj6z17+I1UUuoqPExd/8Gq1dgi0Y5+O/R0VeLmZI=;
+        b=HhAcisqjUofBx26aobXuXtksntebFdJoybZ3mfjlmD8W/aU5S0hSHP5g+ej+0iFPIy
+         mOiFVhJnJpNcl7eCDK2Omn/BnjJ+JhzxJoh6zSEpjveYSPQgqMcjv3F3PK7cCf6jYyrn
+         d5gEBpl8CihJCutuNU9XDZO4KgZS9Ha7fQ8+DigRg4z4sylnF/hMMJsQVf2nJM4QYnDh
+         bQnbAc7zyb/Vf4gSKeUbcc7V2q0kXhD3aRqUeLmN+hboAAqN0RlSzsOY1lJCuvN83ZVk
+         LqlmFy0LsH4G3lhDQcYe4KfFbJKsAsAtFw/R+8LhygL9SQewW0Wa3FELQDU/5CXPm1e5
+         hbzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PYvxj6z17+I1UUuoqPExd/8Gq1dgi0Y5+O/R0VeLmZI=;
+        b=pnv8X/tczxy/RMTF+11dopLaiJk5Xyiz2Teym6QkTGBoIig1gkV45TogZam7t7UtNU
+         1BVqzANFQm6an1O/+Wo2zamNm2t1J5NBaT1/I+6GsQiJOLKPqJ1WdZwhwUSokA2SFwpy
+         jM9O1pRsPtCxG2QAUqbwIUtwyTxlPd7jegkpc7GlNS1peLl1q3mCUK71lWWquafARFg+
+         M+ILaLEV0iS8p11NWhd7mZn/IjMpxH+M3jEehMtWoqCKvB4K2BLTqcqfJTcGNCmtnS5j
+         QNmEPcCfj4slbS3r/cl59ZMWwhLuiQ/n9RCaV5GFkg6uyTtjBsfYcCNZ4IP2usifjsyQ
+         O+Bg==
+X-Gm-Message-State: AO0yUKVKUEBcjIOTc/vQT7dgfN6VxduOhQN1e3+whNSw7IRwGiZd3K+N
+        HXPLltf4CdT3yfh3Zd8mvhM=
+X-Google-Smtp-Source: AK7set+wHPCvRHklQ7ayPD/b6qBRObeY1WsR5zkRqbDL1l35gukOFBqU1HcQ1r5b4ESuKAFNt7gW4g==
+X-Received: by 2002:a05:6a20:7da0:b0:bc:8a99:28c8 with SMTP id v32-20020a056a207da000b000bc8a9928c8mr9882462pzj.57.1675069216001;
+        Mon, 30 Jan 2023 01:00:16 -0800 (PST)
+Received: from localhost.localdomain ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id z10-20020a170902ccca00b0019623858afbsm7248002ple.71.2023.01.30.01.00.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 01:00:15 -0800 (PST)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
+        peterz@infradead.org, jpoimboe@kernel.org, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Song Shuai <suagrfillet@gmail.com>
+Subject: [PATCH] samples: ftrace: Include the nospec-branch.h only for x86
+Date:   Mon, 30 Jan 2023 16:59:54 +0800
+Message-Id: <20230130085954.647845-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] perf test: Switch basic bpf filtering test to use syscall
- tracepoint
-Content-Language: en-US
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Disha Goel <disgoel@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20230123083224.276404-1-naveen.n.rao@linux.vnet.ibm.com>
-From:   kajoljain <kjain@linux.ibm.com>
-In-Reply-To: <20230123083224.276404-1-naveen.n.rao@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7dSqWuNS5E9S8z7_SrItYqzDQSXr_pHv
-X-Proofpoint-GUID: 7dSqWuNS5E9S8z7_SrItYqzDQSXr_pHv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_07,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 mlxscore=0 malwarescore=0 suspectscore=0 spamscore=0
- adultscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
- clxscore=1011 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301300081
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When other architectures without the nospec functionality write their
+direct-call functions of samples/ftrace/*.c, the including of
+asm/nospec-branch.h must be taken care to fix the no header file found
+error in building process.
 
+This commit (ee3e2469b346 "x86/ftrace: Make it call depth tracking aware")
+file-globally includes asm/nospec-branch.h providing CALL_DEPTH_ACCOUNT
+for only x86 direct-call functions.
 
-On 1/23/23 14:02, Naveen N. Rao wrote:
-> BPF filtering tests can sometime fail. Running the test in verbose mode
-> shows the following:
->   $ sudo perf test 42
->   42: BPF filter                                                      :
->   42.1: Basic BPF filtering                                           : FAILED!
->   42.2: BPF pinning                                                   : Skip
->   42.3: BPF prologue generation                                       : Skip
->   $ perf --version
->   perf version 4.18.0-425.3.1.el8.ppc64le
->   $ sudo perf test -v 42
->   42: BPF filter                                                      :
->   42.1: Basic BPF filtering                                           :
->   --- start ---
->   test child forked, pid 711060
->   ...
->   bpf: config 'func=do_epoll_wait' is ok
->   Looking at the vmlinux_path (8 entries long)
->   Using /usr/lib/debug/lib/modules/4.18.0-425.3.1.el8.ppc64le/vmlinux for symbols
->   Open Debuginfo file: /usr/lib/debug/.build-id/81/56f5a07f92ccb62c5600ba0e4aacfb5f3a7534.debug
->   Try to find probe point from debuginfo.
->   Matched function: do_epoll_wait [4ef8cb0]
->   found inline addr: 0xc00000000061dbe4
->   Probe point found: __se_compat_sys_epoll_pwait+196
->   found inline addr: 0xc00000000061d9f4
->   Probe point found: __se_sys_epoll_pwait+196
->   found inline addr: 0xc00000000061d824
->   Probe point found: __se_sys_epoll_wait+36
->   Found 3 probe_trace_events.
->   Opening /sys/kernel/tracing//kprobe_events write=1
->   ...
->   BPF filter result incorrect, expected 56, got 56 samples
->   test child finished with -1
->   ---- end ----
->   BPF filter subtest 1: FAILED!
+It seems better to move the including to `#ifdef CONFIG_X86_64`.
 
-Patch looks good to me.
+Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+---
+ samples/ftrace/ftrace-direct-modify.c       | 2 +-
+ samples/ftrace/ftrace-direct-multi-modify.c | 2 +-
+ samples/ftrace/ftrace-direct-multi.c        | 2 +-
+ samples/ftrace/ftrace-direct-too.c          | 2 +-
+ samples/ftrace/ftrace-direct.c              | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-Reviewed-by: Kajol Jain<kjain@linux.ibm.com>
+diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+index de5a0f67f320..d93abbcb1f4c 100644
+--- a/samples/ftrace/ftrace-direct-modify.c
++++ b/samples/ftrace/ftrace-direct-modify.c
+@@ -3,7 +3,6 @@
+ #include <linux/kthread.h>
+ #include <linux/ftrace.h>
+ #include <asm/asm-offsets.h>
+-#include <asm/nospec-branch.h>
+ 
+ extern void my_direct_func1(void);
+ extern void my_direct_func2(void);
+@@ -26,6 +25,7 @@ static unsigned long my_ip = (unsigned long)schedule;
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
++#include <asm/nospec-branch.h>
+ 
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
+index a825dbd2c9cf..b58c594efb51 100644
+--- a/samples/ftrace/ftrace-direct-multi-modify.c
++++ b/samples/ftrace/ftrace-direct-multi-modify.c
+@@ -3,7 +3,6 @@
+ #include <linux/kthread.h>
+ #include <linux/ftrace.h>
+ #include <asm/asm-offsets.h>
+-#include <asm/nospec-branch.h>
+ 
+ extern void my_direct_func1(unsigned long ip);
+ extern void my_direct_func2(unsigned long ip);
+@@ -24,6 +23,7 @@ extern void my_tramp2(void *);
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
++#include <asm/nospec-branch.h>
+ 
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
+index d955a2650605..c27cf130c319 100644
+--- a/samples/ftrace/ftrace-direct-multi.c
++++ b/samples/ftrace/ftrace-direct-multi.c
+@@ -5,7 +5,6 @@
+ #include <linux/ftrace.h>
+ #include <linux/sched/stat.h>
+ #include <asm/asm-offsets.h>
+-#include <asm/nospec-branch.h>
+ 
+ extern void my_direct_func(unsigned long ip);
+ 
+@@ -19,6 +18,7 @@ extern void my_tramp(void *);
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
++#include <asm/nospec-branch.h>
+ 
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+index e13fb59a2b47..8139dce2a31c 100644
+--- a/samples/ftrace/ftrace-direct-too.c
++++ b/samples/ftrace/ftrace-direct-too.c
+@@ -4,7 +4,6 @@
+ #include <linux/mm.h> /* for handle_mm_fault() */
+ #include <linux/ftrace.h>
+ #include <asm/asm-offsets.h>
+-#include <asm/nospec-branch.h>
+ 
+ extern void my_direct_func(struct vm_area_struct *vma,
+ 			   unsigned long address, unsigned int flags);
+@@ -21,6 +20,7 @@ extern void my_tramp(void *);
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
++#include <asm/nospec-branch.h>
+ 
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+index 1f769d0db20f..1d3d307ca33d 100644
+--- a/samples/ftrace/ftrace-direct.c
++++ b/samples/ftrace/ftrace-direct.c
+@@ -4,7 +4,6 @@
+ #include <linux/sched.h> /* for wake_up_process() */
+ #include <linux/ftrace.h>
+ #include <asm/asm-offsets.h>
+-#include <asm/nospec-branch.h>
+ 
+ extern void my_direct_func(struct task_struct *p);
+ 
+@@ -18,6 +17,7 @@ extern void my_tramp(void *);
+ #ifdef CONFIG_X86_64
+ 
+ #include <asm/ibt.h>
++#include <asm/nospec-branch.h>
+ 
+ asm (
+ "	.pushsection    .text, \"ax\", @progbits\n"
+-- 
+2.20.1
 
-Thanks,
-Kajol Jain
-> 
-> The statement above about the result being incorrect looks weird, and it
-> is due to that particular perf build missing commit 3e11300cdfd5f1
-> ("perf test: Fix bpf test sample mismatch reporting"). In reality, due
-> to commit 4b04e0decd2518 ("perf test: Fix basic bpf filtering test"),
-> perf expects there to be 56*3 samples.
-> 
-> However, the number of samples we receive is going to be dependent on
-> where the probes are installed, which is dependent on where
-> do_epoll_wait gets inlined. On s390x, it looks like probes at all the
-> inlined locations are hit. But, that is not the case on ppc64le.
-> 
-> Fix this by switching the test to instead use the syscall tracepoint.
-> This ensures that we will only ever install a single event enabling us
-> to reliably determine the sample count.
-> 
-> Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> ---
->  tools/perf/tests/bpf-script-example.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/tests/bpf-script-example.c b/tools/perf/tests/bpf-script-example.c
-> index 7981c69ed1b456..b638cc99d5ae56 100644
-> --- a/tools/perf/tests/bpf-script-example.c
-> +++ b/tools/perf/tests/bpf-script-example.c
-> @@ -43,7 +43,7 @@ struct {
->  	__type(value, int);
->  } flip_table SEC(".maps");
->  
-> -SEC("func=do_epoll_wait")
-> +SEC("syscalls:sys_enter_epoll_pwait")
->  int bpf_func__SyS_epoll_pwait(void *ctx)
->  {
->  	int ind =0;
-> 
-> base-commit: 5670ebf54bd26482f57a094c53bdc562c106e0a9
