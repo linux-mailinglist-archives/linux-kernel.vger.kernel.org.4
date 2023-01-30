@@ -2,117 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A1C6804B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD1268048A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235725AbjA3EBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S231157AbjA3D7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 22:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235537AbjA3EAa (ORCPT
+        with ESMTP id S230514AbjA3D7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:00:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66F2241C5
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 19:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675051138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QsSvm36Xk+HrOf60OemtCyImDVL0MFVHI7P7OR8LM6g=;
-        b=UcguvUILjpf2bMv4o0is85L4I5G/jtVr/gzhHKEJNAsjxF3bLqd62IIm2cxj81azNV1nua
-        c1A+Ef1EMxHTcL4HAX7cSCWUls/WIHCqjhSj/XMMsdEx1pXT5Feg+Ij9GDOYp0vLILfF5s
-        3xz4DuUt38ieXhX3H3HWHXsPmqh4MEU=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-164-mowRV-LYMj-MWi0j4R-3Jg-1; Sun, 29 Jan 2023 22:58:54 -0500
-X-MC-Unique: mowRV-LYMj-MWi0j4R-3Jg-1
-Received: by mail-ot1-f70.google.com with SMTP id bh27-20020a056830381b00b00686b0589045so5154302otb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 19:58:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QsSvm36Xk+HrOf60OemtCyImDVL0MFVHI7P7OR8LM6g=;
-        b=3nVuQ8+2zgfznwipLZmTuoBgxw4Kw0dNf1d5OLC5CTE8y6pv6kPzpTtBYRygr0C2cb
-         r8OmxLmDU0OB/SnW+W6nhL2gxpqG7GKmcvq48JryRKtWYcyxAGwsusCjl/6uPCWIUzma
-         Kwm9FiTHOfgdZkZGlGwfmjwp5+xIiI7bfAyor/Any62N+NifQcmBwhSTWMfe7NUYrSL9
-         46Ad1z0mR0s0cg8fR3cH7Eheu+omD9e0QhPPN8dNYYs+Nzw31xPTzxsKBT4jqE8iBS/8
-         YhUxUjSQDdZP4zs/JhEDSe3CctUGgAwLjFMWZ89xIhGf496XlzWEjjg3XbT1rfs4O77h
-         NT9w==
-X-Gm-Message-State: AFqh2kp68Pfq9y0icgWTZk+KvrDdxsAAbdINs5KoZ+gS/r33qzVwg1br
-        88WsfFnIDFYiBnYDilXIOLC+fsCN+3MMB0la/3TxbVwdEpc0+ZVYmH6Nqh6Y8Kq9y18d34aonWf
-        xRzlRMM8A8sLPaOP3TH7JMfVhrclshsiL/P08GPYP
-X-Received: by 2002:a05:6871:10e:b0:15b:96b5:9916 with SMTP id y14-20020a056871010e00b0015b96b59916mr3936908oab.280.1675051133877;
-        Sun, 29 Jan 2023 19:58:53 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuM5wHn4sTMJyFxc8JJT0li6BZ912wXTAByPVQnh6DAkYFaVUTfYozLdOXqMoX/5eBKpP3njBrqsOtckLHf0bI=
-X-Received: by 2002:a05:6871:10e:b0:15b:96b5:9916 with SMTP id
- y14-20020a056871010e00b0015b96b59916mr3936902oab.280.1675051133632; Sun, 29
- Jan 2023 19:58:53 -0800 (PST)
+        Sun, 29 Jan 2023 22:59:49 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9AE241EA
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 19:59:22 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U35CdC008228;
+        Mon, 30 Jan 2023 03:59:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=TE8ds2RYF8W+18i7g6Iedlx3bXoIktMKdH7PSgyNdvc=;
+ b=Dp7CxUc/Wa9BYjp4cYKX70WZ+5P2PuYSAXTzPd4YLdUDRtZ8yOHfrtYujKuwEWSthnzm
+ h22fE8HP510B/Xwz6aDaCN7tOBgWAhlYnpW9siwU990Ooq+y+Ef1bM5pLTbGm+gRnE3X
+ HpxjwFuzpn8LURhRsfj5D1QCfDq5gWeHVS291FiNWwxTDhWZ4t8i9kFX9l89hroP+9M7
+ ZEhQy42OV4g/pEl3L4pTNVp6U/eB9NFqoR2iTqWGoyMPNg75QJY6c9dnqEHIuT9xpI3t
+ BujlbkoZz9dXx24KKjGdD1jQSM16JzARfU6NYCwqY+n3XcvU1aTb1tQyChBkFhW3ynjJ 6Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncuxajnvm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 03:59:13 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30U3xCQ5012760
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 30 Jan 2023 03:59:12 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Sun, 29 Jan 2023 19:59:12 -0800
+Date:   Sun, 29 Jan 2023 19:59:10 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     <broonie@kernel.org>
+CC:     Liam Girdwood <lgirdwood@gmail.com>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] regulator: max20411: Directly include bitfield.h
+Message-ID: <20230130035910.GC464800@hu-bjorande-lv.qualcomm.com>
+References: <20230126225403.522121-1-broonie@kernel.org>
 MIME-Version: 1.0
-References: <20221226074908.8154-1-jasowang@redhat.com> <20221226074908.8154-4-jasowang@redhat.com>
- <20230129073713.5236-1-hdanton@sina.com>
-In-Reply-To: <20230129073713.5236-1-hdanton@sina.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 30 Jan 2023 11:58:42 +0800
-Message-ID: <CACGkMEtUf=23oxwe=QjhD9AhSRHPNuHfNKBJHPrAPLQk3oLFWA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     mst@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, eperezma@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230126225403.522121-1-broonie@kernel.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: IzTGTy8zI5_i_YXRzBd6IsoGGmCm6_S9
+X-Proofpoint-GUID: IzTGTy8zI5_i_YXRzBd6IsoGGmCm6_S9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_01,2023-01-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 mlxlogscore=642 impostorscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301300037
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 3:37 PM Hillf Danton <hdanton@sina.com> wrote:
->
-> On Mon, 26 Dec 2022 15:49:07 +0800 Jason Wang <jasowang@redhat.com>
-> > @@ -2654,6 +2663,8 @@ static void vring_free(struct virtqueue *_vq)
-> >  {
-> >       struct vring_virtqueue *vq = to_vvq(_vq);
-> >
-> > +     wake_up_interruptible(&vq->wq);
-> > +
-> >       if (vq->we_own_ring) {
-> >               if (vq->packed_ring) {
-> >                       vring_free_queue(vq->vq.vdev,
-> > @@ -2863,4 +2874,22 @@ const struct vring *virtqueue_get_vring(struct virtqueue *vq)
-> >  }
-> >  EXPORT_SYMBOL_GPL(virtqueue_get_vring);
-> >
-> > +int virtqueue_wait_for_used(struct virtqueue *_vq)
-> > +{
-> > +     struct vring_virtqueue *vq = to_vvq(_vq);
-> > +
-> > +     /* TODO: Tweak the timeout. */
-> > +     return wait_event_interruptible_timeout(vq->wq,
-> > +            virtqueue_is_broken(_vq) || more_used(vq), HZ);
-> > +}
-> > +EXPORT_SYMBOL_GPL(virtqueue_wait_for_used);
->
->         waker           waiter
->         ---             ---
->         vring_del_virtqueue
->           vring_free(_vq);
->             wakeup
->           kfree(vq);
->                         get on CPU a tick later
->                         uaf ?
->
+On Thu, Jan 26, 2023 at 10:54:03PM +0000, broonie@kernel.org wrote:
+> From: Mark Brown <broonie@kernel.org>
+> 
+> The max20411 driver uses bitfield.h but does not directly include
+> it, add an inclusion to avoid build errors in configurations
+> which do not result in an implicit inclusion.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-Exactly, this wakeup of vring_free is not needed. It's up to the
-driver to do the proper wake up to avoid race when subsystem un
-registration.
+Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-Thanks
-
+> ---
+>  drivers/regulator/max20411-regulator.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/regulator/max20411-regulator.c b/drivers/regulator/max20411-regulator.c
+> index 69f04cbe69f1..b4faad54c458 100644
+> --- a/drivers/regulator/max20411-regulator.c
+> +++ b/drivers/regulator/max20411-regulator.c
+> @@ -4,6 +4,7 @@
+>   * Copyright (c) 2022, Linaro Ltd.
+>   */
+>  
+> +#include <linux/bitfield.h>
+>  #include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/module.h>
+> -- 
+> 2.34.1
+> 
