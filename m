@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC2C68045F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B9F680460
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjA3Dd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 22:33:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S235635AbjA3Ddc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 22:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235438AbjA3DdU (ORCPT
+        with ESMTP id S235514AbjA3DdY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 22:33:20 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044181C336;
-        Sun, 29 Jan 2023 19:33:17 -0800 (PST)
-X-UUID: d291d010a04e11eda06fc9ecc4dadd91-20230130
+        Sun, 29 Jan 2023 22:33:24 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DBB20D21;
+        Sun, 29 Jan 2023 19:33:19 -0800 (PST)
+X-UUID: d35d5cf8a04e11ed945fc101203acc17-20230130
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3Ung9oFBm33rXOG7FFhNcYNioi3ccW9m3+5fbEJMqX0=;
-        b=oSZ6y/ADErueq2lxe2wqgnOpoWh1kmTwu+1DvI+r0EydCZVSFzANq3vhRrlsK97qgRM6pZxFB2CYmI1KcDqRMszqHjvJ/cSpUpyfp2TsNV60eIK5JQ3+3sY6zpiqkahW6VqkQWm/pSvL/fHqDc1qPsa0fDKIebtQpmHdP6UgBgA=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=KEWfprtLcsm395hD7ACF+KmAQ+ogRYh8vluT9gQ1Uyc=;
+        b=OdBH5p/DeURuSrhvLbnXMoMm5gdllOZyHcm0ar/fmOgVp/bHKrW40gcwt9Xof5HXtuMINWAKe7NojyZ4TBmMiyT4wseM/6/fjFVRiKgEF5IZKuPVo7xhN934rIVyw8P8Mu63QyMukmoWmbCgOG0DOXixl52KJiMfpKEjtWSzQY0=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.18,REQID:f7fdc806-bf8d-4786-a0bd-3064080b8b31,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.18,REQID:f7fdc806-bf8d-4786-a0bd-3064080b8b31,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:3ca2d6b,CLOUDID:a633b355-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:230130113313494307RR,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0
+X-CID-O-INFO: VERSION:1.1.18,REQID:d4251ee1-c969-41db-b289-66ee14839d0c,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:9eff4d8d-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
 X-CID-BVR: 0
-X-UUID: d291d010a04e11eda06fc9ecc4dadd91-20230130
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+X-UUID: d35d5cf8a04e11ed945fc101203acc17-20230130
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
         (envelope-from <allen-kh.cheng@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1179411382; Mon, 30 Jan 2023 11:33:11 +0800
+        with ESMTP id 852202809; Mon, 30 Jan 2023 11:33:13 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 30 Jan 2023 11:33:11 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 30 Jan 2023 11:33:11 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 30 Jan 2023 11:33:10 +0800
+ 15.2.792.15 via Frontend Transport; Mon, 30 Jan 2023 11:33:11 +0800
 From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
 CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>, <yunfei.dong@mediatek.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH 4/6] media: dt-bindings: media: mediatek: vcodec: adapt to the 'clock-names' of different platforms
-Date:   Mon, 30 Jan 2023 11:33:03 +0800
-Message-ID: <20230130033305.31830-5-allen-kh.cheng@mediatek.com>
+        "Allen-KH Cheng" <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 5/6] media: dt-bindings: media: mediatek: vcodec: Change the max reg value to 2
+Date:   Mon, 30 Jan 2023 11:33:04 +0800
+Message-ID: <20230130033305.31830-6-allen-kh.cheng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230130033305.31830-1-allen-kh.cheng@mediatek.com>
 References: <20230130033305.31830-1-allen-kh.cheng@mediatek.com>
@@ -75,79 +71,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yunfei Dong <yunfei.dong@mediatek.com>
 
-mt8195 and mt8192 have different clock numbers, separate 'clock-names'
-according to compatible name.
+Need to add racing control register base in device node for mt8195 support
+inner racing mode. Changing the max reg value from 1 to 2.
+
+Adding the description for VDEC_SYS and VDEC_MISC.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Acked-by: Rob Herring <robh@kernel.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../media/mediatek,vcodec-subdev-decoder.yaml | 41 ++++++++++++++++---
- 1 file changed, 35 insertions(+), 6 deletions(-)
+ .../bindings/media/mediatek,vcodec-subdev-decoder.yaml      | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-index 7efc70ae4406..51c0ff7baa52 100644
+index 51c0ff7baa52..cfd13a6b6b68 100644
 --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
 +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-subdev-decoder.yaml
-@@ -110,15 +110,12 @@ patternProperties:
-           Refer to bindings/iommu/mediatek,iommu.yaml.
+@@ -61,7 +61,10 @@ properties:
+       - mediatek,mt8195-vcodec-dec
  
-       clocks:
-+        minItems: 4
-         maxItems: 5
+   reg:
+-    maxItems: 1
++    minItems: 1
++    items:
++      - description: VDEC_SYS register space
++      - description: VDEC_RACING_CTRL register space
  
-       clock-names:
--        items:
--          - const: sel
--          - const: soc-vdec
--          - const: soc-lat
--          - const: vdec
--          - const: top
-+        minItems: 4
-+        maxItems: 5
+   iommus:
+     minItems: 1
+@@ -98,6 +101,7 @@ patternProperties:
  
-       assigned-clocks:
+       reg:
          maxItems: 1
-@@ -160,6 +157,38 @@ then:
-   required:
-     - interrupts
++        description: VDEC_MISC register space
  
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt8192-vcodec-dec
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: sel
-+            - const: soc-vdec
-+            - const: soc-lat
-+            - const: vdec
-+            - const: top
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt8195-vcodec-dec
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: sel
-+            - const: vdec
-+            - const: lat
-+            - const: top
-+
- additionalProperties: false
- 
- examples:
+       interrupts:
+         maxItems: 1
 -- 
 2.18.0
 
