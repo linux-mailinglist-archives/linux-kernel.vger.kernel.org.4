@@ -2,164 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A92681CD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B39E681CD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjA3Vfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S231249AbjA3VgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjA3Vfj (ORCPT
+        with ESMTP id S230398AbjA3VgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:35:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D568B35B0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:34:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675114494;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7BSxtpSj4BrAFBe1Q7X5Ylg8I71bsH6V8VmhxdA0ZpI=;
-        b=TghO/WboHJlfs/sLkCc1Kthc8PPA2fTXKnVb0/1NKA9Y6YmfntcIct4Erxvg5Biq+9jDiC
-        Xdcteu55q15Sbf6YUKcL3F206jU3jMTp14kX69fIX5MNMZFcm6ozmHk9+z5x+9hgvApz0R
-        8L588CC5ig/U/4thv75C0902PBPFSsg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-113-7Ek2sP7zOWWESoKq7cBRRw-1; Mon, 30 Jan 2023 16:34:52 -0500
-X-MC-Unique: 7Ek2sP7zOWWESoKq7cBRRw-1
-Received: by mail-qk1-f199.google.com with SMTP id a3-20020a05620a438300b007069b068069so7805715qkp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:34:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7BSxtpSj4BrAFBe1Q7X5Ylg8I71bsH6V8VmhxdA0ZpI=;
-        b=E9PtA0tUmUNYnkOfGxAgBQms/bkJ21/HD7eW/fFKTCs1QdtVtsLIktFXnWn6mwHHUH
-         g9BuHdz/Ob3PU251j3Sq1yS0bEVnQjMNHbTvdH4Yfyol0qAYGbo1mZSLxg9Bo/xIG7o0
-         UAQ1Nm2LggCWJeoSdKj5GzvY+l4IxamEon1S7l1hIWiCZYyhvCejZSKANeTghuq5GrVA
-         yclnqL3ewkoLd3IHnGB/Mz5/GPrRNLaeAZ5CAJxwoRGoxZOUshMNlgP/6HrikjJ9HhRg
-         g/cYHBP2Nx9XE2Of1R/xXyaMR8ZcJMEiLbbIpbValtAsdtYc1OEhBCto/nOuOf8I2GxH
-         vYLw==
-X-Gm-Message-State: AO0yUKUI5xfx0Uy3nFPpBmCGSlzFJ/1BWbrm4HTs//QjggGr6VdyqY7Y
-        bpll5dQ+8j71ZxN43FtSkvkOnmxFXiuaMLqjHsxtsmxbPiwj4+/OVgjHyF/+7CsWiQnZR+yp3+j
-        H509Q8H8+PbnMbUUndkTHOvpp
-X-Received: by 2002:ac8:550b:0:b0:3b8:4951:57bb with SMTP id j11-20020ac8550b000000b003b8495157bbmr3383734qtq.5.1675114492267;
-        Mon, 30 Jan 2023 13:34:52 -0800 (PST)
-X-Google-Smtp-Source: AK7set+kUbZekNhe/Em61clYhE5CvtRxiubqnW3sSZZq/i2jVbSztFLD9L4HgdjzGzOWpE7h6EK0CA==
-X-Received: by 2002:ac8:550b:0:b0:3b8:4951:57bb with SMTP id j11-20020ac8550b000000b003b8495157bbmr3383706qtq.5.1675114492023;
-        Mon, 30 Jan 2023 13:34:52 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id l3-20020ac84a83000000b003a5c6ad428asm8589540qtq.92.2023.01.30.13.34.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 13:34:51 -0800 (PST)
-Date:   Mon, 30 Jan 2023 16:34:49 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v8 3/4] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <Y9g3+RdfYIH3N47i@x1n>
-References: <20230124084323.1363825-1-usama.anjum@collabora.com>
- <20230124084323.1363825-4-usama.anjum@collabora.com>
- <Y9QLqY0mQ6eD6Zm+@x1n>
- <01bc1428-5340-5a75-6876-417194edba39@collabora.com>
+        Mon, 30 Jan 2023 16:36:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0720C153
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:36:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35B6661262
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 21:36:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C9BC433EF;
+        Mon, 30 Jan 2023 21:35:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675114559;
+        bh=LoNYLv7wzq9BmFzK1bqKIFgAt25dyfZUGPVl4aH06Gk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bcTWyeJyMNJSuJ9h8Ce3QhifwSr7JqV27lJrk9TVZOFVwHjUYncY8H6QAcz30aRTK
+         BxLUB/gg7A6xBVMqJY++akNvpHz05wxWCWGS6GhAesxwSj91WfOvQKxFqiR9Vy33U3
+         i67Y2JAg5LQXNqiKW+NN5OIhyzOWnezT1nLUgfWqrSQEirz7xqDuHxZOUtySBaGKK/
+         JjzE9k4QGGMsZFi3eDgxq89uzvgM6C1Mzdq3SJdmS2rxWc1ZH1c5MA1AJ6qkvCbL1A
+         L1I9P9bsesgU2iJrOoMTa0HQZDyDpalci8aCnJ2YekZAZb6ug7Rx3X4AJUe2ImJ3Ak
+         dYI8FmZiH0QlA==
+Date:   Mon, 30 Jan 2023 13:35:57 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] f2fs: use iostat_lat_type directly as a parameter in the
+ iostat_update_and_unbind_ctx()
+Message-ID: <Y9g4PcQvsCOj1d0r@google.com>
+References: <20230105042240.24738-1-frank.li@vivo.com>
+ <8ab26acd-4df6-8330-8e82-1d258d9f0d6d@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <01bc1428-5340-5a75-6876-417194edba39@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8ab26acd-4df6-8330-8e82-1d258d9f0d6d@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 04:12:25PM +0500, Muhammad Usama Anjum wrote:
-
-[...]
-
+On 01/28, Chao Yu wrote:
+> On 2023/1/5 12:22, Yangtao Li wrote:
+> > Convert to use iostat_lat_type as parameter instead of raw number.
+> > BTW, move NUM_PREALLOC_IOSTAT_CTXS to the header file, and rename
+> > iotype to page_type to match the definition.
 > > 
-> >> +#define IS_WP_ENGAGE_OP(a)	(a->flags & PAGEMAP_WP_ENGAGE)
-> >> +#define IS_GET_OP(a)		(a->vec)
+> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> > ---
+> >   fs/f2fs/data.c   |  5 +++--
+> >   fs/f2fs/iostat.c | 34 +++++++++++-----------------------
+> >   fs/f2fs/iostat.h | 19 ++++++++++---------
+> >   3 files changed, 24 insertions(+), 34 deletions(-)
 > > 
-> > Having a->vec to imply the GET is fine, but IMHO not as clean as having
-> > each OP a bit in the flags.
-> > 
-> > How about:
-> > 
-> > #define  PAGEMAP_OP_GET       (1UL << 0)
-> > #define  PAGEMAP_OP_WP        (1UL << 1)
-> > #define  PAGEMAP_OP_MASK      (PAGEMAP_OP_GET | PAGEMAP_OP_WP)
-> > 
-> > ?
-> > 
-> > Then a->vec requried for PAGEMAP_OP_GET.
-> I had something like PAGEMAP_OP_GET and PAGEMAP_OP_WP flags once until I
-> was asked to only keep WP flag and vec != NULL will imply GET flag in a
-> previous review. I'm ready to change again if there are more notes on it?
+> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > index c940da1c540f..4e8fd5697c42 100644
+> > --- a/fs/f2fs/data.c
+> > +++ b/fs/f2fs/data.c
+> > @@ -292,7 +292,7 @@ static void f2fs_read_end_io(struct bio *bio)
+> >   	struct bio_post_read_ctx *ctx;
+> >   	bool intask = in_task();
+> > -	iostat_update_and_unbind_ctx(bio, 0);
+> > +	iostat_update_and_unbind_ctx(bio, READ_IO);
+> >   	ctx = bio->bi_private;
+> >   	if (time_to_inject(sbi, FAULT_READ_IO))
+> > @@ -330,7 +330,8 @@ static void f2fs_write_end_io(struct bio *bio)
+> >   	struct bio_vec *bvec;
+> >   	struct bvec_iter_all iter_all;
+> > -	iostat_update_and_unbind_ctx(bio, 1);
+> > +	iostat_update_and_unbind_ctx(bio, bio->bi_opf & REQ_SYNC ? WRITE_SYNC_IO :
+> > +										WRITE_ASYNC_IO);
+> 
+> We can use op_is_write(bio_op(bio)) to check IO's rw type, why not just
+> passing bio arguement, and parse rw/sync types from bio inside
+> iostat_update_and_unbind_ctx(), it can avoid passing unneeded arguements.
 
-Sorry to know that; that's somewhat frustrating when you need to go back
-and forth on subjective comments like mine.  So if you still think your
-original way is better then at least you have two votes now. :) Your call
-to choose any, I have a preference as I said but not that strong.
+Chao, let's write another patch to clean up, if you're interested in.
 
-[...]
-
-> > 
-> >> +			     struct pagemap_scan_private *p, unsigned long addr, unsigned int len)
-> >> +{
-> >> +	unsigned long bitmap, cur = PAGEMAP_SCAN_BITMAP(wt, file, pres, swap);
-> >> +	bool cpy = true;
-> >> +	struct page_region *prev = &p->prev;
-> >> +
-> >> +	if (HAS_NO_SPACE(p))
-> >> +		return -ENOSPC;
-> > 
-> > This can be moved to below [1], we should stop scanning immediately if the
-> > condition met.
-> It would be definately possible. Wouldn't it be strange to return error
-> when the operation was successful? A function should return error only when
-> the current execution is unsuccessful. So I'm returning error only when the
-> space is full and there is no space left in the buffer anymore.
-
-I would expect the user to always provide some more space than they expect
-because the merging of page_regions are kind of unpredictable from the
-user's POV.
-
-But yeah, maybe you're right.  I'm fine to keep that as is.
-
-Thanks,
-
--- 
-Peter Xu
-
+> 
+> Thanks,
+> 
+> >   	sbi = bio->bi_private;
+> >   	if (time_to_inject(sbi, FAULT_WRITE_IO))
+> > diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
+> > index 59c72f92191a..20944c4a683a 100644
+> > --- a/fs/f2fs/iostat.c
+> > +++ b/fs/f2fs/iostat.c
+> > @@ -14,7 +14,6 @@
+> >   #include "iostat.h"
+> >   #include <trace/events/f2fs.h>
+> > -#define NUM_PREALLOC_IOSTAT_CTXS	128
+> >   static struct kmem_cache *bio_iostat_ctx_cache;
+> >   static mempool_t *bio_iostat_ctx_pool;
+> > @@ -210,49 +209,38 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
+> >   }
+> >   static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
+> > -				int rw, bool is_sync)
+> > +				enum iostat_lat_type type)
+> >   {
+> >   	unsigned long ts_diff;
+> > -	unsigned int iotype = iostat_ctx->type;
+> > +	unsigned int page_type = iostat_ctx->type;
+> >   	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
+> >   	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
+> > -	int idx;
+> >   	unsigned long flags;
+> >   	if (!sbi->iostat_enable)
+> >   		return;
+> >   	ts_diff = jiffies - iostat_ctx->submit_ts;
+> > -	if (iotype >= META_FLUSH)
+> > -		iotype = META;
+> > -
+> > -	if (rw == 0) {
+> > -		idx = READ_IO;
+> > -	} else {
+> > -		if (is_sync)
+> > -			idx = WRITE_SYNC_IO;
+> > -		else
+> > -			idx = WRITE_ASYNC_IO;
+> > -	}
+> > +	if (page_type >= META_FLUSH)
+> > +		page_type = META;
+> >   	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
+> > -	io_lat->sum_lat[idx][iotype] += ts_diff;
+> > -	io_lat->bio_cnt[idx][iotype]++;
+> > -	if (ts_diff > io_lat->peak_lat[idx][iotype])
+> > -		io_lat->peak_lat[idx][iotype] = ts_diff;
+> > +	io_lat->sum_lat[type][page_type] += ts_diff;
+> > +	io_lat->bio_cnt[type][page_type]++;
+> > +	if (ts_diff > io_lat->peak_lat[type][page_type])
+> > +		io_lat->peak_lat[type][page_type] = ts_diff;
+> >   	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
+> >   }
+> > -void iostat_update_and_unbind_ctx(struct bio *bio, int rw)
+> > +void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type)
+> >   {
+> >   	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
+> > -	bool is_sync = bio->bi_opf & REQ_SYNC;
+> > -	if (rw == 0)
+> > +	if (type == READ_IO)
+> >   		bio->bi_private = iostat_ctx->post_read_ctx;
+> >   	else
+> >   		bio->bi_private = iostat_ctx->sbi;
+> > -	__update_iostat_latency(iostat_ctx, rw, is_sync);
+> > +	__update_iostat_latency(iostat_ctx, type);
+> >   	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
+> >   }
+> > diff --git a/fs/f2fs/iostat.h b/fs/f2fs/iostat.h
+> > index 2c048307b6e0..1f827a2fe6b2 100644
+> > --- a/fs/f2fs/iostat.h
+> > +++ b/fs/f2fs/iostat.h
+> > @@ -8,20 +8,21 @@
+> >   struct bio_post_read_ctx;
+> > +enum iostat_lat_type {
+> > +	READ_IO = 0,
+> > +	WRITE_SYNC_IO,
+> > +	WRITE_ASYNC_IO,
+> > +	MAX_IO_TYPE,
+> > +};
+> > +
+> >   #ifdef CONFIG_F2FS_IOSTAT
+> > +#define NUM_PREALLOC_IOSTAT_CTXS	128
+> >   #define DEFAULT_IOSTAT_PERIOD_MS	3000
+> >   #define MIN_IOSTAT_PERIOD_MS		100
+> >   /* maximum period of iostat tracing is 1 day */
+> >   #define MAX_IOSTAT_PERIOD_MS		8640000
+> > -enum {
+> > -	READ_IO,
+> > -	WRITE_SYNC_IO,
+> > -	WRITE_ASYNC_IO,
+> > -	MAX_IO_TYPE,
+> > -};
+> > -
+> >   struct iostat_lat_info {
+> >   	unsigned long sum_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* sum of io latencies */
+> >   	unsigned long peak_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* peak io latency */
+> > @@ -57,7 +58,7 @@ static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
+> >   	return iostat_ctx->post_read_ctx;
+> >   }
+> > -extern void iostat_update_and_unbind_ctx(struct bio *bio, int rw);
+> > +extern void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type);
+> >   extern void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
+> >   		struct bio *bio, struct bio_post_read_ctx *ctx);
+> >   extern int f2fs_init_iostat_processing(void);
+> > @@ -67,7 +68,7 @@ extern void f2fs_destroy_iostat(struct f2fs_sb_info *sbi);
+> >   #else
+> >   static inline void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
+> >   		enum iostat_type type, unsigned long long io_bytes) {}
+> > -static inline void iostat_update_and_unbind_ctx(struct bio *bio, int rw) {}
+> > +static inline void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type) {}
+> >   static inline void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
+> >   		struct bio *bio, struct bio_post_read_ctx *ctx) {}
+> >   static inline void iostat_update_submit_ctx(struct bio *bio,
