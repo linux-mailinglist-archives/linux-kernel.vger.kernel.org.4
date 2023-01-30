@@ -2,114 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8877680379
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 02:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4AB680388
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 02:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235270AbjA3BRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 20:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S235200AbjA3Blv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 20:41:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbjA3BRk (ORCPT
+        with ESMTP id S229476AbjA3Blt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 20:17:40 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1947013D71;
-        Sun, 29 Jan 2023 17:17:39 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P4qzf14lHz4f3kp2;
-        Mon, 30 Jan 2023 09:17:34 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgCHgR+uGtdjhGmuCQ--.6383S4;
-        Mon, 30 Jan 2023 09:17:36 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        paolo.valente@linaro.org, yukuai3@huawei.com, jack@suse.cz
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v2 block-6.2] block, bfq: fix uaf for bfqq in bic_set_bfqq()
-Date:   Mon, 30 Jan 2023 09:41:36 +0800
-Message-Id: <20230130014136.591038-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Sun, 29 Jan 2023 20:41:49 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CFB193F2;
+        Sun, 29 Jan 2023 17:41:47 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P4rWX1wX1z4x1f;
+        Mon, 30 Jan 2023 12:41:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675042905;
+        bh=/g4ovl4VjuYGQh76xlaD70mVDhhK8pT7E6XlQz3Er1c=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mydGL8neFpL2lMrIaTOb+FIucMafa5Bbfabz2PAWKv7omSAl7aFwV3igmKJmHrkFb
+         QujG5koweEBr3a7c+1ILVlytxG/YgDU3GEUu2C8c2m6fb3FBmsrrcyYi5uS3NH//LI
+         0BssbYYAldIPOzLo8ouqHcZrM4oM/bqx3nUG+VCGWOc3yL8ISbi3cIfRbyC68m0D8+
+         hiRuXKDAU5E5+T1yLZSshvr7OQ/QFl3slP6kgrEncQq54PmwGme6Vs9VVgaThucbqN
+         q5u1l+Z2Ngno2hISkQX/CU7mPrCaff6bp5KeXG4XHX720O3o+8UToYDDGHh/Gv5snK
+         58NNrnsf/nVXA==
+Date:   Mon, 30 Jan 2023 12:41:43 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alasdair G Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the device-mapper tree
+Message-ID: <20230130124143.210b5149@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCHgR+uGtdjhGmuCQ--.6383S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw1xCF4rCr17tF1fJF4fKrg_yoW8Ary5pw
-        nFga17WF97XFs5XF4UJ3WkXF18GFs5CryDK342q3y2vFy7Aw12yan0v3y0vFZ2qrySkay3
-        Zw1j93ykAr1jgrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        fUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/doeHGov9QMIdfFOG3F41NZW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+--Sig_/doeHGov9QMIdfFOG3F41NZW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"),
-bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
-bic->bfqq will be freed, and bic_set_bfqq() is called with the freed
-bic->bfqq.
+Hi all,
 
-Fix the problem by always freeing bfqq after bic_set_bfqq().
+The following commits are also in the block tree as different commits
+(but the same patches):
 
-Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
-Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
- block/bfq-cgroup.c  | 2 +-
- block/bfq-iosched.c | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+  08a39c820686 ("blk-iocost: avoid 64-bit division in ioc_timer_fn")
+  11fd02522aae ("block, bfq: turn bfqq_data into an array in bfq_io_cq")
+  204a9e1eeb4b ("blk-iocost: don't allow to configure bio based device")
+  2192a93eb4ac ("ps3vram: remove bio splitting")
+  3187f22498f6 ("drbd: remove unnecessary assignment in vli_encode_bits")
+  346122e09011 ("block, bfq: retrieve independent access ranges from reques=
+t queue")
+  38d6577f1e01 ("drbd: fix DRBD_VOLUME_MAX 65535 -> 65534")
+  3b1c494c4317 ("block: add a new helper bdev_{is_zone_start, offset_from_z=
+one_start}")
+  3bf6e7ac9a43 ("drbd: remove macros using require_context")
+  419363fec82a ("block: add a BUILD_BUG_ON() for adding more bio flags than=
+ we have space")
+  4e952a32301a ("blk-iocost: fix divide by 0 error in calc_lcoefs()")
+  51ec2387623a ("block, bfq: split sync bfq_queues on a per-actuator basis")
+  55ee20573bd6 ("drbd: make limits unsigned")
+  56f5160bc1b8 ("ublk_drv: add mechanism for supporting unprivileged ublk d=
+evice")
+  5d5ce3a05940 ("block: ublk: fix doc build warning")
+  612307b9e29b ("block: make BLK_DEF_MAX_SECTORS unsigned")
+  615b51f2a7ec ("block, bfq: forbid stable merging of queues associated wit=
+h dif
+ferent actuators")
+  620183fd3cda ("ublk_drv: add device parameter UBLK_PARAM_TYPE_DEVT")
+  6b5bcbd01de8 ("drbd: split off drbd_config into separate file")
+  6e45a73ca9d6 ("drbd: adjust drbd_limits license header")
+  6faa01c8bf3b ("ublk_drv: don't probe partitions if the ubq daemon isn't t=
+ruste
+d")
+  707107e3c830 ("drbd: drbd_insert_interval(): Clarify comment")
+  7a5841d1701d ("block, bfq: balance I/O injection among underutilized actu=
+ators
+")
+  7a69a19ae640 ("block, bfq: inject I/O to underutilized actuators")
+  7b6a2c89052b ("blk-iocost: check return value of match_u64()")
+  7b810b50390b ("blk-iocost: read params inside lock in sysfs apis")
+  7f0e2433880b ("block: save user max_sectors limit")
+  803e2ec47623 ("block: introduce bdev_zone_no helper")
+  8564135fe5b0 ("block: don't allow multiple bios for IOCB_NOWAIT issue")
+  934f178446b1 ("block: extend bio-cache for non-polled requests")
+  93cfbaba481c ("drbd: split off drbd_buildtag into separate file")
+  961ccca54ad5 ("ublk_drv: add module parameter of ublks_max for limiting m=
+ax al
+lowed ublk dev")
+  988136a30715 ("nvme: set REQ_ALLOC_CACHE for uring-passthru request")
+  9d1d75e23110 ("drbd: drop API_VERSION define")
+  a2aea8f56f9e ("s390/dcssblk:: don't call bio_split_to_limits")
+  a5d140c503b6 ("ublk_drv: move ublk_get_device_from_id into ublk_ctrl_urin=
+g_cmd
+")
+  aa70bcb25683 ("drbd: interval tree: make removing an "empty" interval a n=
+o-op"
+)
+  abc42d89596a ("MAINTAINERS: add drbd headers")
+  ad5572498be1 ("blk-iocost: change div64_u64 to DIV64_U64_ROUND_UP in ioc_=
+refre
+sh_params()")
+  ba0b61d03ce3 ("block: treat poll queue enter similarly to timeouts")
+  d5ff0182856b ("block, bfq: move io_cq-persistent bfqq data into a dedicat=
+ed st
+ruct")
+  d66a012deb65 ("ublk_drv: remove nr_aborted_queues from ublk_device")
+  ef0e0afd782e ("block: remove superfluous check for request queue in bdev_=
+is_zo
+ned()")
+  fd44c9c683bc ("block, bfq: split also async bfq_queues on a per-actuator =
+basis
+")
 
-diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-index 7d9b15f0dbd5..0fbde0fc0628 100644
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -769,8 +769,8 @@ static void __bfq_bic_change_cgroup(struct bfq_data *bfqd,
- 				 * request from the old cgroup.
- 				 */
- 				bfq_put_cooperator(sync_bfqq);
--				bfq_release_process_ref(bfqd, sync_bfqq);
- 				bic_set_bfqq(bic, NULL, true);
-+				bfq_release_process_ref(bfqd, sync_bfqq);
- 			}
- 		}
- 	}
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index ccf2204477a5..380e9bda2e57 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -5425,9 +5425,11 @@ static void bfq_check_ioprio_change(struct bfq_io_cq *bic, struct bio *bio)
- 
- 	bfqq = bic_to_bfqq(bic, false);
- 	if (bfqq) {
--		bfq_release_process_ref(bfqd, bfqq);
-+		struct bfq_queue *old_bfqq = bfqq;
-+
- 		bfqq = bfq_get_queue(bfqd, bio, false, bic, true);
- 		bic_set_bfqq(bic, bfqq, false);
-+		bfq_release_process_ref(bfqd, old_bfqq);
- 	}
- 
- 	bfqq = bic_to_bfqq(bic, true);
--- 
-2.31.1
+It looks like the block tree was rebased ...
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/doeHGov9QMIdfFOG3F41NZW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPXIFcACgkQAVBC80lX
+0GyBOwf/X8jUfXlUKssR4Rxmp6sYd9X9lyq4BGDXCJpdh1e2DfHDBW3mTUYtI5Yr
+y5QFWoUXrRx9Rc4WQKRnLvjZRuo6ttQ7kWbOUp2aJqUJeC7Gb0aS+SuIZA4hnKif
+h2LQR5Y/eIgDy7luwOc0qWyR4iGKO+5x77WDwwdxEyzO5QDudoZtwxADMijx/aZg
+cVv5B895gvwWg0amWUpx3Zi7+nifDbhKvw5jiisiXs5aS3Ds14RGfwydRNgRv93/
+6TTmvfzRLhQbzyAEVEPf46atuBbppUzLUocXuPCF4LRqX2+aVuD0+GDDEHLs5E70
+EsN/6ACUHDvexn5eUngEfMncyroOMw==
+=WJec
+-----END PGP SIGNATURE-----
+
+--Sig_/doeHGov9QMIdfFOG3F41NZW--
