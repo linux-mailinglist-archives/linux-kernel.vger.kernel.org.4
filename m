@@ -2,167 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992AC6819EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A80CB6819C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238262AbjA3THs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S235530AbjA3TBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238142AbjA3THm (ORCPT
+        with ESMTP id S229573AbjA3TBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:07:42 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2333A867;
-        Mon, 30 Jan 2023 11:07:36 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id f1e5e01fe10671b7; Mon, 30 Jan 2023 20:07:34 +0100
-Received: from kreacher.localnet (unknown [213.134.169.112])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9535D2528287;
-        Mon, 30 Jan 2023 20:07:33 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Box <david.e.box@linux.intel.com>
-Subject: [PATCH v1 3/8] thermal: intel: intel_pch: Rename device operations callbacks
-Date:   Mon, 30 Jan 2023 20:00:48 +0100
-Message-ID: <2546853.Lt9SDvczpP@kreacher>
-In-Reply-To: <1751684.VLH7GnMWUR@kreacher>
-References: <1751684.VLH7GnMWUR@kreacher>
+        Mon, 30 Jan 2023 14:01:41 -0500
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2363757F;
+        Mon, 30 Jan 2023 11:01:38 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id 123-20020a4a0681000000b004faa9c6f6b9so1395915ooj.11;
+        Mon, 30 Jan 2023 11:01:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D7PNJxFH7gDdMse434RHu5JL4B3ooE6c7lUdvQTDPn8=;
+        b=4hdsU3YS6iHph1fOhh14QSy77ozyKQgy0TACmhPl1RSVjl5ZU+el1VZkZ0/qvCFw9t
+         fGYso/0xcCjsIEludcnyf9E6H58LaD64TQ35E3Sb9IH84nla9Yoq/zzqugeXJ0Ln2z1r
+         hvh7EfINTtb/2dqqZOEgNJjsz7bqANLciQjs+S3aUUAGdBStoJb6DSl61UH6jKNxZIZP
+         bKpr5/a/Csc0KKjkizUyDA7xDAMXwphHkpOy0JAoQ+FgNriJ4qoHrZhhFCR469wq8131
+         xa0ZUVX7XjGSoiPqPtViP6EwMIUd4I1SQyFiQpW7GYOC7+Iwgiwwp39CaVnpbvnzn0Hu
+         s/Xw==
+X-Gm-Message-State: AO0yUKUZVoKG595nRLORYNNhETwZUpvvcJAmu1+54Fds+DjZUdrW7E1r
+        iBq+gS42RN/Ou//XSQIjhA==
+X-Google-Smtp-Source: AK7set97447YafxHmlkxrDII2zwtdplxGb4q+5/7vfjzRM46vNJPfFHa7ECNiIQqZTPgAbRKA+zFug==
+X-Received: by 2002:a4a:346:0:b0:514:d8f0:45b0 with SMTP id 67-20020a4a0346000000b00514d8f045b0mr6845375ooi.2.1675105297531;
+        Mon, 30 Jan 2023 11:01:37 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w6-20020a4ab6c6000000b004fc4000ae48sm5252918ooo.15.2023.01.30.11.01.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 11:01:36 -0800 (PST)
+Received: (nullmailer pid 3121442 invoked by uid 1000);
+        Mon, 30 Jan 2023 19:01:35 -0000
+Date:   Mon, 30 Jan 2023 13:01:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rayyan Ansari <rayyan@ansari.sh>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev,
+        dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, janne@jannau.net,
+        David Airlie <airlied@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v4 2/2] dt-bindings: display: simple-framebuffer:
+ Document the panel node
+Message-ID: <167510529465.3121384.11904840013697184141.robh@kernel.org>
+References: <20230126182435.70544-1-rayyan@ansari.sh>
+ <20230126182435.70544-3-rayyan@ansari.sh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.169.112
-X-CLIENT-HOSTNAME: 213.134.169.112
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddvfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeiledrudduvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieelrdduuddvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdho
- rhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhhiugdrvgdrsghogieslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126182435.70544-3-rayyan@ansari.sh>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Because the same device operations callbacks are used for all supported
-boards, they are in fact generic, so rename them to reflect that.
+On Thu, 26 Jan 2023 18:24:35 +0000, Rayyan Ansari wrote:
+> Document the new panel node and what it is used for.
+> 
+> Signed-off-by: Rayyan Ansari <rayyan@ansari.sh>
+> ---
+>  .../devicetree/bindings/display/simple-framebuffer.yaml  | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
 
-Also rename the operations object itself for consistency.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/intel_pch_thermal.c |   34 ++++++++++++++----------------
- 1 file changed, 16 insertions(+), 18 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -118,7 +118,7 @@ static int pch_wpt_add_acpi_psv_trip(str
- }
- #endif
- 
--static int pch_wpt_init(struct pch_thermal_device *ptd)
-+static int pch_hw_init(struct pch_thermal_device *ptd)
- {
- 	int nr_trips = 0;
- 	u16 trip_temp;
-@@ -164,13 +164,13 @@ read_trips:
- 	return nr_trips + pch_wpt_add_acpi_psv_trip(ptd, nr_trips);
- }
- 
--static int pch_wpt_get_temp(struct pch_thermal_device *ptd)
-+static int pch_get_temp(struct pch_thermal_device *ptd)
- {
- 	return GET_WPT_TEMP(WPT_TEMP_TSR & readw(ptd->hw_base + WPT_TEMP));
- }
- 
- /* Cool the PCH when it's overheat in .suspend_noirq phase */
--static int pch_wpt_suspend(struct pch_thermal_device *ptd)
-+static int pch_suspend(struct pch_thermal_device *ptd)
- {
- 	u8 tsel;
- 	int pch_delay_cnt = 0;
-@@ -237,7 +237,7 @@ static int pch_wpt_suspend(struct pch_th
- 	return 0;
- }
- 
--static int pch_wpt_resume(struct pch_thermal_device *ptd)
-+static int pch_resume(struct pch_thermal_device *ptd)
- {
- 	u8 tsel;
- 
-@@ -258,13 +258,11 @@ struct pch_dev_ops {
- 	int (*resume)(struct pch_thermal_device *ptd);
- };
- 
--
--/* dev ops for Wildcat Point */
--static const struct pch_dev_ops pch_dev_ops_wpt = {
--	.hw_init = pch_wpt_init,
--	.get_temp = pch_wpt_get_temp,
--	.suspend = pch_wpt_suspend,
--	.resume = pch_wpt_resume,
-+static const struct pch_dev_ops pch_dev_ops = {
-+	.hw_init = pch_hw_init,
-+	.get_temp = pch_get_temp,
-+	.suspend = pch_suspend,
-+	.resume = pch_resume,
- };
- 
- static int pch_thermal_get_temp(struct thermal_zone_device *tzd, int *temp)
-@@ -301,31 +299,31 @@ static const struct board_info {
- } board_info[] = {
- 	[board_hsw] = {
- 		.name = "pch_haswell",
--		.ops = &pch_dev_ops_wpt,
-+		.ops = &pch_dev_ops,
- 	},
- 	[board_wpt] = {
- 		.name = "pch_wildcat_point",
--		.ops = &pch_dev_ops_wpt,
-+		.ops = &pch_dev_ops,
- 	},
- 	[board_skl] = {
- 		.name = "pch_skylake",
--		.ops = &pch_dev_ops_wpt,
-+		.ops = &pch_dev_ops,
- 	},
- 	[board_cnl] = {
- 		.name = "pch_cannonlake",
--		.ops = &pch_dev_ops_wpt,
-+		.ops = &pch_dev_ops,
- 	},
- 	[board_cml] = {
- 		.name = "pch_cometlake",
--		.ops = &pch_dev_ops_wpt,
-+		.ops = &pch_dev_ops,
- 	},
- 	[board_lwb] = {
- 		.name = "pch_lewisburg",
--		.ops = &pch_dev_ops_wpt,
-+		.ops = &pch_dev_ops,
- 	},
- 	[board_wbg] = {
- 		.name = "pch_wellsburg",
--		.ops = &pch_dev_ops_wpt,
-+		.ops = &pch_dev_ops,
- 	},
- };
- 
-
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
