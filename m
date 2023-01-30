@@ -2,165 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02419680461
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE9B680464
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235658AbjA3Ddh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 22:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S234004AbjA3Dhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 22:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbjA3DdY (ORCPT
+        with ESMTP id S229476AbjA3Dhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 22:33:24 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00FA21949;
-        Sun, 29 Jan 2023 19:33:20 -0800 (PST)
-X-UUID: d35f8bfea04e11ed945fc101203acc17-20230130
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=by1eY5KmwL6RPgc+Jxj9BAxI9cqcfKeDQSdyxly48P4=;
-        b=DD9xA3As+1yt1yTWoeKn78KXMcAwY+LlTudth6Z9FjmR9IGAxW0OAUcEfm1zBEgIU34VW5dr4dFwEzjiOP0Xe/hFOjNpnNEONG8pS6vURsK+1Ouk2eMF7CrmUuPUaG8GwsdLCvkcSv+T3Ucdzfh03ise4/BQhXLdkdmXUwr9vF0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.18,REQID:3888990b-3b41-43f8-a2f6-a9bb1db7f57e,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:3ca2d6b,CLOUDID:3c01ddf6-ff42-4fb0-b929-626456a83c14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: d35f8bfea04e11ed945fc101203acc17-20230130
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 322740554; Mon, 30 Jan 2023 11:33:13 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 30 Jan 2023 11:33:12 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 30 Jan 2023 11:33:12 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <yunfei.dong@mediatek.com>,
-        "Allen-KH Cheng" <allen-kh.cheng@mediatek.com>
-Subject: [PATCH 6/6] arm64: dts: mt8195: Add video decoder node
-Date:   Mon, 30 Jan 2023 11:33:05 +0800
-Message-ID: <20230130033305.31830-7-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230130033305.31830-1-allen-kh.cheng@mediatek.com>
-References: <20230130033305.31830-1-allen-kh.cheng@mediatek.com>
+        Sun, 29 Jan 2023 22:37:37 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3621FEB40;
+        Sun, 29 Jan 2023 19:37:36 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so9814317pjb.5;
+        Sun, 29 Jan 2023 19:37:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NXqXYjD1ZvFNcnaBmmR5zBeMKcNb5aKnHvmtBgR3H1k=;
+        b=dXNzowh8Dgy5iQpyz+7aSOt+prfDhicqSCNyzgR7zUdzR44JZXeiQuE1KUJYeG+WDs
+         EP6a53I8BXEz0vP6SRIVfElyPgB2gKkgqbw0nQd05auysYi29939px4Y1rcIDMNbsmMH
+         CQZVG5WTvxH3cXvj/PpI/qoi0CIs9TYkgm700BKsXSRi/6G/geK/8bYQa5KPLSORqy8O
+         PNM01aiUvuIrQRyoTbnObiS/4Dvf8G9sXfLwgDkc1a1PxBQ80rU8Rm2315Pa46Jig91R
+         BRqYGKu49CNKiQjS93+dNk3xgD/teqAV5iplrcGm7+kWxBNzC2Xf7yT9x2R0ego54rAJ
+         kB1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NXqXYjD1ZvFNcnaBmmR5zBeMKcNb5aKnHvmtBgR3H1k=;
+        b=lwPu1KmOzG3lPUh+EQXH7mr+vQ7LakSwKgVZCaIcVVxxbflYcVlk5TOIG0mHjKds6r
+         iM+e79qkf2fsC2U8jM8aE2juxAE/wcFTnTkcjSRk6y2ImntILR8QsXYPxRRFNW7R2siQ
+         MjTh+hlT+gcaD82p2opiQ2NLaBWD9mSmuM0uNCi8i8ttwrvfSKFb4GTf3x+puGisrM4H
+         AcTVm95S5GOwzKo5dgE+M/cro7A8KqDWBn2kp4W3lAf2G4qFPf4lyK21uzrIH3j9gCEh
+         kzbbsravmH3sVwvs6zxzaFyjt+JgYRBxJOdmibYTIIlQEf3iitvVmmRtJTBLaml36Nxo
+         VrDw==
+X-Gm-Message-State: AFqh2kq238ZMqdePLFEI43VVIlH+Z8lnnHiDP0DxYTGh08Kk5aax2KuT
+        fSvBsyBxOGM1P406XHooblbNDmAGOMNCepZGyCvmUn+yNFc=
+X-Google-Smtp-Source: AMrXdXuczfeRGC3HWaWmrHbYn2jWubUXzkdOzV2R/l6iW3+KFh1Va7WFLwLpzu07DD88Xq1HeH9Y2jYbYOIl9aGH8UU=
+X-Received: by 2002:a17:90a:138a:b0:22b:ba09:cb1a with SMTP id
+ i10-20020a17090a138a00b0022bba09cb1amr4519867pja.188.1675049855267; Sun, 29
+ Jan 2023 19:37:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <167493679618.4533.12181720504943588640.reportbug@debian-duet>
+ <Y9WGmBc9HG4Tx9gf@eldamar.lan> <CAMxBKG1670TFuV3nHP7Yk8s6H+oBF7iiyiB-b=PvKv9hcH22xQ@mail.gmail.com>
+ <20230129182441.082f29d0@jic23-huawei> <CAMxBKG0tyLSpaDPGBXsJbqgHSG9rH6owtSJsLw_ekmTA3Kyvdw@mail.gmail.com>
+In-Reply-To: <CAMxBKG0tyLSpaDPGBXsJbqgHSG9rH6owtSJsLw_ekmTA3Kyvdw@mail.gmail.com>
+From:   Darrell Kavanagh <darrell.kavanagh@gmail.com>
+Date:   Mon, 30 Jan 2023 03:37:23 +0000
+Message-ID: <CAMxBKG3zL_yvw=dHK+Gqd3EHWzvJmiLHVvKnf6UsYbMgcS6nrg@mail.gmail.com>
+Subject: Fwd: Bug#1029850: linux: Driver not loaded for ST Microelectronics
+ LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
+To:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+Forwarding because original html messages were rejected by the server...
 
-Add video decoder node to mt8195 device tree.
+---------- Forwarded message ---------
+From: Darrell Kavanagh <darrell.kavanagh@gmail.com>
+Date: Mon, 30 Jan 2023 at 02:52
+Subject: Re: Bug#1029850: linux: Driver not loaded for ST
+Microelectronics LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: <lorenzo@kernel.org>, <lars@metafoo.de>,
+<linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+<carnil@debian.org>
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 70 ++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 9db5f9157ce3..04abd9a08d15 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -2196,6 +2196,76 @@
- 			power-domains = <&spm MT8195_POWER_DOMAIN_CAM>;
- 		};
- 
-+		video-codec@18000000 {
-+			compatible = "mediatek,mt8195-vcodec-dec";
-+			mediatek,scp = <&scp>;
-+			iommus = <&iommu_vdo M4U_PORT_L21_VDEC_MC_EXT>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			reg = <0 0x18000000 0 0x1000>,
-+			      <0 0x18004000 0 0x1000>;
-+			ranges = <0 0 0 0x18000000 0 0x26000>;
-+
-+			video-codec@2000 {
-+				compatible = "mediatek,mtk-vcodec-lat-soc";
-+				reg = <0 0x2000 0 0x800>;
-+				iommus = <&iommu_vpp M4U_PORT_L23_VDEC_UFO_ENC_EXT>,
-+					 <&iommu_vpp M4U_PORT_L23_VDEC_RDMA_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-+					 <&topckgen CLK_TOP_UNIVPLL_D4>;
-+				clock-names = "sel", "vdec", "lat", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
-+			};
-+
-+			video-codec@10000 {
-+				compatible = "mediatek,mtk-vcodec-lat";
-+				reg = <0 0x10000 0 0x800>;
-+				interrupts = <GIC_SPI 708 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_VLD_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_VLD2_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_AVC_MC_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_PRED_RD_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_TILE_EXT>,
-+					 <&iommu_vdo M4U_PORT_L24_VDEC_LAT0_WDMA_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
-+					 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
-+					 <&topckgen CLK_TOP_UNIVPLL_D4>;
-+				clock-names = "sel", "vdec", "lat", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC0>;
-+			};
-+
-+			video-codec@25000 {
-+				compatible = "mediatek,mtk-vcodec-core";
-+				reg = <0 0x25000 0 0x1000>;		/* VDEC_CORE_MISC */
-+				interrupts = <GIC_SPI 707 IRQ_TYPE_LEVEL_HIGH 0>;
-+				iommus = <&iommu_vdo M4U_PORT_L21_VDEC_MC_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_UFO_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_PP_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_PRED_RD_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_PRED_WR_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_PPWRAP_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_TILE_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_VLD_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_VLD2_EXT>,
-+					 <&iommu_vdo M4U_PORT_L21_VDEC_AVC_MV_EXT>;
-+				clocks = <&topckgen CLK_TOP_VDEC>,
-+					 <&vdecsys CLK_VDEC_VDEC>,
-+					 <&vdecsys CLK_VDEC_LAT>,
-+					 <&topckgen CLK_TOP_UNIVPLL_D4>;
-+				clock-names = "sel", "vdec", "lat", "top";
-+				assigned-clocks = <&topckgen CLK_TOP_VDEC>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D4>;
-+				power-domains = <&spm MT8195_POWER_DOMAIN_VDEC1>;
-+			};
-+		};
-+
- 		larb24: larb@1800d000 {
- 			compatible = "mediatek,mt8195-smi-larb";
- 			reg = <0 0x1800d000 0 0x1000>;
--- 
-2.18.0
+Hi Jonathan,
 
+Thank you. The driver has evolved quite a bit in 6.2 (I read somewhere
+that 6.2 includes some i2c enhancements), but I adapted your changes
+to fit my Debian 6.1 kernel and it works. Two IIO devices are created
+in sysfs, iio-sensor-proxy.service starts up and automatic screen
+rotation in Gnome just works.
+
+To get the modules to load on boot, I made a small change to your code
+in st_lsm6dsx_i2c to add the acpi alias to modules.alias:
+
+adding a null element to st_lsm6dsx_i2c_acpi_match:
+    static const struct acpi_device_id st_lsm6dsx_i2c_acpi_match[] = {
+         { "SMO8B30", ST_LSM6DS3TRC_ID, },
+         { },
+    };
+then:
+   MODULE_DEVICE_TABLE(acpi, st_lsm6dsx_i2c_acpi_match);
+
+
+dmesg shows:
+
+[ 7366.120208] st_lsm6dsx_i2c i2c-SMO8B30:00: supply vdd not found,
+using dummy regulator
+[ 7366.120260] st_lsm6dsx_i2c i2c-SMO8B30:00: supply vddio not found,
+using dummy regulator
+[ 7366.650839] st_lsm6dsx_i2c i2c-SMO8B30:00: mounting matrix not
+found: using identity...
+
+Is this a problem?
+
+Thanks again.
+
+Darrell
+
+
+On Sun, 29 Jan 2023 at 18:10, Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Sun, 29 Jan 2023 17:03:51 +0000
+> Darrell Kavanagh <darrell.kavanagh@gmail.com> wrote:
+>
+> > Hi,
+> >
+> > I raised this bug in Debian, and have been asked to raise it upstream and
+> > was given your addresses to do so. Will this email be OK, or should I raise
+> > it in a bug tracking system somewhere?
+>
+> Email is the right option.
+>
+> >
+> > Many thanks,
+> > Darrell
+> >
+> >
+> >
+> >
+> > ---------- Forwarded message ---------
+> > From: Salvatore Bonaccorso <carnil@debian.org>
+> > Date: Sat, 28 Jan 2023 at 20:33
+> > Subject: Re: Bug#1029850: linux: Driver not loaded for ST Microelectronics
+> > LSM6DS3TR-C accelerometer (acpi:SMO8B30:SMO8B30:)
+> > To: Darrell Kavanagh <darrell.kavanagh@gmail.com>, <1029850@bugs.debian.org>
+> >
+> >
+> > Hi Darrell,
+> >
+> > On Sat, Jan 28, 2023 at 08:13:16PM +0000, Darrell Kavanagh wrote:
+> > > Package: src:linux
+> > > Version: 6.1.4-1
+> > > Severity: normal
+> > > File: linux
+> > > X-Debbugs-Cc: darrell.kavanagh@gmail.com
+> > >
+> > > Dear Maintainer,
+> > >
+> > > This is a convertable touchscreen tablet/laptop. The rotation sensor
+> > device
+> > > ST Microelectronics LSM6DS3TR-C does not work. It is detected via ACPI
+> > and the
+> > > sysfs trees are created at
+> > devices/pci0000:00/0000:00:17.1/i2c_designware.3/i2c-4/i2c-SMO8B30:00
+> > > and devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/device:3c/SMO8B30:00 with
+> > > symlinks bus/acpi/devices/SMO8B30:00 and bus/i2c/devices/i2c-SMO8B30:00,
+> > but
+> > > no driver is loaded.
+>
+> At least this is using the ST PNP ID which is better than average
+> (long story!)
+>
+> The driver in question (ultimately drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
+> does not currently have an ACPI support.  It should be straight forwards
+> to add though the driver first needs converting to use
+> device_get_match_data() with appropriate fallback so that it will match on
+> ACPI, OF or original spi_device_id tables
+>
+> Completely untested but something like the following
+> (the offset in the enum is needed to allow us to tell if we got a result when
+> calling device_get_match_data() as it returns NULL on failure IIRC)
+>
+> I'm not sure how sucessful the driver will be at finding any interrupts etc, but
+> it may get you basic functionality.
+>
+> Good luck and others more familiar with the driver may well tell me what I forgot
+> when hacking the below ;)
+>
+> diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
+> index 499fcf8875b4..2617ce236ddc 100644
+> --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
+> +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
+> @@ -39,7 +39,7 @@
+>  #define ST_ISM330IS_DEV_NAME   "ism330is"
+>
+>  enum st_lsm6dsx_hw_id {
+> -       ST_LSM6DS3_ID,
+> +       ST_LSM6DS3_ID = 1,
+>         ST_LSM6DS3H_ID,
+>         ST_LSM6DSL_ID,
+>         ST_LSM6DSM_ID,
+> diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
+> index df5f60925260..ecfceb2fb3db 100644
+> --- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
+> +++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_i2c.c
+> @@ -23,10 +23,15 @@ static const struct regmap_config st_lsm6dsx_i2c_regmap_config = {
+>
+>  static int st_lsm6dsx_i2c_probe(struct i2c_client *client)
+>  {
+> -       const struct i2c_device_id *id = i2c_client_get_device_id(client);
+> -       int hw_id = id->driver_data;
+> +       int hw_id;
+>         struct regmap *regmap;
+>
+> +       hw_id = (kernel_ulong_t)device_get_match_data(&client->dev);
+> +       if (!hw_id)
+> +               hw_id = i2c_client_get_device_id(client)->driver_data;
+> +       if (!hw_id)
+> +               return -EINVAL;
+> +
+>         regmap = devm_regmap_init_i2c(client, &st_lsm6dsx_i2c_regmap_config);
+>         if (IS_ERR(regmap)) {
+>                 dev_err(&client->dev, "Failed to register i2c regmap %ld\n", PTR_ERR(regmap));
+> @@ -129,6 +134,10 @@ static const struct of_device_id st_lsm6dsx_i2c_of_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, st_lsm6dsx_i2c_of_match);
+>
+> +static const struct acpi_device_id st_lsm6dsx_i2c_acpi_match[] = {
+> +       { "SMO8B30", ST_LSM6DS3TRC_ID, },
+> +};
+> +
+>  static const struct i2c_device_id st_lsm6dsx_i2c_id_table[] = {
+>         { ST_LSM6DS3_DEV_NAME, ST_LSM6DS3_ID },
+>         { ST_LSM6DS3H_DEV_NAME, ST_LSM6DS3H_ID },
+> @@ -161,6 +170,7 @@ static struct i2c_driver st_lsm6dsx_driver = {
+>                 .name = "st_lsm6dsx_i2c",
+>                 .pm = pm_sleep_ptr(&st_lsm6dsx_pm_ops),
+>                 .of_match_table = st_lsm6dsx_i2c_of_match,
+> +               .acpi_match_table = st_lsm6dsx_i2c_acpi_match,
+>         },
+>         .probe_new = st_lsm6dsx_i2c_probe,
+>         .id_table = st_lsm6dsx_i2c_id_table,
+>
+>
+> > >
+> > > The device is identifying itself to the kernel with PNP id SMO8B30:
+> > > physical_node:
+> > >       modalias=acpi:SMO8B30:SMO8B30:
+> > >       name=SMO8B30:00
+> > >       uevent=MODALIAS=acpi:SMO8B30:SMO8B30:
+> > >       waiting_for_supplier=0
+> > > firmware_node:
+> > >       hid=SMO8B30
+> > >       modalias=acpi:SMO8B30:SMO8B30:
+> > >       path=\_SB_.PCI0.I2C5.DEV_
+> > >       status=15
+> > >       uevent=MODALIAS=acpi:SMO8B30:SMO8B30:
+> > >       uid=0
+> > >
+> > > The kernel module for the appropriate driver (st_lsm6dsx_i2c) is not
+> > loaded on boot.
+> > > Modprobing it does not associate it with the device, as I would expect as
+> > > the module does not provide an alias for the above acpi/pnp id.
+> >
+> > Can you report this issue upstream? Gues to reach out are according to
+> > get_maintainers.pl script:
+> >
+> > Lorenzo Bianconi <lorenzo@kernel.org> (maintainer:ST LSM6DSx IMU IIO DRIVER)
+> > Jonathan Cameron <jic23@kernel.org> (maintainer:IIO SUBSYSTEM AND DRIVERS)
+> > Lars-Peter Clausen <lars@metafoo.de> (reviewer:IIO SUBSYSTEM AND DRIVERS)
+> > linux-iio@vger.kernel.org (open list:ST LSM6DSx IMU IIO DRIVER)
+> > linux-kernel@vger.kernel.org (open list)
+> >
+> > Please keep us in the loop.
+> >
+> > Regards,
+> > Salvatore
+>
