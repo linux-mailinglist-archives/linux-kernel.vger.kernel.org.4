@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308BD6805B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 611416805B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 06:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235482AbjA3FnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 00:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S235619AbjA3Fo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 00:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjA3FnW (ORCPT
+        with ESMTP id S229744AbjA3Fo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 00:43:22 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2041.outbound.protection.outlook.com [40.107.104.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E622CA35;
-        Sun, 29 Jan 2023 21:43:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CifAxPbRN/EjISkrK4/3B+0hWdLawm1poFn044KaISsu8gwRNUA18SAYOcEbVKCNwkHyJ7o1Ow8ZwHjqzpTjOKAS7a8Hrn+g0hMhADbBtZxVRs1iM5Yq198O+VM9DyXhANmGwbXAwt/WGk85NuBILntlghWGmUHmMiEM7wma6EauvOGPrbmeTPG3NtnekNqd/dX6zrTdseXlhzXV5/iSW/0/NKIamL1RLO8pRzjupXzL60nWodeZ+6KcWcOrf9mBP8MpVR2Z1zL2uf4WG2cxyM2ZQNtQsvkIQh1n6fU5gfXCSvAKGplSgXtk/Qx6t1+kR4ahO2r1/VLxTTnWGt8c8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=naEjFzEuNi+66Bmo0RP8DXwCeLCkq0MSnkuUXA/qlw8=;
- b=B7ND0ApWqn4dH0E3FNsXSn6xfq270RuH1pJDyC3raEegTHwJM+1QZuOpkEYTaX7Ex40EzPwhkPgtbQ7ZLYqLmlGWqsYyghncO9YGsaudvQnFd9FpoMbMrj4ETp/Dq2gdVmG+oncp7MtbDB4SBh+Op8B6B6Otjmi5Z5H8Wg6CIlaG1WkMdzUiK2RuQMG4k7jElG3uLvInLsWz+Zoq21yYeqzhZwUH9aDDBFUZMBAzyax+RqV/PdYYW6zGSF2psBmSVWpaz1n9gNWiG/jy2+NmwLb1ZhPmw0DqYoi2JKSUd4dh7Fl+Xmb/zEYsbzwwYiAsMy/rg6W8OXsZibz5kdHdoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=naEjFzEuNi+66Bmo0RP8DXwCeLCkq0MSnkuUXA/qlw8=;
- b=bXBznJJmhQLnAHVftduxECG4FNLIWMnIXY1N7saf2mjXPamgpD67nDDhieYCkJybMNaTmcGf8mC/YGNH7UTgYUNUOqsWl0uHQBE4/fyyH3KfSmQbwa3fHVPTjwyc+/1HyNz9egSVV4keG8evqP1LbtR2hQK6ZM4I8PwRVkCAcgU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by AM7PR04MB6935.eurprd04.prod.outlook.com (2603:10a6:20b:10e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.28; Mon, 30 Jan
- 2023 05:43:18 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::7f24:bc0a:acd4:b13f]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::7f24:bc0a:acd4:b13f%9]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
- 05:43:18 +0000
-From:   Sherry Sun <sherry.sun@nxp.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH RESEND] tty: serial: fsl_lpuart: don't enable receiver/transmitter before rx/tx dma ready
-Date:   Mon, 30 Jan 2023 13:41:07 +0800
-Message-Id: <20230130054107.9119-1-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG3P274CA0014.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::26)
- To AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
+        Mon, 30 Jan 2023 00:44:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0888811160
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:43:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675057427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Kuu0GNI+KbyBCEudDzyW7Q6jFDRoiyBH652zdvdW9k=;
+        b=JhgiZjb0Doyc6HiylZC3Aif29baE9aJO5skUSBl9AdQZE47FN0D9g+TcvZ/+0/3n3MAZnQ
+        oo2w6h8WwqwHyzV1eAmZR2/Mc4xFvmBDECpuPM52BwThAlPWQCRYUq1dzRhmdaaKqfD5sl
+        cPyxbefhwmHpG5q7grqawykIFMyFUlM=
+Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com
+ [209.85.221.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-17-qlnimt_wNJ6xwfEA9XLe6A-1; Mon, 30 Jan 2023 00:43:41 -0500
+X-MC-Unique: qlnimt_wNJ6xwfEA9XLe6A-1
+Received: by mail-vk1-f198.google.com with SMTP id h85-20020a1f9e58000000b003e8d54eb923so3115966vke.5
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 21:43:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Kuu0GNI+KbyBCEudDzyW7Q6jFDRoiyBH652zdvdW9k=;
+        b=E0llpgZYlRdhhKNimCTkp1xcMaZ0xu5fLE5uEDc5dzlL46GzYO90pgXKeTE5CVoqNh
+         AVqrQAlUfPNtIv33b0FGDvxDkZUR5lGt4rcis/lv1iUrL2w3C9UfMQJZ6B4n1IcoqFp5
+         n9b5pu4peCfB1QKI+DJxtF6VfwySpgT/+XxlEG12/eAmsJaw+IHdC7Z97+GYXP+v2YiL
+         6e7jChGJdDfrlmfcNIJvSrEO0cajQ8IoIkQ4iF3I3hdSQkyd800mGzbnABX0tEJ2Akz4
+         gOmcLb6rs6QY8v9BPkXgyaWCAI2KnmtHj3DfmIbExK+ropsTbOcApVRa12VBpLLVplHY
+         oNDA==
+X-Gm-Message-State: AFqh2kpzE5sDSipoIL5Iuv0S9i50L9gqmlHbmUsq6S2kZzncaRFfRbkj
+        c3xqj+zH+evliHmnJ6qTJscerf7ROKR3iZRAfdiv61vAlqi+AcbTikBCPH69+AakWreTQz5n7VE
+        Us97LRhplTq1my1fxlnVi2fda
+X-Received: by 2002:a05:6102:50a4:b0:3d0:dc9c:e82e with SMTP id bl36-20020a05610250a400b003d0dc9ce82emr30642657vsb.7.1675057420565;
+        Sun, 29 Jan 2023 21:43:40 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXujATUMfJc8yKVf9FXdTDbjwCk2aZr0JxpMeuUR+yFC7eaGn7bjMMHIAavl0DoVTfrNkLiTBw==
+X-Received: by 2002:a05:6102:50a4:b0:3d0:dc9c:e82e with SMTP id bl36-20020a05610250a400b003d0dc9ce82emr30642643vsb.7.1675057420187;
+        Sun, 29 Jan 2023 21:43:40 -0800 (PST)
+Received: from redhat.com ([87.249.138.139])
+        by smtp.gmail.com with ESMTPSA id q9-20020a9f3409000000b004c6b53e0fadsm973239uab.25.2023.01.29.21.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 21:43:39 -0800 (PST)
+Date:   Mon, 30 Jan 2023 00:43:31 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
+        eperezma@redhat.com
+Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
+Message-ID: <20230130003334-mutt-send-email-mst@kernel.org>
+References: <0d9f1b89-9374-747b-3fb0-b4b28ad0ace1@redhat.com>
+ <CACGkMEv=+D+Es4sfde_X7F0zspVdy4Rs1Wi9qfCudsznsUrOTQ@mail.gmail.com>
+ <20221229020553-mutt-send-email-mst@kernel.org>
+ <CACGkMEs5s3Muo+4OfjaLK_P76rTdPhjQdTwykRNGOecAWnt+8g@mail.gmail.com>
+ <20221229030633-mutt-send-email-mst@kernel.org>
+ <CACGkMEukqZX=6yz1yCj+psHp5c+ZGVVuEYTUssfRCTQZgVWS6g@mail.gmail.com>
+ <20230127053112-mutt-send-email-mst@kernel.org>
+ <CACGkMEsZs=6TaeSUnu_9Rf+38uisi6ViHyM50=2+ut3Wze2S1g@mail.gmail.com>
+ <20230129022809-mutt-send-email-mst@kernel.org>
+ <CACGkMEuya+_2P8d4hokoyL_LKGdVzyCC1nDwOCdZb0=+2rjKPQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|AM7PR04MB6935:EE_
-X-MS-Office365-Filtering-Correlation-Id: f151616b-46da-4d0a-3b64-08db0284e3ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tf0UOU5UIpiJzqaM/jPGTl9xtmPDSqs9yvCJbox6oacEUwcgy/r/bcy8J7aiTueu9GgoaLC4YGeZSXVYmGqxB0+9FPc/3+qr+qy/Dz+YRZWkQbFrvya3RbB96R3z8nKw7FzjVXFzz2M6z+/k21nr76Op2I77V+Cq67rPsGBKgliJgkwiHqFlnQBGkuoehcSoKZc5LH2yn7wQx7o9wwlh/l4atOz033tSIkYr8D0/ihdtXegfkI/vukhhB77Dsg7Cf0SLs7wxvG6nnqO2kQmZzTk5q/8WAom7MwJ7VD2pOAr41fEP/TslGJF11PYKLMKYsSX/VrFnKtLZ6kcX4OOivgFk/cZrGRRgpM4LoAu8W3i/uXW9IcNOPCd/WN3ESt58IdtEQBK88vu32GoAQG180npqPWBsckPCVmQ54ySFgEjyeHJ3tJ5CwH75MBe1cNDyahc2TcFD8LzXmpE2IOO5DdiSlXYSuDo+cNv67PC7Ksma9Q84SPFMFdlyn/1hemCfiYKY0HU27kbWt0mfebJ7PMd8JOnhUWJ5zem/+rBtIoznk9bMG3ZlGl3HimH3bkpbhgC5coymvO9eTRQcGu+3jb78FWEAlz4XTQWV0DKb0UcqQiR5A2L9/RDCguEs+5Ewy0z/Q+WDkHEtxr2fetm1b7eyFlFEN8d7WsABXf50oX1XhZzVm6ygap6JcsL/zv99
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(39860400002)(366004)(396003)(451199018)(2906002)(86362001)(44832011)(83380400001)(8936002)(41300700001)(38350700002)(52116002)(6486002)(478600001)(38100700002)(1076003)(6512007)(6666004)(36756003)(26005)(186003)(6506007)(5660300002)(2616005)(66556008)(8676002)(66476007)(66946007)(316002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o78uVfN3XrJgtBKzQczfbJ9tS8wFx+yrKIqJktg1vvq2tRYgbboiQfhjjTTk?=
- =?us-ascii?Q?u2xWJRo7LwmMYLfgiz7jQ+tnDyDXebdhgKojWngGhE8SPQ4yF2OqqQY4fy1l?=
- =?us-ascii?Q?yjyUUWQ9rF2L2Foo/jActdQTrx/32eveW0rZ1VoE88guIOKhh2DMk1iChkbp?=
- =?us-ascii?Q?7gwuJlLnCWpAl1KdV8qa16gA/351IpGMXeVlm3dkIjcuqsi6PC+gocSmwltM?=
- =?us-ascii?Q?34jH2SgNFl8u3qSjMPlq0nUhURmQc/dBsTXaGT8dvyGuzrXXfCzBZF0vHVbS?=
- =?us-ascii?Q?dLu6jJZwebqYPDXvawupUwGA2C4X2c9T9Qqz5A5g8zom5LG0hIfBfnCr2gEy?=
- =?us-ascii?Q?+b5YNmdopEeXrfPdXL9Dr63iOD+3hwNDHggk8vX21cl63vasBGDTccQuNeFo?=
- =?us-ascii?Q?LhE2qvgV07404awOY0FXC7uNlExTpajiqc0no7I73UTg5luToHxicx6SxHbO?=
- =?us-ascii?Q?MdefvqU3myNsjiW1mGR4R5SMkk4uN6luVXoNvUZEVKFOqLLMuG+Vvje3wI9P?=
- =?us-ascii?Q?An+rLuuYN8Vlrw8vMIaexmjtlOFb5WNm0wXUQSbut0f7HRC13eufEwmB9z9m?=
- =?us-ascii?Q?b6DXNypUejn+FEaT6ZKZpnewjTVQSJWu/ofJosNmAeu/l5vrcNVEUzBI8s/5?=
- =?us-ascii?Q?cV3Uw2I32XAIQTMZumFwOEhUjakwyAl2fT5NqQ3Go3gZ07+m2nf09PC+jnpE?=
- =?us-ascii?Q?+VctGF+pUOhWGs9wez8czfBMByOI5QMbP80Q3QRnmRVEqYmX2BZShvQ5X1Vv?=
- =?us-ascii?Q?icdeCj943NRVjYRTLwTfsfs1ZArRdM5R0GeIU+aMEr3HbdK4xBnecQtJMdDD?=
- =?us-ascii?Q?+DDTVsmrHD1FODboFW9T81EJ2CKmDC1uDqf7nhTjxACb96yP42Woor/NSEGB?=
- =?us-ascii?Q?RsR2poxUp90uoTA8DwOPKcx9yP0FWk5KlY3NZ3oEqXk7O8G8xCzGfh8OBH6O?=
- =?us-ascii?Q?ATLj2YSCtxJvUK2iqq51IkZiA2nuv/Lrbpxj4rQpXXSUQHp3QKF537Us/SRX?=
- =?us-ascii?Q?Ld9MQ8Thmz1lOf5lTNsvkhuPkLGrP+iy+YavWydAwWfqIxTg9AEU1bs8+hlo?=
- =?us-ascii?Q?ETYeOvszMFfXZnQ/vdWiZUMoYlVFRHPmzPxfoXQDqiTUbntB7uB+h0IMflZM?=
- =?us-ascii?Q?HMS579p/sUN0OPtOMs+In9WK2V1x8+Xr//Dq/eovm2QIYrnzlbk0N96KAB5z?=
- =?us-ascii?Q?3pIcviO6S9XegpvoZrQxq8fwYyLaW0XOj7hs9ph1bMl4NF4qK7/gsTG6pRc1?=
- =?us-ascii?Q?UT1ziuhcjXRiOExCANaRI5dznF/o7yM48W7MS0HoOxy/ZvESQmd1A9NUwIRr?=
- =?us-ascii?Q?oo4sSGrn62RqLIoMkw202vNefyth7B6JEgPCIjgc5JrgcaI6xWbl1GQGvvP6?=
- =?us-ascii?Q?SnZ2p8ap5DNLvSixoBp71z9E7z349NXUBS7CmDgkjLKM6gXQ73Vq9KIDMPjx?=
- =?us-ascii?Q?WPn503WAZO8NmPTXEHG+FRliSkUZ1pdT/9SH/G6DHZvOFVmR2Mza0qkhbHmy?=
- =?us-ascii?Q?0Orbxqt58sdw/X70LZRrIdvi6/r+KihOghoNIdEnsHfxrHYNpkXPMDTkhco3?=
- =?us-ascii?Q?es2+sITBTZA9JY39EVzdWdOb/Gp0Ho1V6o00qOid?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f151616b-46da-4d0a-3b64-08db0284e3ce
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 05:43:18.5814
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Txn3A9EoFdOOov6AO0NrUnkUfq+tbh5g24xkiogiuRBlCnWX+xx5BmzEgYDTc3RUzdhZiatfcv63YSg5awuL+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6935
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEuya+_2P8d4hokoyL_LKGdVzyCC1nDwOCdZb0=+2rjKPQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,53 +91,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lpuart32_setup_watermark_enable() will configure the UART FIFO and
-watermark, also enable the receiver and transmitter, this should be done
-after the rx/tx dma steup ready.
+On Mon, Jan 30, 2023 at 10:53:54AM +0800, Jason Wang wrote:
+> On Sun, Jan 29, 2023 at 3:30 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Sun, Jan 29, 2023 at 01:48:49PM +0800, Jason Wang wrote:
+> > > On Fri, Jan 27, 2023 at 6:35 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Fri, Dec 30, 2022 at 11:43:08AM +0800, Jason Wang wrote:
+> > > > > On Thu, Dec 29, 2022 at 4:10 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > >
+> > > > > > On Thu, Dec 29, 2022 at 04:04:13PM +0800, Jason Wang wrote:
+> > > > > > > On Thu, Dec 29, 2022 at 3:07 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > >
+> > > > > > > > On Wed, Dec 28, 2022 at 07:53:08PM +0800, Jason Wang wrote:
+> > > > > > > > > On Wed, Dec 28, 2022 at 2:34 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > 在 2022/12/27 17:38, Michael S. Tsirkin 写道:
+> > > > > > > > > > > On Tue, Dec 27, 2022 at 05:12:58PM +0800, Jason Wang wrote:
+> > > > > > > > > > >> 在 2022/12/27 15:33, Michael S. Tsirkin 写道:
+> > > > > > > > > > >>> On Tue, Dec 27, 2022 at 12:30:35PM +0800, Jason Wang wrote:
+> > > > > > > > > > >>>>> But device is still going and will later use the buffers.
+> > > > > > > > > > >>>>>
+> > > > > > > > > > >>>>> Same for timeout really.
+> > > > > > > > > > >>>> Avoiding infinite wait/poll is one of the goals, another is to sleep.
+> > > > > > > > > > >>>> If we think the timeout is hard, we can start from the wait.
+> > > > > > > > > > >>>>
+> > > > > > > > > > >>>> Thanks
+> > > > > > > > > > >>> If the goal is to avoid disrupting traffic while CVQ is in use,
+> > > > > > > > > > >>> that sounds more reasonable. E.g. someone is turning on promisc,
+> > > > > > > > > > >>> a spike in CPU usage might be unwelcome.
+> > > > > > > > > > >>
+> > > > > > > > > > >> Yes, this would be more obvious is UP is used.
+> > > > > > > > > > >>
+> > > > > > > > > > >>
+> > > > > > > > > > >>> things we should be careful to address then:
+> > > > > > > > > > >>> 1- debugging. Currently it's easy to see a warning if CPU is stuck
+> > > > > > > > > > >>>      in a loop for a while, and we also get a backtrace.
+> > > > > > > > > > >>>      E.g. with this - how do we know who has the RTNL?
+> > > > > > > > > > >>>      We need to integrate with kernel/watchdog.c for good results
+> > > > > > > > > > >>>      and to make sure policy is consistent.
+> > > > > > > > > > >>
+> > > > > > > > > > >> That's fine, will consider this.
+> > > > > > > > >
+> > > > > > > > > So after some investigation, it seems the watchdog.c doesn't help. The
+> > > > > > > > > only export helper is touch_softlockup_watchdog() which tries to avoid
+> > > > > > > > > triggering the lockups warning for the known slow path.
+> > > > > > > >
+> > > > > > > > I never said you can just use existing exporting APIs. You'll have to
+> > > > > > > > write new ones :)
+> > > > > > >
+> > > > > > > Ok, I thought you wanted to trigger similar warnings as a watchdog.
+> > > > > > >
+> > > > > > > Btw, I wonder what kind of logic you want here. If we switch to using
+> > > > > > > sleep, there won't be soft lockup anymore. A simple wait + timeout +
+> > > > > > > warning seems sufficient?
+> > > > > > >
+> > > > > > > Thanks
+> > > > > >
+> > > > > > I'd like to avoid need to teach users new APIs. So watchdog setup to apply
+> > > > > > to this driver. The warning can be different.
+> > > > >
+> > > > > Right, so it looks to me the only possible setup is the
+> > > > > watchdog_thres. I plan to trigger the warning every watchdog_thres * 2
+> > > > > second (as softlockup did).
+> > > > >
+> > > > > And I think it would still make sense to fail, we can start with a
+> > > > > very long timeout like 1 minutes and break the device. Does this make
+> > > > > sense?
+> > > > >
+> > > > > Thanks
+> > > >
+> > > > I'd say we need to make this manageable then.
+> > >
+> > > Did you mean something like sysfs or module parameters?
+> >
+> > No I'd say pass it with an ioctl.
+> >
+> > > > Can't we do it normally
+> > > > e.g. react to an interrupt to return to userspace?
+> > >
+> > > I didn't get the meaning of this. Sorry.
+> > >
+> > > Thanks
+> >
+> > Standard way to handle things that can timeout and where userspace
+> > did not supply the time is to block until an interrupt
+> > then return EINTR.
+> 
+> Well this seems to be a huge change, ioctl(2) doesn't say it can
+> return EINTR now.
 
-Also add lpuart32_hw_disable() to make sure the receiver/transmitter and
-interrupts are disabled during the dma steup.
+the one on fedora 37 does not but it says:
+       No single standard.  Arguments, returns, and semantics of ioctl() vary according to the device driver in question (the call  is
+       used as a catch-all for operations that don't cleanly fit the UNIX stream I/O model).
 
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
----
- drivers/tty/serial/fsl_lpuart.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+so it depends on the device e.g. for a streams device it does:
+https://pubs.opengroup.org/onlinepubs/9699919799/functions/ioctl.html
+has EINTR.
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 04fecff2fa5f..eac5243a9db0 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -1702,6 +1702,16 @@ static int lpuart_startup(struct uart_port *port)
- 	return 0;
- }
- 
-+static void lpuart32_hw_disable(struct lpuart_port *sport)
-+{
-+	unsigned long temp;
-+
-+	temp = lpuart32_read(&sport->port, UARTCTRL);
-+	temp &= ~(UARTCTRL_RIE | UARTCTRL_ILIE | UARTCTRL_RE |
-+		  UARTCTRL_TIE | UARTCTRL_TE);
-+	lpuart32_write(&sport->port, temp, UARTCTRL);
-+}
-+
- static void lpuart32_configure(struct lpuart_port *sport)
- {
- 	unsigned long temp;
-@@ -1726,11 +1736,12 @@ static void lpuart32_hw_setup(struct lpuart_port *sport)
- 
- 	spin_lock_irqsave(&sport->port.lock, flags);
- 
--	lpuart32_setup_watermark_enable(sport);
-+	lpuart32_hw_disable(sport);
- 
- 	lpuart_rx_dma_startup(sport);
- 	lpuart_tx_dma_startup(sport);
- 
-+	lpuart32_setup_watermark_enable(sport);
- 	lpuart32_configure(sport);
- 
- 	spin_unlock_irqrestore(&sport->port.lock, flags);
--- 
-2.17.1
+
+
+> Actually, a driver timeout is used by other drivers when using
+> controlq/adminq (e.g i40e). Starting from a sane value (e.g 1 minutes
+> to avoid false negatives) seems to be a good first step.
+
+Well because it's specific hardware so timeout matches what it can
+promise.  virtio spec does not give guarantees.  One issue is with
+software implementations. At the moment I can set a breakpoint in qemu
+or vhost user backend and nothing bad happens in just continues.
+
+
+> > Userspace controls the timeout by
+> > using e.g. alarm(2).
+> 
+> Not used in iproute2 after a git grep.
+> 
+> Thanks
+
+No need for iproute2 to do it user can just do it from shell. Or user can just press CTRL-C.
+
+> >
+> >
+> > > >
+> > > >
+> > > >
+> > > > > >
+> > > > > >
+> > > > > > > >
+> > > > > > > > > And before the patch, we end up with a real infinite loop which could
+> > > > > > > > > be caught by RCU stall detector which is not the case of the sleep.
+> > > > > > > > > What we can do is probably do a periodic netdev_err().
+> > > > > > > > >
+> > > > > > > > > Thanks
+> > > > > > > >
+> > > > > > > > Only with a bad device.
+> > > > > > > >
+> > > > > > > > > > >>
+> > > > > > > > > > >>
+> > > > > > > > > > >>> 2- overhead. In a very common scenario when device is in hypervisor,
+> > > > > > > > > > >>>      programming timers etc has a very high overhead, at bootup
+> > > > > > > > > > >>>      lots of CVQ commands are run and slowing boot down is not nice.
+> > > > > > > > > > >>>      let's poll for a bit before waiting?
+> > > > > > > > > > >>
+> > > > > > > > > > >> Then we go back to the question of choosing a good timeout for poll. And
+> > > > > > > > > > >> poll seems problematic in the case of UP, scheduler might not have the
+> > > > > > > > > > >> chance to run.
+> > > > > > > > > > > Poll just a bit :) Seriously I don't know, but at least check once
+> > > > > > > > > > > after kick.
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > I think it is what the current code did where the condition will be
+> > > > > > > > > > check before trying to sleep in the wait_event().
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > >>> 3- suprise removal. need to wake up thread in some way. what about
+> > > > > > > > > > >>>      other cases of device breakage - is there a chance this
+> > > > > > > > > > >>>      introduces new bugs around that? at least enumerate them please.
+> > > > > > > > > > >>
+> > > > > > > > > > >> The current code did:
+> > > > > > > > > > >>
+> > > > > > > > > > >> 1) check for vq->broken
+> > > > > > > > > > >> 2) wakeup during BAD_RING()
+> > > > > > > > > > >>
+> > > > > > > > > > >> So we won't end up with a never woke up process which should be fine.
+> > > > > > > > > > >>
+> > > > > > > > > > >> Thanks
+> > > > > > > > > > >
+> > > > > > > > > > > BTW BAD_RING on removal will trigger dev_err. Not sure that is a good
+> > > > > > > > > > > idea - can cause crashes if kernel panics on error.
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > Yes, it's better to use __virtqueue_break() instead.
+> > > > > > > > > >
+> > > > > > > > > > But consider we will start from a wait first, I will limit the changes
+> > > > > > > > > > in virtio-net without bothering virtio core.
+> > > > > > > > > >
+> > > > > > > > > > Thanks
+> > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > >>>
+> > > > > > > >
+> > > > > >
+> > > >
+> >
 
