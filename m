@@ -2,71 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECF3680B8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18115680B95
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236574AbjA3LDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 06:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S236048AbjA3LFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 06:05:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236575AbjA3LDT (ORCPT
+        with ESMTP id S236321AbjA3LFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 06:03:19 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025662E0F7
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:03:07 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id l8so7691999wms.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iW3h48EgC+B9xesAWTV4ocRnzISW708+S34/T5By3HU=;
-        b=I/vL66wKwzqLij5P964thWoGXBWf3+KlaCT1thMeSMNPsOfANjBAig3bvDY24ERBeR
-         ECtez/D+MW3vFdEc2JKG9slBNZ5rNMtUscHFtJoCyjjPtx4ulXYFL0ys98AglfdmRN6p
-         e7qNcXIkvNuU+c/GI0SbMF+Zh2Ky0J7iwy4epvNWhnRsEg4cDugszIF/evGiKY5XrGki
-         bsb4KEPOKqU9vQpbsrp9HNjAGOi69c4qvGXVvHx6K2hJd3AYi1ZoX+Xpfn4MmngIMYOr
-         49RT0y6/Zd/85gR+CAFkDMkA21gANnmoYgBFWAApVSbzIcFh+4eCh0bIguXqgHJDjz2W
-         31tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iW3h48EgC+B9xesAWTV4ocRnzISW708+S34/T5By3HU=;
-        b=5MnNSE3ttEadixYsJISsQUFUqdEkYhv0HqTJSW0rPPxDd7jEBZHojQUsGPf2vphgsU
-         6ziKeMIlLkSIwVLJxPVR/vom43ylPxPuF/XzOoKquW0nCthQcVIIbkIJKnlZBPLu+xMA
-         JCPQWQB1+ePIuCfX4PrQ8v7n/o8WqasZjB+AaYnoedbcobpuESeaQH8fE2s+hHeIih0V
-         4N8w5UFqp69lorPfRqx3fguLObaPyJuKwi7rMd3CBx/KTAft6faY5/IMyNKI538YlgLP
-         FzIIFkUEVLX/diUMrkKydgxS+Qs36Ry57NPoUDFnwod2/DQSvE9iWnOyTNMJij6CxQYc
-         cqpw==
-X-Gm-Message-State: AO0yUKVqC0yC7czaVHYe2vjgQwhv0Di1UdFy3XPvUBR0j8qNz2B9erpx
-        8dtVU8FuiGJ5/tJZv+Sov9MDFLsy3BjSVVad
-X-Google-Smtp-Source: AK7set92F7rpe2VyZ9xPeLwLyfZu/TFzv535Wdebib/Lc11YmgHfVGoR0nmw7A+no9AHvPW/w/+rNQ==
-X-Received: by 2002:a05:600c:4688:b0:3dc:438a:c381 with SMTP id p8-20020a05600c468800b003dc438ac381mr9402664wmo.28.1675076585672;
-        Mon, 30 Jan 2023 03:03:05 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id e15-20020a05600c218f00b003dc434b39c7sm11618282wme.0.2023.01.30.03.03.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 03:03:04 -0800 (PST)
-Message-ID: <ef5e4ea6-6dcb-3700-a8e5-2b7ec5aad092@linaro.org>
-Date:   Mon, 30 Jan 2023 11:03:03 +0000
+        Mon, 30 Jan 2023 06:05:16 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B2633466
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:04:25 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pMRxX-00009o-UI; Mon, 30 Jan 2023 12:04:23 +0100
+Message-ID: <62fb7c9a-179a-f3f0-93b6-5e74f88dad63@leemhuis.info>
+Date:   Mon, 30 Jan 2023 12:04:23 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 00/10] nvmem: fixes for 6.2
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20230127104015.23839-1-srinivas.kandagatla@linaro.org>
- <Y9Ulm3So08Fg308w@kroah.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <Y9Ulm3So08Fg308w@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+ Thunderbird/102.6.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: CIFS NTLM regression still annoying people (was: Re: Linux
+ regressions report for mainline [2023-01-29])
+Content-Language: en-US, de-DE
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>
+References: <167501403214.1314424.14370223374691112185@leemhuis.info>
+ <CAHk-=wgnBBJ7hDSz5T+2FMF0JhE1Jmf6=tZEytQ6n1jZ4m2s=w@mail.gmail.com>
+From:   "Linux kernel regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <CAHk-=wgnBBJ7hDSz5T+2FMF0JhE1Jmf6=tZEytQ6n1jZ4m2s=w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675076665;76f21fbb;
+X-HE-SMSGID: 1pMRxX-00009o-UI
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,40 +49,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Greg,
-
-On 28/01/2023 13:39, Greg KH wrote:
-> On Fri, Jan 27, 2023 at 10:40:05AM +0000, Srinivas Kandagatla wrote:
->> Hi Greg,
+On 29.01.23 20:32, Linus Torvalds wrote:
+> On Sun, Jan 29, 2023 at 9:42 AM Regzbot (on behalf of Thorsten
+> Leemhuis) <regressions@leemhuis.info> wrote:
 >>
->> Here are some nvmem core fixes around nvmem provider device register
->> and error paths.
->> Most of these patches have been in next for 2-3 weeks.
->>
->> Am really not sure if you are taking fixes late in this cycle.
->> In case you are not could you please apply them for 6.3
-> 
-> When I apply them, I get the following errors from the scripts:
-> 
-> Commit: 36f5dbea16ad ("nvmem: core: fix return value")
-> 	Fixes tag: Fixes: 60c8b4aebd8e ("nvmem: core: fix cleanup after dev_set_name()")
-> 	Has these problem(s):
-> 		- Target SHA1 does not exist
-> Commit: 7de8892c0527 ("nvmem: core: fix device node refcounting")
-> 	Fixes tag: Fixes: 69aba7948cbe("nvmem: Add a simple NVMEM framework for consumers")
-> 	Has these problem(s):
-> 		- missing space between the SHA1 and the subject
-> 
-> The first one is because you have your own git tree, that's fine.  But the
-> second one should have given you an error when it was in linux-next, what
-> happened?
-> 
-> Let me see if I can fix this up...
+>> * Andrew afaics didn’t sent a revert[1] from Vlastimir your way
+> Ok, I applied this one as tiny and clear and hitting actual user loads.
 
-Thankyou very much for fixing this up before applying, will take extra 
-care next time. :-)
+Great, many thx!
 
-thanks,
-srini
-> 
-> greg k-h
+>> * A fix[1] for a stack_depot/kmemleak issue is in next for a while already too[2]
+> This one I left alone, since it's a bit more involved and the use-case
+> is more esoteric too.
+
+Totally fine with me and yeah, a bit esoteric. But when somebody bisects
+and report a problem (in this case: Boris) that already fixed in next
+for a few days, my mind yells "what a waste or energy, this could have
+been prevented by mainlining the fix a bit more quickly" -- that's why I
+brought it up.
+
+> And in other news, the input regression revert you mentioned earlier
+> got pulled this morning.
+
+Ahh, great.
+
+BTW, there is one thing that still bugs me: every few weeks there is yet
+somebody new[1] complaining about the removal of support for NTLM and
+weaker authentication algorithms from cifs some time ago in
+76a3c92ec9e0. The situation[2] was improved slightly in 2f6f19c7aaad
+("cifs: fix regression in very old smb1 mounts"), but it seems some
+users of Apple Time Capsules or some Epson printer/scanner still can't
+access their devices which apparently still work fine in Windows and
+macOS[1].
+
+Yes, the issue is tricky, as there are security implications here and we
+have nobody that tests this, as you pointed out [3]. Is there
+nevertheless something somebody committed could do? Would we even be
+willing to add that support back in, in case someone commits to maintain
+and regularly test that codepath?
+
+Ciao, Thorsten
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=216682
+[2] https://bugzilla.kernel.org/show_bug.cgi?id=215375
+[3]
+https://lore.kernel.org/all/CAHk-=wjSBvRk-ksUBOiQzJd=e19UZKvOSZs1UHahK5U0QVh6RQ@mail.gmail.com/
