@@ -2,46 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3E2680B58
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BF7680B64
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236144AbjA3Kys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S236489AbjA3K5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjA3Kyq (ORCPT
+        with ESMTP id S236360AbjA3K5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:54:46 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B48E617CC0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:54:45 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70FD316A3;
-        Mon, 30 Jan 2023 02:55:27 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.13.128])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E89D93F71E;
-        Mon, 30 Jan 2023 02:54:42 -0800 (PST)
-Date:   Mon, 30 Jan 2023 10:54:40 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     anup@brainfault.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, rostedt@goodmis.org,
-        mhiramat@kernel.org, jolsa@redhat.com, bp@suse.de,
-        jpoimboe@kernel.org, suagrfillet@gmail.com, andy.chiu@sifive.com,
-        e.shatokhin@yadro.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next V7 1/7] riscv: ftrace: Fixup panic by disabling
- preemption
-Message-ID: <Y9eh8DpjrmcLIQb5@FVFF77S0Q05N>
-References: <20230112090603.1295340-1-guoren@kernel.org>
- <20230112090603.1295340-2-guoren@kernel.org>
- <Y7/6AtX5X0+5qF6Y@FVFF77S0Q05N>
- <CAJF2gTTqW5A8qS5CQEr=kakxKw5FaFRDswet6CnBGUDasNJnbQ@mail.gmail.com>
+        Mon, 30 Jan 2023 05:57:07 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CD331E27;
+        Mon, 30 Jan 2023 02:57:04 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P54rB511Xz4f3jZL;
+        Mon, 30 Jan 2023 18:56:58 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP1 (Coremail) with SMTP id cCh0CgAXgSt4otdjy_MHCg--.30573S2;
+        Mon, 30 Jan 2023 18:56:59 +0800 (CST)
+Subject: Re: [PATCH v3 0/2] Fixes for fscache volume operations
+To:     linux-cachefs@redhat.com, David Howells <dhowells@redhat.com>
+Cc:     Jeff Layton <jlayton@kernel.org>, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jingbo Xu <jefflexu@linux.alibaba.com>,
+        "houtao1@huawei.com" <houtao1@huawei.com>
+References: <20230113115211.2895845-1-houtao@huaweicloud.com>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <70586435-8c17-6da7-2971-3fbb3ebe6036@huaweicloud.com>
+Date:   Mon, 30 Jan 2023 18:56:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTTqW5A8qS5CQEr=kakxKw5FaFRDswet6CnBGUDasNJnbQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230113115211.2895845-1-houtao@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: cCh0CgAXgSt4otdjy_MHCg--.30573S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7trWkXw1xXw4UAFWUJw1UJrb_yoW8Gr1rpF
+        ZxCwsIqFW8G3sayws7Ja17Z34v9FW8J397Wr15Jw4UAr4YvFWjqay5K3WY93W7C395Aayx
+        XF1Utw4Sq34jkFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
+        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,74 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 05:37:46PM +0800, Guo Ren wrote:
-> On Thu, Jan 12, 2023 at 8:16 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > Hi Guo,
-> >
-> > On Thu, Jan 12, 2023 at 04:05:57AM -0500, guoren@kernel.org wrote:
-> > > From: Andy Chiu <andy.chiu@sifive.com>
-> > >
-> > > In RISCV, we must use an AUIPC + JALR pair to encode an immediate,
-> > > forming a jump that jumps to an address over 4K. This may cause errors
-> > > if we want to enable kernel preemption and remove dependency from
-> > > patching code with stop_machine(). For example, if a task was switched
-> > > out on auipc. And, if we changed the ftrace function before it was
-> > > switched back, then it would jump to an address that has updated 11:0
-> > > bits mixing with previous XLEN:12 part.
-> > >
-> > > p: patched area performed by dynamic ftrace
-> > > ftrace_prologue:
-> > > p|      REG_S   ra, -SZREG(sp)
-> > > p|      auipc   ra, 0x? ------------> preempted
-> > >                                       ...
-> > >                               change ftrace function
-> > >                                       ...
-> > > p|      jalr    -?(ra) <------------- switched back
-> > > p|      REG_L   ra, -SZREG(sp)
-> > > func:
-> > >       xxx
-> > >       ret
-> >
-> > As mentioned on the last posting, I don't think this is sufficient to fix the
-> > issue. I've replied with more detail there:
-> >
-> >   https://lore.kernel.org/lkml/Y7%2F3hoFjS49yy52W@FVFF77S0Q05N/
-> >
-> > Even in a non-preemptible SMP kernel, if one CPU can be in the middle of
-> > executing the ftrace_prologue while another CPU is patching the
-> > ftrace_prologue, you have the exact same issue.
-> >
-> > For example, if CPU X is in the prologue fetches the old AUIPC and the new
-> > JALR (because it races with CPU Y modifying those), CPU X will branch to the
-> > wrong address. The race window is much smaller in the absence of preemption,
-> > but it's still there (and will be exacerbated in virtual machines since the
-> > hypervisor can preempt a vCPU at any time).
-> >
-> > Note that the above is even assuming that instruction fetches are atomic, which
-> > I'm not sure is the case; for example arm64 has special CMODX / "Concurrent
-> > MODification and eXecutuion of instructions" rules which mean only certain
-> > instructions can be patched atomically.
-> >
-> > Either I'm missing something that provides mutual exclusion between the
-> > patching and execution of the ftrace_prologue, or this patch is not sufficient.
-> This patch is sufficient because riscv isn't the same as arm64. It
-> uses default arch_ftrace_update_code, which uses stop_machine.
-> See kernel/trace/ftrace.c:
-> void __weak arch_ftrace_update_code(int command)
-> {
->         ftrace_run_stop_machine(command);
-> }
+Hi David,
 
-Ah; sorry, I had misunderstood here, since the commit message spoke in terms of
-removing that.
+Could you please pick it up for v6.2 ?
 
-As long as stop_machine() is used I agree this is safe; sorry for the noise.
+On 1/13/2023 7:52 PM, Hou Tao wrote:
+> From: Hou Tao <houtao1@huawei.com>
+>
+> Hi,
+>
+> The patchset includes two fixes for fscache volume operations: patch 1
+> fixes the hang problem during volume acquisition when the volume
+> acquisition process waits for the freeing of relinquished volume, patch
+> 2 adds the missing memory barrier in fscache_create_volume_work() and it
+> is spotted through code review when checking whether or not these is
+> missing smp_mb() before invoking wake_up_bit().
+>
+> Comments are always welcome.
+>
+> Chang Log:
+> v3:
+>  * Use clear_and_wake_up_bit() helper (Suggested by Jingbo Xu)
+>  * Tidy up commit message and add Reviewed-by tag
+>
+> v2: https://listman.redhat.com/archives/linux-cachefs/2022-December/007402.html
+>  * rebased on v6.1-rc1
+>  * Patch 1: use wait_on_bit() instead (Suggested by David)
+>  * Patch 2: add the missing smp_mb() in fscache_create_volume_work()
+>
+> v1: https://listman.redhat.com/archives/linux-cachefs/2022-December/007384.html
+>
+>
+> Hou Tao (2):
+>   fscache: Use wait_on_bit() to wait for the freeing of relinquished
+>     volume
+>   fscache: Use clear_and_wake_up_bit() in fscache_create_volume_work()
+>
+>  fs/fscache/volume.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
 
-> ps:
->  Yes, it's not good, and it's expensive.
-
-We can't have everything! :)
-
-Thanks,
-Mark.
