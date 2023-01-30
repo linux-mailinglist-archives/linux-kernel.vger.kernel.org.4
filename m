@@ -2,119 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FE6680CB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF85680CC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjA3MBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
+        id S235891AbjA3MCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjA3MBH (ORCPT
+        with ESMTP id S235645AbjA3MCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:01:07 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B68F10C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:01:02 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 2411E32002D8;
-        Mon, 30 Jan 2023 07:00:57 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 30 Jan 2023 07:00:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1675080056; x=1675166456; bh=TD
-        MULWl8K42gFGxXXkhM9aDVobr1p0cNzN+gUZU3mzI=; b=a1RqhclrB/UVRDFaX/
-        ABUUVNlvRQblwffKWZGbAPAFWktuBCvNeLm/GCHrgnblaGoduh2SUOXHl5dZJ0po
-        KDcUHSSq28Q16PKse5EzeZfaWTwkoA/Go8HVJqyX4DXmWgYQ3M6AtWb8gsP/y6Bv
-        tV3Yn2lLyaogk62/SKjxMUD4IazMpcACNoPYPt8h/JW6FHzfuhMn+yUsHiSd4JGg
-        70P15/h0za9fOXvBfjK0Ljeb9MVPAldOIpu2lpY6PuDeXv5mR6EjoVqh/JJOjZRC
-        bN87/M0Ubsh5/vhPvhKa1jgjvg76Z1DqlatZHaw+qRZqBW4qr9t0p6+H1W3rPGt2
-        OPlA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675080056; x=1675166456; bh=TDMULWl8K42gFGxXXkhM9aDVobr1
-        p0cNzN+gUZU3mzI=; b=ctjHXfIO5Ph8xWu/paabAmHoAbptx7O8uCgIGXOgV0Ms
-        o0xsHE4wQ+0Wt38i6PW2cviAgEAMUm/3ExG3TEQKhhRv3Fl+0ChKjbxVcfeEnoYV
-        K7t+nE/+ayC+g6SM2wblCPWW2XGrLdFl4anFYk9qJOcFzECnGO38YmXO0pgIogw1
-        1GtthGCX8qIoTpLmodhDXl21g8V1lVMCaKFoaEf8YJD9GJRFMy4TT/xvy76Wv7TC
-        gusxPqQgdj82tK8+KaBKQ8OJe/2MXuluZUQwVeUQXmD8aGffotu+uXadEvgK0su8
-        6P8xD/p0qAhaqYPbZ5pRJg2VjXK5w9t8ZYTlScwc1Q==
-X-ME-Sender: <xms:eLHXY3cxkmQwr2vNdUlrnRWB1VMXssSklU4by6qrNcw_-MHltTdiZQ>
-    <xme:eLHXY9MVWj6nv1bBg6djIdZdsRvxWLlisbKwamL5RGH6VnN1TDioZmUuU6WxgUEcJ
-    HSjP2BWTR69GPkcSes>
-X-ME-Received: <xmr:eLHXYwg124tzT2-FZXrUBd1RicH5ZxS0FNGLEiLRG6aFWNi4jxX3BUu8g-CqWR6pUp2waA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddgfeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:eLHXY48wPpZNpRNidDJkiHEnNQgKkRamoZn8aOfY3wkoFELPyJ25tw>
-    <xmx:eLHXYzvrMtrE7L1oUudGqznK1M_bwqZ5qwfJbiad0f5rqnjZe0GvWw>
-    <xmx:eLHXY3HGTyyUcJhcO1fiXbe-VZRrOc5APVSjvQvHOXzQlhSlNbfVGw>
-    <xmx:eLHXYy876Ul1Ewvgg4ljN1TkvDeK642I0yR3ilthECvGFXgAjQV9zw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 30 Jan 2023 07:00:55 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D9458104B96; Mon, 30 Jan 2023 15:00:52 +0300 (+03)
-Date:   Mon, 30 Jan 2023 15:00:52 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Christophe de Dinechin <dinechin@redhat.com>
-Cc:     "Reshetova, Elena" <elena.reshetova@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-Message-ID: <20230130120052.7wfb5i2vql5ibkso@box.shutemov.name>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
- <m2pmaw5jv4.fsf@redhat.com>
+        Mon, 30 Jan 2023 07:02:01 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E470019F;
+        Mon, 30 Jan 2023 04:01:59 -0800 (PST)
+Received: from [2a02:8108:963f:de38:4bc7:2566:28bd:b73c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pMSrG-00053V-Gx; Mon, 30 Jan 2023 13:01:58 +0100
+Message-ID: <f22551ea-0694-2838-4a3f-f60d8d93fa64@leemhuis.info>
+Date:   Mon, 30 Jan 2023 13:01:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <m2pmaw5jv4.fsf@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: External USB disks not recognized with v6.1.8 when using Xen
+Content-Language: en-US, de-DE
+To:     Christian Kujau <lists@nerdbynature.de>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de>
+From:   "Linux kernel regression tracking (#adding)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <4fe9541e-4d4c-2b2a-f8c8-2d34a7284930@nerdbynature.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1675080120;0f597c1b;
+X-HE-SMSGID: 1pMSrG-00053V-Gx
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 12:36:34PM +0100, Christophe de Dinechin wrote:
-> Is there for example anything that precludes TDX or SEV from executing
-> code in the bounce buffers?
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-In TDX, attempt to fetch instructions from shared memory (i.e. bounce
-buffer) will cause #GP, only data fetch is allowed. Page table also cannot
-be placed there and will cause the same #GP.
+On 30.01.23 04:46, Christian Kujau wrote:
+> [CC stable as I only tested the stable tree for now]
+> 
+> I'm running a current Alpine Linux with linux-edge-6.1.8-r0 installed on a 
+> Lenovo Thinkpad L540 where an external disk enclosure with two disks is 
+> attached via USB. The Alpine Linux kernel appears to track Linux stable 
+> and is more or less vanilla. Also, the machine boots into Xen 4.17.0 and 
+> then starts a few headless VMs, nothing too exotic here.
+> 
+> But when updating from Linux 6.1.1 to 6.1.8, the disks from the external 
+> enclosure did not show up. Unplug, replug, no dice, and this is 100% 
+> reproducable. dmesg has new these lines now:
+> 
+> +ioremap error for 0xf2520000-0xf2530000, requested 0x2, got 0x0
+> +ioremap error for 0xf2520000-0xf2530000, requested 0x2, got 0x0
+> +xhci_hcd 0000:00:14.0: init 0000:00:14.0 fail, -14
+> +ioremap error for 0xfed1f000-0xfed20000, requested 0x2, got 0x0
+> +iTCO_wdt iTCO_wdt.1.auto: ioremap failed for resource [mem 0xfed1f410-0xfed1f414]
+> 
+> I'm not sure if the ioremap error is related here (booted with 
+> early_ioremap_debug but then dmesg was filled with WARNINGS for both 
+> versions, so I disabled it again), but that xhci_hcd error looks 
+> suspicious.
+> 
+> Curiously 6.1.8 works just fine when NOT booted via Xen. I booted into 
+> Xen + vanilla 6.1.8 now and was able to reproduce this issue. Xen + 
+> vanilla 6.1.1 works fine.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Thanks for the report. To be sure the issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced v6.1.1..v6.1.8
+#regzbot title xen/usb(?): External USB disks not recognized anymore
+under Xen
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+> From v6.1.1 to v6.1.8 there's only one commit in drivers/xen, but 54 
+> commits in drivers/usb. Compiling takes time because the distribution 
+> kernel has almost everything enabled and I still need to cut down enabled 
+> options to be able to attempt a git biset in a reasonable time,
+
+FWIW, I'm working on a text for the kernel docs that will use
+"localmodconfig" to trim down the configs automatically. Maybe it's
+helpful for you, here is a draft:
+
+https://www.leemhuis.info/files/misc/How%20to%20quickly%20build%20a%20Linux%20kernel%20%E2%80%94%20The%20Linux%20Kernel%20documentation.html
+
+> but I 
+> still wanted to report this, maybe someone has an idea about this.
+> 
+> Full dmesg and lshw outputs: https://nerdbynature.de/bits/usb_v6.1.8/
+> 
+> Thanks,
+> Christian.
+> 
+> PS: I found this workaround on the interwebs[0] to force the USB ports 
+> of that machine to USB 2.0 and then the missing disks magically appear:
+> 
+> $ lspci -nn | grep -i usb
+> 00:14.0 USB controller [0c03]: Intel Corporation 8 Series/C220 Series Chipset Family USB xHCI [8086:8c31] (rev 05)  <=== !!!
+> 00:1a.0 USB controller [0c03]: Intel Corporation 8 Series/C220 Series Chipset Family USB EHCI #2 [8086:8c2d] (rev 05)
+> 00:1d.0 USB controller [0c03]: Intel Corporation 8 Series/C220 Series Chipset Family USB EHCI #1 [8086:8c26] (rev 05)
+> 
+> $ setpci -H1 -d 8086:8c31 d8.l=0
+> $ setpci -H1 -d 8086:8c31 d0.l=0
+> 
+> $ dmesg 
+> usb 1-1.3: new full-speed USB device number 3 using ehci-pci
+> usb 2-1.3: new high-speed USB device number 3 using ehci-pci
+> usb 1-1.3: New USB device found, idVendor=138a, idProduct=0011, bcdDevice=0.78
+> usb 1-1.3: New USB device strings: Mfr=0, Product=0, SerialNumber=1
+> usb 1-1.3: SerialNumber: aa32bf84ed47
+> usb 1-1.5: new full-speed USB device number 4 using ehci-pci
+> usb 2-1.3: New USB device found, idVendor=1e91, idProduct=a3a8, bcdDevice=2.07
+> usb 2-1.3: New USB device strings: Mfr=1, Product=2, SerialNumber=5
+> usb 2-1.3: Product: Elite Pro Dual
+> usb 2-1.3: Manufacturer: OWC
+> usb 2-1.3: SerialNumber: RANDOM__1E359879645F
+> usb 2-1.3: UAS is ignored for this device, using usb-storage instead
+> usb-storage 2-1.3:1.0: USB Mass Storage device detected
+> usb-storage 2-1.3:1.0: Quirks match for vid 1e91 pid a3a8: 800000
+> scsi host5: usb-storage 2-1.3:1.0
+> usb 1-1.5: New USB device found, idVendor=8087, idProduct=07dc, bcdDevice=0.01
+> usb 1-1.5: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> Bluetooth: hci0: Legacy ROM 2.5 revision 8.0 build 1 week 45 2013
+> Bluetooth: hci0: Intel Bluetooth firmware file: intel/ibt-hw-37.7.10-fw-1.80.1.2d.d.bseq
+> usb 1-1.6: new high-speed USB device number 5 using ehci-pci
+> usb 1-1.6: New USB device found, idVendor=04f2, idProduct=b398, bcdDevice=39.98
+> usb 1-1.6: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> usb 1-1.6: Product: Integrated Camera
+> usb 1-1.6: Manufacturer: Vimicro corp.
+> Bluetooth: hci0: Intel BT fw patch 0x2a completed & activated
+> scsi 5:0:0:0: Direct-Access     ElitePro Dual U3FW-1      0207 PQ: 0 ANSI: 6
+> scsi 5:0:0:1: Direct-Access     ElitePro Dual U3FW-2      0207 PQ: 0 ANSI: 6
+> sd 5:0:0:0: [sdc] Very big device. Trying to use READ CAPACITY(16).
+> sd 5:0:0:0: [sdc] 7814037168 512-byte logical blocks: (4.00 TB/3.64 TiB)
+> sd 5:0:0:1: [sdd] Very big device. Trying to use READ CAPACITY(16).
+> sd 5:0:0:1: [sdd] 7814037168 512-byte logical blocks: (4.00 TB/3.64 TiB)
+> sd 5:0:0:1: [sdd] Write Protect is off
+> sd 5:0:0:1: [sdd] Mode Sense: 47 00 10 08
+> sd 5:0:0:0: [sdc] Write Protect is off
+> sd 5:0:0:0: [sdc] Mode Sense: 47 00 10 08
+> sd 5:0:0:0: [sdc] No Caching mode page found
+> sd 5:0:0:0: [sdc] Assuming drive cache: write through
+> sd 5:0:0:1: [sdd] No Caching mode page found
+> sd 5:0:0:1: [sdd] Assuming drive cache: write through
+> sd 5:0:0:0: [sdc] Attached SCSI disk
+> sd 5:0:0:1: [sdd] Attached SCSI disk
+> 
+> $ lsblk /dev/sd[cd]
+> NAME MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+> sdc    8:32   0  3.6T  0 disk 
+> sdd    8:48   0  3.6T  0 disk 
+> 
+> 
+> [0] https://superuser.com/a/875863/218574
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
