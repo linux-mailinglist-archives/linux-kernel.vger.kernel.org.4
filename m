@@ -2,143 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F4E680F8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE59A680FA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236379AbjA3Nyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
+        id S236495AbjA3NzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:55:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236373AbjA3Nyl (ORCPT
+        with ESMTP id S236456AbjA3NzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:54:41 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F2C39296
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:54:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675086879; x=1706622879;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4DEGDkL+yrEmQwnOAwQuSEcBBMrH3SBUNGZ0BQPN+/Y=;
-  b=e6UeKpwKg7UBVMvT8vambUPfHpCitPPqI9md2jL1iobEUH7s4IxyErIT
-   m0Ex5QNIVVlfTd15cKUxX/elJJNj1fBBB54Q1+MQI9CbOnyxvGq9R1PKc
-   IKgNh9A8WKpAoqzkARWksEShpRdy+1u3cA03QryPFjujPIdweaZxOGlFE
-   +qhjqYyYgm1+rmNS17aGqcSnJyFRZmrrmyXu8CDipT3qF1PqFNyctSVi8
-   riLyxD4QMUwDSnYeK+rFdVthm+dJRbJJ2GUzLf5Et/8ldK6BD6ZOI6bhz
-   k6a0ANA01PdGNIEWSB9wjm5oOkAYh8xsyGqoLTlf0CgIX1q9L+CVxsckd
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="307903829"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="307903829"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 05:54:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="696405603"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="696405603"
-Received: from dhirceax-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.33.6])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 05:54:35 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D4F4710DF7D; Mon, 30 Jan 2023 16:54:31 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
-        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH] x86/tdx: Do not corrupt frame-pointer in __tdx_hypercall()
-Date:   Mon, 30 Jan 2023 16:53:54 +0300
-Message-Id: <20230130135354.27674-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 30 Jan 2023 08:55:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD8C25E38
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:55:17 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id m2so31452292ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:55:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FB2g2c4rIfuYP/zAUAb6cfWJDSl3EKVoz2j41/PaiwQ=;
+        b=oKKlyJ2KD24h9FCrjwuz/haUT4fzJRmeTAUFdwJELfay8Hmrr9RdTuldtoXPKk7l3p
+         wjKE05wTsqwxE5Pwrlk+viGHJ0zt5C88PFLySSl6dpFly3lU7rEyNJbhlQhQSfteMStA
+         Dolm5Q6viMft++3VFIlYMcJr8QTay8FUw/huQfHa5Qs5iC0uTR+zgPrjPBKveRITU5g5
+         CLUuP7zVsF46o9mCmdOEbmUE+fpgKU+51AfmEabkJIWdHGRcF3u86F4tz+tkoNLvuDGM
+         /B9ZZSAVlSJUSid0Tz1xI2bhfxk1SOPrxYdmQvZdXeJ7wbLNefyCRwRCJW8ivCDCVNnk
+         GmyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FB2g2c4rIfuYP/zAUAb6cfWJDSl3EKVoz2j41/PaiwQ=;
+        b=J6UIRhnatkF/PWiQLUdt3NOc/GbGYIgdZSYNq+k6hg29QqmYuNIylNx96xDPScKtKK
+         f6AyA+OZce/Xy7Cp4obz6qL5DBcrBodGeRseFArSQbq0ZhB2RimXWrjMHKR8DEO4ToIw
+         ZkUzXb9j9s3qwRKQArqLi01htD7U5L6n3UkS5NFNfkK0vMeIU3kKOWNWKF18COBEl3FK
+         0Nx+/Z9E6BsIXhK8la2C51Qjz18MKnTmy1RyOsZuOJtl0GiLeKTYWY6+Rceb8HzwSdRJ
+         /PY6psYJMVPGO4BX8LRW6cZwQlIf2SHIx8s4QN7BKjBmC31K9EN9cawxD4ddZ9zdNGHw
+         1DLA==
+X-Gm-Message-State: AO0yUKUbkDG5DG6F/pVChjKJDGvoRzKBRF+YJFCn89C5QJnpNgX8SRab
+        zX030K2Xv06br1PHv3LmryX5VQ==
+X-Google-Smtp-Source: AK7set8RiuC4MJp0K/vak5+3A+l8zKpBr/VhleJ2+63A+X8OKSsDz4eoJInidBH7tvWLzyPa7G0hYQ==
+X-Received: by 2002:a17:906:b353:b0:87d:dd22:a93 with SMTP id cd19-20020a170906b35300b0087ddd220a93mr12275786ejb.54.1675086915736;
+        Mon, 30 Jan 2023 05:55:15 -0800 (PST)
+Received: from mikrawczyk.c.googlers.com.com (12.196.204.35.bc.googleusercontent.com. [35.204.196.12])
+        by smtp.gmail.com with ESMTPSA id a6-20020aa7cf06000000b004a23558f01fsm2817513edy.43.2023.01.30.05.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 05:55:15 -0800 (PST)
+From:   "=?UTF-8?q?Micha=C5=82=20Krawczyk?=" <mk@semihalf.com>
+X-Google-Original-From: =?UTF-8?q?Micha=C5=82=20Krawczyk?= <mk@semmihalf.com>
+To:     Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mw@semihalf.com,
+        =?UTF-8?q?Micha=C5=82=20Krawczyk?= <mk@semihalf.com>
+Subject: [PATCH v2] media: venus: dec: Fix handling of the start cmd
+Date:   Mon, 30 Jan 2023 13:54:18 +0000
+Message-Id: <20230130135418.1604455-1-mk@semmihalf.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+In-Reply-To: <20230130105423.1338554-1-mk@semmihalf.com>
+References: <20230130105423.1338554-1-mk@semmihalf.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If compiled with CONFIG_FRAME_POINTER=y, objtool in not happy that
-__tdx_hypercall() messes up RBP.
+From: Michał Krawczyk <mk@semihalf.com>
 
-  objtool: __tdx_hypercall+0x7f: return with modified stack frame
+The decoder driver should clear the last_buffer_dequeued flag of the
+capture queue upon receiving V4L2_DEC_CMD_START.
 
-Rework the function to store TDX_HCALL_ flags on stack instead of RBP.
+The last_buffer_dequeued flag is set upon receiving EOS (which always
+happens upon receiving V4L2_DEC_CMD_STOP).
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Fixes: c30c4b2555ba ("x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments")
-Link: https://lore.kernel.org/all/202301290255.buUBs99R-lkp@intel.com
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
+Without this patch, after issuing the V4L2_DEC_CMD_STOP and
+V4L2_DEC_CMD_START, the vb2_dqbuf() function will always fail, even if
+the buffers are completed by the hardware.
+
+Fixes: beac82904a87 ("media: venus: make decoder compliant with stateful codec API")
+
+Signed-off-by: Michał Krawczyk <mk@semihalf.com>
 ---
+V1 -> V2: Fix warning regarding unused variable
 
-The patch is against tip/x86/tdx. tip/sched/core removes
-TDX_HCALL_ISSUE_STI. The trird hunk of the patch is not relevant
-after that.
+ drivers/media/platform/qcom/venus/vdec.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
----
- arch/x86/coco/tdx/tdcall.S | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index 5da06d1a9ba3..2bd436a4790d 100644
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -131,11 +131,10 @@ SYM_FUNC_START(__tdx_hypercall)
- 	push %r13
- 	push %r12
- 	push %rbx
--	push %rbp
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 4ceaba37e2e5..9d26587716bf 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -526,6 +526,7 @@ static int
+ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
+ {
+ 	struct venus_inst *inst = to_inst(file);
++	struct vb2_queue *dst_vq;
+ 	struct hfi_frame_data fdata = {0};
+ 	int ret;
  
- 	/* Free RDI and RSI to be used as TDVMCALL arguments */
- 	movq %rdi, %rax
--	movq %rsi, %rbp
-+	push %rsi
- 
- 	/* Copy hypercall registers from arg struct: */
- 	movq TDX_HYPERCALL_r8(%rax),  %r8
-@@ -168,7 +167,7 @@ SYM_FUNC_START(__tdx_hypercall)
- 	 * HLT operation indefinitely. Since this is the not the desired
- 	 * result, conditionally call STI before TDCALL.
- 	 */
--	testq $TDX_HCALL_ISSUE_STI, %rbp
-+	testq $TDX_HCALL_ISSUE_STI, 8(%rsp)
- 	jz .Lskip_sti
- 	sti
- .Lskip_sti:
-@@ -188,7 +187,7 @@ SYM_FUNC_START(__tdx_hypercall)
- 	pop %rax
- 
- 	/* Copy hypercall result registers to arg struct if needed */
--	testq $TDX_HCALL_HAS_OUTPUT, %rbp
-+	testq $TDX_HCALL_HAS_OUTPUT, (%rsp)
- 	jz .Lout
- 
- 	movq %r8,  TDX_HYPERCALL_r8(%rax)
-@@ -218,11 +217,12 @@ SYM_FUNC_START(__tdx_hypercall)
- 	xor %r10d, %r10d
- 	xor %r11d, %r11d
- 	xor %rdi,  %rdi
--	xor %rsi,  %rsi
- 	xor %rdx,  %rdx
- 
-+	/* Remove TDX_HCALL_* flags from the stack */
-+	pop %rsi
+@@ -556,6 +557,13 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
+ 			inst->codec_state = VENUS_DEC_STATE_DRAIN;
+ 			inst->drain_active = true;
+ 		}
++	} else if (cmd->cmd == V4L2_DEC_CMD_START &&
++		   inst->codec_state == VENUS_DEC_STATE_STOPPED) {
++		dst_vq = v4l2_m2m_get_vq(inst->fh.m2m_ctx,
++					 V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
++		vb2_clear_last_buffer_dequeued(dst_vq);
 +
- 	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
--	pop %rbp
- 	pop %rbx
- 	pop %r12
- 	pop %r13
++		inst->codec_state = VENUS_DEC_STATE_DECODING;
+ 	}
+ 
+ unlock:
 -- 
-2.39.1
+2.39.1.456.gfc5497dd1b-goog
 
