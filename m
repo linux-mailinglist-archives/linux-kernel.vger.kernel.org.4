@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D5C68160C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8208E68160D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237052AbjA3QL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S237182AbjA3QMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:12:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbjA3QL4 (ORCPT
+        with ESMTP id S236272AbjA3QMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:11:56 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8573A301B2;
-        Mon, 30 Jan 2023 08:11:53 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id C7C31E0006;
-        Mon, 30 Jan 2023 16:11:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675095112;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lcGSRz6yN0YvpPxM18cpcT5yuDciHrp+by6J8Z2HzPE=;
-        b=fIHDEFlerl/8KMHwFWRVo5CKdbzBAOQCYrA3KdnXDHCfNYGJuNFd99PVt4nzl7eFv+eBa3
-        IKyJnI6OQxAgrGls7DOs1ulfBQijUOU9YIATKPmq4pxufMyY3fnPi6tKLczdWg46ltBL6V
-        7q1vGEghO57UcHuXti6woJd1zHgy5TMAqmd4I/x6ByVb13ulTwDgdVWg4yrRcJmLhBFs4l
-        2xFvQE4KH0/3Iy2eiUEmPGtZFgxKgnQtcniNCnqkH8pQ51AA9zoB0yw5YMSHz8UNWOwUXA
-        HzZH+rJ7sNEmjcEWvHMY+m4D1TttwKjzWhWdMNC/wufQ+dQRdHQ8bd3zJF2BZw==
-Date:   Mon, 30 Jan 2023 17:11:45 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <benliang.zhao@mediatek.com>, <bin.zhang@mediatek.com>
-Subject: Re: [RESEND PATCH v5 00/10] Add MediaTek MT7986 SPI NAND and ECC
- support
-Message-ID: <20230130171145.2c844d34@xps-13>
-In-Reply-To: <20230130030656.12127-1-xiangsheng.hou@mediatek.com>
-References: <20230130030656.12127-1-xiangsheng.hou@mediatek.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 30 Jan 2023 11:12:20 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696D042BDC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:12:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=23pAo9JSVshof/GsDAaXnVhq9lqul+f0c6BSy4eq+zo=; b=RZ/491jdGkmzMV6UR4tEokPjxM
+        QVrFJd0V0gIoQ7FxW5F5luq8VwZYRFhCIE/9XemzJbSdEcCpTIN3ORzitto9t4UrLfmsMNiwW6Bol
+        pYcdJxt5Sgwm1aW09OqkOLUifmGd0UPiFXTTMPRrGiPjSM+yB2fXaG/p6sZ4VMWhyr6tf8EIzvKOF
+        Lo1AQD/3Gu9wcYlHG5Z9jo8y44Km73kYM6rvonZ05p+p3CwM9r9uk6k7VlayaSjmUjSEBCRPz3M5k
+        ntD7DVRiigghw1u2/5tOqwFtUlY+h95iE4Gx8dGgUusav+Muo2muZIf0F11T8czDu4xCfdwmamnXp
+        vkdX+i4w==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pMWlC-00AUKR-PL; Mon, 30 Jan 2023 16:11:59 +0000
+Date:   Mon, 30 Jan 2023 16:11:58 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "contact@pgazz.com" <contact@pgazz.com>,
+        "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>,
+        Huang Ying <ying.huang@intel.com>
+Subject: Re: kernel BUG in page_add_anon_rmap
+Message-ID: <Y9fsTqMPzi9EIUKH@casper.infradead.org>
+References: <IA1PR07MB983017D2FBA174D2FF78CEB6ABCE9@IA1PR07MB9830.namprd07.prod.outlook.com>
+ <Y9LNCouUvsUFCYkT@casper.infradead.org>
+ <adc9152e-c547-12ec-3538-006500619896@redhat.com>
+ <713c6242-be65-c212-b790-2b908627c1b4@google.com>
+ <9d8fb9c-1b81-67cd-e55b-34517388e1ab@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d8fb9c-1b81-67cd-e55b-34517388e1ab@google.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiangsheng,
+On Sat, Jan 28, 2023 at 10:49:31PM -0800, Hugh Dickins wrote:
+> I guess it will turn out not to be relevant to this particular syzbug,
+> but what do we expect an mbind() of just 0x1000 of a THP to do?
+> 
+> It's a subject I've wrestled with unsuccessfully in the past: I found
+> myself arriving at one conclusion (split THP) in one place, and a contrary
+> conclusion (widen range) in another place, and never had time to work out
+> one unified answer.
+> 
+> So I do wonder what pte replaces the migration entry when the bug here
+> is fixed: is it a pte pointing into the THP as before, in which case
+> what was the point of "migration"? is it a Copy-On-Bind page?
+> or has the whole THP been migrated?
 
-xiangsheng.hou@mediatek.com wrote on Mon, 30 Jan 2023 11:06:46 +0800:
+I have an Opinion!
 
-> This patch series add MediaTek MT7986 SPI NAND and ECC controller
-> support, split ECC engine with rawnand controller in bindings and
-> change to YAML schema.
+The important thing about THP (IMO) is the Transparency part.
+Applications don't need to do anything special to get memory managed
+in larger chunks, the only difference is in performance.  That is, they
+get better performance if the kernel can do it, and thinks it worthwhile.
 
-I would like to pick-up patches 3, 7 and 10 and apply them in the mtd
-tree as they look completely orthogonal with all the other (spi/DT)
-changes, am I right?
+The tradeoff with THP is that we treat all memory in this 2MB chunk the
+same way; we track its dirtiness and age as a single thing (position
+on LRU, etc).  That assumes we're doing no harm, or less harm than we
+would be tracking each page independently.
 
-Mark, is it okay for you?
+If userspace gives us a hint like "I want this range of memory on that
+node", that's a strong signal that *this* range of memory is considered
+by userspace to be a single unit.  So my opinion is that userspace is
+letting us know that we previously made a bad decision and we should
+rectify it by splitting now.
 
-Thanks,
-Miqu=C3=A8l
+Zi Yan has a patch to allow pages to be split to arbitrary orders instead
+of 0.  We should probably give that a review so that we're not making
+the opposite mistake of tracking at too fine a granularity.
 
->=20
-> Changes since V4:
->  - Split arm and arm64 dts patch for fix existing NAND controller node na=
-me.
->=20
-> Changes since V3:
->  - Correct mediatek,mtk-nfc.yaml dt-bindings.
->=20
-> Changes since V2:
->  - Change ECC err_mask value with GENMASK macro.
->  - Change snfi mediatek,rx-latch-latency to mediatek,rx-latch-latency-ns.
->  - Add a separate patch for DTS change.
->  - Move common description to top-level pattern properties.
->  - Drop redundant parts in dt-bindings.
->=20
-> Changes since V1:
->  - Use existing sample delay property.
->  - Add restricting for optional nfi_hclk.
->  - Improve and perfect dt-bindings documentation.
->  - Change existing node name to match NAND controller DT bingings.
->  - Fix issues reported by dt_binding_check.
->  - Fix issues reported by dtbs_check.
->=20
-> Xiangsheng Hou (10):
->   spi: mtk-snfi: Change default page format to setup default setting
->   spi: mtk-snfi: Add optional nfi_hclk which is needed for MT7986
->   mtd: nand: ecc-mtk: Add ECC support fot MT7986 IC
->   dt-bindings: spi: mtk-snfi: Add compatible for MT7986
->   spi: mtk-snfi: Add snfi sample delay and read latency adjustment
->   dt-bindings: spi: mtk-snfi: Add read latch latency property
->   dt-bindings: mtd: Split ECC engine with rawnand controller
->   arm64: dts: mediatek: Fix existing NAND controller node name
->   arm: dts: mediatek: Fix existing NAND controller node name
->   dt-bindings: mtd: mediatek,nand-ecc-engine: Add compatible for MT7986
->=20
->  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 155 +++++++++++++++
->  .../mtd/mediatek,nand-ecc-engine.yaml         |  63 +++++++
->  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
->  .../bindings/spi/mediatek,spi-mtk-snfi.yaml   |  54 +++++-
->  arch/arm/boot/dts/mt2701.dtsi                 |   2 +-
->  arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |   2 +-
->  arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   2 +-
->  drivers/mtd/nand/ecc-mtk.c                    |  28 ++-
->  drivers/spi/spi-mtk-snfi.c                    |  41 +++-
->  9 files changed, 330 insertions(+), 193 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nf=
-c.yaml
->  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-e=
-cc-engine.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
->=20
+> I ought to read through those "estimated mapcount" threads more
+> carefully: might be relevant, but I've not paid enough attention.
+
+I'm not sure they're relevant to this, although obviously I'd love
+your thoughts on how we could handle mapcount more efficiently.
+
