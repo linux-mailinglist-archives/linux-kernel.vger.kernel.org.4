@@ -2,173 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365D5680C04
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95F6680C15
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 12:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236650AbjA3LbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 06:31:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
+        id S235545AbjA3LhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 06:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbjA3Lax (ORCPT
+        with ESMTP id S229983AbjA3LhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 06:30:53 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4713A5F8;
-        Mon, 30 Jan 2023 03:30:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 92B7C1FDCA;
-        Mon, 30 Jan 2023 11:30:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1675078251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
+        Mon, 30 Jan 2023 06:37:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859DA3029C
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 03:36:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675078582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7yVMurcsGHiv7+xYW4/H+27IaQd8JYSho/wI2BZnRUo=;
-        b=aijfbGWyINlAMInGEsZDxevlTHYbORDnN3QQ1jpwwDmlpS36DxGTeiXH1lzJ9NItp7Pbv6
-        TPATiiNGtSYQgYhqv2TlPHK5iViEifKoKRva0J5rrzRmKoLmfEbjpc08KqSDnKvFUCzCTS
-        GtVXKwps13Vht1WSzXCF3ILjfYWwvLA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=jeBW6EwqBQR8mcb+U6gPECyycxrOzab1UxBLSfBKtfI=;
+        b=YODwslUKZE/zzWiTskJX6lDMS9Tke5yYMxjc3unYNX1e0GDqN45LR8Bbyz02lQu8eITiDa
+        2PVvhkSWWvqmcuvQo3pB9vGZpRtN+n6kBzUyPBys4RohXbkCct4WeH1g9x7tX618TKfO9U
+        s0S9bi0parVM8lqWpuxsg6n+H9XS5ps=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-258-M2TzEfdmPy6zBLJdpkOz2Q-1; Mon, 30 Jan 2023 06:36:19 -0500
+X-MC-Unique: M2TzEfdmPy6zBLJdpkOz2Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 41C6613A06;
-        Mon, 30 Jan 2023 11:30:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XTO2Dmuq12PWJQAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 30 Jan 2023 11:30:51 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
-        netdev@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 2/2] 9p/xen: fix connection sequence
-Date:   Mon, 30 Jan 2023 12:30:36 +0100
-Message-Id: <20230130113036.7087-3-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230130113036.7087-1-jgross@suse.com>
-References: <20230130113036.7087-1-jgross@suse.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31EF0101A521;
+        Mon, 30 Jan 2023 11:36:18 +0000 (UTC)
+Received: from ptitbras (unknown [10.39.195.43])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C675EC15BAD;
+        Mon, 30 Jan 2023 11:36:13 +0000 (UTC)
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <Y9EkCvAfNXnJ+ATo@kroah.com> <Y9Ex3ZUIFxwOBg1n@work-vm>
+ <Y9E5Cg7mreDx737N@redhat.com>
+User-agent: mu4e 1.8.0; emacs 28.2
+From:   Christophe de Dinechin <dinechin@redhat.com>
+To:     =?utf-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>
+Cc:     "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Date:   Mon, 30 Jan 2023 12:30:45 +0100
+In-reply-to: <Y9E5Cg7mreDx737N@redhat.com>
+Message-ID: <m2tu085k5v.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Today the connection sequence of the Xen 9pfs frontend doesn't match
-the documented sequence. It can work reliably only for a PV 9pfs device
-having been added at boot time already, as the frontend is not waiting
-for the backend to have set its state to "XenbusStateInitWait" before
-reading the backend properties from Xenstore.
 
-Fix that by following the documented sequence [1] (the documentation
-has a bug, so the reference is for the patch fixing that).
+On 2023-01-25 at 14:13 UTC, Daniel P. Berrang=C3=A9 <berrange@redhat.com> w=
+rote...
+> On Wed, Jan 25, 2023 at 01:42:53PM +0000, Dr. David Alan Gilbert wrote:
+>> * Greg Kroah-Hartman (gregkh@linuxfoundation.org) wrote:
+>> > On Wed, Jan 25, 2023 at 12:28:13PM +0000, Reshetova, Elena wrote:
+>> > > Hi Greg,
+>> > >
+>> > > You mentioned couple of times (last time in this recent thread:
+>> > > https://lore.kernel.org/all/Y80WtujnO7kfduAZ@kroah.com/) that we oug=
+ht to start
+>> > > discussing the updated threat model for kernel, so this email is a s=
+tart in this direction.
+>> >
+>> > Any specific reason you didn't cc: the linux-hardening mailing list?
+>> > This seems to be in their area as well, right?
+>> >
+>> > > As we have shared before in various lkml threads/conference presenta=
+tions
+>> > > ([1], [2], [3] and many others), for the Confidential Computing gues=
+t kernel, we have a
+>> > > change in the threat model where guest kernel doesn=E2=80=99t anymor=
+e trust the hypervisor.
+>> >
+>> > That is, frankly, a very funny threat model.  How realistic is it real=
+ly
+>> > given all of the other ways that a hypervisor can mess with a guest?
+>>
+>> It's what a lot of people would like; in the early attempts it was easy
+>> to defeat, but in TDX and SEV-SNP the hypervisor has a lot less that it
+>> can mess with - remember that not just the memory is encrypted, so is
+>> the register state, and the guest gets to see changes to mapping and a
+>> lot of control over interrupt injection etc.
+>>
+>> > So what do you actually trust here?  The CPU?  A device?  Nothing?
+>>
+>> We trust the actual physical CPU, provided that it can prove that it's a
+>> real CPU with the CoCo hardware enabled.  Both the SNP and TDX hardware
+>> can perform an attestation signed by the CPU to prove to someone
+>> external that the guest is running on a real trusted CPU.
+>>
+>> Note that the trust is limited:
+>>   a) We don't trust that we can make forward progress - if something
+>> does something bad it's OK for the guest to stop.
+>>   b) We don't trust devices, and we don't trust them by having the guest
+>> do normal encryption; e.g. just LUKS on the disk and normal encrypted
+>> networking. [There's a lot of schemes people are working on about how
+>> the guest gets the keys etc for that)
+>
+> I think we need to more precisely say what we mean by 'trust' as it
+> can have quite a broad interpretation.
+>
+> As a baseline requirement, in the context of confidential computing the
+> guest would not trust the hypervisor with data that needs to remain
+> confidential, but would generally still expect it to provide a faithful
+> implementation of a given device.
 
-[1]: https://lore.kernel.org/xen-devel/20230130090937.31623-1-jgross@suse.com/T/#u
+... or to have a reliable faulting behaviour (e.g. panic) if the device is
+found to be malicious, e.g. attempting to inject bogus data in the driver to
+trigger unexpected paths in the guest kernel.
 
-Fixes: 868eb122739a ("xen/9pfs: introduce Xen 9pfs transport driver")
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- net/9p/trans_xen.c | 38 +++++++++++++++++++++++---------------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+I think that part of the original discussion is really about being able to
+do that at least for the small subset of (mostly virtio) devices that would
+typically be of use in a CoCo setup.
 
-diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
-index ad2947a3b376..c64050e839ac 100644
---- a/net/9p/trans_xen.c
-+++ b/net/9p/trans_xen.c
-@@ -372,12 +372,11 @@ static int xen_9pfs_front_alloc_dataring(struct xenbus_device *dev,
- 	return ret;
- }
- 
--static int xen_9pfs_front_probe(struct xenbus_device *dev,
--				const struct xenbus_device_id *id)
-+static int xen_9pfs_front_init(struct xenbus_device *dev)
- {
- 	int ret, i;
- 	struct xenbus_transaction xbt;
--	struct xen_9pfs_front_priv *priv = NULL;
-+	struct xen_9pfs_front_priv *priv = dev_get_drvdata(&dev->dev);
- 	char *versions, *v;
- 	unsigned int max_rings, max_ring_order, len = 0;
- 
-@@ -405,11 +404,6 @@ static int xen_9pfs_front_probe(struct xenbus_device *dev,
- 	if (p9_xen_trans.maxsize > XEN_FLEX_RING_SIZE(max_ring_order))
- 		p9_xen_trans.maxsize = XEN_FLEX_RING_SIZE(max_ring_order) / 2;
- 
--	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
--
--	priv->dev = dev;
- 	priv->num_rings = XEN_9PFS_NUM_RINGS;
- 	priv->rings = kcalloc(priv->num_rings, sizeof(*priv->rings),
- 			      GFP_KERNEL);
-@@ -468,23 +462,35 @@ static int xen_9pfs_front_probe(struct xenbus_device *dev,
- 		goto error;
- 	}
- 
--	write_lock(&xen_9pfs_lock);
--	list_add_tail(&priv->list, &xen_9pfs_devs);
--	write_unlock(&xen_9pfs_lock);
--	dev_set_drvdata(&dev->dev, priv);
--	xenbus_switch_state(dev, XenbusStateInitialised);
--
- 	return 0;
- 
-  error_xenbus:
- 	xenbus_transaction_end(xbt, 1);
- 	xenbus_dev_fatal(dev, ret, "writing xenstore");
-  error:
--	dev_set_drvdata(&dev->dev, NULL);
- 	xen_9pfs_front_free(priv);
- 	return ret;
- }
- 
-+static int xen_9pfs_front_probe(struct xenbus_device *dev,
-+				const struct xenbus_device_id *id)
-+{
-+	struct xen_9pfs_front_priv *priv = NULL;
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->dev = dev;
-+	dev_set_drvdata(&dev->dev, priv);
-+
-+	write_lock(&xen_9pfs_lock);
-+	list_add_tail(&priv->list, &xen_9pfs_devs);
-+	write_unlock(&xen_9pfs_lock);
-+
-+	return 0;
-+}
-+
- static int xen_9pfs_front_resume(struct xenbus_device *dev)
- {
- 	dev_warn(&dev->dev, "suspend/resume unsupported\n");
-@@ -503,6 +509,8 @@ static void xen_9pfs_front_changed(struct xenbus_device *dev,
- 		break;
- 
- 	case XenbusStateInitWait:
-+		if (!xen_9pfs_front_init(dev))
-+			xenbus_switch_state(dev, XenbusStateInitialised);
- 		break;
- 
- 	case XenbusStateConnected:
--- 
-2.35.3
+As was pointed out elsewhere in that thread, doing so for physical devices,
+to the point of enabling end-to-end attestation and encryption, is work that
+is presently underway, but there is work to do already with the
+comparatively small subset of devices we need in the short-term. Also, that
+work needs only the Linux kernel community, whereas changes for example at
+the PCI level are much broader, and therefore require a lot more time.
+
+--
+Cheers,
+Christophe de Dinechin (https://c3d.github.io)
+Theory of Incomplete Measurements (https://c3d.github.io/TIM)
 
