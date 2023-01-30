@@ -2,131 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA8D68158D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9FD681596
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237832AbjA3PuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S236705AbjA3PwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:52:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237655AbjA3Ptp (ORCPT
+        with ESMTP id S231936AbjA3PwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:49:45 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C061816D;
-        Mon, 30 Jan 2023 07:49:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1675093778;
-        bh=ZpNvNQjqDJWSVYLNAt/JE5nTHOBGVZ5rNMJzdhWDBvI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YudiXcAUwBLHWeHQdmYHAwKb/PV+eIfah6AtkbuLFKMSbyI5VTiLJ2Vv09FzdbT50
-         0Dat4rR0fgpQWH9dxjK+1RnNVUPgGZD0J50ajPZpmshMP4kHVPThGbE9xdqVvPTTIb
-         p2uAJ/s0Yy4DADm94/g/AvFItVa5XcyLFAqexQbv4Kqm26H3efxSjhJxF6SXW0UlBj
-         wDTsWoiiyDa3e0Bw5pG/h5jo6hREj3Rt2UylpEpqH/A9UIJ0Zgpufr1UaOphQh/l6S
-         vLl1hgJ8I4QnPownZJ3U6XAua/hm/zRALUJwerJuQo9tiAoUEP+U0MaI0uFBsAnwKn
-         ImorP2qQKdiHA==
-Received: from [172.16.0.188] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4P5CKt449Jzj0p;
-        Mon, 30 Jan 2023 10:49:38 -0500 (EST)
-Message-ID: <946da82b-4792-fd0b-9b01-d64bacb17578@efficios.com>
-Date:   Mon, 30 Jan 2023 10:50:18 -0500
+        Mon, 30 Jan 2023 10:52:18 -0500
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFF9172F;
+        Mon, 30 Jan 2023 07:52:14 -0800 (PST)
+Received: by mail-ej1-f53.google.com with SMTP id m2so32559927ejb.8;
+        Mon, 30 Jan 2023 07:52:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cBwjnk18irD2gYHr6RSTL8oiNSvKOVuusoOh34SmgAc=;
+        b=AML9uhFgfI79wmX3x8KTAa12hHOwjoEdaX6VimHtsLVtAwAZATN0X7WlxFdtnOKB1H
+         ldcahFJT/pH4nGIg1OyJA9Ju6vhuxSaqPVf/zNsxF1Miu3s3gozIEYDOtxR3t5D15GAN
+         fsrGCkmCFvudhK+UeRGiXOAWxWDIcaPHqsNaGrhsEL5jGFQAYFMjjKCpM3JizF+S+jSp
+         lCw2bIol0AWruSxRFE0uz1kOK9bv6elF20GSHwLgctckSrZDZp7fF2KmueMi/kKHa8LM
+         GB4aLs0TKgYYivvMtgOffJFdyH55Jy49c6aco07atp/GETAOMVcpXhkNes+ydRAvqTDu
+         FdSQ==
+X-Gm-Message-State: AFqh2krfP8lVWGOV+VNzPxqaE/9luNiqXAypwwbS0bmngJ7RDk4wi3e9
+        5TeS5lQMIOf02LT42Nza3UqvCiSqS3qYs2QmwRTmuR6a
+X-Google-Smtp-Source: AMrXdXu6GDWZV9lCohQER6b63rBHweFDQKwZc7orpDimzIW5qgv0HClbhF+U2d3rjBCDP6Kc6K74BeEWyW1QM/Y9yJA=
+X-Received: by 2002:a17:906:70d2:b0:844:44e0:1c4e with SMTP id
+ g18-20020a17090670d200b0084444e01c4emr8712988ejk.291.1675093933118; Mon, 30
+ Jan 2023 07:52:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH -next] KVM: selftests: Fix build error
-Content-Language: en-US
-To:     YueHaibing <yuehaibing@huawei.com>, pbonzini@redhat.com,
-        shuah@kernel.org, gshan@redhat.com, peterz@infradead.org
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230130124445.3476-1-yuehaibing@huawei.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230130124445.3476-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127064005.1558-1-rdunlap@infradead.org> <20230127064005.1558-10-rdunlap@infradead.org>
+In-Reply-To: <20230127064005.1558-10-rdunlap@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 30 Jan 2023 16:52:01 +0100
+Message-ID: <CAJZ5v0h9_P7wke=KC2=nsLFmQmjh_0Fxao6WeKKnbOSdU_v-NQ@mail.gmail.com>
+Subject: Re: [PATCH 09/35] Documentation: firmware-guide/acpi: correct spelling
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-30 07:44, YueHaibing wrote:
-> kvm selftests build fails with below info:
-> 
-> rseq_test.c:48:13: error: conflicting types for ‘sys_getcpu’; have ‘void(unsigned int *)’
->     48 | static void sys_getcpu(unsigned *cpu)
->        |             ^~~~~~~~~~
-> In file included from rseq_test.c:23:
-> ../rseq/rseq.c:82:12: note: previous definition of ‘sys_getcpu’ with type ‘int(unsigned int *, unsigned int *)’
->     82 | static int sys_getcpu(unsigned *cpu, unsigned *node)
->        |            ^~~~~~~~~~
-> 
-> commit 66d42ac73fc6 ("KVM: selftests: Make rseq compatible with glibc-2.35")
-> has include "../rseq/rseq.c", and commit 99babd04b250 ("selftests/rseq: Implement rseq numa node id field selftest")
-> add sys_getcpu() implement, so use sys_getcpu in rseq/rseq.c to fix this.
-> 
-> Fixes: 99babd04b250 ("selftests/rseq: Implement rseq numa node id field selftest")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-
-Hi,
-
-This patch replicates an already existing patch:
-
-https://lore.kernel.org/all/20230106-fix-kvm-rseq-build-v1-1-b704d9831d02@kernel.org/
-
-The original patch should be routed through the tip tree by Peter Zijlstra shortly.
-
-Thanks,
-
-Mathieu
-
+On Fri, Jan 27, 2023 at 7:40 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Correct spelling problems for Documentation/firmware-guide/ as reported
+> by codespell.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: linux-acpi@vger.kernel.org
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
 > ---
->   tools/testing/selftests/kvm/rseq_test.c | 19 ++++++-------------
->   1 file changed, 6 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index 3045fdf9bdf5..69ff39aa2991 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -41,18 +41,6 @@ static void guest_code(void)
->   		GUEST_SYNC(0);
->   }
->   
-> -/*
-> - * We have to perform direct system call for getcpu() because it's
-> - * not available until glic 2.29.
-> - */
-> -static void sys_getcpu(unsigned *cpu)
-> -{
-> -	int r;
-> -
-> -	r = syscall(__NR_getcpu, cpu, NULL, NULL);
-> -	TEST_ASSERT(!r, "getcpu failed, errno = %d (%s)", errno, strerror(errno));
-> -}
-> -
->   static int next_cpu(int cpu)
->   {
->   	/*
-> @@ -249,7 +237,12 @@ int main(int argc, char *argv[])
->   			 * across the seq_cnt reads.
->   			 */
->   			smp_rmb();
-> -			sys_getcpu(&cpu);
-> +			/*
-> +			 * We have to perform direct system call for getcpu() because it's
-> +			 * not available until glic 2.29.
-> +			 */
-> +			r = sys_getcpu(&cpu, NULL);
-> +			TEST_ASSERT(!r, "getcpu failed, errno = %d (%s)", errno, strerror(errno));
->   			rseq_cpu = rseq_current_cpu_raw();
->   			smp_rmb();
->   		} while (snapshot != atomic_read(&seq_cnt));
+>  Documentation/firmware-guide/acpi/acpi-lid.rst  |    2 +-
+>  Documentation/firmware-guide/acpi/namespace.rst |    2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff -- a/Documentation/firmware-guide/acpi/acpi-lid.rst b/Documentation/firmware-guide/acpi/acpi-lid.rst
+> --- a/Documentation/firmware-guide/acpi/acpi-lid.rst
+> +++ b/Documentation/firmware-guide/acpi/acpi-lid.rst
+> @@ -34,7 +34,7 @@ state upon the last _LID evaluation. The
+>  _LID control method is evaluated during the runtime, the problem is its
+>  initial returning value. When the AML tables implement this control method
+>  with cached value, the initial returning value is likely not reliable.
+> -There are platforms always retun "closed" as initial lid state.
+> +There are platforms always return "closed" as initial lid state.
+>
+>  Restrictions of the lid state change notifications
+>  ==================================================
+> diff -- a/Documentation/firmware-guide/acpi/namespace.rst b/Documentation/firmware-guide/acpi/namespace.rst
+> --- a/Documentation/firmware-guide/acpi/namespace.rst
+> +++ b/Documentation/firmware-guide/acpi/namespace.rst
+> @@ -31,7 +31,7 @@ Description Table).  The XSDT always poi
+>  Description Table) using its first entry, the data within the FADT
+>  includes various fixed-length entries that describe fixed ACPI features
+>  of the hardware.  The FADT contains a pointer to the DSDT
+> -(Differentiated System Descripition Table).  The XSDT also contains
+> +(Differentiated System Description Table).  The XSDT also contains
+>  entries pointing to possibly multiple SSDTs (Secondary System
+>  Description Table).
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Applied as 6.3 material, thanks!
