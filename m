@@ -2,157 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E426680ABD
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3097E680ABE
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235580AbjA3KZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:25:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
+        id S235264AbjA3K0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:26:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjA3KZt (ORCPT
+        with ESMTP id S234818AbjA3K0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:25:49 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1382194C;
-        Mon, 30 Jan 2023 02:25:47 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id me3so30265905ejb.7;
-        Mon, 30 Jan 2023 02:25:47 -0800 (PST)
+        Mon, 30 Jan 2023 05:26:17 -0500
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF75230EB6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:26:07 -0800 (PST)
+Received: by mail-vs1-xe2b.google.com with SMTP id i185so11928625vsc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:26:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IISRXT35hL8Uk1c2h/nwHJF+0TEA/1+4nZBpZMm/b5s=;
-        b=R+gnOclGQyWIi4V7RvgdoTzdiI3YWIq06BvfAQWiYrQp4LoIkcyzR7LNfHCVKSW5w+
-         ReyRGX1MLikDw6a2BK2LBCuxudli8CghD1T9VuMz7FKzzlp1Ura2v+AsvQzh6UeZs6Cu
-         JS3Qmm0lX80vn0cJauwA+HlFZXij9+oVX1z6sj8M3WNkIypQaJg+8xB8mCh9rdlRPQTC
-         hCZG4YiQU9klUH6jE2EibjWizjFZj1AvIHvsQ+y6YXR8RLbIZnGhypRYhGhPLDRevVNe
-         h1EqgmrxkDC9vCMCe4Ng8GGnblYRK8X3B5MdWVUyXJVGiQf+2M9vzg4ofKFug6/KScnu
-         J9CQ==
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hkA2BouTWIVCEzpH5DcRnnowd4/KGZPNwQpLgLcVdKA=;
+        b=dsAo/vucpHuDG1Mwa0G8j3ilAQNwY3m1tta+M0vGvx/GTNKmVH50gqVdBLxIeBPOPq
+         hFH96VXrZBLuxu3YuiawFv2BI3lqYlu+amsyeOFX0zQEdlR8G0AAdfl1wzBzpnF0CQKn
+         6zIBDRtKo83YrSBGyJaFYOJnsEXeFQXh6AZwiSwwCcp50y28W44VBAs0S6RLB4KHr7xk
+         Uqc/El91EL3roODW2WhjBOTU6Nut5lYRXfN98X104c5IvEEgvTHhAWlW4hHBrEnwTEw/
+         I4w9DMdjh3RCnlUpSfnFmoY2oPqaLeVwMySPkfKCB5Dbi1s9ahUM6FaJDrMJTdaIwqNx
+         QZiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IISRXT35hL8Uk1c2h/nwHJF+0TEA/1+4nZBpZMm/b5s=;
-        b=YM5BI9oVDEOkyGYb4CTVxM6ZDO08qcU2bme5XuGUW46IwDw6H3ImD+SXOtTUCAYVB5
-         p7H3+aTV2xqilokP1DUN8a/t1CHnB+yfT30pCk+O0dYg2qsUSWPb9G38TIazMA2HerRH
-         rqweRUjc0xDYnSRaMm+aWfb99hrAOZLwcuvIJlyuo/2w20UFKvDdt5DckbnT2+ppXAa0
-         M5Y2pVhzYx/o97yJDjumkfMqoErFA70zML/5KS8fc38U1B18Xlt+s44i1GkrYqpvHs92
-         T6IJ52iJRhe8Qyx6cnRqWWAtve/i9KwozuBARV/JbWe2Ggr4ES9YixrAzu+kp6TX9UVl
-         rM8g==
-X-Gm-Message-State: AO0yUKWqGO9MU0b2mDC5Do4P980KoAwBF5qaMhjfG5Sk5x0BSSlNGDXc
-        0hVMoDZQKVoKNadYQxk/7/w=
-X-Google-Smtp-Source: AK7set8WEyoXWC1ejujb6qtnJthXNM85HbN3c8GTiV4H0n5Lv8g6RA7kbCfAYaL2xqik7vb+nQsJtg==
-X-Received: by 2002:a17:906:b310:b0:878:52cd:9006 with SMTP id n16-20020a170906b31000b0087852cd9006mr17419959ejz.69.1675074346242;
-        Mon, 30 Jan 2023 02:25:46 -0800 (PST)
-Received: from touko.myxoz.lan (90-224-45-44-no2390.tbcn.telia.com. [90.224.45.44])
-        by smtp.gmail.com with ESMTPSA id fe15-20020a1709072a4f00b008845c668408sm3131547ejc.169.2023.01.30.02.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 02:25:45 -0800 (PST)
-Message-ID: <357d5157e01ee4469ca38595e941971083a51212.camel@gmail.com>
-Subject: Re: [PATCH] x86/debug: Fix stack recursion caused by DR7 accesses
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     x86@kernel.org, hpa@zytor.com,
-        Sean Christopherson <seanjc@google.com>, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Joerg Roedel <jroedel@suse.de>,
-        Alexey Kardashevskiy <aik@amd.com>
-Date:   Mon, 30 Jan 2023 11:25:44 +0100
-In-Reply-To: <20230130093717.460-1-joro@8bytes.org>
-References: <20230130093717.460-1-joro@8bytes.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hkA2BouTWIVCEzpH5DcRnnowd4/KGZPNwQpLgLcVdKA=;
+        b=COXZsGQ4ERuUwZV2dN4ROr39yBLlZZRLLJ1GRxsnCXiWNwVv2DrbLH7FfqrpS4QkiM
+         e8DIhwKhpSKQ+QE8AhKJwjxdzV7DoZieHC41w6drRA2d0USbp3HnXNrzLIWTb3xN2mex
+         yfKDIh2j4DPT0e9NwGoyxL5oDyrf52nN2gUVlhw0FiGD3xEdNxDJtk+dd0Ef+7N1xxtn
+         jILpi2Xy6CLTCxSlRjSC4ZPhrNrBp0Ry8oSj+KBVekqNuCrOAU4Q/H5eIoW7Xyz7Qrew
+         HFVJuKP2GkwFVjD85n/Yis8HOUpBsvOvJBB127+AKgRVMbJpSp/j2bswGOH53vzSaaO7
+         MWfg==
+X-Gm-Message-State: AFqh2krDlEaWIYHhaRe4oVrgPRFDpGCxomDir2Qh3Pwq+BAypWHKFqRu
+        Q4yPHeZ3ycsl/zHuYvEdhgduzX3H/BjmOIpk/Oatqg==
+X-Google-Smtp-Source: AMrXdXuyWpCLTJxLo7/2GNEnqxvt/FzdRd/eNPGS9NLCfnbdRZH/oxwCLQ9FP6DWIlTFGdyEN7z7ABxxwI8Ibp0qujE=
+X-Received: by 2002:a05:6102:c16:b0:3d3:e027:877a with SMTP id
+ x22-20020a0561020c1600b003d3e027877amr6824978vss.0.1675074366736; Mon, 30 Jan
+ 2023 02:26:06 -0800 (PST)
 MIME-Version: 1.0
+References: <20230129064956.143664-1-tjytimi@163.com>
+In-Reply-To: <20230129064956.143664-1-tjytimi@163.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Mon, 30 Jan 2023 15:55:55 +0530
+Message-ID: <CAK9=C2VaxNezv+M=s=ZSA-YDf_17+hcom_z1=_j2YkRHg-yg7Q@mail.gmail.com>
+Subject: Re: [PATCH v1] riscv: support arch_has_hw_pte_young()
+To:     Jinyu Tang <tjytimi@163.com>
+Cc:     palmer@rivosinc.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        yuzhao@google.com, conor.dooley@microchip.com,
+        ajones@ventanamicro.com, guoren@kernel.org, tongtiangen@huawei.com,
+        anup@brainfault.org, akpm@linux-foundation.org, falcon@tinylab.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTAxLTMwIGF0IDEwOjM3ICswMTAwLCBKb2VyZyBSb2VkZWwgd3JvdGU6Cj4g
-RnJvbTogSm9lcmcgUm9lZGVsIDxqcm9lZGVsQHN1c2UuZGU+Cj4gCj4gSW4ga2VybmVscyBjb21w
-aWxlZCB3aXRoIENPTkZJR19QQVJBVklSVD1uIHRoZSBjb21waWxlciByZS1vcmRlcnMgdGhlCj4g
-RFI3IHJlYWQgaW4gZXhjX25taSgpIHRvIGhhcHBlbiBiZWZvcmUgdGhlIGNhbGwgdG8KPiBzZXZf
-ZXNfaXN0X2VudGVyKCkuCj4gCj4gVGhpcyBpcyBwcm9ibGVtYXRpYyB3aGVuIHJ1bm5pbmcgYXMg
-YW4gU0VWLUVTIGd1ZXN0IGJlY2F1c2UgaW4gdGhpcwo+IGVudmlyb25lbW50IHRoZSBEUjcgcmVh
-ZCBtaWdodCBjYXVzZSBhICNWQyBleGNlcHRpb24sIGFuZCB0YWtpbmcgI1ZDCj4gZXhjZXB0aW9u
-cyBpcyBub3Qgc2FmZSBpbiBleGNfbm1pKCkgYmVmb3JlIHNldl9lc19pc3RfZW50ZXIoKSBoYXMK
-PiBydW4uCj4gCj4gVGhlIHJlc3VsdCBpcyBzdGFjayByZWN1cnNpb24gaWYgdGhlIE5NSSB3YXMg
-Y2F1c2VkIG9uIHRoZSAjVkMgSVNUCj4gc3RhY2ssIGJlY2F1c2UgYSBzdWJzZXF1ZW50ICNWQyBl
-eGNlcHRpb24gaW4gdGhlIE5NSSBoYW5kbGVyIHdpbGwKPiBvdmVyd3JpdGUgdGhlIHN0YWNrIGZy
-YW1lIG9mIHRoZSBpbnRlcnJ1cHRlZCAjVkMgaGFuZGxlci4KPiAKPiBBcyB0aGVyZSBhcmUgbm8g
-Y29tcGlsZXIgYmFycmllcnMgYWZmZWN0aW5nIHRoZSBvcmRlcmluZyBvZiBEUjcKPiByZWFkcy93
-cml0ZXMsIG1ha2UgdGhlIGFjY2Vzc2VzIHRvIHRoaXMgcmVnaXN0ZXIgdm9sYXRpbGUsIGZvcmJp
-ZGRpbmcKPiB0aGUgY29tcGlsZXIgdG8gcmUtb3JkZXIgdGhlbS4KPiAKPiBDYzogQWxleGV5IEth
-cmRhc2hldnNraXkgPGFpa0BhbWQuY29tPgo+IENjOiBQZXRlciBaaWpsc3RyYSA8cGV0ZXJ6QGlu
-ZnJhZGVhZC5vcmc+Cj4gU2lnbmVkLW9mZi1ieTogSm9lcmcgUm9lZGVsIDxqcm9lZGVsQHN1c2Uu
-ZGU+Cj4gLS0tCj4gwqBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9kZWJ1Z3JlZy5oIHwgMjkgKysrKysr
-KysrKysrKysrKysrKysrKysrKysrLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAyNyBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9pbmNsdWRlL2Fz
-bS9kZWJ1Z3JlZy5oCj4gYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9kZWJ1Z3JlZy5oCj4gaW5kZXgg
-YjA0OWQ5NTA2MTJmLi5lYjYyMzhhNWY2MGMgMTAwNjQ0Cj4gLS0tIGEvYXJjaC94ODYvaW5jbHVk
-ZS9hc20vZGVidWdyZWcuaAo+ICsrKyBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL2RlYnVncmVnLmgK
-PiBAQCAtMzksNyArMzksMTggQEAgc3RhdGljIF9fYWx3YXlzX2lubGluZSB1bnNpZ25lZCBsb25n
-Cj4gbmF0aXZlX2dldF9kZWJ1Z3JlZyhpbnQgcmVnbm8pCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqBhc20oIm1vdiAlJWRiNiwgJTAiIDoiPXIiICh2YWwpKTsKPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJyZWFrOwo+IMKgwqDCoMKgwqDCoMKgwqBjYXNlIDc6Cj4g
-LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGFzbSgibW92ICUlZGI3LCAlMCIgOiI9ciIg
-KHZhbCkpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKgo+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBNYWtlIERSNyByZWFkcyB2b2xhdGlsZSB0byBmb3JiaWQg
-cmUtb3JkZXJpbmcgdGhlbQo+IHdpdGggb3RoZXIKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgICogY29kZS4gVGhpcyBpcyBuZWVkZWQgYmVjYXVzZSBhIERSNyBhY2Nlc3MgY2FuCj4g
-Y2F1c2UgYSAjVkMKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogZXhjZXB0aW9u
-IHdoZW4gcnVubmluZyB1bmRlciBTRVYtRVMuIEJ1dCB0YWtpbmcgYQo+ICNWQwo+ICvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBleGNlcHRpb24gaXMgbm90IHNhZmUgYXQgZXZlcnl3
-aGVyZSBpbiB0aGUgY29kZS0KPiBmbG93IGFuZAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgKiByZS1vcmRlcmluZyBtaWdodCBwbGFjZSB0aGUgYWNjZXNzIGludG8gYW4gdW5zYWZl
-Cj4gcGxhY2UuCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqCj4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIFRoaXMgaGFwcGVuZWQgaW4gdGhlIE5NSSBoYW5kbGVy
-LCB3aGVyZSB0aGUgRFI3Cj4gcmVhZCB3YXMKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgICogcmUtb3JkZXJlZCB0byBoYXBwZW4gYmVmb3JlIHRoZSBjYWxsIHRvCj4gc2V2X2VzX2lz
-dF9lbnRlcigpLAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBjYXVzaW5nIHN0
-YWNrIHJlY3Vyc2lvbi4KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICovCj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGFzbSB2b2xhdGlsZSAoIm1vdiAlJWRiNywgJTAi
-IDogIj1yIiAodmFsKSk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsK
-PiDCoMKgwqDCoMKgwqDCoMKgZGVmYXVsdDoKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoEJVRygpOwo+IEBAIC02Niw3ICs3NywyMSBAQCBzdGF0aWMgX19hbHdheXNfaW5saW5lIHZv
-aWQKPiBuYXRpdmVfc2V0X2RlYnVncmVnKGludCByZWdubywgdW5zaWduZWQgbG9uZyB2YWx1ZSkK
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGFzbSgibW92ICUwLCAlJWRiNiLCoMKg
-wqDCoMKgOjoiciIgKHZhbHVlKSk7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBi
-cmVhazsKPiDCoMKgwqDCoMKgwqDCoMKgY2FzZSA3Ogo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBhc20oIm1vdiAlMCwgJSVkYjciwqDCoMKgwqDCoDo6InIiICh2YWx1ZSkpOwo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgKiBNYWtlIERSNyB3cml0ZXMgdm9sYXRpbGUgdG8gZm9yYmlkIHJlLW9yZGVyaW5n
-Cj4gdGhlbSB3aXRoCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIG90aGVyIGNv
-ZGUuIFRoaXMgaXMgbmVlZGVkIGJlY2F1c2UgYSBEUjcgYWNjZXNzCj4gY2FuIGNhdXNlIGEKPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogI1ZDIGV4Y2VwdGlvbiB3aGVuIHJ1bm5p
-bmcgdW5kZXIgU0VWLUVTLsKgIEJ1dAo+IHRha2luZyBhICNWQwo+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqAgKiBleGNlcHRpb24gaXMgbm90IHNhZmUgYXQgZXZlcnl3aGVyZSBpbiB0
-aGUgY29kZS0KPiBmbG93IGFuZAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBy
-ZS1vcmRlcmluZyBtaWdodCBwbGFjZSB0aGUgYWNjZXNzIGludG8gYW4gdW5zYWZlCj4gcGxhY2Uu
-Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqCj4gK8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCAqIFRoaXMgaGFwcGVuZWQgaW4gdGhlIE5NSSBoYW5kbGVyLCB3aGVyZSB0
-aGUgRFI3Cj4gcmVhZCB3YXMKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogcmUt
-b3JkZXJlZCB0byBoYXBwZW4gYmVmb3JlIHRoZSBjYWxsIHRvCj4gc2V2X2VzX2lzdF9lbnRlcigp
-LAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBjYXVzaW5nIHN0YWNrIHJlY3Vy
-c2lvbi4KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICoKPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgICogV2hpbGUgaXMgZGlkbid0IGhhcHBlbiB3aXRoIGEgRFI3IHdy
-aXRlLCBhZGQgdGhlCj4gdm9sYXRpbGUKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ICogaGVyZSB0b28gdG8gYXZvaWQgc2ltaWxhciBwcm9ibGVtcyBpbiB0aGUgZnV0dXJlLgo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgYXNtIHZvbGF0aWxlICgibW92ICUwLCAlJWRiNyLCoMKgwqA6OiJyIiAodmFsdWUp
-KTsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGJyZWFrOwo+IMKgwqDCoMKgwqDC
-oMKgwqBkZWZhdWx0Ogo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgQlVHKCk7CgpU
-aGlzIHNob3VsZCBwcm9iYWJseSBiZSBDYydlZCB0byB0aGUgc3RhYmxlIG1haWxpbmcgbGlzdC4K
-LS0gCn5taWtvCg==
+On Sun, Jan 29, 2023 at 12:21 PM Jinyu Tang <tjytimi@163.com> wrote:
+>
+> The arch_has_hw_pte_young() is false for riscv by default. If it's
+> false, page table walk is almost skipped for MGLRU reclaim. And it
+> will also cause useless step in __wp_page_copy_user().
+>
+> RISC-V Privileged Book says that riscv have two schemes to manage A
+> and D bit.
+>
+> So add a config for selecting, the default is true. For simple
+> implementation riscv CPU which just generate page fault, unselect it.
 
+I totally disagree with this approach.
+
+Almost all existing RISC-V platforms don't have HW support
+PTE.A and PTE.D updates.
+
+We want the same kernel image to run HW with/without PTE.A
+and PTE.D updates so kconfig based approach is not going to
+fly.
+
+>
+> Signed-off-by: Jinyu Tang <tjytimi@163.com>
+> ---
+>  arch/riscv/Kconfig               | 10 ++++++++++
+>  arch/riscv/include/asm/pgtable.h |  7 +++++++
+>  2 files changed, 17 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index e2b656043abf..17c82885549c 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -180,6 +180,16 @@ config PAGE_OFFSET
+>         default 0x80000000 if 64BIT && !MMU
+>         default 0xff60000000000000 if 64BIT
+>
+> +config ARCH_HAS_HARDWARE_PTE_YOUNG
+> +       bool "Hardware Set PTE Access Bit"
+> +       default y
+> +       help
+> +         Select if hardware set A bit when PTE is accessed. The default is
+> +         'Y', because most RISC-V CPU hardware can manage A and D bit.
+> +         But RISC-V may have simple implementation that do not support
+> +         hardware set A bit but only generate page fault, for that case just
+> +         unselect it.
+> +
+>  config KASAN_SHADOW_OFFSET
+>         hex
+>         depends on KASAN_GENERIC
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 4eba9a98d0e3..1db54ab4e1ba 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -532,6 +532,13 @@ static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
+>          */
+>         return ptep_test_and_clear_young(vma, address, ptep);
+>  }
+> +#ifdef CONFIG_ARCH_HAS_HARDWARE_PTE_YOUNG
+
+> +#define arch_has_hw_pte_young arch_has_hw_pte_young
+> +static inline bool arch_has_hw_pte_young(void)
+> +{
+> +       return true;
+
+Drop the kconfig option ARCH_HAS_HARDWARE_PTE_YOUNG
+and instead use code patching to return true only when Svadu
+ISA extension is available in DT ISA string.
+
+
+> +}
+> +#endif
+>
+>  #define pgprot_noncached pgprot_noncached
+>  static inline pgprot_t pgprot_noncached(pgprot_t _prot)
+> --
+> 2.30.2
+>
+
+Regards,
+Anup
