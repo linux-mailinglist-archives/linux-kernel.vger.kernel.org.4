@@ -2,344 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BFD681BDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95ECC681BD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbjA3UxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S230074AbjA3UwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:52:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjA3UxC (ORCPT
+        with ESMTP id S229986AbjA3UwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:53:02 -0500
-Received: from out-103.mta0.migadu.com (out-103.mta0.migadu.com [IPv6:2001:41d0:1004:224b::67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0205810A9E
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:52:59 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675111978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1w0jiNXlV5BHI7ghVa1ATPJTlO9YwfzPGkwsURa7liM=;
-        b=g+SFAUpUe2mu88P1pEk70dv2uuPp0/I7xsYXHG/JpiRYYrZmJzuaCNQR1OX4/E+pnbYtxJ
-        EieczeLK5iF1UZKQW572hf2o/Wa64u5xGs7oXn6EP9+t2RBaWPphopRDb4vnlDR1pBJuku
-        4pgNS4ge6XFwTqmjemf/XLPLdINSNno=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 18/18] lib/stackdepot: move documentation comments to stackdepot.h
-Date:   Mon, 30 Jan 2023 21:49:42 +0100
-Message-Id: <341353394ec1134c5a92a2b298348ddc4c48c8a0.1675111415.git.andreyknvl@google.com>
-In-Reply-To: <cover.1675111415.git.andreyknvl@google.com>
-References: <cover.1675111415.git.andreyknvl@google.com>
+        Mon, 30 Jan 2023 15:52:09 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BB12B297
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:51:53 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-163ba2b7c38so4936963fac.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:51:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/IB0oD7j6geI//ci/tiy0+ABQ2OwEHH45LjNSZJhYPQ=;
+        b=FW9lX520twsG5jJ0zxY/6IfRSq59UShuLTRn6bR70IoKtt6Z2M9AolzsdfSyyO7VJu
+         sz4NftgVz8UjuAx3a23Vjvj+W0ifh5QRTJ1A2GHJS4Sb3UUptQitnPLKz1TPrNmpfa/M
+         qzl/mGjGG9imOoiuIERZMB4ehIEHte4+bgEB4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/IB0oD7j6geI//ci/tiy0+ABQ2OwEHH45LjNSZJhYPQ=;
+        b=UB7AASrM56ZIDF9I4+zLdQq2s2gcI3OnVj2c8VJEXTmTb5+YX/tcHl6MsrkuEBn0x+
+         r6lWv9I202GiVSPw4BUmTQR8ODgjDYwDW4rrpyPb6izd6Po21XhGhIrIv4EYtFjry/gn
+         eFN0lVX5Ju/VHNblGY+5ix3Yhm+//hB54l//N2TwQuAMuxDfKpNMmYL95PPYVOYSSy73
+         QgLoANigGVj3fZxuKugRzNvz2LhrAJ+JrcG9XkGaqhUvYvmslWFc4O5LDRpXhMynZ+yF
+         dWp8wlKPXcxS/MvtXsrFI887rAAExSuU2XF92qaJdLIyjGKf2LOV+XI6b8ZXQ2RPGB60
+         sU1w==
+X-Gm-Message-State: AO0yUKUsUDXMhWA8dpHDB1Oc7U1Lsz/bqiWtp3O19V3m69SD4zKxyAKl
+        ZGgWPDaQ/lsoBKbV9DeNUvoWMg==
+X-Google-Smtp-Source: AK7set8cdQ9A4QfoqBd5ctwoFW8HQtfRnJVCnRQ8c19mPc4aApku3LxRhuIDZRejZuRpZgON5tN4Dg==
+X-Received: by 2002:a05:6870:82aa:b0:163:419b:3a90 with SMTP id q42-20020a05687082aa00b00163419b3a90mr6700740oae.17.1675111912755;
+        Mon, 30 Jan 2023 12:51:52 -0800 (PST)
+Received: from debian (108-213-68-242.lightspeed.sntcca.sbcglobal.net. [108.213.68.242])
+        by smtp.gmail.com with ESMTPSA id hj15-20020a056870c90f00b001631c5f7404sm5675094oab.22.2023.01.30.12.51.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 12:51:52 -0800 (PST)
+Date:   Mon, 30 Jan 2023 12:51:48 -0800
+From:   Yan Zhai <yan@cloudflare.com>
+To:     netdev@vger.kernel.org
+Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        davem@davemloft.net, asml.silence@gmail.com, imagedong@tencent.com,
+        keescook@chromium.org, jbenc@redhat.com, richardbgobert@gmail.com,
+        willemb@google.com, steffen.klassert@secunet.com,
+        daniel@iogearbox.net, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: fix NULL pointer in skb_segment_list
+Message-ID: <Y9gt5EUizK1UImEP@debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+Commit 3a1296a38d0c ("net: Support GRO/GSO fraglist chaining.")
+introduced UDP listifyed GRO. The segmentation relies on frag_list being
+untouched when passing through the network stack. This assumption can be
+broken sometimes, where frag_list itself gets pulled into linear area,
+leaving frag_list being NULL. When this happens it can trigger
+following NULL pointer dereference, and panic the kernel. Reverse the
+test condition should fix it.
 
-Move all interface- and usage-related documentation comments to
-include/linux/stackdepot.h.
+[19185.577801][    C1] BUG: kernel NULL pointer dereference, address:
+...
+[19185.663775][    C1] RIP: 0010:skb_segment_list+0x1cc/0x390
+...
+[19185.834644][    C1] Call Trace:
+[19185.841730][    C1]  <TASK>
+[19185.848563][    C1]  __udp_gso_segment+0x33e/0x510
+[19185.857370][    C1]  inet_gso_segment+0x15b/0x3e0
+[19185.866059][    C1]  skb_mac_gso_segment+0x97/0x110
+[19185.874939][    C1]  __skb_gso_segment+0xb2/0x160
+[19185.883646][    C1]  udp_queue_rcv_skb+0xc3/0x1d0
+[19185.892319][    C1]  udp_unicast_rcv_skb+0x75/0x90
+[19185.900979][    C1]  ip_protocol_deliver_rcu+0xd2/0x200
+[19185.910003][    C1]  ip_local_deliver_finish+0x44/0x60
+[19185.918757][    C1]  __netif_receive_skb_one_core+0x8b/0xa0
+[19185.927834][    C1]  process_backlog+0x88/0x130
+[19185.935840][    C1]  __napi_poll+0x27/0x150
+[19185.943447][    C1]  net_rx_action+0x27e/0x5f0
+[19185.951331][    C1]  ? mlx5_cq_tasklet_cb+0x70/0x160 [mlx5_core]
+[19185.960848][    C1]  __do_softirq+0xbc/0x25d
+[19185.968607][    C1]  irq_exit_rcu+0x83/0xb0
+[19185.976247][    C1]  common_interrupt+0x43/0xa0
+[19185.984235][    C1]  asm_common_interrupt+0x22/0x40
+...
+[19186.094106][    C1]  </TASK>
 
-It makes sense to have them in the header where they are available to
-the interface users.
-
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Fixes: 3a1296a38d0c ("net: Support GRO/GSO fraglist chaining.")
+Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Yan Zhai <yan@cloudflare.com>
 ---
- include/linux/stackdepot.h | 87 ++++++++++++++++++++++++++++++++++++++
- lib/stackdepot.c           | 87 --------------------------------------
- 2 files changed, 87 insertions(+), 87 deletions(-)
+ net/core/skbuff.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-index 173740987d8b..a828fbece1ba 100644
---- a/include/linux/stackdepot.h
-+++ b/include/linux/stackdepot.h
-@@ -2,6 +2,17 @@
- /*
-  * Stack depot - a stack trace storage that avoids duplication.
-  *
-+ * Stack depot is intended to be used by subsystems that need to store and
-+ * later retrieve many potentially duplicated stack traces without wasting
-+ * memory.
-+ *
-+ * For example, KASAN needs to save allocation and free stack traces for each
-+ * object. Storing two stack traces per object requires a lot of memory (e.g.
-+ * SLUB_DEBUG needs 256 bytes per object for that). Since allocation and free
-+ * stack traces often repeat, using stack depot allows to save about 100x space.
-+ *
-+ * Stack traces are never removed from stack depot.
-+ *
-  * Author: Alexander Potapenko <glider@google.com>
-  * Copyright (C) 2016 Google, Inc.
-  *
-@@ -57,24 +68,100 @@ static inline void stack_depot_request_early_init(void) { }
- static inline int stack_depot_early_init(void)	{ return 0; }
- #endif
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 4a0eb5593275..a31ff4d83ecc 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -4100,7 +4100,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
  
-+/**
-+ * __stack_depot_save - Save a stack trace to stack depot
-+ *
-+ * @entries:		Pointer to the stack trace
-+ * @nr_entries:		Number of frames in the stack
-+ * @alloc_flags:	Allocation GFP flags
-+ * @can_alloc:		Allocate stack slabs (increased chance of failure if false)
-+ *
-+ * Saves a stack trace from @entries array of size @nr_entries. If @can_alloc is
-+ * %true, stack depot can replenish the stack slab pool in case no space is left
-+ * (allocates using GFP flags of @alloc_flags). If @can_alloc is %false, avoids
-+ * any allocations and fails if no space is left to store the stack trace.
-+ *
-+ * If the provided stack trace comes from the interrupt context, only the part
-+ * up to the interrupt entry is saved.
-+ *
-+ * Context: Any context, but setting @can_alloc to %false is required if
-+ *          alloc_pages() cannot be used from the current context. Currently
-+ *          this is the case for contexts where neither %GFP_ATOMIC nor
-+ *          %GFP_NOWAIT can be used (NMI, raw_spin_lock).
-+ *
-+ * Return: Handle of the stack struct stored in depot, 0 on failure
-+ */
- depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 					unsigned int nr_entries,
- 					gfp_t gfp_flags, bool can_alloc);
+ 	skb_shinfo(skb)->frag_list = NULL;
  
-+/**
-+ * stack_depot_save - Save a stack trace to stack depot
-+ *
-+ * @entries:		Pointer to the stack trace
-+ * @nr_entries:		Number of frames in the stack
-+ * @alloc_flags:	Allocation GFP flags
-+ *
-+ * Context: Contexts where allocations via alloc_pages() are allowed.
-+ *          See __stack_depot_save() for more details.
-+ *
-+ * Return: Handle of the stack trace stored in depot, 0 on failure
-+ */
- depot_stack_handle_t stack_depot_save(unsigned long *entries,
- 				      unsigned int nr_entries, gfp_t gfp_flags);
+-	do {
++	while (list_skb) {
+ 		nskb = list_skb;
+ 		list_skb = list_skb->next;
  
-+/**
-+ * stack_depot_fetch - Fetch a stack trace from stack depot
-+ *
-+ * @handle:	Stack depot handle returned from stack_depot_save()
-+ * @entries:	Pointer to store the address of the stack trace
-+ *
-+ * Return: Number of frames for the fetched stack
-+ */
- unsigned int stack_depot_fetch(depot_stack_handle_t handle,
- 			       unsigned long **entries);
+@@ -4146,8 +4146,7 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 		if (skb_needs_linearize(nskb, features) &&
+ 		    __skb_linearize(nskb))
+ 			goto err_linearize;
+-
+-	} while (list_skb);
++	}
  
-+/**
-+ * stack_depot_print - Print a stack trace from stack depot
-+ *
-+ * @stack:	Stack depot handle returned from stack_depot_save()
-+ */
- void stack_depot_print(depot_stack_handle_t stack);
- 
-+/**
-+ * stack_depot_snprint - Print a stack trace from stack depot into a buffer
-+ *
-+ * @handle:	Stack depot handle returned from stack_depot_save()
-+ * @buf:	Pointer to the print buffer
-+ * @size:	Size of the print buffer
-+ * @spaces:	Number of leading spaces to print
-+ *
-+ * Return:	Number of bytes printed
-+ */
- int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
- 		       int spaces);
- 
-+/**
-+ * stack_depot_set_extra_bits - Set extra bits in a stack depot handle
-+ *
-+ * @handle:	Stack depot handle
-+ * @extra_bits:	Value to set the extra bits
-+ *
-+ * Return: Stack depot handle with extra bits set
-+ *
-+ * Stack depot handles have a few unused bits, which can be used for storing
-+ * user-specific information. These bits are transparent to the stack depot.
-+ */
- depot_stack_handle_t stack_depot_set_extra_bits(depot_stack_handle_t handle,
- 						unsigned int extra_bits);
- 
-+/**
-+ * stack_depot_get_extra_bits - Retrieve extra bits from a stack depot handle
-+ *
-+ * @handle:	Stack depot handle with extra bits saved
-+ *
-+ * Return: Extra bits retrieved from the stack depot handle
-+ */
- unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
- 
- #endif
-diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index 5128f9486ceb..06bea439d748 100644
---- a/lib/stackdepot.c
-+++ b/lib/stackdepot.c
-@@ -2,21 +2,10 @@
- /*
-  * Stack depot - a stack trace storage that avoids duplication.
-  *
-- * Stack depot is intended to be used by subsystems that need to store and
-- * later retrieve many potentially duplicated stack traces without wasting
-- * memory.
-- *
-- * For example, KASAN needs to save allocation and free stack traces for each
-- * object. Storing two stack traces per object requires a lot of memory (e.g.
-- * SLUB_DEBUG needs 256 bytes per object for that). Since allocation and free
-- * stack traces often repeat, using stack depot allows to save about 100x space.
-- *
-  * Internally, stack depot maintains a hash table of unique stacktraces. The
-  * stack traces themselves are stored contiguously one after another in a set
-  * of separate page allocations.
-  *
-- * Stack traces are never removed from stack depot.
-- *
-  * Author: Alexander Potapenko <glider@google.com>
-  * Copyright (C) 2016 Google, Inc.
-  *
-@@ -348,29 +337,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
- 	return NULL;
- }
- 
--/**
-- * __stack_depot_save - Save a stack trace to stack depot
-- *
-- * @entries:		Pointer to the stack trace
-- * @nr_entries:		Number of frames in the stack
-- * @alloc_flags:	Allocation GFP flags
-- * @can_alloc:		Allocate stack slabs (increased chance of failure if false)
-- *
-- * Saves a stack trace from @entries array of size @nr_entries. If @can_alloc is
-- * %true, stack depot can replenish the stack slab pool in case no space is left
-- * (allocates using GFP flags of @alloc_flags). If @can_alloc is %false, avoids
-- * any allocations and fails if no space is left to store the stack trace.
-- *
-- * If the provided stack trace comes from the interrupt context, only the part
-- * up to the interrupt entry is saved.
-- *
-- * Context: Any context, but setting @can_alloc to %false is required if
-- *          alloc_pages() cannot be used from the current context. Currently
-- *          this is the case for contexts where neither %GFP_ATOMIC nor
-- *          %GFP_NOWAIT can be used (NMI, raw_spin_lock).
-- *
-- * Return: Handle of the stack struct stored in depot, 0 on failure
-- */
- depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- 					unsigned int nr_entries,
- 					gfp_t alloc_flags, bool can_alloc)
-@@ -466,18 +432,6 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
- }
- EXPORT_SYMBOL_GPL(__stack_depot_save);
- 
--/**
-- * stack_depot_save - Save a stack trace to stack depot
-- *
-- * @entries:		Pointer to the stack trace
-- * @nr_entries:		Number of frames in the stack
-- * @alloc_flags:	Allocation GFP flags
-- *
-- * Context: Contexts where allocations via alloc_pages() are allowed.
-- *          See __stack_depot_save() for more details.
-- *
-- * Return: Handle of the stack trace stored in depot, 0 on failure
-- */
- depot_stack_handle_t stack_depot_save(unsigned long *entries,
- 				      unsigned int nr_entries,
- 				      gfp_t alloc_flags)
-@@ -486,14 +440,6 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
- }
- EXPORT_SYMBOL_GPL(stack_depot_save);
- 
--/**
-- * stack_depot_fetch - Fetch a stack trace from stack depot
-- *
-- * @handle:	Stack depot handle returned from stack_depot_save()
-- * @entries:	Pointer to store the address of the stack trace
-- *
-- * Return: Number of frames for the fetched stack
-- */
- unsigned int stack_depot_fetch(depot_stack_handle_t handle,
- 			       unsigned long **entries)
- {
-@@ -523,11 +469,6 @@ unsigned int stack_depot_fetch(depot_stack_handle_t handle,
- }
- EXPORT_SYMBOL_GPL(stack_depot_fetch);
- 
--/**
-- * stack_depot_print - Print a stack trace from stack depot
-- *
-- * @stack:	Stack depot handle returned from stack_depot_save()
-- */
- void stack_depot_print(depot_stack_handle_t stack)
- {
- 	unsigned long *entries;
-@@ -539,16 +480,6 @@ void stack_depot_print(depot_stack_handle_t stack)
- }
- EXPORT_SYMBOL_GPL(stack_depot_print);
- 
--/**
-- * stack_depot_snprint - Print a stack trace from stack depot into a buffer
-- *
-- * @handle:	Stack depot handle returned from stack_depot_save()
-- * @buf:	Pointer to the print buffer
-- * @size:	Size of the print buffer
-- * @spaces:	Number of leading spaces to print
-- *
-- * Return:	Number of bytes printed
-- */
- int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
- 		       int spaces)
- {
-@@ -561,17 +492,6 @@ int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
- }
- EXPORT_SYMBOL_GPL(stack_depot_snprint);
- 
--/**
-- * stack_depot_set_extra_bits - Set extra bits in a stack depot handle
-- *
-- * @handle:	Stack depot handle
-- * @extra_bits:	Value to set the extra bits
-- *
-- * Return: Stack depot handle with extra bits set
-- *
-- * Stack depot handles have a few unused bits, which can be used for storing
-- * user-specific information. These bits are transparent to the stack depot.
-- */
- depot_stack_handle_t stack_depot_set_extra_bits(depot_stack_handle_t handle,
- 						unsigned int extra_bits)
- {
-@@ -582,13 +502,6 @@ depot_stack_handle_t stack_depot_set_extra_bits(depot_stack_handle_t handle,
- }
- EXPORT_SYMBOL(stack_depot_set_extra_bits);
- 
--/**
-- * stack_depot_get_extra_bits - Retrieve extra bits from a stack depot handle
-- *
-- * @handle:	Stack depot handle with extra bits saved
-- *
-- * Return: Extra bits retrieved from the stack depot handle
-- */
- unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
- {
- 	union handle_parts parts = { .handle = handle };
+ 	skb->truesize = skb->truesize - delta_truesize;
+ 	skb->data_len = skb->data_len - delta_len;
 -- 
-2.25.1
+2.39.0
 
