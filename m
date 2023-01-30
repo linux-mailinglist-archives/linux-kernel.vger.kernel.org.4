@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A4F680486
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312FC680451
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjA3D55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 22:57:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S235401AbjA3DdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 22:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235314AbjA3D5q (ORCPT
+        with ESMTP id S229476AbjA3DdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 22:57:46 -0500
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546ED199D4;
-        Sun, 29 Jan 2023 19:57:39 -0800 (PST)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0BC5020087C;
-        Mon, 30 Jan 2023 04:57:38 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C7716200030;
-        Mon, 30 Jan 2023 04:57:37 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 05F97183ABF0;
-        Mon, 30 Jan 2023 11:57:35 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        l.stach@pengutronix.de, shawnguo@kernel.org,
-        lorenzo.pieralisi@arm.com, peng.fan@nxp.com, marex@denx.de,
-        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
-        frank.li@nxp.com
-Cc:     hongxing.zhu@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: [PATCH v7 5/5] arm64: dts: Add i.MX8MP PCIe EP support
-Date:   Mon, 30 Jan 2023 11:32:19 +0800
-Message-Id: <1675049539-14976-6-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1675049539-14976-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1675049539-14976-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 29 Jan 2023 22:33:15 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF267EB40;
+        Sun, 29 Jan 2023 19:33:13 -0800 (PST)
+X-UUID: d08037daa04e11ed945fc101203acc17-20230130
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=zusC8Z2n5RMgdqjmR+ABtKSOGnLanZNQFWrygBB0bck=;
+        b=ReBcoINXGcQ2KcNdZiwx3I4TJlMoU9eZA7WYb8BDNhTI8Bzv5wxvuV/tGPuY0ENdQnj3LnxZ7Xiz3LOx1ANlStyKKI5ic4AwUopVMxqnwiJNIiYJ99gyg9+cFiIEUsIgW31dfezH5xPNUQPBwoK3sufDDmeEcaY9JpG5FIfqGvc=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.18,REQID:0472f56e-2a83-4d01-83c6-7e0b33af836c,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:-35
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:d7fe4d8d-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
+        L:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: d08037daa04e11ed945fc101203acc17-20230130
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1051305785; Mon, 30 Jan 2023 11:33:08 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 30 Jan 2023 11:33:07 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 30 Jan 2023 11:33:07 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <yunfei.dong@mediatek.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 0/6] media: mediatek: Update video decoder nodes for MT8195 and MT8192
+Date:   Mon, 30 Jan 2023 11:32:59 +0800
+Message-ID: <20230130033305.31830-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX8MP PCIe EP support.
+This series is based on matthias github, for-next. Since there is a
+dependence in the following series, I send it for them.
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=702423
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=702078
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 26 +++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Allen-KH Cheng (3):
+  media: dt-bindings: media: mediatek: Rename child node names for
+    decoder
+  media: dt-bindings: media: mediatek: Remove "dma-ranges" property for
+    decoder
+  arm64: dts: mt8192: Add video-codec nodes
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index a19224fe1a6a..2f84b8b0118e 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -1309,6 +1309,32 @@ pcie: pcie@33800000 {
- 			status = "disabled";
- 		};
- 
-+		pcie_ep: pcie-ep@33800000 {
-+			compatible = "fsl,imx8mp-pcie-ep";
-+			reg = <0x33800000 0x000400000>, <0x18000000 0x08000000>;
-+			reg-names = "dbi", "addr_space";
-+			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-+				 <&clk IMX8MP_CLK_HSIO_AXI>,
-+				 <&clk IMX8MP_CLK_PCIE_ROOT>;
-+			clock-names = "pcie", "pcie_bus", "pcie_aux";
-+			assigned-clocks = <&clk IMX8MP_CLK_PCIE_AUX>;
-+			assigned-clock-rates = <10000000>;
-+			assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_50M>;
-+			num-lanes = <1>;
-+			interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_HIGH>; /* eDMA */
-+			interrupt-names = "dma";
-+			fsl,max-link-speed = <3>;
-+			power-domains = <&hsio_blk_ctrl IMX8MP_HSIOBLK_PD_PCIE>;
-+			resets = <&src IMX8MP_RESET_PCIE_CTRL_APPS_EN>,
-+				 <&src IMX8MP_RESET_PCIE_CTRL_APPS_TURNOFF>;
-+			reset-names = "apps", "turnoff";
-+			phys = <&pcie_phy>;
-+			phy-names = "pcie-phy";
-+			num-ib-windows = <4>;
-+			num-ob-windows = <4>;
-+			status = "disabled";
-+		};
-+
- 		gpu3d: gpu@38000000 {
- 			compatible = "vivante,gc";
- 			reg = <0x38000000 0x8000>;
+Yunfei Dong (3):
+  media: dt-bindings: media: mediatek: vcodec: adapt to the
+    'clock-names' of different platforms
+  media: dt-bindings: media: mediatek: vcodec: Change the max reg value
+    to 2
+  arm64: dts: mt8195: Add video decoder node
+
+ .../media/mediatek,vcodec-subdev-decoder.yaml | 113 +++++++-----------
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |  59 +++++++++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  70 +++++++++++
+ 3 files changed, 173 insertions(+), 69 deletions(-)
+
 -- 
-2.34.1
+2.18.0
 
