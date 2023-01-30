@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B17681F76
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FAD681F74
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjA3XOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S229973AbjA3XOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:14:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjA3XOi (ORCPT
+        with ESMTP id S229620AbjA3XOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:14:38 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDD81CAEF;
-        Mon, 30 Jan 2023 15:14:31 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5PC95lNtz4x1d;
-        Tue, 31 Jan 2023 10:14:29 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675120470;
-        bh=1NPCECl8cFvSKrhix1qJjN0ZBmuleVasqwSfFxjJOQc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IsR3sChAJkHQFoG60SBLza3p6WGbXEESoICU7jTuaRqZ6mN03MACFwGIpki3O/uU0
-         AVEwMpKEgCG/qqoT4dzZXkTKUnLt4ZQiaShzJZZSKZ0TT+XcKVu5Uh7Y8GPvQe/nak
-         Mb67Z6LiYm6FGMjoTdrvOKyDlBrH12nOzk+0JUhals3ESpkkNiBeYsj0No+4qpa0tw
-         Nosh9mfXimwPfbokIRerFiEvanq0IjuT6h58GK0VqFVzZrfxizwZu7KFMyCYjPd1hl
-         j1N1oMjkhywPKIFSkS8Omdp6cOf1puX/FNEh2b0drHmLkU3zKyyr6oVvFDO1rlVybn
-         7gMcHULAa6Jzg==
-Date:   Tue, 31 Jan 2023 10:12:44 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>
-Cc:     Chao Yu <chao@kernel.org>, Christian Brauner <brauner@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the f2fs tree with the vfs-idmapping
- tree
-Message-ID: <20230131101244.26f85f35@canb.auug.org.au>
+        Mon, 30 Jan 2023 18:14:17 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6203714495;
+        Mon, 30 Jan 2023 15:14:16 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id 5so13301974plo.3;
+        Mon, 30 Jan 2023 15:14:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eKu+kd9X+GTaWdLAQUJinb0Z7Cb02sWxRt1ZBDZ1tPw=;
+        b=SpwzlWusL1iiV7vQ35dwUjrZC7Z+QLqzZQFGcjkd1UAs/oQ57Et6T8HYbzjSfWefj1
+         zNwfPNWHuhVlbHLgAMKTv9HUnXkZfMisbamlbb+U4BCr1fZSN7R6YlILyMjP34fA1X6V
+         i2O0zJNBT1cGtT0cI16KFj1xJYBfc/mc6Gpt/fv0SCUvxyVbd2IAmY/KmwDahoDiZQuA
+         1jRsKfGummyhtGAywSKzRlGpFx9q/G0HpdxuwQFHvCIuzsunfCZEdmqb++k7xpTsAgrU
+         kWZzo5cwCPt2GzmR9HxrwpI0OYMS/lRZQ9wvM4iGQ1anmGrxzm69ZnlzZVmFJpQk5g8u
+         yjrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eKu+kd9X+GTaWdLAQUJinb0Z7Cb02sWxRt1ZBDZ1tPw=;
+        b=bOrq1bxasSX4dvSMClqzVkrNvnCU20JL4yWBoc9mqltLV8iKaB+5uhBOX5nbFvQIII
+         LcTA6Rhyo6YdvRtKMTvzHToaqV8+qXFOC018YL2p1O3xZxKLN8X2NnXzuLZSDaqkO66u
+         /MgqYA+9WxqdHQRCGQ35fHvzKZSS3TgUWYXHowUyq30wHizo48w8EkV7svXtu60c8+5k
+         xma7ycLOWOtXEgh6+ydx9mAr1PZj3oQlgRy/wcU4xR7w4cLVh0+YngHDEVbfCWES3xqf
+         TRB4Ls7c04Vw2wgbPq4lneJR5bmAgn+iTPb/s6rAiNWV2JxnyfJ/E69fui8b9Oc1ukEn
+         6Z9g==
+X-Gm-Message-State: AO0yUKVKhdOJ7fF+SYAPsPe94J41r+WytaMVjq7QnurbzD/JM0R/Dhy8
+        bJAKWW0vBTdT0aRQ/WxyVWc=
+X-Google-Smtp-Source: AK7set9foVYSvp+tV1JKInjXZGdAvVr+C0n/JwJUa1GLBHkpNyK7L5AUtM1fVSoN+j+2fi3W2A/FEQ==
+X-Received: by 2002:a17:902:cec2:b0:196:5035:98c0 with SMTP id d2-20020a170902cec200b00196503598c0mr18082248plg.23.1675120455748;
+        Mon, 30 Jan 2023 15:14:15 -0800 (PST)
+Received: from localhost.localdomain.com (2603-8001-4200-6311-92a0-3d53-9224-b276.res6.spectrum.com. [2603:8001:4200:6311:92a0:3d53:9224:b276])
+        by smtp.gmail.com with ESMTPSA id x26-20020aa7957a000000b0059393d46228sm5102765pfq.144.2023.01.30.15.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 15:14:15 -0800 (PST)
+From:   Chris Healy <cphealy@gmail.com>
+To:     cphealy@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jeremy.wang@amlogic.com
+Cc:     Chris Healy <healych@amazon.com>
+Subject: [PATCH v3] net: phy: meson-gxl: Add generic dummy stubs for MMD register access
+Date:   Mon, 30 Jan 2023 15:14:02 -0800
+Message-Id: <20230130231402.471493-1-cphealy@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Jy=oOH1dTIlGK12s8WfgmxL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,73 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Jy=oOH1dTIlGK12s8WfgmxL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Chris Healy <healych@amazon.com>
 
-Hi all,
+The Meson G12A Internal PHY does not support standard IEEE MMD extended
+register access, therefore add generic dummy stubs to fail the read and
+write MMD calls. This is necessary to prevent the core PHY code from
+erroneously believing that EEE is supported by this PHY even though this
+PHY does not support EEE, as MMD register access returns all FFFFs.
 
-Today's linux-next merge of the f2fs tree got a conflict in:
+Fixes: 5c3407abb338 ("net: phy: meson-gxl: add g12a support")
+Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Chris Healy <healych@amazon.com>
 
-  fs/f2fs/namei.c
+---
 
-between commit:
+Changes in v3:
+* Add reviewed-by
+Change in v2:
+* Add fixes tag
 
-  f2d40141d5d9 ("fs: port inode_init_owner() to mnt_idmap")
+ drivers/net/phy/meson-gxl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-from the vfs-idmapping tree and commit:
+diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
+index c49062ad72c6..5e41658b1e2f 100644
+--- a/drivers/net/phy/meson-gxl.c
++++ b/drivers/net/phy/meson-gxl.c
+@@ -271,6 +271,8 @@ static struct phy_driver meson_gxl_phy[] = {
+ 		.handle_interrupt = meson_gxl_handle_interrupt,
+ 		.suspend        = genphy_suspend,
+ 		.resume         = genphy_resume,
++		.read_mmd	= genphy_read_mmd_unsupported,
++		.write_mmd	= genphy_write_mmd_unsupported,
+ 	},
+ };
+ 
+-- 
+2.39.1
 
-  8abe4be45132 ("f2fs: remove unneeded f2fs_cp_error() in f2fs_create_white=
-out()")
-
-from the f2fs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/f2fs/namei.c
-index d8e01bbbf27f,82923273f4bb..000000000000
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@@ -923,13 -923,10 +923,10 @@@ static int f2fs_tmpfile(struct mnt_idma
-  	return finish_open_simple(file, err);
-  }
- =20
- -static int f2fs_create_whiteout(struct user_namespace *mnt_userns,
- +static int f2fs_create_whiteout(struct mnt_idmap *idmap,
-  				struct inode *dir, struct inode **whiteout)
-  {
-- 	if (unlikely(f2fs_cp_error(F2FS_I_SB(dir))))
-- 		return -EIO;
--=20
- -	return __f2fs_tmpfile(mnt_userns, dir, NULL,
- +	return __f2fs_tmpfile(idmap, dir, NULL,
-  				S_IFCHR | WHITEOUT_MODE, true, whiteout);
-  }
- =20
-
---Sig_/Jy=oOH1dTIlGK12s8WfgmxL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYTuwACgkQAVBC80lX
-0GwBagf/TGt9UbacvbykFcjl7F9l9hxIQmz028e7wYvp1YX5thIU8sK4rI/VZcCA
-7GfzNxj5xzBW7GkMJN1Lnb62VW9N39Y1891h/1b2neQQb8MG6COK1tEvCVYFmUoQ
-DN42Ili9ryjpwNkXl3VwTljuDw4eXRjS0oeKftYIAP6NBRrkWSY6jz6VCMbuvc8j
-x8q/tVve8ooNztrxHPTnHNQGl1Dba+dO9xg07o/kj7QmX+gLBhRFIsoqlwQ0EuLI
-rbe3YZtRCCLR3AekEhxryhoecEAiqRvqLds2jwDCjnNUVvza83gJX8KwW5WWrhDO
-ZXgWJc+rZ64cUX7z1sX3vAO4ozkD5w==
-=KBPc
------END PGP SIGNATURE-----
-
---Sig_/Jy=oOH1dTIlGK12s8WfgmxL--
