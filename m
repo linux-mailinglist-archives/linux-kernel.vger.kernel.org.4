@@ -2,304 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F099C681B5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D95681B5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 21:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjA3UZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 15:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S229768AbjA3UZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 15:25:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjA3UZV (ORCPT
+        with ESMTP id S229742AbjA3UZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 15:25:21 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB6238B51;
-        Mon, 30 Jan 2023 12:25:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SHr6Z2PgRlFlVjVeu9gWEbOZKvl9NmtczNcuDGi4/jpYrq7xSAi3tkqt1S27JG3+u8zD4p6LqtpGGbKGNB4ukRroR5m5rGHkW+a2SVVRTwsewQQwTuM3rsF4awbT3AneeYII/MYExp6GbPMruVSzQLzObKXBNATcG0GKpdIu+Op8BpmEzA45/ocYFGSM3R+No94bJBHZjj+dw/XKRMdbi/UsQTHtMMtmeruMz3vaiT6IQFN6Y2y+r6JXoAT5g/XSUhtjQaSVfleiz658wWuuTPf2xaHLEDg6zVSjILaDUntYbRR507frDL1LtG3mWBLYQGSSO3ZsH1QnlJDKiouTVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dD++tfp6eHwgR9sSGeLOtSkN7zOyu/4f1ou321ckv8s=;
- b=lkZ9vn+p1qJhs6FX/YJrU78IYzfLJdPSn7HnUd6KIY8YYNHw5jsalkmQ9RvrDYobqiGFnYXPb/rwcTqcigsLaeKVomhxAH3ITve0KqRfGq0hY2lZ0AEdHvjsLjJM3sFnjhmECUE8aA/KhHVb2eaWIkRlj5Y3hwVYOWfG1r0+EY5/afzqv6c+ltIFuvgunPjI9XAnmq1Zt4WX2puQHjv4qoWuaFc8d0gu9X1oOBNphdCm52xMPQgkNSb1ldSVwWuNs3U+g9xVU+WoIH3MsbaXByJBkiKxf+8UaADqXMKS1v3ysyqv+DrSSxXnTzD9emdrbadLeJ2oA+qUfvVUFKEGag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dD++tfp6eHwgR9sSGeLOtSkN7zOyu/4f1ou321ckv8s=;
- b=oPvy2gkNhIKsOvwT/TQsZRxph7NIb+PzIb11wx1n7uyC6YHhC4OBjUVEI43/sjapzpzhMqVlUCsHsDradAPXOAuXDJwbHukN8O7ogG4cU1EGw+AkLo9tRDGogumJ+TB1BWryxcxJJmvsM6X4raegNwEpfHHU6pGZwutEGd7BOIXj+5wdXuVBC1rxgGOrSAgdzU5W61T0NZQln/hehrN5OozzpuTP1fN1nTY07aZySy11woie9FSnQap7YtLh2b57VzruSUYius221WF5Gb0zOmx+Dpp63AawVTw2PtAJ4VfqDEXQ/6E0vb2mrMnA6rXqAYAwRAHhhtlcSpZ7nVimeQ==
-Received: from DM6PR12MB3500.namprd12.prod.outlook.com (2603:10b6:5:11d::16)
- by BY5PR12MB5511.namprd12.prod.outlook.com (2603:10b6:a03:1d8::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 20:25:11 +0000
-Received: from DM6PR12MB3500.namprd12.prod.outlook.com
- ([fe80::90c6:a307:66aa:70fc]) by DM6PR12MB3500.namprd12.prod.outlook.com
- ([fe80::90c6:a307:66aa:70fc%6]) with mapi id 15.20.6002.033; Mon, 30 Jan 2023
- 20:25:11 +0000
-From:   Kechen Lu <kechenl@nvidia.com>
-To:     Chao Gao <chao.gao@intel.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "shaoqin.huang@intel.com" <shaoqin.huang@intel.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH v6 4/6] KVM: x86: Let userspace re-enable previously
- disabled exits
-Thread-Topic: [RFC PATCH v6 4/6] KVM: x86: Let userspace re-enable previously
- disabled exits
-Thread-Index: AQHZLT1Ah+DJ4yeqk0ejnCwHWxCqn662iwSAgADlkZA=
-Date:   Mon, 30 Jan 2023 20:25:11 +0000
-Message-ID: <DM6PR12MB35009DA05F3BB84112276B28CAD39@DM6PR12MB3500.namprd12.prod.outlook.com>
-References: <20230121020738.2973-1-kechenl@nvidia.com>
- <20230121020738.2973-5-kechenl@nvidia.com> <Y9dhV3dBpRYQ2jJv@gao-cwp>
-In-Reply-To: <Y9dhV3dBpRYQ2jJv@gao-cwp>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR12MB3500:EE_|BY5PR12MB5511:EE_
-x-ms-office365-filtering-correlation-id: 5db4d474-4dc7-4a77-6279-08db0300164a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zL3pPoqPEfkCVE7O1iQ8dxLsTSlncyGUFNFd+dPQiUyDg9MmusjeM8JHucfz00xUeVs18Tg66WQckKl4+9TS15wMbht/cjq3+HWoOSFBMgCsC5lAOSU+uB1GICJ8d1JHJ3KNRxkX4OMQRnUBJeFl2WBnhozpKvl6TxwcNUpCXD0vzfBF3r3gOBN+OmtkiBviGNZhnId0QGlIrKhd7qVViMbI4sfDH7LwxV7FY4Iuh3ImuOrkfFvKqQ/6lui+RxcpkhBiEN1myxa69wl9GvuNXyZ03RWn1udcAipGrHaYsmFARM+NYt2RijzqCT1kq781oMj2/aPWDZIW/xERWAD9RNMYsKGZlJ5H7LtMP6AvfXJs34z7eLR2L6UMj+qjAh4wyarJd1WmNlF+ymAJcENM/Br9gHgzOmdjt35PALjqLjds6HqN/0K1759mtfUVdeOcEEBsLIzLCl3feKMZ+9n9itbBMLueAErZibuzgscmdgb8ed4r+ctYAdBgGuPU/UjHEPRBPSV26CL1l9qjCAVRwkecPXlwPQS6a5tc8U0F9CD3vMmxfdX80q6+/limhgPthmTjBZDYIG44ix5vINTj4nro9hx1UEP2SH7VlEoglA7VzAhovm8In2ibVB81wHf0D5alzg19m5s8PczeltD/NfIAoy0hb2u2IOHiUCiJMM567JCx6+1+nCoR9j2ieHARxESQPM2B3jepo0HpDW8ANw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3500.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(451199018)(2906002)(52536014)(5660300002)(38070700005)(86362001)(83380400001)(8936002)(41300700001)(478600001)(71200400001)(26005)(7696005)(9686003)(186003)(6506007)(53546011)(33656002)(54906003)(4326008)(66476007)(38100700002)(66446008)(66946007)(76116006)(8676002)(66556008)(6916009)(64756008)(122000001)(316002)(55016003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+i5tRh+sX4iDqUqdB5X3oTGCPuOZpJFNlJy7DCyW+Jf8bNwbYcQp6fWfsCTJ?=
- =?us-ascii?Q?dMb620B9OwhFe0snLT8q1I8q5YFWqHjGLhYe7JRN12L9sOehOeD2wv+TBPMS?=
- =?us-ascii?Q?UkwhQOs+QP6BOF5nIGiT51o+7ayZd3sNH3w8cx0zvY0jyfM19wAzw4eMOGUB?=
- =?us-ascii?Q?NhVVbBbTcM2M7JZBmQqBBNWgu6U0hGquQ3p3d5rSiWcFSkBMk5sLVDMRKFD0?=
- =?us-ascii?Q?9rc8AdRlghZ8aVCZrDpuqu4kq6YimSPXZvbnc+TwtizjAehsYRWiyeuv70QY?=
- =?us-ascii?Q?2FbmiZto1mvmfBTT93qv+qll8mAFJRwlnDZ0CLpil2px5rzpLTitlQTafqzR?=
- =?us-ascii?Q?eT6hTxesCE0T4hCecPLBRd2EupOfH57dNGqMQ6apFY2GoLyf7/wmR0Eezjst?=
- =?us-ascii?Q?7AO/DrPQ+SkZmr5X2KMtAR+xheBQUI3cDWTc8yPbawK18C8TjxGuUrfp+16/?=
- =?us-ascii?Q?CX7hzagBloJLKgRsk9Jeq1KFPgrLz0FBQSj18c4Y1DAZlqlW6LPwx6GX/hsX?=
- =?us-ascii?Q?2LktQ4GxX0EEiDYin/Z/oNvmAVpgliNahrBApg/1yj8mD9c5seQIQyhejeTT?=
- =?us-ascii?Q?KBpWcZ2PC5XLq4GKQAeAJrujoHCNZAzOnsOhGKNBD+4D4kBKfGjoy40eIF/Z?=
- =?us-ascii?Q?3KWv+Og+mnGh/VXv4+fJx46hy+JTTtayCt401jvxMHNyxs9i5w0Nb3XauDPw?=
- =?us-ascii?Q?7eg8cOTMGkQ1h6ShZDvMC8XuOzn7loG8x0RmwJwbrEXlxt2rFMMfXtAKJbxP?=
- =?us-ascii?Q?5Ij615SFzgiE3IUrx1rtk26NnzWa/8FJUO5eVMRt7yS62Byw0w314Y6I7n6q?=
- =?us-ascii?Q?P5OSRWqwgcg9pwRwvyX1KDHWJu3msTzCBRnLxf1mHtq4opwWKuZGflkpaMsl?=
- =?us-ascii?Q?DDIlJk/jTnO+g39Oe7bVYv8K71/ifV721zV19Uf9F6R4/8cIPrDkWz9ph0pi?=
- =?us-ascii?Q?lgeNsUtW4t9xcq4Qmp9Lg3Ev4Y3vGsAp5xrY1p5gXanw3FVNbnEOqXgKUJAy?=
- =?us-ascii?Q?14mksyCiQ/Mu/PzuuEbvPDcvaf0b7tTnvq/32FrO33iB7Sg0jO+eb+glwcie?=
- =?us-ascii?Q?HE+KJCC3CigQbh3RPT28GtCnlS4ym3OEe+vHbfeEC5TvV0rJyUJjy5cd0tYf?=
- =?us-ascii?Q?e0u9YLZ6t1fnimxDJ1E8c5Lmc+Gq/s3drp+aMh3ICJJhDCfbJuc20PYOjSfp?=
- =?us-ascii?Q?SDNv9SWxt0uSGi1bKaljuCovC2tuCmIylaNfiHkNjzcrHaFx5lfJRgv4c72q?=
- =?us-ascii?Q?K7eWYii1tLVJkhqg5NjJTBmdTqE7cZ9VbMtGomWZYOP8PXyV8XhjEo1BbCIn?=
- =?us-ascii?Q?1KsAgBK8QlvDXcYYIVF7V2eZe8t11U5cLWz+SDmLc7Z6tlbCK2JKBCdS+jtL?=
- =?us-ascii?Q?Boc0Ftm5bG2Nl/iD4qgkn5FlL6D11+BPktS2r9DbK/iWzh1oc1ANSQkS7WMT?=
- =?us-ascii?Q?PdAg/hUWvzqIHXHqNiwcJtcCngeDZ4a2IvdBqpqvjv1EJJQLiouc/lOki5k9?=
- =?us-ascii?Q?rFy+W6PlxxVJAtW7JXi0D+0UXHdiqCqz9lo9tqh/iENL04IRfldtA/8z9I93?=
- =?us-ascii?Q?5am3yeDEjKkHYLAOY0GeMiBPxedxPBLxI7mLHp0l?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 30 Jan 2023 15:25:31 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F08D38001
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:25:17 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 1CE533F2F7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:25:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675110316;
+        bh=QmAdL3eatIrmCDpvXcqxYQfPy2kn9y7DPBSKDQ2ydEs=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=DQq6orayfIYLLfq5Q7Yk9nV+qsUmMdiCplDP9WSOChsVhLOaQZsx7z0OYjcFH8hUv
+         azEMNVrFTretJpqZIHK1FWXeAs7pQDzcfypdR8yNfqo2PZ+n7kHy3ZKywoOUny4Wah
+         IX443j68/QTgBI5Y1CO1C9d2s9vspUR+t+jF3+xOYbB/r7ToOPxqqKkhXIiPXBJ6HX
+         yOnyuLpl7+kGNeQTyaD2BIcZPB5NBRsyyNXOl2TyoUNsUC8pfIX68geSYfCnOYL3Pp
+         bcdqy4lxrHbkSr7PxolMJ9LbO0lVGvPfDK9jlz4IsltXm+T7vDbMUwyiKcLVt6ZJvZ
+         aBGsX5QBKiAfg==
+Received: by mail-wm1-f69.google.com with SMTP id o31-20020a05600c511f00b003dc53da325dso3344169wms.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:25:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QmAdL3eatIrmCDpvXcqxYQfPy2kn9y7DPBSKDQ2ydEs=;
+        b=6Gn0Kf+rIdVvnxHVpLuH9hxzqCnkMJQ6lbZ1D6mPVLMdU51eQRyOFg0xQTrTFAf5YO
+         XnBq462E5FWKT9wU9uMViMZpzuwOIgnJbBqQmMbvFBmz75IfWSJg4p+3Qj2PKDqhflIG
+         6KtKSWQOUGj9XC7p1cdGQy7Bxn92+YOYRW2gUkPiJdCykIGJSmItrZyCPpyEyKDHoO/E
+         401E+bW9ve70Munq1/x3OxtVlIsjru+K34jp0rrFAbnpjTHPJWanb+Kk4JoE1uXPaQBt
+         Ly/lfUaXAdWlju1oeqVPmL0HFwDkvPneb5FcPA8hgJDqXeWCaMn6dWehrIgJkkAx5gUT
+         JZkw==
+X-Gm-Message-State: AFqh2krkFfYxW4qaGKYM9i9SFIhrU+lW4TfF8H23LfO8ft/Jqj+1JkLk
+        IFdHNaD0sni/9vVFAoCSx3WB8zfD41lEZAQ2PN7rJXX/HFk2e+na2wwC2TqVOjLe8Mn3ak0lKv+
+        qFpTkVbu5/nrhelEn1CPiU9gNAbTSjzLFks9DAqiySQ==
+X-Received: by 2002:a05:600c:5386:b0:3cf:9844:7b11 with SMTP id hg6-20020a05600c538600b003cf98447b11mr53068068wmb.23.1675110315728;
+        Mon, 30 Jan 2023 12:25:15 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtWrqTQxbaJoIVhTD4WxhSI8FQrWGKgJS6wBOcsvWamAqynFDJkYmjkz4K8qRRFPRDyY5pL/Q==
+X-Received: by 2002:a05:600c:5386:b0:3cf:9844:7b11 with SMTP id hg6-20020a05600c538600b003cf98447b11mr53068060wmb.23.1675110315516;
+        Mon, 30 Jan 2023 12:25:15 -0800 (PST)
+Received: from qwirkle ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id b14-20020a05600010ce00b0029e1aa67fd2sm12844094wrx.115.2023.01.30.12.25.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 12:25:14 -0800 (PST)
+Date:   Mon, 30 Jan 2023 20:25:12 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Willem de Bruijn <willemb@google.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
+ back-off retries
+Message-ID: <Y9gnqNnkiPEw+Pp8@qwirkle>
+References: <Y9fT+LABhW+/3Nal@qwirkle>
+ <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
+ <Y9ftL5c4klThCi9Q@qwirkle>
+ <Y9fu7TR5VC33j+EP@qwirkle>
+ <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
+ <Y9f+7tMWMtPACLz9@qwirkle>
+ <CA+FuTScThEWVevZ+KVgLOZ6zb4Ush6RtKL4FmC2cFMg+Q-OWpw@mail.gmail.com>
+ <Y9gLeNqorZNQ1gjp@qwirkle>
+ <Y9gfpa7vks5Ndl8q@qwirkle>
+ <CA+FuTSckAeDGSBYE3bv2qR9cXpqac8Vmu6YxC1HTJx7YLY7gnQ@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3500.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5db4d474-4dc7-4a77-6279-08db0300164a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 20:25:11.1445
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QKILNaG5kBFGXtKNanCHq7+DrJFPN28v2BxbEEbT7VqNf/jcit2TIDK3YwWJFEXzjGa3Gi+DipnXmbjuTCk6wg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5511
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+FuTSckAeDGSBYE3bv2qR9cXpqac8Vmu6YxC1HTJx7YLY7gnQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chao,
+On 23/01/30 02:57PM, Willem de Bruijn wrote:
+> On Mon, Jan 30, 2023 at 2:51 PM Andrei Gherzan
+> <andrei.gherzan@canonical.com> wrote:
+> >
+> > On 23/01/30 06:24PM, Andrei Gherzan wrote:
+> > > On 23/01/30 12:35PM, Willem de Bruijn wrote:
+> > > > On Mon, Jan 30, 2023 at 12:31 PM Andrei Gherzan
+> > > > <andrei.gherzan@canonical.com> wrote:
+> > > > >
+> > > > > On 23/01/30 11:29AM, Willem de Bruijn wrote:
+> > > > > > On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
+> > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > >
+> > > > > > > On 23/01/30 04:15PM, Andrei Gherzan wrote:
+> > > > > > > > On 23/01/30 11:03AM, Willem de Bruijn wrote:
+> > > > > > > > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
+> > > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
+> > > > > > > > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
+> > > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
+> > > > > > > > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
+> > > > > > > > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
+> > > > > > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
+> > > > > > > > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
+> > > > > > > > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
+> > > > > > > > > > > > > > > accept socket connections. This racing bug could fail the test with at
+> > > > > > > > > > > > > > > least one of the following:
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
+> > > > > > > > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
+> > > > > > > > > > > > > > > ./udpgso_bench_tx: write: Connection refused
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > This change addresses this by adding routines that retry the socket
+> > > > > > > > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> > > > > > > > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Synchronizing the two processes is indeed tricky.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Perhaps more robust is opening an initial TCP connection, with
+> > > > > > > > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
+> > > > > > > > > > > > > > go.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
+> > > > > > > > > > > > > socket to show up in 'ss' output before firing-up the client - quite
+> > > > > > > > > > > > > alike what mptcp self-tests are doing.
+> > > > > > > > > > > >
+> > > > > > > > > > > > I like this idea. I have tested it and it works as expected with the
+> > > > > > > > > > > > exeception of:
+> > > > > > > > > > > >
+> > > > > > > > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
+> > > > > > > > > > > >
+> > > > > > > > > > > > Any ideas on how to handle this? I could retry and that works.
+> > > > > > > > > > >
+> > > > > > > > > > > This happens (also) without the zerocopy flag, right? That
+> > > > > > > > > > >
+> > > > > > > > > > > It might mean reaching the sndbuf limit, which can be adjusted with
+> > > > > > > > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
+> > > > > > > > > > > expect this test to bump up against that limit.
+> > > > > > > > > > >
+> > > > > > > > > > > A few zerocopy specific reasons are captured in
+> > > > > > > > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
+> > > > > > > > > >
+> > > > > > > > > > I have dug a bit more into this, and it does look like your hint was in
+> > > > > > > > > > the right direction. The fails I'm seeing are only with the zerocopy
+> > > > > > > > > > flag.
+> > > > > > > > > >
+> > > > > > > > > > From the reasons (doc) above I can only assume optmem limit as I've
+> > > > > > > > > > reproduced it with unlimited locked pages and the fails are transient.
+> > > > > > > > > > That leaves optmem limit. Bumping the value I have by default (20480) to
+> > > > > > > > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
+> > > > > > > > > > tests started to fail with something like:
+> > > > > > > > > >
+> > > > > > > > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
+> > > > > > > > > > expected    773707 received
+> > > > > > > > >
+> > > > > > > > > More zerocopy completions than number of sends. I have not seen this before.
+> > > > > > > > >
+> > > > > > > > > The completions are ranges of IDs, one per send call for datagram sockets.
+> > > > > > > > >
+> > > > > > > > > Even with segmentation offload, the counter increases per call, not per segment.
+> > > > > > > > >
+> > > > > > > > > Do you experience this without any other changes to udpgso_bench_tx.c.
+> > > > > > > > > Or are there perhaps additional sendmsg calls somewhere (during
+> > > > > > > > > initial sync) that are not accounted to num_sends?
+> > > > > > > >
+> > > > > > > > Indeed, that looks off. No, I have run into this without any changes in
+> > > > > > > > the tests (besides the retry routine in the shell script that waits for
+> > > > > > > > rx to come up). Also, as a data point.
+> > > > > > >
+> > > > > > > Actually wait. I don't think that is the case here. "expected" is the
+> > > > > > > number of sends. In this case we sent 1076 more messages than
+> > > > > > > completions. Am I missing something obvious?
+> > > > > >
+> > > > > > Oh indeed.
+> > > > > >
+> > > > > > Receiving fewer completions than transmission is more likely.
+> > > > >
+> > > > > Exactly, yes.
+> > > > >
+> > > > > > This should be the result of datagrams still being somewhere in the
+> > > > > > system. In a qdisc, or waiting for the network interface to return a
+> > > > > > completion notification, say.
+> > > > > >
+> > > > > > Does this remain if adding a longer wait before the final flush_errqueue?
+> > > > >
+> > > > > Yes and no. But not realiably unless I go overboard.
+> > > > >
+> > > > > > Or, really, the right fix is to keep polling there until the two are
+> > > > > > equal, up to some timeout. Currently flush_errqueue calls poll only
+> > > > > > once.
+> > > > >
+> > > > > That makes sense. I have implemented a retry and this ran for a good
+> > > > > while now.
+> > > > >
+> > > > > -               flush_errqueue(fd, true);
+> > > > > +               while (true) {
+> > > > > +                       flush_errqueue(fd, true);
+> > > > > +                       if ((stat_zcopies == num_sends) || (delay >= MAX_DELAY))
+> > > > > +                               break;
+> > > > > +                       usleep(delay);
+> > > > > +                       delay *= 2;
+> > > > > +               }
+> > > > >
+> > > > > What do you think?
+> > > >
+> > > > Thanks for running experiments.
+> > > >
+> > > > We can avoid the unconditional sleep, as the poll() inside
+> > > > flush_errqueue already takes a timeout.
+> > > >
+> > > > One option is to use start_time = clock_gettime(..) or gettimeofday
+> > > > before poll, and restart poll until either the exit condition or
+> > > > timeout is reached, with timeout = orig_time - elapsed_time.
+> > >
+> > > Yes, this was more of a quick draft. I was thinking to move it into the
+> > > flush function (while making it aware of num_sends via a parameter):
+> > >
+> > > if (do_poll) {
+> > >   struct pollfd fds = {0};
+> > >   int ret;
+> > >   unsigned long tnow, tstop;
+> > >
+> > >   fds.fd = fd;
+> > >   tnow = gettimeofday_ms();
+> > >   tstop = tnow + POLL_LOOP_TIMEOUT_MS;
+> > >   while ((stat_zcopies != num_sends) && (tnow < tstop)) {
+> 
+> The new condition to loop until stat_zcopies == num_sends should only
+> be tested on the final call. This likely needs to become a separate
+> boolean. Or a separate flush_errqueue_last() function, and leave the
+> existing one as is.
 
-> -----Original Message-----
-> From: Chao Gao <chao.gao@intel.com>
-> Sent: Sunday, January 29, 2023 10:19 PM
-> To: Kechen Lu <kechenl@nvidia.com>
-> Cc: kvm@vger.kernel.org; seanjc@google.com; pbonzini@redhat.com;
-> zhi.wang.linux@gmail.com; shaoqin.huang@intel.com;
-> vkuznets@redhat.com; linux-kernel@vger.kernel.org
-> Subject: Re: [RFC PATCH v6 4/6] KVM: x86: Let userspace re-enable
-> previously disabled exits
->=20
-> External email: Use caution opening links or attachments
->=20
->=20
-> On Sat, Jan 21, 2023 at 02:07:36AM +0000, Kechen Lu wrote:
-> >From: Sean Christopherson <seanjc@google.com>
-> >
-> >Add an OVERRIDE flag to KVM_CAP_X86_DISABLE_EXITS allow userspace to
-> >re-enable exits and/or override previous settings.  There's no real use
-> >case for the per-VM ioctl, but a future per-vCPU variant wants to let
-> >userspace toggle interception while the vCPU is running; add the
-> >OVERRIDE functionality now to provide consistent between the per-VM
-> and
-> >per-vCPU variants.
-> >
-> >Signed-off-by: Sean Christopherson <seanjc@google.com>
->=20
-> Kechen, add your signed-off-by as you are the submitter.
->
-=20
-Ack! Forgot this.
+Wouldn't a do/while be enough here?
 
-> >---
-> > Documentation/virt/kvm/api.rst |  5 +++++
-> > arch/x86/kvm/x86.c             | 32 ++++++++++++++++++++++++--------
-> > include/uapi/linux/kvm.h       |  4 +++-
-> > 3 files changed, 32 insertions(+), 9 deletions(-)
-> >
-> >diff --git a/Documentation/virt/kvm/api.rst
-> >b/Documentation/virt/kvm/api.rst index fb0fcc566d5a..3850202942d0
-> >100644
-> >--- a/Documentation/virt/kvm/api.rst
-> >+++ b/Documentation/virt/kvm/api.rst
-> >@@ -7095,6 +7095,7 @@ Valid bits in args[0] are::
-> >   #define KVM_X86_DISABLE_EXITS_HLT              (1 << 1)
-> >   #define KVM_X86_DISABLE_EXITS_PAUSE            (1 << 2)
-> >   #define KVM_X86_DISABLE_EXITS_CSTATE           (1 << 3)
-> >+  #define KVM_X86_DISABLE_EXITS_OVERRIDE         (1ull << 63)
-> >
-> > Enabling this capability on a VM provides userspace with a way to no
-> >longer intercept some instructions for improved latency in some @@
-> >-7103,6 +7104,10 @@ physical CPUs.  More bits can be added in the
-> >future; userspace can  just pass the KVM_CHECK_EXTENSION result to
-> >KVM_ENABLE_CAP to disable  all such vmexits.
-> >
-> >+By default, this capability only disables exits.  To re-enable an
-> >+exit, or to override previous settings, userspace can set
-> >+KVM_X86_DISABLE_EXITS_OVERRIDE, in which case KVM will
-> enable/disable according to the mask (a '1' =3D=3D disable).
-> >+
-> > Do not enable KVM_FEATURE_PV_UNHALT if you disable HLT exits.
-> >
-> > 7.14 KVM_CAP_S390_HPAGE_1M
-> >diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c index
-> >60caa3fd40e5..3ea5f12536a0 100644
-> >--- a/arch/x86/kvm/x86.c
-> >+++ b/arch/x86/kvm/x86.c
-> >@@ -5484,6 +5484,28 @@ static int kvm_vcpu_ioctl_device_attr(struct
-> kvm_vcpu *vcpu,
-> >       return r;
-> > }
-> >
-> >+
-> >+#define kvm_ioctl_disable_exits(a, mask)                               =
-    \
-> >+({                                                                     =
-    \
->=20
-> >+      if (!kvm_can_mwait_in_guest())                                   =
-    \
-> >+              (mask) &=3D KVM_X86_DISABLE_EXITS_MWAIT;                 =
-      \
->=20
-> This can be dropped or should be a WARN_ON_ONCE() because if kvm
-> cannot support mwait in guest (i.e., !kvm_can_mwait_in_guest()), attempts
-> to disable mwait exits are already treated as invalid requests in patch 3=
-.
+> 
+> We can probably merge the outer for and inner while loops
+> 
+> > >     ret = poll(&fds, 1, 500);
+> 
+> Instead of 500, this becomes tstop - tnow.
 
-As last time Sean suggests adding this workaround in case some hypervisors=
-=20
-apply without checking supported flags. Would prefer WARN_ON_ONCE().=20
-Thanks!
+Right. Missed this one.
 
-BR,
-Kechen
+> 
+> > >     if (ret == 0) {
+> > >       if (cfg_verbose)
+> > >         fprintf(stderr, "poll timeout\n");
+> 
+> Poll timeouts are now expected to an extent. Only report once at the
+> end of the function if the poll was only called once and timed out.
 
->=20
-> >+      if ((mask) & KVM_X86_DISABLE_EXITS_OVERRIDE) {                   =
-    \
-> >+              (a).mwait_in_guest =3D (mask) & KVM_X86_DISABLE_EXITS_MWA=
-IT;
-> \
-> >+              (a).hlt_in_guest =3D (mask) & KVM_X86_DISABLE_EXITS_HLT; =
-      \
-> >+              (a).pause_in_guest =3D (mask) & KVM_X86_DISABLE_EXITS_PAU=
-SE;
-> \
-> >+              (a).cstate_in_guest =3D (mask) & KVM_X86_DISABLE_EXITS_CS=
-TATE;
-> \
-> >+      } else {                                                         =
-    \
-> >+              if ((mask) & KVM_X86_DISABLE_EXITS_MWAIT)                =
-    \
-> >+                      (a).mwait_in_guest =3D true;                     =
-      \
-> >+              if ((mask) & KVM_X86_DISABLE_EXITS_HLT)                  =
-    \
-> >+                      (a).hlt_in_guest =3D true;                       =
-      \
-> >+              if ((mask) & KVM_X86_DISABLE_EXITS_PAUSE)                =
-    \
-> >+                      (a).pause_in_guest =3D true;                     =
-      \
-> >+              if ((mask) & KVM_X86_DISABLE_EXITS_CSTATE)               =
-    \
-> >+                      (a).cstate_in_guest =3D true;                    =
-      \
-> >+      }                                                                =
-    \
-> >+})
-> >+
-> > static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
-> >                                    struct kvm_enable_cap *cap)  { @@
-> >-6238,14 +6260,8 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-> >               if (kvm->created_vcpus)
-> >                       goto disable_exits_unlock;
+I had to think about this a bit but now I see your point and it makes
+sense.
+
+> > >       } else if (ret < 0) {
+> > >         error(1, errno, "poll");
+> > >     }
+> > >     tnow = gettimeofday_ms();
+> > >   }
+> > > }
+> > >
+> > > Does this make more sense?
 > >
-> >-              if (cap->args[0] & KVM_X86_DISABLE_EXITS_MWAIT)
-> >-                      kvm->arch.mwait_in_guest =3D true;
-> >-              if (cap->args[0] & KVM_X86_DISABLE_EXITS_HLT)
-> >-                      kvm->arch.hlt_in_guest =3D true;
-> >-              if (cap->args[0] & KVM_X86_DISABLE_EXITS_PAUSE)
-> >-                      kvm->arch.pause_in_guest =3D true;
-> >-              if (cap->args[0] & KVM_X86_DISABLE_EXITS_CSTATE)
-> >-                      kvm->arch.cstate_in_guest =3D true;
-> >+              kvm_ioctl_disable_exits(kvm->arch, cap->args[0]);
-> >+
-> >               r =3D 0;
-> > disable_exits_unlock:
-> >               mutex_unlock(&kvm->lock); diff --git
-> >a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h index
-> >55155e262646..876dcccbfff2 100644
-> >--- a/include/uapi/linux/kvm.h
-> >+++ b/include/uapi/linux/kvm.h
-> >@@ -823,10 +823,12 @@ struct kvm_ioeventfd {
-> > #define KVM_X86_DISABLE_EXITS_HLT            (1 << 1)
-> > #define KVM_X86_DISABLE_EXITS_PAUSE          (1 << 2)
-> > #define KVM_X86_DISABLE_EXITS_CSTATE         (1 << 3)
-> >+#define KVM_X86_DISABLE_EXITS_OVERRIDE             (1ull << 63)
-> > #define KVM_X86_DISABLE_VALID_EXITS
-> (KVM_X86_DISABLE_EXITS_MWAIT | \
-> >                                               KVM_X86_DISABLE_EXITS_HLT=
- | \
-> >                                               KVM_X86_DISABLE_EXITS_PAU=
-SE | \
-> >-                                              KVM_X86_DISABLE_EXITS_CST=
-ATE)
-> >+                                            KVM_X86_DISABLE_EXITS_CSTAT=
-E | \
-> >+
-> >+ KVM_X86_DISABLE_EXITS_OVERRIDE)
-> >
-> > /* for KVM_ENABLE_CAP */
-> > struct kvm_enable_cap {
-> >--
-> >2.34.1
-> >
+> > Obviously, this should be a do/while. Anyway, this works as expected
+> > after leaving it for a around two hours.
+> 
+> Great to hear you found the cause.
+
+Hats off for hints.
+
+-- 
+Andrei Gherzan
