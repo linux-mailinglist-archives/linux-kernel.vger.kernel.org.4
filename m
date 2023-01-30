@@ -2,87 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0EE680E65
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF3C680E62
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237007AbjA3NDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:03:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        id S236901AbjA3NCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:02:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234538AbjA3NDC (ORCPT
+        with ESMTP id S236857AbjA3NCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:03:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF4335AF;
-        Mon, 30 Jan 2023 05:02:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 30 Jan 2023 08:02:47 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA179C663
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:02:44 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BF4160F17;
-        Mon, 30 Jan 2023 13:02:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D57CC433EF;
-        Mon, 30 Jan 2023 13:02:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675083777;
-        bh=VxL2bjQW8m7T81W4f7nNF2r5l8IfbO/VL9g3wOK2I8c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bBjjiDc5M9JcXGIWoEMxouNwg1+oguZkfgDvk1SHnjyOV/QXs3x5/yoCkriIXVY1b
-         mY9LL7rtYez19AM8yUawIYJjxfxluvA7Nq1SMpN7WWj7XF2SVZVYhMJMYmXUy/0YyM
-         vOe/UYjg/CBhA5L6O04cFjoZ8bQ2vz6pK4CSUVPMYO37yIw+TupFEGUcuOlUNW1EQ5
-         JWgqKqiwfJT3bu0kPoNTB8uzcXOcoKPYD26fvt80lbBm59Ev6N3dAIZXlv55RNaBNb
-         Q+6fKMp+43xPF5QXQfkxNQ+RrzTYemgobX31a0x66W7tdgYvO63cforYoeRHw9LvCl
-         XcrweCX7TlrXg==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: [PATCH] ftrace: sample: avoid open-coded 64-bit division
-Date:   Mon, 30 Jan 2023 14:02:37 +0100
-Message-Id: <20230130130246.247537-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3F4C121BB2;
+        Mon, 30 Jan 2023 13:02:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675083763; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ARwEGyGpwYF9H5slVIYtCFzph0d26JmSdEf25hcilbY=;
+        b=pyJcnYwBl3DH/jl+/129tNUOIFyqyViNLmoDtFmngEAY4W5QwguCfIassNpLWPbUwRip5Q
+        Z+RahvE57ghKk8jep3/EAoHBgMp7qdYPURDYQRlHKF4OEFFpfS8h7xHSkIfBx29ubvbPnC
+        EUuasEmCb8a1ZTWBgJ4rSbPj1ooYlNQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3007913A06;
+        Mon, 30 Jan 2023 13:02:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GpzmCvO/12NKUQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 30 Jan 2023 13:02:43 +0000
+Date:   Mon, 30 Jan 2023 14:02:42 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, Shakeel Butt <shakeelb@google.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ma Wupeng <mawupeng1@huawei.com>, shy828301@gmail.com
+Subject: Re: [PATCH] mm: memcg: fix NULL pointer in
+ mem_cgroup_track_foreign_dirty()
+Message-ID: <Y9e/8jtcDzSp9Ix2@dhcp22.suse.cz>
+References: <20230129024451.121590-1-wangkefeng.wang@huawei.com>
+ <20230129134815.21083b65ef3ae4c3e7fae8eb@linux-foundation.org>
+ <568c10e8-c225-b3c4-483a-5bb3329de4c5@huawei.com>
+ <Y9eEbTXNm0x0IZem@dhcp22.suse.cz>
+ <13e4e6ee-414e-7e36-5ac1-fa0fa555ba41@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13e4e6ee-414e-7e36-5ac1-fa0fa555ba41@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon 30-01-23 20:20:16, Kefeng Wang wrote:
+> 
+> 
+> On 2023/1/30 16:48, Michal Hocko wrote:
+> > On Mon 30-01-23 09:16:13, Kefeng Wang wrote:
+> > > 
+> > > 
+> > > On 2023/1/30 5:48, Andrew Morton wrote:
+> > > > On Sun, 29 Jan 2023 10:44:51 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+> > > > 
+> > > > > As commit 18365225f044 ("hwpoison, memcg: forcibly uncharge LRU pages"),
+> > > > 
+> > > > Merged in 2017.
+> > > > 
+> > > > > hwpoison will forcibly uncharg a LRU hwpoisoned page, the folio_memcg
+> > > > > could be NULl, then, mem_cgroup_track_foreign_dirty_slowpath() could
+> > > > > occurs a NULL pointer dereference, let's do not record the foreign
+> > > > > writebacks for folio memcg is null in mem_cgroup_track_foreign() to
+> > > > > fix it.
+> > > > > 
+> > > > > Reported-by: Ma Wupeng <mawupeng1@huawei.com>
+> > > > > Fixes: 97b27821b485 ("writeback, memcg: Implement foreign dirty flushing")
+> > > > 
+> > > > Merged in 2019.
+> > > > 
+> ...
+> > 
+> > Just to make sure I understand. The page has been hwpoisoned, uncharged
+> > but stayed in the page cache so a next page fault on the address has blowned
+> > up?
+> > 
+> > Say we address the NULL memcg case. What is the resulting behavior?
+> > Doesn't userspace access a poisoned page and get a silend memory
+> > corruption?
+> 
+> + Yang Shi
+> 
+> Check previous link[1], seems that it is a known issue, and there is a TODO
+> list for storage backed filesystems from Yang.
 
-Calculating the average period requires a 64-bit division that leads
-to a link failure on 32-bit architectures:
+OK, so IIUC this patch will just help the test to not blow up but it
+will not allow the test to behave consistently. From my past experience
+the hwpoisoning is not really something that any production environment
+should be relying on working properly.
 
-x86_64-linux-ld: samples/ftrace/ftrace-ops.o: in function `ftrace_ops_sample_init':
-ftrace-ops.c:(.init.text+0x23b): undefined reference to `__udivdi3'
+But this patch is straightforward so no objection from me. 
+Acked-by: Michal Hocko <mhocko@suse.com>
+Thanks!
 
-Use the div_u64() helper to do this instead. Since this is an init function that
-is not called frequently, the runtime overhead is going to be acceptable.
+> [1] https://lore.kernel.org/all/20211020210755.23964-6-shy828301@gmail.com/T/#m1d40559ca2dcf94396df5369214288f69dec379b
 
-Fixes: b56c68f705ca ("ftrace: Add sample with custom ops")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- samples/ftrace/ftrace-ops.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/samples/ftrace/ftrace-ops.c b/samples/ftrace/ftrace-ops.c
-index 24deb51c7261..0c8da87ff5c3 100644
---- a/samples/ftrace/ftrace-ops.c
-+++ b/samples/ftrace/ftrace-ops.c
-@@ -223,7 +223,7 @@ static int __init ftrace_ops_sample_init(void)
- 
- 	pr_info("Attempted %u calls to %ps in %lluns (%lluns / call)\n",
- 		nr_function_calls, tracee_relevant,
--		period, period / nr_function_calls);
-+		period, div_u64(period, nr_function_calls));
- 
- 	if (persist)
- 		return 0;
 -- 
-2.39.0
-
+Michal Hocko
+SUSE Labs
