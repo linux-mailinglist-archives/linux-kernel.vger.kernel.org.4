@@ -2,103 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2C0681383
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F89B681878
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:16:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237760AbjA3OjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S235858AbjA3SQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236564AbjA3OjJ (ORCPT
+        with ESMTP id S237403AbjA3SPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:39:09 -0500
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2062.outbound.protection.outlook.com [40.92.107.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE0DE39A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:39:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IWhI4Uf5uH/9rHeMmMlXlSExq/WrrHILWzFEoA6Xy+3N/Y+Li5unoZFIVAyLseaVEZCiIDQnD2+5BIbPjUTyv9CrePcHrRF/90kRcO/6b9bu7RkkhedAEfgDnSIzgX3ZLKZl9XROGZ5hOuWgLalmLOQo4zBqxuFvCInnip3e3GoqyfEEaooM6P4dstQ/SuYosQtGhBs/g28cZ8lJR9X+mRJxISTDJiMfoJi351UOrv4UGqKNve6elgdvKNsJA1QpiVO8kft5HYrrY9yLLo91frcpN1cFVnYkonaRnvP7BIzv9cCNfcfIe6UfSKPYCafJmPnh74Il/3NTwVTR8VKcrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zeMLtdKS7l4svY/92vs/ghe1tScsOpL+kgrmvys0OsU=;
- b=GF706xO2tFKvkbveJ9rvOyRc21Hn30S/DnH20BGpVRibxPGj62bgcJEa+22J6F6rAq30E2wJGrkjetE3a72QifpYZwoR+1GFhpMPMm9AUj8HUij56T0zmfm31PWICIshdJJAuLeNX65BGRRipLp0kOdqcwyCGQnKpxxkiIIvUNCwUbhPyFi1ecCOfkxJBCRioZpgVZ7A79V4LkwvcsLe5X8WVJ/Nba3zVHrgR52eOmcMpOsFUG2w/1+m2h75o44+4ixMyh5Iajj78jwueLXB6JS0GqCSILpBXyeAwsvStywxBgY6VrLjCnYNsiXx0WR2afxmxw3uuVNy/f0KmvSBAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zeMLtdKS7l4svY/92vs/ghe1tScsOpL+kgrmvys0OsU=;
- b=QN9/nfeKNQq8/3yPAgyrcu7EEJK0UCFdw2Qwu3q+2X46xXglsYBJCAScTFow03lYaHJNO7m23IQY6Ftqbk2qYn/yiU49Onp/l6UbiF/E8sKkQHZ5PhbrJ23i2JfX1yJ3r0Z10+DYj3Sw7H+toTndevYovzd7FcuSGTNsIDUVDHEq6NcGW09cSbxD2MMQCLpXUIw9wGSkRVa/8Izp6XwlDIK+PzoihBZRyWXtLqKxtWUvou0zbd4qlZmnVogQsTE0Bt2p1JQx64Zz6kJRxSAdjnds7PLmGlIQpAAqGzklejGAlATRhZ8nxTskH0FcAbzPBwfBF9kL7+oZUvD18kMxxA==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by TY3P286MB3513.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:3b5::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 14:39:06 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::82ce:8498:c0e9:4760]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::82ce:8498:c0e9:4760%9]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
- 14:39:06 +0000
-Date:   Mon, 30 Jan 2023 22:39:03 +0800
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] powerpc: macio: Make remove callback of macio driver
- void returned
-Message-ID: <TYCP286MB2323A8880DE1D1EDFCF58F05CAD39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-References: <TYCP286MB2323FA245F0C35C5D7486CC9CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
- <87sffssk5g.fsf@mpe.ellerman.id.au>
+        Mon, 30 Jan 2023 13:15:55 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2392B60E;
+        Mon, 30 Jan 2023 10:15:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675102549; x=1706638549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QjXjMnu6Y3KsGfyiWp4s/PbltUG+5MX/5jw4lyAX9SI=;
+  b=ADRBXuR4/RUxMjE7apGEcC3zByEzkwGtZZXw0+n6W6bc5Kl+bqGAKVOi
+   h3xQyBWJjgWwtR7JrsRNiwuqD9LbAKXkIvPVXk4bBGBhPYaqfkHcAet1k
+   t8fRoO+ZbD0GRdEr94lxCFrSC99diXMX3yny36DtUhGuvJuRX0+DsSOMM
+   azQcjM7racXV7eYCbI23WqCaUSdCtgEFy9JrzQ75Iihl6gP0QVCvuf0jr
+   JeY3XTrXbdO1LCFhgsgu/grgFlem5BF4Lj4/n0HdyWDgKSHicTWWX7ssM
+   c6+dSq3fHsMc1U95WS+yrnj/HkgDhxbK8wXEB5UWmUGHwK4nr8AbBSFvF
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="328909709"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="328909709"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 10:15:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="657563974"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="657563974"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 10:15:34 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 9970A1202B0;
+        Mon, 30 Jan 2023 16:39:47 +0200 (EET)
+Date:   Mon, 30 Jan 2023 16:39:47 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kiselev <bigunclemax@gmail.com>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2 09/11] of: property: Simplify of_link_to_phandle()
+Message-ID: <Y9fWsxYJgNR0z6te@kekkonen.localdomain>
+References: <20230127001141.407071-1-saravanak@google.com>
+ <20230127001141.407071-10-saravanak@google.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87sffssk5g.fsf@mpe.ellerman.id.au>
-X-TMN:  [08x5AsdShh7yieTERUdEwOEcuZaOF758]
-X-ClientProxiedBy: TY2PR06CA0013.apcprd06.prod.outlook.com
- (2603:1096:404:42::25) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20230130143903.GA54208@wendao-VirtualBox>
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TY3P286MB3513:EE_
-X-MS-Office365-Filtering-Correlation-Id: 265e8c20-47a7-44c4-d0ab-08db02cfbd1d
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +1z1Tt2Vaku7XAL6cTxptickbYZ5pcc+3VYnxEkRasqNWQBIIUiUijsaCsm5bposohywsp+Kvfr/24fa7Q7XEiaE2nFZ9hRd5iYQhpAYhf1CMTsOACiKRnBr7H2YL+8ig1Az4ejl96aUeGHEZy6krKzbWKd+MKRI94pMmilRfjR9eyI8WJoZnc+/1pEos8wu7Nwtj17G8JNI+3COSEDr8tEB89FgwguAJxUg+t5+RmVcflSsdBdNj/jZFrWGiYLvlPurcwP/bOnFQcmYDfh528Y5BZ/ykyM9VYWIfjoRTyffsV/ywd8L1PTwFAy2cRN7NOz3X1wMslT3CG3TDp08+jNx0Ne5kV8i9rDvw34jYmv4D/4ekyoaDD46KEoRDf/HnZa1nN4Z5cxdU/3yrtl7crQ0BoXTVc8JSnETaCrvPMUF9dYJS7YOuisYVzUfPQpmExWEQablS2NAwQKMvSFuEVlyFmNBIgxw+u4BYTNJWjU8Md278amz+jHmWESTquxkFtHZ4IvSLaKDuByWuP6dItiaWuGVNnZVnq8ijd4LyXu5Pw/9Gmq0TBXpkEfT+9rJB/CkZzOQFoJ1V5SoGFOojDwkGXe90vvqDr1PVfF6DWn3Hdb53GsCRVSDj4gc905bmhj49xVJTOwCa6Cg6jE3Cw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZLXEzZ1ufmT80KiR8PMjrnJccn5gsphaH1p5Ug2mflJ24oCt0tmlFtsjXRQo?=
- =?us-ascii?Q?+ZQ7zz4zx+S82QlazAojaZxu3Q6scHARnTiYEjtINBX/pwvVZ3J7AYAEUiDL?=
- =?us-ascii?Q?uiC3uthSx0tFSMGt0PqVESKWGaTV5v1JR1vDa88GORBRpYvrmCZ4QO8G73QV?=
- =?us-ascii?Q?srmqF8E9SUGjUiBzG8MkAGW+iib4XgbIsTalktPXf2XIAdxHWonNMX2OW/Hf?=
- =?us-ascii?Q?ncRsvKJ58Bc3iEJtql4svwpkDgFyxWsxqx/j0sQ5g1bdvHAyKQGHw8beOoK7?=
- =?us-ascii?Q?VUKeULqLSmH8fKang5vrpzmWfWv1/Xtyjsph9tlVGonDmM3aIicSzJtc4Env?=
- =?us-ascii?Q?kHaHc+lvILlNoUvKIlXAIn/2wdVwKU99THLJ04yHbDohw7wC4nb3SwT8kDMB?=
- =?us-ascii?Q?v2XiqFsdAVetzPgc94hu2IYwnId+ZhSCJ8/XqZ38xPD7mZ7yZVT5hA9gcLvW?=
- =?us-ascii?Q?DIRlojMVIIwAgerJuBPl2pidC30fPi7WmfKg60pDW+hpQ2s5mcfjeDwelsBp?=
- =?us-ascii?Q?7lA8w+UZ7XPHOECYYyQSoTj22UJ0ZD5KdVvCx08BvIuguMgql75IuGNxOrWN?=
- =?us-ascii?Q?AFUR00VbqGUOCSFgi58TM4/6KRIBv307THz7wjlTxhG5QdYIcMhV46zyFhIz?=
- =?us-ascii?Q?JNJtLguEDXQKPcQp8ECGsiSbRTQFo5pQLmUN2MYpC2F/1TPRJUtwF+ae2rrm?=
- =?us-ascii?Q?i3+F4JcNt8S0d/xjgUKGnE8LOHMA2191OifeGw0Ivp5qTGX0LADQseZuEE8/?=
- =?us-ascii?Q?0X2IHCeuM7OEOeW7OAIuI9sexitDkxlTn1KwVk10w3gp1iO4PX6PfDwm6mnX?=
- =?us-ascii?Q?fvwXjpG93vKrwF+lwBAuEjpggChyv7Tci5LicspxlkGXQb5flqG4N6xJqqEK?=
- =?us-ascii?Q?761OHL0yv0SI6tq4buHp2OQp2Q6eGst9nVg3hZlIda8YG2cyZ7QENYpWSurr?=
- =?us-ascii?Q?9P0xYrkA9oEgO2g2K5wnoui/uXkZJIHjpsJoRA8Nwow/CeXLJZxVtXgVpYKd?=
- =?us-ascii?Q?Qo031GD1PIGNZ8hafOKURlUZYgm03SKslQ6DQww7ezI7M20LRy8qs21IGfDA?=
- =?us-ascii?Q?VerkA5Gcw1hWDCif3nwQrJRO6GrZfo2Y9nOGA2YKeYbIAs6smkvxO6+qqXiQ?=
- =?us-ascii?Q?nWDTYrVpWJhJ+yQY27vbvACLHHaBGeFHAUY0/iQkzKN+4FzAzB6CwPCAgTbo?=
- =?us-ascii?Q?MBlaJE+zbqMODqNZgmezpkIMnlRz9UzH524iTVWLVa8yqop0G0nPZTh/fbSI?=
- =?us-ascii?Q?cTbwAx2gyeusS0ibQ+rURhdmmcZCgkFAFuTp5DEmsg=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 265e8c20-47a7-44c4-d0ab-08db02cfbd1d
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 14:39:05.9890
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3P286MB3513
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+In-Reply-To: <20230127001141.407071-10-saravanak@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,50 +103,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Hi Saravana,
 
-Thanks for reviewing,
-
-On Mon, Jan 30, 2023 at 03:47:55PM +1100, Michael Ellerman wrote:
-> Dawei Li <set_pte_at@outlook.com> writes:
-> > Commit fc7a6209d571 ("bus: Make remove callback return void") forces
-> > bus_type::remove be void-returned, it doesn't make much sense for any
-> > bus based driver implementing remove callbalk to return non-void to
-> > its caller.
-> >
-> > This change is for macio bus based drivers.
-> >
-> > Signed-off-by: Dawei Li <set_pte_at@outlook.com>
-> > ---
-> > v1 -> v2
-> > - Revert unneeded changes.
-> > - Rebased on latest powerpc/next.
-> >
-> > v1
-> > - https://lore.kernel.org/all/TYCP286MB2323FCDC7ECD87F8D97CB74BCA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
-> > ---
-> >  arch/powerpc/include/asm/macio.h                | 2 +-
-> >  drivers/ata/pata_macio.c                        | 4 +---
-> >  drivers/macintosh/rack-meter.c                  | 4 +---
-> >  drivers/net/ethernet/apple/bmac.c               | 4 +---
-> >  drivers/net/ethernet/apple/mace.c               | 4 +---
-> >  drivers/net/wireless/intersil/orinoco/airport.c | 4 +---
-> >  drivers/scsi/mac53c94.c                         | 5 +----
-> >  drivers/scsi/mesh.c                             | 5 +----
-> >  drivers/tty/serial/pmac_zilog.c                 | 7 ++-----
-> >  sound/aoa/soundbus/i2sbus/core.c                | 4 +---
-> >  10 files changed, 11 insertions(+), 32 deletions(-)
+On Thu, Jan 26, 2023 at 04:11:36PM -0800, Saravana Kannan wrote:
+> The driver core now:
+> - Has the parent device of a supplier pick up the consumers if the
+>   supplier never has a device created for it.
+> - Ignores a supplier if the supplier has no parent device and will never
+>   be probed by a driver
 > 
-> I realise the patch has to be merged via a single subsystem, and powerpc
-> is probably the most appropriate, but please Cc the relevant lists for
-> the drivers touched.
-
-Copy that. Relevant lists will be cc'ed in v3.
-
-Thanks,
-        Dawei 
+> And already prevents creating a device link with the consumer as a
+> supplier of a parent.
 > 
-> AFAICS neither this version or v1 was Cc'ed to relevant lists, eg.
-> netdev, linux-wireless, linux-scsi, alsa-devel etc.
+> So, we no longer need to find the "compatible" node of the supplier or
+> do any other checks in of_link_to_phandle(). We simply need to make sure
+> that the supplier is available in DT.
 > 
-> cheers
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  drivers/of/property.c | 84 +++++++------------------------------------
+>  1 file changed, 13 insertions(+), 71 deletions(-)
+> 
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index 134cfc980b70..c651aad6f34b 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1062,20 +1062,6 @@ of_fwnode_device_get_match_data(const struct fwnode_handle *fwnode,
+>  	return of_device_get_match_data(dev);
+>  }
+>  
+> -static bool of_is_ancestor_of(struct device_node *test_ancestor,
+> -			      struct device_node *child)
+> -{
+> -	of_node_get(child);
+> -	while (child) {
+> -		if (child == test_ancestor) {
+> -			of_node_put(child);
+> -			return true;
+> -		}
+> -		child = of_get_next_parent(child);
+> -	}
+> -	return false;
+> -}
+> -
+>  static struct device_node *of_get_compat_node(struct device_node *np)
+>  {
+>  	of_node_get(np);
+> @@ -1106,71 +1092,27 @@ static struct device_node *of_get_compat_node_parent(struct device_node *np)
+>  	return node;
+>  }
+>  
+> -/**
+> - * of_link_to_phandle - Add fwnode link to supplier from supplier phandle
+> - * @con_np: consumer device tree node
+> - * @sup_np: supplier device tree node
+> - *
+> - * Given a phandle to a supplier device tree node (@sup_np), this function
+> - * finds the device that owns the supplier device tree node and creates a
+> - * device link from @dev consumer device to the supplier device. This function
+> - * doesn't create device links for invalid scenarios such as trying to create a
+> - * link with a parent device as the consumer of its child device. In such
+> - * cases, it returns an error.
+> - *
+> - * Returns:
+> - * - 0 if fwnode link successfully created to supplier
+> - * - -EINVAL if the supplier link is invalid and should not be created
+> - * - -ENODEV if struct device will never be create for supplier
+> - */
+> -static int of_link_to_phandle(struct device_node *con_np,
+> +static void of_link_to_phandle(struct device_node *con_np,
+>  			      struct device_node *sup_np)
+>  {
+> -	struct device *sup_dev;
+> -	struct device_node *tmp_np = sup_np;
+> +	struct device_node *tmp_np = of_node_get(sup_np);
+>  
+> -	/*
+> -	 * Find the device node that contains the supplier phandle.  It may be
+> -	 * @sup_np or it may be an ancestor of @sup_np.
+> -	 */
+> -	sup_np = of_get_compat_node(sup_np);
+> -	if (!sup_np) {
+> -		pr_debug("Not linking %pOFP to %pOFP - No device\n",
+> -			 con_np, tmp_np);
+> -		return -ENODEV;
+> -	}
+> +	/* Check that sup_np and its ancestors are available. */
+> +	while (tmp_np) {
+> +		if (of_fwnode_handle(tmp_np)->dev) {
+> +			of_node_put(tmp_np);
+> +			break;
+> +		}
+>  
+> -	/*
+> -	 * Don't allow linking a device node as a consumer of one of its
+> -	 * descendant nodes. By definition, a child node can't be a functional
+> -	 * dependency for the parent node.
+> -	 */
+> -	if (of_is_ancestor_of(con_np, sup_np)) {
+> -		pr_debug("Not linking %pOFP to %pOFP - is descendant\n",
+> -			 con_np, sup_np);
+> -		of_node_put(sup_np);
+> -		return -EINVAL;
+> -	}
+> +		if (!of_device_is_available(tmp_np)) {
+> +			of_node_put(tmp_np);
+> +			return;
+> +		}
+>  
+> -	/*
+> -	 * Don't create links to "early devices" that won't have struct devices
+> -	 * created for them.
+> -	 */
+> -	sup_dev = get_dev_from_fwnode(&sup_np->fwnode);
+> -	if (!sup_dev &&
+> -	    (of_node_check_flag(sup_np, OF_POPULATED) ||
+> -	     sup_np->fwnode.flags & FWNODE_FLAG_NOT_DEVICE)) {
+> -		pr_debug("Not linking %pOFP to %pOFP - No struct device\n",
+> -			 con_np, sup_np);
+> -		of_node_put(sup_np);
+> -		return -ENODEV;
+> +		tmp_np = of_get_next_parent(tmp_np);
+>  	}
+> -	put_device(sup_dev);
+>  
+>  	fwnode_link_add(of_fwnode_handle(con_np), of_fwnode_handle(sup_np));
+
+fwnode_link_add() returns int. Why is the return type of this function
+changed to void?
+
+> -	of_node_put(sup_np);
+> -
+> -	return 0;
+>  }
+>  
+>  /**
+
+-- 
+Regards,
+
+Sakari Ailus
