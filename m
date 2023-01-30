@@ -2,142 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFE0680A91
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD7E680A9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235902AbjA3KPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
+        id S236272AbjA3KRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:17:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233899AbjA3KPQ (ORCPT
+        with ESMTP id S236259AbjA3KRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:15:16 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA2F5252;
-        Mon, 30 Jan 2023 02:15:15 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U6LBr4028583;
-        Mon, 30 Jan 2023 10:15:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : reply-to : references : mime-version :
- content-type : in-reply-to; s=qcppdkim1;
- bh=FQ25Ocj9mmDa26Q4Qbvq4/AjPwDuTjYyZW7kxiBvCw4=;
- b=BZi8IdZDbX5hx6pjZrgv/HIi1W23MKVBMB0rmvPOzvHxatgRF61leNff6FStpwl9emy0
- va3LN1khxdjFM4WEEzq82Nc2zSuoU1XD9RlgUuQ7jrJSst3oTHR5WUJIpJUEsIldq4+D
- ZFd9ONjt69t9qYre5l9DmPMUJqoZoIBu+Z5hYP47hD/dr7PVnDImaD506x4AvEyH6Wu8
- QgummUH5FKBwl7slhEmTxcN8+5E21YnSpbOIW3XmpM+gp4eDcTdhjvKEQClt88987UqQ
- /zNhxclZ27zUV89K5/Ten0g0cZdzM2RWQccXqduoLeEHdZfWNxp5Qd73QmUjTqPc6FhP Mg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncvvu36p9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 10:15:00 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UAEx3E005764
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 10:14:59 GMT
-Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 02:14:51 -0800
-Date:   Mon, 30 Jan 2023 15:44:45 +0530
-From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-To:     Elliot Berman <quic_eberman@quicinc.com>
-CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Alex Elder <elder@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v9 12/27] gunyah: rsc_mgr: Add RPC for sharing memory
-Message-ID: <20230130101445.GB332@quicinc.com>
-Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
-References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
- <20230120224627.4053418-13-quic_eberman@quicinc.com>
+        Mon, 30 Jan 2023 05:17:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463395252
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:17:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675073820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UlvqrRsIaGySNIWgyEtFe3L6DCZPEcBZ6mU4ziiJiuQ=;
+        b=XyCUXFOUG+yTe6/yHtXhlQpuRB8epzj0ffIf6D9Qf8V6sLDgngbBn7Qyn7wx+9B1ZR9Osi
+        SM2hlLzIsZu8UDUVh3XpjgAcQRiz1RxXgO13qiUouyBRVaRNlf296XzSBrFygeBWfORcQ2
+        w1Ub5BGlTmOBUSQT1PFf9PjNe723qgw=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-631-PTN4PoCkPyuKe7clzUBuqQ-1; Mon, 30 Jan 2023 05:16:59 -0500
+X-MC-Unique: PTN4PoCkPyuKe7clzUBuqQ-1
+Received: by mail-ed1-f71.google.com with SMTP id j10-20020a05640211ca00b0049e385d5830so7952663edw.22
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:16:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UlvqrRsIaGySNIWgyEtFe3L6DCZPEcBZ6mU4ziiJiuQ=;
+        b=Ov/9tWZ3CkJEsjp8n+SNJqQxmkZ9qxb3GiUtg/spsq698zm5VxMzpIZuDLNYKYHY67
+         285lLmqRkyS/BxUd+BFFa5nRzr99+53pONHScRzgriPUtmNYlOsj+UU9qV5DasW0rvCK
+         kGgRI/frxlMHzJULGILDScUz7BeQjevX3AevANd4OfArsfz7rM4JyjjfsASOi17NuFBM
+         HjZKN1CG7TzzBtHQrYrwxwSlKLz63gn8WP6EAL0ezGM6n1Xjb5hdgiQVwa6VDMznF4jR
+         sEHZsB5P1+59loQapWpIMWoHkCNo97fO+lBn81zbdA9K56ylzw2ppTCzRTgZZUm922YQ
+         r88g==
+X-Gm-Message-State: AFqh2krlT1n/6JyCfjjf15Iala4raapDWcJPjjW1UePfpdxjoFD82spb
+        J69VoNXMqpelfyVOYyQsXViMhN76Se7gEJG3OTX/pd6/5yo9s7jwr4MxiLEFu80gUdRwuzFidHC
+        nYxyNunRoW3SeXDBf/QFT0ikx
+X-Received: by 2002:a17:906:8608:b0:86b:9216:2ddb with SMTP id o8-20020a170906860800b0086b92162ddbmr53439640ejx.52.1675073817913;
+        Mon, 30 Jan 2023 02:16:57 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuNsJWKTnv3uN7vRaSshEY3jYIx5DQ3/vAPthUQAXBa0hLAWrs8TG38BNBGQctubhL/2gLNCg==
+X-Received: by 2002:a17:906:8608:b0:86b:9216:2ddb with SMTP id o8-20020a170906860800b0086b92162ddbmr53439629ejx.52.1675073817696;
+        Mon, 30 Jan 2023 02:16:57 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id f19-20020a05640214d300b004a0a915e726sm3390528edx.73.2023.01.30.02.16.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 02:16:57 -0800 (PST)
+Message-ID: <325be2be-0c58-7414-70e9-9585e35874a2@redhat.com>
+Date:   Mon, 30 Jan 2023 11:16:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-In-Reply-To: <20230120224627.4053418-13-quic_eberman@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QKEya6Z32GHI_o5Kft3PK1XLQziwReYd
-X-Proofpoint-ORIG-GUID: QKEya6Z32GHI_o5Kft3PK1XLQziwReYd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_10,2023-01-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=802 suspectscore=0 spamscore=0 mlxscore=0 phishscore=0
- clxscore=1015 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301300098
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [regression] Bug 216977 - asus t100 touchpad registered but not
+ working
+Content-Language: en-US
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <btissoir@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        jessegodfroy@gmail.com
+References: <2f4dc626-5287-6ec7-a31d-335e5dbb9119@leemhuis.info>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <2f4dc626-5287-6ec7-a31d-335e5dbb9119@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Elliot Berman <quic_eberman@quicinc.com> [2023-01-20 14:46:11]:
+Hi All,
 
-> +static int gh_rm_mem_lend_common(struct gh_rm *rm, u32 message_id, struct gh_rm_mem_parcel *p)
-> +{
-> +	size_t msg_size = 0, initial_n_mem_entries = p->n_mem_entries;
-> +	void *msg;
-> +	__le32 *resp;
-> +	struct gh_mem_share_req_header *req_header;
-> +	struct gh_mem_share_req_acl_section *acl_section;
-> +	struct gh_mem_share_req_mem_section *mem_section;
-> +	u32 *mem_attr_section;
-> +	size_t resp_size;
-> +	int ret;
-> +
-> +	if (!p->acl_entries || !p->n_acl_entries || !p->mem_entries || !p->n_mem_entries ||
-> +	    p->n_acl_entries > U8_MAX || p->mem_handle != GH_MEM_HANDLE_INVAL)
-> +		return -EINVAL;
-> +
-> +	if (initial_n_mem_entries > GH_RM_MAX_MEM_ENTRIES)
-> +		initial_n_mem_entries = GH_RM_MAX_MEM_ENTRIES;
-> +
-> +	/* The format of the message goes:
-> +	 * request header
-> +	 * ACL entries (which VMs get what kind of access to this memory parcel)
-> +	 * Memory entries (list of memory regions to share)
-> +	 * Memory attributes (currently unused, we'll hard-code the size to 0)
-> +	 */
-> +	msg_size += sizeof(struct gh_mem_share_req_header);
-> +	msg_size += offsetof(struct gh_mem_share_req_acl_section, entries[p->n_acl_entries]);
-> +	msg_size += offsetof(struct gh_mem_share_req_mem_section, entries[initial_n_mem_entries]);
-> +	msg_size += sizeof(u32); /* for memory attributes, currently unused */
-> +
-> +	msg = kzalloc(msg_size, GFP_KERNEL);
-> +	if (!msg)
-> +		return -ENOMEM;
-> +
-> +	ret = gh_rm_platform_pre_mem_share(rm, p);
+On 1/30/23 10:22, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+> Hi, this is your Linux kernel regression tracker.
+> 
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216977 :
+> 
+>>  jessegodfroy@gmail.com 2023-01-29 15:44:34 UTC
+>>
+>> After upgrading the kernel from 6.0 series to the 6.1 the touchpad on my asus t100 no longer works. 
+>>
+>> The device is registered in dmesg. I believe hid_asus is responsible for the keyboard and touchpad.  The keyboard continues to function, but the touchpad does not. 
+>>
+>> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0001: input,hidraw0: USB HID v1.11 Keyboard [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input0
+>> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0002: Fixing up Asus T100 keyb report descriptor
+>> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0002: input,hiddev96,hidraw1: USB HID v1.11 Device [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input1
+>> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0003: input,hiddev97,hidraw2: USB HID v1.11 Mouse [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input2
+>>
+>> I do not see any changes to hid_asus that should be responsible for the change in performance.
+> See the ticket for more details.
 
-Hmm ..I think gh_rm_platform_pre_mem_share() is not yet defined as of this
-patch, so you probably want this in a later patch.
+This is my bad, I accidentally broke SW_TABLET_MODE reporting on
+the Asus T100* and T101* series and it is now reporting that it
+is in tablet mode while it is actually docked and thus in laptop
+mode.
 
-> +	if (ret) {
-> +		kfree(msg);
-> +		return ret;
-> +	}
-> +
+This is causing libinput to suppress touchpad events, as
+it would for a 360° hinges style 2 in 1 with the keyboard +
+touchpad folded behind the display (so in tablet mode).
+
+A fix for this has already been merged for 6.2-rc6:
+
+"platform/x86: asus-wmi: Fix kbd_dock_devid tablet-switch reporting"
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fdcc0602d64f22185f61c70747214b630049cc33
+
+And the fix is also queued for the next 6.1.y stable series release:
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/log/?h=queue/6.1
+
+I'll also add this info as a comment to the bug.
+
+Regards,
+
+Hans
+
