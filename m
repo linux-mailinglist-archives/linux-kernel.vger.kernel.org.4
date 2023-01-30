@@ -2,403 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E3468189C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224F768188B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237757AbjA3SUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S237074AbjA3STT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237479AbjA3STp (ORCPT
+        with ESMTP id S237196AbjA3STO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:19:45 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214883D08F
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:42 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id d10so5466800ilc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:42 -0800 (PST)
+        Mon, 30 Jan 2023 13:19:14 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B99DF75F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:10 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z1so5447039pfg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OuWeF3rfcHFcdnyMOOHBGhKB3R6BOcBMPglXzqcwFlo=;
-        b=eDvVksg45BXpGSZya+HZiS5XDauERJNk96T18q5/kTMGyvhH7lz8UQ94QnPxlikI/G
-         Z2Tj6GS7qe0Lw59kk2QrfuXruiPUazivNEiWqO3S0d7M8rOqvPASnb0Rfvn717WTTVgZ
-         Hq21+nbTo+zEJfDhrh2HlYBnu1RgSNiDbamf8=
+        d=broadcom.com; s=google;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=0z7OCBQkdRfuPBBXjvUA3YbaATgJDWrXYVSovCQQBhA=;
+        b=X60NU/FplulLlfCTkuG0WLpSG0TP0r9/aZ4hqoJ4WwZqP3GENI/w3TxehB/QJmVvdF
+         zwPwlrvD553cVoYWt8JUEEctNJFH2Y4jN+mWf0DMujTANoOr8CQf89pP6XcMW7Vntxtm
+         gsX1VA8RvCE6MnbwVyMQ8++7QYpvuvIUOicKQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OuWeF3rfcHFcdnyMOOHBGhKB3R6BOcBMPglXzqcwFlo=;
-        b=mI/cR3DJYfocyS0iBPDKiPHoJz6NS9Z0AIcXqjnFaNSFoF+AclpAvCElJFJJqunvGj
-         87q9y1rnNIrFsR+43Du1O6yLcdbCQgqidLLG87lQx3IsgJoB4ydwUczR+NFP+ASXUN1b
-         srEbTpPWT/cizObnoWrWlHhHeA95Kb7gIWf+IoF5i2P2LWZqVSyzosEP7TeJ4/eCMd7/
-         sSkpIZWBoOKSn/u7n+u4aQ4w0uOI2XOr9UfX3X1M98YXVRM96prgMZXg7zS3I/tRPYyF
-         8WqaNkbhRirGTQxVBYGI/GsnemRIbljm1b3wDwEw6F4Ie/jN3Hae9b7Xjcqlhxpqa3TO
-         /Hbg==
-X-Gm-Message-State: AO0yUKUa+i6dRN+fninyUgzyTQ6UgWilarD/WKA+e3PNZ3uwXoJ/H1y6
-        W0oZIEAyw7+As01ct1vAxTt5qF8eFzt6VdC+
-X-Google-Smtp-Source: AK7set/TFGUGCZ3dnywOAl+St5sUEvEv83qJT9/5SVXE7CEke0EIRWmDTdx74h3UjF/WdIeHbjGDhA==
-X-Received: by 2002:a05:6e02:1b83:b0:310:cbfc:1160 with SMTP id h3-20020a056e021b8300b00310cbfc1160mr11857336ili.19.1675102781207;
-        Mon, 30 Jan 2023 10:19:41 -0800 (PST)
-Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:fc8a:dd2f:5914:df14])
-        by smtp.gmail.com with ESMTPSA id o16-20020a056e02115000b002f139ba4135sm4189801ill.86.2023.01.30.10.19.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 10:19:40 -0800 (PST)
-From:   Ross Zwisler <zwisler@chromium.org>
-X-Google-Original-From: Ross Zwisler <zwisler@google.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ross Zwisler <zwisler@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 1/9] tracing: always use canonical ftrace path
-Date:   Mon, 30 Jan 2023 11:19:07 -0700
-Message-Id: <20230130181915.1113313-2-zwisler@google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-In-Reply-To: <20230130181915.1113313-1-zwisler@google.com>
-References: <20230130181915.1113313-1-zwisler@google.com>
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0z7OCBQkdRfuPBBXjvUA3YbaATgJDWrXYVSovCQQBhA=;
+        b=vNVusGw+ToLg7SGzb6VBFgYxec04WFhb6G9NT+uHLMB+pOmFwfo2DkcI0EXJTeTfA5
+         piFDAYRRoABeIv9OUJwPx1dYCAj31EsTJ9mZ2SlLmxKUK5w9S0eFlxmpXFIepLuX8eow
+         Cnw7vISuNfyb52dGB61Iv7o9/YmBUhm4CQubLbwSHo2dCuRY/haNoRWUx7c3p3Mja+W6
+         m5yTTfzRlYuBY1Po8mYni8HxXwXQ36RoW88z3QVszKRYoK49NSRXwj+Lw4fa1H4lcnCj
+         xjuIXQWF+9fiGviZ3sPyL8+xWk2mJUqGWqBumyJiAO41ulUiIhxxb9lMN6B2EHqWFfu1
+         ZZOw==
+X-Gm-Message-State: AO0yUKWfL0Q1zTciR5xX0kpwmEcnrTLfKbxadDv1ZiImIQety7uQmoJp
+        zqR9P1tKsSyDSbh7WUCUU85dwg==
+X-Google-Smtp-Source: AK7set94aXlKeAJiigHwa3wU5v9/0relxPpcL8bT3J5SEZPRYsCuiisIr+IS6L37Dj5r7kfUxrTANA==
+X-Received: by 2002:a62:58c2:0:b0:593:c41e:480 with SMTP id m185-20020a6258c2000000b00593c41e0480mr4299975pfb.23.1675102749627;
+        Mon, 30 Jan 2023 10:19:09 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id t24-20020a62d158000000b005769b23260fsm6595054pfl.18.2023.01.30.10.19.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 10:19:09 -0800 (PST)
+Message-ID: <162b91f4-9334-4941-6d71-8bb9f47a0c12@broadcom.com>
+Date:   Mon, 30 Jan 2023 10:19:07 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next] net: bcmgenet: Add a check for oversized packets
+To:     Leon Romanovsky <leon@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, maxime@cerno.tech,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230127000819.3934-1-f.fainelli@gmail.com>
+ <Y9Y/jMZZbS4HNpCC@unreal> <7cbbb800-9999-302a-5ea9-b93020a1e9e8@gmail.com>
+ <Y9eXb+ZYanvxfq2E@unreal>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <Y9eXb+ZYanvxfq2E@unreal>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000602abe05f37f4092"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+--000000000000602abe05f37f4092
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-But, from Documentation/trace/ftrace.rst:
+On 1/30/23 02:09, Leon Romanovsky wrote:
+> On Sun, Jan 29, 2023 at 01:17:43PM -0800, Florian Fainelli wrote:
+>>
+>>
+>> On 1/29/2023 1:42 AM, Leon Romanovsky wrote:
+>>> On Thu, Jan 26, 2023 at 04:08:19PM -0800, Florian Fainelli wrote:
+>>>> Occasionnaly we may get oversized packets from the hardware which
+>>>> exceed the nomimal 2KiB buffer size we allocate SKBs with. Add an early
+>>>> check which drops the packet to avoid invoking skb_over_panic() and move
+>>>> on to processing the next packet.
+>>>>
+>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>> ---
+>>>>    drivers/net/ethernet/broadcom/genet/bcmgenet.c | 8 ++++++++
+>>>>    1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+>>>> index 21973046b12b..d937daa8ee88 100644
+>>>> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+>>>> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+>>>> @@ -2316,6 +2316,14 @@ static unsigned int bcmgenet_desc_rx(struct bcmgenet_rx_ring *ring,
+>>>>    			  __func__, p_index, ring->c_index,
+>>>>    			  ring->read_ptr, dma_length_status);
+>>>> +		if (unlikely(len > RX_BUF_LENGTH)) {
+>>>> +			netif_err(priv, rx_status, dev, "oversized packet\n");
+>>>
+>>> I don't think that it is wise move to print to dmesg something that can
+>>> be triggered by user over network.
+>>
+>> A frame larger than RX_BUF_LENGTH intentionally received would be segmented
+>> by the MAC, we have seen this happen however while playing with unsafe clock
+>> ratios for instance or when there are insufficient credits given to the
+>> Ethernet MAC to write frames into DRAM. The print is consistent with other
+>> errors that are captured and is only enabled if the appropriate ethtool
+>> message level bitmask is set.
+> 
+> I saw other prints in that function, but you add new one.
+> Won't netif_err() be printed by default in almost all distro?
 
-  Before 4.1, all ftrace tracing control files were within the debugfs
-  file system, which is typically located at /sys/kernel/debug/tracing.
-  For backward compatibility, when mounting the debugfs file system,
-  the tracefs file system will be automatically mounted at:
+Do distributions alter the drive default message level:
 
-  /sys/kernel/debug/tracing
-
-Many comments and Kconfig help messages in the tracing code still refer
-to this older debugfs path, so let's update them to avoid confusion.
-
-Signed-off-by: Ross Zwisler <zwisler@google.com>
----
- include/linux/kernel.h                    |  2 +-
- include/linux/tracepoint.h                |  4 ++--
- kernel/trace/Kconfig                      | 20 ++++++++++----------
- kernel/trace/kprobe_event_gen_test.c      |  2 +-
- kernel/trace/ring_buffer.c                |  2 +-
- kernel/trace/synth_event_gen_test.c       |  2 +-
- kernel/trace/trace.c                      |  2 +-
- samples/user_events/example.c             |  4 ++--
- scripts/tracing/draw_functrace.py         |  6 +++---
- scripts/tracing/ftrace-bisect.sh          |  4 ++--
- tools/lib/api/fs/tracing_path.c           |  4 ++--
- tools/lib/traceevent/event-parse.c        |  8 ++++----
- tools/tracing/latency/latency-collector.c |  2 +-
- 13 files changed, 31 insertions(+), 31 deletions(-)
-
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index fe6efb24d151..40bce7495af8 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -297,7 +297,7 @@ bool mac_pton(const char *s, u8 *mac);
-  *
-  * Use tracing_on/tracing_off when you want to quickly turn on or off
-  * tracing. It simply enables or disables the recording of the trace events.
-- * This also corresponds to the user space /sys/kernel/debug/tracing/tracing_on
-+ * This also corresponds to the user space /sys/kernel/tracing/tracing_on
-  * file, which gives a means for the kernel and userspace to interact.
-  * Place a tracing_off() in the kernel where you want tracing to end.
-  * From user space, examine the trace, and then echo 1 > tracing_on
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 4b33b95eb8be..fa1004fcf810 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -471,7 +471,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
-  *	* This is how the trace record is structured and will
-  *	* be saved into the ring buffer. These are the fields
-  *	* that will be exposed to user-space in
-- *	* /sys/kernel/debug/tracing/events/<*>/format.
-+ *	* /sys/kernel/tracing/events/<*>/format.
-  *	*
-  *	* The declared 'local variable' is called '__entry'
-  *	*
-@@ -531,7 +531,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
-  * tracepoint callback (this is used by programmatic plugins and
-  * can also by used by generic instrumentation like SystemTap), and
-  * it is also used to expose a structured trace record in
-- * /sys/kernel/debug/tracing/events/.
-+ * /sys/kernel/tracing/events/.
-  *
-  * A set of (un)registration functions can be passed to the variant
-  * TRACE_EVENT_FN to perform any (un)registration work.
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index e9e95c790b8e..4b85674935d7 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -232,7 +232,7 @@ config DYNAMIC_FTRACE
- 	  enabled, and the functions not enabled will not affect
- 	  performance of the system.
- 
--	  See the files in /sys/kernel/debug/tracing:
-+	  See the files in /sys/kernel/tracing:
- 	    available_filter_functions
- 	    set_ftrace_filter
- 	    set_ftrace_notrace
-@@ -292,7 +292,7 @@ config STACK_TRACER
- 	select KALLSYMS
- 	help
- 	  This special tracer records the maximum stack footprint of the
--	  kernel and displays it in /sys/kernel/debug/tracing/stack_trace.
-+	  kernel and displays it in /sys/kernel/tracing/stack_trace.
- 
- 	  This tracer works by hooking into every function call that the
- 	  kernel executes, and keeping a maximum stack depth value and
-@@ -332,7 +332,7 @@ config IRQSOFF_TRACER
- 	  disabled by default and can be runtime (re-)started
- 	  via:
- 
--	      echo 0 > /sys/kernel/debug/tracing/tracing_max_latency
-+	      echo 0 > /sys/kernel/tracing/tracing_max_latency
- 
- 	  (Note that kernel size and overhead increase with this option
- 	  enabled. This option and the preempt-off timing option can be
-@@ -356,7 +356,7 @@ config PREEMPT_TRACER
- 	  disabled by default and can be runtime (re-)started
- 	  via:
- 
--	      echo 0 > /sys/kernel/debug/tracing/tracing_max_latency
-+	      echo 0 > /sys/kernel/tracing/tracing_max_latency
- 
- 	  (Note that kernel size and overhead increase with this option
- 	  enabled. This option and the irqs-off timing option can be
-@@ -506,7 +506,7 @@ config TRACER_SNAPSHOT
- 	  Allow tracing users to take snapshot of the current buffer using the
- 	  ftrace interface, e.g.:
- 
--	      echo 1 > /sys/kernel/debug/tracing/snapshot
-+	      echo 1 > /sys/kernel/tracing/snapshot
- 	      cat snapshot
- 
- config TRACER_SNAPSHOT_PER_CPU_SWAP
-@@ -518,7 +518,7 @@ config TRACER_SNAPSHOT_PER_CPU_SWAP
- 	  full swap (all buffers). If this is set, then the following is
- 	  allowed:
- 
--	      echo 1 > /sys/kernel/debug/tracing/per_cpu/cpu2/snapshot
-+	      echo 1 > /sys/kernel/tracing/per_cpu/cpu2/snapshot
- 
- 	  After which, only the tracing buffer for CPU 2 was swapped with
- 	  the main tracing buffer, and the other CPU buffers remain the same.
-@@ -565,7 +565,7 @@ config PROFILE_ANNOTATED_BRANCHES
- 	  This tracer profiles all likely and unlikely macros
- 	  in the kernel. It will display the results in:
- 
--	  /sys/kernel/debug/tracing/trace_stat/branch_annotated
-+	  /sys/kernel/tracing/trace_stat/branch_annotated
- 
- 	  Note: this will add a significant overhead; only turn this
- 	  on if you need to profile the system's use of these macros.
-@@ -578,7 +578,7 @@ config PROFILE_ALL_BRANCHES
- 	  taken in the kernel is recorded whether it hit or miss.
- 	  The results will be displayed in:
- 
--	  /sys/kernel/debug/tracing/trace_stat/branch_all
-+	  /sys/kernel/tracing/trace_stat/branch_all
- 
- 	  This option also enables the likely/unlikely profiler.
- 
-@@ -629,8 +629,8 @@ config BLK_DEV_IO_TRACE
- 	  Tracing also is possible using the ftrace interface, e.g.:
- 
- 	    echo 1 > /sys/block/sda/sda1/trace/enable
--	    echo blk > /sys/kernel/debug/tracing/current_tracer
--	    cat /sys/kernel/debug/tracing/trace_pipe
-+	    echo blk > /sys/kernel/tracing/current_tracer
-+	    cat /sys/kernel/tracing/trace_pipe
- 
- 	  If unsure, say N.
- 
-diff --git a/kernel/trace/kprobe_event_gen_test.c b/kernel/trace/kprobe_event_gen_test.c
-index c736487fc0e4..4850fdfe27f1 100644
---- a/kernel/trace/kprobe_event_gen_test.c
-+++ b/kernel/trace/kprobe_event_gen_test.c
-@@ -21,7 +21,7 @@
-  * Then:
-  *
-  * # insmod kernel/trace/kprobe_event_gen_test.ko
-- * # cat /sys/kernel/debug/tracing/trace
-+ * # cat /sys/kernel/tracing/trace
-  *
-  * You should see many instances of the "gen_kprobe_test" and
-  * "gen_kretprobe_test" events in the trace buffer.
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index b21bf14bae9b..c4ad4939d149 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -2868,7 +2868,7 @@ rb_check_timestamp(struct ring_buffer_per_cpu *cpu_buffer,
- 		  sched_clock_stable() ? "" :
- 		  "If you just came from a suspend/resume,\n"
- 		  "please switch to the trace global clock:\n"
--		  "  echo global > /sys/kernel/debug/tracing/trace_clock\n"
-+		  "  echo global > /sys/kernel/tracing/trace_clock\n"
- 		  "or add trace_clock=global to the kernel command line\n");
- }
- 
-diff --git a/kernel/trace/synth_event_gen_test.c b/kernel/trace/synth_event_gen_test.c
-index 8d77526892f4..8dfe85499d4a 100644
---- a/kernel/trace/synth_event_gen_test.c
-+++ b/kernel/trace/synth_event_gen_test.c
-@@ -22,7 +22,7 @@
-  * Then:
-  *
-  * # insmod kernel/trace/synth_event_gen_test.ko
-- * # cat /sys/kernel/debug/tracing/trace
-+ * # cat /sys/kernel/tracing/trace
-  *
-  * You should see several events in the trace buffer -
-  * "create_synth_test", "empty_synth_test", and several instances of
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index a7fe0e115272..4a034b9c429d 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1143,7 +1143,7 @@ void tracing_snapshot_instance(struct trace_array *tr)
-  *
-  * Note, make sure to allocate the snapshot with either
-  * a tracing_snapshot_alloc(), or by doing it manually
-- * with: echo 1 > /sys/kernel/debug/tracing/snapshot
-+ * with: echo 1 > /sys/kernel/tracing/snapshot
-  *
-  * If the snapshot buffer is not allocated, it will stop tracing.
-  * Basically making a permanent snapshot.
-diff --git a/samples/user_events/example.c b/samples/user_events/example.c
-index d06dc24156ec..18e34c9d708e 100644
---- a/samples/user_events/example.c
-+++ b/samples/user_events/example.c
-@@ -23,8 +23,8 @@
- #endif
- 
- /* Assumes debugfs is mounted */
--const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
--const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
-+const char *data_file = "/sys/kernel/tracing/user_events_data";
-+const char *status_file = "/sys/kernel/tracing/user_events_status";
- 
- static int event_status(long **status)
- {
-diff --git a/scripts/tracing/draw_functrace.py b/scripts/tracing/draw_functrace.py
-index 438516bdfb3c..42fa87300941 100755
---- a/scripts/tracing/draw_functrace.py
-+++ b/scripts/tracing/draw_functrace.py
-@@ -12,9 +12,9 @@ calls. Only the functions's names and the call time are provided.
- 
- Usage:
- 	Be sure that you have CONFIG_FUNCTION_TRACER
--	# mount -t debugfs nodev /sys/kernel/debug
--	# echo function > /sys/kernel/debug/tracing/current_tracer
--	$ cat /sys/kernel/debug/tracing/trace_pipe > ~/raw_trace_func
-+	# mount -t tracefs nodev /sys/kernel/tracing
-+	# echo function > /sys/kernel/tracing/current_tracer
-+	$ cat /sys/kernel/tracing/trace_pipe > ~/raw_trace_func
- 	Wait some times but not too much, the script is a bit slow.
- 	Break the pipe (Ctrl + Z)
- 	$ scripts/tracing/draw_functrace.py < ~/raw_trace_func > draw_functrace
-diff --git a/scripts/tracing/ftrace-bisect.sh b/scripts/tracing/ftrace-bisect.sh
-index 926701162bc8..53244096489e 100755
---- a/scripts/tracing/ftrace-bisect.sh
-+++ b/scripts/tracing/ftrace-bisect.sh
-@@ -12,7 +12,7 @@
- #   (note, if this is a problem with function_graph tracing, then simply
- #    replace "function" with "function_graph" in the following steps).
- #
--#  # cd /sys/kernel/debug/tracing
-+#  # cd /sys/kernel/tracing
- #  # echo schedule > set_ftrace_filter
- #  # echo function > current_tracer
- #
-@@ -35,7 +35,7 @@
- #
- #   Reboot back to test kernel.
- #
--#     # cd /sys/kernel/debug/tracing
-+#     # cd /sys/kernel/tracing
- #     # mv ~/test-file ~/full-file
- #
- # If it didn't crash.
-diff --git a/tools/lib/api/fs/tracing_path.c b/tools/lib/api/fs/tracing_path.c
-index 5afb11b30fca..ca95310f7d8e 100644
---- a/tools/lib/api/fs/tracing_path.c
-+++ b/tools/lib/api/fs/tracing_path.c
-@@ -14,8 +14,8 @@
- #include "tracing_path.h"
- 
- static char tracing_mnt[PATH_MAX]  = "/sys/kernel/debug";
--static char tracing_path[PATH_MAX]        = "/sys/kernel/debug/tracing";
--static char tracing_events_path[PATH_MAX] = "/sys/kernel/debug/tracing/events";
-+static char tracing_path[PATH_MAX]        = "/sys/kernel/tracing";
-+static char tracing_events_path[PATH_MAX] = "/sys/kernel/tracing/events";
- 
- static void __tracing_path_set(const char *tracing, const char *mountpoint)
- {
-diff --git a/tools/lib/traceevent/event-parse.c b/tools/lib/traceevent/event-parse.c
-index 8e24c4c78c7f..9532bcf4138d 100644
---- a/tools/lib/traceevent/event-parse.c
-+++ b/tools/lib/traceevent/event-parse.c
-@@ -6664,7 +6664,7 @@ static void parse_header_field(const char *field,
-  * This parses the header page format for information on the
-  * ring buffer used. The @buf should be copied from
-  *
-- * /sys/kernel/debug/tracing/events/header_page
-+ * /sys/kernel/tracing/events/header_page
-  */
- int tep_parse_header_page(struct tep_handle *tep, char *buf, unsigned long size,
- 			  int long_size)
-@@ -6758,7 +6758,7 @@ static int find_event_handle(struct tep_handle *tep, struct tep_event *event)
-  *
-  * These files currently come from:
-  *
-- * /sys/kernel/debug/tracing/events/.../.../format
-+ * /sys/kernel/tracing/events/.../.../format
-  */
- static enum tep_errno parse_format(struct tep_event **eventp,
- 				   struct tep_handle *tep, const char *buf,
-@@ -6912,7 +6912,7 @@ __parse_event(struct tep_handle *tep,
-  *
-  * These files currently come from:
-  *
-- * /sys/kernel/debug/tracing/events/.../.../format
-+ * /sys/kernel/tracing/events/.../.../format
-  */
- enum tep_errno tep_parse_format(struct tep_handle *tep,
- 				struct tep_event **eventp,
-@@ -6934,7 +6934,7 @@ enum tep_errno tep_parse_format(struct tep_handle *tep,
-  *
-  * These files currently come from:
-  *
-- * /sys/kernel/debug/tracing/events/.../.../format
-+ * /sys/kernel/tracing/events/.../.../format
-  */
- enum tep_errno tep_parse_event(struct tep_handle *tep, const char *buf,
- 			       unsigned long size, const char *sys)
-diff --git a/tools/tracing/latency/latency-collector.c b/tools/tracing/latency/latency-collector.c
-index 59a7f2346eab..0fd9c747d396 100644
---- a/tools/tracing/latency/latency-collector.c
-+++ b/tools/tracing/latency/latency-collector.c
-@@ -1584,7 +1584,7 @@ static void *do_printloop(void *arg)
- 		/*
- 		 * Toss a coin to decide if we want to sleep before printing
- 		 * out the backtrace. The reason for this is that opening
--		 * /sys/kernel/debug/tracing/trace will cause a blackout of
-+		 * /sys/kernel/tracing/trace will cause a blackout of
- 		 * hundreds of ms, where no latencies will be noted by the
- 		 * latency tracer. Thus by randomly sleeping we try to avoid
- 		 * missing traces systematically due to this. With this option
+   #define GENET_MSG_DEFAULT       (NETIF_MSG_DRV | NETIF_MSG_PROBE | \
+                                   NETIF_MSG_LINK)
+?
 -- 
-2.39.1.456.gfc5497dd1b-goog
+Florian
 
+
+--000000000000602abe05f37f4092
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIF7kHOf6I+I1F99P
+Z+NtE3jRgLggoa9A59Cxzfjbnf/nMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDEzMDE4MTkwOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAkbHMmwC5uhrXDRLIfkxAyM0UOC7kmrBv1
+bvweBYDof6XSocDaLwhkS/BBwMDIr+4Tw0SEnzLc/khvtyy9zWOqR7Wal6Xi9YR4V1PoJY9RVF1f
+NqbDGU0FirAMh1SObkW+LN1b7kut7stwezyyqPOZUu4WJM837GLXKQMx8WxYtRybSqmYLcHiKbGc
+9fSgrbP+MDi7nypplWyYzCBtNGgcF8u2KSyJOrHnxBGfoqq4xW208GRd2lBapCcAUABJvV4KQhKc
+YbUhComctgrf8wZlIwWAeBS56tbvpInKzYAv8AUUmgIjtnSVk3qrTFHLNAOwxXKHOUbf/HMSh13e
+SACQ
+--000000000000602abe05f37f4092--
