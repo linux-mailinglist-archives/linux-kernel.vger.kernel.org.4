@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FE4681022
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57D568148A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbjA3OAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:00:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S238082AbjA3PQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:16:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236838AbjA3OAR (ORCPT
+        with ESMTP id S236908AbjA3PP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:00:17 -0500
+        Mon, 30 Jan 2023 10:15:56 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5D3CDD7;
-        Mon, 30 Jan 2023 06:00:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC209F;
+        Mon, 30 Jan 2023 07:15:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0F0EB81181;
-        Mon, 30 Jan 2023 14:00:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392C7C433D2;
-        Mon, 30 Jan 2023 13:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675087199;
-        bh=quv2gJS96/kOS1MFut+Kr8y2xgXp9TjMtnbVARKYfnA=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F4DCB810C5;
+        Mon, 30 Jan 2023 15:14:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92B30C433EF;
+        Mon, 30 Jan 2023 15:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675091697;
+        bh=a90xOxXdB9OfE6RDvIPeW0/Rs9qLjfMK4/iU5SQsr+M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uzvOKTqQcQtzIIYAvD3n65utmLEdbE58vLC9z8CbeuI/5qddveBKaGeXNbT4OaHgZ
-         YimHeCEjCEiFBh8l1MMolnCghKtIA450S8/uzLCwajTPROvYYcelpreaYahekalF5d
-         EzDvzS7i8xsGStq90NxuXGM40m9mWlVXXx22AlcVijXSi0TmjpDhjSaI2M3xo/262F
-         +aNSjnUO7vpKBEInm90075StyXYX4cqGAmu8ZJFPQL2iInWCAVGwYs3QUdXlbNe3Er
-         CO10wLAfbhGO8OmCkcyqrHWL8UALZfAkhApa59UQeAK6S6CHsXyt7lCNNsLD6dLZZC
-         B0lzuMnILBFjg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 00BFC405BE; Mon, 30 Jan 2023 10:59:54 -0300 (-03)
-Date:   Mon, 30 Jan 2023 10:59:54 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     Mike Leach <mike.leach@linaro.org>,
-        linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        mathieu.poirier@linaro.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH] perf: cs-etm: Update decoder code for OpenCSD version 1.4
-Message-ID: <Y9fNWrBIN8o1Ww25@kernel.org>
-References: <20230120153706.20388-1-mike.leach@linaro.org>
- <77f9eab5-4fb2-cf96-9628-2a816d519d61@arm.com>
- <CAP-5=fWNT9XXMN+97TcprxWA+FRJpAy4T=XC9RHrOdKfcKi8_w@mail.gmail.com>
- <f17a40d4-2a37-fe7a-eac9-4ac1215e2c20@arm.com>
+        b=Qhg7Gq0GRWzDG5WdtbKlYpHeurP+ox7s6RY3ZxVqgYy4MD+SlfNvlTqMud9BvVmgn
+         toS83V+xCfsTDkxn6G+XbNfr+xoGIos68x1ytoBWb742IgNud/mWDZybq2qAo8pU5w
+         j94Ed+1zOKFp+EUvby24Iig8Cp8L9HtfPoscQqn4=
+Date:   Mon, 30 Jan 2023 15:01:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?0JbQsNC90LTQsNGA0L7QstC40Ycg0J3QuNC60LjRgtCwINCY0LPQvtGA0LU=?=
+         =?utf-8?B?0LLQuNGH?= <n.zhandarovich@fintech.ru>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>
+Subject: Re: [PATCH 5.10 1/1] mt76: fix mt7615_init_tx_queues() return value
+Message-ID: <Y9fNs5QWbrJh+yH6@kroah.com>
+References: <20230130123655.86339-1-n.zhandarovich@fintech.ru>
+ <20230130123655.86339-2-n.zhandarovich@fintech.ru>
+ <Y9fAkt/5BRist//g@kroah.com>
+ <b945bd5f3d414ac5bc589d65cf439f7b@fintech.ru>
+ <Y9fIFirNHNP06e1L@kroah.com>
+ <e17c785dbacf4605a726cc939bee6533@fintech.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f17a40d4-2a37-fe7a-eac9-4ac1215e2c20@arm.com>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e17c785dbacf4605a726cc939bee6533@fintech.ru>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,56 +69,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jan 30, 2023 at 12:05:53PM +0000, James Clark escreveu:
-> On 24/01/2023 21:50, Ian Rogers wrote:
-> > On Fri, Jan 20, 2023 at 7:47 AM James Clark <james.clark@arm.com> wrote:
-> >> On 20/01/2023 15:37, Mike Leach wrote:
-> >>> OpenCSD version 1.4 is released with support for FEAT_ITE.
-> >>> This adds a new packet type, with associated output element ID in
-> >>> the packet type enum - OCSD_GEN_TRC_ELEM_INSTRUMENTATION.
-> >>>
-> >>> As we just ignore this packet in perf, add to the switch statement
-> >>> to avoid the "enum not handled in switch error", but conditionally
-> >>> so as not to break the perf build for older OpenCSD installations.
-> >>>
-> >>> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> >>> ---
-> >>>  tools/perf/util/cs-etm-decoder/cs-etm-decoder.c | 3 +++
-> >>>  1 file changed, 3 insertions(+)
-> >>>
-> >>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> >>> index fa3aa9c0fb2e..48e7121880a9 100644
-> >>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> >>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> >>> @@ -604,6 +604,9 @@ static ocsd_datapath_resp_t cs_etm_decoder__gen_trace_elem_printer(
-> >>>       case OCSD_GEN_TRC_ELEM_CUSTOM:
-> >>>       case OCSD_GEN_TRC_ELEM_SYNC_MARKER:
-> >>>       case OCSD_GEN_TRC_ELEM_MEMTRANS:
-> >>> +#if (OCSD_VER_NUM >= 0x010400)
-> >>> +     case OCSD_GEN_TRC_ELEM_INSTRUMENTATION:
-> >>> +#endif
-> >>>       default:
-> >>>               break;
-> >>>       }
-> >>
-> >> Checked the build with both old and new versions of OpenCSD and it's ok:
-> >>
-> >> Reviewed-by: James Clark <james.clark@arm.com>
+On Mon, Jan 30, 2023 at 01:48:24PM +0000, Жандарович Никита Игоревич wrote:
+> > On Mon, Jan 30, 2023 at 01:27:26PM +0000, Жандарович Никита Игоревич
+> > wrote:
+> > > > What is the git commit id of this upstream?
+> > > >
+> > > > And I can't apply this as-is for the obvious reason it would mess up
+> > > > the changelog, how did you create this?
+> > > >
+> > > > confused,
+> > > >
+> > > > greg k-h
+> > >
+> > > Commit in question is b671da33d1c5973f90f098ff66a91953691df582
+> > > upstream. I wasn't certain it makes sense to backport the whole patch
+> > > as only a small portion of it pertains to the fault at question.
 > > 
-> > Acked-by: Ian Rogers <irogers@google.com>
-> > 
-> > Thanks,
-> > Ian
+> > What is the "fault"?
 > 
-> Hi Arnaldo,
-> 
-> Is it ok to merge this change? If anyone is building with the latest
-> OpenCSD they will get a build error on the unhandled switch case, and we
-> just got it in our CI too.
-> 
-> I suppose we could disable the warning around this switch, but it's
-> pretty rare to add new packets so might be best to leave it.
+> In 5.10.y "mt7615_init_tx_queues() returns 0 regardless of how final
+> mt7615_init_tx_queue() performs. If mt7615_init_tx_queue() fails (due to
+> memory issues, for instance), parent function will still erroneously
+> return 0."
 
-Thanks, applied.
+And how can memory issues actually be triggered in a real system?  Is
+this a fake problem or something you can validate and verify works
+properly?
 
-- Arnaldo
+Don't worry about fake issues for stable backports please.
+
+thanks,
+
+greg k-h
