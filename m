@@ -2,226 +2,377 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FB768137A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883D668137B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236875AbjA3Ohg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
+        id S237755AbjA3OiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:38:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235123AbjA3Ohf (ORCPT
+        with ESMTP id S235834AbjA3OiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:37:35 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2129.outbound.protection.outlook.com [40.107.215.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1351AF;
-        Mon, 30 Jan 2023 06:37:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SG9hDITvLtNPgKgQ7AUbj7D/fy/aCFPWia1sJ0jxsBNxbbii6gkeVWTCo+PZJU2WTzlRIfROlKK4K/aSDEPnFe889Hmohv7WMo7X31qWzwLtjFLOdv48aTx1/nZ4qrzxI8EvkTPs0Vc8ea0ChPFnPNmi2tNrkDNWPpEGGC+30fTndzS1K8XuKelKvU13Ok2fmn+ERL1RXaK2I8FwyDcJJnr61CYMJU7esoCV5SX82t274I+2f0b0j1V82r4huG7s884s1xK4PJP/Mmo386AeWtVGtPK/m+U0l3TNfE2luG8wjo1nmKLwfU0Ma0GCstfPYAv4uhY7ia1C691J+JNQ/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qvn/xcYgPT0SfzaBSDbKjZfZxVwhUWu7kCGV29T+08M=;
- b=eNtJ6sMwrmfxjlcAv48QPFgmEQJdmrs7MGzgQ3s5tsg0PWPme73SXKNu9SBbVEQtezQNnDaph6xxV55LunQgruT7E8I42VumXvVVU3eBpky8HHM0M6Frd8PyNGDDo7pU82TPDyMy8Be43I6aubHCdcD6sumj9KTAirEmuCZVdfeAsxauLOSE6OcuxRWig35GVjzwh8Vsm1UeKgeIPQ1Pbwwl186tx/W97+c3HRdcUnH3zeMwl0kUI7PwZmEubwQUYmuU+pZyafw+fFqQq9C9HlVlc031ncyV4BHrkGekb8L1kgU3b/pKj6w1jU3DgdrGYGMwfUGR1ESlkrVEifXZow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qvn/xcYgPT0SfzaBSDbKjZfZxVwhUWu7kCGV29T+08M=;
- b=LwxHQmPLNDTU7IfblIBz1bBArDUT0++LiKn/SsGDwSL6ZtwALYlgDsUFKmn3u5huzEUYGrr4yGNTOboLGr12+gZcjqLoNBzkXy4yxTjeGyZvJKbYSXz80HFMgwk9at1qREC49BkXOQ2XZdbvaPa1g8JiboWoBwvjEFs5OzLfpm4=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYCPR01MB8677.jpnprd01.prod.outlook.com (2603:1096:400:13b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 14:37:30 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::343d:7339:78e5:a46e%8]) with mapi id 15.20.6043.036; Mon, 30 Jan 2023
- 14:37:30 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-CC:     Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: RE: [PATCH] xhci: host: renesas: drop excessive Kconfig selects
-Thread-Topic: [PATCH] xhci: host: renesas: drop excessive Kconfig selects
-Thread-Index: AQHZNKtnQ0HXj9mKKUmvHjl/Dm7Wq6628aiQ
-Date:   Mon, 30 Jan 2023 14:37:30 +0000
-Message-ID: <OS0PR01MB592264B5D8BB98A1B2F759C086D39@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230130130425.310410-1-arnd@kernel.org>
-In-Reply-To: <20230130130425.310410-1-arnd@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYCPR01MB8677:EE_
-x-ms-office365-filtering-correlation-id: 2a91514b-e18a-40c5-0d2a-08db02cf8427
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v/q3zeIIb5MLkZQnBjTh0XMHI3mQbcf29jD5q9vyjFYJhxl6KtOwrCLVXF21PChJhdms/KQ5DmiHWhaeFkEXXK7XGphekfOu1xwtDw3T6ZeaeVmIcbgTWySSq09u5kPU7pYbLhjn0ciDxWzxr8WhdUtyzOLBbHTYgjDHs7V1chdTaZG9RaAqKN81XMRvIug9b4StfJ+HMjPLuvNr5m0s1aFz6tA0yR/KiYsBFuco9JH7RYhJHwTGV5pSBEIWvgyYyKhR8aVszgixnq1UAD5rGUCxOaxvtr96ptDR63/OfzlMFcvPhViKH4rK5KiNZs9oICM1uydhZN5Exed1Q6z4+VIiRHybutSLJidWpA43ewVa1LHVjd8k4K0Qq2KPIyRj5/kg1hCWzx9BbBFWshImR0P9fXUmZ2ngMocMvSN185VnewI973fhQeAI6PEVtOyGjmoQYFag6kXsdcjl4iXjJM4ZIieVrWwCOF9Vq1wTjKrrvtwAwxwWu7E6wZDbRiteQYo82NuUqHCqMWidP1PD3UCJjAqehQVUcVQEb+R87kdrKzjEOSe8Ve6Y7LwgqOhVYUgHe6mpdggZbBwQUmX+g2g6sQqFwHuAbp0WosjVTER20dfe3X5AtwVlAqngUCCgSzHbLmb/8bf+Y04w0kl2IIhROUJCgKrqy7DaZlPkeLCKMcdkEc9+1mvUwbh1Bk5fGXx2GJz+/f6qs6FR6VtIdw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(346002)(376002)(366004)(451199018)(52536014)(5660300002)(7416002)(8936002)(41300700001)(38100700002)(122000001)(38070700005)(55016003)(33656002)(86362001)(2906002)(110136005)(54906003)(186003)(478600001)(26005)(9686003)(7696005)(71200400001)(6506007)(316002)(76116006)(4326008)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(83380400001)(107886003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UDbNypZdUemAAZ1yLEIuAvmbaBzCJZj51kLVn6UkUtkF9vMvN5qAMmaQ0Vq1?=
- =?us-ascii?Q?jUg0XHo9tXWKk9rPs0bLvFFffM+PovPk/3jpmvEPJyqh4LffkoJomuW5H0za?=
- =?us-ascii?Q?1NyDrheq48jhKMfNwoGQ1bx/yMOkneGlK8rXQhuvDKEq/OyBm4PMRCuqZS92?=
- =?us-ascii?Q?L2irnh+90GrERTO5Uu5B985kdMYZ2WklfcRYPvLmZHSvFDUATPw9wJ5SUrBz?=
- =?us-ascii?Q?zO8ZQm+HOxdfR270bAEFVrrsFSGm/MSM0d0xzOkO68Y9UN0rNXBW7svElWYX?=
- =?us-ascii?Q?lUGu5k0HdyGAt3vTv68dWxHYU3n3TLDDJadfSYKxhDYS+jcGT09TAlxNhyHs?=
- =?us-ascii?Q?9MR3YnopPY+sR9JWlyWRLI77GFLdSRFkYIzzhNgz+0aebSnYp/x4XVMK2XPD?=
- =?us-ascii?Q?JZSWm7OfnQPrk+vzIa3z3DZ/2aTGviBAZgRpJ1EuCYjdE8NxwjODUNUmBdx/?=
- =?us-ascii?Q?XGkV1fiiL1oKdjWxJ03Nd45UQ7CkchitqQIoKxz4uN/s56W5fbsH8GoOqGPz?=
- =?us-ascii?Q?wcn+vtNrj4t3lnmQltBRe+YwzN3CwQw8D/yV8j5My12s6hSqApF7IiYiwsty?=
- =?us-ascii?Q?/fNjKN5vq5vv0s8t5h292IsRGXx2ezAGMerFNFBRwXvtRaToxJtjALb/2YDU?=
- =?us-ascii?Q?DxnHDMr/YznLX4w7I1fdQB9TBnPR0G9AlPMD2Y9G+aYCK95NV/1WktuaM42d?=
- =?us-ascii?Q?rlgZ6HWu//V1ERuk6L+g5cTWl01ngb0qhCys5Yo+0FpoO9NcHAujRPJ8ccib?=
- =?us-ascii?Q?2ZB+JUjYA/EUTocXRbUXeHrRvWTP5c4n2JYviDbH95e9sAK/5aDCdlxm2BZd?=
- =?us-ascii?Q?oehD6siYK4nMLtLo0Eg7CUwqS4LUg2n7lUwt8SfRTCZlLQKCqdouU0IGcrpC?=
- =?us-ascii?Q?wA/H/0uTyl3Kq8pzGojfBjD3Uezq0qUtZKDneOMVP3R32pm13jIMcF9HpShj?=
- =?us-ascii?Q?c4FHH5ZTZocKpyOOsgdKLMq9jogFTti6IiLwEbBoecqyUPTlIA7oLNapv0la?=
- =?us-ascii?Q?hTri0zJ9ji1Q4m0DDkOnT6St8uzMLSz7d79WyODcGgGHJ1H81CGAJIpgngjr?=
- =?us-ascii?Q?atkuNsvHY+zPft721F8ONcIx5Q6OTpw3AIeQ8kVOV3u/4lk8PQ87vrcnNust?=
- =?us-ascii?Q?gHpJ9JvQRmtvy9QN0JKDCpl0qBNILRBc3wXPd/oe2goePthTmGG4lCpjzdzA?=
- =?us-ascii?Q?E17bnsBdkrA08GJV94SsP6SOQNmje6OBJ7lGgU34Dxdw3fEdJWCzBtIWiIZX?=
- =?us-ascii?Q?C1D/UBAtgq5BokinATsmGVv+xRPwLckFTkeQpCZXNqLKnjJPzmNFmXi4OD6f?=
- =?us-ascii?Q?asUyqf87BZfzoxdhMaYYOC2UKBbXjQQUDgvDCJLLRxBGN/dXzaO5+FqWsiVD?=
- =?us-ascii?Q?ZBOc9K88jeIWR0Cuu+mhZS6IgX5IKI2EyHfssh7Y7Odu5BgCbx3PrcHhysDF?=
- =?us-ascii?Q?gEer/2LGq8wmyUDpaFGFT/C11rEvWklc6llZgD83m6F/6bW7HeaYR6x+Zaku?=
- =?us-ascii?Q?BL3i0618K27kmsk4Imwdc7IukBeQvmagQthUEQWONoF5KGGHOj/Uvx+wXHA6?=
- =?us-ascii?Q?oLqSs5nDqjcKKbyz9Ho/Md3HfnGeNFW+Onb3D+h4GfpL5N7ARyEXZaR8HUVa?=
- =?us-ascii?Q?mQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 30 Jan 2023 09:38:07 -0500
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B6383F4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:38:03 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=guorui.yu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VaT7RNZ_1675089477;
+Received: from 30.121.12.33(mailfrom:GuoRui.Yu@linux.alibaba.com fp:SMTPD_---0VaT7RNZ_1675089477)
+          by smtp.aliyun-inc.com;
+          Mon, 30 Jan 2023 22:37:58 +0800
+Message-ID: <f3921d86-d562-2167-680b-07604be7f46f@linux.alibaba.com>
+Date:   Mon, 30 Jan 2023 22:37:56 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a91514b-e18a-40c5-0d2a-08db02cf8427
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 14:37:30.1538
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 914X9qYnuyMQO8Kw0FaKhxCWMiWSxsY/VY/7hNeQCrghgT9DmsZmjRgKu2Q66owPtEymg6USgMdg9v8vQEiQGW/Cbt+s4nprwfI04pv2XlE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8677
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC] swiotlb: Add a new cc-swiotlb implementation for
+ Confidential VMs
+To:     Robin Murphy <robin.murphy@arm.com>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org, konrad.wilk@oracle.com,
+        linux-coco@lists.linux.dev, hch@lst.de
+References: <20230128083254.86012-1-GuoRui.Yu@linux.alibaba.com>
+ <0ee204fa-091d-43d9-9c2c-0c64cf0c1fdd@arm.com>
+From:   Guorui Yu <GuoRui.Yu@linux.alibaba.com>
+In-Reply-To: <0ee204fa-091d-43d9-9c2c-0c64cf0c1fdd@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd Bergmann,
+Hi Robin,
 
-Thanks for the patch.
+在 2023/1/30 21:03, Robin Murphy 写道:
+> On 2023-01-28 08:32, GuoRui.Yu wrote:
+>> This patch series adds a new swiotlb implementation, cc-swiotlb, for
+>> Confidential VMs (such as TDX and SEV-SNP). The new cc-swiotlb allocates
+>> the DMA TLB buffer dynamically in runtime instead of allocating at boot
+>> with a fixed size. Furthermore, future optimization and security
+>> enhancement could be applied on cc-swiotlb without "infecting" the
+>> legacy swiotlb.
+>>
+>> Background
+>> ==========
+>> Under COnfidential COmputing (CoCo) scenarios, the VMM cannot access
+>> guest memory directly but requires the guest to explicitly mark the
+>> memory as shared (decrypted). To make the streaming DMA mappings work,
+>> the current implementation relays on legacy SWIOTLB to bounce the DMA
+>> buffer between private (encrypted) and shared (decrypted) memory.
+>>
+>> However, the legacy swiotlb is designed for compatibility rather than
+>> efficiency and CoCo purpose, which will inevitably introduce some
+>> unnecessary restrictions.
+>>
+>> 1. Fixed immutable swiotlb size cannot accommodate to requirements of
+>> multiple devices. And 1GiB (current maximum size) of swiotlb in our
+>> testbed cannot afford multiple disks reads/writes simultaneously.
+> 
+> That's not a very logical argument - if a particular use-case needs a 
+> particular total amount of SWIOTLB capacity, then that's how much it 
+> needs. Whether that capacity is allocated up-front or allocated 
+> gradually over time doesn't affect that. The obvious solution to this 
+> issue as presented is "make the maximum size bigger", not "add a whole 
+> other SWIOTLB implementation".
+> 
 
-+ renesas-soc.
+The reason is all about the hotplugged devices.
 
-> Subject: [PATCH] xhci: host: renesas: drop excessive Kconfig selects
->=20
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The USB_XHCI_RZV2M and USB_RENESAS_USB3 select other drivers based on the
-> enabled SoC types, which leads to build failures when the dependencies ar=
-e
-> not met:
->=20
-> WARNING: unmet direct dependencies detected for USB_RZV2M_USB3DRD
->   Depends on [n]: USB_SUPPORT [=3Dy] && USB_GADGET [=3Dn] && (ARCH_R9A09G=
-011
-> [=3Dn] || COMPILE_TEST [=3Dy])
->   Selected by [m]:
->   - USB_XHCI_RZV2M [=3Dm] && USB_SUPPORT [=3Dy] && USB [=3Dy] && USB_XHCI=
-_HCD [=3Dm]
-> && USB_XHCI_PLATFORM [=3Dm] && (ARCH_R9A09G011 [=3Dn] || COMPILE_TEST [=
-=3Dy])
-> ERROR: modpost: "rzv2m_usb3drd_reset" [drivers/usb/host/xhci-plat-hcd.ko]
-> undefined!
->=20
-> All the selected symbols are actually user visible, so the correct approa=
-ch
-> here is to drop the incorrect 'select' statements and have users turn on
-> those drivers during kernel configuration as they would for any other
-> driver.
+In public cloud scenarios, customers often need to hotplug disks. The 
+number of disks can be up to about 50 disks, and the maximum IOPS of 
+each disk may reach 1 million IOPS. It may be difficult for the user to 
+estimate the SWIOTLB size he needs to use when the system starts. And 
+the same story also applies to the NIC devices.
 
-Both Host and device controller need USB3DRD driver to work.
-ie, the reason, added select statement to explicitly enable "USB_RZV2M_USB3=
-DRD"
-by default.
+>> 2. Fixed immutable IO_TLB_SIZE (2KiB) cannot satisfy various kinds of
+>> devices. At the moment, the minimal size of a swiotlb buffer is 2KiB,
+>> which will waste memory on small network packets (under 256 bytes) and
+>> decrease efficiency on a large block (up to 256KiB) size reads/writes of
+>> disks. And it is hard to have a trade-off on legacy swiotlb to rule them
+>> all.
+> 
+> That's clearly a general argument, so why should any improvement be 
+> arbitrarily restricted to Confidential Compute scenarios?
+> 
+My idea is that other scenarios can generally support modern high-speed 
+devices without swiotlb.
 
-I have tested this patch with below configurations in ARM64 defconfig.
+But almost all DMA allocations in CoCo scenarios need to go through 
+swiotlb for bouncing DMA buffer between the private and shared memory, 
+which makes this problem more prominent in CoCo scenarios.
 
-+CONFIG_USB_XHCI_RZV2M=3Dy
-+CONFIG_USB_RZV2M_USB3DRD=3Dy
+I guess the same logic may also apply to Xen, but I am not sure so it is 
+CoCo-limited feature for now.
 
->=20
-> Fixes: c52c9acc415e ("xhci: host: Add Renesas RZ/V2M SoC support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/usb/gadget/udc/Kconfig | 1 -
->  drivers/usb/host/Kconfig       | 3 ---
->  2 files changed, 4 deletions(-)
->=20
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kcon=
-fig
-> index 9b7a1681550f..1821004dd325 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -195,7 +195,6 @@ config USB_RENESAS_USB3
->  	tristate 'Renesas USB3.0 Peripheral controller'
->  	depends on ARCH_RENESAS || COMPILE_TEST
->  	depends on EXTCON
-> -	select USB_RZV2M_USB3DRD if ARCH_R9A09G011
->  	select USB_ROLE_SWITCH
->  	help
->  	   Renesas USB3.0 Peripheral controller is a USB peripheral controller
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig index
-> 4b5c5b1feb40..b975178b38bf 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -53,8 +53,6 @@ config USB_XHCI_PCI_RENESAS
->=20
->  config USB_XHCI_PLATFORM
->  	tristate "Generic xHCI driver for a platform device"
-> -	select USB_XHCI_RCAR if ARCH_RENESAS
+>> 3. The legacy swiotlb cannot efficiently support larger swiotlb buffers.
+>> In the worst case, the current implementation requires a full scan of
+>> the entire swiotlb buffer, which can cause severe performance hits.
+> 
+> Isn't that the main reason we just recently introduced the multiple area 
+> stuff?
+> 
 
-This change has nothing to do with RZ/V2M fixes. Currently USB_XHCI_RCAR is=
- enabled
-by default, with this change user has to enable it separately.
+Yes, this issue is mitigated by multiple area stuff partially, and I am 
+actually facing some issues current scanning logic (for example, it 
+keeps scan the tlb buffer forever and causes soft lookups[1]). And I 
+will keep track this issue (candidate) to give your more details about this.
 
-Maybe keep it here or add a separate patch for dropping it here and add it =
-to the defconfig??
+But my more intuitive thought is why do we need such a complex 
+allocation algorithm? If we only supported CoCo scenarios (or maybe 
+Xen), we might be able to have a more deterministic algorithm instead of 
+waiting for the results of the scan.
 
-Cheers,
-Biju
+[1] some details about the soft lookup:
 
-> -	select USB_XHCI_RZV2M if ARCH_R9A09G011
->  	help
->  	  Adds an xHCI host driver for a generic platform device, which
->  	  provides a memory space and an irq.
-> @@ -100,7 +98,6 @@ config USB_XHCI_RZV2M
->  	tristate "xHCI support for Renesas RZ/V2M SoC"
->  	depends on USB_XHCI_PLATFORM
->  	depends on ARCH_R9A09G011 || COMPILE_TEST
-> -	select USB_RZV2M_USB3DRD
->  	help
->  	  Say 'Y' to enable the support for the xHCI host controller
->  	  found in Renesas RZ/V2M SoC.
-> --
-> 2.39.0
+$ cat ./test.sh
+count=0
+while true; do
+         for i in {1..21};do
+                 mkfs.xfs -f /dev/nvme${i}n1 &> /dev/null &
+         done
+         wait
+         count=$((count+1))
+         echo $count
+done
 
+$ ./test.sh # It may take some time...
+
+$ # The system is not fully operational from here...
+
+$ echo l > /proc/sysrq-trigger
+...
+
+Every other CPU are waiting this core to exit the swiotlb_do_find_slots 
+loop.
+
+[10199.924385] NMI backtrace for cpu 49
+[10199.924386] CPU: 49 PID: 951 Comm: kworker/49:1H Kdump: loaded 
+Tainted: G            EL     6.2.0-rc6-swiotlb-upstream-bug-repreduce+ #70
+[10199.924388] Workqueue: kblockd blk_mq_run_work_fn
+[10199.924391] RIP: 0010:swiotlb_do_find_slots+0x1fe/0x3e0
+[10199.924393] Code: 77 21 48 8b 54 24 28 44 8b 7c 24 38 4c 8b 52 48 48 
+8d 14 49 48 c1 e2 03 45 39 7c 12 10 0f 83 f7 00 00 00 01 e8 bb 00 00 00 
+00 <41> 39 c0 0f 46 c3 39 f8 0f 85 4f ff ff f
+f 48 8b 74 24 40 48 8b 7c
+[10199.924394] RSP: 0018:ffffc90003913bb0 EFLAGS: 00000002
+[10199.924395] RAX: 00000000000000e5 RBX: 0000000000000000 RCX: 
+00000000001880e1
+[10199.924396] RDX: 00000000024c1518 RSI: 0000000000188000 RDI: 
+000000000000030c
+[10199.924397] RBP: 0000000000000004 R08: 0000000000008000 R09: 
+0000000000000002
+[10199.924397] R10: ffff88dad2400000 R11: 00000000001fffff R12: 
+00000000d8400000
+[10199.924398] R13: 000000012cc2a800 R14: 0000000000200000 R15: 
+0000000000000002
+[10199.924399] FS:  0000000000000000(0000) GS:ffff88dce5040000(0000) 
+knlGS:0000000000000000
+[10199.924400] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[10199.924401] CR2: 00007f8eb9dece80 CR3: 000000000640a004 CR4: 
+0000000000770ee0
+[10199.924401] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[10199.924402] DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 
+0000000000000400
+[10199.924403] PKRU: 55555554
+[10199.924403] Call Trace:
+[10199.924404]  <TASK>
+[10199.924405]  swiotlb_tbl_map_single+0xec/0x1f0
+[10199.924407]  swiotlb_map+0x5c/0x260
+[10199.924409]  ? nvme_pci_setup_prps+0x1ed/0x340
+[10199.924411]  dma_direct_map_page+0x12e/0x1c0
+[10199.924413]  nvme_map_data+0x304/0x370
+[10199.924415]  nvme_prep_rq.part.0+0x31/0x120
+[10199.924417]  nvme_queue_rq+0x77/0x1f0
+[10199.924420]  blk_mq_dispatch_rq_list+0x17e/0x670
+[10199.924422]  __blk_mq_sched_dispatch_requests+0x129/0x140
+[10199.924424]  blk_mq_sched_dispatch_requests+0x34/0x60
+[10199.924426]  __blk_mq_run_hw_queue+0x91/0xb0
+[10199.924428]  process_one_work+0x1df/0x3b0
+[10199.924430]  worker_thread+0x49/0x2e0
+[10199.924432]  ? rescuer_thread+0x390/0x390
+[10199.924433]  kthread+0xe5/0x110
+[10199.924435]  ? kthread_complete_and_exit+0x20/0x20
+[10199.924436]  ret_from_fork+0x1f/0x30
+[10199.924439]  </TASK>
+
+...
+[ 9639.596311] NMI backtrace for cpu 48
+[ 9639.596313] CPU: 48 PID: 1215 Comm: kworker/48:1H Kdump: loaded 
+Tainted: G            E      6.2.0-rc6-swiotlb-upstream-bug-repreduce+ #70
+[ 9639.596315] Workqueue: kblockd blk_mq_run_work_fn
+[ 9639.596319] RIP: 0010:native_queued_spin_lock_slowpath+0x18/0x2c0
+[ 9639.596322] Code: 75 02 5a c3 56 0f b6 f0 e8 c5 ff ff ff 5e 5a c3 66 
+90 0f 1f 44 00 00 41 55 41 54 55 48 89 fd 53 66 90 ba 01 00 00 00 8b 45 
+00 <85> c0 75 10 f0 0f b1 55 00 85 c0 75 f0 5
+b 5d 41 5c 41 5d c3 f3 90
+[ 9639.596323] RSP: 0018:ffffc90003e5fb38 EFLAGS: 00000002
+[ 9639.596325] RAX: 0000000000000001 RBX: ffff88de5e459adc RCX: 
+0000000000001000
+[ 9639.596326] RDX: 0000000000000001 RSI: 0000000000000001 RDI: 
+ffff88de5e459adc
+[ 9639.596327] RBP: ffff88de5e459adc R08: 0000000000000000 R09: 
+ffff888102ab6090
+[ 9639.596328] R10: ffff88dad2400000 R11: 00000000001fffff R12: 
+0000000000000293
+[ 9639.596329] R13: 000000000730d000 R14: 0000000000200000 R15: 
+ffffffff83540160
+[ 9639.596330] FS:  0000000000000000(0000) GS:ffff88dce5000000(0000) 
+knlGS:0000000000000000
+[ 9639.596331] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 9639.596332] CR2: 00007fc091da0000 CR3: 000000000640a002 CR4: 
+0000000000770ee0
+[ 9639.596334] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[ 9639.596334] DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 
+0000000000000400
+[ 9639.596335] PKRU: 55555554
+[ 9639.596336] Call Trace:
+[ 9639.596337]  <TASK>
+[ 9639.596338]  _raw_spin_lock_irqsave+0x37/0x40
+[ 9639.596341]  swiotlb_do_find_slots+0xef/0x3e0
+[ 9639.596344]  swiotlb_tbl_map_single+0xec/0x1f0
+[ 9639.596347]  swiotlb_map+0x5c/0x260
+[ 9639.596349]  dma_direct_map_sg+0x7a/0x280
+[ 9639.596352]  __dma_map_sg_attrs+0x30/0x70
+[ 9639.596355]  dma_map_sgtable+0x1d/0x30
+[ 9639.596356]  nvme_map_data+0xce/0x370
+[ 9639.596359]  nvme_prep_rq.part.0+0x31/0x120
+[ 9639.596362]  nvme_queue_rq+0x77/0x1f0
+[ 9639.596364]  blk_mq_dispatch_rq_list+0x17e/0x670
+[ 9639.596367]  __blk_mq_sched_dispatch_requests+0x129/0x140
+[ 9639.596370]  blk_mq_sched_dispatch_requests+0x34/0x60
+[ 9639.596372]  __blk_mq_run_hw_queue+0x91/0xb0
+[ 9639.596374]  process_one_work+0x1df/0x3b0
+[ 9639.596377]  worker_thread+0x49/0x2e0
+[ 9639.596379]  ? rescuer_thread+0x390/0x390
+[ 9639.596380]  kthread+0xe5/0x110
+[ 9639.596382]  ? kthread_complete_and_exit+0x20/0x20
+[ 9639.596383]  ret_from_fork+0x1f/0x30
+[ 9639.596387]  </TASK>
+
+...
+
+[ 9639.595665] NMI backtrace for cpu 50
+[ 9639.595667] CPU: 50 PID: 0 Comm: swapper/50 Kdump: loaded Tainted: G 
+           E      6.2.0-rc6-swiotlb-upstream-bug-repreduce+ #70
+[ 9639.595669] RIP: 0010:native_queued_spin_lock_slowpath+0x2e/0x2c0
+[ 9639.595672] Code: 00 41 55 41 54 55 48 89 fd 53 66 90 ba 01 00 00 00 
+8b 45 00 85 c0 75 10 f0 0f b1 55 00 85 c0 75 f0 5b 5d 41 5c 41 5d c3 f3 
+90 <eb> e5 81 fe 00 01 00 00 74 4e 40 30 f6 8
+5 f6 75 71 f0 0f ba 6d 00
+[ 9639.595673] RSP: 0018:ffffc90000c38e28 EFLAGS: 00000002
+[ 9639.595674] RAX: 0000000000000001 RBX: ffff88de5e459adc RCX: 
+0000000000000001
+[ 9639.595675] RDX: 0000000000000001 RSI: 0000000000000001 RDI: 
+ffff88de5e459adc
+[ 9639.595675] RBP: ffff88de5e459adc R08: ffff88dad2400000 R09: 
+0000000000001000
+[ 9639.595676] R10: 0000005b9c570000 R11: ffffc90000c38ff8 R12: 
+0000000000000087
+[ 9639.595677] R13: ffff88de5e459ad0 R14: ffff88de5e459adc R15: 
+00000000001882e0
+[ 9639.595678] FS:  0000000000000000(0000) GS:ffff88dce5080000(0000) 
+knlGS:0000000000000000
+[ 9639.595679] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 9639.595679] CR2: 00007f256aa4d10c CR3: 000000010ade0005 CR4: 
+0000000000770ee0
+[ 9639.595680] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 
+0000000000000000
+[ 9639.595681] DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 
+0000000000000400
+[ 9639.595681] PKRU: 55555554
+[ 9639.595682] Call Trace:
+[ 9639.595682]  <IRQ>
+[ 9639.595683]  _raw_spin_lock_irqsave+0x37/0x40
+[ 9639.595686]  swiotlb_release_slots.isra.0+0x86/0x180
+[ 9639.595688]  dma_direct_unmap_sg+0xcf/0x1a0
+[ 9639.595690]  nvme_unmap_data.part.0+0x43/0xc0
+[ 9639.595693]  nvme_pci_complete_batch+0x71/0xe0
+[ 9639.595695]  nvme_irq+0x7b/0x90
+[ 9639.595697]  ? nvme_prep_rq_batch+0xc0/0xc0
+[ 9639.595700]  __handle_irq_event_percpu+0x46/0x170
+[ 9639.595701]  handle_irq_event+0x3a/0x80
+[ 9639.595703]  handle_edge_irq+0xae/0x290
+[ 9639.595705]  __common_interrupt+0x62/0x100
+[ 9639.595707]  common_interrupt+0xb3/0xd0
+[ 9639.595709]  </IRQ>
+[ 9639.595709]  <TASK>
+[ 9639.595710]  asm_common_interrupt+0x22/0x40
+[ 9639.595712] RIP: 0010:__tdx_hypercall+0x34/0x80
+
+$ git diff # which allow me to allocate swiotlb memory bigger than 4GiB.
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index a34c38bbe28f..a6d7aae3c040 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -311,6 +311,7 @@ static void *swiotlb_memblock_alloc(unsigned long 
+nslabs, unsigned int flags,
+          * allow to pick a location everywhere for hypervisors with guest
+          * memory encryption.
+          */
++       flags |= SWIOTLB_ANY;
+         if (flags & SWIOTLB_ANY)
+                 tlb = memblock_alloc(bytes, PAGE_SIZE);
+         else
+
+
+
+Thank you very much for your time and careful reading.
+Guorui
+
+> Robin.
+> 
+>> Changes in this patch set
+>> =========================
+>> Instead of keeping "infecting" the legacy swiotlb code with CoCo logic,
+>> this patch tries to introduce a new cc-swiotlb for Confidential VMs.
+>>
+>> Confidential VMs usually have reasonable modern devices (virtio devices,
+>> NVME, etc.), which can access memory above 4GiB, cc-swiotlb could
+>> allocate TLB buffers at any position dynamically. Since
+>> set_memory_{decrypted,encrypted} is time-consuming and cannot be used in
+>> interrupt context, a new kernel thread "kccd" has been added to populate
+>> new TLB buffers on-demand, which solved the problem 1.
+>>
+>> In addition, the cc-swiotlb manages TLB buffers by different sizes
+>> (512B, 2KiB, 4KiB, 16KiB, and 512KiB). The above values come from the
+>> following observations (boot with 8core, 32 GiB, 1 nvme disk, and 1
+>> virtio-net):
+>> - Allocations of 512 bytes and below account for 3.5% of the total DMA
+>>    cache allocations;
+>> - Allocations of 2 KiB and below account for 57.7%;
+>> - Allocations of 4 KiB and below account for 91.3%;
+>> - Allocations of 16 KiB and below account for 96.0%;
+>> - Allocations of 512 KiB and below accounted for 100%;
+>> - At the end of booting, cc-swiotlb uses 288 MiB in total.
+>>
+>> For comparison, legacy swiotlb reserves memory at 6%, which requires
+>> min(1GiB, 32GiB * 0.06) = 1GiB, and will hang when operating multiple
+>> disks simultaneously due to no memory for the swiotlb buffer.
+>>
+>> These patches were tested with fio (using different iodepth and block
+>> size) on a platform with 96 cores, 384 GiB, and 20 NVME disks, and no IO
+>> hang or error was observed.
+>>
+>> For simplicity, the current RFC version cannot switch between legacy
+>> implementation with cmdline but through compile options. I am open to
+>> discussing how to integrate the cc-swiotlb into the legacy one.
+>>
+>> Patch Organization
+>> ==================
+>> - swiotlb: Split common code from swiotlb.{c,h}
+>> - swiotlb: Add a new cc-swiotlb implementation for Confidential VMs
+>> - swiotlb: Add tracepoint swiotlb_unbounced
+>> - cc-swiotlb: Allow set swiotlb watermark from cmdline
+>>
+>> Thanks for your time!
+>>
+>> Have a nice day,
+>> Guorui
+>>
+>>
