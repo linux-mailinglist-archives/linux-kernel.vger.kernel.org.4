@@ -2,105 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4B1680385
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 02:36:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8877680379
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 02:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbjA3BgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 20:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S235270AbjA3BRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 20:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA3BgQ (ORCPT
+        with ESMTP id S232549AbjA3BRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 20:36:16 -0500
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F4419F1E
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 17:36:15 -0800 (PST)
-Received: by mail-vk1-xa2c.google.com with SMTP id t190so5037112vkb.13
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 17:36:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b0Mic7GKL4N/y1hjzEZDBJNa8o16mwGG4oqZUjeMQmI=;
-        b=wuVVSA88CSh8e96SliMukxAUr6oxB+MqD2LlifFN1inXZs1DEfoZXi395gt9ilcC7g
-         jBu8o0EJWRHeOk/08pEwogP/4drNsDFveEmunoeT92pO/DzYNGrZUXGBgSB5IMHjHoOE
-         h0G55/xmMAxDph7Z3zAJ1yGvG6DS0n/6YLplShyaOVEV9mgn9EQhQ+CnwPXKnVtWdHF3
-         7BcjIDbg8JXeYik/NpcU19Us02aLdqyoZ+PZSHcf69stOqlHB5EL/A1QlEATCCl4GpwY
-         UT0SDkL1iG9Z/uM3gSI4Z6s5qcn879Z+wyyerYcNdpEV4EEPEnCk/rC7NakZhO06eQPB
-         ya3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b0Mic7GKL4N/y1hjzEZDBJNa8o16mwGG4oqZUjeMQmI=;
-        b=Ot4S9qxAHOyNYYYV0hos289k2a2zuQDI/PedRnrphY7+LUGp/2eY6976SdyMQRHRky
-         xIYFOF+azS/vSllzNV32F/dsM7Z4+Ed286QdQ07o02EVB6oRvMbsQ/fEwxwfZOXv0orT
-         NVTP+aZ2CUncsUoxeBDu3xLXer0fA+fpkpJ4OHTqv1+qCxLT5Yq+yO1GPIACiqKIhh/s
-         V0fi673BF51Ulwx5unp0fw3jUdwK/a0KROvPdGRvjRXGW1eAxfioBwBeuznvtidyZhBM
-         APnCNtueAbewRByd/hOO0QWvPZ7lHzpYZ5nqkhEKCywxIEIghyVIJ6sK9jZba0ieaobO
-         A1MA==
-X-Gm-Message-State: AFqh2koV+MjLJGoX6QvmtRDbUDGkd+AuoeRNWWKtgWDRBpoffm98Qk9L
-        WBuZMoyHfN+ApdZqq8buKwj/cI21bMpQeb7Y8uMGHVKnGnShgcDO
-X-Google-Smtp-Source: AMrXdXs8NqbH4wKmN5lqGURkFNYAQ0NbT8FgOm3q4ilQ60x0Cd/mmexe1pWPP28IFEW+oKNIlHu1328DzLkC+F2LvvI=
-X-Received: by 2002:a1f:9d58:0:b0:3e1:9f39:5c46 with SMTP id
- g85-20020a1f9d58000000b003e19f395c46mr6037580vke.20.1675042572859; Sun, 29
- Jan 2023 17:36:12 -0800 (PST)
+        Sun, 29 Jan 2023 20:17:40 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1947013D71;
+        Sun, 29 Jan 2023 17:17:39 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P4qzf14lHz4f3kp2;
+        Mon, 30 Jan 2023 09:17:34 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgCHgR+uGtdjhGmuCQ--.6383S4;
+        Mon, 30 Jan 2023 09:17:36 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        paolo.valente@linaro.org, yukuai3@huawei.com, jack@suse.cz
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH v2 block-6.2] block, bfq: fix uaf for bfqq in bic_set_bfqq()
+Date:   Mon, 30 Jan 2023 09:41:36 +0800
+Message-Id: <20230130014136.591038-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Received: by 2002:a05:6130:1015:b0:559:9619:d862 with HTTP; Sun, 29 Jan 2023
- 17:36:12 -0800 (PST)
-X-Originating-IP: [24.53.241.20]
-In-Reply-To: <Y9bvwz4FIOQ+D8c4@x1n>
-References: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
- <Y9bvwz4FIOQ+D8c4@x1n>
-From:   Nick Bowler <nbowler@draconx.ca>
-Date:   Sun, 29 Jan 2023 20:36:12 -0500
-Message-ID: <CADyTPEzvCLoMWJwfTMQZOkNXUgao5ZydUkD_bLewi9K5fCf2vg@mail.gmail.com>
-Subject: Re: PROBLEM: sparc64 random crashes starting w/ Linux 6.1 (regression)
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
-        regressions@lists.linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgCHgR+uGtdjhGmuCQ--.6383S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw1xCF4rCr17tF1fJF4fKrg_yoW8Ary5pw
+        nFga17WF97XFs5XF4UJ3WkXF18GFs5CryDK342q3y2vFy7Aw12yan0v3y0vFZ2qrySkay3
+        Zw1j93ykAr1jgrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-29, Peter Xu <peterx@redhat.com> wrote:
-> There's a similar report previously but interestingly it was exactly
-> reported against commit 0ccf7f168e17, which was the one you reported all
-> good:
->
-> https://lore.kernel.org/all/20221021160603.GA23307@u164.east.ru/
->
-> It's probably because for some reason the thp split didn't really happen in
-> your system (maybe thp disabled?) or it should break too.
+From: Yu Kuai <yukuai3@huawei.com>
 
-This seems an accurate assessment: CONFIG_TRANSPARENT_HUGEPAGE is not set
+After commit 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'"),
+bic->bfqq will be accessed in bic_set_bfqq(), however, in some context
+bic->bfqq will be freed, and bic_set_bfqq() is called with the freed
+bic->bfqq.
 
-> It also means 624a2c94f5b7a didn't really fix all the issues.  So I assumed
-> that's the only issue we had after verified with 624a2c94f5b7a on two
-> existing reproducers and we assumed all issues fixed.
->
-> However then with this report I looked into the whole set and I did notice
-> the page migration code actually has similar problem.  Sorry I should have
-> noticed this even earlier.  So very likely the previous two reports came
-> from environment where page migration is either rare or not enabled.  And
-> now I suspect your system has page migration enabled.
+Fix the problem by always freeing bfqq after bic_set_bfqq().
 
-I'd say that sounds correct too: I have CONFIG_COMPACTION=y which sets
-CONFIG_MIGRATION=y
+Fixes: 64dc8c732f5c ("block, bfq: fix possible uaf for 'bfqq->bic'")
+Reported-and-tested-by: Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+---
+ block/bfq-cgroup.c  | 2 +-
+ block/bfq-iosched.c | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-> Could you try below patch to see whether it fixes your problem?  It should
-> cover the last piece of possible issue with dirty bit on sparc after that
-> patchset.  It's based on latest master branch (commit ab072681eabe1ce0).
+diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+index 7d9b15f0dbd5..0fbde0fc0628 100644
+--- a/block/bfq-cgroup.c
++++ b/block/bfq-cgroup.c
+@@ -769,8 +769,8 @@ static void __bfq_bic_change_cgroup(struct bfq_data *bfqd,
+ 				 * request from the old cgroup.
+ 				 */
+ 				bfq_put_cooperator(sync_bfqq);
+-				bfq_release_process_ref(bfqd, sync_bfqq);
+ 				bic_set_bfqq(bic, NULL, true);
++				bfq_release_process_ref(bfqd, sync_bfqq);
+ 			}
+ 		}
+ 	}
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index ccf2204477a5..380e9bda2e57 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -5425,9 +5425,11 @@ static void bfq_check_ioprio_change(struct bfq_io_cq *bic, struct bio *bio)
+ 
+ 	bfqq = bic_to_bfqq(bic, false);
+ 	if (bfqq) {
+-		bfq_release_process_ref(bfqd, bfqq);
++		struct bfq_queue *old_bfqq = bfqq;
++
+ 		bfqq = bfq_get_queue(bfqd, bio, false, bic, true);
+ 		bic_set_bfqq(bic, bfqq, false);
++		bfq_release_process_ref(bfqd, old_bfqq);
+ 	}
+ 
+ 	bfqq = bic_to_bfqq(bic, true);
+-- 
+2.31.1
 
-I applied this on top of 6.2-rc6 and will give this a spin now.
-
-Thanks,
-  Nick
