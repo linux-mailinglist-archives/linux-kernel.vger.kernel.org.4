@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7BB68053F
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4D0680542
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235659AbjA3Etl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
+        id S235766AbjA3Etr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:49:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235650AbjA3EtE (ORCPT
+        with ESMTP id S235685AbjA3EtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:49:04 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84CD4202;
-        Sun, 29 Jan 2023 20:48:54 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id cl23-20020a17090af69700b0022c745bfdc3so3347484pjb.3;
-        Sun, 29 Jan 2023 20:48:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vuf6VTUpaXKxqyw7z5c5+cecbJFnnXUt9dyG097kBRA=;
-        b=jp51xFQtFLKcrYVfoLOejT5oUazpBjx+EwbIYrYqdqmMXDKmFSoOOB2WXcfxD63h+F
-         etSplpJUlkTQOSZdOC36/oMrVBqXK12t4YQHNDbCZ2jdzDstfPOexfDiIL+uRZo/JYUv
-         YIaHqm5SdF5WgPZji/KWwE9ldjIj1V8qvBraSiSn69Fk4WI1LPyhVtcNr0IjOrjlvhPR
-         Jeou3hou9LsimA4PN8HHZLnOIq8cspauzGeGpk+RpZe9E06nvRbxp70h6x8Gx3djAsxB
-         0eIm8Ioe665AO8QwRnj06waEi3GmdZ2xjgLaRdi6mYaNT5z/H4GTvTOXQf9Om9KUr/hi
-         K2NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vuf6VTUpaXKxqyw7z5c5+cecbJFnnXUt9dyG097kBRA=;
-        b=rOWroAcWW3nhxK4A+6gkJNq8UPWVMkz1TeB8y85kHUOXSoH56+zDM7ghV718c2O1hN
-         3HsvzFL7LzzdSc4Eb9I/tDzq9PxUCSi2Pj2cEMIuoUqPVTcehQsuhXraqtPDQiJRjTtN
-         PDLRsV6A8V95SMf7XKMnmqrLQ1DQkbO7upfFHsQqn1ZIFHo2DeNxOLxG2hucjSTBlc4T
-         yTs74QYap6PovqwmmvBY5Ffe+7E8xdBMB1NdKK24zd5KdyQIoMXm2WcJOZlNG+FlCeKH
-         iPXdRfeaXvS2saloYCb0zd44M6U29Bxyh4ftS9WOZ3G4QvoZL65+ec9lhhri/MqbJlHG
-         H95w==
-X-Gm-Message-State: AO0yUKVw3MXcA50+FmngMTxs/xe4Aao0v9s2eaPRwzzyFxOZmMYXbj9l
-        cZ1T3MYzjLdqpqwcLhFsmrG8Vi7F9dE=
-X-Google-Smtp-Source: AK7set/t8n+5AoxPx92KpJTLhDs3oOya92cDC79HKsUoAfWqru9C1l/loor7GL54hY8lsU9m52yLaw==
-X-Received: by 2002:a05:6a20:ce45:b0:b9:2df:7ef6 with SMTP id id5-20020a056a20ce4500b000b902df7ef6mr16369316pzb.31.1675054134322;
-        Sun, 29 Jan 2023 20:48:54 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:6882:174b:bc70:101])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902bd8500b00194caf3ccc4sm6631099pls.285.2023.01.29.20.48.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 20:48:53 -0800 (PST)
-Date:   Sun, 29 Jan 2023 20:48:50 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH] Input: edt-ft5x06 - fix typo in a comment
-Message-ID: <Y9dMMnD/I1u4mAiy@google.com>
-References: <20230128162325.64467-1-dario.binacchi@amarulasolutions.com>
+        Sun, 29 Jan 2023 23:49:09 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3751CCC18;
+        Sun, 29 Jan 2023 20:48:59 -0800 (PST)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 30 Jan 2023 13:48:57 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id EA8022086DE8;
+        Mon, 30 Jan 2023 13:48:57 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 30 Jan 2023 13:48:54 +0900
+Received: from [10.212.156.20] (unknown [10.212.156.20])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 83A73A855D;
+        Mon, 30 Jan 2023 13:48:57 +0900 (JST)
+Message-ID: <69c26585-a5b7-5c94-a64c-2ba95c14ea82@socionext.com>
+Date:   Mon, 30 Jan 2023 13:48:57 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230128162325.64467-1-dario.binacchi@amarulasolutions.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/5] mmc: uniphier-sd: Add UHS mode support
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230125010201.28246-1-hayashi.kunihiko@socionext.com>
+ <CAPDyKFreuJhwsw3ECvhW+rdM9pouja8wttsRntbwvUR-5haPHw@mail.gmail.com>
+Content-Language: en-US
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <CAPDyKFreuJhwsw3ECvhW+rdM9pouja8wttsRntbwvUR-5haPHw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 05:23:25PM +0100, Dario Binacchi wrote:
-> Replace 'firmares' with 'firmwares'.
+Hi Ulf,
+
+On 2023/01/27 19:57, Ulf Hansson wrote:
+> On Wed, 25 Jan 2023 at 02:02, Kunihiko Hayashi
+> <hayashi.kunihiko@socionext.com> wrote:
+>>
+>> The uniphier-sd controller needs to control some siginals from the SD
+>> interface logic to transition to UHS mode.
+>>
+>> This series adds UHS mode support to the controller driver
+>> to refer to and control the interface logic registers, which include
+>> mode selector and SDR speed selector.
+>>
+>> Kunihiko Hayashi (5):
+>>    dt-bindings: mmc: uniphier-sd: Add socionext,syscon-uhs-mode property
+>>    mmc: uniphier-sd: Add control of UHS mode using SD interface logic
+>>    mmc: uniphier-sd: Add control to switch UHS speed
+>>    ARM: dts: uniphier: Add syscon-uhs-mode to SD node
+>>    arm64: dts: uniphier: Add syscon-uhs-mode to SD node
+>>
+>>   .../bindings/mmc/socionext,uniphier-sd.yaml   | 10 +++
+>>   arch/arm/boot/dts/uniphier-ld4.dtsi           |  3 +-
+>>   arch/arm/boot/dts/uniphier-pro4.dtsi          |  3 +-
+>>   arch/arm/boot/dts/uniphier-pro5.dtsi          |  3 +-
+>>   arch/arm/boot/dts/uniphier-pxs2.dtsi          |  3 +-
+>>   arch/arm/boot/dts/uniphier-sld8.dtsi          |  3 +-
+>>   .../boot/dts/socionext/uniphier-ld20.dtsi     |  3 +-
+>>   .../boot/dts/socionext/uniphier-pxs3.dtsi     |  3 +-
+>>   drivers/mmc/host/uniphier-sd.c                | 83 +++++++++++++++++--
+>>   9 files changed, 102 insertions(+), 12 deletions(-)
+>>
 > 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Patch 1 to 3 applied for next (I fixed up the comments from Krzysztof
+> when I applied), thanks!
 
-Applied, thank you.
+Thank you for fixing up and applying. I'll send patch 4 and 5 (related to
+the devicetree sources) as other requests for the SoC.
 
--- 
-Dmitry
+Thank you,
+
+---
+Best Regards
+Kunihiko Hayashi
