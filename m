@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E49A681709
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20BF68170E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236427AbjA3Q4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:56:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S236434AbjA3Q5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjA3Q4u (ORCPT
+        with ESMTP id S235737AbjA3Q5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:56:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA493D0A4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:56:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE8B5B81269
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:56:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C1C4C4339B;
-        Mon, 30 Jan 2023 16:56:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675097806;
-        bh=ewr/oDOz3QgnkOdhjAWLANR8/++xZfNx9fetWwn02wc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TnotIDIjxyAKloXOFrfY+5Fs6kkrG3ajpcmyy+hOzoHjngt/WZNthH56Ls87DKMbJ
-         eJJAOT3ykQ+ykv0nnV3mmOnT7rs0daNwDkYhnBYKE8qALswYYIzaAXGJBegQjXN9SZ
-         f28Is6DeoQ8goSMuJ//ZVIoZmCPJKDCA7hP91JyGfqnIpz1WV4OtDJWY0rdub5Rm5H
-         r8yoeyykNsUmXFuu7SUmKVl2EI9LXRec8RDwLTUyxzzJJlSeZwvJn+IxadeJg3RzwX
-         I1ugAYrwcGpu1vj2pXdUXUqHC6rYoxNXwXrl9CXtD5aYNB3v/IfUWeehutgI/svBmj
-         WR2WAMqElDMYw==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Guo Ren <guoren@kernel.org>,
-        "liaochang (A)" <liaochang1@huawei.com>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mhiramat@kernel.org,
-        conor.dooley@microchip.com, penberg@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
-In-Reply-To: <Y9fm+6LPXgtDSma/@FVFF77S0Q05N>
-References: <20230126161559.1467374-1-guoren@kernel.org>
- <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
- <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
- <87r0vc9h4g.fsf@all.your.base.are.belong.to.us>
- <Y9fm+6LPXgtDSma/@FVFF77S0Q05N>
-Date:   Mon, 30 Jan 2023 17:56:43 +0100
-Message-ID: <87edrc2c6s.fsf@all.your.base.are.belong.to.us>
+        Mon, 30 Jan 2023 11:57:53 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5972709
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:57:51 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id u7so3842335ilg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:57:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R9FOzbQzT+JXPXKeHlfH1z+hgpT+neOh4BngGa9Z1Bc=;
+        b=TttKP/i7vtuAZ8pKaTh+sofK3a27HCNy4KufY3/BNMoRANmsIQ2572lnptPciHWZZf
+         P5qlDlXVeinJkdOmA3m9+pYT3T5947TpTwDNdY6R1P+KZFqpOs7VQyc3cgJD2rAZF46P
+         0x3x8ZKF1WSpuNfLhGEiLBUU4BQA6t3Lo09ws=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R9FOzbQzT+JXPXKeHlfH1z+hgpT+neOh4BngGa9Z1Bc=;
+        b=taejqJH1j5yhfOrrrTOl7SxcGkixmtLaFONikYNhb5QXCyVZVkrrnAe22matgwOVOs
+         BKzE0whmGgUn69+MO0RaCQFT/O3nIHYIlW+nE9Tmnc1WmMQD84v3ARoQSEtvrf9jShv7
+         vIyTWioyIvodA07Saa4S2m/sY7RqWdKy0MSLx26bgmrMbHaAfDDggwEsKllQBJYBASFa
+         xjzySXBweb0V26TfV5CRoZjGRA6wGfzpRRwSzVQWY8pEkVHy9cxqmV59KzCWHRWrL/Y2
+         7K10qtbqoF1/w/0m7BjSHJ2CU5gYEG3luP8EBqS/r57yTMjnna8mQgOrK3ZW2doywikq
+         0j5Q==
+X-Gm-Message-State: AFqh2kqYgmExWn9xmnVc0ugjg6eDy1vP6+W6Qx7trZ+05Txs0yCsnWbb
+        1GXZsZyORYuDg2wgRgscn1eRI8pOXSi+0lMk
+X-Google-Smtp-Source: AMrXdXvE7lWIIbVRIP8G+LRGLb33nzB4GToWKYt9FVK249yeDSaRKLBitGXd9WC0EEGifClZ8ZeuTw==
+X-Received: by 2002:a92:cda4:0:b0:30d:bf1a:b174 with SMTP id g4-20020a92cda4000000b0030dbf1ab174mr9702736ild.1.1675097870709;
+        Mon, 30 Jan 2023 08:57:50 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v17-20020a92c811000000b0030258f9670bsm4203021iln.13.2023.01.30.08.57.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 08:57:50 -0800 (PST)
+Message-ID: <34a11c33-5a3e-7ba9-59c5-4588033549aa@linuxfoundation.org>
+Date:   Mon, 30 Jan 2023 09:57:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 30/34] selftests: bpf docs: Use installed kernel headers
+ search path
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     linux-kernel@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+ <20230127135755.79929-31-mathieu.desnoyers@efficios.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230127135755.79929-31-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark Rutland <mark.rutland@arm.com> writes:
+On 1/27/23 06:57, Mathieu Desnoyers wrote:
+> Use $(KHDR_INCLUDES) as lookup path for installed kernel headers rather
+> than using kernel headers in include/uapi from the source kernel tree
+> kernel headers.
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: Ingo Molnar <mingo@redhat.com>
+> ---
+>   tools/testing/selftests/bpf/Makefile.docs | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile.docs b/tools/testing/selftests/bpf/Makefile.docs
+> index eb6a4fea8c79..0a538d873def 100644
+> --- a/tools/testing/selftests/bpf/Makefile.docs
+> +++ b/tools/testing/selftests/bpf/Makefile.docs
+> @@ -44,7 +44,7 @@ RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
+>   # $1 - target for scripts/bpf_doc.py
+>   # $2 - man page section to generate the troff file
+>   define DOCS_RULES =
+> -$(OUTPUT)bpf-$1.rst: ../../../../include/uapi/linux/bpf.h
+> +$(OUTPUT)bpf-$1.rst: $(KHDR_INCLUDES)/linux/bpf.h
+>   	$$(QUIET_GEN)../../../../scripts/bpf_doc.py $1 \
+>   		--filename $$< > $$@
+>   
 
->> ...and stop_machine() with !PREEMPTION is broken as well, when you're
->> replacing multiple instructions (see Mark's post at [1]). The
->> stop_machine() dance might work when you're replacing *one* instruction,
->> not multiple as in the RISC-V case. I'll expand on this in a comment in
->> the OPTPROBES v6 series.
->
-> Just to clarify, my comments in [1] were assuming that stop_machine() was=
- not
-> used, in which case there is a problem with or without PREEMPTION.
->
-> I believe that when using stop_machine(), the !PREEMPTION case is fine, s=
-ince
-> stop_machine() schedules work rather than running work in IRQ context on =
-the
-> back of an IPI, so no CPUs should be mid-sequnce during the patching, and=
- it's
-> not possible for there to be threads which are preempted mid-sequence.
+Adding bpf maintainers.
 
-TIL! stop_cpus() highlights that very nicely. Thanks for clearing that
-out! That's good news; That means that this fix [4] should go in.
+Here is my ack:
 
-> That all said, IIUC optprobes is going to disappear once fprobe is ready
-> everywhere, so that might be moot.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Yes (However, the stop_machine()/!PREEMPTION issue was with ftrace).
-
-
-Bj=C3=B6rn
-
-[4] https://lore.kernel.org/lkml/20230107133549.4192639-2-guoren@kernel.org/
+thanks,
+-- Shuah
