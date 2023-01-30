@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555E0681DD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E56681DDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjA3WMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S230236AbjA3WNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:13:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjA3WMB (ORCPT
+        with ESMTP id S229889AbjA3WNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:12:01 -0500
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081C83B0DB;
-        Mon, 30 Jan 2023 14:11:58 -0800 (PST)
-Received: by mail-oo1-f48.google.com with SMTP id i11-20020a056820012b00b00517518d79f6so638957ood.10;
-        Mon, 30 Jan 2023 14:11:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dWJ05yhc/QoYhGwjtBStJIcXLe5TjSNLXFeusdsihHg=;
-        b=PolgQlT2OFSmEkWhXl1LMQ9Dr9C5/9hW04sjACVQKiX4a/Kd+KGIUtjNoycqiaICqg
-         6G9W47J5lMVvUhwIxvTgTpcIOaAFdtlHhBe6gZbcQk9o5SzsoYZAp/DG1eeJ6uhsa8VO
-         +mKylTM2duNUY0kT3sGsk4V6Tv8aPeosBVWRGvA59Ac1jeEFU6TAmoHwtzAtVSzIwTGM
-         pFG9SeBViG5uoXtnRYmEDwrvSZKW8zN7mn1Ji2cKy3aOWaNj/hxPsKc57E2zJMZJ5vep
-         k2oYg0TS8daNgRc7QuSmI+djG65YSjxMs+GWpMcBlM9ru2hAKfctB8El4J27/Dst8vz2
-         vsuQ==
-X-Gm-Message-State: AO0yUKWDUVigRJHOWGlnBGLX/qHBDM/RVX9juNK2/Tg/zquEPF0cIngE
-        NjWGB19DfzKpAzqZVqxVj1LbYhjb2g==
-X-Google-Smtp-Source: AK7set/YAH3TEUhitOrmZxOxRKiEb2e6U2zBS7JTANOg3qFnJ89fkAqhM0gR0HuIkDCGafJlzcSxRw==
-X-Received: by 2002:a4a:c884:0:b0:517:7b89:b8d3 with SMTP id t4-20020a4ac884000000b005177b89b8d3mr2657984ooq.6.1675116717033;
-        Mon, 30 Jan 2023 14:11:57 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o22-20020a4ae596000000b004f269f9b8f3sm5441483oov.25.2023.01.30.14.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 14:11:56 -0800 (PST)
-Received: (nullmailer pid 3618211 invoked by uid 1000);
-        Mon, 30 Jan 2023 22:11:55 -0000
-Date:   Mon, 30 Jan 2023 16:11:55 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, list@opendingux.net,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: rtc: Add #clock-cells property
-Message-ID: <167511671553.3618148.6225023459111985094.robh@kernel.org>
-References: <20230129120442.22858-1-paul@crapouillou.net>
- <20230129120442.22858-2-paul@crapouillou.net>
+        Mon, 30 Jan 2023 17:13:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0779B4A1F2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:12:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675116747;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f/esCj1MNnOe1fnqJrap230ikN63PqOGL5vL8Wutmq8=;
+        b=UYZw6yzXQOUEkZVMRyBG+K162S/l9Enxh3NbDnvaW+TqEI4ZffGXW3IAm0fb844qDzND6s
+        xcVOuJD2N0y+SseFsjSCeWP8Z//MFX/+WpZggAKu4v8H7faW1WeARQsxES/xzgHLNAd+Pk
+        IcohUZmOyasTMhnM+Q93KFXwUyNKMAY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-568-O5GrhKaEPI-knDkSOqp-UQ-1; Mon, 30 Jan 2023 17:12:23 -0500
+X-MC-Unique: O5GrhKaEPI-knDkSOqp-UQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D10A882822;
+        Mon, 30 Jan 2023 22:12:22 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id ABC721121314;
+        Mon, 30 Jan 2023 22:12:20 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
+References: <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com> <3351099.1675077249@warthog.procyon.org.uk> <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk> <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk> <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        "David Hildenbrand" <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Logan Gunthorpe" <logang@deltatee.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230129120442.22858-2-paul@crapouillou.net>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3520517.1675116740.1@warthog.procyon.org.uk>
+Date:   Mon, 30 Jan 2023 22:12:20 +0000
+Message-ID: <3520518.1675116740@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,24 +72,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+John Hubbard <jhubbard@nvidia.com> wrote:
 
-On Sun, 29 Jan 2023 12:04:39 +0000, Paul Cercueil wrote:
-> The RTC in the JZ4770 is compatible with the JZ4760, but has an extra
-> register that permits to configure the behaviour of the CLK32K pin. The
-> same goes for the RTC in the JZ4780.
-> 
-> With this change, the RTC node is now also a clock provider on these
-> SoCs, so a #clock-cells property is added.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> 
-> ---
->  v2: - add constraint on which SoCs can have the #clock-cells property
->      - add JZ4780 example which has a #clock-cells
->  v3: Don't break ABI anymore.
-> ---
->  .../devicetree/bindings/rtc/ingenic,rtc.yaml  | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
+> This is something that we say when adding pin_user_pages_fast(),
+> yes. I doubt that I can quickly find the email thread, but we
+> measured it and weren't immediately able to come up with a way
+> to make it faster.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+percpu counters maybe - add them up at the point of viewing?
+
+David
+
