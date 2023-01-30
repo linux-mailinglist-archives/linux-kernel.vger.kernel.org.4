@@ -2,102 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF979680DA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AE6680DAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236835AbjA3Ma0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
+        id S236839AbjA3Ma4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbjA3MaY (ORCPT
+        with ESMTP id S236836AbjA3May (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:30:24 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B616D36089;
-        Mon, 30 Jan 2023 04:30:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675081822; x=1706617822;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HmEHm/9gJR3pZ+9imdlTbasj5qnwePyJ2tav5AQCevc=;
-  b=Qxwsl5GeDEGYb6xWcZm81PtnUWF9aWjLVW0hrMXBTj8/qfckGur1fKWk
-   mLun99DnFAYvSk9mqq8niVsQQ88y/raMTH6j+msKkBqQVL+Z5/dilNGxc
-   5Pu+NIuGpSogUwI56gT0t0S7GtJnHbaQrwThgUfYmQuyVMahboYikykhT
-   LlSbsWEg1R3Q8UMVZzjsNL4KZ8S7vXj3RaPwTNoO5nYgX/55ignvaAi7I
-   n+HID9J9URyOjhLxvWrvXy3OcgfWdl5Lmn2tDWGN1u13aEKucI6XluwWq
-   i8HccGt/n6DXYgitRxS5dxaLlCqtSAw9+zXNmZH02CCtLG97qbR+oH0Mp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="307889126"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="307889126"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 04:30:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="806658086"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="806658086"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jan 2023 04:30:20 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pMTIg-00HLU8-1c;
-        Mon, 30 Jan 2023 14:30:18 +0200
-Date:   Mon, 30 Jan 2023 14:30:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        Mon, 30 Jan 2023 07:30:54 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D99B2ED6B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:30:52 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so9905960wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:30:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n1QRubOqqMcAF6INE/oHUYXKZooNA3LwFw2vbXP3BI8=;
+        b=JBPq4WtHgD17brJJNB+HeJ+uoALbeC49/oqkEeC23GT0s/NZMwYna5WRm+1cGHhL4c
+         /5ZivFTfG9W3l5ncLECn0ufEkv47harQ1NM5/H3rLTRNTeUU7CAGIj5RqSdsT9JkLlVq
+         RnPnafjOpWgHphC38YL4qyckpbBjzcLZWBcNepj+5CEF1kF8xdmE3EuZaJCgW1Co8slB
+         +oKCliNUjTroTnbcRh7p2fgXCPc8ZP9+fvlAmi9g50waMH2BJ7qEkzC8AZ6XCqYELz3a
+         28sYnFg45Yc6sgDIcLPMcx8Ulu0OiZzIIGQ96Nk78O2bfrpsQZvf9dqnWplYkO+5wtpm
+         oXMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n1QRubOqqMcAF6INE/oHUYXKZooNA3LwFw2vbXP3BI8=;
+        b=mcJmzoUf9AWDU5Qdou3SPyxYQPFqXRGHybB+RBfWE/8IME7cU6LoCK6HeWoKwcCjZ4
+         +Tsr58ThoeWs8SostNSuH+8fMGZ1FXlOGTwCcwmEwHpuaigJUT5yyzH4tyIPmQNa0NBR
+         CXLJN2pGFkJwPOTWLr38g/Psj42p6UpUyr6pJFykNAzwUTutq2l/NcBdzeQYnS2U3Ghu
+         yTUbMMrXrKasnEvMmJzo7hkTTpIifTrnUqevjcUpAq8jLHikttl16Uv8GujOyglSXpB+
+         Ib01rbkubLVFo5hzTbFbLBGeI4ypGnEOTCYxvCNUWSRouYPJvJwAA1qDQTPtJbnz43Us
+         ApKg==
+X-Gm-Message-State: AFqh2kobYfJxGt7vJWuAbc/Q+rlKMa4+zCpmT8KUPLTkT7gEPcKWm+np
+        9qUg/ho56YyokHTmBZTD6+fXEw==
+X-Google-Smtp-Source: AMrXdXtmlsbX33v3FHmU8EnTwJ9AI+SyD8UGSf4c1yBXeykjS4ESON4fJZpK9sDEnnI92b5Em2hLKw==
+X-Received: by 2002:a05:600c:3b1e:b0:3cf:497c:c4f5 with SMTP id m30-20020a05600c3b1e00b003cf497cc4f5mr52975076wms.13.1675081851015;
+        Mon, 30 Jan 2023 04:30:51 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id i20-20020a1c5414000000b003dc3f3d77e3sm9823416wmb.7.2023.01.30.04.30.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 04:30:50 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        iresh Kumar <viresh.kumar@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/7] Add support for pressure sensor Bosch BMP580
-Message-ID: <Y9e4WviD+Lmiin9T@smile.fi.intel.com>
-References: <cover.1674954271.git.ang.iglesiasg@gmail.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM8550 compatible
+Date:   Mon, 30 Jan 2023 14:30:46 +0200
+Message-Id: <20230130123046.3229654-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1674954271.git.ang.iglesiasg@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 02:33:02AM +0100, Angel Iglesias wrote:
-> This patchset adds support for the new pressure sensors BMP580 extending
-> the bmp280 driver.
-> 
-> Patch 1 introduces a minor refactor of the driver structure to change how
-> the device matching and driver initialization is performed. In place of
-> the chips ids, the driver_data now contains a pointer to its chip_info.
-> To perform this change, a series of declarations previously on the core
-> file were migrated to the shared header file, to allow access to specific
-> fields on the chip_info on the I2C and SPI drivers. This change is
-> required because BMP380 and BMP580 have the same chip_id and values would
-> collide using the chip_id as the driver_data value.
-> Patch 2 introduces new preinit callback and unifies init logic across all
-> supported variants.
-> Patch 3 made calibration callback function optional.
-> Patch 4 deletes misleading i2c reference on bmp280 Kconfig entry.
-> Patch 5 extends the bmp280 driver with the new logic to read measurements
-> and configure the operation parameters for the BMP580 sensors.
-> Patch 6 updates the devicetree binding docs with the new sensor id.
-> Patch 7 adds the NVMEM operations to read and program the NVM user range
-> contained in the non-volatile memory of the BMP580 sensors.
+Add compatible for EPSS CPUFREQ-HW on SM8550.
+Also document the interrupts.
 
-Patches 1-5 are good enough for me,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
 
-If anything, we can fix in the followups.
+The v1 is here:
+https://lore.kernel.org/all/20221116115046.2687244-1-abel.vesa@linaro.org/
 
+Changes since v1:
+ * dropped the interrupts related properties as they are already there.
+
+ Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+index 2494e90a2fda..e4aa8c67d532 100644
+--- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+@@ -32,6 +32,7 @@ properties:
+               - qcom,sm8250-cpufreq-epss
+               - qcom,sm8350-cpufreq-epss
+               - qcom,sm8450-cpufreq-epss
++              - qcom,sm8550-cpufreq-epss
+           - const: qcom,cpufreq-epss
+ 
+   reg:
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
