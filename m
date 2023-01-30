@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A99681E07
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE46681E09
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 23:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjA3W1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 17:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
+        id S231163AbjA3W1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 17:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA3W1a (ORCPT
+        with ESMTP id S229476AbjA3W1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:27:30 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3770C1ADCE;
-        Mon, 30 Jan 2023 14:27:30 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id u8so5774519ilq.13;
-        Mon, 30 Jan 2023 14:27:30 -0800 (PST)
+        Mon, 30 Jan 2023 17:27:34 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31961F4B4;
+        Mon, 30 Jan 2023 14:27:33 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id b4so3400166ioj.0;
+        Mon, 30 Jan 2023 14:27:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=91APSBQRASxyaUot6kel5HH01cdUZFzcVWQ89+jE+NE=;
-        b=f4B72CIJYqfo0g21cgdQmSuwU5oOqTM8jlthi0qxLzM3Fk/kk9HkIhzJDCUyu6skOq
-         BaQaPz0ZcBSW+GmBCCz6rcujJz4i+b1XJvMQLUGBEg6UW5IEWDIwlNHf49nUm+L75aHj
-         1r+ki1l0TApiKasfibpSpgM6SgIMATUKu/ebFHWFcNCdtJaPfeUu5qJvI4gXhRxEZ28m
-         Sirzm44ry4gL3GhcD/9fUtbBebaFCMd3mkFpztU9RvU4WRzE+UygPPMdcvq/40OPetqt
-         KWkBdWujvyHYoXPITiTBecar0+jX7Z+49pO9uLLJSPSBmmq9ApAzPztSuzn+MPRH0ewX
-         34Uw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fBDPnxYSUfrgiKj2KMKkACqLWIz+4lF8zwzbQUTMXqY=;
+        b=NviNuGt3il7xmstfEMv2zmdDte/GIs933d6FuffEQ6x+qBpvNU2cFze32sFvYnLVOy
+         128Z367Dg/BTLaPh3A7VAwQigFjoLmpkXtikBvcEokAiWnRKA8ZO3tte12VYEKOlGf3f
+         ZiUOOhgerUEhOJ7RoGQzgRwuJZ0C0iqX7rzgelFODRoaVVvUwKMHl1RBHOw+RmJphBdL
+         08L2bhbe0fvXg4CIywRzn5BUPffR6mCysDv8/z4UQwgDmeYa4Hpn5f3Q0IQyLV141+yd
+         m+mVZas2xy3mGZUXn9DIdH6Uaa/LEMsnuVyTbxqYsDHzJTuyN8DLORYGdNzKELNOZ5cT
+         a9EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=91APSBQRASxyaUot6kel5HH01cdUZFzcVWQ89+jE+NE=;
-        b=jkcCfCSeJ2ScLNqwvnFqE6lux0PtuttHLHxMlf1wNSbUqSsFEJ25u93Ns7VSnL/0qM
-         01tPiyGbYiH4UGfG4WbSbnLFLWhwK4mldgY4IYV3DKvmczzqWTxiCCYtBKN5X95aXg9X
-         tzKgXN7MDtqgtuH/qOL8b1CiYh20VoEtp4e0+Oj1iP0YznGeLThplnVZ5Fxp072FurEV
-         vYylQ44DKEuUdBuuOEWwITuo1GPtVIZF3SAO/lUTfjIXv14bYA7A6UqM1B/mxvto+Q7n
-         vQ/Fkl13kyk8kscShz5TA9VVYd8H8t/ju8iH+JosImeKFKDqPu5kJ6M3pIi+VxWXM7bq
-         3GSw==
-X-Gm-Message-State: AO0yUKXwUBoHf4jW3PEqTgsJ+/3EQBkIOND1e7SNjHgDlSyUALdDGgsr
-        dW5l886YlRzrPFV1l4UEQfU=
-X-Google-Smtp-Source: AK7set+2wJM21/vUhqZKljfebmcjKs1hj2P8FB6BSF+IR4mJCpcim0cnQkXDA3k3kvhEr/KeiyT6Zw==
-X-Received: by 2002:a05:6e02:1c45:b0:310:fb90:b61b with SMTP id d5-20020a056e021c4500b00310fb90b61bmr3315825ilg.10.1675117649557;
-        Mon, 30 Jan 2023 14:27:29 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fBDPnxYSUfrgiKj2KMKkACqLWIz+4lF8zwzbQUTMXqY=;
+        b=zhYp9ArZWsFrmXwmVTkY5ESaf3wB6rf5Adqlc/5BNqAlvTuTSF1SdIKnHUUt7tk8dG
+         HRxDbdYDVzwK6vX2qgCYQeglKwaYUWkN75bo+EFwGedehYb39cLRaW3I9HTqqTbZq8V6
+         1EojslD0PJaQgFTQ4VfOa/SQ6Yc7iCt+FpIL8BLdN55kDSlNJS4LLx8DAgmkoWhqm+P+
+         iZQLuSlZFmjlfvs7pfShWZmHnb1Ey49GhvpYExAXj8A2E3tT8HR5nbxCGTxGCm8x4s79
+         pbAra4hI8NuM3oZic08hQzqugMLzbhlpTKRB0MfvGH8c+40sP1gSE6v3/CvMOgl3vXDo
+         d0eg==
+X-Gm-Message-State: AO0yUKV9eXuUttvb7ww8sbJpij1nRcwdXQayHWaOmOUYOFhuVlxB6+iG
+        8VW9dX8EnuorVypotTpH9V8Ws0maNFCmvg==
+X-Google-Smtp-Source: AK7set+oCdscayHGv0+JxNg85OIUfKxsr+c1taK3ZxmdpYN8KHa+xfEyrGEK/5txXwX6X4LM+Wkugw==
+X-Received: by 2002:a6b:e402:0:b0:707:dcd8:2aea with SMTP id u2-20020a6be402000000b00707dcd82aeamr7151526iog.19.1675117653238;
+        Mon, 30 Jan 2023 14:27:33 -0800 (PST)
 Received: from localhost ([2607:fea8:a2df:3d00::11ab])
-        by smtp.gmail.com with ESMTPSA id p4-20020a056e0206c400b002fc323a2902sm4370778ils.62.2023.01.30.14.27.28
+        by smtp.gmail.com with ESMTPSA id c62-20020a029644000000b003a96cc2bbdesm4535426jai.85.2023.01.30.14.27.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 14:27:28 -0800 (PST)
+        Mon, 30 Jan 2023 14:27:32 -0800 (PST)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Amol Maheshwari <amahesh@qti.qualcomm.com>,
@@ -57,10 +58,12 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Thierry Escande <thierry.escande@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH 0/2] misc: fastrpc: Fixes for issues in userspace
-Date:   Mon, 30 Jan 2023 17:27:14 -0500
-Message-Id: <20230130222716.7016-1-mailingradian@gmail.com>
+Subject: [PATCH 1/2] misc: fastrpc: return -EPIPE to invocations on device removal
+Date:   Mon, 30 Jan 2023 17:27:15 -0500
+Message-Id: <20230130222716.7016-2-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230130222716.7016-1-mailingradian@gmail.com>
+References: <20230130222716.7016-1-mailingradian@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,23 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
+The return value is initialized as -1, or -EPERM. The completion of an
+invocation implies that the return value is set appropriately, but
+"Permission denied" does not accurately describe the outcome of the
+invocation. Set the invocation's return value to a more appropriate
+"Broken pipe", as the cleanup breaks the driver's connection with rpmsg.
 
-I've been playing around a bit with the FastRPC ioctl interface on the
-Pixel 3a with some device tree patches. Since the ADSP crashes every 10
-seconds, the inconvenience caused by related bugs encouraged me to write
-a few fixes. A demonstration is provided in patch 2.
+Fixes: c68cfb718c8f ("misc: fastrpc: Add support for context Invoke method")
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+---
+ drivers/misc/fastrpc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Please enjoy and review these patches for better userspace while remote
-processors crash.
-
-Richard Acayan (2):
-  misc: fastrpc: return -EPIPE to invocations on device removal
-  misc: fastrpc: reject new invocations during device removal
-
- drivers/misc/fastrpc.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 7ccaca1b7cb8..2334a4fd5869 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -2337,8 +2337,10 @@ static void fastrpc_notify_users(struct fastrpc_user *user)
+ 	struct fastrpc_invoke_ctx *ctx;
+ 
+ 	spin_lock(&user->lock);
+-	list_for_each_entry(ctx, &user->pending, node)
++	list_for_each_entry(ctx, &user->pending, node) {
++		ctx->retval = -EPIPE;
+ 		complete(&ctx->work);
++	}
+ 	spin_unlock(&user->lock);
+ }
+ 
 -- 
 2.39.1
 
