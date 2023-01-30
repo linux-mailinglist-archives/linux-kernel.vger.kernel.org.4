@@ -2,109 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019F968140D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1872868140C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbjA3PFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:05:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S236468AbjA3PE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237540AbjA3PFS (ORCPT
+        with ESMTP id S237734AbjA3PE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:05:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A9D17140
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675091066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AHzUAFOISigJSuZLYSE9gYkWGGTM6t11vLNDnydgJJc=;
-        b=a1vaLtZyLfqrReFBHXnQUgoGowgcfcFzpzCdLhmg6xfnaP6mq2QfNMURpR1/DWxgn5eIAt
-        mEGwOclb2axLTvo1YjexKPfBwXhG6uapreTFrp0tFWeQHtkycNQuajqmxwe9x6vLF2oj/U
-        iP1AQgSQOK+f02Z4VLk7VTqYKfqBZX0=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-248-W8kX_6flOxWd1VbMQlJeOw-1; Mon, 30 Jan 2023 10:04:23 -0500
-X-MC-Unique: W8kX_6flOxWd1VbMQlJeOw-1
-Received: by mail-qv1-f72.google.com with SMTP id px22-20020a056214051600b00537657b0449so6663922qvb.23
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:04:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AHzUAFOISigJSuZLYSE9gYkWGGTM6t11vLNDnydgJJc=;
-        b=mcCE3b0ftNPWpdedJbvsUZ1Z53Z9GKQhWzuBPiYsDKiXMQJJn7w0HTOYaguE8f1Rzz
-         Ra4K4aNsa9d5Fua3XtEh0O7YI2g1IaJTSeXypOOs4lg6fZwsnEle/1K2rkffzRuQ6Fr8
-         5hdezav19v0FuRORMb1yMjzr90ryJJY72bJEKEtn9kI89mprGxd5casPMFbHpKqSTBpS
-         qydt/5v3KlwnVs477FYSAmGirDVeZWrom+6FOlnLmZu9YF26GyhRJAubk77Pj10xZdHB
-         LvUyN4h6NjHs+wOccKHLgrXQotC2EwjluTuRWNwYFufEBH3+AOa6NzXFfZW8tCxgcNDo
-         E6uA==
-X-Gm-Message-State: AO0yUKXWS5oU2+hRdY3/a7AQgJEUkosab7YIx48FDwXIUbYGlfZJHvsv
-        CsRkhpxB9igAukPSvwuDyAPaNxsqR1xKqOtBuD92MgJovaVvVr4Vh1Q5gUR39pcsFH4p6ftCYVi
-        FnF1n0Aca90hLXo3yk+dXvXRI
-X-Received: by 2002:ac8:5ccf:0:b0:3b8:6aaf:acfe with SMTP id s15-20020ac85ccf000000b003b86aafacfemr4750206qta.38.1675091062951;
-        Mon, 30 Jan 2023 07:04:22 -0800 (PST)
-X-Google-Smtp-Source: AK7set9YJRIkiVvinAoDC8719oWhQC2COIk00xm3Dl23OMFlPho0p5nFr66Bab8WpRnJVguTUiT25Q==
-X-Received: by 2002:ac8:5ccf:0:b0:3b8:6aaf:acfe with SMTP id s15-20020ac85ccf000000b003b86aafacfemr4750176qta.38.1675091062547;
-        Mon, 30 Jan 2023 07:04:22 -0800 (PST)
-Received: from jsavitz-csb (c-98-229-96-5.hsd1.ct.comcast.net. [98.229.96.5])
-        by smtp.gmail.com with ESMTPSA id b1-20020ac85bc1000000b003b6325dfc4esm8246094qtb.67.2023.01.30.07.04.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 07:04:21 -0800 (PST)
-Date:   Mon, 30 Jan 2023 10:04:19 -0500
-From:   Joel Savitz <jsavitz@redhat.com>
-To:     Jongwoo Han <jongwooo.han@gmail.com>
-Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vc04_services: mmal-vchiq: fix typo in comment
-Message-ID: <20230130150419.GA1268781@jsavitz-csb>
-References: <20230130145400.40890-1-jongwooo.han@gmail.com>
+        Mon, 30 Jan 2023 10:04:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18E81A96B;
+        Mon, 30 Jan 2023 07:04:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EF3F6118A;
+        Mon, 30 Jan 2023 15:04:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F64C433AE;
+        Mon, 30 Jan 2023 15:04:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675091094;
+        bh=NP5hS1dR9EZmj2uQzPc5GC8kAzVVdZAEiPRJ9S3ogeI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JfkSBEiDdHCwrsfpP1o2ASLyl1gWXHuRLeuSIvE9vW44hD9mhkvwoROQD8QIrcP9+
+         kfiUaMTjYKtpddyFZN8rH6G9MqO7wZz+ISPYrrD4YRTfIPovQZiXJtGC6XfOudB6RT
+         ZA3O9mb9VjUFkTDHsOMNoJK83ukgTyNQwOz4IfYQtxqkLVnz5nhg7EG6CeUofwyhgV
+         FqaLYi+mLu6CnaOZLUOyHh2sRF+RkeCmeFBpWdKB2/wIqv5P/TxfJYX3IgJqCIekbm
+         dyaxlVSrZf+K1XGw3c+JGDbsDFjMMVcmzFy017yUOq/XW5mCkB9znE3yBAo+sjXFrU
+         D3/LIj1ZMEcOw==
+Received: by mail-vs1-f48.google.com with SMTP id 187so12723596vsv.10;
+        Mon, 30 Jan 2023 07:04:54 -0800 (PST)
+X-Gm-Message-State: AO0yUKVMZJrUShspaFsw5UnMpJonkhXkIBmGZzzh3ocslQLUJRW0Mpn6
+        CtjjJi30mUIs5Q7NSOPwKT6kHRqSm9JOLJnS6w==
+X-Google-Smtp-Source: AK7set+hZraBztww+lgC8qx204C8V9L5htt85m/SDlWTCczhWl723RbgSQuPGeGVqFZxYylGIiZSxrnXAgLr+5AEgsw=
+X-Received: by 2002:a67:fe41:0:b0:3ea:c8c:48a5 with SMTP id
+ m1-20020a67fe41000000b003ea0c8c48a5mr2455575vsr.53.1675091093363; Mon, 30 Jan
+ 2023 07:04:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130145400.40890-1-jongwooo.han@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230126135049.708524-1-rick.wertenbroek@gmail.com> <20230126135049.708524-6-rick.wertenbroek@gmail.com>
+In-Reply-To: <20230126135049.708524-6-rick.wertenbroek@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 30 Jan 2023 09:04:41 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJSZ7v-YSOyUu2zJ0Yu2pU+qm=hRtoyQpdmQdhs1tirDg@mail.gmail.com>
+Message-ID: <CAL_JsqJSZ7v-YSOyUu2zJ0Yu2pU+qm=hRtoyQpdmQdhs1tirDg@mail.gmail.com>
+Subject: Re: [PATCH 5/8] PCI: rockchip: Added dtsi entry for PCIe endpoint controller
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
+Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
+        wenrui.li@rock-chips.com, rick.wertenbroek@heig-vd.ch,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 11:54:00PM +0900, Jongwoo Han wrote:
-> Signed-off-by: Jongwoo Han <jongwooo.han@gmail.com>
+On Thu, Jan 26, 2023 at 7:52 AM Rick Wertenbroek
+<rick.wertenbroek@gmail.com> wrote:
+>
+> Added missing PCIe endpoint controller entry in the device tree. This
+> entry is documented in :
+> Documentation/devicetree/bindings/pci/rockchip-pcie-ep.txt
+> The status is disabled by default, so it will not be loaded unless
+> explicitly chosen to.
+>
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
 > ---
->  drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-> index 294b184d4..e318f3609 100644
-> --- a/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-> +++ b/drivers/staging/vc04_services/vchiq-mmal/mmal-vchiq.c
-> @@ -245,7 +245,7 @@ static void event_to_host_cb(struct vchiq_mmal_instance *instance,
->  /* workqueue scheduled callback
->   *
->   * we do this because it is important we do not call any other vchiq
-> - * sync calls from witin the message delivery thread
-> + * sync calls from within the message delivery thread
->   */
->  static void buffer_work_cb(struct work_struct *work)
->  {
-> -- 
-> 2.34.1
-> 
-> 
-> _______________________________________________
-> linux-rpi-kernel mailing list
-> linux-rpi-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rpi-kernel
-> 
-Acked-by: Joel Savitz <jsavitz@redhat.com>
+>  arch/arm64/boot/dts/rockchip/rk3399.dtsi | 25 ++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> index 9d5b0e8c9..5f7251118 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+> @@ -265,6 +265,31 @@ pcie0_intc: interrupt-controller {
+>                 };
+>         };
+>
+> +       pcie0_ep: pcie-ep@f8000000 {
+> +               compatible = "rockchip,rk3399-pcie-ep";
+> +               #address-cells = <3>;
+> +               #size-cells = <2>;
 
+These are only needed when you have child nodes. Additionally, it
+would not be a PCI bus which is the only case that has 3 address
+cells.
+
+There's a schema for this in linux-next now. Please test this change
+with that. It should point out the above issue and maybe others.
+
+> +               rockchip,max-outbound-regions = <32>;
+> +               clocks = <&cru ACLK_PCIE>, <&cru ACLK_PERF_PCIE>,
+> +                       <&cru PCLK_PCIE>, <&cru SCLK_PCIE_PM>;
+> +               clock-names = "aclk", "aclk-perf",
+> +                               "hclk", "pm";
+> +               max-functions = /bits/ 8 <8>;
+> +               num-lanes = <4>;
+> +               reg = <0x0 0xfd000000 0x0 0x1000000>, <0x0 0xfa000000 0x0 0x2000000>;
+> +               reg-names = "apb-base", "mem-base";
+> +               resets = <&cru SRST_PCIE_CORE>, <&cru SRST_PCIE_MGMT>,
+> +                       <&cru SRST_PCIE_MGMT_STICKY>, <&cru SRST_PCIE_PIPE> ,
+> +                       <&cru SRST_PCIE_PM>, <&cru SRST_P_PCIE>, <&cru SRST_A_PCIE>;
+> +               reset-names = "core", "mgmt", "mgmt-sticky", "pipe",
+> +                               "pm", "pclk", "aclk";
+> +               phys = <&pcie_phy 0>, <&pcie_phy 1>, <&pcie_phy 2>, <&pcie_phy 3>;
+> +               phy-names = "pcie-phy-0", "pcie-phy-1", "pcie-phy-2", "pcie-phy-3";
+> +               pinctrl-names = "default";
+> +               pinctrl-0 = <&pcie_clkreqnb_cpm>;
+> +               status = "disabled";
+> +       };
+> +
+>         gmac: ethernet@fe300000 {
+>                 compatible = "rockchip,rk3399-gmac";
+>                 reg = <0x0 0xfe300000 0x0 0x10000>;
+> --
+> 2.25.1
+>
