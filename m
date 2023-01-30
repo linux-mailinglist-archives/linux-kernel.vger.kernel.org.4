@@ -2,230 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB27680E85
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5102B680E83
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 14:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235858AbjA3NIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 08:08:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
+        id S235863AbjA3NIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 08:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235425AbjA3NIm (ORCPT
+        with ESMTP id S235575AbjA3NIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 08:08:42 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EA238E82;
-        Mon, 30 Jan 2023 05:08:26 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso1994941wms.0;
-        Mon, 30 Jan 2023 05:08:26 -0800 (PST)
+        Mon, 30 Jan 2023 08:08:18 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF18A2ED61
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:08:01 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso5282177wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 05:08:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NMug5rn4eBbCzTuP14/117PPtm8gZaNRz7jfLdaZaSE=;
-        b=H/UESY5g+1hFVoQBanMALjhu4XqvZnKRhCA9betXDXWKEmsQe+rh0YPJcuO+F08OwU
-         rvIgrbVGO/7L/4Fs68W+E3nJF5bJGUZTyHLUyf3VnfYxHi3NwSAzentarHJdbrcsY8dw
-         7u+kAkccotcF7Cc07M0btvTPT0jhM0KN5IFMkW5zlnsqus4itC8DaUE63TnZpJS97kLp
-         yfRF8ulFo1CHRIfIAM0yNshreTGwkvVr1fJX0Urm7rD0X/wE8PbRYVvBZuNEzIjICq9a
-         VQXP0wkUwdPTVWgseR/xYSOraeHl1op4jX7l7aCN/dsWg3S0YaRayP3jajP2t0BcPRwT
-         n0sw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Se5Q1lXw9K+Pz2pZOS2n30yDozh7nMIeUh0ec9tbew=;
+        b=sYqkr9eqZ0fdxEVtcBLHAy5FfbUAp/4Dsxxuvd6alsL9M67rKWmCLdl1LxFH9debQg
+         d3kfUYXnQzX9UE3tW0P9hIWpYc0X8IY4pccYCoQy6eLfXZEB9X/03KtRhbxWxLaWSbxh
+         XHMVnDvJU5xX2qjHLN4SApu3NSYBRaWFsmDP6GXAgJMTtE5jS9uXRfWMop3JO1v97a1A
+         kXuXZzZSVoqLpFWLEnokjmj71dCa79fpVHfPBUGEtHyapRnOATYxNIrjaHd/cTjH7uw6
+         SUZpq/NZPF1bDP/94tz5hkHz0d699Iq6M8JzCi6e3nSRzz6f3wiN3DPcbaU72OfgwQ88
+         2YRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NMug5rn4eBbCzTuP14/117PPtm8gZaNRz7jfLdaZaSE=;
-        b=f7+nhexEzyd2tl8Eg5My7rEna+joSTCLnvLktsx22rksS5Mk4OyGhRtR8zzbjDu8g0
-         KWDLLDMCSxCFfWjJ3P4Zls9eyYxc+zVDPVy5dat3oLi00FYGPdJMqhEPDg8FyGLN7YNh
-         2yG8YIZzsJ3ydSAa8+88XYXNPhfqcZw1B7bsHcnr6i9G77Szs7OWQyf18chUH/CdMx0C
-         PVcY68fccb6/4L1+hkDqi/In/n+Aam+DtmOZW1t+3zaJQ2BRDnVgI8/5zOxD9kBHoSOX
-         JLAy2QKahLCUhGp8Qfshp1jc+pQc2idFlFpGCWOZTP0YpCyhtcnWMQJR2IMJx0ntCwxM
-         BbkA==
-X-Gm-Message-State: AO0yUKXICNrzEP8J6Xg7cSRcXJphqokXykPGo2iIVKkU3PeyEwtGCFbR
-        c2B0v4AlhZCxFeILqkDy+Dw32q9+S/Y=
-X-Google-Smtp-Source: AK7set/wd0Q7j6KtwIUYcvjb00u1lGhrJBZXjORWzM8mdBG5P9QAG8HZiVQBAtzFmx7ldWJlL2YI6Q==
-X-Received: by 2002:a05:600c:12c6:b0:3dc:59a5:afc7 with SMTP id v6-20020a05600c12c600b003dc59a5afc7mr3411304wmd.20.1675084104638;
-        Mon, 30 Jan 2023 05:08:24 -0800 (PST)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id 2-20020a05600c028200b003dc4baaedd3sm7282532wmk.37.2023.01.30.05.08.16
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2Se5Q1lXw9K+Pz2pZOS2n30yDozh7nMIeUh0ec9tbew=;
+        b=csJM3NRYxZ878BzZY2fH6rOJa7jt6V1Wdn31/qPhrEvpCEc6KkGWO6HDIor+Kkc9c2
+         BmUXGwfUlJ1prsubXu/AyA0ZtUbUH54YHilZTGgN7Z4tK/FUZIFgLgvuc+5cEjNVWvSz
+         eOxEJJ7Rn5963PmgKeqm4gw7Ao155w+G/O7Z6Hs6PoWA1qZ2xUM0eqxoVVeUqEFfaG7B
+         B2n2oInvse95SVnVzoEJhsmzbLoqimyb1vj3pZcmT4bK7eC3cdrUtxxr7EWHk3E8QAoC
+         ywntdQO0Eob4J0ECNWq6Agr+kpQC2jXDeRGUVTNpry7Jr8vP5g2KUvVNImV/nNxbRBWO
+         cp7g==
+X-Gm-Message-State: AO0yUKUXPJqG42vdMB6Lp0iULTgpz3DArmsZyfuK5w9popKivYefqbD/
+        Ay+qGyeXdg2zIsMTMNgtAohQng==
+X-Google-Smtp-Source: AK7set8GSjb0s93vkK1fliYHVJS234DkIT5hqqeHwHaj3yMD9zznVEh8poWvWYbSp0ttOIg1ksF6/g==
+X-Received: by 2002:a05:600c:1d12:b0:3dc:58a6:bbe6 with SMTP id l18-20020a05600c1d1200b003dc58a6bbe6mr4007541wms.31.1675084079443;
+        Mon, 30 Jan 2023 05:07:59 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:b9a5:a1fe:d3ab:6b40])
+        by smtp.gmail.com with ESMTPSA id l21-20020a05600c4f1500b003b47b80cec3sm17776021wmq.42.2023.01.30.05.07.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 05:08:24 -0800 (PST)
-Date:   Mon, 30 Jan 2023 14:07:55 +0100
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        steffen.klassert@secunet.com, lixiaoyan@google.com,
-        alexanderduyck@fb.com, leon@kernel.org, ye.xingchen@zte.com.cn,
-        iwienand@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] gro: optimise redundant parsing of packets
-Message-ID: <20230130130752.GA8015@debian>
-References: <20230130130047.GA7913@debian>
+        Mon, 30 Jan 2023 05:07:58 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-sa8775p compatible
+Date:   Mon, 30 Jan 2023 14:07:56 +0100
+Message-Id: <20230130130756.144160-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130130047.GA7913@debian>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the IPv6 extension headers are parsed twice: first in
-ipv6_gro_receive, and then again in ipv6_gro_complete.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-The field NAPI_GRO_CB(skb)->proto is used by GRO to hold the layer 4
-protocol type that comes after the IPv6 layer. I noticed that it is set
-in ipv6_gro_receive, but isn't used anywhere. By using this field, and
-also storing the size of the network header, we can avoid parsing
-extension headers a second time in ipv6_gro_complete.
+Add a compatible for the sa8775p platform's KPSS watchdog.
 
-The implementation had to handle both inner and outer layers in case of
-encapsulation (as they can't use the same field).
-
-I've applied this optimisation to all base protocols (IPv6, IPv4,
-Ethernet). Then, I benchmarked this patch on my machine, using ftrace to
-measure ipv6_gro_complete's performance, and there was an improvement.
-
-Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- include/net/gro.h      |  8 ++++++--
- net/ethernet/eth.c     | 11 +++++++++--
- net/ipv4/af_inet.c     |  8 +++++++-
- net/ipv6/ip6_offload.c | 15 ++++++++++++---
- 4 files changed, 34 insertions(+), 8 deletions(-)
+Krzysztof: I'm now adding any link here as the v1 of the sa8775p DTS patch
+did not use this compatible and v2 is still WiP.
 
-diff --git a/include/net/gro.h b/include/net/gro.h
-index 7b47dd6ce94f..d364616cb930 100644
---- a/include/net/gro.h
-+++ b/include/net/gro.h
-@@ -41,8 +41,8 @@ struct napi_gro_cb {
- 	/* Number of segments aggregated. */
- 	u16	count;
- 
--	/* Used in ipv6_gro_receive() and foo-over-udp */
--	u16	proto;
-+	/* Used in eth_gro_receive() */
-+	__be16	network_proto;
- 
- /* Used in napi_gro_cb::free */
- #define NAPI_GRO_FREE             1
-@@ -86,6 +86,10 @@ struct napi_gro_cb {
- 
- 	/* used to support CHECKSUM_COMPLETE for tunneling protocols */
- 	__wsum	csum;
-+
-+	/* Used in inet and ipv6 _gro_receive() */
-+	u16	network_len;
-+	u8	transport_proto;
- };
- 
- #define NAPI_GRO_CB(skb) ((struct napi_gro_cb *)(skb)->cb)
-diff --git a/net/ethernet/eth.c b/net/ethernet/eth.c
-index 2edc8b796a4e..d68ad90f0a9e 100644
---- a/net/ethernet/eth.c
-+++ b/net/ethernet/eth.c
-@@ -439,6 +439,9 @@ struct sk_buff *eth_gro_receive(struct list_head *head, struct sk_buff *skb)
- 		goto out;
- 	}
- 
-+	if (!NAPI_GRO_CB(skb)->encap_mark)
-+		NAPI_GRO_CB(skb)->network_proto = type;
-+
- 	skb_gro_pull(skb, sizeof(*eh));
- 	skb_gro_postpull_rcsum(skb, eh, sizeof(*eh));
- 
-@@ -456,12 +459,16 @@ EXPORT_SYMBOL(eth_gro_receive);
- int eth_gro_complete(struct sk_buff *skb, int nhoff)
- {
- 	struct ethhdr *eh = (struct ethhdr *)(skb->data + nhoff);
--	__be16 type = eh->h_proto;
-+	__be16 type;
- 	struct packet_offload *ptype;
- 	int err = -ENOSYS;
- 
--	if (skb->encapsulation)
-+	if (skb->encapsulation) {
- 		skb_set_inner_mac_header(skb, nhoff);
-+		type = eh->h_proto;
-+	} else {
-+		type = NAPI_GRO_CB(skb)->network_proto;
-+	}
- 
- 	ptype = gro_find_complete_by_type(type);
- 	if (ptype != NULL)
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 6c0ec2789943..4401af7b3a15 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1551,6 +1551,9 @@ struct sk_buff *inet_gro_receive(struct list_head *head, struct sk_buff *skb)
- 	 * immediately following this IP hdr.
- 	 */
- 
-+	if (!NAPI_GRO_CB(skb)->encap_mark)
-+		NAPI_GRO_CB(skb)->transport_proto = proto;
-+
- 	/* Note : No need to call skb_gro_postpull_rcsum() here,
- 	 * as we already checked checksum over ipv4 header was 0
- 	 */
-@@ -1621,12 +1624,15 @@ int inet_gro_complete(struct sk_buff *skb, int nhoff)
- 	__be16 newlen = htons(skb->len - nhoff);
- 	struct iphdr *iph = (struct iphdr *)(skb->data + nhoff);
- 	const struct net_offload *ops;
--	int proto = iph->protocol;
-+	int proto;
- 	int err = -ENOSYS;
- 
- 	if (skb->encapsulation) {
- 		skb_set_inner_protocol(skb, cpu_to_be16(ETH_P_IP));
- 		skb_set_inner_network_header(skb, nhoff);
-+		proto = iph->protocol;
-+	} else {
-+		proto = NAPI_GRO_CB(skb)->transport_proto;
- 	}
- 
- 	csum_replace2(&iph->check, iph->tot_len, newlen);
-diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-index 00dc2e3b0184..79ba5882f576 100644
---- a/net/ipv6/ip6_offload.c
-+++ b/net/ipv6/ip6_offload.c
-@@ -227,11 +227,14 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
- 		iph = ipv6_hdr(skb);
- 	}
- 
--	NAPI_GRO_CB(skb)->proto = proto;
--
- 	flush--;
- 	nlen = skb_network_header_len(skb);
- 
-+	if (!NAPI_GRO_CB(skb)->encap_mark) {
-+		NAPI_GRO_CB(skb)->transport_proto = proto;
-+		NAPI_GRO_CB(skb)->network_len = nlen;
-+	}
-+
- 	list_for_each_entry(p, head, list) {
- 		const struct ipv6hdr *iph2;
- 		__be32 first_word; /* <Version:4><Traffic_Class:8><Flow_Label:20> */
-@@ -358,7 +361,13 @@ INDIRECT_CALLABLE_SCOPE int ipv6_gro_complete(struct sk_buff *skb, int nhoff)
- 		iph->payload_len = htons(payload_len);
- 	}
- 
--	nhoff += sizeof(*iph) + ipv6_exthdrs_len(iph, &ops);
-+	if (!skb->encapsulation) {
-+		ops = rcu_dereference(inet6_offloads[NAPI_GRO_CB(skb)->transport_proto]);
-+		nhoff += NAPI_GRO_CB(skb)->network_len;
-+	} else {
-+		nhoff += sizeof(*iph) + ipv6_exthdrs_len(iph, &ops);
-+	}
-+
- 	if (WARN_ON(!ops || !ops->callbacks.gro_complete))
- 		goto out;
- 
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index d8ac0be36e6c..27fb484d5f8d 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -18,6 +18,7 @@ properties:
+       - items:
+           - enum:
+               - qcom,apss-wdt-qcs404
++              - qcom,apss-wdt-sa8775p
+               - qcom,apss-wdt-sc7180
+               - qcom,apss-wdt-sc7280
+               - qcom,apss-wdt-sc8180x
 -- 
-2.36.1
+2.37.2
 
