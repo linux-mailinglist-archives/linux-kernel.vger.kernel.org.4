@@ -2,161 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E857B681A7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD653681A7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238240AbjA3T2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
+        id S238133AbjA3T2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236981AbjA3T2F (ORCPT
+        with ESMTP id S238057AbjA3T2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:28:05 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2043.outbound.protection.outlook.com [40.107.92.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1181A269D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:27:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lZ9mxGb1efmiaDJy/7xg3EodDHaZk9pjGiisotlXD2yqLGPSfsEfUZxulNLpFe15CziKziSTQl8XvXfcb0xrG7xv1zDVdfHfJU/tsXXB8MwpwTPxWm9dowFBchpj9R0GDgrWxnBFIdA7ojz7kYM2d4S3uuda1YvbCqDXm/SVVnRZEw9ACnPLIRk57nhd6gme3b7MqQCpHMsfECOJZT8fyiECT4bmx2gxAjdiMx/EjBi6hHLnvqjQPcSO/sUm7Qt7hac92fFrLclfdlWhVxXB9BniuaC26MaFk/6+xls4qawIa9ECJgeuJUtq8yF9ztmFYiJJWIwNRUsO0kiYwYapVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p/nHW6O8NByM+fBYztB6vrC4vDIXFvyzsgihmCDejWA=;
- b=jCqyd6URn3Cbdiuo+/2bgegwcm28oZBOhIcmaBvCaMMUw0/Mf8lAWKR8ExQ9ymQpA3av27dtgWv3wtYMxodr3AVUydiMXqlCyrfEFBYt6iGuLhTG32QHh4dyGQEeEAb18hy6M8XcSJQVqpETT9QdV+yDrA/BTyiVzD8oExIv7gy6EsZ7v5p6+ekjJNdQIcREmr4pgQ4m7tR/FH8vLTGNEz03DQ2iUBXu0Ug4/zZHDCwNqlzwFJqxba2JY/lOL58s5LnwCI+q6KiFhHaas4ZmrsCwQ3nYLVHc7gSLjo4cBIDVYbrtBAXoiwK91Rp6vM1HloZn8hdZZrd3lfLkMwzgBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p/nHW6O8NByM+fBYztB6vrC4vDIXFvyzsgihmCDejWA=;
- b=IUNemRtm/T7p7vyY3Phw7IdTIM+AMG2dA39iIP5zoiTQ9Sh5Zj5j6RKGk475mX8bM7ot6GsdfOQqR79J4WXat1ddOHwupKNrPH2UkSnIf5oCNXsJYkCUOr4z5Wy6rQMCqdqrLSQzhUZ92l/JEe3EgkUURLy8beUpP+hK2XVaYod7ik9dWV9tlffC2tYANpeGtMQpvB4wAoJKqLulL77LOE0eqQyalCrPL9buk1gfJZ9L9F3xdCGqjqDcFe8Zl4TkZEo4PS530MUsHJTq3orI+VXR+pHAYlx5RdGtPcBB/90koMsLdH6pOtY87WcH0pTtDFTthODo/lTSwOhe/WdVnA==
-Received: from DM6PR07CA0114.namprd07.prod.outlook.com (2603:10b6:5:330::29)
- by DS0PR12MB6630.namprd12.prod.outlook.com (2603:10b6:8:d2::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Mon, 30 Jan
- 2023 19:27:52 +0000
-Received: from DS1PEPF0000E652.namprd02.prod.outlook.com
- (2603:10b6:5:330:cafe::e0) by DM6PR07CA0114.outlook.office365.com
- (2603:10b6:5:330::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36 via Frontend
- Transport; Mon, 30 Jan 2023 19:27:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS1PEPF0000E652.mail.protection.outlook.com (10.167.18.8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6064.17 via Frontend Transport; Mon, 30 Jan 2023 19:27:51 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 11:27:39 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 11:27:39 -0800
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Mon, 30 Jan 2023 11:27:39 -0800
-Date:   Mon, 30 Jan 2023 11:27:37 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     <kevin.tian@intel.com>, <yi.l.liu@intel.com>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] iommufd: Add devices_users to track the
- hw_pagetable usage by device
-Message-ID: <Y9gaKaMKOf+P2NtK@Asurada-Nvidia>
-References: <cover.1674939002.git.nicolinc@nvidia.com>
- <c1c65ce093a3b585546dd17a77949efbe03a81d9.1674939002.git.nicolinc@nvidia.com>
- <Y9fcAdFxl7GVSH9r@nvidia.com>
+        Mon, 30 Jan 2023 14:28:31 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CA329170
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:28:10 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id x7so8807374edr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:28:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eitmlabs-org.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pde1HtL0jbaSii0M64UiQFU/qnbGbv9/KpkjEUAcgCs=;
+        b=TWVNEU/0hAjW3MpjjnPz0cWL/yot4kqsCxV/7jfjoHxjkEOtTBUeb2P/yoA66RqRIa
+         SAmHwnIZaHuvl9SOPBm3mOdaeVwtrFifxKu6m5kSL/ElyJo5UcJOrhEhlRpIz3phkLpi
+         ixOd/FAnQe9kWf1puy9uSBXk4lTbWjG1IOX/+TL8JmYuYsmsWDR2pJ1du2f8pdw2n9Hz
+         0Ve1I0rr+DaICglug0SuufzQ3VTcDQc74xhodhtm4bKROyuG8Lf4XienJMU14TR2LcLW
+         uT6TIDHidO9VGv7DnWWfIEl1K8aVpoKL/zFREXx0YhBytGpyBRvzSI1c0ikePVJxSFke
+         aQNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pde1HtL0jbaSii0M64UiQFU/qnbGbv9/KpkjEUAcgCs=;
+        b=fxRlcQ9DpTo6X9xoaNoYni2wvxoB+0F/cHjLgPgrz9NVFHqyF+1drOMZApX5nL5vYt
+         5ZDvYalLcB0q7+AB4OdORANXs9imi3hBBbC+5LQcQRnPcPpBIhcFcsZjmJeI1/htbJq1
+         bi2RyjhE2YTpgUPn4z6tWgHqrrV9+jpPliHPR4JAcdWsZ+5jkL4q7Fy/JMy5PC/PNtYy
+         M69n51sfIOjN1s+BXPVD0tqdWB8M2Bw3wmMTQ98BNBDpCMBCXjLqUq8WbDiOOR7GuRtD
+         e2BPG5FoWS6oSbFOjAuKfg982ZnTfiByaD0Rnzs1vgYjztFwdqntB4zHMvABY2eVSTUH
+         TBKw==
+X-Gm-Message-State: AO0yUKVhyOu4SFU12Yu86iujzwmGlsuDWl6T9rCnxmbwsAvZQxw2bJRG
+        Wfiilf/4CRXZcNU1iiBNTKsWWm80kA8NwvGCKTXRMw==
+X-Google-Smtp-Source: AK7set+Cbyu/gjwSId0z57qj4f7ODqmywQnBSUV4JGQR6P/djfb+lISYHaaBj+8ytqXxSzZC0HNu79mPM8DJ8vII9aw=
+X-Received: by 2002:a05:6402:2807:b0:4a0:e275:6844 with SMTP id
+ h7-20020a056402280700b004a0e2756844mr4935501ede.74.1675106889050; Mon, 30 Jan
+ 2023 11:28:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y9fcAdFxl7GVSH9r@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E652:EE_|DS0PR12MB6630:EE_
-X-MS-Office365-Filtering-Correlation-Id: 547f455d-87d9-417e-b7d7-08db02f8145d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6HxSqoNc6a/jqWscc5DpCluDGfflG0rL217prJRoGUQVq7uN14LmyuCALlHCRogQkVPSw9yjAaj+5dJkM1A1J1wmpWkcT6d7dYA8/jC3oWgeecXFCio1I3PauSSqUJL6U8yxYiXnfgoeVZhGUPRe1bDNTqAtIzmX9ZvYbPGso2YvhpT+LXvlixumxk7ChYCnr6pbRiwB4bJ0Mb46IKlUiwxu3n0Lt5C5sGDuca3I+GHhr1BJb/2Kh4O8tm/PobhTmeiBuxxcmqjAR6QrVo4hs0kID205Hct53OnX6d3qcyMoJ5Hvy14HORdDqyPto7flbCc+ksuKEwBesNSLUxLA0D8Ad5I4mcADvLnn3iUH1tTqHEyQ+SQLQ7rww9JKgYSxUmTSvMrYrIAy9xGeTdfHBo/8kzh5AVC26pYU5TiCAfyr8DN2fS0YP4mffHhpiqvSmo98XZHmhgDKa0y2mS7p6q/v66re8nSK641rC/vwgcLOVoXBuXHceYE/1+LDJAMqirly2VKr5sPqLZIJZRYMcw8DI1zu6RHARopPeIrSjOBtGIxZp+gqrSyZ5jBQmX4zDiDNWIMjXsdX6KoCG4nzd9tamB+uRbxtWgn7Y9cUFfwKlJLA58ObVtRFPIMss+419+wD7nx2sbb4gPfVnRGWeQJDYwlviN9DZ3D+YbdZ94HaKO94HlO3y9pCWiQb9rVciXIY7Enm2ojdKPHqM+UjsUUfiRPpgyH6mLELZfqpe/w=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(136003)(396003)(376002)(451199018)(40470700004)(36840700001)(46966006)(2906002)(5660300002)(40480700001)(82740400003)(55016003)(186003)(26005)(9686003)(36860700001)(47076005)(7636003)(83380400001)(336012)(426003)(4326008)(86362001)(70206006)(8676002)(6862004)(316002)(41300700001)(6636002)(54906003)(8936002)(70586007)(40460700003)(478600001)(356005)(33716001)(82310400005)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 19:27:51.8325
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 547f455d-87d9-417e-b7d7-08db02f8145d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E652.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6630
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+ <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
+ <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
+ <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
+ <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
+ <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
+ <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
+ <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
+ <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
+ <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
+ <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com>
+In-Reply-To: <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com>
+Reply-To: jonathan@eitm.org
+From:   Jonathan Katz <jkatz@eitmlabs.org>
+Date:   Mon, 30 Jan 2023 11:27:53 -0800
+Message-ID: <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
+Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
+ missing in lower/upper fs
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 11:02:25AM -0400, Jason Gunthorpe wrote:
-> On Sat, Jan 28, 2023 at 01:18:09PM -0800, Nicolin Chen wrote:
-> > From: Yi Liu <yi.l.liu@intel.com>
-> > 
-> > Currently, hw_pagetable tracks the attached devices using a device list.
-> > When attaching the first device to the kernel-managed hw_pagetable, it
-> > should be linked to IOAS. When detaching the last device from this hwpt,
-> > the link with IOAS should be removed too. And this first-or-last device
-> > check is done with list_empty(hwpt->devices).
-> > 
-> > However, with a nested configuration, when a device is attached to the
-> > user-managed stage-1 hw_pagetable, it will be added to this user-managed
-> > hwpt's device list instead of the kernel-managed stage-2 hwpt's one. And
-> > this breaks the logic for a kernel-managed hw_pagetable link/disconnect
-> > to/from IOAS/IOPT. e.g. the stage-2 hw_pagetable would be linked to IOAS
-> > multiple times if multiple device is attached, but it will become empty
-> > as soon as one device detached.
-> 
-> Why this seems really weird to say.
-> 
-> The stage 2 is linked explicitly to the IOAS that drives it's
-> map/unmap
-> 
-> Why is there any implicit activity here? There should be no implicit
-> attach of the S2 to an IOAS ever.
+On Thu, Jan 26, 2023 at 5:26 AM Miklos Szeredi <miklos@szeredi.hu> wrote:
+>
+> On Wed, 18 Jan 2023 at 04:41, Jonathan Katz <jkatz@eitmlabs.org> wrote:
+>
+> > I believe that I am still having issues occur within Ubuntu 22.10 with
+> > the 5.19 version of the kernel that might be associated with this
+> > discussion.  I apologize up front for any faux pas I make in writing
+> > this email.
+>
+> No need to apologize.   The fix in question went into v6.0 of the
+> upstream kernel.  So apparently it's still missing from the distro you
+> are using.
 
-I think this is supposed to say the following use case:
+Thank you for the reply! ---  I have upgraded the Kernel and it still
+seems to be throwing errors.  Details follow:
 
-Two stage-1 hwpts share the same parent s2_hwpt:
+Distro: Ubuntu 22.10.
+Upgraded kernel using mainline (mainline --install-latest)
 
-attach device1 to stage-1 hwpt1:
-	...
-	if (list_empty(s1_hwpt1->devices))		// empty; true
-		iopt_table_add_domain(s2_hwpt->domain); // do once
-	s1_hwpt1 device list cnt++;
-	...
+# uname -a
+Linux instance-20220314-1510-fileserver-for-overlay
+6.1.8-060108-generic #202301240742 SMP PREEMPT_DYNAMIC Tue Jan 24
+08:13:53 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
 
-attach device2 to stage-1 hwpt2:
-	...
-	if (list_empty(s1_hwpt2->devices))		// empty; true
-		iopt_table_add_domain(s2_hwpt->domain); // do again
-	s1_hwpt2 device list cnt++;
-	...
+On mount I still get the following notice in syslog (representative):
+Jan 30 19:11:46 instance-20220314-1510-fileserver-for-overlay kernel:
+[   71.613334] overlayfs: null uuid detected in lower fs '/', falling
+back to xino=off,index=off,nfs_export=off.
 
-This is because each hwpt has its own device list. To prevent
-the duplicated iopt_table_add_domain call, we need to check all
-the device list. So this patch adds a shared list among all
-relevant hwpts.
+And on access (via samba) I still see the following errors in the
+syslog (representative):
+Jan 30 19:19:34 instance-20220314-1510-fileserver-for-overlay kernel:
+[  539.181858] overlayfs: failed to retrieve lower fileattr (8020
+MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/Storage.mcf_idx,
+err=-38)
 
-I can revise the commit message to make a better sense.
+And on the Windows client, the software still fails with the same symptomology.
 
-Thanks
-Nicolin
+
+
+
+>
+> > An example error from our syslog:
+> >
+> > kernel: [2702258.538549] overlayfs: failed to retrieve lower fileattr
+> > (8020 MeOHH2O
+> > RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/analysis.tsf,
+> > err=-38)
+>
+> Yep, looks like the same bug.
+>
+> Thanks,
+> Miklos
