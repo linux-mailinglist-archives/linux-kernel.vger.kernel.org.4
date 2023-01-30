@@ -2,115 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE1368187C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FF4681881
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjA3SQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:16:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
+        id S234198AbjA3SRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:17:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237508AbjA3SQO (ORCPT
+        with ESMTP id S235055AbjA3SRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 13:16:14 -0500
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7AA44BF8;
-        Mon, 30 Jan 2023 10:16:09 -0800 (PST)
-Received: by mail-ot1-f41.google.com with SMTP id e12-20020a0568301e4c00b0068bc93e7e34so1713796otj.4;
-        Mon, 30 Jan 2023 10:16:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=G7bb455SP8TO1b2p4o1VPwtrIH2klzrLn8qwOehGPvI=;
-        b=R9uzLqsGJ790Jdn1vUMi11/uarnRhHJ8F4Fxc+9SpFUrAf6E7BAwCfgiKcGq/Y5XWg
-         NL6vAvV5/YvbTlwGHsu1nnqw1iBMQazJTKv6XSpfZuNF9zxoA8VG3S1QaTatQFN2jvHa
-         OGzJrzqCIERTC9Kt+bGrzoHvP0GOzm5IBOJzv5I7Po3OCtKaGAC5gVKoXODpEmmtJvkH
-         rzlKB6FXXht3NGsphzGi12ZkOTC8yanN8+Bnwj1qqFzDELCaJKStl5eNeKSSj3Q8VjLQ
-         UBKx6P0P8OROJRQaSz/4S1iy3aeCumZS3gNSPUPFoNJjw51rddXPvsjZtlzZnq49yITu
-         dcRQ==
-X-Gm-Message-State: AO0yUKV14Mw0FQBX1e4z/G7CCI5S7WFBiVcGMMzb7B2FgcoQEOzSWXSk
-        1zgbYC+3Xs9rOzSoetmO+Q==
-X-Google-Smtp-Source: AK7set8FrVHMNoEHAdLjytXCeX5uEnWuM2t6vdS0Beh/CVdEt/BsnVh76wgyLd1X+eb1EX1hfyXuJw==
-X-Received: by 2002:a9d:410a:0:b0:68b:d1c7:4eb4 with SMTP id o10-20020a9d410a000000b0068bd1c74eb4mr2404075ote.16.1675102568352;
-        Mon, 30 Jan 2023 10:16:08 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h5-20020a056808014500b003785996ef36sm1111724oie.19.2023.01.30.10.16.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 10:16:07 -0800 (PST)
-Received: (nullmailer pid 3060316 invoked by uid 1000);
-        Mon, 30 Jan 2023 18:16:07 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        andersson@kernel.org, Stephen Boyd <sboyd@kernel.org>
-In-Reply-To: <20230130153252.2310882-8-konrad.dybcio@linaro.org>
-References: <20230130153252.2310882-1-konrad.dybcio@linaro.org>
- <20230130153252.2310882-8-konrad.dybcio@linaro.org>
-Message-Id: <167510252236.3059233.560325193993095939.robh@kernel.org>
-Subject: Re: [PATCH v3 7/8] dt-bindings: clock: Add Qcom SM6115 GPUCC
-Date:   Mon, 30 Jan 2023 12:16:07 -0600
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 30 Jan 2023 13:17:16 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D892ED79
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:17:15 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 19B1B3200754;
+        Mon, 30 Jan 2023 13:17:11 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute5.internal (MEProxy); Mon, 30 Jan 2023 13:17:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1675102630; x=1675189030; bh=Mz
+        vXpXVQ21A6NwgnOt1kJcDGD5oCZ5wPe9HTihkI7YA=; b=lpMju/Li70QJB6+w5u
+        ye7IultwKy8iSRFP1/zQEFi7oHr5Es/lvcQXbo8o8AMv5BaVMiZk9uQBBCBxD3Lt
+        MS2lb3TR0G8LQlBMcR5LfhWP4dIJSjk/2N/I7xhwbc+mjT06lHqp6/ITGx1jG4+S
+        N6/M0GrW/Bw+jcYH2CQKCD7NrnLwC/LfepknlKbgtP6YGGTFUpU5myiDbtDdbxV6
+        OXmDOAUXnMzBk9NFHBiheQh1hAtDfb6ga82lT/ISfa0j575Q4XSPR//dRGatt1T7
+        Kwuf3cvdzoNAcW8kQjV98Ej9UC8rVJfLoUTLonlJozwevr9ikdzCFa9Z4faduG3X
+        cu2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675102630; x=1675189030; bh=MzvXpXVQ21A6NwgnOt1kJcDGD5oC
+        Z5wPe9HTihkI7YA=; b=C4FUfKGRYLcxbSI8bIh9PPbQV4mZrT278z+BnJKeLXQJ
+        zIl59/SlaoyVOhrBimeexZ9nQTxMPbH4p+0TLmxqQgZ/naVeFud2zriPROLXd1wW
+        Yi5U82ab4m9Drp2/+Lnwk5wnGk31z/TtdCn1REAocHZgZChUQ2FxCKTZMVeSiaA0
+        GGiyg4OeuO9k8DS60DRCBdC/R0kYs8h8fX/TyFmWhDo9B4Qix2cIZPW7T9YE/r63
+        tIGQWI5jeVJ12j9xWJ1L3u1D0mJiV//Tw/tISOo2KxYM9F6AHWEGvPNouROwIVyP
+        VAMk663Zo8irSAkz+Fnnv32KQncGS9KEldMdydO5Ow==
+X-ME-Sender: <xms:pQnYY5VYQwh-FJvukvTPbeinj7dtEtlUF3d5x2bPgD3JAGl8eJG5bA>
+    <xme:pQnYY5mxlC1f7H7TDMzUIznu-HLUHlVk93FOoL-3Dz0ov_HxoZsecHpOiyc-GdUWS
+    p_5G8QubZEE03hpsZE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddgudduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
+    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
+    frrghtthgvrhhnpeeggeekkedtjeevieetffdvudfggfegueduhedvgfdtvddugfejtdeu
+    uddvveeuveenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuih
+    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghr
+    rdguvghv
+X-ME-Proxy: <xmx:pQnYY1ZsS15QYSphu99sQdf-6ervy0dD-wbdf14tD9bAQaC6HeKhBw>
+    <xmx:pQnYY8XQnaHAXNWiInznzvJ8wQaId3i5McXQ7PH3wYNDBjz8EN7UsA>
+    <xmx:pQnYYzmmoiHW3zMVa4Aot8oSGIP2EYhJkkc09Tqop4YKWdUT2H7DGw>
+    <xmx:pgnYY14Wpha4mfyex5uLvqEqfkFLKV3UkrVEsWWUmL87XgwXVqh7pw>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 88FE5A6007C; Mon, 30 Jan 2023 13:17:09 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-106-gfe3ab13a96-fm-20230124.001-gfe3ab13a
+Mime-Version: 1.0
+Message-Id: <33081a24-2d23-4e28-8e4d-1db74191ca23@app.fastmail.com>
+In-Reply-To: <20230130165350.58533-1-ecurtin@redhat.com>
+References: <20230130165350.58533-1-ecurtin@redhat.com>
+Date:   Mon, 30 Jan 2023 19:16:49 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Eric Curtin" <ecurtin@redhat.com>, asahi@lists.linux.dev
+Cc:     "Dan Carpenter" <error27@gmail.com>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Joerg Roedel" <joro@8bytes.org>, "Will Deacon" <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "moderated list:ARM/APPLE MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU SUBSYSTEM" <iommu@lists.linux.dev>,
+        "open list" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] iommu: dart: DART_T8110_ERROR range should be 0 to 5
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-On Mon, 30 Jan 2023 16:32:51 +0100, Konrad Dybcio wrote:
-> Add device tree bindings for graphics clock controller for Qualcomm
-> Technology Inc's SM6115 SoCs.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+On Mon, Jan 30, 2023, at 17:53, Eric Curtin wrote:
+> This was detected by smatch as one "else if" statement could never be
+> reached. Confirmed bit order by comparing with python implementation [1].
+>
+> drivers/iommu/apple-dart.c:991 apple_dart_t8110_irq()
+> warn: duplicate check 'error_code == ((((1))) << (3))'
+>   (previous on line 989)
+>
+> Link: https://github.com/AsahiLinux/m1n1/commit/96b2d584feec1e3f7bfa [1]
+>
+> Fixes: d8bcc870d99d ("iommu: dart: Add t8110 DART support")
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Signed-off-by: Eric Curtin <ecurtin@redhat.com>
 > ---
-> v2 -> v3:
+>  drivers/iommu/apple-dart.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
+> index efe877842f72..3adacf4094d7 100644
+> --- a/drivers/iommu/apple-dart.c
+> +++ b/drivers/iommu/apple-dart.c
+> @@ -112,15 +112,15 @@
 > 
-> - Mention resets in description:
-> - Use gcc.yaml
+>  #define DART_T8110_ERROR_MASK 0x104
 > 
->  .../bindings/clock/qcom,sm6115-gpucc.yaml     | 58 +++++++++++++++++++
->  include/dt-bindings/clock/qcom,sm6115-gpucc.h | 36 ++++++++++++
->  2 files changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm6115-gpucc.h
+> -#define DART_T8110_ERROR_READ_FAULT BIT(4)
+> -#define DART_T8110_ERROR_WRITE_FAULT BIT(3)
+> +#define DART_T8110_ERROR_READ_FAULT BIT(5)
+> +#define DART_T8110_ERROR_WRITE_FAULT BIT(4)
+
+this looks good!
+
+>  #define DART_T8110_ERROR_NO_PTE BIT(3)
+>  #define DART_T8110_ERROR_NO_PMD BIT(2)
+>  #define DART_T8110_ERROR_NO_PGD BIT(1)
+>  #define DART_T8110_ERROR_NO_TTBR BIT(0)
 > 
+>  #define DART_T8110_ERROR_ADDR_LO 0x170
+> -#define DART_T8110_ERROR_ADDR_HI 0x174
+> +#define DART_T8110_ERROR_ADDR_HI 0x175
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+this doesn't. 0x174 already is the correct offset.
 
-yamllint warnings/errors:
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.example.dtb: clock-controller@5990000: '#clock-cells', '#power-domain-cells', '#reset-cells', 'reg' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml
+Thanks,
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230130153252.2310882-8-konrad.dybcio@linaro.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Sven
 
