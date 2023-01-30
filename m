@@ -2,112 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FAD681F74
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4966C681F7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjA3XOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43846 "EHLO
+        id S230092AbjA3XS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjA3XOR (ORCPT
+        with ESMTP id S230058AbjA3XS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:14:17 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6203714495;
-        Mon, 30 Jan 2023 15:14:16 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id 5so13301974plo.3;
-        Mon, 30 Jan 2023 15:14:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eKu+kd9X+GTaWdLAQUJinb0Z7Cb02sWxRt1ZBDZ1tPw=;
-        b=SpwzlWusL1iiV7vQ35dwUjrZC7Z+QLqzZQFGcjkd1UAs/oQ57Et6T8HYbzjSfWefj1
-         zNwfPNWHuhVlbHLgAMKTv9HUnXkZfMisbamlbb+U4BCr1fZSN7R6YlILyMjP34fA1X6V
-         i2O0zJNBT1cGtT0cI16KFj1xJYBfc/mc6Gpt/fv0SCUvxyVbd2IAmY/KmwDahoDiZQuA
-         1jRsKfGummyhtGAywSKzRlGpFx9q/G0HpdxuwQFHvCIuzsunfCZEdmqb++k7xpTsAgrU
-         kWZzo5cwCPt2GzmR9HxrwpI0OYMS/lRZQ9wvM4iGQ1anmGrxzm69ZnlzZVmFJpQk5g8u
-         yjrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eKu+kd9X+GTaWdLAQUJinb0Z7Cb02sWxRt1ZBDZ1tPw=;
-        b=bOrq1bxasSX4dvSMClqzVkrNvnCU20JL4yWBoc9mqltLV8iKaB+5uhBOX5nbFvQIII
-         LcTA6Rhyo6YdvRtKMTvzHToaqV8+qXFOC018YL2p1O3xZxKLN8X2NnXzuLZSDaqkO66u
-         /MgqYA+9WxqdHQRCGQ35fHvzKZSS3TgUWYXHowUyq30wHizo48w8EkV7svXtu60c8+5k
-         xma7ycLOWOtXEgh6+ydx9mAr1PZj3oQlgRy/wcU4xR7w4cLVh0+YngHDEVbfCWES3xqf
-         TRB4Ls7c04Vw2wgbPq4lneJR5bmAgn+iTPb/s6rAiNWV2JxnyfJ/E69fui8b9Oc1ukEn
-         6Z9g==
-X-Gm-Message-State: AO0yUKVKhdOJ7fF+SYAPsPe94J41r+WytaMVjq7QnurbzD/JM0R/Dhy8
-        bJAKWW0vBTdT0aRQ/WxyVWc=
-X-Google-Smtp-Source: AK7set9foVYSvp+tV1JKInjXZGdAvVr+C0n/JwJUa1GLBHkpNyK7L5AUtM1fVSoN+j+2fi3W2A/FEQ==
-X-Received: by 2002:a17:902:cec2:b0:196:5035:98c0 with SMTP id d2-20020a170902cec200b00196503598c0mr18082248plg.23.1675120455748;
-        Mon, 30 Jan 2023 15:14:15 -0800 (PST)
-Received: from localhost.localdomain.com (2603-8001-4200-6311-92a0-3d53-9224-b276.res6.spectrum.com. [2603:8001:4200:6311:92a0:3d53:9224:b276])
-        by smtp.gmail.com with ESMTPSA id x26-20020aa7957a000000b0059393d46228sm5102765pfq.144.2023.01.30.15.14.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 15:14:15 -0800 (PST)
-From:   Chris Healy <cphealy@gmail.com>
-To:     cphealy@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jeremy.wang@amlogic.com
-Cc:     Chris Healy <healych@amazon.com>
-Subject: [PATCH v3] net: phy: meson-gxl: Add generic dummy stubs for MMD register access
-Date:   Mon, 30 Jan 2023 15:14:02 -0800
-Message-Id: <20230130231402.471493-1-cphealy@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 30 Jan 2023 18:18:27 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C9327D63
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 15:18:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675120706; x=1706656706;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gsY99mYKP8Tg5ldc1baYQY3jQMrcS6zWQEVh/tUYbeA=;
+  b=M7dlN4zq2kyPnwSp7zFxsIJplTdYVA53BziJxsKnN4PMpnRJj3Pgc0FB
+   cztt9nXf8XBgDzx/xhB7AOHVxLILSsUrlenSTEUqAs4tUki1Xgi7UtlN6
+   wGMOK8BXn2OYvovHilDwK2jXgihg3U9VEBx4g0iYbrV0yO22MxVNJhCYb
+   H+hfFq/HkvlPHygC3LNH/t1KyQ1284DRG50xadP78NRo806Xb0Br9XM33
+   C3/TVVv9q/phuAEr7xfLwp3imDdTHxucKL6z0fwe9AotT9Rm6qk7m3XeO
+   /3WaLcIOGhrvdAnfeeIjDe8gSuTV+hMbpmk5zV3mlNrJwBYPV1wIvptCZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="315661729"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="315661729"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 15:18:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="641740907"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="641740907"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2023 15:18:23 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pMdPq-0003xu-2G;
+        Mon, 30 Jan 2023 23:18:22 +0000
+Date:   Tue, 31 Jan 2023 07:18:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 41028e73cb56f2183227e3c4bf9e9c9aef5cda15
+Message-ID: <63d85032.l4/Aa+G3p6NTUcHB%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Healy <healych@amazon.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 41028e73cb56f2183227e3c4bf9e9c9aef5cda15  Merge branch into tip/master: 'x86/vdso'
 
-The Meson G12A Internal PHY does not support standard IEEE MMD extended
-register access, therefore add generic dummy stubs to fail the read and
-write MMD calls. This is necessary to prevent the core PHY code from
-erroneously believing that EEE is supported by this PHY even though this
-PHY does not support EEE, as MMD register access returns all FFFFs.
+elapsed time: 721m
 
-Fixes: 5c3407abb338 ("net: phy: meson-gxl: add g12a support")
-Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
-Signed-off-by: Chris Healy <healych@amazon.com>
+configs tested: 68
+configs skipped: 2
 
----
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Changes in v3:
-* Add reviewed-by
-Change in v2:
-* Add fixes tag
+gcc tested configs:
+arc                                 defconfig
+alpha                               defconfig
+s390                             allmodconfig
+s390                                defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+m68k                             allmodconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+s390                             allyesconfig
+x86_64                            allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                 randconfig-a002-20230130
+i386                 randconfig-a001-20230130
+i386                 randconfig-a004-20230130
+i386                 randconfig-a003-20230130
+powerpc                           allnoconfig
+sh                               allmodconfig
+i386                 randconfig-a005-20230130
+i386                 randconfig-a006-20230130
+x86_64               randconfig-a001-20230130
+x86_64               randconfig-a003-20230130
+x86_64               randconfig-a004-20230130
+x86_64               randconfig-a002-20230130
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a006-20230130
+x86_64               randconfig-a005-20230130
+x86_64                              defconfig
+x86_64                               rhel-8.3
+arm                                 defconfig
+i386                                defconfig
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+arm64                            allyesconfig
+ia64                             allmodconfig
+arm                              allyesconfig
+arc                  randconfig-r043-20230129
+arm                  randconfig-r046-20230129
+arm                  randconfig-r046-20230130
+arc                  randconfig-r043-20230130
+i386                             allyesconfig
 
- drivers/net/phy/meson-gxl.c | 2 ++
- 1 file changed, 2 insertions(+)
+clang tested configs:
+x86_64                          rhel-8.3-rust
+i386                 randconfig-a013-20230130
+i386                 randconfig-a012-20230130
+i386                 randconfig-a014-20230130
+i386                 randconfig-a011-20230130
+i386                 randconfig-a015-20230130
+i386                 randconfig-a016-20230130
+x86_64               randconfig-a012-20230130
+x86_64               randconfig-a013-20230130
+x86_64               randconfig-a011-20230130
+x86_64               randconfig-a014-20230130
+x86_64               randconfig-a015-20230130
+x86_64               randconfig-a016-20230130
+hexagon              randconfig-r041-20230129
+hexagon              randconfig-r045-20230130
+hexagon              randconfig-r041-20230130
+hexagon              randconfig-r045-20230129
+s390                 randconfig-r044-20230129
+riscv                randconfig-r042-20230129
+riscv                randconfig-r042-20230130
+s390                 randconfig-r044-20230130
 
-diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
-index c49062ad72c6..5e41658b1e2f 100644
---- a/drivers/net/phy/meson-gxl.c
-+++ b/drivers/net/phy/meson-gxl.c
-@@ -271,6 +271,8 @@ static struct phy_driver meson_gxl_phy[] = {
- 		.handle_interrupt = meson_gxl_handle_interrupt,
- 		.suspend        = genphy_suspend,
- 		.resume         = genphy_resume,
-+		.read_mmd	= genphy_read_mmd_unsupported,
-+		.write_mmd	= genphy_write_mmd_unsupported,
- 	},
- };
- 
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
