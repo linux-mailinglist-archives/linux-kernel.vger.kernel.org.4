@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0287E680514
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE35968051E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235273AbjA3Egv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
+        id S233731AbjA3EnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjA3Egs (ORCPT
+        with ESMTP id S230335AbjA3EnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:36:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3603769C
-        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:36:46 -0800 (PST)
+        Sun, 29 Jan 2023 23:43:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C45511EB8
+        for <linux-kernel@vger.kernel.org>; Sun, 29 Jan 2023 20:43:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D03F60EBC
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:36:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0618C433EF;
-        Mon, 30 Jan 2023 04:36:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48A9DB80E17
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1B34C433D2;
+        Mon, 30 Jan 2023 04:43:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675053405;
-        bh=Jw9oe6kjPrddDFxEkme2lYJy6zog54y/sVk4BBq8Zx0=;
+        s=k20201202; t=1675053785;
+        bh=Isk4xzUOSGKw95sCzKmiuuuOOBvJCDhjCDX/cZ3ljN8=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=eHPSudZoghJqnlCLsiJ4EIfWXWXVNEueH797ut1ED07b6fu472PQeuRW5Q9vgHkvU
-         M99CAC+huxZuXuZHD9xdUnzFXocdOgBHEC00GA18KUojBQXN05FqRwdiss6spM7Gqu
-         B2reQrHuVmvPB+rOmE7HgaMnlitdoa2jztPHRKHHuESdlaBTbjsNdxM+ntUcKwd4yl
-         JCFAYuspgV+ttWde9JN1CnOmMF7XhaCkLfq/ulDLQYjbijMLHeGGpgyqfhJxmm45Wo
-         EJnRyGHk7/bPoZ3DwvW8kKvJxJf0QJxiCI2HkShuKdlfsiIXoI+I4RkYFVvoFMhsZu
-         HhPcVhW6ISLfw==
+        b=WnAnQlCxGodcioFgzKwJ3BTqrXZsabFEcLV+se9zR8QCLMfyzoqXVm+ZGLIXMTddb
+         1sDUlgS3BWXVljNdpl4nKfEot0tODLjZRNjFqZobZ2onqWx98Ss2jRTKYlFobfY/ni
+         HFSzaqryxbMeNRfAyA6lZWMKsXnAv7NhRIml+Py0SzsHAA7RrSNxFS5VuJCvaCREqi
+         1oXfd85j5V1vy1kv1xCL76u/O6kYJP7/IbypmSShJoicB2qQ5wZ9ugQkHs0Obs55rQ
+         sKO5epHVVeYb+27JsApV0kgwbDBVubFALWE+vGgsVMfYhnJjt2XpWa1K7QBDHyuIGN
+         lAo4ipq9nY/pg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6CE455C0326; Sun, 29 Jan 2023 20:36:45 -0800 (PST)
-Date:   Sun, 29 Jan 2023 20:36:45 -0800
+        id 7CB735C089F; Sun, 29 Jan 2023 20:43:05 -0800 (PST)
+Date:   Sun, 29 Jan 2023 20:43:05 -0800
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Andrea Parri <parri.andrea@gmail.com>, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+        will@kernel.org, peterz@infradead.org, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
         akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
         urezki@gmail.com, quic_neeraju@quicinc.com, frederic@kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
-Message-ID: <20230130043645.GN2948950@paulmck-ThinkPad-P17-Gen-1>
+Message-ID: <20230130044305.GO2948950@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
- <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
- <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
- <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
- <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
- <Y9WeOTmGCCfjMUtG@andrea>
+References: <Y9WeOTmGCCfjMUtG@andrea>
  <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
- <0da94668-c041-1d59-a46d-bd13562e385e@huaweicloud.com>
- <Y9ct1aAnOTGCy9n2@rowland.harvard.edu>
+ <20230129051734.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9aY4hG3p+82vVIw@rowland.harvard.edu>
+ <20230129162156.GG2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9asu0CswZZ3yyls@andrea>
+ <20230129184403.GJ2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9bomciHJ/6WGYM0@boqun-archlinux>
+ <20230129230900.GK2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9co8OxyRehs8mob@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9ct1aAnOTGCy9n2@rowland.harvard.edu>
+In-Reply-To: <Y9co8OxyRehs8mob@rowland.harvard.edu>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,108 +71,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 09:39:17PM -0500, Alan Stern wrote:
-> On Sun, Jan 29, 2023 at 11:19:32PM +0100, Jonas Oberhauser wrote:
-> > I see now. Somehow I thought stores must execute in program order, but I
-> > guess it doesn't make sense.
-> > In that sense, W ->xbstar&int X always means W propagates to X's CPU before
-> > X executes.
-> 
-> It also means any write that propagates to W's CPU before W executes 
-> also propagates to X's CPU before X executes (because it's the same CPU 
-> and W executes before X).
-> 
-> > > Ideally we would fix this by changing the definition of po-rel to:
+On Sun, Jan 29, 2023 at 09:18:24PM -0500, Alan Stern wrote:
+> On Sun, Jan 29, 2023 at 03:09:00PM -0800, Paul E. McKenney wrote:
+> > On Sun, Jan 29, 2023 at 01:43:53PM -0800, Boqun Feng wrote:
+> > > in lock.cat: 
 > > > 
-> > > 	[M] ; (xbstar & int) ; [Release]
+> > > 	(* Allow up to one unmatched LKW per location; more must deadlock *)
+> > > 	let UNMATCHED-LKW = LKW \ domain(critical)
+> > > 	empty ([UNMATCHED-LKW] ; loc ; [UNMATCHED-LKW]) \ id as unmatched-locks
 > > > 
-> > > (This is closely related to the use of (xbstar & int) in the definition
-> > > of vis that you asked about.)
+> > > we rule out deadlocks from the execution candidates we care about.
 > > 
-> > This misses the property of release stores that any po-earlier store must
-> > also execute before the release store.
+> > Thank you, Boqun!
 > 
-> I should have written:
+> Actually that's only part of it.  The other part is rather obscure:
 > 
-> 	[M] ; (po | (xbstar & int)) ; [Release]
+> (* Generate all co relations, including LKW events but not UL *)
+> let co0 = co0 | ([IW] ; loc ; [LKW]) |
+> 	(([LKW] ; loc ; [UNMATCHED-LKW]) \ [UNMATCHED-LKW])
 > 
-> > Perhaps it could be changed to the old  po-rel | [M] ; (xbstar & int) ;
-> > [Release] but then one could instead move this into the definition of
-> > cumul-fence.
-> > In fact you'd probably want this for all the propagation fences, so
-> > cumul-fence and pb should be the right place.
-> > 
-> > > Unfortunately we can't do this, because
-> > > po-rel has to be defined long before xbstar.
-> > 
-> > You could do it, by turning the relation into one massive recursive
-> > definition.
-> 
-> Which would make pretty much the entire memory model one big recursion.  
-> I do not want to do that.
-> 
-> > Thinking about what the options are:
-> > 1) accept the difference and run with it by making it consistent inside the
-> > axiomatic model
-> > 2) fix it through the recursive definition, which seems to be quite ugly but
-> > also consistent with the power operational model as far as I can tell
-> > 3) weaken the operational model... somehow
-> > 4) just ignore the anomaly
-> > 5) ???
-> > 
-> > Currently my least favorite option is 4) since it seems a bit off that the
-> > reasoning applies in one specific case of LKMM, more specifically the data
-> > race definition which should be equivalent to "the order of the two races
-> > isn't fixed", but here the order isn't fixed but it's a data race.
-> > I think the patch happens to almost do 1) because the xbstar&int at the end
-> > should already imply ordering through the prop&int <= hb rule.
-> > What would remain is to also exclude rcu-fence somehow.
-> 
-> IMO 1) is the best choice.
-> 
-> Alan
-> 
-> PS: For the record, here's a simpler litmus test to illustrates the 
-> failing.  The idea is that Wz=1 is reordered before the store-release, 
-> so it ought to propagate before Wy=1.  The LKMM does not require this.
+> Implicitly this says that any lock with no corresponding unlock must 
+> come last in the coherence order, which implies the unmatched-locks rule 
+> (since only one lock event can be last).  By itself, the unmatched-locks 
+> rule would not prevent P3 from executing before P1, provided P1 executes 
+> both its lock and unlock.
 
-In PowerPC terms, would this be like having the Wz=1 being reorders
-before the Wy=1, but not before the lwsync instruction preceding the
-Wy=1 that made it be a release store?
+And thank you, Alan, as well!
 
-If so, we might have to keep this quirk.
+And RCU looks to operate in a similar manner:
+
+------------------------------------------------------------------------
+
+C rcudeadlock
+
+{
+}
+
+
+P0(int *a, int *b)
+{
+	rcu_read_lock();
+	WRITE_ONCE(*a, 1);
+	synchronize_rcu();
+	WRITE_ONCE(*b, 1);
+	rcu_read_unlock();
+}
+
+P1(int *a, int *b)
+{
+	int r1;
+	int r2;
+
+	r1 = READ_ONCE(*b);
+	smp_mb();
+	r2 = READ_ONCE(*a);
+}
+
+exists (1:r1=1 /\ 1:r2=0)
+
+------------------------------------------------------------------------
+
+$ herd7 -conf linux-kernel.cfg rcudeadlock.litmus 
+Test rcudeadlock Allowed
+States 0
+No
+Witnesses
+Positive: 0 Negative: 0
+Condition exists (1:r1=1 /\ 1:r2=0)
+Observation rcudeadlock Never 0 0
+Time rcudeadlock 0.00
+Hash=4f7f336ad39d724d93b089133b00d1e2
+
+------------------------------------------------------------------------
+
+So good enough!  ;-)
 
 							Thanx, Paul
-
-> C before-release
-> 
-> {}
-> 
-> P0(int *x, int *y, int *z)
-> {
-> 	int r1;
-> 
-> 	r1 = READ_ONCE(*x);
-> 	smp_store_release(y, 1);
-> 	WRITE_ONCE(*z, 1);
-> }
-> 
-> P1(int *x, int *y, int *z)
-> {
-> 	int r2;
-> 
-> 	r2 = READ_ONCE(*z);
-> 	WRITE_ONCE(*x, r2);
-> }
-> 
-> P2(int *x, int *y, int *z)
-> {
-> 	int r3;
-> 	int r4;
-> 
-> 	r3 = READ_ONCE(*y);
-> 	smp_rmb();
-> 	r4 = READ_ONCE(*z);
-> }
-> 
-> exists (0:r1=1 /\ 2:r3=1 /\ 2:r4=0)
