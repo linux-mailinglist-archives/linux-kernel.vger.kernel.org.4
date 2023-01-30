@@ -2,122 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD1E680A05
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0994B6809FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 10:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbjA3Jyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 04:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
+        id S235949AbjA3JyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 04:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235868AbjA3Jya (ORCPT
+        with ESMTP id S235868AbjA3JyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 04:54:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A724C2D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:53:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675072422;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oC9mkSXmhg5R3yB+IPp3y2JMPWQpGEK7krJEALbSb48=;
-        b=aRWIa1KHqhrZaCl2kaTXLje9J9S1Vh95ozE/50NRVNcbmU5WjgdU2Rgyg1c+DdI8E1QH2O
-        jEJaaoT9REAOuUHRkNHQNacUxLxYK5d8jjEAKIpFoXoowFZKWSv7Nx5RGA6X6B1URDrI6Q
-        1SXXLS2rXx2KVRiN6Cff5aQTo8CeRLw=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-18--IEcLegZPLiMU61Z-_k_Yg-1; Mon, 30 Jan 2023 04:53:40 -0500
-X-MC-Unique: -IEcLegZPLiMU61Z-_k_Yg-1
-Received: by mail-qk1-f200.google.com with SMTP id g6-20020ae9e106000000b00720f9e6e3e2so493046qkm.13
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 01:53:40 -0800 (PST)
+        Mon, 30 Jan 2023 04:54:00 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530B12D15E;
+        Mon, 30 Jan 2023 01:53:51 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id w11so3743260qtc.3;
+        Mon, 30 Jan 2023 01:53:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oC9mkSXmhg5R3yB+IPp3y2JMPWQpGEK7krJEALbSb48=;
-        b=CyUADK7M3QUU1wf+ahesGSCEGFKXKZCZsi0Xgi1cFJQ+J59J3nLczDzG3zP6mF0K2L
-         jghoL410rKerDWLT0isi0oSwps1QqDuaI428VtzKt25LmL17n1m3GhaPas2IbLLcFWTc
-         2HBJGrVkHe/ZeG14of+qA3GjHhjkFpTq7LXguLSqIgEFlpxS5UZFgNoldCh5aJEQnPIQ
-         eyk3SAFK1BcHTkqBzVzcgnqI8PVH3pBOuo8bnpav0FVvfRVzjHaYQYhJhItQ00e0EJbI
-         6mXoopI2PupzP2rh5c+4gdbjInYwgGT2rDOykkZ+3bunP1fNrnRIpLBxAucz1jROPiwU
-         4lNQ==
-X-Gm-Message-State: AO0yUKXmENqRr9Idp0MQrBel0SXkPVJNCTTYjIWNyeVbt9pXhePqA6EN
-        NIzCtcwNIRxzGooY7Tzlhkdl4jsnOeykNW11Z2lxUFmp3KXkZVpw7zf4hWYFDy6F3/KN3iToCW4
-        ryS53zVxsKCKVwJ2Bg/p5TFFY
-X-Received: by 2002:ac8:7c53:0:b0:3b9:971d:4e2c with SMTP id o19-20020ac87c53000000b003b9971d4e2cmr389260qtv.45.1675072419921;
-        Mon, 30 Jan 2023 01:53:39 -0800 (PST)
-X-Google-Smtp-Source: AK7set80CR/nVTtkwCAfEd/IosABre9253z+xcb1dPuLTEZo0Xvm2rHI9QMIYNf/0aiswG0Y3K1ebg==
-X-Received: by 2002:ac8:7c53:0:b0:3b9:971d:4e2c with SMTP id o19-20020ac87c53000000b003b9971d4e2cmr389249qtv.45.1675072419670;
-        Mon, 30 Jan 2023 01:53:39 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id b25-20020ac844d9000000b003b82cb8748dsm5345531qto.96.2023.01.30.01.53.35
+        bh=5W5rVZ1fIbyJmvcTi+8Jg6ecbdKjIlcZKlLQLo2bEEY=;
+        b=SvS9A8u0hocclY40IlK/LyJP7UeC5cEJGlZ8+DoyG6C+V0/OisIhUOU0UQveXWEapg
+         cwZWXDJk52wZU40gIiCGIKBCKPKNRZsJOPhWpVHcwRGYOQw0GttQEYYKbRPQxjf1Snf5
+         TREKmt3bUK+3Skgdnifb8pEZV+uhLoTPxDXL1e3mKvTkuuYyal8Ldu9s55eYvjxJLMC4
+         bcZJPT94Drnzs/9abWeEM1w0n/8DRTaL256zb9Fp/ry25jDAj+z3Np8WhD9bzYhQ8PkR
+         t1p5grUAQAXxoOwVc0uHHfP4sHSDKiacRrLouLjwR7QD/1LairHOA8CaWe0f7bUCfSW1
+         DZTA==
+X-Gm-Message-State: AFqh2kqIGQrYsy5Sn8j6b4ATzP1t02X0NaaRyeKjnWoe7m5RR8j6RJe5
+        TZL/cayXRz7ZihgctLbqBhx5InEnIRbiLA==
+X-Google-Smtp-Source: AMrXdXvEIQYftVQX71l5HsqSrf20Ayxi91rs58yA+8bIgN1QHKlw6BEUvCCJyvLKzjM6DBaUIe2H6g==
+X-Received: by 2002:a05:622a:1e1b:b0:3b4:a6af:a2f2 with SMTP id br27-20020a05622a1e1b00b003b4a6afa2f2mr65834183qtb.34.1675072429935;
+        Mon, 30 Jan 2023 01:53:49 -0800 (PST)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id bi7-20020a05620a318700b006e42a8e9f9bsm7816210qkb.121.2023.01.30.01.53.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 01:53:36 -0800 (PST)
-Message-ID: <161272ef-eebc-7b86-1290-d0d77f887700@redhat.com>
-Date:   Mon, 30 Jan 2023 10:53:32 +0100
+        Mon, 30 Jan 2023 01:53:49 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id 123so13270853ybv.6;
+        Mon, 30 Jan 2023 01:53:48 -0800 (PST)
+X-Received: by 2002:a25:9ac1:0:b0:7b4:6a33:d89f with SMTP id
+ t1-20020a259ac1000000b007b46a33d89fmr3784853ybo.543.1675072428751; Mon, 30
+ Jan 2023 01:53:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH] vfio: platform: ignore missing reset if disabled at
- module init
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Tomasz Duszynski <tduszynski@marvell.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "open list:VFIO PLATFORM DRIVER" <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     "jerinj@marvell.com" <jerinj@marvell.com>
-References: <20230125161115.1356233-1-tduszynski@marvell.com>
- <BN9PR11MB527630B903EC14BC61351C668CD39@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <BN9PR11MB527630B903EC14BC61351C668CD39@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230130093229.27489-1-nylon.chen@sifive.com> <20230130093229.27489-3-nylon.chen@sifive.com>
+In-Reply-To: <20230130093229.27489-3-nylon.chen@sifive.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 30 Jan 2023 10:53:37 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXiKAyUeZvmAsNfjJ7_x9bK1zO3iUPdcQ7-60tLQOx_cg@mail.gmail.com>
+Message-ID: <CAMuHMdXiKAyUeZvmAsNfjJ7_x9bK1zO3iUPdcQ7-60tLQOx_cg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] pwm: sifive: change the PWM controlled LED algorithm
+To:     Nylon Chen <nylon.chen@sifive.com>
+Cc:     aou@eecs.berkeley.edu, conor@kernel.org,
+        emil.renner.berthing@canonical.com, heiko@sntech.de,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nylon7717@gmail.com, zong.li@sifive.com, greentime.hu@sifive.com,
+        vincent.chen@sifive.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Nylon,
 
-On 1/30/23 10:05, Tian, Kevin wrote:
->> From: Tomasz Duszynski <tduszynski@marvell.com>
->> Sent: Thursday, January 26, 2023 12:11 AM
->> @@ -653,7 +653,8 @@ int vfio_platform_init_common(struct
->> vfio_platform_device *vdev)
->>  	if (ret && vdev->reset_required)
->>  		dev_err(dev, "No reset function found for device %s\n",
->>  			vdev->name);
->> -	return ret;
->> +
->> +	return vdev->reset_required ? ret : 0;
->>  }
->>  EXPORT_SYMBOL_GPL(vfio_platform_init_common);
-> It reads slightly better to me as below:
+On Mon, Jan 30, 2023 at 10:32 AM Nylon Chen <nylon.chen@sifive.com> wrote:
+> The `frac` variable represents the pulse inactive time, and the result of
+> this algorithm is the pulse active time. Therefore, we must reverse the
+> result.
 >
-> 	if (ret & vdev->reset_required) {
-> 		dev_err(...);
-> 		return ret;
-> 	}
+> The reference is SiFive FU740-C000 Manual[0].
 >
-> 	return 0;
+> [0]: https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-86ed8b16acba_fu740-c000-manual-v1p6.pdf
 >
-agreed.
+> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
 
-Thanks
+Thanks for your patch!
 
-Eric
+> --- a/drivers/pwm/pwm-sifive.c
+> +++ b/drivers/pwm/pwm-sifive.c
+> @@ -158,6 +158,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+>         frac = DIV64_U64_ROUND_CLOSEST(num, state->period);
+>         /* The hardware cannot generate a 100% duty cycle */
+>         frac = min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
+> +       frac = (1U << PWM_SIFIVE_CMPWIDTH) - 1 - frac;
 
+Shouldn't the inversion be done before the hardware limitation fixup?
+
+>
+>         mutex_lock(&ddata->lock);
+>         if (state->period != ddata->approx_period) {
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
