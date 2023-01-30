@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA80681559
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C943468156D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236652AbjA3PoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S237000AbjA3PqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:46:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236320AbjA3Pn5 (ORCPT
+        with ESMTP id S237500AbjA3Ppp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:43:57 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677FA3D938;
-        Mon, 30 Jan 2023 07:43:56 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id b14so256878ljr.3;
-        Mon, 30 Jan 2023 07:43:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DilJcfGDasqC97KmooB5AfInxubuvWnnOroxtRaylXo=;
-        b=pviCkOjxQwgB4M2HxUN+JUzEkbHyzEA3VNmug0VwZ4tqoZ7pDBI1C/ipu/m5+1nYST
-         WMw3KjHsWtadF+0ImMm1gv71XWzc0GATZz8M8ya2h8otA4mJxKI+NI51q2/7CZPGMw3D
-         5iiA5IB3SjGuiW3sbKgZoEOcN2nU5i9DADnP6qHkgL+i/JLsG4padKPTDFvv+9qKXSvC
-         xLXZD13BJzI89itbR9/E7bykok+TpHI6t04zwXO+vzN/WlNo98yTxYg1RZFRhlTDM2+B
-         FKpuO5CudX21db0S4Dvu3LQvsAAdF1uKXD8cVmmVoue6O5GPdjA68g3iMpbIxKUtGzX/
-         omog==
+        Mon, 30 Jan 2023 10:45:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ACB3EFD8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:44:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675093495;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XRAqDvpdOweYOp5rKoRnwrLbtMo4U87gO0dmZD+DZl8=;
+        b=ib9tmd6T81o6xquV7W+ysOD93QZv+L4/I2AIvxF9A4ubGdOOTWldamW2tNpST8s+spMYem
+        P/WaVQCAzUosHp2ZyzyWBgL92fg4P44MGApDTRWMUdA4t91ZkLBPlJ2EC5J+sFdApr1Ly+
+        T/027iLuDQUg8IYXB0vJUIiVG0hwMus=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-88-vseZfI8tP_6BkmjycL97iQ-1; Mon, 30 Jan 2023 10:44:53 -0500
+X-MC-Unique: vseZfI8tP_6BkmjycL97iQ-1
+Received: by mail-pf1-f198.google.com with SMTP id h11-20020a056a00230b00b00593b9e6ee79so1633683pfh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:44:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DilJcfGDasqC97KmooB5AfInxubuvWnnOroxtRaylXo=;
-        b=H8aKdXAN6TyxHqosdNsBfeKlVcyZaM90mW4Hyu7kZvnKYPGqpQyDEcXQ/imSLLr4QP
-         g2liOJG6zwVPtp3WgG4j/my+u9FVgYCSzKYs2o1d0DU60LcVbG4+APlHXwSawXWP3y+y
-         I8y8mY9WtIhaeunzAC8BcJbe+gh+qsEVEZmI6855YWSVzcYdBklLovdxUJdFJSdtCs7y
-         SNihN4dxQ2ab1eeP9o1pdeUf19Cf+cj186MMY51LYPKYVdmy1pAmDmMaVOwk1iBOjYHM
-         xKdQaFI1se3aQtrefZOd7yS5y5VU9Er0x9/QBX7HB8spjo5jRPNibCNdP5CLLaEYoX8d
-         BPKQ==
-X-Gm-Message-State: AFqh2krYHtxH6b68KYWHOMqWrsMjqUAUsihy/EWrPVPn9/CwPc7l3jci
-        5Bdz+rZcracWOfpPwtdkenZvjU4CaTUAhoY11fM=
-X-Google-Smtp-Source: AMrXdXt1gcHUMGP/1TtmrLEEG1lqDpcAxpyANu9CAsIdShc7VsiOjTGTcu6qPdMLuwzJW5KpVjIStNLlxwdV8KIU7qI=
-X-Received: by 2002:a05:651c:481:b0:28b:a09b:b02e with SMTP id
- s1-20020a05651c048100b0028ba09bb02emr3234836ljc.106.1675093434419; Mon, 30
- Jan 2023 07:43:54 -0800 (PST)
+        bh=XRAqDvpdOweYOp5rKoRnwrLbtMo4U87gO0dmZD+DZl8=;
+        b=XrSZYxQ0/loYxIOPP6nwbd1MfnoqBJzmVibfjxQvlUaU4H+NdC+/bcKxZIMimFZ5Bo
+         xMwTHg5fcfYH0rc50/p1ZdLBYuHEvyXY63FGwUBo5zgSRXQCqIu1iDw8GdYiZq06odAh
+         eW3gdwc5PVnn/qIHwqgw8sg6Q4j3X8xCN9vzyFpqRVh/B9RNzkCeKfk/FY7QFJcNIXgc
+         wGGJw5UL2Gg11INj1bXrr9wF3FvhTEReE90IUUc9PznkWakJJfAjK/3XRWPyfvXQ/3zJ
+         lgN6GXx9uRKIJGeoSeGyuo363TctKPRIBdHOVKm68i5AstmFngrNEXNAB2blRfIC1JgM
+         RKHA==
+X-Gm-Message-State: AFqh2kpKUOMO43d5rTLFzIAoE/5Oye2tQUqH+5+VdUt8ERg6VkFvLoes
+        vCA/EWyoTbGPy7HWcP6579wZJOAosLcpngv6DSmo8J5EfWu3evHzhoOii5x6hNsKyDyrFL+ppUz
+        hr4oXtrdYF1GG8tQ7modMJkxl
+X-Received: by 2002:a17:90b:390b:b0:22b:b1cd:cce with SMTP id ob11-20020a17090b390b00b0022bb1cd0ccemr38598610pjb.33.1675093492643;
+        Mon, 30 Jan 2023 07:44:52 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtXwctu5LACNa72F0lwpciIsVwySMd32dCvIolLvbOZ/jRl4lPPEbtxzuPDUZIHh7zq20oeVg==
+X-Received: by 2002:a17:90b:390b:b0:22b:b1cd:cce with SMTP id ob11-20020a17090b390b00b0022bb1cd0ccemr38598587pjb.33.1675093492345;
+        Mon, 30 Jan 2023 07:44:52 -0800 (PST)
+Received: from localhost.localdomain ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
+        by smtp.gmail.com with ESMTPSA id mp1-20020a17090b190100b002298e0641b6sm9654421pjb.27.2023.01.30.07.44.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 07:44:52 -0800 (PST)
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     jchapman@katalix.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shigeru Yoshida <syoshida@redhat.com>
+Subject: [PATCH] l2tp: Avoid possible recursive deadlock in l2tp_tunnel_register()
+Date:   Tue, 31 Jan 2023 00:44:38 +0900
+Message-Id: <20230130154438.1373750-1-syoshida@redhat.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-References: <20230115103209.146002-1-set_pte_at@outlook.com>
- <TYCP286MB23235FDD8102162698EF3154CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
- <Y9dEZ5IgfwpZNlVm@google.com> <TYCP286MB23230E29CC81F5C0590C59C9CAD39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-In-Reply-To: <TYCP286MB23230E29CC81F5C0590C59C9CAD39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 30 Jan 2023 09:43:43 -0600
-Message-ID: <CAH2r5mttK-QTZWkVzB=GsdgiKtv4Y+CtFm=sW7JLO6K3U1mFOw@mail.gmail.com>
-Subject: Re: [PATCH 3/6] ksmbd: replace rwlock with rcu for concurrenct access
- on conn list
-To:     Dawei Li <set_pte_at@outlook.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linkinjeon@kernel.org, sfrench@samba.org, tom@talpey.com,
-        hyc.lee@gmail.com, linux-cifs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,18 +76,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 8:17 AM Dawei Li <set_pte_at@outlook.com> wrote:
-...
-> Steve, Namjae,
-> Please drop this buggy patch from ksmbd-for-next.
->
-> Thanks,
->      Dawei
+When a file descriptor of pppol2tp socket is passed as file descriptor
+of UDP socket, a recursive deadlock occurs in l2tp_tunnel_register().
+This situation is reproduced by the following program:
 
-Done
+int main(void)
+{
+	int sock;
+	struct sockaddr_pppol2tp addr;
 
+	sock = socket(AF_PPPOX, SOCK_DGRAM, PX_PROTO_OL2TP);
+	if (sock < 0) {
+		perror("socket");
+		return 1;
+	}
 
+	addr.sa_family = AF_PPPOX;
+	addr.sa_protocol = PX_PROTO_OL2TP;
+	addr.pppol2tp.pid = 0;
+	addr.pppol2tp.fd = sock;
+	addr.pppol2tp.addr.sin_family = PF_INET;
+	addr.pppol2tp.addr.sin_port = htons(0);
+	addr.pppol2tp.addr.sin_addr.s_addr = inet_addr("192.168.0.1");
+	addr.pppol2tp.s_tunnel = 1;
+	addr.pppol2tp.s_session = 0;
+	addr.pppol2tp.d_tunnel = 0;
+	addr.pppol2tp.d_session = 0;
+
+	if (connect(sock, (const struct sockaddr *)&addr, sizeof(addr)) < 0) {
+		perror("connect");
+		return 1;
+	}
+
+	return 0;
+}
+
+This program causes the following lockdep warning:
+
+ ============================================
+ WARNING: possible recursive locking detected
+ 6.2.0-rc5-00205-gc96618275234 #56 Not tainted
+ --------------------------------------------
+ repro/8607 is trying to acquire lock:
+ ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: l2tp_tunnel_register+0x2b7/0x11c0
+
+ but task is already holding lock:
+ ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: pppol2tp_connect+0xa82/0x1a30
+
+ other info that might help us debug this:
+  Possible unsafe locking scenario:
+
+        CPU0
+        ----
+   lock(sk_lock-AF_PPPOX);
+   lock(sk_lock-AF_PPPOX);
+
+  *** DEADLOCK ***
+
+  May be due to missing lock nesting notation
+
+ 1 lock held by repro/8607:
+  #0: ffff8880213c8130 (sk_lock-AF_PPPOX){+.+.}-{0:0}, at: pppol2tp_connect+0xa82/0x1a30
+
+ stack backtrace:
+ CPU: 0 PID: 8607 Comm: repro Not tainted 6.2.0-rc5-00205-gc96618275234 #56
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.1-2.fc37 04/01/2014
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x100/0x178
+  __lock_acquire.cold+0x119/0x3b9
+  ? lockdep_hardirqs_on_prepare+0x410/0x410
+  lock_acquire+0x1e0/0x610
+  ? l2tp_tunnel_register+0x2b7/0x11c0
+  ? lock_downgrade+0x710/0x710
+  ? __fget_files+0x283/0x3e0
+  lock_sock_nested+0x3a/0xf0
+  ? l2tp_tunnel_register+0x2b7/0x11c0
+  l2tp_tunnel_register+0x2b7/0x11c0
+  ? sprintf+0xc4/0x100
+  ? l2tp_tunnel_del_work+0x6b0/0x6b0
+  ? debug_object_deactivate+0x320/0x320
+  ? lockdep_init_map_type+0x16d/0x7a0
+  ? lockdep_init_map_type+0x16d/0x7a0
+  ? l2tp_tunnel_create+0x2bf/0x4b0
+  ? l2tp_tunnel_create+0x3c6/0x4b0
+  pppol2tp_connect+0x14e1/0x1a30
+  ? pppol2tp_put_sk+0xd0/0xd0
+  ? aa_sk_perm+0x2b7/0xa80
+  ? aa_af_perm+0x260/0x260
+  ? bpf_lsm_socket_connect+0x9/0x10
+  ? pppol2tp_put_sk+0xd0/0xd0
+  __sys_connect_file+0x14f/0x190
+  __sys_connect+0x133/0x160
+  ? __sys_connect_file+0x190/0x190
+  ? lockdep_hardirqs_on+0x7d/0x100
+  ? ktime_get_coarse_real_ts64+0x1b7/0x200
+  ? ktime_get_coarse_real_ts64+0x147/0x200
+  ? __audit_syscall_entry+0x396/0x500
+  __x64_sys_connect+0x72/0xb0
+  do_syscall_64+0x38/0xb0
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+This patch fixes the issue by returning error when a pppol2tp socket
+itself is passed.
+
+Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+---
+ net/l2tp/l2tp_ppp.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/net/l2tp/l2tp_ppp.c b/net/l2tp/l2tp_ppp.c
+index db2e584c625e..88d1a339500b 100644
+--- a/net/l2tp/l2tp_ppp.c
++++ b/net/l2tp/l2tp_ppp.c
+@@ -702,11 +702,14 @@ static int pppol2tp_connect(struct socket *sock, struct sockaddr *uservaddr,
+ 			struct l2tp_tunnel_cfg tcfg = {
+ 				.encap = L2TP_ENCAPTYPE_UDP,
+ 			};
++			int dummy = 0;
+ 
+ 			/* Prevent l2tp_tunnel_register() from trying to set up
+-			 * a kernel socket.
++			 * a kernel socket.  Also, prevent l2tp_tunnel_register()
++			 * from trying to use pppol2tp socket itself.
+ 			 */
+-			if (info.fd < 0) {
++			if (info.fd < 0 ||
++			    sock == sockfd_lookup(info.fd, &dummy)) {
+ 				error = -EBADF;
+ 				goto end;
+ 			}
 -- 
-Thanks,
+2.39.0
 
-Steve
