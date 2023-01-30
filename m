@@ -2,103 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9596B681CCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A92681CD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjA3Vdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
+        id S231237AbjA3Vfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:35:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjA3Vde (ORCPT
+        with ESMTP id S230398AbjA3Vfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:33:34 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D91C9743
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:33:32 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id m15so1103840ilh.9
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6IuS+AlPvW98Qt+RMCpyKlCvmTcjIyk1rKVSn77FnZk=;
-        b=yutfnYWYTGL9rvqX9NK8NKW0cYY1hX6qXFvfmsUjgbZzZlfTmeiQ+WZ1gCOYaVgPyi
-         Pz/6HGBp3mi6cissYy/vIVKG5aVQsq/WyK6fieAf5449c9Urv+p074X4Ki6OVXo7jUyp
-         aczEWVRjWJ1Jr9wtK6YtDx4v5S99KitRsYKMEldZWFZlIunlQhrJg0nMsHkIzgL19OW9
-         6elz4Lc07w6dTF8bGvvfTe9wvV5bokfctyQLf/ZK5Ve8ZnPVP5WVjlp1Hde8tpUd+A/O
-         kIA/p4fvRiLydBA6uj5pnMYN6Udlh/N9Wq5FImMKIDtWt1uxA3m4v9b7Xggll/Krpes+
-         rzpw==
+        Mon, 30 Jan 2023 16:35:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D568B35B0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:34:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675114494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7BSxtpSj4BrAFBe1Q7X5Ylg8I71bsH6V8VmhxdA0ZpI=;
+        b=TghO/WboHJlfs/sLkCc1Kthc8PPA2fTXKnVb0/1NKA9Y6YmfntcIct4Erxvg5Biq+9jDiC
+        Xdcteu55q15Sbf6YUKcL3F206jU3jMTp14kX69fIX5MNMZFcm6ozmHk9+z5x+9hgvApz0R
+        8L588CC5ig/U/4thv75C0902PBPFSsg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-113-7Ek2sP7zOWWESoKq7cBRRw-1; Mon, 30 Jan 2023 16:34:52 -0500
+X-MC-Unique: 7Ek2sP7zOWWESoKq7cBRRw-1
+Received: by mail-qk1-f199.google.com with SMTP id a3-20020a05620a438300b007069b068069so7805715qkp.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:34:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6IuS+AlPvW98Qt+RMCpyKlCvmTcjIyk1rKVSn77FnZk=;
-        b=Wc9l2pdZR+mz5vTwWfmsUb+g60380mPcOovcckr9AmAECvW+Udp6Pbdlgy9JZmlJAV
-         CScAkCP7d3Rx/m861sKVcjCA4gOZNS9X8owL7koNzqjnPueILhQvi5mseztYX7zu9+Ej
-         kwNMnEl/I7+rjxQ/Pc2waD4b6OFn6C/nTe1f/K5I9q6cFy9cNGW/clfOc+ghJ/HmqXHR
-         AhewK/4uyCYZB499RyVjcaAsAoZh66y0qp7x2pWwxbaVeh7AVO1wtvuLMoRwkmtX1P4z
-         RmqUo9V7QIq6iLVRDxUEYLmH8qiiicUTIwtJ2Zj4McN14FFXNKm+esVuYHHf5Z3tGA/L
-         H97Q==
-X-Gm-Message-State: AFqh2kprIYLfj1zZwNI6iyrOOQY1WlusAAJ2cielsY1lQPKOle7R1rUu
-        T7PegoJ/xZn1Xr4jsmCRWX6XTg==
-X-Google-Smtp-Source: AMrXdXtNX89kIh+cJlv4D5se7EwlFyXWSnsI7waS+BCn54d+KKimODStx80DZ9GZTS40+VrkqquNvw==
-X-Received: by 2002:a92:6e11:0:b0:304:c683:3c8a with SMTP id j17-20020a926e11000000b00304c6833c8amr7247424ilc.3.1675114411605;
-        Mon, 30 Jan 2023 13:33:31 -0800 (PST)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 10-20020a056e0211aa00b00310f9a0f8a7sm990514ilj.76.2023.01.30.13.33.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 13:33:31 -0800 (PST)
-Message-ID: <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
-Date:   Mon, 30 Jan 2023 14:33:29 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7BSxtpSj4BrAFBe1Q7X5Ylg8I71bsH6V8VmhxdA0ZpI=;
+        b=E9PtA0tUmUNYnkOfGxAgBQms/bkJ21/HD7eW/fFKTCs1QdtVtsLIktFXnWn6mwHHUH
+         g9BuHdz/Ob3PU251j3Sq1yS0bEVnQjMNHbTvdH4Yfyol0qAYGbo1mZSLxg9Bo/xIG7o0
+         UAQ1Nm2LggCWJeoSdKj5GzvY+l4IxamEon1S7l1hIWiCZYyhvCejZSKANeTghuq5GrVA
+         yclnqL3ewkoLd3IHnGB/Mz5/GPrRNLaeAZ5CAJxwoRGoxZOUshMNlgP/6HrikjJ9HhRg
+         g/cYHBP2Nx9XE2Of1R/xXyaMR8ZcJMEiLbbIpbValtAsdtYc1OEhBCto/nOuOf8I2GxH
+         vYLw==
+X-Gm-Message-State: AO0yUKUI5xfx0Uy3nFPpBmCGSlzFJ/1BWbrm4HTs//QjggGr6VdyqY7Y
+        bpll5dQ+8j71ZxN43FtSkvkOnmxFXiuaMLqjHsxtsmxbPiwj4+/OVgjHyF/+7CsWiQnZR+yp3+j
+        H509Q8H8+PbnMbUUndkTHOvpp
+X-Received: by 2002:ac8:550b:0:b0:3b8:4951:57bb with SMTP id j11-20020ac8550b000000b003b8495157bbmr3383734qtq.5.1675114492267;
+        Mon, 30 Jan 2023 13:34:52 -0800 (PST)
+X-Google-Smtp-Source: AK7set+kUbZekNhe/Em61clYhE5CvtRxiubqnW3sSZZq/i2jVbSztFLD9L4HgdjzGzOWpE7h6EK0CA==
+X-Received: by 2002:ac8:550b:0:b0:3b8:4951:57bb with SMTP id j11-20020ac8550b000000b003b8495157bbmr3383706qtq.5.1675114492023;
+        Mon, 30 Jan 2023 13:34:52 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id l3-20020ac84a83000000b003a5c6ad428asm8589540qtq.92.2023.01.30.13.34.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 13:34:51 -0800 (PST)
+Date:   Mon, 30 Jan 2023 16:34:49 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v8 3/4] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Message-ID: <Y9g3+RdfYIH3N47i@x1n>
+References: <20230124084323.1363825-1-usama.anjum@collabora.com>
+ <20230124084323.1363825-4-usama.anjum@collabora.com>
+ <Y9QLqY0mQ6eD6Zm+@x1n>
+ <01bc1428-5340-5a75-6876-417194edba39@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <3351099.1675077249@warthog.procyon.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <3351099.1675077249@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <01bc1428-5340-5a75-6876-417194edba39@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 4:14 AM, David Howells wrote:
-> Hi Jens,
-> 
-> Could you consider pulling this patchset into the block tree?  I think that
-> Al's fears wrt to pinned pages being removed from page tables causing deadlock
-> have been answered.  Granted, there is still the issue of how to handle
-> vmsplice and a bunch of other places to fix, not least skbuff handling.
-> 
-> I also have patches to fix cifs in a separate branch that I would also like to
-> push in this merge window - and that requires the first two patches from this
-> series also, so would it be possible for you to merge at least those two
-> rather than manually applying them?
+On Mon, Jan 30, 2023 at 04:12:25PM +0500, Muhammad Usama Anjum wrote:
 
-I've pulled this into a separate branch, but based on the block branch,
-for-6.3/iov-extract. It's added to for-next as well.
+[...]
+
+> > 
+> >> +#define IS_WP_ENGAGE_OP(a)	(a->flags & PAGEMAP_WP_ENGAGE)
+> >> +#define IS_GET_OP(a)		(a->vec)
+> > 
+> > Having a->vec to imply the GET is fine, but IMHO not as clean as having
+> > each OP a bit in the flags.
+> > 
+> > How about:
+> > 
+> > #define  PAGEMAP_OP_GET       (1UL << 0)
+> > #define  PAGEMAP_OP_WP        (1UL << 1)
+> > #define  PAGEMAP_OP_MASK      (PAGEMAP_OP_GET | PAGEMAP_OP_WP)
+> > 
+> > ?
+> > 
+> > Then a->vec requried for PAGEMAP_OP_GET.
+> I had something like PAGEMAP_OP_GET and PAGEMAP_OP_WP flags once until I
+> was asked to only keep WP flag and vec != NULL will imply GET flag in a
+> previous review. I'm ready to change again if there are more notes on it?
+
+Sorry to know that; that's somewhat frustrating when you need to go back
+and forth on subjective comments like mine.  So if you still think your
+original way is better then at least you have two votes now. :) Your call
+to choose any, I have a preference as I said but not that strong.
+
+[...]
+
+> > 
+> >> +			     struct pagemap_scan_private *p, unsigned long addr, unsigned int len)
+> >> +{
+> >> +	unsigned long bitmap, cur = PAGEMAP_SCAN_BITMAP(wt, file, pres, swap);
+> >> +	bool cpy = true;
+> >> +	struct page_region *prev = &p->prev;
+> >> +
+> >> +	if (HAS_NO_SPACE(p))
+> >> +		return -ENOSPC;
+> > 
+> > This can be moved to below [1], we should stop scanning immediately if the
+> > condition met.
+> It would be definately possible. Wouldn't it be strange to return error
+> when the operation was successful? A function should return error only when
+> the current execution is unsuccessful. So I'm returning error only when the
+> space is full and there is no space left in the buffer anymore.
+
+I would expect the user to always provide some more space than they expect
+because the merging of page_regions are kind of unpredictable from the
+user's POV.
+
+But yeah, maybe you're right.  I'm fine to keep that as is.
+
+Thanks,
 
 -- 
-Jens Axboe
-
+Peter Xu
 
