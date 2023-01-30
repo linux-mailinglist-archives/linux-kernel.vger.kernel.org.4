@@ -2,132 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD7E680A9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC223680A99
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 11:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbjA3KRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 05:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S236277AbjA3KRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 05:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236259AbjA3KRr (ORCPT
+        with ESMTP id S236065AbjA3KRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 05:17:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463395252
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:17:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675073820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UlvqrRsIaGySNIWgyEtFe3L6DCZPEcBZ6mU4ziiJiuQ=;
-        b=XyCUXFOUG+yTe6/yHtXhlQpuRB8epzj0ffIf6D9Qf8V6sLDgngbBn7Qyn7wx+9B1ZR9Osi
-        SM2hlLzIsZu8UDUVh3XpjgAcQRiz1RxXgO13qiUouyBRVaRNlf296XzSBrFygeBWfORcQ2
-        w1Ub5BGlTmOBUSQT1PFf9PjNe723qgw=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-631-PTN4PoCkPyuKe7clzUBuqQ-1; Mon, 30 Jan 2023 05:16:59 -0500
-X-MC-Unique: PTN4PoCkPyuKe7clzUBuqQ-1
-Received: by mail-ed1-f71.google.com with SMTP id j10-20020a05640211ca00b0049e385d5830so7952663edw.22
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:16:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UlvqrRsIaGySNIWgyEtFe3L6DCZPEcBZ6mU4ziiJiuQ=;
-        b=Ov/9tWZ3CkJEsjp8n+SNJqQxmkZ9qxb3GiUtg/spsq698zm5VxMzpIZuDLNYKYHY67
-         285lLmqRkyS/BxUd+BFFa5nRzr99+53pONHScRzgriPUtmNYlOsj+UU9qV5DasW0rvCK
-         kGgRI/frxlMHzJULGILDScUz7BeQjevX3AevANd4OfArsfz7rM4JyjjfsASOi17NuFBM
-         HjZKN1CG7TzzBtHQrYrwxwSlKLz63gn8WP6EAL0ezGM6n1Xjb5hdgiQVwa6VDMznF4jR
-         sEHZsB5P1+59loQapWpIMWoHkCNo97fO+lBn81zbdA9K56ylzw2ppTCzRTgZZUm922YQ
-         r88g==
-X-Gm-Message-State: AFqh2krlT1n/6JyCfjjf15Iala4raapDWcJPjjW1UePfpdxjoFD82spb
-        J69VoNXMqpelfyVOYyQsXViMhN76Se7gEJG3OTX/pd6/5yo9s7jwr4MxiLEFu80gUdRwuzFidHC
-        nYxyNunRoW3SeXDBf/QFT0ikx
-X-Received: by 2002:a17:906:8608:b0:86b:9216:2ddb with SMTP id o8-20020a170906860800b0086b92162ddbmr53439640ejx.52.1675073817913;
-        Mon, 30 Jan 2023 02:16:57 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXuNsJWKTnv3uN7vRaSshEY3jYIx5DQ3/vAPthUQAXBa0hLAWrs8TG38BNBGQctubhL/2gLNCg==
-X-Received: by 2002:a17:906:8608:b0:86b:9216:2ddb with SMTP id o8-20020a170906860800b0086b92162ddbmr53439629ejx.52.1675073817696;
-        Mon, 30 Jan 2023 02:16:57 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id f19-20020a05640214d300b004a0a915e726sm3390528edx.73.2023.01.30.02.16.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jan 2023 02:16:57 -0800 (PST)
-Message-ID: <325be2be-0c58-7414-70e9-9585e35874a2@redhat.com>
-Date:   Mon, 30 Jan 2023 11:16:56 +0100
+        Mon, 30 Jan 2023 05:17:30 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1C91630A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 02:17:29 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pMRDx-0005mI-Sc; Mon, 30 Jan 2023 11:17:17 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pMRDp-001RYw-MJ; Mon, 30 Jan 2023 11:17:08 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pMRDo-00H0dV-5B; Mon, 30 Jan 2023 11:17:08 +0100
+Date:   Mon, 30 Jan 2023 11:17:07 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Nylon Chen <nylon.chen@sifive.com>
+Cc:     aou@eecs.berkeley.edu, conor@kernel.org,
+        emil.renner.berthing@canonical.com, geert+renesas@glider.be,
+        heiko@sntech.de, krzysztof.kozlowski+dt@linaro.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, nylon7717@gmail.com,
+        zong.li@sifive.com, greentime.hu@sifive.com,
+        vincent.chen@sifive.com
+Subject: Re: [PATCH v2 2/2] pwm: sifive: change the PWM controlled LED
+ algorithm
+Message-ID: <20230130101707.pdvabl3na2wpwxqu@pengutronix.de>
+References: <20230130093229.27489-1-nylon.chen@sifive.com>
+ <20230130093229.27489-3-nylon.chen@sifive.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [regression] Bug 216977 - asus t100 touchpad registered but not
- working
-Content-Language: en-US
-To:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <btissoir@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        jessegodfroy@gmail.com
-References: <2f4dc626-5287-6ec7-a31d-335e5dbb9119@leemhuis.info>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <2f4dc626-5287-6ec7-a31d-335e5dbb9119@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jlahpnwnp2we3m5x"
+Content-Disposition: inline
+In-Reply-To: <20230130093229.27489-3-nylon.chen@sifive.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
 
-On 1/30/23 10:22, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> I noticed a regression report in bugzilla.kernel.org. As many (most?)
-> kernel developer don't keep an eye on it, I decided to forward it by
-> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216977 :
-> 
->>  jessegodfroy@gmail.com 2023-01-29 15:44:34 UTC
->>
->> After upgrading the kernel from 6.0 series to the 6.1 the touchpad on my asus t100 no longer works. 
->>
->> The device is registered in dmesg. I believe hid_asus is responsible for the keyboard and touchpad.  The keyboard continues to function, but the touchpad does not. 
->>
->> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0001: input,hidraw0: USB HID v1.11 Keyboard [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input0
->> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0002: Fixing up Asus T100 keyb report descriptor
->> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0002: input,hiddev96,hidraw1: USB HID v1.11 Device [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input1
->> Jan 29 09:29:53 t100ta-white kernel: asus 0003:0B05:17E0.0003: input,hiddev97,hidraw2: USB HID v1.11 Mouse [ASUSTek COMPUTER INC. ASUS Base Station(T100)] on usb-0000:00:14.0-3/input2
->>
->> I do not see any changes to hid_asus that should be responsible for the change in performance.
-> See the ticket for more details.
+--jlahpnwnp2we3m5x
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is my bad, I accidentally broke SW_TABLET_MODE reporting on
-the Asus T100* and T101* series and it is now reporting that it
-is in tablet mode while it is actually docked and thus in laptop
-mode.
+On Mon, Jan 30, 2023 at 05:32:29PM +0800, Nylon Chen wrote:
+> The `frac` variable represents the pulse inactive time, and the result of
+> this algorithm is the pulse active time. Therefore, we must reverse the
+> result.
+>=20
+> The reference is SiFive FU740-C000 Manual[0].
+>=20
+> [0]: https://sifive.cdn.prismic.io/sifive/1a82e600-1f93-4f41-b2d8-86ed8b1=
+6acba_fu740-c000-manual-v1p6.pdf
+>=20
+> Signed-off-by: Nylon Chen <nylon.chen@sifive.com>
+> ---
+>  drivers/pwm/pwm-sifive.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
+> index 62b6acc6373d..a5eda165d071 100644
+> --- a/drivers/pwm/pwm-sifive.c
+> +++ b/drivers/pwm/pwm-sifive.c
+> @@ -158,6 +158,7 @@ static int pwm_sifive_apply(struct pwm_chip *chip, st=
+ruct pwm_device *pwm,
+>  	frac =3D DIV64_U64_ROUND_CLOSEST(num, state->period);
+>  	/* The hardware cannot generate a 100% duty cycle */
+>  	frac =3D min(frac, (1U << PWM_SIFIVE_CMPWIDTH) - 1);
+> +	frac =3D (1U << PWM_SIFIVE_CMPWIDTH) - 1 - frac;
 
-This is causing libinput to suppress touchpad events, as
-it would for a 360° hinges style 2 in 1 with the keyboard +
-touchpad folded behind the display (so in tablet mode).
+The same problem exists in pwm_sifive_get_state(), doesn't it?
 
-A fix for this has already been merged for 6.2-rc6:
+As fixing this is an interruptive change anyhow, this is the opportunity
+to align the driver to the rules tested by PWM_DEBUG.
 
-"platform/x86: asus-wmi: Fix kbd_dock_devid tablet-switch reporting"
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fdcc0602d64f22185f61c70747214b630049cc33
+The problems I see in the driver (only checked quickly, so I might be
+wrong):
 
-And the fix is also queued for the next 6.1.y stable series release:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/log/?h=queue/6.1
+ - state->period !=3D ddata->approx_period isn't necessarily a problem. If
+   state->period > ddata->real_period that's fine and the driver should
+   continue
 
-I'll also add this info as a comment to the bug.
+ - frac =3D DIV64_U64_ROUND_CLOSEST(num, state->period);
+   is wrong for two reasons:
+   it should round down and use the real period.
 
-Regards,
+Best regards
+Uwe
 
-Hans
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--jlahpnwnp2we3m5x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPXmSAACgkQwfwUeK3K
+7AleyggAkGDMZYle0TOKBmbhKP3cCv66Lspwhkit9fvzLF+u5WV9aZ2Hhh18MHLj
+MH8UhAepKUC7oy5vd5eCo5fafKOOr71uJvkxg6W6IJncOMbphNH9K55LeAktSDg6
+AAk4bHiUx9AW1UEhnyu+9SqTl/SS6UoRzWBB8naxQil/YPJpvP6kUM/MnWDthd5r
+1HM4iovyCbXcWYhdG4asGUvA4lQnK92UO47apHnOW7VL9ivVgmfE6N6m5Q4ELy8e
+KarTUp8nG5N5Ki/+2LlpZYWY6w3t27CQJ0UegXxcn3Igu44a0hpYbpeHgi4kYIME
+Su9cOg8cW7mP2GIhIiVZ+63s+pTWqQ==
+=uHqH
+-----END PGP SIGNATURE-----
+
+--jlahpnwnp2we3m5x--
