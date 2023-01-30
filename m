@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0BD681CF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E6F6681CF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjA3VkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S231344AbjA3VkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjA3VkO (ORCPT
+        with ESMTP id S230104AbjA3VkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:40:14 -0500
+        Mon, 30 Jan 2023 16:40:15 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81B01BDD
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:40:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04011727
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:40:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675114813; x=1706650813;
+  t=1675114814; x=1706650814;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=TFZOhQupMCyhWl530Dlvg8nqRMsH2GVlEz63WCWbwRI=;
-  b=SX+jIj1QJrEkquhHr4DStUzH1VPzQ8DjADtvPk64+b3tKGBstOKXr5TI
-   ScoLb3mqoJNHYkVB/JCl493x3GY9JjK2MmO54cXe4RvY2w24c3z8jC7JF
-   INS1yO1GjmmctFQntOJdkfKAGmUhQOlXQ1vrlZgEOoNx2LsS+4SMdV+3n
-   Z/+k3DWuheSfQj/c/eW7IyFvsZHNexxEuf/+2jzvMgwGHQvQVWtKc2a6z
-   a3E8XDRKWvAN5+VCy9NKIl9QMS2R8VRn/u6I+HVWxDjQNOKvzXfmcHxkE
-   JawMsHOU5RjS14qJZ6cLCxARzDwhFQsL7Y3ApIHgNtLY7RgwXmOEXVzvY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="328955479"
+  bh=VdG1GGA8W0DfnPFwDcohOqulqfW3saP77d/Ow4pY9zI=;
+  b=KNTZ9IGxF0iuFD3oUdMIY02uE6iRC9MsJXJY5Khs8hbwe4wgOO7weLpu
+   1wwdPGPRjCCfGIhphPK4YYhoOhjGLudy5PW5tTuwJLQ92k2orEtg+wxR5
+   IdCAThhuFhbqYHPdnEKsnpFOaj1W2tExpmGdSQgvW3h84gk9EQqOjC59m
+   kD02y9abNJWRVNf5ROwRGULrmE4b+JBgf6/5HSZD7rDqc5Yb7EjulYFbc
+   5H0k0IkgLBVyqTeL/xXmMq+yOY+WTneH7TV+6VkNLj8yiYwFIuU0KO7om
+   E1XlWtIf+Ni4wyRvYi9MMRdiQECWjvhR7piM6B2R/ywqGOqSjb3QPJ7m9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="328955492"
 X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="328955479"
+   d="scan'208";a="328955492"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 13:40:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="696571856"
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="696571860"
 X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="696571856"
+   d="scan'208";a="696571860"
 Received: from araj-ucode.jf.intel.com ([10.23.0.19])
   by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 13:40:12 -0800
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -59,9 +59,9 @@ Cc:     Ashok Raj <ashok.raj@intel.com>,
         Andrew Cooper <Andrew.Cooper3@citrix.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Martin Pohlack <mpohlack@amazon.de>
-Subject: [Patch v3 Part2 1/9] x86/microcode: Taint kernel only if microcode loading was successful
-Date:   Mon, 30 Jan 2023 13:39:47 -0800
-Message-Id: <20230130213955.6046-2-ashok.raj@intel.com>
+Subject: [Patch v3 Part2 2/9] x86/microcode: Report invalid writes to reload sysfs file
+Date:   Mon, 30 Jan 2023 13:39:48 -0800
+Message-Id: <20230130213955.6046-3-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230130213955.6046-1-ashok.raj@intel.com>
 References: <20230130213955.6046-1-ashok.raj@intel.com>
@@ -77,10 +77,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently when late loading is aborted due to check_online_cpu(), kernel
-still ends up tainting the kernel.
+Semantics of the microcode reload file are only defined if a "1" is
+written. But the code silently treats any other unsigned integer as a
+successful write even though no actions are performed to load microcode.
 
-Taint only when microcode loading was successful.
+Report those erroneous writes back to user.
 
 Suggested-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
@@ -104,59 +105,27 @@ Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
 Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Cc: Martin Pohlack <mpohlack@amazon.de>
 ---
-v1->v2: (Thomas)
-	- Remove unnecessary assignment of ret that's being overwritten.
-	- Taint kernel only of loading was successful
----
- arch/x86/kernel/cpu/microcode/core.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ arch/x86/kernel/cpu/microcode/core.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 61d57d9b93ee..1c6831b8b244 100644
+index 1c6831b8b244..e4b4dfcf2d18 100644
 --- a/arch/x86/kernel/cpu/microcode/core.c
 +++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -472,7 +472,8 @@ static ssize_t reload_store(struct device *dev,
- 	enum ucode_state tmp_ret = UCODE_OK;
- 	int bsp = boot_cpu_data.cpu_index;
- 	unsigned long val;
--	ssize_t ret = 0;
-+	int load_ret = -1;
-+	ssize_t ret;
+@@ -476,11 +476,8 @@ static ssize_t reload_store(struct device *dev,
+ 	ssize_t ret;
  
  	ret = kstrtoul(buf, 0, &val);
- 	if (ret)
-@@ -488,20 +489,26 @@ static ssize_t reload_store(struct device *dev,
- 		goto put;
- 
- 	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
--	if (tmp_ret != UCODE_NEW)
-+	if (tmp_ret != UCODE_NEW) {
-+		ret = size;
- 		goto put;
-+	}
- 
- 	mutex_lock(&microcode_mutex);
--	ret = microcode_reload_late();
-+	load_ret = microcode_reload_late();
- 	mutex_unlock(&microcode_mutex);
- 
- put:
- 	cpus_read_unlock();
- 
--	if (ret == 0)
-+	/*
-+	 * Taint only when loading was successful
-+	 */
-+	if (load_ret == 0) {
- 		ret = size;
+-	if (ret)
+-		return ret;
 -
--	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
-+		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
-+		pr_warn("Microcode late loading tainted the kernel\n");
-+	}
+-	if (val != 1)
+-		return size;
++	if (ret || val != 1)
++		return -EINVAL;
  
- 	return ret;
- }
+ 	cpus_read_lock();
+ 
 -- 
 2.37.2
 
