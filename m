@@ -2,133 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F62D6813BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B89C6813BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236233AbjA3Oru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:47:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S237832AbjA3Osz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbjA3Ors (ORCPT
+        with ESMTP id S233505AbjA3Osp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:47:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5146583
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:47:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675090021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mbdGAd5Gc+CeSR09L2sHX0L7qLtN8UTW5GUeq3iWb2o=;
-        b=F28sKGqsuNIb+C9F7TDk6XGELZg3KmFVIVEyZR3fsiQ5Z8wOzUbZDAayOpxmzQEse97gJF
-        rCk0Od4u9Vm34tZyxTNrivxc2omGEkbpXF5O8HcEefjXrdT4BgA08cHiiNFcX2pDz7AM4f
-        witNisun6tN/EdH9FyDYwYxQUarJ3WY=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-608-bBKUAFOFNYKZlj8G1IGydg-1; Mon, 30 Jan 2023 09:46:59 -0500
-X-MC-Unique: bBKUAFOFNYKZlj8G1IGydg-1
-Received: by mail-qv1-f69.google.com with SMTP id q17-20020a056214019100b004b1d3c9f3acso6564395qvr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:46:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mbdGAd5Gc+CeSR09L2sHX0L7qLtN8UTW5GUeq3iWb2o=;
-        b=ZnfHyRlUYksfNdkxjThjTKTJI8YbLtGkmaCZ0LlMIlFe4bGHMotrEfYWCtpQLAlnF8
-         30lhs9KnKu844q0ghzFIjcx7vxP3ZjHM2TTBqW0cDGtN/vdq/QEaJrUChHZj+j2Ym5jo
-         9zj7jBLgUhXJKZ92jAy9twGPs48LwEfniQDt7zLo7o6nF1xBuGZGX3bebVAof25qiL00
-         2V+DuTLoC6C8nnxL2sAYfADqBYHTMTs1x4jzZmMj2FOFt7yYOxwuZ1ujpYa4Ot538vFN
-         k0nLwyjCJtzXE4dReQCzoZFpcdg/GRzw/qPMQLXb+UuRdiSI9KXqAl46MFLGmAIiJK9U
-         7Chw==
-X-Gm-Message-State: AO0yUKVDrK+kK+3+vcauKSHWb2TfCNDnoQJvzx+eIu46zEYBaZSJiSBB
-        nSaQxFRgfNxoc3DWS/3mo1O+yK0ezMRkf4pGkZwwhH6TbqOss5r+dMYS7xJsrI8cGI+XKVsvGqb
-        ddbyZGyl9NsXWp0XIcj+XBRGQ
-X-Received: by 2002:ac8:580c:0:b0:3b8:683c:40f with SMTP id g12-20020ac8580c000000b003b8683c040fmr8271995qtg.30.1675090019354;
-        Mon, 30 Jan 2023 06:46:59 -0800 (PST)
-X-Google-Smtp-Source: AK7set/JA1nw/SruzHK0Oqe75jBaibxmHMmBwxTRKffVdT24iWr4NBK+0Bz5m/p5UKLMUcYU+hO3lQ==
-X-Received: by 2002:ac8:580c:0:b0:3b8:683c:40f with SMTP id g12-20020ac8580c000000b003b8683c040fmr8271956qtg.30.1675090019110;
-        Mon, 30 Jan 2023 06:46:59 -0800 (PST)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id b25-20020ac844d9000000b003b82cb8748dsm5701627qto.96.2023.01.30.06.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 06:46:58 -0800 (PST)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Paul McKenney <paulmck@kernel.org>
-Subject: Re: [PATCH v2 1/4] sched/task: Add the put_task_struct_atomic_safe
- function
-In-Reply-To: <CAAq0SUnUH6DEjwEs2RxRCtkTU121JXpdsV_rZky1d0Bo04=fiQ@mail.gmail.com>
-References: <20230120150246.20797-1-wander@redhat.com>
- <20230120150246.20797-2-wander@redhat.com>
- <20230123163002.GB6268@redhat.com>
- <CAAq0SUk1vfNDuzGbXNftgW4wq4PC_EzMhpq4E=RBQNkOB3f4YQ@mail.gmail.com>
- <xhsmhbkmkdla4.mognet@vschneid.remote.csb>
- <CAAq0SUnUH6DEjwEs2RxRCtkTU121JXpdsV_rZky1d0Bo04=fiQ@mail.gmail.com>
-Date:   Mon, 30 Jan 2023 14:46:54 +0000
-Message-ID: <xhsmh357sdqqp.mognet@vschneid.remote.csb>
+        Mon, 30 Jan 2023 09:48:45 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C80234FC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:48:33 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:248c:95e8:a1ca:b26b])
+        by laurent.telenet-ops.be with bizsmtp
+        id F2oV2900K0Ggu3t012oWze; Mon, 30 Jan 2023 15:48:30 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pMVSC-007t1k-F5
+        for linux-kernel@vger.kernel.org;
+        Mon, 30 Jan 2023 15:48:29 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pMVSP-00HGxB-QZ
+        for linux-kernel@vger.kernel.org;
+        Mon, 30 Jan 2023 15:48:29 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.2-rc6
+Date:   Mon, 30 Jan 2023 15:48:29 +0100
+Message-Id: <20230130144829.4116738-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAHk-=wiJcsgmgjEitJ97x3unFpaKv1d=YyNr_5NbOTGsGqCG=A@mail.gmail.com>
+References: <CAHk-=wiJcsgmgjEitJ97x3unFpaKv1d=YyNr_5NbOTGsGqCG=A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/23 08:49, Wander Lairson Costa wrote:
-> On Fri, Jan 27, 2023 at 12:55 PM Valentin Schneider <vschneid@redhat.com> wrote:
->>
->> On 23/01/23 14:24, Wander Lairson Costa wrote:
->> > Therefore (if I am correct in my assumption), it would make sense for
->> > only some call sites to pay the overhead price for it. But this is
->> > just a guess, and I have no evidence to support my claim.
->>
->> My worry here is that it's easy to miss problematic callgraphs, and it's
->> potentially easy for new ones to creep in. Having a solution within
->> put_task_struct() itself would prevent that.
->>
->
-> We could add a WARN_ON statement in put_task_struct() to detect such cases.
->
+Below is the list of build error/warning regressions/improvements in
+v6.2-rc6[1] compared to v6.1[2].
 
-Anyone running their kernel with DEBUG_ATOMIC_SLEEP should be able to
-detect misuse, but it doesn't change that some callgraphs will only
-materialize under certain hardware/configuration combos.
+Summarized:
+  - build errors: +9/-14
+  - build warnings: +30/-9
 
->> Another thing, if you look at release_task_stack(), it either caches the
->> outgoing stack for later use, or frees it via RCU (regardless of
->> PREEMPT_RT). Perhaps we could follow that and just always punt the freeing
->> of the task struct to RCU?
->>
->
-> That's a point. Do you mean doing that even for !PREEMPT_RT?
+JFYI, when comparing v6.2-rc6[1] to v6.2-rc5[3], the summaries are:
+  - build errors: +4/-1
+  - build warnings: +1/-0
 
-Could be worth a try? I think because of the cache thing the task stack is
-a bit less aggressive wrt RCU callback processing, but at a quick glance I
-don't see any fundamental reason why the task_struct itself can't be given
-the same treatment.
+Happy fixing! ;-)
 
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/6d796c50f84ca79f1722bb131799e5a5710c4700/ (all 152 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/830b3c68c1fb1e9176028d02ef86f3cf76aa2476/ (all 152 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/2241ab53cbb5cdb08a6b2d4688feb13971058f65/ (all 152 configs)
+
+
+*** ERRORS ***
+
+9 error regressions:
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7082:1
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn314/display_mode_vba_314.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7127:1
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 2 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /kisskb/src/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c: error: array subscript 3 is above array bounds of 'u32[2]' {aka 'unsigned int[2]'} [-Werror=array-bounds]:  => 641:28
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: 'gimple_call_addr_fndecl' was not declared in this scope:  => 2790:10
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: 'is_gimple_reg' was not declared in this scope:  => 2556:18
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field 'call_clobbered' has incomplete type 'pt_solution':  => 284:22
+  + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field 'call_used' has incomplete type 'pt_solution':  => 283:22
+  + {standard input}: Error: unknown pseudo-op: `.cfi_def_c':  => 1718
+
+14 error improvements:
+  - /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]: 239:34 => 
+  - /kisskb/src/arch/sparc/kernel/irq_32.c: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]: 263:14, 261:46, 259:14, 262:14, 258:14 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function): 149:37 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor': 149:22 => 
+  - /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]: 150:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size': 88:22 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]: 89:1 => 
+  - /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]: 100:2 => 
+  - /kisskb/src/drivers/net/ethernet/marvell/prestera/prestera_flower.c: error: 'rule' is used uninitialized [-Werror=uninitialized]: 480:34 => 
+  - {standard input}: Error: displacement to undefined symbol .L377 overflows 12-bit field: 2286 => 
+  - {standard input}: Error: displacement to undefined symbol .L378 overflows 8-bit field : 2302 => 
+  - {standard input}: Error: displacement to undefined symbol .L382 overflows 8-bit field : 2213 => 
+  - {standard input}: Error: pcrel too far: 2209, 2248, 2231, 2247, 2249, 2274, 2206, 2215, 2221, 2261, 2217, 2204, 2259, 2232, 2229, 2262, 2293, 2216 => 
+  - {standard input}: Error: unknown pseudo-op: `.l': 2305 => 
+
+
+*** WARNINGS ***
+
+30 warning regressions:
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/bus/mhi/host/mhi_pci_generic.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/extcon/extcon-fsa9480.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-zoned.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/cec/core/cec.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/media/usb/hdpvr/hdpvr.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/misc/habanalabs/habanalabs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/onenand/onenand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/wil6210/wil6210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/pwm/pwm-sifive.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ashldi3" [drivers/scsi/hptiop.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/block/drbd/drbd.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/sd_mod.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-mux-meson-g12a.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!:  => N/A
+  + modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!:  => N/A
+
+9 warning improvements:
+  - /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memset' offset [0, 11] is out of the bounds [0, 0] [-Warray-bounds]: 68:25 => 
+  - /kisskb/src/arch/s390/kernel/setup.c: warning: 'memcpy' offset [0, 127] is out of the bounds [0, 0] [-Warray-bounds]: 524:9 => 
+  - /kisskb/src/drivers/net/ethernet/i825xx/sun3_82586.c: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]: 989:122, 989:108 => 989:108
+  - modpost: WARNING: modpost: "__ashldi3" [lib/zstd/zstd_compress.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/pch_can.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fealnx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc911x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/pcs/pcs-altera-tse.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/fotg210-hcd.ko] has no CRC!: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
