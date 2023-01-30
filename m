@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202D6681FBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1444681FE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 00:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjA3Xea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 18:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S230404AbjA3Xqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 18:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjA3Xe2 (ORCPT
+        with ESMTP id S230166AbjA3Xq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 18:34:28 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207813AA2;
-        Mon, 30 Jan 2023 15:34:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 30 Jan 2023 18:46:29 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838BC2B63F;
+        Mon, 30 Jan 2023 15:46:24 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8E73ECE1331;
-        Mon, 30 Jan 2023 23:34:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3544C433D2;
-        Mon, 30 Jan 2023 23:34:21 +0000 (UTC)
-Date:   Mon, 30 Jan 2023 18:34:19 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Ross Zwisler <zwisler@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 3/9] selftests/bpf: use canonical ftrace path
-Message-ID: <20230130183419.0626dc21@gandalf.local.home>
-In-Reply-To: <CAADnVQ+F3Z70mu3-QyyNFyJ2qCkDXnMJCW-o+fcnZo=LWj5d9g@mail.gmail.com>
-References: <20230130181915.1113313-1-zwisler@google.com>
-        <20230130181915.1113313-4-zwisler@google.com>
-        <CAADnVQJ7KxEK92qOz0Ya4MrACHpxngSpG4W38xuGEgZmXEG-vQ@mail.gmail.com>
-        <20230130145932.37cf6b73@gandalf.local.home>
-        <CAADnVQ+F3Z70mu3-QyyNFyJ2qCkDXnMJCW-o+fcnZo=LWj5d9g@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BBFC16602E5A;
+        Mon, 30 Jan 2023 23:46:22 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675122382;
+        bh=qpiVtCBTcq4oyUEyHgfHNcNf3c0Lxxip1+ljGsvf18o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TEMYysGSmrxfvdsxZrDW4tEPboZ8B6cjfRjj0ovlA/ctdSyEWJ/IPnEHuawG/8SnC
+         MIb7yAO+nj40GgZB+2XCc+qn2qF7CkuHCOkqKCNgCrTJ42w1zYqDolAP9L8VUkbuFH
+         Ket+ykZbBygP/R+K2xGNY6eFovXfRICzDgHwGb9nOFt94zk4xpSyaflRrLM+50Nl9p
+         yXZ8vC/RVJnaUSustzLqn5ooSaMPHZsaOF5WyRmXp7JqDiHA+lmojBb1YBl30o/zgh
+         +99Pk3e+xR32CHTTw5tUHRcxOjDQQFmeiWRnEaIXroqil+t0zFb9O0lhoyBM3B9Prc
+         9mmAzWcHmn43A==
+Received: by mercury (Postfix, from userid 1000)
+        id 4E6A41060FFA; Tue, 31 Jan 2023 00:36:26 +0100 (CET)
+Date:   Tue, 31 Jan 2023 00:36:26 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        shengfei Xu <xsf@rock-chips.com>
+Subject: Re: [PATCHv6 09/11] pinctrl: rk805: add rk806 pinctrl support
+Message-ID: <20230130233626.r5kfnduj2i2urb56@mercury.elektranox.org>
+References: <20230127181244.160887-1-sebastian.reichel@collabora.com>
+ <20230127181244.160887-10-sebastian.reichel@collabora.com>
+ <CACRpkdbQfaCX=ZbFQh3p_T3biWEex-QZofXTrbVKd5hYOzMAug@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uiqkrrhztl7odqxv"
+Content-Disposition: inline
+In-Reply-To: <CACRpkdbQfaCX=ZbFQh3p_T3biWEex-QZofXTrbVKd5hYOzMAug@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,56 +68,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 12:03:52 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > So this change will break the tests. We cannot do it.  
+
+--uiqkrrhztl7odqxv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Linus,
+
+On Mon, Jan 30, 2023 at 11:31:51PM +0100, Linus Walleij wrote:
+> On Fri, Jan 27, 2023 at 7:13 PM Sebastian Reichel
+> <sebastian.reichel@collabora.com> wrote:
+>=20
+> > Add support for rk806 dvs pinctrl to the existing rk805
+> > driver.
 > >
-> > Could we add a way to try to mount it?
+> > This has been implemented using shengfei Xu's rk806
+> > specific driver from the vendor tree as reference.
 > >
-> > If anything, the tests should not have the path hard coded. It should then
-> > look to see if it is mounted and use the path that is found. Otherwise it
-> > should try mounting it at the correct location.
-> >
-> > Feel free to take the code from libtracefs (and modify it):
-> >
-> > https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tree/src/tracefs-utils.c#n89
-> >
-> > It will make the test code much more robust.  
-> 
-> The point is not about tests. The point is that this change might break
-> some users that are working today with /sys/kernel/debug/tracing.
+> > Co-Developed-by: shengfei Xu <xsf@rock-chips.com>
+> > Signed-off-by: shengfei Xu <xsf@rock-chips.com>
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>=20
+> Is this something I can just apply? I haven't had Heiko's review
+> on it but it looks innocent enough.
 
-> It also might be mounted differently.
-> For example from another system:
-> cat /proc/mounts|grep trace
-> tracefs /sys/kernel/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0
-> tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
+No. This code depends on the RK806 register defines added to
+include/linux/mfd/rk808.h in the previous patch. The series cannot
+be applied per-subsystem and my suggestion is that Lee provides an
+immutable branch once he is happy with the MFD patches.
 
-Yes, and the code works when it's mounted multiple times.
+Greetings,
 
-> 
-> So I suggest leaving the code as-is.
+-- Sebastian
 
-Why?  I want to make /sys/kernel/debug/tracing deprecated. It's a hack to
-not break old code. I've had complaints about that hack, and there's even
-systems that disable the auto mounting (that is, /sys/kernel/debug/tracing
-would not exist in such configs) This was never expected to be a permanent
-solution.
+--uiqkrrhztl7odqxv
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If anything, leaving hardcoded calls like that forces the user to mount
-debugfs when they may not want to. The entire point of tracefs was to allow
-users to have access to the trace events without having to expose debugfs
-and all the crud it brings with it. This was requested several times before
-it was added.
+-----BEGIN PGP SIGNATURE-----
 
-What is your technical reason for not modifying the code to look for
-tracefs in /sys/kernel/tracing and if it's not there try
-/sys/kernel/debug/tracing, and if both are not found, try mounting it.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmPYVHcACgkQ2O7X88g7
++ppYZg/8DGI/AMzUJEq3qV2LqyRgz6nFLAFoFr+dA4My3ID5/iL597LBZwdPCDi0
+zE5d8mcUvdQu9eJRlKfMe7W5nrLzp9whOjYGu27cpG8Ho9W4gvKX1oAo0xjiZvpw
+TVZzuyWMdTAh622T+XhN/x9PFYsWop1nMm/Olxl5vC5uole/RxMO7uUNcgjeQgP0
+ssVDGROpjWEpvUg9BYEISBK3G8SN/noMlzpLUZoJkVtEJlGwsIcnJip8BXmKUlqr
+4gVc8Y5GrlULFFCDG+mxoW12YhB28PvxKgp4YtpNxx1sUfa38qJU6Q+U1UoPzXR7
+H5PaH+K288xcSG9Rt4xfZcFcxcmLytvw1Hsdi2zDCgredgwgrS3HaP0QEW8K0VSy
+VPWQ9ndbsyxWMYKhFcm9NFBaqw/rIWqiw0C/Mj7lV9UPXE4yZ+MtNf1zmLXeNYny
+DPKcWrpoiEtkWb5U5sSnE4x2sI12TDy1actVc3y49b//Mwg3N+BS3FWDogcZVKli
+94uKdiZUMtqucK9/BWNov9TCRXDUeYh5myPqI0DtivBnqCq4DYtjdfBasR6VX/jW
+A3UbLxorMUyXvRELdOb7/2u4BhY9QfPJTWu4iZ1/JNpKqiafB4BSPilrKz7dQs1+
+0q0MWr1Fv98SFIMlYXAeRZIxToP2GBHMg5+ly7LZ+mhpYMcFqTs=
+=oQOe
+-----END PGP SIGNATURE-----
 
-That change is not hard and makes the code much more robust and does not
-break anything.
-
--- Steve
-
-
+--uiqkrrhztl7odqxv--
