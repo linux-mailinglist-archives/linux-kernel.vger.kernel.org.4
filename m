@@ -2,175 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360A9680E1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56BA680E4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236932AbjA3M4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:56:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S236975AbjA3M6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236935AbjA3M4L (ORCPT
+        with ESMTP id S236938AbjA3M6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:56:11 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092E29763
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:56:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675083370; x=1706619370;
-  h=from:to:cc:subject:date:message-id:
-   content-transfer-encoding:mime-version;
-  bh=t5loCL9HebcGt8PNdk7kOkclJpjZJOHpDWVmFBmg638=;
-  b=Z/IkaCdGP23Nr3rHfm6vW9y1f0zWdoTAqmcNrwWv33CmTNrLt9iQrVwa
-   mt1hShkudnXrPqcodMZbU7iS+c/bEVeOWSvnBzWqhzspXTChKjNCBWxmD
-   AD+1mLy+8RJRvafxqRXFjQgUqDDE3H7ru7N84HfEtDqkYAzfsyxFywSjk
-   JQJ01YWtfo5nJcfkANUqe/w0v3F+QYdLsAJ1KFs20azwN2YyRYSt0QqGn
-   H5oqljp50lqhL2t6nxjNCtLUrT8waTiy+3202rb6/4r7q5PFK92Y8Y/iN
-   bltq1+PILsXLEBUJsZ45IdvD5ermhpiakiZ1/ZQ16ZFgdetTgF+PGv8Dn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="325246450"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="325246450"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 04:56:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="788018744"
-X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
-   d="scan'208";a="788018744"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jan 2023 04:56:09 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 30 Jan 2023 04:56:09 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 30 Jan 2023 04:56:08 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 30 Jan 2023 04:56:08 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 30 Jan 2023 04:55:53 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W7a1mkjfq+NeEx12o+A7MpHuFXpay9jOFlyId/4zwPC+KWv0qNuqGAkcRXmuNTB2iwt19Bqgp+W0HIePFYxbzTyC1VkzvUeeKD+o9WDewmcHyGdirfQT6WDkzzypqvTNEkt7CzYqFChUImGmZlophBJ1/v33aeJrnznmbIVu/Jl0uTeB9koh26hJBdLSjqL3DsvL1uDBj0MHLiFn3uiykf9U8PoG5X7Vi3LzihceDBW/ESpnsz+kbwwj/ipWAohswIrWkOHjzSekXEmyzMEpYcDUpvSXUOItSSsswL4wyH2Ja/eF2eMhZfWGhnAgv071tLcTbz07DBHWQ0DmwrYhwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wkk2p0nrg5I1FPbFOr1jV6vkmI3Xh6nrUvF8H0F3/Ms=;
- b=aLa5W7rISseDxrHLe2MdxfCDSL4BTI67Fl5EJLK6J7kb4ZoQkbNIDK/G81zBaHcXIpUuiOCaeIja7dpeoNq2O29ZP9YzWaI73m5PpsFeOW6cMfwX9qt/U96hJ9+hnEnuokphy8qx19mCpPwhR6sPQ3NdFEHIraR7TUwQnynQ/k+gFxs72mffulFeLZwpefc2LMBX5aaLo9hpQwZp4j4QZ7D2RrT8cl7+kxjPY8OSH/Dk07q3bnC9lq6KarKPC2pQC8ris7nz90vjmP8X9G0Wwf10htjHuvfDZn/ES1CvobTjGFHv7xvbAE3E8MGFnn8/prYUWeQBwI5oFmJk8f8Z6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BYAPR11MB3240.namprd11.prod.outlook.com (2603:10b6:a03:18::19)
- by BL3PR11MB6363.namprd11.prod.outlook.com (2603:10b6:208:3b6::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
- 2023 12:55:46 +0000
-Received: from BYAPR11MB3240.namprd11.prod.outlook.com
- ([fe80::c42:6379:b57f:4a59]) by BYAPR11MB3240.namprd11.prod.outlook.com
- ([fe80::c42:6379:b57f:4a59%7]) with mapi id 15.20.6043.021; Mon, 30 Jan 2023
- 12:55:46 +0000
-From:   "N, Pandith" <pandith.n@intel.com>
-To:     "giometti@enneenne.com" <giometti@enneenne.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        "T R, Thejesh Reddy" <thejesh.reddy.t.r@intel.com>,
-        "Hall, Christopher S" <christopher.s.hall@intel.com>
-Subject: PPS functionality for Intel Timed I/O
-Thread-Topic: PPS functionality for Intel Timed I/O
-Thread-Index: Adk0qfZfZVvAvtJ8SP+qSzpYuQsN4w==
-Date:   Mon, 30 Jan 2023 12:55:46 +0000
-Message-ID: <BYAPR11MB3240A86B426158623DB9983EE1D39@BYAPR11MB3240.namprd11.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR11MB3240:EE_|BL3PR11MB6363:EE_
-x-ms-office365-filtering-correlation-id: bee9de6a-0012-49c1-f053-08db02c14de2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fmJJ/9G6hN8vglf3vDDUr83ZGLx3BW6XjpNAZUQNVpWodGejWHM3bNEJFOhKd27wAij8XeF7OO/1UlLpMqwuSrmTme0yxEuvD43a3X59JVhxZzLukYnA6rt6GPBW5sIWM8I6o+kZkM1OHS/DWA6/j6B47G1/G9saDKMOrRJyoLxX/fhQkrksiT2qS0TQ/ia1FLYd6WCIqomNxTLcV5aqjO6vnHnrTrPl+0+dXBQykkA7mNJzrd9jOaKsGFOpI9rbb3F55hkkE54VKtX14DUZ0kqLPQeYkXTrIKOg5B6ea0Aoy4hjrr2vOAeEE2mNaLxD1koGpJq+6K+9tE8jH2/D9dGvNBid3UEC7KHR+HfRr5nzEcqjxVGgeoajOddtJgWSYfqg0ypUh7JTOszPuj5lIi5fqalTSSQuX2hUXPBTSYMl38xa/zjyaVJ5OL4/TJNwrjOoI5fv0gmmaG9yg+NfPZaJ3U81u3hIoc8UsklWo6sn3K4lJGj0uaF8XeaVcw6aKmvZ9byONf08Vbmb0CGixpXr+l0QtMvTH8U0xpv84y9WWsPaK0qna2U20z5GjsRKADN/oPpDKW9BKcddduE09yLSbfRuhoSkHkFDB3KO0ZKoCwYf9ysv90o2TtxIHuNpaQYocTqOhLaHq2C8CKDhlbgG/8deqo/v10+YgbgZJwEolmy+PJCCF9HMi6aAwgLEiHUiZwxBhup85uJEyAWUaQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3240.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199018)(66446008)(66556008)(66476007)(64756008)(66946007)(38100700002)(82960400001)(8676002)(6916009)(4326008)(76116006)(122000001)(83380400001)(38070700005)(41300700001)(52536014)(8936002)(86362001)(316002)(5660300002)(54906003)(26005)(9686003)(186003)(107886003)(71200400001)(478600001)(2906002)(7696005)(4744005)(6506007)(33656002)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mCH/0TXLv6oH9Hg3kpqbEfl0nIVja801OqMeNXdljDaQnN/CCLAUL8Fs8XnV?=
- =?us-ascii?Q?HlwN5ynPS1jCPoKAIBgUumnGpDo8HhtRzjQ7+jvK3XkcXAwHQF2Xh/JGA3aN?=
- =?us-ascii?Q?NWCHyAlDDKA7xsgisVHiaiJ6veB7oispBt35fpYdMixF8JRYNUvcPAW3KvHL?=
- =?us-ascii?Q?He7VfvQ701T5NaxmlfSyzAq3R/WH/UYW4/V6iJMdCkF1HBPba3sUJI/747vS?=
- =?us-ascii?Q?0zZWt3jARTpC8CjmKn1Wkg3Vomd/Uu0FZKvit5WFa0CtssKqL6nCro4A0y5K?=
- =?us-ascii?Q?GTjQrNaUH2+1kwrsKFuQ84YUA08GW7dPT8vkRpyOlKbo+uTe/OnULj171uQR?=
- =?us-ascii?Q?hyLskYCtVmthjQ3Uq/BkjSLHiunRJO3svyA48pOyCDtExP6x2NpsdZ4KBhG+?=
- =?us-ascii?Q?WEZTKQpGB5VphzTMftX2Jy6/Y80eF7CYKpSirvrkoypqOHAOtv0EdCCvKhtv?=
- =?us-ascii?Q?GKF9bHgu0lMGhiru/8Dd9qI7K0/d/aC7XUHYjIs6gNTw0qhPle677489rSfx?=
- =?us-ascii?Q?VlDzdbrg2U61yXi/D9VZZadlFhLPvEAQZxlnbmPQnp6KFfYA1OgjhNhjVIBS?=
- =?us-ascii?Q?Ovx2/ofakeFRKpTVqRQg5kZtQgxEfSENg5ywrMA44CMSpnp7nD34MyQP7wtw?=
- =?us-ascii?Q?xxDjKa00WxBkNJ/OQhpbP941bvFr6e2icefQnkQB0/B23a3+VoReOLYkjk5V?=
- =?us-ascii?Q?vfNRowTEcE5DGQ1C1oqZ9DWPDHTd/v9Dbou5717x03s5PaonTbVKw2PU0QS0?=
- =?us-ascii?Q?tjKbbbUNeUnxIphFu3RuuqaUXNQ5EqaMKWaqSsyOYOwYc2+fLry1oXpo66at?=
- =?us-ascii?Q?lihgxjIl67qxB5t5fLyvy3lgqF8lsS6XLsjan39xud179l6b8QRgKqRA5Fui?=
- =?us-ascii?Q?D+4ACrlY2LCOgsBaPoRdDbFo7FkFxS21OmYPdnDEqt/7YNml6ny/Hi0E6cRO?=
- =?us-ascii?Q?oEoPf6+tnXZrUx5NVdLy75BtDHf3GGUa7/zIyYKuj4F1r86eHyscOmzfQQtw?=
- =?us-ascii?Q?8FX7CwlgK3DiwLG31esZsVlmnGG528RCJrib2oAiQouH/ATeYtJcn9n80Y8+?=
- =?us-ascii?Q?x2NZB1R+bQfUaoC/yzwCAx5X9m1njNagK0zLxVC2AstxVOtX0MutBByCW63v?=
- =?us-ascii?Q?5KhofGKafy5ThK4ziCQfJpCls8LqszDtq55uJeahaCIscgQUzfsAQZTNwgF6?=
- =?us-ascii?Q?qJhwUnWnnuZiUeFtKJUbnnjF0q1meZBRrmfpoCisC/ns1n+k6f9DTuVHrMOk?=
- =?us-ascii?Q?6TV+mhKaSRrpCmw3QRwh+PihLz90PClRcCkvxbP7KAcKLy2YU6OfhKbEJTU4?=
- =?us-ascii?Q?HzfVTOlfwfSNOpp2uGtALjndZQeJbLutXuUXetDeJ77Ng7sQTkZgDOP3SlaJ?=
- =?us-ascii?Q?iwh8Z/jOhtY/0OdSG1Eqf8rF37qssF0vLnw0GqwKH0yO27CbQGA7mPeg3Ksk?=
- =?us-ascii?Q?vAB9orRONcaULDQLHeshg6OMVaC0Z0O+x2xYCEhzBg1D3BOx2gKlDMgY5jw1?=
- =?us-ascii?Q?BrrOCghKvhDFQs6gCWDv3Vclb1VvGrKrLXn3wsKZmtJ7azlwll5GiuQjsvlG?=
- =?us-ascii?Q?iSmhWJiqQ4ZKU4d8vKGb8Nn4iD+9EMMIKss4HRVy?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 30 Jan 2023 07:58:49 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DE934304;
+        Mon, 30 Jan 2023 04:58:18 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id x7so7615732edr.0;
+        Mon, 30 Jan 2023 04:58:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jSgexImJFvbllsb2hR3ybobUUI/wwigUcBhRfKkOfog=;
+        b=WnI3TvSl212FavxWOkWMzASf/zIj1UOOD3xLh8tKgY0jr9lubQgLZHuu+NelEDy+T3
+         wJLtc2WTm1v87TuE1IhPmaV403HE4Tkx0rN5In1UMSwlwgTMuRLYoR6E2lTnIykggiUw
+         ezlwKOg2+r3YPwr2GfXiCyfkDYrvpjiidG4yhqBVXRJ6Gp1YvzuyQ34zt8mib6A8T0r6
+         GhD3B05WMRm7Eg/SgH+HSle7CE/z/IvqLQCm61NkKxrvLfu6x0kcyyW1HHkBiMUh6lbx
+         bJ19TrC9eh0mOqj+hudtHkIV7HHSxlj9a2i4H8atMIuWaJJYiFFRM841mgKZM4MNO+dP
+         GA3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jSgexImJFvbllsb2hR3ybobUUI/wwigUcBhRfKkOfog=;
+        b=R18PCTvc32WSeJvqMivLWud70i6O0zqF9znbyASGRjxZw70fw/IZfLpQ3G5emxuuhm
+         F9nKY7DbvJITdKUCGzbZNUEl94Jr2TGfHKxF3B9JhHWWz1/yKmBaVf5h69nOeSkTsxGx
+         VkvaO3fB3DF1CyubmqOmrbhOuc4szDOzJX3LSB009vbd9BVGUxklwyoDXEf47BKzz9XG
+         /JPT0qzqsPRID/g7AgrNT5sWHkyWCLyWaPPoHowRktUpsWh5FkZv7Q5sypGRizID3lUN
+         /H2R3sWb6p0hf+pb3lKnaYAMWI5LVQ2B3AmPd4ytP3E3gjyq/GXUqESSAQq/+6nFi5NP
+         olcg==
+X-Gm-Message-State: AO0yUKWs78SrfDHgOX2h6+ny5uf3JSwWBTSTSsvY0ZBBFVBl4Zyimm4v
+        b/NwwGpfifDklk31pZtolKI=
+X-Google-Smtp-Source: AK7set9JkJt7Zz6KHjv7o/kgAl8hsm7AuCNxAD+p1Qxe5KFXyl5rE/TM1/tzqi2oSQTtcNqdA8YEwQ==
+X-Received: by 2002:a05:6402:4003:b0:4a2:2fa:ead4 with SMTP id d3-20020a056402400300b004a202faead4mr14839532eda.17.1675083496377;
+        Mon, 30 Jan 2023 04:58:16 -0800 (PST)
+Received: from skbuf ([188.26.57.205])
+        by smtp.gmail.com with ESMTPSA id c20-20020aa7df14000000b00499b3d09bd2sm2351700edy.91.2023.01.30.04.58.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 04:58:15 -0800 (PST)
+Date:   Mon, 30 Jan 2023 14:58:13 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Re: [BUG] vlan-aware bridge breaks vlan on another port on same gmac
+Message-ID: <20230130125813.asx5qtm6ttuwdobo@skbuf>
+References: <trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36>
+ <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
+ <trinity-b0df6ff8-cceb-4aa5-a26f-41bc04dc289c-1674303103108@3c-app-gmx-bap60>
+ <20230121122223.3kfcwxqtqm3b6po5@skbuf>
+ <trinity-7c2af652-d3f8-4086-ba12-85cd18cd6a1a-1674304362789@3c-app-gmx-bap60>
+ <20230121133549.vibz2infg5jwupdc@skbuf>
+ <trinity-cbf3ad23-15c0-4c77-828b-94c76c1785a1-1674310370120@3c-app-gmx-bap60>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3240.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bee9de6a-0012-49c1-f053-08db02c14de2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2023 12:55:46.1094
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: q32SgttKVIJUf+vQ5iBNsniXCZuZISemk4+xMSbwc9stQRptHRebJ5pkl+w982YuA/yC7Vc+0HN53RpxDn54fw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6363
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <trinity-cbf3ad23-15c0-4c77-828b-94c76c1785a1-1674310370120@3c-app-gmx-bap60>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rodolfo Giometti,
+Hi Frank,
 
-This is regarding Intel Timed I/O device as PPS.
+On Sat, Jan 21, 2023 at 03:12:50PM +0100, Frank Wunderlich wrote:
+> Hi
+> 
+> > Gesendet: Samstag, 21. Januar 2023 um 14:35 Uhr
+> > Von: "Vladimir Oltean" <olteanv@gmail.com>
+> > An: "Frank Wunderlich" <frank-w@public-files.de>
+> > Cc: "Andrew Lunn" <andrew@lunn.ch>, "Florian Fainelli" <f.fainelli@gmail.com>, "David S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, "Landen Chao" <Landen.Chao@mediatek.com>, "Sean Wang" <sean.wang@mediatek.com>, "DENG Qingfang" <dqfext@gmail.com>, "Matthias Brugger" <matthias.bgg@gmail.com>, "Daniel Golle" <daniel@makrotopia.org>
+> > Betreff: Re: [BUG] vlan-aware bridge breaks vlan on another port on same gmac
+> >
+> > On Sat, Jan 21, 2023 at 01:32:42PM +0100, Frank Wunderlich wrote:
+> > > so first patch fixes the behaviour on bpi-r3 (mt7531)...but maybe mt7530 need the tagging on cpu-port
+> > >
+> > > > Can you try the second patch instead of the first one? Without digging
+> > > > deeply into mt7530 hardware docs, that's the best chance of making
+> > > > things work without changing how the hardware operates.
+> > >
+> > > second patch works for wan, but vlan on bridge is broken, no packets receiving my laptop (also no untagged ones).
+> >
+> > It's hard for me to understand how applying only patch "tag_mtk only
+> > combine VLAN tag with MTK tag is user port is VLAN aware" can produce
+> > the results you describe... For packets sent to port lan0, nothing
+> > should have been changed by that patch, because dsa_port_is_vlan_filtering(dp)
+> > should return true.
+> >
+> > If you can confirm there isn't any mistake in the testing procedure,
+> > I'll take a look later today at the hardware documentation and try to
+> > figure out why the CPU port is configured the way it is.
+> 
+> ok, booted again the kernel with first patch ("mt7530 don't make the CPU port a VLAN user port")
+> and yes lan0-vlan is broken...
+> seems i need to reboot after each lan/wan test to at least clean arp-cache.
+> 
+> but patch2 ("tag_mtk only combine VLAN tag with MTK tag is user port is VLAN aware") still not
+> works on lanbridge vlan (no packet received on target).
+> 
+> regards Frank
 
-Intel Timed I/O is a precise device (10s of nanoseconds), that can send out=
- pulses.
-This is needed in IoT and server applications to measure offset between sys=
-tem clocks on multiple devices
+Sorry for the delay and thanks again for testing.
 
-We are planning to implement a driver, for PPS output functionality using T=
-imed I/O device.
+I simply didn't have time to sit down with the hardware documentation
+and (re)understand the concepts governing this switch.
 
-	1. Is there any support from PPS framework to start/stop pulse generation.
-	If yes, can we get the Pin number, offset(start time) from user space ?
+I now have the patch below which should have everything working. Would
+you mind testing it?
 
-	2. Further, this device has the capability to capture the input events (pu=
-lses, nanosecond precision).
-	The same PIN can work in either input or output mode.
-	Can there be an PPS client driver supporting both modes ?
+From 9110460832d99c3b3e86ffcda472a27a52cdf259 Mon Sep 17 00:00:00 2001
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+Date: Mon, 30 Jan 2023 14:31:17 +0200
+Subject: [PATCH] net: dsa: mt7530: don't change PVC_EG_TAG when CPU port
+ becomes VLAN-aware
 
-Regards,
-Pandith
+Frank reports that in a mt7530 setup where some ports are standalone and
+some are in a VLAN-aware bridge, 8021q uppers of the standalone ports
+lose their VLAN tag on xmit, as seen by the link partner.
+
+This seems to occur because once the other ports join the VLAN-aware
+bridge, mt7530_port_vlan_filtering() also calls
+mt7530_port_set_vlan_aware(ds, cpu_dp->index), and this affects the way
+that the switch processes the traffic of the standalone port.
+
+Relevant is the PVC_EG_TAG bit. The MT7530 documentation says about it:
+
+EG_TAG: Incoming Port Egress Tag VLAN Attribution
+0: disabled (system default)
+1: consistent (keep the original ingress tag attribute)
+
+My interpretation is that this setting applies on the ingress port, and
+"disabled" is basically the normal behavior, where the egress tag format
+of the packet (tagged or untagged) is decided by the VLAN table
+(MT7530_VLAN_EGRESS_UNTAG or MT7530_VLAN_EGRESS_TAG).
+
+But there is also an option of overriding the system default behavior,
+and for the egress tagging format of packets to be decided not by the
+VLAN table, but simply by copying the ingress tag format (if ingress was
+tagged, egress is tagged; if ingress was untagged, egress is untagged;
+aka "consistent). This is useful in 2 scenarios:
+
+- VLAN-unaware bridge ports will always encounter a miss in the VLAN
+  table. They should forward a packet as-is, though. So we use
+  "consistent" there. See commit e045124e9399 ("net: dsa: mt7530: fix
+  tagged frames pass-through in VLAN-unaware mode").
+
+- Traffic injected from the CPU port. The operating system is in god
+  mode; if it wants a packet to exit as VLAN-tagged, it sends it as
+  VLAN-tagged. Otherwise it sends it as VLAN-untagged*.
+
+*This is true only if we don't consider the bridge TX forwarding offload
+feature, which mt7530 doesn't support.
+
+So for now, make the CPU port always stay in "consistent" mode to allow
+software VLANs to be forwarded to their egress ports with the VLAN tag
+intact, and not stripped.
+
+Link: https://lore.kernel.org/netdev/trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36/
+Fixes: e045124e9399 ("net: dsa: mt7530: fix tagged frames pass-through in VLAN-unaware mode")
+Reported-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ drivers/net/dsa/mt7530.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index 616b21c90d05..3a15015bc409 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -1302,14 +1302,26 @@ mt7530_port_set_vlan_aware(struct dsa_switch *ds, int port)
+ 		if (!priv->ports[port].pvid)
+ 			mt7530_rmw(priv, MT7530_PVC_P(port), ACC_FRM_MASK,
+ 				   MT7530_VLAN_ACC_TAGGED);
+-	}
+ 
+-	/* Set the port as a user port which is to be able to recognize VID
+-	 * from incoming packets before fetching entry within the VLAN table.
+-	 */
+-	mt7530_rmw(priv, MT7530_PVC_P(port), VLAN_ATTR_MASK | PVC_EG_TAG_MASK,
+-		   VLAN_ATTR(MT7530_VLAN_USER) |
+-		   PVC_EG_TAG(MT7530_VLAN_EG_DISABLED));
++		/* Set the port as a user port which is to be able to recognize
++		 * VID from incoming packets before fetching entry within the
++		 * VLAN table.
++		 */
++		mt7530_rmw(priv, MT7530_PVC_P(port),
++			   VLAN_ATTR_MASK | PVC_EG_TAG_MASK,
++			   VLAN_ATTR(MT7530_VLAN_USER) |
++			   PVC_EG_TAG(MT7530_VLAN_EG_DISABLED));
++	} else {
++		/* Also set CPU ports to the "user" VLAN port attribute, to
++		 * allow VLAN classification, but keep the EG_TAG attribute as
++		 * "consistent" (i.o.w. don't change its value) for packets
++		 * received by the switch from the CPU, so that tagged packets
++		 * are forwarded to user ports as tagged, and untagged as
++		 * untagged.
++		 */
++		mt7530_rmw(priv, MT7530_PVC_P(port), VLAN_ATTR_MASK,
++			   VLAN_ATTR(MT7530_VLAN_USER));
++	}
+ }
+ 
+ static void
+-- 
+2.34.1
+
