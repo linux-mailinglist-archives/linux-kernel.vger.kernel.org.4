@@ -2,72 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C614768133B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DCF681340
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 15:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237826AbjA3O32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 09:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S237752AbjA3OaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 09:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237817AbjA3O3L (ORCPT
+        with ESMTP id S237808AbjA3O3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 09:29:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34549113F7;
-        Mon, 30 Jan 2023 06:28:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 30 Jan 2023 09:29:19 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A0711715B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:28:14 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD83661163;
-        Mon, 30 Jan 2023 14:28:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2CAC433D2;
-        Mon, 30 Jan 2023 14:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675088882;
-        bh=zDEpKXiQZZeQ0gghTvngUyxYlTUM0N1+OMsn3yXX99Q=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=I1AH8Y32a4ZMkfId4seR29Oldpt+AL6LyyaUriZeeNN+qk8gifGT77tCEpg2doJ8/
-         XKe2AyQTrCwaGeu7ssBWMuwD0kAiFg3os6g1iO+PlNu2jPcvnzavJv18zlyeUwssLZ
-         YxIFBDgMZcnZFl72V+J0a/exBmpE6s3KoUdr9nC4aq6zYjxPQSnVrF8q3h/ar7nrbS
-         2JjVYpED6ERVGVEg9Ty9uDwziOZDujhSyVY1a/2rh4+io0xViAI4nOXyX8CQwyp+AX
-         IoOWM4LQ83dz3lGW5c4FzHNCt0cffe6s1xFILXdGWBlTKwOlwM0kwA6IKBpmZlh4s2
-         YLL9IjzQSfnJw==
-Date:   Mon, 30 Jan 2023 15:28:03 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     qi feng <fengqi706@gmail.com>
-cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        fengqi <fengqi@xiaomi.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH] HID: add KEY_CAMERA_FOCUS event in HID
-In-Reply-To: <CACOZ=ZWB3grJKn7wAZEZ0BDyN7KJF4VWUTNs-mPxeoW_oiR7=g@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.2301301527100.1734@cbobk.fhfr.pm>
-References: <20230109123216.4974-1-fengqi706@gmail.com> <nycvar.YFH.7.76.2301201849090.1734@cbobk.fhfr.pm> <CACOZ=ZWB3grJKn7wAZEZ0BDyN7KJF4VWUTNs-mPxeoW_oiR7=g@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1AE963F301
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 14:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675088892;
+        bh=8tldsSMHjz/KGcubN74VP3m6mSViWeoZ+GXrdbkATG4=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=Xtva5QHr4fCV9JrnEwUcsfVjaMoeQT12m8Ss1f3ZXSxONSGjEFZ+j0MwwQ6LfWAGb
+         XNxqqWKYm9T0FwHWA4ndVDIDq1WffTAOv30eeRTDpjXdGLSpyk6pbHJyMQEItrsxCj
+         srQKk80DpJ1C69kImw+CDuNtZ9Ydm/gx04nqO8oM7mgQ9gyBt+XxSUOjoh/pPOKF1k
+         zLxKcHbO9E9eugEAePx+ElmBSUbnn1aEUJ8RR2sUXsk0MK0gvjiHcugLyX6iODKRJJ
+         g4zB2Bixs4azFO8clMfzTpXtOb/wuiYlLgfFHLnBGNWcnaGrIFXP1R0sEi0UMf7tRN
+         frGlmjcPDjaXg==
+Received: by mail-wm1-f69.google.com with SMTP id fl5-20020a05600c0b8500b003db12112fdeso7249963wmb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 06:28:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8tldsSMHjz/KGcubN74VP3m6mSViWeoZ+GXrdbkATG4=;
+        b=IARFCQQi8sXIPxi2cbqFG7EKpAPEgBseCBLvda4MmaTpBNUyCgxx9NdEEG+nXMUo8s
+         SwNl+tC85A5pnjie3T6QnENXcRWSQ3m7edyqQVqHbKt/qTFv9yvjd937zO0drSr9WcTN
+         F5oiV86KxM+1kqm3TCswnMvxD7cXXji8CrxCWYkCtLHI64oAMgx5m5Qo41zq196f7I2k
+         h9vM8IHmKdt8x7rayf/c7Iar+vUC5E2NdsrIz7YCB+kwsaVlbt0wo0tcxvXewndZ2igh
+         425t0w6f49rp7MZxKueIJ7tHABY59S3Bv7t83vLn0Jv5IYOW+5fW7uIXoi5UzdSFMxAc
+         +klQ==
+X-Gm-Message-State: AO0yUKVMqrm4yFyH0HV/LkWOUuEe02USC3b0fe2Ryi0e0DyBbvxfFDQR
+        EWbV1DIRxiB75FuE5vuKliHZfn5fKckLVWX+mo7Fne8+Ar0Yg2PtNO6/ghjWlGsaE2/GLghmLN/
+        R5IOkoQ6zeOIBwiqEAc6PhlQq1NqrP472a2EUq3mSpA==
+X-Received: by 2002:a05:600c:3ba6:b0:3dc:58d5:3a80 with SMTP id n38-20020a05600c3ba600b003dc58d53a80mr4007479wms.24.1675088891325;
+        Mon, 30 Jan 2023 06:28:11 -0800 (PST)
+X-Google-Smtp-Source: AK7set9RXHwyV38sXXqZOIzwMAAznKaTCBHLsXPHnS8yXwbmHLuyZd3o4xjfz5sCXZ+8TzS3OT06TA==
+X-Received: by 2002:a05:600c:3ba6:b0:3dc:58d5:3a80 with SMTP id n38-20020a05600c3ba600b003dc58d53a80mr4007457wms.24.1675088891083;
+        Mon, 30 Jan 2023 06:28:11 -0800 (PST)
+Received: from qwirkle ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c434700b003dc3f195abesm9540902wme.39.2023.01.30.06.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 06:28:10 -0800 (PST)
+Date:   Mon, 30 Jan 2023 14:28:08 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Willem de Bruijn <willemb@google.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
+ back-off retries
+Message-ID: <Y9fT+LABhW+/3Nal@qwirkle>
+References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
+ <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
+ <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
+ <Y9e9S3ENl0oszAH/@qwirkle>
+ <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 29 Jan 2023, qi feng wrote:
+On 23/01/30 08:35AM, Willem de Bruijn wrote:
+> On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
+> <andrei.gherzan@canonical.com> wrote:
+> >
+> > On 23/01/30 09:26AM, Paolo Abeni wrote:
+> > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
+> > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
+> > > > <andrei.gherzan@canonical.com> wrote:
+> > > > >
+> > > > > The tx and rx test programs are used in a couple of test scripts including
+> > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
+> > > > > are invoked subsequently, there is a chance that the rx one is not ready to
+> > > > > accept socket connections. This racing bug could fail the test with at
+> > > > > least one of the following:
+> > > > >
+> > > > > ./udpgso_bench_tx: connect: Connection refused
+> > > > > ./udpgso_bench_tx: sendmsg: Connection refused
+> > > > > ./udpgso_bench_tx: write: Connection refused
+> > > > >
+> > > > > This change addresses this by adding routines that retry the socket
+> > > > > operations with an exponential back off algorithm from 100ms to 2s.
+> > > > >
+> > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > >
+> > > > Synchronizing the two processes is indeed tricky.
+> > > >
+> > > > Perhaps more robust is opening an initial TCP connection, with
+> > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
+> > > > go.
+> > >
+> > > Another option would be waiting for the listener(tcp)/receiver(udp)
+> > > socket to show up in 'ss' output before firing-up the client - quite
+> > > alike what mptcp self-tests are doing.
+> >
+> > I like this idea. I have tested it and it works as expected with the
+> > exeception of:
+> >
+> > ./udpgso_bench_tx: sendmsg: No buffer space available
+> >
+> > Any ideas on how to handle this? I could retry and that works.
+> 
+> This happens (also) without the zerocopy flag, right? That
+> 
+> It might mean reaching the sndbuf limit, which can be adjusted with
+> SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
+> expect this test to bump up against that limit.
+> 
+> A few zerocopy specific reasons are captured in
+> https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
 
-> Hi,
-> Our Bluetooth Handle needs the focus function, which is missing in the
-> current map
-> If our setting is unreasonable, do you have other suggested values
+I have dug a bit more into this, and it does look like your hint was in
+the right direction. The fails I'm seeing are only with the zerocopy
+flag.
 
-If the device is under your control, wouldn't it be better to let it 
-produce something more defined by HID standard? (see e.g. 0x90 -- Camera 
-Control Page).
+From the reasons (doc) above I can only assume optmem limit as I've
+reproduced it with unlimited locked pages and the fails are transient.
+That leaves optmem limit. Bumping the value I have by default (20480) to
+(2048000) made the sendmsg succeed as expected. On the other hand, the
+tests started to fail with something like:
 
-Thanks,
+./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
+expected    773707 received
+
+Also, this audit fail is transient as with the buffer limit one.
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+Andrei Gherzan
