@@ -2,136 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E89168046E
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C058680477
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 04:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235148AbjA3Dqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 22:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S235321AbjA3D4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 22:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbjA3Dq2 (ORCPT
+        with ESMTP id S232201AbjA3D4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 22:46:28 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0151D900;
-        Sun, 29 Jan 2023 19:46:26 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P4vHJ3gmRz4f3v4f;
-        Mon, 30 Jan 2023 11:46:20 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDX0R+MPddjoCS0CQ--.41891S3;
-        Mon, 30 Jan 2023 11:46:22 +0800 (CST)
-Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create block
- device
-To:     jejb@linux.ibm.com, Yu Kuai <yukuai1@huaweicloud.com>,
-        Zhong Jinghua <zhongjinghua@huawei.com>,
-        gregkh@linuxfoundation.org, martin.petersen@oracle.com,
-        hare@suse.de, bvanassche@acm.org, emilne@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230128094146.205858-1-zhongjinghua@huawei.com>
- <20230128094146.205858-3-zhongjinghua@huawei.com>
- <1b466057ed2e91b05388afbb5791639eb8abdd59.camel@linux.ibm.com>
- <c3e58056-942a-f829-ecf6-1342c65b6865@huaweicloud.com>
- <7c5c38f128910f89f20533b7fd51453a32ff4f5c.camel@linux.ibm.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <19ad8dd7-482e-dad0-8465-f78f7f9c154d@huaweicloud.com>
-Date:   Mon, 30 Jan 2023 11:46:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sun, 29 Jan 2023 22:56:35 -0500
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36768196B5;
+        Sun, 29 Jan 2023 19:56:34 -0800 (PST)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30U0P3m1011796;
+        Sun, 29 Jan 2023 19:56:23 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=2BkxocrkQyuArqadL/m9cRAQ5qXVQ1kYI4JJRWuZG3s=;
+ b=kQYOJk5FTlpprD+XlG8xBWVt95+ughimaDF9Xmmhowcd2PfX0bIE9ugdItjdvwhPSUyV
+ 9fLa+4f4mRMOsAnzhRq4fv1Tr0R+gqDIYLTT7gvRDSAo+rwGqHurFajKPRjTHV0dv5h7
+ wzvrYyMThjroZFdeXHdyO5668H4mKeFRow4PZL9O2wVwjM04KyNrpSSNNviSzRKLWHie
+ zH23OaZK/tatXvkqm/w5lzLWVLXoPMh2lVHLZWHWBIx5hlNcU7kqSnrl75vP7RGZTCR9
+ oXOcgXDwdy+dV3RoIJtuEQvlD1U9Kp/5E1SPLurYySqLyxEU3JJuE9NbOQxzZdNaxx0f UQ== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3nd1xum1hd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sun, 29 Jan 2023 19:56:22 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sun, 29 Jan
+ 2023 19:56:20 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Sun, 29 Jan 2023 19:56:20 -0800
+Received: from localhost.localdomain (unknown [10.28.36.165])
+        by maili.marvell.com (Postfix) with ESMTP id 9EA823F70A7;
+        Sun, 29 Jan 2023 19:56:16 -0800 (PST)
+From:   Ratheesh Kannoth <rkannoth@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <sgoutham@marvell.com>, Ratheesh Kannoth <rkannoth@marvell.com>
+Subject: [net-next PATCH] octeontx2-af: Removed unnecessary debug messages.
+Date:   Mon, 30 Jan 2023 09:25:56 +0530
+Message-ID: <20230130035556.694814-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <7c5c38f128910f89f20533b7fd51453a32ff4f5c.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDX0R+MPddjoCS0CQ--.41891S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw4rAr15KF4xXr15CrykXwb_yoW8Kw4kpF
-        WfKFZIkrWkGwn3Jw1vyayrZw10yw4kAw45JF15Kr17Ja4UCF9aqrW5Ka9Y9FyUWryxX3WY
-        qF4rGa9Ik34qyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
-        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: ZlrVuQPv1haZsu45jxG1nMcA2gISeGiz
+X-Proofpoint-GUID: ZlrVuQPv1haZsu45jxG1nMcA2gISeGiz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_01,2023-01-27_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Sunil Goutham <sgoutham@marvell.com>
 
-在 2023/01/30 11:29, James Bottomley 写道:
-> On Mon, 2023-01-30 at 11:07 +0800, Yu Kuai wrote:
->> Hi,
->>
->> 在 2023/01/30 1:30, James Bottomley 写道:
->>> On Sat, 2023-01-28 at 17:41 +0800, Zhong Jinghua wrote:
->>>> This error will cause a warning:
->>>> kobject_add_internal failed for block (error: -2 parent:
->>>> 1:0:0:1). In the lower version (such as 5.10), there is no
->>>> corresponding error handling, continuing to go down will trigger
->>>> a kernel panic, so cc stable.
->>>
->>> Is this is important point and what you're saying is that this only
->>> panics on kernels before 5.10 or so because after that it's
->>> correctly failed by block device error handling so there's nothing
->>> to fix in later kernels?
->>>
->>> In that case, isn't the correct fix to look at backporting the
->>> block device error handling:
->>
->> This is the last commit that support error handling, and there are
->> many relied patches, and there are lots of refactor in block layer.
->> It's not a good idea to backport error handling to lower version.
->>
->> Althrough error handling can prevent kernel crash in this case, I
->> still think it make sense to make sure kobject is deleted in order,
->> parent should not be deleted before child.
-> 
-> Well, look, you've created a very artificial situation where a create
-> closely followed by a delete of the underlying sdev races with the
-> create of the block gendisk devices of sd that bind asynchronously to
-> the created sdev.  The asynchronous nature of the bind gives the
-> elongated race window so the only real fix is some sort of check that
-> the sdev is still viable by the time the bind occurs ... probably in
-> sd_probe(), say a scsi_device_get of sdp at the top which would ensure
-> viability of the sdev for the entire bind or fail the probe if the sdev
-> can't be got.
+NPC exact match feature is supported only on one silicon
+variant, removed debug messages which print that this
+feature is not available on all other silicon variants.
 
-Sorry, I don't follow here. 😟
+Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
+Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
+---
+ .../net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-I agree this is a very artificial situation, however I can't tell our
-tester not to test this way...
-
-The problem is that kobject session is deleted and then sd_probe() tries
-to create a new kobject under hostx/sessionx/x:x:x:x/. I don't see how
-scsi_device_get() can prevent that, it only get a kobject reference and
-can prevent kobject to be released, however, kobject_del() can still be
-done.
-
-In this patch, we make sure remove session and sd_probe() won't
-concurrent, remove session will wait for all child kobject to be
-deleted, what do you think?
-
-Thanks,
-Kuai
-> 
-> James
-> 
-> 
-> .
-> 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+index f69102d20c90..ad1374a12a40 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+@@ -200,10 +200,8 @@ void npc_config_secret_key(struct rvu *rvu, int blkaddr)
+ 	struct rvu_hwinfo *hw = rvu->hw;
+ 	u8 intf;
+ 
+-	if (!hwcap->npc_hash_extract) {
+-		dev_info(rvu->dev, "HW does not support secret key configuration\n");
++	if (!hwcap->npc_hash_extract)
+ 		return;
+-	}
+ 
+ 	for (intf = 0; intf < hw->npc_intfs; intf++) {
+ 		rvu_write64(rvu, blkaddr, NPC_AF_INTFX_SECRET_KEY0(intf),
+@@ -221,10 +219,8 @@ void npc_program_mkex_hash(struct rvu *rvu, int blkaddr)
+ 	struct rvu_hwinfo *hw = rvu->hw;
+ 	u8 intf;
+ 
+-	if (!hwcap->npc_hash_extract) {
+-		dev_dbg(rvu->dev, "Field hash extract feature is not supported\n");
++	if (!hwcap->npc_hash_extract)
+ 		return;
+-	}
+ 
+ 	for (intf = 0; intf < hw->npc_intfs; intf++) {
+ 		npc_program_mkex_hash_rx(rvu, blkaddr, intf);
+@@ -1854,16 +1850,12 @@ int rvu_npc_exact_init(struct rvu *rvu)
+ 	/* Check exact match feature is supported */
+ 	npc_const3 = rvu_read64(rvu, blkaddr, NPC_AF_CONST3);
+ 	if (!(npc_const3 & BIT_ULL(62))) {
+-		dev_info(rvu->dev, "%s: No support for exact match support\n",
+-			 __func__);
+ 		return 0;
+ 	}
+ 
+ 	/* Check if kex profile has enabled EXACT match nibble */
+ 	cfg = rvu_read64(rvu, blkaddr, NPC_AF_INTFX_KEX_CFG(NIX_INTF_RX));
+ 	if (!(cfg & NPC_EXACT_NIBBLE_HIT)) {
+-		dev_info(rvu->dev, "%s: NPC exact match nibble not enabled in KEX profile\n",
+-			 __func__);
+ 		return 0;
+ 	}
+ 
+-- 
+2.25.1
 
