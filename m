@@ -2,224 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5268681690
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13926816C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237583AbjA3Qjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S237774AbjA3Qp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237614AbjA3Qjs (ORCPT
+        with ESMTP id S237032AbjA3Qpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:39:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5649A40C4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:39:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675096745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vOSbIQi6REbvWHHJ9e5FE37Vj75BNZRylNVQD9QT0pQ=;
-        b=TSpUFt909PyMJ4z22DnrFUrufdDNonEzyqs+Z/ATwYaHcvNJ22nrSdyAnRCR1IgHN1UeA7
-        8fwjQhoYaWmc7IHEBYnYGJI8uwjnJRJtQjlh8zHA4WYO5X/x9UK+OpFp9nLVhGITxdbvME
-        IsEQdyl71d/bCrb6GUHG+jmKS29rCQQ=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-92-kCoo8ONzMhu_eDRoIXwS3Q-1; Mon, 30 Jan 2023 11:39:03 -0500
-X-MC-Unique: kCoo8ONzMhu_eDRoIXwS3Q-1
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-50fe0b4495cso56134077b3.14
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:39:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vOSbIQi6REbvWHHJ9e5FE37Vj75BNZRylNVQD9QT0pQ=;
-        b=tPOIRVViXsfKtbm3LtBVgSVzoF6kl/Fvs4SMDeUNEthyGG4KkXtHoalD2h0J01yP5Y
-         0cn6hMrtHiDC7gvlgzFJsIz3Psa07FmTaDJUFyNbI/RQd8asFMqVDRb4ryQhKezz9FdP
-         WOBut4hIO6yyqNmVJ4+1eeW5JtV3QJF+akd8KsxJ3uXH3zBE8oHb/iDEifzO94iaF+RC
-         ntbyh/rMBv7M2CeLIcapqhUdnv9j6H2LrVd8n8kygDa4Fx+OZhW2GTq+PQw1Mp/MwDF+
-         rjqby7u/TL0xMalQV9AwtkZ3MvUBBpFFsiZTjHMUvF0IJfuhx6TdjlN+t32vM22ely9e
-         ispw==
-X-Gm-Message-State: AFqh2kosF33PokeRh3XCZcdrSguYPNfk9oJA7EsOAFQQxzd1h/Vx+eP9
-        sUXM4WpHkpaIYB3GBRCSLun1sLuqPRpqoAFVKCcJkchPGaAZqc6i6JY5z2J3fUpPXI/N5gOs8Ul
-        BvuhPEheFSLlbA15AvDqXM4TCOuWVguD3KOUo1st/
-X-Received: by 2002:a81:7307:0:b0:464:4ea1:3baa with SMTP id o7-20020a817307000000b004644ea13baamr5257184ywc.302.1675096741822;
-        Mon, 30 Jan 2023 08:39:01 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXv8Hc/0PBjiy1yYTe003vP2IIsZJvaU/f7bDcxzL33GtEtZPIVXDJZQvbzZ3fSubJvmlhLDfrBek23FKfvj5Tw=
-X-Received: by 2002:a81:7307:0:b0:464:4ea1:3baa with SMTP id
- o7-20020a817307000000b004644ea13baamr5257182ywc.302.1675096741551; Mon, 30
- Jan 2023 08:39:01 -0800 (PST)
+        Mon, 30 Jan 2023 11:45:53 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F08FC17F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:45:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675097152; x=1706633152;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4VDTGYM1+byb/e3AIkz0KQQE+tIgA/0Y7EvVgLJaKbU=;
+  b=ZKpHx0jUxpZWRyc01m9zeArVJvYNRCSHJ8b7uIbRqmV+iRThD5C8lqNx
+   6+3WSUT4wLSsd25XbYYEGTBBz6wapgJ8zFSxcOJPVLN8ziX/HCqqkEUrr
+   DAGl6ETgZhT38t0jbaqa39nsVDB7HWmRHOcStFn+n3qlZKfyuUsOn6vZT
+   IK6Tnz+i8Yowh0EL+szXtUWDms/4IoXm8MIOgekbfztxw+LXHcDGfPbYB
+   TkGgYcXU863sccfVm6Dahm/GlyVYK7i0ZOf3jYTGs8hTCfVnVXuwmo1NM
+   HseSmMhX/k6U3TjQb++bOGrr0JFBZLgq7xfFkJkJFPLnMU4uQkBZ0M2/w
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="307260857"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="307260857"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 08:45:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="732763627"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="732763627"
+Received: from inuber-mobl5.amr.corp.intel.com (HELO [10.212.58.60]) ([10.212.58.60])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 08:45:51 -0800
+Message-ID: <7b61ac00-74af-5816-79bb-39eb208ab738@linux.intel.com>
+Date:   Mon, 30 Jan 2023 10:39:29 -0600
 MIME-Version: 1.0
-References: <20230118164359.1523760-1-eperezma@redhat.com> <20230118164359.1523760-3-eperezma@redhat.com>
- <CACGkMEtq_ZOoLaS=vGYPZUc45oP8ENa+5H1KVCF1NS=-SwuPQw@mail.gmail.com>
- <CAJaqyWetovvndcU=pu_kPNUNYkgao=HsENnrKCzoHdK7RBjyAQ@mail.gmail.com> <CACGkMEvX5Li3c8oW2ARc0OAutfDK2=cckjuEf4KQRuNKfH1hfg@mail.gmail.com>
-In-Reply-To: <CACGkMEvX5Li3c8oW2ARc0OAutfDK2=cckjuEf4KQRuNKfH1hfg@mail.gmail.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Mon, 30 Jan 2023 17:38:25 +0100
-Message-ID: <CAJaqyWeWaddX9KjZWs8n9eqx8u-Lk4Nj+VVH_jDh38URuZWJdA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] vringh: fetch used_idx from vring at vringh_init_iotlb
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     mst@redhat.com, leiyang@redhat.com,
-        Laurent Vivier <lvivier@redhat.com>, sgarzare@redhat.com,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
-        linux-kernel@vger.kernel.org, lulu@redhat.com,
-        Gautam Dawar <gdawar@xilinx.com>, alvaro.karsz@solid-run.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v3 6/8] ASoC: cs42l42: Add SoundWire support
+Content-Language: en-US
+To:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+References: <20230127165111.3010960-1-sbinding@opensource.cirrus.com>
+ <20230127165111.3010960-7-sbinding@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230127165111.3010960-7-sbinding@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 7:01 AM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Thu, Jan 19, 2023 at 4:11 PM Eugenio Perez Martin
-> <eperezma@redhat.com> wrote:
-> >
-> > On Thu, Jan 19, 2023 at 4:20 AM Jason Wang <jasowang@redhat.com> wrote:
-> > >
-> > > On Thu, Jan 19, 2023 at 12:44 AM Eugenio P=C3=A9rez <eperezma@redhat.=
-com> wrote:
-> > > >
-> > > > Starting from an used_idx different than 0 is needed in use cases l=
-ike
-> > > > virtual machine migration.  Not doing so and letting the caller set=
- an
-> > > > avail idx different than 0 causes destination device to try to use =
-old
-> > > > buffers that source driver already recover and are not available
-> > > > anymore.
-> > > >
-> > > > While callers like vdpa_sim set avail_idx directly it does not set
-> > > > used_idx.  Instead of let the caller do the assignment, fetch it fr=
-om
-> > > > the guest at initialization like vhost-kernel do.
-> > > >
-> > > > To perform the same at vring_kernel_init and vring_user_init is lef=
-t for
-> > > > the future.
-> > > >
-> > > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> > > > ---
-> > > >  drivers/vhost/vringh.c | 25 +++++++++++++++++++++++--
-> > > >  1 file changed, 23 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> > > > index 33eb941fcf15..0eed825197f2 100644
-> > > > --- a/drivers/vhost/vringh.c
-> > > > +++ b/drivers/vhost/vringh.c
-> > > > @@ -1301,6 +1301,17 @@ static inline int putused_iotlb(const struct=
- vringh *vrh,
-> > > >         return 0;
-> > > >  }
-> > > >
-> > > > +/**
-> > > > + * vringh_update_used_idx - fetch used idx from driver's used spli=
-t vring
-> > > > + * @vrh: The vring.
-> > > > + *
-> > > > + * Returns -errno or 0.
-> > > > + */
-> > > > +static inline int vringh_update_used_idx(struct vringh *vrh)
-> > > > +{
-> > > > +       return getu16_iotlb(vrh, &vrh->last_used_idx, &vrh->vring.u=
-sed->idx);
-> > > > +}
-> > > > +
-> > > >  /**
-> > > >   * vringh_init_iotlb - initialize a vringh for a ring with IOTLB.
-> > > >   * @vrh: the vringh to initialize.
-> > > > @@ -1319,8 +1330,18 @@ int vringh_init_iotlb(struct vringh *vrh, u6=
-4 features,
-> > > >                       struct vring_avail *avail,
-> > > >                       struct vring_used *used)
-> > > >  {
-> > >
-> > > While at this, I wonder if it's better to have a dedicated parameter
-> > > for last_avail_idx?
-> > >
-> >
-> > I also had that thought. To directly assign last_avail_idx is not a
-> > specially elegant API IMO.
-> >
-> > Maybe expose a way to fetch used_idx from device vring and pass
-> > used_idx as parameter too?
->
-> If I was not wrong, we can start from last_avail_idx, for used_idx it
-> is only needed for inflight descriptors which might require other
-> APIs?
->
-> (All the current vDPA user of vringh is doing in order processing)
->
 
-That was actually my first attempt and it works equally well for the
-moment, but it diverges from vhost-kernel behavior for little benefit.
 
-To assign both values at set_vring_base mean that if vDPA introduces
-an (hypothetical) VHOST_VDPA_F_INFLIGHT backend feature in the future,
-the initialization process would vary a lot:
-* Without that feature, the used_idx starts with 0, and the avail one
-is 0 or whatever value the user set with vring_set_base.
-* With that feature, the device will read guest's used_idx as
-vhost-kernel? We would enable a new ioctl to set it, or expand
-set_base to include used_idx, effectively diverting from vhost-kernel?
+On 1/27/23 10:51, Stefan Binding wrote:
+> From: Richard Fitzgerald <rf@opensource.cirrus.com>
+> 
+> This adds support for using CS42L42 as a SoundWire device.
+> 
+> SoundWire-specifics are kept separate from the I2S implementation as
+> much as possible, aiming to limit the risk of breaking the I2C+I2S
+> support.
+> 
+> There are some important differences in the silicon behaviour between
+> I2S and SoundWire mode that are reflected in the implementation:
+> 
+> - ASP (I2S) most not be used in SoundWire mode because the two interfaces
+>   share pins.
+> 
+> - The SoundWire capture (record) port only supports 1 channel. It does
+>   not have left-to-right duplication like the ASP.
+> 
+> - DP2 can only be prepared if the HP has powered-up. DP1 can only be
+>   prepared if the ADC has powered-up. (This ordering restriction does
+>   not exist for ASPs.) The SoundWire core port-prepare step is
+>   triggered by the DAI-link prepare(). This happens before the
+>   codec DAI prepare() or the DAPM sequence so these cannot be used
+>   to enable HP/ADC. Instead the HP/ADC enable/disable are done during
+>   the port_prep callback.
+> 
+> - The SRCs are an integral part of the audio chain but in silicon their
+>   power control is linked to the ASP. There is no equivalent power link
+>   to SoundWire DPs so the driver must take "manual" control of SRC power.
+> 
+> - The SoundWire control registers occupy the lower part of the SoundWire
+>   address space so cs42l42 registers are offset by 0x8000 (non-paged) in
+>   SoundWire mode.
+> 
+> - Register addresses are 8-bit paged in I2C mode but 16-bit unpaged in
+>   SoundWire.
+> 
+> - Special procedures are needed on register read/writes to (a) ensure
+>   that the previous internal bus transaction has completed, and
+>   (b) handle delayed read results, when the read value could not be
+>   returned within the SoundWire read command.
+> 
+> There are also some differences in driver implementation between I2S
+> and SoundWire operation:
+> 
+> - CS42L42 I2S does not runtime_suspend, but runtime_suspend/resume support
+>   has been added into the driver in SoundWire mode as the most convenient
+>   way to power-up the bus manager and to handle the unattach_request
+>   condition, though the CS42L42 chip does not itself suspend or resume.
+> 
+> - Intel SoundWire host controllers have a low-power clock-stop mode that
+>   requires resetting all peripherals when resuming. This means that the
+>   interrupt registers will be reset in between the interrupt being
+>   generated and the interrupt being handled, and since the interrupt
+>   status is debounced, these values may not be accurate immediately,
+>   and may cause spurious unplug events before settling.
+> 
+> - As in I2S mode, the PLL is only used while audio is active because
+>   of clocking quirks in the silicon. For SoundWire the cs42l42_pll_config()
+>   is deferred until the DAI prepare(), to allow the cs42l42_bus_config()
+>   callback to set the SCLK.
+> 
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
 
-To me the wisest option is to move this with vhost-kernel. Maybe we
-need to add a feature bit to know that the hypervisor can trust the
-device will do "the right thing" (VHOST_VDPA_F_FETCH_USED_AT_ENABLE?),
-but we should keep it orthogonal to inflight descriptor migration in
-my opinion.
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-Having said that, I'm totally ok to do it otherwise (or to expand the
-patch message if needed).
+> +static int cs42l42_sdw_dai_set_sdw_stream(struct snd_soc_dai *dai, void *sdw_stream,
+> +					  int direction)
+> +{
+> +	if (!sdw_stream)
+> +		return 0;
+> +
+> +	if (direction == SNDRV_PCM_STREAM_PLAYBACK)
+> +		dai->playback_dma_data = sdw_stream;
+> +	else
+> +		dai->capture_dma_data = sdw_stream;
 
-> >
-> > > > -       return vringh_init_kern(vrh, features, num, weak_barriers,
-> > > > -                               desc, avail, used);
-> > > > +       int r =3D vringh_init_kern(vrh, features, num, weak_barrier=
-s, desc,
-> > > > +                                avail, used);
-> > > > +
-> > > > +       if (r !=3D 0)
-> > > > +               return r;
-> > > > +
-> > > > +       /* Consider the ring not initialized */
-> > > > +       if ((void *)desc =3D=3D used)
-> > > > +               return 0;
-> > >
-> > > I don't understand when we can get this (actually it should be a bug
-> > > of the caller).
-> > >
-> >
-> > You can see it in vdpasim_vq_reset.
-> >
-> > Note that to consider desc =3D=3D 0 to be an uninitialized ring is a bu=
-g
-> > IMO. QEMU considers it that way also, but the standard does not forbid
-> > any ring to be at address 0. Especially if we use vIOMMU.
-> >
-> > So I think the best way to know if we can use the vringh is either
-> > this way, or provide an explicit "initialized" boolean attribute.
-> > Maybe a new "bool is_initialized(vrh)" is enough, if we don't want to
-> > add new attributes.
->
-> I wonder if we can avoid this in the simulator level instead of the
-> vringh (anyhow it only exposes a vringh_init_xxx() helper now).
->
+This may need to be updated to
+snd_soc_dai_dma_data_set(dai, direction, stream);
 
-In my opinion that is a mistake if other drivers will use it to
-implement the emulated control virtqueue. And it requires more
-changes. But it is doable for sure.
+which is being introduced by Morimoto-san
 
-Thanks!
+To avoid dependencies this could be updated later.
 
