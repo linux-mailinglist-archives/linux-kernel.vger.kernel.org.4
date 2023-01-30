@@ -2,101 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC210680D9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 826C2680DA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236759AbjA3M3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:29:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S236802AbjA3M3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbjA3M3V (ORCPT
+        with ESMTP id S236771AbjA3M3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:29:21 -0500
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7872685F;
-        Mon, 30 Jan 2023 04:29:20 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id m8so1545843edd.10;
-        Mon, 30 Jan 2023 04:29:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qCbcC/SCqrKNfyxz02Ndo4K5PjoPuepHRt3ZEc19gvc=;
-        b=mui2O7j4uHgWgkBmChAoCKPfjSyXWyG5poF7LeHVS347QRwVgQyEPGNtMunTV00+y6
-         r6ZJ7jEbJYs3Q4bkQT/PRz2XM7riPY1BlrN2JGmSzHOk83ogbcFDTTB19nDD0oO7E6q0
-         PNeLnkLmo0+GdLvnaQs13fI4DLl+7wVOfkCubc48U25wXdfGSzw/bWwGzQMGAVcY4H+K
-         Xj/RAl/fDa/hqzapRwJTX256d0xcOu4pXmVCQP3pdeMTGw6jpkY7tYtqqIq0xC5uzkTd
-         AyUYM03D81/p1i7cYQpOMXaoX68oFlEYsg9gD4k0/6T8aMGDy8YyWEdBv9FLB68fGS/e
-         4uiA==
-X-Gm-Message-State: AO0yUKXPYFtIkFZ1MFA1c1c14KAvkSVPK0lUit8b3dsWuiVZEfLuUIOb
-        VGZpG8MKyBj2DCwWB2UimtHXZVYqE5rlt0icTbA=
-X-Google-Smtp-Source: AK7set+I7yl7/pgKbZGIlh6IPE69HDCVB3m1cGgNYMwHGcwBhRzt5XFl7PuIsnxrSPwcYYiSM6RRp9wRkvnfo6FX4L4=
-X-Received: by 2002:a05:6402:845:b0:4a2:56e7:178 with SMTP id
- b5-20020a056402084500b004a256e70178mr460794edz.58.1675081758611; Mon, 30 Jan
- 2023 04:29:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20230119142115.38260-1-W_Armin@gmx.de> <8e3ddde5-87aa-a72a-dcfa-5a6041377b15@gmx.de>
-In-Reply-To: <8e3ddde5-87aa-a72a-dcfa-5a6041377b15@gmx.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 30 Jan 2023 13:29:02 +0100
-Message-ID: <CAJZ5v0jkN_Qi+DNmQvbk+bRKfGkgZOvwLmYEujpn9d47TMSrng@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] ACPI: battery: Fix various string handling issues
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        Mon, 30 Jan 2023 07:29:41 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CA82685F;
+        Mon, 30 Jan 2023 04:29:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675081773; x=1706617773;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GTJ6w3MJ1SfsvWS4BfXt9H5te7g7wWNJybMqFlzag0I=;
+  b=DwAzY7g74/yMxT7CKQT8mDsUjxw6rzmZH1DbIPHBObnCYmFkgqa793ZT
+   Cvc1T17Pypy59EGwMDl3bpzdVzpMvnHcojNww2R7pqNc8NC1eEWlGHCCH
+   ttUZetzkTRezgu5RurkKsewRwMDG4CiQ1ZbGY4lQ7SEKS4JsciEEZ7iYo
+   T3Y9WgbHBNv+49KOVW/qJBTLGTa+cu3B0BYurj49R5JnMv7PL65PadZm4
+   tUigKNGuvQnolENe6KsHtNoiupkJS11lV20n6ohX8+1V8hoQ3kvaS1o7z
+   06zwHpwS5zcJ3TFRq001WSucXlN6vYTozCIMq/mf8iEca2kFvbDbLzapc
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="325241052"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="325241052"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 04:29:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="752803767"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="752803767"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Jan 2023 04:29:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pMTHs-00HLRv-1r;
+        Mon, 30 Jan 2023 14:29:28 +0200
+Date:   Mon, 30 Jan 2023 14:29:28 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 7/7] iio: pressure: bmp280: Add nvmem operations for
+ BMP580
+Message-ID: <Y9e4KFhB2E6E4EQb@smile.fi.intel.com>
+References: <cover.1674954271.git.ang.iglesiasg@gmail.com>
+ <013686653a60092227c842ae2fd0197f2509ad7c.1674954271.git.ang.iglesiasg@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <013686653a60092227c842ae2fd0197f2509ad7c.1674954271.git.ang.iglesiasg@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 10:14 AM Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 19.01.23 um 15:21 schrieb Armin Wolf:
->
-> > On my Dell Inspiron 3505, the battery model name was displayed
-> > differently than when running Windows. While i first suspected an
-> > ACPI issue, it turned out that the real reason was the ACPI battery
-> > driver failing to handle strings larger than 32 bytes.
-> >
-> > This caused the model name of the battery (35 bytes long, hex string)
-> > to miss proper NUL-termination, resulting in a buffer overread later.
-> > Luckily, a valid string was stored right after the now invalid string,
-> > appending only the battery serial number to the original model name.
-> >
-> > The first patch fixes a potential buffer overread then handling buffers,
-> > while the second patch finally increases the maximum string length to
-> > avoid truncating such larger strings.
-> >
-> > The patch series was tested on a Dell Inspiron 3505 and appears
-> > to work properly.
->
-> Are there any outstanding issues with the patch series which need
-> to be fixed for mainline inclusion?
+On Sun, Jan 29, 2023 at 02:33:09AM +0100, Angel Iglesias wrote:
+> The pressure sensor BMP580 contains a non-volatile memory that stores
+> trimming and configuration params. That memory provides an programmable
+> user range of three 2-byte words.
 
-I'll have a look shortly and let you know.
+...
 
-Thanks!
+> +#define NVM_READ	false
+> +#define NVM_WRITE	true
 
-> > ---
-> > Changes in v2:
-> > - Drop first patch since it was already applied
-> > - combine the second and third patch
-> > - do not replace 0 with '\0'
-> > - spell ACPI in capitals
-> > - rework the buffer length hdanling
-> >
-> > Armin Wolf (2):
-> >    ACPI: battery: Fix buffer overread if not NUL-terminated
-> >    ACPI: battery: Increase maximum string length
-> >
-> >   drivers/acpi/battery.c | 35 +++++++++++++++++++++++------------
-> >   1 file changed, 23 insertions(+), 12 deletions(-)
-> >
-> > --
+How is it helpful and why it's not namespaced properly (can collide with
+NVM framework)?
+
+...
+
+> +	/* Wait until NVM is ready again */
+> +	do {
+> +		ret = regmap_read(data->regmap, BMP580_REG_STATUS, &reg);
+> +		if (ret) {
+> +			dev_err(data->dev, "failed to check nvm status\n");
+> +			reg &= ~BMP580_STATUS_NVM_RDY_MASK;
+> +		}
+> +	} while (time_before(jiffies, deadline) && !(reg & BMP580_STATUS_NVM_RDY_MASK));
+
+regmap_read_poll_timeout()?
+
+> +	if (!(reg & BMP580_STATUS_NVM_RDY_MASK)) {
+
+	if (ret) {
+		...
+		return ret;
+	}
+
+> +		dev_err(data->dev,
+> +			"reached timeout waiting for nvm operation completion\n");
+> +		return -ETIMEDOUT;
+> +	}
+
+...
+
+> +	while (bytes >= sizeof(u16)) {
+
+sizeof(*dst) ?
+
+Or sizeof(data->le16)?
+
+> +		addr = bmp580_nvmem_addrs[offset / sizeof(u16)];
+
+Ditto.
+
+...
+
+> +		bytes -= sizeof(u16);
+> +		offset += sizeof(u16);
+
+Ditto.
+
+> +	}
+
+...
+
+> +static int bmp580_nvmem_write(void *priv, unsigned int offset, void *val,
+> +			      size_t bytes)
+> +{
+
+Same comments as per above function.
+
+>  }
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
