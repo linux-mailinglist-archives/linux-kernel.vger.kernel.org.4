@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E3B6818A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E346818A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 19:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237988AbjA3SUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 13:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S237970AbjA3SUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 13:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237691AbjA3STs (ORCPT
+        with ESMTP id S237729AbjA3STs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 30 Jan 2023 13:19:48 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167C22E0D2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:45 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id d10so5466879ilc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:45 -0800 (PST)
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7E83A850
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:46 -0800 (PST)
+Received: by mail-il1-x133.google.com with SMTP id h18so2709465ilj.6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 10:19:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5wxgSxSbB5Zk2REp2cxLJz/oBwzWiBxlC3Q9YLCtBp0=;
-        b=U7mVx7EzS1yrwU2P3yJCFPbOxhUhYMyue5ugqwlqBzMAWGhJp/ZcnJ5LAvCCjChwqy
-         47CGNCJ6W2hhzUKfjuleCoW0qvFzcmy96ylKq+qjamUZs0sP8W+lWn949ru912sUju2v
-         kb6hb0iu6cc++EFMCnCck8CjESUAvMzyqlZq8=
+        bh=tgFT+IL5bcCj7J23e5lu6CYNi7LTiunoNwjje3GvFYg=;
+        b=Mq8KtW55EljioiViKDgF8PzaF6ZoQGnyoe2RRses0f4mgf5MIpiCriGT+IifaZfwon
+         X9gCElvVuCs7mc8cR3RJwpKr2/rhpjPfH3EMST7OBev+p4E1ZR9kPbKZSLFahZXq2u5O
+         J2miOwkGMz+dINzvWVyw1PJ51UBnR2WUJXLvs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5wxgSxSbB5Zk2REp2cxLJz/oBwzWiBxlC3Q9YLCtBp0=;
-        b=bjq8b0Rd0DHKJxjTzwnxqSnyuQOaVSVUWVQ5r9J5xvO5V2GU2LLYvDSkmFpUP1cOpx
-         eUgsBkSP9A4DR8Cehpk1EYQLDj/3ZjNOSbggrEGNHOZm0YQ0bub2nzOBebOZbOJotbgO
-         ya2cz7YDICU4AfspAM6wF32m0v0vcAUTl82ZvXsSHn/a6dox0dERDzp3zop/IglLYbay
-         bao2ajIqezL6iPSuDW3Ww4Gc0S0YDWzus9XQgJQVTzPRPaM100/1ILJNnImLvYjGhy/P
-         pJC5e/CEh49vTfGuN0POwmd7BSVKs1Ax6WAijLiirRedT5VX4ABB8uP1DWbZYLKWGBIh
-         NFMA==
-X-Gm-Message-State: AO0yUKUcGoNxzXZqGQi5FEY6bcx11TA3TggFF+9efBrOF5EAcvPUTxXF
-        C1sW0DIDIzCm2754ml+rZ7QibwCmR+W+kbzj
-X-Google-Smtp-Source: AK7set9OTHPr7LKtPzs3v501iP4cToy0c5RMq+2KAtzEJ4vKLeWYV/L2SKkPk0ThRJGdjrofBXwgTg==
-X-Received: by 2002:a05:6e02:1c83:b0:310:e1f6:4a73 with SMTP id w3-20020a056e021c8300b00310e1f64a73mr7318629ill.24.1675102784653;
-        Mon, 30 Jan 2023 10:19:44 -0800 (PST)
+        bh=tgFT+IL5bcCj7J23e5lu6CYNi7LTiunoNwjje3GvFYg=;
+        b=qqk6J3BaVDNZ7uvUosOloNovYCCyHtunhFJ0DIoYTuyGSbTHbfxt54h6FqJuH7qaeS
+         LL7oV5pdh1x7mhzo1exgCBhSMRsZ7kqTBcX3XTYsOKNg2b2JpWmcED5DJVh2D36/+MK5
+         iHSpsVL40TKeIL5QcTDCigEMwi5H3YXZxH73fCkv0w/jWbiqB/9YiWiPSLclrMVan1Xi
+         J7gd1KOLVcW2010vVF8Zl5eJ3rocIT2i3VaSZyOMRMUOJdsFJ+JSalh5FeN3yx0vlqRS
+         w5F0mT2qUb76zxXmLXU9or3c8f7JxpZn+AJe5QTsgxHdTFEr7td/PtCy5/j6MHqLuEDc
+         tMOQ==
+X-Gm-Message-State: AO0yUKXVIjqNubE8sZXh9vs9PaCqXuZgDsu6K23SjtL65doW4cw0fI7T
+        qsFEGNjV/ZpQntJ6Wxl8Jk5q52mlkNBKYixP
+X-Google-Smtp-Source: AK7set8Yf1vmtP2krbFokO0Bn2Jo9liICFpI/GrHXPPM8ng0Ggp+ndGSIwsJUjW/xnrBNESNxA7g7w==
+X-Received: by 2002:a05:6e02:1886:b0:310:a0a3:f614 with SMTP id o6-20020a056e02188600b00310a0a3f614mr19626648ilu.13.1675102785344;
+        Mon, 30 Jan 2023 10:19:45 -0800 (PST)
 Received: from ravnica.bld.corp.google.com ([2620:15c:183:200:fc8a:dd2f:5914:df14])
         by smtp.gmail.com with ESMTPSA id o16-20020a056e02115000b002f139ba4135sm4189801ill.86.2023.01.30.10.19.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 10:19:44 -0800 (PST)
+        Mon, 30 Jan 2023 10:19:45 -0800 (PST)
 From:   Ross Zwisler <zwisler@chromium.org>
 X-Google-Original-From: Ross Zwisler <zwisler@google.com>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ross Zwisler <zwisler@google.com>,
+Cc:     Ross Zwisler <zwisler@google.com>, Shuah Khan <shuah@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         linux-trace-kernel@vger.kernel.org,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org
-Subject: [PATCH 5/9] tools/power: use canonical ftrace path
-Date:   Mon, 30 Jan 2023 11:19:11 -0700
-Message-Id: <20230130181915.1113313-6-zwisler@google.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 6/9] selftests: use canonical ftrace path
+Date:   Mon, 30 Jan 2023 11:19:12 -0700
+Message-Id: <20230130181915.1113313-7-zwisler@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 In-Reply-To: <20230130181915.1113313-1-zwisler@google.com>
 References: <20230130181915.1113313-1-zwisler@google.com>
@@ -65,7 +65,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,103 +84,92 @@ But, from Documentation/trace/ftrace.rst:
 
   /sys/kernel/debug/tracing
 
-A few scripts in tools/power still refer to this older debugfs path, so
-let's update them to avoid confusion.
+A few spots in tools/testing/selftests still refer to this older debugfs
+path, so let's update them to avoid confusion.
 
 Signed-off-by: Ross Zwisler <zwisler@google.com>
 ---
- tools/power/pm-graph/sleepgraph.py                     |  4 ++--
- tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py  |  4 ++--
- .../x86/intel_pstate_tracer/intel_pstate_tracer.py     | 10 +++++-----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ tools/testing/selftests/user_events/dyn_test.c    |  2 +-
+ tools/testing/selftests/user_events/ftrace_test.c | 10 +++++-----
+ tools/testing/selftests/user_events/perf_test.c   |  8 ++++----
+ tools/testing/selftests/vm/protection_keys.c      |  4 ++--
+ 4 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
-index cfe343306e08..eddf8101ddf6 100755
---- a/tools/power/pm-graph/sleepgraph.py
-+++ b/tools/power/pm-graph/sleepgraph.py
-@@ -120,9 +120,9 @@ class SystemValues:
- 	cgexp = False
- 	testdir = ''
- 	outdir = ''
--	tpath = '/sys/kernel/debug/tracing/'
-+	tpath = '/sys/kernel/tracing/'
- 	fpdtpath = '/sys/firmware/acpi/tables/FPDT'
--	epath = '/sys/kernel/debug/tracing/events/power/'
-+	epath = '/sys/kernel/tracing/events/power/'
- 	pmdpath = '/sys/power/pm_debug_messages'
- 	s0ixpath = '/sys/module/intel_pmc_core/parameters/warn_on_s0ix_failures'
- 	s0ixres = '/sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us'
-diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-index 2dea4032ac56..904df0ea0a1e 100755
---- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-+++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-@@ -248,7 +248,7 @@ def signal_handler(signal, frame):
-         ipt.free_trace_buffer()
-         sys.exit(0)
+diff --git a/tools/testing/selftests/user_events/dyn_test.c b/tools/testing/selftests/user_events/dyn_test.c
+index d6265d14cd51..8879a7b04c6a 100644
+--- a/tools/testing/selftests/user_events/dyn_test.c
++++ b/tools/testing/selftests/user_events/dyn_test.c
+@@ -16,7 +16,7 @@
  
--trace_file = "/sys/kernel/debug/tracing/events/amd_cpu/enable"
-+trace_file = "/sys/kernel/tracing/events/amd_cpu/enable"
- signal.signal(signal.SIGINT, signal_handler)
+ #include "../kselftest_harness.h"
  
- interval = ""
-@@ -319,7 +319,7 @@ print(cur_version)
- cleanup_data_files()
+-const char *dyn_file = "/sys/kernel/debug/tracing/dynamic_events";
++const char *dyn_file = "/sys/kernel/tracing/dynamic_events";
+ const char *clear = "!u:__test_event";
  
- if interval:
--    file_name = "/sys/kernel/debug/tracing/trace"
-+    file_name = "/sys/kernel/tracing/trace"
-     ipt.clear_trace_file()
-     ipt.set_trace_buffer_size(memory)
-     ipt.enable_trace(trace_file)
-diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-index b46e9eb8f5aa..ec3323100e1a 100755
---- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-+++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-@@ -373,7 +373,7 @@ def clear_trace_file():
-     """ Clear trace file """
+ static int Append(const char *value)
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index 404a2713dcae..a0b2c96eb252 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -16,11 +16,11 @@
  
-     try:
--        f_handle = open('/sys/kernel/debug/tracing/trace', 'w')
-+        f_handle = open('/sys/kernel/tracing/trace', 'w')
-         f_handle.close()
-     except:
-         print('IO error clearing trace file ')
-@@ -401,7 +401,7 @@ def set_trace_buffer_size(memory):
-     """ Set trace buffer size """
+ #include "../kselftest_harness.h"
  
-     try:
--       with open('/sys/kernel/debug/tracing/buffer_size_kb', 'w') as fp:
-+       with open('/sys/kernel/tracing/buffer_size_kb', 'w') as fp:
-           fp.write(memory)
-     except:
-        print('IO error setting trace buffer size ')
-@@ -411,7 +411,7 @@ def free_trace_buffer():
-     """ Free the trace buffer memory """
+-const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
+-const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
+-const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/enable";
+-const char *trace_file = "/sys/kernel/debug/tracing/trace";
+-const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
++const char *data_file = "/sys/kernel/tracing/user_events_data";
++const char *status_file = "/sys/kernel/tracing/user_events_status";
++const char *enable_file = "/sys/kernel/tracing/events/user_events/__test_event/enable";
++const char *trace_file = "/sys/kernel/tracing/trace";
++const char *fmt_file = "/sys/kernel/tracing/events/user_events/__test_event/format";
  
-     try:
--       open('/sys/kernel/debug/tracing/buffer_size_kb'
-+       open('/sys/kernel/tracing/buffer_size_kb'
-                  , 'w').write("1")
-     except:
-         print('IO error freeing trace buffer ')
-@@ -495,7 +495,7 @@ def signal_handler(signal, frame):
-         sys.exit(0)
+ static inline int status_check(char *status_page, int status_bit)
+ {
+diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
+index 8b4c7879d5a7..31505642aa9b 100644
+--- a/tools/testing/selftests/user_events/perf_test.c
++++ b/tools/testing/selftests/user_events/perf_test.c
+@@ -18,10 +18,10 @@
  
- if __name__ == "__main__":
--    trace_file = "/sys/kernel/debug/tracing/events/power/pstate_sample/enable"
-+    trace_file = "/sys/kernel/tracing/events/power/pstate_sample/enable"
-     signal.signal(signal.SIGINT, signal_handler)
+ #include "../kselftest_harness.h"
  
-     interval = ""
-@@ -569,7 +569,7 @@ if __name__ == "__main__":
-     cleanup_data_files()
+-const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
+-const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
+-const char *id_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/id";
+-const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
++const char *data_file = "/sys/kernel/tracing/user_events_data";
++const char *status_file = "/sys/kernel/tracing/user_events_status";
++const char *id_file = "/sys/kernel/tracing/events/user_events/__test_event/id";
++const char *fmt_file = "/sys/kernel/tracing/events/user_events/__test_event/format";
  
-     if interval:
--        filename = "/sys/kernel/debug/tracing/trace"
-+        filename = "/sys/kernel/tracing/trace"
-         clear_trace_file()
-         set_trace_buffer_size(memory)
-         enable_trace(trace_file)
+ struct event {
+ 	__u32 index;
+diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
+index 291bc1e07842..0d421015fbc1 100644
+--- a/tools/testing/selftests/vm/protection_keys.c
++++ b/tools/testing/selftests/vm/protection_keys.c
+@@ -97,7 +97,7 @@ int tracing_root_ok(void)
+ void tracing_on(void)
+ {
+ #if CONTROL_TRACING > 0
+-#define TRACEDIR "/sys/kernel/debug/tracing"
++#define TRACEDIR "/sys/kernel/tracing"
+ 	char pidstr[32];
+ 
+ 	if (!tracing_root_ok())
+@@ -123,7 +123,7 @@ void tracing_off(void)
+ #if CONTROL_TRACING > 0
+ 	if (!tracing_root_ok())
+ 		return;
+-	cat_into_file("0", "/sys/kernel/debug/tracing/tracing_on");
++	cat_into_file("0", "/sys/kernel/tracing/tracing_on");
+ #endif
+ }
+ 
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
