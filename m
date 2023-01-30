@@ -2,157 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EDC680781
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 09:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C3C68077E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 09:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236047AbjA3Iff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 03:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
+        id S235950AbjA3IfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 03:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjA3Ifd (ORCPT
+        with ESMTP id S230232AbjA3IfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 03:35:33 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE91EB49
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 00:35:32 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id s24so4284784vsi.12
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 00:35:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SDsKqyepeY63ocyMIwF8lZiaR+pOTU94INwLNWf/i/Q=;
-        b=ev6TkzkN+oz3Pn2cqYjBSUtXogA5QDLvcoqgoNESO5OALKcVKunZ5BNPhAn9OKgoB4
-         J+T2sBUxdpcZpAOJxcBhw9LmGzLnIsuD+ImGdOHtBunOYmz3lYKdbYyejff7ZcgAY+bw
-         LkIsBZ92PhyspTXo6Srnts7ZiMcO5R56TMmQyT+qGF9OZiSEqCGgJ+PxI8h7Z558UBj6
-         jezwKhML1nM20ptbwlF2YOAHFlYT6yTh+fwWxDjDUZPX+xMMV3RGMZbEdfxD9ZOujRmy
-         o2HXcwknMXLTfXxJIbeKJlOkDTI9wxjXOB2dwo3wGGsHwPRjtPmqZPYbDHLdJ6B/OUGH
-         gjwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SDsKqyepeY63ocyMIwF8lZiaR+pOTU94INwLNWf/i/Q=;
-        b=SB3dj/ED/bU6yz/pLc5dGFIlkVKSvKAS3MbbxXCCUcrDBUWDZHVPUcvttNolp627aX
-         7ItACBlKhL4tQFqGdiVY77sOwZHqE8ORL7fjfjo8tr/0xwP5B6/sxdCwzbRndCRz7w5P
-         WGwtNxhCnCA1DCQHNn18bjYDif9IIcplKO/Rea0DAnVNjHJU2eq/aw8MCDrWwI+dlbZx
-         Q/3/A5tEhdzMcHCRXrj4OFdgfVzEhzgeeFRM/dKqbcGSK2CDfbJ4MXEMCoPa7rcrnX6U
-         wjl9Kq1PA0sHRQP1uAU8gi3U/SQTY112O5oVETckx8LYOGOZbhW0KaVf2TZtUb10zU+r
-         ns9A==
-X-Gm-Message-State: AO0yUKUzJLzZgo0H9hj2qwt2rJ/onorYN1Fit9hxVsQKqNiaYd53lvmy
-        7NA8lVw4ZemqvrAZTN4sy67jt8YnAjaJh8lr2XCj1A==
-X-Google-Smtp-Source: AK7set87heiUfKYTTgXopGPXqNCq9oqyYQ7M4JyNrCHVP6v7DUboxKAd6easHm0O08SmEKEthX056v5+58w841VaRu0=
-X-Received: by 2002:a05:6102:3237:b0:3f4:eee1:d8c4 with SMTP id
- x23-20020a056102323700b003f4eee1d8c4mr514404vsf.19.1675067731131; Mon, 30 Jan
- 2023 00:35:31 -0800 (PST)
+        Mon, 30 Jan 2023 03:35:09 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0DCEB49;
+        Mon, 30 Jan 2023 00:35:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675067708; x=1706603708;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GBIpIc+A10cwgQqoTcUX1briJX8R+8iaF6VJFNW2w1o=;
+  b=T/OJu6kX+SXVgkQqHw+pvbCzV2htYmlwGEZ0pBVmcLg7V++UtM6D6GCa
+   430DNxXrjGjzdo26Tc/KHKT3JHSBpMd1E2wZYPTz7rHeiOzYwhb6TzLW0
+   Mps6wJM965w44qehlaqg8YDIwOVBT09n9wnnAzydpzqNDKJKqqS3JIJCv
+   K1HuFFYLBVhmV0uNpVQMqYkxRDJSI217IbQ3O74wiURknyqUZ+TrhmKKk
+   gpRhzclSSVck7RbtN3Yt2z3CVZ3WpFN5fjN5tq/2AqidC/6DZYRNcJFoS
+   AeAvRItLQ+gib4MTWWX9L7rkBUpmw9rOTQsN9Y89DzXdeZiyeUgSEDO4M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="327521040"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="327521040"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 00:35:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="772405473"
+X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
+   d="scan'208";a="772405473"
+Received: from zhoufuro-mobl.ccr.corp.intel.com (HELO [10.249.170.163]) ([10.249.170.163])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 00:35:01 -0800
+Message-ID: <7f461661-2dcf-056d-f78a-93c409388f29@linux.intel.com>
+Date:   Mon, 30 Jan 2023 16:34:58 +0800
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
- <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
- <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com> <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 30 Jan 2023 09:34:54 +0100
-Message-ID: <CAG_fn=XNfrpTxWYYLnG5L-ogKmxvWvLGTzgqbT7sWxnFgnu7_w@mail.gmail.com>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH v2 07/22] ASoC: Add SOC USB APIs for adding an USB
+ backend
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Thinh.Nguyen@synopsys.com,
+        broonie@kernel.org, bgoswami@quicinc.com, tiwai@suse.com,
+        robh+dt@kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+References: <20230126031424.14582-1-quic_wcheng@quicinc.com>
+ <20230126031424.14582-8-quic_wcheng@quicinc.com> <Y9UiiMbJFjkzyEol@kroah.com>
+ <7c1d80b6-5db3-9955-0a67-908455bd77fa@linux.intel.com>
+ <Y9YbumlV9qh+k68h@kroah.com>
+Content-Language: en-US
+From:   Zhou Furong <furong.zhou@linux.intel.com>
+In-Reply-To: <Y9YbumlV9qh+k68h@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 11:09 PM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> Alexander Potapenko wrote:
-> > (+ Dan Williams)
-> > (resending with patch context included)
-> >
-> > On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
-> > >
-> > > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
-> > > >
-> > > > KMSAN adds extra metadata fields to struct page, so it does not fit into
-> > > > 64 bytes anymore.
-> > >
-> > > Does this somehow cause extra space being used in all kernel configs?
-> > > If not, it would be good to note this in the commit message.
-> > >
-> > I actually couldn't verify this on QEMU, because the driver never got loaded.
-> > Looks like this increases the amount of memory used by the nvdimm
-> > driver in all kernel configs that enable it (including those that
-> > don't use KMSAN), but I am not sure how much is that.
-> >
-> > Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
->
-> Apologies I missed this several months ago. The answer is that this
-> causes everyone creating PMEM namespaces on v6.1+ to lose double the
-> capacity of their namespace even when not using KMSAN which is too
-> wasteful to tolerate. So, I think "6e9f05dc66f9 libnvdimm/pfn_dev:
-> increase MAX_STRUCT_PAGE_SIZE" needs to be reverted and replaced with
-> something like:
->
-> diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-> index 79d93126453d..5693869b720b 100644
-> --- a/drivers/nvdimm/Kconfig
-> +++ b/drivers/nvdimm/Kconfig
-> @@ -63,6 +63,7 @@ config NVDIMM_PFN
->         bool "PFN: Map persistent (device) memory"
->         default LIBNVDIMM
->         depends on ZONE_DEVICE
-> +       depends on !KMSAN
->         select ND_CLAIM
->         help
->           Map persistent memory, i.e. advertise it to the memory
->
 
-Looks like we still don't have a resolution for this problem.
-I have the following options in mind:
 
-1. Set MAX_STRUCT_PAGE_SIZE to 80 (i.e. increase it by 2*sizeof(struct
-page *) added by KMSAN) instead of 128.
-2. Disable storing of struct pages on device for KMSAN builds.
+On 2023/1/29 15:09, Greg KH wrote:
+> On Sun, Jan 29, 2023 at 02:54:43PM +0800, Zhou Furong wrote:
+>>
+>>
+>>>> +void *snd_soc_usb_get_priv_data(struct device *usbdev)
+>>>> +{
+>>>> +	struct snd_soc_usb *ctx;
+>>>> +
+>>>> +	if (!usbdev)
+>>>> +		return NULL;
+>>>
+>>> How could usbdev ever be NULL?
+>> The method is exported to public, valid check should be reasonable
+>> as someone may call it by mistake
+> 
+> We do not protect the kernel from itself like this, no need to check
+> things that should never happen.  If the caller gets it wrong, their
+> code will break :)
+> 
+> thanks,
+> 
+> greg k-h
 
-, but if those are infeasible, we can always go for:
+Thank you Greg!
 
-3. Disable KMSAN for NVDIMM and reflect it in Documentation. I am
-happy to send the patch if we decide this is the best option.
+This has been confused me for long time when I found Linux kernel don't 
+check input even for public method.
+
