@@ -2,136 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1990E680548
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F31D568054C
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 05:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235471AbjA3Evh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 23:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S235372AbjA3E6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 23:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235638AbjA3EvI (ORCPT
+        with ESMTP id S229614AbjA3E6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 23:51:08 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4FB12594;
-        Sun, 29 Jan 2023 20:50:12 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.48.240]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MZkd5-1p7DGc412N-00Wk4W; Mon, 30 Jan 2023 05:49:42 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:219:b8ff:fe08:dd7c])
+        Sun, 29 Jan 2023 23:58:10 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C80EC51;
+        Sun, 29 Jan 2023 20:58:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id F1B6F3C0EE;
-        Mon, 30 Jan 2023 05:49:37 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 74C7E1F5; Mon, 30 Jan 2023 05:49:37 +0100 (CET)
-Date:   Mon, 30 Jan 2023 05:49:37 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: Re: [PATCH] .gitignore: ignore *.mbx
-Message-ID: <Y9dMYSCCTo/S6DYz@bergen.fjasle.eu>
-References: <20230130021902.4088173-1-masahiroy@kernel.org>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 58CCE21A54;
+        Mon, 30 Jan 2023 04:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675054684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QsEAPOMyaeu/9McoDoMoMk0k2EHIrCJNQvu263sxO1U=;
+        b=DuB4cgq2LIabTM8uZnAWF0eU1FHiS4CQQ2JFBzn+0d/xZ7kIKXp7iSZGWs+TcR0UkgGjJy
+        Q+Ap+x7Ycxwu7xvNd7IUtiWyzX+iIo1yc7Zp079jxprwVrbrIZHmYIPA3m4c5Ny1YcF3XI
+        +gJDo8xIK80N/4RSAYqBddgj9Uip/6w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675054684;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QsEAPOMyaeu/9McoDoMoMk0k2EHIrCJNQvu263sxO1U=;
+        b=Ci2ysmXzLi2CtQmPQ6E555lg6r2QDTpj3135rPpTFD3SXKzx0T5vBmMeFOGjFioX35x/eT
+        69X8ZFwmaPeV29CQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 23F1413A09;
+        Mon, 30 Jan 2023 04:57:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /YhgLVdO12PzegAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 30 Jan 2023 04:57:59 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OgcybDLBsmM8w/ln"
-Content-Disposition: inline
-In-Reply-To: <20230130021902.4088173-1-masahiroy@kernel.org>
-Jabber-ID: nicolas@fjasle.eu
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:8aqWJMH/dMAaW+vxomv1y48xJZrRjdBKhStb/sy121gf0nR9HBd
- wxxfIbJSuorWA434ChpM2HE4mgXOviM5duowkUtJ3gb7xsCSBwx6oVl1Z4FX82mv/PKWjjA
- 7SQLlkERidAoZmxWDnqWa48zugI5z6BV4gYWMPLKwMoK6gvghf8wgqhQR2Do1rXSoA1PR8S
- 9rXoGCz5XU2wzZjPlGQaQ==
-UI-OutboundReport: notjunk:1;M01:P0:tLgrQO3UJn4=;prwCJBbbPG/H4N/auv6U+jB/+yA
- ZsKxCDOnZZI6AfsWzbtX72MyQmYfkqbYrA+KK2TtSSxQP9XkTAojQXhYLwIqfn9OlPTKD61La
- yqYVtbPYpa2rPfQvy01+PsEk+XgtBaZF5JQ+dIlVYFaaaky296r+g4JFGhbkIqnS5FqcP56qp
- vCkaO6AuedRLtjjYl0kBDbyd5MXPovD9ObrBQeBO89L+mB+XFlqjVxpw5wD1rwmnUz5w+jjrg
- ddpUhz1shJ6A3MVsESBlfwgWmt+Bj2Q/bae9sOaJ3SLGL4ClUQXYfOXJLQ5x9slUHtcQMw3J0
- plPjSElbqclqAbZQQKyS2qKHkEW2hvMz4iOeamByEwRJODhhPKirVLQv0Xx1jhTuCoP7kAHjW
- SEYUhgdIk/UX6DVON9/Y/h0ac97tSvf1B0gMERMWZbTLWcLrqXgG6PNd9xTc3cmppZmMS99A5
- udVpL62FjY2x5ETqisL0kQxtxw7Khe/LOHuGlpN6+MmMSHYluT3VmnviCYDzFIfEnm1ilz33V
- aC8nypL8d6S+U3y95e/haLNf9DwriSGOu+4NmEMCTdOI4xwuK8C/vT0T7omDynoo5tysrWPQg
- /ICJDHwJOHPB7GOsNUUFc+SDw2tvpsbYt2C+q8f4av4iZ53HU4LSO7Qvohukr60sbvyNIDW0X
- r9mX64e4U7rXbH2l8chSsJQOWDf5PqsTU4Kb2NhdyA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Paul Cercueil" <paul@crapouillou.net>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        =?utf-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org
+Subject: Re: [PATCH] MIPS: DTS: CI20: fix otg power gpio
+In-reply-to: <b7745c417d5ac46efa273f1fc45217bb6254ea4f.camel@crapouillou.net>
+References: <1e102159b4be526af88883374d112d558e3ac3f5.1675014494.git.hns@goldelico.com>,
+ <b7745c417d5ac46efa273f1fc45217bb6254ea4f.camel@crapouillou.net>
+Date:   Mon, 30 Jan 2023 15:57:53 +1100
+Message-id: <167505467359.23017.2124580706077477317@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---OgcybDLBsmM8w/ln
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon 30 Jan 2023 11:19:02 GMT, Masahiro Yamada wrote:
-> The 'b4' command creates a *.mbx file. Ignore it.
-
-b4 also creates *.cover file.  Can you add that, too?
-
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-
-Thanks,
-Nicolas
-
->=20
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->=20
->  .gitignore | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/.gitignore b/.gitignore
-> index 22984d22d29e..4dc02ef62202 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -33,6 +33,7 @@
->  *.lz4
->  *.lzma
->  *.lzo
-> +*.mbx
->  *.mod
->  *.mod.c
->  *.o
-> --=20
-> 2.34.1
-
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
-
---OgcybDLBsmM8w/ln
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmPXTGAACgkQB1IKcBYm
-EmnJqBAAr9g7ZPyddzeBDAUfF4gXt/j8kF+n4zanYL4O6BurjHZ0xukHnpXax+OZ
-rASE7WxYWRjURIwdg9/bmiI6MX90QbmJucIt+phhgGUlFNISGcYkAPbFZ2m6ZTxM
-ElgVzzPK2CXNTXOyVOVSHwqXGJeSHjJuZ+Bb0rFFOsFofVkbH3njenNjnbD5Iwbe
-StZSCsJGZvyStIMKIoCh8nUNtgfPNUon9VL3VT6OdiSLpnrccGWEXKmlpVpUN4Lq
-lXbwPvKdyvpvTxCBPc/aq7K9v9XOklk9u0Qw225Vlo8Yko6rYY4QgFHfxxpaA3oA
-0by38ruQsLPcQlkkM94F35EuOVArp+UTFjlR4Yj1ypQ6nmjpe92HAP7Tzudu3NO8
-T4a/E6hPMrlWjqQdxqTkbQ9lvSxs24OooZoHYZgqnPFyNrHuF9wlvt8+efcrm8pl
-yEXQO5EhtxWIV0db9KtsHGVYzdT/OJTo6Z9YdFPOtJxY4ldd5Mg2youbD38oXcmi
-Ry561qnT/+/LpoQat/M9dbPXh/fvFlmWU/sWyOJPZWWSaUiTmLogS2/pZTRc9r1F
-23/H5ak7MCcpV58z4tbZxBZYFb4ubAAUMktNJsa3MizcL0YOo68HBTjb2wK/azmn
-rwXuSdlUK2Vcz/BGIMlvDsrTnJW78/FOVldneonfxkPTjkNTqo8=
-=iFHV
------END PGP SIGNATURE-----
-
---OgcybDLBsmM8w/ln--
+T24gTW9uLCAzMCBKYW4gMjAyMywgUGF1bCBDZXJjdWVpbCB3cm90ZToKPiBMZSBkaW1hbmNoZSAy
+OSBqYW52aWVyIDIwMjMgw6AgMTg6NDggKzAxMDAsIEguIE5pa29sYXVzIFNjaGFsbGVyIGEKPiDD
+qWNyaXTCoDoKPiA+IEFjY29yZGluZyB0byBzY2hlbWF0aWNzIGl0IGlzIFBGMTUgYW5kIG5vdCBQ
+RjE0IChNSUNfU1dfRU4pLgo+ID4gU2VlbXMgYXMgaWYgaXQgd2FzIGhpZGRlbiBhbmQgbm90IG5v
+dGljZWQgZHVyaW5nIHRlc3Rpbmcgc2luY2UKPiA+IHRoZXJlIGlzIG5vIHNvdW5kIERUIG5vZGUu
+Cj4gPiAKPiA+IEZpeGVzOiAxNThjNzc0ZDNjNjQgKCJNSVBTOiBJbmdlbmljOiBBZGQgbWlzc2lu
+ZyBub2RlcyBmb3IgSW5nZW5pYwo+ID4gU29DcyBhbmQgYm9hcmRzLiIpCj4gPiBTaWduZWQtb2Zm
+LWJ5OiBILiBOaWtvbGF1cyBTY2hhbGxlciA8aG5zQGdvbGRlbGljby5jb20+Cj4gCj4gSSBtaXNz
+ZWQgaXQsIGJ1dCBldmVyeSB0aW1lIHlvdSBoYXZlIGEgRml4ZXM6IHRhZywgeW91IGFsc28gbmVl
+ZCB0byBhZGQKPiBiZWxvdzoKPiBDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZwoKSSBkb24ndCB0
+aGluayB5b3UgZG8gYW55IG1vcmUuICBUaGUgc3RhYmxlIHRlYW0gZ3JhYnMgYW55dGhpbmcgdGhh
+dApsb29rcyBldmVuIHZhZ3VlbHkgbGlrZSBhIGZpeCBhbmQgYXBwbGllcyBpdC4gIEhhdmluZyBh
+IHZhbGlkIEZpeGVzIHRhZwppcyBlbm91Z2ggZm9yIHRoZSBzdGFibGUgdGVhbSB0byB0YWtlIGlu
+dGVyZXN0LgoKTmVpbEJyb3duCgoKPiAKPiB1bmxlc3MgdGhlIGJ1ZyB5b3UgZml4IGlzIGluIG9u
+ZSBvZiB0aGUgUkNzIChhbmQgbm90IGluIGEgcmVsZWFzZWQKPiBrZXJuZWwpLgo+IAo+IEkgdGhp
+bmsgeW91IHNob3VsZCBzZW5kIGEgVjIgd2l0aCB0aGlzIHRhZyAoYW5kIG15IEFDSykuCj4gCj4g
+Q2hlZXJzLAo+IC1QYXVsCj4gCj4gPiAtLS0KPiA+IMKgYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2Vu
+aWMvY2kyMC5kdHMgfCAyICstCj4gPiDCoDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
+MSBkZWxldGlvbigtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9taXBzL2Jvb3QvZHRzL2lu
+Z2VuaWMvY2kyMC5kdHMKPiA+IGIvYXJjaC9taXBzL2Jvb3QvZHRzL2luZ2VuaWMvY2kyMC5kdHMK
+PiA+IGluZGV4IDk4MTlhYmIyNDY1ZGQuLmEyNzY0ODhjMGY3NTIgMTAwNjQ0Cj4gPiAtLS0gYS9h
+cmNoL21pcHMvYm9vdC9kdHMvaW5nZW5pYy9jaTIwLmR0cwo+ID4gKysrIGIvYXJjaC9taXBzL2Jv
+b3QvZHRzL2luZ2VuaWMvY2kyMC5kdHMKPiA+IEBAIC0xMTUsNyArMTE1LDcgQEAgb3RnX3Bvd2Vy
+OiBmaXhlZHJlZ3VsYXRvckAyIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+cmVndWxhdG9yLW1pbi1taWNyb3ZvbHQgPSA8NTAwMDAwMD47Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoHJlZ3VsYXRvci1tYXgtbWljcm92b2x0ID0gPDUwMDAwMDA+Owo+ID4g
+wqAKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvID0gPCZncGYgMTQgR1BJ
+T19BQ1RJVkVfTE9XPjsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBncGlvID0g
+PCZncGYgMTUgR1BJT19BQ1RJVkVfTE9XPjsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgZW5hYmxlLWFjdGl2ZS1oaWdoOwo+ID4gwqDCoMKgwqDCoMKgwqDCoH07Cj4gPiDCoH07
+Cj4gCj4gCg==
