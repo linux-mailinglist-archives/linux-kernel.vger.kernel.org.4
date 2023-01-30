@@ -2,101 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7EB681CA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2102681CBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 22:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjA3V0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 16:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S230510AbjA3V2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 16:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjA3V0g (ORCPT
+        with ESMTP id S230377AbjA3V2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 16:26:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71EF30E9D;
-        Mon, 30 Jan 2023 13:26:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71922B8169D;
-        Mon, 30 Jan 2023 21:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DEFC433EF;
-        Mon, 30 Jan 2023 21:26:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675113993;
-        bh=69CmkvsAbzmB0w9yvusSxAkH+Iv9Zou02nNhg1UoZ/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hITV6zcJl+zPv06uNIW0x9+IywAcIYBAjrBbx3W2I/2dqy8rdHFJTutUU8oGN7nom
-         /88MKRM2FkTpq0ws5PRantg+oDmcStc28iD/FCtgzmg3p0O7zpi7v2qk2Y8sUbXTg2
-         LNj/f7/yRGNOsQFHUMoLciXMI5hdWzowzVagi39Jb0ur0GL7P5D9vWUOxvYfCFvtiY
-         pg7F+1aBAog2XzxRxnNsw0Geok6stnpG3dwZQGgV5KG25F9SeeoFpCoVsP14yWK/B4
-         Txqsc18rPAeeq4giQmEoB7gveDdpTSpW0Ujuh1vMBoseZNfOclAc/2W+ndvKSpxGle
-         AcS5TqoC4O2gA==
-Date:   Mon, 30 Jan 2023 21:26:27 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/313] 6.1.9-rc2 review
-Message-ID: <Y9g2A/z/onA/2qsi@spud>
-References: <20230130181611.883327545@linuxfoundation.org>
+        Mon, 30 Jan 2023 16:28:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F06B47ED4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:27:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675114043;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DUjUOCosc+n9O/YY6buBifhq9wPTzqRNFK3SmiShyMc=;
+        b=aNORfVlv49Vn1NwGWwCRO4DZmCI8rD6fyHmQz9iEnFxP0ss5V1jnO3k9SH44wtm0vzZvnF
+        SZDBEWinMLO4wJlZPhTlya/b2VhUfyqEkIQuLd0EK6uZvkCFuoHko2E+kffFoLpjvTMEsl
+        B8tpIEuBnkNqOkDAl1pLdv6VOKFpyZs=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-408-5JLhz_YvNAO6gZzP0TR4Lw-1; Mon, 30 Jan 2023 16:27:17 -0500
+X-MC-Unique: 5JLhz_YvNAO6gZzP0TR4Lw-1
+Received: by mail-qt1-f198.google.com with SMTP id a24-20020ac84d98000000b003b9a4958f0cso769435qtw.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 13:27:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DUjUOCosc+n9O/YY6buBifhq9wPTzqRNFK3SmiShyMc=;
+        b=ifLHPjb2Gx4kbKwxToYphXynSG7Yjm+nTa7T2aocHfcSZJxqCxlJ4viAgckT9YQk44
+         po4HRAfj6tktaSJrgVnARxvcqYvHk/09NnIZydpd/ayp3fGVAMka1sWlXXg/iTXKA1vm
+         epXygz+ZBp5iO1q1fmPLbhPA+YPq77h2y98h3LftnUSsYGBCJPhKpbRc5pqr47hvIPb/
+         mha0C04TDeyGIStiTsNYIizV5ukaXK9ImzXTUhMw3GE6mxf1CuhiFmaLBtjPv4RExNr8
+         HVdnbsCYZNGAq55SjUyW2HoqJbt2PLvf+qtDeqnbfPSDGKiwWlSKkV6zDKuUjhSNGJx5
+         TKCw==
+X-Gm-Message-State: AO0yUKVLF0y+XdmDCsv9gCDI9VHpaTdzQVTUNsqwSNsWdPxiphadnXiQ
+        vdd/M57xsz/iaGIRmAFGhz5s3UyF9rgKuN15bYb9zVlRgJf28D8+XJz2YNw44WF1GDxGS6e35FP
+        n7/5HU1nNXjI/Y2mvoJvmWFhm
+X-Received: by 2002:a0c:ebc8:0:b0:537:6e4c:ac60 with SMTP id k8-20020a0cebc8000000b005376e4cac60mr8802585qvq.2.1675114035603;
+        Mon, 30 Jan 2023 13:27:15 -0800 (PST)
+X-Google-Smtp-Source: AK7set9TUlrBdCpVee0Syc/iu5fDy/5lnof3SbV+U+NkYNoyBgzcAg3OjwV20+VqTlOzMOIBNbiuPg==
+X-Received: by 2002:a0c:ebc8:0:b0:537:6e4c:ac60 with SMTP id k8-20020a0cebc8000000b005376e4cac60mr8802538qvq.2.1675114035240;
+        Mon, 30 Jan 2023 13:27:15 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id x20-20020a05620a01f400b0071d2cd07560sm3984325qkn.124.2023.01.30.13.27.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 13:27:14 -0800 (PST)
+Date:   Mon, 30 Jan 2023 16:27:12 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v8 1/4] userfaultfd: Add UFFD WP Async support
+Message-ID: <Y9g2MAwycCJ3N2tf@x1n>
+References: <20230124084323.1363825-1-usama.anjum@collabora.com>
+ <20230124084323.1363825-2-usama.anjum@collabora.com>
+ <Y9MHM+RVzvigcTTk@x1n>
+ <1968dff9-f48a-3290-a15b-a8b739f31ed2@collabora.com>
+ <Y9PtHUONh2ImQyKF@x1n>
+ <d8c30ea7-05a1-d53b-1391-472ff5b2a7fd@collabora.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qH2vrN+ER9KGegbW"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230130181611.883327545@linuxfoundation.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d8c30ea7-05a1-d53b-1391-472ff5b2a7fd@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 30, 2023 at 01:38:16PM +0500, Muhammad Usama Anjum wrote:
+> On 1/27/23 8:32 PM, Peter Xu wrote:
+> > On Fri, Jan 27, 2023 at 11:47:14AM +0500, Muhammad Usama Anjum wrote:
+> >>>> diff --git a/mm/memory.c b/mm/memory.c
+> >>>> index 4000e9f017e0..8c03b133d483 100644
+> >>>> --- a/mm/memory.c
+> >>>> +++ b/mm/memory.c
+> >>>> @@ -3351,6 +3351,18 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+> >>>>  
+> >>>>  	if (likely(!unshare)) {
+> >>>>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+> >>>> +			if (userfaultfd_wp_async(vma)) {
+> >>>> +				/*
+> >>>> +				 * Nothing needed (cache flush, TLB invalidations,
+> >>>> +				 * etc.) because we're only removing the uffd-wp bit,
+> >>>> +				 * which is completely invisible to the user. This
+> >>>> +				 * falls through to possible CoW.
+> >>>
+> >>> Here it says it falls through to CoW, but..
+> >>>
+> >>>> +				 */
+> >>>> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
+> >>>> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
+> >>>> +					   pte_clear_uffd_wp(*vmf->pte));
+> >>>> +				return 0;
+> >>>
+> >>> ... it's not doing so.  The original lines should do:
+> >>>
+> >>> https://lore.kernel.org/all/Y8qq0dKIJBshua+X@x1n/
+> > 
+> > [1]
+> > 
+> >>>
+> >>> Side note: you cannot modify pgtable after releasing the pgtable lock.
+> >>> It's racy.
+> >> If I don't unlock and return after removing the UFFD_WP flag in case of
+> >> async wp, the target just gets stuck. Maybe the pte lock is not unlocked in
+> >> some path.
+> >>
+> >> If I unlock and don't return, the crash happens.
+> >>
+> >> So I'd put unlock and return from here. Please comment on the below patch
+> >> and what do you think should be done. I've missed something.
+> > 
+> > Have you tried to just use exactly what I suggested in [1]?  I'll paste
+> > again:
+> > 
+> > ---8<---
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index 4000e9f017e0..09aab434654c 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -3351,8 +3351,20 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+> > 
+> >         if (likely(!unshare)) {
+> >                 if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+> > -                       pte_unmap_unlock(vmf->pte, vmf->ptl);
+> > -                       return handle_userfault(vmf, VM_UFFD_WP);
+> > +                       if (userfaultfd_uffd_wp_async(vma)) {
+> > +                               /*
+> > +                                * Nothing needed (cache flush, TLB
+> > +                                * invalidations, etc.) because we're only
+> > +                                * removing the uffd-wp bit, which is
+> > +                                * completely invisible to the user.
+> > +                                * This falls through to possible CoW.
+> > +                                */
+> > +                               set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
+> > +                                          pte_clear_uffd_wp(*vmf->pte));
+> > +                       } else {
+> > +                               pte_unmap_unlock(vmf->pte, vmf->ptl);
+> > +                               return handle_userfault(vmf, VM_UFFD_WP);
+> > +                       }
+> >                 }
+> > ---8<---
+> > 
+> > Note that there's no "return", neither the unlock.  The lock is used in the
+> > follow up write fault resolution and it's released later.
+> I've tried out the exact patch above. This doesn't work. The pages keep
+> their WP flag even after being resolved in do_wp_page() while is written on
+> the page.
+> 
+> So I'd added pte_unmap_unlock() and return 0 from here. This makes the
+> patch to work. Maybe you can try this on your end to see what I'm seeing here?
 
---qH2vrN+ER9KGegbW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Oh maybe it's because it didn't update orig_pte.  If you want, you can try
+again with doing so by changing:
 
-On Mon, Jan 30, 2023 at 07:24:47PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.9 release.
-> There are 313 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Wed, 01 Feb 2023 18:15:14 +0000.
-> Anything received after that time might be too late.
->=20
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.9-r=
-c2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git=
- linux-6.1.y
-> and the diffstat can be found below.
+  set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
+             pte_clear_uffd_wp(*vmf->pte));
 
-Build issue resolved, thanks Greg/Guenter.
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+into:
 
-Cheers,
-Conor.
+  pte_t pte = pte_clear_uffd_wp(*vmf->pte);
+  set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
+  /* Update this to be prepared for following up CoW handling */
+  vmf->orig_pte = pte;
 
+> 
+> > 
+> > Meanwhile please fully digest how pgtable lock is used in this path before
+> > moving forward on any of such changes.
+> > 
+> >>
+> >>>
+> >>>> +			}
+> >>>>  			pte_unmap_unlock(vmf->pte, vmf->ptl);
+> >>>>  			return handle_userfault(vmf, VM_UFFD_WP);
+> >>>>  		}
+> >>>> @@ -4812,8 +4824,21 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+> >>>>  
+> >>>>  	if (vma_is_anonymous(vmf->vma)) {
+> >>>>  		if (likely(!unshare) &&
+> >>>> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+> >>>> -			return handle_userfault(vmf, VM_UFFD_WP);
+> >>>> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
+> >>>> +			if (userfaultfd_wp_async(vmf->vma)) {
+> >>>> +				/*
+> >>>> +				 * Nothing needed (cache flush, TLB invalidations,
+> >>>> +				 * etc.) because we're only removing the uffd-wp bit,
+> >>>> +				 * which is completely invisible to the user. This
+> >>>> +				 * falls through to possible CoW.
+> >>>> +				 */
+> >>>> +				set_pmd_at(vmf->vma->vm_mm, vmf->address, vmf->pmd,
+> >>>> +					   pmd_clear_uffd_wp(*vmf->pmd));
+> >>>
+> >>> This is for THP, not hugetlb.
+> >>>
+> >>> Clearing uffd-wp bit here for the whole pmd is wrong to me, because we
+> >>> track writes in small page sizes only.  We should just split.
+> >> By detecting if the fault is async wp, just splitting the PMD doesn't work.
+> >> The below given snippit is working right now. But definately, the fault of
+> >> the whole PMD is being resolved which if we can bypass by correctly
+> >> splitting would be highly desirable. Can you please take a look on UFFD
+> >> side and suggest the changes? It would be much appreciated. I'm attaching
+> >> WIP v9 patches for you to apply on next(next-20230105) and pagemap_ioctl
+> >> selftest can be ran to test things after making changes.
+> > 
+> > Can you elaborate why thp split didn't work?  Or if you want, I can look
+> > into this and provide the patch to enable uffd async mode.
+> Sorry, I was doing the wrong way. Splitting the page does work. What do you
+> think about the following:
+> 
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3351,6 +3351,17 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+> 
+>  	if (likely(!unshare)) {
+>  		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+> +			if (userfaultfd_wp_async(vma)) {
+> +				/*
+> +				 * Nothing needed (cache flush, TLB invalidations,
+> +				 * etc.) because we're only removing the uffd-wp bit,
+> +				 * which is completely invisible to the user.
+> +				 */
+> +				set_pte_at(vma->vm_mm, vmf->address, vmf->pte,
+> +					   pte_clear_uffd_wp(*vmf->pte));
+> +				pte_unmap_unlock(vmf->pte, vmf->ptl);
+> +				return 0;
 
---qH2vrN+ER9KGegbW
-Content-Type: application/pgp-signature; name="signature.asc"
+Please give it a shot with above to see whether we can avoid the "return 0"
+here.
 
------BEGIN PGP SIGNATURE-----
+> +			}
+>  			pte_unmap_unlock(vmf->pte, vmf->ptl);
+>  			return handle_userfault(vmf, VM_UFFD_WP);
+>  		}
+> @@ -4812,8 +4823,13 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault
+> *vmf)
+> 
+>  	if (vma_is_anonymous(vmf->vma)) {
+>  		if (likely(!unshare) &&
+> -		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd)) {
+> +			if (userfaultfd_wp_async(vmf->vma)) {
+> +				__split_huge_pmd(vmf->vma, vmf->pmd, vmf->address, false, NULL);
+> +				return 0;
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9g2AwAKCRB4tDGHoIJi
-0oaBAP4yhrulYZEanKEByJMYIYCRZNQSuJVK/KWAtI6o9zcoswD/YgDyCKbCnLAV
-A+eMZRiYsLIqRKcyK5rUL6d1MoPmaAo=
-=3nEY
------END PGP SIGNATURE-----
+Same here, I hope it'll work for you if you just goto __split_huge_pmd()
+right below and return with VM_FAULT_FALLBACK.  It avoids one more round of
+fault just like the pte case above.
 
---qH2vrN+ER9KGegbW--
+> +			}
+>  			return handle_userfault(vmf, VM_UFFD_WP);
+> +		}
+>  		return do_huge_pmd_wp_page(vmf);
+>  	}
+
+-- 
+Peter Xu
+
