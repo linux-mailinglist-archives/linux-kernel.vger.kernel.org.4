@@ -2,101 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2E9681664
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A967681668
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 17:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236472AbjA3Q3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 11:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
+        id S237516AbjA3QaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 11:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237494AbjA3Q3c (ORCPT
+        with ESMTP id S237479AbjA3QaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 11:29:32 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2493F2A0;
-        Mon, 30 Jan 2023 08:29:27 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 90050240008;
-        Mon, 30 Jan 2023 16:29:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675096165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ttbkmJmfqMZ8rvI1K8Fpp/EYFmvyqrJCorPDwJm4m78=;
-        b=RQfeahdOmqvClK8WcknKv+Vf5vhB11258ZbUQF0vuna0+IElaueM7GcIXzYgNRlWwth91t
-        ryakmqmpmgbVkKMZfn+QthR3wAHnMO0HG2LtHtriYi2WRdi/0IYSpb6JlXrA9LFXujG1Wn
-        KUhaGH8R3FKIGE8fNg3NQoG7Si2THyF04GXVlAJ64hlNABMXwTYVJwcw6q5PzaC18Fan3E
-        iwU+jYgIAgdhZj4YDkGInEDg53M2ffBYb8C80Bcb5WimtWD6pxVgAieoU5vvs8kINiZc2T
-        dUod2aevqFQByjZa/0vRhYRoNI+XbTcciRVmtvhe/8c8dHYNgBlMZ+Yny48DQw==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     alsa-devel@alsa-project.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH RESEND] ALSA: doc: Fix PCM interface section typos
-Date:   Mon, 30 Jan 2023 17:29:24 +0100
-Message-Id: <20230130162924.119389-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 30 Jan 2023 11:30:11 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D20E37568
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:30:09 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id m199so14718027ybm.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 08:30:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TPFC8cMkklXYROXSktfu+SUe+7hNbiwoBvUWNNZQCno=;
+        b=DRdqm1G7sz3+3jrt8fpDzB2z7HSSV6gtQFBIYiP27otecjCpAmCJ/txHXrv9KVYa3x
+         qVj0/ioZFHZGG0RhY2RjIU28alJdx8PK+cAYA1NUX2cyWAbaK7ulvOeyxepPdGoeQ82O
+         dRXQmKtn/U1k9bpYrXfzqNOYAV2R6Wb7CPrHLhqEU/pau7bAEhEx0vcfQjLOa8bbe83l
+         LcLbDvELQwmwyhT1qWefL4Ckg+4Y9Eg3x50x6A5AqDYk3uEkwwNxPvIUhQdeGvcWsYHm
+         5lBZqjmgpLBFt3p0go1gf+N/n4spXoV+piyg05OZslsUTAb1Hu9ExSw4CG4zK+riUDDG
+         w7fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TPFC8cMkklXYROXSktfu+SUe+7hNbiwoBvUWNNZQCno=;
+        b=nx+xMF/s7UJ5bGNcATsVcdUTrpRZB7nztN1NkM7omPEISLj1JzcBDDpHT1/ewMF4Ar
+         /SxX1QqH4RqbWQ5NguqZZXH0PFun33SxZ4ozdtvvdLgflMY5wxfHCmTxHpqcB3hTtzQk
+         dZm2dB09OYJjP+t8dOOkgqmo15z9S3QUUHfXqqvKTy8cnBe2vHaiu8d9Cwv7mwDNmsPH
+         x8eOAoe45CVfM7GljQoiAXENrTm7+ofE+I70mJ9d0UoWmSyHJwiw3ivz8UVD6XeihgQ2
+         3OFEI7ssEi83Q07Jfl1+E31bkoZ2X6IzVm3XCl/q0eFBHzObTzJ0+Yc7nq/RycdzBOU3
+         pFAg==
+X-Gm-Message-State: AFqh2krKCoHciyhesSjmUBlBQ3f6+MQNji5CsxsThEaRW6/LeapduYYf
+        xq/Wx+GOQAVvIA1cWkxAUs7a6W/hyvLN/5UPOr/rtA==
+X-Google-Smtp-Source: AMrXdXtJPRSD2nJpeETSjyTWb9N9nQlXe9LDLFV+Yj2ibrJyK6JgNXl7Kct1hYSFYMK2S6UcEpqYAjYsGida7vX8NDA=
+X-Received: by 2002:a25:84ce:0:b0:7b7:c7ed:eee9 with SMTP id
+ x14-20020a2584ce000000b007b7c7edeee9mr4700617ybm.334.1675096208397; Mon, 30
+ Jan 2023 08:30:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127181625.286546-1-andrei.gherzan@canonical.com>
+ <CA+FuTSewU6bjYLsyLzZ1Yne=6YBPDJZ=U1mZc+6cJVdr06BhiQ@mail.gmail.com>
+ <a762638b06684cd63d212d1ce9f65236a08b78b1.camel@redhat.com>
+ <Y9e9S3ENl0oszAH/@qwirkle> <CA+FuTSe_NMm6goSmCNfKjUWPGYtVnnBMv6W54a_GOeLJ2FqyOQ@mail.gmail.com>
+ <Y9fT+LABhW+/3Nal@qwirkle> <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
+ <Y9ftL5c4klThCi9Q@qwirkle> <Y9fu7TR5VC33j+EP@qwirkle>
+In-Reply-To: <Y9fu7TR5VC33j+EP@qwirkle>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Mon, 30 Jan 2023 11:29:31 -0500
+Message-ID: <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
+ back-off retries
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix two mistakes in the PCM interface section:
-1/ Members of the snd_pcm_hardware structure are channels_{min,max}
-   and not channel_{min,max} (mind the 's').
-2/ Another sentence is incomplete as the reference to one structure
-   member (period_bytes_max) is missing.
+On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
+>
+> On 23/01/30 04:15PM, Andrei Gherzan wrote:
+> > On 23/01/30 11:03AM, Willem de Bruijn wrote:
+> > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
+> > > <andrei.gherzan@canonical.com> wrote:
+> > > >
+> > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
+> > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
+> > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > >
+> > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
+> > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
+> > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
+> > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > >
+> > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
+> > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
+> > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
+> > > > > > > > > accept socket connections. This racing bug could fail the test with at
+> > > > > > > > > least one of the following:
+> > > > > > > > >
+> > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
+> > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
+> > > > > > > > > ./udpgso_bench_tx: write: Connection refused
+> > > > > > > > >
+> > > > > > > > > This change addresses this by adding routines that retry the socket
+> > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
+> > > > > > > > >
+> > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > > > > >
+> > > > > > > > Synchronizing the two processes is indeed tricky.
+> > > > > > > >
+> > > > > > > > Perhaps more robust is opening an initial TCP connection, with
+> > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
+> > > > > > > > go.
+> > > > > > >
+> > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
+> > > > > > > socket to show up in 'ss' output before firing-up the client - quite
+> > > > > > > alike what mptcp self-tests are doing.
+> > > > > >
+> > > > > > I like this idea. I have tested it and it works as expected with the
+> > > > > > exeception of:
+> > > > > >
+> > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
+> > > > > >
+> > > > > > Any ideas on how to handle this? I could retry and that works.
+> > > > >
+> > > > > This happens (also) without the zerocopy flag, right? That
+> > > > >
+> > > > > It might mean reaching the sndbuf limit, which can be adjusted with
+> > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
+> > > > > expect this test to bump up against that limit.
+> > > > >
+> > > > > A few zerocopy specific reasons are captured in
+> > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
+> > > >
+> > > > I have dug a bit more into this, and it does look like your hint was in
+> > > > the right direction. The fails I'm seeing are only with the zerocopy
+> > > > flag.
+> > > >
+> > > > From the reasons (doc) above I can only assume optmem limit as I've
+> > > > reproduced it with unlimited locked pages and the fails are transient.
+> > > > That leaves optmem limit. Bumping the value I have by default (20480) to
+> > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
+> > > > tests started to fail with something like:
+> > > >
+> > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
+> > > > expected    773707 received
+> > >
+> > > More zerocopy completions than number of sends. I have not seen this before.
+> > >
+> > > The completions are ranges of IDs, one per send call for datagram sockets.
+> > >
+> > > Even with segmentation offload, the counter increases per call, not per segment.
+> > >
+> > > Do you experience this without any other changes to udpgso_bench_tx.c.
+> > > Or are there perhaps additional sendmsg calls somewhere (during
+> > > initial sync) that are not accounted to num_sends?
+> >
+> > Indeed, that looks off. No, I have run into this without any changes in
+> > the tests (besides the retry routine in the shell script that waits for
+> > rx to come up). Also, as a data point.
+>
+> Actually wait. I don't think that is the case here. "expected" is the
+> number of sends. In this case we sent 1076 more messages than
+> completions. Am I missing something obvious?
 
-There is no relevant 'Fixes:' tag to apply as both typos predate the
-Git era.
+Oh indeed.
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
+Receiving fewer completions than transmission is more likely.
 
-Hello, I wrote and sent this patch in 2019 but I likely only Cc'd Jon
-and the doc ML, which might have not been enough, so just in case, here
-is a resend.
-Link: https://lore.kernel.org/linux-doc/20190829145512.3752-1-miquel.raynal@bootlin.com/
+This should be the result of datagrams still being somewhere in the
+system. In a qdisc, or waiting for the network interface to return a
+completion notification, say.
 
- .../sound/kernel-api/writing-an-alsa-driver.rst        | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Does this remain if adding a longer wait before the final flush_errqueue?
 
-diff --git a/Documentation/sound/kernel-api/writing-an-alsa-driver.rst b/Documentation/sound/kernel-api/writing-an-alsa-driver.rst
-index 07a620c5ca74..5c9523b7d55c 100644
---- a/Documentation/sound/kernel-api/writing-an-alsa-driver.rst
-+++ b/Documentation/sound/kernel-api/writing-an-alsa-driver.rst
-@@ -1720,16 +1720,16 @@ Typically, you'll have a hardware descriptor as below:
- -  ``rate_min`` and ``rate_max`` define the minimum and maximum sample
-    rate. This should correspond somehow to ``rates`` bits.
- 
---  ``channel_min`` and ``channel_max`` define, as you might already
-+-  ``channels_min`` and ``channels_max`` define, as you might already
-    expected, the minimum and maximum number of channels.
- 
- -  ``buffer_bytes_max`` defines the maximum buffer size in
-    bytes. There is no ``buffer_bytes_min`` field, since it can be
-    calculated from the minimum period size and the minimum number of
--   periods. Meanwhile, ``period_bytes_min`` and define the minimum and
--   maximum size of the period in bytes. ``periods_max`` and
--   ``periods_min`` define the maximum and minimum number of periods in
--   the buffer.
-+   periods. Meanwhile, ``period_bytes_min`` and ``period_bytes_max``
-+   define the minimum and maximum size of the period in bytes.
-+   ``periods_max`` and ``periods_min`` define the maximum and minimum
-+   number of periods in the buffer.
- 
-    The “period” is a term that corresponds to a fragment in the OSS
-    world. The period defines the size at which a PCM interrupt is
--- 
-2.34.1
+Or, really, the right fix is to keep polling there until the two are
+equal, up to some timeout. Currently flush_errqueue calls poll only
+once.
 
+
+>
+> >
+> > As an additional data point, this was only seen on the IPv6 tests. I've
+> > never been able to replicate it on the IPv4 run.
+>
+> I was also fast to send this but it is not correct. I managed to
+> reproduce it on both IPv4 and IPv6.
+>
+> --
+> Andrei Gherzan
