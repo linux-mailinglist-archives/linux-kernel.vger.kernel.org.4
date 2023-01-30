@@ -2,101 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7489A680DB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B0D680DB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 13:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236733AbjA3Mbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 07:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S236864AbjA3McO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 07:32:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236854AbjA3Mb2 (ORCPT
+        with ESMTP id S236792AbjA3McL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 07:31:28 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8368C367DA;
-        Mon, 30 Jan 2023 04:31:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675081887; x=1706617887;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Us4t9RfFIA7QDDFmTvE79SoNQbhU2WQe72gtsd+ApzY=;
-  b=dyChAvkIXOiUF12arWmG1yEJFd2ihEPZMLleSPUGPY3HGnxvr5ELrzMP
-   RRHOT+tZTJG/buGW3Xc8lZvkZoJcnd46WS/YluJlEOXw5HXLfZA16HRl8
-   zEnkSP9QTP5WTrxpmJiUI0cbR9FQbGRT7FgqKzeYux+IGd73dVb0xumrd
-   yAzSpml9X68gjR714qWRs5XOSlrjO31MCcQk1w2zscctCGmZ+n4TY8O+U
-   cwGaF58OGEVuTOa6SDUgMVualuSpsBpYL5OvaEQsKR8eqihoLjqPMJ9kO
-   xBuzWw1vEmQphx5xQUhxholexU83OgMbK+/KG9LdlLoq/mfRZQojWHl1Q
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="327562232"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="327562232"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 04:31:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="696379714"
-X-IronPort-AV: E=Sophos;i="5.97,257,1669104000"; 
-   d="scan'208";a="696379714"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 30 Jan 2023 04:31:18 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pMTJc-00HLVK-33;
-        Mon, 30 Jan 2023 14:31:16 +0200
-Date:   Mon, 30 Jan 2023 14:31:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>, David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the driver-core tree with the
- net-next tree
-Message-ID: <Y9e4lFKZMylweoQF@smile.fi.intel.com>
-References: <20230130153229.6cb70418@canb.auug.org.au>
+        Mon, 30 Jan 2023 07:32:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F8C36FEC
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 04:31:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45A75B8108B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 12:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CA5CC433D2;
+        Mon, 30 Jan 2023 12:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675081907;
+        bh=1owcSCoKbfIMbxpA4IUXuT/V6qrKuhQ2DkpDz3IcX/4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=reVpaRHIlaXaCGccMb3DZuBWu+eWpPJfYI9T3r3MTrbx3J6HMvC3+65W38nfzoQyA
+         SRuRbu0O0TYRwWYp5LS5z9EvI2GbUHjEVi+1rW5RPCaDSxHXZirSSoVupq84Tu8S1+
+         l2qK4PEp889vLErM2aCwOWwUKianGi8FKDgIvwaKPYR6ihw9tyKD4avPqNzEF5cd1M
+         BVgpvRIS1cIu32eQux4nqoehFlG5h7NDPxvQEFJvGt3AyhoR7L1tu+JE124N7+SzGi
+         IY1aaiD4G2Lj6lbxL3KmnynmF28bDQCuu158LYZjwqeuI6BZZiLsBu89qeW9zkmk3E
+         pTwKYtogMy6TQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, rostedt@goodmis.org, mingo@redhat.com,
+        sfr@canb.auug.org.au
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        liaochang1@huawei.com, Chen Guokai <chenguokai17@mails.ucas.ac.cn>
+Subject: Re: [PATCH v6 00/13] Add OPTPROBES feature on RISCV
+In-Reply-To: <20230127130541.1250865-1-chenguokai17@mails.ucas.ac.cn>
+References: <20230127130541.1250865-1-chenguokai17@mails.ucas.ac.cn>
+Date:   Mon, 30 Jan 2023 13:31:45 +0100
+Message-ID: <87wn54i4pa.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130153229.6cb70418@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 03:32:29PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the driver-core tree got a conflict in:
-> 
->   include/linux/acpi.h
-> 
-> between commit:
-> 
->   1b94ad7ccc21 ("ACPI: utils: Add acpi_evaluate_dsm_typed() and acpi_check_dsm() stubs")
-> 
-> from the net-next tree and commit:
-> 
->   162736b0d71a ("driver core: make struct device_type.uevent() take a const *")
-> 
-> from the driver-core tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Chen Guokai <chenguokai17@mails.ucas.ac.cn> writes:
 
-Seems correct, thank you!
+> Add jump optimization support for RISC-V.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I'd like to take the series for a spin, but I'm having trouble applying
+the the patches; What base commit did you use? Or point me to a git
+repo.
+
+(It's nice to use "--base" to git-format-patch.)
 
 
+Thanks!
+Bj=C3=B6rn
