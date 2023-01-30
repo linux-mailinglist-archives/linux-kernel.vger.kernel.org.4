@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE35680383
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 02:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A709268038B
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 02:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbjA3BeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 29 Jan 2023 20:34:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
+        id S235240AbjA3Bod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 29 Jan 2023 20:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjA3BeA (ORCPT
+        with ESMTP id S229476AbjA3Bob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 29 Jan 2023 20:34:00 -0500
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762A219F1B;
-        Sun, 29 Jan 2023 17:33:59 -0800 (PST)
-Received: by mail-pj1-f54.google.com with SMTP id w6-20020a17090ac98600b0022c58cc7a18so5182678pjt.1;
-        Sun, 29 Jan 2023 17:33:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1u0LgSyfcYt4W6CZJvv15AMQYJ+p0Z4FB8ByXsH7ZKA=;
-        b=ExnD0r+KTsfV0LSL3xg0KTVrgSW34fsG4Zm61UnblSrPcTXTdE+DVnHYjvNT8ER6op
-         scN8Kr5AHd3oZj4YyHvRqaLSWPLSjfICbcZHXq7AIyGZkcWqn9cIM8zxFkqKtUOS5/WC
-         nW+7dfQSFiAuR2Xebq5dVDj+Fp2JaHv3viSn7TJlWzEnsWBItKc5jym4jMmendNKNsKN
-         0L/ay1M73JNQwZ5Cn333fSiaP9oDa5ckwf2LUsiChHnpNx9R/XELQ12j8iqQeQaUTltD
-         aosLbLGJvbcwWA54zit4HZ8qD0mATZ8veSna9/eBzIby61v+Nz4NqSG+pyZSyGS7vBk6
-         n7gg==
-X-Gm-Message-State: AO0yUKUq5LKLZpLPqk+//DptCkICqaZL5+DeFBEtZcjOaFWa1xizeyeq
-        ahx5w3MLy6T+IQ+D1DPIUujIP0TryHs=
-X-Google-Smtp-Source: AK7set/s3kO+qIW9inU9p9Ej0WDxcUvJXBQMo+tFrqCxjnXHQADWYv7iwomOKTUJsg/g/q8cnYXjow==
-X-Received: by 2002:a17:903:2282:b0:196:704e:2c9a with SMTP id b2-20020a170903228200b00196704e2c9amr5156560plh.22.1675042438721;
-        Sun, 29 Jan 2023 17:33:58 -0800 (PST)
-Received: from localhost ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id p24-20020a170903249800b00195e6ea45a8sm6433641plw.305.2023.01.29.17.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jan 2023 17:33:58 -0800 (PST)
-From:   Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Hongyu Xie <xiehongyu1@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: [PATCH v4 RESEND] fs: coredump: using preprocessor directives for dump_emit_page
-Date:   Mon, 30 Jan 2023 09:33:47 +0800
-Message-Id: <20230130013347.17654-1-xiehongyu1@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+        Sun, 29 Jan 2023 20:44:31 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFB51A977;
+        Sun, 29 Jan 2023 17:44:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675043070; x=1706579070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=2K4b7bGbKRklP9BOuOl1xdXxItGeJ3QCZn26h699B0A=;
+  b=Ft3wi4CDpFznKbhEwX7ZOms+nJGhtSUuJHJ4fmMRXH1Ohhr5FTWfFatt
+   MPRwFTNt29u4oWCKcWRgNqHTJmvF4RmZ1Cw0IAMg5EzKAmkg8hrOfARIC
+   8gCyT06ToxcCoXSShXYA4QDQRthyqjRNzEU1+Rdk3WWN06gtfNfYzGJuJ
+   kWdhk0xA9AcZNfKvWFXg+CHD1S5v5XJUYEWyXG8uIjNLEcvTPduScxs4x
+   HPo3WGRlZOHQrpd7NgXdh/n67rTIV2We8BcKf+g4ZH4+1iMclKnknkRbA
+   8acnku8SLFnaeTW8ONkSXwm2ntMD2PoMuS8AduTV6H/LCVY8T653MDyOi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="325149331"
+X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
+   d="scan'208";a="325149331"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2023 17:44:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10605"; a="694392676"
+X-IronPort-AV: E=Sophos;i="5.97,256,1669104000"; 
+   d="scan'208";a="694392676"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga008.jf.intel.com with ESMTP; 29 Jan 2023 17:44:25 -0800
+Date:   Mon, 30 Jan 2023 09:33:49 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] Immutable branch between MFD, FPGA and HWMON due for
+ the v6.3 merge window
+Message-ID: <Y9cefQsSi3X5mk8W@yilunxu-OptiPlex-7050>
+References: <20230116100845.6153-1-ilpo.jarvinen@linux.intel.com>
+ <Y9QFkFF2aZ/GibZt@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9QFkFF2aZ/GibZt@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_COREDUMP is set and CONFIG_ELF_CORE is not, you'll get warnings
-like:
-fs/coredump.c:841:12: error: ‘dump_emit_page’ defined but not used
-[-Werror=unused-function]
-841 | static int dump_emit_page(struct coredump_params *cprm, struct
-page *page)
+On 2023-01-27 at 17:10:40 +0000, Lee Jones wrote:
+> Enjoy!
+> 
+> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+> 
+>   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-fpga-hwmon-v6.3
 
-dump_emit_page only called in dump_user_range, since dump_user_range
-using #ifdef preprocessor directives, use #ifdef for dump_emit_page too.
+I've already pulled it to fpga tree and pushed to Greg as the merge
+window is near.
 
-Fixes: 06bbaa6dc53c ("[coredump] don't use __kernel_write() on kmap_local_page()")
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
----
+Patch #11 is left. I could make another pull request if it got acked by
+Lee soon, or we wait for the next cycle.
 
-v4: modify commit msg
+Thanks,
+Yilun
 
-v3: add reported by
-
-v2: change sending mail address
- fs/coredump.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/fs/coredump.c b/fs/coredump.c
-index f27d734f3102..df9f1f99ce46 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -838,6 +838,7 @@ static int __dump_skip(struct coredump_params *cprm, size_t nr)
- 	}
- }
- 
-+#ifdef CONFIG_ELF_CORE
- static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- {
- 	struct bio_vec bvec = {
-@@ -870,6 +871,7 @@ static int dump_emit_page(struct coredump_params *cprm, struct page *page)
- 
- 	return 1;
- }
-+#endif
- 
- int dump_emit(struct coredump_params *cprm, const void *addr, int nr)
- {
--- 
-2.34.1
-
+> 
+> for you to fetch changes up to 869b9eddf0b38a22c27a400e2fa849d2ff2aa7e1:
+> 
+>   mfd: intel-m10-bmc: Add PMCI driver (2023-01-27 10:47:11 +0000)
+> 
+> ----------------------------------------------------------------
+> Immutable branch between MFD, FPGA and HWMON due for the v6.3 merge window
+> 
+> ----------------------------------------------------------------
+> Ilpo Järvinen (10):
+>       mfd: intel-m10-bmc: Add missing includes to header
+>       mfd: intel-m10-bmc: Create m10bmc_platform_info for type specific info
+>       mfd: intel-m10-bmc: Rename the local variables
+>       mfd: intel-m10-bmc: Split into core and spi specific parts
+>       mfd: intel-m10-bmc: Support multiple CSR register layouts
+>       fpga: intel-m10-bmc: Rework flash read/write
+>       mfd: intel-m10-bmc: Prefix register defines with M10BMC_N3000
+>       fpga: m10bmc-sec: Create helpers for rsu status/progress checks
+>       fpga: m10bmc-sec: Make rsu status type specific
+>       mfd: intel-m10-bmc: Add PMCI driver
+> 
+>  .../ABI/testing/sysfs-driver-intel-m10-bmc         |   8 +-
+>  MAINTAINERS                                        |   2 +-
+>  drivers/fpga/Kconfig                               |   2 +-
+>  drivers/fpga/intel-m10-bmc-sec-update.c            | 364 +++++++++++++--------
+>  drivers/hwmon/Kconfig                              |   2 +-
+>  drivers/mfd/Kconfig                                |  32 +-
+>  drivers/mfd/Makefile                               |   5 +-
+>  drivers/mfd/intel-m10-bmc-core.c                   | 122 +++++++
+>  drivers/mfd/intel-m10-bmc-pmci.c                   | 219 +++++++++++++
+>  drivers/mfd/intel-m10-bmc-spi.c                    | 168 ++++++++++
+>  drivers/mfd/intel-m10-bmc.c                        | 238 --------------
+>  include/linux/mfd/intel-m10-bmc.h                  | 154 ++++++---
+>  12 files changed, 888 insertions(+), 428 deletions(-)
+>  create mode 100644 drivers/mfd/intel-m10-bmc-core.c
+>  create mode 100644 drivers/mfd/intel-m10-bmc-pmci.c
+>  create mode 100644 drivers/mfd/intel-m10-bmc-spi.c
+>  delete mode 100644 drivers/mfd/intel-m10-bmc.c
+> 
+> -- 
+> Lee Jones [李琼斯]
