@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138DD681776
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:20:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F5068177A
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 18:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237784AbjA3RUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 12:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S236733AbjA3RU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 12:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235989AbjA3RUh (ORCPT
+        with ESMTP id S237795AbjA3RUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 12:20:37 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B7D2F7BE
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:20:35 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id bb40so3263119qtb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:20:35 -0800 (PST)
+        Mon, 30 Jan 2023 12:20:54 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A3E41B65
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:20:51 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id d10so5385509ilc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 09:20:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BrsBUBgNgJpeJwfPSLgPW4cYzXKkUkqJeLurEgVFBvc=;
-        b=e+ydzywhD50AlIneG126hNOaWzSz7WikqeahTj6y7F0YaCURJalHIeVE4ABw/7sxVO
-         m/3ONdqr9MSPu7D7CTSai9UauHJI281QP2hXt+MKIGoOscPaGV2whzM92UsCoyo5J4EB
-         fLz3E2evnvdnTZMAvV987t7Qn7dSJZrOEBt6WQHVY81jkBD57jqajUTYkpesy9Dx4Yw3
-         8pVoPOscYE/k3Pbq+VlvjaD0oE+QFDrtJ4zQ4LWxCn3ZvJPkkAudndDCOswBZEvCnHvT
-         MCfSPE84Ugnh4GEZkABPP+/k7rWmEUv1qM2mVsFn4+Ntxte4gbeuqF2ESRrIsV69GYUK
-         Lgdg==
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nYvSu7sGuVp3fcdCEzQKaHTtWhvrpcM/e6lnGhHfApc=;
+        b=MDVN9oP8sf9ZdDdDxbmGir/VnoyUkLtqHvPfe/G9K0P1gzsh0nGJVbEuasy3HpfFIl
+         G8M5/D/uV4aDj4Dbuc1D3WGTW29WO2bjLq3sP2mqZ6muyAMe0OvPIAWysFHoULw+8rmW
+         Mk0sc/HuDPV6u4Kg+1Qnt2Z91OAElxNUzvW9E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BrsBUBgNgJpeJwfPSLgPW4cYzXKkUkqJeLurEgVFBvc=;
-        b=V3BmHhg/sxAIJ5UmGnVNEvh8sSN6mKkFUfPqwY5vyQrESglC6N9MCK0rEQtjgzZla2
-         EhM9kUnL2nr6pRQoR6xxIF/PgrNS0u/yiczyn9CniDZHk04Qx8UvTcAL4n0w8aQsVJ+J
-         iMxOBMFawcXU0nOkCpmQcYtu+WdQVxp1Auh1lBZOv9/z8FDkDzPxJdSD/SrLJ9E4rbcD
-         HpOWoxISoU/x5DCenLtni6nXCddoTAjiO85O2ObahedkIfeN7TFWfgApeEgbbO291LjD
-         K9RSCWGZGujDEuFht+xDs23SFJAm9p0J7IuuPAGp5zKBghXcUPXmxUqOgGr53DbjZW3p
-         DiLQ==
-X-Gm-Message-State: AO0yUKUb//g11iTeSDGBe7fPa4fSVnStIKTx1aIM1KtnbcIwv21EaK8B
-        XM23ZRUItVFUGHUEOnBgRx5f3Vnpjmu2IarwdCEX3g==
-X-Google-Smtp-Source: AK7set85qwFb9Qlw4P1CLRjHWKhUUqR7Y9GnLcrwx2XjDh1/2RDOFjTZjB3GMRx2Q2qm8ZWsz1MqPstnRa5cu1JQ+z0=
-X-Received: by 2002:a05:622a:1a0a:b0:3b9:a428:68d with SMTP id
- f10-20020a05622a1a0a00b003b9a428068dmr97209qtb.482.1675099234975; Mon, 30 Jan
- 2023 09:20:34 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nYvSu7sGuVp3fcdCEzQKaHTtWhvrpcM/e6lnGhHfApc=;
+        b=fVb/Kpm65s5dYa0aNLsysYdg2DU+AE+acEF27dajMeKVcuwKXPat1268gN2lnyUoeb
+         BuL4TKqKRtrGlLAxxsHMlDKJmvgyTVAQukmGG7lPHTFyWs7V/d7+LWYIgvR5WBeLtpi7
+         h6b4vHJvqwmNWHr81H06w4e/fBeLguqR2xMmKMebgkkdh74NGJU1J/zA1r1FFc2unwVq
+         tkcCdgMMkPalu6Dt/8lQBJQ1nO3G6turNNjVdW0V5dMZAZEd+W/92Nuzsz+PoZkJkYpm
+         tyEnGRyHfKZgDSi3+XyT0W0XazL9a4AfWb69XPlzQyettRtL4hqUerokQDK+37yddq7p
+         86jA==
+X-Gm-Message-State: AO0yUKUjSlUKk9ms2Ngu+eAjEU9O6l3j5fQ+dsLULrk6CtqiChOoLsS4
+        JrVrppf0JkEeJ1J1ALJhb54N3g==
+X-Google-Smtp-Source: AK7set/cmm0UJmfb8skPehugWvQCe1zkBRJzPEXUguu8cgjJZ0vsH8TB3fLulqfgPzS3PF4wocMzmw==
+X-Received: by 2002:a92:6810:0:b0:310:9adc:e1bb with SMTP id d16-20020a926810000000b003109adce1bbmr3088730ilc.0.1675099250431;
+        Mon, 30 Jan 2023 09:20:50 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t5-20020a028785000000b003a7cd65b280sm4851453jai.92.2023.01.30.09.20.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 09:20:49 -0800 (PST)
+Message-ID: <25c240be-2291-9e4a-a32e-a16a8e2d9c6f@linuxfoundation.org>
+Date:   Mon, 30 Jan 2023 10:20:48 -0700
 MIME-Version: 1.0
-References: <20230130130739.563628-1-arnd@kernel.org>
-In-Reply-To: <20230130130739.563628-1-arnd@kernel.org>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Mon, 30 Jan 2023 12:19:58 -0500
-Message-ID: <CA+CK2bCQPxcXX0uAZUkfjEAHyyCfGz08s0=iDkWr0_9O19nRxw@mail.gmail.com>
-Subject: Re: [PATCH] mm: extend max struct page size for kmsan
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Pavel Tatashin <pavel.tatashin@microsoft.com>,
-        Alexander Potapenko <glider@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 01/34] selftests: arm64: Fix incorrect kernel headers
+ search path
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230127135755.79929-1-mathieu.desnoyers@efficios.com>
+ <20230127135755.79929-2-mathieu.desnoyers@efficios.com>
+ <d44aa330-5767-58e0-77af-c6541252040b@linuxfoundation.org>
+ <Y9f6+jkfE+zRWR+Z@arm.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <Y9f6+jkfE+zRWR+Z@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 8:07 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> After x86 has enabled support for KMSAN, it has become possible
-> to have larger 'struct page' than was expected when commit
-> 5470dea49f53 ("mm: use mm_zero_struct_page from SPARC on all 64b
-> architectures") was merged:
->
-> include/linux/mm.h:156:10: warning: no case matching constant switch condition '96'
->         switch (sizeof(struct page)) {
->
-> Extend the maximum accordingly.
->
-> Fixes: 5470dea49f53 ("mm: use mm_zero_struct_page from SPARC on all 64b architectures")
+On 1/30/23 10:14, Catalin Marinas wrote:
+> Hi Shuah,
+> 
+> On Mon, Jan 30, 2023 at 09:09:42AM -0700, Shuah Khan wrote:
+>> On 1/27/23 06:57, Mathieu Desnoyers wrote:
+>>> Use $(KHDR_INCLUDES) as lookup path for kernel headers. This prevents
+>>> building against kernel headers from the build environment in scenarios
+>>> where kernel headers are installed into a specific output directory
+>>> (O=...).
+>>>
+>>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>> Cc: Shuah Khan <shuah@kernel.org>
+>>> Cc: linux-kselftest@vger.kernel.org
+>>> Cc: Ingo Molnar <mingo@redhat.com>
+>>> Cc: <stable@vger.kernel.org>    [5.18+]
+>>> ---
+>>>    tools/testing/selftests/arm64/fp/Makefile   | 2 +-
+>>>    tools/testing/selftests/arm64/tags/Makefile | 2 +-
+>>>    2 files changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>
+>> Adding arm maintainers.
+>>
+>> Would you me to take this patch through kselftest tree? If you
+>> decide to take this through yours:
+> 
+> Are you taking the whole series? If yes:
+> 
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> 
+> (otherwise I can pick this up)
+> 
 
-No need to add the above "Fixes:". The above patch works as expected
-everywhere where the struct page is 80 bytes or smaller (as specified
-by the comment).
+I am taking several patches in the series with an exception
+when maintainers want to take them through theirs.
 
-I also agree with others that the KMSAN should be part of page_ext
-instead of increasing the complexity of "struct page".
+I will apply to mine and take this through.
 
-Otherwise,
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-
-Thanks,
-Pasha
+thanks,
+-- Shuah
