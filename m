@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92BC681A91
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FC2681A8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 20:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237966AbjA3TeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 14:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S237841AbjA3Tdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 14:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235545AbjA3TeM (ORCPT
+        with ESMTP id S236703AbjA3Tdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 14:34:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1A41204C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 11:33:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675107201;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=B3zRnSLp2ynUX7qdmnYkoyQsTORE3q5pAz8/tYex2W8=;
-        b=cSS7uoXvosYw0g9c4K2rEG4aCCHieExLs7VZQ/cToBk0Pi25KejCf6o59ASmY0514fqhCB
-        W7xaBd6UXTCSOZA53IyPvE9qd26hoibddgMltPlTZlTJvpfIpcMVcoW6BJmh7GFCh4vwIx
-        RHQOy2fqnUzCp17WONPULbxjPkwnpKQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-x27mjU13MBiDmS4SpAKpeg-1; Mon, 30 Jan 2023 14:33:18 -0500
-X-MC-Unique: x27mjU13MBiDmS4SpAKpeg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 30 Jan 2023 14:33:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15E611E9A;
+        Mon, 30 Jan 2023 11:33:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5481E1C07548;
-        Mon, 30 Jan 2023 19:33:18 +0000 (UTC)
-Received: from localhost (unknown [10.39.195.80])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AC7EE2026D4B;
-        Mon, 30 Jan 2023 19:33:17 +0000 (UTC)
-Date:   Mon, 30 Jan 2023 14:33:15 -0500
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     mst@redhat.com, jasowang@redhat.com, pbonzini@redhat.com,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-scsi: convert sysfs snprintf and sprintf to
- sysfs_emit
-Message-ID: <Y9gbe+Pr5AcGbcta@fedora>
-References: <20230129091145.2837-1-liubo03@inspur.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58507B81661;
+        Mon, 30 Jan 2023 19:33:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0FFC433EF;
+        Mon, 30 Jan 2023 19:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675107220;
+        bh=h94RLdZBiN3usJmqJWSlQt5FI3kHCC9pBvoqFO7eogw=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ILxSqazxdzN7tbmfA5R6vvAoOq0GTxkxVIRZJwWkTmo/v6h/Den91qZUXQ5WlzJz1
+         4l/QbhWmjdAZoLW7BFoitzwhbYc2Y1AyLsF/nqHsw0spFxAFqRNzRaaOdt4PFx6XJ0
+         T6VFlZeXBb5qhfPuFIuzLV7T9GsW27SHesfxO8jGjqzUw3sbiuxl3iv8xguqkzGz/A
+         12xaJUh02ZVyjyI/qWzFVBaMoCvoLsmK0mLlOj0JvnHkaaRJ8Ul5gU7gXL6lZo2FUO
+         6yp85BjpqALBDqAR3QqOAW5DLCPYDJzSoZbnZpn7UtwEpkx9RFfG5IZTraI+5c2Ebu
+         cGhnITY7hfsbg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230130140156.3620863-1-arnd@kernel.org>
+References: <20230130140156.3620863-1-arnd@kernel.org>
+Subject: Re: [PATCH] [v2] spi: dw_bt1: fix MUX_MMIO dependencies
+Message-Id: <167510721842.1539806.16770192592343197907.b4-ty@kernel.org>
+Date:   Mon, 30 Jan 2023 19:33:38 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zXZMPvM7BUyVfKwq"
-Content-Disposition: inline
-In-Reply-To: <20230129091145.2837-1-liubo03@inspur.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 30 Jan 2023 15:01:40 +0100, Arnd Bergmann wrote:
+> Selecting a symbol with additional dependencies requires
+> adding the same dependency here:
+> 
+> WARNING: unmet direct dependencies detected for MUX_MMIO
+>   Depends on [n]: MULTIPLEXER [=y] && OF [=n]
+>   Selected by [y]:
+>   - SPI_DW_BT1 [=y] && SPI [=y] && SPI_MASTER [=y] && SPI_DESIGNWARE [=y] && (MIPS_BAIKAL_T1 || COMPILE_TEST [=y])
+> 
+> [...]
 
---zXZMPvM7BUyVfKwq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Sun, Jan 29, 2023 at 04:11:45AM -0500, Bo Liu wrote:
-> Follow the advice of the Documentation/filesystems/sysfs.rst
-> and show() should only use sysfs_emit() or sysfs_emit_at()
-> when formatting the value to be returned to user space.
->=20
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-> ---
->  drivers/vhost/scsi.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+Thanks!
 
---zXZMPvM7BUyVfKwq
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/1] spi: dw_bt1: fix MUX_MMIO dependencies
+      commit: d4bde04318c0d33705e9a77d4c7df72f262011e0
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmPYG3sACgkQnKSrs4Gr
-c8hxvwf7B5Mbqo82xgBpjBde9q1dmi1tzl28i35KjgqCpyf6DNJNI7r+MrkPyIuw
-mGOZjZ3icMd82hcJVEi0XIP8A6eUOsqKPzob4h6w28sRV0kfqmvgSPh9zpRXf8PR
-G43mj1UArMtXj2mPqW4NTF3sgTLXJl+sZiDWvIVQIUuNjbtkxZ89fSZ5cH8AwdRy
-Yb3EQ8TRhb5xpfcYj0EPIM/nFUpyQPZxIKZpg2OeTpv0QZ6ZSo+2kiXYQSE1Cljl
-j2F8xN8OsOhzS2JTCBr777dn7JIHWjKvQvz0u2d4WBqkWw5O2P9Ea90IU5rPK28X
-K8iZ3SXmteQjQsroywTO/jHtYylj8g==
-=EEEC
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---zXZMPvM7BUyVfKwq--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
