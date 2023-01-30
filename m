@@ -2,171 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E2368143B
-	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1529681440
+	for <lists+linux-kernel@lfdr.de>; Mon, 30 Jan 2023 16:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237996AbjA3PMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 10:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S236450AbjA3PMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 10:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237989AbjA3PMJ (ORCPT
+        with ESMTP id S237992AbjA3PMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 10:12:09 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB9738EB9;
-        Mon, 30 Jan 2023 07:12:08 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30UEO4tV006584;
-        Mon, 30 Jan 2023 15:12:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=jJulFpV6iwJHSM2qlHYs3cgpZntK1KZ7YeVM+8oz44U=;
- b=IAHsWotwYbh4o25WyuHheUZSLMEHvHFWukJTRiuB3G4gigHzMSggZFGaWYFeKh9GJtJw
- wR5lb8TiyriRuRTwoA8T1p8spocHymnGWr65hMawlV0T53hKy8ZS1XuNEY+vkhnjUROA
- drYpPtk/bVoz2L7Tcin5F8TYqAMi9LxR7xpeb/Q6/8bDO56PhzSJ2BNbrrGGXi0A1lHH
- Q3gFkkMPE2dkHRo2BFRlR848crBAPk+rGROBiQtlVAHC1mFjyt1G92Af2CnJY04AFg5N
- wjZ1t+pfRAXw+A5GH8PBl9txYYoKlUj7/Zb2IqbbypBtdH8nL2z3YYKDsfGwTFcZqeqv zA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nefmfr313-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 15:12:05 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30UFC4IX004219
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 15:12:04 GMT
-Received: from vpolimer-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 30 Jan 2023 07:11:58 -0800
-From:   Vinod Polimera <quic_vpolimer@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>
-CC:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        <linux-kernel@vger.kernel.org>, <robdclark@gmail.com>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <quic_kalyant@quicinc.com>, <dmitry.baryshkov@linaro.org>,
-        <quic_khsieh@quicinc.com>, <quic_vproddut@quicinc.com>,
-        <quic_bjorande@quicinc.com>, <quic_abhinavk@quicinc.com>,
-        <quic_sbillaka@quicinc.com>
-Subject: [PATCH v12 02/14] drm/msm/disp/dpu: get timing engine status from intf status register
-Date:   Mon, 30 Jan 2023 20:41:22 +0530
-Message-ID: <1675091494-13988-3-git-send-email-quic_vpolimer@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1675091494-13988-1-git-send-email-quic_vpolimer@quicinc.com>
-References: <1675091494-13988-1-git-send-email-quic_vpolimer@quicinc.com>
+        Mon, 30 Jan 2023 10:12:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023FC38E8B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:11:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675091487;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JIrJgo/c+ZFtDvr4payH+0TXcSm3O3nwdwQfk2QniEA=;
+        b=eSoNGf2Ej9FGinXEErG1lzlfl8zxDy7lfCsQfarne72Djw+9dzxVXPG6qadGtEtmvdce36
+        6my9xFAebh+Aq8E4LULiFa8a3G5greBNC7sFSVnW64Bc3sOm0DIo+vzSOUE6FSDxp0zMTP
+        7/3gb8ZB3aw9kHH/9vD290jS0jxedGc=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-163-AJm9f-hEMpyhAiyZdKif3Q-1; Mon, 30 Jan 2023 10:11:24 -0500
+X-MC-Unique: AJm9f-hEMpyhAiyZdKif3Q-1
+Received: by mail-ed1-f71.google.com with SMTP id z6-20020aa7cf86000000b0049f95687b88so8412161edx.4
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 07:11:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JIrJgo/c+ZFtDvr4payH+0TXcSm3O3nwdwQfk2QniEA=;
+        b=agvJoQfCUbD0AztCfyAyWx6kASxzoxkagj6MzJx6X0W1pJ0+FlkmKUuP5F9aYu2cyE
+         HpSYv/7lYbNoR4PwyNBcLNoORFrZ3vHq8+GdSB4N+DdsnmCKzAodydMunCL+tyjJzAQk
+         Hn75kW7WV1jUoFAXganYFnZzjzA/bHHnjF1ApNgs2y7a2PKMa/pAnW5J384o/Xy4aI9B
+         8VwwOTnC+FN638TpxyYV6s4fYUvQT9gWXUud+mta0R0IEsDue9Ckf2d0HPkkHdOLPzAR
+         tDAAUc6WUbP3xNDKCsCu8lJcOmsacAMwQ/uceUNeU22/ZI1jpBNPR58i0b9LLyfzM+F8
+         dcWQ==
+X-Gm-Message-State: AO0yUKVprzHpQRarF/AYQVxTaDZ7I9Ft8I0Srfqz8NnZgj5bYwRYSoGD
+        5zQs9dn0m3oYquxY4Rd21ZFuGdHK7GYh4fJquwUa52jyV5MjDrxxGGxeXmvOGUWKNg1cPF4C4Qp
+        jDx68wq+rYEu5kJihyuINivUd
+X-Received: by 2002:a17:906:dc3:b0:87f:d17:66db with SMTP id p3-20020a1709060dc300b0087f0d1766dbmr10309769eji.52.1675091483456;
+        Mon, 30 Jan 2023 07:11:23 -0800 (PST)
+X-Google-Smtp-Source: AK7set+57HYbmhDApH0Uah5nfXgOEm07VqcuWTqyKF67t+Z6K88j0EiMZ1np6hd2PV6s0wfSY5kVXA==
+X-Received: by 2002:a17:906:dc3:b0:87f:d17:66db with SMTP id p3-20020a1709060dc300b0087f0d1766dbmr10309755eji.52.1675091483283;
+        Mon, 30 Jan 2023 07:11:23 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id hz17-20020a1709072cf100b0087879f8c65asm6612723ejc.89.2023.01.30.07.11.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jan 2023 07:11:22 -0800 (PST)
+Message-ID: <ebb4a159-45d7-4d0f-b6cc-4d8ea9e8dbed@redhat.com>
+Date:   Mon, 30 Jan 2023 16:11:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: s51QSk1xsYLErrcmXaUSS9QHxUE8CxPZ
-X-Proofpoint-GUID: s51QSk1xsYLErrcmXaUSS9QHxUE8CxPZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_14,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 bulkscore=0 mlxscore=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301300147
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 4/5] platform/x86: dell-ddv: Add "force" module param
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Armin Wolf <W_Armin@gmx.de>, markgross@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230126194021.381092-1-W_Armin@gmx.de>
+ <20230126194021.381092-5-W_Armin@gmx.de>
+ <f163ef7e-41ee-cfa4-67c5-4325d1381110@redhat.com>
+In-Reply-To: <f163ef7e-41ee-cfa4-67c5-4325d1381110@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recommended way of reading the interface timing gen status is via
-status register. Timing gen status register will give a reliable status
-of the interface especially during ON/OFF transitions. This support was
-added from DPU version 5.0.0.
+Hi again...
 
-Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  6 ++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 12 +++++++-----
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c    |  8 +++++++-
- 3 files changed, 18 insertions(+), 8 deletions(-)
+On 1/30/23 16:09, Hans de Goede wrote:
+> Hi again,
+> 
+> On 1/26/23 20:40, Armin Wolf wrote:
+>> Until now, the dell-wmi-ddv driver needs to be manually
+>> patched and compiled to test compatibility with unknown
+>> DDV WMI interface versions.
+>> Add a module param to allow users to force loading even
+>> when a unknown interface version was detected. Since this
+>> might cause various unwanted side effects, the module param
+>> is marked as unsafe.
+>> Also update kernel-parameters.txt.
+>>
+>> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+>> ---
+>>  Documentation/admin-guide/kernel-parameters.txt |  3 +++
+>>  drivers/platform/x86/dell/dell-wmi-ddv.c        | 13 +++++++++++--
+>>  2 files changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 6cfa6e3996cf..9bbff5113427 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -1024,6 +1024,9 @@
+>>  	dell_smm_hwmon.fan_max=
+>>  			[HW] Maximum configurable fan speed.
+>>
+>> +	dell_wmi_ddv.force=
+>> +			[HW] Do not check for supported WMI interface versions.
+>> +
+>>  	dfltcc=		[HW,S390]
+>>  			Format: { on | off | def_only | inf_only | always }
+>>  			on:       s390 zlib hardware support for compression on
+> 
+> In my previous email I forgot to add that I have dropped this bit. I appreciate
+> the effort to document this parameter, but if we add documentation for all
+> existing parameters to Documentation/admin-guide/kernel-parameters.txt then
+> the file will become quite unyielding / unusable.
+> 
+> So in general we only add new parameters which we expect to be important for
+> a large group of users or necessary to debug serious problems like machines
+> not booting.
+> 
+> I realize that a bunch of parameters in there do not match this, like
+> e.g. dell_smm_hwmon.fan_max, these are just from older times when
+> there were just less parameters, so listing them all was still ok.
+> 
+> So I have merged this patch, but with the Documentation/admin-guide/kernel-parameters.txt
+> bit dropped.
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index cf053e8..ce6e9e6 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -78,9 +78,11 @@
- 
- #define INTF_SDM845_MASK (0)
- 
--#define INTF_SC7180_MASK BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE)
-+#define INTF_SC7180_MASK \
-+	(BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | BIT(DPU_INTF_STATUS_SUPPORTED))
- 
--#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
-+#define INTF_SC7280_MASK \
-+	(INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN))
- 
- #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
- 			 BIT(MDP_SSPP_TOP0_INTR2) | \
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index ddab9ca..08cd1a1 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -213,17 +213,19 @@ enum {
- 
- /**
-  * INTF sub-blocks
-- * @DPU_INTF_INPUT_CTRL         Supports the setting of pp block from which
-- *                              pixel data arrives to this INTF
-- * @DPU_INTF_TE                 INTF block has TE configuration support
-- * @DPU_DATA_HCTL_EN            Allows data to be transferred at different rate
--                                than video timing
-+ * @DPU_INTF_INPUT_CTRL             Supports the setting of pp block from which
-+ *                                  pixel data arrives to this INTF
-+ * @DPU_INTF_TE                     INTF block has TE configuration support
-+ * @DPU_DATA_HCTL_EN                Allows data to be transferred at different rate
-+ *                                  than video timing
-+ * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS register
-  * @DPU_INTF_MAX
-  */
- enum {
- 	DPU_INTF_INPUT_CTRL = 0x1,
- 	DPU_INTF_TE,
- 	DPU_DATA_HCTL_EN,
-+	DPU_INTF_STATUS_SUPPORTED,
- 	DPU_INTF_MAX
- };
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-index 7ce66bf..84ee2ef 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-@@ -62,6 +62,7 @@
- #define   INTF_LINE_COUNT               0x0B0
- 
- #define   INTF_MUX                      0x25C
-+#define   INTF_STATUS                   0x26C
- 
- #define INTF_CFG_ACTIVE_H_EN	BIT(29)
- #define INTF_CFG_ACTIVE_V_EN	BIT(30)
-@@ -297,8 +298,13 @@ static void dpu_hw_intf_get_status(
- 		struct intf_status *s)
- {
- 	struct dpu_hw_blk_reg_map *c = &intf->hw;
-+	unsigned long cap = intf->cap->features;
-+
-+	if (cap & BIT(DPU_INTF_STATUS_SUPPORTED))
-+		s->is_en = DPU_REG_READ(c, INTF_STATUS) & BIT(0);
-+	else
-+		s->is_en = DPU_REG_READ(c, INTF_TIMING_ENGINE_EN);
- 
--	s->is_en = DPU_REG_READ(c, INTF_TIMING_ENGINE_EN);
- 	s->is_prog_fetch_en = !!(DPU_REG_READ(c, INTF_CONFIG) & BIT(31));
- 	if (s->is_en) {
- 		s->frame_count = DPU_REG_READ(c, INTF_FRAME_COUNT);
--- 
-2.7.4
+I forgot to add: and these days it is really easy to find all the supported parameters
+for a module by just doing "modinfo <modulename>
+
+Regards,
+
+Hans
 
