@@ -2,118 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FF368344B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54796683455
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjAaRvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S231475AbjAaRw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:52:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjAaRu6 (ORCPT
+        with ESMTP id S231137AbjAaRwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:50:58 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B971230D8;
-        Tue, 31 Jan 2023 09:50:56 -0800 (PST)
+        Tue, 31 Jan 2023 12:52:53 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778DE30D8;
+        Tue, 31 Jan 2023 09:52:51 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VbskzU7X9Fy1feYQOMwfReVNyBZCcsxLwpu1H601V3gPyHVyddIi4YS43pIwdASm+6Uq4RBuqImhTIt4BdGxP+X/D7Odx2FzUlRdBh4h3XbzICrmg9z+Q6s881CzFR2BQxTcyXE/k2lCXYN8y1aptZUscKQ7VdLy57YOB/O8zLK2DKnJ/dlq22suVETh0QEU7NjMTLU5/IB+SZPSs2pCh5IV+I794T2byv3LSUku9jQHNtf/3cWWQf681YlZEmB8lleWTWniqChfuy2fmUII0NqI1zYuq1fshXxB+vXPxjJXCbtWZP3GJ5r0HT+pQ9+DMLBkJUVIi8IlQq8o5aoFYg==
+ b=kxK9Hxur27nC+CXzjYNHqqLk0XLjqMT6CVkir8dZT92yk3su8G40sKLRq3CQAhZohN0B/FIrerbqB3zwcHmXB0HJaWKsLytj4WYz62NKvNEt4Xfo5LlM1ZodLP2ns5GEw+HnpGJsXuhdhCVKhh20tkSASTqvq7aDU8sFQpJhdcJI2gtpxYpwENl170/cXQi5XRHfHJ+k0fyur9k3E0IPeC7etKDx1s/TrOAJeWwWjc3oyWShlgiJ+IPTvRAQDXK/cmg56I9/veY5n06rAsuiwEr3KcPw8O6FST6RWUZ4nXr63OmDmHiN3VNqXSZMwFmMIMuezVyoPWdO82j3mGtufA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/h8lmHZ2ZmGfvfyx77Io58q5Eit8nG/QiqTaT7ESWUE=;
- b=RfjiwDlVRdbGYxXQPnXWzlHr6bMEdMTkOxle1Cp1BPE9iu1aC7mscycanV3Pv+2w/SDUj7mP6zQn9lFL4E80/TGfLlzuT/ArjWvmT2Lp10OBjGAh5B2NKRK3B5KJKwS43RkJpQf4ZjPuIegwfl5entEc26sgVo6m4lZFnGI+9nj7+6W02upGukdtcwBFewgW8l6ccYzrqLvmmGOKvpJ8wTSE84ZvFkKg3FXj5gJrFdc5TriT7y8TPSaNu3uE47JJSAiHCdBoM3b9W7qIlKT/b5+cYBMViRvI9rvUTbS4mDGWygpHjyzttZdVeMjaacQw7Jw8gJpmaM5PkbBCNjZ+9g==
+ bh=ccydaN/Un3a9OOa07cPrIJdbZooIBzb/8BFp+j2G50I=;
+ b=KwV32lUD6xZ3QetD80Dg+0PPJ+SADLMMjyA46GVdzj/KKv8f6wvHMMzo3M2XCP7YP60bwoDX1yKW4cW2c/3jMVOmxsOMND1cWphZLg5xk+ShUARzn+bpCQT4RNxBL51VafeSOwk+JzU7Shmc6bW1chrDx0aqQH6N1+l3G73v65sM2y3/oviDJJJNyxSl2S9UOuc5XNRoI4nsTNwLEB2R8GN3nX/wUw/PDZqNtPzOT5/Fi4+3iGyzAQQbb4hDKpo0tHPaDM8g99X6ug/ZsBciqxMD8mcpS2YXzMtQl7M9z0iexS1UCHpC2Qo5hrGUY4rrp41M2bbKo00tts7QIqMozQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/h8lmHZ2ZmGfvfyx77Io58q5Eit8nG/QiqTaT7ESWUE=;
- b=yVwHCP1L+vgnxNvszSCKMFpaMrOD2JAmZweIHs7CP1ZyvWMOkKCjnzRIhWOAX2MnNSVp29rNX8Z0ZLou/QWGB4g8xbxm/9lALTPuXfvZVZtSfBxgWIazVRcLT1l21+9m5zyYgHaQIZM3zwMclkSm0113TYxcPs2ib83JY2x/GDE=
+ bh=ccydaN/Un3a9OOa07cPrIJdbZooIBzb/8BFp+j2G50I=;
+ b=GF4HuSyTZoVCp1F08wVcNBx5PjwiYk1l88VQjQvtlPA8jH0PiexbIqo/3jLHVg07MqemaDrqD2HPMP10kG4TVlgzmu8+L8FJ/ZnPN9Aob5HHfylGGu9aXKb7n9UdTL1wPa663En7KRyWJwUKnXyyHgFQty/a/ZZYGBAOkOetpuM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by CH2PR12MB4325.namprd12.prod.outlook.com (2603:10b6:610:a9::14) with
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
+ by BL3PR12MB6596.namprd12.prod.outlook.com (2603:10b6:208:38f::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
- 2023 17:50:54 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.6043.033; Tue, 31 Jan 2023
- 17:50:54 +0000
-Date:   Tue, 31 Jan 2023 17:50:40 +0000
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     torvic9@mailbox.org
-Cc:     Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
-        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>, gautham.shenoy@amd.com
-Subject: Re: [PATCH v4 0/6] amd_pstate: Add guided autonomous mode support
-Message-ID: <Y9lU8BZKP/eorxmk@beas>
-References: <20230131052141.96475-1-wyes.karny@amd.com>
- <1501106335.274.1675161471528@office.mailbox.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1501106335.274.1675161471528@office.mailbox.org>
-X-ClientProxiedBy: PN2PR01CA0225.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:ea::20) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Tue, 31 Jan
+ 2023 17:52:43 +0000
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::dc5d:6248:1c13:4a3]) by SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::dc5d:6248:1c13:4a3%7]) with mapi id 15.20.6043.038; Tue, 31 Jan 2023
+ 17:52:38 +0000
+Message-ID: <75765583-1807-e5eb-80c4-255ff772ad8c@amd.com>
+Date:   Tue, 31 Jan 2023 11:52:30 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH RFC v7 52/64] KVM: SVM: Provide support for
+ SNP_GUEST_REQUEST NAE event
+Content-Language: en-US
+To:     Alexey Kardashevskiy <aik@amd.com>,
+        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
+Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, harald@profian.com,
+        Brijesh Singh <brijesh.singh@amd.com>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-53-michael.roth@amd.com>
+ <aab7ed11-870e-579d-9328-4c32d9936392@amd.com>
+ <66039193-14ca-5edb-d8d4-ca732d8c13a6@amd.com>
+ <119075dd-5f3e-a393-f543-6cdfd34cd337@amd.com>
+ <385016f9-e948-4f7f-8db3-24a0c0543b3d@amd.com>
+ <55e5f02f-4c1f-e6b0-59ba-07abc4d3408f@amd.com>
+ <81037a58-6b5c-cde4-79fe-3686d9b8a551@amd.com>
+ <b0baa6ee-ea6d-3a30-d5fb-3ec395896750@amd.com>
+From:   "Kalra, Ashish" <ashish.kalra@amd.com>
+In-Reply-To: <b0baa6ee-ea6d-3a30-d5fb-3ec395896750@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR03CA0360.namprd03.prod.outlook.com
+ (2603:10b6:610:11a::11) To SN6PR12MB2767.namprd12.prod.outlook.com
+ (2603:10b6:805:75::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|CH2PR12MB4325:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12f0b070-0900-46a3-9ec0-08db03b3b30a
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:EE_|BL3PR12MB6596:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3218ddbf-16f0-44eb-469d-08db03b3f0b7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8+x/EN1tZLW+PegxQgQzfvzygOKqq6KBGOHHJ5Rm53FkWCDQ3ZGJS4D5989rkavzIVrzPBdBDat2T2AU7zkfsRdXJRye+SsoB8VzzVUEweD8jFvv+g/la9QlRHxyLm4XJW/uYdBDAXvUQ72Afv0rQQZ/q7RJn2SWhk9rOERzTgz+BMuqPLUQoJKOXUPI4EVBDAhPwqip4u+hbiSaIlWYZB7jLRqeVISD1plYMuFpE90S79yecley6XVLGyLn5mt1hrCPt800viwKmBFF8uThwwaNArW4g3S6/bWbWwy26IF4pi6CAKV87LB/gQhuVgqBnKqkRvfKQgwhIIHWSn+/m7fh9Xh5PxDfBp+PLumm2fhgeuuMA163GIwVKqOZ9xxy56IuIbzbw8ozca6l5iIQfVy9nS0Jkxv89pLwltXuM4ljYKjQjwgLbRXT6eQoaFSNpUfeOtlvkFpS5/wRyUkT7l8V2N+yQTkh+qd41hNzNhht7iKSr3ndhfpCXPWK8WZM1rEMLmFp2z4mRPZ8xP9IB0SZNcLqMRYTM6zvC/qrM9szBDa67zoT/nl+5Fc9bUWG/gkfITyRpxjDXGu2QrfR+1eUujyyQErTSXcto9GEdnRUpZVXIX4xe80S7i/birV2bbFmYjKXq8oe3syxR00wFNZI866ZFFybNFjuOew7oO6XnNa0ea2oxPYFT8oUOK1MMCgiwUfnsDqXrN/LxG9njg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(366004)(346002)(396003)(376002)(39860400002)(136003)(451199018)(6666004)(6916009)(4326008)(66946007)(8676002)(66556008)(8936002)(44832011)(83380400001)(966005)(7416002)(41300700001)(6506007)(5660300002)(316002)(54906003)(478600001)(9686003)(186003)(6512007)(26005)(38100700002)(86362001)(66476007)(33716001)(6486002)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: +R/KOeLKBNU/JgizaG/21rlqo/TabxdPQXrTK/2w1Db2mAadsWP/kdCNzSi5rE4FJJFo/IjzymmuGksdbdWe6iPKUAfu77g6m+qeIJ8IkuNiJ/IF/VFU0AYeMxmgRbffabBQ2/6eBdW+8ED5F8tWNx1F8+EyU4AmudjxzwlQlI33Yaz43ZyqTlLaB7tWHygHY2+1h88lwJlH9GggewHVYbA7ZCIFj99MKn76F19HhZAlE1DAn3xkaUaaMuZmO389lV5a0o8dTYxj3l0p2judzG6N/4x23ZBcatP3mG3YFW7Byo1IBICZoQdRVa3nEa/akrUracnV6Xh4nxGXnQrOf67RU7Vgl93nAa3ghGBy4IahKFoP6KLl21XykkueJn5ghu/Ok+ajce3GeWyKOX6Q5qu2qiclXBQrtqCzWoJU+f/yprXMYkONXbV5fLlFVI6t4m6roC34cGXQbws/mbdoYI9MfLhJLiL8d6sAzo98ZBFqfQtzZiw8dbT3RTcPV8X5uDVUMm8fJbatEg4dhfTuOB3Pj0TsySyi3d6PRtigWTqOps+PVZV0Z1i9TLUO/fEwkh/ldGAJWUSrOIyrfG0CuBXE4BMnQLn/stfgcZ1AEdDZzZOdFBuqK+VDePKmrB1uXQqbPA1vKPGteTDfeTbdUvZwrOSTI1sfb1fEuJCSwqMDQ7cJgNiMV7uWjj+riK7Xaax42FVbYF6mNV1nOydxxBbzPqyoZIOmnyiJcH9c6vXiCmmCmgk8EmE7bieOceZ3gFXBwJ2PYqTRkcd85azePA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(136003)(346002)(376002)(366004)(451199018)(53546011)(7406005)(5660300002)(316002)(8936002)(6486002)(478600001)(6666004)(86362001)(6506007)(2616005)(38100700002)(31696002)(186003)(26005)(966005)(36756003)(6512007)(30864003)(7416002)(110136005)(2906002)(8676002)(66946007)(66556008)(66476007)(4326008)(41300700001)(31686004)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fmJBpxaibXYWggRPmL2lEVy80SgmOMmOmsW5Mpk7HoG8y/cga7RNTwaIZ7BS?=
- =?us-ascii?Q?452/J/22Rd+1zs0Ui9zlZH1BnU6yPkRpJZbXpI+vI9jLlhthQkOCT+cVBczP?=
- =?us-ascii?Q?wLA9uCZ3k5XytLThl7nKRs+BeumHy+kF85rsWfYmVrcn9x5RTlQLYayMhCWj?=
- =?us-ascii?Q?no+UZyDEz124IX4fhBvplQH/2RGri6ku659BbqIw/io/N5/Nc+N1SkaVs2FH?=
- =?us-ascii?Q?W1xUXYlD0QU5Fbmo8/itaVN2rzB6AZWXfSAuzklMOaw4BPS7NkC1V+QSdq66?=
- =?us-ascii?Q?ZTlwAdOcZjNjWmHJ7c2i8d9Gn0KTuUQQnIeuRbTWLsIz41LIPZVSOZ7V2q9G?=
- =?us-ascii?Q?dnEcnv2+LaQllSkcOgnEXQ0YRQa2fGSurbXkZnrMycVgfd5IGY5b4qBSf4KS?=
- =?us-ascii?Q?zY5w6kdPXtZCgIMl0QogxgX6ezN9ZEsHgkX8n4YsZcAwMUtBDhs+Bl59n4ZD?=
- =?us-ascii?Q?HU/XuAY87i4WcXY3CxlX9HKCr2ztIqe69fcYZPRTJVcRmrWuxxbBR3sRtq9z?=
- =?us-ascii?Q?DBlTvQcq89I+71wHW/0VYLUlTkz4vWoPOn1WwwQWi1tolmAuUaIr4IiuNB9P?=
- =?us-ascii?Q?/t2bhBVvH986TNefbQyTFSTeTCF787E1TzpY6zkkVerMiWJWIWTtvqJj1UjH?=
- =?us-ascii?Q?QxD8ZhLGaGQe0NPhP9Q3k0G2uJ0n492FgsRcd7zh6DpZlWYIMy8nwMWL3vYN?=
- =?us-ascii?Q?3NssSN14qI7W1QNa68tL5/xYRL+l+6QOlkLt+n1Lxhg13tKD9RRPb6LVEFYW?=
- =?us-ascii?Q?zCPF3hRi+WdQMgboinvLh6lRmOUTTVmf1F9BpEJHLmgUukv3JTcekGHqf/ev?=
- =?us-ascii?Q?YjdAEoWfCDFFsBuoW6NmRGsPaG1xIiW7nOX9xyO+E57yuDojTDA4vjiOOWUi?=
- =?us-ascii?Q?qzMa/KrgPxO1eACvAzYgxVNoLoSfrX7ABnNhCP8ufJqDX9u+qMLrEtiCBEKS?=
- =?us-ascii?Q?gXNLhpt2ggAQ7teEurxGXGpEamBPzr8CkTm8VY4/JjMRYB2TbFecTStUV1Cq?=
- =?us-ascii?Q?AxpYSg6Zsf5dL9dtJCGkm/4qEkKlBkQhRJsHMuHEPaWtDumiX1YoObQG99tD?=
- =?us-ascii?Q?HUdHHV+qPpxMBoHObi3IzqSwn+YtjiRZXGEvcBQ/NIogq3SvWCZq2nAdgiTf?=
- =?us-ascii?Q?AbKED+ToZLurrbgmXO+62+qvXF0tHprYtYMm+KMDO81+C9NQVhf0z3+lNn8w?=
- =?us-ascii?Q?yI4b6TrW2/EjPDZEHlNwOfHV2weBJ2lyWtvxG/Mcj5Ii33I1otSLy3agLGdf?=
- =?us-ascii?Q?xSKlUiUs/gdXNW/JM1LLELAQtuwbwkAeJjlMFsEOCiGJxH5Kw9O8xYjTP2yf?=
- =?us-ascii?Q?y7gjMEgCyUivYnEaIdVebT70HnEYkgGELvId1HA8Qhx8/8hMoI+6SRTlCG7Z?=
- =?us-ascii?Q?B/IUVWMz6+Vc6ozlwktZMCjH0jQfZr5Xixf3RKRObbe0WPEvrc/i4YkXDN7k?=
- =?us-ascii?Q?36B2zUdeTM2PIxNt/fjN14SbnG3P33+p2geyI1aULKGZhEED8MRc4DstmobH?=
- =?us-ascii?Q?C9VjKvAWXTEKinCInhUGMgyhfn8gXZiaXVP27FTEWHUH/2m3Jx9LHyg10XXG?=
- =?us-ascii?Q?XeNm4+4RIY+STFmvE23inbDvuUytiItZHMalRZ19?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VVMwS0FOczhVVUEyM0h4bmNycmJLWTFteTBXaDdnMVRhcE9SUW12UkU4anMx?=
+ =?utf-8?B?dVF4ekU0aFA5enZsQkprOUU0QTNUN1o4REtHcW9FbUdIRnFCZWg3bWZDVHJV?=
+ =?utf-8?B?c3JxTDNzajhWanhqa3NhU0RBQStRaVJkaFFXMTNqcjZhY2JvdlE3WXlVWVh2?=
+ =?utf-8?B?MnV1RDRVbGQyTFZTQ3RkdCs2K09Ga0JwaHBNUDZ1d1Nnck82RkdlN0hDMTgv?=
+ =?utf-8?B?TFVWc0lmMFFIRXRaQk1OaUNyYVI5ZlZ4VktKOGJSMUtLTTJZTDBNOXM5UDg0?=
+ =?utf-8?B?ejZZSC92VkxnOWpyQjUzZlJ2bVFqUHNEWlhkVjcrNE1RenhXZkF6Ni9YaVZ4?=
+ =?utf-8?B?WmYxclkyU2xKYTZiQW5qVEo4S0Z1QjNCdy90Z0EyUU9Xdm5XcnBqVkxGZ1dQ?=
+ =?utf-8?B?RGdJVDF1TXB2bUpoblVnOTl3c2tYd2RxTzdvci9oTFBnKzl3Q3dRZGRGU1kv?=
+ =?utf-8?B?cG5vT0FvTks2blpYQXRXbUNJODduTkM5bVRsNUhlTS9VQjFpeHplUGJpcE5l?=
+ =?utf-8?B?b0lMR1h2MGY3cUw1K0sxaE5qSXhLR1dBMTQ1cHJ6eUxTTTE2dmI5N1dBTUJ2?=
+ =?utf-8?B?c3U5eWwvN2dhWmM5LzV6THU0dlNQa2tjcXFuWjAwSDBDbzRRNTNBYVpwL0Ix?=
+ =?utf-8?B?TThsVjBLcDBxRTBvK0V0T2E2ci83elQxbWZzV21KUlY0THZ3L0N0c0NScWdC?=
+ =?utf-8?B?bW1LT1FNK3NnUFQ5TGxFaXFOQzFMcEpSS2w5OWtBNzRmUHYxNDFlTmgrSlV6?=
+ =?utf-8?B?dElsUkxrbTNNZkxhRHlFQ2FPZ1psODZUSWxONUNqUGNOckluM1I5UUdRUVpB?=
+ =?utf-8?B?TzdxMVN1eDN1emU4ZDg1aEZYN1ZYVFZsQ3NQKzJoZFJ6VnFIQmk4cEVpanA5?=
+ =?utf-8?B?TGFCaFhESXFKRWZwaU12LzRVUDBFY3RQNktxcVROVFNlMU8wM0tSQkd4Sktz?=
+ =?utf-8?B?VzVzcGE5UXo5UGJ3R0U3N2Z1WnRoUGdiMEZOY0R6Ly9ydk1QdzQxeUczeFVU?=
+ =?utf-8?B?MW8rbGltVEltRVZFcGhURllaTkRtZTZPSEpndlVCV0c3V2JIaDVsbFZXSW1M?=
+ =?utf-8?B?SnRaaVljeFFLNzRScWRmRnRxd0dMeWVkWkRFdGhtTlVSU2NCaEtQTHBwbEtx?=
+ =?utf-8?B?NDdKYW1zMjJnKy9SRUNXQmhqWW52dThwUmFIWG95RWo4WEphaVJEdSsyTFZh?=
+ =?utf-8?B?QUlPVDI0MUNnM3dWbE1mWFAyTnduRmlmVXlneXVpWlBTNU1yc0NKd2pXb0h6?=
+ =?utf-8?B?cUVpN0h0L2E4ME5uU3JEdXAwZmFCMEVVUytTM3lKWFdyNTNxeVdOU09VcnRu?=
+ =?utf-8?B?TVBuVndZZTlKYzh5QzZmYWtVNFliYXpEQy9YYThESkplQjl5WGVnYm5SZlZM?=
+ =?utf-8?B?ekJWcTMwMkZjTEt0L2h3UEkxNlpCSWlBTElBbWpzeVZBSS84VHdBNEtCK2Ru?=
+ =?utf-8?B?S201SThCMm15Y3RvUWdGYVJ4YU1tT0pIdTg4SWF5c2dHdktJMjFpOWFPc0J6?=
+ =?utf-8?B?SDlicktTTHhkWkRpZmwvZ3hobGltV04wdTFUMVB5LzFzNmlZUkVtZ3RRRjR0?=
+ =?utf-8?B?OEUvVVRtTHp2ZnVQTk1FL2d1TDlzZ3ZScTJYajdmTlhUbzNDZHovMnJIZ3lP?=
+ =?utf-8?B?OTd0dXI0UE1YU2xVbFBzczN3VURNQ1B6dVcwRGF0RU1DL0dxY0drZy9ic3NK?=
+ =?utf-8?B?NzhzbUhRVVVPNlZlS1B0M3AyRUQxQUF1SHFWdndMRGhTa0lyNVNmVW81a1Nt?=
+ =?utf-8?B?dTNGaE9kMEV0RnRZZXZJL1ozTFBzbVNBWnNyRU81ZkViOUxMdnBhS1YxQktH?=
+ =?utf-8?B?Y0w1VlZWWGt4TWRkUThIRFNGa05reEYvdlZTSUdBQkYwcC90UWxIb3Y5dWZ6?=
+ =?utf-8?B?VGxKOFlpUVdCcjRHS20wM0ZCNTNTT1ZnL0NPMzY0T0VReUNxTGZEcUVBZ2F6?=
+ =?utf-8?B?K1JzUE5IWTZ0WTI4Wi9ac3VLWTVjeXdRcnRTaTRKWVdCU2YyNTZmVXpXZzNx?=
+ =?utf-8?B?Wmx6ZnZHRzNER0c2NHpFdkJmZjJ3UTZDTGJZK2dUcndNb01YZnMrUHBQQnVv?=
+ =?utf-8?B?bGNtUU5rdmcvYUtEb1BXckllM2tIVW4xaWZ4MzM0WnJ1Y3pXZFpPM2l4cm1E?=
+ =?utf-8?Q?dq4c0At+4jk4eBcWeFNHx74FM?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12f0b070-0900-46a3-9ec0-08db03b3b30a
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3218ddbf-16f0-44eb-469d-08db03b3f0b7
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:50:54.3247
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:52:37.8288
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Hp4uPEdvE6laU1ZGDoKRGiHFdmuun5GUPhn8W+ySRnVnjuymgbmdZYfxwgmiWWaaro4Bg5ugslsDUWPt8tZ35Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4325
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-CrossTenant-UserPrincipalName: IO54m2jMOBHGHkF0MgrS9lG/rXv1e9lurBfa7w7Kjj8qBOaxQe0k06yF8xRbECo8E75sAHuFkcu7h7SHrLMEqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6596
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -122,176 +147,348 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31 Jan 11:37, torvic9@mailbox.org wrote:
+On 1/30/2023 7:54 PM, Alexey Kardashevskiy wrote:
 > 
-> > Wyes Karny <wyes.karny@amd.com> hat am 31.01.2023 05:21 GMT geschrieben:
-> > 
-> >  
-> > From ACPI spec[1] below 3 modes for CPPC can be defined:
-> > 1. Non autonomous: OS scaling governor specifies operating frequency/
-> >    performance level through `Desired Performance` register and platform
-> > follows that.
-> > 2. Guided autonomous: OS scaling governor specifies min and max
-> >    frequencies/ performance levels through `Minimum Performance` and
-> > `Maximum Performance` register, and platform can autonomously select an
-> > operating frequency in this range.
-> > 3. Fully autonomous: OS only hints (via EPP) to platform for the required
-> >    energy performance preference for the workload and platform autonomously
-> > scales the frequency.
-> > 
-> > Currently (1) is supported by amd_pstate as passive mode, and (3) is
-> > implemented by EPP support[2]. This change is to support (2).
-> > 
-> > In guided autonomous mode the min_perf is based on the input from the
-> > scaling governor. For example, in case of schedutil this value depends
-> > on the current utilization. And max_perf is set to max capacity.
-> > 
-> > To activate guided auto mode ``amd_pstate=guided`` command line
-> > parameter has to be passed in the kernel.
-> > 
-> > Below are the results (normalized) of benchmarks with this patch:
-> > System: Genoa 96C 192T
-> > Kernel: 6.2.0-rc2 + EPP v11 + patch
-> > Scaling governor: schedutil
-> > 
-> > ================ dbench comparisons ================
-> > dbench result comparison:
-> > Here results are throughput (MB/s)
-> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> >     1	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
-> >     2	   1.07 (0.00 pct)	   1.06 (-0.93 pct)	   1.07 (0.00 pct)
-> >     4	   1.68 (0.00 pct)	   1.70 (1.19 pct)	   1.72 (2.38 pct)
-> >     8	   2.61 (0.00 pct)	   2.68 (2.68 pct)	   2.76 (5.74 pct)
-> >    16	   4.16 (0.00 pct)	   4.24 (1.92 pct)	   4.53 (8.89 pct)
-> >    32	   5.98 (0.00 pct)	   6.17 (3.17 pct)	   7.30 (22.07 pct)
-> >    64	   8.67 (0.00 pct)	   8.99 (3.69 pct)	  10.71 (23.52 pct)
-> >   128	  11.98 (0.00 pct)	  12.52 (4.50 pct)	  14.67 (22.45 pct)
-> >   256	  15.73 (0.00 pct)	  16.13 (2.54 pct)	  17.81 (13.22 pct)
-> >   512	  15.77 (0.00 pct)	  16.32 (3.48 pct)	  16.39 (3.93 pct)
-> > dbench power comparison:
-> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> >     1	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   1.04 (4.00 pct)
-> >     2	   0.99 (0.00 pct)	   0.97 (-2.02 pct)	   1.02 (3.03 pct)
-> >     4	   0.98 (0.00 pct)	   0.98 (0.00 pct)	   1.02 (4.08 pct)
-> >     8	   0.98 (0.00 pct)	   0.99 (1.02 pct)	   1.02 (4.08 pct)
-> >    16	   0.99 (0.00 pct)	   1.00 (1.01 pct)	   1.04 (5.05 pct)
-> >    32	   1.02 (0.00 pct)	   1.02 (0.00 pct)	   1.07 (4.90 pct)
-> >    64	   1.05 (0.00 pct)	   1.05 (0.00 pct)	   1.11 (5.71 pct)
-> >   128	   1.08 (0.00 pct)	   1.08 (0.00 pct)	   1.15 (6.48 pct)
-> >   256	   1.12 (0.00 pct)	   1.12 (0.00 pct)	   1.20 (7.14 pct)
-> >   512	   1.18 (0.00 pct)	   1.17 (-0.84 pct)	   1.26 (6.77 pct)
-> > 
-> > ================ git-source comparisons ================
-> > git-source result comparison:
-> > Here results are throughput (compilations per 1000 sec)
-> > Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> >   192	   1.00 (0.00 pct)	   0.93 (-7.00 pct)	   1.00 (0.00 pct)
-> > git-source power comparison:
-> > Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> >   192	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.96 (-4.00 pct)
-> > 
-> > ================ kernbench comparisons ================
-> > kernbench result comparison:
-> > Here results are throughput (compilations per 1000 sec)
-> > Load:	   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> > 32	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
-> > 48	   1.26 (0.00 pct)	   1.28 (1.58 pct)	   1.25 (-0.79 pct)
-> > 64	   1.39 (0.00 pct)	   1.47 (5.75 pct)	   1.43 (2.87 pct)
-> > 96	   1.48 (0.00 pct)	   1.50 (1.35 pct)	   1.49 (0.67 pct)
-> > 128	   1.29 (0.00 pct)	   1.32 (2.32 pct)	   1.33 (3.10 pct)
-> > 192	   1.17 (0.00 pct)	   1.20 (2.56 pct)	   1.21 (3.41 pct)
-> > 256	   1.17 (0.00 pct)	   1.18 (0.85 pct)	   1.20 (2.56 pct)
-> > 384	   1.16 (0.00 pct)	   1.17 (0.86 pct)	   1.21 (4.31 pct)
-> > kernbench power comparison:
-> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> >    32	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.00 (0.00 pct)
-> >    48	   0.87 (0.00 pct)	   0.81 (-6.89 pct)	   0.88 (1.14 pct)
-> >    64	   0.81 (0.00 pct)	   0.73 (-9.87 pct)	   0.77 (-4.93 pct)
-> >    96	   0.75 (0.00 pct)	   0.74 (-1.33 pct)	   0.75 (0.00 pct)
-> >   128	   0.83 (0.00 pct)	   0.79 (-4.81 pct)	   0.83 (0.00 pct)
-> >   192	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
-> >   256	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
-> >   384	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
-> > 
-> > ================ tbench comparisons ================
-> > tbench result comparison:
-> > Here results are throughput (MB/s)
-> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> >     1	   1.00 (0.00 pct)	   0.70 (-30.00 pct)	   1.37 (37.00 pct)
-> >     2	   2.64 (0.00 pct)	   1.39 (-47.34 pct)	   2.70 (2.27 pct)
-> >     4	   4.89 (0.00 pct)	   2.75 (-43.76 pct)	   5.28 (7.97 pct)
-> >     8	   9.46 (0.00 pct)	   5.42 (-42.70 pct)	  10.22 (8.03 pct)
-> >    16	  19.05 (0.00 pct)	  10.42 (-45.30 pct)	  19.94 (4.67 pct)
-> >    32	  37.50 (0.00 pct)	  20.23 (-46.05 pct)	  36.87 (-1.68 pct)
-> >    64	  61.24 (0.00 pct)	  43.08 (-29.65 pct)	  62.96 (2.80 pct)
-> >   128	  67.16 (0.00 pct)	  69.08 (2.85 pct)	  67.34 (0.26 pct)
-> >   256	 154.59 (0.00 pct)	 162.33 (5.00 pct)	 156.78 (1.41 pct)
-> >   512	 154.02 (0.00 pct)	 156.74 (1.76 pct)	 153.48 (-0.35 pct)
-> > tbench power comparison:
-> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
-> >     1	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.08 (8.00 pct)
-> >     2	   1.04 (0.00 pct)	   0.97 (-6.73 pct)	   1.11 (6.73 pct)
-> >     4	   1.12 (0.00 pct)	   0.99 (-11.60 pct)	   1.18 (5.35 pct)
-> >     8	   1.25 (0.00 pct)	   1.04 (-16.80 pct)	   1.31 (4.80 pct)
-> >    16	   1.53 (0.00 pct)	   1.13 (-26.14 pct)	   1.58 (3.26 pct)
-> >    32	   2.01 (0.00 pct)	   1.36 (-32.33 pct)	   2.03 (0.99 pct)
-> >    64	   2.58 (0.00 pct)	   2.14 (-17.05 pct)	   2.61 (1.16 pct)
-> >   128	   2.80 (0.00 pct)	   2.81 (0.35 pct)	   2.81 (0.35 pct)
-> >   256	   3.39 (0.00 pct)	   3.43 (1.17 pct)	   3.42 (0.88 pct)
-> >   512	   3.44 (0.00 pct)	   3.44 (0.00 pct)	   3.44 (0.00 pct)
-> > 
-> > Note: this series is based on top of EPP v11 [3] series
 > 
-> Hi Wyes,
+> On 11/1/23 13:01, Kalra, Ashish wrote:
+>> On 1/10/2023 6:48 PM, Alexey Kardashevskiy wrote:
+>>> On 10/1/23 19:33, Kalra, Ashish wrote:
+>>>>
+>>>> On 1/9/2023 8:28 PM, Alexey Kardashevskiy wrote:
+>>>>>
+>>>>>
+>>>>> On 10/1/23 10:41, Kalra, Ashish wrote:
+>>>>>> On 1/8/2023 9:33 PM, Alexey Kardashevskiy wrote:
+>>>>>>> On 15/12/22 06:40, Michael Roth wrote:
+>>>>>>>> From: Brijesh Singh <brijesh.singh@amd.com>
+>>>>>>>>
+>>>>>>>> Version 2 of GHCB specification added the support for two SNP Guest
+>>>>>>>> Request Message NAE events. The events allows for an SEV-SNP 
+>>>>>>>> guest to
+>>>>>>>> make request to the SEV-SNP firmware through hypervisor using the
+>>>>>>>> SNP_GUEST_REQUEST API define in the SEV-SNP firmware specification.
+>>>>>>>>
+>>>>>>>> The SNP_EXT_GUEST_REQUEST is similar to SNP_GUEST_REQUEST with the
+>>>>>>>> difference of an additional certificate blob that can be passed 
+>>>>>>>> through
+>>>>>>>> the SNP_SET_CONFIG ioctl defined in the CCP driver. The CCP driver
+>>>>>>>> provides snp_guest_ext_guest_request() that is used by the KVM 
+>>>>>>>> to get
+>>>>>>>> both the report and certificate data at once.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+>>>>>>>> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+>>>>>>>> Signed-off-by: Michael Roth <michael.roth@amd.com>
+>>>>>>>> ---
+>>>>>>>>   arch/x86/kvm/svm/sev.c | 185 
+>>>>>>>> +++++++++++++++++++++++++++++++++++++++--
+>>>>>>>>   arch/x86/kvm/svm/svm.h |   2 +
+>>>>>>>>   2 files changed, 181 insertions(+), 6 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+>>>>>>>> index 5f2b2092cdae..18efa70553c2 100644
+>>>>>>>> --- a/arch/x86/kvm/svm/sev.c
+>>>>>>>> +++ b/arch/x86/kvm/svm/sev.c
+>>>>>>>> @@ -331,6 +331,7 @@ static int sev_guest_init(struct kvm *kvm, 
+>>>>>>>> struct kvm_sev_cmd *argp)
+>>>>>>>>           if (ret)
+>>>>>>>>               goto e_free;
+>>>>>>>> +        mutex_init(&sev->guest_req_lock);
+>>>>>>>>           ret = sev_snp_init(&argp->error, false);
+>>>>>>>>       } else {
+>>>>>>>>           ret = sev_platform_init(&argp->error);
+>>>>>>>> @@ -2051,23 +2052,34 @@ int sev_vm_move_enc_context_from(struct 
+>>>>>>>> kvm *kvm, unsigned int source_fd)
+>>>>>>>>    */
+>>>>>>>>   static void *snp_context_create(struct kvm *kvm, struct 
+>>>>>>>> kvm_sev_cmd *argp)
+>>>>>>>>   {
+>>>>>>>> +    struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>>>       struct sev_data_snp_addr data = {};
+>>>>>>>> -    void *context;
+>>>>>>>> +    void *context, *certs_data;
+>>>>>>>>       int rc;
+>>>>>>>> +    /* Allocate memory used for the certs data in SNP guest 
+>>>>>>>> request */
+>>>>>>>> +    certs_data = kzalloc(SEV_FW_BLOB_MAX_SIZE, 
+>>>>>>>> GFP_KERNEL_ACCOUNT);
+>>>>>>>> +    if (!certs_data)
+>>>>>>>> +        return NULL;
+>>>>>>>> +
+>>>>>>>>       /* Allocate memory for context page */
+>>>>>>>>       context = snp_alloc_firmware_page(GFP_KERNEL_ACCOUNT);
+>>>>>>>>       if (!context)
+>>>>>>>> -        return NULL;
+>>>>>>>> +        goto e_free;
+>>>>>>>>       data.gctx_paddr = __psp_pa(context);
+>>>>>>>>       rc = __sev_issue_cmd(argp->sev_fd, 
+>>>>>>>> SEV_CMD_SNP_GCTX_CREATE, &data, &argp->error);
+>>>>>>>> -    if (rc) {
+>>>>>>>> -        snp_free_firmware_page(context);
+>>>>>>>> -        return NULL;
+>>>>>>>> -    }
+>>>>>>>> +    if (rc)
+>>>>>>>> +        goto e_free;
+>>>>>>>> +
+>>>>>>>> +    sev->snp_certs_data = certs_data;
+>>>>>>>>       return context;
+>>>>>>>> +
+>>>>>>>> +e_free:
+>>>>>>>> +    snp_free_firmware_page(context);
+>>>>>>>> +    kfree(certs_data);
+>>>>>>>> +    return NULL;
+>>>>>>>>   }
+>>>>>>>>   static int snp_bind_asid(struct kvm *kvm, int *error)
+>>>>>>>> @@ -2653,6 +2665,8 @@ static int snp_decommission_context(struct 
+>>>>>>>> kvm *kvm)
+>>>>>>>>       snp_free_firmware_page(sev->snp_context);
+>>>>>>>>       sev->snp_context = NULL;
+>>>>>>>> +    kfree(sev->snp_certs_data);
+>>>>>>>> +
+>>>>>>>>       return 0;
+>>>>>>>>   }
+>>>>>>>> @@ -3174,6 +3188,8 @@ static int sev_es_validate_vmgexit(struct 
+>>>>>>>> vcpu_svm *svm, u64 *exit_code)
+>>>>>>>>       case SVM_VMGEXIT_UNSUPPORTED_EVENT:
+>>>>>>>>       case SVM_VMGEXIT_HV_FEATURES:
+>>>>>>>>       case SVM_VMGEXIT_PSC:
+>>>>>>>> +    case SVM_VMGEXIT_GUEST_REQUEST:
+>>>>>>>> +    case SVM_VMGEXIT_EXT_GUEST_REQUEST:
+>>>>>>>>           break;
+>>>>>>>>       default:
+>>>>>>>>           reason = GHCB_ERR_INVALID_EVENT;
+>>>>>>>> @@ -3396,6 +3412,149 @@ static int snp_complete_psc(struct 
+>>>>>>>> kvm_vcpu *vcpu)
+>>>>>>>>       return 1;
+>>>>>>>>   }
+>>>>>>>> +static unsigned long snp_setup_guest_buf(struct vcpu_svm *svm,
+>>>>>>>> +                     struct sev_data_snp_guest_request *data,
+>>>>>>>> +                     gpa_t req_gpa, gpa_t resp_gpa)
+>>>>>>>> +{
+>>>>>>>> +    struct kvm_vcpu *vcpu = &svm->vcpu;
+>>>>>>>> +    struct kvm *kvm = vcpu->kvm;
+>>>>>>>> +    kvm_pfn_t req_pfn, resp_pfn;
+>>>>>>>> +    struct kvm_sev_info *sev;
+>>>>>>>> +
+>>>>>>>> +    sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>>> +
+>>>>>>>> +    if (!IS_ALIGNED(req_gpa, PAGE_SIZE) || 
+>>>>>>>> !IS_ALIGNED(resp_gpa, PAGE_SIZE))
+>>>>>>>> +        return SEV_RET_INVALID_PARAM;
+>>>>>>>> +
+>>>>>>>> +    req_pfn = gfn_to_pfn(kvm, gpa_to_gfn(req_gpa));
+>>>>>>>> +    if (is_error_noslot_pfn(req_pfn))
+>>>>>>>> +        return SEV_RET_INVALID_ADDRESS;
+>>>>>>>> +
+>>>>>>>> +    resp_pfn = gfn_to_pfn(kvm, gpa_to_gfn(resp_gpa));
+>>>>>>>> +    if (is_error_noslot_pfn(resp_pfn))
+>>>>>>>> +        return SEV_RET_INVALID_ADDRESS;
+>>>>>>>> +
+>>>>>>>> +    if (rmp_make_private(resp_pfn, 0, PG_LEVEL_4K, 0, true))
+>>>>>>>> +        return SEV_RET_INVALID_ADDRESS;
+>>>>>>>> +
+>>>>>>>> +    data->gctx_paddr = __psp_pa(sev->snp_context);
+>>>>>>>> +    data->req_paddr = __sme_set(req_pfn << PAGE_SHIFT);
+>>>>>>>> +    data->res_paddr = __sme_set(resp_pfn << PAGE_SHIFT);
+>>>>>>>> +
+>>>>>>>> +    return 0;
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +static void snp_cleanup_guest_buf(struct 
+>>>>>>>> sev_data_snp_guest_request *data, unsigned long *rc)
+>>>>>>>> +{
+>>>>>>>> +    u64 pfn = __sme_clr(data->res_paddr) >> PAGE_SHIFT;
+>>>>>>>> +    int ret;
+>>>>>>>> +
+>>>>>>>> +    ret = snp_page_reclaim(pfn);
+>>>>>>>> +    if (ret)
+>>>>>>>> +        *rc = SEV_RET_INVALID_ADDRESS;
+>>>>>>>> +
+>>>>>>>> +    ret = rmp_make_shared(pfn, PG_LEVEL_4K);
+>>>>>>>> +    if (ret)
+>>>>>>>> +        *rc = SEV_RET_INVALID_ADDRESS;
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +static void snp_handle_guest_request(struct vcpu_svm *svm, 
+>>>>>>>> gpa_t req_gpa, gpa_t resp_gpa)
+>>>>>>>> +{
+>>>>>>>> +    struct sev_data_snp_guest_request data = {0};
+>>>>>>>> +    struct kvm_vcpu *vcpu = &svm->vcpu;
+>>>>>>>> +    struct kvm *kvm = vcpu->kvm;
+>>>>>>>> +    struct kvm_sev_info *sev;
+>>>>>>>> +    unsigned long rc;
+>>>>>>>> +    int err;
+>>>>>>>> +
+>>>>>>>> +    if (!sev_snp_guest(vcpu->kvm)) {
+>>>>>>>> +        rc = SEV_RET_INVALID_GUEST;
+>>>>>>>> +        goto e_fail;
+>>>>>>>> +    }
+>>>>>>>> +
+>>>>>>>> +    sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>>> +
+>>>>>>>> +    mutex_lock(&sev->guest_req_lock);
+>>>>>>>> +
+>>>>>>>> +    rc = snp_setup_guest_buf(svm, &data, req_gpa, resp_gpa);
+>>>>>>>> +    if (rc)
+>>>>>>>> +        goto unlock;
+>>>>>>>> +
+>>>>>>>> +    rc = sev_issue_cmd(kvm, SEV_CMD_SNP_GUEST_REQUEST, &data, 
+>>>>>>>> &err);
+>>>>>>>
+>>>>>>>
+>>>>>>> This one goes via sev_issue_cmd_external_user() and uses sev-fd...
+>>>>>>>
+>>>>>>>> +    if (rc)
+>>>>>>>> +        /* use the firmware error code */
+>>>>>>>> +        rc = err;
+>>>>>>>> +
+>>>>>>>> +    snp_cleanup_guest_buf(&data, &rc);
+>>>>>>>> +
+>>>>>>>> +unlock:
+>>>>>>>> +    mutex_unlock(&sev->guest_req_lock);
+>>>>>>>> +
+>>>>>>>> +e_fail:
+>>>>>>>> +    svm_set_ghcb_sw_exit_info_2(vcpu, rc);
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +static void snp_handle_ext_guest_request(struct vcpu_svm *svm, 
+>>>>>>>> gpa_t req_gpa, gpa_t resp_gpa)
+>>>>>>>> +{
+>>>>>>>> +    struct sev_data_snp_guest_request req = {0};
+>>>>>>>> +    struct kvm_vcpu *vcpu = &svm->vcpu;
+>>>>>>>> +    struct kvm *kvm = vcpu->kvm;
+>>>>>>>> +    unsigned long data_npages;
+>>>>>>>> +    struct kvm_sev_info *sev;
+>>>>>>>> +    unsigned long rc, err;
+>>>>>>>> +    u64 data_gpa;
+>>>>>>>> +
+>>>>>>>> +    if (!sev_snp_guest(vcpu->kvm)) {
+>>>>>>>> +        rc = SEV_RET_INVALID_GUEST;
+>>>>>>>> +        goto e_fail;
+>>>>>>>> +    }
+>>>>>>>> +
+>>>>>>>> +    sev = &to_kvm_svm(kvm)->sev_info;
+>>>>>>>> +
+>>>>>>>> +    data_gpa = vcpu->arch.regs[VCPU_REGS_RAX];
+>>>>>>>> +    data_npages = vcpu->arch.regs[VCPU_REGS_RBX];
+>>>>>>>> +
+>>>>>>>> +    if (!IS_ALIGNED(data_gpa, PAGE_SIZE)) {
+>>>>>>>> +        rc = SEV_RET_INVALID_ADDRESS;
+>>>>>>>> +        goto e_fail;
+>>>>>>>> +    }
+>>>>>>>> +
+>>>>>>>> +    mutex_lock(&sev->guest_req_lock);
+>>>>>>>> +
+>>>>>>>> +    rc = snp_setup_guest_buf(svm, &req, req_gpa, resp_gpa);
+>>>>>>>> +    if (rc)
+>>>>>>>> +        goto unlock;
+>>>>>>>> +
+>>>>>>>> +    rc = snp_guest_ext_guest_request(&req, (unsigned 
+>>>>>>>> long)sev->snp_certs_data,
+>>>>>>>> +                     &data_npages, &err);
+>>>>>>>
+>>>>>>> but this one does not and jump straight to 
+>>>>>>> drivers/crypto/ccp/sev-dev.c ignoring sev->fd. Why different? Can 
+>>>>>>> these two be unified? sev_issue_cmd_external_user() only checks 
+>>>>>>> if fd is /dev/sev which is hardly useful.
+>>>>>>>
+>>>>>>> "[PATCH RFC v7 32/64] crypto: ccp: Provide APIs to query extended 
+>>>>>>> attestation report" added this one.
+>>>>>>
+>>>>>> SNP_EXT_GUEST_REQUEST additionally returns a certificate blob and 
+>>>>>> that's why it goes through the CCP driver interface 
+>>>>>> snp_guest_ext_guest_request() that is used to get both the report 
+>>>>>> and certificate data/blob at the same time.
+>>>>>
+>>>>> True. I thought though that this calls for extending 
+>>>>> sev_issue_cmd() to take care of these extra parameters rather than 
+>>>>> just skipping the sev->fd.
+>>>>>
+>>>>>
+>>>>>> All the FW API calls on the KVM side go through sev_issue_cmd() 
+>>>>>> and sev_issue_cmd_external_user() interfaces and that i believe 
+>>>>>> uses sev->fd more of as a sanity check.
+>>>>>
+>>>>> Does not look like it:
+>>>>>
+>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/crypto/ccp/sev-dev.c?h=v6.2-rc3#n1290 
+>>>>>
+>>>>>
+>>>>> ===
+>>>>> int sev_issue_cmd_external_user(struct file *filep, unsigned int cmd,
+>>>>>                  void *data, int *error)
+>>>>> {
+>>>>>      if (!filep || filep->f_op != &sev_fops)
+>>>>>          return -EBADF;
+>>>>>
+>>>>>      return sev_do_cmd(cmd, data, error);
+>>>>> }
+>>>>> EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
+>>>>> ===
+>>>>>
+>>>>> The only "more" is that it requires sev->fd to be a valid open fd, 
+>>>>> what is the value in that? I may easily miss the bigger picture 
+>>>>> here. Thanks,
+>>>>>
+>>>>>
+>>>>
+>>>> Have a look at following functions in drivers/crypto/ccp/sev-dev.c:
+>>>> sev_dev_init() and sev_misc_init().
+>>>>
+>>>> static int sev_misc_init(struct sev_device *sev)
+>>>> {
+>>>>          struct device *dev = sev->dev;
+>>>>          int ret;
+>>>>
+>>>>          /*
+>>>>           * SEV feature support can be detected on multiple devices but
+>>>>           * the SEV FW commands must be issued on the master. During
+>>>>           * probe, we do not know the master hence we create 
+>>>> /dev/sev on
+>>>>           * the first device probe.
+>>>>           * sev_do_cmd() finds the right master device to which to 
+>>>> issue
+>>>>           * the command to the firmware.
+>>>>       */
+>>>
+>>>
+>>> It is still a single /dev/sev node and the userspace cannot get it 
+>>> wrong, it does not have to choose between (for instance) /dev/sev0 
+>>> and /dev/sev1 on a 2 SOC system.
+>>>
+>>>> ...
+>>>> ...
+>>>>
+>>>> Hence, sev_issue_cmd_external_user() needs to ensure that the 
+>>>> correct device (master device) is being operated upon and that's why 
+>>>> there is the check for file operations matching sev_fops as below :
+>>>>
+>>>> int sev_issue_cmd_external_user(struct file *filep, unsigned int cmd,
+>>>>                                  void *data, int *error)
+>>>> {
+>>>>          if (!filep || filep->f_op != &sev_fops)
+>>>>                  return -EBADF;
+>>>> ..
+>>>> ..
+>>>>
+>>>> Essentially, sev->fd is the misc. device created for the master PSP 
+>>>> device on which the SEV/SNP firmware commands are issued, hence,
+>>>> sev_issue_cmd() uses sev->fd.
+>>>
+>>> There is always just one fd which always uses psp_master, nothing 
+>>> from that fd is used.
+>>
+>> It also ensures that we can only issue commands (sev_issue_cmd) after 
+>> SEV/SNP guest has launched.
 > 
-> Can you rebase this patchset onto the newest EPP v12 series [1] ?
+> I can open /dev/sev and start sending commands to the firmware with no 
+> KVM running at all. Oh well, we discussed this offline :)
+> 
 
-Sure, I'll rebase this on top of EPP v12.
+Yes, and as we already discussed we need to support that to get SEV/SNP 
+platform status (SNP_PLATFORM_STATUS) and also for legacy SEV commands 
+like certificate generation and import/export which can be issued before 
+a VM is launched.
 
 Thanks,
-Wyes
-
-> 
-> [1] https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan@amd.com/
-> 
-> Cheers,
-> Tor Vic
-> 
-> > 
-> > Change log:
-> > 
-> > v3 -> v4:
-> > - Fixed active mode low frequency issue reported by Peter Jung and Tor Vic
-> > - Documentation modification suggested by Bagas Sanjaya
-> > 
-> > v2 -> v3:
-> > - Addressed review comments form Mario.
-> > - Picked up RB tag from Mario.
-> > - Rebase on top of EPP v11 [3].
-> > 
-> > v1 -> v2:
-> > - Fix issue with shared mem systems.
-> > - Rebase on top of EPP series.
-> > 
-> > [1]: https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
-> > [2]: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
-> > [3]: https://lore.kernel.org/linux-pm/20230118075210.447418-1-perry.yuan@amd.com/
-> > 
-> > Wyes Karny (6):
-> >   acpi: cppc: Add min and max perf reg writing support
-> >   acpi: cppc: Add auto select register read/write support
-> >   cpufreq: amd_pstate: Add guided autonomous mode
-> >   Documentation: amd_pstate: Move amd_pstate param to alphabetical order
-> >   cpufreq: amd_pstate: Add guided mode control support via sysfs
-> >   Documentation: amd_pstate: Update amd_pstate status sysfs for guided
-> > 
-> >  .../admin-guide/kernel-parameters.txt         |  41 ++--
-> >  Documentation/admin-guide/pm/amd-pstate.rst   |  31 ++-
-> >  drivers/acpi/cppc_acpi.c                      | 121 +++++++++++-
-> >  drivers/cpufreq/amd-pstate.c                  | 184 +++++++++++++-----
-> >  include/acpi/cppc_acpi.h                      |  11 ++
-> >  include/linux/amd-pstate.h                    |   2 +
-> >  6 files changed, 309 insertions(+), 81 deletions(-)
-> > 
-> > -- 
-> > 2.34.1
+Ashish
