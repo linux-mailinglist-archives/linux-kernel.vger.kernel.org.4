@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B068468387A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:17:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B48B268387C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjAaVRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        id S232132AbjAaVRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjAaVRO (ORCPT
+        with ESMTP id S229613AbjAaVRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:17:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB7647408;
-        Tue, 31 Jan 2023 13:17:12 -0800 (PST)
+        Tue, 31 Jan 2023 16:17:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365FD4861D;
+        Tue, 31 Jan 2023 13:17:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16C026172D;
-        Tue, 31 Jan 2023 21:17:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 747D8C433EF;
-        Tue, 31 Jan 2023 21:17:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E82FDB81EE8;
+        Tue, 31 Jan 2023 21:17:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E93C433EF;
+        Tue, 31 Jan 2023 21:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675199831;
-        bh=1ZY2ornX4VipZGKYMo7CwCySI7JYuyrC7tE6NUjGzj8=;
+        s=k20201202; t=1675199853;
+        bh=E7KByHYDEVSon6Ok5f/jbVyuLo0txU715xa09Cdt6mE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UI286SBhGfNgMn5RYR8rRHE5dY1MPed3drzQ1q45E9tcx5VYCEYFVKz3UGCgiI9TW
-         D4pqQN77n9mDp6ulU3zxFlfhhtZBgIQTV0k3+eEnROL6379LKPRoIsa/ztw58L3dcU
-         ll/NZ8pGJQky6nDL3W9XF+zqJYg5gkkLs4a1Y06eGbE9IcOI8XCL8dim3XvpNHXN2G
-         ksLg0mFHOoN7cVV00fSs4NmYFxFTpsnZeOI10XSERGSooNekJ/a7VxvHwvT8DnouJv
-         vSnJoZ3nEJ19bSNV7rD/idxkErptPpddYeypZXnzkKopJgi7xJbNNz8U+XVdp4/8+A
-         2tdKrMUv5b6Vg==
-Date:   Tue, 31 Jan 2023 14:17:08 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Connor OBrien <connoro@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X>
-References: <20230124064324.672022-1-irogers@google.com>
- <20230124064324.672022-2-irogers@google.com>
- <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
- <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
- <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
- <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
- <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
+        b=pqiqQI67SOynS8JZEq3e/O+1NP8/ZbVZ+BYY6UiN5/Ou7oYgmVAUHVWqsms8l9gSy
+         rY8kF1vjHoXH40SqOfuAo7zWLqKZts4/MjvrcqZ8g40SeijVoIpANh4Odci8mFnrJH
+         HpWXVMm684/ZvP1wDS+Kl0Y4oAD9rbxkGBFnE/G4XkcPL1UIdG7OJXn2zh54jmlSNw
+         8CmcwgZKya7fKn3IjXSv1Z81Fvw7J20w52ZCr9BLZH/pyTUD61SZdfLhLYl6CK+eQX
+         XYLsVl3FAh6smWJEQfWvXZzDPePjJzORSV8UCNeUD8oZS91yhPadZoJur3Kqd4m9p9
+         Hzmj6VKQcBkww==
+Date:   Tue, 31 Jan 2023 13:17:31 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
+ shadow variables
+Message-ID: <20230131211731.i7c6isqp5a7k4hrj@treble>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-5-mpdesouza@suse.com>
+ <20230131044008.atapgt326nsl6fdp@treble>
+ <Y9kkflJxq2A9+W8Q@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <Y9kkflJxq2A9+W8Q@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,203 +58,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 12:59:04PM -0800, Ian Rogers wrote:
-> On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
-> > > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
-> > > >
-> > > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > >
-> > > > > Hi Ian,
-> > > > >
-> > > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> > > > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> > > > > > after tools/scripts/Makefile.include is included, meaning flags are
-> > > > > > set assuming say CC is gcc, but then it can be later set to HOSTCC
-> > > > > > which may be clang. tools/scripts/Makefile.include is needed for host
-> > > > > > set up and common macros in objtool's Makefile. Rather than override
-> > > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> > > > > > builds and the linkage step. This means the Makefiles don't see things
-> > > > > > like CC changing and tool flag determination, and similar, work
-> > > > > > properly.
-> > > > > >
-> > > > > > Also, clear the passed subdir as otherwise an outer build may break by
-> > > > > > inadvertently passing an inappropriate value.
-> > > > > >
-> > > > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > > > ---
-> > > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
-> > > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > > > >
-> > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> > > > > > index 1fe0082b2ecc..daed388aa5d7 100644
-> > > > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > > > @@ -18,14 +18,11 @@ else
-> > > > > >  endif
-> > > > > >
-> > > > > >  # always use the host compiler
-> > > > > > -AR       = $(HOSTAR)
-> > > > > > -CC       = $(HOSTCC)
-> > > > > > -LD       = $(HOSTLD)
-> > > > > > -ARCH     = $(HOSTARCH)
-> > > > > > +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> > > > > > +               EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > > > +
-> > > > > >  RM      ?= rm
-> > > > > >  CROSS_COMPILE =
-> > > > > > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> > > > > > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
-> > > > > >
-> > > > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > > > >
-> > > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
-> > > > > >
-> > > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> > > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> > > > > > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> > > > > > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > > > >                   $(abspath $@) install_headers
-> > > > > >
-> > > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
-> > > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> > > > > > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> > > > > > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > > > >                   $(abspath $@) install_headers
-> > > > > >
-> > > > > >  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> > > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
-> > > > > >  include $(srctree)/tools/build/Makefile.include
-> > > > > >
-> > > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> > > > > > -     $(Q)$(MAKE) $(build)=resolve_btfids
-> > > > > > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
-> > > > > >
-> > > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> > > > > >       $(call msg,LINK,$@)
-> > > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > >
-> > > > > >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
-> > > > > >                              $(OUTPUT)/.*.o.cmd           \
-> > > > > > --
-> > > > > > 2.39.0.246.g2a6d74b583-goog
-> > > > > >
-> > > > >
-> > > > > I just bisected a linking failure when building resolve_btfids with
-> > > > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-> > > > > Alter how HOSTCC is forced") in the bpf-next tree.
-> > > > >
-> > > > > It appears to be related to whether or not CROSS_COMPILE is specified,
-> > > > > which we have to do for certain architectures and configurations still.
-> > > > > arm64 is not one of those but it helps demonstrate the issue.
-> > > > >
-> > > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
-> > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
-> > > > >
-> > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
-> > > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-> > > > >   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
-> > > > >   ...
-> > > > >
-> > > > > Before your change, with V=1, I see:
-> > > > >
-> > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > > > >
-> > > > > After, I see:
-> > > > >
-> > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > > > >
-> > > > > We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
-> > > > > target of resolve_btfids-in.o) and we dropped the warning flags.
-> > > > >
-> > > > > I think this comes from the clang block in
-> > > > > tools/scripts/Makefile.include, which is included into the
-> > > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
-> > > > >
-> > > > > I am not super familiar with the tools build system, otherwise I would
-> > > > > try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
-> > > > > simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
-> > > > > did not appear to resolve it for me.
-> > > > >
-> > > > > If there is any other information I can provide or patches I can test,
-> > > > > please let me know.
-> > > > >
-> > > > > Cheers,
-> > > > > Nathan
-> > > >
-> > > > Thanks Nathan, and thanks for all the details in the bug report. I'm
-> > > > looking into this.
-> > > >
-> > > > Ian
-> > >
-> > > Given the somewhat complicated cross compile I wasn't able to get a
-> > > reproduction. Could you see if the following addresses the problem:
-> >
-> > As long as you have an LLVM toolchain that targets AArch64 and your
-> > host, you should be able to reproduce this issue with those commands
-> > verbatim, as that command should not use any GNU binutils. I am pretty
-> > sure I tried it in a fresh container before reporting it but it is
-> > possible that I did not.
+On Tue, Jan 31, 2023 at 03:23:58PM +0100, Petr Mladek wrote:
+> > > +
+> > >  void *klp_shadow_get(void *obj, struct klp_shadow_type *shadow_type);
+> > >  void *klp_shadow_alloc(void *obj, struct klp_shadow_type *shadow_type,
+> > >  		       size_t size, gfp_t gfp_flags, void *ctor_data);
+> > 
+> > I find the type-based interface to be unnecessarily clunky and
+> > confusing:
+> > 
+> > - It obscures the fact that uniqueness is determined by ID, not by type.
+> > 
+> > - It's weird to be passing around the type even after it has been
+> >   registered: e.g., why doesn't klp remember the ctor/dtor?
 > 
-> Thanks, do you have instructions on setting up the container?
+> ctor/dtor must be implemented in each livepatch. klp_shadow_register()
+> would need to remember all registered implementations.
+> klp_shadow_alloc/get/free would need to find and choose one.
+> It would add an extra overhead and non-determines.
 
-Sure thing, this worked for me in the Linux source you would like to
-build (I marked it readonly to make sure any modifications were done in
-my host environment, remove the ':ro' if you would like to make edits to
-the source within the container). Docker should work as well but I did
-not test it.
+There's really no need to even "register" the constructor.  It can
+continue to just be passed as needed to the alloc functions.
 
-$ podman run --rm -ti -v $PWD:/linux:ro docker.io/archlinux:base-devel
-# pacman -Syyu --noconfirm bc clang lib32-glibc lld llvm python
-...
+(Side note, I don't see why klp_shadow_alloc() even needs a constructor
+as it's typically used when its corresponding object gets allocated, so
+its initialization doesn't need to be atomic.  klp_shadow_get_or_alloc()
+on the other hand, does need a constructor since it's used for attaching
+to already-existing objects.)
 
-# To turn on CONFIG_DEBUG_INFO_BTF
-# make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build defconfig menuconfig
+The thing really complicating this whole mess of an API is the
+destructor.  The problem is that it can change when replacing
+livepatches, so we can't just remember it in the registration.
 
-# make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build prepare
-ld.lld: error: /build/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+At least at Red Hat, I don't think we've ever used a shadow destructor.
+Its real world use seems somewhere between rare and non-existent.
 
-> > > ```
-> > > diff --git a/tools/bpf/resolve_btfids/Makefile
-> > > b/tools/bpf/resolve_btfids/Makefile
-> > > index daed388aa5d7..a06966841df4 100644
-> > > --- a/tools/bpf/resolv
+I guess a destructor would be needed if the constructor (or some other
+initialization) allocated additional memory associated with the shadow
+variable.  That data would need to be freed.
+
+But in that case couldn't an additional shadow variable be used for the
+additional memory?  Then we could just get rid of this idea of the
+destructor and this API could become much more straightforward.
+
+Alternatively, each livepatch could just have an optional global
+destructor which is called for every object which needs destructing.  It
+could then use the ID to decide what needs done (or pass it off to a
+more specific destructor).
+
+> > - I don't understand the exposed klp_shadow_{un}register() interfaces.
+> >   What's the point of forcing their use if there's no garbage
+> >   collection?
 > 
-> Ian
-> e_btfids/Makefile
-> > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > @@ -19,10 +19,9 @@ endif
-> > >
-> > > # always use the host compiler
-> > > HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)"
-> > > ARCH="$(HOSTARCH)" \
-> > > -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > +                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > CROSS_COMPILE=""
-> > >
-> > > RM      ?= rm
-> > > -CROSS_COMPILE =
-> > >
-> > > OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > ```
-> > >
-> >
-> > Unfortunately, it does not. I still see '--target=' end up in the
-> > CFLAGS of those files.
-> >
-> > Cheers,
-> > Nathan
+> I probably do not understand it correctly.
 > 
-> Hmm.. I can see the issue. We avoid this in places like libsubcmd
-> because the Makefile there includes tools/scripts/Makefile.include,
-> but here the Makefile.build inclusion is direct and we have CC set up
-> for cross compilation. This is messy and it will take some playing
-> around to come up with a simple fix.
+> Normal livepatch developers do not need to use klp_shadow_{un}register().
+> They are called transparently in __klp_enable_patch()/klp_complete_transition()
+> and klp_module_coming()/klp_cleanup_module_patches_limited().
+> 
+> The main reason why they are exposed via include/linux/livepatch.h
+> and EXPORT_SYMBOL_GPL() is the selftest lib/livepatch/test_klp_shadow_vars.c.
+> 
+> Well, the selftest probably could be bundled into a livepatch to go
+> around this.
 
-Ack, if you have any issues with reproducing it, please let me know.
+In that case, at the very least they should be prefixed with underscores
+and the function comment should make it clear they shouldn't be called
+under normal usage.
 
-Cheers,
-Nathan
+> > - It's internally confusing in klp to have both 'type' and 'type_reg'.
+> 
+> I do not like it much either.
+> 
+> An idea. We could replace "bool registered" with "struct list_head
+> register_node" in struct klp_shadow_type. Then we could use it
+> for registration.
+> 
+> All the registered types will be in a global list (klp_type_register).
+> klp_shadow_unregister() would do the garbage collection when it
+> removed the last entry with the given id from the global list.
+
+Yeah, that does sound better (assuming we decide to keep this type
+thing).
+
+> > It seems like overkill to have both klp_shadow_hash and
+> > klp_shadow_types.  For example 'struct klp_shadow' could have a link to
+> > its type and then klp_shadow_type_get_reg could iterate through the
+> > klp_shadow_hash.
+> 
+> I guess that there is a misunderstanding. We need two databases:
+> 
+>    + One for the registered shadow_types. I does the reference
+>      counting. It counts the number of livepatched objects
+>      (livepatches) that might the shadow type. It says _when_ the garbage
+>      collection must be done.
+> 
+>    + Second for existing shadow variables. It is needed for finding
+>      the shadow data. It says _what_ variables have to freed when
+>      the garbage collection is being proceed.
+
+Yup, not sure what I was thinking, please ignore...
+
+-- 
+Josh
