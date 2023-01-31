@@ -2,70 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1708C6838BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5496838C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjAaVg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:36:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
+        id S231503AbjAaVhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjAaVgy (ORCPT
+        with ESMTP id S229613AbjAaVhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:36:54 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33AA1EFEA;
-        Tue, 31 Jan 2023 13:36:53 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 16:37:13 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B86C1EFEA;
+        Tue, 31 Jan 2023 13:37:12 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 6847B2D3;
-        Tue, 31 Jan 2023 21:36:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6847B2D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1675201013; bh=Y8EX7Xm7EO7rFx7DCGwhYFEcakiZsVDGA+4vdrgTolc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=DKDbVL2sJZzJ7dUG7ZzefHQdeo4+za59VyE9Eq5NehFLvbVp6kR5v7bgoYGCBElfK
-         ROAGEkshtKU0YyUpF9m4K4X7NAszXs5RLfbFpkdpScBXHKrKymiZ/Z7BBj0xS9v6Le
-         VxZh9pofetOeJXC0ku+CHGz0yELQdcwoaNu9q4NBarwdRf4PY4p10X1RED4yrqu0s7
-         uRYTNQKEwm/+nLkqmkYqXohBSC3/pVDie8FTAU2CpvRfUI91TCgEL9NO0sM17U3ESd
-         M0nIICEe2zRx//Vb03QL9Frgq6Y1mFZkHHvTa5Y3hNkZSNthisY4YcoRPPou65gmIs
-         1AaQyWHh9pCbw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bilbao@vt.edu, Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: Re: [PATCH] docs/sp_SP: Add process magic-number translation
-In-Reply-To: <20230125181840.3007341-1-carlos.bilbao@amd.com>
-References: <20230125181840.3007341-1-carlos.bilbao@amd.com>
-Date:   Tue, 31 Jan 2023 14:36:52 -0700
-Message-ID: <878rhi2xor.fsf@meer.lwn.net>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5z0Q3xgMz4x1f;
+        Wed,  1 Feb 2023 08:37:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675201030;
+        bh=70uPOttFwg2oCLYLtz9GLb5TnWu84Alghi/ju4dMvCE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aQ0hZa5CvnFcFI4CyxBbIu/TL2W1A/Tsu4yWDaA8Usp/REH0K+LtJBSrC/anUA+uX
+         j6Gj2RrF+JYSVp/wJu5NsKvvgdkYfJcWrv3rF2qUCH4XFxTS7O86ePJ+BUZRxtl49u
+         37jTurFDKfEKn1FH67b7jQzs21kGQA1eN0xOP/C0T1VbhOhDAeNsE4eC8kmEi5NyFt
+         ZZVim0q36P4R9ysObNtdGkyEFeaNjmk5unZALDsQr4s3knAGpBQuGxNrG4+s9nCFOD
+         Ux3uJ/ePUV739cS31jnfSA9VP10ipd2YiI4yw4cSEY3bMAc3DYnJgbEJ8QElvyKAyh
+         dpkfVF8DHHr/A==
+Date:   Wed, 1 Feb 2023 08:37:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steven Whitehouse <swhiteho@redhat.com>,
+        Bob Peterson <rpeterso@redhat.com>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
+Message-ID: <20230201083708.4bf3b219@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/SfM3rhZDisMD4zNseuXR5nv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Carlos Bilbao <carlos.bilbao@amd.com> writes:
+--Sig_/SfM3rhZDisMD4zNseuXR5nv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Translate the following document into Spanish:
->
-> - process/magic-number.rst
->
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> ---
->  .../translations/sp_SP/process/index.rst      |  1 +
->  .../sp_SP/process/magic-number.rst            | 90 +++++++++++++++++++
->  2 files changed, 91 insertions(+)
->  create mode 100644 Documentation/translations/sp_SP/process/magic-number.rst
+Hi all,
 
-I've gone ahead and applied this; if magic-number.rst goes, this one can
-too :)
+Commit
 
-Thanks,
+  0e1c26572546 ("gfs2: Improve gfs2_upgrade_iopen_glock comment")
 
-jon
+is missing a Signed-off-by from its author and committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/SfM3rhZDisMD4zNseuXR5nv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPZigQACgkQAVBC80lX
+0GwsnQf+KaGb5K0DCyqvZ3nhyHLNhrua3fI5ykihmL/2RISfldFcoUpY7lWoNFf0
+f2jN8KskRHA1vrAUHgXk8i3d0eEauy464BlhYREYp9oElZh+PmC4cMUrqQju8RD3
+3GLWdCiPShYiLX6n+m2K6W9LmELACejaY6zDZ9eXk0JnkbVJZDANP+E+3JtXHeyO
+OuiwPVpDmkCJsL60idjvdVdimxWLq1t10GWzyBxdPDwf7b0uVKYhM5Mt//TXjPDl
+oTLnCqkAEcnXduaOayaQ8ya80HwlpDBJmSLyYW2mL6giurJS3vWl8OiPs9sGb/Tq
+YJKC7Ra/JJQtT7JqA3/8G9MMA56DwA==
+=XzUK
+-----END PGP SIGNATURE-----
+
+--Sig_/SfM3rhZDisMD4zNseuXR5nv--
