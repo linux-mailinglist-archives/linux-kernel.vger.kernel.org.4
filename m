@@ -2,140 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFF1682336
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A38682337
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjAaE0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 23:26:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
+        id S230028AbjAaE0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 23:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjAaE0H (ORCPT
+        with ESMTP id S229776AbjAaE0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:26:07 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C7739B97;
-        Mon, 30 Jan 2023 20:26:02 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V2C3NI007982;
-        Tue, 31 Jan 2023 04:25:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=orBpn8DxySwkjINaTjs2Jn1ipDr74tOtJ4EIhV/aEsg=;
- b=qX6+SuYEhwIAI+ZVmnZcnNUotVmVTC/i9aWmRSZY2uFmLxlvYTuQr3pUAtr/JbAWCDcx
- 6JLsvVwFcHtWWEjH4rXTrVmCr2jkad6ox4/1HLMm8v63YglenjMG81V+/yAbcnmOp2uK
- WDNTtbqrphpQvp3zjT2mXgNquYU0jaf4CXrJsFvseFXq9LMz5zzcOuhb2tSMed12zY1F
- bAJ+2E+plkwuvtUZHL/nizUWBCOVwkMKQknoKOpEdMcA7yg3HSXwtxId/1lbnmT2VwST
- PU7MQoiAwH8I+QaQ1hRGUfftM1bC10tVOicJeYZiJXCVcICXvAKXKQh5mOM9Y1iTRk83 IQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3neqbtxa9y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 04:25:53 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30V4IRaS013659;
-        Tue, 31 Jan 2023 04:25:52 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3neqbtxa94-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 04:25:52 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30UH1qYe013066;
-        Tue, 31 Jan 2023 04:25:50 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3ncvugj4xs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 04:25:50 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30V4PlPA39125490
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 04:25:47 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A34652004D;
-        Tue, 31 Jan 2023 04:25:47 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 23B9920040;
-        Tue, 31 Jan 2023 04:25:47 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 04:25:47 +0000 (GMT)
-Received: from [9.192.255.228] (unknown [9.192.255.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id E09DB60151;
-        Tue, 31 Jan 2023 15:25:44 +1100 (AEDT)
-Message-ID: <6c9f774e908fe6e50626a1806ea89dccb7f988c5.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 22/24] powerpc/pseries: Implement secvars for dynamic
- secure boot
-From:   Andrew Donnellan <ajd@linux.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-integrity@vger.kernel.org
-Cc:     sudhakar@linux.ibm.com, bgray@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, nayna@linux.ibm.com,
-        linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
-        gjoyce@linux.ibm.com, ruscur@russell.cc, gcwilson@linux.ibm.com,
-        joel@jms.id.au
-Date:   Tue, 31 Jan 2023 15:25:44 +1100
-In-Reply-To: <9f16d86e855f22823ee24e6a6236a16556425f29.camel@linux.ibm.com>
-References: <20230120074306.1326298-1-ajd@linux.ibm.com>
-         <20230120074306.1326298-23-ajd@linux.ibm.com>
-         <CQ05ZDYG6KNU.1G9O3ITQDIHEM@bobo>
-         <9f16d86e855f22823ee24e6a6236a16556425f29.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Mon, 30 Jan 2023 23:26:36 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6ECD39B97
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:26:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675139195; x=1706675195;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P4fz89K79fqbWFa1/hpbn1TcgTw8ED1hotLhYJ06UZ8=;
+  b=bf+7jMKiS0AvS9DMeSsuPW51K3D6T6dZrqOgukyZaez1JFlsLXg0Do6P
+   KJ6afuoRFWbRhrPLUeEPkVtHtDxmM+zGjl0Qh74aVkz8X4z56ty881HOo
+   aU38TKJ8D3p4DwAusITgcizIrbe0l11da3NsQ1jGg3xu269CcCgjB+zMi
+   Px3Kc/YOLSYlv0ahUrRPaoYnvlw9wpvRemF3FvmWPAEeWZnCdhjZ+qn7B
+   Wd6/Y+u/nupxobiLIZWvRnuG8WNYOQmHT53vHRSs/fK1I18JaNDEUKKVj
+   0NA+h7NyYxhs/tMtNDQgL7LAP2836xuj6NF4kn8u5Xg3B0bWCnufJiEOo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="326409835"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="326409835"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 20:26:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="772809032"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="772809032"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Jan 2023 20:26:34 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pMiE5-00049S-1R;
+        Tue, 31 Jan 2023 04:26:33 +0000
+Date:   Tue, 31 Jan 2023 12:25:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [tip:x86/tdx 3/7] arch/x86/coco/tdx/tdcall.o: warning: objtool:
+ __tdx_hypercall+0x7b: return with modified stack frame
+Message-ID: <202301311257.jasMtEiE-lkp@intel.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FIG61fNwqkqkgQXIsyben8QvnxIGk2hx
-X-Proofpoint-GUID: VCJ2us_vobJpYELVGML01dVKpuNjUrcZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_01,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- suspectscore=0 adultscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=589
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-31 at 13:54 +1100, Andrew Donnellan wrote:
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// The max object size rep=
-orted by the hypervisor is
-> > > accurate for the
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// object itself, but we u=
-se the first 8 bytes of data on
-> > > write as the
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0// signed update flags, so=
- the max size a user can write
-> > > is
-> > > larger.
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0*max_size =3D (u64)plpks_g=
-et_maxobjectsize() + 8;
-> >=20
-> > You have this 8 open coded twice (once as sizeof(u64)). You could
-> > make
-> > it a #define at the top with a brief overview of the hcall format
-> > so
-> > you
-> > don't need so much commentage for it. Although a note here that the
-> > objsize does not include the flags bytes is good to keep.
->=20
-> Will do.
+Hi Kirill,
 
-Thinking about this further, I'm going to change the 8 to sizeof(u64)
-to make it clearer that it's linked with the type of the flags
-variable, but I am going to keep the other cases as is (they're
-sizeof(flags), not sizeof(u64), so it's already obvious how they work,
-and I don't want to define a macro for one user).
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/tdx
+head:   8de62af018cc9262649d7688f7eb1409b2d8f594
+commit: c30c4b2555ba93b845559a036293fcaf7ffd2b82 [3/7] x86/tdx: Refactor __tdx_hypercall() to allow pass down more arguments
+config: x86_64-randconfig-a012-20221107 (https://download.01.org/0day-ci/archive/20230131/202301311257.jasMtEiE-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=c30c4b2555ba93b845559a036293fcaf7ffd2b82
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/tdx
+        git checkout c30c4b2555ba93b845559a036293fcaf7ffd2b82
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/coco/tdx/tdcall.o: warning: objtool: __tdx_hypercall+0x7b: return with modified stack frame
 
 
---=20
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+objdump-func vmlinux.o __tdx_hypercall:
+0000 0000000000004c40 <__tdx_hypercall>:
+0000     4c40:	55                   	push   %rbp
+0001     4c41:	48 89 e5             	mov    %rsp,%rbp
+0004     4c44:	41 57                	push   %r15
+0006     4c46:	41 56                	push   %r14
+0008     4c48:	41 55                	push   %r13
+000a     4c4a:	41 54                	push   %r12
+000c     4c4c:	55                   	push   %rbp
+000d     4c4d:	48 89 f8             	mov    %rdi,%rax
+0010     4c50:	48 89 f5             	mov    %rsi,%rbp
+0013     4c53:	4c 8b 50 10          	mov    0x10(%rax),%r10
+0017     4c57:	4c 8b 58 18          	mov    0x18(%rax),%r11
+001b     4c5b:	4c 8b 60 20          	mov    0x20(%rax),%r12
+001f     4c5f:	4c 8b 68 28          	mov    0x28(%rax),%r13
+0023     4c63:	4c 8b 70 30          	mov    0x30(%rax),%r14
+0027     4c67:	4c 8b 78 38          	mov    0x38(%rax),%r15
+002b     4c6b:	50                   	push   %rax
+002c     4c6c:	31 c0                	xor    %eax,%eax
+002e     4c6e:	b9 00 fc 00 00       	mov    $0xfc00,%ecx
+0033     4c73:	48 f7 c5 02 00 00 00 	test   $0x2,%rbp
+003a     4c7a:	74 01                	je     4c7d <__tdx_hypercall+0x3d>
+003c     4c7c:	fb                   	sti
+003d     4c7d:	66 0f 01 cc          	tdcall
+0041     4c81:	48 85 c0             	test   %rax,%rax
+0044     4c84:	75 36                	jne    4cbc <__tdx_hypercall+0x7c>
+0046     4c86:	58                   	pop    %rax
+0047     4c87:	48 f7 c5 01 00 00 00 	test   $0x1,%rbp
+004e     4c8e:	74 18                	je     4ca8 <__tdx_hypercall+0x68>
+0050     4c90:	4c 89 50 10          	mov    %r10,0x10(%rax)
+0054     4c94:	4c 89 58 18          	mov    %r11,0x18(%rax)
+0058     4c98:	4c 89 60 20          	mov    %r12,0x20(%rax)
+005c     4c9c:	4c 89 68 28          	mov    %r13,0x28(%rax)
+0060     4ca0:	4c 89 70 30          	mov    %r14,0x30(%rax)
+0064     4ca4:	4c 89 78 38          	mov    %r15,0x38(%rax)
+0068     4ca8:	4c 89 d0             	mov    %r10,%rax
+006b     4cab:	45 31 d2             	xor    %r10d,%r10d
+006e     4cae:	45 31 db             	xor    %r11d,%r11d
+0071     4cb1:	5d                   	pop    %rbp
+0072     4cb2:	41 5c                	pop    %r12
+0074     4cb4:	41 5d                	pop    %r13
+0076     4cb6:	41 5e                	pop    %r14
+0078     4cb8:	41 5f                	pop    %r15
+007a     4cba:	5d                   	pop    %rbp
+007b     4cbb:	c3                   	ret
+007c     4cbc:	e8 00 00 00 00       	call   4cc1 <__tdx_hypercall+0x81>	4cbd: R_X86_64_PLT32	__tdx_hypercall_failed-0x4
+0081     4cc1:	eb f9                	jmp    4cbc <__tdx_hypercall+0x7c>
+0083     4cc3:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+008d     4ccd:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+0097     4cd7:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+00a1     4ce1:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+00ab     4ceb:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+00b5     4cf5:	66 2e 0f 1f 84 00 00 00 00 00 	cs nopw 0x0(%rax,%rax,1)
+00bf     4cff:	90                   	nop
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
