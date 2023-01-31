@@ -2,99 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131E268369C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59806836A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjAaTbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
+        id S231857AbjAaTdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbjAaTbm (ORCPT
+        with ESMTP id S230303AbjAaTdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:31:42 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064EC410A0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:31:41 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso11466260wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:31:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8jbLQVc6c4NcLPpk4YcrEqS6jnb0zXu0aRxcozDrrDw=;
-        b=ObyGEWDLK93TYPF0rI0cs3Ra6+/KcHG+nugypmJtapYohin0cVPYmSKl927VH5BZ6f
-         tTbG7iU0vS8UGGKFVv/FMuS1X02C6tFQ8Kor8WycYtV9zkKeP+tf8xNYorbuSzEyMnjq
-         Hs2ZEAYId9c1NvUxK/D4qbR8dNv7uJ06NiTRo2/3j8HVVqtgL/bfZLAqb/YBQ9HebI9i
-         /e6l2+O80ehfwjOuKQoluOfPWA/X1iv1hTcXrkAD0GFKKyoBF0taQVxuYymXkMa8y7JB
-         Alx4e9xAm1gv3SMAz+5IyYrnPaeCLborGilT21rLf9TlzeYTK2QnKkb3oamw/HLcpxOF
-         BfDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8jbLQVc6c4NcLPpk4YcrEqS6jnb0zXu0aRxcozDrrDw=;
-        b=obVz70+3hXwyxvs4C6CoPcE9NrH6NW3CjjqIuw7JNzbk2mRZENRWoLYar8etj/oljX
-         NGdZX5BdjGU3cWE9MEC5Q9DtdAsOiDT7ZiygbHpcTqi6oU6ZRTFB6yOunE+QU1CvMJKb
-         Qi3JnVOOFruo1ZQWthzdV2g8zTfVWe4eicMZmg8LKoi+1+Ndd1QdMar/+CPbWyu13HRP
-         SFeC+NAuRNuGTQA+y4QtxfXGAUKJpufj01e/0x4QOS8cIxxwdKj6rKrTlao8J0R83Iv7
-         BPj4e507x4d777mZKHZyFcHdOgbQR85MRJhc6QXI5bjU/GTBa0T8LwFFAaztiNYWxC72
-         gqqw==
-X-Gm-Message-State: AO0yUKW5QBYwKC2CrOfLahbXdIQBqQl88MguCA0p3EXTveAdYZTo0wZZ
-        zcZGOypXJBZdyRrZ3jzFxT1Vlw==
-X-Google-Smtp-Source: AK7set9vJ0aBsq1GVkQMrZJF464MEAl8JPMUuQEAOZYkmfSVWb2hMh+knkqFl4MERo+XBGRi/BRtkQ==
-X-Received: by 2002:a05:600c:3d95:b0:3dc:4636:7426 with SMTP id bi21-20020a05600c3d9500b003dc46367426mr14611454wmb.13.1675193499383;
-        Tue, 31 Jan 2023 11:31:39 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05600c468b00b003dc4050c97bsm189428wmo.3.2023.01.31.11.31.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 11:31:38 -0800 (PST)
-Message-ID: <f87d1721-c6d6-fc7d-bcdf-f66755b89966@linaro.org>
-Date:   Tue, 31 Jan 2023 20:31:36 +0100
+        Tue, 31 Jan 2023 14:33:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD162720;
+        Tue, 31 Jan 2023 11:33:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01A21B81E83;
+        Tue, 31 Jan 2023 19:33:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01AEC433EF;
+        Tue, 31 Jan 2023 19:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675193597;
+        bh=zC/ai8uytmhWNu+O0kLSPbt20Ti3ixHRPXWEFI+STvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yq2tVrAi0s1sC07GmPdoRbP4sXd/QpLLL8VJxYlGgQXYnpATcIXX/WoIDlrOuYD5c
+         AlPNDj/hncSPiUf2yabogFogc6vvj5n7T6kqqwDPHop7ymPyJFdFWBUIbwSNylvTN2
+         hipdGyfOKDFh4A3QoyloqzFZthru0fUJ2n6zzkh4UL9Snuh4+ySbRACL0ID2OeVK18
+         CuRflFz0VFxkvMaFDLjunlMQcxqXmF9LyiENUZtK/ec1NVSc9m+lyS9tAhSxLt1VBb
+         1rGNXy0HX6FTdikAAbiA3P/fRfXQy7ZTZDQP/HBe5Pc190smtZyxzx5vCtReZWuVYT
+         YQAroVfO/eaqQ==
+Date:   Tue, 31 Jan 2023 12:33:14 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Connor OBrien <connoro@google.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
+Message-ID: <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
+References: <20230124064324.672022-1-irogers@google.com>
+ <20230124064324.672022-2-irogers@google.com>
+ <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
+ <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
+ <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V2 1/9] dt-bindings: pinctrl: qcom: add IPQ5332 pinctrl
-Content-Language: en-US
-To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        shawnguo@kernel.org, arnd@arndb.de, dmitry.baryshkov@linaro.org,
-        marcel.ziswiler@toradex.com, nfraprado@collabora.com,
-        robimarko@gmail.com, quic_gurus@quicinc.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230130114702.20606-1-quic_kathirav@quicinc.com>
- <20230130114702.20606-2-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230130114702.20606-2-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 12:46, Kathiravan Thirumoorthy wrote:
-> From: Kathiravan T <quic_kathirav@quicinc.com>
+On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
+> On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > Hi Ian,
+> > >
+> > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
+> > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
+> > > > after tools/scripts/Makefile.include is included, meaning flags are
+> > > > set assuming say CC is gcc, but then it can be later set to HOSTCC
+> > > > which may be clang. tools/scripts/Makefile.include is needed for host
+> > > > set up and common macros in objtool's Makefile. Rather than override
+> > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
+> > > > builds and the linkage step. This means the Makefiles don't see things
+> > > > like CC changing and tool flag determination, and similar, work
+> > > > properly.
+> > > >
+> > > > Also, clear the passed subdir as otherwise an outer build may break by
+> > > > inadvertently passing an inappropriate value.
+> > > >
+> > > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > > ---
+> > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
+> > > >  1 file changed, 7 insertions(+), 10 deletions(-)
+> > > >
+> > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> > > > index 1fe0082b2ecc..daed388aa5d7 100644
+> > > > --- a/tools/bpf/resolve_btfids/Makefile
+> > > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > > @@ -18,14 +18,11 @@ else
+> > > >  endif
+> > > >
+> > > >  # always use the host compiler
+> > > > -AR       = $(HOSTAR)
+> > > > -CC       = $(HOSTCC)
+> > > > -LD       = $(HOSTLD)
+> > > > -ARCH     = $(HOSTARCH)
+> > > > +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
+> > > > +               EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> > > > +
+> > > >  RM      ?= rm
+> > > >  CROSS_COMPILE =
+> > > > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
+> > > > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
+> > > >
+> > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+> > > >
+> > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+> > > >
+> > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+> > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+> > > > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
+> > > > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+> > > >                   $(abspath $@) install_headers
+> > > >
+> > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+> > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+> > > > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
+> > > > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+> > > >                   $(abspath $@) install_headers
+> > > >
+> > > >  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+> > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
+> > > >  include $(srctree)/tools/build/Makefile.include
+> > > >
+> > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+> > > > -     $(Q)$(MAKE) $(build)=resolve_btfids
+> > > > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
+> > > >
+> > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+> > > >       $(call msg,LINK,$@)
+> > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> > > >
+> > > >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
+> > > >                              $(OUTPUT)/.*.o.cmd           \
+> > > > --
+> > > > 2.39.0.246.g2a6d74b583-goog
+> > > >
+> > >
+> > > I just bisected a linking failure when building resolve_btfids with
+> > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
+> > > Alter how HOSTCC is forced") in the bpf-next tree.
+> > >
+> > > It appears to be related to whether or not CROSS_COMPILE is specified,
+> > > which we have to do for certain architectures and configurations still.
+> > > arm64 is not one of those but it helps demonstrate the issue.
+> > >
+> > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
+> > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
+> > >
+> > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
+> > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
+> > >   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
+> > >   ...
+> > >
+> > > Before your change, with V=1, I see:
+> > >
+> > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
+> > >
+> > > After, I see:
+> > >
+> > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
+> > >
+> > > We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
+> > > target of resolve_btfids-in.o) and we dropped the warning flags.
+> > >
+> > > I think this comes from the clang block in
+> > > tools/scripts/Makefile.include, which is included into the
+> > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
+> > >
+> > > I am not super familiar with the tools build system, otherwise I would
+> > > try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
+> > > simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
+> > > did not appear to resolve it for me.
+> > >
+> > > If there is any other information I can provide or patches I can test,
+> > > please let me know.
+> > >
+> > > Cheers,
+> > > Nathan
+> >
+> > Thanks Nathan, and thanks for all the details in the bug report. I'm
+> > looking into this.
+> >
+> > Ian
 > 
-> Add device tree bindings for IPQ5332 TLMM block.
+> Given the somewhat complicated cross compile I wasn't able to get a
+> reproduction. Could you see if the following addresses the problem:
+
+As long as you have an LLVM toolchain that targets AArch64 and your
+host, you should be able to reproduce this issue with those commands
+verbatim, as that command should not use any GNU binutils. I am pretty
+sure I tried it in a fresh container before reporting it but it is
+possible that I did not.
+
+> ```
+> diff --git a/tools/bpf/resolve_btfids/Makefile
+> b/tools/bpf/resolve_btfids/Makefile
+> index daed388aa5d7..a06966841df4 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -19,10 +19,9 @@ endif
 > 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
+> # always use the host compiler
+> HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)"
+> ARCH="$(HOSTARCH)" \
+> -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> +                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> CROSS_COMPILE=""
+> 
+> RM      ?= rm
+> -CROSS_COMPILE =
+> 
+> OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+> ```
+> 
 
+Unfortunately, it does not. I still see '--target=' end up in the
+CFLAGS of those files.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Cheers,
+Nathan
