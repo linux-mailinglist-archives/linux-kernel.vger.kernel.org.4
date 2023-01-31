@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F62E682078
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB69682086
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:19:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjAaAOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 19:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S229750AbjAaATD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 19:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjAaAOs (ORCPT
+        with ESMTP id S229495AbjAaATC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:14:48 -0500
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04530234C3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:14:47 -0800 (PST)
-Received: by mail-vk1-xa2b.google.com with SMTP id l20so6596712vkm.11
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:14:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VJ1hdrD4+HJQqYfIASw8Elso+UJSyLi7CZGbdOjeE3U=;
-        b=iCd8p3KsBYcx165BHFhjNscpu5vwjEom6JIjr8DXGvPflHdaDCEYPCBVqkHcxn5Agw
-         hBszJfX42ZsVQkMXjYHVGL51XBuo2/iBw8fPEhpXdpQADeN2XX0OqXZtmBnfmcqF3M9V
-         AjniYA3Gpk5BoglEG77yIOBQFMyR4XaUZ+MvHEHca0NPJhzQhy4rl7toQ11HVi6uIY/f
-         UpW9Us1xoV9+DQK+sZXNGBYZl66Iaa+Mu/5c2ACqBv5zYhzvWTfmb9eD+aElFsWA66NW
-         hjCHHL/drDY73+RHGMpV7zVMMKealK0pp0tQnrxbX6WdkQNxtZoUPhYjiveVXjjIz/5K
-         6JDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VJ1hdrD4+HJQqYfIASw8Elso+UJSyLi7CZGbdOjeE3U=;
-        b=f9ATQRNGlF3570Vys73wXPBQavNbdWQ1TLpCyGygdlQA4RhBFhgZDLUCI4S8Xvj3I0
-         L+NGinsUwnC994UQeV0DN3hn9y+OdfPQHtZOieDRXGr4cgTSmg8ua6IUDC0VVJZAj64e
-         /vha35ZEqxsBKLAtfu1Jr/p5SMq1TA5S1f81Onr4U5VkWSus/rh5jAAHwmsGxubvPJMu
-         +4A36p7j4Ipj0TYmPlwodu5mpnag2RmI0Ovt+ocmA3Ht9quExF1K6HKPbDIf4wkcYxRb
-         j5dZ07Nx27T43mMXLaqtJHopDLxfBDXzUBNMag8T7CzFoi/z5JsxC9cqSrrxPTqywAHY
-         BMoQ==
-X-Gm-Message-State: AO0yUKVP2r59r3IZ+V71JcxFFshgD5aONyyDaulPleZwIeOJpWlBZIsE
-        69iTdDykcfQGC2GcREGerfqJPetApWoQb2faok5LSw==
-X-Google-Smtp-Source: AK7set/hyAoJM49lyt0V8W2pMN9Ouelb9rmIVOrGn/1QZoGauQ7QWcDbcJiHVpdnmajSvTWomJ0hNUNLxGEYISh7ITA=
-X-Received: by 2002:a1f:b695:0:b0:3e2:5b03:a395 with SMTP id
- g143-20020a1fb695000000b003e25b03a395mr3012579vkf.4.1675124086060; Mon, 30
- Jan 2023 16:14:46 -0800 (PST)
+        Mon, 30 Jan 2023 19:19:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A701199DD
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:18:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675124298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=39hxHqbfr6Ee10w1IwoFvohjZhArDKGOQzbMUZIMMyg=;
+        b=D21sEto99rQ9PJNufxXqQoO0Po2JTJPGB0pX7O1scaPtQOD0IsbWV6XqqgrY2MgSOEfL7A
+        PDirgkuG+67AKA2zz8+DFwrCL8bBSGQnviKZvRiUMnM/tyA8nc+br2OpQ60TNrLNDbF0FG
+        t7hneDdp9efbzJzSQLmBGSDfmNjZnGA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-195-wnYBeXxsPdWtxRzFqF5AYA-1; Mon, 30 Jan 2023 19:18:15 -0500
+X-MC-Unique: wnYBeXxsPdWtxRzFqF5AYA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99D40855304;
+        Tue, 31 Jan 2023 00:18:14 +0000 (UTC)
+Received: from localhost (unknown [10.22.34.152])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C415B492B05;
+        Tue, 31 Jan 2023 00:18:13 +0000 (UTC)
+Date:   Mon, 30 Jan 2023 21:18:12 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Luis Goncalves <lgoncalv@redhat.com>
+Subject: [ANNOUNCE] 5.10.165-rt81
+Message-ID: <Y9heROlmtFkLFUIi@uudg.org>
 MIME-Version: 1.0
-References: <20230128071007.1134942-1-davidgow@google.com> <CAFd5g47r-J+0FMt+F3pmVWBBKNXEqRD03Jh_i2HjUBhZBM8rdg@mail.gmail.com>
-In-Reply-To: <CAFd5g47r-J+0FMt+F3pmVWBBKNXEqRD03Jh_i2HjUBhZBM8rdg@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 31 Jan 2023 08:14:31 +0800
-Message-ID: <CABVgOS=Wegv+PiA2N2Eo5zxEDWi_5m9PuoLJPMxw2d2SR0FWEg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Add "hooks" to call into KUnit when it's built as
- a module
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001f1b8a05f384384b"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,132 +70,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001f1b8a05f384384b
-Content-Type: text/plain; charset="UTF-8"
+Hello RT-list!
 
-On Tue, 31 Jan 2023 at 08:04, Brendan Higgins <brendanhiggins@google.com> wrote:
->
-> On Sat, Jan 28, 2023 at 2:10 AM 'David Gow' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > KUnit has several macros and functions intended for use from non-test
-> > code. These hooks, currently the kunit_get_current_test() and
-> > kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
-> >
-> > In order to support this case, the required functions and static data
-> > need to be available unconditionally, even when KUnit itself is not
-> > built-in. The new 'hooks.c' file is therefore always included, and has
-> > both the static key required for kunit_get_current_test(), and a table
-> > of function pointers in struct kunit_hooks_table. This is filled in with
-> > the real implementations by kunit_install_hooks(), which is kept in
-> > hooks-impl.h and called when the kunit module is loaded.
-> >
-> > This can  be extended for future features which require similar
-> > "hook" behaviour, such as static stubs, by simply adding new entries to
-> > the struct, and the appropriate code to set them.
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> I agree with Rae that a new file for just setting the pointer seems a
-> bit much, but I also understand the point of separating it out now -
-> not sure of a better place for it to live. Aside from that, looks good
-> to me:
->
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+I'm pleased to announce the 5.10.165-rt81 stable release.
 
-Thanks Rae and Brendan.
+You can get this release via the git tree at:
 
-The reasoning behind the separate file here is that, because the hook
-implementations are not "static" (as they can be found spread across
-different files), they need to have a separate prototype. This
-would've required two prototypes (one in the file which had the
-implementation, one in the file which set the pointer), so it made
-sense to combine these into one header.
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Adding the code to set the function pointers to that header made sense
-just to keep a couple of the lists of hooks together. It's still a
-pain that these are spread between "hooks-impl.h" and "test-bug.h",
-but it's probably worth it to avoid either making all of the hook
-implementations even more public, or using the more complicated macro
-magic (at least for now).
+  branch: v5.10-rt
+  Head SHA1: 9831945c5ac7aafa7ed18026b149fe119b72c38a
 
-Cheers,
--- David
+Or to build 5.10.165-rt81 directly, the following patches should be applied:
 
---0000000000001f1b8a05f384384b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBB
-cQKFr8R5Kbgtlyvq3edkouVX2HXdydOqaeePFh4HcjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMzEwMDE0NDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAK6+sxRrfFXwYYwsNLerD
-2T1dgh0fIpoCGiBgGGog1V7OO2ftBOc//eM6oOz1xykyF+Ux1qp0YVq51d6kMh31lJVIzMaRbo/D
-fUZzupMuwl12LAc/BwtND9eMswgBfbBSuFh4bk3XjYRvc73VdRnbT5ifbyt4qersl9KGtb4ckZLo
-44GkZQ2PkGKDEXQso9m/EduFi1N1Lvm3jyIjOMr0Qvrva51R3molu58Ro1fcgSGnb37rHlFVOACR
-BUsCBcfrphk939hpHIu8jNK31kx5ZU23/Pqd7vROKFzYpTyh/XaLbiNzUW7bWLqwQs/hMafyDS+s
-iS1Mki3RPHMa3/LPfg==
---0000000000001f1b8a05f384384b--
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.165.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/older/patch-5.10.165-rt81.patch.xz
+
+Signing key fingerprint:
+
+  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
+
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Luis
+
