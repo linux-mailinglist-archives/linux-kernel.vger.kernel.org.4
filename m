@@ -2,216 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0505F682D9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7958D682D9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbjAaNTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:19:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S231253AbjAaNSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjAaNTn (ORCPT
+        with ESMTP id S229828AbjAaNSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:19:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB962D4A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:18:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675171081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x4bwdw1aSPYZ1pnRb1AP80waYO8ZcjQgvsJtbjc2ZE8=;
-        b=SivkFE6aSzCA9aeeYoWDeI/2PAj/UoYn/OxaJ92vuryifY0xiaPNT0fWj/Fah5n2nYD/O+
-        WDxZ3oC4I/D4sf+TYO3SrSB/dfMrl1AgF15D6uLt+Zo/oQSW9TbQFhT3HJ5iocD3uqKIx+
-        Gmn2jfk9Pt/JXyfLMlEE0Tz/uoAs5eo=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-144-KWjEXTL7PsCGwjvD8RrKbA-1; Tue, 31 Jan 2023 08:18:00 -0500
-X-MC-Unique: KWjEXTL7PsCGwjvD8RrKbA-1
-Received: by mail-qk1-f197.google.com with SMTP id a3-20020a05620a438300b007069b068069so9004725qkp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:18:00 -0800 (PST)
+        Tue, 31 Jan 2023 08:18:48 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC8D4FAEF
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:18:12 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id pj3so1342434pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:18:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=RUPOFXSiFqFDkTBIM2iuxVDE2FxqjRSmdHPSkuTbjvs=;
+        b=GdqyDwbmy5rnoq9oZbPnp5mA5ZVZNhV4irkutSKNey2T//p0bsMbfsN1KO390PDMYb
+         oY2xmoy4bF0IqR+sydYjHaNHkGx8pNSDAA72w7vh0UodEPziE8RmW74fsMebiEGOllh+
+         pMKJSv3k2BZ635niC98nD1v1mPhTR/MGZtbtM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x4bwdw1aSPYZ1pnRb1AP80waYO8ZcjQgvsJtbjc2ZE8=;
-        b=JtLVg44BT0m5AApIuqmoemlZ2fKOQNWF+1cvDIYqZa6+2Hu2jcrl1kBBnuGY2oOmlh
-         07IvKvrSFj2NvBx0GHVtErXx+JhbYoy69SQdk4ILlN7pJ2QQ5m9F0OvY2yh495HDSAT9
-         6k4VTu+8/h7qsxPh/9R+UWwrU1tuPOrYylVnO4HRBDjFq5xCRMFrsN2bffk+y8j2kkwB
-         0pvXeO94yCG7fhWBSOftEg+FukDvnZ17nClWzxCfWgK8ICEGZmo2EtWNMxUUHYXtJhgW
-         K8XDOk6OJAd1EPf8QM8bkp87z+NKySrDtip1D/MK/ZYrEIuGDC8AUgXHfZhgKnJo2NZB
-         gbAA==
-X-Gm-Message-State: AO0yUKXdBra2mRGAGPTj5kMHC0dng9KekKA3CZs6YFcxqBbFFadoUoXn
-        pKlyV2D/jl90Lbeb+H5h2+JRb7b9zDVBI6f55u46xPv5ineImehQIhoShRiDfJYeoaIGNrHtY+g
-        h2H7DijjETDz3mgXGWbLK7xhW
-X-Received: by 2002:a05:622a:215:b0:3b9:b66a:2569 with SMTP id b21-20020a05622a021500b003b9b66a2569mr498716qtx.7.1675171080042;
-        Tue, 31 Jan 2023 05:18:00 -0800 (PST)
-X-Google-Smtp-Source: AK7set87ltHUQpsY7aACkxt04qwLLJLWImkbZ0WWvwja4PThcHH2OSExIMeBK3w6lfygc1WYOv+bTw==
-X-Received: by 2002:a05:622a:215:b0:3b9:b66a:2569 with SMTP id b21-20020a05622a021500b003b9b66a2569mr498690qtx.7.1675171079768;
-        Tue, 31 Jan 2023 05:17:59 -0800 (PST)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id d29-20020ac8615d000000b003b856b73e8bsm5300885qtm.16.2023.01.31.05.17.58
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RUPOFXSiFqFDkTBIM2iuxVDE2FxqjRSmdHPSkuTbjvs=;
+        b=vW29+3Hih1IIeEV9/AjcO7ybZqMqNAY8EYn7rC01WWGjbz1LMFLsx1UXHEKU37r8yA
+         UtZ38egHVrapTTfN0BTJQtjs3SUw87zGkwuBGe9tBvXtV+sZhbaRYbRQBWknZR4KBGGm
+         BeuJQSjbiV7yneicEIkqumlxgcPkpe9K7OrERsHIYDhnD+WnFH8cAyjWff+rV8okEOWY
+         jqGdbdbEvdd//byQkbwawuDt7f2iMvq5KyoOa4fK12QyotTbYM2dgqqbwsHbfQo2MWal
+         pXDZLrWQ3bJ2FziUaYYgaaHCefry2/2VEQttjw7XLyZcnIE8Ondga0/B7UAwrX+LDpD0
+         1g3g==
+X-Gm-Message-State: AO0yUKUq2My8SSZ/lq1kaoiJr9qBhr5dnQHNdmLyRj5lkHnZu/KvjWUn
+        izlBQuCZ8TvT+KC+OUyljfU1vA==
+X-Google-Smtp-Source: AK7set8BEakqNepA6gKGPtI38cFRulrXnuyJElw2b1NAulYQLSiOc80+P+OspHNlxRdbO9q6bgiNTg==
+X-Received: by 2002:a17:902:e74d:b0:196:7103:259f with SMTP id p13-20020a170902e74d00b001967103259fmr12943785plf.7.1675171088675;
+        Tue, 31 Jan 2023 05:18:08 -0800 (PST)
+Received: from [10.176.68.61] ([192.19.148.250])
+        by smtp.gmail.com with ESMTPSA id je5-20020a170903264500b001896522a23bsm9816364plb.39.2023.01.31.05.18.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:17:59 -0800 (PST)
-Subject: Re: [PATCH] samples: ftrace: make some global variables static
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20230130193708.1378108-1-trix@redhat.com>
- <Y9jo1SJpsBRTb2M5@FVFF77S0Q05N>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <159b128f-beee-a382-c2f7-bff39578ac8a@redhat.com>
-Date:   Tue, 31 Jan 2023 05:17:57 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 31 Jan 2023 05:18:07 -0800 (PST)
+Message-ID: <f71ef248-1019-a70d-3f07-1b7874772cf8@broadcom.com>
+Date:   Tue, 31 Jan 2023 14:18:00 +0100
 MIME-Version: 1.0
-In-Reply-To: <Y9jo1SJpsBRTb2M5@FVFF77S0Q05N>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/5] brcmfmac: Drop all the RAW device IDs
+To:     Hector Martin <marcan@marcan.st>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Prutskov <alep@cypress.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
+        Wright Feng <wright.feng@cypress.com>,
+        Ian Lin <ian.lin@infineon.com>,
+        Soontak Lee <soontak.lee@cypress.com>,
+        Joseph chuang <jiac@cypress.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Aditya Garg <gargaditya08@live.com>, asahi@lists.linux.dev,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230131112840.14017-1-marcan@marcan.st>
+ <20230131112840.14017-2-marcan@marcan.st>
+From:   Arend van Spriel <arend.vanspriel@broadcom.com>
+In-Reply-To: <20230131112840.14017-2-marcan@marcan.st>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000b2e9a705f38f2943"
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--000000000000b2e9a705f38f2943
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 1/31/23 2:09 AM, Mark Rutland wrote:
-> On Mon, Jan 30, 2023 at 11:37:08AM -0800, Tom Rix wrote:
->> smatch reports this representative issue
->> samples/ftrace/ftrace-ops.c:15:14: warning: symbol 'nr_function_calls' was not declared. Should it be static?
->>
->> The nr_functions_calls and several other global variables are only
->> used in ftrace-ops.c, so they should be static.
-> This makes sense to me.
->
->> Remove the instances of initializing static int to 0.
+On 1/31/2023 12:28 PM, 'Hector Martin' via BRCM80211-DEV-LIST,PDL wrote:
+> These device IDs are only supposed to be visible internally, in devices
+> without a proper OTP. They should never be seen in devices in the wild,
+> so drop them to avoid confusion.
 
-Checkpatch complains loudly about the initializations, so I removed them.
+Thanks for this cleanup.
 
-bool is an int type and one of the things checkpatch caught.
+Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c       | 4 ----
+>   drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 4 ----
+>   2 files changed, 8 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> index ae57a9a3ab05..93f961d484c3 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
+> @@ -2589,17 +2589,14 @@ static const struct dev_pm_ops brcmf_pciedrvr_pm = {
+>   static const struct pci_device_id brcmf_pcie_devid_table[] = {
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4350_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE_SUB(0x4355, BRCM_PCIE_VENDOR_ID_BROADCOM, 0x4355, WCC),
+> -	BRCMF_PCIE_DEVICE(BRCM_PCIE_4354_RAW_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4356_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43567_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43570_DEVICE_ID, WCC),
+> -	BRCMF_PCIE_DEVICE(BRCM_PCIE_43570_RAW_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4358_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4359_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_2G_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_5G_DEVICE_ID, WCC),
+> -	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_RAW_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4364_DEVICE_ID, BCA),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4365_DEVICE_ID, BCA),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4365_2G_DEVICE_ID, BCA),
+> @@ -2611,7 +2608,6 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4371_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4378_DEVICE_ID, WCC),
+>   	BRCMF_PCIE_DEVICE(CY_PCIE_89459_DEVICE_ID, CYW),
+> -	BRCMF_PCIE_DEVICE(CY_PCIE_89459_RAW_DEVICE_ID, CYW),
+>   	{ /* end: all zeroes */ }
+>   };
+>   
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> index f4939cf62767..a211a72fca42 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> +++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
+> @@ -71,17 +71,14 @@
+>   /* PCIE Device IDs */
+>   #define BRCM_PCIE_4350_DEVICE_ID	0x43a3
+>   #define BRCM_PCIE_4354_DEVICE_ID	0x43df
+> -#define BRCM_PCIE_4354_RAW_DEVICE_ID	0x4354
+>   #define BRCM_PCIE_4356_DEVICE_ID	0x43ec
+>   #define BRCM_PCIE_43567_DEVICE_ID	0x43d3
+>   #define BRCM_PCIE_43570_DEVICE_ID	0x43d9
+> -#define BRCM_PCIE_43570_RAW_DEVICE_ID	0xaa31
+>   #define BRCM_PCIE_4358_DEVICE_ID	0x43e9
+>   #define BRCM_PCIE_4359_DEVICE_ID	0x43ef
+>   #define BRCM_PCIE_43602_DEVICE_ID	0x43ba
+>   #define BRCM_PCIE_43602_2G_DEVICE_ID	0x43bb
+>   #define BRCM_PCIE_43602_5G_DEVICE_ID	0x43bc
+> -#define BRCM_PCIE_43602_RAW_DEVICE_ID	43602
+>   #define BRCM_PCIE_4364_DEVICE_ID	0x4464
+>   #define BRCM_PCIE_4365_DEVICE_ID	0x43ca
+>   #define BRCM_PCIE_4365_2G_DEVICE_ID	0x43cb
+> @@ -92,7 +89,6 @@
+>   #define BRCM_PCIE_4371_DEVICE_ID	0x440d
+>   #define BRCM_PCIE_4378_DEVICE_ID	0x4425
+>   #define CY_PCIE_89459_DEVICE_ID         0x4415
+> -#define CY_PCIE_89459_RAW_DEVICE_ID     0x4355
+>   
+>   /* brcmsmac IDs */
+>   #define BCM4313_D11N2G_ID	0x4727	/* 4313 802.11n 2.4G device */
 
-Tom
+--000000000000b2e9a705f38f2943
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> I appreciate that static variables get implicitly zero initialized, but
-> dropping the initialization is inconsistent with the other control variables,
-> and IMO it's quite confusing, so I'd prefer to keep that for clarity. I note
-> you've also dropped the initialization of a bool to false, whereas the above
-> just mentions int.
->
-> I'd prefer to keep the initialization, but I'll defre to Steve if he thinks
-> differently. :)
->
->> Signed-off-by: Tom Rix <trix@redhat.com>
-> With the above taken into account:
->
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
->
-> Thanks,
-> Mark.
->
->> ---
->>   samples/ftrace/ftrace-ops.c | 24 ++++++++++++------------
->>   1 file changed, 12 insertions(+), 12 deletions(-)
->>
->> diff --git a/samples/ftrace/ftrace-ops.c b/samples/ftrace/ftrace-ops.c
->> index 24deb51c7261..5e891a995dd3 100644
->> --- a/samples/ftrace/ftrace-ops.c
->> +++ b/samples/ftrace/ftrace-ops.c
->> @@ -12,7 +12,7 @@
->>    * Arbitrary large value chosen to be sufficiently large to minimize noise but
->>    * sufficiently small to complete quickly.
->>    */
->> -unsigned int nr_function_calls = 100000;
->> +static unsigned int nr_function_calls = 100000;
->>   module_param(nr_function_calls, uint, 0);
->>   MODULE_PARM_DESC(nr_function_calls, "How many times to call the relevant tracee");
->>   
->> @@ -21,7 +21,7 @@ MODULE_PARM_DESC(nr_function_calls, "How many times to call the relevant tracee"
->>    * be called directly or whether it's necessary to go via the list func, which
->>    * can be significantly more expensive.
->>    */
->> -unsigned int nr_ops_relevant = 1;
->> +static unsigned int nr_ops_relevant = 1;
->>   module_param(nr_ops_relevant, uint, 0);
->>   MODULE_PARM_DESC(nr_ops_relevant, "How many ftrace_ops to associate with the relevant tracee");
->>   
->> @@ -30,7 +30,7 @@ MODULE_PARM_DESC(nr_ops_relevant, "How many ftrace_ops to associate with the rel
->>    * tracers enabled for distinct functions can force the use of the list func
->>    * and incur overhead for all call sites.
->>    */
->> -unsigned int nr_ops_irrelevant = 0;
->> +static unsigned int nr_ops_irrelevant;
->>   module_param(nr_ops_irrelevant, uint, 0);
->>   MODULE_PARM_DESC(nr_ops_irrelevant, "How many ftrace_ops to associate with the irrelevant tracee");
->>   
->> @@ -38,15 +38,15 @@ MODULE_PARM_DESC(nr_ops_irrelevant, "How many ftrace_ops to associate with the i
->>    * On architectures with DYNAMIC_FTRACE_WITH_REGS, saving the full pt_regs can
->>    * be more expensive than only saving the minimal necessary regs.
->>    */
->> -bool save_regs = false;
->> +static bool save_regs;
->>   module_param(save_regs, bool, 0);
->>   MODULE_PARM_DESC(save_regs, "Register ops with FTRACE_OPS_FL_SAVE_REGS (save all registers in the trampoline)");
->>   
->> -bool assist_recursion = false;
->> +static bool assist_recursion;
->>   module_param(assist_recursion, bool, 0);
->>   MODULE_PARM_DESC(assist_reursion, "Register ops with FTRACE_OPS_FL_RECURSION");
->>   
->> -bool assist_rcu = false;
->> +static bool assist_rcu;
->>   module_param(assist_rcu, bool, 0);
->>   MODULE_PARM_DESC(assist_reursion, "Register ops with FTRACE_OPS_FL_RCU");
->>   
->> @@ -55,7 +55,7 @@ MODULE_PARM_DESC(assist_reursion, "Register ops with FTRACE_OPS_FL_RCU");
->>    * overhead. Sometimes a consistency check using a more expensive tracer is
->>    * desireable.
->>    */
->> -bool check_count = false;
->> +static bool check_count;
->>   module_param(check_count, bool, 0);
->>   MODULE_PARM_DESC(check_count, "Check that tracers are called the expected number of times\n");
->>   
->> @@ -64,7 +64,7 @@ MODULE_PARM_DESC(check_count, "Check that tracers are called the expected number
->>    * runs, but sometimes it can be useful to leave them registered so that they
->>    * can be inspected through the tracefs 'enabled_functions' file.
->>    */
->> -bool persist = false;
->> +static bool persist;
->>   module_param(persist, bool, 0);
->>   MODULE_PARM_DESC(persist, "Successfully load module and leave ftrace ops registered after test completes\n");
->>   
->> @@ -114,8 +114,8 @@ static void ops_func_count(unsigned long ip, unsigned long parent_ip,
->>   	self->count++;
->>   }
->>   
->> -struct sample_ops *ops_relevant;
->> -struct sample_ops *ops_irrelevant;
->> +static struct sample_ops *ops_relevant;
->> +static struct sample_ops *ops_irrelevant;
->>   
->>   static struct sample_ops *ops_alloc_init(void *tracee, ftrace_func_t func,
->>   					 unsigned long flags, int nr)
->> @@ -163,8 +163,8 @@ static void ops_check(struct sample_ops *ops, int nr,
->>   	}
->>   }
->>   
->> -ftrace_func_t tracer_relevant = ops_func_nop;
->> -ftrace_func_t tracer_irrelevant = ops_func_nop;
->> +static ftrace_func_t tracer_relevant = ops_func_nop;
->> +static ftrace_func_t tracer_irrelevant = ops_func_nop;
->>   
->>   static int __init ftrace_ops_sample_init(void)
->>   {
->> -- 
->> 2.26.3
->>
-
+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
+2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
+Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
+HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
+KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
+Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
+dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
+OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
+MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
+BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
+ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
+zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
+sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
+BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
+N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
+p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
+YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
+bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBGXQO4RV9EvCrVf9rG
+Rkm24mBb0vCROLuWkrOR0NipgDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
+BTEPFw0yMzAxMzExMzE4MDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
+AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
+BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEA7QwgBgm5tBUFXjgAoYepRE9txfqbLt5Zq7Pu
+xpTsFhQ5rGsz2WnNG9wqsxQZ8lvvuxBGyKif0p8bwZxb49XCtZixUmCWjKGJz+uSLwTPL1P3ObkH
+NI8wRBh5J2dOx+7CRSvs8v6t5RzmZyusrtIxB56pV3qF6UJ3lWo9trBWopQf0mZdiqDI92nLykPn
+6GKGG+BrRRW/a+d+CiygcJJejjyu6q9Gjin01CAOG+kaOTTq1vpwCMtsG52hwhxeJ6wMBkfkey+B
+PoDMriHmNMCq1p4/wM5/TFkTYczOIkNc9e1NFpmdtMHzc80j9VPhGKZea8BTo5ZhU8KYjSJPAnqg
+aA==
+--000000000000b2e9a705f38f2943--
