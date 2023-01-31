@@ -2,177 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3D2682EDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E065682EE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjAaOIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S231737AbjAaOJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:09:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjAaOIw (ORCPT
+        with ESMTP id S229686AbjAaOJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:08:52 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C002836FFC;
-        Tue, 31 Jan 2023 06:08:50 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 69D8F22B05;
-        Tue, 31 Jan 2023 14:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1675174129; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T49m4aNneycdJRUox2NnWvbDHKOK5LQ0u6zBagVR6NY=;
-        b=19R4zxNGaLGs0/BdyhligmSWKz7ncKw4I9vEaCeJbqvAajD+uc6ET5AkprNHNtGxxTaWE3
-        0ufCmT501ll9cnG5BVbwJ1I5evVot1UbC9ZFNvj1AJTanWK7on2pM1aV2ql50USH5b+oyu
-        uIt7lKO+GN8nQQdrYzdqRIm2OEVTxNI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1675174129;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T49m4aNneycdJRUox2NnWvbDHKOK5LQ0u6zBagVR6NY=;
-        b=z2/uq1WlpP3hZGyMEyL9G0pYl2Vz7xEmuiuYkEuS7QEeRHzP5SU+PqQxN8+KvFbFYWng4I
-        1U0pLFoHuEecFyCg==
-Received: from hawking.suse.de (unknown [10.168.4.11])
-        by relay2.suse.de (Postfix) with ESMTP id E15DE2C141;
-        Tue, 31 Jan 2023 14:08:48 +0000 (UTC)
-Received: by hawking.suse.de (Postfix, from userid 17005)
-        id 9D17F440D4E; Tue, 31 Jan 2023 15:08:48 +0100 (CET)
-From:   Andreas Schwab <schwab@suse.de>
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/5] pinctrl: starfive: Add StarFive JH7110 sys
- controller driver
-References: <20221220005529.34744-1-hal.feng@starfivetech.com>
-        <20221220005529.34744-5-hal.feng@starfivetech.com>
-X-Yow:  My polyvinyl cowboy wallet was made in Hong Kong by Montgomery Clift!
-Date:   Tue, 31 Jan 2023 15:08:48 +0100
-In-Reply-To: <20221220005529.34744-5-hal.feng@starfivetech.com> (Hal Feng's
-        message of "Tue, 20 Dec 2022 08:55:28 +0800")
-Message-ID: <mvm4js6zthr.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Tue, 31 Jan 2023 09:09:47 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755493B3C1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:09:46 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id u72so18184885ybi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:09:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFbhQuUo0EANg9ln/8HeggaLONs0W8b8hm90uzCebrE=;
+        b=lXhE5QJ/7ynLxd0cKoZKcWrPZ6pZhe0ydWHoxEQ/fP/wC8I/V4QxGpbSmQ+lUnnxpJ
+         cQOR0kISIROUfHgSW1INj/zCUMXF+Wai+tZBZB3QFx9b3nTUbHJYkQwUa3dYh8oB13JG
+         KOjEN+l+fCxXvlyUNAdGYSYZ2M8wrnzi7vDXBxbh+Tl8SW3Lctl8pBjI4OR0GC8G60J8
+         3hfq5FdUZBBFsnOR0DvOX84zihVdGl6Yunew8uFOeiSSEKQqfKTguockjtrAaGcHDEFy
+         wzxww5QFFjhj3osj0P8C469s+iKMfKluIZiLfk9KW0ax4UF5Drst1JXxv6PkWaY2j/Y+
+         Nqew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wFbhQuUo0EANg9ln/8HeggaLONs0W8b8hm90uzCebrE=;
+        b=oCDVFLZZctKv6R9N3B/i7SpuX93OhoBTy6kUSKU47Dt1rZY9fdeP4mrQnIrg3WGxCH
+         Lvk2+BMLed6OeWGqfnfaRaLwmUUNHBLeXai1guhb/DOz5CCScuGjO3xjPplrNCMhST/f
+         u5BIvPuuMLot4tiYHbJHqG95qLEC0xuFzHayZco4jkkTe4fFicUMAVc6lDnzmJrDy1Yt
+         Eh0J4pWnnNtKhnpYUSqIarTxurVUwrDr+R3Ai/wQmtHEFaJ1iegXnFYJ8OrKWXX2Jfwq
+         pZoi3ZKNjFZPSjVZ5zgs7+4Zglod52gQ7VFnIwARBtfGRppEe4rorP0nbT5EkHHogST8
+         mPZA==
+X-Gm-Message-State: AO0yUKUA/EP8iJRXwP0JCZOk/9/zXkGgL+OhRjoMkE3SPdMnpU65WJ6c
+        QiYSd+G+jHBIH+JUUQS/uQ8Hx+A0+exQQEztykh0751DCwn+XQ==
+X-Google-Smtp-Source: AK7set/JyxFpgXjZ39+OJTzGZlXsVX4g48dYlb2Ht7MOnFxjEwFbvN6pnKjEeiiK9Cg01y2Xr8GRYPFw+j/bzlCRElw=
+X-Received: by 2002:a25:d884:0:b0:80b:66c5:9fc5 with SMTP id
+ p126-20020a25d884000000b0080b66c59fc5mr3400674ybg.210.1675174185738; Tue, 31
+ Jan 2023 06:09:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131140304.626779-1-clabbe@baylibre.com> <20230131140304.626779-2-clabbe@baylibre.com>
+In-Reply-To: <20230131140304.626779-2-clabbe@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 31 Jan 2023 15:09:34 +0100
+Message-ID: <CACRpkdZpcEUhk_rXdT9B7Y-38Z5cJ8QM26XXNkK-Udr=foVOcA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] leds: remove ide-disk trigger
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     lee@kernel.org, pavel@ucw.cz, robh+dt@kernel.org,
+        jacek.anaszewski@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dez 20 2022, Hal Feng wrote:
+On Tue, Jan 31, 2023 at 3:03 PM Corentin Labbe <clabbe@baylibre.com> wrote:
 
-> diff --git a/drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c b/drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c
-> new file mode 100644
-> index 000000000000..85df9d0ae1de
-> --- /dev/null
-> +++ b/drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c
-> @@ -0,0 +1,979 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Pinctrl / GPIO driver for StarFive JH7110 SoC
-> + *
-> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/clk.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/io.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/spinlock.h>
-> +
-> +#include <linux/pinctrl/pinctrl.h>
-> +#include <linux/pinctrl/pinmux.h>
-> +
-> +#include <dt-bindings/pinctrl/starfive,jh7110-pinctrl.h>
-> +
-> +#include "../core.h"
-> +#include "../pinctrl-utils.h"
-> +#include "../pinmux.h"
-> +#include "../pinconf.h"
-> +#include "pinctrl-starfive-jh7110.h"
+> No user of ide-disk remains, so remove this deprecated trigger.
+> Only a few platforms used this and were fixed in 2016.
+>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 
-This misses a couple of headers, see commit 042b93c9b666.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c: In function 'jh7110_pin_dbg_show':
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:100:9: error: implicit declaration of function 'seq_printf'; did you mean 'bstr_printf'? [-Werror=implicit-function-declaration]
-  100 |         seq_printf(s, "%s", dev_name(pctldev->dev));
-      |         ^~~~~~~~~~
-      |         bstr_printf
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c: At top level:
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:538:21: error: variable 'jh7110_pinconf_ops' has initializer but incomplete type
-  538 | static const struct pinconf_ops jh7110_pinconf_ops = {
-      |                     ^~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:539:10: error: 'const struct pinconf_ops' has no member named 'pin_config_get'
-  539 |         .pin_config_get         = jh7110_pinconf_get,
-      |          ^~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:539:35: warning: excess elements in struct initializer
-  539 |         .pin_config_get         = jh7110_pinconf_get,
-      |                                   ^~~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:539:35: note: (near initialization for 'jh7110_pinconf_ops')
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:540:10: error: 'const struct pinconf_ops' has no member named 'pin_config_group_get'
-  540 |         .pin_config_group_get   = jh7110_pinconf_group_get,
-      |          ^~~~~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:540:35: warning: excess elements in struct initializer
-  540 |         .pin_config_group_get   = jh7110_pinconf_group_get,
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:540:35: note: (near initialization for 'jh7110_pinconf_ops')
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:541:10: error: 'const struct pinconf_ops' has no member named 'pin_config_group_set'
-  541 |         .pin_config_group_set   = jh7110_pinconf_group_set,
-      |          ^~~~~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:541:35: warning: excess elements in struct initializer
-  541 |         .pin_config_group_set   = jh7110_pinconf_group_set,
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:541:35: note: (near initialization for 'jh7110_pinconf_ops')
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:542:10: error: 'const struct pinconf_ops' has no member named 'pin_config_dbg_show'
-  542 |         .pin_config_dbg_show    = jh7110_pinconf_dbg_show,
-      |          ^~~~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:542:35: warning: excess elements in struct initializer
-  542 |         .pin_config_dbg_show    = jh7110_pinconf_dbg_show,
-      |                                   ^~~~~~~~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:542:35: note: (near initialization for 'jh7110_pinconf_ops')
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:543:10: error: 'const struct pinconf_ops' has no member named 'is_generic'
-  543 |         .is_generic             = true,
-      |          ^~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:543:35: warning: excess elements in struct initializer
-  543 |         .is_generic             = true,
-      |                                   ^~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:543:35: note: (near initialization for 'jh7110_pinconf_ops')
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c: In function 'jh7110_gpio_request':
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:548:16: error: implicit declaration of function 'pinctrl_gpio_request' [-Werror=implicit-function-declaration]
-  548 |         return pinctrl_gpio_request(gc->base + gpio);
-      |                ^~~~~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c: In function 'jh7110_gpio_free':
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:553:9: error: implicit declaration of function 'pinctrl_gpio_free' [-Werror=implicit-function-declaration]
-  553 |         pinctrl_gpio_free(gc->base + gpio);
-      |         ^~~~~~~~~~~~~~~~~
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c: At top level:
-../drivers/pinctrl/starfive/pinctrl-starfive-jh7110.c:538:33: error: storage size of 'jh7110_pinconf_ops' isn't known
-  538 | static const struct pinconf_ops jh7110_pinconf_ops = {
-      |                                 ^~~~~~~~~~~~~~~~~~
-cc1: some warnings being treated as errors
-make[4]: *** [../scripts/Makefile.build:253: drivers/pinctrl/starfive/pinctrl-starfive-jh7110.o] Error 1
-
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
+Yours,
+Linus Walleij
