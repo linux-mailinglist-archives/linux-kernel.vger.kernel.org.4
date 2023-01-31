@@ -2,173 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EF1682A63
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D223682A61
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbjAaKXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S231441AbjAaKXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:23:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjAaKXE (ORCPT
+        with ESMTP id S231127AbjAaKXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:23:04 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E10A5FF4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:22:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675160579; x=1706696579;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cXu0fkS8FTZFoU1MeF5vZ4+gXFVaY+cRljoDthUtj80=;
-  b=JewfLBNuVzp0xDZZV1FBdENEVgO/8fMbc4dCpKsVk38Ct7IkBxH62VDI
-   6v6wn6NGJVZ/+kaxIZ6SC1AEBXK9rX5puqJjx4hE1gT1XrI1gwx5HMHNT
-   sgPpRyAOSlZ3dxDH4peIz0bfzCuYbZSOoFZY7SiOAwNsH7KP0b92VCPZD
-   oFW9+jI785BLy0HL0Vzq5AT7FYXzy0cxI9072v67Tof3oWbWUxObFsQvA
-   zGDv3BqXEenlWL1geltiIihD5xS3/jb2z6H0qktQqLamsKYdslqy+ZiCJ
-   BynR2PGTqQY7OWn0tGPaJ0jVBUNScalwxD+V111FYAekeA1WQspNx8otd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="329074375"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="329074375"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 02:22:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="657821369"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="657821369"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 31 Jan 2023 02:22:49 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMnmq-0004MY-0A;
-        Tue, 31 Jan 2023 10:22:48 +0000
-Date:   Tue, 31 Jan 2023 18:22:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Guenter Roeck <groeck@chromium.org>
-Subject: drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning: stack
- frame size (1040) exceeds limit (1024) in
- 'cros_ec_proto_test_get_sensor_count_legacy'
-Message-ID: <202301311846.Y75Dbssa-lkp@intel.com>
+        Tue, 31 Jan 2023 05:23:00 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C333B8;
+        Tue, 31 Jan 2023 02:22:51 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V88jOV027425;
+        Tue, 31 Jan 2023 10:22:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ooGDWvMmAJQv6/uFVmd1tojNLIC77U8WC0NpSBrNCK0=;
+ b=Vi0FnmBW4KDTixMjnkhcGmKGcfFHRki6CBqUeHBRA/sCE1C3Am+bCFiNg7VlpCrvjkuF
+ JVymoy0UqOj7O3bes7aluKAwPawuoYZINbVUZKoJOZsdb8W6XIF7uUBnrybu2qkpck01
+ hTJulr9dDO3VffRAvYk72840cPnO8GG4ZywhKpKfZkFB5Zu9KMczR99zfpAE7qXPiCOD
+ Vcjxso/El0y/FgUX7nbs3+O1XcKSAV9qkAPDjDluwSDOri5V9Q1ZsEaX9PY85/V5tC9G
+ vPjvYro15r2ArXCqcll8lj9jpIyZeqVdqxszPSugRSJIgBjpUf5UZ5ln3szhffpdgriJ 2w== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nexg40cx0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 10:22:47 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30VAMkc6017721
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 10:22:46 GMT
+Received: from [10.50.40.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 02:22:41 -0800
+Message-ID: <dc32d158-d860-54ff-50cd-e1d96c576ed6@quicinc.com>
+Date:   Tue, 31 Jan 2023 15:52:38 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 4/6] regulator: qcom_smd: Add PMIC compatible for IPQ9574
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_srichara@quicinc.com>,
+        <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
+References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
+ <20230113150310.29709-5-quic_devipriy@quicinc.com>
+ <20230117183835.GA3427325-robh@kernel.org>
+ <11a5fa34-c438-a567-6364-4bf1d0d369e3@quicinc.com>
+ <CAL_JsqKMpW7O_sQ4j+ZBfjGZdJUDosM-kVhcFjaUmXvXCC4L8A@mail.gmail.com>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <CAL_JsqKMpW7O_sQ4j+ZBfjGZdJUDosM-kVhcFjaUmXvXCC4L8A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: AbDZqsHKMtzHG0zfk77MP2ul1DyfGbWu
+X-Proofpoint-ORIG-GUID: AbDZqsHKMtzHG0zfk77MP2ul1DyfGbWu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_04,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1015
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301310090
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tzung-Bi,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   22b8077d0fcec86c6ed0e0fce9f7e7e5a4c2d56a
-commit: 33f0fdba6066b504ee0b5f1480b1f93b06050df6 platform/chrome: cros_ec_proto: add Kunit tests for get_sensor_count
-date:   7 months ago
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230131/202301311846.Y75Dbssa-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 4196ca3278f78c6e19246e54ab0ecb364e37d66a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=33f0fdba6066b504ee0b5f1480b1f93b06050df6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 33f0fdba6066b504ee0b5f1480b1f93b06050df6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/ethernet/mellanox/mlx5/core/steering/ drivers/platform/chrome/ drivers/staging/media/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/platform/chrome/cros_ec_proto_test.c:2530:13: warning: stack frame size (1040) exceeds limit (1024) in 'cros_ec_proto_test_get_sensor_count_legacy' [-Wframe-larger-than]
-   static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
-               ^
-   140/1040 (13.46%) spills, 900/1040 (86.54%) variables
-   1 warning generated.
 
 
-vim +/cros_ec_proto_test_get_sensor_count_legacy +2530 drivers/platform/chrome/cros_ec_proto_test.c
+On 1/28/2023 1:42 AM, Rob Herring wrote:
+> On Fri, Jan 27, 2023 at 10:05 AM Devi Priya <quic_devipriy@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 1/18/2023 12:08 AM, Rob Herring wrote:
+>>> On Fri, Jan 13, 2023 at 08:33:08PM +0530, devi priya wrote:
+>>>> Add mp5496 PMIC compatible string for IPQ9574 SoC
+>>>>
+>>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>>>> ---
+>>>>    .../devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml  | 3 ++-
+>>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml
+>>>> index 8c45f53212b1..7907d9385583 100644
+>>>> --- a/Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml
+>>>> +++ b/Documentation/devicetree/bindings/regulator/qcom,smd-rpm-regulator.yaml
+>>>> @@ -22,7 +22,7 @@ description:
+>>>>      Each sub-node is identified using the node's name, with valid values listed
+>>>>      for each of the pmics below.
+>>>>
+>>>> -  For mp5496, s2
+>>>> +  For mp5496, s1, s2
+>>>>
+>>>>      For pm2250, s1, s2, s3, s4, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11,
+>>>>      l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22
+>>>> @@ -84,6 +84,7 @@ properties:
+>>>>      compatible:
+>>>>        enum:
+>>>>          - qcom,rpm-mp5496-regulators
+>>>> +      - qcom,rpm-ipq9574-mp5496-regulators
+>>>
+>>> Is this a different part than just mp5496? Or used in a different,
+>>> incompatible way?
+>> IPQ6018 and IPQ9574 platforms use the same PMIC MP5496 but they have a
+>> different power layout.So, we plan to update the compatible:
+>> qcom,rpm-mp5496-regulators to
+>> qcom,rpm-ipq6018-mp5496-regulators(target-specific) in the next patchset
+>> as the regulators serve different purposes
+> 
+> You can't just change compatibles. It is an ABI.
+> 
+> This still doesn't make sense to me. The PMIC hasn't changed, so the
+> binding shouldn't. It should be flexible enough to be hooked up to
+> different platforms. That's why we have all the per regulator
+> configuration. What are you missing?
+> 
+> Rob
+Sure got it!
+It should be fine to use the existing mp5496 compatible for IPQ9574 too.
+Will update this in V2
 
-  2529	
-> 2530	static void cros_ec_proto_test_get_sensor_count_legacy(struct kunit *test)
-  2531	{
-  2532		struct cros_ec_proto_test_priv *priv = test->priv;
-  2533		struct cros_ec_device *ec_dev = &priv->ec_dev;
-  2534		struct ec_xfer_mock *mock;
-  2535		int ret, i;
-  2536		struct cros_ec_dev ec;
-  2537		struct {
-  2538			u8 readmem_data;
-  2539			int expected_result;
-  2540		} test_data[] = {
-  2541			{ 0, 0 },
-  2542			{ EC_MEMMAP_ACC_STATUS_PRESENCE_BIT, 2 },
-  2543		};
-  2544	
-  2545		ec_dev->max_request = 0xff;
-  2546		ec_dev->max_response = 0xee;
-  2547		ec_dev->cmd_readmem = cros_kunit_readmem_mock;
-  2548		ec.ec_dev = ec_dev;
-  2549		ec.dev = ec_dev->dev;
-  2550		ec.cmd_offset = 0;
-  2551	
-  2552		for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
-  2553			/* For EC_CMD_MOTION_SENSE_CMD. */
-  2554			{
-  2555				mock = cros_kunit_ec_xfer_mock_addx(test, -EPROTO, EC_RES_SUCCESS, 0);
-  2556				KUNIT_ASSERT_PTR_NE(test, mock, NULL);
-  2557			}
-  2558	
-  2559			/* For readmem. */
-  2560			{
-  2561				cros_kunit_readmem_mock_data = kunit_kzalloc(test, 1, GFP_KERNEL);
-  2562				KUNIT_ASSERT_PTR_NE(test, cros_kunit_readmem_mock_data, NULL);
-  2563				cros_kunit_readmem_mock_data[0] = test_data[i].readmem_data;
-  2564	
-  2565				cros_kunit_ec_xfer_mock_default_ret = 1;
-  2566			}
-  2567	
-  2568			ret = cros_ec_get_sensor_count(&ec);
-  2569			KUNIT_EXPECT_EQ(test, ret, test_data[i].expected_result);
-  2570	
-  2571			/* For EC_CMD_MOTION_SENSE_CMD. */
-  2572			{
-  2573				struct ec_params_motion_sense *data;
-  2574	
-  2575				mock = cros_kunit_ec_xfer_mock_next();
-  2576				KUNIT_EXPECT_PTR_NE(test, mock, NULL);
-  2577	
-  2578				KUNIT_EXPECT_EQ(test, mock->msg.version, 1);
-  2579				KUNIT_EXPECT_EQ(test, mock->msg.command, EC_CMD_MOTION_SENSE_CMD);
-  2580				KUNIT_EXPECT_EQ(test, mock->msg.insize,
-  2581						sizeof(struct ec_response_motion_sense));
-  2582				KUNIT_EXPECT_EQ(test, mock->msg.outsize, sizeof(*data));
-  2583	
-  2584				data = (struct ec_params_motion_sense *)mock->i_data;
-  2585				KUNIT_EXPECT_EQ(test, data->cmd, MOTIONSENSE_CMD_DUMP);
-  2586			}
-  2587	
-  2588			/* For readmem. */
-  2589			{
-  2590				KUNIT_EXPECT_EQ(test, cros_kunit_readmem_mock_offset, EC_MEMMAP_ACC_STATUS);
-  2591			}
-  2592		}
-  2593	}
-  2594	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best Regards,
+Devi Priya
