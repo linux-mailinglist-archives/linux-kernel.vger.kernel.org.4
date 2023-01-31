@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4776820FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033FB682102
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjAaAse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 19:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
+        id S229681AbjAaAtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 19:49:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjAaAsc (ORCPT
+        with ESMTP id S229596AbjAaAtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:48:32 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD872A14B
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:48:30 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id l6-20020a17090a72c600b0022bffd5f3ffso5232119pjk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:48:30 -0800 (PST)
+        Mon, 30 Jan 2023 19:49:33 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0259B227BD
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:49:32 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id c2-20020a25a2c2000000b008016611ca77so14439294ybn.9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:49:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
         bh=lKUtIBE/ENkRt4RJuzSzMJ8r5Hrq45eiIYmJfbJ+24Y=;
-        b=fN8EIj+8JoBBckZaxE6iEHhLf1kuoFjMyok3nPClcggajWZw3/2O4mVTQM0M1XGmRk
-         eDWUBf2JIiP+Qsp0nZXK+hazChMgcFVKjmotnW8P1Pjpiiq2IHYpfHxnSSk8EYJHuauy
-         LP9EU2TFSm82hBPv3OSRsF3GBYQUonMd0Ql59kKBKfgOcXEPtDbRjEDTyG5Ajao5Vb1h
-         Q/0MJozKoY87SlrzX/6bIotSOCxxyM8i9snC0ZAozfROWeAFSI0+UK7+Zw7a1W8GreWe
-         efUYxGyGBVzSORwI+mXbisR1R/SCpQ85UNeusZDx0wY9AQJ0S6Iax8lEm/FR7MkAJ+qK
-         qx5A==
+        b=iFzBlvd9pZBXjS4OcNzdAz9AdDVOyy15+obZD1ypWX3rg7IWVYbVi2OnQRbkvxm5/B
+         XxlbrP1ibtoju5+uHYd+Lq8FfjR+sYL/AG/i+BPNif+PqfY2ggBdcd0fCVUfZ8reMN5w
+         FUy54x8AZiVl4s57JnFcMny0+ZIKvrkUlhKUmEGWuNx/qoAkN1X+0LE5r9OGp/zwHyju
+         7KIfZs6OY+0Bumt/4HYwnfOiPQmbk6AMq+Cc3aEM8Hz14Fx7XRXVxWj5tpw9k0mf+vbv
+         AgM1zPIXKfTsINySjiraqP4NKhPZNXj1O1VZPDzfVmnON8Q7Ve0wfXD4SQXiSxJWptxr
+         6zww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
         bh=lKUtIBE/ENkRt4RJuzSzMJ8r5Hrq45eiIYmJfbJ+24Y=;
-        b=xtYFjInzLpQKPjGSjBTYE4V5sKsRL/IQ4IjVVYSStBQeIPKy9twXceCyMbdzPQNkGH
-         rhpeexRWHDgcEjzAofNj6he2ps7FiycvqawXbolRUXeZPWg8uuj+O6FbPJNwfQmWO/Ce
-         D1QbhBKGtexqBiBUm8XV4LbsfzmKwwG+apTz5mEGOH3GJEsKr/j3IjHGrnV/MHPb0xHB
-         G9pxBDKdD/KC2dTE8sGpVVYWQjPzU5ywnkV+F9Gv7/mYdDhmWIjy3KRXsWQ0eEIU/Soq
-         UPlVGE0uV9HHi98Z7SZR0PAdLOgW9WE9ST2RERtKvC8z0qGU8QLK1UUoTNi3DXWHHkJD
-         r7tw==
-X-Gm-Message-State: AO0yUKWOd9JRwFKL2CazadVesnAWUaK7QCIsv04lYP0izuxXrzmxBk+h
-        GeU07rRQadA7Tks054uXGRbayGKLUg9yxg1xLGXY5BQKW+8xYPksFZqSaTM38su7BrCP/6mA3Nu
-        yPb7SHS3vhCqT2GYWH/U6SGqrPMYp63UAvy14nGN0YMKpbbZbgJF3GA3XyMRAmusO3xlB4RfpKz
-        Ngi/i1vJQ=
-X-Google-Smtp-Source: AK7set+5JVP7ro2YuXE8zZprXiBqj+NTnMQ7KfjXZgshhJRNRTpVuEWdEyCTaIG1XijdszOEdTYwujTJJP90pDjiZw==
+        b=PthG8b0zyXhGeklxKFwtO2/cPB3JMRCc/5Y6VrlodCfagh4tihwGw8wh6wyPSnG6cG
+         u70QMQe/CH09r8XvTFM9BA9VFyUo+mI4FHAaEcRePmIx9K9qIWNY+iEOSO4PUpeRxyeK
+         ZjRuZ8SwkGnonKFk1P+VP0g4agU3ru1c8jY7u68a9jm5hbOUqtqkb+fH6IubMEAaNHYD
+         59TP0hhDp1SoANrmv5sl5mUQJxGwMxtQjWZBr7WrTfKzpqaMb764WfgoCgEm2aUlyFpu
+         n5XVBOWFHa3wkzMkhN/ujhxlY+q8adlihFMT2MmE9Dj9/cL5c085rlnLoY6p6u704Ui8
+         DfGA==
+X-Gm-Message-State: AO0yUKXdxGRrHD16bCR3fjFAhAPrMCqKwhfArqx7zMuEM6/9/HJMHIWD
+        e/bM0lQQpgcqKLMviKa5DsC5LbPMUaDN21gz1pvRIUMpIO7PfE/w5Ux/rMs3fcNN2iX3hBDFHj6
+        Do9x0bl339IKw+BAwy6YCyz2iH826YThHHRvG1lqYXHWrSdibj9Kgalz5fQKxHvUng+xqYQEU4O
+        cHRgR3AFw=
+X-Google-Smtp-Source: AK7set8/3eurtNk8LJ6IMm3gdhP0iBk8Qb5g4dsb354zLcMMibLM090E1s8+aGaCQvxtMjXhnysxxARQRCor9fsIUg==
 X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:903:41c9:b0:196:77ef:d51f with
- SMTP id u9-20020a17090341c900b0019677efd51fmr1124324ple.19.1675126110077;
- Mon, 30 Jan 2023 16:48:30 -0800 (PST)
-Date:   Tue, 31 Jan 2023 00:48:25 +0000
+ (user=dionnaglaze job=sendgmr) by 2002:a81:5204:0:b0:507:86ae:c733 with SMTP
+ id g4-20020a815204000000b0050786aec733mr3122340ywb.358.1675126171196; Mon, 30
+ Jan 2023 16:49:31 -0800 (PST)
+Date:   Tue, 31 Jan 2023 00:49:28 +0000
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230131004825.153120-1-dionnaglaze@google.com>
-Subject: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
+Message-ID: <20230131004928.153623-1-dionnaglaze@google.com>
+Subject: [PATCH v2, RESEND] x86/efi: Safely enable unaccepted memory in UEFI
 From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, x86@vger.kernel.org,
+        linux-efi@vger.kernel.org
 Cc:     Dionna Glaze <dionnaglaze@google.com>,
         Ard Biescheuvel <ardb@kernel.org>,
         "Min M. Xu" <min.m.xu@intel.com>,
