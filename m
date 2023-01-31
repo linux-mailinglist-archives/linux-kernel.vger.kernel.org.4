@@ -2,196 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FB5682289
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755A368228D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjAaDIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S230366AbjAaDJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjAaDIt (ORCPT
+        with ESMTP id S229651AbjAaDJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:08:49 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2066.outbound.protection.outlook.com [40.107.102.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A64A11B
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:08:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FmcFOjfDnr/9jHDLEHdMAsnzpxWayv6r1+9c2LnVay/wADLDEAJ9UuNXGtJDLzEGU9snKt1BQ4D/EI+ir7dN9Wv/oikiALHy5pLNoDqCt0fgM9reKcu3XDjj50oT/fQfvvVgYUaj3z0M6rbL/dncbmWYU4J4Vk9Tq/w7arJR9EH9D0wXHmkAzCX0k1TDJD2sewXvC+QiD4hR46S4oI2KUe0cyIhwiLVhPr/bUv+00/5fV736bTUOYgekeMYI0Tj9UqSTnpwsWU2kE4fOOokle7+X4UGmlBEeIblKvNdCJ7yh9rBToAmlf5bNDZ/0MxTl+bdZqajXf/Znns6zU1RXsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j4RN8BD3HQmGQAzs8Q0coCX16A/PpERXJuYKCrzwpRw=;
- b=iSDTbo1ySmgZ4FXRkSQSXsvFXGCtG0+66euJfKPGVx+mzln/3lRUcNJ1Spzts/viFBXGJTglJ22Dn2nKFiwWax8RJZMCuutl0IIwPGCxUQoLnDhyWz+qawZZPr7XQc7WGGje8wE89A56A5r2G6E0svFk8JlSQnwEThytAD3TkUbv0loCwDewrpH949vTkG5TcwZTF8SI+b8CFCScPYpdxAn+DXH3BJN1kQBtdlvoRj594cLozA/lrxmjJ66kUFhc2YQAILeSxOw5oaYxSF9j0at+4te7rzCzk4y3SFKnRPX3aBOFOptsmitfb67FjZB4ZpQGsuFSD8aK+Afb7JWpfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j4RN8BD3HQmGQAzs8Q0coCX16A/PpERXJuYKCrzwpRw=;
- b=NvK7dcnZXI/6X50c6pfwUS2ONNONgYEKIZ+jK+SOZmhpJs0yo9FglMBT9KFXS/rg4HSo3clW4VIYKDcj3QjGNKHu7fx4foKXVZI1oap9VcylOToIKOH7YIgcAwkP5E3OJmg+Usz1LFdERbWHR0sgRiS1hqbkz5I07IkvMPfUc2s=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6309.namprd12.prod.outlook.com (2603:10b6:8:96::19) by
- BL1PR12MB5030.namprd12.prod.outlook.com (2603:10b6:208:313::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
- 2023 03:08:46 +0000
-Received: from DS7PR12MB6309.namprd12.prod.outlook.com
- ([fe80::8079:86db:f2e5:7700]) by DS7PR12MB6309.namprd12.prod.outlook.com
- ([fe80::8079:86db:f2e5:7700%7]) with mapi id 15.20.6043.033; Tue, 31 Jan 2023
- 03:08:46 +0000
-Message-ID: <a4a83fd2-b1e6-3dce-6881-8abe71c7e934@amd.com>
-Date:   Tue, 31 Jan 2023 08:38:31 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 03/11] virt: sev-guest: Add snp_guest_req structure
-Content-Language: en-US
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, bp@alien8.de,
-        thomas.lendacky@amd.com, pgonda@google.com, jroedel@suse.de,
-        mingo@redhat.com, tglx@linutronix.de, dave.hansen@linux.intel.com,
-        seanjc@google.com, pbonzini@redhat.com, michael.roth@amd.com,
-        ketanch@iitk.ac.in
-References: <20230130120327.977460-1-nikunj@amd.com>
- <20230130120327.977460-4-nikunj@amd.com>
- <CAAH4kHbJEcg9p=mXi2aQZFs1bopZgeqWKiwGWu2V4YsgmwHmmw@mail.gmail.com>
-From:   "Nikunj A. Dadhania" <nikunj@amd.com>
-In-Reply-To: <CAAH4kHbJEcg9p=mXi2aQZFs1bopZgeqWKiwGWu2V4YsgmwHmmw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0097.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9b::16) To DS7PR12MB6309.namprd12.prod.outlook.com
- (2603:10b6:8:96::19)
+        Mon, 30 Jan 2023 22:09:19 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1443C28;
+        Mon, 30 Jan 2023 19:09:18 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id j22so1816585qka.0;
+        Mon, 30 Jan 2023 19:09:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ZOfd2zx+NjgQww/0mU3ZaJ9v79cmnQrDykMgvyCyxY=;
+        b=mzAZo9UKt2apBG+a8Vk+YCpQ2F+UrwegjTc4F5sZHyb/tpmwnBW+FQVFlZv5cFkdTM
+         Fj5UP+IddswiXOskayD5RsC7RdozQ/oVuxzQjiEoFOv7RVpn5VlS+ML+LDykzx778FmC
+         /V2lnjbg+Ko3orxv1yk8tyX2llLuBqKo5OpnW8aKoMTvSPJRiTwVXKHWBqzzjnuuCWRx
+         8iix8Y9x9v4Ox26Zxcq6BJ0ROZyd8tJ254zafSXx08PxCm/dqdecN3l20K/42ZKXn4mQ
+         R9Lxt5ocxE65yPdm3kHMn2yRhfJuV4YCoutiqYVk/m3aJ6fpGygeHBrQjqS4CxJEzOmB
+         hBsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1ZOfd2zx+NjgQww/0mU3ZaJ9v79cmnQrDykMgvyCyxY=;
+        b=wu0tvGS5Ifh09Kk2TUpav2xlE4cMEl9G8u9x8g7IqSTM6C6NN2HaiXAhUV6bQ4xbLC
+         lqCgKOMNHd09HU8SZfh+1sgRkfbHZSnS4QCC6utemAF2jiyQWrY1xPEfpZbk8+d2/mpP
+         84iQ+X4h2xn9OSO0ydh4IZgKsAXIrS5Hd2vaaYoE8QuHg8uthnIR6EQZgBwr72L0bIXY
+         SErkpRL2AVp6LafIducXITo5rLTDtu/Eje401Kc39jHzwaCFoOPCmwpSYzkzAlvaKs+v
+         yoaMbs5tqp22xnpTaZwNy3G2EODdFM9p+Xy3z2PAEiMTVoE0/1Z6hh0DrDIkkXl9T+F9
+         yZDQ==
+X-Gm-Message-State: AO0yUKVqL5Mc/uDYuFsx7Jjc9SxlXblCPI8nm1OYWVJGvtwV4adalyyh
+        OnCDmGKybE2Q0Xs7LnK1R247eDz20MSGpG7yxcI=
+X-Google-Smtp-Source: AK7set/0nBTFpX0vgIbgrVXsLzjuAA5v6zMOAXCuo7yTj9cK+cCPb3/FTeGJLfxyzfnTCHWhJu0cPJPDYnef62asg/Y=
+X-Received: by 2002:a05:620a:2042:b0:724:3c65:e6ee with SMTP id
+ d2-20020a05620a204200b007243c65e6eemr206666qka.456.1675134557070; Mon, 30 Jan
+ 2023 19:09:17 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6309:EE_|BL1PR12MB5030:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ad8712b-b78c-41b6-b296-08db0338774f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gax77G7w7mKOYQrgHCYXofV2ffDNso4hAfCosiKV8B+FWNED/DIQUqYeMu0p7AalHOZtQU22u81CqUol2/LRdbh0ZOZVe74qwwLLqff8pQY0MvUfMC5ExP45g56aJyCj7GK6XxlSeQSbJSuuSs6fTqz9+yFLTL+qXQnchyXGBAXXjG8WU9f9QHpoxdoiy6mP/irKrgJX5FUPJHTAj69Na9bCFQ+amVYd0lWwQedpnfaysot2zJ0jkU/evYP3ZCDA8aAC0cd8v2rjXxAmbA50rddg7T6DoAFZ9SQwWCOSH5MJTmZwq/K39aNXOz4V6t3+3MysgDUFXsZNS2f+J5PVzpFF+iEydn0s+pQfVdsruALjLQukQmODm5u9E+o4ewSf1CP7Hqk/JVQZOCbhpXnLqP7eO2P/UCcXjmYzNPQ01jymjt2UsRH7Tma9wV9sEfcUCM17LS7kwGvratYUTGeRMnj7R+qIegWMnmD9ODuHMvOMR7jXANDN9mLjJGUgzDsRWy21AojX4QZmC0hQlOUmIG+NDMKx+dodKzILznIvqX+aHJbo17UNz399Hs+Q145p58uxMb19lXdUixfXn2RzDUJbpHAqLSg/IYuT/yncujs1eoRSJ7bAZVgYCstGKoxJa3BdGRsNGSLgfg7eAtt6P/BgAJbthx3gcMPt7cuLo7fGZj79FFxVrzuyf0gFLL1UKTCfaarKiQA0U/hHzSfQ8NA+AFJUCU6ZpGBXCeneeoI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6309.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(39860400002)(136003)(396003)(366004)(451199018)(8936002)(41300700001)(7416002)(66556008)(5660300002)(83380400001)(38100700002)(66476007)(2616005)(4326008)(31696002)(36756003)(6486002)(6916009)(8676002)(316002)(478600001)(66946007)(186003)(6506007)(26005)(6512007)(6666004)(53546011)(31686004)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUNXZHNBTTM0SlF1aG10dlpZY1JRNFR6ZDZqZDBNL2Z6Z2pTNXVRYmN0QVB4?=
- =?utf-8?B?Z1NEMVRLTzVqSVRBNGlJblFHWHMwZVpGS1BLL3cxeUh2dzlOSVJWeUJad1lR?=
- =?utf-8?B?T3NIKzFybWl1ODVDN1pWS2JMNDgvSmVPc1p2TEFJenc5M2ZSTFlKb2I4ekdX?=
- =?utf-8?B?MzF1Ymc2L2dSSzlIdnhaNERYVjg0OThpNnVHMWxRWVZCTUFESTYwNDNRaDNs?=
- =?utf-8?B?UGpQaTV6VXpwK0wvMHVuVFNSZDliaFZxT0Rjb1Q4NXhoWFE2SkZ1Ti9WZHhO?=
- =?utf-8?B?M053cnUyM2VrSzY4M3ZWbVEyKzJJYVFnLzc5UUNRMFkzNkNVUVJHUDQ5QXdj?=
- =?utf-8?B?YmxmYUt3a2hMYW1BY1lRUGprRisvTnh6eDVackIzU1Z6Umg5WUpodURmKzds?=
- =?utf-8?B?WU5PbGlXMTVyb1l5cjg3R3lTaW12MnRKSEo1YWc4NHV6VGxBcTlPTzVWUVp2?=
- =?utf-8?B?QjUyanN4a3lEM3p6aXJML3J2Z29wTzZqNUc3b1BIYU1SSWg1Sk00Rng2TUoz?=
- =?utf-8?B?MjJxT3p5di9VcCtNOFJCNWFCb0FKOE5SOEJ6QWlRQVdXVDBrSGN2RnB6czlX?=
- =?utf-8?B?QkF5U2JhL3lWdDJvOTNRSVRpcTVhaTlvaXp6dmlwTG1tNHdpUkIwUHF6N2ph?=
- =?utf-8?B?WllDbVN1L1VQR3BueHg0S0J5VldpS1k1UVArelFzaUtnRDZLb3dhWnYzb3BY?=
- =?utf-8?B?cE40U25lZTFYZXNIbE54cUZRQUMxeXBzSXBQNU9zblJTTHRkWmNhNFVHYW5F?=
- =?utf-8?B?RGNYSEdEWllGYzQ0NWYwSVhUNi82R1BhS2ZEVDRPN3JDZjE3dlFwS3V5cGw4?=
- =?utf-8?B?QkFtd2J3TUY2S3FoKy9nOUVXY1g4SGJIeWZUZWZDK2xFOStYazhtaUVCVzE3?=
- =?utf-8?B?MTQyMmlqRW8yd3NtaVNNZkQ3QUxxS08wVjFYMVFLcDdhaVV0WHYwME9hN3lY?=
- =?utf-8?B?U0JRMjBaK2lxTnY0bG1vVFV5bzN0RWNWd1UwWUdRMnI4SC9rRCsxV0tVNmFB?=
- =?utf-8?B?SW81NjZpeXJOSFRadmZJcWVwS1dXKzZWNnNwUXdiaytSTUlqaGd4UmhFb2pN?=
- =?utf-8?B?c29ZbENiK0RIekVsUFRLMCtIc1FIWVprSG54ZXoyQVBRaS81cm5WVnRlb3U5?=
- =?utf-8?B?Qm5OOTJ5UzNpQnh0MDhWQVdvWHI1WnBJVHltdno3aUFhbkd1bjdQSWRWdC8w?=
- =?utf-8?B?M0twcDNwQmYrdUlOQTYwcXRjS2Vrd0h0QkF6YWJFdGNiYnlFS3IxMGszajI5?=
- =?utf-8?B?UUFwTitNN1prQ0JoZXJDZk45TzZ6dUZCVjhkcVdRMjh3cWdtVXNUOG9hVlZJ?=
- =?utf-8?B?SmRRc1pUZlFhekpRdlViQUdqQ2VTZzRGZnUzYmcybUJCUUxlQS9yV09uYzFl?=
- =?utf-8?B?ZHp3TVduNkdERDFKVXlCV0ZsQy9WTDFKVmpVbE9qSm5NWit6NHQ4L1VtOUU1?=
- =?utf-8?B?elNkWVE3U0xqbVJHcFFXY3NXTUlwSitPandmdE53WG5peEhoaERhbHNHblZ4?=
- =?utf-8?B?aTgrbTlSYXAyZWIrZGVkRGZKTEp1WE9TMkpsYnQ5OVlaOEZyYnB6SFdJUk1p?=
- =?utf-8?B?RDBlT05XT05nQWloWlIrOCt0OHkzcisxM1J5UCs4Ykt3cUI4LzFsR1hVUTJi?=
- =?utf-8?B?MFE0dVNxY0FCQlNQT01DR2doZjFnWENPdjdUci82RjFzQXZGOVAwbXRQV2Iy?=
- =?utf-8?B?S3QzSGJ3L3QwbnBVaUlEUGVRc1NpMUdFWFVvMlpSNllZYnVLa3lJVzdnS0c2?=
- =?utf-8?B?MUp3NjI3RlpaNDVYdER3V0kwQXAyWjZ3NlZMSU1pcGZTS1NQcXY5QkV0THF0?=
- =?utf-8?B?VUw4cDRBMytXSWRRVXJESWtxYng3bjNHdjlDZzBqSzN5SHV2MnltTUJ2dXlq?=
- =?utf-8?B?MGtsVENkNlJ4QlhpR3hXN3BmM3lTWGVONXFLeHNQbWkzUWphMGFQS0lJTUE1?=
- =?utf-8?B?amRRcFJyZlZsVEhZS2htZmNwQVNSdUx0b0Z4RVBrZDFMYlc2M21ZeG1IaG01?=
- =?utf-8?B?bE5MNlk4K2wvYXlsRmlEZFViSlhMUFBoTlhhVFFnakN5WTVDQUZhckt4eStq?=
- =?utf-8?B?T1lTdVFFbmFNNXRoUG96alcyckQweTQzSmFvbXkvdGRta0d3eFlyTmxRMFNr?=
- =?utf-8?Q?t8QVVt7gzW8JXaeAqbixoESrt?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ad8712b-b78c-41b6-b296-08db0338774f
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6309.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 03:08:46.2194
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: su18K+MhUuvKj+B9Zy0sBehKtw3cgR93F+MHIPm6KNISWfhpFbrc55FnnEzhwOd5YGXvnT6uqgVWdpVUMuPmqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5030
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230130064656.106793-1-michael@allwinnertech.com>
+In-Reply-To: <20230130064656.106793-1-michael@allwinnertech.com>
+From:   Wenchao Chen <wenchao.chen666@gmail.com>
+Date:   Tue, 31 Jan 2023 11:09:06 +0800
+Message-ID: <CA+Da2qzJBxn5up1YLiaguhMJ=W7JkVExyyiFco9KyPE+3jEn8w@mail.gmail.com>
+Subject: Re: [PATCH] mmc:mmc-cqhci:support interrupt coalescing
+To:     Michael Wu <michael@allwinnertech.com>
+Cc:     adrian.hunter@intel.com, riteshh@codeaurora.org,
+        asutoshd@codeaurora.org, ulf.hansson@linaro.org,
+        chaotian.jing@mediatek.com, matthias.bgg@gmail.com,
+        kdasu.kdev@gmail.com, alcooperx@gmail.com, f.fainelli@gmail.com,
+        haibo.chen@nxp.com, shawnguo@kernel.org, agross@kernel.org,
+        andersson@kernel.org, michal.simek@xilinx.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        bcm-kernel-feedback-list@broadcom.com, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, konrad.dybcio@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jan 30, 2023 at 2:49 PM Michael Wu <michael@allwinnertech.com> wrote:
+>
+> Support interrupt coalescing to reduce the frequency of mmc interrupts
+>
 
+Hi Michael
+The CQIS register does not have any configuration.
+Usually ICCTH needs to be enabled.
 
-On 31/01/23 00:15, Dionna Amalie Glaze wrote:
->> +static int snp_send_guest_request(struct snp_guest_dev *snp_dev, struct snp_guest_req *req)
->>  {
->>         unsigned long err;
->>         u64 seqno;
->>         int rc;
->>
->> +       if (!snp_dev || !req)
->> +               return -ENODEV;
->> +
->>         /* Get message sequence and verify that its a non-zero */
->>         seqno = snp_get_msg_seqno(snp_dev);
->>         if (!seqno)
->> @@ -261,7 +253,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
->>         memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
->>
->>         /* Encrypt the userspace provided payload */
->> -       rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
->> +       rc = enc_payload(snp_dev, seqno, req, vmpck_id);
->>         if (rc)
->>                 return rc;
->>
->> @@ -271,7 +263,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
->>          * sequence number must be incremented or the VMPCK must be deleted to
->>          * prevent reuse of the IV.
->>          */
->> -       rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
->> +       rc = snp_issue_guest_request(req->exit_code, &snp_dev->input, &err);
->>
->>         /*
->>          * If the extended guest request fails due to having too small of a
->> @@ -279,11 +271,11 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
->>          * extended data request in order to increment the sequence number
->>          * and thus avoid IV reuse.
->>          */
->> -       if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
->> +       if (req->exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
->>             err == SNP_GUEST_REQ_INVALID_LEN) {
->>                 const unsigned int certs_npages = snp_dev->input.data_npages;
->>
->> -               exit_code = SVM_VMGEXIT_GUEST_REQUEST;
->> +               req->exit_code = SVM_VMGEXIT_GUEST_REQUEST;
->>
->>                 /*
->>                  * If this call to the firmware succeeds, the sequence number can
->> @@ -293,7 +285,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
->>                  * of the VMPCK and the error code being propagated back to the
->>                  * user as an ioctl() return code.
->>                  */
->> -               rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
->> +               rc = snp_issue_guest_request(req->exit_code, &snp_dev->input, &err);
->>
-> 
-> This is going to have a merge conflict with "[PATCH v13 1/4]
-> virt/coco/sev-guest: Add throttling awareness", which is an important
-> fix to ensure hosts are allowed to throttle guest requests and guests
-> are able to retry instead of disabling the vmpck. I think that set of
-> patches, or at least the first patch, is going to be going in before
-> this series. Please be aware.
-
-Yes, I am aware of the series. I can rebase my patches once that goes in.
-
-Regards
-Nikunj
+> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> ---
+>  drivers/mmc/host/cqhci-core.c      | 20 +++++++++++++++-----
+>  drivers/mmc/host/cqhci.h           |  5 ++++-
+>  drivers/mmc/host/mtk-sd.c          |  2 +-
+>  drivers/mmc/host/sdhci-brcmstb.c   |  2 +-
+>  drivers/mmc/host/sdhci-esdhc-imx.c |  2 +-
+>  drivers/mmc/host/sdhci-msm.c       |  2 +-
+>  drivers/mmc/host/sdhci-of-arasan.c |  2 +-
+>  drivers/mmc/host/sdhci-pci-core.c  |  2 +-
+>  drivers/mmc/host/sdhci-pci-gli.c   |  2 +-
+>  drivers/mmc/host/sdhci-tegra.c     |  2 +-
+>  drivers/mmc/host/sdhci_am654.c     |  2 +-
+>  11 files changed, 28 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
+> index b3d7d6d8d654..f9cdf9f04bfc 100644
+> --- a/drivers/mmc/host/cqhci-core.c
+> +++ b/drivers/mmc/host/cqhci-core.c
+> @@ -420,7 +420,7 @@ static void cqhci_disable(struct mmc_host *mmc)
+>  }
+>
+>  static void cqhci_prep_task_desc(struct mmc_request *mrq,
+> -                                struct cqhci_host *cq_host, int tag)
+> +                                struct cqhci_host *cq_host, int tag, int intr)
+>  {
+>         __le64 *task_desc = (__le64 __force *)get_desc(cq_host, tag);
+>         u32 req_flags = mrq->data->flags;
+> @@ -428,7 +428,7 @@ static void cqhci_prep_task_desc(struct mmc_request *mrq,
+>
+>         desc0 = CQHCI_VALID(1) |
+>                 CQHCI_END(1) |
+> -               CQHCI_INT(1) |
+> +               CQHCI_INT(intr) |
+>                 CQHCI_ACT(0x5) |
+>                 CQHCI_FORCED_PROG(!!(req_flags & MMC_DATA_FORCED_PRG)) |
+>                 CQHCI_DATA_TAG(!!(req_flags & MMC_DATA_DAT_TAG)) |
+> @@ -621,7 +621,7 @@ static int cqhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
+>         }
+>
+>         if (mrq->data) {
+> -               cqhci_prep_task_desc(mrq, cq_host, tag);
+> +               cqhci_prep_task_desc(mrq, cq_host, tag, (cq_host->intr_clsc ? 0 : 1));
+>
+>                 err = cqhci_prep_tran_desc(mrq, cq_host, tag);
+>                 if (err) {
+> @@ -812,7 +812,7 @@ static void cqhci_finish_mrq(struct mmc_host *mmc, unsigned int tag)
+>  irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>                       int data_error)
+>  {
+> -       u32 status;
+> +       u32 status, rval;
+>         unsigned long tag = 0, comp_status;
+>         struct cqhci_host *cq_host = mmc->cqe_private;
+>
+> @@ -856,6 +856,15 @@ irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>                 spin_unlock(&cq_host->lock);
+>         }
+>
+> +       if (cq_host->intr_clsc) {
+> +               rval = cqhci_readl(cq_host, CQHCI_IC);
+> +               rval |= CQHCI_IC_RESET;
+> +               cqhci_writel(cq_host, rval, CQHCI_IC);
+> +               rval = cqhci_readl(cq_host, CQHCI_IC);
+> +               rval &= (~CQHCI_IC_RESET);
+> +               cqhci_writel(cq_host, rval, CQHCI_IC);
+> +       }
+> +
+>         if (status & CQHCI_IS_TCL)
+>                 wake_up(&cq_host->wait_queue);
+>
+> @@ -1172,11 +1181,12 @@ static unsigned int cqhci_ver_minor(struct cqhci_host *cq_host)
+>  }
+>
+>  int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc,
+> -             bool dma64)
+> +             bool dma64, bool intr_clsc)
+>  {
+>         int err;
+>
+>         cq_host->dma64 = dma64;
+> +       cq_host->intr_clsc = intr_clsc;
+>         cq_host->mmc = mmc;
+>         cq_host->mmc->cqe_private = cq_host;
+>
+> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+> index ba9387ed90eb..acf90773c30a 100644
+> --- a/drivers/mmc/host/cqhci.h
+> +++ b/drivers/mmc/host/cqhci.h
+> @@ -227,6 +227,9 @@ struct cqhci_host {
+>
+>         /* 64 bit DMA */
+>         bool dma64;
+> +
+> +       /* interrupt coalescing*/
+> +       bool intr_clsc;
+>         int num_slots;
+>         int qcnt;
+>
+> @@ -312,7 +315,7 @@ struct platform_device;
+>
+>  irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>                       int data_error);
+> -int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc, bool dma64);
+> +int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc, bool dma64, bool intr_clsc);
+>  struct cqhci_host *cqhci_pltfm_init(struct platform_device *pdev);
+>  int cqhci_deactivate(struct mmc_host *mmc);
+>  static inline int cqhci_suspend(struct mmc_host *mmc)
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index edade0e54a0c..2c18f954d4b8 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -2796,7 +2796,7 @@ static int msdc_drv_probe(struct platform_device *pdev)
+>                 host->cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>                 host->cq_host->mmio = host->base + 0x800;
+>                 host->cq_host->ops = &msdc_cmdq_ops;
+> -               ret = cqhci_init(host->cq_host, mmc, true);
+> +               ret = cqhci_init(host->cq_host, mmc, true, false);
+>                 if (ret)
+>                         goto host_free;
+>                 mmc->max_segs = 128;
+> diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
+> index f2cf3d70db79..4aeaeddbbf25 100644
+> --- a/drivers/mmc/host/sdhci-brcmstb.c
+> +++ b/drivers/mmc/host/sdhci-brcmstb.c
+> @@ -231,7 +231,7 @@ static int sdhci_brcmstb_add_host(struct sdhci_host *host,
+>                 cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>         }
+>
+> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>         if (ret)
+>                 goto cleanup;
+>
+> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+> index 9e73c34b6401..7aef7abe71f1 100644
+> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
+> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+> @@ -1712,7 +1712,7 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
+>                 cq_host->mmio = host->ioaddr + ESDHC_CQHCI_ADDR_OFFSET;
+>                 cq_host->ops = &esdhc_cqhci_ops;
+>
+> -               err = cqhci_init(cq_host, host->mmc, false);
+> +               err = cqhci_init(cq_host, host->mmc, false, false);
+>                 if (err)
+>                         goto disable_ahb_clk;
+>         }
+> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+> index 4ac8651d0b29..b6549d1e43ec 100644
+> --- a/drivers/mmc/host/sdhci-msm.c
+> +++ b/drivers/mmc/host/sdhci-msm.c
+> @@ -2153,7 +2153,7 @@ static int sdhci_msm_cqe_add_host(struct sdhci_host *host,
+>         if (ret)
+>                 goto cleanup;
+>
+> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>         if (ret) {
+>                 dev_err(&pdev->dev, "%s: CQE init: failed (%d)\n",
+>                                 mmc_hostname(host->mmc), ret);
+> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+> index 89c431a34c43..811f8686532d 100644
+> --- a/drivers/mmc/host/sdhci-of-arasan.c
+> +++ b/drivers/mmc/host/sdhci-of-arasan.c
+> @@ -1610,7 +1610,7 @@ static int sdhci_arasan_add_host(struct sdhci_arasan_data *sdhci_arasan)
+>         if (dma64)
+>                 cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>
+> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>         if (ret)
+>                 goto cleanup;
+>
+> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+> index c359f867df0a..6f6cae6355a7 100644
+> --- a/drivers/mmc/host/sdhci-pci-core.c
+> +++ b/drivers/mmc/host/sdhci-pci-core.c
+> @@ -964,7 +964,7 @@ static int glk_emmc_add_host(struct sdhci_pci_slot *slot)
+>         if (dma64)
+>                 cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>
+> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>         if (ret)
+>                 goto cleanup;
+>
+> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+> index 633a8ee8f8c5..6917ba339aa9 100644
+> --- a/drivers/mmc/host/sdhci-pci-gli.c
+> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+> @@ -908,7 +908,7 @@ static int gl9763e_add_host(struct sdhci_pci_slot *slot)
+>         if (dma64)
+>                 cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>
+> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>         if (ret)
+>                 goto cleanup;
+>
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+> index bff084f178c9..f98a468e8f43 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -1620,7 +1620,7 @@ static int sdhci_tegra_add_host(struct sdhci_host *host)
+>         if (dma64)
+>                 cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>
+> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>         if (ret)
+>                 goto cleanup;
+>
+> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+> index 7ef828942df3..8e7fbee70e16 100644
+> --- a/drivers/mmc/host/sdhci_am654.c
+> +++ b/drivers/mmc/host/sdhci_am654.c
+> @@ -568,7 +568,7 @@ static int sdhci_am654_cqe_add_host(struct sdhci_host *host)
+>
+>         host->mmc->caps2 |= MMC_CAP2_CQE;
+>
+> -       return cqhci_init(cq_host, host->mmc, 1);
+> +       return cqhci_init(cq_host, host->mmc, 1, false);
+>  }
+>
+>  static int sdhci_am654_get_otap_delay(struct sdhci_host *host,
+> --
+> 2.29.0
+>
