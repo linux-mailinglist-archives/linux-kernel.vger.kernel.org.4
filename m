@@ -2,146 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1BD68265E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CDD1682663
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjAaIbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 03:31:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S230496AbjAaIcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 03:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjAaIbS (ORCPT
+        with ESMTP id S229624AbjAaIck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:31:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594A145F71
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:31:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18439B819A4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:31:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6067C4339C
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:31:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675153870;
-        bh=J/q/Y3zb+IglsouU8fsWGPAsHeUL2+ei6t6E56LXfrQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cpMXWDhU2kyMz/qUfbbb6iz0QKwlGA5I7IGgu10/XDoZmuGynZVQ4WMuSZELFcgnE
-         mAxWw+26gWAPBMaNUM4pwYq9c9MIuZXeR2C3c+e/wkmrI8KQxH0hySYf5r+/X+9x/o
-         yWXI64f591cSJ7XBeiVAOQCVYd/MCrInzm/vgrqTardk/7PTVL5GqFzyS8yMgFiLHG
-         SE8dSz4f2I7viVDxClri4HZQSpTZ/nGsnv5CKUpvUzOYl7sOMCbTJBBm+EvvZczwZj
-         NkAG/erCQ/nBtgCMOhpWkRF9JWJmEatcw6z0xxYEgK77dQEvVQ0PjfKYfGe+ublbV8
-         gjoOwAdfbTgfA==
-Received: by mail-ej1-f47.google.com with SMTP id ud5so39370103ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:31:10 -0800 (PST)
-X-Gm-Message-State: AO0yUKVXzcBPU+MR7GmRv5jxbrfKR5+m9rJvjMCtAtYUpWDq3dpXAgg8
-        yL7ufe0wGE4IacOEPv2lIDv4Ds70LF5UCccTsLY=
-X-Google-Smtp-Source: AK7set88WiPiLLf0VHmR41OtrcA136x6n1Dq4j+rY0Rn43UvU5aKhFAzeivOYzR1DDWwOQAZ61j6gkPacHbuMs2PZfA=
-X-Received: by 2002:a17:906:c41a:b0:87b:d510:77a8 with SMTP id
- u26-20020a170906c41a00b0087bd51077a8mr3958147ejz.235.1675153868975; Tue, 31
- Jan 2023 00:31:08 -0800 (PST)
+        Tue, 31 Jan 2023 03:32:40 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B1542DE5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:32:38 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id cq16-20020a17090af99000b0022c9791ac39so5873182pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:32:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eY6WhpauLgjdc2GeVm59ZJcPRy3bOJRPWYy2o9UJOTs=;
+        b=gDvhUFvTLFqud44CwwqInyihTUiI65hFA8JOcKHcLn9UVqtcsQv19U+MBWki2RO8Nt
+         R30z1HOkLFcxYsOMFQbXwd2hBjB2KuglBwPPycXfU/f92RNvUcFSUvLneYWpJhgVlptd
+         9njIBtJQXP2icVAY3wmYUOkQ9wz87mvD6pLmxrieRF/AI0OYoEKEs1O1QDURTHPnhyq8
+         lsKAxU9oHb1JDqhd40zwBUJUv32A8vGZT0y+Kphrx9F/z5gIROXjFQvJXm04C18g6T2n
+         NBcRV1o/3AH+VpRCuHPjgf1QVhy75RLJqTbWXYiQ6JtG8jNvCfOaU7SrLZhzsMyn9ZYy
+         9jbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eY6WhpauLgjdc2GeVm59ZJcPRy3bOJRPWYy2o9UJOTs=;
+        b=Q5diuLQzvEplb5QqsjvRRYk3zX4PKnXHPHDzoeaKjn8l+qf6FZktMWub4hWNQPLT98
+         gjxSlnc4fUIb8LAOUAI5VfTa7zBf0SeTDFCD0pXmSouVNmyKcJugwKEY7rR4OutLhn7V
+         c7xMERonTMsb+E6wo21DQXiNi9WBQ2WAGP+NCqhUMCe0A9Sgsmmf0uy+CoLxnbMD7DaG
+         va1Eipkncq4uxjBW9JFA5DZ/T2gZINhS+Wa41AFFt+e5dm21/vzXcGW27hztxyHYst67
+         IFxFAVdDIIUiUa30ZXrr64LQRCpfBqA3jtZyF0nBknwVn2QyPBUoyRP1ceHfhBFkP3tS
+         oG7Q==
+X-Gm-Message-State: AFqh2ko6yqmPd3QYUJU32vsPvz2EYci51Rck+A1mA17Vokqf0kcJs4sF
+        C/vOq1SXlCkx2jXRp0slj4s=
+X-Google-Smtp-Source: AMrXdXta+Z0I0LRtkA5JAdf/Ab5Zq2D11VCaAAiVvOoRHiaRxBEEPXz5DuLtncQGQLEyCHpSuMVj9g==
+X-Received: by 2002:a17:90a:1a5c:b0:22b:b76b:5043 with SMTP id 28-20020a17090a1a5c00b0022bb76b5043mr40692416pjl.9.1675153958109;
+        Tue, 31 Jan 2023 00:32:38 -0800 (PST)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id mv12-20020a17090b198c00b0021952b5e9bcsm10482650pjb.53.2023.01.31.00.32.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 00:32:37 -0800 (PST)
+Date:   Tue, 31 Jan 2023 17:32:20 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v4 4/7] mm: replace vma->vm_flags direct modifications
+ with modifier calls
+Message-ID: <Y9jSFFeHYZE1/yFg@hyeyoo>
+References: <20230126193752.297968-1-surenb@google.com>
+ <20230126193752.297968-5-surenb@google.com>
 MIME-Version: 1.0
-References: <20230126161559.1467374-1-guoren@kernel.org> <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
- <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
- <87r0vc9h4g.fsf@all.your.base.are.belong.to.us> <Y9fm+6LPXgtDSma/@FVFF77S0Q05N>
- <CAJF2gTRgze_owuWvJjnrPpBNs8+GY-km7wvHU4EuJzarQc+BPQ@mail.gmail.com> <87a61z2n55.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87a61z2n55.fsf@all.your.base.are.belong.to.us>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 31 Jan 2023 16:30:56 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ7ZfF7JdpxP8O6RZSvPrUqk79geXuyQLweu6U15XjAzA@mail.gmail.com>
-Message-ID: <CAJF2gTQ7ZfF7JdpxP8O6RZSvPrUqk79geXuyQLweu6U15XjAzA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        "liaochang (A)" <liaochang1@huawei.com>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mhiramat@kernel.org,
-        conor.dooley@microchip.com, penberg@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126193752.297968-5-surenb@google.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 3:12 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wr=
-ote:
->
-> Guo Ren <guoren@kernel.org> writes:
->
-> > On Mon, Jan 30, 2023 at 11:49 PM Mark Rutland <mark.rutland@arm.com> wr=
-ote:
-> >>
-> >> Hi Bjorn,
-> >>
-> >> On Mon, Jan 30, 2023 at 04:28:15PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
-> >> > Guo Ren <guoren@kernel.org> writes:
-> >> >
-> >> > >> In the serie of RISCV OPTPROBES [1], it patches a long-jump instr=
-uctions pair
-> >> > >> AUIPC/JALR in kernel text, so in order to ensure other CPUs does =
-not execute
-> >> > >> in the instructions that will be modified, it is still need to st=
-op other CPUs
-> >> > >> via patch_text API, or you have any better solution to achieve th=
-e purpose?
-> >> > >  - The stop_machine is an expensive way all architectures should
-> >> > > avoid, and you could keep that in your OPTPROBES implementation fi=
-les
-> >> > > with static functions.
-> >> > >  - The stop_machine couldn't work with PREEMPTION, so your
-> >> > > implementation needs to work with !PREEMPTION.
-> >> >
-> >> > ...and stop_machine() with !PREEMPTION is broken as well, when you'r=
-e
-> >> > replacing multiple instructions (see Mark's post at [1]). The
-> >> > stop_machine() dance might work when you're replacing *one* instruct=
-ion,
-> >> > not multiple as in the RISC-V case. I'll expand on this in a comment=
- in
-> >> > the OPTPROBES v6 series.
-> >>
-> >> Just to clarify, my comments in [1] were assuming that stop_machine() =
-was not
-> >> used, in which case there is a problem with or without PREEMPTION.
-> >>
-> >> I believe that when using stop_machine(), the !PREEMPTION case is fine=
-, since
-> >> stop_machine() schedules work rather than running work in IRQ context =
-on the
-> >> back of an IPI, so no CPUs should be mid-sequnce during the patching, =
-and it's
-> >> not possible for there to be threads which are preempted mid-sequence.
-> >>
-> >> That all said, IIUC optprobes is going to disappear once fprobe is rea=
-dy
-> >> everywhere, so that might be moot.
-> > The optprobes could be in the middle of a function, but fprobe must be
-> > the entry of a function, right?
-> >
-> > Does your fprobe here mean: ?
-> >
-> > The Linux kernel configuration item CONFIG_FPROBE:
-> >
-> > prompt: Kernel Function Probe (fprobe)
-> > type: bool
-> > depends on: ( CONFIG_FUNCTION_TRACER ) && (
-> > CONFIG_DYNAMIC_FTRACE_WITH_REGS ) && ( CONFIG_HAVE_RETHOOK )
-> > defined in kernel/trace/Kconfig
->
-> See the cover of [1]. It's about direct calls for BPF tracing (and more)
-> on Arm, and you're completly right, that it's *not* related to optprobes
-> at all.
->
-> [1] https://lore.kernel.org/all/20221108220651.24492-1-revest@chromium.or=
-g/
-Thx for sharing :)
+On Thu, Jan 26, 2023 at 11:37:49AM -0800, Suren Baghdasaryan wrote:
+> Replace direct modifications to vma->vm_flags with calls to modifier
+> functions to be able to track flag changes and to keep vma locking
+> correctness.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Acked-by: Mel Gorman <mgorman@techsingularity.net>
+> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  arch/arm/kernel/process.c                          |  2 +-
+>  arch/ia64/mm/init.c                                |  8 ++++----
+>  arch/loongarch/include/asm/tlb.h                   |  2 +-
+>  arch/powerpc/kvm/book3s_xive_native.c              |  2 +-
+>  arch/powerpc/mm/book3s64/subpage_prot.c            |  2 +-
+>  arch/powerpc/platforms/book3s/vas-api.c            |  2 +-
+>  arch/powerpc/platforms/cell/spufs/file.c           | 14 +++++++-------
+>  arch/s390/mm/gmap.c                                |  3 +--
+>  arch/x86/entry/vsyscall/vsyscall_64.c              |  2 +-
+>  arch/x86/kernel/cpu/sgx/driver.c                   |  2 +-
+>  arch/x86/kernel/cpu/sgx/virt.c                     |  2 +-
+>  arch/x86/mm/pat/memtype.c                          |  6 +++---
+>  arch/x86/um/mem_32.c                               |  2 +-
+>  drivers/acpi/pfr_telemetry.c                       |  2 +-
+>  drivers/android/binder.c                           |  3 +--
+>  drivers/char/mspec.c                               |  2 +-
+>  drivers/crypto/hisilicon/qm.c                      |  2 +-
+>  drivers/dax/device.c                               |  2 +-
+>  drivers/dma/idxd/cdev.c                            |  2 +-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c            |  2 +-
+>  drivers/gpu/drm/amd/amdkfd/kfd_chardev.c           |  4 ++--
+>  drivers/gpu/drm/amd/amdkfd/kfd_doorbell.c          |  4 ++--
+>  drivers/gpu/drm/amd/amdkfd/kfd_events.c            |  4 ++--
+>  drivers/gpu/drm/amd/amdkfd/kfd_process.c           |  4 ++--
+>  drivers/gpu/drm/drm_gem.c                          |  2 +-
+>  drivers/gpu/drm/drm_gem_dma_helper.c               |  3 +--
+>  drivers/gpu/drm/drm_gem_shmem_helper.c             |  2 +-
+>  drivers/gpu/drm/drm_vm.c                           |  8 ++++----
+>  drivers/gpu/drm/etnaviv/etnaviv_gem.c              |  2 +-
+>  drivers/gpu/drm/exynos/exynos_drm_gem.c            |  4 ++--
+>  drivers/gpu/drm/gma500/framebuffer.c               |  2 +-
+>  drivers/gpu/drm/i810/i810_dma.c                    |  2 +-
+>  drivers/gpu/drm/i915/gem/i915_gem_mman.c           |  4 ++--
+>  drivers/gpu/drm/mediatek/mtk_drm_gem.c             |  2 +-
+>  drivers/gpu/drm/msm/msm_gem.c                      |  2 +-
+>  drivers/gpu/drm/omapdrm/omap_gem.c                 |  3 +--
+>  drivers/gpu/drm/rockchip/rockchip_drm_gem.c        |  3 +--
+>  drivers/gpu/drm/tegra/gem.c                        |  5 ++---
+>  drivers/gpu/drm/ttm/ttm_bo_vm.c                    |  3 +--
+>  drivers/gpu/drm/virtio/virtgpu_vram.c              |  2 +-
+>  drivers/gpu/drm/vmwgfx/vmwgfx_ttm_glue.c           |  2 +-
+>  drivers/gpu/drm/xen/xen_drm_front_gem.c            |  3 +--
+>  drivers/hsi/clients/cmt_speech.c                   |  2 +-
+>  drivers/hwtracing/intel_th/msu.c                   |  2 +-
+>  drivers/hwtracing/stm/core.c                       |  2 +-
+>  drivers/infiniband/hw/hfi1/file_ops.c              |  4 ++--
+>  drivers/infiniband/hw/mlx5/main.c                  |  4 ++--
+>  drivers/infiniband/hw/qib/qib_file_ops.c           | 13 ++++++-------
+>  drivers/infiniband/hw/usnic/usnic_ib_verbs.c       |  2 +-
+>  drivers/infiniband/hw/vmw_pvrdma/pvrdma_verbs.c    |  2 +-
+>  .../media/common/videobuf2/videobuf2-dma-contig.c  |  2 +-
+>  drivers/media/common/videobuf2/videobuf2-vmalloc.c |  2 +-
+>  drivers/media/v4l2-core/videobuf-dma-contig.c      |  2 +-
+>  drivers/media/v4l2-core/videobuf-dma-sg.c          |  4 ++--
+>  drivers/media/v4l2-core/videobuf-vmalloc.c         |  2 +-
+>  drivers/misc/cxl/context.c                         |  2 +-
+>  drivers/misc/habanalabs/common/memory.c            |  2 +-
+>  drivers/misc/habanalabs/gaudi/gaudi.c              |  4 ++--
+>  drivers/misc/habanalabs/gaudi2/gaudi2.c            |  8 ++++----
+>  drivers/misc/habanalabs/goya/goya.c                |  4 ++--
+>  drivers/misc/ocxl/context.c                        |  4 ++--
+>  drivers/misc/ocxl/sysfs.c                          |  2 +-
+>  drivers/misc/open-dice.c                           |  4 ++--
+>  drivers/misc/sgi-gru/grufile.c                     |  4 ++--
+>  drivers/misc/uacce/uacce.c                         |  2 +-
+>  drivers/sbus/char/oradax.c                         |  2 +-
+>  drivers/scsi/cxlflash/ocxl_hw.c                    |  2 +-
+>  drivers/scsi/sg.c                                  |  2 +-
+>  drivers/staging/media/atomisp/pci/hmm/hmm_bo.c     |  2 +-
+>  drivers/staging/media/deprecated/meye/meye.c       |  4 ++--
+>  .../media/deprecated/stkwebcam/stk-webcam.c        |  2 +-
+>  drivers/target/target_core_user.c                  |  2 +-
+>  drivers/uio/uio.c                                  |  2 +-
+>  drivers/usb/core/devio.c                           |  3 +--
+>  drivers/usb/mon/mon_bin.c                          |  3 +--
+>  drivers/vdpa/vdpa_user/iova_domain.c               |  2 +-
+>  drivers/vfio/pci/vfio_pci_core.c                   |  2 +-
+>  drivers/vhost/vdpa.c                               |  2 +-
+>  drivers/video/fbdev/68328fb.c                      |  2 +-
+>  drivers/video/fbdev/core/fb_defio.c                |  4 ++--
+>  drivers/xen/gntalloc.c                             |  2 +-
+>  drivers/xen/gntdev.c                               |  4 ++--
+>  drivers/xen/privcmd-buf.c                          |  2 +-
+>  drivers/xen/privcmd.c                              |  4 ++--
+>  fs/aio.c                                           |  2 +-
+>  fs/cramfs/inode.c                                  |  2 +-
+>  fs/erofs/data.c                                    |  2 +-
+>  fs/exec.c                                          |  4 ++--
+>  fs/ext4/file.c                                     |  2 +-
+>  fs/fuse/dax.c                                      |  2 +-
+>  fs/hugetlbfs/inode.c                               |  4 ++--
+>  fs/orangefs/file.c                                 |  3 +--
+>  fs/proc/task_mmu.c                                 |  2 +-
+>  fs/proc/vmcore.c                                   |  3 +--
+>  fs/userfaultfd.c                                   |  2 +-
+>  fs/xfs/xfs_file.c                                  |  2 +-
+>  include/linux/mm.h                                 |  2 +-
+>  kernel/bpf/ringbuf.c                               |  4 ++--
+>  kernel/bpf/syscall.c                               |  4 ++--
+>  kernel/events/core.c                               |  2 +-
+>  kernel/kcov.c                                      |  2 +-
+>  kernel/relay.c                                     |  2 +-
+>  mm/madvise.c                                       |  2 +-
+>  mm/memory.c                                        |  6 +++---
+>  mm/mlock.c                                         |  6 +++---
+>  mm/mmap.c                                          | 10 +++++-----
+>  mm/mprotect.c                                      |  2 +-
+>  mm/mremap.c                                        |  6 +++---
+>  mm/nommu.c                                         | 11 ++++++-----
+>  mm/secretmem.c                                     |  2 +-
+>  mm/shmem.c                                         |  2 +-
+>  mm/vmalloc.c                                       |  2 +-
+>  net/ipv4/tcp.c                                     |  4 ++--
+>  security/selinux/selinuxfs.c                       |  6 +++---
+>  sound/core/oss/pcm_oss.c                           |  2 +-
+>  sound/core/pcm_native.c                            |  9 +++++----
+>  sound/soc/pxa/mmp-sspa.c                           |  2 +-
+>  sound/usb/usx2y/us122l.c                           |  4 ++--
+>  sound/usb/usx2y/usX2Yhwdep.c                       |  2 +-
+>  sound/usb/usx2y/usx2yhwdeppcm.c                    |  2 +-
+>  120 files changed, 188 insertions(+), 199 deletions(-)
+> 
 
---=20
-Best Regards
- Guo Ren
+Hello Suren,
+
+[...]
+
+Whoa, it's so long.
+Mostly looks fine but two things I'm not sure about:
+
+> diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
+> index 9dda47b3fd70..7be4e6c9f120 100644
+> --- a/drivers/misc/open-dice.c
+> +++ b/drivers/misc/open-dice.c
+> @@ -95,12 +95,12 @@ static int open_dice_mmap(struct file *filp, struct vm_area_struct *vma)
+>  		if (vma->vm_flags & VM_WRITE)
+>  			return -EPERM;
+>  		/* Ensure userspace cannot acquire VM_WRITE later. */
+> -		vma->vm_flags &= ~VM_MAYWRITE;
+> +		vm_flags_clear(vma, VM_MAYSHARE);
+>  	}
+
+I think it should be:
+	s/VM_MAYSHARE/VM_MAYWRITE/
+
+> diff --git a/mm/mlock.c b/mm/mlock.c
+> index 5c4fff93cd6b..ed49459e343e 100644
+> --- a/mm/mlock.c
+> +++ b/mm/mlock.c
+> @@ -380,7 +380,7 @@ static void mlock_vma_pages_range(struct vm_area_struct *vma,
+>  	 */
+>  	if (newflags & VM_LOCKED)
+>  		newflags |= VM_IO;
+> -	WRITE_ONCE(vma->vm_flags, newflags);
+> +	vm_flags_reset(vma, newflags);
+>  
+>  	lru_add_drain();
+>  	walk_page_range(vma->vm_mm, start, end, &mlock_walk_ops, NULL);
+> @@ -388,7 +388,7 @@ static void mlock_vma_pages_range(struct vm_area_struct *vma,
+>  
+>  	if (newflags & VM_IO) {
+>  		newflags &= ~VM_IO;
+> -		WRITE_ONCE(vma->vm_flags, newflags);
+> +		vm_flags_reset(vma, newflags);
+>  	}
+>  }
+
+wondering the if the comment above is still true?
+
+        /*
+         * There is a slight chance that concurrent page migration,
+         * or page reclaim finding a page of this now-VM_LOCKED vma,
+         * will call mlock_vma_folio() and raise page's mlock_count:
+         * double counting, leaving the page unevictable indefinitely.
+         * Communicate this danger to mlock_vma_folio() with VM_IO,
+         * which is a VM_SPECIAL flag not allowed on VM_LOCKED vmas.
+         * mmap_lock is held in write mode here, so this weird
+         * combination should not be visible to other mmap_lock users;
+         * but WRITE_ONCE so rmap walkers must see VM_IO if VM_LOCKED.
+         */
+
+does ACCESS_PRIVATE() still guarentee that compiler cannot mysteriously
+optimize writes like WRITE_ONCE()?
