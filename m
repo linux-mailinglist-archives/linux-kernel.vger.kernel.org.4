@@ -2,84 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBDE6834FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F484683500
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjAaSQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S230106AbjAaSR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjAaSQe (ORCPT
+        with ESMTP id S229488AbjAaSR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:16:34 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B15314234
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:16:33 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so11318021wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:16:33 -0800 (PST)
+        Tue, 31 Jan 2023 13:17:27 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0759E14234
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:17:27 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-4c131bede4bso214734047b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:17:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UPKrSP4Ne/SNxeLI36oVC9k3148tGOXUA1eFQ1WZK8Y=;
-        b=kjKgH5WUo/W1L09w3eQ1emaWqJGQzJPLq0yAWiwSzppFk7snauHaNUm6fdJwN3WMFp
-         osmQeaMMdlVpoJOyEhp80n066EhpehO1YAVq8Skef8N90BTp2eF6mJwd+9lMqKiiO9VR
-         HQgS1I2agvVmBXXf6NpMGFRfc2yAK3Nje32KvW5LURhIo/BPEQ87E/ztwp18YmBkyaoN
-         2ErB5+KoCoqLdVVjT5ZoU8VJ/WrwZfes1uXUXiT9e9YT3XOTgLlB1D+Pca2I+FfvkzQL
-         znhq7icCbBagdjZa63x8LBxrppUCBk5rex9IB0Cfxh7JRE7I2hmyRd7L79uYXtQNk3wy
-         DwTg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FvdAZD01d8l2dE2yYKs95f5aYb2hmlRgz5dCsUMJuqc=;
+        b=mj0IrcCsuervH4LzfdcuQVY+qIdS49hTvLNTEpZON0scxgtX2UJZgOEy4IS6Uiy3N3
+         /uFAyQ+iU+eYBtwXEkiXtsEIVmv0j/FnyeaCq2A4EKYR2x3bNBwS7EfDrGuW7MSLWB/A
+         da+jryzDREJYJokFjWTq5SzjKOJmwF8lDDk+A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UPKrSP4Ne/SNxeLI36oVC9k3148tGOXUA1eFQ1WZK8Y=;
-        b=xZmWhPPXV9318ea8men2KleJqINHiNVSuu2EoFO3Jn29opiuvbKm3UpztYy+qCYNmt
-         SnVaZgx9DNJQWjV9ycNW0XJmF3vOH58HcZRZw+r/pwH7g6jFbWmaWjouLXFne/qLxpwU
-         SWtQe/4fxft4fYOZxLDpf3XOct+FF3NfaVTMhWEGoum1rrM+FSbiLh3PRiag70avYASc
-         2Y2TgoFmY9t5xyhPOlF4ubXAxUIYFcz1QTgZ/9ONaanGXjWnfZ1FUW1Re80J1DzRQokc
-         o0/28mQl/Is1a1xGq/TTmNaqXzrpoS5R2ktcXqiWCKRcrxU7RrvMeoDPvQJDaHIquVdK
-         /KJA==
-X-Gm-Message-State: AO0yUKX6yRilPZ6Q88lBTh1zu/Z84GRPMYrOqtFkSU/WxA0CG/YPVy2m
-        ELBOvSRBuP7QF1XElCCkxySpeQ==
-X-Google-Smtp-Source: AK7set8bPV+NrF1XZ7KloiOXaXxOlRpzXbUWHITAFZeTAADJ6cGnUcIbU3oPQaEmkbyjZLATQAC3ow==
-X-Received: by 2002:a05:600c:a07:b0:3dc:2137:d67d with SMTP id z7-20020a05600c0a0700b003dc2137d67dmr24054500wmp.16.1675188991728;
-        Tue, 31 Jan 2023 10:16:31 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b003daf6e3bc2fsm58592wms.1.2023.01.31.10.16.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 10:16:31 -0800 (PST)
-Message-ID: <871e93e8-5a20-461a-50c0-c7c3c0a7ce8f@linaro.org>
-Date:   Tue, 31 Jan 2023 19:16:29 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FvdAZD01d8l2dE2yYKs95f5aYb2hmlRgz5dCsUMJuqc=;
+        b=CkiDHsgahmYUv+NDaYCTyLIM+5QHFEdKBwK8TaZxvVmIxM9Iuc4tHhUTK/7pmu5Kv6
+         Fshq8DWEtHWQDnGLaXEOpARgIcROg+MQ3wlPFAEx+BpFNggbRICXjXiVbQDmH5CpvAPg
+         qPuxhhBXu4x1tWrEENvO9jJ6BgrAN8I3Y/3hHP1XBqzxDlZ4t6W/X3NX4eo/w/hoWl+L
+         riKAq3qHgMPEWBnj2zsxKADuG6nMjHmtZ3UmUhGbNjAMp9wB0N2iP/RL6V4Q+lcE2uzp
+         pIIoqGlbBQGMYI/QPMFrq7uX/fiUEn1fWxr1Dxwy07LkAbgNqx2YiqR0jduXNy1BR6wx
+         q1gg==
+X-Gm-Message-State: AO0yUKV0qf8rir1OcfsGZphgNG52M22YwnodNMlDvEq8RgGl5fvD8AcV
+        GBGzOkbsniL/NML6M6ADJclIladXqDFkpIOVLgDtV7HH4sd/dw==
+X-Google-Smtp-Source: AK7set9Ho9990bCiAPi6W5tf4wuIgRKLoCIYpoMYERmBL6WCAN7Vp/gWEdWfZnfLnz1nlp6of9x83VoHN6qHiT/Xl0k=
+X-Received: by 2002:a81:52ce:0:b0:506:60ca:21c3 with SMTP id
+ g197-20020a8152ce000000b0050660ca21c3mr4156259ywb.197.1675189046291; Tue, 31
+ Jan 2023 10:17:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V3 1/7] dt-bindings: Add ipq9574 clock and reset
- definitions
-Content-Language: en-US
-To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230130125528.11509-1-quic_devipriy@quicinc.com>
- <20230130125528.11509-2-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230130125528.11509-2-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230113182626.1149539-1-pmalani@chromium.org> <Y9iPzvfJkxii390K@google.com>
+In-Reply-To: <Y9iPzvfJkxii390K@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 31 Jan 2023 10:17:14 -0800
+Message-ID: <CACeCKac6iHFwjgNn=PWth4OKCYDJRt1R6zJ+n+t6Qd4-zymyDg@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_typec_vdm: Fix VDO copy
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,24 +63,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 13:55, devi priya wrote:
-> Add clock and reset ID definitions for ipq9574
-> 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
-> ---
+Hi Tzung-Bi,
 
-Subject prefixes: dt-bindings: clock:
+On Mon, Jan 30, 2023 at 7:49 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> On Fri, Jan 13, 2023 at 06:26:26PM +0000, Prashant Malani wrote:
+> > The usage of memcpy() affects the representation of the VDOs as they are
+> > copied to the EC Host Command buffer. Specifically, all higher order
+> > bits get dropped (for example: a VDO of 0x406 just gets copied as 0x6).
+>
+> memcpy() is byte-oriented; however, `vdo` is a pointer to u32.
+>
+> > Avoid this by explicitly copying each VDO in the array. The number of
+> > VDOs generated by alternate mode drivers in their VDMs is almost always
+> > just 1 (apart from the header) so this doesn't affect performance in a
+> > meaningful way).
+>
+> Although the patch has applied, I am wondering if the following would be a
+> better way to fix the issue:
+>
+> memcpy(&vdm_req.vdm_data[1], vdo, (cnt - 1) * sizeof(*vdo));
 
->  Changes in V3:
->         - Added a separate clock binding for ipq9574 and reverted the
->           changes from qcom,gcc-other.yaml
-> 
+Yeah, that's right; I forgot that 'cnt' is "number of VDOs" and not
+"number of bytes" :S
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+As I mentioned, in a vast majority of cases, the number of VDOs is just 1, so
+I wouldn't bother and just leave this as it is (since there is no major benefit
+apart from saving 1 line).
