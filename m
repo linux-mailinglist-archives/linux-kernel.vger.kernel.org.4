@@ -2,152 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAC1683A3C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDC3683A3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjAaXLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 18:11:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S232139AbjAaXMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 18:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231622AbjAaXLU (ORCPT
+        with ESMTP id S231622AbjAaXMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 18:11:20 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93594ED23
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:11:16 -0800 (PST)
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 31 Jan 2023 18:12:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838DE13D61
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:12:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D8F1641AB7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675206672;
-        bh=od+H8iRL7U/hEgOt5OEJuPafvt2sARzXNu/6vCcYVbk=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=QMJmu/G2Z5m2PSePmMxWDlAcsfSQZIBvs08F51WQd//es2pyqJBHgtogBwReIiROH
-         QqI2FX3Pc1YHA3dDWenYHe0Nfi0gUfI04ydd+KtIz+WYfc3gqQrTYOzuwCNqmv7M+L
-         L9Td/eigT/pRDpgrdo8wZKJX7tiXiBlGOmCMXXdY838ZVVrvMKGFdAMwejHzXZzDTn
-         aynHy5tcsH0fImKwA7nRIq1GKgy8L0gY9iUCAtf8cfxTE6/S33LBETTvtpxgQgg7WJ
-         VAG3lGMhUBD97ltXg5HyZ+K6D7iGNfvTGWfHyYtTtR9plwdM2znQNipucZ/oUIXIbv
-         eErWl3V3clvFA==
-Received: by mail-wm1-f70.google.com with SMTP id l38-20020a05600c1d2600b003ddff4b9a40so81081wms.9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:11:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=od+H8iRL7U/hEgOt5OEJuPafvt2sARzXNu/6vCcYVbk=;
-        b=aJ1q5m03p8MgSIqi3qJ/F5ZZssfefpMpAQbpwayqNBwgfgShRCsbJk9E+6C5yooCir
-         fnYqIhLI0jniMMpR1IkKhff3E6LQFkjKbuvo2wIlB2yseA1OsvWXyj/pyA7lfzt4Y5yV
-         hN3lZ74hoI3RSQLYLwW46ZQxsZXWqWfZNBRwNFPgUR+gx1+G3FS6FbPw4LpFxCo+zWzW
-         ZsO0We3NPlwZB/aqaDqoBz1l62A/Rhtp6unCSzkI01bSlbhLKqmQrVW9HQi+LGTglyWt
-         CudKDl14vv7T78U3ShDGbiyYeNL08KUr2rnIyiGBRri/gAcSJPrRro1kBG6xWTTfKKgO
-         eVCg==
-X-Gm-Message-State: AO0yUKXhjTn0sRXw12LKOvxFWv3n/Zipw5PueZMSgrAkDzE8+J99BRl4
-        IlWrWL6gGmn0hToBYLf2jnm1InUOo77PIjGgBj5X/0fqg3dPs3Fgqs2/5yinsrYvnkIGbq75kN/
-        IiiwaBvPyEYQkL9AYw69HBz3YX83971evkM5oAI6rrg==
-X-Received: by 2002:a05:6000:1561:b0:2bf:eb67:4774 with SMTP id 1-20020a056000156100b002bfeb674774mr957195wrz.11.1675206669981;
-        Tue, 31 Jan 2023 15:11:09 -0800 (PST)
-X-Google-Smtp-Source: AK7set+UghtwG5i6RKk6gUXdtXT/2iCWC9F9Q8LwQyUgDAkiThUw4PdcBKNkwWZzCmZP4Bi8M/VSCA==
-X-Received: by 2002:a05:6000:1561:b0:2bf:eb67:4774 with SMTP id 1-20020a056000156100b002bfeb674774mr957170wrz.11.1675206669737;
-        Tue, 31 Jan 2023 15:11:09 -0800 (PST)
-Received: from qwirkle ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id x7-20020a5d6b47000000b002bbed1388a5sm15947931wrw.15.2023.01.31.15.11.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 15:11:09 -0800 (PST)
-Date:   Tue, 31 Jan 2023 23:11:07 +0000
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     Willem de Bruijn <willemb@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Fred Klassen <fklassen@appneta.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 4/4] selftests: net: udpgso_bench_tx: Cater
- for pending datagrams zerocopy benchmarking
-Message-ID: <Y9mgC7cEyRuS8UPg@qwirkle>
-References: <20230131210051.475983-4-andrei.gherzan@canonical.com>
- <CA+FuTScJCaW+UL0dDDg-7nNdhdZV7Xs5MrfBkGAg-jR4az+DRQ@mail.gmail.com>
- <Y9mTRER69Z7BGqB5@qwirkle>
- <CA+FuTSfHtidA9zLZMpo+1AoVh=rN=nWyxfVtsUDuuJHmr9UFUw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+FuTSfHtidA9zLZMpo+1AoVh=rN=nWyxfVtsUDuuJHmr9UFUw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2766661745
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:12:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268AFC433D2;
+        Tue, 31 Jan 2023 23:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1675206731;
+        bh=UD5aYgT6pPerwqmRX863s/i9h3g4RLRQIlQIVcQeK9k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ve2cEcLbfkgODWpke5wSo2CRG70LKa3nC9kSoeM1J6Qf6HyPThzORd9pAHW+/ObyJ
+         vCHmRnUh+D8kgZIyNeYV8qZeoc3ilj+qhFfDGjLQUQZHVm2EV2x3+XEgXDtOKDRtmS
+         RAr+qeOOsyKdPonLaBLNkJ9fISBaTBrXqLFvmr5M=
+Date:   Tue, 31 Jan 2023 15:12:09 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v4 4/7] mm: replace vma->vm_flags direct modifications
+ with modifier calls
+Message-Id: <20230131151209.d53ba65c3c065979808d9912@linux-foundation.org>
+In-Reply-To: <CAJuCfpHmtkzrKx45SQQ0gXLoybtgHxHmTP5J4L74ChTqSfFA-g@mail.gmail.com>
+References: <20230126193752.297968-1-surenb@google.com>
+        <20230126193752.297968-5-surenb@google.com>
+        <Y9jSFFeHYZE1/yFg@hyeyoo>
+        <CAJuCfpEzaVkgQt=C-33jAh1vLVJAjoyM8X5AD9CzyDUJnPDCkw@mail.gmail.com>
+        <20230131125355.f07f42af56b23bfa28b2a58c@linux-foundation.org>
+        <CAJuCfpHmtkzrKx45SQQ0gXLoybtgHxHmTP5J4L74ChTqSfFA-g@mail.gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/31 05:28PM, Willem de Bruijn wrote:
-> On Tue, Jan 31, 2023 at 5:16 PM Andrei Gherzan
-> <andrei.gherzan@canonical.com> wrote:
+On Tue, 31 Jan 2023 13:08:19 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+
+> On Tue, Jan 31, 2023 at 12:54 PM Andrew Morton
+> <akpm@linux-foundation.org> wrote:
 > >
-> > On 23/01/31 04:51PM, Willem de Bruijn wrote:
-> > > On Tue, Jan 31, 2023 at 4:01 PM Andrei Gherzan
-> > > <andrei.gherzan@canonical.com> wrote:
+> > On Tue, 31 Jan 2023 10:54:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > > > > -             vma->vm_flags &= ~VM_MAYWRITE;
+> > > > > +             vm_flags_clear(vma, VM_MAYSHARE);
+> > > > >       }
 > > > >
-> > > > The test tool can check that the zerocopy number of completions value is
-> > > > valid taking into consideration the number of datagram send calls. This can
-> > > > catch the system into a state where the datagrams are still in the system
-> > > > (for example in a qdisk, waiting for the network interface to return a
-> > > > completion notification, etc).
-> > > >
-> > > > This change adds a retry logic of computing the number of completions up to
-> > > > a configurable (via CLI) timeout (default: 2 seconds).
-> > > >
-> > > > Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
-> > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > Cc: Willem de Bruijn <willemb@google.com>
-> > > > Cc: Paolo Abeni <pabeni@redhat.com>
-> > > > ---
-> > > >  tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
-> > > >  1 file changed, 27 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-> > > > index b47b5c32039f..ef887842522a 100644
-> > > > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
-> > > > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-> > > > @@ -62,6 +62,7 @@ static int    cfg_payload_len = (1472 * 42);
-> > > >  static int     cfg_port        = 8000;
-> > > >  static int     cfg_runtime_ms  = -1;
-> > > >  static bool    cfg_poll;
-> > > > +static int     cfg_poll_loop_timeout_ms = 2000;
-> > > >  static bool    cfg_segment;
-> > > >  static bool    cfg_sendmmsg;
-> > > >  static bool    cfg_tcp;
-> > > > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
-> > > >         }
-> > > >  }
-> > > >
-> > > > -static void flush_errqueue(int fd, const bool do_poll)
-> > > > +static void flush_errqueue(int fd, const bool do_poll,
-> > > > +               unsigned long poll_timeout, const bool poll_err)
+> > > > I think it should be:
+> > > >         s/VM_MAYSHARE/VM_MAYWRITE/
 > > >
-> > > nit: his indentation looks off though
 > >
-> > This one I've missed but I couldn't find any guidelines on it. Could you
-> > clarify to me what this should be or point me to soem docs? Happy to fix
-> > otherwise. I'm currently using vim smartindent but it is definitely not
-> > in line with what is here already.
+> > I added the fixup.  Much better than resending a seven patch series for a
+> > single line change.  Unless you have substantial other changes pending.
 > 
-> It should align with the parameter above.
-
-Found the roots of the issue - tab stop was 4 so it was rendered
-confusing for me. I'll fix and resend including email prefix change (net
-vs net next) and the CC footers (they should be Cc: not CC:).
-
+> Thanks! That sounds reasonable.
 > 
-> https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-long-lines-and-strings
+> I'll also need to introduce vm_flags_reset_once() to use in
+> replacement of WRITE_ONCE(vma->vm_flags, newflags) case. Should I send
+> a separate short patch for that?
 
--- 
-Andrei Gherzan
+That depends on what the patch looks like.  How about you send it
+and we'll see?
