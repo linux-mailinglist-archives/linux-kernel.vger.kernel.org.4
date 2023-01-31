@@ -2,205 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7CA682D58
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D29E7682D59
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbjAaNI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S232014AbjAaNI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjAaNI1 (ORCPT
+        with ESMTP id S231473AbjAaNI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:08:27 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D623AAB;
-        Tue, 31 Jan 2023 05:08:24 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id b5552f1a09772976; Tue, 31 Jan 2023 14:08:22 +0100
-Received: from kreacher.localnet (unknown [213.134.183.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 9515678167E;
-        Tue, 31 Jan 2023 14:08:21 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "david.e.box@linux.intel.com" <david.e.box@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v1 7/8] thermal: intel: intel_pch: Rename board ID symbols
-Date:   Tue, 31 Jan 2023 14:08:20 +0100
-Message-ID: <12166249.O9o76ZdvQC@kreacher>
-In-Reply-To: <03b213dd351605d34f3d2ebc29fc3795cd2a58d2.camel@intel.com>
-References: <1751684.VLH7GnMWUR@kreacher> <2144306.Icojqenx9y@kreacher> <03b213dd351605d34f3d2ebc29fc3795cd2a58d2.camel@intel.com>
+        Tue, 31 Jan 2023 08:08:56 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962138A73;
+        Tue, 31 Jan 2023 05:08:49 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-142b72a728fso19195859fac.9;
+        Tue, 31 Jan 2023 05:08:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5vxGDcuE5ADlwFzUbFDPZd16x22UTWZptpHGJiMgcac=;
+        b=GGhSlkCqG9nBEEeAex6K3a7EAFyUp4RwNFkYdvohfBEglz0IMFuA4wsRJ0mgiXIQcV
+         nE24AmBFn71YXufi6C16QS4Fws0FKEFNvxKK7H/xJjUXfhA5epOfsPPY2MBMDLbmVkq8
+         5lmgHx35n38FeiPAxo4UC1aGpqbSjZk36hJrx7gt01BY0vizqG4ypXEDGQO22QFSGpD1
+         35M/onbqoNIzo5ipXjeiwJby4xL1+wXcD75KhybgVIGHu2YPYlaHSKamlCejqKZvF5F3
+         HVYupofiLDWB77fbQ1Z3K7scA6ArjCaheCTYgxZmiZK6q4qiPo3fyZEaSaEaGRMx/Fhz
+         A87w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5vxGDcuE5ADlwFzUbFDPZd16x22UTWZptpHGJiMgcac=;
+        b=xhaxseqJWL9soWKpfAVXc4fOfbw9sDwR/X8xms1MZzFbtz4jU+Ie4ijttsU6deUjn5
+         5m94XI1HOHnJVXz/n6y9mXXgecnjnIzyiIp9jp6XNVBMTiqStI/ihmHt3m+cAEtcMGAC
+         HDZ7P9ebKUcaoLb4XnPPj3txv0OC0V/LAPOIh0XPub5aU0OxwwMjDMqodQ6jspgJSRgw
+         Il9GwLz4pziFc1VtdgzfktnzE2idiXe7uvPC27hfCREOPj7kkjl94SPgz/npBvXOtaof
+         BZ95temojfStVvHAYcLFcYmM00adI/00uQTXiDNL95ZXXXKeOcZDMMbm+3cwccO2D9IK
+         VKbg==
+X-Gm-Message-State: AO0yUKW05+xLEcSqoTSNOofgjVTyFMD4+0K0DGSMkjv2388FVkRJohv5
+        fYeUSZm0zIFbsTf1w3GpXGuZ504/NuM=
+X-Google-Smtp-Source: AK7set8egRtFUH7sPqUKaEkP2rN5ZYWl9H1RBSq/E0qGXFBh0wqAsX6aPQ8HP0nDnDgrWUlpSv1HAw==
+X-Received: by 2002:a05:6870:6593:b0:163:4004:c7de with SMTP id fp19-20020a056870659300b001634004c7demr12835858oab.36.1675170528642;
+        Tue, 31 Jan 2023 05:08:48 -0800 (PST)
+Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id g5-20020a05687054c500b0014866eb34cesm6441483oan.48.2023.01.31.05.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 05:08:48 -0800 (PST)
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
+Subject: [PATCH] rust: add this_module macro
+Date:   Tue, 31 Jan 2023 10:08:41 -0300
+Message-Id: <20230131130841.318301-1-yakoyoku@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.183.17
-X-CLIENT-HOSTNAME: 213.134.183.17
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudefgedggeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekfedrudejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekfedrudejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepuggrvhhiugdrvgdr
- sghogieslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, January 31, 2023 12:17:55 PM CET Zhang, Rui wrote:
-> On Mon, 2023-01-30 at 20:04 +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > 
-> > Use capitals in the names of the board ID symbols and add the PCH_
-> > prefix to each of them for consistency.
-> > 
-> > Also rename the board_ids enum accordingly.
-> > 
-> > No intentional functional impact.
-> > 
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/thermal/intel/intel_pch_thermal.c |   54 +++++++++++++++--
-> > -------------
-> >  1 file changed, 27 insertions(+), 27 deletions(-)
-> > 
-> > Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-> > +++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-> > @@ -135,38 +135,38 @@ static struct thermal_zone_device_ops tz
-> >  	.critical = pch_critical,
-> >  };
-> >  
-> > -enum board_ids {
-> > -	board_hsw,
-> > -	board_wpt,
-> > -	board_skl,
-> > -	board_cnl,
-> > -	board_cml,
-> > -	board_lwb,
-> > -	board_wbg,
-> > +enum pch_board_ids {
-> > +	PCH_BOARD_HSW = 0,
-> > +	PCH_BOARD_WPT,
-> > +	PCH_BOARD_SKL,
-> > +	PCH_BOARD_CNL,
-> > +	PCH_BOARD_CML,
-> > +	PCH_BOARD_LWB,
-> > +	PCH_BOARD_WBG,
-> >  };
-> >  
-> >  static const struct board_info {
-> >  	const char *name;
-> >  } board_info[] = {
-> 
-> Now struct board_info has "name" field only, so maybe we can remove
-> struct board_info, and use a "static const char *" array instead?
+Adds a Rust equivalent to the handy THIS_MODULE macro from C.
 
-Good point.
-
-I think that the last patch in the series can be replaced with the
-appended one.
-
-> BTW, I'm building a kernel with this patch series as well as 
-> https://patchwork.kernel.org/project/linux-pm/list/?series=717084,
-> will update the test result later.
-
-Thank you!
-
+Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
 ---
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH] thermal: intel: intel_pch: Drop struct board_info
+ rust/kernel/lib.rs | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Because the only member of struct board_info is the name, the
-board_info[] array of struct board_info elements can be replaced with
-an array of strings.
-
-Modify the code accordingly and drop struct board_info.
-
-No intentional functional impact.
-
-Suggested-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/intel_pch_thermal.c |   42 +++++++++---------------------
- 1 file changed, 13 insertions(+), 29 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -145,37 +145,20 @@ enum pch_board_ids {
- 	PCH_BOARD_WBG,
- };
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index e0b0e953907d..afb6b0390426 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -80,6 +80,18 @@ impl ThisModule {
+     }
+ }
  
--static const struct board_info {
--	const char *name;
--} board_info[] = {
--	[PCH_BOARD_HSW] = {
--		.name = "pch_haswell",
--	},
--	[PCH_BOARD_WPT] = {
--		.name = "pch_wildcat_point",
--	},
--	[PCH_BOARD_SKL] = {
--		.name = "pch_skylake",
--	},
--	[PCH_BOARD_CNL] = {
--		.name = "pch_cannonlake",
--	},
--	[PCH_BOARD_CML] = {
--		.name = "pch_cometlake",
--	},
--	[PCH_BOARD_LWB] = {
--		.name = "pch_lewisburg",
--	},
--	[PCH_BOARD_WBG] = {
--		.name = "pch_wellsburg",
--	},
-+static const char *board_names[] = {
-+	[PCH_BOARD_HSW] = "pch_haswell",
-+	[PCH_BOARD_WPT] = "pch_wildcat_point",
-+	[PCH_BOARD_SKL] = "pch_skylake",
-+	[PCH_BOARD_CNL] = "pch_cannonlake",
-+	[PCH_BOARD_CML] = "pch_cometlake",
-+	[PCH_BOARD_LWB] = "pch_lewisburg",
-+	[PCH_BOARD_WBG] = "pch_wellsburg",
- };
- 
- static int intel_pch_thermal_probe(struct pci_dev *pdev,
- 				   const struct pci_device_id *id)
- {
- 	enum pch_board_ids board_id = id->driver_data;
--	const struct board_info *bi = &board_info[board_id];
- 	struct pch_thermal_device *ptd;
- 	u16 trip_temp;
- 	int nr_trips;
-@@ -249,12 +232,13 @@ read_trips:
- 
- 	nr_trips += pch_wpt_add_acpi_psv_trip(ptd, nr_trips);
- 
--	ptd->tzd = thermal_zone_device_register_with_trips(bi->name, ptd->trips,
--							   nr_trips, 0, ptd,
--							   &tzd_ops, NULL, 0, 0);
-+	ptd->tzd = thermal_zone_device_register_with_trips(board_names[board_id],
-+							   ptd->trips, nr_trips,
-+							   0, ptd, &tzd_ops,
-+							   NULL, 0, 0);
- 	if (IS_ERR(ptd->tzd)) {
- 		dev_err(&pdev->dev, "Failed to register thermal zone %s\n",
--			bi->name);
-+			board_names[board_id]);
- 		err = PTR_ERR(ptd->tzd);
- 		goto error_cleanup;
- 	}
-
-
++/// Returns the current module.
++#[macro_export]
++macro_rules! this_module {
++    () => {
++        if cfg!(MODULE) {
++            Some(unsafe { $crate::ThisModule::from_ptr(&mut $crate::bindings::__this_module) })
++        } else {
++            None
++        }
++    };
++}
++
+ #[cfg(not(any(testlib, test)))]
+ #[panic_handler]
+ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
+-- 
+2.39.1
 
