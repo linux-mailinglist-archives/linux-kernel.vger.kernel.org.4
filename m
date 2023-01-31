@@ -2,97 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EEA68255D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168F768255F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjAaHGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 02:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S230026AbjAaHG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 02:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjAaHGG (ORCPT
+        with ESMTP id S229503AbjAaHGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 02:06:06 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F541701;
-        Mon, 30 Jan 2023 23:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675148766; x=1706684766;
-  h=from:to:cc:subject:date:message-id;
-  bh=ZGgufHzmQCvzFlko20VrIIH01XmxCACYYtOG7HWEiB8=;
-  b=lmtC++k2Tk7VtfI/SuWi6eBDrz3faTGcCUO4/5gfzfRSePCsCdGsB3lP
-   cf7VEb8oWWYmGttmo9ctPFgvtadC7b68MHylGdAsxloPVuwKQWkKL6iRh
-   1EBam3+Sf8JG7LCP9sQTjKx6L0KMDyku73av4Tcyl4M7fi2K0fRt9Y+pj
-   0bwWqyBtLb6QN91JnWWwdKQetT3g/nwkhAquQgQpEAuRLrsU/8LtRyDQV
-   lvMkJDl+xcYy1m5IPKOupGq8YwbLNYzqptIPQVJdTcwWRRurRDVYd1mlJ
-   c+R6ZSxjIByuW9FOVJ83MDVFBq0QS17qOieIx4yee1qUPI9FKr8+MnKeD
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="311391892"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="311391892"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 23:06:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="806997797"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="806997797"
-Received: from storage2.sh.intel.com (HELO localhost) ([10.67.111.9])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Jan 2023 23:06:02 -0800
-From:   Liu Xiaodong <xiaodong.liu@intel.com>
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liu Xiaodong <xiaodong.liu@intel.com>,
-        Jim Harris <james.r.harris@intel.com>,
-        Ben Walker <benjamin.walker@intel.com>
-Subject: [PATCH] block: ublk: extending queue_size to fix overflow
-Date:   Tue, 31 Jan 2023 02:05:52 -0500
-Message-Id: <20230131070552.115067-1-xiaodong.liu@intel.com>
-X-Mailer: git-send-email 2.14.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 31 Jan 2023 02:06:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A61630FE;
+        Mon, 30 Jan 2023 23:06:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46E13B81914;
+        Tue, 31 Jan 2023 07:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FAAC433EF;
+        Tue, 31 Jan 2023 07:06:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675148812;
+        bh=VITKGPVDd2e1fUPIs+B1fK1+Py967sPPaq02shlQyx4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IEvh6PbZOt45Hn2UVMFd2wYOizxgSENUjzDkUa+612fM3GbFoHqV31BMTh3WFDodV
+         UnSxWCbcBaZHtSQNOedzJqL7JsZ2AflxPzoaDh84IcoYhW++DG9Rk2ZFSoAYWTYv8i
+         gUdKpJaAQW2mBrXg5LFMUzLLakEOhXEqAta/qcVy6OCMJ0L6tAhEIaHDHp/vNQc8U9
+         3l43k7/fHYuCd0MRUSp6xbXsIMCPp0HVfq1laVFd05gq/iPg1vUmYzDpBrU9HZ+VEW
+         oqY/jIhozqy5gEh6A4msmdY0m3VG/1BnFJVp2sXzYRCjlJTMSWp5XQ337/guaRaih8
+         VpunGAlwvfzhA==
+Received: by mail-lj1-f173.google.com with SMTP id y19so15024101ljq.7;
+        Mon, 30 Jan 2023 23:06:51 -0800 (PST)
+X-Gm-Message-State: AFqh2kpoA+x4jwYCoCTdf+gLzQIYBGMcUQijiXx+QL8G8iEtQEhkvycg
+        aC0pToEvyBQ141k43W5+soecQdWr3D8OVSxvqrU=
+X-Google-Smtp-Source: AMrXdXs+8ddDVIxY+EbdW5OMRQO2/HFx4j3PfX0LX90N1AC7u8sG4ILqFjilXQ93Qtd3xkvVQR9AMu3xXPS0hnqBc0k=
+X-Received: by 2002:a2e:a812:0:b0:28b:9149:6291 with SMTP id
+ l18-20020a2ea812000000b0028b91496291mr3660948ljq.142.1675148809930; Mon, 30
+ Jan 2023 23:06:49 -0800 (PST)
+MIME-Version: 1.0
+References: <20230131040355.3116-1-justin.he@arm.com> <20230131040355.3116-3-justin.he@arm.com>
+In-Reply-To: <20230131040355.3116-3-justin.he@arm.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 31 Jan 2023 08:06:38 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXE5Ogcxi=Mk7rC8YDo7E825Lk6sxKeTwBmGM8TkrSPs2g@mail.gmail.com>
+Message-ID: <CAMj1kXE5Ogcxi=Mk7rC8YDo7E825Lk6sxKeTwBmGM8TkrSPs2g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] efi: Introduce efi_get_supported_rt_services() to get
+ the runtime services mask
+To:     Jia He <justin.he@arm.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When validating drafted SPDK ublk target, in a case that
-assigning large queue depth to multiqueue ublk device,
-ublk target would run into a weird incorrect state. During
-rounds of review and debug, An overflow bug was found
-in ublk driver.
+On Tue, 31 Jan 2023 at 05:04, Jia He <justin.he@arm.com> wrote:
+>
+> Previously, efi.runtime_supported_mask will always be the initial value
+> EFI_RT_SUPPORTED_ALL and can't be retrieved in efi_config_parse_tables()
+> if rt_prop is EFI_INVALID_TABLE_ADDR. Thus this can cause the wrong
+> return value of efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE)
+> on the Ampere Emag server.
+>
+> Besides, abstract the runtime services retrieving into a new exported
+> helper efi_get_supported_rt_services() to set or clear the runtime service
+> bit of efi.flags.
+>
+> Signed-off-by: Jia He <justin.he@arm.com>
+> ---
+>  drivers/firmware/efi/arm-runtime.c |  5 ++++-
+>  drivers/firmware/efi/efi.c         | 28 +++++++++++++++++++---------
+>  include/linux/efi.h                |  1 +
+>  3 files changed, 24 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/arm-runtime.c b/drivers/firmware/efi/arm-runtime.c
+> index 83f5bb57fa4c..ce93133f9abc 100644
+> --- a/drivers/firmware/efi/arm-runtime.c
+> +++ b/drivers/firmware/efi/arm-runtime.c
+> @@ -146,7 +146,10 @@ static int __init arm_enable_runtime_services(void)
+>
+>         /* Set up runtime services function pointers */
+>         efi_native_runtime_setup();
+> -       set_bit(EFI_RUNTIME_SERVICES, &efi.flags);
+> +       if (efi_get_supported_rt_services())
+> +               set_bit(EFI_RUNTIME_SERVICES, &efi.flags);
+> +       else
+> +               clear_bit(EFI_RUNTIME_SERVICES, &efi.flags);
+>
 
-In ublk_cmd.h, UBLK_MAX_QUEUE_DEPTH is 4096 which means
-each ublk queue depth can be set as large as 4096. But
-when setting qd for a ublk device,
-sizeof(struct ublk_queue) + depth * sizeof(struct ublk_io)
-will be larger than 65535 if qd is larger than 2728.
-Then queue_size is overflowed, and ublk_get_queue()
-references a wrong pointer position. The wrong content of
-ublk_queue elements will lead to out-of-bounds memory
-access.
+This is not right. There are now other users of the EFI runtime
+service infrastructure (ACPI PRM), so even if all EFI runtime services
+are marked as unsupported, we should still set the
+EFI_RUNTIME_SERVICES bit if the EFI runtime memory map is provided.
 
-Extend queue_size in ublk_device as "unsigned int".
 
-Signed-off-by: Liu Xiaodong <xiaodong.liu@intel.com>
----
- drivers/block/ublk_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index e54693204630..6368b56eacf1 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -137,7 +137,7 @@ struct ublk_device {
- 
- 	char	*__queues;
- 
--	unsigned short  queue_size;
-+	unsigned int	queue_size;
- 	struct ublksrv_ctrl_dev_info	dev_info;
- 
- 	struct blk_mq_tag_set	tag_set;
--- 
-2.14.5
-
+>         return 0;
+>  }
+> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+> index a2b0cbc8741c..96475cb8088e 100644
+> --- a/drivers/firmware/efi/efi.c
+> +++ b/drivers/firmware/efi/efi.c
+> @@ -595,6 +595,24 @@ static __init int match_config_table(const efi_guid_t *guid,
+>         return 0;
+>  }
+>
+> +unsigned int __init efi_get_supported_rt_services(void)
+> +{
+> +       unsigned int runtime_supported_mask = EFI_RT_SUPPORTED_ALL;
+> +
+> +       if (rt_prop != EFI_INVALID_TABLE_ADDR) {
+> +               efi_rt_properties_table_t *tbl;
+> +
+> +               tbl = early_memremap(rt_prop, sizeof(*tbl));
+> +               if (tbl) {
+> +                       runtime_supported_mask &= tbl->runtime_services_supported;
+> +                       early_memunmap(tbl, sizeof(*tbl));
+> +               }
+> +       } else
+> +               runtime_supported_mask = 0;
+> +
+> +       return runtime_supported_mask;
+> +}
+> +
+>  int __init efi_config_parse_tables(const efi_config_table_t *config_tables,
+>                                    int count,
+>                                    const efi_config_table_type_t *arch_tables)
+> @@ -695,15 +713,7 @@ int __init efi_config_parse_tables(const efi_config_table_t *config_tables,
+>                 }
+>         }
+>
+> -       if (rt_prop != EFI_INVALID_TABLE_ADDR) {
+> -               efi_rt_properties_table_t *tbl;
+> -
+> -               tbl = early_memremap(rt_prop, sizeof(*tbl));
+> -               if (tbl) {
+> -                       efi.runtime_supported_mask &= tbl->runtime_services_supported;
+> -                       early_memunmap(tbl, sizeof(*tbl));
+> -               }
+> -       }
+> +       efi.runtime_supported_mask &= efi_get_supported_rt_services();
+>
+>         if (IS_ENABLED(CONFIG_BLK_DEV_INITRD) &&
+>             initrd != EFI_INVALID_TABLE_ADDR && phys_initrd_size == 0) {
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index 4b27519143f5..fcaf0d7fc07e 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -717,6 +717,7 @@ extern void __init efi_esrt_init(void);
+>  #else
+>  static inline void efi_esrt_init(void) { }
+>  #endif
+> +extern unsigned int efi_get_supported_rt_services(void);
+>  extern int efi_config_parse_tables(const efi_config_table_t *config_tables,
+>                                    int count,
+>                                    const efi_config_table_type_t *arch_tables);
+> --
+> 2.25.1
+>
