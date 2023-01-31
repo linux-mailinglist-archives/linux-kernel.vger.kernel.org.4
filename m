@@ -2,310 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFB5682D70
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68FF682D71
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjAaNK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S231977AbjAaNLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbjAaNKy (ORCPT
+        with ESMTP id S231825AbjAaNLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:10:54 -0500
-Received: from out28-193.mail.aliyun.com (out28-193.mail.aliyun.com [115.124.28.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD3BAD39;
-        Tue, 31 Jan 2023 05:10:15 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436261|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.109619-0.000511876-0.889869;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=28;RT=28;SR=0;TI=SMTPD_---.R66vAnW_1675170608;
-Received: from 192.168.220.144(mailfrom:michael@allwinnertech.com fp:SMTPD_---.R66vAnW_1675170608)
-          by smtp.aliyun-inc.com;
-          Tue, 31 Jan 2023 21:10:10 +0800
-Message-ID: <241c5b1d-de4a-5127-461f-8b885cca1668@allwinnertech.com>
-Date:   Tue, 31 Jan 2023 21:10:08 +0800
+        Tue, 31 Jan 2023 08:11:21 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6935915576
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:10:47 -0800 (PST)
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 26C0044217
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675170646;
+        bh=Q741xVNPxljikF40G1tYF49pa5Q5XmgVMznZqucbJ7U=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=wAH4MQ0pTlOenqtCcoQDeCZdTBH5QYAjBBcC8ozXeWmquCoyrxLXJizbWUxIarxY7
+         0i1wGV4rcGVbSi/mI0YbgvS4A0UaMHCxWGpmYPyIJphbcT3DZQ3tJMuUmkBFcKbM7W
+         O4o+pKX6mpwSKGtfmkPuog9llxs7aMmTBGnsS/DggfwNhGY9yvyY1khlfD+ZyEGb2t
+         m7uO8zfFwPkKsT2VqDx+1dZUdmI+5oXUS3e84QTjjRO8rxynDYFoZWG5IT89HPBha4
+         8DTxIOssgt+QX1nOPWg/JmKe7XXn3kkT3f1P8iOkrhoPDFJmqKfEY1SnHlKG3cLp0R
+         K4D5Wh19yIQyw==
+Received: by mail-wr1-f71.google.com with SMTP id b15-20020adfc74f000000b002be276d2052so2423601wrh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:10:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q741xVNPxljikF40G1tYF49pa5Q5XmgVMznZqucbJ7U=;
+        b=cXIIRXbfNTehaN6wS11ZV26RUdRBiBMdtslIf+hRIP8Bp7BIkauweL2ZJV5M6OKBw0
+         KHcgy4qmgKZP77Gq5dAjB4TOI/pJzGXr6oriBOVRar2IBWhkiLDt7VwXzJrphF5iNhsV
+         qyFafWVSYTCyk+fXqJgvaRuEZVZiUvQsm9kg2UL8dn0wFmNPYLhKj8MGGUOqRt+CS2DP
+         xUKe2pYEUvVKY81ioJKF2xQ619tyrVr+0lLXRHoXsv5uLskHvxVWgHJaffTtNGrYPDXF
+         mc05oObD/L29TidCtA72KDnKTuIvzdcoRIO332A5NjRqnknDtwonsNfHxtdH0chx6Vqp
+         Dk/Q==
+X-Gm-Message-State: AO0yUKUR/4D58adld3Nk0ALNBjCLmVhmkCZed4yGuZd7uFmVv6sa+vbI
+        S0xOA2YtqhM4UMkWS0pvgfefuHwMaDhXrL1Tg9j6yhKNkxaUYeNXWYOCLFsuT60liNKFFq5qx2B
+        W+5mBijFqhzIjzvnLIzM+P9rHhCc9XQFhu5xLgdT/XA==
+X-Received: by 2002:a05:600c:4b1c:b0:3dc:5bd7:62ec with SMTP id i28-20020a05600c4b1c00b003dc5bd762ecmr6352552wmp.32.1675170645253;
+        Tue, 31 Jan 2023 05:10:45 -0800 (PST)
+X-Google-Smtp-Source: AK7set9Ugoyg1AvpTA39S5u6IM1/+onmzCaM4fhfsMAW0FXiPhLGAHpTn5QJOXYOy3L9Jftn4bO8uQ==
+X-Received: by 2002:a05:600c:4b1c:b0:3dc:5bd7:62ec with SMTP id i28-20020a05600c4b1c00b003dc5bd762ecmr6352527wmp.32.1675170644924;
+        Tue, 31 Jan 2023 05:10:44 -0800 (PST)
+Received: from qwirkle ([2001:67c:1560:8007::aac:c4dd])
+        by smtp.gmail.com with ESMTPSA id i1-20020a05600c354100b003dc4050c97bsm2331886wmq.3.2023.01.31.05.10.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 05:10:44 -0800 (PST)
+Date:   Tue, 31 Jan 2023 13:10:42 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Willem de Bruijn <willemb@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: udpgso_bench_tx: Introduce exponential
+ back-off retries
+Message-ID: <Y9kTUlJLO/H0rbhp@qwirkle>
+References: <CA+FuTScSfLG7gXS_YqJzsC-Teiryj3jeSQs9w0D1PWJs8sv5Rg@mail.gmail.com>
+ <Y9ftL5c4klThCi9Q@qwirkle>
+ <Y9fu7TR5VC33j+EP@qwirkle>
+ <CA+FuTSf1tJ7kw+GCXf0YBRv0HaR8v7=iy6b36hrsmx8hEr5knQ@mail.gmail.com>
+ <Y9f+7tMWMtPACLz9@qwirkle>
+ <CA+FuTScThEWVevZ+KVgLOZ6zb4Ush6RtKL4FmC2cFMg+Q-OWpw@mail.gmail.com>
+ <Y9gLeNqorZNQ1gjp@qwirkle>
+ <Y9gfpa7vks5Ndl8q@qwirkle>
+ <CA+FuTSckAeDGSBYE3bv2qR9cXpqac8Vmu6YxC1HTJx7YLY7gnQ@mail.gmail.com>
+ <Y9gnqNnkiPEw+Pp8@qwirkle>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] mmc:mmc-cqhci:support interrupt coalescing
-Content-Language: en-US
-To:     Wenchao Chen <wenchao.chen666@gmail.com>
-Cc:     adrian.hunter@intel.com, riteshh@codeaurora.org,
-        asutoshd@codeaurora.org, ulf.hansson@linaro.org,
-        chaotian.jing@mediatek.com, matthias.bgg@gmail.com,
-        kdasu.kdev@gmail.com, alcooperx@gmail.com, f.fainelli@gmail.com,
-        haibo.chen@nxp.com, shawnguo@kernel.org, agross@kernel.org,
-        andersson@kernel.org, michal.simek@xilinx.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        bcm-kernel-feedback-list@broadcom.com, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, konrad.dybcio@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20230130064656.106793-1-michael@allwinnertech.com>
- <CA+Da2qzJBxn5up1YLiaguhMJ=W7JkVExyyiFco9KyPE+3jEn8w@mail.gmail.com>
-From:   Michael Wu <michael@allwinnertech.com>
-In-Reply-To: <CA+Da2qzJBxn5up1YLiaguhMJ=W7JkVExyyiFco9KyPE+3jEn8w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9gnqNnkiPEw+Pp8@qwirkle>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Wenchao，
-   At present, I am working on the hook function .cqe_enable that the 
-ICCTH of CQIC is set, and it work well in my test. Actually I want to 
-confirm why the community does not support this feature. I think it is 
-necessary to reduce the number of interrupts caused by IO and reducing 
-interrupt context switching.
+On 23/01/30 08:25PM, Andrei Gherzan wrote:
+> On 23/01/30 02:57PM, Willem de Bruijn wrote:
+> > On Mon, Jan 30, 2023 at 2:51 PM Andrei Gherzan
+> > <andrei.gherzan@canonical.com> wrote:
+> > >
+> > > On 23/01/30 06:24PM, Andrei Gherzan wrote:
+> > > > On 23/01/30 12:35PM, Willem de Bruijn wrote:
+> > > > > On Mon, Jan 30, 2023 at 12:31 PM Andrei Gherzan
+> > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > >
+> > > > > > On 23/01/30 11:29AM, Willem de Bruijn wrote:
+> > > > > > > On Mon, Jan 30, 2023 at 11:23 AM Andrei Gherzan
+> > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > >
+> > > > > > > > On 23/01/30 04:15PM, Andrei Gherzan wrote:
+> > > > > > > > > On 23/01/30 11:03AM, Willem de Bruijn wrote:
+> > > > > > > > > > On Mon, Jan 30, 2023 at 9:28 AM Andrei Gherzan
+> > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > On 23/01/30 08:35AM, Willem de Bruijn wrote:
+> > > > > > > > > > > > On Mon, Jan 30, 2023 at 7:51 AM Andrei Gherzan
+> > > > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > On 23/01/30 09:26AM, Paolo Abeni wrote:
+> > > > > > > > > > > > > > On Fri, 2023-01-27 at 17:03 -0500, Willem de Bruijn wrote:
+> > > > > > > > > > > > > > > On Fri, Jan 27, 2023 at 1:16 PM Andrei Gherzan
+> > > > > > > > > > > > > > > <andrei.gherzan@canonical.com> wrote:
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > The tx and rx test programs are used in a couple of test scripts including
+> > > > > > > > > > > > > > > > "udpgro_bench.sh". Taking this as an example, when the rx/tx programs
+> > > > > > > > > > > > > > > > are invoked subsequently, there is a chance that the rx one is not ready to
+> > > > > > > > > > > > > > > > accept socket connections. This racing bug could fail the test with at
+> > > > > > > > > > > > > > > > least one of the following:
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > ./udpgso_bench_tx: connect: Connection refused
+> > > > > > > > > > > > > > > > ./udpgso_bench_tx: sendmsg: Connection refused
+> > > > > > > > > > > > > > > > ./udpgso_bench_tx: write: Connection refused
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > This change addresses this by adding routines that retry the socket
+> > > > > > > > > > > > > > > > operations with an exponential back off algorithm from 100ms to 2s.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+> > > > > > > > > > > > > > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Synchronizing the two processes is indeed tricky.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Perhaps more robust is opening an initial TCP connection, with
+> > > > > > > > > > > > > > > SO_RCVTIMEO to bound the waiting time. That covers all tests in one
+> > > > > > > > > > > > > > > go.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Another option would be waiting for the listener(tcp)/receiver(udp)
+> > > > > > > > > > > > > > socket to show up in 'ss' output before firing-up the client - quite
+> > > > > > > > > > > > > > alike what mptcp self-tests are doing.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > I like this idea. I have tested it and it works as expected with the
+> > > > > > > > > > > > > exeception of:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > ./udpgso_bench_tx: sendmsg: No buffer space available
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Any ideas on how to handle this? I could retry and that works.
+> > > > > > > > > > > >
+> > > > > > > > > > > > This happens (also) without the zerocopy flag, right? That
+> > > > > > > > > > > >
+> > > > > > > > > > > > It might mean reaching the sndbuf limit, which can be adjusted with
+> > > > > > > > > > > > SO_SNDBUF (or SO_SNDBUFFORCE if CAP_NET_ADMIN). Though I would not
+> > > > > > > > > > > > expect this test to bump up against that limit.
+> > > > > > > > > > > >
+> > > > > > > > > > > > A few zerocopy specific reasons are captured in
+> > > > > > > > > > > > https://www.kernel.org/doc/html/latest/networking/msg_zerocopy.html#transmission.
+> > > > > > > > > > >
+> > > > > > > > > > > I have dug a bit more into this, and it does look like your hint was in
+> > > > > > > > > > > the right direction. The fails I'm seeing are only with the zerocopy
+> > > > > > > > > > > flag.
+> > > > > > > > > > >
+> > > > > > > > > > > From the reasons (doc) above I can only assume optmem limit as I've
+> > > > > > > > > > > reproduced it with unlimited locked pages and the fails are transient.
+> > > > > > > > > > > That leaves optmem limit. Bumping the value I have by default (20480) to
+> > > > > > > > > > > (2048000) made the sendmsg succeed as expected. On the other hand, the
+> > > > > > > > > > > tests started to fail with something like:
+> > > > > > > > > > >
+> > > > > > > > > > > ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    774783
+> > > > > > > > > > > expected    773707 received
+> > > > > > > > > >
+> > > > > > > > > > More zerocopy completions than number of sends. I have not seen this before.
+> > > > > > > > > >
+> > > > > > > > > > The completions are ranges of IDs, one per send call for datagram sockets.
+> > > > > > > > > >
+> > > > > > > > > > Even with segmentation offload, the counter increases per call, not per segment.
+> > > > > > > > > >
+> > > > > > > > > > Do you experience this without any other changes to udpgso_bench_tx.c.
+> > > > > > > > > > Or are there perhaps additional sendmsg calls somewhere (during
+> > > > > > > > > > initial sync) that are not accounted to num_sends?
+> > > > > > > > >
+> > > > > > > > > Indeed, that looks off. No, I have run into this without any changes in
+> > > > > > > > > the tests (besides the retry routine in the shell script that waits for
+> > > > > > > > > rx to come up). Also, as a data point.
+> > > > > > > >
+> > > > > > > > Actually wait. I don't think that is the case here. "expected" is the
+> > > > > > > > number of sends. In this case we sent 1076 more messages than
+> > > > > > > > completions. Am I missing something obvious?
+> > > > > > >
+> > > > > > > Oh indeed.
+> > > > > > >
+> > > > > > > Receiving fewer completions than transmission is more likely.
+> > > > > >
+> > > > > > Exactly, yes.
+> > > > > >
+> > > > > > > This should be the result of datagrams still being somewhere in the
+> > > > > > > system. In a qdisc, or waiting for the network interface to return a
+> > > > > > > completion notification, say.
+> > > > > > >
+> > > > > > > Does this remain if adding a longer wait before the final flush_errqueue?
+> > > > > >
+> > > > > > Yes and no. But not realiably unless I go overboard.
+> > > > > >
+> > > > > > > Or, really, the right fix is to keep polling there until the two are
+> > > > > > > equal, up to some timeout. Currently flush_errqueue calls poll only
+> > > > > > > once.
+> > > > > >
+> > > > > > That makes sense. I have implemented a retry and this ran for a good
+> > > > > > while now.
+> > > > > >
+> > > > > > -               flush_errqueue(fd, true);
+> > > > > > +               while (true) {
+> > > > > > +                       flush_errqueue(fd, true);
+> > > > > > +                       if ((stat_zcopies == num_sends) || (delay >= MAX_DELAY))
+> > > > > > +                               break;
+> > > > > > +                       usleep(delay);
+> > > > > > +                       delay *= 2;
+> > > > > > +               }
+> > > > > >
+> > > > > > What do you think?
+> > > > >
+> > > > > Thanks for running experiments.
+> > > > >
+> > > > > We can avoid the unconditional sleep, as the poll() inside
+> > > > > flush_errqueue already takes a timeout.
+> > > > >
+> > > > > One option is to use start_time = clock_gettime(..) or gettimeofday
+> > > > > before poll, and restart poll until either the exit condition or
+> > > > > timeout is reached, with timeout = orig_time - elapsed_time.
+> > > >
+> > > > Yes, this was more of a quick draft. I was thinking to move it into the
+> > > > flush function (while making it aware of num_sends via a parameter):
+> > > >
+> > > > if (do_poll) {
+> > > >   struct pollfd fds = {0};
+> > > >   int ret;
+> > > >   unsigned long tnow, tstop;
+> > > >
+> > > >   fds.fd = fd;
+> > > >   tnow = gettimeofday_ms();
+> > > >   tstop = tnow + POLL_LOOP_TIMEOUT_MS;
+> > > >   while ((stat_zcopies != num_sends) && (tnow < tstop)) {
+> > 
+> > The new condition to loop until stat_zcopies == num_sends should only
+> > be tested on the final call. This likely needs to become a separate
+> > boolean. Or a separate flush_errqueue_last() function, and leave the
+> > existing one as is.
+> 
+> Wouldn't a do/while be enough here?
+> 
+> > 
+> > We can probably merge the outer for and inner while loops
+> > 
+> > > >     ret = poll(&fds, 1, 500);
+> > 
+> > Instead of 500, this becomes tstop - tnow.
+> 
+> Right. Missed this one.
+> 
+> > 
+> > > >     if (ret == 0) {
+> > > >       if (cfg_verbose)
+> > > >         fprintf(stderr, "poll timeout\n");
+> > 
+> > Poll timeouts are now expected to an extent. Only report once at the
+> > end of the function if the poll was only called once and timed out.
+> 
+> I had to think about this a bit but now I see your point and it makes
+> sense.
+> 
+> > > >       } else if (ret < 0) {
+> > > >         error(1, errno, "poll");
+> > > >     }
+> > > >     tnow = gettimeofday_ms();
+> > > >   }
+> > > > }
+> > > >
+> > > > Does this make more sense?
+> > >
+> > > Obviously, this should be a do/while. Anyway, this works as expected
+> > > after leaving it for a around two hours.
+> > 
+> > Great to hear you found the cause.
+> 
+> Hats off for hints.
 
-On 2023/1/31 11:09, Wenchao Chen wrote:
-> On Mon, Jan 30, 2023 at 2:49 PM Michael Wu <michael@allwinnertech.com> wrote:
->>
->> Support interrupt coalescing to reduce the frequency of mmc interrupts
->>
-> 
-> Hi Michael
-> The CQIS register does not have any configuration.
-> Usually ICCTH needs to be enabled.
-> 
->> Signed-off-by: Michael Wu <michael@allwinnertech.com>
->> ---
->>   drivers/mmc/host/cqhci-core.c      | 20 +++++++++++++++-----
->>   drivers/mmc/host/cqhci.h           |  5 ++++-
->>   drivers/mmc/host/mtk-sd.c          |  2 +-
->>   drivers/mmc/host/sdhci-brcmstb.c   |  2 +-
->>   drivers/mmc/host/sdhci-esdhc-imx.c |  2 +-
->>   drivers/mmc/host/sdhci-msm.c       |  2 +-
->>   drivers/mmc/host/sdhci-of-arasan.c |  2 +-
->>   drivers/mmc/host/sdhci-pci-core.c  |  2 +-
->>   drivers/mmc/host/sdhci-pci-gli.c   |  2 +-
->>   drivers/mmc/host/sdhci-tegra.c     |  2 +-
->>   drivers/mmc/host/sdhci_am654.c     |  2 +-
->>   11 files changed, 28 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
->> index b3d7d6d8d654..f9cdf9f04bfc 100644
->> --- a/drivers/mmc/host/cqhci-core.c
->> +++ b/drivers/mmc/host/cqhci-core.c
->> @@ -420,7 +420,7 @@ static void cqhci_disable(struct mmc_host *mmc)
->>   }
->>
->>   static void cqhci_prep_task_desc(struct mmc_request *mrq,
->> -                                struct cqhci_host *cq_host, int tag)
->> +                                struct cqhci_host *cq_host, int tag, int intr)
->>   {
->>          __le64 *task_desc = (__le64 __force *)get_desc(cq_host, tag);
->>          u32 req_flags = mrq->data->flags;
->> @@ -428,7 +428,7 @@ static void cqhci_prep_task_desc(struct mmc_request *mrq,
->>
->>          desc0 = CQHCI_VALID(1) |
->>                  CQHCI_END(1) |
->> -               CQHCI_INT(1) |
->> +               CQHCI_INT(intr) |
->>                  CQHCI_ACT(0x5) |
->>                  CQHCI_FORCED_PROG(!!(req_flags & MMC_DATA_FORCED_PRG)) |
->>                  CQHCI_DATA_TAG(!!(req_flags & MMC_DATA_DAT_TAG)) |
->> @@ -621,7 +621,7 @@ static int cqhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
->>          }
->>
->>          if (mrq->data) {
->> -               cqhci_prep_task_desc(mrq, cq_host, tag);
->> +               cqhci_prep_task_desc(mrq, cq_host, tag, (cq_host->intr_clsc ? 0 : 1));
->>
->>                  err = cqhci_prep_tran_desc(mrq, cq_host, tag);
->>                  if (err) {
->> @@ -812,7 +812,7 @@ static void cqhci_finish_mrq(struct mmc_host *mmc, unsigned int tag)
->>   irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
->>                        int data_error)
->>   {
->> -       u32 status;
->> +       u32 status, rval;
->>          unsigned long tag = 0, comp_status;
->>          struct cqhci_host *cq_host = mmc->cqe_private;
->>
->> @@ -856,6 +856,15 @@ irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
->>                  spin_unlock(&cq_host->lock);
->>          }
->>
->> +       if (cq_host->intr_clsc) {
->> +               rval = cqhci_readl(cq_host, CQHCI_IC);
->> +               rval |= CQHCI_IC_RESET;
->> +               cqhci_writel(cq_host, rval, CQHCI_IC);
->> +               rval = cqhci_readl(cq_host, CQHCI_IC);
->> +               rval &= (~CQHCI_IC_RESET);
->> +               cqhci_writel(cq_host, rval, CQHCI_IC);
->> +       }
->> +
->>          if (status & CQHCI_IS_TCL)
->>                  wake_up(&cq_host->wait_queue);
->>
->> @@ -1172,11 +1181,12 @@ static unsigned int cqhci_ver_minor(struct cqhci_host *cq_host)
->>   }
->>
->>   int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc,
->> -             bool dma64)
->> +             bool dma64, bool intr_clsc)
->>   {
->>          int err;
->>
->>          cq_host->dma64 = dma64;
->> +       cq_host->intr_clsc = intr_clsc;
->>          cq_host->mmc = mmc;
->>          cq_host->mmc->cqe_private = cq_host;
->>
->> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
->> index ba9387ed90eb..acf90773c30a 100644
->> --- a/drivers/mmc/host/cqhci.h
->> +++ b/drivers/mmc/host/cqhci.h
->> @@ -227,6 +227,9 @@ struct cqhci_host {
->>
->>          /* 64 bit DMA */
->>          bool dma64;
->> +
->> +       /* interrupt coalescing*/
->> +       bool intr_clsc;
->>          int num_slots;
->>          int qcnt;
->>
->> @@ -312,7 +315,7 @@ struct platform_device;
->>
->>   irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
->>                        int data_error);
->> -int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc, bool dma64);
->> +int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc, bool dma64, bool intr_clsc);
->>   struct cqhci_host *cqhci_pltfm_init(struct platform_device *pdev);
->>   int cqhci_deactivate(struct mmc_host *mmc);
->>   static inline int cqhci_suspend(struct mmc_host *mmc)
->> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
->> index edade0e54a0c..2c18f954d4b8 100644
->> --- a/drivers/mmc/host/mtk-sd.c
->> +++ b/drivers/mmc/host/mtk-sd.c
->> @@ -2796,7 +2796,7 @@ static int msdc_drv_probe(struct platform_device *pdev)
->>                  host->cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
->>                  host->cq_host->mmio = host->base + 0x800;
->>                  host->cq_host->ops = &msdc_cmdq_ops;
->> -               ret = cqhci_init(host->cq_host, mmc, true);
->> +               ret = cqhci_init(host->cq_host, mmc, true, false);
->>                  if (ret)
->>                          goto host_free;
->>                  mmc->max_segs = 128;
->> diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
->> index f2cf3d70db79..4aeaeddbbf25 100644
->> --- a/drivers/mmc/host/sdhci-brcmstb.c
->> +++ b/drivers/mmc/host/sdhci-brcmstb.c
->> @@ -231,7 +231,7 @@ static int sdhci_brcmstb_add_host(struct sdhci_host *host,
->>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
->>          }
->>
->> -       ret = cqhci_init(cq_host, host->mmc, dma64);
->> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
->>          if (ret)
->>                  goto cleanup;
->>
->> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
->> index 9e73c34b6401..7aef7abe71f1 100644
->> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
->> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
->> @@ -1712,7 +1712,7 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
->>                  cq_host->mmio = host->ioaddr + ESDHC_CQHCI_ADDR_OFFSET;
->>                  cq_host->ops = &esdhc_cqhci_ops;
->>
->> -               err = cqhci_init(cq_host, host->mmc, false);
->> +               err = cqhci_init(cq_host, host->mmc, false, false);
->>                  if (err)
->>                          goto disable_ahb_clk;
->>          }
->> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
->> index 4ac8651d0b29..b6549d1e43ec 100644
->> --- a/drivers/mmc/host/sdhci-msm.c
->> +++ b/drivers/mmc/host/sdhci-msm.c
->> @@ -2153,7 +2153,7 @@ static int sdhci_msm_cqe_add_host(struct sdhci_host *host,
->>          if (ret)
->>                  goto cleanup;
->>
->> -       ret = cqhci_init(cq_host, host->mmc, dma64);
->> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
->>          if (ret) {
->>                  dev_err(&pdev->dev, "%s: CQE init: failed (%d)\n",
->>                                  mmc_hostname(host->mmc), ret);
->> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
->> index 89c431a34c43..811f8686532d 100644
->> --- a/drivers/mmc/host/sdhci-of-arasan.c
->> +++ b/drivers/mmc/host/sdhci-of-arasan.c
->> @@ -1610,7 +1610,7 @@ static int sdhci_arasan_add_host(struct sdhci_arasan_data *sdhci_arasan)
->>          if (dma64)
->>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
->>
->> -       ret = cqhci_init(cq_host, host->mmc, dma64);
->> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
->>          if (ret)
->>                  goto cleanup;
->>
->> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
->> index c359f867df0a..6f6cae6355a7 100644
->> --- a/drivers/mmc/host/sdhci-pci-core.c
->> +++ b/drivers/mmc/host/sdhci-pci-core.c
->> @@ -964,7 +964,7 @@ static int glk_emmc_add_host(struct sdhci_pci_slot *slot)
->>          if (dma64)
->>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
->>
->> -       ret = cqhci_init(cq_host, host->mmc, dma64);
->> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
->>          if (ret)
->>                  goto cleanup;
->>
->> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
->> index 633a8ee8f8c5..6917ba339aa9 100644
->> --- a/drivers/mmc/host/sdhci-pci-gli.c
->> +++ b/drivers/mmc/host/sdhci-pci-gli.c
->> @@ -908,7 +908,7 @@ static int gl9763e_add_host(struct sdhci_pci_slot *slot)
->>          if (dma64)
->>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
->>
->> -       ret = cqhci_init(cq_host, host->mmc, dma64);
->> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
->>          if (ret)
->>                  goto cleanup;
->>
->> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
->> index bff084f178c9..f98a468e8f43 100644
->> --- a/drivers/mmc/host/sdhci-tegra.c
->> +++ b/drivers/mmc/host/sdhci-tegra.c
->> @@ -1620,7 +1620,7 @@ static int sdhci_tegra_add_host(struct sdhci_host *host)
->>          if (dma64)
->>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
->>
->> -       ret = cqhci_init(cq_host, host->mmc, dma64);
->> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
->>          if (ret)
->>                  goto cleanup;
->>
->> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
->> index 7ef828942df3..8e7fbee70e16 100644
->> --- a/drivers/mmc/host/sdhci_am654.c
->> +++ b/drivers/mmc/host/sdhci_am654.c
->> @@ -568,7 +568,7 @@ static int sdhci_am654_cqe_add_host(struct sdhci_host *host)
->>
->>          host->mmc->caps2 |= MMC_CAP2_CQE;
->>
->> -       return cqhci_init(cq_host, host->mmc, 1);
->> +       return cqhci_init(cq_host, host->mmc, 1, false);
->>   }
->>
->>   static int sdhci_am654_get_otap_delay(struct sdhci_host *host,
->> --
->> 2.29.0
->>
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+I have pushed a new version with a couple of other changes here and
+there.
+
+https://lore.kernel.org/netdev/20230131130412.432549-1-andrei.gherzan@canonical.com/T/#t
+
+Paolo, for the synchronisation implementation I took your advice.
+
+Looking forward for your feedback.
 
 -- 
-Regards,
-Michael Wu
+Andrei Gherzan
