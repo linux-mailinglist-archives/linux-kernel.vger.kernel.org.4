@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FD6683AD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8566F683AD8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjAaX7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 18:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
+        id S229876AbjBAAAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 19:00:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbjAaX7o (ORCPT
+        with ESMTP id S231431AbjBAAAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 18:59:44 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB36883FD;
-        Tue, 31 Jan 2023 15:59:38 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P628m68NBz4wgv;
-        Wed,  1 Feb 2023 10:59:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675209577;
-        bh=dSpxuirEUSIDKHlfTGHnWOqEHbW/u5UzBT1E4zx3kXQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UWWhCAqJrXFOqB3iTjihU7NQL9yeAbLKBhs7OAs/RN4cts9QrBXgfAj4/Qx/ou6sy
-         ZUTQlv8Hrn02XYv08YKp0THoti37wUmLsPlYMwb7LWbwe3xBGsOWa5TGzQKpgOxFqx
-         Vl0HJmVivVFOJJ9ROLT5vnm5IDdCRONmbWto7Hyw7at01Uazj1nHlMGmNg8daYo8vb
-         3h23Hnl6Yfqs5egzL1duMSKHsZZLjxrrqdy4KvCgJtj3NpRta/gBEz2v1YDjn7pOYk
-         LKQpEVoN20KwMXR32A4XAY3yepXQB3Rz93hOL6cEmWhMjsg31p4H5Ik0WdqWsiQMP2
-         0jPL7Rst3Fm8A==
-Date:   Wed, 1 Feb 2023 10:59:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the sound-asoc tree with the arm-soc
- tree
-Message-ID: <20230201105936.5df92b26@canb.auug.org.au>
+        Tue, 31 Jan 2023 19:00:04 -0500
+Received: from out-196.mta0.migadu.com (out-196.mta0.migadu.com [91.218.175.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3412BB9E
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:00:00 -0800 (PST)
+Date:   Tue, 31 Jan 2023 15:59:36 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675209598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hWCqjufY/61qPvR9HEojMrY/WvLmHVsep3q1ZpubUAY=;
+        b=oi8yOtoKcYvdhbl73d25YHMRPp+cfOecqwwPHL2Qxw2ODm0tt+D8eKqciGw2XDuntzxrs6
+        zl/VUUGVfyMPMDKmSjVZ9oAXimeqSY5ovyJn2lEwetzw9eny/LLZyt+XIFtab9XD1WmPG+
+        W1LuOc7XOMQx286qg9dES/uA9XlWO/s=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Sukadev Bhattiprolu <quic_sukadev@quicinc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Joonsoo Kim <js1304@gmail.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Chris Goldsworthy <quic_cgoldswo@quicinc.com>,
+        Georgi Djakov <quic_c_gdjako@quicinc.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm,page_alloc,cma: configurable CMA utilization
+Message-ID: <Y9mraBHucYdnHXiS@P9FQF9L96D.corp.robot.car>
+References: <20230131071052.GB19285@hu-sbhattip-lv.qualcomm.com>
+ <Y9lZoI89Nw4bjjOZ@P9FQF9L96D.corp.robot.car>
+ <20230131201001.GA8585@hu-sbhattip-lv.qualcomm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iC5JR_MrhobD4AelcJE0jRE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131201001.GA8585@hu-sbhattip-lv.qualcomm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,51 +55,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/iC5JR_MrhobD4AelcJE0jRE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jan 31, 2023 at 12:10:01PM -0800, Sukadev Bhattiprolu wrote:
+> On Tue, Jan 31, 2023 at 10:10:40AM -0800, Roman Gushchin wrote:
+> > Hi Sukadev!
+> > 
+> > Can you, please, share a bit more details about your setup? E.g. what is
+> > the zone size, the cma area size and the value you want to set your sysctl to?
+> 
+> Hi Roman,
+> 
+> I currently have a device with 8GB Zone normal and 600MB of CMA. We have a
+> slightly different implementation and use up all the available CMA region.
+> i.e. going forward, we intend to set the ratio to 100 or even higher.
 
-Hi all,
+It means you want allocations be always served from a cma region first?
+What's the point of it?
 
-Today's linux-next merge of the sound-asoc tree got a conflict in:
+The idea behind the current formula is to keep cma regions free if there is
+a plenty of other free memory, otherwise treat it on par with other memory.
 
-  sound/soc/ti/davinci-vcif.c
+To justify a new sysctl you really need a solid use case, which is not limited
+to your custom implementation.
 
-between commit:
+Also, if decide to go with a new sysctl, we probably want to define it differently,
+e.g. as a [0-1000)/1000 of the zone size. But, honestly, I'm not sold yet.
 
-  efe81e9a9273 ("ASoC: remove unused davinci support")
-
-from the arm-soc tree and commit:
-
-  2abde57fb82b ("ASoC: ti: use helper function")
-
-from the sound-asoc tree.
-
-I fixed it up (I removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/iC5JR_MrhobD4AelcJE0jRE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPZq2gACgkQAVBC80lX
-0GxPhQf+Ia7Cj5eDPZ/SvjzuFZQ3soUypnfco3VPT8hjd5AqnKyWbvBG/q+b/rA1
-EyeORa8ZadPzv6vzBOKgV2EDxa6s4ZZ15s+1UOkPdFq1K88EO/You7Dwjvbxgkai
-mexRS/Ww4mJpzYcGa/oOl3Fr4KbMYad22IcaVfyeqxsKliDNHC/xHDxGxrpoGpJF
-s8eBGA/NKX011nitivqFJwG48JuE/eWCGBHC4uAONBoO6mSYfb6jPxzA/1CwpvSA
-tzbecH0DYDrcvVHrKz1f3sQaCCeV/uK9IIgjVkBvJ6QloWEfqKY8ZewydxVWWQ7d
-d0RrRM920Cj7ezImiPv7691g8CSmeA==
-=aRJv
------END PGP SIGNATURE-----
-
---Sig_/iC5JR_MrhobD4AelcJE0jRE--
+Thanks!
