@@ -2,105 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2D5682EF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC38F682EFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbjAaOPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49390 "EHLO
+        id S232521AbjAaOP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbjAaOPI (ORCPT
+        with ESMTP id S232282AbjAaOPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:15:08 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D46E12843;
-        Tue, 31 Jan 2023 06:15:07 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id 0A33C20EA201; Tue, 31 Jan 2023 06:15:07 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0A33C20EA201
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675174507;
-        bh=mT19G71ucLF+4CaSTXOpXQE/L4+jsWO6AotXm3MMpfA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f4of6yuJuqxU4bwC8lYZggOCEjPalaQPNsTBE3fhlgDrMgY+vtzzXGQlAff+wYAVQ
-         mbZHxNBhfyk66pyhrYtonfjcK3mmagigi+pYRKBanuiMtQCkDmPuMUds8loo3afvqF
-         C3+wntX9R8q9w9AwgdpOxAJU1QKzbRugpppPtnig=
-Date:   Tue, 31 Jan 2023 06:15:07 -0800
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        pgonda@google.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com, Nikunj A Dadhania <nikunj@amd.com>
-Subject: Re: [PATCH RFC v7 07/64] KVM: SEV: Handle KVM_HC_MAP_GPA_RANGE
- hypercall
-Message-ID: <20230131141506.GA14449@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-8-michael.roth@amd.com>
- <20230127163558.GA22533@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+        Tue, 31 Jan 2023 09:15:21 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B83E4B77F;
+        Tue, 31 Jan 2023 06:15:18 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21EDA2F4;
+        Tue, 31 Jan 2023 06:16:00 -0800 (PST)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 99C563F71E;
+        Tue, 31 Jan 2023 06:15:16 -0800 (PST)
+Message-ID: <0e9f677b-846d-809d-9bc3-30906f703fda@arm.com>
+Date:   Tue, 31 Jan 2023 14:15:11 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127163558.GA22533@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/3] iommu: mediatek: Add support of unmanaged iommu
+ domain
+Content-Language: en-GB
+To:     Alexandre Bailon <abailon@baylibre.com>, yong.wu@mediatek.com,
+        joro@8bytes.org, will@kernel.org
+Cc:     matthias.bgg@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, iommu@lists.linux.dev,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230130102722.133271-1-abailon@baylibre.com>
+ <20230130102722.133271-3-abailon@baylibre.com>
+ <741920ba-8637-5e28-695c-699b46351590@arm.com>
+ <f126c61f-6373-d6c5-59c8-24dea9d9d168@baylibre.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <f126c61f-6373-d6c5-59c8-24dea9d9d168@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 08:35:58AM -0800, Jeremi Piotrowski wrote:
-> On Wed, Dec 14, 2022 at 01:39:59PM -0600, Michael Roth wrote:
-> > From: Nikunj A Dadhania <nikunj@amd.com>
-> > 
-> > KVM_HC_MAP_GPA_RANGE hypercall is used by the SEV guest to notify a
-> > change in the page encryption status to the hypervisor.
-> > 
-> > The hypercall exits to userspace with KVM_EXIT_HYPERCALL exit code,
-> > currently this is used for explicit memory conversion between
-> > shared/private for memfd based private memory.
-> > 
-> > Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
-> > Signed-off-by: Michael Roth <michael.roth@amd.com>
-> > ---
-> >  arch/x86/kvm/x86.c  | 8 ++++++++
-> >  virt/kvm/kvm_main.c | 1 +
-> >  2 files changed, 9 insertions(+)
-> > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index bb6adb216054..732f9cbbadb5 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -9649,6 +9649,7 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
+On 31/01/2023 1:08 pm, Alexandre Bailon wrote:
+> Hi Robin
 > 
-> Couldn't find a better commit to comment on:
-> when the guest has the ptp-kvm module, it will issue a KVM_HC_CLOCK_PAIRING
-> hypercall. This will pass sev_es_validate_vmgexit validation and end up in this
-> function where kvm_pv_clock_pairing() is called, and that calls
-> kvm_write_guest(). This results in a CPU soft-lockup, at least in my testing.
-> 
-> Are there any emulated hypercalls that make sense for snp guests? We should
-> block at least the ones that definitely don't work.
-> 
-> Jeremi
+> On 1/30/23 13:04, Robin Murphy wrote:
+>> On 2023-01-30 10:27, Alexandre Bailon wrote:
+>>> Currently, the driver can allocate an unmanaged iommu domain.
+>>> But, this only works for SoC having multiple bank or multiple iova 
+>>> region.
+>>
+>> That is for good reason - there is only a single pagetable per bank, 
+>> so if there are multiple devices assigned to a single bank, they 
+>> cannot possibly be attached to different domains at the same time. 
+>> Hence why the banks are modelled as groups.
+> I understand.
+> I am trying to upstream a remoteproc driver but the remote processor is
+> behind the iommu.
+> remoteproc can manage the iommu but it requires an unmanaged domain.
+> I tried a couple of things but this cause code duplication,
+> implies many hacks and not always reliable.
+> Do you have any suggestion ?
 
-So turns out the soft-lockup is a nested issue (details here for those
-interested: [^1]), but the questions still stands, of whether we should
-block kvm_write_page (and similar) explicitly or rely on the rmp fault.
+If there are other active devices behind the same IOMMU, and the 
+remoteproc device cannot be isolated into its own bank using the 
+existing IOMMU driver logic, then the remoteproc driver cannot manage 
+the IOMMU directly, and must just use the regular DMA API. There's no 
+way around it; you can't have two different parts of the kernel both 
+thinking they have exclusive control of a single IOMMU address space at 
+the same time. Similarly, remoteproc also cannot take explicit control 
+of a multi-device group if it's not actually in control of the other 
+devices, since their drivers will not be expecting the DMA address space 
+to suddenly change underfoot - that's why iommu_attach_device() has the 
+check which you presumably ran into.
 
-[^1]: https://github.com/jepio/linux/commit/6c3bdf552e93664ae172660e24ceceed60fd4df5
+Thanks,
+Robin.
