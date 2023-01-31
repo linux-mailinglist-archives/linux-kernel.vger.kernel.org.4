@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858A7682FD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07635682FD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbjAaOyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        id S232194AbjAaOzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:55:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbjAaOyh (ORCPT
+        with ESMTP id S231705AbjAaOzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:54:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329774EC7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:54:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C277461549
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD19C433D2;
-        Tue, 31 Jan 2023 14:54:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675176875;
-        bh=LkTpjPaCa+ALHaNDDa63BHYDcfbV54QQXWyMOfgVUK8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CJz47aPty2hMzTN8JvtOJOpOwVkwUGF4Me2UKY8wa0UIcbrwQIACmBSupaWHC2lAU
-         2tBqRRcVzblq0Wy4c1TyQ6bA838hHnemR/vdsOJ0legWxJUQawfZiYdA3cDB7v1HWb
-         bOdtK8MMg2diZYZT7PhbOQGqW3RWmwK6KFq53cjo=
-Date:   Tue, 31 Jan 2023 15:54:32 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org, david@redhat.com,
-        osalvador@suse.de, rafael@kernel.org, shan.gavin@gmail.com
-Subject: Re: [PATCH v2] drivers/base/memory: Use array to show memory block
- state
-Message-ID: <Y9krqMeponUIy/3l@kroah.com>
-References: <20230120233814.368803-1-gshan@redhat.com>
+        Tue, 31 Jan 2023 09:55:16 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0734A12F14
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:55:14 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id bg26so4690962wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:55:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MQJ5yta28BW2AX6ajuuuroUNS/GTWbM6J5Z+4pB9i5Y=;
+        b=z0TyZRGBjOclUC4hfL/T4CYUupUaJlH+rYUpzQ5mWedkJ9Kq9RagJB5HvCR8fNmi7+
+         ZCpiqCnGHIMpnx/C0KwBVK5/bX9yWQWN73lc/jytWTcsi3sHG2PEe4zM+Jxnwr/b/ioh
+         Bha0prZ/DA4YWP5hiBWFV8EgPEglbdnwr3L5kdPanFF4dUaopDb86xlpFjfr1KEZ3Fdg
+         QCQVn2nTYqQUs9+2SS3pw78NPDKvEEftrm6sTJV6wolkURD/635aIaa+KoZyMCzIDQhR
+         722ZIOrithI1RHwd3qiOiGEB2exdnIkZFsmz+jx64zOp8Lnn4EBgKRP8ifoshiAe3gFY
+         BeYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MQJ5yta28BW2AX6ajuuuroUNS/GTWbM6J5Z+4pB9i5Y=;
+        b=5/dlE16V3iMyx/aj05Cz5t5grpKGA8RvPGf2eaVHOGyTdjAeOETz4Y2yRZ8BEM/qDk
+         XhXpaMfzlb6uzE5riruJ0ahugv2AL8tGCDwFCAIZIznO6jL5QrTL+Wke6OwTfJ4jGYN5
+         gppFr2TRpWHQ6Wd3ANSpT/lrT+9VfgWemU7GAev8h9X9FkYwa9xHAtvvTB6VoKQ0jzHD
+         wbN1SBGRZP4VfxyrnhqLAoSuD9KT/U52pASOKnlc0P2S0DI89P0c1XHyLtIA7YfvmOg6
+         ME/qdBiaqcDY9k20opeqK5Tl+3++hz0GJTrgVFZ1HxwDkmEVoJRymdUrD8sX+0vuQTbv
+         7iUA==
+X-Gm-Message-State: AO0yUKVrXth9+els3+wQbaTMrz0+mN/S4fezbLnpmXaBnXyhEZHx08Ug
+        FTHWPVa+x0W6EyoUsSvC1BelAA==
+X-Google-Smtp-Source: AK7set+u+7E1D7bUEvbCwlmYHqaODmjU1eHMFmKu/hsCb++/mUVNtrzFtBfNz61iDYZ7klMQbA/RKw==
+X-Received: by 2002:a05:600c:4b1c:b0:3dc:5bd7:62ec with SMTP id i28-20020a05600c4b1c00b003dc5bd762ecmr6703773wmp.32.1675176912442;
+        Tue, 31 Jan 2023 06:55:12 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id j14-20020a05600c130e00b003dc541c4b13sm7763802wmf.21.2023.01.31.06.55.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 06:55:12 -0800 (PST)
+Message-ID: <4be21bd9-a9c7-989c-2ce5-2fa2c916b072@linaro.org>
+Date:   Tue, 31 Jan 2023 15:55:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230120233814.368803-1-gshan@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 3/8] thermal: intel: intel_pch: Rename device
+ operations callbacks
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Box <david.e.box@linux.intel.com>
+References: <1751684.VLH7GnMWUR@kreacher> <2546853.Lt9SDvczpP@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <2546853.Lt9SDvczpP@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 07:38:14AM +0800, Gavin Shan wrote:
-> Use an array to show memory block state from '/sys/devices/system/
-> memory/memoryX/state', to simplify the code.
-
-But does it really?
-
-Now you have an implicit binding between the order of this specific
-string array and an enumerated type that is defined in some other
-location.
-
-This makes any future changes really really hard to determine that you
-got this correct.
-
-Besides, WARN_ON()
-> is removed since the warning can be caught by the return value,
-> which is "ERROR-UNKNOWN-%ld\n". A system reboot caused by WARN_ON()
-> is definitely unexpected as Greg mentioned.
+On 30/01/2023 20:00, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> No functional change intended.
+> Because the same device operations callbacks are used for all supported
+> boards, they are in fact generic, so rename them to reflect that.
 > 
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
+> Also rename the operations object itself for consistency.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
-> v2: Drop WARN_ON()					(Greg)
-> ---
->  drivers/base/memory.c | 25 ++++++-------------------
->  1 file changed, 6 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-> index b456ac213610..0fdacdc79806 100644
-> --- a/drivers/base/memory.c
-> +++ b/drivers/base/memory.c
-> @@ -141,28 +141,15 @@ static ssize_t state_show(struct device *dev, struct device_attribute *attr,
->  			  char *buf)
->  {
->  	struct memory_block *mem = to_memory_block(dev);
-> -	const char *output;
-> +	static const char *const mem_state_str[] = {
-> +		NULL, "online", "going-offline", NULL, "offline",
-> +	};
->  
-> -	/*
-> -	 * We can probably put these states in a nice little array
-> -	 * so that they're not open-coded
-> -	 */
-> -	switch (mem->state) {
-> -	case MEM_ONLINE:
-> -		output = "online";
-> -		break;
-> -	case MEM_OFFLINE:
-> -		output = "offline";
-> -		break;
-> -	case MEM_GOING_OFFLINE:
-> -		output = "going-offline";
-> -		break;
-> -	default:
-> -		WARN_ON(1);
-> +	if (mem->state >= ARRAY_SIZE(mem_state_str) ||
-> +	    !mem_state_str[mem->state])
->  		return sysfs_emit(buf, "ERROR-UNKNOWN-%ld\n", mem->state);
-> -	}
->  
-> -	return sysfs_emit(buf, "%s\n", output);
-> +	return sysfs_emit(buf, "%s\n", mem_state_str[mem->state]);
 
-Overall, the current code is simpler and easier to maintain and
-understand over time.  You don't have to mess with an array length, or
-anything else like that.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-I'm all for removing the WARN_ON() if you want to do that, but I think
-this is a regression in the ability to maintain this code for the next
-40+ years, sorry.
 
-greg k-h
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
