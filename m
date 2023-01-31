@@ -2,70 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5D8682B3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7B6682B46
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231723AbjAaLPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 06:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
+        id S231781AbjAaLQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 06:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbjAaLO7 (ORCPT
+        with ESMTP id S231706AbjAaLQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:14:59 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A70E4B4B2;
-        Tue, 31 Jan 2023 03:14:57 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id n6so11402325edo.9;
-        Tue, 31 Jan 2023 03:14:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
-         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=rJ6oUhRQsdKJpSWApz0PU5q/d65KHu6fj0/NFeFyyPo=;
-        b=Uo+JRdrdbMDcPUUK2QO20xye4voQrXk9zs9TSQWcFlFQz9+YY/R5M9nmeduY5/gLbT
-         Z5zVJAR7PjeZQGpNzU9fxLJ/ZYRsZ0/pf05UwEw604xN5JQmlKS15M9hJJKJJsUeb539
-         F1QEr0n0Lgcap65LnTYpFrs7zUOCrd8cO9D24nFzRs9tdhFyvXsGbN4ZG82SUp0pRF5n
-         w0F6x9XUm0gMlHKIVd7w0m1f6Y/qd2rGLFT1CwdpuyAXMqbFgXnDkmlNGyhcFQszBO6p
-         7+dG2TT3rUDkGSrg39RiJjvhdtQotdtE7/ZQMn8XdMxgegpPd7cN5YiRuDkvJNLuaVPc
-         argA==
+        Tue, 31 Jan 2023 06:16:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AA24B199
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:15:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675163711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r5WDosCN8ptqhgrL1cgVrQgfmxbqRf8M/DBi7ayRhQA=;
+        b=hdu8fi4eHzLWPnWrvZOAPzjJfls+owyup7E5vUYITIeyUL3WXT8Z64fTRYQj3JIG+o+ln8
+        C8xcY/wvvDwhVGOJYuj+MbctudiNpto+KHA9+SosAWUo/rVhjTIUERZ4/BvREuJB8Mh2+c
+        loHNlATDohdEUlrZoh2765nwWIMIego=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-562-goArzcsgPEySSm9lHODGfA-1; Tue, 31 Jan 2023 06:15:08 -0500
+X-MC-Unique: goArzcsgPEySSm9lHODGfA-1
+Received: by mail-qk1-f199.google.com with SMTP id a3-20020a05620a438300b007069b068069so8839318qkp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:15:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
-         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rJ6oUhRQsdKJpSWApz0PU5q/d65KHu6fj0/NFeFyyPo=;
-        b=k9FolhluWiLdTaS+saUO16EHz3hRNn+0Uoqxteip2UI/wMxI7TMkHpXwdTDazyE/44
-         ip+y6VKdDjq9vvb5N1itvk8Tw3oCmnyKXY3Nn9DItI7pa5Eg3tjUlmnUDekCEUPMX2bV
-         uLwCco1L6hHiWfhsyWeLEHlznM+NTywjhwXCvoq4HJ1RGrS/pssT8rjmVK/hC+msyONd
-         ySfY3nH2ZTzjXnmwvF3vWkzfm/r8cNfz5zi2L+E4/34/ZUCqH+ITWcFLyGoNQDGdL3tD
-         eCIK1CiJNThcR0JWlJ4skmjWkdZ0mLycBsuO3EtIAREv4tC/k049vfJC6y7AMW8kdC0r
-         PJbQ==
-X-Gm-Message-State: AFqh2kooyWyq8x+L+rQ0kjauS/2SNIjCKOc6rX/7GRizi+2h/sgZl9ON
-        EJzNI3Ur1doTds3KyMbyh0g=
-X-Google-Smtp-Source: AMrXdXtJEdqczl4tefpLNLK5ZBH8a9GvarCeD9R6boDdER2RnVZV/nTbTouhytgSctfuvv0b5kTllg==
-X-Received: by 2002:a05:6402:3709:b0:49e:baf:f6e9 with SMTP id ek9-20020a056402370900b0049e0baff6e9mr63783738edb.9.1675163695979;
-        Tue, 31 Jan 2023 03:14:55 -0800 (PST)
-Received: from touko.myxoz.lan (90-224-45-44-no2390.tbcn.telia.com. [90.224.45.44])
-        by smtp.gmail.com with ESMTPSA id by13-20020a0564021b0d00b004a277d55a6csm76199edb.1.2023.01.31.03.14.54
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r5WDosCN8ptqhgrL1cgVrQgfmxbqRf8M/DBi7ayRhQA=;
+        b=oXUxmFH6WJBLMic09+pd4li36diBIOu6oM4ozsGdeha72rv4atvLDBEzcolb4XPvEe
+         qxOrAQcIfcHLNPncRjCXJi083U/qHSyrJNXZ9hV6O+YLlT6nXKnoUnGbBShlf90bNF32
+         XuHY54WI4tZtuOy9H2Tu4rWwdLDOzTirY24VykxkXbmdCaXteeNdf/P4hZ8tymVoLxpi
+         E9NO0PN0K3q76KLpLDRwcGp0dznXH8GNZFJfomVSfhtC6VX+E/7xQdt6xSBpeh0zpW4H
+         VcNWDUrVVUlcHnNCGK/bBON3X1GU62FZIQHKGdnaTCj4O+Qo385w1ywM+aaUXckPh95U
+         J+zw==
+X-Gm-Message-State: AO0yUKVeD9JchKAYVYUDJ2a2OsZqn3lZX3uI/UlddiYZlrJjEjc0M1Dg
+        Wm/lDrBmU31LvN4UX5rBh+WzH8uXfKo3PYvLIGVj7Mt/HDYa8giB4A/NGOPle7ZrWMiYLhoAkVE
+        SMjV7L1WZD9rHlhEtNSFx44lg
+X-Received: by 2002:a05:6214:b85:b0:537:6dfa:efaf with SMTP id fe5-20020a0562140b8500b005376dfaefafmr33023148qvb.13.1675163708315;
+        Tue, 31 Jan 2023 03:15:08 -0800 (PST)
+X-Google-Smtp-Source: AK7set9PvPYF6HAkQ+AlinxEAf03bWrkLFOaUAgoOy2qSI7bVMAHunwsC9vjqR1Y96nmCMq2TF5yVg==
+X-Received: by 2002:a05:6214:b85:b0:537:6dfa:efaf with SMTP id fe5-20020a0562140b8500b005376dfaefafmr33023117qvb.13.1675163708088;
+        Tue, 31 Jan 2023 03:15:08 -0800 (PST)
+Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id bs32-20020a05620a472000b0071d7ade87afsm4839339qkb.67.2023.01.31.03.15.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 03:14:55 -0800 (PST)
-Message-ID: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
-Subject: [UNTESTED PATCH] net/usb: kalmia: Fix uninit-value in
- kalmia_send_init_packet
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Eric Dumazet <edumazet@google.com>,
+        Tue, 31 Jan 2023 03:15:07 -0800 (PST)
+Date:   Tue, 31 Jan 2023 06:15:05 -0500
+From:   Brian Masney <bmasney@redhat.com>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 31 Jan 2023 12:14:54 +0100
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: sc8280xp: Define uart2
+Message-ID: <Y9j4ORb4r8+QXx4J@x1>
+References: <20230131043816.4525-1-steev@kali.org>
+ <20230131043816.4525-4-steev@kali.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131043816.4525-4-steev@kali.org>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +94,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From ef617d8df22945b871ab989e25c07d7c60ae21f6 Mon Sep 17 00:00:00 2001
-From: Miko Larsson <mikoxyzzz@gmail.com>
-Date: Tue, 31 Jan 2023 11:01:20 +0100
-Subject: [UNTESTED PATCH] net/usb: kalmia: Fix uninit-value in kalmia_send_=
-init_packet
+On Mon, Jan 30, 2023 at 10:38:15PM -0600, Steev Klimaszewski wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Steev Klimaszewski <steev@kali.org>
 
-syzbot reports that act_len in kalmia_send_init_packet() is
-uninitialized. Attempt to fix this by initializing it to 0.
-
-Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for Samsung GT-B37=
-30")
-Reported-by: syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.com
-Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
----
- drivers/net/usb/kalmia.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
-index 9f2b70ef39aa..b158fb7bf66a 100644
---- a/drivers/net/usb/kalmia.c
-+++ b/drivers/net/usb/kalmia.c
-@@ -56,7 +56,7 @@ static int
- kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8 init_msg_len,
- 	u8 *buffer, u8 expected_len)
- {
--	int act_len;
-+	int act_len =3D 0;
- 	int status;
-=20
- 	netdev_dbg(dev->net, "Sending init packet");
---=20
-2.39.1
-
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
