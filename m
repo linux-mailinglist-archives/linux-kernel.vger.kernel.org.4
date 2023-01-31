@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E369C6835DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14336835E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjAaS65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S231956AbjAaS74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbjAaS64 (ORCPT
+        with ESMTP id S231591AbjAaS7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:58:56 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3E41422D
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:58:55 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so15434724pjl.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:58:55 -0800 (PST)
+        Tue, 31 Jan 2023 13:59:54 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D987B10258
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:59:52 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id bg26so5232441wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:59:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TP6A9+wpIMvqF2KNq6LBjoVcO3DYja8lhfZN/jsXFAw=;
-        b=ksnvyCeU1RyWc0VKTsa9dgJxB59yOHGjX1cproOM8Mp0Y8nfkqnlmuozL7CBe/ZWah
-         rdN+MiiIujwE1kfpwsxFPDD0y+gVSFDktlxpdznzekylT+20RXCpZNiIXcnQCaFguseq
-         tFH6vGwpn9pNSCCsauN/XDtwxc4eoBEEjz+ejaVgpAwghYyA3IWL0pwH3I8tzq0Rucrt
-         PXswITHQJ0ByasV3kA7AuZbl6VHFqoGX1PewA9mhOdGXX4YmJPMM1Di/KszXCtQ9jLU6
-         5ThiCtMJKnxDsPlUPhvRPGqaM3xWakLsFrTNwXIubYdud+su0oPhnZc7EF4R5Ba8kue4
-         d0hw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dn/OUXyEA8yi41y38Zyw+PIEAvlfa7axxVjaPefq9nI=;
+        b=VfUOESQlqCLrWAeKzAgRi2eeDTdeAEC39ZoD2kMiKpmnh5CUwo/RJ7+D6zXnLamhU7
+         SSs7p+bWLb8LdKw7XO7S7wMMxy4G6cESQtzOJObG4Jf7MSSwhr38WEtlDkgDcu0By7eD
+         y2HFrma+gM56n74vpVAb127iL0xwhdB8ClP76OeoRHl7eShZoYAE3xDuw/ZLRxM4Kzyf
+         Hp0dcKqM1CSQqwOCY1EhE14Ed8FtIgDaGrCZ96xGKMN4hYPeGBQ1q9TOjNgb78JmfUkw
+         2JqPndKjeg6MftjDbW/6TGocGWVvBsYXLLDWga8fIYiJ9cx8t1iOG+bmBLy0XO0IH6mQ
+         Go6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TP6A9+wpIMvqF2KNq6LBjoVcO3DYja8lhfZN/jsXFAw=;
-        b=I1bAqXrmDViW5xArxa/bH/1vERsNKYv0dSc7LzKraxeCIkzMUUvpgPOg+UZXTYPoE9
-         txgxaFCWfjAzmIC+3huoR+ziXoU/pOMLKItdoG//TLF+d0Gl9433tsG+tBDe+evn7s6y
-         /YmKo8dNd2G2jrqVMZWnKaRLc76rMP7yZFTHNcEz+mdjYJw9zcB6WdWMxiypw4iLSdUF
-         fIwE4aFs+GHHUo5KT3Mac9xzkh//C6N4nVJRCh6jfpG5vtVXBSPk3EMgq0/p/dvUXb2P
-         ZSMDSbQQ4oTyosjyM6Iwj/o0IZ/iJnM2fB2fPM6kzcY8+9iLfyN0sIWRcJo5RQp7AvXV
-         IwOw==
-X-Gm-Message-State: AO0yUKWeGOFnTlceRZFPNzhl79ip4P4884cqoJohI7gT98PSGlLix4T3
-        6feKq2cn0H8FW7/RVivRSCzNc2gwfFvWn/42Hnk=
-X-Google-Smtp-Source: AK7set8XCyt+bK6u6JefsBlIVz/6EymxzMOrBX8XuUIRF3cIGW2hgOy0wXlEZ2nWAqBijXJWrNFkg2XkWsSCoGHya8I=
-X-Received: by 2002:a17:90a:6ac1:b0:22c:697a:e056 with SMTP id
- b1-20020a17090a6ac100b0022c697ae056mr2201922pjm.85.1675191534976; Tue, 31 Jan
- 2023 10:58:54 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dn/OUXyEA8yi41y38Zyw+PIEAvlfa7axxVjaPefq9nI=;
+        b=gTAe6DzPlkGgTctr7b0kBfWUFTJGlvvM7qOfl9zvUujcjuRs9hqh2FkthJvIpKQwMH
+         u5D1IUr6/mS0WgnBcW4bsagEYBDXrzYp99LJ4ChOjrwZ7wXeL7pdWzQHSfHd8BHnw0rY
+         P4k8ptXonafRXOjPrp7c0neKvZOftD8Rcfk/0/e5lJaVoDQGZqhPGaZFX2oEeUMV3f9F
+         Bx6/LbFGnY/A3UrexELWrhoWJnF+XWr0dwMkf6FoUrpgSuWpBVn4MGtXi5ZOwQ5QhLkg
+         p7vweMhnmN4kcXnximPMWHWqkdTHfPtjl/2tbCpgvPa8ib1UWKgSnE3deshPxHHXECQH
+         OAkQ==
+X-Gm-Message-State: AFqh2kqGnkaBP9TRDH1oHoI+Er3nLFLaCU1gcYlFpTFm1aulpVpAzV5g
+        uVmTonw35XONu8E/fiFTNhtGCA==
+X-Google-Smtp-Source: AMrXdXtJkURy/LYDn4cBF+sqOdo9D21oaN0+bd8sHDG28/T98Uhf4bnVdigMQlsfXIDP8tkT+RV2yg==
+X-Received: by 2002:a05:600c:4e94:b0:3db:bc5:b2ae with SMTP id f20-20020a05600c4e9400b003db0bc5b2aemr51470360wmq.41.1675191591436;
+        Tue, 31 Jan 2023 10:59:51 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id x9-20020a05600c21c900b003dc434b39c7sm3479288wmj.0.2023.01.31.10.59.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 10:59:51 -0800 (PST)
+Message-ID: <fd20d74f-b542-b4b3-197e-9142b430a773@linaro.org>
+Date:   Tue, 31 Jan 2023 19:59:48 +0100
 MIME-Version: 1.0
-References: <cover.1675111415.git.andreyknvl@google.com> <fbe58d38b7d93a9ef8500a72c0c4f103222418e6.1675111415.git.andreyknvl@google.com>
- <CANpmjNPakvS5OAp3DEvH=5mdtped8K5WC4j4yRfPEJtJOv4OhA@mail.gmail.com>
-In-Reply-To: <CANpmjNPakvS5OAp3DEvH=5mdtped8K5WC4j4yRfPEJtJOv4OhA@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 31 Jan 2023 19:58:44 +0100
-Message-ID: <CA+fCnZeOs6R_Wk=Da-aC5ZUzz_tOPVQWu1DoPsYVORS=dJ6cQg@mail.gmail.com>
-Subject: Re: [PATCH 15/18] lib/stacktrace, kasan, kmsan: rework extra_bits interface
-To:     Marco Elver <elver@google.com>
-Cc:     andrey.konovalov@linux.dev,
-        Alexander Potapenko <glider@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/4] dt-bindings: net: Add WCN6855 Bluetooth
+Content-Language: en-US
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+References: <20230131043816.4525-1-steev@kali.org>
+ <20230131043816.4525-2-steev@kali.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230131043816.4525-2-steev@kali.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 9:54 AM Marco Elver <elver@google.com> wrote:
->
-> > +depot_stack_handle_t stack_depot_set_extra_bits(depot_stack_handle_t handle,
-> > +                                               unsigned int extra_bits);
->
-> Can you add __must_check to this function? Either that or making
-> handle an in/out param, as otherwise it might be easy to think that it
-> doesn't return anything ("set_foo()" seems like it sets the
-> information in the handle-associated data but not handle itself ... in
-> case someone missed the documentation).
+On 31/01/2023 05:38, Steev Klimaszewski wrote:
+> Add bindings for the QTI WCN6855 chipset, based on the WCN6750.
+> 
+> Signed-off-by: Steev Klimaszewski <steev@kali.org>
+> ---
 
-Makes sense, will do in v2 if Alexander doesn't object to the
-interface change. Thanks!
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
