@@ -2,122 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F576825C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4F66825A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjAaHqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 02:46:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        id S230193AbjAaHjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 02:39:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjAaHqS (ORCPT
+        with ESMTP id S229723AbjAaHjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 02:46:18 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD9B3347B
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 23:46:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675151176; x=1706687176;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tIIPqWLDaXi88jATwWGBnjxjewiMTRegyRpE2yrmVj8=;
-  b=goPRq4GvmKhle/uq6TIv1tHFD+NjLEn3++E1mehXVl4nbY2yMBg5vMEF
-   Yk+VvISIYg8jW89gprvMYXKVF30xOxBv+6wTcM5ZG+Vq74HC8SGEPmT2m
-   cdiHw2kzEvFcn0vpfqurkHak7WhJ4oPkQn31R6wfbZNrfWpSAF2Xrgj0u
-   75sszs1riRKruyI8nUZNhr6EbyVHr2ns+5nvlGL5hlZQMo2jUQMZa2Uto
-   Gosm2lz+/vVdyCPcerF8Hgzkn4FK/nulxuUbUcCpcKKTWJg1Ri1D48ifJ
-   jPLCsbbp7I3YsK/ILdtX2l72JTQzR5Y6admiighgV+yE+En52kGC7GGJv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="315736651"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="315736651"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 23:46:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="657775587"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="657775587"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 30 Jan 2023 23:46:10 -0800
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     kan.liang@linux.intel.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 12/12] iommu/vt-d: Enable IOMMU perfmon support
-Date:   Tue, 31 Jan 2023 15:37:40 +0800
-Message-Id: <20230131073740.378984-13-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230131073740.378984-1-baolu.lu@linux.intel.com>
-References: <20230131073740.378984-1-baolu.lu@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 31 Jan 2023 02:39:31 -0500
+Received: from evilolive.daedalian.us (evilolive.daedalian.us [96.126.118.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E8036441;
+        Mon, 30 Jan 2023 23:39:30 -0800 (PST)
+Received: by evilolive.daedalian.us (Postfix, from userid 111)
+        id 03413120E7; Mon, 30 Jan 2023 23:39:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=daedalian.us;
+        s=default; t=1675150769;
+        bh=VH2cGfZJ/ASf0s5VyTB4yCiXFIqxZ/O9hH846PYQisI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U775xbP7PJiCLVQAqLOExe1dOuNMgpqez4WqCBMtvZsQS4k6VnEkQl68ijCCLuTYE
+         cAosBdkoW0HSmF4XRWKH+2GUXjT5Fv/ZY2XVmz4dmxcFtgzxMxpT9Ni3jG3JZMbTCn
+         zX8zYEBa3RUVhFTpHQJSq1TYJy5C9A28SBpJCIyuInfPz+F1WAKnJ83OyXZMQq4pZM
+         93WiYHKtBBaAKBXDVgSZEPW5EnmHAFeuXi2yqka7UKij4yFxhpL3jGBsDapJSczcc9
+         8YCLbQN8YMKaKlYZWk8zU1dcxoLHWyVIHaVCI4CGqxt5JZWkGlRGvrMNG6uUTPKyzu
+         TEmfGDZsZofrA==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from localhost.localdomain (static-47-181-121-78.lsan.ca.frontiernet.net [47.181.121.78])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by evilolive.daedalian.us (Postfix) with ESMTPSA id B784B12072;
+        Mon, 30 Jan 2023 23:39:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=daedalian.us;
+        s=default; t=1675150762;
+        bh=VH2cGfZJ/ASf0s5VyTB4yCiXFIqxZ/O9hH846PYQisI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YbkzfWv2uV3t9u/5wUApMhQHr5z6N0c+Ss7c1byuwJq6aJYkb2M2qq9NV+01S7H5q
+         YJu9qBqgwYhI1srUJwYfQ2Scv7+sXMfXfqsY5WPZfuaW8hirtszOdyG4By9z9ae/Zx
+         IcZJr7zXmVKIlGBwlNMy0/gQYmue3NA61KACTlQhlxw9gurAM9cWNRDiv7j0TcCCST
+         S1/GMz+BpAYpjPkCLb5bwb+ZXTuEJmVEnQtvLElEZir5UQfDCVRfXmV6EWD9/1muHV
+         Umcisn1iSAkt5zOiEGhYr5iUW1GN/0prfHKIHtemsAwPXSX8gcs9NqFShADFuBlpo3
+         d0w3ReRNU6Mgw==
+From:   John Hickey <jjh@daedalian.us>
+To:     anthony.l.nguyen@intel.com
+Cc:     John Hickey <jjh@daedalian.us>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Shujin Li <lishujin@kuaishou.com>,
+        Jason Xing <xingwanli@kuaishou.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH net v2] ixgbe: Panic during XDP_TX with > 64 CPUs
+Date:   Mon, 30 Jan 2023 23:38:15 -0800
+Message-Id: <20230131073815.181341-1-jjh@daedalian.us>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kan Liang <kan.liang@linux.intel.com>
+In commit 'ixgbe: let the xdpdrv work with more than 64 cpus'
+(4fe815850bdc), support was added to allow XDP programs to run on systems
+with more than 64 CPUs by locking the XDP TX rings and indexing them
+using cpu % 64 (IXGBE_MAX_XDP_QS).
 
-Register and enable an IOMMU perfmon for each active IOMMU device.
+Upon trying this out patch via the Intel 5.18.6 out of tree driver
+on a system with more than 64 cores, the kernel paniced with an
+array-index-out-of-bounds at the return in ixgbe_determine_xdp_ring in
+ixgbe.h, which means ixgbe_determine_xdp_q_idx was just returning the
+cpu instead of cpu % IXGBE_MAX_XDP_QS.
 
-The failure of IOMMU perfmon registration doesn't impact other
-functionalities of an IOMMU device.
+I think this is how it happens:
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Link: https://lore.kernel.org/r/20230128200428.1459118-8-kan.liang@linux.intel.com
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Upon loading the first XDP program on a system with more than 64 CPUs,
+ixgbe_xdp_locking_key is incremented in ixgbe_xdp_setup.  However,
+immediately after this, the rings are reconfigured by ixgbe_setup_tc.
+ixgbe_setup_tc calls ixgbe_clear_interrupt_scheme which calls
+ixgbe_free_q_vectors which calls ixgbe_free_q_vector in a loop.
+ixgbe_free_q_vector decrements ixgbe_xdp_locking_key once per call if
+it is non-zero.  Commenting out the decrement in ixgbe_free_q_vector
+stopped my system from panicing.
+
+I suspect to make the original patch work, I would need to load an XDP
+program and then replace it in order to get ixgbe_xdp_locking_key back
+above 0 since ixgbe_setup_tc is only called when transitioning between
+XDP and non-XDP ring configurations, while ixgbe_xdp_locking_key is
+incremented every time ixgbe_xdp_setup is called.
+
+Also, ixgbe_setup_tc can be called via ethtool --set-channels, so this
+becomes another path to decrement ixgbe_xdp_locking_key to 0 on systems
+with greater than 64 CPUs.
+
+For this patch, I have changed static_branch_inc to static_branch_enable
+in ixgbe_setup_xdp.  We aren't counting references and I don't see any
+reason to turn it off, since all the locking appears to be in the XDP_TX
+path, which isn't run if a XDP program isn't loaded.
+
+Fixes: 4fe815850bdc ("ixgbe: let the xdpdrv work with more than 64 cpus")
+Signed-off-by: John Hickey <jjh@daedalian.us>
 ---
- drivers/iommu/intel/dmar.c  | 3 +++
- drivers/iommu/intel/iommu.c | 3 +++
- 2 files changed, 6 insertions(+)
+v1 -> v2:
+	Added Fixes and net tag.  No code changes.
+---
+ drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 3 ---
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 2 +-
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index 43db6ebe8b57..6acfe879589c 100644
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -1144,6 +1144,8 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
- 		err = iommu_device_register(&iommu->iommu, &intel_iommu_ops, NULL);
- 		if (err)
- 			goto err_sysfs;
-+
-+		iommu_pmu_register(iommu);
- 	}
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+index f8156fe4b1dc..0ee943db3dc9 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+@@ -1035,9 +1035,6 @@ static void ixgbe_free_q_vector(struct ixgbe_adapter *adapter, int v_idx)
+ 	adapter->q_vector[v_idx] = NULL;
+ 	__netif_napi_del(&q_vector->napi);
  
- 	drhd->iommu = iommu;
-@@ -1166,6 +1168,7 @@ static int alloc_iommu(struct dmar_drhd_unit *drhd)
- static void free_iommu(struct intel_iommu *iommu)
- {
- 	if (intel_iommu_enabled && !iommu->drhd->ignored) {
-+		iommu_pmu_unregister(iommu);
- 		iommu_device_unregister(&iommu->iommu);
- 		iommu_device_sysfs_remove(&iommu->iommu);
- 	}
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index e314c30d371a..691b306fada5 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -29,6 +29,7 @@
- #include "../iommu-sva.h"
- #include "pasid.h"
- #include "cap_audit.h"
-+#include "perfmon.h"
+-	if (static_key_enabled(&ixgbe_xdp_locking_key))
+-		static_branch_dec(&ixgbe_xdp_locking_key);
+-
+ 	/*
+ 	 * after a call to __netif_napi_del() napi may still be used and
+ 	 * ixgbe_get_stats64() might access the rings on this vector,
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index ab8370c413f3..cd2fb72c67be 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -10283,7 +10283,7 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
+ 	if (nr_cpu_ids > IXGBE_MAX_XDP_QS * 2)
+ 		return -ENOMEM;
+ 	else if (nr_cpu_ids > IXGBE_MAX_XDP_QS)
+-		static_branch_inc(&ixgbe_xdp_locking_key);
++		static_branch_enable(&ixgbe_xdp_locking_key);
  
- #define ROOT_SIZE		VTD_PAGE_SIZE
- #define CONTEXT_SIZE		VTD_PAGE_SIZE
-@@ -4012,6 +4013,8 @@ int __init intel_iommu_init(void)
- 				       intel_iommu_groups,
- 				       "%s", iommu->name);
- 		iommu_device_register(&iommu->iommu, &intel_iommu_ops, NULL);
-+
-+		iommu_pmu_register(iommu);
- 	}
- 	up_read(&dmar_global_lock);
- 
+ 	old_prog = xchg(&adapter->xdp_prog, prog);
+ 	need_reset = (!!prog != !!old_prog);
 -- 
-2.34.1
+2.37.2
 
