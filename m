@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F083B682214
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D5C682215
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjAaCeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 21:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50142 "EHLO
+        id S229992AbjAaCeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 21:34:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjAaCd4 (ORCPT
+        with ESMTP id S229883AbjAaCd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 21:33:56 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DC6233E6;
-        Mon, 30 Jan 2023 18:33:54 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so13073141pjl.0;
-        Mon, 30 Jan 2023 18:33:54 -0800 (PST)
+        Mon, 30 Jan 2023 21:33:58 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49D221958;
+        Mon, 30 Jan 2023 18:33:56 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id h9so5058226plf.9;
+        Mon, 30 Jan 2023 18:33:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UYmg7u8BuMXGs5kfhUOaWTWsCts8KrLu3C1CWq/3WHM=;
-        b=RTGJbkgf23Vqp0k6oNVwNP/dnObdTu5cDug2Sy9PX/05iTauQBtYdWbumFoFberAEJ
-         Dva/GD2vHJSRgljKfENSIfM8h0Ht4NDON0CbdHpojXxjASUdBbH8G1JGVovp0BSRYmPW
-         Yr+BvfOk6WX3zHhFlUx9pkeOOFBkxXKQ9nOApt0hL05Gzmt/CqWiiHxjteRVQiwaxr2U
-         WVwoXYqQ7T7sSE48/nnBgEbR4pyV7v9ff8ms15oT1XiwLrot3c08/jkj4+tLVVKEq+gx
-         Mg92A4LsBW3tNhq+9a3vyV9le0NI8aYz9ysgY+ih8B4c3QUJejnIweno94hxpruKYWge
-         v0wQ==
+        bh=8hEMIzHdLpwwG0PzQtXZ+smccu5A316Bg7CzC9BcgGQ=;
+        b=aX3IGXALKXnDwSdfOKndnNKd9jKWl88rlYjbvDS85tueylN1U7/B/iuhXgYlhsfJoU
+         5FsIm+zwGWYfd3RVy2E4ZzulzTPASIH0kYA7nsR1sLQzQWH4DkIAU/HuvOvOxKc/65Uk
+         Kwno1gxhzTuaiOm696JJP87e8F61yEcAx8KX8aNAcXz1EwJv9T/5XVH2yyft88R6/m9l
+         CC747rLGdhaTvbkP9kVRdmsG3wOJQJN9QCkpB7BwdruoldIoWVB73hcFVzr08ebAPHkK
+         OivOJ91pI8B6hKZdRTnQNIA75EV/eWYPJhEVXVK2bFKse3Hf4jY4416sKmFzKb65BLtr
+         /JKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=UYmg7u8BuMXGs5kfhUOaWTWsCts8KrLu3C1CWq/3WHM=;
-        b=JHABnFZ6DsiSfDmqPP6AU+ztYdG2QzoOiDGIoX4K91eiSpe10QaSdf0cNWdIhrYnRX
-         sqqzeZllDo8MNj4e8gObHZNEgpQAhZT3gmCmyGCxHRaAnEih6HWY48xplcVuLDRCEXHU
-         HBUDvlKQrfeIgGgxHCUK3v+iYsW8PgP06+Q74ijhxH9+zUHtUwtsqY9xvQwQGGRjXMwB
-         ebU+hb7qQNdjifWUcBy3zflsTuJt8llSExJ7vXuOwtKaqzDovDOcfxx7I4d1Q8PoORS2
-         j038aLYYbG28sUXjOt93gnDQ7Mxv8IYQ7NxVauI5lwXRb5UkYgxk6fcBDPeKrluL1cJ1
-         MO4g==
-X-Gm-Message-State: AO0yUKVHq26QGaHmAfW9T3tqqpR9gT1j/cmmv+LOhUdbcJx2JYD/acYT
-        ogriZxqF7tq9URZdDK6MTd4=
-X-Google-Smtp-Source: AK7set/lWLutoeAUTu0N8F5wNDvxjTUwGDbFJz52BD/gx7r8FGnNl3kGcTrB8SUaoJOZOkGJKB07Ag==
-X-Received: by 2002:a17:90a:1952:b0:22c:3edd:7e48 with SMTP id 18-20020a17090a195200b0022c3edd7e48mr16423999pjh.32.1675132434199;
-        Mon, 30 Jan 2023 18:33:54 -0800 (PST)
+        bh=8hEMIzHdLpwwG0PzQtXZ+smccu5A316Bg7CzC9BcgGQ=;
+        b=mkQNAtCUpruVEtQp0j8iEkrGVXYRQV5ExKEaU5yiJiQYsSGO2amA/a310cJl8z7Xgt
+         XfzhGy4IC2+WTOnw4Z2ABBwdQeKcqcEWsTKeMqPc8qqHv/GKQFTmMtCDRatj5aMKHSYu
+         SIkC8YU+XkVCn6rMpvFVkSfiB4pCtumSeeGK0ZNC4kGjGebSzopOgHWczSCggDr+cZpJ
+         SHe7IAXEkkLMUh/RDNHP1gtH8vjMAUSUMSO2fsRN8G38k2amPWRcSwb7s8C4ug9SEY6h
+         R0hqWmJyhEt4JInvxq2RzcDkHavUwqMCfcscIODmd3kpIQD3HErDntT3uCufrgvEP6Fm
+         +9Vw==
+X-Gm-Message-State: AFqh2kqemb3krNPtKeCCHZEcmXsErRBsxnhSKIdmP/9e0bKClYQnsD27
+        BKk2VEkmhp5IUCZaA3S7DdA=
+X-Google-Smtp-Source: AMrXdXsM7xfZoq36GLn+Mmi+pFGvwUoE+H43qAGxB0PEy/6cf52of3NCix7kqGvRXQvT9ofKru5XNw==
+X-Received: by 2002:a17:90a:4302:b0:219:9da5:40d3 with SMTP id q2-20020a17090a430200b002199da540d3mr55472724pjg.1.1675132435829;
+        Mon, 30 Jan 2023 18:33:55 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:ff0:3f41:4035:c56c:92cc])
-        by smtp.gmail.com with ESMTPSA id u13-20020a17090a6a8d00b00228f45d589fsm7640582pjj.29.2023.01.30.18.33.52
+        by smtp.gmail.com with ESMTPSA id u13-20020a17090a6a8d00b00228f45d589fsm7640582pjj.29.2023.01.30.18.33.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 18:33:53 -0800 (PST)
+        Mon, 30 Jan 2023 18:33:55 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         James Clark <james.clark@arm.com>,
         Leo Yan <leo.yan@linaro.org>,
         Stephane Eranian <eranian@google.com>
-Subject: [PATCH 1/4] perf inject: Use perf_data__read() for auxtrace
-Date:   Mon, 30 Jan 2023 18:33:47 -0800
-Message-Id: <20230131023350.1903992-2-namhyung@kernel.org>
+Subject: [PATCH 2/4] perf intel-pt: Do not try to queue auxtrace data on pipe
+Date:   Mon, 30 Jan 2023 18:33:48 -0800
+Message-Id: <20230131023350.1903992-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 In-Reply-To: <20230131023350.1903992-1-namhyung@kernel.org>
 References: <20230131023350.1903992-1-namhyung@kernel.org>
@@ -81,56 +81,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In copy_bytes(), it reads the data from the (input) fd and writes it to
-the output file.  But it does with the read(2) unconditionally which
-caused a problem of mixing buffered vs unbuffered I/O together.
+When it processes AUXTRACE_INFO, it calls to auxtrace_queue_data() to
+collect AUXTRACE data first.  That won't work with pipe since it needs
+lseek() to read the scattered aux data.
 
-You can see the problem when using pipes.
+  $ perf record -o- -e intel_pt// true | perf report -i- --itrace=i100
+  # To display the perf.data header info, please use --header/--header-only options.
+  #
+  0x4118 [0xa0]: failed to process type: 70
+  Error:
+  failed to process sample
 
-  $ perf record -e intel_pt// -o- true | perf inject -b > /dev/null
-  [ perf record: Woken up 1 times to write data ]
-  [ perf record: Captured and wrote 0.000 MB - ]
-  0x45c0 [0x30]: failed to process type: 71
+For the pipe mode, it can handle the aux data as it gets.  But there's
+no guarantee it can get the aux data in time.  So the following warning
+will be shown at the beginning:
 
-It should use perf_data__read() to honor the 'use_stdio' setting.
+  WARNING: Intel PT with pipe mode is not recommended.
+           The output cannot relied upon.  In particular,
+           time stamps and the order of events may be incorrect.
 
-Fixes: 601366678c93 ("perf data: Allow to use stdio functions for pipe mode")
+Fixes: dbd134322e74 ("perf intel-pt: Add support for decoding AUX area samples")
 Reviewed-by: James Clark <james.clark@arm.com>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-inject.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/perf/Documentation/perf-intel-pt.txt | 30 ++++++++++++++++++++++
+ tools/perf/util/auxtrace.c                 |  3 +++
+ tools/perf/util/intel-pt.c                 |  6 +++++
+ 3 files changed, 39 insertions(+)
 
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index 3f4e4dd5abf3..f8182417b734 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -215,14 +215,14 @@ static int perf_event__repipe_event_update(struct perf_tool *tool,
+diff --git a/tools/perf/Documentation/perf-intel-pt.txt b/tools/perf/Documentation/perf-intel-pt.txt
+index 7b6ccd2fa3bf..9d485a9cdb19 100644
+--- a/tools/perf/Documentation/perf-intel-pt.txt
++++ b/tools/perf/Documentation/perf-intel-pt.txt
+@@ -1821,6 +1821,36 @@ a trace that encodes the payload data into TNT packets.  Here is an example
+  $
  
- #ifdef HAVE_AUXTRACE_SUPPORT
  
--static int copy_bytes(struct perf_inject *inject, int fd, off_t size)
-+static int copy_bytes(struct perf_inject *inject, struct perf_data *data, off_t size)
- {
- 	char buf[4096];
- 	ssize_t ssz;
- 	int ret;
++Pipe mode
++---------
++Pipe mode is a problem for Intel PT and possibly other auxtrace users.
++It's not recommended to use a pipe as data output with Intel PT because
++of the following reason.
++
++Essentially the auxtrace buffers do not behave like the regular perf
++event buffers.  That is because the head and tail are updated by
++software, but in the auxtrace case the data is written by hardware.
++So the head and tail do not get updated as data is written.
++
++In the Intel PT case, the head and tail are updated only when the trace
++is disabled by software, for example:
++    - full-trace, system wide : when buffer passes watermark
++    - full-trace, not system-wide : when buffer passes watermark or
++                                    context switches
++    - snapshot mode : as above but also when a snapshot is made
++    - sample mode : as above but also when a sample is made
++
++That means finished-round ordering doesn't work.  An auxtrace buffer
++can turn up that has data that extends back in time, possibly to the
++very beginning of tracing.
++
++For a perf.data file, that problem is solved by going through the trace
++and queuing up the auxtrace buffers in advance.
++
++For pipe mode, the order of events and timestamps can presumably
++be messed up.
++
++
+ EXAMPLE
+ -------
  
- 	while (size > 0) {
--		ssz = read(fd, buf, min(size, (off_t)sizeof(buf)));
-+		ssz = perf_data__read(data, buf, min(size, (off_t)sizeof(buf)));
- 		if (ssz < 0)
- 			return -errno;
- 		ret = output_bytes(inject, buf, ssz);
-@@ -260,7 +260,7 @@ static s64 perf_event__repipe_auxtrace(struct perf_session *session,
- 		ret = output_bytes(inject, event, event->header.size);
- 		if (ret < 0)
- 			return ret;
--		ret = copy_bytes(inject, perf_data__fd(session->data),
-+		ret = copy_bytes(inject, session->data,
- 				 event->auxtrace.size);
- 	} else {
- 		ret = output_bytes(inject, event,
+diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+index c2e323cd7d49..d4b04fa07a11 100644
+--- a/tools/perf/util/auxtrace.c
++++ b/tools/perf/util/auxtrace.c
+@@ -1133,6 +1133,9 @@ int auxtrace_queue_data(struct perf_session *session, bool samples, bool events)
+ 	if (auxtrace__dont_decode(session))
+ 		return 0;
+ 
++	if (perf_data__is_pipe(session->data))
++		return 0;
++
+ 	if (!session->auxtrace || !session->auxtrace->queue_data)
+ 		return -EINVAL;
+ 
+diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
+index 6d3921627e33..b8b29756fbf1 100644
+--- a/tools/perf/util/intel-pt.c
++++ b/tools/perf/util/intel-pt.c
+@@ -4379,6 +4379,12 @@ int intel_pt_process_auxtrace_info(union perf_event *event,
+ 
+ 	intel_pt_setup_pebs_events(pt);
+ 
++	if (perf_data__is_pipe(session->data)) {
++		pr_warning("WARNING: Intel PT with pipe mode is not recommended.\n"
++			   "         The output cannot relied upon.  In particular,\n"
++			   "         timestamps and the order of events may be incorrect.\n");
++	}
++
+ 	if (pt->sampling_mode || list_empty(&session->auxtrace_index))
+ 		err = auxtrace_queue_data(session, true, true);
+ 	else
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
