@@ -2,146 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41BD682323
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E96682325
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjAaECB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 23:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S230404AbjAaEEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 23:04:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjAaEB6 (ORCPT
+        with ESMTP id S229934AbjAaEEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:01:58 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8146C33440
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:01:54 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id o13so13069795pjg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:01:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h4HuA3j2EBy5AxpIc4hMqjnFXhEdbAZiZIV8HHy46jY=;
-        b=HEWCwGkRH9bAZ7lLPQDJSVH0O3fsFMA4fAd6IgZJbbsN8U3WfErm8xeGa57wmhhtUe
-         PJiCMlfFV2BJCaVCwryDX5vOjVCTFDnxFCq7mDnH4zWHzcbksJhEGNuKtI6VgIifcFsr
-         CGDUaeiWYBZZxs/XSNliTfREJ1U9G4vD/0IZZ8Ho49yWo8NtR1+gqCPH0zg89t7bS8y5
-         xC9kCK/pmKGmiGaHNn5zFH7yC5Gjph0ndJBvQTO0duLUlAQhS7Nbi+BryMBaFP3IiBTo
-         B+ShicADflC9/EVZ7txCK4eYJFONVqnY7l3hQsyQeFSMctpTfS5T/s/SWMvdLsyOr/vv
-         ffXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h4HuA3j2EBy5AxpIc4hMqjnFXhEdbAZiZIV8HHy46jY=;
-        b=hpdTD/0b4e2QWyS7LoU6fq+zsalKA9Cr6RKcf+L8hd88nKvAH8AwYGNiapgzZjFNxX
-         khB7X+4MltiBo2lOI5PjsVAliouGLg+gz5gQfJ853G0M4cOFDQsHDrGDmFalWg4wojI0
-         J7hWsAQY6AmjPw1uimntus7Hr6LGNWfAYczo1jL5cXOfy1c+ccfO/CsT8sLikFk+rsRk
-         2gvTq6lpVsHUhuEZMBwfPXneMkfl3OM+JGrjlxEADg+cNGAbT0M/9srWpTrnz0owF4AI
-         Ba+ZQl8wNR+B1pOF1GQeodNkLDyNrkb8+RAw0bk7xrijDeFmV/XdIiQ1r8/1zXUuHxm2
-         9www==
-X-Gm-Message-State: AO0yUKWPdY2aJ0POHyZCCafpQoSeS3CW9bhyTBrbIWqZuGLlRcIAg/p3
-        jFMjN2SQKKR+vR+E/9kWULVi4NONtGEILwmbbdK6Tw==
-X-Google-Smtp-Source: AK7set9O/ZL92MGFaieNvwAJ5CCNGhB9xx1mRSajxQzhHpp9Wy4/L2V5dizdMVSjKAlymvGjH465mDdS/mVCT2tdPuY=
-X-Received: by 2002:a17:90a:64c5:b0:22b:ef05:ea5b with SMTP id
- i5-20020a17090a64c500b0022bef05ea5bmr4316599pjm.50.1675137713729; Mon, 30 Jan
- 2023 20:01:53 -0800 (PST)
+        Mon, 30 Jan 2023 23:04:06 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39C5E113CB;
+        Mon, 30 Jan 2023 20:04:05 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEF262F4;
+        Mon, 30 Jan 2023 20:04:46 -0800 (PST)
+Received: from entos-ampere-02.shanghai.arm.com (entos-ampere-02.shanghai.arm.com [10.169.214.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A40E23F64C;
+        Mon, 30 Jan 2023 20:04:02 -0800 (PST)
+From:   Jia He <justin.he@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Jia He <justin.he@arm.com>
+Subject: [PATCH 0/2] Fix boot hang issue on Ampere Emag server
+Date:   Tue, 31 Jan 2023 04:03:53 +0000
+Message-Id: <20230131040355.3116-1-justin.he@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230127001141.407071-1-saravanak@google.com> <20230127001141.407071-5-saravanak@google.com>
- <20230130143153.67dsxn4lugfetfwb@bogus> <Y9fe2arI8afeURWn@smile.fi.intel.com>
-In-Reply-To: <Y9fe2arI8afeURWn@smile.fi.intel.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 30 Jan 2023 20:01:17 -0800
-Message-ID: <CAGETcx9aPp+JU-hO+fGyGps6jaoKoFzZd2zzy5YZBKoU8G=OhA@mail.gmail.com>
-Subject: Re: [PATCH v2 04/11] gpiolib: Clear the gpio_device's fwnode
- initialized flag before adding
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Jean-Philippe Brucker <jpb@kernel.org>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 7:14 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Jan 30, 2023 at 02:31:53PM +0000, Sudeep Holla wrote:
-> > On Thu, Jan 26, 2023 at 04:11:31PM -0800, Saravana Kannan wrote:
-> > > Registering an irqdomain sets the flag for the fwnode. But having the
-> > > flag set when a device is added is interpreted by fw_devlink to mean the
-> > > device has already been initialized and will never probe. This prevents
-> > > fw_devlink from creating device links with the gpio_device as a
-> > > supplier. So, clear the flag before adding the device.
->
-> ...
->
-> > > +   /*
-> > > +    * If fwnode doesn't belong to another device, it's safe to clear its
-> > > +    * initialized flag.
-> > > +    */
-> > > +   if (!gdev->dev.fwnode->dev)
-> > > +           fwnode_dev_initialized(gdev->dev.fwnode, false);
-> >
-> > This is the one causing the kernel crash during the boot on FVP which
-> > Naresh has reported. Just reverted this and was able to boot, confirming
-> > the issue with this patch.
->
-> I'm wondering if
->
->         if (!dev_fwnode(&gdev->dev)->dev)
->                 fwnode_dev_initialized(&dev_fwnode(gdev->dev), false);
->
-> works.
+I met a hung task warning and then kernel was hung forever with latest
+kernel on an Ampere Emag server.
 
-No, that won't help. The problem was that with arm32, we have gpio
-devices created without any of_node or fwnode. So I can't assume
-fwnode will always be present.
+The root cause is kernel was hung  when invoking an efi rts call to set
+the RandomSeed variable during the booting stage. The arch_efi_call_virt
+call (set_variable) was never returned and then caused the hung task error.
 
--Saravana
+On the Emag server, efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE)
+is returned with "true"
+
+Fix it by introducing the efi_get_supported_rt_services() and then determine
+to set or clear the runtime services bit of efi.flags.
+
+Jia He (2):
+  efi: libstub: Fix the retriving of supported rutime services
+  efi: Introduce efi_get_supported_rt_services() to get the runtime
+    services mask
+
+ drivers/firmware/efi/arm-runtime.c      |  5 ++++-
+ drivers/firmware/efi/efi.c              | 28 +++++++++++++++++--------
+ drivers/firmware/efi/libstub/efi-stub.c |  2 ++
+ include/linux/efi.h                     |  1 +
+ 4 files changed, 26 insertions(+), 10 deletions(-)
+
+-- 
+2.25.1
+
