@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028B9682B91
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:34:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B993E682B93
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjAaLeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 06:34:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S230078AbjAaLe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 06:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjAaLeJ (ORCPT
+        with ESMTP id S229740AbjAaLe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:34:09 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B2BCDE9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:34:08 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id i188so15683823vsi.8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:34:08 -0800 (PST)
+        Tue, 31 Jan 2023 06:34:57 -0500
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0A26E87
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:34:55 -0800 (PST)
+Received: by mail-vk1-xa36.google.com with SMTP id bs10so7215199vkb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:34:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8eUarQKx4zlWnr8p6102+JRBW/gc9YxRunt0DbrPaA=;
-        b=Hu3jY71lNtAtQxbsDMTMKp2xklIgIO3mPHIJ79EvZmZNNyhd1TYzer4rk+msSCIaZi
-         6BpkIKPeadpYBXTEv3kKK7PtmeQJEngDwb9+OwDKiTrseJp3XtJMuiPWQl70kLvu0WJG
-         y6Fs3pCfGfTPPpJ4VgOTzowNbiD+qYeJ0mD29iB+t8Cvdx3bnW5lBq5bDQridA6KALXA
-         HhIsQWPGYUwIxY47pyV6JcDoSFdSIG3M2+cglWIGXCLY5s2yTTkXH5A5NwcXG95DNtPr
-         /xEvmkqqTB8ICwRhrlWcpW6lwqL6G4NmHvOx1sHXbObgz50sSPsLpMG4J51F/sPAl/Vf
-         LilQ==
+        bh=2XA9F8dT5La7FNowNfZ+ob9NzupifQzUI33ZbhcRFf8=;
+        b=gwtEvNWV1tJLRrrSnYDPf62/TGYX7LvOhCahv9HSd3JPsVxBl1vfbriv4DYEU7MEuV
+         pmU8HkhzQB1hOCxObX/7G5iErNclUZBaTWKa/2NMwjo/xoCvdSozjdF7I5Gww5fzM+s5
+         TwSI9cF0x/9jcWd0cF8MizVOnjUnLamxnElCNdXZUZN7KxQC2yjqKBFJ/6I5spWARpA+
+         vSFDg1gvct8qAGWmDbkzRlKCn9ciCpnEUuEQAoeOtg2Ni6b5NdgfTCUo1ppU7NudSUol
+         SjLiacYX1tNNN1pfYxrYH1Wg7pSzH+2XUq1bs9IkKNVJukMkEi/s/WZtfG/PK8FKeUH8
+         A6Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=i8eUarQKx4zlWnr8p6102+JRBW/gc9YxRunt0DbrPaA=;
-        b=C4kZflCiGAcOWZ6VBQfJ1r+CWgyS6n5lorpjJnOL2ArbF6weL2JSoBN6WywnQl3anT
-         ijoecTVoQeI1MG57YfKHrhpK6K/LBX6U29VB2nRthLZqoEOZvnenjxDYMEs9/tYi14I3
-         4BRUem0aRPTfGrBPblNtmHpAbXdkpoegTrimFbnCsk04qJqGgKFwlmXZcrVjk3eHrl+X
-         o1C1o1k3zmMrOzMi6thlLMUMGmCJneclkYih75lVOt2phk3bR3//xCieljlIJGF8FLsF
-         qEY6bGQ1TGsqKW09f12kSN6qvKIZFq1hSH1V/o0NkSQefzOcXq4iPbM9N2bLUAfDvudp
-         QMJQ==
-X-Gm-Message-State: AFqh2krmHx+iRsXf6kEoC3JCWGF/ZsJwmFrt3EjGeWmacNZ3fVuQPKVa
-        Xh66tr9qT5SsD+6nnW8tn9SUyH2QWUQKNLZidpjVjw==
-X-Google-Smtp-Source: AMrXdXs7gAgf42FKDCJFRrDo6We9zx/CBIN3LvglGtvy3VnkIDYcWFMb/mBbqvaR0o2rHVBOl7Lgw1BwcMrz543P2iw=
-X-Received: by 2002:a67:ec91:0:b0:3d0:a896:51da with SMTP id
- h17-20020a67ec91000000b003d0a89651damr7123043vsp.44.1675164847883; Tue, 31
- Jan 2023 03:34:07 -0800 (PST)
+        bh=2XA9F8dT5La7FNowNfZ+ob9NzupifQzUI33ZbhcRFf8=;
+        b=ilsxst419P2XNVt9GGuPsCVlSxGaajVPkOMncl4HtSYXWSKuYvhI999uFbTpOyivja
+         G8lbdzGd8y1R2CiT9azOQnos1Q7NwD590i3LVrL4CKDc39PIj/Tx2YLTQXpR3Ek+K9em
+         LFYXEwLT4xlcN26bPOvkEiPPhcmLCoXksVF6ANtBD/jIdoLDRoa//HJkmD9RauHZbz9v
+         T2ZBx4L9JXTAc+IiD7FJtiZfet8gI/mey+uaHDv7faI9PvpuRgFYMxBQ8rdp8uK/xKGD
+         ynpY4+/uJGc30g8af/6N+h9QdnTyNS6iAY9+ure1Zo/4W/2/i592ov9QWQG9NPb+SXqh
+         4EOw==
+X-Gm-Message-State: AO0yUKVf+01Ymq9wkuqPL8jWQi261Y508ojKYkhs1ELAtayCQF6y3d+X
+        m+2crb1ud5btkugDqSmPlPUtH+VPprnl6hV0bEAJWg==
+X-Google-Smtp-Source: AK7set/W0WmNEw8E54o2t/mlgZtsc+pm/8wqkXV25xInC/mfTFGPTkEFHWp/0vcxWdmx/J6EnFIyGTPsEdfv7eTJaJA=
+X-Received: by 2002:a1f:d187:0:b0:3e7:295d:64d8 with SMTP id
+ i129-20020a1fd187000000b003e7295d64d8mr2731185vkg.35.1675164894961; Tue, 31
+ Jan 2023 03:34:54 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1675111415.git.andreyknvl@google.com> <5456286e2c9f3cd5abf25ad2e7e60dc997c71f66.1675111415.git.andreyknvl@google.com>
-In-Reply-To: <5456286e2c9f3cd5abf25ad2e7e60dc997c71f66.1675111415.git.andreyknvl@google.com>
+References: <cover.1675111415.git.andreyknvl@google.com> <b756e381a3526c6e59cb68c53ac0f172ddd22776.1675111415.git.andreyknvl@google.com>
+In-Reply-To: <b756e381a3526c6e59cb68c53ac0f172ddd22776.1675111415.git.andreyknvl@google.com>
 From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 31 Jan 2023 12:33:31 +0100
-Message-ID: <CAG_fn=XhboCY1qz6A=vw3OpOv=u6x=QBq-yS5MmA0RbkD7vVJQ@mail.gmail.com>
-Subject: Re: [PATCH 09/18] lib/stackdepot: rename hash table constants and variables
+Date:   Tue, 31 Jan 2023 12:34:18 +0100
+Message-ID: <CAG_fn=UN-K2W9E+q=tHheda8BGCzoPg5-riXpDyiSaLqjekNkw@mail.gmail.com>
+Subject: Re: [PATCH 10/18] lib/stackdepot: rename init_stack_slab
 To:     andrey.konovalov@linux.dev
 Cc:     Marco Elver <elver@google.com>,
         Andrey Konovalov <andreyknvl@gmail.com>,
@@ -77,22 +77,8 @@ On Mon, Jan 30, 2023 at 9:50 PM <andrey.konovalov@linux.dev> wrote:
 >
 > From: Andrey Konovalov <andreyknvl@google.com>
 >
-> Give more meaningful names to hash table-related constants and variables:
->
-> 1. Rename STACK_HASH_SCALE to STACK_TABLE_SCALE to point out that it is
->    related to scaling the hash table.
-
-It's only used twice, and in short lines, maybe make it
-STACK_HASH_TABLE_SCALE to point that out? :)
-
-> 2. Rename STACK_HASH_ORDER_MIN/MAX to STACK_BUCKET_NUMBER_ORDER_MIN/MAX
->    to point out that it is related to the number of hash table buckets.
-
-How about DEPOT_BUCKET_... or STACKDEPOT_BUCKET_...?
-(just bikeshedding, I don't have any strong preference).
-
-> 3. Rename stack_hash_order to stack_bucket_number_order for the same
->    reason as #2.
+> Rename init_stack_slab to depot_init_slab to align the name with
+> depot_alloc_stack.
 >
 > No functional changes.
 >
