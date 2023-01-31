@@ -2,111 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E286831C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987A46831CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233424AbjAaPqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        id S233431AbjAaPsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjAaPqJ (ORCPT
+        with ESMTP id S229828AbjAaPsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:46:09 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBD74108F;
-        Tue, 31 Jan 2023 07:46:08 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFVl1W003895;
-        Tue, 31 Jan 2023 15:45:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=F7/WBm9NjX8DC6g4QGs3UEG18yMswvxt64PCeJCkbyw=;
- b=gFJUp8SxfoUvbTdWt+wUt1XKuJF1g0s1VskcTSyArwemTY9wy8MH7oEpANhCXkgIhlPj
- aaZRnmwwqT3kHvJe/lwSFqxFqzk026PgKO88DnZLbusF9+kO1d3kBWHA97sd5TKItKhM
- xqIM4lcHhR9PMoMFVvTkcZjEUFSCMdS+CFEgY3451kDEhziSBojroUwndteNHaDrImLQ
- HQRPr0hWDdzXmlwDYPJFYoQWbBGTg7V+4KsAvSZOdX6J2LMS6jeaUyXZEFm8oacuBaLa
- Vi4UyWDDuoC8KpLU57M/7kSsj9rfS5lRa+X6pa53gakID4HBDdJdx5WAduKuFCp+H7xf lA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf5q6gadh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:45:58 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VFVfJD001031;
-        Tue, 31 Jan 2023 15:45:58 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf5q6gad5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:45:58 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDeDj6019328;
-        Tue, 31 Jan 2023 15:45:57 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3ncvuqmv9r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:45:57 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFjtbP9306778
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 15:45:55 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61CA558043;
-        Tue, 31 Jan 2023 15:45:55 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E1F3D58053;
-        Tue, 31 Jan 2023 15:45:51 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 15:45:51 +0000 (GMT)
-Message-ID: <9ff066c0-3a09-c366-b545-ddb94d73d84c@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 10:45:51 -0500
+        Tue, 31 Jan 2023 10:48:15 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB126C648
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:48:14 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id m13so3588246plx.13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:48:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=la8OZBgC7aYcAt3o4Ce5dg5dt0dTa4vFux9stLocmok=;
+        b=XJrImPQrIl/4wm5wtN/jh/S1cV10rzscLfyejPeO63bLXexp96Ygfz8pMfPBF+26yN
+         6yPxUYH9uP9Bo7aHontrv8HK9R4Hez3O0RiccpMyO5jLlV3owmte8tTqlLeqNBhK3kSq
+         9feoiunNv2niHSUVReyyzNAYwlGIX37P62QhwRId1hqHNF2iDB7LhjcXOu1hNU1mIeCe
+         dNcX2QWH/QPB7Wk5Ixz2Sn3HocR7Q/FwLB8X8P6NY9iGwHieOoh3eSuUhklfKoSc74vk
+         mMfiAfpYWD4v5aISzz9gsT+yrWhZf93luSK/xjcvRR44gf0GH9ocmH97oN1uLgStyUX+
+         kmtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=la8OZBgC7aYcAt3o4Ce5dg5dt0dTa4vFux9stLocmok=;
+        b=8E0b70eT+ZbylH0mWE8SuNNhSf6A0VNYGjUQe/yAepzK0fX01MTc2+o1QdSPqFkUsI
+         N+cBUqbJFjqEFeraEGB+Gi2HR15cf1VYXF4JM5hkRDTRLWsNVXekPZWfPfj2CYEl60ye
+         znHvW5zHmD2sZ+WfOXskr9F3ciDqt3Y3TA9tPXLxrwLlCHzh09JtG8XuJnTDek+dylDM
+         8KVlStDeEWVuU9v64WYdU0GsyZte1own4+xBw6taS/+Qf+V1NTrEWpSDT5+r7ZFN5zus
+         5jdwemhNsKlIJKEuwzceWrs68jRPWoPHYYTg0rbb2x2JwWAOEEql8hEc/hH8YexHpH91
+         m1RA==
+X-Gm-Message-State: AO0yUKXyOwFyJgWMEsvRRcxTbdZ49jBrvUs0q6QSg+vanskNOZDVLV+6
+        z9g7ry/MEM7kh4FqGt7hWGTGGewjBt/m873jhF8=
+X-Google-Smtp-Source: AK7set+UQu97F5JDMbZSW5Zp0ZVnOmV17D9JI6UbXY9ODO+fJUTkVma/G3lmCkXnnfLMQFb4HOkq+w4ZUIZCpT2N5rY=
+X-Received: by 2002:a17:90a:630b:b0:22c:5b7f:d37f with SMTP id
+ e11-20020a17090a630b00b0022c5b7fd37fmr1960691pjj.31.1675180094246; Tue, 31
+ Jan 2023 07:48:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 09/25] powerpc/secvar: Clean up init error messages
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-10-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-10-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: p77iQe2KGpOf1tSlm-1Yyv_6Jgo7sJ6R
-X-Proofpoint-GUID: omU6nWjmINS5U3dZhAjSouPPZhKqtaFC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 impostorscore=0
- clxscore=1015 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301310137
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220819032706.695212-1-xiehuan09@gmail.com> <20221017154057.78babf40@gandalf.local.home>
+ <CAEr6+ECqn7rABE0cJP_oPr6g37B1kXu2xpge7Pg67hxywqyO0g@mail.gmail.com>
+ <20221129113006.0d745fae@gandalf.local.home> <CAEr6+EArZtwJPwZnKAB_61a=khPpC1=6ogqEC8r4npaaX0WvjA@mail.gmail.com>
+ <CAEr6+EB89otsHVOnYNGQ_gbo_g=2fNiU4+3pk06YWFrpZDy=kQ@mail.gmail.com> <20230131103623.53a4e3a3@gandalf.local.home>
+In-Reply-To: <20230131103623.53a4e3a3@gandalf.local.home>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Tue, 31 Jan 2023 23:48:02 +0800
+Message-ID: <CAEr6+EBdJLZ7pQyxr9uzMMfaUdW4skaaqSD7LtzG14TmtCf2WA@mail.gmail.com>
+Subject: Re: [PATCH v15 0/4] trace: Introduce objtrace trigger to trace the
+ kernel object
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
+        linux-kernel@vger.kernel.org, chensong_2000@189.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 31, 2023 at 11:36 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Tue, 31 Jan 2023 17:55:16 +0800
+> Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> >  Hi Steve,
+> >
+> > On Sat, Dec 17, 2022 at 4:27 PM Jeff Xie <xiehuan09@gmail.com> wrote:
+> > >
+> > > On Wed, Nov 30, 2022 at 12:30 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> > > >
+> > > > On Wed, 30 Nov 2022 00:09:51 +0800
+> > > > Jeff Xie <xiehuan09@gmail.com> wrote:
+> > > >
+> > > > > > Now instead of searching the function arguments for "obj", we should just
+> > > > > > read the obj value at every function and report when it changed, as well as
+> > > > > > the last function it was still the same. The report will be like the
+> > > > > > "func_repeats" entry. And instead we can print when the object changes,
+> > > > > > something like this:
+> > > > > >
+> > > > > >               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000 (last value:0x1000 at [002] __bio_add_page <-bio_add_page ts: 1.602245)
+> > > > >
+> > > > >
+> > > > > I'm just curious if we'll see this rewritten version in the next merge
+> > > > > window  ;-)
+> > > >
+> > > > Unfortunately, this ended up getting dropped in priority, as my workload
+> > > > increased internally. :-/
+> > >
+> >
+> > I would like to ask if there is any hope that this patchset can be
+> > merged into the linux kernel in the end.
+> >
+> > We spent a lot of time on this patchset, I don't want to give up so easily ;-)
+> >
+>
+> I think we were near the end, but it wasn't quite done, as I want it to be
+> integrated with the kprobes indirection interface:
+>
+>   https://lore.kernel.org/all/20220924160136.5029e942@rorschach.local.home/
+>
+> Which I started to work on but didn't have time to finish, nor even get
+> very far with it.
+>
+> I think once we can get that implemented, then this can get in. I don't
+> want to give up on it either.
+
+Thank you for your positive and fast feedback.
+
+>
+> -- Steve
 
 
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> Remove unnecessary prefixes from error messages in secvar_sysfs_init()
-> (the file defines pr_fmt, so putting "secvar:" in every message is
-> unnecessary). Make capitalisation and punctuation more consistent.
-> 
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-
+-- 
+Thanks,
+JeffXie
