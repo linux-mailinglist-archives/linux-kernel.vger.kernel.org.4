@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9989968268E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E85EB682691
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjAaIfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 03:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
+        id S231338AbjAaIfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 03:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbjAaIe0 (ORCPT
+        with ESMTP id S231446AbjAaIey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:34:26 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC4B17CFD;
-        Tue, 31 Jan 2023 00:34:03 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V8S2fl027888;
-        Tue, 31 Jan 2023 00:33:59 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=vQvH3qXMcHL4qC8BimrefIOfrFwKAmxERZF1pGL8+3E=;
- b=UsUrm5pcqfJM/mvdj43yoCGuiaDMQ+AlFu4z6/byDgipyH2d4hALrojmAPbAy53qHMH4
- uLaGtlElxXo7w+XeNN/ntR+06mqlDNmArNWojxMAAxx+vVv2LMpVB/AH04ahaOyeT6My
- w3mIrHFniWocTy6qcX/F0kPI2+qLQwp13ocoYkoxDgi+qmqCPKwenYNb0A8Xsf+A1Cgx
- aeLlpbBWDbS0bAq2l65P8hTEnub+O2E8U3fKVuK8rWOx7grqwux15e1cw2sf0n4O/S91
- +TD7lNlUvDFHf1X02BJSlU58bLYS1NPTOFymTKGu4qR25aGE9j+VPKU7Pqc+ixhsKsbf 1A== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3nd1xurs1g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 00:33:59 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 31 Jan
- 2023 00:33:57 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Tue, 31 Jan 2023 00:33:57 -0800
-Received: from cavium-DT10.. (unknown [10.28.34.39])
-        by maili.marvell.com (Postfix) with ESMTP id A68123F704E;
-        Tue, 31 Jan 2023 00:33:54 -0800 (PST)
-From:   Tomasz Duszynski <tduszynski@marvell.com>
-To:     Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "open list:VFIO PLATFORM DRIVER" <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-CC:     <jerinj@marvell.com>, Tomasz Duszynski <tduszynski@marvell.com>
-Subject: [PATCH v2] vfio: platform: ignore missing reset if disabled at module init
-Date:   Tue, 31 Jan 2023 09:33:49 +0100
-Message-ID: <20230131083349.2027189-1-tduszynski@marvell.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 31 Jan 2023 03:34:54 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4203510AA9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:34:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yIv3LIr3qWgmHuEbe2VAns23Loew5Phrl74MLrKWWD8=; b=dIKlPDN1JvAxGw5inlYXDcwU4t
+        JV1Y7of4EGQZwP+xRWTx2dtjuHLTYTLo02H4E9BQ+GMAToe8yPsuEPgG1RfqBRttJA4T9PYo9TWxV
+        2XHnbEp9zXkaAvnWtqC6dR/OH8asvM85qbqpWDcB2P9inqPzEGPTHTvtiFZoR10dm6xQf+lF0PgWK
+        Y2Alu3/L7rR7gGEJpg+1WVCHAt333Y56eocnk8o5VVWyRXMlwERzy/QGq9yLe/yM8fPnSHXhko0av
+        oPh8Z35zcqVKIHfAmiodzt4GdErWPHE0yzZp3/4eGxqWLrLmViJlNfr/ZDVG/GQJQY/BRlkCYsKrM
+        iL52cKRQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pMm5k-00B9Of-GC; Tue, 31 Jan 2023 08:34:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73934300209;
+        Tue, 31 Jan 2023 09:34:12 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 62BEE2083586E; Tue, 31 Jan 2023 09:34:12 +0100 (CET)
+Date:   Tue, 31 Jan 2023 09:34:12 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] x86/tdx: Do not corrupt frame-pointer in
+ __tdx_hypercall()
+Message-ID: <Y9jShNfS/d8LGu8w@hirez.programming.kicks-ass.net>
+References: <20230130135354.27674-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 1nv3gJORAb-0tnAZ9IjxB8ntSRLC3OI8
-X-Proofpoint-GUID: 1nv3gJORAb-0tnAZ9IjxB8ntSRLC3OI8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_02,2023-01-30_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130135354.27674-1-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +65,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If reset requirement was relaxed via module parameter errors caused by
-missing reset should not be propagated down to the vfio core.
-Otherwise initialization will fail.
+On Mon, Jan 30, 2023 at 04:53:54PM +0300, Kirill A. Shutemov wrote:
+> If compiled with CONFIG_FRAME_POINTER=y, objtool in not happy that
+> __tdx_hypercall() messes up RBP.
+> 
+>   objtool: __tdx_hypercall+0x7f: return with modified stack frame
+> 
+> Rework the function to store TDX_HCALL_ flags on stack instead of RBP.
 
-Signed-off-by: Tomasz Duszynski <tduszynski@marvell.com>
-Fixes: 5f6c7e0831a1 ("vfio/platform: Use the new device life cycle helpers")
----
-v2:
-- return directly instead of using ternary to do that
-
- drivers/vfio/platform/vfio_platform_common.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/vfio/platform/vfio_platform_common.c b/drivers/vfio/platform/vfio_platform_common.c
-index 1a0a238ffa35..7325ff463cf0 100644
---- a/drivers/vfio/platform/vfio_platform_common.c
-+++ b/drivers/vfio/platform/vfio_platform_common.c
-@@ -650,10 +650,13 @@ int vfio_platform_init_common(struct vfio_platform_device *vdev)
- 	mutex_init(&vdev->igate);
-
- 	ret = vfio_platform_get_reset(vdev);
--	if (ret && vdev->reset_required)
-+	if (ret && vdev->reset_required) {
- 		dev_err(dev, "No reset function found for device %s\n",
- 			vdev->name);
--	return ret;
-+		return ret;
-+	}
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(vfio_platform_init_common);
-
---
-2.34.1
-
+Also, on IRC you mentioned that per TDX spec, BP is a valid argument
+register too and you were going to raise this and get it fixed, TDX
+hypercalls must not use BP to pass data.
