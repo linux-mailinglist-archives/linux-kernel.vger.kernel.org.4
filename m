@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4784682182
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A04F682184
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjAaBqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
+        id S230417AbjAaBqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjAaBqK (ORCPT
+        with ESMTP id S230168AbjAaBqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:46:10 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2483A2529D
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:45:40 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id p24so13553009plw.11
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:45:40 -0800 (PST)
+        Mon, 30 Jan 2023 20:46:45 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244E41631A
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:46:31 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id k6so14621523vsk.1
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:46:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        d=draconx-ca.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbM1BOQ4XWE4OUgtCo6C4bdHxYq4OBKrEZY8jLQ57ds=;
-        b=J7nzSQOGmpCmGBqVDqLzDaKqdmThacQyaLPB0hwEiZvvwznIEUic9aw+4OeNlfTMpM
-         jqhHiNK6l7iTxBN6PudMuHzqECrXGGaV/v97OxIrG3237tUu4bmM3wiLV6SkBRnxKETM
-         ghxsrAbZDpwBvLScb3jAYI/cSpbCILEEohizUJq8aF5WlgciyI6Ehl25zn52Y7mmnhLT
-         iXiJ7nlbR+raD/8nKbEZJ5a1zULtWPWsW6gK1CfSE/xwE57rEBBmcRa/20jNRQGF/yhG
-         AUAomNcMCNCDUAkshyxhy40wGcfGs8yYt5smnE0DKNcrT9DQy2VaYFiKdaEZxAi7pqlM
-         +gUA==
+        bh=r0G78tCFuMbUc11f4Np3FVLjYUjXRj+1bSf/D+z772Y=;
+        b=mBtK5jkiEPcmqnnUf3pWbeh8X1hzLi8VxrmvPgnBVeR64+mnnmMndwS6dpqTQOgQTV
+         GYrR7P3jZQo0pYnE8xyMUtVNrxhSv+1+3CdCnGJjS5kJOjSRSy0v6Su3cI6SYyqauSlB
+         vPb8rMkw1MYjQiYj4oaoqHB3JVw4YvTnr2t97GRBiG2II0iD6Qq1DylRNSQrOR5rrmse
+         cqXxYh6CCSb4Jd0lCVVJKNNpJGOcQa8yJTUZbSj0XSMK4LNVSLGenAQR4ZBr54k4VZIo
+         RCH+zjvb6Bcc9CwtuiKAgBA08gZS+RMrsWymnMqBCPaa1E8w70bbakPcfMlclVt+O1T+
+         8ZwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=cc:to:subject:message-id:date:from:references:in-reply-to
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cbM1BOQ4XWE4OUgtCo6C4bdHxYq4OBKrEZY8jLQ57ds=;
-        b=OuY8B9ILIA0LBG7DKCHi9GmtxEBRpF9YPOpEiVeG+436D8h2Ehlretk+OMmiNCSIb/
-         ExG5CEiti795JZdTVseGoTxRqTdBiwAA5WOdXw53R4lMkSd3OSvbr4n6+ehoHt3NYhsS
-         8A2uAdZMVO0Ntvch+Y42RcFyKBJCUlqdDK9OV3+fEjlMW4wKaAcqrNk773L+Sf6b5bzU
-         5o1L9xply46MMBf7QQ87He3Kk6EyWrsPDmCl/ujMcXGvT+GkQhVw8GcCKILVZqTStUfG
-         f+g/pkXJ4yNiaU0/Ks4nf7e0UOsBJwEnAoHZrr/rYdeQuH/ldT6lU+LT8hHRr52jSEvV
-         Lifw==
-X-Gm-Message-State: AO0yUKXzlSAJ72MHqxFBp0Ol3whYceJ1aWV5cbHeY1BfrhuopbP1fRCX
-        j5oNU1ADmk1hiWiUD0iL/ZP5Y9p2r+PgY5hvnJA2Zw==
-X-Google-Smtp-Source: AK7set9N5P5ldD/yETehszirsCZuTnymewwCNrvHg2d+SXQHdcYE+TA92gT37/hltVGbBH/wAx6boLx8qdTaCxypjo8=
-X-Received: by 2002:a17:902:714c:b0:196:3088:5def with SMTP id
- u12-20020a170902714c00b0019630885defmr3074407plm.32.1675129539114; Mon, 30
- Jan 2023 17:45:39 -0800 (PST)
+        bh=r0G78tCFuMbUc11f4Np3FVLjYUjXRj+1bSf/D+z772Y=;
+        b=YtoxlNXBcyfGiAcGBmDIPPKMZCqRtdRi8SVzUIDKg4nKfxv0PEdVxkx7upGVT4NlEi
+         f0N3pkY0mXVan2JITMLzmEEMddP0ZnfFyHc33G9lkLUV/yzIj6WNmDhuYQNs4epM5s7d
+         0F8V66i17XQAgN20E89JiE+1FzeWAsTjmyGplMQhZzN5xpWHhIRPZmYLPcmKeqzyTNmu
+         SeXuFvoUBs3kiXCBe1vsacFJqcZyinFhveMyLD5w74qRMbDkkxSGd1QHDBk20JRzhxWq
+         O44aNjuA7fCLpSvclea3xD/XWCNlk6my0EeqDVpWv2yZRDQs4b1lq74hJlTAGrLvorE5
+         QUqw==
+X-Gm-Message-State: AO0yUKVb7kff/cm23KU9BuGc1VqzUOtV9NqF9I39BEK/W8jwaTQ/ypPl
+        Tyoop7RoCr/VcRsdrTCe1R6pKevu61FKoatZje1vew==
+X-Google-Smtp-Source: AK7set8T18QDx4rAbFvPvwBDlz5oPdhQHy9nhjNv0cUUAZfeKar7Fpa3GKrYmMJRQRPGA3x+F0b5SBaQ6GGUsLHTgr0=
+X-Received: by 2002:a67:ecd8:0:b0:3eb:e432:5601 with SMTP id
+ i24-20020a67ecd8000000b003ebe4325601mr2837366vsp.16.1675129590180; Mon, 30
+ Jan 2023 17:46:30 -0800 (PST)
 MIME-Version: 1.0
-References: <20230128001639.3510083-1-tj@kernel.org> <20230128001639.3510083-28-tj@kernel.org>
- <CABk29Nt2-CCGnogpfEgJ3ZDk5Esk04n6EwsAqpw_vdeVfKuFUQ@mail.gmail.com> <Y9hgLENFI5y3Qtx2@slm.duckdns.org>
-In-Reply-To: <Y9hgLENFI5y3Qtx2@slm.duckdns.org>
-From:   Josh Don <joshdon@google.com>
-Date:   Mon, 30 Jan 2023 17:45:26 -0800
-Message-ID: <CABk29NuwpSDAy6inXD5dPjtw9SqjxNr0hK5SkM98b7jHinWFFw@mail.gmail.com>
-Subject: Re: [PATCH 27/30] sched_ext: Implement core-sched support
-To:     Tejun Heo <tj@kernel.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        brho@google.com, pjt@google.com, derkling@google.com,
-        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
-        dskarlat@cs.cmu.edu, riel@surriel.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com
+Received: by 2002:a05:6130:1015:b0:559:9619:d862 with HTTP; Mon, 30 Jan 2023
+ 17:46:29 -0800 (PST)
+X-Originating-IP: [24.53.241.20]
+In-Reply-To: <Y9bvwz4FIOQ+D8c4@x1n>
+References: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
+ <Y9bvwz4FIOQ+D8c4@x1n>
+From:   Nick Bowler <nbowler@draconx.ca>
+Date:   Mon, 30 Jan 2023 20:46:29 -0500
+Message-ID: <CADyTPEzsvdRC15+Z5T3oryofwRYqHmHzwqRmJKJoHB3d7Tdayw@mail.gmail.com>
+Subject: Re: PROBLEM: sparc64 random crashes starting w/ Linux 6.1 (regression)
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+        regressions@lists.linux.dev,
+        Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,48 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 4:26 PM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Mon, Jan 30, 2023 at 01:38:15PM -0800, Josh Don wrote:
-> > > The core-sched support is composed of the following parts:
-> >
-> > Thanks, this looks pretty reasonable overall.
-> >
-> > One meta comment is that I think we can shortcircuit from
-> > touch_core_sched when we have sched_core_disabled().
->
-> Yeah, touch_core_sched() is really cheap (it's just an assignment from an rq
-> field to a task field) but sched_core_disabled() is also just a static
-> branch. Will update.
+On 2023-01-29, Peter Xu <peterx@redhat.com> wrote:
+> On Sat, Jan 28, 2023 at 09:17:31PM -0500, Nick Bowler wrote:
+>> Starting with Linux 6.1.y, my sparc64 (Sun Ultra 60) system is very
+>> unstable, with userspace processes randomly crashing with all kinds of
+>> different weird errors.  The same problem occurs on 6.2-rc5.  Linux
+>> 6.0.y is OK.
+[...]
+> Could you try below patch to see whether it fixes your problem?  It should
+> cover the last piece of possible issue with dirty bit on sparc after that
+> patchset.  It's based on latest master branch (commit ab072681eabe1ce0).
 
-Yep, true, I was just going through and reasoning about whether
-anything needed to be done in the !sched_core_disabled() case.
+Haven't seen any failures yet, so it seems this patch on top of 6.2-rc6
+makes things much better.
 
-> > Reviewed-by: Josh Don <joshdon@google.com>
-> >
-> > > +                       /*
-> > > +                        * While core-scheduling, rq lock is shared among
-> > > +                        * siblings but the debug annotations and rq clock
-> > > +                        * aren't. Do pinning dance to transfer the ownership.
-> > > +                        */
-> > > +                       WARN_ON_ONCE(__rq_lockp(rq) != __rq_lockp(srq));
-> > > +                       rq_unpin_lock(rq, rf);
-> > > +                       rq_pin_lock(srq, &srf);
-> > > +
-> > > +                       update_rq_clock(srq);
-> >
-> > Unfortunate that we have to do this superfluous update; maybe we can
-> > save/restore the clock flags from before the pinning shenanigans?
->
-> So, this one isn't really superflous. There are two rq's involved - self and
-> sibling. self's rq clock is saved and restored through rq_unpin_lock() and
-> rq_repin_lock(). We're transferring the lock owner ship from self to sibling
-> without actually unlocking and relocking the lock as they should be sharing
-> the same lock; however, that doesn't mean that the two queues share rq
-> clocks, so the sibling needs to update its rq clock upon getting the lock
-> transferred to it. It might make sense to make the siblings share the rq
-> clock when core-sched is enabled but that's probably for some other time.
+I'll keep running this for a while to see if any other problems come up.
 
-Yep, whoops, I forgot that part didn't make it.
+Thanks,
+  Nick
