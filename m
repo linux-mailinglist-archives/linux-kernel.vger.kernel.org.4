@@ -2,119 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515B96824D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A33E6824C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjAaGu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 01:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        id S230051AbjAaGpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 01:45:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjAaGu5 (ORCPT
+        with ESMTP id S229634AbjAaGpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 01:50:57 -0500
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74ECA2132;
-        Mon, 30 Jan 2023 22:50:56 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 0BA642B06E73;
-        Tue, 31 Jan 2023 01:41:21 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 31 Jan 2023 01:41:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675147281; x=1675154481; bh=E2p6V4zwNY
-        VUZOciwM5akvaSzGFZounIOOlrcnF3u0Q=; b=QHe7btkFnAqF1vdLr2jl/yePBk
-        BE/quHdWIzAM1xZZmWybN9UxhKl2/CE2DCzQpZWP4gX0I1Ojp5S2U/WBdQl57tBU
-        YZlH2gvyTk6fhHe1hQA3xeuo8WwPE7o1YPylz1MJs1RH4RIv7zRu1RWbsnz9cXez
-        KdWcm6MS4CPXtGAHacIATT7t+gTfFPaTrUa6QshTl/6//Qp2ICup4Vdi4vUYFW9F
-        tsx/LQ57CQCmNpC5KRKmLdgheukqtR/b8aPp98DBhqlX8ekYi1qxFNT+XOg7zF4b
-        0YeFPs7BYQiw119xSNZckZpaGmAoykQj2HechPuuPsj7ODlsCF44cpdxdFmw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675147281; x=1675154481; bh=E2p6V4zwNYVUZOciwM5akvaSzGFZ
-        ounIOOlrcnF3u0Q=; b=pEuJZTZhlBr361KK4tZ0Ya5gjnPy1pRYM2WlX/SlzDCJ
-        mnr6Hx4u27i6sZL/+p7AoYl33eiouSyUlbmqY2s8pIlA0NaszWmws0vLVxGIawIW
-        D9Eq5kacPDBf0QVz89TuJ+RNaVHvsAuqtXvjVs423Ys9eY7xo2thryKhTEwiRxO6
-        O9+3yhNN846ZZHx90dstOuBiVq2viG1ecsHstWvOgPTSFc8cNRZzeH0SV16PSNXs
-        OsuEabPQ4CMHg405gKE52cOBuSKjeQyAOOgpD0XQKb18vUhtFsuII94n8X5d8EjW
-        NhpcHM6kx7bB1Mc2T3qyvi0l87LD5cmTLWzy5lv2iA==
-X-ME-Sender: <xms:ELjYY5Ijs9u7o3_9vYZCcLlISiw2kZOGsZDUM2AGbGjAYKDKYlVN-Q>
-    <xme:ELjYY1JtySviRcmaj1wbcc5PKdrrfXOY1QQkJnq5NVT9SJgKHM1vzyJLLlNHC55Bl
-    SVonQwcnN4ULg>
-X-ME-Received: <xmr:ELjYYxuQ83d4Cz1fCMEuIB85tz0KPOX0gXjKk2O0BRTL2f7ZQQpweTagmZjsgUrf7VKtvbXgoeXcdp3lt8iytDFhTTPlMPowQ3rTjQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeffedgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:ELjYY6YJ9G30PqObYIjkcCW6Qo-llOPF_QOYcMebmCzMmD_fu9V38w>
-    <xmx:ELjYYwYE3yY2aHrw6gkFkuiDkzw3pogU7x7WWGCb0Wb6zQ3qUfVSiw>
-    <xmx:ELjYY-C2AFX3xXmsmD5R6uH6hNgxAyv19GUl0Dg_cNq_zw9WYEAesw>
-    <xmx:EbjYYyYcP_nJ31akDANKagefjYrG-7IrHOaBb5N4POUM4D_JRU26xxlSuKE>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 31 Jan 2023 01:41:20 -0500 (EST)
-Date:   Tue, 31 Jan 2023 07:41:17 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        John Harrison <John.C.Harrison@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the usb tree with the
- drm-intel-fixes tree
-Message-ID: <Y9i4Ddcz7PsAu8zZ@kroah.com>
-References: <20230131130305.019029ff@canb.auug.org.au>
+        Tue, 31 Jan 2023 01:45:16 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B01C40BF9;
+        Mon, 30 Jan 2023 22:44:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9FA96141C;
+        Tue, 31 Jan 2023 06:42:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF8DC433EF;
+        Tue, 31 Jan 2023 06:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675147365;
+        bh=7brZNx5qtKiUnkOW/MJ4BAj/ITNdtNtLA2ye7w6FtsE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XCY40BsNzVoNShpFsgRdXUv91QX3SrahBKzH+Mi/J2THbh7IVzxtKkyNJgpZGxwlm
+         QKVnHVlcBvoQMStlQBRzK+vn58LP/pVAFnfHkEzmZjWRGAP9LUIGoievxClbTnDpbI
+         faT7aaRHxmBywAjkp8XJB6HWPWyZHn7LTE9csfZElA0rFNKjHUfTpI99hF8nCLuHpQ
+         1yqGsZdnfUBAzmhWPC2IKpzF8o8Nj39MpQ1WrxFKehZKNmfBE0L3Gob4bj0pjDoXDb
+         t5e/vy8GpkoGYOMjme2YJuwoYVjek9nJcDxw7uOW0vYQ+/Hdt46NvnpKVZ2LgcJKCQ
+         vMpZ8oOfe6A7w==
+Date:   Tue, 31 Jan 2023 12:12:37 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Frank Li <Frank.Li@nxp.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2] dmaengine: dw-edma: reduce stack usage after
+ debugfs rework
+Message-ID: <20230131064237.GA5548@thinkpad>
+References: <20230130185101.2883245-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230131130305.019029ff@canb.auug.org.au>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230130185101.2883245-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 01:03:05PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Jan 30, 2023 at 07:50:42PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> 
-> between commit:
-> 
->   5bc4b43d5c6c ("drm/i915: Fix up locking around dumping requests lists")
-> 
-> from the drm-intel-fixes tree and commit:
-> 
->   4d70c74659d9 ("i915: Move list_count() to list.h as list_count_nodes() for broader use")
-> 
-> from the usb tree.
-> 
-> I fixed it up (the former removed the code changed by the latter) and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+> After the dw_edma_debugfs_entry arrays are no longer compile-time
 
-Thanks for the merge resolution.
+This sentence doesn't look complete to me.
 
-greg k-h
+> constant, they take up space on the stack, which exceeds the warning
+> limit after inlining:
+> 
+> drivers/dma/dw-edma/dw-edma-v0-debugfs.c:280:6: error: stack frame size (1784) exceeds limit (1400) in 'dw_edma_v0_debugfs_on' [-Werror,-Wframe-larger-than]
+> void dw_edma_v0_debugfs_on(struct dw_edma *dw)
+> 
+> Work around this by preventing dw_edma_debugfs_regs_{wr,rd} from both
+> being inlined together, which cuts the stack frame size in half and
+> makes it fit below the warning limit.
+> 
+> Fixes: 5c0373eafd83 ("dmaengine: dw-edma: Move eDMA data pointer to debugfs node descriptor")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Small style comment below, with that:
+
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+> ---
+> v2: rebase on top of dmaengine tree
+> ---
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> index 42380bf64a70..6542060bd01a 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> @@ -136,7 +136,8 @@ static void dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
+>  	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
+>  }
+>  
+> -static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+> +static noinline_for_stack void
+> +dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+
+For consistency, the function arguments could be wrapped:
+
+static noinline_for_stack void dw_edma_debugfs_regs_wr(struct dw_edma *dw,
+						       struct dentry *dent)
+
+I could see that with the addition of "noinline_for_stack", the arguments are
+shifted towards the end of the line. But this style matches rest of the
+functions in this file.
+
+Thanks,
+Mani
+
+>  {
+>  	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+>  		/* eDMA global registers */
+> @@ -197,7 +198,8 @@ static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+>  	}
+>  }
+>  
+> -static void dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+> +static noinline_for_stack void
+> +dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+>  {
+>  	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+>  		/* eDMA global registers */
+> -- 
+> 2.39.0
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
