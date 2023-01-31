@@ -2,57 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263506831B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0DA6831AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbjAaPjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S233410AbjAaPjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:39:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbjAaPjc (ORCPT
+        with ESMTP id S233404AbjAaPjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:39:32 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED9A4DE15
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:39:11 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pMsip-0003AW-G5; Tue, 31 Jan 2023 16:38:59 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:29f7:a2fc:d3f6:7550])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 430E116A532;
-        Tue, 31 Jan 2023 15:38:57 +0000 (UTC)
-Date:   Tue, 31 Jan 2023 16:38:51 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ore@pengutronix.de, kernel@pengutronix.de
-Subject: Re: [PATCH] [v2] fec: convert to gpio descriptor
-Message-ID: <20230131153851.ua57vy7vc2xdasup@pengutronix.de>
-References: <20230126210648.1668178-1-arnd@kernel.org>
+        Tue, 31 Jan 2023 10:39:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CCD17CF8;
+        Tue, 31 Jan 2023 07:39:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA923B81D5C;
+        Tue, 31 Jan 2023 15:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16582C4339B;
+        Tue, 31 Jan 2023 15:39:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675179542;
+        bh=JPc05D8LI0SwIX1+XVUqEaxjOD2RwL19ZHR2m8W9Nn0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KcXH1kqbDnhKFLQoaAzP8by87Dj1nDztVRUeTjc5MsJXa0gALlpMm9wojKgIymG0v
+         gJzf+q4fsghwftU5If/2CQ8TcR57Wk3bl6KK6HSpgkVH6l1pd7a5SgptOjfNYsoulw
+         GR3hc9KsItAGKwdt7NrEs9WDtJCxBqtN04qlQPnrCmoQJRh5Q0O+aKQUDvsz9N8Cpb
+         x5aIMGM2dBiFpcmk7JhDHZKYMndquD7LyaiUTw9i/0mxOHICFB4D9GMuqTu4iDXE8g
+         oba0SvjTPJKJ2XUV/q9nBRgYsapIby4H+3Xd76IYXcTR+6c9jo4WeYsQDDBfB1bN0k
+         r7/DSSyAyO0Zw==
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-trace-devel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] rtla: Timerlat auto-analysis
+Date:   Tue, 31 Jan 2023 16:38:52 +0100
+Message-Id: <cover.1675179318.git.bristot@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zy7tm2hvwiyorecs"
-Content-Disposition: inline
-In-Reply-To: <20230126210648.1668178-1-arnd@kernel.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,55 +53,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, timerlat displays the timerlat tracer latency results, saving
+the intuitive timerlat trace for the developer to analyze.
 
---zy7tm2hvwiyorecs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch goes a step forward in the automaton of the scheduling latency
+analysis by providing a summary of the root cause of a latency higher than
+the passed "stop tracing" parameter if the trace stops.
 
-On 26.01.2023 22:05:59, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The driver can be trivially converted, as it only triggers the gpio
-> pin briefly to do a reset, and it already only supports DT.
->=20
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+The output is intuitive enough for non-expert users to have a general idea
+of the root cause by looking at each factor's contribution percentage
+while keeping the technical detail in the output for more expert users
+to start an in dept debug or to correlate a root cause with an existing one.
 
-On current net-next/main 6a8ab436831d ("Merge branch
-'add-support-for-the-the-vsc7512-internal-copper-phys'") this causes the
-riot board (arch/arm/boot/dts/imx6dl-riotboard.dts) to not probe the
-fec:
+The first patch adds the functionality without using it. The second attaches
+it to the timerlat top, and the last one updates the man page.
 
-| Jan 31 16:32:12 riot kernel: fec 2188000.ethernet: error -ENOENT: failed =
-to get phy-reset-gpios
-| Jan 31 16:32:12 riot kernel: fec: probe of 2188000.ethernet failed with e=
-rror -2
+Daniel Bristot de Oliveira (3):
+  rtla/timerlat: Add auto-analysis core
+  rtla/timerlat: Add auto-analysis support to timerlat top
+  Documentation/rtla: Add timerlat-top auto-analysis options
 
-reverting 468ba54bd616 ("fec: convert to gpio descriptor") solves the
-problem.
+ .../tools/rtla/common_timerlat_aa.rst         |   7 +
+ .../tools/rtla/rtla-timerlat-top.rst          | 164 ++-
+ tools/tracing/rtla/src/timerlat_aa.c          | 990 ++++++++++++++++++
+ tools/tracing/rtla/src/timerlat_aa.h          |  12 +
+ tools/tracing/rtla/src/timerlat_top.c         |  46 +-
+ tools/tracing/rtla/src/utils.h                |   3 +
+ 6 files changed, 1129 insertions(+), 93 deletions(-)
+ create mode 100644 Documentation/tools/rtla/common_timerlat_aa.rst
+ create mode 100644 tools/tracing/rtla/src/timerlat_aa.c
+ create mode 100644 tools/tracing/rtla/src/timerlat_aa.h
 
-regards,
-Marc
+-- 
+2.38.1
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---zy7tm2hvwiyorecs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmPZNggACgkQrX5LkNig
-01358Af+MUiH2K0uM45xSjCGqBLdDwmDH3hIqbN7YOmbRY078ZN0+8MY6rKY3iyE
-vToSnRFKHe8jyWCnqVdNSJGt2O/jsZ6QmAk731rHccG04ZZijLfowpnZWAMteq7t
-nEmF9HitPx3l2cKYRORxoxBPqdUisrW/CrN8Xed6rvvrW75CXbYDQ/44Zq0WeNSf
-E0QHDOkHoEpb+p8C0n+fJ2iMnK4P3973C6Z8FyxGUBHI/0xnaJkCvS3Tf5vlrtd9
-DImCP4MjnP/LsNZuR1nO6xcCel4QF3q9h3Rzvtjc5CHNdehA1D1cw6aywelddDdB
-oGgvo1StDSAEnyZB0hhGnGKIXQtajw==
-=b7eA
------END PGP SIGNATURE-----
-
---zy7tm2hvwiyorecs--
