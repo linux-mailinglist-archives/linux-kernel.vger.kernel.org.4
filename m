@@ -2,116 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D82682353
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:37:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9758E68235B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjAaEh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 23:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S230366AbjAaEjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 23:39:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbjAaEgl (ORCPT
+        with ESMTP id S229634AbjAaEi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:36:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A313BD89;
-        Mon, 30 Jan 2023 20:36:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB525B81914;
-        Tue, 31 Jan 2023 04:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D726C433EF;
-        Tue, 31 Jan 2023 04:36:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675139782;
-        bh=CLBqX+BUlH4wfB1ikkhG1DXuwqQ1HR2XR9twYN40fhM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Wih+AekNxMmghUFGZEhNRtJCR8fK8r8QexRrCmRFVImcdV7FTWieco0Bsc2L4Z5Rf
-         BgLWMmSeBEPEscFrosyUqZydTogzNNZOnA47ZVxty82oYjakqFy05TKxi0yMeCwXFH
-         rONcoV7qV+7jWxle+XdViid8CRmy3zYrYga1oObe7oObdTW2ecuN7KeVdObUw1Bxtx
-         RYXhJ3o/G52DKOa3PGmKYlV4fACdXkAEpak9hzu/1ggCwaqLWsQKXXD98KrMtwntr4
-         FAOVEOKGQu5e3re6fsDTbqS8K+txwQ92TGXl/4XZsX3MqMaApZOqwp6H5ecuRo+Akr
-         1RnGkuA72tc5Q==
-Date:   Mon, 30 Jan 2023 20:36:20 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jpoimboe@redhat.com, joe.lawrence@redhat.com, pmladek@suse.com
-Subject: Re: [PATCH v2 3/4] livepatch/shadow: Introduce klp_shadow_type
- structure
-Message-ID: <20230131043620.6nnhqgqr4z55hxfr@treble>
-References: <20221026194122.11761-1-mpdesouza@suse.com>
- <20221026194122.11761-4-mpdesouza@suse.com>
+        Mon, 30 Jan 2023 23:38:58 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECC73C296
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:19 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id 14-20020a9d010e000000b0068bdddfa263so554773otu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kali.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QJ0/xhaPKfH2Cca60pE6TWrTG0mtzLgrVF2qyKPFbpg=;
+        b=WlNsctbWgszBVDSa31eYVUcKBkTha+aPKciVsSkkfNJrLyugJvrClllNhEJpOPqKmj
+         urVajDaEhBnXOosH6TVL6jCExSfgb3lqFPhHUIV0ZMxUETx/geBHwc47RYQHvYq1MHPi
+         RW5l9JuTVa6zDdyRdi+txkAzuBhzT7D3iiiYtLEP68GPJJywOfDDtgYGFwrJ+P5hzFE8
+         xX2d+ZFz8wkNHe/dZLFQKHEGSwR5da8if3sPvG/V5M8rxjsxEL57sGVY4HEtC0o2Vr5O
+         xkjuITMbL2wmFaszsf349bW6tbBkhuvHPkvIMfFnF4UiHtbyB8RPVTK8cGs1B1dfoiu1
+         1eSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QJ0/xhaPKfH2Cca60pE6TWrTG0mtzLgrVF2qyKPFbpg=;
+        b=CYbqnAUuukKLmjWuckynxDZTjSoLTqmW4sVhoNzhokcAGFYqIId12q3B5/f/NMSqT1
+         shWCUYZY+DVuWKtvXZ8rrHw09HvCmaKtIKVqKnm4QPw/P4bgmvB9f/Y/xkfVY27iJ+Xp
+         Zp9iWla69NnTwgJTllL3G3Wl9qfHwy9388hs7A8tF7ADv+Q9ogwgstif2zst0t+c3zGd
+         aPM8EkI9jopZAyEURK1ej1+6WYvmE1ifhdGQ1h1IdXcanhxSy9qLmFDSXbc6oDnN93mb
+         k9QanNZ2peaJpo5l2Z1LCnfp27LHt4/nax5To1yemsh/S384OV3iRB9k2VE4qNTElhFB
+         3KCg==
+X-Gm-Message-State: AO0yUKXxH7H/QJRoap64JgdztQ4U0KfsOm5tAXzzTXifoFFE6xgW7Fc1
+        6SntNKwgFeGs6kuNUH8Xj//EBQ==
+X-Google-Smtp-Source: AK7set8mqgpo6LDyA44nF65Bocpb54FWrJD5HkLb7CaloqZ7a2Ml9jiEFXTqnkcxm1PGEiGuYpwY1A==
+X-Received: by 2002:a05:6830:6989:b0:68a:443c:8c9e with SMTP id cy9-20020a056830698900b0068a443c8c9emr7863229otb.4.1675139898324;
+        Mon, 30 Jan 2023 20:38:18 -0800 (PST)
+Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
+        by smtp.gmail.com with ESMTPSA id c14-20020a9d614e000000b0068bd04b4292sm2174018otk.31.2023.01.30.20.38.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 20:38:17 -0800 (PST)
+From:   Steev Klimaszewski <steev@kali.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+Subject: [PATCH v2 0/4] Attempt at adding WCN6855 BT support
+Date:   Mon, 30 Jan 2023 22:38:12 -0600
+Message-Id: <20230131043816.4525-1-steev@kali.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221026194122.11761-4-mpdesouza@suse.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 04:41:21PM -0300, Marcos Paulo de Souza wrote:
-> +++ b/include/linux/livepatch.h
-> @@ -216,15 +216,26 @@ typedef int (*klp_shadow_ctor_t)(void *obj,
->  				 void *ctor_data);
->  typedef void (*klp_shadow_dtor_t)(void *obj, void *shadow_data);
->  
-> -void *klp_shadow_get(void *obj, unsigned long id);
-> -void *klp_shadow_alloc(void *obj, unsigned long id,
-> -		       size_t size, gfp_t gfp_flags,
-> -		       klp_shadow_ctor_t ctor, void *ctor_data);
-> -void *klp_shadow_get_or_alloc(void *obj, unsigned long id,
-> -			      size_t size, gfp_t gfp_flags,
-> -			      klp_shadow_ctor_t ctor, void *ctor_data);
-> -void klp_shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor);
-> -void klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor);
-> +/**
-> + * struct klp_shadow_type - shadow variable type used by the klp_object
-> + * @id:		shadow variable type indentifier
+This v2 of the patchset is somewhat of an RFC/RFT, and also just something to
+get this out there.
 
-"identifier"
+First things first, I do not have access to the specs nor the schematics, so a
+lot of this was done via guess work, looking at the acpi tables, and looking at
+how a similar device (wcn6750) was added.
 
-> diff --git a/kernel/livepatch/shadow.c b/kernel/livepatch/shadow.c
-> index aba44dcc0a88..64e83853891d 100644
-> --- a/kernel/livepatch/shadow.c
-> +++ b/kernel/livepatch/shadow.c
-> @@ -63,24 +63,24 @@ struct klp_shadow {
->   * klp_shadow_match() - verify a shadow variable matches given <obj, id>
+There are possibly checkpatch warnings, and I do apologize to those who won't
+review things until there are no warnings for wasting your time, I did try to
+correct the ones I came across and seemed to be needed.
 
-"matches given <obj, type>" ?
+One example is that I have the vregs commented out, the dt-bindings say that
+they are required since it's based on the wcn6750 work but also like the 6750,
+I've added defaults into the driver, and those seem to work, at least for the
+initial testing.
 
->   * @shadow:	shadow variable to match
->   * @obj:	pointer to parent object
-> - * @id:		data identifier
-> + * @shadow_type: type of the wanted shadow variable
->   *
->   * Return: true if the shadow variable matches.
->   */
->  static inline bool klp_shadow_match(struct klp_shadow *shadow, void *obj,
-> -				unsigned long id)
-> +				struct klp_shadow_type *shadow_type)
->  {
-> -	return shadow->obj == obj && shadow->id == id;
-> +	return shadow->obj == obj && shadow->id == shadow_type->id;
+The end result is that we do have a working device, but not entirely reliable.
 
-"shadow_type" is redundant, can we just call it "type"?
+Hopefully by getting this out there, people who do have access to the specs or
+schematics can see where the improvements or fixes need to come.
 
-Same comment for all other instances of 'shadow_type' throughout the
-patch.
+There are a few things that I am not sure why they happen, and don't have the
+knowledge level to figure out why they happen or debugging it.
 
-> @@ -159,22 +157,25 @@ static void *__klp_shadow_get_or_alloc(void *obj, unsigned long id,
->  	 * More complex setting can be done by @ctor function.  But it is
->  	 * called only when the buffer is really used (under klp_shadow_lock).
->  	 */
-> -	new_shadow = kzalloc(size + sizeof(*new_shadow), gfp_flags);
-> +	new_shadow = kzalloc(size + sizeof(struct klp_shadow), gfp_flags);
+Bluetooth: hci0: setting up wcn6855
+Bluetooth: hci0: Frame reassembly failed (-84)
+Bluetooth: hci0: QCA Product ID   :0x00000013
+Bluetooth: hci0: QCA SOC Version  :0x400c0210
+Bluetooth: hci0: QCA ROM Version  :0x00000201
+Bluetooth: hci0: QCA Patch Version:0x000038e6
+Bluetooth: hci0: QCA controller version 0x02100201
+Bluetooth: hci0: unexpected event for opcode 0xfc48
+Bluetooth: hci0: Sending QCA Patch config failed (-110)
+Bluetooth: hci0: QCA Downloading qca/hpbtfw21.tlv
+Bluetooth: hci0: QCA Downloading qca/hpnv21g.bin
+Bluetooth: hci0: QCA setup on UART is completed
 
-Unnecessary change?
+I do not know why the Frame assembly failed, nor the unexpected event.
+
+Likewise, I'm not entirely sure why it says the patch config send times out, and
+*then* seems to send it?
+
+The BD Address also seems to be incorrect, and I'm not sure what is going on
+there either.
+
+Additionally, I've tried with an additional patch that I'm not including that is
+based on commit 059924fdf6c1 ("Bluetooth: btqca: Use NVM files based on SoC ID
+for WCN3991") to try using the hpnv21g.bin or hpnv21.bin, and the firmware acted
+the same regardless, so I am assuming I don't truly need the "g" firmware on my
+Thinkpad X13s.
+
+Testing was done by connecting a Razer Orochi bluetooth mouse, and using it, as
+well as connecting to and using an H2GO bluetooth speaker and playing audio out
+via canberra-gtk-play as well as a couple of YouTube videos in a browser.
+
+The mouse only seems to work when < 2 ft. from the laptop, and for the speaker, only
+"A2DP Sink, codec SBC" would provide audio output, and while I could see that
+data was being sent to the speaker, it wasn't always outputting, and going >
+4ft. away, would often disconnect.
+
+steev@wintermute:~$ hciconfig -a
+hci0:   Type: Primary  Bus: UART
+        BD Address: 00:00:00:00:5A:AD  ACL MTU: 1024:8  SCO MTU: 240:4
+        UP RUNNING PSCAN
+        RX bytes:1492 acl:0 sco:0 events:126 errors:0
+        TX bytes:128743 acl:0 sco:0 commands:597 errors:0
+        Features: 0xff 0xfe 0x8f 0xfe 0xd8 0x3f 0x5b 0x87
+        Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3
+        Link policy: RSWITCH HOLD SNIFF
+        Link mode: PERIPHERAL ACCEPT
+        Name: 'wintermute'
+        Class: 0x0c010c
+        Service Classes: Rendering, Capturing
+        Device Class: Computer, Laptop
+        HCI Version:  (0xc)  Revision: 0x0
+        LMP Version:  (0xc)  Subversion: 0x46f7
+        Manufacturer: Qualcomm (29)
+
+steev@wintermute:~$ dmesg | grep Razer
+[ 3089.235440] input: Razer Orochi as /devices/virtual/misc/uhid/0005:1532:0056.0003/input/input11
+[ 3089.238580] hid-generic 0005:1532:0056.0003: input,hidraw2: BLUETOOTH HID v0.01 Mouse [Razer Orochi] on 00:00:00:00:5a:ad
+steev@wintermute:~$ dmesg | grep H2GO
+[ 3140.959947] input: H2GO Speaker (AVRCP) as /devices/virtual/input/input12
+
+Bjorn Andersson (1):
+  arm64: dts: qcom: sc8280xp: Define uart2
+
+Steev Klimaszewski (3):
+  dt-bindings: net: Add WCN6855 Bluetooth
+  Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6855
+  arm64: dts: qcom: thinkpad-x13s: Add bluetooth
+
+ .../net/bluetooth/qualcomm-bluetooth.yaml     |  2 +
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 14 ++++
+ drivers/bluetooth/btqca.c                     | 24 ++++++-
+ drivers/bluetooth/btqca.h                     | 10 +++
+ drivers/bluetooth/hci_qca.c                   | 59 ++++++++++++----
+ 6 files changed, 162 insertions(+), 15 deletions(-)
 
 -- 
-Josh
+2.39.0
+
