@@ -2,221 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE5B683109
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5933683107
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbjAaPOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S232952AbjAaPN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:13:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbjAaPNw (ORCPT
+        with ESMTP id S232868AbjAaPNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:13:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B932758988
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:11:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675177826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zW1XGfXvloprCDLBhrMNbL256Bwo1kZTo72rPkh4eec=;
-        b=LLhaBR+zzmQ7zuPWsuuR8borxSgsgs5r7LEvk+JAfRfrobpX8+hoGM8dD9amefuvoeQWFo
-        csbMSLmtMmypR8c/m5RwSvGHxpHwlL0w+05J6jgr1/YxqQxqPfCbDD5Fkmkd7wRStpX8EM
-        eEBhlTNuGGgTIK4+oQvEOGxQc8+tlAs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-653-YrHdoA87Mpem2ZJscAVLow-1; Tue, 31 Jan 2023 10:10:23 -0500
-X-MC-Unique: YrHdoA87Mpem2ZJscAVLow-1
-Received: by mail-wm1-f71.google.com with SMTP id k9-20020a05600c1c8900b003dc5dec2ac6so2793097wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:10:23 -0800 (PST)
+        Tue, 31 Jan 2023 10:13:37 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C129B56ED2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:11:33 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so10856048wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:11:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZDRV3dTpr/I1IdlDAhOzkzQeE2U7A9MUv4OTs7C9Ic0=;
+        b=fdRNuWwOmD2J8LwVwU9LdwIRGl6NUPNr9RjKhhxb/oVEbmG9OehBPDVzdQa5s66Si1
+         objENa14PROVzi3XlYOwtO82hNuIcp82QvpcPRmyE9PnKvTtMUvxdddUsrtYdXxxb7og
+         bLq94hLu66Es1S+gIJcgdrrE+XUltHjWSreVCW3vOXjJ9JofFGvbwi26hYxyMISWFbVM
+         dKPMxnwRTyke/KeD7oHAvfKyrnNGO/TscGyYoR/d/67FK+l809KkMkUFiWjKZfBiv0NT
+         gDa9mYuLOu/JJDYAhiJOYPLI6pQ2c/MV3Sh7+r71Y9WBwb2jhE/vDAnAOPcjsj9Pv0JE
+         AVPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zW1XGfXvloprCDLBhrMNbL256Bwo1kZTo72rPkh4eec=;
-        b=3x2Mk7bUFkscVwdrwkNRikKCfNSJYHPvPDhWZX9A9RcEUd8aWSBA7eCu2phCrin5ay
-         agrIJjLOZvF2+L9Nl8dqMmw+2+TeVZlxbGCnQGBhpaQ7cozaOi3uMiYRptfRgxDcaX8Y
-         sS2+9ZF/n24x9kW2CqY43bnZxFvlo3OHoiIvdg7uTLXj3l2bXRIAH9eMOs6Ux4wOv0Y8
-         t4OdBXuVe10k5dbnP50X8kdFt2mbRiTAdf6CXyENTKq8oaP13OoHl4Qi64loh6Ly1rNH
-         md7gmmnxhGf7oOun+D1r8ScvQMQHfxTRA+nbPtg01w7mioDQvVYpGvPxjjW1FKblgmbz
-         swbg==
-X-Gm-Message-State: AFqh2koYBSt9WzfOI1RD82fWX1hhVyt3CeRUQ73yMi6zcWTK5KtBWqv7
-        266aSgp7ZI93gcMZJrhmIZDdFSq89KWOnMJd6fidYzyCUhjFr0uHARIH21eimcmUb1QVHWGM5U+
-        lukVWRAOXKvrkEFMLpYJwYNyY
-X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr46934677wro.48.1675177821838;
-        Tue, 31 Jan 2023 07:10:21 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXtRDcsJhRjJCJ6S8KsEYz50Ornge6E54XXYexnHU4JDCIVppDpu1q2bl+uSQOGtZBJMJSxZ0Q==
-X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr46934651wro.48.1675177821494;
-        Tue, 31 Jan 2023 07:10:21 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f0a:ca00:f74f:2017:1617:3ec3? (p200300d82f0aca00f74f201716173ec3.dip0.t-ipconnect.de. [2003:d8:2f0a:ca00:f74f:2017:1617:3ec3])
-        by smtp.gmail.com with ESMTPSA id x12-20020adfec0c000000b002b065272da2sm14989741wrn.13.2023.01.31.07.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 07:10:21 -0800 (PST)
-Message-ID: <0361aae6-59b2-1bbc-5530-a5be587b8a59@redhat.com>
-Date:   Tue, 31 Jan 2023 16:10:19 +0100
+        bh=ZDRV3dTpr/I1IdlDAhOzkzQeE2U7A9MUv4OTs7C9Ic0=;
+        b=lTvSaTmyYnwaM5pKwu1jixAZ7HpZJKkojD6LfwTvAvWj3c7GcvGffZSQc6H+Jw4iy/
+         M9eBrSTtkxnMWJinW48vbEhQFrBujMZV/PHYoOKT/rMXZr2+Uqvd2DBQLQCEi9EEmU1v
+         ts3mbiFqbao9Rww/Hq5e7X7mg2qV5rDiVVCygUu1dN5qrssYiZMMosb2Q0Syg4GXynF/
+         apeEobocCHyP5Drg2OVQFp3/ZNrc6mLvpwx32qNZbAg64fCehUY90hzI1iQDx2vWp5Er
+         VWZ5cPdDzDCxzkOPazQp75zXX5rN/4XtkkLaqu/Ol4D1jArlwkIB1U4q3RKHcL2nProt
+         1q0Q==
+X-Gm-Message-State: AO0yUKW9qkIDnGr5d5ZB4QmVS4zEOX/D/iT5bEVoTa812zmWgJb4z4HB
+        2mppEtHXy+syLwU7a0nNvN9MjA==
+X-Google-Smtp-Source: AK7set/2iizYZSQzebD1MVfEgv6lMNJzzvCce0t08tWnm7LHavMfZ8xs0/vr+y315lraYo4rANMjYg==
+X-Received: by 2002:a05:600c:a14:b0:3dd:97d6:8f2a with SMTP id z20-20020a05600c0a1400b003dd97d68f2amr2027264wmp.33.1675177884047;
+        Tue, 31 Jan 2023 07:11:24 -0800 (PST)
+Received: from alex-rivos.ba.rivosinc.com (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
+        by smtp.gmail.com with ESMTPSA id t1-20020a05600c41c100b003dc47d458cdsm10651305wmh.15.2023.01.31.07.11.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 07:11:23 -0800 (PST)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Conor Dooley <conor@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v4 0/1] riscv: Allow to downgrade paging mode from the command line
+Date:   Tue, 31 Jan 2023 16:11:14 +0100
+Message-Id: <20230131151115.1972740-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, David Howells <dhowells@redhat.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <040ed7a7-3f4d-dab7-5a49-1cd9933c5445@redhat.com>
- <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
- <3351099.1675077249@warthog.procyon.org.uk>
- <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
- <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk>
- <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
- <3520518.1675116740@warthog.procyon.org.uk>
- <f392399b-a4c4-2251-e12b-e89fff351c4d@kernel.dk>
- <3791872.1675172490@warthog.procyon.org.uk>
- <88d50843-9aa6-7930-433d-9b488857dc14@redhat.com>
- <f2fb6cc5-ff95-ca51-b377-5e4bd239d5e8@kernel.dk>
- <7f8f2d0f-4bf2-71aa-c356-c78c6b7fd071@redhat.com>
- <028c959d-e52a-5d08-6ac6-004ecdb3e549@kernel.dk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <028c959d-e52a-5d08-6ac6-004ecdb3e549@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.23 16:04, Jens Axboe wrote:
-> On 1/31/23 8:02?AM, David Hildenbrand wrote:
->> On 31.01.23 15:50, Jens Axboe wrote:
->>> On 1/31/23 6:48?AM, David Hildenbrand wrote:
->>>> On 31.01.23 14:41, David Howells wrote:
->>>>> David Hildenbrand <david@redhat.com> wrote:
->>>>>
->>>>>>>> percpu counters maybe - add them up at the point of viewing?
->>>>>>> They are percpu, see my last email. But for every 108 changes (on
->>>>>>> my system), they will do two atomic_long_adds(). So not very
->>>>>>> useful for anything but low frequency modifications.
->>>>>>>
->>>>>>
->>>>>> Can we just treat the whole acquired/released accounting as a debug mechanism
->>>>>> to detect missing releases and do it only for debug kernels?
->>>>>>
->>>>>>
->>>>>> The pcpu counter is an s8, so we have to flush on a regular basis and cannot
->>>>>> really defer it any longer ... but I'm curious if it would be of any help to
->>>>>> only have a single PINNED counter that goes into both directions (inc/dec on
->>>>>> pin/release), to reduce the flushing.
->>>>>>
->>>>>> Of course, once we pin/release more than ~108 pages in one go or we switch
->>>>>> CPUs frequently it won't be that much of a help ...
->>>>>
->>>>> What are the stats actually used for?  Is it just debugging, or do we actually
->>>>> have users for them (control groups spring to mind)?
->>>>
->>>> As it's really just "how many pinning events" vs. "how many unpinning
->>>> events", I assume it's only for debugging.
->>>>
->>>> For example, if you pin the same page twice it would not get accounted
->>>> as "a single page is pinned".
->>>
->>> How about something like the below then? I can send it out as a real
->>> patch, will run a sanity check on it first but would be surprised if
->>> this doesn't fix it.
->>>
->>>
->>> diff --git a/mm/gup.c b/mm/gup.c
->>> index f45a3a5be53a..41abb16286ec 100644
->>> --- a/mm/gup.c
->>> +++ b/mm/gup.c
->>> @@ -168,7 +168,9 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
->>>             */
->>>            smp_mb__after_atomic();
->>>    +#ifdef CONFIG_DEBUG_VM
->>>            node_stat_mod_folio(folio, NR_FOLL_PIN_ACQUIRED, refs);
->>> +#endif
->>>              return folio;
->>>        }
->>> @@ -180,7 +182,9 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
->>>    static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
->>>    {
->>>        if (flags & FOLL_PIN) {
->>> +#ifdef CONFIG_DEBUG_VM
->>>            node_stat_mod_folio(folio, NR_FOLL_PIN_RELEASED, refs);
->>> +#endif
->>>            if (folio_test_large(folio))
->>>                atomic_sub(refs, folio_pincount_ptr(folio));
->>>            else
->>> @@ -236,8 +240,9 @@ int __must_check try_grab_page(struct page *page, unsigned int flags)
->>>            } else {
->>>                folio_ref_add(folio, GUP_PIN_COUNTING_BIAS);
->>>            }
->>> -
->>> +#ifdef CONFIG_DEBUG_VM
->>>            node_stat_mod_folio(folio, NR_FOLL_PIN_ACQUIRED, 1);
->>> +#endif
->>>        }
->>>          return 0;
->>>
->>
->> We might want to hide the counters completely by defining them only
->> with CONFIG_DEBUG_VM.
-> 
-> Are all of them debug aids only? If so, yes we should just have
-> node_stat_* under CONFIG_DEBUG_VM.
-> 
+This new version gets rid of the limitation that prevented KASAN kernels
+to use the newly introduced parameters.
 
-Rather only these 2. Smth like:
+While looking into KASLR, I fell onto commit aacd149b6238 ("arm64: head:
+avoid relocating the kernel twice for KASLR"): it allows to use the fdt
+functions very early in the boot process with KASAN enabled by simply
+compiling a new version of those functions without instrumentation.
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 815c7c2edf45..a526964b65ce 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -196,8 +196,10 @@ enum node_stat_item {
-  	NR_WRITTEN,		/* page writings since bootup */
-  	NR_THROTTLED_WRITTEN,	/* NR_WRITTEN while reclaim throttled */
-  	NR_KERNEL_MISC_RECLAIMABLE,	/* reclaimable non-slab kernel pages */
-+#ifdef CONFIG_DEBUG_VM
-  	NR_FOLL_PIN_ACQUIRED,	/* via: pin_user_page(), gup flag: FOLL_PIN */
-  	NR_FOLL_PIN_RELEASED,	/* pages returned via unpin_user_page() */
-+#endif
-  	NR_KERNEL_STACK_KB,	/* measured in KiB */
-  #if IS_ENABLED(CONFIG_SHADOW_CALL_STACK)
-  	NR_KERNEL_SCS_KB,	/* measured in KiB */
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 1ea6a5ce1c41..5cbd9a1924bf 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1227,8 +1227,10 @@ const char * const vmstat_text[] = {
-  	"nr_written",
-  	"nr_throttled_written",
-  	"nr_kernel_misc_reclaimable",
-+#ifdef CONFIG_DEBUG_VM
-  	"nr_foll_pin_acquired",
-  	"nr_foll_pin_released",
-+#endif
-  	"nr_kernel_stack",
-  #if IS_ENABLED(CONFIG_SHADOW_CALL_STACK)
-  	"nr_shadow_call_stack",
+I had to change the handling of the command line parsing to make the
+code self-contained in kernel/pi/cmd_early.c to avoid calling too many
+__pi prefixed functions from outside this file.
+
+I'll use this approach like arm64 to handle the extraction of the random
+seedi from the device tree for KASLR.
+
+@Ard: I copied the "pi" name but I have to admit I don't know what it
+means.
+
+Alexandre Ghiti (1):
+  riscv: Allow to downgrade paging mode from the command line
+
+ .../admin-guide/kernel-parameters.txt         |  5 +-
+ arch/riscv/kernel/Makefile                    |  2 +
+ arch/riscv/kernel/pi/Makefile                 | 34 ++++++++++++
+ arch/riscv/kernel/pi/cmdline_early.c          | 52 +++++++++++++++++++
+ arch/riscv/lib/memcpy.S                       |  2 +
+ arch/riscv/lib/memmove.S                      |  2 +
+ arch/riscv/mm/init.c                          | 36 ++++++++++---
+ 7 files changed, 126 insertions(+), 7 deletions(-)
+ create mode 100644 arch/riscv/kernel/pi/Makefile
+ create mode 100644 arch/riscv/kernel/pi/cmdline_early.c
 
 -- 
-Thanks,
-
-David / dhildenb
+2.37.2
 
