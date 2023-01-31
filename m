@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEEC682AAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13F3682AB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjAaKis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S230347AbjAaKjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:39:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjAaKip (ORCPT
+        with ESMTP id S231612AbjAaKju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:38:45 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD942B607;
-        Tue, 31 Jan 2023 02:38:41 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id hx15so20729649ejc.11;
-        Tue, 31 Jan 2023 02:38:41 -0800 (PST)
+        Tue, 31 Jan 2023 05:39:50 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3165A5F8;
+        Tue, 31 Jan 2023 02:39:49 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id qw12so24375019ejc.2;
+        Tue, 31 Jan 2023 02:39:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AWfMqhC7t40F0owjKMxsw443nYgYg1pYLsUU0FA6XJM=;
-        b=Oh37oXrWrPjyZ4hknOJyAkye9RiAWniJ74hYpeocda1ZVkga32X2jeF/qvMLwLN/JD
-         c6eNQoEGVjkCDEJOdmpXC5rhl5xOyT+oHMdHgqreoYA9hw/GTNu/VhDhpUiww4CrMuxo
-         MKqUZlXQck1ibcBjJK8wlOUIlgYw6d/DwTXtw0P6aVZiZLWzBuYRsKTXco3MPmbG7++9
-         qBpPv/vSq8xxA9ORfaNcZQvNOZSeV6cB3YiOfVRl/wjdhM+O/H7GiwwoF2a63sFD5gpq
-         JTNQXwVcmnW5zORYabtmauzlcgu9w+ku/qdtAK0bh8TQ+IcpkxPg3cGk/AnXKVuEUMA7
-         r9XA==
+        bh=AbpzSrkDvZ+O3U1R2gkZ8q145/ganRKDqvC/xmnbE40=;
+        b=CFwvhRlgd3EJKCDVmPccyV4ndF3iNiQbNtl/kkDLBh1rbLn9hq6YA7vKNkHpoXunxx
+         9UWMuPaQrycb0/xEBRVFC90V3tpWfX7geKY9LdzkAVF9DrQ7929b24f0Dcp+Qt34TGPR
+         en2PiwKNjkYUqad17tawZtVTm6Avd+hosMAGir8ASqaTkxu/FKQkvztqm7u+Vlc5hT36
+         KvXrl6WXCJFK0YtFwivmPiN4fBjtmr4QZNIR3Mvhp3YXyyWTmaKOtbbx5YkyeIFG+NkM
+         BFmcUlTEGYAPHgYOaE6ZZezWEImxSQsheJ29y9YVh6QyD+y/FF0o421nhVREuDrVrwAU
+         W4GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AWfMqhC7t40F0owjKMxsw443nYgYg1pYLsUU0FA6XJM=;
-        b=yuP7JO22utm6KRfecQ3/FoH18cL54Y1Zn/T/7Pb/+kZHGuormKTIJEY6SILqj+EywQ
-         vmoW2jHb1zyyZLbO2m2wXJynGCTf2RWNIpGOKUfE/UiI9pL3QpyywDKe/bbGjGB0Q+FQ
-         dX7QWnHMkvJeEPg2IoUEvfooNQ9LAVwaKewI/VK8JEdauo6B+7bFRHlwl/ehi+oGHeov
-         brJoSjWVcSqL2uYztQpH3lp5VI4jt1w1pnznC7UP5lP5vkwATlXTsDk5Jcjaon51vPg/
-         lGkW+1kmANRa3lvKqtLd6sci3E4n8pwFPo/QPrLnVDKnOLEHR2VQl4JESRVGL5h2UvFM
-         CTcQ==
-X-Gm-Message-State: AO0yUKUisIgmwx20Dlosh0I7w+Zlil0P8R92l4bF+lvsqRCBOVX22Hy+
-        xKHRq7ADxyE18D4U4ey/bHo=
-X-Google-Smtp-Source: AK7set9ZbsLLP3Kc0GjQujIrHil9RqC6xXl87N+oWvr8g+PlVmrzTr8pRFad/gUbGo17wMeAWPyfew==
-X-Received: by 2002:a17:906:a886:b0:87d:f29:3a16 with SMTP id ha6-20020a170906a88600b0087d0f293a16mr2930786ejb.34.1675161519755;
-        Tue, 31 Jan 2023 02:38:39 -0800 (PST)
-Received: from ?IPV6:2a01:c23:b8ba:6a00:a5c0:1088:ecf4:92db? (dynamic-2a01-0c23-b8ba-6a00-a5c0-1088-ecf4-92db.c23.pool.telefonica.de. [2a01:c23:b8ba:6a00:a5c0:1088:ecf4:92db])
-        by smtp.googlemail.com with ESMTPSA id e22-20020a17090658d600b0085214114218sm8174856ejs.185.2023.01.31.02.38.38
+        bh=AbpzSrkDvZ+O3U1R2gkZ8q145/ganRKDqvC/xmnbE40=;
+        b=NBLxjKLVJwqLmKu9oR8WFa3aKjVU/okFOSpkK6PDtFrHwaGLf9C+FwsG3mwFh/f7R4
+         uY/AVkbvzqR+yWeaCsIpzKr7X8AmEsP8CAKeF88esMoBFqYdkr2aifF2zxycz0uFSr6e
+         PoxmQZDCAKEBphNi06ow7mJrzk6JYh9Bhd6GfBqVQa82iemN8xMWu1S91e7EA/f/xfDD
+         6QO7Elt/hP3JJ92tFNjQAkrkigfugt5QMTiLa2DgJ6LQoFfPT6N/AKcSA3dXJoFb9PnL
+         iO1zUWzYz6fZ4aea1P5rwccHSh1gfIYchg3vcqqu2HT2i2GeUpnn3rwBNuRDC0oatkuB
+         LHuQ==
+X-Gm-Message-State: AO0yUKUDtkTko7tZ8T1DbdCiangbevf6LDrCS0eB7etCAzWGc7eIT7gT
+        fmSTWaFAwpR+h4t4kgRtjIc=
+X-Google-Smtp-Source: AK7set87n9Vfg8hL/wOt1VTr60pE0bO72l9Og8zMg5sPwSjDV4cOjbpe0BRvjYS7/khoR4jWpG6vqg==
+X-Received: by 2002:a17:906:30c4:b0:885:fee4:69ee with SMTP id b4-20020a17090630c400b00885fee469eemr8357176ejb.59.1675161588185;
+        Tue, 31 Jan 2023 02:39:48 -0800 (PST)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id bh13-20020a170906a0cd00b0084d14646fd9sm8108521ejb.165.2023.01.31.02.39.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 02:38:39 -0800 (PST)
-Message-ID: <671d564e-db1c-ed61-3538-97dd1916714d@gmail.com>
-Date:   Tue, 31 Jan 2023 11:38:36 +0100
+        Tue, 31 Jan 2023 02:39:47 -0800 (PST)
+Message-ID: <8c33967b-1b91-42d2-879b-fa73dd8ecbeb@gmail.com>
+Date:   Tue, 31 Jan 2023 11:39:46 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3] net: phy: meson-gxl: Add generic dummy stubs for MMD
- register access
-To:     Jerome Brunet <jbrunet@baylibre.com>, cphealy@gmail.com,
-        andrew@lunn.ch, linux@armlinux.org.uk, davem@davemloft.net,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jeremy.wang@amlogic.com
-Cc:     Chris Healy <healych@amazon.com>
-References: <20230130231402.471493-1-cphealy@gmail.com>
- <1jbkmf2ewn.fsf@starbuckisacylon.baylibre.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v1] dt-bindings: phy: rename phy-rockchip-inno-usb2.yaml
+To:     vkoul@kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, heiko@sntech.de,
+        linux-phy@lists.infradead.org, krzysztof.kozlowski+dt@linaro.org,
+        Rob Herring <robh@kernel.org>
+References: <99794484-d67e-ee1f-4e76-200de20a879c@gmail.com>
+ <167320365145.195794.14991903357914132463.robh@kernel.org>
 Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <1jbkmf2ewn.fsf@starbuckisacylon.baylibre.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+In-Reply-To: <167320365145.195794.14991903357914132463.robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,58 +79,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.2023 11:05, Jerome Brunet wrote:
-> 
-> On Mon 30 Jan 2023 at 15:14, Chris Healy <cphealy@gmail.com> wrote:
-> 
->> From: Chris Healy <healych@amazon.com>
->>
->> The Meson G12A Internal PHY does not support standard IEEE MMD extended
->> register access, therefore add generic dummy stubs to fail the read and
->> write MMD calls. This is necessary to prevent the core PHY code from
->> erroneously believing that EEE is supported by this PHY even though this
->> PHY does not support EEE, as MMD register access returns all FFFFs.
-> 
-> This is definitely something that should be done, Thx !
-> 
->>
->> Fixes: 5c3407abb338 ("net: phy: meson-gxl: add g12a support")
-> 
-> This commit does not seems appropriate, especially since only the GXL ops
-> are changed, not the g12a variant.
-> 
-The diff is a little bit misleading. The patch affects the G12A PHY.
 
-> This brings a 2nd point, any reason for not changing the g12 variant ?
-> I'm fairly confident it does support EEE either.
-> 
-Supposedly it's a typo and you mean "doesn't". Neither Chris nor me
-have GXL HW and we didn't want to submit a patch just based on speculation.
 
->> Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
->> Signed-off-by: Chris Healy <healych@amazon.com>
+On 1/8/23 19:48, Rob Herring wrote:
+> 
+> On Thu, 29 Dec 2022 12:39:17 +0100, Johan Jonker wrote:
+>> Rename phy-rockchip-inno-usb2.yaml to a more common format of
+>> rockchip,inno-usb2phy.yaml
 >>
+>> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 >> ---
 >>
->> Changes in v3:
->> * Add reviewed-by
->> Change in v2:
->> * Add fixes tag
->>
->>  drivers/net/phy/meson-gxl.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
->> index c49062ad72c6..5e41658b1e2f 100644
->> --- a/drivers/net/phy/meson-gxl.c
->> +++ b/drivers/net/phy/meson-gxl.c
->> @@ -271,6 +271,8 @@ static struct phy_driver meson_gxl_phy[] = {
->>  		.handle_interrupt = meson_gxl_handle_interrupt,
->>  		.suspend        = genphy_suspend,
->>  		.resume         = genphy_resume,
->> +		.read_mmd	= genphy_read_mmd_unsupported,
->> +		.write_mmd	= genphy_write_mmd_unsupported,
->>  	},
->>  };
-> 
 
+>> Apply after:
+>>   dt-bindings: soc: rockchip: grf: add rockchip,rk3288-dp-phy.yaml
+
+Hi Vinod, Heiko,
+
+This patch has been acked from the device tree side.
+If it suits you is there Ack from the phy side possible, so that Heiko can merge it to grf.yaml in the order that he likes.
+
+Johan
+
+
+>> ---
+>>  .../{phy-rockchip-inno-usb2.yaml => rockchip,inno-usb2phy.yaml} | 2 +-
+>>  Documentation/devicetree/bindings/soc/rockchip/grf.yaml         | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>  rename Documentation/devicetree/bindings/phy/{phy-rockchip-inno-usb2.yaml => rockchip,inno-usb2phy.yaml} (98%)
+>>
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
