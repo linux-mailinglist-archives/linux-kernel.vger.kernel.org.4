@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EA4682F23
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D84B682F21
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbjAaOXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:23:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S231253AbjAaOXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbjAaOWc (ORCPT
+        with ESMTP id S231891AbjAaOWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 31 Jan 2023 09:22:32 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06802222D1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068B8227BE;
         Tue, 31 Jan 2023 06:22:31 -0800 (PST)
 Date:   Tue, 31 Jan 2023 14:22:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675174948;
+        s=2020; t=1675174949;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9Um5LKI/9hScNlYvhBVuAMl7qOTHMQENc5JKgiBOlKk=;
-        b=fF/OfaSloyV3VbAU3W/Pcrt1QcvvFFea2BgWT4FK5A+UleMEXNcAkd7BWdU7hBB3IbqqON
-        zMlyi48csIlUJvOzFY6JDap27BrBjee6/CmRw6RvYbM7/l09nNMmwrzXPKeowHsS2e1ENg
-        oyNL/OHq8F9V18/Jx+rVxKmxKcJUBh7vCedqQfkowf8H/EJwPwJvjNUXizPRNit/88kKIM
-        MGyXlL9i8UltdYiQv3vUnTIiT5vNlGrbdW0b/Vaj5QOkiDpEptgP1Xf8ZRg8t5pp21pU/o
-        GHOFoLm2s+8feYzJT9XcI1sUYKhSK56QhhkyFFRuZy+8UoiyMH9E3ovHEF8Eog==
+        bh=oIK6h1KtCD8rcXT0b011MAZsKo8KXw2KFk2eTEW6GPs=;
+        b=slof44rc3eWWU/WuZj9MtjapNPbZRcBfswkwWAQ623al5j/rJ/Tc/ZREOyau2E6Uv+nScV
+        0RUcbTDqyNz4MKYkwDq+NNWzOubZ9EeXBv9r2Fy5R55ZcPStThTi4WSD0b+xX4ATxDDhfa
+        rCDh6MQDo06QXmKfpIJ7MdoYzbXheYsSQ6K32cp3YkeBNehMLbMyLAsGS1QW9jm/tHG5Z1
+        uJj5dAO9GXuXsqMu4sRmFHj1iLwYI5rBXl27jVAmXJ+xTTP5uqlwgtJvFN6Gdn3F9gw2er
+        nF1NBMCqoM7EFBztPMDhT1OYN5naVAiq5grftq1dE6Hdidp1GtB7nIpF30n/kQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675174948;
+        s=2020e; t=1675174949;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9Um5LKI/9hScNlYvhBVuAMl7qOTHMQENc5JKgiBOlKk=;
-        b=/9nnECGq4EUylg9Z3bJRH4RBnUUJBWnfygUW3LUVonxRr+QZZ4gfGEJKMG8iAd5ErPg9wQ
-        aDInwWqIqsLK+ACQ==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+        bh=oIK6h1KtCD8rcXT0b011MAZsKo8KXw2KFk2eTEW6GPs=;
+        b=QxZJbH+U1SzLTgoCsa3Guo8aqcARSQP0zUr7TqQoAeJ3g2rqdLHecbM2d28wIYGPVTDNHL
+        rnBccCzxgqxlurDA==
+From:   "tip-bot2 for Mark Rutland" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] cpuidle: lib/bug: Disable rcu_is_watching() during WARN/BUG
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+Subject: [tip: sched/core] cpuidle: drivers: firmware: psci: Dont instrument
+ suspend code
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230126151323.408156109@infradead.org>
-References: <20230126151323.408156109@infradead.org>
+In-Reply-To: <20230126151323.349423061@infradead.org>
+References: <20230126151323.349423061@infradead.org>
 MIME-Version: 1.0
-Message-ID: <167517494843.4906.16680899245524839121.tip-bot2@tip-bot2>
+Message-ID: <167517494867.4906.2717215016942079366.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,180 +68,120 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     5a5d7e9badd2cb8065db171961bd30bd3595e4b6
-Gitweb:        https://git.kernel.org/tip/5a5d7e9badd2cb8065db171961bd30bd3595e4b6
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 26 Jan 2023 16:08:31 +01:00
+Commit-ID:     393e2ea30aec634b37004d401863428e120d5e1b
+Gitweb:        https://git.kernel.org/tip/393e2ea30aec634b37004d401863428e120d5e1b
+Author:        Mark Rutland <mark.rutland@arm.com>
+AuthorDate:    Thu, 26 Jan 2023 16:08:30 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
 CommitterDate: Tue, 31 Jan 2023 15:01:45 +01:00
 
-cpuidle: lib/bug: Disable rcu_is_watching() during WARN/BUG
+cpuidle: drivers: firmware: psci: Dont instrument suspend code
 
-In order to avoid WARN/BUG from generating nested or even recursive
-warnings, force rcu_is_watching() true during
-WARN/lockdep_rcu_suspicious().
+The PSCI suspend code is currently instrumentable, which is not safe as
+instrumentation (e.g. ftrace) may try to make use of RCU during idle
+periods when RCU is not watching.
 
-Notably things like unwinding the stack can trigger rcu_dereference()
-warnings, which then triggers more unwinding which then triggers more
-warnings etc..
+To fix this we need to ensure that psci_suspend_finisher() and anything
+it calls are not instrumented. We can do this fairly simply by marking
+psci_suspend_finisher() and the psci*_cpu_suspend() functions as
+noinstr, and the underlying helper functions as __always_inline.
 
+When CONFIG_DEBUG_VIRTUAL=y, __pa_symbol() can expand to an out-of-line
+instrumented function, so we must use __pa_symbol_nodebug() within
+psci_suspend_finisher().
+
+The raw SMCCC invocation functions are written in assembly, and are not
+subject to compiler instrumentation.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230126151323.408156109@infradead.org
+Link: https://lore.kernel.org/r/20230126151323.349423061@infradead.org
 ---
- include/linux/context_tracking.h | 27 +++++++++++++++++++++++++++
- kernel/locking/lockdep.c         |  3 +++
- kernel/panic.c                   |  5 +++++
- lib/bug.c                        | 15 ++++++++++++++-
- 4 files changed, 49 insertions(+), 1 deletion(-)
+ drivers/firmware/psci/psci.c | 31 +++++++++++++++++++------------
+ 1 file changed, 19 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/context_tracking.h b/include/linux/context_tracking.h
-index dcef4a9..d4afa85 100644
---- a/include/linux/context_tracking.h
-+++ b/include/linux/context_tracking.h
-@@ -130,9 +130,36 @@ static __always_inline unsigned long ct_state_inc(int incby)
- 	return arch_atomic_add_return(incby, this_cpu_ptr(&context_tracking.state));
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index aef76d8..29619f4 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -108,9 +108,10 @@ bool psci_power_state_is_valid(u32 state)
+ 	return !(state & ~valid_mask);
  }
  
-+static __always_inline bool warn_rcu_enter(void)
-+{
-+	bool ret = false;
-+
-+	/*
-+	 * Horrible hack to shut up recursive RCU isn't watching fail since
-+	 * lots of the actual reporting also relies on RCU.
-+	 */
-+	preempt_disable_notrace();
-+	if (rcu_dynticks_curr_cpu_in_eqs()) {
-+		ret = true;
-+		ct_state_inc(RCU_DYNTICKS_IDX);
-+	}
-+
-+	return ret;
-+}
-+
-+static __always_inline void warn_rcu_exit(bool rcu)
-+{
-+	if (rcu)
-+		ct_state_inc(RCU_DYNTICKS_IDX);
-+	preempt_enable_notrace();
-+}
-+
- #else
- static inline void ct_idle_enter(void) { }
- static inline void ct_idle_exit(void) { }
-+
-+static __always_inline bool warn_rcu_enter(void) { return false; }
-+static __always_inline void warn_rcu_exit(bool rcu) { }
- #endif /* !CONFIG_CONTEXT_TRACKING_IDLE */
+-static unsigned long __invoke_psci_fn_hvc(unsigned long function_id,
+-			unsigned long arg0, unsigned long arg1,
+-			unsigned long arg2)
++static __always_inline unsigned long
++__invoke_psci_fn_hvc(unsigned long function_id,
++		     unsigned long arg0, unsigned long arg1,
++		     unsigned long arg2)
+ {
+ 	struct arm_smccc_res res;
  
+@@ -118,9 +119,10 @@ static unsigned long __invoke_psci_fn_hvc(unsigned long function_id,
+ 	return res.a0;
+ }
+ 
+-static unsigned long __invoke_psci_fn_smc(unsigned long function_id,
+-			unsigned long arg0, unsigned long arg1,
+-			unsigned long arg2)
++static __always_inline unsigned long
++__invoke_psci_fn_smc(unsigned long function_id,
++		     unsigned long arg0, unsigned long arg1,
++		     unsigned long arg2)
+ {
+ 	struct arm_smccc_res res;
+ 
+@@ -128,7 +130,7 @@ static unsigned long __invoke_psci_fn_smc(unsigned long function_id,
+ 	return res.a0;
+ }
+ 
+-static int psci_to_linux_errno(int errno)
++static __always_inline int psci_to_linux_errno(int errno)
+ {
+ 	switch (errno) {
+ 	case PSCI_RET_SUCCESS:
+@@ -169,7 +171,8 @@ int psci_set_osi_mode(bool enable)
+ 	return psci_to_linux_errno(err);
+ }
+ 
+-static int __psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
++static __always_inline int
++__psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
+ {
+ 	int err;
+ 
+@@ -177,13 +180,15 @@ static int __psci_cpu_suspend(u32 fn, u32 state, unsigned long entry_point)
+ 	return psci_to_linux_errno(err);
+ }
+ 
+-static int psci_0_1_cpu_suspend(u32 state, unsigned long entry_point)
++static __always_inline int
++psci_0_1_cpu_suspend(u32 state, unsigned long entry_point)
+ {
+ 	return __psci_cpu_suspend(psci_0_1_function_ids.cpu_suspend,
+ 				  state, entry_point);
+ }
+ 
+-static int psci_0_2_cpu_suspend(u32 state, unsigned long entry_point)
++static __always_inline int
++psci_0_2_cpu_suspend(u32 state, unsigned long entry_point)
+ {
+ 	return __psci_cpu_suspend(PSCI_FN_NATIVE(0_2, CPU_SUSPEND),
+ 				  state, entry_point);
+@@ -450,10 +455,12 @@ late_initcall(psci_debugfs_init)
  #endif
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index e3375bc..50d4863 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -55,6 +55,7 @@
- #include <linux/rcupdate.h>
- #include <linux/kprobes.h>
- #include <linux/lockdep.h>
-+#include <linux/context_tracking.h>
  
- #include <asm/sections.h>
- 
-@@ -6555,6 +6556,7 @@ void lockdep_rcu_suspicious(const char *file, const int line, const char *s)
+ #ifdef CONFIG_CPU_IDLE
+-static int psci_suspend_finisher(unsigned long state)
++static noinstr int psci_suspend_finisher(unsigned long state)
  {
- 	struct task_struct *curr = current;
- 	int dl = READ_ONCE(debug_locks);
-+	bool rcu = warn_rcu_enter();
- 
- 	/* Note: the following can be executed concurrently, so be careful. */
- 	pr_warn("\n");
-@@ -6595,5 +6597,6 @@ void lockdep_rcu_suspicious(const char *file, const int line, const char *s)
- 	lockdep_print_held_locks(curr);
- 	pr_warn("\nstack backtrace:\n");
- 	dump_stack();
-+	warn_rcu_exit(rcu);
- }
- EXPORT_SYMBOL_GPL(lockdep_rcu_suspicious);
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 463c929..487f5b0 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -34,6 +34,7 @@
- #include <linux/ratelimit.h>
- #include <linux/debugfs.h>
- #include <linux/sysfs.h>
-+#include <linux/context_tracking.h>
- #include <trace/events/error_report.h>
- #include <asm/sections.h>
- 
-@@ -679,6 +680,7 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
- void warn_slowpath_fmt(const char *file, int line, unsigned taint,
- 		       const char *fmt, ...)
- {
-+	bool rcu = warn_rcu_enter();
- 	struct warn_args args;
- 
- 	pr_warn(CUT_HERE);
-@@ -693,11 +695,13 @@ void warn_slowpath_fmt(const char *file, int line, unsigned taint,
- 	va_start(args.args, fmt);
- 	__warn(file, line, __builtin_return_address(0), taint, NULL, &args);
- 	va_end(args.args);
-+	warn_rcu_exit(rcu);
- }
- EXPORT_SYMBOL(warn_slowpath_fmt);
- #else
- void __warn_printk(const char *fmt, ...)
- {
-+	bool rcu = warn_rcu_enter();
- 	va_list args;
- 
- 	pr_warn(CUT_HERE);
-@@ -705,6 +709,7 @@ void __warn_printk(const char *fmt, ...)
- 	va_start(args, fmt);
- 	vprintk(fmt, args);
- 	va_end(args);
-+	warn_rcu_exit(rcu);
- }
- EXPORT_SYMBOL(__warn_printk);
- #endif
-diff --git a/lib/bug.c b/lib/bug.c
-index c223a25..e0ff219 100644
---- a/lib/bug.c
-+++ b/lib/bug.c
-@@ -47,6 +47,7 @@
- #include <linux/sched.h>
- #include <linux/rculist.h>
- #include <linux/ftrace.h>
-+#include <linux/context_tracking.h>
- 
- extern struct bug_entry __start___bug_table[], __stop___bug_table[];
- 
-@@ -153,7 +154,7 @@ struct bug_entry *find_bug(unsigned long bugaddr)
- 	return module_find_bug(bugaddr);
- }
- 
--enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
-+static enum bug_trap_type __report_bug(unsigned long bugaddr, struct pt_regs *regs)
- {
- 	struct bug_entry *bug;
- 	const char *file;
-@@ -209,6 +210,18 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
- 	return BUG_TRAP_TYPE_BUG;
- }
- 
-+enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
-+{
-+	enum bug_trap_type ret;
-+	bool rcu = false;
+ 	u32 power_state = state;
+-	phys_addr_t pa_cpu_resume = __pa_symbol(cpu_resume);
++	phys_addr_t pa_cpu_resume;
 +
-+	rcu = warn_rcu_enter();
-+	ret = __report_bug(bugaddr, regs);
-+	warn_rcu_exit(rcu);
-+
-+	return ret;
-+}
-+
- static void clear_once_table(struct bug_entry *start, struct bug_entry *end)
- {
- 	struct bug_entry *bug;
++	pa_cpu_resume = __pa_symbol_nodebug((unsigned long)cpu_resume);
+ 
+ 	return psci_ops.cpu_suspend(power_state, pa_cpu_resume);
+ }
