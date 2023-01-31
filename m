@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0388682BCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042A7682BCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjAaLtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 06:49:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S231420AbjAaLtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 06:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjAaLs7 (ORCPT
+        with ESMTP id S231300AbjAaLtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:48:59 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208143A88;
-        Tue, 31 Jan 2023 03:48:58 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id v10so14112354edi.8;
-        Tue, 31 Jan 2023 03:48:58 -0800 (PST)
+        Tue, 31 Jan 2023 06:49:08 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670B01CAD1;
+        Tue, 31 Jan 2023 03:49:06 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so10386119wms.2;
+        Tue, 31 Jan 2023 03:49:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KA/6v65JHISORnR8UYFr5pvgEPglVJPcah6RD9iD6VE=;
-        b=Nujw77PuiFGn4klGYhioYQbFGnOrgJ94CGJa5iR4+YvGmUEVubXX2R7LgcGa5pgJgx
-         X8of2j5/hnuPxExovpETezwRrqd+uybx7A3iSuwnMQw9fbu3lRMBBqyo9F90HwqJD5h3
-         L7KvzKP2KymKW7PufIKYVbmDkD0eXYEiOryTL1ubA2dj6fH1L5kgWww79L9DufgGyadA
-         3+frBKN1mBG5k/ng9iZCpZU/0SiEEdvIo/ikIjUIT7raUBlfFBhxN4DwsxYf5FSfi3du
-         Z6EXaZ25lZ136m7I0vZpi1on1YoulBFXRdVwUVjBOg4NkHCkNhh2gMbPqoBxAjxir47d
-         wKoA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xOuKpEZ1jj97XUC/j3mPDWi/nJBBNGvsjF3Zpzi3Ud0=;
+        b=qEEyrBhq59r02hG+3psz010bdHV8K8LBFdcPjLxfk4UzbwCDBPoZkqa1N9/qNnaO4l
+         YduhEmRExorbeoa1ygcZNv6c/KuBubPdXTWPOcD+TXacbDPvRKsv9IZ98eCkZ+xaHKmq
+         wdEsSLFyNzKbhHaoomapYTFnncVVGHNfKNhaa6s2JEthouhh5PswNJ31HC93bwnq/PFh
+         l1eT3xiXnDpmgz0SNSs1Y8MvLv5SFJ2LtMdMYOsYb8enCJZwQ193NYVgLzMTvfv++oBB
+         Wudkf7ZymGjBEDxVLvRPNJs5h6TNaB0EOJJwLLBpmg0z9eLI8EdfncNUKeF3JS7kgU8U
+         dWAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KA/6v65JHISORnR8UYFr5pvgEPglVJPcah6RD9iD6VE=;
-        b=PzCohUSsM4dq6L3PwAeY+hqXKfd4MO0ciM+eWgOuc+WjNcKyP3cqoZITgxvm9SUIZG
-         tdUDXBHfk72gMRcO8yedkgSKq5p3rbqXB2QZg7DxYrAbmxvNzdh2CO1RBnFETU/mH4nW
-         q74t1V6lEzAJOBxZqeJaRlFhoVM213xf8mKCF7Oq3NKrXRtOU5Bu0uXPTCCopu9q2Kdz
-         /Pk1+P575+L+hDhcOMsRP2LHnrWx8vRpus8fhlHe9LyBpD8F6onMz5tf840RS30PNd8P
-         f3IssnTS4Fs4qgnQeL0DdIVf7uDXnA+feNzwjYD8VXeElJwlOAvH1SP4UmKmEHBlN8O+
-         l4Eg==
-X-Gm-Message-State: AO0yUKVGgAmi8CGFRW0UAGU9wjjmF52oxq9eMO1LhhAQdo4+0ltA5J7i
-        7lxQ3SW2RHP1e+1BwifaJxw=
-X-Google-Smtp-Source: AK7set9ONJUUydSWVsEW0vZ9wMG/FheHDnZ8BZqxw4WCElT9fs9JUTmls799MvxYJrqGxDexRGY09w==
-X-Received: by 2002:a05:6402:2421:b0:49e:ed9c:215f with SMTP id t33-20020a056402242100b0049eed9c215fmr22203261eda.38.1675165736692;
-        Tue, 31 Jan 2023 03:48:56 -0800 (PST)
-Received: from touko.myxoz.lan (90-224-45-44-no2390.tbcn.telia.com. [90.224.45.44])
-        by smtp.gmail.com with ESMTPSA id a6-20020aa7cf06000000b004a23558f01fsm4190147edy.43.2023.01.31.03.48.55
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xOuKpEZ1jj97XUC/j3mPDWi/nJBBNGvsjF3Zpzi3Ud0=;
+        b=G6JmSVEUUOGk1kFriYXKNk2PuUpmARKj11ar0xPAbo/xNzUpRjhomREqHE5ScDqBBR
+         Tgd/X1qebSDiBvgY60asHnaSqpOZtGz3ViQMJY1+oc2I1cbxiPGBAT1c/djRlOLCgUwZ
+         fZKBoTbj3h+BHznyc2l55Pgus4uqCT5j0PWP2V8nMKGUoYiej4grTNukficHo8nMfkkU
+         t0UyQeDoV7a3ZpZDHheqbrcf1svaLJbFFCPIbCqeR8+lFAVqO1rvi6UGTUV2T25G92Qt
+         6tO37Kn3ppgVjdKW5KR6cpgDGcPC93JR0f2RAVSvnxmoRrcTOpoAEr8SBrCq/oq+7mFn
+         Trtw==
+X-Gm-Message-State: AO0yUKUt3tfKof21k59QE4FER9wqCoyXYxokSIoEr71mkyn/ZyvD+5Mv
+        d83hS29nFvf61cTFoshzjYLIewgIox8=
+X-Google-Smtp-Source: AK7set/S51RBOo0S52AlhMr6xyFSsTawRhwIeQkzjCf3zToS2aDbDQi6oMgQqUd7+4IigxhDOgoIvg==
+X-Received: by 2002:a05:600c:434b:b0:3dd:1982:4d14 with SMTP id r11-20020a05600c434b00b003dd19824d14mr4792279wme.1.1675165744862;
+        Tue, 31 Jan 2023 03:49:04 -0800 (PST)
+Received: from debian ([2a10:d582:3bb:0:63f8:f640:f53e:dd47])
+        by smtp.gmail.com with ESMTPSA id j14-20020a05600c130e00b003dc541c4b13sm7333208wmf.21.2023.01.31.03.49.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 03:48:56 -0800 (PST)
-Message-ID: <a9d5c49536b3dc5039d981952aa60db6266516e2.camel@gmail.com>
-Subject: Re: [UNTESTED PATCH] net/usb: kalmia: Fix uninit-value in
- kalmia_send_init_packet
-From:   Miko Larsson <mikoxyzzz@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 31 Jan 2023 12:48:54 +0100
-In-Reply-To: <Y9j9jAHLDBsTxZB7@kroah.com>
-References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
-         <Y9j9jAHLDBsTxZB7@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
+        Tue, 31 Jan 2023 03:49:04 -0800 (PST)
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+X-Google-Original-From: Sudip Mukherjee <sudip@debian>
+Date:   Tue, 31 Jan 2023 11:49:02 +0000
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/313] 6.1.9-rc2 review
+Message-ID: <Y9kALqNnCA5cwfnC@debian>
+References: <20230130181611.883327545@linuxfoundation.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130181611.883327545@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,26 +76,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-31 at 12:37 +0100, Greg KH wrote:
-> On Tue, Jan 31, 2023 at 12:14:54PM +0100, Miko Larsson wrote:
-> > > From ef617d8df22945b871ab989e25c07d7c60ae21f6 Mon Sep 17 00:00:00
-> > > 2001
-> > From: Miko Larsson <mikoxyzzz@gmail.com>
-> > Date: Tue, 31 Jan 2023 11:01:20 +0100
->=20
-> Why is this in the changelog text?
-D'oh, sorry about that. Imported the patch directly into Evolution
-without trimming that away.
+Hi Greg,
 
-> > Subject: [UNTESTED PATCH] net/usb: kalmia: Fix uninit-value in
-> > kalmia_send_init_packet
-> >=20
-> > syzbot reports that act_len in kalmia_send_init_packet() is
-> > uninitialized. Attempt to fix this by initializing it to 0.
->=20
-> You can send patches to syzbot to have it test things, have you tried
-> that?
-Didn't know that, will try!
+On Mon, Jan 30, 2023 at 07:24:47PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.9 release.
+> There are 313 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 01 Feb 2023 18:15:14 +0000.
+> Anything received after that time might be too late.
 
---=20
-~miko
+Build test (gcc version 12.2.1 20230113):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2772
+[2]. https://openqa.qa.codethink.co.uk/tests/2773
+[3]. https://openqa.qa.codethink.co.uk/tests/2774
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
