@@ -2,151 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A8E6832E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AE26832E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjAaQkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50128 "EHLO
+        id S231249AbjAaQlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:41:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjAaQkW (ORCPT
+        with ESMTP id S230481AbjAaQlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:40:22 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E5F1448C;
-        Tue, 31 Jan 2023 08:40:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1675183189;
-        bh=RIe/S0uaHaYJgMue7HTYnNWRd6tihNmsPFU03DnY8u8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=isMvIMW85ulIIsw+DyntNGcMfLEwAkxiSDXtg7YOdjH+xnCToKe556R4yznLn06Bt
-         ceFCUq/FdovTeiqKHYfg7YlWxcyNlikfz0l9ijlksUm5ffA1I5WltVb4DIPWNMq3Xx
-         8duOru4vZni41IcCSn9/RFqBks5heGxKN/LnoUiTZV5mQHPY9VWM0LLYdwCO+AcK9/
-         sFxEZPG0dqsDQHZzAC8OHrx0OIJn4J97OjzHIpfd3QC6pfgZKI6qHkba5qPGKSGlbX
-         +JgroiBSXdsrhikX3Uj1HV9/hqtjq60iXoOijhYJeQpU7Pwat1/58hlVh7ZXLdKS/B
-         +f2EF8l+YUxWQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.157.42] ([217.61.157.42]) by web-mail.gmx.net
- (3c-app-gmx-bs58.server.lan [172.19.170.142]) (via HTTP); Tue, 31 Jan 2023
- 17:39:49 +0100
+        Tue, 31 Jan 2023 11:41:10 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7991218164;
+        Tue, 31 Jan 2023 08:41:09 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VG06rx003415;
+        Tue, 31 Jan 2023 16:41:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=pJvoL5V/+GcwknrQBp7a7hc0Ze1gkZySLeaW30LrKYs=;
+ b=lIn+UJpnSeBL2m9/dUvSQdJnRJvAt1sKxPyfXSPJx/dQsJe4JAYonwP2Cl9fgHl/ho2C
+ vZTZMbOoblQLopJlUm7wR2H/RzrSR/br94TLcK+kf/MmoIOBPC0oiQiCXRafjjRNH4j7
+ T9z50T53UZF94LwcZRsSkSZlULg/sLN1FP54DtWJDp1HQEGzn3pSoUfHfhy2gAohT0Vx
+ +i8K4RTqErGVqC+9SKGE2Zv728d8vrh9axdxMHR5aDFVbMudqSf533CaCUSFSK8nHZBK
+ QfrQ7h0QDdd9qG/LM7QCRCTIOFiiccN3NBSbRSwVqSujMLTYljQ1iuU/D4QylbNQjwNH Xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3xjd9vt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:41:00 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VGGNAS016317;
+        Tue, 31 Jan 2023 16:41:00 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3xjd9vk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:40:59 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGPSfp008520;
+        Tue, 31 Jan 2023 16:40:59 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ncvw2n7d9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:40:59 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VGevEm44040816
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 16:40:57 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D261E5805F;
+        Tue, 31 Jan 2023 16:40:57 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E67945805C;
+        Tue, 31 Jan 2023 16:40:56 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 16:40:56 +0000 (GMT)
+Message-ID: <6e2267c6-fdd9-b017-ed94-3dc9a8878a29@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 11:40:56 -0500
 MIME-Version: 1.0
-Message-ID: <trinity-a044d8eb-8bc2-4b96-9abf-874dcc10db54-1675183189634@3c-app-gmx-bs58>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        erkin.bozoglu@xeront.com, Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>
-Subject: Aw: Re: [PATCH 4/5] arm: dts: mt7623: mux phy0 on Bananapi BPI-R2
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 31 Jan 2023 17:39:49 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <c78e2725-0be7-caa8-40db-2f355cc2cdec@gmail.com>
-References: <20230120205318.519493-1-arinc.unal@arinc9.com>
- <20230120205318.519493-5-arinc.unal@arinc9.com>
- <9A7BD95A-F026-4EAB-96E1-12B1B0C6AAA4@public-files.de>
- <cf7d3247-4d21-98f0-819b-7653153ee4c0@arinc9.com>
- <c78e2725-0be7-caa8-40db-2f355cc2cdec@gmail.com>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:wf6YfoT4OK7QjKfeIa90qRY/Tb8ei+6zlrygKrdduKqgS6qdQfLxP0l8PayX9BnEIPDfc
- pdyT//908UqfNdZYga/38QiI5k6TgG3IuEIO/DkURyUKlP3LH3eOJm1rtL7poHolpgswbSyhj3Q5
- e/+bvASvLDE8izw8Rh9e1a4iWntSIL3ianjJV/HiIo2iSVUZZBZLGc0+ObcUbpB53w0yft5Jmlz3
- vyb5FYDa3qEiXWoOOXdJ3Mpev3jlkdQBDMKx5VTxFcls6F05V+Hng7KNZPjoW3ikuc1LnS6OgfaC
- V4=
-UI-OutboundReport: notjunk:1;M01:P0:2dBudpK+voc=;7y5POLU7oXjvPhuCAqB51PX0Qdj
- 5aUy4YWDfCiOcmur90YZnmx5SN9uUOgNpE6HmfEjoOUsUnCTEP3PPqgzXG/JpyjYsJsdBfy69
- OFz81xxWSaUzWlggofUujZxSIi79Jzet/QC7HVLj+wb9UYlukIJ7JK2b9gs1EqE6ASvDl2dwK
- bg5TEpRZMp3XqWmqggfSvtNxnOhanxmMM2uVORw4aFUJmiNc1+i/0ZLF6KM+87WPPJWiGqBnT
- TSfvQ6XaNafU8PfvaoGgI2zB4Mf0grU8sxFeED5VLcO4KmhL4CJBFBhpvEko6CL6Z45ynJatF
- YwzU7WxhGkzU1C3MqwfYC9x52u4M9OPajSTfGGv6gS3UGOHQ2aUO/XJcRrPdl/4q2gfVkVXQ+
- 4cs7V7jSJYHbsS4upbB04geSo8yOVuuIaQ8cEFGGLJyeRmxE2PcPsSWncSa67RWcef/gfaPFL
- WFRFlgPEUgCR4J8IC44QmeusfJYtO71+N+gZpgPjPPuV5oG1sZoRiwEBTg9kaExoXBL7wUYfz
- FLRIQlYfZ97SMNYZwOq7TUkb8Tvd2+faG/d1bp1O1YksWVexFYqK/MWpyiEmFmKkbpxMY5HD+
- yKWdrTimizRUIik9CBl0GftSZnHwUi/mgp8oF14kRto1P7RGYWD99cYphC5ugPcmVNKBQZf/F
- 4BmBaUBL5IhkFmr3Thd1mOVE/y3V2Sz4hlXMqXwkW8Bjv/pDoUG/OXi2R8r9Fk9bMswiniEkT
- 2vCm74Zp0fD4sMWP51N1+lTvNTdDFkIDey6q+KIcTHO7Utj31Y94WeUp0Z/QXoxN/ly2vjunM
- l+WQ4Mi7SF6h32idL5GW/qYD4lzGRG4cRCB/astIZX17M=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 20/25] powerpc/pseries: Turn PSERIES_PLPKS into a
+ hidden option
+Content-Language: en-US
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+References: <20230131063928.388035-1-ajd@linux.ibm.com>
+ <20230131063928.388035-21-ajd@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230131063928.388035-21-ajd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zpDreHzUUq5L81lXC_RtOYNYpFmTHmvq
+X-Proofpoint-GUID: aibIpIYoRq5r5gIECFq3td07LY-rMRwO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 mlxlogscore=999 suspectscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310146
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-> Gesendet: Dienstag, 31=2E Januar 2023 um 12:55 Uhr
-> Von: "Matthias Brugger" <matthias=2Ebgg@gmail=2Ecom>
-> An: "Ar=C4=B1n=C3=A7 =C3=9CNAL" <arinc=2Eunal@arinc9=2Ecom>, frank-w@pub=
-lic-files=2Ede, "Rob Herring" <robh+dt@kernel=2Eorg>, "Krzysztof Kozlowski"=
- <krzysztof=2Ekozlowski+dt@linaro=2Eorg>
-> Cc: devicetree@vger=2Ekernel=2Eorg, linux-arm-kernel@lists=2Einfradead=
-=2Eorg, linux-mediatek@lists=2Einfradead=2Eorg, linux-kernel@vger=2Ekernel=
-=2Eorg, erkin=2Ebozoglu@xeront=2Ecom, "Sean Wang" <sean=2Ewang@mediatek=2Ec=
-om>, "DENG Qingfang" <dqfext@gmail=2Ecom>
-> Betreff: Re: [PATCH 4/5] arm: dts: mt7623: mux phy0 on Bananapi BPI-R2
->
->=20
->=20
-> On 25/01/2023 17:54, Ar=C4=B1n=C3=A7 =C3=9CNAL wrote:
-> > On 25=2E01=2E2023 19:41, Frank Wunderlich wrote:
-> >> Am 20=2E Januar 2023 21:53:17 MEZ schrieb "Ar=C4=B1n=C3=A7 =C3=9CNAL"=
- <arinc=2Eunal@arinc9=2Ecom>:
-> >>
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 switch@1f {
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 c=
-ompatible =3D "mediatek,mt7530";
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
-eg =3D <0x1f>;
-> >>> @@ -199,11 +208,6 @@ ports {
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 #address-cells =3D <1>;
-> >>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 #size-cells =3D <0>;
-> >>>
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 port@0 {
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0>;
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 label =3D "wan";
-> >>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 };
-> >>> -
-> >>
-> >> This will break existing userspace setups using wan as interface name=
-=2E
-> >=20
-> > Yup=2E The OS being used will have to either rename the interface or a=
-dapt to the=20
-> > new name, eth1=2E
-> >=20
->=20
-> In that case please explain in the commit message why this is needed=2E =
-We are=20
-> trying really hard to not break userspace by a device-tree update=2E
 
-I understand the reason why Ar=C4=B1n=C3=A7 wants to change it:
 
-currently all ports including wan-port are routed via dsa over gmac0 (trgm=
-ii), Ar=C4=B1n=C3=A7 enables the second gmac and port5 of switch to route w=
-an-traffic over the other gmac=2E But unfortunately there is no mainline-wa=
-y to rename the gmac1 interface (eth1) to wan=2E=2E=2Ethis would be a way t=
-o not break the userspace=2E
+On 1/31/23 01:39, Andrew Donnellan wrote:
+> It seems a bit unnecessary for the PLPKS code to have a user-visible
+> config option when it doesn't do anything on its own, and there's existing
+> options for enabling Secure Boot-related features.
+> 
+> It should be enabled by PPC_SECURE_BOOT, which will eventually be what
+> uses PLPKS to populate keyrings.
+> 
+> However, we can't get of the separate option completely, because it will
+> also be used for SED Opal purposes.
+> 
+> Change PSERIES_PLPKS into a hidden option, which is selected by
+> PPC_SECURE_BOOT.
+> 
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
 
-i had an older patch for mtk_eth_soc [1] which do it at driver level for m=
-ediatek ethernet driver, but afair a generic way to (re)name interfaces in =
-dts (vendor independ) was requested as the right way=2E
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-regards Frank
-
-[1] https://github=2Ecom/frank-w/BPI-Router-Linux/commit/5088c9c81e9001462=
-2a950fca38cfb29e0421155
+> 
+> ---
+> 
+> v3: New patch
+> 
+> v5: Change the previous description into a comment (npiggin)
+> ---
+>   arch/powerpc/Kconfig                   |  1 +
+>   arch/powerpc/platforms/pseries/Kconfig | 19 +++++++++----------
+>   2 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index b8c4ac56bddc..d4ed46101bec 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -1029,6 +1029,7 @@ config PPC_SECURE_BOOT
+>   	depends on PPC_POWERNV || PPC_PSERIES
+>   	depends on IMA_ARCH_POLICY
+>   	imply IMA_SECURE_AND_OR_TRUSTED_BOOT
+> +	select PSERIES_PLPKS if PPC_PSERIES
+>   	help
+>   	  Systems with firmware secure boot enabled need to define security
+>   	  policies to extend secure boot to the OS. This config allows a user
+> diff --git a/arch/powerpc/platforms/pseries/Kconfig b/arch/powerpc/platforms/pseries/Kconfig
+> index a3b4d99567cb..e51d65969318 100644
+> --- a/arch/powerpc/platforms/pseries/Kconfig
+> +++ b/arch/powerpc/platforms/pseries/Kconfig
+> @@ -151,16 +151,15 @@ config IBMEBUS
+>   
+>   config PSERIES_PLPKS
+>   	depends on PPC_PSERIES
+> -	bool "Support for the Platform Key Storage"
+> -	help
+> -	  PowerVM provides an isolated Platform Keystore(PKS) storage
+> -	  allocation for each LPAR with individually managed access
+> -	  controls to store sensitive information securely. It can be
+> -	  used to store asymmetric public keys or secrets as required
+> -	  by different usecases. Select this config to enable
+> -	  operating system interface to hypervisor to access this space.
+> -
+> -	  If unsure, select N.
+> +	bool
+> +	# PowerVM provides an isolated Platform Keystore (PKS) storage
+> +	# allocation for each LPAR with individually managed access
+> +	# controls to store sensitive information securely. It can be
+> +	# used to store asymmetric public keys or secrets as required
+> +	# by different usecases.
+> +	#
+> +	# This option is selected by in-kernel consumers that require
+> +	# access to the PKS.
+>   
+>   config PAPR_SCM
+>   	depends on PPC_PSERIES && MEMORY_HOTPLUG && LIBNVDIMM
