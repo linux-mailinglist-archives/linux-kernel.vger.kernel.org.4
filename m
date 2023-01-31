@@ -2,229 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3259A6821B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2689A6821B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:59:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjAaB6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:58:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S231202AbjAaB7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:59:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjAaB6R (ORCPT
+        with ESMTP id S231154AbjAaB7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:58:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7D717142
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:58:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BA7061313
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:58:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 706D2C433EF;
-        Tue, 31 Jan 2023 01:58:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675130295;
-        bh=VMrLtd9E0jLWhgCSW6g8xpipSeki+xEXEedoi94rEWw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aJ/+8vJaCsnjBwO4nhY7NFvDR4y3Fck586BQavZCVjm845a/tzS2MZ3fYfUqShWy1
-         hcN6crgKrz28TFHl0RtIUTl9WAPt6CFeIEBpJQjaDU2mwa9qJce4Cq27Vh9kwlkvOn
-         2Jt7RJ9ZnLztxWnomrUPntW1XN/xr2e5LyPJwjUw4a2C7PZgNp6/tG9XeMGIFzq92e
-         NZLHmIrgmrXfLwZIK6JJjYhkyJ1d/sAx7VY4kgTLmTed/ar+31fiBrIGpnJ88w3nG3
-         3uLuxEljd6hLcsIJRQiv/8yxw3Ho26mfz5FQwVfT+0TuPbcxHP7Um4oCVmPTZqbP1L
-         k2DhZIpDWJDlQ==
-Message-ID: <581939e0-444e-e331-c26c-bb72ac8b38ac@kernel.org>
-Date:   Tue, 31 Jan 2023 09:58:12 +0800
+        Mon, 30 Jan 2023 20:59:38 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B18B32E45
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:59:28 -0800 (PST)
+X-UUID: e1e4847ea10a11ed945fc101203acc17-20230131
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=WJYXLBX/n/oH+RscWZpywMvfmWqQoxEHuehKlop3feY=;
+        b=QZhxSHGyJX4kFS6bhvcMoqITURSAxh7H3nFwucSWt8tggqmXTl4ZWYJpmpAFZiVHgYh8gCRYcmoNkCCzIz4XMHO1nTq6QjxvoOW3W2HF65aQ6Opid87WL+137DT+GIJ/QfZ3qLPlgjfFFEHAcbh0q/xl0Zd5bIjRqe3WKAMHYMs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.18,REQID:01f3b4b0-ab2b-460d-9b86-ce47af99efae,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.18,REQID:01f3b4b0-ab2b-460d-9b86-ce47af99efae,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:3ca2d6b,CLOUDID:529ccc55-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:230131095924V3P8PX7O,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: e1e4847ea10a11ed945fc101203acc17-20230131
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 85077795; Tue, 31 Jan 2023 09:59:22 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 31 Jan 2023 09:59:21 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 31 Jan 2023 09:59:21 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <jitao.shi@mediatek.com>, <thierry.reding@gmail.com>,
+        <sam@ravnborg.org>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v3 0/2] Reduce lcm_reset to DSI LP11 send cmd time
+Date:   Tue, 31 Jan 2023 09:59:17 +0800
+Message-ID: <1675130359-24459-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [f2fs-dev] [PATCH] f2fs: use iostat_lat_type directly as a
- parameter in the iostat_update_and_unbind_ctx()
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-References: <20230105042240.24738-1-frank.li@vivo.com>
- <8ab26acd-4df6-8330-8e82-1d258d9f0d6d@kernel.org>
- <Y9g4PcQvsCOj1d0r@google.com> <Y9hDXzXnyFA9ejc3@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y9hDXzXnyFA9ejc3@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/31 6:23, Jaegeuk Kim wrote:
-> On 01/30, Jaegeuk Kim wrote:
->> On 01/28, Chao Yu wrote:
->>> On 2023/1/5 12:22, Yangtao Li wrote:
->>>> Convert to use iostat_lat_type as parameter instead of raw number.
->>>> BTW, move NUM_PREALLOC_IOSTAT_CTXS to the header file, and rename
->>>> iotype to page_type to match the definition.
->>>>
->>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->>>> ---
->>>>    fs/f2fs/data.c   |  5 +++--
->>>>    fs/f2fs/iostat.c | 34 +++++++++++-----------------------
->>>>    fs/f2fs/iostat.h | 19 ++++++++++---------
->>>>    3 files changed, 24 insertions(+), 34 deletions(-)
->>>>
->>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
->>>> index c940da1c540f..4e8fd5697c42 100644
->>>> --- a/fs/f2fs/data.c
->>>> +++ b/fs/f2fs/data.c
->>>> @@ -292,7 +292,7 @@ static void f2fs_read_end_io(struct bio *bio)
->>>>    	struct bio_post_read_ctx *ctx;
->>>>    	bool intask = in_task();
->>>> -	iostat_update_and_unbind_ctx(bio, 0);
->>>> +	iostat_update_and_unbind_ctx(bio, READ_IO);
->>>>    	ctx = bio->bi_private;
->>>>    	if (time_to_inject(sbi, FAULT_READ_IO))
->>>> @@ -330,7 +330,8 @@ static void f2fs_write_end_io(struct bio *bio)
->>>>    	struct bio_vec *bvec;
->>>>    	struct bvec_iter_all iter_all;
->>>> -	iostat_update_and_unbind_ctx(bio, 1);
->>>> +	iostat_update_and_unbind_ctx(bio, bio->bi_opf & REQ_SYNC ? WRITE_SYNC_IO :
->>>> +										WRITE_ASYNC_IO);
->>>
->>> We can use op_is_write(bio_op(bio)) to check IO's rw type, why not just
->>> passing bio arguement, and parse rw/sync types from bio inside
->>> iostat_update_and_unbind_ctx(), it can avoid passing unneeded arguements.
->>
->> Chao, let's write another patch to clean up, if you're interested in.
-> 
-> Ok, it seems you need to add this comment in v3 that Yangtao sent.
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-Oh, I missed last patch, I've added comments on v3.
+The panel spec stipulates that after lcm_reset is pulled high, cmd
+should be sent to initialize the panel. Within the allowable range of
+the DSI spec, this time needs to be reduced to avoid panel exceptions.
 
-Thanks,
+Base on the branch of linus/master v6.2.
 
-> 
->>
->>>
->>> Thanks,
->>>
->>>>    	sbi = bio->bi_private;
->>>>    	if (time_to_inject(sbi, FAULT_WRITE_IO))
->>>> diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
->>>> index 59c72f92191a..20944c4a683a 100644
->>>> --- a/fs/f2fs/iostat.c
->>>> +++ b/fs/f2fs/iostat.c
->>>> @@ -14,7 +14,6 @@
->>>>    #include "iostat.h"
->>>>    #include <trace/events/f2fs.h>
->>>> -#define NUM_PREALLOC_IOSTAT_CTXS	128
->>>>    static struct kmem_cache *bio_iostat_ctx_cache;
->>>>    static mempool_t *bio_iostat_ctx_pool;
->>>> @@ -210,49 +209,38 @@ void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
->>>>    }
->>>>    static inline void __update_iostat_latency(struct bio_iostat_ctx *iostat_ctx,
->>>> -				int rw, bool is_sync)
->>>> +				enum iostat_lat_type type)
->>>>    {
->>>>    	unsigned long ts_diff;
->>>> -	unsigned int iotype = iostat_ctx->type;
->>>> +	unsigned int page_type = iostat_ctx->type;
->>>>    	struct f2fs_sb_info *sbi = iostat_ctx->sbi;
->>>>    	struct iostat_lat_info *io_lat = sbi->iostat_io_lat;
->>>> -	int idx;
->>>>    	unsigned long flags;
->>>>    	if (!sbi->iostat_enable)
->>>>    		return;
->>>>    	ts_diff = jiffies - iostat_ctx->submit_ts;
->>>> -	if (iotype >= META_FLUSH)
->>>> -		iotype = META;
->>>> -
->>>> -	if (rw == 0) {
->>>> -		idx = READ_IO;
->>>> -	} else {
->>>> -		if (is_sync)
->>>> -			idx = WRITE_SYNC_IO;
->>>> -		else
->>>> -			idx = WRITE_ASYNC_IO;
->>>> -	}
->>>> +	if (page_type >= META_FLUSH)
->>>> +		page_type = META;
->>>>    	spin_lock_irqsave(&sbi->iostat_lat_lock, flags);
->>>> -	io_lat->sum_lat[idx][iotype] += ts_diff;
->>>> -	io_lat->bio_cnt[idx][iotype]++;
->>>> -	if (ts_diff > io_lat->peak_lat[idx][iotype])
->>>> -		io_lat->peak_lat[idx][iotype] = ts_diff;
->>>> +	io_lat->sum_lat[type][page_type] += ts_diff;
->>>> +	io_lat->bio_cnt[type][page_type]++;
->>>> +	if (ts_diff > io_lat->peak_lat[type][page_type])
->>>> +		io_lat->peak_lat[type][page_type] = ts_diff;
->>>>    	spin_unlock_irqrestore(&sbi->iostat_lat_lock, flags);
->>>>    }
->>>> -void iostat_update_and_unbind_ctx(struct bio *bio, int rw)
->>>> +void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type)
->>>>    {
->>>>    	struct bio_iostat_ctx *iostat_ctx = bio->bi_private;
->>>> -	bool is_sync = bio->bi_opf & REQ_SYNC;
->>>> -	if (rw == 0)
->>>> +	if (type == READ_IO)
->>>>    		bio->bi_private = iostat_ctx->post_read_ctx;
->>>>    	else
->>>>    		bio->bi_private = iostat_ctx->sbi;
->>>> -	__update_iostat_latency(iostat_ctx, rw, is_sync);
->>>> +	__update_iostat_latency(iostat_ctx, type);
->>>>    	mempool_free(iostat_ctx, bio_iostat_ctx_pool);
->>>>    }
->>>> diff --git a/fs/f2fs/iostat.h b/fs/f2fs/iostat.h
->>>> index 2c048307b6e0..1f827a2fe6b2 100644
->>>> --- a/fs/f2fs/iostat.h
->>>> +++ b/fs/f2fs/iostat.h
->>>> @@ -8,20 +8,21 @@
->>>>    struct bio_post_read_ctx;
->>>> +enum iostat_lat_type {
->>>> +	READ_IO = 0,
->>>> +	WRITE_SYNC_IO,
->>>> +	WRITE_ASYNC_IO,
->>>> +	MAX_IO_TYPE,
->>>> +};
->>>> +
->>>>    #ifdef CONFIG_F2FS_IOSTAT
->>>> +#define NUM_PREALLOC_IOSTAT_CTXS	128
->>>>    #define DEFAULT_IOSTAT_PERIOD_MS	3000
->>>>    #define MIN_IOSTAT_PERIOD_MS		100
->>>>    /* maximum period of iostat tracing is 1 day */
->>>>    #define MAX_IOSTAT_PERIOD_MS		8640000
->>>> -enum {
->>>> -	READ_IO,
->>>> -	WRITE_SYNC_IO,
->>>> -	WRITE_ASYNC_IO,
->>>> -	MAX_IO_TYPE,
->>>> -};
->>>> -
->>>>    struct iostat_lat_info {
->>>>    	unsigned long sum_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* sum of io latencies */
->>>>    	unsigned long peak_lat[MAX_IO_TYPE][NR_PAGE_TYPE];	/* peak io latency */
->>>> @@ -57,7 +58,7 @@ static inline struct bio_post_read_ctx *get_post_read_ctx(struct bio *bio)
->>>>    	return iostat_ctx->post_read_ctx;
->>>>    }
->>>> -extern void iostat_update_and_unbind_ctx(struct bio *bio, int rw);
->>>> +extern void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type);
->>>>    extern void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
->>>>    		struct bio *bio, struct bio_post_read_ctx *ctx);
->>>>    extern int f2fs_init_iostat_processing(void);
->>>> @@ -67,7 +68,7 @@ extern void f2fs_destroy_iostat(struct f2fs_sb_info *sbi);
->>>>    #else
->>>>    static inline void f2fs_update_iostat(struct f2fs_sb_info *sbi, struct inode *inode,
->>>>    		enum iostat_type type, unsigned long long io_bytes) {}
->>>> -static inline void iostat_update_and_unbind_ctx(struct bio *bio, int rw) {}
->>>> +static inline void iostat_update_and_unbind_ctx(struct bio *bio, enum iostat_lat_type type) {}
->>>>    static inline void iostat_alloc_and_bind_ctx(struct f2fs_sb_info *sbi,
->>>>    		struct bio *bio, struct bio_post_read_ctx *ctx) {}
->>>>    static inline void iostat_update_submit_ctx(struct bio *bio,
->>
->>
->> _______________________________________________
->> Linux-f2fs-devel mailing list
->> Linux-f2fs-devel@lists.sourceforge.net
->> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+Change since v2:
+1. Remove the applied patch.
+2. Change the commit title and the description.
+
+Change since v1:
+1. Added fine-tuning panel power sequence modification.
+
+Xinlei Lee (2):
+  drm/panel: boe-tv101wum-nl6: Reduce lcm_reset to send initial code
+    time
+  drm/panel: boe-tv101wum-nl6: Fine tune the panel power sequence
+
+ drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+-- 
+2.18.0
+
