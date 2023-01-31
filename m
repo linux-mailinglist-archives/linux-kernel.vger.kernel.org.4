@@ -2,121 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA1D683631
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACD5683637
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjAaTLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S230204AbjAaTNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjAaTLl (ORCPT
+        with ESMTP id S229651AbjAaTNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:11:41 -0500
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484F259757;
-        Tue, 31 Jan 2023 11:11:22 -0800 (PST)
-Received: by mail-ej1-f44.google.com with SMTP id mc11so22126758ejb.10;
-        Tue, 31 Jan 2023 11:11:22 -0800 (PST)
+        Tue, 31 Jan 2023 14:13:48 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4512C274B0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:13:47 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id u72so19406061ybi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:13:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fU8hV2aEVpS4Iv/7PLb42FnF+FtItn9zaQfC2HMeTsU=;
+        b=KsYqvtEwP03MFQk5D61D2vBAeDlqQG54FFVBErzdMjxwLxOrPHvbevBLnlpfttMCa6
+         +z9AyL1dT1w2QlZvxAwKwU4NlXv6mmxYYJCITbF6JYmEnc1Fj/U+ICRjVAESPbPfRfCH
+         jya/MVCNMgL5cmZ73c/xhUenKPVzouZ5SGdwFHdG40Iqi1dgfaLbYGmL3QzWnBt3ml8V
+         SsviGUZFhWswUh3qIlD14+dj4Y+jKNVRpDttZSDQZHf890I5w3ogBENQ9Is9JoqyiEaY
+         wJgqm/tSPWSAPPLOC2MfQ859I6I+HN4kGaHJ2l+ImQjFkQissidTINWTUQ1tKLICK6Rr
+         ljcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Tj0B2PQQQxR/rYyVsTlUwChxXn317haBHssuZ5ZKr0=;
-        b=iexSjDmiJRhSBfhKq0wQULQGguBxwHBcaJ3vhTYbdz9/4z7/m66dCgTpiEKlSi5QV7
-         4XEpTI4X/w8yxUwGZw5PNibTxn48t1cDfvkrw0V0lysbZPYEU9anKtJTKLmkV4T+D6Y+
-         m253CvsmTOR3e93PAMEtnDt1IOMmz3g+uinVwYqsZFn/MJSFYDZzDXyRefwHLwPSfUA0
-         LkoHAH8Hby3ZybwXhNenlu2u1EC3wBXoaYkxN4xUEvT+XHATvEY/UmkPgVGTezl0VUHr
-         KMe5MONzYnRPpD9zWowJuJ5ltNb8m1oMz8lxKha7Ywg9W1zQqg17dsMbm+n9diDIyzwc
-         Id9w==
-X-Gm-Message-State: AFqh2kpv/KDixrluSiYPNfe7puvDObb3G5121IDT6YKH13YK0gezms3i
-        KA1muLWaM2iU9tRkuX2jv6yTfp4SHeAlNlI3gUc=
-X-Google-Smtp-Source: AMrXdXtQTTHdk8ueOISoJacuHi8SLaecWPqeHwKjbXofOFyGnO9Zu88BjZOdI0mcRJnvaVkd71hV3i7D/VH5OdBs9ZQ=
-X-Received: by 2002:a17:907:c928:b0:85e:4218:c011 with SMTP id
- ui40-20020a170907c92800b0085e4218c011mr8652949ejc.258.1675192276763; Tue, 31
- Jan 2023 11:11:16 -0800 (PST)
+        bh=fU8hV2aEVpS4Iv/7PLb42FnF+FtItn9zaQfC2HMeTsU=;
+        b=CZx4t/0KKdQ8gNssEOKvtR8dlTKj6JN6BbnuNM4WmhkEbeIOX4hK4ByHx5IbXk/vvi
+         asxWwQ23RioY4hdgDVQdjyOSZnjbBOf0ihH0SHi9fY7EK+N7Nk0LHdpxCqOu4P3vyjo4
+         Lss8FajLupgaC3rjIKluGZUO876xUh42UcWCtdD2+tPClUSaifOzY3Bg9QQMfr7qY1jl
+         IeY/eDC0CP+Oj5bH3GSgNy05kCV9Hqi89dNXqs3L/ieTAXooOlw1vzpBXQ4u+wqAvXTs
+         gkPFmqPFcqrb3LXTf76+oScyoIlyrXXXFsJgbi/C+EZmXZd6a9vuJOB242oFgVBMGdZO
+         Upbw==
+X-Gm-Message-State: AO0yUKU23MxhA5wZatdVqOjz4THF99uaWbDqvUtoQa3Kxk/2JpCCTpTV
+        FdJV4r8H6lAaoFBlqi6Ky06njWxfKygftX44GDU=
+X-Google-Smtp-Source: AK7set+Uie+lj3Pdtiv1v/j1sXQlZe/9enF5aW+Sgy4MhweL9mhYmeuYt0ssdLoQkJHVoX7eTONZm2GOKikJBQw3bRE=
+X-Received: by 2002:a25:cf83:0:b0:7d6:8ddf:c85b with SMTP id
+ f125-20020a25cf83000000b007d68ddfc85bmr7033ybg.307.1675192426266; Tue, 31 Jan
+ 2023 11:13:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <CAJZ5v0icjsLBNkDqm49az=GixfEoLHAtCm7H13uOUv7Hr6yO2Q@mail.gmail.com> <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org>
-In-Reply-To: <621aca19-6a44-9d42-6fde-1835035c28b4@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 31 Jan 2023 20:11:05 +0100
-Message-ID: <CAJZ5v0iOYH4WR5WoH=jL6VWKhB4CMeZv5V3U0Q_c_qdCJvvvBw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for quark_dts
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Amit Kucheria <amitk@kernel.org>
+References: <20230113004933.2082072-1-daeho43@gmail.com> <ed5f65a7-13bb-581c-cfb5-df5ab30fbc4c@kernel.org>
+ <CACOAw_zhVgS84gOXpfZuvptMgsZDhP3QX2EFm=5CoKibB+3V1A@mail.gmail.com> <8f1c15a3-d056-7709-af45-fe7cba56463f@kernel.org>
+In-Reply-To: <8f1c15a3-d056-7709-af45-fe7cba56463f@kernel.org>
+From:   Daeho Jeong <daeho43@gmail.com>
+Date:   Tue, 31 Jan 2023 11:13:34 -0800
+Message-ID: <CACOAw_zSaZ5JKFtFSxRK3a5_260AYbeYCMzHL11pD8=mWM91Sw@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: synchronize atomic write aborts
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
+        Daeho Jeong <daehojeong@google.com>,
+        syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 5:41 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 26/01/2023 15:15, Rafael J. Wysocki wrote:
-> > On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> The thermal framework gives the possibility to register the trip
-> >> points with the thermal zone. When that is done, no get_trip_* ops are
-> >> needed and they can be removed.
-> >>
-> >> Convert ops content logic into generic trip points and register them with the
-> >> thermal zone.
-> >>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> ---
->
-> [ ... ]
->
-> >> -       aux_entry->tzone = thermal_zone_device_register("quark_dts",
-> >> -                       QRK_MAX_DTS_TRIPS,
-> >> -                       wr_mask,
-> >> -                       aux_entry, &tzone_ops, NULL, 0, polling_delay);
-> >> +       err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
-> >> +       if (err)
-> >> +               goto err_ret;
-> >> +
-> >> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
-> >> +       aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-> >> +
-> >> +       err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
-> >> +       if (err)
-> >> +               goto err_ret;
-> >
-> > If I'm not mistaken, this won't even try to register the thermal zone
-> > if at least one trip cannot be initialized, but previously it was
-> > registered in that case, but the trips that failed to respond were
-> > disabled.
-> >
-> > This is a change in behavior that would at least need to be documented
-> > in the changelog, but it isn't.
-> >
-> > I'm not sure if it is safe to make even, however.
->
-> Thanks for catching this.
->
-> Two solutions:
->
-> 1. Set the temperature to THERMAL_TEMP_INVALID and change
-> get_thermal_trip() to return -EINVAL or -ERANGE if the temperature is
-> THERMAL_TEMP_INVALID
->
-> 2. Register only the valid trip points.
->
-> What would be the preferable way ?
+Hi Chao,
 
-I think that the trip points that are registered currently need to
-still be registered after the change.
+On Tue, Jan 31, 2023 at 3:37 AM Chao Yu <chao@kernel.org> wrote:
+>
+> Hi Daeho,
+>
+> On 2023/1/31 0:34, Daeho Jeong wrote:
+> > Hi Chao,
+> >
+> > I read your patch series now and I like it.
+>
+> Thank you for checking the patches. :)
+>
+> > However, how about a race condition between start_atomic_write and
+> > abort_atomic_write?
+>
+> Yup, I noticed that issue, I guess we can avoid this race condition by
+> covering these two flows w/ i_atomic_sem.
+>
+> > abort_atomic_write is called without inode_lock in closing filp scenarios.
+> > What do you think about this?
+>
+> I'm fine w/ your change as it's more clean, but it's better to drop cow_inode's
+> page cache if atomic_write is committed or aborted to avoid caching obsolete page?
 
-Does registering a trip point with the temperature set to
-THERMAL_TEMP_INVALID cause it to be effectively disabled?
+It's better to put that part in f2fs_abort_atomic_write().
+On top of that, maybe, we should move
+f2fs_do_truncate_blocks(fi->cow_inode, 0, true) part from
+f2fs_ioc_start_atomic_write() to f2fs_abort_atomic_write(), too.
+
+Thanks,
+
+>
+> Thanks,
+>
+> >
+> > Thanks,
+> >
+> >
+> > On Fri, Jan 27, 2023 at 6:07 PM Chao Yu <chao@kernel.org> wrote:
+> >>
+> >> Hi Daeho, Jaegeuk,
+> >>
+> >> Please take a look at patchset in below link:
+> >>
+> >> https://lore.kernel.org/linux-f2fs-devel/20230109034453.490176-1-chao@kernel.org/T/#t
+> >>
+> >> In PATCH 4/5, I'm trying to fix the same issue w/ alternative way, let me
+> >> know your preference. :)
+> >>
+> >> One comment as below.
+> >>
+> >> On 2023/1/13 8:49, Daeho Jeong wrote:
+> >>> From: Daeho Jeong <daehojeong@google.com>
+> >>>
+> >>> To fix a race condition between atomic write aborts, I use the inode
+> >>> lock and make COW inode to be re-usable thoroughout the whole
+> >>> atomic file inode lifetime.
+> >>>
+> >>> Reported-by: syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
+> >>> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
+> >>> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> >>> ---
+> >>>    fs/f2fs/file.c    | 43 ++++++++++++++++++++++++++++---------------
+> >>>    fs/f2fs/inode.c   | 11 +++++++++--
+> >>>    fs/f2fs/segment.c |  3 ---
+> >>>    fs/f2fs/super.c   |  2 --
+> >>>    4 files changed, 37 insertions(+), 22 deletions(-)
+> >>>
+> >>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> >>> index ecbc8c135b49..ff072a9ed258 100644
+> >>> --- a/fs/f2fs/file.c
+> >>> +++ b/fs/f2fs/file.c
+> >>> @@ -1866,7 +1866,10 @@ static int f2fs_release_file(struct inode *inode, struct file *filp)
+> >>>                        atomic_read(&inode->i_writecount) != 1)
+> >>>                return 0;
+> >>>
+> >>> +     inode_lock(inode);
+> >>>        f2fs_abort_atomic_write(inode, true);
+> >>> +     inode_unlock(inode);
+> >>> +
+> >>>        return 0;
+> >>>    }
+> >>>
+> >>> @@ -1880,8 +1883,11 @@ static int f2fs_file_flush(struct file *file, fl_owner_t id)
+> >>>         * until all the writers close its file. Since this should be done
+> >>>         * before dropping file lock, it needs to do in ->flush.
+> >>>         */
+> >>> -     if (F2FS_I(inode)->atomic_write_task == current)
+> >>> +     if (F2FS_I(inode)->atomic_write_task == current) {
+> >>> +             inode_lock(inode);
+> >>>                f2fs_abort_atomic_write(inode, true);
+> >>> +             inode_unlock(inode);
+> >>> +     }
+> >>>        return 0;
+> >>>    }
+> >>>
+> >>> @@ -2087,19 +2093,28 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+> >>>                goto out;
+> >>>        }
+> >>>
+> >>> -     /* Create a COW inode for atomic write */
+> >>> -     pinode = f2fs_iget(inode->i_sb, fi->i_pino);
+> >>> -     if (IS_ERR(pinode)) {
+> >>> -             f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> >>> -             ret = PTR_ERR(pinode);
+> >>> -             goto out;
+> >>> -     }
+> >>> +     /* Check if the inode already has a COW inode */
+> >>> +     if (fi->cow_inode == NULL) {
+> >>> +             /* Create a COW inode for atomic write */
+> >>> +             pinode = f2fs_iget(inode->i_sb, fi->i_pino);
+> >>> +             if (IS_ERR(pinode)) {
+> >>> +                     f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> >>> +                     ret = PTR_ERR(pinode);
+> >>> +                     goto out;
+> >>> +             }
+> >>>
+> >>> -     ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
+> >>> -     iput(pinode);
+> >>> -     if (ret) {
+> >>> -             f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> >>> -             goto out;
+> >>> +             ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
+> >>> +             iput(pinode);
+> >>> +             if (ret) {
+> >>> +                     f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> >>> +                     goto out;
+> >>> +             }
+> >>> +
+> >>> +             set_inode_flag(fi->cow_inode, FI_COW_FILE);
+> >>> +             clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
+> >>> +     } else {
+> >>> +             /* Reuse the already created COW inode */
+> >>> +             f2fs_do_truncate_blocks(fi->cow_inode, 0, true);
+> >>>        }
+> >>>
+> >>>        f2fs_write_inode(inode, NULL);
+> >>> @@ -2107,8 +2122,6 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+> >>>        stat_inc_atomic_inode(inode);
+> >>>
+> >>>        set_inode_flag(inode, FI_ATOMIC_FILE);
+> >>> -     set_inode_flag(fi->cow_inode, FI_COW_FILE);
+> >>> -     clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
+> >>>
+> >>>        isize = i_size_read(inode);
+> >>>        fi->original_i_size = isize;
+> >>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> >>> index ff6cf66ed46b..4921f7209e28 100644
+> >>> --- a/fs/f2fs/inode.c
+> >>> +++ b/fs/f2fs/inode.c
+> >>> @@ -766,11 +766,18 @@ int f2fs_write_inode(struct inode *inode, struct writeback_control *wbc)
+> >>>    void f2fs_evict_inode(struct inode *inode)
+> >>>    {
+> >>>        struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> >>> -     nid_t xnid = F2FS_I(inode)->i_xattr_nid;
+> >>> +     struct f2fs_inode_info *fi = F2FS_I(inode);
+> >>> +     nid_t xnid = fi->i_xattr_nid;
+> >>>        int err = 0;
+> >>>
+> >>>        f2fs_abort_atomic_write(inode, true);
+> >>>
+> >>> +     if (fi->cow_inode) {
+> >>> +             clear_inode_flag(fi->cow_inode, FI_COW_FILE);
+> >>> +             iput(fi->cow_inode);
+> >>> +             fi->cow_inode = NULL;
+> >>> +     }
+> >>> +
+> >>>        trace_f2fs_evict_inode(inode);
+> >>>        truncate_inode_pages_final(&inode->i_data);
+> >>>
+> >>> @@ -857,7 +864,7 @@ void f2fs_evict_inode(struct inode *inode)
+> >>>        stat_dec_inline_inode(inode);
+> >>>        stat_dec_compr_inode(inode);
+> >>>        stat_sub_compr_blocks(inode,
+> >>> -                     atomic_read(&F2FS_I(inode)->i_compr_blocks));
+> >>> +                     atomic_read(&fi->i_compr_blocks));
+> >>>
+> >>>        if (likely(!f2fs_cp_error(sbi) &&
+> >>>                                !is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
+> >>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> >>> index ae3c4e5474ef..536d7c674b04 100644
+> >>> --- a/fs/f2fs/segment.c
+> >>> +++ b/fs/f2fs/segment.c
+> >>> @@ -192,9 +192,6 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
+> >>>        if (!f2fs_is_atomic_file(inode))
+> >>>                return;
+> >>>
+> >>> -     clear_inode_flag(fi->cow_inode, FI_COW_FILE);
+> >>> -     iput(fi->cow_inode);
+> >>> -     fi->cow_inode = NULL;
+> >>>        release_atomic_write_cnt(inode);
+> >>>        clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
+> >>>        clear_inode_flag(inode, FI_ATOMIC_REPLACE);
+> >>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> >>> index 1f812b9ce985..10463f084d30 100644
+> >>> --- a/fs/f2fs/super.c
+> >>> +++ b/fs/f2fs/super.c
+> >>> @@ -1430,8 +1430,6 @@ static int f2fs_drop_inode(struct inode *inode)
+> >>>                        atomic_inc(&inode->i_count);
+> >>>                        spin_unlock(&inode->i_lock);
+> >>>
+> >>> -                     f2fs_abort_atomic_write(inode, true);
+> >>
+> >> In order to avoid caching obsolete page of cow_inode, how about truncating
+> >> them here?
+> >>
+> >> if (f2fs_is_atomic_file() && cow_inode)
+> >>          truncate_inode_pages_final(&cow_inode->i_data);
+> >>
+> >> Thanks,
+> >>
+> >>> -
+> >>>                        /* should remain fi->extent_tree for writepage */
+> >>>                        f2fs_destroy_extent_node(inode);
+> >>>
