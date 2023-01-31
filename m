@@ -2,172 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10D5682C6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B29682C79
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjAaMSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:18:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        id S231556AbjAaMUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbjAaMS3 (ORCPT
+        with ESMTP id S231362AbjAaMUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:18:29 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE32F13531
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675167479; x=1706703479;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HZfoUkL79lYgrOdmcntsIiRWStscy316jRpBhaaQrEY=;
-  b=K0e++ox/QQrL1XiYHXeL/F0ojHecdwQGbW8FxiWYisgcO8q63PCLYiOP
-   y+TqIlZwNCqw+ul5AH6jXPwufxJ9MQdhg8Tk2qu0eV2bSrt4R+AJIJzNq
-   HFFyNarsExAbxnje0WdtaL0PZireYQYYmZT4iCbumLMbKdqqLljazzRuU
-   S1Sn4+XO0OFEMspAJD9hQDJW8lBm6uVX33IrFKw6iS7cEs3DyZyr3vQyQ
-   lE/IU+9Hhs3q2QUgr9HQ0cDpQg8KW9OF0xp/I7Jqv4y17+20aOdRKKDyz
-   PpeMQZdfyJiJwtQrDwMzWObmTpFBMlBexiYbhg0mre8DYnEexlWKYrOC3
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="329094788"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="329094788"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:17:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="727925480"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="727925480"
-Received: from cli6-desk.ccr.corp.intel.com (HELO [10.239.161.129]) ([10.239.161.129])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:17:51 -0800
-Message-ID: <b6e8c90b-08ba-ccf9-8704-97c995722ea5@linux.intel.com>
-Date:   Tue, 31 Jan 2023 20:17:25 +0800
+        Tue, 31 Jan 2023 07:20:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1268C24493
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:19:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675167570;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0xKlxpkUZRo2mPicdjcp1VlQPa8+dcAbG4ZeEJrymiQ=;
+        b=K3zNm6YuM3HDXyJ4K8e1r9WRoIKEuKiwGRgFguTzbWCvo115YZriA0rZQ613BMbDGqkqpp
+        fE7uxkyAslnrsf8M79Qzt+Ol0qiR8lr96qqIF2N7UaQMZJDlhalyQkFksHEhjNKnrjjAEG
+        GDTZ3bx5fKMNiy1bwvRSkhfo5hlQsaU=
+Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
+ [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-588-JoaElhsuNsufC4qtuoMtVQ-1; Tue, 31 Jan 2023 07:17:43 -0500
+X-MC-Unique: JoaElhsuNsufC4qtuoMtVQ-1
+Received: by mail-vk1-f197.google.com with SMTP id s203-20020a1f2cd4000000b003d5b4915319so5112489vks.18
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:17:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0xKlxpkUZRo2mPicdjcp1VlQPa8+dcAbG4ZeEJrymiQ=;
+        b=DQUfVC2KDgBMAfEW78M9jRHHirQkIZOWiAyx2npbILsSpQ9wu5IRO+bQ91sfuofFrZ
+         cJ0kPDkGIrhssZ99IJqbAVaWAEp5V/ZWXq8zgzAtoyHH/U7JnXEyToLlix+yd6sY6eqG
+         BD3/E9RHyPn25RFdUmVuIoMxJRfvxQKr5GB2xNktREegUECK7aLWA37FUxa0hdTCzMQ0
+         1VUkmHNx2BVQneylPDqMK4ch9V6Nkvj9JtQc5J0IVlRoXqfkHExoFE4TQGpl+DrpihoL
+         hQHYtzLTERJIhUm8oTSqbuomJWUARZV/2+SzL8KesZXEjOD1DVXkABRgEXQ0mDEQJVEf
+         lEBA==
+X-Gm-Message-State: AO0yUKUDD2PaGKvBsb2afw/6rcwxRm3gHycUdD0yvxwcPBpNTyj400jx
+        epifpAdNVBS6rqYbJZOHEaOBiggWctA7hLqem/7h6iV72sD1diC705tjUF+V3p4FhnAFdhSn5iy
+        UPpKHj8STANA63gDYivJhroWy
+X-Received: by 2002:a67:c119:0:b0:3ea:99cb:c3e with SMTP id d25-20020a67c119000000b003ea99cb0c3emr2996486vsj.2.1675167462886;
+        Tue, 31 Jan 2023 04:17:42 -0800 (PST)
+X-Google-Smtp-Source: AK7set/3cWf1zFQSzSaXyTvYZFmhtrofj2WcZS5Lru0KQCl9i0U0TOY96Lm9fQ3ijteXPFUn2WOINw==
+X-Received: by 2002:a67:c119:0:b0:3ea:99cb:c3e with SMTP id d25-20020a67c119000000b003ea99cb0c3emr2996457vsj.2.1675167462612;
+        Tue, 31 Jan 2023 04:17:42 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
+        by smtp.gmail.com with ESMTPSA id 10-20020a370b0a000000b007203bbbbb31sm3325683qkl.47.2023.01.31.04.17.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 04:17:42 -0800 (PST)
+Message-ID: <865b04949b69c3470ecb3fa5f93005e4c5a9e86e.camel@redhat.com>
+Subject: Re: [PATCH 0/9] Documentation: correct lots of spelling errors
+ (series 2)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     patchwork-bot+netdevbpf@kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, tj@kernel.org, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, cgroups@vger.kernel.org, agk@redhat.com,
+        snitzer@kernel.org, dm-devel@redhat.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-mm@kvack.org,
+        dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, nvdimm@lists.linux.dev, vkoul@kernel.org,
+        dmaengine@vger.kernel.org, song@kernel.org,
+        linux-raid@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, jdelvare@suse.com, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, jiri@nvidia.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, netdev@vger.kernel.org,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, rcu@vger.kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Date:   Tue, 31 Jan 2023 13:17:35 +0100
+In-Reply-To: <167516701747.19012.10728935395396675001.git-patchwork-notify@kernel.org>
+References: <20230129231053.20863-1-rdunlap@infradead.org>
+         <167516701747.19012.10728935395396675001.git-patchwork-notify@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [Patch v3 Part2 1/9] x86/microcode: Taint kernel only if
- microcode loading was successful
-Content-Language: en-US
-To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Martin Pohlack <mpohlack@amazon.de>
-References: <20230130213955.6046-1-ashok.raj@intel.com>
- <20230130213955.6046-2-ashok.raj@intel.com>
-From:   "Li, Aubrey" <aubrey.li@linux.intel.com>
-In-Reply-To: <20230130213955.6046-2-ashok.raj@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/1/31 5:39, Ashok Raj wrote:
-> Currently when late loading is aborted due to check_online_cpu(), kernel
-> still ends up tainting the kernel.
-> 
-> Taint only when microcode loading was successful.
-> 
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-> Cc: LKML <linux-kernel@vger.kernel.org>
-> Cc: x86 <x86@kernel.org>
-> Cc: Ingo Molnar <mingo@kernel.org>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Dave Hansen <dave.hansen@intel.com>
-> Cc: Alison Schofield <alison.schofield@intel.com>
-> Cc: Reinette Chatre <reinette.chatre@intel.com>
-> Cc: Thomas Gleixner (Intel) <tglx@linutronix.de>
-> Cc: Tom Lendacky <thomas.lendacky@amd.com>
-> Cc: Stefan Talpalaru <stefantalpalaru@yahoo.com>
-> Cc: David Woodhouse <dwmw2@infradead.org>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Peter Zilstra (Intel) <peterz@infradead.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Andrew Cooper <Andrew.Cooper3@citrix.com>
-> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> Cc: Martin Pohlack <mpohlack@amazon.de>
-> ---
-> v1->v2: (Thomas)
-> 	- Remove unnecessary assignment of ret that's being overwritten.
-> 	- Taint kernel only of loading was successful
-> ---
->   arch/x86/kernel/cpu/microcode/core.c | 19 +++++++++++++------
->   1 file changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-> index 61d57d9b93ee..1c6831b8b244 100644
-> --- a/arch/x86/kernel/cpu/microcode/core.c
-> +++ b/arch/x86/kernel/cpu/microcode/core.c
-> @@ -472,7 +472,8 @@ static ssize_t reload_store(struct device *dev,
->   	enum ucode_state tmp_ret = UCODE_OK;
->   	int bsp = boot_cpu_data.cpu_index;
->   	unsigned long val;
-> -	ssize_t ret = 0;
-> +	int load_ret = -1;
-> +	ssize_t ret;
->   
->   	ret = kstrtoul(buf, 0, &val);
->   	if (ret)
-> @@ -488,20 +489,26 @@ static ssize_t reload_store(struct device *dev,
->   		goto put;
->   
->   	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
-> -	if (tmp_ret != UCODE_NEW)
-> +	if (tmp_ret != UCODE_NEW) {
-> +		ret = size;
->   		goto put;
-> +	}
->   
->   	mutex_lock(&microcode_mutex);
-> -	ret = microcode_reload_late();
-> +	load_ret = microcode_reload_late();
->   	mutex_unlock(&microcode_mutex);
->   
->   put:
->   	cpus_read_unlock();
->   
-> -	if (ret == 0)
-> +	/*
-> +	 * Taint only when loading was successful
-> +	 */
-> +	if (load_ret == 0) {
->   		ret = size;
+On Tue, 2023-01-31 at 12:10 +0000, patchwork-bot+netdevbpf@kernel.org
+wrote:
+> Hello:
+>=20
+> This patch was applied to netdev/net-next.git (master)
+> by Paolo Abeni <pabeni@redhat.com>:
+>=20
+> On Sun, 29 Jan 2023 15:10:44 -0800 you wrote:
+> > Maintainers of specific kernel subsystems are only Cc-ed on their
+> > respective patches, not the entire series. [if all goes well]
+> >=20
+> > These patches are based on linux-next-20230127.
+> >=20
+> >=20
+> >  [PATCH 1/9] Documentation: admin-guide: correct spelling
+> >  [PATCH 2/9] Documentation: driver-api: correct spelling
+> >  [PATCH 3/9] Documentation: hwmon: correct spelling
+> >  [PATCH 4/9] Documentation: networking: correct spelling
+> >  [PATCH 5/9] Documentation: RCU: correct spelling
+> >  [PATCH 6/9] Documentation: scsi/ChangeLog*: correct spelling
+> >  [PATCH 7/9] Documentation: scsi: correct spelling
+> >  [PATCH 8/9] Documentation: sparc: correct spelling
+> >  [PATCH 9/9] Documentation: userspace-api: correct spelling
+> >=20
+> > [...]
+>=20
+> Here is the summary with links:
+>   - [4/9] Documentation: networking: correct spelling
+>     https://git.kernel.org/netdev/net-next/c/a266ef69b890
+>=20
+> You are awesome, thank you!
 
-What about if loading was not successful(load_ret != 0)?
-ret has no chance to be returned as size here and we'll run into the 
-endless update?
+That is just a bot glitch. I actually applied only patch 4/9 to the
+net-next tree. I hope this is not too much scarying/confusing.
 
 Thanks,
--Aubrey
 
-> -
-> -	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
-> +		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
-> +		pr_warn("Microcode late loading tainted the kernel\n");
-> +	}
->   
->   	return ret;
->   }
+Paolo
 
