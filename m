@@ -2,153 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DDD682F00
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F6B682F04
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjAaOQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S232282AbjAaOSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjAaOQh (ORCPT
+        with ESMTP id S229488AbjAaOSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:16:37 -0500
+        Tue, 31 Jan 2023 09:18:09 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C46649554
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:15:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE2F14229
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:17:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675174553;
+        s=mimecast20190719; t=1675174641;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DlcHXaQO4YJH3Te+lxRyNGl+ktaDXyBM2nbmHql0yqk=;
-        b=MIKl9uWbqj9xBP3ys3vf2ljohv9hcP8PLPqIjFEs8fbcUGVzRy1TD0AcEL6C6mM2x9Fu0t
-        ADxAnDMhCaj4BYZ7idf5WZAho5fNVghFx1FwxGf6fJ9qHppKNCxPn+LU2oLxwatK0LpIoL
-        EPCFvajf65uFZvTtcTDLMuS+CVUC6nY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-88-FDsAKCOwOOOYTc43azi_Dg-1; Tue, 31 Jan 2023 09:15:52 -0500
-X-MC-Unique: FDsAKCOwOOOYTc43azi_Dg-1
-Received: by mail-wm1-f71.google.com with SMTP id iz20-20020a05600c555400b003dc53fcc88fso3533469wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:15:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DlcHXaQO4YJH3Te+lxRyNGl+ktaDXyBM2nbmHql0yqk=;
-        b=y/OFzesdjFGkL3bANbG2/Zy5vhCeGNk8OklTeTAzGSPcdj7BJPBCowmLO8B/ZmwE+g
-         SkfGlgUf9rxCP1Y644/upeZnE7ivhiRJwQYmnLwUy9kko3VW2b1eHEnabITtk8J+/eE4
-         C2ym2o1ch3mVnMZDH+2P1q870O3q9IMendlv6GTSFX5Mr2jIX6Hd9vQC5PjLWIvS8zaR
-         pFBRzuKYbPbAZdmGSjskyLo/6VFKp1F41FH8T7PtZ4WEJU2iHBeO/mFxw2UFK6tTIFfF
-         rrIihqFf/jBbSH31t5nfgTk7uI25hAMpts2jXJmHjuo3FIVAC6xHNRvu7u+odyDbZQCw
-         QmPg==
-X-Gm-Message-State: AO0yUKX3XsLTZkMEAqy/jbINmBPuabYUOxW1k0qDBZhbNyM66fRWTEui
-        vPg5I7b7Cw2tZcxTO0sbOuipz/anM/bozdWLzX3bzrVyf/ssKe0ZxrtwlyaE4QHN8GMzQ41OE7s
-        WRKqiCiC13eyiQ8jYiKC9GR1s
-X-Received: by 2002:a7b:c847:0:b0:3dc:53da:329b with SMTP id c7-20020a7bc847000000b003dc53da329bmr9316167wml.17.1675174551203;
-        Tue, 31 Jan 2023 06:15:51 -0800 (PST)
-X-Google-Smtp-Source: AK7set9tJhTCTQiOCCJmRQUEFW0MtCCti9k25veReRKJe5i8NLQaVODOpaIHUBrY+NNTucqf1KkbZg==
-X-Received: by 2002:a7b:c847:0:b0:3dc:53da:329b with SMTP id c7-20020a7bc847000000b003dc53da329bmr9316135wml.17.1675174550848;
-        Tue, 31 Jan 2023 06:15:50 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f0a:ca00:f74f:2017:1617:3ec3? (p200300d82f0aca00f74f201716173ec3.dip0.t-ipconnect.de. [2003:d8:2f0a:ca00:f74f:2017:1617:3ec3])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05600c379000b003dc49e0132asm10585172wmr.1.2023.01.31.06.15.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 06:15:50 -0800 (PST)
-Message-ID: <1a2417bc-f3ac-3e63-a930-bdefaab2578e@redhat.com>
-Date:   Tue, 31 Jan 2023 15:15:49 +0100
+        bh=p81NV/pLtAgoeN44z73Y5tEQhrJ6HcWOfwNUrjvOawY=;
+        b=CiPL4W7fOAx8CFzOKhGYYxaBfTwaTVHXVCpU2MCvnyqWKAovlt7O6TIAX3ltcZCwEBskKM
+        cIWdH0c8/xX/C1Qc7TWCkcKr0rddLUsTiaxP6/+FtIQ3dKoyHylaruEvFOmb4ER4wZmqrR
+        w+gMHc4nKlnIDJlpbe+r9tMrukUaU8k=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-164-XKKSBg5QNLS00GcE8V20fQ-1; Tue, 31 Jan 2023 09:17:20 -0500
+X-MC-Unique: XKKSBg5QNLS00GcE8V20fQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5BE2E1C0A582;
+        Tue, 31 Jan 2023 14:17:19 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.64])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AC7712166B33;
+        Tue, 31 Jan 2023 14:17:18 +0000 (UTC)
+From:   Giuseppe Scrivano <gscrivan@redhat.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Colin Walters <walters@verbum.org>,
+        Aleksa Sarai <cyphar@cyphar.com>, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>, bristot@redhat.com,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexander Larsson <alexl@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, bmasney@redhat.com
+Subject: Re: [PATCH v3 1/2] exec: add PR_HIDE_SELF_EXE prctl
+References: <20230120102512.3195094-1-gscrivan@redhat.com>
+        <20230124015348.6rvic5g6ymsfvj4e@senku> <87h6wgcrv6.fsf@redhat.com>
+        <20230125152847.wr443tggzb3no6mg@senku> <871qnibmqa.fsf@redhat.com>
+        <ceac106b-ddac-4ee6-bfdf-1505cc699eaa@app.fastmail.com>
+        <20230129165812.sqypj6nzam7o33lf@wittgenstein>
+        <e637b476-6cc4-4d7f-bab2-4f623617a8ee@app.fastmail.com>
+        <20230130095324.p2gnsvdnpgfehgqt@wittgenstein>
+        <20230130100602.elyvs6oorfzukjwh@wittgenstein>
+Date:   Tue, 31 Jan 2023 15:17:16 +0100
+In-Reply-To: <20230130100602.elyvs6oorfzukjwh@wittgenstein> (Christian
+        Brauner's message of "Mon, 30 Jan 2023 11:06:02 +0100")
+Message-ID: <875ycmg55f.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH 00/19] mm: Introduce a cgroup to limit the amount of
- locked and pinned memory
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
-        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch
-References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
- <Y9A7kDjm3ZFAttRR@nvidia.com>
- <6369225e-3522-341b-cd20-d95b1f11ea71@redhat.com>
- <Y9kfn4YX59PIxj7+@nvidia.com>
- <2e78d261-9ae9-d203-446e-eaa3c652ca6e@redhat.com>
- <Y9khYwunmC/xdXT9@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Y9khYwunmC/xdXT9@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.23 15:10, Jason Gunthorpe wrote:
-> On Tue, Jan 31, 2023 at 03:06:10PM +0100, David Hildenbrand wrote:
->> On 31.01.23 15:03, Jason Gunthorpe wrote:
->>> On Tue, Jan 31, 2023 at 02:57:20PM +0100, David Hildenbrand wrote:
->>>
->>>>> I'm excited by this series, thanks for making it.
->>>>>
->>>>> The pin accounting has been a long standing problem and cgroups will
->>>>> really help!
->>>>
->>>> Indeed. I'm curious how GUP-fast, pinning the same page multiple times, and
->>>> pinning subpages of larger folios are handled :)
->>>
->>> The same as today. The pinning is done based on the result from GUP,
->>> and we charge every returned struct page.
->>>
->>> So duplicates are counted multiple times, folios are ignored.
->>>
->>> Removing duplicate charges would be costly, it would require storage
->>> to keep track of how many times individual pages have been charged to
->>> each cgroup (eg an xarray indexed by PFN of integers in each cgroup).
->>>
->>> It doesn't seem worth the cost, IMHO.
->>>
->>> We've made alot of investment now with iommufd to remove the most
->>> annoying sources of duplicated pins so it is much less of a problem in
->>> the qemu context at least.
->>
->> Wasn't there the discussion regarding using vfio+io_uring+rdma+$whatever on
->> a VM and requiring multiple times the VM size as memlock limit?
-> 
-> Yes, but iommufd gives us some more options to mitigate this.
-> 
-> eg it makes some of logical sense to point RDMA at the iommufd page
-> table that is already pinned when trying to DMA from guest memory, in
-> this case it could ride on the existing pin.
+Christian Brauner <brauner@kernel.org> writes:
 
-Right, I suspect some issue is that the address space layout for the 
-RDMA device might be completely different. But I'm no expert on IOMMUs 
-at all :)
+> On Mon, Jan 30, 2023 at 10:53:31AM +0100, Christian Brauner wrote:
+>> On Sun, Jan 29, 2023 at 01:12:45PM -0500, Colin Walters wrote:
+>> > 
+>> > 
+>> > On Sun, Jan 29, 2023, at 11:58 AM, Christian Brauner wrote:
+>> > > On Sun, Jan 29, 2023 at 08:59:32AM -0500, Colin Walters wrote:
+>> > >> 
+>> > >> 
+>> > >> On Wed, Jan 25, 2023, at 11:30 AM, Giuseppe Scrivano wrote:
+>> > >> > 
+>> > >> > After reading some comments on the LWN.net article, I wonder if
+>> > >> > PR_HIDE_SELF_EXE should apply to CAP_SYS_ADMIN in the initial user
+>> > >> > namespace or if in this case root should keep the privilege to inspect
+>> > >> > the binary of a process.  If a container runs with that many privileges
+>> > >> > then it has already other ways to damage the host anyway.
+>> > >> 
+>> > >> Right, that's what I was trying to express with the "make it
+>> > >> work the same as map_files".  Hiding the entry entirely even
+>> > >> for initial-namespace-root (real root) seems like it's going to
+>> > >> potentially confuse profiling/tracing/debugging tools for no
+>> > >> good reason.
+>> > >
+>> > > If this can be circumvented via CAP_SYS_ADMIN 
+>> > 
+>> > To be clear, I'm proposing CAP_SYS_ADMIN in the current user
+>> > namespace at the time of the prctl().  (Or if keeping around a
+>> > reference just for this is too problematic, perhaps hardcoding to
+>> > the init ns)
+>> 
+>> Oh no, I fully understand. The point was that the userspace fix protects
+>> even against attackers with CAP_SYS_ADMIN in init_user_ns. And that was
+>> important back then and is still relevant today for some workloads.
+>> 
+>> For unprivileged containers where host and container are separate by a
+>> meaningful user namespace boundary this whole mitigation is irrelevant
+>> as the binary can't be overwritten.
+>> 
+>> > 
+>> > A process with CAP_SYS_ADMIN in a child namespace would still not be able to read the binary.
+>> > 
+>> > > then this mitigation
+>> > > becomes immediately way less interesting because the userspace
+>> > > mitigation we came up with protects against CAP_SYS_ADMIN as well
+>> > > without any regression risk. 
+>> > 
+>> > The userspace mitigation here being "clone self to memfd"?  But that's a sufficiently ugly workaround that it's created new problems; see https://lwn.net/Articles/918106/
+>> 
+>> But this is a problem with the memfd api not with the fix. Following the
+>> thread the ability to create executable memfds will stay around. As it
+>> should be given how long this has been supported. And they have backward
+>> compatibility in mind which is great.
+>
+> Following up from yesterday's promise to check with the criu org I'm
+> part of: this is going to break criu unforunately as it dumps (and
+> restores) /proc/self/exe. Even with an escape hatch we'd still risk
+> breaking it. Whereas again, the memfd solution doesn't cause those
+> issues.
+>
+> Don't get me wrong it's pretty obvious that I was pretty supportive of
+> this fix especially because it looked rather simple but this is turning
+> out to be less simple than we tought. I don't think that this is worth
+> it given the functioning fixes we already have.
+>
+> The good thing is that - even if it will take a longer - that Aleksa's
+> patchset will provide a more general solution by making it possible for
+> runc/crun/lxc to open the target binary with a restricted upgrade mask
+> making it impossible to open the binary read-write again. This won't
+> break criu and will fix this issue and is generally useful.
 
-I do understand that at least multiple VFIO containers could benefit by 
-only pinning once (IIUC that mgiht have been an issue?).
+I was not aware that running with CAP_SYS_ADMIN in the initial userns
+was considered as a use case, but in this case don't we need to protect
+/proc/$PID/map_files as well or do we rely only on randomize_va_space? 
+It is a more difficult to guess the name but we can still exec these
+files and grab a reference to them.
 
-> 
->> Would it be the same now, just that we need multiple times the pin
->> limit?
-> 
-> Yes
+The current patch I've proposed is probably a too big hammer for the
+small issue we really have:
 
-Okay, thanks.
+other processes from the container are already blocked by PR_SET_DUMPABLE unless
+CAP_SYS_PTRACE is granted; but if CAP_SYS_PTRACE is granted then it seems
+already vulnerable today since processes from the container can just
+read the /proc/PID/map_files files without even requiring the exec trick.
 
+So the only hole left, that I can see, is that the container runtime
+can be tricked to exec /proc/self/exe (or /proc/self/map_files/*) and
+from there open a reference to the binary.
 
-It's all still a big improvement, because I also asked for TDX 
-restrictedmem to be accounted somehow as unmovable.
+Could we just restrict the usage to the current thread group?  That
+won't affect in any way other processes.
 
--- 
-Thanks,
+The patch won't be too much more complicated, we just need to amend the
+following fix:
 
-David / dhildenb
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index e9127084b82a..2f5c5ed2dae8 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -1723,6 +1723,7 @@ static int proc_exe_link(struct dentry *dentry, struct path *exe_path)
+ {
+        struct task_struct *task;
+        struct file *exe_file;
++       bool is_same_tgroup;
+        long hide_self_exe;
+ 
+        task = get_proc_task(d_inode(dentry));
+@@ -1730,8 +1731,9 @@ static int proc_exe_link(struct dentry *dentry, struct path *exe_path)
+                return -ENOENT;
+        exe_file = get_task_exe_file(task);
+        hide_self_exe = task_hide_self_exe(task);
++       is_same_tgroup = same_thread_group(current, task);
+        put_task_struct(task);
+-       if (hide_self_exe)
++       if (hide_self_exe && is_same_tgroup)
+                return -EPERM;
+        if (exe_file) {
+                *exe_path = exe_file->f_path;
+
+Would that be sufficient or are there other ways to attack it?
+
+Given the premise about CAP_SYS_ADMIN (and even more loosen
+CAP_CHECKPOINT_RESTORE in the *current* user namespace), I think we
+probably need a similar protection fo /proc/PID/map_files.
+
+Regards,
+Giuseppe
 
