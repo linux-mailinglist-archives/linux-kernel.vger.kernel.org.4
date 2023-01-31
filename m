@@ -2,128 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FDA683AAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E412683AAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjAaXpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 18:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S230522AbjAaXqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 18:46:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjAaXo7 (ORCPT
+        with ESMTP id S230508AbjAaXqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 18:44:59 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597714ED07;
-        Tue, 31 Jan 2023 15:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675208698; x=1706744698;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=by5qRdZTxe0QTHHwMBIcWAw1uHYiJKW6XwzKCf+gNJo=;
-  b=A15JtwrfA3ghpprrnQuDEzlAjBxflazXs/OwFmuqPrLseaL5kvvX9TUC
-   hcVg4qSwL7O22utSKEyxe3jPHm4jTYOfc5opkI6VAve5cq7z/8pOyHnxm
-   8uExTXO0KAuv5mUoWZNb3/ky8tUH6p0ECJcHpWX632ctFmpQLpxiNbDxg
-   NOAFDZsPhIiTUcKzexkN7HzfkOr9Xiw+n8Ie08fOmQ7RZifj0gq/zXw9a
-   nM+y5UpSdEwVMDMKujD/83y79Do9wwGm6AYZ6PJtd4HRtFbRpz2EkBgLm
-   //FwtzC6jvo98SM/tkIJtbICRO1gPnRm049yM1hXxneWV4oYkokDlQpA6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="390360446"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="390360446"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 15:44:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="773192036"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="773192036"
-Received: from jithujos.sc.intel.com ([172.25.103.66])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 15:44:55 -0800
-From:   Jithu Joseph <jithu.joseph@intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, rostedt@goodmis.org,
-        jithu.joseph@intel.com, ashok.raj@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
-        sohil.mehta@intel.com
-Subject: [PATCH 5/5] platform/x86/intel/ifs: Trace support for array test
-Date:   Tue, 31 Jan 2023 15:43:02 -0800
-Message-Id: <20230131234302.3997223-6-jithu.joseph@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230131234302.3997223-1-jithu.joseph@intel.com>
-References: <20230131234302.3997223-1-jithu.joseph@intel.com>
+        Tue, 31 Jan 2023 18:46:38 -0500
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A76C4FCC0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:46:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1675208788; x=1706744788;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/2/tPt2lOPGt+BK5mB0mLm3FeAsziHvCuFj9uXyq6js=;
+  b=QRAgLE0r56dZnZYMnIr8/u679CwyUu98aucRZR8eTl1HKFJCZyLWSDta
+   Se/M1ZPbrviL64z6QvJiWWXjOtP2wu2a5JlGmETEHg1kLvp87cHT3sJu2
+   id2nmbB8E5NcKgVtArtd+TBdD1uKnnmzm0BGee5G3g86OvssptqNDra2o
+   17K6qVdHmyJF5ETHu0FoZWw/54TBsPEEEDpC2csjrtfavzZ8WVJA7O00z
+   MzR6mAmGJACiba+a6Hck82WX56VO0ixXla/bheIJq+ko/ab+bhdeMc4pu
+   TH990E6ajvX8bVBu2FChc67RltvZJKpFc7silllBaWlkVTLjtIOthVYTb
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,261,1669046400"; 
+   d="scan'208";a="222011967"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 01 Feb 2023 07:45:47 +0800
+IronPort-SDR: xawAdefHAW4EOUsoci011izY4NK95B9nDQ6l7AbVWh5vQCr0B0e8m1PHh9DXUw+xUhAy0VizPR
+ GjEUS9oeOeZ/8EnX6PEkUJEYD85UP1kCg9/fJPUUkdOwiOMlbZdVL3NDvSinFyHb7UK05ssvx+
+ 4QK38V2WfTJgApNAiGtKxoArApqs70y5mw8souYJTk2B6obvuPbxPFHUlFUnUvU//ZeQwxPnSH
+ 7LXOewOlUPPM5Mfg+QJdOILaOG+9LKjKF+NGKE1bN5gU2e/HHSGycl+r0+uM5wGyoVzrmFAz+s
+ 4ac=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Jan 2023 15:03:12 -0800
+IronPort-SDR: hYX6ILSbjbdXZxPA5OGKQsFwy+duiN2oND7ylrJu1PXb0gpqkNSVCUqAxETg+YT2iPuoGJlBkN
+ iCcJ0m6iBpqbQcIDQLtYiaHqiqXR1UvY90FQobx+jhdq5zFTX7BhXUioyB3/dtarEHODTh1YJf
+ 800ODWMLhy2bGbq1QcRNNJmca6ZJL4u7zu0JdQiuqHS0AoV+55gtObQC3hdMorl6IW+y/V5VTg
+ us/QvBkhRwfelqrcTIQgftkmEmjLXeyfjD3/EWaPkODUxR01F55hlHHe7FVqOme7CMdEPuqo11
+ Emc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Jan 2023 15:45:48 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P61rq4Zqdz1RwqL
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:45:47 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1675208746; x=1677800747; bh=/2/tPt2lOPGt+BK5mB0mLm3FeAsziHvCuFj
+        9uXyq6js=; b=SjFPtlBDUTKaavmkZsHhXDgF2saakxFPzPOfEvKPZhIwiGYkY4d
+        tAxvGT744W3GRyosiUpyWOrNiDvegl+iVr6In4cIc3ukb5KiM+ZfLEb1sRX5sHk8
+        UfW6vbYh7lN8YqbMQwRviZ30b51E4Fa8sSZm+XfLrG3TkgQCzLn8fspPITRL1Tjt
+        703GixhO8GNDUaLqLhQaPngPSyr7o/V3c5wZ2V0SXZJjoFj/h8NpVUXl8s5m3y3V
+        3me1sBujNgv+UFjG40Um85SD04RTPnEFbsudJjXdi9039Zt69ogGpyYLgCGoHN6x
+        MEdWEfngSyKf8VfUczz4wpncbRGToUtPenA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id G6PKSpyieDON for <linux-kernel@vger.kernel.org>;
+        Tue, 31 Jan 2023 15:45:46 -0800 (PST)
+Received: from [10.89.81.171] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.81.171])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P61rn6BcPz1RvLy;
+        Tue, 31 Jan 2023 15:45:45 -0800 (PST)
+Message-ID: <ec536f74-00d7-1f25-e903-278809e33ed9@opensource.wdc.com>
+Date:   Wed, 1 Feb 2023 08:45:43 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] libata: clean up some inconsistent indenting
+Content-Language: en-US
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20230131085431.30549-1-jiapeng.chong@linux.alibaba.com>
+ <d8d117bf-4ab1-3473-85e2-00f1b1a85cba@opensource.wdc.com>
+ <d5a59ca8-1b17-9cf2-80d0-3e267e558fd5@omp.ru>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <d5a59ca8-1b17-9cf2-80d0-3e267e558fd5@omp.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable tracing support in array test flow.
+On 2023/01/31 21:33, Sergey Shtylyov wrote:
+> On 1/31/23 2:26 PM, Damien Le Moal wrote:
+> [...]
+>>> No functional modification involved.
+>>>
+>>> drivers/ata/pata_serverworks.c:443 serverworks_init_one() warn: inconsistent indenting.
+>>>
+>>> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>>> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3905
+>>> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+>>> ---
+>>>  drivers/ata/pata_serverworks.c | 7 +++----
+>>>  1 file changed, 3 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/ata/pata_serverworks.c b/drivers/ata/pata_serverworks.c
+>>> index c0bc4af0d196..c6bd9e95d4e8 100644
+>>> --- a/drivers/ata/pata_serverworks.c
+>>> +++ b/drivers/ata/pata_serverworks.c
+>>> @@ -434,10 +434,9 @@ static int serverworks_init_one(struct pci_dev *pdev, const struct pci_device_id
+>>>  		 (pdev->device == PCI_DEVICE_ID_SERVERWORKS_CSB6IDE) ||
+>>>  		 (pdev->device == PCI_DEVICE_ID_SERVERWORKS_CSB6IDE2)) {
+>>>  
+>>> -		 /* If the returned btr is the newer revision then
+>>> -		    select the right info block */
+>>> -		 if (rc == 3)
+>>> -		 	ppi[0] = &info[3];
+>>> +		/* If the returned btr is the newer revision then select the right info block */
+>>
+>> Very long line. Please make that a proper multi-line comment.
+> 
+>    Perhaps the material of a separate patch?
 
-Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
----
- include/trace/events/intel_ifs.h         | 27 ++++++++++++++++++++++++
- drivers/platform/x86/intel/ifs/runtest.c |  1 +
- 2 files changed, 28 insertions(+)
+Since this patch touches this comment, the fix should be correct from the start.
+I do not see the point of having a different patch fixing a patch that was ideal
+to start with...
 
-diff --git a/include/trace/events/intel_ifs.h b/include/trace/events/intel_ifs.h
-index d7353024016c..db43df4139a2 100644
---- a/include/trace/events/intel_ifs.h
-+++ b/include/trace/events/intel_ifs.h
-@@ -35,6 +35,33 @@ TRACE_EVENT(ifs_status,
- 		__entry->status)
- );
- 
-+TRACE_EVENT(ifs_array,
-+
-+	TP_PROTO(int cpu, union ifs_array activate, union ifs_array status),
-+
-+	TP_ARGS(cpu, activate, status),
-+
-+	TP_STRUCT__entry(
-+		__field(	u64,	status	)
-+		__field(	int,	cpu	)
-+		__field(	u32,	arrays	)
-+		__field(	u16,	bank	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->cpu	= cpu;
-+		__entry->arrays	= activate.array_bitmask;
-+		__entry->bank	= activate.array_bank;
-+		__entry->status	= status.data;
-+	),
-+
-+	TP_printk("cpu: %d, array_list: %.8x, array_bank: %.4x, status: %.16llx",
-+		__entry->cpu,
-+		__entry->arrays,
-+		__entry->bank,
-+		__entry->status)
-+);
-+
- #endif /* _TRACE_IFS_H */
- 
- /* This part must be outside protection */
-diff --git a/drivers/platform/x86/intel/ifs/runtest.c b/drivers/platform/x86/intel/ifs/runtest.c
-index ec0ceb6b5890..4fd80d91ea29 100644
---- a/drivers/platform/x86/intel/ifs/runtest.c
-+++ b/drivers/platform/x86/intel/ifs/runtest.c
-@@ -301,6 +301,7 @@ static void ifs_array_test_core(int cpu, struct device *dev)
- 		stop_core_cpuslocked(cpu, do_array_test, msrvals);
- 		status.data = msrvals[1];
- 
-+		trace_ifs_array(cpu, activate, status);
- 		if (status.ctrl_result)
- 			break;
- 
+> 
+>> And the patch title should be:
+>>
+>> ata: pata_serverworks: clean up indentation
+> 
+>    Yes!
+> 
+> [...]
+> 
+> MBR, Sergey
+
 -- 
-2.25.1
+Damien Le Moal
+Western Digital Research
 
