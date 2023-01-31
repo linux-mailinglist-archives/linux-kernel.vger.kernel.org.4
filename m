@@ -2,221 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4D76835A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC11E6835A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjAaSuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
+        id S231454AbjAaSuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjAaSuJ (ORCPT
+        with ESMTP id S231743AbjAaSuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:50:09 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2086.outbound.protection.outlook.com [40.107.100.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FDC5957F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:49:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PMyVsJih6PgTExgg23NK5peHY9qNm8IomGBMiXzmODUr6yA9+lfOPSF9DehucTnA+65+xV04f+S29twEmJ8gYWenAS6tTd99qat5ukP0zCqMEiyMU+DVMVPNYcQV/lv+gd41K1y/abv8zfZLUVS0f02oJoxLfIEvkBE2aYrUGrfhs8nnikc+qCL4TCnhz4suWM+SCTKjTCAWQWgEVe2T5o8TGzRAc+rLqC/FwEhhzDdC541aUAiRLhh3EhU8gsUBPLY4zS35L2C+ezXmJnzIYLM6YAdpReooiKP6kPljCtQBfr+L4RtLt5W+ngQPXHYLUyqAnXpaqgj7qmR3HndyjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9xDy7rYf6hdvXUDXA5sBnAtUdZHSSRiDjCTSV8V7nwM=;
- b=NMLjFrAoFFWIgTLTA6yJyYpdaeOayfatSzm6JPEW/ey7WIqHbDwIL+uLWup2BL+DICwQMZa6X2FFNQJqD4TS8mIKlklZeKPwCxsXkClUPKQXEhuIoNU4hWYrRo4mw88PAJkQIUYJfGVYxKCUM8qagDyh9v7SAhMwteMe6u/10611HI/xUd+jwBEmAs18VicMjs+KiKGWSc/Ajs2Xuikq2EsWxmKPZCrGFNx98p/itz0Ln1NLtQHS4cxmxYz07PfxGGXqWYfU0I/0zpSnaqa2+b1nlFPMeLtpQtZ40hF554z5PMhzkDWOrqHf5v3WJMR2u2z2XxxaienWFr/VlIqOTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9xDy7rYf6hdvXUDXA5sBnAtUdZHSSRiDjCTSV8V7nwM=;
- b=jSjfmxY4bUGi8bbs7iadAavX7EV/bTQBlW3x9fcDPdoVHMLcTxjyxcO62SQj6iO2nbHYCi9L4+yZtrEFCk5ky35LWbQ5uddeFG4GZwziwpvmou5Gent5bpPllZPOQhgyHEx06gInIg4IPDOOpaw6y7lwKxHMNEWV3rNXDoU1+yI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by PH7PR12MB6420.namprd12.prod.outlook.com (2603:10b6:510:1fc::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Tue, 31 Jan
- 2023 18:49:57 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::6cc0:9c7a:bd00:441c]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::6cc0:9c7a:bd00:441c%9]) with mapi id 15.20.6043.038; Tue, 31 Jan 2023
- 18:49:56 +0000
-Message-ID: <194d8448-dde2-3452-7ccf-4e88fddbff75@amd.com>
-Date:   Tue, 31 Jan 2023 12:49:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 3/8] x86/psp: Register PSP platform device when ASP
- table is present
-Content-Language: en-US
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-References: <20230123152250.26413-1-jpiotrowski@linux.microsoft.com>
- <20230123152250.26413-4-jpiotrowski@linux.microsoft.com>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230123152250.26413-4-jpiotrowski@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA1P222CA0065.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:2c1::16) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Tue, 31 Jan 2023 13:50:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AF644B5;
+        Tue, 31 Jan 2023 10:50:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4D866163F;
+        Tue, 31 Jan 2023 18:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01758C433EF;
+        Tue, 31 Jan 2023 18:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675191003;
+        bh=5fOonaijD0ytDNAFYXSlNMDiCm3o9lQJU786ZKrYCsw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Il1wmarf1X1ubUXC9Bbuv6CUpF30gscwf/hyGcItq06IAN0fG0H16FZqo+2dkL+a4
+         0BHKWw/3rgzzf/n7t51Azqpy6ZfvBftMWa2C8TeeBplDvEz0tVRclQRaE7I0YRRiSr
+         w/EnaC2U7cFpgTT5vMYgklKhyDpkXNITUrSM/dPTgvqC2aJEyLPABJulvyN9Dta/Zn
+         4cAFTXPPQoz5ETj7C5BUtl2fsLx9fNhwTdqhdySK3H29u3MbpbgPpM5oeqF0mwwLH4
+         tvriMMAXaAlySiVzZvw5wsb+tjTwYTf0mJDFJnE7F0S2hY3B+slFXlaamUBAUUTM0/
+         +35bbii093Vlg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8A0655C0510; Tue, 31 Jan 2023 10:50:02 -0800 (PST)
+Date:   Tue, 31 Jan 2023 10:50:02 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
+        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
+        quic_neeraju@quicinc.com, urezki@gmail.com
+Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
+ processing
+Message-ID: <20230131185002.GV2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230108150425.426f2861e9db1152fa84508f@kernel.org>
+ <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
+ <20230110000732.GD4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110095450.2cb4c875f95459e3a4e7dcf1@kernel.org>
+ <20230110010953.GF4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230110231721.ed737bcc46ee6b8572d7cdff@kernel.org>
+ <20230110150259.GO4028633@paulmck-ThinkPad-P17-Gen-1>
+ <20230126192614.GA691808@paulmck-ThinkPad-P17-Gen-1>
+ <20230127145731.ece1ada974d305dae3536bd2@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|PH7PR12MB6420:EE_
-X-MS-Office365-Filtering-Correlation-Id: ef4ef536-dbb5-4ad9-7db7-08db03bbf28f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4emxBHHWH2+G88G224Dk9tDie5IE5ipM3aRzY7hV6+Y2p3HrCzAzyAU/V9CuprWgcoZSO2tvCHV9hB2I4s7GeDwy72X3N4QnnCU3gIigmtiqQCXoobH24rS7186uqXnV9eh65c3gByUIqUsKwMBTUb/j5Xc4+IA/dREDabXyBeVQSiWwFiqyWfcG40VM6Sm6QXWhTt16JZEskRKz+OLTO4YgeFWfF3H7mI8K70WhRdS7n0fVjnxpLlT2ixyREinETh98uiBFiVXTDpoVWxZSLojmixwKvg1/vXcsD6jb53roDp0C5a3CfEZZGY+IOgtsdPIjEE6ixr380KAw0esnNIdd02WWbcD41WHIYN0f+dCBBad6zzgmwXpG436mfvzBk5c92mHGWtCCivNwAR5ippAiZG/z8n6VFgg1orcinvPde6cFKzSNirzSt87R9J5pCWeiIEqfYnx06O+8DEuU/hyP3JcjLnkh9i+GbhqKhiuQpxoXVhhBPoMDHAI5ulUqawF50XG8JJZEPwYvJoq7HdFEuj4pLX+XsuzL/qjISsPV8ActRSLqAqQdhUitcaIbc46zKLOG4sdV1BRP0mVP8YqEOzJqo8lPSK/tPlBXg4wpnlyJaEo3Um83vy6mPqBzIx8xroQi1DgBM1Gi+FEA+6qLq8Tj1iUQOblFxSQ0zScu9TGgqnoW8peOG8pQDrBrb6HcYa6s0yQUqrLzFN/Cp//ORaw77PqIoasvO1bniAg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(346002)(136003)(366004)(376002)(451199018)(41300700001)(4326008)(31686004)(83380400001)(66946007)(66556008)(66476007)(8676002)(316002)(8936002)(36756003)(186003)(6512007)(26005)(2906002)(5660300002)(54906003)(478600001)(6506007)(53546011)(31696002)(86362001)(38100700002)(6486002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnJYc0ZDZjdFeGU3R0RIM3Z6cVJ0UXRMdHVFMXNtM1llZ01UTzVGbmxlMFFH?=
- =?utf-8?B?MUpIZG9tSkpZNXVwaXh0R0t4U1U4bkNsVjVEVVdVV0wwOTJoSi8xaXZvVWcw?=
- =?utf-8?B?Q0pSTVZQR1gxcy9zcHA4OTY0S3lqTUdNY3VObG5iVUJ2QjNOaXJBWU83Q29X?=
- =?utf-8?B?SUR1V1dUczF1MzhTWWkvUng1aHhpWWVEd0RFZUkvR2Z0NWlkazBYUzAybVlh?=
- =?utf-8?B?b05LRFZQdDZqVVBjRkJ1c0M4TVA2Y1lDOURscmlaVlJSQ0FoYlVzSS9iUE5D?=
- =?utf-8?B?Umdqc01EUUp6bzRCbmlJOUZzMStqR3gxS3FyWXg4R3BSNnl4Q1VZYk1PZ2Jj?=
- =?utf-8?B?Yk8rVHduZzdoQXZXVG1GdWo1ZkhtdGthRTVEYWp0R2FrN2R3RERET244aWg2?=
- =?utf-8?B?SXVoNEh1U05sZUZsU2ZkcG9VMjF4b0tlQ000dEJHb3lQZHZKQ2lrODkybmw0?=
- =?utf-8?B?OHNJSWY4R2xpR2tXeUxIb0RGUEI0aDVIRXMxL0oxeEg2bklCRW5LeEZtcHFX?=
- =?utf-8?B?TGhEdlJUNTdzRitUaHc5dWw3dDE3U3VuNG5pQnUzRVYrUHY1eWdxUWpna2VC?=
- =?utf-8?B?NVpwZ29yQUE3ZEdITStoYXY0Rm05YWNxbFVWV1o3ZlErTmJtaFdZbDVTNGZ5?=
- =?utf-8?B?YklpU3ZUYWF6cFRUZU41eUwvblAyM2NlNFU3OFNtOVJsYzJyZkpNSjgyMjJB?=
- =?utf-8?B?RUR3ZFJ6Z3FvRUgzbVRDdThQampvTUpUMEczL0VCbGZta1QwSFN2ZUp3cHFI?=
- =?utf-8?B?U3VDdG9Ma3VHQVRZUG1yYlZHa1BNcEN4VjEzbDg1bmhjeGhvTjFTSUMwSS9U?=
- =?utf-8?B?T0U0TnpyYkJjSjBZWnM1djVzRUVxTktKd2ovSE5DUmpUMzdoZFpKU1NEd2xl?=
- =?utf-8?B?ODUyMXRzRURYTU1RL2lXQytkQ1Z3M0ZHdE9wdEcvK0QyYnhkb3k5TkNSUXhO?=
- =?utf-8?B?V1FuYnh0cTNlMXVHV3M4aU5lb2tyUnUzZEZCOCs4VzRPaCtnZ2lTMUgydGNM?=
- =?utf-8?B?YXNGRUlVRlZCS0Vpa0d3V2hsaWZFZi90aW9mc2Y2Z1dwYnpvM0lUOHpFMXRT?=
- =?utf-8?B?cTRoTEQ2SlNRZXVaa2NFUmNaVlN4aEZ6VE96bk45bkVZY29XczhqVzBTWFBU?=
- =?utf-8?B?QWFQaGJRTWhOZGhTNnV3NG5ySVUxTWx0Smd1RUdlbkZSQ2NjN3V1bFRia0VG?=
- =?utf-8?B?dEIxdlRVMjl0VVpJVVpnMitMUWN1ZFVMZmdGSnlDeTc2bGwraWdmUjYzU2RQ?=
- =?utf-8?B?NlgrSisydkh4cjlrVFhBSzVRQ3B0Z0c5bEx3WTJCcS9OMGNGMnpHNkdhTW5a?=
- =?utf-8?B?YmxLeEdWVDJWL1JvWEdBY2YrL29uZnJqV01XWjNMN2RRM2U3SFVuQUN4TFlV?=
- =?utf-8?B?UE5ob2NacGRyTDJPaEhFM0xKSjZrZUZwTzRQY3AyQWhha3lqSWg4d1RmYjB2?=
- =?utf-8?B?amk3aVhtTkI4S2JwOU1uZjZWSTVKWE94bS95UmxKbUh1QUdyRHRhK3lYOUc0?=
- =?utf-8?B?TVhpNUUzcm9Hc2FiczVRYWQ1aTVVejhiNlM2UGVKRHlmM282YjV2YzhVc2RJ?=
- =?utf-8?B?QUhSUFlGWXRpaW4zYkdBVGZBMDhieGpDV0pBMjJEOG9rUDZlRzJydmIzMWNZ?=
- =?utf-8?B?MitFUFhMVk43R0NHbGNIdzlXYXBpQ3JzcUV1RFVJOWVKVHMzNURDRFJtVkhm?=
- =?utf-8?B?NVVhYURyUndtVCtONTR4VS9odUdhd3NVdDZwYmh0OThXR0I4bVBQVENYK1Fl?=
- =?utf-8?B?eHVhbWNQVm8rOUpydGhwTlI4ekh2dlRQbThrTHVsUW54ZUVZRS9aYUVQNzI1?=
- =?utf-8?B?YkVTQ2s2Tlhtcmt5TDI1cjhkUzNHbElTMjhQelNYcFl4T3dUaklPRlhmOWpN?=
- =?utf-8?B?YWowZStlRmlXeGNxNUdrSTM1UzhEcTY5RmlpNWdkVUowQlBsYStrdWhLOUg1?=
- =?utf-8?B?UFZWL2xvRm5jN1lmWVl6aVFYcDdnLzliU1RoUmUyTkg2NXVNUmNOMWhTNWJG?=
- =?utf-8?B?ODhweWwwU0xTNE9sckRmVjRhUFVjSzBKQUh4dmNtMU4zci8zK0pWdlVIOGYw?=
- =?utf-8?B?QTVNMEttWXhwZ2hmUzBRYVFJMnlHbEduaGI5a1YxYzRMeDMzMllUMDZtN09N?=
- =?utf-8?Q?xuZKfwiqV3T84x5rchECINx/6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef4ef536-dbb5-4ad9-7db7-08db03bbf28f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 18:49:56.7890
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DGpTaWmZM77Sw0Q0wQoJQpjIgAUSZzovDazYBS7xKQyRZdkx09Jz7dwq2MVf3FgvmHgS1jzy47R30Poekep2TQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6420
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127145731.ece1ada974d305dae3536bd2@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/23/23 09:22, Jeremi Piotrowski wrote:
-> The ASP table contains the memory location of the register window for
-> communication with the Platform Security Processor. The device is not
-> exposed as an acpi node, so it is necessary to probe for the table and
-> register a platform_device to represent it in the kernel.
+On Fri, Jan 27, 2023 at 02:57:31PM +0900, Masami Hiramatsu wrote:
+> On Thu, 26 Jan 2023 11:26:14 -0800
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
 > 
-> At least conceptually, the same PSP may be exposed on the PCIe bus as
-> well, in which case it would be necessary to choose whether to use a PCI
-> BAR or the register window defined in ASPT for communication. There is
-> no advantage to using the ACPI and there are no known bare-metal systems
-> that expose the ASP table, so device registration is restricted to the
-> only systems known to provide an ASPT: Hyper-V VMs. Hyper-V VMs also do
-> not expose the PSP over PCIe.
+> > On Tue, Jan 10, 2023 at 07:02:59AM -0800, Paul E. McKenney wrote:
+> > > On Tue, Jan 10, 2023 at 11:17:21PM +0900, Masami Hiramatsu wrote:
+> > > > On Mon, 9 Jan 2023 17:09:53 -0800
+> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > 
+> > > > > On Tue, Jan 10, 2023 at 09:54:50AM +0900, Masami Hiramatsu wrote:
+> > > > > > On Mon, 9 Jan 2023 16:07:32 -0800
+> > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > > > 
+> > > > > > > On Tue, Jan 10, 2023 at 08:56:36AM +0900, Masami Hiramatsu wrote:
+> > > > > > > > On Sun, 8 Jan 2023 20:25:01 -0800
+> > > > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > > > > > 
+> > > > > > > > > On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
+> > > > > > > > > > On Sat, 7 Jan 2023 08:22:02 -0800
+> > > > > > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > > > > > > > 
+> > > > > > > > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
+> > > > > > > > > > > > On Wed, 4 Jan 2023 16:58:38 -0800
+> > > > > > > > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > > > > > > > > > > > 
+> > > > > > > > > > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
+> > > > > > > > > > > > > containing kernel boot parameters to be embedded into an initrd or into
+> > > > > > > > > > > > > the kernel itself.  This can be extremely useful when deploying kernels
+> > > > > > > > > > > > > in cases where some of the boot parameters depend on the kernel version
+> > > > > > > > > > > > > rather than on the server hardware, firmware, or workload.
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
+> > > > > > > > > > > > > order to cause the kernel to look for the embedded bootconfig file,
+> > > > > > > > > > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
+> > > > > > > > > > > > > into that file.
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
+> > > > > > > > > > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
+> > > > > > > > > > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
+> > > > > > > > > > > > > for the embedded bootconfig file even when the "bootconfig" kernel
+> > > > > > > > > > > > > parameter is omitted.  This permits kernel-version-dependent kernel
+> > > > > > > > > > > > > boot parameters to be embedded into the kernel image without the need to
+> > > > > > > > > > > > > (for example) update large numbers of boot loaders.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > I like this because this is a simple solution. We have another option
+> > > > > > > > > > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
+> > > > > > > > > > > > bootloader. Thus, it is better to have this option so that user can
+> > > > > > > > > > > > always enable bootconfig.
+> > > > > > > > > > > 
+> > > > > > > > > > > Glad you like it!
+> > > > > > > > > > > 
+> > > > > > > > > > > In addition, if the help text is accurate, another shortcoming of
+> > > > > > > > > > > CONFIG_CMDLINE is that its semantics vary from one architecture to
+> > > > > > > > > > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
+> > > > > > > > > > > parameters, and others differ in the order in which the parameters
+> > > > > > > > > > > are processed.
+> > > > > > > > > > 
+> > > > > > > > > > Yes, that differences confuse us...
+> > > > > > > > > 
+> > > > > > > > > I am glad that it is not just me.  ;-)
+> > > > > > > > > 
+> > > > > > > > > I will add words to that effect to the commit log.
+> > > > > > > > > 
+> > > > > > > > > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > > > > > > > > > 
+> > > > > > > > > > > Thank you!
+> > > > > > > > > > > 
+> > > > > > > > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
+> > > > > > > > > > > > (or at least recommend to enable this)
+> > > > > > > > > > > 
+> > > > > > > > > > > Like this?
+> > > > > > > > > > 
+> > > > > > > > > > Yes! Thanks.
+> > > > > > > > > > 
+> > > > > > > > > > > 
+> > > > > > > > > > > 							Thanx, Paul
+> > > > > > > > > > > 
+> > > > > > > > > > > ------------------------------------------------------------------------
+> > > > > > > > > > > 
+> > > > > > > > > > > commit d09a1505c51a70da38b34ac38062977299aef742
+> > > > > > > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > > > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
+> > > > > > > > > > > 
+> > > > > > > > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> > > > > > > > > > >     
+> > > > > > > > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
+> > > > > > > > > > >     will normally be to unconditionally provide the specified kernel-boot
+> > > > > > > > > > >     arguments to the kernel, as opposed to requiring a separately provided
+> > > > > > > > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
+> > > > > > > > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
+> > > > > > > > > > >     
+> > > > > > > > > > >     The old semantics may be obtained by manually overriding this default.
+> > > > > > > > > > >     
+> > > > > > > > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > > > > > > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > > > > > > > > 
+> > > > > > > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > > > > > > > 
+> > > > > > > > > Applied, thank you!
+> > > > > > > > 
+> > > > > > > > Paul, just for confirmation, have you picked these patches on your tree?
+> > > > > > > 
+> > > > > > > I have, but if you would prefer to take them, just let me know when you
+> > > > > > > have pulled them in.  It is easy for me to drop them.
+> > > > > > > 
+> > > > > > > Here they are in the -rcu tree:
+> > > > > > > 
+> > > > > > > 3d9ccc4a8b56e bootconfig: Allow forcing unconditional bootconfig processing
+> > > > > > > 68b920592ff67 bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
+> > > > > > > 
+> > > > > > > git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+> > > > > > 
+> > > > > > Yeah, if it's not hurry, let me pick those to linux-trace tree
+> > > > > > (bootconfig/for-next). I would like to consolidate the bootconfig
+> > > > > > updates on my tree.
+> > > > > 
+> > > > > Please go ahead and grab them.  Just out of curiosity, are they in time
+> > > > > for the upcoming v6.3 merge window?
+> > > > 
+> > > > Yes, I will do.
+> > > 
+> > > Very good, I will drop them from my tree on my next rebase.
+> > 
+> > Apologies for nagging, but I don't see this in -next, so I figured that
+> > I should follow up.  Is there some adjustment required to this patch?
+> > If so, please let me know so that I can fix it.
 > 
-> This is a skeleton device at this point, as the ccp driver is not yet
-> prepared to correctly probe it. Interrupt configuration will come later
-> on as well.
-> 
-> Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-> ---
->   arch/x86/kernel/Makefile |  2 +-
->   arch/x86/kernel/psp.c    | 39 +++++++++++++++++++++++++++++++++++++++
+> Thanks for following up!
+> Sorry, it was my mistake to forget it to -next. Let me fix that.
 
-Based on comments about other SEV related items, this should probably be 
-moved into the arch/x86/coco/sev/ directory.
+And I see it now, thank you!
 
-Thanks,
-Tom
-
->   2 files changed, 40 insertions(+), 1 deletion(-)
->   create mode 100644 arch/x86/kernel/psp.c
-> 
-> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-> index f901658d9f7c..e2e19f2d08a7 100644
-> --- a/arch/x86/kernel/Makefile
-> +++ b/arch/x86/kernel/Makefile
-> @@ -139,7 +139,7 @@ obj-$(CONFIG_UNWINDER_ORC)		+= unwind_orc.o
->   obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
->   obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
->   
-> -obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
-> +obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= psp.o sev.o
->   
->   obj-$(CONFIG_CFI_CLANG)			+= cfi.o
->   
-> diff --git a/arch/x86/kernel/psp.c b/arch/x86/kernel/psp.c
-> new file mode 100644
-> index 000000000000..d404df47cc04
-> --- /dev/null
-> +++ b/arch/x86/kernel/psp.c
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/platform_data/psp.h>
-> +#include <linux/platform_device.h>
-> +#include <asm/hypervisor.h>
-> +
-> +static struct platform_device psp_device = {
-> +	.name           = "psp",
-> +	.id             = PLATFORM_DEVID_NONE,
-> +};
-> +
-> +static int __init psp_init_platform_device(void)
-> +{
-> +	struct psp_platform_data pdata = {};
-> +	struct resource res[1];
-> +	int err;
-> +
-> +	/*
-> +	 * The ACPI PSP interface is mutually exclusive with the PCIe interface,
-> +	 * but there is no reason to use the ACPI interface over the PCIe one.
-> +	 * Restrict probing ACPI PSP to platforms known to only expose the ACPI
-> +	 * interface, which at this time is SNP-host capable Hyper-V VMs.
-> +	 */
-> +	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
-> +		return -ENODEV;
-> +
-> +	err = acpi_parse_aspt(res, &pdata);
-> +	if (err)
-> +		return err;
-> +	err = platform_device_add_resources(&psp_device, res, 1);
-> +	if (err)
-> +		return err;
-> +
-> +	err = platform_device_register(&psp_device);
-> +	if (err)
-> +		return err;
-> +	return 0;
-> +}
-> +device_initcall(psp_init_platform_device);
+							Thanx, Paul
