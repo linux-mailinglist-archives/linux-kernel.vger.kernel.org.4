@@ -2,160 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85637683484
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C9968348E
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjAaR7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S230255AbjAaSCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjAaR7l (ORCPT
+        with ESMTP id S230016AbjAaSBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:59:41 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB2510AB3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:59:25 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so4126518wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:59:25 -0800 (PST)
+        Tue, 31 Jan 2023 13:01:46 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F5810AB3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:01:42 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id h5so19159031ybj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:01:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/szpvn7y9gec1tyWJQBadgKS8WeEN4pwAXM4ABHxKUU=;
-        b=SsXUyMMSeCP/y7sVGkHIr+wpXtG+lNexPqRpKCZMGeB2LOgMxzjBwleq77KDiUrHwp
-         SNs3p6Z2ZLyYZyDrWO99h05TxvEa3nX9dSE2k+4IWs1ABGkpDK0yH3ARbya2Y2DQLBLQ
-         PvOrQ+aPNQM49D/a08vbA2DJI9XwdMVecs7CvJnVw6kN7/HNI1cny2fSHFE8B17TNitz
-         Hrk8XloenIKFWf8a2/EWU+eLCsv9MyWD/I1S/EQ3F4d0Jk3E9cK1fhDH/4Ol0DOOkqwO
-         MwVpmttmVDVLqScMFYgRYN0BrQ6Qgvr2Y2fyTQw/ths+an/9+uhimFl0fZk2bfFQXVLQ
-         U9RA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hG4GAMkUnvveluiCUBOIudNumzLbEEo3tvq5Dtd6sdM=;
+        b=d8qqUxV1LG4n6/gqDu6Ip6tvP9Bw16loECWFruKdK+lu3xR/rbBa7gms//GRnUwkqw
+         +P8e1LOicvj3Rzj3fXCHZxm6mu27qHlO7N4bfPcsGIVVEds4/Ou+w8GtAQ8hvor7aPNd
+         bsZWRkL2k5mZHxy3UxUOV5wNaF+v5qStsCiiH5CcR95TMSxPzfqANnIFPVZ6rH0t8WTy
+         xAFkZKEUP5LqQbAUvL7YlnHPaJ749U/45pnv3C5JwjIvIxAYEzVuIWK+vGuWOaNVifl7
+         egboZzNGbBXvHxLOG0jSSzqcO0EjPYo1lDZ1/lKC55N8gxZVS2LsvNiJH30QN2IqXRQx
+         vE9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/szpvn7y9gec1tyWJQBadgKS8WeEN4pwAXM4ABHxKUU=;
-        b=PJM8tQBX6t/vaBHLxhOUwUIEl/a8e0awXk9L+caWWlqZz7aHkI7bu7cYc62errOkLl
-         9cttdb+u7LGraMwW9dq/yTTjp1Bn0bZnnnbmHT9k+918hrVtPcJVaEYuA+HqM0mPr1Yp
-         /tOiv4vPvZOjoupsBqljoKY0fOU2C/RSNSB+1SJZIkQ6hGV4y61NP7JPpOsG00U/eahe
-         5gD9B3XP+HGy13R3LqCDKBaTEYzDugBKXnAcGFLYIUj14JoARCH8GR48ym/MtNg88PCG
-         Kqz5zhD/Ddrnm+dnww/ltJBz9CPoLCcU4ZGkXsDSU8uz9kg8556VL0aLNHZmWapkQwro
-         K1bQ==
-X-Gm-Message-State: AO0yUKVd2Br5YpgdM34IonhxRZ8bQ+MPAYvFgCKxRt4rdDPWcf5FaJIN
-        72Rj9c6m+AyOab4nH2SxhcKY4A==
-X-Google-Smtp-Source: AK7set/mH8G8arPE9aWgo+oZwj285W4mdjXlicy8LcplDLyXvEcpmpH/9UUR/d6w07g+gluxQr8aGQ==
-X-Received: by 2002:a7b:c853:0:b0:3dc:5342:4132 with SMTP id c19-20020a7bc853000000b003dc53424132mr10709426wml.4.1675187964539;
-        Tue, 31 Jan 2023 09:59:24 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p7-20020a1c5447000000b003dc433355aasm13191576wmi.18.2023.01.31.09.59.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 09:59:24 -0800 (PST)
-Message-ID: <5ecabe9e-84f2-cc3a-c213-3b623f90842e@linaro.org>
-Date:   Tue, 31 Jan 2023 18:59:21 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hG4GAMkUnvveluiCUBOIudNumzLbEEo3tvq5Dtd6sdM=;
+        b=R8TvPFtYq7ka1MIuwGc2apSefA6CNpduQMQwv7hS4Tg+0krr4vdmuSM2Tvwyk8YLug
+         sDDyKpDAYyFwGThXvPQ870dyOuwXsZY5cJBgQDEWGW6Rr0YH8P1xK2wLiFUhDMp0FicB
+         ihmLhdMAyrmBoybxKoLRnRPN+oYsxy39gm/GnAtWEzrAllCF8rXvQRmM9HOTyt6K/HPi
+         DPBvOlBnKSzYkhpzXCIJmqBemSkdSPIu0ZZCh3WPr2RGQa/ZUl+p68bVuYBTs+8ax/Ah
+         FJVCsSpX85GgztFQm/Zwjn6sxoqBD/+myuTPWNN6LDiKrsX4+YTVptvT9gU5pBhrntA3
+         1Qsg==
+X-Gm-Message-State: AFqh2krXbY8DgILVUWqarm/OISV+VEqQ6gVc5xOPaBI+qCexZtQHglPa
+        XPIiPKs0h+MBdqX5ihlcsP2Tf1ggrRfySEGO2tSAoA==
+X-Google-Smtp-Source: AMrXdXuysloz9vrHn2UXJqYC8vrizUYsw18sf4LEybqxDbf32L5omhHK4yRO0E2Krl1z4AII4KGSvzly/0dZIcjlJHg=
+X-Received: by 2002:a25:105:0:b0:801:33b9:d9ac with SMTP id
+ 5-20020a250105000000b0080133b9d9acmr4614810ybb.2.1675188101952; Tue, 31 Jan
+ 2023 10:01:41 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v5] ASoC: dt-bindings: Add tas2781 amplifier.
-Content-Language: en-US
-To:     Shenghao Ding <13916275206@139.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, broonie@kernel.org,
-        lgirdwood@gmail.com
-Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230131131735.7118-1-13916275206@139.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230131131735.7118-1-13916275206@139.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230125213857.824959-1-vipinsh@google.com> <Y9GmiyRQ6sULCjEG@google.com>
+ <CANgfPd9T7jdh1Cjjo4y6DcxC2poTaGhQ7wNLf6OgGtStg-yKJg@mail.gmail.com>
+ <Y9HcHRBShQgjxsQb@google.com> <CALzav=fkmS0U4tb4trDtbCmDxo27EcJeOWbiwb+meagj9+PFiw@mail.gmail.com>
+ <Y9hXmz/nDOr1hQal@google.com> <CALzav=cEoF4E3hYStpDDdi_RWvCYXF9iXvznbL234uuEQ0Zv=g@mail.gmail.com>
+In-Reply-To: <CALzav=cEoF4E3hYStpDDdi_RWvCYXF9iXvznbL234uuEQ0Zv=g@mail.gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 31 Jan 2023 10:01:05 -0800
+Message-ID: <CAHVum0da7MBi7G4=jwxpjd51s4OZ_JD-u40e9KJteRLKKyej5w@mail.gmail.com>
+Subject: Re: [Patch] KVM: x86/mmu: Make optimized __handle_changed_spte() for
+ clear dirty log
+To:     David Matlack <dmatlack@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Ben Gardon <bgardon@google.com>, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/01/2023 14:17, Shenghao Ding wrote:
-> Create tas2781.yaml for tas2781 driver.
+On Tue, Jan 31, 2023 at 9:41 AM David Matlack <dmatlack@google.com> wrote:
+>
+> On Mon, Jan 30, 2023 at 3:49 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Mon, Jan 30, 2023, David Matlack wrote:
+> > > On Wed, Jan 25, 2023 at 5:49 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > [...]
+> > > > ---
+> > > >  arch/x86/kvm/mmu/tdp_mmu.c | 92 ++++++++++----------------------------
+> > > >  1 file changed, 24 insertions(+), 68 deletions(-)
+> > > >
+> > > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > > > index bba33aea0fb0..2f78ca43a276 100644
+> > > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > > [...]
+> > > > @@ -1289,8 +1244,7 @@ static bool age_gfn_range(struct kvm *kvm, struct tdp_iter *iter,
+> > > >                 new_spte = mark_spte_for_access_track(new_spte);
+> > > >         }
+> > > >
+> > > > -       tdp_mmu_set_spte_no_acc_track(kvm, iter, new_spte);
+> > > > -
+> > > > +       kvm_tdp_mmu_write_spte(iter->sptep, iter->old_spte, new_spte, iter->level);
+> > >
+> > > This can race with fast_page_fault() setting the W-bit and the CPU
+> > > setting the D-bit. i.e. This call to kvm_tdp_mmu_write_spte() could
+> > > clear the W-bit or D-bit.
+> >
+> > Ugh, right.  Hrm.  Duh, I just didn't go far enough.  A straight XCHG is silly.
+> > Except for the access-tracking mess, KVM wants to clear a single bit.  Writing
+> > the entire thing and potentially clobbering bits is wasteful and unnecessarily
+> > dangerous.  And the access-tracking code already needs special handling.
+> >
+> > We can just simplify this all by adding a helper to clear a single bit (and
+> > maybe even use clear_bit() and __clear_bit() if we save the bit number for the
+> > W/A/D bits and not just the mask).  And if it weren't for EPT (different A/D
+> > locations), we could even use static asserts to restrict the usage to the W/A/D
+> > bits :-/  Oh well.
+> >
+> > E.g. this
+>
+> This patch looks good. Vipin can you incorporate this in your next version?
 
-You treat my feedback selectively... some things improved, but not
-everything. I am literally repeating the same and expect different
-results from you... isn't that the definition of insanity?
-
-Let me paste ignored parts:
-
-1. Your patches are still not correctly threaded. There is no threading
-at all.
-
-I said it multiple times. What else should I say here?
-
-2. Subject: ASoC: dt-bindings: Add tas2781 amplifier
-(drop the full stop - why did you add it there?)
-
-3. Missing changelog under ---.
-I mentioned it already few times, didn't I?
-
-> 
-> Signed-off-by: Shenghao Ding <13916275206@139.com>
-> 
-> ---
->  Changes to be committed:
-> 	new file:   Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> ---
->  .../devicetree/bindings/sound/ti,tas2781.yaml | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/ti,tas2781.yaml b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> new file mode 100644
-> index 000000000..9a440d29f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/ti,tas2781.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments TAS2781 SmartAMP
-> +
-> +maintainers:
-> +  - Shenghao Ding <shenghao-ding@ti.com>
-> +  - Kevin Lu <kevin-lu@ti.com>
-> +
-> +description: |
-> +  The TAS2781 is a mono, digital input Class-D audio amplifier
-> +  optimized for efficiently driving high peak power into small
-> +  loudspeakers. Integrated an on-chip DSP supports Texas Instruments
-> +  Smart Amp speaker protection algorithm. The integrated speaker
-> +  voltage and current sense provides for real time
-> +  monitoring of loudspeaker behavior.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tas2781
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: |
-> +      I2C address of the device can be in range from 0x38 to 0x40.
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description: |
-> +      A GPIO line handling reset of the chip. As the line is active high,
-> +      it should be marked GPIO_ACTIVE_HIGH (see ../gpio/gpio.txt)
-
-Drop the reference to gpio.txt.
-
-I give up. I spent too much time on it while being also ignored a bit
-too much.
-
-
-Best regards,
-Krzysztof
-
+On it.
