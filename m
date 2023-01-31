@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DF3682F07
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2A5682F0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjAaOSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
+        id S230129AbjAaOUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:20:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbjAaOSL (ORCPT
+        with ESMTP id S230272AbjAaOUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:18:11 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE6C16AD6;
-        Tue, 31 Jan 2023 06:18:07 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id cr11so8612657pfb.1;
-        Tue, 31 Jan 2023 06:18:07 -0800 (PST)
+        Tue, 31 Jan 2023 09:20:37 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110331D921;
+        Tue, 31 Jan 2023 06:20:36 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id qw12so26134928ejc.2;
+        Tue, 31 Jan 2023 06:20:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D/tLUdHiIHb80iO9Lp6bZpLrU9d/zmMciFOjvZujeYU=;
-        b=M7BEAZl9XM9H/0i/cZkTiFAj6gsYn05hTXFFLpAf4k7OyA1bg+txR7mkki7YAcPPW3
-         oLmFuZ8vC9EolA/0BQLZdhhC94OeHSQMECFcMpY/CykmgCZHc77HHG/seByXRbR904mF
-         jIHlzSztlVJRjbrOCMVKJzX4AJvT9NjY5O6+s37lCDOrHfXhfj9qPmyONeuL/Ua502te
-         2GsOE5fZuSDI2Qkf8AauNi7QR3TfbgPVEJz2wfsQLq3Pmn5UbX9JD9JRvBYHdcm8YAuA
-         4aqMNWgRTmojcWqkyThZtuuVwpGeCV/iUhYjVd4jOOjLarkILE8jbk54NrTZXHAxqbTY
-         HFGA==
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nVBmiYiYPs6Oa6XcLvsYrvHcRCbEE7kM/cPMb1XwWXI=;
+        b=h1mo+nPagVMmKtLS37LHPDUIkBa9zreqkK8+d8CklgBMP4XZuJkLTJglD8bKci7qsq
+         dWWBUbax+gFDEPIxP2x66jmEl5h4UctxogqpwblpI6aOm3gl9idHQVvJ/VqZ8xxG2eNb
+         VWDuuTk/i5NTBnZ8TKVQ5cjfLJp8chL3uQFx0/M3Dh7ieoZx9vg7ol4XWs4dwbdI+n+E
+         /+bE7MDAOvJhtThVosD2bpYxg+0J8nVp4Dq7ZJEMbqJsFQwTreY7AY/Z1Doscij64BxB
+         Qd40Vk9pkEYmL9mH+MdW/KsfBzab2soYM0JkqUhvG0WRtbTmzIhZGzLRt+XRruVOvV7W
+         bGug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D/tLUdHiIHb80iO9Lp6bZpLrU9d/zmMciFOjvZujeYU=;
-        b=DoJNYxLpJSF4jBuqi7slDa6guIGIZhLivh3ZAkLREmngyEqgbj/XljK2ncRNSz1qoc
-         p+NamXsUS7/2j3oNVqxVLJXcwXIH7PhaKS45dCA+Kh6JHvk7Y0eVDM6Ul6rcTzJVFmOs
-         4/TFLvCIC8WQRkehDvqtOg9z0xG0eQOegySoOEfKcVYr/9xL8QEdGsfm68EllZ4vPMn4
-         GegU4XfTB7D1iXZk7Lw+IE4lbtzP/81jW1B6uqrYWuimo1841tNHVEhtS+vO6p5ZKFpx
-         L1VxNxERhKQbW5pTQaXcinSvxCEiebzpH92aHaBaGEZJUFM5LlB7uohhKIMcjT0kd04M
-         xmeg==
-X-Gm-Message-State: AFqh2krg0oDU+LJb40z7IpzbnYY+mcELFow4Gf9ce+gMw7CtMfD5nLi2
-        cQ4u2/hKEhNbPOmsjkxyYckEeao5O3iPfL2rWcc=
-X-Google-Smtp-Source: AMrXdXs9/A8sqP6U1AUBHsMTAuuw85NEz8wAEfIlns2ZHq3egt0ctehCpLkguo4QE4wz3Iwieal9NkYzu6ISoyDaFl0=
-X-Received: by 2002:a62:1989:0:b0:58d:ae61:c14b with SMTP id
- 131-20020a621989000000b0058dae61c14bmr6651888pfz.51.1675174686518; Tue, 31
- Jan 2023 06:18:06 -0800 (PST)
-MIME-Version: 1.0
-References: <20230131112840.14017-1-marcan@marcan.st> <20230131112840.14017-2-marcan@marcan.st>
-In-Reply-To: <20230131112840.14017-2-marcan@marcan.st>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Tue, 31 Jan 2023 15:17:55 +0100
-Message-ID: <CAOiHx=mYxFx0kr5s=4X_qywZBpPqCbrNjLnTXfigPOnqZSxjag@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] brcmfmac: Drop all the RAW device IDs
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nVBmiYiYPs6Oa6XcLvsYrvHcRCbEE7kM/cPMb1XwWXI=;
+        b=j82/DO5/VB17zNiJ6pyovzanzA9nLQVblALR5T1AF49Rc9YDJYTjs60K2EPrMlqvGt
+         DNLyhzr2v7v+OXjS4HH/WWSDEZexGSWhfMeNi3RPz1PMCHXnort6v0Y5SWCLvTcvl1gk
+         ttgP+vGYgpX3WRPrl14cwDUMkG/YyuugijlacI/G6nTWD4r0flgS0EsuXFvU9pJ3SGHS
+         6Y5vlEW9UV+ovjLfbOhYbr54EeBYzMfMRyN3+wIm/3J1sadYo615FCmrM3B9mpmuh/V1
+         L0VJ5Wh2qO2zwzfktMpeST+tNl7J853whrMm6zNaa9U2MARHDsSW/gmhahRYrz7oqcIV
+         Nf1g==
+X-Gm-Message-State: AO0yUKXUkgyoCwaYIgkk9gha1YjhxdR3oHTQSn0DyT1BlrdoakTD7Cf2
+        NSEduJk3a7i3QQk0adh4Hbg=
+X-Google-Smtp-Source: AK7set8hYqvGPk7DR0V5AAhZJzyAkPR0z/qjrj4D9DH/dwo/o74aLTE6Zu7DnqhUEw8jaFZUJqv5yg==
+X-Received: by 2002:a17:906:f192:b0:878:7ef1:4a20 with SMTP id gs18-20020a170906f19200b008787ef14a20mr17375244ejb.4.1675174834642;
+        Tue, 31 Jan 2023 06:20:34 -0800 (PST)
+Received: from sakura.myxoz.lan (81-230-97-204-no2390.tbcn.telia.com. [81.230.97.204])
+        by smtp.gmail.com with ESMTPSA id fm19-20020a1709072ad300b007c10d47e748sm8368868ejc.36.2023.01.31.06.20.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 06:20:34 -0800 (PST)
+Message-ID: <f0b62f38c042d2dcb8b8e83c827d76db2ac5d7ad.camel@gmail.com>
+Subject: [PATCH v2] net/usb: kalmia: Fix uninit-value in
+ kalmia_send_init_packet
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Aditya Garg <gargaditya08@live.com>, asahi@lists.linux.dev,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Hauke Mehrtens <hauke@hauke-m.de>
+        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Date:   Tue, 31 Jan 2023 15:20:33 +0100
+In-Reply-To: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
+References: <7266fe67c835f90e5c257129014a63e79e849ef9.camel@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
+MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -90,35 +77,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 Jan 2023 at 12:36, Hector Martin <marcan@marcan.st> wrote:
->
-> These device IDs are only supposed to be visible internally, in devices
-> without a proper OTP. They should never be seen in devices in the wild,
-> so drop them to avoid confusion.
+syzbot reports that act_len in kalmia_send_init_packet() is
+uninitialized. Fix this by initializing it to 0.
 
-I think these can still show up in embedded platforms where the
-OTP/SPROM is provided on-flash.
+Fixes: d40261236e8e ("net/usb: Add Samsung Kalmia driver for Samsung GT-B37=
+30")
+Reported-and-tested-by: syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.c=
+om
+Signed-off-by: Miko Larsson <mikoxyzzz@gmail.com>
+---
+v1 -> v2
+* Minor alteration of commit message.
+* Added 'reported-and-tested-by' which is attributed to syzbot.
 
-E.g. https://forum.archive.openwrt.org/viewtopic.php?id=3D55367&p=3D4
-shows this bootlog on an BCM4709A0 router with two BCM43602 wifis:
+ drivers/net/usb/kalmia.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[    3.237132] pci 0000:01:00.0: [14e4:aa52] type 00 class 0x028000
-[    3.237174] pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit=
-]
-[    3.237199] pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit=
-]
-[    3.237302] pci 0000:01:00.0: supports D1 D2
-...
-[    3.782384] pci 0001:03:00.0: [14e4:aa52] type 00 class 0x028000
-[    3.782440] pci 0001:03:00.0: reg 0x10: [mem 0x00000000-0x00007fff 64bit=
-]
-[    3.782474] pci 0001:03:00.0: reg 0x18: [mem 0x00000000-0x003fffff 64bit=
-]
-[    3.782649] pci 0001:03:00.0: supports D1 D2
+diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
+index 9f2b70ef39aa..b158fb7bf66a 100644
+--- a/drivers/net/usb/kalmia.c
++++ b/drivers/net/usb/kalmia.c
+@@ -56,7 +56,7 @@ static int
+ kalmia_send_init_packet(struct usbnet *dev, u8 *init_msg, u8 init_msg_len,
+ 	u8 *buffer, u8 expected_len)
+ {
+-	int act_len;
++	int act_len =3D 0;
+ 	int status;
+=20
+ 	netdev_dbg(dev->net, "Sending init packet");
+--=20
+2.39.1
 
-0xaa52 =3D=3D 43602 (BRCM_PCIE_43602_RAW_DEVICE_ID)
 
-Rafa=C5=82 can probably provide more info there.
-
-Regards
-Jonas
