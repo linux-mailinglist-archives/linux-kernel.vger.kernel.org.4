@@ -2,54 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DAB683783
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:26:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BEC683788
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjAaU0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 15:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S230372AbjAaU2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 15:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbjAaU0i (ORCPT
+        with ESMTP id S231211AbjAaU2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 15:26:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C7256ED8;
-        Tue, 31 Jan 2023 12:26:36 -0800 (PST)
+        Tue, 31 Jan 2023 15:28:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5618F2D4A;
+        Tue, 31 Jan 2023 12:28:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62CE4615A7;
-        Tue, 31 Jan 2023 20:26:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA80C433D2;
-        Tue, 31 Jan 2023 20:26:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CF37B81EB8;
+        Tue, 31 Jan 2023 20:28:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362CBC4339B;
+        Tue, 31 Jan 2023 20:28:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675196795;
-        bh=gq2zoV3fgp96Ze7JcC1BY/MySF5tsWqOBisbKmRgfYI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ccZC3G6ntKeYo84IV6BMZL2L9iGDG+TyMIuIQ3HPttMWnSXSvip7Dlm0dgHSkR2Km
-         Rc8yFFmi2Oas8Ql5d75DKnxSFhyuGaT3u344pexGbv94pg1zh5pIpCgdQnmTPPujRP
-         mTedh3xYPk/OncYTa5PvyZXiae6KchaFvPyMUnE8Pp++ciLfZc1HYT1rl1v6UQyxfV
-         y2Rlw77fSNPo4pbAq/eeeQ+6L11X2TTfYJh0EZn63fDji0+pzNrSR0bFECmQvfwcty
-         1Z1n1fB2f4qG0cC8XA1NyQkAt2tAOX4J+SMvE9NS6uIknVhX+59e9HXlH2Usm7FhA9
-         RZxz60x/7NLAg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 511B75C0510; Tue, 31 Jan 2023 12:26:35 -0800 (PST)
-Date:   Tue, 31 Jan 2023 12:26:35 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     Liam Howlett <liam.howlett@oracle.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [linus:master] [maple_tree] 120b116208:
- INFO:task_blocked_for_more_than#seconds
-Message-ID: <20230131202635.GA3019407@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <202301310940.4a37c7af-yujie.liu@intel.com>
+        s=k20201202; t=1675196883;
+        bh=MX7l6AfPhfgB2B89ZKvj9UQjlQBtzbgEHNVQpqnulMU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SO7BiR/XSAqaRDrI01gYfFDmjtHm5zhjkoswNhTexpnPkgnehJ8lCkXQ8zWQcNp3b
+         uQyry6c91fak3tq3zaquRwazxyjRrGMPmlwHbZ49GaZnR2CXU/DCqCXNZEYdGrfuLr
+         kxLeb7auxnlxTgIsdLrWYfxsrO9nAjQ72a+X1ITLZRdpdRQ9pTBPbczszz2W9xzsOU
+         zimktVQFZUkcut47HeNxI9raQS+qjklDWYxfDSoBzYvdQBJ73bXTh1Jd9skiFy+ocR
+         YRzR1V3MYk/Hp0zkMtibcjBhBCP6C8sS3ULX9cvNBMPSfMqteBvcQdEWuNNxR4WPa2
+         N1pAEVfRlSjtg==
+Received: by mail-vs1-f43.google.com with SMTP id k6so17403580vsk.1;
+        Tue, 31 Jan 2023 12:28:03 -0800 (PST)
+X-Gm-Message-State: AO0yUKXSe2vbGhFQS5go3swhy5RLPhe7NGAQckvKVw8l0rNSRSAnML/K
+        OBNgnYwP8OuohJeT+Vx6v3dQS3UFb33D7yYSqA==
+X-Google-Smtp-Source: AK7set+M1V3xuFlo2nAvDwvo3onui82m9KOW7r1ZM8ACmzzvcpa6Zo7eqj6vrmUYhK9e3oHNnpbua+ZwdcG8LQJLlCw=
+X-Received: by 2002:a05:6102:54aa:b0:3f5:f5f4:893c with SMTP id
+ bk42-20020a05610254aa00b003f5f5f4893cmr27845vsb.85.1675196882190; Tue, 31 Jan
+ 2023 12:28:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202301310940.4a37c7af-yujie.liu@intel.com>
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 31 Jan 2023 14:27:51 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKL3JA6nAkEHuuyxbs8-Mm=Q-nNkCmpnDApNUDVbLsvKw@mail.gmail.com>
+Message-ID: <CAL_JsqKL3JA6nAkEHuuyxbs8-Mm=Q-nNkCmpnDApNUDVbLsvKw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] Device tree support for Hyper-V VMBus driver
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,117 +66,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 03:18:22PM +0800, kernel test robot wrote:
-> Hi Liam,
-> 
-> We caught a "task blocked" dmesg in maple tree test. Not sure if this
-> is expected for maple tree test, so we are sending this report for
-> your information. Thanks.
-> 
-> Greeting,
-> 
-> FYI, we noticed INFO:task_blocked_for_more_than#seconds due to commit (built with clang-14):
-> 
-> commit: 120b116208a0877227fc82e3f0df81e7a3ed4ab1 ("maple_tree: reorganize testing to restore module testing")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> 
-> in testcase: boot
-> 
-> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> [   17.318428][    T1] calling  maple_tree_seed+0x0/0x15d0 @ 1
-> [   17.319219][    T1] 
-> [   17.319219][    T1] TEST STARTING
-> [   17.319219][    T1] 
-> [  999.249871][   T23] INFO: task rcu_scale_shutd:59 blocked for more than 491 seconds.
-> [  999.253363][   T23]       Not tainted 6.1.0-rc4-00003-g120b116208a0 #1
-> [  999.254249][   T23] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [  999.255390][   T23] task:rcu_scale_shutd state:D stack:30968 pid:59    ppid:2      flags:0x00004000
-> [  999.256934][   T23] Call Trace:
-> [  999.257418][   T23]  <TASK>
-> [  999.257900][   T23]  __schedule+0x169b/0x1f90
-> [  999.261677][   T23]  schedule+0x151/0x300
-> [  999.262281][   T23]  ? compute_real+0xe0/0xe0
-> [  999.263364][   T23]  rcu_scale_shutdown+0xdd/0x130
-> [  999.264093][   T23]  ? wake_bit_function+0x2c0/0x2c0
-> [  999.268985][   T23]  kthread+0x309/0x3a0
-> [  999.269958][   T23]  ? compute_real+0xe0/0xe0
-> [  999.270552][   T23]  ? kthread_unuse_mm+0x200/0x200
-> [  999.271281][   T23]  ret_from_fork+0x1f/0x30
-> [  999.272385][   T23]  </TASK>
-> [  999.272865][   T23] 
-> [  999.272865][   T23] Showing all locks held in the system:
-> [  999.273988][   T23] 2 locks held by swapper/0/1:
-> [  999.274684][   T23] 1 lock held by khungtaskd/23:
-> [  999.275400][   T23]  #0: ffffffff88346e00 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x8/0x30
-> [  999.277171][   T23] 
-> [  999.277525][   T23] =============================================
-> [  999.277525][   T23] 
-> [ 1049.050884][    T1] maple_tree: 12610686 of 12610686 tests passed
-> 
-> 
-> If you fix the issue, kindly add following tag
-> | Reported-by: kernel test robot <yujie.liu@intel.com>
-> | Link: https://lore.kernel.org/oe-lkp/202301310940.4a37c7af-yujie.liu@intel.com
+On Tue, Jan 31, 2023 at 12:10 PM Saurabh Sengar
+<ssengar@linux.microsoft.com> wrote:
+>
+> This set of patches expands the VMBus driver to include device tree
+> support.
+>
+> The first two patches enable compilation of Hyper-V APIs in a non-ACPI
+> build.
+>
+> The third patch converts the VMBus driver from acpi to more generic
+> platform driver.
+>
+> Further to add device tree documentation for VMBus, it needs to club with
+> other virtualization driver's documentation. For this rename the virtio
+> folder to more generic hypervisor, so that all the hypervisor based
+> devices can co-exist in a single place in device tree documentation. The
+> fourth patch does this renaming.
+>
+> The fifth patch introduces the device tree documentation for VMBus.
+>
+> The sixth patch adds device tree support to the VMBus driver. Currently
+> this is tested only for x86 and it may not work for other archs.
 
-Liam brought this to my attention on IRC, and it looks like the root
-cause is that the rcuscale code does not deal gracefully with grace
-periods that are in much excess of a second in duration.
+I can read all the patches and see *what* they do. You don't really
+need to list that here. I'm still wondering *why*. That is what the
+cover letter and commit messages should answer. Why do you need DT
+support? How does this even work on x86? FDT is only enabled for
+CE4100 platform.
 
-Now, it might well be worth looking into why the grace periods were taking
-that long, but if you were running Maple Tree stress tests concurrently
-with rcuscale, this might well be expected behavior.
-
-So, does the patch below clear this up for you?
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-commit 8e44d51e3411994091f7c7c136286d82c5757a4a
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Tue Jan 31 12:08:54 2023 -0800
-
-    rcuscale: Move shutdown from wait_event() to wait_event_idle()
-    
-    The rcu_scale_shutdown() and kfree_scale_shutdown() kthreads/functions
-    use wait_event() to wait for the rcuscale test to complete.  However,
-    each updater thread in such a test waits for at least 100 grace periods.
-    If each grace period takes more than 1.2 seconds, which is long, but
-    not insanely so, this can trigger the hung-task timeout.
-    
-    This commit therefore replaces those wait_event() calls with calls to
-    wait_event_idle(), which do not trigger the hung-task timeout.
-    
-    Reported-by: kernel test robot <yujie.liu@intel.com>
-    Reported-by: Liam Howlett <liam.howlett@oracle.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-
-diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index 91fb5905a008f..4120f94030c3c 100644
---- a/kernel/rcu/rcuscale.c
-+++ b/kernel/rcu/rcuscale.c
-@@ -631,8 +631,7 @@ static int compute_real(int n)
- static int
- rcu_scale_shutdown(void *arg)
- {
--	wait_event(shutdown_wq,
--		   atomic_read(&n_rcu_scale_writer_finished) >= nrealwriters);
-+	wait_event_idle(shutdown_wq, atomic_read(&n_rcu_scale_writer_finished) >= nrealwriters);
- 	smp_mb(); /* Wake before output. */
- 	rcu_scale_cleanup();
- 	kernel_power_off();
-@@ -771,8 +770,8 @@ kfree_scale_cleanup(void)
- static int
- kfree_scale_shutdown(void *arg)
- {
--	wait_event(shutdown_wq,
--		   atomic_read(&n_kfree_scale_thread_ended) >= kfree_nrealthreads);
-+	wait_event_idle(shutdown_wq,
-+			atomic_read(&n_kfree_scale_thread_ended) >= kfree_nrealthreads);
- 
- 	smp_mb(); /* Wake before output. */
- 
+Rob
