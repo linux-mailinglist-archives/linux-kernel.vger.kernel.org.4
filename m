@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2BD683978
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFDA68397A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjAaWkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        id S231157AbjAaWmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:42:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjAaWkp (ORCPT
+        with ESMTP id S229961AbjAaWmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:40:45 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A369EFB2;
-        Tue, 31 Jan 2023 14:40:43 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qw12so30179623ejc.2;
-        Tue, 31 Jan 2023 14:40:43 -0800 (PST)
+        Tue, 31 Jan 2023 17:42:20 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCF912057
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:42:18 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id b5so9371459plz.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KUPztVm7TCSgk24kz0qZCmg6of4J1a8oSdbPBOcLku4=;
-        b=c/BEL643UCrCF82LoV3IKB+5KyuXz5WCgAF5qbQDzmz2rbq8SsdE869+V0tZVubxFo
-         kwynVei/99hhq1jWA3ffqaMRAEYrJJj1rIIf7DfLnUkDUpiBYTfVhzI9Z/Em8LpuZoQm
-         VYbF0i8vaAicCJ+CpzW2Ao8HIop4wQ3gqACGS6IimGmadtIe465foqUvE+rD4HfBNQe2
-         JrxI2gr9aN6FnTCUrCcjJlLQZmJQk9kTflb/21hb4xd+RERL8Nd9Gpsg3YRf+FGoycEe
-         xpM0PgS3Ou5QF8H4uRdOBMUrvYaf/9o4GLXeRYDlp+SSXjEdS/faBBI2N85KMpIJyosB
-         ZP0w==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Pn6XQJClPWD3A+imA49mX4oo2DJA54QHzWCHUbbrOY=;
+        b=pWYBoe1SXQGeu4NRast6OyvA1VvHUBtkUN/Su0Lo4NubA5ppR7gC5zmdRjR6+9evyg
+         kYU5Ere6A+ZnbOWtieH/AOYmakzva8O5CU9hlDfJs5ay988U7Cvj+zkT3FJXMPIfN70I
+         J2Ypmx2i+a58klL7lngMRiwo3uN1B7ncasBRoyBBZMRY/VWBxpwfWZVjLl6Cv54oY3WD
+         bOUvcPWzqMKU0lgSZuHf/TfRPvc1LgyR9lA9TR5ys85N9uoV+U95dUmuPvj18iq1JkwO
+         j+aKJXVxSoE/rt6uzF/7R+82d6MUu5r3FcPP/JY8ZbGf16QbjICnHizwkHyBxRdEDY62
+         +n0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KUPztVm7TCSgk24kz0qZCmg6of4J1a8oSdbPBOcLku4=;
-        b=Tum7fVMkPXd7o2s/intcM0zhJ8wsm00iW2LnMLG1XHyWLL6EAAxH/mr9VdPQvB8QqN
-         g5kAZAX30Neg57NZRWuR60vPoRRB9+DFi4rYPA8Rbjt+os+lkROZAM8WxweS1vIed8Av
-         rhvDJzeiQcPY2JM+4j1bRAmPYlfG7cF0T/h2I2/t7AzaXOP1eAYAnEekT19CQi0ecqAl
-         qtHUni3gWh68q+OESyhOy9RmRQ8G+dKL32stpvlMXFfxlRxlhbBR5FSCoK8/vWZyOp3F
-         nQJjRkqgOz0vGqzqGd01k83EULXAeSlR8S/vnyYTYrV+nMpZ2s9fUvhOZeSGdVY432fY
-         mopA==
-X-Gm-Message-State: AO0yUKUfj8I6NyKAzGz6e1xmOfig15YvgyMY6+ydSAY4zAmaJpp1seHn
-        n8AJ1nvCplH69P99xJZwFBo=
-X-Google-Smtp-Source: AK7set+p5JQV/1HfuHev8lqBJ9svYuBbwUUuVTlWdesok6lYa6PakehRGFDPx8aWSKlzUNXHD+Gqhg==
-X-Received: by 2002:a17:906:434b:b0:878:72f7:bd87 with SMTP id z11-20020a170906434b00b0087872f7bd87mr57007ejm.6.1675204841311;
-        Tue, 31 Jan 2023 14:40:41 -0800 (PST)
-Received: from krava ([83.240.61.48])
-        by smtp.gmail.com with ESMTPSA id a26-20020a170906685a00b008878909859bsm4388047ejs.152.2023.01.31.14.40.40
+        bh=1Pn6XQJClPWD3A+imA49mX4oo2DJA54QHzWCHUbbrOY=;
+        b=wZNXv/S3F0QSTFsGL+j67RviQKuQw7IOZTEe2+a8yZiUno/IMlDR2pasSj0jiMfgsz
+         54ANVnR554gGz7mDnv8iaSNq7RaQISb6W6/DU/5IM8Ua253BM7HtVL+9E9U7v29ZqvU6
+         Qq8QLJ7wizYyUHgyXJqftDZjDVmBpk4M2E2zcwZTu5FJCzhBQSi+J0Cff+PkIALJrsva
+         uqeziieqZOOiCm1jJ6EUn5wyPGeCHlvjt5enGPgDdm3q+SvfD0H0th0KkJy9HBEVYqDZ
+         xdpNsY1Ojz0u/xEr8pUu/Qx276wSWjb2NCDPWwC8406WTbBDBLaEVTf2VVmTrv2yi4Mj
+         Gpbg==
+X-Gm-Message-State: AO0yUKV1C/tTTkLwqMmzesn2uOruiTK8dyJiSILBi2UY/O3PSEnEuGyO
+        waim9OnxyzR1VdaQO16AjXgNPg==
+X-Google-Smtp-Source: AK7set/HJt9kh6Tv+h/4RgNVqbG69+AmpAhgM6Tu4U4eD8xeDFmauQycS4aFy/V8BdW62Fpe7VEhEg==
+X-Received: by 2002:a17:90a:af94:b0:22c:952:ab22 with SMTP id w20-20020a17090aaf9400b0022c0952ab22mr72695pjq.1.1675204937955;
+        Tue, 31 Jan 2023 14:42:17 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id bt8-20020a17090af00800b00212e5fe09d7sm9173861pjb.10.2023.01.31.14.42.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 14:40:40 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 31 Jan 2023 23:40:39 +0100
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Connor OBrien <connoro@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y9mY5woe+45nTvTM@krava>
-References: <20230124064324.672022-1-irogers@google.com>
- <20230124064324.672022-2-irogers@google.com>
- <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
- <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
- <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
- <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
- <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
- <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X>
+        Tue, 31 Jan 2023 14:42:17 -0800 (PST)
+Date:   Tue, 31 Jan 2023 22:42:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Santosh Shukla <santosh.shukla@amd.com>
+Subject: Re: [PATCH v2 09/11] KVM: SVM: Add VNMI bit definition
+Message-ID: <Y9mZRU3nbz6ru2lS@google.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+ <20221129193717.513824-10-mlevitsk@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221129193717.513824-10-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,223 +88,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 02:17:08PM -0700, Nathan Chancellor wrote:
-> On Tue, Jan 31, 2023 at 12:59:04PM -0800, Ian Rogers wrote:
-> > On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
-> > > > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
-> > > > >
-> > > > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > > >
-> > > > > > Hi Ian,
-> > > > > >
-> > > > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> > > > > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> > > > > > > after tools/scripts/Makefile.include is included, meaning flags are
-> > > > > > > set assuming say CC is gcc, but then it can be later set to HOSTCC
-> > > > > > > which may be clang. tools/scripts/Makefile.include is needed for host
-> > > > > > > set up and common macros in objtool's Makefile. Rather than override
-> > > > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> > > > > > > builds and the linkage step. This means the Makefiles don't see things
-> > > > > > > like CC changing and tool flag determination, and similar, work
-> > > > > > > properly.
-> > > > > > >
-> > > > > > > Also, clear the passed subdir as otherwise an outer build may break by
-> > > > > > > inadvertently passing an inappropriate value.
-> > > > > > >
-> > > > > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > > > > ---
-> > > > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
-> > > > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> > > > > > > index 1fe0082b2ecc..daed388aa5d7 100644
-> > > > > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > > > > @@ -18,14 +18,11 @@ else
-> > > > > > >  endif
-> > > > > > >
-> > > > > > >  # always use the host compiler
-> > > > > > > -AR       = $(HOSTAR)
-> > > > > > > -CC       = $(HOSTCC)
-> > > > > > > -LD       = $(HOSTLD)
-> > > > > > > -ARCH     = $(HOSTARCH)
-> > > > > > > +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> > > > > > > +               EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > > > > +
-> > > > > > >  RM      ?= rm
-> > > > > > >  CROSS_COMPILE =
-> > > > > > > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> > > > > > > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
-> > > > > > >
-> > > > > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > > > > >
-> > > > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
-> > > > > > >
-> > > > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> > > > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> > > > > > > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> > > > > > > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > > > > >                   $(abspath $@) install_headers
-> > > > > > >
-> > > > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
-> > > > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> > > > > > > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> > > > > > > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > > > > >                   $(abspath $@) install_headers
-> > > > > > >
-> > > > > > >  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> > > > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
-> > > > > > >  include $(srctree)/tools/build/Makefile.include
-> > > > > > >
-> > > > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> > > > > > > -     $(Q)$(MAKE) $(build)=resolve_btfids
-> > > > > > > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
-> > > > > > >
-> > > > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> > > > > > >       $(call msg,LINK,$@)
-> > > > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > > > >
-> > > > > > >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
-> > > > > > >                              $(OUTPUT)/.*.o.cmd           \
-> > > > > > > --
-> > > > > > > 2.39.0.246.g2a6d74b583-goog
-> > > > > > >
-> > > > > >
-> > > > > > I just bisected a linking failure when building resolve_btfids with
-> > > > > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-> > > > > > Alter how HOSTCC is forced") in the bpf-next tree.
-> > > > > >
-> > > > > > It appears to be related to whether or not CROSS_COMPILE is specified,
-> > > > > > which we have to do for certain architectures and configurations still.
-> > > > > > arm64 is not one of those but it helps demonstrate the issue.
-> > > > > >
-> > > > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
-> > > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
-> > > > > >
-> > > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
-> > > > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-> > > > > >   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
-> > > > > >   ...
-> > > > > >
-> > > > > > Before your change, with V=1, I see:
-> > > > > >
-> > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > > > > >
-> > > > > > After, I see:
-> > > > > >
-> > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > > > > >
-> > > > > > We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
-> > > > > > target of resolve_btfids-in.o) and we dropped the warning flags.
-> > > > > >
-> > > > > > I think this comes from the clang block in
-> > > > > > tools/scripts/Makefile.include, which is included into the
-> > > > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
-> > > > > >
-> > > > > > I am not super familiar with the tools build system, otherwise I would
-> > > > > > try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
-> > > > > > simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
-> > > > > > did not appear to resolve it for me.
-> > > > > >
-> > > > > > If there is any other information I can provide or patches I can test,
-> > > > > > please let me know.
-> > > > > >
-> > > > > > Cheers,
-> > > > > > Nathan
-> > > > >
-> > > > > Thanks Nathan, and thanks for all the details in the bug report. I'm
-> > > > > looking into this.
-> > > > >
-> > > > > Ian
-> > > >
-> > > > Given the somewhat complicated cross compile I wasn't able to get a
-> > > > reproduction. Could you see if the following addresses the problem:
-> > >
-> > > As long as you have an LLVM toolchain that targets AArch64 and your
-> > > host, you should be able to reproduce this issue with those commands
-> > > verbatim, as that command should not use any GNU binutils. I am pretty
-> > > sure I tried it in a fresh container before reporting it but it is
-> > > possible that I did not.
-> > 
-> > Thanks, do you have instructions on setting up the container?
+On Tue, Nov 29, 2022, Maxim Levitsky wrote:
+> From: Santosh Shukla <santosh.shukla@amd.com>
 > 
-> Sure thing, this worked for me in the Linux source you would like to
-> build (I marked it readonly to make sure any modifications were done in
-> my host environment, remove the ':ro' if you would like to make edits to
-> the source within the container). Docker should work as well but I did
-> not test it.
+> VNMI exposes 3 capability bits (V_NMI, V_NMI_MASK, and V_NMI_ENABLE) to
+> virtualize NMI and NMI_MASK, Those capability bits are part of
+> VMCB::intr_ctrl -
+> V_NMI(11) - Indicates whether a virtual NMI is pending in the guest.
+> V_NMI_MASK(12) - Indicates whether virtual NMI is masked in the guest.
+> V_NMI_ENABLE(26) - Enables the NMI virtualization feature for the guest.
 > 
-> $ podman run --rm -ti -v $PWD:/linux:ro docker.io/archlinux:base-devel
-> # pacman -Syyu --noconfirm bc clang lib32-glibc lld llvm python
-> ...
+> When Hypervisor wants to inject NMI, it will set V_NMI bit, Processor
+> will clear the V_NMI bit and Set the V_NMI_MASK which means the Guest is
+> handling NMI, After the guest handled the NMI, The processor will clear
+> the V_NMI_MASK on the successful completion of IRET instruction Or if
+> VMEXIT occurs while delivering the virtual NMI.
 > 
-> # To turn on CONFIG_DEBUG_INFO_BTF
-> # make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build defconfig menuconfig
+> To enable the VNMI capability, Hypervisor need to program
+> V_NMI_ENABLE bit 1.
 > 
-> # make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build prepare
-> ld.lld: error: /build/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-> clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+> ---
+>  arch/x86/include/asm/svm.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> > > > ```
-> > > > diff --git a/tools/bpf/resolve_btfids/Makefile
-> > > > b/tools/bpf/resolve_btfids/Makefile
-> > > > index daed388aa5d7..a06966841df4 100644
-> > > > --- a/tools/bpf/resolv
-> > 
-> > Ian
-> > e_btfids/Makefile
-> > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > @@ -19,10 +19,9 @@ endif
-> > > >
-> > > > # always use the host compiler
-> > > > HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)"
-> > > > ARCH="$(HOSTARCH)" \
-> > > > -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > +                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > CROSS_COMPILE=""
-> > > >
-> > > > RM      ?= rm
-> > > > -CROSS_COMPILE =
-> > > >
-> > > > OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > > ```
-> > > >
-> > >
-> > > Unfortunately, it does not. I still see '--target=' end up in the
-> > > CFLAGS of those files.
+> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> index cb1ee53ad3b189..26d6f549ce2b46 100644
+> --- a/arch/x86/include/asm/svm.h
+> +++ b/arch/x86/include/asm/svm.h
+> @@ -203,6 +203,13 @@ struct __attribute__ ((__packed__)) vmcb_control_area {
+>  #define X2APIC_MODE_SHIFT 30
+>  #define X2APIC_MODE_MASK (1 << X2APIC_MODE_SHIFT)
+>  
+> +#define V_NMI_PENDING_SHIFT 11
+> +#define V_NMI_PENDING (1 << V_NMI_PENDING_SHIFT)
+> +#define V_NMI_MASK_SHIFT 12
+> +#define V_NMI_MASK (1 << V_NMI_MASK_SHIFT)
 
-hi,
-I can reproduce that and I think the reason is that the patch removes
-CFLAGS setup
+Argh, more KVM warts.  The existing INT_CTL defines all use "mask" in the name,
+so looking at V_NMI_MASK in the context of other code reads "vNMI is pending",
+not "vNMIs are blocked".
 
-  CFLAGS  := $(KBUILD_HOSTCFLAGS)
+IMO, the existing _MASK terminology is the one that's wrong, but there's an absurd
+amount of prior art in svm.h :-(
 
-so now the 'include ../../scripts/Makefile.include' will set CFLAGS
-with the  --target=... and we fail
+And the really annoying one is V_INTR_MASKING_MASK, which IIRC says "virtual INTR
+masking is enabled", not "virtual INTRs are blocked".
 
-I can compile with the change below.. we could also set CROSS_COMPILE
-before including tools/scripts/Makefile.include ... not sure which
-on is better
+So maybe call this V_NMI_BLOCKING_MASK?  And tack on _MASK too the others (even
+though I agree it's ugly).
 
-also I need to check if we should keep LDFLAGS setup as well
+> +#define V_NMI_ENABLE_SHIFT 26
+> +#define V_NMI_ENABLE (1 << V_NMI_ENABLE_SHIFT)
 
-jirka
-
-
----
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index daed388aa5d7..875e3fcce7cd 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -64,6 +64,7 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
- LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
- LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
- 
-+CFLAGS := $(KBUILD_HOSTCFLAGS)
- CFLAGS += -g \
-           -I$(srctree)/tools/include \
-           -I$(srctree)/tools/include/uapi \
-
+Hrm.  I think I would prefer to keep the defines ordered by bit position.  Knowing
+that there's an enable bit isn't all that critical for understanding vNMI pending
+and blocked.
