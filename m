@@ -2,131 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCBF682851
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9DA68281A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:06:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbjAaJLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:11:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S232457AbjAaJGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbjAaJLa (ORCPT
+        with ESMTP id S232330AbjAaJGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:11:30 -0500
-X-Greylist: delayed 583 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 Jan 2023 01:08:30 PST
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 582F24B185;
-        Tue, 31 Jan 2023 01:08:30 -0800 (PST)
-Received: from cap.home.8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
+        Tue, 31 Jan 2023 04:06:41 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7752A4C6D5;
+        Tue, 31 Jan 2023 01:02:40 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 0403F22407A;
-        Tue, 31 Jan 2023 09:57:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1675155440;
-        bh=tjpmrJmEC8/t0L/DgQl6lz3ODpFwS2ZQUFHcwjQbBD4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=G4EJSS3ZR19gw9wllrj689Nrveho1wdJgPwWYf6gmIAFBmGd4SNBbBS2/zGqwo6mj
-         ejnOjzP2RB+vZKyFmZ7T90e/UtIqDerJ1gMjDXjok6JXT9bsHe+mlkjc2ORkZi31Oy
-         TdLqsoldJbbWY2TUTL/w3Z11aV+GhCx5+70y+oysVX6Y/hkLHD+56Y6n+BNGDRUrVf
-         viu0RDsT9HXGWFPVpRNUFm1PdaJhCgSyydpgu9GA3gtCmNlD4NXbU6Gi2FYYWOJzlt
-         SBmJJvPvMYZRT527Qz3vItuYSr/EPAm1VP9bKYIjmY5MZwpivhFB4gL17jAWPtq60s
-         9G0ZMLp3rZ/Rw==
-From:   Joerg Roedel <joro@8bytes.org>
-To:     x86@kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, hpa@zytor.com,
-        Joerg Roedel <jroedel@suse.de>,
-        Sean Christopherson <seanjc@google.com>, peterz@infradead.org,
-        Alexey Kardashevskiy <aik@amd.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v2] x86/debug: Fix stack recursion caused by DR7 accesses
-Date:   Tue, 31 Jan 2023 09:57:18 +0100
-Message-Id: <20230131085718.16009-1-joro@8bytes.org>
-X-Mailer: git-send-email 2.39.0
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B03F82046E;
+        Tue, 31 Jan 2023 08:57:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675155440; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9lYs5UJZfSHr2t4Wtw9DA3HI1a+TliioCEJTazPDmBI=;
+        b=bA+0TxU5KVGKEiKpY/6B3Q8kqEO5kn64Imfo7/b/JH+XDI+DUVae1YYDb3OAE4JzHs5bRt
+        qZ/ONa+yJUHZawPITmFNLR1Q+aGz0wIuB47xUEDJRIEmDd8rCGZWMs82NIusNslVIlRZ3h
+        0Lne6cVg6PexXZXMtXvZkmwx/2AgYAs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675155440;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9lYs5UJZfSHr2t4Wtw9DA3HI1a+TliioCEJTazPDmBI=;
+        b=YCZxt1WNOOdG3I3E6EsObVdiRobRZgNHqi4me0W782HBmM9MAnhYEfb8OvgRJfhPeg5hgu
+        DJl1UzE1sx0KHjAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 722B513585;
+        Tue, 31 Jan 2023 08:57:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id H7ruGvDX2GNlJQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 31 Jan 2023 08:57:20 +0000
+Message-ID: <ee4af5cb-6f2b-fde4-b81c-ef088d3272a8@suse.de>
+Date:   Tue, 31 Jan 2023 09:57:19 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 1/2] drm/simpledrm: Allow physical width and height
+ configuration via panel node
+Content-Language: en-US
+To:     Rayyan Ansari <rayyan@ansari.sh>, dri-devel@lists.freedesktop.org
+Cc:     devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        janne@jannau.net,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev
+References: <20230126182435.70544-1-rayyan@ansari.sh>
+ <20230126182435.70544-2-rayyan@ansari.sh>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230126182435.70544-2-rayyan@ansari.sh>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------VRDBOmJ1uHgwfQWzhxmFFfyZ"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------VRDBOmJ1uHgwfQWzhxmFFfyZ
+Content-Type: multipart/mixed; boundary="------------BhqH5e0Wj40xoBWNu7IsO9dU";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Rayyan Ansari <rayyan@ansari.sh>, dri-devel@lists.freedesktop.org
+Cc: devicetree@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ janne@jannau.net, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Javier Martinez Canillas <javierm@redhat.com>, linux-kernel@vger.kernel.org,
+ Hans de Goede <hdegoede@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+ ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev
+Message-ID: <ee4af5cb-6f2b-fde4-b81c-ef088d3272a8@suse.de>
+Subject: Re: [PATCH v4 1/2] drm/simpledrm: Allow physical width and height
+ configuration via panel node
+References: <20230126182435.70544-1-rayyan@ansari.sh>
+ <20230126182435.70544-2-rayyan@ansari.sh>
+In-Reply-To: <20230126182435.70544-2-rayyan@ansari.sh>
 
-In kernels compiled with CONFIG_PARAVIRT=n the compiler re-orders the
-DR7 read in exc_nmi() to happen before the call to sev_es_ist_enter().
+--------------BhqH5e0Wj40xoBWNu7IsO9dU
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-This is problematic when running as an SEV-ES guest because in this
-environment the DR7 read might cause a #VC exception, and taking #VC
-exceptions is not safe in exc_nmi() before sev_es_ist_enter() has run.
+DQoNCkFtIDI2LjAxLjIzIHVtIDE5OjI0IHNjaHJpZWIgUmF5eWFuIEFuc2FyaToNCj4gUGFy
+c2UgdGhlIHdpZHRoLW1tIGFuZCBoZWlnaHQtbW0gZGV2aWNldHJlZSBwcm9wZXJ0aWVzIG9m
+IHRoZSBwYW5lbCBub2RlLA0KPiBhbmQgdXNlIHRoaXMgdG8gc2V0IHRoZSBEUk0gRGlzcGxh
+eSBNb2RlIGluc3RlYWQgb2YgY2FsY3VsYXRpbmcgaXQNCj4gYmFzZWQgb24gYSBoYXJkY29k
+ZWQgRFBJLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogUmF5eWFuIEFuc2FyaSA8cmF5eWFuQGFu
+c2FyaS5zaD4NCg0KUmV2aWV3ZWQtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFu
+bkBzdXNlLmRlPg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS90aW55L3NpbXBsZWRy
+bS5jIHwgMzIgKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0NCj4gICAxIGZpbGUg
+Y2hhbmdlZCwgMjMgaW5zZXJ0aW9ucygrKSwgOSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYg
+LS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vdGlueS9zaW1wbGVkcm0uYyBiL2RyaXZlcnMvZ3B1
+L2RybS90aW55L3NpbXBsZWRybS5jDQo+IGluZGV4IDE2MmViNDRkY2JhOC4uZjhiMTg0NDFj
+ZmNiIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vdGlueS9zaW1wbGVkcm0uYw0K
+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vdGlueS9zaW1wbGVkcm0uYw0KPiBAQCAtNTk5LDE2
+ICs1OTksMTIgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBkcm1fbW9kZV9jb25maWdfZnVuY3Mg
+c2ltcGxlZHJtX21vZGVfY29uZmlnX2Z1bmNzID0gew0KPiAgICAqLw0KPiAgIA0KPiAgIHN0
+YXRpYyBzdHJ1Y3QgZHJtX2Rpc3BsYXlfbW9kZSBzaW1wbGVkcm1fbW9kZSh1bnNpZ25lZCBp
+bnQgd2lkdGgsDQo+IC0JCQkJCSAgICAgIHVuc2lnbmVkIGludCBoZWlnaHQpDQo+ICsJCQkJ
+CSAgICAgIHVuc2lnbmVkIGludCBoZWlnaHQsDQo+ICsJCQkJCSAgICAgIHVuc2lnbmVkIGlu
+dCB3aWR0aF9tbSwNCj4gKwkJCQkJICAgICAgdW5zaWduZWQgaW50IGhlaWdodF9tbSkNCj4g
+ICB7DQo+IC0JLyoNCj4gLQkgKiBBc3N1bWUgYSBtb25pdG9yIHJlc29sdXRpb24gb2YgOTYg
+ZHBpIHRvDQo+IC0JICogZ2V0IGEgc29tZXdoYXQgcmVhc29uYWJsZSBzY3JlZW4gc2l6ZS4N
+Cj4gLQkgKi8NCj4gICAJY29uc3Qgc3RydWN0IGRybV9kaXNwbGF5X21vZGUgbW9kZSA9IHsN
+Cj4gLQkJRFJNX01PREVfSU5JVCg2MCwgd2lkdGgsIGhlaWdodCwNCj4gLQkJCSAgICAgIERS
+TV9NT0RFX1JFU19NTSh3aWR0aCwgOTZ1bCksDQo+IC0JCQkgICAgICBEUk1fTU9ERV9SRVNf
+TU0oaGVpZ2h0LCA5NnVsKSkNCj4gKwkJRFJNX01PREVfSU5JVCg2MCwgd2lkdGgsIGhlaWdo
+dCwgd2lkdGhfbW0sIGhlaWdodF9tbSkNCj4gICAJfTsNCj4gICANCj4gICAJcmV0dXJuIG1v
+ZGU7DQo+IEBAIC02MjIsNiArNjE4LDggQEAgc3RhdGljIHN0cnVjdCBzaW1wbGVkcm1fZGV2
+aWNlICpzaW1wbGVkcm1fZGV2aWNlX2NyZWF0ZShzdHJ1Y3QgZHJtX2RyaXZlciAqZHJ2LA0K
+PiAgIAlzdHJ1Y3Qgc2ltcGxlZHJtX2RldmljZSAqc2RldjsNCj4gICAJc3RydWN0IGRybV9k
+ZXZpY2UgKmRldjsNCj4gICAJaW50IHdpZHRoLCBoZWlnaHQsIHN0cmlkZTsNCj4gKwlpbnQg
+d2lkdGhfbW0gPSAwLCBoZWlnaHRfbW0gPSAwOw0KPiArCXN0cnVjdCBkZXZpY2Vfbm9kZSAq
+cGFuZWxfbm9kZTsNCj4gICAJY29uc3Qgc3RydWN0IGRybV9mb3JtYXRfaW5mbyAqZm9ybWF0
+Ow0KPiAgIAlzdHJ1Y3QgcmVzb3VyY2UgKnJlcywgKm1lbTsNCj4gICAJdm9pZCBfX2lvbWVt
+ICpzY3JlZW5fYmFzZTsNCj4gQEAgLTY3Niw2ICs2NzQsMTMgQEAgc3RhdGljIHN0cnVjdCBz
+aW1wbGVkcm1fZGV2aWNlICpzaW1wbGVkcm1fZGV2aWNlX2NyZWF0ZShzdHJ1Y3QgZHJtX2Ry
+aXZlciAqZHJ2LA0KPiAgIAkJZm9ybWF0ID0gc2ltcGxlZmJfZ2V0X2Zvcm1hdF9vZihkZXYs
+IG9mX25vZGUpOw0KPiAgIAkJaWYgKElTX0VSUihmb3JtYXQpKQ0KPiAgIAkJCXJldHVybiBF
+UlJfQ0FTVChmb3JtYXQpOw0KPiArDQo+ICsJCXBhbmVsX25vZGUgPSBvZl9wYXJzZV9waGFu
+ZGxlKG9mX25vZGUsICJwYW5lbCIsIDApOw0KPiArCQlpZiAocGFuZWxfbm9kZSkgew0KPiAr
+CQkJc2ltcGxlZmJfcmVhZF91MzJfb2YoZGV2LCBwYW5lbF9ub2RlLCAid2lkdGgtbW0iLCAm
+d2lkdGhfbW0pOw0KPiArCQkJc2ltcGxlZmJfcmVhZF91MzJfb2YoZGV2LCBwYW5lbF9ub2Rl
+LCAiaGVpZ2h0LW1tIiwgJmhlaWdodF9tbSk7DQo+ICsJCQlvZl9ub2RlX3B1dChwYW5lbF9u
+b2RlKTsNCj4gKwkJfQ0KPiAgIAl9IGVsc2Ugew0KPiAgIAkJZHJtX2VycihkZXYsICJubyBz
+aW1wbGVmYiBjb25maWd1cmF0aW9uIGZvdW5kXG4iKTsNCj4gICAJCXJldHVybiBFUlJfUFRS
+KC1FTk9ERVYpOw0KPiBAQCAtNjg2LDcgKzY5MSwxNiBAQCBzdGF0aWMgc3RydWN0IHNpbXBs
+ZWRybV9kZXZpY2UgKnNpbXBsZWRybV9kZXZpY2VfY3JlYXRlKHN0cnVjdCBkcm1fZHJpdmVy
+ICpkcnYsDQo+ICAgCQkJcmV0dXJuIEVSUl9QVFIoLUVJTlZBTCk7DQo+ICAgCX0NCj4gICAN
+Cj4gLQlzZGV2LT5tb2RlID0gc2ltcGxlZHJtX21vZGUod2lkdGgsIGhlaWdodCk7DQo+ICsJ
+LyoNCj4gKwkgKiBBc3N1bWUgYSBtb25pdG9yIHJlc29sdXRpb24gb2YgOTYgZHBpIGlmIHBo
+eXNpY2FsIGRpbWVuc2lvbnMNCj4gKwkgKiBhcmUgbm90IHNwZWNpZmllZCB0byBnZXQgYSBz
+b21ld2hhdCByZWFzb25hYmxlIHNjcmVlbiBzaXplLg0KPiArCSAqLw0KPiArCWlmICghd2lk
+dGhfbW0pDQo+ICsJCXdpZHRoX21tID0gRFJNX01PREVfUkVTX01NKHdpZHRoLCA5NnVsKTsN
+Cj4gKwlpZiAoIWhlaWdodF9tbSkNCj4gKwkJaGVpZ2h0X21tID0gRFJNX01PREVfUkVTX01N
+KGhlaWdodCwgOTZ1bCk7DQo+ICsNCj4gKwlzZGV2LT5tb2RlID0gc2ltcGxlZHJtX21vZGUo
+d2lkdGgsIGhlaWdodCwgd2lkdGhfbW0sIGhlaWdodF9tbSk7DQo+ICAgCXNkZXYtPmZvcm1h
+dCA9IGZvcm1hdDsNCj4gICAJc2Rldi0+cGl0Y2ggPSBzdHJpZGU7DQo+ICAgDQoNCi0tIA0K
+VGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29m
+dHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8
+cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRz
+ZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-The result is stack recursion if the NMI was caused on the #VC IST
-stack, because a subsequent #VC exception in the NMI handler will
-overwrite the stack frame of the interrupted #VC handler.
+--------------BhqH5e0Wj40xoBWNu7IsO9dU--
 
-As there are no compiler barriers affecting the ordering of DR7
-reads/writes, make the accesses to this register volatile, forbidding
-the compiler to re-order them.
+--------------VRDBOmJ1uHgwfQWzhxmFFfyZ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-  [ bp: Massage text. ]
+-----BEGIN PGP SIGNATURE-----
 
-Cc: stable@vger.kernel.org
-Fixes: 315562c9af3d ("x86/sev-es: Adjust #VC IST Stack on entering NMI handler")
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
----
- arch/x86/include/asm/debugreg.h | 27 ++++++++++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPY1+8FAwAAAAAACgkQlh/E3EQov+Ap
+rBAAnNb0+xGgF6wok0+sXTo9yTCeKShTFhLJ1H3IdFpTlCuyIGLDZJILtQWGjCKGmiEpa2qYtGi6
+UB05X+m+A/b9njDjJEMS+dXbqbyZ6c/tb+yLDKQyNFjvDEPVo3YPM4eu8xBWpBFPx5XR/zWTWf3J
+czs9CjrjdAm4uKMwxq8Vp8mkJ1AJgPil5B0JUEmLDxtyzrZzXye2griD11G9GG7QzOFQnMzU5R+j
+z2Eh3xsHYtqY573xdra/BTsYiQAUMyn+k0+yd7Pc0t+p3oUdZbpv6FuERJCQGx8OugrmumMut0pQ
+C0nobpiGh6s6urgsUMlo7eDkpAd3xE0xUr4HBB1/UIGUkxyHB4NSJyNBXSL27cSjsFE94XlDKczh
+MZCStOZ0CoBkbqxRNRYGenUH5hAbVkA0mWVE8Sr3WJGT/ZeSannsh8LkZDPNwgmOxBE5LgIQhiUa
+ILPJtUw7pVxFeDYSetjM5/QFi6nov4uXIBhFRXACxM+Pjs4bjYa6uiJFTZXbZWNP4NPM1NZBR2PE
+UGK7rvSOSneETQGHHKK6puuZV0r9iK81rjAa7VmjH3Eusy9QhmtdKKMKIEwxzKWwrZNAgd0C7Hix
+kwhvGdglHntlQ0+eskQ+779Q09DTFHgrlo2yq4+D0hVoKR93DXMMaA1orXOrZkOZzb6L7BKEVI1/
+SUI=
+=rZGJ
+-----END PGP SIGNATURE-----
 
-diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
-index b049d950612f..d54d5dbfb4b9 100644
---- a/arch/x86/include/asm/debugreg.h
-+++ b/arch/x86/include/asm/debugreg.h
-@@ -39,7 +39,20 @@ static __always_inline unsigned long native_get_debugreg(int regno)
- 		asm("mov %%db6, %0" :"=r" (val));
- 		break;
- 	case 7:
--		asm("mov %%db7, %0" :"=r" (val));
-+		/*
-+		 * Apply __FORCE_ORDER to DR7 reads to forbid re-ordering them
-+		 * with other code.
-+		 *
-+		 * This is needed because a DR7 access can cause a #VC exception
-+		 * when running under SEV-ES. Taking a #VC exception is not a
-+		 * safe thing to do just anywhere in the entry code and
-+		 * re-ordering might place the access into an unsafe location.
-+		 *
-+		 * This happened in the NMI handler, where the DR7 read was
-+		 * re-ordered to happen before the call to sev_es_ist_enter(),
-+		 * causing stack recursion.
-+		 */
-+		asm("mov %%db7, %0" : "=r" (val) : __FORCE_ORDER);
- 		break;
- 	default:
- 		BUG();
-@@ -66,8 +79,16 @@ static __always_inline void native_set_debugreg(int regno, unsigned long value)
- 		asm("mov %0, %%db6"	::"r" (value));
- 		break;
- 	case 7:
--		asm("mov %0, %%db7"	::"r" (value));
--		break;
-+		/*
-+		 * Apply __FORCE_ORDER to DR7 writes to forbid re-ordering them
-+		 * with other code.
-+		 *
-+		 * While is didn't happen with a DR7 write (see the DR7 read
-+		 * comment above which explains where it happened), add the
-+		 * __FORCE_ORDER here too to avoid similar problems in the
-+		 * future.
-+		 */
-+		asm("mov %0, %%db7"	::"r" (value), __FORCE_ORDER); break;
- 	default:
- 		BUG();
- 	}
--- 
-2.39.0
-
+--------------VRDBOmJ1uHgwfQWzhxmFFfyZ--
