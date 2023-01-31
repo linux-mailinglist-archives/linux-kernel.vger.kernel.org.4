@@ -2,108 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F084683310
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB2F683313
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjAaQxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S231564AbjAaQzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjAaQxW (ORCPT
+        with ESMTP id S229680AbjAaQzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:53:22 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C4A1BACC
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:53:20 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so5552951wms.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:53:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bhqd6GaMITBFWsSZxAFgSD/pVcPeYfxigZYKMLZTsVo=;
-        b=i9i3CPsz3L3rpqSUAW3pyNW8xK3QlaVCRlZmBfCSGLi8GBvgwncZ7dveHHpsz8lPRD
-         mMhJlTJeBeXOqQ7lZSVG/9qIHj7us7FR/puBjT4U/9WZVEuuE4vwpdAjJptwTpUANKjX
-         1qbINfj79rNUa7GkxWhtgZNM5f6sIaItYWXxB8+CG2It22ZUyxu5oPRSDlJSCtdrwCL4
-         cKRuEz/E4MGaLxhn313/llcXOoMKKNVTM13ObIwCCx1RZYTAuqZXESRcz5RVO3kH9nOy
-         EgrJUZ+1bKGKd1L3DNS2ZdYPYM5hJWAbSKow/AR7npIddv5hzoZ9+/wOqauugcRJjTAD
-         9GLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bhqd6GaMITBFWsSZxAFgSD/pVcPeYfxigZYKMLZTsVo=;
-        b=XlESQlgyv2CLm5fskUaFQKAU8U8w3JByuYU5ANycdUPux5SJoCL9Tk1XNMz/b35vTl
-         3wnf/Gt8utV1VFXYi9WqGb9A7KVWmD8H7fDNmw/pMQbilt9Bs7EbdNN1Uwha/2hWGu0N
-         8QuaSvzTaemeXX0Qo+AVYjSHMwe4WhmcnrnzoTdlsQtc5GUXXlBnpPQpjnmJhDeqFhfn
-         64ECkNnvZpi9ekS163ffWfzMNcGlIoudcIw9kJmyLtjxL2dCqfmFINRQjsPBqTPgri8j
-         NiiK77e+yYPSePxUimdUNyzJcB38Ri8aIVRim0KwcRDrQWujGaCbA8bc4H3v1g/+VmbC
-         GfNA==
-X-Gm-Message-State: AO0yUKU8+P58yytEYD85O4ljm8N+qXF6vbPoamiAwEoET7Izwwy+n7jI
-        FWPQUvw4xwagazA4Ie8kno8ezw==
-X-Google-Smtp-Source: AK7set+bIUfS0fpz76LjE4PV/djVbuOCT4BlmSf/Rro7gzNlxehxQ5YrL1YdpvbOcZrodSqxeHRxEw==
-X-Received: by 2002:a05:600c:3b91:b0:3dc:5823:d6c0 with SMTP id n17-20020a05600c3b9100b003dc5823d6c0mr9404040wms.6.1675183998748;
-        Tue, 31 Jan 2023 08:53:18 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id r38-20020a05600c322600b003dd19baf45asm4052329wmp.40.2023.01.31.08.53.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 08:53:18 -0800 (PST)
-Message-ID: <35a4d692-e4f3-e5c7-2d33-2d5e15694c33@linaro.org>
-Date:   Tue, 31 Jan 2023 17:53:15 +0100
+        Tue, 31 Jan 2023 11:55:21 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D497813D57
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:55:19 -0800 (PST)
+Received: (qmail 453220 invoked by uid 1000); 31 Jan 2023 11:55:19 -0500
+Date:   Tue, 31 Jan 2023 11:55:19 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>, paulmck@kernel.org,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+Message-ID: <Y9lH97/Hw+W90gj0@rowland.harvard.edu>
+References: <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+ <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+ <Y9V+CyKIjg8sgVAC@rowland.harvard.edu>
+ <Y9WeOTmGCCfjMUtG@andrea>
+ <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
+ <0da94668-c041-1d59-a46d-bd13562e385e@huaweicloud.com>
+ <Y9ct1aAnOTGCy9n2@rowland.harvard.edu>
+ <001f7d74-0ef9-a667-b656-bbd18491d5c1@huaweicloud.com>
+ <Y9kugMJrR2oJhUVv@rowland.harvard.edu>
+ <878cef1b-d4e5-f710-dc0a-a9329ad483d8@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v12 2/6] dt-bindings: thermal: mediatek: Add LVTS thermal
- controllers dt-binding definition
-Content-Language: en-US
-To:     Balsam CHIHI <bchihi@baylibre.com>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230124131717.128660-3-bchihi@baylibre.com>
- <20230126161048.94089-1-bchihi@baylibre.com>
- <5ec49108-6ad8-daf7-54ec-104f0923a31d@linaro.org>
- <CAGuA+opQboxH8qoNv4GG+raX=ZZAyRVLC9VLjVCzbT_cUQWWTA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAGuA+opQboxH8qoNv4GG+raX=ZZAyRVLC9VLjVCzbT_cUQWWTA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <878cef1b-d4e5-f710-dc0a-a9329ad483d8@huaweicloud.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 11:40, Balsam CHIHI wrote:
->>> diff --git a/include/dt-bindings/thermal/mediatek-lvts.h b/include/dt-bindings/thermal/mediatek-lvts.h
->>> new file mode 100644
->>> index 000000000000..902d5b1e4f43
->>> --- /dev/null
->>> +++ b/include/dt-bindings/thermal/mediatek-lvts.h
->>
->> Same filename as bindings.
+On Tue, Jan 31, 2023 at 04:33:25PM +0100, Jonas Oberhauser wrote:
 > 
-> fixed.
-> rename :
-> include/dt-bindings/thermal/mediatek-lvts.h =>
-> include/dt-bindings/thermal/mediatek-lvts-thermal.h
+> 
+> On 1/31/2023 4:06 PM, Alan Stern wrote:
+> > On Tue, Jan 31, 2023 at 02:56:00PM +0100, Jonas Oberhauser wrote:
+> > > I have some additional thoughts now. It seems that you could weaken the
+> > > operational model by stating that an A-cumulative fence orders propagation
+> > > of all *external* stores (in addition to all po-earlier stores) that
+> > > propagated to you before the fence is executed.
+> > How is that a weakening of the operational model?  It's what the
+> > operational model says right now.
+> 
+> No, as in the part that you have quoted, it is stated that an A-cumulative
+> fence orderes propagation of *all* stores that propagated to you before the
+> fence is executed.
+> I'm saying you could weaken this to only cover all *external* stores.
 
-Missing coma, so mediatek,lvts-thermal.h
+Okay, now I understand.
 
+> More precisely, I would change
+> 
+> > 	For each other CPU C', any store which propagates to C before
+> > 	a release fence is executed (including all po-earlier
+> > 	stores executed on C) is forced to propagate to C' before the
+> > 	store associated with the release fence does.
+> 
+> Into something like
+> 
+> 
+>      For each other CPU C', any *external* store which propagates to C
+> before
+>      a release fence is executed as well as any po-earlier
+>      store executed on C is forced to propagate to C' before the
+>      store associated with the release fence does.
+> 
+> The difference is that po-later stores that happen to propagate to C before
+> the release fence is executed would no longer be ordered.
+> That should be consistent with the axiomatic model.
 
-Best regards,
-Krzysztof
+I had to check that it wouldn't affect the (xbstar & int) part of vis, 
+but it looks all right.  This seems like a reasonable change.
 
+However, it only fixes part of the problem.  Suppose an external write 
+is read by an instruction po-after the release-store, but the read 
+executes before the release-store.  The operational model would still 
+say the external write has to obey the propagation ordering, whereas the 
+formal model doesn't require it.
+
+> > > > P0(int *x, int *y, int *z)
+> > > > {
+> > > > 	int r1;
+> > > > 
+> > > > 	r1 = READ_ONCE(*x);
+> > > > 	smp_store_release(y, 1);
+> > > > 	WRITE_ONCE(*z, 1);
+> > > > }
+> > > > 
+> > > > P1(int *x, int *y, int *z)
+> > > > {
+> > > > 	int r2;
+> > > > 
+> > > > 	r2 = READ_ONCE(*z);
+> > > > 	WRITE_ONCE(*x, r2);
+> > > > }
+> > > > 
+> > > > P2(int *x, int *y, int *z)
+> > > > {
+> > > > 	int r3;
+> > > > 	int r4;
+> > > > 
+> > > > 	r3 = READ_ONCE(*y);
+> > > > 	smp_rmb();
+> > > > 	r4 = READ_ONCE(*z);
+> > > > }
+> > > > 
+> > > > exists (0:r1=1 /\ 2:r3=1 /\ 2:r4=0)
+> > > I could imagine that P0 posts both of its stores in a shared store buffer
+> > > before reading *x, but marks the release store as "not ready".
+> > > Then P1 forwards *z=1 from the store buffer and posts *x=1, which P0 reads,
+> > > and subsequently marks its release store as "ready".
+> > That isn't how release stores are meant to work.  The read of x is
+> > supposed to be complete before the release store becomes visible to any
+> > other CPU.
+> 
+> Note that the release store isn't observed until it becomes "ready", so it
+> is really indistinguishable of whether it had become visible to any other
+> CPU.
+> Indeed stores that aren't marked "ready" would be ignored during forwarding,
+> and not allowed to be pushed to the cache.
+
+Oops, I mixed up a couple of the accesses.  Okay, yes, this mechanism 
+will allow writes that are po-after a release store but execute before 
+it to evade the propagation restriction.
+
+> The reason this kind of implementation seems less natural to me is that such
+> an "not ready" store would need to be pushed back in the buffer (if it is
+> the head of the buffer and the cache is ready to take a store), stall the
+> later stores, or be aborted until it becomes ready.
+> That just seems to create a lot of hassle for no discernible benefit.
+> A "not ready" store probably shouldn't be put into a store queue, even if
+> the only reason it is not ready is that there are some otherwise unrelated
+> reads that haven't completed yet.
+> 
+> 
+> 
+> > This is true even in C11.
+> 
+> Arguable... The following pseudo-code litmus test should demonstrate this:
+> 
+> P0 {
+>    int r = read_relaxed(&x);
+>    store_release(&y,1);
+> }
+> 
+> 
+> P1 {
+>    int s = read_relaxed(&y);
+>    store_release(&x,1);
+> }
+> 
+> In C11, it should be possible to read r==s==1.
+
+True, in C11 releases don't mean anything unless they're paired with 
+acquires.  But if your P1 had been
+
+	int s = read_acquire(&y);
+	write_relaxed(&x, 1);
+
+then r = s = 1 would not be allowed.  And presumably the same object 
+code would be generated for P0 either way, particularly if P1 was in a 
+separate compilation unit (link-time optimization notwithstanding).
+
+> Btw, how to proceed for your SRCU patch and this one?
+> Are you planning to make any changes? I think the version you have is ok if
+> you don't think the patch is improved by anything I brought up.
+
+I don't see any need to change the SRCU patch at this point, other than 
+to improve the attributions.
+
+> Any additional concerns/changes for this patch?
+
+It should give the same data-race diagnostics as the current LKMM.  This 
+probably means the patch will need to punch up the definitions of 
+*-pre-bounded and *-post-bounded, unless you can think of a better 
+approach.
+
+Alan
