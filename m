@@ -2,170 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06E06836C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DA968364F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjAaTpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S231771AbjAaTUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjAaTpK (ORCPT
+        with ESMTP id S231723AbjAaTU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:45:10 -0500
-X-Greylist: delayed 1496 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 Jan 2023 11:45:09 PST
-Received: from mx07-0063e101.pphosted.com (mx07-0063e101.pphosted.com [205.220.184.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42DB49548
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:45:09 -0800 (PST)
-Received: from pps.filterd (m0247495.ppops.net [127.0.0.1])
-        by mx08-0063e101.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VJJGoR005577;
-        Tue, 31 Jan 2023 19:20:02 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
-        by mx08-0063e101.pphosted.com (PPS) with ESMTPS id 3ncsu32d0c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 19:20:02 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KRAyIpFOHt70zZSyvi3XNGibshc5LN4xUVipiYjqWqoIk/0OrEvYZel9aAGmBn5N+FyOKt6rWOd6hVIBr31joKXtprVBioHCO6aKzhLi88u/zeXZg/EGASq+YeCk+nlUBqT/pe1vsZ4/lItWUO5Ts9j/njaP23LydHrl9W89HEJ/IKFkl/wYG9K+SM980+QjFQuRz//QVoD3Yh/B4P1YCm/lJ7YgFwE5Zq+OC31Gaeaq8XdK9xZltmv3C+Hv+66CQ8dO+PDceJajky/jYyfeGC0FfZ5J/L/8r1nBMRSbt0Tl+6RKkMyGWK4XuBYK9AwFZqoI926pKoJDQIo3zGHpsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QvQo2QTnFc6PnhwvyN4x0vgtasuhGfQIJ8BwhVIeqF4=;
- b=ie9XepCaiQjBwrvMpke0QE7LfTwu34sNcXR7jsRCsElSKSXl+bN8aBfop2mpI3fbjgF5caBbi0LcIbcBvdbM8jgUHHfJF8IVbDif2FYLTJhYd5h+3Gh1ntewfvtobKXFtwtREKt0YM7as9sfJKmTnhp64AxEMuREK0d+bdOWX0pPv3vkO6Y/q8B4vfB3/WpoiLQo4hsrSUDmqyUCRn/hN3bpDq5Kq4GX94/+QNCCd4cEmnzzfvNIJZXiK61umNGaZ+uOE8ZZgMWuoVgtd4HYAD7j0bbv9HhJ46kt/4UNZTTsS8za6GWlQg5BX6+NeiYvn4olTLhA6bkKYw1aqr8MUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=blaize.com; dmarc=pass action=none header.from=blaize.com;
- dkim=pass header.d=blaize.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=BLAIZE.COM;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QvQo2QTnFc6PnhwvyN4x0vgtasuhGfQIJ8BwhVIeqF4=;
- b=H9TG4VPZapIDiph/vIpyMp+0RAxB5x+eAu4cPIi1kZhIkmMbv4PrDNnhe93cUzFJnQW/NtYYTTBhDWf9YwYJsHSn2Nxv7jdMUtI6orAp8rQSMCCwEQkijptVIpB7aS8ZNiNGJFl64PK3RWXckqiX/Tk+KLB+Nltpg+JVVdRs1tw=
-Received: from MAZPR01MB7261.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:5b::9)
- by MAZPR01MB7328.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:46::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.22; Tue, 31 Jan
- 2023 19:19:57 +0000
-Received: from MAZPR01MB7261.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::6847:b57b:6b84:28a2]) by MAZPR01MB7261.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::6847:b57b:6b84:28a2%2]) with mapi id 15.20.6064.022; Tue, 31 Jan 2023
- 19:19:57 +0000
-From:   James Cowgill <james.cowgill@blaize.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Philippe CORNU <philippe.cornu@st.com>
-CC:     James Cowgill <james.cowgill@blaize.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [RESEND PATCH] drm/panel: otm8009a: Set backlight parent to panel
- device
-Thread-Topic: [RESEND PATCH] drm/panel: otm8009a: Set backlight parent to
- panel device
-Thread-Index: AQHZNakBZUUgkrNplEWf8+OaQ+Z2iw==
-Date:   Tue, 31 Jan 2023 19:19:57 +0000
-Message-ID: <20230131191748.874884-1-james.cowgill@blaize.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MAZPR01MB7261:EE_|MAZPR01MB7328:EE_
-x-ms-office365-filtering-correlation-id: cd34869e-37a9-4a5e-928e-08db03c023fc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nsJA6NRSGCzia+CdMEUmfdnigkl/sQjrDaq4ZhiBcon2YhWVjhbrHFBhBg61TOAY/6UaNYP+qYM0yStRnPLStn+S/00/lARMUUxJmKb9qKCdXZpVnIPVEdmTdBO56IMnOoOwEPBnjl8TwFxxzk2j2/bCNhLfMvxHqSGThgKzjW5NhDaB8I4ekvkJHFBAdya4o5nHBecEWkyFWcyJSbvfSjU8JjG3zQt5jZqJfBQMeeVeaAnNZ2+74wIbQ1+3K8/MCJzyMwdIfx4onl22thGIbZo+hvvDKq2e/3Z4MiEbmM8dzUlXs/tXO3NO6QysIeSjbZsA3B68NeRl4KXzVCeNYW1uutqmc/X1ncQ60UaiLi0BNvBmECqjwUOWg/5wjl3sUL61w9+NZCmP/JIc1bjyqpCciUYcOc8h2w6UFbGSGOwL/Y59tLXVJXhuBX2xN7UDAZYkj1TG+K/FK2sJSWzvtQadqEZhhXQ4zEo96ykvczVaH+0q9h6I7k2OCdqamgrjaLzvynYTRx9b9Y0OS8mi6ZLeLVvn0Gts+EhnTkdoQ6e7I8c5yD9y2mMny3E3uGNUv47dsddKk31pWwKGM8YHJryHvzw11xneMew9vI1eMsDMUCcPi6I58KIwmgK0iKp9EE8rxQU7Hlvr+H4LpNCsgGO3ODp+ZvPsPrOUltH8w2UTSODyq7CgfDfWGaivmvSgduRUA4Iuhs8f8yPSqaPSig==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MAZPR01MB7261.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(39840400004)(366004)(346002)(136003)(451199018)(36756003)(5660300002)(2906002)(71200400001)(316002)(186003)(2616005)(83380400001)(6512007)(478600001)(6486002)(110136005)(6506007)(26005)(1076003)(54906003)(64756008)(86362001)(66446008)(66476007)(66556008)(8936002)(44832011)(41300700001)(38070700005)(91956017)(4326008)(8676002)(122000001)(66946007)(38100700002)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?tFt9cHDKUrgRIEifjlIYUMhSBz55EdI6z4n9PUaZVSGzEFMxThKW6w7u2J?=
- =?iso-8859-1?Q?mLcuRqVLdeTLpfBSKdCSU+ELdeOD7dRaV1oWoiOUpzFodxpHiWjbN6nthu?=
- =?iso-8859-1?Q?AL/qf/3xqWfshc9wYmSkvfLtgQaEva7sJR6FuXLY6L9LkS1B+Oq0DlxzRO?=
- =?iso-8859-1?Q?Dm7McuBF9BHybSIszBeY/60c2k44vBi7ZI8LU26bwZ/VCZePDvo0PRRCUG?=
- =?iso-8859-1?Q?rJlvlPt72LwKbYD6mqeDP6sQp2AUgTOkiG7s6TZgLTWiiI5t7GOK8PmOYD?=
- =?iso-8859-1?Q?NOyhg0XIpBYQEGAWu+XhhSHf1YhCJhJYGXxRh5A5mR+ysCuSJjGSggbJ7J?=
- =?iso-8859-1?Q?cj8Y/szKXJ+DvrumP2GmzxKfGidHmQMFFwEPFaEJcVir6cflw9pPWgUcHT?=
- =?iso-8859-1?Q?1vrrU/rYAKg79qssIBc/4MtmcemOM23K3JQfpv+LcRkIyc+bCVIPsWEWg2?=
- =?iso-8859-1?Q?NpV8C53oq0l3vW5gkxaN25CQE1XcXpcPYp9HQrj5eMhjpmE9RD8pI6C/13?=
- =?iso-8859-1?Q?Az3tnTaMIi2ZK/kSuHoztjwyZ3zVfLIpjHB/HmA3Zz5BJGl6hN+RDi9fGT?=
- =?iso-8859-1?Q?aB7fpFmAKRlMt4VTT8ak+Z/qaKyq03XkPWNSBVB7ir7293SPFq8W2awvo4?=
- =?iso-8859-1?Q?YBVFk2G8dkptWq8TDtgPtBV8t3nGSPIAnpcWqOKwb3VIOH1gpOjGWUUEEA?=
- =?iso-8859-1?Q?SmcGUK3wpJ8T3pfRvNYPGu9Ca6N5rOR7xtRYWMZV65p+4sVerW6TKJ67T3?=
- =?iso-8859-1?Q?kYsZzmrc4yAiJBTUgkj3XDd39ddQ12aR3m5zpIyDr2bkUmGUAA39VoeHNo?=
- =?iso-8859-1?Q?zoeBDDiuOKtWHVKBpjLCb7WhOJXqmhA3rJBFqbCW1QzJlC5bUR0GIkDOsF?=
- =?iso-8859-1?Q?9D93sx2/xM6RBJXOE0eUZMPtPyeyZQ6hCO9YFotZHY3iV8LNi2Gs6HySf3?=
- =?iso-8859-1?Q?NOYUgx1EYfqkC7suSf4cTioenkVmwVRlUBrXxB0aSjuMDhJK3/ecRkD7F+?=
- =?iso-8859-1?Q?JxmIWZKFA+9yMNBQ1lvNaoLGrpks+4rui22Ecgwt87KKE4w7sipiMi2oiw?=
- =?iso-8859-1?Q?jAjZw3SytFULH8s1t6r5VgEkEWeW6jfeyRwFo7c6CO1gsbi2LBjR8gfViH?=
- =?iso-8859-1?Q?1lLx/quCYA+mCNO7gi2rYYx7KgYDJmMnL4F3LESxMlSbKnMKmwYkAhpFM6?=
- =?iso-8859-1?Q?gKHXp6CeDYMz9oXuPXhVZ4k3Ui036uOqQ2rtRqTbFJK1XCRwVVNweH5zdW?=
- =?iso-8859-1?Q?kSnnPu8W3EFtKoJEKQ4pK8gkYNMu5j6E5kMxjbwIzC6NIIeZW0EEmVfZuM?=
- =?iso-8859-1?Q?zam5L2D9OiKT41Y1b6MYzVoqXUlmloBUWle8F0qzaHsH+pu3NyZ6hdNWS8?=
- =?iso-8859-1?Q?dakbNXeA2GBmx0WzWf/JSLqku/1vTouy8tHiSfBelctJHe1hDv+fCyP6Cc?=
- =?iso-8859-1?Q?WlknK+Q7K5B8TwzWpYQV+rrb0LRz17dOa1F658mazRQkxR57s1BeEayrJH?=
- =?iso-8859-1?Q?TENMl7LAmmDcerne2YgGYqVeY3NFH9IsBBqd7VzHgohylhlNTdf0ZCbxH3?=
- =?iso-8859-1?Q?K+PXzhIA18c9MAKGV3BHSXuqH5ZzTwIrv4JowJI/16ycZeAwnob4cvBBSS?=
- =?iso-8859-1?Q?TqKIGMlcVaxK4iBddaAWtOxusK/Whp319x?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 31 Jan 2023 14:20:27 -0500
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5764215C87
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:20:16 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id i6so3082551ilq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:20:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5E0WkKSlwMnkSQam2K3hwAbOWLDxhrQDjQkwQIk6UGI=;
+        b=C2RXPodxbAjGP9NOH0qoHVRffXo9Nwg19A5X8bgvah5RjCclVxYDZyTeWJHNO5xvE0
+         xBv3WZbNKLizKvyS8VfePoZytlLTIZNkVrYO4J63nOwRJtI0wJJxwsqBxNn6TvFlBF0Z
+         /n1kRKUjDEmItPG7UbkeoKKGZj1VDLPVyyEE8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5E0WkKSlwMnkSQam2K3hwAbOWLDxhrQDjQkwQIk6UGI=;
+        b=mqlPW9/FjU+xaRscUW7BZK65qu5jRIt6DZ+pZRlrmUvl9e3rS3eoZxGCoUUVfJX1ia
+         DOQKydV2WuGWBk88qoWv5DtXV1SKLlfo/Yr62O5SdjvD0cg+a+CYJ5SG7wptgPYoWW7l
+         qiiuqZuJ7jVSzJOegH21jWnn3hmfZfk9xv3OWcvsEbU0f6oqq+b3OEgCeeZCR5T3Skoz
+         no/PYS1nVjarsRFSapzqirx5PHGvFEyswJ7qcD8a3SNlHuOjL015/cGb73wrb7pZfoNL
+         3gyIvBckvMQ/j+w6df4/1X3Lnazq6iaRJxCVi9R1Pth3sdk9uSG2n4JoG5RQeeNcJH1l
+         GA1w==
+X-Gm-Message-State: AO0yUKXWFM5WobwxoF2sN10Q0fnVC9Uk8D55TFM9u86fZ+mfdIvqiWOo
+        Cb9Z+RXx+krIMcAbT/0/1tNZ9g==
+X-Google-Smtp-Source: AK7set8siwIO4FaKPC7+dFQb1GCIBMBKs+WowGEQeuNvAcOtEmsAGVYIjeTiVl721VXKW5e0mms6EA==
+X-Received: by 2002:a05:6e02:1d05:b0:310:cc70:a152 with SMTP id i5-20020a056e021d0500b00310cc70a152mr5682741ila.2.1675192815542;
+        Tue, 31 Jan 2023 11:20:15 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id s8-20020a02cc88000000b003aa9ddab101sm3438287jap.19.2023.01.31.11.20.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 11:20:14 -0800 (PST)
+Message-ID: <53f52975-98d0-dbb3-9781-0366143f2dd0@linuxfoundation.org>
+Date:   Tue, 31 Jan 2023 12:20:13 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: blaize.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MAZPR01MB7261.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd34869e-37a9-4a5e-928e-08db03c023fc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2023 19:19:57.4948
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9d1c3c89-8615-4064-88a7-bb1a8537c779
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4Ah2CtB+FbUIqs7vxqJO8qb7DTE0S36jhSGyMz/ljF9pWN1VoT9hAc7fLzjiuBIX8wFxN+b+LRUlq99lvLz8tg4dStHDjNqrxojpkPf/FCI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MAZPR01MB7328
-X-Proofpoint-GUID: rMgVotVNIMLkYlutfg-nnY2Biucg2A54
-X-Proofpoint-ORIG-GUID: rMgVotVNIMLkYlutfg-nnY2Biucg2A54
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- mlxlogscore=848 suspectscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
- phishscore=0 priorityscore=1501 bulkscore=0 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301310168
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] docs: add workload-tracing document to admin-guide
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     sshefali021@gmail.com, kstewart@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230127234616.55137-1-skhan@linuxfoundation.org>
+ <f48e8dab-2a68-88d2-7917-f8f34a39e322@leemhuis.info>
+ <021776e6-b37f-0a2e-41e0-5c09f9582c57@linuxfoundation.org>
+ <87o7qf4m2p.fsf@meer.lwn.net>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <87o7qf4m2p.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the logical place to put the backlight device, and it also
-fixes a kernel crash if the MIPI host is removed. Previously the
-backlight device would be unregistered twice when this happened - once
-as a child of the MIPI host through `mipi_dsi_host_unregister`, and
-once when the panel device is destroyed.
+On 1/30/23 16:52, Jonathan Corbet wrote:
+> Shuah Khan <skhan@linuxfoundation.org> writes:
+> 
+>> On 1/28/23 01:35, Thorsten Leemhuis wrote:
+>>> Adding another section that doesn't seem to a be a good fit feels a bit
+>>> like "making things worse than better".  So wouldn't this maybe be a
+>>> good opportunity to create a totally new top-level section for
+>>> application developers and system integrators, even if it's tiny for
+>>> now? The audience is likely big enough to justify that -- and the topics
+>>> are likely different enough, too (of course sometimes there will be
+>>> overlap, as always). Any maybe it will help to bring other stuff over
+>>> from admin guide that is more targeted for application developers and
+>>> system integrators, which will help to get more structure into the
+>>> admin-guide.
+>>>
+>>
+>> I like the idea of creating a new top-level section for application developers
+>> and system integrators. I foresee this section growing and also we can look
+>> at other documents that are a good fit under this category and move them over.
+>>
+>> Jon, Thoughts on this.
+> 
+> The fit with the admin guide caught my attention as well, but I didn't
+> immediately have a better place to suggest.  I am somewhat resistant to
+> creating another top-level directory; I really want to have *fewer* of
+> them.  I certainly don't want to create one for a single document.  My
+> inclination would be to leave it where it is for now; we can always
+> revisit this if it turns out we have a lot of material that justifies a
+> new book.
+> 
 
-Fixes: 12a6cbd4f3f1 ("drm/panel: otm8009a: Use new backlight API")
-Signed-off-by: James Cowgill <james.cowgill@blaize.com>
-Cc: stable@vger.kernel.org
----
- drivers/gpu/drm/panel/panel-orisetech-otm8009a.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Makes perfect sense. I didn't want to suggest a new top level for the same
+reasons. For now I will send v3 keeping it in the same location.
 
-diff --git a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c b/drivers/gpu=
-/drm/panel/panel-orisetech-otm8009a.c
-index b4729a94c34a8..898b892f11439 100644
---- a/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-+++ b/drivers/gpu/drm/panel/panel-orisetech-otm8009a.c
-@@ -471,7 +471,7 @@ static int otm8009a_probe(struct mipi_dsi_device *dsi)
- 		       DRM_MODE_CONNECTOR_DSI);
-=20
- 	ctx->bl_dev =3D devm_backlight_device_register(dev, dev_name(dev),
--						     dsi->host->dev, ctx,
-+						     dev, ctx,
- 						     &otm8009a_backlight_ops,
- 						     NULL);
- 	if (IS_ERR(ctx->bl_dev)) {
---=20
-2.39.1
+I will take a pass at the existing documents under admin-guide and in other
+places to see if others could be grouped under a top-level as suggested by
+Thorsten
 
+thanks,
+-- Shuah
