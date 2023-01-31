@@ -2,235 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EFE6838FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8192C683907
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjAaWA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S231509AbjAaWFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:05:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjAaWA4 (ORCPT
+        with ESMTP id S231220AbjAaWFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:00:56 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2068.outbound.protection.outlook.com [40.107.101.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F14FAE4;
-        Tue, 31 Jan 2023 14:00:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TRjWwHmSZhqLUMU7EC9sC6kQGxdancMUgXj5mk/aZuWnTideWyA++AN0D9dmxJ7Py4soobA588vh2hJLYT6g+UIU2E9i7FiA0RrV/NlBpaEJ3MF//EnjIprIEiqVq7rimLcJ0LqtfvbW60FgKIGc1wlRVqNwMQz/2yxrMF0r9gZZwjBracpMDlr3nIuTY5vT1AJ3njjXXaKtj3go+gu/8Kl4W3p3lyieZxMkgxWlP6YafPxtKR6fgiLYTuJuWbap5jTui4xDaKqmTkv5s5pU14gz6BIUqLWHvIR0yHiqCk8+hbd9Ixm4gsowaGefAwKW82Dlbq1TSoCUe0sor/7srg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dsVyyYs0e5NyYf3dAMOlv0j3RXmAL7O8D4n09s61MLY=;
- b=mj3kb2s/0RsXUwmrRzyhtkRR4IBVw91zANlA89wAy1gWGT/ZHCSrQ2Ua+lg6jJJE7csdnZwWz/FBSsgeLJR3Dv6l7F+I3/0sGcRaXfCpWvcUoSaviAPFX4Xwt8q/jqnntvkit7P0UPtL/OC9ZsiwRUoCCKSc5/F87QXNK7PAq2qV/45TbWTidLeVHWiAEogxchT8fcv2NTpNNFYTx1ti/qWqiQwTxskvSsoyWVXo0VjpE3Rd7KYEZXZPU+pJCWM0pr+vNoHBcWA7aBCfCjp+gE4sKJ3dTkmVV63P2XXoaBUC1w8tRQCRSNQUqyKdGPbYMfm+WKsG8/QAcHnEtH0reg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dsVyyYs0e5NyYf3dAMOlv0j3RXmAL7O8D4n09s61MLY=;
- b=3ixcV8BFXl0YDBe6rv4Jmhxnv5Au8in0AFC2G9T20m4uY/Bf1hhajbrtVIrM/2IWmueSD2xAS8HOasCPEnkGes1utF9qRcPwqHclikY+x3HQJhNl90lw24tGxj2jjGpMSQ7W/+sSP+rbP2h9+LdBRQFTQnGC0rOzfn1jGs+EUdo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com (2603:10b6:5:48::24) by
- IA0PR12MB8301.namprd12.prod.outlook.com (2603:10b6:208:40b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
- 2023 22:00:53 +0000
-Received: from DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::2867:7b21:95a4:aaf]) by DM6PR12MB2843.namprd12.prod.outlook.com
- ([fe80::2867:7b21:95a4:aaf%2]) with mapi id 15.20.6043.036; Tue, 31 Jan 2023
- 22:00:53 +0000
-Message-ID: <4c642bd1-5f1c-292e-398f-eed699db590d@amd.com>
-Date:   Wed, 1 Feb 2023 09:00:30 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH RFC v7 52/64] KVM: SVM: Provide support for
- SNP_GUEST_REQUEST NAE event
-Content-Language: en-US
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
-Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, hpa@zytor.com, ardb@kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, harald@profian.com,
-        Brijesh Singh <brijesh.singh@amd.com>
-References: <20221214194056.161492-1-michael.roth@amd.com>
- <20221214194056.161492-53-michael.roth@amd.com>
- <aab7ed11-870e-579d-9328-4c32d9936392@amd.com>
- <66039193-14ca-5edb-d8d4-ca732d8c13a6@amd.com>
- <119075dd-5f3e-a393-f543-6cdfd34cd337@amd.com>
- <385016f9-e948-4f7f-8db3-24a0c0543b3d@amd.com>
- <55e5f02f-4c1f-e6b0-59ba-07abc4d3408f@amd.com>
- <81037a58-6b5c-cde4-79fe-3686d9b8a551@amd.com>
- <b0baa6ee-ea6d-3a30-d5fb-3ec395896750@amd.com>
- <dbcb6666-270a-4867-6de7-73812d32fd8c@amd.com>
- <7fb25176-3752-1be3-66d4-a7f5a0e1617a@amd.com>
- <682c0bf9-ccf7-9660-21fe-925ef63c5fbb@amd.com>
-From:   Alexey Kardashevskiy <aik@amd.com>
-In-Reply-To: <682c0bf9-ccf7-9660-21fe-925ef63c5fbb@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SYBPR01CA0152.ausprd01.prod.outlook.com
- (2603:10c6:10:d::20) To DM6PR12MB2843.namprd12.prod.outlook.com
- (2603:10b6:5:48::24)
+        Tue, 31 Jan 2023 17:05:12 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC7C5A821;
+        Tue, 31 Jan 2023 14:04:44 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id g8so2070060qtq.13;
+        Tue, 31 Jan 2023 14:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MMMEUEVltqpkhgX3Kjutpryf6MbBtm1Jhz+7EncfC3g=;
+        b=CEyuvDcLtt0JpgnTKkraMuo0YZDx8veO3i4l5T14RYnOvTeSZmoJF8S9tK96DdnHY9
+         6hQTUxl5f05pg9VsIp0Rs9ZeTx5aHpabZY1epm0u43ZVX0xrbu/ZIu/jNj3TUNSdjtMN
+         CEhnzuajVVSO6t7fCr6jH1/JLC/xlkg2Dpmc+4YPxeVDStg6gof/r6MJ7cF5moiD17r+
+         C5BR5HzRFfkzn08DfRVA+Jri8g7MywQnMQbWUTg5VXqE/TZN3FENg3g9EVCOqGCwfhxt
+         qdHRMfuu1IMFbhCcVuJ/aWHqLXn3SAqlaWzlYcu71x4BtVnj782LOCIM0S0H37HHFD4H
+         m5TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MMMEUEVltqpkhgX3Kjutpryf6MbBtm1Jhz+7EncfC3g=;
+        b=h/5BEl6EtS4iF9APaw8xj7Z5Q9DRwAjxc2sWby/ItV3SvXD35wyx4HtqiI1XNfSAw7
+         feZstHhCvPsnf2lHdikA3j0rXStPGnTteEVLDrhudswMZpPyrtW/QeQvp2i9nMAZ+m7Q
+         Ac5Vb6mR57BdhMpljdqr2kW4eLXziThlXn68lG8TraGZqdJ6gipRUbDb+e9Elnk92vqo
+         NZft+sgXQcRBAP6gmAD7ackq+vGehehf2WLDuYIKFj0tvNlbSxhP9wD6AHtkBmDSZncg
+         FGoYBNDS0qsI3k0gg/wlzMjnzS/gemb3tUpabnnxncMwWa6Vd9CH+wgMya9ceCY4zgsN
+         37fA==
+X-Gm-Message-State: AO0yUKW1rKuweeLmXaNIfx59LPtewH7UUfCT1WQCWla2raorZ9UP8wxp
+        l4cji/IIvqhLK9ct+BAOMSE=
+X-Google-Smtp-Source: AK7set+Wqugp46Wl+FqKZxsegT45Z3haMQeI1wvyJCwjmTMin1eBNmWgyEBBOI6ZPZOwGcmNA8oRtw==
+X-Received: by 2002:a05:622a:138b:b0:3b8:6c08:21f1 with SMTP id o11-20020a05622a138b00b003b86c0821f1mr386409qtk.51.1675202674477;
+        Tue, 31 Jan 2023 14:04:34 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id a17-20020ac86111000000b003b0766cd169sm10686207qtm.2.2023.01.31.14.04.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 14:04:33 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 0141427C005B;
+        Tue, 31 Jan 2023 17:04:32 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 31 Jan 2023 17:04:33 -0500
+X-ME-Sender: <xms:b5DZY2KzSgNny5Ilweqiqwt6M35nsjqa9M-5ol2Kcn1v-CQl99Uyfg>
+    <xme:b5DZY-KIRib6qdaAlxAO3F_27BM01d4CMyXoL-as_Y4oYIRFOy5GW_0I4-zGB75gZ
+    B2Lwu42qbcs0yB6wA>
+X-ME-Received: <xmr:b5DZY2usu85QVxVkux7it3uuqcJl4hLzEjdPlBADsvOoH4uW4ECKkd54Tp0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefgedgudehjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhepfedtvefhveettedtgfffiefgkeeitedujefgudekiefhffehheeuveel
+    ffekfedvnecuffhomhgrihhnpehlphgtrdgvvhgvnhhtshenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
+    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
+    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:b5DZY7b3V6QyWJt3tvySuQ-Z00vWWqQAxt9RQGQVdToOWSbddIZBSA>
+    <xmx:b5DZY9bADW43mdclG9hMiwz4lUFSoMuL_Fz8SWD93nEiKf888ivGDg>
+    <xmx:b5DZY3D7SRGaUFBlrs-DIZKgcIbMXv2j1iRi2Fk6-B_tGxCycflbMg>
+    <xmx:cJDZY6SQi82tTMrHPdpMb_Iaq8eLMme_V5yhFBa--l7q6mrR_Jy_NQ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 31 Jan 2023 17:04:30 -0500 (EST)
+Date:   Tue, 31 Jan 2023 14:03:32 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
+        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
+        Marco Elver <elver@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
+Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
+ generic atomic ops
+Message-ID: <Y9mQNNhzkOF/+uuC@boqun-archlinux>
+References: <20230126173354.13250-1-jmaselbas@kalray.eu>
+ <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
+ <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
+ <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
+ <Y9RLpYGmzW1KPksE@boqun-archlinux>
+ <2f4717b3-268f-8db3-e380-4af0a5479901@huaweicloud.com>
+ <Y9gOjzGaWy2hIAmu@boqun-archlinux>
+ <2f121e2d-8e4c-de99-5672-93350fbb52af@huaweicloud.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2843:EE_|IA0PR12MB8301:EE_
-X-MS-Office365-Filtering-Correlation-Id: eef611a4-3402-43e4-cf76-08db03d69ebc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l7GaFX+FatlI/v2eZpaRb6J1Q4S1tZVPZLnjVwzgEHIsErz4nm3BoozMLtxOld6p0ff3+X9Ux8ty2ghh30m0Pug7kl0gxJwkrZNJXOds4BT+myWgGT/i8eeVEyANazcTRLxD45CxE2jM924MgOD4K1EYHVE8WUHoPFF6bc5LOKiC9JkeibT7SWVkLY13i/XmqrtAfcE/LxI55Evcu/mSe8KRd98uLYYe/bx2+3L3ZBDjdJlMZO1ftkAXLCS7bNEZdU/7BUo1YQWkzBnUvq5kcAenm5oSAjRzJL6Ek01Twuk/rQ26JKMs25RBLoYaTzYg6j3uo63Srxj+7Kvn5Z/O2vU+X3v3pQc8a+njIcpD+ySk5+cPCsDMasOHHOmp2T7u7+LOOZYAe2QeoTpIOgBhQfl3SIOi/E7jwBdXki0yr2Iuywh+hAz2z+IfVLhTTX2Cy+Hk1MnUIXzZNKLtT9WN2uKQ4wtZMLhq0hdAt64vc1gRJrrDT8kOOfKfSO5pMg+WkCEQVFbyLdUi9XalmHhO/OiQdfJyJt084DQPw2PiRMVTUyUvNShE7Yn+Csi+4UnpwujNCgyVx4nb5wNIiuUf8Vbdh3yNlj/UY6Po61Y10t7bgtiPhAc63wZ6fYfeIgNLYxFXTeLbKWCDFt0k6QlIejPcTHHChDtaK2rgKRcWc4w2OgN6z6B7XTHYTYjaEouGBUBB0HX83YoeKVOiyCRXpLyx2YQQkJPoloL3ZH4J0nI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2843.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(396003)(376002)(366004)(451199018)(41300700001)(38100700002)(316002)(8936002)(2616005)(110136005)(7416002)(7406005)(31696002)(5660300002)(2906002)(36756003)(83380400001)(53546011)(4326008)(6506007)(6486002)(6512007)(478600001)(186003)(6666004)(26005)(31686004)(66556008)(8676002)(66946007)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0ovcnAxS2ZCRWlxOExmQVBTZjB2SCtyWkdjS0pZTXVsMGRUVys1aEhrVmNl?=
- =?utf-8?B?ZzBac2FYYko5LyticHYrS3FzSDYyRkwwMVAvOCtiemVhcUhCcnYxZCtnY09j?=
- =?utf-8?B?bVhLc3VWcjdMajFScFVnakovcWViWWcwSE4xUXRreXdiQlBpUFc5TGU0ZTlx?=
- =?utf-8?B?cUcwSjNtc0NGTm94dHpUSm9IcG0vNXdmU2RDNmJwVHlzaEIySnh5dllvSkZn?=
- =?utf-8?B?dndjRHI4eG1lV2FrbVJGYTd3aDk4MHduaXdWcFpwa2FJQldhcTlaV0ZSRERq?=
- =?utf-8?B?V2FSSDNobkl1UGtHMnVtSnVyeUVIWWFDSVZyR2toQ1J6NUF4Ry8xaC8xSmZv?=
- =?utf-8?B?YmNUUHloL0tWSnpNUTgzSmdqWXdOWVZDNzRVWEJCUEc1dGc0bno0eE00SU91?=
- =?utf-8?B?MWc1VTlOVVg0dmFoN3k0ZnFrRDBJVlh4RHVKUFJFU1RXSlNybnZWcWJXditk?=
- =?utf-8?B?UjVYbWVWeDQ0aTNDaTJLN0ZqK0gzd1dXanIrRkJSeCs4eU94WmlZWWMvczMr?=
- =?utf-8?B?ekxpTmVyU2g4ZGR0aXNHTlpQRHpDYms4d0VjcjVhQWVtR0dYUm9uNzM1cE1F?=
- =?utf-8?B?RS9wUS9UdG9LOWdGK05OYWFDZlh5NEp2S0lDVmZGdEQwbG5teW9OTjFFUCtF?=
- =?utf-8?B?a2U3ZWg3MUdPY1lRM3FkakZjZlVtM04xeVM2dnRPSmpFYVpuQjZUUUw2Q2tT?=
- =?utf-8?B?YTVVZGwyTFpCWWpoMVMzMzVSS1R6N0N5Nm5rMFd5TFd5RXg0dEpFSi9Ya2VG?=
- =?utf-8?B?WVlpQ2ZwUjRSTm5YWUJIRk44UTczN3d2VEl0REdkUktaelRvNWE0ZFI3U3gw?=
- =?utf-8?B?SWZaZUlvSUM4ZEhvZEN3dGhIWUhzNmZIT1VubnhlcHBqR2VwY2d4WGlGeW5Q?=
- =?utf-8?B?ME9GbzNWYk1UZ1diTW1KdFk3YTZ0Z0ZFblkwOEMxdzBmV1FGMGlkejVBR3c3?=
- =?utf-8?B?dUVuQjdiRlZIeFRqNkhjNDBrY3MwWnBUUzVuTjBCNjh6c3o5YkVEZS9vbFdR?=
- =?utf-8?B?MXhOM2FMajhnWnJiQWVmelJLNGkydWh1dEJTQ2RWRC9rNzdud1ZxUmtUSHRM?=
- =?utf-8?B?ZW1PRFJKMk8zNGpPSitBZkZQMUZlWU9Ob1Vic0NsbTFGVVpqdlhZWnpuWm9x?=
- =?utf-8?B?TzFQYmYrOUZ1OFlpT3daNGdLK1FlTlkyVTArZEhkRHJjZnZleVZ6ZmZWSFI3?=
- =?utf-8?B?S2JxTWVNODVUaE5vS2pTRVdHSzF3UVdtamtTSXNmSUVyM0IzZjBuODg5MVFJ?=
- =?utf-8?B?WWJSaDBZWnJEQXc0TW5LblVVQ1c3NVlwZEttSWoxMk5VZXEyMlZQbGFtdjl1?=
- =?utf-8?B?T2RSRzhsanpnQ2VURG5MaE54WGI2eTBiU0tnSkpTWXlyQmZyNFBLME55MUdo?=
- =?utf-8?B?TUVCNXNUNHdwRXdJc3RnYi9KY1VLKy94WXNrUlA5ZGNQdnZSZnlhaHVxVndW?=
- =?utf-8?B?L3JGNXY2RkxscldjaVhlcXducUJWdXhrWmRxZDdjRVdFclhEMm85WElubGxk?=
- =?utf-8?B?UDh4SmptT2tXT0JEc1NnVmJnODRMVzdsbi9ORE5DUEUraTFIOURNWFk5M2NL?=
- =?utf-8?B?YmVBU2t1VEwwZEFUUHU0dFhxdFB1cTlDN0xOelFOQ1gvWUdCbWFOWFl1aEVN?=
- =?utf-8?B?dWF4UnJVVW42UStKRElwRnNLWTFOdTVNMkxzKzNBekJHbTVGdzJQOVBsMnFt?=
- =?utf-8?B?UGdKa0dubzlDNGJsUXBNeEdQcmxJSGVhVjczZzFJNVp4YVZPRVRMN1ZPNVQ3?=
- =?utf-8?B?SXRUZzNiUlBnK1k2WXRkZlJuVG9QQ3QvWktsNW00U2JMTEdrdXR2cGhPck9M?=
- =?utf-8?B?S1VmVVo0WGU0OHE2cU1uc0J4cUdYdHZ6WlRLWjMrazJtbWxzUkt1SzdIbkIv?=
- =?utf-8?B?eDRpNTZqa29NNnJlRzNTUy9ETUJpcWs1UUpSaTAxMHNNUnNkRUx6VU9EeCt0?=
- =?utf-8?B?Ni9yVDhrSWEvRkJhMnhnU3NQRmc0YWR1ODJldFhla0kvZUZGNHc2a0JneEE3?=
- =?utf-8?B?VWJEUC96SDRwbGN4TjhlYkNGZG9qelUrLzA1SDlIczFVMTVSZFhyM0d2L1hN?=
- =?utf-8?B?S0JvR3dMdFdXeHREUWNCME84elVXaXFhek9yei9LeStrYVRkcWdjNVlubWRU?=
- =?utf-8?Q?EtbPbpLsfoDFomdSXG0uq+d/w?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eef611a4-3402-43e4-cf76-08db03d69ebc
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2843.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 22:00:52.7396
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fGJMagJtsEV2Ag0zFjabhHD1ib9xPeZEudN+5SjK9FIZA82cKMh57FE8YgoJ1pcZ2eMWdi26wpl53resfT+RKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8301
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f121e2d-8e4c-de99-5672-93350fbb52af@huaweicloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 01/02/2023 08:21, Tom Lendacky wrote:
-> On 1/31/23 14:21, Alexey Kardashevskiy wrote:
->> On 01/02/2023 03:23, Tom Lendacky wrote:
->>> On 1/30/23 19:54, Alexey Kardashevskiy wrote:
->>>> On 11/1/23 13:01, Kalra, Ashish wrote:
->>>>> On 1/10/2023 6:48 PM, Alexey Kardashevskiy wrote:
->>>>>> On 10/1/23 19:33, Kalra, Ashish wrote:
->>>>>>> On 1/9/2023 8:28 PM, Alexey Kardashevskiy wrote:
->>>>>>>> On 10/1/23 10:41, Kalra, Ashish wrote:
->>>>>>>>> On 1/8/2023 9:33 PM, Alexey Kardashevskiy wrote:
->>>>>>>>>> On 15/12/22 06:40, Michael Roth wrote:
->>>>>>>>>>> From: Brijesh Singh <brijesh.singh@amd.com>
->>>>>>>>>>>
->>>>>>>>>>> Version 2 of GHCB specification added the support for two SNP 
->>>>>>>>>>> Guest
->>>>>>>>>>> Request Message NAE events. The events allows for an SEV-SNP 
->>>>>>>>>>> guest to
->>>>>>>>>>> make request to the SEV-SNP firmware through hypervisor using 
->>>>>>>>>>> the
->>>>>>>>>>> SNP_GUEST_REQUEST API define in the SEV-SNP firmware 
->>>>>>>>>>> specification.
->>>>>>>>>>>
->>>>>>>>>>> The SNP_EXT_GUEST_REQUEST is similar to SNP_GUEST_REQUEST 
->>>>>>>>>>> with the
->>>>>>>>>>> difference of an additional certificate blob that can be 
->>>>>>>>>>> passed through
->>>>>>>>>>> the SNP_SET_CONFIG ioctl defined in the CCP driver. The CCP 
->>>>>>>>>>> driver
->>>>>>>>>>> provides snp_guest_ext_guest_request() that is used by the 
->>>>>>>>>>> KVM to get
->>>>>>>>>>> both the report and certificate data at once.
->>>>>>>>>>>
->>>>>>>>>>> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
->>>>>>>>>>> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
->>>>>>>>>>> Signed-off-by: Michael Roth <michael.roth@amd.com>
->>>>>>>>>>> ---
+On Tue, Jan 31, 2023 at 04:08:29PM +0100, Jonas Oberhauser wrote:
 > 
->>>>
->>>> And GET ioctls() return what SET passed on (not something the 
->>>> firware returned, for example), what is ever going to call SET? The 
->>>> userspace can 
->>>
->>> As stated above, the firmware already has the information needed to 
->>> sign the attestation report. The SET IOCTL is used to supply the 
->>> certficates to the guest for validation of the attestation report.
->>
->>
->> Does the firmware have to have all certificates beforehand? How does 
->> the firmware choose which certificate to use for a specific VM, or 
->> just signs all reports with all certificates it knows?
 > 
->  From the SNP API spec, the firmware uses the VCEK, which is derived 
-> from chip-unique secrets, to sign the attestation report.
-
-Does the firmware derive it? How does the guest gets to know it?
-(forgive me my ignorance)
-
-
-> The guest can then use the returned VCEK certificate, the ASK 
-> certificate and ARK certificate from the extended guest request to 
-> validate the attestation report.
-
->>
->>
->>> This reduces the traffic and complexity of the guest requesting the 
->>> certficates from the KDS.
->>
->> Guest <-> HV interaction is clear, I am only wondering about HV <-> FW.
+> On 1/30/2023 7:38 PM, Boqun Feng wrote:
+> > On Mon, Jan 30, 2023 at 01:23:28PM +0100, Jonas Oberhauser wrote:
+> > > 
+> > > On 1/27/2023 11:09 PM, Boqun Feng wrote:
+> > > > On Fri, Jan 27, 2023 at 03:34:33PM +0100, Peter Zijlstra wrote:
+> > > > > > I also noticed that GCC has some builtin/extension to do such things,
+> > > > > > __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
+> > > > > > can be used in the kernel.
+> > > > > On a per-architecture basis only, the C/C++ memory model does not match
+> > > > > the Linux Kernel memory model so using the compiler to generate the
+> > > > > atomic ops is somewhat tricky and needs architecture audits.
+> > > > Hijack this thread a little bit, but while we are at it, do you think it
+> > > > makes sense that we have a config option that allows archs to
+> > > > implement LKMM atomics via C11 (volatile) atomics? I know there are gaps
+> > > > between two memory models, but the option is only for fallback/generic
+> > > > implementation so we can put extra barriers/orderings to make things
+> > > > guaranteed to work.
+> > > Another is that the C11 model is more about atomic locations than atomic
+> > > accesses, and there are several places in the kernel where a location is
+> > > accessed both atomically and non-atomically. This API mismatch is more
+> > > severe than the semantic differences in my opinion, since you don't have
+> > > guarantees of what the layout of atomics is going to be.
+> > > 
+> > True, but the same problem for our asm implemented atomics, right? My
+> > plan is to do (volatile atomic_int *) casts on these locations.
 > 
-> I'm not sure what you mean here. The HV doesn't put the signing key in 
-> the firmware, it is derived.
+> Do you? I think LKMM atomic types are always exactly as big as the
+> underlying types.
+> With C you might get into a case where the atomic_int is actually [lock ;
+> non-atomic int] and when you access the location in a mixed way, you will
+> non-atomically read the lock part but the atomic accesses modify the int
+> part (protected by the lock).
+> 
 
+Well, I plan is to check ATOMIC_*_LOCK_FREE and have Static_assert() on
+the side of atomic_int ;-)
 
-Those ioctls() are in the HV and they take certificates which then get 
-sent to the guest but not to the firmware. The firmware signs a report 
-with a key and the guest needs another half of it to verify the report. 
-Sadly I do not know cryptography enough.
+> > 
+> > > Perhaps you could instead rely on the compiler builtins? Note that this may
+> > These are less formal/defined to me, and not much research on them I
+> > assume, I'd rather not use them.
+> 
+> I think that it's easy enough to define a formal model of these that is a
+> bit conservative, and then just add mb()s to make them safe.
+> 
 
+I actually have a similar idea about the communication betweet Rust and
+kernel C with atomic variables: Rust can use its standard atomics (i.e.
+C11/LLVM atomics) but with mb()s to make them safe when talking with C.
 
+Of course, no problem about pure Rust code using pure LLVM atomics.
 
--- 
-Alexey
+> > 
+> > > invalidate some progress properties, e.g., ticket locks become unfair if the
+> > > increment (for taking a ticket) is implemented with a CAS loop (because a
+> > > thread can fail forever to get a ticket if the ticket counter is contended,
+> > > and thus starve). There may be some linux atomics that don't map to any
+> > > compiler builtins and need to implemented with such CAS loops, potentially
+> > > leading to such problems.
+> > > 
+> > > I'm also curious whether link time optimization can resolve the inlining
+> > > issue?
+> > > 
+> > For Rust case, cross-language LTO is needed I think, and last time I
+> > tried, it didn't work.
+> 
+> In German we say "Was noch nicht ist kann ja noch werden", translated as
+> "what isn't can yet become", I don't feel like putting too much effort into
+
+Not too much compared to wrapping LKMM atomics with Rust using FFI,
+
+Using FFI:
+
+	impl Atomic {
+		fn read_acquire(&self) -> i32 {
+			// SAFTEY:
+			unsafe { atomic_read_acquire(self as _) }
+		}
+	}
+
+Using standard atomics:
+
+	impl Atomic {
+		fn read_acquire(&self) -> i32 {
+			// self.0 is a Rust AtomicI32
+			compiler_fence(SeqCst); // Rust not support volatile atomic yet
+			self.0.load(Acquire)
+		}
+	}
+
+Needless to say, if we really need LKMM atomics in Rust, it's kinda my
+job to implement these, so not much different for me ;-) Of course, any
+help is appreciate!
+
+> something that hardly affects performance and will hopefully become obsolete
+> at some point in the near future.
+> 
+> > 
+> > > I think another big question for me is to which extent it makes sense
+> > > anyways to have shared memory concurrency between the Rust code and the C
+> > > code. It seems all the bad concurrency stuff from the C world would flow
+> > > into the Rust world, right?
+> > What do you mean by "bad" ;-) ;-) ;-)
+> 
+> Uh oh. Let's pretend I didn't say anything :D
+> 
+> > > If you can live without shared Rust & C concurrency, then perhaps you can
+> > > get away without using LKMM in Rust at all, and just rely on its (C11-like)
+> > > memory model internally and talk to the C code through synchronous, safer
+> > > ways.
+> > > 
+> > First I don't think I can avoid using LKMM in Rust, besides the
+> > communication from two sides, what if kernel developers just want to
+> > use the memory model they learn and understand (i.e. LKMM) in a new Rust
+> > driver?
+> 
+> I'd rather people think 10 times before relying on atomics to write Rust
+> code.
+> There may be cases where it can't be avoided because of performance reasons,
+> but Rust has a much more convenient concurrency model to offer than atomics.
+> I think a lot more people understand Rust mutexes or channels compared to
+> atomics.
+
+C also has more convenient concurrency tools in kernel, and I'm happy
+that people use them. But there are also people (including me) working
+on building these tools/models, inevitably we need to use atomics. And
+when we use the atomics, the biggest question is which one to use?
+Right, it seems that I'm responsible for the answer because I have
+multiple hats on. Trust me, it's not something I like to think about but
+I have to ;-)
+
+> Unfortunately I haven't written much driver code so I don't have experience
+> to what extent it's generally necessary to rely on atomics :(
+> 
+> 
+
+[snip some good tech inputs, I will reply later]
+
+> 
+> > > But I currently don't see that this implementation would be noticeably
+> > > faster than paying the overhead of lack of inline.
+> > > 
+> > You are not wrong, surely we will need to real benchmark to know. But my
+> > rationale is 1) in theory this is faster, 2) we also get a chance to try
+> > out code based on LKMM with C11 atomics to see where it hurts. Therefore
+> > I asked ;-)
+> 
+> I think one beautiful thing about open source is that nobody can stop you
+> from trying it out yourself :D
+
+I wish this is a personal side project that I can give up whenever I
+want ;-)
+
+The key question is that when building something in Rust for Linux using
+atomics, and also talking with C side with atomics, how do we handle the
+different between two memory models? A few options I can think of:
+
+1.	Use Rust standard atomics and pretend different memory models
+	work together (do we have model tools to handle code in
+	different models communicating with each other?)
+
+2.	Use Rust standard atomics and add extra mb()s to enforce more
+	ordering guarantee.
+
+3.	Implement LKMM atomics in Rust and use them with caution when
+	comes to implicit ordering guarantees such as ppo. In fact lots
+	of implicit ordering guarantees are available since the compiler
+	won't exploit the potential reordering to "optimize", we also
+	kinda have tools to check:
+
+		https://lpc.events/event/16/contributions/1174/attachments/1108/2121/Status%20Report%20-%20Broken%20Dependency%20Orderings%20in%20the%20Linux%20Kernel.pdf
+
+	A good part of using Rust is that we may try out a few tricks
+	(with proc-macro, compiler plugs, etc) to express some ordering
+	expection, e.g. control dependencies.
+
+	Two suboptions are:
+
+	3.1	Implement LKMM atomics in Rust with FFI
+	3.2	Implement LKMM atomics in Rust with Rust standard
+		atomics
+
+I'm happy to figure out pros and cons behind each option.
+
+Regards,
+Boqun
+
+> It's currently not something I would personally put resources into though.
+> You could pick a DPDK or CK algorithm and port it to a version using FFI
+> instead of using atomics directly, and measure the impact on some
+> microbenchmarks.
+> Then consider that the end-to-end impact on Linux will probably be at least
+> one or two orders of magnitude less.
+> 
+> Have fun, jonas
+> 
