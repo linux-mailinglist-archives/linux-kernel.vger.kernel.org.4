@@ -2,149 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFCC683307
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5D0683308
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjAaQuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S231260AbjAaQvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:51:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjAaQur (ORCPT
+        with ESMTP id S230325AbjAaQvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:50:47 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6652BF08
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:50:45 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so11113489wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:50:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5XuvLcDLAk/pmrbKQwlDowxpATVa8cUm39NsNa3Uaak=;
-        b=Ndf4M2282U4vn98N8DKnwdT4/h8DhaWfBL+udLuVr5X9f4+bs/dC1PzEM55nqx25dW
-         UF4kCNf2WXjpO6p1Il/WbXhHgvzm/GWYX0dlGA+ZlaKRb0t9JDAQAggxgOGogGPbUavG
-         PxA2+6VhvnYi24tGYuiScVWp/RGA1Z3yc2Tji+mAl/8WewAC0EJ7RpxwOY4FI0huDXmE
-         aMuxhLxcu6S83g84KonPNBtLg4NWFGqxjw7GnoDrClJqrgo7qytS5qUxKOqhMfvwtMxW
-         SvJGyfaYeVnNvNdJSsBUelqcqR5LzN16314JF42TNFWCnwNxRnKv6Hq3tDYDP1Dxll5X
-         9v6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5XuvLcDLAk/pmrbKQwlDowxpATVa8cUm39NsNa3Uaak=;
-        b=Bs3CWQuTVxVI4a8K/aetU6y+Dyc1GYNkXX0k5L13qpCoxca7TVkQFuVYHohRG+4dzB
-         Zi6sr/qo18kOAvdhqZliPfMo+IF8ptKp+JNj5N9zww0WJiPa+Ip7vs1kvdmOEfzy1S1Q
-         xa3rT9LcXOTz27wJiHtGCtHvBphlUqkT3XUAy/mMcLk+c3swm9GfFuUKVXY3I0WCv4nN
-         VQ4MLG2ZyTJQK0xANYsiUyOcFUlX75WMippgyrMy0FIuJddvSkzqgi6Hduvq3f/32rMN
-         xwOeySwp3JKt4SqlNgeJ7GRE3lRRAWehIg5RfQS4Id5m9rvuctnWcH2ajGOHGKLC0ZnG
-         jDCg==
-X-Gm-Message-State: AFqh2kqgUIACxn/riLCaE7jWRJt+6y8GwghprmeVyZcFost8hAMg5mF9
-        Yd2r5z7ZPp4fqpU5zvkuTJT4ig==
-X-Google-Smtp-Source: AMrXdXulAFl2rPcGHYe/Vg7Mc32h7TSOaot+MsYdOQScg65kYGdSM3YlAkJ5dURTcACfNim10dLSaw==
-X-Received: by 2002:a05:600c:1c1f:b0:3db:2d7e:1204 with SMTP id j31-20020a05600c1c1f00b003db2d7e1204mr45231041wms.27.1675183844534;
-        Tue, 31 Jan 2023 08:50:44 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q17-20020a05600c2e5100b003dd1c45a7b0sm2828762wmf.23.2023.01.31.08.50.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 08:50:44 -0800 (PST)
-Message-ID: <8b93062d-9d79-ad8f-0797-8ababc2066de@linaro.org>
-Date:   Tue, 31 Jan 2023 17:50:41 +0100
+        Tue, 31 Jan 2023 11:51:38 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292982E0CA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675183897; x=1706719897;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=4/Pr+nTNrN5S1fQu3qT0O6idcEgxoMi20WoBfP+TH/4=;
+  b=dWD7qWvgtLrg23FS892K4vs31iwqTYIuGQlfeu3mU+ywd/YbLX1CXpHI
+   ryXmJViSmDZZYj/X3WrxUkbJ3b5slAhvEbeAcbbr4HO+o9TeQRGzL7rXJ
+   IWkNpN7EjhnqSiN7A2NSJIyMFfo5DGqpGP+YSASLqciQM263nOkzZEt0I
+   pVB6LCAVft/hOdwHUAQsPG7/ymCGUy03mClJWwgtqBNzJO1dY9EcJWEPN
+   SAjds7WYMvJvbdmCmkdh0YrUziI26q9+xbza3e2zCz7O6m4lo82wezN9d
+   MeTB6ZkXwuNUbDSYOBFJqXsYTxbRii6EU7DyR9n6/q5mSAKCnKY7ucQJJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="390254758"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="390254758"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 08:51:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="696885138"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="696885138"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga001.jf.intel.com with ESMTP; 31 Jan 2023 08:51:35 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 31 Jan 2023 08:51:35 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 31 Jan 2023 08:51:35 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 31 Jan 2023 08:51:33 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ExGv0IgVzoVG0Mn3PZRMopDPLN+fN021YH1zy4E12aIqjaZkTglNDDeW2MaFF3ECcYVa2pOQhtrEDah0Gp5n59XeERGSoe7vXPr7S5zIrvQngSomTFUALfHNkYq2cdJmQE1ZLxn6vfE8T9MqBuHnP6iRpPCsfNF+fP/w+x4SIwOzHMtZC5TShmz0EBkmPA0qYDfqUFN1VhpxwjntFQe8Pahfar0aTwMO9xNfdE+8kO/GJc6pgqXydYs8TcWbsDtudU4fzIr5gyWeCMN1068wmgzvakx1fXXZLOf0jrSx0mQdbTYwplVITloywUKfwb8BYaXZu621150bItHDPyiurQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/eIND+rlfWhj0VuKxI6VPAPpOlzbUU11SpQRltn4osU=;
+ b=H5wib4AKAg6E15gBLnXyLxB+MfhmMcaZPatXAE3/blKg+kwlGJ2xg/5lQz/s7GmJxu2Ef57XDnTfoPugmv5m38ATPWuRLX8g7QYpdLg3TMhwep6I2zRojRif/Yigc/vvQ/uPVgctFUGJJIC/ZhDcfNFbFJxEAzLEqAwhpxOVPIG0KI+1rzX4ERsOX57lOVDZSXCGQ1ACkJNapDz/UyfaFEV649hfF76yV8yqvfpCPoDiFunPZfINF+m2NwF65Fd80xkB+w7ZF9YzWHl+egYmFMbZSVgjXSnDSCV6n1JqKeRhuarNtFmFJZXcWlqYGpeH8xW2i/KEiALrvzcS5Xzq2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+ by SJ0PR11MB4926.namprd11.prod.outlook.com (2603:10b6:a03:2d7::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Tue, 31 Jan
+ 2023 16:51:29 +0000
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::570c:84d0:3c30:3282]) by SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::570c:84d0:3c30:3282%5]) with mapi id 15.20.6043.036; Tue, 31 Jan 2023
+ 16:51:29 +0000
+Date:   Tue, 31 Jan 2023 08:51:25 -0800
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Peter Zilstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Martin Pohlack <mpohlack@amazon.de>,
+        Ashok Raj <ashok.raj@intel.com>,
+        "Li, Aubrey" <aubrey.li@intel.com>
+Subject: Re: [Patch v3 Part2 1/9] x86/microcode: Taint kernel only if
+ microcode loading was successful
+Message-ID: <Y9lHDWjjnqdletL3@a4bf019067fa.jf.intel.com>
+References: <20230130213955.6046-1-ashok.raj@intel.com>
+ <20230130213955.6046-2-ashok.raj@intel.com>
+ <Y9kAlKFfdek2rq6g@zn.tnic>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Y9kAlKFfdek2rq6g@zn.tnic>
+X-ClientProxiedBy: SJ0PR03CA0124.namprd03.prod.outlook.com
+ (2603:10b6:a03:33c::9) To SJ1PR11MB6201.namprd11.prod.outlook.com
+ (2603:10b6:a03:45c::14)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 7/8] dt-bindings: clock: Add Qcom SM6115 GPUCC
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230130153252.2310882-1-konrad.dybcio@linaro.org>
- <20230130153252.2310882-8-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230130153252.2310882-8-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|SJ0PR11MB4926:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8167c59-c738-4cac-398c-08db03ab65c8
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CcexGZI78oO3KQ1ZhZzrEenj0yux4iTQM6qej69XzygofKqe18pVNxZ8pwmRpX7gx6YtVxbsTrfVCXeG6VzjA6CMAqc36mG1IEAWtNZPJl8dH8HyC/t4c/CxP0Yo5ubsMsPkYgqfboKAcjvdyyadyeBb9LWFil+hWgrMQXNIa+EK3P8FxnMQEnuCNGoZG62UIUKrtWayqFlUmo7Rev3c+zYwTlulloBemapvBYgEpXwuz/QDnedjoWZjUhA4cYy2HQnD4nuErJ241pnGOQUhvUmAxUBZhwCDR8O6l8HXWUYzqz1FOdx1QKJSxyuFkQy/gtIwhiKNh25rh6AraRp4SJroWL4j+chM39zPJPgzncqreGLP9PeJ80p9uU8o/zQSUDSY3nvFccQU2RzzA0K/K2CcPbqR2fCMV4YbP8xwjvNsBOviPuIwH8H+9lHx831CSn6yUhYSe5wVKQIfoSUvnukgNG697qv86DuQ2KDZ/PNU6pgZZqKgmN6p8gbqeJJ6RtayVoLJ6FvZRJJPjvWr1Ihn5BC+mZxK/HawHeOK8NuJj8qVaLF039AUiSDuv/mEeVY7wh7DdXAD5aH6WwyAgggOnCadrQff5ZLAuuP/yc/XSX50aXB+jTlT7ewt0SxhLYXAOs+JLwY0d2VyggBbW+UxU6oQaZ9mt//LEP14YHHo5vEkiSnQUqcxZJSPeTuU5YBREGsycZfDZaU7ttL/DQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(39860400002)(376002)(396003)(366004)(451199018)(66556008)(316002)(66476007)(6916009)(54906003)(8676002)(4326008)(41300700001)(8936002)(5660300002)(66946007)(7416002)(38100700002)(86362001)(82960400001)(6666004)(107886003)(26005)(186003)(6506007)(6512007)(83380400001)(2906002)(44832011)(6486002)(478600001)(334744004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VNPpq/FZ59dV9JENGFEFLIB3KVhpJFB7kfJrecp9VmDBUzC2TSt/r9Y8eNB8?=
+ =?us-ascii?Q?yHa9RA01+18PuOdDxrrrgMnqKMt3kpmcFPjbsxmwsuk7VCfjAIX6UdDx8RWV?=
+ =?us-ascii?Q?hTif5dtAL7u47lHgdk+/Ec1FZGDVV20k/aUKb3cnxQogWDqd/r0rbBFb2dCI?=
+ =?us-ascii?Q?76GtwxwK87JbuunQjkECdaOXMECEljHTgNwAZ2YgDrrmmqvTUMvK4fJ7F1Pt?=
+ =?us-ascii?Q?Klp8jaL1tGm7K4wG+rvEHskMTNEUMWN8WHU7jKyU5WPE9WfCwdL0XhuJIoir?=
+ =?us-ascii?Q?pHJ8k6JUbLZIBJ9/aQRwFfMCuADAK2pperxpaObIwFb0Rpgk0wJPuWaRnFsa?=
+ =?us-ascii?Q?8tHZLOrRMdUld53fsCEF6KJjwKxJqaXeVK4ZN23vTSho6sv636bYz+RBP1Yv?=
+ =?us-ascii?Q?jPdN2DyfWCtsvkG1rpfG2M97nm1YYEbwTWxcZLtABVs+Q5iH1r5uH/Of/OZA?=
+ =?us-ascii?Q?P5uQ65Udlv2Z5EJY17QmC5eXzgjIPHsN9g9zlxvouWmYUan3W5bLShiAD07E?=
+ =?us-ascii?Q?O1uqNflbrRJO0Y+/M4c1ZejcU20ASACbjkC2odx7fl8byyVb6UF8lmz96X/P?=
+ =?us-ascii?Q?lmhlXUSZpw4viUCv7fOL9OytDF2ePtkYUxuPB03jMhTniuYKdYwRzpRbNBIp?=
+ =?us-ascii?Q?+7f1RvNqxkaAqcnUM23tHtDKylkzlK7dBDmsYkuOns0SozgKBVPMpUsKyY4/?=
+ =?us-ascii?Q?0B/BVyva6U1mbzLGAIj+zv7oIzjvIbuBHRrTyxqGONEYFDZpOJ+rIV8e1ojg?=
+ =?us-ascii?Q?G/rIDZLfbBIRb+z+9PJBcFeyPaHqcliZuJwbtYbvN59ygsK8Dz3qEadTJkMz?=
+ =?us-ascii?Q?msCtn6jWnbVB91eSkaalA259D/J5PzgTjlTM/f5tYoblvJ3anl4je/7tLoeA?=
+ =?us-ascii?Q?cykM9MlW+XM03QIYNjFHR7EGCVDcPK3RGe1T0VLhhWOFfbsX23Qz1shkBqAJ?=
+ =?us-ascii?Q?iICSINJX88bfruJi/XQ4zUKWGhZyGvI4MHFzIjXm30MUgbg7O+td88mFuEvv?=
+ =?us-ascii?Q?dxu78WLitaItkj6LJY6VpDLVz56AtuiWNBv+GZYc0UErhHRWhh3wuqiO9Opf?=
+ =?us-ascii?Q?jsT1dh8PdVd09kkmKifILxE/5qXCSzJCn5GeCqmMbjz/nUcvbrZa820mObqI?=
+ =?us-ascii?Q?KuA6JfVi4BaC4RGU2ZoBppjCPm2/8R34eheTWE2qRE67A7oMDQtOpTxuukpQ?=
+ =?us-ascii?Q?5pe+PImqqKPHnurAYhfaRl0ycSAoRwhdtHLWbB5H+zaXkrrdJd4LgTQk9+5p?=
+ =?us-ascii?Q?NRHMoMWjQB2IZxz0Zkc1iSNh5Y/cTZVnNuOKeaPX5nW86adiX5LmsRndyGZb?=
+ =?us-ascii?Q?vD5xsR7V42Tra96lkpvCDTtZsvZy1zFwD50ewPtNG8S9xpTdb36xP2AaVHuL?=
+ =?us-ascii?Q?1x2rk6iSyGgCcHiQaLT9S8GSLsHykD/IY3X3GdSFIWRnL7ZhW3sLTyUl8aLI?=
+ =?us-ascii?Q?9Qj5rdT+AeDU/kbt9qLkOAZdyDRxgqCxnnofThTCypZSdUtjuPCwd0I+SvX0?=
+ =?us-ascii?Q?g5JKi+uU0zLxRXcABfpVNj5FnJxM2WScUHi+1jqyYU1MDLNQxNuLUl/nFbcy?=
+ =?us-ascii?Q?Ahq9UGH/7H/h0v9N+MReYuHNSKNOhpTYweUbFikwUbUbv+ud4gagxBfAjuXc?=
+ =?us-ascii?Q?TA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8167c59-c738-4cac-398c-08db03ab65c8
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 16:51:28.8093
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KRg3ekFbiPRe1iCY7vcXtYRBNDR0Mgxn30PSJM4yLUh0b8KpeU+d/0RJiLjBLLdImcIybS3M2AhuG2/v0TddxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4926
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 16:32, Konrad Dybcio wrote:
-> Add device tree bindings for graphics clock controller for Qualcomm
-> Technology Inc's SM6115 SoCs.
+On Tue, Jan 31, 2023 at 12:50:44PM +0100, Borislav Petkov wrote:
+> On Mon, Jan 30, 2023 at 01:39:47PM -0800, Ashok Raj wrote:
+> >  arch/x86/kernel/cpu/microcode/core.c | 19 +++++++++++++------
+> >  1 file changed, 13 insertions(+), 6 deletions(-)
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Why all this hoopla and unrelated changes?
+> 
+> Why don't you simply hoist the call to ->request_microcode_fw outside of
+> the locked region as it doesn't have to be there and then do the usual
+> pattern?
+
+Makes total sense, and seems to make the code more readable. Thanks!
+
+Just some minor changes below.
+
+remove ret = 0 during initialization since its cleared right below. (tglx)
+
+Some more below, updated patch at the end.
+
+I have tested with the modified patch below.
+
+> 
 > ---
-> v2 -> v3:
+> diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+> index 14a2280fdcd2..23f4f22df581 100644
+> --- a/arch/x86/kernel/cpu/microcode/core.c
+> +++ b/arch/x86/kernel/cpu/microcode/core.c
+> @@ -481,28 +481,28 @@ static ssize_t reload_store(struct device *dev,
+>  	if (val != 1)
+>  		return size;
+>  
+> +	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
+> +	if (tmp_ret != UCODE_NEW)
+> +		return ret;
+> +
+>  	cpus_read_lock();
+>  
+>  	ret = check_online_cpus();
+>  	if (ret)
+> -		goto put;
+> -
+> -	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
+> -	if (tmp_ret != UCODE_NEW)
+> -		goto put;
+> +		goto unlock;
+
+Need to set ret explicitly to either -EINVAL, or size. Otherwise it will be
+endlessly waiting for write to complete. (As Aubrey pointed out)
+
+>  
+>  	mutex_lock(&microcode_mutex);
+>  	ret = microcode_reload_late();
+
+I think its safe to leave ret as is, since microcode_reload_late() only
+returns -1, or 0.
+
+>  	mutex_unlock(&microcode_mutex);
+>  
+> -put:
+> -	cpus_read_unlock();
+> -
+>  	if (ret == 0)
+>  		ret = size;
+>  
+>  	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
+
+Pull this into the ret == 0, so taint only if the update was successful? 
+And add a message so its not silent?
+
+>  
+> +unlock:
+> +	cpus_read_unlock();
+> +
+>  	return ret;
+>  }
+>  
 > 
-> - Mention resets in description:
-> - Use gcc.yaml
-> 
->  .../bindings/clock/qcom,sm6115-gpucc.yaml     | 58 +++++++++++++++++++
->  include/dt-bindings/clock/qcom,sm6115-gpucc.h | 36 ++++++++++++
->  2 files changed, 94 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm6115-gpucc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml
-> new file mode 100644
-> index 000000000000..354ace48301d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,sm6115-gpucc.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,sm6115-gpucc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Graphics Clock & Reset Controller on SM6115
-> +
-> +maintainers:
-> +  - Konrad Dybcio <konrad.dybcio@linaro.org>
-> +
-> +description: |
-> +  Qualcomm graphics clock control module provides clocks, resets and power
-> +  domains on Qualcomm SoCs.
-> +
-> +  See also:: include/dt-bindings/clock/qcom,sm6115-gpucc.h
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm6115-gpucc
-> +
-> +  clocks:
-> +    items:
-> +      - description: Board XO source
-> +      - description: GPLL0 main branch source
-> +      - description: GPLL0 main div source
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +
-> +allOf:
-> +  - $ref: qcom,gcc.yaml#
-> +
-> +additionalProperties: false
 
-unevaluatedProperties: false
-
-
-Best regards,
-Krzysztof
-
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 94d942c1bf2c..550b7c566311 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -472,7 +472,7 @@ static ssize_t reload_store(struct device *dev,
+ 	enum ucode_state tmp_ret = UCODE_OK;
+ 	int bsp = boot_cpu_data.cpu_index;
+ 	unsigned long val;
+-	ssize_t ret = 0;
++	ssize_t ret;
+ 
+ 	ret = kstrtoul(buf, 0, &val);
+ 	if (ret)
+@@ -483,7 +483,7 @@ static ssize_t reload_store(struct device *dev,
+ 
+ 	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
+ 	if (tmp_ret != UCODE_NEW)
+-		return ret;
++		return (tmp_ret == UCODE_ERROR ? -EINVAL : size);
+ 
+ 	cpus_read_lock();
+ 
+@@ -495,10 +495,11 @@ static ssize_t reload_store(struct device *dev,
+ 	ret = microcode_reload_late();
+ 	mutex_unlock(&microcode_mutex);
+ 
+-	if (ret == 0)
++	if (ret == 0) {
+ 		ret = size;
+-
+-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++		pr_warn("Microcode late loading tainted the kernel\n");
++	}
+ 
+ unlock:
+ 	cpus_read_unlock();
