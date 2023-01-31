@@ -2,115 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36CF683856
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D50683857
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjAaVIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S232027AbjAaVJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbjAaVIe (ORCPT
+        with ESMTP id S231731AbjAaVJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:08:34 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B924EF1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:08:32 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id e15so19802281ybn.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:08:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bDq7d/n4hRdxw/uuHY1zsy7WUcXmIawJLMPKVEj5Oqk=;
-        b=U/HrMYPECFRkq9PkPWwApR3OeNslyly/bOGovMVkhgn5x/4H3rBa+5Q1e8lajkmDFg
-         hdXiowPRj5EJYmQVq9v0e3GI9JRDz5DDKyxwYMJnQQUDMLSyXobCMDk8u5db/owOJJ5L
-         GAAyUx478W7Dj8GmbfulidXOwwUIp82QUFfTe8W4/EE7jRoOVHESeFqMZbWCROEzxlFp
-         XbZxSml7D6XvIfI3uiwDZBOWarlwFsYgBHo7/hJ9rwt2ieOpQlFlDGL8xtXyb8xPzMAL
-         BNBZNshG24V4cs4Sz8MVzFEx3BFPEwCUj7E3bhs6Ek5WwtzRyXCLhX5E2tjmXkI8dGzU
-         Dzbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bDq7d/n4hRdxw/uuHY1zsy7WUcXmIawJLMPKVEj5Oqk=;
-        b=NzqE1TI9XiwWzyieQOCVkx1VF5qjKAntm3Qcaw/7w9RpfqF7jkZsKZ1T3rmNSqWWDP
-         VVtRbzOVJKMVoznRpuMuqFZX5qHq2qiSeMLRrbAMIbNkFqmtZccS4yZd6b4rnayBe/gW
-         JmLaomQ2S+Tk0RZJ97NQEzXKaFyINYEkPoKTnxuBZ/hr4sQ1iPlJ36i/WBUoMkggi44+
-         G177IvmuNpOZhdNgSysRyqlNOv6DniHqkGnj840SC/I3VXmffftVQQjoZq3Ke3fbklKD
-         cN5IhCxOcu+w+Kl+q/9qP/zUAVJ9FeTcN/uFCMD/Ox1cHJQeLMlSm8xMDXqTqbEjXLRp
-         emtw==
-X-Gm-Message-State: AO0yUKX4nEZyffcikv5j/Z2OhT2QOHTA8+by/PCBUPLWXx2W77symKPh
-        0ZCbGYIYXWg2UKN1qLrCgilDyyv9CrYywmHCv14duw==
-X-Google-Smtp-Source: AK7set8TN+vhTCk6n+wEoQB3UO9IaaO8ylUfxNJA77IxdpDEU7vhpknIio3f4DVrz3qNcZAJLnR7+kYgR98f6snoq4A=
-X-Received: by 2002:a25:a088:0:b0:80b:6fd3:84d3 with SMTP id
- y8-20020a25a088000000b0080b6fd384d3mr46494ybh.316.1675199311005; Tue, 31 Jan
- 2023 13:08:31 -0800 (PST)
+        Tue, 31 Jan 2023 16:09:00 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB77253982
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:08:58 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 79BA81EC0104;
+        Tue, 31 Jan 2023 22:08:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675199337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=LMP/QMFsFKhoP9e1MvUTWpew6YMs3U0h5i1EaPY92UQ=;
+        b=EwMtOlDiRCT4wJONiPQwtEbJyA/stzMzHWjqvGB6ZN9/h9wgNHY1fSexiTSMmsdPWxodls
+        3N24+SbRKXwMtIQ+PehXry/l+GD3pw3eQeCRIJqLuiAvWvc16yh7oSl7B7Zs8W+LYneO2Q
+        +TeAbRLEicg9YQqu0Yf5NVPjIFliRBk=
+Date:   Tue, 31 Jan 2023 22:08:48 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Raj, Ashok" <ashok.raj@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Peter Zilstra <peterz@infradead.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
+        Martin Pohlack <mpohlack@amazon.de>
+Subject: Re: [Patch v3 Part2 3/9] x86/microcode/intel: Fix collect_cpu_info()
+ to reflect current microcode
+Message-ID: <Y9mDYMASXCFaFkNU@zn.tnic>
+References: <20230130213955.6046-1-ashok.raj@intel.com>
+ <20230130213955.6046-4-ashok.raj@intel.com>
+ <Y9lGdh+0faIrIIiQ@zn.tnic>
+ <SJ1PR11MB6083580526A7FFA11F110B77FCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <Y9l8yGVvVHBLKAoh@zn.tnic>
+ <SJ1PR11MB60837E6E6AE7C82511DC039EFCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230126193752.297968-1-surenb@google.com> <20230126193752.297968-5-surenb@google.com>
- <Y9jSFFeHYZE1/yFg@hyeyoo> <CAJuCfpEzaVkgQt=C-33jAh1vLVJAjoyM8X5AD9CzyDUJnPDCkw@mail.gmail.com>
- <20230131125355.f07f42af56b23bfa28b2a58c@linux-foundation.org>
-In-Reply-To: <20230131125355.f07f42af56b23bfa28b2a58c@linux-foundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 31 Jan 2023 13:08:19 -0800
-Message-ID: <CAJuCfpHmtkzrKx45SQQ0gXLoybtgHxHmTP5J4L74ChTqSfFA-g@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] mm: replace vma->vm_flags direct modifications
- with modifier calls
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SJ1PR11MB60837E6E6AE7C82511DC039EFCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 12:54 PM Andrew Morton
-<akpm@linux-foundation.org> wrote:
->
-> On Tue, 31 Jan 2023 10:54:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
->
-> > > > -             vma->vm_flags &= ~VM_MAYWRITE;
-> > > > +             vm_flags_clear(vma, VM_MAYSHARE);
-> > > >       }
-> > >
-> > > I think it should be:
-> > >         s/VM_MAYSHARE/VM_MAYWRITE/
-> >
->
-> I added the fixup.  Much better than resending a seven patch series for a
-> single line change.  Unless you have substantial other changes pending.
+On Tue, Jan 31, 2023 at 08:49:52PM +0000, Luck, Tony wrote:
+> What happens here if the update on the first hyperthread failed (sure, it shouldn't,
+> but stuff happens at large scale).  In this case the current rev is still older that the
+> the cache version ... so there is no "goto out", and this hyperthread will now write
+> the MSR to initiate microcode update here, while the first thread is off executing
+> arbitrary code (the situation that we want to avoid).
 
-Thanks! That sounds reasonable.
+Lemme see if I can follow: we sync all threads in __reload_late() and
+once they all arrive, we send them down into ->apply_microcode.
 
-I'll also need to introduce vm_flags_reset_once() to use in
-replacement of WRITE_ONCE(vma->vm_flags, newflags) case. Should I send
-a separate short patch for that?
+T0 arrives, and fails the update. That is this piece:
 
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+        /* write microcode via MSR 0x79 */
+        wrmsrl(MSR_IA32_UCODE_WRITE, (unsigned long)mc->bits);
+
+        rev = intel_get_microcode_revision();
+
+        if (rev != mc->hdr.rev) {
+                pr_err("CPU%d update to revision 0x%x failed\n",
+                       cpu, mc->hdr.rev);
+                return UCODE_ERROR;
+        }
+
+We return here without updating cpu_sig.rev, as we should.
+
+T1 arrives, updates successfully and updates its cpu_sig.rev.
+
+T0's patch level has been updated too with that because the microcode
+engine is shared between the threads. T0's cpu_sig.rev isn't, however,
+as that has happened "behind its back", so to speak.
+
+Is that the scenario you're talking about?
+
+If so, if you look at __reload_late(), it'll say
+
+	pr_warn("Error reloading microcode on CPU %d\n", cpu);
+
+and the large scale operator will know.
+
+And well, the easy fix is, do the reload again. :-)
+
+That'll update the cached values too.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
