@@ -2,115 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB96682BB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:42:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B212682BB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjAaLmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 06:42:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S231831AbjAaLm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 06:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjAaLml (ORCPT
+        with ESMTP id S231802AbjAaLmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:42:41 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15201244A8;
-        Tue, 31 Jan 2023 03:42:40 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id t7so5566638wrp.5;
-        Tue, 31 Jan 2023 03:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jbuaZt7lhM/9Ln5zNse1ilA+2En9FQ3goK6JMsF3RXU=;
-        b=iBJRXcXOfNlS/bNMALXBSUsoDCg0SbyFWLXapD05y0OOSL874mHMqfAuh5vd3VO45r
-         79VWiPhfRAG9Eofp5QQRhQ/UZycsbplEOhl4uVpMf0wt4dJyeACIBclsRv+d37nKitcE
-         uc4pAYt2yyiNb2quuXfViTLCPU2RaLPvSjmfL0ho+O90QmI3CA/2zdHYXYWRvsoZqjuO
-         JAr09yk0QaYpF1xzZ1D8A4wnJBKVaCVdlrhzoAf3BtIlIXpV5GxIAxxMqYEdIHlBTb0h
-         I07gxQ3kMf0GeBlKEYRX+h/xc3KVTsSiyczyehePJnrWBhn4oEJpRHM0OZCHpPsxPo7n
-         +4PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jbuaZt7lhM/9Ln5zNse1ilA+2En9FQ3goK6JMsF3RXU=;
-        b=dtqlxjwHHZh4wLtBQ/3O4x2st9Qqbsc0Mvz3V+MKe6tcM12PtGqYsd/Btw4xXEEVx1
-         Wkaq590SdvSJpENVayEC+TYIK05NnJa6+Bn6Q4+In8fSMbY8uD6aTYeNjqCg5k8qlLeH
-         PWI6y2rrXZ5AfPx4Du62qPs/f1r+oBbjT0CGi3jHHroXUwIWfr+z2pfgwHJ5PY+hVijN
-         ECx1UNgGjYbix+VJfkjJvEZLWBQ/aXRTdHuaMFFC5RAaJ6xwDRb9ONAufrjpjKINcvsE
-         VnF5a/rIBAYAc5aqxQbKpMCpF+bhd85dY0UnO/bKGosOnXqdgBV9mMaokEcME3xAyMwG
-         nkEQ==
-X-Gm-Message-State: AO0yUKWK50xFtGTzXNAdgHXgjjjMK9CkXRbYTT6v/VkGhx9qkTC1ieii
-        W1tPJ4SpnT1KZTf2ZhkL0aE=
-X-Google-Smtp-Source: AK7set9v+XGRdhbhRoauvb60itN4l43MujdWvSVRCtJ9jAJS7r5kiHvWKLHYDuoX5hwD0pmfNEG/hQ==
-X-Received: by 2002:a5d:5e93:0:b0:2bf:cba5:6add with SMTP id ck19-20020a5d5e93000000b002bfcba56addmr2898145wrb.58.1675165358589;
-        Tue, 31 Jan 2023 03:42:38 -0800 (PST)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id z14-20020a5d4d0e000000b002bde537721dsm14408352wrt.20.2023.01.31.03.42.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 03:42:38 -0800 (PST)
-Message-ID: <2a091926-653c-6deb-12b9-85ae5ecef8cc@gmail.com>
-Date:   Tue, 31 Jan 2023 12:42:36 +0100
+        Tue, 31 Jan 2023 06:42:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20AD623C5D;
+        Tue, 31 Jan 2023 03:42:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B14B0614BB;
+        Tue, 31 Jan 2023 11:42:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1B9C4339B;
+        Tue, 31 Jan 2023 11:42:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675165360;
+        bh=XRAFPWWquRK1zwy2lCEBziv6ZCdmEycsChN+P9F6L/o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AP1knRte0q45IitAGytRys/kY3zh85gG2XP9DdJoDqKVhieC9baaonkO4bLqOGkQ7
+         FC1SESOucfwy0i10b92mSaWmSBqoH3Y8RhMNVdCQaD/ySwq3DWpnZaLtAGx8J6sTIf
+         HRB3/kkDxjspbl8fpWi5YPgADtZycmu7P2rnlvQE=
+Date:   Tue, 31 Jan 2023 12:42:37 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nava kishore Manne <nava.kishore.manne@amd.com>
+Cc:     michal.simek@xilinx.com, mdf@kernel.org, hao.wu@intel.com,
+        yilun.xu@intel.com, trix@redhat.com, ronak.jain@xilinx.com,
+        tanmay.shah@xilinx.com, ben.levinsky@amd.com,
+        rajan.vaja@xilinx.com, harsha.harsha@xilinx.com,
+        mathieu.poirier@linaro.org,
+        lakshmi.sai.krishna.potthuri@xilinx.com, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] fpga: zynqmp-fpga: Adds status interface
+Message-ID: <Y9j+rZQkiPcIPxOr@kroah.com>
+References: <20230131094810.1945541-1-nava.kishore.manne@amd.com>
+ <20230131094810.1945541-3-nava.kishore.manne@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 0/6] Fix MT8186/92/95 topology and idle state names
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        seiya.wang@mediatek.com, tinghan.shen@mediatek.com,
-        allen-kh.cheng@mediatek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230126103526.417039-1-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230126103526.417039-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131094810.1945541-3-nava.kishore.manne@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 31, 2023 at 03:18:10PM +0530, Nava kishore Manne wrote:
+> Adds status interface for zynqmp-fpga, It's a read only interface
+> which allows the user to get the Programmable Logic(PL) configuration
+> status.
+> 
+> Usage:
+> To read the Programmable Logic(PL) configuration status
+>         cat /sys/class/fpga_manager/<fpga>/device/status
+> 
+> Signed-off-by: Nava kishore Manne <nava.kishore.manne@amd.com>
+> ---
+> Changes for v2:
+>               - Updated status messages handling logic as suggested by Xu Yilun.
+> 
+> Changes for v3:
+>               - Updated status interface handling logic (Restrict the status
+>                 interface to the device-specific instead of handled by the core)
+>                 as suggested by Xu Yilun.
+> 
+> Changes for v4:
+>               - Limit the error strings to one word for each as suggested by
+>                 Xu Yilun
+> 
+> Changes for v5:
+>               - Added new sysfs-driver-zynqmp-fpga file.
+> 
+>  .../ABI/testing/sysfs-driver-zynqmp-fpga      | 18 ++++
+>  drivers/fpga/zynqmp-fpga.c                    | 87 +++++++++++++++++++
+>  2 files changed, 105 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> new file mode 100644
+> index 000000000000..66c98bb8dfba
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-zynqmp-fpga
+> @@ -0,0 +1,18 @@
+> +What:		/sys/class/fpga_manager/<fpga>/device/status
+> +Date:		Jan 2023
+> +KernelVersion:	6.2
+> +Contact:	Nava kishore Manne <nava.kishore.manne@amd.com>
+> +Description:	Read fpga status as a string.
+> +		If FPGA programming operation fails, it could be caused by crc
+> +		error or incompatible bitstream image. The intent of this
+> +		interface is to provide more detailed information for FPGA
+> +		programming errors to userspace. This is a list of strings for
+> +		the supported status.
+> +
+> +		* CRC-Error		- CRC error detected by hardware.
+> +		* Security-Error	- Security error detected by hardware.
+> +		* Initialization-Error	- Device Initialization error.
+> +		* Internal-Signal-Error	- Device internal signal error.
+> +		* I/Os-High-Z-state	- All I/Os are placed in High-Z state.
+> +		* Sequence-Error	- Device start-up sequence error.
+> +		* Firmware-Error	- Firmware error.
+> diff --git a/drivers/fpga/zynqmp-fpga.c b/drivers/fpga/zynqmp-fpga.c
+> index c60f20949c47..81d3e18527ee 100644
+> --- a/drivers/fpga/zynqmp-fpga.c
+> +++ b/drivers/fpga/zynqmp-fpga.c
+> @@ -15,6 +15,37 @@
+>  /* Constant Definitions */
+>  #define IXR_FPGA_DONE_MASK	BIT(3)
+>  
+> +/* Error Register */
+> +#define IXR_FPGA_ERR_CRC_ERR		BIT(0)
+> +#define IXR_FPGA_ERR_SECURITY_ERR	BIT(16)
+> +
+> +/* Signal Status Register */
+> +#define IXR_FPGA_END_OF_STARTUP		BIT(4)
+> +#define IXR_FPGA_GST_CFG_B		BIT(5)
+> +#define IXR_FPGA_INIT_B_INTERNAL	BIT(11)
+> +#define IXR_FPGA_DONE_INTERNAL_SIGNAL	BIT(13)
+> +
+> +/* FPGA error status. */
+> +enum {
+> +	ZYNQMP_FPGA_STATUS_CRC_ERR,
+> +	ZYNQMP_FPGA_STATUS_SECURITY_ERR,
+> +	ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR,
+> +	ZYNQMP_FPGA_STATUS_SIGNAL_ERR,
+> +	ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR,
+> +	ZYNQMP_FPGA_STATUS_EOS_ERR,
+> +	ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR,
+> +};
+> +
+> +static const char * const zynqmp_fpga_error_statuses[] = {
+> +	[ZYNQMP_FPGA_STATUS_CRC_ERR] = "CRC-Error",
+> +	[ZYNQMP_FPGA_STATUS_SECURITY_ERR] = "Security-Error",
+> +	[ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR] = "Initialization-Error",
+> +	[ZYNQMP_FPGA_STATUS_SIGNAL_ERR] = "Internal-Signal-Error",
+> +	[ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR] = "I/Os-High-Z-state",
+> +	[ZYNQMP_FPGA_STATUS_EOS_ERR] = "Sequence-Error",
+> +	[ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR] = "Firmware-Error",
+> +};
+> +
+>  /**
+>   * struct zynqmp_fpga_priv - Private data structure
+>   * @dev:	Device data structure
+> @@ -77,6 +108,54 @@ static enum fpga_mgr_states zynqmp_fpga_ops_state(struct fpga_manager *mgr)
+>  	return FPGA_MGR_STATE_UNKNOWN;
+>  }
+>  
+> +static ssize_t status_show(struct device *dev,
+> +			   struct device_attribute *attr, char *buf)
+> +{
+> +	unsigned long status = 0;
+> +	ssize_t len = 0;
+> +	u32 reg_val;
+> +	int ret;
+> +	u8 i;
+> +
+> +	ret = zynqmp_pm_fpga_get_config_status(&reg_val);
+> +	if (!ret) {
+> +		if (reg_val & IXR_FPGA_ERR_CRC_ERR)
+> +			status |= ZYNQMP_FPGA_STATUS_CRC_ERR;
+> +		if (reg_val & IXR_FPGA_ERR_SECURITY_ERR)
+> +			status |= ZYNQMP_FPGA_STATUS_SECURITY_ERR;
+> +		if (!(reg_val & IXR_FPGA_INIT_B_INTERNAL))
+> +			status |= ZYNQMP_FPGA_STATUS_DEVICE_INIT_ERR;
+> +		if (!(reg_val & IXR_FPGA_DONE_INTERNAL_SIGNAL))
+> +			status |= ZYNQMP_FPGA_STATUS_SIGNAL_ERR;
+> +		if (!(reg_val & IXR_FPGA_GST_CFG_B))
+> +			status |= ZYNQMP_FPGA_STATUS_HIGH_Z_STATE_ERR;
+> +		if (!(reg_val & IXR_FPGA_END_OF_STARTUP))
+> +			status |= ZYNQMP_FPGA_STATUS_EOS_ERR;
+> +	} else {
+> +		status = ZYNQMP_FPGA_MGR_STATUS_FIRMWARE_REQ_ERR;
+> +	}
+> +
+> +	for_each_set_bit(i, &status, ARRAY_SIZE(zynqmp_fpga_error_statuses))
+> +		len += sysfs_emit_at(buf, len, "%s ",
+> +				     zynqmp_fpga_error_statuses[i]);
+> +
 
+Sorry, but no, you can not export a list of strings that userspace is
+somehow going to parse.
 
-On 26/01/2023 11:35, AngeloGioacchino Del Regno wrote:
-> MT8186, MT8192 and MT8195 use ARM DynamIQ, which combines big and
-> LITTLE cores in one single cluster! A two cluster topology is simply
-> wrong in this case.
-> 
-> While at it, after some research, I've also noticed that the names
-> assigned to the idle states are misleading, so I went on changing
-> them to reflect the actual function.
-> 
-> The names change commits, unlike the CPU map ones, didn't get any
-> Fixes tag, as naming changes aren't fixing anything that would be
-> meaningful for functionality (it's cosmetic, nothing else).
-> 
-> AngeloGioacchino Del Regno (6):
->    arm64: dts: mt8195: Fix CPU map for single-cluster SoC
->    arm64: dts: mt8192: Fix CPU map for single-cluster SoC
->    arm64: dts: mt8186: Fix CPU map for single-cluster SoC
->    arm64: dts: mt8195: Change idle states names to reflect actual
->      function
->    arm64: dts: mt8186: Change idle states names to reflect actual
->      function
->    arm64: dts: mt8192: Change idle states names to reflect actual
->      function
-> 
+As this is all a bit field, why not just export the raw hex value
+instead and let userspace parse what bits are set?
 
-Whole series applied, thanks!
-Matthias
+thanks,
 
->   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 30 ++++++++++----------
->   arch/arm64/boot/dts/mediatek/mt8192.dtsi | 35 +++++++++++-------------
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 34 +++++++++++------------
->   3 files changed, 46 insertions(+), 53 deletions(-)
-> 
+greg k-h
