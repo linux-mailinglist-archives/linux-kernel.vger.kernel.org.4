@@ -2,77 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0417A6835BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C6E6835C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:55:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbjAaSzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
+        id S231894AbjAaSzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:55:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbjAaSzF (ORCPT
+        with ESMTP id S231776AbjAaSzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:55:05 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE6C577F8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:55:00 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id bk16so15142360wrb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:55:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QuexQnSJj1/dEzqqzwt9cJfQTWna5k6Z7+DQSeslwSo=;
-        b=UiFzOWFB4a/3xgSp1yUwchiAQ8AKbNngi8yAmudhhCWJPkH/vxdFxKnmN52dgge+99
-         qV3JOlCLHqFjy9hcRlUHUKdwen91bD+PkvYzAYTR2ty2z7aKbQKdw1C8d4VPFkiKKTpl
-         m/VAUSTxqu8ueLRRQUL9BBaylQ7omcTh92y39KQGo3LWPTIaYWhsaG23o15L+JPz/CYO
-         KkmmixGlhfeo+NMFMvn+tXpyvnXBO2YKnH3OoRDt8BMVJWCKbQTRjKQp1zLrsVWtTC3V
-         e6mdZXE6kookzzCJ/wh3wMXHTP/qJy9S92/66UvKZkeI1tYpylvfi1+eioXQCTQRcGYS
-         yqHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QuexQnSJj1/dEzqqzwt9cJfQTWna5k6Z7+DQSeslwSo=;
-        b=FEz84ofZn16WEArQeE83qDgSZgXVbPEYBvBDFOs5Fbk1MaxK8fPu3MhDlO4V19fStm
-         bCg2iPoB1FjR3DqX7lGD/Je7MYbXoKrO2IQwU0ky46O6zT6FLZDfDu+5/IDIqMDoR7Wa
-         L18WzeDabrK2U6riZXaEqGGCTPDtdA+BTyV64jVybZOjWf33zCk7OuXtAEsUjvxd7QP/
-         CDtuAFdU3F6CVyKlvpr1xpWMbdEcyy1LHvFtkkwUveJRu9rI2liF4SvCX25cub54tVAl
-         EA58KdxPCBVjQmT9uecNHgeWzz2vLUvuH2tD/7JHdli70DGGT4OWYtfgagt75L4UJHXT
-         HuFg==
-X-Gm-Message-State: AO0yUKVaYKVhLebTxtDZ2Ob21xMloi0bgRoUL9CnQMagG9hir28XTC7M
-        Fag92zPFAF7m6aeCLIWLIB8IAw==
-X-Google-Smtp-Source: AK7set/71U7zFmoH6k8sW32CesgMw/oX9q60A5z4fWakNgzXRDUUedjJa/xOqvp4MjzwwWbSNWAoaQ==
-X-Received: by 2002:adf:fe86:0:b0:2bf:b36e:f6ac with SMTP id l6-20020adffe86000000b002bfb36ef6acmr30914wrr.39.1675191299268;
-        Tue, 31 Jan 2023 10:54:59 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v9-20020a056000144900b002c3b2afae00sm112304wrx.41.2023.01.31.10.54.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 10:54:58 -0800 (PST)
-Message-ID: <9a3bbaf0-eb1d-613a-a8ba-272896ef2da8@linaro.org>
-Date:   Tue, 31 Jan 2023 19:54:56 +0100
+        Tue, 31 Jan 2023 13:55:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610A35649C;
+        Tue, 31 Jan 2023 10:55:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2F6861646;
+        Tue, 31 Jan 2023 18:55:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 249B8C433EF;
+        Tue, 31 Jan 2023 18:55:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675191318;
+        bh=bIDjyyvdysd52cz3wo+R2FqIpQuhXwaSP+2JinM77Zs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p4r9YCVihzZrIRlizFq96lF4LsuRcYuXyit+cVXFPxJSxGfL99cms2/SSKpvkF2Pp
+         NgIawOhOvw555KfS+LAiMfG5/YT2a/THCQd4ucSFldwug8pgOxrs80vH+lCVDLHIZh
+         fh6CSOEpoCrswZLqAXRWz9pZ9CFIa58ZjTeMXFlgy8V6KmgUqFk322AZ/O2du+jfxI
+         cQP8VEptS2HT9jSp8zZqLDDlrzS+XSn+HUeeyHjnm0LO863o/QOiqT647VANwYetka
+         9TpahVOYB0s8YL82xibnQ7Ggye7lO/va5K0QbIxfYIjwKYESn8Y2//JUV74+mpgZ7e
+         krHdpZB95Rbtg==
+Date:   Tue, 31 Jan 2023 18:55:07 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
+ pfn_valid() for FLATMEM
+Message-ID: <Y9lkCz73v7/iyyLj@spud>
+References: <20230129124235.209895-1-rppt@kernel.org>
+ <20230129124235.209895-5-rppt@kernel.org>
+ <Y9lULIIOneBUFE/E@spud>
+ <Y9lg7R1Yd931C+y5@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 5/6] dt-bindings: hypervisor: Add dt-bindings for VMBus
-Content-Language: en-US
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
- <1675188609-20913-6-git-send-email-ssengar@linux.microsoft.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1675188609-20913-6-git-send-email-ssengar@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="hiaCFsst32mLBZni"
+Content-Disposition: inline
+In-Reply-To: <Y9lg7R1Yd931C+y5@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,42 +88,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/01/2023 19:10, Saurabh Sengar wrote:
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 
-> +  - |
-> +    / {
-> +        compatible = "foo";
-> +        model = "foo";
-> +        #address-cells = <0x02>;
-> +        #size-cells = <0x02>;
+--hiaCFsst32mLBZni
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Except previous comments (all of them were ignored), also:
-Drop entire part. Not related, not correct, not helping and you cannot
-have top level nodes in example.
+Hi Mike,
 
-> +
-> +        vmbus@ff0000000 {
-> +            #address-cells = <0x02>;
-> +            #size-cells = <0x01>;
-> +            compatible = "msft,vmbus";
-> +            ranges = <0x00 0x00 0x0f 0xf0000000 0x10000000>;
-> +        };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index 1f7a519a936f..ab74ea97535f 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -876,6 +876,8 @@ patternProperties:
->      deprecated: true
->    "^mscc,.*":
->      description: Microsemi Corporation
-> +  "^msft,.*":
-> +    description: Microsoft Corporation
+On Tue, Jan 31, 2023 at 08:41:49PM +0200, Mike Rapoport wrote:
+> On Tue, Jan 31, 2023 at 05:47:24PM +0000, Conor Dooley wrote:
+> > On Sun, Jan 29, 2023 at 02:42:35PM +0200, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > >=20
+> > > Every architecture that supports FLATMEM memory model defines its own
+> > > version of pfn_valid() that essentially compares a pfn to max_mapnr.
+> > >=20
+> > > Use mips/powerpc version implemented as static inline as a generic
+> > > implementation of pfn_valid() and drop its per-architecture definitio=
+ns.
+> > >=20
+> > > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > > Acked-by: Guo Ren <guoren@kernel.org>		# csky
+> > > Acked-by: Huacai Chen <chenhuacai@loongson.cn>	# LoongArch
+> > > Acked-by: Stafford Horne <shorne@gmail.com>	# OpenRISC
+> >=20
+> > Hmm, so this landed in linux-next today and I bisected a boot failure in
+> > my CI to it. However, I am not really sure if it is a real issue worth
+> > worrying about as the platform it triggered on is supposed to be using
+> > SPARSEMEM, but isn't.
+> > I had thought that my CI was using a config with SPARSEMEM since that
+> > became required for riscv defconfig builds to boot in v6.1-rc1, but I
+> > must have just forgotten to add it to my $platform_defconfig builds too.
+> > However, those $platform_defconfig builds continued booting without
+> > SPARSEMEM enabled until today.
+>=20
+> The issue seems to be that the generic pfn_valid() does not take into
+> account pfn_offset when it compares it with max_mapnr.
+> Can you please test with the patch below?
+>=20
+> diff --git a/include/asm-generic/memory_model.h b/include/asm-generic/mem=
+ory_model.h
+> index 13d2a844d928..6796abe1900e 100644
+> --- a/include/asm-generic/memory_model.h
+> +++ b/include/asm-generic/memory_model.h
+> @@ -26,7 +26,7 @@ static inline int pfn_valid(unsigned long pfn)
+>  	extern unsigned long max_mapnr;
+>  	unsigned long pfn_offset =3D ARCH_PFN_OFFSET;
+> =20
+> -	return pfn >=3D pfn_offset && pfn < max_mapnr;
+> +	return pfn >=3D pfn_offset && (pfn - pfn_offset) < max_mapnr;
+>  }
+>  #define pfn_valid pfn_valid
+>  #endif
 
-Don't duplicate vendor prefixes. Drop and use correct prefix.
+Gave that a go, board is booting properly again! Feel free to add a:
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-Best regards,
-Krzysztof
+Thanks for the prompt fix!
 
+
+--hiaCFsst32mLBZni
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9lkCwAKCRB4tDGHoIJi
+0pIDAP9nc8RsXGyfp84b29PfLE6bd1djEIZ71+YYWPrhRbOT0QEAs5hvd2Aq0mES
+TzWIEs2xL7+wjwVIWLwPjr1kP0shHA0=
+=AQg2
+-----END PGP SIGNATURE-----
+
+--hiaCFsst32mLBZni--
