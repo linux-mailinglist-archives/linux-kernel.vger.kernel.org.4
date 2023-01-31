@@ -2,137 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F404C6833E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCF26833EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjAaRcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S229693AbjAaRcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:32:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjAaRcD (ORCPT
+        with ESMTP id S230433AbjAaRcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:32:03 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9F0552BE;
-        Tue, 31 Jan 2023 09:31:45 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id v24-20020a05683011d800b0068bdd29b160so1211641otq.13;
-        Tue, 31 Jan 2023 09:31:45 -0800 (PST)
+        Tue, 31 Jan 2023 12:32:12 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36A256ECA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:32:09 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id h16so14912721wrz.12
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:32:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+5bGw1GezPF6lXREFqF5MGFbYS7Ls0VCvjS/3Gu5c1o=;
-        b=dI1g0aM3WSZXEIh4UQRcbUZ6SxeMAjDTx2eaLT7Hi6013TN1+MngO+p9OOBRn5oFHj
-         nVX7o3c7rSv2nJxP2nFumnUITGWUcZBd5aFtDjN1o+kQUImZkCo9Q2qzZUsExkYqeWgy
-         aFIZVUaUvzTjtHr50MCY6PNjaGirZaM49lx6gAFiEpDjGQjhXb+m10v+UKvapyxjGbUb
-         7Qn4tI867RSpBFTj7P4OsW7JhpeJRFJevXr85CojW5tKhaBTluP5ue76P27Yb5FBPKq4
-         UtXAtwO3RYOYM5HYBi+D9fI99tr/4bC6BmFS5oluOGTUoRJQRgNPuOmwD7oXX1JUSHsv
-         VSsg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9CuHKps70Th0JGwhWBmGqTShgEX6rGAigmrTuj9OLyU=;
+        b=q5rHNABBlkdhViPW0OuYkpf6eOtoWTpfUk7Ka4ALSx978K1Mhc99XVzE9YfJG3JaTT
+         Eeh6e6ZMxaXJn4cIU+KnxSQG5O4ek7y6gmv3BrjQCLPIqpo5g/fE6y81H9de/UsNE38v
+         YksWjO8LSaOb1GQjTdFg6tvdjvDml897KbL1fs+XwpL+gTZCdORr8RMQwbBSDY6XI5nv
+         hpWBhhedi4YdlUCg/i6cvkS+RVkBN6fmKVVtXcQrzhqyYLLeWz4MXhrORZX4NHVil9hc
+         BA+OjWESMp0WUR75LZkmNhsT2btJwUWI+Yyg7MjJhI8oZq0SfHS61CTaxRuiuGm628Dc
+         A/qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+5bGw1GezPF6lXREFqF5MGFbYS7Ls0VCvjS/3Gu5c1o=;
-        b=BY8pleXD+WbVzaEr8LfjVS+bcSzuRcO/BoXsv+9Ot3asypuah5ZokSVPKsGQh7Gyyj
-         4yHTbTrYBhS290s2eaBdDykXmMaRvJHFz9HP8+Sz7Fe7jqEw6pk/GMmIPMIQxk5+0bce
-         +MXYE5aAXL+ZqSRg2P8E9IPHoAcKhnv6lkqHT29VAhy8rx3H6GswCt7IbzQi2OWW3mRx
-         9pruvcjQAjDv3VAUh/Xwn6JQQJD4kzKKPD/HTytUsusPJzy2x5O+FLJ45nthP9gTnMJo
-         Tq1kc7PLCkQVe8jCxq8v7Q8ImC2vD4/73XldGQGwqDfilzm02QZL/meWeb7U/8R8+w4P
-         DuJw==
-X-Gm-Message-State: AO0yUKV7SouC2cT/BiinGkLYf1XY4y93di4y/nmH5MmljQA/HMZshvyd
-        1KNHrKX5yzaLw1MFajBE2Lk=
-X-Google-Smtp-Source: AK7set9atEFPZOKuJlKHCZOavMXiSaklruZcJWcU4Gcs3M05uCUJF4eeAodqhtpCmABsL0P7//IK+w==
-X-Received: by 2002:a05:6830:44a0:b0:68b:cdc3:78dd with SMTP id r32-20020a05683044a000b0068bcdc378ddmr5252347otv.17.1675186304967;
-        Tue, 31 Jan 2023 09:31:44 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n19-20020a9d64d3000000b006884924ca4bsm6775540otl.5.2023.01.31.09.31.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 09:31:44 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 31 Jan 2023 09:31:43 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/12] dt-bindings: watchdog: qcom-wdt: fix list of MSM
- timer compatibles
-Message-ID: <20230131173143.GA3601677@roeck-us.net>
-References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
- <20221212163532.142533-3-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9CuHKps70Th0JGwhWBmGqTShgEX6rGAigmrTuj9OLyU=;
+        b=sLC4w7C5uMJ6wM9ALSo9q0mE/isGVQC0l+MskfoqvqMG51x75WEPmhE8LqKNQEHk5K
+         Xt5KUwpFHIDqF9xIxPaiDiZwsSdesn8wJUIIkbt20rjcnmH+Sx0gY0i6e+SprjDHxDQJ
+         ry0K/MjZWebGUyQk5Nz0YbdmGxhWmzevXCSPYQ9cyCe5NEAjptWK/YbjQIPfK7JRrjCk
+         MMngQeOdL/zdH9tDsf33BYWIUyWPd15nDyerTXSb4ijBl9215UoNLs+stYJNCBbeLUmg
+         207yuNgOFgPwRDi/WjpqpoIAB/2eMfnFQt7Qa/N0Qz6GVax44GR0pSUmKL/9jDt0LN0o
+         we4g==
+X-Gm-Message-State: AFqh2kruWUxsLMifLTrHifs3BudxDFbM4u0HWvrhQy41nIRI++pLHs9V
+        y27RPiEQLsiH7cpeIueA/c6OTA==
+X-Google-Smtp-Source: AMrXdXv8k8Tg3vIs2xhUZQj7w1uQ9ulfgatRSOVAT/xBwk1bew0zK3kfBW/5yEUINCGGSH/H+7iinw==
+X-Received: by 2002:a5d:6a47:0:b0:2be:64bb:1d84 with SMTP id t7-20020a5d6a47000000b002be64bb1d84mr34046276wrw.24.1675186328393;
+        Tue, 31 Jan 2023 09:32:08 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id c13-20020adffb0d000000b002bfd190fd60sm14563771wrr.108.2023.01.31.09.32.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 09:32:07 -0800 (PST)
+Message-ID: <a3fdb1a7-0585-6282-0b84-27c82a35244b@linaro.org>
+Date:   Tue, 31 Jan 2023 18:32:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212163532.142533-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/8] dt-bindings: phy: samsung,dp-video-phy: deprecate
+ syscon phandle
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
+        replicant@osuosl.org, Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, phone-devel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
+        Henrik Grimler <henrik@grimler.se>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20230127194057.186458-1-krzysztof.kozlowski@linaro.org>
+ <20230127194057.186458-3-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230127194057.186458-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 05:35:23PM +0100, Krzysztof Kozlowski wrote:
-> The MSM timer ("qcom,msm-timer") is a bit different timer and watchdog
-> device than KPSS watchdog.  It has its own generic and specific
-> compatibles, so fix the list to reflect this.  Adjust the example to
-> show the newer KPSS watchdog.
+On 27/01/2023 20:40, Krzysztof Kozlowski wrote:
+> The DisplayPort phy is actually part of the Power Management Unit system
+> controller, thus it should be its child, instead of sibling node with
+> syscon phandle.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Rob Herring <robh@kernel.org>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
 > ---
->  .../devicetree/bindings/watchdog/qcom-wdt.yaml    | 15 ++++++++++-----
->  1 file changed, 10 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 3e0b30a817d6..93e4381067dd 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -33,13 +33,16 @@ properties:
->            - const: qcom,kpss-wdt
->        - const: qcom,kpss-wdt
->          deprecated: true
-> +      - items:
-> +          - const: qcom,scss-timer
-> +          - const: qcom,msm-timer
->        - items:
->            - enum:
-> -              - qcom,kpss-timer
->                - qcom,kpss-wdt-apq8064
->                - qcom,kpss-wdt-ipq8064
->                - qcom,kpss-wdt-msm8960
-> -              - qcom,scss-timer
-> +          - const: qcom,kpss-timer
-> +          - const: qcom,msm-timer
->  
->    reg:
->      maxItems: 1
-> @@ -56,9 +59,11 @@ unevaluatedProperties: false
->  
->  examples:
->    - |
-> -    watchdog@208a038 {
-> -      compatible = "qcom,kpss-wdt-ipq8064";
-> -      reg = <0x0208a038 0x40>;
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    watchdog@17c10000 {
-> +      compatible = "qcom,apss-wdt-sm8150", "qcom,kpss-wdt";
-> +      reg = <0x17c10000 0x1000>;
->        clocks = <&sleep_clk>;
->        timeout-sec = <10>;
->      };
+>  .../devicetree/bindings/phy/samsung,dp-video-phy.yaml        | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+
+Hi Vinod,
+
+It turns out, my previous patch (1/8, which I took via Samsung SoC)
+actually depends on these here. Without these here it causes warning.
+That 1/8 patch is already in soc tree and will be for v6.3. Will you be
+taking these for v6.3? If not, could you Ack and I will take them.
+
+Best regards,
+Krzysztof
+
