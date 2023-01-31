@@ -2,73 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6080E682585
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F5468258A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjAaH13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 02:27:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40020 "EHLO
+        id S230364AbjAaH2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 02:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjAaH10 (ORCPT
+        with ESMTP id S230135AbjAaH2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 02:27:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212A2302AF
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 23:27:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B096E6136F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:27:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A220C433EF;
-        Tue, 31 Jan 2023 07:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675150045;
-        bh=/+z9RH4h0gpPcoPZBLaROC49eL3VvR3fCyK472WqbL4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zSlxHep1Rvnwya56O4mLu37nMVy7xkgtMR2LJp+VUct98kiiyzXOYkVYCg8QZJpq1
-         FxsIePbCBFY0QXyKDupjbCXBRCAu0+SmccSr+5BMqY+ZafgGJ8UYeTXjcQb6d3qE3U
-         RF7cplsN0xJvBfbTl++GWZvql/vmO4zhSY6nt94s=
-Date:   Tue, 31 Jan 2023 08:27:22 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     ruanjinjie <ruanjinjie@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, haibinzhang@tencent.com,
-        hewenliang4@huawei.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5.10] arm64: fix a concurrency issue in
- emulation_proc_handler()
-Message-ID: <Y9jC2msv2q39+ZA1@kroah.com>
-References: <20230131065211.2826133-1-ruanjinjie@huawei.com>
+        Tue, 31 Jan 2023 02:28:38 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BBF303FF
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 23:28:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675150117; x=1706686117;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=/ZmJJuA60MRhmaDJdcoSBVZcQNooClU+3svm7Np3S0s=;
+  b=M8JgX8F+2hT4gPUUBNrLaF9sr69s7mNrSMc1BRGvJ1OPM17sZximMoOp
+   KnQkWzOy6LXBa3EglXm0I0DdS5Q0ZCy84M6rpz6yWccW7MYilxvIcDsy3
+   pwfyxxx/f20M9eDdNI5BmJi6Ys8emY4l4Zv272W8kWchMDQ4Fiv4hriXZ
+   78OloKFlrdX7jNbzmcm0taIESdtmmWESCoL42V2tLcFElZTaTo21Q4lSk
+   OZQOVv1enPQxRxldtwcIOXw0oukT6z1f8vJ8ghrdnEe+BuxZp/OUPlxjv
+   ld8W4oRNEdtDVCWVikXQ68EzPd1MTUIkxGIgzuXEF4VY9H89eUtkAJUHH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="326435022"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="326435022"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 23:28:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="993169017"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="993169017"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 23:28:34 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Longlong Xia <xialonglong1@huawei.com>
+Cc:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <chenwandun@huawei.com>,
+        <wangkefeng.wang@huawei.com>, <sunnanyong@huawei.com>
+Subject: Re: [PATCH -next] mm/swapfile: remove pr_debug in get_swap_pages()
+References: <87wn54c1fi.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <20230131071035.1085968-1-xialonglong1@huawei.com>
+Date:   Tue, 31 Jan 2023 15:27:44 +0800
+In-Reply-To: <20230131071035.1085968-1-xialonglong1@huawei.com> (Longlong
+        Xia's message of "Tue, 31 Jan 2023 07:10:35 +0000")
+Message-ID: <87leljrwnj.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131065211.2826133-1-ruanjinjie@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 02:52:11PM +0800, ruanjinjie wrote:
-> This patch is addressing an issue in stable linux-5.10 only.
-> 
-> In linux-6.1, the related code is refactored in 124c49b1b("arm64:
-> armv8_deprecated: rework deprected instruction handling") and
-> this issue was incidentally fixed. However, the patch changes a lot and
-> is not specific to this issue.
+Longlong Xia <xialonglong1@huawei.com> writes:
 
-Then what about 5.15.y?  You can not upgrade to that kernel and have a
-regression, right?
+> It's known that get_swap_pages() may fail to find available space
+> under some extreme case, but pr_debug() provides useless information.
+> Let's remove it.
+>
+> Signed-off-by: Longlong Xia <xialonglong1@huawei.com>
 
-And nit, you need a ' ' before the '(' character.
+Thanks!
 
-But why can we just not take the original commit that fixed this issue?
-That way almost always is the best (prevents regressions, makes
-backports easier, is actually tested, etc.) ?
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
-thanks,
-
-greg k-h
+> ---
+>  mm/swapfile.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 6202a6668a63..99143875d6f0 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1098,8 +1098,6 @@ int get_swap_pages(int n_goal, swp_entry_t swp_entries[], int entry_size)
+>  		spin_unlock(&si->lock);
+>  		if (n_ret || size == SWAPFILE_CLUSTER)
+>  			goto check_out;
+> -		pr_debug("scan_swap_map of si %d failed to find offset\n",
+> -			si->type);
+>  		cond_resched();
+>  
+>  		spin_lock(&swap_avail_lock);
