@@ -2,102 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F7F682CA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71177682CA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjAaMfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
+        id S231712AbjAaMfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjAaMfR (ORCPT
+        with ESMTP id S231303AbjAaMfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:35:17 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD536298F9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:35:13 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 74CA641AC7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675168511;
-        bh=ueQfyKF8BlPF+R7M5uaK1t4wPoccd5BHGE7Whcp4jsA=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=jszm0xWwOwIamrip4oCB3bBeUY+JfjunatbLXcxfaDafcYKp6F3KV5DKrwocKV0ZY
-         mchTkRugPGxkLGnkXy3fwafuNfA6I5DUI/UkwNmdpPr3kvH3ysIDnQNAQnsB7pgeWe
-         ixfNHmcWsdZDhX37VSQSxEAp70X8lsUAbzR1v+i6pdwqDQcgd4Be2U5QS5OWM+oe4k
-         Uwg3b3AshpEzeMCEAAFmLD2OyBnnqbYxxil8uv7jdl0mSwZVKnA6S65/r2G9gHM9Ad
-         STtaNcj7AX0XEdj/tR4Z0A1lvDk8CNgX2hx5aO0Sa462OIR1tWqMoMhaPlFSFSA2tt
-         V0+0ZuQ7zf6MA==
-Received: by mail-ej1-f70.google.com with SMTP id hq7-20020a1709073f0700b0086fe36ed3d0so9511854ejc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:35:11 -0800 (PST)
+        Tue, 31 Jan 2023 07:35:33 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C49237F19;
+        Tue, 31 Jan 2023 04:35:26 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id z1so7366781plg.6;
+        Tue, 31 Jan 2023 04:35:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p3Bprh6qzi6N7O5JqZWzaWLkqDk7+Hs/nJb9oKk2rCs=;
+        b=Qxp+RbCuOAmMF9JjQ+UQypcN6aXfqx66Bou0GHmm2nWOGeeVzhoKKs7NpSVLLgVo/2
+         L45/OgdoBBBkwVbOVqlA9s8JMAFfy6FviT++JVIUSyZ8D+KuI/iMheytzplsjedXFQOr
+         qxlqx7DW6ZbISA1TCJyXt0YXAokehOGs53J3C6hMwEx+0TpNnk3oEXMhvoKLg9hwVZuV
+         ImHe0wYjUIVo3Zvq4X9X+TizGGi2BPi2IDrnAr82SvfwSbTRThjHhiZp6bruw8kodHMN
+         igDB8EwyTk1Gso7QIK49ltx8y3eFaJgjLcrXaiCDs2WNNgB/TL7n1b+8jeCU7t1XyRW+
+         kcgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ueQfyKF8BlPF+R7M5uaK1t4wPoccd5BHGE7Whcp4jsA=;
-        b=NGRWJI/b9f7+VELMI0bWvUrOBLHMGwer/wsFNRRu7pO2pz3zkhqSKrm8XWkpO7qet0
-         DOW7ahAXuF7Tnzmu7azcRr52O3lDjfvtNPu5bkDMzWOgvKaR/uVww9T1e5MYb8h9F0XA
-         M+sx/aIikr/+pLf0udayydRHP/RRtG9Aq4jh9oj4avP7fh90FP2KQkw+dw/WESGFxhPT
-         /aBav2CnKZ2hqhPCkmBaroqAvQGRmYnEcJ9woVNTODK/6HzDgfoSYAKJGwRL5K4fsObi
-         PbbplnqCmb7Ds8P2foM+EPouNg7vyT6xPFCCcoKDZ4TqRGP0oI/9dKDMOVfk1Hq3j/Z4
-         +qrw==
-X-Gm-Message-State: AO0yUKXaAsb1+okrF09sZKblcIM6DsKVaCVmVkhGRMV0X+JHlVJLlLqS
-        a6rRiJ2qOPZLf8a+EW63dgfj4TNRR/DAeRj5fO65qWvHNxRf/aDcg0uqLULqpYpEvoY2MN3eVdw
-        8PoewMZB8JoU3T8JAx2IdriwwdFzHRfZqldnrcWZfdg==
-X-Received: by 2002:a05:6402:4d1:b0:4a0:a7d8:500e with SMTP id n17-20020a05640204d100b004a0a7d8500emr25819589edw.20.1675168510690;
-        Tue, 31 Jan 2023 04:35:10 -0800 (PST)
-X-Google-Smtp-Source: AK7set+zhJgJ10F2JvGPNmG1Bjo6DZcP4Y9AkOapRMpD3BBbyBUK6HSSV7KfW6UKjkqN7ZU3DgtMFQ==
-X-Received: by 2002:a05:6402:4d1:b0:4a0:a7d8:500e with SMTP id n17-20020a05640204d100b004a0a7d8500emr25819576edw.20.1675168510511;
-        Tue, 31 Jan 2023 04:35:10 -0800 (PST)
-Received: from amikhalitsyn.. (ip5f5bf399.dynamic.kabel-deutschland.de. [95.91.243.153])
-        by smtp.gmail.com with ESMTPSA id a66-20020a509ec8000000b00482e0c55e2bsm253001edf.93.2023.01.31.04.35.09
+        bh=p3Bprh6qzi6N7O5JqZWzaWLkqDk7+Hs/nJb9oKk2rCs=;
+        b=4pQzXbWi0iUvfD/UUJ/zySgvXyBw63QrPfh0A3BXVSyCjLd0/wC5/g32ZrMfN4pQZj
+         Scewrw5xrY1d0KQeo4RBkoPtOXBAWf4tJXdY1GHDTmM5sY5n4lisH4ViCq8fkth8yJX4
+         ASrDuqQRcUJ/nbJ35sm/cVie495rhN6RoQtrU3J1s/+ATcMHuqJuHolWOuXfzYUojk4M
+         7/P2uGJiQxAR6vTyd8tQ8uDyPggkV5l1blNsncSo4MDALvzqqchP5//K/dK1IPf5GRe4
+         KDTO5ujC3XQRvtINBvMzteW/1t/wBpHqn3znKBL3i51K61xLTRi71szY4xiWnUKRnwXX
+         o8sQ==
+X-Gm-Message-State: AO0yUKWI2bNcyDRstPwUWCq10m4XkL4osEDOLMSNIY3ueea1KWRNJIMG
+        338/shc3QNIJdXawyzuLvLQ=
+X-Google-Smtp-Source: AK7set9meLUleoPPOYf2CHYo3cG+8acjn9MkDPxNVatdfbc06w9tOYQyqkqlBg1GBLUllXq6+pmRXw==
+X-Received: by 2002:a05:6a20:1596:b0:b8:54a2:b8d1 with SMTP id h22-20020a056a20159600b000b854a2b8d1mr22995794pzj.57.1675168525734;
+        Tue, 31 Jan 2023 04:35:25 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id r19-20020a170902c61300b0018544ad1e8esm9692527plr.238.2023.01.31.04.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 04:35:10 -0800 (PST)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     akpm@linux-foundation.org
-Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mailmap: add entry for Alexander Mikhalitsyn
-Date:   Tue, 31 Jan 2023 13:34:56 +0100
-Message-Id: <20230131123456.192657-1-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 31 Jan 2023 04:35:25 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>
+Subject: [PATCH v4 1/2] dt-bindings: arm: qcom: Add Xiaomi Mi Pad 5 Pro (xiaomi-elish)
+Date:   Tue, 31 Jan 2023 20:35:14 +0800
+Message-Id: <20230131123515.833-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My old email <alexander.mikhalitsyn@virtuozzo.com> isn't working
-anymore.
+Add a compatible for Xiaomi Mi Pad 5 Pro.
 
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
 ---
- .mailmap | 2 ++
- 1 file changed, 2 insertions(+)
+No changes in v4
 
-diff --git a/.mailmap b/.mailmap
-index ccba4cf0d893..49b0c280b561 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -25,6 +25,8 @@ Aleksey Gorelov <aleksey_gorelov@phoenix.com>
- Alexander Lobakin <alobakin@pm.me> <alobakin@dlink.ru>
- Alexander Lobakin <alobakin@pm.me> <alobakin@marvell.com>
- Alexander Lobakin <alobakin@pm.me> <bloodyreaper@yandex.ru>
-+Alexander Mikhalitsyn <alexander@mihalicyn.com> <alexander.mikhalitsyn@virtuozzo.com>
-+Alexander Mikhalitsyn <alexander@mihalicyn.com> <aleksandr.mikhalitsyn@canonical.com>
- Alexandre Belloni <alexandre.belloni@bootlin.com> <alexandre.belloni@free-electrons.com>
- Alexei Starovoitov <ast@kernel.org> <alexei.starovoitov@gmail.com>
- Alexei Starovoitov <ast@kernel.org> <ast@fb.com>
+Changes in v3:
+  - Pick up Krzysztof's A-b
+
+Changes in v2:
+  - Move compatible "xiaomi-elish" down.
+
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 22553637c519..398ff26e6e0e 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -875,6 +875,7 @@ properties:
+               - qcom,sm8250-mtp
+               - sony,pdx203-generic
+               - sony,pdx206-generic
++              - xiaomi,elish
+           - const: qcom,sm8250
+ 
+       - items:
 -- 
-2.34.1
+2.39.1
 
