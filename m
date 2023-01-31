@@ -2,85 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E74D6837EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 383176837FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjAaUyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 15:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S231673AbjAaUzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 15:55:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbjAaUyL (ORCPT
+        with ESMTP id S231661AbjAaUy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 15:54:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7243B5AA50
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:53:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F04B8615A7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:53:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB5F4C433EF;
-        Tue, 31 Jan 2023 20:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1675198437;
-        bh=jHy4qpmBfs5JB+49uMUbT6ZlxxySVk0qKxcOzh21LsU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hHngKerx0MW9zufZtMuQZEzHh3CP4ijBQc0AQ3au4woHogCVYIXIgmCDTB3X1PFRX
-         FoL9w9mszj2lnuZGJN/zx9flw95uDHtCKgSsx9iQE3VP9KxUjOpK8pO+iR/Iaaw1/A
-         H0saKzFa8Zb51o2dQFJzCGUfalgCpK/aouzY88j4=
-Date:   Tue, 31 Jan 2023 12:53:55 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v4 4/7] mm: replace vma->vm_flags direct modifications
- with modifier calls
-Message-Id: <20230131125355.f07f42af56b23bfa28b2a58c@linux-foundation.org>
-In-Reply-To: <CAJuCfpEzaVkgQt=C-33jAh1vLVJAjoyM8X5AD9CzyDUJnPDCkw@mail.gmail.com>
-References: <20230126193752.297968-1-surenb@google.com>
-        <20230126193752.297968-5-surenb@google.com>
-        <Y9jSFFeHYZE1/yFg@hyeyoo>
-        <CAJuCfpEzaVkgQt=C-33jAh1vLVJAjoyM8X5AD9CzyDUJnPDCkw@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 31 Jan 2023 15:54:58 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54D34C28;
+        Tue, 31 Jan 2023 12:54:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1675198477; bh=QeckxysZjgypxBRfoatLwznSwJbDt6HokBs3xnmWHB4=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=kWzj+Z2p6lKeqamyPgX04OPdFh3vJlwjdSuxdwBVhB7cTDwEf5EF6D2V8pW6jiCem
+         5c1Z3SsrKvq7wdtC+3/EG6b+uyGRa6UriQE4syySM/Hxgvywp6GyopEYF2Xz4Bc1CE
+         wd8CCX0ZNeNWU0PpcvkMCk03Fc6erHHuOoR+cEGQ1ssVzKr9SXOnthY0ZHtnrLQOef
+         Pf2ye4ogRjHjGZZxGsg8EhjG3/tZhhbiXIg/QZB8G3yh9h4Iu8fpsqDyqHJNSgsSzi
+         SpipxIo1brX16MOYA5gONjVQz2Nha346ZN8cqpjojdElkXw2XKHp/KhHdQv9M4v1CJ
+         GdRc1J3e8oHVA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0G1n-1oT62k1X9j-00xJNl; Tue, 31
+ Jan 2023 21:54:37 +0100
+Date:   Tue, 31 Jan 2023 21:54:36 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: Add kerneldoc comment to napi_complete_done
+Message-ID: <Y9mADAaHTGOEBzHd@probook>
+References: <20230129132618.1361421-1-j.neuschaefer@gmx.net>
+ <20230130182622.462a2e0e@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="spt6httPZc2M2IgK"
+Content-Disposition: inline
+In-Reply-To: <20230130182622.462a2e0e@kernel.org>
+X-Provags-ID: V03:K1:Dvk4XHQzgmvXSu/0175crCx4gYC47dN01iRmJk/i+r2gzcUYRWr
+ 6357Oa7Gb277XuZKzYeRkZ/JnVp/L+dFuLMEd9Rp+sZUy+LNb8V6C1NljlF6d+a1mWBQVX+
+ wqcaeRVAqcGj7gC1+ORImEZN+kz7fY4pJq0vQSPUM9Ytpj6qGs/QFaShFOH5SBAWG91976T
+ u5Vhf+7hIF6r1cFj7IMZA==
+UI-OutboundReport: notjunk:1;M01:P0:DMrOMspsWJ0=;z5o2rLNODMzbWH9XWlnWVzN+bjs
+ mrkf+m5QyQ2v02Kex+REplSwkeS6lz8Bj3QCI6yWapNuT9Co0IScAMCvGD74ZUMILXBufmIkU
+ g90r2TIsS9Dy2oTSPqa+l9tK/cvPqf2/R8Zhdp0QxR5TcHiSZ1sZTi8nYPC+3tDWXF+0CIk1Y
+ d6n8clBEkKS0H8cfBfVnL6ydPtSiw8qu+vX4NvvcRErwAlxvCraABOuE6d6zb6NO4V41GASGS
+ Dp//2/KEPeGvtV36Sll6tcPv8FTJcN1S+FSPbqP5jK77G7bupXJRz8wJmY713qZzWFdd8cZzH
+ KC0I4sBbxKYnL9pRbKwIF2NPgNCNeRvUd0Gk+hj6h6p9whg4gqSnfGqNyEo8PS3XFveob8BgT
+ 2+ynOXdjPm+e32cq/mFMhfoC+SnwdLWgsR+9+1A7Naf0ADDcIQcL4bhZylLyInDAS5sBOHl+C
+ 5uWDIRRyu0R7yRlCuiGZh4kmA2eCXPe7eMtkP1/SL8s9YwA9z+BNBBRsx33OkXxzltBXaTHi7
+ bkmCGphnsThAs43iVglMrxPXtlJMb2gDWsHgcq5g2FB5TNQz+4YAbJUbtXHGp1Edqr0C1Ad5A
+ UueBOOQ2WVqyOx7Z3BIzhzbc2RvyRRjQvNmETGNV99wNI8OdenoQXMnnD9rQFE/U4bLod7GwR
+ kuj2kfys4HmFZ9Dz3vng649g/Y6sLRwYtBZNxkFaHPRpd04iUbiXzh5wWcgCUNA032CjDbKWu
+ t6XSF9O824ilnp6svI5tPrng1djgEq5llVeZGuoC/Z8m3iGvQGcMO7klgNbZ/E3KAp/3p4+nT
+ nBJlGn/LpZXgHwELzwDrpnSKOX5YsjOqc2ObdBIe/6SeYW3PHPfc0hKUpnwCTjrgpvorUbwGM
+ Llq6x3B9IpwHLRSJa722dRPGKY6E1IepiVP3pqVpBTLydpKswc7H6fZlvR0JFpDpkJZBG2bzK
+ cHqpcA==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 Jan 2023 10:54:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
 
-> > > -             vma->vm_flags &= ~VM_MAYWRITE;
-> > > +             vm_flags_clear(vma, VM_MAYSHARE);
-> > >       }
-> >
-> > I think it should be:
-> >         s/VM_MAYSHARE/VM_MAYWRITE/
-> 
+--spt6httPZc2M2IgK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I added the fixup.  Much better than resending a seven patch series for a
-single line change.  Unless you have substantial other changes pending.
+On Mon, Jan 30, 2023 at 06:26:22PM -0800, Jakub Kicinski wrote:
+> On Sun, 29 Jan 2023 14:26:18 +0100 Jonathan Neusch=C3=A4fer wrote:
+> > Document napi_complete_done, so that it shows up in HTML documentation.
+>=20
+> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> > index aad12a179e540..828e58791baa1 100644
+> > --- a/include/linux/netdevice.h
+> > +++ b/include/linux/netdevice.h
+>=20
+> Please put the doc in the source file, rather than the header.
+
+Will do.
+
+Thanks,
+Jonathan
+
+--spt6httPZc2M2IgK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmPZgAwACgkQCDBEmo7z
+X9s8HRAAwpljw8caoG7P0QpqN0Vn06mjKaH6nQuiIk2XxKoQmgU2uUCGaMoLn/Qg
+Y46XsT4NpWE7T7+D/PeFjpwPsZWi9mp02lD1wYP6HOK39uAC6PL1arBvRS36D6NV
+N8gi/08m8r4V4zt6SqN0bQ4V90bVXvcfyfPUglsVmxkYDw+K/sHEeaUdxsICjXOt
+3e8EW84RHwHksp2jQd+pWK+rNWKNf1QDoSwQSt/NoYpTpHnF0VGjJCWB4H1YjwHT
+gIvd4TlZCrqb5RJeCn7loHrVbSjJrpbAJKBYtjD7AmY3uOO0MJvsNoowDZfcnKz9
+D8nBf8YRjM/Zpt3EtY6yi5xE8iVXy6JTnKguXDPt/z9efNHMAvJJ9xXaDAF65wn8
+Ll5qu7fILmtAMxZ4e8O0jeYkdERzxfH6DHHZzxo7C2Yi8mS9Dwzwbre8yO2JOoAY
+sbN9BxeA9Rf0wvD3Su4oCTkt0d1OMRzRO7IhDKLn71lq9jHpsunfdduhuT6kut7i
+WkRZNJOg4JrkRYTcHTP1j2YBCagQn83oy8ps24FtrOfmKAqyTklo4/nCGsqmR3sK
+lqF+ur7f7LPmUR7NYfwEmJGyIPHpD0MHyRPRH6R8pNX/eHAntdyJDAt5Rrv5OR1T
+OzwN0DWYwHExG6nNLKsL88uF9qAQ1J+jlVE/iSin5hLC3Mk+jS8=
+=W5lQ
+-----END PGP SIGNATURE-----
+
+--spt6httPZc2M2IgK--
