@@ -2,151 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8F868294C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D5B6829D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjAaJoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42786 "EHLO
+        id S231295AbjAaKCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjAaJnh (ORCPT
+        with ESMTP id S232098AbjAaKBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:43:37 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F0E6A63;
-        Tue, 31 Jan 2023 01:43:01 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Tue, 31 Jan 2023 05:01:55 -0500
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 Jan 2023 02:01:45 PST
+Received: from mail.multiname.org (h4.multiname.org [94.130.68.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221834B19A;
+        Tue, 31 Jan 2023 02:01:44 -0800 (PST)
+Received: from webmail.multiname.org (unknown [10.0.10.104])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 928A9204DC;
-        Tue, 31 Jan 2023 09:42:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1675158160; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        by mail.multiname.org (Postfix) with ESMTPSA id 4P5gBf04bKzPLtZC;
+        Tue, 31 Jan 2023 10:44:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ccbib.org; s=20220806;
+        t=1675158298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vatAf4PA7oDC3qG6Ue8FoZZjsEq4Bdh1B0/k8ZQrTUg=;
-        b=gMhWmTrc01TgLLV8/IeGhnFBJM4GcUYvw4lY4dB1//uRSyA/Gg5OACxbr1kveVnuJANNPG
-        4J0JY8QnzqABcd7bhm28E78+rsyHH2TTlcKBv/CSUD4kBycejiP6IrTv7rhyLtLf68CgB7
-        Y2sMD7oWVorTHewyxaIYO7EZDk0ME4c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1675158160;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vatAf4PA7oDC3qG6Ue8FoZZjsEq4Bdh1B0/k8ZQrTUg=;
-        b=GLY2i5COFd94mFE4jR18lrRkUMnnzt9idGAB9CoC3pHu3qqdeEh0kSlhsoOuUg+/+Q6NAd
-        uTz6Ov8dMKEExpBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4DB6F138E8;
-        Tue, 31 Jan 2023 09:42:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6jAfEpDi2GMAOgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 31 Jan 2023 09:42:40 +0000
-Message-ID: <6f63f1cc-ba33-2253-cd90-e01285bc6ff1@suse.de>
-Date:   Tue, 31 Jan 2023 10:42:39 +0100
+        bh=u92+jTmd41zljmbXNuo5Urnc5+K1eFfPMB3du4y+R74=;
+        b=mhQP+PBiE7mkse22lhpvhHcKOXJhwDbjsgVQnI7m/0bwvTvUNbw3vsKbyt2/CQMOFoW0zV
+        YzGWlK5Vah9zvehcED7KrKNV902o9gDTAlcxGSetPMaHpvxCpE+HoLcIOiUC5qcYSUBbfq
+        y5nExMivJr2ru+ykXsmmgqgWXWEvK39oxniZBOnIoRG7/dnpln/x/p0QqdH+rO+h8Zt6+I
+        fRKAMnsa1i++oatCj0BXdJHULVNYKO8H143FkySe2mxB4GhWsYnEYaldnFIthZarBjDt0n
+        Sa6tNP9xBLUkyZwRWQYglrV1WQ3ZqsRI/DdCaqYxDJNJYOHfGc/Ng5hTneMtzJv9INVDq0
+        KnP7Nk0LFm2aVqj342Me/VLt1Zvtli2MpEeytXrET81QTjlOQYzljl/cJ39co9lNNUQNcO
+        mTYl+u/x2QXPqByTnMy897XuR+r0KzuEacgR5ZPvrPV4dvuDhbXvo+47omSHfGevX7TN1L
+        1s1ziuw0SFmYfqP9aib+j216zZNyLsBQUpkeY+pJVIKGKtGHC+y08v1m0t94RAp5iMUZDY
+        0y85wyo2Qqx1YGd73A2pnyM1WbbSfkTeaeYVrN8DHv/+kGdA+FsplXfme25IC1cKdUgSXk
+        hnmIWO24z5KrooYQGzN/mObG93RmLQdZR8bbfJNBLgVKHCK4U5u60=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 0/2] SimpleDRM: allow configuring physical width and
- height
-Content-Language: en-US
-To:     Rayyan Ansari <rayyan@ansari.sh>, dri-devel@lists.freedesktop.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev,
-        janne@jannau.net, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>, devicetree@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-References: <20230126182435.70544-1-rayyan@ansari.sh>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230126182435.70544-1-rayyan@ansari.sh>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------vKdGn7SnPXKMfMFUmfsmOGd5"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 31 Jan 2023 10:44:57 +0100
+From:   harald@ccbib.org
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Andreas Feldner <pelzi@flying-snail.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: dht11: Read bit stream from IRQ on falling edges
+ only
+In-Reply-To: <20230130202216.42034309@jic23-huawei>
+References: <Y9a0RZ+inWs44Kn8@debian-qemu.internal.flying-snail.de>
+ <20230130202216.42034309@jic23-huawei>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <45efc11e5b4cdba3766f19190bb65840@ccbib.org>
+X-Sender: harald@ccbib.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------vKdGn7SnPXKMfMFUmfsmOGd5
-Content-Type: multipart/mixed; boundary="------------0RUuxtggqXskTXKOjH6pMaNX";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Rayyan Ansari <rayyan@ansari.sh>, dri-devel@lists.freedesktop.org
-Cc: ~postmarketos/upstreaming@lists.sr.ht, asahi@lists.linux.dev,
- janne@jannau.net, Daniel Vetter <daniel@ffwll.ch>,
- David Airlie <airlied@gmail.com>, devicetree@vger.kernel.org,
- Hans de Goede <hdegoede@redhat.com>,
- Javier Martinez Canillas <javierm@redhat.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Rob Herring <robh+dt@kernel.org>
-Message-ID: <6f63f1cc-ba33-2253-cd90-e01285bc6ff1@suse.de>
-Subject: Re: [PATCH v4 0/2] SimpleDRM: allow configuring physical width and
- height
-References: <20230126182435.70544-1-rayyan@ansari.sh>
-In-Reply-To: <20230126182435.70544-1-rayyan@ansari.sh>
+On 2023-01-30 21:22, Jonathan Cameron wrote:
+> On Sun, 29 Jan 2023 19:05:23 +0100
+> Andreas Feldner <pelzi@flying-snail.de> wrote:
+> 
+>> Currently, IRQs for both falling and raising edges of the GPIO
+>> line connected to the DHT11 device are requested. However, the
+>> low states do not carry information, it is possible to determine
+>> 0 and 1 bits from the timing of two adjacent falling edges as
+>> well.
 
---------------0RUuxtggqXskTXKOjH6pMaNX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This probably is true, but it wasn't obvious from reading the data
+sheet, how constant the low times actually are. Back then the idea
+also was, to use the low times to do recovery from line noise etc.
+In the end the driver works reliably without, so we could make
+this change.
 
-SGksDQoNCnRoYW5rcyBhIGxvdC4gSSd2ZSBhZGRlZCB5b3VyIHBhdGNoZXMgdG8gZHJtLW1p
-c2MtbmV4dC4gVGhleSBzaG91bGQgYmUgDQppbiBMaW51eCB2Ni40Lg0KDQpCZXN0IHJlZ2Fy
-ZHMNClRob21hcw0KDQpBbSAyNi4wMS4yMyB1bSAxOToyNCBzY2hyaWViIFJheXlhbiBBbnNh
-cmk6DQo+IEhlbGxvLA0KPiANCj4gVGhlIGZvbGxvd2luZyBwYXRjaGVzOg0KPiAtIEFkZCBz
-dXBwb3J0IGZvciBjb25maWd1cmluZyB0aGUgd2lkdGgtbW0gYW5kIGhlaWdodC1tbSBEUk0g
-bW9kZQ0KPiAgICBwcm9wZXJ0aWVzIGluIHRoZSBTaW1wbGVEUk0gZHJpdmVyIHZpYSBEZXZp
-Y2UgVHJlZQ0KPiAtIERvY3VtZW50IHRoZXNlIHR3byBuZXcgRGV2aWNlIFRyZWUgcHJvcGVy
-dGllcw0KPiANCj4gVGhpcyBpcyB1c2VmdWwgZm9yIGFsbG93aW5nIGludGVyZmFjZXMgc3Vj
-aCBhcyBQaG9zaCB0byBjYWxjdWxhdGUNCj4gcHJvcGVyIHNjYWxpbmcgdmFsdWVzIGFuZCBm
-b3IgZWFybHkgYm9vdCBjb2RlIGtub3dpbmcgaWYgaGktZHBpDQo+IHJlbmRlcmluZyBpcyBu
-ZWNlc3NhcnkuDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIHYzOg0KPiAtIFVzZSBwYW5lbCBub2Rl
-DQo+IA0KPiBSYXl5YW4gQW5zYXJpICgyKToNCj4gICAgZHJtL3NpbXBsZWRybTogQWxsb3cg
-cGh5c2ljYWwgd2lkdGggYW5kIGhlaWdodCBjb25maWd1cmF0aW9uIHZpYSBwYW5lbA0KPiAg
-ICAgIG5vZGUNCj4gICAgZHQtYmluZGluZ3M6IGRpc3BsYXk6IHNpbXBsZS1mcmFtZWJ1ZmZl
-cjogRG9jdW1lbnQgdGhlIHBhbmVsIG5vZGUNCj4gDQo+ICAgLi4uL2JpbmRpbmdzL2Rpc3Bs
-YXkvc2ltcGxlLWZyYW1lYnVmZmVyLnlhbWwgIHwgIDkgKysrKysrDQo+ICAgZHJpdmVycy9n
-cHUvZHJtL3Rpbnkvc2ltcGxlZHJtLmMgICAgICAgICAgICAgIHwgMzIgKysrKysrKysrKysr
-Ky0tLS0tLQ0KPiAgIDIgZmlsZXMgY2hhbmdlZCwgMzIgaW5zZXJ0aW9ucygrKSwgOSBkZWxl
-dGlvbnMoLSkNCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZl
-ciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4
-ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBO
-w7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+However aside from the DHT11 there are also a number of different
+chips sold as DHT22. I tried to get as many of them as possible
+and made extensive tests to ensure they all work properly and
+with different timer resolutions.
 
---------------0RUuxtggqXskTXKOjH6pMaNX--
+It would be quite an effort to replicate this for your new
+algorithm. However, if you want to pursue this, the first step
+would be to prove (probably by calculation), that no matter the
+timer resolution (ie some systems have 32kHz timers only) the
+new algorithm doesn't lead to decoding ambiguity in cases where
+the current algorithm is unambiguous.
 
---------------vKdGn7SnPXKMfMFUmfsmOGd5
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+>> Doing so does no longer requires to read the GPIO line value
+>> within the IRQ handler, plus halves the number of IRQs to be
+>> handled at all.
 
------BEGIN PGP SIGNATURE-----
+This seems like a really small benefit. And we would lose the
+low state timings in debug output, which I personally find quite
+convenient. Unless there is data, that this change actually improves
+something for somebody, I'd reject it.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPY4o8FAwAAAAAACgkQlh/E3EQov+AE
-dA//fz/G8qQwPJkI47+I8GMBOVSE0os63R/mcfTCuVXyWtQhEOUBELIoW99tguWlMkflPXxOMVfw
-1H18lB5liJ1wmzTb8lOdXmvA8sgpdjWnyJ7buKNIZIKPGmorPF4fHa6Wxk+Uko9Qemz4f9r6z9eN
-2OzEk+OPbUvApCF9tAm3q8+8Yazzb4O1gypgjzOmEA0cfP6plSNMJXTfSbFMUaZngHFNH0arC3OR
-NnLhIqgt255hOJhr1isUebefE8Gj98QAnPuIqBQ2r7k6vVQ1qAt7kyuhcYuELaFuMS/koioVzgng
-/oIejnRrCgw6Y9L/NWwA0RJB76Ju0CMs0kYYL7Pr6zr380TU7NN+hOq8op7lk8B7czIvgDg1hmi3
-kBAeTnsuxnSdQA8POeOEgJWaPb15LsL5gBzFlZGmJnLmwRDJ9JLtvQ+ybiY9EUlDDr0nCXBN/fPy
-Wn3tBkGEJ6D4LLB1z9FrRhJuEE/j1/4VFSNyUXbYIhpx5qsuPSulwIBr7fET/fyvCSp8O55mhOOb
-2WDM9yUQXTnpPGsnQ9F0ZlKLMV4tIT/kt0FxVe230F+la3nVsUIbdMmU3e6dRRYsVFd8mWmPqonm
-sY86vsrN/xjQOpDjRsJL8hImirw0ponZB4d4qXbTvGz/dVywnCOAriHDtAfmoM61EPVXUVkAK1qe
-wu0=
-=+yZq
------END PGP SIGNATURE-----
+Also if we ever are to support shared interrupts, we will need to
+read the line value anyway.
 
---------------vKdGn7SnPXKMfMFUmfsmOGd5--
+>> Signed-off-by: Andreas Feldner <pelzi@flying-snail.de>
+> 
+> +CC Harald  Not been that many years since Harald replied, so address
+> may still be good.
+
+Thanks for including me in the discussion.
+
+best regards,
+Harald
+
+>> ---
+>>  drivers/iio/humidity/dht11.c | 28 +++++++++++-----------------
+>>  1 file changed, 11 insertions(+), 17 deletions(-)
+>> 
+>> diff --git a/drivers/iio/humidity/dht11.c 
+>> b/drivers/iio/humidity/dht11.c
+>> index c97e25448772..d1cd053c5dd4 100644
+>> --- a/drivers/iio/humidity/dht11.c
+>> +++ b/drivers/iio/humidity/dht11.c
+>> @@ -30,13 +30,13 @@
+>> 
+>>  #define DHT11_DATA_VALID_TIME	2000000000  /* 2s in ns */
+>> 
+>> -#define DHT11_EDGES_PREAMBLE 2
+>> +#define DHT11_EDGES_PREAMBLE 1
+>>  #define DHT11_BITS_PER_READ 40
+>>  /*
+>>   * Note that when reading the sensor actually 84 edges are detected, 
+>> but
+>>   * since the last edge is not significant, we only store 83:
+>>   */
+>> -#define DHT11_EDGES_PER_READ (2 * DHT11_BITS_PER_READ + \
+>> +#define DHT11_EDGES_PER_READ (DHT11_BITS_PER_READ + \
+>>  			      DHT11_EDGES_PREAMBLE + 1)
+>> 
+>>  /*
+>> @@ -46,6 +46,7 @@
+>>   * 1-bit: 68-75uS -- typically 70uS (AM2302)
+>>   * The acutal timings also depend on the properties of the cable, 
+>> with
+>>   * longer cables typically making pulses shorter.
+>> + * Low time is constant 50uS.
+>>   *
+>>   * Our decoding depends on the time resolution of the system:
+>>   * timeres > 34uS ... don't know what a 1-tick pulse is
+>> @@ -63,7 +64,8 @@
+>>  #define DHT11_START_TRANSMISSION_MIN	18000  /* us */
+>>  #define DHT11_START_TRANSMISSION_MAX	20000  /* us */
+>>  #define DHT11_MIN_TIMERES	34000  /* ns */
+>> -#define DHT11_THRESHOLD		49000  /* ns */
+>> +#define DHT11_LOW		50000  /* ns */
+>> +#define DHT11_THRESHOLD		(49000 + DHT11_LOW)  /* ns */
+>>  #define DHT11_AMBIG_LOW		23000  /* ns */
+>>  #define DHT11_AMBIG_HIGH	30000  /* ns */
+>> 
+>> @@ -83,7 +85,7 @@ struct dht11 {
+>> 
+>>  	/* num_edges: -1 means "no transmission in progress" */
+>>  	int				num_edges;
+>> -	struct {s64 ts; int value; }	edges[DHT11_EDGES_PER_READ];
+>> +	struct {s64 ts; }	edges[DHT11_EDGES_PER_READ];
+>>  };
+>> 
+>>  #ifdef CONFIG_DYNAMIC_DEBUG
+>> @@ -99,7 +101,7 @@ static void dht11_edges_print(struct dht11 *dht11)
+>>  	for (i = 1; i < dht11->num_edges; ++i) {
+>>  		dev_dbg(dht11->dev, "%d: %lld ns %s\n", i,
+>>  			dht11->edges[i].ts - dht11->edges[i - 1].ts,
+>> -			dht11->edges[i - 1].value ? "high" : "low");
+>> +			"falling");
+>>  	}
+>>  }
+>>  #endif /* CONFIG_DYNAMIC_DEBUG */
+>> @@ -125,14 +127,8 @@ static int dht11_decode(struct dht11 *dht11, int 
+>> offset)
+>>  	unsigned char temp_int, temp_dec, hum_int, hum_dec, checksum;
+>> 
+>>  	for (i = 0; i < DHT11_BITS_PER_READ; ++i) {
+>> -		t = dht11->edges[offset + 2 * i + 2].ts -
+>> -			dht11->edges[offset + 2 * i + 1].ts;
+>> -		if (!dht11->edges[offset + 2 * i + 1].value) {
+>> -			dev_dbg(dht11->dev,
+>> -				"lost synchronisation at edge %d\n",
+>> -				offset + 2 * i + 1);
+>> -			return -EIO;
+>> -		}
+>> +		t = dht11->edges[offset + i + 1].ts -
+>> +		    dht11->edges[offset + i].ts;
+>>  		bits[i] = t > DHT11_THRESHOLD;
+>>  	}
+>> 
+>> @@ -174,9 +170,7 @@ static irqreturn_t dht11_handle_irq(int irq, void 
+>> *data)
+>>  	struct dht11 *dht11 = iio_priv(iio);
+>> 
+>>  	if (dht11->num_edges < DHT11_EDGES_PER_READ && dht11->num_edges >= 
+>> 0) {
+>> -		dht11->edges[dht11->num_edges].ts = ktime_get_boottime_ns();
+>> -		dht11->edges[dht11->num_edges++].value =
+>> -						gpiod_get_value(dht11->gpiod);
+>> +		dht11->edges[dht11->num_edges++].ts = ktime_get_boottime_ns();
+>> 
+>>  		if (dht11->num_edges >= DHT11_EDGES_PER_READ)
+>>  			complete(&dht11->completion);
+>> @@ -224,7 +218,7 @@ static int dht11_read_raw(struct iio_dev *iio_dev,
+>>  			goto err;
+>> 
+>>  		ret = request_irq(dht11->irq, dht11_handle_irq,
+>> -				  IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
+>> +				  IRQF_TRIGGER_FALLING,
+>>  				  iio_dev->name, iio_dev);
+>>  		if (ret)
+>>  			goto err;
