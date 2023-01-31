@@ -2,218 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E7D68204E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D911B682053
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjAaABx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 19:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S229559AbjAaACJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 19:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjAaABf (ORCPT
+        with ESMTP id S231516AbjAaABt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:01:35 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B3D31E39
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:00:57 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id p10so9920914vsu.5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:00:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tipP8auUb9xr1cGT7aUFtbv6C6/UO9CUpkh2W6gM57Q=;
-        b=A+9TmKWePKGX1TElQoC/RYFYu400KBxsnIyDsUM4E6/pWlzmcjeS4t/RaPVrLG01SK
-         9u5H5JnqHt8i/An7j96yAJ/Z8PWCDEVOz5xzR8NxAzYni0satpTj+gz5x/ZrsyktHmLY
-         lzjDwvnENiKq/gXTL8nF9r4X0UGxTFKdgLx+hRUxrz6qWcWkNGwYJYMF1jfJgyNNV6vi
-         Ospp0+c9/Oa1eavWYzsUW30/vPrxPeTecxa5FCNLsivOH4mBrIVFnq6IXHO083STL6Bj
-         B8XZk7B80xKaapgu4GkL6ukOQRfFQ1n4OL2doDyeXJqNoxZEyJycEtSenhbID6Vack4r
-         xNLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tipP8auUb9xr1cGT7aUFtbv6C6/UO9CUpkh2W6gM57Q=;
-        b=FohHb6mU1OLnl4nx5nPaBS78Ir8hdpyD6c3K7VJgzAA8n73ozZ9wKw79hZa43LG/rN
-         bukMGPSkERDh/U4wrOBuMnpIxhmI7tKCJxzP+1GWMF/6esZR5EpaIoeFbQZ/JqTVfyU7
-         jaSAJ/olfxHz1JE7iSnpe8nxBnP+udfzcGIibg5d/Sxkx8tigPw2btoFlnNEC9YOlSov
-         gLmWYjNMZy71z+cxR3itwmcdEwHvaB5eEotbNp+d22+duDsaQ/rQIU9iU0H3GHB8Lmtg
-         PnQWHHMxTzOaJEy7LTLcU+saJscNGz3fhRDz8FDcGO54ViTi9xBVTQ7KxwsdsTxvy2NS
-         TlgA==
-X-Gm-Message-State: AFqh2kqVlQiHzFDAYEndVb6ydUrDle4cWGxgYkESWI6kTMmBHNGww7dP
-        5z3y0b/4WZWmVyntdb+Y4u+X0WJfmbFNAKJ/ybnKNQ==
-X-Google-Smtp-Source: AMrXdXsFGVqmumebPGCY4ZqTyKyRgWRBWTO1KtujgUYv2UWe47vPVYCuG+BGFFwvCHicDzVCLzeSRsGrvUXi/5j0Jj0=
-X-Received: by 2002:a67:1544:0:b0:3d2:3594:dba8 with SMTP id
- 65-20020a671544000000b003d23594dba8mr7686576vsv.18.1675123255423; Mon, 30 Jan
- 2023 16:00:55 -0800 (PST)
+        Mon, 30 Jan 2023 19:01:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B1730B25;
+        Mon, 30 Jan 2023 16:01:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE21A6131F;
+        Tue, 31 Jan 2023 00:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC897C433EF;
+        Tue, 31 Jan 2023 00:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675123280;
+        bh=CHPwyXwrlUp2cym1Ex88j+UZaK/fPmtpJjBJE9f7Mbw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=JSo144KCujPACvf6R1aEKxYHAELzz4gRiOGWstaDeRWwgS3o/NKn57oS/lY/XVGkh
+         t+ehzsjMmvi4nV/XLEB1mWcvaHNeTOpOLDFydaeQV2feL5dL7Vmp8Yx4C+ytHvVUV/
+         raCzEBaGKa81cbLO2ZATXBNQEAr95/HMiN1MzRL9JuxAcsuwzaEMsFGQrUR/SVD37e
+         cvS6gLnSr3UnDUiVd0L8X6kJdHDPdC7J4isxjJPi8RW8Hby9WuHsXy8tRi6I3O2r56
+         ZHp1ZNNVpeA2l61SBR/fLfngXOZy06MJyQCGCWmqjznr8qRhbKz42i4TMgRkFBbUmt
+         2CWjT6Q6REtQw==
+Date:   Mon, 30 Jan 2023 18:01:18 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
+Message-ID: <20230131000118.GA1322972@bhelgaas>
 MIME-Version: 1.0
-References: <20230127145708.12915-1-andriy.shevchenko@linux.intel.com>
- <CABVgOSmZsAQcf6Ou_tyZL=hpiJcxMxXzmMfV5wRyCPBsb_d0UQ@mail.gmail.com> <CAK7LNASsnDymUS=Pyo77g=0v58fMn38PY66A887nC8_E6_qXAg@mail.gmail.com>
-In-Reply-To: <CAK7LNASsnDymUS=Pyo77g=0v58fMn38PY66A887nC8_E6_qXAg@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 31 Jan 2023 08:00:40 +0800
-Message-ID: <CABVgOSnRC3AuUo4Qc2K3pXEcj3Wbt9LE2DTbejGrPOCKefxB2g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] .gitignore: Unignore .kunitconfig
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000009cff7c05f38406d6"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H4LDn4YmM6Cwse-yjEeooeyqQ4Gy0gPxN0WS=H6KmuSJw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009cff7c05f38406d6
-Content-Type: text/plain; charset="UTF-8"
-
-On Sat, 28 Jan 2023 at 22:37, Masahiro Yamada <masahiroy@kernel.org> wrote:
+On Sat, Jan 21, 2023 at 11:10:09PM +0800, Huacai Chen wrote:
+> On Fri, Jan 20, 2023 at 11:36 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, Jan 20, 2023 at 09:31:43PM +0800, Huacai Chen wrote:
+> > > On Thu, Jan 19, 2023 at 8:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > On Thu, Jan 19, 2023 at 08:25:20PM +0800, Huacai Chen wrote:
+> > > > > Ping?
+> > > >
+> > > > I suggested another possible way to do this that wasn't so much of a
+> > > > special case.  Did you explore that at all?
+> > >
+> > > That is a little difficult for me, but what is worse is that the root
+> > > cause doesn't come from gpu or console drivers, but from the root
+> > > port. That means: even if we can workaround the gpu issue in another
+> > > way, there are still problems on other devices. Besides the graphics
+> > > card, the most frequent problematic device is the sata controller
+> > > connected on LS7A chipset, there are incomplete I/O accesses after the
+> > > root port disabled and also cause reboot failure.
+> >
+> > Yes, SATA sounds like another case where we want to use the device
+> > after we call the driver's remove/shutdown method.  That's not
+> > *worse*, it's just another case where we might have to mark devices
+> > for special handling.
 >
-> On Sat, Jan 28, 2023 at 3:56 PM David Gow <davidgow@google.com> wrote:
-> >
-> > On Fri, 27 Jan 2023 at 22:56, Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > There are almost dozen of .kunitconfig files that are ignored but
-> > > tracked. Unignore them.
-> > >
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > ---
-> >
-> > Thanks! Only the original root-directory .kunitignore file was
-> > intended to be ignored, and that's no longer as important, and is now
-> > in the build dir anyway.
-> >
-> > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > Cheers,
-> > -- David
-> >
-> > >  .gitignore | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/.gitignore b/.gitignore
-> > > index 22984d22d29e..e4f2ba0be516 100644
-> > > --- a/.gitignore
-> > > +++ b/.gitignore
-> > > @@ -100,6 +100,7 @@ modules.order
-> > >  !.get_maintainer.ignore
-> > >  !.gitattributes
-> > >  !.gitignore
-> > > +!.kunitconfig
-> > >  !.mailmap
-> > >  !.rustfmt.toml
-> > >
-> > > --
-> > > 2.39.0
-> > >
+> That needs too much effort because we need to modify nearly every pci
+> driver, and it exceeds my ability. :)
+
+We would only modify drivers that need this special handling, so it's
+only console/graphics/disks/network/..., well, OK, I see your point,
+it probably *would* be nearly every driver!
+
+> > If we remove/shutdown *any* Root Port, not just LS7A, I think the idea
+> > of assuming downstream devices can continue to work as usual is a
+> > little suspect.  They might continue to work by accident today, but it
+> > doesn't seem like a robust design.
 >
->
-> Why is this a dot file in the first place?
->
+> The existing design works for so many years, so it is mostly
+> reasonable. For the LS7A case, the root cause comes from the root
+> port, so a workaround on the root port seems somewhat reasonable.
 
-In short, historical reasons.
+Yeah, I think you're right.  A few more notes below.
 
-The long answer is that there are two places "kunitconfig" files are
-used: as a user-provided file with their preferred test config (which
-is kept local), and as a recommended test config for a given subsystem
-(which is checked in).
-Originally, no .kunitconfig files were checked in: one was either
-autogenerated or manually modified and left in the root source
-directory. This eventually moved into the build directory, and a
-number of features which de-emphasized it in favour of command-line
-arguments and the (new) checked-in per-subsystem configs, which
-probably shouldn't be hidden.
+> > > > > On Sat, Jan 7, 2023 at 10:25 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > > > On Fri, Jan 6, 2023 at 11:38 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > > On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
+> > > > > > > > After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe
+> > > > > > > > services during shutdown") we observe poweroff/reboot
+> > > > > > > > failures on systems with LS7A chipset.
+> > > > > > > >
+> > > > > > > > We found that if we remove "pci_command &=
+> > > > > > > > ~PCI_COMMAND_MASTER" in do_pci_disable_device(), it can
+> > > > > > > > work well. The hardware engineer says that the root cause
+> > > > > > > > is that CPU is still accessing PCIe devices while
+> > > > > > > > poweroff/reboot, and if we disable the Bus Master Bit at
+> > > > > > > > this time, the PCIe controller doesn't forward requests to
+> > > > > > > > downstream devices, and also does not send TIMEOUT to CPU,
+> > > > > > > > which causes CPU wait forever (hardware deadlock).
+> > > > > > > >
+> > > > > > > > To be clear, the sequence is like this:
+> > > > > > > >
+> > > > > > > >   - CPU issues MMIO read to device below Root Port
+> > > > > > > >
+> > > > > > > >   - LS7A Root Port fails to forward transaction to secondary bus
+> > > > > > > >     because of LS7A Bus Master defect
+> > > > > > > >
+> > > > > > > >   - CPU hangs waiting for response to MMIO read
+> ...
 
-There's no fundamental reason (other than it being a bit annoying to
-rename everything and update the code) we can't change it, either for
-all kunitconfig files, or just the checked-in ones, if that's
-preferred.
+> > > > > > > > +
+> > > > > > > > +static void pcie_portdrv_shutdown(struct pci_dev *dev)
+> > > > > > > > +{
+> > > > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
+> > > > > > > > +
+> > > > > > > > +     if (pci_bridge_d3_possible(dev)) {
+> > > > > > > > +             pm_runtime_forbid(&dev->dev);
+> > > > > > > > +             pm_runtime_get_noresume(&dev->dev);
+> > > > > > > > +             pm_runtime_dont_use_autosuspend(&dev->dev);
+> > > > > > > > +     }
+> > > > > > > > +
+> > > > > > > > +     pcie_port_device_remove(dev);
+> > > > > > > > +
+> > > > > > > > +     if (!bridge->no_dis_bmaster)
+> > > > > > > > +             pci_disable_device(dev);
 
--- David
+I think there's an argument that pcie_portdrv_shutdown() doesn't
+actually need to clear bus mastering on *any* platform.
 
---0000000000009cff7c05f38406d6
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+For reboot and poweroff, we only use .shutdown(), and .shutdown() only
+needs to stop DMA and interrupts.  Clearing bus master enable stops
+MSI/MSI-X since that's a DMA, but doesn't do anything to stop INTx,
+which portdrv does use in some cases.
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCc
-w4j0mYs6jb3zVte3/9Jgrq6hG2dT+iHYk1+65ufePzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMzEwMDAwNTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAHK1RX1ZScr4UtaKzmJv2
-JMZi28uUh5/HrZamcb7sLMn4jQj2+zT50NNWFTY2h1AbhZsKL+ICW0Gc6DXbwPwfC07O7JJY0zFu
-UulMtb1gcPuesRDQNNeV1ecndofXSFNm8tucWdlADXHO4f5qMkdiAYTNj73LvtQcrhaICYK9BEAI
-o/9Ay1SgUpThDacj4gJTC8nHgE4e1bVFMe66zZ++1AmI8bK1DNSzKJWnI9vsmtN9x1bIRJZDG4Fe
-iQ221ulbJM5GTPR7i+HHdGnfYXwnm3z4nvC6OGpGB4Wnii6Jv9TSJradqGnRZL2vkBoV0jqfp2Xb
-qvA7pQZI2pqVAC69Ig==
---0000000000009cff7c05f38406d6--
+But those .remove() methods *do* clear the interrupt enables for each
+service (PCI_ERR_ROOT_COMMAND, PCI_EXP_DPC_CTL, PCI_EXP_SLTCTL, and
+PCI_EXP_RTCTL), so all the interrupts should be disabled regardless of
+whether they are MSI/MSI-X or INTx, even without disabling bus
+mastering.
+
+So I would argue that omitting the pci_disable_device() here might be
+enough, and we wouldn't need the quirk at all.
+
+Bjorn
