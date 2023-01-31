@@ -2,140 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2F66829E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF62B6829ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjAaKGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:06:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S230120AbjAaKG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjAaKGA (ORCPT
+        with ESMTP id S231476AbjAaKGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:06:00 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B067DBC
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:05:59 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id z12-20020a92d6cc000000b00310d4433c8cso6047478ilp.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:05:58 -0800 (PST)
+        Tue, 31 Jan 2023 05:06:48 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144E54B8AC
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:06:47 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id ud5so40069565ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:06:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=futuring-girl-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xkw9ssCWJyclisbP9nCkp/nTlcXWXM8FpBUVmi1FLp8=;
+        b=F3O/hTi2OdGhVbsp6wAE3zXX4ww0RuFrx7DQFNPnvthLyF9Sr6AUdHZ/WiuFfErBXi
+         alvm5XJJ18R8XqKwGKfh3/hxEv9wmqQ0GzajLZNqhVDka56IBjS57hLr27HSWPP5MePj
+         LEABo7NzS5eUxWfvv752DRbE7wC9G49nVC0c6IS8TmKaBWi/NruZMJCljW40awXw1CY3
+         mx0nd2zOt7W9Qb2ZKDHpKSPtfxNII/Ly+vaI9w/sLPppKRbMDnrFJhOcWV1H+RVV0jrm
+         gLxGQR6nm5SG6omCh7opXFF7TtKSTdSMNyeNNwaq06Nl24wPGtsz9jN12ojdxcq5DbFj
+         KUDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y+4BMTrID5GcVOa6o1z549r2tcoDXP5QejHz+tWZx88=;
-        b=0uzVRW84AVNbYnfz03L4joiqXZPGcNfJNIWnK+0fjjH17bAdcE52z/hyfI4tBu9ITu
-         qu0qmAsLiWIeqIhTI7XwT4qS11ieX+1EfQdLojA18c4dcpyYX0m75PuZxuqGynM7WBvA
-         +STjAPcfCy4KsPOWXsGDNVbAZFvuzGIbnUrrK45rGyIaru1mioJZgyBGq+Ie5hfGQCRu
-         KhfGEVLKfiAb26Z1Nz1u9xR0BHFk/tjUixgNk4PR/8h/vDrFv4RRsnAZe5nr3sfAvGa5
-         zrgnYCxf/2NIDpFCkAhTN0+wZYFSQgMsQC1LjXzfNgexhrmbL7m8K0gaQcBuLxgzjWJa
-         i0Hg==
-X-Gm-Message-State: AFqh2kprC+q0Kk0jKDCA88hAAyqx9B2q8C7jpjii9sgWiDMZYjdT0XMA
-        KZ1hx+xqGLnCemoIvBh+MCu4c2T+4YZZ/nNhounOxhiP/Ya1
-X-Google-Smtp-Source: AMrXdXvFluzhK2vyMm+UWJOG0y8yvyJwKxz9BROjgeMtjj6jwcDXR3vF7oz2p1MUBVKBL5zgzdKSb8nC4PFr0BMfcZLSCZZ5wY2k
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xkw9ssCWJyclisbP9nCkp/nTlcXWXM8FpBUVmi1FLp8=;
+        b=1KJBGKkLPsBipHOogpet6IbYYlXntSKXDwvOR9UewK/PN0JdeUorHX44mVpYcopoSD
+         LDY+CMgGfN9qxbJNJ+BbC9smkImj7nuzvxJe3QMqKo7+WxnLRqlynHa1zDEsoir51H9N
+         VDw0/ZjbZmR0a7TueneFw7XjMcBFYWPnBbsAY1FGIIiV47/qMqOsEoLCNRn3ViJDnE/D
+         ogvstm+THDtq4dK5j05JkORVZCiPxcUe3kW9Gf/Emub46R2wovDFGfEC/jqEolnE0CUz
+         /fuIB0js+yLlePfQeMzUFaJVE2S70Fvld7pk8YiRvpBaAMb0Cj3XRTFVpEKgeo8JgWav
+         IzyQ==
+X-Gm-Message-State: AO0yUKUPL3HoWWSzkWCGuX8lNxdZoiITEdrp6kmAEI7z86VDaeY8VRU2
+        buIjApH/KNytYHq6zNgibse/MrlI/uBOgjTJP2FPAKYH1Blfulbl5Oo=
+X-Google-Smtp-Source: AK7set9RfNpPl1SDeMeR6WbkTsxeGy/wDlqKFk6JaKuxcJ1m6+ZQ2J0rQE5oO9OSoJpCExplhpYOJ7Y3VUnjmnrEYQs=
+X-Received: by 2002:a17:906:4950:b0:88a:b6ca:7d3a with SMTP id
+ f16-20020a170906495000b0088ab6ca7d3amr1183718ejt.1.1675159605583; Tue, 31 Jan
+ 2023 02:06:45 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:caac:0:b0:3a3:1d2f:1a23 with SMTP id
- e12-20020a02caac000000b003a31d2f1a23mr7385081jap.85.1675159558366; Tue, 31
- Jan 2023 02:05:58 -0800 (PST)
-Date:   Tue, 31 Jan 2023 02:05:58 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006b2ca005f38c7aeb@google.com>
-Subject: [syzbot] [hfsplus?] [udf?] [fat?] [jfs?] [vfs?] [hfs?] [exfat?]
- [ntfs3?] WARNING in __mpage_writepage
-From:   syzbot <syzbot+707bba7f823c7b02fa43@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com, brauner@kernel.org,
-        dchinner@redhat.com, hirofumi@mail.parknet.co.jp, jack@suse.com,
-        jfs-discussion@lists.sourceforge.net, linkinjeon@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, shaggy@kernel.org, sj1557.seo@samsung.com,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
+References: <20230131072621.746783417@linuxfoundation.org>
+In-Reply-To: <20230131072621.746783417@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Tue, 31 Jan 2023 19:06:34 +0900
+Message-ID: <CAKL4bV782_oo+2JpTrNqGuxMh9kj2vo-9Ra3gDpDZ9YsYSeXTQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/306] 6.1.9-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Greg
 
-syzbot found the following issue on:
+On Tue, Jan 31, 2023 at 4:34 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.9 release.
+> There are 306 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 02 Feb 2023 07:25:23 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.9-rc3.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-HEAD commit:    e2f86c02fdc9 Add linux-next specific files for 20230127
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=156b2101480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=920c61956db733da
-dashboard link: https://syzkaller.appspot.com/bug?extid=707bba7f823c7b02fa43
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=118429cd480000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12ccb1c1480000
+6.1.9-rc3 tested.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ff04f1611fad/disk-e2f86c02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/67928a8622d3/vmlinux-e2f86c02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/b444a3d78556/bzImage-e2f86c02.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/99c5e7532847/mount_0.gz
+x86_64
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+707bba7f823c7b02fa43@syzkaller.appspotmail.com
+Build successfully completed.
+Boot successfully completed.
+No dmesg regressions.
+Video output normal.
+Sound output normal.
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 5085 at fs/mpage.c:570 __mpage_writepage+0x138b/0x16f0 fs/mpage.c:570
-Modules linked in:
-CPU: 1 PID: 5085 Comm: syz-executor403 Not tainted 6.2.0-rc5-next-20230127-syzkaller-08766-ge2f86c02fdc9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-RIP: 0010:__mpage_writepage+0x138b/0x16f0 fs/mpage.c:570
-Code: 00 00 48 89 ef e8 15 24 df ff 48 8b 44 24 38 f0 80 88 c0 01 00 00 02 48 c7 44 24 10 00 00 00 00 e9 3c f0 ff ff e8 c5 25 90 ff <0f> 0b 48 8b 44 24 08 48 83 c0 10 48 89 44 24 20 e9 78 ef ff ff e8
-RSP: 0018:ffffc90003bff4e8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: fffffffffffe2000 RCX: 0000000000000000
-RDX: ffff888021b11d40 RSI: ffffffff81f48f5b RDI: 0000000000000006
-RBP: 000000000001e000 R08: 0000000000000006 R09: 0000000000000000
-R10: 000000000001e000 R11: 0000000000000000 R12: 0000000000000004
-R13: ffff88801b930000 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f5bbe1fd700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffee627fdc0 CR3: 000000001c713000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- write_cache_pages+0x4cc/0xe70 mm/page-writeback.c:2473
- mpage_writepages+0xc6/0x170 fs/mpage.c:652
- do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
- filemap_fdatawrite_wbc mm/filemap.c:388 [inline]
- filemap_fdatawrite_wbc+0x147/0x1b0 mm/filemap.c:378
- __filemap_fdatawrite_range+0xb8/0xf0 mm/filemap.c:421
- file_write_and_wait_range+0xce/0x140 mm/filemap.c:779
- hfsplus_file_fsync+0xc3/0x5d0 fs/hfsplus/inode.c:313
- vfs_fsync_range+0x13e/0x230 fs/sync.c:188
- generic_write_sync include/linux/fs.h:2452 [inline]
- generic_file_write_iter+0x25a/0x350 mm/filemap.c:3934
- call_write_iter include/linux/fs.h:1851 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x9ed/0xe10 fs/read_write.c:584
- ksys_write+0x12b/0x250 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5bbe258be9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5bbe1fd2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f5bbe2d56c0 RCX: 00007f5bbe258be9
-RDX: 000000000208e280 RSI: 0000000020001980 RDI: 0000000000000004
-RBP: 00007f5bbe2a2640 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f5bbe2a22e0
-R13: 0030656c69662f2e R14: 0073756c70736668 R15: 00007f5bbe2d56c8
- </TASK>
+Lenovo ThinkPad X1 Nano Gen1(Intel i5-1130G7, arch linux)
 
+Thanks
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
