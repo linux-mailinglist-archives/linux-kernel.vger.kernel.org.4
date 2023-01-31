@@ -2,118 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18356682C87
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B238682C88
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjAaM1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S231761AbjAaM1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjAaM1I (ORCPT
+        with ESMTP id S230177AbjAaM1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:27:08 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF0C3A90;
-        Tue, 31 Jan 2023 04:27:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675168027; x=1706704027;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pm+2Xp9G75JHYb1LMbl4t3W66mzSj4xDQZ/8FSjmgMw=;
-  b=GESqnCWahHJhpR5ZJWD9wqpAViL4gjusMmBSNxvvtuTzmHhnJeafylhN
-   PZJwWJrRad9C9rgAHnjSXXqHLVJrYxbk77pS46NKh7c7ykVds5Kp28If7
-   UWH+6vfg7vNcQbeJzGD8aR7PxyEo2oJyDTR8x6qXYxQ0UFDrwLavOSgJ1
-   eiWYoyWB7Y6wcZ4LYDe8ZLacZIqzftkqib/h4jljtZ1UZ0LC+2MqsB4jU
-   r4qckRau/6IuHQJZlD+zvLBZU3lobjtt4VhxVNigdSNVsD345nfKuXRjm
-   YlmtOR+OaVxTuH3QbCXeM0o/05LVSC90ZiRmWua59WO8w4IHLIUBAsMrg
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="325522679"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="325522679"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:27:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="733091691"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="733091691"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 31 Jan 2023 04:27:01 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pMpj0-000FHX-2y;
-        Tue, 31 Jan 2023 14:26:58 +0200
-Date:   Tue, 31 Jan 2023 14:26:58 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Sahin, Okan" <Okan.Sahin@analog.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v3 3/5] drivers: regulator: Add ADI MAX77541/MAX77540
- Regulator Support
-Message-ID: <Y9kJEsjkG8h79tcR@smile.fi.intel.com>
-References: <20230118063822.14521-1-okan.sahin@analog.com>
- <20230118063822.14521-4-okan.sahin@analog.com>
- <Y8erlpofdk24vwCC@smile.fi.intel.com>
- <MN2PR03MB5168EC97926AB33D4D806FCCE7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
- <MN2PR03MB516865804044A798AEB5B6C0E7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
+        Tue, 31 Jan 2023 07:27:48 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4073A90
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:27:47 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VBnaYT025120;
+        Tue, 31 Jan 2023 12:27:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xB5fUspCTO+VQj/5dpcV2OhNZHk7ltHcKSbXlXQu3hs=;
+ b=oM5QzJ9qdL1oa0uyr5yfRNBHnmE/7yjkFFcxsEsie2QO/wsPksmbE0xl1OeW9S0DaeDK
+ Jg7md2jZy0KFsGh166KpaOEoZfzIqLG4l2KnaLr2ft54jkvjzEFix6rpOps2Oymnbvle
+ TKNttQij4RhhmxYuZUxS7ltnHfs2gxWthN3Z80O4mFOjvDFKz+XfNkUFstNIOTZwbmz+
+ sKpj7SBO97EElhnNNzdWke5qSHaDQbXl17qIINhjSP4v0SQeFnGPHOWEDV8o90TDL7po
+ mbPlF54MxGROy0wUadW59GVhry4P7Y5FXR1x8gYRT8Y+jmnZmZPrAGUmdPpNVYvVnGI6 Vg== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf05g4abq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 12:27:40 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VADt1W006508;
+        Tue, 31 Jan 2023 12:27:39 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ncvtmbvc4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 12:27:39 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VCRcSf33161968
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 12:27:38 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 578655805D;
+        Tue, 31 Jan 2023 12:27:38 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 048CE58043;
+        Tue, 31 Jan 2023 12:27:35 +0000 (GMT)
+Received: from [9.160.34.223] (unknown [9.160.34.223])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 12:27:34 +0000 (GMT)
+Message-ID: <7116a13a-6566-3cff-50ef-137d8ed0c7e4@linux.vnet.ibm.com>
+Date:   Tue, 31 Jan 2023 17:57:32 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN2PR03MB516865804044A798AEB5B6C0E7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH] hrtimer: interleave timers for improved single thread
+ performance at low utilization
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     peterz@infradead.org, arjan@linux.intel.com, mingo@kernel.org,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        svaidy@linux.ibm.com, linux-kernel@vger.kernel.org,
+        bigeasy@linutronix.de
+References: <5ae3cb09-8c9a-11e8-75a7-cc774d9bc283@linux.vnet.ibm.com>
+ <877cx30xnt.ffs@tglx>
+From:   shrikanth hegde <sshegde@linux.vnet.ibm.com>
+In-Reply-To: <877cx30xnt.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: IqagJaLwvkz35pqivFWNWLRsJv53wxc3
+X-Proofpoint-GUID: IqagJaLwvkz35pqivFWNWLRsJv53wxc3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_07,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ phishscore=0 adultscore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ mlxscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310107
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 09:27:48AM +0000, Sahin, Okan wrote:
 
-First of all, please do avoid top-posting.
 
-> Sorry for second question. I do not want to bother you, but I realized that I
-> need to be sure about driver_data before sending new patch. You said that you
-> need to use pointers directly for driver_data then I fixed that part in mfd,
-> but I do not need or  use driver_data in regulator since chip_id comes from
-> mfd device so I think using like below should be enough for my
-> implementation.
+On 1/31/23 4:38 PM, Thomas Gleixner wrote:
+> On Tue, Jan 31 2023 at 11:18, shrikanth hegde wrote:
+>> As per current design of hrtimer, it uses the _softexpires to trigger the
+>> timer function.  _softexpires is set as multiple of the period/interval value.
 > 
-> static const struct platform_device_id max77541_regulator_platform_id[] = {
-> 	{ "max77540-regulator", },
-> 	{ "max77541-regulator", },
-> 	{  /* sentinel */  }
-> };
-> MODULE_DEVICE_TABLE(platform, max77541_regulator_platform_id);
+> Wrong. _softexpires is _hardexpires + slack. The slack allows for
+> batching which:
 > 
-> static const struct of_device_id max77541_regulator_of_id[] = {
-> 	{ .compatible = "adi,max77540-regulator", },
-> 	{ .compatible = "adi,max77541-regulator", },
-> 	{ /* sentinel */  }
-> };
-> MODULE_DEVICE_TABLE(of, max77541_regulator_of_id);
+Ok. understood.
+>> This will benefit the power saving by less wakeups.
 > 
-> What do you think?
+This is what i thought was the rationale of _softexpires
+> But that has absolutely nothing to do with your problem:
+> 
+Yes. 
+>> Due to this, different timers of the same period/interval values align
+>> and the callbacks functions will be called at the same time.
+> 
+> The whole point of hrtimer_forward_now() is to forward the expiry time
+> of a timer with the given period so that it expires after 'now'.
+> 
+> That's functionality which is used by a lot of callers to implement
+> proper periodic timers.
+> 
+>> Came up with a naive patch, more of hack.
+> 
+> A broken hack to be precise because any existing user of
+> hrtimer_forward() will be broken by this hack.
+> 
+Agree. Aim was to describe the problem. 
+>> Other alternative is to use a slightly modified API for cgroups, so
+>> that all other timers align and wakeups remain reduced.
+> 
+> I'm not seeing why you need a new API for that. The problem is _NOT_ in
+> the hrtimer code at all.
+> 
+> Lets look at the math:
+> 
+>     expiry = $INITIAL_EXPIRYVALUE + $N * $PERIOD
+> 
+> If $INITIAL_EXPIRYVALUE is the same then for all instances then
+> obviously the expiry values of all instances will be all aligned on
+> multiples of $PERIOD, right?
+> 
+> So why the heck do you need a new hrtimer API? There is an obvious
+> solution, right?
+> 
+> Thanks,
+> 
+>         tglx
 
-If you have got all necessary data from the upper layer, why do you need to
-have an ID table here? I'm not sure I understand how this OF ID table works
-in this case.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks Thomas for taking a look and correcting wrong bits here.  The problem    
+here was that $INITIAL_EXPIRYVALUE was never set. Hence the _softexpires was    
+always set as the Multiple of $PERIOD.                                          
+                                                                                
+As Ingo Suggested this, this can be done in sched code. would need to set the    
+$INITIAL_EXPIRYVALUE in start_cfs_bandwidth and Timers would interleave on the  
+same logic which was described in the patch.                                    
+                                                                                
+No change in hrtimer code  would be needed. will send out the patch after some  
+more testing.
