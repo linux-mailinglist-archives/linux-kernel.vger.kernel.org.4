@@ -2,100 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8766835F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501B56835F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjAaTBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S232088AbjAaTB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbjAaTBo (ORCPT
+        with ESMTP id S232041AbjAaTBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:01:44 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF34589A7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:01:40 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id e10so10749855pgc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:01:40 -0800 (PST)
+        Tue, 31 Jan 2023 14:01:45 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABA559261
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:01:44 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id q8so11068161wmo.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:01:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JEPpab3psC6bj9jl5RKXgLUqYW14UThmzVF6DuOiw/8=;
-        b=c7mxTGGa9A1LwUkWB4akK2UlSlprQ/F4wZkQfISs+OsLhsm0YaC/hBtxD3IxCIIDr2
-         jmhevDnuLoyCl9vqRo2x7NswXwz/mwwg6MMYxNYfF6xwwnA+1D3c4zXK35chb3UQp5ZN
-         BHGi1RSypx30sJFir4RnlAmwP1qES2TGLyxdBrYbqshr4W0yn67WMrXf8Z/ZDKI2C0pI
-         g1BSvGjsH69RyROe86IfM0cffETBNHgqVQdyR30TIxM3NEF7iqdzciV4zYHr/1Ct3rmB
-         MV5PPMLlYGUKSUCD8iSerY19ufBwtIG/K0Sd97VspYvKrT4OBuEhua1lVD14V9qmi8Q4
-         T+lQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0f5n/Bb4ZQ3NDjDGqKckIUS2qUmXXS6bLtvGcaKg4v8=;
+        b=cdxfXqElRety6rvzIlwBfnO/C4WBsJWfZ8jeoyrmxufbaHUFP6RWEQ2bt8peHS2CHX
+         V9yTNKUbAe98kiY413wXqlUwG/VEsW2YgmWauruCyeEo+k8zCoZPL2o9Po8Nqorxq1sk
+         XN1prF/g5v1Akd25JmZdQplSN5X3HRvfjRJS6tRTr1UrhXZTh0PnAk+xF/l9bCGyYsQB
+         k6+396jkxHnR2D5Ytphl4Wjqap8C0hlsMfh/qdlJ1JeTARhpxq8c9nPzNIvTImjxpT+C
+         GMRwixiuq6GeF0ElW1rqSCwjokJMVWJ6qlQC5MYHS4kR+T3ipjsCQ6wLJAnNTAUCuFaK
+         aPrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JEPpab3psC6bj9jl5RKXgLUqYW14UThmzVF6DuOiw/8=;
-        b=cozBMu8y4yqleEn4SEI8qh/Ao+VrlkNGoDEejvS6Ep+ftiE+AfySK1+q0h2HFoAcPv
-         orvsqQFus7zLEeEDTC31EIdPYA2BrcAh1iL7J1jf/8CgiRG8vQ97LaZYMas/3LqjUg+L
-         H4JTxwCtyJ3nyG0OUZYy6ihhowwq/3yuefBd48zekNuEJg6rgQUzqsqDokCGjZK+4mhi
-         GMEGVPty35HJAdFoPStAc9yYDOcAe+4CI0DQ5rKD0mu2yZUfg+pDmod8SAb++W+i37WM
-         bCw7qsHiuvciefckdsRq18AyoU7B3MVs/T4XemJEYjR8p7cII9Zyac6j5kFDwBWbvm1I
-         HqDQ==
-X-Gm-Message-State: AO0yUKUHNvqR07b4gdhcdfLozZAkD7c4ojxJFSmavij5GDqWp9btp1tz
-        oOhUVO959HwnwVg6+sgQKA2Tv7BxDf6Z1sC2hPM=
-X-Google-Smtp-Source: AK7set9nFO7AbCFSBUnBwbXDh0Sd63kphwuYMRjlW/W05MiWN/UbYOMWhlAruqIK5rkPIWrq/r0++vnYzYzaSs7iy50=
-X-Received: by 2002:a62:1dcd:0:b0:592:d71:74ec with SMTP id
- d196-20020a621dcd000000b005920d7174ecmr3537457pfd.43.1675191700062; Tue, 31
- Jan 2023 11:01:40 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0f5n/Bb4ZQ3NDjDGqKckIUS2qUmXXS6bLtvGcaKg4v8=;
+        b=lAIw5PQ5UXE070ubCOhWl1zk2jvRGXyP58xsVvp9wa86CaT6IXYzzoPALa0IKbZqIB
+         SmpBNC/W1tGdZbJQ2a8P02xMzSvvpPOwxuZE50EanmwGmDGc3PCNJBmeU0zpPzYLG9qV
+         UdoDuOIvjnBsh5/ynzaB3eLYTUfFyUbqf8AZCdOOhiURWoe8DNoSI5870chMTxrDZ8rD
+         c98Jnzi03cDXXmO1ZAhEjR1uj4fwLQylogmuc8dvVuW3w8KJjs79vOeLhTQa617vLQnT
+         eWTc7WiRIqWve+ohtgNHiVBAR9ZioabTIW7Nn4BLQfoz+MRwcHy839qD1T0UCwSGQlI9
+         vlrw==
+X-Gm-Message-State: AO0yUKVS/7yophR1ho4eQvMUYvhK7YDLco4w0kzf9BcO/CsccJCVN9lE
+        BtuQ28C02jKLiF9ukn6meeKkUw==
+X-Google-Smtp-Source: AK7set9a7FuW0Dzh6tzfAaUyOZas2h1eDn7WsexBmWEpoMAWXmh8wHpmKr7+Weg1cVXbQ8uHlMwQMg==
+X-Received: by 2002:a05:600c:5386:b0:3cf:9844:7b11 with SMTP id hg6-20020a05600c538600b003cf98447b11mr342875wmb.23.1675191702581;
+        Tue, 31 Jan 2023 11:01:42 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n15-20020a5d598f000000b002bdff778d87sm16939882wri.34.2023.01.31.11.01.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 11:01:41 -0800 (PST)
+Message-ID: <c515aae3-88e4-948c-a856-7b45dd2caed9@linaro.org>
+Date:   Tue, 31 Jan 2023 20:01:39 +0100
 MIME-Version: 1.0
-References: <cover.1675111415.git.andreyknvl@google.com> <4ed1d0828e837e15566a7cfa7688a47006e3f4b3.1675111415.git.andreyknvl@google.com>
- <CAG_fn=V=91XNUyaWuwrgDqNKhHcEQFmD7Q4opc_v4vos+GR3qQ@mail.gmail.com>
-In-Reply-To: <CAG_fn=V=91XNUyaWuwrgDqNKhHcEQFmD7Q4opc_v4vos+GR3qQ@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 31 Jan 2023 20:01:29 +0100
-Message-ID: <CA+fCnZeWQ7xSTLxLhGmDeyQx6UVDN9J9J0_jUjv3B--dPWaXAw@mail.gmail.com>
-Subject: Re: [PATCH 08/18] lib/stackdepot: reorder and annotate global variables
-To:     Alexander Potapenko <glider@google.com>
-Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: thinkpad-x13s: Add bluetooth
+Content-Language: en-US
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+References: <20230131043816.4525-1-steev@kali.org>
+ <20230131043816.4525-5-steev@kali.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230131043816.4525-5-steev@kali.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 11:43 AM Alexander Potapenko <glider@google.com> wrote:
->
-> On Mon, Jan 30, 2023 at 9:50 PM <andrey.konovalov@linux.dev> wrote:
-> >
-> > From: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > Group stack depot global variables by their purpose:
-> >
-> > 1. Hash table-related variables,
-> > 2. Slab-related variables,
-> >
-> > and add comments.
-> >
-> > Also clean up comments for hash table-related constants.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> Reviewed-by: Alexander Potapenko <glider@google.com>
->
-> ...
-> > +/* Lock that protects the variables above. */
-> > +static DEFINE_RAW_SPINLOCK(depot_lock);
-> > +/* Whether the next slab is initialized. */
-> > +static int next_slab_inited;
-> Might be worth clarifying what happens if there's no next slab (see my
-> comment to patch 01).
+On 31/01/2023 05:38, Steev Klimaszewski wrote:
+> Signed-off-by: Steev Klimaszewski <steev@kali.org>
+> ---
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> index f936b020a71d..951438ac5946 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+> @@ -24,6 +24,8 @@ / {
+>  	aliases {
+>  		i2c4 = &i2c4;
+>  		i2c21 = &i2c21;
+> +		serial0 = &uart17;
+> +		serial1 = &uart2;
+>  	};
+>  
+>  	wcd938x: audio-codec {
+> @@ -712,6 +714,32 @@ &qup0 {
+>  	status = "okay";
+>  };
+>  
+> +&uart2 {
+> +	status = "okay";
+> +
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&uart2_state>;
+> +
+> +	bluetooth {
+> +		compatible = "qcom,wcn6855-bt";
+> +
+> +/*
 
-Will do in v2. Thanks!
+Why dead code should be in the kernel?
+
+> +		vddio-supply = <&vreg_s4a_1p8>;
+> +		vddxo-supply = <&vreg_l7a_1p8>;
+> +		vddrf-supply = <&vreg_l17a_1p3>;
+> +		vddch0-supply = <&vreg_l25a_3p3>;
+> +		vddch1-supply = <&vreg_l23a_3p3>;
+> +*/
+> +		max-speed = <3200000>;
+> +
+> +		enable-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
+> +		swctrl-gpios = <&tlmm 132 GPIO_ACTIVE_HIGH>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&bt_en>;
+> +	};
+> +};
+> +
+>  &qup1 {
+>  	status = "okay";
+>  };
+> @@ -720,6 +748,12 @@ &qup2 {
+>  	status = "okay";
+>  };
+>  
+> +&uart17 {
+> +	compatible = "qcom,geni-debug-uart";
+> +
+> +	status = "okay";
+> +};
+> +
+>  &remoteproc_adsp {
+>  	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
+>  
+> @@ -980,6 +1014,19 @@ hastings_reg_en: hastings-reg-en-state {
+>  &tlmm {
+>  	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+>  
+> +	bt_en: bt-en-state {
+> +		hstp-sw-ctrl {
+
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+> +			pins = "gpio132";
+> +			function = "gpio";
+> +		};
+> +
+> +		hstp-bt-en {
+> +			pins = "gpio133";
+> +			function = "gpio";
+> +			drive-strength = <16>;
+> +		};
+> +	};
+> +
+>  	edp_reg_en: edp-reg-en-state {
+>  		pins = "gpio25";
+>  		function = "gpio";
+> @@ -1001,6 +1048,27 @@ i2c4_default: i2c4-default-state {
+>  		bias-disable;
+>  	};
+>  
+> +	uart2_state: uart2-state {
+> +		cts {
+
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+
+Best regards,
+Krzysztof
+
