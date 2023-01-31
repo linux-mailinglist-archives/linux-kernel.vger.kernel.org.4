@@ -2,113 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499DA6828DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 891E76828E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjAaJab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S231416AbjAaJcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjAaJaa (ORCPT
+        with ESMTP id S231126AbjAaJb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:30:30 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C8028D1F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:30:28 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id u3so2819221uae.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:30:28 -0800 (PST)
+        Tue, 31 Jan 2023 04:31:58 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B501515C9A
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:31:56 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id mf7so21052513ejc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:31:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cb4ZLvwVAqQMn3anowjzMX/KwREznkusXpss39hXIZs=;
-        b=XRAHzGnG2Vhz2trHE2vGYlBS045uWpa6mo02OhCc+Y+yOHLRS6MglwEDJvQGrHlGMw
-         atQggWzi93C4Omw16FSWlzEgyEmZT4s9pFUMWpxGg7iYKy8zDaaZ0nt5zDxLNROtJKNh
-         RBaWJ1s/Q3YtGGPZTp48Y2XPd3pX88bhydwmpiaw7s4qq2ZFDkMtSdWGPOF6OPxJhMOe
-         LBpDdqXP+HRyoiuxcj/9WVtf24dQhLSn8gdwQGEeYlASiLZ23/LBJNn2w3AVUqAC4dkL
-         cZ2ODUcvMaI38UV6Nzz+mwQmJJDMg7B5n/+uH0XKwk4BIUivjOfJC2M7GVRCeHsBByMI
-         zT+Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A4df+YMYrca5Xl2bwz5EZIKoolwQF6iGlzj7p2qVcIs=;
+        b=FW6x0jGkYIwA8TqNbVVgHK6Pk0O6Kaaope8iCCGlh6oY+LWTKdTA8pusjVlZNT7Gzh
+         CNY9EN1wJRyIe3MRgcfrzyBE7CQW3lHlVsR+FoATiiOB78YeAEHJ9h120WXXyaivantA
+         iUlA5vz9fRD/aQCIv21oyz0nKAZvpyBYoGwnlYZDcCBWktphCnwDi81jfIUIkAWc9Z5R
+         P0cV3wujZFXuYRvmb8HIBIW4k7lx0oaN5jx7Eu6ekY9RBiCya8zAskNBQlzMAmhwKVq7
+         bd/kooO2gMj3eJrlol0eSJEvYvxXHLzRNZub9OFr7PwcMRSi5C+OX3oeLk1OqR5+bOtH
+         LH+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cb4ZLvwVAqQMn3anowjzMX/KwREznkusXpss39hXIZs=;
-        b=idUqOUpyEouHOLFcDlLz3ix8uVefDDUyoWrJimAFOMkKz+cuuDFDG1b+2kJnKRNy64
-         HceTuQSpm9pdps8Nw+o8eAf06coqp193sp3V6vjmcfznkTohOQQJXC+JUkIoPjfqjdoG
-         /Agob404LIrEDLBfw1tfBPBX8lhHBSHZy+/3UQtYj8KZSO0mGvSCaYu9Dw5W0yYNO3NA
-         9YdLn3kBIIT1MpoWOjltKcxqIBP5gzkpbkfAJtO0mfYW8fsOzZb/zi1fJFjQOMH8xdK9
-         R+5h1DVzAN2bleWtdej9BJq4j1Wvqhc7ujANSl5IZ9DVnPGJyydOer3g9smirPOE7I3K
-         JksA==
-X-Gm-Message-State: AFqh2kp4RrBferIxVyS608UMqxp5kf90eCPk4iqZOoWBIp+CIaehJ2fW
-        OoUg/P34RNCosYMH2MH7qwzbg7YP03sbtWwzJ0r7cQ==
-X-Google-Smtp-Source: AMrXdXv2QnqPvTZoUFbskWKQJ1VxBIQtfHPHrvs+nAWPAf+wbWhb34qdxYIIVbOh+Sl0rVVEK84poHcnOzStbV3bhwY=
-X-Received: by 2002:a9f:372c:0:b0:5ff:91d2:ea36 with SMTP id
- z41-20020a9f372c000000b005ff91d2ea36mr6350452uad.43.1675157427073; Tue, 31
- Jan 2023 01:30:27 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A4df+YMYrca5Xl2bwz5EZIKoolwQF6iGlzj7p2qVcIs=;
+        b=o6TLOUpK5kuPmFwW+Xl9aBzadsTCtO3yqm47l56C0DKwfGkduUOmq+6+PaqjmJITXO
+         lvtZf0lFfVpQjUAuBn1OlLWdWQeEXcdH9kg6qpufrH+yFK7xquFwO63cXUuv9E7M3ahl
+         42BOb0jPc69sPxY8HEs1YXLJ0kX3XSNeH0SGLe6Kc4fC5zynGEkpBw+a84tYhHT8CjT+
+         e3GfnW1qs/UvaSEmBDOSwHRSNlw5rTKX44wn51VgfFwQ61A7Csr/2iHJD9xrnE4XdJIy
+         ZXJ6h7k83pR6gCHrMrW3Bn3A/JEm3QV/YtJJSSus3By8EbZGgiOcfLAG8WlE4i+ei0i/
+         2MeA==
+X-Gm-Message-State: AFqh2koqm3dto6aMjLnst+ODWRHDLaxhYh7jzlR3mpUJaevkoz72pdDs
+        9OBVdzMYzI7kdVViTrjatHQv6g==
+X-Google-Smtp-Source: AMrXdXvTI20pQa3xMP9ePTvSO6XvhZBS1sBCWdguw5OSM5xobqPC9/TI+CS7Z+mYGsluohhXwBtJuA==
+X-Received: by 2002:a17:907:971d:b0:870:d15a:c2dc with SMTP id jg29-20020a170907971d00b00870d15ac2dcmr73161479ejc.74.1675157515261;
+        Tue, 31 Jan 2023 01:31:55 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id j6-20020a170906474600b0088ba2de323csm1088152ejs.181.2023.01.31.01.31.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 01:31:54 -0800 (PST)
+Message-ID: <b8b90989-4bc9-f3a9-516e-2101bfc2293d@linaro.org>
+Date:   Tue, 31 Jan 2023 11:31:53 +0200
 MIME-Version: 1.0
-References: <cover.1675111415.git.andreyknvl@google.com> <9fbb4d2bf9b2676a29b120980b5ffbda8e2304ee.1675111415.git.andreyknvl@google.com>
-In-Reply-To: <9fbb4d2bf9b2676a29b120980b5ffbda8e2304ee.1675111415.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 31 Jan 2023 10:29:51 +0100
-Message-ID: <CAG_fn=VO0iO4+EuwDR0bKP-4om9_Afir3fY6CExKGRNad+uPLA@mail.gmail.com>
-Subject: Re: [PATCH 01/18] lib/stackdepot: fix setting next_slab_inited in init_stack_slab
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 3/6] arm64: defconfig: Enable ipq6018 apss clock and PLL
+ controller
+Content-Language: en-GB
+To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, jassisinghbrar@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
+        arnd@arndb.de, marcel.ziswiler@toradex.com,
+        nfraprado@collabora.com, broonie@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230113143647.14961-1-quic_devipriy@quicinc.com>
+ <20230113143647.14961-4-quic_devipriy@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230113143647.14961-4-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 9:49 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> In commit 305e519ce48e ("lib/stackdepot.c: fix global out-of-bounds in
-> stack_slabs"), init_stack_slab was changed to only use preallocated
-> memory for the next slab if the slab number limit is not reached.
-> However, setting next_slab_inited was not moved together with updating
-> stack_slabs.
->
-> Set next_slab_inited only if the preallocated memory was used for the
-> next slab.
->
-> Fixes: 305e519ce48e ("lib/stackdepot.c: fix global out-of-bounds in stack_slabs")
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+On 13/01/2023 16:36, devi priya wrote:
+> Enable the PLL controller and IPQ6018 APSS clock controller
 
-Wait, I think there's a problem here.
+... it is used on several IPQ platforms to clock the CPU so it should be 
+enabled and built-in.
 
-> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> index 79e894cf8406..0eed9bbcf23e 100644
-> --- a/lib/stackdepot.c
-> +++ b/lib/stackdepot.c
-> @@ -105,12 +105,13 @@ static bool init_stack_slab(void **prealloc)
->                 if (depot_index + 1 < STACK_ALLOC_MAX_SLABS) {
-If we get to this branch, but the condition is false, this means that:
- - next_slab_inited == 0
- - depot_index == STACK_ALLOC_MAX_SLABS+1
- - stack_slabs[depot_index] != NULL.
+> 
+> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
 
-So stack_slabs[] is at full capacity, but upon leaving
-init_stack_slab() we'll always keep next_slab_inited==0.
+Just to check: is the capitalization correct in your name here and 
+everywhere else? (please excuse my ignorance here, I do not know all the 
+spelling/capitalization rules).
 
-Now every time __stack_depot_save() is called for a known stack trace,
-it will preallocate 1<<STACK_ALLOC_ORDER pages (because
-next_slab_inited==0), then find the stack trace id in the hash, then
-pass the preallocated pages to init_stack_slab(), which will not
-change the value of next_slab_inited.
-Then the preallocated pages will be freed, and next time
-__stack_depot_save() is called they'll be allocated again.
+> ---
+>   arch/arm64/configs/defconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index e0ae0996d5ad..8de3979b10a3 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -1092,6 +1092,7 @@ CONFIG_QCOM_CLK_APCS_MSM8916=y
+>   CONFIG_QCOM_CLK_APCC_MSM8996=y
+>   CONFIG_QCOM_CLK_SMD_RPM=y
+>   CONFIG_QCOM_CLK_RPMH=y
+> +CONFIG_IPQ_APSS_6018=y
+>   CONFIG_IPQ_GCC_6018=y
+>   CONFIG_IPQ_GCC_8074=y
+>   CONFIG_IPQ_GCC_9574=y
+
+-- 
+With best wishes
+Dmitry
+
