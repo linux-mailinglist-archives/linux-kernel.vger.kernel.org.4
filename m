@@ -2,115 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8387C683497
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6313F68349F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjAaSCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S231557AbjAaSD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:03:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjAaSCV (ORCPT
+        with ESMTP id S231656AbjAaSDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:02:21 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9470510AB3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:02:19 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so13091105wmb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:02:19 -0800 (PST)
+        Tue, 31 Jan 2023 13:03:03 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF90B47E
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:02:55 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id k13so15962944plg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:02:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dpDv+9QPHupt1UyeJB0z1k2Ufnogyk9lZGLkIf5nWzc=;
-        b=svhNacA6geE2Ndg8QTafTeJu6fXopqBbRymSroIFbX/LguDYlC21U70PeI85j0xCO/
-         de7Rlm3uRrh8/qlrB1NYmw40Q4ecXeuTtNnWmIu4sV6zoZ1/B40no6R1OICgEj/YiwqO
-         chbqhdxE1n1PbVE6UtbqKZ/dH0C5M6cetlRhN5aflW70jBH8H0V3FdD1Kg1BsTxxEtOp
-         o14OYqQLXk7wjBOd4JHFQrK5rTWVdkXYAnuaXZJIolGF+VmnH9VpjnnC9OkG8YfpzF7N
-         BltxlLu0omgrNryDuBjGAUIG+WKGKdknMrQCjT4rOD2tcGRxjccSZD1mZl/p8KwOR1+H
-         GHNQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zF5FBVNGpjtgxLS+bV3TsuLS5czo6abFNJe3eVmeQhM=;
+        b=PongnsqZrFWa+7otFndotY2MGP9DEsZFJlPJX5CWuujuLb+Mi8aAXK4tZ6Oeg90O5V
+         0j5mZad1meeJgu2FCFyt46ddqs/NYA/3jGvrV02oB34cwsCxrvsofLOBZXpK6AnnTUdn
+         KD6pMDzDVzR6BbDCBYhSjFosYFLNRmN/s9R8lVZTlGKhGLSCYd+2rvu+69yT3qCRrhQU
+         F97t6zzBXoWhW+VbBFkqHIrkk5lFzMd9O/1O5YtTwAUTtbJumbUhJf/wYyFp+5PRkEgJ
+         6v0ghDut1HgGcNed1suhlEaTrdg7ZyT82F2Ll4ssPEhB5Bis51EZj9oYv8PGHaYoi8mH
+         2JPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dpDv+9QPHupt1UyeJB0z1k2Ufnogyk9lZGLkIf5nWzc=;
-        b=HUT995X+e7BgLzip73AFmUk3dcig2FADqR7Yjfb+HB4tvbWHP6M8YEBTEOnGDHITDS
-         AEdv+0sbiXpeZizOUQn4BvfnMC8emZp4feJggY+1z0cw4/tOTvuu1C1QI3QEQnZFcYFG
-         VvT40t79ZdHHvH8sq2RpZcT3pxSwNrJumxxktXPHwfRyLE2rSbyjBEBlCP2NfRwf7+bY
-         1bJHU5Uc3MgWod3KCHSpx8QfQg3cwQ4L/uqWSOPm97c1su0cWBWIkcBeRTpsbb8pE8Q/
-         S9Ty1NTbvM2YvFlv/QAjgQc2s88wM4fuT3ZRoBkyfTdHbbxenwkxzpn1KkN8yK2UhOyK
-         ShYQ==
-X-Gm-Message-State: AFqh2kquSxkYQJiSJgsZS679OqdqGPZoby0qpPmGDgMVxS17TLA5yx1Z
-        483OwbpNUHR/0UmkoefHY7bI1Q==
-X-Google-Smtp-Source: AMrXdXtKb+4uvfotizMeuQfwAZA8MV5qRAu8vrz2XPdlaH7ZSWFKiEGd/DB4cabCuP4PCRF20iHbaA==
-X-Received: by 2002:a1c:ed0a:0:b0:3d3:4a47:52e9 with SMTP id l10-20020a1ced0a000000b003d34a4752e9mr55153400wmh.15.1675188138023;
-        Tue, 31 Jan 2023 10:02:18 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id h13-20020a05600c314d00b003db2b81660esm7148131wmo.21.2023.01.31.10.02.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 10:02:17 -0800 (PST)
-Message-ID: <622ef51f-643e-5eb5-3884-3f22bf4fa9be@linaro.org>
-Date:   Tue, 31 Jan 2023 19:02:16 +0100
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zF5FBVNGpjtgxLS+bV3TsuLS5czo6abFNJe3eVmeQhM=;
+        b=bCz7shiXHIcyfjOOMvVODwkRj3hC6C3MCF8apUZxe+Lv/P6dOhKQtRaAyz1EYVDnpt
+         omdiy6FKzgrs/wx1BEeMZYZaoY0fx7k51CZbqLcbVAB7G1OFkMQANS6OKPjGktFjvHEw
+         GpCgLQT/N2iX+XIelBfZbDZcMl9ONWs7Uz8r7nN0c7uabC7LifMWP9kXgkLruiC/Up2U
+         +YflOlvZhw+AqotYopBGHcsNN1BJvHVOlHDV+pPKRAqnD4jvsQTv3ng4CTbDP7YBokNz
+         3pu15UaPBGorMTsuwibPU8+qcJp7DW9ZsflkZ9GaNWWNlV3fNzeahy6n2CWtykTsxoG+
+         F1sQ==
+X-Gm-Message-State: AFqh2koH+MkG/lX334pML8mJynLPXIJeIyiO42pxaOz6l5/u/KPl6S23
+        YRe5R5D76ZOg7sKbEpL23mK3AA==
+X-Google-Smtp-Source: AMrXdXvezqFwgLDeT6M06pfBrzmly8Jw4gE3tWkEi9LAhdjldWOIDY8v0K3SeZi+fLsG8SDpqjSnqw==
+X-Received: by 2002:a05:6a20:2d12:b0:b8:b9e7:6d4 with SMTP id g18-20020a056a202d1200b000b8b9e706d4mr16854163pzl.0.1675188175049;
+        Tue, 31 Jan 2023 10:02:55 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id z92-20020a17090a6d6500b0022c2e29cadbsm8825260pjj.45.2023.01.31.10.02.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 10:02:54 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+In-Reply-To: <20230131050132.2627124-1-willy@infradead.org>
+References: <20230131050132.2627124-1-willy@infradead.org>
+Subject: Re: [PATCH] block: Remove mm.h from bvec.h
+Message-Id: <167518817431.121439.15195663136772829300.b4-ty@kernel.dk>
+Date:   Tue, 31 Jan 2023 11:02:54 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/2] dt: bindings: add dt entry for XO calibration
- support
-Content-Language: en-US
-To:     Youghandhar Chintala <quic_youghand@quicinc.com>, kvalo@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230131140345.6193-1-quic_youghand@quicinc.com>
- <20230131140345.6193-2-quic_youghand@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230131140345.6193-2-quic_youghand@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/01/2023 15:03, Youghandhar Chintala wrote:
-> Add dt binding to get XO calibration data support for Wi-Fi RF clock.
 
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
-Hint: dt-bindings: net: qcom,ath11k:
-
+On Tue, 31 Jan 2023 05:01:32 +0000, Matthew Wilcox (Oracle) wrote:
+> This was originally added for the definition of nth_page(), but we no
+> longer use nth_page() in this header, so we can drop the heavyweight
+> mm.h now.
 > 
-> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
-> ---
->  .../devicetree/bindings/net/wireless/qcom,ath11k.yaml         | 4 ++++
->  1 file changed, 4 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> index f7cf135aa37f..205ee949daba 100644
-> --- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
-> @@ -41,6 +41,10 @@ properties:
->          * reg
->          * reg-names
->  
-> +  xo-cal-data:
-> +    description:
-> +      XO cal offset to be configured in XO trim register
 
-Missing type. I also do not understand what's this and why some register
-offset should be stored in DT. Please give us some justification why
-this is suitable for DT.
+Applied, thanks!
+
+[1/1] block: Remove mm.h from bvec.h
+      commit: 2d97930d74b12467fd5f48d8560e48c1cf5edcb1
 
 Best regards,
-Krzysztof
+-- 
+Jens Axboe
+
+
 
