@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03273683640
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880F4683644
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjAaTQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:16:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S230444AbjAaTSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjAaTQv (ORCPT
+        with ESMTP id S229488AbjAaTSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:16:51 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D3758646
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:16:49 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso8618866wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9MPbe5iwRaaP/IhZCNpsudukeeF99kTQgmfKMrip8BA=;
-        b=z5ogbM37k1wr3/oCWnDbpLVmf2A2QM+l1gRn1csf3YTqwBpp2Pt0BzMzp8SHaJvf1i
-         4lR23QOEODZ8w1IbL6qMPoA4n1gsfxVdvafWi9rVCY+Pm04RaKDYjC4D6MEWAEto2qm2
-         TXBcOxoop/r+Q9zPKYxlV5kyoq2i9I/a7rlpZ8x8OjEdy7YrWtFMn6uZGXTMJCDYQjju
-         CmoqnfQVLVLK+mx3ZPtmxIg4E7JKKIo0QSBlhi+ZrU2e0FAjD585kR8XgLWGX81IPrji
-         tgo0KonsNDSc2yeRdfRR5JnYWIsTwTUb85Cz1chcZyCP9O+INl+8mX1lqtLNDowc5Sm7
-         oHug==
+        Tue, 31 Jan 2023 14:18:10 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5599911EAC;
+        Tue, 31 Jan 2023 11:18:07 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id me3so44675047ejb.7;
+        Tue, 31 Jan 2023 11:18:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9MPbe5iwRaaP/IhZCNpsudukeeF99kTQgmfKMrip8BA=;
-        b=lB79Dj1SQESOzxyqgUF/LiVUcBtNV8+x4IQL9YUgUAL8N8XAH4sISRrfB9/lVN0KdT
-         20/Y6UNMMrPLJfIq3NBuhDvzw/lQbzJeM4UlzEh1tU54ZbPT7Q4vp2UrOqDAXbWaTrP7
-         0/MN/45ITQxQeYwPhyTRwv95rMrCzyvsa8/viGAZwjkBk24a/VWzls6H76cw/WCDK7jk
-         umBhaMKsgeFouBYLrqSjya6nUQXBOowZFvK/DkQCHCpJS6tSrXlzUmcLiMVBc5iBKI1M
-         UuSDI+t6Umb+jbmFEZfS5JWYphrRzYlMn1GNkcPEGMcTkxy7l99dPzbyhSJ0HgcIvP+t
-         ty1A==
-X-Gm-Message-State: AO0yUKVmnvIvLxf2xKmoR1EIaNvX50Ykjhcw7XREvaTfuwRK3cARPv0W
-        rKlAqsO1RLDnrBW0LYJIvd7fpw==
-X-Google-Smtp-Source: AK7set/LpiB/mUdZaDfwthxd/ezxlPemqRQ7sUPZnHU1TMciOsezu5qImknY4ffAJhBqQbGcoL7QEw==
-X-Received: by 2002:a7b:cd87:0:b0:3da:fa18:a535 with SMTP id y7-20020a7bcd87000000b003dafa18a535mr280865wmj.29.1675192608325;
-        Tue, 31 Jan 2023 11:16:48 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j14-20020a05600c130e00b003dc541c4b13sm8320321wmf.21.2023.01.31.11.16.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 11:16:47 -0800 (PST)
-Message-ID: <b510b2e1-8f0c-f942-75c2-65f1f3efdbfe@linaro.org>
-Date:   Tue, 31 Jan 2023 20:16:46 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PgqXjqu7PB4cDpZ4t5aYViWzYUyq/bNQ+W4YAsennk4=;
+        b=uU7se3VGBpAAkNx7sZ+NqrPzdyHiDcWBsY71wZJpoZND8nX8VkqsryDDfL6jlQMirS
+         1cS294PrCZU7wMPy7d4G8LOTyeCkPliq3SSF27KduRecWT0v+tM3q07LUyAr6rfRnedU
+         MoQFirplm+xRIWSSQffkG11GNVpiY16VcOTfh8G/+Xyjz6+zDhJ9f2rM80knwN/gT0Bh
+         JIBu2mkiHZWtbwuP0Lo42DCWU7EWSl3pqtvysCJ5gISHb+NI9Ifxsg+PMUUXc/7CH1X1
+         aLa8buzkwKaQ7uGM0ya6BVyGNkUBrFJKlUxQFnJ6Up6NTVqFVJFfcG8efFPpMUKBabRy
+         jovQ==
+X-Gm-Message-State: AO0yUKUf83v7fbsvizJEIrpSvawPVTH7DvDaDI+xiDWjc8VrBw1oLkil
+        tCGjGQeymLsQqpBKz/MaizTGKcBcGBd8z8Hm2UU=
+X-Google-Smtp-Source: AK7set/8MNl94eWnK+p2gRPKvJNunvkkdqU775q8MznNt3ygHG6M0TswuNUlDSLpgbXu/IiXn0SeDaSBftVXXzqBmgY=
+X-Received: by 2002:a17:906:95d7:b0:88a:30dc:5730 with SMTP id
+ n23-20020a17090695d700b0088a30dc5730mr2170974ejy.25.1675192685276; Tue, 31
+ Jan 2023 11:18:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] dt-bindings: mmc: Add cap-aggressive-pm property
-Content-Language: en-US
-To:     Hermes Zhang <chenhuiz@axis.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     kernel@axis.com, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230130064433.962712-1-chenhuiz@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230130064433.962712-1-chenhuiz@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+ <20230118181622.33335-3-daniel.lezcano@linaro.org> <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
+ <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
+In-Reply-To: <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 31 Jan 2023 20:17:54 +0100
+Message-ID: <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 07:44, Hermes Zhang wrote:
-> Add a new property: cap-aggressive-pm to enable the
-> MMC_CAP_AGGRESSIVE_PM feature for (e)MMC/SD power saving.
-> 
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+On Tue, Jan 31, 2023 at 6:03 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+>
+> On 26/01/2023 17:47, Rafael J. Wysocki wrote:
+> > On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> From: Daniel Lezcano <daniel.lezcano@kernel.org>
+> >>
+> >> The thermal framework gives the possibility to register the trip
+> >> points with the thermal zone. When that is done, no get_trip_* ops are
+> >> needed and they can be removed.
+> >>
+> >> Convert ops content logic into generic trip points and register them with the
+> >> thermal zone.
+> >>
+> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> >> ---
+>
+> [ ... ]
+>
+> >> @@ -173,8 +166,13 @@ static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
+> >>          if (status)
+> >>                  goto err_restore_te_out;
+> >>
+> >> -       dts->trip_types[thres_index] = trip_type;
+> >> -
+> >> +       status = get_trip_temp(sensors, thres_index, &temp);
+> >> +       if (status)
+> >> +               goto err_restore_te_out;
+> >> +
+> >> +       dts->trips[thres_index].type = trip_type;
+> >> +       dts->trips[thres_index].temperature = temp;
+> >
+> > This change doesn't look correct to me, because this function takes
+> > temp as an argument and it is used to populate the trip with it at
+> > least in some cases.
+> >
+> > Why should temp be overwritten here?
+>
+> You are correct. This is wrong.
+>
+> I think we should call get_trip_temp() before calling update_trip_temp()
+> instead of passing a zero temperature parameter
 
+update_trip_temp() is sort of a misnomer, because it is used for
+initializing a trip point for example in
+intel_soc_dts_iosf_add_read_only_critical_trip() and in this
+particular case get_trip_temp() need not be called before it.
 
-We did not finish discussion from v1 as you did not really answer my
-concerns there. Don't send v2 because it looks like you cut the
-discussion and ignore the feedback.
-
-Best regards,
-Krzysztof
-
+This driver seems to be in need of a cleanup.
