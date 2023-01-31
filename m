@@ -2,98 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DDE6834F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBDE6834FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjAaSOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:14:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S229590AbjAaSQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjAaSOn (ORCPT
+        with ESMTP id S229488AbjAaSQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:14:43 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8EE1027D
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:14:42 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id k4so38698116eje.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:14:42 -0800 (PST)
+        Tue, 31 Jan 2023 13:16:34 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B15314234
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:16:33 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so11318021wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:16:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oBUJW5g0l7Cow1aZueI6QMIdh34q+4xeYl6ay0vZEdY=;
-        b=ooUIqV1qOuf4L+JepERD12vmqc21GEhVvlFh8Kk/YMuX5rl/Emj5/KdJvys6lyRWPw
-         KfA1VwfDQ+wdIW+wW7m8Aqd7YRGb4DE3UNTqsLa0sIVKR4/YOHpj9x5s3FrZxHJWvTaZ
-         Dz7fuyyxHPYNQC37otjMILneEAZY92edcJhHaNyF/vn4BQgm28GhsVLQY20ZZq1GSUFJ
-         R2vMXoQFwffwTr7347LV/UTAX9dr3A1p3Np5bwOIcNaf1U6B4sXd49Si+1P8sl+BeIiI
-         c6zjTGW3x0uWfQXNeimNq6IJKSoAwV4RZOAa4dbg6xWbEN/EWmleGKrRcUU+ZnYRF+aO
-         BSeA==
+        bh=UPKrSP4Ne/SNxeLI36oVC9k3148tGOXUA1eFQ1WZK8Y=;
+        b=kjKgH5WUo/W1L09w3eQ1emaWqJGQzJPLq0yAWiwSzppFk7snauHaNUm6fdJwN3WMFp
+         osmQeaMMdlVpoJOyEhp80n066EhpehO1YAVq8Skef8N90BTp2eF6mJwd+9lMqKiiO9VR
+         HQgS1I2agvVmBXXf6NpMGFRfc2yAK3Nje32KvW5LURhIo/BPEQ87E/ztwp18YmBkyaoN
+         2ErB5+KoCoqLdVVjT5ZoU8VJ/WrwZfes1uXUXiT9e9YT3XOTgLlB1D+Pca2I+FfvkzQL
+         znhq7icCbBagdjZa63x8LBxrppUCBk5rex9IB0Cfxh7JRE7I2hmyRd7L79uYXtQNk3wy
+         DwTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oBUJW5g0l7Cow1aZueI6QMIdh34q+4xeYl6ay0vZEdY=;
-        b=wvbg/RLvOmcS6AJSC0w6bL9bgPGo4R55WkbD+tjmwRvk1uDJxgb2vGRA81YlPrNsMN
-         YEla1fBtC7cgow8SuRj1OffeRIhV60Ht7z990HRndRnyedVCcYxD3C3oBP5L72dWoBJC
-         /wf17Axlgi/WC6UyhXfJbmwIKxf5VEIn50u4z+QsGXi+/qPD2Y9rZbE6gbCq6ZdJJnBg
-         U/2qcicokKsSp/IDvM4r/duAbYXBQBZqWh1LjEkmArNobCvZtWxj2Y0tOid3PJ/+g0iK
-         /CkFgGAHntNq1GXNgIj+WGelIRp0DXi8w5lAIvj1ObJCaxe74vQxBvU/r/aFyIMGfBTX
-         2mxw==
-X-Gm-Message-State: AO0yUKWuRqblqs8mF8dcdHv6E1HIo3M3Ze8dFyC+47EUQ/W82QpfxqXk
-        3AmOnK4U+sDUlMrTLPWpLHc=
-X-Google-Smtp-Source: AK7set/Fm2STpfkzkeO2bN2CrWnDnnHCG4vOw5APB3JNA3oxaU0Bf8XyZTdFJzyYYgRCvlzNO3jmFA==
-X-Received: by 2002:a17:907:c282:b0:878:509f:798d with SMTP id tk2-20020a170907c28200b00878509f798dmr26429055ejc.0.1675188881209;
-        Tue, 31 Jan 2023 10:14:41 -0800 (PST)
-Received: from combine-ThinkPad-S1-Yoga (gw.combine.ideon.se. [85.235.7.115])
-        by smtp.gmail.com with ESMTPSA id 7-20020a170906318700b00888f92f0708sm3370998ejy.15.2023.01.31.10.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 10:14:40 -0800 (PST)
-Date:   Tue, 31 Jan 2023 19:14:39 +0100
-From:   Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: pi433: Added information about bit_rate
- configuration
-Message-ID: <Y9laj+z0TuasBRx5@combine-ThinkPad-S1-Yoga>
+        bh=UPKrSP4Ne/SNxeLI36oVC9k3148tGOXUA1eFQ1WZK8Y=;
+        b=xZmWhPPXV9318ea8men2KleJqINHiNVSuu2EoFO3Jn29opiuvbKm3UpztYy+qCYNmt
+         SnVaZgx9DNJQWjV9ycNW0XJmF3vOH58HcZRZw+r/pwH7g6jFbWmaWjouLXFne/qLxpwU
+         SWtQe/4fxft4fYOZxLDpf3XOct+FF3NfaVTMhWEGoum1rrM+FSbiLh3PRiag70avYASc
+         2Y2TgoFmY9t5xyhPOlF4ubXAxUIYFcz1QTgZ/9ONaanGXjWnfZ1FUW1Re80J1DzRQokc
+         o0/28mQl/Is1a1xGq/TTmNaqXzrpoS5R2ktcXqiWCKRcrxU7RrvMeoDPvQJDaHIquVdK
+         /KJA==
+X-Gm-Message-State: AO0yUKX6yRilPZ6Q88lBTh1zu/Z84GRPMYrOqtFkSU/WxA0CG/YPVy2m
+        ELBOvSRBuP7QF1XElCCkxySpeQ==
+X-Google-Smtp-Source: AK7set8bPV+NrF1XZ7KloiOXaXxOlRpzXbUWHITAFZeTAADJ6cGnUcIbU3oPQaEmkbyjZLATQAC3ow==
+X-Received: by 2002:a05:600c:a07:b0:3dc:2137:d67d with SMTP id z7-20020a05600c0a0700b003dc2137d67dmr24054500wmp.16.1675188991728;
+        Tue, 31 Jan 2023 10:16:31 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b003daf6e3bc2fsm58592wms.1.2023.01.31.10.16.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 10:16:31 -0800 (PST)
+Message-ID: <871e93e8-5a20-461a-50c0-c7c3c0a7ce8f@linaro.org>
+Date:   Tue, 31 Jan 2023 19:16:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH V3 1/7] dt-bindings: Add ipq9574 clock and reset
+ definitions
+Content-Language: en-US
+To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linus.walleij@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
+        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230130125528.11509-1-quic_devipriy@quicinc.com>
+ <20230130125528.11509-2-quic_devipriy@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230130125528.11509-2-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Information in the TODO file for bit_rate configuration is
-insufficient.
+On 30/01/2023 13:55, devi priya wrote:
+> Add clock and reset ID definitions for ipq9574
+> 
+> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> ---
 
-This patch adds information on how to approach when considering
-to modify bit_rate to support upto 300kbps.
+Subject prefixes: dt-bindings: clock:
 
-Signed-off-by: Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
----
- drivers/staging/pi433/TODO | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/staging/pi433/TODO b/drivers/staging/pi433/TODO
-index 5cf3fd99d521..daa0dbcf6d53 100644
---- a/drivers/staging/pi433/TODO
-+++ b/drivers/staging/pi433/TODO
-@@ -3,3 +3,6 @@
- * Some missing data (marked with ###) needs to be added in the documentation
- * Change (struct pi433_tx_cfg)->bit_rate to be a u32 so that we can support
-     bit rates up to 300kbps per the spec.
-+  -> This configuration needs to be moved to sysfs instead of being done through
-+     IOCTL. Goind forward, we need to port userspace tools to use sysfs instead
-+     of IOCTL and then we would delete IOCTL.
--- 
-2.34.1
+>  Changes in V3:
+>         - Added a separate clock binding for ipq9574 and reverted the
+>           changes from qcom,gcc-other.yaml
+> 
 
 
--- 
-Thanks & Regards,
-Guru
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
