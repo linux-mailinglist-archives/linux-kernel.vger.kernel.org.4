@@ -2,133 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3773682D28
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090F4682D2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjAaNBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
+        id S231622AbjAaNBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:01:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjAaNBG (ORCPT
+        with ESMTP id S231540AbjAaNBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:01:06 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190134C0EF;
-        Tue, 31 Jan 2023 05:01:05 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12394735wma.1;
-        Tue, 31 Jan 2023 05:01:05 -0800 (PST)
+        Tue, 31 Jan 2023 08:01:30 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA564E525
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:01:25 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id k4so35873865eje.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:01:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VcbQEiUfrn1ZLUYtm1to7N6PATT0Q4d4Al24IcBS9+8=;
-        b=gxbalLRF7g/piLUDzum6ebHhSbBaltk6UMjAP7SzNURpivtTQRNbXwLEF3xjaouFBn
-         jtFHwMyOW0WxQK0V1w2+IWl0yv85YcEJXQf6uPgkCbbSV6zGUMvwpM8jO54q0LJmsfzE
-         Sn+g6BOpSl2VHk6D7eM0XrTl34FLD9+JxoVqEcjU4QX8LfQlYpCbtWtzySRmxaTAeiN2
-         Yho9h0l1V3OoxmRXvtL6RwynC9iju0zES5zGPs6pd2AaktDox1ymMdOjA/tRnwTAIp5L
-         +woUlu2SxAF3KNorJCpALEkhhOF+HRlFpsYDcDjt9frz5AKSF7B80R8n6Bg6o4yi4UAd
-         qz3g==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7gMYnSeHKqcsyPBImnOU5RDW7p64vR2ZolURuiV8JxA=;
+        b=jFYcxiT7bOVUAkiqIk5UxJpSSOFPV6Ns78ObeD2X/lYdWLPg//4qValV9/JSKm9el9
+         fiW9SzN2SfDFzBofAcfvZ7FRMEy6zP+/N/lX0QOWX50uE/r1oCVvgLukoug5DEX56GSY
+         BWpeE0LvQVqyUJLW32XInshyTqReK1dTnIweg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VcbQEiUfrn1ZLUYtm1to7N6PATT0Q4d4Al24IcBS9+8=;
-        b=g3ycmcJmGxADuAkDuyk85H444mLRexcacPILOnZo8ThX8ymIvqV535YvN0K3G/wTQD
-         DqhwCN2JXh/s66oK7LkyrOq4VTo803Myx4HAJ2Vahc6Xw5hARylvMuJ69wNhc9eQvhxw
-         duu3daoHEOuBYcOP5fqU7uGF+vmgITpgN1u3qnIqByhSOnuTcOw5fpfX7FADYY+tmZal
-         Qjirwv5dhD8Jo6BIulE6lNJ0VE1JHvbA/zBlPWEbvt2KL2e0CCTQ/tqHiJxvTNe3sVFC
-         AXOuaHP7I9nUKgqp+m0ak8IPNnm3pOLxbzpQOmUkNVdGawxA/U10wWXcfkXUGI5FZ+Sn
-         0m3A==
-X-Gm-Message-State: AFqh2kozHCIpCbdhCY7jkuJRE4Qd55beZonWIOkd+qWskXu7Je4tOzD7
-        RYm4T5NhmM1TBmZYyoqpsv0=
-X-Google-Smtp-Source: AMrXdXuDDJd2SOnxH8EH5v5wZHtF9KUTDRi/lGRngFPYhNv4y5IUyuOEIXA9HCw05LZe4uX1KZugCA==
-X-Received: by 2002:a05:600c:a4e:b0:3db:14d0:65be with SMTP id c14-20020a05600c0a4e00b003db14d065bemr48389876wmq.34.1675170063488;
-        Tue, 31 Jan 2023 05:01:03 -0800 (PST)
-Received: from smtpclient.apple ([167.99.200.149])
-        by smtp.gmail.com with ESMTPSA id g8-20020adfe408000000b002bdda9856b5sm14901344wrm.50.2023.01.31.05.01.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:01:02 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH] media: rc: add keymap for Beelink Mini MXIII remote
-From:   Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <Y9kJfPqtd98wIQ6r@gofer.mess.org>
-Date:   Tue, 31 Jan 2023 17:00:59 +0400
-Cc:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <34CD7297-AC0A-404D-B90C-D00FA861A43E@gmail.com>
-References: <20230128034117.3983105-1-christianshewitt@gmail.com>
- <6e953652-4a24-6f3c-74e7-07c25fa1c6c1@linaro.org>
- <Y9YwbiJz9vOBejdL@gofer.mess.org> <20230130213020.GA3541260-robh@kernel.org>
- <Y9kJfPqtd98wIQ6r@gofer.mess.org>
-To:     Sean Young <sean@mess.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7gMYnSeHKqcsyPBImnOU5RDW7p64vR2ZolURuiV8JxA=;
+        b=uEU4Rwrv8aIrAPhOkkaKFqjN9W32aSGBxKD2WjzG9i2Cv79Prr8iEX481nOjdsITNM
+         fmh65ZyTLCCyNG+j4cYlSnHtjp1Gjtcfis+geVnHCl/FNXlZOq5tGuUSsCtCwm2imyaP
+         9uDRu0wkUeI1cX7Yr7OmvZVgmKTxS29B+o0uaqSDL/+qZQrp8harGhUKuDv/TBrgVbG9
+         Ict2+nLaF6Uj2zg4J+fRTfKqJySRh0UDBMWJEotwhzUH8ISlXq8gnfOqJVGhq9kt25tf
+         v/oXVOkt/b4isBgRJ+lBRW1KTvgLrlhKmsG80mwUpqKEq8WBnNUumRU71vRxmPgK8ipI
+         8Pcg==
+X-Gm-Message-State: AFqh2kopYWOzOHOUnHADwBBQOS4kDV7TcPPKWxWB6qy3ojRBumpOYsuG
+        9NZRIXT47pf3F5Ajc0P+pDVyOQ==
+X-Google-Smtp-Source: AMrXdXv8Tl8EVS3s3so/8xhXlhWJn5A6/u1EiEI76SCc/7nRpcDN22oB/nVJQNm8T0sr3wMSoZMN+Q==
+X-Received: by 2002:a17:906:25c5:b0:84d:47e3:fe49 with SMTP id n5-20020a17090625c500b0084d47e3fe49mr51991415ejb.39.1675170083763;
+        Tue, 31 Jan 2023 05:01:23 -0800 (PST)
+Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
+        by smtp.gmail.com with ESMTPSA id gv21-20020a170906f11500b0086dd8f20a6asm8422670ejb.77.2023.01.31.05.01.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 05:01:23 -0800 (PST)
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Tue, 31 Jan 2023 13:01:16 +0000
+Subject: [PATCH v2] sched: pick_next_rt_entity(): checked list_entry
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230128-list-entry-null-check-sched-v2-1-d8e010cce91b@diag.uniroma1.it>
+X-B4-Tracking: v=1; b=H4sIABwR2WMC/42OTQ6CMBCFr0K6dkh/hKAr72FYlHagE7GYthAJ4
+ e4WTuDq5ZtJvvc2FjEQRnYvNhZwoUiTzyAvBTNO+wGBbGYmuVRcyAZGignQp7CCn8cRjEPzgpjD
+ gla9sr2t7bVuWDZ0OiJ0QXvjDsdbx4TheHwC9vQ9a59tZpelU1jPFYs4rv8VLgIEmJviTYXIeVU
+ 9LOmhnD2F6a1FSYm1+77/ACQHovHmAAAA
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Dmitry Adamushko <dmitry.adamushko@gmail.com>
+Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>
+X-Mailer: b4 0.11.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675170083; l=1714;
+ i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
+ bh=JXMb4KYxycIr7yob7kbIo17I74pfdYCRvrPeZI4D6Is=;
+ b=GlyICFn4R9dN1ziaNTtDtK0FhGOH1W3rrj9NJsYS0fC0S1h8/ZA36YyrNaC4LD+egslJGv3PuQSx
+ 23sClmDND7qRiDHJ58hYeFGOJke4b++EpTCqn1scckdWZWRHMxna
+X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
+ pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
+removed any path which could make pick_next_rt_entity() return NULL.
+However, BUG_ON(!rt_se) in _pick_next_task_rt() (the only caller of
+pick_next_rt_entity()) still checks the error condition, which can
+never happen, since list_entry() never returns NULL.
+Remove the BUG_ON check, and instead emit a warning in the only
+possible error condition here: the queue being empty which should
+never happen.
 
-> On 31 Jan 2023, at 4:28 pm, Sean Young <sean@mess.org> wrote:
->=20
-> On Mon, Jan 30, 2023 at 03:30:20PM -0600, Rob Herring wrote:
->> On Sun, Jan 29, 2023 at 08:38:06AM +0000, Sean Young wrote:
->>> On Sat, Jan 28, 2023 at 11:11:32AM +0100, Krzysztof Kozlowski wrote:
->>>> On 28/01/2023 04:41, Christian Hewitt wrote:
->>>>> Add a keymap and bindings for the simple IR (NEC) remote used with
->>>>> the Beelink Mini MXIII Android STB device.
->>>>>=20
->>>>> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
->>>>> ---
->>>>> .../devicetree/bindings/media/rc.yaml         |  1 +
->>>>> drivers/media/rc/keymaps/Makefile             |  1 +
->>>>> drivers/media/rc/keymaps/rc-beelink-mxiii.c   | 54 =
-+++++++++++++++++++
->>>>> include/media/rc-map.h                        |  1 +
->>>>> 4 files changed, 57 insertions(+)
->>>>> create mode 100644 drivers/media/rc/keymaps/rc-beelink-mxiii.c
->>>>>=20
->>>>> diff --git a/Documentation/devicetree/bindings/media/rc.yaml =
-b/Documentation/devicetree/bindings/media/rc.yaml
->>>>> index 266f1d5cae51..f390a5d2c82d 100644
->>>>> --- a/Documentation/devicetree/bindings/media/rc.yaml
->>>>> +++ b/Documentation/devicetree/bindings/media/rc.yaml
->>>>> @@ -39,6 +39,7 @@ properties:
->>>>>       - rc-avertv-303
->>>>>       - rc-azurewave-ad-tu700
->>>>>       - rc-beelink-gs1
->>>>> +      - rc-beelink-mxiii
->>>>=20
->>>> Bindings are separate patches. Didn't you get such feedback =
-already?
->>>=20
->>> The only change for new keymaps is an added entry to the rc-map-name =
-enum.
->>> In the past, new keymaps have been accepted with that single line in =
-the
->>> same commit.
->>=20
->> It's been a checkpatch.pl warning since 2018. The separation is so =
-that=20
->> commit messages in the DT only repo[1] make sense.
->=20
-> Ok, makes sense.=20
+Fixes: 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
+Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+---
+Changes in v2:
+- pick_next_rt_entity(): emit warning instead of crashing
+- Link to v1: https://lore.kernel.org/r/20230128-list-entry-null-check-sched-v1-1-c93085ee0055@diag.uniroma1.it
+---
+ kernel/sched/rt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I will resend v2 series(s) with the bindings separated. Are there any =
-other
-issues to address?
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index ed2a47e4ddae..c024529d8416 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1777,6 +1777,7 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
+ 	BUG_ON(idx >= MAX_RT_PRIO);
+ 
+ 	queue = array->queue + idx;
++	SCHED_WARN_ON(list_empty(queue));
+ 	next = list_entry(queue->next, struct sched_rt_entity, run_list);
+ 
+ 	return next;
+@@ -1789,7 +1790,6 @@ static struct task_struct *_pick_next_task_rt(struct rq *rq)
+ 
+ 	do {
+ 		rt_se = pick_next_rt_entity(rt_rq);
+-		BUG_ON(!rt_se);
+ 		rt_rq = group_rt_rq(rt_se);
+ 	} while (rt_rq);
+ 
 
-Christian=
+---
+base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+change-id: 20230128-list-entry-null-check-sched-a3f3dfd6d468
+
+Best regards,
+-- 
+Pietro Borrello <borrello@diag.uniroma1.it>
