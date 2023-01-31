@@ -2,196 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B225A682D50
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFB5682D70
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbjAaNGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:06:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
+        id S232094AbjAaNK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjAaNGk (ORCPT
+        with ESMTP id S230481AbjAaNKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:06:40 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF8BC656
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:06:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kr/nsfryENXhzmtlve5aJewe0lSmCGDOkFeUpm5BWq04hAHsA78DqA7YkWBsZfwcaBZHb0mihr9gy26aAU4sk4rrfRmaKsTDHiZXI7q1N+12KH8aklVF1ykB4exsOt+Kd5MGYG01mDKKvXM3/ewf00u0FF2SzV4IjBG8+8IKQc16vFfxZx2Wg5VVZSigfTE3yrsKGbUCRFtIGfxC4WZiluZNqGH+gxMWBOCE6nkWB03wnxi38iFhPNJnKlRxUkMRgIi/40A+sQ+CWfHMpQUdaueqdPhMjrOJHrWiXahv1S6UD1/LHuyukUsy61StCH8+u4ODGxrD8BihViWHopS/pA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=reBLPJBu8aOUtKR0WlJDvXK0672ibZY1uiP2UzeS4dQ=;
- b=WufpXbyjgzrbLcLeJppTTCHoXsQI3KKtTfNtpJYBUBczEZrGyOqEEuIF5DBzlltRTLcFNPFv9MHJklh7IEBZDeYfglDIKodVWzU8AF2T2db7dlY7G8dr4YcBKJlERkM0NI7zi07yKOrbPxwUh1F2ezVFLVZsUmH/nVbjbhf3VyCt4wuHLNe9ZSd98gi83PT2sJ2bjRgiulzBJIoikKfRCqJbc6IcbqN6B1WDvQFYJDx17poNOJ6YNl09AGGCuQM/0gY3iM/OCCnWVIFOhlls9IgILshPwuacBONmi9TyLTqBXN07ssyOjWnSVwrP24A9hFq00bUNkp9HJ427+WJ8yQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=reBLPJBu8aOUtKR0WlJDvXK0672ibZY1uiP2UzeS4dQ=;
- b=aySOM35rYSSA63uONwK6FmzC3mTKsx42HQmv1CsCRY+9QXgX5brKqRs0d3fUT73t2tnGioKBPpD+FVBvxkjbkOZY8TA8C7n2+W9iQFDCfb8SzXnT2E4HICGrIyWLvUVjIAy8nB8xr9+oqsFtmxEKClDF2DVc2g+23bH4iiuD22Y=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by PH7PR12MB5655.namprd12.prod.outlook.com (2603:10b6:510:138::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Tue, 31 Jan
- 2023 13:06:36 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::fc88:7080:445e:6866%6]) with mapi id 15.20.6043.038; Tue, 31 Jan 2023
- 13:06:36 +0000
-Message-ID: <87ddd91b-fb5f-4f27-942b-dc439b32ce20@amd.com>
-Date:   Tue, 31 Jan 2023 18:39:43 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 01/19] ASoC: amd: ps: create platform devices based on acp
- config
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        broonie@kernel.org, vkoul@kernel.org, alsa-devel@alsa-project.org
-Cc:     Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, Mastan.Katragadda@amd.com,
-        arungopal.kondaveeti@amd.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
- <20230111090222.2016499-2-Vijendar.Mukunda@amd.com>
- <9f2229fb-499b-f802-993b-56a7ad2ce361@linux.intel.com>
- <257b6f1e-f403-573f-3978-13ffb14342ad@amd.com>
- <2b4c12ce-2586-0277-ede0-560f8317e4e4@linux.intel.com>
- <27eabbf2-eff2-0964-b72b-f9db251c3b57@amd.com>
-Content-Language: en-US
-In-Reply-To: <27eabbf2-eff2-0964-b72b-f9db251c3b57@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0209.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e9::20) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+        Tue, 31 Jan 2023 08:10:54 -0500
+Received: from out28-193.mail.aliyun.com (out28-193.mail.aliyun.com [115.124.28.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD3BAD39;
+        Tue, 31 Jan 2023 05:10:15 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436261|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.109619-0.000511876-0.889869;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=28;RT=28;SR=0;TI=SMTPD_---.R66vAnW_1675170608;
+Received: from 192.168.220.144(mailfrom:michael@allwinnertech.com fp:SMTPD_---.R66vAnW_1675170608)
+          by smtp.aliyun-inc.com;
+          Tue, 31 Jan 2023 21:10:10 +0800
+Message-ID: <241c5b1d-de4a-5127-461f-8b885cca1668@allwinnertech.com>
+Date:   Tue, 31 Jan 2023 21:10:08 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|PH7PR12MB5655:EE_
-X-MS-Office365-Filtering-Correlation-Id: 94fc3761-c390-470f-3ddd-08db038bfbb3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h/5ZtE+5WdxYVQx9pI/wmO4P1qh+LNFuR6uucKtKFSq7SsXJ+9a3Lma+p8Iky48t765Zvb6lW42+pTR/r7/1D93qEN8BAk3r5uHIL7JqiCyu8FL64ZNr2NDQhT1PDbIf7srqqW6ltLPRZu7IpJF/cKA56wZdsf7lsk85o6pGFapiQy9Wp+DDHlI4c1FMFihLQHahdmiBzFJFeOT1Gyhyrv6KHcRsdmkUwvXiLkpTl+nV23i85qLz+FZ7goM3EJNcojw6g+KA650r3A8qtq9m21mwYVvgOHrScY7GLZOrQ6PjfG/TJnT2hzLwGeZ4jnysygrzxG5dLMjum57xqk5M8hTW5ssQPFwoqo7+qgX/NpNNJlY8IFCbT5Bzno74IMKPDYlD92PVnGW7xU5u0dFFigXaDUlySRxUfGgzarzrnaXjwGreD7BCdscxvXpMyyGhWGdZ5pRcF2V/6v40eEDMMkqr+WlxpLZFcyQHW3cUhlFM1AmuJ29IVVmTuJkol8h+xGIi7vUrsYU+P45uswRA1228+UiAb5bqClg+I8x72cs3X7wTj3k7UhGP3eoI9Jnhb9Bc5ZJiA331T4mvgAIzfEoHwoESpr+bs+caw0WOzoQaYU+vhpwWQufjLRpI7DRGzkgwJqiicrq+euXzMQgQ2zU4iHN6XpnUl3O/rGXrkxffxLWB8Q1flMPWMc3tTECVnxFPqo7e1zG7Wr9tsz3z28QqCF/1t7r4rroi1ap6hFk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(451199018)(6506007)(7416002)(5660300002)(54906003)(6486002)(316002)(38100700002)(2616005)(36756003)(6512007)(186003)(26005)(6666004)(41300700001)(8936002)(4326008)(83380400001)(31696002)(66476007)(8676002)(53546011)(66946007)(478600001)(66556008)(86362001)(31686004)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0ZkZHQzR3M1Wmd2ZGV6L3l4RFZSWjhqSzgvUncrLzBlU1h2S3hPelRYc3Uv?=
- =?utf-8?B?L1JzR2VJeWtZQ0FZeW1VaUVzRlorcTdkcnYwUk5RaERFS3QyNWhxWm1WcmlX?=
- =?utf-8?B?RGtWSmhlbFA2L0dpMGpFTWJZNHVZYTZhdURuMU02czkycjdwSmF2YU5Ja3RY?=
- =?utf-8?B?NnFqN2tUMFl6bXJEdTRhNVdJSHh2Znh6THpaMmNXWU1sNFFWVUV0b2hTaDEy?=
- =?utf-8?B?ZmFpeGM1NlZZSjNKamdZdjllMUFFMVBRbWdMNTl0ajFvUG80SEZYVXdOa2F5?=
- =?utf-8?B?TERTdWZWQjZvQVYyekNscDRFUDdVc0VWbnkxQUZVYmN5RnliTjFhY2tEbTNO?=
- =?utf-8?B?emdIUXlKaFkxQ2FVUmc2N1FkQUQzQlhKWHdtdm1XMlArVXkyZVdneE5tdHBr?=
- =?utf-8?B?K3RYYzFqM2QwKzd4WE9ONmdPVndiUEdmMDJOaTM5NzNzd0kxYTlsR3VGRzZK?=
- =?utf-8?B?aHBrSXVaRENvQ2V0U0o3elVjcXAzeWNBVDBJM1R2NlVPOENJQ2tiVS8yZ3U1?=
- =?utf-8?B?RnVubXVNbzhoNTZrUDVsVWpmZ3g3dWZBaVh6NGl6ZmxoTFB0bVJ1VGNyeWFM?=
- =?utf-8?B?VTRYcWN3aDBiL2FIb3BjTDNQZmFDbkVnc21XdTV0b09oN1NZVkErWnFUQW05?=
- =?utf-8?B?UHY2UzRHVHY3R2xoUGNvdEUzai90Y2lOWnRXVEYrSnh3V21MT1RMbkx5ZGM1?=
- =?utf-8?B?Q1lvZHBzT0FlSm51eUxIODlhM2U4Yk9TcCtCYi9BWGo5NFpQVTR1QStjeU1x?=
- =?utf-8?B?L3M2dmtsc2tSTW9ISW1Bb0dKOFU4UUdCcVBKTUhIejJEbUFUak80Q2hBc1Rx?=
- =?utf-8?B?OCtiSkFzQUNpN3dxdjMydEMzZkY0a0tvTEJrMTN0b3FsY1BES3RTUFQraHQ0?=
- =?utf-8?B?a2tobm1oekw3Rk9DaytEcXg2R2VvaHJURmp1L2JYVUNWOUxWd1pNVW4xcEdI?=
- =?utf-8?B?ZmRydTFBWFY2TDhscTBIT1ZFOTd2bTVORTFpTGZ2MnBBZnpOK0xlcWREZ0dU?=
- =?utf-8?B?Y204MG1seXhoeStWUm1VT2hxRkZCUHM0dk84NFdwMHJVK1FRbDA4QzJmZjVr?=
- =?utf-8?B?Z1Jpck1GM0ErcHdlTWVUYzJtMktyREhQbVRTbTR0c1Zmb3hJNEExazFVTVBC?=
- =?utf-8?B?ZFZweGRYaDEvWkUySXZRaFFxcjhneFVIMkhiNEFGeHZEYlJkcEFVS1BVMFJK?=
- =?utf-8?B?b2dFT0VuMmRPU3NRL0RNUFdOZ2lKMU9ZOHFlOXhNcGlUWnpWUUxGdVlTL081?=
- =?utf-8?B?Nm1WcG42VnNxUHo4UjRmNGNrUGxFNWdMcEJva2s3azM0UVIxQVRTeFBWK202?=
- =?utf-8?B?V2RJN3NGT2RwQkkxUzNtaURWNkdKdFhDV3d0Q0kxTWNhMGxLR2IxVTBGM0Zh?=
- =?utf-8?B?RFVsbWw2N3dYYUlRZ0p6TndEU2p6REhHYlAvNU02VHh5eTR5WVllRWFPREps?=
- =?utf-8?B?ZjlQeTRPV2V3MHFSRjBZZG5VUUVldEM2WDRkdHVXVCt2TG40ZXVxckMrWGR6?=
- =?utf-8?B?d0UyNlozMnRQZ0R0TVhISEVCc1pqbUVPZUEvcTVhZEl6VDY0cTBQOW5oOUtz?=
- =?utf-8?B?QTVPL1l3K3E2Vjc5cWY2YVorZVRFWXVmVHBDNnRwZ1lweC9qaHBxay83Si92?=
- =?utf-8?B?VHFkOUh6bDQ1aE9ObzhPajA5UDB0bThBbE4wVzBub2lKZlRuZDk1UWtHRCt6?=
- =?utf-8?B?UzBDWWhmS0R0K25aMEZMZGwvUE40bE9iZlo0UGo3aHhoRDg0STF5WWxoVitk?=
- =?utf-8?B?YkVzN0dEOVVJTjdGelc3M0c0YW9BaHFSOTMzcmt4RW15Q1laWEZ0RzNvNTB5?=
- =?utf-8?B?cE91VysxdXcrejc4dUxVTTIwWTdJOVg4dFJlRW5VYm5tYU96MVFBdnVDbTZs?=
- =?utf-8?B?SjNUekVyWFlnelBFYUYrOWpjS29FYzhXeklJNFpkV1kvVy84eHphRklJOTM0?=
- =?utf-8?B?OW82YmpId29TVkRsT3lmekxEZXB3V3R6cUZSaFBHYXJoWVM0bDBiUEJOSy9O?=
- =?utf-8?B?eVZxVDU3dk5VRmhCTnV1eVA4dG9MMk5najk5VmlYVXk3dDAxRlc1Q29zUm1a?=
- =?utf-8?B?VHRMVWhJeVBONVorcE95bnZkV1lUK2JhaldzTnFtZk9NV1dheDN4SzROWWZ3?=
- =?utf-8?Q?uY0swth+r3jLsAhFEzck5G855?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94fc3761-c390-470f-3ddd-08db038bfbb3
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 13:06:36.4833
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a26wSPjVSCuWEdgFXe/egbgneK8I9wY7iqzh5BGb+p7SdnGWB9yFS6pb0bW7ZQpJk+ZtUD7YDqEMjporPfAOWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5655
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] mmc:mmc-cqhci:support interrupt coalescing
+Content-Language: en-US
+To:     Wenchao Chen <wenchao.chen666@gmail.com>
+Cc:     adrian.hunter@intel.com, riteshh@codeaurora.org,
+        asutoshd@codeaurora.org, ulf.hansson@linaro.org,
+        chaotian.jing@mediatek.com, matthias.bgg@gmail.com,
+        kdasu.kdev@gmail.com, alcooperx@gmail.com, f.fainelli@gmail.com,
+        haibo.chen@nxp.com, shawnguo@kernel.org, agross@kernel.org,
+        andersson@kernel.org, michal.simek@xilinx.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        bcm-kernel-feedback-list@broadcom.com, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, konrad.dybcio@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20230130064656.106793-1-michael@allwinnertech.com>
+ <CA+Da2qzJBxn5up1YLiaguhMJ=W7JkVExyyiFco9KyPE+3jEn8w@mail.gmail.com>
+From:   Michael Wu <michael@allwinnertech.com>
+In-Reply-To: <CA+Da2qzJBxn5up1YLiaguhMJ=W7JkVExyyiFco9KyPE+3jEn8w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/01/23 13:32, Mukunda,Vijendar wrote:
-> On 13/01/23 22:41, Pierre-Louis Bossart wrote:
->>>>> +		if (is_dmic_dev && is_sdw_dev) {
->>>>> +			switch (acp_data->sdw_master_count) {
->>>>> +			case 1:
->>>>> +				acp_data->pdev_mask = ACP63_SDW_PDM_DEV_MASK;
->>>>> +				acp_data->pdev_count = ACP63_SDW0_PDM_MODE_DEVS;
->>>>> +				break;
->>>>> +			case 2:
->>>>> +				acp_data->pdev_mask = ACP63_SDW_PDM_DEV_MASK;
->>>>> +				acp_data->pdev_count = ACP63_SDW0_SDW1_PDM_MODE_DEVS;
->>>>> +				break;
->>>> so the cover letter is indeed wrong and confuses two controllers for two
->>>> managers.
->>> ACP IP has two independent manager instances driven by separate controller
->>> each which are connected in different power domains.
->>>
->>> we should create two separate ACPI companion devices for separate
->>> manager instance.  Currently we have limitations with BIOS.
->>> we are going with single ACPI companion device.
->>> We will update the changes later.
->> Humm, this is tricky. The BIOS interface isn't something that can be
->> changed at will on the kernel side, you'd have to maintain two solutions
->> with a means to detect which one to use.
+Dear Wenchao，
+   At present, I am working on the hook function .cqe_enable that the 
+ICCTH of CQIC is set, and it work well in my test. Actually I want to 
+confirm why the community does not support this feature. I think it is 
+necessary to reduce the number of interrupts caused by IO and reducing 
+interrupt context switching.
+
+On 2023/1/31 11:09, Wenchao Chen wrote:
+> On Mon, Jan 30, 2023 at 2:49 PM Michael Wu <michael@allwinnertech.com> wrote:
 >>
->> Or is this is a temporary issue on development devices, then that part
->> should probably not be upstreamed.
-> It's a temporary issue on development devices.
-> We had discussion with Windows dev team and BIOS team.
-> They have agreed to modify ACPI companion device logic.
-> We will update the two companion devices logic for two manager
-> instances in V2 version.
-After experimenting, two ACPI companion devices approach,
-we got an update from Windows team, there is a limitation
-on windows stack. For current platform, we can't proceed
-with two ACPI companion devices.
+>> Support interrupt coalescing to reduce the frequency of mmc interrupts
+>>
+> 
+> Hi Michael
+> The CQIS register does not have any configuration.
+> Usually ICCTH needs to be enabled.
+> 
+>> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+>> ---
+>>   drivers/mmc/host/cqhci-core.c      | 20 +++++++++++++++-----
+>>   drivers/mmc/host/cqhci.h           |  5 ++++-
+>>   drivers/mmc/host/mtk-sd.c          |  2 +-
+>>   drivers/mmc/host/sdhci-brcmstb.c   |  2 +-
+>>   drivers/mmc/host/sdhci-esdhc-imx.c |  2 +-
+>>   drivers/mmc/host/sdhci-msm.c       |  2 +-
+>>   drivers/mmc/host/sdhci-of-arasan.c |  2 +-
+>>   drivers/mmc/host/sdhci-pci-core.c  |  2 +-
+>>   drivers/mmc/host/sdhci-pci-gli.c   |  2 +-
+>>   drivers/mmc/host/sdhci-tegra.c     |  2 +-
+>>   drivers/mmc/host/sdhci_am654.c     |  2 +-
+>>   11 files changed, 28 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
+>> index b3d7d6d8d654..f9cdf9f04bfc 100644
+>> --- a/drivers/mmc/host/cqhci-core.c
+>> +++ b/drivers/mmc/host/cqhci-core.c
+>> @@ -420,7 +420,7 @@ static void cqhci_disable(struct mmc_host *mmc)
+>>   }
+>>
+>>   static void cqhci_prep_task_desc(struct mmc_request *mrq,
+>> -                                struct cqhci_host *cq_host, int tag)
+>> +                                struct cqhci_host *cq_host, int tag, int intr)
+>>   {
+>>          __le64 *task_desc = (__le64 __force *)get_desc(cq_host, tag);
+>>          u32 req_flags = mrq->data->flags;
+>> @@ -428,7 +428,7 @@ static void cqhci_prep_task_desc(struct mmc_request *mrq,
+>>
+>>          desc0 = CQHCI_VALID(1) |
+>>                  CQHCI_END(1) |
+>> -               CQHCI_INT(1) |
+>> +               CQHCI_INT(intr) |
+>>                  CQHCI_ACT(0x5) |
+>>                  CQHCI_FORCED_PROG(!!(req_flags & MMC_DATA_FORCED_PRG)) |
+>>                  CQHCI_DATA_TAG(!!(req_flags & MMC_DATA_DAT_TAG)) |
+>> @@ -621,7 +621,7 @@ static int cqhci_request(struct mmc_host *mmc, struct mmc_request *mrq)
+>>          }
+>>
+>>          if (mrq->data) {
+>> -               cqhci_prep_task_desc(mrq, cq_host, tag);
+>> +               cqhci_prep_task_desc(mrq, cq_host, tag, (cq_host->intr_clsc ? 0 : 1));
+>>
+>>                  err = cqhci_prep_tran_desc(mrq, cq_host, tag);
+>>                  if (err) {
+>> @@ -812,7 +812,7 @@ static void cqhci_finish_mrq(struct mmc_host *mmc, unsigned int tag)
+>>   irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>>                        int data_error)
+>>   {
+>> -       u32 status;
+>> +       u32 status, rval;
+>>          unsigned long tag = 0, comp_status;
+>>          struct cqhci_host *cq_host = mmc->cqe_private;
+>>
+>> @@ -856,6 +856,15 @@ irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>>                  spin_unlock(&cq_host->lock);
+>>          }
+>>
+>> +       if (cq_host->intr_clsc) {
+>> +               rval = cqhci_readl(cq_host, CQHCI_IC);
+>> +               rval |= CQHCI_IC_RESET;
+>> +               cqhci_writel(cq_host, rval, CQHCI_IC);
+>> +               rval = cqhci_readl(cq_host, CQHCI_IC);
+>> +               rval &= (~CQHCI_IC_RESET);
+>> +               cqhci_writel(cq_host, rval, CQHCI_IC);
+>> +       }
+>> +
+>>          if (status & CQHCI_IS_TCL)
+>>                  wake_up(&cq_host->wait_queue);
+>>
+>> @@ -1172,11 +1181,12 @@ static unsigned int cqhci_ver_minor(struct cqhci_host *cq_host)
+>>   }
+>>
+>>   int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc,
+>> -             bool dma64)
+>> +             bool dma64, bool intr_clsc)
+>>   {
+>>          int err;
+>>
+>>          cq_host->dma64 = dma64;
+>> +       cq_host->intr_clsc = intr_clsc;
+>>          cq_host->mmc = mmc;
+>>          cq_host->mmc->cqe_private = cq_host;
+>>
+>> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+>> index ba9387ed90eb..acf90773c30a 100644
+>> --- a/drivers/mmc/host/cqhci.h
+>> +++ b/drivers/mmc/host/cqhci.h
+>> @@ -227,6 +227,9 @@ struct cqhci_host {
+>>
+>>          /* 64 bit DMA */
+>>          bool dma64;
+>> +
+>> +       /* interrupt coalescing*/
+>> +       bool intr_clsc;
+>>          int num_slots;
+>>          int qcnt;
+>>
+>> @@ -312,7 +315,7 @@ struct platform_device;
+>>
+>>   irqreturn_t cqhci_irq(struct mmc_host *mmc, u32 intmask, int cmd_error,
+>>                        int data_error);
+>> -int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc, bool dma64);
+>> +int cqhci_init(struct cqhci_host *cq_host, struct mmc_host *mmc, bool dma64, bool intr_clsc);
+>>   struct cqhci_host *cqhci_pltfm_init(struct platform_device *pdev);
+>>   int cqhci_deactivate(struct mmc_host *mmc);
+>>   static inline int cqhci_suspend(struct mmc_host *mmc)
+>> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+>> index edade0e54a0c..2c18f954d4b8 100644
+>> --- a/drivers/mmc/host/mtk-sd.c
+>> +++ b/drivers/mmc/host/mtk-sd.c
+>> @@ -2796,7 +2796,7 @@ static int msdc_drv_probe(struct platform_device *pdev)
+>>                  host->cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>>                  host->cq_host->mmio = host->base + 0x800;
+>>                  host->cq_host->ops = &msdc_cmdq_ops;
+>> -               ret = cqhci_init(host->cq_host, mmc, true);
+>> +               ret = cqhci_init(host->cq_host, mmc, true, false);
+>>                  if (ret)
+>>                          goto host_free;
+>>                  mmc->max_segs = 128;
+>> diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
+>> index f2cf3d70db79..4aeaeddbbf25 100644
+>> --- a/drivers/mmc/host/sdhci-brcmstb.c
+>> +++ b/drivers/mmc/host/sdhci-brcmstb.c
+>> @@ -231,7 +231,7 @@ static int sdhci_brcmstb_add_host(struct sdhci_host *host,
+>>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>>          }
+>>
+>> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+>> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>>          if (ret)
+>>                  goto cleanup;
+>>
+>> diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
+>> index 9e73c34b6401..7aef7abe71f1 100644
+>> --- a/drivers/mmc/host/sdhci-esdhc-imx.c
+>> +++ b/drivers/mmc/host/sdhci-esdhc-imx.c
+>> @@ -1712,7 +1712,7 @@ static int sdhci_esdhc_imx_probe(struct platform_device *pdev)
+>>                  cq_host->mmio = host->ioaddr + ESDHC_CQHCI_ADDR_OFFSET;
+>>                  cq_host->ops = &esdhc_cqhci_ops;
+>>
+>> -               err = cqhci_init(cq_host, host->mmc, false);
+>> +               err = cqhci_init(cq_host, host->mmc, false, false);
+>>                  if (err)
+>>                          goto disable_ahb_clk;
+>>          }
+>> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+>> index 4ac8651d0b29..b6549d1e43ec 100644
+>> --- a/drivers/mmc/host/sdhci-msm.c
+>> +++ b/drivers/mmc/host/sdhci-msm.c
+>> @@ -2153,7 +2153,7 @@ static int sdhci_msm_cqe_add_host(struct sdhci_host *host,
+>>          if (ret)
+>>                  goto cleanup;
+>>
+>> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+>> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>>          if (ret) {
+>>                  dev_err(&pdev->dev, "%s: CQE init: failed (%d)\n",
+>>                                  mmc_hostname(host->mmc), ret);
+>> diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
+>> index 89c431a34c43..811f8686532d 100644
+>> --- a/drivers/mmc/host/sdhci-of-arasan.c
+>> +++ b/drivers/mmc/host/sdhci-of-arasan.c
+>> @@ -1610,7 +1610,7 @@ static int sdhci_arasan_add_host(struct sdhci_arasan_data *sdhci_arasan)
+>>          if (dma64)
+>>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>>
+>> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+>> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>>          if (ret)
+>>                  goto cleanup;
+>>
+>> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+>> index c359f867df0a..6f6cae6355a7 100644
+>> --- a/drivers/mmc/host/sdhci-pci-core.c
+>> +++ b/drivers/mmc/host/sdhci-pci-core.c
+>> @@ -964,7 +964,7 @@ static int glk_emmc_add_host(struct sdhci_pci_slot *slot)
+>>          if (dma64)
+>>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>>
+>> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+>> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>>          if (ret)
+>>                  goto cleanup;
+>>
+>> diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
+>> index 633a8ee8f8c5..6917ba339aa9 100644
+>> --- a/drivers/mmc/host/sdhci-pci-gli.c
+>> +++ b/drivers/mmc/host/sdhci-pci-gli.c
+>> @@ -908,7 +908,7 @@ static int gl9763e_add_host(struct sdhci_pci_slot *slot)
+>>          if (dma64)
+>>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>>
+>> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+>> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>>          if (ret)
+>>                  goto cleanup;
+>>
+>> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+>> index bff084f178c9..f98a468e8f43 100644
+>> --- a/drivers/mmc/host/sdhci-tegra.c
+>> +++ b/drivers/mmc/host/sdhci-tegra.c
+>> @@ -1620,7 +1620,7 @@ static int sdhci_tegra_add_host(struct sdhci_host *host)
+>>          if (dma64)
+>>                  cq_host->caps |= CQHCI_TASK_DESC_SZ_128;
+>>
+>> -       ret = cqhci_init(cq_host, host->mmc, dma64);
+>> +       ret = cqhci_init(cq_host, host->mmc, dma64, false);
+>>          if (ret)
+>>                  goto cleanup;
+>>
+>> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+>> index 7ef828942df3..8e7fbee70e16 100644
+>> --- a/drivers/mmc/host/sdhci_am654.c
+>> +++ b/drivers/mmc/host/sdhci_am654.c
+>> @@ -568,7 +568,7 @@ static int sdhci_am654_cqe_add_host(struct sdhci_host *host)
+>>
+>>          host->mmc->caps2 |= MMC_CAP2_CQE;
+>>
+>> -       return cqhci_init(cq_host, host->mmc, 1);
+>> +       return cqhci_init(cq_host, host->mmc, 1, false);
+>>   }
+>>
+>>   static int sdhci_am654_get_otap_delay(struct sdhci_host *host,
+>> --
+>> 2.29.0
+>>
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
-Even on Linux side, if we create two ACPI companion devices
-followed by creating a single soundwire manager instance per
-Soundwire controller, we have observed an issue in a scenario,
-where similar codec parts(UID are also same) are connected on
-both soundwire manager instances.
-
-As per MIPI Disco spec, for single link controllers Link ID should
-be set to zero.
-If we use Link ID as zero, for the soundwire manager which is on
-the second soundwire controller ACPI device scope, then soundwire
-framework is not allowing to create peripheral device node as its
-duplicate one.
-
-If we want to support two ACPI companion device approach
-on our future platforms, how to proceed?
->
->
-
+-- 
+Regards,
+Michael Wu
