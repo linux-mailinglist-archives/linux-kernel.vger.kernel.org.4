@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3072E6835D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEED6835DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231934AbjAaS5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:57:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S231926AbjAaS6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbjAaS5I (ORCPT
+        with ESMTP id S231941AbjAaS6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:57:08 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24FA59267
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:57:03 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d14so15152833wrr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:57:03 -0800 (PST)
+        Tue, 31 Jan 2023 13:58:10 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77D730B15
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:58:09 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id a184so10921542pfa.9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=koCfgPABV8Epk2uhsIa3+bxa1VIQcy8atWQ8PzegVkU=;
-        b=EK27b5DOne8CRgvIHl6Y2/Vvq3NixvSguwMwgD6AJC0fqaOw8tGba/6dfruRRb0mQd
-         fohyudu/x2R6VRjg3zkHEf0C2kfshkkblOFDCR3tQ4ZDsT/Aayg4gaxFToSLo42mnHqS
-         2xD2/H5ff1qQ6rPwsXKGL9yW+KdccUtKMu/iWok7p3FG+qXO1+xuIhAnWHyi3WjaXPUL
-         oHobFx0dBlUI5FRPpYQV6VcM4fdipqJ0sLlk0BbpWrhP+br62sUSlM8FHaire/zbbLOx
-         /wlX8CifwvFWVuv3fzLTA86yQlh4ffLY5SRHkj8Ix3mMXkSg9FADFkqHf2AL7z1h19Lg
-         g/pg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bCWK8k8m5VD33jjUoYPOLmfdpETQJTETp3AURhGUsTI=;
+        b=dou2JilzlSfcvD6beS/Lc7cUD4v6y1YTLvqqI6xnQ2iXPrGyqyNyFytIfursaV15G1
+         1CSvEbmrKE7U5Hbxk46wdTs8ETu2idQVtwYxVcZG+HkPWeZiPqWHmkcSYHr8o0WnHVRZ
+         7nWbpmtPqJ3DO4YjV6aLbJ6K/19Ec4kxOFo9vduSFZSR8JIlMqpkGbNBjAbT5lhsdvnj
+         ZqtVZdIT5mw7ILf5qFHwrZ/IESHzJX1XzLMQ1cHuuVhapZntySbnwoXrR9j2DWxp/UKv
+         CdFlwMop+9m3Mqc14Gxl4E0IvqismmudhrgG70wVQ1ofkgq8bogEJT0mop1XBzYla/jx
+         Lx/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=koCfgPABV8Epk2uhsIa3+bxa1VIQcy8atWQ8PzegVkU=;
-        b=viS6wNg0r8JJZHmPHFxU83lVO0JFqdgoUKsk4+/W/XNyrjS8OuaceJ+9C23tFmd4E4
-         YJ7OujhTSYGQZPjXzXSxL688nibu6UkwcnuSY7QDreEhi/Bbz1z8cUtOpGYHu4oYsDLC
-         xnoQnMA/vbvjoyVOnH7PCzknlxOFAMQ6TzD6wISiDdycgURG0DOv+qdXsqR6zu5tXKIP
-         4g7Jk0Hk4+TKmbXZzbGFhCmIUTBYiyuglDrlSqDDbqZWFDz+9UogSfJTnC1xuKpYJ1OF
-         wVamW0T0UiebfHpa7AvGlfc3No5WXRgp+zmB429PwB92rmmm9zpC87GBCQSLqoIGV4vV
-         3TRw==
-X-Gm-Message-State: AO0yUKWn11RuTwGv46hIqhPgT85KRiAZBmqTT8IAzm8ISIjbBbsyABmj
-        WcqyL5sAvdBtGcP2SlsQia0EPQ==
-X-Google-Smtp-Source: AK7set/nmjOCflpMPfwLqC/I3rcVtck7nZbUopSbWf2ygMtn4iNFOv5iBEiBrqKK5Y3cLV2X8AwqLQ==
-X-Received: by 2002:a5d:4dc4:0:b0:2bf:b9f2:6f88 with SMTP id f4-20020a5d4dc4000000b002bfb9f26f88mr3772308wru.33.1675191422445;
-        Tue, 31 Jan 2023 10:57:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q3-20020adff503000000b002bfae1398bbsm15928669wro.42.2023.01.31.10.57.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 10:57:02 -0800 (PST)
-Message-ID: <271c387f-41b9-3932-ba9f-60f1bea24019@linaro.org>
-Date:   Tue, 31 Jan 2023 19:56:59 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bCWK8k8m5VD33jjUoYPOLmfdpETQJTETp3AURhGUsTI=;
+        b=F/08Bi94o4XDV59SPF91E0Tg8MnTIiGQUuo42LIpyu2d093iMVzSRE3HQvgpesyi2R
+         UMYzv3ke/CfAiYvYKbfGNoSeAq3UW8LpDO00/1V/VmRRD5pLpcPGPZUimoXwn5dbS28x
+         lyvrKAIdu5ith7OGQK1GE+mgyqydBr4wTsiikt7vGh0LoW4zgBAxH0f/38NkarOc9bdV
+         CK38o4Eyt4KHY3JCDWjLAM+wv1A33o7bx0/c50uJkFnDPdAk/S8a3Lz2JjzLGp4xVxJm
+         UbFo5C5E672TY7d+CGia6w/BHc6UIjxBXMLwKQcPhZ8nmvNahFdFFmYNFu2hzyhsAN+/
+         EM8A==
+X-Gm-Message-State: AO0yUKV4SWdMtDWDSXXd+9ofAF0WOtW8OQR3T2hcexsSIoNCdK6Rehg1
+        qV8aMWMtI6CLjAyaUirAtQr4b9bD/kyG/iY9xLYi60Az
+X-Google-Smtp-Source: AK7set8dA9Ys2TgYqLX2FGRSRFnPJERimQrle+4WRunjf0aTyqg/0dZcq4caPZM9ksDh+XPYg2QgTXqqhJxAB2I+vFU=
+X-Received: by 2002:a05:6a00:9aa:b0:593:e0ce:fc20 with SMTP id
+ u42-20020a056a0009aa00b00593e0cefc20mr1061238pfg.28.1675191489136; Tue, 31
+ Jan 2023 10:58:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net-next v3 1/5] dt-bindings: net: Add Motorcomm yt8xxx
- ethernet phy
-Content-Language: en-US
-To:     Frank Sae <Frank.Sae@motor-comm.com>,
-        Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        yanhong.wang@starfivetech.com
-Cc:     xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
-        hua.sun@motor-comm.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230130063539.3700-1-Frank.Sae@motor-comm.com>
- <20230130063539.3700-2-Frank.Sae@motor-comm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230130063539.3700-2-Frank.Sae@motor-comm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <cover.1675111415.git.andreyknvl@google.com> <19512bb03eed27ced5abeb5bd03f9a8381742cb1.1675111415.git.andreyknvl@google.com>
+ <CANpmjNNzNSDrxfrZUcRtt7=hV=Mz8_kyCpqVnyAqzhaiyipXCg@mail.gmail.com>
+In-Reply-To: <CANpmjNNzNSDrxfrZUcRtt7=hV=Mz8_kyCpqVnyAqzhaiyipXCg@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Tue, 31 Jan 2023 19:57:58 +0100
+Message-ID: <CA+fCnZdwuAm-fD-o2Yq86=NgU=YympuwAmERN9KwjpYfkPeYLg@mail.gmail.com>
+Subject: Re: [PATCH 16/18] lib/stackdepot: annotate racy slab_index accesses
+To:     Marco Elver <elver@google.com>
+Cc:     andrey.konovalov@linux.dev,
+        Alexander Potapenko <glider@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 07:35, Frank Sae wrote:
->  Add a YAML binding document for the Motorcom yt8xxx Ethernet phy driver.
->  
-> Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
-> ---
+On Tue, Jan 31, 2023 at 9:41 AM Marco Elver <elver@google.com> wrote:
+>
+> > diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+> > index f291ad6a4e72..cc2fe8563af4 100644
+> > --- a/lib/stackdepot.c
+> > +++ b/lib/stackdepot.c
+> > @@ -269,8 +269,11 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
+> >                         return NULL;
+> >                 }
+> >
+> > -               /* Move on to the next slab. */
+> > -               slab_index++;
+> > +               /*
+> > +                * Move on to the next slab.
+> > +                * WRITE_ONCE annotates a race with stack_depot_fetch.
+>
+> "Pairs with potential concurrent read in stack_depot_fetch()." would be clearer.
+>
+> I wouldn't say WRITE_ONCE annotates a race (race = involves 2+
+> accesses, but here's just 1), it just marks this access here which
+> itself is paired with the potential racing read in the other function.
 
-Some of my comments from your v2 still apply. This was sent before I
-replied to v2, so it's okay - but fix the points I asked.
-
-Best regards,
-Krzysztof
-
+Will do in v2. Thanks!
