@@ -2,146 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C6F6831FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1AB6831FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbjAaP6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S233505AbjAaP7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbjAaP6p (ORCPT
+        with ESMTP id S233406AbjAaP66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:58:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B6349004;
-        Tue, 31 Jan 2023 07:58:44 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VEf7iX005558;
-        Tue, 31 Jan 2023 15:58:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=vMKvVrDcKvHi4ygBedjGhMHiu80tIjMuvsG1vFRtDNE=;
- b=CPLsSVUL0MzV91MU5H4iPGc7IU4UsmwnxPSDBWWiw695QI6isB3XvHRs0g8rJYZk9AJZ
- +oyGjs622gS/irwjGG+x+6w4NwDS3NHP3F2QDorZKZvXL3Fpjlo5WtBacXLb80rB2M6T
- lkHjgTyXejO2DHslCPfBhU5xwPe4J9yrq5hJT7jBvH+FlU7XTI643rEs02z6UK/XICG0
- 4IKuCyQHNabxPC13prlLU2RVKEblHINqEuXOQ3HYQXu5jHH48Y5KjNluLxizTK8YiIWD
- bKnw5NGSpABFCKsKxioPlkSpd6ViF7IU4gkQEWgeoRYRN6dc+O4jE/5WTyWdxUAgf4rH 6g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ndee3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:58:35 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VDHTli020244;
-        Tue, 31 Jan 2023 15:58:35 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ndedq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:58:35 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDHe8X025436;
-        Tue, 31 Jan 2023 15:58:34 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3ncvtrmyx2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:58:34 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFwVco17039934
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 15:58:32 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CC50F5806A;
-        Tue, 31 Jan 2023 15:58:31 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF08158069;
-        Tue, 31 Jan 2023 15:58:30 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 15:58:30 +0000 (GMT)
-Message-ID: <06cb4327-5e60-d472-57cc-3b2c568014f1@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 10:58:30 -0500
+        Tue, 31 Jan 2023 10:58:58 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567664F342
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:58:54 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so10994949wmq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:58:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MuxDQCViT4/rjK57nPCOeqyGrdJQA3MVCaVUVW/eRi4=;
+        b=YdAOPan771llkCfxIt3mEPtlqDgoZQW/siYU6aGXdjvgcN0PoFEOC2cguzS2N5wO3j
+         r2k0IQks3V+So8Hj4IUQZj79iZTO0f8ayuAcl5VhgxiqlOi+upTGooiNFS9cKqbhbQfb
+         ezFxF8JlImULUtbsrwSNNo+HFg1tYz0eKlkiJaO52tH4FwFOkHNiFald/qqIddZF3kNK
+         g3CdxtpiPt4uBgojC6rC4mQgoL6tTwHHPikNngS+5F1HwASkv67c1l9j63CIvAkhe78A
+         y06pdTHYwMHPLriRH+YS1ht0AmbgbgkDz8fqnabRq3OL7U7ND1rv4vPTxdCNow6PN0i+
+         /DHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MuxDQCViT4/rjK57nPCOeqyGrdJQA3MVCaVUVW/eRi4=;
+        b=vDsXMmJJSfhKsGtQkRDMnemCIFrO0AQHyIIOHS9hThWjMfirEOAEG5GS2u0wjqXHKg
+         u/utI1KXE+6jPn35c9pkRJy4CtEFH4HPFiv9zrpQOzCzAGNOPaR/XwwxlbAK5HtD/W61
+         Y/zc20SDz07lWsuBKVPXmN4CtWcKat19XvruflrKKo43olQ2LerVaJi3LgDHNki7mZA1
+         8xnrfAXT5hVcC4ePXxEIiZi99cZKkkYiqIvczumO1XMiN4Gl3HZexvvCgv90MFaob3ML
+         kMSdheNsSSh/sGwM8HdxnyE1jXrvzdpI3imuCkkD+U6+/wLVagDyFBvve9GH3EvCJJml
+         Ecvg==
+X-Gm-Message-State: AO0yUKVzYE+VXBPbZDZk1MDiRleuvpcz/lIqa0d6sJMIzM8+3qUO+IMQ
+        Y4qgcypXGDrbvCGRjpdSqFDik+dJw/e+ZyIl
+X-Google-Smtp-Source: AK7set9RF8riTs5UIMbg/CPy1RXYcMBQ/8OKabm1Lq7LZ+lDz0nM9kFfWlFxQVm/tlOYUxu82e5Kog==
+X-Received: by 2002:a05:600c:310f:b0:3db:8de:6993 with SMTP id g15-20020a05600c310f00b003db08de6993mr4348595wmo.4.1675180732607;
+        Tue, 31 Jan 2023 07:58:52 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id a11-20020a5d4d4b000000b00289bdda07b7sm14910483wru.92.2023.01.31.07.58.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 07:58:52 -0800 (PST)
+Message-ID: <624ab008-cac6-def9-c2c7-809019aa3c2d@linaro.org>
+Date:   Tue, 31 Jan 2023 16:58:51 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 13/25] powerpc/secvar: Don't print error on ENOENT when
- reading variables
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 5/8] thermal: intel: intel_pch: Fold two functions into
+ their callers
 Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-14-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-14-ajd@linux.ibm.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Box <david.e.box@linux.intel.com>
+References: <1751684.VLH7GnMWUR@kreacher> <3662399.MHq7AAxBmi@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <3662399.MHq7AAxBmi@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5Pte0MhJzS1TBlWULkN0SPmtUwrFHnCJ
-X-Proofpoint-GUID: 9bz0UTf004LdAleWIwBy3FOeV_6qDs3J
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
- phishscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301310137
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> If attempting to read the size or data attributes of a  non-existent
-> variable (which will be possible after a later patch to expose the PLPKS
-> via the secvar interface), don't spam the kernel log with error messages.
-> Only print errors for return codes that aren't ENOENT.
+On 30/01/2023 20:03, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Reported-by: Sudhakar Kuppusamy <sudhakar@linux.ibm.com>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-
+> Fold two functions, pch_hw_init() and pch_get_temp(), that each have
+> only one caller, into their respective callers to make the code somewhat
+> easier to follow.
 > 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
-> 
-> v3: New patch
-> ---
->   arch/powerpc/kernel/secvar-sysfs.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/secvar-sysfs.c
-> index 9b6be63b7b36..ca3df3f7156c 100644
-> --- a/arch/powerpc/kernel/secvar-sysfs.c
-> +++ b/arch/powerpc/kernel/secvar-sysfs.c
-> @@ -43,8 +43,8 @@ static ssize_t size_show(struct kobject *kobj, struct kobj_attribute *attr,
->   
->   	rc = secvar_ops->get(kobj->name, strlen(kobj->name) + 1, NULL, &dsize);
->   	if (rc) {
-> -		pr_err("Error retrieving %s variable size %d\n", kobj->name,
-> -		       rc);
-> +		if (rc != -ENOENT)
-> +			pr_err("Error retrieving %s variable size %d\n", kobj->name, rc);
->   		return rc;
->   	}
->   
-> @@ -61,7 +61,8 @@ static ssize_t data_read(struct file *filep, struct kobject *kobj,
->   
->   	rc = secvar_ops->get(kobj->name, strlen(kobj->name) + 1, NULL, &dsize);
->   	if (rc) {
-> -		pr_err("Error getting %s variable size %d\n", kobj->name, rc);
-> +		if (rc != -ENOENT)
-> +			pr_err("Error getting %s variable size %d\n", kobj->name, rc);
->   		return rc;
->   	}
->   	pr_debug("dsize is %llu\n", dsize);
+
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
