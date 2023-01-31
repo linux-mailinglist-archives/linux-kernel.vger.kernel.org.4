@@ -2,157 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDED56831E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 177C26831E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:53:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbjAaPxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60464 "EHLO
+        id S231704AbjAaPxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbjAaPxH (ORCPT
+        with ESMTP id S231671AbjAaPxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:53:07 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA55234FC;
-        Tue, 31 Jan 2023 07:53:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675180386; x=1706716386;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ul30YowJ/hdgvarujvqemzj4xp48ISoRMAjzYZ6+Ks4=;
-  b=KEKX41lRVWmH21uy9eZSMOEtxa8afPoMrgyCz3A+L9dJIPaReLQ3lXx7
-   PqT9/wpMchA2WAbtTagg/rHqpBGojjrOcIS/xcgo+h+9CJC0eLeTUJFrw
-   Nn/sAWAx2uAMRfPQp7KhJVoeyASG9qkqXhe/bz3LY0l2WKacMRs4iJJ/9
-   2MvsArmddKv4UDPGHyPU3OE3TNrKrH+bBixTWo48r47fRXlmm1MpyKCfu
-   1wGbwjWvNJfE7ajZoLkMLsYFOpYyMhGb3wLz4aKcc0urzRdQsRLubQVa/
-   TxB9zuydZEQlvPm2hEtY3OtIXhE791DYmKRJgaec9vTN0ETcEZQ0r8WKM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="329983898"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="329983898"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 07:53:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="909953990"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="909953990"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Jan 2023 07:52:59 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMswM-0004WY-1B;
-        Tue, 31 Jan 2023 15:52:58 +0000
-Date:   Tue, 31 Jan 2023 23:52:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <202301312359.8WtBkSkQ-lkp@intel.com>
-References: <20230131083257.3302830-3-usama.anjum@collabora.com>
+        Tue, 31 Jan 2023 10:53:44 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035D417154
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:53:44 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id l4-20020a17090a850400b0023013402671so2816541pjn.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:53:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8BDBGIr020TIEN48KHoXszHSY7JH31zE2b6DhwjqkpU=;
+        b=i0jigBhmeRjaAtvW2bVUaQPHSOXnmtp6KW5DRBVBoMs9M95X0qKfuKWydeztA7qQ9A
+         +PqS3GEUcHUGwBfRKP3Zuz3rfg+thRbu4mVBTTUBXhpE9TUVjx24IUQzns0scPtIXuMT
+         ctgHAVgpKcpJ7by5c58aOPLIilAVT9b9knMJz8fqgIO1SLTBHQ7f8kLcc5QbQOpKEC9Q
+         qJFBMGogqJC3mGYSXcXl1IxvbUJfJ6CHTl5z6jH2in9+Gl1URvuhstI5fQt6nPIRDK0n
+         wBCdfAIvDjt2WfX6v2ee8EjsAimhl2K90y6zivnNcHzOd78Q7m/lJtG+6nBvZHCHKZmh
+         iFHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8BDBGIr020TIEN48KHoXszHSY7JH31zE2b6DhwjqkpU=;
+        b=Ori/HJITzC4lKM74OiR/s7o1etYYcreke/zCRXKTNwPOjJmf0CFokLW0f9dLrFtv4m
+         wjtQ0wRIIPKgiWT6sy+pj9/jWz7EhtZ2ZWjBz8WbJlQYVHOXSM1R1+pwtizkLH2vQyNY
+         hMIAkDeVFITMvBec7MTO6QgKtA/YFh1K+VzyhsgOBfVCOjP4U63ucy+XnRJOZz/L/F+v
+         OQNoqZETNUSuRWc6Hf0X4GQRdrRtFaW+wsg00uscpLWnte/kbWSiBoB4tqpqp0w8vvzD
+         n9oWxAn2OeGmiKDnbUThoUYRiBEUY9oQbupv8Df02MFGv2RoMJIabLhGhQqFPYoZkjeP
+         L1QA==
+X-Gm-Message-State: AO0yUKXFGTWAF658jHAblYDJwFbbGfHLgJ033pGtd9QbxF9nEEzM3MZM
+        J+WOhTGe5SEqr4CIj6fo5aaBxg==
+X-Google-Smtp-Source: AK7set86Spbju15zAbisK2mmq3j8WKEdenghpKFRQltXbuwmg9z/EBPdC24x5DEU09pf9f5AKKLB0w==
+X-Received: by 2002:a17:902:b686:b0:191:4367:7fde with SMTP id c6-20020a170902b68600b0019143677fdemr1307314pls.0.1675180423267;
+        Tue, 31 Jan 2023 07:53:43 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x17-20020a170902ea9100b00196768692e0sm5338448plb.86.2023.01.31.07.53.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 07:53:42 -0800 (PST)
+Date:   Tue, 31 Jan 2023 15:53:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Alexey Kardashevskiy <aik@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>, kvm@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jiri Kosina <jkosina@suse.cz>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [Question PATCH kernel] x86/amd/sev/nmi+vc: Fix stack handling
+ (why is this happening?)
+Message-ID: <Y9k5g5jYA/rjIwUj@google.com>
+References: <20230127035616.508966-1-aik@amd.com>
+ <Y9OUfofjxDtTmwyV@hirez.programming.kicks-ass.net>
+ <Y9OpcoSacyOkPkvl@8bytes.org>
+ <b7880f0b-a592-cf2d-03b9-1ccfd83f8223@amd.com>
+ <Y9QI9JwCVvRmtbr+@8bytes.org>
+ <3bb3e080-caee-8bc8-7de9-f44969f16e75@amd.com>
+ <38C572D7-E637-48C2-A57A-E62D44FF19BB@zytor.com>
+ <Y9jX9AKYP8H34wGI@8bytes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230131083257.3302830-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9jX9AKYP8H34wGI@8bytes.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Muhammad,
+On Tue, Jan 31, 2023, Joerg Roedel wrote:
+> On Mon, Jan 30, 2023 at 09:30:38AM -0800, H. Peter Anvin wrote:
+> > It's somewhat odd to me that reading %dr7 is volatile, but %dr6 is
+> > not... %dr6 is the status register!
+> 
+> The reason is that on SEV-ES only accesses to DR7 will cause #VC
+> exceptions, DR0-DR6 are not intercepted.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on shuah-kselftest/fixes]
-[also build test ERROR on linus/master v6.2-rc6 next-20230131]
-[cannot apply to shuah-kselftest/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git fixes
-patch link:    https://lore.kernel.org/r/20230131083257.3302830-3-usama.anjum%40collabora.com
-patch subject: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about PTEs
-config: arc-defconfig (https://download.01.org/0day-ci/archive/20230131/202301312359.8WtBkSkQ-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/11677b6b7fda958031115ea40aa219fc32c7dea4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
-        git checkout 11677b6b7fda958031115ea40aa219fc32c7dea4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
->> fs/proc/task_mmu.c:1927:17: error: implicit declaration of function 'uffd_wp_range' [-Werror=implicit-function-declaration]
-    1927 |                 uffd_wp_range(walk->mm, vma, start, addr - start, true);
-         |                 ^~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/uffd_wp_range +1927 fs/proc/task_mmu.c
-
-  1915	
-  1916		pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
-  1917		if (IS_GET_OP(p)) {
-  1918			for (addr = start; addr < end; pte++, addr += PAGE_SIZE) {
-  1919				ret = pagemap_scan_output(!is_pte_uffd_wp(*pte), vma->vm_file,
-  1920							  pte_present(*pte), is_swap_pte(*pte), p, addr, 1);
-  1921				if (ret)
-  1922					break;
-  1923			}
-  1924		}
-  1925		pte_unmap_unlock(pte - 1, ptl);
-  1926		if ((!ret || ret == -ENOSPC) && IS_WP_ENGAGE_OP(p) && (addr - start))
-> 1927			uffd_wp_range(walk->mm, vma, start, addr - start, true);
-  1928	
-  1929		cond_resched();
-  1930		return ret;
-  1931	}
-  1932	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I don't think that is technically true.  A _well-behaved_ hypervisor will not
+intercept DR0-DR6 accesses for SEV-ES guests, but AFAICT nothing in the SEV-ES
+architecture enforces that behavior.
