@@ -2,185 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12C8682177
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8FA68217F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjAaBnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
+        id S229495AbjAaBoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjAaBnI (ORCPT
+        with ESMTP id S230336AbjAaBoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:43:08 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B63215CB8;
-        Mon, 30 Jan 2023 17:43:05 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P5SVX3C7kz4f3jLs;
-        Tue, 31 Jan 2023 09:43:00 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgCnUiAkcthjLPbnCQ--.15264S3;
-        Tue, 31 Jan 2023 09:43:02 +0800 (CST)
-Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create block
- device
-To:     jejb@linux.ibm.com, Yu Kuai <yukuai1@huaweicloud.com>,
-        Zhong Jinghua <zhongjinghua@huawei.com>,
-        gregkh@linuxfoundation.org, martin.petersen@oracle.com,
-        hare@suse.de, bvanassche@acm.org, emilne@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230128094146.205858-1-zhongjinghua@huawei.com>
- <20230128094146.205858-3-zhongjinghua@huawei.com>
- <1b466057ed2e91b05388afbb5791639eb8abdd59.camel@linux.ibm.com>
- <c3e58056-942a-f829-ecf6-1342c65b6865@huaweicloud.com>
- <7c5c38f128910f89f20533b7fd51453a32ff4f5c.camel@linux.ibm.com>
- <19ad8dd7-482e-dad0-8465-f78f7f9c154d@huaweicloud.com>
- <5b1605cceba6e7de753bce8a78e1ce5c2d545546.camel@linux.ibm.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <69a9000f-541e-c182-44c9-75337094de4a@huaweicloud.com>
-Date:   Tue, 31 Jan 2023 09:43:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 30 Jan 2023 20:44:18 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17CA15CB8
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:44:16 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id cr11so7488815pfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:44:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pL/hSEFt7W/dmd5X1D5aub2I4IDaaPmHoX3KevKN9IM=;
+        b=QmkAGmmCeAy7guXmW7+vaJUorpyn/bXcs0qCkfPA/IgFDfmwigiBHUA7kEznpiAFVJ
+         v/HgCKUQTjcxffH/84OTpOyy7+z22PZevI9hzjmsG+zquTkhhTbmfBa11luzyoFI412V
+         YvyXH80AzQucz9N+67CY/fli7v3URG5soQQFKJ6q1BL4sedWQNxPAVZ4hov0nsa+mZd+
+         WMdFaXOPEE9YKKRnCbHwTjXZjKLm/WzyHXO0HdETmsxJs3UmInX5YLwoEc6VXWNIC1LO
+         oiKdyelW1S88v2aH68LiT6nBCtQol+YacyxO338LR/k9elTN8n25X2U374ZZxVPVY20M
+         e+Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pL/hSEFt7W/dmd5X1D5aub2I4IDaaPmHoX3KevKN9IM=;
+        b=7sgQx2htsqwAH2gbAqiyDmiPk9SA+5543nFKen+0OIaFLxl0lxyjFjkLuEs93xxGPy
+         J2v+zyomEg+CWY781/DDCzsvD3YHkEXyLPnJbmwnbUk5pt37VnVkzBDtpFYRoi5+ndon
+         9XQxRcePsp4YQgmq7HJNf37PHZn2M4TPgCskIVgXz22pJNSmqOioWn+YmTQlmO6eAPGj
+         UzGOnx70lTt6N6s4pTKNWxeDVoYwZeFe06ctXBOmNFnU1VlWLXm6/hNtT7JDHMpkVgw2
+         m5piV1yNkMIibTHmEDEv0SXzKP+jGZAJMooa04+BzUgh3mBQEKtjG8lpBMu1L6eBR4Wu
+         IuHg==
+X-Gm-Message-State: AO0yUKU9OALFfP9iIQh/cyK65QBtAvKCahG7O2TBvW3obl6/ePzKi1D3
+        5K016XmhiDMX82JW9stSWUiVJg==
+X-Google-Smtp-Source: AK7set/LdTxIHvUU7egyEysNxW+soRaGI1tUU8LRhXfJvhW+FxxEJPURWr8yJxj9V9/is7yJC94qTA==
+X-Received: by 2002:aa7:858a:0:b0:590:7627:91b with SMTP id w10-20020aa7858a000000b005907627091bmr1065457pfn.0.1675129456206;
+        Mon, 30 Jan 2023 17:44:16 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 74-20020a62164d000000b0058b59c81a29sm7940953pfw.220.2023.01.30.17.44.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 17:44:15 -0800 (PST)
+Date:   Tue, 31 Jan 2023 01:44:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 02/11] KVM: nSVM: clean up the copying of V_INTR bits
+ from vmcb02 to vmcb12
+Message-ID: <Y9hybI65So5X2LFg@google.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+ <20221129193717.513824-3-mlevitsk@redhat.com>
+ <Y9RuQz8dAT7DZGYk@google.com>
 MIME-Version: 1.0
-In-Reply-To: <5b1605cceba6e7de753bce8a78e1ce5c2d545546.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCnUiAkcthjLPbnCQ--.15264S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw1kAF45WFW7Xw1xZw1rXrb_yoWrur4fpF
-        WfJa43Kr4kXwnrtw4vv3ykX348tw4kAry5WF15tr18GryqvryIyrsYyayq9FyDWr97Ja15
-        WF4UJa97J3yUAaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y9RuQz8dAT7DZGYk@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/01/30 21:17, James Bottomley 写道:
-> On Mon, 2023-01-30 at 11:46 +0800, Yu Kuai wrote:
->> Hi,
->>
->> 在 2023/01/30 11:29, James Bottomley 写道:
->>> On Mon, 2023-01-30 at 11:07 +0800, Yu Kuai wrote:
->>>> Hi,
->>>>
->>>> 在 2023/01/30 1:30, James Bottomley 写道:
->>>>> On Sat, 2023-01-28 at 17:41 +0800, Zhong Jinghua wrote:
->>>>>> This error will cause a warning:
->>>>>> kobject_add_internal failed for block (error: -2 parent:
->>>>>> 1:0:0:1). In the lower version (such as 5.10), there is no
->>>>>> corresponding error handling, continuing to go down will
->>>>>> trigger a kernel panic, so cc stable.
->>>>>
->>>>> Is this is important point and what you're saying is that this
->>>>> only panics on kernels before 5.10 or so because after that
->>>>> it's correctly failed by block device error handling so there's
->>>>> nothing to fix in later kernels?
->>>>>
->>>>> In that case, isn't the correct fix to look at backporting the
->>>>> block device error handling:
->>>>
->>>> This is the last commit that support error handling, and there
->>>> are many relied patches, and there are lots of refactor in block
->>>> layer. It's not a good idea to backport error handling to lower
->>>> version.
->>>> Althrough error handling can prevent kernel crash in this case, I
->>>> still think it make sense to make sure kobject is deleted in
->>>> order, parent should not be deleted before child.
->>>
->>> Well, look, you've created a very artificial situation where a
->>> create closely followed by a delete of the underlying sdev races
->>> with the create of the block gendisk devices of sd that bind
->>> asynchronously to the created sdev.  The asynchronous nature of the
->>> bind gives the elongated race window so the only real fix is some
->>> sort of check that the sdev is still viable by the time the bind
->>> occurs ... probably in sd_probe(), say a scsi_device_get of sdp at
->>> the top which would ensure viability of the sdev for the entire
->>> bind or fail the probe if the sdev can't be got.
->>
->> Sorry, I don't follow here. 😟
+On Sat, Jan 28, 2023, Sean Christopherson wrote:
+> On Tue, Nov 29, 2022, Maxim Levitsky wrote:
+> > the V_IRQ and v_TPR bits don't exist when virtual interrupt
+> > masking is not enabled, therefore the KVM should not copy these
+> > bits regardless of V_IRQ intercept.
 > 
-> In the current kernel the race is mitigated because add_device fails
-> due to the parent being torn down.  That parent is the sdev->gendev so
-> it seems we can detect this in the probe by looking at the sdev->gendev
-> state, which scsi_device_get() will do.
+> Hmm, the APM disagrees:
 > 
->> I agree this is a very artificial situation, however I can't tell our
->> tester not to test this way...
->>
->> The problem is that kobject session is deleted and then sd_probe()
->> tries to create a new kobject under hostx/sessionx/x:x:x:x/. I don't
->> see how scsi_device_get() can prevent that, it only get a kobject
->> reference and can prevent kobject to be released, however,
->> kobject_del() can still be done.
+>  The APIC's TPR always controls the task priority for physical interrupts, and the
+>  V_TPR always controls virtual interrupts.
 > 
-> So your contention is there's no way that we could make scsi_device_get
-> see the kernfs deactivation?  I would have thought checking sdev-
->> sdev_gendev.kobj.sd.active would give that ... although the check
-> would have to be via an API since KN_DEACTIVATED_BIAS is internal.
-
-I'm still not sure if such checking is enough.
-
-session1/target1:0:0/1:0:0:0/block
-
-1) t1 is deleting target, and t1 already set 1:0:0:0 to SDEV_CANCEL, and
-1:0:0:0 is not deleted yet.
-2) t2 is deleting session1, 1:0:0:0 state is SDEV_CACEL, so 1:0:0:0 is
-skipped, and session1 is deleted before 1:0:0:0, which will cause
-1:0:0:0 to be not active.
-3) t3 create block, it can happen because 1:0:0:0 is still not deleted,
-and later kobject_add() will found 1:0:0:0 is not active and hence
-faild.
-
-The problem is that deleting parent kobject will cause child kobject not
-to be active, and in 3) device_lock is not hold for parents, hence just
-checking if this scsi_device is active is not enough, we have to make
-sure parents won't be deleted concurrently, for example, a litter
-adjustment for above procedures:
-
-1) ...(the same)
-2) t3 create block, it check kobject state is still active
-3) t2 delete session1 ...(the same), 1:0:0:0 is not active anymore.
-4) t3 continue to create block undre 1:0:0:0, which will fail.
-
-By the way, I think such problem exist because scsi_device state is
-SDEV_CANCEL doesn't mean that the device is deleted, simply skip such
-device while removing session is not right.
-
-Do you found other problems if we make sure that kobject is deleted in
-order?
-
-Thanks,
-Kuai
+>    While running a guest with V_INTR_MASKING cleared to 0:
+>      • Writes to CR8 affect both the APIC's TPR and the V_TPR register.
 > 
-> James
 > 
->> In this patch, we make sure remove session and sd_probe() won't
->> concurrent, remove session will wait for all child kobject to be
->> deleted, what do you think?
->>
->> Thanks,
->> Kuai
->>
+>  ...
 > 
-> .
+>  The three VMCB fields V_IRQ, V_INTR_PRIO, and V_INTR_VECTOR indicate whether there
+>  is a virtual interrupt pending, and, if so, what its vector number and priority are.
 > 
+> IIUC, V_INTR_MASKING_MASK is mostly about EFLAGS.IF, with a small side effect on
+> TPR.  E.g. a VMM could pend a V_IRQ but clear V_INTR_MASKING and expect the guest
+> to take the V_IRQ.  At least, that's my reading of things.
+>
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> >  arch/x86/kvm/svm/nested.c | 23 ++++++++---------------
+> >  1 file changed, 8 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> > index 37af0338da7c32..aad3145b2f62fe 100644
+> > --- a/arch/x86/kvm/svm/nested.c
+> > +++ b/arch/x86/kvm/svm/nested.c
+> > @@ -412,24 +412,17 @@ void nested_copy_vmcb_save_to_cache(struct vcpu_svm *svm,
+> >   */
+> >  void nested_sync_control_from_vmcb02(struct vcpu_svm *svm)
+> >  {
+> > -	u32 mask;
+> > +	u32 mask = 0;
+> >  	svm->nested.ctl.event_inj      = svm->vmcb->control.event_inj;
+> >  	svm->nested.ctl.event_inj_err  = svm->vmcb->control.event_inj_err;
+> >  
+> > -	/* Only a few fields of int_ctl are written by the processor.  */
+> > -	mask = V_IRQ_MASK | V_TPR_MASK;
+> > -	if (!(svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK) &&
+> > -	    svm_is_intercept(svm, INTERCEPT_VINTR)) {
+> > -		/*
+> > -		 * In order to request an interrupt window, L0 is usurping
+> > -		 * svm->vmcb->control.int_ctl and possibly setting V_IRQ
+> > -		 * even if it was clear in L1's VMCB.  Restoring it would be
+> > -		 * wrong.  However, in this case V_IRQ will remain true until
+> > -		 * interrupt_window_interception calls svm_clear_vintr and
+> > -		 * restores int_ctl.  We can just leave it aside.
+> > -		 */
+> > -		mask &= ~V_IRQ_MASK;
 
+Argh! *shakes fist at KVM and SVM*
+
+This is ridiculously convoluted, and I'm pretty sure there are existing bugs.  If
+L1 runs L2 with V_IRQ=1 and V_INTR_MASKING=1, and KVM requests an interrupt window,
+then KVM will overwrite vmcb02's int_vector and int_ctl, i.e. clobber L1's V_IRQ,
+but then silently clear INTERCEPT_VINTR in recalc_intercepts() and thus prevent
+svm_clear_vintr() from being reached, i.e. prevent restoring L1's V_IRQ.
+
+Bug #1 is that KVM shouldn't clobber the V_IRQ fields if KVM ultimately decides
+not to open an interrupt window.  Bug #2 is that KVM needs to open an interrupt
+window if save.RFLAGS.IF=1, as interrupts may become unblocked in that case,
+e.g. if L2 is in an interrupt shadow.
+
+So I think this over two patches?
+
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index 05d38944a6c0..ad1e70ac8669 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -139,13 +139,18 @@ void recalc_intercepts(struct vcpu_svm *svm)
+ 
+        if (g->int_ctl & V_INTR_MASKING_MASK) {
+                /*
+-                * Once running L2 with HF_VINTR_MASK, EFLAGS.IF and CR8
+-                * does not affect any interrupt we may want to inject;
+-                * therefore, writes to CR8 are irrelevant to L0, as are
+-                * interrupt window vmexits.
++                * If L2 is active and V_INTR_MASKING is enabled in vmcb12,
++                * disable intercept of CR8 writes as L2's CR8 does not affect
++                * any interrupt KVM may want to inject.
++                *
++                * Similarly, disable intercept of virtual interrupts (used to
++                * detect interrupt windows) if the saved RFLAGS.IF is '0', as
++                * the effective RFLAGS.IF for L1 interrupts will never be set
++                * while L2 is running (L2's RFLAGS.IF doesn't affect L1 IRQs).
+                 */
+                vmcb_clr_intercept(c, INTERCEPT_CR8_WRITE);
+-               vmcb_clr_intercept(c, INTERCEPT_VINTR);
++               if (!(svm->vmcb01.ptr->save.rflags & X86_EFLAGS_IF))
++                       vmcb_clr_intercept(c, INTERCEPT_VINTR);
+        }
+ 
+        /*
+@@ -416,18 +421,18 @@ void nested_sync_control_from_vmcb02(struct vcpu_svm *svm)
+ 
+        /* Only a few fields of int_ctl are written by the processor.  */
+        mask = V_IRQ_MASK | V_TPR_MASK;
+-       if (!(svm->nested.ctl.int_ctl & V_INTR_MASKING_MASK) &&
+-           svm_is_intercept(svm, INTERCEPT_VINTR)) {
+-               /*
+-                * In order to request an interrupt window, L0 is usurping
+-                * svm->vmcb->control.int_ctl and possibly setting V_IRQ
+-                * even if it was clear in L1's VMCB.  Restoring it would be
+-                * wrong.  However, in this case V_IRQ will remain true until
+-                * interrupt_window_interception calls svm_clear_vintr and
+-                * restores int_ctl.  We can just leave it aside.
+-                */
++
++       /*
++        * Don't sync vmcb02 V_IRQ back to vmcb12 if KVM (L0) is intercepting
++        * virtual interrupts in order to request an interrupt window, as KVM
++        * has usurped vmcb02's int_ctl.  If an interrupt window opens before
++        * the next VM-Exit, svm_clear_vintr() will restore vmcb12's int_ctl.
++        * If no window opens, V_IRQ will be correctly preserved in vmcb12's
++        * int_ctl (because it was never recognized while L2 was running).
++        */
++       if (svm_is_intercept(svm, INTERCEPT_VINTR) &&
++           !test_bit(INTERCEPT_VINTR, (unsigned long *)svm->nested.ctl.intercepts))
+                mask &= ~V_IRQ_MASK;
+-       }
+ 
+        if (nested_vgif_enabled(svm))
+                mask |= V_GIF_MASK;
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index b103fe7cbc82..59d2891662ef 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -1580,6 +1580,16 @@ static void svm_set_vintr(struct vcpu_svm *svm)
+ 
+        svm_set_intercept(svm, INTERCEPT_VINTR);
+ 
++       /*
++        * Recalculating intercepts may have clear the VINTR intercept.  If
++        * V_INTR_MASKING is enabled in vmcb12, then the effective RFLAGS.IF
++        * for L1 physical interrupts is L1's RFLAGS.IF at the time of VMRUN.
++        * Requesting an interrupt window if save.RFLAGS.IF=0 is pointless as
++        * interrupts will never be unblocked while L2 is running.
++        */
++       if (!svm_is_intercept(svm, INTERCEPT_VINTR))
++               return;
++
+        /*
+         * This is just a dummy VINTR to actually cause a vmexit to happen.
+         * Actual injection of virtual interrupts happens through EVENTINJ.
