@@ -2,72 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76B3682056
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F82682058
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjAaAEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 19:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S229851AbjAaAE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 19:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjAaAEE (ORCPT
+        with ESMTP id S229580AbjAaAE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:04:04 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC7D184
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:04:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4F218CE068B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:04:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5635EC433D2;
-        Tue, 31 Jan 2023 00:03:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675123438;
-        bh=OoMr6vXX+ozdyLfbfDdKFYHI0TxUbuwdprwgLlEpxTE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=soSpiZ1MOsntQQHqthTSB6YqIMCIC86+144cpdUDH8MNGnKpRiEH1tzluG6nwoAn2
-         JnUEjzmw1QNjr6DO9LeQKSHFyY6QYm8jERlTRq7k0BpFT7F3hQJ4FNjcOF+owP3ykk
-         9iptSL4F7BLtezjpoxNUYnWtNSuUKE2om6rkjxE9A/Si5acdFaFEZq36gBhc+stvQF
-         R5vlwTz9nbjDIc/42xkxnXWUkEpRTuuy5+sO8RRsd0sWvKu0phAmshuAtB9Ho07ZQN
-         5PDGBBWVnUXu4PtAnDe9U9DLG38BeYWPHflQ5G5jWJztJI+v/1So3u4mhnLvEMdZiU
-         AMWfMXycmZMZw==
-Date:   Mon, 30 Jan 2023 16:03:56 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] objtool: reduce maximum memory usage
-Message-ID: <20230131000356.5u2siglndnjyarql@treble>
-References: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
- <20230129214339.76hyytrllggbvuat@t-8ch.de>
+        Mon, 30 Jan 2023 19:04:57 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833832693
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:04:56 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id h18so3100989ilj.6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8BhSRwMVXxuU+369SFYGj7Ymc7BXj/kKm12kMslOVkM=;
+        b=ZSVdaMAKZzRpWwR2cThrlBzJ79H2pkCj6uEqIKXvJTwXvplRmXOQN6pCPhFGER4ixd
+         YIBurgyroGALBV7pjIFjvfxCRrI61cbYAM2FFS2klSQ5SjegAq2KwPGj/RLwzf9PCDg/
+         xo6qKZpPydrk9sSDL9xqIkwnUltYkwPmC45hYkrehH4QNTOUk+en7oOfJ6mmb2zu23Lq
+         aFgtqd7vmMv5qAwYEIIHOA8lf08PjVFlUy/2NSdmIHFuYjGBkwGhKArJENGxb1uyOndc
+         MHr+XqGqfeKhZd6iNdHFLp9UHK1n08Kkjz9uMhLPqkwOCbTlMg/qH8+RtM4WzdPlT/e6
+         NMUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8BhSRwMVXxuU+369SFYGj7Ymc7BXj/kKm12kMslOVkM=;
+        b=j69NRZvrw/PfsLKkpnNQ0KRbn69qurS/q65E9xy3yf5V3j8Jp440l5oscjLEovDCC3
+         jx9ipLglaCE2WIfTWdRe5oufOutY+0TKfW5lkRVNNtrmwO77uXU09OMjKbrc8ZPDJ/qr
+         G67cRe+sSRvg6aB/iPZvNG7Q/p46uRnze11YnSreD4X9Rnfwp5tyCSRoalw74IpLRx0M
+         zbSCi5aPIjVa9ypxkrFV7ZVJuEx83Rm4jorght4kDcGlwPXmrPJxDT6+KvQ9KhRPo78F
+         6p5KgUz4Ht9kvuVCEXwwTG783PZ/Exf4BbbbQUMzKRhEQ3squBk7YlSes3FfeV7TF2W4
+         pklA==
+X-Gm-Message-State: AO0yUKUJE2egM7z7oKaSoIq/4rDkMHOV+rYclBwQA2+MF/pxeWwvUz8C
+        dbDPuAOkgYRqi+L/9fbhClgOK7dHJXPZrKb/y4hB7A==
+X-Google-Smtp-Source: AK7set+HE0Eoj6fa0jUiHRwdtyKKhGLsxOR16qJEZ6t6OUjst5IC0bdCNQvWgGhrj20GQRntSGrPNK87dMpmntyxFxw=
+X-Received: by 2002:a92:c981:0:b0:310:99f5:df36 with SMTP id
+ y1-20020a92c981000000b0031099f5df36mr3521198iln.65.1675123495672; Mon, 30 Jan
+ 2023 16:04:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230129214339.76hyytrllggbvuat@t-8ch.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230128071007.1134942-1-davidgow@google.com>
+In-Reply-To: <20230128071007.1134942-1-davidgow@google.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 30 Jan 2023 19:04:44 -0500
+Message-ID: <CAFd5g47r-J+0FMt+F3pmVWBBKNXEqRD03Jh_i2HjUBhZBM8rdg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Add "hooks" to call into KUnit when it's built as
+ a module
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Rae Moar <rmoar@google.com>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 09:43:39PM +0000, Thomas Weißschuh wrote:
-> On Tue, Dec 27, 2022 at 04:00:57PM +0000, Thomas Weißschuh wrote:
-> > The processing of vmlinux.o with objtool is the most memory-intensive step
-> > of a kernel build. By reducing the maximum memory usage here we can reduce
-> > the maximum memory usage of the whole kernel build.
-> > Therefore memory pressure on memory starved machines is relieved during
-> > kernel builds and the build is faster as less swapping has to occur.
-> 
-> Friendly ping.
-> 
-> These patches can also applied one by one, the only dependency is from
-> patch 5 to patch 4.
+On Sat, Jan 28, 2023 at 2:10 AM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
+>
+> KUnit has several macros and functions intended for use from non-test
+> code. These hooks, currently the kunit_get_current_test() and
+> kunit_fail_current_test() macros, didn't work when CONFIG_KUNIT=m.
+>
+> In order to support this case, the required functions and static data
+> need to be available unconditionally, even when KUnit itself is not
+> built-in. The new 'hooks.c' file is therefore always included, and has
+> both the static key required for kunit_get_current_test(), and a table
+> of function pointers in struct kunit_hooks_table. This is filled in with
+> the real implementations by kunit_install_hooks(), which is kept in
+> hooks-impl.h and called when the kunit module is loaded.
+>
+> This can  be extended for future features which require similar
+> "hook" behaviour, such as static stubs, by simply adding new entries to
+> the struct, and the appropriate code to set them.
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Thanks, I'll go ahead and take five of them now.
+I agree with Rae that a new file for just setting the pointer seems a
+bit much, but I also understand the point of separating it out now -
+not sure of a better place for it to live. Aside from that, looks good
+to me:
 
--- 
-Josh
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
