@@ -2,132 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700DE6832C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3882D6832C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjAaQcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
+        id S229992AbjAaQcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:32:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbjAaQbo (ORCPT
+        with ESMTP id S231819AbjAaQbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:31:44 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD2758980;
-        Tue, 31 Jan 2023 08:31:39 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGBFnb018576;
-        Tue, 31 Jan 2023 16:31:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=5pGqmlCLT0ihGUnS3W+K7EQ1tmmYncWPcA1t4EYzQL4=;
- b=UmmFAkSOgEcgyUxnJYkx192K3cEh57RrNtcj39H5/Nh6o3jJF8oHV017u0lnN+WwwiE9
- X++DgOk4KcRihcq+Lqn5XO5l3UocIZzzVIkdgL22Qe/e+P3qbxjJQmEiAiXGwi6+EifU
- 9hNz2tk2RGOUVi+HDbBuP2xwb0MA1LaKbgljBaNjrqXasTzQkLznZeJP3HTiOb8MEKGm
- tWBJ1TY5JgDVu3UQETbSz8UJzm0+2aN4j3Nq0F0umFrzfnvT8cUye3LN3/KDnAwoqNwt
- 1wmFOyNjw+1MDWEXslbofrLd43kqZ/BIIC0EHLa4MpYniRrH1F/XoG0y/qDDKC0VYIZq NQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf69e8kau-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:31:29 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VGCKqk021606;
-        Tue, 31 Jan 2023 16:31:29 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf69e8kah-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:31:29 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFeApL007767;
-        Tue, 31 Jan 2023 16:31:28 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3ncvterywr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:31:28 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VGVQWT52953358
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 16:31:26 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D1BCD5805B;
-        Tue, 31 Jan 2023 16:31:26 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3674858063;
-        Tue, 31 Jan 2023 16:31:23 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 16:31:23 +0000 (GMT)
-Message-ID: <a7e3df6a-c62b-c22c-119a-a4f14662ca0c@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 11:31:22 -0500
+        Tue, 31 Jan 2023 11:31:36 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6E3568BD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:31:33 -0800 (PST)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 51C7B3F2D1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:31:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675182692;
+        bh=n/CaqmU/bb0yNkProNxdjfJ6mcTnYxY6CqP06NZVn3c=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=BDQIhe/aYeM3EFr8gAC/tImQItWCQiGdds1EdGH1nPAdPeYvUtlODX3QjVGFa4j+Y
+         OaISoDPEC9dCaJiBhqp+HPvNd8OZ/EEOaJMXN2m0jFrx1fi33N2CTlgmGM2t9o7x/G
+         nPYpNjOjCp/ONZIQx+zOuz98LClRPoInJSZjQcXoyobgijEGBM6ctmYFkjo5eXXsAh
+         q7lqeGe2+4tGUgDdreu3ZGERXfxVM612kSjf62FlZeFy08CU366hnheG3NDS21NK1i
+         u7XMMBNkvfnAN3bOHGnoZH10X3ald0GQV+nsXdDTbetwKaDpECv8SGXQxrQt5G7AbU
+         G73ZR5uWCnXeQ==
+Received: by mail-wr1-f69.google.com with SMTP id v5-20020adf8b45000000b002bde0366b11so2595577wra.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:31:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n/CaqmU/bb0yNkProNxdjfJ6mcTnYxY6CqP06NZVn3c=;
+        b=kIs3meAYBeeO4PjAa+bH6azv4Ymo4s00fw6xkEgpDE/dK/GNmQLLxKD/MkamQQwbfA
+         4UXXwX2eqygOEcEhOK4r2EbD9ah8PHQDb3Dk/XoMqegWG6pI9S6YGUwBKYSbSNEF17wn
+         KFZhaKdAqe/DK9iRmNlpB1mTiBcBgjtuC0TgUtQybqrl+ViqfXMmNqaGQc8cq9yvzDws
+         tHFQVFT/mnK0gpBLEYqfwcqrlZ8ZLek7rjW7oyc1fibI5glWRxE3ajgkq+zwUKFWt/FQ
+         4I7ME9DVLR4qptI5uyb2+ntrdEsDWOQdsE1SA6KPYWKCV/oSuU3QwBUGjXI7wBI/vaHD
+         L0Yg==
+X-Gm-Message-State: AO0yUKUGzHtQr4ON38ZFDtiZTRDCizozoaS2l8DRahFMb8v5I1RYVliX
+        jgoVpfWIU1Xq0oCi+dOeKtd4WafZYyB+sckOXdlQxD2P7K1IUns0WTfEiKCyv8M91GJ88XtMHi6
+        wl6t9vhAJnFrDbaVHubZ/qsuJ1GE9SDCa0P6By/kWJg==
+X-Received: by 2002:a05:600c:6022:b0:3dd:a4ad:ae45 with SMTP id az34-20020a05600c602200b003dda4adae45mr2134985wmb.12.1675182692036;
+        Tue, 31 Jan 2023 08:31:32 -0800 (PST)
+X-Google-Smtp-Source: AK7set9zBF6o7zL3fJ6hNw5NSvlvEQCRi/XegUVE/rVjPpShff+Un53fy3zh8lgjygf64THgdtxdvA==
+X-Received: by 2002:a05:600c:6022:b0:3dd:a4ad:ae45 with SMTP id az34-20020a05600c602200b003dda4adae45mr2134969wmb.12.1675182691813;
+        Tue, 31 Jan 2023 08:31:31 -0800 (PST)
+Received: from qwirkle ([2001:67c:1560:8007::aac:c4dd])
+        by smtp.gmail.com with ESMTPSA id m29-20020a05600c3b1d00b003dc51c48f0bsm10026808wms.19.2023.01.31.08.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 08:31:31 -0800 (PST)
+Date:   Tue, 31 Jan 2023 16:31:29 +0000
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] selftests: net: udpgso_bench_tx: Cater for
+ pending datagrams zerocopy benchmarking
+Message-ID: <Y9lCYT3XUgo4npox@qwirkle>
+References: <20230131130412.432549-1-andrei.gherzan@canonical.com>
+ <20230131130412.432549-4-andrei.gherzan@canonical.com>
+ <d9ca623d01274889913001ce92f686652fa8fea8.camel@redhat.com>
+ <Y9kvADcYZ18XFTXu@qwirkle>
+ <17e062f077235b949090cba893c91f5637cc1f0e.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 18/25] powerpc/pseries: Log hcall return codes for
- PLPKS debug
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-19-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-19-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XqcPozooyZ-h4wr2E7oAZFZvC4xOsNq_
-X-Proofpoint-ORIG-GUID: p9mnkBPnEdc8wpnU_ufMwejKs4-eOTIj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 adultscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310142
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <17e062f077235b949090cba893c91f5637cc1f0e.camel@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
+On 23/01/31 05:22PM, Paolo Abeni wrote:
+> On Tue, 2023-01-31 at 15:08 +0000, Andrei Gherzan wrote:
+> > On 23/01/31 03:51PM, Paolo Abeni wrote:
+> > > On Tue, 2023-01-31 at 13:04 +0000, Andrei Gherzan wrote:
+> > > > The test tool can check that the zerocopy number of completions value is
+> > > > valid taking into consideration the number of datagram send calls. This can
+> > > > catch the system into a state where the datagrams are still in the system
+> > > > (for example in a qdisk, waiting for the network interface to return a
+> > > > completion notification, etc).
+> > > > 
+> > > > This change adds a retry logic of computing the number of completions up to
+> > > > a configurable (via CLI) timeout (default: 2 seconds).
+> > > > 
+> > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > > ---
+> > > >  tools/testing/selftests/net/udpgso_bench_tx.c | 38 +++++++++++++++----
+> > > >  1 file changed, 30 insertions(+), 8 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > > index b47b5c32039f..5a29b5f24023 100644
+> > > > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > > @@ -62,6 +62,7 @@ static int	cfg_payload_len	= (1472 * 42);
+> > > >  static int	cfg_port	= 8000;
+> > > >  static int	cfg_runtime_ms	= -1;
+> > > >  static bool	cfg_poll;
+> > > > +static int	cfg_poll_loop_timeout_ms = 2000;
+> > > >  static bool	cfg_segment;
+> > > >  static bool	cfg_sendmmsg;
+> > > >  static bool	cfg_tcp;
+> > > > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
+> > > >  	}
+> > > >  }
+> > > >  
+> > > > -static void flush_errqueue(int fd, const bool do_poll)
+> > > > +static void flush_errqueue(int fd, const bool do_poll,
+> > > > +		unsigned long poll_timeout, const bool poll_err)
+> > > >  {
+> > > >  	if (do_poll) {
+> > > >  		struct pollfd fds = {0};
+> > > >  		int ret;
+> > > >  
+> > > >  		fds.fd = fd;
+> > > > -		ret = poll(&fds, 1, 500);
+> > > > +		ret = poll(&fds, 1, poll_timeout);
+> > > >  		if (ret == 0) {
+> > > > -			if (cfg_verbose)
+> > > > +			if ((cfg_verbose) && (poll_err))
+> > > >  				fprintf(stderr, "poll timeout\n");
+> > > >  		} else if (ret < 0) {
+> > > >  			error(1, errno, "poll");
+> > > > @@ -254,6 +256,22 @@ static void flush_errqueue(int fd, const bool do_poll)
+> > > >  	flush_errqueue_recv(fd);
+> > > >  }
+> > > >  
+> > > > +static void flush_errqueue_retry(int fd, const bool do_poll, unsigned long num_sends)
+> > > > +{
+> > > > +	unsigned long tnow, tstop;
+> > > > +	bool first_try = true;
+> > > > +
+> > > > +	tnow = gettimeofday_ms();
+> > > > +	tstop = tnow + cfg_poll_loop_timeout_ms;
+> > > > +	do {
+> > > > +		flush_errqueue(fd, do_poll, tstop - tnow, first_try);
+> > > > +		first_try = false;
+> > > > +		if (!do_poll)
+> > > > +			usleep(1000);  // a throttling delay if polling is enabled
+> > > 
+> > > Even if the kernel codying style is not very strictly enforced for
+> > > self-tests, please avoid c++ style comments.
+> > > 
+> > > More importantly, as Willem noded, this function is always called with
+> > > do_poll == true. You should drop such argument and the related branch
+> > > above.
+> > 
+> > Agreed. I will drop.
+> > 
+> > > 
+> > > > +		tnow = gettimeofday_ms();
+> > > > +	} while ((stat_zcopies != num_sends) && (tnow < tstop));
+> > > > +}
+> > > > +
+> > > >  static int send_tcp(int fd, char *data)
+> > > >  {
+> > > >  	int ret, done = 0, count = 0;
+> > > > @@ -413,8 +431,9 @@ static int send_udp_segment(int fd, char *data)
+> > > >  
+> > > >  static void usage(const char *filepath)
+> > > >  {
+> > > > -	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+> > > > -		    filepath);
+> > > > +	error(1, 0,
+> > > > +			"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+> > > > +			filepath);
+> > > 
+> > > Please avoid introducing unnecessary white-space changes (no reason to
+> > > move the usage text on a new line)
+> > 
+> > The only reason why I've done this was to make scripts/checkpatch.pl
+> > happy:
+> > 
+> > WARNING: line length of 141 exceeds 100 columns
+> > #83: FILE: tools/testing/selftests/net/udpgso_bench_tx.c:432:
+> > 
+> > I can drop and ignore the warning, or maybe it would have been better to
+> > just mention this in git message. What do you prefer?
 > 
-> The plpks code converts hypervisor return codes into their Linux
-> equivalents so that users can understand them.  Having access to the
-> original return codes is really useful for debugging, so add a
-> pr_debug() so we don't lose information from the conversion.
+> Long lines are allowed for (kernel) messages, to make them easily grep-
+> able.
 > 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-
-> ---
->   arch/powerpc/platforms/pseries/plpks.c | 2 ++
->   1 file changed, 2 insertions(+)
+> In this specific case you can either append the new text to the message
+> without introducing that strange indentation or even better break the
+> usage string alike:
 > 
-> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
-> index cee06fb9a370..e5755443d4a4 100644
-> --- a/arch/powerpc/platforms/pseries/plpks.c
-> +++ b/arch/powerpc/platforms/pseries/plpks.c
-> @@ -117,6 +117,8 @@ static int pseries_status_to_err(int rc)
->   		err = -EINVAL;
->   	}
->   
-> +	pr_debug("Converted hypervisor code %d to Linux %d\n", rc, err);
-> +
->   	return err;
->   }
->   
+> 	"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L secs]"
+> 	" [-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]"
+
+Funny I went through this too but it also fails with:
+
+WARNING: quoted string split across lines
+#84: FILE: tools/testing/selftests/net/udpgso_bench_tx.c:433
+
+This is how I usually do it but it seems like it's flagged too.
+
+-- 
+Andrei Gherzan
