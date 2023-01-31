@@ -2,95 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE65E682C8F
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B84D682C92
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:29:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbjAaM2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:28:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S231831AbjAaM3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:29:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjAaM2v (ORCPT
+        with ESMTP id S231812AbjAaM3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:28:51 -0500
-Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27C74AA7A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:28:50 -0800 (PST)
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id E3E8C100065; Tue, 31 Jan 2023 12:28:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-        t=1675168124; bh=03l1i5KMWTYFOtEVWuqkQUS4MN/8sH2rZL5RFoUKuyU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bJiMFsDxd2jA+xb0yGRf2FrBS5wLVMgHc4Fh32Y+Lhg+afUuoUJ6KIN04mST5xDKE
-         SO/VQT+u4zFRTmAStqho5O2uJmiEGbDg6TKS6XB7d4ESmVG4VqkKzijfaIu6BuieSG
-         LsBMuZCSnPEvCbfpxZ/WgQoDE5gLcciqv9lXEIKLxvS4559Hd7AVh/MQdZWQ82dFpe
-         WbSZzyg5XzZQwc1X/t+Feg9hS+60dPfyFJgF1U6LIjTVhU9JLdYUilm3hdzWxO9zXw
-         5wb97k/3CnBym/gvgYl+XLH+iSfVTZ6VPBt4KxxJdUdP88v8Bp/hSjF7zaV69sp2vU
-         895NyKdBkcAlA==
-Date:   Tue, 31 Jan 2023 12:28:44 +0000
-From:   Sean Young <sean@mess.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] media: rc: add keymap for Beelink Mini MXIII remote
-Message-ID: <Y9kJfPqtd98wIQ6r@gofer.mess.org>
-References: <20230128034117.3983105-1-christianshewitt@gmail.com>
- <6e953652-4a24-6f3c-74e7-07c25fa1c6c1@linaro.org>
- <Y9YwbiJz9vOBejdL@gofer.mess.org>
- <20230130213020.GA3541260-robh@kernel.org>
+        Tue, 31 Jan 2023 07:29:00 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F9F41B4D;
+        Tue, 31 Jan 2023 04:28:59 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A81392286E;
+        Tue, 31 Jan 2023 12:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1675168138; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QrUTypHAUkttp02W8QWkJo6LCDLcL4N0tatTKmlKOb4=;
+        b=BbEYZvUHh89Z25teFMQ0r/TfosK1ThRsmIu/YY2SctXBa9Kp5p5jjwksyuk2UMUCiBJ+dK
+        lghQBQhfxfwzAjpE8QFk4x1emnlXZVs4crH0N/ROg9CCi3GAFr9geXt6BTJ/z72hadrcFf
+        HmqLSUCpiUXh0+BSsVKtFw2NVMJF2GY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1675168138;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QrUTypHAUkttp02W8QWkJo6LCDLcL4N0tatTKmlKOb4=;
+        b=2nXCGND8EePAPt/o97fnU+FUtqWIiulOdD5y7vCfu8d4v3XuYD6gOTsHb1HMKtmKtu/oCt
+        FKRSgmmuOnYKurDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9A48713585;
+        Tue, 31 Jan 2023 12:28:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id w4SdJYoJ2WMpDAAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 31 Jan 2023 12:28:58 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id CD1AFA06D5; Tue, 31 Jan 2023 13:28:57 +0100 (CET)
+Date:   Tue, 31 Jan 2023 13:28:57 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, David Howells <dhowells@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
+Message-ID: <20230131122857.6tchetnsgepl3ck3@quack3>
+References: <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
+ <3351099.1675077249@warthog.procyon.org.uk>
+ <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
+ <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk>
+ <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
+ <3520518.1675116740@warthog.procyon.org.uk>
+ <f392399b-a4c4-2251-e12b-e89fff351c4d@kernel.dk>
+ <040ed7a7-3f4d-dab7-5a49-1cd9933c5445@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230130213020.GA3541260-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <040ed7a7-3f4d-dab7-5a49-1cd9933c5445@redhat.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 03:30:20PM -0600, Rob Herring wrote:
-> On Sun, Jan 29, 2023 at 08:38:06AM +0000, Sean Young wrote:
-> > On Sat, Jan 28, 2023 at 11:11:32AM +0100, Krzysztof Kozlowski wrote:
-> > > On 28/01/2023 04:41, Christian Hewitt wrote:
-> > > > Add a keymap and bindings for the simple IR (NEC) remote used with
-> > > > the Beelink Mini MXIII Android STB device.
-> > > > 
-> > > > Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> > > > ---
-> > > >  .../devicetree/bindings/media/rc.yaml         |  1 +
-> > > >  drivers/media/rc/keymaps/Makefile             |  1 +
-> > > >  drivers/media/rc/keymaps/rc-beelink-mxiii.c   | 54 +++++++++++++++++++
-> > > >  include/media/rc-map.h                        |  1 +
-> > > >  4 files changed, 57 insertions(+)
-> > > >  create mode 100644 drivers/media/rc/keymaps/rc-beelink-mxiii.c
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/media/rc.yaml b/Documentation/devicetree/bindings/media/rc.yaml
-> > > > index 266f1d5cae51..f390a5d2c82d 100644
-> > > > --- a/Documentation/devicetree/bindings/media/rc.yaml
-> > > > +++ b/Documentation/devicetree/bindings/media/rc.yaml
-> > > > @@ -39,6 +39,7 @@ properties:
-> > > >        - rc-avertv-303
-> > > >        - rc-azurewave-ad-tu700
-> > > >        - rc-beelink-gs1
-> > > > +      - rc-beelink-mxiii
+On Tue 31-01-23 09:32:27, David Hildenbrand wrote:
+> On 30.01.23 23:15, Jens Axboe wrote:
+> > On 1/30/23 3:12 PM, David Howells wrote:
+> > > John Hubbard <jhubbard@nvidia.com> wrote:
 > > > 
-> > > Bindings are separate patches. Didn't you get such feedback already?
+> > > > This is something that we say when adding pin_user_pages_fast(),
+> > > > yes. I doubt that I can quickly find the email thread, but we
+> > > > measured it and weren't immediately able to come up with a way
+> > > > to make it faster.
+> > > 
+> > > percpu counters maybe - add them up at the point of viewing?
 > > 
-> > The only change for new keymaps is an added entry to the rc-map-name enum.
-> > In the past, new keymaps have been accepted with that single line in the
-> > same commit.
+> > They are percpu, see my last email. But for every 108 changes (on
+> > my system), they will do two atomic_long_adds(). So not very
+> > useful for anything but low frequency modifications.
+> > 
 > 
-> It's been a checkpatch.pl warning since 2018. The separation is so that 
-> commit messages in the DT only repo[1] make sense.
+> Can we just treat the whole acquired/released accounting as a debug
+> mechanism to detect missing releases and do it only for debug kernels?
 
-Ok, makes sense. 
+Yes, AFAIK it is just a debug mechanism for helping to find out issues with
+page pinning conversions. So I think we can put this behind some debugging
+ifdef. John?
 
-Thanks,
-
-Sean
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
