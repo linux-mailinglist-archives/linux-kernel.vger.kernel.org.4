@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B21AE682AD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2394682A9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbjAaKvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38478 "EHLO
+        id S231292AbjAaKeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:34:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjAaKvE (ORCPT
+        with ESMTP id S229608AbjAaKeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:51:04 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E2E922A22
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:50:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26EA32F4;
-        Tue, 31 Jan 2023 02:33:52 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.12.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4FC3A3F64C;
-        Tue, 31 Jan 2023 02:33:08 -0800 (PST)
-Date:   Tue, 31 Jan 2023 10:33:05 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        "liaochang (A)" <liaochang1@huawei.com>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mhiramat@kernel.org,
-        conor.dooley@microchip.com, penberg@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
-Message-ID: <Y9juYX8Bt1Z55lv0@FVFF77S0Q05N>
-References: <20230126161559.1467374-1-guoren@kernel.org>
- <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
- <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
- <87r0vc9h4g.fsf@all.your.base.are.belong.to.us>
- <Y9fm+6LPXgtDSma/@FVFF77S0Q05N>
- <CAJF2gTRgze_owuWvJjnrPpBNs8+GY-km7wvHU4EuJzarQc+BPQ@mail.gmail.com>
+        Tue, 31 Jan 2023 05:34:06 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8188C1422A;
+        Tue, 31 Jan 2023 02:34:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1675161244; x=1706697244;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=r4kjuULXMnJtmj88iglwf80C4myiNq+dzKNJ7ZMal+c=;
+  b=UzvAd1EnwRn2DmRzzbLMvs6EXQygS2arczCpKfJT97HTT56T0k5d/wkZ
+   ZRkFPfKZNfm5UsRJHUuhhfUMIQGy5oqWrY/fT+PNVFbX7RqX0RYaoUKo2
+   XURCrSlQuQKTiwxtKM0YKi73VRsTfrymYbbZD9V78ngkZSR8HZWC4Tc7q
+   1q1HC7jmyjAAfaPrFa5Ih/Pjx3lSy0+1uQGbbzvUcdprxxzkz37gRoDBE
+   QlmfG2GV6v60WC4Jq9tX0cyKPGyRxf7MeDJT0RVk7mKbCGCQ9bDN5zJ7w
+   0jhrJe4+iQdKqceYb9acKU5+wEDpEiXXBS5nKd11qSYi0CXrsPCLbF2kt
+   w==;
+X-IronPort-AV: E=Sophos;i="5.97,261,1669071600"; 
+   d="scan'208";a="28767327"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 31 Jan 2023 11:34:03 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 31 Jan 2023 11:34:03 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 31 Jan 2023 11:34:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1675161243; x=1706697243;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=r4kjuULXMnJtmj88iglwf80C4myiNq+dzKNJ7ZMal+c=;
+  b=AlyjSfLvgHNDFL3vxw6/gzOGrVWY1TpFOMQNQjBH95ntpK93iXdesPsu
+   AIi4Rv11xDCt8sRJz2e6lQBZhZp/YAqlxrYdf9+L6za3P2YSopZT7HHZ1
+   SWz4QZZR0v5SW0A3JqAwwqTmX+oMBcn9a8eKUzHlJC4qZutsjmefzJ02L
+   n2azQALl6q9WxjlaOKX9Y9M/B7uClZP+okNR72kt5jypjiT8Rp0lJ9jRl
+   JOuOSBHy6Mf0cqfyZ6yr27cVibDk2t9F6G3dbSE3k1d3qeweyDEaQ1Ng+
+   2wodbbN4JW/QQhNeiSXDtRF7MdAp5YclxjNDLEeq40UEXCcOXlgTUIiVq
+   g==;
+X-IronPort-AV: E=Sophos;i="5.97,261,1669071600"; 
+   d="scan'208";a="28767326"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 31 Jan 2023 11:34:02 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id AA533280072;
+        Tue, 31 Jan 2023 11:34:02 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] hwmon: (iio_hwmon) use dev_err_probe
+Date:   Tue, 31 Jan 2023 11:33:59 +0100
+Message-Id: <20230131103359.625081-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTRgze_owuWvJjnrPpBNs8+GY-km7wvHU4EuJzarQc+BPQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 09:48:29AM +0800, Guo Ren wrote:
-> On Mon, Jan 30, 2023 at 11:49 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > Hi Bjorn,
-> >
-> > On Mon, Jan 30, 2023 at 04:28:15PM +0100, Björn Töpel wrote:
-> > > Guo Ren <guoren@kernel.org> writes:
-> > >
-> > > >> In the serie of RISCV OPTPROBES [1], it patches a long-jump instructions pair
-> > > >> AUIPC/JALR in kernel text, so in order to ensure other CPUs does not execute
-> > > >> in the instructions that will be modified, it is still need to stop other CPUs
-> > > >> via patch_text API, or you have any better solution to achieve the purpose?
-> > > >  - The stop_machine is an expensive way all architectures should
-> > > > avoid, and you could keep that in your OPTPROBES implementation files
-> > > > with static functions.
-> > > >  - The stop_machine couldn't work with PREEMPTION, so your
-> > > > implementation needs to work with !PREEMPTION.
-> > >
-> > > ...and stop_machine() with !PREEMPTION is broken as well, when you're
-> > > replacing multiple instructions (see Mark's post at [1]). The
-> > > stop_machine() dance might work when you're replacing *one* instruction,
-> > > not multiple as in the RISC-V case. I'll expand on this in a comment in
-> > > the OPTPROBES v6 series.
-> >
-> > Just to clarify, my comments in [1] were assuming that stop_machine() was not
-> > used, in which case there is a problem with or without PREEMPTION.
-> >
-> > I believe that when using stop_machine(), the !PREEMPTION case is fine, since
-> > stop_machine() schedules work rather than running work in IRQ context on the
-> > back of an IPI, so no CPUs should be mid-sequnce during the patching, and it's
-> > not possible for there to be threads which are preempted mid-sequence.
-> >
-> > That all said, IIUC optprobes is going to disappear once fprobe is ready
-> > everywhere, so that might be moot.
-> The optprobes could be in the middle of a function, but fprobe must be
-> the entry of a function, right?
-> 
-> Does your fprobe here mean: ?
-> 
-> The Linux kernel configuration item CONFIG_FPROBE:
-> 
-> prompt: Kernel Function Probe (fprobe)
-> type: bool
-> depends on: ( CONFIG_FUNCTION_TRACER ) && (
-> CONFIG_DYNAMIC_FTRACE_WITH_REGS ) && ( CONFIG_HAVE_RETHOOK )
-> defined in kernel/trace/Kconfig
+Instead of just returning an error code, add an error message as well.
+While at it, simplify the code and use a common return path.
+Upon deferral this also nicely lists the following message in
+/sys/kernel/debug/devices_deferred:
+adc     iio_hwmon: Failed to get channels
 
-Yes.
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ drivers/hwmon/iio_hwmon.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Masami, Steve, and I had a chat at the tracing summit late last year (which
-unfortunately, was not recorded), and what we'd like to do is get each
-architecture to have FPROBE (and FTRACE_WITH_ARGS), at which point OPTPROBE
-and KRETPROBE become redundant and could be removed.
+diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
+index 3aa40893fc09..4c8a80847891 100644
+--- a/drivers/hwmon/iio_hwmon.c
++++ b/drivers/hwmon/iio_hwmon.c
+@@ -77,9 +77,11 @@ static int iio_hwmon_probe(struct platform_device *pdev)
+ 
+ 	channels = devm_iio_channel_get_all(dev);
+ 	if (IS_ERR(channels)) {
+-		if (PTR_ERR(channels) == -ENODEV)
+-			return -EPROBE_DEFER;
+-		return PTR_ERR(channels);
++		ret = PTR_ERR(channels);
++		if (ret == -ENODEV)
++			ret = -EPROBE_DEFER;
++		return dev_err_probe(dev, ret,
++				     "Failed to get channels\n");
+ 	}
+ 
+ 	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
+-- 
+2.34.1
 
-i.e. we'd keep KPROBES as a "you can trace any instruction" feature, but in the
-few cases where OPTPROBES can make things fater by using FTRACE, you should
-just use that directly via FPROBE.
-
-Thanks,
-Mark.
