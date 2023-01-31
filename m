@@ -2,253 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BE56828A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77006828AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbjAaJWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S232415AbjAaJXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbjAaJWg (ORCPT
+        with ESMTP id S232241AbjAaJXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:22:36 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D85610C8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:22:34 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id nm12-20020a17090b19cc00b0022c2155cc0bso13827023pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:22:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+UEl9RpJ5/r5T0BjzaMIIiVb97mqpj9qTAKyDrcDn1s=;
-        b=IEJRkQls5Sti1k2gmcAzYSguZdHLWZyZoBmugS2+PQ16+tGc1p4rhb9kpRpQQmWlBs
-         T2yIvj5nh+wjzWdV/ABezn4jzdeZeHnZMQotFwagHbnm7qCwlgJxCyH4g+C4M7qspptB
-         ivcISSK/fr8CsHnU/MRn7cnzj36nZAOagMdyQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+UEl9RpJ5/r5T0BjzaMIIiVb97mqpj9qTAKyDrcDn1s=;
-        b=uCcQCrwOUqQ49PMxGf4j28QrO7WFp8ao7gnk4gCXqkGe6Yzd9cQQBPXevvz/kDfXq+
-         5yvy8w7ShYplI0i9f4DhcAX04OwCCPXBSBIx24vih4EXpznNfV1dttrJY7Rve3ZiJXzQ
-         XvsUj/K6UrcnEVw55PWa7RaudVw3kFyyIbNQZAQoiWYStXKZaHGCYVRihG67s7pol7uL
-         BbOmsKQ4g1kj5gr5YtsMw+63d9KZWxWtg4QeQFPpsL7A4LQ/VhYy1yoCaICFKGLecdFg
-         NgJPVfjw4UEkzeHrpNElyWqqBq+YOtTeTRjwiKvRadeUP3OzYZKyzpQp3Kq+3QPODROq
-         M8zQ==
-X-Gm-Message-State: AO0yUKXUqT0E4BLGPj9Ae7M/4mGsNn4sZVnJSACZkz5TJHc44PsEYWne
-        gjPsMIQrnbDnOKI2pzp+/7DEnMdr7wRWdb+M2ptS
-X-Google-Smtp-Source: AK7set9Z0iLiZ4sURdAqhKBWdj0u+01Lupue+Lq9cv6c/O6SyZKRw2Y58r0+sqn+RShz/fRqAf6m916jGZYPaOiju58=
-X-Received: by 2002:a17:902:b706:b0:196:6dac:3426 with SMTP id
- d6-20020a170902b70600b001966dac3426mr1508273pls.23.1675156954396; Tue, 31 Jan
- 2023 01:22:34 -0800 (PST)
+        Tue, 31 Jan 2023 04:23:51 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754642D50;
+        Tue, 31 Jan 2023 01:23:50 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V88akb027835;
+        Tue, 31 Jan 2023 09:23:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hxOCwGxpA1TRbKoE7GvTV0+56lZEbEuHNc10QcdY+S8=;
+ b=na/69P/AZ1KuUYfIGv6F7B0ZtNLAGf/eyIMN3sCOv+fyXzJN78DQJVobDSy1WiTbadkf
+ icJ1JLhVzvEYqhQ+ppnXCjkIB0l52H9eq/DnMPF+7WA9U/10TaagLEoVqvAFhzpifq2c
+ RVgyWTjUGHo1TFvlwHXWo8kvlk4qQ+NpF0g51r12agYVoMsgm0Jb1elVIMmTZsTHBH8G
+ 9s6pywI9laEcjCIHlcw2Z4OlzMhTjcDbkvFDqCZ+PrVAo+X0DAmMNH/iyqofFl+SsqgL
+ ek/7Mm6SD+aXoYtkHKdy8hHoKs1RNbGnf6zQ2rDoYUmrbi2wOSwWPWk5r69PzSYK8kq+ ww== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nexn8g7g2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 09:23:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30V9NUIX003411
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 09:23:30 GMT
+Received: from [10.50.40.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 01:23:22 -0800
+Message-ID: <c761f718-7dd5-153e-eb1f-a4de0d2ab88a@quicinc.com>
+Date:   Tue, 31 Jan 2023 14:53:19 +0530
 MIME-Version: 1.0
-References: <20230128072737.2995881-1-apatel@ventanamicro.com> <20230128072737.2995881-2-apatel@ventanamicro.com>
-In-Reply-To: <20230128072737.2995881-2-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 31 Jan 2023 01:22:23 -0800
-Message-ID: <CAOnJCU+HKqVWz+SaFj=G-Rim-91h5uimTk0FCHa_mUX-gtxbbA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] RISC-V: Add AIA related CSR defines
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6/6] clk: qcom: Fix APSS PLL and RCG Configuration
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <jassisinghbrar@gmail.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <shawnguo@kernel.org>, <arnd@arndb.de>,
+        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <quic_ipkumar@quicinc.com>
+References: <20230113143647.14961-1-quic_devipriy@quicinc.com>
+ <20230113143647.14961-7-quic_devipriy@quicinc.com>
+ <b87ab80d-0936-5a5a-25da-35c0dbdede33@linaro.org>
+ <0e5e2d46-3578-678b-5980-ecf68f9a5f18@gmail.com>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <0e5e2d46-3578-678b-5980-ecf68f9a5f18@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: qcR2h1pEbJRC0sCo7WaxhouyyLPtWGd_
+X-Proofpoint-ORIG-GUID: qcR2h1pEbJRC0sCo7WaxhouyyLPtWGd_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_04,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 suspectscore=0
+ impostorscore=0 mlxlogscore=999 mlxscore=0 clxscore=1011 bulkscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310082
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:27 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> The RISC-V AIA specification improves handling per-HART local interrupts
-> in a backward compatible manner. This patch adds defines for new RISC-V
-> AIA CSRs.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/csr.h | 95 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 94 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index 0e571f6483d9..3c8d68152bce 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -7,7 +7,7 @@
->  #define _ASM_RISCV_CSR_H
->
->  #include <asm/asm.h>
-> -#include <linux/const.h>
-> +#include <linux/bits.h>
->
->  /* Status register flags */
->  #define SR_SIE         _AC(0x00000002, UL) /* Supervisor Interrupt Enable */
-> @@ -73,7 +73,10 @@
->  #define IRQ_S_EXT              9
->  #define IRQ_VS_EXT             10
->  #define IRQ_M_EXT              11
-> +#define IRQ_S_GEXT             12
->  #define IRQ_PMU_OVF            13
-> +#define IRQ_LOCAL_MAX          (IRQ_PMU_OVF + 1)
-> +#define IRQ_LOCAL_MASK         GENMASK((IRQ_LOCAL_MAX - 1), 0)
->
->  /* Exception causes */
->  #define EXC_INST_MISALIGNED    0
-> @@ -156,6 +159,27 @@
->                                  (_AC(1, UL) << IRQ_S_TIMER) | \
->                                  (_AC(1, UL) << IRQ_S_EXT))
->
-> +/* AIA CSR bits */
-> +#define TOPI_IID_SHIFT         16
-> +#define TOPI_IID_MASK          GENMASK(11, 0)
-> +#define TOPI_IPRIO_MASK                GENMASK(7, 0)
-> +#define TOPI_IPRIO_BITS                8
-> +
-> +#define TOPEI_ID_SHIFT         16
-> +#define TOPEI_ID_MASK          GENMASK(10, 0)
-> +#define TOPEI_PRIO_MASK                GENMASK(10, 0)
-> +
-> +#define ISELECT_IPRIO0         0x30
-> +#define ISELECT_IPRIO15                0x3f
-> +#define ISELECT_MASK           GENMASK(8, 0)
-> +
-> +#define HVICTL_VTI             BIT(30)
-> +#define HVICTL_IID             GENMASK(27, 16)
-> +#define HVICTL_IID_SHIFT       16
-> +#define HVICTL_DPR             BIT(9)
-> +#define HVICTL_IPRIOM          BIT(8)
-> +#define HVICTL_IPRIO           GENMASK(7, 0)
-> +
->  /* xENVCFG flags */
->  #define ENVCFG_STCE                    (_AC(1, ULL) << 63)
->  #define ENVCFG_PBMTE                   (_AC(1, ULL) << 62)
-> @@ -250,6 +274,18 @@
->  #define CSR_STIMECMP           0x14D
->  #define CSR_STIMECMPH          0x15D
->
-> +/* Supervisor-Level Window to Indirectly Accessed Registers (AIA) */
-> +#define CSR_SISELECT           0x150
-> +#define CSR_SIREG              0x151
-> +
-> +/* Supervisor-Level Interrupts (AIA) */
-> +#define CSR_STOPEI             0x15c
-> +#define CSR_STOPI              0xdb0
-> +
-> +/* Supervisor-Level High-Half CSRs (AIA) */
-> +#define CSR_SIEH               0x114
-> +#define CSR_SIPH               0x154
-> +
->  #define CSR_VSSTATUS           0x200
->  #define CSR_VSIE               0x204
->  #define CSR_VSTVEC             0x205
-> @@ -279,8 +315,32 @@
->  #define CSR_HGATP              0x680
->  #define CSR_HGEIP              0xe12
->
-> +/* Virtual Interrupts and Interrupt Priorities (H-extension with AIA) */
-> +#define CSR_HVIEN              0x608
-> +#define CSR_HVICTL             0x609
-> +#define CSR_HVIPRIO1           0x646
-> +#define CSR_HVIPRIO2           0x647
-> +
-> +/* VS-Level Window to Indirectly Accessed Registers (H-extension with AIA) */
-> +#define CSR_VSISELECT          0x250
-> +#define CSR_VSIREG             0x251
-> +
-> +/* VS-Level Interrupts (H-extension with AIA) */
-> +#define CSR_VSTOPEI            0x25c
-> +#define CSR_VSTOPI             0xeb0
-> +
-> +/* Hypervisor and VS-Level High-Half CSRs (H-extension with AIA) */
-> +#define CSR_HIDELEGH           0x613
-> +#define CSR_HVIENH             0x618
-> +#define CSR_HVIPH              0x655
-> +#define CSR_HVIPRIO1H          0x656
-> +#define CSR_HVIPRIO2H          0x657
-> +#define CSR_VSIEH              0x214
-> +#define CSR_VSIPH              0x254
-> +
->  #define CSR_MSTATUS            0x300
->  #define CSR_MISA               0x301
-> +#define CSR_MIDELEG            0x303
->  #define CSR_MIE                        0x304
->  #define CSR_MTVEC              0x305
->  #define CSR_MENVCFG            0x30a
-> @@ -297,6 +357,25 @@
->  #define CSR_MIMPID             0xf13
->  #define CSR_MHARTID            0xf14
->
-> +/* Machine-Level Window to Indirectly Accessed Registers (AIA) */
-> +#define CSR_MISELECT           0x350
-> +#define CSR_MIREG              0x351
-> +
-> +/* Machine-Level Interrupts (AIA) */
-> +#define CSR_MTOPEI             0x35c
-> +#define CSR_MTOPI              0xfb0
-> +
-> +/* Virtual Interrupts for Supervisor Level (AIA) */
-> +#define CSR_MVIEN              0x308
-> +#define CSR_MVIP               0x309
-> +
-> +/* Machine-Level High-Half CSRs (AIA) */
-> +#define CSR_MIDELEGH           0x313
-> +#define CSR_MIEH               0x314
-> +#define CSR_MVIENH             0x318
-> +#define CSR_MVIPH              0x319
-> +#define CSR_MIPH               0x354
-> +
->  #ifdef CONFIG_RISCV_M_MODE
->  # define CSR_STATUS    CSR_MSTATUS
->  # define CSR_IE                CSR_MIE
-> @@ -307,6 +386,13 @@
->  # define CSR_TVAL      CSR_MTVAL
->  # define CSR_IP                CSR_MIP
->
-> +# define CSR_IEH               CSR_MIEH
-> +# define CSR_ISELECT   CSR_MISELECT
-> +# define CSR_IREG      CSR_MIREG
-> +# define CSR_IPH               CSR_MIPH
-> +# define CSR_TOPEI     CSR_MTOPEI
-> +# define CSR_TOPI      CSR_MTOPI
-> +
->  # define SR_IE         SR_MIE
->  # define SR_PIE                SR_MPIE
->  # define SR_PP         SR_MPP
-> @@ -324,6 +410,13 @@
->  # define CSR_TVAL      CSR_STVAL
->  # define CSR_IP                CSR_SIP
->
-> +# define CSR_IEH               CSR_SIEH
-> +# define CSR_ISELECT   CSR_SISELECT
-> +# define CSR_IREG      CSR_SIREG
-> +# define CSR_IPH               CSR_SIPH
-> +# define CSR_TOPEI     CSR_STOPEI
-> +# define CSR_TOPI      CSR_STOPI
-> +
->  # define SR_IE         SR_SIE
->  # define SR_PIE                SR_SPIE
->  # define SR_PP         SR_SPP
-> --
-> 2.34.1
->
+Thanks for taking time to review the patch!
 
-LGTM.
+On 1/13/2023 9:47 PM, Robert Marko wrote:
+> 
+> On 13. 01. 2023. 16:20, Konrad Dybcio wrote:
+>>
+>> On 13.01.2023 15:36, devi priya wrote:
+>>> Included CLK_IS_CRITICAL flag which helps to properly enable
+>>> the APSS PLL during bootup.
+>> Please describe the issue and not only the user-visible impact it
+>> makes. Does the PLL get shut down by clk_ignore_unused? Maybe you
+>> would be interested in the sync_state changes that landed in recent
+>> -next that may solve it for you?
+>>
+>> I don't think it should be always-on, as you have an alternate source
+>> for low power modes, adding CLK_IS_CRITICAL will keep the PLL enabled
+>> even if you're not using it.
+> 
+> I have the same opinion, as this is working fine on IPQ6018 and IPQ8074
+> and I have not experienced any issues with it.
+> 
+Sure, will drop the critical flag
+>>
+>>> clk_rcg2_ops should be used for APSS clock RCG, as other ops
+>>> will not configure the RCG register
+>> RCG register meaning RCG register*s*, meaning in this case M/N/D
+>> which would be required for proper rate setting and not only input
+>> switching (which arguably doesn't seem to be of much concern on a
+>> single-parent clock)? This all is not obvious..
+> Same question from me as well, why do you need clk_rcg2_ops with
+> a dummy frequency table since this is just a mux using RCG2 control
+> bits?
+> 
+> Regards,
+> Robert
+>>
+The RCGR is used for source selection whereas the rate setting is done 
+by configuring the PLL. The source is configured in the RCGR using the 
+source entry (P_APSS_PLL_EARLY) added to the frequency table.
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
-
--- 
-Regards,
-Atish
+>> Konrad
+>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>>> ---
+>>>   drivers/clk/qcom/apss-ipq-pll.c | 1 +
+>>>   drivers/clk/qcom/apss-ipq6018.c | 8 +++++++-
+>>>   2 files changed, 8 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/clk/qcom/apss-ipq-pll.c 
+>>> b/drivers/clk/qcom/apss-ipq-pll.c
+>>> index dd0c01bf5a98..75486a124fcd 100644
+>>> --- a/drivers/clk/qcom/apss-ipq-pll.c
+>>> +++ b/drivers/clk/qcom/apss-ipq-pll.c
+>>> @@ -33,6 +33,7 @@ static struct clk_alpha_pll ipq_pll = {
+>>>               },
+>>>               .num_parents = 1,
+>>>               .ops = &clk_alpha_pll_huayra_ops,
+>>> +            .flags = CLK_IS_CRITICAL,
+>>>           },
+>>>       },
+>>>   };
+>>> diff --git a/drivers/clk/qcom/apss-ipq6018.c 
+>>> b/drivers/clk/qcom/apss-ipq6018.c
+>>> index f2f502e2d5a4..0d0e7196a4dc 100644
+>>> --- a/drivers/clk/qcom/apss-ipq6018.c
+>>> +++ b/drivers/clk/qcom/apss-ipq6018.c
+>>> @@ -33,15 +33,21 @@ static const struct parent_map 
+>>> parents_apcs_alias0_clk_src_map[] = {
+>>>       { P_APSS_PLL_EARLY, 5 },
+>>>   };
+>>> +static const struct freq_tbl ftbl_apcs_alias0_clk_src[] = {
+>>> +    { .src = P_APSS_PLL_EARLY, .pre_div = 1 },
+>>> +    { }
+>>> +};
+>>> +
+>>>   static struct clk_rcg2 apcs_alias0_clk_src = {
+>>>       .cmd_rcgr = 0x0050,
+>>> +    .freq_tbl = ftbl_apcs_alias0_clk_src,
+>>>       .hid_width = 5,
+>>>       .parent_map = parents_apcs_alias0_clk_src_map,
+>>>       .clkr.hw.init = &(struct clk_init_data){
+>>>           .name = "apcs_alias0_clk_src",
+>>>           .parent_data = parents_apcs_alias0_clk_src,
+>>>           .num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
+>>> -        .ops = &clk_rcg2_mux_closest_ops,
+>>> +        .ops = &clk_rcg2_ops,
+>>>           .flags = CLK_SET_RATE_PARENT,
+>>>       },
+>>>   };
+>>
+Best Regards,
+Devi Priya
