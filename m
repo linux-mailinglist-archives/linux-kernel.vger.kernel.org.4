@@ -2,92 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D5A682FDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89883682FE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:57:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjAaOz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:55:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53708 "EHLO
+        id S232238AbjAaO5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjAaOzV (ORCPT
+        with ESMTP id S231303AbjAaO5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:55:21 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A660747EC6;
-        Tue, 31 Jan 2023 06:55:19 -0800 (PST)
+        Tue, 31 Jan 2023 09:57:13 -0500
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C69D51C7C;
+        Tue, 31 Jan 2023 06:56:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1675176920; x=1706712920;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BCSsrKUiuMN0+pRrbKoNsUmN5hp7qg+hDzz5qrL82eg=;
-  b=H8RydCYkCNrQgWcdpBjytfnFtgwyMx9xJQjxBhsnkoZlm5iTQyKWlwu/
-   Mv8f4wRchfUFhpKP9F5l2Gg497iS6YWizxnnSES0Qvw42E9EHdUPi/M+x
-   u7+usqdfeBXqUrxxviMhGfkLACBGnn2aCJg5D9mw5MggAvt3KZD3yRZLu
-   I8UjUGdxG+cP9xmcXcW+Xjnugn2mDNHOhB7NILEls7A/Os02UjQ3LnfA5
-   xmDDW4Y4u08OKHItPOAxxqjvYt7W/fBixPyocsyxZKeTyCA2QaAI+5db+
-   ulZYofc2Nvow6MbbDPuTUa+lppIeTR/VTvmMQkDGjTSorgq2OV6HJratk
-   w==;
-X-IronPort-AV: E=Sophos;i="5.97,261,1669071600"; 
-   d="scan'208";a="28776003"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 31 Jan 2023 15:55:18 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Tue, 31 Jan 2023 15:55:18 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Tue, 31 Jan 2023 15:55:18 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1675176918; x=1706712918;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BCSsrKUiuMN0+pRrbKoNsUmN5hp7qg+hDzz5qrL82eg=;
-  b=XrlB2kNLY8dkB0qyDIz1+b7kus5YjW9V2j80740zwasb67bBDQ2gyfoi
-   bpB7ePn731qw0PyjNSkiSr5PhfLgpPUjdoNRPi/IuQDxtQOnQy1vMiWI2
-   U7CESQBaz1BeY+wV2qRWepjVAckjirbkh2Cm/xWZa+1/vE98vzHxyYH4g
-   RvJGSFT/2kF262uOWhyJ1YQreRhzznSHw7KJP8/6ROa8xOjj62uCZ4fcu
-   93XOW/8PnP2PfMj9Pvsw3xQQaykcWrBwiNWC9RTVQqX32BU2G0AKdeiTO
-   rfYICL0P/MMW0CDvGfXsFWD6iqJ+mTwzz1UIdJ0fJ0k7OpDYGxZWJzBj/
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,261,1669071600"; 
-   d="scan'208";a="28776002"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 31 Jan 2023 15:55:17 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 9AECF280056;
-        Tue, 31 Jan 2023 15:55:17 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com, Liu Ying <victor.liu@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v5 05/10] arm64: dts: imx8qxp: add flexcan in adma
-Date:   Tue, 31 Jan 2023 15:55:14 +0100
-Message-ID: <3220805.aeNJFYEL58@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20230126110833.264439-6-marcel@ziswiler.com>
-References: <20230126110833.264439-1-marcel@ziswiler.com> <20230126110833.264439-6-marcel@ziswiler.com>
+  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
+  t=1675177015; x=1706713015;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XSDcZI74s9f8AMx7xjEoypdbAe3QClb1iLeEjBiKsBI=;
+  b=EvUMvy9LUUaeUkv8clzUbJP6p1GkVRTTMrBB/Za8FF5tA7eB3Wa+8aZk
+   OX324yvcIgADEt0PX+Zs6At7JC2VWK71y4agYG/1/XgriocclMmkjfz2S
+   W6q26TeX9JQ/NqNhqgqLZRdKDRsrAqhe+0DfvIrTsINpcO80adHu0wKg8
+   w=;
+X-IronPort-AV: E=Sophos;i="5.97,261,1669075200"; 
+   d="scan'208";a="292084543"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 14:56:52 +0000
+Received: from EX13D43EUB003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com (Postfix) with ESMTPS id C756241DC7;
+        Tue, 31 Jan 2023 14:56:48 +0000 (UTC)
+Received: from EX19D037EUB003.ant.amazon.com (10.252.61.119) by
+ EX13D43EUB003.ant.amazon.com (10.43.166.195) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 31 Jan 2023 14:56:47 +0000
+Received: from f4d4887fdcfb.ant.amazon.com (10.43.161.198) by
+ EX19D037EUB003.ant.amazon.com (10.252.61.119) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.24; Tue, 31 Jan 2023 14:56:41 +0000
+From:   Babis Chalios <bchalios@amazon.es>
+To:     Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Jason Wang" <jasowang@redhat.com>,
+        Babis Chalios <bchalios@amazon.es>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>
+CC:     <sgarzare@redhat.com>, <amit@kernel.org>, <graf@amazon.de>,
+        <Jason@zx2c4.com>, <xmarcalx@amazon.co.uk>
+Subject: [PATCH v2 0/2] [RFC] virtio-rng entropy leak reporting feature
+Date:   Tue, 31 Jan 2023 15:55:41 +0100
+Message-ID: <20230131145543.86369-1-bchalios@amazon.es>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+X-Originating-IP: [10.43.161.198]
+X-ClientProxiedBy: EX13D39UWB001.ant.amazon.com (10.43.161.5) To
+ EX19D037EUB003.ant.amazon.com (10.252.61.119)
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,129 +69,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marcel,
 
-Am Donnerstag, 26. Januar 2023, 12:08:28 CET schrieb Marcel Ziswiler:
-> From: Joakim Zhang <qiangqing.zhang@nxp.com>
-> 
-> Add FlexCAN decive in adma subsystem.
-> 
-> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-> Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Recently, a proposal has been published [1] for a new feature in the
+VirtIO RNG device which will allows the device to report "entropy leaks"
+to the guest VM. Such an event occurs when, for example, we take a VM
+snapshot, or when we restore a VM from a snapshot.
 
-On TQMa8XQP (i.MX8QXP) using flexcan1 and flexcan2:
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+The feature allows the guest to request for certain operations to be
+performed upon an entropy leak event. When such an event occurs, the
+device will handle the requests and add the request buffers to the used
+queue. Adding these buffers to the used queue operates as a notification
+towards the guest about the entropy leak event.
 
-Best regards,
-Alexander
+The proposed changes describe two types of requests that can be
+performed: (1) fill a buffer in guest memory with random bytes and (2)
+perform a memory copy between two buffers in guest memory.
 
-> ---
-> 
-> (no changes since v4)
-> 
-> Changes in v4:
-> - New patch combining the following downstream patches:
->   commit e8fe3f57223a ("arm64: dts: imx8qxp: add FlexCAN in adma")
->   commit 4e90361f1ed3 ("arm64: dts: imx8qxp: add multi-pd support for
-> CAN1/2") commit 899f516e61f8 ("arm64: dts: imx8: dma: fully switched to new
-> clk binding") commit 8a28ca15a058 ("arm64: dts: imx8qxp: drop multi-pd for
-> CAN device") commit c493402197dd ("arm64: dts: imx8: update CAN
-> fsl,clk-source and fsl,scu-index property")
-> 
->  .../arm64/boot/dts/freescale/imx8-ss-dma.dtsi | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-> b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi index
-> 6ccf926b77a5..2dce8f2ee3ea 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
-> @@ -298,6 +298,65 @@ adc1: adc@5a890000 {
->  		status = "disabled";
->  	};
-> 
-> +	flexcan1: can@5a8d0000 {
-> +		compatible = "fsl,imx8qm-flexcan";
-> +		reg = <0x5a8d0000 0x10000>;
-> +		interrupts = <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-parent = <&gic>;
-> +		clocks = <&can0_lpcg 1>,
-> +			 <&can0_lpcg 0>;
-> +		clock-names = "ipg", "per";
-> +		assigned-clocks = <&clk IMX_SC_R_CAN_0 IMX_SC_PM_CLK_PER>;
-> +		assigned-clock-rates = <40000000>;
-> +		power-domains = <&pd IMX_SC_R_CAN_0>;
-> +		/* SLSlice[4] */
-> +		fsl,clk-source = /bits/ 8 <0>;
-> +		fsl,scu-index = /bits/ 8 <0>;
-> +		status = "disabled";
-> +	};
-> +
-> +	flexcan2: can@5a8e0000 {
-> +		compatible = "fsl,imx8qm-flexcan";
-> +		reg = <0x5a8e0000 0x10000>;
-> +		interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-parent = <&gic>;
-> +		/* CAN0 clock and PD is shared among all CAN instances as
-> +		 * CAN1 shares CAN0's clock and to enable CAN0's clock it
-> +		 * has to be powered on.
-> +		 */
-> +		clocks = <&can0_lpcg 1>,
-> +			 <&can0_lpcg 0>;
-> +		clock-names = "ipg", "per";
-> +		assigned-clocks = <&clk IMX_SC_R_CAN_0 IMX_SC_PM_CLK_PER>;
-> +		assigned-clock-rates = <40000000>;
-> +		power-domains = <&pd IMX_SC_R_CAN_1>;
-> +		/* SLSlice[4] */
-> +		fsl,clk-source = /bits/ 8 <0>;
-> +		fsl,scu-index = /bits/ 8 <1>;
-> +		status = "disabled";
-> +	};
-> +
-> +	flexcan3: can@5a8f0000 {
-> +		compatible = "fsl,imx8qm-flexcan";
-> +		reg = <0x5a8f0000 0x10000>;
-> +		interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-parent = <&gic>;
-> +		/* CAN0 clock and PD is shared among all CAN instances as
-> +		 * CAN2 shares CAN0's clock and to enable CAN0's clock it
-> +		 * has to be powered on.
-> +		 */
-> +		clocks = <&can0_lpcg 1>,
-> +			 <&can0_lpcg 0>;
-> +		clock-names = "ipg", "per";
-> +		assigned-clocks = <&clk IMX_SC_R_CAN_0 IMX_SC_PM_CLK_PER>;
-> +		assigned-clock-rates = <40000000>;
-> +		power-domains = <&pd IMX_SC_R_CAN_2>;
-> +		/* SLSlice[4] */
-> +		fsl,clk-source = /bits/ 8 <0>;
-> +		fsl,scu-index = /bits/ 8 <2>;
-> +		status = "disabled";
-> +	};
-> +
->  	i2c0_lpcg: clock-controller@5ac00000 {
->  		compatible = "fsl,imx8qxp-lpcg";
->  		reg = <0x5ac00000 0x10000>;
-> @@ -369,4 +428,17 @@ adc1_lpcg: clock-controller@5ac90000 {
->  				     "adc1_lpcg_ipg_clk";
->  		power-domains = <&pd IMX_SC_R_ADC_1>;
->  	};
-> +
-> +	can0_lpcg: clock-controller@5acd0000 {
-> +		compatible = "fsl,imx8qxp-lpcg";
-> +		reg = <0x5acd0000 0x10000>;
-> +		#clock-cells = <1>;
-> +		clocks = <&clk IMX_SC_R_CAN_0 IMX_SC_PM_CLK_PER>,
-> +			 <&dma_ipg_clk>, <&dma_ipg_clk>;
-> +		clock-indices = <IMX_LPCG_CLK_0>, <IMX_LPCG_CLK_4>, 
-<IMX_LPCG_CLK_5>;
-> +		clock-output-names = "can0_lpcg_pe_clk",
-> +				     "can0_lpcg_ipg_clk",
-> +				     "can0_lpcg_chi_clk";
-> +		power-domains = <&pd IMX_SC_R_CAN_0>;
-> +	};
->  };
+The mechanism provides similar functionality to Microsoft's Virtual
+Machine Generation ID and it can be used to re-seed the kernel's PRNG
+upon taking a VM snapshot or resuming from one. Additionally, it allows
+to (1) avoid the race-condition that exists with our VMGENID
+implementation, between the time a VM is resumed after a "leak event"
+and the handling of the ACPI notification before adding the new entropy.
+Finally, it allows building on top of it to provide a mechanism for
+notifying user-space about such events.
 
+The first patch of this series, extends the current virtio-rng driver to
+implement the new feature and ensures that there is always a request to
+get some random bytes from the device in the event of an entropy leak
+and uses these bytes as entropy through the `add_device_randomness`.
 
+The second patch adds a copy-on-leak command as well in the queue,
+implementating the idea of a generation counter that has previously been
+part of the VMGENID saga. It then exposes the value of the generation
+counter over a sysfs file. User-space can read, mmap and poll on the
+file in order to be notified about entropy leak events.
 
+I have performed basic tests of the user-space interfaces using a
+Firecracker where I implemented virtio-rng with the proposed features.
+Instructions on how to replicate this can be found here:
+https://github.com/bchalios/virtio-snapsafe-example
+
+The patchset does not solve all problems. We do not define an API for
+other parts of the kernel to be able to use directly the new
+functionality (add commands to the queue), mainly because I 'm not sure
+what would the correct API be. I was toying with the idea of extending
+`struct hwrng` with two new hooks that would be implemented only by
+virtio-rng but I'm not sure I like it, so I am open to suggestions.
+
+As a result of the above, the way we use the functionality to add new
+entropy, i.e. calling `add_device_randomness`, is as racy as the VMGENID
+case, since it relies on used buffers been handled by the virtio driver.
+
+As for user-space, the `mmap` interface *is* race-free. Changes in the
+generation counter will be observable by user applications the moment VM
+vcpus resume. However, the `poll` interface isn't, `sysfs_notify` is
+being called as well when the virtio driver handles used buffers. I am
+not sure I have a solution for this last one.
+
+Posting this, I hope we can resume the discussion about solving the
+above issues (or any other issue that I haven't thought of), especially
+with regards to providing a mechanism suitable for user-space
+notifications.
+
+Cheers,
+Babis
+
+Changes in v2: fix kbuild warnings
+
+Babis Chalios (2):
+  virtio-rng: implement entropy leak feature
+  virtio-rng: add sysfs entries for leak detection
+
+ drivers/char/hw_random/virtio-rng.c | 372 +++++++++++++++++++++++++++-
+ include/uapi/linux/virtio_rng.h     |   3 +
+ 2 files changed, 368 insertions(+), 7 deletions(-)
+
+-- 
+2.38.1
+
+Amazon Spain Services sociedad limitada unipersonal, Calle Ramirez de Prado 5, 28045 Madrid. Registro Mercantil de Madrid . Tomo 22458 . Folio 102 . Hoja M-401234 . CIF B84570936
 
