@@ -2,134 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D21682E56
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BAE682E53
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbjAaNtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S232301AbjAaNsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:48:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjAaNtf (ORCPT
+        with ESMTP id S231615AbjAaNsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:49:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB6FCA36
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:48:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675172932;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IjJLFD2d2G0+4FaeIQz9TlcS4nROfEwnimKGLhaKDRA=;
-        b=PZMp0m/Rr7OHld/3ObrDNwqSGqP4dKyP2z3EAGB/91L7KUJJI3fVVsiBJS1mUkRTtDzzS6
-        UgvtuCiIG+jovOAPliTJ71rSgWs5ikohOw2yCcLOpkHZC3DBTwI6XM/dpjdbXGUgxs6Cjw
-        EdL7sRSARlYJPJOsWIoxpi6AbCH6hrU=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-139-_vE1W_iCNRO5c8UOY4T6Tg-1; Tue, 31 Jan 2023 08:48:51 -0500
-X-MC-Unique: _vE1W_iCNRO5c8UOY4T6Tg-1
-Received: by mail-wr1-f70.google.com with SMTP id e9-20020a5d6d09000000b002c172f173a9so295892wrq.17
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:48:51 -0800 (PST)
+        Tue, 31 Jan 2023 08:48:51 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B13ECA36
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:48:50 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id n8-20020a6bf608000000b007048850aa92so8372012ioh.10
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:48:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IjJLFD2d2G0+4FaeIQz9TlcS4nROfEwnimKGLhaKDRA=;
-        b=g6sBMvZsoyop6uoNPsOkl907yIH+pUzc48EV8VCI62Q4dzjn+L0pAHe+uVYbkWlKHn
-         w4bgsuYJA7MrUGnxm2TqXIcVgrq+2m2DuEnX/T8Ef1PpvsKj0WChRJ/1VecntXWri1bb
-         oGtqrt+Xx30+Qne3mSmG7OziC/NHeMF/tKZgIOozjL02+TLVOmVNrsZ5TotaL3pFw7Xd
-         6PnmhVW03ERSFwHuDaoQn/kCC2KltTyOLaq9s2oIlvS/RxfRagt6NFF1yR4arwAsfX1H
-         qsY8kOju9p5OGSluajxjd6ae1g9kc7ESSoMu9YZyeI34aCDM9IlIuXu9McVspsK7+iVJ
-         E/lw==
-X-Gm-Message-State: AFqh2krAlSf9q7UQ/keGMrJzT3PiISFLM3/YKBMvc8EGJ8zV7BM6aRNG
-        qxQlsh4D9Chi1c98Y3AlXrT3LBeuPltVYjhWDIcCmaiYHGBUuekKo4XC2/+9vpTSpNR/041RFsE
-        GSFEb04srKSIwKgmCGAAUWKUv
-X-Received: by 2002:a05:600c:198e:b0:3db:1d7e:c429 with SMTP id t14-20020a05600c198e00b003db1d7ec429mr47082362wmq.40.1675172930138;
-        Tue, 31 Jan 2023 05:48:50 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXshlDM/kQP8UJqjwbUaYwp0yiDAedYva3SxuXjhG46v5k1mOFWlDh+q4kEbTiH/6PL7Sw4dLg==
-X-Received: by 2002:a05:600c:198e:b0:3db:1d7e:c429 with SMTP id t14-20020a05600c198e00b003db1d7ec429mr47082333wmq.40.1675172929825;
-        Tue, 31 Jan 2023 05:48:49 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f0a:ca00:f74f:2017:1617:3ec3? (p200300d82f0aca00f74f201716173ec3.dip0.t-ipconnect.de. [2003:d8:2f0a:ca00:f74f:2017:1617:3ec3])
-        by smtp.gmail.com with ESMTPSA id j5-20020a05600c1c0500b003dc4aae4739sm13771171wms.27.2023.01.31.05.48.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:48:48 -0800 (PST)
-Message-ID: <88d50843-9aa6-7930-433d-9b488857dc14@redhat.com>
-Date:   Tue, 31 Jan 2023 14:48:47 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rXRBZcfiZgUOnHWClzz8kSv/Et/TqkjjdObCbwIZEF8=;
+        b=IrF4AO6CvLQcFnERy/0pZDWMPsAZCSp9lJ0B4Lmm0iaP2xwh9DN5bpaWc/Azu/gJvK
+         r4TFWF8KRRBvmxFxQZ7410BRM3wdiALl+VsXTre3dlTDeGkAUm3Jl66RCXr7cPnUVxSo
+         QtAVrbmyGTDlLsxDRjiRjoaqHNQk4KAUGB5e6VS6zqJPqQH+oAYAqtC10DuidRnU3H8f
+         pg/OWgZPAu4+H9MHZmc0OpC4gszeggtbUXSPza+MEdGbERUY8D138sp4A+/iwFtQOJOD
+         J1873j06QGHVQdXWcbHZelM+7k7iOi2mWxUEXmNvnc2Wnhs9MZBBMwKq1nfle96IjYsh
+         iotA==
+X-Gm-Message-State: AO0yUKXEkD44Pdm+b1AiLUiOkkyaf0hGgt+8/ZhtvXOX2SB/WUebbc+I
+        uDcPENehA39GW1CIs1DJN0Esct9/PR6MAA5blhZm9DBpCgj3
+X-Google-Smtp-Source: AK7set9+xnDgx0d9/8zeiBxOCJ8n3xg1eLWs9XIX1n927iLQry7o9FUuTR5C5eMsM4JB1YzWngoVq8F2lzMcU8GzWbX0juKOzb2W
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, John Hubbard <jhubbard@nvidia.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <040ed7a7-3f4d-dab7-5a49-1cd9933c5445@redhat.com>
- <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
- <3351099.1675077249@warthog.procyon.org.uk>
- <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
- <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk>
- <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
- <3520518.1675116740@warthog.procyon.org.uk>
- <f392399b-a4c4-2251-e12b-e89fff351c4d@kernel.dk>
- <3791872.1675172490@warthog.procyon.org.uk>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <3791872.1675172490@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cc77:0:b0:3b2:a6c0:2879 with SMTP id
+ j23-20020a02cc77000000b003b2a6c02879mr1188152jaq.7.1675172929812; Tue, 31 Jan
+ 2023 05:48:49 -0800 (PST)
+Date:   Tue, 31 Jan 2023 05:48:49 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006b3ead05f38f970e@google.com>
+Subject: [syzbot] [f2fs?] KASAN: use-after-free Read in __shrink_extent_tree
+From:   syzbot <syzbot+552d3bff86d241487b03@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.23 14:41, David Howells wrote:
-> David Hildenbrand <david@redhat.com> wrote:
-> 
->>>> percpu counters maybe - add them up at the point of viewing?
->>> They are percpu, see my last email. But for every 108 changes (on
->>> my system), they will do two atomic_long_adds(). So not very
->>> useful for anything but low frequency modifications.
->>>
->>
->> Can we just treat the whole acquired/released accounting as a debug mechanism
->> to detect missing releases and do it only for debug kernels?
->>
->>
->> The pcpu counter is an s8, so we have to flush on a regular basis and cannot
->> really defer it any longer ... but I'm curious if it would be of any help to
->> only have a single PINNED counter that goes into both directions (inc/dec on
->> pin/release), to reduce the flushing.
->>
->> Of course, once we pin/release more than ~108 pages in one go or we switch
->> CPUs frequently it won't be that much of a help ...
-> 
-> What are the stats actually used for?  Is it just debugging, or do we actually
-> have users for them (control groups spring to mind)?
+Hello,
 
-As it's really just "how many pinning events" vs. "how many unpinning 
-events", I assume it's only for debugging.
+syzbot found the following issue on:
 
-For example, if you pin the same page twice it would not get accounted 
-as "a single page is pinned".
+HEAD commit:    7c46948a6e9c Merge tag 'fs.fuse.acl.v6.2-rc6' of git://git..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12c1d8ed480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c8d5c2ee6c2bd4b8
+dashboard link: https://syzkaller.appspot.com/bug?extid=552d3bff86d241487b03
+compiler:       Debian clang version 13.0.1-6~deb11u1, GNU ld (GNU Binutils for Debian) 2.35.2
 
--- 
-Thanks,
+Unfortunately, I don't have any reproducer for this issue yet.
 
-David / dhildenb
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/cc51645b6401/disk-7c46948a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/be036b5604a3/vmlinux-7c46948a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/274f5abf2c8f/bzImage-7c46948a.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+552d3bff86d241487b03@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: use-after-free in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+BUG: KASAN: use-after-free in queued_write_trylock include/asm-generic/qrwlock.h:67 [inline]
+BUG: KASAN: use-after-free in do_raw_write_trylock+0x6e/0x1f0 kernel/locking/spinlock_debug.c:216
+Read of size 4 at addr ffff8880276cd510 by task syz-executor.1/5105
+
+CPU: 0 PID: 5105 Comm: syz-executor.1 Not tainted 6.2.0-rc5-syzkaller-00047-g7c46948a6e9c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:306
+ print_report+0x107/0x1f0 mm/kasan/report.c:417
+ kasan_report+0xcd/0x100 mm/kasan/report.c:517
+ kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+ queued_write_trylock include/asm-generic/qrwlock.h:67 [inline]
+ do_raw_write_trylock+0x6e/0x1f0 kernel/locking/spinlock_debug.c:216
+ __raw_write_trylock include/linux/rwlock_api_smp.h:132 [inline]
+ _raw_write_trylock+0x1c/0x70 kernel/locking/spinlock.c:292
+ __shrink_extent_tree+0x85d/0xc50 fs/f2fs/extent_cache.c:1015
+ f2fs_leave_shrinker+0x80/0x250 fs/f2fs/shrinker.c:142
+ f2fs_put_super+0x59b/0xc20 fs/f2fs/super.c:1597
+ generic_shutdown_super+0x130/0x310 fs/super.c:492
+ kill_block_super+0x79/0xd0 fs/super.c:1386
+ kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4640
+ deactivate_locked_super+0xa7/0xf0 fs/super.c:332
+ cleanup_mnt+0x494/0x520 fs/namespace.c:1291
+ task_work_run+0x243/0x300 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
+ exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
+ do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f779e88d537
+Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff5ea91f98 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f779e88d537
+RDX: 00007fff5ea9206a RSI: 000000000000000a RDI: 00007fff5ea92060
+RBP: 00007fff5ea92060 R08: 00000000ffffffff R09: 00007fff5ea91e30
+R10: 0000555555e448b3 R11: 0000000000000246 R12: 00007f779e8e6b24
+R13: 00007fff5ea93120 R14: 0000555555e44810 R15: 00007fff5ea93160
+ </TASK>
+
+Allocated by task 9209:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x65/0x70 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:761 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x1b3/0x350 mm/slub.c:3476
+ f2fs_kmem_cache_alloc_nofail fs/f2fs/f2fs.h:2796 [inline]
+ f2fs_kmem_cache_alloc fs/f2fs/f2fs.h:2806 [inline]
+ __grab_extent_tree+0x19b/0x420 fs/f2fs/extent_cache.c:423
+ f2fs_init_extent_tree+0x20c/0x450 fs/f2fs/extent_cache.c:533
+ f2fs_new_inode+0xd89/0x1060 fs/f2fs/namei.c:312
+ __f2fs_tmpfile+0xa5/0x380 fs/f2fs/namei.c:852
+ f2fs_ioc_start_atomic_write+0x3ec/0x970 fs/f2fs/file.c:2098
+ __f2fs_ioctl+0x137d/0xb540
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 9242:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
+ kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ kmem_cache_free+0x94/0x1d0 mm/slub.c:3809
+ __destroy_extent_tree+0x6fa/0x880 fs/f2fs/extent_cache.c:1193
+ f2fs_destroy_extent_tree+0x13/0x20 fs/f2fs/extent_cache.c:1204
+ f2fs_evict_inode+0x324/0x1310 fs/f2fs/inode.c:789
+ evict+0x2a4/0x620 fs/inode.c:664
+ f2fs_abort_atomic_write+0xc7/0x410 fs/f2fs/segment.c:196
+ f2fs_ioc_abort_atomic_write fs/f2fs/file.c:2182 [inline]
+ __f2fs_ioctl+0x3294/0xb540 fs/f2fs/file.c:4156
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff8880276cd4e0
+ which belongs to the cache f2fs_extent_tree of size 144
+The buggy address is located 48 bytes inside of
+ 144-byte region [ffff8880276cd4e0, ffff8880276cd570)
+
+The buggy address belongs to the physical page:
+page:ffffea00009db340 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8880276cd820 pfn:0x276cd
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffff8880193cab40 dead000000000122 0000000000000000
+raw: ffff8880276cd820 000000008013000b 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Reclaimable, gfp_mask 0x112c50(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY|__GFP_HARDWALL|__GFP_RECLAIMABLE), pid 6721, tgid 6674 (syz-executor.5), ts 321161536352, free_ts 299722486648
+ prep_new_page mm/page_alloc.c:2531 [inline]
+ get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4283
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
+ alloc_slab_page+0xbd/0x190 mm/slub.c:1851
+ allocate_slab+0x5e/0x3c0 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0x782/0xe20 mm/slub.c:3193
+ __slab_alloc mm/slub.c:3292 [inline]
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x268/0x350 mm/slub.c:3476
+ f2fs_kmem_cache_alloc_nofail fs/f2fs/f2fs.h:2796 [inline]
+ f2fs_kmem_cache_alloc fs/f2fs/f2fs.h:2806 [inline]
+ __grab_extent_tree+0x19b/0x420 fs/f2fs/extent_cache.c:423
+ f2fs_init_extent_tree+0x20c/0x450 fs/f2fs/extent_cache.c:533
+ f2fs_new_inode+0xd89/0x1060 fs/f2fs/namei.c:312
+ __f2fs_tmpfile+0xa5/0x380 fs/f2fs/namei.c:852
+ f2fs_ioc_start_atomic_write+0x3ec/0x970 fs/f2fs/file.c:2098
+ __f2fs_ioctl+0x137d/0xb540
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1446 [inline]
+ free_pcp_prepare+0x751/0x780 mm/page_alloc.c:1496
+ free_unref_page_prepare mm/page_alloc.c:3369 [inline]
+ free_unref_page+0x19/0x4c0 mm/page_alloc.c:3464
+ qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x156/0x170 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x1f/0x70 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:761 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ __kmem_cache_alloc_node+0x1e0/0x340 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:967 [inline]
+ __kmalloc+0x9e/0x190 mm/slab_common.c:981
+ kmalloc include/linux/slab.h:584 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ tomoyo_encode2 security/tomoyo/realpath.c:45 [inline]
+ tomoyo_encode+0x26f/0x540 security/tomoyo/realpath.c:80
+ tomoyo_path_perm+0x344/0x670 security/tomoyo/file.c:831
+ tomoyo_path_symlink+0xda/0x110 security/tomoyo/tomoyo.c:211
+ security_path_symlink+0xd6/0x160 security/security.c:1212
+ do_symlinkat+0x11b/0x5f0 fs/namei.c:4425
+ __do_sys_symlinkat fs/namei.c:4447 [inline]
+ __se_sys_symlinkat fs/namei.c:4444 [inline]
+ __x64_sys_symlinkat+0x95/0xa0 fs/namei.c:4444
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff8880276cd400: fc fc fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880276cd480: fb fb fb fb fc fc fc fc fc fc fc fc fa fb fb fb
+>ffff8880276cd500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc
+                         ^
+ ffff8880276cd580: fc fc fc fc fc fc fb fb fb fb fb fb fb fb fb fb
+ ffff8880276cd600: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
