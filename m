@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D489D682E05
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4971D682E03
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbjAaNdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjAaNdq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231311AbjAaNdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 31 Jan 2023 08:33:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF2F23C76;
-        Tue, 31 Jan 2023 05:33:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B03EB81C95;
-        Tue, 31 Jan 2023 13:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7705DC433EF;
-        Tue, 31 Jan 2023 13:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675172020;
-        bh=6Hx/Yl639gs12tAxrrRchm4lXuBjrnkbiP792+3ios0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gxAxcYeaUqyMFe6e/jBcqfq0uWYwq0vATyD9O3wKa13ubJc9WGsyrnKZdRiXI4VXI
-         hgt9wqAogfJScOIsdtAksRFD4RA6jwT3aLkvF0mATVvUqfCfCK6PRjQB//ipGv8Tnr
-         Wjt6HNH8V/XMAiA+tmiHUlP78dkRSgIbA5zgNO0U7PwARe8dmvMwh1Qm4U5BIgmomd
-         KNpIUuUizU9hv2j+UnOU5Um3HJmSt2OyvOexEOAdIpdqIHpHRLyAKX9F+2ChTKABIf
-         qojUpQblX5pD0vvGkDkCzmqRZiFsq9WdpjmlH5t1J0hfKF+u/JKl8nRg5fhNdZMtiZ
-         8tR4sC/FknT0g==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] setlocalversion: do not append git commit hash if localversion* exists
-Date:   Tue, 31 Jan 2023 22:32:53 +0900
-Message-Id: <20230131133253.1460560-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232230AbjAaNdm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 31 Jan 2023 08:33:42 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82295085D;
+        Tue, 31 Jan 2023 05:33:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=2Kb+RfZF2P0xLGtBohMblwLOSUXun94qd49rrzVcMJU=; b=vBCDOTlW4hLkt12W37EmOTEojN
+        EIsxLpp4xPnqRIx+NQPLLcc95nwQvsjPuPLCGt3kVum69gG5EiaaG5q0d9WV+L35briLKEQ7s29bB
+        +xqv9QBMzODJtSSPIi21ETpMQ2Lb08cDMycc2LVSy0dmDwut+5dbRrtM9N7bEjJVN+pI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pMqlC-003h6b-Rj; Tue, 31 Jan 2023 14:33:18 +0100
+Date:   Tue, 31 Jan 2023 14:33:18 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Frank.Sae" <Frank.Sae@motor-comm.com>
+Cc:     Rob Herring <robh@kernel.org>, Peter Geis <pgwipeout@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        yanhong.wang@starfivetech.com, xiaogang.fan@motor-comm.com,
+        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/5] dt-bindings: net: Add Motorcomm yt8xxx
+ ethernet phy
+Message-ID: <Y9kYnnYRMW9Vi0DU@lunn.ch>
+References: <20230130063539.3700-1-Frank.Sae@motor-comm.com>
+ <20230130063539.3700-2-Frank.Sae@motor-comm.com>
+ <20230130224158.GA3655289-robh@kernel.org>
+ <af6beebc-0a70-16f5-e0e9-5f4cbeea8955@motor-comm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <af6beebc-0a70-16f5-e0e9-5f4cbeea8955@motor-comm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit dcfbcb1033bb ("setlocalversion: use only the correct
-release tag for git-describe"), KERNELRELEASE of linux-next is
-annoyingly long:
+> phy id list:
+> YT8511	0x0000010a
+> YT8521	0x0000011A
+> YT8531  0x4f51e91b
 
-  $ make kernelrelease
-  6.2.0-rc6-next-20230131-09515-g80bd9028feca
+The first two are clearly invalid, the OUI part is zero. So i would
+not list those. Just use the last one.
 
-The string '-09515-g80bd9028feca' is appended because git-describe now
-uses the v6.2.0 tag instead of the next-20230113 tag.
+In the binding part, you need something like
 
-In linux-next, the 'localversion-next' file well specifies the local
-version, so the extra info from git is unneeded.
+properties:
+  compatible:
+    const: ethernet-phy-id4f51.e91b
+    description: Only needed for DT lint tools
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+What i don't know is how this will work in combination with the
+compatibles gained from ethernet-phy.yaml. You might need to follow
+the same structure, include a oneOf:
 
- scripts/setlocalversion | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+In the example part, you would do something like:
+> 
+>     mdio0 {
+>         ...
+>         ethernet-phy@5 {
+	      # Only needed to make DT lint tools work. Do not copy/paste
+	      # into real DTS files.
+>             compatible = "ethernet-phy-id4f51.e91b";
+>             reg = <5>;
+>             ...
+>         };
+>     };
 
-diff --git a/scripts/setlocalversion b/scripts/setlocalversion
-index e2b2d492ac13..4219a0ca1e62 100755
---- a/scripts/setlocalversion
-+++ b/scripts/setlocalversion
-@@ -113,22 +113,23 @@ if [ -z "${KERNELVERSION}" ]; then
- 	exit 1
- fi
- 
--res="${KERNELVERSION}"
--
- # localversion* files in the build and source directory
--res="${res}$(collect_files localversion*)"
-+file_localversion="$(collect_files localversion*)"
- if test ! "$srctree" -ef .; then
--	res="$res$(collect_files "$srctree"/localversion*)"
-+	file_localversion="${file_localversion}$(collect_files "$srctree"/localversion*)"
- fi
- 
--# CONFIG_LOCALVERSION and LOCALVERSION (if set)
-+# CONFIG_LOCALVERSION
- config_localversion=$(sed -n 's/^CONFIG_LOCALVERSION=\(.*\)$/\1/p' include/config/auto.conf)
--res="${res}${config_localversion}${LOCALVERSION}"
- 
- # scm version string if not at the kernel version tag
--if grep -q "^CONFIG_LOCALVERSION_AUTO=y$" include/config/auto.conf; then
-+if [ -n "${file_localversion}" ]; then
-+	# If localversion* files exist (like in linux-next), the version is
-+	# well specified. Do not append scm_version.
-+	scm_version=
-+elif grep -q "^CONFIG_LOCALVERSION_AUTO=y$" include/config/auto.conf; then
- 	# full scm version string
--	res="$res$(scm_version)"
-+	scm_version="$(scm_version)"
- elif [ "${LOCALVERSION+set}" != "set" ]; then
- 	# If the variable LOCALVERSION is not set, append a plus
- 	# sign if the repository is not in a clean annotated or
-@@ -137,7 +138,7 @@ elif [ "${LOCALVERSION+set}" != "set" ]; then
- 	#
- 	# If the variable LOCALVERSION is set (including being set
- 	# to an empty string), we don't want to append a plus sign.
--	res="$res$(scm_version --short)"
-+	scm_version="$(scm_version --short)"
- fi
- 
--echo "$res"
-+echo "${KERNELVERSION}${file_localversion}${config_localversion}${LOCALVERSION}${scm_version}"
--- 
-2.34.1
+I don't think there are any examples to follow because the kernel
+does not need any of this, is probes using the IDs. Listing
+compatibles like this is purely for the DT tools, which is why i put
+in the comments about not copy/pasting it to real DT blobs.
 
+   Andrew
