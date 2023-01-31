@@ -2,236 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272E46832EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBAB6832ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjAaQlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:41:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S230255AbjAaQma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjAaQlk (ORCPT
+        with ESMTP id S229686AbjAaQm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:41:40 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCDE561A2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:41:38 -0800 (PST)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 147CD240009;
-        Tue, 31 Jan 2023 16:41:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675183295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=euDzKHP9/mtuK4Sv6gmdi0F88PCk07Xbz8L5E8Kz3kU=;
-        b=gUXjnRAfNZaRf5ey5PfkDn+Il1s9laCJdGtd3dJY8iyRrhbHBL7xnQi+HPbe+0k4vkNH+d
-        VXdqGOM3r8kDYflvrHO3/DE5mkYOwpPWvFSy2ovyKmSYw/jyJxZItR6bSCNB0Vq30wWDRv
-        Ge0QmukmalggjGepa3NnnbPUaOqdoCfEy7rwL0EwWbl+RF1bS7eZv7qVBVEgvlgrqapsDa
-        UUKAwJBuKYyJkMPwOSmpdgP4MRBAg2YLYpbudijNuA9IG+imy8vUlBT5FxRN6xge7K4rEW
-        +hCYiGNar5YZX10UTzO1vTn3EXn2sVF2mC/nPVidXPpKt2K7wgPbIgB1KunC4Q==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: irq: remove handle_IRQ() for good
-In-Reply-To: <20230117174117.3314951-1-arnd@kernel.org>
-References: <20230117174117.3314951-1-arnd@kernel.org>
-Date:   Tue, 31 Jan 2023 17:41:33 +0100
-Message-ID: <87k012bqrm.fsf@BL-laptop>
+        Tue, 31 Jan 2023 11:42:27 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36FC474FA;
+        Tue, 31 Jan 2023 08:42:21 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGBDNj018502;
+        Tue, 31 Jan 2023 16:42:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=WJAte0fcgniYyVZvagGlZqyo+5v/BoLB4JUGbQfZdqo=;
+ b=IdwMGkWj/esZajsbfYn4dZpTu2KKpqO1n2bSvylHpUBXoJd8Up3J3PA2Gw5/GzwTuq7Y
+ CidrxmhmO5DHem62hJbe/LrHmr84knnGkkjrbBGxGPc+YNlhyxC3jKHlvYKVUpVr8Nis
+ lpwAFp+cULfko9TzF5yM+80Ql7K6xdJFHeyMJz0wEDU8zxB/fPApbhS9YCUo0U164iKI
+ QgTVSrM/nCFfIdWZ6JAuTLrfZb8u2u5Si6ZyXFQKeetpIut1yQvjE9rKTG08OCesr2RA
+ hdMz+bU5WJNjucD/yhqStyzyNj3HD/ievKcXHadPrp0YOSU/EcDyvOWQTId77htjwPWZ pQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf69e8v2x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:42:13 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VGfG8L027021;
+        Tue, 31 Jan 2023 16:42:12 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf69e8v2g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:42:12 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFdXLn005396;
+        Tue, 31 Jan 2023 16:42:12 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3ncvv1ryyr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:42:12 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VGg9Ip59769328
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 16:42:10 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CCC9C58051;
+        Tue, 31 Jan 2023 16:42:09 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2946058065;
+        Tue, 31 Jan 2023 16:42:08 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 16:42:08 +0000 (GMT)
+Message-ID: <0289a68b-cecb-baea-1c4e-4a290ba95669@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 11:42:07 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 21/25] powerpc/pseries: Add helper to get PLPKS
+ password length
+Content-Language: en-US
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+References: <20230131063928.388035-1-ajd@linux.ibm.com>
+ <20230131063928.388035-22-ajd@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230131063928.388035-22-ajd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pFciKYwC2mEkPK3pPxdBkhVWOLbig5ld
+X-Proofpoint-ORIG-GUID: ePnfQeNe-KNB3zwbKyZAn1NIBXDFaOIb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 adultscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310146
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Arnd Bergmann <arnd@kernel.org> writes:
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The only difference between generic_handle_irq() and the ARM
-> handle_IRQ() version is now the range check, and in the remaining
-> drivers this does not appear to be needed any more.
->
-> Remove this old interface and use the generic version in its place.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+On 1/31/23 01:39, Andrew Donnellan wrote:
+> From: Russell Currey <ruscur@russell.cc>
+> 
+> Add helper function to get the PLPKS password length. This will be used
+> in a later patch to support passing the password between kernels over
+> kexec.
+> 
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+
+> 
 > ---
->  arch/arm/include/asm/irq.h  |  4 ----
->  arch/arm/kernel/irq.c       | 25 -------------------------
->  arch/arm/mach-dove/irq.c    |  6 ++----
->  arch/arm/mach-mv78xx0/irq.c |  9 +++------
->  arch/arm/mach-orion5x/irq.c |  3 +--
->  arch/arm/mach-pxa/irq.c     |  4 ++--
-
-For mvebu related platform
-
-Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-
-Thanks,
-
-Gregory
-
-
->  6 files changed, 8 insertions(+), 43 deletions(-)
->
-> diff --git a/arch/arm/include/asm/irq.h b/arch/arm/include/asm/irq.h
-> index a7c2337b0c7d..f62fa9f36192 100644
-> --- a/arch/arm/include/asm/irq.h
-> +++ b/arch/arm/include/asm/irq.h
-> @@ -23,10 +23,6 @@
->  #endif
->  
->  #ifndef __ASSEMBLY__
-> -struct irqaction;
-> -struct pt_regs;
-> -
-> -void handle_IRQ(unsigned int, struct pt_regs *);
->  void init_IRQ(void);
->  
->  #ifdef CONFIG_SMP
-> diff --git a/arch/arm/kernel/irq.c b/arch/arm/kernel/irq.c
-> index fe28fc1f759d..e0983269729f 100644
-> --- a/arch/arm/kernel/irq.c
-> +++ b/arch/arm/kernel/irq.c
-> @@ -96,31 +96,6 @@ int arch_show_interrupts(struct seq_file *p, int prec)
->  	return 0;
->  }
->  
-> -/*
-> - * handle_IRQ handles all hardware IRQ's.  Decoded IRQs should
-> - * not come via this function.  Instead, they should provide their
-> - * own 'handler'.  Used by platform code implementing C-based 1st
-> - * level decoding.
-> - */
-> -void handle_IRQ(unsigned int irq, struct pt_regs *regs)
-> -{
-> -	struct irq_desc *desc;
-> -
-> -	/*
-> -	 * Some hardware gives randomly wrong interrupts.  Rather
-> -	 * than crashing, do something sensible.
-> -	 */
-> -	if (unlikely(!irq || irq >= nr_irqs))
-> -		desc = NULL;
-> -	else
-> -		desc = irq_to_desc(irq);
-> -
-> -	if (likely(desc))
-> -		handle_irq_desc(desc);
-> -	else
-> -		ack_bad_irq(irq);
-> -}
-> -
->  void __init init_IRQ(void)
->  {
->  	int ret;
-> diff --git a/arch/arm/mach-dove/irq.c b/arch/arm/mach-dove/irq.c
-> index 027a8f87bc2e..500f097e09b3 100644
-> --- a/arch/arm/mach-dove/irq.c
-> +++ b/arch/arm/mach-dove/irq.c
-> @@ -47,15 +47,13 @@ __exception_irq_entry dove_legacy_handle_irq(struct pt_regs *regs)
->  	stat = readl_relaxed(dove_irq_base + IRQ_CAUSE_LOW_OFF);
->  	stat &= readl_relaxed(dove_irq_base + IRQ_MASK_LOW_OFF);
->  	if (stat) {
-> -		unsigned int hwirq = 1 + __fls(stat);
-> -		handle_IRQ(hwirq, regs);
-> +		generic_handle_irq(1 + __fls(stat));
->  		return;
->  	}
->  	stat = readl_relaxed(dove_irq_base + IRQ_CAUSE_HIGH_OFF);
->  	stat &= readl_relaxed(dove_irq_base + IRQ_MASK_HIGH_OFF);
->  	if (stat) {
-> -		unsigned int hwirq = 33 + __fls(stat);
-> -		handle_IRQ(hwirq, regs);
-> +		generic_handle_irq(33 + __fls(stat));
->  		return;
->  	}
->  }
-> diff --git a/arch/arm/mach-mv78xx0/irq.c b/arch/arm/mach-mv78xx0/irq.c
-> index a34b6855fb19..6114ccbcdab2 100644
-> --- a/arch/arm/mach-mv78xx0/irq.c
-> +++ b/arch/arm/mach-mv78xx0/irq.c
-> @@ -31,22 +31,19 @@ __exception_irq_entry mv78xx0_legacy_handle_irq(struct pt_regs *regs)
->  	stat = readl_relaxed(mv78xx0_irq_base + IRQ_CAUSE_LOW_OFF);
->  	stat &= readl_relaxed(mv78xx0_irq_base + IRQ_MASK_LOW_OFF);
->  	if (stat) {
-> -		unsigned int hwirq = __fls(stat);
-> -		handle_IRQ(hwirq, regs);
-> +		generic_handle_irq(__fls(stat));
->  		return;
->  	}
->  	stat = readl_relaxed(mv78xx0_irq_base + IRQ_CAUSE_HIGH_OFF);
->  	stat &= readl_relaxed(mv78xx0_irq_base + IRQ_MASK_HIGH_OFF);
->  	if (stat) {
-> -		unsigned int hwirq = 32 + __fls(stat);
-> -		handle_IRQ(hwirq, regs);
-> +		generic_handle_irq(32 + __fls(stat));
->  		return;
->  	}
->  	stat = readl_relaxed(mv78xx0_irq_base + IRQ_CAUSE_ERR_OFF);
->  	stat &= readl_relaxed(mv78xx0_irq_base + IRQ_MASK_ERR_OFF);
->  	if (stat) {
-> -		unsigned int hwirq = 64 + __fls(stat);
-> -		handle_IRQ(hwirq, regs);
-> +		generic_handle_irq(64 + __fls(stat));
->  		return;
->  	}
->  }
-> diff --git a/arch/arm/mach-orion5x/irq.c b/arch/arm/mach-orion5x/irq.c
-> index e17727e53cb4..41d08934a918 100644
-> --- a/arch/arm/mach-orion5x/irq.c
-> +++ b/arch/arm/mach-orion5x/irq.c
-> @@ -31,8 +31,7 @@ __exception_irq_entry orion5x_legacy_handle_irq(struct pt_regs *regs)
->  	stat = readl_relaxed(MAIN_IRQ_CAUSE);
->  	stat &= readl_relaxed(MAIN_IRQ_MASK);
->  	if (stat) {
-> -		unsigned int hwirq = 1 + __fls(stat);
-> -		handle_IRQ(hwirq, regs);
-> +		generic_handle_irq(1 + __fls(stat));
->  		return;
->  	}
->  }
-> diff --git a/arch/arm/mach-pxa/irq.c b/arch/arm/mach-pxa/irq.c
-> index 96f33ef1d9ea..1fe551b60eed 100644
-> --- a/arch/arm/mach-pxa/irq.c
-> +++ b/arch/arm/mach-pxa/irq.c
-> @@ -101,7 +101,7 @@ asmlinkage void __exception_irq_entry icip_handle_irq(struct pt_regs *regs)
->  		if (mask == 0)
->  			break;
->  
-> -		handle_IRQ(PXA_IRQ(fls(mask) - 1), regs);
-> +		generic_handle_irq(PXA_IRQ(fls(mask) - 1));
->  	} while (1);
->  }
->  
-> @@ -115,7 +115,7 @@ asmlinkage void __exception_irq_entry ichp_handle_irq(struct pt_regs *regs)
->  		if ((ichp & ICHP_VAL_IRQ) == 0)
->  			break;
->  
-> -		handle_IRQ(PXA_IRQ(ICHP_IRQ(ichp)), regs);
-> +		generic_handle_irq(PXA_IRQ(ICHP_IRQ(ichp)));
->  	} while (1);
->  }
->  
-> -- 
-> 2.39.0
->
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+> 
+> v3: New patch
+> 
+> v5: Drop plpks_get_password() since we no longer need to expose it.
+> ---
+>   arch/powerpc/include/asm/plpks.h       | 5 +++++
+>   arch/powerpc/platforms/pseries/plpks.c | 5 +++++
+>   2 files changed, 10 insertions(+)
+> 
+> diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/plpks.h
+> index 0c49969b0864..757313e00521 100644
+> --- a/arch/powerpc/include/asm/plpks.h
+> +++ b/arch/powerpc/include/asm/plpks.h
+> @@ -171,6 +171,11 @@ u32 plpks_get_maxlargeobjectsize(void);
+>    */
+>   u64 plpks_get_signedupdatealgorithms(void);
+>   
+> +/**
+> + * Returns the length of the PLPKS password in bytes.
+> + */
+> +u16 plpks_get_passwordlen(void);
+> +
+>   #endif // CONFIG_PSERIES_PLPKS
+>   
+>   #endif // _ASM_POWERPC_PLPKS_H
+> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
+> index 926b6a927326..6940280ae94a 100644
+> --- a/arch/powerpc/platforms/pseries/plpks.c
+> +++ b/arch/powerpc/platforms/pseries/plpks.c
+> @@ -359,6 +359,11 @@ u64 plpks_get_signedupdatealgorithms(void)
+>   	return signedupdatealgorithms;
+>   }
+>   
+> +u16 plpks_get_passwordlen(void)
+> +{
+> +	return ospasswordlength;
+> +}
+> +
+>   bool plpks_is_available(void)
+>   {
+>   	int rc;
