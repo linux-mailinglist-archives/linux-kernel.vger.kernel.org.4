@@ -2,96 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AC2682E4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D21682E56
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232277AbjAaNrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:47:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S232385AbjAaNtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbjAaNrU (ORCPT
+        with ESMTP id S229686AbjAaNtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:47:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB332269F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:47:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 806B6B81CD8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E33C433D2;
-        Tue, 31 Jan 2023 13:47:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675172837;
-        bh=bVqXna5WxCsAHx/u/2x8IFda69mGhWNfyQf/4SSeqFo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aLwUUOWzunX5b0iNH/5uYpBQudZqjaFb+2mf1Ru3dqDsNAz0NOHpCMRBsw6S9TK8E
-         itS0ih2Yvy91YSkgtOlKPXaxPrHbIljz7H1tYZdFb5UTS8cChG4zr7knEDmrv4gTDh
-         Yeq9YTSaxes/J1zV3nub/Q5DNnbbisNF0JcfJLtQ2dgNAsI1okA6QEcxLm9CYcqJZt
-         ncm3oCg9LhYogbUz1kmm5kr2t2Ze9d+EOyGNtAowSM7nGS0wYFeLnr2cUcrz/aQuoU
-         aZLr7TNlJRop61r8G9swwqUhHsXjoNSy06mmFMbIEp0L4jbkjMfsZunsSPxAaZbZj/
-         6tZPpBFVa5NTg==
-Date:   Tue, 31 Jan 2023 15:47:05 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Hyunmin Lee <hn.min.lee@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Jeungwoo Yoo <casionwoo@gmail.com>,
-        Sangyun Kim <sangyun.kim@snu.ac.kr>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [PATCH] replace BUG_ON to WARN_ON
-Message-ID: <Y9kb2XUunZlgsu2z@kernel.org>
-References: <20230127115844.GA1124261@min-iamroot>
- <Y9eYbPuq5Nw9Njxf@kernel.org>
- <20230131105629.GA1195431@min-iamroot>
+        Tue, 31 Jan 2023 08:49:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB6FCA36
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:48:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675172932;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IjJLFD2d2G0+4FaeIQz9TlcS4nROfEwnimKGLhaKDRA=;
+        b=PZMp0m/Rr7OHld/3ObrDNwqSGqP4dKyP2z3EAGB/91L7KUJJI3fVVsiBJS1mUkRTtDzzS6
+        UgvtuCiIG+jovOAPliTJ71rSgWs5ikohOw2yCcLOpkHZC3DBTwI6XM/dpjdbXGUgxs6Cjw
+        EdL7sRSARlYJPJOsWIoxpi6AbCH6hrU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-139-_vE1W_iCNRO5c8UOY4T6Tg-1; Tue, 31 Jan 2023 08:48:51 -0500
+X-MC-Unique: _vE1W_iCNRO5c8UOY4T6Tg-1
+Received: by mail-wr1-f70.google.com with SMTP id e9-20020a5d6d09000000b002c172f173a9so295892wrq.17
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:48:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IjJLFD2d2G0+4FaeIQz9TlcS4nROfEwnimKGLhaKDRA=;
+        b=g6sBMvZsoyop6uoNPsOkl907yIH+pUzc48EV8VCI62Q4dzjn+L0pAHe+uVYbkWlKHn
+         w4bgsuYJA7MrUGnxm2TqXIcVgrq+2m2DuEnX/T8Ef1PpvsKj0WChRJ/1VecntXWri1bb
+         oGtqrt+Xx30+Qne3mSmG7OziC/NHeMF/tKZgIOozjL02+TLVOmVNrsZ5TotaL3pFw7Xd
+         6PnmhVW03ERSFwHuDaoQn/kCC2KltTyOLaq9s2oIlvS/RxfRagt6NFF1yR4arwAsfX1H
+         qsY8kOju9p5OGSluajxjd6ae1g9kc7ESSoMu9YZyeI34aCDM9IlIuXu9McVspsK7+iVJ
+         E/lw==
+X-Gm-Message-State: AFqh2krAlSf9q7UQ/keGMrJzT3PiISFLM3/YKBMvc8EGJ8zV7BM6aRNG
+        qxQlsh4D9Chi1c98Y3AlXrT3LBeuPltVYjhWDIcCmaiYHGBUuekKo4XC2/+9vpTSpNR/041RFsE
+        GSFEb04srKSIwKgmCGAAUWKUv
+X-Received: by 2002:a05:600c:198e:b0:3db:1d7e:c429 with SMTP id t14-20020a05600c198e00b003db1d7ec429mr47082362wmq.40.1675172930138;
+        Tue, 31 Jan 2023 05:48:50 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXshlDM/kQP8UJqjwbUaYwp0yiDAedYva3SxuXjhG46v5k1mOFWlDh+q4kEbTiH/6PL7Sw4dLg==
+X-Received: by 2002:a05:600c:198e:b0:3db:1d7e:c429 with SMTP id t14-20020a05600c198e00b003db1d7ec429mr47082333wmq.40.1675172929825;
+        Tue, 31 Jan 2023 05:48:49 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f0a:ca00:f74f:2017:1617:3ec3? (p200300d82f0aca00f74f201716173ec3.dip0.t-ipconnect.de. [2003:d8:2f0a:ca00:f74f:2017:1617:3ec3])
+        by smtp.gmail.com with ESMTPSA id j5-20020a05600c1c0500b003dc4aae4739sm13771171wms.27.2023.01.31.05.48.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 05:48:48 -0800 (PST)
+Message-ID: <88d50843-9aa6-7930-433d-9b488857dc14@redhat.com>
+Date:   Tue, 31 Jan 2023 14:48:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131105629.GA1195431@min-iamroot>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, John Hubbard <jhubbard@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <040ed7a7-3f4d-dab7-5a49-1cd9933c5445@redhat.com>
+ <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
+ <3351099.1675077249@warthog.procyon.org.uk>
+ <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
+ <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk>
+ <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
+ <3520518.1675116740@warthog.procyon.org.uk>
+ <f392399b-a4c4-2251-e12b-e89fff351c4d@kernel.dk>
+ <3791872.1675172490@warthog.procyon.org.uk>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <3791872.1675172490@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 07:56:29PM +0900, Hyunmin Lee wrote:
-> On Mon, Jan 30, 2023 at 12:14:04PM +0200, Mike Rapoport wrote:
-> > Hi,
-> > 
-> > On Fri, Jan 27, 2023 at 08:58:44PM +0900, Hyunmin Lee wrote:
-> > > Replace unnacessary BUG_ON to WARN_ON. These BUG_ONs verify aruguments of a function. Thus, the WARN_ONs return an EINVAL error when their condition is true.
-> > 
-> > Some users enable panic_on_warn, so for them WARN_ON will still crash a
-> > machine.
-> > 
-> > I think a simple if() will be sufficient.
-> >  
-> Hi Mike,
+On 31.01.23 14:41, David Howells wrote:
+> David Hildenbrand <david@redhat.com> wrote:
 > 
-> Thank you for your advice.
-> Would you please give feedback about the below opinion?
-> - Printing warning messages is helpful to inform what happened in the system to the users.
-> - When a simple if() is used instead of WARN_ON, the if() should print a warning message.
-> - The condition of the simple if() should also have unlikely() for optimization of system performance.
-> - WARN_ON is a macro doing like thoes easily. It has a notifying function and unlikely optimization.
-> - Eventhough WARN_ON will still crash like BUG_ON by some users who enable panic_on_warn, it is their intention. They should accept the crash by WARN_ON.
-> - Therefore, using WARN_ON looks like natural and efficient.
+>>>> percpu counters maybe - add them up at the point of viewing?
+>>> They are percpu, see my last email. But for every 108 changes (on
+>>> my system), they will do two atomic_long_adds(). So not very
+>>> useful for anything but low frequency modifications.
+>>>
+>>
+>> Can we just treat the whole acquired/released accounting as a debug mechanism
+>> to detect missing releases and do it only for debug kernels?
+>>
+>>
+>> The pcpu counter is an s8, so we have to flush on a regular basis and cannot
+>> really defer it any longer ... but I'm curious if it would be of any help to
+>> only have a single PINNED counter that goes into both directions (inc/dec on
+>> pin/release), to reduce the flushing.
+>>
+>> Of course, once we pin/release more than ~108 pages in one go or we switch
+>> CPUs frequently it won't be that much of a help ...
+> 
+> What are the stats actually used for?  Is it just debugging, or do we actually
+> have users for them (control groups spring to mind)?
 
-As this is a validation of the function parameters, there is no need in
-warning messages and if(unlikely()) will do. There is really no point in
-WARN_ON() for something that's totally recoverable and very unlikely to
-happen.
- 
-> Best,
-> Hyunmin
+As it's really just "how many pinning events" vs. "how many unpinning 
+events", I assume it's only for debugging.
+
+For example, if you pin the same page twice it would not get accounted 
+as "a single page is pinned".
 
 -- 
-Sincerely yours,
-Mike.
+Thanks,
+
+David / dhildenb
+
