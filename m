@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966A96833E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B0B6833DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjAaRbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:31:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S232088AbjAaRbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjAaRbT (ORCPT
+        with ESMTP id S229871AbjAaRbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:31:19 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9485C561A4;
-        Tue, 31 Jan 2023 09:31:17 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id v17so19422148lfd.7;
-        Tue, 31 Jan 2023 09:31:17 -0800 (PST)
+        Tue, 31 Jan 2023 12:31:12 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DF86A46;
+        Tue, 31 Jan 2023 09:31:07 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id o66so13446974oia.6;
+        Tue, 31 Jan 2023 09:31:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gUiDjq2S2vaAEK8eNz2fJgHVZeFErtwWVx84asj9SyU=;
-        b=G2R9ePxcZkjX91SDf4M2gkBjHdGcwHWZf87vYtFCa1uGuRvYcaBBs2+YFrmHGOOr7i
-         jB+zkZxmTaZM6vTl3KSqmwyb430jTLJJWli6g+DrRHO+FxieqXS9gtS0ij9M7uhv7MRW
-         Mlloqv7rImX8tKSkC/X6Kz2oxeU2w0mdcgjOOwCB778mlJirHWCp8Zx9oCszB/PArpdt
-         hHDdOKJwcolT9KrYCKqtrIIbtD+7lGZBd+02/kKpd568bMjh4rMvyxQUQBIOmGfDeZ/b
-         ypGQRNU3/UFZBUYS9eR16H2RU9l5xhNYIr2KDuDt4OLaBsGIdabv1Kz6pbyJXWbNOiEC
-         I8Og==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=23/Ygv4K9LVUh4Trn3GlV760MzhnYkiKXWah0In2v88=;
+        b=q7E6y2nd/9deUEEXJ5EjsL7rCom7WIdcMBgwXImide0A48cE5rQrgwK5eCcuAnLw/m
+         7N3TUCdRjhtgbR/k5IrJLZoI5pzO+jSttLlzqtNhEtrepG65Lzuyv6l7ENGPgFTDDe/H
+         2dd7O+NvPa2ZZsCmM6YPNwrRKCmtXfQdjwiCmf49ht8jBIXua+chFCH9oa4b1dqs9qT7
+         Xoq4tR0g6cxAtoAk1luIfLzkGGqtEepptwYaBJTjJZAZyZCPTsgmX/rpldckebFSkyAi
+         gOom/+5FwxFb81g8L7Ovl/iX06Zj0ljN0gWes5/SPkAq5u40QTexsAwHKoiy7ZySQk3U
+         2xJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gUiDjq2S2vaAEK8eNz2fJgHVZeFErtwWVx84asj9SyU=;
-        b=UruyZQKdAtSxYsPoVdA1ej7yD+r0Qb3aDputTXWrJx31wFyFgT/aYBQc3dgRzDydwi
-         ZpoM8BHKkSk/rqXx95apLijPFNaI0bT8385sbBXqVLKZfOTr387Rh4oBLPMcKJHP5trb
-         XFVtCuY66kpiuEqju8Ro1Nf1YWKRcLpe+0B19a5qY51aMICGVluUMQjj3iIbLMsEGr05
-         eA6os0F85PNLbna3+EMwW7/KsSvmNFNdcKbDoZOKVlwPo7v3TNlq09Ebyqp9vfy6s7hY
-         ta2geuicQMIs88+zDldDedbe25rgxiJ6KNvLYQF0r8wSj3PdPJ/D5M9f3WT4F9XTatDC
-         ygQQ==
-X-Gm-Message-State: AFqh2ko/RKLRXeBh/YMDJmsqLh659u0BFhZx/jmeiEFrYw5Eu3FFslmi
-        J4sWAgKkxNBWwrGRxHsor1TQrNMn0sWo4IEk6Ghp5HSnuUE=
-X-Google-Smtp-Source: AK7set8xhKvw8br45SCrwEarB0blAscO+iGTd2VBtFC0r9ivc0Uzzoe7F3WBwZP7O3Zw5kPMekpXQ3iBw7h9Yur0Yng=
-X-Received: by 2002:a17:907:780c:b0:88c:1d3d:6fab with SMTP id
- la12-20020a170907780c00b0088c1d3d6fabmr1051698ejc.299.1675186265480; Tue, 31
- Jan 2023 09:31:05 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=23/Ygv4K9LVUh4Trn3GlV760MzhnYkiKXWah0In2v88=;
+        b=IkvBA58BGXE+el3pJfz1nOGS8z+Ac4aKBXBh5NiSmNTVVlDPC4POGNFVYH0XrEm7jJ
+         VqZ3nbqZeZPtuJRwZGOR95KNBq4Hg8YBNAdfJ7ymqKAn+S5YYFHKjvRtFYyHXOoF1QJt
+         suCFihEToMkQnse+5//ek2833f87WO6NP6YGFNcnBOSxYNrR09MtNbLAUgArGzuYfkGq
+         eThJUXQrM5H/6SG9crf/kUZbn2atmH/S3VVuc4K0HWaVBJqjxrOjUjUwiuHlyh9SWOt5
+         bME8INe3K8UcuviX+K3BmkAbX29sU7VomP1SIAzPOs/kR1UuzpNtS/iFskFHzY/e2g4y
+         C7WQ==
+X-Gm-Message-State: AO0yUKWUuUXDO1DcyF3Mp2+4Z/oQlzWFWPJufAECD8t7X3MEnuXdD8N3
+        JDaM7neMQQVtYm7J+UAuUqeYtZGLMLQ=
+X-Google-Smtp-Source: AK7set8sJEXmQ1kws9YxJnpkV+RwwlImgJMbhRDSQOThL8KPYC2mp21g9BdNW6xBd4sf6YtVHHUtcA==
+X-Received: by 2002:aca:2306:0:b0:378:29a6:b657 with SMTP id e6-20020aca2306000000b0037829a6b657mr4883582oie.53.1675186267126;
+        Tue, 31 Jan 2023 09:31:07 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u2-20020a056808000200b0037868f9e657sm1690563oic.37.2023.01.31.09.31.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 09:31:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 31 Jan 2023 09:31:05 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/12] dt-bindings: watchdog: qcom-wdt: do not allow
+ fallback alone
+Message-ID: <20230131173105.GA3601537@roeck-us.net>
+References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+ <20221212163532.142533-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230123171506.71995-4-void@manifault.com> <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
- <Y87We/92xiv5/+g+@maniforge.lan> <20230123185434.ybfhrmbootcnjuoj@macbook-pro-6.dhcp.thefacebook.com>
- <ebff2166-8a70-af62-b859-6b5c6b008b36@iogearbox.net> <87o7qphspq.fsf@meer.lwn.net>
- <Y88sMlmrq0wCFSRP@maniforge.lan> <87lelsgf60.fsf@meer.lwn.net>
- <Y9AFT4pTydKh+PD3@maniforge.lan> <7cecda8c-9499-4fc1-784c-4e6174122a1f@oracle.com>
- <Y9k3bz5h8VDqDoZw@maniforge>
-In-Reply-To: <Y9k3bz5h8VDqDoZw@maniforge>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 31 Jan 2023 09:30:54 -0800
-Message-ID: <CAADnVQJQ3ofRtvY_55O3yA3eSNrj+kY3=nO0a3QJMyrZgmyBEg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc definitions
-To:     David Vernet <void@manifault.com>
-Cc:     Alan Maguire <alan.maguire@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@meta.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212163532.142533-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,116 +83,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 7:44 AM David Vernet <void@manifault.com> wrote:
->
-> On Tue, Jan 31, 2023 at 03:15:25PM +0000, Alan Maguire wrote:
-> > On 24/01/2023 16:20, David Vernet wrote:
-> > > On Tue, Jan 24, 2023 at 07:50:31AM -0700, Jonathan Corbet wrote:
-> > >> David Vernet <void@manifault.com> writes:
-> > >>
-> > >>> I was perhaps a bit naive to think we could just throw a __bpf_kfunc
-> > >>> macro onto the function signatures and call it a day :-) I think it's
-> > >>> probably best to table this for now, and either I or someone else can
-> > >>> come back to it when we have bandwidth to solve the problem more
-> > >>> appropriately.
-> > >>
-> > >> Now I feel bad ... I was just tossing out a thought, not wanting to
-> > >> bikeshed this work into oblivion.  If what you have solves a real
-> > >
-> > > No apologies necessary. I don't think this qualifies as bikeshedding.
-> > > IMO folks are raising legitimate UX concerns, which is important and
-> > > worth getting right.
-> > >
-> > >> problem and is the best that can be done now, perhaps it should just go
-> > >> in and a "more appropriate" solution can be adopted later, should
-> > >> somebody manage to come up with it?
-> > >
-> > > That would be my preference, but I also understand folks' sentiment of
-> > > wanting to keep out what they feel like is odd syntax, as Christoph said
-> > > in [0], and Daniel alluded to earlier in this thread.
-> > >
-> > > [0]: https://lore.kernel.org/all/Y8+FeH7rz8jDTubt@infradead.org/
-> > >
-> > > I tested on an LTO build and wrapper kfuncs (with external linkage) were
-> > > not being stripped despite not being called from anywhere else in the
-> > > kernel, so for now I _think_ it's safe to call this patch set more of a
-> > > cleanup / future-proofing than solving an immediate and pressing problem
-> > > (as long as anyone adding kfuncs carefully follows the directions in
-> > > [1]). In other words, I think we have some time to do this the right way
-> > > without paying too much of a cost later. If we set up the UX correctly,
-> > > just adding an EXPORT_SYMBOL_KFUNC call (or something to that effect,
-> > > including just using BTF_ID_FLAGS) should be minimal effort even if
-> > > there are a lot more kfuncs by then.
-> > >
-> > > [1]: https://docs.kernel.org/bpf/kfuncs.html
-> > >
-> > > If it turns out that we start to observe problems in LTO builds without
-> > > specifying __used and/or noinline, or if folks are repeatedly making
-> > > mistakes when adding kfuncs (by e.g. not giving wrapper kfuncs external
-> > > linkage) then I think it would be a stronger case to get this in now and
-> > > fix it up later.
-> > >
-> >
-> > hi David,
-> >
-> > I think I may have stumbled upon such a case. We're working on improving
-> > the relationship between the generated BPF Type Format (BTF) info
-> > for the kernel and the actual function signatures, doing things like
-> > spotting optimized-out parameters and not including such functions
-> > in the final BTF since tracing such functions violates user expectations.
-> > The changes also remove functions with inconsistent prototypes (same
-> > name, different function prototype).
-> >
-> > As part of that work [1], I ran into an issue with kfuncs. Because some of these
-> > functions have minimal definitions, the compiler tries to be clever and as
-> > a result parameters are not represented in DWARF. As a consequence of this,
-> > we do not generate a BTF representation for the kfunc (since DWARF is telling
-> > us the function has optimized-out parameters), and so then don't have BTF ids
-> > for the associated kfunc, which is then not usable. The issue of trace accuracy
-> > is important for users, so we're hoping to land those changes in dwarves soon.
+On Mon, Dec 12, 2022 at 05:35:22PM +0100, Krzysztof Kozlowski wrote:
+> The compatible "qcom,kpss-wdt" is too generic and should not be used
+> alone.  Mark it as deprecated when not prepended by specific compatible.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Alan,
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-which kfuncs suffer from missing dwarf ?
-I'm assuming that issues happens only with your new pahole patches
-that are trying to detect all optimized out args, right?
-
-> Hi Alan,
->
-> I see. Thanks for explaining. So it seems that maybe the issue is
-> slightly more urgent than we first thought. Given that folks aren't keen
-> on the BPF_KFUNC macro approach that wraps the function definition,
-> maybe we can go back to the __bpf_kfunc proposal from [0] as a stopgap
-> solution until we can properly support something like
-> EXPORT_SYMBOL_KFUNC. Alexei -- what do you think?
->
-> [0]: https://lore.kernel.org/bpf/Y7kCsjBZ%2FFrsWW%2Fe@maniforge.lan/T/
->
-> >
-> > As described in [2] adding a prefixed
-> >
-> > __attribute__ ((optimize("O0")))
-
-That won't work.
-This attr sort-of "works" in gcc only, but it's discouraged
-and officially considered broken by gcc folks.
-There are projects open and close source that use this attr,
-but it's very fragile.
-Also we really don't want to reduce optimizations in kfuncs.
-They need to be fast.
-
-> >
-> > ...to the kfunc sorts this out, so having that attribute rolled into a prefix
-> > definition like the one you've proposed would solve this in the short term.
->
-> Does just using __attribute__((__used__)) work? Many of these kfuncs are
-> called on hotpaths in BPF programs, so compiling them with no
-> optimization is not an ideal or likely even realistic option. Not to
-> mention the fact that not all kfuncs are BPF-exclusive (meaning you can
-> export a normal kernel function that's called by the main kernel as a
-> kfunc).
-
-let's annotate with __used and __weak to prevent compilers optimizing
-things out. I think just __used won't be enough, but __weak should do
-the trick. And noinline.
-There is also __attribute__((visibility("hidden"))) to experiment with.
+> ---
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index e76364c52fc7..3e0b30a817d6 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -31,9 +31,10 @@ properties:
+>                - qcom,apss-wdt-sm8150
+>                - qcom,apss-wdt-sm8250
+>            - const: qcom,kpss-wdt
+> +      - const: qcom,kpss-wdt
+> +        deprecated: true
+>        - items:
+>            - enum:
+> -              - qcom,kpss-wdt
+>                - qcom,kpss-timer
+>                - qcom,kpss-wdt-apq8064
+>                - qcom,kpss-wdt-ipq8064
