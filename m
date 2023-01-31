@@ -2,94 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C0A683A97
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D4F683A99
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjAaXkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 18:40:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S229992AbjAaXks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 18:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjAaXkO (ORCPT
+        with ESMTP id S229900AbjAaXkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 18:40:14 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD8D22DF3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:40:12 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id s24so10470153vsi.12
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:40:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yNWJjiHZ40BzwBFNd25x6TMl8GnedoNNCYGCd1mQAeg=;
-        b=Nhou7RN5fM5f5cI/iVGIMo21MZVVTKgkyIJL5ORf8vkscx4DIfYfx71Gf+Fu9zwbhI
-         jKvjlDNed0CaPq2PJhGvQzp7IjTBlAqw1vBWFiqixPH1NoHRTldioPZEGhWzJQyaUvOM
-         QT5DWZTE7nGsM0k6tTPQ0S8mB289q3k5fM4brPNxyCrIy+Usx+m/cH3bFdWUmlouuURb
-         USBnNE8XbO5WB5vrnN97xTXbfmeVijTWmnIxELq/aWzoqP6QZzimfRKRCMNzCw9OrGn4
-         vcvlAo/7Stbrg8A9eE6oB56vVwKhqzKfQb/NnSDK0PIwV0M/8hEHOKkxCBnSWmX5ge/t
-         7BTA==
+        Tue, 31 Jan 2023 18:40:47 -0500
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506E7F77F;
+        Tue, 31 Jan 2023 15:40:42 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1631b928691so21474232fac.11;
+        Tue, 31 Jan 2023 15:40:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yNWJjiHZ40BzwBFNd25x6TMl8GnedoNNCYGCd1mQAeg=;
-        b=fGEt9+NpsbZAeylCRpgBzNpO0w9DRnUaRduNq4AxAcWDn5i9QRcxVShqKQbPudzeF+
-         Om2BlikLwXI5Y8p6iLp/NkepJd/Eujz7Ss5WLQ6wxKY4Lhn1R7/eOqP6QfLAqRmKxQcA
-         UjqaApq6ui3Si13akIYfIBFq2NQHG0NSJCmAExSkqiHCisk75iC8S5sbnm9UlAXaezje
-         2hrtzdYB0jMMU3xuxv4ZR0ObkLU4ovWKiIc81wE5Mysbx2H6X2Lg9YYELV/4KfvqkcA1
-         i5r5IsWtSHAXUC/fAo0d4Lb1HLA9KuAHAODCBzCMKtqA1yzIlg1T3Ylf4iNMaHwODH22
-         N4Nw==
-X-Gm-Message-State: AO0yUKWCiUmkFWWuv8o5vcpAjxGvPrzNRxog0+yZ0fA6jrRO5+aSn7/V
-        ViUilPTPse3VljrAGo46oxrmeXpAdjvhHWVsGhSZAA==
-X-Google-Smtp-Source: AK7set+LGZpVBUq8jBYUp23fV64plVr7SG2DY47NRbmas+5wk9V9BIThjG1yn8uBo52H/ysiEC+SN+XZvlxAE8uICa8=
-X-Received: by 2002:a67:e19a:0:b0:3f7:528b:d25f with SMTP id
- e26-20020a67e19a000000b003f7528bd25fmr138820vsl.9.1675208410993; Tue, 31 Jan
- 2023 15:40:10 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MLht+cV6v3V59oYZ+zm9MhRpf7R18xJ4uQrHG67u++I=;
+        b=zlNVXWX0PH0FzziG9DeoPaRCCt41ni8BlMfvJKPIiJZJhfROIn1QxgRbW2ShXBFa+t
+         BcSB5f8iZ4PHRdcDI9WQU4hohE7dh2YS9fkP9h4D2Zl1qhnUewRWiG8R960V6TIMj/RI
+         ENATGq+ja25NpUjqoVZsCyVFeCZYD6Urd+hQ3Qida93iV86Z5QLYl3jLGo6Gf3Rxz65l
+         KIq2Ozv+p570rFD5cOsbc1gF1kNTgqV5Opf1NH9IRsGnE+W5LW7vhOrhF2iu/63fX8Ss
+         glwyGRKZj6WGd/O/ogI3gs8t9jFRqNzZPbUnH2rquPJJpkx1t7XzIoog8b9biNiv3mmk
+         qDcQ==
+X-Gm-Message-State: AO0yUKWsoBIlySfhZflBL0D0tIJ531a3h6YIq1hv1ONfQXELNmEJM+EK
+        oFtp2TpBvA7BlAzdMfZPSK8xOaEdGA==
+X-Google-Smtp-Source: AK7set9J8xKhfoC47bjJSd9BhnQwx97pqYlWUEN/OU2PKkSU8k4VzwVXMnVmY8DLrpKIFhnB/MvKKA==
+X-Received: by 2002:a05:6870:4710:b0:15e:cfce:fcb9 with SMTP id b16-20020a056870471000b0015ecfcefcb9mr698749oaq.34.1675208441500;
+        Tue, 31 Jan 2023 15:40:41 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y15-20020a4acb8f000000b0049fd5c02d25sm4398963ooq.12.2023.01.31.15.40.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 15:40:41 -0800 (PST)
+Received: (nullmailer pid 2162871 invoked by uid 1000);
+        Tue, 31 Jan 2023 23:40:40 -0000
+Date:   Tue, 31 Jan 2023 17:40:40 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        - <devicetree-spec@vger.kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: reserved-memory: Refine 'size' and
+ 'alignment' types
+Message-ID: <167520843972.2162817.14937783775593918446.robh@kernel.org>
+References: <20230125221450.3058762-1-robh@kernel.org>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 1 Feb 2023 05:10:00 +0530
-Message-ID: <CA+G9fYsPSJiTXouaMUSeoU3JEwym0baq7OGOAMFNWgrgEWOHfA@mail.gmail.com>
-Subject: Re: ACPICA: Replace fake flexible arrays with flexible array members
-To:     Kees Cook <keescook@chromium.org>
-Cc:     open list <linux-kernel@vger.kernel.org>, devel@acpica.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>, robert.moore@intel.com,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125221450.3058762-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The qemu-i386 boot failed on Linux next- 20230131 started from
-next-20230125. Please refer to boot logs [1], [2] & [3].
 
-The bisection pointed to the following commit,
-# first bad commit:
-  [5f7e8394a70761036e416c7529c937f309e4680f]
-  ACPICA: Replace fake flexible arrays with flexible array members
+On Wed, 25 Jan 2023 16:14:50 -0600, Rob Herring wrote:
+> Both 'size' and 'alignment' are single values, but can be 32 or 64 bits.
+> Use the precise types rather than the 2 32-bit cell encoding.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/reserved-memory/reserved-memory.yaml    | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Applied, thanks!
 
-Reverting the above patch fixes the qemu-i386 boot problem.
-
-[1] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi3ZZDct0vwmV2tIVY5AtNr0/logs?format=html
-[2] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi3ZZDct0vwmV2tIVY5AtNr0/logs?format=txt
-[3] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2L4mi32cqUyZvCIhJlV5nR8CuQk
-
-Bisection log:
-http://ix.io/4mIP
-
---
-Linaro LKFT
-https://lkft.linaro.org
