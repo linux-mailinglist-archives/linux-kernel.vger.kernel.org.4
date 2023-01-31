@@ -2,133 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F61682896
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:20:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CF9682898
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjAaJUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:20:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
+        id S232068AbjAaJUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjAaJUP (ORCPT
+        with ESMTP id S229692AbjAaJUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:20:15 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABC6CD
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:20:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675156814; x=1706692814;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4JM1VnPDZosr3/MSF2FzrL7UH4abNkI0iF6A5UQGphM=;
-  b=KLBmhLNcApntmahUMqAIE2SJOnix/l9zTQ7g2P4MVz+nwWSlkzaWqvi4
-   hGcwWV3nS+tjEAesb8+/Je+2Mh/6VdyuoW81kjbnSlEnZQ6QQ8ah6C04G
-   B6XB6HoNJFRxyNK0Pq3D2FD/l20wXqcv0lGI4Jg9nUjAjxxHXW9cyZpSn
-   DcZohYWsHRbKgG72y/TDVjgS5KpfgkSd/Eu6f1ur9vQqEgFku/HyWP7oc
-   hRKq/ydxqwC0pdK+WXP5Jrzz0h8P0FdwUXmqf2bhWP92ZUnmVdczl2N1z
-   Q1sFV6H3XSiqg6jRt3XKvQ9M8SK4ttuiQJm+SbECf9UghlYvw2OYFoU8O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="392340234"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="392340234"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 01:20:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="993199875"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="993199875"
-Received: from jlawryno-mobl.ger.corp.intel.com (HELO [10.237.142.112]) ([10.237.142.112])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 01:20:10 -0800
-Message-ID: <6b48eef6-2f9c-9673-fe3d-009d29dea641@linux.intel.com>
-Date:   Tue, 31 Jan 2023 10:20:08 +0100
+        Tue, 31 Jan 2023 04:20:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D0A269B;
+        Tue, 31 Jan 2023 01:20:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C867B81A56;
+        Tue, 31 Jan 2023 09:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5480DC433EF;
+        Tue, 31 Jan 2023 09:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675156818;
+        bh=YIpkb9oU+WXKr/Wvb4VBfYhVPXlTNuFv/QZLLcV7TvA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=esJraJO6BpNLf49WHhYguEurnHI3UlWezjO4fs5mpD+i0cPTYMLaYjtJcC8Bh8KDW
+         jpt56KxzhOj/jcSl+xorkwS/4WshRKS+H8W3AgjrhDgVyuYLXyQwUpc6ibtbFTFPdW
+         NQ2sGHvrGB5R3rr+O+xrLsqhe+pATZxsRpxtiIou721+PpayZ8QyX4oQq8I2zt71GA
+         1ELhbrZMAkgcLV7aW6561HiJSJvWbtqvODxngHg3WY+T7XFB+zwIUUX31zqN58mMhC
+         lpUhaC6TQZOCrBT56bG9BfnfPNvTgtu75Wccp7YDfvvoRq9B2+x2/tIKcRqADAECLr
+         VP0i4BrJ9ECQg==
+Date:   Tue, 31 Jan 2023 11:20:14 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>
+Subject: Re: [EXT] Re: [net-next PATCH] octeontx2-af: Removed unnecessary
+ debug messages.
+Message-ID: <Y9jdTjV1MwOQrBkC@unreal>
+References: <20230130035556.694814-1-rkannoth@marvell.com>
+ <Y9eUIfUkwf69ntJm@unreal>
+ <MWHPR1801MB1918AEE92F5D6FEC4D19F923D3D09@MWHPR1801MB1918.namprd18.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] [v2] accel: fix CONFIG_DRM dependencies
-Content-Language: en-US
-To:     Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@kernel.org>
-Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Melissa Wen <mwen@igalia.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Airlie <airlied@redhat.com>
-References: <20230127221504.2522909-1-arnd@kernel.org>
- <CAFCwf10RRFUqYEATg7p-LmKSEkFtAhneufJTdezFA7i3HJaDDw@mail.gmail.com>
-From:   Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <CAFCwf10RRFUqYEATg7p-LmKSEkFtAhneufJTdezFA7i3HJaDDw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MWHPR1801MB1918AEE92F5D6FEC4D19F923D3D09@MWHPR1801MB1918.namprd18.prod.outlook.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.2023 09:53, Oded Gabbay wrote:
-> On Sat, Jan 28, 2023 at 12:15 AM Arnd Bergmann <arnd@kernel.org> wrote:
->>
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> At the moment, accel drivers can be built-in even with CONFIG_DRM=m,
->> but this causes a link failure:
->>
->> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_dev_init':
->> ivpu_drv.c:(.text+0x1535): undefined reference to `drmm_kmalloc'
->> x86_64-linux-ld: ivpu_drv.c:(.text+0x1562): undefined reference to `drmm_kmalloc'
->> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_remove':
->> ivpu_drv.c:(.text+0x1faa): undefined reference to `drm_dev_unregister'
->> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_probe':
->> ivpu_drv.c:(.text+0x1fef): undefined reference to `__devm_drm_dev_alloc'
->>
->> The problem is that DRM_ACCEL is a 'bool' symbol symbol, so driver that
->> only depend on DRM_ACCEL but not also on DRM do not see the restriction
->> to =m configs.
->>
->> To ensure that each accel driver has an implied dependency on CONFIG_DRM,
->> enclose the entire Kconfig file in an if/endif check.
->>
->> Fixes: 8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->> v2: rearrage the DRM dependency rather than requiring DRM to be built-in
->> ---
->>  drivers/accel/Kconfig | 5 ++++-
->>  1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
->> index 834863902e16..c437206aa3f1 100644
->> --- a/drivers/accel/Kconfig
->> +++ b/drivers/accel/Kconfig
->> @@ -6,9 +6,10 @@
->>  # as, but not limited to, Machine-Learning and Deep-Learning acceleration
->>  # devices
->>  #
->> +if DRM
->> +
->>  menuconfig DRM_ACCEL
->>         bool "Compute Acceleration Framework"
->> -       depends on DRM
->>         help
->>           Framework for device drivers of compute acceleration devices, such
->>           as, but not limited to, Machine-Learning and Deep-Learning
->> @@ -25,3 +26,5 @@ menuconfig DRM_ACCEL
->>
->>  source "drivers/accel/habanalabs/Kconfig"
->>  source "drivers/accel/ivpu/Kconfig"
->> +
->> +endif
->> --
->> 2.39.0
->>
-> This patch is:
-> Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+On Tue, Jan 31, 2023 at 07:11:10AM +0000, Ratheesh Kannoth wrote:
+> ----------------------------------------------------------------------
+> On Mon, Jan 30, 2023 at 09:25:56AM +0530, Ratheesh Kannoth wrote:
+> > From: Sunil Goutham <sgoutham@marvell.com>
+> > 
+> > NPC exact match feature is supported only on one silicon variant, 
+> > removed debug messages which print that this feature is not available 
+> > on all other silicon variants.
+> > 
+> > Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
+> > Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
+> > ---
+> >  .../net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c | 12 
+> > ++----------
+> >  1 file changed, 2 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c 
+> > b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+> > index f69102d20c90..ad1374a12a40 100644
+> > --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+> > +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
+> > @@ -200,10 +200,8 @@ void npc_config_secret_key(struct rvu *rvu, int blkaddr)
+> >  	struct rvu_hwinfo *hw = rvu->hw;
+> >  	u8 intf;
+> >  
+> > -	if (!hwcap->npc_hash_extract) {
+> > -		dev_info(rvu->dev, "HW does not support secret key configuration\n");
+> > +	if (!hwcap->npc_hash_extract)
+> >  		return;
+> > -	}
+> >  
+> >  	for (intf = 0; intf < hw->npc_intfs; intf++) {
+> >  		rvu_write64(rvu, blkaddr, NPC_AF_INTFX_SECRET_KEY0(intf), @@ 
+> > -221,10 +219,8 @@ void npc_program_mkex_hash(struct rvu *rvu, int blkaddr)
+> >  	struct rvu_hwinfo *hw = rvu->hw;
+> >  	u8 intf;
+> >  
+> > -	if (!hwcap->npc_hash_extract) {
+> > -		dev_dbg(rvu->dev, "Field hash extract feature is not supported\n");
+> > +	if (!hwcap->npc_hash_extract)
+> >  		return;
+> > -	}
+> >  
+> >  	for (intf = 0; intf < hw->npc_intfs; intf++) {
+> >  		npc_program_mkex_hash_rx(rvu, blkaddr, intf); @@ -1854,16 +1850,12 
+> > @@ int rvu_npc_exact_init(struct rvu *rvu)
+> >  	/* Check exact match feature is supported */
+> >  	npc_const3 = rvu_read64(rvu, blkaddr, NPC_AF_CONST3);
+> >  	if (!(npc_const3 & BIT_ULL(62))) {
+> > -		dev_info(rvu->dev, "%s: No support for exact match support\n",
+> > -			 __func__);
+> >  		return 0;
+> >  	}
+> 
+> >You should remove () brackets here too.
+> Ratheesh ->  Sorry , I did not get you. We have more than one statement in this "if" loop. How can we remove brackets ?
 
-Applied to drm-misc-next.
-Thanks.
+Please configure your email client to respect reply format.
+
+Probably my typo mislead you, you need to remove {} brackets.
+
+Before your change
+
+     if (!(npc_const3 & BIT_ULL(62))) {
+            dev_info(rvu->dev, "%s: No support for exact match support\n",
+                     __func__);
+            return 0;
+     }
+
+After your change:
+
+    if (!(npc_const3 & BIT_ULL(62))) {
+            return 0;
+    }
+
+Thanks
