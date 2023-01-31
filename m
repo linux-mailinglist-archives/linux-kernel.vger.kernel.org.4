@@ -2,324 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490CD682A45
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C34682A4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjAaKSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        id S231254AbjAaKSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:18:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjAaKSH (ORCPT
+        with ESMTP id S231157AbjAaKS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:18:07 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A7A10C4;
-        Tue, 31 Jan 2023 02:18:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675160282; x=1706696282;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=o3QoCbR4jTslkyBD3vSoJKDE4L3p29KDEGVEZAblG2s=;
-  b=XCuWcVYnYcHLHQbFSqcUmIu2F/CuMmUXWRcRcazoAfh3nCUZMaaactcD
-   76Tw8owLPFZb2csccoH0197l2ikb69Xam5ssHCHUCIvDLY+YwukuznQZD
-   to3WMd9vVFzUYUmam0rfDJt22/fiQcf5KrAejRvpZpoVglPLHbZ+7y+7u
-   WnI9q8rFAc9WjfNOHk/du3uUSlnmMsgfmJeUlGHROZi5QQFMhj5eA1NfT
-   rHIQscK7B3SVqTfUg1mIJQKDY7dJL8mWnRhICAMlyt1T2cyz5ZQIgYO0F
-   61/QP5fuCbn4qGJm6SqPS6fjPoxIB9Pwou5ucxMGlUwvE9sVft+fNmCUq
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="308147203"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="308147203"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 02:18:01 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="909855244"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="909855244"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.47.218])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 02:17:59 -0800
-Message-ID: <b0a66e24-29c1-45e6-1578-5302127a926e@intel.com>
-Date:   Tue, 31 Jan 2023 12:17:56 +0200
+        Tue, 31 Jan 2023 05:18:28 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD3B44956D;
+        Tue, 31 Jan 2023 02:18:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A1BB1713;
+        Tue, 31 Jan 2023 02:19:03 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCFFD3F64C;
+        Tue, 31 Jan 2023 02:18:15 -0800 (PST)
+Date:   Tue, 31 Jan 2023 10:18:13 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, abel.vesa@linaro.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        alexander.stein@ew.tq-group.com, andriy.shevchenko@linux.intel.com,
+        bigunclemax@gmail.com, brgl@bgdev.pl,
+        colin.foster@in-advantage.com, cristian.marussi@arm.com,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        djrscally@gmail.com, dmitry.baryshkov@linaro.org,
+        festevam@gmail.com, fido_max@inbox.ru, frowand.list@gmail.com,
+        geert+renesas@glider.be, geert@linux-m68k.org,
+        gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        jpb@kernel.org, jstultz@google.com, kernel-team@android.com,
+        kernel@pengutronix.de, lenb@kernel.org, linus.walleij@linaro.org,
+        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux@roeck-us.net, lkft@linaro.org, luca.weiss@fairphone.com,
+        magnus.damm@gmail.com, martin.kepplinger@puri.sm, maz@kernel.org,
+        miquel.raynal@bootlin.com, rafael@kernel.org, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, sakari.ailus@linux.intel.com,
+        shawnguo@kernel.org, tglx@linutronix.de, tony@atomide.com
+Subject: Re: [PATCH v2 00/11] fw_devlink improvements
+Message-ID: <20230131101813.goaoy32qvrowvyyb@bogus>
+References: <20230127001141.407071-1-saravanak@google.com>
+ <20230130085542.38546-1-naresh.kamboju@linaro.org>
+ <CAGETcx_411fVxsM-ZMK7j2Bvkmi2TKPbzSuD+03M3cb7WKHfJw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH 9/9] perf symbols: Get symbols for .plt.got for x86-64
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20230127170222.9895-1-adrian.hunter@intel.com>
- <20230127170222.9895-10-adrian.hunter@intel.com>
- <Y9hSCR6WvpI4b5Cm@google.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <Y9hSCR6WvpI4b5Cm@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx_411fVxsM-ZMK7j2Bvkmi2TKPbzSuD+03M3cb7WKHfJw@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/01/23 01:26, Namhyung Kim wrote:
-> On Fri, Jan 27, 2023 at 07:02:22PM +0200, Adrian Hunter wrote:
->> For x86_64, determine a symbol for .plt.got entries. That requires
->> computing the target offset and finding that in .rela.dyn, which in
->> turn means .rela.dyn needs to be sorted by offset.
->>
->> Example:
->>
->>   In this example, the GNU C Library is using .plt.got for malloc and
->>   free.
->>
->>   Before:
->>
->>     $ gcc --version
->>     gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
->>     Copyright (C) 2021 Free Software Foundation, Inc.
->>     This is free software; see the source for copying conditions.  There is NO
->>     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
->>     $ perf record -e intel_pt//u uname
->>     Linux
->>     [ perf record: Woken up 1 times to write data ]
->>     [ perf record: Captured and wrote 0.027 MB perf.data ]
->>     $ perf script --itrace=be --ns -F-event,+addr,-period,-comm,-tid,-cpu > /tmp/cmp1.txt
->>
->>   After:
->>
->>     $ perf script --itrace=be --ns -F-event,+addr,-period,-comm,-tid,-cpu > /tmp/cmp2.txt
->>     $ diff /tmp/cmp1.txt /tmp/cmp2.txt | head -12
->>     15509,15510c15509,15510
->>     < 27046.755390907:      7f0b2943e3ab _nl_normalize_codeset+0x5b (/usr/lib/x86_64-linux-gnu/libc.so.6) =>     7f0b29428380 offset_0x28380@plt+0x0 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->>     < 27046.755390907:      7f0b29428384 offset_0x28380@plt+0x4 (/usr/lib/x86_64-linux-gnu/libc.so.6) =>     7f0b294a5120 malloc+0x0 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->>     ---
->>     > 27046.755390907:      7f0b2943e3ab _nl_normalize_codeset+0x5b (/usr/lib/x86_64-linux-gnu/libc.so.6) =>     7f0b29428380 malloc@plt+0x0 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->>     > 27046.755390907:      7f0b29428384 malloc@plt+0x4 (/usr/lib/x86_64-linux-gnu/libc.so.6) =>     7f0b294a5120 malloc+0x0 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->>     15821,15822c15821,15822
->>     < 27046.755394865:      7f0b2943850c _nl_load_locale_from_archive+0x5bc (/usr/lib/x86_64-linux-gnu/libc.so.6) =>     7f0b29428370 offset_0x28370@plt+0x0 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->>     < 27046.755394865:      7f0b29428374 offset_0x28370@plt+0x4 (/usr/lib/x86_64-linux-gnu/libc.so.6) =>     7f0b294a5460 cfree@GLIBC_2.2.5+0x0 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->>     ---
->>     > 27046.755394865:      7f0b2943850c _nl_load_locale_from_archive+0x5bc (/usr/lib/x86_64-linux-gnu/libc.so.6) =>     7f0b29428370 free@plt+0x0 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->>     > 27046.755394865:      7f0b29428374 free@plt+0x4 (/usr/lib/x86_64-linux-gnu/libc.so.6) =>     7f0b294a5460 cfree@GLIBC_2.2.5+0x0 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->>
->> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
->> ---
->>  tools/perf/util/symbol-elf.c | 158 ++++++++++++++++++++++++++++++++++-
->>  1 file changed, 154 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
->> index 254116d40e59..4fc8e7fc10f4 100644
->> --- a/tools/perf/util/symbol-elf.c
->> +++ b/tools/perf/util/symbol-elf.c
->> @@ -466,28 +466,178 @@ static bool machine_is_x86(GElf_Half e_machine)
->>  	return e_machine == EM_386 || e_machine == EM_X86_64;
->>  }
->>  
->> +struct rela_dyn {
->> +	GElf_Addr	offset;
->> +	u32		sym_idx;
->> +};
->> +
->> +struct rela_dyn_info {
->> +	struct dso	*dso;
->> +	Elf_Data	*plt_got_data;
->> +	u32		nr_entries;
->> +	struct rela_dyn	*sorted;
->> +	Elf_Data	*dynsym_data;
->> +	Elf_Data	*dynstr_data;
->> +	Elf_Data	*rela_dyn_data;
->> +};
->> +
->> +static void exit_rela_dyn(struct rela_dyn_info *di)
->> +{
->> +	free(di->sorted);
->> +}
->> +
->> +static int cmp_offset(const void *a, const void *b)
->> +{
->> +	const struct rela_dyn *va = a;
->> +	const struct rela_dyn *vb = b;
->> +
->> +	return va->offset < vb->offset ? -1 : (va->offset > vb->offset ? 1 : 0);
->> +}
->> +
->> +static int sort_rela_dyn(struct rela_dyn_info *di)
->> +{
->> +	u32 i, n;
->> +
->> +	di->sorted = calloc(di->nr_entries, sizeof(di->sorted[0]));
->> +	if (!di->sorted)
->> +		return -1;
->> +
->> +	/* Get data for sorting: the offset and symbol index */
->> +	for (i = 0, n = 0; i < di->nr_entries; i++) {
->> +		GElf_Rela rela;
->> +		u32 sym_idx;
->> +
->> +		gelf_getrela(di->rela_dyn_data, i, &rela);
->> +		sym_idx = GELF_R_SYM(rela.r_info);
->> +		if (sym_idx) {
->> +			di->sorted[n].sym_idx = sym_idx;
->> +			di->sorted[n].offset = rela.r_offset;
->> +			n += 1;
->> +		}
->> +	}
->> +
->> +	/* Sort by offset */
->> +	di->nr_entries = n;
->> +	qsort(di->sorted, n, sizeof(di->sorted[0]), cmp_offset);
->> +
->> +	return 0;
->> +}
->> +
->> +static void get_rela_dyn_info(Elf *elf, GElf_Ehdr *ehdr, struct rela_dyn_info *di, Elf_Scn *scn)
->> +{
->> +	GElf_Shdr rela_dyn_shdr;
->> +	GElf_Shdr shdr;
->> +
->> +	di->plt_got_data = elf_getdata(scn, NULL);
->> +
->> +	scn = elf_section_by_name(elf, ehdr, &rela_dyn_shdr, ".rela.dyn", NULL);
->> +	if (!scn || !rela_dyn_shdr.sh_link || !rela_dyn_shdr.sh_entsize)
->> +		return;
->> +
->> +	di->nr_entries = rela_dyn_shdr.sh_size / rela_dyn_shdr.sh_entsize;
->> +	di->rela_dyn_data = elf_getdata(scn, NULL);
->> +
->> +	scn = elf_getscn(elf, rela_dyn_shdr.sh_link);
->> +	if (!scn || !gelf_getshdr(scn, &shdr) || !shdr.sh_link)
->> +		return;
->> +
->> +	di->dynsym_data = elf_getdata(scn, NULL);
->> +	di->dynstr_data = elf_getdata(elf_getscn(elf, shdr.sh_link), NULL);
->> +
->> +	if (!di->plt_got_data || !di->dynstr_data || !di->dynsym_data || !di->rela_dyn_data)
->> +		return;
->> +
->> +	/* Sort into offset order */
->> +	sort_rela_dyn(di);
->> +}
->> +
->> +/* Get instruction displacement from a plt entry for x86_64 */
->> +static u32 get_x86_64_plt_disp(const u8 *p)
->> +{
->> +	u8 endbr64[] = {0xf3, 0x0f, 0x1e, 0xfa};
->> +	int n = 0;
->> +
->> +	/* Skip endbr64 */
->> +	if (!memcmp(p, endbr64, sizeof(endbr64)))
->> +		n += sizeof(endbr64);
->> +	/* Skip bnd prefix */
->> +	if (p[n] == 0xf2)
->> +		n += 1;
->> +	/* jmp with 4-byte displacement */
->> +	if (p[n] == 0xff && p[n + 1] == 0x25) {
->> +		n += 2;
->> +		/* Also add offset from start of entry to end of instruction */
->> +		return n + 4 + le32toh(*(const u32 *)(p + n));
->> +	}
->> +	return 0;
->> +}
->> +
->> +static bool get_plt_got_name(GElf_Shdr *shdr, size_t i,
->> +			     struct rela_dyn_info *di,
->> +			     char *buf, size_t buf_sz)
->> +{
->> +	void *p = di->plt_got_data->d_buf + i;
->> +	u32 disp = get_x86_64_plt_disp(p);
->> +	struct rela_dyn vi, *vr;
->> +	const char *sym_name;
->> +	char *demangled;
->> +	GElf_Sym sym;
->> +
->> +	if (!di->sorted || !disp)
->> +		return false;
->> +
->> +	/* Compute target offset of the .plt.got entry */
->> +	vi.offset = shdr->sh_offset + di->plt_got_data->d_off + i + disp;
->> +
->> +	/* Find that offset in .rela.dyn (sorted by offset) */
->> +	vr = bsearch(&vi, di->sorted, di->nr_entries, sizeof(di->sorted[0]), cmp_offset);
->> +	if (!vr)
->> +		return false;
->> +
->> +	/* Get the associated symbol */
->> +	gelf_getsym(di->dynsym_data, vr->sym_idx, &sym);
->> +	sym_name = elf_sym__name(&sym, di->dynstr_data);
->> +	demangled = demangle_sym(di->dso, 0, sym_name);
->> +	if (demangled != NULL)
->> +		sym_name = demangled;
->> +
->> +	snprintf(buf, buf_sz, "%s@plt", sym_name);
->> +
->> +	free(demangled);
->> +
->> +	return *sym_name;
->> +}
->> +
->>  static int dso__synthesize_plt_got_symbols(struct dso *dso, Elf *elf,
->>  					   GElf_Ehdr *ehdr,
->>  					   char *buf, size_t buf_sz)
->>  {
->> +	struct rela_dyn_info di = { .dso = dso };
->>  	struct symbol *sym;
->>  	GElf_Shdr shdr;
->>  	Elf_Scn *scn;
->> +	int err = -1;
->>  	size_t i;
->>  
->>  	scn = elf_section_by_name(elf, ehdr, &shdr, ".plt.got", NULL);
->>  	if (!scn || !shdr.sh_entsize)
->>  		return 0;
->>  
->> +	if (ehdr->e_machine == EM_X86_64)
->> +		get_rela_dyn_info(elf, ehdr, &di, scn);
-> 
-> What about EM_386?  Now I'm seeing segfaults on 32 bit test programs
-> with .plt.got section.
+Hi Saravana,
 
-Thanks for looking at this.
+On Mon, Jan 30, 2023 at 03:03:01PM -0800, Saravana Kannan wrote:
+> On Mon, Jan 30, 2023 at 12:56 AM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > Build test pass on arm, arm64, i386, mips, parisc, powerpc, riscv, s390, sh,
+> > sparc and x86_64.
+> >
+> > Boot and LTP smoke pass on qemu-arm64, qemu-armv7, qemu-i386 and qemu-x86_64.
+> > Boot failed on FVP.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Please refer following link for details of testing.
+> > FVP boot log failed.
+> > https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-devicetree_20230127001141_407071-1-saravanak_google_com/testrun/14389034/suite/boot/test/gcc-12-lkftconfig-64k_page_size/details/
+>
+> Sudeep pointed me to what the issue might be. But it's strange that
+> you are hitting an issue now. I'm pretty sure I haven't changed this
+> part since v1. I'd also expect the limited assumptions I made to have
+> not been affected between v1 and v2.
+>
 
-Looks like a late change in get_plt_got_name() did not
-get tested for 32-bit.  It should be checking di->sorted
-first.  EM_386 is not supported by this logic.
+Sorry I hadn't seen or tested v1.
 
-I will send a V2
+FYI The fwnode non-NULL check as in your nvmem diff/suggestion and the diff I
+replied on the gpiolib patch thread fixes the issues.
 
-> 
-> Thanks,
-> Namhyung
-> 
-> 
->> +
->>  	for (i = 0; i < shdr.sh_size; i += shdr.sh_entsize) {
->> -		snprintf(buf, buf_sz, "offset_%#zx@plt", shdr.sh_offset + i);
->> +		if (!get_plt_got_name(&shdr, i, &di, buf, buf_sz))
->> +			snprintf(buf, buf_sz, "offset_%#zx@plt", shdr.sh_offset + i);
->>  		sym = symbol__new(shdr.sh_offset + i, shdr.sh_entsize, STB_GLOBAL, STT_FUNC, buf);
->>  		if (!sym)
->> -			return -1;
->> +			goto out;
->>  		symbols__insert(&dso->symbols, sym);
->>  	}
->> -
->> -	return 0;
->> +	err = 0;
->> +out:
->> +	exit_rela_dyn(&di);
->> +	return err;
->>  }
->>  
->>  /*
->> -- 
->> 2.34.1
->>
->>
+> Anyway, I'll look at this and fix it in v3.
+>
 
+If you add that fwnode check, feel free to add my tested by.
+
+--
+Regards,
+Sudeep
