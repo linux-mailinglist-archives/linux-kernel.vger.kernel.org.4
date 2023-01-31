@@ -2,260 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265A668327A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DEF68327F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjAaQYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:24:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33902 "EHLO
+        id S231774AbjAaQYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjAaQYG (ORCPT
+        with ESMTP id S231305AbjAaQYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:24:06 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BB5244A8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:24:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675182245; x=1706718245;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=blhwIt4pXs4RZFwAJ+0oJ/pbR/6npPnMEeUr9ldlKgc=;
-  b=JoNI14mJhGz9ZBmDFIM2qhbe3ZH4bZPWNDz6fTPgbwE04Su8a6ZRiDVn
-   4rXu5+Gf8wFq8Up/PxJ5/XcRrxHpk+/eWDTdz0IHbaYXb19dtbuX59F/U
-   qHg3djbfCsK+0JsrAntR7M6UWoGjGKuKoyqodT7wOJfgRSTPdlxSfxu6g
-   kbxaUsZPTZ69RJB67ahqiHW073aqI3Oz3iwekcKUTfRHXZaqqudSTmbKl
-   F5QM6ALx4RLdxeTDTLn1ObuNhu/GQrmU3cMtkg/XDW1ASoGm/JmJ3ULDV
-   IZ98bI9WECJCO7DbGeAUDbqiuKgEHOB0R3S4zfgAoA9gs8VgxhWN/2Ixi
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="311504554"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="311504554"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 08:24:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="909970895"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="909970895"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Jan 2023 08:24:01 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMtQO-0004YL-2f;
-        Tue, 31 Jan 2023 16:24:00 +0000
-Date:   Wed, 1 Feb 2023 00:23:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com
-Cc:     oe-kbuild-all@lists.linux.dev, kevin-lu@ti.com,
-        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Shenghao Ding <13916275206@139.com>
-Subject: Re: [PATCH v2] ASoC: tas2781: Add tas2781 driver.
-Message-ID: <202302010039.V0TFjmXX-lkp@intel.com>
-References: <20230131131701.7097-1-13916275206@139.com>
+        Tue, 31 Jan 2023 11:24:07 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1067013538;
+        Tue, 31 Jan 2023 08:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1675182218;
+        bh=OSza1V6wu4Mxn3GkTiNAS0BN4mhrkESEDlrHtdOGFlg=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=hqgMWBTKiLE3mNjIPv9KUcIBtm+A4si4vAsqJs8xBIiWtl40TeOtAceLr04zH6+uM
+         8OFmPFfI0Tr01OQfyu61szAUvsRTAzZAvvte5UL70BLFOvv85heI97lVBR1GaRBdO3
+         Khbh8c3oWO5FX0zUcyH2u/cAAsE2g3+RgQFdPcxZEU7Xz7aKmZPM+Qcf3PfO2QDL3/
+         GK0vmftlb9cNsdewfT+CkI4iCCt2XAH08hu2AwiTQWd+DwMiVSY4V5b36wVruDvVz5
+         Qe3AjxDMoMHGhXGCRioHmtTm4dg7gQ/YHmumyxWOvTHR+cwCE7BZOvrCASWhPggNvV
+         qAt+IRMh5NmKQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.157.42] ([217.61.157.42]) by web-mail.gmx.net
+ (3c-app-gmx-bs58.server.lan [172.19.170.142]) (via HTTP); Tue, 31 Jan 2023
+ 17:23:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131131701.7097-1-13916275206@139.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <trinity-4103b9e0-48e7-4de5-8757-21670a613f64-1675182218246@3c-app-gmx-bs58>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Aw: Re: [BUG] vlan-aware bridge breaks vlan on another port on same
+ gmac
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 31 Jan 2023 17:23:38 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20230130125813.asx5qtm6ttuwdobo@skbuf>
+References: <trinity-e6294d28-636c-4c40-bb8b-b523521b00be-1674233135062@3c-app-gmx-bs36>
+ <20230120172132.rfo3kf4fmkxtw4cl@skbuf>
+ <trinity-b0df6ff8-cceb-4aa5-a26f-41bc04dc289c-1674303103108@3c-app-gmx-bap60>
+ <20230121122223.3kfcwxqtqm3b6po5@skbuf>
+ <trinity-7c2af652-d3f8-4086-ba12-85cd18cd6a1a-1674304362789@3c-app-gmx-bap60>
+ <20230121133549.vibz2infg5jwupdc@skbuf>
+ <trinity-cbf3ad23-15c0-4c77-828b-94c76c1785a1-1674310370120@3c-app-gmx-bap60>
+ <20230130125813.asx5qtm6ttuwdobo@skbuf>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:jDlGDwdxY4brUTFinZEgfRfvreK5kdhvt8U+CNpUmi1/sOwKzDS0h3gCAfDLm4RO/H4pf
+ u6+Oo7m1R7QodMNKIrDtUFN6h+X/JjzXixi2+JEyE/nc57SKrw/8Bq+A05GIL3pQbO5Fte9BWUe4
+ zaVfZ5keCyHgsLyqHDjzD0wEaSKkM5PB4KsfbYq/bqee6OaDO5SvUfdEtZYbAZ6GIqEFgRbLRdtC
+ pVRZ+V8rjkYI4GQms4R3z3rFNxb4q2vz0sn3eOV8F09eg2+qLAaaj4PHsFddvCz2P78u4tnUe5Da
+ JQ=
+UI-OutboundReport: notjunk:1;M01:P0:hPTymqTVVOc=;gz/JNCnWPEWc0QK708s3GwVmKaM
+ CM39SFyjWPAeATXA+dcPHKDopGyQDw7xnx1tTFRD7A/aYHGBmyD9VcT/uUzrZqB7DlhJGKJfP
+ wR69aAfrtp+NAZ5d9TRZd+QlhOgUhCiqJL96mG63MMy705h3DIN5KUaTH6j4g6qJnnraos9Uo
+ Si9MwSBHarZLZOkUyMRkvOKaVnSOVw3AtQ7uJpS1YDeQTX1wArQi9wjLR2vQ7P033C2aAd5XG
+ S/ExVQc4ojQjjB8NbO441jTnXpPMqEe4BlCIIUMz3lUBJFp+FGdaqnyG0xYOlJ32b+lveUbJz
+ Q5KEhFGA9Jhjultfw6NpczvPBxTmtX1479wXqM6hX2V58LtVPkKh7KSfxCe48Y2fjhaoPdQXW
+ tXIji20mY+SmFx/x9FtiVVOaC5uMUPItCSJaag5ih09/gG8pXjqIYXnRM6QywQ2PXjiTxVUQF
+ iC6TAcnaJMwPQTaGhB0kdI2PNwYXHL4gIUp8KbKNgB8V0LPcQ/8gPe8iYMrPYhhacWoMHfPIx
+ Ks0bVNpyLX+t7nvIppDCGieoWJKbQtd1rm/p5BmppaoOrx90J6E/zDFF6YgZSVdmykeoQ/S3H
+ u8ieDAzy/h3ILSqAI1SoEadKb994W7Zu3Q0Am0g4eJ0Ob6uLEo4IXs1OnTuCusuMJfCTuxBOl
+ 2Gy6MyJe3vIsy2yvc+AO1kvFcScRfNfY3oiPlzhXDLTNHTWl4CBwoIvSFAgZ8ZZeXyWuV7sNK
+ ZPgrXpfUH7u3G9ZighHWFeyjHgJGlJgTaunvnku6ATD7Cfa5IJK2IZFGltk1Q3wlM5H7cnF4Y
+ lRorQT+HYRGVULk5Ri/JLJyA==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shenghao,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on linus/master v6.2-rc6 next-20230131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230131-212221
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230131131701.7097-1-13916275206%40139.com
-patch subject: [PATCH v2] ASoC: tas2781: Add tas2781 driver.
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230201/202302010039.V0TFjmXX-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d0782b52a1274657458fa49356eacb7c56eddf6b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230131-212221
-        git checkout d0782b52a1274657458fa49356eacb7c56eddf6b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash sound/soc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   sound/soc/codecs/tas2781-dsp.c:591:5: warning: no previous prototype for 'fw_parse_variable_header_git' [-Wmissing-prototypes]
-     591 | int fw_parse_variable_header_git(struct tasdevice_priv *tas_dev,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:650:5: warning: no previous prototype for 'fw_parse_variable_header_cal' [-Wmissing-prototypes]
-     650 | int fw_parse_variable_header_cal(struct tasdevice_priv *tas_dev,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/device.h:15,
-                    from include/linux/acpi.h:15,
-                    from include/linux/i2c.h:13,
-                    from sound/soc/codecs/tas2781-dsp.c:16:
-   sound/soc/codecs/tas2781-dsp.c: In function 'fw_parse_block_data':
->> sound/soc/codecs/tas2781-dsp.c:809:25: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     809 |                         "%s: File Size(%lu) error offset = %d n = %d\n",
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:808:17: note: in expansion of macro 'dev_err'
-     808 |                 dev_err(tas_fmw->dev,
-         |                 ^~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:809:42: note: format string is defined here
-     809 |                         "%s: File Size(%lu) error offset = %d n = %d\n",
-         |                                        ~~^
-         |                                          |
-         |                                          long unsigned int
-         |                                        %u
-   sound/soc/codecs/tas2781-dsp.c: In function 'fw_parse_header':
->> sound/soc/codecs/tas2781-dsp.c:1199:39: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-    1199 |                 dev_err(tas_dev->dev, "File size not match, %ld %u", fmw->size,
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:1199:17: note: in expansion of macro 'dev_err'
-    1199 |                 dev_err(tas_dev->dev, "File size not match, %ld %u", fmw->size,
-         |                 ^~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:1199:63: note: format string is defined here
-    1199 |                 dev_err(tas_dev->dev, "File size not match, %ld %u", fmw->size,
-         |                                                             ~~^
-         |                                                               |
-         |                                                               long int
-         |                                                             %d
-   sound/soc/codecs/tas2781-dsp.c: In function 'tas2781_load_calibration':
-   sound/soc/codecs/tas2781-dsp.c:1819:33: warning: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-    1819 |                                 "%s: file read error: size = %ld\n",
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:1818:25: note: in expansion of macro 'dev_err'
-    1818 |                         dev_err(tas_dev->dev,
-         |                         ^~~~~~~
-   sound/soc/codecs/tas2781-dsp.c:1819:64: note: format string is defined here
-    1819 |                                 "%s: file read error: size = %ld\n",
-         |                                                              ~~^
-         |                                                                |
-         |                                                                long int
-         |                                                              %d
+Hi Vladimir,
 
 
-vim +809 sound/soc/codecs/tas2781-dsp.c
+> Gesendet: Montag, 30. Januar 2023 um 13:58 Uhr
+> Von: "Vladimir Oltean" <olteanv@gmail.com>
+> Hi Frank,
+> Sorry for the delay and thanks again for testing.
+>
+> I simply didn't have time to sit down with the hardware documentation
+> and (re)understand the concepts governing this switch.
 
-   740	
-   741	static int fw_parse_block_data(struct tasdevice_fw *tas_fmw,
-   742		struct tasdevice_block *block, const struct firmware *fmw, int offset)
-   743	{
-   744		unsigned char *data = (unsigned char *)fmw->data;
-   745		int n;
-   746	
-   747		if (offset + 4 > fmw->size) {
-   748			dev_err(tas_fmw->dev, "%s: mnType error\n", __func__);
-   749			offset = -1;
-   750			goto out;
-   751		}
-   752		block->type = SMS_HTONL(data[offset], data[offset + 1],
-   753			data[offset + 2], data[offset + 3]);
-   754		offset  += 4;
-   755	
-   756		if (tas_fmw->fw_hdr.fixed_hdr.drv_ver >=
-   757			PPC_DRIVER_CRCCHK) {
-   758			if (offset + 1 > fmw->size) {
-   759				dev_err(tas_fmw->dev, "%s: mbPChkSumPresent error\n",
-   760					__func__);
-   761				offset = -1;
-   762				goto out;
-   763			}
-   764			block->is_pchksum_present = data[offset];
-   765			offset++;
-   766	
-   767			if (offset + 1 > fmw->size) {
-   768				dev_err(tas_fmw->dev, "%s: mnPChkSum error\n",
-   769					__func__);
-   770				offset = -1;
-   771				goto out;
-   772			}
-   773			block->pchksum = data[offset];
-   774			offset++;
-   775	
-   776			if (offset + 1 > fmw->size) {
-   777				dev_err(tas_fmw->dev, "%s: mbYChkSumPresent error\n",
-   778					__func__);
-   779				offset = -1;
-   780				goto out;
-   781			}
-   782			block->is_ychksum_present = data[offset];
-   783			offset++;
-   784	
-   785			if (offset + 1 > fmw->size) {
-   786				dev_err(tas_fmw->dev, "%s: mnYChkSum error\n",
-   787					__func__);
-   788				offset = -1;
-   789				goto out;
-   790			}
-   791			block->ychksum = data[offset];
-   792			offset++;
-   793		} else {
-   794			block->is_pchksum_present = 0;
-   795			block->is_ychksum_present = 0;
-   796		}
-   797		if (offset + 4 > fmw->size) {
-   798			dev_err(tas_fmw->dev, "%s: mnCommands error\n", __func__);
-   799			offset = -1;
-   800			goto out;
-   801		}
-   802		block->n_cmds = SMS_HTONL(data[offset], data[offset + 1],
-   803			data[offset + 2], data[offset + 3]);
-   804		offset  += 4;
-   805	
-   806		n = block->n_cmds * 4;
-   807		if (offset + n > fmw->size) {
-   808			dev_err(tas_fmw->dev,
- > 809				"%s: File Size(%lu) error offset = %d n = %d\n",
-   810				__func__, fmw->size, offset, n);
-   811			offset = -1;
-   812			goto out;
-   813		}
-   814		block->data = kmemdup(&data[offset], n, GFP_KERNEL);
-   815		if (block->data == NULL) {
-   816			offset = -1;
-   817			goto out;
-   818		}
-   819		offset  += n;
-   820	out:
-   821		return offset;
-   822	}
-   823	
+no problem, same here...not have every day time to dive into it :)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> I now have the patch below which should have everything working. Would
+> you mind testing it?
+
+thanks for your Patch, but unfortunately it looks like does not change beh=
+aviour (have reverted all prevously applied patches,
+only have felix series in).
+
+i can ping over software-vlan on wan-port (and see tagged packets on other=
+ side), till the point i setup the vlan-aware bridge over lan-ports. ping =
+works some time (imho till arp-cache is cleared) and i see untagged packet=
+s leaving wan-port (seen on other end) which should be tagged (wan.110).
+
+and before anything ask: yes, i have set different mac to wan-port (and it=
+s vlan-interfaces) and lanbr0
+
+15: lanbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue sta=
+te DOWN group default qlen 1000
+    link/ether 96:3f:c5:84:65:f0 brd ff:ff:ff:ff:ff:ff
+17: wan.140@wan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue =
+state UP group default qlen 1000
+    link/ether 02:11:02:03:01:40 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.140.1/24 brd 192.168.140.255 scope global wan.140
+       valid_lft forever preferred_lft forever
+    inet6 fe80::11:2ff:fe03:140/64 scope link
+       valid_lft forever preferred_lft forever
+18: wan.110@wan: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue =
+state UP group default qlen 1000
+    link/ether 02:11:02:03:01:10 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.110.1/24 brd 192.168.110.255 scope global wan.110
+       valid_lft forever preferred_lft forever
+    inet6 fe80::11:2ff:fe03:110/64 scope link
+       valid_lft forever preferred_lft forever
+
+have not yet defined any vlans in the bridge...only set vlan_awareness...m=
+aybe i need to add the wan-vlan
+to the lan bridge too to pass filtering?
+
+i'm unsure if tcpdump on the host interface should see vlan-traffic too (b=
+ut do not show the vlan itself)...
+in working state i see icmp in both tcpdump modes (pinging the full time w=
+ithout the bridge enabled only
+changed tcpdump on the other side):
+
+# tcpdump -nni lanbr0 | grep '\.110\.'
+
+17:13:36.071047 IP 192.168.110.1 > 192.168.110.3: ICMP echo request, id 16=
+17, seq 47, length 64
+17:13:36.071290 IP 192.168.110.3 > 192.168.110.1: ICMP echo reply, id 1617=
+, seq 47, length 64
+
+and
+
+tcpdump -nni lanbr0 -e vlan | grep '\.110\.'
+
+17:16:35.032417 02:11:02:03:01:10 > 08:02:00:00:00:10, ethertype 802.1Q (0=
+x8100), length 102: vlan 110, p 0, ethertype IPv4, 192.168.110.1 > 192.168=
+.110.3: ICMP echo request, id 1617, seq 219, length 64
+17:16:35.032609 08:02:00:00:00:10 > 02:11:02:03:01:10, ethertype 802.1Q (0=
+x8100), length 102: vlan 110, p 0, ethertype IPv4, 192.168.110.3 > 192.168=
+.110.1: ICMP echo reply, id 1617, seq 219, length 64
+
+after the vlan_aware bridge goes up i see packets in the non-vlan-mode
+
+if needed here is my current codebase:
+https://github.com/frank-w/BPI-Router-Linux/commits/6.2-rc
+
+regards Frank
