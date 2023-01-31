@@ -2,168 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61491683927
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1798D683929
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjAaWRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:17:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
+        id S229907AbjAaWSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjAaWRc (ORCPT
+        with ESMTP id S230447AbjAaWSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:17:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAF9460BA;
-        Tue, 31 Jan 2023 14:17:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BACAB81F54;
-        Tue, 31 Jan 2023 22:17:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5170FC433A0;
-        Tue, 31 Jan 2023 22:17:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675203449;
-        bh=QeeSjHFFviAdqSXwR8qgEE04ILGmTX9d2u0+rUBGGfA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EMvjDpuwGsse6CjAWdx95eLhVhyqOmy3NGY6VaRrPM/v/x8FUdelAx0Ym+Iu4CCk9
-         XVT8SSVTaujB2jVjdnzEtmg9/DezLBbtvfFEamzabWcKu4n0VR2c0oYv0nrQZ/9Y/D
-         N1qJqPyE1ClBStFMeJpK2VVHJUbRzwnHlh6DP4+2o2lhtvl8gY6R57neNjSSpGA+kS
-         N9XUFglBzHgv1H8l+gilMzKauMsCUjx8s/t+lokRFeHi9w1+iK8nbaJRHGI2T4v0IK
-         oPBwO75mt/aZZpiOQ06Rhmph6dirsFzbf+RH60mNCDzBEfVcEdQ4laPaQqI6yqry0+
-         HVEJFPnhrr2zw==
-From:   Will Deacon <will@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
-Subject: [PATCH 2/2] cpuset: Call set_cpus_allowed_ptr() with appropriate mask for task
-Date:   Tue, 31 Jan 2023 22:17:19 +0000
-Message-Id: <20230131221719.3176-3-will@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230131221719.3176-1-will@kernel.org>
-References: <20230131221719.3176-1-will@kernel.org>
+        Tue, 31 Jan 2023 17:18:04 -0500
+Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326065A832
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:17:51 -0800 (PST)
+Received: from alt-proxy28.mail.unifiedlayer.com (unknown [74.220.216.123])
+        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id A233C80334C1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 22:17:50 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 2E83E1003FA93
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 22:17:50 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id MywopVOtgx7AJMywop0639; Tue, 31 Jan 2023 22:17:50 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=WsvujfTv c=1 sm=1 tr=0 ts=63d9938e
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=RvmDmJFTN0MA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=GJu6-S3nnsZq6mQa6O8A:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ogul/3P+0fBr842LZyIYdpdnHH6FmcaSD6blNeYVVhY=; b=m6ADB0NIvJRyJEVsqlAM0keJDW
+        psmgkvli3Q8eJSXp9UdLf3JApohN4ExTzTqVHklQCzOIjxQT1J9TNiFtxGx5OXM5XVRhxMu86g0rU
+        aKmX4Ag1NmzLi7m6ODYQPPVmj7MaDtHcN3LSjyeQJRSUJzcdzeP5RM94ABJvlV8Wj/4iEoB73ulTj
+        x6epqBVu4rwqdwDhdUx9lMnLhGLHwiFhAQvnPKysDVUWxzUbxiZaNXnRmAosi1sWKu73O4dVVrDth
+        PLgVZxIc55HRYTmKnPCCcbG4GYhawf6KJOokCjrHAJ8puIvIVSA3NctnDAsa4ZBZF6gU4zljFOBh/
+        2KqXZpCg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:53154 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1pMywn-000hUQ-B4;
+        Tue, 31 Jan 2023 15:17:49 -0700
+Subject: Re: [PATCH 6.1 000/306] 6.1.9-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230131072621.746783417@linuxfoundation.org>
+In-Reply-To: <20230131072621.746783417@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <03c296a8-6267-e73f-d10a-c0557cd26d11@w6rz.net>
+Date:   Tue, 31 Jan 2023 14:17:45 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1pMywn-000hUQ-B4
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:53154
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-set_cpus_allowed_ptr() will fail with -EINVAL if the requested
-affinity mask is not a subset of the task_cpu_possible_mask() for the
-task being updated. Consequently, on a heterogeneous system with cpusets
-spanning the different CPU types, updates to the cgroup hierarchy can
-silently fail to update task affinities when the effective affinity
-mask for the cpuset is expanded.
+On 1/30/23 11:34 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.9 release.
+> There are 306 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 02 Feb 2023 07:25:23 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.9-rc3.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-For example, consider an arm64 system with 4 CPUs, where CPUs 2-3 are
-the only cores capable of executing 32-bit tasks. Attaching a 32-bit
-task to a cpuset containing CPUs 0-2 will correctly affine the task to
-CPU 2. Extending the cpuset to CPUs 0-3, however, will fail to extend
-the affinity mask of the 32-bit task because update_tasks_cpumask() will
-pass the full 0-3 mask to set_cpus_allowed_ptr().
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Extend update_tasks_cpumask() to take a temporary 'cpumask' paramater
-and use it to mask the 'effective_cpus' mask with the possible mask for
-each task being updated.
-
-Fixes: 431c69fac05b ("cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()")
-Signed-off-by: Will Deacon <will@kernel.org>
----
-
-Note: We wondered whether it was worth calling guarantee_online_cpus()
-if the cpumask_and() returns 0 in update_tasks_cpumask(), but given that
-this path is only called when the effective mask changes, it didn't
-seem appropriate. Ultimately, if you have 32-bit tasks attached to a
-cpuset containing only 64-bit cpus, then the affinity is going to be
-forced.
-
- kernel/cgroup/cpuset.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 8552cc2c586a..f15fb0426707 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1205,12 +1205,13 @@ void rebuild_sched_domains(void)
- /**
-  * update_tasks_cpumask - Update the cpumasks of tasks in the cpuset.
-  * @cs: the cpuset in which each task's cpus_allowed mask needs to be changed
-+ * @new_cpus: the temp variable for the new effective_cpus mask
-  *
-  * Iterate through each task of @cs updating its cpus_allowed to the
-  * effective cpuset's.  As this function is called with cpuset_rwsem held,
-  * cpuset membership stays stable.
-  */
--static void update_tasks_cpumask(struct cpuset *cs)
-+static void update_tasks_cpumask(struct cpuset *cs, struct cpumask *new_cpus)
- {
- 	struct css_task_iter it;
- 	struct task_struct *task;
-@@ -1224,7 +1225,10 @@ static void update_tasks_cpumask(struct cpuset *cs)
- 		if (top_cs && (task->flags & PF_KTHREAD) &&
- 		    kthread_is_per_cpu(task))
- 			continue;
--		set_cpus_allowed_ptr(task, cs->effective_cpus);
-+
-+		cpumask_and(new_cpus, cs->effective_cpus,
-+			    task_cpu_possible_mask(task));
-+		set_cpus_allowed_ptr(task, new_cpus);
- 	}
- 	css_task_iter_end(&it);
- }
-@@ -1509,7 +1513,7 @@ static int update_parent_subparts_cpumask(struct cpuset *cs, int cmd,
- 	spin_unlock_irq(&callback_lock);
- 
- 	if (adding || deleting)
--		update_tasks_cpumask(parent);
-+		update_tasks_cpumask(parent, tmp->new_cpus);
- 
- 	/*
- 	 * Set or clear CS_SCHED_LOAD_BALANCE when partcmd_update, if necessary.
-@@ -1661,7 +1665,7 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
- 		WARN_ON(!is_in_v2_mode() &&
- 			!cpumask_equal(cp->cpus_allowed, cp->effective_cpus));
- 
--		update_tasks_cpumask(cp);
-+		update_tasks_cpumask(cp, tmp->new_cpus);
- 
- 		/*
- 		 * On legacy hierarchy, if the effective cpumask of any non-
-@@ -2309,7 +2313,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		}
- 	}
- 
--	update_tasks_cpumask(parent);
-+	update_tasks_cpumask(parent, tmpmask.new_cpus);
- 
- 	if (parent->child_ecpus_count)
- 		update_sibling_cpumasks(parent, cs, &tmpmask);
-@@ -3347,7 +3351,7 @@ hotplug_update_tasks_legacy(struct cpuset *cs,
- 	 * as the tasks will be migrated to an ancestor.
- 	 */
- 	if (cpus_updated && !cpumask_empty(cs->cpus_allowed))
--		update_tasks_cpumask(cs);
-+		update_tasks_cpumask(cs, new_cpus);
- 	if (mems_updated && !nodes_empty(cs->mems_allowed))
- 		update_tasks_nodemask(cs);
- 
-@@ -3384,7 +3388,7 @@ hotplug_update_tasks(struct cpuset *cs,
- 	spin_unlock_irq(&callback_lock);
- 
- 	if (cpus_updated)
--		update_tasks_cpumask(cs);
-+		update_tasks_cpumask(cs, new_cpus);
- 	if (mems_updated)
- 		update_tasks_nodemask(cs);
- }
--- 
-2.39.1.456.gfc5497dd1b-goog
+Tested-by: Ron Economos <re@w6rz.net>
 
