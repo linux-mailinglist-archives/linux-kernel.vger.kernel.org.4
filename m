@@ -2,95 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADD2682969
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A4A682970
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232828AbjAaJrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:47:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S231292AbjAaJsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:48:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbjAaJrT (ORCPT
+        with ESMTP id S232837AbjAaJsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:47:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A12446718
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:46:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6772DCE1C83
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 464FAC4339B;
-        Tue, 31 Jan 2023 09:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675158383;
-        bh=drj8Q7DR3ak/2XdNo8GhguQIPXGnSMqZd36bxWhjgJw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iWaQXUYUEfz4egILmZZ2iaXcX3R4PnrswWeeN8w15k8dwM3uISKalaK0uHey2TaUw
-         qxJZCo+DLP89CRFh8k7dOPzxdtaJ0mkaH1D7nJImRrkQ0xMulzJSNMXpDWLi+0Qt8J
-         JeYeJpayWG4/OYwAYDGXGSQt8zb9LltHVPnLlpAo=
-Date:   Tue, 31 Jan 2023 10:46:20 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christian.Gromm@microchip.com
-Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] most: fix kernel-doc warnings
-Message-ID: <Y9jjbMWKlRkCzzSe@kroah.com>
-References: <20230113063947.23174-1-rdunlap@infradead.org>
- <Y8lsvtoSYFj/8/U/@kroah.com>
- <7e79c3bb823ab54b7440129b8d5a1897cfa01dd2.camel@microchip.com>
+        Tue, 31 Jan 2023 04:48:08 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19995FF8;
+        Tue, 31 Jan 2023 01:47:56 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id u5so9494067pfm.10;
+        Tue, 31 Jan 2023 01:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A655nD9x3a8hHtfO8IDUSlIL069yAfQEg9w8Iv6Dufs=;
+        b=m12/umS4j2j0YqF5LiWwgSDuueEjUt9WJxbgd3UcEGFgpncM5fxHeU8fp3pIWJZu/Z
+         e8eaJAIjV3VUEKfJReLmAnzxAFEKylpVdbsY03rnbrgtM03mBeX2l7hJ47XWovIFjsyZ
+         GLv7z6ni9u0Rg9b+zM2u0BNBUPn4b8jue2pzsnMpYcjRtuioKu7XMNusVeVorDQOq9ev
+         hd/ncgcvuu9k5R03+tRwSiR92xMmq9nRmxc8GsWTfh1GHE6Owv6IEUSCCel5QQnvomDH
+         Ev63/O/mqL5+Oh9xlNyUibwJXO+EjCC6Z7uO2CNLGM7NxYeDpx3/vh90Q5eyqknrdlMU
+         UCXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A655nD9x3a8hHtfO8IDUSlIL069yAfQEg9w8Iv6Dufs=;
+        b=MRdyzLe3bs/IzBBsH4CnLVVf1vu+v4eOD/rn+nnrNHMkoBcHa+kLpWylDSU0fkL2Z7
+         rbYkDuJXncbibxT5XMunS4MKI5ZpgFWi/X3A3cgtssFjsR5wKEwKX/zEfv3aG2dJIXah
+         p64/5ghfTgjGTfB6sCw3SH3wtjiGusPFJ/AVPxlH/wmwRX53ak/sruho7npFVbGbFTW/
+         61+ji7+5bvniY3ndDzDC1K5tj904Mg5YcCoO4VrdjBjF8vcOCXoQ8p7EfL8+soJ7TsDL
+         03UOTQDcSkmYD1GmwukWZ5gs4hUOPk7c0qOF2dTq+shED38Y0DRkVZ4InmqkvsgA7ibC
+         zuvg==
+X-Gm-Message-State: AO0yUKWEbQPK1IL5OWXVMG7fa/Y5QXdE3ox/eSpbyVdXrCFqvfNUJx4p
+        RlV0JWVqE9QdkhJJEvmFhak=
+X-Google-Smtp-Source: AK7set9O4tsrz6wug59doXOI4kgE9FXIm4c4WQEycPHDa80z7J04/eOPcCC3ahy+mW4viPWptwCkEA==
+X-Received: by 2002:a05:6a00:26cf:b0:580:ea08:5277 with SMTP id p15-20020a056a0026cf00b00580ea085277mr9060494pfw.16.1675158476139;
+        Tue, 31 Jan 2023 01:47:56 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id j11-20020aa7928b000000b0058bb8943c9asm8911641pfa.161.2023.01.31.01.47.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 01:47:55 -0800 (PST)
+Message-ID: <18068631-d634-679c-3dd1-4493d186ffb8@gmail.com>
+Date:   Tue, 31 Jan 2023 17:47:46 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e79c3bb823ab54b7440129b8d5a1897cfa01dd2.camel@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] .gitignore: Keep track of archived files as they are
+ added to a new git repo
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Shuah Khan <shuah@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Kees Cook <keescook@chromium.org>, Andrew Davis <afd@ti.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        Will Deacon <will@kernel.org>
+References: <20230130090426.13864-1-likexu@tencent.com>
+ <CAK7LNAT=8Z_-OJdEdUNvUwYpXvWZU7JnYLHW-o+w9GBXjaFbMQ@mail.gmail.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <CAK7LNAT=8Z_-OJdEdUNvUwYpXvWZU7JnYLHW-o+w9GBXjaFbMQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 10:31:56AM +0000, Christian.Gromm@microchip.com wrote:
+On 31/1/2023 12:06 am, Masahiro Yamada wrote:
+> On Mon, Jan 30, 2023 at 6:04 PM Like Xu <like.xu.linux@gmail.com> wrote:
+>>
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> With thousands of commits going into mainline each development cycle,
+>> the metadata .git folder size is gradually expanding (1GB+), and for some
+>> developers (most likely testers) who don't care about the lengthy git-log,
+>> they just use git-archive to distribute a certain version of code (~210MB)
+>> and rebuild git repository from anywhere for further code changes, e.g.
+>>
+>>    $ git init && git add . -A
+>>
+>> Then unfortunately, the file tracking metadata from the original git-repo
+>> using "git add -f" will also be lost, to the point where part of source
+>> files wrapped by git-archive may be accidentally cleaned up:
+>>
+>>    $ git clean -nxdf
+>>    Would remove Documentation/devicetree/bindings/.yamllint
+>>    Would remove drivers/clk/.kunitconfig
+>>    Would remove drivers/gpu/drm/tests/.kunitconfig
+>>    Would remove drivers/hid/.kunitconfig
+>>    Would remove fs/ext4/.kunitconfig
+>>    Would remove fs/fat/.kunitconfig
+>>    Would remove kernel/kcsan/.kunitconfig
+>>    Would remove lib/kunit/.kunitconfig
+>>    Would remove mm/kfence/.kunitconfig
+>>    Would remove tools/testing/selftests/arm64/tags/
+>>    Would remove tools/testing/selftests/kvm/.gitignore
+>>    Would remove tools/testing/selftests/kvm/Makefile
+>>    Would remove tools/testing/selftests/kvm/config
+>>    Would remove tools/testing/selftests/kvm/settings
+>>
+>> This asymmetry is very troubling to those users since finding out which
+>> files to track with "git add -f" clearly requires priori knowledge on
+>> various subsystems. The eradication of this little issue requires naturally
+>> making git-init aware of all .gitignore restrictions at different file tree
+>> hierarchies. Similar issues can be troubleshot with "git check-ignore -v"
+>> for any mistakenly cleaned files.
+>>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
 > 
-> On Thu, 2023-01-19 at 17:15 +0100, Greg Kroah-Hartman wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On Thu, Jan 12, 2023 at 10:39:47PM -0800, Randy Dunlap wrote:
-> > > Fix various W=1 kernel-doc warnings in drivers/most/:
-> > >
-> > > drivers/most/most_usb.c:669: warning: Excess function parameter 'data' description in 'link_stat_timer_handler'
-> > > drivers/most/most_usb.c:769: warning: cannot understand function prototype: 'const struct file_operations hdm_usb_fops = '
-> > > drivers/most/most_usb.c:776: warning: cannot understand function prototype: 'const struct usb_device_id usbid[] = '
-> > > drivers/most/most_cdev.c:301: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> > >  * Initialization of struct file_operations
-> > > drivers/most/most_cdev.c:414: warning: Function parameter or member 'args' not described in 'comp_probe'
-> > > drivers/most/most_snd.c:56: warning: Function parameter or member 'pcm_hardware' not described in 'channel'
-> > > drivers/most/most_snd.c:56: warning: Function parameter or member 'copy_fn' not described in 'channel'
-> > > drivers/most/most_snd.c:404: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> > >  * Initialization of struct snd_pcm_ops
-> > > drivers/most/most_snd.c:514: warning: Function parameter or member 'device_name' not described in 'audio_probe_channel'
-> > > drivers/most/most_snd.c:703: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> > >  * Initialization of the struct most_component
-> > >
-> > >
-> > > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Cc: Christian Gromm <christian.gromm@microchip.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ---
-> > > Also: what does MOST mean? Can that be added to drivers/most/Kconfig,
-> > >     in a prompt or help text?
-> > > Also: how about a MAINTAINERS entry for drivers/most/?
-> > 
-> > That would be good, Christian, can you send a patch for that?
-> > 
 > 
-> Sure, I can do that. But since I am not working for the automotive divison
-> within the company anymore I need to indentify the right person for that first.
+> 
+> tools/testing/selftests/kvm/.gitignore is already meh.
+> 
+> I hope somebody will submit a better fix.
+> 
+> 
 
-Should we just remove these files if no one is using them anymore and
-there's no one to maintain them?
+If we don't append "!.gitignore" to tools/testing/selftests/kvm/.gitignore,
+the same issue still exists due to the "*" entry in the same file:
 
-thanks,
+# git version 2.31.1
+$ git clean -nxdf
+Would remove tools/testing/selftests/kvm/.gitignore
 
-greg k-h
+Is there a better move for this kind of git usage,
+or could any maintainer pick this up? Thanks.
+
+> 
+> 
+>> ---
+>>   .gitignore                               | 2 ++
+>>   tools/testing/selftests/arm64/.gitignore | 2 ++
+>>   tools/testing/selftests/kvm/.gitignore   | 4 ++++
+>>   3 files changed, 8 insertions(+)
+>>   create mode 100644 tools/testing/selftests/arm64/.gitignore
+>>
+>> diff --git a/.gitignore b/.gitignore
+>> index 20dce5c3b9e0..fa39e98caee3 100644
+>> --- a/.gitignore
+>> +++ b/.gitignore
+>> @@ -102,6 +102,8 @@ modules.order
+>>   !.gitignore
+>>   !.mailmap
+>>   !.rustfmt.toml
+>> +!.yamllint
+>> +!.kunitconfig
+>>
+>>   #
+>>   # Generated include files
+>> diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
+>> new file mode 100644
+>> index 000000000000..135d709d2d65
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/.gitignore
+>> @@ -0,0 +1,2 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +!tags
+>> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+>> index 6d9381d60172..96561c8e06e0 100644
+>> --- a/tools/testing/selftests/kvm/.gitignore
+>> +++ b/tools/testing/selftests/kvm/.gitignore
+>> @@ -5,3 +5,7 @@
+>>   !*.h
+>>   !*.S
+>>   !*.sh
+>> +!.gitignore
+>> +!Makefile
+>> +!settings
+>> +!config
+>> \ No newline at end of file
+>> --
+>> 2.39.1
+>>
+> 
+> 
