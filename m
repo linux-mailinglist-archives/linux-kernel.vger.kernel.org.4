@@ -2,90 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A04F682184
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEF4682185
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjAaBqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S230087AbjAaBss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjAaBqp (ORCPT
+        with ESMTP id S229456AbjAaBsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:46:45 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244E41631A
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:46:31 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id k6so14621523vsk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:46:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r0G78tCFuMbUc11f4Np3FVLjYUjXRj+1bSf/D+z772Y=;
-        b=mBtK5jkiEPcmqnnUf3pWbeh8X1hzLi8VxrmvPgnBVeR64+mnnmMndwS6dpqTQOgQTV
-         GYrR7P3jZQo0pYnE8xyMUtVNrxhSv+1+3CdCnGJjS5kJOjSRSy0v6Su3cI6SYyqauSlB
-         vPb8rMkw1MYjQiYj4oaoqHB3JVw4YvTnr2t97GRBiG2II0iD6Qq1DylRNSQrOR5rrmse
-         cqXxYh6CCSb4Jd0lCVVJKNNpJGOcQa8yJTUZbSj0XSMK4LNVSLGenAQR4ZBr54k4VZIo
-         RCH+zjvb6Bcc9CwtuiKAgBA08gZS+RMrsWymnMqBCPaa1E8w70bbakPcfMlclVt+O1T+
-         8ZwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r0G78tCFuMbUc11f4Np3FVLjYUjXRj+1bSf/D+z772Y=;
-        b=YtoxlNXBcyfGiAcGBmDIPPKMZCqRtdRi8SVzUIDKg4nKfxv0PEdVxkx7upGVT4NlEi
-         f0N3pkY0mXVan2JITMLzmEEMddP0ZnfFyHc33G9lkLUV/yzIj6WNmDhuYQNs4epM5s7d
-         0F8V66i17XQAgN20E89JiE+1FzeWAsTjmyGplMQhZzN5xpWHhIRPZmYLPcmKeqzyTNmu
-         SeXuFvoUBs3kiXCBe1vsacFJqcZyinFhveMyLD5w74qRMbDkkxSGd1QHDBk20JRzhxWq
-         O44aNjuA7fCLpSvclea3xD/XWCNlk6my0EeqDVpWv2yZRDQs4b1lq74hJlTAGrLvorE5
-         QUqw==
-X-Gm-Message-State: AO0yUKVb7kff/cm23KU9BuGc1VqzUOtV9NqF9I39BEK/W8jwaTQ/ypPl
-        Tyoop7RoCr/VcRsdrTCe1R6pKevu61FKoatZje1vew==
-X-Google-Smtp-Source: AK7set8T18QDx4rAbFvPvwBDlz5oPdhQHy9nhjNv0cUUAZfeKar7Fpa3GKrYmMJRQRPGA3x+F0b5SBaQ6GGUsLHTgr0=
-X-Received: by 2002:a67:ecd8:0:b0:3eb:e432:5601 with SMTP id
- i24-20020a67ecd8000000b003ebe4325601mr2837366vsp.16.1675129590180; Mon, 30
- Jan 2023 17:46:30 -0800 (PST)
+        Mon, 30 Jan 2023 20:48:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027A027D51
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:48:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D11FB818C2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1C2C433EF
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675129723;
+        bh=K/yjW5Nk+aszNLr45x2MctvZq4mHC7XfhLAHpxR9Iyw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JEqiA6CKjGCWt72BlyrT7IuQAgV1yG8HkFcs+fchVfhK/HrvjOv8k0+A73mffzJXf
+         aETCY+VnRSjmlJEjB6rckHGQh9H+nGnU5lMvDHyQMzQCpasi0kWDFZ1JkVzWP254gg
+         9nwiuW/vA5gV5pyKeQbZZoFBr83pO4n55V2bgNnhC5zRZ9hiAY7o5NOmEV+d1LV8Ij
+         aAc7sKvSlTQm6T1j4xvdF95G4zfgBg6CwpQP1pIypm7u/DG20o6U0rsM8XoSUzva5L
+         83EVu1kKs8MnvShzd6qq18c38fHEjL0H29ZF1IDiwgxSxmtbPaW/8mmBeIWTgqPsSZ
+         dy7uHOunhnzTQ==
+Received: by mail-ed1-f52.google.com with SMTP id cw4so7840669edb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:48:43 -0800 (PST)
+X-Gm-Message-State: AO0yUKUDfFrDrJ8fPlZHF+w9te+Rsfe8POsqIDao3Cxjk2vtuEBlRvej
+        TbjoTBie21q+Nq75RF/kNexMYiSlYVT4qJo+pS0=
+X-Google-Smtp-Source: AK7set86ZLrbSDX6C8yFFLgbGhZwssXS3Isjcf+A2euqyYBysQ7/UnXRcMOITEhGoE6uyALpI2oj7zA3pHnkV3M5qPY=
+X-Received: by 2002:a05:6402:291:b0:4a2:1776:631b with SMTP id
+ l17-20020a056402029100b004a21776631bmr3407030edv.30.1675129721469; Mon, 30
+ Jan 2023 17:48:41 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6130:1015:b0:559:9619:d862 with HTTP; Mon, 30 Jan 2023
- 17:46:29 -0800 (PST)
-X-Originating-IP: [24.53.241.20]
-In-Reply-To: <Y9bvwz4FIOQ+D8c4@x1n>
-References: <CADyTPExpEqaJiMGoV+Z6xVgL50ZoMJg49B10LcZ=8eg19u34BA@mail.gmail.com>
- <Y9bvwz4FIOQ+D8c4@x1n>
-From:   Nick Bowler <nbowler@draconx.ca>
-Date:   Mon, 30 Jan 2023 20:46:29 -0500
-Message-ID: <CADyTPEzsvdRC15+Z5T3oryofwRYqHmHzwqRmJKJoHB3d7Tdayw@mail.gmail.com>
-Subject: Re: PROBLEM: sparc64 random crashes starting w/ Linux 6.1 (regression)
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
-        regressions@lists.linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>
+References: <20230126161559.1467374-1-guoren@kernel.org> <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
+ <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
+ <87r0vc9h4g.fsf@all.your.base.are.belong.to.us> <Y9fm+6LPXgtDSma/@FVFF77S0Q05N>
+In-Reply-To: <Y9fm+6LPXgtDSma/@FVFF77S0Q05N>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 31 Jan 2023 09:48:29 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRgze_owuWvJjnrPpBNs8+GY-km7wvHU4EuJzarQc+BPQ@mail.gmail.com>
+Message-ID: <CAJF2gTRgze_owuWvJjnrPpBNs8+GY-km7wvHU4EuJzarQc+BPQ@mail.gmail.com>
+Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        "liaochang (A)" <liaochang1@huawei.com>, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mhiramat@kernel.org,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-29, Peter Xu <peterx@redhat.com> wrote:
-> On Sat, Jan 28, 2023 at 09:17:31PM -0500, Nick Bowler wrote:
->> Starting with Linux 6.1.y, my sparc64 (Sun Ultra 60) system is very
->> unstable, with userspace processes randomly crashing with all kinds of
->> different weird errors.  The same problem occurs on 6.2-rc5.  Linux
->> 6.0.y is OK.
-[...]
-> Could you try below patch to see whether it fixes your problem?  It should
-> cover the last piece of possible issue with dirty bit on sparc after that
-> patchset.  It's based on latest master branch (commit ab072681eabe1ce0).
+On Mon, Jan 30, 2023 at 11:49 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> Hi Bjorn,
+>
+> On Mon, Jan 30, 2023 at 04:28:15PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
+> > Guo Ren <guoren@kernel.org> writes:
+> >
+> > >> In the serie of RISCV OPTPROBES [1], it patches a long-jump instruct=
+ions pair
+> > >> AUIPC/JALR in kernel text, so in order to ensure other CPUs does not=
+ execute
+> > >> in the instructions that will be modified, it is still need to stop =
+other CPUs
+> > >> via patch_text API, or you have any better solution to achieve the p=
+urpose?
+> > >  - The stop_machine is an expensive way all architectures should
+> > > avoid, and you could keep that in your OPTPROBES implementation files
+> > > with static functions.
+> > >  - The stop_machine couldn't work with PREEMPTION, so your
+> > > implementation needs to work with !PREEMPTION.
+> >
+> > ...and stop_machine() with !PREEMPTION is broken as well, when you're
+> > replacing multiple instructions (see Mark's post at [1]). The
+> > stop_machine() dance might work when you're replacing *one* instruction=
+,
+> > not multiple as in the RISC-V case. I'll expand on this in a comment in
+> > the OPTPROBES v6 series.
+>
+> Just to clarify, my comments in [1] were assuming that stop_machine() was=
+ not
+> used, in which case there is a problem with or without PREEMPTION.
+>
+> I believe that when using stop_machine(), the !PREEMPTION case is fine, s=
+ince
+> stop_machine() schedules work rather than running work in IRQ context on =
+the
+> back of an IPI, so no CPUs should be mid-sequnce during the patching, and=
+ it's
+> not possible for there to be threads which are preempted mid-sequence.
+>
+> That all said, IIUC optprobes is going to disappear once fprobe is ready
+> everywhere, so that might be moot.
+The optprobes could be in the middle of a function, but fprobe must be
+the entry of a function, right?
 
-Haven't seen any failures yet, so it seems this patch on top of 6.2-rc6
-makes things much better.
+Does your fprobe here mean: ?
 
-I'll keep running this for a while to see if any other problems come up.
+The Linux kernel configuration item CONFIG_FPROBE:
 
-Thanks,
-  Nick
+prompt: Kernel Function Probe (fprobe)
+type: bool
+depends on: ( CONFIG_FUNCTION_TRACER ) && (
+CONFIG_DYNAMIC_FTRACE_WITH_REGS ) && ( CONFIG_HAVE_RETHOOK )
+defined in kernel/trace/Kconfig
+
+
+>
+> Thanks,
+> Mark.
+>
+> > >> >  static void __kprobes arch_prepare_simulate(struct kprobe *p)
+> > >> > @@ -114,16 +120,23 @@ void *alloc_insn_page(void)
+> > >> >  /* install breakpoint in text */
+> > >> >  void __kprobes arch_arm_kprobe(struct kprobe *p)
+> > >> >  {
+> > >> > -     if ((p->opcode & __INSN_LENGTH_MASK) =3D=3D __INSN_LENGTH_32=
+)
+> > >> > -             patch_text(p->addr, __BUG_INSN_32);
+> > >> > -     else
+> > >> > -             patch_text(p->addr, __BUG_INSN_16);
+> > >> > +#ifdef CONFIG_RISCV_ISA_C
+> > >> > +     u32 opcode =3D __BUG_INSN_16;
+> > >> > +#else
+> > >> > +     u32 opcode =3D __BUG_INSN_32;
+> > >> > +#endif
+> > >> > +     patch_text_nosync(p->addr, &opcode, GET_INSN_LENGTH(opcode))=
+;
+> > >>
+> > >> Sounds good, but it will leave some RVI instruction truncated in ker=
+nel text,
+> > >> i doubt kernel behavior depends on the rest of the truncated instruc=
+tion, well,
+> > >> it needs more strict testing to prove my concern :)
+> > > I do this on purpose, and it doesn't cause any problems. Don't worry;
+> > > IFU hw must enforce the fetch sequence, and there is no way to execut=
+e
+> > > broken instructions even in the speculative execution path.
+> >
+> > This is stretching reality a bit much. ARMv8, e.g., has a chapter in th=
+e
+> > Arm ARM [2] Appendix B "Concurrent modification and execution of
+> > instructions" (CMODX). *Some* instructions can be replaced concurrently=
+,
+> > and others cannot without caution. Assuming that that all RISC-V
+> > implementations can, is a stretch. RISC-V hasn't even specified the
+> > behavior of CMODX (which is problematic).
+> >
+> > If anything it would be more likely that the existing
+> > "stop_machine()-to-replace-with-ebreak" works (again, replacing one
+> > instruction does not have the !PREEMPTION issues). Then again, no spec,
+> > so mostly guessing from my side. :-(
+> >
+> > Oh, but the existing "ebreak replace" might be broken like [3].
+> >
+> >
+> > Bj=C3=B6rn
+> >
+> >
+> > [1] https://lore.kernel.org/linux-riscv/Y7%2F6AtX5X0+5qF6Y@FVFF77S0Q05N=
+/
+> > [2] https://developer.arm.com/documentation/ddi0487/latest
+> > [3] https://lore.kernel.org/linux-riscv/20230126170607.1489141-2-guoren=
+@kernel.org/
+
+
+
+--=20
+Best Regards
+ Guo Ren
