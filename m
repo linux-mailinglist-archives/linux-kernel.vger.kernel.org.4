@@ -2,113 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAED2682A37
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DD6682A40
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjAaKP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S230364AbjAaKQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjAaKP5 (ORCPT
+        with ESMTP id S230430AbjAaKQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:15:57 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27874A211
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:15:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1675160108; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=AnMq+5elFPUhIPHg/lZuIkx2KbX18eyi/w4q9RVOhNH7TpnU/ONgLQVxp90U89axUjmmh8X+VWhKe2raktiSmF3yTmcbk2HRsUN8NM1CyRvLKwhOHDg9/X5bIQYbMELCGU3GH8LO7uOnOg3hWFzM6vmy+C6PIYth3nfPIp2ARKQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1675160108; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=n92mC6ZuA5G2Jp0m1IQ48fttaRXQ9O8TIQKnESJL3cQ=; 
-        b=a2REufaeh+DpT2R0cjEq5Cp+C6ZHOjaQWSIxWz5r8/9Nf+tGDaJdqZ4A3sfRmM2nfk1jtOcR09WZEOmGGKMp7Gmg9/ZLlAFApiPgyoUPqi2mXbve4Wj5QQARwpGWBvqnO9m9ZJpYeNRzxtfm82evExPJvH6HIpCCMtQU6cDdTms=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1675160108;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Message-ID:Date:Date:MIME-Version:To:To:Cc:Cc:References:Subject:Subject:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=n92mC6ZuA5G2Jp0m1IQ48fttaRXQ9O8TIQKnESJL3cQ=;
-        b=Xz1m4dolZOV3RcJSMWFiHahqu6Rhr9/YiCh2bOyj5na18HaxytQvZTasgm8QQdxJ
-        Er3r6X0MyQXshw3Ghi557cyboDC/Jh2fdDSS+RVeVB7lFW60sT+fYXbSmtDn8WBfxn8
-        SO46bqDhpaeQ5gaoD0Jq6e7+SxbsUSrA43s0CDPQ=
-Received: from [192.168.1.9] (117.97.173.26 [117.97.173.26]) by mx.zoho.in
-        with SMTPS id 1675160107680903.5041974356834; Tue, 31 Jan 2023 15:45:07 +0530 (IST)
-Message-ID: <1393b9df-f234-04c7-0471-1012b54aadbb@siddh.me>
-Date:   Tue, 31 Jan 2023 15:45:02 +0530
+        Tue, 31 Jan 2023 05:16:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEEF49962
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:15:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675160126;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZAQct07RmXjsPBydkh4gU6qVtTSDWIY2zc/YS0s3Fdw=;
+        b=hlXCiSioS3J9LU0VxFCEXPgQcZQ06kJoKIcgMq+2WDdWLl275f1MlWVz175AFlvr435N/Q
+        opdwyBRbZwzITopBrACcECmWNiOnhN5BbIcYPmH9LsGogMVjvvrQLF+898XvuqSWzCEVB9
+        PCWcGgKFAD1KsOp1MjcT0Qmb96FYJrc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-Y5BX3Fx4Pweph0Y3k0Y3Yw-1; Tue, 31 Jan 2023 05:15:20 -0500
+X-MC-Unique: Y5BX3Fx4Pweph0Y3k0Y3Yw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B09B800B23;
+        Tue, 31 Jan 2023 10:15:20 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AE733140EBF4;
+        Tue, 31 Jan 2023 10:15:15 +0000 (UTC)
+Date:   Tue, 31 Jan 2023 18:15:09 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Liu Xiaodong <xiaodong.liu@intel.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jim Harris <james.r.harris@intel.com>,
+        Ben Walker <benjamin.walker@intel.com>
+Subject: Re: [PATCH] block: ublk: extending queue_size to fix overflow
+Message-ID: <Y9jqLdZauz9mab4t@T590>
+References: <20230131070552.115067-1-xiaodong.liu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Simon Ser <contact@emersion.fr>,
-        Jim Cromie <jim.cromie@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <cover.1673269059.git.code@siddh.me>
-Subject: Re: [PATCH v6 00/10] drm: Remove usage of deprecated DRM_* macros
-Content-Language: en-US, en-GB, hi-IN
-From:   Siddh Raman Pant <code@siddh.me>
-In-Reply-To: <cover.1673269059.git.code@siddh.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131070552.115067-1-xiaodong.liu@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 Jan 2023 at 18:30:25 +0530, Siddh Raman Pant wrote:
-> This patchset aims to remove usages of deprecated DRM_* macros from the
-> files residing in drivers/gpu/drm root.
+On Tue, Jan 31, 2023 at 02:05:52AM -0500, Liu Xiaodong wrote:
+> When validating drafted SPDK ublk target, in a case that
+> assigning large queue depth to multiqueue ublk device,
+> ublk target would run into a weird incorrect state. During
+> rounds of review and debug, An overflow bug was found
+> in ublk driver.
 > 
-> In process, I found out that NULL as first argument of drm_dbg_* wasn't
-> working, but it was listed as the alternative in deprecation comment,
-> so I fixed that before removing usages of DRM_DEBUG_* macros. Courtesy
-> discussion on v1, I added support for NULL in drm_()* macros too.
+> In ublk_cmd.h, UBLK_MAX_QUEUE_DEPTH is 4096 which means
+> each ublk queue depth can be set as large as 4096. But
+> when setting qd for a ublk device,
+> sizeof(struct ublk_queue) + depth * sizeof(struct ublk_io)
+> will be larger than 65535 if qd is larger than 2728.
+> Then queue_size is overflowed, and ublk_get_queue()
+> references a wrong pointer position. The wrong content of
+> ublk_queue elements will lead to out-of-bounds memory
+> access.
 > 
-> This patchset should be applied in order as changes might be dependent.
+> Extend queue_size in ublk_device as "unsigned int".
 > 
-> Please review and let me know if any errors are there, and hopefully
-> this gets accepted.
-> 
+> Signed-off-by: Liu Xiaodong <xiaodong.liu@intel.com>
 > ---
-> v5 -> v6:
-> - Move drm_device to default case in _Generic as it is the default behaviour.
-> - Fix incorrect const drm_device handling in _Generic.
-> - Minor positioning / comment changes.
+>  drivers/block/ublk_drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> [...]
-> 
-> Siddh Raman Pant (10):
->   drm/print: Fix and add support for NULL as first argument in drm_*
->     macros
->   drm: Remove usage of deprecated DRM_INFO
->   drm: Remove usage of deprecated DRM_NOTE
->   drm: Remove usage of deprecated DRM_ERROR
->   drm: Remove usage of deprecated DRM_DEBUG
->   drm: Remove usage of deprecated DRM_DEBUG_DRIVER
->   drm: Remove usage of deprecated DRM_DEBUG_KMS
->   drm: Remove usage of deprecated DRM_DEBUG_PRIME
->   drm/drm_blend: Remove usage of deprecated DRM_DEBUG_ATOMIC
->   drm/drm_lease: Remove usage of deprecated DRM_DEBUG_LEASE
-> 
->  [...]
+> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+> index e54693204630..6368b56eacf1 100644
+> --- a/drivers/block/ublk_drv.c
+> +++ b/drivers/block/ublk_drv.c
+> @@ -137,7 +137,7 @@ struct ublk_device {
+>  
+>  	char	*__queues;
+>  
+> -	unsigned short  queue_size;
+> +	unsigned int	queue_size;
+>  	struct ublksrv_ctrl_dev_info	dev_info;
 
-Hello,
+Good catch,
 
-Please review these patches, which I sent more than 2 weeks ago. Note
-that the last three patches have been already merged. Lore link is:
-https://lore.kernel.org/dri-devel/cover.1673269059.git.code@siddh.me/
+Fixes: 71f28f3136af ("ublk_drv: add io_uring based userspace block driver")
+
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+
 
 Thanks,
-Siddh
+Ming
+
