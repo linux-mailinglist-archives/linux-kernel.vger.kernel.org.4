@@ -2,118 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34230682DC2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6605682DC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjAaNYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:24:32 -0500
+        id S232094AbjAaNY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:24:28 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbjAaNY2 (ORCPT
+        with ESMTP id S232090AbjAaNY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:24:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A7A234FE
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:24:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B394B81BDF
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ACDBC433A8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675171453;
-        bh=BWyo85S31f1UQsUNQTKebmZ46eBrrXm1tWKRlYhorI8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uVsX2vLNW0uN243oQHh+8TZbhhHi1hwcc954Z7dNzUkxM09LgVGVGmECZQScBKbkR
-         bPW0VvBkWOwk9OEkIKRPnSKXVtsM/FXUXw4+lSTtEzNoETFEXsHlX5gjXI5jdeAUlA
-         gbSZCIs/s8bSTYpxnPkM/3sgV05JqGaxgv+kV+2OuW3KJT2PgbLPcAqPF30jpOgRhy
-         AfMZgqOBBJbKUJttfPI3HpMMCjOYrFnqjuR+erh4mfYcU9gqGYKO7GYGvItsmK0MfX
-         f/3iWfod9jgGlUVUPIkLNeaH809CuNCmNxSdCivgD3QUQoMGh53nYRnRUApD1Z54HP
-         M0vlwAiQrOwFQ==
-Received: by mail-ed1-f45.google.com with SMTP id cw4so9249037edb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:24:13 -0800 (PST)
-X-Gm-Message-State: AO0yUKXCLhgX91ckPJg80WGkFoYlkda7/Q5leEbYKYhk0agYgKlrIrdn
-        iy8VRnR5PClRfnF1oC9Cza0IS3GrgUN8q3+INeg=
-X-Google-Smtp-Source: AK7set9Otp07JUTr42TmNzrRx4W4b+aOce1FsAQZXhWJMe2XWMax3Bb02kt6uZnvwzr3iW49fdfxJCnT+VkzrGeNVic=
-X-Received: by 2002:a05:6402:291:b0:4a2:1776:631b with SMTP id
- l17-20020a056402029100b004a21776631bmr3944330edv.30.1675171451223; Tue, 31
- Jan 2023 05:24:11 -0800 (PST)
+        Tue, 31 Jan 2023 08:24:26 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBC42FCEE;
+        Tue, 31 Jan 2023 05:24:10 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso5591925wms.5;
+        Tue, 31 Jan 2023 05:24:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uYAnZ/YKKMZS0ESVTb/QD70EINljsBIpkmayN7aaRjY=;
+        b=oThxhhvGEHzBRodyxvZhenx9d/DdJBBOrLzYg3WN6xin/pwCMuCMZSRjIJNX5tJl1m
+         4WIsMGxZllazPJS8FWgre5+cUPGzId2umKrw2Mc0mCJRVC6P8tMi4syNXMiXZo0T5EzE
+         3bFMu3IXVz+xwhzgWC24XZ0pM+x7sq+XW4CBkBtMUIcst9PGNMmj7As8gixEW4sGkXFv
+         1xSljzi9FpAoxU99dDynD21Y1+wHmBhHxqvwguKmWkmMu9FnvxVdQZFPkjCWS5FQnvUb
+         1zFXACdPYiEsVdB/qaSrqDomknSSnTkUFVffFWP72yjiOZCqN7WvxLO4y725cr+IYldH
+         2sLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uYAnZ/YKKMZS0ESVTb/QD70EINljsBIpkmayN7aaRjY=;
+        b=QxoM4U7ddLwo3YTJrNA6RwGoqHzyHGLAsiDDssGqGe1oZq6+ysYmfW9l5Wik6elwHI
+         QHCKS7g9H/zPwyatugYJrO/4ijIOI8D1xlnWAIgcAJVY93P/yKF7C5PqmTTt1akv7wKU
+         G/4ilJRh7bKU7VRuHvuFhapkbN128JgjEP5+zNdBfJQY0k3ywfDFk7j3zUCqFGqrywyF
+         1qP4h11RmHjC+kjd6d2ZO8FJV/b5Ylycml+0FEQxaD5bDUecoIcsRp31dqgHbax8fzJX
+         0CwiNDCVXMrHdqJIJtMkiTurZueSwRXxf5ZA+ovHJ4XFJJVom5Cf9gx2s0CiMxyfaQue
+         9uqA==
+X-Gm-Message-State: AO0yUKWHAryrG4aGTvL6L21yn65pcXP1nmmOJhuwOmLbdbgW9W3JitIt
+        svNPSUAiNf6CtOy8zAWvhwd6MEmRvc4=
+X-Google-Smtp-Source: AK7set+wO+ccUoqK04iTl8+nmE2aEHP+M+nzLL77INW0lcsGsDqoKdu7CQsLyWZX//2uQN7rA/neTg==
+X-Received: by 2002:a05:600c:1d0e:b0:3dd:1bcc:eb17 with SMTP id l14-20020a05600c1d0e00b003dd1bcceb17mr3459855wms.28.1675171449053;
+        Tue, 31 Jan 2023 05:24:09 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id u20-20020a05600c00d400b003dc5343188dsm8198730wmm.24.2023.01.31.05.24.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 05:24:08 -0800 (PST)
+Message-ID: <6ef5047f-5728-3729-ddcc-c3a90eeb0483@gmail.com>
+Date:   Tue, 31 Jan 2023 14:24:07 +0100
 MIME-Version: 1.0
-References: <20230126161559.1467374-1-guoren@kernel.org> <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
- <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
- <87r0vc9h4g.fsf@all.your.base.are.belong.to.us> <CAJF2gTQZWO8Ubi60nHn-J-8czqBnsp1Kdyoim3uLNkjbYd-H8Q@mail.gmail.com>
- <87ilgntdef.fsf@all.your.base.are.belong.to.us> <CAJF2gTTaartwjVdmtmsm1FqmYVuAq5_nGYU5zc6nkdTtCm200A@mail.gmail.com>
- <Y9jz+zUDebQ4VLlF@andrea>
-In-Reply-To: <Y9jz+zUDebQ4VLlF@andrea>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 31 Jan 2023 21:23:59 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQsRcUpMk8nvFkEsz_fpVV+v6tpUDcPzaNjqfj+i_VvXA@mail.gmail.com>
-Message-ID: <CAJF2gTQsRcUpMk8nvFkEsz_fpVV+v6tpUDcPzaNjqfj+i_VvXA@mail.gmail.com>
-Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        "liaochang (A)" <liaochang1@huawei.com>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mhiramat@kernel.org,
-        conor.dooley@microchip.com, penberg@kernel.org,
-        mark.rutland@arm.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 07/14] soc: mediatek: mtk-svs: keep svs alive if
+ CONFIG_DEBUG_FS not supported
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230111074528.29354-1-roger.lu@mediatek.com>
+ <20230111074528.29354-8-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230111074528.29354-8-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 6:57 PM Andrea Parri <parri.andrea@gmail.com> wrote:
->
-> > > It's the concurrent modification that I was referring to (removing
-> > > stop_machine()). You're saying "it'll always work", I'm saying "I'm not
-> > > so sure". :-) E.g., writing c.ebreak on an 32b insn. Can you say that
-> > Software must ensure write c.ebreak on the head of an 32b insn.
-> >
-> > That means IFU only see:
-> >  - c.ebreak + broken/illegal insn.
-> > or
-> >  - origin insn
-> >
-> > Even in the worst case, such as IFU fetches instructions one by one:
-> > If the IFU gets the origin insn, it will skip the broken/illegal insn.
-> > If the IFU gets the c.ebreak + broken/illegal insn, then an ebreak
-> > exception is raised.
-> >
-> > Because c.ebreak would raise an exception, I don't see any problem.
->
-> That's the problem, this discussion is:
->
-> Reviewer: "I'm not sure, that's not written in our spec"
-> Submitter: "I said it, it's called -accurate atomicity-"
-I really don't see any hardware that could break the atomicity of this
-c.ebreak scenario:
- - c.ebreak on the head of 32b insn
- - ebreak on an aligned 32b insn
-
-If IFU fetches with cacheline, all is atomicity.
-If IFU fetches with 16bit one by one, the first c.ebreak would raise
-an exception and skip the next broke/illegal instruction.
-Even if IFU fetches without any sequence, the IDU must decode one by
-one, right? The first half c.ebreak would protect and prevent the next
-broke/illegal instruction. Speculative execution on broke/illegal
-instruction won't cause any exceptions.
-
-It's a common issue, not a specific ISA issue.
-32b instruction A -> 16b ebreak + 16b broken/illegal -> 32b
-instruction A. It's safe to transform.
-
->
->   Andrea
 
 
+On 11/01/2023 08:45, Roger Lu wrote:
+> Some projects might not support CONFIG_DEBUG_FS but still needs svs to be
+> alive. Therefore, enclose debug cmd codes with CONFIG_DEBUG_FS to make sure
+> svs can be alive when CONFIG_DEBUG_FS not supported.
+> 
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 
--- 
-Best Regards
- Guo Ren
+Applied, thanks!
+
+> ---
+>   drivers/soc/mediatek/mtk-svs.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index a3c84e819bc5..70ca9c9acae0 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -138,6 +138,7 @@
+>   
+>   static DEFINE_SPINLOCK(svs_lock);
+>   
+> +#ifdef CONFIG_DEBUG_FS
+>   #define debug_fops_ro(name)						\
+>   	static int svs_##name##_debug_open(struct inode *inode,		\
+>   					   struct file *filp)		\
+> @@ -170,6 +171,7 @@ static DEFINE_SPINLOCK(svs_lock);
+>   	}
+>   
+>   #define svs_dentry_data(name)	{__stringify(name), &svs_##name##_debug_fops}
+> +#endif
+>   
+>   /**
+>    * enum svsb_phase - svs bank phase enumeration
+> @@ -652,6 +654,7 @@ static int svs_adjust_pm_opp_volts(struct svs_bank *svsb)
+>   	return ret;
+>   }
+>   
+> +#ifdef CONFIG_DEBUG_FS
+>   static int svs_dump_debug_show(struct seq_file *m, void *p)
+>   {
+>   	struct svs_platform *svsp = (struct svs_platform *)m->private;
+> @@ -867,6 +870,7 @@ static int svs_create_debug_cmds(struct svs_platform *svsp)
+>   
+>   	return 0;
+>   }
+> +#endif /* CONFIG_DEBUG_FS */
+>   
+>   static u32 interpolate(u32 f0, u32 f1, u32 v0, u32 v1, u32 fx)
+>   {
+> @@ -2476,11 +2480,13 @@ static int svs_probe(struct platform_device *pdev)
+>   		goto svs_probe_iounmap;
+>   	}
+>   
+> +#ifdef CONFIG_DEBUG_FS
+>   	ret = svs_create_debug_cmds(svsp);
+>   	if (ret) {
+>   		dev_err(svsp->dev, "svs create debug cmds fail: %d\n", ret);
+>   		goto svs_probe_iounmap;
+>   	}
+> +#endif
+>   
+>   	return 0;
+>   
