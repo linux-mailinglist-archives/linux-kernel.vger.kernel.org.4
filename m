@@ -2,202 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC11E6835A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08696835AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjAaSuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:50:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S231530AbjAaSva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjAaSuN (ORCPT
+        with ESMTP id S229759AbjAaSv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:50:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AF644B5;
-        Tue, 31 Jan 2023 10:50:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 13:51:27 -0500
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0271E83FE
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:51:23 -0800 (PST)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id BC972400;
+        Tue, 31 Jan 2023 19:51:20 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz BC972400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1675191080; bh=3nzYCZcw7/+jFcY6pwONKDi/Zj110sMOebq8ZsrjNjM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GXZnwlhSkswK+mEpgA8fhz/5fjAo+UljjKdsOQUj/76cW3/l1wXao2eYvA2xrWt+k
+         9U//imSekCazruTt4GWYc1/fE3xerxyBGTU/Onrv5r+I3dJvg6iMi/3pDyPp9EdIF9
+         wW1J9k6z66TOvVwXIioU1XIzpr2Y5pU7LiZE8uj8=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4D866163F;
-        Tue, 31 Jan 2023 18:50:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01758C433EF;
-        Tue, 31 Jan 2023 18:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675191003;
-        bh=5fOonaijD0ytDNAFYXSlNMDiCm3o9lQJU786ZKrYCsw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Il1wmarf1X1ubUXC9Bbuv6CUpF30gscwf/hyGcItq06IAN0fG0H16FZqo+2dkL+a4
-         0BHKWw/3rgzzf/n7t51Azqpy6ZfvBftMWa2C8TeeBplDvEz0tVRclQRaE7I0YRRiSr
-         w/EnaC2U7cFpgTT5vMYgklKhyDpkXNITUrSM/dPTgvqC2aJEyLPABJulvyN9Dta/Zn
-         4cAFTXPPQoz5ETj7C5BUtl2fsLx9fNhwTdqhdySK3H29u3MbpbgPpM5oeqF0mwwLH4
-         tvriMMAXaAlySiVzZvw5wsb+tjTwYTf0mJDFJnE7F0S2hY3B+slFXlaamUBAUUTM0/
-         +35bbii093Vlg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8A0655C0510; Tue, 31 Jan 2023 10:50:02 -0800 (PST)
-Date:   Tue, 31 Jan 2023 10:50:02 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, ndesaulniers@google.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, joel@joelfernandes.org,
-        quic_neeraju@quicinc.com, urezki@gmail.com
-Subject: Re: [PATCH RFC bootconfig] Allow forcing unconditional bootconfig
- processing
-Message-ID: <20230131185002.GV2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230108150425.426f2861e9db1152fa84508f@kernel.org>
- <20230109042501.GF4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110085636.5d679f98c5b6914ecf19e724@kernel.org>
- <20230110000732.GD4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110095450.2cb4c875f95459e3a4e7dcf1@kernel.org>
- <20230110010953.GF4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230110231721.ed737bcc46ee6b8572d7cdff@kernel.org>
- <20230110150259.GO4028633@paulmck-ThinkPad-P17-Gen-1>
- <20230126192614.GA691808@paulmck-ThinkPad-P17-Gen-1>
- <20230127145731.ece1ada974d305dae3536bd2@kernel.org>
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Tue, 31 Jan 2023 19:51:12 +0100 (CET)
+Message-ID: <9d61d3c1-c94c-a9c6-2d0d-3368e02e1943@perex.cz>
+Date:   Tue, 31 Jan 2023 19:51:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230127145731.ece1ada974d305dae3536bd2@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 0/6] Fix default DMIC gain on AMD PDM drivers
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jaroslav Kysela <jkysela@redhat.com>,
+        Mukunda Vijendar <Vijendar.Mukunda@amd.com>,
+        Saba Kareem Syed <Syed.SabaKareem@amd.com>
+Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Mark Pearson <mpearson@lenovo.com>,
+        Pananchikkal Renjith <Renjith.Pananchikkal@amd.com>
+References: <20230131184653.10216-1-mario.limonciello@amd.com>
+From:   Jaroslav Kysela <perex@perex.cz>
+In-Reply-To: <20230131184653.10216-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 02:57:31PM +0900, Masami Hiramatsu wrote:
-> On Thu, 26 Jan 2023 11:26:14 -0800
-> "Paul E. McKenney" <paulmck@kernel.org> wrote:
+On 31. 01. 23 19:46, Mario Limonciello wrote:
+> It's been reported that a number of laptops have a low volume
+> level from the digital microphone compared to Windows.
 > 
-> > On Tue, Jan 10, 2023 at 07:02:59AM -0800, Paul E. McKenney wrote:
-> > > On Tue, Jan 10, 2023 at 11:17:21PM +0900, Masami Hiramatsu wrote:
-> > > > On Mon, 9 Jan 2023 17:09:53 -0800
-> > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > 
-> > > > > On Tue, Jan 10, 2023 at 09:54:50AM +0900, Masami Hiramatsu wrote:
-> > > > > > On Mon, 9 Jan 2023 16:07:32 -0800
-> > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > > 
-> > > > > > > On Tue, Jan 10, 2023 at 08:56:36AM +0900, Masami Hiramatsu wrote:
-> > > > > > > > On Sun, 8 Jan 2023 20:25:01 -0800
-> > > > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > > > > 
-> > > > > > > > > On Sun, Jan 08, 2023 at 03:04:25PM +0900, Masami Hiramatsu wrote:
-> > > > > > > > > > On Sat, 7 Jan 2023 08:22:02 -0800
-> > > > > > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > > > > > > 
-> > > > > > > > > > > On Sun, Jan 08, 2023 at 12:22:15AM +0900, Masami Hiramatsu wrote:
-> > > > > > > > > > > > On Wed, 4 Jan 2023 16:58:38 -0800
-> > > > > > > > > > > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > > > > > > > > > > > 
-> > > > > > > > > > > > > The BOOT_CONFIG family of Kconfig options allows a bootconfig file
-> > > > > > > > > > > > > containing kernel boot parameters to be embedded into an initrd or into
-> > > > > > > > > > > > > the kernel itself.  This can be extremely useful when deploying kernels
-> > > > > > > > > > > > > in cases where some of the boot parameters depend on the kernel version
-> > > > > > > > > > > > > rather than on the server hardware, firmware, or workload.
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > Unfortunately, the "bootconfig" kernel parameter must be specified in
-> > > > > > > > > > > > > order to cause the kernel to look for the embedded bootconfig file,
-> > > > > > > > > > > > > and it clearly does not help to embed this "bootconfig" kernel parameter
-> > > > > > > > > > > > > into that file.
-> > > > > > > > > > > > > 
-> > > > > > > > > > > > > Therefore, provide a new BOOT_CONFIG_FORCE Kconfig option that causes the
-> > > > > > > > > > > > > kernel to act as if the "bootconfig" kernel parameter had been specified.
-> > > > > > > > > > > > > In other words, kernels built with CONFIG_BOOT_CONFIG_FORCE=y will look
-> > > > > > > > > > > > > for the embedded bootconfig file even when the "bootconfig" kernel
-> > > > > > > > > > > > > parameter is omitted.  This permits kernel-version-dependent kernel
-> > > > > > > > > > > > > boot parameters to be embedded into the kernel image without the need to
-> > > > > > > > > > > > > (for example) update large numbers of boot loaders.
-> > > > > > > > > > > > 
-> > > > > > > > > > > > I like this because this is a simple solution. We have another option
-> > > > > > > > > > > > to specify "bootconfig" in CONFIG_CMDLINE, but it can be overwritten by
-> > > > > > > > > > > > bootloader. Thus, it is better to have this option so that user can
-> > > > > > > > > > > > always enable bootconfig.
-> > > > > > > > > > > 
-> > > > > > > > > > > Glad you like it!
-> > > > > > > > > > > 
-> > > > > > > > > > > In addition, if the help text is accurate, another shortcoming of
-> > > > > > > > > > > CONFIG_CMDLINE is that its semantics vary from one architecture to
-> > > > > > > > > > > another.  Some have CONFIG_CMDLINE override the boot-loader supplied
-> > > > > > > > > > > parameters, and others differ in the order in which the parameters
-> > > > > > > > > > > are processed.
-> > > > > > > > > > 
-> > > > > > > > > > Yes, that differences confuse us...
-> > > > > > > > > 
-> > > > > > > > > I am glad that it is not just me.  ;-)
-> > > > > > > > > 
-> > > > > > > > > I will add words to that effect to the commit log.
-> > > > > > > > > 
-> > > > > > > > > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > > > > > > > > 
-> > > > > > > > > > > Thank you!
-> > > > > > > > > > > 
-> > > > > > > > > > > > BTW, maybe CONFIG_BOOT_CONFIG_EMBED is better to select this.
-> > > > > > > > > > > > (or at least recommend to enable this)
-> > > > > > > > > > > 
-> > > > > > > > > > > Like this?
-> > > > > > > > > > 
-> > > > > > > > > > Yes! Thanks.
-> > > > > > > > > > 
-> > > > > > > > > > > 
-> > > > > > > > > > > 							Thanx, Paul
-> > > > > > > > > > > 
-> > > > > > > > > > > ------------------------------------------------------------------------
-> > > > > > > > > > > 
-> > > > > > > > > > > commit d09a1505c51a70da38b34ac38062977299aef742
-> > > > > > > > > > > Author: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > > > > > Date:   Sat Jan 7 08:09:22 2023 -0800
-> > > > > > > > > > > 
-> > > > > > > > > > >     bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > > > > > > > > > >     
-> > > > > > > > > > >     When a kernel is built with CONFIG_BOOT_CONFIG_EMBED=y, the intention
-> > > > > > > > > > >     will normally be to unconditionally provide the specified kernel-boot
-> > > > > > > > > > >     arguments to the kernel, as opposed to requiring a separately provided
-> > > > > > > > > > >     bootconfig parameter.  Therefore, make the BOOT_CONFIG_FORCE Kconfig
-> > > > > > > > > > >     option default to y in kernels built with CONFIG_BOOT_CONFIG_EMBED=y.
-> > > > > > > > > > >     
-> > > > > > > > > > >     The old semantics may be obtained by manually overriding this default.
-> > > > > > > > > > >     
-> > > > > > > > > > >     Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > > > > > > > >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > > > > > > > > > 
-> > > > > > > > > > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > > > > > > 
-> > > > > > > > > Applied, thank you!
-> > > > > > > > 
-> > > > > > > > Paul, just for confirmation, have you picked these patches on your tree?
-> > > > > > > 
-> > > > > > > I have, but if you would prefer to take them, just let me know when you
-> > > > > > > have pulled them in.  It is easy for me to drop them.
-> > > > > > > 
-> > > > > > > Here they are in the -rcu tree:
-> > > > > > > 
-> > > > > > > 3d9ccc4a8b56e bootconfig: Allow forcing unconditional bootconfig processing
-> > > > > > > 68b920592ff67 bootconfig: Default BOOT_CONFIG_FORCE to y if BOOT_CONFIG_EMBED
-> > > > > > > 
-> > > > > > > git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-> > > > > > 
-> > > > > > Yeah, if it's not hurry, let me pick those to linux-trace tree
-> > > > > > (bootconfig/for-next). I would like to consolidate the bootconfig
-> > > > > > updates on my tree.
-> > > > > 
-> > > > > Please go ahead and grab them.  Just out of curiosity, are they in time
-> > > > > for the upcoming v6.3 merge window?
-> > > > 
-> > > > Yes, I will do.
-> > > 
-> > > Very good, I will drop them from my tree on my next rebase.
-> > 
-> > Apologies for nagging, but I don't see this in -next, so I figured that
-> > I should follow up.  Is there some adjustment required to this patch?
-> > If so, please let me know so that I can fix it.
+> AMD offers a register that can adjust the gain for PDM which is not
+> configured at maximum gain by default.
 > 
-> Thanks for following up!
-> Sorry, it was my mistake to forget it to -next. Let me fix that.
+> To fix this change the default for all 3 drivers to raise the gain
+> but also offer a module parameter. The module parameter can be used
+> for debugging if the gain is too high on a given laptop.
+> 
+> This is intentionally split into multiple patches for default and
+> parameter so that if the default really does behave better universally
+> we can bring it back to stable too later.
+> 
+> v2->v3:
+>   * Use clamp and clear properly
+> 
+> Mario Limonciello (6):
+>    ASoC: amd: yc: Adjust the gain for PDM DMIC
+>    ASoC: amd: yc: Add a module parameter to influence pdm_gain
+>    ASoC: amd: renoir: Adjust the gain for PDM DMIC
+>    ASoC: amd: renoir: Add a module parameter to influence pdm_gain
+>    ASoC: amd: ps: Adjust the gain for PDM DMIC
+>    ASoC: amd: ps: Add a module parameter to influence pdm_gain
 
-And I see it now, thank you!
+For all patches:
 
-							Thanx, Paul
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
