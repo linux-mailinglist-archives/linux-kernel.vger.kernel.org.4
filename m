@@ -2,134 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 906E5682371
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAA6682369
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjAaEkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 23:40:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S230521AbjAaEjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 23:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjAaEjO (ORCPT
+        with ESMTP id S230011AbjAaEjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:39:14 -0500
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8946710F9;
-        Mon, 30 Jan 2023 20:38:59 -0800 (PST)
+        Mon, 30 Jan 2023 23:39:02 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3A63B679
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:24 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id r9so11894542oig.12
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1675139940; x=1706675940;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KzxtKnvbi8Q7EeBQQOVpXwZCQQNURGL1YCOaytw/sBY=;
-  b=jED0HrnIRKb4aH5qkNnQCPTd6JofJNViJdyugWtAsxceKpTQ1DR8tvHY
-   2aUzJqQMPkgw7OkwiO6nvKPNbKjoOQcvRv3L0BnRUID1bfJq8wo5xO35o
-   JgPX7lHhVjYcw+STTtISsu1L2PclW55bFMcWTa8h4EDtjDEs+PqYqnYTe
-   c=;
-X-IronPort-AV: E=Sophos;i="5.97,259,1669075200"; 
-   d="scan'208";a="287996743"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1box-1dm6-7f722725.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:38:59 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1box-1dm6-7f722725.us-east-1.amazon.com (Postfix) with ESMTPS id 388A89ACF7;
-        Tue, 31 Jan 2023 04:38:58 +0000 (UTC)
-Received: from EX19D002UWA004.ant.amazon.com (10.13.138.230) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Tue, 31 Jan 2023 04:38:57 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX19D002UWA004.ant.amazon.com (10.13.138.230) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
- Tue, 31 Jan 2023 04:38:57 +0000
-Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
- (10.189.73.169) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.45 via Frontend Transport; Tue, 31 Jan 2023 04:38:56
- +0000
-Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
-        id 9D103271E; Tue, 31 Jan 2023 04:38:56 +0000 (UTC)
-From:   Rishabh Bhatnagar <risbhat@amazon.com>
-To:     <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <mhocko@suse.co>, Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Tom Herbert <tom@quantonium.net>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Rishabh Bhatnagar <risbhat@amazon.com>
-Subject: [PATCH stable 4.14 1/1] mm: kvmalloc does not fallback to vmalloc for incompatible gfp flags
-Date:   Tue, 31 Jan 2023 04:38:15 +0000
-Message-ID: <20230131043815.14989-2-risbhat@amazon.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230131043815.14989-1-risbhat@amazon.com>
-References: <20230131043815.14989-1-risbhat@amazon.com>
+        d=kali.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T/GKVYrgbIBQHH6fmUv9pOZxtXQP4w6AX+T7K+xd4AM=;
+        b=c/fjOBx7+hWIUANgvprYAZdZDNNykXdzcLGb/O9jVHhsJzCNtyCiAaX92yen+hsRuX
+         uD9uhR17iks9wh2+1P1K7zvEYJIT2qhTrjVsGicg/aufDTcLN39FYm7UCXLsQEMamtGg
+         3Tcikor14qM7xKLcN3zEfQpB+DJN1xyjnL2kx5fCduUS39Ren7ZvF0ozIjdASMiX3AgG
+         801AOGAyFOz8iIk2N0vwgUcB2Z0iPolKdC2uR7Gi0XS6uFa1TV6qpsI9dlyQqYPh7RCN
+         0mNJJt7HeWR5nwIF5mZ2cBkPKhmwQHkI3xk1sPfuyuTB8ccUB52WsC+opfLwPst+PQWO
+         Tt5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T/GKVYrgbIBQHH6fmUv9pOZxtXQP4w6AX+T7K+xd4AM=;
+        b=11No4wB4JaBXC42i3vodTe9yXieMnzQ/in2nDEQ1XoQbrOodxmYnV3oKT6ICQZ5yJ3
+         ebsoOo6CX9sWlUEzfQHHQDV87xJcFqCwoA1yd0ULPTlXtU2mn8Fsq/iezYgnYQzSGZlu
+         gnAL4d+0MX6Dc8vfJuSpddZA1XYyAgzKC3FQWimwj8ayesRsuL6v/J/3H8/RC0X5Cna3
+         uDoaxBXdBS9ktFWV4h2i9XlRIc+Nu7MA22KNjnMa/2Nl5hcuol5R1DaBH0KyaaLRNd5D
+         PQKeMVWaZHdoTmjczSbZ6IBZZpdU2lLhBu6GijNo95xtmZwB3GI1f7vgERAK3TlZMJp7
+         SbaQ==
+X-Gm-Message-State: AFqh2krWL0gYPRpu2N7xBqhxZmT6FX+BYzFP2tnQwPexyDht3MP93tmT
+        TNEdN40AOej5XgOQ1327r6bGAw==
+X-Google-Smtp-Source: AMrXdXu1wZjJMPpCW0mNp5fuRR4nUE+0+et1glRZXOH1PYRu3drdI4L6/IVoLzV8Sv1dr/pzNRxOjw==
+X-Received: by 2002:a05:6808:23c4:b0:367:29d:20c2 with SMTP id bq4-20020a05680823c400b00367029d20c2mr30414178oib.44.1675139903503;
+        Mon, 30 Jan 2023 20:38:23 -0800 (PST)
+Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
+        by smtp.gmail.com with ESMTPSA id c82-20020acab355000000b003645b64d7b3sm5519939oif.4.2023.01.30.20.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 20:38:23 -0800 (PST)
+From:   Steev Klimaszewski <steev@kali.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+Subject: [PATCH v2 3/4] arm64: dts: qcom: sc8280xp: Define uart2
+Date:   Mon, 30 Jan 2023 22:38:15 -0600
+Message-Id: <20230131043816.4525-4-steev@kali.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230131043816.4525-1-steev@kali.org>
+References: <20230131043816.4525-1-steev@kali.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Hocko <mhocko@suse.com>
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Commit ce91f6ee5b3bbbad8caff61b1c46d845c8db19bf upstream.
 
-kvmalloc warned about incompatible gfp_mask to catch abusers (mostly
-GFP_NOFS) with an intention that this will motivate authors of the code
-to fix those.  Linus argues that this just motivates people to do even
-more hacks like
-
-	if (gfp == GFP_KERNEL)
-		kvmalloc
-	else
-		kmalloc
-
-I haven't seen this happening much (Linus pointed to bucket_lock special
-cases an atomic allocation but my git foo hasn't found much more) but it
-is true that we can grow those in future.  Therefore Linus suggested to
-simply not fallback to vmalloc for incompatible gfp flags and rather
-stick with the kmalloc path.
-
-Link: http://lkml.kernel.org/r/20180601115329.27807-1-mhocko@kernel.org
-Signed-off-by: Michal Hocko <mhocko@suse.com>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Tom Herbert <tom@quantonium.net>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Steev Klimaszewski <steev@kali.org>
 ---
-Changelog:
-- Removed lib/bucket_locks.c diff as not present in 4.14
+Changes since v1:
+* Changed subject line
+* Move node to the correct place based on address
+* Add my Signed-off-by
+---
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
- mm/util.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/mm/util.c b/mm/util.c
-index 84e775f5216f..7d80c8119dce 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -400,7 +400,8 @@ EXPORT_SYMBOL(vm_mmap);
-  * __GFP_RETRY_MAYFAIL is supported, and it should be used only if kmalloc is
-  * preferable to the vmalloc fallback, due to visible performance drawbacks.
-  *
-- * Any use of gfp flags outside of GFP_KERNEL should be consulted with mm people.
-+ * Please note that any use of gfp flags outside of GFP_KERNEL is careful to not
-+ * fall back to vmalloc.
-  */
- void *kvmalloc_node(size_t size, gfp_t flags, int node)
- {
-@@ -411,7 +412,8 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
- 	 * vmalloc uses GFP_KERNEL for some internal allocations (e.g page tables)
- 	 * so the given set of flags has to be compatible.
- 	 */
--	WARN_ON_ONCE((flags & GFP_KERNEL) != GFP_KERNEL);
-+	if ((flags & GFP_KERNEL) != GFP_KERNEL)
-+		return kmalloc_node(size, flags, node);
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index fa2d0d7d1367..eab54aab3b76 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -1207,6 +1207,20 @@ spi2: spi@988000 {
+ 				status = "disabled";
+ 			};
  
- 	/*
- 	 * We want to attempt a large physically contiguous block first because
++			uart2: serial@988000 {
++				compatible = "qcom,geni-uart";
++				reg = <0 0x00988000 0 0x4000>;
++				clocks = <&gcc GCC_QUPV3_WRAP0_S2_CLK>;
++				clock-names = "se";
++				interrupts = <GIC_SPI 603 IRQ_TYPE_LEVEL_HIGH>;
++				operating-points-v2 = <&qup_opp_table_100mhz>;
++				power-domains = <&rpmhpd SC8280XP_CX>;
++				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
++						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>;
++				interconnect-names = "qup-core", "qup-config";
++				status = "disabled";
++			};
++
+ 			i2c3: i2c@98c000 {
+ 				compatible = "qcom,geni-i2c";
+ 				reg = <0 0x0098c000 0 0x4000>;
 -- 
-2.38.1
+2.39.0
 
