@@ -2,140 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FA4683155
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F2968315D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbjAaPVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:21:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S233235AbjAaPVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbjAaPUn (ORCPT
+        with ESMTP id S232766AbjAaPVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:20:43 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525AF589A3;
-        Tue, 31 Jan 2023 07:18:35 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id q8so10575032wmo.5;
-        Tue, 31 Jan 2023 07:18:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oje2X12UqN3hFAptDZ/80EkF8Fd5akHgh1yM49ZX7sI=;
-        b=qDYj2LrT6Ak6dKZ1tobe/lJRGSirc3zbzWWt7vWbDrgrRqUMwzUJgHn1y+o7ksZwH6
-         8IubtJkhGTi9+cotasj3KIpQNuNk5R9ODlngRYnuM1APSr462lhbRd23jGJSxcaI04Rf
-         77qHQ0wxkmrCxvERRpS5Aqvf4pq2MrGFwasiTYGsqyFNoEUKiwkgGko7GtL9qxWq/Tww
-         rpTd1RMqwwGc5Xo7d+m8P1tPpr4hNHjlBcou+uu6uwwp2418YnwIV0/BkSw6EUymI19M
-         cvCqRlDhwfE3YGR18WLtAczZAziKnEjRWmRDcrSAqhlMEhddew40yTM2wSpf1Q1X5MCq
-         D7UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oje2X12UqN3hFAptDZ/80EkF8Fd5akHgh1yM49ZX7sI=;
-        b=SATrndbHHuEC+SdnWbGC5J0aPk/8S9AbwkR6qQTOZHDNQXOOaaa7GKzWsdjUXxHbPL
-         T0TvQ6kQUmuqEcTXPWMCIG6g83qslLHQdh23muU6//GCAhnk9RdDr7q0dr+SsvVC4NuY
-         sDGp6yCidAASTw5HAT1jLmoTGk+Pu4F6dU9lwwPxJhTkPkNyXoQmszknWdKTO0Uhgd96
-         pPI4MyLIIE8IVyl1IOU4NqlgczA6TqoevSeJfYgRm37q/EU74/mAidzbiH/LsIw67DFy
-         bZDVAEgHbqS/SoKQb1zZ5XeQv5ZzbADczUgBmpUkRsZFfngtixK1d8Pbt8cWQ9yUWMeY
-         G9HQ==
-X-Gm-Message-State: AFqh2krLSrOFSuf0258G8JUsw6Z1+ThavZg4BAjoo/5CkfJ27Sm96jRy
-        KTIxuvfP9wwT2SSKz1zwukk=
-X-Google-Smtp-Source: AMrXdXu6q1r07Mhk9IvC6Qghagx78uVacKRSM8kVyAvklx9a3sbnah+20FtAfO3N0fjqFnEoYYPPzg==
-X-Received: by 2002:a05:600c:22c6:b0:3da:fc30:bfc5 with SMTP id 6-20020a05600c22c600b003dafc30bfc5mr55192039wmg.13.1675178313585;
-        Tue, 31 Jan 2023 07:18:33 -0800 (PST)
-Received: from localhost.localdomain (93-34-88-241.ip49.fastwebnet.it. [93.34.88.241])
-        by smtp.googlemail.com with ESMTPSA id x9-20020a05600c21c900b003dc434b39c7sm2854861wmj.0.2023.01.31.07.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 07:18:33 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
+        Tue, 31 Jan 2023 10:21:32 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4B755282;
+        Tue, 31 Jan 2023 07:19:12 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VEn8AB020024;
+        Tue, 31 Jan 2023 15:18:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : reply-to : references : mime-version :
+ content-type : in-reply-to; s=qcppdkim1;
+ bh=bgX3jpoASPjVdzGNfq22olUT76/fsVEkQivhHSjUx3s=;
+ b=ESGHJRo47GelNfdH/U+HIDc6xDFsvHUI2Mx3tloGd7vY+dOfg5R++6lk+kIJJPekE9Za
+ zofMjkM7Ctff+5f2mFTz+2jDQUm9zdTxbUT/Krwc/EO9fukMgsWClaENgdCa1yyfr0VJ
+ CFNTNx9L59fHvIga7Fz0D2f+5dLDS2OWKPOYs1vQCsg/VhxQV1f7oYeBIaZwuZFIMKPK
+ 79wNLfHW/1u5I7T1ltAx3rBoYWnsr9nyBk7LM22Pz5WPInt/ymye0Dns7wmmmvsgwW63
+ tcFQamz0nrmOCl5tLmdZYTykC4bz1qMXUrHwkgtQuz1fnuV2hof5L1C4KKXYW1M8punE eQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3new3u9ctv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:18:55 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30VFIsrF016529
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:18:54 GMT
+Received: from quicinc.com (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 07:18:47 -0800
+Date:   Tue, 31 Jan 2023 20:48:43 +0530
+From:   Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Alex Elder <elder@linaro.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Murali Nalajala" <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 3/3] dt-bindings: opp: opp-v2-kryo-cpu: enlarge opp-supported-hw maximum
-Date:   Tue, 31 Jan 2023 16:18:19 +0100
-Message-Id: <20230131151819.16612-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230131151819.16612-1-ansuelsmth@gmail.com>
-References: <20230131151819.16612-1-ansuelsmth@gmail.com>
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v9 18/27] firmware: qcom_scm: Register Gunyah platform ops
+Message-ID: <20230131151843.GD4169015@quicinc.com>
+Reply-To: Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>
+References: <20230120224627.4053418-1-quic_eberman@quicinc.com>
+ <20230120224627.4053418-19-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+In-Reply-To: <20230120224627.4053418-19-quic_eberman@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: yM2P9em_0wy-BTbbA6biMq32dYVgcMLk
+X-Proofpoint-ORIG-GUID: yM2P9em_0wy-BTbbA6biMq32dYVgcMLk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 clxscore=1011 suspectscore=0 mlxscore=0 mlxlogscore=560
+ impostorscore=0 adultscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310136
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enlarge opp-supported-hw maximum value. In recent SoC we started
-matching more bit and we currently match mask of 112. The old maximum of
-7 was good for old SoC that didn't had complex id, but now this is
-limiting and we need to enlarge it to support more variants.
+* Elliot Berman <quic_eberman@quicinc.com> [2023-01-20 14:46:17]:
 
-Document all the various mask that can be used and limit them to only
-reasonable values instead of using a generic maximum limit.
+> +	for (i = 0; i < mem_parcel->n_mem_entries; i++) {
+> +		src_cpy = src;
+> +		ret = qcom_scm_assign_mem(le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
+> +						le64_to_cpu(mem_parcel->mem_entries[i].size),
+> +						&src_cpy, new_perms, mem_parcel->n_acl_entries);
+> +		if (ret) {
+> +			src = 0;
+> +			for (n = 0; n < mem_parcel->n_acl_entries; n++) {
+> +				vmid = le16_to_cpu(mem_parcel->acl_entries[n].vmid);
+> +				if (vmid <= QCOM_SCM_MAX_MANAGED_VMID)
+> +					src |= (1ull << vmid);
+> +				else
+> +					src |= (1ull << QCOM_SCM_RM_MANAGED_VMID);
+> +			}
+> +
+> +			new_perms[0].vmid = QCOM_SCM_VMID_HLOS;
+> +
+> +			for (i--; i >= 0; i--) {
+> +				src_cpy = src;
+> +				ret = qcom_scm_assign_mem(
+> +						le64_to_cpu(mem_parcel->mem_entries[i].ipa_base),
+> +						le64_to_cpu(mem_parcel->mem_entries[i].size),
+> +						&src_cpy, new_perms, 1);
+> +				WARN_ON_ONCE(ret);
+> +			}
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Changes v5:
-- No change
-Changes v4:
-- Add review tag from Krzysztof
-Changes v3:
-- Fix dt_binding_check for missing 0x5 and 0x6 value
-Changes v2:
-- Document additional bit format
+We would be returning 0 incorrectly here, indicating success.
 
- .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+> @@ -1414,6 +1511,9 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>  	if (download_mode)
+>  		qcom_scm_set_download_mode(true);
+>  
+> +	if (gh_rm_register_platform_ops(&qcom_scm_gh_rm_platform_ops))
+> +		dev_warn(__scm->dev, "Gunyah RM platform ops were already registered\n");
+> +
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-index b4947b326773..bbbad31ae4ca 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-@@ -50,12 +50,22 @@ patternProperties:
-       opp-supported-hw:
-         description: |
-           A single 32 bit bitmap value, representing compatible HW.
--          Bitmap:
-+          Bitmap for MSM8996 format:
-           0:  MSM8996, speedbin 0
-           1:  MSM8996, speedbin 1
-           2:  MSM8996, speedbin 2
--          3-31:  unused
--        maximum: 0x7
-+          3:  MSM8996, speedbin 3
-+          4-31:  unused
-+
-+          Bitmap for MSM8996SG format (speedbin shifted of 4 left):
-+          0-3:  unused
-+          4:  MSM8996SG, speedbin 0
-+          5:  MSM8996SG, speedbin 1
-+          6:  MSM8996SG, speedbin 2
-+          7-31:  unused
-+        enum: [0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
-+               0x9, 0xd, 0xe, 0xf,
-+               0x10, 0x20, 0x30, 0x70]
- 
-       clock-latency-ns: true
- 
--- 
-2.38.1
+We should remove above registration in qcom_scm_shutdown.
+
 
