@@ -2,201 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EDE6824CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515B96824D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjAaGrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 01:47:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
+        id S229761AbjAaGu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 01:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjAaGrL (ORCPT
+        with ESMTP id S229501AbjAaGu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 01:47:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F43DBC8;
-        Mon, 30 Jan 2023 22:46:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A038B819A4;
-        Tue, 31 Jan 2023 06:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D3D1C4339C;
-        Tue, 31 Jan 2023 06:41:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675147261;
-        bh=1Ktw8fRx3L9lsDLoEZlYAA2XenxlZJqftC4YCLC29nE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2nxZzCgnPYPKqIKINTpUSpK3N6jKEGvefto19ofjDD9/2LNFxCM1WA054yWoJSD0A
-         q7FdaX96ku87QoH5UjCRaqdTc9zSzEQjB12sBIC1Og7XmNx3y1YBbObRZ/LjPei54L
-         d5/37ZFsPMWF7rq0gdKpRnpHyHSytpEf5Bp2N/gc=
-Date:   Tue, 31 Jan 2023 07:40:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Haotien Hsu <haotienh@nvidia.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sing-Han Chen <singhanc@nvidia.com>,
-        Sanket Goswami <Sanket.Goswami@amd.com>,
-        Wayne Chang <waynec@nvidia.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4] ucsi_ccg: Refine the UCSI Interrupt handling
-Message-ID: <Y9i3+sMs+wI6AhqG@kroah.com>
-References: <20230118061523.1537992-1-haotienh@nvidia.com>
- <Y8k3XB53iHeE0XZF@kroah.com>
- <b590cb4e-1814-4253-9f87-2f945b99452d@nvidia.com>
+        Tue, 31 Jan 2023 01:50:57 -0500
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74ECA2132;
+        Mon, 30 Jan 2023 22:50:56 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 0BA642B06E73;
+        Tue, 31 Jan 2023 01:41:21 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 31 Jan 2023 01:41:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675147281; x=1675154481; bh=E2p6V4zwNY
+        VUZOciwM5akvaSzGFZounIOOlrcnF3u0Q=; b=QHe7btkFnAqF1vdLr2jl/yePBk
+        BE/quHdWIzAM1xZZmWybN9UxhKl2/CE2DCzQpZWP4gX0I1Ojp5S2U/WBdQl57tBU
+        YZlH2gvyTk6fhHe1hQA3xeuo8WwPE7o1YPylz1MJs1RH4RIv7zRu1RWbsnz9cXez
+        KdWcm6MS4CPXtGAHacIATT7t+gTfFPaTrUa6QshTl/6//Qp2ICup4Vdi4vUYFW9F
+        tsx/LQ57CQCmNpC5KRKmLdgheukqtR/b8aPp98DBhqlX8ekYi1qxFNT+XOg7zF4b
+        0YeFPs7BYQiw119xSNZckZpaGmAoykQj2HechPuuPsj7ODlsCF44cpdxdFmw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675147281; x=1675154481; bh=E2p6V4zwNYVUZOciwM5akvaSzGFZ
+        ounIOOlrcnF3u0Q=; b=pEuJZTZhlBr361KK4tZ0Ya5gjnPy1pRYM2WlX/SlzDCJ
+        mnr6Hx4u27i6sZL/+p7AoYl33eiouSyUlbmqY2s8pIlA0NaszWmws0vLVxGIawIW
+        D9Eq5kacPDBf0QVz89TuJ+RNaVHvsAuqtXvjVs423Ys9eY7xo2thryKhTEwiRxO6
+        O9+3yhNN846ZZHx90dstOuBiVq2viG1ecsHstWvOgPTSFc8cNRZzeH0SV16PSNXs
+        OsuEabPQ4CMHg405gKE52cOBuSKjeQyAOOgpD0XQKb18vUhtFsuII94n8X5d8EjW
+        NhpcHM6kx7bB1Mc2T3qyvi0l87LD5cmTLWzy5lv2iA==
+X-ME-Sender: <xms:ELjYY5Ijs9u7o3_9vYZCcLlISiw2kZOGsZDUM2AGbGjAYKDKYlVN-Q>
+    <xme:ELjYY1JtySviRcmaj1wbcc5PKdrrfXOY1QQkJnq5NVT9SJgKHM1vzyJLLlNHC55Bl
+    SVonQwcnN4ULg>
+X-ME-Received: <xmr:ELjYYxuQ83d4Cz1fCMEuIB85tz0KPOX0gXjKk2O0BRTL2f7ZQQpweTagmZjsgUrf7VKtvbXgoeXcdp3lt8iytDFhTTPlMPowQ3rTjQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeffedgleelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:ELjYY6YJ9G30PqObYIjkcCW6Qo-llOPF_QOYcMebmCzMmD_fu9V38w>
+    <xmx:ELjYYwYE3yY2aHrw6gkFkuiDkzw3pogU7x7WWGCb0Wb6zQ3qUfVSiw>
+    <xmx:ELjYY-C2AFX3xXmsmD5R6uH6hNgxAyv19GUl0Dg_cNq_zw9WYEAesw>
+    <xmx:EbjYYyYcP_nJ31akDANKagefjYrG-7IrHOaBb5N4POUM4D_JRU26xxlSuKE>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 31 Jan 2023 01:41:20 -0500 (EST)
+Date:   Tue, 31 Jan 2023 07:41:17 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        John Harrison <John.C.Harrison@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the
+ drm-intel-fixes tree
+Message-ID: <Y9i4Ddcz7PsAu8zZ@kroah.com>
+References: <20230131130305.019029ff@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b590cb4e-1814-4253-9f87-2f945b99452d@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230131130305.019029ff@canb.auug.org.au>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 06:29:59AM +0000, Haotien Hsu wrote:
-> On 1/19/23 20:28, Greg Kroah-Hartman wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Wed, Jan 18, 2023 at 02:15:23PM +0800, Haotien Hsu wrote:
-> >> From: Sing-Han Chen <singhanc@nvidia.com>
-> >>
-> >> For the CCGx, when the OPM field in the INTR_REG is cleared, then the
-> >> CCI data in the PPM is reset.
-> >>
-> >> To align with the CCGx UCSI interface guide, this patch updates the
-> >> driver to copy CCI and MESSAGE_IN before clearing UCSI interrupt.
-> >> When a new command is sent, the driver will clear the old CCI and
-> >> MESSAGE_IN copy.
-> >>
-> >> Finally, clear UCSI_READ_INT before calling complete() to ensure that
-> >> the ucsi_ccg_sync_write() would wait for the interrupt handling to
-> >> complete.
-> >> It prevents the driver from resetting CCI prematurely.
-> >>
-> >> Signed-off-by: Sing-Han Chen <singhanc@nvidia.com>
-> >> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-> >> ---
-> >> V1->V2
-> >> - Fix uninitialized symbol 'cci'
-> >> v2->v3
-> >> - Remove misusing Reported-by tags
-> >> v3->v4
-> >> - Add comments for op_lock
-> >> ---
-> >>   drivers/usb/typec/ucsi/ucsi_ccg.c | 90 ++++++++++++++++++++++++++++---
-> >>   1 file changed, 83 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> index eab3012e1b01..532813a32cc1 100644
-> >> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> >> @@ -192,6 +192,12 @@ struct ucsi_ccg_altmode {
-> >>        bool checked;
-> >>   } __packed;
-> >>
-> >> +#define CCGX_MESSAGE_IN_MAX 4
-> >> +struct op_region {
-> >> +     u32 cci;
-> > 
-> > This is coming from hardware so you have to specify the endian-ness of
-> > it, right?
+On Tue, Jan 31, 2023 at 01:03:05PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
+> Today's linux-next merge of the usb tree got a conflict in:
 > 
-> Yes.
-> According to CCGX's guide, CCI and MESSAGE_IN are accessed as registers.
+>   drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> 
+> between commit:
+> 
+>   5bc4b43d5c6c ("drm/i915: Fix up locking around dumping requests lists")
+> 
+> from the drm-intel-fixes tree and commit:
+> 
+>   4d70c74659d9 ("i915: Move list_count() to list.h as list_count_nodes() for broader use")
+> 
+> from the usb tree.
+> 
+> I fixed it up (the former removed the code changed by the latter) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
-So please specify the endianness of the registers.
-
-> >> +static void ccg_op_region_update(struct ucsi_ccg *uc, u32 cci)
-> >> +{
-> >> +     u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_MESSAGE_IN);
-> >> +     struct op_region *data = &uc->op_data;
-> >> +     u32 message_in[CCGX_MESSAGE_IN_MAX];
-> > 
-> > Are you sure you can put this big of a buffer on the stack?
-> > 
-> 
-> 
-> I assume 16 bytes are okay to put on the stack.
-> Please let me know if you think this size is not practical to put on the 
-> stack.
-
-Why do you want it on the stack?  Is it going to be used as DMA memory?
-If so, it can NOT be on the stack.
-
-> >> +
-> >> +     if (UCSI_CCI_LENGTH(cci))
-> >> +             if (ccg_read(uc, reg, (void *)&message_in,
-> >> +                                     sizeof(message_in))) {
-> > 
-> > Are you allowed to copy in into stack memory?  This ends up being an i2c
-> > message, right?  Can that be transferred into non-dma-able memory?
-> > 
-> 
-> 
-> Yes, it works.
-
-How was this tested?  On a system that requires i2c messages to be in
-DMA?
-
-> >> +                     return;
-> >> +             }
-> >> +
-> >> +     spin_lock(&uc->op_lock);
-> >> +     memcpy(&data->cci, &cci, sizeof(cci));
-> > 
-> > Perhaps just:
-> >          data->cci = cci;
-> > as this is only a 32bit value.
-> >
-> 
-> 
-> True.
-> >> +     if (UCSI_CCI_LENGTH(cci))
-> >> +             memcpy(&data->message_in, &message_in, sizeof(message_in));
-> >> +     spin_unlock(&uc->op_lock);
-> >> +}
-> >> +
-> >> +static void ccg_op_region_clean(struct ucsi_ccg *uc)
-> >> +{
-> >> +     struct op_region *data = &uc->op_data;
-> >> +
-> >> +     spin_lock(&uc->op_lock);
-> >> +     memset(&data->cci, 0, sizeof(data->cci));
-> > 
-> >          data->cci = 0;
-> > 
-> >> +     memset(&data->message_in, 0, sizeof(data->message_in));
-> > 
-> > Or better yet, do it all at once:
-> >          memset(&data, 0, sizeof(*data));
-> 
-> 
-> That looks better, thanks.
-> 
-> > 
-> >> +     spin_unlock(&uc->op_lock);
-> > 
-> > But why do you need to do this at all?  Why "clean" the whole buffer
-> > out, why not just set cci to 0 and be done with it?
-> > 
-> > Or why even clean this out at all, what happens if you do not?
-> > 
-> 
-> 
-> It only be called in ucsi_ccg_async_write(), and I will move it there as 
-> inline.
-> The reason to clean the whole op_data is that UCSI may read MESSAGE_IN 
-> after writing UCSI_CONTROL, so clear it to avoid callers getting wrong data.
-
-How could a caller get the wrong data?  It's what they asked for.  I'm
-confused.
+Thanks for the merge resolution.
 
 greg k-h
