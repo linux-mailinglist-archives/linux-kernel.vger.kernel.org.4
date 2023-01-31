@@ -2,63 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B5A68311C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0059683190
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbjAaPPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:15:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S233214AbjAaPci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232810AbjAaPPT (ORCPT
+        with ESMTP id S233248AbjAaPcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:15:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC09458964;
-        Tue, 31 Jan 2023 07:13:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 10:32:31 -0500
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 Jan 2023 07:32:31 PST
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C757199FB;
+        Tue, 31 Jan 2023 07:32:31 -0800 (PST)
+Received: from spock.localnet (unknown [83.148.33.151])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D6E36153C;
-        Tue, 31 Jan 2023 15:13:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2215AC433EF;
-        Tue, 31 Jan 2023 15:13:02 +0000 (UTC)
-Date:   Tue, 31 Jan 2023 10:13:00 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Anton Gusev <aagusev@ispras.ru>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] tracing: Fix wrong return in kprobe_event_gen_test.c
-Message-ID: <20230131101300.510a47f0@gandalf.local.home>
-In-Reply-To: <20230131075818.5322-1-aagusev@ispras.ru>
-References: <20230131075818.5322-1-aagusev@ispras.ru>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id EC25A11F6B51;
+        Tue, 31 Jan 2023 16:13:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1675178012;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SEAFekxO4H1r0D0uCq8wnBQbhqfRc6NLBnWGl+JsmXc=;
+        b=tjKz44pDJwB6f8baVJEvgny1EJsyMst+Y/ZkdXo6IoXPslCNquifKGGDuTBpDrJsCBe2Ky
+        g6RyIOi/LTpj+Id7xPevFkXwYi99T4Sho7F8ZnU4Iq2Lkb265x52TShUvMwLfY8SGdj0Yv
+        HO1C6GCKW6by2OC8izCMKYkkoeW9lEE=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Wyes Karny <wyes.karny@amd.com>,
+        Rafael J Wysocki <rafael@kernel.org>,
+        Huang Rui <ray.huang@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mario.Limonciello@amd.com, Perry.Yuan@amd.com, torvic9@mailbox.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
+        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Ananth Narayan <ananth.narayan@amd.com>, gautham.shenoy@amd.com
+Subject: Re: [PATCH v4 0/6] amd_pstate: Add guided autonomous mode support
+Date:   Tue, 31 Jan 2023 16:13:30 +0100
+Message-ID: <5643269.DvuYhMxLoT@natalenko.name>
+In-Reply-To: <1501106335.274.1675161471528@office.mailbox.org>
+References: <20230131052141.96475-1-wyes.karny@amd.com>
+ <1501106335.274.1675161471528@office.mailbox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 Jan 2023 10:58:18 +0300
-Anton Gusev <aagusev@ispras.ru> wrote:
+Hello.
 
-> Overwriting the error code with the deletion result may cause the
-> function to return 0 despite encountering an error. Commit b111545d26c0
-> ("tracing: Remove the useless value assignment in
-> test_create_synth_event()") solves a similar issue by
-> returning the original error code, so this patch does the same.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Signed-off-by: Anton Gusev <aagusev@ispras.ru>
+On =FAter=FD 31. ledna 2023 11:37:51 CET torvic9@mailbox.org wrote:
+> Can you rebase this patchset onto the newest EPP v12 series [1] ?
+>=20
+> [1] https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan@=
+amd.com/
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+You may consider trying my rebase here: [1].
 
-Thanks Anton!
+This commit applies to v11+v3 series. I hope I didn't miss anything.
 
--- Steve
+If interested, please let me know whether it works for you.
+
+Thanks.
+
+[1] https://codeberg.org/pf-kernel/linux/commit/438525b8029b23967722e9c7af9=
+7c6b8deb25029
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+
+
