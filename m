@@ -2,147 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6DA683238
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C87368323B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjAaQHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:07:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S230443AbjAaQIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:08:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjAaQHe (ORCPT
+        with ESMTP id S232340AbjAaQIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:07:34 -0500
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C45CC142;
-        Tue, 31 Jan 2023 08:07:33 -0800 (PST)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-15fe106c7c7so19925679fac.8;
-        Tue, 31 Jan 2023 08:07:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nlJoguK982+kO7T2uOCdKMNuyyt02oHs2sPS+iRFOYQ=;
-        b=KGg9JB0195ErXV4ykn/ODGZms/7r0VvR90JlsYvs7ldmTzB1gUDsgu8n4BXkCmWOZ0
-         Y90cp4liWbWmIJ8zeCyWO4/GQjMJGmZm1FggGm88PztYLq8+aNyJqw2Zns1mgXUL2PQw
-         Oo+sILBJzh2SUzp+1HHkpJ6RcG6Uew05+1shSTJNPvEB8jxfqs8G/Nj8aJdnZtPdVcHN
-         aVg5eu3zrrW+TD60gYIXjeu6pG574Qju+6fjt2/Km1O3icA5b62sHXu+JdSlWyZNqJVs
-         5SYzbjKXoBlCFnU4bpwiVtgp3UkaIDWAHBeq2Ho91pIbd3a6kJB2rLbPdPg/0lWQflUX
-         hV0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nlJoguK982+kO7T2uOCdKMNuyyt02oHs2sPS+iRFOYQ=;
-        b=DBTHeMhGQjTmZsM9OpBzD8VgDabRVqhssSiS42/iIGTIpqK9Ki+yd9LZwW0gDUNuDX
-         0OhKNCOpwpTBpKjjWjKexLRQNdEF9sNgpWTdJgTaS/J17ZDUlAq+MzlPOACnmy9BXs/Y
-         2HvNYy4tfpfQHYpsvFq+9EN8HBDooiV2CrxA8eWKGHDGHUaG4KqL6xvpgzsW01F2mJkX
-         VfHOku2REiZfNnOv3W8vC0Yi1mkYN9uN4ZDwBMqy2gTmy1bQaBJn5MtFBZCkgF6hykg2
-         RWK3GpfLiXk44YbLvX+j498oWYHsOIv/UdCEs0TZtWoheJw+x8rB68yh7F/w7h52mwPe
-         AfTg==
-X-Gm-Message-State: AO0yUKW/76Pwx58S5jxP3v0MeYtCunj/sa8lG2r6u5X4WlnDarCPo//O
-        lrdVEjktd1xtcMm54mmCJUI=
-X-Google-Smtp-Source: AK7set/di3NWLbvj+4d+uPUsXRKj/KHCpdXmXsSRemOVZOVBfemqVwszIfyP7JZWWtuSuUcD4C6BFQ==
-X-Received: by 2002:a05:6870:8927:b0:163:c8d4:3983 with SMTP id i39-20020a056870892700b00163c8d43983mr4447196oao.29.1675181252857;
-        Tue, 31 Jan 2023 08:07:32 -0800 (PST)
-Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id g5-20020a05687054c500b0014866eb34cesm6642803oan.48.2023.01.31.08.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 08:07:32 -0800 (PST)
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     alex.gaynor@gmail.com, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
-        yakoyoku@gmail.com
-Subject: Re: [PATCH] rust: add this_module macro
-Date:   Tue, 31 Jan 2023 13:07:28 -0300
-Message-Id: <20230131160728.400481-1-yakoyoku@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <Y9kwpw18SVx9GZC4@kroah.com>
-References: <Y9kwpw18SVx9GZC4@kroah.com>
+        Tue, 31 Jan 2023 11:08:12 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D4A3F29F;
+        Tue, 31 Jan 2023 08:08:07 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VG09qc003873;
+        Tue, 31 Jan 2023 16:07:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Fu/tbqqHfgUN/kgoduzd2305awnVX2CCCG//YFy9Nqs=;
+ b=QhsqvRa94JK+0PGfGdvoKEbF4ytf/OEx9VukAxDuLaHOpl5/xApnQcipAidxW8Ob5sl1
+ OB8uU9copXJVVMVYJGMNVpae9vbcS9N2T27gTEpzJP7We+XqXih4KQydG4SMu6gKv3XK
+ iXzZRbJoT+7nFyGijFrFdaTK9itcLXYgo4GPqi3F2C5fpA/DxV8rSRlj51pza74rf85m
+ ros6OxL0VDcfHK+Y/ZmA1eyVaXOzU8tyiOycRhUR057OiSjzbhMYrOxbQxBVD91yzJxP
+ HlYuZ5HwvF9WXvHhfZXH6BiKEuI9jq+9BSLa5dc48h6Ni6zzdlGksyjWZCI7BOrlJUh0 rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3xjcaj9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:07:58 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VG0jdj011553;
+        Tue, 31 Jan 2023 16:07:58 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3xjcahx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:07:58 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VF8kAW028521;
+        Tue, 31 Jan 2023 16:07:57 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuygvf6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 16:07:57 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VG7uOq7013000
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 16:07:56 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6284B58063;
+        Tue, 31 Jan 2023 16:07:56 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAED55805B;
+        Tue, 31 Jan 2023 16:07:54 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 16:07:54 +0000 (GMT)
+Message-ID: <55871940-1da9-0ea0-8f46-28be3e2beadd@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 11:07:54 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 15/25] powerpc/pseries: Move PLPKS constants to header
+ file
+Content-Language: en-US
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+References: <20230131063928.388035-1-ajd@linux.ibm.com>
+ <20230131063928.388035-16-ajd@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230131063928.388035-16-ajd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: MNOx4h7Sw_MDjVgPbGt8J0Y0JjOhSTSw
+X-Proofpoint-GUID: 84OAhpqQYiuARIr_F57v33GnVLxTvizM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 mlxlogscore=999 suspectscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310142
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 04:15:51PM +0100, Greg KH wrote:=0D
->On Tue, Jan 31, 2023 at 12:07:45PM -0300, Martin Rodriguez Reboredo wrote:=
-=0D
->> On Tue, Jan 31, 2023 at 02:42:08PM +0100, Greg KH wrote:=0D
->> >On Tue, Jan 31, 2023 at 10:08:41AM -0300, Martin Rodriguez Reboredo wro=
-te:=0D
->> >> Adds a Rust equivalent to the handy THIS_MODULE macro from C.=0D
->> >> =0D
->> >> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>=0D
->> >> ---=0D
->> >>  rust/kernel/lib.rs | 12 ++++++++++++=0D
->> >>  1 file changed, 12 insertions(+)=0D
->> >> =0D
->> >> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs=0D
->> >> index e0b0e953907d..afb6b0390426 100644=0D
->> >> --- a/rust/kernel/lib.rs=0D
->> >> +++ b/rust/kernel/lib.rs=0D
->> >> @@ -80,6 +80,18 @@ impl ThisModule {=0D
->> >>      }=0D
->> >>  }=0D
->> >>  =0D
->> >> +/// Returns the current module.=0D
->> >> +#[macro_export]=0D
->> >> +macro_rules! this_module {=0D
->> >> +    () =3D> {=0D
->> >> +        if cfg!(MODULE) {=0D
->> >> +            Some(unsafe { $crate::ThisModule::from_ptr(&mut $crate::=
-bindings::__this_module) })=0D
->> >> +        } else {=0D
->> >> +            None=0D
->> >> +        }=0D
->> >> +    };=0D
->> >> +}=0D
->> >=0D
->> >While this is handy, what exactly will it be used for?  The C=0D
->> >wrappers/shim/whatever should probably handle this for you already when=
-=0D
->> >you save this pointer into a structure right?=0D
->> >=0D
->> >Surely you aren't trying to increment your own module's reference count=
-,=0D
->> >right?  That just doesn't work :)=0D
->> >=0D
->> >thanks,=0D
->> >=0D
->> >greg k-h=0D
->> =0D
->> This was meant for setting the owner field of a file_operations struct=0D
->> or the cra_owner field of crypto_alg and many other structs.=0D
->=0D
->But shouldn't the macro kernel::declare_file_operations() do this for=0D
->you automagically?  You should never have to manually say "this module!"=0D
->to any structure or function call if we do things right.=0D
->=0D
->Yes, many "old school" structures in the kernel do this, but we have=0D
->learned from the 1990's, see the fun wrappers around simple things like=0D
->usb_register_driver(); as an example of how the driver author themselves=0D
->should never see a module pointer anywhere.=0D
->=0D
->> I know that increfing a module without a good reason is dead dumb, so=0D
->> I'm not trying to send things in a downwards spiral. @@@=0D
->=0D
->That's good, but let's not add housekeeping requirements when we do not=0D
->have to do so if at all possible please.=0D
->=0D
->thanks,=0D
->=0D
->greg k-h=0D
-=0D
-*kicks can*, at least I can take some ideas out of this, anyways, thanks=0D
-for your reviews.=0D
+
+
+On 1/31/23 01:39, Andrew Donnellan wrote:
+> From: Russell Currey <ruscur@russell.cc>
+> 
+> Move the constants defined in plpks.c to plpks.h, and standardise their
+> naming, so that PLPKS consumers can make use of them later on.
+> 
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
