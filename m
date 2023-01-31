@@ -2,766 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24831682CA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1663B682CAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjAaMfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:35:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
+        id S230200AbjAaMhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjAaMfm (ORCPT
+        with ESMTP id S229613AbjAaMhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:35:42 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEAE4B4AD;
-        Tue, 31 Jan 2023 04:35:33 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id m2so9905213plg.4;
-        Tue, 31 Jan 2023 04:35:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WupCFpuK/gdTbAFNyjJ6efwKirtvbDcNhyiGEgKGwB0=;
-        b=m91YWGtUuf/1h/cZEgO8JKInoaKwEnmWYsoSpoFHnkxY8WtS8LMhoPB6t7lSnLD3Eo
-         h0EBusFt4Ni5kBgw4rqDsDg78zGCJuLqdrDllFj5T4JZ4BtNROs8saHlmkO5sjDsHBCp
-         lZ4aLPzoAVxUNwy4o9lur7xxDJfEAkNcwEfMDF2L4ihFNAZA6c7BHJCXZg461LecE57Q
-         hvpvloAaYal3HhonMKrOtF8bZdGbGXkRnSt+RAQL6W3R3r0/tBmB1AOLVD54DIpILr+6
-         wlI++b/9OtdrBFwuYRjUsDS5aR+ccVWHo4eAn4bT6RZ9ZGwxL+V+8W7ee+nQDOUISGGb
-         ShPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WupCFpuK/gdTbAFNyjJ6efwKirtvbDcNhyiGEgKGwB0=;
-        b=hOdFaxQAQDX70cFmxzft7BANXNffkHBKIVESUTNrALKypi0/6OTGVem+oZRuF+XeTa
-         /mEG4hAibBJ66OWW8Xhf7ms2glrHtn1UGcstnjU/CERPPWMZo8ihQubIjOqzRtKZYTOj
-         E5SGCSrmSFFtUVLfnZO749QOtLY2kgoemVfS3vIs9wq0amcDniGpzerA+KK1TwA6LJwT
-         CyierA2Y3mkeEcyy+XqsAuMYFIAp0YVcbWMQWj3gGzZctB6aw46/gTHsrDVfDtpKGQUf
-         lOV+ZlQY7euvwgQqfhfsmdzzfvCu/jW0pXItIXIPH5fRCANAgeMpsaBTePU23yOCQ29C
-         el1A==
-X-Gm-Message-State: AO0yUKX7wpzAdluDlxEdHG5JGqrSkWLLaLCc9lWa5RozNXWtUeUNySGC
-        Ri7mgGnsl4/uw+2dH/2/jO8=
-X-Google-Smtp-Source: AK7set92rF4E2OFjzsFd4tuigWQsTbRJxe49ABL6LyQkSnGwdj12uzyFikjsa+3+YRJC8QoeQAm+mg==
-X-Received: by 2002:a05:6a21:33a3:b0:bc:ebd8:4c8b with SMTP id yy35-20020a056a2133a300b000bcebd84c8bmr10267671pzb.14.1675168532482;
-        Tue, 31 Jan 2023 04:35:32 -0800 (PST)
-Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id r19-20020a170902c61300b0018544ad1e8esm9692527plr.238.2023.01.31.04.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 04:35:32 -0800 (PST)
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Jianhua Lu <lujianhua000@gmail.com>
-Subject: [PATCH v4 2/2] arm64: dts: qcom: sm8250: Add device tree for Xiaomi Mi Pad 5 Pro
-Date:   Tue, 31 Jan 2023 20:35:15 +0800
-Message-Id: <20230131123515.833-2-lujianhua000@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230131123515.833-1-lujianhua000@gmail.com>
-References: <20230131123515.833-1-lujianhua000@gmail.com>
+        Tue, 31 Jan 2023 07:37:09 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D534298F9;
+        Tue, 31 Jan 2023 04:37:06 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.165.226])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F0A346602E28;
+        Tue, 31 Jan 2023 12:37:01 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675168625;
+        bh=60U5+6/yjtOTkeqXbdeBD+8rsPW/2ChMIbYlgd/SfhI=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=akYwYidOn7urqbXxl4kI9hM/YCJxtNNeXXXqZBC9Io6K5oa/fbpjDG7Sr4I2km9rh
+         7TDqgb/3Nv0TxfscOMk09/tM19cNLdSEJTBAdsPbB9r03+k4bF0JpCfasBEmF705O0
+         swjcJwsjSe6efOfY/5WCDsmjnyanG+h9b5vs6Mmsfa1TrYNA2BKpZTe/n9W01HBl0E
+         oivPzBiveosn9/pUtPwpI+PT2DndwHV7fH2DhouV/n4+AFxdhddApCG2uKl/m3jwlt
+         TECaY7t/rFXnSdLgiZk/mUnznjLkb1LauwDoRc52N0cbK8b8ooGmzMoY/vksRkE/lf
+         pxGIKT/vXqXMw==
+Message-ID: <1fcf162c-bde4-d982-5fa4-8317e7ba878b@collabora.com>
+Date:   Tue, 31 Jan 2023 17:36:57 +0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 00/11] Implement AMD Pstate EPP Driver
+Content-Language: en-US
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        Mario.Limonciello@amd.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org
+References: <20230131090016.3970625-1-perry.yuan@amd.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230131090016.3970625-1-perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Xiaomi Mi Pad 5 Pro, codename is xiaomi-elish.
+On 1/31/23 2:00 PM, Perry Yuan wrote:
+> Hi all,
+> 
+> This patchset implements one new AMD CPU frequency driver
+> `amd-pstate-epp` instance for better performance and power control.
+> CPPC has a parameter called energy preference performance (EPP).
+> The EPP is used in the CCLK DPM controller to drive the frequency that a core
+> is going to operate during short periods of activity.
+> EPP values will be utilized for different OS profiles (balanced, performance, power savings).
+> 
+> AMD Energy Performance Preference (EPP) provides a hint to the hardware
+> if software wants to bias toward performance (0x0) or energy efficiency (0xff)
+> The lowlevel power firmware will calculate the runtime frequency according to the EPP preference 
+> value. So the EPP hint will impact the CPU cores frequency responsiveness.
+> 
+> We use the RAPL interface with "perf" tool to get the energy data of the package power.
+> Performance Per Watt (PPW) Calculation:
+> 
+> The PPW calculation is referred by below paper:
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsoftware.intel.com%2Fcontent%2Fdam%2Fdevelop%2Fexternal%2Fus%2Fen%2Fdocuments%2Fperformance-per-what-paper.pdf&amp;data=04%7C01%7CPerry.Yuan%40amd.com%7Cac66e8ce98044e9b062708d9ab47c8d8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637729147708574423%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=TPOvCE%2Frbb0ptBreWNxHqOi9YnVhcHGKG88vviDLb00%3D&amp;reserved=0
+> 
+> Below formula is referred from below spec to measure the PPW:
+> 
+> (F / t) / P = F * t / (t * E) = F / E,
+> 
+> "F" is the number of frames per second.
+> "P" is power measured in watts.
+> "E" is energy measured in joules.
+> 
+> Gitsouce Benchmark Data on ROME Server CPU
+> +------------------------------+------------------------------+------------+------------------+
+> | Kernel Module                | PPW (1 / s * J)              |Energy(J) | PPW Improvement (%)|
+> +==============================+==============================+============+==================+
+> | acpi-cpufreq:schedutil       | 5.85658E-05                  | 17074.8    | base             |
+> +------------------------------+------------------------------+------------+------------------+
+> | acpi-cpufreq:ondemand        | 5.03079E-05                  | 19877.6    | -14.10%          |
+> +------------------------------+------------------------------+------------+------------------+
+> | acpi-cpufreq:performance     | 5.88132E-05                  | 17003      | 0.42%            |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:ondemand          | 4.60295E-05                  | 21725.2    | -21.41%          |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:schedutil         | 4.70026E-05                  | 21275.4    | -19.7%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:performance       | 5.80094E-05                  | 17238.6    | -0.95%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP:performance              | 5.8292E-05                   | 17155      | -0.47%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP: balance performance:    | 6.71709E-05                  | 14887.4    | 14.69%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP:power                    | 6.66951E-05                  | 4993.6     | 13.88%           |
+> +------------------------------+------------------------------+------------+------------------+
+Really sorry to interrupt. But I want to test this driver on my system. I'm
+not sure how to measure the energy consumed in a specific benchmark
+duration. Please can you share the name of the tool or script which has
+been used to measure power/energy consumed over the benchmark duration? Any
+pointer or reference would be very helpful.
 
-This commit brings support for:
-  * ADSP/CDSP/SLPI/VENUS
-  * Backlight
-  * Battery fuel gauge
-  * Framebuffer
-  * PCIe0
-  * USB2.0
+I'm assuming that the energy(J) has been measured with some X tool for the
+duration of gitsource benchmark run. I want to try and reproduce these
+results on AMD machines I've here.
 
-Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
----
-The backlight driver (ktz8866) has been merged to linux-next.
+> 
+> Tbench Benchmark Data on ROME Server CPU
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | Kernel Module                               | PPW MB / (s * J)  |Throughput(MB/s)| Energy (J)|PPW Improvement(%)|
+> +=============================================+===================+==============+=============+==================+
+> | acpi_cpufreq: schedutil                     | 46.39             | 17191        | 37057.3     | base             |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | acpi_cpufreq: ondemand                      | 51.51             | 19269.5      | 37406.5     | 11.04 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | acpi_cpufreq: performance                   | 45.96             | 17063.7      | 37123.7     | -0.74 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: performance(0)               | 54.46             | 20263.1      | 37205       | 17.87 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: balance performance          | 55.03             | 20481.9      | 37221.5     | 19.14 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: balance_power                | 54.43             | 20245.9      | 37194.2     | 17.77 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: power(255)                   | 54.26             | 20181.7      | 37197.4     | 17.40 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: schedutil                       | 48.22             | 17844.9      | 37006.6     | 3.80 %           |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: ondemand                        | 61.30             | 22988        | 37503.4     | 33.72 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: performance                     | 54.52             | 20252.6      | 37147.8     | 17.81 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> 
+> changes from v11:
+>  * rebase to latest linux-pm/bleeding-edge kernel tree
+>  * fix the CI build warning issue
+>  * pick up RB flag from Wyes
+> 
+> changes from v10:
+>  * pick up all new ack flas added by Ray
+>  * pick up Review-By flag added by Wyes
+>  * pick up Test-By flags added by Wyes
+>  * move the EPP macro definition to amd_pstate.h and drop the common
+>    code patch
+>  * add amd_perf_ctl_reset() in epp init code as well
+>  * As the warning which reminded by 0day, change amd_pstate_get_epp(cpudata, value)
+>    to amd_pstate_get_epp(cpudata, 0).
+> 
+> changes from v8:
+>  * drive all the feedbacks from Mario and change the codes in this
+>   version
+>  * drive all the feedbacks from Ray and change the codes in this
+>   version
+>  * pick up all the R-B flags from Mario
+>  * pick up all the R-B flags from Ray
+>  * drop boost/refresh_freq_limits callback
+>  * reuse policy->driver_data to store amd_cpudata struct
+>  * use switch-case in the driver mode switching function
+>  * add Kconfig dependency the INTEL_PSTATE for AMD_PSTATE build
+>  * fix some other code format and typos
+> 
+> changes from v7:
+>  * remove  iowait boost functions code
+>  * pick up ack by flag from Huang Ray.
+>  * add one new patch to support multiple working modes in the amd_pstate_param(),aligned with Wyse 
+>  * drop the patch "[v7 08/13] cpufreq: amd-pstate: add frequency dynamic boost sysfs control"
+>  * replace the cppc_get_epp_caps() with new cppc_get_epp_perf() wihch is
+>    more simple to use
+>  * remove I/O wait boost code from amd_pstate_update_status()
+>  * replace cppc_active var with enum type AMD_PSTATE_ACTIVE
+>  * squash amd_pstate_epp_verify_policy() into sigle function
+>  * remove "amd pstate" string from the pr_err, pr_debug logs info
+>  * rework patch [v7 03/13], move the common EPP profiles declaration
+>    into cpufreq.h which will be used by amd-pstate and intel-pstate
+>  * combine amd psate init functions.
+>  * remove epp_powersave from amd-pstate.h and dropping the codes.
+>  * move amd_pstate_params{} from amd-pstate.h into amd-pstate.c
+>  * drive some other feedbacks from huang ray 
+> 
+> changes from v6:
+>  * fix one legacy kernel hang issue when amd-pstate driver unregistering
+>  * add new documentation to introduce new global sysfs attributes
+>  * use sysfs_emit_at() to print epp profiles array
+>  * update commit info for patch v6 patch 1/11 as Mario sugguested.
+>  * trying to add the EPP profiles into cpufreq.h, but it will cause lots
+>    of build failues,continue to keep cpufreq_common.h used in v7
+>  * update commit info using amd-pstate as prefix same as before.
+>  * remove CONFIG_ACPI for the header as Ray suggested.
+>  * move amd_pstate_kobj to where it is used in patch "add frequency dynamic boost sysfs control"
+>  * drive feedback removing X86_FEATURE_CPPC check for the epp init from Huang Ray 
+>  * drive feedback from Mario
+>  
+> change from v5:
+>  * add one common header `cpufreq_commoncpufreq_common` to extract EPP profiles 
+>    definition for amd and intel pstate driver.
+>  * remove the epp_off value to avoid confusion.
+>  * convert some other sysfs sprintf() function with sysfs_emit() and add onew new patch
+>  * add acpi pm server priofile detection to enable dynamic boost control
+>  * fix some code format with checkpatch script
+>  * move the EPP profile declaration into common header file `cpufreq_common.h`
+>  * fix commit typos
+> 
+> changes from v4:
+>  * rebase driver based on the v6.1-rc7
+>  * remove the builtin changes patch because pstate driver has been
+>    changed to builtin type by another thread patch
+>  * update Documentation: amd-pstate: add amd pstate driver mode introduction 
+>  * replace sprintf with sysfs_emit() instead.
+>  * fix typo for cppc_set_epp_perf() in cppc_acpi.h header
+> 
+> changes from v3:
+>  * add one more document update patch for the active and passive mode
+>    introducion.
+>  * drive most of the feedbacks from Mario
+>  * drive feedback from Rafael for the cppc_acpi driver.
+>  * remove the epp raw data set/get function
+>  * set the amd-pstate drive by passing kernel parameter
+>  * set amd-pstate driver disabled by default if no kernel parameter
+>    input from booting
+>  * get cppc_set_auto_epp and cppc_set_epp_perf combined
+>  * pick up reviewed by flag from Mario
+> 
+> changes from v2:
+>  * change pstate driver as builtin type from module
+>  * drop patch "export cpufreq cpu release and acquire"
+>  * squash patch of shared mem into single patch of epp implementation
+>  * add one new patch to support frequency boost control
+>  * add patch to expose driver working status checking
+>  * rebase driver into v6.1-rc4 kernel release
+>  * move some declaration to amd-pstate.h
+>  * drive feedback from Mario for the online/offline patch
+>  * drive feedback from Mario for the suspend/resume patch
+>  * drive feedback from Ray for the cppc_acpi and some other patches
+>  * drive feedback from Nathan for the epp patch
+> 
+> changes from v1:
+>  * rebased to v6.0
+>  * drive feedbacks from Mario for the suspend/resume patch
+>  * drive feedbacks from Nathan for the EPP support on msr type
+>  * fix some typos and code style indent problems
+>  * update commit comments for patch 4/7
+>  * change the `epp_enabled` module param name to `epp`
+>  * set the default epp mode to be false
+>  * add testing for the x86_energy_perf_policy utility patchset(will
+>    send that utility patchset with another thread)
+> 
+> v11: https://lore.kernel.org/lkml/20230118075210.447418-1-perry.yuan@amd.com/
+> v10:https://lore.kernel.org/lkml/20230106061420.95715-1-perry.yuan@amd.com/
+> v9: https://lore.kernel.org/lkml/20221225163442.2205660-1-perry.yuan@amd.com/
+> v8: https://lore.kernel.org/lkml/20221219064042.661122-1-perry.yuan@amd.com/
+> v7: https://lore.kernel.org/lkml/20221208111852.386731-1-perry.yuan@amd.com/
+> v6: https://lore.kernel.org/lkml/20221202074719.623673-1-perry.yuan@amd.com/
+> v5: https://lore.kernel.org/lkml/20221128170314.2276636-1-perry.yuan@amd.com/
+> v4: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
+> v3: https://lore.kernel.org/all/20221107175705.2207842-1-Perry.Yuan@amd.com/
+> v2: https://lore.kernel.org/all/20221010162248.348141-1-Perry.Yuan@amd.com/
+> v1: https://lore.kernel.org/all/20221009071033.21170-1-Perry.Yuan@amd.com/
+> 
+> 
+> Perry Yuan (10):
+>   ACPI: CPPC: Add AMD pstate energy performance preference cppc control
+>   Documentation: amd-pstate: add EPP profiles introduction
+>   cpufreq: amd-pstate: implement Pstate EPP support for the AMD
+>     processors
+>   cpufreq: amd-pstate: implement amd pstate cpu online and offline
+>     callback
+>   cpufreq: amd-pstate: implement suspend and resume callbacks
+>   cpufreq: amd-pstate: add driver working mode switch support
+>   Documentation: amd-pstate: add amd pstate driver mode introduction
+>   Documentation: introduce amd pstate active mode kernel command line
+>     options
+>   cpufreq: amd-pstate: convert sprintf with sysfs_emit()
+>   Documentation: amd-pstate: introduce new global sysfs attributes
+> 
+> Wyes Karny (1):
+>   cpufreq: amd-pstate: optimize driver working mode selection in
+>     amd_pstate_param()
+> 
+>  .../admin-guide/kernel-parameters.txt         |   7 +
+>  Documentation/admin-guide/pm/amd-pstate.rst   |  74 +-
+>  drivers/acpi/cppc_acpi.c                      |  67 ++
+>  drivers/cpufreq/amd-pstate.c                  | 705 +++++++++++++++++-
+>  include/acpi/cppc_acpi.h                      |  12 +
+>  include/linux/amd-pstate.h                    |  32 +
+>  6 files changed, 876 insertions(+), 21 deletions(-)
+> 
 
-Changes in v4:
-  - Add gpu node.
-
-Changes in v3:
-  - Sort deleted node.
-  - Use descriptive name for reserved memory.
-
-Changes in v2:
-  - Use definition for magic value and flags.
-  - Add pin setting for pm8150_gpio6.
-  - Sort device tree node.
-  - battery_fg -> fuel-gauge
-  - vol-up -> key-vol-up
-
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- .../boot/dts/qcom/sm8250-xiaomi-elish.dts     | 630 ++++++++++++++++++
- 2 files changed, 631 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 557d77d48dc8..4701027109c6 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -186,6 +186,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-hdk.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-mtp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-xiaomi-elish.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-hdk.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-microsoft-surface-duo2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-new file mode 100644
-index 000000000000..acaa99c5ff8b
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish.dts
-@@ -0,0 +1,630 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022, 2023 Jianhua Lu <lujianhua000@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/arm/qcom,ids.h>
-+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-+#include "sm8250.dtsi"
-+#include "pm8150.dtsi"
-+#include "pm8150b.dtsi"
-+#include "pm8150l.dtsi"
-+#include "pm8009.dtsi"
-+
-+/*
-+ * Delete following upstream (sm8250.dtsi) reserved
-+ * memory mappings which are different on this device.
-+ */
-+/delete-node/ &adsp_mem;
-+/delete-node/ &cdsp_secure_heap;
-+/delete-node/ &slpi_mem;
-+/delete-node/ &spss_mem;
-+/delete-node/ &xbl_aop_mem;
-+
-+/ {
-+	model = "Xiaomi Mi Pad 5 Pro";
-+	compatible = "xiaomi,elish", "qcom,sm8250";
-+	classis-type = "tablet";
-+
-+	/* required for bootloader to select correct board */
-+	qcom,msm-id = <QCOM_ID_SM8250 0x20001>; /* SM8250 v2.1 */
-+	qcom,board-id = <0x10008 0>;
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		framebuffer: framebuffer@9c000000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0x0 0x9c000000 0x0 0x2300000>;
-+			width = <1600>;
-+			height = <2560>;
-+			stride = <(1600 * 4)>;
-+			format = "a8r8g8b8";
-+		};
-+	};
-+
-+	battery_l: battery-l {
-+		compatible = "simple-battery";
-+		voltage-min-design-microvolt = <3870000>;
-+		energy-full-design-microwatt-hours = <16600000>;
-+		charge-full-design-microamp-hours = <4300000>;
-+	};
-+
-+	battery_r: battery-r {
-+		compatible = "simple-battery";
-+		voltage-min-design-microvolt = <3870000>;
-+		energy-full-design-microwatt-hours = <16600000>;
-+		charge-full-design-microamp-hours = <4300000>;
-+	};
-+
-+	bl_vddpos_5p5: bl-vddpos-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "bl_vddpos_5p5";
-+		regulator-min-microvolt = <5500000>;
-+		regulator-max-microvolt = <5500000>;
-+		regulator-enable-ramp-delay = <233>;
-+		gpio = <&tlmm 130 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-boot-on;
-+	};
-+
-+	bl_vddneg_5p5: bl-vddneg-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "bl_vddneg_5p5";
-+		regulator-min-microvolt = <5500000>;
-+		regulator-max-microvolt = <5500000>;
-+		regulator-enable-ramp-delay = <233>;
-+		gpio = <&tlmm 131 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-boot-on;
-+	};
-+
-+	gpio_keys: gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vol_up_n>;
-+
-+		key-vol-up {
-+			label = "Volume Up";
-+			gpios = <&pm8150_gpios 6 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_VOLUMEUP>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			gpio-key,wakeup;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-min-microvolt = <3700000>;
-+		regulator-max-microvolt = <3700000>;
-+	};
-+
-+	/* S6c is really ebi.lvl but it's there for supply map completeness sake. */
-+	vreg_s6c_0p88: smpc6-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vreg_s6c_0p88";
-+		regulator-min-microvolt = <880000>;
-+		regulator-max-microvolt = <880000>;
-+		regulator-always-on;
-+		vin-supply = <&vph_pwr>;
-+	};
-+
-+	reserved-memory {
-+		xbl_aop_mem: xbl-aop@80700000 {
-+			reg = <0x0 0x80600000 0x0 0x260000>;
-+			no-map;
-+		};
-+
-+		slpi_mem: slpi@88c00000 {
-+			reg = <0x0 0x88c00000 0x0 0x2f00000>;
-+			no-map;
-+		};
-+
-+		adsp_mem: adsp@8bb00000 {
-+			reg = <0x0 0x8bb00000 0x0 0x2500000>;
-+			no-map;
-+		};
-+
-+		spss_mem: spss@8e000000 {
-+			reg = <0x0 0x8e000000 0x0 0x100000>;
-+			no-map;
-+		};
-+
-+		cdsp_secure_heap: cdsp-secure-heap@8e100000 {
-+			reg = <0x0 0x8e100000 0x0 0x4600000>;
-+			no-map;
-+		};
-+
-+		cont_splash_mem: cont-splash@9c000000 {
-+			reg = <0x0 0x9c000000 0x0 0x2300000>;
-+			no-map;
-+		};
-+
-+		ramoops@b0000000 {
-+			compatible = "ramoops";
-+			reg = <0x0 0xb0000000 0x0 0x400000>;
-+			record-size = <0x1000>;
-+			console-size = <0x200000>;
-+			ecc-size = <16>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&adsp {
-+	firmware-name = "qcom/sm8250/xiaomi/elish/adsp.mbn";
-+	status = "okay";
-+};
-+
-+&apps_rsc {
-+	regulators-0 {
-+		compatible = "qcom,pm8150-rpmh-regulators";
-+		qcom,pmic-id = "a";
-+
-+		vdd-s1-supply = <&vph_pwr>;
-+		vdd-s2-supply = <&vph_pwr>;
-+		vdd-s3-supply = <&vph_pwr>;
-+		vdd-s4-supply = <&vph_pwr>;
-+		vdd-s5-supply = <&vph_pwr>;
-+		vdd-s6-supply = <&vph_pwr>;
-+		vdd-s7-supply = <&vph_pwr>;
-+		vdd-s8-supply = <&vph_pwr>;
-+		vdd-s9-supply = <&vph_pwr>;
-+		vdd-s10-supply = <&vph_pwr>;
-+		vdd-l1-l8-l11-supply = <&vreg_s6c_0p88>;
-+		vdd-l2-l10-supply = <&vreg_bob>;
-+		vdd-l3-l4-l5-l18-supply = <&vreg_s6a_0p95>;
-+		vdd-l6-l9-supply = <&vreg_s8c_1p35>;
-+		vdd-l7-l12-l14-l15-supply = <&vreg_s5a_1p9>;
-+		vdd-l13-l16-l17-supply = <&vreg_bob>;
-+
-+		/* (S1+S2+S3) - cx.lvl (ARC) */
-+
-+		vreg_s4a_1p8: smps4 {
-+			regulator-name = "vreg_s4a_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1920000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
-+						   RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_s5a_1p9: smps5 {
-+			regulator-name = "vreg_s5a_1p9";
-+			regulator-min-microvolt = <1900000>;
-+			regulator-max-microvolt = <2040000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_s6a_0p95: smps6 {
-+			regulator-name = "vreg_s6a_0p95";
-+			regulator-min-microvolt = <950000>;
-+			regulator-max-microvolt = <1128000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l2a_3p1: ldo2 {
-+			regulator-name = "vreg_l2a_3p1";
-+			regulator-min-microvolt = <3072000>;
-+			regulator-max-microvolt = <3072000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l3a_0p9: ldo3 {
-+			regulator-name = "vreg_l3a_0p9";
-+			regulator-min-microvolt = <928000>;
-+			regulator-max-microvolt = <932000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		/* L4 - lmx.lvl (ARC) */
-+
-+		vreg_l5a_0p88: ldo5 {
-+			regulator-name = "vreg_l5a_0p88";
-+			regulator-min-microvolt = <880000>;
-+			regulator-max-microvolt = <880000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l6a_1p2: ldo6 {
-+			regulator-name = "vreg_l6a_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
-+						   RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		/* L7 is unused. */
-+
-+		vreg_l9a_1p2: ldo9 {
-+			regulator-name = "vreg_l9a_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		/* L10 is unused, L11 - lcx.lvl (ARC) */
-+
-+		vreg_l12a_1p8: ldo12 {
-+			regulator-name = "vreg_l12a_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		/* L13 is unused. */
-+
-+		vreg_l14a_1p88: ldo14 {
-+			regulator-name = "vreg_l14a_1p88";
-+			regulator-min-microvolt = <1880000>;
-+			regulator-max-microvolt = <1880000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		/* L15 & L16 are unused. */
-+
-+		vreg_l17a_3p0: ldo17 {
-+			regulator-name = "vreg_l17a_3p0";
-+			regulator-min-microvolt = <2496000>;
-+			regulator-max-microvolt = <3008000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
-+						   RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l18a_0p9: ldo18 {
-+			regulator-name = "vreg_l18a_0p9";
-+			regulator-min-microvolt = <800000>;
-+			regulator-max-microvolt = <920000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+
-+	/*
-+	 * Remaining regulators that are not yet supported:
-+	 * OLEDB: 4925000-8100000
-+	 * ab: 4600000-6100000
-+	 * ibb: 800000-5400000
-+	 */
-+	regulators-1 {
-+		compatible = "qcom,pm8150l-rpmh-regulators";
-+		qcom,pmic-id = "c";
-+
-+		vdd-s1-supply = <&vph_pwr>;
-+		vdd-s2-supply = <&vph_pwr>;
-+		vdd-s3-supply = <&vph_pwr>;
-+		vdd-s4-supply = <&vph_pwr>;
-+		vdd-s5-supply = <&vph_pwr>;
-+		vdd-s6-supply = <&vph_pwr>;
-+		vdd-s7-supply = <&vph_pwr>;
-+		vdd-s8-supply = <&vph_pwr>;
-+		vdd-l1-l8-supply = <&vreg_s4a_1p8>;
-+		vdd-l2-l3-supply = <&vreg_s8c_1p35>;
-+		vdd-l4-l5-l6-supply = <&vreg_bob>;
-+		vdd-l7-l11-supply = <&vreg_bob>;
-+		vdd-l9-l10-supply = <&vreg_bob>;
-+		vdd-bob-supply = <&vph_pwr>;
-+
-+		vreg_bob: bob {
-+			regulator-name = "vreg_bob";
-+			regulator-min-microvolt = <3350000>;
-+			regulator-max-microvolt = <3960000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
-+		};
-+
-+		/*
-+		 * S1-S6 are ARCs:
-+		 * (S1+S2) - gfx.lvl,
-+		 * S3 - mx.lvl,
-+		 * (S4+S5) - mmcx.lvl,
-+		 * S6 - ebi.lvl
-+		 */
-+
-+		vreg_s7c_0p35: smps7 {
-+			regulator-name = "vreg_s7c_0p35";
-+			regulator-min-microvolt = <348000>;
-+			regulator-max-microvolt = <1000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_s8c_1p35: smps8 {
-+			regulator-name = "vreg_s8c_1p35";
-+			regulator-min-microvolt = <1350000>;
-+			regulator-max-microvolt = <1400000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l1c_1p8: ldo1 {
-+			regulator-name = "vreg_l1c_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		/* L2-4 are unused. */
-+
-+		vreg_l5c_1p8: ldo5 {
-+			regulator-name = "vreg_l5c_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l6c_2p9: ldo6 {
-+			regulator-name = "vreg_l6c_2p9";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2960000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
-+						   RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l7c_2p85: ldo7 {
-+			regulator-name = "vreg_l7c_2p85";
-+			regulator-min-microvolt = <2856000>;
-+			regulator-max-microvolt = <3104000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l8c_1p8: ldo8 {
-+			regulator-name = "vreg_l8c_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l9c_2p9: ldo9 {
-+			regulator-name = "vreg_l9c_2p9";
-+			regulator-min-microvolt = <2704000>;
-+			regulator-max-microvolt = <2960000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
-+						   RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l10c_3p3: ldo10 {
-+			regulator-name = "vreg_l10c_3p3";
-+			regulator-min-microvolt = <3296000>;
-+			regulator-max-microvolt = <3296000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l11c_3p0: ldo11 {
-+			regulator-name = "vreg_l11c_3p0";
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3000000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+
-+	regulators-2 {
-+		compatible = "qcom,pm8009-rpmh-regulators";
-+		qcom,pmic-id = "f";
-+
-+		vdd-s1-supply = <&vph_pwr>;
-+		vdd-s2-supply = <&vreg_bob>;
-+		vdd-l2-supply = <&vreg_s8c_1p35>;
-+		vdd-l5-l6-supply = <&vreg_bob>;
-+		vdd-l7-supply = <&vreg_s4a_1p8>;
-+
-+		vreg_s1f_1p2: smps1 {
-+			regulator-name = "vreg_s1f_1p2";
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1200000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_s2f_0p5: smps2 {
-+			regulator-name = "vreg_s2f_0p5";
-+			regulator-min-microvolt = <512000>;
-+			regulator-max-microvolt = <1100000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		/* L1 is unused. */
-+
-+		vreg_l2f_1p3: ldo2 {
-+			regulator-name = "vreg_l2f_1p3";
-+			regulator-min-microvolt = <1304000>;
-+			regulator-max-microvolt = <1304000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		/* L3 & L4 are unused. */
-+
-+		vreg_l5f_2p8: ldo5 {
-+			regulator-name = "vreg_l5f_2p85";
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l6f_2p8: ldo6 {
-+			regulator-name = "vreg_l6f_2p8";
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <2800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+
-+		vreg_l7f_1p8: ldo7 {
-+			regulator-name = "vreg_l7f_1p8";
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+		};
-+	};
-+};
-+
-+&cdsp {
-+	firmware-name = "qcom/sm8250/xiaomi/elish/cdsp.mbn";
-+	status = "okay";
-+};
-+
-+&gmu {
-+	status = "okay";
-+};
-+
-+&gpi_dma0 {
-+	status = "okay";
-+};
-+
-+&gpi_dma1 {
-+	status = "okay";
-+};
-+
-+&gpi_dma2 {
-+	status = "okay";
-+};
-+
-+&gpu {
-+	status = "okay";
-+
-+	zap-shader {
-+		memory-region = <&gpu_mem>;
-+		firmware-name = "qcom/sm8250/xiaomi/elish/a650_zap.mbn";
-+	};
-+};
-+
-+&i2c0 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	fuel-gauge@55 {
-+		compatible = "ti,bq27z561";
-+		reg = <0x55>;
-+		monitored-battery = <&battery_r>;
-+	};
-+};
-+
-+&i2c11 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	backlight: backlight@11 {
-+		compatible = "kinetic,ktz8866";
-+		reg = <0x11>;
-+		vddpos-supply = <&bl_vddpos_5p5>;
-+		vddneg-supply = <&bl_vddneg_5p5>;
-+		enable-gpios = <&tlmm 139 GPIO_ACTIVE_HIGH>;
-+		current-num-sinks = <5>;
-+		kinetic,current-ramp-delay-ms = <128>;
-+		kinetic,led-enable-ramp-delay-ms = <1>;
-+		kinetic,enable-lcd-bias;
-+	};
-+};
-+
-+&i2c13 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	fuel-gauge@55 {
-+		compatible = "ti,bq27z561";
-+		reg = <0x55>;
-+		monitored-battery = <&battery_l>;
-+	};
-+};
-+
-+&pcie0 {
-+	status = "okay";
-+};
-+
-+&pcie0_phy {
-+	vdda-phy-supply = <&vreg_l5a_0p88>;
-+	vdda-pll-supply = <&vreg_l9a_1p2>;
-+	status = "okay";
-+};
-+
-+&pm8150_gpios {
-+	vol_up_n: vol-up-n-state {
-+		pins = "gpio6";
-+		function = "normal";
-+		power-source = <1>;
-+		input-enable;
-+		bias-pull-up;
-+	};
-+};
-+
-+&pon_pwrkey {
-+	status = "okay";
-+};
-+
-+&pon_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+	status = "okay";
-+};
-+
-+&qupv3_id_0 {
-+	status = "okay";
-+};
-+
-+&qupv3_id_1 {
-+	status = "okay";
-+};
-+
-+&qupv3_id_2 {
-+	status = "okay";
-+};
-+
-+&slpi {
-+	firmware-name = "qcom/sm8250/xiaomi/elish/slpi.mbn";
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <40 4>;
-+};
-+
-+&usb_1 {
-+	/* USB 2.0 only */
-+	qcom,select-utmi-as-pipe-clk;
-+	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
-+	dr_mode = "peripheral";
-+	maximum-spped = "high-speed";
-+	/* Remove USB3 phy */
-+	phys = <&usb_1_hsphy>;
-+	phy-names = "usb2-phy";
-+};
-+
-+&usb_1_hsphy {
-+	vdda-pll-supply = <&vreg_l5a_0p88>;
-+	vdda18-supply = <&vreg_l12a_1p8>;
-+	vdda33-supply = <&vreg_l2a_3p1>;
-+	status = "okay";
-+};
-+
-+&ufs_mem_hc {
-+	vcc-supply = <&vreg_l17a_3p0>;
-+	vcc-max-microamp = <800000>;
-+	vccq-supply = <&vreg_l6a_1p2>;
-+	vccq-max-microamp = <800000>;
-+	vccq2-supply = <&vreg_s4a_1p8>;
-+	vccq2-max-microamp = <800000>;
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l5a_0p88>;
-+	vdda-pll-supply = <&vreg_l9a_1p2>;
-+	status = "okay";
-+};
-+
-+&venus {
-+	firmware-name = "qcom/sm8250/elish/venus.mbn";
-+	status = "okay";
-+};
 -- 
-2.39.1
-
+BR,
+Muhammad Usama Anjum
