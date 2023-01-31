@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFD56820DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4776820FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjAaAjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 19:39:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32798 "EHLO
+        id S229880AbjAaAse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 19:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjAaAjp (ORCPT
+        with ESMTP id S229740AbjAaAsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:39:45 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A2D29439
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:39:44 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso6645929wms.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:39:44 -0800 (PST)
+        Mon, 30 Jan 2023 19:48:32 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD872A14B
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:48:30 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id l6-20020a17090a72c600b0022bffd5f3ffso5232119pjk.3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 16:48:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6AfmE3NriTDZXeBtPjgO5/cFK1t9ckr012YHXC87X88=;
-        b=atG3rW3Qq1QGQMTcmfDo7Fkt2jfEqLzTNzH/DGSkqLEzUcFKVz9LPmDmg9nYE9j122
-         f52ewBWuv5abxIoF/Zlf+uaLuVozSK5l5PdKeg5aTD4U2r8xcMjzVNE8g1MdxLFRgnPU
-         OWKunZLpyW48NzPeyrYKOGOFteyAi7CjZmxjXtZ7RMFOEeVYp3Lh3quhdstnaWxcX4Q3
-         pNdsrFvjw7c2MoXa/HvcECRTxuPCE5wfAHZ0N99pC/vSxPMqVDbljTdqPQeOKTLziCkV
-         Im8Pwoits5fwpIIIZoAvKWcGDj3KVV8YgCJroq8GPDtVj/o+iDDebPGsgKebl1hInui7
-         5ZfQ==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lKUtIBE/ENkRt4RJuzSzMJ8r5Hrq45eiIYmJfbJ+24Y=;
+        b=fN8EIj+8JoBBckZaxE6iEHhLf1kuoFjMyok3nPClcggajWZw3/2O4mVTQM0M1XGmRk
+         eDWUBf2JIiP+Qsp0nZXK+hazChMgcFVKjmotnW8P1Pjpiiq2IHYpfHxnSSk8EYJHuauy
+         LP9EU2TFSm82hBPv3OSRsF3GBYQUonMd0Ql59kKBKfgOcXEPtDbRjEDTyG5Ajao5Vb1h
+         Q/0MJozKoY87SlrzX/6bIotSOCxxyM8i9snC0ZAozfROWeAFSI0+UK7+Zw7a1W8GreWe
+         efUYxGyGBVzSORwI+mXbisR1R/SCpQ85UNeusZDx0wY9AQJ0S6Iax8lEm/FR7MkAJ+qK
+         qx5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6AfmE3NriTDZXeBtPjgO5/cFK1t9ckr012YHXC87X88=;
-        b=12c3OY0jglgX+dfxajGz1aB/j9uAAes/1GJlV7k0v+CoU1Sx2xLLtnrA98mR3joFez
-         FDqGA31VB+XeMlV7ZN5l/gCYzWwwdk09VrorJPeR0YKLplEEf02MjjBWEoek2XqXY+8b
-         BT3ZwcjQ2GVH4BmUKGAIP3gVKRBVAwb58F5M7ksBULYe3d+7W3Mne//E/uXiLdfrWC31
-         kDyRBkLz3g5CmAFklltEd90DV3Oke+EfWdwAOVmJZavnqmrxJyck/If7dcygdiOgvbrN
-         A+Qj/Vv+lD9IFc4VHI79wqvjviKhcC5e/bVj16VNZODmHJmZx810GtffAOSZtvvMFlo0
-         RU8A==
-X-Gm-Message-State: AO0yUKVxRbuGT8S3HTwyeFvMtDuskVtnQ7pJgMSAvUC/AWw4hwhzam+Q
-        mn5qtjR65oeO4ABv+qtQmTa3OvuxYLJKXe+vl9d60Q==
-X-Google-Smtp-Source: AK7set8dbrb84Sq6Vq89iS+Rfc/IidveFR9I6gsKg0LdArFqaNehK7b3xc+T8mhT2oN98RrBoyaXefpNBRjJnygEtIw=
-X-Received: by 2002:a1c:2b07:0:b0:3dc:19fc:3059 with SMTP id
- r7-20020a1c2b07000000b003dc19fc3059mr1488017wmr.188.1675125582994; Mon, 30
- Jan 2023 16:39:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20230126233645.200509-1-irogers@google.com> <56f1ed31-886d-358d-cfcc-0ab9fe7a76d8@oracle.com>
- <CAP-5=fWc1UcjZT-8YcqHaiSEUGJCMNd4Syx3-MVhnk5PGUDPMQ@mail.gmail.com> <c18b2293-5f34-28b9-25de-c92c25d5c3f0@oracle.com>
-In-Reply-To: <c18b2293-5f34-28b9-25de-c92c25d5c3f0@oracle.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 30 Jan 2023 16:39:31 -0800
-Message-ID: <CAP-5=fWvdOFG0r5eibOy4Ai2EF2zcKZBsFU+vSDBPasvjFepVg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/15] jevents/pmu-events improvements
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        linuxppc-dev@lists.ozlabs.org, Kajol Jain <kjain@linux.ibm.com>,
-        Stephane Eranian <eranian@google.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lKUtIBE/ENkRt4RJuzSzMJ8r5Hrq45eiIYmJfbJ+24Y=;
+        b=xtYFjInzLpQKPjGSjBTYE4V5sKsRL/IQ4IjVVYSStBQeIPKy9twXceCyMbdzPQNkGH
+         rhpeexRWHDgcEjzAofNj6he2ps7FiycvqawXbolRUXeZPWg8uuj+O6FbPJNwfQmWO/Ce
+         D1QbhBKGtexqBiBUm8XV4LbsfzmKwwG+apTz5mEGOH3GJEsKr/j3IjHGrnV/MHPb0xHB
+         G9pxBDKdD/KC2dTE8sGpVVYWQjPzU5ywnkV+F9Gv7/mYdDhmWIjy3KRXsWQ0eEIU/Soq
+         UPlVGE0uV9HHi98Z7SZR0PAdLOgW9WE9ST2RERtKvC8z0qGU8QLK1UUoTNi3DXWHHkJD
+         r7tw==
+X-Gm-Message-State: AO0yUKWOd9JRwFKL2CazadVesnAWUaK7QCIsv04lYP0izuxXrzmxBk+h
+        GeU07rRQadA7Tks054uXGRbayGKLUg9yxg1xLGXY5BQKW+8xYPksFZqSaTM38su7BrCP/6mA3Nu
+        yPb7SHS3vhCqT2GYWH/U6SGqrPMYp63UAvy14nGN0YMKpbbZbgJF3GA3XyMRAmusO3xlB4RfpKz
+        Ngi/i1vJQ=
+X-Google-Smtp-Source: AK7set+5JVP7ro2YuXE8zZprXiBqj+NTnMQ7KfjXZgshhJRNRTpVuEWdEyCTaIG1XijdszOEdTYwujTJJP90pDjiZw==
+X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
+ (user=dionnaglaze job=sendgmr) by 2002:a17:903:41c9:b0:196:77ef:d51f with
+ SMTP id u9-20020a17090341c900b0019677efd51fmr1124324ple.19.1675126110077;
+ Mon, 30 Jan 2023 16:48:30 -0800 (PST)
+Date:   Tue, 31 Jan 2023 00:48:25 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230131004825.153120-1-dionnaglaze@google.com>
+Subject: [PATCH v2] x86/efi: Safely enable unaccepted memory in UEFI
+From:   Dionna Glaze <dionnaglaze@google.com>
+To:     linux-kernel@vger.kernel.org, x86@vger.kernel.org
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Ard Biescheuvel <ardb@kernel.org>,
+        "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,34 +77,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 7:22 AM John Garry <john.g.garry@oracle.com> wrote:
->
-> On 27/01/2023 13:48, Ian Rogers wrote:
-> > On Fri, Jan 27, 2023, 5:20 AM John Garry <john.g.garry@oracle.com
-> > <mailto:john.g.garry@oracle.com>> wrote:
-> >
-> >     On 26/01/2023 23:36, Ian Rogers wrote:
-> >
-> >     Hi Ian,
-> >
-> >     At a glance, none of this series has your Signed-off-by tag..
-> >
-> >     Thanks,
-> >     John
-> >
-> >
-> >
-> > Thanks John, will fix. Is there anything else?
->
-> Do you think that pmu-events/__pycache__/metric.cpython-36.pyc should be
-> deleted with a make clean? I would expect stuff like this to be deleted
-> (with a clean), but I am not sure if we have a policy on this (pyc files)
+This patch depends on Kirill A. Shutemov's series
 
-Should they be covered by the existing clean target?
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/Makefile.perf?h=perf/core#n1102
+[PATCHv8 00/14] mm, x86/cc: Implement support for unaccepted memory
 
-Thanks,
-Ian
+The UEFI v2.9 specification includes a new memory type to be used in
+environments where the OS must accept memory that is provided from its
+host. Before the introduction of this memory type, all memory was
+accepted eagerly in the firmware. In order for the firmware to safely
+stop accepting memory on the OS's behalf, the OS must affirmatively
+indicate support to the firmware. This is only a problem for AMD
+SEV-SNP, since Linux has had support for it since 5.19. The other
+technology that can make use of unaccepted memory, Intel TDX, does not
+yet have Linux support, so it can strictly require unaccepted memory
+support as a dependency of CONFIG_TDX and not require communication with
+the firmware.
 
-> Thanks,
-> John
+Enabling unaccepted memory requires calling a 0-argument enablement
+protocol before ExitBootServices. This call is only made if the kernel
+is compiled with UNACCEPTED_MEMORY=y
+
+This protocol will be removed after the end of life of the first LTS
+that includes it, in order to give firmware implementations an
+expiration date for it. When the protocol is removed, firmware will
+strictly infer that a SEV-SNP VM is running an OS that supports the
+unaccepted memory type. At the earliest convenience, when unaccepted
+memory support is added to Linux, SEV-SNP may take strict dependence in
+it. After the firmware removes support for the protocol, this patch
+should be reverted.
+
+Change since v1:
+* protocol name, as it is in OVMF
+https://github.com/tianocore/edk2/commit/26847fb6be7fff83a834a3154224588afede0073
+* protocol typedef moved before struct definition.
+
+Cc: Ard Biescheuvel <ardb@kernel.org>
+Cc: "Min M. Xu" <min.m.xu@intel.com>
+Cc: Gerd Hoffmann <kraxel@redhat.com>
+Cc: James Bottomley <jejb@linux.ibm.com>
+Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
+Cc: Jiewen Yao <jiewen.yao@intel.com>
+Cc: Erdem Aktas <erdemaktas@google.com>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Borislav Petkov <bp@alien8.de>
+
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+---
+ drivers/firmware/efi/libstub/x86-stub.c | 37 +++++++++++++++++++++++++
+ include/linux/efi.h                     |  4 +++
+ 2 files changed, 41 insertions(+)
+
+diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+index a0bfd31358ba..e4c04444edab 100644
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -26,6 +26,17 @@ const efi_dxe_services_table_t *efi_dxe_table;
+ u32 image_offset __section(".data");
+ static efi_loaded_image_t *image = NULL;
+ 
++typedef union sev_memory_acceptance_protocol sev_memory_acceptance_protocol_t;
++union sev_memory_acceptance_protocol {
++	struct {
++		efi_status_t (__efiapi *allow_unaccepted_memory)(
++			sev_memory_acceptance_protocol_t *);
++	};
++	struct {
++		u32 allow_unaccepted_memory;
++	} mixed_mode;
++};
++
+ static efi_status_t
+ preserve_pci_rom_image(efi_pci_io_protocol_t *pci, struct pci_setup_rom **__rom)
+ {
+@@ -310,6 +321,30 @@ setup_memory_protection(unsigned long image_base, unsigned long image_size)
+ #endif
+ }
+ 
++
++static void setup_unaccepted_memory(void)
++{
++	efi_guid_t mem_acceptance_proto = OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID;
++	sev_memory_acceptance_protocol_t *proto;
++	efi_status_t status;
++
++	if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
++		return;
++
++	/*
++	 * Enable unaccepted memory before calling exit boot services in order
++	 * for the UEFI to not accept all memory on EBS.
++	 */
++	status = efi_bs_call(locate_protocol, &mem_acceptance_proto, NULL,
++			     (void **)&proto);
++	if (status != EFI_SUCCESS)
++		return;
++
++	status = efi_call_proto(proto, allow_unaccepted_memory);
++	if (status != EFI_SUCCESS)
++		efi_err("Memory acceptance protocol failed\n");
++}
++
+ static const efi_char16_t apple[] = L"Apple";
+ 
+ static void setup_quirks(struct boot_params *boot_params,
+@@ -899,6 +934,8 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
+ 
+ 	setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
+ 
++	setup_unaccepted_memory();
++
+ 	status = exit_boot(boot_params, handle);
+ 	if (status != EFI_SUCCESS) {
+ 		efi_err("exit_boot() failed!\n");
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index 4b27519143f5..ac812978a03a 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -434,6 +434,10 @@ void efi_native_runtime_setup(void);
+ #define DELLEMC_EFI_RCI2_TABLE_GUID		EFI_GUID(0x2d9f28a2, 0xa886, 0x456a,  0x97, 0xa8, 0xf1, 0x1e, 0xf2, 0x4f, 0xf4, 0x55)
+ #define AMD_SEV_MEM_ENCRYPT_GUID		EFI_GUID(0x0cf29b71, 0x9e51, 0x433a,  0xa3, 0xb7, 0x81, 0xf3, 0xab, 0x16, 0xb8, 0x75)
+ 
++/* OVMF protocol GUIDs */
++#define OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID	EFI_GUID(0xc5a010fe, 0x38a7, 0x4531,  0x8a, 0x4a, 0x05, 0x00, 0xd2, 0xfd, 0x16, 0x49)
++
++
+ typedef struct {
+ 	efi_guid_t guid;
+ 	u64 table;
+-- 
+2.39.1.456.gfc5497dd1b-goog
+
