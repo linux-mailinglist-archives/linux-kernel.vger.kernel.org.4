@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E220682D82
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4858F682D83
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjAaNOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        id S230163AbjAaNOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjAaNOH (ORCPT
+        with ESMTP id S230372AbjAaNOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:14:07 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57F510C9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:13:56 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id x4so18005857ybp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:13:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lebX9VzQP7VMYHLa2vyK4hrBtzDqJ9eFCBgK4dZHGqY=;
-        b=qXtrFvc8NPvibTzkOdKNUNcSgLQUKhwmE6ALIFFlhhema+9UDs2/xEAIp+1VFL2AAa
-         9YdIL9SgKkLhDEhuwRUiuvwE+TJRxMZaSHitbLSVMLJWtVAtYkK0GK6tJyPqTuRp+uQL
-         z9Swhwf9izFHI+zJzgyEejUwavw8wqvwJqCFL7fTGGGc8rUk6bd8vUrsAR80S6dFW0CU
-         hZiVxhUNlbWJv7m3ZE4fyFtpkBPjAJ3YI9uNsWLMWDjXerT9A5FLOXeafa1i88ACzgEk
-         ucAdfE/0nfU4LAz+zOTnAF/Jz8srUae8pvFzBqYWFGMrKyNnJMDbovdndrXlESHtXAa3
-         /m+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lebX9VzQP7VMYHLa2vyK4hrBtzDqJ9eFCBgK4dZHGqY=;
-        b=1d/QmN85uU+WOeQnPtmD9wMqGTdc35BpHx7MSnL3+5PkjF8dbVjOKg0CgC8uHuGxu+
-         O1TJA089qdzF22d7y+Ul5PyZ5kiZguBAzMhsogBR13LML6anQLnKAzTD1gKZuY8jMirw
-         gRIC7t3EvbGRRpww+O7fmn9g1IMGkQg+E4uWD012n/mBpPCweCsjshwb/W71al0VJjAZ
-         ZDuQeekTnv7nkl08gRnML/GBYSD3wGMbyhyQ6WSyFQFUxtfsfg1WyxwQKoLavidOVvxb
-         rlRB7wJ2DEjW7HjVl5cD0LHc706EHDkG3UYH9bp5+mn1HoTRLdmT/93obTWLEcTbqARJ
-         XWtw==
-X-Gm-Message-State: AO0yUKUgPy+RFxSAOan8OjYqImE7/+Hy1mzpAKtynv92MYvSv7kds26Y
-        KJXjT24JaxltxAZCaxkWiGFDLuufxQ/jo2Z0bdoUIg==
-X-Google-Smtp-Source: AK7set/ssVUH1Rz89sAOJnKBoqT7NZMWXa8/qUnWnQSWqihB5+j26vSuiStV4rczYgZIb+D5YQtZAm1c0IjM0yuMuo4=
-X-Received: by 2002:a25:2fce:0:b0:83e:bd63:6dd7 with SMTP id
- v197-20020a252fce000000b0083ebd636dd7mr45490ybv.24.1675170835979; Tue, 31 Jan
- 2023 05:13:55 -0800 (PST)
+        Tue, 31 Jan 2023 08:14:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FD6A5DF
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:14:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A41C1614DE
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD60C433EF;
+        Tue, 31 Jan 2023 13:14:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675170845;
+        bh=MvBRUhXs8Mb0cjrqONXBDmQkhlrVlqX5fAH9pVKnyP4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bk2XSB6LliekhTckkTnGX2h4Q3EKN4p2737yWZSVKsvN3yn7XTumWApmg6K9wUvM0
+         n4Mh+XaZk6JcFHsjCs85sUJ8J1/iKss6izVsde3nagHmWOxHhZNxxLGOHiEzdTgVCZ
+         FM+TC+0OhOk3CkuLQP/vW7+YykUiZjdXRPcQkY8rBxnSbfOQwHT+HTVPQWfRmsz0u9
+         7lEfEZ89NIUsyQri1qV+D4GG/nBT5cFLo7AVfee/yp2GZBuuoP5YTaCqQnTFSlpGOE
+         LfCAxr0p49YhcAF+si8IcEQ2P9k7Gg2NyNj2kYuqXUzbqCs7gV26qJnMtN5M7I92Rj
+         NjofA5W49mMbQ==
+Date:   Tue, 31 Jan 2023 13:14:00 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] arm64/signal: Signal handling cleanups
+Message-ID: <Y9kUGGYpWvbb1fZC@sirena.org.uk>
+References: <20221212-arm64-signal-cleanup-v2-0-14a8f3e088b7@kernel.org>
+ <Y9kO1egKjKNqE0zg@arm.com>
 MIME-Version: 1.0
-References: <20221220005529.34744-1-hal.feng@starfivetech.com>
-In-Reply-To: <20221220005529.34744-1-hal.feng@starfivetech.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 31 Jan 2023 14:13:44 +0100
-Message-ID: <CACRpkdbU=Y_LVBfSctQULzFuo4tB9KxgFbv=JGHPuuok6jC8FQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] Basic pinctrl support for StarFive JH7110 RISC-V SoC
-To:     Hal Feng <hal.feng@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Jianlong Huang <jianlong.huang@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pEWZi37D5UvUp+u6"
+Content-Disposition: inline
+In-Reply-To: <Y9kO1egKjKNqE0zg@arm.com>
+X-Cookie: MS-DOS must die!
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,30 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 1:55 AM Hal Feng <hal.feng@starfivetech.com> wrote:
 
-> This patch series adds basic pinctrl support for StarFive JH7110 SoC.
-> You can simply get or review the patches at the link [1].
->
-> [1]: https://github.com/hal-feng/linux/commits/visionfive2-minimal
->
-> Changes since v2:
-> - Rebased on tag v6.1.
+--pEWZi37D5UvUp+u6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Overall this looks OK, the DT bindings does not have any review from
-the DT people but I think they had enough time to do that and were
-properly CC:ed so not your fault.
+On Tue, Jan 31, 2023 at 12:51:33PM +0000, Catalin Marinas wrote:
+> On Tue, Jan 03, 2023 at 08:25:15PM +0000, Mark Brown wrote:
 
-However when I try to apply this to the pinctrl tree it fails,
-for example it seems to depend on an entry in MAINTAINERS
-which isn't upstream.
+> >       arm64/signal: Avoid rereading context frame sizes
+> >       arm64/signal: Only read new data when parsing the SVE context
+> >       arm64/signal: Only read new data when parsing the ZA context
 
-Can you please rebase the patches that are supposed to be
-applied to the pinctrl tree (for example normally not patch 1, the DTS
-patch) on my "devel" branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
+> I'm not sure these add much to the code readability (and the performance
+> improvement I guess is negligible). We avoid some copy_from_user() into
+> the context structures but rely on data read previously or some
+> get_user() into local variables. Personally I'd make the
+> restore_fpsimd_context() also do a copy_from_user() for consistency with
+> the current sve and za frames restoring.
 
-If you resend this quickly I can apply it pronto.
+> Personal preference, not sure whether Will has the same view.
 
-Yours,
-Linus Walleij
+I don't particularly care about those changs either, Will seemed to be
+asking for something like that.
+
+Note that I should at some point today send a version of this series
+rebased on for-next/core due to the TPIDR2 and SME2 changes.
+
+--pEWZi37D5UvUp+u6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPZFBcACgkQJNaLcl1U
+h9CM0Qf/Q4kwXZ5gT5659flGrSzy49DIrxrJyXlQYg6be5W2GMKo+isJeXnSQW72
+YZ7ROEKBRMC6Fnv62XGwiSWXtETgEm3xWK49QMnUd2Xd91P6uRdM5hB0EvvBZ+8r
+rKTJ4EpDaIP8+kooqrBz0JBFDxfiR5uUo8/Vy1YuFIyDbK39hJnwyS1Dq6rqZd5+
+wJewvo8Jef/oqYsB+kGeiv5WIeEUz/CQKAWkpvHFYcOCP1WwTe1W0vsMjF8tmjxi
+5tHKzWqFo/O03dyJf+5C03h2ud+1p9V35bKP3OloKSKTPDUXIC44Pem0u3wQ+yH6
+rVz3iF8vy7zfylgHM3IgTsCYgyDbYw==
+=u87Z
+-----END PGP SIGNATURE-----
+
+--pEWZi37D5UvUp+u6--
