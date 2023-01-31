@@ -2,185 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0309C683782
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DAB683783
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:26:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjAaU0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 15:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39382 "EHLO
+        id S230347AbjAaU0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 15:26:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjAaU0c (ORCPT
+        with ESMTP id S230481AbjAaU0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 15:26:32 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B551568BE
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:26:29 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id g14so17166529ljh.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:26:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WicTkXVndZ07GHnNQe6ipzb4YsdiJNTuwmAU0Sz2L8=;
-        b=Bf9Ov4q3GVnCky1QJQ+/a57YxXm3bt+7lNTdglDfPdLnCZxChH6RrzNB3yBU5kKzwE
-         AuLNylMeYEF6xFn5H45h0e8spBQb7yFBlHAAFR63Yz514vMYRu6nw0BTBtjQ2J8Oq+Hl
-         Bd4ubKyJthMk2RjDxPhxBauT+gdBgg9fG2u60=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+WicTkXVndZ07GHnNQe6ipzb4YsdiJNTuwmAU0Sz2L8=;
-        b=ZV6QjdjfgSMsJfVQx+G8kn8Zs0UwbktaLVLyeG1P9XqhlSFXWH6fVgIQx0G2qcXZX7
-         6gCp5PQdRqXIkp0/lBVkjafZFaIbcvtaz3uzHlnPg7TdBioTMDM9fTYkGebTzTYNi/m8
-         oH4Y30MFiEUrN4K7//6hnd3JOBQsJvABVqPT8MFQf4K5mLIFeP+bR0rva6XGQ+dWzlN/
-         dAZp3Dyl58qtOxv6b4OujghPepGXxhg1G0aFtOvVeoKpKLksgCat7/aRc0jkvVRPKlYo
-         XesL7xXDhhJDPd5ENln/5wiW0esDcIwnAZCvGagSuhPfetR2cXyXOace20cdcz/zyeHY
-         1Kyg==
-X-Gm-Message-State: AO0yUKUPQQWgc7RoNKjo4TmdpiFed3ODZQaqCFK/zUEy5elnTY/f/wDV
-        lhDmlPMLaZNKmLjxvSraEtekQ7cXPuJwLGC3QstmrA==
-X-Google-Smtp-Source: AK7set8KBkpr+y1ysEDqO7DO4k/P1BRS4tDvdlexR3qHwklCkm97ZcXq8H83tLgM5vq/VuQIz+wEKfhUwl5QRRzr/0E=
-X-Received: by 2002:a2e:9dc9:0:b0:28e:bba7:22dc with SMTP id
- x9-20020a2e9dc9000000b0028ebba722dcmr2751500ljj.56.1675196787342; Tue, 31 Jan
- 2023 12:26:27 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 31 Jan 2023 12:26:26 -0800
+        Tue, 31 Jan 2023 15:26:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C7256ED8;
+        Tue, 31 Jan 2023 12:26:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62CE4615A7;
+        Tue, 31 Jan 2023 20:26:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCA80C433D2;
+        Tue, 31 Jan 2023 20:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675196795;
+        bh=gq2zoV3fgp96Ze7JcC1BY/MySF5tsWqOBisbKmRgfYI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ccZC3G6ntKeYo84IV6BMZL2L9iGDG+TyMIuIQ3HPttMWnSXSvip7Dlm0dgHSkR2Km
+         Rc8yFFmi2Oas8Ql5d75DKnxSFhyuGaT3u344pexGbv94pg1zh5pIpCgdQnmTPPujRP
+         mTedh3xYPk/OncYTa5PvyZXiae6KchaFvPyMUnE8Pp++ciLfZc1HYT1rl1v6UQyxfV
+         y2Rlw77fSNPo4pbAq/eeeQ+6L11X2TTfYJh0EZn63fDji0+pzNrSR0bFECmQvfwcty
+         1Z1n1fB2f4qG0cC8XA1NyQkAt2tAOX4J+SMvE9NS6uIknVhX+59e9HXlH2Usm7FhA9
+         RZxz60x/7NLAg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 511B75C0510; Tue, 31 Jan 2023 12:26:35 -0800 (PST)
+Date:   Tue, 31 Jan 2023 12:26:35 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <yujie.liu@intel.com>
+Cc:     Liam Howlett <liam.howlett@oracle.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [linus:master] [maple_tree] 120b116208:
+ INFO:task_blocked_for_more_than#seconds
+Message-ID: <20230131202635.GA3019407@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202301310940.4a37c7af-yujie.liu@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <c8d779fe-2508-4aa1-8de9-26d858bc068b@quicinc.com>
-References: <1674728065-24955-1-git-send-email-quic_srivasam@quicinc.com>
- <1674728065-24955-6-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n50y4JEQqW2wgS_qoDkdrqP=bzpC6b_LpA6Q9P+jDc00ZQ@mail.gmail.com> <c8d779fe-2508-4aa1-8de9-26d858bc068b@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 31 Jan 2023 12:26:26 -0800
-Message-ID: <CAE-0n50fJWqHE0A3R8yawGZAcNb_QDNQ5h2=CXxKAX0eOghegQ@mail.gmail.com>
-Subject: Re: [PATCH v6 5/6] clk: qcom: lpassaudiocc-sc7280: Merge lpasscc into lpass_aon
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, broonie@kernel.org,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-        robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202301310940.4a37c7af-yujie.liu@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2023-01-31 01:29:16)
->
-> On 1/31/2023 6:34 AM, Stephen Boyd wrote:
-> Thanks for your Time Stephen!!!
-> > Quoting Srinivasa Rao Mandadapu (2023-01-26 02:14:24)
-> >> Merge lpasscc clocks into lpass_aon clk_regmap structure as they
-> >> are using same register space.
-> >> Add conditional check for doing lpasscc clock registration only
-> >> if regname specified in device tree node.
-> >> In existing implementation, lpasscc clocks and lpass_aon clocks are
-> >> being registered exclusively and overlapping if both of them are
-> >> to be used.
-> >> This is required to avoid such overlapping and to register
-> >> lpasscc clocks and lpass_aon clocks simultaneously.
-> > Can you describe the register ranges that are overlapping?
-> Okay. Will add register ranges in description.
+On Tue, Jan 31, 2023 at 03:18:22PM +0800, kernel test robot wrote:
+> Hi Liam,
+> 
+> We caught a "task blocked" dmesg in maple tree test. Not sure if this
+> is expected for maple tree test, so we are sending this report for
+> your information. Thanks.
+> 
+> Greeting,
+> 
+> FYI, we noticed INFO:task_blocked_for_more_than#seconds due to commit (built with clang-14):
+> 
+> commit: 120b116208a0877227fc82e3f0df81e7a3ed4ab1 ("maple_tree: reorganize testing to restore module testing")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> in testcase: boot
+> 
+> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+> 
+> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> [   17.318428][    T1] calling  maple_tree_seed+0x0/0x15d0 @ 1
+> [   17.319219][    T1] 
+> [   17.319219][    T1] TEST STARTING
+> [   17.319219][    T1] 
+> [  999.249871][   T23] INFO: task rcu_scale_shutd:59 blocked for more than 491 seconds.
+> [  999.253363][   T23]       Not tainted 6.1.0-rc4-00003-g120b116208a0 #1
+> [  999.254249][   T23] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [  999.255390][   T23] task:rcu_scale_shutd state:D stack:30968 pid:59    ppid:2      flags:0x00004000
+> [  999.256934][   T23] Call Trace:
+> [  999.257418][   T23]  <TASK>
+> [  999.257900][   T23]  __schedule+0x169b/0x1f90
+> [  999.261677][   T23]  schedule+0x151/0x300
+> [  999.262281][   T23]  ? compute_real+0xe0/0xe0
+> [  999.263364][   T23]  rcu_scale_shutdown+0xdd/0x130
+> [  999.264093][   T23]  ? wake_bit_function+0x2c0/0x2c0
+> [  999.268985][   T23]  kthread+0x309/0x3a0
+> [  999.269958][   T23]  ? compute_real+0xe0/0xe0
+> [  999.270552][   T23]  ? kthread_unuse_mm+0x200/0x200
+> [  999.271281][   T23]  ret_from_fork+0x1f/0x30
+> [  999.272385][   T23]  </TASK>
+> [  999.272865][   T23] 
+> [  999.272865][   T23] Showing all locks held in the system:
+> [  999.273988][   T23] 2 locks held by swapper/0/1:
+> [  999.274684][   T23] 1 lock held by khungtaskd/23:
+> [  999.275400][   T23]  #0: ffffffff88346e00 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x8/0x30
+> [  999.277171][   T23] 
+> [  999.277525][   T23] =============================================
+> [  999.277525][   T23] 
+> [ 1049.050884][    T1] maple_tree: 12610686 of 12610686 tests passed
+> 
+> 
+> If you fix the issue, kindly add following tag
+> | Reported-by: kernel test robot <yujie.liu@intel.com>
+> | Link: https://lore.kernel.org/oe-lkp/202301310940.4a37c7af-yujie.liu@intel.com
 
-Thanks!
+Liam brought this to my attention on IRC, and it looks like the root
+cause is that the rcuscale code does not deal gracefully with grace
+periods that are in much excess of a second in duration.
 
-> >
-> > Here's what I see in DT right now:
-> >
-> >                  lpasscc: lpasscc@3000000 {
-> >                          compatible = "qcom,sc7280-lpasscc";
-> >                          reg = <0 0x03000000 0 0x40>,
-> >                                <0 0x03c04000 0 0x4>;
-> >                          ...
-> >                  };
-> >
-> >                  lpass_audiocc: clock-controller@3300000 {
-> >                          compatible = "qcom,sc7280-lpassaudiocc";
-> >                          reg = <0 0x03300000 0 0x30000>,
-> >                                <0 0x032a9000 0 0x1000>;
-> >                          ...
-> >                  };
-> >
-> >                  lpass_aon: clock-controller@3380000 {
-> >                          compatible = "qcom,sc7280-lpassaoncc";
-> >                          reg = <0 0x03380000 0 0x30000>;
-> >                          ...
-> >                  };
-> >
-> >                  lpass_core: clock-controller@3900000 {
-> >                          compatible = "qcom,sc7280-lpasscorecc";
-> >                          reg = <0 0x03900000 0 0x50000>;
-> >                          ...
-> >                  };
-> >
-> > Presumably lpascc is really supposed to be a node named
-> > 'clock-controller' and is the node that is overlapping with lpass_aon?
->
-> Okay. As it's been coming previous patches, didn't change the name.
->
-> May be we need to do it as separate patch.
+Now, it might well be worth looking into why the grace periods were taking
+that long, but if you were running Maple Tree stress tests concurrently
+with rcuscale, this might well be expected behavior.
 
-Sure, another patch to rename lpasscc to clock-controller would be
-appreciated.
+So, does the patch below clear this up for you?
 
->
-> Yes. It's overlapping with lpass_aon ( <0 0x03380000 0 0x30000>).
->
-> CC clocks range is <0 0x03389000 0 0x24>;
+							Thanx, Paul
 
-Is that a new register range for lpasscc? Why do we have that node at
-all? Can we add different properties to the existing lpass_audiocc,
-lpass_aon, or lpass_core nodes to indicate what clks should or shouldn't
-be registered or provided to the kernel?
+------------------------------------------------------------------------
 
->
-> >
-> >> Fixes: 4ab43d171181 ("clk: qcom: Add lpass clock controller driver for SC7280")
-> >> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> >> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-> >> ---
-> >>   drivers/clk/qcom/lpassaudiocc-sc7280.c | 13 +++++++++----
-> >>   1 file changed, 9 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-> >> index 1339f92..8e2f433 100644
-> >> --- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
-> >> +++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-> >> @@ -826,10 +829,12 @@ static int lpass_aon_cc_sc7280_probe(struct platform_device *pdev)
-> >>                  return ret;
-> >>
-> >>          if (of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode")) {
-> >> -               lpass_audio_cc_sc7280_regmap_config.name = "cc";
-> >> -               desc = &lpass_cc_sc7280_desc;
-> >> -               ret = qcom_cc_probe(pdev, desc);
-> >> -               goto exit;
-> >> +               res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cc");
-> > We shouldn't need to check for reg-name property. Instead, the index
-> > should be the only thing that matters.
->
-> As qcom_cc_probe() function is mapping the zero index reg property, and
->
-> in next implementation qcom_cc_really_probe() is also probing zero index
-> reg property,
->
-> unable to map the same region twice.
+commit 8e44d51e3411994091f7c7c136286d82c5757a4a
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Tue Jan 31 12:08:54 2023 -0800
 
-Use qcom_cc_probe_by_index()?
+    rcuscale: Move shutdown from wait_event() to wait_event_idle()
+    
+    The rcu_scale_shutdown() and kfree_scale_shutdown() kthreads/functions
+    use wait_event() to wait for the rcuscale test to complete.  However,
+    each updater thread in such a test waits for at least 100 grace periods.
+    If each grace period takes more than 1.2 seconds, which is long, but
+    not insanely so, this can trigger the hung-task timeout.
+    
+    This commit therefore replaces those wait_event() calls with calls to
+    wait_event_idle(), which do not trigger the hung-task timeout.
+    
+    Reported-by: kernel test robot <yujie.liu@intel.com>
+    Reported-by: Liam Howlett <liam.howlett@oracle.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
->
-> Hence all I want here is to skip this cc clock probing by keeping some
-> check.
->
-> If we remove, it may cause ABI break.
->
-
-I'm not sure what you mean here about ABI break, but hopefully just
-using qcom_cc_probe_by_index() works!
+diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
+index 91fb5905a008f..4120f94030c3c 100644
+--- a/kernel/rcu/rcuscale.c
++++ b/kernel/rcu/rcuscale.c
+@@ -631,8 +631,7 @@ static int compute_real(int n)
+ static int
+ rcu_scale_shutdown(void *arg)
+ {
+-	wait_event(shutdown_wq,
+-		   atomic_read(&n_rcu_scale_writer_finished) >= nrealwriters);
++	wait_event_idle(shutdown_wq, atomic_read(&n_rcu_scale_writer_finished) >= nrealwriters);
+ 	smp_mb(); /* Wake before output. */
+ 	rcu_scale_cleanup();
+ 	kernel_power_off();
+@@ -771,8 +770,8 @@ kfree_scale_cleanup(void)
+ static int
+ kfree_scale_shutdown(void *arg)
+ {
+-	wait_event(shutdown_wq,
+-		   atomic_read(&n_kfree_scale_thread_ended) >= kfree_nrealthreads);
++	wait_event_idle(shutdown_wq,
++			atomic_read(&n_kfree_scale_thread_ended) >= kfree_nrealthreads);
+ 
+ 	smp_mb(); /* Wake before output. */
+ 
