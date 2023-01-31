@@ -2,173 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F80682891
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F61682896
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbjAaJTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S230474AbjAaJUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbjAaJSb (ORCPT
+        with ESMTP id S229692AbjAaJUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:18:31 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59C710AB3;
-        Tue, 31 Jan 2023 01:17:41 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V4OLPA003361;
-        Tue, 31 Jan 2023 09:17:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=5nYgaJWsCSJ5rGq768SJ/8y1lpd2DBZK7ktGQOW3ufc=;
- b=OQiALB62RxfP7W6iXXxwqa2CHlXXvDUeP3XUGhQOn5y7OKFuxDqW3mAM8xmpX+EKXpLY
- Mf0ij0yRWR9u5VKyCs41JRQDAYlIJMea2zN9RCTnXJE3Exgb8ugmUAXAXhr129ZVcXt9
- XyXRfFs4jMuoDRrlvzesX1hEoCDQNVhCXlmRzhcmnYVSRtuLksjaFJc578gnCQ0eb1JW
- FWb2CbnqWgcjaC/vddfiWS2ut29sRWUO1pi1tDwiuKB0zzPOvl5Qr/laDqBY1on8s7yw
- TyHsLCrsALw1S1A7fbzj/yWjKS/jmBtzwOb9TqPTXHaHH8JB1pYGz7FSo0DHpGU1HnGD Ug== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3neuwc8rky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 09:17:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30V9HFVj026111
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 09:17:15 GMT
-Received: from [10.50.40.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 01:17:07 -0800
-Message-ID: <ea0dbbf0-958c-145b-abaa-3bbcb620df5c@quicinc.com>
-Date:   Tue, 31 Jan 2023 14:47:00 +0530
+        Tue, 31 Jan 2023 04:20:15 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABC6CD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:20:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675156814; x=1706692814;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4JM1VnPDZosr3/MSF2FzrL7UH4abNkI0iF6A5UQGphM=;
+  b=KLBmhLNcApntmahUMqAIE2SJOnix/l9zTQ7g2P4MVz+nwWSlkzaWqvi4
+   hGcwWV3nS+tjEAesb8+/Je+2Mh/6VdyuoW81kjbnSlEnZQ6QQ8ah6C04G
+   B6XB6HoNJFRxyNK0Pq3D2FD/l20wXqcv0lGI4Jg9nUjAjxxHXW9cyZpSn
+   DcZohYWsHRbKgG72y/TDVjgS5KpfgkSd/Eu6f1ur9vQqEgFku/HyWP7oc
+   hRKq/ydxqwC0pdK+WXP5Jrzz0h8P0FdwUXmqf2bhWP92ZUnmVdczl2N1z
+   Q1sFV6H3XSiqg6jRt3XKvQ9M8SK4ttuiQJm+SbECf9UghlYvw2OYFoU8O
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="392340234"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="392340234"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 01:20:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="993199875"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="993199875"
+Received: from jlawryno-mobl.ger.corp.intel.com (HELO [10.237.142.112]) ([10.237.142.112])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 01:20:10 -0800
+Message-ID: <6b48eef6-2f9c-9673-fe3d-009d29dea641@linux.intel.com>
+Date:   Tue, 31 Jan 2023 10:20:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 6/6] clk: qcom: Fix APSS PLL and RCG Configuration
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] [v2] accel: fix CONFIG_DRM dependencies
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <jassisinghbrar@gmail.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230113143647.14961-1-quic_devipriy@quicinc.com>
- <20230113143647.14961-7-quic_devipriy@quicinc.com>
- <b87ab80d-0936-5a5a-25da-35c0dbdede33@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <b87ab80d-0936-5a5a-25da-35c0dbdede33@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@kernel.org>
+Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Melissa Wen <mwen@igalia.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Airlie <airlied@redhat.com>
+References: <20230127221504.2522909-1-arnd@kernel.org>
+ <CAFCwf10RRFUqYEATg7p-LmKSEkFtAhneufJTdezFA7i3HJaDDw@mail.gmail.com>
+From:   Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <CAFCwf10RRFUqYEATg7p-LmKSEkFtAhneufJTdezFA7i3HJaDDw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TnZPL9HQgdMgllX-CoziRcCUXd3EhTPm
-X-Proofpoint-ORIG-GUID: TnZPL9HQgdMgllX-CoziRcCUXd3EhTPm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_04,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- malwarescore=0 bulkscore=0 suspectscore=0 phishscore=0 spamscore=0
- impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310082
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for taking time to review the patch
-
-On 1/13/2023 8:50 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 13.01.2023 15:36, devi priya wrote:
->> Included CLK_IS_CRITICAL flag which helps to properly enable
->> the APSS PLL during bootup.
-> Please describe the issue and not only the user-visible impact it
-> makes. Does the PLL get shut down by clk_ignore_unused? Maybe you
-> would be interested in the sync_state changes that landed in recent
-> -next that may solve it for you?
-> 
-> I don't think it should be always-on, as you have an alternate source
-> for low power modes, adding CLK_IS_CRITICAL will keep the PLL enabled
-> even if you're not using it.
-Yeah, got it. Will drop the critical flag
-> 
->> clk_rcg2_ops should be used for APSS clock RCG, as other ops
->> will not configure the RCG register
-> RCG register meaning RCG register*s*, meaning in this case M/N/D
-> which would be required for proper rate setting and not only input
-> switching (which arguably doesn't seem to be of much concern on a
-> single-parent clock)? This all is not obvious..
-> 
-> Konrad
-The source selection is done by configuring the RCGR config register 
-with the source entry (P_APSS_PLL_EARLY) added to the frequency table. 
-Proper rate is achieved by configuring the PLL and hence M/N/D values 
-are not configured
+On 31.01.2023 09:53, Oded Gabbay wrote:
+> On Sat, Jan 28, 2023 at 12:15 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >>
->> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> At the moment, accel drivers can be built-in even with CONFIG_DRM=m,
+>> but this causes a link failure:
+>>
+>> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_dev_init':
+>> ivpu_drv.c:(.text+0x1535): undefined reference to `drmm_kmalloc'
+>> x86_64-linux-ld: ivpu_drv.c:(.text+0x1562): undefined reference to `drmm_kmalloc'
+>> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_remove':
+>> ivpu_drv.c:(.text+0x1faa): undefined reference to `drm_dev_unregister'
+>> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_probe':
+>> ivpu_drv.c:(.text+0x1fef): undefined reference to `__devm_drm_dev_alloc'
+>>
+>> The problem is that DRM_ACCEL is a 'bool' symbol symbol, so driver that
+>> only depend on DRM_ACCEL but not also on DRM do not see the restriction
+>> to =m configs.
+>>
+>> To ensure that each accel driver has an implied dependency on CONFIG_DRM,
+>> enclose the entire Kconfig file in an if/endif check.
+>>
+>> Fixes: 8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 >> ---
->>   drivers/clk/qcom/apss-ipq-pll.c | 1 +
->>   drivers/clk/qcom/apss-ipq6018.c | 8 +++++++-
->>   2 files changed, 8 insertions(+), 1 deletion(-)
+>> v2: rearrage the DRM dependency rather than requiring DRM to be built-in
+>> ---
+>>  drivers/accel/Kconfig | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
 >>
->> diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
->> index dd0c01bf5a98..75486a124fcd 100644
->> --- a/drivers/clk/qcom/apss-ipq-pll.c
->> +++ b/drivers/clk/qcom/apss-ipq-pll.c
->> @@ -33,6 +33,7 @@ static struct clk_alpha_pll ipq_pll = {
->>   			},
->>   			.num_parents = 1,
->>   			.ops = &clk_alpha_pll_huayra_ops,
->> +			.flags = CLK_IS_CRITICAL,
->>   		},
->>   	},
->>   };
->> diff --git a/drivers/clk/qcom/apss-ipq6018.c b/drivers/clk/qcom/apss-ipq6018.c
->> index f2f502e2d5a4..0d0e7196a4dc 100644
->> --- a/drivers/clk/qcom/apss-ipq6018.c
->> +++ b/drivers/clk/qcom/apss-ipq6018.c
->> @@ -33,15 +33,21 @@ static const struct parent_map parents_apcs_alias0_clk_src_map[] = {
->>   	{ P_APSS_PLL_EARLY, 5 },
->>   };
->>   
->> +static const struct freq_tbl ftbl_apcs_alias0_clk_src[] = {
->> +	{ .src = P_APSS_PLL_EARLY, .pre_div = 1 },
->> +	{ }
->> +};
+>> diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
+>> index 834863902e16..c437206aa3f1 100644
+>> --- a/drivers/accel/Kconfig
+>> +++ b/drivers/accel/Kconfig
+>> @@ -6,9 +6,10 @@
+>>  # as, but not limited to, Machine-Learning and Deep-Learning acceleration
+>>  # devices
+>>  #
+>> +if DRM
 >> +
->>   static struct clk_rcg2 apcs_alias0_clk_src = {
->>   	.cmd_rcgr = 0x0050,
->> +	.freq_tbl = ftbl_apcs_alias0_clk_src,
->>   	.hid_width = 5,
->>   	.parent_map = parents_apcs_alias0_clk_src_map,
->>   	.clkr.hw.init = &(struct clk_init_data){
->>   		.name = "apcs_alias0_clk_src",
->>   		.parent_data = parents_apcs_alias0_clk_src,
->>   		.num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
->> -		.ops = &clk_rcg2_mux_closest_ops,
->> +		.ops = &clk_rcg2_ops,
->>   		.flags = CLK_SET_RATE_PARENT,
->>   	},
->>   };
-Best Regards,
-Devi Priya
+>>  menuconfig DRM_ACCEL
+>>         bool "Compute Acceleration Framework"
+>> -       depends on DRM
+>>         help
+>>           Framework for device drivers of compute acceleration devices, such
+>>           as, but not limited to, Machine-Learning and Deep-Learning
+>> @@ -25,3 +26,5 @@ menuconfig DRM_ACCEL
+>>
+>>  source "drivers/accel/habanalabs/Kconfig"
+>>  source "drivers/accel/ivpu/Kconfig"
+>> +
+>> +endif
+>> --
+>> 2.39.0
+>>
+> This patch is:
+> Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+
+Applied to drm-misc-next.
+Thanks.
