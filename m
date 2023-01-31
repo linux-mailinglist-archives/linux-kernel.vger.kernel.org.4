@@ -2,162 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D583682F94
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB850682F96
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbjAaOp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
+        id S231962AbjAaOqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:46:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjAaOp4 (ORCPT
+        with ESMTP id S231236AbjAaOqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:45:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DAA46727
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:45:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675176312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xn8TtSD/AsRILC72eNaykv7ZyTuVxpBZIKtdo2DAH1A=;
-        b=gEU/x9Qk0nTqRgCWLGJpREmzt3vmBDMEnqa955ocTkklLDrmHQVZgtiuhoXgWwm+jf5ggH
-        9obXMuCbS6BWUkw16zk7KZbj500Y9mQBZzjvL1EfqlSXLLw6+pK7diDFOuM1u4GXBNT2OS
-        J4sHUfsDZ0TQkLAKoYfSCsKv3pId4fs=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-385-mrGfdHj0PLqTMJfe87-rJQ-1; Tue, 31 Jan 2023 09:45:10 -0500
-X-MC-Unique: mrGfdHj0PLqTMJfe87-rJQ-1
-Received: by mail-qk1-f200.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so9215196qkn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:45:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xn8TtSD/AsRILC72eNaykv7ZyTuVxpBZIKtdo2DAH1A=;
-        b=cOE6IrE5onbGHL4Tw13yhZPrxZTrnoq4hwfVgBJszVzrp3b6muGh5qyztCVp76r6rE
-         4/rJINr0DvRNXhFx4zbupKf8bYnwxeED1Fb/jGiE2yHQ67+Ddf69ws2nAXWr9X/hzddP
-         LYnYQzdqIixKoz6P+WbsxwiMKF0YKSx3dnXKfbfm4/Mwf7CTxGrdqAwzOkRCbsF3kb6H
-         QGlKFf35zckqZUpHKEWH1gJ2bqsIiCFocaWtwyGBJWnmIp9JAoQBy9IzNN87vRU9CLFs
-         0FLW2MNThe3JLYV3GPaqHPwTSqXbfOiQSHMWLMiH4RV5TRWlDcvmcglg7Z/4lNkHaCs2
-         Iffw==
-X-Gm-Message-State: AO0yUKXpCd+8FoyGL5sX/KJDniB1rB8yc9e48tj7SMAz2OoLY6F+Ktxt
-        hyzHYX2Jw1M/smos8jS7lsk8QU0akCunlQ1eqLR+3TKDa+hFqMe4uojpTVLkPEL81Js7j2lvSlu
-        D8+YwV8wXU8d9+qAI8lKHQYD8
-X-Received: by 2002:a0c:c484:0:b0:537:7e81:73ec with SMTP id u4-20020a0cc484000000b005377e8173ecmr10038060qvi.3.1675176308467;
-        Tue, 31 Jan 2023 06:45:08 -0800 (PST)
-X-Google-Smtp-Source: AK7set8/6AUEXMvGYSP/0m29hp2+J2HOrCZjUA3ETettzdz1KyQPZ9G2hmwb7tu/ki9YzwSEWJftrg==
-X-Received: by 2002:a0c:c484:0:b0:537:7e81:73ec with SMTP id u4-20020a0cc484000000b005377e8173ecmr10038022qvi.3.1675176308174;
-        Tue, 31 Jan 2023 06:45:08 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id o62-20020a37be41000000b006fcaa1eab0esm10147005qkf.123.2023.01.31.06.45.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 06:45:07 -0800 (PST)
-Message-ID: <ede0b4ea92187ca7b6303f3c1c98c26f513a3ce9.camel@redhat.com>
-Subject: Re: [PATCH v2 3/4] selftests: net: udpgso_bench: Fix racing bug
- between the rx/tx programs
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Willem de Bruijn <willemb@google.com>,
-        Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 31 Jan 2023 15:45:04 +0100
-In-Reply-To: <CA+FuTSdtzFXWWDLk=LOdrkS00oH4HGvtoYYQh7YQd2ADsp0UbA@mail.gmail.com>
-References: <20230131130412.432549-1-andrei.gherzan@canonical.com>
-         <20230131130412.432549-3-andrei.gherzan@canonical.com>
-         <CA+FuTSdtzFXWWDLk=LOdrkS00oH4HGvtoYYQh7YQd2ADsp0UbA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
+        Tue, 31 Jan 2023 09:46:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A347EF3;
+        Tue, 31 Jan 2023 06:46:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C561B81D1C;
+        Tue, 31 Jan 2023 14:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86FBFC433EF;
+        Tue, 31 Jan 2023 14:46:06 +0000 (UTC)
+Date:   Tue, 31 Jan 2023 09:46:02 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] tracing: clean up some inconsistent indentings
+Message-ID: <20230131094404.06a477fd@gandalf.local.home>
+In-Reply-To: <20230131061935.53453-1-yang.lee@linux.alibaba.com>
+References: <20230131061935.53453-1-yang.lee@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-31 at 08:33 -0500, Willem de Bruijn wrote:
-> On Tue, Jan 31, 2023 at 8:06 AM Andrei Gherzan
-> <andrei.gherzan@canonical.com> wrote:
-> >=20
-> > "udpgro_bench.sh" invokes udpgso_bench_rx/udpgso_bench_tx programs
-> > subsequently and while doing so, there is a chance that the rx one is n=
-ot
-> > ready to accept socket connections. This racing bug could fail the test
-> > with at least one of the following:
-> >=20
-> > ./udpgso_bench_tx: connect: Connection refused
-> > ./udpgso_bench_tx: sendmsg: Connection refused
-> > ./udpgso_bench_tx: write: Connection refused
-> >=20
-> > This change addresses this by making udpgro_bench.sh wait for the rx
-> > program to be ready before firing off the tx one - with an exponential =
-back
-> > off algorithm from 1s to 10s.
-> >=20
-> > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
->=20
-> please CC: reviewers of previous revisions on new revisions
->=20
-> also for upcoming patches: please clearly mark net or net-next.
-> > ---
-> >  tools/testing/selftests/net/udpgso_bench.sh | 18 ++++++++++++++++++
-> >  1 file changed, 18 insertions(+)
-> >=20
-> > diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testin=
-g/selftests/net/udpgso_bench.sh
-> > index dc932fd65363..20b5db8fcbde 100755
-> > --- a/tools/testing/selftests/net/udpgso_bench.sh
-> > +++ b/tools/testing/selftests/net/udpgso_bench.sh
-> > @@ -7,6 +7,7 @@ readonly GREEN=3D'\033[0;92m'
-> >  readonly YELLOW=3D'\033[0;33m'
-> >  readonly RED=3D'\033[0;31m'
-> >  readonly NC=3D'\033[0m' # No Color
-> > +readonly TESTPORT=3D8000 # Keep this in sync with udpgso_bench_rx/tx
->=20
-> then also pass explicit -p argument to the processes to keep all three
-> consistent
->=20
-> >=20
-> >  readonly KSFT_PASS=3D0
-> >  readonly KSFT_FAIL=3D1
-> > @@ -56,10 +57,27 @@ trap wake_children EXIT
-> >=20
-> >  run_one() {
-> >         local -r args=3D$@
-> > +       local -r init_delay_s=3D1
-> > +       local -r max_delay_s=3D10
-> > +       local delay_s=3D0
-> > +       local nr_socks=3D0
-> >=20
-> >         ./udpgso_bench_rx &
-> >         ./udpgso_bench_rx -t &
-> >=20
-> > +       # Wait for the above test program to get ready to receive conne=
-ctions.
-> > +       delay_s=3D"${init_delay_s}"
-> > +       while [ "$delay_s" -lt "$max_delay_s" ]; do
-> > +               nr_socks=3D"$(ss -lnHi | grep -c "\*:${TESTPORT}")"
-> > +               [ "$nr_socks" -eq 2 ] && break
-> > +               sleep "$delay_s"
-> > +               delay=3D"$((delay*2))"
->=20
-> I don't think we need exponential back-off for something this simple
+On Tue, 31 Jan 2023 14:19:35 +0800
+Yang Li <yang.lee@linux.alibaba.com> wrote:
 
-Agreed. Additionally you could use constant, sub-second delay (say 0.1)
-to keep the runtime delta relatively low.
+> kernel/trace/trace_events_synth.c:567 trace_event_raw_event_synth() warn: inconsistent indenting
+> 
 
-Cheers,
+NACK!
 
-Paolo
+This just removes the warning and hence it hides the bug!
+
+This was already reported by kernel test robot:
+   https://lore.kernel.org/all/202301302110.mEtNwkBD-lkp@intel.com/
+
+I have a fix but haven't posted it yet.
+
+-- Steve
+
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3892
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  kernel/trace/trace_events_synth.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+> index adb630633f31..949d4cbe3f82 100644
+> --- a/kernel/trace/trace_events_synth.c
+> +++ b/kernel/trace/trace_events_synth.c
+> @@ -564,7 +564,8 @@ static notrace void trace_event_raw_event_synth(void *__data,
+>  					   event->fields[i]->is_dynamic,
+>  					   data_size, &n_u64);
+>  			data_size += len; /* only dynamic string increments */
+> -		} if (event->fields[i]->is_stack) {
+> +		}
+> +		if (event->fields[i]->is_stack) {
+>  		        long *stack = (long *)(long)var_ref_vals[val_idx];
+>  
+>  			len = trace_stack(entry, event, stack,
 
