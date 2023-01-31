@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2C668312D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D0168312C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbjAaPSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S233110AbjAaPST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233179AbjAaPSB (ORCPT
+        with ESMTP id S232860AbjAaPR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:18:01 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9445A59B4F
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:16:14 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id e9so8536225vsj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:16:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hqSkLxxkS4WxXckkEqwqJ2FoqZVZdDRCF2SZ/0LGP88=;
-        b=JtZQ/lBmt1byjRUtXNuodezmFLI68Y4U1n9cV4QC89Jrp7zRN+opOXcshCLau26tiK
-         Nd7XZH0XhmPh/ylPrymz6yitRCTAk77brQH6Y7T9Rwe3+PBn1kmbTPPEa5n39WSpbPC/
-         3UVWX2vsjw2pYxx03h0V6D3FqfEWNxMiI4V+1HfBhQ7IPqlBbu3/6JtPVaSx9TOUQRxf
-         2mhIwkexBZz2BsG43yqbCb10cc/be7/cOMguEs3i6vHqPgytYuZugK70wSwuExWwjz2Y
-         zsQhqw+EG63ShEJ2r0cpRtXL/S2Fd3ulNRqK5Gi2R4vnSEqOzBBhRqgx2w0+r7or3E81
-         nYJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hqSkLxxkS4WxXckkEqwqJ2FoqZVZdDRCF2SZ/0LGP88=;
-        b=V9dQrKFCw4Z3dD3D0Sfa0SsVGe8FOtOPxqkwYlmr9/HyaOk7d2/201Exq8457HEWsB
-         tllNUz6xw88V7QS77vnMVgKSYBOYcxujxtHqSM72DU+9+rA8121Z/FKzNAMev2XOkFdQ
-         Luubr04/20QDRyMsEbqsjt3PCiCCoVH7n86oWjo+3P3uOEuaNhJBV9Gh89RoNrI1uGLW
-         KfYEMwHg5EU3RIP9I+LhnYFZqrEt3c+SyssK00+XyUnrVk48EHTiJh9ANA/jEKB9AMaR
-         R7eZ1KMTDoBdEHDSWPbIt1CguhqVMgZeUlHTO8OY1CQkHDhTYSqxwi3HBYRzkKTJIhm/
-         ZcPA==
-X-Gm-Message-State: AO0yUKWBUl0c7N8vsgMRBNQDEsn4cW5YCYtf+nnSGTlZxhj5ptQ6Fyf2
-        /tXKIag0ceHZT9/CU4UiA8qUMt1RrzpOVKXj6eadbw==
-X-Google-Smtp-Source: AK7set9TuI801MQUIobSqj1yTStH7qsNvDVpmcS4/LrfPrPNvx2T47lNeSF2Vu2NdDktr05dS0mA/2X+cH7Q7NH14kc=
-X-Received: by 2002:a67:c31e:0:b0:3ed:1e92:a87f with SMTP id
- r30-20020a67c31e000000b003ed1e92a87fmr2427528vsj.1.1675178173210; Tue, 31 Jan
- 2023 07:16:13 -0800 (PST)
+        Tue, 31 Jan 2023 10:17:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF52359241;
+        Tue, 31 Jan 2023 07:16:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE18A6156A;
+        Tue, 31 Jan 2023 15:15:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7449C433EF;
+        Tue, 31 Jan 2023 15:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675178154;
+        bh=tIlkIAwhoU4Gqa2trj8qjbDbCf3WrEZyMlMXKhe5lFg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N/skL8LazREI8qonSp4pRdocHg1sVW0HoCYsvF4IMaLoye9Zt9avHiYiHrhL2howy
+         V4PQDYxzOwUZpLWTpK2q//PgxxRy5u7HMJDKzKkQO91Sq/5i1FjXB9ooUKU3oPel33
+         cCLx3MQSUOJ9eVrt4iU6Lkdca521AvU46aE/bRVo=
+Date:   Tue, 31 Jan 2023 16:15:51 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     alex.gaynor@gmail.com, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com
+Subject: Re: [PATCH] rust: add this_module macro
+Message-ID: <Y9kwpw18SVx9GZC4@kroah.com>
+References: <Y9kasJQZf146ekp+@kroah.com>
+ <20230131150745.370345-1-yakoyoku@gmail.com>
 MIME-Version: 1.0
-References: <167467815773.463042.7022545814443036382.stgit@dwillia2-xfh.jf.intel.com>
-In-Reply-To: <167467815773.463042.7022545814443036382.stgit@dwillia2-xfh.jf.intel.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 31 Jan 2023 16:15:36 +0100
-Message-ID: <CAG_fn=U37EVEYYBTRWvOzVq7n0sSqaS5UN-9pjfZQnczAv3B4w@mail.gmail.com>
-Subject: Re: [PATCH v2] nvdimm: Support sizeof(struct page) > MAX_STRUCT_PAGE_SIZE
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     nvdimm@lists.linux.dev, stable@vger.kernel.org,
-        Marco Elver <elver@google.com>, Jeff Moyer <jmoyer@redhat.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131150745.370345-1-yakoyoku@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 9:23 PM Dan Williams <dan.j.williams@intel.com> wrote:
->
-> Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
->
-> ...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
-> potentially doubling in the case of CONFIG_KMSAN=y. Unfortunately this
-> doubles the amount of capacity stolen from user addressable capacity for
-> everyone, regardless of whether they are using the debug option. Revert
-> that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
-> allow for debug scenarios to proceed with creating debug sized page maps
-> with a compile option to support debug scenarios.
->
-> Note that this only applies to cases where the page map is permanent,
-> i.e. stored in a reservation of the pmem itself ("--map=dev" in "ndctl
-> create-namespace" terms). For the "--map=mem" case, since the allocation
-> is ephemeral for the lifespan of the namespace, there are no explicit
-> restriction. However, the implicit restriction, of having enough
-> available "System RAM" to store the page map for the typically large
-> pmem, still applies.
->
-> Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-> Cc: <stable@vger.kernel.org>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Marco Elver <elver@google.com>
-> Reported-by: Jeff Moyer <jmoyer@redhat.com>
-Acked-by: Alexander Potapenko <glider@google.com>
+On Tue, Jan 31, 2023 at 12:07:45PM -0300, Martin Rodriguez Reboredo wrote:
+> On Tue, Jan 31, 2023 at 02:42:08PM +0100, Greg KH wrote:
+> >On Tue, Jan 31, 2023 at 10:08:41AM -0300, Martin Rodriguez Reboredo wrote:
+> >> Adds a Rust equivalent to the handy THIS_MODULE macro from C.
+> >> 
+> >> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> >> ---
+> >>  rust/kernel/lib.rs | 12 ++++++++++++
+> >>  1 file changed, 12 insertions(+)
+> >> 
+> >> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> >> index e0b0e953907d..afb6b0390426 100644
+> >> --- a/rust/kernel/lib.rs
+> >> +++ b/rust/kernel/lib.rs
+> >> @@ -80,6 +80,18 @@ impl ThisModule {
+> >>      }
+> >>  }
+> >>  
+> >> +/// Returns the current module.
+> >> +#[macro_export]
+> >> +macro_rules! this_module {
+> >> +    () => {
+> >> +        if cfg!(MODULE) {
+> >> +            Some(unsafe { $crate::ThisModule::from_ptr(&mut $crate::bindings::__this_module) })
+> >> +        } else {
+> >> +            None
+> >> +        }
+> >> +    };
+> >> +}
+> >
+> >While this is handy, what exactly will it be used for?  The C
+> >wrappers/shim/whatever should probably handle this for you already when
+> >you save this pointer into a structure right?
+> >
+> >Surely you aren't trying to increment your own module's reference count,
+> >right?  That just doesn't work :)
+> >
+> >thanks,
+> >
+> >greg k-h
+> 
+> This was meant for setting the owner field of a file_operations struct
+> or the cra_owner field of crypto_alg and many other structs.
+
+But shouldn't the macro kernel::declare_file_operations() do this for
+you automagically?  You should never have to manually say "this module!"
+to any structure or function call if we do things right.
+
+Yes, many "old school" structures in the kernel do this, but we have
+learned from the 1990's, see the fun wrappers around simple things like
+usb_register_driver(); as an example of how the driver author themselves
+should never see a module pointer anywhere.
+
+> I know that increfing a module without a good reason is dead dumb, so
+> I'm not trying to send things in a downwards spiral. @@@
+
+That's good, but let's not add housekeeping requirements when we do not
+have to do so if at all possible please.
+
+thanks,
+
+greg k-h
