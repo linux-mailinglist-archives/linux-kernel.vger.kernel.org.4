@@ -2,190 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F9E682148
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:10:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F8668214B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjAaBKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S229486AbjAaBMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjAaBKQ (ORCPT
+        with ESMTP id S229817AbjAaBMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:10:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160F92194C
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:10:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EFC261355
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B66AC433D2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675127413;
-        bh=onpyFW2B+Gj5kU4fpubsm41eLl07ahwfV/KCzovWuCM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JLX3QU5f6YyvUji+AsZZDgDFjL93k9MqyxII8YTOjFjg9xb7qQusUInU5OBUWf7Uu
-         0mK51JzVBJgHZyPLpCYbVU7HsptcBbhQ6jMTTk22nzwL806mEeTkIt98D39v54yXv+
-         +sLcniGZ5f3crLxq3qobHzYMiNH7fa1gL6l4sHG+ZCoz1yyJn71JkTKYaAeaXnGAs3
-         kZptq0fewUUZZdUrjD3OuTsaKLzaIFPJYuY0x6Is68I3VfJLJFEz5I2bzWRmkbWPdq
-         z1mwri75ZMYOyj+mjcg7vhjR51l5hgf3H83m4PDhrfxe7ZfghYMYIir5fVGMnADnyC
-         OzZ9FgojgSoGA==
-Received: by mail-ed1-f53.google.com with SMTP id be12so1647879edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:10:13 -0800 (PST)
-X-Gm-Message-State: AFqh2krkqhgNTTKYQB7EXVw9kVYcOhZL7oYNFXnGtF8oTakEBkGtrDsj
-        YXVn4GxN3KAJ7TshRpyeE0tzN2N9ZGY5b652XP4=
-X-Google-Smtp-Source: AMrXdXsIBsel5Hml0GeDeoAvVHwBKmoYikSeM8cUxgU/ynijJ65Yr62SwxH+Ic34fjMwvakQ3EXbZiCwVVaf5q+hTIM=
-X-Received: by 2002:aa7:dbd9:0:b0:49c:ea59:46b with SMTP id
- v25-20020aa7dbd9000000b0049cea59046bmr10186437edt.54.1675127411777; Mon, 30
- Jan 2023 17:10:11 -0800 (PST)
+        Mon, 30 Jan 2023 20:12:43 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067702B2B6;
+        Mon, 30 Jan 2023 17:12:42 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id t12so14457569lji.13;
+        Mon, 30 Jan 2023 17:12:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EjdiAa8c6Qvj1NCdEIb0i9bJmr0kmiDAx481+Zg80vM=;
+        b=RZqHpTGC8QPmetJxZyudlvCU/1nbY6OE3NlbuJmenrF+dCmD8KMTVsCQpuQ6ZX7J3k
+         XBRAOMKmqhsuW9nEIJ1RiiGNdHKSLwnba5v6S65w2G+tP958A/EeE4W+SvyBvkFsx7qy
+         3gv5OnMTw5dyW2XYu39Blje59Ky08uc1UqHAsYKQEbPnmgp9rBjWekSZcKc42MxCowgH
+         MHLr/WBsvoJ5oeS6SAIbxx+9TfrH0vYw4XS/RDpAMBBBkYPg9QviZ1EIvREi8H44qV1i
+         LxRRcDqYMHMjTEgelnb9o7Y58C+kuG3xR9uhqOfWnUqsPt8ZOUlsMVOMne9J52ZYajIu
+         CWng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EjdiAa8c6Qvj1NCdEIb0i9bJmr0kmiDAx481+Zg80vM=;
+        b=I4SYsKUVF3FVOGbQ/T7jQyFv2WoY7JaDJgGeyqfZYVMril+xs+ORdMySYm4LZNZgIJ
+         /NdHyl1a1jBp5ke/8ZFFFfHqLn1gwJhhKLG86qx2Q1zUCw+2QYdVXbiWeA4ULzVd1+n+
+         Ub6veNcuu9QL5HQpBN/oY2zDZij1HJN8+v68SLeDEhu+Fz3Yn6X9dSqqv7G0Xzr4hGM/
+         bpvDppLsB6Ofop8A/6o5CjNxCsPYNeWRxfQrVP77mpe2H0FXoH+URtCPEQgLiChO4dV0
+         xwWNr8UiGfYRn6Tpim6vEjpCxdDvVuYLbq6Wk39JuT1AFfNgssRavpqpZUnC1VsOS29/
+         4Tvg==
+X-Gm-Message-State: AO0yUKWtCXUR5MhDiP+VGwYGsqlPGHsd6NOEdVnTgJcK4JJ5k2tDDNZs
+        ycxrsviyTMe4SLKQ068o6J1C2F4YlxGRA7YCEPlB/YLxSdw=
+X-Google-Smtp-Source: AK7set/jz08NpydF/GhOSK0WN/1oIaQVTciMoeupM8drYaH84Bjn8LcBdo7m4yq9ontAbGMqAkOZK59RHzycFqWzm8c=
+X-Received: by 2002:a2e:9a9a:0:b0:290:60a9:b5e6 with SMTP id
+ p26-20020a2e9a9a000000b0029060a9b5e6mr870547lji.62.1675127559691; Mon, 30 Jan
+ 2023 17:12:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20230126161559.1467374-1-guoren@kernel.org> <0abbbdd4-6b85-9659-03ee-97c56a5b77c1@huawei.com>
- <CAJF2gTS0s4X_uwLaEeSqKAyRmxCR2vxRuHhz7-SP2w4bBqzr+Q@mail.gmail.com>
- <87r0vc9h4g.fsf@all.your.base.are.belong.to.us> <CAJF2gTQZWO8Ubi60nHn-J-8czqBnsp1Kdyoim3uLNkjbYd-H8Q@mail.gmail.com>
-In-Reply-To: <CAJF2gTQZWO8Ubi60nHn-J-8czqBnsp1Kdyoim3uLNkjbYd-H8Q@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 31 Jan 2023 09:09:59 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSHQ7J1a-0tTzaLAHeUTqbco5OXJgGDZpgB-SLb+teL2A@mail.gmail.com>
-Message-ID: <CAJF2gTSHQ7J1a-0tTzaLAHeUTqbco5OXJgGDZpgB-SLb+teL2A@mail.gmail.com>
-Subject: Re: [PATCH] riscv: kprobe: Optimize kprobe with accurate atomicity
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     "liaochang (A)" <liaochang1@huawei.com>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mhiramat@kernel.org,
-        conor.dooley@microchip.com, penberg@kernel.org,
-        mark.rutland@arm.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 30 Jan 2023 19:12:28 -0600
+Message-ID: <CAH2r5msGoRGzKbjFUJQ9HBivb0ia8-bakeVzeDknEmCQd5yd-A@mail.gmail.com>
+Subject: [PATCH] cifs: update Kconfig description
+To:     CIFS <linux-cifs@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        ronnie sahlberg <ronniesahlberg@gmail.com>,
+        Paulo Alcantara <pc@cjr.nz>
+Content-Type: multipart/mixed; boundary="000000000000263c5705f3850793"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 9:01 AM Guo Ren <guoren@kernel.org> wrote:
->
-> On Mon, Jan 30, 2023 at 11:28 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>=
- wrote:
-> >
-> > Guo Ren <guoren@kernel.org> writes:
-> >
-> > >> In the serie of RISCV OPTPROBES [1], it patches a long-jump instruct=
-ions pair
-> > >> AUIPC/JALR in kernel text, so in order to ensure other CPUs does not=
- execute
-> > >> in the instructions that will be modified, it is still need to stop =
-other CPUs
-> > >> via patch_text API, or you have any better solution to achieve the p=
-urpose?
-> > >  - The stop_machine is an expensive way all architectures should
-> > > avoid, and you could keep that in your OPTPROBES implementation files
-> > > with static functions.
-> > >  - The stop_machine couldn't work with PREEMPTION, so your
-> > > implementation needs to work with !PREEMPTION.
-> >
-> > ...and stop_machine() with !PREEMPTION is broken as well, when you're
-> > replacing multiple instructions (see Mark's post at [1]). The
-> > stop_machine() dance might work when you're replacing *one* instruction=
-,
-> > not multiple as in the RISC-V case. I'll expand on this in a comment in
-> > the OPTPROBES v6 series.
-> >
-> > >> >  static void __kprobes arch_prepare_simulate(struct kprobe *p)
-> > >> > @@ -114,16 +120,23 @@ void *alloc_insn_page(void)
-> > >> >  /* install breakpoint in text */
-> > >> >  void __kprobes arch_arm_kprobe(struct kprobe *p)
-> > >> >  {
-> > >> > -     if ((p->opcode & __INSN_LENGTH_MASK) =3D=3D __INSN_LENGTH_32=
-)
-> > >> > -             patch_text(p->addr, __BUG_INSN_32);
-> > >> > -     else
-> > >> > -             patch_text(p->addr, __BUG_INSN_16);
-> > >> > +#ifdef CONFIG_RISCV_ISA_C
-> > >> > +     u32 opcode =3D __BUG_INSN_16;
-> > >> > +#else
-> > >> > +     u32 opcode =3D __BUG_INSN_32;
-> > >> > +#endif
-> > >> > +     patch_text_nosync(p->addr, &opcode, GET_INSN_LENGTH(opcode))=
-;
-> > >>
-> > >> Sounds good, but it will leave some RVI instruction truncated in ker=
-nel text,
-> > >> i doubt kernel behavior depends on the rest of the truncated instruc=
-tion, well,
-> > >> it needs more strict testing to prove my concern :)
-> > > I do this on purpose, and it doesn't cause any problems. Don't worry;
-> > > IFU hw must enforce the fetch sequence, and there is no way to execut=
-e
-> > > broken instructions even in the speculative execution path.
-> >
-> > This is stretching reality a bit much. ARMv8, e.g., has a chapter in th=
-e
-> > Arm ARM [2] Appendix B "Concurrent modification and execution of
-> > instructions" (CMODX). *Some* instructions can be replaced concurrently=
-,
-> > and others cannot without caution. Assuming that that all RISC-V
-> > implementations can, is a stretch. RISC-V hasn't even specified the
-> > behavior of CMODX (which is problematic).
-> Here we only use one sw/sh instruction to store a 32bit/16bit aligned ele=
-ment:
->
-> INSN_0 <- ebreak (16bit/32bit aligned)
-> INSN_1
-> INSN_2
->
-> The ebreak would cause an exception which implies a huge fence here.
-> No machine could give a speculative execution for the ebreak path.
+--000000000000263c5705f3850793
+Content-Type: text/plain; charset="UTF-8"
 
-For ARMv7, ebreak is also safe:
+There were various outdated or missing things in fs/cifs/Kconfig
+e.g. mention of support for insecure NTLM which has been removed,
+and lack of mention of some important features. This also shortens
+it slightly, and fixes some confusing text (e.g. the SMB1 POSIX
+extensions option).  See attached.
 
----
-Concurrent modification and execution of instructions
+-- 
+Thanks,
 
-The ARMv7 architecture limits the set of instructions that can be
-executed by one thread of execution as they are being modified by
-another thread of execution without requiring explicit
-synchronization.
-...
-The instructions to which this guarantee applies are:
-In the Thumb instruction set
-The 16-bit encodings of the B, NOP, BKPT, and SVC instructions.
-...
-In the ARM instruction set
-The B, BL, NOP, BKPT, SVC, HVC, and SMC instructions.
----
+Steve
 
->
-> >
-> > If anything it would be more likely that the existing
-> > "stop_machine()-to-replace-with-ebreak" works (again, replacing one
-> > instruction does not have the !PREEMPTION issues). Then again, no spec,
-> > so mostly guessing from my side. :-(
-> >
-> > Oh, but the existing "ebreak replace" might be broken like [3].
-> >
-> >
-> > Bj=C3=B6rn
-> >
-> >
-> > [1] https://lore.kernel.org/linux-riscv/Y7%2F6AtX5X0+5qF6Y@FVFF77S0Q05N=
-/
-> > [2] https://developer.arm.com/documentation/ddi0487/latest
-> > [3] https://lore.kernel.org/linux-riscv/20230126170607.1489141-2-guoren=
-@kernel.org/
->
->
->
-> --
-> Best Regards
->  Guo Ren
+--000000000000263c5705f3850793
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-cifs-update-Kconfig-description.patch"
+Content-Disposition: attachment; 
+	filename="0001-cifs-update-Kconfig-description.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_ldjjl3sl0>
+X-Attachment-Id: f_ldjjl3sl0
 
-
-
---=20
-Best Regards
- Guo Ren
+RnJvbSA2YTEwYjdlZTJhOGQ0ZDlmMDFiNzAxZjliZTU2MGIxYWI0YmNlMWYyIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
+CkRhdGU6IE1vbiwgMzAgSmFuIDIwMjMgMTg6NTc6MDYgLTA2MDAKU3ViamVjdDogW1BBVENIXSBj
+aWZzOiB1cGRhdGUgS2NvbmZpZyBkZXNjcmlwdGlvbgoKVGhlcmUgd2VyZSB2YXJpb3VzIG91dGRh
+dGVkIG9yIG1pc3NpbmcgdGhpbmdzIGluIGZzL2NpZnMvS2NvbmZpZwplLmcuIG1lbnRpb24gb2Yg
+c3VwcG9ydCBmb3IgaW5zZWN1cmUgTlRMTSB3aGljaCBoYXMgYmVlbiByZW1vdmVkLAphbmQgbGFj
+ayBvZiBtZW50aW9uIG9mIHNvbWUgaW1wb3J0YW50IGZlYXR1cmVzLiBUaGlzIGFsc28gc2hvcnRl
+bnMKaXQgc2xpZ2h0bHksIGFuZCBmaXhlcyBzb21lIGNvbmZ1c2luZyB0ZXh0IChlLmcuIHRoZSBT
+TUIxIFBPU0lYCmV4dGVuc2lvbnMgb3B0aW9uKS4KCkFja2VkLWJ5OiBQYXVsbyBBbGNhbnRhcmEg
+KFNVU0UpIDxwY0BjanIubno+CkFja2VkLWJ5OiBSb25uaWUgU2FobGJlcmcgPGxzYWhsYmVyQHJl
+ZGhhdC5jb20+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9zb2Z0
+LmNvbT4KLS0tCiBmcy9jaWZzL0tjb25maWcgfCA2MSArKysrKysrKysrKysrKysrKysrKysrKy0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMjkgaW5zZXJ0aW9ucygr
+KSwgMzIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZnMvY2lmcy9LY29uZmlnIGIvZnMvY2lm
+cy9LY29uZmlnCmluZGV4IDNiN2UzYjllNGZkMi4uMWUwMjFjMGIwNjUzIDEwMDY0NAotLS0gYS9m
+cy9jaWZzL0tjb25maWcKKysrIGIvZnMvY2lmcy9LY29uZmlnCkBAIC0xOSwzOSArMTksMzYgQEAg
+Y29uZmlnIENJRlMKIAlzZWxlY3QgQVNOMQogCXNlbGVjdCBPSURfUkVHSVNUUlkKIAloZWxwCi0J
+ICBUaGlzIGlzIHRoZSBjbGllbnQgVkZTIG1vZHVsZSBmb3IgdGhlIFNNQjMgZmFtaWx5IG9mIE5B
+UyBwcm90b2NvbHMsCi0JICAoaW5jbHVkaW5nIHN1cHBvcnQgZm9yIHRoZSBtb3N0IHJlY2VudCwg
+bW9zdCBzZWN1cmUgZGlhbGVjdCBTTUIzLjEuMSkKLQkgIGFzIHdlbGwgYXMgZm9yIGVhcmxpZXIg
+ZGlhbGVjdHMgc3VjaCBhcyBTTUIyLjEsIFNNQjIgYW5kIHRoZSBvbGRlcgotCSAgQ29tbW9uIElu
+dGVybmV0IEZpbGUgU3lzdGVtIChDSUZTKSBwcm90b2NvbC4gIENJRlMgd2FzIHRoZSBzdWNjZXNz
+b3IKLQkgIHRvIHRoZSBvcmlnaW5hbCBkaWFsZWN0LCB0aGUgU2VydmVyIE1lc3NhZ2UgQmxvY2sg
+KFNNQikgcHJvdG9jb2wsIHRoZQotCSAgbmF0aXZlIGZpbGUgc2hhcmluZyBtZWNoYW5pc20gZm9y
+IG1vc3QgZWFybHkgUEMgb3BlcmF0aW5nIHN5c3RlbXMuCi0KLQkgIFRoZSBTTUIzIHByb3RvY29s
+IGlzIHN1cHBvcnRlZCBieSBtb3N0IG1vZGVybiBvcGVyYXRpbmcgc3lzdGVtcwotCSAgYW5kIE5B
+UyBhcHBsaWFuY2VzIChlLmcuIFNhbWJhLCBXaW5kb3dzIDEwLCBXaW5kb3dzIFNlcnZlciAyMDE2
+LAotCSAgTWFjT1MpIGFuZCBldmVuIGluIHRoZSBjbG91ZCAoZS5nLiBNaWNyb3NvZnQgQXp1cmUp
+LgotCSAgVGhlIG9sZGVyIENJRlMgcHJvdG9jb2wgd2FzIGluY2x1ZGVkIGluIFdpbmRvd3MgTlQ0
+LCAyMDAwIGFuZCBYUCAoYW5kCi0JICBsYXRlcikgYXMgd2VsbCBieSBTYW1iYSAod2hpY2ggcHJv
+dmlkZXMgZXhjZWxsZW50IENJRlMgYW5kIFNNQjMKLQkgIHNlcnZlciBzdXBwb3J0IGZvciBMaW51
+eCBhbmQgbWFueSBvdGhlciBvcGVyYXRpbmcgc3lzdGVtcykuIFVzZSBvZgotCSAgZGlhbGVjdHMg
+b2xkZXIgdGhhbiBTTUIyLjEgaXMgb2Z0ZW4gZGlzY291cmFnZWQgb24gcHVibGljIG5ldHdvcmtz
+LgorCSAgVGhpcyBpcyB0aGUgY2xpZW50IFZGUyBtb2R1bGUgZm9yIHRoZSBTTUIzIGZhbWlseSBv
+ZiBuZXR3b3JrIGZpbGUKKwkgIHByb3RvY29scyAoaW5jbHVkaW5nIHRoZSBtb3N0IHJlY2VudCwg
+bW9zdCBzZWN1cmUgZGlhbGVjdCBTTUIzLjEuMSkuCisJICBUaGlzIG1vZHVsZSBhbHNvIGluY2x1
+ZGVzIHN1cHBvcnQgZm9yIGVhcmxpZXIgZGlhbGVjdHMgc3VjaCBhcworCSAgU01CMi4xLCBTTUIy
+IGFuZCBldmVuIHRoZSBvbGQgQ29tbW9uIEludGVybmV0IEZpbGUgU3lzdGVtIChDSUZTKQorCSAg
+cHJvdG9jb2wuICBDSUZTIHdhcyB0aGUgc3VjY2Vzc29yIHRvIHRoZSBvcmlnaW5hbCBuZXR3b3Jr
+IGZpbGVzeXN0ZW0KKwkgIHByb3RvY29sLCBTZXJ2ZXIgTWVzc2FnZSBCbG9jayAoU01CIGllIFNN
+QjEpLCB0aGUgbmF0aXZlIGZpbGUgc2hhcmluZworCSAgbWVjaGFuaXNtIGZvciBtb3N0IGVhcmx5
+IFBDIG9wZXJhdGluZyBzeXN0ZW1zLgorCisJICBUaGUgU01CMy4xLjEgcHJvdG9jb2wgaXMgc3Vw
+cG9ydGVkIGJ5IG1vc3QgbW9kZXJuIG9wZXJhdGluZyBzeXN0ZW1zCisJICBhbmQgTkFTIGFwcGxp
+YW5jZXMgKGUuZy4gU2FtYmEsIFdpbmRvd3MgMTEsIFdpbmRvd3MgU2VydmVyIDIwMjIsCisJICBN
+YWNPUykgYW5kIGV2ZW4gaW4gdGhlIGNsb3VkIChlLmcuIE1pY3Jvc29mdCBBenVyZSkgYW5kIGFs
+c28gYnkgdGhlCisJICBMaW51eCBrZXJuZWwgc2VydmVyLCBrc21iZC4gIFN1cHBvcnQgZm9yIHRo
+ZSBvbGRlciBDSUZTIHByb3RvY29sIHdhcworCSAgaW5jbHVkZWQgaW4gV2luZG93cyBOVDQsIDIw
+MDAgYW5kIFhQIChhbmQgbGF0ZXIpLiBVc2Ugb2YgZGlhbGVjdHMKKwkgIG9sZGVyIHRoYW4gU01C
+Mi4xIGlzIG9mdGVuIGRpc2NvdXJhZ2VkIG9uIHB1YmxpYyBuZXR3b3Jrcy4KIAkgIFRoaXMgbW9k
+dWxlIGFsc28gcHJvdmlkZXMgbGltaXRlZCBzdXBwb3J0IGZvciBPUy8yIGFuZCBXaW5kb3dzIE1F
+CiAJICBhbmQgc2ltaWxhciB2ZXJ5IG9sZCBzZXJ2ZXJzLgogCi0JICBUaGlzIG1vZHVsZSBwcm92
+aWRlcyBhbiBhZHZhbmNlZCBuZXR3b3JrIGZpbGUgc3lzdGVtIGNsaWVudAotCSAgZm9yIG1vdW50
+aW5nIHRvIFNNQjMgKGFuZCBDSUZTKSBjb21wbGlhbnQgc2VydmVycy4gIEl0IGluY2x1ZGVzCi0J
+ICBzdXBwb3J0IGZvciBERlMgKGhpZXJhcmNoaWNhbCBuYW1lIHNwYWNlKSwgc2VjdXJlIHBlci11
+c2VyCi0JICBzZXNzaW9uIGVzdGFibGlzaG1lbnQgdmlhIEtlcmJlcm9zIG9yIE5UTE0gb3IgTlRM
+TXYyLCBSRE1BCi0JICAoc21iZGlyZWN0KSwgYWR2YW5jZWQgc2VjdXJpdHkgZmVhdHVyZXMsIHBl
+ci1zaGFyZSBlbmNyeXB0aW9uLAotCSAgZGlyZWN0b3J5IGxlYXNlcywgc2FmZSBkaXN0cmlidXRl
+ZCBjYWNoaW5nIChvcGxvY2spLCBvcHRpb25hbCBwYWNrZXQKLQkgIHNpZ25pbmcsIFVuaWNvZGUg
+YW5kIG90aGVyIGludGVybmF0aW9uYWxpemF0aW9uIGltcHJvdmVtZW50cy4KKwkgIFRoaXMgbW9k
+dWxlIHByb3ZpZGVzIGFuIGFkdmFuY2VkIG5ldHdvcmsgZmlsZSBzeXN0ZW0gY2xpZW50IGZvcgor
+CSAgbW91bnRpbmcgdG8gU01CMyAoYW5kIENJRlMpIGNvbXBsaWFudCBzZXJ2ZXJzLiAgSXQgaW5j
+bHVkZXMgc3VwcG9ydAorCSAgZm9yIERGUyAoaGllcmFyY2hpY2FsIG5hbWUgc3BhY2UpLCBzZWN1
+cmUgcGVyLXVzZXIgc2Vzc2lvbgorCSAgZXN0YWJsaXNobWVudCB2aWEgS2VyYmVyb3Mgb3IgTlRM
+TXYyLCBSRE1BIChzbWJkaXJlY3QpLCBhZHZhbmNlZAorCSAgc2VjdXJpdHkgZmVhdHVyZXMsIHBl
+ci1zaGFyZSBlbmNyeXB0aW9uLCBwYWNrZXQtc2lnbmluZywgc25hcHNob3RzLAorCSAgZGlyZWN0
+b3J5IGxlYXNlcywgc2FmZSBkaXN0cmlidXRlZCBjYWNoaW5nIChsZWFzZXMpLCBtdWx0aWNoYW5u
+ZWwsCisJICBVbmljb2RlIGFuZCBvdGhlciBpbnRlcm5hdGlvbmFsaXphdGlvbiBpbXByb3ZlbWVu
+dHMuCiAKIAkgIEluIGdlbmVyYWwsIHRoZSBkZWZhdWx0IGRpYWxlY3RzLCBTTUIzIGFuZCBsYXRl
+ciwgZW5hYmxlIGJldHRlcgogCSAgcGVyZm9ybWFuY2UsIHNlY3VyaXR5IGFuZCBmZWF0dXJlcywg
+dGhhbiB3b3VsZCBiZSBwb3NzaWJsZSB3aXRoIENJRlMuCi0JICBOb3RlIHRoYXQgd2hlbiBtb3Vu
+dGluZyB0byBTYW1iYSwgZHVlIHRvIHRoZSBDSUZTIFBPU0lYIGV4dGVuc2lvbnMsCi0JICBDSUZT
+IG1vdW50cyBjYW4gcHJvdmlkZSBzbGlnaHRseSBiZXR0ZXIgUE9TSVggY29tcGF0aWJpbGl0eQot
+CSAgdGhhbiBTTUIzIG1vdW50cy4gU01CMi9TTUIzIG1vdW50IG9wdGlvbnMgYXJlIGFsc28KLQkg
+IHNsaWdodGx5IHNpbXBsZXIgKGNvbXBhcmVkIHRvIENJRlMpIGR1ZSB0byBwcm90b2NvbCBpbXBy
+b3ZlbWVudHMuCiAKLQkgIElmIHlvdSBuZWVkIHRvIG1vdW50IHRvIFNhbWJhLCBBenVyZSwgTWFj
+cyBvciBXaW5kb3dzIGZyb20gdGhpcyBtYWNoaW5lLCBzYXkgWS4KKwkgIElmIHlvdSBuZWVkIHRv
+IG1vdW50IHRvIFNhbWJhLCBBenVyZSwga3NtYmQsIE1hY3Mgb3IgV2luZG93cyBmcm9tIHRoaXMK
+KwkgIG1hY2hpbmUsIHNheSBZLgogCiBjb25maWcgQ0lGU19TVEFUUzIKIAlib29sICJFeHRlbmRl
+ZCBzdGF0aXN0aWNzIgpAQCAtMTExLDEyICsxMDgsMTIgQEAgY29uZmlnIENJRlNfUE9TSVgKIAlk
+ZXBlbmRzIG9uIENJRlMgJiYgQ0lGU19BTExPV19JTlNFQ1VSRV9MRUdBQ1kgJiYgQ0lGU19YQVRU
+UgogCWhlbHAKIAkgIEVuYWJsaW5nIHRoaXMgb3B0aW9uIHdpbGwgY2F1c2UgdGhlIGNpZnMgY2xp
+ZW50IHRvIGF0dGVtcHQgdG8KLQkgIG5lZ290aWF0ZSBhIG5ld2VyIGRpYWxlY3Qgd2l0aCBzZXJ2
+ZXJzLCBzdWNoIGFzIFNhbWJhIDMuMC41Ci0JICBvciBsYXRlciwgdGhhdCBvcHRpb25hbGx5IGNh
+biBoYW5kbGUgbW9yZSBQT1NJWCBsaWtlIChyYXRoZXIKLQkgIHRoYW4gV2luZG93cyBsaWtlKSBm
+aWxlIGJlaGF2aW9yLiAgSXQgYWxzbyBlbmFibGVzCi0JICBzdXBwb3J0IGZvciBQT1NJWCBBQ0xz
+IChnZXRmYWNsIGFuZCBzZXRmYWNsKSB0byBzZXJ2ZXJzCi0JICAoc3VjaCBhcyBTYW1iYSAzLjEw
+IGFuZCBsYXRlcikgd2hpY2ggY2FuIG5lZ290aWF0ZQotCSAgQ0lGUyBQT1NJWCBBQ0wgc3VwcG9y
+dC4gIElmIHVuc3VyZSwgc2F5IE4uCisJICBuZWdvdGlhdGUgYSBmZWF0dXJlIG9mIHRoZSBvbGRl
+ciBjaWZzIGRpYWxlY3Qgd2l0aCBzZXJ2ZXJzLCBzdWNoIGFzCisJICBTYW1iYSAzLjAuNSBvciBs
+YXRlciwgdGhhdCBvcHRpb25hbGx5IGNhbiBoYW5kbGUgbW9yZSBQT1NJWCBsaWtlCisJICAocmF0
+aGVyIHRoYW4gV2luZG93cyBsaWtlKSBmaWxlIGJlaGF2aW9yLiAgSXQgYWxzbyBlbmFibGVzIHN1
+cHBvcnQKKwkgIGZvciBQT1NJWCBBQ0xzIChnZXRmYWNsIGFuZCBzZXRmYWNsKSB0byBzZXJ2ZXJz
+IChzdWNoIGFzIFNhbWJhIDMuMTAKKwkgIGFuZCBsYXRlcikgd2hpY2ggY2FuIG5lZ290aWF0ZSBD
+SUZTIFBPU0lYIEFDTCBzdXBwb3J0LiAgVGhpcyBjb25maWcKKwkgIG9wdGlvbiBpcyBub3QgbmVl
+ZGVkIHdoZW4gbW91bnRpbmcgd2l0aCBTTUIzLjEuMS4gSWYgdW5zdXJlLCBzYXkgTi4KIAogY29u
+ZmlnIENJRlNfREVCVUcKIAlib29sICJFbmFibGUgQ0lGUyBkZWJ1Z2dpbmcgcm91dGluZXMiCi0t
+IAoyLjM0LjEKCg==
+--000000000000263c5705f3850793--
