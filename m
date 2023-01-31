@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A718E6831EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF266831EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjAaPzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S232764AbjAaP4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjAaPzo (ORCPT
+        with ESMTP id S232199AbjAaP4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:55:44 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BAD3402B;
-        Tue, 31 Jan 2023 07:55:42 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id q5so14690695wrv.0;
-        Tue, 31 Jan 2023 07:55:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cZO3OXoklLdjvq1ElI0EhzGrI2GyGBeJ7SHRlnQtpNk=;
-        b=DN2ilcPcEGj1u9H9FXqp6nulPpgvCZxOHQnTbrDwur8O5FM9ON/+7CizpyATxu5BRz
-         D4H7cpf0mbE6+DL/2V+ubMcbq+ByztUUWF42aswATqm4HQ2rMwGes79HzqTkwe2ApvFE
-         NEdc4aE6HqHFtoxvtQMcwQDqWJ4PzjPbM18kz6KFltSmhhorDEe7FBvRRSCrGyh2xOeA
-         VBkitRRbxh/RzNGvalSJL01BaYEykQyIc+sA23zZ0XSBQg2VC+tf3Bsp+uHrnAmlsQhm
-         LHVTqX95/l6sMRWiNjB96NTyAUp4YEqeHqJ0SfDv9Ov21WL760YdjzIrUaYqySXnk1h1
-         wPJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cZO3OXoklLdjvq1ElI0EhzGrI2GyGBeJ7SHRlnQtpNk=;
-        b=yjOC34y/8MCkyf2jbWo1/Pl6VLe0ZOcJvk8IVUEWUiml7zOfwFB8JFpS7tGcKuLnf9
-         cK425gEEURkbh5MmAEAaV433TlVKk5vc1yTTmFfp7rIc6LRQ8hQ+4xblLkpQ0KqeytJO
-         Xawb89HFioWelCj9yknyDddsJ11rt383qRqacFuvNcFDXCzbvhhY8xRNmWwGoB6qBwf9
-         1yVRHFNY0OuMnxpyoDtivMa8H0OjUAZypCUbdQtuYgBeHgIBmd2ySV+Gqotut01484Me
-         m5qntFcD1Jaw+EWtut8YBleJ2+sMv+hnNtPn5EorQ2Dslhf+c0T5fVMZLvmcX6qA23qG
-         lsyQ==
-X-Gm-Message-State: AO0yUKWtKRNME7glD4+Kw+8mY0ROxWaNm1S4yfrJquulP3sKdPayJYQx
-        Flgp9I8dLAi322qa1vkVagEf52auVxw=
-X-Google-Smtp-Source: AK7set/u3WxPaikwkA8y3DKENc0uI1hUprGHYaSwKCccfUZwSJv65dyMoqkB0I3I/MeM/y0DniS+kg==
-X-Received: by 2002:adf:ef12:0:b0:2bf:c364:47b3 with SMTP id e18-20020adfef12000000b002bfc36447b3mr18137390wro.26.1675180540252;
-        Tue, 31 Jan 2023 07:55:40 -0800 (PST)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id w10-20020adfcd0a000000b002bff7caa1c2sm4106908wrm.0.2023.01.31.07.55.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 07:55:31 -0800 (PST)
-From:   Stafford Horne <shorne@gmail.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Linux OpenRISC <linux-openrisc@vger.kernel.org>,
-        Stafford Horne <shorne@gmail.com>
-Subject: [PATCH] MAINTAINERS: Update OpenRISC mailing list
-Date:   Wed,  1 Feb 2023 00:55:24 +0900
-Message-Id: <20230131155524.2700453-1-shorne@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 31 Jan 2023 10:56:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657FA17154;
+        Tue, 31 Jan 2023 07:56:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0331B6158D;
+        Tue, 31 Jan 2023 15:56:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A9BC433D2;
+        Tue, 31 Jan 2023 15:56:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675180570;
+        bh=FDlHK/H4Jh89Tca25M42ibJ74C6dgzbMwkQIcxTDWhE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D0G7i5l+vHCPeJhaI7CisXTHBWimO9WD5x6Jx9RQKfhtjpD11MBk49H+Q9dib9Wnm
+         ehvasr+/pg88d2zULRByTanGWs4ymgOkECrEVuNgW1EoaFoyd6v45ikDohdGoodlvf
+         yOzQAisSW+ZnL5Py7DZ9SV1ISXOxorcCper207AKwMFnH+yxeg69rdoRybErEUZ6du
+         LDmGxdGzDI6ZdbhDs+QiWIq14DtjVPdiUleUvIRQaAM8Csw+kWRg3NTR2fdvyWXMMI
+         6kQaMGZ68qjWnsVaJzZ2suNNmWxSvK4BU2uKT0HKMyFzLNJAcuVDyKqWmZp3sUgGkX
+         o1GWTMPG/9L1w==
+From:   Chao Yu <chao@kernel.org>
+To:     akpm@linux-foundation.org, adobriyan@gmail.com
+Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH 1/2] proc: fix to check name length in proc_lookup_de()
+Date:   Tue, 31 Jan 2023 23:55:58 +0800
+Message-Id: <20230131155559.35800-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mailing list at librecores.org is being shut down due to
-infrastructure issues.  Update the the newly created list on
-vger.kernel.org.
+__proc_create() has limited dirent's max name length with 255, let's
+add this limitation in proc_lookup_de(), so that it can return
+-ENAMETOOLONG correctly instead of -ENOENT when stating a file which
+has out-of-range name length.
 
-Signed-off-by: Stafford Horne <shorne@gmail.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
 ---
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/proc/generic.c  | 5 ++++-
+ fs/proc/internal.h | 3 +++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7f86d02cb427..6037a1131ccd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15658,7 +15658,7 @@ OPENRISC ARCHITECTURE
- M:	Jonas Bonn <jonas@southpole.se>
- M:	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
- M:	Stafford Horne <shorne@gmail.com>
--L:	openrisc@lists.librecores.org
-+L:	linux-openrisc@vger.kernel.org
- S:	Maintained
- W:	http://openrisc.io
- T:	git https://github.com/openrisc/linux.git
+diff --git a/fs/proc/generic.c b/fs/proc/generic.c
+index 878d7c6db919..f547e9593a77 100644
+--- a/fs/proc/generic.c
++++ b/fs/proc/generic.c
+@@ -245,6 +245,9 @@ struct dentry *proc_lookup_de(struct inode *dir, struct dentry *dentry,
+ {
+ 	struct inode *inode;
+ 
++	if (dentry->d_name.len > PROC_NAME_LEN)
++		return ERR_PTR(-ENAMETOOLONG);
++
+ 	read_lock(&proc_subdir_lock);
+ 	de = pde_subdir_find(de, dentry->d_name.name, dentry->d_name.len);
+ 	if (de) {
+@@ -401,7 +404,7 @@ static struct proc_dir_entry *__proc_create(struct proc_dir_entry **parent,
+ 		goto out;
+ 	qstr.name = fn;
+ 	qstr.len = strlen(fn);
+-	if (qstr.len == 0 || qstr.len >= 256) {
++	if (qstr.len == 0 || qstr.len > PROC_NAME_LEN) {
+ 		WARN(1, "name len %u\n", qstr.len);
+ 		return NULL;
+ 	}
+diff --git a/fs/proc/internal.h b/fs/proc/internal.h
+index b701d0207edf..7611bc684d9e 100644
+--- a/fs/proc/internal.h
++++ b/fs/proc/internal.h
+@@ -142,6 +142,9 @@ unsigned name_to_int(const struct qstr *qstr);
+ /* Worst case buffer size needed for holding an integer. */
+ #define PROC_NUMBUF 13
+ 
++/* Max name length of procfs dirent */
++#define PROC_NAME_LEN		255
++
+ /*
+  * array.c
+  */
 -- 
-2.37.1
+2.36.1
 
