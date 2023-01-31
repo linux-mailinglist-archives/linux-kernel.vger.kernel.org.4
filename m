@@ -2,140 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6C8682B09
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DE2682B2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjAaLBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 06:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
+        id S230404AbjAaLKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 06:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjAaLAx (ORCPT
+        with ESMTP id S229577AbjAaLKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:00:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C8A470A1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:59:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675162786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bK0hY7jWQjhFw5K0U5dRPmjS4u6L95GMLvGFqwCWeps=;
-        b=W6+njMID067xOZwyViz89utZldNI9af6Ch8WehwuWXybfQgNg81L4QVg9pQjEgL4GtlsOx
-        DX66I6QXYI+i5jcOZ26g0g+GdCzgbFsPtMxo3W4tV6RtF7cG6dWmCVkVfi0qlVSXmPlO8u
-        qk+qTlaV8Q2sISWPiWBv/LkE2EL5kOk=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-620-lL8OXA-8NniIvC6dg_PTlg-1; Tue, 31 Jan 2023 05:59:42 -0500
-X-MC-Unique: lL8OXA-8NniIvC6dg_PTlg-1
-Received: by mail-wr1-f71.google.com with SMTP id r1-20020adfa141000000b002be28fd4a7bso2402479wrr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:59:42 -0800 (PST)
+        Tue, 31 Jan 2023 06:10:12 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39850768A
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:10:10 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id j29-20020a05600c1c1d00b003dc52fed235so4740648wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=MA8S/y1Gs1MEQ7N3aRN+Al5XCapmAfGlB4c1wqU7XjM=;
+        b=FH1Unjui52IkGTPhUHp5BhDuROTGf59RbUbqmNWz0chvb22Xg8klEm/bOXb9jpHk4Z
+         3pkGXLCer5EoKOLjwFN0tfkh4eD+XS1GSbhejlA/rM2HlUlqIge3HcdECKalAdKq6EqS
+         aSwpCw93y/OK0ZSnSUjDzLFWg+cTI2YcGXx56J+g3z1wyYdzMaPUu2SONAe+WuR6rjxa
+         DICsf2xUoC++LOoDjZwX4OsdocheSi0vFp3HJWBtt3XufCQLz2DKNPQzM5dKT0YthFQ+
+         zbaX8HjN1jWP+tJXYb0b3LrNpptrMcrPyoUNtRYOiKC5f5ZZ524Kmlj1Tjt1ViWu0+Iv
+         hOPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bK0hY7jWQjhFw5K0U5dRPmjS4u6L95GMLvGFqwCWeps=;
-        b=BolYG/vP9vrnMvEHyOcjclPfl9DZVZmw2Z4fbfqNWg/2MYlpHqN2NKHi3IM+HKKPmd
-         E53t5pf1SifqPbvLatlSnez5IIc/V9y1OscoKvgKwiBWQcBrlnNIaXnNwD65/AyxluvN
-         985UQTjjVe8Bj23lMguQq/vILR1pBgNv0rL+0JUTFG5PhGp7J48hn7GRkbiQ1Frb0Ax2
-         uGYd7Ida6/CAdhe41czhBJlToIAqnRDkMAiE3KxY/nKj48BIRdSLL1RzqOR5kDEJrNxL
-         MtZ/SHE8THPOC9opWIxZDsKorB4Fc8XfsZHubti4VshIaK1koayWJTiycOWhPgfT5Upq
-         lbDA==
-X-Gm-Message-State: AO0yUKUijjj+L38SFaj2ysrMsdGhoQgvIr76edh9cy0Jf+XzjcyAmeZ/
-        KH0ZhT+gya8+gYIxjYdT+2mb030i5jC0nIfHyLTKMYT4/7qo7qaKyRjuz1W1wrJ7ZQJ8iy8z9CA
-        OMS/gis5Oghk+vUVfMVVkpqTy
-X-Received: by 2002:a5d:5181:0:b0:2bf:b92b:8a78 with SMTP id k1-20020a5d5181000000b002bfb92b8a78mr19716859wrv.23.1675162781365;
-        Tue, 31 Jan 2023 02:59:41 -0800 (PST)
-X-Google-Smtp-Source: AK7set8DGpVSZWFcxWxQzzKd2hwFYf7lwSaCZ2AyoxEoOEo3a1/URRT8kvwULuQ6IWx0K5zx+ogBEg==
-X-Received: by 2002:a5d:5181:0:b0:2bf:b92b:8a78 with SMTP id k1-20020a5d5181000000b002bfb92b8a78mr19716838wrv.23.1675162781009;
-        Tue, 31 Jan 2023 02:59:41 -0800 (PST)
-Received: from ?IPV6:2003:d8:2f0a:ca00:f74f:2017:1617:3ec3? (p200300d82f0aca00f74f201716173ec3.dip0.t-ipconnect.de. [2003:d8:2f0a:ca00:f74f:2017:1617:3ec3])
-        by smtp.gmail.com with ESMTPSA id j5-20020adff005000000b002bddd75a83fsm14159375wro.8.2023.01.31.02.59.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 02:59:40 -0800 (PST)
-Message-ID: <8c152d25-5909-71f9-3946-cba9254525ef@redhat.com>
-Date:   Tue, 31 Jan 2023 11:59:39 +0100
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MA8S/y1Gs1MEQ7N3aRN+Al5XCapmAfGlB4c1wqU7XjM=;
+        b=OWDrOzD/VGWquoy9zxnQ5Q4u/oLzy2jWQ4PI3kR+x62UKcPFD+Lvc+v1Mv7f6Sb7Nd
+         DiMFzNgODJwZ5RtD1jpjO7aJo8DYxMF/zPfdhw382RB0pxG2vWvLPLddr2NIHHbThAI/
+         I5cl4B7P1XvsOPpzrKXN172zRyY/oIPE4QJL9DXLw8NwpaNdOwhKUjYBcaZraJKlwpnO
+         KW1XNUYTnIsUW6PO9gds0y8VvkRCXfhZQmFCr+PxHuWujaLbIL+w3kHlyz7ruzn74g5b
+         qW2P8pCAuE0emsFFcOeAxXt7MVG+wNarsOzLE7pbgyyidX56iDf0699n5onsCFvUopo7
+         +ezg==
+X-Gm-Message-State: AO0yUKUvaxLvBmeVK3eSNaNUyvpQ9f+hFX/YW8d9TAVJrSudlfPEMNT9
+        QEHvpBTGaaC/Kn9BJ8gNKm4VMBllROHE3IsF
+X-Google-Smtp-Source: AK7set/pFaDuIxJKAHREd2WyfYMwlWeiG3tW5Bw04KC3h7MBM3BvQaR9xw+dGlgqTh3NU841lYLFdw==
+X-Received: by 2002:a05:600c:1e0d:b0:3dc:3f1b:6757 with SMTP id ay13-20020a05600c1e0d00b003dc3f1b6757mr14844157wmb.15.1675163408692;
+        Tue, 31 Jan 2023 03:10:08 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c310a00b003dc4480df80sm11959003wmo.34.2023.01.31.03.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 03:10:07 -0800 (PST)
+References: <20230130231402.471493-1-cphealy@gmail.com>
+ <1jbkmf2ewn.fsf@starbuckisacylon.baylibre.com>
+ <671d564e-db1c-ed61-3538-97dd1916714d@gmail.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Heiner Kallweit <hkallweit1@gmail.com>, cphealy@gmail.com,
+        andrew@lunn.ch, linux@armlinux.org.uk, davem@davemloft.net,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jeremy.wang@amlogic.com
+Cc:     Chris Healy <healych@amazon.com>
+Subject: Re: [PATCH v3] net: phy: meson-gxl: Add generic dummy stubs for MMD
+ register access
+Date:   Tue, 31 Jan 2023 11:59:40 +0100
+In-reply-to: <671d564e-db1c-ed61-3538-97dd1916714d@gmail.com>
+Message-ID: <1j7cx32c4y.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH mm-unstable v4 1/6] mm: add folio_estimated_sharers()
-Content-Language: en-US
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20230130201833.27042-1-vishal.moola@gmail.com>
- <20230130201833.27042-2-vishal.moola@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230130201833.27042-2-vishal.moola@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.01.23 21:18, Vishal Moola (Oracle) wrote:
-> folio_estimated_sharers() takes in a folio and returns the precise
-> number of times the first subpage of the folio is mapped.
-> 
-> This function aims to provide an estimate for the number of sharers of a
-> folio. This is necessary for folio conversions where we care
-> about the number of processes that share a folio, but don't necessarily
-> want to check every single page within that folio.
-> 
-> This is in contrast to folio_mapcount() which calculates the total
-> number of the times a folio and all its subpages are mapped.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
->   include/linux/mm.h | 18 ++++++++++++++++++
->   1 file changed, 18 insertions(+)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 27b34f7730e7..c91bf9cdb3d0 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1905,6 +1905,24 @@ static inline size_t folio_size(struct folio *folio)
->   	return PAGE_SIZE << folio_order(folio);
->   }
->   
-> +/**
-> + * folio_estimated_sharers - Estimate the number of sharers of a folio.
-> + * @folio: The folio.
-> + *
-> + * folio_estimated_sharers() aims to serve as a function to efficiently
-> + * estimate the number of processes sharing a folio. This is done by
-> + * looking at the precise mapcount of the first subpage in the folio, and
-> + * assuming the other subpages are the same. This may not be true for large
-> + * folios. If you want exact mapcounts for exact calculations, look at
-> + * page_mapcount() or folio_total_mapcount().
-> + *
-> + * Return: The estimated number of processes sharing a folio.
-> + */
-> +static inline int folio_estimated_sharers(struct folio *folio)
-> +{
-> +	return page_mapcount(folio_page(folio, 0));
-> +}
-> +
->   #ifndef HAVE_ARCH_MAKE_PAGE_ACCESSIBLE
->   static inline int arch_make_page_accessible(struct page *page)
->   {
 
+On Tue 31 Jan 2023 at 11:38, Heiner Kallweit <hkallweit1@gmail.com> wrote:
 
-Acked-by: David Hildenbrand <david@redhat.com>
+> On 31.01.2023 11:05, Jerome Brunet wrote:
+>> 
+>> On Mon 30 Jan 2023 at 15:14, Chris Healy <cphealy@gmail.com> wrote:
+>> 
+>>> From: Chris Healy <healych@amazon.com>
+>>>
+>>> The Meson G12A Internal PHY does not support standard IEEE MMD extended
+>>> register access, therefore add generic dummy stubs to fail the read and
+>>> write MMD calls. This is necessary to prevent the core PHY code from
+>>> erroneously believing that EEE is supported by this PHY even though this
+>>> PHY does not support EEE, as MMD register access returns all FFFFs.
+>> 
+>> This is definitely something that should be done, Thx !
+>> 
+>>>
+>>> Fixes: 5c3407abb338 ("net: phy: meson-gxl: add g12a support")
+>> 
+>> This commit does not seems appropriate, especially since only the GXL ops
+>> are changed, not the g12a variant.
+>> 
+> The diff is a little bit misleading. The patch affects the G12A PHY.
+>
+>> This brings a 2nd point, any reason for not changing the g12 variant ?
+>> I'm fairly confident it does support EEE either.
+>> 
+> Supposedly it's a typo and you mean "doesn't". Neither Chris nor me
 
--- 
-Thanks,
+Indeed ;)
 
-David / dhildenb
+> have GXL HW and we didn't want to submit a patch just based on speculation.
+>
+
+Ah - Ok.
+I've tested something similar recently while working on the PHY.
+I confirm that both GXL and G12a should stub those calls.
+
+... maybe in separate patches to help stable backports.
+
+Do you want to handle this or should I ?
+
+>>> Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
+>>> Signed-off-by: Chris Healy <healych@amazon.com>
+>>>
+
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+
+>>> ---
+>>>
+>>> Changes in v3:
+>>> * Add reviewed-by
+>>> Change in v2:
+>>> * Add fixes tag
+>>>
+>>>  drivers/net/phy/meson-gxl.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
+>>> index c49062ad72c6..5e41658b1e2f 100644
+>>> --- a/drivers/net/phy/meson-gxl.c
+>>> +++ b/drivers/net/phy/meson-gxl.c
+>>> @@ -271,6 +271,8 @@ static struct phy_driver meson_gxl_phy[] = {
+>>>  		.handle_interrupt = meson_gxl_handle_interrupt,
+>>>  		.suspend        = genphy_suspend,
+>>>  		.resume         = genphy_resume,
+>>> +		.read_mmd	= genphy_read_mmd_unsupported,
+>>> +		.write_mmd	= genphy_write_mmd_unsupported,
+>>>  	},
+>>>  };
+>> 
 
