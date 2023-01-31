@@ -2,233 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59806836A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD07F6836A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjAaTdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
+        id S231995AbjAaTei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:34:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjAaTdV (ORCPT
+        with ESMTP id S230303AbjAaTeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:33:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD162720;
-        Tue, 31 Jan 2023 11:33:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 14:34:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2338E38E82
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:33:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675193627;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eK2YYGBTOGyQmg247Ozw7C64TaiZCT3FrZlIk4YE0l4=;
+        b=QkuaSsh35L56RB3wMvFkcqUn3IqFd3YOmIAHux+2wQtPlfL/G0oWU6/d6LrSXMq05jGffm
+        mFEC8pD9X/8eo4CFa4A2uIbKotZEpV6B0zPr8LxtRxj4xZn8EyfGonZHiHPflPwRYwwTEn
+        5LQ2HkUam+UuExmAXVuuK60YjdlNfFM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-617-NH5JaXWDOGKi356MyyEi9g-1; Tue, 31 Jan 2023 14:33:42 -0500
+X-MC-Unique: NH5JaXWDOGKi356MyyEi9g-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01A21B81E83;
-        Tue, 31 Jan 2023 19:33:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01AEC433EF;
-        Tue, 31 Jan 2023 19:33:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675193597;
-        bh=zC/ai8uytmhWNu+O0kLSPbt20Ti3ixHRPXWEFI+STvo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yq2tVrAi0s1sC07GmPdoRbP4sXd/QpLLL8VJxYlGgQXYnpATcIXX/WoIDlrOuYD5c
-         AlPNDj/hncSPiUf2yabogFogc6vvj5n7T6kqqwDPHop7ymPyJFdFWBUIbwSNylvTN2
-         hipdGyfOKDFh4A3QoyloqzFZthru0fUJ2n6zzkh4UL9Snuh4+ySbRACL0ID2OeVK18
-         CuRflFz0VFxkvMaFDLjunlMQcxqXmF9LyiENUZtK/ec1NVSc9m+lyS9tAhSxLt1VBb
-         1rGNXy0HX6FTdikAAbiA3P/fRfXQy7ZTZDQP/HBe5Pc190smtZyxzx5vCtReZWuVYT
-         YQAroVfO/eaqQ==
-Date:   Tue, 31 Jan 2023 12:33:14 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Connor OBrien <connoro@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
-References: <20230124064324.672022-1-irogers@google.com>
- <20230124064324.672022-2-irogers@google.com>
- <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
- <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
- <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF8E43847980;
+        Tue, 31 Jan 2023 19:33:41 +0000 (UTC)
+Received: from [10.22.9.39] (unknown [10.22.9.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BCAA12026D4B;
+        Tue, 31 Jan 2023 19:33:40 +0000 (UTC)
+Message-ID: <6587af4f-5012-ef33-8e0e-d6c43d662e43@redhat.com>
+Date:   Tue, 31 Jan 2023 14:33:40 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2] sched: cpuset: Don't rebuild sched domains on
+ suspend-resume
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>
+References: <20230120194822.962958-1-qyousef@layalina.io>
+ <c4c2dec6-a72b-d675-fb42-be40e384ea2c@redhat.com>
+ <20230125163546.pspvigh4groiwjy7@airbuntu>
+ <45e0f8ea-d229-1ae7-5c12-7f0a64c6767a@redhat.com>
+ <20230130130038.2qx3pkzut6ypqdub@airbuntu>
+ <253ced33-c3a8-269f-90cc-b69e66b10370@redhat.com>
+ <20230130194826.rxwk4ryvpyxemflm@airbuntu>
+ <17537d7f-8734-2186-b27c-f39f3110ffe5@redhat.com>
+ <20230131192223.jf3aydhafpmjg5z4@airbuntu>
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230131192223.jf3aydhafpmjg5z4@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
-> On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > >
-> > > Hi Ian,
-> > >
-> > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> > > > after tools/scripts/Makefile.include is included, meaning flags are
-> > > > set assuming say CC is gcc, but then it can be later set to HOSTCC
-> > > > which may be clang. tools/scripts/Makefile.include is needed for host
-> > > > set up and common macros in objtool's Makefile. Rather than override
-> > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> > > > builds and the linkage step. This means the Makefiles don't see things
-> > > > like CC changing and tool flag determination, and similar, work
-> > > > properly.
-> > > >
-> > > > Also, clear the passed subdir as otherwise an outer build may break by
-> > > > inadvertently passing an inappropriate value.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
-> > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > >
-> > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> > > > index 1fe0082b2ecc..daed388aa5d7 100644
-> > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > @@ -18,14 +18,11 @@ else
-> > > >  endif
-> > > >
-> > > >  # always use the host compiler
-> > > > -AR       = $(HOSTAR)
-> > > > -CC       = $(HOSTCC)
-> > > > -LD       = $(HOSTLD)
-> > > > -ARCH     = $(HOSTARCH)
-> > > > +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> > > > +               EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > > > +
-> > > >  RM      ?= rm
-> > > >  CROSS_COMPILE =
-> > > > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> > > > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
-> > > >
-> > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> > > >
-> > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
-> > > >
-> > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> > > > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> > > > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > >                   $(abspath $@) install_headers
-> > > >
-> > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
-> > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> > > > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> > > > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
-> > > >                   $(abspath $@) install_headers
-> > > >
-> > > >  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
-> > > >  include $(srctree)/tools/build/Makefile.include
-> > > >
-> > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> > > > -     $(Q)$(MAKE) $(build)=resolve_btfids
-> > > > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
-> > > >
-> > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> > > >       $(call msg,LINK,$@)
-> > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > >
-> > > >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
-> > > >                              $(OUTPUT)/.*.o.cmd           \
-> > > > --
-> > > > 2.39.0.246.g2a6d74b583-goog
-> > > >
-> > >
-> > > I just bisected a linking failure when building resolve_btfids with
-> > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-> > > Alter how HOSTCC is forced") in the bpf-next tree.
-> > >
-> > > It appears to be related to whether or not CROSS_COMPILE is specified,
-> > > which we have to do for certain architectures and configurations still.
-> > > arm64 is not one of those but it helps demonstrate the issue.
-> > >
-> > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
-> > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
-> > >
-> > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
-> > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-> > >   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
-> > >   ...
-> > >
-> > > Before your change, with V=1, I see:
-> > >
-> > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > >
-> > > After, I see:
-> > >
-> > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-> > >
-> > > We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
-> > > target of resolve_btfids-in.o) and we dropped the warning flags.
-> > >
-> > > I think this comes from the clang block in
-> > > tools/scripts/Makefile.include, which is included into the
-> > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
-> > >
-> > > I am not super familiar with the tools build system, otherwise I would
-> > > try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
-> > > simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
-> > > did not appear to resolve it for me.
-> > >
-> > > If there is any other information I can provide or patches I can test,
-> > > please let me know.
-> > >
-> > > Cheers,
-> > > Nathan
-> >
-> > Thanks Nathan, and thanks for all the details in the bug report. I'm
-> > looking into this.
-> >
-> > Ian
-> 
-> Given the somewhat complicated cross compile I wasn't able to get a
-> reproduction. Could you see if the following addresses the problem:
 
-As long as you have an LLVM toolchain that targets AArch64 and your
-host, you should be able to reproduce this issue with those commands
-verbatim, as that command should not use any GNU binutils. I am pretty
-sure I tried it in a fresh container before reporting it but it is
-possible that I did not.
+On 1/31/23 14:22, Qais Yousef wrote:
+> On 01/30/23 14:57, Waiman Long wrote:
+>> On 1/30/23 14:48, Qais Yousef wrote:
+>>> On 01/30/23 11:29, Waiman Long wrote:
+>>>> On 1/30/23 08:00, Qais Yousef wrote:
+>>>>
+>>>>           just skip the call here if the condition is right? Like
+>>>>
+>>>>                   /* rebuild sched domains if cpus_allowed has changed */
+>>>>                   if (cpus_updated || (force_rebuild && !cpuhp_tasks_frozen)) {
+>>>>                           force_rebuild = false;
+>>>>                           rebuild_sched_domains();
+>>>>                   }
+>>>>
+>>>>           Still, we will need to confirm that cpuhp_tasks_frozen will be cleared
+>>>>           outside of the suspend/resume cycle.
+>>>>
+>>>>       I think it's fine to use this variable from the cpuhp callback context only.
+>>>>       Which I think this cpuset workfn is considered an extension of.
+>>>>
+>>>>       But you're right, I can't use cpuhp_tasks_frozen directly in
+>>>>       rebuild_root_domains() as I did in v1 because it doesn't get cleared after
+>>>>       calling the last _cpu_up().
+>>>>
+>>>> That is what I suspect. So we can't use that cpuhp_tasks_frozen variable here
+>>>> in cpuset.
+>>>>
+>>>>        force_rebuild will only be set after the last cpu
+>>>>       is brought online though - so this should happen once at the end.
+>>>>
+>>>> Perhaps you can add another tracking variable for detecting if suspend/resume
+>>>> is in progress.
+>>> I think cpuhp_tasks_frozen is meant for that. All users who cared so far
+>>> belonged to the cpuhp callback. I think reading it from cpuset_hotplug_workfn()
+>>> is fine too as this function will only run as a consequence of the cpuhp
+>>> callback AFAICS. cpuset_cpu_active() takes care of not forcing a rebuild of
+>>> sched_domains until the last cpu becomes active - so the part of it being done
+>>> once at the end at resume is handled too.
+>> Well we will have to add code to clear cpuhp_tasks_frozen at the end of
+>> resume then. We don't want to affect other callers unless we are sure that
+>> it won't affect them.
+> Actually I think since the cpuset_hotplug_workfn() is called later, there's
+> a chance to race with another cpuhp operation just after resume.
+>
+> Anyway. I think we don't have to use this flag. But we'd have to better distill
+> the reasons of why we force_rebuild.
+>
+> Your 2 new users are tripping me so far - do they handle errors where the shape
+> of cpuset changes? If yes, then we must take dl accounting update into
+> consideration for these errors.
+The 2 new users is for the cpuset cpu partition which is used to create 
+a secondary scheduling domain and hence have to call 
+rebuilds_sched_domains() to set it up. Those should not be used that 
+frequently.
 
-> ```
-> diff --git a/tools/bpf/resolve_btfids/Makefile
-> b/tools/bpf/resolve_btfids/Makefile
-> index daed388aa5d7..a06966841df4 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -19,10 +19,9 @@ endif
-> 
-> # always use the host compiler
-> HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)"
-> ARCH="$(HOSTARCH)" \
-> -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> +                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> CROSS_COMPILE=""
-> 
-> RM      ?= rm
-> -CROSS_COMPILE =
-> 
-> OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> ```
-> 
+>
+> Juri, I'd still would appreciate a confirmation from you that I'm not
+> understanding things completely wrong.
+>
+>>> It's just rebuild_sched_domains() will always assume it needs to clear and
+>>> rebuild deadline accounting - which is not true for suspend/resume case. But
+>>> now looking at other users of rebuild_sched_domains(), others might be getting
+>>> the hit too. For example rebuild_sched_domains_locked() is called on
+>>> update_relax_domain_level() which AFAIU should not impact dl accounting.
+>>>
+>>> FWIW, I did capture a worst case scenario of 21ms because of
+>>> rebuild_root_domains().
+>>>
+>>> /me thinks rebuild_root_domains() is a misleading name too as it just fixes
+>>> dl accounting but not rebuild the rd itself.
+>>>
+>>> What makes sense to me now is to pass whether dl accounting requires updating
+>>> to rebuild_sched_domains() as an arg so that the caller can decide whether the
+>>> reason can affect dl accounting.
+>>>
+>>> Or maybe pull rebuild_root_domains() out of the chain and let the caller call
+>>> it directly. And probably rename it to update_do_rd_accounting() or something.
+>>>
+>>> I'll continue to dig more..
+>> Looking forward to see that.
+> Another thought I had is maybe worth trying to optimize the rebuild root domain
+> process. Interestingly in my system there are no dl tasks but
+>
+> 	rebuilds_sched_domains()
+> 	  cpuset_for_each_descendant_pre()
+> 	    update_tasks_root_domain()
+> 	      css_task_iter_next()
+> 	        dl_add_task_root_domain()
+>
+> seems to be going through every task in the hierarchy anyway which would
+> explain the slow down. We can have special variants to iterate through
+> hierarchies that ever seen a dl task attached to them and a special variant to
+> iterate through dl tasks only in a css - but I'm not sure if I'm brave enough
+> to go down this rabbit hole :D
 
-Unfortunately, it does not. I still see '--target=' end up in the
-CFLAGS of those files.
+Yes, it seems like we have to check every tasks in the system to see if 
+they are dl tasks. It can be expensive if there are a large number of 
+tasks. Maybe we should track the # of dl tasks in each cgroup and skip 
+this operation if there is none.
 
 Cheers,
-Nathan
+Longman
+
