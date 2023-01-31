@@ -2,97 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7422C6838F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC5D6838F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjAaVzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S230200AbjAaV5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjAaVzQ (ORCPT
+        with ESMTP id S229907AbjAaV5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:55:16 -0500
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0C7485A7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:55:03 -0800 (PST)
+        Tue, 31 Jan 2023 16:57:23 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3A147401
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:57:22 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id o187so3494845ybg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:57:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1675202105; x=1706738105;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wrckb9mlh8yXx5gPqo3dLsOrcTZgI0LG6DD2w9k7peE=;
-  b=PuF6XV4UUZogkL6ckapnYW7GRZmyUZ7ykPsSV+qciwIkFUiKALGnLlmW
-   HYssHi93THJJrefQbQg5G1FfSO4zoy+RcvoB1pstSTC+34ea8UemQ0/BU
-   Cnmyzyq1JMedzl8JB+dRO+LZF6la+iuI2E4AGK1zXxVo+GH9BFmQ4j8LW
-   E=;
-X-IronPort-AV: E=Sophos;i="5.97,261,1669075200"; 
-   d="scan'208";a="177024314"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 21:55:03 +0000
-Received: from EX13MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-m6i4x-d40ec5a9.us-west-2.amazon.com (Postfix) with ESMTPS id D5FBD40DBD;
-        Tue, 31 Jan 2023 21:54:59 +0000 (UTC)
-Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
- EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
- id 15.0.1497.45; Tue, 31 Jan 2023 21:54:57 +0000
-Received: from b0f1d8753182.ant.amazon.com.com (10.43.162.56) by
- EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
- Tue, 31 Jan 2023 21:54:53 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     <x86@kernel.org>
-CC:     Takahiro Itazuri <itazur@amazon.com>,
-        Takahiro Itazuri <zulinx86@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] x86/cpufeatures: Add AMD-specific IBRS hint bits
-Date:   Tue, 31 Jan 2023 21:54:39 +0000
-Message-ID: <20230131215439.17294-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.38.0
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gmJtAREyo8ivJ4Kqeq2bHJyT3OX19Q3/5Agieb/eCv4=;
+        b=FzV5ad/w9oI7JUyKjIOehmdS6FJzcwhMWrQLXXTbMOvALvL5lkZBmWdBxTPlEf5qX2
+         bs2nbOtWaXdg+pvv24rRWzsueuY43fa+LaIY2eADp0ic+7sgntGa/OA6A/X+oxleng59
+         In0F6AXJyJPvHlbeDvk8MVSXfmfJqv5xyg8JyJh9RyXI253ZGWCLnygVvvqo0+98saNK
+         r0okEEu0L+gI81aeeFUYzHUajHLaxA7DKZN/7GLfyLYyxl66vClaT/MYDT6Rfbl88nYJ
+         /ryyp/XgSaf0CNXtWFbxC1iJYqWq7/+wNNjzZPWThW7k67WRRxTJCMBNVdC/JbV+nwei
+         jKLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gmJtAREyo8ivJ4Kqeq2bHJyT3OX19Q3/5Agieb/eCv4=;
+        b=I4m+9V7kgAjWK68A/vOkutXBSB+I6sst9/AeCNITNk7rw444gObJSTfUKyYYXmXuBu
+         aavG7XA+znTMoi8O9Bl83wA0EW+cFzNaRwK5SQaoXPERhooYnBu0z5gp9f07LOZ9WvkU
+         CBaMWW8Xa+NhrvmPpTDnqRDlsuxK0tnacSrNawJc1Jx4+hmYONd0ktXEOMML0ni7JEbI
+         Awqxa463QwOna5lPyEZZb8tBB1amhfcSSY7dM+kZz18RhWg8W0HAbw9zaISuz//76PD+
+         a5BAf5CJW5d/8osxYWdiZwwRKELirBMdbwUWIDk9fbPisLG8ak/O4GsylsnK+hDgI+XM
+         Zp/Q==
+X-Gm-Message-State: AO0yUKUfj/WtNA+IfoxdcvwU2txcANYM530RqhyfPHjrC/DqtcVNNCd9
+        O6D6EPvK7ZsjTQm8Ny+tCMN8f1w36EhCJeGtagQ=
+X-Google-Smtp-Source: AK7set+Ot0MQgVfuUTCbU8X1TkUfaJLbC3fNPaSKAiTBe4drEQA2+P0s8G/TDe4betMcz+jtgywV1axIxu/GtJ9GJw4=
+X-Received: by 2002:a25:7412:0:b0:802:f667:b222 with SMTP id
+ p18-20020a257412000000b00802f667b222mr66794ybc.100.1675202241394; Tue, 31 Jan
+ 2023 13:57:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.56]
-X-ClientProxiedBy: EX13D32UWB004.ant.amazon.com (10.43.161.36) To
- EX19D002ANA003.ant.amazon.com (10.37.240.141)
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113004933.2082072-1-daeho43@gmail.com> <ed5f65a7-13bb-581c-cfb5-df5ab30fbc4c@kernel.org>
+ <CACOAw_zhVgS84gOXpfZuvptMgsZDhP3QX2EFm=5CoKibB+3V1A@mail.gmail.com>
+ <8f1c15a3-d056-7709-af45-fe7cba56463f@kernel.org> <CACOAw_zSaZ5JKFtFSxRK3a5_260AYbeYCMzHL11pD8=mWM91Sw@mail.gmail.com>
+ <CACOAw_xjNz2AKa+MMqpVKo4SOC_ptbXY1P3S4tY2g8JneTzkPQ@mail.gmail.com>
+In-Reply-To: <CACOAw_xjNz2AKa+MMqpVKo4SOC_ptbXY1P3S4tY2g8JneTzkPQ@mail.gmail.com>
+From:   Daeho Jeong <daeho43@gmail.com>
+Date:   Tue, 31 Jan 2023 13:57:09 -0800
+Message-ID: <CACOAw_wUOv6GjiErE=m8vVHL8T9wzAe-TQ6=xYaNKWcoMaNDYw@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: synchronize atomic write aborts
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
+        Daeho Jeong <daehojeong@google.com>,
+        syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add AMD-specific IBRS-related hint bits to enable pass-through to KVM
-guests. KVM_GET_SUPPORTED_CPUID masks capability bits that KVM does not
-recognize even when host sets these bits. Making KVM recognize these
-allows VMMs to pass through host values to KVM guests without
-explicitly modifying KVM_GET_SUPPORTED_CPUID results.
+On Tue, Jan 31, 2023 at 1:38 PM Daeho Jeong <daeho43@gmail.com> wrote:
+>
+> On Tue, Jan 31, 2023 at 11:13 AM Daeho Jeong <daeho43@gmail.com> wrote:
+> >
+> > Hi Chao,
+> >
+> > On Tue, Jan 31, 2023 at 3:37 AM Chao Yu <chao@kernel.org> wrote:
+> > >
+> > > Hi Daeho,
+> > >
+> > > On 2023/1/31 0:34, Daeho Jeong wrote:
+> > > > Hi Chao,
+> > > >
+> > > > I read your patch series now and I like it.
+> > >
+> > > Thank you for checking the patches. :)
+> > >
+> > > > However, how about a race condition between start_atomic_write and
+> > > > abort_atomic_write?
+> > >
+> > > Yup, I noticed that issue, I guess we can avoid this race condition by
+> > > covering these two flows w/ i_atomic_sem.
+> > >
+> > > > abort_atomic_write is called without inode_lock in closing filp scenarios.
+> > > > What do you think about this?
+> > >
+> > > I'm fine w/ your change as it's more clean, but it's better to drop cow_inode's
+> > > page cache if atomic_write is committed or aborted to avoid caching obsolete page?
+> >
+> > It's better to put that part in f2fs_abort_atomic_write().
+> > On top of that, maybe, we should move
+> > f2fs_do_truncate_blocks(fi->cow_inode, 0, true) part from
+> > f2fs_ioc_start_atomic_write() to f2fs_abort_atomic_write(), too.
+>
+> Oh, we shouldn't touch the f2fs_do_truncate_blocks() part, since there
+> might be some left writeback after aborting atomic write.
+> Plz. review it related to the timing of calling truncate_inode_pages_final().
 
-Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
----
- arch/x86/include/asm/cpufeatures.h | 3 +++
- 1 file changed, 3 insertions(+)
+Looks like the scenario becomes too complicated if I think about more
+than one writer's scenario.
+How about we check writecount in commit_atomic_write ioctl and return
+EBUSY when it's not only one writer?
+In that case, we can make the scenario simple and effective, and we
+can release all the resources in abort_atomic_write().
 
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index fdb8e09234ba..3447a9be1616 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -328,7 +328,10 @@
- #define X86_FEATURE_AMD_IBPB		(13*32+12) /* "" Indirect Branch Prediction Barrier */
- #define X86_FEATURE_AMD_IBRS		(13*32+14) /* "" Indirect Branch Restricted Speculation */
- #define X86_FEATURE_AMD_STIBP		(13*32+15) /* "" Single Thread Indirect Branch Predictors */
-+#define X86_FEATURE_AMD_IBRS_ALWAYS_ON	(13*32+16) /* "" Inidrect Branch Restricted Speculation always-on preferred */
- #define X86_FEATURE_AMD_STIBP_ALWAYS_ON	(13*32+17) /* "" Single Thread Indirect Branch Predictors always-on preferred */
-+#define X86_FEATURE_AMD_IBRS_PREFERRED	(13*32+18) /* "" Indirect Branch Restricted Speculation preferred over software */
-+#define X86_FEATURE_AMD_IBRS_SAME_MODE	(13*32+19) /* "" Indirect Branch Restricted Speculation provides same mode protection */
- #define X86_FEATURE_AMD_PPIN		(13*32+23) /* Protected Processor Inventory Number */
- #define X86_FEATURE_AMD_SSBD		(13*32+24) /* "" Speculative Store Bypass Disable */
- #define X86_FEATURE_VIRT_SSBD		(13*32+25) /* Virtualized Speculative Store Bypass Disable */
--- 
-2.38.0
-
+>
+> >
+> > Thanks,
+> >
+> > >
+> > > Thanks,
+> > >
+> > > >
+> > > > Thanks,
+> > > >
+> > > >
+> > > > On Fri, Jan 27, 2023 at 6:07 PM Chao Yu <chao@kernel.org> wrote:
+> > > >>
+> > > >> Hi Daeho, Jaegeuk,
+> > > >>
+> > > >> Please take a look at patchset in below link:
+> > > >>
+> > > >> https://lore.kernel.org/linux-f2fs-devel/20230109034453.490176-1-chao@kernel.org/T/#t
+> > > >>
+> > > >> In PATCH 4/5, I'm trying to fix the same issue w/ alternative way, let me
+> > > >> know your preference. :)
+> > > >>
+> > > >> One comment as below.
+> > > >>
+> > > >> On 2023/1/13 8:49, Daeho Jeong wrote:
+> > > >>> From: Daeho Jeong <daehojeong@google.com>
+> > > >>>
+> > > >>> To fix a race condition between atomic write aborts, I use the inode
+> > > >>> lock and make COW inode to be re-usable thoroughout the whole
+> > > >>> atomic file inode lifetime.
+> > > >>>
+> > > >>> Reported-by: syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
+> > > >>> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
+> > > >>> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> > > >>> ---
+> > > >>>    fs/f2fs/file.c    | 43 ++++++++++++++++++++++++++++---------------
+> > > >>>    fs/f2fs/inode.c   | 11 +++++++++--
+> > > >>>    fs/f2fs/segment.c |  3 ---
+> > > >>>    fs/f2fs/super.c   |  2 --
+> > > >>>    4 files changed, 37 insertions(+), 22 deletions(-)
+> > > >>>
+> > > >>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> > > >>> index ecbc8c135b49..ff072a9ed258 100644
+> > > >>> --- a/fs/f2fs/file.c
+> > > >>> +++ b/fs/f2fs/file.c
+> > > >>> @@ -1866,7 +1866,10 @@ static int f2fs_release_file(struct inode *inode, struct file *filp)
+> > > >>>                        atomic_read(&inode->i_writecount) != 1)
+> > > >>>                return 0;
+> > > >>>
+> > > >>> +     inode_lock(inode);
+> > > >>>        f2fs_abort_atomic_write(inode, true);
+> > > >>> +     inode_unlock(inode);
+> > > >>> +
+> > > >>>        return 0;
+> > > >>>    }
+> > > >>>
+> > > >>> @@ -1880,8 +1883,11 @@ static int f2fs_file_flush(struct file *file, fl_owner_t id)
+> > > >>>         * until all the writers close its file. Since this should be done
+> > > >>>         * before dropping file lock, it needs to do in ->flush.
+> > > >>>         */
+> > > >>> -     if (F2FS_I(inode)->atomic_write_task == current)
+> > > >>> +     if (F2FS_I(inode)->atomic_write_task == current) {
+> > > >>> +             inode_lock(inode);
+> > > >>>                f2fs_abort_atomic_write(inode, true);
+> > > >>> +             inode_unlock(inode);
+> > > >>> +     }
+> > > >>>        return 0;
+> > > >>>    }
+> > > >>>
+> > > >>> @@ -2087,19 +2093,28 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+> > > >>>                goto out;
+> > > >>>        }
+> > > >>>
+> > > >>> -     /* Create a COW inode for atomic write */
+> > > >>> -     pinode = f2fs_iget(inode->i_sb, fi->i_pino);
+> > > >>> -     if (IS_ERR(pinode)) {
+> > > >>> -             f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> > > >>> -             ret = PTR_ERR(pinode);
+> > > >>> -             goto out;
+> > > >>> -     }
+> > > >>> +     /* Check if the inode already has a COW inode */
+> > > >>> +     if (fi->cow_inode == NULL) {
+> > > >>> +             /* Create a COW inode for atomic write */
+> > > >>> +             pinode = f2fs_iget(inode->i_sb, fi->i_pino);
+> > > >>> +             if (IS_ERR(pinode)) {
+> > > >>> +                     f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> > > >>> +                     ret = PTR_ERR(pinode);
+> > > >>> +                     goto out;
+> > > >>> +             }
+> > > >>>
+> > > >>> -     ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
+> > > >>> -     iput(pinode);
+> > > >>> -     if (ret) {
+> > > >>> -             f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> > > >>> -             goto out;
+> > > >>> +             ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
+> > > >>> +             iput(pinode);
+> > > >>> +             if (ret) {
+> > > >>> +                     f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
+> > > >>> +                     goto out;
+> > > >>> +             }
+> > > >>> +
+> > > >>> +             set_inode_flag(fi->cow_inode, FI_COW_FILE);
+> > > >>> +             clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
+> > > >>> +     } else {
+> > > >>> +             /* Reuse the already created COW inode */
+> > > >>> +             f2fs_do_truncate_blocks(fi->cow_inode, 0, true);
+> > > >>>        }
+> > > >>>
+> > > >>>        f2fs_write_inode(inode, NULL);
+> > > >>> @@ -2107,8 +2122,6 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+> > > >>>        stat_inc_atomic_inode(inode);
+> > > >>>
+> > > >>>        set_inode_flag(inode, FI_ATOMIC_FILE);
+> > > >>> -     set_inode_flag(fi->cow_inode, FI_COW_FILE);
+> > > >>> -     clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
+> > > >>>
+> > > >>>        isize = i_size_read(inode);
+> > > >>>        fi->original_i_size = isize;
+> > > >>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> > > >>> index ff6cf66ed46b..4921f7209e28 100644
+> > > >>> --- a/fs/f2fs/inode.c
+> > > >>> +++ b/fs/f2fs/inode.c
+> > > >>> @@ -766,11 +766,18 @@ int f2fs_write_inode(struct inode *inode, struct writeback_control *wbc)
+> > > >>>    void f2fs_evict_inode(struct inode *inode)
+> > > >>>    {
+> > > >>>        struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> > > >>> -     nid_t xnid = F2FS_I(inode)->i_xattr_nid;
+> > > >>> +     struct f2fs_inode_info *fi = F2FS_I(inode);
+> > > >>> +     nid_t xnid = fi->i_xattr_nid;
+> > > >>>        int err = 0;
+> > > >>>
+> > > >>>        f2fs_abort_atomic_write(inode, true);
+> > > >>>
+> > > >>> +     if (fi->cow_inode) {
+> > > >>> +             clear_inode_flag(fi->cow_inode, FI_COW_FILE);
+> > > >>> +             iput(fi->cow_inode);
+> > > >>> +             fi->cow_inode = NULL;
+> > > >>> +     }
+> > > >>> +
+> > > >>>        trace_f2fs_evict_inode(inode);
+> > > >>>        truncate_inode_pages_final(&inode->i_data);
+> > > >>>
+> > > >>> @@ -857,7 +864,7 @@ void f2fs_evict_inode(struct inode *inode)
+> > > >>>        stat_dec_inline_inode(inode);
+> > > >>>        stat_dec_compr_inode(inode);
+> > > >>>        stat_sub_compr_blocks(inode,
+> > > >>> -                     atomic_read(&F2FS_I(inode)->i_compr_blocks));
+> > > >>> +                     atomic_read(&fi->i_compr_blocks));
+> > > >>>
+> > > >>>        if (likely(!f2fs_cp_error(sbi) &&
+> > > >>>                                !is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
+> > > >>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> > > >>> index ae3c4e5474ef..536d7c674b04 100644
+> > > >>> --- a/fs/f2fs/segment.c
+> > > >>> +++ b/fs/f2fs/segment.c
+> > > >>> @@ -192,9 +192,6 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
+> > > >>>        if (!f2fs_is_atomic_file(inode))
+> > > >>>                return;
+> > > >>>
+> > > >>> -     clear_inode_flag(fi->cow_inode, FI_COW_FILE);
+> > > >>> -     iput(fi->cow_inode);
+> > > >>> -     fi->cow_inode = NULL;
+> > > >>>        release_atomic_write_cnt(inode);
+> > > >>>        clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
+> > > >>>        clear_inode_flag(inode, FI_ATOMIC_REPLACE);
+> > > >>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> > > >>> index 1f812b9ce985..10463f084d30 100644
+> > > >>> --- a/fs/f2fs/super.c
+> > > >>> +++ b/fs/f2fs/super.c
+> > > >>> @@ -1430,8 +1430,6 @@ static int f2fs_drop_inode(struct inode *inode)
+> > > >>>                        atomic_inc(&inode->i_count);
+> > > >>>                        spin_unlock(&inode->i_lock);
+> > > >>>
+> > > >>> -                     f2fs_abort_atomic_write(inode, true);
+> > > >>
+> > > >> In order to avoid caching obsolete page of cow_inode, how about truncating
+> > > >> them here?
+> > > >>
+> > > >> if (f2fs_is_atomic_file() && cow_inode)
+> > > >>          truncate_inode_pages_final(&cow_inode->i_data);
+> > > >>
+> > > >> Thanks,
+> > > >>
+> > > >>> -
+> > > >>>                        /* should remain fi->extent_tree for writepage */
+> > > >>>                        f2fs_destroy_extent_node(inode);
+> > > >>>
