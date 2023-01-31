@@ -2,92 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B61683852
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8CF683854
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231997AbjAaVHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S231939AbjAaVHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbjAaVHS (ORCPT
+        with ESMTP id S231834AbjAaVHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:07:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F557C154;
-        Tue, 31 Jan 2023 13:07:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B459B81ED8;
-        Tue, 31 Jan 2023 21:07:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D89DC433D2;
-        Tue, 31 Jan 2023 21:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1675199234;
-        bh=4H4iBjRwVxioiqKFCxXizJYSV6KoeP6hWEgfnJdkrEs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oy9jqjN3LqiTDGhC2GGlKK4sF1VMrdmttEVIY6Lx0hops8uEGrRqAZGqXAn4rP+vy
-         pHPSBcpJC7x4yU5vNGkGICeLVcihx07bHo5W+mmmIPt6AIlQOb7FScmO9rxUGcaiRK
-         ozrQLvmGaUnhG2Cp5cPM/HRlhqsCgWzd4cWGXEng=
-Date:   Tue, 31 Jan 2023 13:07:13 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@knights.ucf.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH] mm/mmap: Fix vma_merge() offset when expanding the next
- vma
-Message-Id: <20230131130713.5d6a5bc9eb0ec957c5d1ba26@linux-foundation.org>
-In-Reply-To: <72dfedd2-a26a-17f4-87c2-3d71ab3f55b4@redhat.com>
-References: <20230130195713.2881766-1-Liam.Howlett@oracle.com>
-        <97ea66a4-54a0-68a3-c42b-f3c36c69768e@redhat.com>
-        <20230131142452.sfrmubta4ojejct2@revolver>
-        <72dfedd2-a26a-17f4-87c2-3d71ab3f55b4@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 31 Jan 2023 16:07:52 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3701B472
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:07:51 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id g68so10985124pgc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:07:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Up7/zvDdjUz1Pcl1Rjcqj9BQdupVezuRTStHZScQfAA=;
+        b=rmIT1jIZRk8hQ3tu2ptW5zSnxr4aPhAb2XBN08+YjY4NUbUv3Z1DD9vzsx6igrkfZg
+         O32HcLg9Ef5Jh+Z1NNAFpQNQoM4LLvzKKNU4IjP6yXro8bGPMDPzJ7FZJUbRsyVeuOGY
+         Y4xY91h9yfK21L8nAepgJQdsmTJPYlmSxScUBiMdS9Rq6V4xHqrjqY2bFjW2Vl8JJrl8
+         6bQx8ncWgz9qJ6I/8/Q1Ld8+QYA2cM/8SUU+RvlTb7EfuYGlg88Vx/ApgiPzcxA+AwxS
+         6GwKoonBNGseVBx9qyJnQuODj2hr5AKOI3SXcGdm4i9tvzGRacKKKVdz+C1WWrtCGsHY
+         dwMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Up7/zvDdjUz1Pcl1Rjcqj9BQdupVezuRTStHZScQfAA=;
+        b=AfvykgEeG+z+veoKoevWNpRtlW7KQtLcVv6uy+uNtEg3FTqe+JACe57YyyLLrd9Wya
+         lmiMDUF+UOFgrxVSqgrJJ7Wn0nEIjEE2Arasx0PwoJTs+nkfcffR4Q2TAqnjpY4fwat1
+         3rJNZEEx/U19kqEDgeJH7UBCIrhfMfq26hExXR2+UtloK566tl/AE+YYaPZUODHYlX8w
+         hkVYE/pyHjp3AVDYARPGmS+V63AGNkT2ScKxvrezRhPoITVJPU6NTih1ZWNkDQahC79m
+         8H6aoVDjit9UetzdZNDMFrjHNcP1ZEES0BdIGePZyp31PN8G09oweX8YVZE1vZS2KIqx
+         vf7A==
+X-Gm-Message-State: AO0yUKWAZgduN3NxgTO7Y33EFcQ68bgQHlcoN15UorwDqskwXPNbzjzY
+        0U3g5+YibO/HCXtRHCYk1+wLwQ==
+X-Google-Smtp-Source: AK7set/UeC8+PrNBMRcAicmB2v06KLiBgEVfW/rBqKSq3VcmoSyU+lmwsGCajCVhHYyfaE1vyJWfFA==
+X-Received: by 2002:a05:6a00:784:b0:576:9252:d06 with SMTP id g4-20020a056a00078400b0057692520d06mr127327pfu.0.1675199270958;
+        Tue, 31 Jan 2023 13:07:50 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 144-20020a621996000000b0058bcb42dd1asm9920762pfz.111.2023.01.31.13.07.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 13:07:50 -0800 (PST)
+Date:   Tue, 31 Jan 2023 21:07:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Santosh Shukla <santosh.shukla@amd.com>, kvm@vger.kernel.org,
+        Sandipan Das <sandipan.das@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
+        Jing Liu <jing2.liu@intel.com>,
+        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v2 06/11] KVM: SVM: add wrappers to enable/disable IRET
+ interception
+Message-ID: <Y9mDInNl65hjVblm@google.com>
+References: <20221129193717.513824-1-mlevitsk@redhat.com>
+ <20221129193717.513824-7-mlevitsk@redhat.com>
+ <41abb37b-c74a-f2cf-c0ce-74d5d6487e92@amd.com>
+ <181f437164296e19683f086c11bf64c11a3f380e.camel@redhat.com>
+ <70078abb-f8b7-cd33-5bdd-bc6ee44c0bd3@amd.com>
+ <06d12050eece922e786b7bee1254698466c6d3d4.camel@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <06d12050eece922e786b7bee1254698466c6d3d4.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 Jan 2023 15:29:59 +0100 David Hildenbrand <david@redhat.com> wrote:
-
-> On 31.01.23 15:24, Liam R. Howlett wrote:
-> > * David Hildenbrand <david@redhat.com> [230131 03:35]:
-> >> On 30.01.23 20:57, Liam R. Howlett wrote:
-> >>> The vm_pgoff was being set incorrectly when expanding the next VMA to a
-> >>> lower address.  Fix the issue by using the mid->vm_pgoff value for this
-> >>> merge case (aka case 8).  Note that this does not change case 3's
-> >>> vm_pgoff as next and mid are the same VMA.
-> >>>
-> >>> Reported-by: Sanan Hasanov <sanan.hasanov@knights.ucf.edu>
-> >>> Link: https://lore.kernel.org/linux-mm/IA1PR07MB983017D2FBA174D2FF78CEB6ABCE9@IA1PR07MB9830.namprd07.prod.outlook.com/
-> >>> Cc: Matthew Wilcox <willy@infradead.org>
-> >>> Cc: David Hildenbrand <david@redhat.com>
-> >>> Cc: Hugh Dickins <hughd@google.com>
-> >>
-> >> Fixes: ?
+On Thu, Dec 08, 2022, Maxim Levitsky wrote:
+> On Thu, 2022-12-08 at 17:39 +0530, Santosh Shukla wrote:
 > > 
-> > Fixes: (soon to be invalid git id :) ("mm/mmap: remove __vma_adjust()")
+> > On 12/6/2022 5:44 PM, Maxim Levitsky wrote:
+> > > > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > > > > index 512b2aa21137e2..cfed6ab29c839a 100644
+> > > > > --- a/arch/x86/kvm/svm/svm.c
+> > > > > +++ b/arch/x86/kvm/svm/svm.c
+> > > > > @@ -2468,16 +2468,29 @@ static int task_switch_interception(struct kvm_vcpu *vcpu)
+> > > > >  			       has_error_code, error_code);
+> > > > >  }
+> > > > >  
+> > > > > +static void svm_disable_iret_interception(struct vcpu_svm *svm)
+> > > > > +{
+> > > > > +	if (!sev_es_guest(svm->vcpu.kvm))
+> > > > > +		svm_clr_intercept(svm, INTERCEPT_IRET);
+> > > > > +}
+> > > > > +
+> > > > > +static void svm_enable_iret_interception(struct vcpu_svm *svm)
+> > > > > +{
+> > > > > +	if (!sev_es_guest(svm->vcpu.kvm))
+> > > > > +		svm_set_intercept(svm, INTERCEPT_IRET);
+> > > > > +}
+> > > > > +
+> > > > 
+> > > > nits:
+> > > > s/_iret_interception / _iret_intercept
+> > > > does that make sense?
+> > > 
+> > > Makes sense.
+
+I would rather go with svm_{clr,set}_iret_intercept().  I don't particularly like
+the SVM naming scheme, but I really dislike inconsistent naming.  If we want to
+clean up naming, I would love unify VMX and SVM nomenclature for things like this.
+
+> > >  I can also move this to svm.h near the svm_set_intercept(), I think
+> > > it better a better place for this function there if no objections.
+> > > 
+> > I think current approach is fine since function used in svm.c only. but I have
+> > no strong opinion on moving to svm.h either ways.
 > 
-> Ah, right, upstream was not affected ... :)
-> 
-> ... so this should be squashed into that commit instead as long as it 
-> doesn't have a stable ID.
+> I also think so, just noticed something in case there are any objections.
 
-Yup, I queued this as mm-mmap-remove-__vma_adjust-fix.patch so it's
-to-be-squished.
-
-Generally, please let's tell people when a patch fixes something which
-is staged in mm-unstable - to save a few brain cycles and to hopefully
-improve review.  A Fixes: with no SHA works, or simply "this fixes X".
-
+My vote is to keep it in svm.c unless we anticipate usage outside of svm.h.  Keeping
+the implementation close to the usage makes it easer to understand what's going on,
+especially for something like this where there's a bit of "hidden" logic for SEV-ES.
