@@ -2,98 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2353A682F36
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7CE682F3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjAaO0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
+        id S230129AbjAaO2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231994AbjAaO00 (ORCPT
+        with ESMTP id S230033AbjAaO2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:26:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDEEC40CA
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:26:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E31961426
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:26:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA54C433D2;
-        Tue, 31 Jan 2023 14:26:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675175171;
-        bh=YgwryXO/WjU7qeBo+PfmZ5YImF9RsONUHj2VOYTQaLw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HqKKuHdWWsetbObe+TJDLV7+/QOme9pRaZ4WnEZKgvpkSuCPam3bphp+UTceJN4nR
-         uHqdAjCcB0JXZsEVxw+7X8vf5iFZggZBtIjIzu/Gq8PSjwBobBl/AY/tJzv/smjV/w
-         wPn+zQviwMGzkf/jvRnwPzGvZlEXOIS5+K9NiniF1NgTbJJVSXKYwfVb6ek9hwP8Fp
-         KiBkTJ/bgz+Tu54mX9uR7UICp9kIyaAc/qJ1pt5PmGh/p+LhFc+xlaAcblntK9PJuy
-         XgI1PsqOG65uDWy85a9ORJrJS/mQlYJ3jiC6gPgpxBHnlBVDMgas/AGKqOzDW5xbyr
-         +yAH6QW3uD5Hg==
-Message-ID: <d436ee82-4e3f-67a3-e825-a57d5f096e83@kernel.org>
-Date:   Tue, 31 Jan 2023 16:26:06 +0200
+        Tue, 31 Jan 2023 09:28:06 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939C610411;
+        Tue, 31 Jan 2023 06:28:03 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDhjLQ024672;
+        Tue, 31 Jan 2023 14:28:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ozFySGGVA6rJOoLJ2OEKhNK/VirTHinOBCsxBe0QIhE=;
+ b=VtpvfRVAeishEOn/dwb5p3Xh8FFDd6tlFprSKISHYlI/q+QRahcOUeveqoWefL8z4Tz8
+ a6PyvSOrFMg6QZ36lxvuciFawWPVVbVNXhlx82GmjCS+nFmLIvoadC3kKyEoMr+JDBot
+ AE8hWBU+3M9bhXQU+E/AX3KQX4AK44iWQxQc4tN0zbYRPERKZUmL/VvxuVQAzuo0gHL8
+ 4D8JAMoWEl801P9Xo3G3dhxj2TFYhsYWxY49tFWQ4vU8rxXGJPkYtuZcT48x+NLu83lj
+ Ts64KWnPHAINcX7RRVHUtKuu44GHyXyaheE3UzWXP9SYhtotrlNXzq86ZaM890ezZ6+t sg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf05g7fbs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 14:27:59 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VDtQ7f007961;
+        Tue, 31 Jan 2023 14:27:59 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf05g7fbd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 14:27:59 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDdrqf008520;
+        Tue, 31 Jan 2023 14:27:58 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ncvw2mh3m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 14:27:58 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VERuAY7471808
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 14:27:56 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A992158052;
+        Tue, 31 Jan 2023 14:27:56 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE5C658056;
+        Tue, 31 Jan 2023 14:27:54 +0000 (GMT)
+Received: from [9.160.68.138] (unknown [9.160.68.138])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 14:27:54 +0000 (GMT)
+Message-ID: <67ec09bf-cb24-34e3-6ec4-1ae87b0738bd@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 09:27:54 -0500
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm,page_alloc,cma: configurable CMA utilization
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] kvm/vfio: Fix potential deadlock on vfio group_lock
 Content-Language: en-US
-To:     Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Rik van Riel <riel@surriel.com>, Roman Gushchin <guro@fb.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Joonsoo Kim <js1304@gmail.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Chris Goldsworthy <quic_cgoldswo@quicinc.com>,
-        Georgi Djakov <quic_c_gdjako@quicinc.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230131071052.GB19285@hu-sbhattip-lv.qualcomm.com>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20230131071052.GB19285@hu-sbhattip-lv.qualcomm.com>
+To:     Yi Liu <yi.l.liu@intel.com>, alex.williamson@redhat.com,
+        pbonzini@redhat.com, mjrosato@linux.ibm.com
+Cc:     jgg@nvidia.com, kevin.tian@intel.com, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, jjherne@linux.ibm.com,
+        pasic@linux.ibm.com, zhenyuw@linux.intel.com, zhi.a.wang@intel.com,
+        seanjc@google.com, linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230120150528.471752-1-yi.l.liu@intel.com>
+From:   Anthony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <20230120150528.471752-1-yi.l.liu@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Mk7kXAXbBCgwh7F6bfurhUQET_8XaaiW
+X-Proofpoint-GUID: iFJAPq_Cx2MDCYrX48L24SPiMmlVWDYB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1011
+ phishscore=0 adultscore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ mlxscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310126
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sukadev,
+I encountered a lockdep splat while running some regression tests today 
+(see below). I suspected it might be this patch so I reverted it, 
+rebuilt the kernel and ran the regression tests again; this time, the 
+test ran cleanly. It looks like this patch may not have fixed the 
+problem for which it was intended. Here is the relevant dmesg output:
 
-On 31.01.23 9:10, Sukadev Bhattiprolu wrote:
-> 
-> Commit 16867664936e ("mm,page_alloc,cma: conditionally prefer cma pageblocks for movable allocations")
-> added support to use CMA pages when more than 50% of total free pages in
-> the zone are free CMA pages.
-> 
-> However, with multiplatform kernels a single binary is used across different
-> targets of varying memory sizes. A low memory target using one such kernel
-> would incur allocation failures even when sufficient memory is available in
-> the CMA region. On these targets we would want to utilize a higher percentage
-> of the CMA region and reduce the allocation failures, even if it means that a
-> subsequent cma_alloc() would take longer.
->  > Make the percentage of CMA utilization a configurable parameter to allow
-> for such usecases.
+[  579.471402] hades[1099]: Start test run
+[  579.473486] hades[1099]: Start 
+'tests.test_vfio_ap.VfioAPAssignMdevToGuestTest.runTest' test
+[  579.505804] vfio_ap matrix: MDEV: Registered
+[  579.604024] vfio_ap_mdev 529654a9-bea4-461a-b64d-9d9c63df0deb: Adding 
+to iommu group 0
 
-The above makes sense to me. But it also needs to documented like the other
-sysctl files in Documentation/admin-guide/sysctl/vm.rst
+[  585.043898] ======================================================
+[  585.043900] WARNING: possible circular locking dependency detected
+[  585.043902] 6.2.0-rc6-00057-g41c03ba9beea-dirty #18 Not tainted
+[  585.043904] ------------------------------------------------------
+[  585.043905] CPU 0/KVM/1173 is trying to acquire lock:
+[  585.043907] 000000008cfb24b0 (&group->group_lock){+.+.}-{3:3}, at: 
+vfio_file_set_kvm+0x50/0x68 [vfio]
+[  585.043919]
+                but task is already holding lock:
+[  585.043920] 00000000b2960ba0 (&kvm->lock){+.+.}-{3:3}, at: 
+kvm_device_release+0x4a/0xb8 [kvm]
+[  585.043960]
+                which lock already depends on the new lock.
 
-Thanks,
-Georgi
+[  585.043962]
+                the existing dependency chain (in reverse order) is:
+[  585.043963]
+                -> #3 (&kvm->lock){+.+.}-{3:3}:
+[  585.043967]        __lock_acquire+0x3e2/0x750
+[  585.043974]        lock_acquire.part.0+0xe2/0x250
+[  585.043977]        lock_acquire+0xac/0x1d0
+[  585.043980]        __mutex_lock+0x9e/0x868
+[  585.043985]        mutex_lock_nested+0x32/0x40
+[  585.043988]        vfio_ap_mdev_open_device+0x9a/0x198 [vfio_ap]
+[  585.043991]        vfio_device_open+0x122/0x168 [vfio]
+[  585.043995]        vfio_device_open_file+0x64/0x120 [vfio]
+[  585.043999]        vfio_group_fops_unl_ioctl+0xd4/0x1e0 [vfio]
+[  585.044002]        __s390x_sys_ioctl+0xc0/0x100
+[  585.044007]        do_syscall+0xee/0x118
+[  585.044032]        __do_syscall+0xd2/0x120
+[  585.044035]        system_call+0x82/0xb0
+[  585.044037]
+                -> #2 (&matrix_dev->guests_lock){+.+.}-{3:3}:
+[  585.044041]        __lock_acquire+0x3e2/0x750
+[  585.044044]        lock_acquire.part.0+0xe2/0x250
+[  585.044047]        lock_acquire+0xac/0x1d0
+[  585.044049]        __mutex_lock+0x9e/0x868
+[  585.044052]        mutex_lock_nested+0x32/0x40
+[  585.044054]        vfio_ap_mdev_open_device+0x8c/0x198 [vfio_ap]
+[  585.044057]        vfio_device_open+0x122/0x168 [vfio]
+[  585.044060]        vfio_device_open_file+0x64/0x120 [vfio]
+[  585.044064]        vfio_group_fops_unl_ioctl+0xd4/0x1e0 [vfio]
+[  585.044068]        __s390x_sys_ioctl+0xc0/0x100
+[  585.044070]        do_syscall+0xee/0x118
+[  585.044072]        __do_syscall+0xd2/0x120
+[  585.044074]        system_call+0x82/0xb0
+[  585.044076]
+                -> #1 (&new_dev_set->lock){+.+.}-{3:3}:
+[  585.044080]        __lock_acquire+0x3e2/0x750
+[  585.044082]        lock_acquire.part.0+0xe2/0x250
+[  585.044085]        lock_acquire+0xac/0x1d0
+[  585.044088]        __mutex_lock+0x9e/0x868
+[  585.044090]        mutex_lock_nested+0x32/0x40
+[  585.044093]        vfio_device_open+0x3e/0x168 [vfio]
+[  585.044096]        vfio_device_open_file+0x64/0x120 [vfio]
+[  585.044100]        vfio_group_fops_unl_ioctl+0xd4/0x1e0 [vfio]
+[  585.044104]        __s390x_sys_ioctl+0xc0/0x100
+[  585.044106]        do_syscall+0xee/0x118
+[  585.044108]        __do_syscall+0xd2/0x120
+[  585.044110]        system_call+0x82/0xb0
+[  585.044112]
+                -> #0 (&group->group_lock){+.+.}-{3:3}:
+[  585.044115]        check_prev_add+0xd4/0xf10
+[  585.044118]        validate_chain+0x698/0x8e8
+[  585.044120]        __lock_acquire+0x3e2/0x750
+[  585.044123]        lock_acquire.part.0+0xe2/0x250
+[  585.044125]        lock_acquire+0xac/0x1d0
+[  585.044128]        __mutex_lock+0x9e/0x868
+[  585.044130]        mutex_lock_nested+0x32/0x40
+[  585.044133]        vfio_file_set_kvm+0x50/0x68 [vfio]
+[  585.044137]        kvm_vfio_release+0x5e/0xf8 [kvm]
+[  585.044156]        kvm_device_release+0x90/0xb8 [kvm]
+[  585.044175]        __fput+0xaa/0x2a0
+[  585.044180]        task_work_run+0x76/0xd0
+[  585.044183]        do_exit+0x248/0x538
+[  585.044186]        do_group_exit+0x40/0xb0
+[  585.044188]        get_signal+0x614/0x698
+[  585.044192]        arch_do_signal_or_restart+0x58/0x370
+[  585.044195]        exit_to_user_mode_loop+0xe8/0x1b8
+[  585.044200]        exit_to_user_mode_prepare+0x164/0x190
+[  585.044203]        __do_syscall+0xd2/0x120
+[  585.044205]        system_call+0x82/0xb0
+[  585.044207]
+                other info that might help us debug this:
 
-> 
-> Signed-off-by: Sukadev Bhattiprolu <quic_sukadev@quicinc.com>
+[  585.044209] Chain exists of:
+                  &group->group_lock --> &matrix_dev->guests_lock --> 
+&kvm->lock
+
+[  585.044213]  Possible unsafe locking scenario:
+
+[  585.044214]        CPU0                    CPU1
+[  585.044216]        ----                    ----
+[  585.044217]   lock(&kvm->lock);
+[  585.044219] lock(&matrix_dev->guests_lock);
+[  585.044221] lock(&kvm->lock);
+[  585.044223]   lock(&group->group_lock);
+[  585.044225]
+                 *** DEADLOCK ***
+
+[  585.044227] 1 lock held by CPU 0/KVM/1173:
+[  585.044228]  #0: 00000000b2960ba0 (&kvm->lock){+.+.}-{3:3}, at: 
+kvm_device_release+0x4a/0xb8 [kvm]
+[  585.044251]
+                stack backtrace:
+[  585.044253] CPU: 3 PID: 1173 Comm: CPU 0/KVM Not tainted 
+6.2.0-rc6-00057-g41c03ba9beea-dirty #18
+[  585.044256] Hardware name: IBM 8561 T01 772 (LPAR)
+[  585.044257] Call Trace:
+[  585.044258]  [<000000011a818936>] dump_stack_lvl+0x8e/0xc8
+[  585.044261]  [<0000000119aca3f2>] check_noncircular+0x132/0x158
+[  585.044264]  [<0000000119acba44>] check_prev_add+0xd4/0xf10
+[  585.044267]  [<0000000119accf18>] validate_chain+0x698/0x8e8
+[  585.044270]  [<0000000119ace70a>] __lock_acquire+0x3e2/0x750
+[  585.044273]  [<0000000119acf682>] lock_acquire.part.0+0xe2/0x250
+[  585.044276]  [<0000000119acf89c>] lock_acquire+0xac/0x1d0
+[  585.044279]  [<000000011a823c66>] __mutex_lock+0x9e/0x868
+[  585.044282]  [<000000011a824462>] mutex_lock_nested+0x32/0x40
+[  585.044285]  [<000003ff7fbcd6a0>] vfio_file_set_kvm+0x50/0x68 [vfio]
+[  585.044289]  [<000003ff7feacab6>] kvm_vfio_release+0x5e/0xf8 [kvm]
+[  585.044308]  [<000003ff7fea6d58>] kvm_device_release+0x90/0xb8 [kvm]
+[  585.044328]  [<0000000119dbb83a>] __fput+0xaa/0x2a0
+[  585.044331]  [<0000000119a67c66>] task_work_run+0x76/0xd0
+[  585.044333]  [<0000000119a3ec18>] do_exit+0x248/0x538
+[  585.044335]  [<0000000119a3f0c8>] do_group_exit+0x40/0xb0
+[  585.044338]  [<0000000119a50dec>] get_signal+0x614/0x698
+[  585.044340]  [<00000001199ea030>] arch_do_signal_or_restart+0x58/0x370
+[  585.044343]  [<0000000119b0bb50>] exit_to_user_mode_loop+0xe8/0x1b8
+[  585.044346]  [<0000000119b0bd84>] exit_to_user_mode_prepare+0x164/0x190
+[  585.044349]  [<000000011a818d2a>] __do_syscall+0xd2/0x120
+[  585.044351]  [<000000011a82c462>] system_call+0x82/0xb0
+[  585.044354] INFO: lockdep is turned off.
+[  610.595528] vfio_ap_mdev 529654a9-bea4-461a-b64d-9d9c63df0deb: 
+Removing from iommu group 0
+[  610.604408] vfio_ap matrix: MDEV: Unregistering
+[  610.826074] hades[1099]: Stop 
+'tests.test_vfio_ap.VfioAPAssignMdevToGuestTest.runTest'
+
+On 1/20/23 10:05 AM, Yi Liu wrote:
+> Currently it is possible that the final put of a KVM reference comes from
+> vfio during its device close operation.  This occurs while the vfio group
+> lock is held; however, if the vfio device is still in the kvm device list,
+> then the following call chain could result in a deadlock:
+>
+> VFIO holds group->group_lock/group_rwsem
+>    -> kvm_put_kvm
+>     -> kvm_destroy_vm
+>      -> kvm_destroy_devices
+>       -> kvm_vfio_destroy
+>        -> kvm_vfio_file_set_kvm
+>         -> vfio_file_set_kvm
+>          -> try to hold group->group_lock/group_rwsem
+>
+> The key function is the kvm_destroy_devices() which triggers destroy cb
+> of kvm_device_ops. It calls back to vfio and try to hold group_lock. So
+> if this path doesn't call back to vfio, this dead lock would be fixed.
+> Actually, there is a way for it. KVM provides another point to free the
+> kvm-vfio device which is the point when the device file descriptor is
+> closed. This can be achieved by providing the release cb instead of the
+> destroy cb. Also rename kvm_vfio_destroy() to be kvm_vfio_release().
+>
+> 	/*
+> 	 * Destroy is responsible for freeing dev.
+> 	 *
+> 	 * Destroy may be called before or after destructors are called
+> 	 * on emulated I/O regions, depending on whether a reference is
+> 	 * held by a vcpu or other kvm component that gets destroyed
+> 	 * after the emulated I/O.
+> 	 */
+> 	void (*destroy)(struct kvm_device *dev);
+>
+> 	/*
+> 	 * Release is an alternative method to free the device. It is
+> 	 * called when the device file descriptor is closed. Once
+> 	 * release is called, the destroy method will not be called
+> 	 * anymore as the device is removed from the device list of
+> 	 * the VM. kvm->lock is held.
+> 	 */
+> 	void (*release)(struct kvm_device *dev);
+>
+> Fixes: 421cfe6596f6 ("vfio: remove VFIO_GROUP_NOTIFY_SET_KVM")
+> Reported-by: Alex Williamson <alex.williamson@redhat.com>
+> Suggested-by: Kevin Tian <kevin.tian@intel.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 > ---
-> Note:	There was a mention about it being the last resort to making this
-> 	percentage configurable (https://lkml.org/lkml/2020/3/12/751). But
-> 	as explained above, multi-platform kernels for varying memory size
-> 	targets would need this to be configurable.
-> ---
->   include/linux/mm.h |  1 +
->   kernel/sysctl.c    |  8 ++++++++
->   mm/page_alloc.c    | 18 +++++++++++++++---
->   mm/util.c          |  2 ++
->   4 files changed, 26 insertions(+), 3 deletions(-)
-> 
+>   virt/kvm/vfio.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/virt/kvm/vfio.c b/virt/kvm/vfio.c
+> index 495ceabffe88..e94f3ea718e5 100644
+> --- a/virt/kvm/vfio.c
+> +++ b/virt/kvm/vfio.c
+> @@ -336,7 +336,7 @@ static int kvm_vfio_has_attr(struct kvm_device *dev,
+>   	return -ENXIO;
+>   }
+>   
+> -static void kvm_vfio_destroy(struct kvm_device *dev)
+> +static void kvm_vfio_release(struct kvm_device *dev)
+>   {
+>   	struct kvm_vfio *kv = dev->private;
+>   	struct kvm_vfio_group *kvg, *tmp;
+> @@ -363,7 +363,7 @@ static int kvm_vfio_create(struct kvm_device *dev, u32 type);
+>   static struct kvm_device_ops kvm_vfio_ops = {
+>   	.name = "kvm-vfio",
+>   	.create = kvm_vfio_create,
+> -	.destroy = kvm_vfio_destroy,
+> +	.release = kvm_vfio_release,
+>   	.set_attr = kvm_vfio_set_attr,
+>   	.has_attr = kvm_vfio_has_attr,
+>   };
