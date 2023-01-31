@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AB06833A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C89636833A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbjAaRTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S231849AbjAaRTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:19:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjAaRSd (ORCPT
+        with ESMTP id S231550AbjAaRTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:18:33 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761794AA71;
-        Tue, 31 Jan 2023 09:18:07 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VG06Ca009039;
-        Tue, 31 Jan 2023 17:17:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=g5Nz1N51a9LvLF+LPsrVOUApZAL6oSBYkLnDjZdTvb8=;
- b=hCUk9/+P86Yxz5nF1p4oJ2ScUOPRflOFeyHGJfQoWcRsue3KPnIw0WITfXRJCFQZL6Ww
- g5OnSq0rJI21AApFaVSuPHieHa/9Y4EQLiOT7g5OibvHUsL6NWybXCmeocqidvjEJ0Va
- whv6TctVGU5q0smcYezl+6Q1Q/wgol9jww1UHmGd4lXFMNSKK5JMKYMYAEVYB4OVF7DJ
- lUN5+wdVVphY5VD24i8pCAx747mZG7Zf3PBgjwsg8I+m0ZHyGyoIV9MPUJNiyUdLVAOu
- umNfHxUzqn3GnSbgVCU3GW/e/qIigCFeWz2K5dxAM9Y0ye7NRSdJBLP9i22NswmHxGiK UQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31nfrqx-1
+        Tue, 31 Jan 2023 12:19:06 -0500
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEA84A22D
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:18:17 -0800 (PST)
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGXriP031218;
+        Tue, 31 Jan 2023 17:17:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=n13Qbs+81Hma7bEWH6okHak0zLeAk2ohGoduVT+n/ns=;
+ b=h1bh4dqjYIZZB2fiKyThES/y3fED1fgWmKpe3RRYH7441u+6ednCPRftzjMnV4jAkFqk
+ Rp+pq3Un49CAwij3azLXCuqy1a/0wmxJbdEv9A5Dxnc9/zqVlSdjPDi2NGJpCxb4rZyk
+ n8j2Fgs6rr4AxTSp7csvixkLr/HB48/GORPic62IDvlhJ61yr22DzgLHEBh5UMKn4sES
+ hHuK00rHZrQTgDUtLY1iQ+Q0blSAr+Q7KQyPGx9dRE3hc5Gp9kBoySJTI/EgxRIayWUG
+ HDathIO6IT+AgceF9+uzls+sBvnfa+x2hMNiMdQmDuF+e5Ge0Bl/VA8kDWC5vanJFLp2 2A== 
+Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3nf6m98k78-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 17:17:17 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VGT5Rj018708;
-        Tue, 31 Jan 2023 17:17:16 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31nfrqb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 17:17:16 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGAiA1019225;
-        Tue, 31 Jan 2023 17:17:15 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3ncvuqnbvw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 17:17:15 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VHHDrA28573986
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 17:17:13 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3440058065;
-        Tue, 31 Jan 2023 17:17:13 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48CF558056;
-        Tue, 31 Jan 2023 17:17:12 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 17:17:12 +0000 (GMT)
-Message-ID: <5fc51ed4-19fa-6116-0f8a-a67b7d746398@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 12:17:11 -0500
+        Tue, 31 Jan 2023 17:17:19 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id 59687131A1;
+        Tue, 31 Jan 2023 17:17:18 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id E421E804770;
+        Tue, 31 Jan 2023 17:17:16 +0000 (UTC)
+Date:   Tue, 31 Jan 2023 11:17:15 -0600
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     kan.liang@linux.intel.com
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, steve.wahl@hpe.com,
+        alexander.antonov@linux.intel.com, ak@linux.intel.com,
+        eranian@google.com, namhyung@kernel.org
+Subject: Re: [PATCH RESEND 0/5] Fix UPI uncore issue on SPR
+Message-ID: <Y9lNG+JnSFNFFAHQ@swahl-home.5wahls.com>
+References: <20230112200105.733466-1-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 25/25] integrity/powerpc: Support loading keys from
- PLPKS
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-26-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-26-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: DwSd9rXQKvF4RVlIxzqSXJPfTeCSGuns
-X-Proofpoint-GUID: YEp6XU2nuMKdsH4FqzATq8ZJwPLiJWQH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112200105.733466-1-kan.liang@linux.intel.com>
+X-Proofpoint-ORIG-GUID: 64f4TGacv6K1HqZ3UKdN8xpPcalMkr3_
+X-Proofpoint-GUID: 64f4TGacv6K1HqZ3UKdN8xpPcalMkr3_
+X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
- phishscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301310150
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=622 mlxscore=0
+ phishscore=0 adultscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 clxscore=1011 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310153
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I reviewed this patch series, applied it to a kernel tree, and tested
+it on two larger (12+ socket) systems, did not notice any adverse
+affects.  So I believe it's appropriate to add both of these tags:
 
+Tested-by: Steve Wahl <steve.wahl@hpe.com>
+Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
 
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
-> 
-> Add support for loading keys from the PLPKS on pseries machines, with the
-> "ibm,plpks-sb-v1" format.
-> 
-> The object format is expected to be the same, so there shouldn't be any
-> functional differences between objects retrieved on powernv or pseries.
-> 
-> Unlike on powernv, on pseries the format string isn't contained in the
-> device tree. Use secvar_ops->format() to fetch the format string in a
-> generic manner, rather than searching the device tree ourselves.
-> 
-> (The current code searches the device tree for a node compatible with
-> "ibm,edk2-compat-v1". This patch switches to calling secvar_ops->format(),
-> which in the case of OPAL/powernv means opal_secvar_format(), which
-> searches the device tree for a node compatible with "ibm,secvar-backend"
-> and checks its "format" property. These are equivalent, as skiboot creates
-> a node with both "ibm,edk2-compat-v1" and "ibm,secvar-backend" as
-> compatible strings.)
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+--> Steve
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+On Thu, Jan 12, 2023 at 12:01:00PM -0800, kan.liang@linux.intel.com wrote:
+> From: Kan Liang <kan.liang@linux.intel.com>
+> 
+> The discovery table of UPI on SPR MCC is broken. The patch series is
+> to mitigate the issue by providing a hardcode pre-defined table.
+> 
+> The broken discovery table can trigger a kernel warning message, which
+> is overkilled. The patch series also refine the error handling code.
+> 
+> Kan Liang (5):
+>   perf/x86/uncore: Factor out uncore_device_to_die()
+>   perf/x86/uncore: Fix potential NULL pointer in uncore_get_alias_name
+>   perf/x86/uncore: Ignore broken units in discovery table
+>   perf/x86/uncore: Add a quirk for UPI on SPR
+>   perf/x86/uncore: Don't WARN_ON_ONCE() for a broken discovery table
+> 
+>  arch/x86/events/intel/uncore.c           |  34 ++++-
+>  arch/x86/events/intel/uncore.h           |   4 +
+>  arch/x86/events/intel/uncore_discovery.c |  60 ++++++---
+>  arch/x86/events/intel/uncore_discovery.h |  14 +-
+>  arch/x86/events/intel/uncore_snbep.c     | 158 ++++++++++++++++++-----
+>  5 files changed, 210 insertions(+), 60 deletions(-)
+> 
+> -- 
+> 2.35.1
+> 
+
+-- 
+Steve Wahl, Hewlett Packard Enterprise
