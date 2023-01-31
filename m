@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EC66822F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832AB6822F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjAaDoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
+        id S230007AbjAaDpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:45:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjAaDoH (ORCPT
+        with ESMTP id S229460AbjAaDpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:44:07 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC09EFBF;
-        Mon, 30 Jan 2023 19:44:06 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-15fe106c7c7so17848043fac.8;
-        Mon, 30 Jan 2023 19:44:06 -0800 (PST)
+        Mon, 30 Jan 2023 22:45:52 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A851B576;
+        Mon, 30 Jan 2023 19:45:49 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id v17so16438286lfd.7;
+        Mon, 30 Jan 2023 19:45:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dDrLZ++5N+sw+ZK0t3EaqYJtg0ZAcMsbhUYSmXTMd7c=;
-        b=LmvHYI/hQfhLg3zN+FbsCSdzogdn1isNJ7cfe5A8SziJ0bvJ4vA/w/WjkmevSMJudA
-         apTco4buzXOoicguENtP2jyJMpgTCUC6j1qe8i0hxI8vw2ARr+qk5EChICslk6/naHxP
-         AUBtIaO8bZ6l+xH2VR+43oyj5rhMi1JATwHEdgbZdE+y+Ig1gNZENTeemB+gHQgYtYPK
-         kOzbYf5pph6G88FKH5izbeTA2IalyWJzz0NKvLbSaGgco+g1KKtIO9izbAqHYSI8BYVl
-         vTMdnWF/w7wwCK4N6a3PL6VUp/xMxOtIXD4qgD4oIfx70JZ73r/fWu3UvVeq7G1iDdWl
-         nM4g==
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bu9kOzolYrLN18xE7vKK9Gz/M0Y2r1dd0So265lFzjA=;
+        b=SAqmwlChFK5IhDU8so8BIfdRI4HhmAHFNEfPs70Ht1NU1PK3+G6W5msIg8+Vko3Nul
+         IHKxz5ccIw/1BSNX33Bt482b5pgiyvNVnz6eS4LQ1Vt2krgxAq69d+s4gFUqEKBF+bcG
+         1zqJ5QJ1xq18caVHOEk0dYBbKJAFG/pCMUZviZEiTqvViXNvTciUu7eVSc+eIDL1lyt3
+         fp/XwiMP6YMC8PH4q9VMKR7v/utEIaYFZodGYN1hY0nxar9rCVFY5COpq4WdH2xNP19u
+         9W7sa3Pgy/hwSrZ/oiw0GdpN++3whACaFp4HhX0XgL3xVIJJc31ruY1hz1FcCXvkisVt
+         pdrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dDrLZ++5N+sw+ZK0t3EaqYJtg0ZAcMsbhUYSmXTMd7c=;
-        b=GyZ0YU9T9mx9N9DWM3GfC/BIznjbyftaI8CEUABNkni+J9k26A43IMCo5seVQTb1aS
-         tUvW2hdDpZEe/SM3XQ73woTLhD4A8qTm2XqWtWVmXKEZP54lY5v94QUzKBA1KKX1Xfgq
-         K6kk+0sXGEwee4OORuTEYUzV1WrH/sU8XuzsCJbg4ywJO8w4DK3WxweBLBh/bjiuCXs1
-         ANvF9BkZ2+LOBxYr9tNraUP7b66LX3QhBEzo+QwzvhELb8YFWp07ld5O7zsdVv/5doeC
-         /GtPv68LMDkJBIY/0AmOSXqCsrcmZB2a55GHK+LLiVbHJtCWoFRg1UC192uN+8/Pp2oB
-         hFsg==
-X-Gm-Message-State: AO0yUKXIHiOWA1mSfS3HcdX9GNgH9DjkXSkxpoBY65d9r/x0ZpMVi4T6
-        kHn2z/uygbl1ZHgje2FKk7uPvaZGADY=
-X-Google-Smtp-Source: AK7set9TAOmFkF7TpbGY6qpBnEzhdcJtoG5aCtcO1Ay+7/w8nDVqK0QsofjJ7DpKeeUGBNXcEhHk0Q==
-X-Received: by 2002:a05:6870:b00b:b0:163:98d1:ba0c with SMTP id y11-20020a056870b00b00b0016398d1ba0cmr5136904oae.49.1675136645990;
-        Mon, 30 Jan 2023 19:44:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gq11-20020a056870d90b00b001435fe636f2sm6042847oab.53.2023.01.30.19.44.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 19:44:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 30 Jan 2023 19:44:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/8] Docs/hwmon/index: Add missing SPDX License
- Identifier
-Message-ID: <20230131034404.GA837158@roeck-us.net>
-References: <20230122213650.187710-1-sj@kernel.org>
- <20230122213650.187710-5-sj@kernel.org>
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bu9kOzolYrLN18xE7vKK9Gz/M0Y2r1dd0So265lFzjA=;
+        b=v/0KPxWn7gLo2csMIQAOwADyd8F8voDvYml7rdRlbyz//VN85m9Zr/FDnWTat42lnd
+         hhtUDSvMNTw3UEBiYWOImDGiJyqqH2wsWQYs/OUYrup/Esx09YU/ODsmkqYZjO19NSfi
+         +jp/hZ2lyuJADLKrQRz3QPkh/ABGD6IARyuS4QhZlZYtQk0fsTRL7QbHwH5X4g7xEuIq
+         VQoqIo8O6nrGJGZzZlueBpYyjsKY93t/TxxHzc+hWC89DM5+nhUUkoqmwca59Tcewvje
+         jMwHrUv0ps0RHQZS67Q37M8R/2fe4LrT13OHBrzEEr/Fuex+b1zTAP4i7z+ZtSzvCiF+
+         WWPA==
+X-Gm-Message-State: AFqh2krTc+E7iUHFPAybQ0GrSNPYLUFUw2JjO/hyHmH2G2lnh5HumlLk
+        7g/JS+2jopgE6TwBhvymH9KGh6vWo/PFQyk7uM0=
+X-Google-Smtp-Source: AMrXdXusdJixXviU8/vqPC/MNZPVuSwvSyFs2AF8bKXCXGxiqNUtynbCWHYlaD/1yn2KP8L+Qho5AaHYZF9M1tYwNHE=
+X-Received: by 2002:ac2:57cc:0:b0:4b5:886b:d4af with SMTP id
+ k12-20020ac257cc000000b004b5886bd4afmr6243652lfo.276.1675136747349; Mon, 30
+ Jan 2023 19:45:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230122213650.187710-5-sj@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <CA+icZUU_ew7pzWJJZLbj1xsU6MQTPrj8tkFfDhNdTDRQfGUBMQ@mail.gmail.com>
+ <CAP-5=fULKkEYXOVV5tXd8J0occGJwgV+BiJLkA=exW=bfgyEBw@mail.gmail.com>
+ <CA+icZUUOZoLOFiBcYkccWPSusk9G_Rhf3DOZYWat-K+VfWFHQw@mail.gmail.com>
+ <c6605d52-b9e1-e8d3-ed29-562146f64eea@arm.com> <CAP-5=fWcb8m9vkfqSC9H2Gqi2dBjbPuGb2F27Fq-ejmR25foQw@mail.gmail.com>
+In-Reply-To: <CAP-5=fWcb8m9vkfqSC9H2Gqi2dBjbPuGb2F27Fq-ejmR25foQw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Tue, 31 Jan 2023 04:45:09 +0100
+Message-ID: <CA+icZUWKFCdhQ9XN0wLN6BF5ft3WaNrtXDb9D8ckNOPG9gUf+g@mail.gmail.com>
+Subject: Re: [6.1.7][6.2-rc5] perf all metrics test: FAILED!
+To:     Ian Rogers <irogers@google.com>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        "Xing, Zhengjun" <zhengjun.xing@intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        llvm@lists.linux.dev, Ben Hutchings <benh@debian.org>,
+        James Clark <james.clark@arm.com>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,28 +84,478 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 09:36:46PM +0000, SeongJae Park wrote:
-> Add missing SPDX License Identifier for hwmon documentation index file.
-> 
+On Tue, Jan 31, 2023 at 1:20 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Mon, Jan 30, 2023 at 2:04 AM James Clark <james.clark@arm.com> wrote:
+> >
+> >
+> >
+> > On 30/01/2023 02:24, Sedat Dilek wrote:
+> > > ?
+> > >
+> > > On Mon, Jan 30, 2023 at 12:21 AM Ian Rogers <irogers@google.com> wrote:
+> > >>
+> > >> On Sun, Jan 29, 2023 at 1:59 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >>>
+> > >>> [ CC LLVM linux folks + Ben from Debian kernel team ]
+> > >>>
+> > >>> Hi,
+> > >>>
+> > >>> I am playing with LLVM version 16.0.0-rc1 which was released yesterday and PERF.
+> > >>>
+> > >>> After building my selfmade LLVM toolchain, I built perf and run some
+> > >>> perf tests here on my Intel SandyBridge CPU (details see below).
+> > >>>
+> > >>> perf all metrics test: FAILED!
+> > >>>
+> > >>> ...with both Debian's perf version 6.1.7 and my selfmade version 6.2-rc5.
+> > >>>
+> > >>> Just noticed:
+> > >>>
+> > >>> Couldn't bump rlimit(MEMLOCK), failures may take place when creating
+> > >>> BPF maps, etc
+> > >>>
+> > >>> Run the below tests with `sudo` - made this go away - still FAILED.
+> > >>>
+> > >>> But maybe I am missing to activate some sysfs/debug or whatever other stuff?
+> > >>
+> > >> Hi Sedat,
+> > >>
+> > >> things have been improving wrt metrics and so this failure may have
+> > >> just been because of the addition of a previously missing metric. The
+> > >> rlimit thing shouldn't affect things but maybe file descriptors?
+> > >> Looking at the test output the issue is:
+> > >>
+> > >> ```
+> > >> Metric 'tma_dram_bound' not printed in:
+> > >> # Running 'internals/synthesize' benchmark:
+> > >> Computing performance of single threaded perf event synthesis by
+> > >> synthesizing events on the perf process itself:
+> > >>   Average synthesis took: 207.680 usec (+- 0.176 usec)
+> > >>   Average num. events: 30.000 (+- 0.000)
+> > >>   Average time per event 6.923 usec
+> > >>   Average data synthesis took: 217.833 usec (+- 0.202 usec)
+> > >>   Average num. events: 161.000 (+- 0.000)
+> > >>   Average time per event 1.353 usec
+> > >>
+> > >>  Performance counter stats for 'perf bench internals synthesize':
+> > >>
+> > >>      <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+> > >>                          (0,00%)
+> > >>      <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+> > >>                          (0,00%)
+> > >>      <not counted>      CPU_CLK_UNHALTED.THREAD
+> > >>                          (0,00%)
+> > >>      <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+> > >>                             (0,00%)
+> > >> ```
+> > >>
+> > >> So the test was checking to see whether the tma_dram_bound metric
+> > >> could be computed on your Sandybridge and it failed. The event counts
+> > >> below show that every event came back "<not counted>" which is usually
+> > >> indicative of a permissions problem - it is also not surprising given
+> > >> this that the metric wasn't computed. You could try repeating the
+> > >> command the test is trying with something like "perf stat -M
+> > >> tma_dram_bound -a sleep 1", but running as root should have resolved
+> > >> that issue. Does that give you enough to keep exploring?
+> > >>
+> > >
+> > > Hi Ian,
+> > >
+> > > Thanks for your feedback!
+> > >
+> > > I booted into my Debian kernel - just to see what happens.
+> > >
+> > > # cat /proc/version
+> > > Linux version 6.1.0-2-amd64 (debian-kernel@lists.debian.org) (gcc-12
+> > > (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1
+> > > SMP PREEMPT_DYNAMIC Debian 6.1.7-1 (2023-01-18)
+> > >
+> > > All things run as root...
+> > >
+> > > # echo 0 | tee /proc/sys/kernel/kptr_restrict
+> > > /proc/sys/kernel/perf_event_paranoid
+> > > 0
+> > >
+> > > # /usr/bin/perf test 10 92 98 99 100 101
+> > > 10: PMU events                                                      :
+> > > 10.1: PMU event table sanity                                        : Ok
+> > > 10.2: PMU event map aliases                                         : Ok
+> > > 10.3: Parsing of PMU event table metrics                            : Ok
+> > > 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> > > 92: perf record tests                                               : Ok
+> > > 98: perf stat tests                                                 : Ok
+> > > 99: perf all metricgroups test                                      : Ok
+> > > 100: perf all metrics test                                           : FAILED!
+> > > 101: perf all PMU test                                               : Ok
+> > >
+> > > # perf stat -M tma_dram_bound -a sleep 1
+> > >
+> > > Performance counter stats for 'system wide':
+> > >
+> > >     <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+> > >                   (0,00%)
+> > >     <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+> > >                      (0,00%)
+> > >     <not counted>      CPU_CLK_UNHALTED.THREAD
+> > >               (0,00%)
+> > >     <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+> > >                         (0,00%)
+> > >
+> >
+> > Hi Sedat,
+> >
+> > I also had this failure and did a git bisect, but it led me to the
+> > conclusion that it is a stale build issue rather than a regression.
+> >
+> > There was a recent commit that renamed/removed some json PMU files which
+> > the build system can't cope with. I think the tests end up iterating
+> > over a different set of event names than were generated by the build system.
+> >
+> > If you do a clean build the issue should go away. I don't know if there
+> > is anything more we can do to stop this from happening.
+> >
+> > James
+>
+> So I think this is a kernel bug triggering a perf tool bug. The kernel
+> bug can be worked around in the perf tool. I only had an Ivybridge to
+> test with (hence slightly different events) but what I see is both
+> tma_dram_bound and tma_l3_bound using the same 4 events. I could work
+> around the "<not counted>" by adding the --metric-no-group flag:
+>
+> ```
+> $ perf stat -M tma_l3_bound --metric-no-group -a sleep 1
+>
+> Performance counter stats for 'system wide':
+>
+>           400,404      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      4.3 %
+> tma_l3_bound             (74.99%)
+>       128,937,891      CYCLE_ACTIVITY.STALLS_L2_PENDING
+>                         (87.46%)
+>           167,459      MEM_LOAD_UOPS_RETIRED.LLC_MISS
+>                         (74.99%)
+>       759,574,967      CPU_CLK_UNHALTED.THREAD
+>                         (87.47%)
+>
+>       1.001526438 seconds time elapsed
+>
+> $ perf stat -M tma_dram_bound -a --metric-no-group sleep 1
+>
+> Performance counter stats for 'system wide':
+>
+>           259,954      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #     15.2 %
+> tma_dram_bound           (74.99%)
+>       118,807,043      CYCLE_ACTIVITY.STALLS_L2_PENDING
+>                         (87.46%)
+>           111,699      MEM_LOAD_UOPS_RETIRED.LLC_MISS
+>                         (74.95%)
+>       587,571,060      CPU_CLK_UNHALTED.THREAD
+>                         (87.45%)
+>
+>       1.001518093 seconds time elapsed
+> ```
+>
+> The issue is that perf metrics use weak groups of events. A weak group
+> is the same as a group of events initially. We want to use groups of
+> events with metrics so that all the counters are scheduled in and out
+> at the same time, and not multiplexed independently. Imagine measuring
+> IPC but the counts for instructions and cycles are measured at
+> different periods, the resultant IPC value would be unlikely to be
+> accurate. If perf_event_open fails then the perf tool retries the
+> events without the group. If I try just 3 of the events in a weak
+> group then the failure can be seen:
+>
+> ```
+> $ perf stat -e "{MEM_LOAD_UOPS_RETIRED.LLC_HIT,MEM_LOAD_UOPS_RETIRED.LLC_MISS,CYCLE_ACTIVITY.STALLS_L2_PENDING}:W"
+> -a sleep 1
+>
+> Performance counter stats for 'system wide':
+>
+>     <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+>                         (0.00%)
+>     <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_MISS
+>                         (0.00%)
+>     <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+>                         (0.00%)
+>
+>       1.001458485 seconds time elapsed
+> ```
+>
+> The kernel should have failed the perf_event_open on opening the third
+> event and then measured without the group, which it can do with
+> multiplexing as in the following:
+>
+> ```
+> $ perf stat -e "MEM_LOAD_UOPS_RETIRED.LLC_HIT,MEM_LOAD_UOPS_RETIRED.LLC_MISS,CYCLE_ACTIVITY.STALLS_L2_PENDING"
+> -a sleep 1
+>
+> Performance counter stats for 'system wide':
+>
+>         1,239,397      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+>                         (79.06%)
+>           174,826      MEM_LOAD_UOPS_RETIRED.LLC_MISS
+>                         (64.60%)
+>       124,026,024      CYCLE_ACTIVITY.STALLS_L2_PENDING
+>                         (81.16%)
+>
+>       1.001483434 seconds time elapsed
+> ```
+>
+> When the --metric-no-group flag is given to perf then it doesn't
+> produce the initial weak group, which works around the bug of the
+> kernel not failing on the 3rd perf_event_open. I've added Kan and
+> Zhengjun to the e-mail as they work on the Intel kernel PMU code.
+>
+> There's a question about what we should do in the perf test about
+> this? I have a few solutions:
+>
+> 1) try metric tests again with the --metric-no-group flag and don't
+> fail the test if this succeeds. This allows kernel bugs to hide, so
+> I'm not a huge fan.
+>
+> 2) add a new metric flag/constraint to say not to group, this way the
+> metric will automatically apply the "--metric-no-group" flag. It is a
+> bit of work to wire this up but this kind of failure is common enough
+> in PMUs that it is probably worthwhile. We also need to add the flag
+> to metrics and I'm not sure how to get a good list of the metrics that
+> currently fail and require it. This is okay but error prone.
+>
+> 3) fix the kernel bug and let the perf test fail until an adequate
+> kernel is installed. Probably the best option.
+>
 
-I do not feel comfortable accepting this change without confirmation
-that changing the license from <none> to an explicit <GPL v2.0> is
-legally acceptable.
+Hi Ian,
 
-Guenter
+I can confirm:
 
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->  Documentation/hwmon/index.rst | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-> index c2b3c1a822dd..2186d732654f 100644
-> --- a/Documentation/hwmon/index.rst
-> +++ b/Documentation/hwmon/index.rst
-> @@ -1,3 +1,5 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
->  ===================
->  Hardware Monitoring
->  ===================
+$ echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+/proc/sys/kernel/perf_event_paranoid
+0
+
+$ ~/bin/perf stat -M tma_l3_bound --metric-no-group -a sleep 1
+
+Performance counter stats for 'system wide':
+
+        2.058.892      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,5 %
+tma_l3_bound             (99,30%)
+      173.254.697      CYCLE_ACTIVITY.STALLS_L2_PENDING
+                        (99,10%)
+    2.396.130.501      CPU_CLK_UNHALTED.THREAD
+                        (99,60%)
+        1.110.486      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+                           (99,53%)
+
+      1,001989022 seconds time elapsed
+
+$ ~/bin/perf stat -M tma_dram_bound --metric-no-group -a sleep 1
+
+Performance counter stats for 'system wide':
+
+        1.729.208      MEM_LOAD_UOPS_RETIRED.LLC_HIT    #      1,2 %
+tma_dram_bound           (99,50%)
+       50.346.734      CYCLE_ACTIVITY.STALLS_L2_PENDING
+                        (99,50%)
+    2.354.963.862      CPU_CLK_UNHALTED.THREAD
+                        (99,80%)
+          306.500      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+                           (99,61%)
+
+      1,001981392 seconds time elapsed
+
+Thanks!
+
+BR,
+-Sedat-
+
+> Thanks,
+> Ian
+>
+> > >       1,002148600 seconds time elapsed
+> > >
+> > > Hmm... looking at... Metric 'tma_l3_bound' ...
+> > >
+> > > Running...
+> > >
+> > > # perf stat --verbose -M tma_l3_bound -a sleep 1
+> > > Using CPUID GenuineIntel-6-2A-7
+> > > metric expr (MEM_LOAD_UOPS_RETIRED.LLC_HIT /
+> > > (MEM_LOAD_UOPS_RETIRED.LLC_HIT + 7 *
+> > > MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS)) *
+> > > CYCLE_ACTIVITY.STALLS_L2_PENDING / CLKS for tma_l3_bound
+> > > metric expr CPU_CLK_UNHALTED.THREAD for CLKS
+> > >
+> > > found event MEM_LOAD_UOPS_RETIRED.LLC_HIT
+> > > found event CYCLE_ACTIVITY.STALLS_L2_PENDING
+> > > found event CPU_CLK_UNHALTED.THREAD
+> > > found event MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+> > >
+> > > Parsing metric events
+> > > '{MEM_LOAD_UOPS_RETIRED.LLC_HIT/metric-id=MEM_LOAD_UOPS_RETIRED.LLC_HIT/,CYCLE_ACTIVITY.STALLS_L2_PENDING/metric-id=CYCLE_ACTIVITY.STALLS_L2_PEND
+> > > ING/,CPU_CLK_UNHALTED.THREAD/metric-id=CPU_CLK_UNHALTED.THREAD/,MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS/metric-id=MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS/}:W'
+> > > MEM_LOAD_UOPS_RETIRED.LLC_HIT -> cpu/event=0xd1,period=0xc365,umask=0x4/
+> > > CYCLE_ACTIVITY.STALLS_L2_PENDING ->
+> > > cpu/event=0xa3,cmask=0x5,period=0x1e8483,umask=0x5/
+> > > CPU_CLK_UNHALTED.THREAD -> cpu/event=0x3c,period=0x1e8483/
+> > > MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS -> cpu/event=0xd4,period=0x186a7,umask=0x2/
+> > >
+> > > Control descriptor is not initialized
+> > >
+> > > MEM_LOAD_UOPS_RETIRED.LLC_HIT: 0 4007421228 0
+> > > CYCLE_ACTIVITY.STALLS_L2_PENDING: 0 4007421228 0
+> > > CPU_CLK_UNHALTED.THREAD: 0 4007421228 0
+> > > MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS: 0 4007421228 0
+> > >
+> > > Performance counter stats for 'system wide':
+> > >
+> > >     <not counted>      MEM_LOAD_UOPS_RETIRED.LLC_HIT
+> > >                   (0,00%)
+> > >     <not counted>      CYCLE_ACTIVITY.STALLS_L2_PENDING
+> > >                      (0,00%)
+> > >     <not counted>      CPU_CLK_UNHALTED.THREAD
+> > >               (0,00%)
+> > >     <not counted>      MEM_LOAD_UOPS_MISC_RETIRED.LLC_MISS
+> > >                         (0,00%)
+> > >
+> > >       1,002310013 seconds time elapsed
+> > >
+> > > So those events/metric-ids resulting in "<not counted>" are all found.
+> > >
+> > > What means "Control descriptor is not initialized"?
+> > >
+> > > To summarize:
+> > >
+> > > Those two tests in "100: perf all metrics test" FAILED:
+> > >
+> > > 1. tma_dram_bound
+> > > 2. tma_l3_bound
+> > >
+> > > Best regards,
+> > > -Sedat-
+> > >
+> > >> Thanks,
+> > >> Ian
+> > >>
+> > >>> Last perf version which was OK:
+> > >>>
+> > >>> ~/bin/perf -v
+> > >>> perf version 6.0.0
+> > >>>
+> > >>> echo "linux-perf: Adjust limited access to performance monitoring and
+> > >>> observability operations"
+> > >>> echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> > >>> /proc/sys/kernel/perf_event_paranoid
+> > >>> 0
+> > >>>
+> > >>> ~/bin/perf test 10 86 92 93 94 95
+> > >>> 10: PMU events                                                      :
+> > >>> 10.1: PMU event table sanity                                        : Ok
+> > >>> 10.2: PMU event map aliases                                         : Ok
+> > >>> 10.3: Parsing of PMU event table metrics                            : Ok
+> > >>> 10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> > >>> 86: perf record tests                                               : Ok
+> > >>> 92: perf stat tests                                                 : Ok
+> > >>> 93: perf all metricgroups test                                      : Ok
+> > >>> 94: perf all metrics test                                           : Ok
+> > >>> 95: perf all PMU test                                               : Ok
+> > >>>
+> > >>> echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+> > >>> /proc/sys/kernel/perf_event_paranoid
+> > >>> echo "linux-perf: Reset limited access to performance monitoring and
+> > >>> observability operations"
+> > >>>
+> > >>> If you need further information, please let me know.
+> > >>>
+> > >>> Thanks.
+> > >>>
+> > >>> Regards,
+> > >>> -Sedat-
+> > >>>
+> > >>> P.S. Instructions
+> > >>>
+> > >>> [ REPRODUCER ]
+> > >>>
+> > >>> LLVM_MVER="16"
+> > >>>
+> > >>> # Debian LLVM
+> > >>> ##LLVM_TOOLCHAIN_PATH="/usr/lib/llvm-${LLVM_MVER}/bin"
+> > >>> # Selfmade LLVM
+> > >>> LLVM_TOOLCHAIN_PATH="/opt/llvm/bin"
+> > >>> if [ -d ${LLVM_TOOLCHAIN_PATH} ]; then
+> > >>>    export PATH="${LLVM_TOOLCHAIN_PATH}:${PATH}"
+> > >>> fi
+> > >>>
+> > >>> PYTHON_VER="3.11"
+> > >>> MAKE="make"
+> > >>> MAKE_OPTS="V=1 -j1 HOSTCC=clang-$LLVM_MVER HOSTLD=ld.lld
+> > >>> HOSTAR=llvm-ar CC=clang-$LLVM_MVER LD=ld.lld AR=llvm-ar
+> > >>> STRIP=llvm-strip"
+> > >>>
+> > >>> echo "LLVM MVER ........ $LLVM_MVER"
+> > >>> echo "Path settings .... $PATH"
+> > >>> echo "Python version ... $PYTHON_VER"
+> > >>> echo "make line ........ $MAKE $MAKE_OPTS"
+> > >>>
+> > >>> LANG=C LC_ALL=C make -C tools/perf clean 2>&1 | tee ../make-log_perf-clean.txt
+> > >>>
+> > >>> LANG=C LC_ALL=C $MAKE $MAKE_OPTS -C tools/perf
+> > >>> PYTHON=python${PYTHON_VER} install-bin 2>&1 | tee
+> > >>> ../make-log_perf-install_bin_python${PYTHON_VER}_llvm${LLVM_MVER}.txt
+> > >>>
+> > >>>
+> > >>> [ TESTS ]
+> > >>>
+> > >>> [ TESTS - START ]
+> > >>>
+> > >>> echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+> > >>> /proc/sys/kernel/perf_event_paranoid
+> > >>>
+> > >>> [ TESTS - DEBIAN ]
+> > >>>
+> > >>> /usr/bin/perf -v
+> > >>> perf version 6.1.7
+> > >>>
+> > >>> /usr/bin/perf test 10 92 98 99 100 101
+> > >>>
+> > >>>  10: PMU events                                                      :
+> > >>>  10.1: PMU event table sanity                                        : Ok
+> > >>>  10.2: PMU event map aliases                                         : Ok
+> > >>>  10.3: Parsing of PMU event table metrics                            : Ok
+> > >>>  10.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> > >>>  92: perf record tests                                               : Ok
+> > >>>  98: perf stat tests                                                 : Ok
+> > >>>  99: perf all metricgroups test                                      : Ok
+> > >>> 100: perf all metrics test                                           : FAILED!
+> > >>> 101: perf all PMU test                                               : Ok
+> > >>>
+> > >>> [ TESTS - DILEKS ]
+> > >>>
+> > >>> ~/bin/perf -v
+> > >>> perf version 6.2.0-rc5
+> > >>>
+> > >>> ~/bin/perf test 7 87 93 94 95 96
+> > >>>
+> > >>>   7: PMU events                                                      :
+> > >>>   7.1: PMU event table sanity                                        : Ok
+> > >>>   7.2: PMU event map aliases                                         : Ok
+> > >>>   7.3: Parsing of PMU event table metrics                            : Ok
+> > >>>   7.4: Parsing of PMU event table metrics with fake PMUs             : Ok
+> > >>>  87: perf record tests                                               : Ok
+> > >>>  93: perf stat tests                                                 : Ok
+> > >>>  94: perf all metricgroups test                                      : Ok
+> > >>>  95: perf all metrics test                                           : FAILED!
+> > >>>  96: perf all PMU test                                               : Ok
+> > >>>
+> > >>> [ TESTS - FAILED ]
+> > >>>
+> > >>> /usr/bin/perf test --verbose 100 2>&1 | tee
+> > >>> perf-test-verbose-100-perf-all-metrics-test_debian-perf-6-1-7.txt
+> > >>>
+> > >>> ~/bin/perf test --verbose 95 2>&1 | tee
+> > >>> perf-test-verbose-95-perf-all-metrics-test_dileks-perf-6-2-rc5.txt
+> > >>>
+> > >>> [ TESTS - STOP ]
+> > >>>
+> > >>> echo 1 | sudo tee /proc/sys/kernel/kptr_restrict
+> > >>> /proc/sys/kernel/perf_event_paranoid
+> > >>>
+> > >>> - EOT -
