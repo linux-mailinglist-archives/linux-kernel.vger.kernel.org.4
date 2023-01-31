@@ -2,72 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE52F683187
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D583682F94
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbjAaPa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:30:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S231287AbjAaOp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbjAaPaz (ORCPT
+        with ESMTP id S231236AbjAaOp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:30:55 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A55F15574;
-        Tue, 31 Jan 2023 07:30:53 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id k12so1592149ilv.10;
-        Tue, 31 Jan 2023 07:30:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=96om8t2sidbzcWJI83hHCTkanS4Z8I9qkmW3e+ASsa4=;
-        b=UztB9v+TO8Vbd8rQ/zHU52XiIpEVCaoD4M0wCBfMNGLlXHkx2Rg/vn6Sm7KbwNPB7c
-         ksWuawoKuvNV0jh0F07FE8DYbofjnUUAIt1KDw5xxJKrtaJWM7SywUDOUmoVMBHBbj6u
-         K2ioyXN3cPWyUabwW2d/ow0jXBGc7lbFfW9s9GNekfJqWGVX5uT+Tms8cSa+Qq3wyJu6
-         9jM6SMepaQrHs4lLMnocrZgZ4P1/Oql6Vzl/i9lQ2m3qcdkVC0FPoU1lA8tIwmE1CCDM
-         zCoTtwbqzUMlT3iq5Ejs9qQ2OyrHccT59EFmd0wYwsXiTHimP/pvljsLJplpkzQUa1Iq
-         TeTA==
+        Tue, 31 Jan 2023 09:45:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DAA46727
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:45:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675176312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xn8TtSD/AsRILC72eNaykv7ZyTuVxpBZIKtdo2DAH1A=;
+        b=gEU/x9Qk0nTqRgCWLGJpREmzt3vmBDMEnqa955ocTkklLDrmHQVZgtiuhoXgWwm+jf5ggH
+        9obXMuCbS6BWUkw16zk7KZbj500Y9mQBZzjvL1EfqlSXLLw6+pK7diDFOuM1u4GXBNT2OS
+        J4sHUfsDZ0TQkLAKoYfSCsKv3pId4fs=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-385-mrGfdHj0PLqTMJfe87-rJQ-1; Tue, 31 Jan 2023 09:45:10 -0500
+X-MC-Unique: mrGfdHj0PLqTMJfe87-rJQ-1
+Received: by mail-qk1-f200.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so9215196qkn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:45:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=96om8t2sidbzcWJI83hHCTkanS4Z8I9qkmW3e+ASsa4=;
-        b=Z+oi4gGBn02U1CCRbvaVsKssCA+SUwyj4ibVWeDFN/fx+ma9in+Q+SrujjZaGLamJz
-         xa9fTJeSSBD450KLdJDO+WIf3q7wzCzeFsMpu02WDP1hAckJTRcrrGBQVs6R1gfD19WT
-         kQ11uUAcUrRfo9utAZMH6ZKqESYEnXP9b3ochIevF+4QFMC4vmPRREJhOga8tlpPMUnq
-         +JlN9KJGj6h3+qmgHrTvFn2m6dOWAPnS6JJr6Qw56Nr4/VH8ReI2C1+xDKW/LDpD+CXa
-         H7jgBupr4eUi4xvKfbq6TbU8TQczWrzwzqdThGTOfnpQvuI2rG80wW2XneE5e/CTQCsu
-         +Jew==
-X-Gm-Message-State: AO0yUKUvTdqDejDJ+P706kDoDUNujdIvrdaIkEf2qmEp3NXhHdEos0CI
-        MEiKoEH5/c+A2ulFCGtC2ov0VHtGJV71
-X-Google-Smtp-Source: AK7set+CbRUJVZ2oScP/acmnuuLmIiorQHtl2vLl0D3MGFAQlCLy24ZSeaieHRqwQyjdE5khdAJ6Lw==
-X-Received: by 2002:a05:6e02:178d:b0:311:10b7:c3c3 with SMTP id y13-20020a056e02178d00b0031110b7c3c3mr1817102ilu.16.1675179052672;
-        Tue, 31 Jan 2023 07:30:52 -0800 (PST)
-Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id eb10-20020a05620a480a00b0071323d3e37fsm9968963qkb.133.2023.01.31.07.30.52
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xn8TtSD/AsRILC72eNaykv7ZyTuVxpBZIKtdo2DAH1A=;
+        b=cOE6IrE5onbGHL4Tw13yhZPrxZTrnoq4hwfVgBJszVzrp3b6muGh5qyztCVp76r6rE
+         4/rJINr0DvRNXhFx4zbupKf8bYnwxeED1Fb/jGiE2yHQ67+Ddf69ws2nAXWr9X/hzddP
+         LYnYQzdqIixKoz6P+WbsxwiMKF0YKSx3dnXKfbfm4/Mwf7CTxGrdqAwzOkRCbsF3kb6H
+         QGlKFf35zckqZUpHKEWH1gJ2bqsIiCFocaWtwyGBJWnmIp9JAoQBy9IzNN87vRU9CLFs
+         0FLW2MNThe3JLYV3GPaqHPwTSqXbfOiQSHMWLMiH4RV5TRWlDcvmcglg7Z/4lNkHaCs2
+         Iffw==
+X-Gm-Message-State: AO0yUKXpCd+8FoyGL5sX/KJDniB1rB8yc9e48tj7SMAz2OoLY6F+Ktxt
+        hyzHYX2Jw1M/smos8jS7lsk8QU0akCunlQ1eqLR+3TKDa+hFqMe4uojpTVLkPEL81Js7j2lvSlu
+        D8+YwV8wXU8d9+qAI8lKHQYD8
+X-Received: by 2002:a0c:c484:0:b0:537:7e81:73ec with SMTP id u4-20020a0cc484000000b005377e8173ecmr10038060qvi.3.1675176308467;
+        Tue, 31 Jan 2023 06:45:08 -0800 (PST)
+X-Google-Smtp-Source: AK7set8/6AUEXMvGYSP/0m29hp2+J2HOrCZjUA3ETettzdz1KyQPZ9G2hmwb7tu/ki9YzwSEWJftrg==
+X-Received: by 2002:a0c:c484:0:b0:537:7e81:73ec with SMTP id u4-20020a0cc484000000b005377e8173ecmr10038022qvi.3.1675176308174;
+        Tue, 31 Jan 2023 06:45:08 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
+        by smtp.gmail.com with ESMTPSA id o62-20020a37be41000000b006fcaa1eab0esm10147005qkf.123.2023.01.31.06.45.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 07:30:52 -0800 (PST)
-From:   Gregory Price <gourry.memverge@gmail.com>
-X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, oleg@redhat.com, avagin@gmail.com,
-        peterz@infradead.org, luto@kernel.org, krisman@collabora.com,
-        tglx@linutronix.de, corbet@lwn.net, shuah@kernel.org,
-        Gregory Price <gregory.price@memverge.com>
-Subject: [PATCH v8 1/1] ptrace,syscall_user_dispatch: checkpoint/restore support for SUD
-Date:   Tue, 31 Jan 2023 09:44:58 -0500
-Message-Id: <20230131144458.1980891-2-gregory.price@memverge.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230131144458.1980891-1-gregory.price@memverge.com>
-References: <20230131144458.1980891-1-gregory.price@memverge.com>
+        Tue, 31 Jan 2023 06:45:07 -0800 (PST)
+Message-ID: <ede0b4ea92187ca7b6303f3c1c98c26f513a3ce9.camel@redhat.com>
+Subject: Re: [PATCH v2 3/4] selftests: net: udpgso_bench: Fix racing bug
+ between the rx/tx programs
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Willem de Bruijn <willemb@google.com>,
+        Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 31 Jan 2023 15:45:04 +0100
+In-Reply-To: <CA+FuTSdtzFXWWDLk=LOdrkS00oH4HGvtoYYQh7YQd2ADsp0UbA@mail.gmail.com>
+References: <20230131130412.432549-1-andrei.gherzan@canonical.com>
+         <20230131130412.432549-3-andrei.gherzan@canonical.com>
+         <CA+FuTSdtzFXWWDLk=LOdrkS00oH4HGvtoYYQh7YQd2ADsp0UbA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,177 +86,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement ptrace getter/setter interface for syscall user dispatch.
+On Tue, 2023-01-31 at 08:33 -0500, Willem de Bruijn wrote:
+> On Tue, Jan 31, 2023 at 8:06 AM Andrei Gherzan
+> <andrei.gherzan@canonical.com> wrote:
+> >=20
+> > "udpgro_bench.sh" invokes udpgso_bench_rx/udpgso_bench_tx programs
+> > subsequently and while doing so, there is a chance that the rx one is n=
+ot
+> > ready to accept socket connections. This racing bug could fail the test
+> > with at least one of the following:
+> >=20
+> > ./udpgso_bench_tx: connect: Connection refused
+> > ./udpgso_bench_tx: sendmsg: Connection refused
+> > ./udpgso_bench_tx: write: Connection refused
+> >=20
+> > This change addresses this by making udpgro_bench.sh wait for the rx
+> > program to be ready before firing off the tx one - with an exponential =
+back
+> > off algorithm from 1s to 10s.
+> >=20
+> > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+>=20
+> please CC: reviewers of previous revisions on new revisions
+>=20
+> also for upcoming patches: please clearly mark net or net-next.
+> > ---
+> >  tools/testing/selftests/net/udpgso_bench.sh | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >=20
+> > diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testin=
+g/selftests/net/udpgso_bench.sh
+> > index dc932fd65363..20b5db8fcbde 100755
+> > --- a/tools/testing/selftests/net/udpgso_bench.sh
+> > +++ b/tools/testing/selftests/net/udpgso_bench.sh
+> > @@ -7,6 +7,7 @@ readonly GREEN=3D'\033[0;92m'
+> >  readonly YELLOW=3D'\033[0;33m'
+> >  readonly RED=3D'\033[0;31m'
+> >  readonly NC=3D'\033[0m' # No Color
+> > +readonly TESTPORT=3D8000 # Keep this in sync with udpgso_bench_rx/tx
+>=20
+> then also pass explicit -p argument to the processes to keep all three
+> consistent
+>=20
+> >=20
+> >  readonly KSFT_PASS=3D0
+> >  readonly KSFT_FAIL=3D1
+> > @@ -56,10 +57,27 @@ trap wake_children EXIT
+> >=20
+> >  run_one() {
+> >         local -r args=3D$@
+> > +       local -r init_delay_s=3D1
+> > +       local -r max_delay_s=3D10
+> > +       local delay_s=3D0
+> > +       local nr_socks=3D0
+> >=20
+> >         ./udpgso_bench_rx &
+> >         ./udpgso_bench_rx -t &
+> >=20
+> > +       # Wait for the above test program to get ready to receive conne=
+ctions.
+> > +       delay_s=3D"${init_delay_s}"
+> > +       while [ "$delay_s" -lt "$max_delay_s" ]; do
+> > +               nr_socks=3D"$(ss -lnHi | grep -c "\*:${TESTPORT}")"
+> > +               [ "$nr_socks" -eq 2 ] && break
+> > +               sleep "$delay_s"
+> > +               delay=3D"$((delay*2))"
+>=20
+> I don't think we need exponential back-off for something this simple
 
-These prctl settings are presently write-only, making it impossible to
-implement transparent checkpoint/restore via software like CRIU.
+Agreed. Additionally you could use constant, sub-second delay (say 0.1)
+to keep the runtime delta relatively low.
 
-'on_dispatch' field is not exposed because it is a kernel-internal
-only field that cannot be 'true' when returning to userland.
+Cheers,
 
-Signed-off-by: Gregory Price <gregory.price@memverge.com>
----
- .../admin-guide/syscall-user-dispatch.rst     |  5 ++-
- include/linux/syscall_user_dispatch.h         | 18 +++++++++
- include/uapi/linux/ptrace.h                   |  9 +++++
- kernel/entry/syscall_user_dispatch.c          | 40 +++++++++++++++++++
- kernel/ptrace.c                               |  9 +++++
- 5 files changed, 80 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/syscall-user-dispatch.rst b/Documentation/admin-guide/syscall-user-dispatch.rst
-index 60314953c728..a23ae21a1d5b 100644
---- a/Documentation/admin-guide/syscall-user-dispatch.rst
-+++ b/Documentation/admin-guide/syscall-user-dispatch.rst
-@@ -43,7 +43,10 @@ doesn't rely on any of the syscall ABI to make the filtering.  It uses
- only the syscall dispatcher address and the userspace key.
- 
- As the ABI of these intercepted syscalls is unknown to Linux, these
--syscalls are not instrumentable via ptrace or the syscall tracepoints.
-+syscalls are not instrumentable via ptrace or the syscall tracepoints,
-+however an interfaces to suspend, checkpoint, and restore syscall user
-+dispatch configuration has been added to ptrace to assist userland
-+checkpoint/restart software.
- 
- Interface
- ---------
-diff --git a/include/linux/syscall_user_dispatch.h b/include/linux/syscall_user_dispatch.h
-index a0ae443fb7df..5de2d64ace19 100644
---- a/include/linux/syscall_user_dispatch.h
-+++ b/include/linux/syscall_user_dispatch.h
-@@ -22,6 +22,12 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- #define clear_syscall_work_syscall_user_dispatch(tsk) \
- 	clear_task_syscall_work(tsk, SYSCALL_USER_DISPATCH)
- 
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data);
-+
- #else
- struct syscall_user_dispatch {};
- 
-@@ -35,6 +41,18 @@ static inline void clear_syscall_work_syscall_user_dispatch(struct task_struct *
- {
- }
- 
-+static inline int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
-+static inline int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+	void __user *data)
-+{
-+	return -EINVAL;
-+}
-+
- #endif /* CONFIG_GENERIC_ENTRY */
- 
- #endif /* _SYSCALL_USER_DISPATCH_H */
-diff --git a/include/uapi/linux/ptrace.h b/include/uapi/linux/ptrace.h
-index 195ae64a8c87..6d2f3b86f932 100644
---- a/include/uapi/linux/ptrace.h
-+++ b/include/uapi/linux/ptrace.h
-@@ -112,6 +112,15 @@ struct ptrace_rseq_configuration {
- 	__u32 pad;
- };
- 
-+#define PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG 0x4210
-+#define PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG 0x4211
-+struct syscall_user_dispatch_config {
-+	__u64 mode;
-+	__s8 *selector;
-+	__u64 offset;
-+	__u64 len;
-+};
-+
- /*
-  * These values are stored in task->ptrace_message
-  * by ptrace_stop to describe the current syscall-stop.
-diff --git a/kernel/entry/syscall_user_dispatch.c b/kernel/entry/syscall_user_dispatch.c
-index 0b6379adff6b..05d4053a771e 100644
---- a/kernel/entry/syscall_user_dispatch.c
-+++ b/kernel/entry/syscall_user_dispatch.c
-@@ -4,6 +4,7 @@
-  */
- #include <linux/sched.h>
- #include <linux/prctl.h>
-+#include <linux/ptrace.h>
- #include <linux/syscall_user_dispatch.h>
- #include <linux/uaccess.h>
- #include <linux/signal.h>
-@@ -106,3 +107,42 @@ int set_syscall_user_dispatch(unsigned long mode, unsigned long offset,
- 
- 	return 0;
- }
-+
-+int syscall_user_dispatch_get_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch *sd = &task->syscall_dispatch;
-+	struct syscall_user_dispatch_config config;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (test_syscall_work(SYSCALL_USER_DISPATCH))
-+		config.mode = PR_SYS_DISPATCH_ON;
-+	else
-+		config.mode = PR_SYS_DISPATCH_OFF;
-+
-+	config.offset = sd->offset;
-+	config.len = sd->len;
-+	config.selector = sd->selector;
-+
-+	if (copy_to_user(data, &config, sizeof(config)))
-+		return -EFAULT;
-+
-+	return 0;
-+}
-+
-+int syscall_user_dispatch_set_config(struct task_struct *task, unsigned long size,
-+		void __user *data)
-+{
-+	struct syscall_user_dispatch_config config;
-+
-+	if (size != sizeof(struct syscall_user_dispatch_config))
-+		return -EINVAL;
-+
-+	if (copy_from_user(&config, data, sizeof(config)))
-+		return -EFAULT;
-+
-+	return set_syscall_user_dispatch(config.mode, config.offset, config.len,
-+			config.selector);
-+}
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 54482193e1ed..d99376532b56 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -32,6 +32,7 @@
- #include <linux/compat.h>
- #include <linux/sched/signal.h>
- #include <linux/minmax.h>
-+#include <linux/syscall_user_dispatch.h>
- 
- #include <asm/syscall.h>	/* for syscall_get_* */
- 
-@@ -1259,6 +1260,14 @@ int ptrace_request(struct task_struct *child, long request,
- 		break;
- #endif
- 
-+	case PTRACE_SET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_set_config(child, addr, datavp);
-+		break;
-+
-+	case PTRACE_GET_SYSCALL_USER_DISPATCH_CONFIG:
-+		ret = syscall_user_dispatch_get_config(child, addr, datavp);
-+		break;
-+
- 	default:
- 		break;
- 	}
--- 
-2.39.0
+Paolo
 
