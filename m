@@ -2,261 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BAE682E53
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:48:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7575C682E5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbjAaNsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:48:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59484 "EHLO
+        id S232397AbjAaNtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbjAaNsv (ORCPT
+        with ESMTP id S231861AbjAaNto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:48:51 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B13ECA36
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:48:50 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id n8-20020a6bf608000000b007048850aa92so8372012ioh.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:48:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rXRBZcfiZgUOnHWClzz8kSv/Et/TqkjjdObCbwIZEF8=;
-        b=IrF4AO6CvLQcFnERy/0pZDWMPsAZCSp9lJ0B4Lmm0iaP2xwh9DN5bpaWc/Azu/gJvK
-         r4TFWF8KRRBvmxFxQZ7410BRM3wdiALl+VsXTre3dlTDeGkAUm3Jl66RCXr7cPnUVxSo
-         QtAVrbmyGTDlLsxDRjiRjoaqHNQk4KAUGB5e6VS6zqJPqQH+oAYAqtC10DuidRnU3H8f
-         pg/OWgZPAu4+H9MHZmc0OpC4gszeggtbUXSPza+MEdGbERUY8D138sp4A+/iwFtQOJOD
-         J1873j06QGHVQdXWcbHZelM+7k7iOi2mWxUEXmNvnc2Wnhs9MZBBMwKq1nfle96IjYsh
-         iotA==
-X-Gm-Message-State: AO0yUKXEkD44Pdm+b1AiLUiOkkyaf0hGgt+8/ZhtvXOX2SB/WUebbc+I
-        uDcPENehA39GW1CIs1DJN0Esct9/PR6MAA5blhZm9DBpCgj3
-X-Google-Smtp-Source: AK7set9+xnDgx0d9/8zeiBxOCJ8n3xg1eLWs9XIX1n927iLQry7o9FUuTR5C5eMsM4JB1YzWngoVq8F2lzMcU8GzWbX0juKOzb2W
+        Tue, 31 Jan 2023 08:49:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9464DBCD;
+        Tue, 31 Jan 2023 05:49:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10E20B81C95;
+        Tue, 31 Jan 2023 13:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BC9EEC433D2;
+        Tue, 31 Jan 2023 13:49:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675172980;
+        bh=1Z7cFnIaVZYHOUdHNJcuzkiLztx+3TEdtrF5p6m8WUQ=;
+        h=From:Subject:Date:To:Cc:Reply-To:From;
+        b=CPa7O6jH1u2doQWEM0n18EidGCsTBtqRT/56VA5vc+MPatJO7XeDy3CbLgdiy8PQC
+         Mg2X5necEynfG4FgNjXDlKtI8KAyMs79L4LEBUbkmEh81raF627CrkfymA/v1wB960
+         sTkLL8m0TkfbSN3G6rOHvNW1kG3XIlj71Vlq32WQAJo3eMAoqo6o1nD+NeB1rjvLf/
+         KiHuIDiD8862rTLE3tKB7AtrEzAjZCvUMMU41C9nz/v6MKgR0qMdw9VpO+m6wsL47l
+         gkd+65PtRODBVBxb+DItfF/+QJ/9Ai382/wGyk8JBq+Y8ef3P01hz7Suwcjkpjgi4z
+         3vJJl185p1d9A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id ABAAAC636D4;
+        Tue, 31 Jan 2023 13:49:40 +0000 (UTC)
+From:   Niall Leonard via B4 Submission Endpoint 
+        <devnull+nl250060.ncr.com@kernel.org>
+Subject: [PATCH v2 0/2] Introduce new optional property to mark port as
+ write only.
+Date:   Tue, 31 Jan 2023 13:49:36 +0000
+Message-Id: <20230126-gpio-mmio-fix-v2-0-38397aace340@ncr.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:cc77:0:b0:3b2:a6c0:2879 with SMTP id
- j23-20020a02cc77000000b003b2a6c02879mr1188152jaq.7.1675172929812; Tue, 31 Jan
- 2023 05:48:49 -0800 (PST)
-Date:   Tue, 31 Jan 2023 05:48:49 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006b3ead05f38f970e@google.com>
-Subject: [syzbot] [f2fs?] KASAN: use-after-free Read in __shrink_extent_tree
-From:   syzbot <syzbot+552d3bff86d241487b03@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHAc2WMC/3WNSw6DMAxEr4K8rqskqHy64h4VixBc8CIJchBqh
+ bh7A/tuRnpjj94OiYQpwbPYQWjjxDFkMLcC3GzDRMhjZjDKlEqbCqeFI3qf480f1LZqR1WSa6m
+ GvBlsIhzEBjefK2/TSnIeFqH8f4lefeaZ0xrle3k3fbb/FJtGhY01ypGixtSPLji5u+ihP47jB
+ wXno9nBAAAA
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Niall Leonard <nl250060@ncr.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1814; i=nl250060@ncr.com;
+ h=from:subject:message-id; bh=1Z7cFnIaVZYHOUdHNJcuzkiLztx+3TEdtrF5p6m8WUQ=; 
+ =?utf-8?q?b=3DowEBbQKS/ZANAwAKAVGiIrYFD2P/AcsmYgBj2RxylmuT5skkrTH/YOGohMmNJ?=
+ =?utf-8?q?8jj5UPwlHDOiDQ2_Schczg6JAjMEAAEKAB0WIQSha1EPjh6hUqdtwZNRoiK2BQ9j/?=
+ =?utf-8?q?wUCY9kccgAKCRBRoiK2BQ9j/3B4EA_CDgRlwzS6iaobZ21c4NI7EohDkC3mafEZFU?=
+ =?utf-8?q?C8J27JAwqTcq4dJ8TuDFD7WJm0M5a2f4j6QuvDueKpZ_Qr3jXmaTNe+vtWSimB6Fz?=
+ =?utf-8?q?I4sl7ZbMyRyzg0w+zlbge3WfMKitPdWVEW5KaXWz89KFs+RctteMWxp5o_Dr8uDcB?=
+ =?utf-8?q?QlYPzyC3WIVfFPiZPk2L40BHik9pwUq1qey9pRVIoBFiNBKgF/K6N2SI5Opn4jkpv?=
+ =?utf-8?q?8t0n+e_4O3j2BhwbkcWMFoMR8r3Ilob9FXUPgpVWZ3mh3vOBH/6ZeAk9uRIZYuC5L?=
+ =?utf-8?q?YsYRo0u25YL2GS8cnm2d_KUSPSfbXch/hE95DF6ynGOuQpxyFMaqeiXn+hT60ipYF?=
+ =?utf-8?q?UsDNXivaukdHcLnVRRGRe7Tdh2BQ8FZ1V1_0nUNxEWGOUPP7Uu1xViJByfk00IqLx?=
+ =?utf-8?q?9h7plFvFpOow63EiPqV4Ccd2IHA1RZ791V9Gccwi1kUT/c50_5dQU3J5DV5EmPN/8?=
+ =?utf-8?q?7s2e15MrZ18LJhFGcwF5FpjsdPEn8+UN9+KXnsAxDbqowKy+WLZM43L/izKci2_pF?=
+ =?utf-8?q?TA+0ohdkPiXiQT5Bl6nxQvl4s4xc8gvkSortHZBkxJcqDaje22bgvDbObEavGg5Pc?=
+ =?utf-8?q?gmFIFUHpBJq?=
+ bAm7AC73+49N7SukOS4spYL6ePPlQxVRMIzbam89BQfq/sScdXKcvYbXaDkA==
+X-Developer-Key: i=nl250060@ncr.com; a=openpgp;
+ fpr=A16B510F8E1EA152A76DC19351A222B6050F63FF
+X-Endpoint-Received: by B4 Submission Endpoint for nl250060@ncr.com/default with auth_id=26
+X-Original-From: Niall Leonard <nl250060@ncr.com>
+Reply-To: <nl250060@ncr.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Some electronics do not allow the data regsister to be read without
+corrupting the existing data on the port. It a quirk of the board
+design.
+e.g. I have a couple of boards where the electronics engineer decided 
+to only use the chip select line, so no read/write signal is connected. 
+This means that reading the address activates the chip select and drives 
+the contents of the data bus to the port.This makes it impossible to 
+read the last data written to the port.
 
-syzbot found the following issue on:
+This solution is to use the existing shadow data register 'bgpio_data'.
+It  can be used to return the last value written to the port by the read 
+operation.
+ 
+This is enabled for a particular port using a new flag and a new
+device tree property "no-input" to allow it to be selected on a board by 
+board basis. This means it will only effect hardware that requests it.
 
-HEAD commit:    7c46948a6e9c Merge tag 'fs.fuse.acl.v6.2-rc6' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c1d8ed480000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c8d5c2ee6c2bd4b8
-dashboard link: https://syzkaller.appspot.com/bug?extid=552d3bff86d241487b03
-compiler:       Debian clang version 13.0.1-6~deb11u1, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/cc51645b6401/disk-7c46948a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/be036b5604a3/vmlinux-7c46948a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/274f5abf2c8f/bzImage-7c46948a.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+552d3bff86d241487b03@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
-BUG: KASAN: use-after-free in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
-BUG: KASAN: use-after-free in queued_write_trylock include/asm-generic/qrwlock.h:67 [inline]
-BUG: KASAN: use-after-free in do_raw_write_trylock+0x6e/0x1f0 kernel/locking/spinlock_debug.c:216
-Read of size 4 at addr ffff8880276cd510 by task syz-executor.1/5105
-
-CPU: 0 PID: 5105 Comm: syz-executor.1 Not tainted 6.2.0-rc5-syzkaller-00047-g7c46948a6e9c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:306
- print_report+0x107/0x1f0 mm/kasan/report.c:417
- kasan_report+0xcd/0x100 mm/kasan/report.c:517
- kasan_check_range+0x2a7/0x2e0 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:72 [inline]
- atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
- queued_write_trylock include/asm-generic/qrwlock.h:67 [inline]
- do_raw_write_trylock+0x6e/0x1f0 kernel/locking/spinlock_debug.c:216
- __raw_write_trylock include/linux/rwlock_api_smp.h:132 [inline]
- _raw_write_trylock+0x1c/0x70 kernel/locking/spinlock.c:292
- __shrink_extent_tree+0x85d/0xc50 fs/f2fs/extent_cache.c:1015
- f2fs_leave_shrinker+0x80/0x250 fs/f2fs/shrinker.c:142
- f2fs_put_super+0x59b/0xc20 fs/f2fs/super.c:1597
- generic_shutdown_super+0x130/0x310 fs/super.c:492
- kill_block_super+0x79/0xd0 fs/super.c:1386
- kill_f2fs_super+0x2f9/0x3c0 fs/f2fs/super.c:4640
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- cleanup_mnt+0x494/0x520 fs/namespace.c:1291
- task_work_run+0x243/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f779e88d537
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff5ea91f98 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f779e88d537
-RDX: 00007fff5ea9206a RSI: 000000000000000a RDI: 00007fff5ea92060
-RBP: 00007fff5ea92060 R08: 00000000ffffffff R09: 00007fff5ea91e30
-R10: 0000555555e448b3 R11: 0000000000000246 R12: 00007f779e8e6b24
-R13: 00007fff5ea93120 R14: 0000555555e44810 R15: 00007fff5ea93160
- </TASK>
-
-Allocated by task 9209:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- __kasan_slab_alloc+0x65/0x70 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:761 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x1b3/0x350 mm/slub.c:3476
- f2fs_kmem_cache_alloc_nofail fs/f2fs/f2fs.h:2796 [inline]
- f2fs_kmem_cache_alloc fs/f2fs/f2fs.h:2806 [inline]
- __grab_extent_tree+0x19b/0x420 fs/f2fs/extent_cache.c:423
- f2fs_init_extent_tree+0x20c/0x450 fs/f2fs/extent_cache.c:533
- f2fs_new_inode+0xd89/0x1060 fs/f2fs/namei.c:312
- __f2fs_tmpfile+0xa5/0x380 fs/f2fs/namei.c:852
- f2fs_ioc_start_atomic_write+0x3ec/0x970 fs/f2fs/file.c:2098
- __f2fs_ioctl+0x137d/0xb540
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Freed by task 9242:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:518
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1781 [inline]
- slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1807
- slab_free mm/slub.c:3787 [inline]
- kmem_cache_free+0x94/0x1d0 mm/slub.c:3809
- __destroy_extent_tree+0x6fa/0x880 fs/f2fs/extent_cache.c:1193
- f2fs_destroy_extent_tree+0x13/0x20 fs/f2fs/extent_cache.c:1204
- f2fs_evict_inode+0x324/0x1310 fs/f2fs/inode.c:789
- evict+0x2a4/0x620 fs/inode.c:664
- f2fs_abort_atomic_write+0xc7/0x410 fs/f2fs/segment.c:196
- f2fs_ioc_abort_atomic_write fs/f2fs/file.c:2182 [inline]
- __f2fs_ioctl+0x3294/0xb540 fs/f2fs/file.c:4156
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The buggy address belongs to the object at ffff8880276cd4e0
- which belongs to the cache f2fs_extent_tree of size 144
-The buggy address is located 48 bytes inside of
- 144-byte region [ffff8880276cd4e0, ffff8880276cd570)
-
-The buggy address belongs to the physical page:
-page:ffffea00009db340 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8880276cd820 pfn:0x276cd
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffff8880193cab40 dead000000000122 0000000000000000
-raw: ffff8880276cd820 000000008013000b 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Reclaimable, gfp_mask 0x112c50(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY|__GFP_HARDWALL|__GFP_RECLAIMABLE), pid 6721, tgid 6674 (syz-executor.5), ts 321161536352, free_ts 299722486648
- prep_new_page mm/page_alloc.c:2531 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4283
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5549
- alloc_slab_page+0xbd/0x190 mm/slub.c:1851
- allocate_slab+0x5e/0x3c0 mm/slub.c:1998
- new_slab mm/slub.c:2051 [inline]
- ___slab_alloc+0x782/0xe20 mm/slub.c:3193
- __slab_alloc mm/slub.c:3292 [inline]
- __slab_alloc_node mm/slub.c:3345 [inline]
- slab_alloc_node mm/slub.c:3442 [inline]
- slab_alloc mm/slub.c:3460 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
- kmem_cache_alloc+0x268/0x350 mm/slub.c:3476
- f2fs_kmem_cache_alloc_nofail fs/f2fs/f2fs.h:2796 [inline]
- f2fs_kmem_cache_alloc fs/f2fs/f2fs.h:2806 [inline]
- __grab_extent_tree+0x19b/0x420 fs/f2fs/extent_cache.c:423
- f2fs_init_extent_tree+0x20c/0x450 fs/f2fs/extent_cache.c:533
- f2fs_new_inode+0xd89/0x1060 fs/f2fs/namei.c:312
- __f2fs_tmpfile+0xa5/0x380 fs/f2fs/namei.c:852
- f2fs_ioc_start_atomic_write+0x3ec/0x970 fs/f2fs/file.c:2098
- __f2fs_ioctl+0x137d/0xb540
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1446 [inline]
- free_pcp_prepare+0x751/0x780 mm/page_alloc.c:1496
- free_unref_page_prepare mm/page_alloc.c:3369 [inline]
- free_unref_page+0x19/0x4c0 mm/page_alloc.c:3464
- qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
- kasan_quarantine_reduce+0x156/0x170 mm/kasan/quarantine.c:294
- __kasan_slab_alloc+0x1f/0x70 mm/kasan/common.c:302
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:761 [inline]
- slab_alloc_node mm/slub.c:3452 [inline]
- __kmem_cache_alloc_node+0x1e0/0x340 mm/slub.c:3491
- __do_kmalloc_node mm/slab_common.c:967 [inline]
- __kmalloc+0x9e/0x190 mm/slab_common.c:981
- kmalloc include/linux/slab.h:584 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- tomoyo_encode2 security/tomoyo/realpath.c:45 [inline]
- tomoyo_encode+0x26f/0x540 security/tomoyo/realpath.c:80
- tomoyo_path_perm+0x344/0x670 security/tomoyo/file.c:831
- tomoyo_path_symlink+0xda/0x110 security/tomoyo/tomoyo.c:211
- security_path_symlink+0xd6/0x160 security/security.c:1212
- do_symlinkat+0x11b/0x5f0 fs/namei.c:4425
- __do_sys_symlinkat fs/namei.c:4447 [inline]
- __se_sys_symlinkat fs/namei.c:4444 [inline]
- __x64_sys_symlinkat+0x95/0xa0 fs/namei.c:4444
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Memory state around the buggy address:
- ffff8880276cd400: fc fc fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880276cd480: fb fb fb fb fc fc fc fc fc fc fc fc fa fb fb fb
->ffff8880276cd500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc
-                         ^
- ffff8880276cd580: fc fc fc fc fc fc fb fb fb fb fb fb fb fb fb fb
- ffff8880276cd600: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-==================================================================
-
+Signed-off-by: Niall Leonard <nl250060@ncr.com>
+---
+Changes in v2:
+- Description of change updated to clarify why it is needed.
+- Patches squashed as per request during review.
+- wd,mbl-gpio bindings updated to yaml format.
+- Link to v1: https://lore.kernel.org/r/20230126-gpio-mmio-fix-v1-0-8a20ce0e8275@ncr.com
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Niall Leonard (2):
+      dt-bindings: improve wb,mbl-gpio binding documentation.
+      gpio: mmio: Use new flag BGPIOF_NO_INPUT.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ .../devicetree/bindings/gpio/wd,mbl-gpio.txt       | 38 -----------
+ .../devicetree/bindings/gpio/wd,mbl-gpio.yaml      | 78 ++++++++++++++++++++++
+ drivers/gpio/gpio-mmio.c                           | 24 ++++++-
+ include/linux/gpio/driver.h                        |  1 +
+ 4 files changed, 100 insertions(+), 41 deletions(-)
+---
+base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+change-id: 20230126-gpio-mmio-fix-1a69d03ec9e7
+
+Best regards,
+-- 
+Niall Leonard <nl250060@ncr.com>
+
