@@ -2,120 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C598E6836E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB296836EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjAaT5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S231567AbjAaT6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjAaT5j (ORCPT
+        with ESMTP id S229468AbjAaT6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:57:39 -0500
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2F045884;
-        Tue, 31 Jan 2023 11:57:38 -0800 (PST)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-142b72a728fso20806179fac.9;
-        Tue, 31 Jan 2023 11:57:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=m82eJrTLsCVv6+8d1tBF70ypw6dfuc3iNnRL2mCyZ7Q=;
-        b=t6yPnyCtoNhSg26TgMDaiLvakC7WdESszfa3LRwM4d68CSVTFvXSkVKZhdAVvIfyrl
-         RC5OtwBKC78Z5kdAaKWpVCqT9+ap2wDlnfLhp8gNqF5AlHhKmgVxMRc/RvS+2b/rxY/z
-         86rrk5I+IYZgPFT4CCVmGAN5wCA5gaMavAI52iAkGBszWssRSGKPd6yDS+ySB1wUC7wK
-         XtSJKVc1QdI/19Zu23ns3Hdp2gs2CNoaFHt0OYpY/rpBv+AZ19M2E6FtUlE5kzi00oO9
-         jiUvqeUtz244UmtkMUO0U4CaZ8zMolYelh+yXOBnc5+3j+YkRcN3ARbPWWS3RZP9FMUQ
-         Eq3Q==
-X-Gm-Message-State: AO0yUKUasGQGsvfah+IusIzxxl+rMLjMTaAEZm9/Kn80fY4qiw3mNSlO
-        wB38GL8vHhbff9wj6yVRQA==
-X-Google-Smtp-Source: AK7set9mqa5Na5vbUcPoMSNwU8zMyBTBeTBDFDOv7+2/nvgRcTdmrhpji7/Gn0VRdn0ekPOq4E9Swg==
-X-Received: by 2002:a05:6871:10e:b0:15e:db7e:b4dc with SMTP id y14-20020a056871010e00b0015edb7eb4dcmr8075396oab.35.1675195057458;
-        Tue, 31 Jan 2023 11:57:37 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r12-20020a05687080cc00b00163af122666sm3197311oab.3.2023.01.31.11.57.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 11:57:37 -0800 (PST)
-Received: (nullmailer pid 1853627 invoked by uid 1000);
-        Tue, 31 Jan 2023 19:57:36 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Tue, 31 Jan 2023 14:58:15 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325BB10ABD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:58:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0Boqe77xXw/WW6/Jx9IzSgzEvG7AsRtZEZ4We5AQ2oY=; b=gI25N3EUJYmiNAQBK3q8AnSBDE
+        7L4MN1uk34doF7bYxOUAQ2SE0jH3ShvXili1sCp+XAi6jaAdi4XMKAI8zhHXGDXR7XM5fYB+coGn3
+        8kOOfcw+BLqZR/y7Hb/fcV6sA1R1krlWimbsw2RBkI5E63mQm1n8v3TmK6OqYnzoYCrkl7D7NcnVW
+        v0zKa+gzmq/wgTspAbsKVd1DsWzhulvgqVluwo/RmM7g6lLFfrEG0uPQo8LBPpOIQh8Rfi4mYlhZ/
+        5Wv9oKXuqXAs6ULw4qPQXzZ9r8EKMeEJhjsha1wI5i+F5r6Kj2JvIt9n0NRGysJI9F1NGt4JX1snz
+        oQg82jeA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pMwlU-00BcdF-S0; Tue, 31 Jan 2023 19:58:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6C175300577;
+        Tue, 31 Jan 2023 20:57:59 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 370BD20D6DE1C; Tue, 31 Jan 2023 20:57:59 +0100 (CET)
+Date:   Tue, 31 Jan 2023 20:57:59 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Yu Liao <liaoyu15@huawei.com>, fweisbec@gmail.com,
+        mingo@kernel.org, liwei391@huawei.com, adobriyan@gmail.com,
+        mirsad.todorovac@alu.unizg.hr, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] tick/nohz: fix data races in get_cpu_idle_time_us()
+Message-ID: <Y9lyx38kHmKEF5CQ@hirez.programming.kicks-ass.net>
+References: <20230128020051.2328465-1-liaoyu15@huawei.com>
+ <87357q228f.ffs@tglx>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     tglx@linutronix.de, kys@microsoft.com,
-        linux-hyperv@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wei.liu@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
-        virtualization@lists.linux-foundation.org, haiyangz@microsoft.com,
-        decui@microsoft.com, daniel.lezcano@linaro.org,
-        ssengar@microsoft.com
-In-Reply-To: <1675188609-20913-5-git-send-email-ssengar@linux.microsoft.com>
-References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
- <1675188609-20913-5-git-send-email-ssengar@linux.microsoft.com>
-Message-Id: <167519443459.1836211.1945655170442861713.robh@kernel.org>
-Subject: Re: [PATCH v2 4/6] dt-bindings: hypervisor: Rename virtio to
- hypervisor
-Date:   Tue, 31 Jan 2023 13:57:36 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87357q228f.ffs@tglx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 31, 2023 at 03:44:00PM +0100, Thomas Gleixner wrote:
 
-On Tue, 31 Jan 2023 10:10:07 -0800, Saurabh Sengar wrote:
-> Rename virtio folder to more generic hypervisor, so that this can
-> accommodate more devices of similar type.
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  .../devicetree/bindings/{virtio => hypervisor}/mmio.yaml        | 2 +-
->  .../devicetree/bindings/{virtio => hypervisor}/pci-iommu.yaml   | 2 +-
->  .../bindings/{virtio => hypervisor}/virtio-device.yaml          | 2 +-
->  MAINTAINERS                                                     | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
->  rename Documentation/devicetree/bindings/{virtio => hypervisor}/mmio.yaml (95%)
->  rename Documentation/devicetree/bindings/{virtio => hypervisor}/pci-iommu.yaml (98%)
->  rename Documentation/devicetree/bindings/{virtio => hypervisor}/virtio-device.yaml (93%)
-> 
+> P.S.: I hate the spinlock in the idle code path, but I don't have a
+>       better idea.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+seqcount? It would avoid the obvious interleave and put most of the onus
+on the reader (which never happens anyway).
 
-yamllint warnings/errors:
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/i2c/i2c-virtio.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/virtio/virtio-device.yaml
-./Documentation/devicetree/bindings/gpio/gpio-virtio.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/virtio/virtio-device.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-virtio.example.dtb: i2c: False schema does not allow {'compatible': ['virtio,device22'], '#address-cells': [[1]], '#size-cells': [[0]], 'light-sensor@20': {'compatible': ['dynaimage,al3320a'], 'reg': [[32]]}, '$nodename': ['i2c']}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/gpio-virtio.example.dtb: gpio: False schema does not allow {'compatible': ['virtio,device29'], 'gpio-controller': True, '#gpio-cells': [[2]], 'interrupt-controller': True, '#interrupt-cells': [[2]], '$nodename': ['gpio']}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/gpio-virtio.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/hypervisor/virtio-device.example.dtb: i2c: False schema does not allow {'compatible': ['virtio,device22'], '$nodename': ['i2c']}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-virtio.yaml
-
-doc reference errors (make refcheckdocs):
-MAINTAINERS: Documentation/devicetree/bindings/virtio/
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1675188609-20913-5-git-send-email-ssengar@linux.microsoft.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
