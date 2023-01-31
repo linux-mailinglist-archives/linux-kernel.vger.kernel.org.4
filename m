@@ -2,88 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A9E6831DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A6568392C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232378AbjAaPvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:51:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S229948AbjAaWTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjAaPvb (ORCPT
+        with ESMTP id S230202AbjAaWT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:51:31 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751F3457C0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:51:16 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFLcnU020662;
-        Tue, 31 Jan 2023 15:51:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qjXXVK0zkU1ANWo0rs8zm6gUVBVlTWW6LHxz1BED2Eg=;
- b=U4/134DeLvtIKwpKhJbtk5IlZxjuOdQdf64yVixrR44mb/vg/mMla9AqOsrKPfQC4UDx
- w0t3a2xq8jeJxxVe7xAcZm9fz4pQMZoprsPN0W6ZBhrEn/qAf2YZ89pHsS+l3cvNo/Xv
- HbcIKzy7aGQoykMUjBCX02bqKpYHk7FVvNgniUI7LeeIgE9/RR4XnfTmT1iHMa7GwcAe
- N/azgkKRlATEe5+f8TC5J22Dj4eHTalb1r5szliK7KSizYJ0TjXqrgE59/Q54+rqAO30
- Lf5oTv2fvNep5dJnc5FUCz5NjFMFAfRzNabSXUeRfd3TuQVsz7vAr4x7Dc917gwrHaJ7 8w== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf44tkgfy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:51:01 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFo37w004994;
-        Tue, 31 Jan 2023 15:51:01 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3ncvv1rryy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:51:00 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFoxQt62849304
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 15:51:00 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DC0D758063;
-        Tue, 31 Jan 2023 15:50:59 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C83F5805F;
-        Tue, 31 Jan 2023 15:50:56 +0000 (GMT)
-Received: from [9.160.34.223] (unknown [9.160.34.223])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 15:50:55 +0000 (GMT)
-Message-ID: <adb4042b-4fd9-4a64-5904-b00c4ae8d473@linux.vnet.ibm.com>
-Date:   Tue, 31 Jan 2023 21:20:53 +0530
+        Tue, 31 Jan 2023 17:19:28 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508427A9D
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:19:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675203566; x=1706739566;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1k+bgDHjFw33vi2FYCvnMsD2v6XTns/PIAju5+u3Wh4=;
+  b=R8z8SZH4GbpBKk50WqkOcLu5g6V7y4fLXr5RqJgqCW+QrrGDfqL5jli5
+   kCa+MLutPL7Gr8pjRn39B9E9AOeaf6H+bRc2HLmq/4U2uOk4apyczTu1R
+   VeFUkiO4122/2h+Yl6LLmdmzLPgu+Jg4jaaCUQkwy0oVRucMnyHAUrR7M
+   ZPAj37wrwMuyL5CTpCUrkKMua2OOzgFeYjxzUt7smlx2Auabi7W0zicif
+   mqv4TrPfhcwzi979fICoO4vB6EtbSLB1ts3UP3nUg8coJqEkoeyGdp46U
+   uQm5SnyQ0Qthc7UCvkQ97TFRux0lnj5XmItem//15bmjY7NRyS33kXdzM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="308318506"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="308318506"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 14:19:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="788615794"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="788615794"
+Received: from ncollins-mobl.amr.corp.intel.com (HELO [10.212.85.244]) ([10.212.85.244])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 14:19:25 -0800
+Message-ID: <12b10990-8f06-e0a3-df6a-33fa20ba2cd9@linux.intel.com>
+Date:   Tue, 31 Jan 2023 09:52:22 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH] hrtimer: interleave timers for improved single thread
- performance at low utilization
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v3 8/8] ASoC: cs42l42: Wait for debounce interval after
+ resume
 Content-Language: en-US
-To:     Arjan van de Ven <arjan@linux.intel.com>, tglx@linutronix.de
-Cc:     peterz@infradead.org, mingo@kernel.org,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        svaidy@linux.ibm.com, linux-kernel@vger.kernel.org,
-        bigeasy@linutronix.de
-References: <5ae3cb09-8c9a-11e8-75a7-cc774d9bc283@linux.vnet.ibm.com>
- <c6c106a2-b180-d3fd-5904-44f9b4949ddc@linux.intel.com>
-From:   shrikanth hegde <sshegde@linux.vnet.ibm.com>
-In-Reply-To: <c6c106a2-b180-d3fd-5904-44f9b4949ddc@linux.intel.com>
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20230127165111.3010960-1-sbinding@opensource.cirrus.com>
+ <20230127165111.3010960-9-sbinding@opensource.cirrus.com>
+ <1e5e1312-18f5-e70f-3237-c2ffc851eef7@linux.intel.com>
+ <cb52e4cf-47d8-33be-f77d-fc2d0b868a5c@opensource.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <cb52e4cf-47d8-33be-f77d-fc2d0b868a5c@opensource.cirrus.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: h-3fOSmkEDVFN1llDFbOuxg9VbsdIbVo
-X-Proofpoint-GUID: h-3fOSmkEDVFN1llDFbOuxg9VbsdIbVo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- malwarescore=0 adultscore=0 spamscore=0 suspectscore=0 phishscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310137
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,34 +73,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 1/31/23 8:25 PM, Arjan van de Ven wrote:
-> 
->>   kernel/time/hrtimer.c | 11 +++++++++++
->>   1 file changed, 11 insertions(+)
+On 1/31/23 05:03, Richard Fitzgerald wrote:
+> On 30/01/2023 16:45, Pierre-Louis Bossart wrote:
 >>
->> diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
->> index 3ae661ab6260..d160f49f0cce 100644
->> --- a/kernel/time/hrtimer.c
->> +++ b/kernel/time/hrtimer.c
->> @@ -1055,6 +1055,17 @@ u64 hrtimer_forward(struct hrtimer *timer,
->> ktime_t now, ktime_t interval)
 >>
->>           orun = ktime_divns(delta, incr);
->>           hrtimer_add_expires_ns(timer, incr * orun);
->> +        /*
->> +         * Avoid timer round-off, so that all cfs bandwidth timers
->> +         * don't start at the same time
+>> On 1/27/23 10:51, Stefan Binding wrote:
+>>> Since clock stop causes bus reset on Intel controllers, we need
+>>
+>> nit-pick: It's more that the Intel controller has a power optimization
+>> where the context is lost when stopping the clock, which requires a bus
+>> reset and full re-enumeration/initialization when the clock resumes.
+>>
 > 
-> so while I applaud the final objective, I am sort of wondering if
-> hrtimer.c is the right place in the kernel to fix a CFS/cgroup issue...
-> wouldn't it be better to solve such issues at the place we want this to
-> happen, rather than for all timers in the whole system?
+> Ok, it's true that clock stop doesn't _cause_ bus reset, bus reset is
+> necessary when exiting clock stop. We can re-word if you want us to
+> describe that accurately.
 > 
-Agree. It was an initial approach to the problem. This can be fixed in scheduler 
-code itself as suggested by Ingo. Will send out that patch soon. 
-> (also while for performance it might be better to spread out a bit, for
-> power consumption it's obviously the other way around)
-> 
-This would be performance vs power comparison. Would get both the 
-numbers next time for fairer comparison. 
+> But from the codec driver's point of view, a clock stop causes a bus
+> reset.
 
+it's fine, we all agree here.
+
+>> The rest of the patch is fine so
+>>
+>> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+>>
+>>> to wait for the debounce interval on resume, to ensure all the
+>>> interrupt status registers are set correctly.
+>>>
+>>> Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
