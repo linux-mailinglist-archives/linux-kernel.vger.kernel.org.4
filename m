@@ -2,73 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E76682C8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:28:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE65E682C8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjAaM2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
+        id S231781AbjAaM2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjAaM22 (ORCPT
+        with ESMTP id S230177AbjAaM2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:28:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7155641B4D;
-        Tue, 31 Jan 2023 04:28:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20A8AB81C76;
-        Tue, 31 Jan 2023 12:28:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B510BC433EF;
-        Tue, 31 Jan 2023 12:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675168104;
-        bh=6s+C+6fb5oc4CDzOFxiI0nlwhy5299qc5Lrzw/fcOzM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ITUw/wUSQynoWoEBrMVTfcowXP+zNHUsoFT+LjmjoPxJCgzXGsVj0WVCW/5B2swEt
-         2uI8cW44A2Hx2kbY5KSonA7fRFbHGRYMtzIGCKAP2Gx2t09pkSBm3yhqam7IA8HPoP
-         jzhR1wbLZFUqhxliX6xhTLMyw3j/DDA7BttZnW2q+31Cy4xoxyGRq/3Rp8cyN0gQz2
-         Na+rW/DZORyAByZALE5xKWhjujSPXgw+vixYFJDasjnTIGpQsYuqdVRoNZyJIPJQGt
-         3hZe1YIOoFrH/SBL4rQ6F/Q/CsIz+EbRXKj0j5ubYzTjtu0SGmYJKCgsRsS+ulbel7
-         t7hNoL56FqHaA==
-Message-ID: <cd603e63-1599-8225-bfa4-c1c7a3e4cea2@kernel.org>
-Date:   Tue, 31 Jan 2023 14:28:20 +0200
+        Tue, 31 Jan 2023 07:28:51 -0500
+Received: from gofer.mess.org (gofer.mess.org [88.97.38.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27C74AA7A
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:28:50 -0800 (PST)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id E3E8C100065; Tue, 31 Jan 2023 12:28:44 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1675168124; bh=03l1i5KMWTYFOtEVWuqkQUS4MN/8sH2rZL5RFoUKuyU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bJiMFsDxd2jA+xb0yGRf2FrBS5wLVMgHc4Fh32Y+Lhg+afUuoUJ6KIN04mST5xDKE
+         SO/VQT+u4zFRTmAStqho5O2uJmiEGbDg6TKS6XB7d4ESmVG4VqkKzijfaIu6BuieSG
+         LsBMuZCSnPEvCbfpxZ/WgQoDE5gLcciqv9lXEIKLxvS4559Hd7AVh/MQdZWQ82dFpe
+         WbSZzyg5XzZQwc1X/t+Feg9hS+60dPfyFJgF1U6LIjTVhU9JLdYUilm3hdzWxO9zXw
+         5wb97k/3CnBym/gvgYl+XLH+iSfVTZ6VPBt4KxxJdUdP88v8Bp/hSjF7zaV69sp2vU
+         895NyKdBkcAlA==
+Date:   Tue, 31 Jan 2023 12:28:44 +0000
+From:   Sean Young <sean@mess.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] media: rc: add keymap for Beelink Mini MXIII remote
+Message-ID: <Y9kJfPqtd98wIQ6r@gofer.mess.org>
+References: <20230128034117.3983105-1-christianshewitt@gmail.com>
+ <6e953652-4a24-6f3c-74e7-07c25fa1c6c1@linaro.org>
+ <Y9YwbiJz9vOBejdL@gofer.mess.org>
+ <20230130213020.GA3541260-robh@kernel.org>
 MIME-Version: 1.0
-Subject: Re: linux-next: Signed-off-by missing for commit in the qcom tree
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>
-References: <20230131161128.3845f226@canb.auug.org.au>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20230131161128.3845f226@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130213020.GA3541260-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.23 7:11, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Jan 30, 2023 at 03:30:20PM -0600, Rob Herring wrote:
+> On Sun, Jan 29, 2023 at 08:38:06AM +0000, Sean Young wrote:
+> > On Sat, Jan 28, 2023 at 11:11:32AM +0100, Krzysztof Kozlowski wrote:
+> > > On 28/01/2023 04:41, Christian Hewitt wrote:
+> > > > Add a keymap and bindings for the simple IR (NEC) remote used with
+> > > > the Beelink Mini MXIII Android STB device.
+> > > > 
+> > > > Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> > > > ---
+> > > >  .../devicetree/bindings/media/rc.yaml         |  1 +
+> > > >  drivers/media/rc/keymaps/Makefile             |  1 +
+> > > >  drivers/media/rc/keymaps/rc-beelink-mxiii.c   | 54 +++++++++++++++++++
+> > > >  include/media/rc-map.h                        |  1 +
+> > > >  4 files changed, 57 insertions(+)
+> > > >  create mode 100644 drivers/media/rc/keymaps/rc-beelink-mxiii.c
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/media/rc.yaml b/Documentation/devicetree/bindings/media/rc.yaml
+> > > > index 266f1d5cae51..f390a5d2c82d 100644
+> > > > --- a/Documentation/devicetree/bindings/media/rc.yaml
+> > > > +++ b/Documentation/devicetree/bindings/media/rc.yaml
+> > > > @@ -39,6 +39,7 @@ properties:
+> > > >        - rc-avertv-303
+> > > >        - rc-azurewave-ad-tu700
+> > > >        - rc-beelink-gs1
+> > > > +      - rc-beelink-mxiii
+> > > 
+> > > Bindings are separate patches. Didn't you get such feedback already?
+> > 
+> > The only change for new keymaps is an added entry to the rc-map-name enum.
+> > In the past, new keymaps have been accepted with that single line in the
+> > same commit.
 > 
-> Commit
-> 
->    bb8379ce26d0 ("dt-bindings: interconnect: Add QDU1000/QRU1000 devices")
-> 
-> is missing a Signed-off-by from its committer.
-> 
+> It's been a checkpatch.pl warning since 2018. The separation is so that 
+> commit messages in the DT only repo[1] make sense.
 
-Thanks for the report, Stephen!
+Ok, makes sense. 
 
-Bjorn, feel free to use this branch: icc-qdu1000-immutable
+Thanks,
 
-BR,
-Georgi
+Sean
