@@ -2,204 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4A5683834
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00702683837
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbjAaVBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S231877AbjAaVCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjAaVBO (ORCPT
+        with ESMTP id S231776AbjAaVCA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:01:14 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC4B2729
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:01:13 -0800 (PST)
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 29C9A44303
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 21:01:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675198872;
-        bh=etom2qVxb9kUkl83UlutiswUofv0UufWb2skcOFCPPw=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=OYIRDBX40LZv2AyQXVZxynP7XXUNxBfKEFrL6a2GJwdUztOOTivJrTP5mCHo3xUeF
-         96HsTPbZ7ABSeZHDfMe5k0S3Hd+V6YseyFXF0lAjNS+suzXwbjNK88JtYfrrdTWpmq
-         wpB4Sm8mE2aVfdHoaKuROUIzRPB7mSqPBealMqlttVp95Gwq2oi/SRNVohr8EndGbl
-         yqiKdzPDgWr+bnPiCpsjXumD7hkzQBxPhTI9onLP76VERGvVcgAfs7tqXOaY/8yRjc
-         cnjNLRhpmFPBwAIkO4YqEjdYYGLby0hgBy8ofB2lq3Y52jZFMwLoq17HlnJ8+7WiQ/
-         UVAG5OS/ZoXDA==
-Received: by mail-wm1-f71.google.com with SMTP id fl5-20020a05600c0b8500b003db12112fdeso9410842wmb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:01:12 -0800 (PST)
+        Tue, 31 Jan 2023 16:02:00 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB5010CA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:01:58 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id fi26so15703736edb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:01:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jzS//Tvn+8u6WEDulB0XGRp+90ihmZL8y7hV6gzvNvE=;
+        b=CcycIhOSaGqcMcNaJ6Z2MvhNm9iMbbTx3IKMsJElhPL8g/A+CxoUvRmYlNmtjfAvHp
+         4S8nBHvhFE69NHdigXz2jYcBaljXu24BFuVwFcsmVI2DEWvIXfejzcOFNq9bNFIwSb9A
+         VtELSUoC8Abmrr6tHF2bt6O1kwy8dif8B+9Sw/6fIHjbcvHct9WDFBtkgGQNFW7J81a3
+         eAtmtcPhXp1yX9XrAQBC87llTC1k+ZTTThrQ2Q2RO7DFlEOa5+02v/LVIBIKI2NQ2gGw
+         DcnYOpVu2fu+hF4x/X8st3CqYYqneEZo0ANlgGmuw2ffP3wacAcqYd+u4c15vhuusa28
+         yRxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=etom2qVxb9kUkl83UlutiswUofv0UufWb2skcOFCPPw=;
-        b=t4UIYEMK1U2rCv3z8TmKwbKTnNvXsEn4j7ctKkf1BVLKzKy347GUgwXAiQpu0kj4vz
-         gA9h+9GHLsZM5gOvP8O9LhbxEqPP2p00cD3Mon8nXpiDa9VGZrk3ZVq8nI9vPxmqJ7ip
-         SXkGlALDnvzMyww+0Vbctak1z1xkmeDCY9mj/M2k+KbnHEd3rJwpUQNxbmfm5cTFki3I
-         A8W+b+bwhJJpOe8b9vacR7S+nFWuQYK//jF69i8Jvb93SqeAuitn2YkUJ4GTKPlESHxs
-         /TpqvRSmrPTQH4dT2h0tB5nDdlhYehc/WEbwIt/YbUPnRsW4BuJ98phf1gh5GFvtqHNy
-         JTsg==
-X-Gm-Message-State: AO0yUKWPTifSev/ZTxEV+Ppe/RYSeC7I2CJNRW2Gj4tBg4W584BJ89NF
-        TOus+a9RCm1qhg5sKgITKCW9r8fEN0dL5Dx9RMCbEDGT9RlBo2Z2QXBfwon1pC3xJebyGDwKWXl
-        QOG4/I1jgUZQTPY6EWTClwBx+YoDCOm/ify4GRAVuUg==
-X-Received: by 2002:a5d:5092:0:b0:2bf:ee58:72b1 with SMTP id a18-20020a5d5092000000b002bfee5872b1mr325271wrt.23.1675198871610;
-        Tue, 31 Jan 2023 13:01:11 -0800 (PST)
-X-Google-Smtp-Source: AK7set8tasggKf/Rx9l1go+kcn/gV3gCYWXptSmptiXfMWE21yhGCKkWfePVwItC66FiAsdLnfbQow==
-X-Received: by 2002:a5d:5092:0:b0:2bf:ee58:72b1 with SMTP id a18-20020a5d5092000000b002bfee5872b1mr325240wrt.23.1675198871377;
-        Tue, 31 Jan 2023 13:01:11 -0800 (PST)
-Received: from qwirkle.internal ([81.2.157.149])
-        by smtp.gmail.com with ESMTPSA id t27-20020adfa2db000000b002366553eca7sm15530408wra.83.2023.01.31.13.01.10
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jzS//Tvn+8u6WEDulB0XGRp+90ihmZL8y7hV6gzvNvE=;
+        b=W6XnjgOv4s0L9mw5XriLpaYbLCG9Di3VzEkSLBNvwyiG2t5sHygNL2nnNxItcI24ZM
+         ys/Jxom1UdTE7QwmNzzKj/HIlJatYC3biVsEVXCp3UVEE73kroCKxCKsafK1h3A0RVbu
+         kN7MMFVsmthkAXfpwL8HQXu+GjvNRy36K1RntD+WBdOB60TLfJjUFQ8txYyXp8mYeOHU
+         XUU1SajM+hspJ6x7ty+cvbB0hcBhVYJPpeaQJbgOKgjdxmmm318AqdUQEs7Hs/rP/Eeo
+         ctJN2yHZAfwGl0Qh/K84mm+YTQyg/ahFas0RQg3aJGM3UY0dHUp41gYIPBYRXYLD9BSW
+         pfHw==
+X-Gm-Message-State: AO0yUKXhzgEFfg6wt4tQ94yikUL2SwANp3tsRsLMpn7+PAWcHZdvVtoU
+        LBwIO9fQIKYafXUHrAa6GVI=
+X-Google-Smtp-Source: AK7set/6Ch/IS6VkXdI7ykel8LTt0101Bc6VBcRWIO9d2OA0S+ZeazMS1S98Xz5tUh9vCM9DE97eUg==
+X-Received: by 2002:aa7:df9a:0:b0:4a2:1737:55a9 with SMTP id b26-20020aa7df9a000000b004a2173755a9mr19114131edy.9.1675198917199;
+        Tue, 31 Jan 2023 13:01:57 -0800 (PST)
+Received: from sakura.myxoz.lan (81-230-97-204-no2390.tbcn.telia.com. [81.230.97.204])
+        by smtp.gmail.com with ESMTPSA id l3-20020aa7c3c3000000b004a22ed9030csm5335976edr.56.2023.01.31.13.01.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 13:01:10 -0800 (PST)
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Fred Klassen <fklassen@appneta.com>
-Cc:     Willem de Bruijn <willemb@google.com>,
-        Andrei Gherzan <andrei.gherzan@canonical.com>,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Tue, 31 Jan 2023 13:01:56 -0800 (PST)
+Message-ID: <3bccbead128d5bbc699cd092b79bf8d61e6cb373.camel@gmail.com>
+Subject: Re: [PATCH v3] x86: Use `get_random_u8' for kernel stack offset
+ randomization
+From:   Miko Larsson <mikoxyzzz@gmail.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 4/4] selftests: net: udpgso_bench_tx: Cater for pending datagrams zerocopy benchmarking
-Date:   Tue, 31 Jan 2023 21:00:51 +0000
-Message-Id: <20230131210051.475983-4-andrei.gherzan@canonical.com>
-X-Mailer: git-send-email 2.34.1
+Date:   Tue, 31 Jan 2023 22:01:55 +0100
+In-Reply-To: <alpine.DEB.2.21.2301302011150.55843@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2301302011150.55843@angie.orcam.me.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.module_f37+15877+cf3308f9) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The test tool can check that the zerocopy number of completions value is
-valid taking into consideration the number of datagram send calls. This can
-catch the system into a state where the datagrams are still in the system
-(for example in a qdisk, waiting for the network interface to return a
-completion notification, etc).
-
-This change adds a retry logic of computing the number of completions up to
-a configurable (via CLI) timeout (default: 2 seconds).
-
-Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
-Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-Cc: Willem de Bruijn <willemb@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
----
- tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
- 1 file changed, 27 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-index b47b5c32039f..ef887842522a 100644
---- a/tools/testing/selftests/net/udpgso_bench_tx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-@@ -62,6 +62,7 @@ static int	cfg_payload_len	= (1472 * 42);
- static int	cfg_port	= 8000;
- static int	cfg_runtime_ms	= -1;
- static bool	cfg_poll;
-+static int	cfg_poll_loop_timeout_ms = 2000;
- static bool	cfg_segment;
- static bool	cfg_sendmmsg;
- static bool	cfg_tcp;
-@@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
- 	}
- }
- 
--static void flush_errqueue(int fd, const bool do_poll)
-+static void flush_errqueue(int fd, const bool do_poll,
-+		unsigned long poll_timeout, const bool poll_err)
- {
- 	if (do_poll) {
- 		struct pollfd fds = {0};
- 		int ret;
- 
- 		fds.fd = fd;
--		ret = poll(&fds, 1, 500);
-+		ret = poll(&fds, 1, poll_timeout);
- 		if (ret == 0) {
--			if (cfg_verbose)
-+			if ((cfg_verbose) && (poll_err))
- 				fprintf(stderr, "poll timeout\n");
- 		} else if (ret < 0) {
- 			error(1, errno, "poll");
-@@ -254,6 +256,20 @@ static void flush_errqueue(int fd, const bool do_poll)
- 	flush_errqueue_recv(fd);
- }
- 
-+static void flush_errqueue_retry(int fd, unsigned long num_sends)
-+{
-+	unsigned long tnow, tstop;
-+	bool first_try = true;
-+
-+	tnow = gettimeofday_ms();
-+	tstop = tnow + cfg_poll_loop_timeout_ms;
-+	do {
-+		flush_errqueue(fd, true, tstop - tnow, first_try);
-+		first_try = false;
-+		tnow = gettimeofday_ms();
-+	} while ((stat_zcopies != num_sends) && (tnow < tstop));
-+}
-+
- static int send_tcp(int fd, char *data)
- {
- 	int ret, done = 0, count = 0;
-@@ -413,7 +429,8 @@ static int send_udp_segment(int fd, char *data)
- 
- static void usage(const char *filepath)
- {
--	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-+	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
-+		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
- 		    filepath);
- }
- 
-@@ -423,7 +440,7 @@ static void parse_opts(int argc, char **argv)
- 	int max_len, hdrlen;
- 	int c;
- 
--	while ((c = getopt(argc, argv, "46acC:D:Hl:mM:p:s:PS:tTuvz")) != -1) {
-+	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
- 		switch (c) {
- 		case '4':
- 			if (cfg_family != PF_UNSPEC)
-@@ -452,6 +469,9 @@ static void parse_opts(int argc, char **argv)
- 		case 'l':
- 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
- 			break;
-+		case 'L':
-+			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
-+			break;
- 		case 'm':
- 			cfg_sendmmsg = true;
- 			break;
-@@ -679,7 +699,7 @@ int main(int argc, char **argv)
- 			num_sends += send_udp(fd, buf[i]);
- 		num_msgs++;
- 		if ((cfg_zerocopy && ((num_msgs & 0xF) == 0)) || cfg_tx_tstamp)
--			flush_errqueue(fd, cfg_poll);
-+			flush_errqueue(fd, cfg_poll, 500, true);
- 
- 		if (cfg_msg_nr && num_msgs >= cfg_msg_nr)
- 			break;
-@@ -698,7 +718,7 @@ int main(int argc, char **argv)
- 	} while (!interrupted && (cfg_runtime_ms == -1 || tnow < tstop));
- 
- 	if (cfg_zerocopy || cfg_tx_tstamp)
--		flush_errqueue(fd, true);
-+		flush_errqueue_retry(fd, num_sends);
- 
- 	if (close(fd))
- 		error(1, errno, "close");
--- 
-2.34.1
-
+On Mon, 2023-01-30 at 21:30 +0000, Maciej W. Rozycki wrote:
+> For x86 kernel stack offset randomization uses the RDTSC instruction,
+> which according to H. Peter Anvin is not a secure source of entropy:
+>=20
+> "RDTSC isn't a super fast instruction either, but what is *way* more
+> significant is that this use of RDTSC is NOT safe: in certain power
+> states
+> it may very well be that stone number of lower bits of TSC contain no
+> entropy at all."
+>=20
+> It also causes an invalid opcode exception with hardware that does
+> not=20
+> implement this instruction:
+>=20
+> process '/sbin/init' started with executable stack
+> invalid opcode: 0000 [#1]
+> CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc4+ #1
+> EIP: exit_to_user_mode_prepare+0x90/0xe1
+> Code: 30 02 00 75 ad 0f ba e3 16 73 05 e8 a7 a5 fc ff 0f ba e3 0e 73
+> 05 e8 3e af fc ff a1 c4 c6 51 c0 85 c0 7e 13 8b 0d ac 01 53 c0 <0f>
+> 31 0f b6 c0 31 c1 89 0d ac 01 53 c0 83 3d 30 ed 62 c0 00 75 33
+> EAX: 00000001 EBX: 00004000 ECX: 00000000 EDX: 000004ff
+> ESI: c10253c0 EDI: 00000000 EBP: c1027f98 ESP: c1027f8c
+> DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010002
+> CR0: 80050033 CR2: bfe8659b CR3: 012e0000 CR4: 00000000
+> Call Trace:
+> =C2=A0? rest_init+0x72/0x72
+> =C2=A0syscall_exit_to_user_mode+0x15/0x27
+> =C2=A0ret_from_fork+0x10/0x30
+> EIP: 0xb7f74800
+> Code: Unable to access opcode bytes at 0xb7f747d6.
+> EAX: 00000000 EBX: 00000000 ECX: 00000000 EDX: 00000000
+> ESI: 00000000 EDI: 00000000 EBP: 00000000 ESP: bfe864b0
+> DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 007b EFLAGS: 00000200
+> ---[ end trace 0000000000000000 ]---
+> EIP: exit_to_user_mode_prepare+0x90/0xe1
+> Code: 30 02 00 75 ad 0f ba e3 16 73 05 e8 a7 a5 fc ff 0f ba e3 0e 73
+> 05 e8 3e af fc ff a1 c4 c6 51 c0 85 c0 7e 13 8b 0d ac 01 53 c0 <0f>
+> 31 0f b6 c0 31 c1 89 0d ac 01 53 c0 83 3d 30 ed 62 c0 00 75 33
+> EAX: 00000001 EBX: 00004000 ECX: 00000000 EDX: 000004ff
+> ESI: c10253c0 EDI: 00000000 EBP: c1027f98 ESP: c1027f8c
+> DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010002
+> CR0: 80050033 CR2: b7f747d6 CR3: 012e0000 CR4: 00000000
+> Kernel panic - not syncing: Fatal exception
+>=20
+> Therefore switch to our generic entropy source and use
+> `get_random_u8'=20
+> instead, which according to Jason A. Donenfeld is supposed to be fast
+> enough:
+>=20
+> "Generally it's very very fast, as most cases wind up being only a
+> memcpy -- in this case, a single byte copy. So by and large it should
+> be suitable. It's fast enough now that most networking things are
+> able
+> to use it. And lots of other places where you'd want really high
+> performance. So I'd expect it's okay to use here too. And if it is
+> too
+> slow, we should figure out how to make it faster. But I don't suspect
+> it'll be too slow."
+>=20
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Suggested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Fixes: fe950f602033 ("x86/entry: Enable random_kstack_offset
+> support")
+> Cc: stable@vger.kernel.org=C2=A0# v5.13+
+> ---
+> Changes from v2:
+>=20
+> - Use `get_random_u8' rather than `rdtsc', universally; update the
+> heading=20
+> =C2=A0 (was: "x86: Disable kernel stack offset randomization for !TSC")
+> and the=20
+> =C2=A0 description accordingly.
+>=20
+> - As a security concern mark for backporting.
+>=20
+> Changes from v1:
+>=20
+> - Disable randomization at run time rather than in configuration.
+> ---
+> =C2=A0arch/x86/include/asm/entry-common.h |=C2=A0=C2=A0=C2=A0 3 ++-
+> =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> linux-x86-randomize-kstack-offset-random-u8.diff
+> Index: linux-macro/arch/x86/include/asm/entry-common.h
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-macro.orig/arch/x86/include/asm/entry-common.h
+> +++ linux-macro/arch/x86/include/asm/entry-common.h
+> @@ -2,6 +2,7 @@
+> =C2=A0#ifndef _ASM_X86_ENTRY_COMMON_H
+> =C2=A0#define _ASM_X86_ENTRY_COMMON_H
+> =C2=A0
+> +#include <linux/random.h>
+> =C2=A0#include <linux/randomize_kstack.h>
+> =C2=A0#include <linux/user-return-notifier.h>
+> =C2=A0
+> @@ -85,7 +86,7 @@ static inline void arch_exit_to_user_mod
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Therefore, final stack=
+ offset entropy will be 5 (x86_64)
+> or
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * 6 (ia32) bits.
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0choose_random_kstack_offset(rd=
+tsc() & 0xFF);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0choose_random_kstack_offset(ge=
+t_random_u8());
+> =C2=A0}
+> =C2=A0#define arch_exit_to_user_mode_prepare
+> arch_exit_to_user_mode_prepare
+> =C2=A0
+Tested-by: Miko Larsson <mikoxyzzz@gmail.com>
+--=20
+~miko
