@@ -2,159 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED16682118
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 01:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDD9682147
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjAaAxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 19:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S230152AbjAaBHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjAaAxV (ORCPT
+        with ESMTP id S229531AbjAaBHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 19:53:21 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1F2E04D;
-        Mon, 30 Jan 2023 16:53:20 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id nn18-20020a17090b38d200b0022bfb584987so12868901pjb.2;
-        Mon, 30 Jan 2023 16:53:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jBYldhL8pTWqB3BqjInd39Jcu1r7g+Kxk37exfegHcI=;
-        b=b2JJ+b1c9pBa8vvw60U+wt9PkFe5oyfkppoG3QrQ87BnswsR71K9MpcVrNozZ0KEl9
-         iTWvvLBgatoqKHqb6RGO2U0OBAGlFhmmvTKR+EOnV6G0vmqVsaFbIIZ5mCtMKBQSlwBi
-         3GQRUOXLnd9r8sN1TETlMzsj90KMrqLFo0/MPNPWZpUb3BTndbH3/f0+cUxOoPUWa3r9
-         S45J7wxzZ7ZP1H2+0ZMHL8U43McqdX5yE5c7WbMZ2Gt0sUWoJLCEr3GyfgdL1hsFVrcb
-         ptERI7CQ7JT2q/qCOZLBgsPUgumiZ7Mx46Qt46T+g82ykILDsAjTcEopgWvEaT5LCi19
-         2AWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jBYldhL8pTWqB3BqjInd39Jcu1r7g+Kxk37exfegHcI=;
-        b=RoA4DMUskHxKxd4lDfxENUTTGMxG3NnZ9khN3DObgQFROscifoldPZ1nOMbEl6g3TR
-         5SrtBVb6dk4lqzCxPdketEj/M8one+pvG1RF49+rIKLUgYN59q07csUKY1IRinFxgP5y
-         3KcqRwhJEjjtl7H7feWs6mzXH/MtH/umK2rvKBL0ZWQz30rld2EhPlYMaPSOLmA2m7V9
-         dAg5KP02D1i5usAYKEUiLS3n3yN1YVD26fOuevGT3LFn8cb3YI/z24IQ/WgbpJp4eEJe
-         DHstn1LmcTK1c5S3dJuBULDGxaznKsYfYQPWrklQ0lwdiku6xQ5CBXjit5U6aBn8khiC
-         VnCA==
-X-Gm-Message-State: AO0yUKVnh3I8Ohx/Z7RgX8kFEBgyu8fy1gYeyXbljk6wBhanK4+5e1FU
-        w7TaHIeYcvC9mWOUY96q+kE2tnhExHU=
-X-Google-Smtp-Source: AK7set+A0QTFKRqjBMuZoq4Wo4mo09+R9ZCV1G/LpP3BiEvAwLBrdpiNXf+1CYEjx249igNHV4hxTA==
-X-Received: by 2002:a17:902:f095:b0:196:1d89:7002 with SMTP id p21-20020a170902f09500b001961d897002mr7677082pla.31.1675126399830;
-        Mon, 30 Jan 2023 16:53:19 -0800 (PST)
-Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:a52d])
-        by smtp.gmail.com with ESMTPSA id k17-20020a170902ba9100b001967692d6f5sm3742819pls.227.2023.01.30.16.53.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 16:53:19 -0800 (PST)
-Date:   Mon, 30 Jan 2023 16:53:15 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Ross Zwisler <zwisler@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ross Zwisler <zwisler@google.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 3/9] selftests/bpf: use canonical ftrace path
-Message-ID: <20230131005315.phdnhkeeconxxm3e@macbook-pro-6.dhcp.thefacebook.com>
-References: <20230130181915.1113313-1-zwisler@google.com>
- <20230130181915.1113313-4-zwisler@google.com>
- <CAADnVQJ7KxEK92qOz0Ya4MrACHpxngSpG4W38xuGEgZmXEG-vQ@mail.gmail.com>
- <20230130145932.37cf6b73@gandalf.local.home>
- <CAADnVQ+F3Z70mu3-QyyNFyJ2qCkDXnMJCW-o+fcnZo=LWj5d9g@mail.gmail.com>
- <20230130183419.0626dc21@gandalf.local.home>
+        Mon, 30 Jan 2023 20:07:50 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B5E2FCE0;
+        Mon, 30 Jan 2023 17:07:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nAe55TfF37jgIdmQ5XgOp9qGo6DxNZNpQr1vjg5aCNkQT/GnOxX1uTnnycD3oZm4mh2Wx8Erxzbo/eU6+YrmgdjSMEK9wSoYGTz4tz+WXUFJ2iSi+uDR8cOPutnnkQ10lU0PFCIqI88y9RKaUNsOIFezPnAAlXmUyug2XurcNvnjSSr44eb/58bB0KKvEoo8YS+SwVxMEu8A4oRIgois7qp3o8hUKs/n5fo3QxzM0qQ8Ev2JGk0865CtC3NLN4O/hLXQcDvyW1jERrfRc5SHJjSwhefu3ueH+zyRyUbnmSd8h7VjuocuTPh6qT4DgHi4qdP5K6Ew2Ao/s4kIOfp4rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yFQT3Xs8fBf2yGNhs7PKtR1XTGYn+5x6UNzKWleM/NE=;
+ b=STGgQVJp5LkHqP8ILc8YdSYKGXUvY9R2mG9csA/n1qWhJvlaCIydkSQpjyX/GtcNKrx1tibVsCqLP8cmCaDwQ4EV8MuurOhIHPgDnuJg5uK6R0FQcQGdBOonTNqNhs0SkX33oA3PI3/XF1juKB5lhWA8AJHb48wTbunULrmgq1Vr2WeU3582GDpc2tFv3LBG93/YUuP+IOcEyE6KVZArThBY1LS8xist4+foYocAqA3ZjoRO9Mjl8Pv/HrLaaNPvg2Hz6arG10G/auOfXjaPmcpPt2kt1p9ehu+PLqjpmIrdHkSHPIpIlD7FqsTZdIpU+SIggwH2a6tdZvH6Hkt+WQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yFQT3Xs8fBf2yGNhs7PKtR1XTGYn+5x6UNzKWleM/NE=;
+ b=T4xvYqqlvPzECmI38uGp92YufClakDo1o1PhLBHUN/1iObQInUA8J13XC13DH2iNLLS8q+nwehFPo1Vku0LKOslDNPBAfcTbJ14Pf7sym40+8IOkyEd29+GCM3z+Ukr54v/m8Zs3LGa0UrNW4yPHTIR5XdWGUFNELVxud94WUM7by2plsIXwzaGC4eaAc6Cg/o71LcNmyUayaOLtwuPASeIaRiLnYwkSlFQPCxmk5CChxKCd5GwZHqHjXK5BRKg5DaSWqH5y819olWmoPyhaCRv3ddZ6+JDmYSrvlfJgXmzRRfWtnHUI3SmmyQBv0xZ6ldczteDSYJTe7UOBbFH9PA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by SN7PR12MB6888.namprd12.prod.outlook.com (2603:10b6:806:260::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Tue, 31 Jan
+ 2023 01:07:46 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::465a:6564:6198:2f4e]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::465a:6564:6198:2f4e%4]) with mapi id 15.20.6043.023; Tue, 31 Jan 2023
+ 01:07:46 +0000
+References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+ <CAJD7tkavoSu9WOnw4Nbxz41nq+Rm6Sq5EeOjh3CTyA=AT5=ujg@mail.gmail.com>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
+        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch
+Subject: Re: [RFC PATCH 00/19] mm: Introduce a cgroup to limit the amount of
+ locked and pinned memory
+Date:   Tue, 31 Jan 2023 11:54:20 +1100
+In-reply-to: <CAJD7tkavoSu9WOnw4Nbxz41nq+Rm6Sq5EeOjh3CTyA=AT5=ujg@mail.gmail.com>
+Message-ID: <874js7zf38.fsf@nvidia.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SY4P282CA0009.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:10:a0::19) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130183419.0626dc21@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3176:EE_|SN7PR12MB6888:EE_
+X-MS-Office365-Filtering-Correlation-Id: a22e79bf-e0c5-4784-1d0f-08db03279032
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sMas+zb7dQgG/1XNlaaSX9NtkxESyA+oFhnyo/HgiczaUusvvNKzrUNtdR/03B7KjCApi6yTiP5WbGYR3S5lVsCqg2uVarhwASetn0z8mhX4CiIDAZhPAmL4rfnAzUMcwTborNvluzVju8IhJwp11V+kDukpM677E9ziQtChB/ycJHkashvz932vk9yjc8Wsx6e18rg4ed6l1Ui7Z++aoHOilbHnYjHZasFAomK7POi3fSBH33CbO7rsPF9fyyirvuYpYH0BUzD5ClRCfvqhMfcNZom+xl9NvZeSaT2s6XxbSti+4i0ZPFItYRUz9lgu7f6ABrliGtztsUBI+u5b1jaCxDw9PSSHiWlzgzHtiWHP+JgrvGM+FwDzLI3cbkph+mmSEXMyniI5OnFZiuOdYLhYFk8qKVChnlNIO72W6WUA6BB/EApHZfLdApMoBos0PP/7qPPq8BFApwA1iokblyKPLMWcJx3lCLyVC/ANKHjaIrnvMZlAp+qC0gk5vtW8MwSMhlHSuefmCocj5m0fYlczku3bSz+it4nYORRcs22D4Cb6dg2rTkbx90IwAWHAEPMSLuveOD/D+msFKA9357cw/P2DcpUYZoc3tlMlaHVwqgLPlcoKI0pGYH1BzQxSWpgAHDBBlRZ6V50H4PRn9A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39860400002)(396003)(346002)(136003)(451199018)(5660300002)(41300700001)(316002)(2906002)(8936002)(66899018)(66556008)(6486002)(6916009)(4326008)(26005)(66946007)(6666004)(478600001)(6512007)(186003)(6506007)(66476007)(53546011)(2616005)(83380400001)(38100700002)(8676002)(86362001)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EnbMGtXoDIekVZ2LCTT2Q8GOmMTeBbQpNOmfWyO9gC7BD0IMBe95eNIO9LNt?=
+ =?us-ascii?Q?4qt/armT9c3VyA4H2cR4Buk0i9nvXUToqsni6ySt+L/6SNyNbyZpavEa8nHm?=
+ =?us-ascii?Q?eKAsylH+tCcWKmhPPnzskGat3gFJdy/HEAbRTuCbmZtTU2r5YULuJOX1HfAg?=
+ =?us-ascii?Q?5S2PwQEFXe+xnAA9Tl/AcT3mINUFIMcsxv8KEdFbnL5LHNepCDO/W+wEi7bs?=
+ =?us-ascii?Q?NddCD5CqTFAvmLlR/E/47CXkBEI54SYMIoMBN/4XJVFeFJlPu8qHSsbkhonG?=
+ =?us-ascii?Q?yusYVHqRGqAL2ZpRyOjjua9D/u8u4FJtKh2Su/86AgaJg7PcrC0sJ7qKsbez?=
+ =?us-ascii?Q?04YmsOVziRsf5s4CcQ5ZOIbjn+9i5o0zxsp67w/aOpsPNRLaACaATRf73pIT?=
+ =?us-ascii?Q?I+gOwbZvyEFJPNtt6XJolTkfFa8u9a7fxXTXhNkk7AlCzHaF/3VlwCFj2Wl1?=
+ =?us-ascii?Q?XcsrZbHsC75Ey6HqNMhn16MWN9mBab3GPLgTJhhV5Lwd0UwjhnBsUS8ZgX8x?=
+ =?us-ascii?Q?T/ixWokiN1w7wUfnwn7Nx7MhM9Q5Uog442IMmeI/AiuJLASmPoVfuuIIKA4O?=
+ =?us-ascii?Q?y3QspMZenlKgEwaNNT69QrqVqo8WlMImWzBYqYugUqiXIgdBhxh2sA2wxFTP?=
+ =?us-ascii?Q?PFtXxIwet3Hrpr+PrzLSOpoeNhVjwLG1bQGnK/3XJNTAzY8tLP+Kr4bB8ic/?=
+ =?us-ascii?Q?b0JWPlrmrfkLk4w0ueYA9ZTOPt80QACX5shuXr183+kkRw1GvyQKZ/pYkKpB?=
+ =?us-ascii?Q?eTJAsT2YjOoYDo8m7Axz5xelItVJUGdIvcGI2XiExNP3yZ7KtZU8VzVKMgxr?=
+ =?us-ascii?Q?GcGFy54jLKZBRl0xSfMnrDO7yH+GIDDwnw0gqYToSUHE+UhsmCWBYYTz81G2?=
+ =?us-ascii?Q?X/dIKpyoeuGB2UtHEZjKsvY6t+Ek3zomiombC5sFPr1jxQnhe7+op1RNeu3q?=
+ =?us-ascii?Q?sxco6i1T3iHisu3tvPXYGP1bSPyH+tgFmqYfOwClKgPmg4pd0guUbt03Xfax?=
+ =?us-ascii?Q?/Ww5i9vYIfRfkBtxONK+iqbKfw9ZJUfNoR5Ut6Xpp/eDiyHex+ecaILus1C2?=
+ =?us-ascii?Q?iyE1BWJ5tZhGniAl47R0eyRRY2Jk5UUZWpWCUFyHKhdjTMetJ52APBYqor9P?=
+ =?us-ascii?Q?mxwHNghHxFmvo7NHKOg0Lfo/SQs/D9GG+UKiNGl8263zK77RmbltVpotL0t5?=
+ =?us-ascii?Q?bkkPe+mVkbxcHEdGEydNLD4RXPpj3leGmLGAFha6G34yhvm/RS5wn7/8D1vX?=
+ =?us-ascii?Q?+Jk9nvwBSo2I/fsG+VquO44M6rOhuNs6vSCDJID3x/ErsbYtfwhceJWmv4Cq?=
+ =?us-ascii?Q?GrlXBz3v7lzogjT7sDW8SU9yhftwXXB4LjSbJGmmwjnE3qINREh/vFcbC/GZ?=
+ =?us-ascii?Q?41nwoU0eglRZX2KLeuB+votK+74RbolGE36kBszVZ+vTD2LiHkHeDPzpN4Cl?=
+ =?us-ascii?Q?/vGQy/1yPQw9EO/Bqkv0cdjFiRMS/OoeTsIzxuIcO1F3K0cJA4vnzyM+1b9W?=
+ =?us-ascii?Q?5RALouBkYFnmXTAEuDKqtkykXm6GwdjTjR81MgRcjFvMenDCNE96Fa/ITjcL?=
+ =?us-ascii?Q?nsbj6dPmiO+arjVu2ZAbpXtsrdPnH/aw42n9IDOv?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a22e79bf-e0c5-4784-1d0f-08db03279032
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 01:07:46.2897
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vlda9n3Mx6W8U4ZR95Bm6vrFnCoMuqf4yAn/ZdOMp2t0nYlY+pxt3ruNAPTrmLGj0p/TBkdbwGjDoQO9nXvTLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6888
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 06:34:19PM -0500, Steven Rostedt wrote:
-> On Mon, 30 Jan 2023 12:03:52 -0800
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > So this change will break the tests. We cannot do it.  
-> > >
-> > > Could we add a way to try to mount it?
-> > >
-> > > If anything, the tests should not have the path hard coded. It should then
-> > > look to see if it is mounted and use the path that is found. Otherwise it
-> > > should try mounting it at the correct location.
-> > >
-> > > Feel free to take the code from libtracefs (and modify it):
-> > >
-> > > https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tree/src/tracefs-utils.c#n89
-> > >
-> > > It will make the test code much more robust.  
-> > 
-> > The point is not about tests. The point is that this change might break
-> > some users that are working today with /sys/kernel/debug/tracing.
-> 
-> > It also might be mounted differently.
-> > For example from another system:
-> > cat /proc/mounts|grep trace
-> > tracefs /sys/kernel/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0
-> > tracefs /sys/kernel/debug/tracing tracefs rw,relatime 0 0
-> 
-> Yes, and the code works when it's mounted multiple times.
-> 
-> > 
-> > So I suggest leaving the code as-is.
-> 
-> Why?  I want to make /sys/kernel/debug/tracing deprecated. It's a hack to
-> not break old code. I've had complaints about that hack, and there's even
-> systems that disable the auto mounting (that is, /sys/kernel/debug/tracing
-> would not exist in such configs) This was never expected to be a permanent
-> solution.
 
-I don't think /sys/kernel/debug/tracing can ever be deprecated.
-There are plenty of user space applications (not bpf related at all) that
-expect it to be in that location.
+Yosry Ahmed <yosryahmed@google.com> writes:
 
-Quick search shows:
+> On Mon, Jan 23, 2023 at 9:43 PM Alistair Popple <apopple@nvidia.com> wrote:
+>>
+>> Having large amounts of unmovable or unreclaimable memory in a system
+>> can lead to system instability due to increasing the likelihood of
+>> encountering out-of-memory conditions. Therefore it is desirable to
+>> limit the amount of memory users can lock or pin.
+>>
+>> From userspace such limits can be enforced by setting
+>> RLIMIT_MEMLOCK. However there is no standard method that drivers and
+>> other in-kernel users can use to check and enforce this limit.
+>>
+>> This has lead to a large number of inconsistencies in how limits are
+>> enforced. For example some drivers will use mm->locked_mm while others
+>> will use mm->pinned_mm or user->locked_mm. It is therefore possible to
+>> have up to three times RLIMIT_MEMLOCKED pinned.
+>>
+>> Having pinned memory limited per-task also makes it easy for users to
+>> exceed the limit. For example drivers that pin memory with
+>> pin_user_pages() it tends to remain pinned after fork. To deal with
+>> this and other issues this series introduces a cgroup for tracking and
+>> limiting the number of pages pinned or locked by tasks in the group.
+>>
+>> However the existing behaviour with regards to the rlimit needs to be
+>> maintained. Therefore the lesser of the two limits is
+>> enforced. Furthermore having CAP_IPC_LOCK usually bypasses the rlimit,
+>> but this bypass is not allowed for the cgroup.
+>>
+>> The first part of this series converts existing drivers which
+>> open-code the use of locked_mm/pinned_mm over to a common interface
+>> which manages the refcounts of the associated task/mm/user
+>> structs. This ensures accounting of pages is consistent and makes it
+>> easier to add charging of the cgroup.
+>>
+>> The second part of the series adds the cgroup and converts core mm
+>> code such as mlock over to charging the cgroup before finally
+>> introducing some selftests.
+>
+>
+> I didn't go through the entire series, so apologies if this was
+> mentioned somewhere, but do you mind elaborating on why this is added
+> as a separate cgroup controller rather than an extension of the memory
+> cgroup controller?
 
-android profiler:
-https://android.googlesource.com/platform/external/perfetto/+/refs/heads/master/src/tools/dump_ftrace_stats/main.cc#60
+One of my early prototypes actually did add this to the memcg
+controller. However pinned pages fall under their own limit, and we
+wanted to always account pages to the cgroup of the task using the
+driver rather than say folio_memcg(). So adding it to memcg didn't seem
+to have much benefit as we didn't end up using any of the infrastructure
+provided by memcg. Hence I thought it was clearer to just add it as it's
+own controller.
 
-java profiler:
-https://github.com/jvm-profiling-tools/async-profiler/blob/master/src/perfEvents_linux.cpp#L85
+ - Alistair
+ 
+>>
+>>
+>> As I don't have access to systems with all the various devices I
+>> haven't been able to test all driver changes. Any help there would be
+>> appreciated.
+>>
+>> Alistair Popple (19):
+>>   mm: Introduce vm_account
+>>   drivers/vhost: Convert to use vm_account
+>>   drivers/vdpa: Convert vdpa to use the new vm_structure
+>>   infiniband/umem: Convert to use vm_account
+>>   RMDA/siw: Convert to use vm_account
+>>   RDMA/usnic: convert to use vm_account
+>>   vfio/type1: Charge pinned pages to pinned_vm instead of locked_vm
+>>   vfio/spapr_tce: Convert accounting to pinned_vm
+>>   io_uring: convert to use vm_account
+>>   net: skb: Switch to using vm_account
+>>   xdp: convert to use vm_account
+>>   kvm/book3s_64_vio: Convert account_locked_vm() to vm_account_pinned()
+>>   fpga: dfl: afu: convert to use vm_account
+>>   mm: Introduce a cgroup for pinned memory
+>>   mm/util: Extend vm_account to charge pages against the pin cgroup
+>>   mm/util: Refactor account_locked_vm
+>>   mm: Convert mmap and mlock to use account_locked_vm
+>>   mm/mmap: Charge locked memory to pins cgroup
+>>   selftests/vm: Add pins-cgroup selftest for mlock/mmap
+>>
+>>  MAINTAINERS                              |   8 +-
+>>  arch/powerpc/kvm/book3s_64_vio.c         |  10 +-
+>>  arch/powerpc/mm/book3s64/iommu_api.c     |  29 +--
+>>  drivers/fpga/dfl-afu-dma-region.c        |  11 +-
+>>  drivers/fpga/dfl-afu.h                   |   1 +-
+>>  drivers/infiniband/core/umem.c           |  16 +-
+>>  drivers/infiniband/core/umem_odp.c       |   6 +-
+>>  drivers/infiniband/hw/usnic/usnic_uiom.c |  13 +-
+>>  drivers/infiniband/hw/usnic/usnic_uiom.h |   1 +-
+>>  drivers/infiniband/sw/siw/siw.h          |   2 +-
+>>  drivers/infiniband/sw/siw/siw_mem.c      |  20 +--
+>>  drivers/infiniband/sw/siw/siw_verbs.c    |  15 +-
+>>  drivers/vdpa/vdpa_user/vduse_dev.c       |  20 +--
+>>  drivers/vfio/vfio_iommu_spapr_tce.c      |  15 +-
+>>  drivers/vfio/vfio_iommu_type1.c          |  59 +----
+>>  drivers/vhost/vdpa.c                     |   9 +-
+>>  drivers/vhost/vhost.c                    |   2 +-
+>>  drivers/vhost/vhost.h                    |   1 +-
+>>  include/linux/cgroup.h                   |  20 ++-
+>>  include/linux/cgroup_subsys.h            |   4 +-
+>>  include/linux/io_uring_types.h           |   3 +-
+>>  include/linux/kvm_host.h                 |   1 +-
+>>  include/linux/mm.h                       |   5 +-
+>>  include/linux/mm_types.h                 |  88 ++++++++-
+>>  include/linux/skbuff.h                   |   6 +-
+>>  include/net/sock.h                       |   2 +-
+>>  include/net/xdp_sock.h                   |   2 +-
+>>  include/rdma/ib_umem.h                   |   1 +-
+>>  io_uring/io_uring.c                      |  20 +--
+>>  io_uring/notif.c                         |   4 +-
+>>  io_uring/notif.h                         |  10 +-
+>>  io_uring/rsrc.c                          |  38 +---
+>>  io_uring/rsrc.h                          |   9 +-
+>>  mm/Kconfig                               |  11 +-
+>>  mm/Makefile                              |   1 +-
+>>  mm/internal.h                            |   2 +-
+>>  mm/mlock.c                               |  76 +------
+>>  mm/mmap.c                                |  76 +++----
+>>  mm/mremap.c                              |  54 +++--
+>>  mm/pins_cgroup.c                         | 273 ++++++++++++++++++++++++-
+>>  mm/secretmem.c                           |   6 +-
+>>  mm/util.c                                | 196 +++++++++++++++--
+>>  net/core/skbuff.c                        |  47 +---
+>>  net/rds/message.c                        |   9 +-
+>>  net/xdp/xdp_umem.c                       |  38 +--
+>>  tools/testing/selftests/vm/Makefile      |   1 +-
+>>  tools/testing/selftests/vm/pins-cgroup.c | 271 ++++++++++++++++++++++++-
+>>  virt/kvm/kvm_main.c                      |   3 +-
+>>  48 files changed, 1114 insertions(+), 401 deletions(-)
+>>  create mode 100644 mm/pins_cgroup.c
+>>  create mode 100644 tools/testing/selftests/vm/pins-cgroup.c
+>>
+>> base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+>> --
+>> git-series 0.9.1
+>>
 
-> If anything, leaving hardcoded calls like that forces the user to mount
-> debugfs when they may not want to. The entire point of tracefs was to allow
-> users to have access to the trace events without having to expose debugfs
-> and all the crud it brings with it. This was requested several times before
-> it was added.
-
-All makes sense.
-
-> What is your technical reason for not modifying the code to look for
-> tracefs in /sys/kernel/tracing and if it's not there try
-> /sys/kernel/debug/tracing, and if both are not found, try mounting it.
-
-libbpf already has code to probe both locations.
-The point that full deprecation of /sys/kernel/debug/tracing is not possible,
-hence no point doing the diff:
-48 files changed, 96 insertions(+), 95 deletions(-)
-It doesn't move the needle. Just a code churn.
