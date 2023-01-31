@@ -2,78 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711E2682A3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E187B682A44
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjAaKQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S229716AbjAaKRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjAaKQG (ORCPT
+        with ESMTP id S229900AbjAaKRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:16:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A814B8B9;
-        Tue, 31 Jan 2023 02:16:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E30EB81B7F;
-        Tue, 31 Jan 2023 10:16:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A54C4339B;
-        Tue, 31 Jan 2023 10:16:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675160161;
-        bh=1pkJs2jkaOkE6Qmfs+EJL7dI3laoOBYaUoEx2DL2DAQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JeUCAMhotOYwRP97EU1HcJrCThrmOa5XN5RReHodKijjavC31Ovbrsqto0qcNy/Sl
-         y/QCoWqB7nj2mUGjSzyb63xaCRU5hUlSt1dKhEs6mo7Z2608k80HCl7mPZH6nhP499
-         SD1PuTM5tPeXyQziiqU+gvpWyRZEfhfoXMbXxawo=
-Date:   Tue, 31 Jan 2023 11:15:58 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Basavaraj Natikar <basavaraj.natikar@amd.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Filipe =?iso-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH 9/9] staging: greybus: hid: Constify lowlevel HID driver
-Message-ID: <Y9jqXklnj44XiZ93@kroah.com>
-References: <20230130-hid-const-ll-driver-v1-0-3fc282b3b1d0@weissschuh.net>
- <20230130-hid-const-ll-driver-v1-9-3fc282b3b1d0@weissschuh.net>
+        Tue, 31 Jan 2023 05:17:11 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794134A211;
+        Tue, 31 Jan 2023 02:17:10 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V4umH2028760;
+        Tue, 31 Jan 2023 10:17:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MT3ILMDbCV+lqKyn4yXDQ0/1vxBQ1kSzH7A3Kr8PP0o=;
+ b=ou55hD0WUnNb2e2G2oStQL4XFOIEvrF1zjzcLlkx07f8ygjFwMOJ35UStS28WxyNTUMH
+ N4m4bEhoglfdGooIzqoI+Z+i3vnCSjd1H8zUkJ2edc1jP8LDaAHefyMA1dl1t/0NZdBA
+ PhDQt/pk9WXqpBWsocFkibee4Zign7TbKDetRIsFWPDKrF3zLJq790mrd6c867nk2FLF
+ sGYp8XFKFe8L6XFpeHgtLHx//zrvTmgskHz3ssMr4wEGkg6+wyQx6W18eDGfXsvlYby/
+ GhWYsQ21By0GaDwTpJH19chg/PiGk5VtvRD81yCcIGxrKTXn+WEXHaC7Vs1Gho4UmdIl gA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3neua98x7a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 10:17:06 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30VAH5rR026522
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 10:17:05 GMT
+Received: from [10.50.40.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 02:16:59 -0800
+Message-ID: <2d735345-b2cc-faf8-7c3c-43d481ac7116@quicinc.com>
+Date:   Tue, 31 Jan 2023 15:46:56 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/6] regulator: qcom_smd: Add MP5496 regulators
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <quic_ipkumar@quicinc.com>
+References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
+ <20230113150310.29709-4-quic_devipriy@quicinc.com>
+ <552e75a9-179a-7720-3d37-59f1846266b1@linaro.org>
+ <2cc385d9-4f51-945d-cc59-2738011bd295@quicinc.com>
+ <0ef104a5-fc10-a043-a458-4e6d1e07a7a7@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <0ef104a5-fc10-a043-a458-4e6d1e07a7a7@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230130-hid-const-ll-driver-v1-9-3fc282b3b1d0@weissschuh.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NBu5J3l3sQz5juhUomKRqJh2IJWLdUhq
+X-Proofpoint-ORIG-GUID: NBu5J3l3sQz5juhUomKRqJh2IJWLdUhq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_04,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301310090
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 03:59:45AM +0000, Thomas Wei�schuh wrote:
-> Since commit 52d225346904 ("HID: Make lowlevel driver structs const")
-> the lowlevel HID drivers are only exposed as const.
-> 
-> Take advantage of this to constify the underlying structure, too.
-> 
-> Signed-off-by: Thomas Wei�schuh <linux@weissschuh.net>
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+On 1/27/2023 9:33 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 27.01.2023 17:01, Devi Priya wrote:
+>>
+>>
+>> On 1/13/2023 8:54 PM, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 13.01.2023 16:03, devi priya wrote:
+>>>> Adding support for PMIC MP5496 on IPQ9574 SoC
+>>>>
+>>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>>>> ---
+>>> Please simply extend the existing MP5496 support with this
+>>> S1 regulator. If you don't explicitly define and set voltages
+>>> for the other vregs, they will not be probed.
+>>>
+>>> Konrad
+>> IPQ6018 and IPQ9574 platforms use the same PMIC MP5496 but they have a different power layout. IPQ9574 has S2 regulator which will be used for NSS scaling but S2 in IPQ6018 serves a different purpose. Hence it would not be possible to extend the existing MP5496 support for IPQ9574
+> Does the s2 on IPQ9574 have a different voltage range than
+> the one on IPQ6018? No? Then there's nothing blocking you
+> from using the setup for both SoCs. As I've mentioned,
+> regulators that you don't add to the device tree will
+> not even be probed.
+> 
+Yeah, understood! will update this in V2
+> Konrad
+>>>>    drivers/regulator/qcom_smd-regulator.c | 16 ++++++++++++++++
+>>>>    1 file changed, 16 insertions(+)
+>>>>
+>>>> diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+>>>> index 9f2b58458841..1eb17d378897 100644
+>>>> --- a/drivers/regulator/qcom_smd-regulator.c
+>>>> +++ b/drivers/regulator/qcom_smd-regulator.c
+>>>> @@ -767,6 +767,15 @@ static const struct regulator_desc mp5496_ldoa2 = {
+>>>>        .ops = &rpm_mp5496_ops,
+>>>>    };
+>>>>    +static const struct regulator_desc ipq9574_mp5496_smpa1 = {
+>>>> +    .linear_ranges = (struct linear_range[]) {
+>>>> +        REGULATOR_LINEAR_RANGE(600000, 0, 37, 12500),
+>>>> +    },
+>>>> +    .n_linear_ranges = 1,
+>>>> +    .n_voltages = 38,
+>>>> +    .ops = &rpm_mp5496_ops,
+>>>> +};
+>>>> +
+>>>>    static const struct regulator_desc pm2250_lvftsmps = {
+>>>>        .linear_ranges = (struct linear_range[]) {
+>>>>            REGULATOR_LINEAR_RANGE(320000, 0, 269, 4000),
+>>>> @@ -799,6 +808,11 @@ static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+>>>>        {}
+>>>>    };
+>>>>    +static const struct rpm_regulator_data rpm_ipq9574_mp5496_regulators[] = {
+>>>> +    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1" },
+>>>> +    {}
+>>>> +};
+>>>> +
+>>>>    static const struct rpm_regulator_data rpm_pm2250_regulators[] = {
+>>>>        { "s1", QCOM_SMD_RPM_SMPA, 1, &pm2250_lvftsmps, "vdd_s1" },
+>>>>        { "s2", QCOM_SMD_RPM_SMPA, 2, &pm2250_lvftsmps, "vdd_s2" },
+>>>> @@ -1320,6 +1334,8 @@ static const struct rpm_regulator_data rpm_pms405_regulators[] = {
+>>>>    };
+>>>>      static const struct of_device_id rpm_of_match[] = {
+>>>> +    { .compatible = "qcom,rpm-ipq9574-mp5496-regulators",
+>>>> +        .data = &rpm_ipq9574_mp5496_regulators },
+>>>>        { .compatible = "qcom,rpm-mp5496-regulators", .data = &rpm_mp5496_regulators },
+>>>>        { .compatible = "qcom,rpm-pm2250-regulators", .data = &rpm_pm2250_regulators },
+>>>>        { .compatible = "qcom,rpm-pm6125-regulators", .data = &rpm_pm6125_regulators },
+>> Best Regards,
+>> Devi Priya
+Best Regards,
+Devi Priya
