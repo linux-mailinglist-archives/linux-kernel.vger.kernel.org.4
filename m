@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB52C682F1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEDD682F1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjAaOWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
+        id S230299AbjAaOWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjAaOWa (ORCPT
+        with ESMTP id S231773AbjAaOWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:22:30 -0500
+        Tue, 31 Jan 2023 09:22:31 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FA1222D1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7583A23859;
         Tue, 31 Jan 2023 06:22:29 -0800 (PST)
 Date:   Tue, 31 Jan 2023 14:22:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675174947;
+        s=2020; t=1675174948;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=d9aU86yIRrHT4SeqF5L9jK7lUvBot2TGYqlLipevtkA=;
-        b=KfoLIlc2rNlG57K6ETARdDp1ly+yybcrfC8BmPi9hUEj5Zf0G6INKR9m1A/bSs7i82tmWw
-        t3d5nwHgad0tnzmUXxZRZeweB96zkuIoBTfg4+70dGNEOC+M+tOwpgB/pW9slq7nndD0UN
-        yj/QY2WgDc9o6ZAvXAaoByvjOr6soO5221lxw5jsx8bN8l/1op4tHFqMeTa4kg9lK3UG/0
-        2H+gZ8L6jziVJ7SzVvtI74ZYfZ+u1/LlgMZSY8ECSxUTV6uZB2KpgSYFfmxbO+UjmYX9FW
-        lSJ8r1HK4y+Xhhmgk/F3N0XXKaWUNKNPECXk034/atPuEvDK4AJ3+Q3LoPl7ng==
+        bh=4G14+ekvYO/NDmGQDCsXbInmS4RuIIXCyfANPWDSrZo=;
+        b=ghOX4mzm0u5V1S4z0OfFH5oDJvy9fE3p81cKvJyMm6lZBgu5SNQrjiwGnEEkmIJigadGl+
+        2RWjn1TSP8dPpAdkA/fuWZIkszk+wzQHT5fDuwBiz942p4xEnCUM32y+uJEpJrZXVD+YJs
+        6PxUHEenVBBbIUXaD+8uPfyv/T4CAIPmDteE3b/JVwFrl4qNpp10iJhodPRD8yycLExVvB
+        8qezO9axACPR3hLkUWrdCyand3vd4kzJn9a7iQoSNpeg19WrdKinOnlUCA3q/WdiqAvnzN
+        4UIZH3t5ojrtBv3E+KhaXcyHTml//mFEuuFeLjpfyLhf6+BoL56wCIJNFGwlOQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675174947;
+        s=2020e; t=1675174948;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=d9aU86yIRrHT4SeqF5L9jK7lUvBot2TGYqlLipevtkA=;
-        b=lQu+ofjefPsq2Xg7d2vgTOXFqGUqt9O/9By4WDTjTU43QBNfsYgMw7XcWVu6Y+PUtalaRx
-        7wJJdKWYCHu6hODg==
+        bh=4G14+ekvYO/NDmGQDCsXbInmS4RuIIXCyfANPWDSrZo=;
+        b=yLgFMGkrIzmHztStfG+5SqphdiVilHhZAMS6SpQ6ogzdUILoD/BKM/9UwOBbKoJmWd/Aht
+        xJmjEYrVv4COq4Aw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/clock/x86: Mark sched_clock() noinstr
+Subject: [tip: sched/core] x86/atomics: Always inline arch_atomic64*()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230126151323.702003578@infradead.org>
-References: <20230126151323.702003578@infradead.org>
+In-Reply-To: <20230126151323.585115019@infradead.org>
+References: <20230126151323.585115019@infradead.org>
 MIME-Version: 1.0
-Message-ID: <167517494734.4906.17956886323824650289.tip-bot2@tip-bot2>
+Message-ID: <167517494778.4906.7689889716452581880.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,252 +66,382 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     8739c6811572b087decd561f96382087402cc343
-Gitweb:        https://git.kernel.org/tip/8739c6811572b087decd561f96382087402cc343
+Commit-ID:     7aab7aa4b4bed2b9030fcdd207e0f3a5d257bda0
+Gitweb:        https://git.kernel.org/tip/7aab7aa4b4bed2b9030fcdd207e0f3a5d257bda0
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 26 Jan 2023 16:08:36 +01:00
+AuthorDate:    Thu, 26 Jan 2023 16:08:34 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 31 Jan 2023 15:01:47 +01:00
+CommitterDate: Tue, 31 Jan 2023 15:01:46 +01:00
 
-sched/clock/x86: Mark sched_clock() noinstr
+x86/atomics: Always inline arch_atomic64*()
 
-In order to use sched_clock() from noinstr code, mark it and all it's
-implenentations noinstr.
-
-The whole pvclock thing (used by KVM/Xen) is a bit of a pain,
-since it calls out to watchdogs, create a
-pvclock_clocksource_read_nowd() variant doesn't do that and can be
-noinstr.
+As already done for regular arch_atomic*(), always inline arch_atomic64*().
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Link: https://lore.kernel.org/r/20230126151323.702003578@infradead.org
+Link: https://lore.kernel.org/r/20230126151323.585115019@infradead.org
 ---
- arch/x86/include/asm/kvmclock.h |  2 +-
- arch/x86/include/asm/paravirt.h |  2 +-
- arch/x86/include/asm/pvclock.h  |  3 ++-
- arch/x86/kernel/cpu/vmware.c    |  2 +-
- arch/x86/kernel/kvmclock.c      |  6 +++---
- arch/x86/kernel/pvclock.c       | 19 +++++++++++++++----
- arch/x86/kernel/tsc.c           |  7 +++----
- arch/x86/xen/time.c             | 12 ++++++++++--
- include/linux/math64.h          |  4 ++--
- 9 files changed, 38 insertions(+), 19 deletions(-)
+ arch/x86/include/asm/atomic64_32.h | 44 ++++++++++++++---------------
+ arch/x86/include/asm/atomic64_64.h | 36 ++++++++++++------------
+ 2 files changed, 40 insertions(+), 40 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvmclock.h b/arch/x86/include/asm/kvmclock.h
-index 6c57651..511b350 100644
---- a/arch/x86/include/asm/kvmclock.h
-+++ b/arch/x86/include/asm/kvmclock.h
-@@ -8,7 +8,7 @@ extern struct clocksource kvm_clock;
- 
- DECLARE_PER_CPU(struct pvclock_vsyscall_time_info *, hv_clock_per_cpu);
- 
--static inline struct pvclock_vcpu_time_info *this_cpu_pvti(void)
-+static __always_inline struct pvclock_vcpu_time_info *this_cpu_pvti(void)
- {
- 	return &this_cpu_read(hv_clock_per_cpu)->pvti;
- }
-diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
-index 86c9d83..cf40e81 100644
---- a/arch/x86/include/asm/paravirt.h
-+++ b/arch/x86/include/asm/paravirt.h
-@@ -26,7 +26,7 @@ DECLARE_STATIC_CALL(pv_sched_clock, dummy_sched_clock);
- 
- void paravirt_set_sched_clock(u64 (*func)(void));
- 
--static inline u64 paravirt_sched_clock(void)
-+static __always_inline u64 paravirt_sched_clock(void)
- {
- 	return static_call(pv_sched_clock)();
- }
-diff --git a/arch/x86/include/asm/pvclock.h b/arch/x86/include/asm/pvclock.h
-index 19b695f..0c92db8 100644
---- a/arch/x86/include/asm/pvclock.h
-+++ b/arch/x86/include/asm/pvclock.h
-@@ -7,6 +7,7 @@
- 
- /* some helper functions for xen and kvm pv clock sources */
- u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src);
-+u64 pvclock_clocksource_read_nowd(struct pvclock_vcpu_time_info *src);
- u8 pvclock_read_flags(struct pvclock_vcpu_time_info *src);
- void pvclock_set_flags(u8 flags);
- unsigned long pvclock_tsc_khz(struct pvclock_vcpu_time_info *src);
-@@ -39,7 +40,7 @@ bool pvclock_read_retry(const struct pvclock_vcpu_time_info *src,
-  * Scale a 64-bit delta by scaling and multiplying by a 32-bit fraction,
-  * yielding a 64-bit result.
+diff --git a/arch/x86/include/asm/atomic64_32.h b/arch/x86/include/asm/atomic64_32.h
+index 5efd01b..808b4ee 100644
+--- a/arch/x86/include/asm/atomic64_32.h
++++ b/arch/x86/include/asm/atomic64_32.h
+@@ -71,7 +71,7 @@ ATOMIC64_DECL(add_unless);
+  * the old value.
   */
--static inline u64 pvclock_scale_delta(u64 delta, u32 mul_frac, int shift)
-+static __always_inline u64 pvclock_scale_delta(u64 delta, u32 mul_frac, int shift)
+ 
+-static inline s64 arch_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
++static __always_inline s64 arch_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
  {
- 	u64 product;
- #ifdef __i386__
-diff --git a/arch/x86/kernel/cpu/vmware.c b/arch/x86/kernel/cpu/vmware.c
-index 02039ec..11f83d0 100644
---- a/arch/x86/kernel/cpu/vmware.c
-+++ b/arch/x86/kernel/cpu/vmware.c
-@@ -143,7 +143,7 @@ static __init int parse_no_stealacc(char *arg)
+ 	return arch_cmpxchg64(&v->counter, o, n);
  }
- early_param("no-steal-acc", parse_no_stealacc);
- 
--static unsigned long long notrace vmware_sched_clock(void)
-+static noinstr u64 vmware_sched_clock(void)
+@@ -85,7 +85,7 @@ static inline s64 arch_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
+  * Atomically xchgs the value of @v to @n and returns
+  * the old value.
+  */
+-static inline s64 arch_atomic64_xchg(atomic64_t *v, s64 n)
++static __always_inline s64 arch_atomic64_xchg(atomic64_t *v, s64 n)
  {
- 	unsigned long long ns;
- 
-diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
-index 16333ba..0f35d44 100644
---- a/arch/x86/kernel/kvmclock.c
-+++ b/arch/x86/kernel/kvmclock.c
-@@ -71,12 +71,12 @@ static int kvm_set_wallclock(const struct timespec64 *now)
- 	return -ENODEV;
- }
- 
--static u64 kvm_clock_read(void)
-+static noinstr u64 kvm_clock_read(void)
+ 	s64 o;
+ 	unsigned high = (unsigned)(n >> 32);
+@@ -104,7 +104,7 @@ static inline s64 arch_atomic64_xchg(atomic64_t *v, s64 n)
+  *
+  * Atomically sets the value of @v to @n.
+  */
+-static inline void arch_atomic64_set(atomic64_t *v, s64 i)
++static __always_inline void arch_atomic64_set(atomic64_t *v, s64 i)
  {
- 	u64 ret;
- 
- 	preempt_disable_notrace();
--	ret = pvclock_clocksource_read(this_cpu_pvti());
-+	ret = pvclock_clocksource_read_nowd(this_cpu_pvti());
- 	preempt_enable_notrace();
- 	return ret;
- }
-@@ -86,7 +86,7 @@ static u64 kvm_clock_get_cycles(struct clocksource *cs)
- 	return kvm_clock_read();
- }
- 
--static u64 kvm_sched_clock_read(void)
-+static noinstr u64 kvm_sched_clock_read(void)
+ 	unsigned high = (unsigned)(i >> 32);
+ 	unsigned low = (unsigned)i;
+@@ -119,7 +119,7 @@ static inline void arch_atomic64_set(atomic64_t *v, s64 i)
+  *
+  * Atomically reads the value of @v and returns it.
+  */
+-static inline s64 arch_atomic64_read(const atomic64_t *v)
++static __always_inline s64 arch_atomic64_read(const atomic64_t *v)
  {
- 	return kvm_clock_read() - kvm_sched_clock_offset;
- }
-diff --git a/arch/x86/kernel/pvclock.c b/arch/x86/kernel/pvclock.c
-index 5a2a517..56acf53 100644
---- a/arch/x86/kernel/pvclock.c
-+++ b/arch/x86/kernel/pvclock.c
-@@ -64,7 +64,8 @@ u8 pvclock_read_flags(struct pvclock_vcpu_time_info *src)
- 	return flags & valid_flags;
- }
- 
--u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
-+static __always_inline
-+u64 __pvclock_clocksource_read(struct pvclock_vcpu_time_info *src, bool dowd)
+ 	s64 r;
+ 	alternative_atomic64(read, "=&A" (r), "c" (v) : "memory");
+@@ -133,7 +133,7 @@ static inline s64 arch_atomic64_read(const atomic64_t *v)
+  *
+  * Atomically adds @i to @v and returns @i + *@v
+  */
+-static inline s64 arch_atomic64_add_return(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_add_return(s64 i, atomic64_t *v)
  {
- 	unsigned version;
- 	u64 ret;
-@@ -77,7 +78,7 @@ u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
- 		flags = src->flags;
- 	} while (pvclock_read_retry(src, version));
- 
--	if (unlikely((flags & PVCLOCK_GUEST_STOPPED) != 0)) {
-+	if (dowd && unlikely((flags & PVCLOCK_GUEST_STOPPED) != 0)) {
- 		src->flags &= ~PVCLOCK_GUEST_STOPPED;
- 		pvclock_touch_watchdogs();
- 	}
-@@ -100,15 +101,25 @@ u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
- 	 * updating at the same time, and one of them could be slightly behind,
- 	 * making the assumption that last_value always go forward fail to hold.
- 	 */
--	last = atomic64_read(&last_value);
-+	last = arch_atomic64_read(&last_value);
- 	do {
- 		if (ret <= last)
- 			return last;
--	} while (!atomic64_try_cmpxchg(&last_value, &last, ret));
-+	} while (!arch_atomic64_try_cmpxchg(&last_value, &last, ret));
- 
- 	return ret;
- }
- 
-+u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
-+{
-+	return __pvclock_clocksource_read(src, true);
-+}
-+
-+noinstr u64 pvclock_clocksource_read_nowd(struct pvclock_vcpu_time_info *src)
-+{
-+	return __pvclock_clocksource_read(src, false);
-+}
-+
- void pvclock_read_wallclock(struct pvclock_wall_clock *wall_clock,
- 			    struct pvclock_vcpu_time_info *vcpu_time,
- 			    struct timespec64 *ts)
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index a78e73d..8c33936 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -215,7 +215,7 @@ static void __init cyc2ns_init_secondary_cpus(void)
+ 	alternative_atomic64(add_return,
+ 			     ASM_OUTPUT2("+A" (i), "+c" (v)),
+@@ -145,7 +145,7 @@ static inline s64 arch_atomic64_add_return(s64 i, atomic64_t *v)
  /*
-  * Scheduler clock - returns current time in nanosec units.
+  * Other variants with different arithmetic operators:
   */
--u64 native_sched_clock(void)
-+noinstr u64 native_sched_clock(void)
+-static inline s64 arch_atomic64_sub_return(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_sub_return(s64 i, atomic64_t *v)
  {
- 	if (static_branch_likely(&__use_tsc)) {
- 		u64 tsc_now = rdtsc();
-@@ -248,7 +248,7 @@ u64 native_sched_clock_from_tsc(u64 tsc)
- /* We need to define a real function for sched_clock, to override the
-    weak default version */
- #ifdef CONFIG_PARAVIRT
--unsigned long long sched_clock(void)
-+noinstr u64 sched_clock(void)
+ 	alternative_atomic64(sub_return,
+ 			     ASM_OUTPUT2("+A" (i), "+c" (v)),
+@@ -154,7 +154,7 @@ static inline s64 arch_atomic64_sub_return(s64 i, atomic64_t *v)
+ }
+ #define arch_atomic64_sub_return arch_atomic64_sub_return
+ 
+-static inline s64 arch_atomic64_inc_return(atomic64_t *v)
++static __always_inline s64 arch_atomic64_inc_return(atomic64_t *v)
  {
- 	return paravirt_sched_clock();
+ 	s64 a;
+ 	alternative_atomic64(inc_return, "=&A" (a),
+@@ -163,7 +163,7 @@ static inline s64 arch_atomic64_inc_return(atomic64_t *v)
  }
-@@ -258,8 +258,7 @@ bool using_native_sched_clock(void)
- 	return static_call_query(pv_sched_clock) == native_sched_clock;
- }
- #else
--unsigned long long
--sched_clock(void) __attribute__((alias("native_sched_clock")));
-+u64 sched_clock(void) __attribute__((alias("native_sched_clock")));
+ #define arch_atomic64_inc_return arch_atomic64_inc_return
  
- bool using_native_sched_clock(void) { return true; }
- #endif
-diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
-index 9ef0a5c..6b8836d 100644
---- a/arch/x86/xen/time.c
-+++ b/arch/x86/xen/time.c
-@@ -60,9 +60,17 @@ static u64 xen_clocksource_get_cycles(struct clocksource *cs)
- 	return xen_clocksource_read();
- }
- 
--static u64 xen_sched_clock(void)
-+static noinstr u64 xen_sched_clock(void)
+-static inline s64 arch_atomic64_dec_return(atomic64_t *v)
++static __always_inline s64 arch_atomic64_dec_return(atomic64_t *v)
  {
--	return xen_clocksource_read() - xen_sched_clock_offset;
-+        struct pvclock_vcpu_time_info *src;
-+	u64 ret;
-+
-+	preempt_disable_notrace();
-+	src = &__this_cpu_read(xen_vcpu)->time;
-+	ret = pvclock_clocksource_read_nowd(src);
-+	ret -= xen_sched_clock_offset;
-+	preempt_enable_notrace();
-+	return ret;
+ 	s64 a;
+ 	alternative_atomic64(dec_return, "=&A" (a),
+@@ -179,7 +179,7 @@ static inline s64 arch_atomic64_dec_return(atomic64_t *v)
+  *
+  * Atomically adds @i to @v.
+  */
+-static inline s64 arch_atomic64_add(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_add(s64 i, atomic64_t *v)
+ {
+ 	__alternative_atomic64(add, add_return,
+ 			       ASM_OUTPUT2("+A" (i), "+c" (v)),
+@@ -194,7 +194,7 @@ static inline s64 arch_atomic64_add(s64 i, atomic64_t *v)
+  *
+  * Atomically subtracts @i from @v.
+  */
+-static inline s64 arch_atomic64_sub(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_sub(s64 i, atomic64_t *v)
+ {
+ 	__alternative_atomic64(sub, sub_return,
+ 			       ASM_OUTPUT2("+A" (i), "+c" (v)),
+@@ -208,7 +208,7 @@ static inline s64 arch_atomic64_sub(s64 i, atomic64_t *v)
+  *
+  * Atomically increments @v by 1.
+  */
+-static inline void arch_atomic64_inc(atomic64_t *v)
++static __always_inline void arch_atomic64_inc(atomic64_t *v)
+ {
+ 	__alternative_atomic64(inc, inc_return, /* no output */,
+ 			       "S" (v) : "memory", "eax", "ecx", "edx");
+@@ -221,7 +221,7 @@ static inline void arch_atomic64_inc(atomic64_t *v)
+  *
+  * Atomically decrements @v by 1.
+  */
+-static inline void arch_atomic64_dec(atomic64_t *v)
++static __always_inline void arch_atomic64_dec(atomic64_t *v)
+ {
+ 	__alternative_atomic64(dec, dec_return, /* no output */,
+ 			       "S" (v) : "memory", "eax", "ecx", "edx");
+@@ -237,7 +237,7 @@ static inline void arch_atomic64_dec(atomic64_t *v)
+  * Atomically adds @a to @v, so long as it was not @u.
+  * Returns non-zero if the add was done, zero otherwise.
+  */
+-static inline int arch_atomic64_add_unless(atomic64_t *v, s64 a, s64 u)
++static __always_inline int arch_atomic64_add_unless(atomic64_t *v, s64 a, s64 u)
+ {
+ 	unsigned low = (unsigned)u;
+ 	unsigned high = (unsigned)(u >> 32);
+@@ -248,7 +248,7 @@ static inline int arch_atomic64_add_unless(atomic64_t *v, s64 a, s64 u)
+ }
+ #define arch_atomic64_add_unless arch_atomic64_add_unless
+ 
+-static inline int arch_atomic64_inc_not_zero(atomic64_t *v)
++static __always_inline int arch_atomic64_inc_not_zero(atomic64_t *v)
+ {
+ 	int r;
+ 	alternative_atomic64(inc_not_zero, "=&a" (r),
+@@ -257,7 +257,7 @@ static inline int arch_atomic64_inc_not_zero(atomic64_t *v)
+ }
+ #define arch_atomic64_inc_not_zero arch_atomic64_inc_not_zero
+ 
+-static inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
++static __always_inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
+ {
+ 	s64 r;
+ 	alternative_atomic64(dec_if_positive, "=&A" (r),
+@@ -269,7 +269,7 @@ static inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
+ #undef alternative_atomic64
+ #undef __alternative_atomic64
+ 
+-static inline void arch_atomic64_and(s64 i, atomic64_t *v)
++static __always_inline void arch_atomic64_and(s64 i, atomic64_t *v)
+ {
+ 	s64 old, c = 0;
+ 
+@@ -277,7 +277,7 @@ static inline void arch_atomic64_and(s64 i, atomic64_t *v)
+ 		c = old;
  }
  
- static void xen_read_wallclock(struct timespec64 *ts)
-diff --git a/include/linux/math64.h b/include/linux/math64.h
-index 8958f4c..8b9191a 100644
---- a/include/linux/math64.h
-+++ b/include/linux/math64.h
-@@ -161,7 +161,7 @@ static inline u64 mul_u32_u32(u32 a, u32 b)
- #if defined(CONFIG_ARCH_SUPPORTS_INT128) && defined(__SIZEOF_INT128__)
- 
- #ifndef mul_u64_u32_shr
--static inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
-+static __always_inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
+-static inline s64 arch_atomic64_fetch_and(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_and(s64 i, atomic64_t *v)
  {
- 	return (u64)(((unsigned __int128)a * mul) >> shift);
+ 	s64 old, c = 0;
+ 
+@@ -288,7 +288,7 @@ static inline s64 arch_atomic64_fetch_and(s64 i, atomic64_t *v)
  }
-@@ -177,7 +177,7 @@ static inline u64 mul_u64_u64_shr(u64 a, u64 mul, unsigned int shift)
- #else
+ #define arch_atomic64_fetch_and arch_atomic64_fetch_and
  
- #ifndef mul_u64_u32_shr
--static inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
-+static __always_inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
+-static inline void arch_atomic64_or(s64 i, atomic64_t *v)
++static __always_inline void arch_atomic64_or(s64 i, atomic64_t *v)
  {
- 	u32 ah, al;
- 	u64 ret;
+ 	s64 old, c = 0;
+ 
+@@ -296,7 +296,7 @@ static inline void arch_atomic64_or(s64 i, atomic64_t *v)
+ 		c = old;
+ }
+ 
+-static inline s64 arch_atomic64_fetch_or(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_or(s64 i, atomic64_t *v)
+ {
+ 	s64 old, c = 0;
+ 
+@@ -307,7 +307,7 @@ static inline s64 arch_atomic64_fetch_or(s64 i, atomic64_t *v)
+ }
+ #define arch_atomic64_fetch_or arch_atomic64_fetch_or
+ 
+-static inline void arch_atomic64_xor(s64 i, atomic64_t *v)
++static __always_inline void arch_atomic64_xor(s64 i, atomic64_t *v)
+ {
+ 	s64 old, c = 0;
+ 
+@@ -315,7 +315,7 @@ static inline void arch_atomic64_xor(s64 i, atomic64_t *v)
+ 		c = old;
+ }
+ 
+-static inline s64 arch_atomic64_fetch_xor(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_xor(s64 i, atomic64_t *v)
+ {
+ 	s64 old, c = 0;
+ 
+@@ -326,7 +326,7 @@ static inline s64 arch_atomic64_fetch_xor(s64 i, atomic64_t *v)
+ }
+ #define arch_atomic64_fetch_xor arch_atomic64_fetch_xor
+ 
+-static inline s64 arch_atomic64_fetch_add(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_add(s64 i, atomic64_t *v)
+ {
+ 	s64 old, c = 0;
+ 
+diff --git a/arch/x86/include/asm/atomic64_64.h b/arch/x86/include/asm/atomic64_64.h
+index 7886d05..c496595 100644
+--- a/arch/x86/include/asm/atomic64_64.h
++++ b/arch/x86/include/asm/atomic64_64.h
+@@ -17,7 +17,7 @@
+  * Atomically reads the value of @v.
+  * Doesn't imply a read memory barrier.
+  */
+-static inline s64 arch_atomic64_read(const atomic64_t *v)
++static __always_inline s64 arch_atomic64_read(const atomic64_t *v)
+ {
+ 	return __READ_ONCE((v)->counter);
+ }
+@@ -29,7 +29,7 @@ static inline s64 arch_atomic64_read(const atomic64_t *v)
+  *
+  * Atomically sets the value of @v to @i.
+  */
+-static inline void arch_atomic64_set(atomic64_t *v, s64 i)
++static __always_inline void arch_atomic64_set(atomic64_t *v, s64 i)
+ {
+ 	__WRITE_ONCE(v->counter, i);
+ }
+@@ -55,7 +55,7 @@ static __always_inline void arch_atomic64_add(s64 i, atomic64_t *v)
+  *
+  * Atomically subtracts @i from @v.
+  */
+-static inline void arch_atomic64_sub(s64 i, atomic64_t *v)
++static __always_inline void arch_atomic64_sub(s64 i, atomic64_t *v)
+ {
+ 	asm volatile(LOCK_PREFIX "subq %1,%0"
+ 		     : "=m" (v->counter)
+@@ -71,7 +71,7 @@ static inline void arch_atomic64_sub(s64 i, atomic64_t *v)
+  * true if the result is zero, or false for all
+  * other cases.
+  */
+-static inline bool arch_atomic64_sub_and_test(s64 i, atomic64_t *v)
++static __always_inline bool arch_atomic64_sub_and_test(s64 i, atomic64_t *v)
+ {
+ 	return GEN_BINARY_RMWcc(LOCK_PREFIX "subq", v->counter, e, "er", i);
+ }
+@@ -113,7 +113,7 @@ static __always_inline void arch_atomic64_dec(atomic64_t *v)
+  * returns true if the result is 0, or false for all other
+  * cases.
+  */
+-static inline bool arch_atomic64_dec_and_test(atomic64_t *v)
++static __always_inline bool arch_atomic64_dec_and_test(atomic64_t *v)
+ {
+ 	return GEN_UNARY_RMWcc(LOCK_PREFIX "decq", v->counter, e);
+ }
+@@ -127,7 +127,7 @@ static inline bool arch_atomic64_dec_and_test(atomic64_t *v)
+  * and returns true if the result is zero, or false for all
+  * other cases.
+  */
+-static inline bool arch_atomic64_inc_and_test(atomic64_t *v)
++static __always_inline bool arch_atomic64_inc_and_test(atomic64_t *v)
+ {
+ 	return GEN_UNARY_RMWcc(LOCK_PREFIX "incq", v->counter, e);
+ }
+@@ -142,7 +142,7 @@ static inline bool arch_atomic64_inc_and_test(atomic64_t *v)
+  * if the result is negative, or false when
+  * result is greater than or equal to zero.
+  */
+-static inline bool arch_atomic64_add_negative(s64 i, atomic64_t *v)
++static __always_inline bool arch_atomic64_add_negative(s64 i, atomic64_t *v)
+ {
+ 	return GEN_BINARY_RMWcc(LOCK_PREFIX "addq", v->counter, s, "er", i);
+ }
+@@ -161,25 +161,25 @@ static __always_inline s64 arch_atomic64_add_return(s64 i, atomic64_t *v)
+ }
+ #define arch_atomic64_add_return arch_atomic64_add_return
+ 
+-static inline s64 arch_atomic64_sub_return(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_sub_return(s64 i, atomic64_t *v)
+ {
+ 	return arch_atomic64_add_return(-i, v);
+ }
+ #define arch_atomic64_sub_return arch_atomic64_sub_return
+ 
+-static inline s64 arch_atomic64_fetch_add(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_add(s64 i, atomic64_t *v)
+ {
+ 	return xadd(&v->counter, i);
+ }
+ #define arch_atomic64_fetch_add arch_atomic64_fetch_add
+ 
+-static inline s64 arch_atomic64_fetch_sub(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_sub(s64 i, atomic64_t *v)
+ {
+ 	return xadd(&v->counter, -i);
+ }
+ #define arch_atomic64_fetch_sub arch_atomic64_fetch_sub
+ 
+-static inline s64 arch_atomic64_cmpxchg(atomic64_t *v, s64 old, s64 new)
++static __always_inline s64 arch_atomic64_cmpxchg(atomic64_t *v, s64 old, s64 new)
+ {
+ 	return arch_cmpxchg(&v->counter, old, new);
+ }
+@@ -191,13 +191,13 @@ static __always_inline bool arch_atomic64_try_cmpxchg(atomic64_t *v, s64 *old, s
+ }
+ #define arch_atomic64_try_cmpxchg arch_atomic64_try_cmpxchg
+ 
+-static inline s64 arch_atomic64_xchg(atomic64_t *v, s64 new)
++static __always_inline s64 arch_atomic64_xchg(atomic64_t *v, s64 new)
+ {
+ 	return arch_xchg(&v->counter, new);
+ }
+ #define arch_atomic64_xchg arch_atomic64_xchg
+ 
+-static inline void arch_atomic64_and(s64 i, atomic64_t *v)
++static __always_inline void arch_atomic64_and(s64 i, atomic64_t *v)
+ {
+ 	asm volatile(LOCK_PREFIX "andq %1,%0"
+ 			: "+m" (v->counter)
+@@ -205,7 +205,7 @@ static inline void arch_atomic64_and(s64 i, atomic64_t *v)
+ 			: "memory");
+ }
+ 
+-static inline s64 arch_atomic64_fetch_and(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_and(s64 i, atomic64_t *v)
+ {
+ 	s64 val = arch_atomic64_read(v);
+ 
+@@ -215,7 +215,7 @@ static inline s64 arch_atomic64_fetch_and(s64 i, atomic64_t *v)
+ }
+ #define arch_atomic64_fetch_and arch_atomic64_fetch_and
+ 
+-static inline void arch_atomic64_or(s64 i, atomic64_t *v)
++static __always_inline void arch_atomic64_or(s64 i, atomic64_t *v)
+ {
+ 	asm volatile(LOCK_PREFIX "orq %1,%0"
+ 			: "+m" (v->counter)
+@@ -223,7 +223,7 @@ static inline void arch_atomic64_or(s64 i, atomic64_t *v)
+ 			: "memory");
+ }
+ 
+-static inline s64 arch_atomic64_fetch_or(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_or(s64 i, atomic64_t *v)
+ {
+ 	s64 val = arch_atomic64_read(v);
+ 
+@@ -233,7 +233,7 @@ static inline s64 arch_atomic64_fetch_or(s64 i, atomic64_t *v)
+ }
+ #define arch_atomic64_fetch_or arch_atomic64_fetch_or
+ 
+-static inline void arch_atomic64_xor(s64 i, atomic64_t *v)
++static __always_inline void arch_atomic64_xor(s64 i, atomic64_t *v)
+ {
+ 	asm volatile(LOCK_PREFIX "xorq %1,%0"
+ 			: "+m" (v->counter)
+@@ -241,7 +241,7 @@ static inline void arch_atomic64_xor(s64 i, atomic64_t *v)
+ 			: "memory");
+ }
+ 
+-static inline s64 arch_atomic64_fetch_xor(s64 i, atomic64_t *v)
++static __always_inline s64 arch_atomic64_fetch_xor(s64 i, atomic64_t *v)
+ {
+ 	s64 val = arch_atomic64_read(v);
+ 
