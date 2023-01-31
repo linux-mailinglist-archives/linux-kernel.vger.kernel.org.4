@@ -2,183 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493FC6833D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBDB6833C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjAaR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S232029AbjAaRXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbjAaR0J (ORCPT
+        with ESMTP id S229651AbjAaRWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:26:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B96530F5;
-        Tue, 31 Jan 2023 09:26:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A3CAB81E23;
-        Tue, 31 Jan 2023 17:21:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49748C433EF;
-        Tue, 31 Jan 2023 17:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675185659;
-        bh=+pvUZxvhRwxJP5MRWV/FG2QALpGhPM4yg4kJFt4ZFlI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FPKZBNkr4YMaum4++SVy1d+KjqgdDu04hJDzmRHOeWM9Rw4g69HGsE+J50iv0S43P
-         052q+53XWlexnd48eQqCpsIJNW1uEY7PVJhPoNzXFw2DiD04IXHXB0faQNuLHaSuPS
-         smV8LoJamcPlIQuTxPiKxxEKhyj0NdF9NuypU1FuTHfDnNzma/AfnksxfnhP5Y4LVV
-         w9d2T0xHZWqXIz3nqK2rmYe4yx1tiSzdBBmXLj3vR6waNmcPhyc+MT3Vv3bVGkPzvn
-         sQdaiCVDl566Z+33gbNAQX8emOTxTkm8eUac3GQTTfup+SH+Lit1/NHy5rX/WOiy0a
-         sJYZdK5NKel9A==
-Date:   Tue, 31 Jan 2023 10:20:56 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Connor OBrien <connoro@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-Message-ID: <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
-References: <20230124064324.672022-1-irogers@google.com>
- <20230124064324.672022-2-irogers@google.com>
+        Tue, 31 Jan 2023 12:22:55 -0500
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8308549021
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:22:31 -0800 (PST)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-163adf0cfc4so8987238fac.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:22:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jJ4ivKCSSjC/nsEprnt+8Zq1TU7NBjHqzheuppe5Hlc=;
+        b=aubPHj9Bqdk7dreN5BitMQndcJvpdoL/53VtmiC4laWRWmkd1Yb7Bnxfw+uMEMJhJh
+         9ADBdMjJKGhCV6HuPnQID9W4steAnGR8UVEq6U7ewy3gSnAvSAeUWACXvwI4oV2rJ5to
+         S5sxFbTMLLw2ASIQDFRgwEi3pS1QZA0z9+yjp7KNZNURvy4lJGBxChLjLYRbl2StshA9
+         tnVZplvBEGTSjJ7DglZc+sOkeAcwkMlULANmxMZzWjlWRdtW68WHxGcaQ2TCErxxwonX
+         AE5m1o71AkIr47TRynvJ7W7KU91zvit13a6YYwB6L92aBzYyBu9arVX1mn8+MtjYtq4e
+         qEKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jJ4ivKCSSjC/nsEprnt+8Zq1TU7NBjHqzheuppe5Hlc=;
+        b=ZSHNl8gDtuambSCYGJZNA37VI2zC5wK8Uh1FczczupERfmYbxvdByq52SdhcFyB64Y
+         +nY2BldTELCF17Ke7TeoTipJHloMQ7ZwBbbXXyaV2A/h8XDePosT4W9vpUNva7bKhVpy
+         oYaiTRoO8sxSt9AZ7r3Vm2Gq2T/Fyxg1lRWl2jyUFyXpAqJK5DwkkLQecfWurGigmgGH
+         v8O0e2PG8gbz0IpWkpnIKPneRQf7315kY+r1JpRAjRSr8ecoX4wyyAMXFksi/EqUxQ1K
+         m190RGJ4OH+qUX4rcZwtgDwVu2kkAkh/G4fM88SBXaHztY3pII/L5AO42qaPU0XJrR81
+         U+Xw==
+X-Gm-Message-State: AO0yUKU8PjFQRmwDMkhdFJJTfOpHEwnhsZfoPyVZ68yN2I/vWkyEeI2e
+        HgebzOxbykj5mEw5vMkQq54lFCP7LqVgZEvWLms=
+X-Google-Smtp-Source: AK7set/L5JhayGONTYLQxHrTfP9o0V2pHohgI/C0z5ya1GYvsguIk4c3xqh5rQSPnSuia4QPomH3wrYxML1a5IHYTQo=
+X-Received: by 2002:a05:6870:b522:b0:163:8cc6:86a with SMTP id
+ v34-20020a056870b52200b001638cc6086amr1618651oap.46.1675185750411; Tue, 31
+ Jan 2023 09:22:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124064324.672022-2-irogers@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230126204935.819030-1-trix@redhat.com>
+In-Reply-To: <20230126204935.819030-1-trix@redhat.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 31 Jan 2023 12:22:18 -0500
+Message-ID: <CADnq5_NKPO3gEST2oqp9bB77y2iFHtvnNzKnnT8dSVTAEzY=bw@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: reduce else-if to else in dcn32_calculate_dlg_params()
+To:     Tom Rix <trix@redhat.com>
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, jun.lei@amd.com, Alvin.Lee2@amd.com,
+        Nevenko.Stupar@amd.com, Dillon.Varone@amd.com, george.shen@amd.com,
+        rdunlap@infradead.org, David.Galiffi@amd.com,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Applied.  Thanks!
 
-On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> HOSTCC is always wanted when building. Setting CC to HOSTCC happens
-> after tools/scripts/Makefile.include is included, meaning flags are
-> set assuming say CC is gcc, but then it can be later set to HOSTCC
-> which may be clang. tools/scripts/Makefile.include is needed for host
-> set up and common macros in objtool's Makefile. Rather than override
-> CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
-> builds and the linkage step. This means the Makefiles don't see things
-> like CC changing and tool flag determination, and similar, work
-> properly.
-> 
-> Also, clear the passed subdir as otherwise an outer build may break by
-> inadvertently passing an inappropriate value.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+Alex
+
+On Thu, Jan 26, 2023 at 3:50 PM Tom Rix <trix@redhat.com> wrote:
+>
+> cppcheck reports
+> drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c:1403:76: style:
+>   Expression is always true because 'else if' condition is opposite to previous condition at line 1396. [multiCondition]
+>    } else if (context->res_ctx.pipe_ctx[i].stream->mall_stream_config.type == SUBVP_PHANTOM) {
+>                                                                            ^
+> drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c:1396:69: note: first condition
+>    if (context->res_ctx.pipe_ctx[i].stream->mall_stream_config.type != SUBVP_PHANTOM) {
+>                                                                     ^
+> drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c:1403:76: note: else if condition is opposite to first condition
+>    } else if (context->res_ctx.pipe_ctx[i].stream->mall_stream_config.type == SUBVP_PHANTOM) {
+>
+> It is not necessary to explicitly the check != condition, an else is simplier.
+>
+> Fixes: 238debcaebe4 ("drm/amd/display: Use DML for MALL SS and Subvp allocation calculations")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
->  1 file changed, 7 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index 1fe0082b2ecc..daed388aa5d7 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -18,14 +18,11 @@ else
->  endif
->  
->  # always use the host compiler
-> -AR       = $(HOSTAR)
-> -CC       = $(HOSTCC)
-> -LD       = $(HOSTLD)
-> -ARCH     = $(HOSTARCH)
-> +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
-> +		  EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> +
->  RM      ?= rm
->  CROSS_COMPILE =
-> -CFLAGS  := $(KBUILD_HOSTCFLAGS)
-> -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
->  
->  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
->  
-> @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
->  
->  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
->  	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
-> -		    DESTDIR=$(SUBCMD_DESTDIR) prefix= \
-> +		    DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
->  		    $(abspath $@) install_headers
->  
->  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
->  	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
-> -		    DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
-> +		    DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
->  		    $(abspath $@) install_headers
->  
->  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
->  include $(srctree)/tools/build/Makefile.include
->  
->  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> -	$(Q)$(MAKE) $(build)=resolve_btfids
-> +	$(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
->  
->  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
->  	$(call msg,LINK,$@)
-> -	$(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-> +	$(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
->  
->  clean_objects := $(wildcard $(OUTPUT)/*.o                \
->                              $(OUTPUT)/.*.o.cmd           \
-> -- 
-> 2.39.0.246.g2a6d74b583-goog
-> 
-
-I just bisected a linking failure when building resolve_btfids with
-clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-Alter how HOSTCC is forced") in the bpf-next tree.
-
-It appears to be related to whether or not CROSS_COMPILE is specified,
-which we have to do for certain architectures and configurations still.
-arm64 is not one of those but it helps demonstrate the issue.
-
-  # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
-  $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
-
-  $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
-  ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
-  clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
-  ...
-
-Before your change, with V=1, I see:
-
-clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-
-After, I see:
-
-clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
-
-We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
-target of resolve_btfids-in.o) and we dropped the warning flags.
-
-I think this comes from the clang block in
-tools/scripts/Makefile.include, which is included into the
-resolve_btfids Makefile via tools/lib/bpf/Makefile.
-
-I am not super familiar with the tools build system, otherwise I would
-try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
-simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
-did not appear to resolve it for me.
-
-If there is any other information I can provide or patches I can test,
-please let me know.
-
-Cheers,
-Nathan
+>  drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
+> index 0dc1a03999b6..c96cbd88e20d 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c
+> @@ -1400,7 +1400,7 @@ static void dcn32_calculate_dlg_params(struct dc *dc, struct dc_state *context,
+>                                         /* SS PSR On: all active surfaces part of streams not supporting PSR stored in MALL */
+>                                         context->bw_ctx.bw.dcn.mall_ss_psr_active_size_bytes += context->res_ctx.pipe_ctx[i].surface_size_in_mall_bytes;
+>                                 }
+> -                       } else if (context->res_ctx.pipe_ctx[i].stream->mall_stream_config.type == SUBVP_PHANTOM) {
+> +                       } else {
+>                                 /* SUBVP: phantom surfaces only stored in MALL */
+>                                 context->bw_ctx.bw.dcn.mall_subvp_size_bytes += context->res_ctx.pipe_ctx[i].surface_size_in_mall_bytes;
+>                         }
+> --
+> 2.26.3
+>
