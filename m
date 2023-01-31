@@ -2,103 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323C268215D
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ABF1682164
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjAaB0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:26:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
+        id S230268AbjAaBag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjAaBZ6 (ORCPT
+        with ESMTP id S229490AbjAaBae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:25:58 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84E4222EF;
-        Mon, 30 Jan 2023 17:25:53 -0800 (PST)
-Received: from dggpemm500015.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P5S4F0sPPzRnvL;
-        Tue, 31 Jan 2023 09:23:41 +0800 (CST)
-Received: from [10.174.177.133] (10.174.177.133) by
- dggpemm500015.china.huawei.com (7.185.36.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 31 Jan 2023 09:25:51 +0800
-Subject: Re: [PATCH v3 1/8] ftrace: Add DYNAMIC_FTRACE_WITH_CALL_OPS
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
-        <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <mhiramat@kernel.org>,
-        <ndesaulniers@google.com>, <ojeda@kernel.org>,
-        <peterz@infradead.org>, <rafael.j.wysocki@intel.com>,
-        <revest@chromium.org>, <robert.moore@intel.com>,
-        <rostedt@goodmis.org>, <will@kernel.org>,
-        "liwei (GF)" <liwei391@huawei.com>
-References: <20230123134603.1064407-1-mark.rutland@arm.com>
- <20230123134603.1064407-2-mark.rutland@arm.com>
- <f2f5dfc6-3deb-9fce-a9be-9386e844a9cf@huawei.com>
- <Y9ebIY/pWz0Ms9S6@FVFF77S0Q05N>
-From:   "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
-Message-ID: <60ec7607-7c5c-1a6e-18c9-8025cb2f289f@huawei.com>
-Date:   Tue, 31 Jan 2023 09:25:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        Mon, 30 Jan 2023 20:30:34 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59152942E;
+        Mon, 30 Jan 2023 17:30:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675128634; x=1706664634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mCbTcNSjIWyRnXHSgve6MUZ/c41wT/Sy0NkCC4hOH4Y=;
+  b=iidGwvMjZiQZgIsGeZ4e96g/26WXfrT2KwTWQRRmg9OxMFrSvreKfN3U
+   4XYUpEADjRxp5uXkxalIzA1kDZMb54EXVKPbBIAE5j6rc0iE4pWaxDcLj
+   F0KhLAlcZEMd6fT1X4VO+n7plTp19riiIcH7g9fwpFXmhX05DBAIqyXPs
+   52onzqF03Vq9tIPR2uKcaf/S7yWtoKg0HRlp0wCpr65d7M8IirVTUzHSd
+   4LPkfrDWjqsE4EbJ9JHVBKB27+fcN0AeGXecBZ03ABhgeLVsEgj6aV2AR
+   7B+TIwc5UvxzOSUzCnpJDojgIOzhF4Yy7sZamAbsHTgVW6yy6RKTx9Z6E
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="329833108"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="329833108"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 17:30:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="641773594"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="641773594"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga006.jf.intel.com with ESMTP; 30 Jan 2023 17:30:30 -0800
+Date:   Tue, 31 Jan 2023 09:30:29 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v11 099/113] KVM: TDX: Handle TDX PV map_gpa hypercall
+Message-ID: <20230131013029.qtansdeuvwe7nlzt@yy-desk-7060>
+References: <cover.1673539699.git.isaku.yamahata@intel.com>
+ <1a7c87931d303b2e66874e0bbbd791aa308bc918.1673539699.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <Y9ebIY/pWz0Ms9S6@FVFF77S0Q05N>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.133]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500015.china.huawei.com (7.185.36.181)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a7c87931d303b2e66874e0bbbd791aa308bc918.1673539699.git.isaku.yamahata@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jan 12, 2023 at 08:32:47AM -0800, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> Wire up TDX PV map_gpa hypercall to the kvm/mmu backend.
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/vmx/tdx.c | 53 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 4bbde58510a4..486d0f0c6dd1 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -1181,6 +1181,57 @@ static int tdx_emulate_wrmsr(struct kvm_vcpu *vcpu)
+>  	return 1;
+>  }
+>
+> +static int tdx_map_gpa(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm *kvm = vcpu->kvm;
+> +	gpa_t gpa = tdvmcall_a0_read(vcpu);
+> +	gpa_t size = tdvmcall_a1_read(vcpu);
+> +	gpa_t end = gpa + size;
+> +	gfn_t s = gpa_to_gfn(gpa) & ~kvm_gfn_shared_mask(kvm);
+> +	gfn_t e = gpa_to_gfn(end) & ~kvm_gfn_shared_mask(kvm);
+> +	int i;
+> +
+> +	if (!IS_ALIGNED(gpa, 4096) || !IS_ALIGNED(size, 4096) ||
+> +	    end < gpa ||
+> +	    end > kvm_gfn_shared_mask(kvm) << (PAGE_SHIFT + 1) ||
+> +	    kvm_is_private_gpa(kvm, gpa) != kvm_is_private_gpa(kvm, end)) {
+> +		tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
+> +		return 1;
+> +	}
+> +
+> +	/*
+> +	 * Check how the requested region overlaps with the KVM memory slots.
+> +	 * For simplicity, require that it must be contained within a memslot or
+> +	 * it must not overlap with any memslots (MMIO).
+> +	 */
+> +	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
+> +		struct kvm_memslots *slots = __kvm_memslots(kvm, i);
+> +		struct kvm_memslot_iter iter;
+> +
+> +		kvm_for_each_memslot_in_gfn_range(&iter, slots, s, e) {
+> +			struct kvm_memory_slot *slot = iter.slot;
+> +			gfn_t slot_s = slot->base_gfn;
+> +			gfn_t slot_e = slot->base_gfn + slot->npages;
+> +
+> +			/* no overlap */
+> +			if (e < slot_s || s >= slot_e)
+> +				continue;
+> +
+> +			/* contained in slot */
+> +			if (slot_s <= s && e <= slot_e) {
+> +				if (kvm_slot_can_be_private(slot))
+> +					return tdx_vp_vmcall_to_user(vcpu);
+> +				continue;
+> +			}
+> +
+> +			break;
+> +		}
+> +	}
+> +
+> +	tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_INVALID_OPERAND);
 
+This returns TDG_VP_VMCALL_INVALID_OPERAND if the TD is running with
+non-private slots, which looks incorrect to the caller in TD guest(because
+the operands are correct). Can we just refuse to create TD if private memory
+slot is the only supported slot type for it ?
 
-在 2023/1/30 18:25, Mark Rutland 写道:
-> On Sat, Jan 28, 2023 at 04:46:48PM +0800, Wangshaobo (bobo) wrote:
->> 锟斤拷 2023/1/23 21:45, Mark Rutland 写锟斤拷:
->>> +config DYNAMIC_FTRACE_WITH_CALL_OPS
->>> +	def_bool y
->>> +	depends on HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS
->>> +
->> Hi Mark,
-> 
-> Hi,
-> 
->> I have test your patches and it looks fine with my sample module,
-> 
-> Thanks for testing!
-> 
->> but here setting DYNAMIC_FTRACE_WITH_CALL_OPS to y immutably may increase the
->> .text section size by 5% or more, how about making this to optional^^
-> 
-> We could consider making this optional. I had not made this optional so far as
-> in the future I'd like to make this the only implementation of ftrace on arm64
-> (once we can drop the old mcount version, and once we've sorted out the
-> incompatibility with CFI). In the mean time, it probably makes sense to have
-> the option at least to enable testing of each of the two forms.
-> 
-> Is your concern that the overall kernel image size is larger, or do you care
-> specifically about the size of the .text section for some reason?
-> 
-> Thanks,
-> Mark
-Embedded devices may pay more attention to Image size, and which may 
-also indirectly affects performance, for more reason, I think making 
-sense to have the option for testing is more important.
-
--- Wang ShaoBo
-> 
->>
->> -- Wang ShaoBo
->>>    config DYNAMIC_FTRACE_WITH_ARGS
->>>    	def_bool y
->>>    	depends on DYNAMIC_FTRACE
->>> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
->>> index 442438b93fe9..e634b80f49d1 100644
+> +	return 1;
+> +}
+> +
+>  static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>  {
+>  	if (tdvmcall_exit_type(vcpu))
+> @@ -1206,6 +1257,8 @@ static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>  		 * guest TD doesn't make sense.  No argument check is done.
+>  		 */
+>  		return tdx_vp_vmcall_to_user(vcpu);
+> +	case TDG_VP_VMCALL_MAP_GPA:
+> +		return tdx_map_gpa(vcpu);
+>  	default:
+>  		break;
+>  	}
+> --
+> 2.25.1
+>
