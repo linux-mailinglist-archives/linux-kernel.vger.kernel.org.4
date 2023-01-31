@@ -2,214 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3882D6832C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3A96832CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjAaQcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S230104AbjAaQez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjAaQbg (ORCPT
+        with ESMTP id S230207AbjAaQeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:31:36 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6E3568BD
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:31:33 -0800 (PST)
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 51C7B3F2D1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:31:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1675182692;
-        bh=n/CaqmU/bb0yNkProNxdjfJ6mcTnYxY6CqP06NZVn3c=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=BDQIhe/aYeM3EFr8gAC/tImQItWCQiGdds1EdGH1nPAdPeYvUtlODX3QjVGFa4j+Y
-         OaISoDPEC9dCaJiBhqp+HPvNd8OZ/EEOaJMXN2m0jFrx1fi33N2CTlgmGM2t9o7x/G
-         nPYpNjOjCp/ONZIQx+zOuz98LClRPoInJSZjQcXoyobgijEGBM6ctmYFkjo5eXXsAh
-         q7lqeGe2+4tGUgDdreu3ZGERXfxVM612kSjf62FlZeFy08CU366hnheG3NDS21NK1i
-         u7XMMBNkvfnAN3bOHGnoZH10X3ald0GQV+nsXdDTbetwKaDpECv8SGXQxrQt5G7AbU
-         G73ZR5uWCnXeQ==
-Received: by mail-wr1-f69.google.com with SMTP id v5-20020adf8b45000000b002bde0366b11so2595577wra.7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:31:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n/CaqmU/bb0yNkProNxdjfJ6mcTnYxY6CqP06NZVn3c=;
-        b=kIs3meAYBeeO4PjAa+bH6azv4Ymo4s00fw6xkEgpDE/dK/GNmQLLxKD/MkamQQwbfA
-         4UXXwX2eqygOEcEhOK4r2EbD9ah8PHQDb3Dk/XoMqegWG6pI9S6YGUwBKYSbSNEF17wn
-         KFZhaKdAqe/DK9iRmNlpB1mTiBcBgjtuC0TgUtQybqrl+ViqfXMmNqaGQc8cq9yvzDws
-         tHFQVFT/mnK0gpBLEYqfwcqrlZ8ZLek7rjW7oyc1fibI5glWRxE3ajgkq+zwUKFWt/FQ
-         4I7ME9DVLR4qptI5uyb2+ntrdEsDWOQdsE1SA6KPYWKCV/oSuU3QwBUGjXI7wBI/vaHD
-         L0Yg==
-X-Gm-Message-State: AO0yUKUGzHtQr4ON38ZFDtiZTRDCizozoaS2l8DRahFMb8v5I1RYVliX
-        jgoVpfWIU1Xq0oCi+dOeKtd4WafZYyB+sckOXdlQxD2P7K1IUns0WTfEiKCyv8M91GJ88XtMHi6
-        wl6t9vhAJnFrDbaVHubZ/qsuJ1GE9SDCa0P6By/kWJg==
-X-Received: by 2002:a05:600c:6022:b0:3dd:a4ad:ae45 with SMTP id az34-20020a05600c602200b003dda4adae45mr2134985wmb.12.1675182692036;
-        Tue, 31 Jan 2023 08:31:32 -0800 (PST)
-X-Google-Smtp-Source: AK7set9zBF6o7zL3fJ6hNw5NSvlvEQCRi/XegUVE/rVjPpShff+Un53fy3zh8lgjygf64THgdtxdvA==
-X-Received: by 2002:a05:600c:6022:b0:3dd:a4ad:ae45 with SMTP id az34-20020a05600c602200b003dda4adae45mr2134969wmb.12.1675182691813;
-        Tue, 31 Jan 2023 08:31:31 -0800 (PST)
-Received: from qwirkle ([2001:67c:1560:8007::aac:c4dd])
-        by smtp.gmail.com with ESMTPSA id m29-20020a05600c3b1d00b003dc51c48f0bsm10026808wms.19.2023.01.31.08.31.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 08:31:31 -0800 (PST)
-Date:   Tue, 31 Jan 2023 16:31:29 +0000
-From:   Andrei Gherzan <andrei.gherzan@canonical.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] selftests: net: udpgso_bench_tx: Cater for
- pending datagrams zerocopy benchmarking
-Message-ID: <Y9lCYT3XUgo4npox@qwirkle>
-References: <20230131130412.432549-1-andrei.gherzan@canonical.com>
- <20230131130412.432549-4-andrei.gherzan@canonical.com>
- <d9ca623d01274889913001ce92f686652fa8fea8.camel@redhat.com>
- <Y9kvADcYZ18XFTXu@qwirkle>
- <17e062f077235b949090cba893c91f5637cc1f0e.camel@redhat.com>
+        Tue, 31 Jan 2023 11:34:44 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72B01259B;
+        Tue, 31 Jan 2023 08:34:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675182860; x=1706718860;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=0DEwPKhkQjGI3UKmg7bswgp8ZdYCS9oYnQ8XHjDrvXQ=;
+  b=ki+WXunXTiLyhaB2R2mDWJErtonsdmvcL74C0yVvaN9DFJjbLDjweX49
+   H7VImkHECvYAE5GG9143Pj6CojvL3a7gLNwRCo+dvk1zzYZSYSXUEGHax
+   oviqdgXoqubSqRIbaZhLyEjj0Siutt+Xgta8yM/6UYOdWucR3xhZiQD91
+   Ja5Aq+JvYdBvyEaOFKxiNOIO/yfAbGEU35LeiBcZok2Y+3glYIBN12tC5
+   isXun+SALEwIguZYPIub9JJlL2EGsAyMjANg35QggsN1Izz4+1azaJh/p
+   saPC4THpG+zPsvxvedEc8FQHD/1/VdH3auE9ZMh9pylu+61B0OFbRk+IV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="325588872"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="325588872"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 08:33:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="666545423"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="666545423"
+Received: from bdoolin-mobl1.amr.corp.intel.com (HELO [10.209.125.63]) ([10.209.125.63])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 08:33:06 -0800
+Message-ID: <59f89cd9-9de8-cbec-7bce-cfef3284fd4c@intel.com>
+Date:   Tue, 31 Jan 2023 08:33:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17e062f077235b949090cba893c91f5637cc1f0e.camel@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2, RESEND] x86/efi: Safely enable unaccepted memory in
+ UEFI
+Content-Language: en-US
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@vger.kernel.org,
+        linux-efi@vger.kernel.org, "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+References: <20230131004928.153623-1-dionnaglaze@google.com>
+ <CAMj1kXG9ONi4_AD1G0Py_qrLLzRfSXGCTEOeu2xowViO0mJkuA@mail.gmail.com>
+ <CAAH4kHaqObDRfKAzM8tTrhmQWZx7w2oTP=YJOo=fCG1kHDvj8w@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAAH4kHaqObDRfKAzM8tTrhmQWZx7w2oTP=YJOo=fCG1kHDvj8w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/31 05:22PM, Paolo Abeni wrote:
-> On Tue, 2023-01-31 at 15:08 +0000, Andrei Gherzan wrote:
-> > On 23/01/31 03:51PM, Paolo Abeni wrote:
-> > > On Tue, 2023-01-31 at 13:04 +0000, Andrei Gherzan wrote:
-> > > > The test tool can check that the zerocopy number of completions value is
-> > > > valid taking into consideration the number of datagram send calls. This can
-> > > > catch the system into a state where the datagrams are still in the system
-> > > > (for example in a qdisk, waiting for the network interface to return a
-> > > > completion notification, etc).
-> > > > 
-> > > > This change adds a retry logic of computing the number of completions up to
-> > > > a configurable (via CLI) timeout (default: 2 seconds).
-> > > > 
-> > > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
-> > > > ---
-> > > >  tools/testing/selftests/net/udpgso_bench_tx.c | 38 +++++++++++++++----
-> > > >  1 file changed, 30 insertions(+), 8 deletions(-)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-> > > > index b47b5c32039f..5a29b5f24023 100644
-> > > > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
-> > > > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-> > > > @@ -62,6 +62,7 @@ static int	cfg_payload_len	= (1472 * 42);
-> > > >  static int	cfg_port	= 8000;
-> > > >  static int	cfg_runtime_ms	= -1;
-> > > >  static bool	cfg_poll;
-> > > > +static int	cfg_poll_loop_timeout_ms = 2000;
-> > > >  static bool	cfg_segment;
-> > > >  static bool	cfg_sendmmsg;
-> > > >  static bool	cfg_tcp;
-> > > > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
-> > > >  	}
-> > > >  }
-> > > >  
-> > > > -static void flush_errqueue(int fd, const bool do_poll)
-> > > > +static void flush_errqueue(int fd, const bool do_poll,
-> > > > +		unsigned long poll_timeout, const bool poll_err)
-> > > >  {
-> > > >  	if (do_poll) {
-> > > >  		struct pollfd fds = {0};
-> > > >  		int ret;
-> > > >  
-> > > >  		fds.fd = fd;
-> > > > -		ret = poll(&fds, 1, 500);
-> > > > +		ret = poll(&fds, 1, poll_timeout);
-> > > >  		if (ret == 0) {
-> > > > -			if (cfg_verbose)
-> > > > +			if ((cfg_verbose) && (poll_err))
-> > > >  				fprintf(stderr, "poll timeout\n");
-> > > >  		} else if (ret < 0) {
-> > > >  			error(1, errno, "poll");
-> > > > @@ -254,6 +256,22 @@ static void flush_errqueue(int fd, const bool do_poll)
-> > > >  	flush_errqueue_recv(fd);
-> > > >  }
-> > > >  
-> > > > +static void flush_errqueue_retry(int fd, const bool do_poll, unsigned long num_sends)
-> > > > +{
-> > > > +	unsigned long tnow, tstop;
-> > > > +	bool first_try = true;
-> > > > +
-> > > > +	tnow = gettimeofday_ms();
-> > > > +	tstop = tnow + cfg_poll_loop_timeout_ms;
-> > > > +	do {
-> > > > +		flush_errqueue(fd, do_poll, tstop - tnow, first_try);
-> > > > +		first_try = false;
-> > > > +		if (!do_poll)
-> > > > +			usleep(1000);  // a throttling delay if polling is enabled
-> > > 
-> > > Even if the kernel codying style is not very strictly enforced for
-> > > self-tests, please avoid c++ style comments.
-> > > 
-> > > More importantly, as Willem noded, this function is always called with
-> > > do_poll == true. You should drop such argument and the related branch
-> > > above.
-> > 
-> > Agreed. I will drop.
-> > 
-> > > 
-> > > > +		tnow = gettimeofday_ms();
-> > > > +	} while ((stat_zcopies != num_sends) && (tnow < tstop));
-> > > > +}
-> > > > +
-> > > >  static int send_tcp(int fd, char *data)
-> > > >  {
-> > > >  	int ret, done = 0, count = 0;
-> > > > @@ -413,8 +431,9 @@ static int send_udp_segment(int fd, char *data)
-> > > >  
-> > > >  static void usage(const char *filepath)
-> > > >  {
-> > > > -	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-> > > > -		    filepath);
-> > > > +	error(1, 0,
-> > > > +			"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
-> > > > +			filepath);
-> > > 
-> > > Please avoid introducing unnecessary white-space changes (no reason to
-> > > move the usage text on a new line)
-> > 
-> > The only reason why I've done this was to make scripts/checkpatch.pl
-> > happy:
-> > 
-> > WARNING: line length of 141 exceeds 100 columns
-> > #83: FILE: tools/testing/selftests/net/udpgso_bench_tx.c:432:
-> > 
-> > I can drop and ignore the warning, or maybe it would have been better to
-> > just mention this in git message. What do you prefer?
+On 1/31/23 08:08, Dionna Amalie Glaze wrote:
+>>> +       efi_status_t status;
+>>> +
+>>> +       if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+>> Do we need to check for IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT) here as well?
+>>
+> Arguably no, since the firmware should only make the protocol
+> available when it determines that the protocol should be used. In our
+> case, that's just SEV-SNP. The firmware's TDX logic will not expose
+> this protocol.
 > 
-> Long lines are allowed for (kernel) messages, to make them easily grep-
-> able.
-> 
-> In this specific case you can either append the new text to the message
-> without introducing that strange indentation or even better break the
-> usage string alike:
-> 
-> 	"Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-L secs]"
-> 	" [-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]"
+> This maintains flexibility for the rare case that the TDX go-to-market
+> schedule doesn't align with upstream's acceptance of unaccepted memory
+> support, but does accept the generic TDX support. Best not paint
+> ourselves into a corner.
 
-Funny I went through this too but it also fails with:
-
-WARNING: quoted string split across lines
-#84: FILE: tools/testing/selftests/net/udpgso_bench_tx.c:433
-
-This is how I usually do it but it seems like it's flagged too.
-
--- 
-Andrei Gherzan
+Yes, please.  Maintaining this functionality for TDX would provide some
+more flexibility in how things get accepted upstream.
