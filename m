@@ -2,99 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB295683516
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BC468351B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:23:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjAaSVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S230520AbjAaSXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjAaSVq (ORCPT
+        with ESMTP id S229693AbjAaSXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:21:46 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645E737F25
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:21:45 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5063029246dso214791687b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:21:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X7pBEKn4xB6KlSsgM67ywt4YhFhtJVw3vFCQK0MunrU=;
-        b=a54hMh4vQaR+SnfjHs+/tTs9WgpKM8eRewGPeGHtO7AfZ8B/IoHcC+VUKcnOuN5Or2
-         g3wtl9gka5vLbNzdzK0Z8kf4V6iYujZeIMwawJr/r3r1CE+1IWzIIBDmnqRsxAwO4NLR
-         P4J8TjE6RgzBp3wtbZc3nCLGKZ6aP+sOHUq9E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X7pBEKn4xB6KlSsgM67ywt4YhFhtJVw3vFCQK0MunrU=;
-        b=iwlNgORK2WEWruPnQRMAde37eVnFrEv6QACNPynJ2MQjTDNZgjiUIlOUJ3Gl+ql5u1
-         Rfr4+jfBJTbYEquLvnhHZLE0YR2hsKLsm1j/2HrRQ4Bh5KVCoI4k3Upt/3qPBZtBpFpG
-         EStWbmju2woKIw7v5Zcn9zBtScR9VAFvF7vtX3tr/vTJzSkMMODxCMJy2Ylf8H5OfraF
-         x/G6MD2kQcf5LuUdb5yOwndcGsIxoiTDHkiJgu8ILyoxLCjs37m8blnDWz1t5oh3EpG3
-         O6kj5uQuHSuZyBszUXRud3VaEMH8qBvqqGdvVj6TeMbDQ+PLHd70gorO8BGtCm76p5hl
-         M3nA==
-X-Gm-Message-State: AO0yUKVs1nliWMovZlehIHUl6g2fj+zayzK2qAdifnTqm+r6vA9yvVNF
-        lYrLsn38STLYSAUAHBJi7EwG6H3cVJ0WQbU4lPZCxw==
-X-Google-Smtp-Source: AK7set/2RMPBY9eBahBTJEvy3rYfwwbLjgi7c1vRDs5ESG4HcYXd5DGekbUkiWg0DHXub99IRVG7DJ9cLcGN4Xa6sZ4=
-X-Received: by 2002:a0d:d7cf:0:b0:50f:ba3b:8a0a with SMTP id
- z198-20020a0dd7cf000000b0050fba3b8a0amr1346075ywd.181.1675189304668; Tue, 31
- Jan 2023 10:21:44 -0800 (PST)
+        Tue, 31 Jan 2023 13:23:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3523C41;
+        Tue, 31 Jan 2023 10:23:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDA176160B;
+        Tue, 31 Jan 2023 18:23:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8090AC433EF;
+        Tue, 31 Jan 2023 18:23:03 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="EqE57RqB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1675189381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QpT46/u33S6NMwaECaUNHvlKPKaadrNKuyaF728fjXY=;
+        b=EqE57RqBg6yn6nqrbDD80y4P2xlhLeKSyO8QWqqmnMPBmM519vHQb/nKWIimx4BHJYM9EF
+        J9I5Hn4ZFYQ/etGHFpZOd4th2Z2/hQnXz0eZMgqSCC/XbwosLjoQvVN2spclerlvgpeZg8
+        1NwncALk2I8WyjLNZCZ5qyFSGyvSS1o=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7e409f5c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 31 Jan 2023 18:23:01 +0000 (UTC)
+Date:   Tue, 31 Jan 2023 19:23:00 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Justin He <Justin.He@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alexandru Elisei <Alexandru.Elisei@arm.com>
+Subject: Re: [PATCH 0/2] Fix boot hang issue on Ampere Emag server
+Message-ID: <Y9lchEgyNGLKu/4R@zx2c4.com>
+References: <20230131040355.3116-1-justin.he@arm.com>
+ <CAMj1kXFTUXgaENBSYh+cGCS3wFCFunf+auk3nKwHVJWiZ7crig@mail.gmail.com>
+ <DBBPR08MB45383B479656BA18FEFFB7D5F7D09@DBBPR08MB4538.eurprd08.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230126205620.3714994-1-pmalani@chromium.org> <Y9iIzcz5AGjVXsNG@google.com>
-In-Reply-To: <Y9iIzcz5AGjVXsNG@google.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 31 Jan 2023 10:21:33 -0800
-Message-ID: <CACeCKae0s21=tj4pKvm3SyU-AUxB67oH=vO3ihHTSQ31d26ZDg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform/chrome: cros_ec: Add VDM attention headers
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <DBBPR08MB45383B479656BA18FEFFB7D5F7D09@DBBPR08MB4538.eurprd08.prod.outlook.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for reviewing the patch, Tzung-Bi.
+On Tue, Jan 31, 2023 at 03:21:39PM +0000, Justin He wrote:
+> Hi Ard,
+> 
+> > -----Original Message-----
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> > Sent: Tuesday, January 31, 2023 3:19 PM
+> > To: Justin He <Justin.He@arm.com>; Jason A. Donenfeld <Jason@zx2c4.com>
+> > Cc: Huacai Chen <chenhuacai@kernel.org>; linux-efi@vger.kernel.org;
+> > linux-kernel@vger.kernel.org; Alexandru Elisei <Alexandru.Elisei@arm.com>
+> > Subject: Re: [PATCH 0/2] Fix boot hang issue on Ampere Emag server
+> >
+> > (cc Jason for awareness)
+> >
+> > On Tue, 31 Jan 2023 at 05:04, Jia He <justin.he@arm.com> wrote:
+> > >
+> > > I met a hung task warning and then kernel was hung forever with latest
+> > > kernel on an Ampere Emag server.
+> > >
+> > > The root cause is kernel was hung  when invoking an efi rts call to
+> > > set the RandomSeed variable during the booting stage. The
+> > > arch_efi_call_virt call (set_variable) was never returned and then caused the
+> > hung task error.
+> > >
+> >
+> > Given that EFI variables work on this platform (as far as I know), the problem
+> > may be that we are calling SetVariable() too early.
+> >
+> > Could you double check whether setting variables works as expected?
+> > You can use efibootmgr -t 10 as root (for example) to set the boot timeout, and
+> > check whether the new value is retained after a reboot (efibootmgr will print
+> > the current value for you)
+> >
+> > Could you also please share the kernel log up until the point where it hangs?
+> >
+> The set_variable seems to be ok in 5.19+:
+> root@:~# efibootmgr -t 10
+> BootCurrent: 0000
+> Timeout: 10 seconds
 
-On Mon, Jan 30, 2023 at 7:19 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> On Thu, Jan 26, 2023 at 08:55:45PM +0000, Prashant Malani wrote:
-> > Incorporate updates to the EC headers to support the retrieval of VDM
-> > Attention messages from port partners. These headers are already present
-> > in the ChromeOS EC codebase. [1]
-> >
-> > [1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:include/ec_commands.h
-> >
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
->
-> With a nit:
-> Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
->
-> > diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-> > index b9c4a3964247..ec327638c6eb 100644
-> > --- a/include/linux/platform_data/cros_ec_commands.h
-> > +++ b/include/linux/platform_data/cros_ec_commands.h
-> > @@ -5862,6 +5862,7 @@ enum tcpc_cc_polarity {
-> >  #define PD_STATUS_EVENT_MUX_1_SET_DONE               BIT(5)
-> >  #define PD_STATUS_EVENT_VDM_REQ_REPLY                BIT(6)
-> >  #define PD_STATUS_EVENT_VDM_REQ_FAILED               BIT(7)
-> > +#define PD_STATUS_EVENT_VDM_ATTENTION                        BIT(8)
->
-> This has an extra tab if comparing with others around.
-Fixed the tab and applied to chrome-platform/for-kernelci.
+I think what we want to learn is whether efibootmgr -t 10 works in the
+latest RC. If not, it would suggest the issue isn't with the seed
+setting, but with some other unrelated change.
+
+Can you run efibootmgr -t 10 (or whatever) again on a kernel where
+you've commented out these lines in efi.c inside of efisubsys_init():
+
+    if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE))
+        execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
+
+-->
+
+    // if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE))
+    //     execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
+
+Or something like that.
+
+Jason
