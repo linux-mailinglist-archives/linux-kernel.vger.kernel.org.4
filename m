@@ -2,136 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090F4682D2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F819682D32
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjAaNBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S231558AbjAaNCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjAaNBa (ORCPT
+        with ESMTP id S231305AbjAaNCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:01:30 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA564E525
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:01:25 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id k4so35873865eje.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:01:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=diag.uniroma1.it; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7gMYnSeHKqcsyPBImnOU5RDW7p64vR2ZolURuiV8JxA=;
-        b=jFYcxiT7bOVUAkiqIk5UxJpSSOFPV6Ns78ObeD2X/lYdWLPg//4qValV9/JSKm9el9
-         fiW9SzN2SfDFzBofAcfvZ7FRMEy6zP+/N/lX0QOWX50uE/r1oCVvgLukoug5DEX56GSY
-         BWpeE0LvQVqyUJLW32XInshyTqReK1dTnIweg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7gMYnSeHKqcsyPBImnOU5RDW7p64vR2ZolURuiV8JxA=;
-        b=uEU4Rwrv8aIrAPhOkkaKFqjN9W32aSGBxKD2WjzG9i2Cv79Prr8iEX481nOjdsITNM
-         fmh65ZyTLCCyNG+j4cYlSnHtjp1Gjtcfis+geVnHCl/FNXlZOq5tGuUSsCtCwm2imyaP
-         9uDRu0wkUeI1cX7Yr7OmvZVgmKTxS29B+o0uaqSDL/+qZQrp8harGhUKuDv/TBrgVbG9
-         Ict2+nLaF6Uj2zg4J+fRTfKqJySRh0UDBMWJEotwhzUH8ISlXq8gnfOqJVGhq9kt25tf
-         v/oXVOkt/b4isBgRJ+lBRW1KTvgLrlhKmsG80mwUpqKEq8WBnNUumRU71vRxmPgK8ipI
-         8Pcg==
-X-Gm-Message-State: AFqh2kopYWOzOHOUnHADwBBQOS4kDV7TcPPKWxWB6qy3ojRBumpOYsuG
-        9NZRIXT47pf3F5Ajc0P+pDVyOQ==
-X-Google-Smtp-Source: AMrXdXv8Tl8EVS3s3so/8xhXlhWJn5A6/u1EiEI76SCc/7nRpcDN22oB/nVJQNm8T0sr3wMSoZMN+Q==
-X-Received: by 2002:a17:906:25c5:b0:84d:47e3:fe49 with SMTP id n5-20020a17090625c500b0084d47e3fe49mr51991415ejb.39.1675170083763;
-        Tue, 31 Jan 2023 05:01:23 -0800 (PST)
-Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
-        by smtp.gmail.com with ESMTPSA id gv21-20020a170906f11500b0086dd8f20a6asm8422670ejb.77.2023.01.31.05.01.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 05:01:23 -0800 (PST)
-From:   Pietro Borrello <borrello@diag.uniroma1.it>
-Date:   Tue, 31 Jan 2023 13:01:16 +0000
-Subject: [PATCH v2] sched: pick_next_rt_entity(): checked list_entry
+        Tue, 31 Jan 2023 08:02:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC1F4E530
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:01:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB72E614FF
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:01:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 334C2C433EF
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:01:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675170116;
+        bh=/VAKhl7zagtIgdjGwqlGupC5IRrBl2jrcRFqxAjRHxM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=icpG5ITbtsUgk6GynG1F4oNBYCig/WOimDgmxqS85xlBvdXstlGnNKYDjqCDsTWfl
+         kZSk+YIobQjBInIPaTFJBe6N877NIWtUujbzUr4SxrKCd5AVw5/U9xy8b+B+ppyWui
+         O/CtkoLl0gnIPGeUuaIXZfXRJ4L9ZVzEPCQCjbZfN3WHajNz0ZSnT6z1z30D13ODDl
+         U3q40QuYc2J/K3DJRNKeCf8/7Jca2+XLZd5pCE9DEa6uok2F6pdy5dzlFCD9BLsBkY
+         5AqHO4akzhKcmnAlVtzZlJ1WJ4h/4/YFYt333jVzYa5Y5NUnsRaPMTbOFAP691M7aJ
+         cBZv6CAw82tow==
+Received: by mail-ej1-f42.google.com with SMTP id qw12so25452488ejc.2
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:01:56 -0800 (PST)
+X-Gm-Message-State: AO0yUKW3Va/aMDmmw6juF1EipqqpCcq74R1Yl+D2MFf78NuVQXG1kEZS
+        v6jgi1R/ZYlhOgKE0fOtbRSPlYa1tpReB0j+nyc=
+X-Google-Smtp-Source: AK7set8ZY0Pqh013WZoEM81qvg3+qc7Ap0ePYEZL/lKJHhaYQoLaEJC43/Cqck8HNJYNwQwTD+CbB9Bkdbqu8QiYtXY=
+X-Received: by 2002:a17:906:14cf:b0:878:69e5:b797 with SMTP id
+ y15-20020a17090614cf00b0087869e5b797mr4325487ejc.228.1675170114368; Tue, 31
+ Jan 2023 05:01:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230128-list-entry-null-check-sched-v2-1-d8e010cce91b@diag.uniroma1.it>
-X-B4-Tracking: v=1; b=H4sIABwR2WMC/42OTQ6CMBCFr0K6dkh/hKAr72FYlHagE7GYthAJ4
- e4WTuDq5ZtJvvc2FjEQRnYvNhZwoUiTzyAvBTNO+wGBbGYmuVRcyAZGignQp7CCn8cRjEPzgpjD
- gla9sr2t7bVuWDZ0OiJ0QXvjDsdbx4TheHwC9vQ9a59tZpelU1jPFYs4rv8VLgIEmJviTYXIeVU
- 9LOmhnD2F6a1FSYm1+77/ACQHovHmAAAA
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Dmitry Adamushko <dmitry.adamushko@gmail.com>
-Cc:     Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        Ingo Molnar <mingo@elte.hu>, linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>
-X-Mailer: b4 0.11.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675170083; l=1714;
- i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
- bh=JXMb4KYxycIr7yob7kbIo17I74pfdYCRvrPeZI4D6Is=;
- b=GlyICFn4R9dN1ziaNTtDtK0FhGOH1W3rrj9NJsYS0fC0S1h8/ZA36YyrNaC4LD+egslJGv3PuQSx
- 23sClmDND7qRiDHJ58hYeFGOJke4b++EpTCqn1scckdWZWRHMxna
-X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
- pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230126130509.1418251-1-guoren@kernel.org> <878rhig9zj.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <878rhig9zj.fsf@all.your.base.are.belong.to.us>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 31 Jan 2023 21:01:42 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSnb4cvcXFvgkesgjuPOiZbcp4GZ2qJas4VWn68Pfsb9A@mail.gmail.com>
+Message-ID: <CAJF2gTSnb4cvcXFvgkesgjuPOiZbcp4GZ2qJas4VWn68Pfsb9A@mail.gmail.com>
+Subject: Re: [PATCH] riscv: kprobe: Fixup kernel panic when probing an illegal position
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com, mhiramat@kernel.org,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        mark.rutland@arm.com, liaochang <liaochang1@huawei.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
-removed any path which could make pick_next_rt_entity() return NULL.
-However, BUG_ON(!rt_se) in _pick_next_task_rt() (the only caller of
-pick_next_rt_entity()) still checks the error condition, which can
-never happen, since list_entry() never returns NULL.
-Remove the BUG_ON check, and instead emit a warning in the only
-possible error condition here: the queue being empty which should
-never happen.
+On Tue, Jan 31, 2023 at 8:32 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wr=
+ote:
+>
+> guoren@kernel.org writes:
+>
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The kernel would panic when probed for an illegal position. eg:
+> >
+> > (CONFIG_RISCV_ISA_C=3Dn)
+> >
+> > echo 'p:hello kernel_clone+0x16 a0=3D%a0' >> kprobe_events
+> > echo 1 > events/kprobes/hello/enable
+> > cat trace
+> >
+> > Kernel panic - not syncing: stack-protector: Kernel stack
+> > is corrupted in: __do_sys_newfstatat+0xb8/0xb8
+> > CPU: 0 PID: 111 Comm: sh Not tainted
+> > 6.2.0-rc1-00027-g2d398fe49a4d #490
+> > Hardware name: riscv-virtio,qemu (DT)
+> > Call Trace:
+> > [<ffffffff80007268>] dump_backtrace+0x38/0x48
+> > [<ffffffff80c5e83c>] show_stack+0x50/0x68
+> > [<ffffffff80c6da28>] dump_stack_lvl+0x60/0x84
+> > [<ffffffff80c6da6c>] dump_stack+0x20/0x30
+> > [<ffffffff80c5ecf4>] panic+0x160/0x374
+> > [<ffffffff80c6db94>] generic_handle_arch_irq+0x0/0xa8
+> > [<ffffffff802deeb0>] sys_newstat+0x0/0x30
+> > [<ffffffff800158c0>] sys_clone+0x20/0x30
+> > [<ffffffff800039e8>] ret_from_syscall+0x0/0x4
+> > ---[ end Kernel panic - not syncing: stack-protector:
+> > Kernel stack is corrupted in: __do_sys_newfstatat+0xb8/0xb8 ]---
+> >
+> > That is because the kprobe's ebreak instruction broke the kernel's
+> > original code. The user should guarantee the correction of the probe
+> > position, but it couldn't make the kernel panic.
+> >
+> > This patch adds arch_check_kprobe in arch_prepare_kprobe to prevent an
+> > illegal position (Such as the middle of an instruction).
+>
+> Nice!
+>
+> @liaochang Will you remove your patch from the OPTPROBE series?
+>
+> > Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  arch/riscv/kernel/probes/kprobes.c | 18 ++++++++++++++++++
+> >  1 file changed, 18 insertions(+)
+> >
+> > diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/pro=
+bes/kprobes.c
+> > index f21592d20306..475989f06d6d 100644
+> > --- a/arch/riscv/kernel/probes/kprobes.c
+> > +++ b/arch/riscv/kernel/probes/kprobes.c
+> > @@ -48,6 +48,21 @@ static void __kprobes arch_simulate_insn(struct kpro=
+be *p, struct pt_regs *regs)
+> >       post_kprobe_handler(p, kcb, regs);
+> >  }
+> >
+> > +static bool __kprobes arch_check_kprobe(struct kprobe *p)
+> > +{
+> > +     unsigned long tmp  =3D (unsigned long)p->addr - p->offset;
+> > +     unsigned long addr =3D (unsigned long)p->addr;
+> > +
+> > +     while (tmp <=3D addr) {
+> > +             if (tmp =3D=3D addr)
+> > +                     return true;
+> > +
+> > +             tmp +=3D GET_INSN_LENGTH(*(kprobe_opcode_t *)tmp);
+>
+> kprobe_opcode_t is u32; This can trigger a misaligned load, right?
+>
+> > +     }
+> > +
+> > +     return false;
+> > +}
+> > +
+> >  int __kprobes arch_prepare_kprobe(struct kprobe *p)
+> >  {
+> >       unsigned long probe_addr =3D (unsigned long)p->addr;
+> > @@ -55,6 +70,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+> >       if (probe_addr & 0x1)
+> >               return -EILSEQ;
+> >
+> > +     if (!arch_check_kprobe(p))
+> > +             return -EILSEQ;
+> > +
+> >       /* copy instruction */
+> >       p->opcode =3D *p->addr;
+>
+> Not related to your patch, but this can also trigger a misaligned load.
+Yes, it would trigger a misaligned load.
 
-Fixes: 326587b84078 ("sched: fix goto retry in pick_next_task_rt()")
-Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
----
-Changes in v2:
-- pick_next_rt_entity(): emit warning instead of crashing
-- Link to v1: https://lore.kernel.org/r/20230128-list-entry-null-check-sched-v1-1-c93085ee0055@diag.uniroma1.it
----
- kernel/sched/rt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What's the problem of that?
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index ed2a47e4ddae..c024529d8416 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -1777,6 +1777,7 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
- 	BUG_ON(idx >= MAX_RT_PRIO);
- 
- 	queue = array->queue + idx;
-+	SCHED_WARN_ON(list_empty(queue));
- 	next = list_entry(queue->next, struct sched_rt_entity, run_list);
- 
- 	return next;
-@@ -1789,7 +1790,6 @@ static struct task_struct *_pick_next_task_rt(struct rq *rq)
- 
- 	do {
- 		rt_se = pick_next_rt_entity(rt_rq);
--		BUG_ON(!rt_se);
- 		rt_rq = group_rt_rq(rt_se);
- 	} while (rt_rq);
- 
+>
+>
+> Bj=C3=B6rn
 
----
-base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
-change-id: 20230128-list-entry-null-check-sched-a3f3dfd6d468
 
-Best regards,
--- 
-Pietro Borrello <borrello@diag.uniroma1.it>
+
+--=20
+Best Regards
+ Guo Ren
