@@ -2,204 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A541682863
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C6A682861
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:13:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbjAaJNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
+        id S230315AbjAaJNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbjAaJNW (ORCPT
+        with ESMTP id S232439AbjAaJNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:13:22 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1514E522
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:11:13 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id g68so9563440pgc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:11:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+G7LKm94Gh8IveRXkVxzmqetNifcC6zGcwfVmKZiIxU=;
-        b=eqXSbhCEC9s02q8nHxUEus2+H/2Y0rvRKIp9bmt9yZfTuOssg1+p7nndjt2NON5wIW
-         0/xDxXb9svWhNEqPLB2Rkr2XW12YJIgZLHJUxwc0oD+YaTcloroWP2GQkUwK+y+rcFij
-         yzwEDLuRbzZv/qbhS6M4i67X+ja+AFpECod3dAEHZNGXfwqFJdUtRuZEqhVKkIh/jbTc
-         u5WZQInCjtsSmScQ182N0Rn8PUceGOmZ46ulxNvHkMWH9xtNpDxiA8fFGaKzebqxW9LB
-         KgY3T9Sy1JDPUittTemk7HZycvL7LywHjj+jk2cmQYG6Qc22WgvPMX58TH4Hixxm7rrQ
-         6aJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+G7LKm94Gh8IveRXkVxzmqetNifcC6zGcwfVmKZiIxU=;
-        b=ROlys+AhQiGbgMqFrpDIEDv8Auix7aRVcRAkgOifHUBHNhnBn42Kw73MM1zzWJjqpp
-         BE5rs/hMrUZaaiGv5d+FDHXknjSdBVe8Igho9SW/BvyXjklubWDBgsKbJgykifN6czB8
-         lMpxdesuOf3SRgNGvHIgG/xmRezlqCDbCM8+9hUO5pEIZf8AhGrQhDennDlHyM7QP1wz
-         bStwpVZZTf9MAsin+ojeoZEN39rbRh5qP34oFFGEgaRVFfe+dwoywgoVFCMc4HS/xECa
-         wll/z2zJgaikHLjD5EfVbVawbdpbzMXagOgx22JsyAUcVPE8gqwP7vIpDxmelbWWtMEp
-         pHhQ==
-X-Gm-Message-State: AO0yUKUuC6EiFgoK+cquOUbYwx+N71MBhxQg9ob+HbTJqdIvSGB6+4uQ
-        MUeUgDZnnGZew1YeouV4olAmV8OkfTPAX9Za
-X-Google-Smtp-Source: AK7set9Wno7a0XYRFhzJYb6jckFGgD3MgmlKDmdJYnMg7BAjHupX6GqxvIMpR9adRETeVxpQn4ox6A==
-X-Received: by 2002:a05:6a00:1483:b0:592:61a5:40 with SMTP id v3-20020a056a00148300b0059261a50040mr15751149pfu.16.1675156269503;
-        Tue, 31 Jan 2023 01:11:09 -0800 (PST)
-Received: from sunil-laptop ([49.206.9.96])
-        by smtp.gmail.com with ESMTPSA id bt26-20020a056a00439a00b0058a7bacd31fsm6540587pfb.32.2023.01.31.01.11.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 01:11:09 -0800 (PST)
-Date:   Tue, 31 Jan 2023 14:41:00 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-doc@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-acpi@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Andrew Jones <ajones@ventanamicro.com>
-Subject: Re: [PATCH 11/24] RISC-V: ACPI: irqchip/riscv-intc: Add ACPI support
-Message-ID: <Y9jbJDwuJ0RnkviA@sunil-laptop>
-References: <20230130182225.2471414-1-sunilvl@ventanamicro.com>
- <20230130182225.2471414-12-sunilvl@ventanamicro.com>
- <AFDD5897-27A3-4418-B08B-9650B543692D@jrtc27.com>
+        Tue, 31 Jan 2023 04:13:16 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2060.outbound.protection.outlook.com [40.107.21.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0DB4E505;
+        Tue, 31 Jan 2023 01:11:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c2MKTiCU57cr2p0dRam2oPY5ItzcD9DxucfrwfnyOi1usTnTKldkBOgHrHzPDf/REZTt+d9X7KlrQaTMPiBIPApAD8MBNswVXRyJpphOCyDoqcBrScnVgZp2G2OZZ6/NXerg8ZfPRImTCMKWrfaHMk9OOTvb+4E7IM4rTqddwpbRXfM/qipXucQSncGnTYrJtbIjZhQ9suM0+7Z0zZTXV99UaT4+4jicM2P7XebDOoOBL4cv9ZAxcZPVZK647NS85Ijq82mulB1w6bDdMBjEBOBiT9/zR2177mPuGTEmxejIRh7jPWOm7/UA3RU0VX2Qk3sfw4my8/mRt7HbT7Gndw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oSE4biS5VxyWA0FfFzjaGHtJY118yFhIC2CkFDOTDQM=;
+ b=UhbTZQc9WWo04arGA383G2Ou4C+WzwiEzPpDT2H8oLAZd/jmbqetRStTSHDL3L7CZIZ8kWstWfZRPvW9AkpG0aX/YffIBf0cTf4EwH8NHaytF3cyCQiauQxM8gBrr7NCj3zDISStmzpNhJy4VloHMxAbAiblt8+7Y7nfMzv5mNi9uCT9B6ZXogg/lka9MFj09SyOqAvOB3IWZijyOf29ECSiVAWFwE6js4VdVzPCMXQmyAHASAvaFLf3NVGGNFFkk8P1tTbhaf5LbLc7qWM9MgywFJl7frb5XinrYFnEBMx+F6LNPz7hr2DcTmDGRwDP7C5EukiFF8kbGzy9fPjzbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oSE4biS5VxyWA0FfFzjaGHtJY118yFhIC2CkFDOTDQM=;
+ b=LIkMu8wUWrdhgCUGRGRFdPaSDrZGl4mX7T0erbRwMmjmyiDP0fOtML6gZN7wuPn2h57Nl1pF+jkErB+q+sSVia0fzY5ANAK9LKbjpIkWGVXuWA2f/Zuo+V12QrWNcK02I+tMsNHVFqDjS/PusrsxmwdqyyoHtIENINbg6dl7o7Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM9PR04MB8539.eurprd04.prod.outlook.com (2603:10a6:20b:436::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.33; Tue, 31 Jan
+ 2023 09:10:23 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::e203:47be:36e4:c0c3]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::e203:47be:36e4:c0c3%9]) with mapi id 15.20.6043.025; Tue, 31 Jan 2023
+ 09:10:23 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH] arm64: dts: imx8mq: update usb compatible string
+Date:   Tue, 31 Jan 2023 17:11:40 +0800
+Message-Id: <20230131091140.3696808-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR01CA0009.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::18) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AFDD5897-27A3-4418-B08B-9650B543692D@jrtc27.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM9PR04MB8539:EE_
+X-MS-Office365-Filtering-Correlation-Id: 182f5c90-5d0d-4a63-5919-08db036afbc0
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: T8NHetC2/3t9pHw0U4/tLM1rvi9HZKEREh68FzdH5k1F6CPCxXJFherOsasXEm41yca1KzaHTIqf2wAMCQ9IXRZ74t7POBK9pbRbJ6OhkY9d8vTQQrwSWexDcP1362rHlzDZIwLZ0C3OYROHWuZOis6/BqWN2BhMLn4n/4igh5sH1dcUNpRo0Di43x2z5diGXA2UzHthJTJyQ+xQUgHBr46MBtJfJHvxPBNjhFv/cLKHRdl93xzHzMsd9aIORhVZfFSEqXE1e/3wEqOGHi+o0V/OTknGHP5U9Tfv0+BrcZw1fdJLrPLB5nSK8XfabagRr2L5DxoiLh6+DzDL6qfCvdxtfew14fSwR7R5+jzkCOiKlUxL+ozoS0pUbOGFGfizEd2Ri0GopLaDpNDD5gpSk1NTxudbEt3OfhPjVfXbPW8sZhpzDUPCiUjsdz18yVWCzQuMMnnXrdFQ9bxYLJ5ykzyiSUYki8yPXH50+8pNafpO5jePfPrNfJ4a0djlI5PGwDWIxlPoFpzSPZygkjwjdndIIcyGL2Vj3cKSDmuvqqR4zDrzt+y6PLipSw8+qDr1NrawiKF9RB3xZ8MjVDM6tUL5SUKD7Ds+sOoQlV81RM4sm+7lx2XtPLLfuejuTzNAznMAg3WhSKXrIeBasnyVGbLEwQnP2PdMt9fRcyK8bNfk/zp4MyGDQiS+EhOl5XqYZKvh+cCuagB1zJa7DjB8DSz1Tv4FPQxVwU8Gp54KksY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(451199018)(41300700001)(8676002)(66556008)(66476007)(4326008)(6666004)(8936002)(6506007)(66946007)(316002)(5660300002)(2906002)(52116002)(26005)(86362001)(6486002)(6512007)(1076003)(478600001)(83380400001)(186003)(2616005)(38100700002)(38350700002)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gk7h/zPSSMJdzHi+FkCtquLcAWwPDfeWOf5JaN+RP92ew5HGk3prNQMZYr/f?=
+ =?us-ascii?Q?PHca7YxS8hE4zdD0ZsgRgbUPActqXcfoMmJwggfu/J5TN05Ds66Z2dCY4sgr?=
+ =?us-ascii?Q?LuZiws4y9Dy0t6Pi3J+XA4fTxXglNXP9vkeclqDkHEZ21KZhAqPYB4C7Uq+j?=
+ =?us-ascii?Q?bpWBxQBgjV7cdg1JnHWzbqTjY4nL35HCwfcanUuWF9YhmLLayDLfvgdK+t1u?=
+ =?us-ascii?Q?OQA44LGmGXZNF322yjRnXnJQu6vQfP5FSfT6eByOjzEg5L2PZnhCmo+ZC6j3?=
+ =?us-ascii?Q?RUgMhu9lC1aKxbSwEOnYrxiDWesGiqmIFTkiI8XATc5TIXD7IgyaCJeOqzRk?=
+ =?us-ascii?Q?LZBLq+P73oCZZEm5EKAA6H35FcHmo5s/+WrDV8/X+dTLEuHyx+eopcuEtSTF?=
+ =?us-ascii?Q?zQ/6gKTKbuQVB0/JcbaDvcAwyDvQa3J3ySkJc22Tl+SLbHZ/bUdH61IJAwNp?=
+ =?us-ascii?Q?/bm3mFNOeh7aGGtPoqo6oUBFi/5ePOkL0rB8Glg0z5hzERxJfgBgAiucQOxz?=
+ =?us-ascii?Q?7oHbDOeTqFzRK4lw9HsCJ3nSsziZWpSHVNtjS37YnfYm0RvfLRgbl9ArtkLP?=
+ =?us-ascii?Q?7GAu/Vysb92THmHkwNetB2uto2/uTVz3jfsLVYs51pN4FJ+ufEa8je/DhHMD?=
+ =?us-ascii?Q?U4lxC7rf0BTjXHp6MZLlokZSwtHG0gmW350B3SE+EMWrTnAAy9TKqT9IYgtt?=
+ =?us-ascii?Q?UqT6zQLG+awIHGtPbb9NsnlpO9JkVwlnC71C5lgX/z2wmADELCp3sFYGCuZI?=
+ =?us-ascii?Q?A2GJ/shbe2glYI6DScfzDtt2pDSDdxQav7qBp8+dqWYPq1kRJ2k4EJMypoxT?=
+ =?us-ascii?Q?OmaQtW4P7nJZ3UgvmxuW6EjoXG90H1aRxin+9my3w6xMuCmatvofuCJDpE06?=
+ =?us-ascii?Q?nkjxsNco9FjPyLOd65bCh9rkU22ouFLmFVdnih9nx0goB0CWxenNyUDuiapS?=
+ =?us-ascii?Q?ymwmSe2a0i0QXxF/TrTfnQHB39y9LzYAS+I9hl62+MRFz5dGzxkUfY2AWyvq?=
+ =?us-ascii?Q?5Ilu/Y04ElrozquKZQlL0r+1DP+tLrKwPfQ69a6XbVzM29oSssRmaujs4vXy?=
+ =?us-ascii?Q?QYUVaPeyId59lWjyEpdpR/mcb8lJo7iRfV8CdwjH6mBmrUUNUjDMi+4rhJhQ?=
+ =?us-ascii?Q?Em4gskmDRZqiY6VD+AxVSniihDs7vHA+Ggj6b2mADRDcDpyh721PnqevpY+w?=
+ =?us-ascii?Q?mj8iMlP/ltNWf3j1SRM2SFyCy1KUEw2bAu732JT31r+68tuo+48n4ARhrRp/?=
+ =?us-ascii?Q?frt2FH7ObUKq/NAOjD8T4HM86echsl4t8YGwAiyprqmWlvwuHyNUW7d2GvlZ?=
+ =?us-ascii?Q?+olGEdTxmWHc5jeBZ5j4+X/MDkYIHOG/zl7KErh9gWvF78vvNeKlLXoSbBU/?=
+ =?us-ascii?Q?XdJ/PsqS0uXlw1arDwT2t7wYkvFRAFakni8CGhDMKFblsFvK3e/RFY5DYfWV?=
+ =?us-ascii?Q?9Q80KHPG566jkIdJYQHfPeNBYhYCtqrtBIbMtY7K9WjsQBuanw99NwdedjP/?=
+ =?us-ascii?Q?Jw3QiKvzg2lHMvdfNB3gqpF3es8iFcB6eavYQ2U3g7ckD9RJcprDkKWrlS1c?=
+ =?us-ascii?Q?nljRvYqFmAmO0+sTfvdGw+anNhs68Lmq+A4BWys6?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 182f5c90-5d0d-4a63-5919-08db036afbc0
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 09:10:23.3628
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CvCnQ4KYf7yt4uJJJxpwidJ2bvog/YTBmZBXWJPwo9Vd5DRsT6uHpI6XTgx1jmYrLYhgx60DeTAJOjN0E0klXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8539
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jessica,
+From: Peng Fan <peng.fan@nxp.com>
 
-On Mon, Jan 30, 2023 at 11:38:49PM +0000, Jessica Clarke wrote:
-> On 30 Jan 2023, at 18:22, Sunil V L <sunilvl@ventanamicro.com> wrote:
-> > 
-> > Add support for initializing the RISC-V INTC driver on ACPI based
-> > platforms.
-> > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > ---
-> > drivers/irqchip/irq-riscv-intc.c | 79 +++++++++++++++++++++++++++-----
-> > 1 file changed, 67 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-> > index f229e3e66387..044ec92fcba7 100644
-> > --- a/drivers/irqchip/irq-riscv-intc.c
-> > +++ b/drivers/irqchip/irq-riscv-intc.c
-> > @@ -6,6 +6,7 @@
-> >  */
-> > 
-> > #define pr_fmt(fmt) "riscv-intc: " fmt
-> > +#include <linux/acpi.h>
-> > #include <linux/atomic.h>
-> > #include <linux/bits.h>
-> > #include <linux/cpu.h>
-> > @@ -112,6 +113,30 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
-> > 	return intc_domain->fwnode;
-> > }
-> > 
-> > +static int __init riscv_intc_init_common(struct fwnode_handle *fn)
-> > +{
-> > +	int rc;
-> > +
-> > +	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
-> > +					       &riscv_intc_domain_ops, NULL);
-> > +	if (!intc_domain) {
-> > +		pr_err("unable to add IRQ domain\n");
-> > +		return -ENXIO;
-> > +	}
-> > +
-> > +	rc = set_handle_irq(&riscv_intc_irq);
-> > +	if (rc) {
-> > +		pr_err("failed to set irq handler\n");
-> > +		return rc;
-> > +	}
-> > +
-> > +	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> > +
-> > +	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > static int __init riscv_intc_init(struct device_node *node,
-> > 				  struct device_node *parent)
-> > {
-> > @@ -133,24 +158,54 @@ static int __init riscv_intc_init(struct device_node *node,
-> > 	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
-> > 		return 0;
-> > 
-> > -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
-> > -					    &riscv_intc_domain_ops, NULL);
-> > -	if (!intc_domain) {
-> > -		pr_err("unable to add IRQ domain\n");
-> > -		return -ENXIO;
-> > -	}
-> > -
-> > -	rc = set_handle_irq(&riscv_intc_irq);
-> > +	rc = riscv_intc_init_common(of_node_to_fwnode(node));
-> > 	if (rc) {
-> > -		pr_err("failed to set irq handler\n");
-> > +		pr_err("failed to initialize INTC\n");
-> > 		return rc;
-> > 	}
-> > 
-> > -	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> > +	return 0;
-> > +}
-> > 
-> > -	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> > +IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
-> > +
-> > +#ifdef CONFIG_ACPI
-> > +
-> > +static int __init
-> > +riscv_intc_acpi_init(union acpi_subtable_headers *header,
-> > +		     const unsigned long end)
-> > +{
-> > +	int rc;
-> > +	struct fwnode_handle *fn;
-> > +	struct acpi_madt_rintc *rintc;
-> > +
-> > +	rintc = (struct acpi_madt_rintc *)header;
-> > +
-> > +	/*
-> > +	 * The ACPI MADT will have one INTC for each CPU (or HART)
-> > +	 * so riscv_intc_acpi_init() function will be called once
-> > +	 * for each INTC. We only need to do INTC initialization
-> > +	 * for the INTC belonging to the boot CPU (or boot HART).
-> > +	 */
-> > +	if (riscv_hartid_to_cpuid(rintc->hart_id) != smp_processor_id())
-> > +		return 0;
-> 
-> Why are we carrying forward this mess to ACPI? The DT bindings are
-> awful and a complete pain to deal with, as evidenced by how both Linux
-> and FreeBSD have to go out of their way to do special things to only
-> look at one of the many copies of the same thing.
->
+There is no fsl,imx8mq-dwc3 binding doc, no driver use this compatible
+string. Drop it.
 
-Local interrupt controller structures are per-cpu in any architecture.
-So, there will be multiple such structures. It is upto the OS to choose
-one of them. What is the issue here?
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The RISC-V DT code is selecting the one which is corresponding to the boot
-cpu. While in ACPI we can choose any one, I think it is better to
-follow the DT code to keep it similar and boot cpu is always guaranteed
-to be available.
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+index d59156fdee0b..d308f94a7c52 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
+@@ -1431,7 +1431,7 @@ gpu: gpu@38000000 {
+ 		};
+ 
+ 		usb_dwc3_0: usb@38100000 {
+-			compatible = "fsl,imx8mq-dwc3", "snps,dwc3";
++			compatible = "snps,dwc3";
+ 			reg = <0x38100000 0x10000>;
+ 			clocks = <&clk IMX8MQ_CLK_USB1_CTRL_ROOT>,
+ 			         <&clk IMX8MQ_CLK_USB_CORE_REF>,
+@@ -1463,7 +1463,7 @@ usb3_phy0: usb-phy@381f0040 {
+ 		};
+ 
+ 		usb_dwc3_1: usb@38200000 {
+-			compatible = "fsl,imx8mq-dwc3", "snps,dwc3";
++			compatible = "snps,dwc3";
+ 			reg = <0x38200000 0x10000>;
+ 			clocks = <&clk IMX8MQ_CLK_USB2_CTRL_ROOT>,
+ 			         <&clk IMX8MQ_CLK_USB_CORE_REF>,
+-- 
+2.37.1
 
-Thanks!
-Sunil
