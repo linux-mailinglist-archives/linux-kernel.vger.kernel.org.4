@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02D56835E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D016835EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:01:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjAaTAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49994 "EHLO
+        id S232020AbjAaTBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:01:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbjAaTAP (ORCPT
+        with ESMTP id S232005AbjAaTBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:00:15 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638384B1B0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:00:07 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id a184so10925159pfa.9
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:00:07 -0800 (PST)
+        Tue, 31 Jan 2023 14:01:07 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF1B59274
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:01:03 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id m13so4161988plx.13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:01:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w3/WE1wMhkpHW4nP7y1SsKn66zt1nWRGpIbsLu/1uw8=;
-        b=kzhGg2/m3NTY9DKZZnThP6o85dv5BS/efwYYw/Eh+3CMn7EGD0X3HEA/KGDRxXxA7y
-         hkC3VGV27xOqXBUpBnm1UGJwEfYYeGVPRr6OhNAtqNAE6TNUYmYCerNfdvqGRc4PaaM8
-         l2kWzfiOBDmJ3Ubh/bf1V10B0rC1+k/jD+zW/NVd6yW3R6C5554QGiE3EbRFT9RwXxBx
-         YP+fnu1kGsJ45zW8dWgm1OoeHm8DT+Df5HFt/rLxs+dGGhM5ypIdGmKfF1xYbJxoFEdr
-         RQF+tRCmpnhiwDYFIFHKsLF2vxLAIniK0QaTCLe/OgRFUrDgCpMCO9+Bg6inkUOm+zq9
-         6Ycg==
+        bh=b1NzJQj+IlX2uUKAqxA9aAlIl32T8LLkBO2KdikgTrw=;
+        b=POpr6rtUzbOEXVUyz0KPld50XaTfjwTRbNMH8d5J2igr75HqUw8wn90WpgqoDKL046
+         RcWTXbeXPGvoPjqcW07ptOP3iHwWFeBXc8tiekDXDvF/LejmGtoREbloLtMUw65NODPf
+         oLHldBXWNOrGGkj8iaZ2PsUPUYS76S0jwd/L5Sc9KKEHVKr9aZG+R7WXc2vwu7vygNGe
+         P1aYV5t9cwjivcY8xAN2lvxFbYP5B4cTaxxgPLtGWnioZz3B8tdeDySLdPApRBrSAy1O
+         Qt66RkBR4C0rG5qG5bOOPsVqkWckGjC3CYJveB1HNOHTaHCeNWI0YuIxqPf2Oh86mxmt
+         dr/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=w3/WE1wMhkpHW4nP7y1SsKn66zt1nWRGpIbsLu/1uw8=;
-        b=kufEB8A6q9L5Gj4+dzb2uJYREvzU3rj9BS1g4jT6C0w4z9ps47vYKSAcXjFy0y0h6u
-         DYKC66vsjs57X2arwHBxt8PPDxQgWib0irt2PrvmVJFfO0qe6RZ/eCVL261hO/5sfgM1
-         k6/RZhaLSaNbkxLqMaAKTPSlm1EpuA2YY1ykxpucyqKNmGRDR9DYOuIP5LdeO71+Gr3u
-         t4ZwU9ZfsYkfw5vj7vJE4wCQXXkeY5rS/c7hXq7WAzMKVs20hTefI6XC0FxKyqu8Ss7V
-         EjsEssnOUFL5HMTKO7hxOrYLdiQXI4WVEUCuBNvvTEBmDXCVmMNDFAgrC5goQlrKB2SY
-         YQnA==
-X-Gm-Message-State: AFqh2krdXKAECpc8u51eJ8DwqQ+Bv7wDFM5LAP8wcasrcpr7nPT0GQta
-        qclMLhjueeyS/1yXEaWnSLY/fWqhFakL2B83zjU=
-X-Google-Smtp-Source: AMrXdXvivcKw9xG2hqDoVShH9pk8i1fRloruRBEB3dI190pnIcWOJtD8ST38uUF3rkQWBP+Qoez3loJHZygKiAYFJOk=
-X-Received: by 2002:a63:f657:0:b0:477:a33f:4858 with SMTP id
- u23-20020a63f657000000b00477a33f4858mr6531588pgj.76.1675191606922; Tue, 31
- Jan 2023 11:00:06 -0800 (PST)
+        bh=b1NzJQj+IlX2uUKAqxA9aAlIl32T8LLkBO2KdikgTrw=;
+        b=tE33rKwelQkocsM+LaD8REqw7r/BoBODcUjg5oIpOY3SF1gnEgH8IngRRIyEgl1iCL
+         VdS9puxN5EZDhZuIXaR9+/55ykjNN2y1val27RaTXg/AsIYL1sLfcbnQAp90J06H4HEg
+         gr8cxvbuzImm58cIYBZutqYP+j3bSPZlHDdpzmH8YOKwZCMfnA8ac4qYYAHbo94UWrKQ
+         3A+HVoQxCae/FosSxoVwCQkwsEv71XH+7Nl74Kcn5kYBlw/FNTm699cgESDBcLllBd58
+         luQNSpnYviDAygqbqTVaNfXWJqHrLIiDl2o4AbF/Zp/DEkc9OjVGa9L4/Cx4B8DzZCn8
+         B9HA==
+X-Gm-Message-State: AO0yUKU4CVT/yjxtQgVm2iiEvVwi1tpwOj48yEr75q6M9moFer24f+8F
+        M+zVPm008OWbbfpxjkaCuVbh2CcYh07/nbIHdk8=
+X-Google-Smtp-Source: AK7set8bc7F3qbqkhbudXFapyZSTiQa6mULkelevw59uR/GLAtno9GuThVSykdKYn4f2fcDI1+Jga0NXpcHac0PMfeQ=
+X-Received: by 2002:a17:90a:cc5:b0:22c:4462:fb92 with SMTP id
+ 5-20020a17090a0cc500b0022c4462fb92mr3207848pjt.44.1675191662752; Tue, 31 Jan
+ 2023 11:01:02 -0800 (PST)
 MIME-Version: 1.0
 References: <cover.1675111415.git.andreyknvl@google.com> <9fbb4d2bf9b2676a29b120980b5ffbda8e2304ee.1675111415.git.andreyknvl@google.com>
- <CAG_fn=VO0iO4+EuwDR0bKP-4om9_Afir3fY6CExKGRNad+uPLA@mail.gmail.com>
-In-Reply-To: <CAG_fn=VO0iO4+EuwDR0bKP-4om9_Afir3fY6CExKGRNad+uPLA@mail.gmail.com>
+ <20230130161817.a13365bca60543e34da27f48@linux-foundation.org>
+In-Reply-To: <20230130161817.a13365bca60543e34da27f48@linux-foundation.org>
 From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 31 Jan 2023 19:59:55 +0100
-Message-ID: <CA+fCnZfjbHaS9So6gO_3ZkgLazJXYAtw-PNV5C0xhAjzVE3p-Q@mail.gmail.com>
+Date:   Tue, 31 Jan 2023 20:00:51 +0100
+Message-ID: <CA+fCnZcu8hjK8GQ0j2UnWFjyED9ys52pFG7zbnuRkUzGnP2BGg@mail.gmail.com>
 Subject: Re: [PATCH 01/18] lib/stackdepot: fix setting next_slab_inited in init_stack_slab
-To:     Alexander Potapenko <glider@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
         Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Evgenii Stepanov <eugenis@google.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -72,34 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 10:30 AM Alexander Potapenko <glider@google.com> wrote:
+On Tue, Jan 31, 2023 at 1:18 AM Andrew Morton <akpm@linux-foundation.org> wrote:
 >
-> Wait, I think there's a problem here.
+> On Mon, 30 Jan 2023 21:49:25 +0100 andrey.konovalov@linux.dev wrote:
 >
-> > diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> > index 79e894cf8406..0eed9bbcf23e 100644
-> > --- a/lib/stackdepot.c
-> > +++ b/lib/stackdepot.c
-> > @@ -105,12 +105,13 @@ static bool init_stack_slab(void **prealloc)
-> >                 if (depot_index + 1 < STACK_ALLOC_MAX_SLABS) {
-> If we get to this branch, but the condition is false, this means that:
->  - next_slab_inited == 0
->  - depot_index == STACK_ALLOC_MAX_SLABS+1
->  - stack_slabs[depot_index] != NULL.
+> > In commit 305e519ce48e ("lib/stackdepot.c: fix global out-of-bounds in
+> > stack_slabs"), init_stack_slab was changed to only use preallocated
+> > memory for the next slab if the slab number limit is not reached.
+> > However, setting next_slab_inited was not moved together with updating
+> > stack_slabs.
+> >
+> > Set next_slab_inited only if the preallocated memory was used for the
+> > next slab.
 >
-> So stack_slabs[] is at full capacity, but upon leaving
-> init_stack_slab() we'll always keep next_slab_inited==0.
+> Please provide a full description of the user-visible runtime effects
+> of the bug (always always).
 >
-> Now every time __stack_depot_save() is called for a known stack trace,
-> it will preallocate 1<<STACK_ALLOC_ORDER pages (because
-> next_slab_inited==0), then find the stack trace id in the hash, then
-> pass the preallocated pages to init_stack_slab(), which will not
-> change the value of next_slab_inited.
-> Then the preallocated pages will be freed, and next time
-> __stack_depot_save() is called they'll be allocated again.
+> I'll add the cc:stable (per your comments in the [0/N] cover letter),
+> but it's more reliable to add it to the changelog yourself.
 
-Ah, right, missed that.
+Right, will do this next time.
 
-What do you think about renaming next_slab_inited to
-next_slab_required and inverting the used values (0/1 -> 1/0)? This
-would make this part of code less confusing.
+> As to when I upstream this: don't know - that depends on the
+> user-visible-effects thing.
+
+Looks like there's no bug to fix after all as per comments by Alexander.
+
+Thanks!
