@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D016835EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F466835ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbjAaTBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:01:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S231989AbjAaTBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbjAaTBH (ORCPT
+        with ESMTP id S231978AbjAaTA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:01:07 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF1B59274
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:01:03 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id m13so4161988plx.13
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:01:03 -0800 (PST)
+        Tue, 31 Jan 2023 14:00:59 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F795B763
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:00:57 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id a3so8476529wrt.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:00:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b1NzJQj+IlX2uUKAqxA9aAlIl32T8LLkBO2KdikgTrw=;
-        b=POpr6rtUzbOEXVUyz0KPld50XaTfjwTRbNMH8d5J2igr75HqUw8wn90WpgqoDKL046
-         RcWTXbeXPGvoPjqcW07ptOP3iHwWFeBXc8tiekDXDvF/LejmGtoREbloLtMUw65NODPf
-         oLHldBXWNOrGGkj8iaZ2PsUPUYS76S0jwd/L5Sc9KKEHVKr9aZG+R7WXc2vwu7vygNGe
-         P1aYV5t9cwjivcY8xAN2lvxFbYP5B4cTaxxgPLtGWnioZz3B8tdeDySLdPApRBrSAy1O
-         Qt66RkBR4C0rG5qG5bOOPsVqkWckGjC3CYJveB1HNOHTaHCeNWI0YuIxqPf2Oh86mxmt
-         dr/A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SIJaGfWdRfJxS6q3tqM9XAVlnh9n1n3wd/3LvQMSRzw=;
+        b=xwxvFcqLjJnew4mehUfiyv8u7x+VWUXfIaTQKsctNUAlYKVitu7h+y1heXMnVflfpu
+         2njIIom0UbXkff070SCR48N5rtVy++PskgVzUp+oH+1F0qu1K3ShSSTrDL6vfqFMiPNb
+         JU3eDfersxU9ilvLJGRF4uPYgkVds/GKg1AWzatLcLF3D7rRz8zsE5AXb9JSFnyYxitb
+         v8bKxvPqItlxibtHZf300LSKUUwy0asXifbcflE1opOXQdQAm0dkYS/Aqtnf4oLA3YuM
+         ZhP/uUAkqJr2T5YrWIC6y38vcSWib9lvCdaewlkQz0ubMhdoKW5yC7ZGysX+fV0xqR1P
+         811A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b1NzJQj+IlX2uUKAqxA9aAlIl32T8LLkBO2KdikgTrw=;
-        b=tE33rKwelQkocsM+LaD8REqw7r/BoBODcUjg5oIpOY3SF1gnEgH8IngRRIyEgl1iCL
-         VdS9puxN5EZDhZuIXaR9+/55ykjNN2y1val27RaTXg/AsIYL1sLfcbnQAp90J06H4HEg
-         gr8cxvbuzImm58cIYBZutqYP+j3bSPZlHDdpzmH8YOKwZCMfnA8ac4qYYAHbo94UWrKQ
-         3A+HVoQxCae/FosSxoVwCQkwsEv71XH+7Nl74Kcn5kYBlw/FNTm699cgESDBcLllBd58
-         luQNSpnYviDAygqbqTVaNfXWJqHrLIiDl2o4AbF/Zp/DEkc9OjVGa9L4/Cx4B8DzZCn8
-         B9HA==
-X-Gm-Message-State: AO0yUKU4CVT/yjxtQgVm2iiEvVwi1tpwOj48yEr75q6M9moFer24f+8F
-        M+zVPm008OWbbfpxjkaCuVbh2CcYh07/nbIHdk8=
-X-Google-Smtp-Source: AK7set8bc7F3qbqkhbudXFapyZSTiQa6mULkelevw59uR/GLAtno9GuThVSykdKYn4f2fcDI1+Jga0NXpcHac0PMfeQ=
-X-Received: by 2002:a17:90a:cc5:b0:22c:4462:fb92 with SMTP id
- 5-20020a17090a0cc500b0022c4462fb92mr3207848pjt.44.1675191662752; Tue, 31 Jan
- 2023 11:01:02 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SIJaGfWdRfJxS6q3tqM9XAVlnh9n1n3wd/3LvQMSRzw=;
+        b=T4HemNNzxmWPM6YXPWxEVZN90WzUFTj3FHXDuPvhSTU8SDojoKvDbrYWinkd8SCGsc
+         RP553IRFX7KoQ/1m0pyVS1aSztIC2DRm4falUtgv4zgkjV8MiI9/GJuOJDNSvqwBXaSZ
+         fcEpyzC71woka0UbKgWYrJTT9YkOCrd2RyGAJMg1+YD6HlHVZf0yB/UTTAC0oflPonAc
+         +AFJMQEW4nnJ6wTtAngooqa6/NJ/R5M2Arzbjg2aeznP5jMCrDt+hxlh78r7zl49MC82
+         +MYSBQoL8GjRz4Pxxt4YnhG1lAyPHuk0FFurNIBxMuADQfpulq/yHY8WcWj275Z74vzu
+         gr6Q==
+X-Gm-Message-State: AO0yUKXRHXPOwmLaKxfARrSivFGHUmlDSnp1dXnD5/KpxzAiNjm/4mhE
+        m/l3mYzWtnPsOEYRTZN/ZlidWQ==
+X-Google-Smtp-Source: AK7set9f6mNUbT120znKVF+/TqYuNPTA/VMgJurzT6zxsEMrQvrRXBuPBoLC7BtLBwvLCSqqBigRsw==
+X-Received: by 2002:a05:6000:16c4:b0:2bf:95fb:e5b3 with SMTP id h4-20020a05600016c400b002bf95fbe5b3mr53119wrf.33.1675191655850;
+        Tue, 31 Jan 2023 11:00:55 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id m13-20020a5d56cd000000b002bfd462d13asm14868075wrw.18.2023.01.31.11.00.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 11:00:55 -0800 (PST)
+Message-ID: <a18751a0-f51b-0a3a-58ff-2062a9dc46fb@linaro.org>
+Date:   Tue, 31 Jan 2023 20:00:53 +0100
 MIME-Version: 1.0
-References: <cover.1675111415.git.andreyknvl@google.com> <9fbb4d2bf9b2676a29b120980b5ffbda8e2304ee.1675111415.git.andreyknvl@google.com>
- <20230130161817.a13365bca60543e34da27f48@linux-foundation.org>
-In-Reply-To: <20230130161817.a13365bca60543e34da27f48@linux-foundation.org>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 31 Jan 2023 20:00:51 +0100
-Message-ID: <CA+fCnZcu8hjK8GQ0j2UnWFjyED9ys52pFG7zbnuRkUzGnP2BGg@mail.gmail.com>
-Subject: Re: [PATCH 01/18] lib/stackdepot: fix setting next_slab_inited in init_stack_slab
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/4] Bluetooth: hci_qca: Add support for QTI Bluetooth
+ chip wcn6855
+Content-Language: en-US
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>
+References: <20230131043816.4525-1-steev@kali.org>
+ <20230131043816.4525-3-steev@kali.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230131043816.4525-3-steev@kali.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 1:18 AM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Mon, 30 Jan 2023 21:49:25 +0100 andrey.konovalov@linux.dev wrote:
->
-> > In commit 305e519ce48e ("lib/stackdepot.c: fix global out-of-bounds in
-> > stack_slabs"), init_stack_slab was changed to only use preallocated
-> > memory for the next slab if the slab number limit is not reached.
-> > However, setting next_slab_inited was not moved together with updating
-> > stack_slabs.
-> >
-> > Set next_slab_inited only if the preallocated memory was used for the
-> > next slab.
->
-> Please provide a full description of the user-visible runtime effects
-> of the bug (always always).
->
-> I'll add the cc:stable (per your comments in the [0/N] cover letter),
-> but it's more reliable to add it to the changelog yourself.
+On 31/01/2023 05:38, Steev Klimaszewski wrote:
+> Added regulators,GPIOs and changes required to power on/off wcn6855.
+> Added support for firmware download for wcn6855.
+> 
+> This is based on commit d8f97da1b92d ("Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6750")
 
-Right, will do this next time.
+Drop. If that commit is merged, how is it useful to keep it in git
+history forever?
 
-> As to when I upstream this: don't know - that depends on the
-> user-visible-effects thing.
+Dependencies go to the cover letter or under ---.
 
-Looks like there's no bug to fix after all as per comments by Alexander.
 
-Thanks!
+Best regards,
+Krzysztof
+
