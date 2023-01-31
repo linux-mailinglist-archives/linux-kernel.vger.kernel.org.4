@@ -2,252 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EA66839B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEC76839B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjAaWyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:54:36 -0500
+        id S232087AbjAaWyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:54:37 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjAaWye (ORCPT
+        with ESMTP id S231530AbjAaWyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:54:34 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBDA3C30
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:54:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675205672; x=1706741672;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TlDpM4JxpT631r62xY5llqyLQDbSYM3Crt0zBN/mQ40=;
-  b=RH2liA2crO7t8qyV25rpwqEx3Y3EKFynoV0lE8umv/GHg6wzx9pscuLE
-   jytnqiynnu9bNmEwpR1/ikTYO/rrCgQESBif/5dQuLM/jIDRXvtYUL9vX
-   PhppnP/MR7siuQYAcieqVwPwTm7exOz66ZXW1tJ48rXAzqP4eyei33R4S
-   DddfZiT4AMY+Xfc7uc4YNzlxZfhlCq4J3du2VtD7Tz+MY4aNrmKSIW8Ay
-   L7oHNJVqn3tA9jU0SexJTi6qP+PbRvx1xE5YY7ycljpckDW5mqIW62tq6
-   yqKZxfZeFDc5nsKy596hcRwMPCRGXwwtR0+S/otv/IDkYe8L34q009xpE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="392537108"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="392537108"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 14:54:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="697001679"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="697001679"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jan 2023 14:54:29 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMzWG-0004mA-1f;
-        Tue, 31 Jan 2023 22:54:28 +0000
-Date:   Wed, 1 Feb 2023 06:54:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com
-Cc:     oe-kbuild-all@lists.linux.dev, kevin-lu@ti.com,
-        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Shenghao Ding <13916275206@139.com>
-Subject: Re: [PATCH v2] ASoC: tas2781: Add tas2781 driver.
-Message-ID: <202302010621.HbhoRa8c-lkp@intel.com>
-References: <20230131131701.7097-1-13916275206@139.com>
+        Tue, 31 Jan 2023 17:54:35 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F93A410AE;
+        Tue, 31 Jan 2023 14:54:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P60jf5xWXz4x1d;
+        Wed,  1 Feb 2023 09:54:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675205671;
+        bh=5V/LAnN0pFO5vCbZcZP47Qcu2W8IXRG/+P4wvCiMzaU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=km+hFuoPZO4BafXVBgVWf1orrIGbH8OSID482RcMFICF+B5Lo+LmRrVqFh+P7i+c+
+         aKZUQ2xEUd3AwV+zCi4GuAgYq610xXPq3SeZIEme2/SP9AgY9x46MCfdlK8rZgElTL
+         R/rWjDaXzATE9BO0Ny9/YaYAN45WxD5HiF8JzTXY7Bv6nR8/w+iPnQrYpg3RRaW4TG
+         O1YDRoZ6MZT4GGD/HeYF7tjlGJJ1wH+uwMZ/Pfpn98E5oyptGSuYbpLJ4P8j3Q0d2f
+         S9HaNELWIc36jpPF6auJP1y86LwFAKGeahQRU4b9+SBi/OWwBXi3+KSih0Lp/2l5sd
+         +bl+/uta5X22w==
+Date:   Wed, 1 Feb 2023 09:54:29 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        SeongJae Park <sj@kernel.org>
+Subject: linux-next: manual merge of the jc_docs tree with the hwmon-staging
+ tree
+Message-ID: <20230201095429.3aa29df0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131131701.7097-1-13916275206@139.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/CJ67WxMix1V5wb8YcYKRhI0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shenghao,
+--Sig_/CJ67WxMix1V5wb8YcYKRhI0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch! Perhaps something to improve:
+Hi all,
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on linus/master v6.2-rc6 next-20230131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Today's linux-next merge of the jc_docs tree got a conflict in:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230131-212221
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230131131701.7097-1-13916275206%40139.com
-patch subject: [PATCH v2] ASoC: tas2781: Add tas2781 driver.
-config: m68k-randconfig-m031-20230129 (https://download.01.org/0day-ci/archive/20230201/202302010621.HbhoRa8c-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
+  Documentation/hwmon/index.rst
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+between commit:
 
-New smatch warnings:
-sound/soc/codecs/tas2781-i2c.c:220 tasdevice_process_block() warn: inconsistent indenting
-sound/soc/codecs/tas2781-i2c.c:471 tas2781_digital_putvol() warn: unsigned 'val' is never less than zero.
-sound/soc/codecs/tas2781-i2c.c:544 tas2781_amp_putvol() warn: unsigned 'val' is never less than zero.
-sound/soc/codecs/tas2781-i2c.c:841 tasdevice_rca_ready() error: we previously assumed 'tas_dev' could be null (see line 840)
-sound/soc/codecs/tas2781-i2c.c:1095 tasdevice_dapm_event() error: uninitialized symbol 'pwr_state'.
-sound/soc/codecs/tas2781-i2c.c:1818 tasdevice_pm_suspend() error: we previously assumed 'tas_dev' could be null (see line 1817)
-sound/soc/codecs/tas2781-dsp.c:1670 tasdevice_load_block() warn: inconsistent indenting
-sound/soc/codecs/tas2781-dsp.c:732 tas2781_clear_calfirmware() warn: inconsistent indenting
-sound/soc/codecs/tas2781-dsp.c:2038 tasdevice_dsp_remove() warn: inconsistent indenting
+  62485d4ae451 ("Docs/hwmon/index: Add missing SPDX License Identifier")
 
-Old smatch warnings:
-sound/soc/codecs/tas2781-dsp.c:1688 tasdevice_load_block() warn: inconsistent indenting
-sound/soc/codecs/tas2781-dsp.c:2042 tasdevice_dsp_remove() warn: inconsistent indenting
-sound/soc/codecs/tas2781-dsp.c:2069 tasdevice_dsp_remove() warn: inconsistent indenting
-sound/soc/codecs/tas2781-dsp.c:2073 tasdevice_dsp_remove() warn: inconsistent indenting
+from the hwmon-staging tree and commit:
 
-vim +220 sound/soc/codecs/tas2781-i2c.c
+  941c95fdd61f ("Docs/subsystem-apis: Remove '[The ]Linux' prefixes from ti=
+tles of listed documents")
 
-    94	
-    95	int tasdevice_process_block(void *context,
-    96		unsigned char *data, unsigned char dev_idx, int sublocksize)
-    97	{
-    98		struct tasdevice_priv *tas_dev =
-    99			(struct tasdevice_priv *)context;
-   100		unsigned char subblk_typ = data[1];
-   101		int subblk_offset = 2;
-   102		int chn = 0, chnend = 0;
-   103		int rc = 0;
-   104		int blktyp = dev_idx & 0xC0, idx = dev_idx & 0x3F;
-   105		bool is_err = false;
-   106	
-   107		if (idx) {
-   108			chn = idx-1;
-   109			chnend = idx;
-   110		} else {
-   111			if (tas_dev->set_global_mode) {
-   112				chn = tas_dev->ndev;
-   113				chnend = tas_dev->ndev + 1;
-   114			} else {
-   115				chn = 0;
-   116				chnend = tas_dev->ndev;
-   117			}
-   118		}
-   119	
-   120		for (; chn < chnend; chn++) {
-   121			if (tas_dev->set_global_mode == NULL &&
-   122				tas_dev->tasdevice[chn].is_loading == false)
-   123				continue;
-   124	
-   125			is_err = false;
-   126			subblk_offset = 2;
-   127			switch (subblk_typ) {
-   128			case TASDEVICE_CMD_SING_W: {
-   129				int i = 0;
-   130				unsigned short len = SMS_HTONS(data[2], data[3]);
-   131	
-   132				subblk_offset  += 2;
-   133				if (subblk_offset + 4 * len > sublocksize) {
-   134					dev_err(tas_dev->dev,
-   135						"process_block: Out of memory\n");
-   136					is_err = true;
-   137					break;
-   138				}
-   139	
-   140				for (i = 0; i < len; i++) {
-   141					rc = tasdevice_dev_write(tas_dev, chn,
-   142						TASDEVICE_REG(data[subblk_offset],
-   143							data[subblk_offset + 1],
-   144							data[subblk_offset + 2]),
-   145						data[subblk_offset + 3]);
-   146					if (rc < 0) {
-   147						is_err = true;
-   148						dev_err(tas_dev->dev,
-   149						"process_block: single write error\n");
-   150					}
-   151					subblk_offset  += 4;
-   152				}
-   153			}
-   154				break;
-   155			case TASDEVICE_CMD_BURST: {
-   156				unsigned short len = SMS_HTONS(data[2], data[3]);
-   157	
-   158				subblk_offset  += 2;
-   159				if (subblk_offset + 4 + len > sublocksize) {
-   160					dev_err(tas_dev->dev,
-   161					"process_block: BURST Out of memory\n");
-   162					is_err = true;
-   163					break;
-   164				}
-   165				if (len % 4) {
-   166					dev_err(tas_dev->dev,
-   167						"%s: Burst len(%u) can be div by 4\n",
-   168						__func__, len);
-   169					break;
-   170				}
-   171	
-   172				rc = tasdevice_dev_bulk_write(tas_dev, chn,
-   173					TASDEVICE_REG(data[subblk_offset],
-   174						data[subblk_offset + 1],
-   175						data[subblk_offset + 2]),
-   176						&(data[subblk_offset + 4]), len);
-   177				if (rc < 0) {
-   178					is_err = true;
-   179					dev_err(tas_dev->dev,
-   180						"%s: bulk_write error = %d\n",
-   181						__func__, rc);
-   182				}
-   183				subblk_offset  += (len + 4);
-   184			}
-   185				break;
-   186			case TASDEVICE_CMD_DELAY: {
-   187				unsigned short delay_time = 0;
-   188	
-   189				if (subblk_offset + 2 > sublocksize) {
-   190					dev_err(tas_dev->dev,
-   191						"%s: deley Out of memory\n",
-   192						__func__);
-   193					is_err = true;
-   194					break;
-   195				}
-   196				delay_time = SMS_HTONS(data[2], data[3]);
-   197				usleep_range(delay_time*1000, delay_time*1000);
-   198				subblk_offset  += 2;
-   199			}
-   200				break;
-   201			case TASDEVICE_CMD_FIELD_W:
-   202			if (subblk_offset + 6 > sublocksize) {
-   203				dev_err(tas_dev->dev,
-   204					"process_block: bit write Out of memory\n");
-   205				is_err = true;
-   206				break;
-   207			}
-   208			rc = tasdevice_dev_update_bits(tas_dev, chn,
-   209				TASDEVICE_REG(data[subblk_offset + 2],
-   210					data[subblk_offset + 3],
-   211					data[subblk_offset + 4]),
-   212					data[subblk_offset + 1],
-   213					data[subblk_offset + 5]);
-   214			if (rc < 0) {
-   215				is_err = true;
-   216				dev_err(tas_dev->dev,
-   217					"process_block: update_bits error = %d\n", rc);
-   218			}
-   219			subblk_offset  += 6;
- > 220				break;
-   221			default:
-   222				break;
-   223			};
-   224			if (is_err == true && blktyp != 0) {
-   225				if (blktyp == 0x80) {
-   226					tas_dev->tasdevice[chn].cur_prog = -1;
-   227					tas_dev->tasdevice[chn].cur_conf = -1;
-   228				} else
-   229					tas_dev->tasdevice[chn].cur_conf = -1;
-   230			}
-   231		}
-   232		return subblk_offset;
-   233	}
-   234	
+from the jc_docs tree.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/hwmon/index.rst
+index 96ce91b7d9a8,c2b3c1a822dd..000000000000
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@@ -1,8 -1,6 +1,8 @@@
+ +.. SPDX-License-Identifier: GPL-2.0
+ +
+- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+- Linux Hardware Monitoring
+- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++ Hardware Monitoring
++ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ =20
+  .. toctree::
+     :maxdepth: 1
+
+--Sig_/CJ67WxMix1V5wb8YcYKRhI0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPZnCUACgkQAVBC80lX
+0GzEiwf/SpwV265hCKrMUuF5PhyqXeGUjz0o/CxUwgik7kCBXXh8tlmy40t9MumK
+7F7PXG6r3WWzuWfO8iacPEynAOJLbwaXjKuAMDRnYnQQ6SyfqNn3Nn3hlAfnIlBw
+Cg7NGoSiuf0Pq52o/NZlF+smBrP3W9pOlU2it/+ZgvkBM4xIm/uDwQTbjvkS6JVq
+mw9RojPnuI1lvrZiZ0JvkMRJUXy1EAj7HQWvdTmZyUaKIMlrXyDUQmwcE/9DnfPN
+9woS1L8mSOsjC7MEOeS0RyHzUw/0/+eNJGcHzcRFMiqiCjyPf5q2+jYvhBj80bm3
+viHdjNWrdat32I5XYPpekiaiKlwSQw==
+=gMhQ
+-----END PGP SIGNATURE-----
+
+--Sig_/CJ67WxMix1V5wb8YcYKRhI0--
