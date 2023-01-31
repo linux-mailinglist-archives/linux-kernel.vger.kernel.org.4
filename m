@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8CF683854
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F36CF683856
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbjAaVHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
+        id S232016AbjAaVIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:08:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbjAaVHw (ORCPT
+        with ESMTP id S231817AbjAaVIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:07:52 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3701B472
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:07:51 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id g68so10985124pgc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:07:51 -0800 (PST)
+        Tue, 31 Jan 2023 16:08:34 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B924EF1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:08:32 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id e15so19802281ybn.10
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:08:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Up7/zvDdjUz1Pcl1Rjcqj9BQdupVezuRTStHZScQfAA=;
-        b=rmIT1jIZRk8hQ3tu2ptW5zSnxr4aPhAb2XBN08+YjY4NUbUv3Z1DD9vzsx6igrkfZg
-         O32HcLg9Ef5Jh+Z1NNAFpQNQoM4LLvzKKNU4IjP6yXro8bGPMDPzJ7FZJUbRsyVeuOGY
-         Y4xY91h9yfK21L8nAepgJQdsmTJPYlmSxScUBiMdS9Rq6V4xHqrjqY2bFjW2Vl8JJrl8
-         6bQx8ncWgz9qJ6I/8/Q1Ld8+QYA2cM/8SUU+RvlTb7EfuYGlg88Vx/ApgiPzcxA+AwxS
-         6GwKoonBNGseVBx9qyJnQuODj2hr5AKOI3SXcGdm4i9tvzGRacKKKVdz+C1WWrtCGsHY
-         dwMQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bDq7d/n4hRdxw/uuHY1zsy7WUcXmIawJLMPKVEj5Oqk=;
+        b=U/HrMYPECFRkq9PkPWwApR3OeNslyly/bOGovMVkhgn5x/4H3rBa+5Q1e8lajkmDFg
+         hdXiowPRj5EJYmQVq9v0e3GI9JRDz5DDKyxwYMJnQQUDMLSyXobCMDk8u5db/owOJJ5L
+         GAAyUx478W7Dj8GmbfulidXOwwUIp82QUFfTe8W4/EE7jRoOVHESeFqMZbWCROEzxlFp
+         XbZxSml7D6XvIfI3uiwDZBOWarlwFsYgBHo7/hJ9rwt2ieOpQlFlDGL8xtXyb8xPzMAL
+         BNBZNshG24V4cs4Sz8MVzFEx3BFPEwCUj7E3bhs6Ek5WwtzRyXCLhX5E2tjmXkI8dGzU
+         Dzbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Up7/zvDdjUz1Pcl1Rjcqj9BQdupVezuRTStHZScQfAA=;
-        b=AfvykgEeG+z+veoKoevWNpRtlW7KQtLcVv6uy+uNtEg3FTqe+JACe57YyyLLrd9Wya
-         lmiMDUF+UOFgrxVSqgrJJ7Wn0nEIjEE2Arasx0PwoJTs+nkfcffR4Q2TAqnjpY4fwat1
-         3rJNZEEx/U19kqEDgeJH7UBCIrhfMfq26hExXR2+UtloK566tl/AE+YYaPZUODHYlX8w
-         hkVYE/pyHjp3AVDYARPGmS+V63AGNkT2ScKxvrezRhPoITVJPU6NTih1ZWNkDQahC79m
-         8H6aoVDjit9UetzdZNDMFrjHNcP1ZEES0BdIGePZyp31PN8G09oweX8YVZE1vZS2KIqx
-         vf7A==
-X-Gm-Message-State: AO0yUKWAZgduN3NxgTO7Y33EFcQ68bgQHlcoN15UorwDqskwXPNbzjzY
-        0U3g5+YibO/HCXtRHCYk1+wLwQ==
-X-Google-Smtp-Source: AK7set/UeC8+PrNBMRcAicmB2v06KLiBgEVfW/rBqKSq3VcmoSyU+lmwsGCajCVhHYyfaE1vyJWfFA==
-X-Received: by 2002:a05:6a00:784:b0:576:9252:d06 with SMTP id g4-20020a056a00078400b0057692520d06mr127327pfu.0.1675199270958;
-        Tue, 31 Jan 2023 13:07:50 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 144-20020a621996000000b0058bcb42dd1asm9920762pfz.111.2023.01.31.13.07.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 13:07:50 -0800 (PST)
-Date:   Tue, 31 Jan 2023 21:07:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Santosh Shukla <santosh.shukla@amd.com>, kvm@vger.kernel.org,
-        Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 06/11] KVM: SVM: add wrappers to enable/disable IRET
- interception
-Message-ID: <Y9mDInNl65hjVblm@google.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
- <20221129193717.513824-7-mlevitsk@redhat.com>
- <41abb37b-c74a-f2cf-c0ce-74d5d6487e92@amd.com>
- <181f437164296e19683f086c11bf64c11a3f380e.camel@redhat.com>
- <70078abb-f8b7-cd33-5bdd-bc6ee44c0bd3@amd.com>
- <06d12050eece922e786b7bee1254698466c6d3d4.camel@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bDq7d/n4hRdxw/uuHY1zsy7WUcXmIawJLMPKVEj5Oqk=;
+        b=NzqE1TI9XiwWzyieQOCVkx1VF5qjKAntm3Qcaw/7w9RpfqF7jkZsKZ1T3rmNSqWWDP
+         VVtRbzOVJKMVoznRpuMuqFZX5qHq2qiSeMLRrbAMIbNkFqmtZccS4yZd6b4rnayBe/gW
+         JmLaomQ2S+Tk0RZJ97NQEzXKaFyINYEkPoKTnxuBZ/hr4sQ1iPlJ36i/WBUoMkggi44+
+         G177IvmuNpOZhdNgSysRyqlNOv6DniHqkGnj840SC/I3VXmffftVQQjoZq3Ke3fbklKD
+         cN5IhCxOcu+w+Kl+q/9qP/zUAVJ9FeTcN/uFCMD/Ox1cHJQeLMlSm8xMDXqTqbEjXLRp
+         emtw==
+X-Gm-Message-State: AO0yUKX4nEZyffcikv5j/Z2OhT2QOHTA8+by/PCBUPLWXx2W77symKPh
+        0ZCbGYIYXWg2UKN1qLrCgilDyyv9CrYywmHCv14duw==
+X-Google-Smtp-Source: AK7set8TN+vhTCk6n+wEoQB3UO9IaaO8ylUfxNJA77IxdpDEU7vhpknIio3f4DVrz3qNcZAJLnR7+kYgR98f6snoq4A=
+X-Received: by 2002:a25:a088:0:b0:80b:6fd3:84d3 with SMTP id
+ y8-20020a25a088000000b0080b6fd384d3mr46494ybh.316.1675199311005; Tue, 31 Jan
+ 2023 13:08:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06d12050eece922e786b7bee1254698466c6d3d4.camel@redhat.com>
+References: <20230126193752.297968-1-surenb@google.com> <20230126193752.297968-5-surenb@google.com>
+ <Y9jSFFeHYZE1/yFg@hyeyoo> <CAJuCfpEzaVkgQt=C-33jAh1vLVJAjoyM8X5AD9CzyDUJnPDCkw@mail.gmail.com>
+ <20230131125355.f07f42af56b23bfa28b2a58c@linux-foundation.org>
+In-Reply-To: <20230131125355.f07f42af56b23bfa28b2a58c@linux-foundation.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 31 Jan 2023 13:08:19 -0800
+Message-ID: <CAJuCfpHmtkzrKx45SQQ0gXLoybtgHxHmTP5J4L74ChTqSfFA-g@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] mm: replace vma->vm_flags direct modifications
+ with modifier calls
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,49 +88,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022, Maxim Levitsky wrote:
-> On Thu, 2022-12-08 at 17:39 +0530, Santosh Shukla wrote:
-> > 
-> > On 12/6/2022 5:44 PM, Maxim Levitsky wrote:
-> > > > > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> > > > > index 512b2aa21137e2..cfed6ab29c839a 100644
-> > > > > --- a/arch/x86/kvm/svm/svm.c
-> > > > > +++ b/arch/x86/kvm/svm/svm.c
-> > > > > @@ -2468,16 +2468,29 @@ static int task_switch_interception(struct kvm_vcpu *vcpu)
-> > > > >  			       has_error_code, error_code);
-> > > > >  }
-> > > > >  
-> > > > > +static void svm_disable_iret_interception(struct vcpu_svm *svm)
-> > > > > +{
-> > > > > +	if (!sev_es_guest(svm->vcpu.kvm))
-> > > > > +		svm_clr_intercept(svm, INTERCEPT_IRET);
-> > > > > +}
-> > > > > +
-> > > > > +static void svm_enable_iret_interception(struct vcpu_svm *svm)
-> > > > > +{
-> > > > > +	if (!sev_es_guest(svm->vcpu.kvm))
-> > > > > +		svm_set_intercept(svm, INTERCEPT_IRET);
-> > > > > +}
-> > > > > +
-> > > > 
-> > > > nits:
-> > > > s/_iret_interception / _iret_intercept
-> > > > does that make sense?
-> > > 
-> > > Makes sense.
+On Tue, Jan 31, 2023 at 12:54 PM Andrew Morton
+<akpm@linux-foundation.org> wrote:
+>
+> On Tue, 31 Jan 2023 10:54:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> > > > -             vma->vm_flags &= ~VM_MAYWRITE;
+> > > > +             vm_flags_clear(vma, VM_MAYSHARE);
+> > > >       }
+> > >
+> > > I think it should be:
+> > >         s/VM_MAYSHARE/VM_MAYWRITE/
+> >
+>
+> I added the fixup.  Much better than resending a seven patch series for a
+> single line change.  Unless you have substantial other changes pending.
 
-I would rather go with svm_{clr,set}_iret_intercept().  I don't particularly like
-the SVM naming scheme, but I really dislike inconsistent naming.  If we want to
-clean up naming, I would love unify VMX and SVM nomenclature for things like this.
+Thanks! That sounds reasonable.
 
-> > >  I can also move this to svm.h near the svm_set_intercept(), I think
-> > > it better a better place for this function there if no objections.
-> > > 
-> > I think current approach is fine since function used in svm.c only. but I have
-> > no strong opinion on moving to svm.h either ways.
-> 
-> I also think so, just noticed something in case there are any objections.
+I'll also need to introduce vm_flags_reset_once() to use in
+replacement of WRITE_ONCE(vma->vm_flags, newflags) case. Should I send
+a separate short patch for that?
 
-My vote is to keep it in svm.c unless we anticipate usage outside of svm.h.  Keeping
-the implementation close to the usage makes it easer to understand what's going on,
-especially for something like this where there's a bit of "hidden" logic for SEV-ES.
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
