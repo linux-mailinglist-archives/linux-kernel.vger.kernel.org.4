@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267F3682311
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:57:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A185B682314
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjAaD5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:57:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S230026AbjAaD6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjAaD5B (ORCPT
+        with ESMTP id S229871AbjAaD6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:57:01 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC25232521;
-        Mon, 30 Jan 2023 19:57:00 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 30 Jan 2023 22:58:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B3F222F0;
+        Mon, 30 Jan 2023 19:58:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5WT351bbz4x1h;
-        Tue, 31 Jan 2023 14:56:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675137416;
-        bh=0ULXQQPxQt5dD1YSuQCXxacGANsv4+XOFGF6aRjY5H0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OwEdBaAZb5GKHBwxatk6TNBOZtxNBtpY9C9yS816s6IktOPSzkql0bkPYN2DdOo/i
-         p9V9z/IM3y29HYAwDW9zI4IyGR2ymHGo0NOrkM267WsewFd0oZh/4oGM9gpLtpj111
-         Y9EcUD246sFGT3C7m8niwkyc94rLvbNi5d4WK46BJ9m/8YR8TW7DW7a1XKiKDUWfN/
-         2g+dnOjrUUsN2Fep2aPJG6qmy1W8Rv2giaZbRKc2k0783ognR8z0c2bLV9xmrInmbi
-         /ly4UXJ+8+Cp13LikK4LrDn+87/Xc44TgMbi64N8HgGxlRPKiImD4sfoxAtfLpz36I
-         SbhlVvhiu6cMQ==
-Date:   Tue, 31 Jan 2023 14:56:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the mm tree
-Message-ID: <20230131145654.768c6149@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34D4061388;
+        Tue, 31 Jan 2023 03:58:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D588C433EF;
+        Tue, 31 Jan 2023 03:58:08 +0000 (UTC)
+Date:   Mon, 30 Jan 2023 22:58:07 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5] trace: acquire buffer from temparary trace sequence
+Message-ID: <20230130225807.54446779@gandalf.local.home>
+In-Reply-To: <5f37bdef-5447-8def-7bb0-a498879abc4c@quicinc.com>
+References: <1675065249-23368-1-git-send-email-quic_linyyuan@quicinc.com>
+        <28cd9aca-1945-ceed-2756-162132d576ef@quicinc.com>
+        <20230130143041.713c4c7b@gandalf.local.home>
+        <e2735a3a-4a9b-8b3a-0671-b3f56187cbe2@quicinc.com>
+        <20230130213735.72cdcee4@gandalf.local.home>
+        <5f37bdef-5447-8def-7bb0-a498879abc4c@quicinc.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gG7OXgly3Ex4=D/K4f0bWgz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,43 +50,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/gG7OXgly3Ex4=D/K4f0bWgz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 31 Jan 2023 10:49:37 +0800
+Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
 
-Hi all,
+> > A lot of systems that worry about hackers enable "panic_on_warn" which
+> > means that if the WARN_ON() triggers, the machine will crash, which will at
+> > most cause a DOS, but not something people can use to hack into the machine
+> > with.  
+> 
+> 
+> thanks, please help review the change.
 
-The following commit is also in the ext3 tree as a different commit
-(but the same patch):
-
-  05a4851d2729 ("fs: gracefully handle ->get_block not mapping bh in __mpag=
-e_writepage")
-
-This is commit
-
-  7010839ccfd4 ("fs: gracefully handle ->get_block not mapping bh in __mpag=
-e_writepage")
-
-in the ext3 tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gG7OXgly3Ex4=D/K4f0bWgz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYkYcACgkQAVBC80lX
-0GyGjQf/QM1Xy8wzoDxi/axUGqJL+cAshfn9Qte/PjkmhkXXp1267kLyYkMiQWhM
-n5izzawz258LteZfywd+204KGhe8NVGXpnh6AIiN5eS9s3kWBM5LGWe5/itHMIah
-T7SCz4sdDzRuGE71BfcjRoDSm3BuXrD2g0XfdskORqaUXxsZyaz9Rmxlm90JOPEt
-H7itojZ3C8gD+1lvIj1lAoZGkJpeQyIeksqELsjFhaxLSlSHsG6ykEEf9GHTP/1l
-ApBNsgThGUkloFVj59IO/UNPeQLJeQlu3AtY9u+9bcUJJxk4Z3LG3gMHLEhGmDNl
-o+PdJehNoO4fgkAytOOGqXi1kt1p8w==
-=WsHP
------END PGP SIGNATURE-----
-
---Sig_/gG7OXgly3Ex4=D/K4f0bWgz--
+I'm fine with it. I can pull this into my tree (after it goes through all
+my testing with the other patches in queue).
