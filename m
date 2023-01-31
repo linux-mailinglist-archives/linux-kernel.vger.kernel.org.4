@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D69F683955
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6E868395A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjAaW2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S231552AbjAaW31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbjAaW2o (ORCPT
+        with ESMTP id S229962AbjAaW3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:28:44 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748851ABF8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:28:43 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so115340pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:28:43 -0800 (PST)
+        Tue, 31 Jan 2023 17:29:25 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8D31CF73
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:29:24 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id c124so20021511ybb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:29:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N7s5g/njGNZsKUP9bAQb4HSON8Z3dq/K+SA0pUZricQ=;
-        b=mAH8PQYsCu2WsusNle75fK+ImCQJbe6PwHrn65rGsY9u3wY4P+r30oPg17wcax6EkL
-         s6aE6kRtwrHxa6unsjnMzjC3+1K8KRceFqsU5+SdlxsogaGfY9Dgjj3Vda+g3Tlc7fng
-         GsXsVfGYls49N1tixbqDfqfCSrzj1qYfLhGgUgIw+qQlWxjSEY6B7QdnIkhSowDpV3Lt
-         MmU1CbAeZGdqQRoUZd6270KsC1SzXkrcSi3ptXwhq72nFuV4gQiQavLJVK8/ykhNXGeH
-         OtGyHbrq5z728kqlr8usdqSOHnKoaDQKxdwIaqWG0rcINo2qFA3WRZhFwBxNpeDbw1FV
-         fOgA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zeRarg6CqXMEX8rLftL5bCcpMW/NHnhU9LHLUUmOD0U=;
+        b=gBXFgUNPHp3apwCjs098LhxtEdcLfrKpSRz1EDvEhiVP7XyiRn8CziBjpO9abvkoGd
+         sJ0mKqwK39pY6Ui/D2BqBcWhGdC5o3xDnFL+yq4seXwW32rw3Uaz/r5uoOHGveb1U7zI
+         //RD+171zjH7SHww5egifnPZ0h8VGrbAptEElNF34N+ZeXERk5DJ63C+2P6Wrlby9aWI
+         ZiYVyMynkcl5YZ1Ps7mJy+RcqUgGLqnxr/vfE7MEBcngrtg3F6OfLkxSku9j8WdPSD8j
+         6lIWm2+x+wqM9b3823Ksq7KZCFx6vflqkJUOTNCjA8mVdhu37w82DgsZoXkS9H9of0U4
+         s19w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N7s5g/njGNZsKUP9bAQb4HSON8Z3dq/K+SA0pUZricQ=;
-        b=1iA1sooyPZJy+/2SoQJDhkXi4vW9t6oNSzrOkgLylxzEgzhEY4uSxNeEcziWb4VjZo
-         jwaccXinRoeU+xmpD0BmrlfY66Swxsn/t5J182DY3dI6dbIedetT6Ucup9hg1lYejvP3
-         GhficA7jSFxj3wG0GdmsFMPy61R6J7/adTxrHWjJ+/8sCLK5MRLlYmdKflKsvSADvWPO
-         Jh5HFdJbFgMr7Vo1ARwlqoPgpxWNnRP/tNnwXP3W4wl5ZcNbrZPkIohu0y0z1KADJUWe
-         oEnI1JFA2JaTKo63g7B4nH5aTPwT22b85Ul5FqWLmqQfOO1RutA9lUfZE30bOU+RDGT7
-         Awwg==
-X-Gm-Message-State: AO0yUKU2H6gI7ZK+3GLaoz4B5p6PoE6VChEcNiw7rkYyjlbfOlzsGv/g
-        ynZcF28E+SViJxd3e4CipjGcHg==
-X-Google-Smtp-Source: AK7set9P4eybO7vgLjy2Ta8j4KN+vUkU4sgnPdrhY+RoILUDe983URuNAhrj8GrLzIh3DwbaSI8oRg==
-X-Received: by 2002:a05:6a20:a69d:b0:9d:c38f:9bdd with SMTP id ba29-20020a056a20a69d00b0009dc38f9bddmr174533pzb.2.1675204122667;
-        Tue, 31 Jan 2023 14:28:42 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id o9-20020a1709026b0900b00180033438a0sm10215571plk.106.2023.01.31.14.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 14:28:42 -0800 (PST)
-Date:   Tue, 31 Jan 2023 22:28:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v2 07/11] KVM: x86: add a delayed hardware NMI injection
- interface
-Message-ID: <Y9mWFlGdzoa8ZDW7@google.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
- <20221129193717.513824-8-mlevitsk@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zeRarg6CqXMEX8rLftL5bCcpMW/NHnhU9LHLUUmOD0U=;
+        b=jelVCI5RiWQP0g5muU6EJgp8S/Z4IQiRSNokLxFn/8NKNqdvQrawRJkqSscMFmgNii
+         F+R27JCnDolqxxSNmoqSXCAor2VqKLUAle1bYAqhhQSpT9hie5w/YxXUBeswhfscV8eD
+         UsHQ1Be0Uwyvv1nDnd3mjoV0DnuAaNH1gf/urkitnIGZJT/2nVuliK3wa6y3feACED8z
+         +IsAICXQSuC4Pub8EUTsqhLMVa6rm+uyH/5Wtu4o4QBG/2J3EC5kEb3O1Vee7P2NTIFb
+         aOwp5IShe2t34iV3rElK/jE7YnZI6/JwHA7IuPClHG0dnxooAORQSy3uhKgDbyg/LcSB
+         QkQw==
+X-Gm-Message-State: AO0yUKUUENy0yxkQWdKya3iLf/Nh7mG+GSWdZDfO/68j7jj/FQRU+/uG
+        V36tbs7bFGRCIcVaaNCgWULD+RBy0AIxaMCCifc4+w==
+X-Google-Smtp-Source: AK7set/cWlCmeUTW+A8zJSzg38BetBn2D9i2nnIo50u/JNifuJOrAFuyiJOsRmP5GCPK0vR5sOeaRY4fEyV557sJXuA=
+X-Received: by 2002:a25:908:0:b0:703:e000:287 with SMTP id 8-20020a250908000000b00703e0000287mr83847ybj.171.1675204163710;
+ Tue, 31 Jan 2023 14:29:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221129193717.513824-8-mlevitsk@redhat.com>
+References: <20230131210051.475983-4-andrei.gherzan@canonical.com>
+ <CA+FuTScJCaW+UL0dDDg-7nNdhdZV7Xs5MrfBkGAg-jR4az+DRQ@mail.gmail.com> <Y9mTRER69Z7BGqB5@qwirkle>
+In-Reply-To: <Y9mTRER69Z7BGqB5@qwirkle>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Tue, 31 Jan 2023 17:28:47 -0500
+Message-ID: <CA+FuTSfHtidA9zLZMpo+1AoVh=rN=nWyxfVtsUDuuJHmr9UFUw@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 4/4] selftests: net: udpgso_bench_tx: Cater
+ for pending datagrams zerocopy benchmarking
+To:     Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Fred Klassen <fklassen@appneta.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -88,141 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022, Maxim Levitsky wrote:
-> @@ -5191,9 +5191,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
->  
->  	vcpu->arch.nmi_injected = events->nmi.injected;
->  	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING)
-> -		vcpu->arch.nmi_pending = events->nmi.pending;
-> +		atomic_add(events->nmi.pending, &vcpu->arch.nmi_queued);
-> +
->  	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
->  
-> +	process_nmi(vcpu);
+On Tue, Jan 31, 2023 at 5:16 PM Andrei Gherzan
+<andrei.gherzan@canonical.com> wrote:
+>
+> On 23/01/31 04:51PM, Willem de Bruijn wrote:
+> > On Tue, Jan 31, 2023 at 4:01 PM Andrei Gherzan
+> > <andrei.gherzan@canonical.com> wrote:
+> > >
+> > > The test tool can check that the zerocopy number of completions value is
+> > > valid taking into consideration the number of datagram send calls. This can
+> > > catch the system into a state where the datagrams are still in the system
+> > > (for example in a qdisk, waiting for the network interface to return a
+> > > completion notification, etc).
+> > >
+> > > This change adds a retry logic of computing the number of completions up to
+> > > a configurable (via CLI) timeout (default: 2 seconds).
+> > >
+> > > Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
+> > > Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+> > > Cc: Willem de Bruijn <willemb@google.com>
+> > > Cc: Paolo Abeni <pabeni@redhat.com>
+> > > ---
+> > >  tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
+> > >  1 file changed, 27 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > index b47b5c32039f..ef887842522a 100644
+> > > --- a/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > +++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+> > > @@ -62,6 +62,7 @@ static int    cfg_payload_len = (1472 * 42);
+> > >  static int     cfg_port        = 8000;
+> > >  static int     cfg_runtime_ms  = -1;
+> > >  static bool    cfg_poll;
+> > > +static int     cfg_poll_loop_timeout_ms = 2000;
+> > >  static bool    cfg_segment;
+> > >  static bool    cfg_sendmmsg;
+> > >  static bool    cfg_tcp;
+> > > @@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
+> > >         }
+> > >  }
+> > >
+> > > -static void flush_errqueue(int fd, const bool do_poll)
+> > > +static void flush_errqueue(int fd, const bool do_poll,
+> > > +               unsigned long poll_timeout, const bool poll_err)
+> >
+> > nit: his indentation looks off though
+>
+> This one I've missed but I couldn't find any guidelines on it. Could you
+> clarify to me what this should be or point me to soem docs? Happy to fix
+> otherwise. I'm currently using vim smartindent but it is definitely not
+> in line with what is here already.
 
-Argh, having two process_nmi() calls is ugly (not blaming your code, it's KVM's
-ABI that's ugly).  E.g. if we collapse this down, it becomes:
+It should align with the parameter above.
 
-	process_nmi(vcpu);
-
-	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
-		<blah blah blah>
-	}
-	static_call(kvm_x86_set_nmi_mask)(vcpu, events->nmi.masked);
-
-	process_nmi(vcpu);
-
-And the second mess is that V_NMI needs to be cleared.
-
-The first process_nmi() effectively exists to (a) purge nmi_queued and (b) keep
-nmi_pending if KVM_VCPUEVENT_VALID_NMI_PENDING is not set.  I think we can just
-replace that with an set of nmi_queued, i.e.
-
-	if (events->flags & KVM_VCPUEVENT_VALID_NMI_PENDING) {
-		vcpu->arch-nmi_pending = 0;	
-		atomic_set(&vcpu->arch.nmi_queued, events->nmi.pending);
-		process_nmi();
-	}
-
-because if nmi_queued is non-zero in the !KVM_VCPUEVENT_VALID_NMI_PENDING, then
-there should already be a pending KVM_REQ_NMI.  Alternatively, replace process_nmi()
-with a KVM_REQ_NMI request (that probably has my vote?).
-
-If that works, can you do that in a separate patch?  Then this patch can tack on
-a call to clear V_NMI.
-
->  	if (events->flags & KVM_VCPUEVENT_VALID_SIPI_VECTOR &&
->  	    lapic_in_kernel(vcpu))
->  		vcpu->arch.apic->sipi_vector = events->sipi_vector;
-> @@ -10008,6 +10011,10 @@ static int kvm_check_and_inject_events(struct kvm_vcpu *vcpu,
->  static void process_nmi(struct kvm_vcpu *vcpu)
->  {
->  	unsigned limit = 2;
-> +	int nmi_to_queue = atomic_xchg(&vcpu->arch.nmi_queued, 0);
-> +
-> +	if (!nmi_to_queue)
-> +		return;
->  
->  	/*
->  	 * x86 is limited to one NMI running, and one NMI pending after it.
-> @@ -10015,13 +10022,34 @@ static void process_nmi(struct kvm_vcpu *vcpu)
->  	 * Otherwise, allow two (and we'll inject the first one immediately).
->  	 */
->  	if (static_call(kvm_x86_get_nmi_mask)(vcpu) || vcpu->arch.nmi_injected)
-> -		limit = 1;
-> +		limit--;
-> +
-> +	/* Also if there is already a NMI hardware queued to be injected,
-> +	 * decrease the limit again
-> +	 */
-> +	if (static_call(kvm_x86_get_hw_nmi_pending)(vcpu))
-> +		limit--;
-
-I don't think this is correct.  If a vNMI is pending and NMIs are blocked, then
-limit will end up '0' and KVM will fail to pend the additional NMI in software.
-After much fiddling, and factoring in the above, how about this?
-
-	unsigned limit = 2;
-
-	/*
-	 * x86 is limited to one NMI running, and one NMI pending after it.
-	 * If an NMI is already in progress, limit further NMIs to just one.
-	 * Otherwise, allow two (and we'll inject the first one immediately).
-	 */
-	if (vcpu->arch.nmi_injected) {
-		/* vNMI counts as the "one pending NMI". */
-		if (static_call(kvm_x86_is_vnmi_pending)(vcpu))
-			limit = 0;
-		else
-			limit = 1;
-	} else if (static_call(kvm_x86_get_nmi_mask)(vcpu) ||
-		   static_call(kvm_x86_is_vnmi_pending)(vcpu)) {
-		limit = 1;
-	}
-
-	vcpu->arch.nmi_pending += atomic_xchg(&vcpu->arch.nmi_queued, 0);
-	vcpu->arch.nmi_pending = min(vcpu->arch.nmi_pending, limit);
-
-	if (vcpu->arch.nmi_pending &&
-	    static_call(kvm_x86_set_vnmi_pending(vcpu)))
-		vcpu->arch.nmi_pending--;
-
-	if (vcpu->arch.nmi_pending)
-		kvm_make_request(KVM_REQ_EVENT, vcpu);
-
-With the KVM_REQ_EVENT change in a separate prep patch:
-
---
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 31 Jan 2023 13:33:02 -0800
-Subject: [PATCH] KVM: x86: Raise an event request when processing NMIs iff an
- NMI is pending
-
-Don't raise KVM_REQ_EVENT if no NMIs are pending at the end of
-process_nmi().  Finishing process_nmi() without a pending NMI will become
-much more likely when KVM gains support for AMD's vNMI, which allows
-pending vNMIs in hardware, i.e. doesn't require explicit injection.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 508074e47bc0..030136b6ebbd 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10134,7 +10134,9 @@ static void process_nmi(struct kvm_vcpu *vcpu)
- 
- 	vcpu->arch.nmi_pending += atomic_xchg(&vcpu->arch.nmi_queued, 0);
- 	vcpu->arch.nmi_pending = min(vcpu->arch.nmi_pending, limit);
--	kvm_make_request(KVM_REQ_EVENT, vcpu);
-+
-+	if (vcpu->arch.nmi_pending)
-+		kvm_make_request(KVM_REQ_EVENT, vcpu);
- }
- 
- void kvm_make_scan_ioapic_request_mask(struct kvm *kvm,
-
-base-commit: 916b54a7688b0b9a1c48c708b848e4348c3ae2ab
--- 
+https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-long-lines-and-strings
