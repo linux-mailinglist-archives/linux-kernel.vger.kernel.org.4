@@ -2,167 +2,565 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E7E68282E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56ACA682801
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbjAaJGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        id S229944AbjAaJEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232274AbjAaJF2 (ORCPT
+        with ESMTP id S231926AbjAaJDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:05:28 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2075.outbound.protection.outlook.com [40.107.95.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77EE1D938;
-        Tue, 31 Jan 2023 01:01:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gL+g2H2z/3sAKymJQGGAGYa098Bdv2LZWNUsMz+J6LHX7t4ta9YHE60jMQal9A+LXNlMioAJdKNqBJA4rCJ2L6R9bTH2iCvTC5Bt1lCFoV9OltC/GPzVpibVCIwtljkDOTc47m0mdj3bl/v4zXaWX1dkd6zSCp8irksQX7P5ZPnUSQS70I/Wzx4PndFIEfay2WdbiGEoZLC5stkAoonNH+keQxr6BR6SPd2gCBCRzZ+OwTLUTq39U9a07z8N5uqCoqtyIdp49Xc5/jAHUOu8pSOZ1LJYjk9sWrgED7GQQWtMBhQ2zxeTVlJVtv0O91q5P2Smmsb4lwyq2ya8dXriLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Noen4OCHV20exX3SkQuvyAz5WIkB8aTweLqLsdGjQI4=;
- b=as6c3xMX7Vt0vZuw/mWkhS4KHWh6M5PmuSXcVolJdtl1TaI0tVXvhJoyOavq/RYAB7iuHuJDeeg9fWwD+2BJv7duBz/2ukrXr8KEcKnBIlL18Hol/wrbUihMlTdj+3UfhP2Gbry3xpzWn5PVrs158cAFFLwA0fDmChlIBmDXZZOCqqbGa3yMcTX4dyAr9nhNntYdNCTm5HcSKJDuYXXE08Dbs8MWcXFP/e99otfb3/qWetUfQAk+CZJRZMRDSLnE8CFMGCF2zLjwnunBHbb4iVZkoP8gmZtg5wQka6mWJ6sutddKYlTOCY++OoBEYRDFGN/4jzWbkSvgnkXw8gRFJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Noen4OCHV20exX3SkQuvyAz5WIkB8aTweLqLsdGjQI4=;
- b=0299HKv+OYn09+Hse/yEIq2lxOyRbEhNh/0yE8tNZVCP3Wg8q8umKej8VKbpxdFSMvWN7B50c7NRRp5cTQWl97gTkXCa919vf+OxK7yQvZP+IWLDJvzFlbtc1mZhMDlYVZi+u+bZzy/6WJ68xvK0LVMZlEYxwi2FKbO4LKw19LQ=
-Received: from MW4PR04CA0117.namprd04.prod.outlook.com (2603:10b6:303:83::32)
- by SA3PR12MB8000.namprd12.prod.outlook.com (2603:10b6:806:31f::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Tue, 31 Jan
- 2023 09:01:23 +0000
-Received: from CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:83:cafe::78) by MW4PR04CA0117.outlook.office365.com
- (2603:10b6:303:83::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38 via Frontend
- Transport; Tue, 31 Jan 2023 09:01:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT063.mail.protection.outlook.com (10.13.175.37) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6043.22 via Frontend Transport; Tue, 31 Jan 2023 09:01:22 +0000
-Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 31 Jan 2023 03:01:18 -0600
-From:   Perry Yuan <perry.yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-        <ray.huang@amd.com>, <viresh.kumar@linaro.org>
-CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
-        <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v12 11/11] Documentation: amd-pstate: introduce new global sysfs attributes
-Date:   Tue, 31 Jan 2023 17:00:16 +0800
-Message-ID: <20230131090016.3970625-12-perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230131090016.3970625-1-perry.yuan@amd.com>
-References: <20230131090016.3970625-1-perry.yuan@amd.com>
+        Tue, 31 Jan 2023 04:03:46 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3685C4B1AD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:00:24 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id ud5so39573798ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:00:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IzmwuFbv/Dt96spaoMIhvTJetC1bhODDZNOO16lq0VM=;
+        b=EekWvz/q9Shw2x9yuwW/YEXz2VvrWfnH+gPJjuLwPBDNLl519sii9B8dNban0Zn32H
+         7+rUob3kABTgp64c2TqYChbM2Io+ii03rVQPRSszXWbaZPFcSBWd1lZoJVnnVx0hVed5
+         R89uJeRIJJY3Hmv7TLraYb2vd2obM+YRrytpFN5tNpN+gVzZJj9uXaoqRk3PpujSFN7a
+         +uvoCDUJpaAEs197AI07vAkIkmOcelZJbR0qu3Z7XC7EsC7XV8a13BdDgy5h04+fT4gO
+         LROpxZxEOA8062Epwm1G1wUo6qvkmoAs+33nSzIG7nlwfpNe5294oA5RcvyMfal8EJQR
+         6NqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IzmwuFbv/Dt96spaoMIhvTJetC1bhODDZNOO16lq0VM=;
+        b=O4iMfAyUTY9L/YWScvdBiXOSIMQeQ1yqp691EPVallqB3eRSKkOHgAF+wUPoJFMcfY
+         XAYiugKdHl86g61lfgxayoZkKq8hUNq0SkW6N5KG08EbQJfwUhcnxnGE94odMJHkyeF3
+         1OqiLRbI4qD+kRt10SbYW+ziY23pZODIHqZd0cU9jGpn3+C48ZhMF4FVaZfF7Ti82y7X
+         vwJYQ+rgcovz3BgqFhXXQCzAWNimsotobSkLegRRNOti3R17PtyOYWHfnXfMJXeMtEi5
+         AhSU8pMBpmwqtnuvZ2/zhhx5Qq0HNQeUI2a37tK6bQcVxpQs7JIBulnStgWz2sB+h7XM
+         vNKw==
+X-Gm-Message-State: AO0yUKXde1unnbWKBlinzye8bPgCT78NT04Px3aIS2JsHQXIhrIPG+NF
+        id6XirLY1Up8tEuUSAVZwcRK2A==
+X-Google-Smtp-Source: AK7set+WwIv3DbUIM7Zr3WioVHo8XYM8EQYgMtpLroNfEE8ydt046yKtAaoc9L6Ae4lsA4OnhLKjiQ==
+X-Received: by 2002:a17:906:2ad4:b0:884:4806:c39 with SMTP id m20-20020a1709062ad400b0088448060c39mr10301626eje.11.1675155619707;
+        Tue, 31 Jan 2023 01:00:19 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id b14-20020a1709062b4e00b00880d9530761sm5499532ejg.209.2023.01.31.01.00.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 01:00:19 -0800 (PST)
+Message-ID: <ac2d458c-3cb9-9117-82ca-b025b92073df@linaro.org>
+Date:   Tue, 31 Jan 2023 11:00:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT063:EE_|SA3PR12MB8000:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3ff5bbab-5b3e-4404-c5b8-08db0369b9fd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: odUHlkWadRm9/XoIQjY+/bVyajqG9Msb6IezeNAgqgqQa9LH0y7YBJz8349bxmgLoAGikH6f71SxenbhS0+fRYf8KueLZGDRsh8O6sh/jkaeZmsncYNFwMNm3fKU0aJWoAKhWUjfpvyRmFoBkcQhWXfAo6HzEbcKyQ39thwPaLjH7kfukyoDjNY72PjeICe3El/2uE6qs91Z8rTDAINwPFaxezQw002zr+YhOD6cuECCi227ixEtI9ibixz2OXrKqdwRry/Eep4IxCQp+xyII3gCvOrNcHRVZ3EWmqQVQbrQeWo3L+HA6gICjSC/sujPST9ZTQ9GtSvLSsaz7BMJzeOXOKpaR4iB3OXTu46YbtRF5IYvlxDAqdFKYprsAUQ0C+xgdh19gOoRHfvWn1DmbR1u7wvGZh2lpM3XQcjNFdefVS5Nvf1G2+PosF959UGpnNyygcv9Kh1ReCrh5o50axI6+ytx/Y+gh24zn8i+P4Ns7wNOEO1OYoCKfPD+ry7E1wxiOdoDgemlHTXzmCTQt6/d6QyJx1ZRT1sVYUUquX2d/0F80pYNpOUJrJy0CH7OtisCjpKhmLP9Njuwnvm48TlyQ7CmoLYeLQQyfaIsOQ/FiaC8EIXjXNVlJLhROHPpssm2IFpD1MM6wXUu4lupIlaEsYsb1s/O64/jn6RZfRN8GWcoeintYzwHm3QuKau8k65GPJOnbMXgfyKOBqeowSV6YxJdDaY3GCtG+4EIISs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199018)(36840700001)(40470700004)(46966006)(8936002)(2906002)(8676002)(4326008)(44832011)(336012)(478600001)(36756003)(40460700003)(5660300002)(186003)(16526019)(26005)(7696005)(2616005)(40480700001)(86362001)(1076003)(426003)(47076005)(41300700001)(82310400005)(356005)(81166007)(83380400001)(70586007)(70206006)(82740400003)(316002)(36860700001)(110136005)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 09:01:22.8360
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ff5bbab-5b3e-4404-c5b8-08db0369b9fd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8000
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v4 4/8] clk: qcom: Add GPU clock controller driver for
+ SM6125
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20230130235926.2419776-1-konrad.dybcio@linaro.org>
+ <20230130235926.2419776-5-konrad.dybcio@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230130235926.2419776-5-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The amd-pstate driver supports switching working modes at runtime.
-Users can view and change modes by interacting with the "status" sysfs
-attribute.
+On 31/01/2023 01:59, Konrad Dybcio wrote:
+> Add support for the GPU clock controller found on SM6125.
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/clk/qcom/Kconfig        |   9 +
+>   drivers/clk/qcom/Makefile       |   1 +
+>   drivers/clk/qcom/gpucc-sm6125.c | 424 ++++++++++++++++++++++++++++++++
+>   3 files changed, 434 insertions(+)
+>   create mode 100644 drivers/clk/qcom/gpucc-sm6125.c
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index ca6c7d2ada6c..4ee1bf151ee2 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -798,6 +798,15 @@ config SM_GCC_8550
+>   	  Say Y if you want to use peripheral devices such as UART,
+>   	  SPI, I2C, USB, SD/UFS, PCIe etc.
+>   
+> +config SM_GPUCC_6125
+> +	tristate "SM6125 Graphics Clock Controller"
+> +	select SM_GCC_6125
+> +	depends on ARM64 || COMPILE_TEST
+> +	help
+> +	  Support for the graphics clock controller on SM6125 devices.
+> +	  Say Y if you want to support graphics controller devices and
+> +	  functionality such as 3D graphics.
+> +
+>   config SM_GPUCC_6350
+>   	tristate "SM6350 Graphics Clock Controller"
+>   	select SM_GCC_6350
+> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+> index e41ea0efe8c4..14405ccf1992 100644
+> --- a/drivers/clk/qcom/Makefile
+> +++ b/drivers/clk/qcom/Makefile
+> @@ -112,6 +112,7 @@ obj-$(CONFIG_SM_GCC_8250) += gcc-sm8250.o
+>   obj-$(CONFIG_SM_GCC_8350) += gcc-sm8350.o
+>   obj-$(CONFIG_SM_GCC_8450) += gcc-sm8450.o
+>   obj-$(CONFIG_SM_GCC_8550) += gcc-sm8550.o
+> +obj-$(CONFIG_SM_GPUCC_6125) += gpucc-sm6125.o
+>   obj-$(CONFIG_SM_GPUCC_6350) += gpucc-sm6350.o
+>   obj-$(CONFIG_SM_GPUCC_8150) += gpucc-sm8150.o
+>   obj-$(CONFIG_SM_GPUCC_8250) += gpucc-sm8250.o
+> diff --git a/drivers/clk/qcom/gpucc-sm6125.c b/drivers/clk/qcom/gpucc-sm6125.c
+> new file mode 100644
+> index 000000000000..5ddaf45b6e0b
+> --- /dev/null
+> +++ b/drivers/clk/qcom/gpucc-sm6125.c
+> @@ -0,0 +1,424 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023, Linaro Limited
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <dt-bindings/clock/qcom,sm6125-gpucc.h>
+> +
+> +#include "clk-alpha-pll.h"
+> +#include "clk-branch.h"
+> +#include "clk-rcg.h"
+> +#include "clk-regmap.h"
+> +#include "clk-regmap-divider.h"
+> +#include "clk-regmap-mux.h"
+> +#include "clk-regmap-phy-mux.h"
+> +#include "gdsc.h"
+> +#include "reset.h"
+> +
+> +enum {
+> +	DT_BI_TCXO,
+> +	DT_GCC_GPU_GPLL0_CLK_SRC,
+> +};
+> +
+> +enum {
+> +	P_BI_TCXO,
+> +	P_GPLL0_OUT_MAIN,
+> +	P_GPU_CC_PLL0_2X_CLK,
+> +	P_GPU_CC_PLL0_OUT_AUX2,
+> +	P_GPU_CC_PLL1_OUT_AUX,
+> +	P_GPU_CC_PLL1_OUT_AUX2,
+> +};
+> +
+> +static struct pll_vco gpu_cc_pll_vco[] = {
+> +	{ 1000000000, 2000000000, 0 },
+> +	{ 500000000,  1000000000, 2 },
+> +};
+> +
+> +/* 1020MHz configuration */
+> +static const struct alpha_pll_config gpu_pll0_config = {
+> +	.l = 0x35,
+> +	.config_ctl_val = 0x4001055b,
+> +	.alpha_hi = 0x20,
+> +	.alpha = 0x00,
+> +	.alpha_en_mask = BIT(24),
+> +	.vco_val = 0x0 << 20,
+> +	.vco_mask = 0x3 << 20,
+> +	.aux2_output_mask = BIT(2),
+> +};
+> +
+> +/* 930MHz configuration */
+> +static const struct alpha_pll_config gpu_pll1_config = {
+> +	.l = 0x30,
+> +	.config_ctl_val = 0x4001055b,
+> +	.alpha_hi = 0x70,
+> +	.alpha = 0x00,
+> +	.alpha_en_mask = BIT(24),
+> +	.vco_val = 0x2 << 20,
+> +	.vco_mask = 0x3 << 20,
+> +	.aux2_output_mask = BIT(2),
+> +};
+> +
+> +static struct clk_alpha_pll gpu_cc_pll0_out_aux2 = {
+> +	.offset = 0x0,
+> +	.vco_table = gpu_cc_pll_vco,
+> +	.num_vco = ARRAY_SIZE(gpu_cc_pll_vco),
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
+> +	.flags = SUPPORTS_DYNAMIC_UPDATE,
+> +	.clkr = {
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_pll0_out_aux2",
+> +			.parent_data = &(const struct clk_parent_data) {
+> +				.index = DT_BI_TCXO,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_alpha_pll_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_alpha_pll gpu_cc_pll1_out_aux2 = {
+> +	.offset = 0x100,
+> +	.vco_table = gpu_cc_pll_vco,
+> +	.num_vco = ARRAY_SIZE(gpu_cc_pll_vco),
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
+> +	.flags = SUPPORTS_DYNAMIC_UPDATE,
+> +	.clkr = {
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_pll1_out_aux2",
+> +			.parent_data = &(const struct clk_parent_data) {
+> +				.index = DT_BI_TCXO,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_alpha_pll_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static const struct parent_map gpu_cc_parent_map_0[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_GPLL0_OUT_MAIN, 5 },
+> +};
+> +
+> +static const struct clk_parent_data gpu_cc_parent_data_0[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .index = DT_GCC_GPU_GPLL0_CLK_SRC },
+> +};
+> +
+> +static const struct parent_map gpu_cc_parent_map_1[] = {
+> +	{ P_BI_TCXO, 0 },
+> +	{ P_GPU_CC_PLL0_OUT_AUX2, 2 },
+> +	{ P_GPU_CC_PLL1_OUT_AUX2, 4 },
+> +};
+> +
+> +static const struct clk_parent_data gpu_cc_parent_data_1[] = {
+> +	{ .index = DT_BI_TCXO },
+> +	{ .hw = &gpu_cc_pll0_out_aux2.clkr.hw },
+> +	{ .hw = &gpu_cc_pll1_out_aux2.clkr.hw },
+> +};
+> +
+> +static const struct freq_tbl ftbl_gpu_cc_gmu_clk_src[] = {
+> +	F(200000000, P_GPLL0_OUT_MAIN, 3, 0, 0),
+> +	{ }
+> +};
+> +
+> +static struct clk_rcg2 gpu_cc_gmu_clk_src = {
+> +	.cmd_rcgr = 0x1120,
+> +	.mnd_width = 0,
+> +	.hid_width = 5,
+> +	.parent_map = gpu_cc_parent_map_0,
+> +	.freq_tbl = ftbl_gpu_cc_gmu_clk_src,
+> +	.clkr.hw.init = &(struct clk_init_data){
+> +		.name = "gpu_cc_gmu_clk_src",
+> +		.parent_data = gpu_cc_parent_data_0,
+> +		.num_parents = ARRAY_SIZE(gpu_cc_parent_data_0),
+> +		.ops = &clk_rcg2_shared_ops,
+> +	},
+> +};
+> +
+> +static const struct freq_tbl ftbl_gpu_cc_gx_gfx3d_clk_src[] = {
+> +	F(320000000, P_GPU_CC_PLL1_OUT_AUX2, 2, 0, 0),
+> +	F(465000000, P_GPU_CC_PLL1_OUT_AUX2, 2, 0, 0),
+> +	F(600000000, P_GPU_CC_PLL0_OUT_AUX2, 2, 0, 0),
+> +	F(745000000, P_GPU_CC_PLL0_OUT_AUX2, 2, 0, 0),
+> +	F(820000000, P_GPU_CC_PLL0_OUT_AUX2, 2, 0, 0),
+> +	F(900000000, P_GPU_CC_PLL0_OUT_AUX2, 2, 0, 0),
+> +	F(950000000, P_GPU_CC_PLL0_OUT_AUX2, 2, 0, 0),
+> +	{ }
+> +};
+> +
+> +static struct clk_rcg2 gpu_cc_gx_gfx3d_clk_src = {
+> +	.cmd_rcgr = 0x101c,
+> +	.mnd_width = 0,
+> +	.hid_width = 5,
+> +	.parent_map = gpu_cc_parent_map_1,
+> +	.freq_tbl = ftbl_gpu_cc_gx_gfx3d_clk_src,
+> +	.clkr.hw.init = &(struct clk_init_data){
+> +		.name = "gpu_cc_gx_gfx3d_clk_src",
+> +		.parent_data = gpu_cc_parent_data_1,
+> +		.num_parents = ARRAY_SIZE(gpu_cc_parent_data_1),
+> +		.flags = CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE,
+> +		.ops = &clk_rcg2_ops,
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_crc_ahb_clk = {
+> +	.halt_reg = 0x107c,
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x107c,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_crc_ahb_clk",
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_cx_apb_clk = {
+> +	.halt_reg = 0x1088,
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x1088,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_cx_apb_clk",
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_gx_gfx3d_clk = {
+> +	.halt_reg = 0x1054,
+> +	.halt_check = BRANCH_HALT_SKIP,
+> +	.clkr = {
+> +		.enable_reg = 0x1054,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_gx_gfx3d_clk",
+> +			.parent_hws = (const struct clk_hw*[]) {
+> +				&gpu_cc_gx_gfx3d_clk_src.clkr.hw,
+> +			},
+> +			.num_parents = 1,
+> +			.flags = CLK_SET_RATE_PARENT,
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_cx_gfx3d_clk = {
+> +	.halt_reg = 0x10a4,
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x10a4,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_cx_gfx3d_clk",
+> +			.parent_hws = (const struct clk_hw*[]) {
+> +				&gpu_cc_gx_gfx3d_clk.clkr.hw,
+> +			},
+> +			.num_parents = 1,
+> +			.flags = CLK_SET_RATE_PARENT,
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_cx_gmu_clk = {
+> +	.halt_reg = 0x1098,
+> +	.halt_check = BRANCH_HALT,
+> +	.clkr = {
+> +		.enable_reg = 0x1098,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_cx_gmu_clk",
+> +			.parent_hws = (const struct clk_hw*[]) {
+> +				&gpu_cc_gmu_clk_src.clkr.hw,
+> +			},
+> +			.num_parents = 1,
+> +			.flags = CLK_SET_RATE_PARENT,
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_cx_snoc_dvm_clk = {
+> +	.halt_reg = 0x108c,
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x108c,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_cx_snoc_dvm_clk",
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_cxo_aon_clk = {
+> +	.halt_reg = 0x1004,
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x1004,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_cxo_aon_clk",
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_cxo_clk = {
+> +	.halt_reg = 0x109c,
+> +	.halt_check = BRANCH_HALT,
+> +	.clkr = {
+> +		.enable_reg = 0x109c,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_cxo_clk",
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_sleep_clk = {
+> +	.halt_reg = 0x1090,
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x1090,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_sleep_clk",
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_ahb_clk = {
+> +	.halt_reg = 0x1078,
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x1078,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_ahb_clk",
+> +			.flags = CLK_IS_CRITICAL,
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gpu_cc_hlos1_vote_gpu_smmu_clk = {
+> +	.halt_reg = 0x5000,
+> +	.halt_check = BRANCH_VOTED,
+> +	.clkr = {
+> +		.enable_reg = 0x5000,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gpu_cc_hlos1_vote_gpu_smmu_clk",
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct gdsc gpu_cx_gdsc = {
+> +	.gdscr = 0x106c,
+> +	.gds_hw_ctrl = 0x1540,
+> +	.pd = {
+> +		.name = "gpu_cx_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = VOTABLE,
+> +};
+> +
+> +static struct gdsc gpu_gx_gdsc = {
+> +	.gdscr = 0x100c,
+> +	.pd = {
+> +		.name = "gpu_gx_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +	.flags = VOTABLE,
+> +};
+> +
+> +static struct clk_regmap *gpu_cc_sm6125_clocks[] = {
+> +	[GPU_CC_CRC_AHB_CLK] = &gpu_cc_crc_ahb_clk.clkr,
+> +	[GPU_CC_CX_APB_CLK] = &gpu_cc_cx_apb_clk.clkr,
+> +	[GPU_CC_CX_GFX3D_CLK] = &gpu_cc_cx_gfx3d_clk.clkr,
+> +	[GPU_CC_CX_GMU_CLK] = &gpu_cc_cx_gmu_clk.clkr,
+> +	[GPU_CC_CX_SNOC_DVM_CLK] = &gpu_cc_cx_snoc_dvm_clk.clkr,
+> +	[GPU_CC_CXO_AON_CLK] = &gpu_cc_cxo_aon_clk.clkr,
+> +	[GPU_CC_CXO_CLK] = &gpu_cc_cxo_clk.clkr,
+> +	[GPU_CC_GMU_CLK_SRC] = &gpu_cc_gmu_clk_src.clkr,
+> +	[GPU_CC_PLL0_OUT_AUX2] = &gpu_cc_pll0_out_aux2.clkr,
+> +	[GPU_CC_PLL1_OUT_AUX2] = &gpu_cc_pll1_out_aux2.clkr,
+> +	[GPU_CC_SLEEP_CLK] = &gpu_cc_sleep_clk.clkr,
+> +	[GPU_CC_GX_GFX3D_CLK] = &gpu_cc_gx_gfx3d_clk.clkr,
+> +	[GPU_CC_GX_GFX3D_CLK_SRC] = &gpu_cc_gx_gfx3d_clk_src.clkr,
+> +	[GPU_CC_AHB_CLK] = &gpu_cc_ahb_clk.clkr,
+> +	[GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK] = &gpu_cc_hlos1_vote_gpu_smmu_clk.clkr,
+> +};
+> +
+> +static struct gdsc *gpucc_sm6125_gdscs[] = {
+> +	[GPU_CX_GDSC] = &gpu_cx_gdsc,
+> +	[GPU_GX_GDSC] = &gpu_gx_gdsc,
+> +};
+> +
+> +static const struct regmap_config gpu_cc_sm6125_regmap_config = {
+> +	.reg_bits = 32,
+> +	.reg_stride = 4,
+> +	.val_bits = 32,
+> +	.max_register = 0x9000,
+> +	.fast_io = true,
+> +};
+> +
+> +static const struct qcom_cc_desc gpu_cc_sm6125_desc = {
+> +	.config = &gpu_cc_sm6125_regmap_config,
+> +	.clks = gpu_cc_sm6125_clocks,
+> +	.num_clks = ARRAY_SIZE(gpu_cc_sm6125_clocks),
+> +	.gdscs = gpucc_sm6125_gdscs,
+> +	.num_gdscs = ARRAY_SIZE(gpucc_sm6125_gdscs),
+> +};
+> +
+> +static const struct of_device_id gpu_cc_sm6125_match_table[] = {
+> +	{ .compatible = "qcom,sm6125-gpucc" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, gpu_cc_sm6125_match_table);
+> +
+> +static int gpu_cc_sm6125_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap;
+> +
+> +	regmap = qcom_cc_map(pdev, &gpu_cc_sm6125_desc);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	clk_alpha_pll_configure(&gpu_cc_pll0_out_aux2, regmap, &gpu_pll0_config);
+> +	clk_alpha_pll_configure(&gpu_cc_pll1_out_aux2, regmap, &gpu_pll1_config);
+> +
+> +	/* Set recommended WAKEUP/SLEEP settings for the gpu_cc_cx_gmu_clk */
+> +	regmap_update_bits(regmap, gpu_cc_cx_gmu_clk.clkr.enable_reg, CBCR_WAKEUP, 0xf);
+> +	regmap_update_bits(regmap, gpu_cc_cx_gmu_clk.clkr.enable_reg, CBCR_SLEEP, 0xf);
 
-1) check driver mode:
-$ cat /sys/devices/system/cpu/amd-pstate/status
+I think you have to use FIELD_PREP here. regmap_update_bits doesn't 
+shift the value according to the mask, does it?
 
-2) switch mode:
-`# echo "passive" | sudo tee /sys/devices/system/cpu/amd-pstate/status`
-or
-`# echo "active" | sudo tee /sys/devices/system/cpu/amd-pstate/status`
+> +
+> +	qcom_branch_set_force_mem_core(regmap, gpu_cc_gx_gfx3d_clk.halt_reg, true);
+> +	qcom_branch_set_force_periph_on(regmap, gpu_cc_gx_gfx3d_clk.halt_reg, true);
+> +
+> +	return qcom_cc_really_probe(pdev, &gpu_cc_sm6125_desc, regmap);
+> +}
+> +
+> +static struct platform_driver gpu_cc_sm6125_driver = {
+> +	.probe = gpu_cc_sm6125_probe,
+> +	.driver = {
+> +		.name = "gpucc-sm6125",
+> +		.of_match_table = gpu_cc_sm6125_match_table,
+> +	},
+> +};
+> +module_platform_driver(gpu_cc_sm6125_driver);
+> +
+> +MODULE_DESCRIPTION("QTI GPUCC SM6125 Driver");
+> +MODULE_LICENSE("GPL");
 
-Acked-by: Huang Rui <ray.huang@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-Tested-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 29 +++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index b6aee69f564f..5304adf2fc2f 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -339,6 +339,35 @@ processor must provide at least nominal performance requested and go higher if c
- operating conditions allow.
- 
- 
-+User Space Interface in ``sysfs``
-+=================================
-+
-+Global Attributes
-+-----------------
-+
-+``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
-+control its functionality at the system level.  They are located in the
-+``/sys/devices/system/cpu/amd-pstate/`` directory and affect all CPUs.
-+
-+``status``
-+	Operation mode of the driver: "active", "passive" or "disable".
-+
-+	"active"
-+		The driver is functional and in the ``active mode``
-+
-+	"passive"
-+		The driver is functional and in the ``passive mode``
-+
-+	"disable"
-+		The driver is unregistered and not functional now.
-+
-+        This attribute can be written to in order to change the driver's
-+        operation mode or to unregister it.  The string written to it must be
-+        one of the possible values of it and, if successful, writing one of
-+        these values to the sysfs file will cause the driver to switch over
-+        to the operation mode represented by that string - or to be
-+        unregistered in the "disable" case.
-+
- ``cpupower`` tool support for ``amd-pstate``
- ===============================================
- 
 -- 
-2.34.1
+With best wishes
+Dmitry
 
