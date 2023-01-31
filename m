@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4374A6821D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E2A6821DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjAaCDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 21:03:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S230477AbjAaCFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 21:05:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjAaCDl (ORCPT
+        with ESMTP id S229874AbjAaCFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 21:03:41 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A1A5BAD;
-        Mon, 30 Jan 2023 18:03:39 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5SyC5PCSz4xwq;
-        Tue, 31 Jan 2023 13:03:31 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1675130613;
-        bh=wMaAeKI0zF7GwzSps0H7CB6N6KHHwOabGNIZQ95HWBg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BVKQ98PvgZqHBLO2kR3gbz02EFoXyRvgJn7RDLChli+kDiMtRPGgobJWGfKsFhTc+
-         tnVDdnFuw6ENs0lKFT6rghKG60ufhvd2OKPyysZvQvLus5kDvxX2/MtY21iGB3DC5a
-         +RwKyJMApMj6umiLScqmyMqitWFnVfKMV/Mr+V7F8ZUva7d5h7tYt1u1F0lx/lzvY2
-         Bt78VMJd4pxHH0oeYkRcAj0TeibDVxcIdDVI8oZrGVJJasodXGHC0pp7S3zxRi1LoZ
-         kHRaD8F1fLb9PL8Ddvci328VeguR2xfRw7mw1Gx/JtMmkFhdfAiYjzMoCUf8DIRBfa
-         X77dipw83qBYg==
-Date:   Tue, 31 Jan 2023 13:03:05 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the usb tree with the drm-intel-fixes
- tree
-Message-ID: <20230131130305.019029ff@canb.auug.org.au>
+        Mon, 30 Jan 2023 21:05:40 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B4B1C582;
+        Mon, 30 Jan 2023 18:05:39 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P5Sxq5WXYzRrKx;
+        Tue, 31 Jan 2023 10:03:11 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 31 Jan 2023 10:05:22 +0800
+Message-ID: <29f45743-ba43-c2ec-4494-7253170ab9ce@huawei.com>
+Date:   Tue, 31 Jan 2023 10:05:22 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dTmyzOU1EnNXR2Sh6q=MHTo";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH -next] evm: call dump_security_xattr() in all cases to
+ remove code duplication
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        Christian Brauner b <brauner@kernel.org>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230129004637.191106-1-xiujianfeng@huawei.com>
+ <a7f1324e88023a86c3489d53268bde17069ece1f.camel@linux.ibm.com>
+ <c95487db-f304-2610-5e93-41d7b39934d7@huawei.com>
+ <9c6826bb7e5aa85be06865f5a2bed0e30b4ad33e.camel@linux.ibm.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <9c6826bb7e5aa85be06865f5a2bed0e30b4ad33e.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/dTmyzOU1EnNXR2Sh6q=MHTo
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the usb tree got a conflict in:
+On 2023/1/30 20:17, Mimi Zohar wrote:
+> [Cc: Christian Brauner <brauner@kernel.org>]
+> 
+> On Mon, 2023-01-30 at 12:02 +0800, xiujianfeng wrote:
+>> Hi,
+>>
+>> On 2023/1/30 0:15, Mimi Zohar wrote:
+>>>> @@ -254,15 +264,9 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
+>>>>  			if (is_ima)
+>>>>  				ima_present = true;
+>>>>  
+>>>> -			if (req_xattr_value_len < 64)
+>>>> -				pr_debug("%s: (%zu) [%*phN]\n", req_xattr_name,
+>>>> -					 req_xattr_value_len,
+>>>> -					 (int)req_xattr_value_len,
+>>>> -					 req_xattr_value);
+>>>> -			else
+>>>> -				dump_security_xattr(req_xattr_name,
+>>>> -						    req_xattr_value,
+>>>> -						    req_xattr_value_len);
+>>>> +			dump_security_xattr(req_xattr_name,
+>>>> +					    req_xattr_value,
+>>>> +					    req_xattr_value_len);
+>>>>  			continue;
+>>>>  		}
+>>>>  		size = vfs_getxattr_alloc(&nop_mnt_idmap, dentry, xattr->name,
+>>>
+>>> Hm, this patch doesn't apply properly.
+>>
+>> I noticed that the patch fails to apply on linux master, however this
+>> patch is meant for linux-next, would you please maybe have a look?
+> 
+> I wasn't aware of the change.  However, merge conflicts should not be
+> "fixed", but mentioned immediately after the patch break line ("---") .
+> FYI, this merge conflict is a result of commit 4609e1f18e19 ("fs: port
+> ->permission() to pass mnt_idmap").
+> 
+> Patches for the linux-integrity branch should be based on the next-
+> integrity branch.
 
-  drivers/gpu/drm/i915/gt/intel_engine_cs.c
-
-between commit:
-
-  5bc4b43d5c6c ("drm/i915: Fix up locking around dumping requests lists")
-
-from the drm-intel-fixes tree and commit:
-
-  4d70c74659d9 ("i915: Move list_count() to list.h as list_count_nodes() fo=
-r broader use")
-
-from the usb tree.
-
-I fixed it up (the former removed the code changed by the latter) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/dTmyzOU1EnNXR2Sh6q=MHTo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYdtkACgkQAVBC80lX
-0GzxOwf9H9KgKNxnEkcMqyn6HV7TCodkrJAi9nEvNMBrRRottaKd5N7bsouPLC/X
-f0WfJlwSxldmWxwLCDfsjJwI62sXjaaSIaYDIYt5rXxChJvOD/URZMGK0bcwBCzV
-ZGfWW0+zH7Qp8xYImST9wr2tuRn8SGivLr17oXd+Fj9Y24JRsWSPF22/Vpzu883e
-LBiKJTJycDze69CBhu6LpAxmCv+H2RtrKdso2XKUFT9O70nCA0qoR525fZidU/P4
-HUICvWbzPcBOGjdtmPIWiYssx/OsbFSW6bz/D1vjch5Bz8IKBwdF0HJoWh66cG6y
-Vq5TGBAdcw9JnFEgYPqMQbt0bnDrNw==
-=uMpd
------END PGP SIGNATURE-----
-
---Sig_/dTmyzOU1EnNXR2Sh6q=MHTo--
+Thanks mimi, I assume you mean next-integrity branch on
+https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/,
+new patch already sent.
