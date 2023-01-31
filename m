@@ -2,150 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C89B682AA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4AF682AAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjAaKhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        id S231502AbjAaKi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:38:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230390AbjAaKh3 (ORCPT
+        with ESMTP id S230135AbjAaKi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:37:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C731422A;
-        Tue, 31 Jan 2023 02:37:28 -0800 (PST)
-Date:   Tue, 31 Jan 2023 10:37:26 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675161446;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5nyVX6UzHAlhc/7AFEArzgMDPUZiXMu6IpVjRekl/mg=;
-        b=P8+toq3p29CR4+cYjcPhrOy9rdktq6yNXLxJP6hIqwM8wHGP/49aeHHGHsCWDeUjEwK1yF
-        WVTO/k43BZSK6joUQUHJ7jqzwwxxSgO2YyJiyN9EYf7x/HuhlISHOuI2ddRTRHcYBo32C0
-        3xWF4kFIpEGHWnO6bGasc4cC4FyePdru2atKWxSt7fDcIpEJSpWLXP56ZSDPQPfpZmqukI
-        vlHMXtIdWdjLvKxCNLEkioG7vJCXjI5DqEPItx9vy/ht8o1vSPk6PEjA2ycVl3wYSFYpSP
-        nK1i9SELJCkrAHWOKg8EQXHVRV259lG+/U5e+14JPalvtM8phbYDBsCzOLuPxw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675161446;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5nyVX6UzHAlhc/7AFEArzgMDPUZiXMu6IpVjRekl/mg=;
-        b=862MNdN/AdQilGpLLXF0q2fYC3z6FUutTf6yN5I+/hEg2a04AfLTzgWkeijDVPCmzkdUf2
-        sOdTFNySdPGjvqBQ==
-From:   "tip-bot2 for Joerg Roedel" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/debug: Fix stack recursion caused by wrongly
- ordered DR7 accesses
-Cc:     Alexey Kardashevskiy <aik@amd.com>, Joerg Roedel <jroedel@suse.de>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230127035616.508966-1-aik@amd.com>
-References: <20230127035616.508966-1-aik@amd.com>
+        Tue, 31 Jan 2023 05:38:27 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900537EC1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:38:26 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id r12so2830685uaf.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:38:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+FR83tVbeEjgy0Oli/8j0skm7nFq9FbEOCLhEuugDSs=;
+        b=iPwvJeD3/p11kF8yQm7dA7l1EVnHenYYsiI9kgvUR9O9fzvF5c4qnNVYzdDhuxfV1m
+         jnO8Zdx1d/OqnSgRdnALXjOe6dgV62gQdzs2xzJdsgpHfKdWtHGSZTaa161CiLgDA4u8
+         Ja5B7v8itoRQ/vyLlxry3k8Xk3TYHnqBThLY8xdrNRV+DGiQxKVXd5dPiZODRTdwIl+4
+         I3R09u9fEPW2zK3Z3Zil9LYc/oIZSH3YNlgFKib38wCwsp+v29jTUUbvCqOwegR4u96p
+         8iib2zWZyLnl66bKwamVgC6fQlHT1rxuC3XZFfItd1UhWeSz/X5Bpnhy4LRy3UCStn3i
+         /t0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+FR83tVbeEjgy0Oli/8j0skm7nFq9FbEOCLhEuugDSs=;
+        b=kC3GVcqm+JFM2qhBjQgEJt076iZ+rv309Mp8RNgIZYzjeeoQjj+UZ+4MPXvtMv5Zd9
+         1ZR3WOvuSPIxdqObXhNKts9sXW1nX8FWmU9PophSiYNyt8rUnx9BfpOl2aVUNbp2ym4b
+         llpNKvWxqQYfXxUbw3ta390pGjMrW3LvQr541CBL+qK1r1kdi+YX86PK6WFY61IE03PA
+         Nr6874xLIuKrpAiETD1gC4HfYxH3FqBOYP3GYo2Crc1EtMUbLParuUbLK0GmOSLiU4do
+         ixKWL+MJiX29Wy1uQEn2qxW8JkHZoRNuUkQC9mPZLghi8xnsUn4oWvaRgXKnZC4VKILk
+         C45w==
+X-Gm-Message-State: AFqh2kow8m7MwdAUuSD/eQ0oaVzrAtWJJhL1wg+/2ZJ24+J1ipjoV6mX
+        thcaiDYAghr36F4OoPUbPyqBGCIKndEJh1OOgYG2jw==
+X-Google-Smtp-Source: AMrXdXujsX2E+/qfekYVe5Lz/ZZ/t3PCFqnvxcy2/1V+Q6bxKEu1iYi8q+tAShzmpJoFrGBbN2ArTl8HwoeBnNFFXPU=
+X-Received: by 2002:ab0:31d0:0:b0:419:d115:2773 with SMTP id
+ e16-20020ab031d0000000b00419d1152773mr6564727uan.29.1675161505619; Tue, 31
+ Jan 2023 02:38:25 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <167516144628.4906.13176618976353474076.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1675111415.git.andreyknvl@google.com> <eb6f0a014b8d0bfa73a8bbd358c627dc66cf51b7.1675111415.git.andreyknvl@google.com>
+In-Reply-To: <eb6f0a014b8d0bfa73a8bbd358c627dc66cf51b7.1675111415.git.andreyknvl@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 31 Jan 2023 11:37:49 +0100
+Message-ID: <CAG_fn=XP=RducNNBr8oT6P8u5gN3QCpTKyjMSyUbLPO2ovgEhA@mail.gmail.com>
+Subject: Re: [PATCH 07/18] lib/stackdepot: lower the indentation in stack_depot_init
+To:     andrey.konovalov@linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
-
-Commit-ID:     31859551393bc00f705cae2e1f9d31b80c62f365
-Gitweb:        https://git.kernel.org/tip/31859551393bc00f705cae2e1f9d31b80c62f365
-Author:        Joerg Roedel <jroedel@suse.de>
-AuthorDate:    Tue, 31 Jan 2023 09:57:18 +01:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 31 Jan 2023 11:26:15 +01:00
-
-x86/debug: Fix stack recursion caused by wrongly ordered DR7 accesses
-
-In kernels compiled with CONFIG_PARAVIRT=n, the compiler re-orders the
-DR7 read in exc_nmi() to happen before the call to sev_es_ist_enter().
-
-This is problematic when running as an SEV-ES guest because in this
-environment the DR7 read might cause a #VC exception, and taking #VC
-exceptions is not safe in exc_nmi() before sev_es_ist_enter() has run.
-
-The result is stack recursion if the NMI was caused on the #VC IST
-stack, because a subsequent #VC exception in the NMI handler will
-overwrite the stack frame of the interrupted #VC handler.
-
-As there are no compiler barriers affecting the ordering of DR7
-reads/writes, make the accesses to this register volatile, forbidding
-the compiler to re-order them.
-
-  [ bp: Massage text, make them volatile too, to make sure some
-  aggressive compiler optimization pass doesn't discard them. ]
-
-Fixes: 315562c9af3d ("x86/sev-es: Adjust #VC IST Stack on entering NMI handler")
-Reported-by: Alexey Kardashevskiy <aik@amd.com>
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20230127035616.508966-1-aik@amd.com
----
- arch/x86/include/asm/debugreg.h | 27 ++++++++++++++++++++++++---
- 1 file changed, 24 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
-index b049d95..ff1a924 100644
---- a/arch/x86/include/asm/debugreg.h
-+++ b/arch/x86/include/asm/debugreg.h
-@@ -39,7 +39,20 @@ static __always_inline unsigned long native_get_debugreg(int regno)
- 		asm("mov %%db6, %0" :"=r" (val));
- 		break;
- 	case 7:
--		asm("mov %%db7, %0" :"=r" (val));
-+		/*
-+		 * Apply __FORCE_ORDER to DR7 reads to forbid re-ordering them
-+		 * with other code.
-+		 *
-+		 * This is needed because a DR7 access can cause a #VC exception
-+		 * when running under SEV-ES. Taking a #VC exception is not a
-+		 * safe thing to do just anywhere in the entry code and
-+		 * re-ordering might place the access into an unsafe location.
-+		 *
-+		 * This happened in the NMI handler, where the DR7 read was
-+		 * re-ordered to happen before the call to sev_es_ist_enter(),
-+		 * causing stack recursion.
-+		 */
-+		asm volatile("mov %%db7, %0" : "=r" (val) : __FORCE_ORDER);
- 		break;
- 	default:
- 		BUG();
-@@ -66,8 +79,16 @@ static __always_inline void native_set_debugreg(int regno, unsigned long value)
- 		asm("mov %0, %%db6"	::"r" (value));
- 		break;
- 	case 7:
--		asm("mov %0, %%db7"	::"r" (value));
--		break;
-+		/*
-+		 * Apply __FORCE_ORDER to DR7 writes to forbid re-ordering them
-+		 * with other code.
-+		 *
-+		 * While is didn't happen with a DR7 write (see the DR7 read
-+		 * comment above which explains where it happened), add the
-+		 * __FORCE_ORDER here too to avoid similar problems in the
-+		 * future.
-+		 */
-+		asm volatile("mov %0, %%db7"	::"r" (value), __FORCE_ORDER); break;
- 	default:
- 		BUG();
- 	}
+On Mon, Jan 30, 2023 at 9:50 PM <andrey.konovalov@linux.dev> wrote:
+>
+> From: Andrey Konovalov <andreyknvl@google.com>
+>
+> stack_depot_init does most things inside an if check. Move them out and
+> use a goto statement instead.
+>
+> No functional changes.
+>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
