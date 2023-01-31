@@ -2,184 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E58D6831C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E286831C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjAaPoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:44:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
+        id S233424AbjAaPqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbjAaPox (ORCPT
+        with ESMTP id S230239AbjAaPqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:44:53 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2581538038;
-        Tue, 31 Jan 2023 07:44:52 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id c2so375558qtw.5;
-        Tue, 31 Jan 2023 07:44:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C783Nh9J6CgxhYis78NdX7Hgktg+0aGPcVJ8i8fBtOY=;
-        b=u31MZO3J7nkwKjnL2EE0ljDpRptiVQ0DZ0KS2lfaXAx5olQXd5+JYIa3W1CmN1Gw64
-         R36Cf08MF/MmwsejIdEmhAxxSGXvGbocUK+06HTCXkAoZ/Ag9NC3E/M6X4kJlv+7eW+o
-         U+rPXi29QjHhdgsfS1L0C0UCHVvvG4znDGhH3sGcb6qT0F0rSIP0ToRSZlhTsg0gj8XU
-         Vz5sM9BnoBBdp8vMg6f7i6SMWiO1SoMkKKO4DJRLLSE1b7vM3SJFb5YIDRnw0V1ufVeu
-         +XYFlg2pAt72qbMPqnS5M9RH4CGV04ppoj+U5RhT3FcNnQQnDXzPvJv/eGCNQGLMUUrE
-         3G1w==
-X-Gm-Message-State: AO0yUKUK2J2/eDBE5IHVkXfOolMTScQboa8UKzyOlSENnrz9Dqk4I/Ru
-        bHj5GFN/pcp1IP3f2VeH1uc=
-X-Google-Smtp-Source: AK7set/hVDIuevnnukfaPDhDgIEOH77pK/WmdvlIDAN+QAMppFENc6jo9ubQYEHfMDEO6Fd/Mt5viQ==
-X-Received: by 2002:ac8:5b89:0:b0:3a4:fddd:f8ef with SMTP id a9-20020ac85b89000000b003a4fdddf8efmr19618152qta.53.1675179891034;
-        Tue, 31 Jan 2023 07:44:51 -0800 (PST)
-Received: from maniforge ([2620:10d:c091:480::1:62fc])
-        by smtp.gmail.com with ESMTPSA id pi48-20020a05620a37b000b006e16dcf99c8sm10297801qkn.71.2023.01.31.07.44.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 07:44:50 -0800 (PST)
-Date:   Tue, 31 Jan 2023 09:44:47 -0600
-From:   David Vernet <void@manifault.com>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, memxor@gmail.com, hch@infradead.org
-Subject: Re: [PATCH bpf-next v2 3/3] bpf: Use BPF_KFUNC macro at all kfunc
- definitions
-Message-ID: <Y9k3bz5h8VDqDoZw@maniforge>
-References: <20230123171506.71995-4-void@manifault.com>
- <20230123183305.2mgoxgw4ca3sfk24@macbook-pro-6.dhcp.thefacebook.com>
- <Y87We/92xiv5/+g+@maniforge.lan>
- <20230123185434.ybfhrmbootcnjuoj@macbook-pro-6.dhcp.thefacebook.com>
- <ebff2166-8a70-af62-b859-6b5c6b008b36@iogearbox.net>
- <87o7qphspq.fsf@meer.lwn.net>
- <Y88sMlmrq0wCFSRP@maniforge.lan>
- <87lelsgf60.fsf@meer.lwn.net>
- <Y9AFT4pTydKh+PD3@maniforge.lan>
- <7cecda8c-9499-4fc1-784c-4e6174122a1f@oracle.com>
+        Tue, 31 Jan 2023 10:46:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBD74108F;
+        Tue, 31 Jan 2023 07:46:08 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFVl1W003895;
+        Tue, 31 Jan 2023 15:45:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=F7/WBm9NjX8DC6g4QGs3UEG18yMswvxt64PCeJCkbyw=;
+ b=gFJUp8SxfoUvbTdWt+wUt1XKuJF1g0s1VskcTSyArwemTY9wy8MH7oEpANhCXkgIhlPj
+ aaZRnmwwqT3kHvJe/lwSFqxFqzk026PgKO88DnZLbusF9+kO1d3kBWHA97sd5TKItKhM
+ xqIM4lcHhR9PMoMFVvTkcZjEUFSCMdS+CFEgY3451kDEhziSBojroUwndteNHaDrImLQ
+ HQRPr0hWDdzXmlwDYPJFYoQWbBGTg7V+4KsAvSZOdX6J2LMS6jeaUyXZEFm8oacuBaLa
+ Vi4UyWDDuoC8KpLU57M/7kSsj9rfS5lRa+X6pa53gakID4HBDdJdx5WAduKuFCp+H7xf lA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf5q6gadh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:45:58 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VFVfJD001031;
+        Tue, 31 Jan 2023 15:45:58 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf5q6gad5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:45:58 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDeDj6019328;
+        Tue, 31 Jan 2023 15:45:57 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3ncvuqmv9r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:45:57 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFjtbP9306778
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 15:45:55 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 61CA558043;
+        Tue, 31 Jan 2023 15:45:55 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E1F3D58053;
+        Tue, 31 Jan 2023 15:45:51 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 15:45:51 +0000 (GMT)
+Message-ID: <9ff066c0-3a09-c366-b545-ddb94d73d84c@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 10:45:51 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7cecda8c-9499-4fc1-784c-4e6174122a1f@oracle.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 09/25] powerpc/secvar: Clean up init error messages
+Content-Language: en-US
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+References: <20230131063928.388035-1-ajd@linux.ibm.com>
+ <20230131063928.388035-10-ajd@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230131063928.388035-10-ajd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: p77iQe2KGpOf1tSlm-1Yyv_6Jgo7sJ6R
+X-Proofpoint-GUID: omU6nWjmINS5U3dZhAjSouPPZhKqtaFC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 impostorscore=0
+ clxscore=1015 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301310137
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 03:15:25PM +0000, Alan Maguire wrote:
-> On 24/01/2023 16:20, David Vernet wrote:
-> > On Tue, Jan 24, 2023 at 07:50:31AM -0700, Jonathan Corbet wrote:
-> >> David Vernet <void@manifault.com> writes:
-> >>
-> >>> I was perhaps a bit naive to think we could just throw a __bpf_kfunc
-> >>> macro onto the function signatures and call it a day :-) I think it's
-> >>> probably best to table this for now, and either I or someone else can
-> >>> come back to it when we have bandwidth to solve the problem more
-> >>> appropriately.
-> >>
-> >> Now I feel bad ... I was just tossing out a thought, not wanting to
-> >> bikeshed this work into oblivion.  If what you have solves a real
-> > 
-> > No apologies necessary. I don't think this qualifies as bikeshedding.
-> > IMO folks are raising legitimate UX concerns, which is important and
-> > worth getting right.
-> > 
-> >> problem and is the best that can be done now, perhaps it should just go
-> >> in and a "more appropriate" solution can be adopted later, should
-> >> somebody manage to come up with it?
-> > 
-> > That would be my preference, but I also understand folks' sentiment of
-> > wanting to keep out what they feel like is odd syntax, as Christoph said
-> > in [0], and Daniel alluded to earlier in this thread.
-> > 
-> > [0]: https://lore.kernel.org/all/Y8+FeH7rz8jDTubt@infradead.org/
-> > 
-> > I tested on an LTO build and wrapper kfuncs (with external linkage) were
-> > not being stripped despite not being called from anywhere else in the
-> > kernel, so for now I _think_ it's safe to call this patch set more of a
-> > cleanup / future-proofing than solving an immediate and pressing problem
-> > (as long as anyone adding kfuncs carefully follows the directions in
-> > [1]). In other words, I think we have some time to do this the right way
-> > without paying too much of a cost later. If we set up the UX correctly,
-> > just adding an EXPORT_SYMBOL_KFUNC call (or something to that effect,
-> > including just using BTF_ID_FLAGS) should be minimal effort even if
-> > there are a lot more kfuncs by then.
-> > 
-> > [1]: https://docs.kernel.org/bpf/kfuncs.html
-> > 
-> > If it turns out that we start to observe problems in LTO builds without
-> > specifying __used and/or noinline, or if folks are repeatedly making
-> > mistakes when adding kfuncs (by e.g. not giving wrapper kfuncs external
-> > linkage) then I think it would be a stronger case to get this in now and
-> > fix it up later.
-> >
-> 
-> hi David,
-> 
-> I think I may have stumbled upon such a case. We're working on improving
-> the relationship between the generated BPF Type Format (BTF) info
-> for the kernel and the actual function signatures, doing things like
-> spotting optimized-out parameters and not including such functions
-> in the final BTF since tracing such functions violates user expectations.
-> The changes also remove functions with inconsistent prototypes (same
-> name, different function prototype).
-> 
-> As part of that work [1], I ran into an issue with kfuncs. Because some of these
-> functions have minimal definitions, the compiler tries to be clever and as
-> a result parameters are not represented in DWARF. As a consequence of this,
-> we do not generate a BTF representation for the kfunc (since DWARF is telling
-> us the function has optimized-out parameters), and so then don't have BTF ids 
-> for the associated kfunc, which is then not usable. The issue of trace accuracy
-> is important for users, so we're hoping to land those changes in dwarves soon.
 
-Hi Alan,
 
-I see. Thanks for explaining. So it seems that maybe the issue is
-slightly more urgent than we first thought. Given that folks aren't keen
-on the BPF_KFUNC macro approach that wraps the function definition,
-maybe we can go back to the __bpf_kfunc proposal from [0] as a stopgap
-solution until we can properly support something like
-EXPORT_SYMBOL_KFUNC. Alexei -- what do you think?
+On 1/31/23 01:39, Andrew Donnellan wrote:
+> Remove unnecessary prefixes from error messages in secvar_sysfs_init()
+> (the file defines pr_fmt, so putting "secvar:" in every message is
+> unnecessary). Make capitalisation and punctuation more consistent.
+> 
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> 
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-[0]: https://lore.kernel.org/bpf/Y7kCsjBZ%2FFrsWW%2Fe@maniforge.lan/T/
-
->  
-> As described in [2] adding a prefixed
-> 
-> __attribute__ ((optimize("O0"))) 
-> 
-> ...to the kfunc sorts this out, so having that attribute rolled into a prefix
-> definition like the one you've proposed would solve this in the short term.
-
-Does just using __attribute__((__used__)) work? Many of these kfuncs are
-called on hotpaths in BPF programs, so compiling them with no
-optimization is not an ideal or likely even realistic option. Not to
-mention the fact that not all kfuncs are BPF-exclusive (meaning you can
-export a normal kernel function that's called by the main kernel as a
-kfunc).
-
-> There may be a better way to solve the problem I've run into, but I can't
-> see an easy solution right now.
-> 
-> Would the above be feasible do you think? Thanks!
-> 
-> Alan
-> 
-> [1] https://lore.kernel.org/bpf/1675088985-20300-1-git-send-email-alan.maguire@oracle.com/
-> [2] https://lore.kernel.org/bpf/fe5d42d1-faad-d05e-99ad-1c2c04776950@oracle.com/
-> 
->  
-
-Thanks,
-David
