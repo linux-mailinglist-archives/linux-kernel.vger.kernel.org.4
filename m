@@ -2,323 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D526682351
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D82682353
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjAaEg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 23:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S229624AbjAaEh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 23:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjAaEg1 (ORCPT
+        with ESMTP id S231260AbjAaEgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:36:27 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1723A590
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:35:54 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id w3so3711884qts.7
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:35:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=skMwyc22NR9Qk8YVny2dR/jEXQcu8nXYP2om5YcHDp8=;
-        b=vbqASWaYlv8/x9oWVi1jq0jC7/PmzDkGXEQjFiy0sXuRAEqjH0A7jFO8775AstWjlH
-         1x8gnNQaryySG7a0fOiYPxDhGfddCQ0XklaZVrr/n8re5om8WYECP9s90uGxS4q8CKxK
-         s2uEaLAXVG2MjBTBCCTKn2uGh057r+1H3pt53Kl7AWuyM7DIcXzmjvYzG23WWx5WEmk9
-         S04IYBPaUnvghaSOCUFoVn7WwMlS4D3dRo/uPVet+Z7CMcDBFIZZcVLQAtR389pgtGO/
-         uDNNsiX6IEpzwdSiQQfTFLNWp0ddWrGQR4mBNyb02t5DA6hTpNoPn8OxDv7VK0DtGJva
-         d5NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=skMwyc22NR9Qk8YVny2dR/jEXQcu8nXYP2om5YcHDp8=;
-        b=TgNrejoy6X2SrGHIAXyW9CS+D3dhAn78uSe3hyxu+MX9noYnWxXHUB4y1+78TIVASO
-         EIp9XrQHWpdm3VmaQHEvQys1FuSjRe4ajx+LNh4XY6pJsPBSJlvZG1fnsNk1hadslnqc
-         2tcrZL1sG0RBFX9DbqIK+6f3ZUqsuem0Ao5DaNtW9OHT7gjmRvH8fzBCLkfo2vZL2Lrr
-         +LXerrbcLuS0WNgAEc+VizredbXBA9XChe+fIprTaCziDfgGbOwa5Zs1pYHCIGCetPa7
-         hVNXSR0gQrZ1L3BrvCq1Gr7Lj3kR9nIh8lJ+jzVrKJAl7lL/BuAsKr8GaomGf1M8H80Q
-         whfA==
-X-Gm-Message-State: AO0yUKVJSDohcaAVfUQr2IQ6SHODEoq7gWpc8ENXkQ61dWVLy57PVssM
-        V/7gI5Rm3OVRIUkYNlQr0vnSBw==
-X-Google-Smtp-Source: AK7set9BM+8iUKiCkpfLTmszHcuZgOQUjyY5cg1pD/EnFFDR3dMjz+xiPonG6jQ4anPf45O7e+VacQ==
-X-Received: by 2002:ac8:7e93:0:b0:3b8:2940:e2e8 with SMTP id w19-20020ac87e93000000b003b82940e2e8mr24857592qtj.14.1675139753541;
-        Mon, 30 Jan 2023 20:35:53 -0800 (PST)
-Received: from C02G8BMUMD6R.bytedance.net ([148.59.24.152])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac801cd000000b003a6a19ee4f0sm9260682qtg.33.2023.01.30.20.35.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Jan 2023 20:35:53 -0800 (PST)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        jakub@cloudflare.com, hdanton@sina.com, cong.wang@bytedance.com
-Subject: [PATCH RFC net-next v2 3/3] selftests/bpf: Add a test case for vsock sockmap
-Date:   Mon, 30 Jan 2023 20:35:14 -0800
-Message-Id: <20230118-support-vsock-sockmap-connectible-v2-3-58ffafde0965@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230118-support-vsock-sockmap-connectible-v2-0-58ffafde0965@bytedance.com>
-References: <20230118-support-vsock-sockmap-connectible-v2-0-58ffafde0965@bytedance.com>
+        Mon, 30 Jan 2023 23:36:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A313BD89;
+        Mon, 30 Jan 2023 20:36:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB525B81914;
+        Tue, 31 Jan 2023 04:36:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D726C433EF;
+        Tue, 31 Jan 2023 04:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675139782;
+        bh=CLBqX+BUlH4wfB1ikkhG1DXuwqQ1HR2XR9twYN40fhM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wih+AekNxMmghUFGZEhNRtJCR8fK8r8QexRrCmRFVImcdV7FTWieco0Bsc2L4Z5Rf
+         BgLWMmSeBEPEscFrosyUqZydTogzNNZOnA47ZVxty82oYjakqFy05TKxi0yMeCwXFH
+         rONcoV7qV+7jWxle+XdViid8CRmy3zYrYga1oObe7oObdTW2ecuN7KeVdObUw1Bxtx
+         RYXhJ3o/G52DKOa3PGmKYlV4fACdXkAEpak9hzu/1ggCwaqLWsQKXXD98KrMtwntr4
+         FAOVEOKGQu5e3re6fsDTbqS8K+txwQ92TGXl/4XZsX3MqMaApZOqwp6H5ecuRo+Akr
+         1RnGkuA72tc5Q==
+Date:   Mon, 30 Jan 2023 20:36:20 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com, pmladek@suse.com
+Subject: Re: [PATCH v2 3/4] livepatch/shadow: Introduce klp_shadow_type
+ structure
+Message-ID: <20230131043620.6nnhqgqr4z55hxfr@treble>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-4-mpdesouza@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.1
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221026194122.11761-4-mpdesouza@suse.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test case testing the redirection from connectible AF_VSOCK
-sockets to connectible AF_UNIX sockets.
+On Wed, Oct 26, 2022 at 04:41:21PM -0300, Marcos Paulo de Souza wrote:
+> +++ b/include/linux/livepatch.h
+> @@ -216,15 +216,26 @@ typedef int (*klp_shadow_ctor_t)(void *obj,
+>  				 void *ctor_data);
+>  typedef void (*klp_shadow_dtor_t)(void *obj, void *shadow_data);
+>  
+> -void *klp_shadow_get(void *obj, unsigned long id);
+> -void *klp_shadow_alloc(void *obj, unsigned long id,
+> -		       size_t size, gfp_t gfp_flags,
+> -		       klp_shadow_ctor_t ctor, void *ctor_data);
+> -void *klp_shadow_get_or_alloc(void *obj, unsigned long id,
+> -			      size_t size, gfp_t gfp_flags,
+> -			      klp_shadow_ctor_t ctor, void *ctor_data);
+> -void klp_shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor);
+> -void klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor);
+> +/**
+> + * struct klp_shadow_type - shadow variable type used by the klp_object
+> + * @id:		shadow variable type indentifier
 
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
----
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 163 +++++++++++++++++++++
- 1 file changed, 163 insertions(+)
+"identifier"
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 2cf0c7a3fe23..8b5a2e09c9ed 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -18,6 +18,7 @@
- #include <string.h>
- #include <sys/select.h>
- #include <unistd.h>
-+#include <linux/vm_sockets.h>
- 
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
-@@ -249,6 +250,16 @@ static void init_addr_loopback6(struct sockaddr_storage *ss, socklen_t *len)
- 	*len = sizeof(*addr6);
- }
- 
-+static void init_addr_loopback_vsock(struct sockaddr_storage *ss, socklen_t *len)
-+{
-+	struct sockaddr_vm *addr = memset(ss, 0, sizeof(*ss));
-+
-+	addr->svm_family = AF_VSOCK;
-+	addr->svm_port = VMADDR_PORT_ANY;
-+	addr->svm_cid = VMADDR_CID_LOCAL;
-+	*len = sizeof(*addr);
-+}
-+
- static void init_addr_loopback(int family, struct sockaddr_storage *ss,
- 			       socklen_t *len)
- {
-@@ -259,6 +270,9 @@ static void init_addr_loopback(int family, struct sockaddr_storage *ss,
- 	case AF_INET6:
- 		init_addr_loopback6(ss, len);
- 		return;
-+	case AF_VSOCK:
-+		init_addr_loopback_vsock(ss, len);
-+		return;
- 	default:
- 		FAIL("unsupported address family %d", family);
- 	}
-@@ -1434,6 +1448,8 @@ static const char *family_str(sa_family_t family)
- 		return "IPv6";
- 	case AF_UNIX:
- 		return "Unix";
-+	case AF_VSOCK:
-+		return "VSOCK";
- 	default:
- 		return "unknown";
- 	}
-@@ -1644,6 +1660,151 @@ static void test_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *ma
- 	unix_skb_redir_to_connected(skel, map, sotype);
- }
- 
-+/* Returns two connected loopback vsock sockets */
-+static int vsock_socketpair_connectible(int sotype, int *v0, int *v1)
-+{
-+	struct sockaddr_storage addr;
-+	socklen_t len = sizeof(addr);
-+	int s, p, c;
-+
-+	s = socket_loopback(AF_VSOCK, sotype);
-+	if (s < 0)
-+		return -1;
-+
-+	c = xsocket(AF_VSOCK, sotype | SOCK_NONBLOCK, 0);
-+	if (c == -1)
-+		goto close_srv;
-+
-+	if (getsockname(s, sockaddr(&addr), &len) < 0)
-+		goto close_cli;
-+
-+	if (connect(c, sockaddr(&addr), len) < 0 && errno != EINPROGRESS) {
-+		FAIL_ERRNO("connect");
-+		goto close_cli;
-+	}
-+
-+	len = sizeof(addr);
-+	p = accept_timeout(s, sockaddr(&addr), &len, IO_TIMEOUT_SEC);
-+	if (p < 0)
-+		goto close_cli;
-+
-+	*v0 = p;
-+	*v1 = c;
-+
-+	return 0;
-+
-+close_cli:
-+	close(c);
-+close_srv:
-+	close(s);
-+
-+	return -1;
-+}
-+
-+static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
-+					 enum redir_mode mode, int sotype)
-+{
-+	const char *log_prefix = redir_mode_str(mode);
-+	char a = 'a', b = 'b';
-+	int u0, u1, v0, v1;
-+	int sfd[2];
-+	unsigned int pass;
-+	int err, n;
-+	u32 key;
-+
-+	zero_verdict_count(verd_mapfd);
-+
-+	if (socketpair(AF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0, sfd))
-+		return;
-+
-+	u0 = sfd[0];
-+	u1 = sfd[1];
-+
-+	err = vsock_socketpair_connectible(sotype, &v0, &v1);
-+	if (err) {
-+		FAIL("vsock_socketpair_connectible() failed");
-+		goto close_uds;
-+	}
-+
-+	err = add_to_sockmap(sock_mapfd, u0, v0);
-+	if (err) {
-+		FAIL("add_to_sockmap failed");
-+		goto close_vsock;
-+	}
-+
-+	n = write(v1, &a, sizeof(a));
-+	if (n < 0)
-+		FAIL_ERRNO("%s: write", log_prefix);
-+	if (n == 0)
-+		FAIL("%s: incomplete write", log_prefix);
-+	if (n < 1)
-+		goto out;
-+
-+	n = recv(mode == REDIR_INGRESS ? u0 : u1, &b, sizeof(b), MSG_DONTWAIT);
-+	if (n < 0)
-+		FAIL("%s: recv() err, errno=%d", log_prefix, errno);
-+	if (n == 0)
-+		FAIL("%s: incomplete recv", log_prefix);
-+	if (b != a)
-+		FAIL("%s: vsock socket map failed, %c != %c", log_prefix, a, b);
-+
-+	key = SK_PASS;
-+	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
-+	if (err)
-+		goto out;
-+	if (pass != 1)
-+		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
-+out:
-+	key = 0;
-+	bpf_map_delete_elem(sock_mapfd, &key);
-+	key = 1;
-+	bpf_map_delete_elem(sock_mapfd, &key);
-+
-+close_vsock:
-+	close(v0);
-+	close(v1);
-+
-+close_uds:
-+	close(u0);
-+	close(u1);
-+}
-+
-+static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
-+					     struct bpf_map *inner_map,
-+					     int sotype)
-+{
-+	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-+	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
-+	int sock_map = bpf_map__fd(inner_map);
-+	int err;
-+
-+	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
-+	if (err)
-+		return;
-+
-+	skel->bss->test_ingress = false;
-+	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_EGRESS, sotype);
-+	skel->bss->test_ingress = true;
-+	vsock_unix_redir_connectible(sock_map, verdict_map, REDIR_INGRESS, sotype);
-+
-+	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
-+}
-+
-+static void test_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *map)
-+{
-+	const char *family_name, *map_name;
-+	char s[MAX_TEST_NAME];
-+
-+	family_name = family_str(AF_VSOCK);
-+	map_name = map_type_str(map);
-+	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
-+	if (!test__start_subtest(s))
-+		return;
-+
-+	vsock_unix_skb_redir_connectible(skel, map, SOCK_STREAM);
-+	vsock_unix_skb_redir_connectible(skel, map, SOCK_SEQPACKET);
-+}
-+
- static void test_reuseport(struct test_sockmap_listen *skel,
- 			   struct bpf_map *map, int family, int sotype)
- {
-@@ -2015,12 +2176,14 @@ void serial_test_sockmap_listen(void)
- 	run_tests(skel, skel->maps.sock_map, AF_INET6);
- 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
- 	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
-+	test_vsock_redir(skel, skel->maps.sock_map);
- 
- 	skel->bss->test_sockmap = false;
- 	run_tests(skel, skel->maps.sock_hash, AF_INET);
- 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
- 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_DGRAM);
- 	test_unix_redir(skel, skel->maps.sock_hash, SOCK_STREAM);
-+	test_vsock_redir(skel, skel->maps.sock_hash);
- 
- 	test_sockmap_listen__destroy(skel);
- }
+> diff --git a/kernel/livepatch/shadow.c b/kernel/livepatch/shadow.c
+> index aba44dcc0a88..64e83853891d 100644
+> --- a/kernel/livepatch/shadow.c
+> +++ b/kernel/livepatch/shadow.c
+> @@ -63,24 +63,24 @@ struct klp_shadow {
+>   * klp_shadow_match() - verify a shadow variable matches given <obj, id>
+
+"matches given <obj, type>" ?
+
+>   * @shadow:	shadow variable to match
+>   * @obj:	pointer to parent object
+> - * @id:		data identifier
+> + * @shadow_type: type of the wanted shadow variable
+>   *
+>   * Return: true if the shadow variable matches.
+>   */
+>  static inline bool klp_shadow_match(struct klp_shadow *shadow, void *obj,
+> -				unsigned long id)
+> +				struct klp_shadow_type *shadow_type)
+>  {
+> -	return shadow->obj == obj && shadow->id == id;
+> +	return shadow->obj == obj && shadow->id == shadow_type->id;
+
+"shadow_type" is redundant, can we just call it "type"?
+
+Same comment for all other instances of 'shadow_type' throughout the
+patch.
+
+> @@ -159,22 +157,25 @@ static void *__klp_shadow_get_or_alloc(void *obj, unsigned long id,
+>  	 * More complex setting can be done by @ctor function.  But it is
+>  	 * called only when the buffer is really used (under klp_shadow_lock).
+>  	 */
+> -	new_shadow = kzalloc(size + sizeof(*new_shadow), gfp_flags);
+> +	new_shadow = kzalloc(size + sizeof(struct klp_shadow), gfp_flags);
+
+Unnecessary change?
 
 -- 
-2.35.1
-
+Josh
