@@ -2,153 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8096682CCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08603682CCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:43:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbjAaMmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S231897AbjAaMnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjAaMmX (ORCPT
+        with ESMTP id S230094AbjAaMnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:42:23 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320FF59F8;
-        Tue, 31 Jan 2023 04:42:23 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id jh15so5873289plb.8;
-        Tue, 31 Jan 2023 04:42:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yVPlqWdyzakqT8A0oiBlN6ELSaA4FijmFZ/f8hBpSb0=;
-        b=XNjSuciVozPlCMf5ihdSXuioYZPON6d+ZFbO1IfiSBrGttMPr5hyxsABsNk7bxuk+A
-         Rld4u0v8FcZYDzsz+Vusi90Dmj+5hUv+9buwFU92ikWhQ8x4on2alV2a5cHEJDbG3As8
-         mhfv1ZyzY2cmgw1IWdW1MbtzrgKqZ1usAILviUaxHnmPsuS2xJhx5Ep8kk90xgmv38TF
-         DhrrFv6MNBTPMlG4XuEm7MudCDrMOEwgOl6RSWGmQxQfVy2t0d2Lct3xySX66H1n7MZJ
-         TaobB772CSK6XCZHXRv6Hcf7NHJDsF+Qrazg6ZCJn8QKagX3RwS6YVU3Pbf4ZgIUn9qT
-         uG2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yVPlqWdyzakqT8A0oiBlN6ELSaA4FijmFZ/f8hBpSb0=;
-        b=vaUgTeBeicxJe0NEXLL/sJycCIBK+d0nCqAWjI2bRaHDl8sLLw8SVic+NmUtOYV0/3
-         aA5s/cxSW/nfXMaVe+nJeDX8FZfpQoQdBE5B42rzSmFi91DHKxoYbntJO7HSyOJl1hM2
-         WW3key+6oYgq4g3cNZbUyFVStbzXRTqM4cAdGrHVnAkntTj8eAMssGD2nFoCh/ZKnMA3
-         q2WHXS0IzK58XRL7S6WsR73YoIayCj33pn/sk4XPMYDulQTHDcjIPBgOwL3UVpm80QF5
-         TXE26icnrImheNUyaF6pozIUsA6XTeiz4/uk6MoJvvF+YvFdYFzn5gckgtSfU2/n9ff7
-         3CKg==
-X-Gm-Message-State: AO0yUKVV4gAVsomM52J1yy9dvucrI6/daXa6oiZVe/sRfiDaFsKDr4F9
-        TliwyOs5iwiSC0exeee+TOw=
-X-Google-Smtp-Source: AK7set9LJLOYk1jCM9i+2oLYrMZvin4DbigkZZE5RXUHNhyJVfOknN7WGNZT0ELlQhpHLXkZzNDp3Q==
-X-Received: by 2002:a17:902:da92:b0:196:7df6:2d38 with SMTP id j18-20020a170902da9200b001967df62d38mr9687039plx.7.1675168942642;
-        Tue, 31 Jan 2023 04:42:22 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-4.three.co.id. [180.214.232.4])
-        by smtp.gmail.com with ESMTPSA id t19-20020a1709028c9300b001965f761e6dsm6949475plo.182.2023.01.31.04.42.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 04:42:22 -0800 (PST)
-Message-ID: <65c16136-025a-f2f0-402f-a341f3da2723@gmail.com>
-Date:   Tue, 31 Jan 2023 19:42:15 +0700
+        Tue, 31 Jan 2023 07:43:09 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D34A29173;
+        Tue, 31 Jan 2023 04:43:08 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 088342F4;
+        Tue, 31 Jan 2023 04:43:50 -0800 (PST)
+Received: from [10.57.88.157] (unknown [10.57.88.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D84443F71E;
+        Tue, 31 Jan 2023 04:43:05 -0800 (PST)
+Message-ID: <c014b074-6d7f-773b-533a-c0500e239ab8@arm.com>
+Date:   Tue, 31 Jan 2023 12:42:57 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v4 6/6] Documentation: amd_pstate: Update amd_pstate
- status sysfs for guided
-Content-Language: en-US
-To:     Wyes Karny <wyes.karny@amd.com>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, santosh.shukla@amd.com,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        gautham.shenoy@amd.com, Tor Vic <torvic9@mailbox.org>
-References: <20230131052141.96475-1-wyes.karny@amd.com>
- <20230131052141.96475-7-wyes.karny@amd.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230131052141.96475-7-wyes.karny@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v6 0/2] PCI: dwc: Add support for 64-bit MSI target
+ addresses
+Content-Language: en-GB
+To:     Evgenii Shatokhin <e.shatokhin@yadro.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux@yadro.com
+References: <20220825235404.4132818-1-willmcvicker@google.com>
+ <decae9e4-3446-2384-4fc5-4982b747ac03@yadro.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <decae9e4-3446-2384-4fc5-4982b747ac03@yadro.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/23 12:21, Wyes Karny wrote:
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 5304adf2fc2f..56a3d11f51a5 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -303,13 +303,18 @@ efficiency frequency management method on AMD processors.
->  AMD Pstate Driver Operation Modes
->  =================================
->  
-> -``amd_pstate`` CPPC has two operation modes: CPPC Autonomous(active) mode and
-> -CPPC non-autonomous(passive) mode.
-> -active mode and passive mode can be chosen by different kernel parameters.
-> -When in Autonomous mode, CPPC ignores requests done in the Desired Performance
-> -Target register and takes into account only the values set to the Minimum requested
-> -performance, Maximum requested performance, and Energy Performance Preference
-> -registers. When Autonomous is disabled, it only considers the Desired Performance Target.
-> +``amd_pstate`` CPPC has 3 operation modes: autonomous (active) mode,
-> +non-autonomous (passive) mode and guided autonomous (guided) mode.
-> +Active/passive/guided mode can be chosen by different kernel parameters.
-> +
-> +- In autonomous mode, platform ignores the desired performance level request
-> +  and takes into account only the values set to the minimum, maximum and energy
-> +  performance preference registers.
-> +- In non-autonomous mode, platform gets desired performance level
-> +  from OS directly through Desired Performance Register.
-> +- In guided-autonomous mode, platform sets operating performance level
-> +  autonomously according to the current workload and within the limits set by
-> +  OS through min and max performance registers.
->  
->  Active Mode
->  ------------
-> @@ -338,6 +343,15 @@ to the Performance Reduction Tolerance register. Above the nominal performance l
->  processor must provide at least nominal performance requested and go higher if current
->  operating conditions allow.
->  
-> +Guided Mode
-> +-----------
-> +
-> +``amd_pstate=guided``
-> +
-> +If ``amd_pstate=guided`` is passed to kernel command line option then this mode
-> +is activated.  In this mode, driver requests minimum and maximum performance
-> +level and the platform autonomously selects a performance level in this range
-> +and appropriate to the current workload.
->  
->  User Space Interface in ``sysfs``
->  =================================
-> @@ -358,6 +372,9 @@ control its functionality at the system level.  They are located in the
->  	"passive"
->  		The driver is functional and in the ``passive mode``
->  
-> +        "guided"
-> +                The driver is functional and in the ``guided mode``
-> +
->  	"disable"
->  		The driver is unregistered and not functional now.
->  
+On 2023-01-31 12:29, Evgenii Shatokhin wrote:
+> Hi,
+> 
+> On 26.08.2022 02:54, Will McVicker wrote:
+>> Hi All,
+>>
+>> I've update patch 2/2 to address Robin's suggestions. This includes:
+>>
+>>   * Dropping the while-loop for retrying with a 64-bit mask in favor of
+>>     retrying within the error if-statement.
+>>   * Using an int for the DMA mask instead of a bool and ternary 
+>> operation.
+>>
+>> Thanks again for the reviews and sorry for the extra revision today!
+>> Hopefully this is the last one :) If not, I'd be fine to submit patch 1/2
+>> without 2/2 to avoid resending patch 1/2 for future revisions of patch 
+>> 2/2
+>> (unless I don't need to do that anyway).
+> 
+> The first patch of the series made it into the mainline kernel, but, it 
+> seems, the second one ("PCI: dwc: Add support for 64-bit MSI target 
+> address") did not. As of 6.2-rc6, it is still missing.
+> 
+> Was it intentionally dropped because of some issues or, perhaps, just by 
+> accident? If it was by accident, could you please queue it for inclusion 
+> into mainline again?
 
-LGTM, thanks!
+Yes, it was dropped due to the PCI_MSI_FLAGS_64BIT usage apparently 
+being incorrect, and some other open debate (which all happened on the 
+v5 thread):
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+https://lore.kernel.org/linux-pci/YzVTmy9MWh+AjshC@lpieralisi/
 
--- 
-An old man doll... just what I always wanted! - Clara
+The DMA mask issues have now been sorted out, so you, or Will, or anyone 
+else interested should be free to rework this on top of linux-next 
+(although at this point, more realistically on top of 6.3-rc1 in a few 
+weeks).
 
+Thanks,
+Robin.
+
+> Support for 64-bit MSI target addresses is needed for some of our SoCs. 
+> I ran into a situation when there was no available RAM in ZONE_DMA32 
+> during initialization of PCIe host. Hence, dmam_alloc_coherent() failed 
+> in dw_pcie_msi_host_init() and initialization failed with -ENOMEM:
+> 
+> [    0.374834] dw-pcie 4000000.pcie0: host bridge /soc/pcie0@4000000 
+> ranges:
+> [    0.375813] dw-pcie 4000000.pcie0:      MEM 
+> 0x0041000000..0x004fffffff -> 0x0041000000
+> [    0.376171] dw-pcie 4000000.pcie0:   IB MEM 
+> 0x0400000000..0x07ffffffff -> 0x0400000000
+> [    0.377914] dw-pcie 4000000.pcie0: Failed to alloc and map MSI data
+> [    0.378191] dw-pcie 4000000.pcie0: Failed to initialize host
+> [    0.378255] dw-pcie: probe of 4000000.pcie0 failed with error -12
+> 
+> Mainline kernel 6.2-rc6 was used in that test.
+> 
+> The hardware supports 64-bit target addresses, so the patch "PCI: dwc: 
+> Add support for 64-bit MSI target address" should help with this 
+> particular failure.
+> 
+> 
+>>
+>> Thanks,
+>> Will
+>>
+>> Will McVicker (2):
+>>    PCI: dwc: Drop dependency on ZONE_DMA32
+>>
+>> v6:
+>>   * Retrying DMA allocation with 64-bit mask within the error 
+>> if-statement.
+>>   * Use an int for the DMA mask instead of a bool and ternary operation.
+>>
+>> v5:
+>>   * Updated patch 2/2 to first try with a 32-bit DMA mask. On failure,
+>>     retry with a 64-bit mask if supported.
+>>
+>> v4:
+>>   * Updated commit descriptions.
+>>   * Renamed msi_64b -> msi_64bit.
+>>   * Dropped msi_64bit ternary use.
+>>   * Dropped export of dw_pcie_msi_capabilities.
+>>
+>> v3:
+>>    * Switched to a managed DMA allocation.
+>>    * Simplified the DMA allocation cleanup.
+>>    * Dropped msi_page from struct dw_pcie_rp.
+>>    * Allocating a u64 instead of a full page.
+>>
+>> v2:
+>>    * Fixed build error caught by kernel test robot
+>>    * Fixed error handling reported by Isaac Manjarres
+>>   PCI: dwc: Add support for 64-bit MSI target address
+>>
+>>   .../pci/controller/dwc/pcie-designware-host.c | 43 +++++++++----------
+>>   drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
+>>   drivers/pci/controller/dwc/pcie-designware.h  |  2 +-
+>>   3 files changed, 30 insertions(+), 23 deletions(-)
+>>
+>>
+>> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+> 
+> Thank you in advance.
+> 
+> Regards,
+> Evgenii
+> 
+> 
+> 
