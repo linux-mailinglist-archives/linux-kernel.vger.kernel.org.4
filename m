@@ -2,164 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7319682C95
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80290682C97
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjAaMaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
+        id S230267AbjAaMdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:33:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjAaMaG (ORCPT
+        with ESMTP id S229706AbjAaMc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:30:06 -0500
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82954ABE4;
-        Tue, 31 Jan 2023 04:30:02 -0800 (PST)
-Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id 30850341BBD;
-        Tue, 31 Jan 2023 15:30:00 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=mta-01; bh=VOs7l5WPKJF3uWy0u/
-        DHRLHlyX+FMl0S4wKIE9TP0Ac=; b=Nx9nPZONUMmq50ODICOmqQM+2t2cmnj7OI
-        kJVUmMzxeH14IlnqNsmyRgOgooZKkmWfWgv9IsjmpkESVjzIUQTfotriLAJfHovS
-        J/OL0HCVqfBRmSPGYLiKn5Q289y3znaMSYWIgTb5U18LQ+C8Eujan177M1LsBFtf
-        Q8c0KomOk=
-Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
+        Tue, 31 Jan 2023 07:32:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB786728F
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:32:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id 22C2B341763;
-        Tue, 31 Jan 2023 15:30:00 +0300 (MSK)
-Received: from [10.178.118.164] (10.178.118.164) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Tue, 31 Jan
- 2023 15:29:59 +0300
-Message-ID: <decae9e4-3446-2384-4fc5-4982b747ac03@yadro.com>
-Date:   Tue, 31 Jan 2023 15:29:58 +0300
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A26DB81BF9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F3DC433EF;
+        Tue, 31 Jan 2023 12:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675168371;
+        bh=XMt8AVXDCOd/Rs6vc6kQue3V5MV99U//73gnlqRozJ8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=NtoDolA9YmbmzDvm8CPAiURc5XXn4kDciE21UhO5RAUKwKWv3Z6dFb9Uj/nl+YnZp
+         3LxpXYCT87RzLo1V/ym9bgvNEjQu5FPLt24BbFTCcEeEOmcpbmeLNPVjeK5VR+/a2J
+         7/tRu3UAn6ic2BtQfhSI4vPEsFWMY5gYmCdIJMkbZd+C7W6rT7varD/XT3EPwSBL1J
+         YKJCuLdqcj0+CQxOFJqHuuq9RyuKih84QTeyTY5vyAPWE83v87+gDeYOYqC5uCj2c+
+         XvvLf6nz0kjfVTaBTQ1eaupt6g27W0edoqCYVGtgS5xxMK8K0ogcg7OE1fJviBrxXg
+         U33ZJFCwAYS4g==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     guoren@kernel.org, guoren@kernel.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mhiramat@kernel.org,
+        conor.dooley@microchip.com, penberg@kernel.org,
+        mark.rutland@arm.com, liaochang (A) <liaochang1@huawei.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] riscv: kprobe: Fixup kernel panic when probing an
+ illegal position
+In-Reply-To: <20230126130509.1418251-1-guoren@kernel.org>
+References: <20230126130509.1418251-1-guoren@kernel.org>
+Date:   Tue, 31 Jan 2023 13:32:48 +0100
+Message-ID: <878rhig9zj.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 0/2] PCI: dwc: Add support for 64-bit MSI target
- addresses
-To:     Will McVicker <willmcvicker@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>
-CC:     <kernel-team@android.com>, Vidya Sagar <vidyas@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, <linux@yadro.com>
-References: <20220825235404.4132818-1-willmcvicker@google.com>
-Content-Language: en-US
-From:   Evgenii Shatokhin <e.shatokhin@yadro.com>
-In-Reply-To: <20220825235404.4132818-1-willmcvicker@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.178.118.164]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+guoren@kernel.org writes:
 
-On 26.08.2022 02:54, Will McVicker wrote:
-> Hi All,
-> 
-> I've update patch 2/2 to address Robin's suggestions. This includes:
-> 
->   * Dropping the while-loop for retrying with a 64-bit mask in favor of
->     retrying within the error if-statement.
->   * Using an int for the DMA mask instead of a bool and ternary operation.
-> 
-> Thanks again for the reviews and sorry for the extra revision today!
-> Hopefully this is the last one :) If not, I'd be fine to submit patch 1/2
-> without 2/2 to avoid resending patch 1/2 for future revisions of patch 2/2
-> (unless I don't need to do that anyway).
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The kernel would panic when probed for an illegal position. eg:
+>
+> (CONFIG_RISCV_ISA_C=3Dn)
+>
+> echo 'p:hello kernel_clone+0x16 a0=3D%a0' >> kprobe_events
+> echo 1 > events/kprobes/hello/enable
+> cat trace
+>
+> Kernel panic - not syncing: stack-protector: Kernel stack
+> is corrupted in: __do_sys_newfstatat+0xb8/0xb8
+> CPU: 0 PID: 111 Comm: sh Not tainted
+> 6.2.0-rc1-00027-g2d398fe49a4d #490
+> Hardware name: riscv-virtio,qemu (DT)
+> Call Trace:
+> [<ffffffff80007268>] dump_backtrace+0x38/0x48
+> [<ffffffff80c5e83c>] show_stack+0x50/0x68
+> [<ffffffff80c6da28>] dump_stack_lvl+0x60/0x84
+> [<ffffffff80c6da6c>] dump_stack+0x20/0x30
+> [<ffffffff80c5ecf4>] panic+0x160/0x374
+> [<ffffffff80c6db94>] generic_handle_arch_irq+0x0/0xa8
+> [<ffffffff802deeb0>] sys_newstat+0x0/0x30
+> [<ffffffff800158c0>] sys_clone+0x20/0x30
+> [<ffffffff800039e8>] ret_from_syscall+0x0/0x4
+> ---[ end Kernel panic - not syncing: stack-protector:
+> Kernel stack is corrupted in: __do_sys_newfstatat+0xb8/0xb8 ]---
+>
+> That is because the kprobe's ebreak instruction broke the kernel's
+> original code. The user should guarantee the correction of the probe
+> position, but it couldn't make the kernel panic.
+>
+> This patch adds arch_check_kprobe in arch_prepare_kprobe to prevent an
+> illegal position (Such as the middle of an instruction).
 
-The first patch of the series made it into the mainline kernel, but, it 
-seems, the second one ("PCI: dwc: Add support for 64-bit MSI target 
-address") did not. As of 6.2-rc6, it is still missing.
+Nice!
 
-Was it intentionally dropped because of some issues or, perhaps, just by 
-accident? If it was by accident, could you please queue it for inclusion 
-into mainline again?
+@liaochang Will you remove your patch from the OPTPROBE series?
 
-Support for 64-bit MSI target addresses is needed for some of our SoCs. 
-I ran into a situation when there was no available RAM in ZONE_DMA32 
-during initialization of PCIe host. Hence, dmam_alloc_coherent() failed 
-in dw_pcie_msi_host_init() and initialization failed with -ENOMEM:
+> Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/kernel/probes/kprobes.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+>
+> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probe=
+s/kprobes.c
+> index f21592d20306..475989f06d6d 100644
+> --- a/arch/riscv/kernel/probes/kprobes.c
+> +++ b/arch/riscv/kernel/probes/kprobes.c
+> @@ -48,6 +48,21 @@ static void __kprobes arch_simulate_insn(struct kprobe=
+ *p, struct pt_regs *regs)
+>  	post_kprobe_handler(p, kcb, regs);
+>  }
+>=20=20
+> +static bool __kprobes arch_check_kprobe(struct kprobe *p)
+> +{
+> +	unsigned long tmp  =3D (unsigned long)p->addr - p->offset;
+> +	unsigned long addr =3D (unsigned long)p->addr;
+> +
+> +	while (tmp <=3D addr) {
+> +		if (tmp =3D=3D addr)
+> +			return true;
+> +
+> +		tmp +=3D GET_INSN_LENGTH(*(kprobe_opcode_t *)tmp);
 
-[    0.374834] dw-pcie 4000000.pcie0: host bridge /soc/pcie0@4000000 ranges:
-[    0.375813] dw-pcie 4000000.pcie0:      MEM 
-0x0041000000..0x004fffffff -> 0x0041000000
-[    0.376171] dw-pcie 4000000.pcie0:   IB MEM 
-0x0400000000..0x07ffffffff -> 0x0400000000
-[    0.377914] dw-pcie 4000000.pcie0: Failed to alloc and map MSI data
-[    0.378191] dw-pcie 4000000.pcie0: Failed to initialize host
-[    0.378255] dw-pcie: probe of 4000000.pcie0 failed with error -12
+kprobe_opcode_t is u32; This can trigger a misaligned load, right?
 
-Mainline kernel 6.2-rc6 was used in that test.
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  int __kprobes arch_prepare_kprobe(struct kprobe *p)
+>  {
+>  	unsigned long probe_addr =3D (unsigned long)p->addr;
+> @@ -55,6 +70,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
+>  	if (probe_addr & 0x1)
+>  		return -EILSEQ;
+>=20=20
+> +	if (!arch_check_kprobe(p))
+> +		return -EILSEQ;
+> +
+>  	/* copy instruction */
+>  	p->opcode =3D *p->addr;
 
-The hardware supports 64-bit target addresses, so the patch "PCI: dwc: 
-Add support for 64-bit MSI target address" should help with this 
-particular failure.
-
-
-> 
-> Thanks,
-> Will
-> 
-> Will McVicker (2):
->    PCI: dwc: Drop dependency on ZONE_DMA32
-> 
-> v6:
->   * Retrying DMA allocation with 64-bit mask within the error if-statement.
->   * Use an int for the DMA mask instead of a bool and ternary operation.
-> 
-> v5:
->   * Updated patch 2/2 to first try with a 32-bit DMA mask. On failure,
->     retry with a 64-bit mask if supported.
-> 
-> v4:
->   * Updated commit descriptions.
->   * Renamed msi_64b -> msi_64bit.
->   * Dropped msi_64bit ternary use.
->   * Dropped export of dw_pcie_msi_capabilities.
-> 
-> v3:
->    * Switched to a managed DMA allocation.
->    * Simplified the DMA allocation cleanup.
->    * Dropped msi_page from struct dw_pcie_rp.
->    * Allocating a u64 instead of a full page.
-> 
-> v2:
->    * Fixed build error caught by kernel test robot
->    * Fixed error handling reported by Isaac Manjarres
->   PCI: dwc: Add support for 64-bit MSI target address
-> 
->   .../pci/controller/dwc/pcie-designware-host.c | 43 +++++++++----------
->   drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
->   drivers/pci/controller/dwc/pcie-designware.h  |  2 +-
->   3 files changed, 30 insertions(+), 23 deletions(-)
-> 
-> 
-> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
-
-Thank you in advance.
-
-Regards,
-Evgenii
+Not related to your patch, but this can also trigger a misaligned load.
 
 
-
+Bj=C3=B6rn
