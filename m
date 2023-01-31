@@ -2,124 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C8A682A05
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2F66829E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbjAaKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S229930AbjAaKGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjAaKKW (ORCPT
+        with ESMTP id S229577AbjAaKGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:10:22 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071CC4ED7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:10:20 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so10177542wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:10:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=7CdDpf2HvFlRQpQEy8BTNgrbPxxoMvWAhrZNxv0ihbw=;
-        b=EsczMRY9pPKBmk0Uoa90CyuZBNr/wmbe8DL6DdmUKyhg9uT4jfKKwFFR/eXjWogSyS
-         byyQ2TmNEFYrdw1gNOTj7au/GibHuX4b+usuQwoqP6zJAWmiUzHxrBvlJ+jBw1DIrYsv
-         SNHCXPqB+idCsnYL+8IZqYaSe2HFxMEt+coR3oQHHEMG71Fob8ex995m6rbqdBo1DWBd
-         F0h68k2qzLM3JMl+LoAUaN95pSRayhCLxjsWv+biSmsBzwzWGbZY6UmSungwu9YTmLwU
-         kwrcT8DFMIOeGI0jbMWklUnyGTdbv6mukyK/4883jkLf5dpBeCGLnipNcMAgIa6Dkezd
-         ldcA==
+        Tue, 31 Jan 2023 05:06:00 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B067DBC
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:05:59 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id z12-20020a92d6cc000000b00310d4433c8cso6047478ilp.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:05:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7CdDpf2HvFlRQpQEy8BTNgrbPxxoMvWAhrZNxv0ihbw=;
-        b=sNDQnxrdfJQ8nTldPZAunoeuIQouINLvJKDmHm0x2BCHqFmqUtD/MLbtux8dpZuaFL
-         RbL5aTBbZrap+drHJ33qnVdHORsQsCYLAIEazGdk9SbwvSv5Pgi/cHQ6mDrj7+IIzx3M
-         3gRIY3WNQrTTHDo61+xpZBfjaEJDGUDeA3vbU9TEKEVAIeJXAf1GDno1EfLiNMHcxwPb
-         GK5Q6lv6XMY4a9mzNYxorKfhVeAtXx4LAGJhss+wKRCVqEU8q7/FOUbXSK/7JK/l+6h5
-         SfTbuhCcH0AW8uxT7Nk4qk9+S53LtN7ZQ6e9bEjxBH1kctoJ0Vw8GpO0Bv3MWcVRqW5u
-         3eLw==
-X-Gm-Message-State: AFqh2kqTg5WFqd1v+lVwGapyr9tC/PhvVbhkf4ATmoY7oL++85cdr1rX
-        ypEHdjQ48gwykFdhOMAFb6oUhw==
-X-Google-Smtp-Source: AMrXdXthUNPuxugLmFyr20OmcGU3scVtN6peVaj9WzwNmFTstwv/1P+9kRFJRaBdgp4jtqclwOZUvw==
-X-Received: by 2002:a05:600c:539b:b0:3da:1bb0:4d78 with SMTP id hg27-20020a05600c539b00b003da1bb04d78mr50940932wmb.14.1675159818451;
-        Tue, 31 Jan 2023 02:10:18 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id u9-20020a05600c4d0900b003dc54eef495sm7097981wmp.24.2023.01.31.02.10.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 02:10:17 -0800 (PST)
-References: <20230130231402.471493-1-cphealy@gmail.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     cphealy@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jeremy.wang@amlogic.com
-Cc:     Chris Healy <healych@amazon.com>
-Subject: Re: [PATCH v3] net: phy: meson-gxl: Add generic dummy stubs for MMD
- register access
-Date:   Tue, 31 Jan 2023 11:05:19 +0100
-In-reply-to: <20230130231402.471493-1-cphealy@gmail.com>
-Message-ID: <1jbkmf2ewn.fsf@starbuckisacylon.baylibre.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y+4BMTrID5GcVOa6o1z549r2tcoDXP5QejHz+tWZx88=;
+        b=0uzVRW84AVNbYnfz03L4joiqXZPGcNfJNIWnK+0fjjH17bAdcE52z/hyfI4tBu9ITu
+         qu0qmAsLiWIeqIhTI7XwT4qS11ieX+1EfQdLojA18c4dcpyYX0m75PuZxuqGynM7WBvA
+         +STjAPcfCy4KsPOWXsGDNVbAZFvuzGIbnUrrK45rGyIaru1mioJZgyBGq+Ie5hfGQCRu
+         KhfGEVLKfiAb26Z1Nz1u9xR0BHFk/tjUixgNk4PR/8h/vDrFv4RRsnAZe5nr3sfAvGa5
+         zrgnYCxf/2NIDpFCkAhTN0+wZYFSQgMsQC1LjXzfNgexhrmbL7m8K0gaQcBuLxgzjWJa
+         i0Hg==
+X-Gm-Message-State: AFqh2kprC+q0Kk0jKDCA88hAAyqx9B2q8C7jpjii9sgWiDMZYjdT0XMA
+        KZ1hx+xqGLnCemoIvBh+MCu4c2T+4YZZ/nNhounOxhiP/Ya1
+X-Google-Smtp-Source: AMrXdXvFluzhK2vyMm+UWJOG0y8yvyJwKxz9BROjgeMtjj6jwcDXR3vF7oz2p1MUBVKBL5zgzdKSb8nC4PFr0BMfcZLSCZZ5wY2k
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:caac:0:b0:3a3:1d2f:1a23 with SMTP id
+ e12-20020a02caac000000b003a31d2f1a23mr7385081jap.85.1675159558366; Tue, 31
+ Jan 2023 02:05:58 -0800 (PST)
+Date:   Tue, 31 Jan 2023 02:05:58 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006b2ca005f38c7aeb@google.com>
+Subject: [syzbot] [hfsplus?] [udf?] [fat?] [jfs?] [vfs?] [hfs?] [exfat?]
+ [ntfs3?] WARNING in __mpage_writepage
+From:   syzbot <syzbot+707bba7f823c7b02fa43@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com, brauner@kernel.org,
+        dchinner@redhat.com, hirofumi@mail.parknet.co.jp, jack@suse.com,
+        jfs-discussion@lists.sourceforge.net, linkinjeon@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, shaggy@kernel.org, sj1557.seo@samsung.com,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On Mon 30 Jan 2023 at 15:14, Chris Healy <cphealy@gmail.com> wrote:
+syzbot found the following issue on:
 
-> From: Chris Healy <healych@amazon.com>
->
-> The Meson G12A Internal PHY does not support standard IEEE MMD extended
-> register access, therefore add generic dummy stubs to fail the read and
-> write MMD calls. This is necessary to prevent the core PHY code from
-> erroneously believing that EEE is supported by this PHY even though this
-> PHY does not support EEE, as MMD register access returns all FFFFs.
+HEAD commit:    e2f86c02fdc9 Add linux-next specific files for 20230127
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=156b2101480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=920c61956db733da
+dashboard link: https://syzkaller.appspot.com/bug?extid=707bba7f823c7b02fa43
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=118429cd480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12ccb1c1480000
 
-This is definitely something that should be done, Thx !
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ff04f1611fad/disk-e2f86c02.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/67928a8622d3/vmlinux-e2f86c02.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b444a3d78556/bzImage-e2f86c02.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/99c5e7532847/mount_0.gz
 
->
-> Fixes: 5c3407abb338 ("net: phy: meson-gxl: add g12a support")
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+707bba7f823c7b02fa43@syzkaller.appspotmail.com
 
-This commit does not seems appropriate, especially since only the GXL ops
-are changed, not the g12a variant.
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5085 at fs/mpage.c:570 __mpage_writepage+0x138b/0x16f0 fs/mpage.c:570
+Modules linked in:
+CPU: 1 PID: 5085 Comm: syz-executor403 Not tainted 6.2.0-rc5-next-20230127-syzkaller-08766-ge2f86c02fdc9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+RIP: 0010:__mpage_writepage+0x138b/0x16f0 fs/mpage.c:570
+Code: 00 00 48 89 ef e8 15 24 df ff 48 8b 44 24 38 f0 80 88 c0 01 00 00 02 48 c7 44 24 10 00 00 00 00 e9 3c f0 ff ff e8 c5 25 90 ff <0f> 0b 48 8b 44 24 08 48 83 c0 10 48 89 44 24 20 e9 78 ef ff ff e8
+RSP: 0018:ffffc90003bff4e8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: fffffffffffe2000 RCX: 0000000000000000
+RDX: ffff888021b11d40 RSI: ffffffff81f48f5b RDI: 0000000000000006
+RBP: 000000000001e000 R08: 0000000000000006 R09: 0000000000000000
+R10: 000000000001e000 R11: 0000000000000000 R12: 0000000000000004
+R13: ffff88801b930000 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007f5bbe1fd700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffee627fdc0 CR3: 000000001c713000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ write_cache_pages+0x4cc/0xe70 mm/page-writeback.c:2473
+ mpage_writepages+0xc6/0x170 fs/mpage.c:652
+ do_writepages+0x1a8/0x640 mm/page-writeback.c:2551
+ filemap_fdatawrite_wbc mm/filemap.c:388 [inline]
+ filemap_fdatawrite_wbc+0x147/0x1b0 mm/filemap.c:378
+ __filemap_fdatawrite_range+0xb8/0xf0 mm/filemap.c:421
+ file_write_and_wait_range+0xce/0x140 mm/filemap.c:779
+ hfsplus_file_fsync+0xc3/0x5d0 fs/hfsplus/inode.c:313
+ vfs_fsync_range+0x13e/0x230 fs/sync.c:188
+ generic_write_sync include/linux/fs.h:2452 [inline]
+ generic_file_write_iter+0x25a/0x350 mm/filemap.c:3934
+ call_write_iter include/linux/fs.h:1851 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x9ed/0xe10 fs/read_write.c:584
+ ksys_write+0x12b/0x250 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f5bbe258be9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 31 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f5bbe1fd2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f5bbe2d56c0 RCX: 00007f5bbe258be9
+RDX: 000000000208e280 RSI: 0000000020001980 RDI: 0000000000000004
+RBP: 00007f5bbe2a2640 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f5bbe2a22e0
+R13: 0030656c69662f2e R14: 0073756c70736668 R15: 00007f5bbe2d56c8
+ </TASK>
 
-This brings a 2nd point, any reason for not changing the g12 variant ?
-I'm fairly confident it does support EEE either.
 
-> Reviewed-by: Heiner Kallweit <hkallweit1@gmail.com>
-> Signed-off-by: Chris Healy <healych@amazon.com>
->
-> ---
->
-> Changes in v3:
-> * Add reviewed-by
-> Change in v2:
-> * Add fixes tag
->
->  drivers/net/phy/meson-gxl.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/net/phy/meson-gxl.c b/drivers/net/phy/meson-gxl.c
-> index c49062ad72c6..5e41658b1e2f 100644
-> --- a/drivers/net/phy/meson-gxl.c
-> +++ b/drivers/net/phy/meson-gxl.c
-> @@ -271,6 +271,8 @@ static struct phy_driver meson_gxl_phy[] = {
->  		.handle_interrupt = meson_gxl_handle_interrupt,
->  		.suspend        = genphy_suspend,
->  		.resume         = genphy_resume,
-> +		.read_mmd	= genphy_read_mmd_unsupported,
-> +		.write_mmd	= genphy_write_mmd_unsupported,
->  	},
->  };
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
