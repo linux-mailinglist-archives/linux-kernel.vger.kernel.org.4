@@ -2,163 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83C76828CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C536828D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbjAaJ2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S232645AbjAaJ3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjAaJ2C (ORCPT
+        with ESMTP id S232302AbjAaJ27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:28:02 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5459759
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:28:00 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so13835488pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cRicPiuaBpPdTHFzOhiCezQ5GuYSGllcRPaK1dz/uvE=;
-        b=b68LiQHhWG3BL76DPGqfQQR8n8lH8MhamuMSFuRccumQrqSxrFcpNzdHuWE0ZrmaOj
-         85t7w84ieF8VtgWrBMU3b93HPfiZRrsIzU6QEDBpWc3JT9ufUkERMQdZqInh/l18wd7n
-         TXnnQ3LerHMIrQesfDzvyGDIPEEXsmufdJmro=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cRicPiuaBpPdTHFzOhiCezQ5GuYSGllcRPaK1dz/uvE=;
-        b=q24tQYRnoo9mU6tFl34Ft+ZCOvDbv7CR2MzLK2uIyFWyYv730i3PjWDHeLMEH8izaC
-         VUj5uq6Va2N99cbo/QXKX1ZOoDNC/nDNLArMSGsaDX6PHPQkOFsn6wnRGiaNiF4M/UvQ
-         fR8FbGfH9+Ox+NOcgs8wFQ1w00P400o8gS5uyxxZJBF+bykozlAxeQHo+yLPAajubvAh
-         L61Izhf5R5h7M1lzsokfBStuT+L9YeBUnzQe5QEpOo0gbhtpMMbGaabqzM0gU81SUxA4
-         5Jt/vQG97xbGu3gRhrakdQY/dyZQqeHlkN5639Hs1iw6MrWNvDukZQZ+Lg/KSyPzCIoe
-         BCrA==
-X-Gm-Message-State: AFqh2krD6PnbXn44Fnx6rScnJAN4P5dQAYlAGFrTTzGLV6jA4aVuG2md
-        r6C3Yf2Toub9/W6IGdYr9ZyUHwxNwNCLuTABCODY
-X-Google-Smtp-Source: AMrXdXuqJZe71wMHsvHQa+/ofcNqzAcOCHpQvFAoA3yjOjAFaR3HQs3cLMhLk6QI5qrARLILCxRb9Lw/BmeYIUF58Rg=
-X-Received: by 2002:a17:902:8f8a:b0:193:794:ba9 with SMTP id
- z10-20020a1709028f8a00b0019307940ba9mr6658889plo.22.1675157280064; Tue, 31
- Jan 2023 01:28:00 -0800 (PST)
+        Tue, 31 Jan 2023 04:28:59 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A54CDC7;
+        Tue, 31 Jan 2023 01:28:58 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V88YNh001974;
+        Tue, 31 Jan 2023 09:28:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=oQTL0ghYcTZEQswOQIPao0jBiOAoKd9a71FE5v671Fg=;
+ b=V2wFDN2A5kJYLS6Q2Mo6u1BwvX8wjoDcozsgwnJIPvyRYE/C3ytc/OTsfxE0fKzjHbhz
+ AzK6huL1PBt9WltEdQ8z3NKA+DjdBOSNISBJjLRcAN1Fx4BhWRgk6s2O82JoEmNtuCa4
+ xlL87119YBKC5KOCSlTNkH3Dr9g1MHnKRczGJAEICwmffAGt6lHbPHayLedtBUSVLskc
+ oe7CoI4hue/VaihdH29/9Msc5R+DOWi4aA1JTmzeB37GTXfZPinqEIAFTaIf+9Ws+Jzh
+ NTLWSK5GZGP8DRmi33PDn6O1gDhP1+hYyB2x49dvn5EJwFHiWl4VAVMZH/Ye/AINYxPv cQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nexb00am3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 09:28:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30V9Slww009694
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 09:28:47 GMT
+Received: from [10.50.40.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 01:28:42 -0800
+Message-ID: <6bb22160-5966-43d3-ffba-489b77b3a095@quicinc.com>
+Date:   Tue, 31 Jan 2023 14:58:39 +0530
 MIME-Version: 1.0
-References: <20230128072737.2995881-1-apatel@ventanamicro.com> <20230128072737.2995881-4-apatel@ventanamicro.com>
-In-Reply-To: <20230128072737.2995881-4-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 31 Jan 2023 01:27:48 -0800
-Message-ID: <CAOnJCUKDYkJz0RNEYnPFrSax7e8cATvqYTXwPA+58Y8zVqEZCQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/7] RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID
- mask defines
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 6/6] regulator: qcom_smd: Add support to define the bootup
+ voltage
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <quic_ipkumar@quicinc.com>
+References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
+ <20230113150310.29709-7-quic_devipriy@quicinc.com>
+ <77d84408-166e-8a02-227a-67654a4d31f2@linaro.org>
+ <df6c1cd6-ea70-e65c-b4e8-3da80697242f@quicinc.com>
+ <cc037133-7c45-325f-4a1d-9855d033ae5c@linaro.org>
+From:   Devi Priya <quic_devipriy@quicinc.com>
+In-Reply-To: <cc037133-7c45-325f-4a1d-9855d033ae5c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: LzJ7g2sKFVBevlMbIiTzXXZdbqWSM1l5
+X-Proofpoint-ORIG-GUID: LzJ7g2sKFVBevlMbIiTzXXZdbqWSM1l5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_04,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 clxscore=1015 adultscore=0 suspectscore=0 spamscore=0
+ bulkscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310083
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 11:28 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> The hgatp.VMID mask defines are used before shifting when extracting
-> VMID value from hgatp CSR value so based on the convention followed
-> in the other parts of asm/csr.h, the hgatp.VMID mask defines should
-> not have a _MASK suffix.
->
-> While we are here, let's use GENMASK() for hgatp.VMID and hgatp.PPN.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/csr.h | 12 ++++++------
->  arch/riscv/kvm/mmu.c         |  3 +--
->  arch/riscv/kvm/vmid.c        |  4 ++--
->  3 files changed, 9 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-> index 3c8d68152bce..3176355cf4e9 100644
-> --- a/arch/riscv/include/asm/csr.h
-> +++ b/arch/riscv/include/asm/csr.h
-> @@ -131,25 +131,25 @@
->
->  #define HGATP32_MODE_SHIFT     31
->  #define HGATP32_VMID_SHIFT     22
-> -#define HGATP32_VMID_MASK      _AC(0x1FC00000, UL)
-> -#define HGATP32_PPN            _AC(0x003FFFFF, UL)
-> +#define HGATP32_VMID           GENMASK(28, 22)
-> +#define HGATP32_PPN            GENMASK(21, 0)
->
->  #define HGATP64_MODE_SHIFT     60
->  #define HGATP64_VMID_SHIFT     44
-> -#define HGATP64_VMID_MASK      _AC(0x03FFF00000000000, UL)
-> -#define HGATP64_PPN            _AC(0x00000FFFFFFFFFFF, UL)
-> +#define HGATP64_VMID           GENMASK(57, 44)
-> +#define HGATP64_PPN            GENMASK(43, 0)
->
->  #define HGATP_PAGE_SHIFT       12
->
->  #ifdef CONFIG_64BIT
->  #define HGATP_PPN              HGATP64_PPN
->  #define HGATP_VMID_SHIFT       HGATP64_VMID_SHIFT
-> -#define HGATP_VMID_MASK                HGATP64_VMID_MASK
-> +#define HGATP_VMID             HGATP64_VMID
->  #define HGATP_MODE_SHIFT       HGATP64_MODE_SHIFT
->  #else
->  #define HGATP_PPN              HGATP32_PPN
->  #define HGATP_VMID_SHIFT       HGATP32_VMID_SHIFT
-> -#define HGATP_VMID_MASK                HGATP32_VMID_MASK
-> +#define HGATP_VMID             HGATP32_VMID
->  #define HGATP_MODE_SHIFT       HGATP32_MODE_SHIFT
->  #endif
->
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index dbc4ca060174..829a7065ae01 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -748,8 +748,7 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu)
->         unsigned long hgatp = gstage_mode;
->         struct kvm_arch *k = &vcpu->kvm->arch;
->
-> -       hgatp |= (READ_ONCE(k->vmid.vmid) << HGATP_VMID_SHIFT) &
-> -                HGATP_VMID_MASK;
-> +       hgatp |= (READ_ONCE(k->vmid.vmid) << HGATP_VMID_SHIFT) & HGATP_VMID;
->         hgatp |= (k->pgd_phys >> PAGE_SHIFT) & HGATP_PPN;
->
->         csr_write(CSR_HGATP, hgatp);
-> diff --git a/arch/riscv/kvm/vmid.c b/arch/riscv/kvm/vmid.c
-> index 6cd93995fb65..6f4d4979a759 100644
-> --- a/arch/riscv/kvm/vmid.c
-> +++ b/arch/riscv/kvm/vmid.c
-> @@ -26,9 +26,9 @@ void kvm_riscv_gstage_vmid_detect(void)
->
->         /* Figure-out number of VMID bits in HW */
->         old = csr_read(CSR_HGATP);
-> -       csr_write(CSR_HGATP, old | HGATP_VMID_MASK);
-> +       csr_write(CSR_HGATP, old | HGATP_VMID);
->         vmid_bits = csr_read(CSR_HGATP);
-> -       vmid_bits = (vmid_bits & HGATP_VMID_MASK) >> HGATP_VMID_SHIFT;
-> +       vmid_bits = (vmid_bits & HGATP_VMID) >> HGATP_VMID_SHIFT;
->         vmid_bits = fls_long(vmid_bits);
->         csr_write(CSR_HGATP, old);
->
-> --
-> 2.34.1
->
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
--- 
-Regards,
-Atish
+On 1/27/2023 9:40 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 27.01.2023 17:07, Devi Priya wrote:
+>>
+>>
+>> On 1/13/2023 9:07 PM, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 13.01.2023 16:03, devi priya wrote:
+>>>> Kernel does not know the initial voltage set by the bootloaders.
+>>>> During regulator registration, the voltage variable is just declared
+>>>> and it is zero. Based on that, the regulator framework considers current
+>>>> the voltage as zero and tries to bring up each regulator to minimum
+>>>> the supported voltage.
+>>>>
+>>>> This introduces a dip in the voltage during kernel boot and gets
+>>>> stabilized once the voltage scaling comes into picture.
+>>>>
+>>>> To avoid the voltage dip, adding support to define the
+>>>> bootup voltage set by the boodloaders and based on it, regulator
+>>>> framework understands that proper voltage is already set
+>>>>
+>>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+>>>> ---
+>>> Or maybe hook it up to the spmi_regulator_common_get_voltage()
+>>> from the SPMI regulator driver and read the real voltage instead
+>>> of relying on hardcoded values thay may differ between boards?
+>>>
+>>> Konrad
+>> In IPQ9574, SPMI regulator is not used. We are using RPM-Glink communication and the regulators are controlled by RPM.
+>> In this case, we don't have an option to readback the bootup voltage and so, we have hardcoded the values
+> Unless something changed, RPM regulator framework is simply a
+> fancy front-end for communicating with the PMIC over SPMI, AFAIK..
+> 
+> Konrad
+Currently in our driver, the voltage write request will be sent to RPM 
+via GLINK which then writes it to the PMIC over I2C using the below APIs
+qcom_rpm_smd_write -> rpmsg_send
+In IPQ9574, we do not have SPMI support or the support to readback voltage.
+
+>>
+>>>>    drivers/regulator/qcom_smd-regulator.c | 6 +++++-
+>>>>    1 file changed, 5 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+>>>> index 1eb17d378897..49a36b07397c 100644
+>>>> --- a/drivers/regulator/qcom_smd-regulator.c
+>>>> +++ b/drivers/regulator/qcom_smd-regulator.c
+>>>> @@ -800,6 +800,7 @@ struct rpm_regulator_data {
+>>>>        u32 id;
+>>>>        const struct regulator_desc *desc;
+>>>>        const char *supply;
+>>>> +    int boot_uV; /* To store the bootup voltage set by bootloaders */
+>>>>    };
+>>>>      static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+>>>> @@ -809,7 +810,7 @@ static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+>>>>    };
+>>>>      static const struct rpm_regulator_data rpm_ipq9574_mp5496_regulators[] = {
+>>>> -    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1" },
+>>>> +    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1", 875000 },
+>>>>        {}
+>>>>    };
+>>>>    @@ -1394,6 +1395,9 @@ static int rpm_regulator_init_vreg(struct qcom_rpm_reg *vreg, struct device *dev
+>>>>        vreg->type    = rpm_data->type;
+>>>>        vreg->id    = rpm_data->id;
+>>>>    +    if (rpm_data->boot_uV)
+>>>> +        vreg->uV = rpm_data->boot_uV;
+>>>> +
+>>>>        memcpy(&vreg->desc, rpm_data->desc, sizeof(vreg->desc));
+>>>>        vreg->desc.name = rpm_data->name;
+>>>>        vreg->desc.supply_name = rpm_data->supply;
+>> Best Regards,
+>> Devi Priya
+Best Regards,
+Devi Priya
