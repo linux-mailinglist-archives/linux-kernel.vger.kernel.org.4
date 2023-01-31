@@ -2,108 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A5E682E90
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534F7682E98
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbjAaOAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S232455AbjAaOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjAaOAN (ORCPT
+        with ESMTP id S231407AbjAaOBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:00:13 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DD84B77E
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675173610; x=1706709610;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0oIxRLpksNU+vzluJm3n5ZxLGPzCv+NyMfa7IMvHzBg=;
-  b=bBjI2dKkAA7Inbn985IKrwZxoJ8wNgNEJpFzu/FA/s8DMMYGnnir9yY+
-   mdurTPE5IOV9RRmHyjYIDrqhM8DEYWDWGqU49d6s8/TJznUcf7WNOlMcv
-   EpkzOhauNaQOfJOvoTQ7aQS6wRydR5BQZ4HxPg6/8FSowEDbulLiNU7DI
-   g+7BhUgpF3vHqE9I5KDTx49B8e8mM3WW3AmqSSfXGdM/KXGgrY0xmvpui
-   LN2FbO7fjV6fjyUsklzTggssYGzihokkNtGgXzxat5lUxjjUcd6MICh/f
-   Z/k3slGYpaG5SSaLmKV1JANdtDNHZVOGlm42oMUssIQaIY+FpwmYN8VVw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="329115525"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="329115525"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 06:00:10 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="772982150"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="772982150"
-Received: from jlawryno-mobl.ger.corp.intel.com (HELO [10.237.142.112]) ([10.237.142.112])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 06:00:07 -0800
-Message-ID: <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
-Date:   Tue, 31 Jan 2023 15:00:05 +0100
+        Tue, 31 Jan 2023 09:01:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF440518CA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:00:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675173614;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sW7aiMox0CriK8aU+HN+jb3vaXSIy6HBnrk2aPiMthI=;
+        b=hNBqq1VaLUmj3Gv1bRG7q+5EQCO429IY7U/08wZlnbsDbr814ZlRjHZ0QxfnaGFtdWzpni
+        tDLuxG8mKUlU8g0iKrrkVJslJvv5Pg/tJEf+A+xr1EDIPxSAPiLpbQV/Nn1IDqcMMhscrK
+        f3/M7EcB/tK+JCmXdbEaboSZ0rFgfhs=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-635-ex_gDDw1MTSG51iMe9dUbg-1; Tue, 31 Jan 2023 09:00:12 -0500
+X-MC-Unique: ex_gDDw1MTSG51iMe9dUbg-1
+Received: by mail-wr1-f72.google.com with SMTP id e9-20020a5d6d09000000b002c172f173a9so301443wrq.17
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:00:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sW7aiMox0CriK8aU+HN+jb3vaXSIy6HBnrk2aPiMthI=;
+        b=Z86W/PjIKYGnpOap9AFIAUyV7T2ODF4WoOxXXn4WmLcmXpNDOkOcH9IZ/0ShoH7HyY
+         6pAvBMffxeb42w/4mSGLq3X5PgWgGFN9n0wcUCwWPFCHe50Rw3zQThUV4/dlZ9kyjGGH
+         MJfnpLmWpZHV5PsZhZjgzKVW94hGkEn+Sh+T0wojZPZh9h9Go6k1OiJYI+QKqQK65R37
+         614VXk3gBx1rUNkXu/EKyoyRUppmEIbOwnWwqLmR6+hJeNIIJv7ZO2OM6u7lSvTtPM/Z
+         DV8rT2zzm6m84IsfoUcddtoy73wITaK78XcGsugAdTLHKgpRVltpALTII39a+03ER64D
+         z0nA==
+X-Gm-Message-State: AO0yUKWHCfTZJOzpRv/n10LBxjBpZN5IhkkOsj65R4o49J5f0v0aceIK
+        lrmiFc60SYqzBQ/RI009UWEoYM5shDoEdmNmjIdQJrhgcujPrPZZENKXgKl4j1YaFWRfse9bqHE
+        OpNhZrT56fTGu3NXtFp003rBw
+X-Received: by 2002:a05:600c:3b84:b0:3dc:1031:14c4 with SMTP id n4-20020a05600c3b8400b003dc103114c4mr3752227wms.14.1675173611365;
+        Tue, 31 Jan 2023 06:00:11 -0800 (PST)
+X-Google-Smtp-Source: AK7set94yYHCQtMUhLwwFZW2Tw85+OPCk5GgL8jU/FYp0b92bP94albwy2k0jgp6h4ZElMMLuWMq1g==
+X-Received: by 2002:a05:600c:3b84:b0:3dc:1031:14c4 with SMTP id n4-20020a05600c3b8400b003dc103114c4mr3752186wms.14.1675173611028;
+        Tue, 31 Jan 2023 06:00:11 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f0a:ca00:f74f:2017:1617:3ec3? (p200300d82f0aca00f74f201716173ec3.dip0.t-ipconnect.de. [2003:d8:2f0a:ca00:f74f:2017:1617:3ec3])
+        by smtp.gmail.com with ESMTPSA id e38-20020a05600c4ba600b003dc434900e1sm11512963wmp.34.2023.01.31.06.00.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 06:00:10 -0800 (PST)
+Message-ID: <658eda9c-d716-fcb7-ba0c-b36f646195f1@redhat.com>
+Date:   Tue, 31 Jan 2023 15:00:08 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] accel/ivpu: avoid duplciate assignment
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH 01/19] mm: Introduce vm_account
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Krystian Pradzynski <krystian.pradzynski@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org
-References: <20230126163804.3648051-1-arnd@kernel.org>
- <20230126163804.3648051-2-arnd@kernel.org>
-From:   Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20230126163804.3648051-2-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
+        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch, linuxppc-dev@lists.ozlabs.org,
+        linux-fpga@vger.kernel.org, linux-rdma@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org,
+        bpf@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-kselftest@vger.kernel.org
+References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+ <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <748338ffe4c42d86669923159fe0426808ecb04d.1674538665.git-series.apopple@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied to drm-misc-next. Thanks.
+On 24.01.23 06:42, Alistair Popple wrote:
+> Kernel drivers that pin pages should account these pages against
+> either user->locked_vm or mm->pinned_vm and fail the pinning if
+> RLIMIT_MEMLOCK is exceeded and CAP_IPC_LOCK isn't held.
+> 
+> Currently drivers open-code this accounting and use various methods to
+> update the atomic variables and check against the limits leading to
+> various bugs and inconsistencies. To fix this introduce a standard
+> interface for charging pinned and locked memory. As this involves
+> taking references on kernel objects such as mm_struct or user_struct
+> we introduce a new vm_account struct to hold these references. Several
+> helper functions are then introduced to grab references and check
+> limits.
+> 
+> As the way these limits are charged and enforced is visible to
+> userspace we need to be careful not to break existing applications by
+> charging to different counters. As a result the vm_account functions
+> support accounting to different counters as required.
+> 
+> A future change will extend this to also account against a cgroup for
+> pinned pages.
 
-On 26.01.2023 17:37, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> With extra warnings enabled, gcc warns about two assignments
-> of the same .mmap callback:
-> 
-> In file included from drivers/accel/ivpu/ivpu_drv.c:10:
-> include/drm/drm_accel.h:31:27: error: initialized field overwritten [-Werror=override-init]
->    31 |         .mmap           = drm_gem_mmap
->       |                           ^~~~~~~~~~~~
-> drivers/accel/ivpu/ivpu_drv.c:360:9: note: in expansion of macro 'DRM_ACCEL_FOPS'
->   360 |         DRM_ACCEL_FOPS,
->       |         ^~~~~~~~~~~~~~
-> 
-> Remove the unused local assignment.
-> 
-> Fixes: 20709aa9435b ("accel: Add .mmap to DRM_ACCEL_FOPS")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/accel/ivpu/ivpu_drv.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/accel/ivpu/ivpu_drv.c b/drivers/accel/ivpu/ivpu_drv.c
-> index 2bc2f1b90671..a29e8ee0dce6 100644
-> --- a/drivers/accel/ivpu/ivpu_drv.c
-> +++ b/drivers/accel/ivpu/ivpu_drv.c
-> @@ -356,7 +356,6 @@ int ivpu_shutdown(struct ivpu_device *vdev)
->  
->  static const struct file_operations ivpu_fops = {
->  	.owner		= THIS_MODULE,
-> -	.mmap           = drm_gem_mmap,
->  	DRM_ACCEL_FOPS,
->  };
->  
+The term "vm_account" is misleading, no? VM_ACCOUNT is for accounting 
+towards the commit limit ....
+
+-- 
+Thanks,
+
+David / dhildenb
+
