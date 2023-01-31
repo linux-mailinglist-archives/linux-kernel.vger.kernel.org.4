@@ -2,375 +2,600 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9B36839D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6256839EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjAaW6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:58:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
+        id S229900AbjAaXAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 18:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjAaW6p (ORCPT
+        with ESMTP id S231283AbjAaXAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:58:45 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7DE4ED23
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:58:42 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VIhvhd013725;
-        Tue, 31 Jan 2023 22:58:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=Z5Yml8pBO/4eNWfIeYBssFI6hrhIBjwid65P0cqXlZs=;
- b=PvMWTx/Z25iL6s3aeXGrYPO7f7VxjropB6v9XMc3rKG+eObn5WOPrFyDn6lp9FNvaw9u
- iuTO20tP22xEWaUbP+FPdIIFMW8oqtgtA2krUa1OE311FfOLPUnoWVAbWGLvpeZN8Gb+
- vT5r4a0xUCyhs8S+EvGv27XaLDjnBX8SzmJEvhRCXN1PH7IRhEUeuP0hOfyBdYV3h7Ez
- BtuLBRga43UemUjb8OA2HA1w8dIq/x91RMxvHv4W7oqeHvLLutk3p7H+XpZU1W0xqlpT
- YLMYzZKAmLrJMnuBZr5vp6xEIXU/VurSrjdh1dDIKejC9xL7BFnrvk0F3M1HmH9Nduxy nw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ncvn9xy5f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 22:58:36 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 30VLE83i003590;
-        Tue, 31 Jan 2023 22:58:36 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3nct5dr79g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 22:58:36 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WnZXdg+o2WUE7Tyw01X4iezZVi7E9U39U02m/+q3akELKC7cz9+VcCdBpoR0Oi2730MeIlTZ05y71n3IIUA98RMms6QHQRJ5JduIE+duNC47v0XwXFGIprG4ooQ94VXtIlxMxiqEzxkNA+ZSVrrbT7JYZEAKEeO/YdBe1IzqMC6haYrnFEmdqOQ/iyR04REJub5fTsWuNNZlTD1UQP57A4QJfYj/H9OSvdFUm3oNDMLAANVfIVinUROljQscE/Ab6qywv4MxOmJeEE45ND2J7l83Um9tSg73dPzfa0kXJ0xHpSe90o018HYg4cOGBEDbFR9xMoxgkDiFRVV3GMkjNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z5Yml8pBO/4eNWfIeYBssFI6hrhIBjwid65P0cqXlZs=;
- b=kQ7/bvVFqZHHYmMaVt4zy5H93C1lRwikg7P4prX2ZkZucJxp3nQnomLkyJEIaWEiH3uxq8hfZIBf7R5OYy+65iN5V+6QBxakJTR5ki4IYqZZ+KMMw5YbA0qbLfKkLS2yjwd/VrA0AzOP+450dvlSpwpiuWZS0UgeHEbxfHjaPebvBToNp9E+tGUdwafr0zNa+bdIOFd9ZRt5hXDP/eQ9SSmRdU6tbLTUWQP+VddkIOIziaYjIwlGnZpPAXWAKiN4jIJPTdx2rTVDYb82nSeSZaYfN8UgNQW9SLi7eOkHkYUfgTFdCsXzl8QJikFouKEC3HtWDrHqHAFL6MfaN4Hqaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 31 Jan 2023 18:00:03 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B04323C79
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:00:01 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id ay1so11224588pfb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:00:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z5Yml8pBO/4eNWfIeYBssFI6hrhIBjwid65P0cqXlZs=;
- b=GfP3Voaus/N3rzGNG+vRLTrZP4nMgkjfv10JqRRTjoPFCOIQOenkxhojfxrDkTTVlnlhFn/IZ9ls0KlQRXiXCwAtV+gUOyBPvHHhltmj/lCKUfQ/E7iX3VIFk/aeKga93541tyzytwqDDPCMffjXfbmQ3BLLlkEHxt9CBgYvj18=
-Received: from MW4PR10MB6535.namprd10.prod.outlook.com (2603:10b6:303:225::12)
- by IA1PR10MB6784.namprd10.prod.outlook.com (2603:10b6:208:428::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.20; Tue, 31 Jan
- 2023 22:58:33 +0000
-Received: from MW4PR10MB6535.namprd10.prod.outlook.com
- ([fe80::cd0e:bbf4:4b15:308b]) by MW4PR10MB6535.namprd10.prod.outlook.com
- ([fe80::cd0e:bbf4:4b15:308b%7]) with mapi id 15.20.6064.022; Tue, 31 Jan 2023
- 22:58:33 +0000
-Message-ID: <b228665e-223e-11d5-cf05-ff24a656c0e3@oracle.com>
-Date:   Tue, 31 Jan 2023 14:58:26 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 6/6] vdpa/mlx5: support device features provisioning
-Content-Language: en-US
-To:     Eli Cohen <elic@nvidia.com>, mst@redhat.com, jasowang@redhat.com,
-        parav@nvidia.com
-Cc:     virtualization@lists.linux-foundation.org,
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3QpaZ5KVjwfMzAN4m8VDdNazD96JE3dp7xBbhHzuQWQ=;
+        b=EYIEX4ort4qvDuppuUZjW+/9XDQ1WWEFl+JuPLNBfizjRa9qN+/mL8KuPKj0/5dZRn
+         gimhmwYOXQbt4+RayLj0CNSTbgJ1/vPWgYZXSbvIhOUt+j2f6cfVofLmbVbeQ33sCmBr
+         vPEEABtiBqsotSRYLGjk4ApseTdYoeruqosqSKGzavwYCWzYlMGMZyMf3r1quJGNtJFE
+         nMTYmRaVt/omO91NytLlMIFJytqvOEhSQPiNndFKuxiWrZjEk4dZT/XqhrfmfGD8Y0mN
+         YyhTHKP28YXk4hpxSTsLFl2pF0LWRDkWHQ28FHiayjyqs2K+ZHz+ok7R43i8gbYLhhux
+         yhCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3QpaZ5KVjwfMzAN4m8VDdNazD96JE3dp7xBbhHzuQWQ=;
+        b=kltfSYVVQHIpVa7RvLZn2oLwUSLRfMinOVnsPL7DQCWjg5pIYMyoShQa+vHQwi1s2t
+         aJyspXATISgGSTNfNfaE+s1HVFV7NDG7jXv6rAjxlo/qqX2eh/syo7z2kBqYpx746tW/
+         s4QVkpZkQsobI7eOhJH5+3steaETj8MTZntamMtub/3/sE3LrHwGACpdk5al2E9HMfNL
+         NGdC97L4y0q5MWQl3bVXu7ooilLdOhvptoprFV2KKGGNKuogucJ1QspWK4aOSI+4HhPL
+         ayM2S/49llu2HvwBN5b4menuBtcELJ9J4iToP0xkJAdxjl+Nh1jXe7xe+vMV5/ANoQaD
+         Y2Nw==
+X-Gm-Message-State: AO0yUKWosL05TmCDuqaqcL9qj2ZcWMTTuivvtITOcgbmuqRZEYspW8bU
+        A0ethXPpw/DhXz0O940MlZ0V5g==
+X-Google-Smtp-Source: AK7set8ehO5ZBPK+SjOOw8UbnmOjz01o/s24nQFI2pjdieXK8cR6M+saD194BhoBshQ/6yWsfX6YzQ==
+X-Received: by 2002:a62:1c88:0:b0:593:b115:e2ca with SMTP id c130-20020a621c88000000b00593b115e2camr198651pfc.9.1675206000471;
+        Tue, 31 Jan 2023 15:00:00 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:4e47:8986:95c0:e9fd])
+        by smtp.gmail.com with ESMTPSA id q22-20020aa79836000000b00575caf80d08sm10044453pfl.31.2023.01.31.14.59.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 14:59:59 -0800 (PST)
+Date:   Tue, 31 Jan 2023 15:59:57 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tanmay Shah <tanmay.shah@amd.com>
+Cc:     andersson@kernel.org, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <1675110643-28143-1-git-send-email-si-wei.liu@oracle.com>
- <1675110643-28143-7-git-send-email-si-wei.liu@oracle.com>
- <0b1f2898-e49d-9cb5-2913-382c9a04170f@nvidia.com>
-From:   Si-Wei Liu <si-wei.liu@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <0b1f2898-e49d-9cb5-2913-382c9a04170f@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BN0PR04CA0037.namprd04.prod.outlook.com
- (2603:10b6:408:e8::12) To MW4PR10MB6535.namprd10.prod.outlook.com
- (2603:10b6:303:225::12)
+Subject: Re: [PATCH v2] remoteproc: xilinx: add mailbox channels for rpmsg
+Message-ID: <20230131225957.GA217823@p14s>
+References: <20230126213154.1707300-1-tanmay.shah@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR10MB6535:EE_|IA1PR10MB6784:EE_
-X-MS-Office365-Filtering-Correlation-Id: b88cdaed-783c-4ab9-ccd1-08db03deada4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G7YboQWGm8U+tZzCbun9greToz5pNq3WOn/zDAVvFpkl+iARk+Q37k8o7R3cbbKvOrdpC06wQuFfIquCtRJ6V733ESP2ig64pHaGUiNagNOTFenYOdOOFBP4E493av4Xf4GhvebBCJJZwy5ycrpnFSZ1xYtJWHAZnQ0TjR2rriWT7+Rfk4P29HOOlRlLdEhryH1/Q0UZhQb5ICkZc71t0zugmish4QWZ+bCQP1aEcnuRr3EwAkJDxS+bTg8CszRVTsYueZ7JrRbkapIlH9cQZGbHfcqkB8s8YRF61Wf4u5CNyol7FLTjpwb3MyQsxkmeMCRbSsvOEair+N7AdbcumE+qfNwEBHH4emTT7ZtDUjkNlq+cf8qANQiW6nT6zCzRuF0JHLyDPUnob6LjAJN/1vxYeFdsYUrE9VW//8axXgxdF7VIk+CNSWGAs+yxpzCcasHyf8QLHxiSTq0kQAayBwaIsfFeH9l1PA/aWzL+6ulnuxHgbNYJy9+5OtR70a1Qo7Y2EzL7rHviFlGkCjaMxs74DeSMGLi4AaP30Z1RhzgpAFcxJjIRXV+Avy87BwMEnkOgQ8WnoXmzl80QzgLPGM82QutHsH779M7EzJZNweup8xEaaIGkV5q+eOd/1UicQGZ00pXL9WLQiAwURLtCjFGPdiRO7KGSNBkqGAN73npbJmik9mcHQFXa/icLcI9uYjYuBGRX8D9SdXjcaMgL6etnG8Y01hLKF6f9U7CfXvY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR10MB6535.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(346002)(396003)(39860400002)(376002)(451199018)(31686004)(38100700002)(8936002)(5660300002)(41300700001)(2616005)(8676002)(66556008)(36916002)(66476007)(478600001)(4326008)(36756003)(316002)(2906002)(6486002)(26005)(186003)(86362001)(6512007)(6666004)(31696002)(53546011)(83380400001)(66946007)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VnJlanFrTkRaZ1BoS1RVNVFvZjFjVjU0U21aTWlsODFpWERMNUtLckRaUFpO?=
- =?utf-8?B?MjYwRGcvVnRiT3RuMmpUZzdoUklKOHlIbko2aEFKUWNzaUtFUXUwQmZ5WUsr?=
- =?utf-8?B?N3Y0b0ltazVxdlhxOWozNjQrK2hFc3dpVTB0b1Q1WHhrenkxNUtJRGFpMk11?=
- =?utf-8?B?K0lnQVhzOS9HT1ZocjFVWVdOK1RUWmNhM2VFWHBIek9BSWtpcFJVdGRyUmM0?=
- =?utf-8?B?Nm1ja3V0cCtOSEdVZmlqakkzSDhXOHdxTi9yYXc3Z1lmRnRTUU1LaFZTWFRm?=
- =?utf-8?B?VmNBSndqai9EZ1RwMW5SK3Q2aVVlNDRXYzFKenUyaDh5Yi8zRmRXQkJCRXlG?=
- =?utf-8?B?RlNLUURqVFhoK3hkOGx5dWZzVis4cTZ3SWZ2aHhGZ0ZQSGVZWlZiRm5tV1Z3?=
- =?utf-8?B?ZXBBd29zZHErcU9GcGV4RmI0TVJRLzJHN1BCM1lVMEwyRGxoRkRWRyt4RklM?=
- =?utf-8?B?bzBLY3U5WWhkYXNoM0tzVHcyaGlCa1dyQU4vTVo3YlpNUXV6ZkdtVXcxeUx0?=
- =?utf-8?B?ejBaUTR4TnVpR3RRMW1rajB2d2dvYm5nTDlFUEU0ajZGSE5sL2pOcmU3UHM4?=
- =?utf-8?B?NDA2VmRMVktUKzZ6dFZDbnJpQmwxYUs5RzU1UFF1Ly91YWxhZ3F4cTN0Njc1?=
- =?utf-8?B?RFhZS2MzU3FubmRYVDh4ZTFnMFFVRS9rdDFuZ21sVGpNOU5VWnFDNlFZa1h5?=
- =?utf-8?B?VTRGazhXUXFvMXpkcWZBSm5VVXR5bHpvbEJSQmtobm9jTUowOVZWS3B3REhY?=
- =?utf-8?B?NU5KYjJLYWE5OHpmbVBCc2RLYlVGRUxJWmZSYmZCT2ZhUnEzOWgwZjZMQm5S?=
- =?utf-8?B?TVdZTEJVcitmODlKT1NVOUNUcTN2MEZPSnUyZHRxeHRIS3NwNnc2ODhxeFBW?=
- =?utf-8?B?b3NZLzdRUkh6U1dFbHdoRUM2cFExbmIvQ3YwMHVFUXpxUmZseGhSZmdmdGVE?=
- =?utf-8?B?bFVzczdTbHJOaW9FN1dHdkkrbTdMOTFkSmsrblZjOHlEMFh6cnRPWnQwYU9P?=
- =?utf-8?B?R2VQUG83VWk2Z1hjMWtzU3ZLL2FtNDhjRzlrM0ExbSs1SEQ1RHdLUjRUWmV4?=
- =?utf-8?B?RWFNczRUU0NxZDNaUUtBbWVyWWV5MHFkcDRDSERQSnJCOGpROUM2SHBmNmFD?=
- =?utf-8?B?alQybFZpOFRQN3FiZ3loblYrM1B5YTNPdE1sTmFZQWxEUGdOSGEzaWZwZ2dE?=
- =?utf-8?B?dGhXc1duRjRWajdYUHNzVTd6Y0s0TFRJY3FWM3NONS9KZGEyZzUvVnN1QW5I?=
- =?utf-8?B?SHZ4M1EvTUJibHpDS1BTTjZXUkFUczRNTnlXTXljWU5HNzJUZDNPd09VdURD?=
- =?utf-8?B?MzRaQXFBQ043RVJpKzNqVHRENHFRQmNCV3BvTEk4Q0JQbUQ5SEpOMWtWR25w?=
- =?utf-8?B?YlJwVWtlVytpeUttTW9BNmV3NW1VanFYc0lCNXpjVGhIVndXYU82TFI0NnBQ?=
- =?utf-8?B?VWlYSzRaQmZhMTB2ZjNTL0ZERlZ2UGRMaERvc3VORExHREZMR09iNHh1eW90?=
- =?utf-8?B?ZEVnUGRDa1dlOEMwU1JYelNzUjZHakJ6aEp4cmtXL0tZdVZCNnZNb2hYcWZk?=
- =?utf-8?B?UFQxNi9iS0JLSDQrcm1nVytOMkpYVFk5QjZ6NGIvQndMS0lGR1hWTUtCZ3VP?=
- =?utf-8?B?R0krWHhXaEx4czhUL1BXQnhlTDJXSnA5emhMZkFNalNYeTg2MGtiSVpTcDF3?=
- =?utf-8?B?aE92RzgvUFpOeVh2VzROemhTdFpPQVRNNHpmeFMyOUdnd2VVOE05RjRHYXZa?=
- =?utf-8?B?UFNtV2NkS0J5cm5ia2RJdUREdEU3aDh6ZTU5eTVHWmRVK3k5OTB3dkVRQmhj?=
- =?utf-8?B?Q1J3UExWMHNRdG1landXT2MyMmloOVZpem9qZlM2aERQQ29yTkEra0U3YWcy?=
- =?utf-8?B?QXBDR0ZFbGx1enFYZWpBVHY4c1NocVNlbTBTQkZvSGw2QWdHekpFS2JKS0tV?=
- =?utf-8?B?a24veHlDbUEzU21za3Y3czZQWVVMaDdncUtRdXVpSzlLdnRjbHFJTU03VWZl?=
- =?utf-8?B?N2hWM0RhL3VDWC96YkdUWXArQjFIYnpTQ1gyQkh4M25MeGU4MTFWVlRzTEJs?=
- =?utf-8?B?TTNNM1c5WnJOclJYV0xwbXZ0N2hDZWJLak93ZmlqaENUUGFoMEZPSzl5SHNo?=
- =?utf-8?Q?wASGnzwvNhDt2zwxGEpg0gTWq?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: F960bDIIxxUv5M1z9bqSHwxLYU9CCIgacpA50pACsXp4J/f9nsKbf/LFIpPp9ur+EJ2EqnFWpb1QitmjkMfcn0ZX0bWi3XDYvuNVMeiVrD3l0YOi7PSrL8Sc6jLQLWhLQu1c5+bgXfFpa+LIgyoJE9JG1wFGGRHymJIkdlQROCLs+SVcwwFmwJENfP2bUbBgHJ8cNUfFlBXY0EEvmGPwOrN5zTRtW7F0GTPmGZoZ1PiEMji89wYMSLvwRMJEtm89Oo6FW2eu6Va2r0D3J5368FVKa8dshBqlJOaEHQenOtqGsGHHaKrsEZDp2ix5hdBwzerEdb/MaWCCvbThpVUnCzxafQWoNCxrRqFAnSe3jTa/iXtQQlaUfivPIpqr6yiLJej7pDng7p3s8b6eFJpHlbn/rsCk3+gS1iR5Nw+Cl87i+w3UfhHkLYUTvaqI94TDQz4gd0YJJqeT2eM5wf3E+Cqmfj4zbWPsbOrnED5T7pU629sxr1IH75Vn2Zc84BAMznTBsGYd7DTiXwPNIpV0hgbtDWo8zkGn9QqWSlVCNiO1uERcZmI51p4bkqZRRUA8AoZ8i6/hYtjXcuLEi909VLYHJeo3h2KdfSyTT9xY4bgxi5iJtromKoK81TahjbtuJ0/qUjzMXEtrlBPylJYoY0gy8BI4P2in9CR3kggHq88VZDn4VrCAJCewtyskE9C4cROJAmxqrV2zSxaqfU2QbyLh1lvAX6XnMBQ5JLB/NEg8TOM81PzJYlxTS2SsYkky/eluT5p9PEJGowjmEwTPVi+hjqGgU6kE6EWK99KSO0hbY5D0E4/lQUTgn+SJgOcT038uvHKvaokiN8CV3kb9CwRXLASHKkXjCJHc76pzQSE7CK17ybVd0jQeHvMhXFfQIt26IB/KISEpHOizk4tQbA==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b88cdaed-783c-4ab9-ccd1-08db03deada4
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR10MB6535.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 22:58:33.5813
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ybve0LoNyxZpF0WqOQ8YgPKhpauOg8MrhKpwOQdIFg9AErfsSYayqVczCc1NZicRAXYvNrfMk04TOrIrkjzb2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6784
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- malwarescore=0 mlxscore=0 adultscore=0 suspectscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310198
-X-Proofpoint-GUID: 9Di5sQ36XF9x51L9nloO7Afhsl4_FTYf
-X-Proofpoint-ORIG-GUID: 9Di5sQ36XF9x51L9nloO7Afhsl4_FTYf
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126213154.1707300-1-tanmay.shah@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Good afternoon,
 
+On Thu, Jan 26, 2023 at 01:31:54PM -0800, Tanmay Shah wrote:
+> This patch makes each r5 core mailbox client and uses
+> tx and rx channels to send and receive data to/from
+> remote processor respectively. This is needed for rpmsg
+> communication to remote processor.
+> 
+> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+> ---
+> 
+> Changes in v2:
+>   - fix vrings carveout names as expeceted by remoteproc framework
+> 
 
-On 1/31/2023 4:56 AM, Eli Cohen wrote:
->
-> On 30/01/2023 22:30, Si-Wei Liu wrote:
->> This patch implements features provisioning for mlx5_vdpa.
->>
->> 1) Validate the provisioned features are a subset of the parent
->>     features.
->> 2) Clearing features that are not wanted by userspace.
->> 3) Set config space field only when the corresponding feature is
->>     provisioned.
->>
->> For example:
->>
->>     # vdpa mgmtdev show
->>     pci/0000:41:04.2:
->>       supported_classes net
->>       max_supported_vqs 65
->>       dev_features CSUM GUEST_CSUM MTU MAC HOST_TSO4 HOST_TSO6 STATUS 
->> CTRL_VQ CTRL_VLAN MQ CTRL_MAC_ADDR VERSION_1 ACCESS_PLATFORM
->>
->> 1) Provision vDPA device with all features derived from the parent
->>
->>     # vdpa dev add name vdpa1 mgmtdev pci/0000:41:04.2
->>     # vdpa dev config show
->>     vdpa1: mac e4:11:c6:d3:45:f0 link up link_announce false 
->> max_vq_pairs 1 mtu 1500
->>       negotiated_features CSUM GUEST_CSUM MTU HOST_TSO4 HOST_TSO6 
->> STATUS CTRL_VQ CTRL_VLAN MQ CTRL_MAC_ADDR VERSION_1 ACCESS_PLATFORM
->>
->> 2) Provision vDPA device with a subset of parent features
->>
->>     # vdpa dev add name vdpa1 mgmtdev pci/0000:41:04.2 
->> device_features 0x300020000
->>     # vdpa dev config show
->>     vdpa1:
->>       negotiated_features CTRL_VQ VERSION_1 ACCESS_PLATFORM
->>
->> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
->> ---
->>   drivers/vdpa/mlx5/net/mlx5_vnet.c | 72 
->> +++++++++++++++++++++++++++++++--------
->>   1 file changed, 58 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c 
->> b/drivers/vdpa/mlx5/net/mlx5_vnet.c
->> index 3a6dbbc6..5d6dfd2 100644
->> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
->> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
->> @@ -2183,6 +2183,7 @@ static u64 get_supported_features(struct 
->> mlx5_core_dev *mdev)
->>       mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_STATUS);
->>       mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_MTU);
->>       mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_CTRL_VLAN);
->> +    mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_MAC);
->>         return mlx_vdpa_features;
->>   }
->> @@ -3009,6 +3010,8 @@ static int event_handler(struct notifier_block 
->> *nb, unsigned long event, void *p
->>       struct mlx5_vdpa_wq_ent *wqent;
->>         if (event == MLX5_EVENT_TYPE_PORT_CHANGE) {
->> +        if (!(ndev->mvdev.actual_features & 
->> BIT_ULL(VIRTIO_NET_F_STATUS)))
->> +            return NOTIFY_DONE;
-> Does not belong in this patch
-Yep, I can split the patch. Though feature provisioning on mlx5_vdpa has 
-to depend on that patch.
+This should be in a patch on its own along with a "Fixes" tag.
 
->>           switch (eqe->sub_type) {
->>           case MLX5_PORT_CHANGE_SUBTYPE_DOWN:
->>           case MLX5_PORT_CHANGE_SUBTYPE_ACTIVE:
->> @@ -3060,6 +3063,7 @@ static int mlx5_vdpa_dev_add(struct 
->> vdpa_mgmt_dev *v_mdev, const char *name,
->>       struct mlx5_vdpa_dev *mvdev;
->>       struct mlx5_vdpa_net *ndev;
->>       struct mlx5_core_dev *mdev;
->> +    u64 device_features;
->>       u32 max_vqs;
->>       u16 mtu;
->>       int err;
->> @@ -3068,6 +3072,25 @@ static int mlx5_vdpa_dev_add(struct 
->> vdpa_mgmt_dev *v_mdev, const char *name,
->>           return -ENOSPC;
->>         mdev = mgtdev->madev->mdev;
->> +    device_features = mgtdev->mgtdev.supported_features;
->> +    if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
->> +        if (add_config->device_features & ~device_features) {
->> +            dev_warn(mdev->device,
->> +                 "The provisioned features 0x%llx are not supported 
->> by this device with features 0x%llx\n",
->> +                 add_config->device_features, device_features);
->> +            return -EINVAL;
->> +        }
->> +        device_features &= add_config->device_features;
->> +    }
->> +    if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES) &&
-> This looks redundant.
-This will be handy to rewrite the conditional when legacy device (non 
-VERSION_1) is going to be provisioned which may support in future.. But 
-I can remove the check for now.
+>  drivers/remoteproc/xlnx_r5_remoteproc.c | 352 ++++++++++++++++++++----
+>  1 file changed, 292 insertions(+), 60 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
+> index 2db57d394155..45ce7f2089bf 100644
+> --- a/drivers/remoteproc/xlnx_r5_remoteproc.c
+> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
+> @@ -8,16 +8,23 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/firmware/xlnx-zynqmp.h>
+>  #include <linux/kernel.h>
+> +#include <linux/mailbox_client.h>
+> +#include <linux/mailbox/zynqmp-ipi-message.h>
+>  #include <linux/module.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/remoteproc.h>
+> -#include <linux/slab.h>
+>  
+>  #include "remoteproc_internal.h"
+>  
+> +/* IPI buffer MAX length */
+> +#define IPI_BUF_LEN_MAX	32U
+> +
 
->> +        !(device_features & BIT_ULL(VIRTIO_F_VERSION_1) &&
->> +          device_features & BIT_ULL(VIRTIO_F_ACCESS_PLATFORM))) {
->> +        dev_warn(mdev->device,
->> +             "Must provision minimum features 0x%llx for this device",
->> +             BIT_ULL(VIRTIO_F_VERSION_1) | 
->> BIT_ULL(VIRTIO_F_ACCESS_PLATFORM));
->> +        return -EOPNOTSUPP;
->> +    }
->> +
->>       if (!(MLX5_CAP_DEV_VDPA_EMULATION(mdev, virtio_queue_type) &
->>           MLX5_VIRTIO_EMULATION_CAP_VIRTIO_QUEUE_TYPE_SPLIT)) {
->>           dev_warn(mdev->device, "missing support for split 
->> virtqueues\n");
->> @@ -3096,7 +3119,6 @@ static int mlx5_vdpa_dev_add(struct 
->> vdpa_mgmt_dev *v_mdev, const char *name,
->>       if (IS_ERR(ndev))
->>           return PTR_ERR(ndev);
->>   -    ndev->mvdev.mlx_features = mgtdev->mgtdev.supported_features;
->>       ndev->mvdev.max_vqs = max_vqs;
->>       mvdev = &ndev->mvdev;
->>       mvdev->mdev = mdev;
->> @@ -3118,20 +3140,26 @@ static int mlx5_vdpa_dev_add(struct 
->> vdpa_mgmt_dev *v_mdev, const char *name,
->>               goto err_alloc;
->>       }
->>   -    err = query_mtu(mdev, &mtu);
->> -    if (err)
->> -        goto err_alloc;
->> +    if (device_features & BIT_ULL(VIRTIO_NET_F_MTU)) {
->> +        err = query_mtu(mdev, &mtu);
->> +        if (err)
->> +            goto err_alloc;
->>   -    ndev->config.mtu = cpu_to_mlx5vdpa16(mvdev, mtu);
->> +        ndev->config.mtu = cpu_to_mlx5vdpa16(mvdev, mtu);
->> +    }
->>   -    if (get_link_state(mvdev))
->> -        ndev->config.status |= cpu_to_mlx5vdpa16(mvdev, 
->> VIRTIO_NET_S_LINK_UP);
->> -    else
->> -        ndev->config.status &= cpu_to_mlx5vdpa16(mvdev, 
->> ~VIRTIO_NET_S_LINK_UP);
->> +    if (device_features & BIT_ULL(VIRTIO_NET_F_STATUS)) {
->> +        if (get_link_state(mvdev))
->> +            ndev->config.status |= cpu_to_mlx5vdpa16(mvdev, 
->> VIRTIO_NET_S_LINK_UP);
->> +        else
->> +            ndev->config.status &= cpu_to_mlx5vdpa16(mvdev, 
->> ~VIRTIO_NET_S_LINK_UP);
->> +    }
-> Doesn't belong in this patch
-Will split patch.
+The documentation for struct zynqmp_ipi_message clearly states that @data is
+fixed to 12 bytes, whereas here is it set to 32 bytes.  Wrong documentation or
+bug?
 
--Siwei
->>         if (add_config->mask & (1 << VDPA_ATTR_DEV_NET_CFG_MACADDR)) {
->>           memcpy(ndev->config.mac, add_config->net.mac, ETH_ALEN);
->> -    } else {
->> +    /* No bother setting mac address in config if not going to 
->> provision _F_MAC */
->> +    } else if ((add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) 
->> == 0 ||
->> +           device_features & BIT_ULL(VIRTIO_NET_F_MAC)) {
->>           err = mlx5_query_nic_vport_mac_address(mdev, 0, 0, 
->> config->mac);
->>           if (err)
->>               goto err_alloc;
->> @@ -3142,11 +3170,26 @@ static int mlx5_vdpa_dev_add(struct 
->> vdpa_mgmt_dev *v_mdev, const char *name,
->>           err = mlx5_mpfs_add_mac(pfmdev, config->mac);
->>           if (err)
->>               goto err_alloc;
->> -
->> -        ndev->mvdev.mlx_features |= BIT_ULL(VIRTIO_NET_F_MAC);
->> +    } else if ((add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) 
->> == 0) {
->> +        /*
->> +         * We used to clear _F_MAC feature bit if seeing
->> +         * zero mac address when device features are not
->> +         * specifically provisioned. Keep the behaviour
->> +         * so old scripts do not break.
->> +         */
->> +        device_features &= ~BIT_ULL(VIRTIO_NET_F_MAC);
->> +    } else if (device_features & BIT_ULL(VIRTIO_NET_F_MAC)) {
->> +        /* Don't provision zero mac address for _F_MAC */
->> +        mlx5_vdpa_warn(&ndev->mvdev,
->> +                   "No mac address provisioned?\n");
->> +        err = -EINVAL;
->> +        goto err_alloc;
->>       }
->>   -    config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, max_vqs 
->> / 2);
->> +    if (device_features & BIT_ULL(VIRTIO_NET_F_MQ))
->> +        config->max_virtqueue_pairs = cpu_to_mlx5vdpa16(mvdev, 
->> max_vqs / 2);
->> +
->> +    ndev->mvdev.mlx_features = device_features;
->>       mvdev->vdev.dma_dev = &mdev->pdev->dev;
->>       err = mlx5_vdpa_alloc_resources(&ndev->mvdev);
->>       if (err)
->> @@ -3243,7 +3286,8 @@ static int mlx5v_probe(struct auxiliary_device 
->> *adev,
->>       mgtdev->mgtdev.id_table = id_table;
->>       mgtdev->mgtdev.config_attr_mask = 
->> BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR) |
->>                         BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP) |
->> -                      BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU);
->> +                      BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU) |
->> +                      BIT_ULL(VDPA_ATTR_DEV_FEATURES);
->>       mgtdev->mgtdev.max_supported_vqs =
->>           MLX5_CAP_DEV_VDPA_EMULATION(mdev, max_num_virtio_queues) + 1;
->>       mgtdev->mgtdev.supported_features = get_supported_features(mdev);
+> +/* RX mailbox client buffer max length */
+> +#define MBOX_CLIENT_BUF_MAX	(IPI_BUF_LEN_MAX + \
+> +				 sizeof(struct zynqmp_ipi_message))
+>  /*
+>   * settings for RPU cluster mode which
+>   * reflects possible values of xlnx,cluster-mode dt-property
+> @@ -65,6 +72,12 @@ static const struct mem_bank_data zynqmp_tcm_banks[] = {
+>   * @rmem: reserved memory region nodes from device tree
+>   * @rproc: rproc handle
+>   * @pm_domain_id: RPU CPU power domain id
+> + * @rx_mc_buf: to copy data from mailbox rx channel
+> + * @tx_mc_buf: to copy data to mailbox tx channel
+> + * @mbox_work: schedule work after receiving data from mailbox
+> + * @mbox_cl: mailbox client
+> + * @tx_chan: mailbox tx channel
+> + * @rx_chan: mailbox rx channel
+>   */
+>  struct zynqmp_r5_core {
+>  	struct device *dev;
+> @@ -75,6 +88,14 @@ struct zynqmp_r5_core {
+>  	struct reserved_mem **rmem;
+>  	struct rproc *rproc;
+>  	u32 pm_domain_id;
+> +
+> +	/* mailbox related data structures */
+> +	unsigned char rx_mc_buf[MBOX_CLIENT_BUF_MAX];
+> +	unsigned char tx_mc_buf[MBOX_CLIENT_BUF_MAX];
+> +	struct work_struct mbox_work;
+> +	struct mbox_client mbox_cl;
+> +	struct mbox_chan *tx_chan;
+> +	struct mbox_chan *rx_chan;
+>  };
+>  
+>  /**
+> @@ -92,6 +113,181 @@ struct zynqmp_r5_cluster {
+>  	struct zynqmp_r5_core **r5_cores;
+>  };
+>  
+> +/**
+> + * event_notified_idr_cb() - callback for vq_interrupt per notifyid
+> + * @id: rproc->notify id
+> + * @ptr: pointer to idr private data
+> + * @data: data passed to idr_for_each callback
+> + *
+> + * Pass notification to remoteproc virtio
+> + *
+> + * Return: 0. having return is to satisfy the idr_for_each() function
+> + *          pointer input argument requirement.
+> + **/
+> +static int event_notified_idr_cb(int id, void *ptr, void *data)
+> +{
+> +	struct rproc *rproc = data;
+> +
+> +	if (rproc_vq_interrupt(rproc, id) == IRQ_NONE)
+> +		dev_dbg(&rproc->dev, "data not found for vqid=%d\n", id);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * handle_event_notified() - remoteproc notification work function
+> + * @work: pointer to the work structure
+> + *
+> + * It checks each registered remoteproc notify IDs.
+> + */
+> +static void handle_event_notified(struct work_struct *work)
+> +{
+> +	struct zynqmp_r5_core *r5_core;
+> +	struct rproc *rproc;
+> +
+> +	r5_core = container_of(work, struct zynqmp_r5_core, mbox_work);
+> +	rproc = r5_core->rproc;
+> +
+> +	/*
+> +	 * We only use IPI for interrupt. The RPU firmware side may or may
+> +	 * not write the notifyid when it trigger IPI.
+> +	 * And thus, we scan through all the registered notifyids and
+> +	 * find which one is valid to get the message.
+> +	 * Even if message from firmware is NULL, we attempt to get vqid
+> +	 */
+> +	idr_for_each(&rproc->notifyids, event_notified_idr_cb, rproc);
+> +}
+> +
+> +/**
+> + * zynqmp_r5_mb_rx_cb() - receive channel mailbox callback
+> + * @cl: mailbox client
+> + * @msg: message pointer
+> + *
+> + * Receive data from ipi buffer, ack interrupt and then
+> + * it will schedule the R5 notification work.
+> + */
+> +static void zynqmp_r5_mb_rx_cb(struct mbox_client *cl, void *msg)
+> +{
+> +	struct zynqmp_ipi_message *ipi_msg, *buf_msg;
+> +	struct zynqmp_r5_core *r5_core;
+> +	size_t len;
+> +
+> +	r5_core = container_of(cl, struct zynqmp_r5_core, mbox_cl);
+> +
+> +	/* copy data from ipi buffer to r5_core */
+> +	ipi_msg = (struct zynqmp_ipi_message *)msg;
+> +	buf_msg = (struct zynqmp_ipi_message *)r5_core->rx_mc_buf;
+> +	len = ipi_msg->len;
+> +	if (len > IPI_BUF_LEN_MAX) {
+> +		dev_warn(r5_core->dev, "msg size exceeded than %d\n",
+> +			 IPI_BUF_LEN_MAX);
+> +		len = IPI_BUF_LEN_MAX;
+> +	}
+> +	buf_msg->len = len;
+> +	memcpy(buf_msg->data, ipi_msg->data, len);
+> +
+> +	/* received and processed interrupt ack */
+> +	if (mbox_send_message(r5_core->rx_chan, NULL) < 0)
+> +		dev_err(r5_core->dev, "ack failed to mbox rx_chan\n");
+> +
+> +	schedule_work(&r5_core->mbox_work);
+> +}
+> +
+> +/**
+> + * zynqmp_r5_setup_mbox() - Setup mailboxes related properties
+> + *			    this is used for each individual R5 core
+> + *
+> + * @r5_core: pointer to the ZynqMP r5 core data
+> + *
+> + * Function to setup mailboxes related properties
+> + *
+> + */
+> +static void zynqmp_r5_setup_mbox(struct zynqmp_r5_core *r5_core)
+> +{
+> +	struct zynqmp_r5_cluster *cluster;
+> +	struct mbox_client *mbox_cl;
+> +
+> +	cluster = dev_get_drvdata(r5_core->dev->parent);
+> +
+> +	/**
 
+Extra '*', please remove.
+
+> +	 * ToDo: Use only one IPI channel for APU to communicate with both RPUs
+> +	 * in split mode. As of now, two IPI channels are expeceted for APU
+> +	 * to communicate with RPU. for example, APU(IPI0)<-> RPU0(IPI1) and
+> +	 * APU(IPI7)<->RPU1(IPI2). However, this is not the optimized use
+> +	 * of the hardware. As per hardware reference manual, each IPI channel
+> +	 * can receive interrupt from another IPI channel. So APU must be able
+> +	 * to communicate with both RPUs simultaneously using same IPI channel.
+> +	 * For example, this is valid case: APU(IPI0)<->RPU0(IPI1) and
+> +	 * APU(IPI0)<->RPU1(IPI2). However, with current available examples
+> +	 * and RPU firmware, this configuration in device-tree is causing system-crash.
+> +	 * And so, using extra IPI channel is required in device-tree. In split
+> +	 * mode explicitly inform user about this limitation and requirement.
+> +	 */
+> +	if (cluster->mode == SPLIT_MODE)
+> +		dev_warn(r5_core->dev, "split mode: APU should use two IPI channels\n");
+
+This comment doesn't do anything useful, please remove.
+
+> +
+> +	mbox_cl = &r5_core->mbox_cl;
+> +	mbox_cl->rx_callback = zynqmp_r5_mb_rx_cb;
+> +	mbox_cl->tx_block = false;
+> +	mbox_cl->knows_txdone = false;
+> +	mbox_cl->tx_done = NULL;
+> +	mbox_cl->dev = r5_core->dev;
+> +
+> +	/* Request TX and RX channels */
+> +	r5_core->tx_chan = mbox_request_channel_byname(mbox_cl, "tx");
+> +	if (IS_ERR(r5_core->tx_chan)) {
+> +		r5_core->tx_chan = NULL;
+> +		return;
+> +	}
+> +
+> +	r5_core->rx_chan = mbox_request_channel_byname(mbox_cl, "rx");
+> +	if (IS_ERR(r5_core->rx_chan)) {
+> +		mbox_free_channel(r5_core->tx_chan);
+> +		r5_core->rx_chan = NULL;
+> +		r5_core->tx_chan = NULL;
+> +		return;
+> +	}
+> +
+> +	INIT_WORK(&r5_core->mbox_work, handle_event_notified);
+> +}
+> +
+> +static void zynqmp_r5_free_mbox(struct zynqmp_r5_core *r5_core)
+> +{
+> +	if (r5_core->tx_chan) {
+> +		mbox_free_channel(r5_core->tx_chan);
+> +		r5_core->tx_chan = NULL;
+> +	}
+> +
+> +	if (r5_core->rx_chan) {
+> +		mbox_free_channel(r5_core->rx_chan);
+> +		r5_core->rx_chan = NULL;
+> +	}
+> +}
+> +
+> +/*
+> + * zynqmp_r5_core_kick() - kick a firmware if mbox is provided
+> + * @rproc: r5 core's corresponding rproc structure
+> + * @vqid: virtqueue ID
+> + */
+> +static void zynqmp_r5_rproc_kick(struct rproc *rproc, int vqid)
+> +{
+> +	struct zynqmp_r5_core *r5_core = rproc->priv;
+> +	struct device *dev = r5_core->dev;
+> +	struct zynqmp_ipi_message *mb_msg;
+> +	int ret;
+> +
+> +	/* don't handle kick if mbox setup failed for this core */
+> +	if (!r5_core->tx_chan && !r5_core->rx_chan)
+> +		return;
+> +
+> +	mb_msg = (struct zynqmp_ipi_message *)r5_core->tx_mc_buf;
+> +	memcpy(mb_msg->data, &vqid, sizeof(vqid));
+> +	mb_msg->len = sizeof(vqid);
+> +	ret = mbox_send_message(r5_core->tx_chan, mb_msg);
+> +	if (ret < 0)
+> +		dev_warn(dev, "failed to send message\n");
+> +}
+> +
+>  /*
+>   * zynqmp_r5_set_mode()
+>   *
+> @@ -227,6 +423,63 @@ static int zynqmp_r5_mem_region_unmap(struct rproc *rproc,
+>  	return 0;
+>  }
+>  
+> +/**
+> + * zynqmp_r5_get_mem_region_node()
+> + * parse memory-region property and get reserved mem regions
+> + *
+> + * @r5_core: pointer to zynqmp_r5_core type object
+> + *
+> + * Return: 0 for success and error code for failure.
+> + */
+> +static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core *r5_core)
+> +{
+> +	struct device_node *np, *rmem_np;
+> +	struct reserved_mem **rmem;
+> +	int res_mem_count, i;
+> +	struct device *dev;
+> +
+> +	dev = r5_core->dev;
+> +	np = r5_core->np;
+> +
+> +	res_mem_count = of_property_count_elems_of_size(np, "memory-region",
+> +							sizeof(phandle));
+> +
+> +	if (res_mem_count <= 0) {
+> +		dev_warn(dev, "failed to get memory-region property %d\n",
+> +			 res_mem_count);
+> +		return 0;
+> +	}
+> +
+> +	if (!r5_core->tx_chan && !r5_core->rx_chan)
+> +		res_mem_count = 1;
+
+Hackish, please remove.  There should not be a need to mix mailbox information
+with memory regions.
+
+> +
+> +	rmem = devm_kcalloc(dev, res_mem_count,
+> +			    sizeof(struct reserved_mem *), GFP_KERNEL);
+> +	if (!rmem)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < res_mem_count; i++) {
+> +		rmem_np = of_parse_phandle(np, "memory-region", i);
+> +		if (!rmem_np)
+> +			goto release_rmem;
+> +
+> +		rmem[i] = of_reserved_mem_lookup(rmem_np);
+> +		if (!rmem[i]) {
+> +			of_node_put(rmem_np);
+> +			goto release_rmem;
+> +		}
+> +
+> +		of_node_put(rmem_np);
+> +	}
+> +
+> +	r5_core->rmem_count = res_mem_count;
+> +	r5_core->rmem = rmem;
+> +	return 0;
+> +
+> +release_rmem:
+> +	return -EINVAL;
+> +}
+> +
+>  /*
+>   * add_mem_regions_carveout()
+>   * @rproc: single R5 core's corresponding rproc instance
+> @@ -241,6 +494,7 @@ static int add_mem_regions_carveout(struct rproc *rproc)
+>  	struct zynqmp_r5_core *r5_core;
+>  	struct reserved_mem *rmem;
+>  	int i, num_mem_regions;
+> +	const char *name;
+>  
+>  	r5_core = (struct zynqmp_r5_core *)rproc->priv;
+>  	num_mem_regions = r5_core->rmem_count;
+> @@ -253,15 +507,33 @@ static int add_mem_regions_carveout(struct rproc *rproc)
+>  			rproc_mem = rproc_of_resm_mem_entry_init(&rproc->dev, i,
+>  								 rmem->size,
+>  								 rmem->base,
+> -								 rmem->name);
+> +								 "vdev0buffer");
+
+This looks very hackish.
+
+>  		} else {
+> +			/*
+> +			 * As per bindings 3rd entry in memory-region property
+> +			 * must contain vring0 and 4th entry must contain vring1
+> +			 * memory-regions. For remoteproc framework it is
+> +			 * required to have fixed names for these carveouts i.e.
+> +			 * in the form of "vdev%dvring%d" where first %d is ID
+> +			 * of vdev and second %d is ID of vring. Assign fix names
+> +			 * instead of node names, as node names may contain
+> +			 * @unit-address as well i.e. vdev0vring0@xxxxxxxx which
+> +			 * won't work.
+> +			 */
+> +			if (!strncmp(rmem->name, "vdev0vring0", strlen("vdev0vring0")))
+> +				name = "vdev0vring0";
+> +			else if (!strncmp(rmem->name, "vdev0vring1", strlen("vdev0vring1")))
+> +				name = "vdev0vring1";
+> +			else
+> +				name = rmem->name;
+> +
+
+So does this.  It would be much better to get the right rmem->name before
+getting to this function, something that should be done in
+zynqmp_r5_get_mem_region_node().  Look at stm32_rproc_prepare() for an example
+on how to get the right name reserve memory entries. 
+
+I am also reasonning this problem has become obvious now that mailboxes are
+working.  That said I also think it should have been caught when the patchset
+adding support for r5f was worked on.
+
+>  			/* Register associated reserved memory regions */
+>  			rproc_mem = rproc_mem_entry_init(&rproc->dev, NULL,
+>  							 (dma_addr_t)rmem->base,
+>  							 rmem->size, rmem->base,
+>  							 zynqmp_r5_mem_region_map,
+>  							 zynqmp_r5_mem_region_unmap,
+> -							 rmem->name);
+> +							 name);
+>  		}
+>  
+>  		if (!rproc_mem)
+> @@ -572,6 +844,20 @@ static int zynqmp_r5_rproc_prepare(struct rproc *rproc)
+>  		return ret;
+>  	}
+>  
+> +	/*
+> +	 * If mailbox nodes are disabled using "status" property then setting up
+> +	 * mailbox channels will be failed and in that case, we don't need vrings
+> +	 * and vdevbuffer for this core. So, setup mailbox before parsing
+> +	 * memory-region property. If "tx" and "rx" mailboxes are not setup, then
+> +	 * only parse and add first memory-region carveout. As per bindings, it
+> +	 * must be firmware load region
+> +	 */
+> +	zynqmp_r5_setup_mbox(rproc->priv);
+> +
+
+Setting up mailboxes should return an error code when not successful.  Moreover,
+why do mailboxes have to be initialised at prepare() time and not once in the
+probe() function?
+
+> +	ret = zynqmp_r5_get_mem_region_node(rproc->priv);
+> +	if (ret)
+> +		dev_warn(&rproc->dev, "memory-region prop failed %d\n", ret);
+> +
+>  	ret = add_mem_regions_carveout(rproc);
+>  	if (ret) {
+>  		dev_err(&rproc->dev, "failed to get reserve mem regions %d\n", ret);
+> @@ -597,6 +883,8 @@ static int zynqmp_r5_rproc_unprepare(struct rproc *rproc)
+>  
+>  	r5_core = (struct zynqmp_r5_core *)rproc->priv;
+>  
+> +	zynqmp_r5_free_mbox(r5_core);
+> +
+>  	for (i = 0; i < r5_core->tcm_bank_count; i++) {
+>  		pm_domain_id = r5_core->tcm_banks[i]->pm_domain_id;
+>  		if (zynqmp_pm_release_node(pm_domain_id))
+> @@ -617,6 +905,7 @@ static const struct rproc_ops zynqmp_r5_rproc_ops = {
+>  	.find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table,
+>  	.sanity_check	= rproc_elf_sanity_check,
+>  	.get_boot_addr	= rproc_elf_get_boot_addr,
+> +	.kick		= zynqmp_r5_rproc_kick,
+
+A kick() function should added only when mailboxes are present rather than
+invariably as it is now.
+
+>  };
+>  
+>  /**
+> @@ -726,59 +1015,6 @@ static int zynqmp_r5_get_tcm_node(struct zynqmp_r5_cluster *cluster)
+>  	return 0;
+>  }
+>  
+> -/**
+> - * zynqmp_r5_get_mem_region_node()
+> - * parse memory-region property and get reserved mem regions
+> - *
+> - * @r5_core: pointer to zynqmp_r5_core type object
+> - *
+> - * Return: 0 for success and error code for failure.
+> - */
+> -static int zynqmp_r5_get_mem_region_node(struct zynqmp_r5_core *r5_core)
+> -{
+> -	struct device_node *np, *rmem_np;
+> -	struct reserved_mem **rmem;
+> -	int res_mem_count, i;
+> -	struct device *dev;
+> -
+> -	dev = r5_core->dev;
+> -	np = r5_core->np;
+> -
+> -	res_mem_count = of_property_count_elems_of_size(np, "memory-region",
+> -							sizeof(phandle));
+> -	if (res_mem_count <= 0) {
+> -		dev_warn(dev, "failed to get memory-region property %d\n",
+> -			 res_mem_count);
+> -		return 0;
+> -	}
+> -
+> -	rmem = devm_kcalloc(dev, res_mem_count,
+> -			    sizeof(struct reserved_mem *), GFP_KERNEL);
+> -	if (!rmem)
+> -		return -ENOMEM;
+> -
+> -	for (i = 0; i < res_mem_count; i++) {
+> -		rmem_np = of_parse_phandle(np, "memory-region", i);
+> -		if (!rmem_np)
+> -			goto release_rmem;
+> -
+> -		rmem[i] = of_reserved_mem_lookup(rmem_np);
+> -		if (!rmem[i]) {
+> -			of_node_put(rmem_np);
+> -			goto release_rmem;
+> -		}
+> -
+> -		of_node_put(rmem_np);
+> -	}
+> -
+> -	r5_core->rmem_count = res_mem_count;
+> -	r5_core->rmem = rmem;
+> -	return 0;
+> -
+> -release_rmem:
+> -	return -EINVAL;
+> -}
+> -
+
+Why was this moved instead of simply adding a forward declaration at the top of
+the file?
+
+>  /*
+>   * zynqmp_r5_core_init()
+>   * Create and initialize zynqmp_r5_core type object
+> @@ -806,10 +1042,6 @@ static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
+>  	for (i = 0; i < cluster->core_count; i++) {
+>  		r5_core = cluster->r5_cores[i];
+>  
+> -		ret = zynqmp_r5_get_mem_region_node(r5_core);
+> -		if (ret)
+> -			dev_warn(dev, "memory-region prop failed %d\n", ret);
+> -
+
+Why doing this since this driver doesn't support attach()/detach() operations
+yet?
+
+Thanks,
+Mathieu
+
+>  		/* Initialize r5 cores with power-domains parsed from dts */
+>  		ret = of_property_read_u32_index(r5_core->np, "power-domains",
+>  						 1, &r5_core->pm_domain_id);
+> 
+> base-commit: 10de8156ed71d3dbd7e9099aa76e67ea2c37d4ff
+> -- 
+> 2.25.1
+> 
