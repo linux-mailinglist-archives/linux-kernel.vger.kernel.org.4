@@ -2,306 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964696836CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0246836D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjAaTrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:47:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
+        id S230299AbjAaTuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjAaTrK (ORCPT
+        with ESMTP id S229943AbjAaTuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:47:10 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE640521C5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:47:06 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id e8-20020a17090a9a8800b0022c387f0f93so15194201pjp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:47:06 -0800 (PST)
+        Tue, 31 Jan 2023 14:50:03 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE38166C1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:50:00 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id k4so39432290eje.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:50:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G13tWeBbYfAk5YRSjBH6d+0AX/VYrNSYaahFKuov3no=;
-        b=N02NPCqPBJGnnPmVQ++Yd/D7ebLtRyBO11o1prrtqWdov0HvUZFgmw4616IlZqwulM
-         nrlAq7KSim5Yk4sqlquj1EYKYc+i8lEg8eUpPqO5hgBtQkomPzb0E/AI0UN3qof7pCXp
-         5pxLt+vPzpUHuWysN+suqo9x1ck0D047Qltaw=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gBGYSHhxIz39bWAegoggfzJ6ks2CGggvwHv6lw1lI78=;
+        b=j+D8hqiIH8+0MHEgypl/+feUSt1xb9I4p44epkjKOGrtZCbmzJpfq0vEEe9dimZZau
+         kceU273RfoWQlTCrCqXG3zlBYya9fH3W5qskHtSh1WsHIWMEwvrR8OCQCIC/OzRpzbHz
+         qijkEebgtWzYDmlwg4BtVyfwpNWhTAx6qkmVu2Oo0JwVPwZJKTCCsBB+s+hUi0ihKmCq
+         Ios8NnaF3PeUQNEYLrm03TZw2T/lel7fUC0TAyU7sDgeAmnIQYuxWpqgFvF0EG1MBXj8
+         TU8NhYgga/8N758Tk/jmeirtaqmG4gbyaK8lmyb2SA/5dtq3HV6DOUHDX91VqroXe0qA
+         eF6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G13tWeBbYfAk5YRSjBH6d+0AX/VYrNSYaahFKuov3no=;
-        b=dz3WsOYIJZIsSqXQG0HlYHyvVYTRdJ2+EkgTXo9g/W4S1+iYge/2+aIxL6sTohoxoS
-         i1v0vZfDnmxDO7yv4VeXV5p0+i65Zmu+g9nTivuQ5919POF0Zka2Y54ROVAMuyEizjM1
-         8f9EjKqvBlAhYiR+6J1oQe3PsK4W4ZV+EJtyQxdrfvlzLdNcvk9OExOGV8Uaw48xekC7
-         zRZotCj+SeOonj42xwdM4nWzxQfbjjv+qSt39ZbdRsQunqvTvZeJjtWnscbD45Bl9gGo
-         IVW9UWn3JgfrDU51g1pdKZS+PW3SNlgGt/aFNKQXvtPKPSi9w8t89gK2bXtBgFU81TfU
-         wGiA==
-X-Gm-Message-State: AO0yUKWoFK+FaXtSAqwi7pqx5qt/pRnSNUcowGkVi/CcIwVuoF501o4p
-        0xg/P4BAczQ0yJfEuV7eI5NzCw==
-X-Google-Smtp-Source: AK7set/ftAkYE48QSVASVRmQfgYuRbJF0QKXzbo3WlcsGEFcSE8mO1bWSEfI2H2e9lb5a59L2eHDFA==
-X-Received: by 2002:a05:6a20:71d4:b0:be:db40:634f with SMTP id t20-20020a056a2071d400b000bedb40634fmr3251777pzb.55.1675194426146;
-        Tue, 31 Jan 2023 11:47:06 -0800 (PST)
-Received: from ballway1.c.googlers.com.com (97.173.125.34.bc.googleusercontent.com. [34.125.173.97])
-        by smtp.gmail.com with ESMTPSA id k11-20020a17090aef0b00b0022bb3ee9b68sm9230954pjz.13.2023.01.31.11.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 11:47:05 -0800 (PST)
-From:   Allen Ballway <ballway@chromium.org>
-To:     ballway@chromium.org
-Cc:     benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
-        dtor@chromium.org, jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rydberg@bitmath.org,
-        lukas.bulwahn@gmail.com
-Subject: [PATCH v7] HID: multitouch: Add quirks for flipped axes
-Date:   Tue, 31 Jan 2023 19:46:47 +0000
-Message-Id: <20230131194647.3941931-1-ballway@chromium.org>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-In-Reply-To: <20230110202550.651091-1-ballway@chromium.org>
-References: <20230110202550.651091-1-ballway@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gBGYSHhxIz39bWAegoggfzJ6ks2CGggvwHv6lw1lI78=;
+        b=FhzIrDGuzx2tluzKPuuQeFmSFYHYsQumCFhJdcaeSn/PQM1Qg7Jag2UvNdXwfUpyzx
+         4inIJE9xoGeCgeD0alrwWJ+/yjeeUMujvaZcg5i2YWuqDakbPLEvrbS432kMEIlj55R+
+         W99N+LjqGxWcYv6Fz+T2bQst92QGw6qTZ0D2mm6gARAF8FgW7bBlodESjGZDPkLVw2er
+         aB/73C6NZmFbEF8Az2DfIp/QPo8DxiB2D6/C6JcjBxIDWpU9rw+XD4OnnchBiGKfvLyf
+         +Z5+urqaCRnI+OJhGypgQ5zkfuRjNxu1l/oI75FLWh+clPxXXv/TqREP/4b0GeAaA1LI
+         xMsw==
+X-Gm-Message-State: AFqh2krwQpRJhBTwBb1IEcliNe0/iUWuNJO3IST2gU6r0ib4C2muV+Or
+        +dZtfv83JZEvpuwKHWNzz6Fs+fsqtmVH9DXvHGo94g==
+X-Google-Smtp-Source: AMrXdXtlD2H62LuEgeMz9hIErCWgvd2CYQ+BQJFo3dbnKHljO0E+6b0SAW0EkxZKbHKcQ+AjVM17kUdIdLR3DbZEBec=
+X-Received: by 2002:a17:906:6049:b0:84d:457b:b987 with SMTP id
+ p9-20020a170906604900b0084d457bb987mr8544970ejj.161.1675194598847; Tue, 31
+ Jan 2023 11:49:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+ <CAJD7tkavoSu9WOnw4Nbxz41nq+Rm6Sq5EeOjh3CTyA=AT5=ujg@mail.gmail.com>
+ <874js7zf38.fsf@nvidia.com> <CAJD7tkZTvXjoNZYC99yekbA0zHkD4iFj0J3+8dsOMht6rxrRcQ@mail.gmail.com>
+ <87r0vblzf3.fsf@nvidia.com>
+In-Reply-To: <87r0vblzf3.fsf@nvidia.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 31 Jan 2023 11:49:22 -0800
+Message-ID: <CAJD7tkZcZ2mzEAv5x5TQk8of9A7w2p_fY3dGJAM29sXPvS7_RA@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/19] mm: Introduce a cgroup to limit the amount of
+ locked and pinned memory
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jgg@nvidia.com, jhubbard@nvidia.com,
+        tjmercier@google.com, hannes@cmpxchg.org, surenb@google.com,
+        mkoutny@suse.com, daniel@ffwll.ch
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Certain touchscreen devices, such as the ELAN9034, are oriented
-incorrectly and report touches on opposite points on the X and Y axes.
-For example, a 100x200 screen touched at (10,20) would report (90, 180)
-and vice versa.
+On Tue, Jan 31, 2023 at 3:24 AM Alistair Popple <apopple@nvidia.com> wrote:
+>
+>
+> Yosry Ahmed <yosryahmed@google.com> writes:
+>
+> > On Mon, Jan 30, 2023 at 5:07 PM Alistair Popple <apopple@nvidia.com> wrote:
+> >>
+> >>
+> >> Yosry Ahmed <yosryahmed@google.com> writes:
+> >>
+> >> > On Mon, Jan 23, 2023 at 9:43 PM Alistair Popple <apopple@nvidia.com> wrote:
+> >> >>
+> >> >> Having large amounts of unmovable or unreclaimable memory in a system
+> >> >> can lead to system instability due to increasing the likelihood of
+> >> >> encountering out-of-memory conditions. Therefore it is desirable to
+> >> >> limit the amount of memory users can lock or pin.
+> >> >>
+> >> >> From userspace such limits can be enforced by setting
+> >> >> RLIMIT_MEMLOCK. However there is no standard method that drivers and
+> >> >> other in-kernel users can use to check and enforce this limit.
+> >> >>
+> >> >> This has lead to a large number of inconsistencies in how limits are
+> >> >> enforced. For example some drivers will use mm->locked_mm while others
+> >> >> will use mm->pinned_mm or user->locked_mm. It is therefore possible to
+> >> >> have up to three times RLIMIT_MEMLOCKED pinned.
+> >> >>
+> >> >> Having pinned memory limited per-task also makes it easy for users to
+> >> >> exceed the limit. For example drivers that pin memory with
+> >> >> pin_user_pages() it tends to remain pinned after fork. To deal with
+> >> >> this and other issues this series introduces a cgroup for tracking and
+> >> >> limiting the number of pages pinned or locked by tasks in the group.
+> >> >>
+> >> >> However the existing behaviour with regards to the rlimit needs to be
+> >> >> maintained. Therefore the lesser of the two limits is
+> >> >> enforced. Furthermore having CAP_IPC_LOCK usually bypasses the rlimit,
+> >> >> but this bypass is not allowed for the cgroup.
+> >> >>
+> >> >> The first part of this series converts existing drivers which
+> >> >> open-code the use of locked_mm/pinned_mm over to a common interface
+> >> >> which manages the refcounts of the associated task/mm/user
+> >> >> structs. This ensures accounting of pages is consistent and makes it
+> >> >> easier to add charging of the cgroup.
+> >> >>
+> >> >> The second part of the series adds the cgroup and converts core mm
+> >> >> code such as mlock over to charging the cgroup before finally
+> >> >> introducing some selftests.
+> >> >
+> >> >
+> >> > I didn't go through the entire series, so apologies if this was
+> >> > mentioned somewhere, but do you mind elaborating on why this is added
+> >> > as a separate cgroup controller rather than an extension of the memory
+> >> > cgroup controller?
+> >>
+> >> One of my early prototypes actually did add this to the memcg
+> >> controller. However pinned pages fall under their own limit, and we
+> >> wanted to always account pages to the cgroup of the task using the
+> >> driver rather than say folio_memcg(). So adding it to memcg didn't seem
+> >> to have much benefit as we didn't end up using any of the infrastructure
+> >> provided by memcg. Hence I thought it was clearer to just add it as it's
+> >> own controller.
+> >
+> > To clarify, you account and limit pinned memory based on the cgroup of
+> > the process pinning the pages, not based on the cgroup that the pages
+> > are actually charged to? Is my understanding correct?
+>
+> That's correct.
 
-This is fixed by adding device quirks to transform the touch points
-into the correct spaces, from X -> MAX(X) - X, and Y -> MAX(Y) - Y.
+Interesting.
 
-Signed-off-by: Allen Ballway <ballway@chromium.org>
----
-V6 -> V7: Fix typo in config name.
+>
+> > IOW, you limit the amount of memory that processes in a cgroup can
+> > pin, not the amount of memory charged to a cgroup that can be pinned?
+>
+> Right, that's a good clarification which I might steal and add to the
+> cover letter.
 
-V5 -> V6: Add another IS_ENABLED check for CONFIG_I2C_DMI_CORE because
-the module may not be there at all.
+Feel free to :)
 
-V4 -> V5: Add IS_ENABLED check for CONFIG_DMI to prevent linker error.
+Please also clarify this in the code/docs. Glancing through the
+patches I was asking myself multiple times why this is not
+"memory.pinned.[current/max]" or similar.
 
-V3 -> V4: Move quirk logic to i2c_hid_get_dmi_quirks and remove
-duplicate quirks from hid-multitouch.
-
-V2 -> V3: Use existing HID_QUIRK_*_INVERT and match the quirk in
-hid-quirk, passing down to hid-multitouch through the hid device.
-
-V1 -> V2: Address review comments, change to use DMI match. Confirmed
-MT_TOOL_X/Y require transformation and update orientation based on
-flipped axes.
-
-
- drivers/hid/hid-multitouch.c             | 39 ++++++++++++++++++---
- drivers/hid/hid-quirks.c                 |  6 ++++
- drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c | 43 ++++++++++++++++++++++++
- drivers/hid/i2c-hid/i2c-hid.h            |  3 ++
- 4 files changed, 87 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 91a4d3fc30e08..622fe6928104c 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -71,6 +71,7 @@ MODULE_LICENSE("GPL");
- #define MT_QUIRK_SEPARATE_APP_REPORT	BIT(19)
- #define MT_QUIRK_FORCE_MULTI_INPUT	BIT(20)
- #define MT_QUIRK_DISABLE_WAKEUP		BIT(21)
-+#define MT_QUIRK_ORIENTATION_INVERT	BIT(22)
-
- #define MT_INPUTMODE_TOUCHSCREEN	0x02
- #define MT_INPUTMODE_TOUCHPAD		0x03
-@@ -1009,6 +1010,7 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
- 			    struct mt_usages *slot)
- {
- 	struct input_mt *mt = input->mt;
-+	struct hid_device *hdev = td->hdev;
- 	__s32 quirks = app->quirks;
- 	bool valid = true;
- 	bool confidence_state = true;
-@@ -1086,6 +1088,10 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
- 		int orientation = wide;
- 		int max_azimuth;
- 		int azimuth;
-+		int x;
-+		int y;
-+		int cx;
-+		int cy;
-
- 		if (slot->a != DEFAULT_ZERO) {
- 			/*
-@@ -1104,6 +1110,9 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
- 			if (azimuth > max_azimuth * 2)
- 				azimuth -= max_azimuth * 4;
- 			orientation = -azimuth;
-+			if (quirks & MT_QUIRK_ORIENTATION_INVERT)
-+				orientation = -orientation;
-+
- 		}
-
- 		if (quirks & MT_QUIRK_TOUCH_SIZE_SCALING) {
-@@ -1115,10 +1124,23 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
- 			minor = minor >> 1;
- 		}
-
--		input_event(input, EV_ABS, ABS_MT_POSITION_X, *slot->x);
--		input_event(input, EV_ABS, ABS_MT_POSITION_Y, *slot->y);
--		input_event(input, EV_ABS, ABS_MT_TOOL_X, *slot->cx);
--		input_event(input, EV_ABS, ABS_MT_TOOL_Y, *slot->cy);
-+		x = hdev->quirks & HID_QUIRK_X_INVERT ?
-+			input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->x :
-+			*slot->x;
-+		y = hdev->quirks & HID_QUIRK_Y_INVERT ?
-+			input_abs_get_max(input, ABS_MT_POSITION_Y) - *slot->y :
-+			*slot->y;
-+		cx = hdev->quirks & HID_QUIRK_X_INVERT ?
-+			input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->cx :
-+			*slot->cx;
-+		cy = hdev->quirks & HID_QUIRK_Y_INVERT ?
-+			input_abs_get_max(input, ABS_MT_POSITION_Y) - *slot->cy :
-+			*slot->cy;
-+
-+		input_event(input, EV_ABS, ABS_MT_POSITION_X, x);
-+		input_event(input, EV_ABS, ABS_MT_POSITION_Y, y);
-+		input_event(input, EV_ABS, ABS_MT_TOOL_X, cx);
-+		input_event(input, EV_ABS, ABS_MT_TOOL_Y, cy);
- 		input_event(input, EV_ABS, ABS_MT_DISTANCE, !*slot->tip_state);
- 		input_event(input, EV_ABS, ABS_MT_ORIENTATION, orientation);
- 		input_event(input, EV_ABS, ABS_MT_PRESSURE, *slot->p);
-@@ -1735,6 +1757,15 @@ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
- 	if (id->vendor == HID_ANY_ID && id->product == HID_ANY_ID)
- 		td->serial_maybe = true;
-
-+
-+	/* Orientation is inverted if the X or Y axes are
-+	 * flipped, but normalized if both are inverted.
-+	 */
-+	if (hdev->quirks & (HID_QUIRK_X_INVERT | HID_QUIRK_Y_INVERT) &&
-+	    !((hdev->quirks & HID_QUIRK_X_INVERT)
-+	      && (hdev->quirks & HID_QUIRK_Y_INVERT)))
-+		td->mtclass.quirks = MT_QUIRK_ORIENTATION_INVERT;
-+
- 	/* This allows the driver to correctly support devices
- 	 * that emit events over several HID messages.
- 	 */
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 0e9702c7f7d6c..78452faf3c9b4 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -19,6 +19,7 @@
- #include <linux/input/elan-i2c-ids.h>
-
- #include "hid-ids.h"
-+#include "i2c-hid/i2c-hid.h"
-
- /*
-  * Alphabetically sorted by vendor then product.
-@@ -1298,6 +1299,11 @@ unsigned long hid_lookup_quirk(const struct hid_device *hdev)
- 		quirks = hid_gets_squirk(hdev);
- 	mutex_unlock(&dquirks_lock);
-
-+	/* Get quirks specific to I2C devices */
-+	if (IS_ENABLED(CONFIG_I2C_HID_CORE) && IS_ENABLED(CONFIG_DMI) &&
-+	    hdev->bus == BUS_I2C)
-+		quirks |= i2c_hid_get_dmi_quirks(hdev->vendor, hdev->product);
-+
- 	return quirks;
- }
- EXPORT_SYMBOL_GPL(hid_lookup_quirk);
-diff --git a/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c b/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
-index 8e0f67455c098..554a7dc285365 100644
---- a/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.c
-@@ -10,8 +10,10 @@
- #include <linux/types.h>
- #include <linux/dmi.h>
- #include <linux/mod_devicetable.h>
-+#include <linux/hid.h>
-
- #include "i2c-hid.h"
-+#include "../hid-ids.h"
-
-
- struct i2c_hid_desc_override {
-@@ -416,6 +418,28 @@ static const struct dmi_system_id i2c_hid_dmi_desc_override_table[] = {
- 	{ }	/* Terminate list */
- };
-
-+static const struct hid_device_id i2c_hid_elan_flipped_quirks = {
-+	HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8, USB_VENDOR_ID_ELAN, 0x2dcd),
-+		HID_QUIRK_X_INVERT | HID_QUIRK_Y_INVERT
-+};
-+
-+/*
-+ * This list contains devices which have specific issues based on the system
-+ * they're on and not just the device itself. The driver_data will have a
-+ * specific hid device to match against.
-+ */
-+static const struct dmi_system_id i2c_hid_dmi_quirk_table[] = {
-+	{
-+		.ident = "DynaBook K50/FR",
-+		.matches = {
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dynabook Inc."),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "dynabook K50/FR"),
-+		},
-+		.driver_data = (void *)&i2c_hid_elan_flipped_quirks,
-+	},
-+	{ }	/* Terminate list */
-+};
-+
-
- struct i2c_hid_desc *i2c_hid_get_dmi_i2c_hid_desc_override(uint8_t *i2c_name)
- {
-@@ -450,3 +474,22 @@ char *i2c_hid_get_dmi_hid_report_desc_override(uint8_t *i2c_name,
- 	*size = override->hid_report_desc_size;
- 	return override->hid_report_desc;
- }
-+
-+u32 i2c_hid_get_dmi_quirks(const u16 vendor, const u16 product)
-+{
-+	u32 quirks = 0;
-+	const struct dmi_system_id *system_id =
-+			dmi_first_match(i2c_hid_dmi_quirk_table);
-+
-+	if (system_id) {
-+		const struct hid_device_id *device_id =
-+				(struct hid_device_id *)(system_id->driver_data);
-+
-+		if (device_id && device_id->vendor == vendor &&
-+		    device_id->product == product)
-+			quirks = device_id->driver_data;
-+	}
-+
-+	return quirks;
-+}
-+EXPORT_SYMBOL_GPL(i2c_hid_get_dmi_quirks);
-diff --git a/drivers/hid/i2c-hid/i2c-hid.h b/drivers/hid/i2c-hid/i2c-hid.h
-index 96c75510ad3f1..2c7b66d5caa0f 100644
---- a/drivers/hid/i2c-hid/i2c-hid.h
-+++ b/drivers/hid/i2c-hid/i2c-hid.h
-@@ -9,6 +9,7 @@
- struct i2c_hid_desc *i2c_hid_get_dmi_i2c_hid_desc_override(uint8_t *i2c_name);
- char *i2c_hid_get_dmi_hid_report_desc_override(uint8_t *i2c_name,
- 					       unsigned int *size);
-+u32 i2c_hid_get_dmi_quirks(const u16 vendor, const u16 product);
- #else
- static inline struct i2c_hid_desc
- 		   *i2c_hid_get_dmi_i2c_hid_desc_override(uint8_t *i2c_name)
-@@ -16,6 +17,8 @@ static inline struct i2c_hid_desc
- static inline char *i2c_hid_get_dmi_hid_report_desc_override(uint8_t *i2c_name,
- 							     unsigned int *size)
- { return NULL; }
-+static inline u32 i2c_hid_get_dmi_quirks(const u16 vendor, const u16 product)
-+{ return 0; }
- #endif
-
- /**
---
-2.39.0.rc1.256.g54fd8350bd-goog
-
+>
+> >>
+> >>  - Alistair
+> >>
+> >> >>
+> >> >>
+> >> >> As I don't have access to systems with all the various devices I
+> >> >> haven't been able to test all driver changes. Any help there would be
+> >> >> appreciated.
+> >> >>
+> >> >> Alistair Popple (19):
+> >> >>   mm: Introduce vm_account
+> >> >>   drivers/vhost: Convert to use vm_account
+> >> >>   drivers/vdpa: Convert vdpa to use the new vm_structure
+> >> >>   infiniband/umem: Convert to use vm_account
+> >> >>   RMDA/siw: Convert to use vm_account
+> >> >>   RDMA/usnic: convert to use vm_account
+> >> >>   vfio/type1: Charge pinned pages to pinned_vm instead of locked_vm
+> >> >>   vfio/spapr_tce: Convert accounting to pinned_vm
+> >> >>   io_uring: convert to use vm_account
+> >> >>   net: skb: Switch to using vm_account
+> >> >>   xdp: convert to use vm_account
+> >> >>   kvm/book3s_64_vio: Convert account_locked_vm() to vm_account_pinned()
+> >> >>   fpga: dfl: afu: convert to use vm_account
+> >> >>   mm: Introduce a cgroup for pinned memory
+> >> >>   mm/util: Extend vm_account to charge pages against the pin cgroup
+> >> >>   mm/util: Refactor account_locked_vm
+> >> >>   mm: Convert mmap and mlock to use account_locked_vm
+> >> >>   mm/mmap: Charge locked memory to pins cgroup
+> >> >>   selftests/vm: Add pins-cgroup selftest for mlock/mmap
+> >> >>
+> >> >>  MAINTAINERS                              |   8 +-
+> >> >>  arch/powerpc/kvm/book3s_64_vio.c         |  10 +-
+> >> >>  arch/powerpc/mm/book3s64/iommu_api.c     |  29 +--
+> >> >>  drivers/fpga/dfl-afu-dma-region.c        |  11 +-
+> >> >>  drivers/fpga/dfl-afu.h                   |   1 +-
+> >> >>  drivers/infiniband/core/umem.c           |  16 +-
+> >> >>  drivers/infiniband/core/umem_odp.c       |   6 +-
+> >> >>  drivers/infiniband/hw/usnic/usnic_uiom.c |  13 +-
+> >> >>  drivers/infiniband/hw/usnic/usnic_uiom.h |   1 +-
+> >> >>  drivers/infiniband/sw/siw/siw.h          |   2 +-
+> >> >>  drivers/infiniband/sw/siw/siw_mem.c      |  20 +--
+> >> >>  drivers/infiniband/sw/siw/siw_verbs.c    |  15 +-
+> >> >>  drivers/vdpa/vdpa_user/vduse_dev.c       |  20 +--
+> >> >>  drivers/vfio/vfio_iommu_spapr_tce.c      |  15 +-
+> >> >>  drivers/vfio/vfio_iommu_type1.c          |  59 +----
+> >> >>  drivers/vhost/vdpa.c                     |   9 +-
+> >> >>  drivers/vhost/vhost.c                    |   2 +-
+> >> >>  drivers/vhost/vhost.h                    |   1 +-
+> >> >>  include/linux/cgroup.h                   |  20 ++-
+> >> >>  include/linux/cgroup_subsys.h            |   4 +-
+> >> >>  include/linux/io_uring_types.h           |   3 +-
+> >> >>  include/linux/kvm_host.h                 |   1 +-
+> >> >>  include/linux/mm.h                       |   5 +-
+> >> >>  include/linux/mm_types.h                 |  88 ++++++++-
+> >> >>  include/linux/skbuff.h                   |   6 +-
+> >> >>  include/net/sock.h                       |   2 +-
+> >> >>  include/net/xdp_sock.h                   |   2 +-
+> >> >>  include/rdma/ib_umem.h                   |   1 +-
+> >> >>  io_uring/io_uring.c                      |  20 +--
+> >> >>  io_uring/notif.c                         |   4 +-
+> >> >>  io_uring/notif.h                         |  10 +-
+> >> >>  io_uring/rsrc.c                          |  38 +---
+> >> >>  io_uring/rsrc.h                          |   9 +-
+> >> >>  mm/Kconfig                               |  11 +-
+> >> >>  mm/Makefile                              |   1 +-
+> >> >>  mm/internal.h                            |   2 +-
+> >> >>  mm/mlock.c                               |  76 +------
+> >> >>  mm/mmap.c                                |  76 +++----
+> >> >>  mm/mremap.c                              |  54 +++--
+> >> >>  mm/pins_cgroup.c                         | 273 ++++++++++++++++++++++++-
+> >> >>  mm/secretmem.c                           |   6 +-
+> >> >>  mm/util.c                                | 196 +++++++++++++++--
+> >> >>  net/core/skbuff.c                        |  47 +---
+> >> >>  net/rds/message.c                        |   9 +-
+> >> >>  net/xdp/xdp_umem.c                       |  38 +--
+> >> >>  tools/testing/selftests/vm/Makefile      |   1 +-
+> >> >>  tools/testing/selftests/vm/pins-cgroup.c | 271 ++++++++++++++++++++++++-
+> >> >>  virt/kvm/kvm_main.c                      |   3 +-
+> >> >>  48 files changed, 1114 insertions(+), 401 deletions(-)
+> >> >>  create mode 100644 mm/pins_cgroup.c
+> >> >>  create mode 100644 tools/testing/selftests/vm/pins-cgroup.c
+> >> >>
+> >> >> base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+> >> >> --
+> >> >> git-series 0.9.1
+> >> >>
+> >>
+>
