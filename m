@@ -2,117 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880F4683644
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB25683649
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjAaTSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:18:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S231578AbjAaTUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjAaTSK (ORCPT
+        with ESMTP id S231358AbjAaTUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:18:10 -0500
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5599911EAC;
-        Tue, 31 Jan 2023 11:18:07 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id me3so44675047ejb.7;
-        Tue, 31 Jan 2023 11:18:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PgqXjqu7PB4cDpZ4t5aYViWzYUyq/bNQ+W4YAsennk4=;
-        b=uU7se3VGBpAAkNx7sZ+NqrPzdyHiDcWBsY71wZJpoZND8nX8VkqsryDDfL6jlQMirS
-         1cS294PrCZU7wMPy7d4G8LOTyeCkPliq3SSF27KduRecWT0v+tM3q07LUyAr6rfRnedU
-         MoQFirplm+xRIWSSQffkG11GNVpiY16VcOTfh8G/+Xyjz6+zDhJ9f2rM80knwN/gT0Bh
-         JIBu2mkiHZWtbwuP0Lo42DCWU7EWSl3pqtvysCJ5gISHb+NI9Ifxsg+PMUUXc/7CH1X1
-         aLa8buzkwKaQ7uGM0ya6BVyGNkUBrFJKlUxQFnJ6Up6NTVqFVJFfcG8efFPpMUKBabRy
-         jovQ==
-X-Gm-Message-State: AO0yUKUf83v7fbsvizJEIrpSvawPVTH7DvDaDI+xiDWjc8VrBw1oLkil
-        tCGjGQeymLsQqpBKz/MaizTGKcBcGBd8z8Hm2UU=
-X-Google-Smtp-Source: AK7set/8MNl94eWnK+p2gRPKvJNunvkkdqU775q8MznNt3ygHG6M0TswuNUlDSLpgbXu/IiXn0SeDaSBftVXXzqBmgY=
-X-Received: by 2002:a17:906:95d7:b0:88a:30dc:5730 with SMTP id
- n23-20020a17090695d700b0088a30dc5730mr2170974ejy.25.1675192685276; Tue, 31
- Jan 2023 11:18:05 -0800 (PST)
+        Tue, 31 Jan 2023 14:20:04 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5241215568;
+        Tue, 31 Jan 2023 11:20:02 -0800 (PST)
+Received: from fpc.intra.ispras.ru (unknown [10.10.165.10])
+        by mail.ispras.ru (Postfix) with ESMTPSA id AC03B44C1001;
+        Tue, 31 Jan 2023 19:19:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru AC03B44C1001
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1675192798;
+        bh=acFv/EVWgo/r3B/eoVvQRH4Rv7zdDgk0cupPU3JKT9M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jBfys3aNqdowNgIq94lu6N83EpR+X80bo1ofcMXeb1zgvwdvebEsEi/vXWWQtsv4m
+         0ccAt1+HTgCWlkjiUaxj574FkwKu/b/fi8cOTknLy/QOli5JKEa4vd7axb7GZu5PVY
+         p33LaoAlsKacsP8+zQX1mUIDX/A/SYeFPWwZEE5c=
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     Pravin B Shelar <pshelar@ovn.org>
+Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        lvc-project@linuxtesting.org
+Subject: [PATCH] net: openvswitch: fix flow memory leak in ovs_flow_cmd_new
+Date:   Tue, 31 Jan 2023 22:19:39 +0300
+Message-Id: <20230131191939.901288-1-pchelkin@ispras.ru>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <20230118181622.33335-3-daniel.lezcano@linaro.org> <CAJZ5v0jbHR03UyJBMmBBYnSsZmGG0OXqLJvMfXxXKVn4Np4Egw@mail.gmail.com>
- <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
-In-Reply-To: <beb367d8-dad7-87d9-7872-b81a4d3492ae@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 31 Jan 2023 20:17:54 +0100
-Message-ID: <CAJZ5v0hFG1VjzKubWkLYPXeGHN9sMt4SDdC_f-dLseaXpsAOKg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 6:03 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
->
-> On 26/01/2023 17:47, Rafael J. Wysocki wrote:
-> > On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> From: Daniel Lezcano <daniel.lezcano@kernel.org>
-> >>
-> >> The thermal framework gives the possibility to register the trip
-> >> points with the thermal zone. When that is done, no get_trip_* ops are
-> >> needed and they can be removed.
-> >>
-> >> Convert ops content logic into generic trip points and register them with the
-> >> thermal zone.
-> >>
-> >> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> ---
->
-> [ ... ]
->
-> >> @@ -173,8 +166,13 @@ static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
-> >>          if (status)
-> >>                  goto err_restore_te_out;
-> >>
-> >> -       dts->trip_types[thres_index] = trip_type;
-> >> -
-> >> +       status = get_trip_temp(sensors, thres_index, &temp);
-> >> +       if (status)
-> >> +               goto err_restore_te_out;
-> >> +
-> >> +       dts->trips[thres_index].type = trip_type;
-> >> +       dts->trips[thres_index].temperature = temp;
-> >
-> > This change doesn't look correct to me, because this function takes
-> > temp as an argument and it is used to populate the trip with it at
-> > least in some cases.
-> >
-> > Why should temp be overwritten here?
->
-> You are correct. This is wrong.
->
-> I think we should call get_trip_temp() before calling update_trip_temp()
-> instead of passing a zero temperature parameter
+Syzkaller reports a memory leak of new_flow in ovs_flow_cmd_new() as it is
+not freed when an allocation of a key fails.
 
-update_trip_temp() is sort of a misnomer, because it is used for
-initializing a trip point for example in
-intel_soc_dts_iosf_add_read_only_critical_trip() and in this
-particular case get_trip_temp() need not be called before it.
+BUG: memory leak
+unreferenced object 0xffff888116668000 (size 632):
+  comm "syz-executor231", pid 1090, jiffies 4294844701 (age 18.871s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000defa3494>] kmem_cache_zalloc include/linux/slab.h:654 [inline]
+    [<00000000defa3494>] ovs_flow_alloc+0x19/0x180 net/openvswitch/flow_table.c:77
+    [<00000000c67d8873>] ovs_flow_cmd_new+0x1de/0xd40 net/openvswitch/datapath.c:957
+    [<0000000010a539a8>] genl_family_rcv_msg_doit+0x22d/0x330 net/netlink/genetlink.c:739
+    [<00000000dff3302d>] genl_family_rcv_msg net/netlink/genetlink.c:783 [inline]
+    [<00000000dff3302d>] genl_rcv_msg+0x328/0x590 net/netlink/genetlink.c:800
+    [<000000000286dd87>] netlink_rcv_skb+0x153/0x430 net/netlink/af_netlink.c:2515
+    [<0000000061fed410>] genl_rcv+0x24/0x40 net/netlink/genetlink.c:811
+    [<000000009dc0f111>] netlink_unicast_kernel net/netlink/af_netlink.c:1313 [inline]
+    [<000000009dc0f111>] netlink_unicast+0x545/0x7f0 net/netlink/af_netlink.c:1339
+    [<000000004a5ee816>] netlink_sendmsg+0x8e7/0xde0 net/netlink/af_netlink.c:1934
+    [<00000000482b476f>] sock_sendmsg_nosec net/socket.c:651 [inline]
+    [<00000000482b476f>] sock_sendmsg+0x152/0x190 net/socket.c:671
+    [<00000000698574ba>] ____sys_sendmsg+0x70a/0x870 net/socket.c:2356
+    [<00000000d28d9e11>] ___sys_sendmsg+0xf3/0x170 net/socket.c:2410
+    [<0000000083ba9120>] __sys_sendmsg+0xe5/0x1b0 net/socket.c:2439
+    [<00000000c00628f8>] do_syscall_64+0x30/0x40 arch/x86/entry/common.c:46
+    [<000000004abfdcf4>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
 
-This driver seems to be in need of a cleanup.
+To fix this the patch removes unnecessary err_kfree_key label and adds a
+proper goto statement on the key-allocation-error path.
+
+Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+
+Fixes: 68bb10101e6b ("openvswitch: Fix flow lookup to use unmasked key")
+Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+---
+ net/openvswitch/datapath.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+index a71795355aec..3d4b5d83d306 100644
+--- a/net/openvswitch/datapath.c
++++ b/net/openvswitch/datapath.c
+@@ -1004,7 +1004,7 @@ static int ovs_flow_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 	key = kzalloc(sizeof(*key), GFP_KERNEL);
+ 	if (!key) {
+ 		error = -ENOMEM;
+-		goto err_kfree_key;
++		goto err_kfree_flow;
+ 	}
+ 
+ 	ovs_match_init(&match, key, false, &mask);
+@@ -1128,7 +1128,6 @@ static int ovs_flow_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 	ovs_nla_free_flow_actions(acts);
+ err_kfree_flow:
+ 	ovs_flow_free(new_flow, false);
+-err_kfree_key:
+ 	kfree(key);
+ error:
+ 	return error;
+-- 
+2.30.2
+
