@@ -2,96 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DB1683655
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D93683665
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjAaTU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S230444AbjAaTVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjAaTUu (ORCPT
+        with ESMTP id S230364AbjAaTVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:20:50 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED98F599B7
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:20:48 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id q10so15219250wrm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:20:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rO9xEG/bOZY4cntCd84nSns1hK9qjk1PYziJfq/4dVk=;
-        b=QbtfJ9Ha9lzoJnEIfv2/ezR7wPbZ1BWSN2gUV2+GdrC4tnyq0VnF7ZwiuNd5t7haIY
-         eYV388lsPF926Yo1sEgPtL3g8chTqIfHxBZd0B0nkBbs2ecCdXlZi+mCG8KPfGvg90pz
-         ramdFFTUps1n0RMzyAtZ/hE9WwEm3veep+ozVW6+DG0Cr1FkhCNe+R3BFLN2pAvkEL+4
-         XiI7/7zTi9MyMo/nVyUWtc++OJu46/vh8j0JXjltVSNi7IrmVAUJwHyqTfVMHRcyG7Pj
-         Ipil3jceEXLE2+opB0OQhjEJVExF3EFA7fDHTzsX2bPxCSWXpmE4Dp+QO1/MPoh0gTHr
-         Hrow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rO9xEG/bOZY4cntCd84nSns1hK9qjk1PYziJfq/4dVk=;
-        b=Df1oThaUKsEh9S+sZlRXr+E8+DZkgh30lzY4kLdBh7tZCpXATTyVz1YQmHv2cxyFOy
-         Q8p/YhRVtT1ITJo5BEFK+QBrBrhdAKEUBiapnNESjJBAwyiGcq3oFz1nbdpwSq9BXAzc
-         PkY3qBwYSwiytR/Vd1R5fPCJwi85NjUhTjrTWoBB4fndrjBat2NA8P3nEG/dp73OMLuM
-         zVYE98otxAZbh47+bp7XoGQF3T92le+eCfZpJbsCa69ZjvsO9Bzw3hZMX9cRLqCBN+M0
-         L+ESQSjO4s52VgNSULFC/RcZ7N0kzfEfpRyabfEV0WwXOMq/P9wWGQXnix9QWvoiEGXm
-         RxAg==
-X-Gm-Message-State: AO0yUKXDOBz/0X06u1BqkrErAl9Gbbz6Gr0ZZ/zoTOTRVbsqr0S52339
-        JfCRQQIZDvkkGXQiaxw98ou2lw==
-X-Google-Smtp-Source: AK7set8ADBTVfpachmf5xkFo7QhRIxXekiyZNrp0kIaeTqdI3Y+sezADMRk2NRE4tAQ9oe3HoojItA==
-X-Received: by 2002:a5d:64e6:0:b0:2bf:da34:2b37 with SMTP id g6-20020a5d64e6000000b002bfda342b37mr195874wri.3.1675192847526;
-        Tue, 31 Jan 2023 11:20:47 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b14-20020a05600010ce00b0029e1aa67fd2sm15600252wrx.115.2023.01.31.11.20.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 11:20:46 -0800 (PST)
-Message-ID: <0551b34f-5c69-528a-5e26-482e697c793f@linaro.org>
-Date:   Tue, 31 Jan 2023 20:20:45 +0100
+        Tue, 31 Jan 2023 14:21:31 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECDECA06;
+        Tue, 31 Jan 2023 11:21:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1675192887;
+        bh=ylYwSQlzxv3UK8qHxCuat9EOrQw8l1G5MawGzF0fTMs=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=FAaljnmTB8PteQDcqpkoTu5UdHX9bkvWsjaIeJVaInLQ4QjguKJ9yzdWYlbKU9bJe
+         nb4K1gLo3tIsWwqy69SmhpW24+cFY5+VSd6adfeAwYuEZq3do5JU+MweYm9bOPzCFf
+         Cleb5lJfqAlTM+uBABQtiqry+IL2ucI3BCWMFvRU=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0FDB91280528;
+        Tue, 31 Jan 2023 14:21:27 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id eOqdkYJqxs9Q; Tue, 31 Jan 2023 14:21:26 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1675192886;
+        bh=ylYwSQlzxv3UK8qHxCuat9EOrQw8l1G5MawGzF0fTMs=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=RAClvfL4gLV50EmBa7rYzB5MhVY/62xlBW71ATK4x+TAqPZiFSLzdNaIcSSNvRXom
+         bGZfC384JuoaVRRI3EM756mi2jH28NSIBpV35h+jTKREuSiq22cTuMv1CkKoKtH3BJ
+         R4z49HaGMyZvfm1EsFycmXifMbj8jbMlnsyfv5I8=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 638DE1280486;
+        Tue, 31 Jan 2023 14:21:26 -0500 (EST)
+Message-ID: <b7da90228a0f844928c9331eab0be64072d237f5.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 6.1-rc6
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 31 Jan 2023 14:21:25 -0500
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] dt-bindings: watchdog: qcom-wdt: add
- qcom,apss-wdt-sa8775p compatible
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230130130756.144160-1-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230130130756.144160-1-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 14:07, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add a compatible for the sa8775p platform's KPSS watchdog.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Two core fixes.  One simply moves an annotation from put to release to
+avoid the warning triggering needlessly in alua, but to keep it in case
+release is ever called from that path (which we don't think will
+happen).  The other reverts a change to the PQ=1 target scanning
+behaviour that's under intense discussion at the moment.
 
+The patch is available here:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-Best regards,
-Krzysztof
+The short changelog is:
+
+Bart Van Assche (1):
+      scsi: core: Fix the scsi_device_put() might_sleep annotation
+
+Martin K. Petersen (1):
+      scsi: Revert "scsi: core: map PQ=1, PDT=other values to SCSI_SCAN_TARGET_PRESENT"
+
+And the diffstat:
+
+ drivers/scsi/scsi.c       | 2 --
+ drivers/scsi/scsi_scan.c  | 7 +++----
+ drivers/scsi/scsi_sysfs.c | 2 ++
+ 3 files changed, 5 insertions(+), 6 deletions(-)
+
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+index 1426b9b03612..9feb0323bc44 100644
+--- a/drivers/scsi/scsi.c
++++ b/drivers/scsi/scsi.c
+@@ -588,8 +588,6 @@ void scsi_device_put(struct scsi_device *sdev)
+ {
+ 	struct module *mod = sdev->host->hostt->module;
+ 
+-	might_sleep();
+-
+ 	put_device(&sdev->sdev_gendev);
+ 	module_put(mod);
+ }
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index 7a6904a3928e..f9b18fdc7b3c 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1232,8 +1232,7 @@ static int scsi_probe_and_add_lun(struct scsi_target *starget,
+ 	 * that no LUN is present, so don't add sdev in these cases.
+ 	 * Two specific examples are:
+ 	 * 1) NetApp targets: return PQ=1, PDT=0x1f
+-	 * 2) IBM/2145 targets: return PQ=1, PDT=0
+-	 * 3) USB UFI: returns PDT=0x1f, with the PQ bits being "reserved"
++	 * 2) USB UFI: returns PDT=0x1f, with the PQ bits being "reserved"
+ 	 *    in the UFI 1.0 spec (we cannot rely on reserved bits).
+ 	 *
+ 	 * References:
+@@ -1247,8 +1246,8 @@ static int scsi_probe_and_add_lun(struct scsi_target *starget,
+ 	 * PDT=00h Direct-access device (floppy)
+ 	 * PDT=1Fh none (no FDD connected to the requested logical unit)
+ 	 */
+-	if (((result[0] >> 5) == 1 ||
+-	    (starget->pdt_1f_for_no_lun && (result[0] & 0x1f) == 0x1f)) &&
++	if (((result[0] >> 5) == 1 || starget->pdt_1f_for_no_lun) &&
++	    (result[0] & 0x1f) == 0x1f &&
+ 	    !scsi_is_wlun(lun)) {
+ 		SCSI_LOG_SCAN_BUS(3, sdev_printk(KERN_INFO, sdev,
+ 					"scsi scan: peripheral device type"
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 981d1bab2120..8ef9a5494340 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -451,6 +451,8 @@ static void scsi_device_dev_release(struct device *dev)
+ 	struct scsi_vpd *vpd_pgb0 = NULL, *vpd_pgb1 = NULL, *vpd_pgb2 = NULL;
+ 	unsigned long flags;
+ 
++	might_sleep();
++
+ 	scsi_dh_release_device(sdev);
+ 
+ 	parent = sdev->sdev_gendev.parent;
 
