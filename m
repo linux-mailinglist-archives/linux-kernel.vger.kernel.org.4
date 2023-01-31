@@ -2,110 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5616A6822DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C28CF6822DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjAaDbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:31:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
+        id S230285AbjAaDdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjAaDbr (ORCPT
+        with ESMTP id S229588AbjAaDdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:31:47 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AD11CADD
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:31:45 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id pj3so176021pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:31:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iDi6IM/MaPJ/3n0t/k9AegJIGfm9vzz6t4MiBeVwT9A=;
-        b=NkPYUsYiLUOZlIG9EyWyy1qJsJQ0dtFO2oALntKqx5o32aklVgo3idQTfkuLsG3hAd
-         jeDEAuGbZA8nj/vCCmVof27GomGGQLFyu45IR/MWwqV3yctcAXJHAkJCGd/rptdKN16y
-         /dskoEbuflEPnkl7QgrIeGRfmzyEmQlwIJqocmO4Uu+0fbbCZffQbdMY2m3Ilj4FlNGe
-         GrnEWVcfI4uU1oWhAE4qd+qlLopmdDMN3dMW4Z1WgT9gfujhmglsXrsF95eDn8u8HHsA
-         L2MW+EPtRhmI30Kq3z6LV04RqZlCxuLpXBrVmEHw7cz7nNzEGmWWlXcPJRTrVlf7VoK/
-         Hqwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iDi6IM/MaPJ/3n0t/k9AegJIGfm9vzz6t4MiBeVwT9A=;
-        b=H1S9nmWGoEzlgYThTWiD3wmrmqATEzm15wn+N46ezVaF1H8ah1VsYFXK3DENNMVZd1
-         zZA2l7JOGqMi1gZkdGUHdEOxJKDv4TMmujTSs/whvSKyHiW703GHMSL+1DQSLyzSqKIh
-         rXL254J9Uzf3nSRqR51AXLsg3RVzzUgNuIi8e1l40n7r6R/OqogVt95jWOkEhlSULgLL
-         r7mbmc9ln8wiqCD2L7HQwHWiSdFO6T+GDYRXNJyeBSwOIha1HTFVLLXMsFnQ3FOK64WL
-         8Lc6ykQ4Qh67wjiDsu5uzeWzrAuIEoHW1cXg4XOydG7e+QHGNk8ZKkYtZsWUT++gO4yK
-         YWiQ==
-X-Gm-Message-State: AO0yUKVZ5KqMGFQOarVPNtvudW0jFoXNbbLKLj9m+ZaQbpNI2PFSzVah
-        0c6s0rC1+JbgwfiAADxv2j+IwQ==
-X-Google-Smtp-Source: AK7set8Paapy/h78JoHz48aSDiy+HfPZsFgLg5+P131bwxrtUytlBCWxTII/Ts7bbR26BqvEwL7v9g==
-X-Received: by 2002:a05:6a20:5484:b0:bc:244a:c43e with SMTP id i4-20020a056a20548400b000bc244ac43emr19530680pzk.55.1675135905090;
-        Mon, 30 Jan 2023 19:31:45 -0800 (PST)
-Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id b17-20020a639311000000b00478c48cf73csm7528002pge.82.2023.01.30.19.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 19:31:44 -0800 (PST)
-Date:   Tue, 31 Jan 2023 09:01:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM8550
- compatible
-Message-ID: <20230131033142.oykyybqia32lwi6r@vireshk-i7>
-References: <20230130123046.3229654-1-abel.vesa@linaro.org>
+        Mon, 30 Jan 2023 22:33:04 -0500
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0310E9755
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:32:59 -0800 (PST)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 8CE7D2C0424;
+        Tue, 31 Jan 2023 16:32:56 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1675135976;
+        bh=pAofpme7zrgGYuxzotW8YdvJY4zRXAp/0MRHk+ANOYQ=;
+        h=From:To:Subject:Date:References:In-Reply-To:From;
+        b=AEk6KWBUOO+ZKz4U5vCkgezHxW0pPY9qkBv5wxQcBBZbhng1uRK4nffCIW+oXHKAB
+         7yshoCEtciHxbwLJHD/xcNJXxYlA4GvfSsC6oiTDv+tdMtLaweriShlMSC5aLOk/Z/
+         eD4brEOA16oB9S9dyFI0ZiPEHq+4jGBQL9jjyHubUjHjtuJQgXMYQ9bYAGioz1fe56
+         PVdO7sg0elTVC6Q2ADqWTHDh8PKXARkdopJQdYBpI6QAsR68+bghFIc3WUwofeAz+Q
+         0vatkgpxyT0l9nGZF0F8gydDkTj1JuyiQVgisjV0FM+fB02QNYTRerZFquNl085JFr
+         IDKXc/ibLuBWg==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B63d88be80001>; Tue, 31 Jan 2023 16:32:56 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
+ by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.45; Tue, 31 Jan 2023 16:32:56 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.045; Tue, 31 Jan 2023 16:32:56 +1300
+From:   Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
+To:     "davem@davemloft.net" <davem@davemloft.net>,
+        "dsahern@kernel.org" <dsahern@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "a@unstable.cc" <a@unstable.cc>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "kuba@kernel.org" <kuba@kernel.org>
+Subject: Re: [PATCH v4 1/2] ip/ip6_gre: Fix changing addr gen mode not
+ generating IPv6 link local address
+Thread-Topic: [PATCH v4 1/2] ip/ip6_gre: Fix changing addr gen mode not
+ generating IPv6 link local address
+Thread-Index: AQHZMftpU3nXhE6KVEm07vwYj8Sov6603S8AgAIuVYA=
+Date:   Tue, 31 Jan 2023 03:32:55 +0000
+Message-ID: <8ecf823a13c7375aa6d86c9fe244a6481410f982.camel@alliedtelesis.co.nz>
+References: <20230127025941.2813766-1-Thomas.Winter@alliedtelesis.co.nz>
+         <20230127025941.2813766-2-Thomas.Winter@alliedtelesis.co.nz>
+         <a4f4392f-cc15-86e0-9b63-12678b65d58f@kernel.org>
+In-Reply-To: <a4f4392f-cc15-86e0-9b63-12678b65d58f@kernel.org>
+Accept-Language: en-GB, en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [2001:df5:b000:25:642:1aff:fe08:1270]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <82192CA47AD10741BF6BEF088BAF6D2C@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130123046.3229654-1-abel.vesa@linaro.org>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=a6lOCnaF c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=RvmDmJFTN0MA:10 a=XFRO4y6jSu2azTGKomUA:9 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30-01-23, 14:30, Abel Vesa wrote:
-> Add compatible for EPSS CPUFREQ-HW on SM8550.
-> Also document the interrupts.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> 
-> The v1 is here:
-> https://lore.kernel.org/all/20221116115046.2687244-1-abel.vesa@linaro.org/
-> 
-> Changes since v1:
->  * dropped the interrupts related properties as they are already there.
-> 
->  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> index 2494e90a2fda..e4aa8c67d532 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> @@ -32,6 +32,7 @@ properties:
->                - qcom,sm8250-cpufreq-epss
->                - qcom,sm8350-cpufreq-epss
->                - qcom,sm8450-cpufreq-epss
-> +              - qcom,sm8550-cpufreq-epss
->            - const: qcom,cpufreq-epss
->  
->    reg:
-
-Applied. Thanks.
-
--- 
-viresh
+T24gU3VuLCAyMDIzLTAxLTI5IGF0IDExOjE0IC0wNzAwLCBEYXZpZCBBaGVybiB3cm90ZToNCj4g
+QSBjb3VwbGUgb2Ygbml0cy4NCj4gDQo+IE9uIDEvMjYvMjMgNzo1OSBQTSwgVGhvbWFzIFdpbnRl
+ciB3cm90ZToNCj4gPiBkaWZmIC0tZ2l0IGEvbmV0L2lwdjYvYWRkcmNvbmYuYyBiL25ldC9pcHY2
+L2FkZHJjb25mLmMNCj4gPiBpbmRleCBmN2E4NGE0YWNmZmMuLjAwNjViMzhmYzg1YiAxMDA2NDQN
+Cj4gPiAtLS0gYS9uZXQvaXB2Ni9hZGRyY29uZi5jDQo+ID4gKysrIGIvbmV0L2lwdjYvYWRkcmNv
+bmYuYw0KPiA+IEBAIC0zMzU1LDcgKzMzNTUsNyBAQCBzdGF0aWMgdm9pZCBhZGRyY29uZl9hZGRy
+X2dlbihzdHJ1Y3QNCj4gPiBpbmV0Nl9kZXYgKmlkZXYsIGJvb2wgcHJlZml4X3JvdXRlKQ0KPiA+
+ICAJfQ0KPiA+ICB9DQo+ID4gIA0KPiA+IC1zdGF0aWMgdm9pZCBhZGRyY29uZl9kZXZfY29uZmln
+KHN0cnVjdCBuZXRfZGV2aWNlICpkZXYpDQo+ID4gK3N0YXRpYyB2b2lkIGFkZHJjb25mX2V0aF9j
+b25maWcoc3RydWN0IG5ldF9kZXZpY2UgKmRldikNCj4gDQo+IHdoeSB0aGUgcmVuYW1lIG9mIHRo
+aXMgZnVuY3Rpb24/IEl0IGRvZXMgbW9yZSB0aGFuIGV0aGVybmV0IGNvbmZpZy4NCg0KQSByZW1u
+YW50IG9mIGEgcHJldmlvdXMgdmVyc2lvbiB3aGVyZSBJIG5hbWVkIHRoZSBuZXcgZnVuY3Rpb24N
+CmFkZHJjb25mX2Rldl9jb25maWcgd2hpY2ggdGhlbiBjYWxscyBhZGRyY29uZl9ldGhfY29uZmln
+LA0KYWRkcmNvbmZfZ3JlX2NvbmZpZywgZXRjLg0KDQpUaGVyZSBpcyBhbHNvIHRoZSBmb2xsb3dp
+bmcgY29tbWVudCBpbiB0aGUgZnVuY3Rpb24gIkFsYXMsIHdlIHN1cHBvcnQNCm9ubHkgRXRoZXJu
+ZXQgYXV0b2NvbmZpZ3VyYXRpb24uIi4NCg0KSSBjb3VsZCByZW5hbWUgaXQgYmFjayBpbiB0aGUg
+bmV4dCBwYXRjaHNldCB2ZXJzaW9uLg0KDQo+IA0KPiANCj4gPiAgew0KPiA+ICAJc3RydWN0IGlu
+ZXQ2X2RldiAqaWRldjsNCj4gPiAgDQo+ID4gQEAgLTM0NDcsNiArMzQ0NywzMCBAQCBzdGF0aWMg
+dm9pZCBhZGRyY29uZl9ncmVfY29uZmlnKHN0cnVjdA0KPiA+IG5ldF9kZXZpY2UgKmRldikNCj4g
+PiAgfQ0KPiA+ICAjZW5kaWYNCj4gPiAgDQo+ID4gK3N0YXRpYyB2b2lkIGFkZHJjb25maWdfaW5p
+dF9hdXRvX2FkZHJzKHN0cnVjdCBuZXRfZGV2aWNlICpkZXYpDQo+IA0KPiB0aGlzIG9uZSBzaG91
+bGQgYmUgJ2FkZHJjb25mXycgdG8gYmUgY29uc2lzdGVudCB3aXRoIHJlbGF0ZWQgZnVuY3Rpb24N
+Cj4gbmFtZXMuDQo+IA0KPiANCg0KV2lsbCB1cGRhdGUgaW4gbmV3IHBhdGNoIHNldC4NCg==
