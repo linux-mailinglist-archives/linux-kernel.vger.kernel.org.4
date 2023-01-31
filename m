@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB9A682968
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CADD2682969
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232822AbjAaJrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S232828AbjAaJrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjAaJrD (ORCPT
+        with ESMTP id S232672AbjAaJrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:47:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA5DCA2C;
-        Tue, 31 Jan 2023 01:46:24 -0800 (PST)
+        Tue, 31 Jan 2023 04:47:19 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A12446718
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:46:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97D8861485;
-        Tue, 31 Jan 2023 09:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D279C433EF;
-        Tue, 31 Jan 2023 09:46:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675158380;
-        bh=KTfxAv4/PIks1rtAcMvxbdh4fpDCyfuw7pXRReopI3Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nu1hPCq9s7Jhnb2Yl9juR5sAlsr0lq6ir2BCfz3ElXtbHzNbizn+DzUNFurLSgomT
-         i6X4/Ra8hBdbUiPfbOzDbJy0oYh/iigjyWBjLn2nUN4lv6N/gIpm7wsaV1Hl/UJY0O
-         kJiBJ9xVBmAYzeTKP1DeMPkZYhI18L9LyB7ja6bxJh3YVfMTAWVSmfmZs+BtGEXdbz
-         y3iibSwb/vaQALRn0b++qB/1GVsN6XWKAXregjKVdxV9Yf/DG2DZaMtiaZsb9LP6Sh
-         ADmy6BuRHFhxWWvezjlgKYB7RGal2G2b+lYT+qYnIvozJuBH03HuRl+jIu+PC4ACNq
-         k46Sj9kV/IsHA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Jonathan Cameron <jic23@kernel.org>, Nuno Sa <nuno.sa@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andrea Merello <andrea.merello@iit.it>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: adis16480: select CONFIG_CRC32
-Date:   Tue, 31 Jan 2023 10:46:11 +0100
-Message-Id: <20230131094616.130238-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6772DCE1C83
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:46:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 464FAC4339B;
+        Tue, 31 Jan 2023 09:46:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675158383;
+        bh=drj8Q7DR3ak/2XdNo8GhguQIPXGnSMqZd36bxWhjgJw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iWaQXUYUEfz4egILmZZ2iaXcX3R4PnrswWeeN8w15k8dwM3uISKalaK0uHey2TaUw
+         qxJZCo+DLP89CRFh8k7dOPzxdtaJ0mkaH1D7nJImRrkQ0xMulzJSNMXpDWLi+0Qt8J
+         JeYeJpayWG4/OYwAYDGXGSQt8zb9LltHVPnLlpAo=
+Date:   Tue, 31 Jan 2023 10:46:20 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Christian.Gromm@microchip.com
+Cc:     rdunlap@infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] most: fix kernel-doc warnings
+Message-ID: <Y9jjbMWKlRkCzzSe@kroah.com>
+References: <20230113063947.23174-1-rdunlap@infradead.org>
+ <Y8lsvtoSYFj/8/U/@kroah.com>
+ <7e79c3bb823ab54b7440129b8d5a1897cfa01dd2.camel@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e79c3bb823ab54b7440129b8d5a1897cfa01dd2.camel@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,33 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Jan 23, 2023 at 10:31:56AM +0000, Christian.Gromm@microchip.com wrote:
+> 
+> On Thu, 2023-01-19 at 17:15 +0100, Greg Kroah-Hartman wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Thu, Jan 12, 2023 at 10:39:47PM -0800, Randy Dunlap wrote:
+> > > Fix various W=1 kernel-doc warnings in drivers/most/:
+> > >
+> > > drivers/most/most_usb.c:669: warning: Excess function parameter 'data' description in 'link_stat_timer_handler'
+> > > drivers/most/most_usb.c:769: warning: cannot understand function prototype: 'const struct file_operations hdm_usb_fops = '
+> > > drivers/most/most_usb.c:776: warning: cannot understand function prototype: 'const struct usb_device_id usbid[] = '
+> > > drivers/most/most_cdev.c:301: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> > >  * Initialization of struct file_operations
+> > > drivers/most/most_cdev.c:414: warning: Function parameter or member 'args' not described in 'comp_probe'
+> > > drivers/most/most_snd.c:56: warning: Function parameter or member 'pcm_hardware' not described in 'channel'
+> > > drivers/most/most_snd.c:56: warning: Function parameter or member 'copy_fn' not described in 'channel'
+> > > drivers/most/most_snd.c:404: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> > >  * Initialization of struct snd_pcm_ops
+> > > drivers/most/most_snd.c:514: warning: Function parameter or member 'device_name' not described in 'audio_probe_channel'
+> > > drivers/most/most_snd.c:703: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> > >  * Initialization of the struct most_component
+> > >
+> > >
+> > > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > > Cc: Christian Gromm <christian.gromm@microchip.com>
+> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > > Also: what does MOST mean? Can that be added to drivers/most/Kconfig,
+> > >     in a prompt or help text?
+> > > Also: how about a MAINTAINERS entry for drivers/most/?
+> > 
+> > That would be good, Christian, can you send a patch for that?
+> > 
+> 
+> Sure, I can do that. But since I am not working for the automotive divison
+> within the company anymore I need to indentify the right person for that first.
 
-In rare randconfig builds, the missing CRC32 helper causes
-a link error:
+Should we just remove these files if no one is using them anymore and
+there's no one to maintain them?
 
-ld.lld: error: undefined symbol: crc32_le
->>> referenced by usercopy_64.c
->>>               vmlinux.o:(adis16480_trigger_handler)
+thanks,
 
-Fixes: 941f130881fa ("iio: adis16480: support burst read function")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/iio/imu/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/iio/imu/Kconfig b/drivers/iio/imu/Kconfig
-index f1d7d4b5e222..c2f97629e9cd 100644
---- a/drivers/iio/imu/Kconfig
-+++ b/drivers/iio/imu/Kconfig
-@@ -47,6 +47,7 @@ config ADIS16480
- 	depends on SPI
- 	select IIO_ADIS_LIB
- 	select IIO_ADIS_LIB_BUFFER if IIO_BUFFER
-+	select CRC32
- 	help
- 	  Say yes here to build support for Analog Devices ADIS16375, ADIS16480,
- 	  ADIS16485, ADIS16488 inertial sensors.
--- 
-2.39.0
-
+greg k-h
