@@ -2,269 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100BA683976
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2BD683978
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjAaWjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S231200AbjAaWkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjAaWjx (ORCPT
+        with ESMTP id S229961AbjAaWkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:39:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9E5F746;
-        Tue, 31 Jan 2023 14:39:49 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VMJdii038789;
-        Tue, 31 Jan 2023 22:39:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=BKcYaxcWYH/ofWDt8+sbufGNtI9zvO8cCx8Veh2f5cI=;
- b=Y30+wvqLCgv1nnLfSuu7/AS1XxPzVj8L+hAoETMMuHEjG2/2r6rI2J/Qd1+9Oz2st4PJ
- op6a/XprX9/OiLgX2Ii/JquEMFyR+F17dAxgcISD18+rtakHcN8s71RtrexFpiRkq1o8
- J151GDoEbnP/PUJdqx+fyW0hpwzxSDwrJv6WZ3siJTpAcneB8shff1tuC3th4HCMAvsj
- tvn6aFivfjl/ElMv1mtQfN50yfW1c3vbj1RKcNxdVTbGKEP2+uMeMqRdHlehrWiPr/RB
- jvJUgu/9ZeGfG/HLFTR+LASCwJMUEltxd0Y/oC1AmOdVD3C9QT3rDIxgk7C9oQduXqwL jA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfbpe8dfv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 22:39:28 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VMQvtH020712;
-        Tue, 31 Jan 2023 22:39:27 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfbpe8dfd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 22:39:27 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VLaEOb025857;
-        Tue, 31 Jan 2023 22:39:26 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3ncvtrq1bj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 22:39:26 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VMdNlc2425418
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 22:39:23 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E0E458052;
-        Tue, 31 Jan 2023 22:39:23 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E9095804E;
-        Tue, 31 Jan 2023 22:39:22 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 22:39:22 +0000 (GMT)
-Message-ID: <deec5230-b72e-3325-3dfc-fb8c818526a4@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 17:39:20 -0500
+        Tue, 31 Jan 2023 17:40:45 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A369EFB2;
+        Tue, 31 Jan 2023 14:40:43 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id qw12so30179623ejc.2;
+        Tue, 31 Jan 2023 14:40:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KUPztVm7TCSgk24kz0qZCmg6of4J1a8oSdbPBOcLku4=;
+        b=c/BEL643UCrCF82LoV3IKB+5KyuXz5WCgAF5qbQDzmz2rbq8SsdE869+V0tZVubxFo
+         kwynVei/99hhq1jWA3ffqaMRAEYrJJj1rIIf7DfLnUkDUpiBYTfVhzI9Z/Em8LpuZoQm
+         VYbF0i8vaAicCJ+CpzW2Ao8HIop4wQ3gqACGS6IimGmadtIe465foqUvE+rD4HfBNQe2
+         JrxI2gr9aN6FnTCUrCcjJlLQZmJQk9kTflb/21hb4xd+RERL8Nd9Gpsg3YRf+FGoycEe
+         xpM0PgS3Ou5QF8H4uRdOBMUrvYaf/9o4GLXeRYDlp+SSXjEdS/faBBI2N85KMpIJyosB
+         ZP0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KUPztVm7TCSgk24kz0qZCmg6of4J1a8oSdbPBOcLku4=;
+        b=Tum7fVMkPXd7o2s/intcM0zhJ8wsm00iW2LnMLG1XHyWLL6EAAxH/mr9VdPQvB8QqN
+         g5kAZAX30Neg57NZRWuR60vPoRRB9+DFi4rYPA8Rbjt+os+lkROZAM8WxweS1vIed8Av
+         rhvDJzeiQcPY2JM+4j1bRAmPYlfG7cF0T/h2I2/t7AzaXOP1eAYAnEekT19CQi0ecqAl
+         qtHUni3gWh68q+OESyhOy9RmRQ8G+dKL32stpvlMXFfxlRxlhbBR5FSCoK8/vWZyOp3F
+         nQJjRkqgOz0vGqzqGd01k83EULXAeSlR8S/vnyYTYrV+nMpZ2s9fUvhOZeSGdVY432fY
+         mopA==
+X-Gm-Message-State: AO0yUKUfj8I6NyKAzGz6e1xmOfig15YvgyMY6+ydSAY4zAmaJpp1seHn
+        n8AJ1nvCplH69P99xJZwFBo=
+X-Google-Smtp-Source: AK7set+p5JQV/1HfuHev8lqBJ9svYuBbwUUuVTlWdesok6lYa6PakehRGFDPx8aWSKlzUNXHD+Gqhg==
+X-Received: by 2002:a17:906:434b:b0:878:72f7:bd87 with SMTP id z11-20020a170906434b00b0087872f7bd87mr57007ejm.6.1675204841311;
+        Tue, 31 Jan 2023 14:40:41 -0800 (PST)
+Received: from krava ([83.240.61.48])
+        by smtp.gmail.com with ESMTPSA id a26-20020a170906685a00b008878909859bsm4388047ejs.152.2023.01.31.14.40.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 14:40:40 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 31 Jan 2023 23:40:39 +0100
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Connor OBrien <connoro@google.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
+Message-ID: <Y9mY5woe+45nTvTM@krava>
+References: <20230124064324.672022-1-irogers@google.com>
+ <20230124064324.672022-2-irogers@google.com>
+ <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X>
+ <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
+ <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
+ <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
+ <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
+ <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH ima-evm-utils v2] Add tests for MMAP_CHECK and
- MMAP_CHECK_REQPROT hooks
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        pvorel@suse.cz, Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230131174245.2343342-1-roberto.sassu@huaweicloud.com>
- <20230131174245.2343342-3-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131174245.2343342-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jtRuxiSHqkKzwTNNpi6FBqSTWrNRJ_M4
-X-Proofpoint-GUID: ES69wqk_a3WYrbbLU1p5ub7BMnnA1Ns4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- impostorscore=0 malwarescore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
- spamscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301310195
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 1/31/23 12:42, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue, Jan 31, 2023 at 02:17:08PM -0700, Nathan Chancellor wrote:
+> On Tue, Jan 31, 2023 at 12:59:04PM -0800, Ian Rogers wrote:
+> > On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
+> > > > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
+> > > > >
+> > > > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > > >
+> > > > > > Hi Ian,
+> > > > > >
+> > > > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
+> > > > > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happens
+> > > > > > > after tools/scripts/Makefile.include is included, meaning flags are
+> > > > > > > set assuming say CC is gcc, but then it can be later set to HOSTCC
+> > > > > > > which may be clang. tools/scripts/Makefile.include is needed for host
+> > > > > > > set up and common macros in objtool's Makefile. Rather than override
+> > > > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsubcmd
+> > > > > > > builds and the linkage step. This means the Makefiles don't see things
+> > > > > > > like CC changing and tool flag determination, and similar, work
+> > > > > > > properly.
+> > > > > > >
+> > > > > > > Also, clear the passed subdir as otherwise an outer build may break by
+> > > > > > > inadvertently passing an inappropriate value.
+> > > > > > >
+> > > > > > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > > > > > ---
+> > > > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
+> > > > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> > > > > > > index 1fe0082b2ecc..daed388aa5d7 100644
+> > > > > > > --- a/tools/bpf/resolve_btfids/Makefile
+> > > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > > > > > @@ -18,14 +18,11 @@ else
+> > > > > > >  endif
+> > > > > > >
+> > > > > > >  # always use the host compiler
+> > > > > > > -AR       = $(HOSTAR)
+> > > > > > > -CC       = $(HOSTCC)
+> > > > > > > -LD       = $(HOSTLD)
+> > > > > > > -ARCH     = $(HOSTARCH)
+> > > > > > > +HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)" \
+> > > > > > > +               EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> > > > > > > +
+> > > > > > >  RM      ?= rm
+> > > > > > >  CROSS_COMPILE =
+> > > > > > > -CFLAGS  := $(KBUILD_HOSTCFLAGS)
+> > > > > > > -LDFLAGS := $(KBUILD_HOSTLDFLAGS)
+> > > > > > >
+> > > > > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+> > > > > > >
+> > > > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
+> > > > > > >
+> > > > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+> > > > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(SUBCMD_OUT) \
+> > > > > > > -                 DESTDIR=$(SUBCMD_DESTDIR) prefix= \
+> > > > > > > +                 DESTDIR=$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+> > > > > > >                   $(abspath $@) install_headers
+> > > > > > >
+> > > > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUT)
+> > > > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(LIBBPF_OUT)    \
+> > > > > > > -                 DESTDIR=$(LIBBPF_DESTDIR) prefix= EXTRA_CFLAGS="$(CFLAGS)" \
+> > > > > > > +                 DESTDIR=$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) prefix= subdir= \
+> > > > > > >                   $(abspath $@) install_headers
+> > > > > > >
+> > > > > > >  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+> > > > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
+> > > > > > >  include $(srctree)/tools/build/Makefile.include
+> > > > > > >
+> > > > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+> > > > > > > -     $(Q)$(MAKE) $(build)=resolve_btfids
+> > > > > > > +     $(Q)$(MAKE) $(build)=resolve_btfids $(HOST_OVERRIDES)
+> > > > > > >
+> > > > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+> > > > > > >       $(call msg,LINK,$@)
+> > > > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> > > > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> > > > > > >
+> > > > > > >  clean_objects := $(wildcard $(OUTPUT)/*.o                \
+> > > > > > >                              $(OUTPUT)/.*.o.cmd           \
+> > > > > > > --
+> > > > > > > 2.39.0.246.g2a6d74b583-goog
+> > > > > > >
+> > > > > >
+> > > > > > I just bisected a linking failure when building resolve_btfids with
+> > > > > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
+> > > > > > Alter how HOSTCC is forced") in the bpf-next tree.
+> > > > > >
+> > > > > > It appears to be related to whether or not CROSS_COMPILE is specified,
+> > > > > > which we have to do for certain architectures and configurations still.
+> > > > > > arm64 is not one of those but it helps demonstrate the issue.
+> > > > > >
+> > > > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INFO_BTF
+> > > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 defconfig menuconfig
+> > > > > >
+> > > > > >   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 prepare
+> > > > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
+> > > > > >   clang-17: error: linker command failed with exit code 1 (use -v to see invocation)
+> > > > > >   ...
+> > > > > >
+> > > > > > Before your change, with V=1, I see:
+> > > > > >
+> > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -Wdeclaration-after-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
+> > > > > >
+> > > > > > After, I see:
+> > > > > >
+> > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=aarch64-linux-gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=#s" -c -o $LINUX_SRC/tools/bpf/resolve_btfids/main.o main.c
+> > > > > >
+> > > > > > We seem to have taken on a '--target=aarch64-linux-gnu' (changing the
+> > > > > > target of resolve_btfids-in.o) and we dropped the warning flags.
+> > > > > >
+> > > > > > I think this comes from the clang block in
+> > > > > > tools/scripts/Makefile.include, which is included into the
+> > > > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
+> > > > > >
+> > > > > > I am not super familiar with the tools build system, otherwise I would
+> > > > > > try to provide a patch. I tried moving CROSS_COMPILE from a recursive to
+> > > > > > simple variable ('=' -> ':=') and moving it to HOST_OVERRIDES but those
+> > > > > > did not appear to resolve it for me.
+> > > > > >
+> > > > > > If there is any other information I can provide or patches I can test,
+> > > > > > please let me know.
+> > > > > >
+> > > > > > Cheers,
+> > > > > > Nathan
+> > > > >
+> > > > > Thanks Nathan, and thanks for all the details in the bug report. I'm
+> > > > > looking into this.
+> > > > >
+> > > > > Ian
+> > > >
+> > > > Given the somewhat complicated cross compile I wasn't able to get a
+> > > > reproduction. Could you see if the following addresses the problem:
+> > >
+> > > As long as you have an LLVM toolchain that targets AArch64 and your
+> > > host, you should be able to reproduce this issue with those commands
+> > > verbatim, as that command should not use any GNU binutils. I am pretty
+> > > sure I tried it in a fresh container before reporting it but it is
+> > > possible that I did not.
+> > 
+> > Thanks, do you have instructions on setting up the container?
 > 
+> Sure thing, this worked for me in the Linux source you would like to
+> build (I marked it readonly to make sure any modifications were done in
+> my host environment, remove the ':ro' if you would like to make edits to
+> the source within the container). Docker should work as well but I did
+> not test it.
+> 
+> $ podman run --rm -ti -v $PWD:/linux:ro docker.io/archlinux:base-devel
+> # pacman -Syyu --noconfirm bc clang lib32-glibc lld llvm python
+> ...
+> 
+> # To turn on CONFIG_DEBUG_INFO_BTF
+> # make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build defconfig menuconfig
+> 
+> # make -C /linux -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- HOSTLDFLAGS=-fuse-ld=lld LLVM=1 O=/build prepare
+> ld.lld: error: /build/tools/bpf/resolve_btfids//resolve_btfids-in.o is incompatible with elf64-x86-64
+> clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+> 
+> > > > ```
+> > > > diff --git a/tools/bpf/resolve_btfids/Makefile
+> > > > b/tools/bpf/resolve_btfids/Makefile
+> > > > index daed388aa5d7..a06966841df4 100644
+> > > > --- a/tools/bpf/resolv
+> > 
+> > Ian
+> > e_btfids/Makefile
+> > > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > > @@ -19,10 +19,9 @@ endif
+> > > >
+> > > > # always use the host compiler
+> > > > HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)"
+> > > > ARCH="$(HOSTARCH)" \
+> > > > -                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> > > > +                 EXTRA_CFLAGS="$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
+> > > > CROSS_COMPILE=""
+> > > >
+> > > > RM      ?= rm
+> > > > -CROSS_COMPILE =
+> > > >
+> > > > OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+> > > > ```
+> > > >
+> > >
+> > > Unfortunately, it does not. I still see '--target=' end up in the
+> > > CFLAGS of those files.
+
+hi,
+I can reproduce that and I think the reason is that the patch removes
+CFLAGS setup
+
+  CFLAGS  := $(KBUILD_HOSTCFLAGS)
+
+so now the 'include ../../scripts/Makefile.include' will set CFLAGS
+with the  --target=... and we fail
+
+I can compile with the change below.. we could also set CROSS_COMPILE
+before including tools/scripts/Makefile.include ... not sure which
+on is better
+
+also I need to check if we should keep LDFLAGS setup as well
+
+jirka
 
 
-> +check_mmap() {
-> +	local hook="$1"
-> +	local arg="$2"
-> +	local test_file fowner rule result test_file_entry
-> +
-> +	echo -e "\nTest: ${FUNCNAME[0]} (hook=\"$hook\", test_mmap arg: \"$arg\")"
-> +
-> +	if ! test_file=$(mktemp -p "$PWD"); then
-> +		echo "${RED}Cannot write $test_file${NORM}"
-> +		return "$HARDFAIL"
-> +	fi
-> +
-> +	fowner="$MMAP_CHECK_FOWNER"
-> +	rule="$MEASURE_MMAP_CHECK_RULE"
-> +
-> +	if [ "$hook" = "MMAP_CHECK_REQPROT" ]; then
-> +		fowner="$MMAP_CHECK_REQPROT_FOWNER"
-> +		rule="$MEASURE_MMAP_CHECK_REQPROT_RULE"
-> +	fi
-> +
-> +	if ! chown "$fowner" "$test_file"; then
-> +		echo "${RED}Cannot change owner of $test_file${NORM}"
-> +		return "$HARDFAIL"
-> +	fi
-> +
-> +	check_load_ima_rule "$rule"
-> +	result=$?
-> +	if [ $result -ne "$OK" ]; then
-> +		return $result
-> +	fi
-> +
-> +	test_mmap "$test_file" "$arg"
+---
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index daed388aa5d7..875e3fcce7cd 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -64,6 +64,7 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
+ LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+ LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+ 
++CFLAGS := $(KBUILD_HOSTCFLAGS)
+ CFLAGS += -g \
+           -I$(srctree)/tools/include \
+           -I$(srctree)/tools/include/uapi \
 
-In this case it should succeed or fail depending on the $rule?  I am just wondering whether to check $? here as well for expected outcome...
-
-> +
-> +	if [ "$TFAIL" != "yes" ]; then
-> +		echo -n "Result (expect found): "
-> +	else
-> +		echo -n "Result (expect not found): "
-> +	fi
-> +
-> +	test_file_entry=$(awk '$5 == "'"$test_file"'"' < /sys/kernel/security/ima/ascii_runtime_measurements)
-> +	if [ -z "$test_file_entry" ]; then
-> +		echo "not found"
-> +		return "$FAIL"
-> +	fi
-> +
-> +	echo "found"
-> +	return "$OK"
-> +}
-
-> +if [ -n "$TST_KEY_PATH" ]; then
-> +	if [ "${TST_KEY_PATH:0:1}" != "/" ]; then
-> +		echo "${RED}Absolute path required for the signing key${NORM}"
-> +		exit "$FAIL"
-> +	fi
-> +
-> +	if [ ! -f "$TST_KEY_PATH" ]; then
-> +		echo "${RED}Kernel signing key not found in $TST_KEY_PATH${NORM}"
-> +		exit "$FAIL"
-> +	fi
-> +
-> +	key_path="$TST_KEY_PATH"
-
-g_key_path ? or pass as parameter to check_deny (better IMO)
-
-> +elif [ -f "$PWD/../signing_key.pem" ]; then
-> +	key_path="$PWD/../signing_key.pem"
-> +elif [ -f "/lib/modules/$(uname -r)/source/certs/signing_key.pem" ]; then
-> +	key_path="/lib/modules/$(uname -r)/source/certs/signing_key.pem"
-> +elif [ -f "/lib/modules/$(uname -r)/build/certs/signing_key.pem" ]; then
-> +	key_path="/lib/modules/$(uname -r)/build/certs/signing_key.pem"
-> +else
-> +	echo "${CYAN}Kernel signing key not found${NORM}"
-> +	exit "$SKIP"
-> +fi
-> +
-> +key_path_der=$(mktemp)
-
-g_key_path_der for consistency
-
-> +++ b/tests/test_mmap.c
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Tool to test IMA MMAP_CHECK and MMAP_CHECK_REQPROT hooks.
-> + */
-> +#include <stdio.h>
-> +#include <errno.h>
-> +#include <fcntl.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <sys/stat.h>
-> +#include <sys/mman.h>
-> +#include <sys/personality.h>
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	struct stat st;
-> +	void *ptr, *ptr_write = NULL;
-> +	int ret, fd, fd_write, prot = PROT_READ;
-> +
-> +	if (!argv[1])
-> +		return -ENOENT;
-> +
-> +	if (argv[2] && !strcmp(argv[2], "read_implies_exec")) {
-> +		ret = personality(READ_IMPLIES_EXEC);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	if (stat(argv[1], &st) == -1)
-> +		return -errno;
-> +
-> +	if (argv[2] && !strcmp(argv[2], "exec_on_writable")) {
-> +		fd_write = open(argv[1], O_RDWR);
-> +		if (fd_write == -1)
-> +			return -errno;
-> +
-> +		ptr_write = mmap(0, st.st_size, PROT_WRITE, MAP_SHARED,
-> +				 fd_write, 0);
-> +		close(fd_write);
-> +
-> +		if (ptr_write == (void *)-1)
-> +			return -errno;
-> +	}
-> +
-> +	fd = open(argv[1], O_RDONLY);
-> +	if (fd == -1) {
-> +		if (ptr_write)
-> +			munmap(ptr_write, st.st_size);
-> +
-> +		return -errno;
-> +	}
-> +
-> +	if (argv[2] && !strncmp(argv[2], "exec", 4))
-> +		prot |= PROT_EXEC;
-> +
-> +	ptr = mmap(0, st.st_size, prot, MAP_PRIVATE, fd, 0);
-> +
-> +	close(fd);
-> +
-> +	if (ptr_write)
-> +		munmap(ptr_write, st.st_size);
-> +
-> +	if (ptr == (void *)-1)
-> +		return -errno;
-> +
-> +	ret = 0;
-> +
-> +	if (argv[2] && !strcmp(argv[2], "mprotect"))
-> +		ret = mprotect(ptr, st.st_size, PROT_EXEC);
-> +
-> +	munmap(ptr, st.st_size);
-> +	return ret;
-> +}
-
-Are there any unexpected failure cases here where it should report an error to the user?
-
-    Stefan
