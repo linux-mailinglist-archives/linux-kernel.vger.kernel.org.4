@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C8C682DB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:22:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E7B682DBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjAaNWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:22:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
+        id S232036AbjAaNXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbjAaNWm (ORCPT
+        with ESMTP id S230200AbjAaNXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:22:42 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A92BB1;
-        Tue, 31 Jan 2023 05:22:41 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id n13so3314890wmr.4;
-        Tue, 31 Jan 2023 05:22:41 -0800 (PST)
+        Tue, 31 Jan 2023 08:23:20 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6013065A0;
+        Tue, 31 Jan 2023 05:23:19 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso10575536wmq.5;
+        Tue, 31 Jan 2023 05:23:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YqCcxNM0oQ47CTFQk6ypa9uV7hhok/zL4Fnr5q3moYk=;
-        b=Eb5Fa0y2PKje90ynik0qDiPK88YhdfznviATz7/qM/4FIz3xdlMVVEtd992UzgLXlJ
-         eWcHQG5o3DcWbVPUU4kQ3xiWQ5NfQwvPOore1j1lJ43bckFv7y+NPAFWJaj5Zt7NaFq+
-         dxWOgpTw+xYAijDfamE/4nvRI5khcW55ctYWqLhA2Vr7NVgIXnOtPvJH/CN0DxJ/3yse
-         wlTivATD30zwugRCrUiHvR/+x9iyXjKpQbDIAKasXiVvMv+O/gd/odXJ0lELg2Bj+EQY
-         mC5rIkLghhqpDaubEtmL96JwT1i0autyAEvmPq1TjmOncsLh1cV/yUz1gsUUCuYgqvU2
-         s3OA==
+        bh=DxqT2eMiEuxRnBsmwUs2D0qkIojDueG3BR3ri/bN6+s=;
+        b=T0r+CaGMfGweUThdfbzF9UjIdg+qzhzE/zYh6nJZNGdLSuF7rhGCe/sqWeFbbj9UXJ
+         6HZCUh2n4YYwdT8UM2o1P0Xa+C6cjlVSkEWjmbItKQkjkAbVI7aO8qMQAbA24Wu2CB1s
+         uhTKIHauaE3ecoVYwDuXKqEOWTObc1/frP630Iy7a7XDeOeXwh3yH/kXn5SYKkNZNk4C
+         SjxSpXbHuukH2d2s3HPUajJMdrOYIBeBxD1UjvcpCW56iMlg7wBWWJEwTIAvYdbiCAQd
+         0XAQ23FH7De3Nfuj4ocYEC64wfhy/hSD5neChPhTISOjBnYKplKF3A2Q7LeJBaK03wFV
+         KZig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YqCcxNM0oQ47CTFQk6ypa9uV7hhok/zL4Fnr5q3moYk=;
-        b=X6QeVsHSdvkT3sGu7EEjQoNoSybXQ7PLzqlJ/YdF8uVmJjP/NaiXuFohz4k05Vsx2E
-         4Q6/DIji9tiXMMhqdOZ832xQaUSjslOiyFYAl+t4SeRrol4Kct2deuPh5J0y6V9IdtMT
-         YbxzoKse8XVeVLrlyrBWrtplTgt92lMHQTrJ9zJ927UxS9RjgdBl/1mP1QojrzVhQoO3
-         JGKKtCHW1H/bnWEV3xVe2ccOuYWCSeYdWqAihCtW23iKENDdAkmRAjwKDmga3lfhTBzN
-         Jt6RNrR1bS0YZ36W4+qmN82sWhBjRG4Htr3cxguWbcKxXgSOBHqk3U/30lS0hfZgLolP
-         bm4g==
-X-Gm-Message-State: AFqh2ko/jQlgNReqzTDYNd8OnXkAt+wgRDXi473v49ItnwfrDuJM7Nq/
-        VA3CsVXQLtr1YcCEGvRItRk=
-X-Google-Smtp-Source: AMrXdXtixiVnQKlwB4dKIZTeavrQqJ0wcmz9Mhqv3aD7AfQaRe21JMjwNwp+cs2JCFFXcClem4ZelA==
-X-Received: by 2002:a05:600c:1d8e:b0:3d9:efe8:a42d with SMTP id p14-20020a05600c1d8e00b003d9efe8a42dmr54310562wms.21.1675171359958;
-        Tue, 31 Jan 2023 05:22:39 -0800 (PST)
+        bh=DxqT2eMiEuxRnBsmwUs2D0qkIojDueG3BR3ri/bN6+s=;
+        b=sal6a9lvbaBNJ+F7XaXom0upEAVv8LuqMtfwJCfGIqmgfzUy/ZRfdI5SdKEq3cLavS
+         78uVO5sCumV2Mq6mUSvzysfWL0AW3qkm8f9bmkL0D7IyPWmQZF8hbpS60HjO18lrZDzD
+         GAhoYzlgpIXaPqO6+cnCagEVnbsOtcAucWN+d9zrHMVJaRt4eESmNj4y0i0YOKOBF6AN
+         FSjsL+7j9DLUHAZw4SOzeCFcMn4FAnPKXleZMHaKyqkb1gmI87g9z+/HATXmn3JKEjYw
+         pvAbxF8UPpbu6xoO4UlcbNuXj/e99HSMYjqQZo8sE3bzcaCUENp3mVOfePEH/P4HdIZa
+         nU3A==
+X-Gm-Message-State: AFqh2kqGHYLWiKOnfPrhvOKqHd3ZZ+gUTl+RQbpqR5C2NDcH+fiamkXk
+        YSi/YJtlQPcnsNzryoR4btY=
+X-Google-Smtp-Source: AMrXdXs90s3eq6X/sKbtmQ3mlK2owSJhgh00MP0sAFb6WKMS4+U9xyLsJ07GGTZiYY1iXwIChdaY+g==
+X-Received: by 2002:a1c:ed0a:0:b0:3d3:4a47:52e9 with SMTP id l10-20020a1ced0a000000b003d34a4752e9mr54149073wmh.15.1675171397941;
+        Tue, 31 Jan 2023 05:23:17 -0800 (PST)
 Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id j22-20020a05600c485600b003cffd3c3d6csm15455120wmo.12.2023.01.31.05.22.38
+        by smtp.gmail.com with ESMTPSA id c1-20020a05600c0a4100b003d9fba3c7a4sm21354223wmq.16.2023.01.31.05.23.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:22:39 -0800 (PST)
-Message-ID: <618fb1ea-4f26-a8e3-21b6-b6a2017aa73b@gmail.com>
-Date:   Tue, 31 Jan 2023 14:22:38 +0100
+        Tue, 31 Jan 2023 05:23:17 -0800 (PST)
+Message-ID: <ad5e0eff-e043-2e27-d152-54f3047da0a3@gmail.com>
+Date:   Tue, 31 Jan 2023 14:23:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v4 02/14] soc: mediatek: mtk-svs: reset svs when
- svs_resume() fail
+Subject: Re: [PATCH v4 04/14] soc: mediatek: mtk-svs: Use
+ pm_runtime_resume_and_get() in svs_init01()
 Content-Language: en-US
 To:     Roger Lu <roger.lu@mediatek.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
@@ -67,11 +67,12 @@ Cc:     Fan Chen <fan.chen@mediatek.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Shang XiaoJing <shangxiaojing@huawei.com>
 References: <20230111074528.29354-1-roger.lu@mediatek.com>
- <20230111074528.29354-3-roger.lu@mediatek.com>
+ <20230111074528.29354-5-roger.lu@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230111074528.29354-3-roger.lu@mediatek.com>
+In-Reply-To: <20230111074528.29354-5-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,36 +88,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 11/01/2023 08:45, Roger Lu wrote:
-> Add svs reset when svs_resume() fail.
+> From: Shang XiaoJing <shangxiaojing@huawei.com>
 > 
-> Fixes: a825d72f74a3 ("soc: mediatek: fix missing clk_disable_unprepare() on err in svs_resume()")
+> svs_init01() calls pm_runtime_get_sync() and added fail path as
+> svs_init01_finish to put usage_counter. However, pm_runtime_get_sync()
+> will increment usage_counter even it failed. Fix it by replacing it with
+> pm_runtime_resume_and_get() to keep usage counter balanced.
+> 
+> Fixes: 681a02e95000 ("soc: mediatek: SVS: introduce MTK SVS engine")
+> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
 > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 Applied, thanks!
 
 > ---
->   drivers/soc/mediatek/mtk-svs.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
+>   drivers/soc/mediatek/mtk-svs.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-> index 2df30a6bca28..a803b92afc3d 100644
+> index 64d4d03ab71c..9575aa645643 100644
 > --- a/drivers/soc/mediatek/mtk-svs.c
 > +++ b/drivers/soc/mediatek/mtk-svs.c
-> @@ -1614,12 +1614,16 @@ static int svs_resume(struct device *dev)
+> @@ -1324,7 +1324,7 @@ static int svs_init01(struct svs_platform *svsp)
+>   				svsb->pm_runtime_enabled_count++;
+>   			}
 >   
->   	ret = svs_init02(svsp);
->   	if (ret)
-> -		goto out_of_resume;
-> +		goto svs_resume_reset_assert;
->   
->   	svs_mon_mode(svsp);
->   
->   	return 0;
->   
-> +svs_resume_reset_assert:
-> +	dev_err(svsp->dev, "assert reset: %d\n",
-> +		reset_control_assert(svsp->rst));
-> +
->   out_of_resume:
->   	clk_disable_unprepare(svsp->main_clk);
->   	return ret;
+> -			ret = pm_runtime_get_sync(svsb->opp_dev);
+> +			ret = pm_runtime_resume_and_get(svsb->opp_dev);
+>   			if (ret < 0) {
+>   				dev_err(svsb->dev, "mtcmos on fail: %d\n", ret);
+>   				goto svs_init01_resume_cpuidle;
