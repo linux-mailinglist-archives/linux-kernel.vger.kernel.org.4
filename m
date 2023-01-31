@@ -2,205 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1526822C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDC26822CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjAaDYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:24:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S230299AbjAaDY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:24:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjAaDYo (ORCPT
+        with ESMTP id S230306AbjAaDYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:24:44 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BB6210D;
-        Mon, 30 Jan 2023 19:24:43 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V2LA4X016345;
-        Tue, 31 Jan 2023 03:24:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=5Ly9k2vbaRfxNYTkMAZxUzQjFn6BER4QVrRQ2fK++34=;
- b=JVr98NlFWJJynZI4nlRGsds0N0I/DSMnClZJpID478d8kdNKyJ/evFi0GnUuqPujUrI8
- 3kI1eNiOkcPSnT2b8hE6napZse7KydDXgyolXcHUg9TW+2iJDEDYraLpxDbr+abJfKfj
- 3CSznaR0M+c94RXkCAThJC6Xy71teg88HhbxngnEZ7yPMyCqzMaWe8s1TFvXh8yyPkRJ
- wfbJ5Ul2Ue1hJiTpS4pVSeshkasZHGCMEu5dw5Egk9+M9OgvH4quX9XaxDk4eQH49CF3
- 0EKDfvhSxpik0rYQhkhotFddUcJxXK60X8hVz7i6pqRHgOBhO2RVUwRMHD7Liocfoou1 QA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ncut2nkba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 03:24:28 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30V3ORTl003028
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 03:24:27 GMT
-Received: from [10.253.75.6] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 19:24:21 -0800
-Message-ID: <058241be-ffa8-6fc6-7262-705ec41e849c@quicinc.com>
-Date:   Tue, 31 Jan 2023 11:23:10 +0800
+        Mon, 30 Jan 2023 22:24:50 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715552DE51;
+        Mon, 30 Jan 2023 19:24:49 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id f3so9146025pgc.2;
+        Mon, 30 Jan 2023 19:24:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I7aOuN0Z7cOy5dqAaUiuywFRmsjtA1MOUQCg+0SjNXU=;
+        b=QLP6qnxqtTVUGl8ftH1gx2SHFDp02aveZTLQWaEOtDVIhjkRGUGKMk4EpnBNTjEMlk
+         1rBuU1LF13nS12x7YzruzYDNrITQ50V3D9ZwxIu4okbxWH6j68pqU6HzH4d0mgMYblMi
+         HOMRc4MZmxa1zygmqSMOatsw5R+MuyeIzSQpi0Ace2iJBsdIqOjuWrePd48IjOjX935U
+         1Fplq+GekDXsYlncVjlLu2ia7+kYovFP9bJz/HTX+W4iKtHLgdnnmRaOdpF8rghpjDoV
+         b6+BdmJPqzpfznLLxThiKt0XOAxz0eHB3wZan1KdmVHd9wSahApJzACHQucJ+R4LhFaP
+         0zOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I7aOuN0Z7cOy5dqAaUiuywFRmsjtA1MOUQCg+0SjNXU=;
+        b=w1p8ycQ3ZqPIc3d+9bMslPRTG194nErOUDWt5+g4ipG7vEpiWjxT5Drpw42dozRWOJ
+         /QhRfsCjR5PdhRXpfw+gpwS3XJnVZ9/oJGnDiA+WHku/LOG6qVpL+txuaRG3V+WVp52a
+         pGZiNnnA8PrfY605YbcY0/1i7HCA5PGYzkkRKN3c+E7lXdIfcyVGUZj1+qDmvJtXGFu7
+         hkWqKyc/mJTkFi8Em7zv5RcaVQd2sFsCsH1jo4dZKctDeOY4Ov5anJmvrKjivFFjcjJU
+         depERLLEXxkfv3TxYWPpel+PulTjhLPthr4/A8HCbhMAtoOc1WPa0+XjNly8EK2eXHn0
+         T19Q==
+X-Gm-Message-State: AO0yUKWVXn4kcmmZR//cTRUpWoYP8aWWNwuiHPdbEkAFw8hHEq3dByuU
+        KiRHXPPEAYKQyCs5QhC8ei0=
+X-Google-Smtp-Source: AK7set/B7wVZT+I5etpqA/nHbyamv863RRwrdx2lkYxVfeAJYa94pjlygbTNxMJtL7wq1rfDVeJNqQ==
+X-Received: by 2002:a62:585:0:b0:590:32a9:b276 with SMTP id 127-20020a620585000000b0059032a9b276mr19003810pff.22.1675135488934;
+        Mon, 30 Jan 2023 19:24:48 -0800 (PST)
+Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
+        by smtp.gmail.com with ESMTPSA id 189-20020a6215c6000000b005906dbf5f80sm8207545pfv.163.2023.01.30.19.24.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 19:24:48 -0800 (PST)
+From:   Jason Xing <kerneljasonxing@gmail.com>
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        alexandr.lobakin@intel.com, maciej.fijalkowski@intel.com
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kerneljasonxing@gmail.com, Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH v3 net] ixgbe: allow to increase MTU to 3K with XDP enabled
+Date:   Tue, 31 Jan 2023 11:23:57 +0800
+Message-Id: <20230131032357.34029-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/9] dt-bindings: arm: Add support for DSB element
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>,
-        Tao Zhang <taozha@qti.qualcomm.com>
-References: <1674114105-16651-1-git-send-email-quic_taozha@quicinc.com>
- <1674114105-16651-2-git-send-email-quic_taozha@quicinc.com>
- <cd7a2eac-5d70-6dcd-ddbd-317e1cbd7d23@linaro.org>
-Content-Language: en-US
-From:   Tao Zhang <quic_taozha@quicinc.com>
-In-Reply-To: <cd7a2eac-5d70-6dcd-ddbd-317e1cbd7d23@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wkRiWcp08z695MHa2FB5N0gTQcoQdeFB
-X-Proofpoint-ORIG-GUID: wkRiWcp08z695MHa2FB5N0gTQcoQdeFB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_19,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0 spamscore=0
- suspectscore=0 mlxlogscore=951 impostorscore=0 priorityscore=1501
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310029
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+From: Jason Xing <kernelxing@tencent.com>
 
-On 1/19/2023 6:44 PM, Krzysztof Kozlowski wrote:
-> On 19/01/2023 08:41, Tao Zhang wrote:
->> Add property "qcom,dsb-elem-size" to support DSB(Discrete Single
->> Bit) element for TPDA. Specifies the DSB element size supported
->> by each monitor connected to the aggregator on each port. Should
->> be specified in pairs (port, dsb element size).
->>
->> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->> Signed-off-by: Tao Zhang <taozha@qti.qualcomm.com>
-> You are the same person and it is still the same organization
-> (Qualcomm), right? Only one SoB.
-I will change and update this in the next patch series.
->
->> ---
->>   .../bindings/arm/qcom,coresight-tpda.yaml          | 22 ++++++++++++++++++++++
->>   1 file changed, 22 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
->> index 2ec9b5b..298db7f 100644
->> --- a/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
->> +++ b/Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
->> @@ -58,6 +58,26 @@ properties:
->>       minItems: 1
->>       maxItems: 2
->>   
->> +  qcom,dsb-element-size:
->> +    description: |
->> +      Specifies the DSB(Discrete Single Bit) element size supported by
->> +      each monitor connected to the aggregator on each port. Should be
->> +      specified in pairs <port, dsb element size>.
-> s/port/port number/
+Recently I encountered one case where I cannot increase the MTU size
+directly from 1500 to a much bigger value with XDP enabled if the
+server is equipped with IXGBE card, which happened on thousands of
+servers in production environment. After appling the current patch,
+we can set the maximum MTU size to 3K.
 
-It should be "port number" here.
+This patch follows the behavior of changing MTU as i40e/ice does.
 
-I will change "<port, dsb element size>" to "<port number, DSB element 
-size>" in the next patch series.
+Referrences:
+[1] commit 23b44513c3e6 ("ice: allow 3k MTU for XDP")
+[2] commit 0c8493d90b6b ("i40e: add XDP support for pass and drop actions")
 
->> +
->> +      Note: The maximum value of the port number depends on how many
->> +      input ports the current TPDA has. DSB element size currently only
->> +      supports 32-bit and 64-bit.
->> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
->> +    items:
-> Are some reasonable maxItems known?
+Fixes: fabf1bce103a ("ixgbe: Prevent unsupported configurations with XDP")
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+v3:
+1) modify the titile and body message.
 
-This is related to hardware design, depending on how many input ports 
-the TPDA has.
+v2:
+1) change the commit message.
+2) modify the logic when changing MTU size suggested by Maciej and Alexander.
+---
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 25 ++++++++++++-------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-We cannot limit it to a reasonable maximum value from the software.
-
-According to the existing hardware design, TPDA with the most input 
-ports has about 30 input ports.
-
-But there may be TPDA with more input ports.
-
->
->> +      items:
->> +        - description: |
->> +            "port" indicates TPDA input port number
-> What is "port"? You quoted it like it was some name of variable or
-> property. Where is then?
-
-The "port" here refers to the port number of other Coresight devices 
-connected to the TPDA input port.
-
-I will change and update it in the next patch series.
-
->> +          minimum: 0
->> +        - description: |
->> +            "dsb element size" indicates dsb element size
-> "A" indicates A. This sentence does not make sense.
->
-> Also missing units.
->
-> s/dsb/DSB/
-"DSB element size" indicate the size of the element in DSB. DSB(Discrete 
-Single
-
-Bit) is a data collection unit.
-
-I will change and update it in the next patch series.
-
->
->> +          minimum: 0
->> +          maximum: 64
->> +
->>     clocks:
->>       maxItems: 1
->>   
->> @@ -100,6 +120,8 @@ examples:
->>          compatible = "qcom,coresight-tpda", "arm,primecell";
->>          reg = <0x6004000 0x1000>;
->>   
->> +       qcom,dsb-element-size = <0 32>;
->> +
->>          clocks = <&aoss_qmp>;
->>          clock-names = "apb_pclk";
->>   
-> Best regards,
-> Krzysztof
-
-Best,
-
-Tao
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+index ab8370c413f3..2c1b6eb60436 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+@@ -6777,6 +6777,18 @@ static void ixgbe_free_all_rx_resources(struct ixgbe_adapter *adapter)
+ 			ixgbe_free_rx_resources(adapter->rx_ring[i]);
+ }
+ 
++/**
++ * ixgbe_max_xdp_frame_size - returns the maximum allowed frame size for XDP
++ * @adapter - device handle, pointer to adapter
++ */
++static int ixgbe_max_xdp_frame_size(struct ixgbe_adapter *adapter)
++{
++	if (PAGE_SIZE >= 8192 || adapter->flags2 & IXGBE_FLAG2_RX_LEGACY)
++		return IXGBE_RXBUFFER_2K;
++	else
++		return IXGBE_RXBUFFER_3K;
++}
++
+ /**
+  * ixgbe_change_mtu - Change the Maximum Transfer Unit
+  * @netdev: network interface device structure
+@@ -6788,18 +6800,13 @@ static int ixgbe_change_mtu(struct net_device *netdev, int new_mtu)
+ {
+ 	struct ixgbe_adapter *adapter = netdev_priv(netdev);
+ 
+-	if (adapter->xdp_prog) {
++	if (ixgbe_enabled_xdp_adapter(adapter)) {
+ 		int new_frame_size = new_mtu + ETH_HLEN + ETH_FCS_LEN +
+ 				     VLAN_HLEN;
+-		int i;
+-
+-		for (i = 0; i < adapter->num_rx_queues; i++) {
+-			struct ixgbe_ring *ring = adapter->rx_ring[i];
+ 
+-			if (new_frame_size > ixgbe_rx_bufsz(ring)) {
+-				e_warn(probe, "Requested MTU size is not supported with XDP\n");
+-				return -EINVAL;
+-			}
++		if (new_frame_size > ixgbe_max_xdp_frame_size(adapter)) {
++			e_warn(probe, "Requested MTU size is not supported with XDP\n");
++			return -EINVAL;
+ 		}
+ 	}
+ 
+-- 
+2.37.3
 
