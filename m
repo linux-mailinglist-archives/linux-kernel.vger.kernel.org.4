@@ -2,233 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4229E682248
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 445BB68224A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjAaCio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 21:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
+        id S230166AbjAaCjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 21:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjAaCik (ORCPT
+        with ESMTP id S230078AbjAaCjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 21:38:40 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B73613DEF
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 18:38:38 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso4588591wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 18:38:38 -0800 (PST)
+        Mon, 30 Jan 2023 21:39:40 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418E440F7
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 18:39:39 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so2642515pjd.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 18:39:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cyC4UehlLv2JiEuE48KPckxAAuEIaiQJm0vcqGCj+J0=;
-        b=g5BD6n+2XbWw8rvwgwZ8IcQQBWloR6TXmz/emwPsX6KSfJD++qo09iF8tKX0Yq28wF
-         ytQYBFvqtUQbjjYLSMVtN9816tPu5yxTYLPfJf+8BZmS+v8hmbJK+t0DUlaTbe06gidS
-         KVq/OBS7dbH1cWnWODwbDqy3woOVVm+544T78JLOBZvSbQ+5V7SHE3pt11hijgMun3Zy
-         xeUEdXFen6373WYIbpiuIFRVoHFkzquo3JTZte8TKAckCbLse+gJnOyllZUl1XEJW636
-         QHYC9K2znakinONa3HKNsar8FpDvYnS8XcOXhxL4inCRyTicSJaT8787bLTuzPerxdx8
-         kl7Q==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Av8nuXDb3ehCMmKHr8yr1MaT2beeOkgE9Ws+9RcVzT4=;
+        b=kTRV+yKckURisyIAwjKxmwj9h0qC9+D87EcB2jtc6ZvePip6tXP4eVYnO/E2lpvzIQ
+         Aoo27MXZh65rWTXDkvR5U4F04LHtHjtdBLnNjsgHjJmaTgCg9bZzEeFQvfFlGWkpE1q5
+         /y6vAM5gxBS7QpCoTz3SWlm8Q2OklqhP2FpdM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cyC4UehlLv2JiEuE48KPckxAAuEIaiQJm0vcqGCj+J0=;
-        b=aJ8Oatj2yIEYmwZZys8lhVP4VHX9eUJ6wvDEYbiLrDF04Yh+eJ3upkClxNjadDWmag
-         sIO99oEBXof/T+B9q5N2FQkbjtFuA84vBHCuByOWpgwsKNw76vl3ZBTHYNY33bWqB30I
-         LCtpLg4WLChPuLBZ3z61hm4jM8aPIc6vxIjLVGI7oe9OrYLAS06geAxc6HcQEaYvQZVY
-         yUEU17xeaJx7W70ieb13WbCpazoZsZJiXMf91lvQNtXkExs+wEbzV92/ca2uz9bkjhTe
-         i0nHWnU5GVpyYHes7+kYUy+qvmOthgC9iFgwBw+jsZkE0vhYKA/7gepUf4TXcS3NPFV7
-         IlEg==
-X-Gm-Message-State: AFqh2kqakNgNlDw+KM1DmXC9JIiDiHPoWhGDBOHq8UmjhUW5/BGdYLY9
-        JjpaThEeLYKG/xdCCsgC0lHiikVsCUETy9HuKWEI1g==
-X-Google-Smtp-Source: AMrXdXuC1hAAE0czNXWYE8UAVNO0QRlt/WvvlF5K5TJnmJ92XOQ0j2wIcbVSWRzQFcOImZZrlkDBuAu/mpFRIo0/QfA=
-X-Received: by 2002:a05:600c:1d8e:b0:3d9:ebe0:f7f8 with SMTP id
- p14-20020a05600c1d8e00b003d9ebe0f7f8mr3755969wms.99.1675132716624; Mon, 30
- Jan 2023 18:38:36 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Av8nuXDb3ehCMmKHr8yr1MaT2beeOkgE9Ws+9RcVzT4=;
+        b=VA2Vf0CBuq1gsXiHo9PXv+DXHLJ9oX9tHH/Mj8FQHwIeZ12csKoT0kL0nX8z65y5BI
+         V/CkPPmp9VaTJiXNwa62PnyoIpVRjm2YJpy/eoa1i96djRpGNDupUcII+uSr2lEeKALJ
+         VBkvmSKV+6DmS9rEj04FTiQHe02mwXNuCotTkvfZcy5QjDGUmx4wRRpqaH1/QyWUzUhi
+         2tuYSjHQUI3UhncISic2GYsv3UzFEUW3qdGWXyIs75/fdREoH48XilWoCrIvgfAgUJa6
+         kswKGQ5Q3VAGKY2m/u30z3Y3p4ED2Pbw/MhrpoHY3Wc10h31H/XECH2zsD9gISKjUAjI
+         EhQw==
+X-Gm-Message-State: AO0yUKVgj27fVzzvovVH7hRX5IafzkkcBB8/vWQWCWij7X+rd//pmSZF
+        nnniXGYTg7q6Ts592TytgCHDRA==
+X-Google-Smtp-Source: AK7set/f7uBMUKqu9KFk26rahjgTv38fqPMMgcxHXRi4/E/5YLC9GO0kqR7X6odW3Kl48bh1QBtT4A==
+X-Received: by 2002:a17:903:11d2:b0:192:ac33:7f91 with SMTP id q18-20020a17090311d200b00192ac337f91mr12063975plh.69.1675132778722;
+        Mon, 30 Jan 2023 18:39:38 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id w9-20020a1709027b8900b0019682e27995sm2834039pll.223.2023.01.30.18.39.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 18:39:38 -0800 (PST)
+Date:   Tue, 31 Jan 2023 11:39:33 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Dawei Li <set_pte_at@outlook.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linkinjeon@kernel.org, sfrench@samba.org, tom@talpey.com,
+        hyc.lee@gmail.com, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] ksmbd: replace rwlock with rcu for concurrenct
+ access on conn list
+Message-ID: <Y9h/ZbLPQlbKiRzZ@google.com>
+References: <20230115103209.146002-1-set_pte_at@outlook.com>
+ <TYCP286MB23235FDD8102162698EF3154CAC09@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+ <Y9dEZ5IgfwpZNlVm@google.com>
+ <TYCP286MB23230E29CC81F5C0590C59C9CAD39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-References: <20230127145708.12915-1-andriy.shevchenko@linux.intel.com>
- <CABVgOSmZsAQcf6Ou_tyZL=hpiJcxMxXzmMfV5wRyCPBsb_d0UQ@mail.gmail.com>
- <CAK7LNASsnDymUS=Pyo77g=0v58fMn38PY66A887nC8_E6_qXAg@mail.gmail.com>
- <CABVgOSnRC3AuUo4Qc2K3pXEcj3Wbt9LE2DTbejGrPOCKefxB2g@mail.gmail.com> <CAK7LNAR8D6E_md3=1dLAc-o73xmKXDRXv9Fi_hiav1VhPSW58w@mail.gmail.com>
-In-Reply-To: <CAK7LNAR8D6E_md3=1dLAc-o73xmKXDRXv9Fi_hiav1VhPSW58w@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 31 Jan 2023 10:38:23 +0800
-Message-ID: <CABVgOS=sS7Dx+N3agbAGQ2BfwDuTT1JyApGaw4kZE5e9HrMuFg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] .gitignore: Unignore .kunitconfig
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008b100b05f3863a53"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYCP286MB23230E29CC81F5C0590C59C9CAD39@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000008b100b05f3863a53
-Content-Type: text/plain; charset="UTF-8"
+Hi,
 
-On Tue, 31 Jan 2023 at 10:11, Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Tue, Jan 31, 2023 at 9:01 AM David Gow <davidgow@google.com> wrote:
-> >
-> > On Sat, 28 Jan 2023 at 22:37, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > On Sat, Jan 28, 2023 at 3:56 PM David Gow <davidgow@google.com> wrote:
-> > > >
-> > > > On Fri, 27 Jan 2023 at 22:56, Andy Shevchenko
-> > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > >
-> > > > > There are almost dozen of .kunitconfig files that are ignored but
-> > > > > tracked. Unignore them.
-> > > > >
-> > > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > > > ---
-> > > >
-> > > > Thanks! Only the original root-directory .kunitignore file was
-> > > > intended to be ignored, and that's no longer as important, and is now
-> > > > in the build dir anyway.
-> > > >
-> > > > Reviewed-by: David Gow <davidgow@google.com>
-> > > >
-> > > > Cheers,
-> > > > -- David
-> > > >
-> > > > >  .gitignore | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > > diff --git a/.gitignore b/.gitignore
-> > > > > index 22984d22d29e..e4f2ba0be516 100644
-> > > > > --- a/.gitignore
-> > > > > +++ b/.gitignore
-> > > > > @@ -100,6 +100,7 @@ modules.order
-> > > > >  !.get_maintainer.ignore
-> > > > >  !.gitattributes
-> > > > >  !.gitignore
-> > > > > +!.kunitconfig
-> > > > >  !.mailmap
-> > > > >  !.rustfmt.toml
-> > > > >
-> > > > > --
-> > > > > 2.39.0
-> > > > >
-> > >
-> > >
-> > > Why is this a dot file in the first place?
-> > >
-> >
-> > In short, historical reasons.
-> >
-> > The long answer is that there are two places "kunitconfig" files are
-> > used: as a user-provided file with their preferred test config (which
-> > is kept local), and as a recommended test config for a given subsystem
-> > (which is checked in).
-> > Originally, no .kunitconfig files were checked in: one was either
-> > autogenerated or manually modified and left in the root source
-> > directory. This eventually moved into the build directory, and a
-> > number of features which de-emphasized it in favour of command-line
-> > arguments and the (new) checked-in per-subsystem configs, which
-> > probably shouldn't be hidden.
->
->
-> Do you mean there are two types for .kunitconfig - auto-generated ones
-> and check-in ones?
->
-> If this patch is applied, is there a possibility where
-> auto-generated .kunitconfig files would be accidentally
-> added to the repository?
->
->
+On (23/01/30 22:16), Dawei Li wrote:
+> Hi Sergey,
+> 
+> Thanks for reviewing,
+> 
+> On Mon, Jan 30, 2023 at 01:15:35PM +0900, Sergey Senozhatsky wrote:
+> > On (23/01/15 18:32), Dawei Li wrote:
+> > > 
+> > >  void ksmbd_conn_free(struct ksmbd_conn *conn)
+> > >  {
+> > > -	write_lock(&conn_list_lock);
+> > > -	list_del(&conn->conns_list);
+> > > -	write_unlock(&conn_list_lock);
+> > > +	spin_lock(&conn_list_lock);
+> > > +	list_del_rcu(&conn->conns_list);
+> > > +	spin_unlock(&conn_list_lock);
+>         synchronize_rcu(); 
+> > >  
+> > >  	xa_destroy(&conn->sessions);
+> > >  	kvfree(conn->request_buf);
+> > 
+> > From a quick look this does not seem like a correct RCU usage. E.g.
+> > where do you wait for grace periods and synchronize readers/writers?
+> 
+> Nice catch, I totally mess it up. Thanks!
+> 
+> At first glance, I assume synchronize_rcu() will do the job if sleeping
+> is OK?
 
-I wouldn't think so -- the auto-generated ones live in the build
-directory (which is itself '.kunit' by default). You'd have to go out
-of your way to do an in-tree build, and then add generated files.
+Yes, synchronize_rcu() will sleep (schedule()) and wait for grace
+period to expire (and synchronize will all the RCU readers). RCU
+is good for cases when writes are seldom, which may not be the case
+with ksmb.
 
--- David
-
---0000000000008b100b05f3863a53
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC1
-xMmWMVUlvWM/r5vpKX8z81FClR9i+WmcEZtjhjRDZjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAxMzEwMjM4MzZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAuFvogl7VwDeHBljPsTMs
-kQEyFOicaZDkO3ePeP6QvovBgzdUDTKqDJ5qkienlUHsjgHq9gmLGXCAnm+ACPlMKp/AS1uWMOPj
-E0uabpqy9l2jA26CAgBM+Rxc/5jAJA3ANFVd9sGq4UczwgDfjQWhrj+Ke+SPHRbFj9Twu9Ay/hmy
-Lp15P2x2DZiYloBhivq3VxFaUr5h8hpRUKlTC1lMQXIt1trKWkH9dzitMx/o1Z/gFmdSNwcieRXm
-+MEYzyv3JXFCeoD/9Kid8TqI4jmUt5Xozw7cR455A7hqS2B1ss4bGP8uTrwO/xHxOqXGF5sn7APv
-su6fQh2NjGjZ3F9MZQ==
---0000000000008b100b05f3863a53--
+I really want to see benhcmarks, why do we want to remove the RW-lock.
