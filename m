@@ -2,116 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08607682300
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8FF682313
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbjAaDrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S229797AbjAaD5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjAaDq7 (ORCPT
+        with ESMTP id S229776AbjAaD5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:46:59 -0500
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19ED3EFBF
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:46:58 -0800 (PST)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BED6E2C0108;
-        Tue, 31 Jan 2023 16:46:54 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1675136814;
-        bh=U9KFztAChA6oGuRtVHcip1cs8BS/t3P2PSFd6k0wIRI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1bEjIej9laiKD/KpeJEi2oph3a0HF7YBdFydbEQETLDEfJ04PfKICs95qYBEQsfe+
-         29tiruVcqIVGK2RHFGdnOr9K81ewmQa9JRy4dkKLhme5LcB93Y8wh1vjNdgIsWysCX
-         cffQIkU86pOdpf98450zFCTu3GX1M6xLe4luZDgm5sNLGGmgLp1qPbpJcxsvUQpzvg
-         qSgDBhuHhK7JbO/iV3Wz5IYjtOAkvCTUgVs97GlKg98VNa0zi7/mpPtqQz2ePhlrFu
-         4uEdLiM4KaAyy/CiZ2K4HWUB6SUE22NYvM22cjtQOA/UC3o8BKu+tIyAr4CDMyOh98
-         s679ledbrxEMQ==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B63d88f2e0003>; Tue, 31 Jan 2023 16:46:54 +1300
-Received: from thomaswi-dl.ws.atlnz.lc (thomaswi-dl.ws.atlnz.lc [10.33.25.46])
-        by pat.atlnz.lc (Postfix) with ESMTP id 7971913EE8F;
-        Tue, 31 Jan 2023 16:46:54 +1300 (NZDT)
-Received: by thomaswi-dl.ws.atlnz.lc (Postfix, from userid 1719)
-        id 7819C3E089B; Tue, 31 Jan 2023 16:46:54 +1300 (NZDT)
-From:   Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
-To:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        pabeni@redhat.com, edumazet@google.com, kuba@kernel.org,
-        a@unstable.cc, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
-Subject: [PATCH v5 2/2] ip/ip6_gre: Fix non-point-to-point tunnel not generating IPv6 link local address
-Date:   Tue, 31 Jan 2023 16:46:46 +1300
-Message-Id: <20230131034646.237671-3-Thomas.Winter@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230131034646.237671-1-Thomas.Winter@alliedtelesis.co.nz>
-References: <20230131034646.237671-1-Thomas.Winter@alliedtelesis.co.nz>
+        Mon, 30 Jan 2023 22:57:19 -0500
+X-Greylist: delayed 518 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 Jan 2023 19:57:18 PST
+Received: from relay01.tist.ro (unknown [104.40.159.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5316A360B3
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:57:18 -0800 (PST)
+Received: from server1.example.com (unknown [92.82.79.137])
+        by relay01.tist.ro (Postfix) with ESMTPS id C47773ECE8;
+        Tue, 31 Jan 2023 05:48:02 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+        by server1.example.com (Postfix) with ESMTP id 012728B6D6;
+        Tue, 31 Jan 2023 05:48:02 +0200 (EET)
+X-Virus-Scanned: Debian amavisd-new at server1.example.com
+Received: from server1.example.com ([127.0.0.1])
+        by localhost (hosting.umoserv.ro [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id i0AnibkrOI3Q; Tue, 31 Jan 2023 05:48:01 +0200 (EET)
+Received: from mail.umoserv.ro (localhost [IPv6:::1])
+        by server1.example.com (Postfix) with ESMTP id 7B8A7892B6;
+        Tue, 31 Jan 2023 05:47:56 +0200 (EET)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=a6lOCnaF c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=RvmDmJFTN0MA:10 a=grpyvFInbdX5ElKdMEcA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 31 Jan 2023 04:47:56 +0100
+From:   Tom Dalston <tomdalstonjd@gmail.com>
+To:     undisclosed-recipients:;
+Subject: #departed relative
+Reply-To: tomdalstonjd@mannllp.com
+Mail-Reply-To: tomdalstonjd@mannllp.com
+Message-ID: <052799aab89625c9e94df7e589e41647@gmail.com>
+X-Sender: tomdalstonjd@gmail.com
+User-Agent: Roundcube Webmail/1.2.3
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_ADSP_CUSTOM_MED,FORGED_GMAIL_RCVD,FREEMAIL_FROM,MAY_BE_FORGED,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_SOFTFAIL,
+        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.0 DKIM_ADSP_CUSTOM_MED No valid author signature, adsp_override
+        *      is CUSTOM_MED
+        *  1.5 RCVD_IN_SORBS_WEB RBL: SORBS: sender is an abusable web server
+        *      [92.82.79.137 listed in dnsbl.sorbs.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        *  1.0 FORGED_GMAIL_RCVD 'From' gmail.com does not match 'Received'
+        *      headers
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [tomdalstonjd[at]gmail.com]
+        *  0.9 NML_ADSP_CUSTOM_MED ADSP custom_med hit, and not from a mailing
+        *       list
+        *  0.0 MAY_BE_FORGED Relay IP's reverse DNS does not resolve to IP
+        *  0.0 SPOOFED_FREEMAIL No description available.
+        *  0.0 SPOOF_GMAIL_MID From Gmail but it doesn't seem to be...
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We recently found that our non-point-to-point tunnels were not
-generating any IPv6 link local address and instead generating an
-IPv6 compat address, breaking IPv6 communication on the tunnel.
+greetings
 
-Previously, addrconf_gre_config always would call addrconf_addr_gen
-and generate a EUI64 link local address for the tunnel.
-Then commit e5dd729460ca changed the code path so that add_v4_addrs
-is called but this only generates a compat IPv6 address for
-non-point-to-point tunnels.
+As you may know, I am the attorney representing the estate of the 
+deceased and would like to reach out to you about a potential claim on 
+the estate of your loved one. If you have any questions or concerns 
+please feel free to contact me
 
-I assume the compat address is specifically for SIT tunnels so
-have kept that only for SIT - GRE tunnels now always generate link
-local addresses.
+Thank you in advance for your time and attention in this matter. I look 
+forward to speaking with you soon.
 
-Fixes: e5dd729460ca ("ip/ip6_gre: use the same logic as SIT interfaces wh=
-en computing v6LL address")
-Signed-off-by: Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
----
- net/ipv6/addrconf.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index f4ba68e096ac..faa47f9ea73a 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -3127,17 +3127,17 @@ static void add_v4_addrs(struct inet6_dev *idev)
- 		offset =3D sizeof(struct in6_addr) - 4;
- 	memcpy(&addr.s6_addr32[3], idev->dev->dev_addr + offset, 4);
-=20
--	if (idev->dev->flags&IFF_POINTOPOINT) {
-+	if (!(idev->dev->flags & IFF_POINTOPOINT) && idev->dev->type =3D=3D ARP=
-HRD_SIT) {
-+		scope =3D IPV6_ADDR_COMPATv4;
-+		plen =3D 96;
-+		pflags |=3D RTF_NONEXTHOP;
-+	} else {
- 		if (idev->cnf.addr_gen_mode =3D=3D IN6_ADDR_GEN_MODE_NONE)
- 			return;
-=20
- 		addr.s6_addr32[0] =3D htonl(0xfe800000);
- 		scope =3D IFA_LINK;
- 		plen =3D 64;
--	} else {
--		scope =3D IPV6_ADDR_COMPATv4;
--		plen =3D 96;
--		pflags |=3D RTF_NONEXTHOP;
- 	}
-=20
- 	if (addr.s6_addr32[3]) {
---=20
-2.39.0
-
+Best Regard.
+Tom
