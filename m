@@ -2,377 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129D5682367
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906E5682371
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjAaEj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 23:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S230077AbjAaEkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 23:40:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjAaEjB (ORCPT
+        with ESMTP id S229943AbjAaEjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:39:01 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9109C3D901
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:22 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id 14-20020a9d010e000000b0068bdddfa263so554796otu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:22 -0800 (PST)
+        Mon, 30 Jan 2023 23:39:14 -0500
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8946710F9;
+        Mon, 30 Jan 2023 20:38:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/8llqLMFQ7jVdFWtu3Ijgyyjs5oxhzYavOReuuUDh/Q=;
-        b=ZrRi1cyAJqub5WBjXXNvDCW/RRm6VaEHGCukz7IiX4EsecRcGzLzwWmz/cBnkJOS5Y
-         V9Qlf/Y3sWeJEXxI4YsSwWhWwOR4vZauZxBrJp8qGCGrojQ9wYLN4Po6p1LyQNrfsbj8
-         takOnM7H8itU9WM2okxbEfVSZ/TsXVpGCZN06L62hOJBtz5Yx1DmDEyjmYWr0B+EPRyk
-         3IjUuYy3QxEevpdKoV2UPqZ4yAFzx0q99Nka9aRsS2Mk5IBj4fvU4RMNwMP0Dhdi5tYJ
-         jBfmQ1FDN4T9QHTy/ZyX1rs4Gpx8zubznW05Yx5NTD6nMiWdp/a6W8sO7Za9tAsQUsZT
-         Ie2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/8llqLMFQ7jVdFWtu3Ijgyyjs5oxhzYavOReuuUDh/Q=;
-        b=fzHi4Yyue8w3UD5igl+FEf3FCZqnPxA3lrGN9b+qaRAAR9F+tmXTJxVwI0BG0ycJLp
-         SW4HxxJFbif/zQO5DyLCnkdtw6Bz1vrIaApUJrtN7wksJWiTjucotPgynB94q3KgXpgo
-         EpLLueh9LRL/pnSXwBaXwBVOV+ak4SeJiqNIWHZ7cilCjJdbVEeBWMwdqRXsntanoN49
-         Wp3KeYVioLN9+vDA/nnJT/Fo3YlM1Oqz3HZ1gfduZuBrRcSAB4svuwMq/lPq6qpulfwy
-         7AtooAjFx/HBqvDyQdo367caETxi+u8eEfQ17YD972skXFdtI8DM1tGlP/8UlIKM6GBP
-         8B5Q==
-X-Gm-Message-State: AO0yUKVuhLZ+WovRiJtBj1A2kXnNatDWqnc7a/Q7S6QJO/kM1RKCjyqV
-        G4bgiMNb61upMHuQ+hS+vac0oQ==
-X-Google-Smtp-Source: AK7set91QUmfmU/xQsqKuKB4G+yFOEjmHs/IpZB6ZyFWV7rRBj7GaXf4fgjghI8GAUJ5mh8ZBsZT3w==
-X-Received: by 2002:a9d:1f6:0:b0:68b:b721:8f1c with SMTP id e109-20020a9d01f6000000b0068bb7218f1cmr6606338ote.27.1675139901902;
-        Mon, 30 Jan 2023 20:38:21 -0800 (PST)
-Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
-        by smtp.gmail.com with ESMTPSA id o16-20020a9d7190000000b0067781a9292asm1467186otj.2.2023.01.30.20.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 20:38:21 -0800 (PST)
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: [PATCH v2 2/4] Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6855
-Date:   Mon, 30 Jan 2023 22:38:14 -0600
-Message-Id: <20230131043816.4525-3-steev@kali.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230131043816.4525-1-steev@kali.org>
-References: <20230131043816.4525-1-steev@kali.org>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1675139940; x=1706675940;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KzxtKnvbi8Q7EeBQQOVpXwZCQQNURGL1YCOaytw/sBY=;
+  b=jED0HrnIRKb4aH5qkNnQCPTd6JofJNViJdyugWtAsxceKpTQ1DR8tvHY
+   2aUzJqQMPkgw7OkwiO6nvKPNbKjoOQcvRv3L0BnRUID1bfJq8wo5xO35o
+   JgPX7lHhVjYcw+STTtISsu1L2PclW55bFMcWTa8h4EDtjDEs+PqYqnYTe
+   c=;
+X-IronPort-AV: E=Sophos;i="5.97,259,1669075200"; 
+   d="scan'208";a="287996743"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1box-1dm6-7f722725.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:38:59 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1box-1dm6-7f722725.us-east-1.amazon.com (Postfix) with ESMTPS id 388A89ACF7;
+        Tue, 31 Jan 2023 04:38:58 +0000 (UTC)
+Received: from EX19D002UWA004.ant.amazon.com (10.13.138.230) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 31 Jan 2023 04:38:57 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D002UWA004.ant.amazon.com (10.13.138.230) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
+ Tue, 31 Jan 2023 04:38:57 +0000
+Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
+ (10.189.73.169) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.45 via Frontend Transport; Tue, 31 Jan 2023 04:38:56
+ +0000
+Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
+        id 9D103271E; Tue, 31 Jan 2023 04:38:56 +0000 (UTC)
+From:   Rishabh Bhatnagar <risbhat@amazon.com>
+To:     <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <mhocko@suse.co>, Michal Hocko <mhocko@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Tom Herbert <tom@quantonium.net>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Rishabh Bhatnagar <risbhat@amazon.com>
+Subject: [PATCH stable 4.14 1/1] mm: kvmalloc does not fallback to vmalloc for incompatible gfp flags
+Date:   Tue, 31 Jan 2023 04:38:15 +0000
+Message-ID: <20230131043815.14989-2-risbhat@amazon.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230131043815.14989-1-risbhat@amazon.com>
+References: <20230131043815.14989-1-risbhat@amazon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added regulators,GPIOs and changes required to power on/off wcn6855.
-Added support for firmware download for wcn6855.
+From: Michal Hocko <mhocko@suse.com>
 
-This is based on commit d8f97da1b92d ("Bluetooth: hci_qca: Add support for QTI Bluetooth chip wcn6750")
+Commit ce91f6ee5b3bbbad8caff61b1c46d845c8db19bf upstream.
 
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
+kvmalloc warned about incompatible gfp_mask to catch abusers (mostly
+GFP_NOFS) with an intention that this will motivate authors of the code
+to fix those.  Linus argues that this just motivates people to do even
+more hacks like
+
+	if (gfp == GFP_KERNEL)
+		kvmalloc
+	else
+		kmalloc
+
+I haven't seen this happening much (Linus pointed to bucket_lock special
+cases an atomic allocation but my git foo hasn't found much more) but it
+is true that we can grow those in future.  Therefore Linus suggested to
+simply not fallback to vmalloc for incompatible gfp flags and rather
+stick with the kmalloc path.
+
+Link: http://lkml.kernel.org/r/20180601115329.27807-1-mhocko@kernel.org
+Signed-off-by: Michal Hocko <mhocko@suse.com>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Tom Herbert <tom@quantonium.net>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Rishabh Bhatnagar <risbhat@amazon.com>
 ---
-Changes since v1:
-* No changes requested yet.
----
- drivers/bluetooth/btqca.c   | 24 +++++++++++++--
- drivers/bluetooth/btqca.h   | 10 +++++++
- drivers/bluetooth/hci_qca.c | 59 +++++++++++++++++++++++++++++--------
- 3 files changed, 78 insertions(+), 15 deletions(-)
+Changelog:
+- Removed lib/bucket_locks.c diff as not present in 4.14
 
-diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index c9064d34d830..456b961b9554 100644
---- a/drivers/bluetooth/btqca.c
-+++ b/drivers/bluetooth/btqca.c
-@@ -472,6 +472,19 @@ static int qca_download_firmware(struct hci_dev *hdev,
- 					   config->fwname, ret);
- 				return ret;
- 			}
-+		} else if (soc_type == QCA_WCN6855 && config->type == ELF_TYPE_PATCH) {
-+			bt_dev_dbg(hdev, "QCA Failed to request file: %s (%d)",
-+				   config->fwname, ret);
-+			config->type = TLV_TYPE_PATCH;
-+			snprintf(config->fwname, sizeof(config->fwname),
-+				 "qca/hpbtfw%02x.tlv", rom_ver);
-+			bt_dev_info(hdev, "QCA Downloading %s", config->fwname);
-+			ret = request_firmware(&fw, config->fwname, &hdev->dev);
-+			if (ret) {
-+				bt_dev_err(hdev, "QCA Failed to request file: %s (%d)",
-+					   config->fwname, ret);
-+				return ret;
-+			}
- 		} else {
- 			bt_dev_err(hdev, "QCA Failed to request file: %s (%d)",
- 				   config->fwname, ret);
-@@ -596,7 +609,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+ mm/util.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/mm/util.c b/mm/util.c
+index 84e775f5216f..7d80c8119dce 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -400,7 +400,8 @@ EXPORT_SYMBOL(vm_mmap);
+  * __GFP_RETRY_MAYFAIL is supported, and it should be used only if kmalloc is
+  * preferable to the vmalloc fallback, due to visible performance drawbacks.
+  *
+- * Any use of gfp flags outside of GFP_KERNEL should be consulted with mm people.
++ * Please note that any use of gfp flags outside of GFP_KERNEL is careful to not
++ * fall back to vmalloc.
+  */
+ void *kvmalloc_node(size_t size, gfp_t flags, int node)
+ {
+@@ -411,7 +412,8 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
+ 	 * vmalloc uses GFP_KERNEL for some internal allocations (e.g page tables)
+ 	 * so the given set of flags has to be compatible.
  	 */
- 	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
+-	WARN_ON_ONCE((flags & GFP_KERNEL) != GFP_KERNEL);
++	if ((flags & GFP_KERNEL) != GFP_KERNEL)
++		return kmalloc_node(size, flags, node);
  
--	if (soc_type == QCA_WCN6750)
-+	if (soc_type == QCA_WCN6750 || soc_type == QCA_WCN6855)
- 		qca_send_patch_config_cmd(hdev);
- 
- 	/* Download rampatch file */
-@@ -614,6 +627,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 		config.type = ELF_TYPE_PATCH;
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/msbtfw%02x.mbn", rom_ver);
-+	} else if (soc_type == QCA_WCN6855) {
-+		snprintf(config.fwname, sizeof(config.fwname),
-+			 "qca/hpbtfw%02x.tlv", rom_ver);
- 	} else {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/rampatch_%08x.bin", soc_ver);
-@@ -648,6 +664,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	else if (soc_type == QCA_WCN6750)
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/msnv%02x.bin", rom_ver);
-+	else if (soc_type == QCA_WCN6855)
-+		snprintf(config.fwname, sizeof(config.fwname),
-+			 "qca/hpnv%02x.bin", rom_ver);
- 	else
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/nvm_%08x.bin", soc_ver);
-@@ -672,6 +691,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	case QCA_WCN3991:
- 	case QCA_WCN3998:
- 	case QCA_WCN6750:
-+	case QCA_WCN6855:
- 		hci_set_msft_opcode(hdev, 0xFD70);
- 		break;
- 	default:
-@@ -685,7 +705,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 		return err;
- 	}
- 
--	if (soc_type == QCA_WCN3991 || soc_type == QCA_WCN6750) {
-+	if (soc_type == QCA_WCN3991 || soc_type == QCA_WCN6750 || soc_type == QCA_WCN6855) {
- 		/* get fw build info */
- 		err = qca_read_fw_build_info(hdev);
- 		if (err < 0)
-diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-index 61e9a50e66ae..b884095bcd9d 100644
---- a/drivers/bluetooth/btqca.h
-+++ b/drivers/bluetooth/btqca.h
-@@ -147,6 +147,7 @@ enum qca_btsoc_type {
- 	QCA_WCN3991,
- 	QCA_QCA6390,
- 	QCA_WCN6750,
-+	QCA_WCN6855,
- };
- 
- #if IS_ENABLED(CONFIG_BT_QCA)
-@@ -168,6 +169,10 @@ static inline bool qca_is_wcn6750(enum qca_btsoc_type soc_type)
- {
- 	return soc_type == QCA_WCN6750;
- }
-+static inline bool qca_is_wcn6855(enum qca_btsoc_type soc_type)
-+{
-+	return soc_type == QCA_WCN6855;
-+}
- 
- #else
- 
-@@ -206,6 +211,11 @@ static inline bool qca_is_wcn6750(enum qca_btsoc_type soc_type)
- 	return false;
- }
- 
-+static inline bool qca_is_wcn6855(enum qca_btsoc_type soc_type)
-+{
-+	return false;
-+}
-+
- static inline int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
- {
- 	return -EOPNOTSUPP;
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index a5c19f32926b..18e2882772f9 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -606,7 +606,8 @@ static int qca_open(struct hci_uart *hu)
- 		qcadev = serdev_device_get_drvdata(hu->serdev);
- 
- 		if (qca_is_wcn399x(qcadev->btsoc_type) ||
--		    qca_is_wcn6750(qcadev->btsoc_type))
-+		    qca_is_wcn6750(qcadev->btsoc_type) ||
-+		    qca_is_wcn6855(qcadev->btsoc_type))
- 			hu->init_speed = qcadev->init_speed;
- 
- 		if (qcadev->oper_speed)
-@@ -1317,7 +1318,8 @@ static int qca_set_baudrate(struct hci_dev *hdev, uint8_t baudrate)
- 
- 	/* Give the controller time to process the request */
- 	if (qca_is_wcn399x(qca_soc_type(hu)) ||
--	    qca_is_wcn6750(qca_soc_type(hu)))
-+	    qca_is_wcn6750(qca_soc_type(hu)) ||
-+	    qca_is_wcn6855(qca_soc_type(hu)))
- 		usleep_range(1000, 10000);
- 	else
- 		msleep(300);
-@@ -1394,7 +1396,8 @@ static unsigned int qca_get_speed(struct hci_uart *hu,
- static int qca_check_speeds(struct hci_uart *hu)
- {
- 	if (qca_is_wcn399x(qca_soc_type(hu)) ||
--	    qca_is_wcn6750(qca_soc_type(hu))) {
-+	    qca_is_wcn6750(qca_soc_type(hu)) ||
-+	    qca_is_wcn6855(qca_soc_type(hu))) {
- 		if (!qca_get_speed(hu, QCA_INIT_SPEED) &&
- 		    !qca_get_speed(hu, QCA_OPER_SPEED))
- 			return -EINVAL;
-@@ -1428,7 +1431,8 @@ static int qca_set_speed(struct hci_uart *hu, enum qca_speed_type speed_type)
- 		 * changing the baudrate of chip and host.
- 		 */
- 		if (qca_is_wcn399x(soc_type) ||
--		    qca_is_wcn6750(soc_type))
-+		    qca_is_wcn6750(soc_type) ||
-+		    qca_is_wcn6855(soc_type))
- 			hci_uart_set_flow_control(hu, true);
- 
- 		if (soc_type == QCA_WCN3990) {
-@@ -1446,7 +1450,8 @@ static int qca_set_speed(struct hci_uart *hu, enum qca_speed_type speed_type)
- 
- error:
- 		if (qca_is_wcn399x(soc_type) ||
--		    qca_is_wcn6750(soc_type))
-+		    qca_is_wcn6750(soc_type) ||
-+		    qca_is_wcn6855(soc_type))
- 			hci_uart_set_flow_control(hu, false);
- 
- 		if (soc_type == QCA_WCN3990) {
-@@ -1681,7 +1686,8 @@ static int qca_power_on(struct hci_dev *hdev)
- 		return 0;
- 
- 	if (qca_is_wcn399x(soc_type) ||
--	    qca_is_wcn6750(soc_type)) {
-+	    qca_is_wcn6750(soc_type) ||
-+	    qca_is_wcn6855(soc_type)) {
- 		ret = qca_regulator_init(hu);
- 	} else {
- 		qcadev = serdev_device_get_drvdata(hu->serdev);
-@@ -1722,7 +1728,8 @@ static int qca_setup(struct hci_uart *hu)
- 
- 	bt_dev_info(hdev, "setting up %s",
- 		qca_is_wcn399x(soc_type) ? "wcn399x" :
--		(soc_type == QCA_WCN6750) ? "wcn6750" : "ROME/QCA6390");
-+		(soc_type == QCA_WCN6750) ? "wcn6750" :
-+		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390");
- 
- 	qca->memdump_state = QCA_MEMDUMP_IDLE;
- 
-@@ -1734,7 +1741,8 @@ static int qca_setup(struct hci_uart *hu)
- 	clear_bit(QCA_SSR_TRIGGERED, &qca->flags);
- 
- 	if (qca_is_wcn399x(soc_type) ||
--	    qca_is_wcn6750(soc_type)) {
-+	    qca_is_wcn6750(soc_type) ||
-+	    qca_is_wcn6855(soc_type)) {
- 		set_bit(HCI_QUIRK_USE_BDADDR_PROPERTY, &hdev->quirks);
- 		hci_set_aosp_capable(hdev);
- 
-@@ -1756,7 +1764,8 @@ static int qca_setup(struct hci_uart *hu)
- 	}
- 
- 	if (!(qca_is_wcn399x(soc_type) ||
--	     qca_is_wcn6750(soc_type))) {
-+	     qca_is_wcn6750(soc_type) ||
-+	     qca_is_wcn6855(soc_type))) {
- 		/* Get QCA version information */
- 		ret = qca_read_soc_version(hdev, &ver, soc_type);
- 		if (ret)
-@@ -1882,6 +1891,23 @@ static const struct qca_device_data qca_soc_data_wcn6750 = {
- 	.capabilities = QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STATES,
- };
- 
-+static const struct qca_device_data qca_soc_data_wcn6855 = {
-+	.soc_type = QCA_WCN6855,
-+	.vregs = (struct qca_vreg []) {
-+		{ "vddio", 5000 },
-+		{ "vddaon", 26000 },
-+		{ "vddbtcxmx", 126000 },
-+		{ "vddrfacmn", 12500 },
-+		{ "vddrfa0p8", 102000 },
-+		{ "vddrfa1p7", 302000 },
-+		{ "vddrfa1p2", 257000 },
-+		{ "vddrfa2p2", 1700000 },
-+		{ "vddasd", 200 },
-+	},
-+	.num_vregs = 9,
-+	.capabilities = QCA_CAP_WIDEBAND_SPEECH | QCA_CAP_VALID_LE_STATES,
-+};
-+
- static void qca_power_shutdown(struct hci_uart *hu)
- {
- 	struct qca_serdev *qcadev;
-@@ -2046,7 +2072,8 @@ static int qca_serdev_probe(struct serdev_device *serdev)
- 
- 	if (data &&
- 	    (qca_is_wcn399x(data->soc_type) ||
--	    qca_is_wcn6750(data->soc_type))) {
-+	    qca_is_wcn6750(data->soc_type) ||
-+	    qca_is_wcn6855(data->soc_type))) {
- 		qcadev->btsoc_type = data->soc_type;
- 		qcadev->bt_power = devm_kzalloc(&serdev->dev,
- 						sizeof(struct qca_power),
-@@ -2066,14 +2093,18 @@ static int qca_serdev_probe(struct serdev_device *serdev)
- 
- 		qcadev->bt_en = devm_gpiod_get_optional(&serdev->dev, "enable",
- 					       GPIOD_OUT_LOW);
--		if (IS_ERR_OR_NULL(qcadev->bt_en) && data->soc_type == QCA_WCN6750) {
-+		if (IS_ERR_OR_NULL(qcadev->bt_en)
-+		    && (data->soc_type == QCA_WCN6750 ||
-+			data->soc_type == QCA_WCN6855)) {
- 			dev_err(&serdev->dev, "failed to acquire BT_EN gpio\n");
- 			power_ctrl_enabled = false;
- 		}
- 
- 		qcadev->sw_ctrl = devm_gpiod_get_optional(&serdev->dev, "swctrl",
- 					       GPIOD_IN);
--		if (IS_ERR_OR_NULL(qcadev->sw_ctrl) && data->soc_type == QCA_WCN6750)
-+		if (IS_ERR_OR_NULL(qcadev->sw_ctrl)
-+		    && (data->soc_type == QCA_WCN6750 ||
-+			data->soc_type == QCA_WCN6855))
- 			dev_warn(&serdev->dev, "failed to acquire SW_CTRL gpio\n");
- 
- 		qcadev->susclk = devm_clk_get_optional(&serdev->dev, NULL);
-@@ -2149,7 +2180,8 @@ static void qca_serdev_remove(struct serdev_device *serdev)
- 	struct qca_power *power = qcadev->bt_power;
- 
- 	if ((qca_is_wcn399x(qcadev->btsoc_type) ||
--	     qca_is_wcn6750(qcadev->btsoc_type)) &&
-+	     qca_is_wcn6750(qcadev->btsoc_type) ||
-+	     qca_is_wcn6855(qcadev->btsoc_type)) &&
- 	     power->vregs_on)
- 		qca_power_shutdown(&qcadev->serdev_hu);
- 	else if (qcadev->susclk)
-@@ -2334,6 +2366,7 @@ static const struct of_device_id qca_bluetooth_of_match[] = {
- 	{ .compatible = "qcom,wcn3991-bt", .data = &qca_soc_data_wcn3991},
- 	{ .compatible = "qcom,wcn3998-bt", .data = &qca_soc_data_wcn3998},
- 	{ .compatible = "qcom,wcn6750-bt", .data = &qca_soc_data_wcn6750},
-+	{ .compatible = "qcom,wcn6855-bt", .data = &qca_soc_data_wcn6855},
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, qca_bluetooth_of_match);
+ 	/*
+ 	 * We want to attempt a large physically contiguous block first because
 -- 
-2.39.0
+2.38.1
 
