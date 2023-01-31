@@ -2,125 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891E76828E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950EB6828E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbjAaJcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        id S231660AbjAaJdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjAaJb6 (ORCPT
+        with ESMTP id S231126AbjAaJdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:31:58 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B501515C9A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:31:56 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id mf7so21052513ejc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A4df+YMYrca5Xl2bwz5EZIKoolwQF6iGlzj7p2qVcIs=;
-        b=FW6x0jGkYIwA8TqNbVVgHK6Pk0O6Kaaope8iCCGlh6oY+LWTKdTA8pusjVlZNT7Gzh
-         CNY9EN1wJRyIe3MRgcfrzyBE7CQW3lHlVsR+FoATiiOB78YeAEHJ9h120WXXyaivantA
-         iUlA5vz9fRD/aQCIv21oyz0nKAZvpyBYoGwnlYZDcCBWktphCnwDi81jfIUIkAWc9Z5R
-         P0cV3wujZFXuYRvmb8HIBIW4k7lx0oaN5jx7Eu6ekY9RBiCya8zAskNBQlzMAmhwKVq7
-         bd/kooO2gMj3eJrlol0eSJEvYvxXHLzRNZub9OFr7PwcMRSi5C+OX3oeLk1OqR5+bOtH
-         LH+A==
+        Tue, 31 Jan 2023 04:33:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FF34695
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:32:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675157578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DBQzfQxX4tLE3XglxaxRBTAUCUwV8ydRvRoWUBFiIAU=;
+        b=DGSnsjpF8+hAxK9Dp6jp1WVDbiuROwtSAN/W8bvMZhT5RZ82wX12ixVJVS+BNFV2XV1PqQ
+        ikizPHVgho8ASpxYpQfkzGoS11s3yLXccRyNZiD8Qwzx4RaBuvC8oJJY36x00LvTqbLaBE
+        +TEYNUtsKG2LAt5DIWLeXjmyYS7/rXM=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-590-9H32PN2xMOiWHqmD-OwTYg-1; Tue, 31 Jan 2023 04:32:57 -0500
+X-MC-Unique: 9H32PN2xMOiWHqmD-OwTYg-1
+Received: by mail-qv1-f71.google.com with SMTP id j12-20020a056214032c00b0053782e42278so7511504qvu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:32:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A4df+YMYrca5Xl2bwz5EZIKoolwQF6iGlzj7p2qVcIs=;
-        b=o6TLOUpK5kuPmFwW+Xl9aBzadsTCtO3yqm47l56C0DKwfGkduUOmq+6+PaqjmJITXO
-         lvtZf0lFfVpQjUAuBn1OlLWdWQeEXcdH9kg6qpufrH+yFK7xquFwO63cXUuv9E7M3ahl
-         42BOb0jPc69sPxY8HEs1YXLJ0kX3XSNeH0SGLe6Kc4fC5zynGEkpBw+a84tYhHT8CjT+
-         e3GfnW1qs/UvaSEmBDOSwHRSNlw5rTKX44wn51VgfFwQ61A7Csr/2iHJD9xrnE4XdJIy
-         ZXJ6h7k83pR6gCHrMrW3Bn3A/JEm3QV/YtJJSSus3By8EbZGgiOcfLAG8WlE4i+ei0i/
-         2MeA==
-X-Gm-Message-State: AFqh2koqm3dto6aMjLnst+ODWRHDLaxhYh7jzlR3mpUJaevkoz72pdDs
-        9OBVdzMYzI7kdVViTrjatHQv6g==
-X-Google-Smtp-Source: AMrXdXvTI20pQa3xMP9ePTvSO6XvhZBS1sBCWdguw5OSM5xobqPC9/TI+CS7Z+mYGsluohhXwBtJuA==
-X-Received: by 2002:a17:907:971d:b0:870:d15a:c2dc with SMTP id jg29-20020a170907971d00b00870d15ac2dcmr73161479ejc.74.1675157515261;
-        Tue, 31 Jan 2023 01:31:55 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170906474600b0088ba2de323csm1088152ejs.181.2023.01.31.01.31.53
+        bh=DBQzfQxX4tLE3XglxaxRBTAUCUwV8ydRvRoWUBFiIAU=;
+        b=mFw68YEvj/9a7A5kpq1t9dUEOdhrvVr9Ijye8OKFxn/nkmNGGu7vPBD8PtrXAworfL
+         3dhzym6rh5f58E38nEpboyzn3UbNjwOvG/bxUNFhndavbInnqeKbv5UrZBHT1RdClOS9
+         zFJzBEAHGFKj6PE5ZBCw8PYFNPqQbkH/FAjyTGscI+60SyHbLXS/n3RXXwhU4b1iM341
+         thyKdFIMKECNlfqxij7OfYiQHCcI7EmH1+QOz+SYJZlLHCi6Si6KaFD3Y2dYscwkuzLT
+         DzT1RDWm960+Yt83Qx7wauTdym4VaDjj8CYoszGWLuNucKlSHN+JvYPXo9/IfCI7jtYX
+         1w6w==
+X-Gm-Message-State: AFqh2kqUZIzcO1A20X0cngH/uupdZcbiTdGM8MyVXHBCfvonh6YShbRm
+        0kyQBEjkqlId3Lv5WdEO4SRAbBqdUJwXWtFDIhsgfXbuR8WoD/SrnogIYpxUtZEDFJY8TWZobei
+        3JoY4l4pV77vUSHVQPOIhTNZH
+X-Received: by 2002:ac8:454e:0:b0:3a8:fdf:8ff8 with SMTP id z14-20020ac8454e000000b003a80fdf8ff8mr71681303qtn.36.1675157576800;
+        Tue, 31 Jan 2023 01:32:56 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXuFcusn7/Z9gSKN7OA3kQNo5zOuRPcVs4oJi5oHw2k5cV6S5N4fhP31zSpvJcDZwlm/3V5sOg==
+X-Received: by 2002:ac8:454e:0:b0:3a8:fdf:8ff8 with SMTP id z14-20020ac8454e000000b003a80fdf8ff8mr71681284qtn.36.1675157576463;
+        Tue, 31 Jan 2023 01:32:56 -0800 (PST)
+Received: from [192.168.100.30] ([82.142.8.70])
+        by smtp.gmail.com with ESMTPSA id j4-20020a37c244000000b00706a452c074sm6737880qkm.104.2023.01.31.01.32.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 01:31:54 -0800 (PST)
-Message-ID: <b8b90989-4bc9-f3a9-516e-2101bfc2293d@linaro.org>
-Date:   Tue, 31 Jan 2023 11:31:53 +0200
+        Tue, 31 Jan 2023 01:32:55 -0800 (PST)
+Message-ID: <8bb17aed-d643-2e33-472a-9f237e26e4d1@redhat.com>
+Date:   Tue, 31 Jan 2023 10:32:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH 3/6] arm64: defconfig: Enable ipq6018 apss clock and PLL
- controller
-Content-Language: en-GB
-To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, jassisinghbrar@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
-        arnd@arndb.de, marcel.ziswiler@toradex.com,
-        nfraprado@collabora.com, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230113143647.14961-1-quic_devipriy@quicinc.com>
- <20230113143647.14961-4-quic_devipriy@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230113143647.14961-4-quic_devipriy@quicinc.com>
+Subject: Re: [PATCH v3 2/2] virtio_net: notify MAC address change on device
+ initialization
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        virtualization@lists.linux-foundation.org,
+        Cindy Lu <lulu@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, Eli Cohen <elic@nvidia.com>,
+        Gautam Dawar <gautam.dawar@xilinx.com>,
+        =?UTF-8?Q?Eugenio_P=c3=a9rez?= <eperezma@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
+        Parav Pandit <parav@nvidia.com>
+References: <20230127204500.51930-1-lvivier@redhat.com>
+ <20230127204500.51930-3-lvivier@redhat.com>
+ <949500bd10077989eb21bd41d6bb1a0de296f9d8.camel@redhat.com>
+From:   Laurent Vivier <lvivier@redhat.com>
+In-Reply-To: <949500bd10077989eb21bd41d6bb1a0de296f9d8.camel@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/01/2023 16:36, devi priya wrote:
-> Enable the PLL controller and IPQ6018 APSS clock controller
-
-... it is used on several IPQ platforms to clock the CPU so it should be 
-enabled and built-in.
-
+On 1/31/23 10:01, Paolo Abeni wrote:
+> On Fri, 2023-01-27 at 21:45 +0100, Laurent Vivier wrote:
+>> In virtnet_probe(), if the device doesn't provide a MAC address the
+>> driver assigns a random one.
+>> As we modify the MAC address we need to notify the device to allow it
+>> to update all the related information.
+>>
+>> The problem can be seen with vDPA and mlx5_vdpa driver as it doesn't
+>> assign a MAC address by default. The virtio_net device uses a random
+>> MAC address (we can see it with "ip link"), but we can't ping a net
+>> namespace from another one using the virtio-vdpa device because the
+>> new MAC address has not been provided to the hardware:
+>> RX packets are dropped since they don't go through the receive filters,
+>> TX packets go through unaffected.
+>>
+>> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+>> ---
+>>   drivers/net/virtio_net.c | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
+>>
+>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+>> index 7d700f8e545a..704a05f1c279 100644
+>> --- a/drivers/net/virtio_net.c
+>> +++ b/drivers/net/virtio_net.c
+>> @@ -3806,6 +3806,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+>>   		eth_hw_addr_set(dev, addr);
+>>   	} else {
+>>   		eth_hw_addr_random(dev);
+>> +		dev_info(&vdev->dev, "Assigned random MAC address %pM\n",
+>> +			 dev->dev_addr);
+>>   	}
+>>   
+>>   	/* Set up our device-specific information */
+>> @@ -3933,6 +3935,24 @@ static int virtnet_probe(struct virtio_device *vdev)
+>>   
+>>   	virtio_device_ready(vdev);
+>>   
+>> +	/* a random MAC address has been assigned, notify the device.
+>> +	 * We don't fail probe if VIRTIO_NET_F_CTRL_MAC_ADDR is not there
+>> +	 * because many devices work fine without getting MAC explicitly
+>> +	 */
+>> +	if (!virtio_has_feature(vdev, VIRTIO_NET_F_MAC) &&
+>> +	    virtio_has_feature(vi->vdev, VIRTIO_NET_F_CTRL_MAC_ADDR)) {
+>> +		struct scatterlist sg;
+>> +
+>> +		sg_init_one(&sg, dev->dev_addr, dev->addr_len);
+>> +		if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_MAC,
+>> +					  VIRTIO_NET_CTRL_MAC_ADDR_SET, &sg)) {
+>> +			pr_debug("virtio_net: setting MAC address failed\n");
+>> +			rtnl_unlock();
+>> +			err = -EINVAL;
+>> +			goto free_unregister_netdev;
 > 
-> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> Since the above is still dealing with device initialization, would it
+> make sense moving such init step before registering the netdevice?
 
-Just to check: is the capitalization correct in your name here and 
-everywhere else? (please excuse my ignorance here, I do not know all the 
-spelling/capitalization rules).
+It depends if we can send the command using the control command queue or not.
+I don't think we can use a vq before virtio_device_ready().
 
-> ---
->   arch/arm64/configs/defconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index e0ae0996d5ad..8de3979b10a3 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1092,6 +1092,7 @@ CONFIG_QCOM_CLK_APCS_MSM8916=y
->   CONFIG_QCOM_CLK_APCC_MSM8996=y
->   CONFIG_QCOM_CLK_SMD_RPM=y
->   CONFIG_QCOM_CLK_RPMH=y
-> +CONFIG_IPQ_APSS_6018=y
->   CONFIG_IPQ_GCC_6018=y
->   CONFIG_IPQ_GCC_8074=y
->   CONFIG_IPQ_GCC_9574=y
-
--- 
-With best wishes
-Dmitry
+Thanks,
+Laurent
 
