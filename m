@@ -2,96 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D64F68330B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF393683410
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbjAaQwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
+        id S230315AbjAaRku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjAaQwV (ORCPT
+        with ESMTP id S230009AbjAaRks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:52:21 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F3F2BF08;
-        Tue, 31 Jan 2023 08:52:20 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGFp0a017743;
-        Tue, 31 Jan 2023 16:52:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=4n8MyIdQwf8lXurw4fkxxKv88LvIqCvjwDBXGT/lB9w=;
- b=kfW6NYeej77Jq5gyPi4MP7IPvPsyLeaRkqCjURH0oEGlxCPH7UESjDsHPfLFLOjnzDyo
- 02iT7wxkdckF1oNHdUXaz4hMs0Fau5k+R9Gyt7jInKvfpbWMu1gu5+0SqeI5FJFyKAsc
- Ii/34T8IKq4uzGJh8/RgRhyn8l2eA+iE3vGfW5Qo/eKM9hqSPMsoJVMDk43UdhJ69H51
- mVZhf2HLVyDrxT+wqfybvS6BQaX+U5GKsKWmpJ0jEHlDRw3biLt/wEdxC4cKFt52RZLF
- 2x/YViAPavtlKyIIZzdm8RhXEDTHcb97j6L8JbtC5M8hKesGjdXR7oSyv/eUV67SoMR5 GQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf6bvs2a0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:52:10 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VGS2cQ007836;
-        Tue, 31 Jan 2023 16:52:09 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf6bvs29n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:52:09 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VGe7jc008920;
-        Tue, 31 Jan 2023 16:52:09 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ncvw2n8yn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:52:09 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VGq7Rb24379716
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 16:52:07 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 70BC05805A;
-        Tue, 31 Jan 2023 16:52:07 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A6625803F;
-        Tue, 31 Jan 2023 16:52:05 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 16:52:05 +0000 (GMT)
-Message-ID: <6a56a427-1f38-d3d8-63e2-7ed67198c31d@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 11:52:05 -0500
+        Tue, 31 Jan 2023 12:40:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9189C93D3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:39:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675186796;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MsCyJ6wih57A5GjVGHDZm3qG6/Eq1d91lr2fpDgzdcg=;
+        b=YMe9ioUQrw8UxhyffKrJCHeCBDLaAR78FqXNuODFcrr4Cwlbp9KQxYZcIL3Fv3b6Ps9kxJ
+        K3G2j3KDBqA/KRwJsPnC7DSuWxf2s5LfIvbtojcPE/9xJWTex82U+svI4M8BzRXbhvOf4j
+        1wDfT4EzSHBL0f9Q4NHwgF3iHLco0Xw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-157-RoLOdRQVOLGwdjK3BbJPbw-1; Tue, 31 Jan 2023 12:39:54 -0500
+X-MC-Unique: RoLOdRQVOLGwdjK3BbJPbw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5294638173D2;
+        Tue, 31 Jan 2023 17:39:53 +0000 (UTC)
+Received: from ptitbras (unknown [10.39.194.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CBBF3112132C;
+        Tue, 31 Jan 2023 17:39:47 +0000 (UTC)
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <m2pmaw5jv4.fsf@redhat.com>
+ <DM8PR11MB57504761DE92CE1213549C27E7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
+User-agent: mu4e 1.8.0; emacs 28.2
+From:   Christophe de Dinechin <dinechin@redhat.com>
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Date:   Tue, 31 Jan 2023 17:52:57 +0100
+In-reply-to: <DM8PR11MB57504761DE92CE1213549C27E7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
+Message-ID: <m2cz6uk3h9.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 22/25] powerpc/pseries: Pass PLPKS password on kexec
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-23-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-23-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: asXG1Ov5dGaD8y8gvQ7DQB0bEurHFuEn
-X-Proofpoint-ORIG-GUID: LFp8T5_Fs6meJ_TmUGtyJWc9aDrf6mZb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 bulkscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 adultscore=0
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310146
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,236 +84,116 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 2023-01-31 at 10:06 UTC, "Reshetova, Elena" <elena.reshetova@intel.com> wrote...
+> Hi Dinechin,
 
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
-> 
-> Before interacting with the PLPKS, we ask the hypervisor to generate a
-> password for the current boot, which is then required for most further
-> PLPKS operations.
-> 
-> If we kexec into a new kernel, the new kernel will try and fail to
-> generate a new password, as the password has already been set.
-> 
-> Pass the password through to the new kernel via the device tree, in
-> /chosen/ibm,plpks-pw. Check for the presence of this property before
-> trying to generate a new password - if it exists, use the existing
-> password and remove it from the device tree.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> 
-> ---
-> 
-> v3: New patch
-> 
-> v4: Fix compile when CONFIG_PSERIES_PLPKS=n (snowpatch)
-> 
->      Fix error handling on fdt_path_offset() call (ruscur)
-> 
-> v5: Fix DT property name in commit message (npiggin)
-> 
->      Clear prop in FDT during init to prevent password exposure (mpe)
-> 
->      Rework to remove ifdefs from C code (npiggin)
-> ---
->   arch/powerpc/include/asm/plpks.h       | 14 ++++++
->   arch/powerpc/kernel/prom.c             |  4 ++
->   arch/powerpc/kexec/file_load_64.c      | 15 +++++--
->   arch/powerpc/platforms/pseries/plpks.c | 60 ++++++++++++++++++++++++++
->   4 files changed, 90 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/plpks.h
-> index 757313e00521..23b77027c916 100644
-> --- a/arch/powerpc/include/asm/plpks.h
-> +++ b/arch/powerpc/include/asm/plpks.h
-> @@ -176,6 +176,20 @@ u64 plpks_get_signedupdatealgorithms(void);
->    */
->   u16 plpks_get_passwordlen(void);
->   
-> +/**
-> + * Called in early init to retrieve and clear the PLPKS password from the DT.
-> + */
-> +void plpks_early_init_devtree(void);
-> +
-> +/**
-> + * Populates the FDT with the PLPKS password to prepare for kexec.
-> + */
-> +int plpks_populate_fdt(void *fdt);
-> +#else // CONFIG_PSERIES_PLPKS
-> +static inline bool plpks_is_available(void) { return false; }
-> +static inline u16 plpks_get_passwordlen(void) { BUILD_BUG(); }
-> +static inline void plpks_early_init_devtree(void) { }
-> +static inline int plpks_populate_fdt(void *fdt) { BUILD_BUG(); }
->   #endif // CONFIG_PSERIES_PLPKS
->   
->   #endif // _ASM_POWERPC_PLPKS_H
-> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> index 4f1c920aa13e..8a13b378770f 100644
-> --- a/arch/powerpc/kernel/prom.c
-> +++ b/arch/powerpc/kernel/prom.c
-> @@ -56,6 +56,7 @@
->   #include <asm/drmem.h>
->   #include <asm/ultravisor.h>
->   #include <asm/prom.h>
-> +#include <asm/plpks.h>
->   
->   #include <mm/mmu_decl.h>
->   
-> @@ -893,6 +894,9 @@ void __init early_init_devtree(void *params)
->   		powerpc_firmware_features |= FW_FEATURE_PS3_POSSIBLE;
->   #endif
->   
-> +	/* If kexec left a PLPKS password in the DT, get it and clear it */
-> +	plpks_early_init_devtree();
-> +
->   	tm_init();
->   
->   	DBG(" <- early_init_devtree()\n");
-> diff --git a/arch/powerpc/kexec/file_load_64.c b/arch/powerpc/kexec/file_load_64.c
-> index af8854f9eae3..3f5740fb01a4 100644
-> --- a/arch/powerpc/kexec/file_load_64.c
-> +++ b/arch/powerpc/kexec/file_load_64.c
-> @@ -27,6 +27,7 @@
->   #include <asm/kexec_ranges.h>
->   #include <asm/crashdump-ppc64.h>
->   #include <asm/prom.h>
-> +#include <asm/plpks.h>
->   
->   struct umem_info {
->   	u64 *buf;		/* data buffer for usable-memory property */
-> @@ -977,12 +978,16 @@ static unsigned int cpu_node_size(void)
->    */
->   unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
->   {
-> -	unsigned int cpu_nodes, extra_size;
-> +	unsigned int cpu_nodes, extra_size = 0;
->   	struct device_node *dn;
->   	u64 usm_entries;
->   
-> +	// Make room for the PLPKS password, plus node overhead for ibm,plpks-pw.
-> +	if (plpks_is_available())
-> +		extra_size += (unsigned int)plpks_get_passwordlen() + 32;
+Nit: My first name is actually Christophe ;-)
 
-Is there nothing better than a '32'?
-  
-> +
->   	if (image->type != KEXEC_TYPE_CRASH)
-> -		return 0;
-> +		return extra_size;
->   
->   	/*
->   	 * For kdump kernel, account for linux,usable-memory and
-> @@ -992,7 +997,7 @@ unsigned int kexec_extra_fdt_size_ppc64(struct kimage *image)
->   	usm_entries = ((memblock_end_of_DRAM() / drmem_lmb_size()) +
->   		       (2 * (resource_size(&crashk_res) / drmem_lmb_size())));
->   
-> -	extra_size = (unsigned int)(usm_entries * sizeof(u64));
-> +	extra_size += (unsigned int)(usm_entries * sizeof(u64));
->   
->   	/*
->   	 * Get the number of CPU nodes in the current DT. This allows to
-> @@ -1230,6 +1235,10 @@ int setup_new_fdt_ppc64(const struct kimage *image, void *fdt,
->   		}
->   	}
->   
-> +	// If we have PLPKS active, we need to provide the password to the new kernel
-> +	if (plpks_is_available())
-> +		ret = plpks_populate_fdt(fdt);
-> +
->   out:
->   	kfree(rmem);
->   	kfree(umem);
-> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
-> index 6940280ae94a..481a669845c5 100644
-> --- a/arch/powerpc/platforms/pseries/plpks.c
-> +++ b/arch/powerpc/platforms/pseries/plpks.c
-> @@ -16,6 +16,9 @@
->   #include <linux/slab.h>
->   #include <linux/string.h>
->   #include <linux/types.h>
-> +#include <linux/of_fdt.h>
-> +#include <linux/libfdt.h>
-> +#include <linux/memblock.h>
->   #include <asm/hvcall.h>
->   #include <asm/machdep.h>
->   #include <asm/plpks.h>
-> @@ -128,6 +131,12 @@ static int plpks_gen_password(void)
->   	u8 *password, consumer = PLPKS_OS_OWNER;
->   	int rc;
->   
-> +	// If we booted from kexec, we could be reusing an existing password already
-> +	if (ospassword) {
-> +		pr_debug("Password of length %u already in use\n", ospasswordlength);
-> +		return 0;
-> +	}
-> +
->   	// The password must not cross a page boundary, so we align to the next power of 2
->   	password = kzalloc(roundup_pow_of_two(maxpwsize), GFP_KERNEL);
->   	if (!password)
-> @@ -621,6 +630,57 @@ int plpks_read_bootloader_var(struct plpks_var *var)
->   	return plpks_read_var(PLPKS_BOOTLOADER_OWNER, var);
->   }
->   
-> +int plpks_populate_fdt(void *fdt)
-> +{
-> +	int chosen_offset = fdt_path_offset(fdt, "/chosen");
+[snip]
 
-Newline here?
-> +	if (chosen_offset < 0) {
-> +		pr_err("Can't find chosen node: %s\n",
-> +		       fdt_strerror(chosen_offset));
-> +		return chosen_offset;
-> +	}
-> +
-> +	return fdt_setprop(fdt, chosen_offset, "ibm,plpks-pw", ospassword, ospasswordlength);
-> +}
-> +
-> +// Once a password is registered with the hypervisor it cannot be cleared without
-> +// rebooting the LPAR, so to keep using the PLPKS across kexec boots we need to
-> +// recover the previous password from the FDT.
-> +//
-> +// There are a few challenges here.  We don't want the password to be visible to
-> +// users, so we need to clear it from the FDT.  This has to be done in early boot.
-> +// Clearing it from the FDT would make the FDT's checksum invalid, so we have to
-> +// manually cause the checksum to be recalculated.
-> +void __init plpks_early_init_devtree(void)
-> +{
-> +	void *fdt = initial_boot_params;
-> +	int chosen_node = fdt_path_offset(fdt, "/chosen");
-> +	u8 *password;
+>> "The implementation of the #VE handler is simple and does not require an
+>> in-depth security audit or fuzzing since it is not the actual consumer of
+>> the host/VMM supplied untrusted data": The assumption there seems to be that
+>> the host will never be able to supply data (e.g. through a bounce buffer)
+>> that it can trick the guest into executing. If that is indeed the
+>> assumption, it is worth mentioning explicitly. I suspect it is a bit weak,
+>> since many earlier attacks were based on executing the wrong code. Notably,
+>> it is worth pointing out that I/O buffers are _not_ encrypted with the CPU
+>> key (as opposed to any device key e.g. for PCI encryption) in either
+>> TDX or SEV. Is there for example anything that precludes TDX or SEV from
+>> executing code in the bounce buffers?
+>
+> This was already replied by Kirill, any code execution out of shared memory generates
+> a #GP.
 
-const u8 *password ?
+Apologies for my wording. Everyone interpreted "executing" as "executing
+directly on the bounce buffer page", when what I meant is "consuming data
+fetched from the bounce buffers as code" (not necessarily directly).
 
-> +	int len;
-> +
-> +	if (chosen_node < 0)
-> +		return;
-> +
-> +	password = (u8 *)fdt_getprop(fdt, chosen_node, "ibm,plpks-pw", &len);
-> +	if (len <= 0) {
-> +		pr_debug("Couldn't find ibm,plpks-pw node.\n");
-> +		return;
-> +	}
-> +
-> +	ospassword = memblock_alloc_raw(len, SMP_CACHE_BYTES);
-> +	if (!ospassword) {
-> +		pr_err("Error allocating memory for password.\n");
+For example, in the diagram in your document, the guest kernel is a
+monolithic piece. In reality, there are dynamically loaded components. In
+the original SEV implementation, with pre-attestation, the measurement could
+only apply before loading any DLKM (I believe, not really sure). As another
+example, SEVerity (CVE-2020-12967 [1]) worked by injecting a payload
+directly into the guest kernel using virtio-based network I/O. That is what
+I referred to when I wrote "many earlier attacks were based on executing the
+wrong code".
 
-Also display 'len' here?
+The fact that I/O buffers are not encrypted matters here, because it gives
+the host ample latitude to observe or even corrupt all I/Os, as many others
+have pointed out. Notably, disk crypto may not be designed to resist to a
+host that can see and possibly change the I/Os.
 
-> +		goto out;
-> +	}
-> +
-> +	memcpy(ospassword, password, len);
-> +	ospasswordlength = (u16)len;
-> +
-> +out:
-> +	fdt_nop_property(fdt, chosen_node, "ibm,plpks-pw");
-> +	// Since we've cleared the password, we must update the FDT checksum
-> +	early_init_dt_verify(fdt);
-> +}
-> +
->   static __init int pseries_plpks_init(void)
->   {
->   	int rc;
+So let me rephrase my vague question as a few more precise ones:
+
+1) What are the effects of semi-random kernel code injection?
+
+   If the host knows that a given bounce buffer happens to be used later to
+   execute some kernel code, it can start flipping bits in it to try and
+   trigger arbitrary code paths in the guest. My understanding is that
+   crypto alone (i.e. without additional layers like dm-integrity) will
+   happily decrypt that into a code stream with pseudo-random instructions
+   in it, not vehemently error out.
+
+   So, while TDX precludes the host from writing into guest memory directly,
+   since the bounce buffers are shared, TDX will not prevent the host from
+   flipping bits there. It's then just a matter of guessing where the bits
+   will go, and hoping that some bits execute at guest PL0. Of course, this
+   can be mitigated by either only using static configs, or using
+   dm-verity/dm-integrity, or maybe some other mechanisms.
+
+   Shouldn't that be part of your document?  To be clear: you mention under
+   "Storage protection" that you use dm-crypt and dm-integrity, so I believe
+   *you* know, but your readers may not figure out why dm-integrity is
+   integral to the process, notably after you write "Users could use other
+   encryption schemes".
+
+2) What are the effects of random user code injection?
+
+   It's the same as above, except that now you can target a much wider range
+   of input data, including shell scripts, etc. So the attack surface is
+   much larger.
+
+3) What is the effect of data poisoning?
+
+   You don't necessarily need to corrupt code. Being able to corrupt a
+   system configuration file for example can be largely sufficient.
+
+4) Are there I/O-based replay attacks that would work pre-attestation?
+
+   My current mental model is that you load a "base" software stack into the
+   TCB and then measure a relevant part of it. What you measure is somewhat
+   implementation-dependent, but in the end, if the system is attested, you
+   respond to a cryptographic challenge based on what was measured, and you
+   then get relevant secrets, e.g. a disk decryption key, that let you make
+   forward progress. However, what happens if every time you boot, the host
+   feeds you bogus disk data just to try to steer the boot sequence along
+   some specific path?
+
+   I believe that the short answer is: the guest either:
+
+   a) reaches attestation, but with bad in-memory data, so it fails the
+      crypto exchange, and secrets are not leaked.
+
+   b) does not reach attestation, so never gets the secrets, and therefore
+      still fulfils the CC promise of not leaking secrets.
+
+   So I personally feel this is OK, but it's worth writing up in your doc.
+
+
+Back to the #VE handler, if I can find a way to inject malicious code into
+my guest, what you wrote in that paragraph as a justification for no
+in-depth security still seems like "not exactly defense in depth". I would
+just remove the sentence, audit and fuzz that code with the same energy as
+for anything else that could face bad input.
+
+
+[1]: https://www.sec.in.tum.de/i20/student-work/code-execution-attacks-against-encrypted-virtual-machines
+
+
+
+--
+Cheers,
+Christophe de Dinechin (https://c3d.github.io)
+Theory of Incomplete Measurements (https://c3d.github.io/TIM)
+
