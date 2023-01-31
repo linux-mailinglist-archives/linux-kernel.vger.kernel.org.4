@@ -2,132 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3873B6822B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDF26822B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjAaDTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
+        id S230414AbjAaDUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjAaDTl (ORCPT
+        with ESMTP id S230415AbjAaDTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:19:41 -0500
-Received: from out28-196.mail.aliyun.com (out28-196.mail.aliyun.com [115.124.28.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E9F35B0;
-        Mon, 30 Jan 2023 19:19:39 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1931266|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00821912-0.000205457-0.991575;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=17;RT=17;SR=0;TI=SMTPD_---.R5azWh9_1675135174;
-Received: from 10.0.2.15(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.R5azWh9_1675135174)
-          by smtp.aliyun-inc.com;
-          Tue, 31 Jan 2023 11:19:35 +0800
-Message-ID: <af6beebc-0a70-16f5-e0e9-5f4cbeea8955@motor-comm.com>
-Date:   Tue, 31 Jan 2023 11:19:33 +0800
+        Mon, 30 Jan 2023 22:19:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2207B298CE
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:19:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F40861381
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:19:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 162E4C433A1;
+        Tue, 31 Jan 2023 03:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675135186;
+        bh=1NQ1Fbrb6bK/cTYJdpO49DSrf2htZos9hMzLNdyHHg8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t06pJJocpsUJTxA5t1KZeruxfokw32eTe9R4I2X/JBA66H07qrpcj/ARP1YqY7waO
+         99biYH5CNAKLb6dkkWehRiaINaPJN6aEfiLRxqYJl7K1lqcwEoVmMiRLFXLKhBWGJE
+         S6ZQ6WNIvLSBDbLVcotYtcaY1JnY72F9D8c9TpkcaVbjrpRslSvJFBqSyL8FoWdd2p
+         RCnE+naOzinwPiNoBnU3K78Mt3j3r401JGg2lt26pLq2usGZ58ZzMAf61QJRgrFCB1
+         sThCToXf+tpL+qULX7fgIRKlXRPJKuPz4LhsFVjJrz13GHa7y5wCBbBNba/zc3cyPZ
+         oSq9/JUllWGSQ==
+Date:   Tue, 31 Jan 2023 11:19:41 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org, heikki.krogerus@linux.intel.com,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        "Dustin L. Howett" <dustin@howett.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: Re: [PATCH 1/2] platform/chrome: cros_ec: Add VDM attention headers
+Message-ID: <Y9iIzcz5AGjVXsNG@google.com>
+References: <20230126205620.3714994-1-pmalani@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v3 1/5] dt-bindings: net: Add Motorcomm yt8xxx
- ethernet phy
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        yanhong.wang@starfivetech.com, xiaogang.fan@motor-comm.com,
-        fei.zhang@motor-comm.com, hua.sun@motor-comm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230130063539.3700-1-Frank.Sae@motor-comm.com>
- <20230130063539.3700-2-Frank.Sae@motor-comm.com>
- <20230130224158.GA3655289-robh@kernel.org>
-From:   "Frank.Sae" <Frank.Sae@motor-comm.com>
-In-Reply-To: <20230130224158.GA3655289-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230126205620.3714994-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On 2023/1/31 06:41, Rob Herring wrote:
-> On Mon, Jan 30, 2023 at 02:35:35PM +0800, Frank Sae wrote:
->>  Add a YAML binding document for the Motorcom yt8xxx Ethernet phy driver.
+On Thu, Jan 26, 2023 at 08:55:45PM +0000, Prashant Malani wrote:
+> Incorporate updates to the EC headers to support the retrieval of VDM
+> Attention messages from port partners. These headers are already present
+> in the ChromeOS EC codebase. [1]
 > 
-> Bindings are for h/w devices, not drivers.
+> [1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:include/ec_commands.h
 > 
->>  
->> Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
->> ---
->>  .../bindings/net/motorcomm,yt8xxx.yaml        | 102 ++++++++++++++++++
->>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->>  MAINTAINERS                                   |   1 +
->>  3 files changed, 105 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
->> new file mode 100644
->> index 000000000000..8527576c15b3
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
->> @@ -0,0 +1,102 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/net/motorcomm,yt8xxx.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: MotorComm yt8xxx Ethernet PHY
->> +
->> +maintainers:
->> +  - frank sae <frank.sae@motor-comm.com>
->> +
->> +allOf:
->> +  - $ref: ethernet-phy.yaml#
-> 
-> This schema doesn't work because there is no way to determine whether to 
-> apply it or not. You need a compatible for your phy.
-> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
- I don't understand how to add a compatible for my phy.
+With a nit:
+Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-compatible:
-    oneOf:
-      - enum:
-          - fsl,imx25-fec
-          - fsl,imx27-fec
+> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
+> index b9c4a3964247..ec327638c6eb 100644
+> --- a/include/linux/platform_data/cros_ec_commands.h
+> +++ b/include/linux/platform_data/cros_ec_commands.h
+> @@ -5862,6 +5862,7 @@ enum tcpc_cc_polarity {
+>  #define PD_STATUS_EVENT_MUX_1_SET_DONE		BIT(5)
+>  #define PD_STATUS_EVENT_VDM_REQ_REPLY		BIT(6)
+>  #define PD_STATUS_EVENT_VDM_REQ_FAILED		BIT(7)
+> +#define PD_STATUS_EVENT_VDM_ATTENTION			BIT(8)
 
-compatible usually like this, but it is usually for mac or mdio.
-
-
-phy id list:
-YT8511	0x0000010a
-YT8521	0x0000011A
-YT8531  0x4f51e91b
-
-motorcomm,yt8xxx.yaml
-
-    mdio0 {
-        ...
-        ethernet-phy@5 {
-            compatible = "ethernet-phy-id0000.010a",
-                         "ethernet-phy-id0000.011a",
-                         "ethernet-phy-id4f51.e91b",
-                         "ethernet-phy-ieee802.3-c22";
-            reg = <5>;
-            ...
-        };
-    };
-
- Should i add compatible like this ? 
- If above is error, please give me an example, thanks!
-
-> Rob
+This has an extra tab if comparing with others around.
