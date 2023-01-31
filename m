@@ -2,135 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950B268322A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFBC68322D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjAaQEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S232097AbjAaQFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233467AbjAaQEr (ORCPT
+        with ESMTP id S231915AbjAaQFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:04:47 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFF25140B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:04:26 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id u3so3009161uae.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:04:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XGZmY7Tt1HJYqMq5brkkG/QfW9zI5chcAr9ksUNQ6+c=;
-        b=SP1ltVq7cdTVCK9AISOW+m93/NhA0++ySLTl9oTijKCpmzXfl+45FboohcIkCKMd1c
-         +6IcbFKGUR6Epz5AQZYRHap9aAbzFHCrcLGxXiIEkw/SH8ti93E+rr7ZxkHGE5+3u0FI
-         J17JYzE30j9gL8Ia86p3suAjzQ+LEzywr4Kh1xBxP8iEnof+/cjpqzYV/NN45pZUy4t2
-         2REso6lCrMYSp4073+0t+xSXxI9ws9QVLceqf7l5KD6cxite+ZZo3O3gmi9agmz9glVf
-         AKeKQONzNVzsZbPALGtEm3jcwGeWecbP0iCXvup8jOMT0AWLvMl9DfGAF4V6VTO3d0QK
-         jx3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XGZmY7Tt1HJYqMq5brkkG/QfW9zI5chcAr9ksUNQ6+c=;
-        b=SC5WuMy7tk3xV+WYRs9QXfW3kqBNu/XsO3pc/qLa3/Wsr8d/tWxpZ4i5OK5VFUxe4g
-         jgRabn0l5XSqtHxnm09oFoYBzx1Oj4MtFN/M4QC8NjhFrTNCgI6zxUc+l8lyJJZAR7Pg
-         b9Vw0l9miJKDxIESpwONHVtjWWSfneWmNJBlC2G7rBlREF8Guek0tyLh07Y1aRRmodAS
-         GXDra53N9BOlD9VOAruaUqYBZA/xAoAczWf2m+lT/tdMuVD7hxfubt1Cf1g9xaOIAP87
-         3NL834clxDNfwEPcQs8Dq/0qsPryIQdyKyqGpQsP7cAQ3UtU1WI47g0Y8Qwz98OCYnVb
-         dUsQ==
-X-Gm-Message-State: AFqh2krVz4yv+B8nNH5KfKs8+EB2xvbhB1tHOya//tJvwVRA3bLqnoWA
-        YRpgKf+uDeaQXHh0d3/s695d4lB/68Zw1KVe65+C4Q==
-X-Google-Smtp-Source: AMrXdXuytnhJwA8QUwdq+FsCn5crjUyy7UnTBO8zJNQTiwxf0TwtUWYOPRcufcT39/ORVz7TIu3VrV9RGCZwGkF569w=
-X-Received: by 2002:ab0:31d0:0:b0:419:d115:2773 with SMTP id
- e16-20020ab031d0000000b00419d1152773mr6727916uan.29.1675181065076; Tue, 31
- Jan 2023 08:04:25 -0800 (PST)
+        Tue, 31 Jan 2023 11:05:00 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877A0460B5;
+        Tue, 31 Jan 2023 08:04:42 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.165.226])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1817E6602EBA;
+        Tue, 31 Jan 2023 16:04:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1675181080;
+        bh=bWKosL3FqQvGKVbLtHwh+SviC5G8f7DqaNQ3HiK29gg=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=mwyaDxKJAgsiN57aH1NG+118IRW4nXqfCENped3PNLTVXscFLnCORdHU0Y7018s7e
+         a/xzkXGtIHGAUNgO92cQeor2oHe1iEjqRos1cyJficaxPOxybgB/Bjhe0dPuW34Ojv
+         RfCkTGF9ARvcNY02mCp8+ScZ37tkKNUjN3earw5U5qAt14LGzgw04cjRxx3vETcpyZ
+         fniY/yXMn+IR7xGkfAsUXwQlv23+37inwe6p7QcVaLxUy+32ig754ma4g7Bey4C9GK
+         /iTCphurFTH3Yge6p0oZDKvFe0WqqDdGrUEcjV8xRlYU8CF7wMDkT66ORWpS+w7SKF
+         C8TcyeBZH42KQ==
+Message-ID: <ef9c0a5a-4697-c21f-0da5-aa5698cdcb6b@collabora.com>
+Date:   Tue, 31 Jan 2023 21:04:26 +0500
 MIME-Version: 1.0
-References: <20230130130739.563628-1-arnd@kernel.org> <Y9fITnjnIuDz8NYw@dhcp22.suse.cz>
- <CAG_fn=UC-zPKfXvhnXO-Hb7Wp3+BJyT4WvotATigigb63N0tdA@mail.gmail.com> <Y9kwTXhAQiEWz0IJ@dhcp22.suse.cz>
-In-Reply-To: <Y9kwTXhAQiEWz0IJ@dhcp22.suse.cz>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 31 Jan 2023 17:03:48 +0100
-Message-ID: <CAG_fn=XLRa0hz0R5JpLLWhe62669yGcT_ME5g8hEVo4yuXuOmg@mail.gmail.com>
-Subject: Re: [PATCH] mm: extend max struct page size for kmsan
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Hugh Dickins <hughd@google.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
         Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pasha.tatashin@soleen.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
+ the clear info about PTEs
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>
+References: <20230131083257.3302830-3-usama.anjum@collabora.com>
+ <202301312359.8WtBkSkQ-lkp@intel.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <202301312359.8WtBkSkQ-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Right now KMSAN allocates its metadata at boot time, when tearing down memblock.
-> > At that point only a handful of memory ranges exist, and it is pretty
-> > easy to carve out some unused pages for the metadata for those ranges,
-> > then divide the rest evenly and return 1/3 to the system, spending 2/3
-> > to keep the metadata for the returned pages.
-> > I tried allocating the memory lazily (at page_alloc(), for example),
-> > and it turned out to be very tricky because of fragmentation: for an
-> > allocation of a given order, one needs shadow and origin allocations
-> > of the same order [1], and alloc_pages() simply started with ripping
-> > apart the biggest chunk of memory available.
->
-> page_ext allocation happens quite early as well. There shouldn't be any
-> real fragmentation that early during the boot.
+On 1/31/23 8:52 PM, kernel test robot wrote:
+> Hi Muhammad,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on shuah-kselftest/fixes]
+> [also build test ERROR on linus/master v6.2-rc6 next-20230131]
+> [cannot apply to shuah-kselftest/next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git fixes
+> patch link:    https://lore.kernel.org/r/20230131083257.3302830-3-usama.anjum%40collabora.com
+> patch subject: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about PTEs
+> config: arc-defconfig (https://download.01.org/0day-ci/archive/20230131/202301312359.8WtBkSkQ-lkp@intel.com/config)
+> compiler: arc-elf-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/11677b6b7fda958031115ea40aa219fc32c7dea4
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
+>         git checkout 11677b6b7fda958031115ea40aa219fc32c7dea4
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
+>>> fs/proc/task_mmu.c:1927:17: error: implicit declaration of function 'uffd_wp_range' [-Werror=implicit-function-declaration]
+>     1927 |                 uffd_wp_range(walk->mm, vma, start, addr - start, true);
+>          |                 ^~~~~~~~~~~~~
+>    cc1: some warnings being treated as errors
+I'll fix this by adding the following patch in next version:
 
-Assuming we are talking about the early_page_ext_enabled() case, here
-are the init functions that are executed between kmsan_init_shadow()
-and page_ext_init():
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -190,6 +190,11 @@ static inline vm_fault_t handle_userfault(struct
+vm_fault *vmf,
+        return VM_FAULT_SIGBUS;
+ }
 
-        stack_depot_early_init();
-        mem_init();
-        mem_init_print_info();
-        kmem_cache_init();
-        /*
-         * page_owner must be initialized after buddy is ready, and also after
-         * slab is ready so that stack_depot_init() works properly
-         */
-        page_ext_init_flatmem_late();
-        kmemleak_init();
-        pgtable_init();
-        debug_objects_mem_init();
-        vmalloc_init();
++static inline void uffd_wp_range(struct mm_struct *dst_mm, struct
+vm_area_struct *vma,
++                                unsigned long start, unsigned long len,
+bool enable_wp)
++{
++}
++
 
-There's yet another problem besides fragmentation: we need to allocate
-shadow for every page that was allocated by these functions.
-Right now this is done by kmsan_init_shadow, which walks all the
-existing memblock ranges, plus the _data segment and the node data for
-each node, and grabs memory from the buddy allocator.
-If we delay the metadata allocation to the point where memory caches
-exist, we'll have to somehow walk every allocated struct page and
-allocate the metadata for each of those. Is there an easy way to do
-so?
 
-I am unsure if vmalloc_init() creates any virtual mappings (probably
-not?), but if it does, we'd also need to call
-kmsan_vmap_pages_range_noflush() for them once we set up the metadata.
-With the current metadata allocation scheme it's not needed, because
-the buddy allocator is torn down before the virtual mappings are
-created.
 
-In the ideal world, we'd better place KMSAN shadow/origin pages at
-fixed addresses, like this is done for KASAN - that would not require
-storing pointers in struct page.
-But reserving big chunks of the address space is even harder than
-what's currently being done.
+
+> 
+> 
+> vim +/uffd_wp_range +1927 fs/proc/task_mmu.c
+> 
+>   1915	
+>   1916		pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
+>   1917		if (IS_GET_OP(p)) {
+>   1918			for (addr = start; addr < end; pte++, addr += PAGE_SIZE) {
+>   1919				ret = pagemap_scan_output(!is_pte_uffd_wp(*pte), vma->vm_file,
+>   1920							  pte_present(*pte), is_swap_pte(*pte), p, addr, 1);
+>   1921				if (ret)
+>   1922					break;
+>   1923			}
+>   1924		}
+>   1925		pte_unmap_unlock(pte - 1, ptl);
+>   1926		if ((!ret || ret == -ENOSPC) && IS_WP_ENGAGE_OP(p) && (addr - start))
+>> 1927			uffd_wp_range(walk->mm, vma, start, addr - start, true);
+>   1928	
+>   1929		cond_resched();
+>   1930		return ret;
+>   1931	}
+>   1932	
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
