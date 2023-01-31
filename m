@@ -2,125 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7F86827E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B42CD6827D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjAaJAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S232178AbjAaI70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 03:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjAaI7c (ORCPT
+        with ESMTP id S232114AbjAaI65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:59:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F84D4A223
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:55:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3641DB81A77
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:53:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC052C433D2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675155235;
-        bh=JRJCmS7TbfihSxBfK2OlvDfGSJCL2cPfzKd3PSOst4I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RybNy8tAs4k2ezl3eng8QvNLNFyszr7QK3GEFhw0PPllGdVe2Ad0wuleHN/euV3Mh
-         TLEMXj6QNhgUUSIrydHn2HrVRCmn1DJRpc3Vb6JVBvEKuofh10w0KEDaXtWwSZ8zzE
-         Qz9uSxx44FG3lxF5bDRcQSxqrI6kCXC+JSGLHw4+oabAD3NnLVlrGADpWfQ3wc5TMf
-         ++QgLawWAZ3unVPuQdYV3JDfeR3luWHwTsFCxvsbGDpUxCUoSIlIsvIFlCYBSKzWJT
-         NCV9pHXQkYM2rtpivWhjG71cpS2WRtTRwz9X1BpaeGefxBAQGBXX1zdyxVgO1TiHLp
-         0/sj+Whfum8gg==
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-5063029246dso194244177b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:53:55 -0800 (PST)
-X-Gm-Message-State: AFqh2koyKmOE9S9AkWUpqpxBQex2RlIb7FTLtXhFsQV8FK9qxzrdtwQa
-        ombGxR5yHEFmnw3LnzH95tH01a5DDK4bbenEGVU=
-X-Google-Smtp-Source: AMrXdXt9H80BxARzMJJWDaxQGGFOEhNQbEiRDMS6HuGbtD0/x3qYCDvGhyZLLu6Gk5B3Ci3YWGlZ2hpvM4AKOSMrydU=
-X-Received: by 2002:a81:14d3:0:b0:459:ef5d:529c with SMTP id
- 202-20020a8114d3000000b00459ef5d529cmr8910623ywu.211.1675155234934; Tue, 31
- Jan 2023 00:53:54 -0800 (PST)
+        Tue, 31 Jan 2023 03:58:57 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC31D518DA
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:55:05 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5063029246dso194253177b3.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=q1SrdDNUlC8jwW9ILBpZQKsxZB0Kk6bmk1dzxOugPqw=;
+        b=rAIko5S656uXYnMEPKcMcp9zgAKiuhyYIHq+CtfD0P4YTXB5pDrenATm8Z9aEUO5SS
+         xiSUxuAQOxSGKKFaWmNCMvrwiBWQRZlRPztdqGRL/gHUxdJRfz6BVxqJqI+5v7mWXxcr
+         Kx/nStRUuqMsFlHJ51LQUwmAozVWOmKptPg+kuOthAqQReD57P/bZZS6Sg9Fm1HqJDkV
+         8XnwiErjgZ+BxdBmZxCjiTwxsFkNF7Aek9A/O091/dZPgvxSbR86nkOxqL4CL2EBrc7u
+         q/D5Fy53PmD3E5mfIL3lgADH0brpnWjGHmdVFr05+fXPACY7AlWbsKluf+YZQcA1r77x
+         UDLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q1SrdDNUlC8jwW9ILBpZQKsxZB0Kk6bmk1dzxOugPqw=;
+        b=Ib0Wu45Qlzm88aINIai0I+Wyai3EozCHQtlISOj9DFlhDi2fQ/2SKqKqvRlH/EGSYD
+         NRpw06ZcGq/ZlCnQZvrGfhedCVXMLjvLFcJtc2nGANrL+xkhoSZU1ofpLXCwJvh1gTik
+         H9697CoVJjuaniYURKqkFlH5psfCj7vQcOntwkswB7K8lxkeBnc+beSFbDgnm0+sf18/
+         X273oHf9dXnpIVZ0m7Ug4p+FnOf4BboOx0K9y7hv/5Sm5uaTlmdIDE2zbXd757I3ukcg
+         dLrIoukn2BQqWMuDnO8TxMnlj8uO9Wm/of4czCUyiqV8afSfjK76RCsadRs/XXQIQjUH
+         oRTw==
+X-Gm-Message-State: AFqh2koVXLLs9JSCpxxKSj8nkmt9mMd4bLAD5F1IYAG+LDpQbCAyeH6J
+        rasorVXTZsyz0iMcWfIaK16Cmgj5YmQ0dtwvPXaV5A==
+X-Google-Smtp-Source: AMrXdXuFN4s20Kx9T5tmNLJ44z59TdEQU7GqKqHCpApJ5dnP9JbjylkFb83+PoHMtS5f4TPercZLAZZI9kkdd+3E1Wo=
+X-Received: by 2002:a81:6d4:0:b0:468:5fe3:7771 with SMTP id
+ 203-20020a8106d4000000b004685fe37771mr6562874ywg.267.1675155254079; Tue, 31
+ Jan 2023 00:54:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127221504.2522909-1-arnd@kernel.org>
-In-Reply-To: <20230127221504.2522909-1-arnd@kernel.org>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Tue, 31 Jan 2023 10:53:28 +0200
-X-Gmail-Original-Message-ID: <CAFCwf10RRFUqYEATg7p-LmKSEkFtAhneufJTdezFA7i3HJaDDw@mail.gmail.com>
-Message-ID: <CAFCwf10RRFUqYEATg7p-LmKSEkFtAhneufJTdezFA7i3HJaDDw@mail.gmail.com>
-Subject: Re: [PATCH] [v2] accel: fix CONFIG_DRM dependencies
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Dave Airlie <airlied@redhat.com>, Melissa Wen <mwen@igalia.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <cover.1675111415.git.andreyknvl@google.com> <fbe58d38b7d93a9ef8500a72c0c4f103222418e6.1675111415.git.andreyknvl@google.com>
+In-Reply-To: <fbe58d38b7d93a9ef8500a72c0c4f103222418e6.1675111415.git.andreyknvl@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 31 Jan 2023 09:53:37 +0100
+Message-ID: <CANpmjNPakvS5OAp3DEvH=5mdtped8K5WC4j4yRfPEJtJOv4OhA@mail.gmail.com>
+Subject: Re: [PATCH 15/18] lib/stacktrace, kasan, kmsan: rework extra_bits interface
+To:     andrey.konovalov@linux.dev
+Cc:     Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 12:15 AM Arnd Bergmann <arnd@kernel.org> wrote:
+On Mon, 30 Jan 2023 at 21:51, <andrey.konovalov@linux.dev> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> From: Andrey Konovalov <andreyknvl@google.com>
 >
-> At the moment, accel drivers can be built-in even with CONFIG_DRM=m,
-> but this causes a link failure:
+> The current implementation of the extra_bits interface is confusing:
+> passing extra_bits to __stack_depot_save makes it seem that the extra
+> bits are somehow stored in stack depot. In reality, they are only
+> embedded into a stack depot handle and are not used within stack depot.
 >
-> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_dev_init':
-> ivpu_drv.c:(.text+0x1535): undefined reference to `drmm_kmalloc'
-> x86_64-linux-ld: ivpu_drv.c:(.text+0x1562): undefined reference to `drmm_kmalloc'
-> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_remove':
-> ivpu_drv.c:(.text+0x1faa): undefined reference to `drm_dev_unregister'
-> x86_64-linux-ld: drivers/accel/ivpu/ivpu_drv.o: in function `ivpu_probe':
-> ivpu_drv.c:(.text+0x1fef): undefined reference to `__devm_drm_dev_alloc'
+> Drop the extra_bits argument from __stack_depot_save and instead provide
+> a new stack_depot_set_extra_bits function (similar to the exsiting
+> stack_depot_get_extra_bits) that saves extra bits into a stack depot
+> handle.
 >
-> The problem is that DRM_ACCEL is a 'bool' symbol symbol, so driver that
-> only depend on DRM_ACCEL but not also on DRM do not see the restriction
-> to =m configs.
+> Update the callers of __stack_depot_save to use the new interace.
 >
-> To ensure that each accel driver has an implied dependency on CONFIG_DRM,
-> enclose the entire Kconfig file in an if/endif check.
+> This change also fixes a minor issue in the old code: __stack_depot_save
+> does not return NULL if saving stack trace fails and extra_bits is used.
 >
-> Fixes: 8bf4889762a8 ("drivers/accel: define kconfig and register a new major")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 > ---
-> v2: rearrage the DRM dependency rather than requiring DRM to be built-in
-> ---
->  drivers/accel/Kconfig | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  include/linux/stackdepot.h |  4 +++-
+>  lib/stackdepot.c           | 38 +++++++++++++++++++++++++++++---------
+>  mm/kasan/common.c          |  2 +-
+>  mm/kmsan/core.c            | 10 +++++++---
+>  4 files changed, 40 insertions(+), 14 deletions(-)
 >
-> diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
-> index 834863902e16..c437206aa3f1 100644
-> --- a/drivers/accel/Kconfig
-> +++ b/drivers/accel/Kconfig
-> @@ -6,9 +6,10 @@
->  # as, but not limited to, Machine-Learning and Deep-Learning acceleration
->  # devices
->  #
-> +if DRM
-> +
->  menuconfig DRM_ACCEL
->         bool "Compute Acceleration Framework"
-> -       depends on DRM
->         help
->           Framework for device drivers of compute acceleration devices, such
->           as, but not limited to, Machine-Learning and Deep-Learning
-> @@ -25,3 +26,5 @@ menuconfig DRM_ACCEL
+> diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
+> index c4e3abc16b16..f999811c66d7 100644
+> --- a/include/linux/stackdepot.h
+> +++ b/include/linux/stackdepot.h
+> @@ -57,7 +57,6 @@ static inline int stack_depot_early_init(void)        { return 0; }
 >
->  source "drivers/accel/habanalabs/Kconfig"
->  source "drivers/accel/ivpu/Kconfig"
+>  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>                                         unsigned int nr_entries,
+> -                                       unsigned int extra_bits,
+>                                         gfp_t gfp_flags, bool can_alloc);
+>
+>  depot_stack_handle_t stack_depot_save(unsigned long *entries,
+> @@ -71,6 +70,9 @@ void stack_depot_print(depot_stack_handle_t stack);
+>  int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
+>                        int spaces);
+>
+> +depot_stack_handle_t stack_depot_set_extra_bits(depot_stack_handle_t handle,
+> +                                               unsigned int extra_bits);
+
+Can you add __must_check to this function? Either that or making
+handle an in/out param, as otherwise it might be easy to think that it
+doesn't return anything ("set_foo()" seems like it sets the
+information in the handle-associated data but not handle itself ... in
+case someone missed the documentation).
+
+>  unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
+>
+>  #endif
+> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+> index 7282565722f2..f291ad6a4e72 100644
+> --- a/lib/stackdepot.c
+> +++ b/lib/stackdepot.c
+> @@ -346,7 +346,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
+>   *
+>   * @entries:           Pointer to storage array
+>   * @nr_entries:                Size of the storage array
+> - * @extra_bits:                Flags to store in unused bits of depot_stack_handle_t
+>   * @alloc_flags:       Allocation gfp flags
+>   * @can_alloc:         Allocate stack slabs (increased chance of failure if false)
+>   *
+> @@ -358,10 +357,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
+>   * If the stack trace in @entries is from an interrupt, only the portion up to
+>   * interrupt entry is saved.
+>   *
+> - * Additional opaque flags can be passed in @extra_bits, stored in the unused
+> - * bits of the stack handle, and retrieved using stack_depot_get_extra_bits()
+> - * without calling stack_depot_fetch().
+> - *
+>   * Context: Any context, but setting @can_alloc to %false is required if
+>   *          alloc_pages() cannot be used from the current context. Currently
+>   *          this is the case from contexts where neither %GFP_ATOMIC nor
+> @@ -371,7 +366,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
+>   */
+>  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>                                         unsigned int nr_entries,
+> -                                       unsigned int extra_bits,
+>                                         gfp_t alloc_flags, bool can_alloc)
+>  {
+>         struct stack_record *found = NULL, **bucket;
+> @@ -461,8 +455,6 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>         if (found)
+>                 retval.handle = found->handle.handle;
+>  fast_exit:
+> -       retval.extra = extra_bits;
+> -
+>         return retval.handle;
+>  }
+>  EXPORT_SYMBOL_GPL(__stack_depot_save);
+> @@ -483,7 +475,7 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+>                                       unsigned int nr_entries,
+>                                       gfp_t alloc_flags)
+>  {
+> -       return __stack_depot_save(entries, nr_entries, 0, alloc_flags, true);
+> +       return __stack_depot_save(entries, nr_entries, alloc_flags, true);
+>  }
+>  EXPORT_SYMBOL_GPL(stack_depot_save);
+>
+> @@ -566,6 +558,34 @@ int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
+>  }
+>  EXPORT_SYMBOL_GPL(stack_depot_snprint);
+>
+> +/**
+> + * stack_depot_set_extra_bits - Set extra bits in a stack depot handle
+> + *
+> + * @handle:    Stack depot handle
+> + * @extra_bits:        Value to set the extra bits
+> + *
+> + * Return: Stack depot handle with extra bits set
+> + *
+> + * Stack depot handles have a few unused bits, which can be used for storing
+> + * user-specific information. These bits are transparent to the stack depot.
+> + */
+> +depot_stack_handle_t stack_depot_set_extra_bits(depot_stack_handle_t handle,
+> +                                               unsigned int extra_bits)
+> +{
+> +       union handle_parts parts = { .handle = handle };
 > +
-> +endif
+> +       parts.extra = extra_bits;
+> +       return parts.handle;
+> +}
+> +EXPORT_SYMBOL(stack_depot_set_extra_bits);
+> +
+> +/**
+> + * stack_depot_get_extra_bits - Retrieve extra bits from a stack depot handle
+> + *
+> + * @handle:    Stack depot handle with extra bits saved
+> + *
+> + * Return: Extra bits retrieved from the stack depot handle
+> + */
+>  unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
+>  {
+>         union handle_parts parts = { .handle = handle };
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index 833bf2cfd2a3..50f4338b477f 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -43,7 +43,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+>         unsigned int nr_entries;
+>
+>         nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+> -       return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
+> +       return __stack_depot_save(entries, nr_entries, flags, can_alloc);
+>  }
+>
+>  void kasan_set_track(struct kasan_track *track, gfp_t flags)
+> diff --git a/mm/kmsan/core.c b/mm/kmsan/core.c
+> index 112dce135c7f..f710257d6867 100644
+> --- a/mm/kmsan/core.c
+> +++ b/mm/kmsan/core.c
+> @@ -69,13 +69,15 @@ depot_stack_handle_t kmsan_save_stack_with_flags(gfp_t flags,
+>  {
+>         unsigned long entries[KMSAN_STACK_DEPTH];
+>         unsigned int nr_entries;
+> +       depot_stack_handle_t handle;
+>
+>         nr_entries = stack_trace_save(entries, KMSAN_STACK_DEPTH, 0);
+>
+>         /* Don't sleep (see might_sleep_if() in __alloc_pages_nodemask()). */
+>         flags &= ~__GFP_DIRECT_RECLAIM;
+>
+> -       return __stack_depot_save(entries, nr_entries, extra, flags, true);
+> +       handle = __stack_depot_save(entries, nr_entries, flags, true);
+> +       return stack_depot_set_extra_bits(handle, extra);
+>  }
+>
+>  /* Copy the metadata following the memmove() behavior. */
+> @@ -215,6 +217,7 @@ depot_stack_handle_t kmsan_internal_chain_origin(depot_stack_handle_t id)
+>         u32 extra_bits;
+>         int depth;
+>         bool uaf;
+> +       depot_stack_handle_t handle;
+>
+>         if (!id)
+>                 return id;
+> @@ -250,8 +253,9 @@ depot_stack_handle_t kmsan_internal_chain_origin(depot_stack_handle_t id)
+>          * positives when __stack_depot_save() passes it to instrumented code.
+>          */
+>         kmsan_internal_unpoison_memory(entries, sizeof(entries), false);
+> -       return __stack_depot_save(entries, ARRAY_SIZE(entries), extra_bits,
+> -                                 GFP_ATOMIC, true);
+> +       handle = __stack_depot_save(entries, ARRAY_SIZE(entries), GFP_ATOMIC,
+> +                                   true);
+> +       return stack_depot_set_extra_bits(handle, extra_bits);
+>  }
+>
+>  void kmsan_internal_set_shadow_origin(void *addr, size_t size, int b,
 > --
-> 2.39.0
+> 2.25.1
 >
-This patch is:
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
