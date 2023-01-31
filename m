@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAA6682369
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD94268236E
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbjAaEjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 23:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
+        id S229577AbjAaEj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 23:39:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjAaEjC (ORCPT
+        with ESMTP id S230154AbjAaEjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:39:02 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3A63B679
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:24 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id r9so11894542oig.12
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:24 -0800 (PST)
+        Mon, 30 Jan 2023 23:39:05 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854DA3CE0F
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:31 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id s17so956328ois.10
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kali.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T/GKVYrgbIBQHH6fmUv9pOZxtXQP4w6AX+T7K+xd4AM=;
-        b=c/fjOBx7+hWIUANgvprYAZdZDNNykXdzcLGb/O9jVHhsJzCNtyCiAaX92yen+hsRuX
-         uD9uhR17iks9wh2+1P1K7zvEYJIT2qhTrjVsGicg/aufDTcLN39FYm7UCXLsQEMamtGg
-         3Tcikor14qM7xKLcN3zEfQpB+DJN1xyjnL2kx5fCduUS39Ren7ZvF0ozIjdASMiX3AgG
-         801AOGAyFOz8iIk2N0vwgUcB2Z0iPolKdC2uR7Gi0XS6uFa1TV6qpsI9dlyQqYPh7RCN
-         0mNJJt7HeWR5nwIF5mZ2cBkPKhmwQHkI3xk1sPfuyuTB8ccUB52WsC+opfLwPst+PQWO
-         Tt5Q==
+        bh=eVFjUAudhz48B1PG37PF0oDcvMhXp172jIwuWPlj7hM=;
+        b=WxKR1qFCYmq75yM8ksUFDRSsFWXpnPcTkqYKr/NifhNqXlx+tnPSHWA/IqxgveYdHa
+         qcGsxnQdHae2UyazsMBt6XhYQAy+fGBPn7rR7N7t/PpyTTwKbA9KYbRrtYpHMHPwQYxa
+         I0wYi3HqYWr6l8ejdFryo9/Pbe0UW5pbpP2y8uuz58a0TqUgGOyLuUy2euTmy2MlqMxW
+         4p/gnpw+B40IBjEY6IGQ2ODiCaNOs1jroe7eP73Wh3LtVg1IR2122ooawoFA5p85TRfA
+         BC3EcovRFWsbDd43Kkv/4P++7ZcZxQEPQ+rgmTXuE0wkAaiWHLJFyiqZsDV7orw2Dwi9
+         g8Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=T/GKVYrgbIBQHH6fmUv9pOZxtXQP4w6AX+T7K+xd4AM=;
-        b=11No4wB4JaBXC42i3vodTe9yXieMnzQ/in2nDEQ1XoQbrOodxmYnV3oKT6ICQZ5yJ3
-         ebsoOo6CX9sWlUEzfQHHQDV87xJcFqCwoA1yd0ULPTlXtU2mn8Fsq/iezYgnYQzSGZlu
-         gnAL4d+0MX6Dc8vfJuSpddZA1XYyAgzKC3FQWimwj8ayesRsuL6v/J/3H8/RC0X5Cna3
-         uDoaxBXdBS9ktFWV4h2i9XlRIc+Nu7MA22KNjnMa/2Nl5hcuol5R1DaBH0KyaaLRNd5D
-         PQKeMVWaZHdoTmjczSbZ6IBZZpdU2lLhBu6GijNo95xtmZwB3GI1f7vgERAK3TlZMJp7
-         SbaQ==
-X-Gm-Message-State: AFqh2krWL0gYPRpu2N7xBqhxZmT6FX+BYzFP2tnQwPexyDht3MP93tmT
-        TNEdN40AOej5XgOQ1327r6bGAw==
-X-Google-Smtp-Source: AMrXdXu1wZjJMPpCW0mNp5fuRR4nUE+0+et1glRZXOH1PYRu3drdI4L6/IVoLzV8Sv1dr/pzNRxOjw==
-X-Received: by 2002:a05:6808:23c4:b0:367:29d:20c2 with SMTP id bq4-20020a05680823c400b00367029d20c2mr30414178oib.44.1675139903503;
-        Mon, 30 Jan 2023 20:38:23 -0800 (PST)
+        bh=eVFjUAudhz48B1PG37PF0oDcvMhXp172jIwuWPlj7hM=;
+        b=KcVxDLBWPyv8BdHFaaBXGUQTTcFyW6mmJYT34uC+Zp+qiXFhN1iKquq6QIZIP7mYe8
+         Qt2+xCJVvzuS3YRIXTrsPs2kl7YdL4Lic8eslqeXeZWWtBNStg0MYmIuwwyUhaEiBidj
+         fvaf5yOE5GeLXBVv6Jr9jLLfnc3JOT4Hh6RDK5fHEuWqQT/Xj8rYIZj9VGFqzZs1zfSf
+         W7BH4W10YNNUUKyjKh6Dh6bPahg9cOSeTzkLw4kDq++Dvji9xqbxFEwL1SzaUhXu/4XR
+         ywRoMLpYSEIqu3//g3O6WJHQ4XNwVIh7JqwT0GtP5OUJ5tISTuZ1MgAJaIYlVMlnzuqC
+         GtOQ==
+X-Gm-Message-State: AFqh2kruU9xhyOraWL9DOgQAVVyC8ADVNm6fEtb2oxDk0+DaHZm/S1d2
+        OZBnLkNPCusnk0JjQOxzaNcbVQ==
+X-Google-Smtp-Source: AMrXdXvaEIEHQxmGGUSLDqOZjf++5rSIBsjsT19PE0dlt7VSbc4D+DUnkT6Qp/lNws2gihhJ93yCeA==
+X-Received: by 2002:a05:6808:1247:b0:360:e643:7e27 with SMTP id o7-20020a056808124700b00360e6437e27mr30333622oiv.36.1675139904792;
+        Mon, 30 Jan 2023 20:38:24 -0800 (PST)
 Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
-        by smtp.gmail.com with ESMTPSA id c82-20020acab355000000b003645b64d7b3sm5519939oif.4.2023.01.30.20.38.22
+        by smtp.gmail.com with ESMTPSA id u14-20020a056808150e00b0035418324b78sm4276083oiw.11.2023.01.30.20.38.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 20:38:23 -0800 (PST)
+        Mon, 30 Jan 2023 20:38:24 -0800 (PST)
 From:   Steev Klimaszewski <steev@kali.org>
 To:     Steev Klimaszewski <steev@kali.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
@@ -69,9 +68,9 @@ Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
         Mark Pearson <markpearson@lenovo.com>
-Subject: [PATCH v2 3/4] arm64: dts: qcom: sc8280xp: Define uart2
-Date:   Mon, 30 Jan 2023 22:38:15 -0600
-Message-Id: <20230131043816.4525-4-steev@kali.org>
+Subject: [PATCH v2 4/4] arm64: dts: qcom: thinkpad-x13s: Add bluetooth
+Date:   Mon, 30 Jan 2023 22:38:16 -0600
+Message-Id: <20230131043816.4525-5-steev@kali.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230131043816.4525-1-steev@kali.org>
 References: <20230131043816.4525-1-steev@kali.org>
@@ -87,45 +86,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Steev Klimaszewski <steev@kali.org>
 ---
-Changes since v1:
-* Changed subject line
-* Move node to the correct place based on address
-* Add my Signed-off-by
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index fa2d0d7d1367..eab54aab3b76 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1207,6 +1207,20 @@ spi2: spi@988000 {
- 				status = "disabled";
- 			};
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+index f936b020a71d..951438ac5946 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
++++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+@@ -24,6 +24,8 @@ / {
+ 	aliases {
+ 		i2c4 = &i2c4;
+ 		i2c21 = &i2c21;
++		serial0 = &uart17;
++		serial1 = &uart2;
+ 	};
  
-+			uart2: serial@988000 {
-+				compatible = "qcom,geni-uart";
-+				reg = <0 0x00988000 0 0x4000>;
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S2_CLK>;
-+				clock-names = "se";
-+				interrupts = <GIC_SPI 603 IRQ_TYPE_LEVEL_HIGH>;
-+				operating-points-v2 = <&qup_opp_table_100mhz>;
-+				power-domains = <&rpmhpd SC8280XP_CX>;
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 0 &clk_virt SLAVE_QUP_CORE_0 0>,
-+						<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>;
-+				interconnect-names = "qup-core", "qup-config";
-+				status = "disabled";
-+			};
+ 	wcd938x: audio-codec {
+@@ -712,6 +714,32 @@ &qup0 {
+ 	status = "okay";
+ };
+ 
++&uart2 {
++	status = "okay";
 +
- 			i2c3: i2c@98c000 {
- 				compatible = "qcom,geni-i2c";
- 				reg = <0 0x0098c000 0 0x4000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart2_state>;
++
++	bluetooth {
++		compatible = "qcom,wcn6855-bt";
++
++/*
++		vddio-supply = <&vreg_s4a_1p8>;
++		vddxo-supply = <&vreg_l7a_1p8>;
++		vddrf-supply = <&vreg_l17a_1p3>;
++		vddch0-supply = <&vreg_l25a_3p3>;
++		vddch1-supply = <&vreg_l23a_3p3>;
++*/
++		max-speed = <3200000>;
++
++		enable-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
++		swctrl-gpios = <&tlmm 132 GPIO_ACTIVE_HIGH>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&bt_en>;
++	};
++};
++
+ &qup1 {
+ 	status = "okay";
+ };
+@@ -720,6 +748,12 @@ &qup2 {
+ 	status = "okay";
+ };
+ 
++&uart17 {
++	compatible = "qcom,geni-debug-uart";
++
++	status = "okay";
++};
++
+ &remoteproc_adsp {
+ 	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
+ 
+@@ -980,6 +1014,19 @@ hastings_reg_en: hastings-reg-en-state {
+ &tlmm {
+ 	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
+ 
++	bt_en: bt-en-state {
++		hstp-sw-ctrl {
++			pins = "gpio132";
++			function = "gpio";
++		};
++
++		hstp-bt-en {
++			pins = "gpio133";
++			function = "gpio";
++			drive-strength = <16>;
++		};
++	};
++
+ 	edp_reg_en: edp-reg-en-state {
+ 		pins = "gpio25";
+ 		function = "gpio";
+@@ -1001,6 +1048,27 @@ i2c4_default: i2c4-default-state {
+ 		bias-disable;
+ 	};
+ 
++	uart2_state: uart2-state {
++		cts {
++			pins = "gpio122";
++			function = "qup2";
++			bias-disable;
++		};
++
++		rts-tx {
++			pins = "gpio122", "gpio123";
++			function = "qup2";
++			drive-strength = <2>;
++			bias-disable;
++		};
++
++		rx {
++			pins = "gpio124";
++			function = "qup2";
++			bias-pull-up;
++		};
++	};
++
+ 	i2c21_default: i2c21-default-state {
+ 		pins = "gpio81", "gpio82";
+ 		function = "qup21";
 -- 
 2.39.0
 
