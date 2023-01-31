@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB25683649
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BECCD683647
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjAaTUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35854 "EHLO
+        id S231292AbjAaTT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjAaTUE (ORCPT
+        with ESMTP id S231482AbjAaTTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:20:04 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5241215568;
-        Tue, 31 Jan 2023 11:20:02 -0800 (PST)
-Received: from fpc.intra.ispras.ru (unknown [10.10.165.10])
-        by mail.ispras.ru (Postfix) with ESMTPSA id AC03B44C1001;
-        Tue, 31 Jan 2023 19:19:58 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru AC03B44C1001
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1675192798;
-        bh=acFv/EVWgo/r3B/eoVvQRH4Rv7zdDgk0cupPU3JKT9M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=jBfys3aNqdowNgIq94lu6N83EpR+X80bo1ofcMXeb1zgvwdvebEsEi/vXWWQtsv4m
-         0ccAt1+HTgCWlkjiUaxj574FkwKu/b/fi8cOTknLy/QOli5JKEa4vd7axb7GZu5PVY
-         p33LaoAlsKacsP8+zQX1mUIDX/A/SYeFPWwZEE5c=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Pravin B Shelar <pshelar@ovn.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>, netdev@vger.kernel.org,
-        dev@openvswitch.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: [PATCH] net: openvswitch: fix flow memory leak in ovs_flow_cmd_new
-Date:   Tue, 31 Jan 2023 22:19:39 +0300
-Message-Id: <20230131191939.901288-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.30.2
+        Tue, 31 Jan 2023 14:19:48 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3B4CA06
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:19:46 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id x7so12219312edr.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:19:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TknF9ez1i9mYFjSeMX9CHkG5E9Ti+NVIIB/8UZbo7kI=;
+        b=c79OJQMbJ6jYG0JsqF9libOA2r6DD/9K7H1yJTHROa1tyM0EW9mr0IZf6P1/v2po0D
+         Lt3qQ6cRLCU8BL44l5kMefi9fC4UA/29TRKKBwSjyg6RXiiRh0QhnA+UzC988J/rO9/4
+         BxgtkYCyVry9H2A9LZ8rC9dirmbvbSxwNrAwVlGbo9DvzBbTaFL+M9Hlhz006XH2Jkpx
+         TO0bvscxhROjoNK0R/nyA+8lDIDOxd3sdObC9npKVvUoj/ek8s02u/zXay3G409VuSqO
+         9mOfJHagVwJLYFpXcv/Rl51lXq0cIvsur4JMjqmH7uYpBaFfjkG8Hv6/abnmtAvmH4eD
+         5Jww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TknF9ez1i9mYFjSeMX9CHkG5E9Ti+NVIIB/8UZbo7kI=;
+        b=yGp1SJ0uul3jF4qqsdR0XYqga0kniFD0oBod9k99YQkTsR5HSGw3cZn7OYJI3tBlQZ
+         FMJuXUcUOft9xhZ5VHXmRZhhh921IjdwFO3A/edBf+7C5xfjL9BoNps8amVE3oBSIcXt
+         keGclPFk2bxYe8dvUTLQIgbLHVu6tB4d/CBoiLOMo9mIJTPTd8uYKOpH+zlBsaj3JJlB
+         jacfDZukM8I1PmDHoB1jTdUCJsBKaj/wcHi6UeOEXxbjmeXPpGZO0f1lwDkR818tqBra
+         GlIFvUJeauoK6I/xhrV5gDOVkbkPQBhhNazuP/m5SeEVYn0ObLMx40tXJb4FW/wkH44A
+         PVFQ==
+X-Gm-Message-State: AO0yUKV6nIAG07+KvKbidK2kP+hsi3Ue0rKvBpCyjYJLCWhuDVocwSs6
+        mBuRe6AF2g5IyLWzCg9z201oDw==
+X-Google-Smtp-Source: AK7set97AdQmeSZfU9qeHJgvw6OEfqdFyxEugOOiZbJsMALb91xFzkfXbgZyeKYOsJdq6/Dyi6fUvw==
+X-Received: by 2002:a05:6402:3814:b0:499:d374:e18b with SMTP id es20-20020a056402381400b00499d374e18bmr153459edb.35.1675192784991;
+        Tue, 31 Jan 2023 11:19:44 -0800 (PST)
+Received: from localhost.localdomain (abyl20.neoplus.adsl.tpnet.pl. [83.9.31.20])
+        by smtp.gmail.com with ESMTPSA id f9-20020a056402354900b0049e9e9204basm8642344edd.21.2023.01.31.11.19.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 11:19:44 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        D Scott Phillips <scott@os.amperecomputing.com>,
+        James Morse <james.morse@arm.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Michal Orzel <michal.orzel@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: Add a couple of missing part numbers
+Date:   Tue, 31 Jan 2023 20:19:40 +0100
+Message-Id: <20230131191940.2903908-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reports a memory leak of new_flow in ovs_flow_cmd_new() as it is
-not freed when an allocation of a key fails.
+Add Cortex X1C and add/clarify various recent Qualcomm Kryo cores,
+which almost exclusively mimic ARM IDs nowadays.
 
-BUG: memory leak
-unreferenced object 0xffff888116668000 (size 632):
-  comm "syz-executor231", pid 1090, jiffies 4294844701 (age 18.871s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000defa3494>] kmem_cache_zalloc include/linux/slab.h:654 [inline]
-    [<00000000defa3494>] ovs_flow_alloc+0x19/0x180 net/openvswitch/flow_table.c:77
-    [<00000000c67d8873>] ovs_flow_cmd_new+0x1de/0xd40 net/openvswitch/datapath.c:957
-    [<0000000010a539a8>] genl_family_rcv_msg_doit+0x22d/0x330 net/netlink/genetlink.c:739
-    [<00000000dff3302d>] genl_family_rcv_msg net/netlink/genetlink.c:783 [inline]
-    [<00000000dff3302d>] genl_rcv_msg+0x328/0x590 net/netlink/genetlink.c:800
-    [<000000000286dd87>] netlink_rcv_skb+0x153/0x430 net/netlink/af_netlink.c:2515
-    [<0000000061fed410>] genl_rcv+0x24/0x40 net/netlink/genetlink.c:811
-    [<000000009dc0f111>] netlink_unicast_kernel net/netlink/af_netlink.c:1313 [inline]
-    [<000000009dc0f111>] netlink_unicast+0x545/0x7f0 net/netlink/af_netlink.c:1339
-    [<000000004a5ee816>] netlink_sendmsg+0x8e7/0xde0 net/netlink/af_netlink.c:1934
-    [<00000000482b476f>] sock_sendmsg_nosec net/socket.c:651 [inline]
-    [<00000000482b476f>] sock_sendmsg+0x152/0x190 net/socket.c:671
-    [<00000000698574ba>] ____sys_sendmsg+0x70a/0x870 net/socket.c:2356
-    [<00000000d28d9e11>] ___sys_sendmsg+0xf3/0x170 net/socket.c:2410
-    [<0000000083ba9120>] __sys_sendmsg+0xe5/0x1b0 net/socket.c:2439
-    [<00000000c00628f8>] do_syscall_64+0x30/0x40 arch/x86/entry/common.c:46
-    [<000000004abfdcf4>] entry_SYSCALL_64_after_hwframe+0x61/0xc6
-
-To fix this the patch removes unnecessary err_kfree_key label and adds a
-proper goto statement on the key-allocation-error path.
-
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-Fixes: 68bb10101e6b ("openvswitch: Fix flow lookup to use unmasked key")
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- net/openvswitch/datapath.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm64/include/asm/cputype.h | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-index a71795355aec..3d4b5d83d306 100644
---- a/net/openvswitch/datapath.c
-+++ b/net/openvswitch/datapath.c
-@@ -1004,7 +1004,7 @@ static int ovs_flow_cmd_new(struct sk_buff *skb, struct genl_info *info)
- 	key = kzalloc(sizeof(*key), GFP_KERNEL);
- 	if (!key) {
- 		error = -ENOMEM;
--		goto err_kfree_key;
-+		goto err_kfree_flow;
- 	}
+diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
+index 683ca3af4084..4b79a0d44c65 100644
+--- a/arch/arm64/include/asm/cputype.h
++++ b/arch/arm64/include/asm/cputype.h
+@@ -84,6 +84,7 @@
+ #define ARM_CPU_PART_CORTEX_X2		0xD48
+ #define ARM_CPU_PART_NEOVERSE_N2	0xD49
+ #define ARM_CPU_PART_CORTEX_A78C	0xD4B
++#define ARM_CPU_PART_CORTEX_X1C		0xD4C
  
- 	ovs_match_init(&match, key, false, &mask);
-@@ -1128,7 +1128,6 @@ static int ovs_flow_cmd_new(struct sk_buff *skb, struct genl_info *info)
- 	ovs_nla_free_flow_actions(acts);
- err_kfree_flow:
- 	ovs_flow_free(new_flow, false);
--err_kfree_key:
- 	kfree(key);
- error:
- 	return error;
+ #define APM_CPU_PART_POTENZA		0x000
+ 
+@@ -107,9 +108,17 @@
+ #define QCOM_CPU_PART_KRYO		0x200
+ #define QCOM_CPU_PART_KRYO_2XX_GOLD	0x800
+ #define QCOM_CPU_PART_KRYO_2XX_SILVER	0x801
++#define QCOM_CPU_PART_KRYO_3XX_GOLD	0x802
+ #define QCOM_CPU_PART_KRYO_3XX_SILVER	0x803
+ #define QCOM_CPU_PART_KRYO_4XX_GOLD	0x804
+-#define QCOM_CPU_PART_KRYO_4XX_SILVER	0x805
++#define QCOM_CPU_PART_KRYO_4XX_SILVER_V2	0x805
++#define QCOM_CPU_PART_KRYO_5XX_GOLD	ARM_CPU_PART_CORTEX_A77
++#define QCOM_CPU_PART_KRYO_6XX_GOLD	ARM_CPU_PART_CORTEX_A78
++#define QCOM_CPU_PART_KRYO_6XX_GOLDPLUS	ARM_CPU_PART_CORTEX_X1
++#define QCOM_CPU_PART_KRYO_6XX_SILVER_V1	ARM_CPU_PART_CORTEX_A55
++#define QCOM_CPU_PART_KRYO_7XX_GOLD	ARM_CPU_PART_CORTEX_A710
++#define QCOM_CPU_PART_KRYO_7XX_GOLDPLUS	ARM_CPU_PART_CORTEX_X2
++#define QCOM_CPU_PART_KRYO_7XX_SILVER	ARM_CPU_PART_CORTEX_A510
+ 
+ #define NVIDIA_CPU_PART_DENVER		0x003
+ #define NVIDIA_CPU_PART_CARMEL		0x004
 -- 
-2.30.2
+2.39.1
 
