@@ -2,80 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3760468382B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FF75683831
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjAaU70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 15:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S231837AbjAaVA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbjAaU7W (ORCPT
+        with ESMTP id S230503AbjAaVAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 15:59:22 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BF1B46E
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:59:17 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id l20so8040582vkm.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lWhna/Hba4ISz0fCxKP0EiS7JmjiNyE/gZLSSMBsSUE=;
-        b=g/InC7c0ETS6vp4IQnTz2rvHoCh/7UeqaHq/SOo3kcgRJ3e/Z1nto1zis3hrvULPNH
-         ZfA+Z6rSJCXkayn/pxbSv7KzU+SF+6DAwA4YL8ClPxEQcT7H+zdNVaR0AI49txe/PZne
-         qMDZJABWEMXF9iI72+us2P2P8FM6S/BcADyIfvU1qhvgH54ixUZQcB2cYmS5JF8eAqus
-         9BFPw89URcOiqwOlQ8Ue3kgqESOuj+Zvjmz99zj+F37MscryE98eHrrSKep263vu53F0
-         JENKlfS3rMmu9Yx/5lqWrnR9TNvaYbEJRwgjSFPwxBszkOvh0hy5/6BZjxofwmTkGYqV
-         VOdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lWhna/Hba4ISz0fCxKP0EiS7JmjiNyE/gZLSSMBsSUE=;
-        b=raSLxUPK8YDLJXya/MP5ZnZqkEsd/utqMmVRM07Qqd+ceyO9SivkMx7M+MhH4KHVMS
-         LGSlNuLv/TEkd0O3+2HQZlIRAsXm4LyF6CWFbpOPJLMcWxtzTxThxTNSyT2H+0yKT6JQ
-         xv79ukdkKgbMviIPxsNsVVJuzHAf4KoJRT8hriGTYW4FPzP3/JZ2BfhTJWg/ZKiVO/v0
-         OEBtcmotDh07Xc+jEhjWJRIOsr0DfL+cWkI0XoPebXiEKDz9LQZuSjSiUed0opdi6zUo
-         4qZKHWgZw9a3HSJeEXDK5DGRhHhvjg3G8RTLa8OihGIE5pJ+DEpsECmL779UgxZQIKNy
-         TpdA==
-X-Gm-Message-State: AO0yUKVoCE65YC66GNRh4UMZr3ndhoD2+mtbT519nNYuJXahuh343l57
-        h4mIbObTe5laig4ZasEABT8WUOXxWXpFcGpbYDPTVQ==
-X-Google-Smtp-Source: AK7set92dDyn3VfFxJm5tt2dLK7NYKHQrq5tdwF3BAHNwWWT+SQEJyPJGa/cxOzFTnF7DC2APGdmuR1jShGrjTXDw4E=
-X-Received: by 2002:a1f:b442:0:b0:3da:bbe7:c9a5 with SMTP id
- d63-20020a1fb442000000b003dabbe7c9a5mr131108vkf.30.1675198755957; Tue, 31 Jan
- 2023 12:59:15 -0800 (PST)
+        Tue, 31 Jan 2023 16:00:25 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CD599
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:00:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1675198817; bh=MSM1dyVVeYWbZgYwM+ZMUuaKXnKRKbTaYBvxINXvbwg=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=igIY7W0L/Y8LbTjsceL4YP/hFYDA+OGHfYw1HGeBoWaQRwjw/pIQ6Q8f6OnQLKavG
+         fnt5tGGhi1lQotWCFCWIIztN5ulUZwvE6QzQW90Pz6KlMapqS2X3BrRi2Zw8tjZolB
+         t/ydUKQLtcsLO6e8wmMsg6WZzPjmzLH3IeWiuIVlHRtA9gT23CgmP/Nf4A2yNcU4mA
+         2LiITHf7R/SxESXW2QwslZDm5NQmij8JaB2Gz7+cFolgZF5QNVTDImXNNw88MggGLT
+         txwEVNs/ry795BVsCefsVYDodOlNzresgmg2+lMHR7ZrYaxepbP2H00RSzgu85pRHm
+         SvMlPxY4Q0iSg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MStCe-1pDjNX23Uk-00UGJz; Tue, 31
+ Jan 2023 22:00:17 +0100
+Date:   Tue, 31 Jan 2023 22:00:16 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Joe Perches <joe@perches.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-kernel@vger.kernel.org, Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
+ 12 chars
+Message-ID: <Y9mBYEAq/g42s/S2@probook>
+References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
+ <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
 MIME-Version: 1.0
-References: <20230124064324.672022-1-irogers@google.com> <20230124064324.672022-2-irogers@google.com>
- <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X> <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
- <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com> <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
-In-Reply-To: <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 31 Jan 2023 12:59:04 -0800
-Message-ID: <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Connor OBrien <connoro@google.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dbsH6cXHw2LGY0yv"
+Content-Disposition: inline
+In-Reply-To: <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
+X-Provags-ID: V03:K1:Vo5qwmmgMQ+JZvjbi0fTBviJBoRgT286o8jRyJJG2s4pDpMmcg2
+ aelUPRVrDh5wbkaqATzXE6EDxhZpswjric/PepyfSkRSUXgYn7tFuDjcd++w0EgyFEhvwNQ
+ g4l72qzQ/uEAhOedF/1Vl8YoJkepj325ZUnLfsorB3tBxZ60uxEGP3ESJ4BYcFdu72yzDi2
+ r40VMq0omFErXNcAjLYbQ==
+UI-OutboundReport: notjunk:1;M01:P0:sx13+h+4V6s=;GCFO3Pk6re4oQRt8cRA1H/7o0Tf
+ XBPIskbN9Ny7/4jE5k2oaFtMLJLmM6zD6PY+/IhNLhQg0/X1sOWNjMzbnoYSXQeYBO5uFvxv5
+ r3xtmgurmENjNWrxUSuztX+8P4pHBYLADDHYjPA2bi4y6ZWm9VcRjR8lpeoxwUJ3VbCQUc1YG
+ bJSRpyUvMlydprCQt9i5aiSNlvXZVaQuQnLAN2hy89BtuGW5LtFSgwfSPot29DEflJ2McSRh/
+ mck0wR4XwAkm4GzDSlURZQzHpfrOaOaMDWyjN1OX7hE8euqpkV6AmpOZ8OM844LaSA4YhFwmi
+ RholBlS2rBxibBYok1/ruom8BiV/2LGUf4K5hzRQbpAlmNPWKCM3D4bMIJbF5gIlKjCJANisO
+ l/5s8eaIR8gUvtxUTclnOq0X5nKuNo5WmPXt8UCsHyEZ2vJrJ5fzX6vQ7Bdw84XnQoXp4NxRp
+ 9CfBVxMbrke0mk4hF0Keb5eSvq4xmCwotN+hEneUDBVxmNHRR+qVXUyb7hfUWdGOeQfi5MJzY
+ RAIpkT2IQUHiVHhgKTa8SttlVz+3TiXDi8MGw1AKlFmLotKj762wE0EOnsM4wzGKPKykmgFDn
+ PdNSEAMInC0HHuoJYol2nmxGoM0GcSbW1EVGkQKHni/QDQ323OtH+OayF8XNVG5bA8l42Fugh
+ fs/rJ8In6a809iVuV4AIko5y6PUaVbtlA/44OgbhyuLIExjRO7DIlJIj0wqceH4pLA7L1T/oX
+ RlJXtrpc0idL8+ZJW6d+Ks7uVtfzVvVedlBpfNzy5jhA12Vbfa1EDSvfKxjeRacs7cSVABMlP
+ iycdYyEdMLc8kQ7aH2K3clrLq3xhn1oAZnXnDN40Jj3BpCfOjmIFNQR0EvQRZHK63xGQH9Lez
+ 8CqX3iOxMRJcMwi6l+DhjBBGJK8+78M6tPtgu1dNFKhRkiYW06d9QP5QBocLNznEAuwAQZa9M
+ jRuWP3C72HY37XG3LQNxvEjVukk=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,227 +74,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.org> wrot=
-e:
->
-> On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
-> > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kernel.org>=
- wrote:
-> > > >
-> > > > Hi Ian,
-> > > >
-> > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
-> > > > > HOSTCC is always wanted when building. Setting CC to HOSTCC happe=
-ns
-> > > > > after tools/scripts/Makefile.include is included, meaning flags a=
-re
-> > > > > set assuming say CC is gcc, but then it can be later set to HOSTC=
-C
-> > > > > which may be clang. tools/scripts/Makefile.include is needed for =
-host
-> > > > > set up and common macros in objtool's Makefile. Rather than overr=
-ide
-> > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the libsu=
-bcmd
-> > > > > builds and the linkage step. This means the Makefiles don't see t=
-hings
-> > > > > like CC changing and tool flag determination, and similar, work
-> > > > > properly.
-> > > > >
-> > > > > Also, clear the passed subdir as otherwise an outer build may bre=
-ak by
-> > > > > inadvertently passing an inappropriate value.
-> > > > >
-> > > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > > ---
-> > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
-> > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
-> > > > >
-> > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolv=
-e_btfids/Makefile
-> > > > > index 1fe0082b2ecc..daed388aa5d7 100644
-> > > > > --- a/tools/bpf/resolve_btfids/Makefile
-> > > > > +++ b/tools/bpf/resolve_btfids/Makefile
-> > > > > @@ -18,14 +18,11 @@ else
-> > > > >  endif
-> > > > >
-> > > > >  # always use the host compiler
-> > > > > -AR       =3D $(HOSTAR)
-> > > > > -CC       =3D $(HOSTCC)
-> > > > > -LD       =3D $(HOSTLD)
-> > > > > -ARCH     =3D $(HOSTARCH)
-> > > > > +HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HO=
-STLD)" ARCH=3D"$(HOSTARCH)" \
-> > > > > +               EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS=
-)"
-> > > > > +
-> > > > >  RM      ?=3D rm
-> > > > >  CROSS_COMPILE =3D
-> > > > > -CFLAGS  :=3D $(KBUILD_HOSTCFLAGS)
-> > > > > -LDFLAGS :=3D $(KBUILD_HOSTLDFLAGS)
-> > > > >
-> > > > >  OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
-> > > > >
-> > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_OUT):
-> > > > >
-> > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
-> > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=3D$(SUBCMD_OUT) \
-> > > > > -                 DESTDIR=3D$(SUBCMD_DESTDIR) prefix=3D \
-> > > > > +                 DESTDIR=3D$(SUBCMD_DESTDIR) $(HOST_OVERRIDES) p=
-refix=3D subdir=3D \
-> > > > >                   $(abspath $@) install_headers
-> > > > >
-> > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefil=
-e) | $(LIBBPF_OUT)
-> > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=3D$(L=
-IBBPF_OUT)    \
-> > > > > -                 DESTDIR=3D$(LIBBPF_DESTDIR) prefix=3D EXTRA_CFL=
-AGS=3D"$(CFLAGS)" \
-> > > > > +                 DESTDIR=3D$(LIBBPF_DESTDIR) $(HOST_OVERRIDES) p=
-refix=3D subdir=3D \
-> > > > >                   $(abspath $@) install_headers
-> > > > >
-> > > > >  LIBELF_FLAGS :=3D $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/d=
-ev/null)
-> > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
-> > > > >  include $(srctree)/tools/build/Makefile.include
-> > > > >
-> > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
-> > > > > -     $(Q)$(MAKE) $(build)=3Dresolve_btfids
-> > > > > +     $(Q)$(MAKE) $(build)=3Dresolve_btfids $(HOST_OVERRIDES)
-> > > > >
-> > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
-> > > > >       $(call msg,LINK,$@)
-> > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDO=
-BJ) $(LIBS)
-> > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BP=
-FOBJ) $(SUBCMDOBJ) $(LIBS)
-> > > > >
-> > > > >  clean_objects :=3D $(wildcard $(OUTPUT)/*.o                \
-> > > > >                              $(OUTPUT)/.*.o.cmd           \
-> > > > > --
-> > > > > 2.39.0.246.g2a6d74b583-goog
-> > > > >
-> > > >
-> > > > I just bisected a linking failure when building resolve_btfids with
-> > > > clang to this change as commit 13e07691a16f ("tools/resolve_btfids:
-> > > > Alter how HOSTCC is forced") in the bpf-next tree.
-> > > >
-> > > > It appears to be related to whether or not CROSS_COMPILE is specifi=
-ed,
-> > > > which we have to do for certain architectures and configurations st=
-ill.
-> > > > arm64 is not one of those but it helps demonstrate the issue.
-> > > >
-> > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEBUG_INF=
-O_BTF
-> > > >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-=
-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 defconfig menuconfig
-> > > >
-> > > >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-=
-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 prepare
-> > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve_btfid=
-s-in.o is incompatible with elf64-x86-64
-> > > >   clang-17: error: linker command failed with exit code 1 (use -v t=
-o see invocation)
-> > > >   ...
-> > > >
-> > > > Before your change, with V=3D1, I see:
-> > > >
-> > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT=
-,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototypes -Wst=
-rict-prototypes -O2 -fomit-frame-pointer -std=3Dgnu11 -Wdeclaration-after-s=
-tatement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$L=
-INUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/res=
-olve_btfids/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/tools/=
-bpf/resolve_btfids/main.o main.c
-> > > >
-> > > > After, I see:
-> > > >
-> > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -Wp,-MT=
-,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=3Daarch64-linux-gnu -g=
- -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_SRC/to=
-ols/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_btfids=
-/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/tools/bpf/resolve=
-_btfids/main.o main.c
-> > > >
-> > > > We seem to have taken on a '--target=3Daarch64-linux-gnu' (changing=
- the
-> > > > target of resolve_btfids-in.o) and we dropped the warning flags.
-> > > >
-> > > > I think this comes from the clang block in
-> > > > tools/scripts/Makefile.include, which is included into the
-> > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
-> > > >
-> > > > I am not super familiar with the tools build system, otherwise I wo=
-uld
-> > > > try to provide a patch. I tried moving CROSS_COMPILE from a recursi=
-ve to
-> > > > simple variable ('=3D' -> ':=3D') and moving it to HOST_OVERRIDES b=
-ut those
-> > > > did not appear to resolve it for me.
-> > > >
-> > > > If there is any other information I can provide or patches I can te=
-st,
-> > > > please let me know.
-> > > >
-> > > > Cheers,
-> > > > Nathan
-> > >
-> > > Thanks Nathan, and thanks for all the details in the bug report. I'm
-> > > looking into this.
-> > >
-> > > Ian
-> >
-> > Given the somewhat complicated cross compile I wasn't able to get a
-> > reproduction. Could you see if the following addresses the problem:
->
-> As long as you have an LLVM toolchain that targets AArch64 and your
-> host, you should be able to reproduce this issue with those commands
-> verbatim, as that command should not use any GNU binutils. I am pretty
-> sure I tried it in a fresh container before reporting it but it is
-> possible that I did not.
 
-Thanks, do you have instructions on setting up the container?
+--dbsH6cXHw2LGY0yv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > ```
-> > diff --git a/tools/bpf/resolve_btfids/Makefile
-> > b/tools/bpf/resolve_btfids/Makefile
-> > index daed388aa5d7..a06966841df4 100644
-> > --- a/tools/bpf/resolv
+On Sun, Jan 29, 2023 at 09:52:38AM -0800, Joe Perches wrote:
+> On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neusch=C3=A4fer wrote:
+> > By now, `git log --pretty=3D%h` (on my copy of linux.git) prints commit
+> > hashes with 13 digits, because of the number of objects.
+> >=20
+> > Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
+>=20
+> NAK without updating the process docs first.
 
-Ian
-e_btfids/Makefile
-> > +++ b/tools/bpf/resolve_btfids/Makefile
-> > @@ -19,10 +19,9 @@ endif
-> >
-> > # always use the host compiler
-> > HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"
-> > ARCH=3D"$(HOSTARCH)" \
-> > -                 EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > +                 EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)"
-> > CROSS_COMPILE=3D""
-> >
-> > RM      ?=3D rm
-> > -CROSS_COMPILE =3D
-> >
-> > OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
-> > ```
-> >
->
-> Unfortunately, it does not. I still see '--target=3D' end up in the
-> CFLAGS of those files.
->
-> Cheers,
-> Nathan
-
-Hmm.. I can see the issue. We avoid this in places like libsubcmd
-because the Makefile there includes tools/scripts/Makefile.include,
-but here the Makefile.build inclusion is direct and we have CC set up
-for cross compilation. This is messy and it will take some playing
-around to come up with a simple fix.
+Good point, I'll do that.
 
 Thanks,
-Ian
+Jonathan
+
+>=20
+> Documentation/process/submitting-patches.rst-If your patch fixes a bug in=
+ a specific commit, e.g. you found an issue using
+> Documentation/process/submitting-patches.rst:``git bisect``, please use t=
+he 'Fixes:' tag with the first 12 characters of
+> Documentation/process/submitting-patches.rst-the SHA-1 ID, and the one li=
+ne summary.  Do not split the tag across multiple
+> Documentation/process/submitting-patches.rst-lines, tags are exempt from =
+the "wrap at 75 columns" rule in order to simplify
+> Documentation/process/submitting-patches.rst-parsing scripts.  For exampl=
+e::
+> Documentation/process/submitting-patches.rst-
+> Documentation/process/submitting-patches.rst-   Fixes: 54a4f0239f2e ("KVM=
+: MMU: make kvm_mmu_zap_page() return the number of pages it actually fr>
+> Documentation/process/submitting-patches.rst-
+> Documentation/process/submitting-patches.rst-The following ``git config``=
+ settings can be used to add a pretty format for
+> Documentation/process/submitting-patches.rst-outputting the above style i=
+n the ``git log`` or ``git show`` commands::
+> Documentation/process/submitting-patches.rst-
+> Documentation/process/submitting-patches.rst-   [core]
+> Documentation/process/submitting-patches.rst:           abbrev =3D 12
+> Documentation/process/submitting-patches.rst-   [pretty]
+> Documentation/process/submitting-patches.rst-           fixes =3D Fixes: =
+%h (\"%s\")
+>=20
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> []
+> > @@ -3177,7 +3177,7 @@ sub process {
+> >  				$tag_case =3D 0 if $tag eq "Fixes:";
+> >  				$tag_space =3D 0 if ($line =3D~ /^fixes:? [0-9a-f]{5,} ($balanced_=
+parens)/i);
+> >=20
+> > -				$id_length =3D 0 if ($orig_commit =3D~ /^[0-9a-f]{12}$/i);
+> > +				$id_length =3D 0 if ($orig_commit =3D~ /^[0-9a-f]{12,16}$/i);
+> >  				$id_case =3D 0 if ($orig_commit !~ /[A-F]/);
+> >=20
+> >  				# Always strip leading/trailing parens then double quotes if exist=
+ing
+> > @@ -3194,7 +3194,7 @@ sub process {
+> >  			if ($ctitle ne $title || $tag_case || $tag_space ||
+> >  			    $id_length || $id_case || !$title_has_quotes) {
+> >  				if (WARN("BAD_FIXES_TAG",
+> > -				     "Please use correct Fixes: style 'Fixes: <12 chars of sha1> (=
+\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
+> > +				     "Please use correct Fixes: style 'Fixes: <12-16 chars of sha1=
+> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
+> >  				    $fix) {
+> >  					$fixed[$fixlinenr] =3D "Fixes: $cid (\"$ctitle\")";
+> >  				}
+> > --
+> > 2.39.0
+> >=20
+>=20
+
+--dbsH6cXHw2LGY0yv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmPZgWAACgkQCDBEmo7z
+X9syqhAAjCLoXy/zOreS8TWQ0IrrO/yBMXSCv5pyAmT0rN01fjbaiHR7w2xpDGff
+d4fAvLqc6IyN4ORhruGJSCjcm9tzYvoE/glotuygNktL9xahTeAjdFdUMYWsj6j7
+zVAbxpbrtITH6F6K3zv3UXbpqE4hMPv0kDgrJblwrwrY0Pik5ypwE8eRcsXc26O6
+zjNgwjNNA+b1yv+a+WvAmr7HIw46QlCWfEPeWegyDoCttvKCmTcLkXKtnaEHBgjd
+YEaLGQaeE6MLXYiQB5cthPDn8X9ncy+pcjMSrl1sOrk35q8OcUnNZyiZQlLXATGf
+X0RpqF4fycbRWIqU5vzikO9dLunl/gY41rEQEkV6UGia4Xj474a5IODq5Fm4FX6E
+Mf2oERpqaAbn+IfBiYaP+I1juozPY55D83aCTcInWE4U+IkZOdFJXx/iIwU1AVyX
+tT3X+x50dYQQ6dGXaY65wOb4mNyEbYcMu/9ygcDR2dYoSCFh72FJB20kPYOEYI1F
+evIOWP6lEP5bWdU4YEmqRgYywvvJMXlE4MSXKFIx3ZTyh2R6+7k6Fo4hYKCb0690
+3Qic54+33YjgdySTLrv3BKCE77z69sdvB9TxMiNcsHetkL3obcvI6cFOL0TKmJDe
+9cpDR8+jUO4n8FtXkvGXIY2hhTEdsW3Od8GW5uxGY1dkI06ShQ4=
+=LoGj
+-----END PGP SIGNATURE-----
+
+--dbsH6cXHw2LGY0yv--
