@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF0D683226
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950B268322A
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjAaQEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42916 "EHLO
+        id S231509AbjAaQEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbjAaQDw (ORCPT
+        with ESMTP id S233467AbjAaQEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:03:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D364B181;
-        Tue, 31 Jan 2023 08:03:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84A8861593;
-        Tue, 31 Jan 2023 16:03:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C49FC4339B;
-        Tue, 31 Jan 2023 16:03:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675181026;
-        bh=UX+yQLDq7VrhLvnZlMtmwzCmWD7VUrxQjpb7+3bLHuc=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=lyf2vcod5dIuTiaP82FMDWgf3IeIMm4bdNaJ+E3zPfjNv9D6Snum5QTOT+wxRKf3j
-         8OlAzlD7u3/AIwHTJv/JERzSEDesjStlIbze5Zhb8d1Nfz/u8GX8t9V9n7tydivF8Q
-         r9tS/zHI+6POZ1TLBLKbUYuc3F06c/XuiMyyG/CU9JVQWNGVAlZEAzNARL1+7zbO58
-         KZO/3S5wX02sb4GCoSvCCoxRYMCsT8mss8QsCj18CJKYozPl9V6hzD0KBeByEGvfo7
-         lkgubQKkpfeF+0SkbqRhbjQlbvYMXrkS/xxZabKd+Eqagn5U9BkPRyLUEKff7PAn2c
-         72e2QyCrw0nGQ==
-Message-ID: <91aab3d6-1167-fc19-4bbf-f679de1418c5@kernel.org>
-Date:   Tue, 31 Jan 2023 09:03:45 -0700
+        Tue, 31 Jan 2023 11:04:47 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFF25140B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:04:26 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id u3so3009161uae.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:04:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XGZmY7Tt1HJYqMq5brkkG/QfW9zI5chcAr9ksUNQ6+c=;
+        b=SP1ltVq7cdTVCK9AISOW+m93/NhA0++ySLTl9oTijKCpmzXfl+45FboohcIkCKMd1c
+         +6IcbFKGUR6Epz5AQZYRHap9aAbzFHCrcLGxXiIEkw/SH8ti93E+rr7ZxkHGE5+3u0FI
+         J17JYzE30j9gL8Ia86p3suAjzQ+LEzywr4Kh1xBxP8iEnof+/cjpqzYV/NN45pZUy4t2
+         2REso6lCrMYSp4073+0t+xSXxI9ws9QVLceqf7l5KD6cxite+ZZo3O3gmi9agmz9glVf
+         AKeKQONzNVzsZbPALGtEm3jcwGeWecbP0iCXvup8jOMT0AWLvMl9DfGAF4V6VTO3d0QK
+         jx3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XGZmY7Tt1HJYqMq5brkkG/QfW9zI5chcAr9ksUNQ6+c=;
+        b=SC5WuMy7tk3xV+WYRs9QXfW3kqBNu/XsO3pc/qLa3/Wsr8d/tWxpZ4i5OK5VFUxe4g
+         jgRabn0l5XSqtHxnm09oFoYBzx1Oj4MtFN/M4QC8NjhFrTNCgI6zxUc+l8lyJJZAR7Pg
+         b9Vw0l9miJKDxIESpwONHVtjWWSfneWmNJBlC2G7rBlREF8Guek0tyLh07Y1aRRmodAS
+         GXDra53N9BOlD9VOAruaUqYBZA/xAoAczWf2m+lT/tdMuVD7hxfubt1Cf1g9xaOIAP87
+         3NL834clxDNfwEPcQs8Dq/0qsPryIQdyKyqGpQsP7cAQ3UtU1WI47g0Y8Qwz98OCYnVb
+         dUsQ==
+X-Gm-Message-State: AFqh2krVz4yv+B8nNH5KfKs8+EB2xvbhB1tHOya//tJvwVRA3bLqnoWA
+        YRpgKf+uDeaQXHh0d3/s695d4lB/68Zw1KVe65+C4Q==
+X-Google-Smtp-Source: AMrXdXuytnhJwA8QUwdq+FsCn5crjUyy7UnTBO8zJNQTiwxf0TwtUWYOPRcufcT39/ORVz7TIu3VrV9RGCZwGkF569w=
+X-Received: by 2002:ab0:31d0:0:b0:419:d115:2773 with SMTP id
+ e16-20020ab031d0000000b00419d1152773mr6727916uan.29.1675181065076; Tue, 31
+ Jan 2023 08:04:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v5 1/2] ip/ip6_gre: Fix changing addr gen mode not
- generating IPv6 link local address
-Content-Language: en-US
-To:     Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, pabeni@redhat.com,
-        edumazet@google.com, kuba@kernel.org, a@unstable.cc,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230131034646.237671-1-Thomas.Winter@alliedtelesis.co.nz>
- <20230131034646.237671-2-Thomas.Winter@alliedtelesis.co.nz>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20230131034646.237671-2-Thomas.Winter@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230130130739.563628-1-arnd@kernel.org> <Y9fITnjnIuDz8NYw@dhcp22.suse.cz>
+ <CAG_fn=UC-zPKfXvhnXO-Hb7Wp3+BJyT4WvotATigigb63N0tdA@mail.gmail.com> <Y9kwTXhAQiEWz0IJ@dhcp22.suse.cz>
+In-Reply-To: <Y9kwTXhAQiEWz0IJ@dhcp22.suse.cz>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 31 Jan 2023 17:03:48 +0100
+Message-ID: <CAG_fn=XLRa0hz0R5JpLLWhe62669yGcT_ME5g8hEVo4yuXuOmg@mail.gmail.com>
+Subject: Re: [PATCH] mm: extend max struct page size for kmsan
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Hugh Dickins <hughd@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pasha.tatashin@soleen.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,40 +80,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/30/23 8:46 PM, Thomas Winter wrote:
-> For our point-to-point GRE tunnels, they have IN6_ADDR_GEN_MODE_NONE
-> when they are created then we set IN6_ADDR_GEN_MODE_EUI64 when they
-> come up to generate the IPv6 link local address for the interface.
-> Recently we found that they were no longer generating IPv6 addresses.
-> This issue would also have affected SIT tunnels.
-> 
-> Commit e5dd729460ca changed the code path so that GRE tunnels
-> generate an IPv6 address based on the tunnel source address.
-> It also changed the code path so GRE tunnels don't call addrconf_addr_gen
-> in addrconf_dev_config which is called by addrconf_sysctl_addr_gen_mode
-> when the IN6_ADDR_GEN_MODE is changed.
-> 
-> This patch aims to fix this issue by moving the code in addrconf_notify
-> which calls the addr gen for GRE and SIT into a separate function
-> and calling it in the places that expect the IPv6 address to be
-> generated.
-> 
-> The previous addrconf_dev_config is renamed to addrconf_eth_config
-> since it only expected eth type interfaces and follows the
-> addrconf_gre/sit_config format.
-> 
-> A part of this changes means that the loopback address will be
-> attempted to be configured when changing addr_gen_mode for lo.
-> This should not be a problem because the address should exist anyway
-> and if does already exist then no error is produced.
-> 
-> Fixes: e5dd729460ca ("ip/ip6_gre: use the same logic as SIT interfaces when computing v6LL address")
-> Signed-off-by: Thomas Winter <Thomas.Winter@alliedtelesis.co.nz>
-> ---
->  net/ipv6/addrconf.c | 49 +++++++++++++++++++++++++--------------------
->  1 file changed, 27 insertions(+), 22 deletions(-)
-> 
+> > Right now KMSAN allocates its metadata at boot time, when tearing down memblock.
+> > At that point only a handful of memory ranges exist, and it is pretty
+> > easy to carve out some unused pages for the metadata for those ranges,
+> > then divide the rest evenly and return 1/3 to the system, spending 2/3
+> > to keep the metadata for the returned pages.
+> > I tried allocating the memory lazily (at page_alloc(), for example),
+> > and it turned out to be very tricky because of fragmentation: for an
+> > allocation of a given order, one needs shadow and origin allocations
+> > of the same order [1], and alloc_pages() simply started with ripping
+> > apart the biggest chunk of memory available.
+>
+> page_ext allocation happens quite early as well. There shouldn't be any
+> real fragmentation that early during the boot.
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+Assuming we are talking about the early_page_ext_enabled() case, here
+are the init functions that are executed between kmsan_init_shadow()
+and page_ext_init():
 
+        stack_depot_early_init();
+        mem_init();
+        mem_init_print_info();
+        kmem_cache_init();
+        /*
+         * page_owner must be initialized after buddy is ready, and also after
+         * slab is ready so that stack_depot_init() works properly
+         */
+        page_ext_init_flatmem_late();
+        kmemleak_init();
+        pgtable_init();
+        debug_objects_mem_init();
+        vmalloc_init();
 
+There's yet another problem besides fragmentation: we need to allocate
+shadow for every page that was allocated by these functions.
+Right now this is done by kmsan_init_shadow, which walks all the
+existing memblock ranges, plus the _data segment and the node data for
+each node, and grabs memory from the buddy allocator.
+If we delay the metadata allocation to the point where memory caches
+exist, we'll have to somehow walk every allocated struct page and
+allocate the metadata for each of those. Is there an easy way to do
+so?
+
+I am unsure if vmalloc_init() creates any virtual mappings (probably
+not?), but if it does, we'd also need to call
+kmsan_vmap_pages_range_noflush() for them once we set up the metadata.
+With the current metadata allocation scheme it's not needed, because
+the buddy allocator is torn down before the virtual mappings are
+created.
+
+In the ideal world, we'd better place KMSAN shadow/origin pages at
+fixed addresses, like this is done for KASAN - that would not require
+storing pointers in struct page.
+But reserving big chunks of the address space is even harder than
+what's currently being done.
