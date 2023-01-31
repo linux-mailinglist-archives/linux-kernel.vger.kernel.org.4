@@ -2,142 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00E1682EB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E64682EB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbjAaODW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:03:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S232265AbjAaODZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjAaODP (ORCPT
+        with ESMTP id S231360AbjAaODQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:03:15 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C581FF28
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:03:13 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id t18so14326605wro.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 06:03:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lc8ed0h0ZvjQ5UirrcCDNDRepKtbVnO5U4g4adO99nk=;
-        b=hWAOXV+eH0/DS4Hu76lBf7HOJPHyBrLevKwVWzylha4entBU1Yly4+uLlRKu05MBAz
-         UYwDYw3EisDTl4Opu0YXG1f4BLhxYLOagWpcFbQsEe2E2QUDzXwIoQaQL5+BXAQtOtXb
-         kzYzqe3xaU8zsFKoeZQ+N5HjRVMks5GK0X6YX1Qg/dMTwtlLUVnjC4QIrA5uBNL0qsMW
-         BGsZLB9RGwdgnLQCOsFf8BAygt0Ojp28TqtZ3x0iRqB5JcLZtU37e4HOl2EV98DOYAZT
-         S+LCcTEbUZyLrFOQ/NZePZZ63ucq8i5UN2YZzdlP3LizkIo7SO+HtqtgCBA9HdX/ySza
-         ufOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lc8ed0h0ZvjQ5UirrcCDNDRepKtbVnO5U4g4adO99nk=;
-        b=QCBN16dGmdng/P/ioUYnSvUm0kNj1vm3dVOxPVXPbL7vK6CEsJIt1vNWBrJ1HBka11
-         Yr8FT/aeinQOmJ20JwCo2EhAP9aQsIXGwtvUP2EBngRAArR8gXPqTljfoobcjvsSjey+
-         PDIP03i4DZOwGyh/2WXrj07BTAkPRR8ZXc2/ySaxl3iNMfv0WJd6S+btufrrYuAQ7TQP
-         S3UPwZFGwvwleQ4QLZvY5Zw5eoVK9aP0Zgsj1bi6oEM8AnF4kSIS3ttxNJfpkysP07TR
-         nip7e0XNJThonmX8Q8Jo4EyCZtVQH0NZp2zheZMYq23xixdDSkEdcJP6kkJ/LjV9VGAf
-         6IFA==
-X-Gm-Message-State: AFqh2kpCNdCyiTrFfn+eIcmBB4wlj45Dm3CfVZ98wYB4OcJg7zVuEPPp
-        EgWjMRoATqXFjJGKdfuK7687vw==
-X-Google-Smtp-Source: AMrXdXv9M6VOOSiVMhMuDVUhPTRizSby4m22qg+uSqGL9zPq5nQ3Kv3RQkyMEqnq7/OxbkKiJufUMA==
-X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr46749979wro.48.1675173792075;
-        Tue, 31 Jan 2023 06:03:12 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id z12-20020adff74c000000b00291f1a5ced6sm14950847wrp.53.2023.01.31.06.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 06:03:11 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     lee@kernel.org, linus.walleij@linaro.org, pavel@ucw.cz,
-        robh+dt@kernel.org, jacek.anaszewski@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 2/2] leds: remove ide-disk trigger
-Date:   Tue, 31 Jan 2023 14:03:04 +0000
-Message-Id: <20230131140304.626779-2-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230131140304.626779-1-clabbe@baylibre.com>
-References: <20230131140304.626779-1-clabbe@baylibre.com>
+        Tue, 31 Jan 2023 09:03:16 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F259283DE;
+        Tue, 31 Jan 2023 06:03:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IbFMhWSGFuNwLioCygu8vzNDlbh2xFxxq3MfKscA8COkHDFXe/5gHaWZIW7xv6E2OvWttXfeq9kIeHBuHoP+kuZMtCxEgj56RzbG5VLCKjS3hhvj3k8Acb0taTJWEqlkc0Y2Luu9njRLex9A7E33sjVZ0Y2HfAqZbTiBq5hgLsSZaFucIWHSLLk9gmSSyFEdRLIRbPZF3fnLujA9KiTXS4MED3u+j65Sjqxwgnv3LyYRyfncgbp8qXvnrj/t+DV0JTfzgm03Izom10/sX6cj/0YCtk7xIBjyaI5SY+UzL82wHaZHDR2tCoEHO8jcxGG2RzzrdFm6VWqHQ/OKmrfv1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6aW5CjZCKEWPOM6s1Er0FBASkHjiq7mAYmv2yOpE9ts=;
+ b=O6ta/qk9yvFC+D9pbB8CGuhRS72iG428urVulJ2w1IGmMGLiarjhCMEbohqFPEXDq1EIzNdFpKIFmA/2S5xWumyQv91XYpu+4ChMbpBBFrz5jip75y/4Pt8tluF+smvS3CTL9JSy9YmPhdr4Lmx8tRpH5oYQXyZQNUFJioeTQaJ96oJPYyk099/Hv67ZPP7uLj1BI/xpI1RSaf2Tm+YMryiZK/0CcN1sMyioxtfVkmXsIm92+271yoHeT+jC3GgOAhZeLOXjJbLDiv+Rc2KUXTmuVyXhGuaHCT6fVDCHCwhkQiXvbGpdQoDu+dRqbQYjY1xedAFF6VwoKFZJkUaAzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6aW5CjZCKEWPOM6s1Er0FBASkHjiq7mAYmv2yOpE9ts=;
+ b=QgI7MtzolMUfMjKEcSx7V23hVVbZ0h9tjIglCxYu1iQUVpgZHm/DxL8uNmQfIGwqH6zsVpn7XT9BzKQhWi6qnNf/JotK2rpUYQEx1LSH0ZxZzRFVLy0lLz0Al4mj9IOT+QjwA0TxbIMA4pnCvDdkeL/DvrFO7X422JcFxLD2GCKz+2QI+akECiOu43sjbMWHaNHSR4DpLKDGaZ4Sx2oj1bRhmOea8286cZtRRPyYnOCZUm+D4y5O+m4jtBDVmiWcdmecrn/HoWeuZHKotyvNf14YzR4x6OU6c/lCjmcapO0LYRpvTglxZO5yDMyKTrylV9XKuc1l8s6NoGXYVnJLPQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by IA1PR12MB7591.namprd12.prod.outlook.com (2603:10b6:208:429::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
+ 2023 14:03:14 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6043.038; Tue, 31 Jan 2023
+ 14:03:14 +0000
+Date:   Tue, 31 Jan 2023 10:03:11 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Alistair Popple <apopple@nvidia.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jhubbard@nvidia.com, tjmercier@google.com, hannes@cmpxchg.org,
+        surenb@google.com, mkoutny@suse.com, daniel@ffwll.ch
+Subject: Re: [RFC PATCH 00/19] mm: Introduce a cgroup to limit the amount of
+ locked and pinned memory
+Message-ID: <Y9kfn4YX59PIxj7+@nvidia.com>
+References: <cover.f52b9eb2792bccb8a9ecd6bc95055705cfe2ae03.1674538665.git-series.apopple@nvidia.com>
+ <Y9A7kDjm3ZFAttRR@nvidia.com>
+ <6369225e-3522-341b-cd20-d95b1f11ea71@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6369225e-3522-341b-cd20-d95b1f11ea71@redhat.com>
+X-ClientProxiedBy: SJ0PR03CA0340.namprd03.prod.outlook.com
+ (2603:10b6:a03:39c::15) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA1PR12MB7591:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f9135c0-8aa8-4abe-e15e-08db0393e515
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p+Y4l9EgP9qvEu5GRhh2k0hUQCWXUVx1vkTuCQQFf6kcjqy1bcyIW+CGdyuRy8r8YBjiwsfrRHK93pesV6JpfG8Ag+LspLTrpj3F1LxwC1041vrJeEnd5aC1sBzhM+ELMIPMUBwfCBHWPIH3+0Kuh9uX5kMASdjS/9jU8tyhCOGwR2IjP3kmOkNinN5ud3DN86PKcEmgFC0y080Vxn3vssuk4QUvzZIFG4IxjCn2CjeAFfOzFseuLA6r6csc3R/nlJxh1o6P2Z8QfH5GX8caUNmssvHM6v/cY2IQSYPS0jcBJWyrpsIGNeYGdrr0z803bwpQ1o/ZonN82uwr0jPN1nlkiABc8o6ak47HW2b+wdoGNql6/3EOywrrdR+22sSfGqCIVuz+hVMLmJ7b7ATCZbMkO15wYfYCTMTpkaIxi+QIADrij9Adavq0sHAeqxeWQJMgv6dO4x3PB4BWdMml/kOScv2BlEihu1OkHdjKRRERiDSAimdv88uRIetah2TUN5xhe9lD3KlkrVPGbRChqOLGtlvezmRLxmapdpXv9L4BhGiMAJDXqBqtf7Od51ZE1BmOCDk9sDHib3ljXgJgdasbcuLqSTK3YzjOyyf3b+JnSHXCTUpquZs/e21bA8ZPJ/AI3immsTkqoDGCp9nM/Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(136003)(396003)(366004)(346002)(451199018)(66946007)(316002)(8936002)(66476007)(4326008)(6916009)(66556008)(36756003)(5660300002)(38100700002)(8676002)(86362001)(6666004)(6512007)(186003)(6506007)(26005)(41300700001)(478600001)(2906002)(4744005)(6486002)(83380400001)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IYskne+lnU4UNMf43ZkDxG2Z6zWO/6G8icMVk+Zhu/s1o2ue9z+Y//FQIQry?=
+ =?us-ascii?Q?vWk+/2jdwJzYJxoqwfMHiu9cnNzyCmT/JZkAzsoRM6lQ3EBShgeKLv9DTb+U?=
+ =?us-ascii?Q?Id8UXn+X7wi341aGijW/oS8AaLXy1dgbVdR6jmVhQOQXgCnYBeyBSbUU6cZ2?=
+ =?us-ascii?Q?L9KlQ6sA8Dh98BHGTkOqMHiWpzcKnVp5wD/a4P9RRCNKbJj0XxVgffTtCFJ8?=
+ =?us-ascii?Q?zpTOZ4c/0PMVcwCIiisJ5NAzdWi08xghZ08B1LCSB4ZxNPnFQUO1qq/Heks/?=
+ =?us-ascii?Q?y0uXoc2MdqqVtVCDyZCdF4pVKDLNuONrnMZlDZyC4ADQN/m7Qj/BpB7/2PfW?=
+ =?us-ascii?Q?FLyokSl/U9QJfJA/1hcxKRsEeBw5hTxmtqHbwfZDLrn1XU5PRblmwwmaiRDo?=
+ =?us-ascii?Q?ccBHkOqU9h068XA7GPraSK1jQk2uvJcdOPJhNNzfWZ15ZTxdWZnWOdBeEPqc?=
+ =?us-ascii?Q?p/YiWHoCdMrtJEEeNSvmQk0WvIu18/zsslqz0hMvnxd+hPvaH1XCfj8NCiYe?=
+ =?us-ascii?Q?Gt4Vmy11DFnDHr/kO4HVZkNkUVc0A1ej+ioB7CucbN3rbkLDDgrqRpYGc5Do?=
+ =?us-ascii?Q?dwtUUVQUiS1ymKqy5szsK5TZzqkr9mObHQkl9GucOb24H0CCKTq1Ire99w2M?=
+ =?us-ascii?Q?hnxEYLYZI2Qqd0PTHIyQNie/PEgaRTwBbpmammnG82MKaCBFbXGPQVkinBfD?=
+ =?us-ascii?Q?OL1HF2gmOooBFL+YtUi5/T8uu1myDW4I974KP6oGGVqSk+WpBU72s9JIkhcn?=
+ =?us-ascii?Q?OmFMMwvqUiCxcrCHLWiyd2067V/XcF9OHoPAMb2FiVwHqUs+4QbfghN2UIKk?=
+ =?us-ascii?Q?uqO12AzYa7HzNZDke3LmPYzdcFWwrNhcKOBy7bfHMMzg0Hc0cbTnyXDFREZO?=
+ =?us-ascii?Q?in6DrA0F0XvJg6QGR3lGhpZp1WBumKzF3hkLBI9/DgxrvqP49CXCoVYZ1GgZ?=
+ =?us-ascii?Q?RKY+Le1i/k2bJ29lxriGkzHvEfeQVMlOw/puNPA3pSPb3DrgWgnCRy9tdFeu?=
+ =?us-ascii?Q?/C1rsjzijQPO2RT9ezuuIIpy/W2pVR+4VWkJE17YWP8Jdd0JprUiE7IgSQX0?=
+ =?us-ascii?Q?JlarPwBAd07tIyAWwyX+CtIQnU9YtW2EXO+KFHJPmOMNOrzVOiY83GOEuOzR?=
+ =?us-ascii?Q?l3KCgV9RbQ2IF8wp3TAHWxOFcdDOxNxBkjTKiyboRnGCu5j6UVpzkQB5yfkn?=
+ =?us-ascii?Q?pUQbAnZGD1gwef0bR0a7niP+6UjaBnDd+BPKR9sxDjwmj89S3hEMX/14sxtQ?=
+ =?us-ascii?Q?pHWdjUidTJTdsXZpHUfQF87RkU8VEdAW7YtSuKQhVEdAxiuoBg8bUq5gELBP?=
+ =?us-ascii?Q?dxo9E+IW/y+B2Kq3RlkZjCNZMtylqZPJ26JCzPYpP3OHcttpNOK4+QImSBZ9?=
+ =?us-ascii?Q?aXNSB9W2TuORKQsqhcsyiLxrYBU4BsmwfKsrEiHTwHYu11yi/rBCb5kMCkqJ?=
+ =?us-ascii?Q?ier+VNWyie65MjB9ovQIWFXeh7n8v+xu4cjT8JnPzahYZV1n48Qyn8VSeCtZ?=
+ =?us-ascii?Q?8cSYYbxyRU3wzHxtl0t5VyOhbv8iDeQNCWtaorzA0VOYkZQ9y1SzI/XzLh3C?=
+ =?us-ascii?Q?x6Aww4gLgPtyqblwcUBgW7XAmyvEfLhTpsvgT8dI?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f9135c0-8aa8-4abe-e15e-08db0393e515
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 14:03:14.3280
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i26dADBBgN0f7TlEkTb9+R3aFSrnz8yiAEJwe37KnPJn4vGpw3vQTzyjDil1rJ+t
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7591
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No user of ide-disk remains, so remove this deprecated trigger.
-Only a few platforms used this and were fixed in 2016.
+On Tue, Jan 31, 2023 at 02:57:20PM +0100, David Hildenbrand wrote:
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
-Change since v1:
-- remove also DEFINE_LED_TRIGGER(ledtrig_ide)
-Changes since v2:
-- Added the fact that few platforms used this and it was fixed old ago.
-- Added Rob's ack
+> > I'm excited by this series, thanks for making it.
+> > 
+> > The pin accounting has been a long standing problem and cgroups will
+> > really help!
+> 
+> Indeed. I'm curious how GUP-fast, pinning the same page multiple times, and
+> pinning subpages of larger folios are handled :)
 
-Change since v3:
-- Rebase on top of latest next
-Change since v4:
-- Rebase on top of latest next
+The same as today. The pinning is done based on the result from GUP,
+and we charge every returned struct page.
 
- Documentation/devicetree/bindings/leds/common.yaml | 3 ---
- drivers/leds/trigger/ledtrig-disk.c                | 4 ----
- 2 files changed, 7 deletions(-)
+So duplicates are counted multiple times, folios are ignored.
 
-diff --git a/Documentation/devicetree/bindings/leds/common.yaml b/Documentation/devicetree/bindings/leds/common.yaml
-index 60c8611c6611..15e3f6645682 100644
---- a/Documentation/devicetree/bindings/leds/common.yaml
-+++ b/Documentation/devicetree/bindings/leds/common.yaml
-@@ -92,9 +92,6 @@ properties:
-           - disk-activity
-           - disk-read
-           - disk-write
--            # LED indicates IDE disk activity (deprecated), in new implementations
--            # use "disk-activity"
--          - ide-disk
-             # LED flashes at a fixed, configurable rate
-           - timer
-             # LED alters the brightness for the specified duration with one software
-diff --git a/drivers/leds/trigger/ledtrig-disk.c b/drivers/leds/trigger/ledtrig-disk.c
-index 0741910785bb..0b7dfbd04273 100644
---- a/drivers/leds/trigger/ledtrig-disk.c
-+++ b/drivers/leds/trigger/ledtrig-disk.c
-@@ -16,7 +16,6 @@
- DEFINE_LED_TRIGGER(ledtrig_disk);
- DEFINE_LED_TRIGGER(ledtrig_disk_read);
- DEFINE_LED_TRIGGER(ledtrig_disk_write);
--DEFINE_LED_TRIGGER(ledtrig_ide);
- 
- void ledtrig_disk_activity(bool write)
- {
-@@ -24,8 +23,6 @@ void ledtrig_disk_activity(bool write)
- 
- 	led_trigger_blink_oneshot(ledtrig_disk,
- 				  &blink_delay, &blink_delay, 0);
--	led_trigger_blink_oneshot(ledtrig_ide,
--				  &blink_delay, &blink_delay, 0);
- 	if (write)
- 		led_trigger_blink_oneshot(ledtrig_disk_write,
- 					  &blink_delay, &blink_delay, 0);
-@@ -40,7 +37,6 @@ static int __init ledtrig_disk_init(void)
- 	led_trigger_register_simple("disk-activity", &ledtrig_disk);
- 	led_trigger_register_simple("disk-read", &ledtrig_disk_read);
- 	led_trigger_register_simple("disk-write", &ledtrig_disk_write);
--	led_trigger_register_simple("ide-disk", &ledtrig_ide);
- 
- 	return 0;
- }
--- 
-2.39.1
+Removing duplicate charges would be costly, it would require storage
+to keep track of how many times individual pages have been charged to
+each cgroup (eg an xarray indexed by PFN of integers in each cgroup).
 
+It doesn't seem worth the cost, IMHO.
+
+We've made alot of investment now with iommufd to remove the most
+annoying sources of duplicated pins so it is much less of a problem in
+the qemu context at least.
+
+Jason
