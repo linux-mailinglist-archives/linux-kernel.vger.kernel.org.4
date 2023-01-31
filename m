@@ -2,142 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63C6683A46
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A9D683A4B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjAaXPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 18:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S231865AbjAaXRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 18:17:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjAaXPd (ORCPT
+        with ESMTP id S231376AbjAaXRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 18:15:33 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B657A8D;
-        Tue, 31 Jan 2023 15:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675206932; x=1706742932;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nhQKXK4du3QYoITmpjYltXnWiNyEHo74mvQfoZMOFYE=;
-  b=BCpCxlkmoxHef0gj2bF5nNJdlCzDqoMwYCgbvYN2nSEDFCxWSwn2zMq8
-   dZxu4LdrzBjoXwhqF0s6mskk1kcPcz96i4lMbiyKfzOHWCOvjLbtDG2zT
-   8JN8Bdiadblqhn/re5ygXbhXdGM9NFGWgR810X6B/8dMBWKnqBJPnuxu6
-   utzs3xUnOatZnx8G1t4dRxVoF87FbUYo90jmBzbP98OjljWjRO0biB1DD
-   htrcY7kakdv5XsSEsUVYMqlMeYhFbw+dTYQCcHQjX0FfWTlgH5BBir5dN
-   Cy2uuoDxN5KbzYsWKuqCFAcO4nD4O7xJ4+Lt0x35gDy8GA8kxrKF7HxM3
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="307643502"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="307643502"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 15:15:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="666693216"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="666693216"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 31 Jan 2023 15:15:29 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMzqa-0004mc-36;
-        Tue, 31 Jan 2023 23:15:29 +0000
-Date:   Wed, 1 Feb 2023 07:14:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        davidgow@google.com, dlatypov@google.com
-Cc:     oe-kbuild-all@lists.linux.dev, skhan@linuxfoundation.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Rae Moar <rmoar@google.com>
-Subject: Re: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized
- tests
-Message-ID: <202302010709.7ZmEen4w-lkp@intel.com>
-References: <20230131220355.1603527-2-rmoar@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131220355.1603527-2-rmoar@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 31 Jan 2023 18:17:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035FE53558
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 15:17:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50129CE217B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B71C433D2;
+        Tue, 31 Jan 2023 23:17:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1675207063;
+        bh=9gIG6ub4W7Ha8XoJuUw+fr70dVqCYbeFXGcT/33aTxM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=yYF2fcfJYQ9Oj2bsgYjdQr3rA3MST8yjvB6HjFHEs11Ec+JcfyjhnGzPpD76rdCjh
+         5ETkg050rbXW8vogKCM3u0KwtMyLjv5iyGk+TAWBPx3981me5xnnSxTEqV2H004lzh
+         Zajar06+fQHk9w6VqMTwtt2D5seDlwEt0Dkx+sBI=
+Date:   Tue, 31 Jan 2023 15:17:42 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        <chinwen.chang@mediatek.com>, <andrew.yang@mediatek.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH] mm/gup: Add folio to list when folio_isolate_lru()
+ succeed
+Message-Id: <20230131151742.df43c3fd11bda01b613234ef@linux-foundation.org>
+In-Reply-To: <20230131063206.28820-1-Kuan-Ying.Lee@mediatek.com>
+References: <20230131063206.28820-1-Kuan-Ying.Lee@mediatek.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rae,
+On Tue, 31 Jan 2023 14:32:06 +0800 Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com> wrote:
 
-Thank you for the patch! Perhaps something to improve:
+> If we call folio_isolate_lru() successfully, we will get
+> return value 0. We need to add this folio to the
+> movable_pages_list.
+> 
+> Fixes: 67e139b02d99 ("mm/gup.c: refactor check_and_migrate_movable_pages()")
+> Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+>
+> ...
+>
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1914,7 +1914,7 @@ static unsigned long collect_longterm_unpinnable_pages(
+>  			drain_allow = false;
+>  		}
+>  
+> -		if (!folio_isolate_lru(folio))
+> +		if (folio_isolate_lru(folio))
+>  			continue;
+>  
+>  		list_add_tail(&folio->lru, movable_page_list);
 
-[auto build test WARNING on 766f4f2514d2d18bcbd60a058188fb502dea5ddf]
+Thanks.  What are the user-visible effects of this bug?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rae-Moar/kunit-fix-bug-in-debugfs-logs-of-parameterized-tests/20230201-060537
-base:   766f4f2514d2d18bcbd60a058188fb502dea5ddf
-patch link:    https://lore.kernel.org/r/20230131220355.1603527-2-rmoar%40google.com
-patch subject: [PATCH v1 1/3] kunit: fix bug in debugfs logs of parameterized tests
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230201/202302010709.7ZmEen4w-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c8b669e1d139e1ee08121b184d859e45d7a02940
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rae-Moar/kunit-fix-bug-in-debugfs-logs-of-parameterized-tests/20230201-060537
-        git checkout c8b669e1d139e1ee08121b184d859e45d7a02940
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash lib/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   lib/kunit/test.c: In function '__kunit_fail_current_test_impl':
-   lib/kunit/test.c:40:9: warning: function '__kunit_fail_current_test_impl' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-      40 |         len = vsnprintf(NULL, 0, fmt, args) + 1;
-         |         ^~~
-   lib/kunit/test.c:48:9: warning: function '__kunit_fail_current_test_impl' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
-      48 |         vsnprintf(buffer, len, fmt, args);
-         |         ^~~~~~~~~
-   lib/kunit/test.c: In function 'kunit_log_append':
->> lib/kunit/test.c:133:1: warning: the frame size of 1500 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-     133 | }
-         | ^
-
-
-vim +133 lib/kunit/test.c
-
-acd8e8407b8fcc David Gow    2021-08-03  110  
-e2219db280e3fe Alan Maguire 2020-03-26  111  /*
-e2219db280e3fe Alan Maguire 2020-03-26  112   * Append formatted message to log, size of which is limited to
-e2219db280e3fe Alan Maguire 2020-03-26  113   * KUNIT_LOG_SIZE bytes (including null terminating byte).
-e2219db280e3fe Alan Maguire 2020-03-26  114   */
-e2219db280e3fe Alan Maguire 2020-03-26  115  void kunit_log_append(char *log, const char *fmt, ...)
-e2219db280e3fe Alan Maguire 2020-03-26  116  {
-e2219db280e3fe Alan Maguire 2020-03-26  117  	char line[KUNIT_LOG_SIZE];
-e2219db280e3fe Alan Maguire 2020-03-26  118  	va_list args;
-e2219db280e3fe Alan Maguire 2020-03-26  119  	int len_left;
-e2219db280e3fe Alan Maguire 2020-03-26  120  
-e2219db280e3fe Alan Maguire 2020-03-26  121  	if (!log)
-e2219db280e3fe Alan Maguire 2020-03-26  122  		return;
-e2219db280e3fe Alan Maguire 2020-03-26  123  
-e2219db280e3fe Alan Maguire 2020-03-26  124  	len_left = KUNIT_LOG_SIZE - strlen(log) - 1;
-e2219db280e3fe Alan Maguire 2020-03-26  125  	if (len_left <= 0)
-e2219db280e3fe Alan Maguire 2020-03-26  126  		return;
-e2219db280e3fe Alan Maguire 2020-03-26  127  
-e2219db280e3fe Alan Maguire 2020-03-26  128  	va_start(args, fmt);
-e2219db280e3fe Alan Maguire 2020-03-26  129  	vsnprintf(line, sizeof(line), fmt, args);
-e2219db280e3fe Alan Maguire 2020-03-26  130  	va_end(args);
-e2219db280e3fe Alan Maguire 2020-03-26  131  
-e2219db280e3fe Alan Maguire 2020-03-26  132  	strncat(log, line, len_left);
-e2219db280e3fe Alan Maguire 2020-03-26 @133  }
-e2219db280e3fe Alan Maguire 2020-03-26  134  EXPORT_SYMBOL_GPL(kunit_log_append);
-e2219db280e3fe Alan Maguire 2020-03-26  135  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
