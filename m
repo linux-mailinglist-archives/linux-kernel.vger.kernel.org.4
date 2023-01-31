@@ -2,118 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4508F683160
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08CA683164
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233166AbjAaPW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
+        id S232810AbjAaPWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbjAaPWN (ORCPT
+        with ESMTP id S233251AbjAaPWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:22:13 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B42353B08;
-        Tue, 31 Jan 2023 07:20:11 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id l4-20020a17090a850400b0023013402671so2694749pjn.5;
-        Tue, 31 Jan 2023 07:20:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:cc:date:message-id:subject:mime-version:from
-         :content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6BINpfzI37FmubXDbCicBUzweI9/UjZf3V5c6wKLnds=;
-        b=krZoGmaRnqVDyYJ7XU3vWJMH5kbybAFhCjzRQWk2kZB3VeCDx4Xx3tV3n1yiWUHOOr
-         814/eA/liKoE1pS5VaqQ2sLDkvLOfp1nTpzx+4CUBaTUnW1qotfNkAAAOza0bMOMeEHz
-         ZPXq+YD8U4JJgakjxzDLVxvxb+hA/9x3MIg5y8Jmj0zgzbk1gUowjb1Vx7LY2eGj5DvN
-         19dAYrbtdssUXndbwOYk7f26EDrQZ0+DeLT6fTxjpkQEC1b0frmc7H96mt+lgJ2Ya/1B
-         Kc7d9/oN70IleBIqdDSHq6WwgPAkouxyxxAoY3tGqALvQx6jgbK1gNlnv8xMnm+TcIuJ
-         iRZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:cc:date:message-id:subject:mime-version:from
-         :content-transfer-encoding:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6BINpfzI37FmubXDbCicBUzweI9/UjZf3V5c6wKLnds=;
-        b=PYN6WNi8zStVUdzFMVt4FcQM/Hvj0Ac4lXTpC3KNukYjR05TSzkomY4cFiwToxQgPc
-         ze8HeaE4P42sRREBnHBlcFb7zupgL0vbhtCW/nd5rM+EDOBNaG7SOjn3QHnCWrDgpQ+n
-         80ZG1keCysy8FjATIHFX3A+BXRXPDaOty77BD8qNSKozY7XpmAK9GNkjAVXE2SAdWU9K
-         +IuRoqvz1v9AFvcdKziFjYYDqNdhcIS1kxIviCILCe+efxb5Oj2Y4inB5eVjYrzs30xC
-         J4LGm5G1RJLN5VnDnpEjoRmShMC5h8Qr9uPNMhsMt0dUXv1WpBepjYQyyRgzMutsDvrF
-         a96Q==
-X-Gm-Message-State: AO0yUKUk4t8g/RZBVW9cYh1OTnirVEtPtpFkfWlO1UCUKlwwGE73RAzn
-        D1e+zHP/AIa4/pbow/y9VijgGiifLLM=
-X-Google-Smtp-Source: AK7set80uUmFSGOZLMp0wOxAk4gMm5CvMCBTAUlLTfe2BVHOM9OrrqM29suibFMPqWRrfrVH6wqnTg==
-X-Received: by 2002:a17:902:da89:b0:194:6f3b:3aa1 with SMTP id j9-20020a170902da8900b001946f3b3aa1mr15438191plx.55.1675178410502;
-        Tue, 31 Jan 2023 07:20:10 -0800 (PST)
-Received: from smtpclient.apple ([24.6.25.249])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170902ce8800b0018725c2fc46sm9874385plg.303.2023.01.31.07.20.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 07:20:09 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Shesha Sreenivasamurthy <sheshas@gmail.com>
-Mime-Version: 1.0 (1.0)
-Subject: Re: Hot ADD using CXL1.1 host
-Message-Id: <0D3A81E2-C99A-491D-AB66-FC6005E38667@gmail.com>
-Date:   Tue, 31 Jan 2023 07:19:58 -0800
-Cc:     linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-To:     Dan Williams <dan.j.williams@intel.com>
-X-Mailer: iPhone Mail (20B110)
+        Tue, 31 Jan 2023 10:22:21 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18302D6E;
+        Tue, 31 Jan 2023 07:20:23 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VE0EAe019127;
+        Tue, 31 Jan 2023 15:20:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=NUrwm1/97p8NzORzLu1YMNAECiHXcwg75orVSw4GWzo=;
+ b=UpPXQO398zePUl0OQEo/beldG7Z+Y5+/0XIuIjaHPRQx8qOzpWf3qvanDafGoS7dr313
+ KB9JMEM06g6AK6qIEm94OjSLyWLjKA9cXC26+wWKkgT5wcQeRSw8M+Vo5inM9AP4rTyZ
+ nEpQ2gkE+QFuJe6wPxRev8Md2FfF5lTYXhBH7SdxmtCw+G0KHPTgLUmRE/6JSWcKcg0b
+ rjXabpIbcuWclLlTGz5joU36WSHkMOLeFqrG2PvadYtUlAclsOTlFecc+FhQxW1Dfi+v
+ /T33TZX4YUU5VBv9OT0C/E+qYJLcaSNjW1HZOtXHGGBLTFEBMsTq096orE+lIaVtC/uu 9Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf4cb2941-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:20:13 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VEbmCc031159;
+        Tue, 31 Jan 2023 15:20:13 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf4cb293f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:20:13 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDXaxx006508;
+        Tue, 31 Jan 2023 15:20:12 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ncvtmcqws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:20:12 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFKAik30933272
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 15:20:11 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AA58058067;
+        Tue, 31 Jan 2023 15:20:10 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 810B058056;
+        Tue, 31 Jan 2023 15:20:07 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 15:20:07 +0000 (GMT)
+Message-ID: <ab6b55d9-ce8b-868d-fec1-6d02c89943eb@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 10:20:06 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 06/25] powerpc/secvar: Use sysfs_emit() instead of
+ sprintf()
+Content-Language: en-US
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+References: <20230131063928.388035-1-ajd@linux.ibm.com>
+ <20230131063928.388035-7-ajd@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230131063928.388035-7-ajd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7s0-wcUkBqQS-KqTtDEHEYFZA-Iho481
+X-Proofpoint-ORIG-GUID: StoRF08fLD_K8ibX9EQA9FznkT429up6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
+ mlxlogscore=999 bulkscore=0 adultscore=0 priorityscore=1501 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310135
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=EF=BB=BF
 
-On Mon, Jan 30, 2023 at 2:00 PM Dan Williams <dan.j.williams@intel.com> wrot=
-e:
->=20
-> Hi Shesha, Linux email expectations are to not top post, i.e. respond
-> inline, like below:
->=20
-> Shesha Sreenivasamurthy wrote:
->> The re-configuration does not reset the device. It does re-program the PC=
-Ie
->> DVSEC for CXL Device register (Section 8.1.3 CXL 2.0 spec Pg 258), regist=
-er
->> (DVSEC vendor ID 0x1E98, DCSEC ID 0x0).
->> =E2=80=9CSo you need to dynamically recreate the region, especially if yo=
-ur step 10
->> above resets the device.=E2=80=9D
->> Do you mean the DAX region ?
->=20
-> No, I mean the CXL region.
->=20
->> If so, I can if the system stays up. After a few seconds the system
->> crashes. Can the crash be because of a mismatch between DVSEC
->> information with what kernel was informed by BIOS during boot (Some
->> ACPI tables ?)
->=20
-> My concern is that the platform memory decode configuration is not
-> prepared for the CXL device to claim more than what was originally
-> programmed in the CXL DVSEC range registers. One of the platform
-> firmware updates for CXL 2.0 was the creation of the CFMWS (CXL Fixed
-> Memory Window Structure) in the ACPI CEDT (CXL Early Discovery Table).
-> That structure indicates which platform address ranges decode to which
-> CXL host bridges. Those windows are defined in platform specific
-> registersi (not enumerated to the OS). If the window is only 8GB then
-> the endpoint device can not decode more. You would need to reboot to get
-> the BIOS to allocate more host address space for CXL.
->=20
-> The expectation for newer platforms is that platform firmware define
-> CFMWS such that there is spare capacity in the address map for the OS to
-> dynmaically map more CXL.
 
-There seems to be some instability in using DAX. When the system is given al=
-l the device memory using efi=3Dnosoftreserve, the stressapptest (https://gi=
-thub.com/stressapptest/stressapptest) runs for an extended period of time. H=
-owever, when the system is booted without efi=3Dnosoftreserve, and assigned t=
-he special purpose memory to system-ram using daxctl, the system crashes aft=
-er some time (20-30 mins). Is there any known instabilities when using DAX?
+On 1/31/23 01:39, Andrew Donnellan wrote:
+> From: Russell Currey <ruscur@russell.cc>
+> 
+> The secvar format string and object size sysfs files are both ASCII
+> text, and should use sysfs_emit().  No functional change.
+> 
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> 
+> ---
+> 
+> v2: New patch (gregkh)
+> ---
+>   arch/powerpc/kernel/secvar-sysfs.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/secvar-sysfs.c
+> index 702044edf14d..b786d1005027 100644
+> --- a/arch/powerpc/kernel/secvar-sysfs.c
+> +++ b/arch/powerpc/kernel/secvar-sysfs.c
+> @@ -35,7 +35,7 @@ static ssize_t format_show(struct kobject *kobj, struct kobj_attribute *attr,
+>   	if (rc)
+>   		goto out;
+>   
+> -	rc = sprintf(buf, "%s\n", format);
+> +	rc = sysfs_emit(buf, "%s\n", format);
+>   
+>   out:
+>   	of_node_put(node);
+> @@ -57,7 +57,7 @@ static ssize_t size_show(struct kobject *kobj, struct kobj_attribute *attr,
+>   		return rc;
+>   	}
+>   
+> -	return sprintf(buf, "%llu\n", dsize);
+> +	return sysfs_emit(buf, "%llu\n", dsize);
+>   }
+>   
+>   static ssize_t data_read(struct file *filep, struct kobject *kobj,
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+
