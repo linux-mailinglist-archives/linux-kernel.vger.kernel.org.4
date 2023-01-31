@@ -2,80 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1B7682189
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C15682197
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjAaBux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S229736AbjAaBwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:52:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjAaBuw (ORCPT
+        with ESMTP id S229792AbjAaBwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:50:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7376827D51;
-        Mon, 30 Jan 2023 17:50:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC04B818EB;
-        Tue, 31 Jan 2023 01:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E63C433D2;
-        Tue, 31 Jan 2023 01:50:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675129848;
-        bh=HJKQNx3fRNZxY4vArUZ3gyzU1g+TgmgDu91AsEma7fU=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=BYCJ3rqx9l7r6aU/XtyjH1qX9OpzR8tcJVNxwc/TYKyMS7wdPP6rOhvQbL0Tl/3le
-         YnMgP9YUsQ231YFBzcnAU/mgH8senEXopHLHvGYi+ewk6ULldHRWqiwdPj0ofNJlct
-         b2fEZoj42/q4gxGMInOT7C3CPP9OwfaB7EQaMhprQQtE8nlBCQnfQx6ktgatduEq1V
-         khk04yxPBLZbCbRqa+MflBwxYYo0I9nOWoRTla9EkS4iAKTEN7ayj2tvuHLYPxDmz5
-         HPJZ00oWHobw4bIvIdijoK1JRALjF98zN8Fpp/U6i/hyXZqXQLrsU5P/Tqpq4xo9Yr
-         tO1WSsJOC0lPg==
-Received: by mail-oi1-f173.google.com with SMTP id s17so741869ois.10;
-        Mon, 30 Jan 2023 17:50:48 -0800 (PST)
-X-Gm-Message-State: AO0yUKWsGHcdSRXGWLV8hUobe5obNV8hjOz1tYQQReUTOoR5ATY3rQB2
-        ArgPh20PK+D8kl6sLwjNhtwsugGEBNnCLMNGdT0=
-X-Google-Smtp-Source: AK7set/9JPR6cjJv9xRhT55XiUVtS1vUYh0zXL9sqR/YYWtSHfzMq6iNEDp3sn11Va8aKXFqLrKFxxmnv6MWnYBfxDs=
-X-Received: by 2002:a05:6808:1402:b0:378:57fb:de1f with SMTP id
- w2-20020a056808140200b0037857fbde1fmr307671oiv.215.1675129847919; Mon, 30 Jan
- 2023 17:50:47 -0800 (PST)
+        Mon, 30 Jan 2023 20:52:37 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0608129165;
+        Mon, 30 Jan 2023 17:52:31 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-15ff0a1f735so17626984fac.5;
+        Mon, 30 Jan 2023 17:52:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YkhOVKtwqGjloVyH5HhA0nwe/ERN2VhbSaTeDIUnuS8=;
+        b=OjLQWr5jOPQZMPvnoXWdSNH5+ByMgB6O/3OlSBn6TWIlOygW9QjJZvH3vFEdXApCuM
+         5kh2pQMyMQVXDVldCMJnw3a1U/a1H6E/Vsi0psa5UhRKA/ftvIllDY1+PHXUbwc1TAG4
+         Ov+u7VIV1XukhXIzcUre3usnN0SOPIF3311BBfqYPVUMZZj+aDx6AsB9JXq1mI+0uSEL
+         9RuF4iP5Oxjym5PPEngpCU2dmI0gwC85geCLaODt4pr8NUh1p/xKbId69P6cVgp7i2YB
+         Drwk127sYlfIniCzy0t3Q4mfvR4+OsMEcyE8u4x2Ost6X+PdyPiL62OMw8CkZc/jgfe9
+         8BBA==
+X-Gm-Message-State: AO0yUKWuss6nCQkczBZc4SWOnWC1HBBDQg/F47xrbfVjYVIFFDIx8fDz
+        vkDNXfHlBsiuVOkmbKqfhA==
+X-Google-Smtp-Source: AK7set/8OytAoPy2uP+IdddqTcDlyRj6kfw+2UPVg402hqcTw/35UG6u+SQaeuAv7aBL8FshJLZteA==
+X-Received: by 2002:a05:6870:d10e:b0:163:88f7:d947 with SMTP id e14-20020a056870d10e00b0016388f7d947mr4388118oac.43.1675129950231;
+        Mon, 30 Jan 2023 17:52:30 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v9-20020a05687105c900b00163c90c1513sm1309223oan.28.2023.01.30.17.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 17:52:29 -0800 (PST)
+Received: (nullmailer pid 4086481 invoked by uid 1000);
+        Tue, 31 Jan 2023 01:52:28 -0000
+Date:   Mon, 30 Jan 2023 19:52:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alok.a.tiwari@oracle.com, hdanton@sina.com,
+        ilpo.jarvinen@linux.intel.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
+        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
+Subject: Re: [PATCH v2 2/3] dt-bindings: net: bluetooth: Add NXP bluetooth
+ support
+Message-ID: <20230131015228.GA4082140-robh@kernel.org>
+References: <20230130180504.2029440-1-neeraj.sanjaykale@nxp.com>
+ <20230130180504.2029440-3-neeraj.sanjaykale@nxp.com>
 MIME-Version: 1.0
-Received: by 2002:a8a:355:0:b0:4a5:1048:434b with HTTP; Mon, 30 Jan 2023
- 17:50:47 -0800 (PST)
-In-Reply-To: <CAH2r5msGoRGzKbjFUJQ9HBivb0ia8-bakeVzeDknEmCQd5yd-A@mail.gmail.com>
-References: <CAH2r5msGoRGzKbjFUJQ9HBivb0ia8-bakeVzeDknEmCQd5yd-A@mail.gmail.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Tue, 31 Jan 2023 10:50:47 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8FuOVZhfbJoQejEvSa0SmnMix15LqLwNrVwdcP-ZMgTg@mail.gmail.com>
-Message-ID: <CAKYAXd8FuOVZhfbJoQejEvSa0SmnMix15LqLwNrVwdcP-ZMgTg@mail.gmail.com>
-Subject: Re: [PATCH] cifs: update Kconfig description
-To:     Steve French <smfrench@gmail.com>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>,
-        Paulo Alcantara <pc@cjr.nz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130180504.2029440-3-neeraj.sanjaykale@nxp.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-01-31 10:12 GMT+09:00, Steve French <smfrench@gmail.com>:
-> There were various outdated or missing things in fs/cifs/Kconfig
-> e.g. mention of support for insecure NTLM which has been removed,
-> and lack of mention of some important features. This also shortens
-> it slightly, and fixes some confusing text (e.g. the SMB1 POSIX
-> extensions option).  See attached.
-Looks good to me.
-Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
->
-> --
-> Thanks,
->
-> Steve
->
+On Mon, Jan 30, 2023 at 11:35:03PM +0530, Neeraj Sanjay Kale wrote:
+> Add binding document for generic and legacy NXP bluetooth
+> chipsets.
+> 
+> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> ---
+> v2: Resolved dt_binding_check errors. (Rob Herring)
+> v2: Modified description, added specific compatibility devices,
+> corrected indentations. (Krzysztof Kozlowski)
+> ---
+>  .../bindings/net/bluetooth/nxp-bluetooth.yaml | 40 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml b/Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml
+> new file mode 100644
+> index 000000000000..9c8a25396b49
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml
+> @@ -0,0 +1,40 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/bluetooth/nxp-bluetooth.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP Bluetooth chips
+> +
+> +description:
+> +  This binding describes UART-attached NXP bluetooth chips.
+> +
+> +maintainers:
+> +  - Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,w8987-bt
+> +      - nxp,w8997-bt
+> +      - nxp,w9098-bt
+> +      - nxp,iw416-bt
+> +      - nxp,iw612-bt
+> +
+> +  firmware-name:
+> +    description:
+> +      Specify firmware file name.
+
+default?
+
+
+No interrupts or power supplies on these chips?
+
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    uart2 {
+
+serial {
+
+> +        bluetooth {
+> +          compatible = "nxp,iw416-bt";
+> +          firmware-name = "uartuart_n61x_v1.bin";
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 32dd41574930..d465c1124699 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22835,6 +22835,12 @@ L:	linux-mm@kvack.org
+>  S:	Maintained
+>  F:	mm/zswap.c
+>  
+> +NXP BLUETOOTH WIRELESS DRIVERS
+> +M:	Amitkumar Karwar <amitkumar.karwar@nxp.com>
+> +M:	Neeraj Kale <neeraj.sanjaykale@nxp.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/net/bluetooth/nxp-bluetooth.yaml
+> +
+>  THE REST
+>  M:	Linus Torvalds <torvalds@linux-foundation.org>
+>  L:	linux-kernel@vger.kernel.org
+> -- 
+> 2.34.1
+> 
