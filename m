@@ -2,62 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F8668214B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815F9682158
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjAaBMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:12:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S230249AbjAaBUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjAaBMn (ORCPT
+        with ESMTP id S229489AbjAaBUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:12:43 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067702B2B6;
-        Mon, 30 Jan 2023 17:12:42 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id t12so14457569lji.13;
-        Mon, 30 Jan 2023 17:12:41 -0800 (PST)
+        Mon, 30 Jan 2023 20:20:43 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861AE10ABA
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:20:42 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id u5so8816218pfm.10
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:20:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EjdiAa8c6Qvj1NCdEIb0i9bJmr0kmiDAx481+Zg80vM=;
-        b=RZqHpTGC8QPmetJxZyudlvCU/1nbY6OE3NlbuJmenrF+dCmD8KMTVsCQpuQ6ZX7J3k
-         XBRAOMKmqhsuW9nEIJ1RiiGNdHKSLwnba5v6S65w2G+tP958A/EeE4W+SvyBvkFsx7qy
-         3gv5OnMTw5dyW2XYu39Blje59Ky08uc1UqHAsYKQEbPnmgp9rBjWekSZcKc42MxCowgH
-         MHLr/WBsvoJ5oeS6SAIbxx+9TfrH0vYw4XS/RDpAMBBBkYPg9QviZ1EIvREi8H44qV1i
-         LxRRcDqYMHMjTEgelnb9o7Y58C+kuG3xR9uhqOfWnUqsPt8ZOUlsMVOMne9J52ZYajIu
-         CWng==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WlKnm9SlBY6a95G31ugIPx75GFY5lk/gBJScYr6B/MA=;
+        b=D9rmez0+kSKL3ccFg9a8F7AC1nKa00vADDYdszu9EH8DheWWLli6rK5KQG+m5BDTun
+         lBN3WiydFkh0tenV2406XKnQtMRh6xc6n2fE0ebr1WQaK0U9SEeflAszPpkaoEczXCPa
+         XnJ1zqvgyNwoi6VrgYqpbxCLOgDdxcvws0ZfwlT70OkOSwwYd8pazHEn/kuiJtYM22J7
+         kOf9lJua0c/fv0pyYlG9F4HJa3jGoahD9mRdj1+isxbekM65F/g6qDG8KyLMcWDQWG6+
+         R8T2lbX2UzZVK83BTDKWSVk4xIjaABA2PMQlvA9tQVzbLSueVsWJKDQjFrANX9n7Nu8n
+         auYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EjdiAa8c6Qvj1NCdEIb0i9bJmr0kmiDAx481+Zg80vM=;
-        b=I4SYsKUVF3FVOGbQ/T7jQyFv2WoY7JaDJgGeyqfZYVMril+xs+ORdMySYm4LZNZgIJ
-         /NdHyl1a1jBp5ke/8ZFFFfHqLn1gwJhhKLG86qx2Q1zUCw+2QYdVXbiWeA4ULzVd1+n+
-         Ub6veNcuu9QL5HQpBN/oY2zDZij1HJN8+v68SLeDEhu+Fz3Yn6X9dSqqv7G0Xzr4hGM/
-         bpvDppLsB6Ofop8A/6o5CjNxCsPYNeWRxfQrVP77mpe2H0FXoH+URtCPEQgLiChO4dV0
-         xwWNr8UiGfYRn6Tpim6vEjpCxdDvVuYLbq6Wk39JuT1AFfNgssRavpqpZUnC1VsOS29/
-         4Tvg==
-X-Gm-Message-State: AO0yUKWtCXUR5MhDiP+VGwYGsqlPGHsd6NOEdVnTgJcK4JJ5k2tDDNZs
-        ycxrsviyTMe4SLKQ068o6J1C2F4YlxGRA7YCEPlB/YLxSdw=
-X-Google-Smtp-Source: AK7set/jz08NpydF/GhOSK0WN/1oIaQVTciMoeupM8drYaH84Bjn8LcBdo7m4yq9ontAbGMqAkOZK59RHzycFqWzm8c=
-X-Received: by 2002:a2e:9a9a:0:b0:290:60a9:b5e6 with SMTP id
- p26-20020a2e9a9a000000b0029060a9b5e6mr870547lji.62.1675127559691; Mon, 30 Jan
- 2023 17:12:39 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WlKnm9SlBY6a95G31ugIPx75GFY5lk/gBJScYr6B/MA=;
+        b=mYQlWEhmBm5aPXkkQKSGxe6Uh4IfzjhCZ4Euj8qar/OSy1nRI8QV1Rv+J4IZrnHw6c
+         sASQUZ5OT8e+E9f4Gxd24pX8TTdlomJWYQIdcGK+YzvWKubzcv8/leRV6HpK2pVYaYkW
+         V4bW3I92quHRAwOgMvYLopHbCnYDlp+5jJK849iXVecJ68MeounW9Rztfxbx5wZ0NZJx
+         3K5OZT3+dY2ysyecMceAFkmDgvnrR5TEmc0K3vx3Lgwrg7Lo8QIdeP15SRwfdH+xaz57
+         3KOOpCAg+eNYJrhT9t9+5YE2utd+naoIsPAsDbmKw3zR1ktVkwWeZo7zOjbSBP9svWNB
+         kAXA==
+X-Gm-Message-State: AO0yUKWZJUvwtZxOijMja1VyLOonR7HLyZg33SDc71NKXYt33bNvx982
+        CbciNDigEGmJapZvcYw030OudK8X1GfbDfGc/Djc6Q==
+X-Google-Smtp-Source: AK7set/OnrysWGmShNaN4ttMAIR9UncJ4m1eUuwNep1bR9GutY4sRTfWIiOaEY4ReHbIYjKOu7DJxRnva6K27yrlZqg=
+X-Received: by 2002:aa7:91d3:0:b0:592:61cc:5aeb with SMTP id
+ z19-20020aa791d3000000b0059261cc5aebmr2113642pfa.59.1675128041704; Mon, 30
+ Jan 2023 17:20:41 -0800 (PST)
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 30 Jan 2023 19:12:28 -0600
-Message-ID: <CAH2r5msGoRGzKbjFUJQ9HBivb0ia8-bakeVzeDknEmCQd5yd-A@mail.gmail.com>
-Subject: [PATCH] cifs: update Kconfig description
-To:     CIFS <linux-cifs@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        ronnie sahlberg <ronniesahlberg@gmail.com>,
-        Paulo Alcantara <pc@cjr.nz>
-Content-Type: multipart/mixed; boundary="000000000000263c5705f3850793"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230127001141.407071-1-saravanak@google.com> <20230130114839.379f08bd@xps-13>
+ <CALHCpMimX63NC2P=mYdqOv339P06B4iAd10L2NpC5ALy_207vA@mail.gmail.com>
+In-Reply-To: <CALHCpMimX63NC2P=mYdqOv339P06B4iAd10L2NpC5ALy_207vA@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 30 Jan 2023 17:20:05 -0800
+Message-ID: <CAGETcx8FpmbaRm2CCwqt3BRBpgbogwP5gNB+iA5OEtuxWVTNLA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] fw_devlink improvements
+To:     Maxim Kiselev <bigunclemax@gmail.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Maxim Kochetkov <fido_max@inbox.ru>,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Jean-Philippe Brucker <jpb@kernel.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,124 +108,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000263c5705f3850793
-Content-Type: text/plain; charset="UTF-8"
+On Mon, Jan 30, 2023 at 4:09 AM Maxim Kiselev <bigunclemax@gmail.com> wrote:
+>
+> Hi Saravana & Miquel.
+>
+> Sorry for the long response. I finally got access to my test device
+> and tried this patch series.
+>
+> And unfortunately it didn't solve my issue. I'm still getting a
+> hanging f1070000.ethernet dependency
+> from the nvmem-cell mac@6 subnode.
 
-There were various outdated or missing things in fs/cifs/Kconfig
-e.g. mention of support for insecure NTLM which has been removed,
-and lack of mention of some important features. This also shortens
-it slightly, and fixes some confusing text (e.g. the SMB1 POSIX
-extensions option).  See attached.
+Thanks for testing the series.
 
--- 
-Thanks,
+Btw, don't top post. It's frowned upon. Top post means your reply is
+on the top before the email you are replying to. See how my first line
+of reply in inline with your email I'm replying to?
 
-Steve
+>
+> Here are related parts of my kernel log and device tree:
+>
+>
+>     [    2.713302] device: 'mtd-0': device_add
+>     [    2.719528] device: 'spi0': device_add
+>     [    2.724180] device: 'spi0.0': device_add
+>     [    2.728957] spi-nor spi0.0: mx66l51235f (65536 Kbytes)
+>     [    2.735338] 7 fixed-partitions partitions found on MTD device spi0.0
+>     [    2.741978] device:
+> 'f1010600.spi:m25p80@0:partitions:partition@1': device_add
+>     [    2.749636] Creating 7 MTD partitions on "spi0.0":
+>     [    2.754564] 0x000000000000-0x000000080000 : "SPI.U_BOOT"
+>     [    2.759981] device: 'mtd0': device_add
+>     [    2.764323] device: 'mtd0': device_add
+>     [    2.768280] device: 'mtd0ro': device_add
+>     [    2.772624] 0x0000000a0000-0x0000000c0000 : "SPI.INV_INFO"
+>     [    2.778218] device: 'mtd1': device_add
+>     [    2.782549] device: 'mtd1': device_add
+>     [    2.786582] device: 'mtd1ro': device_add
+>     ...
+>     [    5.426625] mvneta_bm f10c0000.bm: Buffer Manager for network
+> controller enabled
+>     [    5.492867] platform f1070000.ethernet: error -EPROBE_DEFER:
+> wait for supplier mac@6
+>     [    5.528636] device: 'Fixed MDIO bus.0': device_add
+>     [    5.533726] device: 'fixed-0': device_add
+>     [    5.547564] device: 'f1072004.mdio-eth-mii': device_add
+>     [    5.616368] device: 'f1072004.mdio-eth-mii:00': device_add
+>     [    5.645127] device: 'f1072004.mdio-eth-mii:1e': device_add
+>     [    5.651530] devices_kset: Moving f1070000.ethernet to end of list
+>     [    5.657948] platform f1070000.ethernet: error -EPROBE_DEFER:
+> wait for supplier mac@6
+>
+>     spi@10600 {
+>         m25p80@0 {
+>             compatible = "mx66l51235l";
+>
+>             partitions {
+>                 compatible = "fixed-partitions";
+>
+>                 partition@0 {
+>                     label = "SPI.U_BOOT";
+>                 };
+>                 partition@1 {
+>                     compatible = "nvmem-cells";
+>                     label = "SPI.INV_INFO";
+>                     macaddr: mac@6 {
+>                         reg = <0x6 0x6>;
+>                     };
+>                 };
+>                 ...
+>             };
+>         };
+>     };
+>
+>     enet1: ethernet@70000 {
+>         nvmem-cells = <&macaddr>;
+>         nvmem-cell-names = "mac-address";
+>         phy-mode = "rgmii";
+>         phy = <&phy0>;
+>     };
+>
+>
+> Maybe I should provide some additional debug info?
 
---000000000000263c5705f3850793
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-cifs-update-Kconfig-description.patch"
-Content-Disposition: attachment; 
-	filename="0001-cifs-update-Kconfig-description.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ldjjl3sl0>
-X-Attachment-Id: f_ldjjl3sl0
+I took a look at it and I think I know the issue. But it'll be good if
+you can point me to the dts (not dtsi) file that corresponds to the
+board you are seeing this issue on so I can double check my guess by
+looking at the exact code/drivers.
 
-RnJvbSA2YTEwYjdlZTJhOGQ0ZDlmMDFiNzAxZjliZTU2MGIxYWI0YmNlMWYyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTdGV2ZSBGcmVuY2ggPHN0ZnJlbmNoQG1pY3Jvc29mdC5jb20+
-CkRhdGU6IE1vbiwgMzAgSmFuIDIwMjMgMTg6NTc6MDYgLTA2MDAKU3ViamVjdDogW1BBVENIXSBj
-aWZzOiB1cGRhdGUgS2NvbmZpZyBkZXNjcmlwdGlvbgoKVGhlcmUgd2VyZSB2YXJpb3VzIG91dGRh
-dGVkIG9yIG1pc3NpbmcgdGhpbmdzIGluIGZzL2NpZnMvS2NvbmZpZwplLmcuIG1lbnRpb24gb2Yg
-c3VwcG9ydCBmb3IgaW5zZWN1cmUgTlRMTSB3aGljaCBoYXMgYmVlbiByZW1vdmVkLAphbmQgbGFj
-ayBvZiBtZW50aW9uIG9mIHNvbWUgaW1wb3J0YW50IGZlYXR1cmVzLiBUaGlzIGFsc28gc2hvcnRl
-bnMKaXQgc2xpZ2h0bHksIGFuZCBmaXhlcyBzb21lIGNvbmZ1c2luZyB0ZXh0IChlLmcuIHRoZSBT
-TUIxIFBPU0lYCmV4dGVuc2lvbnMgb3B0aW9uKS4KCkFja2VkLWJ5OiBQYXVsbyBBbGNhbnRhcmEg
-KFNVU0UpIDxwY0BjanIubno+CkFja2VkLWJ5OiBSb25uaWUgU2FobGJlcmcgPGxzYWhsYmVyQHJl
-ZGhhdC5jb20+ClNpZ25lZC1vZmYtYnk6IFN0ZXZlIEZyZW5jaCA8c3RmcmVuY2hAbWljcm9zb2Z0
-LmNvbT4KLS0tCiBmcy9jaWZzL0tjb25maWcgfCA2MSArKysrKysrKysrKysrKysrKysrKysrKy0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMjkgaW5zZXJ0aW9ucygr
-KSwgMzIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZnMvY2lmcy9LY29uZmlnIGIvZnMvY2lm
-cy9LY29uZmlnCmluZGV4IDNiN2UzYjllNGZkMi4uMWUwMjFjMGIwNjUzIDEwMDY0NAotLS0gYS9m
-cy9jaWZzL0tjb25maWcKKysrIGIvZnMvY2lmcy9LY29uZmlnCkBAIC0xOSwzOSArMTksMzYgQEAg
-Y29uZmlnIENJRlMKIAlzZWxlY3QgQVNOMQogCXNlbGVjdCBPSURfUkVHSVNUUlkKIAloZWxwCi0J
-ICBUaGlzIGlzIHRoZSBjbGllbnQgVkZTIG1vZHVsZSBmb3IgdGhlIFNNQjMgZmFtaWx5IG9mIE5B
-UyBwcm90b2NvbHMsCi0JICAoaW5jbHVkaW5nIHN1cHBvcnQgZm9yIHRoZSBtb3N0IHJlY2VudCwg
-bW9zdCBzZWN1cmUgZGlhbGVjdCBTTUIzLjEuMSkKLQkgIGFzIHdlbGwgYXMgZm9yIGVhcmxpZXIg
-ZGlhbGVjdHMgc3VjaCBhcyBTTUIyLjEsIFNNQjIgYW5kIHRoZSBvbGRlcgotCSAgQ29tbW9uIElu
-dGVybmV0IEZpbGUgU3lzdGVtIChDSUZTKSBwcm90b2NvbC4gIENJRlMgd2FzIHRoZSBzdWNjZXNz
-b3IKLQkgIHRvIHRoZSBvcmlnaW5hbCBkaWFsZWN0LCB0aGUgU2VydmVyIE1lc3NhZ2UgQmxvY2sg
-KFNNQikgcHJvdG9jb2wsIHRoZQotCSAgbmF0aXZlIGZpbGUgc2hhcmluZyBtZWNoYW5pc20gZm9y
-IG1vc3QgZWFybHkgUEMgb3BlcmF0aW5nIHN5c3RlbXMuCi0KLQkgIFRoZSBTTUIzIHByb3RvY29s
-IGlzIHN1cHBvcnRlZCBieSBtb3N0IG1vZGVybiBvcGVyYXRpbmcgc3lzdGVtcwotCSAgYW5kIE5B
-UyBhcHBsaWFuY2VzIChlLmcuIFNhbWJhLCBXaW5kb3dzIDEwLCBXaW5kb3dzIFNlcnZlciAyMDE2
-LAotCSAgTWFjT1MpIGFuZCBldmVuIGluIHRoZSBjbG91ZCAoZS5nLiBNaWNyb3NvZnQgQXp1cmUp
-LgotCSAgVGhlIG9sZGVyIENJRlMgcHJvdG9jb2wgd2FzIGluY2x1ZGVkIGluIFdpbmRvd3MgTlQ0
-LCAyMDAwIGFuZCBYUCAoYW5kCi0JICBsYXRlcikgYXMgd2VsbCBieSBTYW1iYSAod2hpY2ggcHJv
-dmlkZXMgZXhjZWxsZW50IENJRlMgYW5kIFNNQjMKLQkgIHNlcnZlciBzdXBwb3J0IGZvciBMaW51
-eCBhbmQgbWFueSBvdGhlciBvcGVyYXRpbmcgc3lzdGVtcykuIFVzZSBvZgotCSAgZGlhbGVjdHMg
-b2xkZXIgdGhhbiBTTUIyLjEgaXMgb2Z0ZW4gZGlzY291cmFnZWQgb24gcHVibGljIG5ldHdvcmtz
-LgorCSAgVGhpcyBpcyB0aGUgY2xpZW50IFZGUyBtb2R1bGUgZm9yIHRoZSBTTUIzIGZhbWlseSBv
-ZiBuZXR3b3JrIGZpbGUKKwkgIHByb3RvY29scyAoaW5jbHVkaW5nIHRoZSBtb3N0IHJlY2VudCwg
-bW9zdCBzZWN1cmUgZGlhbGVjdCBTTUIzLjEuMSkuCisJICBUaGlzIG1vZHVsZSBhbHNvIGluY2x1
-ZGVzIHN1cHBvcnQgZm9yIGVhcmxpZXIgZGlhbGVjdHMgc3VjaCBhcworCSAgU01CMi4xLCBTTUIy
-IGFuZCBldmVuIHRoZSBvbGQgQ29tbW9uIEludGVybmV0IEZpbGUgU3lzdGVtIChDSUZTKQorCSAg
-cHJvdG9jb2wuICBDSUZTIHdhcyB0aGUgc3VjY2Vzc29yIHRvIHRoZSBvcmlnaW5hbCBuZXR3b3Jr
-IGZpbGVzeXN0ZW0KKwkgIHByb3RvY29sLCBTZXJ2ZXIgTWVzc2FnZSBCbG9jayAoU01CIGllIFNN
-QjEpLCB0aGUgbmF0aXZlIGZpbGUgc2hhcmluZworCSAgbWVjaGFuaXNtIGZvciBtb3N0IGVhcmx5
-IFBDIG9wZXJhdGluZyBzeXN0ZW1zLgorCisJICBUaGUgU01CMy4xLjEgcHJvdG9jb2wgaXMgc3Vw
-cG9ydGVkIGJ5IG1vc3QgbW9kZXJuIG9wZXJhdGluZyBzeXN0ZW1zCisJICBhbmQgTkFTIGFwcGxp
-YW5jZXMgKGUuZy4gU2FtYmEsIFdpbmRvd3MgMTEsIFdpbmRvd3MgU2VydmVyIDIwMjIsCisJICBN
-YWNPUykgYW5kIGV2ZW4gaW4gdGhlIGNsb3VkIChlLmcuIE1pY3Jvc29mdCBBenVyZSkgYW5kIGFs
-c28gYnkgdGhlCisJICBMaW51eCBrZXJuZWwgc2VydmVyLCBrc21iZC4gIFN1cHBvcnQgZm9yIHRo
-ZSBvbGRlciBDSUZTIHByb3RvY29sIHdhcworCSAgaW5jbHVkZWQgaW4gV2luZG93cyBOVDQsIDIw
-MDAgYW5kIFhQIChhbmQgbGF0ZXIpLiBVc2Ugb2YgZGlhbGVjdHMKKwkgIG9sZGVyIHRoYW4gU01C
-Mi4xIGlzIG9mdGVuIGRpc2NvdXJhZ2VkIG9uIHB1YmxpYyBuZXR3b3Jrcy4KIAkgIFRoaXMgbW9k
-dWxlIGFsc28gcHJvdmlkZXMgbGltaXRlZCBzdXBwb3J0IGZvciBPUy8yIGFuZCBXaW5kb3dzIE1F
-CiAJICBhbmQgc2ltaWxhciB2ZXJ5IG9sZCBzZXJ2ZXJzLgogCi0JICBUaGlzIG1vZHVsZSBwcm92
-aWRlcyBhbiBhZHZhbmNlZCBuZXR3b3JrIGZpbGUgc3lzdGVtIGNsaWVudAotCSAgZm9yIG1vdW50
-aW5nIHRvIFNNQjMgKGFuZCBDSUZTKSBjb21wbGlhbnQgc2VydmVycy4gIEl0IGluY2x1ZGVzCi0J
-ICBzdXBwb3J0IGZvciBERlMgKGhpZXJhcmNoaWNhbCBuYW1lIHNwYWNlKSwgc2VjdXJlIHBlci11
-c2VyCi0JICBzZXNzaW9uIGVzdGFibGlzaG1lbnQgdmlhIEtlcmJlcm9zIG9yIE5UTE0gb3IgTlRM
-TXYyLCBSRE1BCi0JICAoc21iZGlyZWN0KSwgYWR2YW5jZWQgc2VjdXJpdHkgZmVhdHVyZXMsIHBl
-ci1zaGFyZSBlbmNyeXB0aW9uLAotCSAgZGlyZWN0b3J5IGxlYXNlcywgc2FmZSBkaXN0cmlidXRl
-ZCBjYWNoaW5nIChvcGxvY2spLCBvcHRpb25hbCBwYWNrZXQKLQkgIHNpZ25pbmcsIFVuaWNvZGUg
-YW5kIG90aGVyIGludGVybmF0aW9uYWxpemF0aW9uIGltcHJvdmVtZW50cy4KKwkgIFRoaXMgbW9k
-dWxlIHByb3ZpZGVzIGFuIGFkdmFuY2VkIG5ldHdvcmsgZmlsZSBzeXN0ZW0gY2xpZW50IGZvcgor
-CSAgbW91bnRpbmcgdG8gU01CMyAoYW5kIENJRlMpIGNvbXBsaWFudCBzZXJ2ZXJzLiAgSXQgaW5j
-bHVkZXMgc3VwcG9ydAorCSAgZm9yIERGUyAoaGllcmFyY2hpY2FsIG5hbWUgc3BhY2UpLCBzZWN1
-cmUgcGVyLXVzZXIgc2Vzc2lvbgorCSAgZXN0YWJsaXNobWVudCB2aWEgS2VyYmVyb3Mgb3IgTlRM
-TXYyLCBSRE1BIChzbWJkaXJlY3QpLCBhZHZhbmNlZAorCSAgc2VjdXJpdHkgZmVhdHVyZXMsIHBl
-ci1zaGFyZSBlbmNyeXB0aW9uLCBwYWNrZXQtc2lnbmluZywgc25hcHNob3RzLAorCSAgZGlyZWN0
-b3J5IGxlYXNlcywgc2FmZSBkaXN0cmlidXRlZCBjYWNoaW5nIChsZWFzZXMpLCBtdWx0aWNoYW5u
-ZWwsCisJICBVbmljb2RlIGFuZCBvdGhlciBpbnRlcm5hdGlvbmFsaXphdGlvbiBpbXByb3ZlbWVu
-dHMuCiAKIAkgIEluIGdlbmVyYWwsIHRoZSBkZWZhdWx0IGRpYWxlY3RzLCBTTUIzIGFuZCBsYXRl
-ciwgZW5hYmxlIGJldHRlcgogCSAgcGVyZm9ybWFuY2UsIHNlY3VyaXR5IGFuZCBmZWF0dXJlcywg
-dGhhbiB3b3VsZCBiZSBwb3NzaWJsZSB3aXRoIENJRlMuCi0JICBOb3RlIHRoYXQgd2hlbiBtb3Vu
-dGluZyB0byBTYW1iYSwgZHVlIHRvIHRoZSBDSUZTIFBPU0lYIGV4dGVuc2lvbnMsCi0JICBDSUZT
-IG1vdW50cyBjYW4gcHJvdmlkZSBzbGlnaHRseSBiZXR0ZXIgUE9TSVggY29tcGF0aWJpbGl0eQot
-CSAgdGhhbiBTTUIzIG1vdW50cy4gU01CMi9TTUIzIG1vdW50IG9wdGlvbnMgYXJlIGFsc28KLQkg
-IHNsaWdodGx5IHNpbXBsZXIgKGNvbXBhcmVkIHRvIENJRlMpIGR1ZSB0byBwcm90b2NvbCBpbXBy
-b3ZlbWVudHMuCiAKLQkgIElmIHlvdSBuZWVkIHRvIG1vdW50IHRvIFNhbWJhLCBBenVyZSwgTWFj
-cyBvciBXaW5kb3dzIGZyb20gdGhpcyBtYWNoaW5lLCBzYXkgWS4KKwkgIElmIHlvdSBuZWVkIHRv
-IG1vdW50IHRvIFNhbWJhLCBBenVyZSwga3NtYmQsIE1hY3Mgb3IgV2luZG93cyBmcm9tIHRoaXMK
-KwkgIG1hY2hpbmUsIHNheSBZLgogCiBjb25maWcgQ0lGU19TVEFUUzIKIAlib29sICJFeHRlbmRl
-ZCBzdGF0aXN0aWNzIgpAQCAtMTExLDEyICsxMDgsMTIgQEAgY29uZmlnIENJRlNfUE9TSVgKIAlk
-ZXBlbmRzIG9uIENJRlMgJiYgQ0lGU19BTExPV19JTlNFQ1VSRV9MRUdBQ1kgJiYgQ0lGU19YQVRU
-UgogCWhlbHAKIAkgIEVuYWJsaW5nIHRoaXMgb3B0aW9uIHdpbGwgY2F1c2UgdGhlIGNpZnMgY2xp
-ZW50IHRvIGF0dGVtcHQgdG8KLQkgIG5lZ290aWF0ZSBhIG5ld2VyIGRpYWxlY3Qgd2l0aCBzZXJ2
-ZXJzLCBzdWNoIGFzIFNhbWJhIDMuMC41Ci0JICBvciBsYXRlciwgdGhhdCBvcHRpb25hbGx5IGNh
-biBoYW5kbGUgbW9yZSBQT1NJWCBsaWtlIChyYXRoZXIKLQkgIHRoYW4gV2luZG93cyBsaWtlKSBm
-aWxlIGJlaGF2aW9yLiAgSXQgYWxzbyBlbmFibGVzCi0JICBzdXBwb3J0IGZvciBQT1NJWCBBQ0xz
-IChnZXRmYWNsIGFuZCBzZXRmYWNsKSB0byBzZXJ2ZXJzCi0JICAoc3VjaCBhcyBTYW1iYSAzLjEw
-IGFuZCBsYXRlcikgd2hpY2ggY2FuIG5lZ290aWF0ZQotCSAgQ0lGUyBQT1NJWCBBQ0wgc3VwcG9y
-dC4gIElmIHVuc3VyZSwgc2F5IE4uCisJICBuZWdvdGlhdGUgYSBmZWF0dXJlIG9mIHRoZSBvbGRl
-ciBjaWZzIGRpYWxlY3Qgd2l0aCBzZXJ2ZXJzLCBzdWNoIGFzCisJICBTYW1iYSAzLjAuNSBvciBs
-YXRlciwgdGhhdCBvcHRpb25hbGx5IGNhbiBoYW5kbGUgbW9yZSBQT1NJWCBsaWtlCisJICAocmF0
-aGVyIHRoYW4gV2luZG93cyBsaWtlKSBmaWxlIGJlaGF2aW9yLiAgSXQgYWxzbyBlbmFibGVzIHN1
-cHBvcnQKKwkgIGZvciBQT1NJWCBBQ0xzIChnZXRmYWNsIGFuZCBzZXRmYWNsKSB0byBzZXJ2ZXJz
-IChzdWNoIGFzIFNhbWJhIDMuMTAKKwkgIGFuZCBsYXRlcikgd2hpY2ggY2FuIG5lZ290aWF0ZSBD
-SUZTIFBPU0lYIEFDTCBzdXBwb3J0LiAgVGhpcyBjb25maWcKKwkgIG9wdGlvbiBpcyBub3QgbmVl
-ZGVkIHdoZW4gbW91bnRpbmcgd2l0aCBTTUIzLjEuMS4gSWYgdW5zdXJlLCBzYXkgTi4KIAogY29u
-ZmlnIENJRlNfREVCVUcKIAlib29sICJFbmFibGUgQ0lGUyBkZWJ1Z2dpbmcgcm91dGluZXMiCi0t
-IAoyLjM0LjEKCg==
---000000000000263c5705f3850793--
+The main problem/mistake is the nvmem framework is using a "struct
+bus" instead of a "struct class" to keep a list of the nvmem devices.
+And we can't change it now because it'd affect the sysfs paths
+significantly and might break userspace ABI.
+
+Can you try the patch at the end of this email under these
+configurations and tell me which ones fail vs pass? I don't need logs
+for any pass/failures.
+1. On top of this series
+2. Without this series
+3. On top of the series but with the call to fwnode_dev_initialized() deleted?
+4. Without this series, but with the call to fwnode_dev_initialized() deleted?
+
+-Saravana
+
+Sorry about tabs to spaces conversion. Email client issue.
+
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 321d7d63e068..23d94c0ecccf 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -752,6 +752,7 @@ static int nvmem_add_cells_from_of(struct
+nvmem_device *nvmem)
+ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ {
+        struct nvmem_device *nvmem;
++       struct fwnode_handle *fwnode;
+        int rval;
+
+        if (!config->dev)
+@@ -804,9 +805,18 @@ struct nvmem_device *nvmem_register(const struct
+nvmem_config *config)
+        nvmem->keepout = config->keepout;
+        nvmem->nkeepout = config->nkeepout;
+        if (config->of_node)
+-               nvmem->dev.of_node = config->of_node;
++               fwnode = of_fwnode_handle(config->of_node);
+        else if (!config->no_of_node)
+-               nvmem->dev.of_node = config->dev->of_node;
++               fwnode = of_fwnode_handle(config->dev->of_node);
++       device_set_node(&nvmem->dev, fwnode);
++
++       /*
++        * If the fwnode doesn't have another device associated with it, mark
++        * the fwnode as initialized since no driver is going to bind to the
++        * nvmem.
++        */
++       if (fwnode && !fwnode->dev)
++               fwnode_dev_initialized(fwnode, true);
+
+        switch (config->id) {
+        case NVMEM_DEVID_NONE:
