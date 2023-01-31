@@ -2,136 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B77568297A
+	by mail.lfdr.de (Postfix) with ESMTP id A625F68297B
 	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjAaJu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:50:26 -0500
+        id S232215AbjAaJu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:50:27 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233077AbjAaJuQ (ORCPT
+        with ESMTP id S233090AbjAaJuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:50:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB26D6A63
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:49:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675158565;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jfaQ85a1dAVfhNsu1a2URYhGm3l71cfWadA+896tDVg=;
-        b=F9mvX9af2rQS5F3K2+ZxAwk0LBNincNNjyY1/fXRon/0+94meZBYzhbLVGkau3Om3FfVLg
-        JsN9igM1p0Y1XellxjAR9praSmJAo0RtZQNZCger9Nzp5y6fDVNbrpyUSWuVIQCXbjX0+C
-        qZT8/Vsw37/fVcbnHyxz/MKVjJ3J590=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-70-DLiCeX-kPwmuq5qwZ14Cbg-1; Tue, 31 Jan 2023 04:49:24 -0500
-X-MC-Unique: DLiCeX-kPwmuq5qwZ14Cbg-1
-Received: by mail-qt1-f199.google.com with SMTP id j14-20020ac874ce000000b003b6917d0731so6283061qtr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:49:24 -0800 (PST)
+        Tue, 31 Jan 2023 04:50:18 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040611A8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:50:17 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id y8so15506880vsq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:50:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ay4JjzFOi8u8tMMqeo9ypRaHpCzMeD1s8ySg55sDfvA=;
+        b=X7qkWyQt8Nmpyd8tODNC6MVvJAs6pPWPg4+UGaJtcp92pV5yFejhXVMlk9N6Ne0O/x
+         sJDx+ymPit1ElxTDAPp2M2NaD+94yYbcjDeTJeHkBQndJoaPQzDoh/O0k5kga8a0/02c
+         rvzmD7VHZTbrwQPOdYeJNYWMApcfFEkMQ96vo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jfaQ85a1dAVfhNsu1a2URYhGm3l71cfWadA+896tDVg=;
-        b=Yk/thziO7h/zBwuZh+yrnUHI45+nFI1L9+ggpm9tGQwBrzKX1zj530fBxlApsEEvMm
-         QTXcTdAoBZ2KeHahoA/tgnlkeG5OLY47v0lB6YLd/pfqfH/ZX8zDkMzpfeRmJOUKeGlJ
-         BDRpeu41SUcgyFXwJcwHz+ulIMJtE5K1YRRlwNzsg9Wvgl4dlIixNqO2xc51pBmJPETX
-         2O8zH//k9WJwyiMA428IdUJiwAoYLAKYQdAcDp/C0dBMpMTtlUEKKDxkju4YA7GfpfkW
-         AomAF7arJEC/qJK8rntyj7eT4edSs1Al2oEVoDM5DRwfy7iHHM/EmrvLl9HMf9ycH87m
-         YWGA==
-X-Gm-Message-State: AO0yUKVsYzunMV09g0BVEmNCGgTaehZG2281TEb+RzCcvdxQm+6LD99c
-        XsZvBru94U55zBLylsjv7OMpIDDgj/Y6xcsnmRQj7LMHR9CR/Sy+F6NSIrMzYzHeDVNfWdh4YWt
-        /1JypLj8Z3cm6flyVrxGAw0rG
-X-Received: by 2002:a0c:ea4c:0:b0:537:6a5d:4899 with SMTP id u12-20020a0cea4c000000b005376a5d4899mr30409075qvp.29.1675158564083;
-        Tue, 31 Jan 2023 01:49:24 -0800 (PST)
-X-Google-Smtp-Source: AK7set/SUd7wTQ5Au07UhYfX1m0HbSmQEcQjHvhILDcjUglU5votIYONG/eo7Ch8QW4jq+sJkQeRgQ==
-X-Received: by 2002:a0c:ea4c:0:b0:537:6a5d:4899 with SMTP id u12-20020a0cea4c000000b005376a5d4899mr30409060qvp.29.1675158563856;
-        Tue, 31 Jan 2023 01:49:23 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id j7-20020a37b907000000b00706c1fc62desm9643587qkf.112.2023.01.31.01.49.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 01:49:22 -0800 (PST)
-Message-ID: <c946d31d-3696-510b-17b9-9ac9b361b7bf@redhat.com>
-Date:   Tue, 31 Jan 2023 10:49:19 +0100
+        bh=ay4JjzFOi8u8tMMqeo9ypRaHpCzMeD1s8ySg55sDfvA=;
+        b=OjukmM6TjIJf8NpidawUXfPjI1t8iiZfhNPsOHmrlJkQhjgzwKCT8oIje+PlzVmD7b
+         jkqcF+F/2NPbhYPXLxvYycvjvrlz4U60fa9hTfEahNXlcGjirgNfw1VcieyAjGqE5rGF
+         sqDYEtwELEOVPICvQovF/wuOz0zCv3ysB4spcLisBPyjLQzhCYgGrya+mK/3ZQLMifhZ
+         FfiVxYL6lQSIIuCgqBKhurHUOulueAGFhOE3cC1OvefPYLHD6xy8x16+dx1si0OLSM9R
+         X7YebQ3sRtEVtn8G+B8tDTflNdLKUq3ehVRAQu1ZNR1dl6QgiZadD7kpgPk3OKVmYMtC
+         jrug==
+X-Gm-Message-State: AO0yUKX1bAUWXzgQyQ4X42q66zJGWGS7LfT74BjZObRcLewD4+rJGc+Z
+        +PGoiT4JTMaRrffbk3I6io1ayEv03pow95Jsf0sB2A==
+X-Google-Smtp-Source: AK7set+/qcQFjgwbi+Ocj+LtBVuICC7AYNVeLlyhaPp038xPLhOSZqARwYUNLiyEVrFfSwlzmO4Suik/9e/bTguM2EY=
+X-Received: by 2002:a67:d294:0:b0:3ed:89c7:4bd2 with SMTP id
+ z20-20020a67d294000000b003ed89c74bd2mr2766641vsi.26.1675158616078; Tue, 31
+ Jan 2023 01:50:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Reply-To: eric.auger@redhat.com
-Subject: Re: [PATCH v2] vfio: platform: ignore missing reset if disabled at
- module init
-Content-Language: en-US
-To:     Tomasz Duszynski <tduszynski@marvell.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "open list:VFIO PLATFORM DRIVER" <kvm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     jerinj@marvell.com
-References: <20230131083349.2027189-1-tduszynski@marvell.com>
-From:   Eric Auger <eric.auger@redhat.com>
-In-Reply-To: <20230131083349.2027189-1-tduszynski@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118031509.29834-1-moudy.ho@mediatek.com> <20230118031509.29834-4-moudy.ho@mediatek.com>
+In-Reply-To: <20230118031509.29834-4-moudy.ho@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 31 Jan 2023 17:50:05 +0800
+Message-ID: <CAGXv+5Gid0xT=Ru0G3d-z+ED_wKWpGYSbhwiFXRv5jqJL0vC_A@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] clk: mediatek: remove MT8195 vppsys/0/1 simple_probe
+To:     Moudy Ho <moudy.ho@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomasz,
-
-On 1/31/23 09:33, Tomasz Duszynski wrote:
-> If reset requirement was relaxed via module parameter errors caused by
-> missing reset should not be propagated down to the vfio core.
-> Otherwise initialization will fail.
+On Wed, Jan 18, 2023 at 11:16 AM Moudy Ho <moudy.ho@mediatek.com> wrote:
 >
-> Signed-off-by: Tomasz Duszynski <tduszynski@marvell.com>
-> Fixes: 5f6c7e0831a1 ("vfio/platform: Use the new device life cycle helpers")
-Reviewed-by: Eric Auger <eric.auger@redhat.com>
-
-Thanks
-
-Eric
+> MT8195 VPPSYS0/1 will be probed by the compatible name in
+> the mtk-mmsys driver and then probe its own clock driver as
+> a platform driver.
+>
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 > ---
-> v2:
-> - return directly instead of using ternary to do that
+>  drivers/clk/mediatek/clk-mt8195-vpp0.c | 58 +++++++++++++++++++-------
+>  drivers/clk/mediatek/clk-mt8195-vpp1.c | 58 +++++++++++++++++++-------
+>  2 files changed, 86 insertions(+), 30 deletions(-)
 >
->  drivers/vfio/platform/vfio_platform_common.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+> diff --git a/drivers/clk/mediatek/clk-mt8195-vpp0.c b/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> index bf2939c3a023..6d5800f69f6c 100644
+> --- a/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> +++ b/drivers/clk/mediatek/clk-mt8195-vpp0.c
+> @@ -86,26 +86,54 @@ static const struct mtk_gate vpp0_clks[] = {
+>         GATE_VPP0_2(CLK_VPP0_WARP1_MDP_DL_ASYNC, "vpp0_warp1_mdp_dl_async", "top_wpe_vpp", 3),
+>  };
 >
-> diff --git a/drivers/vfio/platform/vfio_platform_common.c b/drivers/vfio/platform/vfio_platform_common.c
-> index 1a0a238ffa35..7325ff463cf0 100644
-> --- a/drivers/vfio/platform/vfio_platform_common.c
-> +++ b/drivers/vfio/platform/vfio_platform_common.c
-> @@ -650,10 +650,13 @@ int vfio_platform_init_common(struct vfio_platform_device *vdev)
->  	mutex_init(&vdev->igate);
->
->  	ret = vfio_platform_get_reset(vdev);
-> -	if (ret && vdev->reset_required)
-> +	if (ret && vdev->reset_required) {
->  		dev_err(dev, "No reset function found for device %s\n",
->  			vdev->name);
-> -	return ret;
-> +		return ret;
-> +	}
-> +
-> +	return 0;
->  }
->  EXPORT_SYMBOL_GPL(vfio_platform_init_common);
->
-> --
-> 2.34.1
->
+> -static const struct mtk_clk_desc vpp0_desc = {
+> -       .clks = vpp0_clks,
+> -       .num_clks = ARRAY_SIZE(vpp0_clks),
+> -};
+> +static int clk_mt8195_vpp0_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *node = dev->parent->of_node;
+> +       struct clk_onecell_data *clk_data;
 
+mtk_alloc_clk_data() API changed a couple releases back. So:
+
+          struct clk_hw_onecell_data
+
+> +       int r;
+>
+> -static const struct of_device_id of_match_clk_mt8195_vpp0[] = {
+> -       {
+> -               .compatible = "mediatek,mt8195-vppsys0",
+> -               .data = &vpp0_desc,
+> -       }, {
+> -               /* sentinel */
+> -       }
+> -};
+> +       clk_data = mtk_alloc_clk_data(CLK_VPP0_NR_CLK);
+> +       if (!clk_data)
+> +               return -ENOMEM;
+> +
+> +       r = mtk_clk_register_gates(node, vpp0_clks, ARRAY_SIZE(vpp0_clks), clk_data);
+
+API changed.
+
+> +       if (r)
+> +               goto free_vpp0_data;
+> +
+> +       r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+
+              of_clk_add_provider(node, of_clk_hw_onecell_get, clk_data);
+
+Same for the other driver.
+
+
+ChenYu
+
+> +       if (r)
+> +               goto unregister_gates;
+> +
+> +       platform_set_drvdata(pdev, clk_data);
+> +
+> +       return r;
+> +
+> +unregister_gates:
+> +       mtk_clk_unregister_gates(vpp0_clks, ARRAY_SIZE(vpp0_clks), clk_data);
+> +free_vpp0_data:
+> +       mtk_free_clk_data(clk_data);
+> +       return r;
+> +}
+> +
+> +static int clk_mt8195_vpp0_remove(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *node = dev->parent->of_node;
+> +       struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
+> +
+> +       of_clk_del_provider(node);
+> +       mtk_clk_unregister_gates(vpp0_clks, ARRAY_SIZE(vpp0_clks), clk_data);
+> +       mtk_free_clk_data(clk_data);
+> +
+> +       return 0;
+> +}
+>
+>  static struct platform_driver clk_mt8195_vpp0_drv = {
+> -       .probe = mtk_clk_simple_probe,
+> -       .remove = mtk_clk_simple_remove,
+> +       .probe = clk_mt8195_vpp0_probe,
+> +       .remove = clk_mt8195_vpp0_remove,
+>         .driver = {
+>                 .name = "clk-mt8195-vpp0",
+> -               .of_match_table = of_match_clk_mt8195_vpp0,
+>         },
+>  };
+>  builtin_platform_driver(clk_mt8195_vpp0_drv);
+> diff --git a/drivers/clk/mediatek/clk-mt8195-vpp1.c b/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> index ffd52c762890..3b88c69e96c9 100644
+> --- a/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> +++ b/drivers/clk/mediatek/clk-mt8195-vpp1.c
+> @@ -84,26 +84,54 @@ static const struct mtk_gate vpp1_clks[] = {
+>         GATE_VPP1_1(CLK_VPP1_VPP_SPLIT_26M, "vpp1_vpp_split_26m", "clk26m", 26),
+>  };
+>
+> -static const struct mtk_clk_desc vpp1_desc = {
+> -       .clks = vpp1_clks,
+> -       .num_clks = ARRAY_SIZE(vpp1_clks),
+> -};
+> +static int clk_mt8195_vpp1_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *node = dev->parent->of_node;
+> +       struct clk_onecell_data *clk_data;
+> +       int r;
+>
+> -static const struct of_device_id of_match_clk_mt8195_vpp1[] = {
+> -       {
+> -               .compatible = "mediatek,mt8195-vppsys1",
+> -               .data = &vpp1_desc,
+> -       }, {
+> -               /* sentinel */
+> -       }
+> -};
+> +       clk_data = mtk_alloc_clk_data(CLK_VPP1_NR_CLK);
+> +       if (!clk_data)
+> +               return -ENOMEM;
+> +
+> +       r = mtk_clk_register_gates(node, vpp1_clks, ARRAY_SIZE(vpp1_clks), clk_data);
+> +       if (r)
+> +               goto free_vpp1_data;
+> +
+> +       r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+> +       if (r)
+> +               goto unregister_gates;
+> +
+> +       platform_set_drvdata(pdev, clk_data);
+> +
+> +       return r;
+> +
+> +unregister_gates:
+> +       mtk_clk_unregister_gates(vpp1_clks, ARRAY_SIZE(vpp1_clks), clk_data);
+> +free_vpp1_data:
+> +       mtk_free_clk_data(clk_data);
+> +       return r;
+> +}
+> +
+> +static int clk_mt8195_vpp1_remove(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *node = dev->parent->of_node;
+> +       struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
+> +
+> +       of_clk_del_provider(node);
+> +       mtk_clk_unregister_gates(vpp1_clks, ARRAY_SIZE(vpp1_clks), clk_data);
+> +       mtk_free_clk_data(clk_data);
+> +
+> +       return 0;
+> +}
+>
+>  static struct platform_driver clk_mt8195_vpp1_drv = {
+> -       .probe = mtk_clk_simple_probe,
+> -       .remove = mtk_clk_simple_remove,
+> +       .probe = clk_mt8195_vpp1_probe,
+> +       .remove = clk_mt8195_vpp1_remove,
+>         .driver = {
+>                 .name = "clk-mt8195-vpp1",
+> -               .of_match_table = of_match_clk_mt8195_vpp1,
+>         },
+>  };
+>  builtin_platform_driver(clk_mt8195_vpp1_drv);
+> --
+> 2.18.0
+>
