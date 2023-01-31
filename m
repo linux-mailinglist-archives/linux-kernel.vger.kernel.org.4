@@ -2,81 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A855D6822CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0B86822D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjAaD0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S229960AbjAaD1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:27:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjAaD0H (ORCPT
+        with ESMTP id S229501AbjAaD07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:26:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8330305CD
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675135507;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vr/XPJ17q7z7e/z/oXjbB8MrOAf0hopqLmOBio0dflk=;
-        b=K8bILVfGmYkKS10JdPTzqt1loQI27jeuM1dXaTDJNzHHRCPbGTligzjxOgqkeHpvta3mgx
-        jAdQSayr0s0/+2jeiR/LW50t1JNI97dCjPURGyBUhVy2yViXvdFes4bkDZ4OP3mSH+0tZv
-        Zme+xisIswICzWkNYg2eMbOc64Ix+YI=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-670-XfB-NFidNHKqFOui2Mv1Pg-1; Mon, 30 Jan 2023 22:25:05 -0500
-X-MC-Unique: XfB-NFidNHKqFOui2Mv1Pg-1
-Received: by mail-ot1-f69.google.com with SMTP id e20-20020a9d5614000000b0068401872536so6493004oti.3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:25:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vr/XPJ17q7z7e/z/oXjbB8MrOAf0hopqLmOBio0dflk=;
-        b=c5ar9XFwcxCO+wEsz2GadAN9OPS413FTfeked+ZbJ8WiuvU/vuwlqdgyonXlJSb4Cw
-         kfND1vXphdBXGK0C5oSKrOUl6ci+zoDD6TRI44IQvju07mIUyf7i7lIh1c1jjCQN5Hi1
-         iDsOlL6Dy9USnF7r56zfTkNthcl7fk6tI5DpLezRvMbsOggjlJTYXsS9reh6wFbpttKC
-         N2mXbP0r6XMqrKKg8uaiHdESadxJjl5V5mcYd4zxVWWfRYkBv3YjIOeJ8WL3D3P9CaHQ
-         tcfy+ywgC6SDnn9SubyHWhTXMEDONCpB7nIAYZwMCkhweAI4U26M2aaL7GfPwdUxdEkR
-         6o9g==
-X-Gm-Message-State: AO0yUKX4ItgkdQLwF2OeDTbBe9j01VypB87J6IEa3vo0qOaJVy+Qa0rw
-        bkGhI/iha8rh4x1AWcwJik/CVB8CaE7h+OJJCohMoKPyZq4/e5HsPuCPO7pz4m+TelmRqTI8rXZ
-        XxUW4PHJtCWHmwRYfdPwNvdXxTgTansN1qvor4Si8
-X-Received: by 2002:a05:6870:959e:b0:163:9cea:eea7 with SMTP id k30-20020a056870959e00b001639ceaeea7mr568142oao.35.1675135503902;
-        Mon, 30 Jan 2023 19:25:03 -0800 (PST)
-X-Google-Smtp-Source: AK7set/VJiLIh/TubQIOMpyVamjgT72GTmyo0tvSLnBVw1r+/0Ig8xZ/jKP2by6xLPdeeXJwbkASAQGVMeFCu5J5COE=
-X-Received: by 2002:a05:6870:959e:b0:163:9cea:eea7 with SMTP id
- k30-20020a056870959e00b001639ceaeea7mr568140oao.35.1675135503638; Mon, 30 Jan
- 2023 19:25:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20221229020553-mutt-send-email-mst@kernel.org>
- <CACGkMEs5s3Muo+4OfjaLK_P76rTdPhjQdTwykRNGOecAWnt+8g@mail.gmail.com>
- <20221229030633-mutt-send-email-mst@kernel.org> <CACGkMEukqZX=6yz1yCj+psHp5c+ZGVVuEYTUssfRCTQZgVWS6g@mail.gmail.com>
- <20230127053112-mutt-send-email-mst@kernel.org> <CACGkMEsZs=6TaeSUnu_9Rf+38uisi6ViHyM50=2+ut3Wze2S1g@mail.gmail.com>
- <20230129022809-mutt-send-email-mst@kernel.org> <CACGkMEuya+_2P8d4hokoyL_LKGdVzyCC1nDwOCdZb0=+2rjKPQ@mail.gmail.com>
- <20230130003334-mutt-send-email-mst@kernel.org> <CACGkMEu0v-kbh2vKvcDRoMsRoXwidPnQhiFetYPY-tXOAVScsg@mail.gmail.com>
- <20230130061437-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20230130061437-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 31 Jan 2023 11:24:52 +0800
-Message-ID: <CACGkMEsk92FSyP6uMheAzkAPbnGfdCsq387fL9XqhfF6Z=Xmew@mail.gmail.com>
-Subject: Re: [PATCH 3/4] virtio_ring: introduce a per virtqueue waitqueue
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maxime.coquelin@redhat.com, alvaro.karsz@solid-run.com,
-        eperezma@redhat.com
+        Mon, 30 Jan 2023 22:26:59 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393BD358A;
+        Mon, 30 Jan 2023 19:26:58 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V1QAFW031430;
+        Tue, 31 Jan 2023 03:26:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=2IL8lKFb8MQDNcC65oW02wIG+dVT7/A+li+H98VgwAs=;
+ b=m8D8Wa/sRKxoKj5vGbltnGilw0jVdpk06Nq8qZQXa1TsxgaMihwMygIjENBU2gBJrkQy
+ dp5NCRhrBvInAle1uJ2VUORNqDXjO3keeZBoeG42eCQIreOVoQHTsSFhleO2qJg53Trp
+ 8IkY+1RhrlW39UB8JXEUgagvqu92rIgK9Zv6yFxfk81UN8gOGjE9RIBmW5yps0rsHrPn
+ Lo0fFicTlMcWHrnzclIZrCJL/XPbA3BnuvqBC13gl2KWjhYkn24uqjdAEWAzqzSH4Egm
+ liJsAHlB4FdXWANO8SYEVL7AvD5S1HYPU0FSua1Y2KEr0pal2Pdz97YI4y1BW+kbZltf Zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nery5jx20-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 03:26:36 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30V2HIjr015473;
+        Tue, 31 Jan 2023 03:26:36 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nery5jx1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 03:26:36 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30V0N3rt008390;
+        Tue, 31 Jan 2023 03:26:35 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ncvw2hf0h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 03:26:35 +0000
+Received: from b03ledav001.gho.boulder.ibm.com ([9.17.130.232])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30V3QXah12190386
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 03:26:34 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 367556E04E;
+        Tue, 31 Jan 2023 03:28:40 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C39CB6E050;
+        Tue, 31 Jan 2023 03:28:37 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.110.248])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 03:28:37 +0000 (GMT)
+Message-ID: <7eef4b0ce1904f30c02b9e89aa6732d32bb5593f.camel@linux.ibm.com>
+Subject: Re: [PATCH-next v2 2/2] scsi: fix iscsi rescan fails to create
+ block device
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Yu Kuai <yukuai1@huaweicloud.com>,
+        Zhong Jinghua <zhongjinghua@huawei.com>,
+        gregkh@linuxfoundation.org, martin.petersen@oracle.com,
+        hare@suse.de, bvanassche@acm.org, emilne@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Date:   Mon, 30 Jan 2023 22:25:59 -0500
+In-Reply-To: <69a9000f-541e-c182-44c9-75337094de4a@huaweicloud.com>
+References: <20230128094146.205858-1-zhongjinghua@huawei.com>
+         <20230128094146.205858-3-zhongjinghua@huawei.com>
+         <1b466057ed2e91b05388afbb5791639eb8abdd59.camel@linux.ibm.com>
+         <c3e58056-942a-f829-ecf6-1342c65b6865@huaweicloud.com>
+         <7c5c38f128910f89f20533b7fd51453a32ff4f5c.camel@linux.ibm.com>
+         <19ad8dd7-482e-dad0-8465-f78f7f9c154d@huaweicloud.com>
+         <5b1605cceba6e7de753bce8a78e1ce5c2d545546.camel@linux.ibm.com>
+         <69a9000f-541e-c182-44c9-75337094de4a@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QkolrsabyiaVBugXbbmM52Igv1CvjQWN
+X-Proofpoint-ORIG-GUID: lCQmvnXJtE18MuHWM14-KlUQgXN4oCvx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-30_19,2023-01-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 malwarescore=0 adultscore=0 phishscore=0
+ clxscore=1015 mlxlogscore=999 spamscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310026
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,323 +103,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 7:18 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Mon, Jan 30, 2023 at 03:44:24PM +0800, Jason Wang wrote:
-> > On Mon, Jan 30, 2023 at 1:43 PM Michael S. Tsirkin <mst@redhat.com> wro=
-te:
-> > >
-> > > On Mon, Jan 30, 2023 at 10:53:54AM +0800, Jason Wang wrote:
-> > > > On Sun, Jan 29, 2023 at 3:30 PM Michael S. Tsirkin <mst@redhat.com>=
- wrote:
-> > > > >
-> > > > > On Sun, Jan 29, 2023 at 01:48:49PM +0800, Jason Wang wrote:
-> > > > > > On Fri, Jan 27, 2023 at 6:35 PM Michael S. Tsirkin <mst@redhat.=
-com> wrote:
-> > > > > > >
-> > > > > > > On Fri, Dec 30, 2022 at 11:43:08AM +0800, Jason Wang wrote:
-> > > > > > > > On Thu, Dec 29, 2022 at 4:10 PM Michael S. Tsirkin <mst@red=
-hat.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Thu, Dec 29, 2022 at 04:04:13PM +0800, Jason Wang wrot=
-e:
-> > > > > > > > > > On Thu, Dec 29, 2022 at 3:07 PM Michael S. Tsirkin <mst=
-@redhat.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On Wed, Dec 28, 2022 at 07:53:08PM +0800, Jason Wang =
-wrote:
-> > > > > > > > > > > > On Wed, Dec 28, 2022 at 2:34 PM Jason Wang <jasowan=
-g@redhat.com> wrote:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > =E5=9C=A8 2022/12/27 17:38, Michael S. Tsirkin =
-=E5=86=99=E9=81=93:
-> > > > > > > > > > > > > > On Tue, Dec 27, 2022 at 05:12:58PM +0800, Jason=
- Wang wrote:
-> > > > > > > > > > > > > >> =E5=9C=A8 2022/12/27 15:33, Michael S. Tsirkin=
- =E5=86=99=E9=81=93:
-> > > > > > > > > > > > > >>> On Tue, Dec 27, 2022 at 12:30:35PM +0800, Jas=
-on Wang wrote:
-> > > > > > > > > > > > > >>>>> But device is still going and will later us=
-e the buffers.
-> > > > > > > > > > > > > >>>>>
-> > > > > > > > > > > > > >>>>> Same for timeout really.
-> > > > > > > > > > > > > >>>> Avoiding infinite wait/poll is one of the go=
-als, another is to sleep.
-> > > > > > > > > > > > > >>>> If we think the timeout is hard, we can star=
-t from the wait.
-> > > > > > > > > > > > > >>>>
-> > > > > > > > > > > > > >>>> Thanks
-> > > > > > > > > > > > > >>> If the goal is to avoid disrupting traffic wh=
-ile CVQ is in use,
-> > > > > > > > > > > > > >>> that sounds more reasonable. E.g. someone is =
-turning on promisc,
-> > > > > > > > > > > > > >>> a spike in CPU usage might be unwelcome.
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >> Yes, this would be more obvious is UP is used.
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >>> things we should be careful to address then:
-> > > > > > > > > > > > > >>> 1- debugging. Currently it's easy to see a wa=
-rning if CPU is stuck
-> > > > > > > > > > > > > >>>      in a loop for a while, and we also get a=
- backtrace.
-> > > > > > > > > > > > > >>>      E.g. with this - how do we know who has =
-the RTNL?
-> > > > > > > > > > > > > >>>      We need to integrate with kernel/watchdo=
-g.c for good results
-> > > > > > > > > > > > > >>>      and to make sure policy is consistent.
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >> That's fine, will consider this.
-> > > > > > > > > > > >
-> > > > > > > > > > > > So after some investigation, it seems the watchdog.=
-c doesn't help. The
-> > > > > > > > > > > > only export helper is touch_softlockup_watchdog() w=
-hich tries to avoid
-> > > > > > > > > > > > triggering the lockups warning for the known slow p=
-ath.
-> > > > > > > > > > >
-> > > > > > > > > > > I never said you can just use existing exporting APIs=
-. You'll have to
-> > > > > > > > > > > write new ones :)
-> > > > > > > > > >
-> > > > > > > > > > Ok, I thought you wanted to trigger similar warnings as=
- a watchdog.
-> > > > > > > > > >
-> > > > > > > > > > Btw, I wonder what kind of logic you want here. If we s=
-witch to using
-> > > > > > > > > > sleep, there won't be soft lockup anymore. A simple wai=
-t + timeout +
-> > > > > > > > > > warning seems sufficient?
-> > > > > > > > > >
-> > > > > > > > > > Thanks
-> > > > > > > > >
-> > > > > > > > > I'd like to avoid need to teach users new APIs. So watchd=
-og setup to apply
-> > > > > > > > > to this driver. The warning can be different.
-> > > > > > > >
-> > > > > > > > Right, so it looks to me the only possible setup is the
-> > > > > > > > watchdog_thres. I plan to trigger the warning every watchdo=
-g_thres * 2
-> > > > > > > > second (as softlockup did).
-> > > > > > > >
-> > > > > > > > And I think it would still make sense to fail, we can start=
- with a
-> > > > > > > > very long timeout like 1 minutes and break the device. Does=
- this make
-> > > > > > > > sense?
-> > > > > > > >
-> > > > > > > > Thanks
-> > > > > > >
-> > > > > > > I'd say we need to make this manageable then.
-> > > > > >
-> > > > > > Did you mean something like sysfs or module parameters?
-> > > > >
-> > > > > No I'd say pass it with an ioctl.
-> > > > >
-> > > > > > > Can't we do it normally
-> > > > > > > e.g. react to an interrupt to return to userspace?
-> > > > > >
-> > > > > > I didn't get the meaning of this. Sorry.
-> > > > > >
-> > > > > > Thanks
-> > > > >
-> > > > > Standard way to handle things that can timeout and where userspac=
-e
-> > > > > did not supply the time is to block until an interrupt
-> > > > > then return EINTR.
-> > > >
-> > > > Well this seems to be a huge change, ioctl(2) doesn't say it can
-> > > > return EINTR now.
-> > >
-> > > the one on fedora 37 does not but it says:
-> > >        No single standard.  Arguments, returns, and semantics of ioct=
-l() vary according to the device driver in question (the call  is
-> > >        used as a catch-all for operations that don't cleanly fit the =
-UNIX stream I/O model).
-> > >
-> > > so it depends on the device e.g. for a streams device it does:
-> > > https://pubs.opengroup.org/onlinepubs/9699919799/functions/ioctl.html
-> > > has EINTR.
-> >
-> > Ok, I saw signal(7) also mention about EINTR for ioctl(2):
-> >
-> > """
-> >        If  a  blocked call to one of the following interfaces is
-> > interrupted by a signal handler, then the call is automatically
-> > restarted after the signal handler re=E2=80=90
-> >        turns if the SA_RESTART flag was used; otherwise the call fails
-> > with the error EINTR:
-> >
-> >        * read(2), readv(2), write(2), writev(2), and ioctl(2) calls on
-> > "slow" devices.  A "slow" device is one where the I/O call may block
-> > for an indefinite time, for
-> >          example,  a  terminal,  pipe, or socket.  If an I/O call on a
-> > slow device has already transferred some data by the time it is
-> > interrupted by a signal handler,
-> >          then the call will return a success status (normally, the
-> > number of bytes transferred).  Note that a (local) disk is not a slow
-> > device according to this defi=E2=80=90
-> >          nition; I/O operations on disk devices are not interrupted by =
-signals.
-> > """
->
->
-> And note that if you interrupt then you don't know whether ioctl
-> changed device state or not generally.
+On Tue, 2023-01-31 at 09:43 +0800, Yu Kuai wrote:
+> Hi,
+> 
+> 在 2023/01/30 21:17, James Bottomley 写道:
+> > On Mon, 2023-01-30 at 11:46 +0800, Yu Kuai wrote:
+> > > Hi,
+> > > 
+> > > 在 2023/01/30 11:29, James Bottomley 写道:
+> > > > On Mon, 2023-01-30 at 11:07 +0800, Yu Kuai wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > 在 2023/01/30 1:30, James Bottomley 写道:
+> > > > > > On Sat, 2023-01-28 at 17:41 +0800, Zhong Jinghua wrote:
+> > > > > > > This error will cause a warning:
+> > > > > > > kobject_add_internal failed for block (error: -2 parent:
+> > > > > > > 1:0:0:1). In the lower version (such as 5.10), there is
+> > > > > > > no corresponding error handling, continuing to go down
+> > > > > > > will trigger a kernel panic, so cc stable.
+> > > > > > 
+> > > > > > Is this is important point and what you're saying is that
+> > > > > > this only panics on kernels before 5.10 or so because after
+> > > > > > that it's correctly failed by block device error handling
+> > > > > > so there's nothing to fix in later kernels?
+> > > > > > 
+> > > > > > In that case, isn't the correct fix to look at backporting
+> > > > > > the block device error handling:
+> > > > > 
+> > > > > This is the last commit that support error handling, and
+> > > > > there are many relied patches, and there are lots of refactor
+> > > > > in block layer. It's not a good idea to backport error
+> > > > > handling to lower version. Althrough error handling can
+> > > > > prevent kernel crash in this case, I still think it make
+> > > > > sense to make sure kobject is deleted in order, parent should
+> > > > > not be deleted before child.
+> > > > 
+> > > > Well, look, you've created a very artificial situation where a
+> > > > create closely followed by a delete of the underlying sdev
+> > > > races with the create of the block gendisk devices of sd that
+> > > > bind asynchronously to the created sdev.  The asynchronous
+> > > > nature of the bind gives the elongated race window so the only
+> > > > real fix is some sort of check that the sdev is still viable by
+> > > > the time the bind occurs ... probably in sd_probe(), say a
+> > > > scsi_device_get of sdp at the top which would ensure viability
+> > > > of the sdev for the entire bind or fail the probe if the sdev
+> > > > can't be got.
+> > > 
+> > > Sorry, I don't follow here. 😟
+> > 
+> > In the current kernel the race is mitigated because add_device
+> > fails due to the parent being torn down.  That parent is the sdev-
+> > >gendev so it seems we can detect this in the probe by looking at
+> > the sdev->gendev state, which scsi_device_get() will do.
+> > 
+> > > I agree this is a very artificial situation, however I can't tell
+> > > our tester not to test this way...
+> > > 
+> > > The problem is that kobject session is deleted and then
+> > > sd_probe() tries to create a new kobject under
+> > > hostx/sessionx/x:x:x:x/. I don't see how scsi_device_get() can
+> > > prevent that, it only get a kobject reference and can prevent
+> > > kobject to be released, however, kobject_del() can still be done.
+> > 
+> > So your contention is there's no way that we could make
+> > scsi_device_get see the kernfs deactivation?  I would have thought
+> > checking sdev->sdev_gendev.kobj.sd.active would give that ...
+> > although the check would have to be via an API since
+> > KN_DEACTIVATED_BIAS is internal.
+> 
+> I'm still not sure if such checking is enough.
 
-Yes.
+It's the same check as causes the block device_add() to fail in
+upstream which, so far I believe, you've failed to trigger an oops on.
+The problem is this doesn't reproduce upstream and say you need
+something simple to backport to stable kernels rather than trying to
+backport the device_add() error handling.  The proposal doesn't
+completely close the race windows but I think it narrows it to the
+point where the add/remove race is almost impossible to trigger.
 
-> > >
-> > >
-> > >
-> > > > Actually, a driver timeout is used by other drivers when using
-> > > > controlq/adminq (e.g i40e). Starting from a sane value (e.g 1 minut=
-es
-> > > > to avoid false negatives) seems to be a good first step.
-> > >
-> > > Well because it's specific hardware so timeout matches what it can
-> > > promise.  virtio spec does not give guarantees.  One issue is with
-> > > software implementations. At the moment I can set a breakpoint in qem=
-u
-> > > or vhost user backend and nothing bad happens in just continues.
-> >
-> > Yes but it should be no difference from using a kgdb to debug i40e driv=
-ers.
->
-> Except one of the reasons people prefer programming in userspace is
-> because debugging is so much less painful. Someone using kgdb
-> knows what driver is doing and can work around that.
+> session1/target1:0:0/1:0:0:0/block
+> 
+> 1) t1 is deleting target, and t1 already set 1:0:0:0 to SDEV_CANCEL,
+> and 1:0:0:0 is not deleted yet.
+> 2) t2 is deleting session1, 1:0:0:0 state is SDEV_CACEL, so 1:0:0:0
+> is skipped, and session1 is deleted before 1:0:0:0, which will cause
+> 1:0:0:0 to be not active.
+> 3) t3 create block, it can happen because 1:0:0:0 is still not
+> deleted, and later kobject_add() will found 1:0:0:0 is not active and
+> hence faild.
+> 
+> The problem is that deleting parent kobject will cause child kobject
+> not to be active, and in 3) device_lock is not hold for parents,
+> hence just checking if this scsi_device is active is not enough, we
+> have to make sure parents won't be deleted concurrently, for example,
+> a litter adjustment for above procedures:
+> 
+> 1) ...(the same)
+> 2) t3 create block, it check kobject state is still active
+> 3) t2 delete session1 ...(the same), 1:0:0:0 is not active anymore.
+> 4) t3 continue to create block undre 1:0:0:0, which will fail.
+> 
+> By the way, I think such problem exist because scsi_device state is
+> SDEV_CANCEL doesn't mean that the device is deleted, simply skip such
+> device while removing session is not right.
+> 
+> Do you found other problems if we make sure that kobject is deleted
+> in order?
 
-Ok.
+Given there's nothing to fix in upstream, coming up with elaborate
+ordering constraints on kobjects isn't going to pass muster for
+backporting to stable.
 
->
-> > >
-> > >
-> > > > > Userspace controls the timeout by
-> > > > > using e.g. alarm(2).
-> > > >
-> > > > Not used in iproute2 after a git grep.
-> > > >
-> > > > Thanks
-> > >
-> > > No need for iproute2 to do it user can just do it from shell. Or user=
- can just press CTRL-C.
-> >
-> > Yes, but iproute2 needs to deal with EINTR, that is the challenge
-> > part, if we simply return an error, the next cvq command might get
-> > confused.
-> >
-> > Thanks
->
-> You mean this:
->         start command
->         interrupt
->         start next command
->
-> ?
->
-> next command is confused?
-> I think if you try a new command until previous
-> one finished it's ok to just return EBUSY.
-
-That would be fine.
-
-And we go back to somehow the idea here:
-
-https://lore.kernel.org/all/CACGkMEvQwhOhgGW6F22+3vmR4AW90qYXF+ZO6BQZguUF2x=
-t2SA@mail.gmail.com/T/#m2da63932eae775d7d05d93d44c2f1d115ffbcefe
-
-Will try to do that in the next version.
-
-Thanks
-
->
-> > >
-> > > > >
-> > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > > And before the patch, we end up with a real infinit=
-e loop which could
-> > > > > > > > > > > > be caught by RCU stall detector which is not the ca=
-se of the sleep.
-> > > > > > > > > > > > What we can do is probably do a periodic netdev_err=
-().
-> > > > > > > > > > > >
-> > > > > > > > > > > > Thanks
-> > > > > > > > > > >
-> > > > > > > > > > > Only with a bad device.
-> > > > > > > > > > >
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >>> 2- overhead. In a very common scenario when d=
-evice is in hypervisor,
-> > > > > > > > > > > > > >>>      programming timers etc has a very high o=
-verhead, at bootup
-> > > > > > > > > > > > > >>>      lots of CVQ commands are run and slowing=
- boot down is not nice.
-> > > > > > > > > > > > > >>>      let's poll for a bit before waiting?
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >> Then we go back to the question of choosing a =
-good timeout for poll. And
-> > > > > > > > > > > > > >> poll seems problematic in the case of UP, sche=
-duler might not have the
-> > > > > > > > > > > > > >> chance to run.
-> > > > > > > > > > > > > > Poll just a bit :) Seriously I don't know, but =
-at least check once
-> > > > > > > > > > > > > > after kick.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > I think it is what the current code did where the=
- condition will be
-> > > > > > > > > > > > > check before trying to sleep in the wait_event().
-> > > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > >>> 3- suprise removal. need to wake up thread in=
- some way. what about
-> > > > > > > > > > > > > >>>      other cases of device breakage - is ther=
-e a chance this
-> > > > > > > > > > > > > >>>      introduces new bugs around that? at leas=
-t enumerate them please.
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >> The current code did:
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >> 1) check for vq->broken
-> > > > > > > > > > > > > >> 2) wakeup during BAD_RING()
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >> So we won't end up with a never woke up proces=
-s which should be fine.
-> > > > > > > > > > > > > >>
-> > > > > > > > > > > > > >> Thanks
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > BTW BAD_RING on removal will trigger dev_err. N=
-ot sure that is a good
-> > > > > > > > > > > > > > idea - can cause crashes if kernel panics on er=
-ror.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Yes, it's better to use __virtqueue_break() inste=
-ad.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > But consider we will start from a wait first, I w=
-ill limit the changes
-> > > > > > > > > > > > > in virtio-net without bothering virtio core.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Thanks
-> > > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > >>>
-> > > > > > > > > > >
-> > > > > > > > >
-> > > > > > >
-> > > > >
-> > >
->
+James
 
