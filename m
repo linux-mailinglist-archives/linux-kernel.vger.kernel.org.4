@@ -2,115 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608E2682903
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C583682906
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjAaJhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S230474AbjAaJhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjAaJhc (ORCPT
+        with ESMTP id S232164AbjAaJhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:37:32 -0500
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4671A2FCE7;
-        Tue, 31 Jan 2023 01:37:08 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 92534604F5;
-        Tue, 31 Jan 2023 10:37:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1675157826; bh=FtN4LMS8C9+3nz9zfUMZh9plV6iw9nUPLDBqeq51mBE=;
-        h=Date:To:Cc:From:Subject:From;
-        b=uOEAq8aLWgrNzRvF9QLqw7QJSGA+Fs7TDBtV4FPQmV2xxXe4i+/Nezm+JYGPw8T9G
-         MYSJaaXFAGCfvKbp/+8vi25mAetYtUVPyHT6tNMrQf3J2knzLUlZkTwo0d5GzqSYrt
-         H9cIx3HVLwH+tCG6hMZux6TkjCa7pWcyRWFVWdQ3f37WkcftXoiw4X+vmAKUYcDReb
-         UCKyxKpLwm2v+FLPuDdZQfMjshasGItGjbK6EG6DRlZK53vAV5EXO/AI345g3wvN4S
-         L9oYvZeu8EMsnle+h6MNXt2u4ouukIda8mq0VvjGZbUogAtynoXQI/2Q6xgYX0ndGk
-         ZkCMj6XlaPyug==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BdyIDR776n-g; Tue, 31 Jan 2023 10:37:04 +0100 (CET)
-Received: from [10.0.1.83] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id B242B604F3;
-        Tue, 31 Jan 2023 10:37:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1675157824; bh=FtN4LMS8C9+3nz9zfUMZh9plV6iw9nUPLDBqeq51mBE=;
-        h=Date:To:Cc:From:Subject:From;
-        b=EX7nbdij7cszzqeF1vHyqDG2QVANaT73h07X2w+0UruKIjkMZ0AgWbXhZFCtkzgSs
-         ntTA1ywFHsGqtBz++8QUCXotevZI4WF5uBH2OG/M+GUVi1Y/CBWlIAZoMLlYUhwaXy
-         uYfUP6kOXZ25Wj+rtqxP/+xExEvFGv9jS7dwFV34A3/WjiTxHQFouc7+sC/ONoYAUM
-         N3dAB27geg9AgPi550dfAmzKWXAqZB0qapui/xb7GRQDtU/UlM8J9DWMgTZXt5XPA3
-         ejs3k1PLem9gwtqg3OFWs0ODSivcbBMEjQlT+PWNr+mqxhzNfKFwxbz7qFx7Kf0HuT
-         xo+MN58O+LEhA==
-Message-ID: <cdb562c5-040e-687f-a61f-4273fc356ff3@alu.unizg.hr>
-Date:   Tue, 31 Jan 2023 10:36:55 +0100
+        Tue, 31 Jan 2023 04:37:47 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C56841B66
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:37:38 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id me3so39810464ejb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:37:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OD7XGDv2KxphkB7RKHdi18VA1OrEATdEVb4Xqu3ljXI=;
+        b=sDHQCupikeKKp8TKGc3h0zG38YF3g16GDGBLuAJ067k7cn74z7VyLz1l9ExAe2IjEU
+         8FQ9WA83qmyUIclvYHtmZ9tADHXjYqDJnWIW5r5yJawZ/5LKqPxXV9JYoBb9Ks79IGVg
+         C6Ro1Gmj/oh3mogBGJpp/Mo0WNLUJTdQUswgGQUDqYvQrdZ5VXp/AL6iQV0k3jQZkIbN
+         +M4tisiX+nkxUtLibZQtB8BRFWDpjyfKQwaRZsoflGWuXhhSAPYMZxnhbwy2S//9ZZwt
+         qecdG8vGjFi6hbLK5SIJH6iON7oiuP1CGAEANlsxwhahNjHlikwYDtx5jpqYmyabTiAW
+         kj+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OD7XGDv2KxphkB7RKHdi18VA1OrEATdEVb4Xqu3ljXI=;
+        b=03B/KGEx00SkP6GVYGUtm36ydvBOhfofvh/I2ivYyjdnVqv3CzpxkTXjMvruQ8CqYM
+         gyl+3Wlts6rwITSKrkm/Db49k93mF+QFXfFeQ6+LejuCfSaB5u+5osvyw13t1Sz/2kBv
+         aieDxM0PAA+CDMBoESPEmUFlepqRjzDo4TXvXAvDzpBh4aQABk+BC5VdIJc+kEKrBHbB
+         zvmzMc/oEmDfT4uOyR92JyRYD9dNjQ58mR1gJpdeSqBkYU7Bi9y/1E8vOHKgyi7sg+5i
+         iKvg2rS5+XCzxCLVfkYekeMFBCyZy6qimCZElbhvLpJQeMjyPy/ok5wCQNWjVPHvQlCw
+         Qdhw==
+X-Gm-Message-State: AO0yUKWz4SJdjxxWPVbfUxK7hvKKIqMsrh3zlvCH8ml/8751fmWVyG5q
+        PdOjiz0aeAK2tjPcBTDRc2Mk2Q==
+X-Google-Smtp-Source: AK7set+Ur+1jFhf3cQKjyDZW0knZ3vKYTjCUuqEnWcmp3+BZdR/2r2TdHRbfsZU2YQ4/OcXEPTHl8g==
+X-Received: by 2002:a17:907:9054:b0:878:6519:c740 with SMTP id az20-20020a170907905400b008786519c740mr11015916ejc.44.1675157856950;
+        Tue, 31 Jan 2023 01:37:36 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a4-20020a170906274400b0088224df181asm5285585ejd.224.2023.01.31.01.37.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 01:37:36 -0800 (PST)
+Message-ID: <3813f262-8d36-2b1c-2230-cbb5a161d4c1@linaro.org>
+Date:   Tue, 31 Jan 2023 11:37:35 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Content-Language: en-US
-To:     linux-gpio@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: INFO: memory leak in gpio device in 6.2-rc6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 6/6] regulator: qcom_smd: Add support to define the bootup
+ voltage
+Content-Language: en-GB
+To:     devi priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
+ <20230113150310.29709-7-quic_devipriy@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230113150310.29709-7-quic_devipriy@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 13/01/2023 17:03, devi priya wrote:
+> Kernel does not know the initial voltage set by the bootloaders.
+> During regulator registration, the voltage variable is just declared
+> and it is zero. Based on that, the regulator framework considers current
+> the voltage as zero and tries to bring up each regulator to minimum
+> the supported voltage.
+> 
+> This introduces a dip in the voltage during kernel boot and gets
+> stabilized once the voltage scaling comes into picture.
+> 
+> To avoid the voltage dip, adding support to define the
+> bootup voltage set by the boodloaders and based on it, regulator
+> framework understands that proper voltage is already set
+> 
+> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
+> ---
+>   drivers/regulator/qcom_smd-regulator.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
+> index 1eb17d378897..49a36b07397c 100644
+> --- a/drivers/regulator/qcom_smd-regulator.c
+> +++ b/drivers/regulator/qcom_smd-regulator.c
+> @@ -800,6 +800,7 @@ struct rpm_regulator_data {
+>   	u32 id;
+>   	const struct regulator_desc *desc;
+>   	const char *supply;
+> +	int boot_uV; /* To store the bootup voltage set by bootloaders */
+>   };
+>   
+>   static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+> @@ -809,7 +810,7 @@ static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
+>   };
+>   
+>   static const struct rpm_regulator_data rpm_ipq9574_mp5496_regulators[] = {
+> -	{ "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1" },
+> +	{ "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1", 875000 },
 
-I came across this memory leak apparently in the GPIO device driver.
-It is still present in 6.2-rc6 release candidate kernel (just ran kselftest).
+I think this is a peculiarity of the particular board that than a 
+property of the PMIC. Please describe this in the board or SoC DTS if 
+the value can not be read using the software .
 
-This is a vanilla Torvalds tree kernel with MGLRU and KMEMLEAK (obviously)
-enabled.
-
-If you think this bug is significant, I can attempt the bug bisect in the
-environment that triggered it (Lenovo LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB)
-with BIOS M22KT49A from 11/10/2022 and AlmaLinux 8.7.
-
-Here is the /sys/kernel/debug/kmemleak output:
-
-unreferenced object 0xffff9e67ad71f160 (size 32):
-   comm "gpio-sim.sh", pid 208926, jiffies 4372229685 (age 2101.564s)
-   hex dump (first 32 bytes):
-     67 70 69 6f 2d 73 69 6d 2e 30 2d 6e 6f 64 65 30  gpio-sim.0-node0
-     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-   backtrace:
-     [<0000000098bf3d1b>] slab_post_alloc_hook+0x91/0x320
-     [<00000000da3205c5>] __kmem_cache_alloc_node+0x1bf/0x2b0
-     [<00000000aa51a58a>] __kmalloc_node_track_caller+0x55/0x140
-     [<00000000bd682ecc>] kvasprintf+0x6b/0xd0
-     [<00000000a3431d55>] kasprintf+0x4e/0x70
-     [<00000000f52d2629>] gpio_sim_device_config_live_store+0x401/0x59d [gpio_sim]
-     [<00000000673fc6df>] configfs_write_iter+0xcc/0x130
-     [<000000001d5d0829>] vfs_write+0x2b4/0x3d0
-     [<00000000d2336251>] ksys_write+0x61/0xe0
-     [<00000000f7015bb1>] __x64_sys_write+0x1a/0x20
-     [<000000008ac743d2>] do_syscall_64+0x58/0x80
-     [<000000004d7b7d50>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[root@pc-mtodorov marvin]#
-
-Regards,
-Mirsad
+>   	{}
+>   };
+>   
+> @@ -1394,6 +1395,9 @@ static int rpm_regulator_init_vreg(struct qcom_rpm_reg *vreg, struct device *dev
+>   	vreg->type	= rpm_data->type;
+>   	vreg->id	= rpm_data->id;
+>   
+> +	if (rpm_data->boot_uV)
+> +		vreg->uV = rpm_data->boot_uV;
+> +
+>   	memcpy(&vreg->desc, rpm_data->desc, sizeof(vreg->desc));
+>   	vreg->desc.name = rpm_data->name;
+>   	vreg->desc.supply_name = rpm_data->supply;
 
 -- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
---
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+With best wishes
+Dmitry
+
