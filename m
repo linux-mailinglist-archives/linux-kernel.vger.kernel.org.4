@@ -2,93 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E418F682A93
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 321E6682A97
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjAaKbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:31:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
+        id S231253AbjAaKbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjAaKbE (ORCPT
+        with ESMTP id S230215AbjAaKbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:31:04 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21793F2BE
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:31:03 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id 22so7159972vkn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:31:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=biRptAnS/23/d1sfZT7OvK0Nsb2kEXEG2iefSRQIeYE=;
-        b=N4W0VQzf/QKJ6ONvniC2q/NvKJd+XXlmKEn46E/k278t7UNFa9Vcja4Q5Uoviduf1A
-         62OmwHUqF876n1Ml7aNMGN6Mkfys5arnC0CMD13LwK7oOglYKD9Rj9mphMsOQb5vNxHP
-         XFvrqQxNYijZ6oupnsOE7wlEbT2FFAIVqjev1NxAlqah8Cg2rWi4ZrEVlBMbmRC7KyWM
-         Mgth4/XThgiKdtx4/O+6GCQdWAuVPXDmGEk7I8xGUWQRUzKTNDG+0/r4uDidaxzIb98M
-         pHRVCdCX6jxt9gu0a37ofWJRheHTQyts/ZBrtbXSZKiEe1fugC+AfJmNIxQzIum53dvQ
-         K/cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=biRptAnS/23/d1sfZT7OvK0Nsb2kEXEG2iefSRQIeYE=;
-        b=KxdF6sXahGWOG1NQMkLLWSwS661z93moq95Vvrk1XwLdcq8FlrHCmUgjowYbG1DKc2
-         EopLdlwoQZLydU8ybQxDDxQgARoy6iKGTqx+4UpmTaayvfg7zafiJO3mvpDWlq+fmy1e
-         Jtrk+bmrVjpd4iheVLyRU1TZBXelCfpnGyMx8z5ggeLBxiFz3xqYZ1iCeqDEK2fUdcdq
-         BUCBwGmaz7ZIth/BxFhv3eEaYvdWaoEi0L22e4reVYMefiDQWfa0cJCfNir037yQuWvS
-         AFe4CF75vhA4Pc8SoCCpVw0Zxe5AxGII+N+EnV4u90GVdZxZaI9AGEwW8Qv2evNgcpz4
-         wj3g==
-X-Gm-Message-State: AFqh2koejBlE/W/uUwdg2l2bvVlKdOmQ0uepQOiiPMTCTJx4fQwnntx2
-        Jum+spuvCB9Dm4t+Dcuay3a806r3NWUow+Wg2CgG/w==
-X-Google-Smtp-Source: AMrXdXtA+nQqDbRIGryG5iub+Xzha80yKCFEITt1L/ujGSq+l3Ow5201zNt6pfcrxFe3paPOA51MxPiHEIgf1d0NJ7c=
-X-Received: by 2002:a1f:ac0a:0:b0:3d5:911f:daed with SMTP id
- v10-20020a1fac0a000000b003d5911fdaedmr7024011vke.39.1675161062850; Tue, 31
- Jan 2023 02:31:02 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1675111415.git.andreyknvl@google.com> <be09b64fb196ffe0c19ce7afc4130efba5425df9.1675111415.git.andreyknvl@google.com>
-In-Reply-To: <be09b64fb196ffe0c19ce7afc4130efba5425df9.1675111415.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 31 Jan 2023 11:30:26 +0100
-Message-ID: <CAG_fn=WnxbcbjfKvRGen7fkKyx_9_S+nL9p+8xfeU8N0L93f7w@mail.gmail.com>
-Subject: Re: [PATCH 06/18] lib/stackdepot: annotate init and early init functions
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Tue, 31 Jan 2023 05:31:43 -0500
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00956392B4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:31:41 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:fd54:3eff:f16a:8c82])
+        by laurent.telenet-ops.be with bizsmtp
+        id FNXf2900b3oGUMV01NXf6P; Tue, 31 Jan 2023 11:31:40 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pMnvB-007vjk-Pw;
+        Tue, 31 Jan 2023 11:31:39 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pMnvP-000NWt-NJ;
+        Tue, 31 Jan 2023 11:31:39 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-pci@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 resend] PCI: Fix dropping valid root bus resources with .end = zero
+Date:   Tue, 31 Jan 2023 11:31:36 +0100
+Message-Id: <ecea3ffade000556419683b2a89ab402823bf323.1675160811.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 9:50 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> Add comments to stack_depot_early_init and stack_depot_init to explain
-> certain parts of their implementation.
->
-> Also add a pr_info message to stack_depot_early_init similar to the one
-> in stack_depot_init.
->
-> Also move the scale variable in stack_depot_init to the scope where it
-> is being used.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
-...
->
-> +/* Allocates a hash table via kvmalloc. Can be used after boot. */
-Nit: kvcalloc? (Doesn't really matter much)
+On r8a7791/koelsch:
+
+    kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
+    # cat /sys/kernel/debug/kmemleak
+    unreferenced object 0xc3a34e00 (size 64):
+      comm "swapper/0", pid 1, jiffies 4294937460 (age 199.080s)
+      hex dump (first 32 bytes):
+	b4 5d 81 f0 b4 5d 81 f0 c0 b0 a2 c3 00 00 00 00  .]...]..........
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+      backtrace:
+	[<fe3aa979>] __kmalloc+0xf0/0x140
+	[<34bd6bc0>] resource_list_create_entry+0x18/0x38
+	[<767046bc>] pci_add_resource_offset+0x20/0x68
+	[<b3f3edf2>] devm_of_pci_get_host_bridge_resources.constprop.0+0xb0/0x390
+
+When coalescing two resources for a contiguous aperture, the first
+resource is enlarged to cover the full contiguous range, while the
+second resource is marked invalid.  This invalidation is done by
+clearing the flags, start, and end members.
+
+When adding the initial resources to the bus later, invalid resources
+are skipped.  Unfortunately, the check for an invalid resource considers
+only the end member, causing false positives.
+
+E.g. on r8a7791/koelsch, root bus resource 0 ("bus 00") is skipped, and
+no longer registered with pci_bus_insert_busn_res() (causing the memory
+leak), nor printed:
+
+     pci-rcar-gen2 ee090000.pci: host bridge /soc/pci@ee090000 ranges:
+     pci-rcar-gen2 ee090000.pci:      MEM 0x00ee080000..0x00ee08ffff -> 0x00ee080000
+     pci-rcar-gen2 ee090000.pci: PCI: revision 11
+     pci-rcar-gen2 ee090000.pci: PCI host bridge to bus 0000:00
+    -pci_bus 0000:00: root bus resource [bus 00]
+     pci_bus 0000:00: root bus resource [mem 0xee080000-0xee08ffff]
+
+Fix this by only skipping resources where all of the flags, start, and
+end members are zero.
+
+Fixes: 7c3855c423b17f6c ("PCI: Coalesce host bridge contiguous apertures")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Acked-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+Is there any side effect of not registering the root bus resource with
+pci_bus_insert_busn_res()?  This is the resource created by
+of_pci_parse_bus_range(), and thus affects any DT platforms using
+"bus-range = <0 0>".
+
+Perhaps checking for "!res->flags" would be sufficient?
+
+I assume this still causes memory leaks on systems where resources are
+coalesced, as the second resource of a contiguous aperture is no longer
+referenced? Perhaps instead of clearing the resource, it should be
+removed from the list (and freed? is it actually safe to do that?)?
+
+Apparently Johannes had identified the bug before, but didn't realize
+the full impact...
+https://lore.kernel.org/r/5331e942ff28bb191d62bb403b03ceb7d750856c.camel@sipsolutions.net/
+
+v2:
+  - Add Tested-by, Acked-by.
+---
+ drivers/pci/probe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 1779582fb5007cd1..5988584825482e9f 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -996,7 +996,7 @@ static int pci_register_host_bridge(struct pci_host_bridge *bridge)
+ 	resource_list_for_each_entry_safe(window, n, &resources) {
+ 		offset = window->offset;
+ 		res = window->res;
+-		if (!res->end)
++		if (!res->flags && !res->start && !res->end)
+ 			continue;
+ 
+ 		list_move_tail(&window->node, &bridge->windows);
+-- 
+2.34.1
+
