@@ -2,135 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7D06825EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF23F6825F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbjAaHyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 02:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S231236AbjAaHzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 02:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjAaHyh (ORCPT
+        with ESMTP id S231222AbjAaHzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 02:54:37 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E8A30281;
-        Mon, 30 Jan 2023 23:54:35 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id f34so22906099lfv.10;
-        Mon, 30 Jan 2023 23:54:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P3UB2wsc83MArKTJGJW3EePeDr6MsyyvFxES+baeN/4=;
-        b=ZGGXLy5w9WeMvHwSr7+C0rrfvyoY3QKCCBHUbvvQ7gUI70sXxH/LrbYTSpkY033H6f
-         +EECuFa8i5U2gtz2SLa2wYizhq6kSGdb27XL/GkTPtm8dVg2ufcLrZHMBcy+BPNmnzMV
-         jhg4x+dAUuHUzDLYdJh0V/KSWrKVSXKfHJ/yhI+ik0crgBmMui9WWSEbg7aa5CPwYdyY
-         EBj2me25LQSaCqtYpJmEA7YP1N3B8TAqzx3MsluKB9VLdSK9cvx8ijZ8z60aReZsNF9F
-         wBxtgpMcug7+X/5km06fqkLbNcJ+KXA3cFH2t8iK4Jwwp6176izBYgIbiRgr+deNM/FY
-         IGOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P3UB2wsc83MArKTJGJW3EePeDr6MsyyvFxES+baeN/4=;
-        b=xkREAoS2EgI/tCLkTMN59j6Ezq6FCSwpKsiYvucik08/qNc83lvmWz3gv2ZiIBuCoG
-         e4zsL2DhKfWR+XZd2/OzBho0S10kJbSNuRkWCc4jmEtwWk5RlYVt8C5m8wvOSfp4F7EP
-         YOeZrvNYt5a03GRKRp63JWSwR+qoTtBRx8js7M/kAR4xswCzuj5614VnKmmnB/E0hX0p
-         /pfkKfneuT3cWXAarmgUsq8HCqpMff2qaLnPM5AAFGOy9kdbCUV1heo/Iu1U17TJe2lU
-         P8cuAOoxJ1HqC7tG0AcfT1nYgD7aOU5cYeCIepiL5E2f7tnTtsFuUgA5a/G1Ux0pMTV/
-         rLAA==
-X-Gm-Message-State: AO0yUKVPZlRe2zm9Z4VO7PTUjl9M+xnNGV7ijblHYclAaCxvtH786bgX
-        aeXHfset7JYOvfktxELD78b66q8oF+A=
-X-Google-Smtp-Source: AK7set/LcL+urIEbKZ7/pp2YLvqDSc3QO0Bgy+Deb4ae7zWLxkbQ/ZaKA/92eAEqKE9kV6+HPmx2Jg==
-X-Received: by 2002:a05:6512:2212:b0:4d8:7f17:d0e9 with SMTP id h18-20020a056512221200b004d87f17d0e9mr87607lfu.14.1675151673602;
-        Mon, 30 Jan 2023 23:54:33 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id d6-20020ac244c6000000b004d6d0261a5bsm925209lfm.206.2023.01.30.23.54.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 23:54:33 -0800 (PST)
-Date:   Tue, 31 Jan 2023 10:54:30 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Frank Li <Frank.Li@nxp.com>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] dmaengine: dw-edma: reduce stack usage after
- debugfs rework
-Message-ID: <20230131075430.ecssjouom2kc5apx@mobilestation>
-References: <20230130185101.2883245-1-arnd@kernel.org>
+        Tue, 31 Jan 2023 02:55:06 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201A33E609
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 23:55:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675151704; x=1706687704;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YGP3Zf7KaslK46KT4ZdpOe8BqHP3ROGlVR+cuxazIyA=;
+  b=dJONDMyT+Ow9dULZweLgbYcPgK1+NvgNeJiIARK1tC6eA7gytS/sWOgJ
+   tgjm2j7wj/e01TQYg0t9jZQPd1HzfUS902KN4+8KwCjoxqfLqeQm9yLEn
+   +Mzpaiell3uKj78cSf4mDBMdwwyhD3yQ3cn/f2xhOimp90nK6MQrPqf47
+   5nZ6shTrKF49KfvOCAGfs3t8npmPxRaYR6Ud8aDqJYkND2rX2kjHdUawT
+   8CB5AkwUn8tmfqvdNKwdkPnKzFIAPRmY78Gt//4axIDihghBgvdjQ/X9I
+   c5+SbyZxongalHKp8ZZgOTNuy/0fN0XsKeEjE0ZuXChOsROHZmdh10lwY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="355101007"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="355101007"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 23:55:03 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="788348067"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="788348067"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.172.41]) ([10.249.172.41])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 23:55:00 -0800
+Message-ID: <91b485f7-ffd9-65ce-5656-5659a48968b4@linux.intel.com>
+Date:   Tue, 31 Jan 2023 15:54:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130185101.2883245-1-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, yu-cheng.yu@intel.com
+Subject: Re: [PATCH V4 0/7] iommu/vt-d: Support performance monitoring for
+ IOMMU
+Content-Language: en-US
+To:     kan.liang@linux.intel.com, joro@8bytes.org, will@kernel.org,
+        dwmw2@infradead.org, robin.murphy@arm.com, robert.moore@intel.com,
+        rafael.j.wysocki@intel.com, lenb@kernel.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230128200428.1459118-1-kan.liang@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230128200428.1459118-1-kan.liang@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 07:50:42PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 2023/1/29 4:04, kan.liang@linux.intel.com wrote:
+> From: Kan Liang<kan.liang@linux.intel.com>
 > 
-> After the dw_edma_debugfs_entry arrays are no longer compile-time
-> constant, they take up space on the stack, which exceeds the warning
-> limit after inlining:
+> Changes since V3:
+> - Fix issues found by "./scripts/checkpatch.pl --strict" scripts
+>    Doesn't fix the "macros should not use a trailing semicolon" warning,
+>    since the macros has to include several struct and functions to
+>    further reduce the code duplication.
+> - To fix the 0 value filter issue, introduce new "*_filter_en" attrs
+>    for each filter. The end user must set both filter_en and filter
+>    to utilize a filter.
+> - Re-organize the layout of config1 and config2.
 > 
-> drivers/dma/dw-edma/dw-edma-v0-debugfs.c:280:6: error: stack frame size (1784) exceeds limit (1400) in 'dw_edma_v0_debugfs_on' [-Werror,-Wframe-larger-than]
-> void dw_edma_v0_debugfs_on(struct dw_edma *dw)
+> Changes since V2:
+> - Move ecmd_submit_sync() to iommu.c to avoid #ifdef CONFIG_INTEL_IOMMU
 > 
-> Work around this by preventing dw_edma_debugfs_regs_{wr,rd} from both
-> being inlined together, which cuts the stack frame size in half and
-> makes it fit below the warning limit.
+> Changes since V1:
+> - The cap and ecap registers are always in the first page. It's not
+>    necessary to use the reg size in dmar_validate_one_drhd(). (Patch 1)
+> - Move reg_size up and pair it with reg_base_addr in struct
+>    dmar_drhd_unit (Patch 1)
+> - Update the year of Copyright (Patch 2)
+> - Return 0 if PMS is not supported (Patch 2)
+> - Refine the comments and add a pr_warn for per-counter capabilities
+>    check (Patch 2)
+> - Remove unnecessary iommu_pmu->num_cntr = i (Patch 2)
+> - Remove has_ob of ecmd_submit_sync() (Patch 3)
+> - Remove the helpers from non-INTEL_IOMMU. (Patch 3)
+> - Still keep #ifdef CONFIG_INTEL_IOMMU for ecmd_submit_sync() to
+>    avoid compile warning with non-INTEL_IOMMU config.
+> - Use pr_warn_once() to replace WARN_ONCE() (Patch 4 & 6)
+> - Free iommu PMU if it fails to be registered. (Patch 4)
+> - Remove unnecessary 'handled' variable. (Patch 6)
 > 
-> Fixes: 5c0373eafd83 ("dmaengine: dw-edma: Move eDMA data pointer to debugfs node descriptor")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> A performance monitoring infrastructure, perfmon, is introduced with
+> the VT-d Spec 4.0. The purpose of perfmon is to support collection of
+> information about key events occurring during operation of the remapping
+> hardware, to aid performance tuning and debug. The patch series is to
+> support the perfmon for IOMMU.
+> 
+> To facilitate the perfmon support, the patch series also supports two
+> new generic features of VT-d Spec 4.0.
+> - Support the 'size' field to retrieve the accurate size of the register
+>    set for each dmar device from DRHD. (Patch 1)
+> - Support the new Enhanced Command Interface. (Patch 3)
+> 
+> With the patch series, users can collect the performance data of IOMMU
+> via Linux perf tool. For example,
+> 
+>   $ perf stat -e dmar1/iommu_requests,filter_ats_en=0x1,filter_ats=0x1/
+>     -a sleep 1
+> 
+>   Performance counter stats for 'system wide':
+> 
+>     368,947      dmar1/iommu_requests,filter_ats_en=0x1,filter_ats=0x1/
+> 
+>   1.002592074 seconds time elapsed
+> 
+> Kan Liang (7):
+>    iommu/vt-d: Support size of the register set in DRHD
+>    iommu/vt-d: Retrieve IOMMU perfmon capability information
+>    iommu/vt-d: Support Enhanced Command Interface
+>    iommu/vt-d: Add IOMMU perfmon support
+>    iommu/vt-d: Support cpumask for IOMMU perfmon
+>    iommu/vt-d: Add IOMMU perfmon overflow handler support
+>    iommu/vt-d: Enable IOMMU perfmon support
 
-Great! Thanks for the patch.
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Patches queued for v6.3. Thank you!
 
--Serge(y)
+https://lore.kernel.org/linux-iommu/20230131073740.378984-1-baolu.lu@linux.intel.com/
 
-> ---
-> v2: rebase on top of dmaengine tree
-> ---
->  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> index 42380bf64a70..6542060bd01a 100644
-> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
-> @@ -136,7 +136,8 @@ static void dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
->  	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
->  }
->  
-> -static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
-> +static noinline_for_stack void
-> +dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
->  {
->  	const struct dw_edma_debugfs_entry debugfs_regs[] = {
->  		/* eDMA global registers */
-> @@ -197,7 +198,8 @@ static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
->  	}
->  }
->  
-> -static void dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
-> +static noinline_for_stack void
-> +dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
->  {
->  	const struct dw_edma_debugfs_entry debugfs_regs[] = {
->  		/* eDMA global registers */
-> -- 
-> 2.39.0
-> 
+Best regards,
+baolu
