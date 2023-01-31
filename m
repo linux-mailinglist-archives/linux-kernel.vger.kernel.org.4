@@ -2,138 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A3968351E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300D1683524
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjAaSXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50594 "EHLO
+        id S229680AbjAaS0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:26:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjAaSXx (ORCPT
+        with ESMTP id S231167AbjAaS0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:23:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DADB27D7E
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:23:52 -0800 (PST)
+        Tue, 31 Jan 2023 13:26:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3330427D7E;
+        Tue, 31 Jan 2023 10:26:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9E49B81E21
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 18:23:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C99C3C433EF;
-        Tue, 31 Jan 2023 18:23:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEC03B81E21;
+        Tue, 31 Jan 2023 18:26:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 245F1C433D2;
+        Tue, 31 Jan 2023 18:26:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675189429;
-        bh=VnD9d4+w/3Jfx127g1aQktEJStJ9dQ+jfi150fUwax4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mtc0jMNUrXXop6WwNpS7fLWyH1YMqKs+EpcAX/QMXhb+qtd0A1HrLOAeaeF0etXxm
-         2Y4ogTZMtQvbUzLtqVmPYZp9Wwy6uaci6eS2teya/w6zqRr0XuqogzIh7sGZvVJDeB
-         alFpPIKIJ3WlttnKpx5Ad8RL4J5o88uodg/FQl3p1vq9fPf7ylbGsM8w9qDGzuVi24
-         zGMmvXwdYnxjL5K4KUyC+0QAYQHQ1bwa9u3ivgpZAkbDO8yl3HXWTS9cxhls+9euTb
-         wSnGEnY5L2qh8ZnXlooFthxzW/eMJHsy2wpKI4tujjYwcuQJ5wMdfh0hPISpJBOYZp
-         RO7NnPeor7wyA==
-Date:   Tue, 31 Jan 2023 18:23:45 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     guoren@kernel.org
-Cc:     tongtiangen@huawei.com, alexandre.ghiti@canonical.com,
-        muchun.song@linux.dev, palmer@rivosinc.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH -next V2] riscv: mm: hugetlb: Enable
- ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Message-ID: <Y9lcsajzIpS5ZkDT@spud>
-References: <20230127050421.1920048-1-guoren@kernel.org>
+        s=k20201202; t=1675189566;
+        bh=lkbkiaZrD8zXRI/8NCIDbrXjxjGi9DThHe+rjAlqA5w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=euAsoBtPzn/yYx5mlQiQtm26AtDlx68REJAuTRiDW4BOSy3CBk/q9XRaDsoDtUPmp
+         CoB2/Pu9xwupxGVScMGKmS2HfTGWPUl4cmiDYF/TFq8rWH7n02RJWfiYqPX6iEUYls
+         VUaeInSYwlTD33ytr3rvAopR4D4YYnVPbHyJzBJgcWYwdDF0jFcfZQBPQaZLLfEv/x
+         qJqxhnvgxx+Bp33hb3ivX4UxTf0Y3wVQaQkhn7wJBTpL7JtYETbMtybvOs3uT4/wSA
+         NNdejM649swXEZVONGWcEBoWRcprVUo2RiXdR/O5We0o2jLRfqR2qmdEug1IDcciIn
+         oFOd7GMGqMNrw==
+Message-ID: <e37497f5-bca7-aa9a-6629-472cbd8072a3@kernel.org>
+Date:   Tue, 31 Jan 2023 19:25:58 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jzDCvYMAFAxxEvI8"
-Content-Disposition: inline
-In-Reply-To: <20230127050421.1920048-1-guoren@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net-next v2 1/5] dt-bindings: net: Add Motorcomm yt8xxx
+ ethernet phy
+To:     Frank Sae <Frank.Sae@motor-comm.com>,
+        Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     xiaogang.fan@motor-comm.com, fei.zhang@motor-comm.com,
+        hua.sun@motor-comm.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230128031314.19752-1-Frank.Sae@motor-comm.com>
+ <20230128031314.19752-2-Frank.Sae@motor-comm.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230128031314.19752-2-Frank.Sae@motor-comm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/01/2023 04:13, Frank Sae wrote:
+>  Add a YAML binding document for the Motorcom yt8xxx Ethernet phy driver.
+>  
+> Signed-off-by: Frank Sae <Frank.Sae@motor-comm.com>
 
---jzDCvYMAFAxxEvI8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-On Fri, Jan 27, 2023 at 12:04:21AM -0500, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->=20
-> Add HVO support for RISC-V; see commit 6be24bed9da3 ("mm: hugetlb:
-> introduce a new config HUGETLB_PAGE_FREE_VMEMMAP"). This patch is
-> similar to commit 1e63ac088f20 ("arm64: mm: hugetlb: enable
-> HUGETLB_PAGE_FREE_VMEMMAP for arm64"), and riscv's motivation is the
-> same as arm64. The current riscv was ready to enable HVO after fixup,
-> ref commit d33deda095d3 ("riscv/mm: hugepage's PG_dcache_clean flag
-> is only set in head page").
->=20
-> The HugeTLB VmemmapvOptimization (HVO) defaults to off in Kconfig.
->=20
-> Here is the riscv test log:
-> cat /proc/sys/vm/hugetlb_optimize_vmemmap
-> echo 8 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-> mount -t hugetlbfs none test/ -o pagesize=3D2048k
-> <Try some simple hugetlb test in test dir, no problem found.>
->=20
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Link: https://lore.kernel.org/linux-riscv/1F5AF29D-708A-483B-A29F-CAEE6F5=
-54866@linux.dev/
-> Acked-by: Muchun Song <songmuchun@bytedance.com>
+This missed also DT list so it means it won't be tested.
+
 > ---
-> Changelog:
-> V2:
->  - Optimize the commit log
->  - Remove riscv page compound_head fixup which has been merged.
->  - Rebase on riscv for-next (20230127)
->  - Add HVO author's acked-by
->=20
-> V1:
-> https://lore.kernel.org/linux-riscv/20221023133205.3493564-1-guoren@kerne=
-l.org/
-> ---
->  arch/riscv/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index e2b656043abf..949974a38a41 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -46,6 +46,7 @@ config RISCV
->  	select ARCH_WANT_FRAME_POINTERS
->  	select ARCH_WANT_GENERAL_HUGETLB
->  	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-> +	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>  .../bindings/net/motorcomm,yt8xxx.yaml        | 102 ++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  MAINTAINERS                                   |   1 +
+>  3 files changed, 105 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> new file mode 100644
+> index 000000000000..b666584d51eb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/motorcomm,yt8xxx.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/motorcomm,yt8xxx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MotorComm yt8xxx Ethernet PHY
+> +
+> +maintainers:
+> +  - frank sae <frank.sae@motor-comm.com>
+> +
+> +allOf:
+> +  - $ref: ethernet-phy.yaml#
+> +
+> +properties:
 
-CI is telling me that this is added out of order. I suppose that means
-that T is before _ in the "alphabet", and this should be moved up one
-line.
-Perhaps it can be fixed on application!
+I think the problem of missing compatible is still not solved...
 
->  	select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
->  	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
->  	select BUILDTIME_TABLE_SORT if MMU
-> --=20
-> 2.36.1
->=20
+> +  rx-internal-delay-ps:
+> +    description: |
+> +      RGMII RX Clock Delay used only when PHY operates in RGMII mode with
+> +      internal delay (phy-mode is 'rgmii-id' or 'rgmii-rxid') in pico-seconds.
+> +    enum: [ 0, 150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1500, 1650,
+> +            1800, 1900, 1950, 2050, 2100, 2200, 2250, 2350, 2500, 2650, 2800,
+> +            2950, 3100, 3250, 3400, 3550, 3700, 3850, 4000, 4150 ]
+> +    default: 1900
+> +
+> +  tx-internal-delay-ps:
+> +    description: |
+> +      RGMII TX Clock Delay used only when PHY operates in RGMII mode with
+> +      internal delay (phy-mode is 'rgmii-id' or 'rgmii-txid') in pico-seconds.
+> +    enum: [ 0, 150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1500, 1650, 1800,
+> +            1950, 2100, 2250 ]
+> +    default: 150
+> +
+> +  motorcomm,clk-out-frequency-hz:
+> +    description: clock output on clock output pin.
+> +    enum: [0, 25000000, 125000000]
+> +    default: 0
+> +
+> +  motorcomm,keep-pll-enabled:
+> +    description: |
+> +      If set, keep the PLL enabled even if there is no link. Useful if you
+> +      want to use the clock output without an ethernet link.
+> +    type: boolean
+> +
+> +  motorcomm,auto-sleep-disabled:
+> +    description: |
+> +      If set, PHY will not enter sleep mode and close AFE after unplug cable
+> +      for a timer.
+> +    type: boolean
+> +
+> +  motorcomm,tx-clk-adj-enabled:
+> +    description: |
+> +      This configuration is mainly to adapt to VF2 with JH7110 SoC.
+> +      Useful if you want to use tx-clk-xxxx-inverted to adj the delay of tx clk.
+> +    type: boolean
+> +
+> +  motorcomm,tx-clk-10-inverted:
+> +    description: |
+> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
+> +      Transmit PHY Clock delay train configuration when speed is 10Mbps.
+> +    type: boolean
+> +
+> +  motorcomm,tx-clk-100-inverted:
+> +    description: |
+> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
+> +      Transmit PHY Clock delay train configuration when speed is 100Mbps.
+> +    type: boolean
+> +
+> +  motorcomm,tx-clk-1000-inverted:
+> +    description: |
+> +      Use original or inverted RGMII Transmit PHY Clock to drive the RGMII
+> +      Transmit PHY Clock delay train configuration when speed is 1000Mbps.
+> +    type: boolean
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    mdio0 {
 
---jzDCvYMAFAxxEvI8
-Content-Type: application/pgp-signature; name="signature.asc"
+mdio
 
------BEGIN PGP SIGNATURE-----
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        phy-mode = "rgmii-id";
+> +        ethernet-phy@4 {
+> +            reg = <4>;
+> +            rx-internal-delay-ps = <2100>;
+> +            tx-internal-delay-ps = <150>;
+> +            motorcomm,clk-out-frequency-hz = <0>;
+> +            motorcomm,keep-pll-enabled;
+> +            motorcomm,auto-sleep-disabled;
+> +        };
+> +    };
+> +  - |
+> +    mdio0 {
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9lcsQAKCRB4tDGHoIJi
-0unmAQDThJqtWFmjK8UJeucxod5elztkEGFbVBGc/3NVd0lUdwEAgTM9IjxSoOIn
-sHAzccTxl07PcjJhG5qwPwcnNc1eTA8=
-=hf/N
------END PGP SIGNATURE-----
+mdio
 
---jzDCvYMAFAxxEvI8--
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        phy-mode = "rgmii";
+> +        ethernet-phy@5 {
+> +            reg = <5>;
+> +            motorcomm,clk-out-frequency-hz = <125000000>;
+> +            motorcomm,keep-pll-enabled;
+> +            motorcomm,auto-sleep-disabled;
+> +        };
+> +    };
+
+Best regards,
+Krzysztof
+
