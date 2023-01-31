@@ -2,171 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF75683831
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4A5683834
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbjAaVA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:00:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S231883AbjAaVBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:01:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjAaVAZ (ORCPT
+        with ESMTP id S230301AbjAaVBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:00:25 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CD599
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:00:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1675198817; bh=MSM1dyVVeYWbZgYwM+ZMUuaKXnKRKbTaYBvxINXvbwg=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=igIY7W0L/Y8LbTjsceL4YP/hFYDA+OGHfYw1HGeBoWaQRwjw/pIQ6Q8f6OnQLKavG
-         fnt5tGGhi1lQotWCFCWIIztN5ulUZwvE6QzQW90Pz6KlMapqS2X3BrRi2Zw8tjZolB
-         t/ydUKQLtcsLO6e8wmMsg6WZzPjmzLH3IeWiuIVlHRtA9gT23CgmP/Nf4A2yNcU4mA
-         2LiITHf7R/SxESXW2QwslZDm5NQmij8JaB2Gz7+cFolgZF5QNVTDImXNNw88MggGLT
-         txwEVNs/ry795BVsCefsVYDodOlNzresgmg2+lMHR7ZrYaxepbP2H00RSzgu85pRHm
-         SvMlPxY4Q0iSg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MStCe-1pDjNX23Uk-00UGJz; Tue, 31
- Jan 2023 22:00:17 +0100
-Date:   Tue, 31 Jan 2023 22:00:16 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Joe Perches <joe@perches.com>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-kernel@vger.kernel.org, Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH] checkpatch.pl: Relax commit ID check to allow more than
- 12 chars
-Message-ID: <Y9mBYEAq/g42s/S2@probook>
-References: <20230129123431.1282427-1-j.neuschaefer@gmx.net>
- <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
+        Tue, 31 Jan 2023 16:01:14 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC4B2729
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:01:13 -0800 (PST)
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 29C9A44303
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 21:01:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675198872;
+        bh=etom2qVxb9kUkl83UlutiswUofv0UufWb2skcOFCPPw=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=OYIRDBX40LZv2AyQXVZxynP7XXUNxBfKEFrL6a2GJwdUztOOTivJrTP5mCHo3xUeF
+         96HsTPbZ7ABSeZHDfMe5k0S3Hd+V6YseyFXF0lAjNS+suzXwbjNK88JtYfrrdTWpmq
+         wpB4Sm8mE2aVfdHoaKuROUIzRPB7mSqPBealMqlttVp95Gwq2oi/SRNVohr8EndGbl
+         yqiKdzPDgWr+bnPiCpsjXumD7hkzQBxPhTI9onLP76VERGvVcgAfs7tqXOaY/8yRjc
+         cnjNLRhpmFPBwAIkO4YqEjdYYGLby0hgBy8ofB2lq3Y52jZFMwLoq17HlnJ8+7WiQ/
+         UVAG5OS/ZoXDA==
+Received: by mail-wm1-f71.google.com with SMTP id fl5-20020a05600c0b8500b003db12112fdeso9410842wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:01:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=etom2qVxb9kUkl83UlutiswUofv0UufWb2skcOFCPPw=;
+        b=t4UIYEMK1U2rCv3z8TmKwbKTnNvXsEn4j7ctKkf1BVLKzKy347GUgwXAiQpu0kj4vz
+         gA9h+9GHLsZM5gOvP8O9LhbxEqPP2p00cD3Mon8nXpiDa9VGZrk3ZVq8nI9vPxmqJ7ip
+         SXkGlALDnvzMyww+0Vbctak1z1xkmeDCY9mj/M2k+KbnHEd3rJwpUQNxbmfm5cTFki3I
+         A8W+b+bwhJJpOe8b9vacR7S+nFWuQYK//jF69i8Jvb93SqeAuitn2YkUJ4GTKPlESHxs
+         /TpqvRSmrPTQH4dT2h0tB5nDdlhYehc/WEbwIt/YbUPnRsW4BuJ98phf1gh5GFvtqHNy
+         JTsg==
+X-Gm-Message-State: AO0yUKWPTifSev/ZTxEV+Ppe/RYSeC7I2CJNRW2Gj4tBg4W584BJ89NF
+        TOus+a9RCm1qhg5sKgITKCW9r8fEN0dL5Dx9RMCbEDGT9RlBo2Z2QXBfwon1pC3xJebyGDwKWXl
+        QOG4/I1jgUZQTPY6EWTClwBx+YoDCOm/ify4GRAVuUg==
+X-Received: by 2002:a5d:5092:0:b0:2bf:ee58:72b1 with SMTP id a18-20020a5d5092000000b002bfee5872b1mr325271wrt.23.1675198871610;
+        Tue, 31 Jan 2023 13:01:11 -0800 (PST)
+X-Google-Smtp-Source: AK7set8tasggKf/Rx9l1go+kcn/gV3gCYWXptSmptiXfMWE21yhGCKkWfePVwItC66FiAsdLnfbQow==
+X-Received: by 2002:a5d:5092:0:b0:2bf:ee58:72b1 with SMTP id a18-20020a5d5092000000b002bfee5872b1mr325240wrt.23.1675198871377;
+        Tue, 31 Jan 2023 13:01:11 -0800 (PST)
+Received: from qwirkle.internal ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id t27-20020adfa2db000000b002366553eca7sm15530408wra.83.2023.01.31.13.01.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 13:01:10 -0800 (PST)
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Fred Klassen <fklassen@appneta.com>
+Cc:     Willem de Bruijn <willemb@google.com>,
+        Andrei Gherzan <andrei.gherzan@canonical.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 4/4] selftests: net: udpgso_bench_tx: Cater for pending datagrams zerocopy benchmarking
+Date:   Tue, 31 Jan 2023 21:00:51 +0000
+Message-Id: <20230131210051.475983-4-andrei.gherzan@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dbsH6cXHw2LGY0yv"
-Content-Disposition: inline
-In-Reply-To: <78d224a63f6c27bf700d59007b6f3c89746d728c.camel@perches.com>
-X-Provags-ID: V03:K1:Vo5qwmmgMQ+JZvjbi0fTBviJBoRgT286o8jRyJJG2s4pDpMmcg2
- aelUPRVrDh5wbkaqATzXE6EDxhZpswjric/PepyfSkRSUXgYn7tFuDjcd++w0EgyFEhvwNQ
- g4l72qzQ/uEAhOedF/1Vl8YoJkepj325ZUnLfsorB3tBxZ60uxEGP3ESJ4BYcFdu72yzDi2
- r40VMq0omFErXNcAjLYbQ==
-UI-OutboundReport: notjunk:1;M01:P0:sx13+h+4V6s=;GCFO3Pk6re4oQRt8cRA1H/7o0Tf
- XBPIskbN9Ny7/4jE5k2oaFtMLJLmM6zD6PY+/IhNLhQg0/X1sOWNjMzbnoYSXQeYBO5uFvxv5
- r3xtmgurmENjNWrxUSuztX+8P4pHBYLADDHYjPA2bi4y6ZWm9VcRjR8lpeoxwUJ3VbCQUc1YG
- bJSRpyUvMlydprCQt9i5aiSNlvXZVaQuQnLAN2hy89BtuGW5LtFSgwfSPot29DEflJ2McSRh/
- mck0wR4XwAkm4GzDSlURZQzHpfrOaOaMDWyjN1OX7hE8euqpkV6AmpOZ8OM844LaSA4YhFwmi
- RholBlS2rBxibBYok1/ruom8BiV/2LGUf4K5hzRQbpAlmNPWKCM3D4bMIJbF5gIlKjCJANisO
- l/5s8eaIR8gUvtxUTclnOq0X5nKuNo5WmPXt8UCsHyEZ2vJrJ5fzX6vQ7Bdw84XnQoXp4NxRp
- 9CfBVxMbrke0mk4hF0Keb5eSvq4xmCwotN+hEneUDBVxmNHRR+qVXUyb7hfUWdGOeQfi5MJzY
- RAIpkT2IQUHiVHhgKTa8SttlVz+3TiXDi8MGw1AKlFmLotKj762wE0EOnsM4wzGKPKykmgFDn
- PdNSEAMInC0HHuoJYol2nmxGoM0GcSbW1EVGkQKHni/QDQ323OtH+OayF8XNVG5bA8l42Fugh
- fs/rJ8In6a809iVuV4AIko5y6PUaVbtlA/44OgbhyuLIExjRO7DIlJIj0wqceH4pLA7L1T/oX
- RlJXtrpc0idL8+ZJW6d+Ks7uVtfzVvVedlBpfNzy5jhA12Vbfa1EDSvfKxjeRacs7cSVABMlP
- iycdYyEdMLc8kQ7aH2K3clrLq3xhn1oAZnXnDN40Jj3BpCfOjmIFNQR0EvQRZHK63xGQH9Lez
- 8CqX3iOxMRJcMwi6l+DhjBBGJK8+78M6tPtgu1dNFKhRkiYW06d9QP5QBocLNznEAuwAQZa9M
- jRuWP3C72HY37XG3LQNxvEjVukk=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The test tool can check that the zerocopy number of completions value is
+valid taking into consideration the number of datagram send calls. This can
+catch the system into a state where the datagrams are still in the system
+(for example in a qdisk, waiting for the network interface to return a
+completion notification, etc).
 
---dbsH6cXHw2LGY0yv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This change adds a retry logic of computing the number of completions up to
+a configurable (via CLI) timeout (default: 2 seconds).
 
-On Sun, Jan 29, 2023 at 09:52:38AM -0800, Joe Perches wrote:
-> On Sun, 2023-01-29 at 13:34 +0100, Jonathan Neusch=C3=A4fer wrote:
-> > By now, `git log --pretty=3D%h` (on my copy of linux.git) prints commit
-> > hashes with 13 digits, because of the number of objects.
-> >=20
-> > Relax the rule in checkpatch.pl to allow a few more digits (up to 16).
->=20
-> NAK without updating the process docs first.
+Fixes: 79ebc3c26010 ("net/udpgso_bench_tx: options to exercise TX CMSG")
+Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+Cc: Willem de Bruijn <willemb@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+---
+ tools/testing/selftests/net/udpgso_bench_tx.c | 34 +++++++++++++++----
+ 1 file changed, 27 insertions(+), 7 deletions(-)
 
-Good point, I'll do that.
+diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
+index b47b5c32039f..ef887842522a 100644
+--- a/tools/testing/selftests/net/udpgso_bench_tx.c
++++ b/tools/testing/selftests/net/udpgso_bench_tx.c
+@@ -62,6 +62,7 @@ static int	cfg_payload_len	= (1472 * 42);
+ static int	cfg_port	= 8000;
+ static int	cfg_runtime_ms	= -1;
+ static bool	cfg_poll;
++static int	cfg_poll_loop_timeout_ms = 2000;
+ static bool	cfg_segment;
+ static bool	cfg_sendmmsg;
+ static bool	cfg_tcp;
+@@ -235,16 +236,17 @@ static void flush_errqueue_recv(int fd)
+ 	}
+ }
+ 
+-static void flush_errqueue(int fd, const bool do_poll)
++static void flush_errqueue(int fd, const bool do_poll,
++		unsigned long poll_timeout, const bool poll_err)
+ {
+ 	if (do_poll) {
+ 		struct pollfd fds = {0};
+ 		int ret;
+ 
+ 		fds.fd = fd;
+-		ret = poll(&fds, 1, 500);
++		ret = poll(&fds, 1, poll_timeout);
+ 		if (ret == 0) {
+-			if (cfg_verbose)
++			if ((cfg_verbose) && (poll_err))
+ 				fprintf(stderr, "poll timeout\n");
+ 		} else if (ret < 0) {
+ 			error(1, errno, "poll");
+@@ -254,6 +256,20 @@ static void flush_errqueue(int fd, const bool do_poll)
+ 	flush_errqueue_recv(fd);
+ }
+ 
++static void flush_errqueue_retry(int fd, unsigned long num_sends)
++{
++	unsigned long tnow, tstop;
++	bool first_try = true;
++
++	tnow = gettimeofday_ms();
++	tstop = tnow + cfg_poll_loop_timeout_ms;
++	do {
++		flush_errqueue(fd, true, tstop - tnow, first_try);
++		first_try = false;
++		tnow = gettimeofday_ms();
++	} while ((stat_zcopies != num_sends) && (tnow < tstop));
++}
++
+ static int send_tcp(int fd, char *data)
+ {
+ 	int ret, done = 0, count = 0;
+@@ -413,7 +429,8 @@ static int send_udp_segment(int fd, char *data)
+ 
+ static void usage(const char *filepath)
+ {
+-	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
++	error(1, 0, "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] "
++		    "[-L secs] [-M messagenr] [-p port] [-s sendsize] [-S gsosize]",
+ 		    filepath);
+ }
+ 
+@@ -423,7 +440,7 @@ static void parse_opts(int argc, char **argv)
+ 	int max_len, hdrlen;
+ 	int c;
+ 
+-	while ((c = getopt(argc, argv, "46acC:D:Hl:mM:p:s:PS:tTuvz")) != -1) {
++	while ((c = getopt(argc, argv, "46acC:D:Hl:L:mM:p:s:PS:tTuvz")) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			if (cfg_family != PF_UNSPEC)
+@@ -452,6 +469,9 @@ static void parse_opts(int argc, char **argv)
+ 		case 'l':
+ 			cfg_runtime_ms = strtoul(optarg, NULL, 10) * 1000;
+ 			break;
++		case 'L':
++			cfg_poll_loop_timeout_ms = strtoul(optarg, NULL, 10) * 1000;
++			break;
+ 		case 'm':
+ 			cfg_sendmmsg = true;
+ 			break;
+@@ -679,7 +699,7 @@ int main(int argc, char **argv)
+ 			num_sends += send_udp(fd, buf[i]);
+ 		num_msgs++;
+ 		if ((cfg_zerocopy && ((num_msgs & 0xF) == 0)) || cfg_tx_tstamp)
+-			flush_errqueue(fd, cfg_poll);
++			flush_errqueue(fd, cfg_poll, 500, true);
+ 
+ 		if (cfg_msg_nr && num_msgs >= cfg_msg_nr)
+ 			break;
+@@ -698,7 +718,7 @@ int main(int argc, char **argv)
+ 	} while (!interrupted && (cfg_runtime_ms == -1 || tnow < tstop));
+ 
+ 	if (cfg_zerocopy || cfg_tx_tstamp)
+-		flush_errqueue(fd, true);
++		flush_errqueue_retry(fd, num_sends);
+ 
+ 	if (close(fd))
+ 		error(1, errno, "close");
+-- 
+2.34.1
 
-Thanks,
-Jonathan
-
->=20
-> Documentation/process/submitting-patches.rst-If your patch fixes a bug in=
- a specific commit, e.g. you found an issue using
-> Documentation/process/submitting-patches.rst:``git bisect``, please use t=
-he 'Fixes:' tag with the first 12 characters of
-> Documentation/process/submitting-patches.rst-the SHA-1 ID, and the one li=
-ne summary.  Do not split the tag across multiple
-> Documentation/process/submitting-patches.rst-lines, tags are exempt from =
-the "wrap at 75 columns" rule in order to simplify
-> Documentation/process/submitting-patches.rst-parsing scripts.  For exampl=
-e::
-> Documentation/process/submitting-patches.rst-
-> Documentation/process/submitting-patches.rst-   Fixes: 54a4f0239f2e ("KVM=
-: MMU: make kvm_mmu_zap_page() return the number of pages it actually fr>
-> Documentation/process/submitting-patches.rst-
-> Documentation/process/submitting-patches.rst-The following ``git config``=
- settings can be used to add a pretty format for
-> Documentation/process/submitting-patches.rst-outputting the above style i=
-n the ``git log`` or ``git show`` commands::
-> Documentation/process/submitting-patches.rst-
-> Documentation/process/submitting-patches.rst-   [core]
-> Documentation/process/submitting-patches.rst:           abbrev =3D 12
-> Documentation/process/submitting-patches.rst-   [pretty]
-> Documentation/process/submitting-patches.rst-           fixes =3D Fixes: =
-%h (\"%s\")
->=20
-> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> []
-> > @@ -3177,7 +3177,7 @@ sub process {
-> >  				$tag_case =3D 0 if $tag eq "Fixes:";
-> >  				$tag_space =3D 0 if ($line =3D~ /^fixes:? [0-9a-f]{5,} ($balanced_=
-parens)/i);
-> >=20
-> > -				$id_length =3D 0 if ($orig_commit =3D~ /^[0-9a-f]{12}$/i);
-> > +				$id_length =3D 0 if ($orig_commit =3D~ /^[0-9a-f]{12,16}$/i);
-> >  				$id_case =3D 0 if ($orig_commit !~ /[A-F]/);
-> >=20
-> >  				# Always strip leading/trailing parens then double quotes if exist=
-ing
-> > @@ -3194,7 +3194,7 @@ sub process {
-> >  			if ($ctitle ne $title || $tag_case || $tag_space ||
-> >  			    $id_length || $id_case || !$title_has_quotes) {
-> >  				if (WARN("BAD_FIXES_TAG",
-> > -				     "Please use correct Fixes: style 'Fixes: <12 chars of sha1> (=
-\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
-> > +				     "Please use correct Fixes: style 'Fixes: <12-16 chars of sha1=
-> (\"<title line>\")' - ie: 'Fixes: $cid (\"$ctitle\")'\n" . $herecurr) &&
-> >  				    $fix) {
-> >  					$fixed[$fixlinenr] =3D "Fixes: $cid (\"$ctitle\")";
-> >  				}
-> > --
-> > 2.39.0
-> >=20
->=20
-
---dbsH6cXHw2LGY0yv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmPZgWAACgkQCDBEmo7z
-X9syqhAAjCLoXy/zOreS8TWQ0IrrO/yBMXSCv5pyAmT0rN01fjbaiHR7w2xpDGff
-d4fAvLqc6IyN4ORhruGJSCjcm9tzYvoE/glotuygNktL9xahTeAjdFdUMYWsj6j7
-zVAbxpbrtITH6F6K3zv3UXbpqE4hMPv0kDgrJblwrwrY0Pik5ypwE8eRcsXc26O6
-zjNgwjNNA+b1yv+a+WvAmr7HIw46QlCWfEPeWegyDoCttvKCmTcLkXKtnaEHBgjd
-YEaLGQaeE6MLXYiQB5cthPDn8X9ncy+pcjMSrl1sOrk35q8OcUnNZyiZQlLXATGf
-X0RpqF4fycbRWIqU5vzikO9dLunl/gY41rEQEkV6UGia4Xj474a5IODq5Fm4FX6E
-Mf2oERpqaAbn+IfBiYaP+I1juozPY55D83aCTcInWE4U+IkZOdFJXx/iIwU1AVyX
-tT3X+x50dYQQ6dGXaY65wOb4mNyEbYcMu/9ygcDR2dYoSCFh72FJB20kPYOEYI1F
-evIOWP6lEP5bWdU4YEmqRgYywvvJMXlE4MSXKFIx3ZTyh2R6+7k6Fo4hYKCb0690
-3Qic54+33YjgdySTLrv3BKCE77z69sdvB9TxMiNcsHetkL3obcvI6cFOL0TKmJDe
-9cpDR8+jUO4n8FtXkvGXIY2hhTEdsW3Od8GW5uxGY1dkI06ShQ4=
-=LoGj
------END PGP SIGNATURE-----
-
---dbsH6cXHw2LGY0yv--
