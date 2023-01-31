@@ -2,90 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968986827EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE906827F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbjAaJCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S232213AbjAaJCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjAaJB5 (ORCPT
+        with ESMTP id S232183AbjAaJCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:01:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2014F474E0;
-        Tue, 31 Jan 2023 00:58:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 04:02:08 -0500
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83D654C6EA;
+        Tue, 31 Jan 2023 00:58:33 -0800 (PST)
+Received: from 8bytes.org (p5b006afb.dip0.t-ipconnect.de [91.0.106.251])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE08F6146C;
-        Tue, 31 Jan 2023 08:57:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4D8C433EF;
-        Tue, 31 Jan 2023 08:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675155448;
-        bh=ISESLkl40Te6umM1VGiHLeoxC2NCXAUuGsERDg2T2Ns=;
+        by mail.8bytes.org (Postfix) with ESMTPSA id 68D1C2240D5;
+        Tue, 31 Jan 2023 09:57:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1675155445;
+        bh=HND3GhRQqeOUknErw80DpidVfZ5cmPK3Nh8LxM5ynBA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LZdmeEcJGHXPpZkhbNBV0YJd6M2xFbOvCEdYFdOdqw8HCpra4ZxCEU3PvSkpmu9EF
-         qDA/ZdELX1DaOp36+55eJukXKgCA72SJAjByYQzoKvggOPLDQVoAX6MhJ3YeYzHPyk
-         VjyYZ1u6H2OW/wbcofU194G/2uIvzMN4vJxT6S6+Jr7P7AvDXhJuZhprfvrHDrH8cp
-         nOeDz7IP0XKLGttwMGTuXiuKc2zrmgsy/wyODIyfTX6JnfXvEKLbqFOLssw8AB8ve0
-         8pHmGr3FmM2Q6cgkQ5VFAuqW6CnUunG0EHnEhapCEciHMcOrXHsknTRXmQMz1ccCc8
-         GgT2S8Iyqjtag==
-Date:   Tue, 31 Jan 2023 10:57:23 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
-Subject: Re: [PATCH v2 1/3] serdev: Add method to assert break
-Message-ID: <Y9jX81zJTM9xzDo2@unreal>
-References: <20230130180504.2029440-1-neeraj.sanjaykale@nxp.com>
- <20230130180504.2029440-2-neeraj.sanjaykale@nxp.com>
+        b=fAbfc0JEueUVQyWR48ST1c9tf6NNWpXRpGXbW11UWVXJFmMrv3ZrX96q68FEPiSW6
+         KqpKSv/6GcMLVW2SJjc5KVwXh0uetPwEuT6aOR4409RKV+4aU3wLEYcnvCU/jKPT7Z
+         eIw0ozyu7Li6FEsz9tNbP6QnxOYCGdG13yNpteVI14Ig/ZeJW4EN5EcOgzuJnseKVV
+         +hBnVrVkQBhSmvmsbCy/K9MOiO7vfr0IrUaQhRf1+CAQeS1YXBTu4nA3Lzyf6G/tp5
+         JQ0vaiXJM8VVOYuiqqxUMS52gmQlgKNmch8Su25qBBS31n1hTroiIQ/lNirtb1HGKp
+         kJAt+lq0K5O2A==
+Date:   Tue, 31 Jan 2023 09:57:24 +0100
+From:   Joerg Roedel <joro@8bytes.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Alexey Kardashevskiy <aik@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>, kvm@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Jiri Kosina <jkosina@suse.cz>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [Question PATCH kernel] x86/amd/sev/nmi+vc: Fix stack handling
+ (why is this happening?)
+Message-ID: <Y9jX9AKYP8H34wGI@8bytes.org>
+References: <20230127035616.508966-1-aik@amd.com>
+ <Y9OUfofjxDtTmwyV@hirez.programming.kicks-ass.net>
+ <Y9OpcoSacyOkPkvl@8bytes.org>
+ <b7880f0b-a592-cf2d-03b9-1ccfd83f8223@amd.com>
+ <Y9QI9JwCVvRmtbr+@8bytes.org>
+ <3bb3e080-caee-8bc8-7de9-f44969f16e75@amd.com>
+ <38C572D7-E637-48C2-A57A-E62D44FF19BB@zytor.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230130180504.2029440-2-neeraj.sanjaykale@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <38C572D7-E637-48C2-A57A-E62D44FF19BB@zytor.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 11:35:02PM +0530, Neeraj Sanjay Kale wrote:
-> Adds serdev_device_break_ctl() and an implementation for ttyport.
-> 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> ---
->  drivers/tty/serdev/core.c           | 11 +++++++++++
->  drivers/tty/serdev/serdev-ttyport.c | 12 ++++++++++++
->  include/linux/serdev.h              |  6 ++++++
->  3 files changed, 29 insertions(+)
+On Mon, Jan 30, 2023 at 09:30:38AM -0800, H. Peter Anvin wrote:
+> It's somewhat odd to me that reading %dr7 is volatile, but %dr6 is
+> not... %dr6 is the status register!
 
-<...>
+The reason is that on SEV-ES only accesses to DR7 will cause #VC
+exceptions, DR0-DR6 are not intercepted.
 
-> +{
-> +	struct serport *serport = serdev_controller_get_drvdata(ctrl);
-> +	struct tty_struct *tty = serport->tty;
-> +
-> +	if (!tty->ops->break_ctl)
-> +		return -ENOTSUPP;
+Regards,
 
-Documentation/dev-tools/checkpatch.rst
-   429   **ENOTSUPP**
-   430     ENOTSUPP is not a standard error code and should be avoided in new patches.
-   431     EOPNOTSUPP should be used instead.
-   432 
-   433     See: https://lore.kernel.org/netdev/20200510182252.GA411829@lunn.ch/
+	Joerg
 
-Thanks
