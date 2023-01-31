@@ -2,178 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3B76822D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5616A6822DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjAaD35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S230239AbjAaDbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbjAaD3y (ORCPT
+        with ESMTP id S229944AbjAaDbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:29:54 -0500
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208811CAD8;
-        Mon, 30 Jan 2023 19:29:07 -0800 (PST)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Tue, 31 Jan
- 2023 11:29:04 +0800
-Message-ID: <ad1f6ea5-f506-22f7-1f88-0291167fb7fd@amlogic.com>
-Date:   Tue, 31 Jan 2023 11:29:04 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V6 3/3] clk: meson: s4: add support for Amlogic S4 SoC
- peripheral clock controller
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Mon, 30 Jan 2023 22:31:47 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AD11CADD
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:31:45 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id pj3so176021pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:31:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iDi6IM/MaPJ/3n0t/k9AegJIGfm9vzz6t4MiBeVwT9A=;
+        b=NkPYUsYiLUOZlIG9EyWyy1qJsJQ0dtFO2oALntKqx5o32aklVgo3idQTfkuLsG3hAd
+         jeDEAuGbZA8nj/vCCmVof27GomGGQLFyu45IR/MWwqV3yctcAXJHAkJCGd/rptdKN16y
+         /dskoEbuflEPnkl7QgrIeGRfmzyEmQlwIJqocmO4Uu+0fbbCZffQbdMY2m3Ilj4FlNGe
+         GrnEWVcfI4uU1oWhAE4qd+qlLopmdDMN3dMW4Z1WgT9gfujhmglsXrsF95eDn8u8HHsA
+         L2MW+EPtRhmI30Kq3z6LV04RqZlCxuLpXBrVmEHw7cz7nNzEGmWWlXcPJRTrVlf7VoK/
+         Hqwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iDi6IM/MaPJ/3n0t/k9AegJIGfm9vzz6t4MiBeVwT9A=;
+        b=H1S9nmWGoEzlgYThTWiD3wmrmqATEzm15wn+N46ezVaF1H8ah1VsYFXK3DENNMVZd1
+         zZA2l7JOGqMi1gZkdGUHdEOxJKDv4TMmujTSs/whvSKyHiW703GHMSL+1DQSLyzSqKIh
+         rXL254J9Uzf3nSRqR51AXLsg3RVzzUgNuIi8e1l40n7r6R/OqogVt95jWOkEhlSULgLL
+         r7mbmc9ln8wiqCD2L7HQwHWiSdFO6T+GDYRXNJyeBSwOIha1HTFVLLXMsFnQ3FOK64WL
+         8Lc6ykQ4Qh67wjiDsu5uzeWzrAuIEoHW1cXg4XOydG7e+QHGNk8ZKkYtZsWUT++gO4yK
+         YWiQ==
+X-Gm-Message-State: AO0yUKVZ5KqMGFQOarVPNtvudW0jFoXNbbLKLj9m+ZaQbpNI2PFSzVah
+        0c6s0rC1+JbgwfiAADxv2j+IwQ==
+X-Google-Smtp-Source: AK7set8Paapy/h78JoHz48aSDiy+HfPZsFgLg5+P131bwxrtUytlBCWxTII/Ts7bbR26BqvEwL7v9g==
+X-Received: by 2002:a05:6a20:5484:b0:bc:244a:c43e with SMTP id i4-20020a056a20548400b000bc244ac43emr19530680pzk.55.1675135905090;
+        Mon, 30 Jan 2023 19:31:45 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id b17-20020a639311000000b00478c48cf73csm7528002pge.82.2023.01.30.19.31.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 19:31:44 -0800 (PST)
+Date:   Tue, 31 Jan 2023 09:01:42 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     "kelvin . zhang" <Kelvin.Zhang@amlogic.com>,
-        "qi . duan" <qi.duan@amlogic.com>
-References: <20230116074214.2326-1-yu.tu@amlogic.com>
- <20230116074214.2326-4-yu.tu@amlogic.com>
- <1ja62eybrv.fsf@starbuckisacylon.baylibre.com>
- <aedb0764-b5cb-7f49-f279-51dbec070e80@amlogic.com>
- <1jwn5hwn0w.fsf@starbuckisacylon.baylibre.com>
- <a4ad6ac6-60c2-8f7b-fdb0-509de31db282@amlogic.com>
- <1jy1pko0fc.fsf@starbuckisacylon.baylibre.com>
- <e2e9045a-6e35-112f-69a7-15b080571b69@amlogic.com>
- <1jr0vcnyf7.fsf@starbuckisacylon.baylibre.com>
- <37e5d1a9-9379-a7ff-e288-9a4b80a0cc5f@amlogic.com>
- <1jmt60nxa7.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1jmt60nxa7.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM8550
+ compatible
+Message-ID: <20230131033142.oykyybqia32lwi6r@vireshk-i7>
+References: <20230130123046.3229654-1-abel.vesa@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130123046.3229654-1-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30-01-23, 14:30, Abel Vesa wrote:
+> Add compatible for EPSS CPUFREQ-HW on SM8550.
+> Also document the interrupts.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> The v1 is here:
+> https://lore.kernel.org/all/20221116115046.2687244-1-abel.vesa@linaro.org/
+> 
+> Changes since v1:
+>  * dropped the interrupts related properties as they are already there.
+> 
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> index 2494e90a2fda..e4aa8c67d532 100644
+> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> @@ -32,6 +32,7 @@ properties:
+>                - qcom,sm8250-cpufreq-epss
+>                - qcom,sm8350-cpufreq-epss
+>                - qcom,sm8450-cpufreq-epss
+> +              - qcom,sm8550-cpufreq-epss
+>            - const: qcom,cpufreq-epss
+>  
+>    reg:
 
+Applied. Thanks.
 
-On 2023/1/30 18:07, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Mon 30 Jan 2023 at 17:59, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> On 2023/1/30 17:47, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>> On Mon 30 Jan 2023 at 17:41, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>>> On 2023/1/30 17:06, Jerome Brunet wrote:
->>>>> [ EXTERNAL EMAIL ]
->>>>> On Sat 28 Jan 2023 at 18:17, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>>
->>>>>> On 2023/1/20 17:47, Jerome Brunet wrote:
->>>>>>> [ EXTERNAL EMAIL ]
->>>>>>> On Fri 20 Jan 2023 at 11:33, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>>>>
->>>>>>>> Hi
->>>>>>>> On 2023/1/19 19:37, Jerome Brunet wrote:
->>>>>>>>> [ EXTERNAL EMAIL ]
->>>>>>>>> On Mon 16 Jan 2023 at 15:42, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>>>>>>
->>>>>>>>>> Add the peripherals clock controller driver in the s4 SoC family.
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>>>>>>> [...]
->>>>>>>>>
->>>>>>>>>> +
->>>>>>>>>> +/* Video Clocks */
->>>>>>>>>> +static struct clk_regmap s4_vid_pll_div = {
->>>>>>>>>> +	.data = &(struct meson_vid_pll_div_data){
->>>>>>>>>> +		.val = {
->>>>>>>>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
->>>>>>>>>> +			.shift   = 0,
->>>>>>>>>> +			.width   = 15,
->>>>>>>>>> +		},
->>>>>>>>>> +		.sel = {
->>>>>>>>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
->>>>>>>>>> +			.shift   = 16,
->>>>>>>>>> +			.width   = 2,
->>>>>>>>>> +		},
->>>>>>>>>> +	},
->>>>>>>>>> +	.hw.init = &(struct clk_init_data) {
->>>>>>>>>> +		.name = "vid_pll_div",
->>>>>>>>>> +		/*
->>>>>>>>>> +		 * The frequency division from the hdmi_pll clock to the vid_pll_div
->>>>>>>>>> +		 * clock is the default value of this register. When designing the
->>>>>>>>>> +		 * video module of the chip, a default value that can meet the
->>>>>>>>>> +		 * requirements of the video module will be solidified according
->>>>>>>>>> +		 * to the usage requirements of the chip, so as to facilitate chip
->>>>>>>>>> +		 * simulation. So this is ro_ops.
->>>>>>>>>> +		 * It is important to note that this clock is not used on this
->>>>>>>>>> +		 * chip and is described only for the integrity of the clock tree.
->>>>>>>>>> +		 */
->>>>>>>>> If it is reset value and will be applicable to all the design, regarless
->>>>>>>>> of the use-case, then yes RO ops is OK
->>>>>>>>>
->>>>>>>>> >From what I understand here, the value will depend on the use-case requirements.
->>>>>>>>> This is a typical case where the DT prop "assigned-rate" should be used, not RO ops.
->>>>>>>>
->>>>>>>> Check the previous chip history, the actual scene is not used at all,
->>>>>>>> basically is used in simulation. So the previous SOC was "ro_ops" without
->>>>>>>> any problems.  This S4 SOC is not actually useful either.
->>>>>>>>
->>>>>>>> So when you were upstream, you had no problem making "ro_ops". I wonder if
->>>>>>>> I could delete this useless clock, so you don't have to worry about it.
->>>>>>> I don't know what to make of this. What is the point of adding a useless
->>>>>>> clock ?
->>>>>>
->>>>>> As explained earlier this "vid_pll_div" is actually used in chip
->>>>>> emulation. So next I'd like to know what you suggest to do with the clock?
->>>>>>
->>>>> If it does not exist in the actual SoC, please remove it
->>>>>
->>>>
->>>> If I remove it, the "vid_pll_sel" clock will be missing a parent
->>>> (vid_pll_div). I will use the table method and give the above reasons. Do
->>>> you accept this method?
->>> Either the clock exists or it does not.
->>> If the HW actually exist, it is expected to be properly described.
->>> If it does not, it obviously cannot be an input to another clock.
->>> Please sort this out and make the necessary changes.
->>>
->>
->> The CLKCTRL_VID_PLL_CLK_DIV register is actually described, but it is not
->> used in the actual board. According to your reply just now, description is
->> required, but I want to know how to describe it to meet your requirements.
->>
->> Please give me some suggestions.
-> 
-> Implementing things is NOT about usage, it is about correctness.
-> Either there is actually a clock in the silicon you are producing at the
-> Amlogic factory, or there is not.
-> 
-> If the clock is there in the actual HW should be properly
-> described/implemented, as it "might" be used as an input to other clocks
-> - even if you personnaly don't.
-> 
-> If clock does not exists (nothing behind the registers, or broken, etc
-> ...)  then, yes you'll need to use parent tables and document this.
-> 
-
-According to your suggestion, we need to describe the clock 
-(vid_pll_div).So it seems like we need to implement 
-"meson_vid_pll_div_ops" and do a commit first. Then submit the S4 SOC 
-clock driver. So change whether you take it or not?
-
-Or if you have a better idea, let me know.
+-- 
+viresh
