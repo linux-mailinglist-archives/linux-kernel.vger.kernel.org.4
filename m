@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A36968236A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AEF682372
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 05:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjAaEjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 23:39:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
+        id S231221AbjAaEkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 23:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjAaEi7 (ORCPT
+        with ESMTP id S229659AbjAaEjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 23:38:59 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237A239BB3
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:21 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id bg12so5278434oib.5
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 20:38:21 -0800 (PST)
+        Mon, 30 Jan 2023 23:39:13 -0500
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D4E3A59D;
+        Mon, 30 Jan 2023 20:38:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SXzzK5FVdbfjHsKczaF+d6bF7UcG4AwVnTFb17KpdMo=;
-        b=DPHIeeG9Qe9vZAwktVaCedN0BzLtD2Z2DSdlJW2dkkvtyoMJDr/asztI4JA/x2VJ2F
-         yvql4TTLDepezfWIGYDPI9Pyw4kATNQmcuU2ZfZHIAXHaQFJsbhlzp7r834T/0i7ajaZ
-         eWoGSwmH/ONGpWW7rsGMZW4mxqrmmgj8fCB8jG9beTanzODbaMsh01KpPOCQsfRVRB/P
-         8GqdIqlKRclU1qvQa0y1PTMg/7vAKRSJuYHMf4G4VPdOlSYSbbn77ZzQOg0Nikj0HsuL
-         sTln9p4hrOb6UCYsJSppQ+LPTDKpKnNRs5BgzDzJ0IaF9+NbYkBqngTFCpk0y/0T+UUE
-         VdMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SXzzK5FVdbfjHsKczaF+d6bF7UcG4AwVnTFb17KpdMo=;
-        b=wt4UUZpfcTi1EadvtUvUooY2xAhbrmO/L12bqEF8GSMfRtiNgaAZrnquJoGJOp56nz
-         fhMpHIXcAr7sDvmaS1BzIHqI4NphuQtZ9t/7i6KSOHhmebwJ4DfYPkFLLpNJ3uzvgzmd
-         dbMJdiK0BSXLcq6kp4f8to53nvfnc0F0F9TEuLffu87i/l+QDS/HB2HtuzIvZ+5/26cy
-         1jc5ODFzIzoEVa8oc8lVho4MEgkZOFJuRsCk6YKBanc32VcOJb61m27/VC7dR35NAvKS
-         Oxv0ZYsvp/h6V3W0eSuLapTpbWGxuJtwye9lpiPFwG/RC3WXffPbw4Z+EuPR9IxXCTQo
-         Jo3Q==
-X-Gm-Message-State: AO0yUKWC4m4VfVjU657L+3W8PS1Pq3QC1sVKRA2oL/d13kTpbX0wEVY+
-        bHHSmKAhtVO5cs6HL4OzoU09jA==
-X-Google-Smtp-Source: AK7set+0SX5l6OqA15wmfLibMyvjJLh+/cHpE/VbiBm1eq26fmxp8x6bMw7gKOpfZA/YEQJO5hKi0A==
-X-Received: by 2002:a05:6808:1987:b0:378:6ebe:a98b with SMTP id bj7-20020a056808198700b003786ebea98bmr2054601oib.37.1675139900468;
-        Mon, 30 Jan 2023 20:38:20 -0800 (PST)
-Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
-        by smtp.gmail.com with ESMTPSA id s1-20020a056808208100b0037841fb9a65sm2049736oiw.5.2023.01.30.20.38.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 20:38:19 -0800 (PST)
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: [PATCH v2 1/4] dt-bindings: net: Add WCN6855 Bluetooth
-Date:   Mon, 30 Jan 2023 22:38:13 -0600
-Message-Id: <20230131043816.4525-2-steev@kali.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230131043816.4525-1-steev@kali.org>
-References: <20230131043816.4525-1-steev@kali.org>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1675139936; x=1706675936;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CXKI8V8i96SMsRvHYzeufowrTOHGbbWXe38v5Z4Dvh4=;
+  b=fyARXLoYZGPATEk5fv1o61j/hn8wqLcTKz0GOZY1kRGe8JMd+lMvHQr7
+   nVAGtDygDQ9ri4mJqiUloq66q75opmq3afq4dSts9sQIkLcj83Wn/uLPi
+   GGqusXZ28Blr67JMBh7UeV2f0ONFUE9gzXkHGB3aByT4+WbHVKyk+KQO+
+   s=;
+X-IronPort-AV: E=Sophos;i="5.97,259,1669075200"; 
+   d="scan'208";a="293718495"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:38:55 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-b1c0e1d0.us-west-2.amazon.com (Postfix) with ESMTPS id A1D3D81A5F;
+        Tue, 31 Jan 2023 04:38:53 +0000 (UTC)
+Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Tue, 31 Jan 2023 04:38:51 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D002UWC004.ant.amazon.com (10.13.138.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.24;
+ Tue, 31 Jan 2023 04:38:51 +0000
+Received: from dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com
+ (10.189.73.169) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.45 via Frontend Transport; Tue, 31 Jan 2023 04:38:51
+ +0000
+Received: by dev-dsk-risbhat-2b-8bdc64cd.us-west-2.amazon.com (Postfix, from userid 22673075)
+        id 429D5271E; Tue, 31 Jan 2023 04:38:50 +0000 (UTC)
+From:   Rishabh Bhatnagar <risbhat@amazon.com>
+To:     <stable@vger.kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <mhocko@suse.co>, Rishabh Bhatnagar <risbhat@amazon.com>
+Subject: [PATCH stable 4.14 0/1] Fix ext4 xfstests failure
+Date:   Tue, 31 Jan 2023 04:38:14 +0000
+Message-ID: <20230131043815.14989-1-risbhat@amazon.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for the QTI WCN6855 chipset, based on the WCN6750.
+While running xfstests on 4.14.304 version we see a warning being
+generated in one of ext4 tests with the following stack trace.
 
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
----
-Changes since v1:
-* drop second binding in subject line
----
- .../devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml   | 2 ++
- 1 file changed, 2 insertions(+)
+WARNING: CPU: 4 PID: 15332 at mm/util.c:414
+kvmalloc_node+0x67/0x70
+ext4_expand_extra_isize_ea+0x2b4/0x870 [ext4]
+__ext4_expand_extra_isize+0xcb/0x120 [ext4]
+ext4_mark_inode_dirty+0x1a5/0x1d0 [ext4]
+ext4_ext_truncate+0x1f/0x90 [ext4]
+ext4_truncate+0x363/0x400 [ext4]
+ext4_setattr+0x392/0xa00 [ext4]
+notify_change+0x300/0x420
+? ext4_xattr_security_set+0x20/0x20 [ext4]
+do_truncate+0x75/0xc0
+? ext4_release_file+0xa0/0xa0 [ext4]
+path_openat+0x737/0x16f0
+do_filp_open+0x9b/0x110
+? __check_object_size+0xb4/0x190
+? do_sys_open+0x1bd/0x250
+do_sys_open+0x1bd/0x250
+do_syscall_64+0x67/0x110
+entry_SYSCALL_64_after_hwframe+0x59/0xbe
 
-diff --git a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
-index a6a6b0e4df7a..64e278561ba8 100644
---- a/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
-+++ b/Documentation/devicetree/bindings/net/bluetooth/qualcomm-bluetooth.yaml
-@@ -23,6 +23,7 @@ properties:
-       - qcom,wcn3998-bt
-       - qcom,qca6390-bt
-       - qcom,wcn6750-bt
-+      - qcom,wcn6855-bt
- 
-   enable-gpios:
-     maxItems: 1
-@@ -121,6 +122,7 @@ allOf:
-           contains:
-             enum:
-               - qcom,wcn6750-bt
-+              - qcom,wcn6855-bt
-     then:
-       required:
-         - enable-gpios
+It seems rebase to 4.14.304 brings a bunch of ext4 changes.
+Commit ext4: allocate extended attribute value in vmalloc area
+(73c44f61dab180b5f2dee9f15397aba36a75a882) tries to allocate buffer
+using kvmalloc with improper flags that generates this warning.
+To fix backport an upstream commit mm: kvmalloc does not
+fallback to vmalloc for incompatible gfp flags
+(170f26afa0481c72af93aa61b7398b5663451651). This removes the WARN_ON and
+fallsback to kmalloc if correct flags are not passed.
+
+
+Michal Hocko (1):
+  mm: kvmalloc does not fallback to vmalloc for incompatible gfp flags
+
+ mm/util.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
 -- 
-2.39.0
+2.38.1
 
