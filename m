@@ -2,57 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F4A6834F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DDE6834F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjAaSOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42704 "EHLO
+        id S229972AbjAaSOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:14:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjAaSOH (ORCPT
+        with ESMTP id S229488AbjAaSOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:14:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FD71027D;
-        Tue, 31 Jan 2023 10:14:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22153B81E54;
-        Tue, 31 Jan 2023 18:14:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB2A9C433D2;
-        Tue, 31 Jan 2023 18:14:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YvZCDbRS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1675188840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A/qvWPFTSISHsGaMVyCiO50xdJQGWHUT7OqnT80bTFE=;
-        b=YvZCDbRS1ifRYS//mJCvzykkRX8lE25MHYH9s+B33fMZ1pHxohr1GAbkt39r+djac/DO9x
-        +3p1rY0+cqgstDIYW2HZwLDZijIBHFLqBG9Dt0V/zjAbo3Yc2tsw0jp2Umw/I3h6+X4UQs
-        HZ/7fcEiu5IrAFdfgHU3yVeAahThxEE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f369265f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 31 Jan 2023 18:14:00 +0000 (UTC)
-Date:   Tue, 31 Jan 2023 19:13:59 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Jia He <justin.he@arm.com>, Huacai Chen <chenhuacai@kernel.org>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexandru Elisei <alexandru.elisei@arm.com>
-Subject: Re: [PATCH 0/2] Fix boot hang issue on Ampere Emag server
-Message-ID: <Y9laZ1nx+MzFHvQx@zx2c4.com>
-References: <20230131040355.3116-1-justin.he@arm.com>
- <CAMj1kXFTUXgaENBSYh+cGCS3wFCFunf+auk3nKwHVJWiZ7crig@mail.gmail.com>
- <Y9lX4FtlOf2htnxj@zx2c4.com>
+        Tue, 31 Jan 2023 13:14:43 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8EE1027D
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:14:42 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id k4so38698116eje.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:14:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oBUJW5g0l7Cow1aZueI6QMIdh34q+4xeYl6ay0vZEdY=;
+        b=ooUIqV1qOuf4L+JepERD12vmqc21GEhVvlFh8Kk/YMuX5rl/Emj5/KdJvys6lyRWPw
+         KfA1VwfDQ+wdIW+wW7m8Aqd7YRGb4DE3UNTqsLa0sIVKR4/YOHpj9x5s3FrZxHJWvTaZ
+         Dz7fuyyxHPYNQC37otjMILneEAZY92edcJhHaNyF/vn4BQgm28GhsVLQY20ZZq1GSUFJ
+         R2vMXoQFwffwTr7347LV/UTAX9dr3A1p3Np5bwOIcNaf1U6B4sXd49Si+1P8sl+BeIiI
+         c6zjTGW3x0uWfQXNeimNq6IJKSoAwV4RZOAa4dbg6xWbEN/EWmleGKrRcUU+ZnYRF+aO
+         BSeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oBUJW5g0l7Cow1aZueI6QMIdh34q+4xeYl6ay0vZEdY=;
+        b=wvbg/RLvOmcS6AJSC0w6bL9bgPGo4R55WkbD+tjmwRvk1uDJxgb2vGRA81YlPrNsMN
+         YEla1fBtC7cgow8SuRj1OffeRIhV60Ht7z990HRndRnyedVCcYxD3C3oBP5L72dWoBJC
+         /wf17Axlgi/WC6UyhXfJbmwIKxf5VEIn50u4z+QsGXi+/qPD2Y9rZbE6gbCq6ZdJJnBg
+         U/2qcicokKsSp/IDvM4r/duAbYXBQBZqWh1LjEkmArNobCvZtWxj2Y0tOid3PJ/+g0iK
+         /CkFgGAHntNq1GXNgIj+WGelIRp0DXi8w5lAIvj1ObJCaxe74vQxBvU/r/aFyIMGfBTX
+         2mxw==
+X-Gm-Message-State: AO0yUKWuRqblqs8mF8dcdHv6E1HIo3M3Ze8dFyC+47EUQ/W82QpfxqXk
+        3AmOnK4U+sDUlMrTLPWpLHc=
+X-Google-Smtp-Source: AK7set/Fm2STpfkzkeO2bN2CrWnDnnHCG4vOw5APB3JNA3oxaU0Bf8XyZTdFJzyYYgRCvlzNO3jmFA==
+X-Received: by 2002:a17:907:c282:b0:878:509f:798d with SMTP id tk2-20020a170907c28200b00878509f798dmr26429055ejc.0.1675188881209;
+        Tue, 31 Jan 2023 10:14:41 -0800 (PST)
+Received: from combine-ThinkPad-S1-Yoga (gw.combine.ideon.se. [85.235.7.115])
+        by smtp.gmail.com with ESMTPSA id 7-20020a170906318700b00888f92f0708sm3370998ejy.15.2023.01.31.10.14.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 10:14:40 -0800 (PST)
+Date:   Tue, 31 Jan 2023 19:14:39 +0100
+From:   Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: pi433: Added information about bit_rate
+ configuration
+Message-ID: <Y9laj+z0TuasBRx5@combine-ThinkPad-S1-Yoga>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9lX4FtlOf2htnxj@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,41 +68,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually...
+Information in the TODO file for bit_rate configuration is
+insufficient.
 
-On Tue, Jan 31, 2023 at 07:03:12PM +0100, Jason A. Donenfeld wrote:
-> On Tue, Jan 31, 2023 at 08:18:49AM +0100, Ard Biesheuvel wrote:
-> > (cc Jason for awareness)
-> > 
-> > On Tue, 31 Jan 2023 at 05:04, Jia He <justin.he@arm.com> wrote:
-> > >
-> > > I met a hung task warning and then kernel was hung forever with latest
-> > > kernel on an Ampere Emag server.
-> > >
-> > > The root cause is kernel was hung  when invoking an efi rts call to set
-> > > the RandomSeed variable during the booting stage. The arch_efi_call_virt
-> > > call (set_variable) was never returned and then caused the hung task error.
-> > >
-> > 
-> > Given that EFI variables work on this platform (as far as I know), the
-> > problem may be that we are calling SetVariable() too early.
-> > 
-> 
-> On my phone and with very limited connectivity for another 10 days, but
-> I wonder if there's a later place we could move this block:
-> 
->     if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE))
->         execute_with_initialized_rng(&refresh_nv_rng_seed_nb);
-> 
-> Is there any additional initialization that happens after
-> efisubsys_init() that we're maybe missing out on there?
+This patch adds information on how to approach when considering
+to modify bit_rate to support upto 300kbps.
 
-From Jia's dmesg:
+Signed-off-by: Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
+---
+ drivers/staging/pi433/TODO | 3 +++
+ 1 file changed, 3 insertions(+)
 
-[   14.209389][    C2] random: crng init done
+diff --git a/drivers/staging/pi433/TODO b/drivers/staging/pi433/TODO
+index 5cf3fd99d521..daa0dbcf6d53 100644
+--- a/drivers/staging/pi433/TODO
++++ b/drivers/staging/pi433/TODO
+@@ -3,3 +3,6 @@
+ * Some missing data (marked with ###) needs to be added in the documentation
+ * Change (struct pi433_tx_cfg)->bit_rate to be a u32 so that we can support
+     bit rates up to 300kbps per the spec.
++  -> This configuration needs to be moved to sysfs instead of being done through
++     IOCTL. Goind forward, we need to port userspace tools to use sysfs instead
++     of IOCTL and then we would delete IOCTL.
+-- 
+2.34.1
 
-So SetVariable isn't even being called until 14 seconds after boot. That
-suggests there's something else wrong here. I wonder how it is that
-efibootmgr works, but this does not... Hm?
 
-Jason
+-- 
+Thanks & Regards,
+Guru
