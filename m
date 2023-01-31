@@ -2,84 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594A0682159
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D10A68215B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjAaBVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
+        id S229969AbjAaBYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:24:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjAaBVO (ORCPT
+        with ESMTP id S229490AbjAaBYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:21:14 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8CE1A4B6
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:21:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=XwacVAoDlSbhvdOZfOteaBXk54tWeyXApMz+z+NJOP8=; b=S7YpfgA9tRx/yCrjFvVnTUdkaq
-        7fd9YB2tGyuYg39ZO5DFdQRLD4Ou1hGkwFM2Eq7C+l6B4EaVTCtrCoQDgJZ+WUeJyvT2cYsK+vlH5
-        E5olaslqFU49EEFSlhmPkNAvLKYFzAb5xQ3Tqne+jAgVRn2o9LKWESJeBKPuwoR18mjmRKPNkhEd/
-        bgZgTvNyuF82ZeAmrqO3fozLEY6kN5xQaxb0RYUHxT4HDIDXRpC1RhqLuQuiXtoFAvJbzTd9htorE
-        PtLW/OB0rdr+mHu6hOo7W+sIRN8uCfj6Dbu3hCEv2E82KVpkn5oJBDLZKvzkGoImLw63P/YYTfq1U
-        X1EdmorQ==;
-Received: from [2601:1c2:d00:6a60::9526] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pMfKg-005zG6-D6; Tue, 31 Jan 2023 01:21:10 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH -next] drm/client: fix kernel-doc warning in drm_client.h
-Date:   Mon, 30 Jan 2023 17:21:07 -0800
-Message-Id: <20230131012107.20943-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.1
+        Mon, 30 Jan 2023 20:24:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279BA21A11
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:24:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E6FCB81891
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1306DC433D2;
+        Tue, 31 Jan 2023 01:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675128281;
+        bh=tIoQ3mGo3qACY5bcEi+ZYv6uYIXGGi2MgJ4tmLqx3wY=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=qbmvCp0WpPTUZv3WzmF/W5zZEM9a3fz1R9Rzwj0v/qm7jkH//22Q27wbqUbjv0QTV
+         itASKOtEReBC96AwdKYmKyZABSSMo1fn3kHeZ6XT6hSYhyVAIyumASY91LVpZc8H6v
+         RbClhXo2+wFlBG3ao1SCUA8xVy01Ia+1O6wM7fWzjCDZJInfjmeJ114AelnHEwPpkY
+         hUykR2Y1eftncr5lkXMDRgKthmdjzbNrPJgifvWHizd0pol8B0G+QtSii4V2cO+11k
+         Lk0nejuS2pB0LHeZ6ol6ttBmkqpb5fstRGFUDgC9BR0xdMq0RZV4RPHLT20ea1jUPI
+         r0vHinGdjIpsw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A6B2C5C08D8; Mon, 30 Jan 2023 17:24:40 -0800 (PST)
+Date:   Mon, 30 Jan 2023 17:24:40 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     tglx@linutronix.de, daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
+        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
+        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
+        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com
+Subject: [GIT PULL clocksource] Clocksource watchdog commits for v6.3]
+Message-ID: <20230131012440.GA1251465@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-scripts/kernel-doc complains about the comment for hotplug_failed,
-so fix it:
+Hello, Thomas,
 
-include/drm/drm_client.h:111: warning: Incorrect use of kernel-doc format:          * @hotplug failed:
+The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
 
-Fixes: 6a9d5ad3af65 ("drm/client: Add hotplug_failed flag")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Javier Martinez Canillas <javierm@redhat.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org
----
- include/drm/drm_client.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
 
-diff -- a/include/drm/drm_client.h b/include/drm/drm_client.h
---- a/include/drm/drm_client.h
-+++ b/include/drm/drm_client.h
-@@ -108,7 +108,7 @@ struct drm_client_dev {
- 	struct drm_mode_set *modesets;
- 
- 	/**
--	 * @hotplug failed:
-+	 * @hotplug_failed:
- 	 *
- 	 * Set by client hotplug helpers if the hotplugging failed
- 	 * before. It is usually not tried again.
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/clocksource.2023.01.30a
+
+for you to fetch changes up to 39836ec34f4698cfc80df4b2953e10fb9fa03506:
+
+  x86/tsc: Add option to force frequency recalibration with HW timer (2023-01-24 15:18:36 -0800)
+
+----------------------------------------------------------------
+Clocksource watchdog commits for v6.3
+
+This pull request contains the following:
+
+o	Improvements to clocksource-watchdog console messages.
+
+o	Loosening of the clocksource-watchdog skew criteria to match
+	those of NTP (500 parts per million, relaxed from 400 parts
+	per million).  If it is good enough for NTP, it is good enough
+	for the clocksource watchdog.
+
+o	Suspend clocksource-watchdog checking temporarily when high
+	memory latencies are detected.	This avoids the false-positive
+	clock-skew events that have been seen on production systems
+	running memory-intensive workloads.
+
+o	On systems where the TSC is deemed trustworthy, use it as the
+	watchdog timesource.  This permits clock-skew events to be
+	detected, but avoids forcing workloads to use the slow HPET
+	and ACPI PM timers.  These last two timers are slow enough to
+	cause systems to be needlessly marked bad on the one hand, and
+	real skew does sometimes happen on production systems running
+	production workloads on the other.  And sometimes it is the fault
+	of the TSC, or at least of the firmware that told the kernel to
+	program the TSC with the wrong frequency.
+
+o	Add a tsc=revalidate kernel boot parameter to allow the kernel
+	to diagnose cases where the TSC hardware works fine, but was told
+	by firmware to tick at the wrong frequency.  Such cases are rare,
+	but they really have happened on production systems.
+
+----------------------------------------------------------------
+Feng Tang (2):
+      clocksource: Suspend the watchdog temporarily when high read latency detected
+      x86/tsc: Add option to force frequency recalibration with HW timer
+
+Paul E. McKenney (4):
+      clocksource: Loosen clocksource watchdog constraints
+      clocksource: Improve read-back-delay message
+      clocksource: Improve "skew is too large" messages
+      clocksource: Verify HPET and PMTMR when TSC unverified
+
+Yunying Sun (1):
+      clocksource: Print clocksource name when clocksource is tested unstable
+
+ Documentation/admin-guide/kernel-parameters.txt |  4 ++
+ arch/x86/include/asm/time.h                     |  1 +
+ arch/x86/kernel/hpet.c                          |  2 +
+ arch/x86/kernel/tsc.c                           | 39 ++++++++++++--
+ drivers/clocksource/acpi_pm.c                   |  6 ++-
+ kernel/time/Kconfig                             |  6 ++-
+ kernel/time/clocksource.c                       | 72 +++++++++++++++++--------
+ 7 files changed, 102 insertions(+), 28 deletions(-)
