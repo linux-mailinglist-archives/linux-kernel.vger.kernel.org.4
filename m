@@ -2,108 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494C068352E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A39683532
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 19:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjAaS24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 13:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S231254AbjAaS3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 13:29:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjAaS2w (ORCPT
+        with ESMTP id S231440AbjAaS3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 13:28:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A354AA61;
-        Tue, 31 Jan 2023 10:28:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 13:29:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B88A5896E
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 10:29:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675189746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1skKAMSOcYitXlHWUQzUa5QecINDy3eBArvxadBodVs=;
+        b=HaC5P+OFUkmTVTvYuoLilYdESueubO8KvaBnuvkj9umVEKe95cC6M3dKmXde0rtyyv2b2s
+        vE3sF7CcLFZ7WsvARgWrnjCnWSiroQdr/Gylwvc/xYYBXXxG1ZTR6gLFpvON0o1jrK1svQ
+        qaiFa58LtTFr6BZbebern0bu7GHLQj0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-clOmH5KrPXC5C5_W2nDGGg-1; Tue, 31 Jan 2023 13:29:00 -0500
+X-MC-Unique: clOmH5KrPXC5C5_W2nDGGg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F5AA6160B;
-        Tue, 31 Jan 2023 18:28:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C06C433EF;
-        Tue, 31 Jan 2023 18:28:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675189730;
-        bh=AGlzssf36xL8VsGXJcqmepsel7PDFzSpp+uASAyVOVs=;
-        h=From:Date:Subject:To:Cc:From;
-        b=Yhy5OtyOi6AGdzbNiA2GBS9sXCLBOx2mCi5maNJq2OHe/cM0WpQynhqol1jvU1Tmc
-         nPRpBXDCz/ZKV4/ThO9xsf5iFTtruEHhjdfIxc+0WGECA2psWZTBXltgyFPlqVwXIu
-         Sb+Q4zHCZXk6BoRD+EQWZ3iNGcxCVYnfHJL4B8Wx1mJieuOOvAUVyb6vcrxaIVFJmE
-         AztXNvtJzwfN2Jt5+MckIdlPuNkYVjUKjdSvh7ZERunoFcqeQ0zNyAY/nn38rCdVJm
-         0f8tQrxq6r5l9bx7YhlmNsDN7lxS/ukO+JV/8gRaVF5G7LibNkregpXhlmZal+ezUf
-         ejFGF6KSRBNIA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 31 Jan 2023 18:28:05 +0000
-Subject: [PATCH] kselftest/arm64: Don't require FA64 for streaming SVE
- tests
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 31BE3811E9C;
+        Tue, 31 Jan 2023 18:29:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 86343C15BAD;
+        Tue, 31 Jan 2023 18:28:58 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Steve French <smfrench@gmail.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>,
+        Stefan Metzmacher <metze@samba.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/12] smb3: Use iov_iters down to the network transport and fix DIO page pinning
+Date:   Tue, 31 Jan 2023 18:28:43 +0000
+Message-Id: <20230131182855.4027499-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230131-arm64-kselfetest-ssve-fa64-v1-1-f418efcc2b60@kernel.org>
-X-B4-Tracking: v=1; b=H4sIALRd2WMC/x2NwQ6CMBAFf4Xs2U1aSjz4K8bDUl6lQYvZJWBC+
- HeLx5nDzE4GzTC6NTsp1mx5LhX8paE4SnmC81CZWtcG54Nn0fe148nwSlhgC5ut4CRVRsTWBT9
- IFxLVQC8G7lVKHM/ENut06o8i5e//eX8cxw8ycQ1bgwAAAA==
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1551; i=broonie@kernel.org;
- h=from:subject:message-id; bh=AGlzssf36xL8VsGXJcqmepsel7PDFzSpp+uASAyVOVs=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj2V3glQese4OPH5StSUZB8xEXxeXWdfrXKjvjxuI9
- THezIDmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9ld4AAKCRAk1otyXVSH0LfNB/
- 0doo1N1doclNJ4OnQOs/J7cq1jWPNEQ6Jf/GYLlRq4px094SkWJ8IK+uKMFBiGVAVDNY4g2NSpWa9K
- v9+axCv1shR+DiQZbT94GMS1nAka9LB2K44bk9HGEQr5t0uFsaE5QPYxYs4/klKdPD+9FbwOfEHX93
- g53ZrNJW9xopn+Kx43Z2NeJWdQGRrPS9PGjiN2TgEf83w4fm4iETDwROR/yKbGVc26Vh5G8Hd7BPRQ
- mKmI7NOPR/w8PrOnIbWOujo77LNVBzvGyxz2TvCoGUPL49aRJ+VXEwkehpCFKjFGoA1sOSE67h1u+M
- 2DAxSitFfEjThqxPnDhEfnasQPHEFH
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During early development a dependedncy was added on having FA64
-available so we could use the full FPSIMD register set in the signal
-handler.  Subsequently the ABI was finialised so the handler is run with
-streaming mode disabled meaning this is redundant but the dependency was
-never removed, do so now.
+Hi Steve,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/signal/testcases/ssve_regs.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Here's an updated version of my patchset to make the cifs/smb3 driver pass
+iov_iters down to the lowest layers where they can be passed directly to
+the network transport rather than passing lists of pages around.
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
-index d0a178945b1a..f0985da7936e 100644
---- a/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/ssve_regs.c
-@@ -116,12 +116,7 @@ static int sme_regs(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
- struct tdescr tde = {
- 	.name = "Streaming SVE registers",
- 	.descr = "Check that we get the right Streaming SVE registers reported",
--	/*
--	 * We shouldn't require FA64 but things like memset() used in the
--	 * helpers might use unsupported instructions so for now disable
--	 * the test unless we've got the full instruction set.
--	 */
--	.feats_required = FEAT_SME | FEAT_SME_FA64,
-+	.feats_required = FEAT_SME,
- 	.timeout = 3,
- 	.init = sme_get_vls,
- 	.run = sme_regs,
+I've fixed a couple of bugs and rebased on top of a merge of my two
+iov_iter_extract_pages() patches onto your for-next branch.  The merge is
+so that the same commits are used as are in the linux-block tree.
 
----
-base-commit: b7bfaa761d760e72a969d116517eaa12e404c262
-change-id: 20230131-arm64-kselfetest-ssve-fa64-cec2031da43f
+The series also deals with some other issues:
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+ (*) By pinning pages, it fixes the race between concurrent DIO read and
+     fork, whereby the pages containing the DIO read buffer may end up
+     belonging to the child process and not the parent - with the result
+     that the parent might not see the retrieved data.
+
+ (*) cifs shouldn't take refs on pages extracted from non-user-backed
+     iterators (eg. KVEC).  With these changes, cifs will apply the
+     appropriate cleanup.  Note that there is the possibility the network
+     transport might, but that's beyond the scope of this patchset.
+
+ (*) Making it easier to transition to using folios in cifs rather than
+     pages by dealing with them through BVEC and XARRAY iterators.
+
+
+The first couple of patches to provide function to pin or leave unpinned
+the pages from an iterator (and not take a ref on them).
+
+ (1) Define qualifying flags for extraction functions.
+
+ (2) Define iov_iter_extract_pages() to do the extraction and
+     iov_iter_extract_will_pin() to indicate how it should be cleaned up.
+
+Then there are a couple of patches that add stuff to netfslib that I want
+to use there as well as in cifs:
+
+ (3) Add a netfslib function to extract and pin pages from an ITER_IOBUF or
+     ITER_UBUF iterator into an ITER_BVEC iterator.
+
+ (4) Add a netfslib function to extract pages from an iterator that's of
+     type ITER_UBUF/IOVEC/BVEC/KVEC/XARRAY and add them to a scatterlist.
+     The cleanup will need to be done as for iov_iter_extract_pages().
+
+     BVEC, KVEC and XARRAY iterators can be rendered into elements that
+     span multiple pages.
+
+Then a fix:
+
+ (5) Fix oops due to uncleared server->smbd_conn in reconnect
+
+Then there are some cifs helpers that work with iterators:
+
+ (6) Implement cifs_splice_read() to use an ITER_BVEC rather than an
+     ITER_PIPE, bulk-allocating the pages, attaching them to the bvec,
+     doing the I/O and then pushing the pages into the pipe.  This avoids
+     the problem with cifs wanting to split the pipe iterator in a later
+     patch.
+
+ (7) Add a function to walk through an ITER_BVEC/KVEC/XARRAY iterator and
+     add elements to an RDMA SGE list.  Only the DMA addresses are stored,
+     and an element may span multiple pages (say if an xarray contains a
+     multipage folio).
+
+ (8) Add a function to walk through an ITER_BVEC/KVEC/XARRAY iterator and
+     pass the contents into a shash function.
+
+ (9) Add functions to walk through an ITER_XARRAY iterator and perform
+     various sorts of cleanup on the folios held therein, to be used on I/O
+     completion.
+
+(10) Add a function to read from the transport TCP socket directly into an
+     iterator.
+
+Then come the patches that actually do the work of iteratorising cifs:
+
+(11) The main patch.  Replace page lists with iterators.  It extracts the
+     pages from ITER_UBUF and ITER_IOVEC iterators to an ITER_BVEC
+     iterator, pinning or getting refs on them, before passing them down as
+     the I/O may be done from a worker thread.
+
+     The iterator is extracted into a scatterlist in order to talk to the
+     crypto interface or to do RDMA.
+
+(12) In the cifs RDMA code, extract the iterator into an RDMA SGE[] list,
+     removing the scatterlist intermediate - at least for smbd_send().
+     There appear to be other ways for cifs to talk to the RDMA layer that
+     don't go through that that I haven't managed to work out.
+
+(13) Remove a chunk of now-unused code.
+
+(14) Fix a problem with encrypted RDMA data read.
+
+(15) Allow DIO to/from KVEC-type iterators.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-cifs
+
+David
+
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/
+
+David Howells (12):
+  netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
+  netfs: Add a function to extract an iterator into a scatterlist
+  cifs: Implement splice_read to pass down ITER_BVEC not ITER_PIPE
+  cifs: Add a function to build an RDMA SGE list from an iterator
+  cifs: Add a function to Hash the contents of an iterator
+  cifs: Add some helper functions
+  cifs: Add a function to read into an iter from a socket
+  cifs: Change the I/O paths to use an iterator rather than a page list
+  cifs: Build the RDMA SGE list directly from an iterator
+  cifs: Remove unused code
+  cifs: Fix problem with encrypted RDMA data read
+  cifs: DIO to/from KVEC-type iterators should now work
+
+ fs/cifs/Kconfig       |    1 +
+ fs/cifs/cifsencrypt.c |  172 +++-
+ fs/cifs/cifsfs.c      |   12 +-
+ fs/cifs/cifsfs.h      |    6 +
+ fs/cifs/cifsglob.h    |   66 +-
+ fs/cifs/cifsproto.h   |   11 +-
+ fs/cifs/cifssmb.c     |   15 +-
+ fs/cifs/connect.c     |   14 +
+ fs/cifs/file.c        | 1848 +++++++++++++++++++----------------------
+ fs/cifs/fscache.c     |   22 +-
+ fs/cifs/fscache.h     |   10 +-
+ fs/cifs/misc.c        |  128 +--
+ fs/cifs/smb2ops.c     |  365 ++++----
+ fs/cifs/smb2pdu.c     |   53 +-
+ fs/cifs/smbdirect.c   |  535 +++++++-----
+ fs/cifs/smbdirect.h   |    7 +-
+ fs/cifs/transport.c   |   54 +-
+ fs/netfs/Makefile     |    1 +
+ fs/netfs/iterator.c   |  371 +++++++++
+ fs/splice.c           |    1 +
+ include/linux/netfs.h |    6 +
+ mm/vmalloc.c          |    1 +
+ 22 files changed, 2013 insertions(+), 1686 deletions(-)
+ create mode 100644 fs/netfs/iterator.c
 
