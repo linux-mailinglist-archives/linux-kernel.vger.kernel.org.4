@@ -2,99 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B463683416
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BA668341B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjAaRl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
+        id S229939AbjAaRmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:42:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjAaRl4 (ORCPT
+        with ESMTP id S231264AbjAaRmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:41:56 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DE0577DB
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:41:55 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id mf7so25185800ejc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:41:55 -0800 (PST)
+        Tue, 31 Jan 2023 12:42:13 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017BF577ED;
+        Tue, 31 Jan 2023 09:42:12 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id s66so13469600oib.7;
+        Tue, 31 Jan 2023 09:42:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sVtlaBH2oW7gQDOB4EYMReZLPA6GM1pQjljM+jQPnhA=;
-        b=jbBmOHVgpj9vI/nB8FVnps1C53CfWOLMG7s0wuIKjQTnHoj6zdqPXe2N8X9j3FrUEN
-         iZkxB2+VPyBNl0O+UrXE4vlMgyf9fjLdD2Bn/l8mbpVgCDN0pMuxNJz+hsDi1vLxdFdZ
-         7GrJt87rr0RhLfzHTL2Zm+rLm5mNNG0EkMC/jgS1HVFQr7SDs71PVtH6uOZ6jX7skZhK
-         TwsY8Plrv5N6MouOf5WFjrKrpdyCjzVqkpIMay/Q2jrLTJ7ab0Wv4zSyF34b+X4C45MZ
-         Xl/YZ1lBUlltjeubdBL+MGY8Tt2M18AAx9TADlQZCkS867NWlW4rwBnGibdYfUj5uDRB
-         ENQw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/nQTlu24MgbwA1itsX0SvceyYlE+PA1Yy3UWZCbDfgE=;
+        b=S54Qr8+41Z6P+57CNzgSkPI6uPzQ1AoLYft7ruZy0dTsy2NmJWX3RjL09Pw76Fe513
+         aVEasY/WxXWdriPh5V8p7rafFAqInW/CzkH6ZuOL2pEzA6cpXq9YRrt+yE/HY7xz2Zy2
+         NebFji12wUByo6GIjqGNTgpQfZkC+MdfmhJqmXZCPVs4P3h2p+a06eDHRTKqKMFWZpPA
+         C3O+Urpob1AVr83BpxyKRs4fwqmnbNSJ7rg8OE/wgRHz1YScONDYzjaxo63cWTyy9IPK
+         f5ct8NAK01585tlGgDDZ1VCfxHS8ErtFHvGSk77UnwyBKqyzw6N2tSxoxtusemFVoRFf
+         bjCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sVtlaBH2oW7gQDOB4EYMReZLPA6GM1pQjljM+jQPnhA=;
-        b=plNcurw1eXE8M+fDsUGbBpmouQHQYUlKGinltEgy5nLwTHEdvp+LRKNA4vgj49XgdU
-         Kk7E2B2WMaCy0juWW6Ea2lAM4cF/sQD1b/YIeycuYLipL0S8FiNG8BSGHkNixoGc+Av+
-         z/zYqnWpD5bPb+l9YNGZpesTeT/Ot6zHkg98wcbq/fjxU0AX8sB75bHn60oD1450qBjw
-         lQQADAEa2QiaTii0gA8mAUV9MoGJS9xu2G2MUKV0T6RPsyO+JJyAxUvCMLzIQ/wGZxcS
-         +lmVhy7GGjvL79Y4YtDgZfnCO/0tYXdBV1OjAmCkorPpMwLfXx2l8GIruOlcyNp+iSUz
-         HQPA==
-X-Gm-Message-State: AO0yUKVB/0aL5panasfeq5rE7eBd6oBSvcyf53uOt6AJf/17ywbuWVC7
-        M90hbjijv8NoYVV7Y3Q7fjguCbGXjEJtH6o/HwE=
-X-Google-Smtp-Source: AK7set/B6zfBUrcsB8u0YzGzbM9oU0cm0kSsBHJEPlN+nR+fkTMxgGY4Oz7lDsT9hlLJeFmyyrM7l/kce/u8WAJiOTk=
-X-Received: by 2002:a17:906:7f0e:b0:88c:b87d:b771 with SMTP id
- d14-20020a1709067f0e00b0088cb87db771mr719769ejr.195.1675186913688; Tue, 31
- Jan 2023 09:41:53 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/nQTlu24MgbwA1itsX0SvceyYlE+PA1Yy3UWZCbDfgE=;
+        b=GpXvgAKr/i9yRAoERqk0XXASlspYA8/zZMpk6wilafBeGFBr7K+RG2s9UkOM6G9IgQ
+         c3RQWwDAWGDZPsPUNbmWcRTlYr/lC2jzYxmvXNyZt9az8FOEgWrJAzV5Ul6SJRNEklXJ
+         4Uz3cH3XvjG3tlBL7PjVBwyAFTMWnoinX0/va4lfVIu9Xb+lBYrMrP1K79eHKegWXMxz
+         VtTZFI8hVEwrZQKCHR899y4FAsAOgTtiO88rslBfbRt4uxr3morT6vhYJaqFeDiriKl5
+         OgQkWpuQfZeTGKDkx08kjxQhC0o60RY3OIBvUNgIOAi6u4ezt+WMuC0w/Hek60x2w7kb
+         u4Sg==
+X-Gm-Message-State: AO0yUKX6hpnZ8Q3nS4MN8SUSkdiKdRJMJqQD55qdLaolmNSeMzhjv4Qg
+        CKUIkTFjtmuvnGx/im5oaBc=
+X-Google-Smtp-Source: AK7set8/IWg5wpSXT2CaR5i54+1B2bm0kh1HPX8V0UVhuDrCRFFIZdJqj0rxXmNrfCC5saC8Ns9hSw==
+X-Received: by 2002:a54:4181:0:b0:378:808d:8441 with SMTP id 1-20020a544181000000b00378808d8441mr1701718oiy.45.1675186931335;
+        Tue, 31 Jan 2023 09:42:11 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w8-20020a056808140800b0035bd65b776bsm6032464oiv.2.2023.01.31.09.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 09:42:10 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 31 Jan 2023 09:42:09 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, Anson.Huang@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] dt-bindings: watchdog: fsl-imx: document suspend
+ in wait mode
+Message-ID: <20230131174209.GA3602823@roeck-us.net>
+References: <20221104070358.426657-1-andrej.picej@norik.com>
+ <20221104070358.426657-3-andrej.picej@norik.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7208:4291:b0:62:7391:d678 with HTTP; Tue, 31 Jan 2023
- 09:41:52 -0800 (PST)
-Reply-To: innocent_iddrisa@innocent.com
-From:   Mr innocent Kanazoe Iddrisa <sec.susanakone@gmail.com>
-Date:   Tue, 31 Jan 2023 17:41:52 +0000
-Message-ID: <CACHxTFwN_uCVXvTU49gYB3iTqLtfYuCG_GziyHk33OppH8xkOg@mail.gmail.com>
-Subject: Please reply me this mail today.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104070358.426657-3-andrej.picej@norik.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:629 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [sec.susanakone[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Greetings to you.I am Mr.innocent kanazoe iddrisa working at the coris
-bank international.I have a transaction that worth a total sum of
-$18.7 million dollars to handle with you.Reply me today for more
-detailed information if you are interested.
+On Fri, Nov 04, 2022 at 08:03:57AM +0100, Andrej Picej wrote:
+> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
+> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
+> set and the device is put into Suspend-to-Idle mode, the watchdog
+> triggers a reset after 128 seconds.
+> 
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+> Changes in v4:
+>  - combine allOf, reorder allOf so it follows example-schema, drop the
+>    quotes around 'watchdog.yaml'.
+> 
+> Changes in v3:
+>  - disallow the property for devices which don't support WDW bit
+>    functionality with .yaml DTS allOf:if:then scheme.
+> 
+> Changes in v2:
+>  - add a commit message,
+>  - add a list of devices which support this functionality
+> ---
+>  .../bindings/watchdog/fsl-imx-wdt.yaml        | 37 +++++++++++++++++--
+>  1 file changed, 34 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> index fb7695515be1..181f0cc5b5bd 100644
+> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> @@ -9,9 +9,6 @@ title: Freescale i.MX Watchdog Timer (WDT) Controller
+>  maintainers:
+>    - Anson Huang <Anson.Huang@nxp.com>
+>  
+> -allOf:
+> -  - $ref: "watchdog.yaml#"
+> -
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -55,11 +52,45 @@ properties:
+>        If present, the watchdog device is configured to assert its
+>        external reset (WDOG_B) instead of issuing a software reset.
+>  
+> +  fsl,suspend-in-wait:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: |
+> +      If present, the watchdog device is suspended in WAIT mode
+> +      (Suspend-to-Idle). Only supported on certain devices.
+> +
+>  required:
+>    - compatible
+>    - interrupts
+>    - reg
+>  
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - fsl,imx25-wdt
+> +                - fsl,imx35-wdt
+> +                - fsl,imx50-wdt
+> +                - fsl,imx51-wdt
+> +                - fsl,imx53-wdt
+> +                - fsl,imx6q-wdt
+> +                - fsl,imx6sl-wdt
+> +                - fsl,imx6sll-wdt
+> +                - fsl,imx6sx-wdt
+> +                - fsl,imx6ul-wdt
+> +                - fsl,imx7d-wdt
+> +                - fsl,imx8mm-wdt
+> +                - fsl,imx8mn-wdt
+> +                - fsl,imx8mp-wdt
+> +                - fsl,imx8mq-wdt
+> +                - fsl,vf610-wdt
+> +    then:
+> +      properties:
+> +        fsl,suspend-in-wait: false
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
