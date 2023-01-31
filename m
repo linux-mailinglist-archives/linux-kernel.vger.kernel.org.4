@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFE1683993
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB636683996
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjAaWsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S231789AbjAaWup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232077AbjAaWs0 (ORCPT
+        with ESMTP id S231714AbjAaWun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:48:26 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EBC13DEB;
-        Tue, 31 Jan 2023 14:48:20 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v6-20020a17090ad58600b00229eec90a7fso2277947pju.0;
-        Tue, 31 Jan 2023 14:48:20 -0800 (PST)
+        Tue, 31 Jan 2023 17:50:43 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2FE4A234
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:50:41 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso1649067wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6kwuIhUv1yjhT0xuETFJz2oVLL3BtcvO9tDJ9jRzsWI=;
-        b=Xr0ymyYNLQbibGsJScW4JKNLzoF6HH/dDhtTIDnfEVMHd389zDQ8G60HZCgEJc+gHO
-         KgbQkbtZ8qwi8I1bHn7Ju3qcITk52xBKnNwHbVmMjcKx5EHw7P7k2Bcu1OEIan4+SI11
-         jP1hMdp7Mb+3ADs14T4Ad6vOwioFlpsN2DcCmJyquzFMDNr4Ca207+t8jmg37ZVwiGP4
-         uSsXANkIUfCqPsLF7wSdKrZEIRYLNf2qpLMtlEOmY3N+xDpGGjec6jX03MG1AtE+wRgw
-         ImyDMjgjW1/8KamBNGASvhV3UNjbT/ajJ4D5Z9x22G8dYsIhdoy3faKnvRs01hvUIx2N
-         Db9A==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A0LDbERO12laLmPDWTi8+TGflh7aG4vAdRmgw8+IF1Q=;
+        b=jlnWnt7nSMwLcUXQIhXN2JEVq6iNDvdZivkhZrKhvuL2zuEqI+h3WB7BXQ28OQhb/C
+         AURJ0HL3jIWx/O+QzijM8jTN5IYhVZJBURl0EhogFM5yVaMxpj0sCwW9UrzTmj5ABYe7
+         S2Ok1UIKDjdLSmMkWz0BD12N0bOyDVMlN/5r2AZSLPue3wrQQwD5qUUNyw9eFMiNPZhG
+         YF1dcVf3EIbvyQeKHTpQnUzTdVGkvBEKD3pZMVIzKVAYDVv6k/jC3BHntfQ5HHKSrytl
+         IE4FnQXfJUsA0/rt+KtW5rnjP7SQR2BYeI+6EbhePhKRCMO0npsyQADS7Xem0dezaiBw
+         UbBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6kwuIhUv1yjhT0xuETFJz2oVLL3BtcvO9tDJ9jRzsWI=;
-        b=ZBm+pbzZWpQBrVnzrGDvuFGDT0mtER/dYFHy8ZdgOVmjl/xYHFMXU9NLSDeDNhmBpu
-         pI+dtABryANzbImMYdFgap+h/kgiRA/QcLlbhRI+4MdWC0rkN5CV8wSToVPTV2N5dajH
-         rShv3XxGKIywbTNa2og9kpl5ll9Vqk4OCAbaJ2WN997ixU5h1A8MEJeZTcK2c5cFNcqN
-         kQS5QJOBC4W9RcmXYzjNWKxM2utGS3nQMv2R+lCE868AquNv7AMJ2sVmzrp4WaBKjwcV
-         4sdrYCfNm+s/KEb7kJLk/Zc4+uG/3slH6v3+pF2muEvJrmLEg9M67WLLlow3Fxj2uYwz
-         VEaQ==
-X-Gm-Message-State: AO0yUKVNCFNY++3Ne9xPvvDHQsrOH1CZG+7RdYY3rZ/BvSiMEvUpzSBS
-        +3YMYQbT+wGkYzqeOaQcQ8Dt8e2mGTg=
-X-Google-Smtp-Source: AK7set95G8jOg+GrDZN+glwKR2rgPogOa/ncWkz9eb92xKjLy7i7L7rmJL+LG/vi4gt/0TkUoKMBww==
-X-Received: by 2002:a17:903:41d1:b0:194:d057:46e5 with SMTP id u17-20020a17090341d100b00194d05746e5mr522369ple.62.1675205299907;
-        Tue, 31 Jan 2023 14:48:19 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:effb:a74f:225a:28ef])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902ec8100b001966d94cb2esm6467139plg.288.2023.01.31.14.48.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 14:48:18 -0800 (PST)
-Date:   Tue, 31 Jan 2023 14:48:15 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: fec: fix conversion to gpiod API
-Message-ID: <Y9mar1COtT5z4mvT@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A0LDbERO12laLmPDWTi8+TGflh7aG4vAdRmgw8+IF1Q=;
+        b=oQYcMNy9LjxSYcmvCdonQBrRjY7iU9KchkeKZc5wJDS16DDmox2jTt94KNOD1YoXJy
+         orO18WRahZLH1dnujmUcg4a/oJdUYrXXXq7QokVG385Wbuq621V5zDLSwmrX3N2RfMVa
+         LL/qakFLZfNma52vX5gt6WAiLHEPeGGn3v/Dk3UEvpS+NUT9TacCBD5p2NAtP3lvmpRJ
+         wJOZMdHq4tiKoedyv+DvcWOXiXfa8b0kCChuyzFgs1Jh+HHBeAdQrmJkM2/Ua9QMPIY1
+         njPomVq0Q4spnRtHlTbOEdxlqeT5r03n1Je7LuhAp6VpzY3M8d3Crkb2FGrpX3omS+4O
+         T6Tw==
+X-Gm-Message-State: AFqh2kpjYJ83rGp3ebv3zRIEkbL3MTIz62aIiepaKITEduf8PMfaf5cA
+        db60DI/WhDuCMjHui0GRXSVdxCMR7juhmwsPswKpKQ==
+X-Google-Smtp-Source: AMrXdXsILaDRFMCzV7v+w7tHyqSBq005Ff7hC4ApPZB8W6if6HOnW0wrkCggvzAbdIwKg065Q+wT0Ly5b6YI6PpIel4=
+X-Received: by 2002:a05:600c:6020:b0:3da:1bb6:ed44 with SMTP id
+ az32-20020a05600c602000b003da1bb6ed44mr3915205wmb.149.1675205439446; Tue, 31
+ Jan 2023 14:50:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230124064324.672022-1-irogers@google.com> <20230124064324.672022-2-irogers@google.com>
+ <Y9lN+H3ModGwwKV6@dev-arch.thelio-3990X> <CAP-5=fWvmEJ3DuKkhOEVg6zoiSKDGW-n=GFqRhse=2dP=C6i3Q@mail.gmail.com>
+ <CAP-5=fWJzTOYj167maEP8=k=iWQJcrF-zOdbkTAUw94qrVOL5g@mail.gmail.com>
+ <Y9ls+nWTwE5we5ah@dev-arch.thelio-3990X> <CAP-5=fWbd2gNhWXkffQQmVrLY6dzHxH68zumNwp4_a0b83D7qg@mail.gmail.com>
+ <Y9mFVNEi5wAINARY@dev-arch.thelio-3990X> <Y9mY5woe+45nTvTM@krava>
+In-Reply-To: <Y9mY5woe+45nTvTM@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 31 Jan 2023 14:50:27 -0800
+Message-ID: <CAP-5=fVDE6a+1rxOFhFjheg3ybUMRxE51NPW=kKLc=O98TQHHA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] tools/resolve_btfids: Alter how HOSTCC is forced
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Connor OBrien <connoro@google.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,113 +86,318 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reset line is optional, so we should be using
-devm_gpiod_get_optional() and not abort probing if it is not available.
-Also, gpiolib already handles phy-reset-active-high, continuing handling
-it directly in the driver when using gpiod API results in flipped logic.
+On Tue, Jan 31, 2023 at 2:40 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> On Tue, Jan 31, 2023 at 02:17:08PM -0700, Nathan Chancellor wrote:
+> > On Tue, Jan 31, 2023 at 12:59:04PM -0800, Ian Rogers wrote:
+> > > On Tue, Jan 31, 2023 at 11:33 AM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+> > > >
+> > > > On Tue, Jan 31, 2023 at 11:25:38AM -0800, Ian Rogers wrote:
+> > > > > On Tue, Jan 31, 2023 at 10:08 AM Ian Rogers <irogers@google.com> =
+wrote:
+> > > > > >
+> > > > > > On Tue, Jan 31, 2023 at 9:21 AM Nathan Chancellor <nathan@kerne=
+l.org> wrote:
+> > > > > > >
+> > > > > > > Hi Ian,
+> > > > > > >
+> > > > > > > On Mon, Jan 23, 2023 at 10:43:24PM -0800, Ian Rogers wrote:
+> > > > > > > > HOSTCC is always wanted when building. Setting CC to HOSTCC=
+ happens
+> > > > > > > > after tools/scripts/Makefile.include is included, meaning f=
+lags are
+> > > > > > > > set assuming say CC is gcc, but then it can be later set to=
+ HOSTCC
+> > > > > > > > which may be clang. tools/scripts/Makefile.include is neede=
+d for host
+> > > > > > > > set up and common macros in objtool's Makefile. Rather than=
+ override
+> > > > > > > > CC to HOSTCC, just pass CC as HOSTCC to Makefile.build, the=
+ libsubcmd
+> > > > > > > > builds and the linkage step. This means the Makefiles don't=
+ see things
+> > > > > > > > like CC changing and tool flag determination, and similar, =
+work
+> > > > > > > > properly.
+> > > > > > > >
+> > > > > > > > Also, clear the passed subdir as otherwise an outer build m=
+ay break by
+> > > > > > > > inadvertently passing an inappropriate value.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > > > > > > ---
+> > > > > > > >  tools/bpf/resolve_btfids/Makefile | 17 +++++++----------
+> > > > > > > >  1 file changed, 7 insertions(+), 10 deletions(-)
+> > > > > > > >
+> > > > > > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/=
+resolve_btfids/Makefile
+> > > > > > > > index 1fe0082b2ecc..daed388aa5d7 100644
+> > > > > > > > --- a/tools/bpf/resolve_btfids/Makefile
+> > > > > > > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > > > > > > @@ -18,14 +18,11 @@ else
+> > > > > > > >  endif
+> > > > > > > >
+> > > > > > > >  # always use the host compiler
+> > > > > > > > -AR       =3D $(HOSTAR)
+> > > > > > > > -CC       =3D $(HOSTCC)
+> > > > > > > > -LD       =3D $(HOSTLD)
+> > > > > > > > -ARCH     =3D $(HOSTARCH)
+> > > > > > > > +HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=
+=3D"$(HOSTLD)" ARCH=3D"$(HOSTARCH)" \
+> > > > > > > > +               EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOST=
+CFLAGS)"
+> > > > > > > > +
+> > > > > > > >  RM      ?=3D rm
+> > > > > > > >  CROSS_COMPILE =3D
+> > > > > > > > -CFLAGS  :=3D $(KBUILD_HOSTCFLAGS)
+> > > > > > > > -LDFLAGS :=3D $(KBUILD_HOSTLDFLAGS)
+> > > > > > > >
+> > > > > > > >  OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
+> > > > > > > >
+> > > > > > > > @@ -56,12 +53,12 @@ $(OUTPUT) $(OUTPUT)/libsubcmd $(LIBBPF_=
+OUT):
+> > > > > > > >
+> > > > > > > >  $(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
+> > > > > > > >       $(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=3D$(SUBCMD_OUT) \
+> > > > > > > > -                 DESTDIR=3D$(SUBCMD_DESTDIR) prefix=3D \
+> > > > > > > > +                 DESTDIR=3D$(SUBCMD_DESTDIR) $(HOST_OVERRI=
+DES) prefix=3D subdir=3D \
+> > > > > > > >                   $(abspath $@) install_headers
+> > > > > > > >
+> > > > > > > >  $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/M=
+akefile) | $(LIBBPF_OUT)
+> > > > > > > >       $(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=
+=3D$(LIBBPF_OUT)    \
+> > > > > > > > -                 DESTDIR=3D$(LIBBPF_DESTDIR) prefix=3D EXT=
+RA_CFLAGS=3D"$(CFLAGS)" \
+> > > > > > > > +                 DESTDIR=3D$(LIBBPF_DESTDIR) $(HOST_OVERRI=
+DES) prefix=3D subdir=3D \
+> > > > > > > >                   $(abspath $@) install_headers
+> > > > > > > >
+> > > > > > > >  LIBELF_FLAGS :=3D $(shell $(HOSTPKG_CONFIG) libelf --cflag=
+s 2>/dev/null)
+> > > > > > > > @@ -80,11 +77,11 @@ export srctree OUTPUT CFLAGS Q
+> > > > > > > >  include $(srctree)/tools/build/Makefile.include
+> > > > > > > >
+> > > > > > > >  $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+> > > > > > > > -     $(Q)$(MAKE) $(build)=3Dresolve_btfids
+> > > > > > > > +     $(Q)$(MAKE) $(build)=3Dresolve_btfids $(HOST_OVERRIDE=
+S)
+> > > > > > > >
+> > > > > > > >  $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+> > > > > > > >       $(call msg,LINK,$@)
+> > > > > > > > -     $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(S=
+UBCMDOBJ) $(LIBS)
+> > > > > > > > +     $(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $=
+@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+> > > > > > > >
+> > > > > > > >  clean_objects :=3D $(wildcard $(OUTPUT)/*.o               =
+ \
+> > > > > > > >                              $(OUTPUT)/.*.o.cmd           \
+> > > > > > > > --
+> > > > > > > > 2.39.0.246.g2a6d74b583-goog
+> > > > > > > >
+> > > > > > >
+> > > > > > > I just bisected a linking failure when building resolve_btfid=
+s with
+> > > > > > > clang to this change as commit 13e07691a16f ("tools/resolve_b=
+tfids:
+> > > > > > > Alter how HOSTCC is forced") in the bpf-next tree.
+> > > > > > >
+> > > > > > > It appears to be related to whether or not CROSS_COMPILE is s=
+pecified,
+> > > > > > > which we have to do for certain architectures and configurati=
+ons still.
+> > > > > > > arm64 is not one of those but it helps demonstrate the issue.
+> > > > > > >
+> > > > > > >   # Turn off CONFIG_DEBUG_INFO_REDUCED and turn on CONFIG_DEB=
+UG_INFO_BTF
+> > > > > > >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-=
+linux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 defconfig menuconfig
+> > > > > > >
+> > > > > > >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-=
+linux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 prepare
+> > > > > > >   ld.lld: error: $LINUX_SRC/tools/bpf/resolve_btfids//resolve=
+_btfids-in.o is incompatible with elf64-x86-64
+> > > > > > >   clang-17: error: linker command failed with exit code 1 (us=
+e -v to see invocation)
+> > > > > > >   ...
+> > > > > > >
+> > > > > > > Before your change, with V=3D1, I see:
+> > > > > > >
+> > > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -=
+Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o -Wall -Wmissing-prototype=
+s -Wstrict-prototypes -O2 -fomit-frame-pointer -std=3Dgnu11 -Wdeclaration-a=
+fter-statement -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uap=
+i -I$LINUX_SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/b=
+pf/resolve_btfids/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/=
+tools/bpf/resolve_btfids/main.o main.c
+> > > > > > >
+> > > > > > > After, I see:
+> > > > > > >
+> > > > > > > clang -Wp,-MD,$LINUX_SRC/tools/bpf/resolve_btfids/.main.o.d -=
+Wp,-MT,$LINUX_SRC/tools/bpf/resolve_btfids/main.o --target=3Daarch64-linux-=
+gnu -g -I$LINUX_SRC/tools/include -I$LINUX_SRC/tools/include/uapi -I$LINUX_=
+SRC/tools/bpf/resolve_btfids/libbpf/include -I$LINUX_SRC/tools/bpf/resolve_=
+btfids/libsubcmd/include -D"BUILD_STR(s)=3D#s" -c -o $LINUX_SRC/tools/bpf/r=
+esolve_btfids/main.o main.c
+> > > > > > >
+> > > > > > > We seem to have taken on a '--target=3Daarch64-linux-gnu' (ch=
+anging the
+> > > > > > > target of resolve_btfids-in.o) and we dropped the warning fla=
+gs.
+> > > > > > >
+> > > > > > > I think this comes from the clang block in
+> > > > > > > tools/scripts/Makefile.include, which is included into the
+> > > > > > > resolve_btfids Makefile via tools/lib/bpf/Makefile.
+> > > > > > >
+> > > > > > > I am not super familiar with the tools build system, otherwis=
+e I would
+> > > > > > > try to provide a patch. I tried moving CROSS_COMPILE from a r=
+ecursive to
+> > > > > > > simple variable ('=3D' -> ':=3D') and moving it to HOST_OVERR=
+IDES but those
+> > > > > > > did not appear to resolve it for me.
+> > > > > > >
+> > > > > > > If there is any other information I can provide or patches I =
+can test,
+> > > > > > > please let me know.
+> > > > > > >
+> > > > > > > Cheers,
+> > > > > > > Nathan
+> > > > > >
+> > > > > > Thanks Nathan, and thanks for all the details in the bug report=
+. I'm
+> > > > > > looking into this.
+> > > > > >
+> > > > > > Ian
+> > > > >
+> > > > > Given the somewhat complicated cross compile I wasn't able to get=
+ a
+> > > > > reproduction. Could you see if the following addresses the proble=
+m:
+> > > >
+> > > > As long as you have an LLVM toolchain that targets AArch64 and your
+> > > > host, you should be able to reproduce this issue with those command=
+s
+> > > > verbatim, as that command should not use any GNU binutils. I am pre=
+tty
+> > > > sure I tried it in a fresh container before reporting it but it is
+> > > > possible that I did not.
+> > >
+> > > Thanks, do you have instructions on setting up the container?
+> >
+> > Sure thing, this worked for me in the Linux source you would like to
+> > build (I marked it readonly to make sure any modifications were done in
+> > my host environment, remove the ':ro' if you would like to make edits t=
+o
+> > the source within the container). Docker should work as well but I did
+> > not test it.
+> >
+> > $ podman run --rm -ti -v $PWD:/linux:ro docker.io/archlinux:base-devel
+> > # pacman -Syyu --noconfirm bc clang lib32-glibc lld llvm python
+> > ...
+> >
+> > # To turn on CONFIG_DEBUG_INFO_BTF
+> > # make -C /linux -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-li=
+nux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 O=3D/build defconfig menucon=
+fig
+> >
+> > # make -C /linux -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-li=
+nux-gnu- HOSTLDFLAGS=3D-fuse-ld=3Dlld LLVM=3D1 O=3D/build prepare
+> > ld.lld: error: /build/tools/bpf/resolve_btfids//resolve_btfids-in.o is =
+incompatible with elf64-x86-64
+> > clang-15: error: linker command failed with exit code 1 (use -v to see =
+invocation)
+> >
+> > > > > ```
+> > > > > diff --git a/tools/bpf/resolve_btfids/Makefile
+> > > > > b/tools/bpf/resolve_btfids/Makefile
+> > > > > index daed388aa5d7..a06966841df4 100644
+> > > > > --- a/tools/bpf/resolv
+> > >
+> > > Ian
+> > > e_btfids/Makefile
+> > > > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > > > @@ -19,10 +19,9 @@ endif
+> > > > >
+> > > > > # always use the host compiler
+> > > > > HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOS=
+TLD)"
+> > > > > ARCH=3D"$(HOSTARCH)" \
+> > > > > -                 EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLA=
+GS)"
+> > > > > +                 EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLA=
+GS)"
+> > > > > CROSS_COMPILE=3D""
+> > > > >
+> > > > > RM      ?=3D rm
+> > > > > -CROSS_COMPILE =3D
+> > > > >
+> > > > > OUTPUT ?=3D $(srctree)/tools/bpf/resolve_btfids/
+> > > > > ```
+> > > > >
+> > > >
+> > > > Unfortunately, it does not. I still see '--target=3D' end up in the
+> > > > CFLAGS of those files.
+>
+> hi,
+> I can reproduce that and I think the reason is that the patch removes
+> CFLAGS setup
+>
+>   CFLAGS  :=3D $(KBUILD_HOSTCFLAGS)
+>
+> so now the 'include ../../scripts/Makefile.include' will set CFLAGS
+> with the  --target=3D... and we fail
+>
+> I can compile with the change below.. we could also set CROSS_COMPILE
+> before including tools/scripts/Makefile.include ... not sure which
+> on is better
+>
+> also I need to check if we should keep LDFLAGS setup as well
+>
+> jirka
 
-While at this convert phy properties parsing from OF to generic device
-properties to avoid #ifdef-ery.
+Right, but the code shouldn't be doing that - it was the purpose of
+the patch to remove it. If you include tools/scripts/Makefile.include,
+which is done on line 2, then a bunch of warnings, cflags, etc. are
+set based on CC. To then overwrite those values with various HOST
+values is at best confusing - CC no longer being CC but HOSTCC, but
+other values may or may not have changed. As we build using submakes,
+the goal here was to push the problem into the submake which will only
+ever see CC and other values being passed in.
 
-Fixes: 468ba54bd616 ("fec: convert to gpio descriptor")
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/net/ethernet/freescale/fec_main.c | 36 ++++++++---------------
- 1 file changed, 12 insertions(+), 24 deletions(-)
+So perhaps:
+HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"
+ARCH=3D"$(HOSTARCH)" \
+  EXTRA_CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)" CROSS_COMPILE=3D""
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 2716898e0b9b..c2b54a31541e 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -27,6 +27,7 @@
- #include <linux/string.h>
- #include <linux/pm_runtime.h>
- #include <linux/ptrace.h>
-+#include <linux/err.h>
- #include <linux/errno.h>
- #include <linux/ioport.h>
- #include <linux/slab.h>
-@@ -65,6 +66,7 @@
- #include <linux/prefetch.h>
- #include <linux/mfd/syscon.h>
- #include <linux/regmap.h>
-+#include <linux/property.h>
- #include <soc/imx/cpuidle.h>
- #include <linux/filter.h>
- #include <linux/bpf.h>
-@@ -4032,42 +4034,38 @@ static int fec_enet_init(struct net_device *ndev)
- 	return ret;
- }
- 
--#ifdef CONFIG_OF
- static int fec_reset_phy(struct platform_device *pdev)
- {
- 	struct gpio_desc *phy_reset;
--	bool active_high = false;
- 	int msec = 1, phy_post_delay = 0;
--	struct device_node *np = pdev->dev.of_node;
- 	int err;
- 
--	if (!np)
--		return 0;
--
--	err = of_property_read_u32(np, "phy-reset-duration", &msec);
-+	err = device_property_read_u32(&pdev->dev, "phy-reset-duration", &msec);
- 	/* A sane reset duration should not be longer than 1s */
- 	if (!err && msec > 1000)
- 		msec = 1;
- 
--	err = of_property_read_u32(np, "phy-reset-post-delay", &phy_post_delay);
-+	err = device_property_read_u32(&pdev->dev, "phy-reset-post-delay",
-+				       &phy_post_delay);
- 	/* valid reset duration should be less than 1s */
- 	if (!err && phy_post_delay > 1000)
- 		return -EINVAL;
- 
--	active_high = of_property_read_bool(np, "phy-reset-active-high");
--
--	phy_reset = devm_gpiod_get(&pdev->dev, "phy-reset",
--			active_high ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW);
-+	phy_reset = devm_gpiod_get_optional(&pdev->dev, "phy-reset",
-+					    GPIOD_OUT_HIGH);
- 	if (IS_ERR(phy_reset))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(phy_reset),
--				     "failed to get phy-reset-gpios\n");
-+				     "failed to request phy-reset-gpios\n");
-+
-+	if (!phy_reset)
-+		return 0;
- 
- 	if (msec > 20)
- 		msleep(msec);
- 	else
- 		usleep_range(msec * 1000, msec * 1000 + 1000);
- 
--	gpiod_set_value_cansleep(phy_reset, !active_high);
-+	gpiod_set_value_cansleep(phy_reset, 0);
- 
- 	if (!phy_post_delay)
- 		return 0;
-@@ -4080,16 +4078,6 @@ static int fec_reset_phy(struct platform_device *pdev)
- 
- 	return 0;
- }
--#else /* CONFIG_OF */
--static int fec_reset_phy(struct platform_device *pdev)
--{
--	/*
--	 * In case of platform probe, the reset has been done
--	 * by machine code.
--	 */
--	return 0;
--}
--#endif /* CONFIG_OF */
- 
- static void
- fec_enet_get_queue_num(struct platform_device *pdev, int *num_tx, int *num_rx)
--- 
-2.39.1.456.gfc5497dd1b-goog
+should be:
+HOST_OVERRIDES :=3D AR=3D"$(HOSTAR)" CC=3D"$(HOSTCC)" LD=3D"$(HOSTLD)"
+ARCH=3D"$(HOSTARCH)" \
+  CFLAGS=3D"$(HOSTCFLAGS) $(KBUILD_HOSTCFLAGS)" CROSS_COMPILE=3D""
 
+I'm still trying to get a reproduction.
 
--- 
-Dmitry
+Thanks,
+Ian
+
+>
+> ---
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids=
+/Makefile
+> index daed388aa5d7..875e3fcce7cd 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -64,6 +64,7 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC=
+)/Makefile) | $(LIBBPF_OU
+>  LIBELF_FLAGS :=3D $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+>  LIBELF_LIBS  :=3D $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null ||=
+ echo -lelf)
+>
+> +CFLAGS :=3D $(KBUILD_HOSTCFLAGS)
+>  CFLAGS +=3D -g \
+>            -I$(srctree)/tools/include \
+>            -I$(srctree)/tools/include/uapi \
+>
