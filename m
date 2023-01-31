@@ -2,322 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA2C682E80
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00636682E82
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbjAaNzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S232380AbjAaN4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjAaNzd (ORCPT
+        with ESMTP id S229680AbjAaN4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:55:33 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A641E4B1A9;
-        Tue, 31 Jan 2023 05:55:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675173331; x=1706709331;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IejCjfETg28DEDjjWsKtgjkb7Y0hOwxTAEjBfl4ZLhE=;
-  b=Vt7RHBsrQWC5Bq6J9xT5WLRjWaRTxUutaXSR0c3iF4SbOYTklcLJ4FJc
-   H3HSl72dJOo3ohj4xkH1Te7O6R1u6C+1qm7pFVp572EvF4pbOUndHA43u
-   RmP2iyrZRjR1qFCZR+fMgTJ8KMzhcTuN/MsBuDmWJ2DrmbQNirGBDyqwc
-   MrhsKXvJJNrtF7I9OdGH+SliYG1OGbg5zick/kiI6itJM8h5Y1w7HiHva
-   x3X03CYqnPryqcCF2Af67JNfgz75YHKipkCSaESM+V5HHMmmEuXXOsMW5
-   2nXT1ce5QphgZD0L5Ti3bSqfoQjADLsosZpk3VQ2bjmMNmrvvx6f2fIZq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="392392291"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="392392291"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 05:55:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="909911049"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="909911049"
-Received: from amedve1x-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.35.45])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 05:55:11 -0800
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>
-Subject: [PATCH] hwmon: intel-m10-bmc-hwmon: Add N6000 sensors
-Date:   Tue, 31 Jan 2023 15:54:50 +0200
-Message-Id: <20230131135450.43072-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 31 Jan 2023 08:56:40 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FB14B1B8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:56:38 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4P5mbc0vZYz9v7gm
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 21:48:28 +0800 (CST)
+Received: from [10.45.157.21] (unknown [10.45.157.21])
+        by APP2 (Coremail) with SMTP id GxC2BwD3zGPzHdljyi3fAA--.48937S2;
+        Tue, 31 Jan 2023 14:56:14 +0100 (CET)
+Message-ID: <001f7d74-0ef9-a667-b656-bbd18491d5c1@huaweicloud.com>
+Date:   Tue, 31 Jan 2023 14:56:00 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 2/2] tools/memory-model: Make ppo a subrelation of po
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrea Parri <parri.andrea@gmail.com>, paulmck@kernel.org,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, urezki@gmail.com, quic_neeraju@quicinc.com,
+        frederic@kernel.org, linux-kernel@vger.kernel.org
+References: <20230126134604.2160-1-jonas.oberhauser@huaweicloud.com>
+ <20230126134604.2160-3-jonas.oberhauser@huaweicloud.com>
+ <Y9Kr+GntQyGKPH3K@rowland.harvard.edu>
+ <47acbaa7-8280-48f2-678f-53762cf3fe9d@huaweicloud.com>
+ <Y9V+CyKIjg8sgVAC@rowland.harvard.edu> <Y9WeOTmGCCfjMUtG@andrea>
+ <Y9Wo6OttHC4sUxCS@rowland.harvard.edu>
+ <0da94668-c041-1d59-a46d-bd13562e385e@huaweicloud.com>
+ <Y9ct1aAnOTGCy9n2@rowland.harvard.edu>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <Y9ct1aAnOTGCy9n2@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwD3zGPzHdljyi3fAA--.48937S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAF43Xr1kAF1UArWrtrWUArb_yoW5tw1rpF
+        Z5tFWrKFn5Ar9Yvw1xXwn8XFySyryFyF45GFnYqrWrC398GryF9r1UtayY9Fy7Cr4kWa1U
+        Z3yjyFn7Ga4DCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tianfei zhang <tianfei.zhang@intel.com>
 
-Add sensors supported by N6000 card with MAX10 BMC to monitor
-temperature, voltage, current, and power on board.
 
-Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+On 1/30/2023 3:39 AM, Alan Stern wrote:
+> On Sun, Jan 29, 2023 at 11:19:32PM +0100, Jonas Oberhauser wrote:
+>> You could do it, by turning the relation into one massive recursive
+>> definition.
+> Which would make pretty much the entire memory model one big recursion.
+> I do not want to do that.
 
----
- drivers/hwmon/intel-m10-bmc-hwmon.c | 229 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 229 insertions(+)
+Neither do I :D
 
-diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-index 6e82f7200d1c..2f0323c14bab 100644
---- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-+++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-@@ -340,6 +340,231 @@ static const struct m10bmc_hwmon_board_data n5010bmc_hwmon_bdata = {
- 	.hinfo = n5010bmc_hinfo,
- };
- 
-+static const struct m10bmc_sdata n6000bmc_temp_tbl[] = {
-+	{ 0x444, 0x448, 0x44c, 0x0, 0x0, 500, "FPGA E-TILE Temperature #1" },
-+	{ 0x450, 0x454, 0x458, 0x0, 0x0, 500, "FPGA E-TILE Temperature #2" },
-+	{ 0x45c, 0x460, 0x464, 0x0, 0x0, 500, "FPGA E-TILE Temperature #3" },
-+	{ 0x468, 0x46c, 0x470, 0x0, 0x0, 500, "FPGA E-TILE Temperature #4" },
-+	{ 0x474, 0x478, 0x47c, 0x0, 0x0, 500, "FPGA P-TILE Temperature" },
-+	{ 0x484, 0x488, 0x48c, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #1" },
-+	{ 0x490, 0x494, 0x498, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #2" },
-+	{ 0x49c, 0x4a0, 0x4a4, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #3" },
-+	{ 0x4a8, 0x4ac, 0x4b0, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #4" },
-+	{ 0x4b4, 0x4b8, 0x4bc, 0x0, 0x0, 500, "FPGA FABRIC Digital Temperature #5" },
-+	{ 0x4c0, 0x4c4, 0x4c8, 0x0, 0x0, 500, "FPGA FABRIC Remote Digital Temperature #1" },
-+	{ 0x4cc, 0x4d0, 0x4d4, 0x0, 0x0, 500, "FPGA FABRIC Remote Digital Temperature #2" },
-+	{ 0x4d8, 0x4dc, 0x4e0, 0x0, 0x0, 500, "FPGA FABRIC Remote Digital Temperature #3" },
-+	{ 0x4e4, 0x4e8, 0x4ec, 0x0, 0x0, 500, "FPGA FABRIC Remote Digital Temperature #4" },
-+	{ 0x4f0, 0x4f4, 0x4f8, 0x52c, 0x0, 500, "Board Top Near FPGA Temperature" },
-+	{ 0x4fc, 0x500, 0x504, 0x52c, 0x0, 500, "Board Bottom Near CVL Temperature" },
-+	{ 0x508, 0x50c, 0x510, 0x52c, 0x0, 500, "Board Top East Near VRs Temperature" },
-+	{ 0x514, 0x518, 0x51c, 0x52c, 0x0, 500, "Columbiaville Die Temperature" },
-+	{ 0x520, 0x524, 0x528, 0x52c, 0x0, 500, "Board Rear Side Temperature" },
-+	{ 0x530, 0x534, 0x538, 0x52c, 0x0, 500, "Board Front Side Temperature" },
-+	{ 0x53c, 0x540, 0x544, 0x0, 0x0, 500, "QSFP1 Case Temperature" },
-+	{ 0x548, 0x54c, 0x550, 0x0, 0x0, 500, "QSFP2 Case Temperature" },
-+	{ 0x554, 0x0, 0x0, 0x0, 0x0, 500, "FPGA Core Voltage Phase 0 VR Temperature" },
-+	{ 0x560, 0x0, 0x0, 0x0, 0x0, 500, "FPGA Core Voltage Phase 1 VR Temperature" },
-+	{ 0x56c, 0x0, 0x0, 0x0, 0x0, 500, "FPGA Core Voltage Phase 2 VR Temperature" },
-+	{ 0x578, 0x0, 0x0, 0x0, 0x0, 500, "FPGA Core Voltage VR Controller Temperature" },
-+	{ 0x584, 0x0, 0x0, 0x0, 0x0, 500, "FPGA VCCH VR Temperature" },
-+	{ 0x590, 0x0, 0x0, 0x0, 0x0, 500, "FPGA VCC_1V2 VR Temperature" },
-+	{ 0x59c, 0x0, 0x0, 0x0, 0x0, 500, "FPGA VCCH, VCC_1V2 VR Controller Temperature" },
-+	{ 0x5a8, 0x0, 0x0, 0x0, 0x0, 500, "3V3 VR Temperature" },
-+	{ 0x5b4, 0x0, 0x0, 0x0, 0x0, 500, "CVL Core Voltage VR Temperature" },
-+	{ 0x5c4, 0x5c8, 0x5cc, 0x5c0, 0x0, 500, "FPGA P-Tile Temperature [Remote]" },
-+	{ 0x5d0, 0x5d4, 0x5d8, 0x5c0, 0x0, 500, "FPGA E-Tile Temperature [Remote]" },
-+	{ 0x5dc, 0x5e0, 0x5e4, 0x5c0, 0x0, 500, "FPGA SDM Temperature [Remote]" },
-+	{ 0x5e8, 0x5ec, 0x5f0, 0x5c0, 0x0, 500, "FPGA Corner Temperature [Remote]" },
-+};
-+
-+static const struct m10bmc_sdata n6000bmc_in_tbl[] = {
-+	{ 0x5f4, 0x0, 0x0, 0x0, 0x0, 1, "Inlet 12V PCIe Rail Voltage" },
-+	{ 0x60c, 0x0, 0x0, 0x0, 0x0, 1, "Inlet 12V Aux Rail Voltage" },
-+	{ 0x624, 0x0, 0x0, 0x0, 0x0, 1, "Inlet 3V3 PCIe Rail Voltage" },
-+	{ 0x63c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Voltage Rail Voltage" },
-+	{ 0x644, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCCH Rail Voltage" },
-+	{ 0x64c, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCC_1V2 Rail Voltage" },
-+	{ 0x654, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCCH_GXER_1V1, VCCA_1V8 Voltage" },
-+	{ 0x664, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCCIO_1V2 Voltage" },
-+	{ 0x674, 0x0, 0x0, 0x0, 0x0, 1, "CVL Non Core Rails Inlet Voltage" },
-+	{ 0x684, 0x0, 0x0, 0x0, 0x0, 1, "MAX10 & Board CLK PWR 3V3 Inlet Voltage" },
-+	{ 0x694, 0x0, 0x0, 0x0, 0x0, 1, "CVL Core Voltage Rail Voltage" },
-+	{ 0x6ac, 0x0, 0x0, 0x0, 0x0, 1, "Board 3V3 VR Voltage" },
-+	{ 0x6b4, 0x0, 0x0, 0x0, 0x0, 1, "QSFP 3V3 Rail Voltage" },
-+	{ 0x6c4, 0x0, 0x0, 0x0, 0x0, 1, "QSFP (Primary) Supply Rail Voltage" },
-+	{ 0x6c8, 0x0, 0x0, 0x0, 0x0, 1, "QSFP (Secondary) Supply Rail Voltage" },
-+	{ 0x6cc, 0x0, 0x0, 0x0, 0x0, 1, "VCCCLK_GXER_2V5 Voltage" },
-+	{ 0x6d0, 0x0, 0x0, 0x0, 0x0, 1, "AVDDH_1V1_CVL Voltage" },
-+	{ 0x6d4, 0x0, 0x0, 0x0, 0x0, 1, "VDDH_1V8_CVL Voltage" },
-+	{ 0x6d8, 0x0, 0x0, 0x0, 0x0, 1, "VCCA_PLL Voltage" },
-+	{ 0x6e0, 0x0, 0x0, 0x0, 0x0, 1, "VCCRT_GXER_0V9 Voltage" },
-+	{ 0x6e8, 0x0, 0x0, 0x0, 0x0, 1, "VCCRT_GXPL_0V9 Voltage" },
-+	{ 0x6f0, 0x0, 0x0, 0x0, 0x0, 1, "VCCH_GXPL_1V8 Voltage" },
-+	{ 0x6f4, 0x0, 0x0, 0x0, 0x0, 1, "VCCPT_1V8 Voltage" },
-+	{ 0x6fc, 0x0, 0x0, 0x0, 0x0, 1, "VCC_3V3_M10 Voltage" },
-+	{ 0x700, 0x0, 0x0, 0x0, 0x0, 1, "VCC_1V8_M10 Voltage" },
-+	{ 0x704, 0x0, 0x0, 0x0, 0x0, 1, "VCC_1V2_EMIF1_2_3 Voltage" },
-+	{ 0x70c, 0x0, 0x0, 0x0, 0x0, 1, "VCC_1V2_EMIF4_5 Voltage" },
-+	{ 0x714, 0x0, 0x0, 0x0, 0x0, 1, "VCCA_1V8 Voltage" },
-+	{ 0x718, 0x0, 0x0, 0x0, 0x0, 1, "VCCH_GXER_1V1 Voltage" },
-+	{ 0x71c, 0x0, 0x0, 0x0, 0x0, 1, "AVDD_ETH_0V9_CVL Voltage" },
-+	{ 0x720, 0x0, 0x0, 0x0, 0x0, 1, "AVDD_PCIE_0V9_CVL Voltage" },
-+};
-+
-+static const struct m10bmc_sdata n6000bmc_curr_tbl[] = {
-+	{ 0x600, 0x604, 0x608, 0x0, 0x0, 1, "Inlet 12V PCIe Rail Current" },
-+	{ 0x618, 0x61c, 0x620, 0x0, 0x0, 1, "Inlet 12V Aux Rail Current" },
-+	{ 0x630, 0x634, 0x638, 0x0, 0x0, 1, "Inlet 3V3 PCIe Rail Current" },
-+	{ 0x640, 0x0, 0x0, 0x0, 0x0, 1, "FPGA Core Voltage Rail Current" },
-+	{ 0x648, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCCH Rail Current" },
-+	{ 0x650, 0x0, 0x0, 0x0, 0x0, 1, "FPGA VCC_1V2 Rail Current" },
-+	{ 0x658, 0x65c, 0x660, 0x0, 0x0, 1, "FPGA VCCH_GXER_1V1, VCCA_1V8 Current" },
-+	{ 0x668, 0x66c, 0x670, 0x0, 0x0, 1, "FPGA VCCIO_1V2 Current" },
-+	{ 0x678, 0x67c, 0x680, 0x0, 0x0, 1, "CVL Non Core Rails Inlet Current" },
-+	{ 0x688, 0x68c, 0x690, 0x0, 0x0, 1, "MAX10 & Board CLK PWR 3V3 Inlet Current" },
-+	{ 0x698, 0x0, 0x0, 0x0, 0x0, 1, "CVL Core Voltage Rail Current" },
-+	{ 0x6b0, 0x0, 0x0, 0x0, 0x0, 1, "Board 3V3 VR Current" },
-+	{ 0x6b8, 0x6bc, 0x6c0, 0x0, 0x0, 1, "QSFP 3V3 Rail Current" },
-+};
-+
-+static const struct m10bmc_sdata n6000bmc_power_tbl[] = {
-+	{ 0x724, 0x0, 0x0, 0x0, 0x0, 1, "Board Power" },
-+};
-+
-+static const struct hwmon_channel_info *n6000bmc_hinfo[] = {
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT |
-+			   HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL,
-+			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MAX_HYST |
-+			   HWMON_T_CRIT | HWMON_T_CRIT_HYST | HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL,
-+			   HWMON_I_INPUT | HWMON_I_LABEL),
-+	HWMON_CHANNEL_INFO(curr,
-+			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
-+			   HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
-+			   HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
-+			   HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
-+			   HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
-+			   HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
-+			   HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
-+			   HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_LABEL,
-+			   HWMON_C_INPUT | HWMON_C_MAX | HWMON_C_CRIT |
-+			   HWMON_C_LABEL),
-+	HWMON_CHANNEL_INFO(power,
-+			   HWMON_P_INPUT | HWMON_P_LABEL),
-+	NULL
-+};
-+
-+static const struct m10bmc_hwmon_board_data n6000bmc_hwmon_bdata = {
-+	.tables = {
-+		[hwmon_temp] = n6000bmc_temp_tbl,
-+		[hwmon_in] = n6000bmc_in_tbl,
-+		[hwmon_curr] = n6000bmc_curr_tbl,
-+		[hwmon_power] = n6000bmc_power_tbl,
-+	},
-+
-+	.hinfo = n6000bmc_hinfo,
-+};
-+
- static umode_t
- m10bmc_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
- 			u32 attr, int channel)
-@@ -549,6 +774,10 @@ static const struct platform_device_id intel_m10bmc_hwmon_ids[] = {
- 		.name = "n5010bmc-hwmon",
- 		.driver_data = (unsigned long)&n5010bmc_hwmon_bdata,
- 	},
-+	{
-+		.name = "n6000bmc-hwmon",
-+		.driver_data = (unsigned long)&n6000bmc_hwmon_bdata,
-+	},
- 	{ }
- };
- 
+>
+>> Thinking about what the options are:
+>> 1) accept the difference and run with it by making it consistent inside the
+>> axiomatic model
+>> 2) fix it through the recursive definition, which seems to be quite ugly but
+>> also consistent with the power operational model as far as I can tell
+>> 3) weaken the operational model... somehow
+>> 4) just ignore the anomaly
+>> 5) ???
+>>
+>> Currently my least favorite option is 4) since it seems a bit off that the
+>> reasoning applies in one specific case of LKMM, more specifically the data
+>> race definition which should be equivalent to "the order of the two races
+>> isn't fixed", but here the order isn't fixed but it's a data race.
+>> I think the patch happens to almost do 1) because the xbstar&int at the end
+>> should already imply ordering through the prop&int <= hb rule.
+>> What would remain is to also exclude rcu-fence somehow.
+> IMO 1) is the best choice.
 
--- 
-tg: (65f974c89cff..) hwmon/n6000 (depends on: log/drv)
+I have some additional thoughts now. It seems that you could weaken the 
+operational model by stating that an A-cumulative fence orders 
+propagation of all *external* stores (in addition to all po-earlier 
+stores) that propagated to you before the fence is executed.
+
+It seems that on power, from an operational model perspective, there's 
+currently no difference between propagation fences ordering all stores 
+vs only external stores that propagated to the CPU before the fence is 
+executed, because they only have bidirectional (*->W) fences (sync, 
+lwsync) and not uni-directional (acquire, release), and so it is not 
+possible for a store that is po-later than the barrier to be executed 
+before the barrier; i.e., on power, every internal store that propagates 
+to a CPU before the fence executes is also po-earler than the fence.
+
+If power did introduce release stores, I think you could potentially 
+create implementations that allow the behavior in the example you have 
+given, but I don't think they are the most natural ones:
+
+> {}
+>
+> P0(int *x, int *y, int *z)
+> {
+> 	int r1;
+>
+> 	r1 = READ_ONCE(*x);
+> 	smp_store_release(y, 1);
+> 	WRITE_ONCE(*z, 1);
+> }
+>
+> P1(int *x, int *y, int *z)
+> {
+> 	int r2;
+>
+> 	r2 = READ_ONCE(*z);
+> 	WRITE_ONCE(*x, r2);
+> }
+>
+> P2(int *x, int *y, int *z)
+> {
+> 	int r3;
+> 	int r4;
+>
+> 	r3 = READ_ONCE(*y);
+> 	smp_rmb();
+> 	r4 = READ_ONCE(*z);
+> }
+>
+> exists (0:r1=1 /\ 2:r3=1 /\ 2:r4=0)
+
+I could imagine that P0 posts both of its stores in a shared store 
+buffer before reading *x, but marks the release store as "not ready".
+Then P1 forwards *z=1 from the store buffer and posts *x=1, which P0 
+reads, and subsequently marks its release store as "ready".
+Then the release store is sent to the cache, where P2 reads *y=1 and 
+then *z=0.
+Finally P0 sends its *z=1 store to the cache.
+
+However, a perhaps more natural implementation would not post the 
+release store to the store buffer until it is "ready", in which case the 
+order in the store buffer would be *z=1 before *y=1, and in this case 
+the release ordering would presumably work like your current operational 
+model.
+
+Nevertheless, perhaps this slightly weaker operational model isn't as 
+absurd as it sounds. And I think many people wouldn't be shocked if the 
+release store didn't provide ordering with *z=1.
+
+Best wishes, jonas
+
