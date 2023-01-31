@@ -2,152 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2FF68289E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BE56828A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbjAaJWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:22:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S232300AbjAaJWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjAaJWf (ORCPT
+        with ESMTP id S232124AbjAaJWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:22:35 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7971BF
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:22:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675156953; x=1706692953;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0T9JnpMnofgA14nTnYkQJMBylZvmsrtKlxmjhK44Yxw=;
-  b=KbFUAdGt5SEIl+Ke6yL+txPNwhjwpk3Wio6R2XwwRrVng8MbvP3BRk6t
-   Q/DfIccdk1/8NzUZEJNd0I7mXBT/XakEvJPf10XUTpx4efdRiz+aNWY58
-   VLyZJfaQ8PTyp1v7pFWrW914Gb3Nqq0A+tSzrSjTtYc6roadwHNeosZ1J
-   hNzbzU0tLf+U+o/6AOUKdKu+NpDm65K346QaRXJiXc3jTJuDYCLCbzxIv
-   g0Ulkqkd9qjxXOl6CookPzRq4t6Ro8tVGOj8JUyaNsywi1L5mSrxx5KTg
-   VpIzUS2LS0Up9eBpx9pjkb7Sn+2pOktaakn4Z1+80yXf6nsH34Cy/Mno8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="390155141"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="390155141"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 01:22:20 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="909839409"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="909839409"
-Received: from jlawryno-mobl.ger.corp.intel.com (HELO [10.237.142.112]) ([10.237.142.112])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 01:22:17 -0800
-Message-ID: <a7a36fa5-c48e-438e-f7fd-141ab6278bab@linux.intel.com>
-Date:   Tue, 31 Jan 2023 10:22:15 +0100
+        Tue, 31 Jan 2023 04:22:36 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D85610C8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:22:34 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id nm12-20020a17090b19cc00b0022c2155cc0bso13827023pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:22:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+UEl9RpJ5/r5T0BjzaMIIiVb97mqpj9qTAKyDrcDn1s=;
+        b=IEJRkQls5Sti1k2gmcAzYSguZdHLWZyZoBmugS2+PQ16+tGc1p4rhb9kpRpQQmWlBs
+         T2yIvj5nh+wjzWdV/ABezn4jzdeZeHnZMQotFwagHbnm7qCwlgJxCyH4g+C4M7qspptB
+         ivcISSK/fr8CsHnU/MRn7cnzj36nZAOagMdyQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+UEl9RpJ5/r5T0BjzaMIIiVb97mqpj9qTAKyDrcDn1s=;
+        b=uCcQCrwOUqQ49PMxGf4j28QrO7WFp8ao7gnk4gCXqkGe6Yzd9cQQBPXevvz/kDfXq+
+         5yvy8w7ShYplI0i9f4DhcAX04OwCCPXBSBIx24vih4EXpznNfV1dttrJY7Rve3ZiJXzQ
+         XvsUj/K6UrcnEVw55PWa7RaudVw3kFyyIbNQZAQoiWYStXKZaHGCYVRihG67s7pol7uL
+         BbOmsKQ4g1kj5gr5YtsMw+63d9KZWxWtg4QeQFPpsL7A4LQ/VhYy1yoCaICFKGLecdFg
+         NgJPVfjw4UEkzeHrpNElyWqqBq+YOtTeTRjwiKvRadeUP3OzYZKyzpQp3Kq+3QPODROq
+         M8zQ==
+X-Gm-Message-State: AO0yUKXUqT0E4BLGPj9Ae7M/4mGsNn4sZVnJSACZkz5TJHc44PsEYWne
+        gjPsMIQrnbDnOKI2pzp+/7DEnMdr7wRWdb+M2ptS
+X-Google-Smtp-Source: AK7set9Z0iLiZ4sURdAqhKBWdj0u+01Lupue+Lq9cv6c/O6SyZKRw2Y58r0+sqn+RShz/fRqAf6m916jGZYPaOiju58=
+X-Received: by 2002:a17:902:b706:b0:196:6dac:3426 with SMTP id
+ d6-20020a170902b70600b001966dac3426mr1508273pls.23.1675156954396; Tue, 31 Jan
+ 2023 01:22:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] accep/ivpu: PM: remove broken ivpu_dbg() statements
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Krystian Pradzynski <krystian.pradzynski@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org
-References: <20230126163804.3648051-1-arnd@kernel.org>
-From:   Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20230126163804.3648051-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230128072737.2995881-1-apatel@ventanamicro.com> <20230128072737.2995881-2-apatel@ventanamicro.com>
+In-Reply-To: <20230128072737.2995881-2-apatel@ventanamicro.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 31 Jan 2023 01:22:23 -0800
+Message-ID: <CAOnJCU+HKqVWz+SaFj=G-Rim-91h5uimTk0FCHa_mUX-gtxbbA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] RISC-V: Add AIA related CSR defines
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied to drm-misc-next.
-Thanks.
-
-On 26.01.2023 17:37, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When CONFIG_PM is disabled, the driver fails to build:
-> 
-> drivers/accel/ivpu/ivpu_pm.c: In function 'ivpu_rpm_get':
-> drivers/accel/ivpu/ivpu_pm.c:240:84: error: 'struct dev_pm_info' has no member named 'usage_count'
->   240 |         ivpu_dbg(vdev, RPM, "rpm_get count %d\n", atomic_read(&vdev->drm.dev->power.usage_count));
->       |                                                                                    ^
-> include/linux/dynamic_debug.h:223:29: note: in definition of macro '__dynamic_func_call_cls'
->   223 |                 func(&id, ##__VA_ARGS__);                       \
->       |                             ^~~~~~~~~~~
-> include/linux/dynamic_debug.h:249:9: note: in expansion of macro '_dynamic_func_call_cls'
->   249 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
->       |         ^~~~~~~~~~~~~~~~~~~~~~
-> include/linux/dynamic_debug.h:272:9: note: in expansion of macro '_dynamic_func_call'
->   272 |         _dynamic_func_call(fmt, __dynamic_dev_dbg,              \
->       |         ^~~~~~~~~~~~~~~~~~
-> include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
->   155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
->       |         ^~~~~~~~~~~~~~~
-> drivers/accel/ivpu/ivpu_drv.h:65:17: note: in expansion of macro 'dev_dbg'
->    65 |                 dev_dbg((vdev)->drm.dev, "[%s] " fmt, #type, ##args);          \
->       |                 ^~~~~~~
-> drivers/accel/ivpu/ivpu_pm.c:240:9: note: in expansion of macro 'ivpu_dbg'
->   240 |         ivpu_dbg(vdev, RPM, "rpm_get count %d\n", atomic_read(&vdev->drm.dev->power.usage_count));
->       |         ^~~~~~~~
-> 
-> It would be possible to rework these statements to only conditionally print
-> the reference counter, or to make the driver depend on CONFIG_PM, but my
-> impression is that these are not actually needed at all if the driver generally
-> works, or they could be put back when required. Just remove all four of these
-> to make the driver build in all configurations.
-> 
-> Fixes: 852be13f3bd3 ("accel/ivpu: Add PM support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jan 27, 2023 at 11:27 PM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> The RISC-V AIA specification improves handling per-HART local interrupts
+> in a backward compatible manner. This patch adds defines for new RISC-V
+> AIA CSRs.
+>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 > ---
->  drivers/accel/ivpu/ivpu_pm.c | 10 ----------
->  1 file changed, 10 deletions(-)
-> 
-> diff --git a/drivers/accel/ivpu/ivpu_pm.c b/drivers/accel/ivpu/ivpu_pm.c
-> index 553bcbd787b3..a880f1dd857e 100644
-> --- a/drivers/accel/ivpu/ivpu_pm.c
-> +++ b/drivers/accel/ivpu/ivpu_pm.c
-> @@ -237,8 +237,6 @@ int ivpu_rpm_get(struct ivpu_device *vdev)
->  {
->  	int ret;
->  
-> -	ivpu_dbg(vdev, RPM, "rpm_get count %d\n", atomic_read(&vdev->drm.dev->power.usage_count));
-> -
->  	ret = pm_runtime_resume_and_get(vdev->drm.dev);
->  	if (!drm_WARN_ON(&vdev->drm, ret < 0))
->  		vdev->pm->suspend_reschedule_counter = PM_RESCHEDULE_LIMIT;
-> @@ -248,8 +246,6 @@ int ivpu_rpm_get(struct ivpu_device *vdev)
->  
->  void ivpu_rpm_put(struct ivpu_device *vdev)
->  {
-> -	ivpu_dbg(vdev, RPM, "rpm_put count %d\n", atomic_read(&vdev->drm.dev->power.usage_count));
-> -
->  	pm_runtime_mark_last_busy(vdev->drm.dev);
->  	pm_runtime_put_autosuspend(vdev->drm.dev);
->  }
-> @@ -314,16 +310,10 @@ void ivpu_pm_enable(struct ivpu_device *vdev)
->  	pm_runtime_allow(dev);
->  	pm_runtime_mark_last_busy(dev);
->  	pm_runtime_put_autosuspend(dev);
-> -
-> -	ivpu_dbg(vdev, RPM, "Enable RPM count %d\n", atomic_read(&dev->power.usage_count));
->  }
->  
->  void ivpu_pm_disable(struct ivpu_device *vdev)
->  {
-> -	struct device *dev = vdev->drm.dev;
-> -
-> -	ivpu_dbg(vdev, RPM, "Disable RPM count %d\n", atomic_read(&dev->power.usage_count));
-> -
->  	pm_runtime_get_noresume(vdev->drm.dev);
->  	pm_runtime_forbid(vdev->drm.dev);
->  }
+>  arch/riscv/include/asm/csr.h | 95 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 94 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+> index 0e571f6483d9..3c8d68152bce 100644
+> --- a/arch/riscv/include/asm/csr.h
+> +++ b/arch/riscv/include/asm/csr.h
+> @@ -7,7 +7,7 @@
+>  #define _ASM_RISCV_CSR_H
+>
+>  #include <asm/asm.h>
+> -#include <linux/const.h>
+> +#include <linux/bits.h>
+>
+>  /* Status register flags */
+>  #define SR_SIE         _AC(0x00000002, UL) /* Supervisor Interrupt Enable */
+> @@ -73,7 +73,10 @@
+>  #define IRQ_S_EXT              9
+>  #define IRQ_VS_EXT             10
+>  #define IRQ_M_EXT              11
+> +#define IRQ_S_GEXT             12
+>  #define IRQ_PMU_OVF            13
+> +#define IRQ_LOCAL_MAX          (IRQ_PMU_OVF + 1)
+> +#define IRQ_LOCAL_MASK         GENMASK((IRQ_LOCAL_MAX - 1), 0)
+>
+>  /* Exception causes */
+>  #define EXC_INST_MISALIGNED    0
+> @@ -156,6 +159,27 @@
+>                                  (_AC(1, UL) << IRQ_S_TIMER) | \
+>                                  (_AC(1, UL) << IRQ_S_EXT))
+>
+> +/* AIA CSR bits */
+> +#define TOPI_IID_SHIFT         16
+> +#define TOPI_IID_MASK          GENMASK(11, 0)
+> +#define TOPI_IPRIO_MASK                GENMASK(7, 0)
+> +#define TOPI_IPRIO_BITS                8
+> +
+> +#define TOPEI_ID_SHIFT         16
+> +#define TOPEI_ID_MASK          GENMASK(10, 0)
+> +#define TOPEI_PRIO_MASK                GENMASK(10, 0)
+> +
+> +#define ISELECT_IPRIO0         0x30
+> +#define ISELECT_IPRIO15                0x3f
+> +#define ISELECT_MASK           GENMASK(8, 0)
+> +
+> +#define HVICTL_VTI             BIT(30)
+> +#define HVICTL_IID             GENMASK(27, 16)
+> +#define HVICTL_IID_SHIFT       16
+> +#define HVICTL_DPR             BIT(9)
+> +#define HVICTL_IPRIOM          BIT(8)
+> +#define HVICTL_IPRIO           GENMASK(7, 0)
+> +
+>  /* xENVCFG flags */
+>  #define ENVCFG_STCE                    (_AC(1, ULL) << 63)
+>  #define ENVCFG_PBMTE                   (_AC(1, ULL) << 62)
+> @@ -250,6 +274,18 @@
+>  #define CSR_STIMECMP           0x14D
+>  #define CSR_STIMECMPH          0x15D
+>
+> +/* Supervisor-Level Window to Indirectly Accessed Registers (AIA) */
+> +#define CSR_SISELECT           0x150
+> +#define CSR_SIREG              0x151
+> +
+> +/* Supervisor-Level Interrupts (AIA) */
+> +#define CSR_STOPEI             0x15c
+> +#define CSR_STOPI              0xdb0
+> +
+> +/* Supervisor-Level High-Half CSRs (AIA) */
+> +#define CSR_SIEH               0x114
+> +#define CSR_SIPH               0x154
+> +
+>  #define CSR_VSSTATUS           0x200
+>  #define CSR_VSIE               0x204
+>  #define CSR_VSTVEC             0x205
+> @@ -279,8 +315,32 @@
+>  #define CSR_HGATP              0x680
+>  #define CSR_HGEIP              0xe12
+>
+> +/* Virtual Interrupts and Interrupt Priorities (H-extension with AIA) */
+> +#define CSR_HVIEN              0x608
+> +#define CSR_HVICTL             0x609
+> +#define CSR_HVIPRIO1           0x646
+> +#define CSR_HVIPRIO2           0x647
+> +
+> +/* VS-Level Window to Indirectly Accessed Registers (H-extension with AIA) */
+> +#define CSR_VSISELECT          0x250
+> +#define CSR_VSIREG             0x251
+> +
+> +/* VS-Level Interrupts (H-extension with AIA) */
+> +#define CSR_VSTOPEI            0x25c
+> +#define CSR_VSTOPI             0xeb0
+> +
+> +/* Hypervisor and VS-Level High-Half CSRs (H-extension with AIA) */
+> +#define CSR_HIDELEGH           0x613
+> +#define CSR_HVIENH             0x618
+> +#define CSR_HVIPH              0x655
+> +#define CSR_HVIPRIO1H          0x656
+> +#define CSR_HVIPRIO2H          0x657
+> +#define CSR_VSIEH              0x214
+> +#define CSR_VSIPH              0x254
+> +
+>  #define CSR_MSTATUS            0x300
+>  #define CSR_MISA               0x301
+> +#define CSR_MIDELEG            0x303
+>  #define CSR_MIE                        0x304
+>  #define CSR_MTVEC              0x305
+>  #define CSR_MENVCFG            0x30a
+> @@ -297,6 +357,25 @@
+>  #define CSR_MIMPID             0xf13
+>  #define CSR_MHARTID            0xf14
+>
+> +/* Machine-Level Window to Indirectly Accessed Registers (AIA) */
+> +#define CSR_MISELECT           0x350
+> +#define CSR_MIREG              0x351
+> +
+> +/* Machine-Level Interrupts (AIA) */
+> +#define CSR_MTOPEI             0x35c
+> +#define CSR_MTOPI              0xfb0
+> +
+> +/* Virtual Interrupts for Supervisor Level (AIA) */
+> +#define CSR_MVIEN              0x308
+> +#define CSR_MVIP               0x309
+> +
+> +/* Machine-Level High-Half CSRs (AIA) */
+> +#define CSR_MIDELEGH           0x313
+> +#define CSR_MIEH               0x314
+> +#define CSR_MVIENH             0x318
+> +#define CSR_MVIPH              0x319
+> +#define CSR_MIPH               0x354
+> +
+>  #ifdef CONFIG_RISCV_M_MODE
+>  # define CSR_STATUS    CSR_MSTATUS
+>  # define CSR_IE                CSR_MIE
+> @@ -307,6 +386,13 @@
+>  # define CSR_TVAL      CSR_MTVAL
+>  # define CSR_IP                CSR_MIP
+>
+> +# define CSR_IEH               CSR_MIEH
+> +# define CSR_ISELECT   CSR_MISELECT
+> +# define CSR_IREG      CSR_MIREG
+> +# define CSR_IPH               CSR_MIPH
+> +# define CSR_TOPEI     CSR_MTOPEI
+> +# define CSR_TOPI      CSR_MTOPI
+> +
+>  # define SR_IE         SR_MIE
+>  # define SR_PIE                SR_MPIE
+>  # define SR_PP         SR_MPP
+> @@ -324,6 +410,13 @@
+>  # define CSR_TVAL      CSR_STVAL
+>  # define CSR_IP                CSR_SIP
+>
+> +# define CSR_IEH               CSR_SIEH
+> +# define CSR_ISELECT   CSR_SISELECT
+> +# define CSR_IREG      CSR_SIREG
+> +# define CSR_IPH               CSR_SIPH
+> +# define CSR_TOPEI     CSR_STOPEI
+> +# define CSR_TOPI      CSR_STOPI
+> +
+>  # define SR_IE         SR_SIE
+>  # define SR_PIE                SR_SPIE
+>  # define SR_PP         SR_SPP
+> --
+> 2.34.1
+>
+
+LGTM.
+
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+
+-- 
+Regards,
+Atish
