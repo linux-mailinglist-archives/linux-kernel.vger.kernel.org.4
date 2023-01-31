@@ -2,188 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD216821ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9446821EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjAaCMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 21:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
+        id S231440AbjAaCNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 21:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjAaCMS (ORCPT
+        with ESMTP id S229953AbjAaCNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 21:12:18 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BB835267
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 18:12:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CaUBGnLwqTTp/Pydb2XPc7qzV1tDDHddsLG9NhfjLS/4p1vE8vVzj0Oj68TCNsEsxUaY/uxEEGPN07BD8ww8lmu+Y3JOoqSzA5kFk5M7PP/TRbzXoFRKgx4OxO0pNMbLT5s+a+fu+onPqsM+YhfOr68jrprFwFyQdRqtSJ5WskZm8Mhp9TRr6rmAMEmWLuyvPIs57dGb521qbn8JlQzAvCgR8XS+5tDGrbDjdgfll8+YJFGbAFcdEBr6efvdr1S/SOl3PyBA0OMqV3YGJXMKIaF4JWjmSLdqPQt06Zy4LOkW+g+34llvOfGgjLDCySwcX3LBnbndSG+Gdfy70HRPvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jH9DexqY+0NipZuZ8kdrR08rlQULxK5eTmwhb0wBXsk=;
- b=iPbATiQzY9BMMmiWiOn0hrB+hJ9zIiBD/tjwJvZAw9b0SOf1jOvwNibY/X0i5cdqQNrF8Vhk0MOAL+IyrxV4wGHl5Yijyvn7nTEvr0XpeQNHsy9Elf3eD05si8lLfWt6SpYUkLLQErKo4pbPCCiqSUpbDXizmF6V1ZyRB4mIjSj0CeD/sQSblTqdpi8p4nOPkRq9rU+m6qg2kBOt8ePg+yn4lRiZtbRAinPpqC1SDNodP61mOlOihfS6GPNobLmzrlpGg22v7fFjj2dtF1bAfrhU5KD6uG6vg+8MwcWBs1a5gSOusYOW8e7hUt+cgiwnpfKC3A82egws4Dw+cL0M/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jH9DexqY+0NipZuZ8kdrR08rlQULxK5eTmwhb0wBXsk=;
- b=hYtAVsvdTmV8r66lTZ/C/GhURrcJ64JWdufgvtay+whpP/8ORDw/YBogwiht4qrhj4SNSKSSApXzp6KmrpZMw7xq/h4+YWpGu/DUr6/rXQNczw7IJhL9saQKag/pnHDsdp0RQYORbhYe9mEe7F4BncoeczDfgARjWBFCTvWnSnk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by SA2PR10MB4633.namprd10.prod.outlook.com
- (2603:10b6:806:11a::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.22; Tue, 31 Jan
- 2023 02:12:07 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2015:3589:3e96:2acd]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::2015:3589:3e96:2acd%5]) with mapi id 15.20.6064.019; Tue, 31 Jan 2023
- 02:12:07 +0000
-Date:   Mon, 30 Jan 2023 18:12:04 -0800
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [RFC PATCH v2] regmap: apply reg_base and reg_downshift for
- single register ops
-Message-ID: <Y9h49F7QxdTa/deD@euler>
-References: <Y9WAPBYaLMsCbQN6@euler>
- <Y9clyVS3tQEHlUhA@makrotopia.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9clyVS3tQEHlUhA@makrotopia.org>
-X-ClientProxiedBy: MW4PR04CA0208.namprd04.prod.outlook.com
- (2603:10b6:303:86::33) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Mon, 30 Jan 2023 21:13:47 -0500
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1EE2F79A;
+        Mon, 30 Jan 2023 18:13:46 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so11419579wma.1;
+        Mon, 30 Jan 2023 18:13:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I9pRDoiS5AR3g6YwrAuc/Yjjp7F1D+mNr/yQup2Qmh0=;
+        b=M50QAdnil0fuf2dpP7I1PUWzZ7WL4VyzZJa1sOHtWq6EoDBHjCaI/4+yxXkLrvsX6b
+         r/x38WA5APdNpQ040JJszfPlJz2VcHOP7x8SuEQ07NC1saXds77p6y+7I9dOl6OCl50z
+         b0B+5dML3Q0LOj8e+oulVwqn5YwOVNNL0lauuD5sbYedrz0KJF/GwX2hRtFBG0cPA8yB
+         o/KNNNTNJR4pyjIDjE+eWZrV/9NZoG0ng/VDCpp0bV/u0MQbpSUN+egFKcjvbSrhYTEF
+         q/iTZwtzHU0pWAo7+U/u/eJDRFoa0547YL0kJxtiPYvN4doCQ3BcRR8p7BUH7kc25i7z
+         3PaA==
+X-Gm-Message-State: AFqh2kpd8PpedzWpAad5jHQoscNbag8JvgzmAkMt+obcl/ciw9/0eIkI
+        VOT7Gzh97natCQKbnS4ecx6Et48W5kRtoYgpxHw=
+X-Google-Smtp-Source: AMrXdXtyZe/SUBPmb3AbkrfmeHyqkCfWDG8LGaxhGnCCaQwspwbUktIL2RmxPn7fOp/5FYv0C6etUZJsOi4WXgjsYkU=
+X-Received: by 2002:a05:600c:538e:b0:3db:1a:3490 with SMTP id
+ hg14-20020a05600c538e00b003db001a3490mr2110585wmb.158.1675131224803; Mon, 30
+ Jan 2023 18:13:44 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|SA2PR10MB4633:EE_
-X-MS-Office365-Filtering-Correlation-Id: 16f32703-d673-43cd-ff4b-08db03308da4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xNq+3DVKeGScSYoCC+k8L4mNdHp9kmdN8xwvujSf13taqmt5MtJBHlGqsHj80aqn156OxGW3nwmE8nkoj4eN0teV20mLKw9CEYhnzhV1sEGdNYeUSIl9TptCtCnrM2YOKUzDs1aHdW+voTi/ScN089E/lwmtgbkmqtCK/YVwltMfoC2viZ6ltZFt8t3lIsS0ulLDoOA5UGIKb1097DYBOT+0PwLekFZN6rXQym42bbROyG3Ua+/V+oZdOwCXvmoFte0mX7MNI2PLgJP7DvDQeFXp/VePlyM9AJuO85NeDThGOblevNYgFkXq8K+DN3b3HN50iHp4q5TKmqIwTxatWCuvcXvM19iCeVKDJT22TSqpA4eauGMAQ8oHX+/5jLUpxQF5yZfrJWCjCOZ5c5HInjb6aiNJPH2YCQW/lfqRkeuKIKyW5Vg60iHkrSK24qEc/nkA2PzBCp5Dp9ZxMY+pySm7tvjcBG2h4NWcMy3Q4vKP+kep+iOah5DbTPIZUBtyvM49Zeaby4pZj/CL4EcwzFMmkoAVRqHUJdiV3WthlmSafN7nGHL6evmct0P9gCSjAJQbcv44byBFBmwgRPgof0KaYL8IyeBQzmwpvTmXwcs376zK47gd+ixaWK0FVE44Tu/orfRMwyOoFj6aRFVaYA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(136003)(376002)(346002)(396003)(366004)(39830400003)(451199018)(6512007)(9686003)(66899018)(186003)(6486002)(26005)(6506007)(2906002)(38100700002)(44832011)(6666004)(5660300002)(4326008)(33716001)(6916009)(66476007)(66556008)(66946007)(8676002)(54906003)(478600001)(41300700001)(316002)(86362001)(83380400001)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dZP9VnfY/UKo+Q0tiWhtSbZjcFpx3eRbFXKh+C3NqngLAfcHGJcwwaCO0NE1?=
- =?us-ascii?Q?VkDvjjuXJvaeljin3fE9tTAQ9dR3d434idN99z1GoAb592jEdEURXndGJZbc?=
- =?us-ascii?Q?uMum80/J6G+PFdvtHQ8uInzSgjKMKFDpEulyjb3wugWXmC983n6973CzFTZ/?=
- =?us-ascii?Q?Nt2RNYrgkuwwqi+GksRVoha5xfK0yOflpwhSraqZuxNrGe6AD2DeuF5TWwpk?=
- =?us-ascii?Q?qheH5fy9+CnDYfLlJzdQt1qsBuj8QlNTbuPp2hcsu+QPT2AS/IabKk3c+2JH?=
- =?us-ascii?Q?KPajRV+Al6rANItBfxT4D7NQDUstE22SbkiGzAly2/8+dQ+ExdtLYPm/K6YB?=
- =?us-ascii?Q?fIcdoJHfC+/0L2BdeMmMdmfg9CIAIEuk2q0p41H/bUcPv+jpS9vTy0Z+9t//?=
- =?us-ascii?Q?dKyx7xGWs5nMIu4e8BDuLkw9khktcjBEiMkwI72O7lwBOqR291H+8CBIDrC7?=
- =?us-ascii?Q?7qPl6YKIKPN27xXXLkBkhDLSjHPVScOO2qFj2JohLEV7B/zbSz1/JnYxeOQ2?=
- =?us-ascii?Q?FyiRHnvEsLZD+pVOryD9dMPvNsUDSwxwLbxy3VAnnRzrzrITog4EwH/9C95m?=
- =?us-ascii?Q?R183zLLalGGAtq0dRoDofVmUx4sgy+E6iTnZaoVkD0Dbun3nVYqWO4A1tuOs?=
- =?us-ascii?Q?GZN1iHIFblct+pAP9erC1SPDfHdNiwtdNBTrj8SPfkgSrty10xEKU9oiGhVE?=
- =?us-ascii?Q?9Xo1c61Yvl5lBmTvz//uy/Xc3Nu5TLvDLSFazYR1BMKyvcF52oAvGsJCI4Ln?=
- =?us-ascii?Q?BrDtNTkK6lK9TKlEBdeIYThpf4lr0dDXKRnxZ65Mdj6pOua0VNnbJPd1sIe7?=
- =?us-ascii?Q?1di3cwo7yTTz8n6++galUTufyiq2cpKgWSmMSz+XYH5nNjKze9A2FIPliPt+?=
- =?us-ascii?Q?7pjUUN1DdSAONNuOlcge8W5r4RqzwdVYRYp/JnORukJpYYPgTZ6XbbQIvaVo?=
- =?us-ascii?Q?nc0aMHcS+Ym3D4Oxm8vHKijT46VX9mRMMJee/P2LcAvh9JyY60Z124cBfid9?=
- =?us-ascii?Q?RK6fb6vmdZ1SNFm7fWl/dPAxk7yZW5W5hSWwbyUd9H6lbXKvO/uzr4gAKvoH?=
- =?us-ascii?Q?QMaH9Bkayee7ROcRqvw4lQ2E9lNDcx176Jhha2Clvl3pxiDIR0HAMnn2rq1T?=
- =?us-ascii?Q?wLs4JXh4R9lMH9nheUYz4WBaHQA/HedXfDVYqAqmlJl7lUsLIoK/X2rfWM48?=
- =?us-ascii?Q?IPD8vaSgZ4m2Qf6kBuRtLrJHPxZlwPDRfMJ4v0Cj4XhpjLIRBHClrkrCJ2wB?=
- =?us-ascii?Q?8K3nZ+sYvuq5z6cAUP74nB0CrNwm46oJbzAktn86UZ2Xon9rERFbgepo+lV8?=
- =?us-ascii?Q?ALDbGqCJ2dx+WxW9MYZar/+09EeWwvy6AB4JnX076VWGDiGvIAMnRx72X7EA?=
- =?us-ascii?Q?lx2qiDgle85cDE3SPSEGDmGdqsKfFq88UwJ7kaplRU0KzCaCXxgb7SzC1HO5?=
- =?us-ascii?Q?OburYyVzHDQTTVrJHqjsVtdjFi0njzldbtoBzc8UmJFRa71HVoYJjrppvDmd?=
- =?us-ascii?Q?uxKhfoUbsfFiPQjxcGw9Av9YOe5Wwf2lGo8BX09ikqnyXprxoTlMXD6AtJtj?=
- =?us-ascii?Q?n9fJ93jTpub5C3I+AEJXC20NTXAlwzt76qJ1B3iBQlnSwtdYM/vUlr5PKwbp?=
- =?us-ascii?Q?0Zfg/20bFFoRWTs+3kQARU0=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16f32703-d673-43cd-ff4b-08db03308da4
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 02:12:07.6521
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t9BvC3mOeC3Mm/9Z4fi8P0TNDfrZLCS04OCp/6nO4fKHjswRQUwOBvDqTau2Ajy6jrrnfqT/LoWwSBF92QqPoCCcGhWRU7BZ85acQkRklos=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4633
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127001951.3432374-1-namhyung@kernel.org> <bda606c2-2b1b-de9f-1386-8ee2bf925b4b@intel.com>
+ <317a91ff-70c5-57a5-8447-7543057e4055@arm.com> <CAM9d7chU6kTdG0y65_UaD_hW75GezzNJF1ZwjNWq8BUpACAGTA@mail.gmail.com>
+ <43ff6d3d-2047-1b2f-12ab-849a915a6e2f@arm.com>
+In-Reply-To: <43ff6d3d-2047-1b2f-12ab-849a915a6e2f@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 30 Jan 2023 18:13:32 -0800
+Message-ID: <CAM9d7cju5-Zvb19wmzUHpMKL_Hzf8+vOvaAx4Ob2dDhwbJ5ynA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] perf intel-pt: Fix the pipe mode (v1)
+To:     James Clark <james.clark@arm.com>
+Cc:     Denis Nikitin <denik@chromium.org>,
+        Stephane Eranian <eranian@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Mon, Jan 30, 2023 at 2:56 AM James Clark <james.clark@arm.com> wrote:
+>
+>
+>
+> On 27/01/2023 23:08, Namhyung Kim wrote:
+> > Hi James,
+> >
+> > On Fri, Jan 27, 2023 at 6:42 AM James Clark <james.clark@arm.com> wrote:
+> >>
+> >>
+> >>
+> >> On 27/01/2023 07:22, Adrian Hunter wrote:
+> >>> On 27/01/23 02:19, Namhyung Kim wrote:
+> >>>> Hello,
+> >>>>
+> >>>> I found some problems in Intel-PT and auxtrace in general with pipe.
+> >>>> In the past it used to work with pipe, but recent code fails.
+> >>>
+> >>> Pipe mode is a problem for Intel PT and possibly other auxtrace users.
+> >>
+> >> Just some info from my side: For Arm Coresight we ended up deprecating
+> >> pipe mode, then not supporting it altogether. First was when we added an
+> >> optional step to peek through all of the data to help with an edge case.
+> >> Then we added a requirement to receive a HW_ID packet before decoding
+> >> which necessitated the peek. You can't peek in pipe mode because you
+> >> need to be able to seek, so it's not supported at all anymore.
+> >>
+> >> For Arm SPE I never tested it with piped data. I suppose I could add a
+> >> test at some point, but I don't really see the usecase.
+> >
+> > Yeah, it'd be great if we can have a test for Arm SPE.
+> >
+>
+> Ok thanks I will put it on the list of things to do.
+>
+> > Anyway, my work env (Google) requires the pipe mode due to the
+> > restriction in disk usage.  Without the pipe support, it's not possible
+> > to run `perf record` in production.
+> >
+>
+> Makes sense. Unfortunately at the moment with Coresight, because of the
+> lack of appropriate timestamps we're waiting for the end of the file
+> before starting decoding. So you're not really any better off using
+> piped mode, unless you have a lot more memory than disk space?
+>
+> Since this commit [1] and Arm v8.4 we can actually start making use of
+> the timestamps and do a streaming decode again. So I will also add it to
+> the list to look into that for Coresight again. Are you using an old
+> version of Perf or not using Coresight at all? I know Denis at Google is
+> using Coresight, but only with files rather than pipes.
 
-On Mon, Jan 30, 2023 at 02:04:57AM +0000, Daniel Golle wrote:
-> reg_base and reg_downshift currently don't have any effect if used with
-> a regmap_bus or regmap_config which only offers single register
-> operations (ie. reg_read, reg_write and optionally reg_update_bits).
-> 
-> Fix that and take them into account also for regmap_bus with only
-> reg_read and read_write operations by applying reg_base and
-> reg_downshift in _regmap_bus_reg_write, _regmap_bus_reg_read.
-> 
-> Also apply reg_base and reg_downshift in _regmap_update_bits, but only
-> in case the operation is carried out with a reg_update_bits call
-> defined in either regmap_bus or regmap_config.
-> 
-> Fixes: 0074f3f2b1e43d ("regmap: allow a defined reg_base to be added to every address")
-> Fixes: 86fc59ef818beb ("regmap: add configurable downshift for addresses")
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
-> I hope that I didn't miss anything there...
-> 
-> @Colin Please let me know if this breaks anything with your ocelot_spi
-> use-case.
+I'm not aware of usage of Coresight yet in my boundary, but others
+may be using it.
 
-I see we're working on similar things! (DSA hardware, that is)
+>
+> One other thing, have you used the --switch-output mode to perf record
+> before? I would have said it would give you some of the benefits of
+> piped mode, but is more likely to work with Coresight. But last time I
+> checked it's not working either. Not very helpful I know, but something
+> to keep in mind.
 
-This patch works for me. I don't konw if there's any value in
-back-porting it to affected kernels, as ocelot_spi is the only user as
-far as I can tell. (wishing I called it something more greppable than
-'reg_base')
+I don't think it'd work because it still occupies the same space.
+So far, the pipe mode worked well but I think it needs some
+more improvements.
 
-Tested-by: Colin Foster <colin.foster@in-advantage.com>
+Anyway, thanks for your suggestion and review!
 
-> 
->  drivers/base/regmap/regmap.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-> index d12d669157f24..d2a54eb0efd9b 100644
-> --- a/drivers/base/regmap/regmap.c
-> +++ b/drivers/base/regmap/regmap.c
-> @@ -1942,6 +1942,8 @@ static int _regmap_bus_reg_write(void *context, unsigned int reg,
->  {
->  	struct regmap *map = context;
->  
-> +	reg += map->reg_base;
-> +	reg >>= map->format.reg_downshift;
->  	return map->bus->reg_write(map->bus_context, reg, val);
->  }
->  
-> @@ -2840,6 +2842,8 @@ static int _regmap_bus_reg_read(void *context, unsigned int reg,
->  {
->  	struct regmap *map = context;
->  
-> +	reg += map->reg_base;
-> +	reg >>= map->format.reg_downshift;
->  	return map->bus->reg_read(map->bus_context, reg, val);
->  }
->  
-> @@ -3231,6 +3235,8 @@ static int _regmap_update_bits(struct regmap *map, unsigned int reg,
->  		*change = false;
->  
->  	if (regmap_volatile(map, reg) && map->reg_update_bits) {
-> +		reg += map->reg_base;
-> +		reg >>= map->format.reg_downshift;
->  		ret = map->reg_update_bits(map->bus_context, reg, mask, val);
->  		if (ret == 0 && change)
->  			*change = true;
-> -- 
-> 2.39.1
-> 
+Thanks,
+Namhyung
