@@ -2,103 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AEEC6831AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263506831B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbjAaPiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S233438AbjAaPjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbjAaPis (ORCPT
+        with ESMTP id S233461AbjAaPjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:38:48 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FA3222F4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:38:44 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12758068wma.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:38:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9LHtH3bJ+q5MZMDliWaNSJG1cRpwfIRUNjGZgww+vEs=;
-        b=ecx8uctjXOWtRMTS/y3varh5ANvb0+M/RaMhOzCFULxvmxs4/ztcA/Up8cVFOvTqhA
-         fDBn59GXuIIlNagvxb8b6Hq3VY/nBY5yzkokO6iAoOT4qE1d0LMvpiEnmEfv0D+zX5sW
-         +uIXD69G0fZ+YegCxt+ZnbO4Ie4+haUYSloYSwVNKPIif+JzO4qkBqc45B9FA1AW2PIC
-         OnjbZYSFjX16UEcNJlAWuQWJ1zzorRbRVzBfTbz+YuVaKdkeU5ZlbFvEGSQfzgvDldTW
-         /7QlhG3TgF3Y1y3BBoxaZIl6AlCReoGTx8qo1ycojFhI47T1W0puSu1pNVAIZ/Vl/GRx
-         szYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9LHtH3bJ+q5MZMDliWaNSJG1cRpwfIRUNjGZgww+vEs=;
-        b=LOzFQBRyS/2RUc/mgezi4erNVgc4HZ7K90PUhkpEMaP0Nreo1uZbvFvKvqiX3xOS72
-         qYgxLoa/u6yinJZwuLtljzbZ/Wf3N47jugM6IUxUy7pZcd3c8FmXPfcu3emQ3MDrwnjx
-         1hhyKKPzGUJ5cEElQOBLTQrgu/qN5TvNysUAzZKuxeiGgAc5+IYGUa1n4M6e0BD2CS0K
-         Hi27BvXKSayYSwILvuRHRKMtfeD44bHrcFShnK1lS8SyvxfZJfjQ4fzluGSa4WDCiV0C
-         exKo4b0kX5qExhSREzcC/TESUsfb0pCDkOiNQDU9egYaua9tMJ6Qjfu/hqrWisxYXP3V
-         m8sA==
-X-Gm-Message-State: AO0yUKVUut4stTku556wxFMYNdFdoZYqATXh+UDCfKCpRmwQLtpBM1E/
-        LKo9wTeEsiPPkbCYG6xY3tX6uQ==
-X-Google-Smtp-Source: AK7set+qXEO5f6dM/+ByOJF3uNln+DhK4z5qtfoz1VcbfCM/HgCJKWfILh4TRd9lo8Bwr4d98fApGw==
-X-Received: by 2002:a1c:4c12:0:b0:3dd:1c45:a90e with SMTP id z18-20020a1c4c12000000b003dd1c45a90emr3725660wmf.25.1675179522630;
-        Tue, 31 Jan 2023 07:38:42 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id x2-20020a05600c2d0200b003dd86c24005sm1686377wmf.42.2023.01.31.07.38.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 07:38:42 -0800 (PST)
-Message-ID: <20034fe0-3fa8-9ece-b0e8-96143cd2deea@linaro.org>
-Date:   Tue, 31 Jan 2023 16:38:41 +0100
+        Tue, 31 Jan 2023 10:39:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED9A4DE15
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:39:11 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pMsip-0003AW-G5; Tue, 31 Jan 2023 16:38:59 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:29f7:a2fc:d3f6:7550])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 430E116A532;
+        Tue, 31 Jan 2023 15:38:57 +0000 (UTC)
+Date:   Tue, 31 Jan 2023 16:38:51 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ore@pengutronix.de, kernel@pengutronix.de
+Subject: Re: [PATCH] [v2] fec: convert to gpio descriptor
+Message-ID: <20230131153851.ua57vy7vc2xdasup@pengutronix.de>
+References: <20230126210648.1668178-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 3/4] thermal: intel: int340x: Drop pointless cast to
- unsigned long
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <2133431.irdbgypaU6@kreacher> <1921559.PYKUYFuaPT@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <1921559.PYKUYFuaPT@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zy7tm2hvwiyorecs"
+Content-Disposition: inline
+In-Reply-To: <20230126210648.1668178-1-arnd@kernel.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 19:45, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> The explicit casting from int to unsigned long in
-> int340x_thermal_get_zone_temp() is pointless, becuase the multiplication
-> result is cast back to int by the assignment in the same statement, so
-> drop it.
-> 
-> No expected functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+--zy7tm2hvwiyorecs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+On 26.01.2023 22:05:59, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The driver can be trivially converted, as it only triggers the gpio
+> pin briefly to do a reset, and it already only supports DT.
+>=20
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+On current net-next/main 6a8ab436831d ("Merge branch
+'add-support-for-the-the-vsc7512-internal-copper-phys'") this causes the
+riot board (arch/arm/boot/dts/imx6dl-riotboard.dts) to not probe the
+fec:
 
+| Jan 31 16:32:12 riot kernel: fec 2188000.ethernet: error -ENOENT: failed =
+to get phy-reset-gpios
+| Jan 31 16:32:12 riot kernel: fec: probe of 2188000.ethernet failed with e=
+rror -2
+
+reverting 468ba54bd616 ("fec: convert to gpio descriptor") solves the
+problem.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--zy7tm2hvwiyorecs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmPZNggACgkQrX5LkNig
+01358Af+MUiH2K0uM45xSjCGqBLdDwmDH3hIqbN7YOmbRY078ZN0+8MY6rKY3iyE
+vToSnRFKHe8jyWCnqVdNSJGt2O/jsZ6QmAk731rHccG04ZZijLfowpnZWAMteq7t
+nEmF9HitPx3l2cKYRORxoxBPqdUisrW/CrN8Xed6rvvrW75CXbYDQ/44Zq0WeNSf
+E0QHDOkHoEpb+p8C0n+fJ2iMnK4P3973C6Z8FyxGUBHI/0xnaJkCvS3Tf5vlrtd9
+DImCP4MjnP/LsNZuR1nO6xcCel4QF3q9h3Rzvtjc5CHNdehA1D1cw6aywelddDdB
+oGgvo1StDSAEnyZB0hhGnGKIXQtajw==
+=b7eA
+-----END PGP SIGNATURE-----
+
+--zy7tm2hvwiyorecs--
