@@ -2,125 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB67683972
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100BA683976
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbjAaWhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:37:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S229719AbjAaWjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:39:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjAaWhB (ORCPT
+        with ESMTP id S229875AbjAaWjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:37:01 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34ADA530FB;
-        Tue, 31 Jan 2023 14:36:19 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id q5so15679148wrv.0;
-        Tue, 31 Jan 2023 14:36:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+2nyXegReOu8jUxiMGB5palVRTeOJ+I1UHYLKAdwCtY=;
-        b=RFo38UKcYBx5o1Bb5fsP/sr+jl2BnGOHqltKsAyxLMuHyWikMnLfczvzWnrrHi9l5H
-         EAikqs768XxfuNNVUZcKw6+hRmr8wgM2PSxV1p3qdhBgDmOjB3r8k2HeveKS2P1k1J8k
-         0oVI3nXse2jvMrSzmXYM/Zurl5LbrOw/2tQk2IQvNWzgl8VmA9y9Kk0WaAM37JYXqKXl
-         6fT2tjAMpyZIz5941zm5x1NU85yfYWGDuZk3MPIigK9XngU00aX2A/a7DcFPVvHqKZjS
-         t7Ct46zBTFtarUkPMx0LwyzXBEVpRKQbljg1C+faka9QOeG2d9qIZfwosPUaeovlxsqc
-         3FBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+2nyXegReOu8jUxiMGB5palVRTeOJ+I1UHYLKAdwCtY=;
-        b=Z00viHjqhWO4jIAIwYbmHMZhMzOve3M1C/ncgGRtWFI6uo+uzHagzWVSZV8P7yAxmq
-         3AFA9mPeeCtKaxaUPQhxx/emb1bLuVf1NMKVvSRb3Il1pejsY4ofyfngkNQ16t9hVu3a
-         V9vrR30SlTUlG6psMYemODn1+f8l0WZNkp5HR2530UYwicqcAID4sbo6uS/QnHZqH52I
-         LvcAakTExwuMXXfg+2n5US9lj+D2n+mwA3Q6ML1g0RYbhCg/KFlslzZtOVMpnJXEubM9
-         zVruyaylhqXH5Hw1WkdIyb7IjOn+cSHsNJRMmHeXsmVZc8ONSsYXFvm0qRNMo0KG39bW
-         rE6g==
-X-Gm-Message-State: AO0yUKVaNtWWZKBfcJHtFQH8cGCRInPpu1q/IONkGhpwbUSPCljn9Qy6
-        7O3Ls7uaTblCY8ooT31eCks=
-X-Google-Smtp-Source: AK7set90rpA4ZQJVazlfBbK/Uu73azbwA5+NWjVqg0ebSg5dMWw+xP966xjiMn5hYIFZzhj+b8DeMA==
-X-Received: by 2002:a5d:40c3:0:b0:2bf:b746:6224 with SMTP id b3-20020a5d40c3000000b002bfb7466224mr501837wrq.0.1675204576537;
-        Tue, 31 Jan 2023 14:36:16 -0800 (PST)
-Received: from DreamMachine2.lan (143.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.143])
-        by smtp.gmail.com with ESMTPSA id g2-20020a5d4882000000b002bdf3809f59sm15362561wrq.38.2023.01.31.14.36.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 14:36:16 -0800 (PST)
-Message-ID: <2be3109edf0c29178aab58705ed2cf60b6b30a62.camel@gmail.com>
-Subject: Re: [PATCH v3 7/7] iio: pressure: bmp280: Add nvmem operations for
- BMP580
-From:   Angel Iglesias <ang.iglesiasg@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andreas Klinger <ak@it-klinger.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 31 Jan 2023 23:36:14 +0100
-In-Reply-To: <Y9e4KFhB2E6E4EQb@smile.fi.intel.com>
-References: <cover.1674954271.git.ang.iglesiasg@gmail.com>
-         <013686653a60092227c842ae2fd0197f2509ad7c.1674954271.git.ang.iglesiasg@gmail.com>
-         <Y9e4KFhB2E6E4EQb@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.3 (by Flathub.org) 
+        Tue, 31 Jan 2023 17:39:53 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9E5F746;
+        Tue, 31 Jan 2023 14:39:49 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VMJdii038789;
+        Tue, 31 Jan 2023 22:39:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=BKcYaxcWYH/ofWDt8+sbufGNtI9zvO8cCx8Veh2f5cI=;
+ b=Y30+wvqLCgv1nnLfSuu7/AS1XxPzVj8L+hAoETMMuHEjG2/2r6rI2J/Qd1+9Oz2st4PJ
+ op6a/XprX9/OiLgX2Ii/JquEMFyR+F17dAxgcISD18+rtakHcN8s71RtrexFpiRkq1o8
+ J151GDoEbnP/PUJdqx+fyW0hpwzxSDwrJv6WZ3siJTpAcneB8shff1tuC3th4HCMAvsj
+ tvn6aFivfjl/ElMv1mtQfN50yfW1c3vbj1RKcNxdVTbGKEP2+uMeMqRdHlehrWiPr/RB
+ jvJUgu/9ZeGfG/HLFTR+LASCwJMUEltxd0Y/oC1AmOdVD3C9QT3rDIxgk7C9oQduXqwL jA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfbpe8dfv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 22:39:28 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VMQvtH020712;
+        Tue, 31 Jan 2023 22:39:27 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfbpe8dfd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 22:39:27 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VLaEOb025857;
+        Tue, 31 Jan 2023 22:39:26 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3ncvtrq1bj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 22:39:26 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VMdNlc2425418
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 22:39:23 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E0E458052;
+        Tue, 31 Jan 2023 22:39:23 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E9095804E;
+        Tue, 31 Jan 2023 22:39:22 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 22:39:22 +0000 (GMT)
+Message-ID: <deec5230-b72e-3325-3dfc-fb8c818526a4@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 17:39:20 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH ima-evm-utils v2] Add tests for MMAP_CHECK and
+ MMAP_CHECK_REQPROT hooks
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        pvorel@suse.cz, Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230131174245.2343342-1-roberto.sassu@huaweicloud.com>
+ <20230131174245.2343342-3-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230131174245.2343342-3-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jtRuxiSHqkKzwTNNpi6FBqSTWrNRJ_M4
+X-Proofpoint-GUID: ES69wqk_a3WYrbbLU1p5ub7BMnnA1Ns4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ impostorscore=0 malwarescore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
+ spamscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301310195
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTAxLTMwIGF0IDE0OjI5ICswMjAwLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6
-Cj4gT24gU3VuLCBKYW4gMjksIDIwMjMgYXQgMDI6MzM6MDlBTSArMDEwMCwgQW5nZWwgSWdsZXNp
-YXMgd3JvdGU6Cj4gPiBUaGUgcHJlc3N1cmUgc2Vuc29yIEJNUDU4MCBjb250YWlucyBhIG5vbi12
-b2xhdGlsZSBtZW1vcnkgdGhhdCBzdG9yZXMKPiA+IHRyaW1taW5nIGFuZCBjb25maWd1cmF0aW9u
-IHBhcmFtcy4gVGhhdCBtZW1vcnkgcHJvdmlkZXMgYW4gcHJvZ3JhbW1hYmxlCj4gPiB1c2VyIHJh
-bmdlIG9mIHRocmVlIDItYnl0ZSB3b3Jkcy4KPiAKPiAuLi4KPiAKPiA+ICsjZGVmaW5lIE5WTV9S
-RUFEwqDCoMKgwqDCoMKgwqBmYWxzZQo+ID4gKyNkZWZpbmUgTlZNX1dSSVRFwqDCoMKgwqDCoMKg
-dHJ1ZQo+IAo+IEhvdyBpcyBpdCBoZWxwZnVsIGFuZCB3aHkgaXQncyBub3QgbmFtZXNwYWNlZCBw
-cm9wZXJseSAoY2FuIGNvbGxpZGUgd2l0aAo+IE5WTSBmcmFtZXdvcmspPwoKSSB0aG91Z2h0IGl0
-IGNvdWxkIHByb3ZpZGUgY2xhcml0eSB1c2luZyB0aG9zZSBhbGlhc2VzIGNhbGxpbmcKYm1wNTgw
-X252bV9vcGVyYXRpb24oKSBoZWxwZXIgZnVuY3Rpb24gb24gbnZtZW4gY2FsbGJhY2tzLCBpbnN0
-ZWFkIG9mIHVzaW5nCmp1c3QgdHJ1ZSBvciBmYWxzZS4gTm90IG15IGJyaWdodGVzdCBpZGVhIGZv
-ciBzdXJlLgoKPiAuLi4KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoC8qIFdhaXQgdW50aWwgTlZNIGlz
-IHJlYWR5IGFnYWluICovCj4gPiArwqDCoMKgwqDCoMKgwqBkbyB7Cj4gPiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gcmVnbWFwX3JlYWQoZGF0YS0+cmVnbWFwLCBCTVA1ODBf
-UkVHX1NUQVRVUywgJnJlZyk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYg
-KHJldCkgewo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBkZXZfZXJyKGRhdGEtPmRldiwgImZhaWxlZCB0byBjaGVjayBudm0gc3RhdHVzXG4iKTsKPiA+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmVnICY9IH5C
-TVA1ODBfU1RBVFVTX05WTV9SRFlfTUFTSzsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqB9Cj4gPiArwqDCoMKgwqDCoMKgwqB9IHdoaWxlICh0aW1lX2JlZm9yZShqaWZmaWVzLCBk
-ZWFkbGluZSkgJiYgIShyZWcgJgo+ID4gQk1QNTgwX1NUQVRVU19OVk1fUkRZX01BU0spKTsKPiAK
-PiByZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQoKT8KClllcywgdGhhbmtzIGZvciBwb2ludGluZyBv
-dXQsIHRoYXQncyB3YXkgYmV0dGVyIHRoYW4gdGhlIGN1cnJlbnQgbG9vcC4KCj4gCj4gPiArwqDC
-oMKgwqDCoMKgwqBpZiAoIShyZWcgJiBCTVA1ODBfU1RBVFVTX05WTV9SRFlfTUFTSykpIHsKPiAK
-PiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgLi4uCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gcmV0Owo+
-IMKgwqDCoMKgwqDCoMKgwqB9Cj4gCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ZGV2X2VycihkYXRhLT5kZXYsCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCJyZWFjaGVkIHRpbWVvdXQgd2FpdGluZyBmb3IgbnZtIG9wZXJhdGlvbgo+
-ID4gY29tcGxldGlvblxuIik7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0
-dXJuIC1FVElNRURPVVQ7Cj4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gCj4gLi4uCj4gCj4gPiArwqDC
-oMKgwqDCoMKgwqB3aGlsZSAoYnl0ZXMgPj0gc2l6ZW9mKHUxNikpIHsKPiAKPiBzaXplb2YoKmRz
-dCkgPwo+IAo+IE9yIHNpemVvZihkYXRhLT5sZTE2KT8KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBhZGRyID0gYm1wNTgwX252bWVtX2FkZHJzW29mZnNldCAvIHNpemVvZih1
-MTYpXTsKPiAKPiBEaXR0by4KPiAKPiAuLi4KPiAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBieXRlcyAtPSBzaXplb2YodTE2KTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBvZmZzZXQgKz0gc2l6ZW9mKHUxNik7Cj4gCj4gRGl0dG8uCj4gCj4gPiArwqDCoMKg
-wqDCoMKgwqB9Cj4gCj4gLi4uCj4gCj4gPiArc3RhdGljIGludCBibXA1ODBfbnZtZW1fd3JpdGUo
-dm9pZCAqcHJpdiwgdW5zaWduZWQgaW50IG9mZnNldCwgdm9pZCAqdmFsLAo+ID4gK8KgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHNpemVfdCBi
-eXRlcykKPiA+ICt7Cj4gCj4gU2FtZSBjb21tZW50cyBhcyBwZXIgYWJvdmUgZnVuY3Rpb24uCgpH
-b3QgaXQhCgo+ID4gwqB9Cj4gCj4gCgpUaGFua3MgZm9yIHlvdXIgdGltZSwKQW5nZWwK
 
+
+On 1/31/23 12:42, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+
+
+> +check_mmap() {
+> +	local hook="$1"
+> +	local arg="$2"
+> +	local test_file fowner rule result test_file_entry
+> +
+> +	echo -e "\nTest: ${FUNCNAME[0]} (hook=\"$hook\", test_mmap arg: \"$arg\")"
+> +
+> +	if ! test_file=$(mktemp -p "$PWD"); then
+> +		echo "${RED}Cannot write $test_file${NORM}"
+> +		return "$HARDFAIL"
+> +	fi
+> +
+> +	fowner="$MMAP_CHECK_FOWNER"
+> +	rule="$MEASURE_MMAP_CHECK_RULE"
+> +
+> +	if [ "$hook" = "MMAP_CHECK_REQPROT" ]; then
+> +		fowner="$MMAP_CHECK_REQPROT_FOWNER"
+> +		rule="$MEASURE_MMAP_CHECK_REQPROT_RULE"
+> +	fi
+> +
+> +	if ! chown "$fowner" "$test_file"; then
+> +		echo "${RED}Cannot change owner of $test_file${NORM}"
+> +		return "$HARDFAIL"
+> +	fi
+> +
+> +	check_load_ima_rule "$rule"
+> +	result=$?
+> +	if [ $result -ne "$OK" ]; then
+> +		return $result
+> +	fi
+> +
+> +	test_mmap "$test_file" "$arg"
+
+In this case it should succeed or fail depending on the $rule?  I am just wondering whether to check $? here as well for expected outcome...
+
+> +
+> +	if [ "$TFAIL" != "yes" ]; then
+> +		echo -n "Result (expect found): "
+> +	else
+> +		echo -n "Result (expect not found): "
+> +	fi
+> +
+> +	test_file_entry=$(awk '$5 == "'"$test_file"'"' < /sys/kernel/security/ima/ascii_runtime_measurements)
+> +	if [ -z "$test_file_entry" ]; then
+> +		echo "not found"
+> +		return "$FAIL"
+> +	fi
+> +
+> +	echo "found"
+> +	return "$OK"
+> +}
+
+> +if [ -n "$TST_KEY_PATH" ]; then
+> +	if [ "${TST_KEY_PATH:0:1}" != "/" ]; then
+> +		echo "${RED}Absolute path required for the signing key${NORM}"
+> +		exit "$FAIL"
+> +	fi
+> +
+> +	if [ ! -f "$TST_KEY_PATH" ]; then
+> +		echo "${RED}Kernel signing key not found in $TST_KEY_PATH${NORM}"
+> +		exit "$FAIL"
+> +	fi
+> +
+> +	key_path="$TST_KEY_PATH"
+
+g_key_path ? or pass as parameter to check_deny (better IMO)
+
+> +elif [ -f "$PWD/../signing_key.pem" ]; then
+> +	key_path="$PWD/../signing_key.pem"
+> +elif [ -f "/lib/modules/$(uname -r)/source/certs/signing_key.pem" ]; then
+> +	key_path="/lib/modules/$(uname -r)/source/certs/signing_key.pem"
+> +elif [ -f "/lib/modules/$(uname -r)/build/certs/signing_key.pem" ]; then
+> +	key_path="/lib/modules/$(uname -r)/build/certs/signing_key.pem"
+> +else
+> +	echo "${CYAN}Kernel signing key not found${NORM}"
+> +	exit "$SKIP"
+> +fi
+> +
+> +key_path_der=$(mktemp)
+
+g_key_path_der for consistency
+
+> +++ b/tests/test_mmap.c
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Tool to test IMA MMAP_CHECK and MMAP_CHECK_REQPROT hooks.
+> + */
+> +#include <stdio.h>
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include <sys/stat.h>
+> +#include <sys/mman.h>
+> +#include <sys/personality.h>
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	struct stat st;
+> +	void *ptr, *ptr_write = NULL;
+> +	int ret, fd, fd_write, prot = PROT_READ;
+> +
+> +	if (!argv[1])
+> +		return -ENOENT;
+> +
+> +	if (argv[2] && !strcmp(argv[2], "read_implies_exec")) {
+> +		ret = personality(READ_IMPLIES_EXEC);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	if (stat(argv[1], &st) == -1)
+> +		return -errno;
+> +
+> +	if (argv[2] && !strcmp(argv[2], "exec_on_writable")) {
+> +		fd_write = open(argv[1], O_RDWR);
+> +		if (fd_write == -1)
+> +			return -errno;
+> +
+> +		ptr_write = mmap(0, st.st_size, PROT_WRITE, MAP_SHARED,
+> +				 fd_write, 0);
+> +		close(fd_write);
+> +
+> +		if (ptr_write == (void *)-1)
+> +			return -errno;
+> +	}
+> +
+> +	fd = open(argv[1], O_RDONLY);
+> +	if (fd == -1) {
+> +		if (ptr_write)
+> +			munmap(ptr_write, st.st_size);
+> +
+> +		return -errno;
+> +	}
+> +
+> +	if (argv[2] && !strncmp(argv[2], "exec", 4))
+> +		prot |= PROT_EXEC;
+> +
+> +	ptr = mmap(0, st.st_size, prot, MAP_PRIVATE, fd, 0);
+> +
+> +	close(fd);
+> +
+> +	if (ptr_write)
+> +		munmap(ptr_write, st.st_size);
+> +
+> +	if (ptr == (void *)-1)
+> +		return -errno;
+> +
+> +	ret = 0;
+> +
+> +	if (argv[2] && !strcmp(argv[2], "mprotect"))
+> +		ret = mprotect(ptr, st.st_size, PROT_EXEC);
+> +
+> +	munmap(ptr, st.st_size);
+> +	return ret;
+> +}
+
+Are there any unexpected failure cases here where it should report an error to the user?
+
+    Stefan
