@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691F96825ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7D06825EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjAaHyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 02:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S231224AbjAaHyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 02:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbjAaHyS (ORCPT
+        with ESMTP id S231222AbjAaHyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 02:54:18 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC39029406;
-        Mon, 30 Jan 2023 23:54:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1675151649; bh=mD8CL799/ivFKlFLLXZUVe+X80GvHc8yo2ph30a3qFk=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=H3E9fjzTJOvLaPG7uDuB1U/x6lt/GUk4eWscD0xFSyTP1lUkAQQE29oANo97f1/l5
-         Y7Af0x2/GR9m49unhtGKeLD7By+n9CWvzfB/SiekpMq5vXv4TvwgQZwEdugxIDfHT/
-         cnhKwfl7Ox/EWTopVmNYClGFeS/bYiAMfkb5Sc4tkuWszj43y9SWJ3MTIGooBRfqdm
-         2Q/JjuGv7G4e0AO8YBoJXGLM4T14mDfuuhOVrSRzes/dft2rRgT4mjmP7V2qkwcKI9
-         FB7Q7u5KtwraAOqG1u42iST1mOCTVyTc8/dgLzJl7fo68lpBYAuACb/bBe3bHmVJgs
-         eyGsK6tpewCFg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.35.76]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M89L1-1pJCy33ehX-005KWc; Tue, 31
- Jan 2023 08:54:08 +0100
-Message-ID: <4563b862-b0c0-390c-9212-89cf7f5d8e45@gmx.de>
-Date:   Tue, 31 Jan 2023 08:54:08 +0100
+        Tue, 31 Jan 2023 02:54:37 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E8A30281;
+        Mon, 30 Jan 2023 23:54:35 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id f34so22906099lfv.10;
+        Mon, 30 Jan 2023 23:54:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P3UB2wsc83MArKTJGJW3EePeDr6MsyyvFxES+baeN/4=;
+        b=ZGGXLy5w9WeMvHwSr7+C0rrfvyoY3QKCCBHUbvvQ7gUI70sXxH/LrbYTSpkY033H6f
+         +EECuFa8i5U2gtz2SLa2wYizhq6kSGdb27XL/GkTPtm8dVg2ufcLrZHMBcy+BPNmnzMV
+         jhg4x+dAUuHUzDLYdJh0V/KSWrKVSXKfHJ/yhI+ik0crgBmMui9WWSEbg7aa5CPwYdyY
+         EBj2me25LQSaCqtYpJmEA7YP1N3B8TAqzx3MsluKB9VLdSK9cvx8ijZ8z60aReZsNF9F
+         wBxtgpMcug7+X/5km06fqkLbNcJ+KXA3cFH2t8iK4Jwwp6176izBYgIbiRgr+deNM/FY
+         IGOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P3UB2wsc83MArKTJGJW3EePeDr6MsyyvFxES+baeN/4=;
+        b=xkREAoS2EgI/tCLkTMN59j6Ezq6FCSwpKsiYvucik08/qNc83lvmWz3gv2ZiIBuCoG
+         e4zsL2DhKfWR+XZd2/OzBho0S10kJbSNuRkWCc4jmEtwWk5RlYVt8C5m8wvOSfp4F7EP
+         YOeZrvNYt5a03GRKRp63JWSwR+qoTtBRx8js7M/kAR4xswCzuj5614VnKmmnB/E0hX0p
+         /pfkKfneuT3cWXAarmgUsq8HCqpMff2qaLnPM5AAFGOy9kdbCUV1heo/Iu1U17TJe2lU
+         P8cuAOoxJ1HqC7tG0AcfT1nYgD7aOU5cYeCIepiL5E2f7tnTtsFuUgA5a/G1Ux0pMTV/
+         rLAA==
+X-Gm-Message-State: AO0yUKVPZlRe2zm9Z4VO7PTUjl9M+xnNGV7ijblHYclAaCxvtH786bgX
+        aeXHfset7JYOvfktxELD78b66q8oF+A=
+X-Google-Smtp-Source: AK7set/LcL+urIEbKZ7/pp2YLvqDSc3QO0Bgy+Deb4ae7zWLxkbQ/ZaKA/92eAEqKE9kV6+HPmx2Jg==
+X-Received: by 2002:a05:6512:2212:b0:4d8:7f17:d0e9 with SMTP id h18-20020a056512221200b004d87f17d0e9mr87607lfu.14.1675151673602;
+        Mon, 30 Jan 2023 23:54:33 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id d6-20020ac244c6000000b004d6d0261a5bsm925209lfm.206.2023.01.30.23.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 23:54:33 -0800 (PST)
+Date:   Tue, 31 Jan 2023 10:54:30 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Frank Li <Frank.Li@nxp.com>, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2] dmaengine: dw-edma: reduce stack usage after
+ debugfs rework
+Message-ID: <20230131075430.ecssjouom2kc5apx@mobilestation>
+References: <20230130185101.2883245-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
-Subject: Re: [PATCH 6.1 000/306] 6.1.9-rc3 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:xKjpXjn8WRt1KXFf5vhYf3zOCMmr6HzkCFOjNgQBovusylteV7G
- G4ff5Ag8BpIfp1CEbZoEkMCrBYyxifAMjfhXcBmqyO00Vv5tPawEiRBPSOGFRkSuIIQSTQo
- sd6rX16fw6zMiWtc92qship1cb6ySBKzdztPq24oEDtPJ0M1Yby8+xUT5Bww/mBnqni1tB0
- aB1g9QrOgaMtYd/e8tJTw==
-UI-OutboundReport: notjunk:1;M01:P0:Vv5BOeygXSY=;rSG097n6EK0FtTY9LLA5zjyOU4l
- zEvMtmZBvmOFqiHa+GbLU1ZmfBOEwNGceOLq/CipUSX4b4Qiln85AFMDKHVu6Uo8qbB4awjqt
- 9hEZ4Cd/cp8nB07uZPQiGA31ORRG6BCp0I2mNhsTn/aCwGi4rXRIAvk2N7r0US9cu4nWsDUbE
- CR3fYZBFr8MG/FDduzcO2tDfmnEHshyD+UMgZhcYWYlE1BO66JkKaSCh16k1tauBqEsx1sKxo
- bsZ4H8oLwKs8vETWSWWpy2UkFNShgdxx2m31+ACONotbRcpP7Y1Da15FKyIkKVrCZVp5okHxR
- jeL4Hzz+uhYibnAsCF/Uk8tBen4Kr3F2QKiMqOuj6bP0LFFf5uLlrNOUuP2wa1TMhItDq29Ay
- +yEmRoUFRcs+CyKG+Qq0/QUNJsA5BFxiAXLz6Gf/HobWJ4QV7j7yCtMDQYJvisD7PzQwNNMio
- s8MTz0eHdfER9yIlYd8OKgAjZ/deyfIUKmNMQFKc1g20k2ZLi6/17B+sf8pRKEldDesLifUcV
- chpzaf3320rU03LM58eaCt8XrQ1quY7Hovluv6NSKRtwq0At1dQoCTf6kmKvAqCH24OqbSsZW
- VwiXhrHbhG9a2kxZgKv8gwTEtNszJ5H8nE/YkfIiLEr18lhpaD2pcO9nUdKVrg0vdH5407SAT
- o9mhhby28hPqlcwX4P2oBj8mWpSEEs1h2eUazKukY85MGVLAKmIt/vHybYQPzx6MYBhBXglMX
- ze2ImfptGxcBHcPEIv9kP94LUNMrVyULT1YiR3L+frvfWMwqLZEW4OcEbJdsW6qyCBDO7ULlo
- ELxTjtqTp1PZbyJalFbM3O7mU0/txvSbk9FIcuBaPixu//k4hkTuBP7VmYL2DMAbVdpM0vreR
- PclvGddrsMqPiYwt77GZvm8Ls+Yb++u2n2plv+QKtiy8cXTwPco0sekL1JFe4P6U5TWxNjOLx
- QCN4dA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230130185101.2883245-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,14 +79,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Mon, Jan 30, 2023 at 07:50:42PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> After the dw_edma_debugfs_entry arrays are no longer compile-time
+> constant, they take up space on the stack, which exceeds the warning
+> limit after inlining:
+> 
+> drivers/dma/dw-edma/dw-edma-v0-debugfs.c:280:6: error: stack frame size (1784) exceeds limit (1400) in 'dw_edma_v0_debugfs_on' [-Werror,-Wframe-larger-than]
+> void dw_edma_v0_debugfs_on(struct dw_edma *dw)
+> 
+> Work around this by preventing dw_edma_debugfs_regs_{wr,rd} from both
+> being inlined together, which cuts the stack frame size in half and
+> makes it fit below the warning limit.
+> 
+> Fixes: 5c0373eafd83 ("dmaengine: dw-edma: Move eDMA data pointer to debugfs node descriptor")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-6.1.9-rc3
+Great! Thanks for the patch.
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37)
+-Serge(y)
 
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+> ---
+> v2: rebase on top of dmaengine tree
+> ---
+>  drivers/dma/dw-edma/dw-edma-v0-debugfs.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> index 42380bf64a70..6542060bd01a 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-debugfs.c
+> @@ -136,7 +136,8 @@ static void dw_edma_debugfs_regs_ch(struct dw_edma *dw, enum dw_edma_dir dir,
+>  	dw_edma_debugfs_create_x32(dw, debugfs_regs, nr_entries, dent);
+>  }
+>  
+> -static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+> +static noinline_for_stack void
+> +dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+>  {
+>  	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+>  		/* eDMA global registers */
+> @@ -197,7 +198,8 @@ static void dw_edma_debugfs_regs_wr(struct dw_edma *dw, struct dentry *dent)
+>  	}
+>  }
+>  
+> -static void dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+> +static noinline_for_stack void
+> +dw_edma_debugfs_regs_rd(struct dw_edma *dw, struct dentry *dent)
+>  {
+>  	const struct dw_edma_debugfs_entry debugfs_regs[] = {
+>  		/* eDMA global registers */
+> -- 
+> 2.39.0
+> 
