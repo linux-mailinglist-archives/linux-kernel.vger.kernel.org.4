@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9CA682F14
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB52C682F1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjAaOWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S231831AbjAaOWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:22:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjAaOW3 (ORCPT
+        with ESMTP id S230325AbjAaOWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:22:29 -0500
+        Tue, 31 Jan 2023 09:22:30 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CC414229;
-        Tue, 31 Jan 2023 06:22:28 -0800 (PST)
-Date:   Tue, 31 Jan 2023 14:22:26 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FA1222D1;
+        Tue, 31 Jan 2023 06:22:29 -0800 (PST)
+Date:   Tue, 31 Jan 2023 14:22:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1675174947;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HeesFkyJpgmdoB5mc6HRlpXKR0i4W5Ofb0R0giGU8H4=;
-        b=TqArNT8vhNEcdvFwtnSt6tTZWObxOvdbHnh8kpMhdWAehQb+VbqpJSVn/+9BstRuvOFSAm
-        KD8Zuyvv7IKRG1iRTJHdQKcPKkJRcGee8ZgfcI6IbvlvpYicCL1Rd8pvhCBycXRLs2bHgn
-        kYpxDHlkNlpxG8HJlQW73aaIJ8iQ/aYH31f8hkMla1GOdrXzXEyuT4k+8c7hqPQ9EoYtEP
-        qj12qX7wC27xjSCv9eG3sdb9o4YIsiYRgReCCzxj3Qe16ZKPuEkYKIy9idLwV6xU79KaZj
-        FvG1PrKeUiuhjO/H/k3TybSm+8Xz5vKg6dI/RvW3P75DDcWNsUiZRdqDEx5ozA==
+        bh=d9aU86yIRrHT4SeqF5L9jK7lUvBot2TGYqlLipevtkA=;
+        b=KfoLIlc2rNlG57K6ETARdDp1ly+yybcrfC8BmPi9hUEj5Zf0G6INKR9m1A/bSs7i82tmWw
+        t3d5nwHgad0tnzmUXxZRZeweB96zkuIoBTfg4+70dGNEOC+M+tOwpgB/pW9slq7nndD0UN
+        yj/QY2WgDc9o6ZAvXAaoByvjOr6soO5221lxw5jsx8bN8l/1op4tHFqMeTa4kg9lK3UG/0
+        2H+gZ8L6jziVJ7SzVvtI74ZYfZ+u1/LlgMZSY8ECSxUTV6uZB2KpgSYFfmxbO+UjmYX9FW
+        lSJ8r1HK4y+Xhhmgk/F3N0XXKaWUNKNPECXk034/atPuEvDK4AJ3+Q3LoPl7ng==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1675174947;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HeesFkyJpgmdoB5mc6HRlpXKR0i4W5Ofb0R0giGU8H4=;
-        b=NlzxGtH2f5GmNpUMkjSj4Z6R7Euj4675Uxp2YKjEIsSYVEs1XioHEsgNFZNiiY+21+GoB0
-        HDhGy7oaLVtZZcCg==
+        bh=d9aU86yIRrHT4SeqF5L9jK7lUvBot2TGYqlLipevtkA=;
+        b=lQu+ofjefPsq2Xg7d2vgTOXFqGUqt9O/9By4WDTjTU43QBNfsYgMw7XcWVu6Y+PUtalaRx
+        7wJJdKWYCHu6hODg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] cpuidle: Fix poll_idle() noinstr annotation
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, x86@kernel.org,
+Subject: [tip: sched/core] sched/clock/x86: Mark sched_clock() noinstr
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <202301192148.58ece903-oliver.sang@intel.com>
-References: <202301192148.58ece903-oliver.sang@intel.com>
+In-Reply-To: <20230126151323.702003578@infradead.org>
+References: <20230126151323.702003578@infradead.org>
 MIME-Version: 1.0
-Message-ID: <167517494639.4906.1628335276634090502.tip-bot2@tip-bot2>
+Message-ID: <167517494734.4906.17956886323824650289.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,63 +66,252 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     4d627628d7584f3d3add1d53342d0f01aa878e04
-Gitweb:        https://git.kernel.org/tip/4d627628d7584f3d3add1d53342d0f01aa878e04
+Commit-ID:     8739c6811572b087decd561f96382087402cc343
+Gitweb:        https://git.kernel.org/tip/8739c6811572b087decd561f96382087402cc343
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 26 Jan 2023 16:08:38 +01:00
+AuthorDate:    Thu, 26 Jan 2023 16:08:36 +01:00
 Committer:     Ingo Molnar <mingo@kernel.org>
 CommitterDate: Tue, 31 Jan 2023 15:01:47 +01:00
 
-cpuidle: Fix poll_idle() noinstr annotation
+sched/clock/x86: Mark sched_clock() noinstr
 
-The instrumentation_begin()/end() annotations in poll_idle() were
-complete nonsense. Specifically they caused tracing to happen in the
-middle of noinstr code, resulting in RCU splats.
+In order to use sched_clock() from noinstr code, mark it and all it's
+implenentations noinstr.
 
-Now that local_clock() is noinstr, mark up the rest and let it rip.
+The whole pvclock thing (used by KVM/Xen) is a bit of a pain,
+since it calls out to watchdogs, create a
+pvclock_clocksource_read_nowd() variant doesn't do that and can be
+noinstr.
 
-Fixes: 00717eb8c955 ("cpuidle: Annotate poll_idle()")
-Reported-by: kernel test robot <oliver.sang@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202301192148.58ece903-oliver.sang@intel.com
-Link: https://lore.kernel.org/r/20230126151323.819534689@infradead.org
+Link: https://lore.kernel.org/r/20230126151323.702003578@infradead.org
 ---
- drivers/cpuidle/cpuidle.c    | 2 +-
- drivers/cpuidle/poll_state.c | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ arch/x86/include/asm/kvmclock.h |  2 +-
+ arch/x86/include/asm/paravirt.h |  2 +-
+ arch/x86/include/asm/pvclock.h  |  3 ++-
+ arch/x86/kernel/cpu/vmware.c    |  2 +-
+ arch/x86/kernel/kvmclock.c      |  6 +++---
+ arch/x86/kernel/pvclock.c       | 19 +++++++++++++++----
+ arch/x86/kernel/tsc.c           |  7 +++----
+ arch/x86/xen/time.c             | 12 ++++++++++--
+ include/linux/math64.h          |  4 ++--
+ 9 files changed, 38 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 500d172..0b00f21 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -426,7 +426,7 @@ void cpuidle_reflect(struct cpuidle_device *dev, int index)
-  * @dev:   the cpuidle device
-  *
-  */
--u64 cpuidle_poll_time(struct cpuidle_driver *drv,
-+__cpuidle u64 cpuidle_poll_time(struct cpuidle_driver *drv,
- 		      struct cpuidle_device *dev)
+diff --git a/arch/x86/include/asm/kvmclock.h b/arch/x86/include/asm/kvmclock.h
+index 6c57651..511b350 100644
+--- a/arch/x86/include/asm/kvmclock.h
++++ b/arch/x86/include/asm/kvmclock.h
+@@ -8,7 +8,7 @@ extern struct clocksource kvm_clock;
+ 
+ DECLARE_PER_CPU(struct pvclock_vsyscall_time_info *, hv_clock_per_cpu);
+ 
+-static inline struct pvclock_vcpu_time_info *this_cpu_pvti(void)
++static __always_inline struct pvclock_vcpu_time_info *this_cpu_pvti(void)
  {
- 	int i;
-diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
-index d25ec52..bdcfeae 100644
---- a/drivers/cpuidle/poll_state.c
-+++ b/drivers/cpuidle/poll_state.c
-@@ -15,7 +15,6 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
- {
- 	u64 time_start;
- 
--	instrumentation_begin();
- 	time_start = local_clock();
- 
- 	dev->poll_time_limit = false;
-@@ -42,7 +41,6 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
- 	raw_local_irq_disable();
- 
- 	current_clr_polling();
--	instrumentation_end();
- 
- 	return index;
+ 	return &this_cpu_read(hv_clock_per_cpu)->pvti;
  }
+diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
+index 86c9d83..cf40e81 100644
+--- a/arch/x86/include/asm/paravirt.h
++++ b/arch/x86/include/asm/paravirt.h
+@@ -26,7 +26,7 @@ DECLARE_STATIC_CALL(pv_sched_clock, dummy_sched_clock);
+ 
+ void paravirt_set_sched_clock(u64 (*func)(void));
+ 
+-static inline u64 paravirt_sched_clock(void)
++static __always_inline u64 paravirt_sched_clock(void)
+ {
+ 	return static_call(pv_sched_clock)();
+ }
+diff --git a/arch/x86/include/asm/pvclock.h b/arch/x86/include/asm/pvclock.h
+index 19b695f..0c92db8 100644
+--- a/arch/x86/include/asm/pvclock.h
++++ b/arch/x86/include/asm/pvclock.h
+@@ -7,6 +7,7 @@
+ 
+ /* some helper functions for xen and kvm pv clock sources */
+ u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src);
++u64 pvclock_clocksource_read_nowd(struct pvclock_vcpu_time_info *src);
+ u8 pvclock_read_flags(struct pvclock_vcpu_time_info *src);
+ void pvclock_set_flags(u8 flags);
+ unsigned long pvclock_tsc_khz(struct pvclock_vcpu_time_info *src);
+@@ -39,7 +40,7 @@ bool pvclock_read_retry(const struct pvclock_vcpu_time_info *src,
+  * Scale a 64-bit delta by scaling and multiplying by a 32-bit fraction,
+  * yielding a 64-bit result.
+  */
+-static inline u64 pvclock_scale_delta(u64 delta, u32 mul_frac, int shift)
++static __always_inline u64 pvclock_scale_delta(u64 delta, u32 mul_frac, int shift)
+ {
+ 	u64 product;
+ #ifdef __i386__
+diff --git a/arch/x86/kernel/cpu/vmware.c b/arch/x86/kernel/cpu/vmware.c
+index 02039ec..11f83d0 100644
+--- a/arch/x86/kernel/cpu/vmware.c
++++ b/arch/x86/kernel/cpu/vmware.c
+@@ -143,7 +143,7 @@ static __init int parse_no_stealacc(char *arg)
+ }
+ early_param("no-steal-acc", parse_no_stealacc);
+ 
+-static unsigned long long notrace vmware_sched_clock(void)
++static noinstr u64 vmware_sched_clock(void)
+ {
+ 	unsigned long long ns;
+ 
+diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
+index 16333ba..0f35d44 100644
+--- a/arch/x86/kernel/kvmclock.c
++++ b/arch/x86/kernel/kvmclock.c
+@@ -71,12 +71,12 @@ static int kvm_set_wallclock(const struct timespec64 *now)
+ 	return -ENODEV;
+ }
+ 
+-static u64 kvm_clock_read(void)
++static noinstr u64 kvm_clock_read(void)
+ {
+ 	u64 ret;
+ 
+ 	preempt_disable_notrace();
+-	ret = pvclock_clocksource_read(this_cpu_pvti());
++	ret = pvclock_clocksource_read_nowd(this_cpu_pvti());
+ 	preempt_enable_notrace();
+ 	return ret;
+ }
+@@ -86,7 +86,7 @@ static u64 kvm_clock_get_cycles(struct clocksource *cs)
+ 	return kvm_clock_read();
+ }
+ 
+-static u64 kvm_sched_clock_read(void)
++static noinstr u64 kvm_sched_clock_read(void)
+ {
+ 	return kvm_clock_read() - kvm_sched_clock_offset;
+ }
+diff --git a/arch/x86/kernel/pvclock.c b/arch/x86/kernel/pvclock.c
+index 5a2a517..56acf53 100644
+--- a/arch/x86/kernel/pvclock.c
++++ b/arch/x86/kernel/pvclock.c
+@@ -64,7 +64,8 @@ u8 pvclock_read_flags(struct pvclock_vcpu_time_info *src)
+ 	return flags & valid_flags;
+ }
+ 
+-u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
++static __always_inline
++u64 __pvclock_clocksource_read(struct pvclock_vcpu_time_info *src, bool dowd)
+ {
+ 	unsigned version;
+ 	u64 ret;
+@@ -77,7 +78,7 @@ u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
+ 		flags = src->flags;
+ 	} while (pvclock_read_retry(src, version));
+ 
+-	if (unlikely((flags & PVCLOCK_GUEST_STOPPED) != 0)) {
++	if (dowd && unlikely((flags & PVCLOCK_GUEST_STOPPED) != 0)) {
+ 		src->flags &= ~PVCLOCK_GUEST_STOPPED;
+ 		pvclock_touch_watchdogs();
+ 	}
+@@ -100,15 +101,25 @@ u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
+ 	 * updating at the same time, and one of them could be slightly behind,
+ 	 * making the assumption that last_value always go forward fail to hold.
+ 	 */
+-	last = atomic64_read(&last_value);
++	last = arch_atomic64_read(&last_value);
+ 	do {
+ 		if (ret <= last)
+ 			return last;
+-	} while (!atomic64_try_cmpxchg(&last_value, &last, ret));
++	} while (!arch_atomic64_try_cmpxchg(&last_value, &last, ret));
+ 
+ 	return ret;
+ }
+ 
++u64 pvclock_clocksource_read(struct pvclock_vcpu_time_info *src)
++{
++	return __pvclock_clocksource_read(src, true);
++}
++
++noinstr u64 pvclock_clocksource_read_nowd(struct pvclock_vcpu_time_info *src)
++{
++	return __pvclock_clocksource_read(src, false);
++}
++
+ void pvclock_read_wallclock(struct pvclock_wall_clock *wall_clock,
+ 			    struct pvclock_vcpu_time_info *vcpu_time,
+ 			    struct timespec64 *ts)
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index a78e73d..8c33936 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -215,7 +215,7 @@ static void __init cyc2ns_init_secondary_cpus(void)
+ /*
+  * Scheduler clock - returns current time in nanosec units.
+  */
+-u64 native_sched_clock(void)
++noinstr u64 native_sched_clock(void)
+ {
+ 	if (static_branch_likely(&__use_tsc)) {
+ 		u64 tsc_now = rdtsc();
+@@ -248,7 +248,7 @@ u64 native_sched_clock_from_tsc(u64 tsc)
+ /* We need to define a real function for sched_clock, to override the
+    weak default version */
+ #ifdef CONFIG_PARAVIRT
+-unsigned long long sched_clock(void)
++noinstr u64 sched_clock(void)
+ {
+ 	return paravirt_sched_clock();
+ }
+@@ -258,8 +258,7 @@ bool using_native_sched_clock(void)
+ 	return static_call_query(pv_sched_clock) == native_sched_clock;
+ }
+ #else
+-unsigned long long
+-sched_clock(void) __attribute__((alias("native_sched_clock")));
++u64 sched_clock(void) __attribute__((alias("native_sched_clock")));
+ 
+ bool using_native_sched_clock(void) { return true; }
+ #endif
+diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
+index 9ef0a5c..6b8836d 100644
+--- a/arch/x86/xen/time.c
++++ b/arch/x86/xen/time.c
+@@ -60,9 +60,17 @@ static u64 xen_clocksource_get_cycles(struct clocksource *cs)
+ 	return xen_clocksource_read();
+ }
+ 
+-static u64 xen_sched_clock(void)
++static noinstr u64 xen_sched_clock(void)
+ {
+-	return xen_clocksource_read() - xen_sched_clock_offset;
++        struct pvclock_vcpu_time_info *src;
++	u64 ret;
++
++	preempt_disable_notrace();
++	src = &__this_cpu_read(xen_vcpu)->time;
++	ret = pvclock_clocksource_read_nowd(src);
++	ret -= xen_sched_clock_offset;
++	preempt_enable_notrace();
++	return ret;
+ }
+ 
+ static void xen_read_wallclock(struct timespec64 *ts)
+diff --git a/include/linux/math64.h b/include/linux/math64.h
+index 8958f4c..8b9191a 100644
+--- a/include/linux/math64.h
++++ b/include/linux/math64.h
+@@ -161,7 +161,7 @@ static inline u64 mul_u32_u32(u32 a, u32 b)
+ #if defined(CONFIG_ARCH_SUPPORTS_INT128) && defined(__SIZEOF_INT128__)
+ 
+ #ifndef mul_u64_u32_shr
+-static inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
++static __always_inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
+ {
+ 	return (u64)(((unsigned __int128)a * mul) >> shift);
+ }
+@@ -177,7 +177,7 @@ static inline u64 mul_u64_u64_shr(u64 a, u64 mul, unsigned int shift)
+ #else
+ 
+ #ifndef mul_u64_u32_shr
+-static inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
++static __always_inline u64 mul_u64_u32_shr(u64 a, u32 mul, unsigned int shift)
+ {
+ 	u32 ah, al;
+ 	u64 ret;
