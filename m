@@ -2,88 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C536828D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2DD682A74
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjAaJ3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:29:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
+        id S230212AbjAaKZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232302AbjAaJ27 (ORCPT
+        with ESMTP id S229577AbjAaKZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:28:59 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A54CDC7;
-        Tue, 31 Jan 2023 01:28:58 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V88YNh001974;
-        Tue, 31 Jan 2023 09:28:48 GMT
+        Tue, 31 Jan 2023 05:25:49 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC121C5A3;
+        Tue, 31 Jan 2023 02:25:48 -0800 (PST)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V6BAen009974;
+        Tue, 31 Jan 2023 09:29:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
+ mime-version : subject : to : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=oQTL0ghYcTZEQswOQIPao0jBiOAoKd9a71FE5v671Fg=;
- b=V2wFDN2A5kJYLS6Q2Mo6u1BwvX8wjoDcozsgwnJIPvyRYE/C3ytc/OTsfxE0fKzjHbhz
- AzK6huL1PBt9WltEdQ8z3NKA+DjdBOSNISBJjLRcAN1Fx4BhWRgk6s2O82JoEmNtuCa4
- xlL87119YBKC5KOCSlTNkH3Dr9g1MHnKRczGJAEICwmffAGt6lHbPHayLedtBUSVLskc
- oe7CoI4hue/VaihdH29/9Msc5R+DOWi4aA1JTmzeB37GTXfZPinqEIAFTaIf+9Ws+Jzh
- NTLWSK5GZGP8DRmi33PDn6O1gDhP1+hYyB2x49dvn5EJwFHiWl4VAVMZH/Ye/AINYxPv cQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nexb00am3-1
+ bh=61YJvs37rVND9bnQtqkwhkRu7Ta9WxqCU5NShGp5dGg=;
+ b=Lh2ts7GMEkGjaqqfoeKaiRryi0W6zZJOHQDZgupTJpcAkNjnegMSxIZTCCT/kYpEvXby
+ dw95dTtiuvxEr8BJWFe981tZ4kY2eT5oSVbN9oUJUDONa0gp91Ld2SwW2eCG8HAgGPf/
+ f6Q1oA+aP3GW5Ru/Cbm8qj6SLmBUJpn04xSggTlhJqZQYt6ThM39Ictc9Udj6tPCgpQ2
+ K7qyl+tsQ+woqcalxc3fDenEbF4ZhPupo6xY5Y6ozvlbIzDi1IN2kzgEoekmdYa548xW
+ RHoDxBQYoQUjTFsEG8V+vnUguiXMkbzoOYhBp411yBpSRA7p+VuC6jproq6yC1rLKZwP wg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3neua98u0s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 09:28:48 +0000
+        Tue, 31 Jan 2023 09:29:25 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30V9Slww009694
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30V9TObw002725
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 09:28:47 GMT
-Received: from [10.50.40.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
+        Tue, 31 Jan 2023 09:29:24 GMT
+Received: from [10.216.43.35] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 01:28:42 -0800
-Message-ID: <6bb22160-5966-43d3-ffba-489b77b3a095@quicinc.com>
-Date:   Tue, 31 Jan 2023 14:58:39 +0530
+ 2023 01:29:20 -0800
+Message-ID: <c8d779fe-2508-4aa1-8de9-26d858bc068b@quicinc.com>
+Date:   Tue, 31 Jan 2023 14:59:16 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 6/6] regulator: qcom_smd: Add support to define the bootup
- voltage
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 5/6] clk: qcom: lpassaudiocc-sc7280: Merge lpasscc into
+ lpass_aon
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <robh+dt@kernel.org>,
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <broonie@kernel.org>,
+        <konrad.dybcio@somainline.org>,
         <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>, <quic_ipkumar@quicinc.com>
-References: <20230113150310.29709-1-quic_devipriy@quicinc.com>
- <20230113150310.29709-7-quic_devipriy@quicinc.com>
- <77d84408-166e-8a02-227a-67654a4d31f2@linaro.org>
- <df6c1cd6-ea70-e65c-b4e8-3da80697242f@quicinc.com>
- <cc037133-7c45-325f-4a1d-9855d033ae5c@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <cc037133-7c45-325f-4a1d-9855d033ae5c@linaro.org>
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>,
+        <quic_plai@quicinc.com>, <quic_rohkumar@quicinc.com>,
+        <robh+dt@kernel.org>
+References: <1674728065-24955-1-git-send-email-quic_srivasam@quicinc.com>
+ <1674728065-24955-6-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n50y4JEQqW2wgS_qoDkdrqP=bzpC6b_LpA6Q9P+jDc00ZQ@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <CAE-0n50y4JEQqW2wgS_qoDkdrqP=bzpC6b_LpA6Q9P+jDc00ZQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LzJ7g2sKFVBevlMbIiTzXXZdbqWSM1l5
-X-Proofpoint-ORIG-GUID: LzJ7g2sKFVBevlMbIiTzXXZdbqWSM1l5
+X-Proofpoint-GUID: nI_bk7k3IjfC3b6TsEh--h2AaG1ywLfq
+X-Proofpoint-ORIG-GUID: nI_bk7k3IjfC3b6TsEh--h2AaG1ywLfq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
  definitions=2023-01-31_04,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- malwarescore=0 clxscore=1015 adultscore=0 suspectscore=0 spamscore=0
- bulkscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310083
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301310083
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,82 +88,98 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 1/31/2023 6:34 AM, Stephen Boyd wrote:
+Thanks for your Time Stephen!!!
+> Quoting Srinivasa Rao Mandadapu (2023-01-26 02:14:24)
+>> Merge lpasscc clocks into lpass_aon clk_regmap structure as they
+>> are using same register space.
+>> Add conditional check for doing lpasscc clock registration only
+>> if regname specified in device tree node.
+>> In existing implementation, lpasscc clocks and lpass_aon clocks are
+>> being registered exclusively and overlapping if both of them are
+>> to be used.
+>> This is required to avoid such overlapping and to register
+>> lpasscc clocks and lpass_aon clocks simultaneously.
+> Can you describe the register ranges that are overlapping?
+Okay. Will add register ranges in description.
+>
+> Here's what I see in DT right now:
+>
+>                  lpasscc: lpasscc@3000000 {
+>                          compatible = "qcom,sc7280-lpasscc";
+>                          reg = <0 0x03000000 0 0x40>,
+>                                <0 0x03c04000 0 0x4>;
+>                          ...
+>                  };
+>
+>                  lpass_audiocc: clock-controller@3300000 {
+>                          compatible = "qcom,sc7280-lpassaudiocc";
+>                          reg = <0 0x03300000 0 0x30000>,
+>                                <0 0x032a9000 0 0x1000>;
+>                          ...
+>                  };
+>
+>                  lpass_aon: clock-controller@3380000 {
+>                          compatible = "qcom,sc7280-lpassaoncc";
+>                          reg = <0 0x03380000 0 0x30000>;
+>                          ...
+>                  };
+>
+>                  lpass_core: clock-controller@3900000 {
+>                          compatible = "qcom,sc7280-lpasscorecc";
+>                          reg = <0 0x03900000 0 0x50000>;
+>                          ...
+>                  };
+>
+> Presumably lpascc is really supposed to be a node named
+> 'clock-controller' and is the node that is overlapping with lpass_aon?
 
-On 1/27/2023 9:40 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 27.01.2023 17:07, Devi Priya wrote:
->>
->>
->> On 1/13/2023 9:07 PM, Konrad Dybcio wrote:
->>>
->>>
->>> On 13.01.2023 16:03, devi priya wrote:
->>>> Kernel does not know the initial voltage set by the bootloaders.
->>>> During regulator registration, the voltage variable is just declared
->>>> and it is zero. Based on that, the regulator framework considers current
->>>> the voltage as zero and tries to bring up each regulator to minimum
->>>> the supported voltage.
->>>>
->>>> This introduces a dip in the voltage during kernel boot and gets
->>>> stabilized once the voltage scaling comes into picture.
->>>>
->>>> To avoid the voltage dip, adding support to define the
->>>> bootup voltage set by the boodloaders and based on it, regulator
->>>> framework understands that proper voltage is already set
->>>>
->>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
->>>> ---
->>> Or maybe hook it up to the spmi_regulator_common_get_voltage()
->>> from the SPMI regulator driver and read the real voltage instead
->>> of relying on hardcoded values thay may differ between boards?
->>>
->>> Konrad
->> In IPQ9574, SPMI regulator is not used. We are using RPM-Glink communication and the regulators are controlled by RPM.
->> In this case, we don't have an option to readback the bootup voltage and so, we have hardcoded the values
-> Unless something changed, RPM regulator framework is simply a
-> fancy front-end for communicating with the PMIC over SPMI, AFAIK..
-> 
-> Konrad
-Currently in our driver, the voltage write request will be sent to RPM 
-via GLINK which then writes it to the PMIC over I2C using the below APIs
-qcom_rpm_smd_write -> rpmsg_send
-In IPQ9574, we do not have SPMI support or the support to readback voltage.
+Okay. As it's been coming previous patches, didn't change the name.
 
+May be we need to do it as separate patch.
+
+Yes. It's overlapping with lpass_aon ( <0 0x03380000 0 0x30000>).
+
+CC clocks range is <0 0x03389000 0 0x24>;
+
+>
+>> Fixes: 4ab43d171181 ("clk: qcom: Add lpass clock controller driver for SC7280")
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+>> ---
+>>   drivers/clk/qcom/lpassaudiocc-sc7280.c | 13 +++++++++----
+>>   1 file changed, 9 insertions(+), 4 deletions(-)
 >>
->>>>    drivers/regulator/qcom_smd-regulator.c | 6 +++++-
->>>>    1 file changed, 5 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
->>>> index 1eb17d378897..49a36b07397c 100644
->>>> --- a/drivers/regulator/qcom_smd-regulator.c
->>>> +++ b/drivers/regulator/qcom_smd-regulator.c
->>>> @@ -800,6 +800,7 @@ struct rpm_regulator_data {
->>>>        u32 id;
->>>>        const struct regulator_desc *desc;
->>>>        const char *supply;
->>>> +    int boot_uV; /* To store the bootup voltage set by bootloaders */
->>>>    };
->>>>      static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
->>>> @@ -809,7 +810,7 @@ static const struct rpm_regulator_data rpm_mp5496_regulators[] = {
->>>>    };
->>>>      static const struct rpm_regulator_data rpm_ipq9574_mp5496_regulators[] = {
->>>> -    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1" },
->>>> +    { "s1", QCOM_SMD_RPM_SMPA, 1, &ipq9574_mp5496_smpa1, "s1", 875000 },
->>>>        {}
->>>>    };
->>>>    @@ -1394,6 +1395,9 @@ static int rpm_regulator_init_vreg(struct qcom_rpm_reg *vreg, struct device *dev
->>>>        vreg->type    = rpm_data->type;
->>>>        vreg->id    = rpm_data->id;
->>>>    +    if (rpm_data->boot_uV)
->>>> +        vreg->uV = rpm_data->boot_uV;
->>>> +
->>>>        memcpy(&vreg->desc, rpm_data->desc, sizeof(vreg->desc));
->>>>        vreg->desc.name = rpm_data->name;
->>>>        vreg->desc.supply_name = rpm_data->supply;
->> Best Regards,
->> Devi Priya
-Best Regards,
-Devi Priya
+>> diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
+>> index 1339f92..8e2f433 100644
+>> --- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
+>> +++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
+>> @@ -826,10 +829,12 @@ static int lpass_aon_cc_sc7280_probe(struct platform_device *pdev)
+>>                  return ret;
+>>
+>>          if (of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode")) {
+>> -               lpass_audio_cc_sc7280_regmap_config.name = "cc";
+>> -               desc = &lpass_cc_sc7280_desc;
+>> -               ret = qcom_cc_probe(pdev, desc);
+>> -               goto exit;
+>> +               res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cc");
+> We shouldn't need to check for reg-name property. Instead, the index
+> should be the only thing that matters.
+
+As qcom_cc_probe() function is mapping the zero index reg property, and
+
+in next implementation qcom_cc_really_probe() is also probing zero index 
+reg property,
+
+unable to map the same region twice.
+
+Hence all I want here is to skip this cc clock probing by keeping some 
+check.
+
+If we remove, it may cause ABI break.
+
+
+>
+>> +               if (res) {
+>> +                       lpass_audio_cc_sc7280_regmap_config.name = "cc";
+>> +                       desc = &lpass_cc_sc7280_desc;
