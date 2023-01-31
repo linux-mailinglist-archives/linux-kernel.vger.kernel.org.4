@@ -2,81 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C2B682B11
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B1B682B14
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjAaLCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 06:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S231728AbjAaLDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 06:03:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjAaLCL (ORCPT
+        with ESMTP id S231264AbjAaLDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:02:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0799A234FE
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:02:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1A1FB81B07
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:02:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB567C4339C;
-        Tue, 31 Jan 2023 11:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675162928;
-        bh=bRqEfY10DI/ElKGgak14w3PjLKkH8pmgrhnheNwGgN4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n7zpcfwadDkHKiNV5OrUEOKg6NEgMt/0LZUzqLffFMVlYaRROJJOyfuKkyNSvjqlf
-         YWAYmgUgYN3cWvQUtJVphPaknR8sKy3Teghj19R9O8EcNxYVf85MSwoRKC5GfOFcDk
-         lHgKCSz2hYTWuErEMWuo8ScdqVR76q82YY5bUyUeRPOd+QoF+Os8PuTooLzTi3bt4j
-         nQrXHk5DyxbRieRLp1yfBbfAdzy1R4gHaL51ShopJhO2qxkXYTXrOc8jlKHgYPCtJ+
-         /uADFWgkv/CqFEPWNTzOe/8HccTC63ldz0e5F8r+x71ERRz7D159QE4E3F/qpJgpnn
-         Jv8Dcd90U7pGg==
-Date:   Tue, 31 Jan 2023 16:32:04 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Stefan Binding <sbinding@opensource.cirrus.com>
-Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH v3 1/8] soundwire: stream: Add specific prep/deprep
- commands to port_prep callback
-Message-ID: <Y9j1LNjmHxex/HLy@matsya>
-References: <20230127165111.3010960-1-sbinding@opensource.cirrus.com>
- <20230127165111.3010960-2-sbinding@opensource.cirrus.com>
+        Tue, 31 Jan 2023 06:03:11 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BEF34019;
+        Tue, 31 Jan 2023 03:03:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vCRGwPB48G8ENg7hpO4WTSPW8dw9Fpx61HJzCq4ErcE=; b=MpRQT7CLqyIGbs1gC+In9RUbkM
+        sKXGBTlsXq+UNo/3A4QifDSq41T1OQcRWvnRXtrLdVTv1RFIjRh0p4oAr1hbfF3Jn2zK+YySZY+aK
+        d+E6AJzaXxLhBWZNZ0hMZMZWsZMfSQ23RO/IXCO9EPCI0dvhidmdaM7hMLpU4+fwwFd9sQto9Benw
+        KZtzzyJgf7mbfbojJLjQEeTCSBXyMXmOIGbK0OHFqqoZeWb945ve9k4lcUJdwSxk5up7tpI7uCbh7
+        F2zorzXEXfsbcjU0D154FBYJWZn10zanD72QqgfYc6VUKVKrUvJFicSsAL+EUIIbksz0Hjwl7WmQq
+        E9xRZysQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pMoPo-00BFYL-UW; Tue, 31 Jan 2023 11:03:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EAC7430012F;
+        Tue, 31 Jan 2023 12:03:04 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CC065240A5DFC; Tue, 31 Jan 2023 12:03:04 +0100 (CET)
+Date:   Tue, 31 Jan 2023 12:03:04 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianfeng Gao <jianfeng.gao@intel.com>
+Subject: Re: [PATCH v2] KVM: x86/pmu: Disable all vPMU features support on
+ Intel hybrid CPUs
+Message-ID: <Y9j1aA84e8WG+FCr@hirez.programming.kicks-ass.net>
+References: <20230131085031.88939-1-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127165111.3010960-2-sbinding@opensource.cirrus.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230131085031.88939-1-likexu@tencent.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-01-23, 16:51, Stefan Binding wrote:
-> Currently, port_prep callback only has commands for PRE_PREP, PREP,
-> and POST_PREP, which doesn't directly say whether this is for a
-> prepare or deprepare call. Extend the command list enum to say
-> whether the call is for prepare or deprepare aswell.
+On Tue, Jan 31, 2023 at 04:50:31PM +0800, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Also remove SDW_OPS_PORT_PREP from sdw_port_prep_ops as this is unused,
-> and update this enum to be simpler and more consistent with enum
-> sdw_clk_stop_type.
+> Disable KVM support for virtualizing PMUs on hosts with hybrid PMUs until
+> KVM gains a sane way to enumeration the hybrid vPMU to userspace and/or
+> gains a mechanism to let userspace opt-in to the dangers of exposing a
+> hybrid vPMU to KVM guests.
 > 
-> Note: Currently, the only users of SDW_OPS_PORT_POST_PREP are codec
-> drivers sound/soc/codecs/wsa881x.c and sound/soc/codecs/wsa883x.c, both
-> of which seem to assume that POST_PREP only occurs after a prepare,
-> even though it would also have occurred after a deprepare. Since it
-> doesn't make sense to mark the port prepared after a deprepare, changing
-> the enum to separate PORT_DEPREP from PORT_PREP should make the check
-> for PORT_PREP in those drivers be more logical.
+> Virtualizing a hybrid PMU, or at least part of a hybrid PMU, is possible,
+> but it requires userspace to pin vCPUs to pCPUs to prevent migrating a
+> vCPU between a big core and a little core, requires the VMM to accurately
+> enumerate the topology to the guest (if exposing a hybrid CPU to the
+> guest), and also requires the VMM to accurately enumerate the vPMU
+> capabilities to the guest.
+> 
+> The last point is especially problematic, as KVM doesn't control which
+> pCPU it runs on when enumerating KVM's vPMU capabilities to userspace.
+> For now, simply disable vPMU support on hybrid CPUs to avoid inducing
+> seemingly random #GPs in guests.
+> 
+> Reported-by: Jianfeng Gao <jianfeng.gao@intel.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+This seems reasonable; Paolo, will you take this through the KVM tree?
 
--- 
-~Vinod
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+> ---
+> v1: https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com/
+>  arch/x86/kvm/pmu.h | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index 79988dafb15b..6a3995657e1e 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -166,9 +166,11 @@ static inline void kvm_init_pmu_capability(const struct kvm_pmu_ops *pmu_ops)
+>  
+>  	 /*
+>  	  * For Intel, only support guest architectural pmu
+> -	  * on a host with architectural pmu.
+> +	  * on a non-hybrid host with architectural pmu.
+>  	  */
+> -	if ((is_intel && !kvm_pmu_cap.version) || !kvm_pmu_cap.num_counters_gp)
+> +	if (!kvm_pmu_cap.num_counters_gp ||
+> +	    (is_intel && (!kvm_pmu_cap.version ||
+> +			  boot_cpu_has(X86_FEATURE_HYBRID_CPU))))
+>  		enable_pmu = false;
+>  
+>  	if (!enable_pmu) {
+> -- 
+> 2.39.1
+> 
