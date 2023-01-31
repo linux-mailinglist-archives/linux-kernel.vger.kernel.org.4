@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDF26822B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 421B56822B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjAaDUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:20:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S230086AbjAaDWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjAaDTu (ORCPT
+        with ESMTP id S230030AbjAaDWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:19:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2207B298CE
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:19:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F40861381
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:19:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 162E4C433A1;
-        Tue, 31 Jan 2023 03:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675135186;
-        bh=1NQ1Fbrb6bK/cTYJdpO49DSrf2htZos9hMzLNdyHHg8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t06pJJocpsUJTxA5t1KZeruxfokw32eTe9R4I2X/JBA66H07qrpcj/ARP1YqY7waO
-         99biYH5CNAKLb6dkkWehRiaINaPJN6aEfiLRxqYJl7K1lqcwEoVmMiRLFXLKhBWGJE
-         S6ZQ6WNIvLSBDbLVcotYtcaY1JnY72F9D8c9TpkcaVbjrpRslSvJFBqSyL8FoWdd2p
-         RCnE+naOzinwPiNoBnU3K78Mt3j3r401JGg2lt26pLq2usGZ58ZzMAf61QJRgrFCB1
-         sThCToXf+tpL+qULX7fgIRKlXRPJKuPz4LhsFVjJrz13GHa7y5wCBbBNba/zc3cyPZ
-         oSq9/JUllWGSQ==
-Date:   Tue, 31 Jan 2023 11:19:41 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        "Dustin L. Howett" <dustin@howett.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-Subject: Re: [PATCH 1/2] platform/chrome: cros_ec: Add VDM attention headers
-Message-ID: <Y9iIzcz5AGjVXsNG@google.com>
-References: <20230126205620.3714994-1-pmalani@chromium.org>
+        Mon, 30 Jan 2023 22:22:22 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB492916F;
+        Mon, 30 Jan 2023 19:22:21 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so2720799pjd.2;
+        Mon, 30 Jan 2023 19:22:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+j6pFZGGgujGy7LvSAngOzCpxRZrhReXbxCPaVYnQ1o=;
+        b=n6mP7G80ow0Bpl7VY6gHhRpTwOhA4r5vC4lUmFFSUFTQZgDcQJsxvHRLZQ4yNRQLMo
+         LYWDo4ms2sxPQZZFRvLvoUHlI11hAPAl23v5TVUmsNcpwGdd+wGbfE8QK/KEFvu8YVF2
+         F1DrP7o3+H3rmVJyFbYNW1nIthK/OOZShtHnC2aS9k832Sp7fFa5JXc9DUkJJdiX2UFR
+         5HxPZN5C1IeAjHpgHj/RYFoGEWIaWkITL2uja+h5x8Oa1KsMzChbKs9lbjVkZxSn9MnZ
+         XsQvweoLjZSNhm5r1/h/zmtXT79i5KDfFdhF9+5V+9dvexIeOM3FoneKoBWElU7oq86S
+         vkDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+j6pFZGGgujGy7LvSAngOzCpxRZrhReXbxCPaVYnQ1o=;
+        b=BALI58BFuph2AVq2ENkp1GyuAZzXEykOX7sz0+TD5F+m1dHAcf4nyV65rARXBswK6h
+         KMGpGUkT2KGHbV0cbiWwFoFZlme4QL5VK/PkfQr9FL9Lq0TJ/fXEL6HHiD/LMrLHncdI
+         hLOeUWteZNjZEWpFep9WQjZhMtMKgu6OzgQiH9xBi6ugIGDaeTmQG9atwNeQH8pLSxCP
+         vy5sn3CNwAoAsqmOh1vSLKaMfi6P+qVW+UVITKHhSt+nssPplZudHQtN88jGVzKS4QAU
+         ZfiiIL2ciNcC0AJWkfulAMdqOjh6FQNvg9wbBMSzM8mQgavCc9+fFR/Rh5xsaPOANJKW
+         ehaw==
+X-Gm-Message-State: AO0yUKVM9M0+r6EYyu3RdgFvK651+6JIAZ2n/92EhU4YU/TdwM0S5Pzi
+        cL/xC3gL7miQVMhk/U/8OTGWFRuOu9c=
+X-Google-Smtp-Source: AK7set/FxqZFK40qZC0h14bLDj5xKY8N6wqL4cMXGwqLemqisO2JV1iOrHWYFQ/dTDr0U26SHBFc+A==
+X-Received: by 2002:a17:903:2282:b0:196:704e:2c9a with SMTP id b2-20020a170903228200b00196704e2c9amr8909820plh.22.1675135340802;
+        Mon, 30 Jan 2023 19:22:20 -0800 (PST)
+Received: from debian.me (subs32-116-206-28-47.three.co.id. [116.206.28.47])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090332cf00b00194799b084esm7692665plr.10.2023.01.30.19.22.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jan 2023 19:22:20 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 105EB105433; Tue, 31 Jan 2023 10:21:03 +0700 (WIB)
+Date:   Tue, 31 Jan 2023 10:21:03 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/313] 6.1.9-rc2 review
+Message-ID: <Y9iJH26f3+CzJaqT@debian.me>
+References: <20230130181611.883327545@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hjO68foB3B0jiJqv"
 Content-Disposition: inline
-In-Reply-To: <20230126205620.3714994-1-pmalani@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230130181611.883327545@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 08:55:45PM +0000, Prashant Malani wrote:
-> Incorporate updates to the EC headers to support the retrieval of VDM
-> Attention messages from port partners. These headers are already present
-> in the ChromeOS EC codebase. [1]
-> 
-> [1] https://source.chromium.org/chromium/chromiumos/platform/ec/+/main:include/ec_commands.h
-> 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-With a nit:
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+--hjO68foB3B0jiJqv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-> index b9c4a3964247..ec327638c6eb 100644
-> --- a/include/linux/platform_data/cros_ec_commands.h
-> +++ b/include/linux/platform_data/cros_ec_commands.h
-> @@ -5862,6 +5862,7 @@ enum tcpc_cc_polarity {
->  #define PD_STATUS_EVENT_MUX_1_SET_DONE		BIT(5)
->  #define PD_STATUS_EVENT_VDM_REQ_REPLY		BIT(6)
->  #define PD_STATUS_EVENT_VDM_REQ_FAILED		BIT(7)
-> +#define PD_STATUS_EVENT_VDM_ATTENTION			BIT(8)
+On Mon, Jan 30, 2023 at 07:24:47PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.9 release.
+> There are 313 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+=20
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
-This has an extra tab if comparing with others around.
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--hjO68foB3B0jiJqv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY9iJGQAKCRD2uYlJVVFO
+o78mAQDFrDRP9WMRTYzmzU7J3ZSNI/qe47rjHOvPBFbJ4zZp6gD/RyFHSY8rfzNN
+0R6QYU2pc23kLsHGaNXxcTuyQ5SZdwg=
+=YDa8
+-----END PGP SIGNATURE-----
+
+--hjO68foB3B0jiJqv--
