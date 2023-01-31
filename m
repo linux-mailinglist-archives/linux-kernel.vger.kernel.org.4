@@ -2,113 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C87368323B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:08:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E740168323D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 17:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbjAaQIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 11:08:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
+        id S233242AbjAaQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 11:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbjAaQIM (ORCPT
+        with ESMTP id S232474AbjAaQIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 11:08:12 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D4A3F29F;
-        Tue, 31 Jan 2023 08:08:07 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VG09qc003873;
-        Tue, 31 Jan 2023 16:07:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Fu/tbqqHfgUN/kgoduzd2305awnVX2CCCG//YFy9Nqs=;
- b=QhsqvRa94JK+0PGfGdvoKEbF4ytf/OEx9VukAxDuLaHOpl5/xApnQcipAidxW8Ob5sl1
- OB8uU9copXJVVMVYJGMNVpae9vbcS9N2T27gTEpzJP7We+XqXih4KQydG4SMu6gKv3XK
- iXzZRbJoT+7nFyGijFrFdaTK9itcLXYgo4GPqi3F2C5fpA/DxV8rSRlj51pza74rf85m
- ros6OxL0VDcfHK+Y/ZmA1eyVaXOzU8tyiOycRhUR057OiSjzbhMYrOxbQxBVD91yzJxP
- HlYuZ5HwvF9WXvHhfZXH6BiKEuI9jq+9BSLa5dc48h6Ni6zzdlGksyjWZCI7BOrlJUh0 rw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3xjcaj9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:07:58 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VG0jdj011553;
-        Tue, 31 Jan 2023 16:07:58 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3xjcahx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:07:58 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VF8kAW028521;
-        Tue, 31 Jan 2023 16:07:57 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuygvf6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 16:07:57 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VG7uOq7013000
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 16:07:56 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6284B58063;
-        Tue, 31 Jan 2023 16:07:56 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EAED55805B;
-        Tue, 31 Jan 2023 16:07:54 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 16:07:54 +0000 (GMT)
-Message-ID: <55871940-1da9-0ea0-8f46-28be3e2beadd@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 11:07:54 -0500
+        Tue, 31 Jan 2023 11:08:18 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25510521DD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:08:17 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id 203so9264064pfx.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 08:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uCGH+92SGmFm+bJkDru4uxKLQQvLGJCTMjQcAnlJWUQ=;
+        b=ez6rA1tLLRtGH0rac3xUGE2Vmi90TAGuzmN2Qk2VYZX2y1ZRLpCVAHUCXCxfr0gb4n
+         UxwXyEXW0B5GQMWfFuxXs2u3mkqujdtcwRcTgjql4nHvVmde82CHs9SDK9MaZJpqN8fC
+         J718xKmyUM7VYbGnBNwBnkNeuFYK6mqUt10uvb+Bd5iODlMuTZ0TbPhW1Y8OcJ0HUsJi
+         XN5syAepWjJXsY1O0kSktCjQ5TMXWzLb172pWMuLMuBpaHsZlomjpfn/pvNSYAVvZnbO
+         0bzESWELe74BAoENU1UB88M19tOOD+8IZlm6acu3S9DEr4hohfXx5ARxT0jxPu4YP4it
+         ENfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uCGH+92SGmFm+bJkDru4uxKLQQvLGJCTMjQcAnlJWUQ=;
+        b=UTXJJ3TGwnwIdrVKY4sK2Ui8M+DI2J7OUL7O/faAhhXkZL7lRIm84+HvZlvhOe4qjK
+         DktzWk9+ln+WYHF7Q2+8KYqUxwIaCz59tCeJ5D5JHTsraiIawS+klE2QPazn3+fbTK8R
+         e8Jxf/nbPi9RXAmaLs8o/ctZmpt1qqvSTcFlABy+QpoPPCETJuWUmbJQ5rei6bMH0MXG
+         tZy6zOEgySQ36bXvpb9h92kvoC4L+XHBnQDbb+DkLCgXopoRrZZoWTnaRTsAoeOnhdHE
+         CaSlBgFaA3Z0ji5XF61zKnbocRxFToAt8rPUHFiq0r5D3imWIhqS8QLNiei3rOzfOKVm
+         8kYw==
+X-Gm-Message-State: AO0yUKWukAzMa8NVE8eQZK+b2t5enCl66a0EB3OEI0CW/lVWc17nOwB4
+        kvaiehJcfHtluvm9LHsH+WUP0tOZyH7awsQchXiKIw==
+X-Google-Smtp-Source: AK7set/3zBEfuo0tk7dwIn7jI2X4ovYj7hBfigwHmlv1EDwBFavs4kB97BdSl8RrUfD+G/KbFimBZtFYqSLzKed6v+w=
+X-Received: by 2002:a62:8445:0:b0:593:bcc4:11ec with SMTP id
+ k66-20020a628445000000b00593bcc411ecmr1574378pfd.6.1675181296402; Tue, 31 Jan
+ 2023 08:08:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 15/25] powerpc/pseries: Move PLPKS constants to header
- file
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-16-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-16-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MNOx4h7Sw_MDjVgPbGt8J0Y0JjOhSTSw
-X-Proofpoint-GUID: 84OAhpqQYiuARIr_F57v33GnVLxTvizM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310142
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131004928.153623-1-dionnaglaze@google.com> <CAMj1kXG9ONi4_AD1G0Py_qrLLzRfSXGCTEOeu2xowViO0mJkuA@mail.gmail.com>
+In-Reply-To: <CAMj1kXG9ONi4_AD1G0Py_qrLLzRfSXGCTEOeu2xowViO0mJkuA@mail.gmail.com>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Tue, 31 Jan 2023 08:08:04 -0800
+Message-ID: <CAAH4kHaqObDRfKAzM8tTrhmQWZx7w2oTP=YJOo=fCG1kHDvj8w@mail.gmail.com>
+Subject: Re: [PATCH v2, RESEND] x86/efi: Safely enable unaccepted memory in UEFI
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@vger.kernel.org,
+        linux-efi@vger.kernel.org, "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > +       efi_status_t status;
+> > +
+> > +       if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+>
+> Do we need to check for IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT) here as well?
+>
 
+Arguably no, since the firmware should only make the protocol
+available when it determines that the protocol should be used. In our
+case, that's just SEV-SNP. The firmware's TDX logic will not expose
+this protocol.
 
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
-> 
-> Move the constants defined in plpks.c to plpks.h, and standardise their
-> naming, so that PLPKS consumers can make use of them later on.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Co-developed-by: Andrew Donnellan <ajd@linux.ibm.com>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+This maintains flexibility for the rare case that the TDX go-to-market
+schedule doesn't align with upstream's acceptance of unaccepted memory
+support, but does accept the generic TDX support. Best not paint
+ourselves into a corner.
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+-- 
+-Dionna Glaze, PhD (she/her)
