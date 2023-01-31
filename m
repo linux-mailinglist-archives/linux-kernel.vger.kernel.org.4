@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42CD6827D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB756827D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjAaI70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 03:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S231952AbjAaI6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 03:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbjAaI65 (ORCPT
+        with ESMTP id S231650AbjAaI6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:58:57 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC31D518DA
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:55:05 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5063029246dso194253177b3.6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:55:05 -0800 (PST)
+        Tue, 31 Jan 2023 03:58:25 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD755143F;
+        Tue, 31 Jan 2023 00:54:26 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so3385343pjd.2;
+        Tue, 31 Jan 2023 00:54:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=q1SrdDNUlC8jwW9ILBpZQKsxZB0Kk6bmk1dzxOugPqw=;
-        b=rAIko5S656uXYnMEPKcMcp9zgAKiuhyYIHq+CtfD0P4YTXB5pDrenATm8Z9aEUO5SS
-         xiSUxuAQOxSGKKFaWmNCMvrwiBWQRZlRPztdqGRL/gHUxdJRfz6BVxqJqI+5v7mWXxcr
-         Kx/nStRUuqMsFlHJ51LQUwmAozVWOmKptPg+kuOthAqQReD57P/bZZS6Sg9Fm1HqJDkV
-         8XnwiErjgZ+BxdBmZxCjiTwxsFkNF7Aek9A/O091/dZPgvxSbR86nkOxqL4CL2EBrc7u
-         q/D5Fy53PmD3E5mfIL3lgADH0brpnWjGHmdVFr05+fXPACY7AlWbsKluf+YZQcA1r77x
-         UDLQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FzJvkcgZ0YfW42PnpzKH9LgmOzD8Ikgfi8w02uzzo8s=;
+        b=G3p9VagdmJWM4BqT2W4/RJML/dKuk8P65A1KSXk40ZZoOmv9Aheai6r/4R3MrmawD0
+         BJKC44zuedjDAlhYAIz/cTwvwE95+0g4VI8DSUs3HAdnHGlntEc05t2FY+h6VofByHCX
+         Pfqt06BPNzDH2b1qfQa3nDpuwRrTToaVBHd3kkNjrszVnphtBwh4q04yYFxOvjBTGHnu
+         IhO5hdBj74ukRLR48OC6Jla9ERFySggiABJfFlbMntF3h5FOA5ZI3igM+ZgerFZR6dhx
+         gsL9aCaIvE+i8QiIVpiNI7JDqCYsbyWGlHjBGtS4PEt9+xDFbe9fFo26X1ver0n+3QV9
+         vFlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q1SrdDNUlC8jwW9ILBpZQKsxZB0Kk6bmk1dzxOugPqw=;
-        b=Ib0Wu45Qlzm88aINIai0I+Wyai3EozCHQtlISOj9DFlhDi2fQ/2SKqKqvRlH/EGSYD
-         NRpw06ZcGq/ZlCnQZvrGfhedCVXMLjvLFcJtc2nGANrL+xkhoSZU1ofpLXCwJvh1gTik
-         H9697CoVJjuaniYURKqkFlH5psfCj7vQcOntwkswB7K8lxkeBnc+beSFbDgnm0+sf18/
-         X273oHf9dXnpIVZ0m7Ug4p+FnOf4BboOx0K9y7hv/5Sm5uaTlmdIDE2zbXd757I3ukcg
-         dLrIoukn2BQqWMuDnO8TxMnlj8uO9Wm/of4czCUyiqV8afSfjK76RCsadRs/XXQIQjUH
-         oRTw==
-X-Gm-Message-State: AFqh2koVXLLs9JSCpxxKSj8nkmt9mMd4bLAD5F1IYAG+LDpQbCAyeH6J
-        rasorVXTZsyz0iMcWfIaK16Cmgj5YmQ0dtwvPXaV5A==
-X-Google-Smtp-Source: AMrXdXuFN4s20Kx9T5tmNLJ44z59TdEQU7GqKqHCpApJ5dnP9JbjylkFb83+PoHMtS5f4TPercZLAZZI9kkdd+3E1Wo=
-X-Received: by 2002:a81:6d4:0:b0:468:5fe3:7771 with SMTP id
- 203-20020a8106d4000000b004685fe37771mr6562874ywg.267.1675155254079; Tue, 31
- Jan 2023 00:54:14 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FzJvkcgZ0YfW42PnpzKH9LgmOzD8Ikgfi8w02uzzo8s=;
+        b=P4OYjKLxZ6HxEyT1aLf2z7EdAKjmNtzJZmZD2eesu03oj+jw6bjMm0A9QryXWQKbnl
+         xndjW2NaTvpuMyI27ni4wU+XTBa1AOvhYzHTo3SDE1wOVYH+fjxNkHBekKPV06AWcnWQ
+         SIIEB0zXYWhzz1bIvW9n5Vc+2PD/sRe84cHQZat+VktTcFN02UVoZOSNZwuBGJnvdg6F
+         +Py0tJRgNfbUc4MTyaZEVW0hGbYvFnn59KbFIH4O11a/vpLhhlfzpOSZvJL3moWS3HX3
+         0xD5qBMiLAw7tFOg7AFMFOALJ2QYuM1y696TTyNM/7GAJd0tZXUYyIjyrlpn7wjKCtVI
+         C83Q==
+X-Gm-Message-State: AO0yUKUwwZ5dkzqtS2Yc/e8e+hXfO9BK9FwNolscDBPsDkSkurteERrN
+        u6bWTiySkq/a5APF+bDd10kkd6ehIqPQndEg
+X-Google-Smtp-Source: AK7set8cMaPZ7PqOED+YOPMLaN92XMb3ueUSy0smv4WmF2QTj15FSJ+ikAaNklyWJeHEpbJN0evzDA==
+X-Received: by 2002:a17:902:9a85:b0:196:1d60:b1b1 with SMTP id w5-20020a1709029a8500b001961d60b1b1mr21729192plp.31.1675155235905;
+        Tue, 31 Jan 2023 00:53:55 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id s18-20020a170902ea1200b00188fc6766d6sm9210214plg.219.2023.01.31.00.53.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 00:53:55 -0800 (PST)
+Message-ID: <617d9a3f-63a2-3ce2-b19a-2427ebbb7754@gmail.com>
+Date:   Tue, 31 Jan 2023 16:53:51 +0800
 MIME-Version: 1.0
-References: <cover.1675111415.git.andreyknvl@google.com> <fbe58d38b7d93a9ef8500a72c0c4f103222418e6.1675111415.git.andreyknvl@google.com>
-In-Reply-To: <fbe58d38b7d93a9ef8500a72c0c4f103222418e6.1675111415.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 31 Jan 2023 09:53:37 +0100
-Message-ID: <CANpmjNPakvS5OAp3DEvH=5mdtped8K5WC4j4yRfPEJtJOv4OhA@mail.gmail.com>
-Subject: Re: [PATCH 15/18] lib/stacktrace, kasan, kmsan: rework extra_bits interface
-To:     andrey.konovalov@linux.dev
-Cc:     Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3 1/3] KVM: x86/pmu: Disable guest PEBS on hybird cpu due
+ to heterogeneity
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20221109082802.27543-1-likexu@tencent.com>
+ <20221109082802.27543-2-likexu@tencent.com> <Y8nknyxfKl4p/0GY@google.com>
+ <9b422d58-72ab-051f-e317-02b4d8e7211d@gmail.com>
+ <Y9gA9aZNxYAZGgPh@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <Y9gA9aZNxYAZGgPh@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,199 +79,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 at 21:51, <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> The current implementation of the extra_bits interface is confusing:
-> passing extra_bits to __stack_depot_save makes it seem that the extra
-> bits are somehow stored in stack depot. In reality, they are only
-> embedded into a stack depot handle and are not used within stack depot.
->
-> Drop the extra_bits argument from __stack_depot_save and instead provide
-> a new stack_depot_set_extra_bits function (similar to the exsiting
-> stack_depot_get_extra_bits) that saves extra bits into a stack depot
-> handle.
->
-> Update the callers of __stack_depot_save to use the new interace.
->
-> This change also fixes a minor issue in the old code: __stack_depot_save
-> does not return NULL if saving stack trace fails and extra_bits is used.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  include/linux/stackdepot.h |  4 +++-
->  lib/stackdepot.c           | 38 +++++++++++++++++++++++++++++---------
->  mm/kasan/common.c          |  2 +-
->  mm/kmsan/core.c            | 10 +++++++---
->  4 files changed, 40 insertions(+), 14 deletions(-)
->
-> diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-> index c4e3abc16b16..f999811c66d7 100644
-> --- a/include/linux/stackdepot.h
-> +++ b/include/linux/stackdepot.h
-> @@ -57,7 +57,6 @@ static inline int stack_depot_early_init(void)        { return 0; }
->
->  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
->                                         unsigned int nr_entries,
-> -                                       unsigned int extra_bits,
->                                         gfp_t gfp_flags, bool can_alloc);
->
->  depot_stack_handle_t stack_depot_save(unsigned long *entries,
-> @@ -71,6 +70,9 @@ void stack_depot_print(depot_stack_handle_t stack);
->  int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
->                        int spaces);
->
-> +depot_stack_handle_t stack_depot_set_extra_bits(depot_stack_handle_t handle,
-> +                                               unsigned int extra_bits);
+On 31/1/2023 1:40 am, Sean Christopherson wrote:
+> On Mon, Jan 30, 2023, Like Xu wrote:
+>> On 20/1/2023 8:47 am, Sean Christopherson wrote:
+>>> On Wed, Nov 09, 2022, Like Xu wrote:
+>>>> From: Like Xu <likexu@tencent.com>
+>>>>
+>>>>   From vPMU enabling perspective, KVM does not have proper support for
+>>>> hybird x86 core. The reported perf_capabilities value (e.g. the format
+>>>> of pebs record) depends on the type of cpu the kvm-intel module is init.
+>>>> When a vcpu of one pebs format migrates to a vcpu of another pebs format,
+>>>> the incorrect parsing of pebs records by guest can make profiling data
+>>>> analysis extremely problematic.
+>>>>
+>>>> The safe way to fix this is to disable this part of the support until the
+>>>> guest recognizes that it is running on the hybird cpu, which is appropriate
+>>>> at the moment given that x86 hybrid architectures are not heavily touted
+>>>> in the data center market.
+>>>>
+>>>> Signed-off-by: Like Xu <likexu@tencent.com>
+>>>> ---
+>>>>    arch/x86/kvm/vmx/capabilities.h | 4 +++-
+>>>>    1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
+>>>> index cd2ac9536c99..ea0498684048 100644
+>>>> --- a/arch/x86/kvm/vmx/capabilities.h
+>>>> +++ b/arch/x86/kvm/vmx/capabilities.h
+>>>> @@ -392,7 +392,9 @@ static inline bool vmx_pt_mode_is_host_guest(void)
+>>>>    static inline bool vmx_pebs_supported(void)
+>>>>    {
+>>>> -	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
+>>>> +	return boot_cpu_has(X86_FEATURE_PEBS) &&
+>>>> +	       !boot_cpu_has(X86_FEATURE_HYBRID_CPU) &&
+>>>> +	       kvm_pmu_cap.pebs_ept;
+>>>
+>>> I assume the patch I just posted[*] to disable the vPMU entirely is sufficient, or
+>>
+>> AFAI, some developers doing client-side virtualization on a hybrid cpu will
+>> specifically want vPMU,
+>> in which case it makes perfect sense for KVM to expose common pmu
+>> capabilities (not PEBS at the current) of big and little cores, such as the
+>> most basic performance counter.
+>>
+>>> do we need this as well in order to hide X86_FEATURE_DS and X86_FEATURE_DTES64?
+>>
+>> I think we still need this diff. Better to prioritize this minor feature a
+>> little bit for hungry users.
+> 
+> That wasn't my question.  My question was whether or not wholesale disabling vPMU
+> is sufficient to prevent issues with PEBS.  Unless we need this patch on top of
+> disabling the vPMU, my strong preference is to disable vPMU, or at the very least
+> make it off-by-default and require a explicit override.
 
-Can you add __must_check to this function? Either that or making
-handle an in/out param, as otherwise it might be easy to think that it
-doesn't return anything ("set_foo()" seems like it sets the
-information in the handle-associated data but not handle itself ... in
-case someone missed the documentation).
+OK and if so, just set global module parameter "enable_pmu=false" for HYBRID_CPU.
+With "disable vPMU" diff, this patch should be dropped since 
+kvm_pmu_cap.pebs_ept = 0.
 
->  unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
->
->  #endif
-> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> index 7282565722f2..f291ad6a4e72 100644
-> --- a/lib/stackdepot.c
-> +++ b/lib/stackdepot.c
-> @@ -346,7 +346,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
->   *
->   * @entries:           Pointer to storage array
->   * @nr_entries:                Size of the storage array
-> - * @extra_bits:                Flags to store in unused bits of depot_stack_handle_t
->   * @alloc_flags:       Allocation gfp flags
->   * @can_alloc:         Allocate stack slabs (increased chance of failure if false)
->   *
-> @@ -358,10 +357,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
->   * If the stack trace in @entries is from an interrupt, only the portion up to
->   * interrupt entry is saved.
->   *
-> - * Additional opaque flags can be passed in @extra_bits, stored in the unused
-> - * bits of the stack handle, and retrieved using stack_depot_get_extra_bits()
-> - * without calling stack_depot_fetch().
-> - *
->   * Context: Any context, but setting @can_alloc to %false is required if
->   *          alloc_pages() cannot be used from the current context. Currently
->   *          this is the case from contexts where neither %GFP_ATOMIC nor
-> @@ -371,7 +366,6 @@ static inline struct stack_record *find_stack(struct stack_record *bucket,
->   */
->  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
->                                         unsigned int nr_entries,
-> -                                       unsigned int extra_bits,
->                                         gfp_t alloc_flags, bool can_alloc)
->  {
->         struct stack_record *found = NULL, **bucket;
-> @@ -461,8 +455,6 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
->         if (found)
->                 retval.handle = found->handle.handle;
->  fast_exit:
-> -       retval.extra = extra_bits;
-> -
->         return retval.handle;
->  }
->  EXPORT_SYMBOL_GPL(__stack_depot_save);
-> @@ -483,7 +475,7 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
->                                       unsigned int nr_entries,
->                                       gfp_t alloc_flags)
->  {
-> -       return __stack_depot_save(entries, nr_entries, 0, alloc_flags, true);
-> +       return __stack_depot_save(entries, nr_entries, alloc_flags, true);
->  }
->  EXPORT_SYMBOL_GPL(stack_depot_save);
->
-> @@ -566,6 +558,34 @@ int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
->  }
->  EXPORT_SYMBOL_GPL(stack_depot_snprint);
->
-> +/**
-> + * stack_depot_set_extra_bits - Set extra bits in a stack depot handle
-> + *
-> + * @handle:    Stack depot handle
-> + * @extra_bits:        Value to set the extra bits
-> + *
-> + * Return: Stack depot handle with extra bits set
-> + *
-> + * Stack depot handles have a few unused bits, which can be used for storing
-> + * user-specific information. These bits are transparent to the stack depot.
-> + */
-> +depot_stack_handle_t stack_depot_set_extra_bits(depot_stack_handle_t handle,
-> +                                               unsigned int extra_bits)
-> +{
-> +       union handle_parts parts = { .handle = handle };
-> +
-> +       parts.extra = extra_bits;
-> +       return parts.handle;
-> +}
-> +EXPORT_SYMBOL(stack_depot_set_extra_bits);
-> +
-> +/**
-> + * stack_depot_get_extra_bits - Retrieve extra bits from a stack depot handle
-> + *
-> + * @handle:    Stack depot handle with extra bits saved
-> + *
-> + * Return: Extra bits retrieved from the stack depot handle
-> + */
->  unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
->  {
->         union handle_parts parts = { .handle = handle };
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index 833bf2cfd2a3..50f4338b477f 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -43,7 +43,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
->         unsigned int nr_entries;
->
->         nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
-> -       return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
-> +       return __stack_depot_save(entries, nr_entries, flags, can_alloc);
->  }
->
->  void kasan_set_track(struct kasan_track *track, gfp_t flags)
-> diff --git a/mm/kmsan/core.c b/mm/kmsan/core.c
-> index 112dce135c7f..f710257d6867 100644
-> --- a/mm/kmsan/core.c
-> +++ b/mm/kmsan/core.c
-> @@ -69,13 +69,15 @@ depot_stack_handle_t kmsan_save_stack_with_flags(gfp_t flags,
->  {
->         unsigned long entries[KMSAN_STACK_DEPTH];
->         unsigned int nr_entries;
-> +       depot_stack_handle_t handle;
->
->         nr_entries = stack_trace_save(entries, KMSAN_STACK_DEPTH, 0);
->
->         /* Don't sleep (see might_sleep_if() in __alloc_pages_nodemask()). */
->         flags &= ~__GFP_DIRECT_RECLAIM;
->
-> -       return __stack_depot_save(entries, nr_entries, extra, flags, true);
-> +       handle = __stack_depot_save(entries, nr_entries, flags, true);
-> +       return stack_depot_set_extra_bits(handle, extra);
->  }
->
->  /* Copy the metadata following the memmove() behavior. */
-> @@ -215,6 +217,7 @@ depot_stack_handle_t kmsan_internal_chain_origin(depot_stack_handle_t id)
->         u32 extra_bits;
->         int depth;
->         bool uaf;
-> +       depot_stack_handle_t handle;
->
->         if (!id)
->                 return id;
-> @@ -250,8 +253,9 @@ depot_stack_handle_t kmsan_internal_chain_origin(depot_stack_handle_t id)
->          * positives when __stack_depot_save() passes it to instrumented code.
->          */
->         kmsan_internal_unpoison_memory(entries, sizeof(entries), false);
-> -       return __stack_depot_save(entries, ARRAY_SIZE(entries), extra_bits,
-> -                                 GFP_ATOMIC, true);
-> +       handle = __stack_depot_save(entries, ARRAY_SIZE(entries), GFP_ATOMIC,
-> +                                   true);
-> +       return stack_depot_set_extra_bits(handle, extra_bits);
->  }
->
->  void kmsan_internal_set_shadow_origin(void *addr, size_t size, int b,
-> --
-> 2.25.1
->
+> 
+> I agree that there are users that want to enable vPMU for hybrid CPUs, but as
+> stated in the link below, that needs to be a dedicated enabling effort.  I don't
+> see any reason to exempt PEBS from that.  E.g. isn't PEBS usable if userspace pins
+> vCPUs to pCPUs and enumerates an accurate topology to the guest?
+
+So for HYBRID_CPU, {pebs, lbr, basic PMU} would be disabled globally by KVM
+until a dedicated effort enables them one by one in the near future.
+
+Follow up with a rewritten diff, 20230131085031.88939-1-likexu@tencent.com
+
+> 
+>>> [*] https://lore.kernel.org/all/20230120004051.2043777-1-seanjc@google.com
