@@ -2,124 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0F46830F8
+	by mail.lfdr.de (Postfix) with ESMTP id 082556830F7
 	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233073AbjAaPLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:11:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
+        id S232923AbjAaPLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:11:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233714AbjAaPKk (ORCPT
+        with ESMTP id S233743AbjAaPKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:10:40 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BD859548;
-        Tue, 31 Jan 2023 07:08:46 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-163adf0cfc4so8426347fac.7;
-        Tue, 31 Jan 2023 07:08:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nohc6E2ihYOuK35Jea33fNaQW2kkFVKii1+lDbXYoXE=;
-        b=LKUUEQFvdbXg0F7ZzAUYxKQYRgMZTPIUvQ6MS/Abge1gDeK8F6k4qwR3h1Ui26ut3w
-         8/RkuJTy0zFzZNi+7+ja00myfNp4wtgNJ3ChkRc/vxo0IVJH9n3D/Q/4ymbgj9UW4rmO
-         vIZwxXpR96K3Co2SL1R21rW7V3I4+n3yUafMl2MCCp9rsp6l7O5c2M/9JmeDgQhhI+cY
-         8t3gln9oCxLpT2CL8DQbsM1wJ1uJ8KjSP6DFVycKCmi8lZIIVuKtDzngrljpHSW+LwbO
-         V27YMKNc3ENAyD25/8HBW/nhaYb1yUPozU5t+aWhhR2ZpvWDIoUZQocov5PA/VHPGSva
-         /NjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nohc6E2ihYOuK35Jea33fNaQW2kkFVKii1+lDbXYoXE=;
-        b=bbl9zqiyXE4sI3/e54ZAD4dMl9qf1IYTHOi3QkObE6l82HALDAeIu2ZHk7ld2Pli+8
-         U3r9gbUg/60dW1HSgNleYbyCDynM4mZHYvgJl/1tHyrt+raBcg5AdKAt7qmIi1dZvAGM
-         R5BlvY7jq3pSNB9QpXrMoJkoHwIJXpUsQcqNHxIpybGr2Ld96gXAlYv91/eiK4v6wTX4
-         tVc2r39GUh+P7wuYF5D1ni/UKB46UiJSKlQWY4WcFLZuFjRkVjhPTtQ8c+HJ5lk0ZYqZ
-         F9MWnxZatc7/dUPWxlAzJJfc/P+a7YCWaAlovpkBzOUQNq0bgJI00N7UTMXdWeUzawJN
-         sMRw==
-X-Gm-Message-State: AO0yUKW9bgCrCfw4w63Ngwq/6T7l94/FmYef99gytU3NFXv2XYEsKjlB
-        NVEaJS+pzWmGeMCqtmv/P8Mz/art/LI=
-X-Google-Smtp-Source: AK7set8NsaYc5sNtkn/Z6zl56qhpr0hi+bisvlrj6EqghOSyhntrOk4esNAh+err3DkVEXLMZbptpg==
-X-Received: by 2002:a05:6870:9106:b0:163:ade9:27b4 with SMTP id o6-20020a056870910600b00163ade927b4mr5132883oae.26.1675177671306;
-        Tue, 31 Jan 2023 07:07:51 -0800 (PST)
-Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id z12-20020a056870738c00b0016343c187dfsm6670244oam.32.2023.01.31.07.07.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 07:07:50 -0800 (PST)
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     alex.gaynor@gmail.com, bjorn3_gh@protonmail.com,
-        boqun.feng@gmail.com, gary@garyguo.net,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        rust-for-linux@vger.kernel.org, wedsonaf@gmail.com,
-        yakoyoku@gmail.com
-Subject: Re: [PATCH] rust: add this_module macro
-Date:   Tue, 31 Jan 2023 12:07:45 -0300
-Message-Id: <20230131150745.370345-1-yakoyoku@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <Y9kasJQZf146ekp+@kroah.com>
-References: <Y9kasJQZf146ekp+@kroah.com>
+        Tue, 31 Jan 2023 10:10:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C3F577E9;
+        Tue, 31 Jan 2023 07:08:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 650E6B81D5D;
+        Tue, 31 Jan 2023 15:07:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE29C4339C;
+        Tue, 31 Jan 2023 15:07:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675177673;
+        bh=WkNjJuwqHkG7P5IgmPmjTqjsQls0TpMSY4OxdD8w9lo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lOCycWes0eem4ZagNblW0Z8ToP3gcG/+Va8SAn4gmymAb8tamJePNl3M5F1AY5K0V
+         MmXonwmQhdPUfhmcy2k77sXgVNplvF8oHEKl/XcRuOkU+f3erM4i34ZnRaPPgTenYX
+         Xxm7zXqoCbwB88bU2O9lYTMNROX9Lrx1pZv1h7XU=
+Date:   Tue, 31 Jan 2023 16:07:50 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Lee Jones <lee@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>
+Subject: Re: [PATCH] mfd: Add Simple PCI MFD driver
+Message-ID: <Y9kuxrL3XaCG+blk@kroah.com>
+References: <20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com>
+ <Y86op9oh5ldrZQyG@google.com>
+ <Y862WTT03/JxXUG8@kroah.com>
+ <Y9EBSmOoE5+83jS5@axis.com>
+ <Y9EgrKT3hDyx+ULy@kroah.com>
+ <CAL_JsqLGworC4beavkWSk9Uf=qFUR1RtsKBezH2xvop83C15NQ@mail.gmail.com>
+ <Y9FEJAah8y0aY1L2@kroah.com>
+ <CAL_JsqL02_z8ePyAObbe219iYcCyPKGURYvT3_yuG5B4qxXSeQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqL02_z8ePyAObbe219iYcCyPKGURYvT3_yuG5B4qxXSeQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 02:42:08PM +0100, Greg KH wrote:
->On Tue, Jan 31, 2023 at 10:08:41AM -0300, Martin Rodriguez Reboredo wrote:
->> Adds a Rust equivalent to the handy THIS_MODULE macro from C.
->> 
->> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
->> ---
->>  rust/kernel/lib.rs | 12 ++++++++++++
->>  1 file changed, 12 insertions(+)
->> 
->> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
->> index e0b0e953907d..afb6b0390426 100644
->> --- a/rust/kernel/lib.rs
->> +++ b/rust/kernel/lib.rs
->> @@ -80,6 +80,18 @@ impl ThisModule {
->>      }
->>  }
->>  
->> +/// Returns the current module.
->> +#[macro_export]
->> +macro_rules! this_module {
->> +    () => {
->> +        if cfg!(MODULE) {
->> +            Some(unsafe { $crate::ThisModule::from_ptr(&mut $crate::bindings::__this_module) })
->> +        } else {
->> +            None
->> +        }
->> +    };
->> +}
->
->While this is handy, what exactly will it be used for?  The C
->wrappers/shim/whatever should probably handle this for you already when
->you save this pointer into a structure right?
->
->Surely you aren't trying to increment your own module's reference count,
->right?  That just doesn't work :)
->
->thanks,
->
->greg k-h
+On Wed, Jan 25, 2023 at 09:34:01AM -0600, Rob Herring wrote:
+> On Wed, Jan 25, 2023 at 9:00 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Jan 25, 2023 at 08:54:21AM -0600, Rob Herring wrote:
+> > > On Wed, Jan 25, 2023 at 6:29 AM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Wed, Jan 25, 2023 at 11:15:38AM +0100, Vincent Whitchurch wrote:
+> > > > > On Mon, Jan 23, 2023 at 05:31:21PM +0100, Greg Kroah-Hartman wrote:
+> > > > > > On Mon, Jan 23, 2023 at 03:32:55PM +0000, Lee Jones wrote:
+> > > > > > > On Mon, 23 Jan 2023, Vincent Whitchurch wrote:
+> > > > > > >
+> > > > > > > > Add a PCI driver which registers all child nodes specified in the
+> > > > > > > > devicetree.  It will allow platform devices to be used on virtual
+> > > > > > > > systems which already support PCI and devicetree, such as UML with
+> > > > > > > > virt-pci.
+> > > > > > > >
+> > > > > > > > The driver has no id_table by default; user space needs to provide one
+> > > > > > > > using the new_id mechanism in sysfs.
+> > > > > > >
+> > > > > > > This feels wrong for several reasons.
+> > > > > > >
+> > > > > > > Firstly, I think Greg (Cc:ed) will have something to say about this.
+> > > > > >
+> > > > > > Yes, this isn't ok.  Please write a real driver for the hardware under
+> > > > > > control here, and that would NOT be a MFD driver (hint, if you want to
+> > > > > > split up a PCI device into different drivers, use the aux bus code, that
+> > > > > > is what it is there for.)
+> > > > >
+> > > > > I hope it's clear from my other replies in this thread that the entire
+> > > > > purpose of this driver is to allow arbitrary platform devices to be used
+> > > > > via a PCI device in virtual environments like User Mode Linux in order
+> > > > > to test existing platform drivers using mocked hardware.
+> > > >
+> > > > That still feels wrong, why is PCI involved here at all?
+> > > >
+> > > > Don't abuse platform devices like this please, mock up a platform device
+> > > > framework instead if you want to test them that way, don't think that
+> > > > adding a platform device "below" a PCI device is somehow allowed at all.
+> > >
+> > > My question as well. However, that's only for Vincent's usecase. The
+> > > other ones I'm aware of are definitely non-discoverable MMIO devices
+> > > behind a PCI device.
+> > >
+> > > It is perfectly valid in DT to have the same device either directly on
+> > > an MMIO bus or behind some other MMIO capable bus. So what bus type
+> > > should they all be?
+> >
+> > If the mmio space is behind a PCI device, then why isn't that a special
+> > bus type for that "pci-mmio" or something, right?  Otherwise what
+> > happens when you yank out that PCI device?  Does that work today for
+> > these platform devices?
+> 
+> Well, yes, I'm sure there's lots of issues with hot-unplug and DT.
+> That's pretty much anything using DT, not just platform devices. Those
+> will only get fixed when folks try to do that, but so far we've mostly
+> prevented doing that. For example, we don't support a generic
+> mechanism to add and remove DT overlays because most drivers aren't
+> ready for their DT node to disappear.
+> 
+> Is there some restriction that says platform_bus can't do hotplug? I
+> thought everything is hotpluggable (in theory).
+> 
+> > > > > Given this "hardware", it's not clear what a "real driver" would do
+> > > > > differently.
+> > > >
+> > > > Again, you can not have a platform device below a PCI device, that's not
+> > > > what a platform device is for at all.
+> > > >
+> > > > > The auxiliary bus cannot be used since it naturally does
+> > > > > not support platform devices.
+> > > >
+> > > > The aux bus can support any type of bus (it's there to be used as you
+> > > > want, it's just that people are currently using it for PCI devices right
+> > > > now).
+> > > >
+> > > > > A hard coded list of sub-devices cannot be used since arbitrary
+> > > > > platform devices with arbitrary devicetree properties need to be
+> > > > > supported.
+> > > >
+> > > > Then make a new bus type and again, do not abuse platform devices.
+> > >
+> > > How about of_platform_bus[1]?
+> >
+> > Fair enough :)
+> >
+> > > At this point, it would be easier to create a new bus type for
+> > > whatever it is you think *should* be a platform device and move those
+> > > to the new bus leaving platform_bus as the DT/ACPI devices bus.
+> >
+> > platfom bus should be for DT/ACPI devices like that, but that's not what
+> > a "hang a DT off a PCI device" should be, right?  Why is mmio space
+> > somehow special here?
+> 
+> Only because platform_bus is the bus type in the kernel that supports
+> MMIO devices and that the DT code uses to instantiate them. The DT
+> code doesn't care if those are at the root level or behind some other
+> bus type.
+> 
+> > Perhaps we just add support for that to the aux
+> > bus?
+> 
+> Yes, we could add IOMEM resources, DT ID table and matching, etc., but
+> we'd just end up back at of_platform_bus with a new name. Every driver
+> doing both would have 2 driver structs and register calls. What do we
+> gain from that?
 
-This was meant for setting the owner field of a file_operations struct
-or the cra_owner field of crypto_alg and many other structs.
+As you know, nothing :)
 
-I know that increfing a module without a good reason is dead dumb, so
-I'm not trying to send things in a downwards spiral. @@@
+Ok, I'll stop arguing now, maybe this is a valid use of a platform
+device, but it feels really wrong that such a thing could live below a
+PCI device that can be removed from the system at any point in time.
 
-And yes, I should have mentioned that in the commit message, but I let
-slip that detail.
+thanks,
+
+greg k-h
