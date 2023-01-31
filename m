@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB3568275E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2579D682756
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjAaIut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 03:50:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S230372AbjAaIsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 03:48:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbjAaIuB (ORCPT
+        with ESMTP id S230489AbjAaIsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:50:01 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3474AA4D
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:46:04 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VaW9tU._1675154649;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VaW9tU._1675154649)
-          by smtp.aliyun-inc.com;
-          Tue, 31 Jan 2023 16:44:17 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     perex@perex.cz
-Cc:     tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] ALSA: emu10k1: clean up some inconsistent indenting
-Date:   Tue, 31 Jan 2023 16:43:04 +0800
-Message-Id: <20230131084304.12920-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 31 Jan 2023 03:48:23 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E2E4E535
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:44:14 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1pMmEl-0002nx-L2; Tue, 31 Jan 2023 09:43:31 +0100
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1pMmEl-001eKs-IY; Tue, 31 Jan 2023 09:43:30 +0100
+Received: from jlu by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <jlu@pengutronix.de>)
+        id 1pMmEj-005vrV-Rx; Tue, 31 Jan 2023 09:43:29 +0100
+From:   Jan Luebbe <jlu@pengutronix.de>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Jan Luebbe <jlu@pengutronix.de>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH v2 0/2] Fix module signing with PKCS#11 URIs
+Date:   Tue, 31 Jan 2023 09:43:21 +0100
+Message-Id: <20230131084323.1414010-1-jlu@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: jlu@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
+Hi,
 
-sound/pci/emu10k1/memory.c:446 snd_emu10k1_synth_free() warn: inconsistent indenting.
+here are two patches to fix kernel module signing when using a key via
+PKCS#11, including the case where the URI contains semicolons to
+separate components.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3903
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- sound/pci/emu10k1/memory.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Compared to v1, I've used the change suggested by Masahiro Yamada in the
+first patch.
 
-diff --git a/sound/pci/emu10k1/memory.c b/sound/pci/emu10k1/memory.c
-index edb3f1763719..6a7406014f81 100644
---- a/sound/pci/emu10k1/memory.c
-+++ b/sound/pci/emu10k1/memory.c
-@@ -443,7 +443,7 @@ snd_emu10k1_synth_free(struct snd_emu10k1 *emu, struct snd_util_memblk *memblk)
- 		unmap_memblk(emu, blk);
- 	spin_unlock_irqrestore(&emu->memblk_lock, flags);
- 	synth_free_pages(emu, blk);
--	 __snd_util_mem_free(hdr, memblk);
-+	__snd_util_mem_free(hdr, memblk);
- 	mutex_unlock(&hdr->block_mutex);
- 	return 0;
- }
+Jan Luebbe (2):
+  certs: Fix build error when PKCS#11 URI contains semicolon
+  kbuild: modinst: Fix build error when CONFIG_MODULE_SIG_KEY is a
+    PKCS#11 URI
+
+ certs/Makefile           | 4 ++--
+ scripts/Makefile.modinst | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
 -- 
-2.20.1.7.g153144c
+2.30.2
 
