@@ -2,113 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE206831F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C6F6831FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbjAaP6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
+        id S233098AbjAaP6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:58:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbjAaP56 (ORCPT
+        with ESMTP id S233287AbjAaP6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:57:58 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94124ED5;
-        Tue, 31 Jan 2023 07:57:56 -0800 (PST)
-Date:   Tue, 31 Jan 2023 15:57:53 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675180674;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TZzJ+GQ2T/0Ua8BfIYWMuAMISueCW/XtJ+YiNk66U1I=;
-        b=pzbnRaPLaQ/3gI7t6UbZa/Oa5PmR4y47cA+G2DKLBBCcUfEM/1uHI3tAcsTXD9NMw1CEBK
-        qqoOhiPwvWe4w6NY9A/s+kE1k3Eflef7H6ginQ+Om6K8s8pBnyPhwgZ+my6HLznBL8wfEQ
-        FYxn06Xxk7KrQwGcC7Mwn6N1Sz6ee9QJmk3Rs7a2HC0OouUzCYDRGywy28WzI9BiQ/4xqb
-        +KHVpSsL9M1nZO9Jxy0BntK8BBIAfMhkEkQT1Lp8l3ekFOl3j1IrvnaeqJUJlMLiGWsO4l
-        8UFG2ePQtQR/c/AhQSZm41uLc1G8AXrl51ntd1jLTvTMgOME3LHLJToHvvQP8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675180674;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TZzJ+GQ2T/0Ua8BfIYWMuAMISueCW/XtJ+YiNk66U1I=;
-        b=h7RpaJHa6/0UI7mJcEDt5gunf0evL5A/bBsDZrDv12iro0vvgltSIUVG8vDBeIeyOwBfPB
-        gA6Atrza6/OTsVAQ==
-From:   "tip-bot2 for Ashok Raj" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/microcode] x86/microcode: Allow only "1" as a late reload
- trigger value
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ashok Raj <ashok.raj@intel.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230130213955.6046-3-ashok.raj@intel.com>
-References: <20230130213955.6046-3-ashok.raj@intel.com>
+        Tue, 31 Jan 2023 10:58:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B6349004;
+        Tue, 31 Jan 2023 07:58:44 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VEf7iX005558;
+        Tue, 31 Jan 2023 15:58:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=vMKvVrDcKvHi4ygBedjGhMHiu80tIjMuvsG1vFRtDNE=;
+ b=CPLsSVUL0MzV91MU5H4iPGc7IU4UsmwnxPSDBWWiw695QI6isB3XvHRs0g8rJYZk9AJZ
+ +oyGjs622gS/irwjGG+x+6w4NwDS3NHP3F2QDorZKZvXL3Fpjlo5WtBacXLb80rB2M6T
+ lkHjgTyXejO2DHslCPfBhU5xwPe4J9yrq5hJT7jBvH+FlU7XTI643rEs02z6UK/XICG0
+ 4IKuCyQHNabxPC13prlLU2RVKEblHINqEuXOQ3HYQXu5jHH48Y5KjNluLxizTK8YiIWD
+ bKnw5NGSpABFCKsKxioPlkSpd6ViF7IU4gkQEWgeoRYRN6dc+O4jE/5WTyWdxUAgf4rH 6g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ndee3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:58:35 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VDHTli020244;
+        Tue, 31 Jan 2023 15:58:35 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ndedq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:58:35 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VDHe8X025436;
+        Tue, 31 Jan 2023 15:58:34 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3ncvtrmyx2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:58:34 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFwVco17039934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 15:58:32 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC50F5806A;
+        Tue, 31 Jan 2023 15:58:31 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF08158069;
+        Tue, 31 Jan 2023 15:58:30 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 15:58:30 +0000 (GMT)
+Message-ID: <06cb4327-5e60-d472-57cc-3b2c568014f1@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 10:58:30 -0500
 MIME-Version: 1.0
-Message-ID: <167518067379.4906.5578847349116389476.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 13/25] powerpc/secvar: Don't print error on ENOENT when
+ reading variables
+Content-Language: en-US
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+References: <20230131063928.388035-1-ajd@linux.ibm.com>
+ <20230131063928.388035-14-ajd@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230131063928.388035-14-ajd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 5Pte0MhJzS1TBlWULkN0SPmtUwrFHnCJ
+X-Proofpoint-GUID: 9bz0UTf004LdAleWIwBy3FOeV_6qDs3J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301310137
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/microcode branch of tip:
 
-Commit-ID:     25d0dc4b957cc8674f8554e85f18a00467e876d7
-Gitweb:        https://git.kernel.org/tip/25d0dc4b957cc8674f8554e85f18a00467e876d7
-Author:        Ashok Raj <ashok.raj@intel.com>
-AuthorDate:    Mon, 30 Jan 2023 13:39:48 -08:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 31 Jan 2023 16:47:03 +01:00
 
-x86/microcode: Allow only "1" as a late reload trigger value
+On 1/31/23 01:39, Andrew Donnellan wrote:
+> If attempting to read the size or data attributes of a  non-existent
+> variable (which will be possible after a later patch to expose the PLPKS
+> via the secvar interface), don't spam the kernel log with error messages.
+> Only print errors for return codes that aren't ENOENT.
+> 
+> Reported-by: Sudhakar Kuppusamy <sudhakar@linux.ibm.com>
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
 
-Microcode gets reloaded late only if "1" is written to the reload file.
-However, the code silently treats any other unsigned integer as a
-successful write even though no actions are performed to load microcode.
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-Make the loader more strict to accept only "1" as a trigger value and
-return an error otherwise.
-
-  [ bp: Massage commit message. ]
-
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230130213955.6046-3-ashok.raj@intel.com
----
- arch/x86/kernel/cpu/microcode/core.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 61d57d9..fdd1e7e 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -475,11 +475,8 @@ static ssize_t reload_store(struct device *dev,
- 	ssize_t ret = 0;
- 
- 	ret = kstrtoul(buf, 0, &val);
--	if (ret)
--		return ret;
--
--	if (val != 1)
--		return size;
-+	if (ret || val != 1)
-+		return -EINVAL;
- 
- 	cpus_read_lock();
- 
+> 
+> ---
+> 
+> v3: New patch
+> ---
+>   arch/powerpc/kernel/secvar-sysfs.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/secvar-sysfs.c
+> index 9b6be63b7b36..ca3df3f7156c 100644
+> --- a/arch/powerpc/kernel/secvar-sysfs.c
+> +++ b/arch/powerpc/kernel/secvar-sysfs.c
+> @@ -43,8 +43,8 @@ static ssize_t size_show(struct kobject *kobj, struct kobj_attribute *attr,
+>   
+>   	rc = secvar_ops->get(kobj->name, strlen(kobj->name) + 1, NULL, &dsize);
+>   	if (rc) {
+> -		pr_err("Error retrieving %s variable size %d\n", kobj->name,
+> -		       rc);
+> +		if (rc != -ENOENT)
+> +			pr_err("Error retrieving %s variable size %d\n", kobj->name, rc);
+>   		return rc;
+>   	}
+>   
+> @@ -61,7 +61,8 @@ static ssize_t data_read(struct file *filep, struct kobject *kobj,
+>   
+>   	rc = secvar_ops->get(kobj->name, strlen(kobj->name) + 1, NULL, &dsize);
+>   	if (rc) {
+> -		pr_err("Error getting %s variable size %d\n", kobj->name, rc);
+> +		if (rc != -ENOENT)
+> +			pr_err("Error getting %s variable size %d\n", kobj->name, rc);
+>   		return rc;
+>   	}
+>   	pr_debug("dsize is %llu\n", dsize);
