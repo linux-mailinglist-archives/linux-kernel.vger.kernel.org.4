@@ -2,331 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D448E682D2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BD2682D31
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjAaNBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S230177AbjAaNB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:01:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjAaNBU (ORCPT
+        with ESMTP id S230091AbjAaNBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:01:20 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED624B898;
-        Tue, 31 Jan 2023 05:01:18 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 91455228FF;
-        Tue, 31 Jan 2023 13:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1675170077; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=NLETNYRB1I9t8cXemPHR0hkOBQ4tV56gRSZ+uiABDF4=;
-        b=GPWeZ4HzDM+VzbgslendF66NPeXFYqPxEb+vlNczJZkOEBnHkue46fCyggBcrvUCJ+ZdtD
-        dgppdI6fldhPvn0YyQG8kOFBaE4Htszp+4/n+hQYJHrzDN9tu5My+G/4+1UdIYvDCQ22mY
-        2StCAs8kkuRu508IIn7Nxr111QM/E6k=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 574BB13585;
-        Tue, 31 Jan 2023 13:01:17 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id n5lvFB0R2WPmGgAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Tue, 31 Jan 2023 13:01:17 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
-Cc:     pmladek@suse.com, mcgrof@kernel.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH] ACPI: cpufreq: use a platform device to load ACPI PPC and PCC drivers
-Date:   Tue, 31 Jan 2023 14:00:41 +0100
-Message-Id: <20230131130041.629-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 31 Jan 2023 08:01:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F074C6FD
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:01:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675170066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5LAlV4rwXGaZAkBT5gd6JtG7tn12Ct026ebSvrWPbW4=;
+        b=CmXfT2YgESrhThVHbUMr6LrO1NCoGdzhGMEWJRNlUc4nf2IalZUHUZk8dT0/56qoT2ygLS
+        CBl8iu8Ynlw1bTcs4XUdWvbSd6L4NfaS7KjAOHLM6Y3R0x2uH5J3m3swXtuKrfM+gZrMi1
+        idIMzbqAOAG0AObf2e0X3+ADYwPnFlk=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
+ [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-212-JdCVZGF4OQKlIn36R_S9QA-1; Tue, 31 Jan 2023 08:01:05 -0500
+X-MC-Unique: JdCVZGF4OQKlIn36R_S9QA-1
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-15ba18af8d6so5580437fac.23
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:00:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5LAlV4rwXGaZAkBT5gd6JtG7tn12Ct026ebSvrWPbW4=;
+        b=Do0rbrrdenIfCLpXXbGhMp4UMuuMhyLmxJnL2RABKKbHx2vMsQWNHwCeWgobR1a8GQ
+         BaCeyUsRbyFf2qZKBf7QQUrnRXgPetB0lCsC7NfzVRnpkRG1+nnmgSe2JzFDRjtA2b11
+         ITXJq9fV8HlQ1m9jWswMXQccDnMLZcfOWfoJ8FB8szooN9La8TmEpS5pX9gy3biIz3xA
+         bFH9Ur3dDqAQ/Rj0Y3X0ebxuBDVJT5nvwmFbL1GPYL9vZyA82901hHD27JRZSBrOos/R
+         VT+OBuEAUV3ln3NbLpb0Ld+mJ681Rnd7wz7NF+bvC68dUvw7iVMvRMvtQIaOt2Hfd81V
+         Xt4Q==
+X-Gm-Message-State: AO0yUKX0nZXtQoXPEYj7obJBQhXbGp8WB0UMzh2kzth8UgENLiJol+66
+        76iObU7BQ7yL9nTo9dTtUn85CeWvAh7nTfVN3NHrUFBZ0g5eri0Y9m+SwCrMoX3zzw+igC8LTTZ
+        I1Ox2wimzYDiwaRpOSrjMo0zs
+X-Received: by 2002:a05:6870:ebc3:b0:163:758d:a6b7 with SMTP id cr3-20020a056870ebc300b00163758da6b7mr2880302oab.1.1675170048988;
+        Tue, 31 Jan 2023 05:00:48 -0800 (PST)
+X-Google-Smtp-Source: AK7set/3EcOyUfREamMpigitPUuOxl0q6+e2Sf3auXXnXQriycKTacCv8kCcq1zOOtoetgGsmXZm4Q==
+X-Received: by 2002:a05:6870:ebc3:b0:163:758d:a6b7 with SMTP id cr3-20020a056870ebc300b00163758da6b7mr2880278oab.1.1675170048723;
+        Tue, 31 Jan 2023 05:00:48 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
+        by smtp.gmail.com with ESMTPSA id dy31-20020a05620a60df00b0070531c5d655sm9925169qkb.90.2023.01.31.05.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 05:00:48 -0800 (PST)
+Message-ID: <f753ad2b0c19e085867698f7bbbe37f6d172772e.camel@redhat.com>
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: disable hardware DSA
+ untagging for second MAC
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     arinc9.unal@gmail.com, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        erkin.bozoglu@xeront.com
+Date:   Tue, 31 Jan 2023 14:00:43 +0100
+In-Reply-To: <20230128094232.2451947-1-arinc.unal@arinc9.com>
+References: <20230128094232.2451947-1-arinc.unal@arinc9.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The acpi-cpufreq and pcc-cpufreq drivers are loaded through per-CPU
-module aliases. This can result in many unnecessary load requests during
-boot if another frequency module, such as intel_pstate, is already
-active. For instance, on a typical Intel system, one can observe that
-udev makes 2x#CPUs attempts to insert acpi_cpufreq and 1x#CPUs attempts
-for pcc_cpufreq. All these tries then fail if another frequency module
-is already registered.
+On Sat, 2023-01-28 at 12:42 +0300, arinc9.unal@gmail.com wrote:
+> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+>=20
+> According to my tests on MT7621AT and MT7623NI SoCs, hardware DSA untaggi=
+ng
+> won't work on the second MAC. Therefore, disable this feature when the
+> second MAC of the MT7621 and MT7623 SoCs is being used.
+>=20
+> Fixes: 2d7605a72906 ("net: ethernet: mtk_eth_soc: enable hardware DSA unt=
+agging")
+> Link: https://lore.kernel.org/netdev/6249fc14-b38a-c770-36b4-5af6d41c21d3=
+@arinc9.com/
+> Tested-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> ---
+>=20
+> Final send which should end up on the list. I tested this with Felix's
+> upcoming patch series. This fix is still needed on top of it.
+>=20
+> https://lore.kernel.org/netdev/20221230073145.53386-1-nbd@nbd.name/
+>=20
+> The MTK_GMAC1_TRGMII capability is only on the MT7621 and MT7623 SoCs whi=
+ch
+> I see this problem on. I'm new to coding so I took an educated guess from
+> the use of MTK_NETSYS_V2 to disable this feature altogether for MT7986 So=
+C.
 
-Both acpi-cpufreq and pcc-cpufreq drivers have their platform firmware
-interface defined by ACPI. Allowed performance states and parameters
-must be same for each CPU. This makes it possible to model these
-interfaces as platform devices.
+Keeping this one a little more on pw. It would be great is someone else
+could validate the above on the relevant H/W.
 
-The patch extends the ACPI parsing logic to check the ACPI namespace if
-the PPC or PCC interface is present and creates a virtual platform
-device for each if it is available. The acpi-cpufreq and pcc-cpufreq
-drivers are then updated to map to these devices.
+Thanks,
 
-This allows to try loading acpi-cpufreq and pcc-cpufreq only once during
-boot and only if a given interface is available in the firmware.
-
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- drivers/acpi/Makefile          |  1 +
- drivers/acpi/acpi_cpufreq.c    | 49 ++++++++++++++++++++++++++++++++++
- drivers/acpi/bus.c             |  1 +
- drivers/acpi/internal.h        |  2 ++
- drivers/cpufreq/acpi-cpufreq.c | 39 +++++++++++++++------------
- drivers/cpufreq/pcc-cpufreq.c  | 34 ++++++++++++++++-------
- 6 files changed, 99 insertions(+), 27 deletions(-)
- create mode 100644 drivers/acpi/acpi_cpufreq.c
-
-diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
-index feb36c0b9446..880db1082c3e 100644
---- a/drivers/acpi/Makefile
-+++ b/drivers/acpi/Makefile
-@@ -57,6 +57,7 @@ acpi-y				+= evged.o
- acpi-y				+= sysfs.o
- acpi-y				+= property.o
- acpi-$(CONFIG_X86)		+= acpi_cmos_rtc.o
-+acpi-$(CONFIG_X86)		+= acpi_cpufreq.o
- acpi-$(CONFIG_X86)		+= x86/apple.o
- acpi-$(CONFIG_X86)		+= x86/utils.o
- acpi-$(CONFIG_X86)		+= x86/s2idle.o
-diff --git a/drivers/acpi/acpi_cpufreq.c b/drivers/acpi/acpi_cpufreq.c
-new file mode 100644
-index 000000000000..7cf243c67475
---- /dev/null
-+++ b/drivers/acpi/acpi_cpufreq.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Registration of platform devices for ACPI Processor Performance Control and
-+ * Processor Clocking Control.
-+ */
-+
-+#include <linux/acpi.h>
-+#include <linux/platform_device.h>
-+
-+#include "internal.h"
-+
-+static void __init cpufreq_add_device(const char *name)
-+{
-+	struct platform_device *pdev;
-+
-+	pdev = platform_device_register_simple(name, PLATFORM_DEVID_NONE, NULL,
-+					       0);
-+	if (IS_ERR(pdev))
-+		pr_err("%s device creation failed: %ld\n", name, PTR_ERR(pdev));
-+}
-+
-+static acpi_status __init acpi_pct_match(acpi_handle handle, u32 level,
-+					 void *context, void **return_value)
-+{
-+	bool *pct = context;
-+
-+	/* Check if the first CPU has _PCT. The data must be same for all. */
-+	*pct = acpi_has_method(handle, "_PCT");
-+	return AE_CTRL_TERMINATE;
-+}
-+
-+void __init acpi_cpufreq_init(void)
-+{
-+	acpi_status status;
-+	acpi_handle handle;
-+	bool pct = false;
-+
-+	status = acpi_get_handle(NULL, "\\_SB", &handle);
-+	if (ACPI_FAILURE(status))
-+		return;
-+
-+	acpi_walk_namespace(ACPI_TYPE_PROCESSOR, ACPI_ROOT_OBJECT,
-+			    ACPI_UINT32_MAX, acpi_pct_match, NULL, &pct, NULL);
-+	if (pct)
-+		cpufreq_add_device("acpi-cpufreq");
-+
-+	if (acpi_has_method(handle, "PCCH"))
-+		cpufreq_add_device("pcc-cpufreq");
-+}
-diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-index 0c05ccde1f7a..f1559e26d5ff 100644
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -1428,6 +1428,7 @@ static int __init acpi_init(void)
- 	acpi_viot_init();
- 	acpi_agdi_init();
- 	acpi_apmt_init();
-+	acpi_cpufreq_init();
- 	return 0;
- }
- 
-diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-index ec584442fb29..c9b1a5f689fa 100644
---- a/drivers/acpi/internal.h
-+++ b/drivers/acpi/internal.h
-@@ -157,8 +157,10 @@ static inline void acpi_early_processor_set_pdc(void) {}
- 
- #ifdef CONFIG_X86
- void acpi_early_processor_osc(void);
-+void acpi_cpufreq_init(void);
- #else
- static inline void acpi_early_processor_osc(void) {}
-+static inline void acpi_cpufreq_init(void) {}
- #endif
- 
- /* --------------------------------------------------------------------------
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 78adfb2ffff6..e1a5384cf21c 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -965,7 +965,7 @@ static void __init acpi_cpufreq_boost_init(void)
- 	acpi_cpufreq_driver.boost_enabled = boost_state(0);
- }
- 
--static int __init acpi_cpufreq_init(void)
-+static int __init acpi_cpufreq_probe(struct platform_device *pdev)
- {
- 	int ret;
- 
-@@ -1010,13 +1010,32 @@ static int __init acpi_cpufreq_init(void)
- 	return ret;
- }
- 
--static void __exit acpi_cpufreq_exit(void)
-+static int acpi_cpufreq_remove(struct platform_device *pdev)
- {
- 	pr_debug("%s\n", __func__);
- 
- 	cpufreq_unregister_driver(&acpi_cpufreq_driver);
- 
- 	free_acpi_perf_data();
-+
-+	return 0;
-+}
-+
-+static struct platform_driver acpi_cpufreq_platdrv = {
-+	.driver = {
-+		.name	= "acpi-cpufreq",
-+	},
-+	.remove		= acpi_cpufreq_remove,
-+};
-+
-+static int __init acpi_cpufreq_init(void)
-+{
-+	return platform_driver_probe(&acpi_cpufreq_platdrv, acpi_cpufreq_probe);
-+}
-+
-+static void __exit acpi_cpufreq_exit(void)
-+{
-+	platform_driver_unregister(&acpi_cpufreq_platdrv);
- }
- 
- module_param(acpi_pstate_strict, uint, 0644);
-@@ -1027,18 +1046,4 @@ MODULE_PARM_DESC(acpi_pstate_strict,
- late_initcall(acpi_cpufreq_init);
- module_exit(acpi_cpufreq_exit);
- 
--static const struct x86_cpu_id __maybe_unused acpi_cpufreq_ids[] = {
--	X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
--	X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
--	{}
--};
--MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
--
--static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
--	{ACPI_PROCESSOR_OBJECT_HID, },
--	{ACPI_PROCESSOR_DEVICE_HID, },
--	{},
--};
--MODULE_DEVICE_TABLE(acpi, processor_device_ids);
--
--MODULE_ALIAS("acpi");
-+MODULE_ALIAS("platform:acpi-cpufreq");
-diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
-index 9f3fc7a073d0..0c362932ca60 100644
---- a/drivers/cpufreq/pcc-cpufreq.c
-+++ b/drivers/cpufreq/pcc-cpufreq.c
-@@ -384,7 +384,7 @@ static int __init pcc_cpufreq_do_osc(acpi_handle *handle)
- 	return ret;
- }
- 
--static int __init pcc_cpufreq_probe(void)
-+static int __init pcc_cpufreq_evaluate(void)
- {
- 	acpi_status status;
- 	struct acpi_buffer output = {ACPI_ALLOCATE_BUFFER, NULL};
-@@ -576,7 +576,7 @@ static struct cpufreq_driver pcc_cpufreq_driver = {
- 	.name = "pcc-cpufreq",
- };
- 
--static int __init pcc_cpufreq_init(void)
-+static int __init pcc_cpufreq_probe(struct platform_device *pdev)
- {
- 	int ret;
- 
-@@ -587,9 +587,9 @@ static int __init pcc_cpufreq_init(void)
- 	if (acpi_disabled)
- 		return -ENODEV;
- 
--	ret = pcc_cpufreq_probe();
-+	ret = pcc_cpufreq_evaluate();
- 	if (ret) {
--		pr_debug("pcc_cpufreq_init: PCCH evaluation failed\n");
-+		pr_debug("pcc_cpufreq_probe: PCCH evaluation failed\n");
- 		return ret;
- 	}
- 
-@@ -607,21 +607,35 @@ static int __init pcc_cpufreq_init(void)
- 	return ret;
- }
- 
--static void __exit pcc_cpufreq_exit(void)
-+static int pcc_cpufreq_remove(struct platform_device *pdev)
- {
- 	cpufreq_unregister_driver(&pcc_cpufreq_driver);
- 
- 	pcc_clear_mapping();
- 
- 	free_percpu(pcc_cpu_info);
-+
-+	return 0;
- }
- 
--static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
--	{ACPI_PROCESSOR_OBJECT_HID, },
--	{ACPI_PROCESSOR_DEVICE_HID, },
--	{},
-+static struct platform_driver pcc_cpufreq_platdrv = {
-+	.driver = {
-+		.name	= "pcc-cpufreq",
-+	},
-+	.remove		= pcc_cpufreq_remove,
- };
--MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-+
-+static int __init pcc_cpufreq_init(void)
-+{
-+	return platform_driver_probe(&pcc_cpufreq_platdrv, pcc_cpufreq_probe);
-+}
-+
-+static void __exit pcc_cpufreq_exit(void)
-+{
-+	platform_driver_unregister(&pcc_cpufreq_platdrv);
-+}
-+
-+MODULE_ALIAS("platform:pcc-cpufreq");
- 
- MODULE_AUTHOR("Matthew Garrett, Naga Chumbalkar");
- MODULE_VERSION(PCC_VERSION);
--- 
-2.35.3
+Paolo
 
