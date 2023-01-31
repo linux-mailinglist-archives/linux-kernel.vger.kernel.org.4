@@ -2,78 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E263682D00
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02531682CFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:51:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbjAaMvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:51:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
+        id S231129AbjAaMvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjAaMvk (ORCPT
+        with ESMTP id S231664AbjAaMvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 31 Jan 2023 07:51:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E548745F43
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C2F35277
         for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:51:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D39B614EC
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:51:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4B3C433D2;
-        Tue, 31 Jan 2023 12:51:36 +0000 (UTC)
-Date:   Tue, 31 Jan 2023 12:51:33 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] arm64/signal: Signal handling cleanups
-Message-ID: <Y9kO1egKjKNqE0zg@arm.com>
-References: <20221212-arm64-signal-cleanup-v2-0-14a8f3e088b7@kernel.org>
+Received: by mail-wm1-x335.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so3414380wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:51:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n65vnVKUKNt8sq6OAnE9DvWi7qEHkIEJrwEj31voYJc=;
+        b=UdiQFxg8bARvB8WUDhiJW5v0fhBx6P/SghoR4ExMXmol8S8ZOSR2N+/MLh2zBciUZj
+         y/ARlUt9g/Eo8QFMkaHr297lO1wN1/szlws64TROBwrW1M3qohGMzBShVdhFPSKwMot5
+         dAMJuflQqocRWPrl+nJaNGjXrg5eTobBJw9IkHFx4shQAS24q9KAO6jz47iep36vd/AT
+         PnfhRqaJTR0CL9bC2FZ/p38o7vdBNXwdHYa00u9flA0Bvyn5XSimcKzw1r5+eKytmgg4
+         oCgFwreYrfJjIJgNve1LoGUeRBnipbP+zHhF/XkBARDFwbwigPdtzVUStnFph+UPvis6
+         MQLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n65vnVKUKNt8sq6OAnE9DvWi7qEHkIEJrwEj31voYJc=;
+        b=NY0+VfcZMz+u3uxJ79EnyCdZzLtF6aK3zmjstbn9wCcdJggAmUv4hgXBBUvnuGpgFy
+         7Zd2wRxuvUCkdErdfyqE1uog4LS5v9KKON0BU7Ekd+NxtB6msruALihH5H/q3yduRrLw
+         fMteFS7u1MPvYKjmOgGPMH2/JwrWvMr9BzfAp1hzQWz6R6r6ZA27hm8JjWsIp9jQUscC
+         +LT9OJoHbk7fijxBdMyt7DYWvrFCGVQZPq+19Mz+gGaOVZf1rLxDhLYZ/BqOr2bg5OQd
+         01fQUbGbMWo3k7ek+jOGRuu6AmbscXfYwAvKBOT8KJxsCiWAbGh1VU9jIKy7P1aDEDIm
+         k5QA==
+X-Gm-Message-State: AO0yUKVOWgKnFBU2ylZsqnxSwtL6mp/sMb/lONqnQNikOrDrwA9etH8q
+        xlzXP+puzmBkH6blTwBykk6FWA==
+X-Google-Smtp-Source: AK7set87qQhpYFQ5Ln/lqHrC79343lQuL5eRVq9AVr7ltHrMJ+M2G75KQraxNDzZODnnDlOY3iQPVw==
+X-Received: by 2002:a05:600c:500d:b0:3dd:97d6:8f2e with SMTP id n13-20020a05600c500d00b003dd97d68f2emr1559900wmr.17.1675169496919;
+        Tue, 31 Jan 2023 04:51:36 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id l16-20020a7bc350000000b003d9aa76dc6asm22318343wmj.0.2023.01.31.04.51.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 04:51:36 -0800 (PST)
+Date:   Tue, 31 Jan 2023 14:51:34 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v3 00/19] ARM: imx: make Ethernet refclock configurable
+Message-ID: <Y9kO1rGH5hDWky//@linaro.org>
+References: <20230131084642.709385-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212-arm64-signal-cleanup-v2-0-14a8f3e088b7@kernel.org>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230131084642.709385-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On 23-01-31 09:46:23, Oleksij Rempel wrote:
+> changes v3:
+> - add Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+> - rebase on top of abelvesa/for-next
 
-On Tue, Jan 03, 2023 at 08:25:15PM +0000, Mark Brown wrote:
-> This series collects a number of small cleanups to the signal handling
-> code which removes redundant validation of size information and avoids
-> reading the same data from userspace twice.
+Applied all clk/imx ones. Thanks!
+
 > 
-> There are some overlaps with both the TPIDR2 signal handling and SME2
-> serieses which are also in flight, applying this will require
-> adjustments in those serieses and vice versa.
-[...]
-> Mark Brown (6):
->       arm64/signal: Don't redundantly verify FPSIMD magic
->       arm64/signal: Remove redundant size validation from parse_user_sigframe()
->       arm64/signal: Make interface for restore_fpsimd_context() consistent
-
-I'm fine with the first three patches, they seem correct and make the
-frame checking more consistent.
-
->       arm64/signal: Avoid rereading context frame sizes
->       arm64/signal: Only read new data when parsing the SVE context
->       arm64/signal: Only read new data when parsing the ZA context
-
-I'm not sure these add much to the code readability (and the performance
-improvement I guess is negligible). We avoid some copy_from_user() into
-the context structures but rely on data read previously or some
-get_user() into local variables. Personally I'd make the
-restore_fpsimd_context() also do a copy_from_user() for consistency with
-the current sve and za frames restoring.
-
-Personal preference, not sure whether Will has the same view.
-
--- 
-Catalin
+> changes v2:
+> - remove "ARM: imx6q: use of_clk_get_by_name() instead of_clk_get() to
+>   get ptp clock" patch
+> - fix build warnings
+> - add "Acked-by: Lee Jones <lee@kernel.org>"
+> - reword some commits as suggested by Fabio
+> 
+> Most of i.MX SoC variants have configurable FEC/Ethernet reference
+> lock
+> used by RMII specification. This functionality is located in the
+> general purpose registers (GRPx) and till now was not implemented as
+> part of SoC clock tree.
+> 
+> With this patch set, we move forward and add this missing functionality
+> to some of i.MX clk drivers. So, we will be able to configure clock
+> opology
+> by using devicetree and be able to troubleshoot clock dependencies
+> by using clk_summary etc.
+> 
+> Currently implemented and tested i.MX6Q, i.MX6DL and i.MX6UL variants.
+> 
+> 
+> Oleksij Rempel (19):
+>   clk: imx: add clk-gpr-mux driver
+>   clk: imx6q: add ethernet refclock mux support
+>   ARM: imx6q: skip ethernet refclock reconfiguration if enet_clk_ref is
+>     present
+>   ARM: dts: imx6qdl: use enet_clk_ref instead of enet_out for the FEC
+>     node
+>   ARM: dts: imx6dl-lanmcu: configure ethernet reference clock parent
+>   ARM: dts: imx6dl-alti6p: configure ethernet reference clock parent
+>   ARM: dts: imx6dl-plybas: configure ethernet reference clock parent
+>   ARM: dts: imx6dl-plym2m: configure ethernet reference clock parent
+>   ARM: dts: imx6dl-prtmvt: configure ethernet reference clock parent
+>   ARM: dts: imx6dl-victgo: configure ethernet reference clock parent
+>   ARM: dts: imx6q-prtwd2: configure ethernet reference clock parent
+>   ARM: dts: imx6qdl-skov-cpu: configure ethernet reference clock parent
+>   ARM: dts: imx6dl-eckelmann-ci4x10: configure ethernet reference clock
+>     parent
+>   clk: imx: add imx_obtain_fixed_of_clock()
+>   clk: imx6ul: fix enet1 gate configuration
+>   clk: imx6ul: add ethernet refclock mux support
+>   ARM: dts: imx6ul: set enet_clk_ref to CLK_ENETx_REF_SEL
+>   ARM: mach-imx: imx6ul: remove not optional ethernet refclock overwrite
+>   ARM: dts: imx6ul-prti6g: configure ethernet reference clock parent
+> 
+>  arch/arm/boot/dts/imx6dl-alti6p.dts           |  12 +-
+>  arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts |  13 +-
+>  arch/arm/boot/dts/imx6dl-lanmcu.dts           |  12 +-
+>  arch/arm/boot/dts/imx6dl-plybas.dts           |  12 +-
+>  arch/arm/boot/dts/imx6dl-plym2m.dts           |  12 +-
+>  arch/arm/boot/dts/imx6dl-prtmvt.dts           |  11 +-
+>  arch/arm/boot/dts/imx6dl-victgo.dts           |  12 +-
+>  arch/arm/boot/dts/imx6q-prtwd2.dts            |  17 ++-
+>  arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi       |  12 +-
+>  arch/arm/boot/dts/imx6qdl.dtsi                |   4 +-
+>  arch/arm/boot/dts/imx6ul-prti6g.dts           |  14 ++-
+>  arch/arm/boot/dts/imx6ul.dtsi                 |  10 +-
+>  arch/arm/mach-imx/mach-imx6q.c                |  10 +-
+>  arch/arm/mach-imx/mach-imx6ul.c               |  20 ---
+>  drivers/clk/imx/Makefile                      |   1 +
+>  drivers/clk/imx/clk-gpr-mux.c                 | 119 ++++++++++++++++++
+>  drivers/clk/imx/clk-imx6q.c                   |  13 ++
+>  drivers/clk/imx/clk-imx6ul.c                  |  33 ++++-
+>  drivers/clk/imx/clk.c                         |  14 +++
+>  drivers/clk/imx/clk.h                         |   8 ++
+>  include/dt-bindings/clock/imx6qdl-clock.h     |   4 +-
+>  include/dt-bindings/clock/imx6ul-clock.h      |   7 +-
+>  include/linux/mfd/syscon/imx6q-iomuxc-gpr.h   |   6 +-
+>  23 files changed, 296 insertions(+), 80 deletions(-)
+>  create mode 100644 drivers/clk/imx/clk-gpr-mux.c
+> 
+> -- 
+> 2.30.2
+> 
