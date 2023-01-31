@@ -2,143 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A878168314B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA58683149
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjAaPVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
+        id S233217AbjAaPVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbjAaPUi (ORCPT
+        with ESMTP id S230054AbjAaPUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:20:38 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AAB58650;
+        Tue, 31 Jan 2023 10:20:36 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DAE5866F;
         Tue, 31 Jan 2023 07:18:32 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFEQZv021534;
-        Tue, 31 Jan 2023 15:18:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=rvXOTcorzfsPEZ+ryU4QPusMRu8sCurgU5JTFn+aGds=;
- b=E4TVAEsWfzZATUv6zEYRMV8l35xqm4G4NHk6XgrM+1jDGNtl18/AfXF8OFqEpUaF8zBh
- a7jvqnpzhLlJPI7pXjOkbjoh32S57thyVRC1k+H532KsjhXPYtzmzxnklyW1VUQwYah/
- 6Y2+VH5Zz86DcMDSx9GKuLQk9w9vJ+G+tlBRRIGplgzPkcAwh4SxxJQwUlUkIax7mCFY
- 8YCYaeayZyghMlAr8GWqtluIaYYiKiiYpkoDSdlm9I04wOk83OSelikRyABh/umhhfGg
- kMLXvHsor6DVKBSgNMBt1Fvt+Gsw7VeN3lvqN9qTKo/nOdUdHX3D8bFPIE4FdC3ChEhF 5Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3q7u9fp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:18:23 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VFINqV005731;
-        Tue, 31 Jan 2023 15:18:23 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3q7u9f5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:18:22 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VBqvNx012321;
-        Tue, 31 Jan 2023 15:18:21 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3ncvvdgmx6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 15:18:21 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFIKS89634308
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 15:18:20 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 17A025805A;
-        Tue, 31 Jan 2023 15:18:20 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9287558056;
-        Tue, 31 Jan 2023 15:18:18 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 15:18:16 +0000 (GMT)
-Message-ID: <1f633865-d695-467a-b240-135c4887329b@linux.ibm.com>
-Date:   Tue, 31 Jan 2023 10:18:15 -0500
+Received: by mail-wm1-x331.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12708689wma.1;
+        Tue, 31 Jan 2023 07:18:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bBwrI8hKmSv5gQ7N7D3hIfQL3dVj+xe6qEN98lCdCy0=;
+        b=KUvk6pa+U6ArxTo3fM5DG3JpjKo5Mparu+2/mk+iCDI/peBaxA3PK9rAFfvRCUXu57
+         kS6KKtIfsB5+4KDeLjxkUqzowUynUK6Bggov5so9huUjuB8vxtXaylHXdP9YeSHzt7tx
+         9Rmk6bn88UuIjtj63z/UaEyg0XCx7lxEYHS64Ulhv8bqk2KhIYBGAOYBYowTAlPDYEiu
+         OQ53w+e3VH2C0NOAQmDH15haFVFBqsOU+BmdaIq3ZG4PItdg7kzy+QpQt1H+WoWwsfle
+         Brbx9uW1Z2/pjU1oX93aoRVkElmYBJaqeWPOd3wUAVTHJCZQ72d3FtbyROAH+yDL3voH
+         4Big==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bBwrI8hKmSv5gQ7N7D3hIfQL3dVj+xe6qEN98lCdCy0=;
+        b=UgpC9zeGEF/tKv+TCTCXPEfW8sVqz/OpWCjdkZiSKDXcWMjBkH8C1VVjpanVWufFxR
+         qibvClZNhWtXUdTdEZize5quw0riwKBPRMcRqAV+l5EKKjTi4jkAEdSwrvVszRE+p5bF
+         lpfnhOFLzA8bogdQUHz0wFxfMDQPcTiaB0MUE7RsYPHn1FjglVpNlzIHpmoeHyj4VI39
+         c6z5koFvnguBFNeNToUdedghyRJ5vJx2AjrdzS6XGlYpIwvh+jv5P+Qs97yobj9IDQmo
+         QXgUUPr66w+qibf7Ha3utZLC1zlvXXiqIeuZ+n5aQDc4TT21cw82Z2QG6AshgFd6Zx8I
+         5luw==
+X-Gm-Message-State: AO0yUKXRqMLnkVoKWXmNFWL+AWWftVRCHeBz1bbjAFVS3TL8QVovHLOZ
+        toibGtwrFVBc0tSld4MFVlhDKziyvtk=
+X-Google-Smtp-Source: AK7set+VVu+M+aULp66owrhILnZtcngXHdXkQ2pADm4UZQdos1fjvbwnPnM2kpyojLmxxTWfqCzXpg==
+X-Received: by 2002:a05:600c:3492:b0:3dc:de85:5007 with SMTP id a18-20020a05600c349200b003dcde855007mr5985854wmq.21.1675178311223;
+        Tue, 31 Jan 2023 07:18:31 -0800 (PST)
+Received: from localhost.localdomain (93-34-88-241.ip49.fastwebnet.it. [93.34.88.241])
+        by smtp.googlemail.com with ESMTPSA id x9-20020a05600c21c900b003dc434b39c7sm2854861wmj.0.2023.01.31.07.18.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 07:18:30 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v5 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify supported opp tables
+Date:   Tue, 31 Jan 2023 16:18:17 +0100
+Message-Id: <20230131151819.16612-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 03/25] powerpc/secvar: Fix incorrect return in
- secvar_sysfs_load()
-Content-Language: en-US
-To:     Andrew Donnellan <ajd@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
-        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
-        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
-References: <20230131063928.388035-1-ajd@linux.ibm.com>
- <20230131063928.388035-4-ajd@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230131063928.388035-4-ajd@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 5YSa_VDEKuKGJ_q9Zz75dLFr4NGPLh8X
-X-Proofpoint-GUID: iVnyRJPoLkRZxLtWDDD7up2F6roNL-Vz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- mlxscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2301310135
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add additional info on what opp tables the defined devices in this schema
+supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
+and reference them.
 
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+Changes v5:
+- Swap patch 1 and patch 2 to fix dt_check_warning on single
+  patch bisecting 
+Changes v4:
+- Add patch split from patch 1
 
-On 1/31/23 01:39, Andrew Donnellan wrote:
-> From: Russell Currey <ruscur@russell.cc>
-> 
-> secvar_ops->get_next() returns -ENOENT when there are no more variables
-> to return, which is expected behaviour.
-> 
-> Fix this by returning 0 if get_next() returns -ENOENT.
-> 
-> This fixes an issue introduced in commit bd5d9c743d38 ("powerpc: expose
-> secure variables to userspace via sysfs"), but the return code of
-> secvar_sysfs_load() was never checked so this issue never mattered.
-> 
-> Signed-off-by: Russell Currey <ruscur@russell.cc>
-> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
-> 
-> ---
-> 
-> v5: New patch
-> ---
->   arch/powerpc/kernel/secvar-sysfs.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/secvar-sysfs.c
-> index 1ee4640a2641..7fa5f8ed9542 100644
-> --- a/arch/powerpc/kernel/secvar-sysfs.c
-> +++ b/arch/powerpc/kernel/secvar-sysfs.c
-> @@ -179,8 +179,10 @@ static int secvar_sysfs_load(void)
->   		rc = secvar_ops->get_next(name, &namesize, NAME_MAX_SIZE);
->   		if (rc) {
->   			if (rc != -ENOENT)
-> -				pr_err("error getting secvar from firmware %d\n",
-> -				       rc);
-> +				pr_err("error getting secvar from firmware %d\n", rc);
-> +			else
-> +				rc = 0;
-> +
->   			break;
->   		}
->   
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 35 ++++++++++++++-----
+ 1 file changed, 26 insertions(+), 9 deletions(-)
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 9c086eac6ca7..7c42d9439abd 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -55,15 +55,32 @@ properties:
+ 
+ patternProperties:
+   '^opp-table(-[a-z0-9]+)?$':
+-    if:
+-      properties:
+-        compatible:
+-          const: operating-points-v2-kryo-cpu
+-    then:
+-      patternProperties:
+-        '^opp-?[0-9]+$':
+-          required:
+-            - required-opps
++    allOf:
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          patternProperties:
++            '^opp-?[0-9]+$':
++              required:
++                - required-opps
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-qcom-level
++        then:
++          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
++
++    unevaluatedProperties: false
+ 
+ additionalProperties: true
+ 
+-- 
+2.38.1
+
