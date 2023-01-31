@@ -2,232 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C28683102
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE5B683109
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbjAaPNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:13:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
+        id S232495AbjAaPOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:14:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbjAaPM7 (ORCPT
+        with ESMTP id S233056AbjAaPNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:12:59 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9119D577D3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:10:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675177857; x=1706713857;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MEM1cwCVSTmwLqFbehqNIVjnLWUHb6/SQKKmZ3uIb3o=;
-  b=c2TPfJg2sCbLDAuYLdwjKLPHAkL8pZxrGritwB5hlXa0PqvlK3GrLcz/
-   KJN1v0vDoq9qEuP7yOZlEKwGmGYeo6/NE7T404a0R+8ggqE4rLeB4ty8j
-   wgaKLmH0whoFk1a2sJGEDZrs8cQIvgxKZb8EZ5QA4aUXMryH12hVzxfjQ
-   IdJvvlBFAwLh+8c43fbgQJvrfXj4loP9Vl4MKvOd+6ADybEFPl2fDmAGo
-   Z7v+NCLyg6nXyUTrNqWjqvy9QN44AWOdTF2Lbwbsb9hXQuv3z4o91C93D
-   E+F+RV1n8JmPs8MIU//bL0OUPQE/gnRVQm0W5/F+Y3ErjK6DEzqQHSXmp
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="326524639"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="326524639"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 07:09:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="664519803"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="664519803"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 31 Jan 2023 07:09:57 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMsGi-0004Ug-0X;
-        Tue, 31 Jan 2023 15:09:56 +0000
-Date:   Tue, 31 Jan 2023 23:09:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shenghao Ding <13916275206@139.com>, broonie@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com
-Cc:     oe-kbuild-all@lists.linux.dev, kevin-lu@ti.com,
-        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Shenghao Ding <13916275206@139.com>
-Subject: Re: [PATCH v2] ASoC: tas2781: Add tas2781 driver.
-Message-ID: <202301312243.8wxlGhpo-lkp@intel.com>
-References: <20230131131701.7097-1-13916275206@139.com>
+        Tue, 31 Jan 2023 10:13:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B932758988
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:11:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675177826;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zW1XGfXvloprCDLBhrMNbL256Bwo1kZTo72rPkh4eec=;
+        b=LLhaBR+zzmQ7zuPWsuuR8borxSgsgs5r7LEvk+JAfRfrobpX8+hoGM8dD9amefuvoeQWFo
+        csbMSLmtMmypR8c/m5RwSvGHxpHwlL0w+05J6jgr1/YxqQxqPfCbDD5Fkmkd7wRStpX8EM
+        eEBhlTNuGGgTIK4+oQvEOGxQc8+tlAs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-653-YrHdoA87Mpem2ZJscAVLow-1; Tue, 31 Jan 2023 10:10:23 -0500
+X-MC-Unique: YrHdoA87Mpem2ZJscAVLow-1
+Received: by mail-wm1-f71.google.com with SMTP id k9-20020a05600c1c8900b003dc5dec2ac6so2793097wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:10:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zW1XGfXvloprCDLBhrMNbL256Bwo1kZTo72rPkh4eec=;
+        b=3x2Mk7bUFkscVwdrwkNRikKCfNSJYHPvPDhWZX9A9RcEUd8aWSBA7eCu2phCrin5ay
+         agrIJjLOZvF2+L9Nl8dqMmw+2+TeVZlxbGCnQGBhpaQ7cozaOi3uMiYRptfRgxDcaX8Y
+         sS2+9ZF/n24x9kW2CqY43bnZxFvlo3OHoiIvdg7uTLXj3l2bXRIAH9eMOs6Ux4wOv0Y8
+         t4OdBXuVe10k5dbnP50X8kdFt2mbRiTAdf6CXyENTKq8oaP13OoHl4Qi64loh6Ly1rNH
+         md7gmmnxhGf7oOun+D1r8ScvQMQHfxTRA+nbPtg01w7mioDQvVYpGvPxjjW1FKblgmbz
+         swbg==
+X-Gm-Message-State: AFqh2koYBSt9WzfOI1RD82fWX1hhVyt3CeRUQ73yMi6zcWTK5KtBWqv7
+        266aSgp7ZI93gcMZJrhmIZDdFSq89KWOnMJd6fidYzyCUhjFr0uHARIH21eimcmUb1QVHWGM5U+
+        lukVWRAOXKvrkEFMLpYJwYNyY
+X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr46934677wro.48.1675177821838;
+        Tue, 31 Jan 2023 07:10:21 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtRDcsJhRjJCJ6S8KsEYz50Ornge6E54XXYexnHU4JDCIVppDpu1q2bl+uSQOGtZBJMJSxZ0Q==
+X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr46934651wro.48.1675177821494;
+        Tue, 31 Jan 2023 07:10:21 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f0a:ca00:f74f:2017:1617:3ec3? (p200300d82f0aca00f74f201716173ec3.dip0.t-ipconnect.de. [2003:d8:2f0a:ca00:f74f:2017:1617:3ec3])
+        by smtp.gmail.com with ESMTPSA id x12-20020adfec0c000000b002b065272da2sm14989741wrn.13.2023.01.31.07.10.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Jan 2023 07:10:21 -0800 (PST)
+Message-ID: <0361aae6-59b2-1bbc-5530-a5be587b8a59@redhat.com>
+Date:   Tue, 31 Jan 2023 16:10:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131131701.7097-1-13916275206@139.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [GIT PULL] iov_iter: Improve page extraction (pin or just list)
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, David Howells <dhowells@redhat.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <040ed7a7-3f4d-dab7-5a49-1cd9933c5445@redhat.com>
+ <e68c5cab-c3a6-1872-98fa-9f909f23be79@nvidia.com>
+ <3351099.1675077249@warthog.procyon.org.uk>
+ <fd0003a0-a133-3daf-891c-ba7deafad768@kernel.dk>
+ <f57ee72f-38e9-6afa-182f-2794638eadcb@kernel.dk>
+ <e8480b18-08af-d101-a721-50d213893492@kernel.dk>
+ <3520518.1675116740@warthog.procyon.org.uk>
+ <f392399b-a4c4-2251-e12b-e89fff351c4d@kernel.dk>
+ <3791872.1675172490@warthog.procyon.org.uk>
+ <88d50843-9aa6-7930-433d-9b488857dc14@redhat.com>
+ <f2fb6cc5-ff95-ca51-b377-5e4bd239d5e8@kernel.dk>
+ <7f8f2d0f-4bf2-71aa-c356-c78c6b7fd071@redhat.com>
+ <028c959d-e52a-5d08-6ac6-004ecdb3e549@kernel.dk>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <028c959d-e52a-5d08-6ac6-004ecdb3e549@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shenghao,
+On 31.01.23 16:04, Jens Axboe wrote:
+> On 1/31/23 8:02?AM, David Hildenbrand wrote:
+>> On 31.01.23 15:50, Jens Axboe wrote:
+>>> On 1/31/23 6:48?AM, David Hildenbrand wrote:
+>>>> On 31.01.23 14:41, David Howells wrote:
+>>>>> David Hildenbrand <david@redhat.com> wrote:
+>>>>>
+>>>>>>>> percpu counters maybe - add them up at the point of viewing?
+>>>>>>> They are percpu, see my last email. But for every 108 changes (on
+>>>>>>> my system), they will do two atomic_long_adds(). So not very
+>>>>>>> useful for anything but low frequency modifications.
+>>>>>>>
+>>>>>>
+>>>>>> Can we just treat the whole acquired/released accounting as a debug mechanism
+>>>>>> to detect missing releases and do it only for debug kernels?
+>>>>>>
+>>>>>>
+>>>>>> The pcpu counter is an s8, so we have to flush on a regular basis and cannot
+>>>>>> really defer it any longer ... but I'm curious if it would be of any help to
+>>>>>> only have a single PINNED counter that goes into both directions (inc/dec on
+>>>>>> pin/release), to reduce the flushing.
+>>>>>>
+>>>>>> Of course, once we pin/release more than ~108 pages in one go or we switch
+>>>>>> CPUs frequently it won't be that much of a help ...
+>>>>>
+>>>>> What are the stats actually used for?  Is it just debugging, or do we actually
+>>>>> have users for them (control groups spring to mind)?
+>>>>
+>>>> As it's really just "how many pinning events" vs. "how many unpinning
+>>>> events", I assume it's only for debugging.
+>>>>
+>>>> For example, if you pin the same page twice it would not get accounted
+>>>> as "a single page is pinned".
+>>>
+>>> How about something like the below then? I can send it out as a real
+>>> patch, will run a sanity check on it first but would be surprised if
+>>> this doesn't fix it.
+>>>
+>>>
+>>> diff --git a/mm/gup.c b/mm/gup.c
+>>> index f45a3a5be53a..41abb16286ec 100644
+>>> --- a/mm/gup.c
+>>> +++ b/mm/gup.c
+>>> @@ -168,7 +168,9 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
+>>>             */
+>>>            smp_mb__after_atomic();
+>>>    +#ifdef CONFIG_DEBUG_VM
+>>>            node_stat_mod_folio(folio, NR_FOLL_PIN_ACQUIRED, refs);
+>>> +#endif
+>>>              return folio;
+>>>        }
+>>> @@ -180,7 +182,9 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
+>>>    static void gup_put_folio(struct folio *folio, int refs, unsigned int flags)
+>>>    {
+>>>        if (flags & FOLL_PIN) {
+>>> +#ifdef CONFIG_DEBUG_VM
+>>>            node_stat_mod_folio(folio, NR_FOLL_PIN_RELEASED, refs);
+>>> +#endif
+>>>            if (folio_test_large(folio))
+>>>                atomic_sub(refs, folio_pincount_ptr(folio));
+>>>            else
+>>> @@ -236,8 +240,9 @@ int __must_check try_grab_page(struct page *page, unsigned int flags)
+>>>            } else {
+>>>                folio_ref_add(folio, GUP_PIN_COUNTING_BIAS);
+>>>            }
+>>> -
+>>> +#ifdef CONFIG_DEBUG_VM
+>>>            node_stat_mod_folio(folio, NR_FOLL_PIN_ACQUIRED, 1);
+>>> +#endif
+>>>        }
+>>>          return 0;
+>>>
+>>
+>> We might want to hide the counters completely by defining them only
+>> with CONFIG_DEBUG_VM.
+> 
+> Are all of them debug aids only? If so, yes we should just have
+> node_stat_* under CONFIG_DEBUG_VM.
+> 
 
-Thank you for the patch! Perhaps something to improve:
+Rather only these 2. Smth like:
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on linus/master v6.2-rc6 next-20230131]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230131-212221
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230131131701.7097-1-13916275206%40139.com
-patch subject: [PATCH v2] ASoC: tas2781: Add tas2781 driver.
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230131/202301312243.8wxlGhpo-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d0782b52a1274657458fa49356eacb7c56eddf6b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shenghao-Ding/ASoC-tas2781-Add-tas2781-driver/20230131-212221
-        git checkout d0782b52a1274657458fa49356eacb7c56eddf6b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash sound/soc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> sound/soc/codecs/tas2781-dsp.c:591:5: warning: no previous prototype for 'fw_parse_variable_header_git' [-Wmissing-prototypes]
-     591 | int fw_parse_variable_header_git(struct tasdevice_priv *tas_dev,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/codecs/tas2781-dsp.c:650:5: warning: no previous prototype for 'fw_parse_variable_header_cal' [-Wmissing-prototypes]
-     650 | int fw_parse_variable_header_cal(struct tasdevice_priv *tas_dev,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/fw_parse_variable_header_git +591 sound/soc/codecs/tas2781-dsp.c
-
-   590	
- > 591	int fw_parse_variable_header_git(struct tasdevice_priv *tas_dev,
-   592		const struct firmware *fmw, int offset)
-   593	{
-   594		const unsigned char *buf = fmw->data;
-   595		struct tasdevice_fw *tas_fmw = tas_dev->fmw;
-   596		struct tasdevice_dspfw_hdr *fw_hdr = &(tas_fmw->fw_hdr);
-   597		int i = strlen((char *)&buf[offset]);
-   598	
-   599		i++;
-   600	
-   601		if (offset + i > fmw->size) {
-   602			dev_err(tas_dev->dev, "%s: File Size error\n", __func__);
-   603			offset = -1;
-   604			goto out;
-   605		}
-   606	
-   607		offset  += i;
-   608	
-   609		if (offset + 4 > fmw->size) {
-   610			dev_err(tas_dev->dev, "%s: File Size error\n", __func__);
-   611			offset = -1;
-   612			goto out;
-   613		}
-   614		fw_hdr->device_family = SMS_HTONL(buf[offset], buf[offset + 1],
-   615			buf[offset + 2], buf[offset + 3]);
-   616		if (fw_hdr->device_family != 0) {
-   617			dev_err(tas_dev->dev, "ERROR:%s: not TAS device\n", __func__);
-   618			offset = -1;
-   619			goto out;
-   620		}
-   621		offset  += 4;
-   622		if (offset + 4 > fmw->size) {
-   623			dev_err(tas_dev->dev, "%s: File Size error\n", __func__);
-   624			offset = -1;
-   625			goto out;
-   626		}
-   627		fw_hdr->device = SMS_HTONL(buf[offset], buf[offset + 1],
-   628			buf[offset + 2], buf[offset + 3]);
-   629		if (fw_hdr->device >= TASDEVICE_DSP_TAS_MAX_DEVICE ||
-   630			fw_hdr->device == 6) {
-   631			dev_err(tas_dev->dev, "ERROR:%s: not support device %d\n",
-   632				__func__, fw_hdr->device);
-   633			offset = -1;
-   634			goto out;
-   635		}
-   636		offset  += 4;
-   637		fw_hdr->ndev = deviceNumber[fw_hdr->device];
-   638		if (fw_hdr->ndev != tas_dev->ndev) {
-   639			dev_err(tas_dev->dev,
-   640				"%s: ndev(%u) in dspbin dismatch ndev(%u) in DTS\n",
-   641				__func__, fw_hdr->ndev,
-   642				tas_dev->ndev);
-   643			offset = -1;
-   644		}
-   645	
-   646	out:
-   647		return offset;
-   648	}
-   649	
- > 650	int fw_parse_variable_header_cal(struct tasdevice_priv *tas_dev,
-   651		struct tasdevice_fw *tas_fmw, const struct firmware *fmw, int offset)
-   652	{
-   653		const unsigned char *buf = fmw->data;
-   654		struct tasdevice_dspfw_hdr *fw_hdr = &(tas_fmw->fw_hdr);
-   655		int i = strlen((char *)&buf[offset]);
-   656	
-   657		i++;
-   658	
-   659		if (offset + i > fmw->size) {
-   660			dev_err(tas_dev->dev, "%s: File Size error\n", __func__);
-   661			offset = -1;
-   662			goto out;
-   663		}
-   664	
-   665		offset  += i;
-   666	
-   667		if (offset + 4 > fmw->size) {
-   668			dev_err(tas_dev->dev, "%s: mnDeviceFamily error\n", __func__);
-   669			offset = -1;
-   670			goto out;
-   671		}
-   672		fw_hdr->device_family = SMS_HTONL(buf[offset], buf[offset + 1],
-   673			buf[offset + 2], buf[offset + 3]);
-   674		if (fw_hdr->device_family != 0) {
-   675			dev_err(tas_dev->dev, "ERROR:%s: not TAS device\n", __func__);
-   676			offset = -1;
-   677			goto out;
-   678		}
-   679		offset  += 4;
-   680		if (offset + 4 > fmw->size) {
-   681			dev_err(tas_dev->dev, "%s: mnDevice error\n", __func__);
-   682			offset = -1;
-   683			goto out;
-   684		}
-   685		fw_hdr->device = SMS_HTONL(buf[offset], buf[offset + 1],
-   686			buf[offset + 2], buf[offset + 3]);
-   687		if (fw_hdr->device >= TASDEVICE_DSP_TAS_MAX_DEVICE ||
-   688			fw_hdr->device == 6) {
-   689			dev_err(tas_dev->dev, "ERROR:%s: not support device %d\n",
-   690				__func__, fw_hdr->device);
-   691			offset = -1;
-   692			goto out;
-   693		}
-   694		offset  += 4;
-   695		fw_hdr->ndev = deviceNumber[fw_hdr->device];
-   696		if (fw_hdr->ndev != 1) {
-   697			dev_err(tas_dev->dev,
-   698				"%s: calbin must be 1, but currently ndev(%u)\n",
-   699				__func__, fw_hdr->ndev);
-   700			offset = -1;
-   701		}
-   702	
-   703	out:
-   704		return offset;
-   705	}
-   706	
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 815c7c2edf45..a526964b65ce 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -196,8 +196,10 @@ enum node_stat_item {
+  	NR_WRITTEN,		/* page writings since bootup */
+  	NR_THROTTLED_WRITTEN,	/* NR_WRITTEN while reclaim throttled */
+  	NR_KERNEL_MISC_RECLAIMABLE,	/* reclaimable non-slab kernel pages */
++#ifdef CONFIG_DEBUG_VM
+  	NR_FOLL_PIN_ACQUIRED,	/* via: pin_user_page(), gup flag: FOLL_PIN */
+  	NR_FOLL_PIN_RELEASED,	/* pages returned via unpin_user_page() */
++#endif
+  	NR_KERNEL_STACK_KB,	/* measured in KiB */
+  #if IS_ENABLED(CONFIG_SHADOW_CALL_STACK)
+  	NR_KERNEL_SCS_KB,	/* measured in KiB */
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index 1ea6a5ce1c41..5cbd9a1924bf 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1227,8 +1227,10 @@ const char * const vmstat_text[] = {
+  	"nr_written",
+  	"nr_throttled_written",
+  	"nr_kernel_misc_reclaimable",
++#ifdef CONFIG_DEBUG_VM
+  	"nr_foll_pin_acquired",
+  	"nr_foll_pin_released",
++#endif
+  	"nr_kernel_stack",
+  #if IS_ENABLED(CONFIG_SHADOW_CALL_STACK)
+  	"nr_shadow_call_stack",
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+
+David / dhildenb
+
