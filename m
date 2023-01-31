@@ -2,89 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4937682604
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF455682620
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:04:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjAaICP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 03:02:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S230112AbjAaIEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 03:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjAaICG (ORCPT
+        with ESMTP id S230390AbjAaIEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:02:06 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A7441B6D;
-        Tue, 31 Jan 2023 00:02:04 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id BA501682646;
-        Tue, 31 Jan 2023 16:02:01 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 31 Jan
- 2023 16:02:01 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 31 Jan
- 2023 16:02:00 +0800
-Message-ID: <fdad1eaf-bba5-0706-e3bf-9a4869ea4e92@starfivetech.com>
-Date:   Tue, 31 Jan 2023 16:02:00 +0800
+        Tue, 31 Jan 2023 03:04:44 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEF3769D
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:04:43 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id bp27-20020a056e02349b00b00310f4e56eebso3286532ilb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:04:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p4MQa1yQG6X9/QC2Xjtit3PZhQKPbwEt6l5OBshwjLE=;
+        b=qd1/FWsXgkwMDsTnM2L47OWRuCZe0yBpkVhgKrmgS6imJIx25P/kHgecpckx5l+K9k
+         Lx25eeiEWS0t60HvSY9H4gBMeov86Bq1pbOyO6zTZo2Y8nXOnNhcf+8n7NvdT7yBh4Wa
+         K+ZgynYtTtj6hzJXIQxf7JKz6l22cytenFCurAlq/Iy2yfBYeDB2xMM1iaYv2JAXKkNg
+         zTVAX/nh5c075CLnWzIPp844F6Q20sw4+DMjysG5evAqtL8VBz2mfHgDsLU3Zk4yBe+3
+         e4fEzo5r2IFh9NT1UjLtDkve4NsCJfiCWUfUYjZCsWl5rmkNDSEMmxyxOGhAEU1+BYdu
+         G6Kw==
+X-Gm-Message-State: AO0yUKVDiMlv1CKuM9L2ypY5f2uubpbbC44a6XHEIRWazeYHHSbtQxov
+        mLDLAg/M1UT3Sh4/xwAvCYHA/7S226y0KlQd5tZCD87n7byz
+X-Google-Smtp-Source: AK7set9emcv9i7GW6it6Xabrs4q3bhw9NAy/c62EkoJrHJztrnZLoND+Jo+/W8yXFH63nx+IuYgdQBbfY1Kn8GK16/uCCAiY0WXn
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 3/3] riscv: dts: starfive: Add mmc node
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221227122227.460921-1-william.qiu@starfivetech.com>
- <20221227122227.460921-4-william.qiu@starfivetech.com>
- <Y8mPRQnGPpAhpu8C@spud>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <Y8mPRQnGPpAhpu8C@spud>
+X-Received: by 2002:a02:b904:0:b0:3b1:92c0:ac28 with SMTP id
+ v4-20020a02b904000000b003b192c0ac28mr1373084jan.74.1675152282617; Tue, 31 Jan
+ 2023 00:04:42 -0800 (PST)
+Date:   Tue, 31 Jan 2023 00:04:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c0128805f38ac843@google.com>
+Subject: [syzbot] KMSAN: uninit-value in kalmia_send_init_packet
+From:   syzbot <syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    41c66f470616 kmsan: silence -Wmissing-prototypes warnings
+git tree:       https://github.com/google/kmsan.git master
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=122f123e480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a9a22da1efde3af6
+dashboard link: https://syzkaller.appspot.com/bug?extid=cd80c5ef5121bfe85b55
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=148c93e1480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=133524d1480000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/69d5eef879e6/disk-41c66f47.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e91a447c44a2/vmlinux-41c66f47.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c549edb9c410/bzImage-41c66f47.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cd80c5ef5121bfe85b55@syzkaller.appspotmail.com
+
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+usb 1-1: config 0 descriptor??
+=====================================================
+BUG: KMSAN: uninit-value in kalmia_send_init_packet+0x56f/0x5f0 drivers/net/usb/kalmia.c:67
+ kalmia_send_init_packet+0x56f/0x5f0 drivers/net/usb/kalmia.c:67
+ kalmia_init_and_get_ethernet_addr drivers/net/usb/kalmia.c:113 [inline]
+ kalmia_bind+0x2fd/0x5a0 drivers/net/usb/kalmia.c:148
+ usbnet_probe+0xf8e/0x3de0 drivers/net/usb/usbnet.c:1745
+ usb_probe_interface+0xc4b/0x11f0 drivers/usb/core/driver.c:396
+ really_probe+0x506/0x1000 drivers/base/dd.c:639
+ __driver_probe_device+0x2fa/0x3d0 drivers/base/dd.c:778
+ driver_probe_device+0x72/0x7a0 drivers/base/dd.c:808
+ __device_attach_driver+0x548/0x8e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x1fc/0x360 drivers/base/bus.c:427
+ __device_attach+0x42a/0x720 drivers/base/dd.c:1008
+ device_initial_probe+0x2e/0x40 drivers/base/dd.c:1057
+ bus_probe_device+0x13c/0x3b0 drivers/base/bus.c:487
+ device_add+0x1d4b/0x26c0 drivers/base/core.c:3479
+ usb_set_configuration+0x3157/0x3860 drivers/usb/core/message.c:2171
+ usb_generic_driver_probe+0x105/0x290 drivers/usb/core/generic.c:238
+ usb_probe_device+0x288/0x490 drivers/usb/core/driver.c:293
+ really_probe+0x506/0x1000 drivers/base/dd.c:639
+ __driver_probe_device+0x2fa/0x3d0 drivers/base/dd.c:778
+ driver_probe_device+0x72/0x7a0 drivers/base/dd.c:808
+ __device_attach_driver+0x548/0x8e0 drivers/base/dd.c:936
+ bus_for_each_drv+0x1fc/0x360 drivers/base/bus.c:427
+ __device_attach+0x42a/0x720 drivers/base/dd.c:1008
+ device_initial_probe+0x2e/0x40 drivers/base/dd.c:1057
+ bus_probe_device+0x13c/0x3b0 drivers/base/bus.c:487
+ device_add+0x1d4b/0x26c0 drivers/base/core.c:3479
+ usb_new_device+0x17ac/0x2370 drivers/usb/core/hub.c:2576
+ hub_port_connect drivers/usb/core/hub.c:5408 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5552 [inline]
+ port_event drivers/usb/core/hub.c:5712 [inline]
+ hub_event+0x56f3/0x7660 drivers/usb/core/hub.c:5794
+ process_one_work+0xb27/0x13e0 kernel/workqueue.c:2289
+ worker_thread+0x1076/0x1d60 kernel/workqueue.c:2436
+ kthread+0x31b/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+Local variable act_len created at:
+ kalmia_send_init_packet+0x4e/0x5f0 drivers/net/usb/kalmia.c:64
+ kalmia_init_and_get_ethernet_addr drivers/net/usb/kalmia.c:113 [inline]
+ kalmia_bind+0x2fd/0x5a0 drivers/net/usb/kalmia.c:148
+
+CPU: 1 PID: 4675 Comm: kworker/1:3 Not tainted 6.2.0-rc5-syzkaller-80200-g41c66f470616 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Workqueue: usb_hub_wq hub_event
+=====================================================
 
 
-On 2023/1/20 2:43, Conor Dooley wrote:
-> Hey William,
-> 
-> On Tue, Dec 27, 2022 at 08:22:27PM +0800, William Qiu wrote:
->> This adds the mmc node for the StarFive JH7110 SoC.
->> Set sdioo node to emmc and set sdio1 node to sd.
->> 
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-v2.dts         | 25 ++++++++++++
-> 
-> FYI, this file does not exist in the v3 Devicetree patchset sent by Hal
-> Feng:
-> https://lore.kernel.org/linux-riscv/20221220011247.35560-1-hal.feng@starfivetech.com
-> 
-> Would you make sure that future revisions take into account that there
-> is now a jh7110-starfive-visionfive-2.dtsi file instead?
-> 
-> Thanks,
-> Conor.
-> 
-Hi Conor,
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-I did it based on v2 and will rebase to v3 in the next version.
-
-Best Regards
-William Qiu
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
