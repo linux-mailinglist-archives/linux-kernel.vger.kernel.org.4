@@ -2,306 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC5D6838F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74EFE6838FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjAaV5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        id S230177AbjAaWA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjAaV5X (ORCPT
+        with ESMTP id S229539AbjAaWA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:57:23 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3A147401
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:57:22 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id o187so3494845ybg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=gmJtAREyo8ivJ4Kqeq2bHJyT3OX19Q3/5Agieb/eCv4=;
-        b=FzV5ad/w9oI7JUyKjIOehmdS6FJzcwhMWrQLXXTbMOvALvL5lkZBmWdBxTPlEf5qX2
-         bs2nbOtWaXdg+pvv24rRWzsueuY43fa+LaIY2eADp0ic+7sgntGa/OA6A/X+oxleng59
-         In0F6AXJyJPvHlbeDvk8MVSXfmfJqv5xyg8JyJh9RyXI253ZGWCLnygVvvqo0+98saNK
-         r0okEEu0L+gI81aeeFUYzHUajHLaxA7DKZN/7GLfyLYyxl66vClaT/MYDT6Rfbl88nYJ
-         /ryyp/XgSaf0CNXtWFbxC1iJYqWq7/+wNNjzZPWThW7k67WRRxTJCMBNVdC/JbV+nwei
-         jKLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gmJtAREyo8ivJ4Kqeq2bHJyT3OX19Q3/5Agieb/eCv4=;
-        b=I4m+9V7kgAjWK68A/vOkutXBSB+I6sst9/AeCNITNk7rw444gObJSTfUKyYYXmXuBu
-         aavG7XA+znTMoi8O9Bl83wA0EW+cFzNaRwK5SQaoXPERhooYnBu0z5gp9f07LOZ9WvkU
-         CBaMWW8Xa+NhrvmPpTDnqRDlsuxK0tnacSrNawJc1Jx4+hmYONd0ktXEOMML0ni7JEbI
-         Awqxa463QwOna5lPyEZZb8tBB1amhfcSSY7dM+kZz18RhWg8W0HAbw9zaISuz//76PD+
-         a5BAf5CJW5d/8osxYWdiZwwRKELirBMdbwUWIDk9fbPisLG8ak/O4GsylsnK+hDgI+XM
-         Zp/Q==
-X-Gm-Message-State: AO0yUKUfj/WtNA+IfoxdcvwU2txcANYM530RqhyfPHjrC/DqtcVNNCd9
-        O6D6EPvK7ZsjTQm8Ny+tCMN8f1w36EhCJeGtagQ=
-X-Google-Smtp-Source: AK7set+Ot0MQgVfuUTCbU8X1TkUfaJLbC3fNPaSKAiTBe4drEQA2+P0s8G/TDe4betMcz+jtgywV1axIxu/GtJ9GJw4=
-X-Received: by 2002:a25:7412:0:b0:802:f667:b222 with SMTP id
- p18-20020a257412000000b00802f667b222mr66794ybc.100.1675202241394; Tue, 31 Jan
- 2023 13:57:21 -0800 (PST)
+        Tue, 31 Jan 2023 17:00:56 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2068.outbound.protection.outlook.com [40.107.101.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7F14FAE4;
+        Tue, 31 Jan 2023 14:00:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TRjWwHmSZhqLUMU7EC9sC6kQGxdancMUgXj5mk/aZuWnTideWyA++AN0D9dmxJ7Py4soobA588vh2hJLYT6g+UIU2E9i7FiA0RrV/NlBpaEJ3MF//EnjIprIEiqVq7rimLcJ0LqtfvbW60FgKIGc1wlRVqNwMQz/2yxrMF0r9gZZwjBracpMDlr3nIuTY5vT1AJ3njjXXaKtj3go+gu/8Kl4W3p3lyieZxMkgxWlP6YafPxtKR6fgiLYTuJuWbap5jTui4xDaKqmTkv5s5pU14gz6BIUqLWHvIR0yHiqCk8+hbd9Ixm4gsowaGefAwKW82Dlbq1TSoCUe0sor/7srg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dsVyyYs0e5NyYf3dAMOlv0j3RXmAL7O8D4n09s61MLY=;
+ b=mj3kb2s/0RsXUwmrRzyhtkRR4IBVw91zANlA89wAy1gWGT/ZHCSrQ2Ua+lg6jJJE7csdnZwWz/FBSsgeLJR3Dv6l7F+I3/0sGcRaXfCpWvcUoSaviAPFX4Xwt8q/jqnntvkit7P0UPtL/OC9ZsiwRUoCCKSc5/F87QXNK7PAq2qV/45TbWTidLeVHWiAEogxchT8fcv2NTpNNFYTx1ti/qWqiQwTxskvSsoyWVXo0VjpE3Rd7KYEZXZPU+pJCWM0pr+vNoHBcWA7aBCfCjp+gE4sKJ3dTkmVV63P2XXoaBUC1w8tRQCRSNQUqyKdGPbYMfm+WKsG8/QAcHnEtH0reg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dsVyyYs0e5NyYf3dAMOlv0j3RXmAL7O8D4n09s61MLY=;
+ b=3ixcV8BFXl0YDBe6rv4Jmhxnv5Au8in0AFC2G9T20m4uY/Bf1hhajbrtVIrM/2IWmueSD2xAS8HOasCPEnkGes1utF9qRcPwqHclikY+x3HQJhNl90lw24tGxj2jjGpMSQ7W/+sSP+rbP2h9+LdBRQFTQnGC0rOzfn1jGs+EUdo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB2843.namprd12.prod.outlook.com (2603:10b6:5:48::24) by
+ IA0PR12MB8301.namprd12.prod.outlook.com (2603:10b6:208:40b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
+ 2023 22:00:53 +0000
+Received: from DM6PR12MB2843.namprd12.prod.outlook.com
+ ([fe80::2867:7b21:95a4:aaf]) by DM6PR12MB2843.namprd12.prod.outlook.com
+ ([fe80::2867:7b21:95a4:aaf%2]) with mapi id 15.20.6043.036; Tue, 31 Jan 2023
+ 22:00:53 +0000
+Message-ID: <4c642bd1-5f1c-292e-398f-eed699db590d@amd.com>
+Date:   Wed, 1 Feb 2023 09:00:30 +1100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH RFC v7 52/64] KVM: SVM: Provide support for
+ SNP_GUEST_REQUEST NAE event
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
+Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, hpa@zytor.com, ardb@kernel.org,
+        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, harald@profian.com,
+        Brijesh Singh <brijesh.singh@amd.com>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-53-michael.roth@amd.com>
+ <aab7ed11-870e-579d-9328-4c32d9936392@amd.com>
+ <66039193-14ca-5edb-d8d4-ca732d8c13a6@amd.com>
+ <119075dd-5f3e-a393-f543-6cdfd34cd337@amd.com>
+ <385016f9-e948-4f7f-8db3-24a0c0543b3d@amd.com>
+ <55e5f02f-4c1f-e6b0-59ba-07abc4d3408f@amd.com>
+ <81037a58-6b5c-cde4-79fe-3686d9b8a551@amd.com>
+ <b0baa6ee-ea6d-3a30-d5fb-3ec395896750@amd.com>
+ <dbcb6666-270a-4867-6de7-73812d32fd8c@amd.com>
+ <7fb25176-3752-1be3-66d4-a7f5a0e1617a@amd.com>
+ <682c0bf9-ccf7-9660-21fe-925ef63c5fbb@amd.com>
+From:   Alexey Kardashevskiy <aik@amd.com>
+In-Reply-To: <682c0bf9-ccf7-9660-21fe-925ef63c5fbb@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SYBPR01CA0152.ausprd01.prod.outlook.com
+ (2603:10c6:10:d::20) To DM6PR12MB2843.namprd12.prod.outlook.com
+ (2603:10b6:5:48::24)
 MIME-Version: 1.0
-References: <20230113004933.2082072-1-daeho43@gmail.com> <ed5f65a7-13bb-581c-cfb5-df5ab30fbc4c@kernel.org>
- <CACOAw_zhVgS84gOXpfZuvptMgsZDhP3QX2EFm=5CoKibB+3V1A@mail.gmail.com>
- <8f1c15a3-d056-7709-af45-fe7cba56463f@kernel.org> <CACOAw_zSaZ5JKFtFSxRK3a5_260AYbeYCMzHL11pD8=mWM91Sw@mail.gmail.com>
- <CACOAw_xjNz2AKa+MMqpVKo4SOC_ptbXY1P3S4tY2g8JneTzkPQ@mail.gmail.com>
-In-Reply-To: <CACOAw_xjNz2AKa+MMqpVKo4SOC_ptbXY1P3S4tY2g8JneTzkPQ@mail.gmail.com>
-From:   Daeho Jeong <daeho43@gmail.com>
-Date:   Tue, 31 Jan 2023 13:57:09 -0800
-Message-ID: <CACOAw_wUOv6GjiErE=m8vVHL8T9wzAe-TQ6=xYaNKWcoMaNDYw@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH] f2fs: synchronize atomic write aborts
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>,
-        syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2843:EE_|IA0PR12MB8301:EE_
+X-MS-Office365-Filtering-Correlation-Id: eef611a4-3402-43e4-cf76-08db03d69ebc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l7GaFX+FatlI/v2eZpaRb6J1Q4S1tZVPZLnjVwzgEHIsErz4nm3BoozMLtxOld6p0ff3+X9Ux8ty2ghh30m0Pug7kl0gxJwkrZNJXOds4BT+myWgGT/i8eeVEyANazcTRLxD45CxE2jM924MgOD4K1EYHVE8WUHoPFF6bc5LOKiC9JkeibT7SWVkLY13i/XmqrtAfcE/LxI55Evcu/mSe8KRd98uLYYe/bx2+3L3ZBDjdJlMZO1ftkAXLCS7bNEZdU/7BUo1YQWkzBnUvq5kcAenm5oSAjRzJL6Ek01Twuk/rQ26JKMs25RBLoYaTzYg6j3uo63Srxj+7Kvn5Z/O2vU+X3v3pQc8a+njIcpD+ySk5+cPCsDMasOHHOmp2T7u7+LOOZYAe2QeoTpIOgBhQfl3SIOi/E7jwBdXki0yr2Iuywh+hAz2z+IfVLhTTX2Cy+Hk1MnUIXzZNKLtT9WN2uKQ4wtZMLhq0hdAt64vc1gRJrrDT8kOOfKfSO5pMg+WkCEQVFbyLdUi9XalmHhO/OiQdfJyJt084DQPw2PiRMVTUyUvNShE7Yn+Csi+4UnpwujNCgyVx4nb5wNIiuUf8Vbdh3yNlj/UY6Po61Y10t7bgtiPhAc63wZ6fYfeIgNLYxFXTeLbKWCDFt0k6QlIejPcTHHChDtaK2rgKRcWc4w2OgN6z6B7XTHYTYjaEouGBUBB0HX83YoeKVOiyCRXpLyx2YQQkJPoloL3ZH4J0nI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2843.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(136003)(396003)(376002)(366004)(451199018)(41300700001)(38100700002)(316002)(8936002)(2616005)(110136005)(7416002)(7406005)(31696002)(5660300002)(2906002)(36756003)(83380400001)(53546011)(4326008)(6506007)(6486002)(6512007)(478600001)(186003)(6666004)(26005)(31686004)(66556008)(8676002)(66946007)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0ovcnAxS2ZCRWlxOExmQVBTZjB2SCtyWkdjS0pZTXVsMGRUVys1aEhrVmNl?=
+ =?utf-8?B?ZzBac2FYYko5LyticHYrS3FzSDYyRkwwMVAvOCtiemVhcUhCcnYxZCtnY09j?=
+ =?utf-8?B?bVhLc3VWcjdMajFScFVnakovcWViWWcwSE4xUXRreXdiQlBpUFc5TGU0ZTlx?=
+ =?utf-8?B?cUcwSjNtc0NGTm94dHpUSm9IcG0vNXdmU2RDNmJwVHlzaEIySnh5dllvSkZn?=
+ =?utf-8?B?dndjRHI4eG1lV2FrbVJGYTd3aDk4MHduaXdWcFpwa2FJQldhcTlaV0ZSRERq?=
+ =?utf-8?B?V2FSSDNobkl1UGtHMnVtSnVyeUVIWWFDSVZyR2toQ1J6NUF4Ry8xaC8xSmZv?=
+ =?utf-8?B?YmNUUHloL0tWSnpNUTgzSmdqWXdOWVZDNzRVWEJCUEc1dGc0bno0eE00SU91?=
+ =?utf-8?B?MWc1VTlOVVg0dmFoN3k0ZnFrRDBJVlh4RHVKUFJFU1RXSlNybnZWcWJXditk?=
+ =?utf-8?B?UjVYbWVWeDQ0aTNDaTJLN0ZqK0gzd1dXanIrRkJSeCs4eU94WmlZWWMvczMr?=
+ =?utf-8?B?ekxpTmVyU2g4ZGR0aXNHTlpQRHpDYms4d0VjcjVhQWVtR0dYUm9uNzM1cE1F?=
+ =?utf-8?B?RS9wUS9UdG9LOWdGK05OYWFDZlh5NEp2S0lDVmZGdEQwbG5teW9OTjFFUCtF?=
+ =?utf-8?B?a2U3ZWg3MUdPY1lRM3FkakZjZlVtM04xeVM2dnRPSmpFYVpuQjZUUUw2Q2tT?=
+ =?utf-8?B?YTVVZGwyTFpCWWpoMVMzMzVSS1R6N0N5Nm5rMFd5TFd5RXg0dEpFSi9Ya2VG?=
+ =?utf-8?B?WVlpQ2ZwUjRSTm5YWUJIRk44UTczN3d2VEl0REdkUktaelRvNWE0ZFI3U3gw?=
+ =?utf-8?B?SWZaZUlvSUM4ZEhvZEN3dGhIWUhzNmZIT1VubnhlcHBqR2VwY2d4WGlGeW5Q?=
+ =?utf-8?B?ME9GbzNWYk1UZ1diTW1KdFk3YTZ0Z0ZFblkwOEMxdzBmV1FGMGlkejVBR3c3?=
+ =?utf-8?B?dUVuQjdiRlZIeFRqNkhjNDBrY3MwWnBUUzVuTjBCNjh6c3o5YkVEZS9vbFdR?=
+ =?utf-8?B?MXhOM2FMajhnWnJiQWVmelJLNGkydWh1dEJTQ2RWRC9rNzdud1ZxUmtUSHRM?=
+ =?utf-8?B?ZW1PRFJKMk8zNGpPSitBZkZQMUZlWU9Ob1Vic0NsbTFGVVpqdlhZWnpuWm9x?=
+ =?utf-8?B?TzFQYmYrOUZ1OFlpT3daNGdLK1FlTlkyVTArZEhkRHJjZnZleVZ6ZmZWSFI3?=
+ =?utf-8?B?S2JxTWVNODVUaE5vS2pTRVdHSzF3UVdtamtTSXNmSUVyM0IzZjBuODg5MVFJ?=
+ =?utf-8?B?WWJSaDBZWnJEQXc0TW5LblVVQ1c3NVlwZEttSWoxMk5VZXEyMlZQbGFtdjl1?=
+ =?utf-8?B?T2RSRzhsanpnQ2VURG5MaE54WGI2eTBiU0tnSkpTWXlyQmZyNFBLME55MUdo?=
+ =?utf-8?B?TUVCNXNUNHdwRXdJc3RnYi9KY1VLKy94WXNrUlA5ZGNQdnZSZnlhaHVxVndW?=
+ =?utf-8?B?L3JGNXY2RkxscldjaVhlcXducUJWdXhrWmRxZDdjRVdFclhEMm85WElubGxk?=
+ =?utf-8?B?UDh4SmptT2tXT0JEc1NnVmJnODRMVzdsbi9ORE5DUEUraTFIOURNWFk5M2NL?=
+ =?utf-8?B?YmVBU2t1VEwwZEFUUHU0dFhxdFB1cTlDN0xOelFOQ1gvWUdCbWFOWFl1aEVN?=
+ =?utf-8?B?dWF4UnJVVW42UStKRElwRnNLWTFOdTVNMkxzKzNBekJHbTVGdzJQOVBsMnFt?=
+ =?utf-8?B?UGdKa0dubzlDNGJsUXBNeEdQcmxJSGVhVjczZzFJNVp4YVZPRVRMN1ZPNVQ3?=
+ =?utf-8?B?SXRUZzNiUlBnK1k2WXRkZlJuVG9QQ3QvWktsNW00U2JMTEdrdXR2cGhPck9M?=
+ =?utf-8?B?S1VmVVo0WGU0OHE2cU1uc0J4cUdYdHZ6WlRLWjMrazJtbWxzUkt1SzdIbkIv?=
+ =?utf-8?B?eDRpNTZqa29NNnJlRzNTUy9ETUJpcWs1UUpSaTAxMHNNUnNkRUx6VU9EeCt0?=
+ =?utf-8?B?Ni9yVDhrSWEvRkJhMnhnU3NQRmc0YWR1ODJldFhla0kvZUZGNHc2a0JneEE3?=
+ =?utf-8?B?VWJEUC96SDRwbGN4TjhlYkNGZG9qelUrLzA1SDlIczFVMTVSZFhyM0d2L1hN?=
+ =?utf-8?B?S0JvR3dMdFdXeHREUWNCME84elVXaXFhek9yei9LeStrYVRkcWdjNVlubWRU?=
+ =?utf-8?Q?EtbPbpLsfoDFomdSXG0uq+d/w?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eef611a4-3402-43e4-cf76-08db03d69ebc
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2843.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 22:00:52.7396
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fGJMagJtsEV2Ag0zFjabhHD1ib9xPeZEudN+5SjK9FIZA82cKMh57FE8YgoJ1pcZ2eMWdi26wpl53resfT+RKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8301
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 1:38 PM Daeho Jeong <daeho43@gmail.com> wrote:
->
-> On Tue, Jan 31, 2023 at 11:13 AM Daeho Jeong <daeho43@gmail.com> wrote:
-> >
-> > Hi Chao,
-> >
-> > On Tue, Jan 31, 2023 at 3:37 AM Chao Yu <chao@kernel.org> wrote:
-> > >
-> > > Hi Daeho,
-> > >
-> > > On 2023/1/31 0:34, Daeho Jeong wrote:
-> > > > Hi Chao,
-> > > >
-> > > > I read your patch series now and I like it.
-> > >
-> > > Thank you for checking the patches. :)
-> > >
-> > > > However, how about a race condition between start_atomic_write and
-> > > > abort_atomic_write?
-> > >
-> > > Yup, I noticed that issue, I guess we can avoid this race condition by
-> > > covering these two flows w/ i_atomic_sem.
-> > >
-> > > > abort_atomic_write is called without inode_lock in closing filp scenarios.
-> > > > What do you think about this?
-> > >
-> > > I'm fine w/ your change as it's more clean, but it's better to drop cow_inode's
-> > > page cache if atomic_write is committed or aborted to avoid caching obsolete page?
-> >
-> > It's better to put that part in f2fs_abort_atomic_write().
-> > On top of that, maybe, we should move
-> > f2fs_do_truncate_blocks(fi->cow_inode, 0, true) part from
-> > f2fs_ioc_start_atomic_write() to f2fs_abort_atomic_write(), too.
->
-> Oh, we shouldn't touch the f2fs_do_truncate_blocks() part, since there
-> might be some left writeback after aborting atomic write.
-> Plz. review it related to the timing of calling truncate_inode_pages_final().
 
-Looks like the scenario becomes too complicated if I think about more
-than one writer's scenario.
-How about we check writecount in commit_atomic_write ioctl and return
-EBUSY when it's not only one writer?
-In that case, we can make the scenario simple and effective, and we
-can release all the resources in abort_atomic_write().
 
->
-> >
-> > Thanks,
-> >
-> > >
-> > > Thanks,
-> > >
-> > > >
-> > > > Thanks,
-> > > >
-> > > >
-> > > > On Fri, Jan 27, 2023 at 6:07 PM Chao Yu <chao@kernel.org> wrote:
-> > > >>
-> > > >> Hi Daeho, Jaegeuk,
-> > > >>
-> > > >> Please take a look at patchset in below link:
-> > > >>
-> > > >> https://lore.kernel.org/linux-f2fs-devel/20230109034453.490176-1-chao@kernel.org/T/#t
-> > > >>
-> > > >> In PATCH 4/5, I'm trying to fix the same issue w/ alternative way, let me
-> > > >> know your preference. :)
-> > > >>
-> > > >> One comment as below.
-> > > >>
-> > > >> On 2023/1/13 8:49, Daeho Jeong wrote:
-> > > >>> From: Daeho Jeong <daehojeong@google.com>
-> > > >>>
-> > > >>> To fix a race condition between atomic write aborts, I use the inode
-> > > >>> lock and make COW inode to be re-usable thoroughout the whole
-> > > >>> atomic file inode lifetime.
-> > > >>>
-> > > >>> Reported-by: syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
-> > > >>> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
-> > > >>> Signed-off-by: Daeho Jeong <daehojeong@google.com>
-> > > >>> ---
-> > > >>>    fs/f2fs/file.c    | 43 ++++++++++++++++++++++++++++---------------
-> > > >>>    fs/f2fs/inode.c   | 11 +++++++++--
-> > > >>>    fs/f2fs/segment.c |  3 ---
-> > > >>>    fs/f2fs/super.c   |  2 --
-> > > >>>    4 files changed, 37 insertions(+), 22 deletions(-)
-> > > >>>
-> > > >>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> > > >>> index ecbc8c135b49..ff072a9ed258 100644
-> > > >>> --- a/fs/f2fs/file.c
-> > > >>> +++ b/fs/f2fs/file.c
-> > > >>> @@ -1866,7 +1866,10 @@ static int f2fs_release_file(struct inode *inode, struct file *filp)
-> > > >>>                        atomic_read(&inode->i_writecount) != 1)
-> > > >>>                return 0;
-> > > >>>
-> > > >>> +     inode_lock(inode);
-> > > >>>        f2fs_abort_atomic_write(inode, true);
-> > > >>> +     inode_unlock(inode);
-> > > >>> +
-> > > >>>        return 0;
-> > > >>>    }
-> > > >>>
-> > > >>> @@ -1880,8 +1883,11 @@ static int f2fs_file_flush(struct file *file, fl_owner_t id)
-> > > >>>         * until all the writers close its file. Since this should be done
-> > > >>>         * before dropping file lock, it needs to do in ->flush.
-> > > >>>         */
-> > > >>> -     if (F2FS_I(inode)->atomic_write_task == current)
-> > > >>> +     if (F2FS_I(inode)->atomic_write_task == current) {
-> > > >>> +             inode_lock(inode);
-> > > >>>                f2fs_abort_atomic_write(inode, true);
-> > > >>> +             inode_unlock(inode);
-> > > >>> +     }
-> > > >>>        return 0;
-> > > >>>    }
-> > > >>>
-> > > >>> @@ -2087,19 +2093,28 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
-> > > >>>                goto out;
-> > > >>>        }
-> > > >>>
-> > > >>> -     /* Create a COW inode for atomic write */
-> > > >>> -     pinode = f2fs_iget(inode->i_sb, fi->i_pino);
-> > > >>> -     if (IS_ERR(pinode)) {
-> > > >>> -             f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> > > >>> -             ret = PTR_ERR(pinode);
-> > > >>> -             goto out;
-> > > >>> -     }
-> > > >>> +     /* Check if the inode already has a COW inode */
-> > > >>> +     if (fi->cow_inode == NULL) {
-> > > >>> +             /* Create a COW inode for atomic write */
-> > > >>> +             pinode = f2fs_iget(inode->i_sb, fi->i_pino);
-> > > >>> +             if (IS_ERR(pinode)) {
-> > > >>> +                     f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> > > >>> +                     ret = PTR_ERR(pinode);
-> > > >>> +                     goto out;
-> > > >>> +             }
-> > > >>>
-> > > >>> -     ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
-> > > >>> -     iput(pinode);
-> > > >>> -     if (ret) {
-> > > >>> -             f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> > > >>> -             goto out;
-> > > >>> +             ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
-> > > >>> +             iput(pinode);
-> > > >>> +             if (ret) {
-> > > >>> +                     f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> > > >>> +                     goto out;
-> > > >>> +             }
-> > > >>> +
-> > > >>> +             set_inode_flag(fi->cow_inode, FI_COW_FILE);
-> > > >>> +             clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
-> > > >>> +     } else {
-> > > >>> +             /* Reuse the already created COW inode */
-> > > >>> +             f2fs_do_truncate_blocks(fi->cow_inode, 0, true);
-> > > >>>        }
-> > > >>>
-> > > >>>        f2fs_write_inode(inode, NULL);
-> > > >>> @@ -2107,8 +2122,6 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
-> > > >>>        stat_inc_atomic_inode(inode);
-> > > >>>
-> > > >>>        set_inode_flag(inode, FI_ATOMIC_FILE);
-> > > >>> -     set_inode_flag(fi->cow_inode, FI_COW_FILE);
-> > > >>> -     clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
-> > > >>>
-> > > >>>        isize = i_size_read(inode);
-> > > >>>        fi->original_i_size = isize;
-> > > >>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> > > >>> index ff6cf66ed46b..4921f7209e28 100644
-> > > >>> --- a/fs/f2fs/inode.c
-> > > >>> +++ b/fs/f2fs/inode.c
-> > > >>> @@ -766,11 +766,18 @@ int f2fs_write_inode(struct inode *inode, struct writeback_control *wbc)
-> > > >>>    void f2fs_evict_inode(struct inode *inode)
-> > > >>>    {
-> > > >>>        struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-> > > >>> -     nid_t xnid = F2FS_I(inode)->i_xattr_nid;
-> > > >>> +     struct f2fs_inode_info *fi = F2FS_I(inode);
-> > > >>> +     nid_t xnid = fi->i_xattr_nid;
-> > > >>>        int err = 0;
-> > > >>>
-> > > >>>        f2fs_abort_atomic_write(inode, true);
-> > > >>>
-> > > >>> +     if (fi->cow_inode) {
-> > > >>> +             clear_inode_flag(fi->cow_inode, FI_COW_FILE);
-> > > >>> +             iput(fi->cow_inode);
-> > > >>> +             fi->cow_inode = NULL;
-> > > >>> +     }
-> > > >>> +
-> > > >>>        trace_f2fs_evict_inode(inode);
-> > > >>>        truncate_inode_pages_final(&inode->i_data);
-> > > >>>
-> > > >>> @@ -857,7 +864,7 @@ void f2fs_evict_inode(struct inode *inode)
-> > > >>>        stat_dec_inline_inode(inode);
-> > > >>>        stat_dec_compr_inode(inode);
-> > > >>>        stat_sub_compr_blocks(inode,
-> > > >>> -                     atomic_read(&F2FS_I(inode)->i_compr_blocks));
-> > > >>> +                     atomic_read(&fi->i_compr_blocks));
-> > > >>>
-> > > >>>        if (likely(!f2fs_cp_error(sbi) &&
-> > > >>>                                !is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
-> > > >>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> > > >>> index ae3c4e5474ef..536d7c674b04 100644
-> > > >>> --- a/fs/f2fs/segment.c
-> > > >>> +++ b/fs/f2fs/segment.c
-> > > >>> @@ -192,9 +192,6 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
-> > > >>>        if (!f2fs_is_atomic_file(inode))
-> > > >>>                return;
-> > > >>>
-> > > >>> -     clear_inode_flag(fi->cow_inode, FI_COW_FILE);
-> > > >>> -     iput(fi->cow_inode);
-> > > >>> -     fi->cow_inode = NULL;
-> > > >>>        release_atomic_write_cnt(inode);
-> > > >>>        clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
-> > > >>>        clear_inode_flag(inode, FI_ATOMIC_REPLACE);
-> > > >>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> > > >>> index 1f812b9ce985..10463f084d30 100644
-> > > >>> --- a/fs/f2fs/super.c
-> > > >>> +++ b/fs/f2fs/super.c
-> > > >>> @@ -1430,8 +1430,6 @@ static int f2fs_drop_inode(struct inode *inode)
-> > > >>>                        atomic_inc(&inode->i_count);
-> > > >>>                        spin_unlock(&inode->i_lock);
-> > > >>>
-> > > >>> -                     f2fs_abort_atomic_write(inode, true);
-> > > >>
-> > > >> In order to avoid caching obsolete page of cow_inode, how about truncating
-> > > >> them here?
-> > > >>
-> > > >> if (f2fs_is_atomic_file() && cow_inode)
-> > > >>          truncate_inode_pages_final(&cow_inode->i_data);
-> > > >>
-> > > >> Thanks,
-> > > >>
-> > > >>> -
-> > > >>>                        /* should remain fi->extent_tree for writepage */
-> > > >>>                        f2fs_destroy_extent_node(inode);
-> > > >>>
+On 01/02/2023 08:21, Tom Lendacky wrote:
+> On 1/31/23 14:21, Alexey Kardashevskiy wrote:
+>> On 01/02/2023 03:23, Tom Lendacky wrote:
+>>> On 1/30/23 19:54, Alexey Kardashevskiy wrote:
+>>>> On 11/1/23 13:01, Kalra, Ashish wrote:
+>>>>> On 1/10/2023 6:48 PM, Alexey Kardashevskiy wrote:
+>>>>>> On 10/1/23 19:33, Kalra, Ashish wrote:
+>>>>>>> On 1/9/2023 8:28 PM, Alexey Kardashevskiy wrote:
+>>>>>>>> On 10/1/23 10:41, Kalra, Ashish wrote:
+>>>>>>>>> On 1/8/2023 9:33 PM, Alexey Kardashevskiy wrote:
+>>>>>>>>>> On 15/12/22 06:40, Michael Roth wrote:
+>>>>>>>>>>> From: Brijesh Singh <brijesh.singh@amd.com>
+>>>>>>>>>>>
+>>>>>>>>>>> Version 2 of GHCB specification added the support for two SNP 
+>>>>>>>>>>> Guest
+>>>>>>>>>>> Request Message NAE events. The events allows for an SEV-SNP 
+>>>>>>>>>>> guest to
+>>>>>>>>>>> make request to the SEV-SNP firmware through hypervisor using 
+>>>>>>>>>>> the
+>>>>>>>>>>> SNP_GUEST_REQUEST API define in the SEV-SNP firmware 
+>>>>>>>>>>> specification.
+>>>>>>>>>>>
+>>>>>>>>>>> The SNP_EXT_GUEST_REQUEST is similar to SNP_GUEST_REQUEST 
+>>>>>>>>>>> with the
+>>>>>>>>>>> difference of an additional certificate blob that can be 
+>>>>>>>>>>> passed through
+>>>>>>>>>>> the SNP_SET_CONFIG ioctl defined in the CCP driver. The CCP 
+>>>>>>>>>>> driver
+>>>>>>>>>>> provides snp_guest_ext_guest_request() that is used by the 
+>>>>>>>>>>> KVM to get
+>>>>>>>>>>> both the report and certificate data at once.
+>>>>>>>>>>>
+>>>>>>>>>>> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+>>>>>>>>>>> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+>>>>>>>>>>> Signed-off-by: Michael Roth <michael.roth@amd.com>
+>>>>>>>>>>> ---
+> 
+>>>>
+>>>> And GET ioctls() return what SET passed on (not something the 
+>>>> firware returned, for example), what is ever going to call SET? The 
+>>>> userspace can 
+>>>
+>>> As stated above, the firmware already has the information needed to 
+>>> sign the attestation report. The SET IOCTL is used to supply the 
+>>> certficates to the guest for validation of the attestation report.
+>>
+>>
+>> Does the firmware have to have all certificates beforehand? How does 
+>> the firmware choose which certificate to use for a specific VM, or 
+>> just signs all reports with all certificates it knows?
+> 
+>  From the SNP API spec, the firmware uses the VCEK, which is derived 
+> from chip-unique secrets, to sign the attestation report.
+
+Does the firmware derive it? How does the guest gets to know it?
+(forgive me my ignorance)
+
+
+> The guest can then use the returned VCEK certificate, the ASK 
+> certificate and ARK certificate from the extended guest request to 
+> validate the attestation report.
+
+>>
+>>
+>>> This reduces the traffic and complexity of the guest requesting the 
+>>> certficates from the KDS.
+>>
+>> Guest <-> HV interaction is clear, I am only wondering about HV <-> FW.
+> 
+> I'm not sure what you mean here. The HV doesn't put the signing key in 
+> the firmware, it is derived.
+
+
+Those ioctls() are in the HV and they take certificates which then get 
+sent to the guest but not to the firmware. The firmware signs a report 
+with a key and the guest needs another half of it to verify the report. 
+Sadly I do not know cryptography enough.
+
+
+
+-- 
+Alexey
