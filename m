@@ -2,106 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29E7682D59
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57439682D63
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjAaNI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        id S232004AbjAaNJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbjAaNI4 (ORCPT
+        with ESMTP id S232040AbjAaNJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:08:56 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962138A73;
-        Tue, 31 Jan 2023 05:08:49 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-142b72a728fso19195859fac.9;
-        Tue, 31 Jan 2023 05:08:49 -0800 (PST)
+        Tue, 31 Jan 2023 08:09:06 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA6C126D7
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:09:03 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id ud5so41449296ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:09:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5vxGDcuE5ADlwFzUbFDPZd16x22UTWZptpHGJiMgcac=;
-        b=GGhSlkCqG9nBEEeAex6K3a7EAFyUp4RwNFkYdvohfBEglz0IMFuA4wsRJ0mgiXIQcV
-         nE24AmBFn71YXufi6C16QS4Fws0FKEFNvxKK7H/xJjUXfhA5epOfsPPY2MBMDLbmVkq8
-         5lmgHx35n38FeiPAxo4UC1aGpqbSjZk36hJrx7gt01BY0vizqG4ypXEDGQO22QFSGpD1
-         35M/onbqoNIzo5ipXjeiwJby4xL1+wXcD75KhybgVIGHu2YPYlaHSKamlCejqKZvF5F3
-         HVYupofiLDWB77fbQ1Z3K7scA6ArjCaheCTYgxZmiZK6q4qiPo3fyZEaSaEaGRMx/Fhz
-         A87w==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uOYadJvP8u49K2x2oSYl+EYqiXssZ4idBGq/e4Tz9NY=;
+        b=KDEKy6z9clzZ/yt+Ugm+vcRRWzEj90+XlSFk9eYXi6IC5nH1Ekl2y3Hm9QX1/VOyg6
+         KoU6Bt2QbVi12p9NEJGHVLQti9laMQw3q0XhRpn8RudSITu6ZnOGgKHs7nTwUuFy4XOk
+         N1Lq/Rl18bZd0+9UEdChBzxmYVa5FEhjARYR8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5vxGDcuE5ADlwFzUbFDPZd16x22UTWZptpHGJiMgcac=;
-        b=xhaxseqJWL9soWKpfAVXc4fOfbw9sDwR/X8xms1MZzFbtz4jU+Ie4ijttsU6deUjn5
-         5m94XI1HOHnJVXz/n6y9mXXgecnjnIzyiIp9jp6XNVBMTiqStI/ihmHt3m+cAEtcMGAC
-         HDZ7P9ebKUcaoLb4XnPPj3txv0OC0V/LAPOIh0XPub5aU0OxwwMjDMqodQ6jspgJSRgw
-         Il9GwLz4pziFc1VtdgzfktnzE2idiXe7uvPC27hfCREOPj7kkjl94SPgz/npBvXOtaof
-         BZ95temojfStVvHAYcLFcYmM00adI/00uQTXiDNL95ZXXXKeOcZDMMbm+3cwccO2D9IK
-         VKbg==
-X-Gm-Message-State: AO0yUKW05+xLEcSqoTSNOofgjVTyFMD4+0K0DGSMkjv2388FVkRJohv5
-        fYeUSZm0zIFbsTf1w3GpXGuZ504/NuM=
-X-Google-Smtp-Source: AK7set8egRtFUH7sPqUKaEkP2rN5ZYWl9H1RBSq/E0qGXFBh0wqAsX6aPQ8HP0nDnDgrWUlpSv1HAw==
-X-Received: by 2002:a05:6870:6593:b0:163:4004:c7de with SMTP id fp19-20020a056870659300b001634004c7demr12835858oab.36.1675170528642;
-        Tue, 31 Jan 2023 05:08:48 -0800 (PST)
-Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id g5-20020a05687054c500b0014866eb34cesm6441483oan.48.2023.01.31.05.08.46
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uOYadJvP8u49K2x2oSYl+EYqiXssZ4idBGq/e4Tz9NY=;
+        b=2XqWLvwh/vGR4VzPu7fC7Wg+Qp7UGeqyYRktVuGBK2ynmQgp418TLhd/H5mvVT81O9
+         j/NlXvoDU34ESipWPFwt4VA8xGX06LRzahRSvELaagQYWd4ccctbwOSJZo2hDVKe2Zyn
+         +FEF1X4SY+p+5mZ2KjT6P3LPQ9qhmEt8ey1M+EtElJ7RO1yyINulXIVnDq2fREbnosRb
+         0H3uSZp1GR4WtOO0jfSb9SutRVOEVPsZjI2GZlrUCzPoI9EMH5BtmbcyqjmAc91uCDQs
+         OkjzEZCO4/cweLlSyzKazXjSTF7Xua3E/4QvDNyakvVJxkgzzAJ1QxECyfK1S5UORPlQ
+         1sKA==
+X-Gm-Message-State: AO0yUKUAxBsEJLglinOPC5ZlpIBo6YIE2YKgORM2/qmCdYVH8vR7X9h7
+        OQ9RxfVtolZLGaoXjnDAP7Ofdg==
+X-Google-Smtp-Source: AK7set+TLo90zN/rggXs78IMqKvdRPq3UMM97//YKxvo/gz4hPVpUrCvA/s+uzGixpW4LfOqI22Pzg==
+X-Received: by 2002:a17:907:da1:b0:888:7ce4:1dc1 with SMTP id go33-20020a1709070da100b008887ce41dc1mr10015780ejc.26.1675170541590;
+        Tue, 31 Jan 2023 05:09:01 -0800 (PST)
+Received: from [192.168.17.2] (wolkje-127.labs.vu.nl. [130.37.198.127])
+        by smtp.gmail.com with ESMTPSA id f19-20020a170906391300b0088452ca0666sm4898956eje.196.2023.01.31.05.09.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 05:08:48 -0800 (PST)
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>
-Subject: [PATCH] rust: add this_module macro
-Date:   Tue, 31 Jan 2023 10:08:41 -0300
-Message-Id: <20230131130841.318301-1-yakoyoku@gmail.com>
-X-Mailer: git-send-email 2.39.1
+        Tue, 31 Jan 2023 05:09:01 -0800 (PST)
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Tue, 31 Jan 2023 13:08:45 +0000
+Subject: [PATCH v2 1/5] HID: bigben_remove: manually unregister leds
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230125-hid-unregister-leds-v2-1-689cc62fc878@diag.uniroma1.it>
+References: <20230125-hid-unregister-leds-v2-0-689cc62fc878@diag.uniroma1.it>
+In-Reply-To: <20230125-hid-unregister-leds-v2-0-689cc62fc878@diag.uniroma1.it>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Hanno Zulla <kontakt@hanno.de>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        Roderick Colenbrander <roderick.colenbrander@sony.com>,
+        Sven Eckelmann <sven@narfation.org>
+Cc:     linux-leds@vger.kernel.org,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Kosina <jkosina@suse.cz>,
+        Roderick Colenbrander <roderick@gaikai.com>,
+        Pietro Borrello <borrello@diag.uniroma1.it>
+X-Mailer: b4 0.11.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675170540; l=1037;
+ i=borrello@diag.uniroma1.it; s=20221223; h=from:subject:message-id;
+ bh=wlU1zbXd7qFTSbVqYvqS9BOVrqglVS3eHD1ePCtISHc=;
+ b=1S4dFJ6YtEJ88InQZSjBIJqgxbqXt+T9JIgkqoLWq0NtwsubGN/Fl9VW6G07oKHBAzx9ClO/JaNt
+ v2JlPGwtCuiFqrHoLk9QBHzG1Seo6N4LHcIZ7c4vooOoJ+dx5t6/
+X-Developer-Key: i=borrello@diag.uniroma1.it; a=ed25519;
+ pk=4xRQbiJKehl7dFvrG33o2HpveMrwQiUPKtIlObzKmdY=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds a Rust equivalent to the handy THIS_MODULE macro from C.
+Unregister the LED controllers before device removal, as
+bigben_set_led() may schedule bigben->worker after the structure has
+been freed, causing a use-after-free.
 
-Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Fixes: 4eb1b01de5b9 ("HID: hid-bigbenff: fix race condition for scheduled work during removal")
+Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
 ---
- rust/kernel/lib.rs | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/hid/hid-bigbenff.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index e0b0e953907d..afb6b0390426 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -80,6 +80,18 @@ impl ThisModule {
-     }
- }
+diff --git a/drivers/hid/hid-bigbenff.c b/drivers/hid/hid-bigbenff.c
+index e8b16665860d..d3201b755595 100644
+--- a/drivers/hid/hid-bigbenff.c
++++ b/drivers/hid/hid-bigbenff.c
+@@ -306,9 +306,14 @@ static enum led_brightness bigben_get_led(struct led_classdev *led)
  
-+/// Returns the current module.
-+#[macro_export]
-+macro_rules! this_module {
-+    () => {
-+        if cfg!(MODULE) {
-+            Some(unsafe { $crate::ThisModule::from_ptr(&mut $crate::bindings::__this_module) })
-+        } else {
-+            None
-+        }
-+    };
-+}
-+
- #[cfg(not(any(testlib, test)))]
- #[panic_handler]
- fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
--- 
-2.39.1
+ static void bigben_remove(struct hid_device *hid)
+ {
++	int n;
+ 	struct bigben_device *bigben = hid_get_drvdata(hid);
+ 
+ 	bigben->removed = true;
++	for (n = 0; n < NUM_LEDS; n++) {
++		if (bigben->leds[n])
++			devm_led_classdev_unregister(&hid->dev, bigben->leds[n]);
++	}
+ 	cancel_work_sync(&bigben->worker);
+ 	hid_hw_stop(hid);
+ }
 
+-- 
+2.25.1
