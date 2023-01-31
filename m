@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94568683AB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADDA683ABF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjAaXvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 18:51:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42772 "EHLO
+        id S230519AbjAaXxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 18:53:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjAaXu7 (ORCPT
+        with ESMTP id S229992AbjAaXxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 18:50:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B61538EAD;
-        Tue, 31 Jan 2023 15:50:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EDB1B81D77;
-        Tue, 31 Jan 2023 23:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE10C433D2;
-        Tue, 31 Jan 2023 23:50:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675209053;
-        bh=aFl+VUDVpujhoAOWmOzkpNW/4tGNs0cKm/I6jSpI+qc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=k3yR/xuWZbpREb18GdLiL+NMHiy0tlBAmleW023UO5DMEl66flLruIRGz/ZtVAcJM
-         9k3/rsjd0C98GBW66GVqWg8xw3LIyeOQDrdRRM1D2KiIYXiN2dz5gchGT7R5FdvIin
-         G3fTRDiHCUDq5+JM6x3vNPnImjIetjIrDgDj5v9oFFFXsW+hwpSFDpGvEE4bDipKRd
-         0UBAAHp0aSJjuKugbwGc4MoKp8GXYb3qrCFeKgYUqnLc60f6x7m9/OztoePjwNZizZ
-         qRKTxLQ7Vdz9Pl+yCTQbx9IDrP65CHCJFzCOWD0RYQzteNcokS3hQB7O+nls+hrtt/
-         lcg9hT+yBPnEg==
-Date:   Tue, 31 Jan 2023 17:50:52 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Matt Fagnani <matt.fagnani@bell.net>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
- pci_enable_pasid()
-Message-ID: <20230131235052.GA1811430@bhelgaas>
+        Tue, 31 Jan 2023 18:53:10 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC2E1815C;
+        Tue, 31 Jan 2023 15:53:09 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-15085b8a2f7so21536080fac.2;
+        Tue, 31 Jan 2023 15:53:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vYdEeqjNgoJHoM9SJT0m+2v5Gmt/A9maZs7Zf5eYT0U=;
+        b=CXfgZBjaN8iKI3nm7eBxc2m4WpogJtbLT+AgoHycgD3olULfXSwuI5j6/GiFc+jBob
+         VmUL2tKDllcVmP+K2CA7vvg2wZ8pgWhZQ9NCPjNqAmL+zoYygQdvvMS5aA+ysALBl0Ir
+         2kYQpf8bLQhF8b6euAOzPPPUgbN8bjJLUJEXBW/pCQhnKgc/u6aP3zDwfIHXEo22xUoT
+         bDaHWBfqKM1wwYwuE7T/aEGfOx3T8DGPefE270WKYN7FcFSwfmeNPYyFoK29oriJxSay
+         USjEZphJE7VRAjnw253uW3MnklxL2NtDu5vAAfR+wI2xdfwA15SrqJsubYA5m8Y2AiCY
+         yV3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vYdEeqjNgoJHoM9SJT0m+2v5Gmt/A9maZs7Zf5eYT0U=;
+        b=D1l+hragq5mQqffvXdZJ3k+IyveYt1zpRvTyJpFA4z7IWUcRU2njDnfKVgPDSJd7U4
+         S+d0dBuFch7Z/0bbBxG4NVwJl5Hnr1ZchMXPkEvW7PDGyywOwCaeVpwZf8q9qMvUintA
+         fuSY1SgRZLkUiaEqWwt4BDPCc2sFKB5uG5pCggyGWwGSU2LPRP/01ZpJQtOEkvlDKoij
+         EHaAchvL9OK6DeVKcYT8EkRGxTLjuB8g6D8E8GTDZnwufBoE479+cZePqdUw1BldbTrz
+         gSvrbRZM5o599K9CNPHZMQg1voWY7YYpdZagxtBKVMOo5WiV95Tmk2NyMHqfAnI8r0eg
+         lwTA==
+X-Gm-Message-State: AO0yUKUzK5eJ4PxR+jgDzRvnnvjmhagRGh3gkd6KTRyAB001fnWfV4SY
+        17WvkOg5w2eMbA5cNSY3yKHqVk/UCqabWi3lHfZYFJ9d/6Y=
+X-Google-Smtp-Source: AK7set9X0fMapUox6SkZRqxLHjb6kHYlavJvRHqQlWZX9LMKSI82Azfoc1BVOABrvqzOsDMgTuUiphTTOOsZEQJxB5E=
+X-Received: by 2002:a05:6870:3913:b0:163:4ae7:f200 with SMTP id
+ b19-20020a056870391300b001634ae7f200mr2021361oap.84.1675209188690; Tue, 31
+ Jan 2023 15:53:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9gQxCmzqq6WXZK4@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230126162323.2986682-1-arnd@kernel.org>
+In-Reply-To: <20230126162323.2986682-1-arnd@kernel.org>
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Date:   Tue, 31 Jan 2023 15:52:55 -0800
+Message-ID: <CAKdAkRQT_Jk5yBeMZqh=M1JscVLFieZTQjLGOGxy8nHh8SnD3A@mail.gmail.com>
+Subject: Re: [PATCH] [v2] at86rf230: convert to gpio descriptors
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 02:47:32PM -0400, Jason Gunthorpe wrote:
-> On Mon, Jan 30, 2023 at 12:38:10PM -0600, Bjorn Helgaas wrote:
-> 
-> > Sorry, I'm still confused.  PCI_PASID_XLATED_REQ_ONLY is a
-> > device-specific property, and you want to opt-in AMD graphics devices.
-> > Where's the AMD graphics-specific change?  The current patch does
-> > this:
-> > 
-> >   pdev_pri_ats_enable
-> >     pci_enable_pasid(pdev, 0, PCI_PASID_XLATED_REQ_ONLY)
-> > 
-> > which looks like it does it for *all* devices below an AMD IOMMU,
-> > without any device or driver input.
-> 
-> AMD GPU has a private interface to AMD IOMMU to support PASID support
-> that only it uses.
+Hi Arnd,
 
-What is it that makes this a private interface?  It seems like we will
-end up enabling PASID on any device below an AMD v2 IOMMU.
+On Thu, Jan 26, 2023 at 8:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+>         /* Reset */
+> -       if (gpio_is_valid(rstn)) {
+> +       if (rstn) {
+>                 udelay(1);
+> -               gpio_set_value_cansleep(rstn, 0);
+> +               gpiod_set_value_cansleep(rstn, 0);
+>                 udelay(1);
+> -               gpio_set_value_cansleep(rstn, 1);
+> +               gpiod_set_value_cansleep(rstn, 1);
 
-I do see the DRM amdgpu_amdkfd_device_init() path that ends up at
-domain_enable_v2().  Maybe that's it?
+For gpiod conversions, if we are not willing to chase whether existing
+DTSes specify polarities
+properly and create workarounds in case they are wrong, we should use
+gpiod_set_raw_value*()
+(my preference would be to do the work and not use "raw" variants).
 
-But amd_iommu_domain_alloc() also leads to domain_enable_v2(), and
-that's pretty generic, so it looks like we set PD_IOMMUV2_MASK
-whenever the IOMMU supports it.
+In this particular case, arch/arm/boot/dts/vf610-zii-dev-rev-c.dts
+defines reset line as active low,
+so you are leaving the device in reset state.
 
-And it seems like we call pci_enable_pasid() for all endpoints below
-a v2 IOMMU.  Of course, if the endpoint doesn't have a PASID cap,
-pci_enable_pasid() fails (and pdev_pri_ats_enable() probably splats
-useless warnings when we try to disable PRI and PASID which haven't
-been enabled).
+Please review your other conversion patches.
 
-I guess I'm trying to convince myself that no harm in enabling PASID
-for any device below an AMD v2 IOMMU.  But I don't think a device is
-*required* to use translated addresses with PASID, and if it uses
-untranslated addresses with PASID, don't we need ACS to avoid
-misrouting?
-
-Bjorn
+-- 
+Dmitry
