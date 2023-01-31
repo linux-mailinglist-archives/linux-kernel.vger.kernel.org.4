@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98DB683AAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF92683AAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 00:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjAaXpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 18:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
+        id S230443AbjAaXpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 18:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjAaXo7 (ORCPT
+        with ESMTP id S230213AbjAaXo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 31 Jan 2023 18:44:59 -0500
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56E32B619;
-        Tue, 31 Jan 2023 15:44:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276804C6EF;
+        Tue, 31 Jan 2023 15:44:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675208697; x=1706744697;
+  t=1675208698; x=1706744698;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=f9j1tac3fXJ7zWWtJKdbIWJZZUO6h9XAWqOwYcAGIU0=;
-  b=AORAxdgr/PRbTMMk44zmmftLJ1g4sXfqXgsCD+1C4NWYy4w+HI5lHxEV
-   PmMfIqBtcBTzeLobgnVtcqrqj3U28pwx6u0dxm2oprmUInq5U1jdn4fFR
-   0BS+nf9x/jgtMgEc5fSO1f8IrhAUBl/s5iTj8oirNYnsbGZxJAOlvjrB0
-   iXZd/QnBbOYkCJng5jFbqH/HwuT6erC2JlYeaHpju39OxxgwtTifo5r/t
-   lrPzSaMianq/38kXgGxS+k3JZUoG/q3a979Sc6mFkK+I3GrXBc4b7vKxw
-   oTopSfR6fghtgNxksMl7NaINMAuUpG7bv3lnxQTUqckTpydC97uJfK5gQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="390360430"
+  bh=ar2gkz6ChPb2jBvdRtwjD+KktDkQQZm5UI6aP2nLoyI=;
+  b=VgyzqcmCfETSJjDDxfNeL2nSJ2TlB38jMs3Iijih0GJvEFPeSBD5fPB9
+   Zv55ATBoEiyELcOsx5E2Iq+yPTL+p3pSNQ8qwOBxmf2B7n8K8E93lTiYy
+   lyyHZABar093+yZdjA0il+WDtQpjKmfHzYUoDwKVL3ymbwc/i9T+bW4H6
+   eSPn5gEUC5XVKhv4RVjNuhxPxX4gfedCjr55bAkGeoUEJ23i1SCKDfbTy
+   GSGTGdKi5ahS2lAIj+UikwLpE/iofxh7EkP7nPlxtMsfT+9UaXD3RT7ig
+   Fz9RPiatC3BYuoqvrlpkAbOeJPyuj9011L3gLmoAfLUNjaeL4laPOrxVn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="390360438"
 X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="390360430"
+   d="scan'208";a="390360438"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 15:44:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="773192030"
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 15:44:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="773192033"
 X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="773192030"
+   d="scan'208";a="773192033"
 Received: from jithujos.sc.intel.com ([172.25.103.66])
   by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 15:44:55 -0800
 From:   Jithu Joseph <jithu.joseph@intel.com>
@@ -48,9 +48,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         patches@lists.linux.dev, ravi.v.shankar@intel.com,
         thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
         sohil.mehta@intel.com
-Subject: [PATCH 3/5] platform/x86/intel/ifs: Sysfs interface for Array BIST
-Date:   Tue, 31 Jan 2023 15:43:00 -0800
-Message-Id: <20230131234302.3997223-4-jithu.joseph@intel.com>
+Subject: [PATCH 4/5] platform/x86/intel/ifs: Implement Array BIST test
+Date:   Tue, 31 Jan 2023 15:43:01 -0800
+Message-Id: <20230131234302.3997223-5-jithu.joseph@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230131234302.3997223-1-jithu.joseph@intel.com>
 References: <20230131234302.3997223-1-jithu.joseph@intel.com>
@@ -65,139 +65,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The interface to trigger Array BIST test and obtain its result
-is similar to the existing scan test. The only notable
-difference is that, Array BIST doesn't require any test content
-to be loaded. So binary load related options are not needed for
-this test.
+Array BIST test (for a particlular core) is triggered by writing
+to MSR_ARRAY_BIST from one sibling of the core.
 
-Add sysfs interface array BIST test, the testing support will
-be added by subsequent patch.
+This will initiate a test for all supported arrays on that
+CPU. Array BIST test may be aborted before completing all the
+arrays in the event of an interrupt or other reasons.
+In this case, kernel will restart the test from that point
+onwards. Array test will also be aborted when the test fails,
+in which case the test is stopped immediately without further
+retry.
 
 Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 ---
- drivers/platform/x86/intel/ifs/ifs.h     |  1 +
- drivers/platform/x86/intel/ifs/core.c    | 18 +++++++++++++-----
- drivers/platform/x86/intel/ifs/runtest.c | 11 ++++++++++-
- drivers/platform/x86/intel/ifs/sysfs.c   | 17 ++++++++++++++++-
- 4 files changed, 40 insertions(+), 7 deletions(-)
+ drivers/platform/x86/intel/ifs/ifs.h     | 12 ++++
+ drivers/platform/x86/intel/ifs/runtest.c | 92 ++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+)
 
 diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-index 2cef88a88aa9..07423bc4e368 100644
+index 07423bc4e368..b1a997e39216 100644
 --- a/drivers/platform/x86/intel/ifs/ifs.h
 +++ b/drivers/platform/x86/intel/ifs/ifs.h
-@@ -249,5 +249,6 @@ static inline struct ifs_data *ifs_get_data(struct device *dev)
- int ifs_load_firmware(struct device *dev);
- int do_core_test(int cpu, struct device *dev);
- const struct attribute_group **ifs_get_groups(void);
-+const struct attribute_group **ifs_get_array_groups(void);
+@@ -127,6 +127,7 @@
+ #include <linux/device.h>
+ #include <linux/miscdevice.h>
  
- #endif
-diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-index ab234620ef4c..2b7a49fd473d 100644
---- a/drivers/platform/x86/intel/ifs/core.c
-+++ b/drivers/platform/x86/intel/ifs/core.c
-@@ -25,6 +25,7 @@ static struct ifs_device ifs_devices[] = {
- 	[IFS_SAF] = {
- 		.data = {
- 			.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
-+			.pkg_auth = NULL,
- 			.test_num = IFS_SAF,
- 		},
- 		.misc = {
-@@ -36,6 +37,7 @@ static struct ifs_device ifs_devices[] = {
- 	[IFS_ARRAY] = {
- 		.data = {
- 			.integrity_cap_bit = MSR_INTEGRITY_CAPS_ARRAY_BIST_BIT,
-+			.pkg_auth = NULL,
- 			.test_num = IFS_ARRAY,
- 		},
- 		.misc = {
-@@ -72,11 +74,17 @@ static int __init ifs_init(void)
- 		if (!(msrval & BIT(ifs_devices[i].data.integrity_cap_bit)))
- 			continue;
++#define MSR_ARRAY_BIST				0x00000105
+ #define MSR_COPY_SCAN_HASHES			0x000002c2
+ #define MSR_SCAN_HASHES_STATUS			0x000002c3
+ #define MSR_AUTHENTICATE_AND_COPY_CHUNK		0x000002c4
+@@ -194,6 +195,17 @@ union ifs_status {
+ 	};
+ };
  
--		ifs_devices[i].data.pkg_auth = kmalloc_array(topology_max_packages(),
--							     sizeof(bool), GFP_KERNEL);
--		if (!ifs_devices[i].data.pkg_auth)
--			continue;
--		ifs_devices[i].misc.groups = ifs_get_groups();
-+		switch (ifs_devices[i].data.test_num) {
-+		case IFS_SAF:
-+			ifs_devices[i].data.pkg_auth = kmalloc_array(topology_max_packages(),
-+								     sizeof(bool), GFP_KERNEL);
-+			if (!ifs_devices[i].data.pkg_auth)
-+				continue;
-+			ifs_devices[i].misc.groups = ifs_get_groups();
-+			break;
-+		case IFS_ARRAY:
-+			ifs_devices[i].misc.groups = ifs_get_array_groups();
-+		}
- 
- 		if (misc_register(&ifs_devices[i].misc))
- 			kfree(ifs_devices[i].data.pkg_auth);
-diff --git a/drivers/platform/x86/intel/ifs/runtest.c b/drivers/platform/x86/intel/ifs/runtest.c
-index 0bfd8fcdd7e8..65e08af70994 100644
---- a/drivers/platform/x86/intel/ifs/runtest.c
-+++ b/drivers/platform/x86/intel/ifs/runtest.c
-@@ -236,6 +236,7 @@ static void ifs_test_core(int cpu, struct device *dev)
-  */
- int do_core_test(int cpu, struct device *dev)
- {
-+	struct ifs_data *ifsd = ifs_get_data(dev);
- 	int ret = 0;
- 
- 	/* Prevent CPUs from being taken offline during the scan test */
-@@ -247,7 +248,15 @@ int do_core_test(int cpu, struct device *dev)
- 		goto out;
- 	}
- 
--	ifs_test_core(cpu, dev);
-+	switch (ifsd->test_num) {
-+	case IFS_SAF:
-+		ifs_test_core(cpu, dev);
-+		break;
-+	case IFS_ARRAY:
-+	default:
-+		return -EINVAL;
-+	}
-+
- out:
- 	cpus_read_unlock();
- 	return ret;
-diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
-index ee636a76b083..7cf32184ce6a 100644
---- a/drivers/platform/x86/intel/ifs/sysfs.c
-+++ b/drivers/platform/x86/intel/ifs/sysfs.c
-@@ -75,7 +75,7 @@ static ssize_t run_test_store(struct device *dev,
- 	if (down_interruptible(&ifs_sem))
- 		return -EINTR;
- 
--	if (!ifsd->loaded)
-+	if (ifsd->test_num != IFS_ARRAY && !ifsd->loaded)
- 		rc = -EPERM;
- 	else
- 		rc = do_core_test(cpu, dev);
-@@ -156,3 +156,18 @@ const struct attribute_group **ifs_get_groups(void)
- {
- 	return plat_ifs_groups;
- }
-+
-+/* global array sysfs attributes */
-+static struct attribute *plat_ifs_array_attrs[] = {
-+	&dev_attr_details.attr,
-+	&dev_attr_status.attr,
-+	&dev_attr_run_test.attr,
-+	NULL
++/* MSR_ARRAY_BIST bit fields */
++union ifs_array {
++	u64	data;
++	struct {
++		u32	array_bitmask		:32;
++		u32	array_bank		:16;
++		u32	rsvd			:15;
++		u32	ctrl_result		:1;
++	};
 +};
 +
-+ATTRIBUTE_GROUPS(plat_ifs_array);
+ /*
+  * Driver populated error-codes
+  * 0xFD: Test timed out before completing all the chunks.
+diff --git a/drivers/platform/x86/intel/ifs/runtest.c b/drivers/platform/x86/intel/ifs/runtest.c
+index 65e08af70994..ec0ceb6b5890 100644
+--- a/drivers/platform/x86/intel/ifs/runtest.c
++++ b/drivers/platform/x86/intel/ifs/runtest.c
+@@ -229,6 +229,96 @@ static void ifs_test_core(int cpu, struct device *dev)
+ 	}
+ }
+ 
++#define SPINUNIT 100 /* 100 nsec */
++static atomic_t array_cpus_out;
 +
-+const struct attribute_group **ifs_get_array_groups(void)
++/*
++ * Simplified cpu sibling rendezvous loop based on microcode loader __wait_for_cpus()
++ */
++static void wait_for_sibling_cpu(atomic_t *t, long long timeout)
 +{
-+	return plat_ifs_array_groups;
++	int cpu = smp_processor_id();
++	const struct cpumask *smt_mask = cpu_smt_mask(cpu);
++	int all_cpus = cpumask_weight(smt_mask);
++
++	atomic_inc(t);
++	while (atomic_read(t) < all_cpus) {
++		if (timeout < SPINUNIT)
++			return;
++		ndelay(SPINUNIT);
++		timeout -= SPINUNIT;
++		touch_nmi_watchdog();
++	}
 +}
++
++static int do_array_test(void *data)
++{
++	int cpu = smp_processor_id();
++	u64 *msrs = data;
++	int first;
++
++	/*
++	 * Only one logical CPU on a core needs to trigger the Array test via MSR write.
++	 */
++	first = cpumask_first(cpu_smt_mask(cpu));
++
++	if (cpu == first) {
++		wrmsrl(MSR_ARRAY_BIST, msrs[0]);
++		/* Pass back the result of the test */
++		rdmsrl(MSR_ARRAY_BIST, msrs[1]);
++	}
++
++	/* Tests complete faster if the sibling is spinning here */
++	wait_for_sibling_cpu(&array_cpus_out, NSEC_PER_SEC);
++
++	return 0;
++}
++
++static void ifs_array_test_core(int cpu, struct device *dev)
++{
++	union ifs_array activate, status;
++	bool timed_out = false;
++	struct ifs_data *ifsd;
++	unsigned long timeout;
++	u64 msrvals[2];
++
++	ifsd = ifs_get_data(dev);
++
++	activate.data = 0;
++	activate.array_bitmask = ~0U;
++	activate.ctrl_result = 0;
++	timeout = jiffies + HZ / 2;
++
++	do {
++		if (time_after(jiffies, timeout)) {
++			timed_out = true;
++			break;
++		}
++
++		msrvals[0] = activate.data;
++
++		atomic_set(&array_cpus_out, 0);
++		stop_core_cpuslocked(cpu, do_array_test, msrvals);
++		status.data = msrvals[1];
++
++		if (status.ctrl_result)
++			break;
++
++		activate.array_bitmask = status.array_bitmask;
++		activate.array_bank = status.array_bank;
++
++	} while (status.array_bitmask);
++
++	ifsd->scan_details = status.data;
++
++	if (status.ctrl_result)
++		ifsd->status = SCAN_TEST_FAIL;
++	else if (timed_out || status.array_bitmask)
++		ifsd->status = SCAN_NOT_TESTED;
++	else
++		ifsd->status = SCAN_TEST_PASS;
++}
++
+ /*
+  * Initiate per core test. It wakes up work queue threads on the target cpu and
+  * its sibling cpu. Once all sibling threads wake up, the scan test gets executed and
+@@ -253,6 +343,8 @@ int do_core_test(int cpu, struct device *dev)
+ 		ifs_test_core(cpu, dev);
+ 		break;
+ 	case IFS_ARRAY:
++		ifs_array_test_core(cpu, dev);
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
 -- 
 2.25.1
 
