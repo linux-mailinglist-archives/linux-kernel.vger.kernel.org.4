@@ -2,173 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0165D68227F
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:04:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54319682288
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 04:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjAaDEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 22:04:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S230337AbjAaDHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 22:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjAaDEe (ORCPT
+        with ESMTP id S229742AbjAaDHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 22:04:34 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3069F298D1
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:04:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675134273; x=1706670273;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hLCFWGnvWUCA2eW5ZVvowWWx7O/vT55Sw2QHbwKsg6g=;
-  b=Qxbbh3Au100kpSWdn8X8oFQLbUixuuPHZ/eXo/StQs1gf3HwD6nMbBpV
-   mufFTXDalMtLhIJ26V3M3SBjm7moHQJjiqoF86w/AtI238h9IEuJNRyUL
-   VG+ZNlwOttfhFqkEOLyqD6uZ4K1tFIFt41+j/SbNBNfyyJL0+X+Z5BN3c
-   Fjnt+chzlOJj8z5sxbCihKCjaprLzNkf2zyt79Cdy8vt009lQxpPNPldz
-   Pa4V4/1kr54L5VCPzC1w21Nzlk/UB6BHH0g3RNu5P7f9KHNqrkaPm2ili
-   d7sFMFrDuhzQ4cgf/p7j/jOAccVzigmv8BVLOxdqMEpicGqBIAApx+9xg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="307390931"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="307390931"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 19:04:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="993116147"
-X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
-   d="scan'208";a="993116147"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Jan 2023 19:04:31 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pMgwh-00046N-0D;
-        Tue, 31 Jan 2023 03:04:31 +0000
-Date:   Tue, 31 Jan 2023 11:03:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: arch/arm/mm/copypage-feroceon.c:65:6: sparse: sparse: symbol
- 'feroceon_copy_user_highpage' was not declared. Should it be static?
-Message-ID: <202301311052.rwOHaa5u-lkp@intel.com>
+        Mon, 30 Jan 2023 22:07:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C602429E08
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:06:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675134392;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KdMSX2PGXe45qBgqP8RMLgntuCYyndOvWlGnSWr1I1w=;
+        b=Lrortqv7icKfhEub19HsWOVMh8X/pZjigrG+ootNdXQaHreHpsRKbYpRK/+4lBQSkH84FZ
+        M7bz0VP6U54Bfb0LiWfbgRRQqtkaLI5dQsmZXSyBKtnC+8MIcMXBytuDzHitD4BFSMFE/E
+        4zAhmEzKBG5sFzwUV9j1Ukvt00JO1Ls=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-649-oop9K43INPuetYbYdFO9dg-1; Mon, 30 Jan 2023 22:06:29 -0500
+X-MC-Unique: oop9K43INPuetYbYdFO9dg-1
+Received: by mail-oi1-f197.google.com with SMTP id u9-20020a056808150900b0036f087d05fdso5873838oiw.0
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 19:06:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KdMSX2PGXe45qBgqP8RMLgntuCYyndOvWlGnSWr1I1w=;
+        b=qc7Hixc9Ra04Mk/lqQkuoSDqvzEOWliKC2l7a01Vm6oNUErEc8ncBS3l5fyrJiKnu2
+         Da01sdZ5Zq+XQOCOUJNqmbSbSEPjtjn+e7HPGH69C0c/zoif08rXnT3kD8s0FeeiIvZr
+         r0we8WChD0ghICScIpcdxvTWl9VuAL9tJYooNmBY94MByQ47DZgZr9hImhPSmEwpqf/+
+         CI2wulE4gio777h9QnjjKgsN9XubQETmSbv7VPWxwFRAC/LUpn3s016urXeLtCntF1Uq
+         X4eF6vtf/bYAg5mJTCvaY6cHPNBoeC1JUIKqOLhKhUjOFOkPOflOhr17WQUjBMWB6M+d
+         XWyw==
+X-Gm-Message-State: AO0yUKU/Jb0JhPMrhsofTZ5mbS12JNYWWjBu5zKm9ntqcBzaQv5zvZ/l
+        AUJ+NbGH5c+uysf0fK2L3jxNqVp//rSA9y9WjcL/9Os8CPLWtU/zU5dGjTB5zZ638Tbo7Ov7gKL
+        kqSQDv5kWBGXP2KcXC8vcI4DOI2Vml+W85n52kviQ
+X-Received: by 2002:a05:6870:959e:b0:163:9cea:eea7 with SMTP id k30-20020a056870959e00b001639ceaeea7mr565253oao.35.1675134389122;
+        Mon, 30 Jan 2023 19:06:29 -0800 (PST)
+X-Google-Smtp-Source: AK7set/gy6zeCHS7dDqTzLgm0l0HH281Gpnu1QcOaLODISHVTb7n1+4QzN8Fzmkkj1rEtYbW+m8iASC8yFpzqnKRkFM=
+X-Received: by 2002:a05:6870:959e:b0:163:9cea:eea7 with SMTP id
+ k30-20020a056870959e00b001639ceaeea7mr565247oao.35.1675134388839; Mon, 30 Jan
+ 2023 19:06:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230128031740.166743-1-sunnanyong@huawei.com>
+ <CACGkMEtMAFMbhPnaaTwGRFofPM-p8ceKzAUbD2AFBz=fbR6hYQ@mail.gmail.com> <ffe21085-13cf-e2e9-e5cc-8755e9e3250b@huawei.com>
+In-Reply-To: <ffe21085-13cf-e2e9-e5cc-8755e9e3250b@huawei.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 31 Jan 2023 11:06:17 +0800
+Message-ID: <CACGkMEsuYLen=pXd0e3hFNcUj-GQzj8ggh_8NDgWR2HbsD2S1A@mail.gmail.com>
+Subject: Re: [PATCH] vhost/vdpa: Add MSI translation tables to iommu for
+ software-managed MSI
+To:     Nanyong Sun <sunnanyong@huawei.com>
+Cc:     joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+        mst@redhat.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        wangrong68@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On Tue, Jan 31, 2023 at 9:32 AM Nanyong Sun <sunnanyong@huawei.com> wrote:
+>
+> On 2023/1/29 14:02, Jason Wang wrote:
+> > On Sat, Jan 28, 2023 at 10:25 AM Nanyong Sun <sunnanyong@huawei.com> wrote:
+> >> From: Rong Wang <wangrong68@huawei.com>
+> >>
+> >> Once enable iommu domain for one device, the MSI
+> >> translation tables have to be there for software-managed MSI.
+> >> Otherwise, platform with software-managed MSI without an
+> >> irq bypass function, can not get a correct memory write event
+> >> from pcie, will not get irqs.
+> >> The solution is to obtain the MSI phy base address from
+> >> iommu reserved region, and set it to iommu MSI cookie,
+> >> then translation tables will be created while request irq.
+> >>
+> >> Signed-off-by: Rong Wang <wangrong68@huawei.com>
+> >> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
+> >> ---
+> >>   drivers/iommu/iommu.c |  1 +
+> >>   drivers/vhost/vdpa.c  | 53 ++++++++++++++++++++++++++++++++++++++++---
+> >>   2 files changed, 51 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> >> index de91dd88705b..f6c65d5d8e2b 100644
+> >> --- a/drivers/iommu/iommu.c
+> >> +++ b/drivers/iommu/iommu.c
+> >> @@ -2623,6 +2623,7 @@ void iommu_get_resv_regions(struct device *dev, struct list_head *list)
+> >>          if (ops->get_resv_regions)
+> >>                  ops->get_resv_regions(dev, list);
+> >>   }
+> >> +EXPORT_SYMBOL_GPL(iommu_get_resv_regions);
+> >>
+> >>   /**
+> >>    * iommu_put_resv_regions - release resered regions
+> >> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> >> index ec32f785dfde..31d3e9ed4cfa 100644
+> >> --- a/drivers/vhost/vdpa.c
+> >> +++ b/drivers/vhost/vdpa.c
+> >> @@ -1103,6 +1103,48 @@ static ssize_t vhost_vdpa_chr_write_iter(struct kiocb *iocb,
+> >>          return vhost_chr_write_iter(dev, from);
+> >>   }
+> >>
+> >> +static bool vhost_vdpa_check_sw_msi(struct list_head *dev_resv_regions, phys_addr_t *base)
+> >> +{
+> >> +       struct iommu_resv_region *region;
+> >> +       bool ret = false;
+> >> +
+> >> +       list_for_each_entry(region, dev_resv_regions, list) {
+> >> +               /*
+> >> +                * The presence of any 'real' MSI regions should take
+> >> +                * precedence over the software-managed one if the
+> >> +                * IOMMU driver happens to advertise both types.
+> >> +                */
+> >> +               if (region->type == IOMMU_RESV_MSI) {
+> >> +                       ret = false;
+> >> +                       break;
+> >> +               }
+> >> +
+> >> +               if (region->type == IOMMU_RESV_SW_MSI) {
+> >> +                       *base = region->start;
+> >> +                       ret = true;
+> >> +               }
+> >> +       }
+> >> +
+> >> +       return ret;
+> >> +}
+> > Can we unify this with what VFIO had?
+> Yes, these two functions are just the same.
+> Do you think move this function to iommu.c, and export from iommu is a
+> good choice?
 
-First bad commit (maybe != root cause):
+Probably, we can try and see.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   22b8077d0fcec86c6ed0e0fce9f7e7e5a4c2d56a
-commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
-date:   9 months ago
-config: arm-randconfig-s042-20230129 (https://download.01.org/0day-ci/archive/20230131/202301311052.rwOHaa5u-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-orion5x/ arch/arm/mm/ drivers/uio/
+> >
+> >> +
+> >> +static int vhost_vdpa_get_msi_cookie(struct iommu_domain *domain, struct device *dma_dev)
+> >> +{
+> >> +       struct list_head dev_resv_regions;
+> >> +       phys_addr_t resv_msi_base = 0;
+> >> +       int ret = 0;
+> >> +
+> >> +       INIT_LIST_HEAD(&dev_resv_regions);
+> >> +       iommu_get_resv_regions(dma_dev, &dev_resv_regions);
+> >> +
+> >> +       if (vhost_vdpa_check_sw_msi(&dev_resv_regions, &resv_msi_base))
+> >> +               ret = iommu_get_msi_cookie(domain, resv_msi_base);
+> >> +
+> >> +       iommu_put_resv_regions(dma_dev, &dev_resv_regions);
+> >> +
+> >> +       return ret;
+> >> +}
+> >> +
+> >>   static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+> >>   {
+> >>          struct vdpa_device *vdpa = v->vdpa;
+> >> @@ -1128,11 +1170,16 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+> >>
+> >>          ret = iommu_attach_device(v->domain, dma_dev);
+> >>          if (ret)
+> >> -               goto err_attach;
+> >> +               goto err_alloc_domain;
+> >>
+> >> -       return 0;
+> >> +       ret = vhost_vdpa_get_msi_cookie(v->domain, dma_dev);
+> > Do we need to check the overlap mapping and record it in the interval
+> > tree (as what VFIO did)?
+> >
+> > Thanks
+> Yes, we need to care about this part, I will handle this recently.
+> Thanks a lot.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+I think for parents that requires vendor specific mapping logic we
+probably also need this.
 
-sparse warnings: (new ones prefixed by >>)
->> arch/arm/mm/copypage-feroceon.c:65:6: sparse: sparse: symbol 'feroceon_copy_user_highpage' was not declared. Should it be static?
->> arch/arm/mm/copypage-feroceon.c:78:6: sparse: sparse: symbol 'feroceon_clear_user_highpage' was not declared. Should it be static?
---
->> arch/arm/mach-orion5x/board-d2net.c:104:13: sparse: sparse: symbol 'd2net_init' was not declared. Should it be static?
---
-   drivers/uio/uio_aec.c:44:49: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *int_flag @@     got void * @@
-   drivers/uio/uio_aec.c:44:49: sparse:     expected void [noderef] __iomem *int_flag
-   drivers/uio/uio_aec.c:44:49: sparse:     got void *
-   drivers/uio/uio_aec.c:50:49: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:50:49: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:50:49: sparse:     got void *
-   drivers/uio/uio_aec.c:59:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:59:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:59:9: sparse:     got void *
-   drivers/uio/uio_aec.c:59:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:59:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:59:9: sparse:     got void *
-   drivers/uio/uio_aec.c:59:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:59:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:59:9: sparse:     got void *
-   drivers/uio/uio_aec.c:59:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:59:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:59:9: sparse:     got void *
-   drivers/uio/uio_aec.c:59:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:59:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:59:9: sparse:     got void *
-   drivers/uio/uio_aec.c:59:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:59:9: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:59:9: sparse:     got void *
-   drivers/uio/uio_aec.c:88:20: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *priv @@     got void [noderef] __iomem * @@
-   drivers/uio/uio_aec.c:88:20: sparse:     expected void *priv
-   drivers/uio/uio_aec.c:88:20: sparse:     got void [noderef] __iomem *
-   drivers/uio/uio_aec.c:104:42: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:104:42: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:104:42: sparse:     got void *
-   drivers/uio/uio_aec.c:105:43: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:105:43: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:105:43: sparse:     got void *
-   drivers/uio/uio_aec.c:106:34: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:106:34: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:106:34: sparse:     got void *
->> drivers/uio/uio_aec.c:115:31: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got void *priv @@
-   drivers/uio/uio_aec.c:115:31: sparse:     expected void [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:115:31: sparse:     got void *priv
-   drivers/uio/uio_aec.c:128:42: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:128:42: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:128:42: sparse:     got void *
-   drivers/uio/uio_aec.c:129:43: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:129:43: sparse:     expected void volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:129:43: sparse:     got void *
-   drivers/uio/uio_aec.c:131:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got void * @@
-   drivers/uio/uio_aec.c:131:28: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:131:28: sparse:     got void *
-   drivers/uio/uio_aec.c:136:31: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __iomem *addr @@     got void *priv @@
-   drivers/uio/uio_aec.c:136:31: sparse:     expected void [noderef] __iomem *addr
-   drivers/uio/uio_aec.c:136:31: sparse:     got void *priv
+But this could be added on top (via a new config ops probably).
 
-vim +/feroceon_copy_user_highpage +65 arch/arm/mm/copypage-feroceon.c
+Thanks
 
-063b0a4207e43a Russell King 2008-10-31 @65  void feroceon_copy_user_highpage(struct page *to, struct page *from,
-f00a75c094c340 Russell King 2009-10-05  66  	unsigned long vaddr, struct vm_area_struct *vma)
-063b0a4207e43a Russell King 2008-10-31  67  {
-063b0a4207e43a Russell King 2008-10-31  68  	void *kto, *kfrom;
-063b0a4207e43a Russell King 2008-10-31  69  
-5472e862de2bc4 Cong Wang    2011-11-25  70  	kto = kmap_atomic(to);
-5472e862de2bc4 Cong Wang    2011-11-25  71  	kfrom = kmap_atomic(from);
-2725898fc9bb21 Russell King 2009-10-05  72  	flush_cache_page(vma, vaddr, page_to_pfn(from));
-063b0a4207e43a Russell King 2008-10-31  73  	feroceon_copy_user_page(kto, kfrom);
-5472e862de2bc4 Cong Wang    2011-11-25  74  	kunmap_atomic(kfrom);
-5472e862de2bc4 Cong Wang    2011-11-25  75  	kunmap_atomic(kto);
-063b0a4207e43a Russell King 2008-10-31  76  }
-063b0a4207e43a Russell King 2008-10-31  77  
-303c6443659bc1 Russell King 2008-10-31 @78  void feroceon_clear_user_highpage(struct page *page, unsigned long vaddr)
+> >> +       if (ret)
+> >> +               goto err_attach_device;
+> >>
+> >> -err_attach:
+> >> +       return 0;
+> >> +err_attach_device:
+> >> +       iommu_detach_device(v->domain, dma_dev);
+> >> +err_alloc_domain:
+> >>          iommu_domain_free(v->domain);
+> >>          return ret;
+> >>   }
+> >> --
+> >> 2.25.1
+> >>
+> > .
+>
 
-:::::: The code at line 65 was first introduced by commit
-:::::: 063b0a4207e43acbeff3d4b09f43e750e0212b48 [ARM] copypage: provide our own copy_user_highpage()
-
-:::::: TO: Russell King <rmk@dyn-67.arm.linux.org.uk>
-:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
