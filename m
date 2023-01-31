@@ -2,125 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD6B683672
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5405683674
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 20:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjAaTY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 14:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S231482AbjAaTZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 14:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbjAaTY4 (ORCPT
+        with ESMTP id S230324AbjAaTZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 14:24:56 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063364237
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:24:54 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id q5so15264759wrv.0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:24:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l4y+ZuW6GtjoBTNPafHpwiagaTjvE6XPCrQfZhYPCAQ=;
-        b=ehEaAOCJoPt7ANCjpeOxEKnr3hXlyhYuCekjjhWHIUIZDOcEQD+Zna67t37uGH+GuO
-         50InIdnkiD+8vu8yjERTzfZ80s3tz00aKjvBHkgbCHjV5cxiTSrAckE4NSMjT3YEVDE4
-         vCwP51sIYHD16nsCmXISgObPYbaIzfxS9Uiw72xJMqAaAKWIPyAzRzWAEYnRR8AWTja5
-         rhZdNOqTdZ3/JS5L2TbW65w9JckKSadbSLoK2Uqva8Rp0DSud+tYQEASJKFPVo/Egiap
-         BLOVcipoXHib7VMxW+9vMtBPcIJqoDj5MOd6EDuXDkmLU/xizfiMGgZsni30NlroJpwq
-         izkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l4y+ZuW6GtjoBTNPafHpwiagaTjvE6XPCrQfZhYPCAQ=;
-        b=kxsS/OcnAYtFGR40REt2IyGNiorvatSMjBTfElSKRyaMJc1gk4tMoIKtZO2I8PSBAT
-         FpZ23GjzI/KfnKG+us3OZCj6EYTa6VXJ1Cckgb8lqxb/xqFxlteUmYAnBdTp4gCAw1pw
-         +Y0EHNub4DmyzK59tuHu62jLXz+/Yc5AqNT9myKv+mNLl0gQlME/2K582GbW5g0CJLgl
-         qeaqU13MR7TPkaWZN55ul7/eAKrqZ0HxiSk8Yp6BNyLsuAPdjRCFEbB0GOlPDyVDlobj
-         BeJurQGRMe1vTweznAf/B0P0d5uPmH1tXBGmzOgVRqr14Bx4zXrBgxCkMy5NzZBJumLt
-         SrrA==
-X-Gm-Message-State: AO0yUKVt4tyNbHioVD4iubAPuA2hxC74HvzuZtlZ+jjcipQ8JpV+7SFY
-        ZvBQiu8bV+njWL5n4mAlczY1Kw==
-X-Google-Smtp-Source: AK7set9PTZvzxhF33ZkIt3r0P1qzuHKaDSEhuvm8Lo6AEfz4xAQ4oYF4+3MYOgHmK1uV4cS/FXE5SQ==
-X-Received: by 2002:a05:6000:1105:b0:2bf:b5ec:4844 with SMTP id z5-20020a056000110500b002bfb5ec4844mr128472wrw.19.1675193092560;
-        Tue, 31 Jan 2023 11:24:52 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id k7-20020adfb347000000b002bfe5efca78sm8647979wrd.98.2023.01.31.11.24.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 11:24:52 -0800 (PST)
-Message-ID: <85ae379d-ee71-7636-1ca1-2fb2baad63f3@linaro.org>
-Date:   Tue, 31 Jan 2023 20:24:49 +0100
+        Tue, 31 Jan 2023 14:25:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12A91C31A;
+        Tue, 31 Jan 2023 11:25:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54277616C2;
+        Tue, 31 Jan 2023 19:25:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCDE9C433D2;
+        Tue, 31 Jan 2023 19:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675193099;
+        bh=Usq/qChe2TB94lautIipeNYeRg/tKGhE2z4UOGHJcX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XKgqHeEnxvJYKo4a0AOCwbNQJqX/0a+666YQLKyzsHnSruZvclUbmL92Lj3V8dy9y
+         wNCZN84wYg8RzExJ948+qiqzp2fAPFJzGxxDEDPpIVIGQQTPqx2KDRWWHdJr+nonDE
+         Z7QGiBEzetzq5mbRpNUVKPFGf0vnNMswwqmsufvg7bWrEpbu0Dc1CSfMuUcoBdzU4a
+         uuRBMZgshu9LNKl0mG2ozX+2gGt35kVJCrbLn70bnZl+D667D48ZuZf/fPBvCi6bb4
+         UCTr5b0c1Xq2ILDxuq6HGKPLLFSoFXf3ZPt+5Sx+0RSgK531DaRxoeeImSpSHP+wwe
+         CKRv9fnl5QppA==
+Date:   Tue, 31 Jan 2023 19:24:55 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 0/1] riscv: Allow to downgrade paging mode from the
+ command line
+Message-ID: <Y9lrB+RUBk1Njhaq@spud>
+References: <20230131151115.1972740-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 09/10] arm64: dts: qcom: add IPQ5332 SoC and MI01.2 board
- support
-Content-Language: en-US
-To:     Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, ulf.hansson@linaro.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, shawnguo@kernel.org,
-        arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, robimarko@gmail.com, quic_gurus@quicinc.com,
-        bhupesh.sharma@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230125104520.89684-1-quic_kathirav@quicinc.com>
- <20230125104520.89684-10-quic_kathirav@quicinc.com>
- <f0312e77-0835-7f79-acf0-3d91d6548f07@linaro.org>
- <8b9ed619-8ff1-53f1-1f3a-c10a3585b9c4@quicinc.com>
- <efe976be-79b9-1f1b-69a1-18dd3b0798df@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <efe976be-79b9-1f1b-69a1-18dd3b0798df@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="caGKd7o6+JAz/98x"
+Content-Disposition: inline
+In-Reply-To: <20230131151115.1972740-1-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 12:56, Kathiravan Thirumoorthy wrote:
->>>> +        sdhc: mmc@7804000 {
->>>> +            compatible = "qcom,ipq5332-sdhci", "qcom,sdhci-msm-v5";
->>>> +            reg = <0x07804000 0x1000>, <0x07805000 0x1000>;
->>>> +
->>>> +            interrupts = <GIC_SPI 313 IRQ_TYPE_LEVEL_HIGH>,
->>>> +                     <GIC_SPI 316 IRQ_TYPE_LEVEL_HIGH>;
->>>> +            interrupt-names = "hc_irq", "pwr_irq";
->>>> +
->>>> +            clocks = <&gcc GCC_SDCC1_AHB_CLK>,
->>>> +                 <&gcc GCC_SDCC1_APPS_CLK>,
->>>> +                 <&xo_board>;
->>>> +            clock-names = "iface", "core", "xo";
->>>> +            mmc-ddr-1_8v;
->>>> +            mmc-hs200-1_8v;
->>>> +            max-frequency = <192000000>;
->>> As Krzysztof pointed out, this one should go.
->>
->>
->> Ack.
-> 
-> Krzysztof & Konrad,
-> 
-> These are the properties of the SDHC controller present in the SoC. So I 
-> think no need to move out these properties to board DTS. Please let me 
-> know if my understanding is otherwise.
 
-Usually max frequency of SDHC controller is depending on the board, so
-no, it is not a property of SoC. The same with type of attached memory.
+--caGKd7o6+JAz/98x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hey Alex,
 
-Best regards,
-Krzysztof
+On Tue, Jan 31, 2023 at 04:11:14PM +0100, Alexandre Ghiti wrote:
+> This new version gets rid of the limitation that prevented KASAN kernels
+> to use the newly introduced parameters.
 
+What's the base commit for this version?
+Fails to apply for me on top of for-next, fixes, rc1, and linux-next :/
+I also tried it on top of your KASAN series, but no luck there either!
+
+Thanks,
+Conor.
+
+> While looking into KASLR, I fell onto commit aacd149b6238 ("arm64: head:
+> avoid relocating the kernel twice for KASLR"): it allows to use the fdt
+> functions very early in the boot process with KASAN enabled by simply
+> compiling a new version of those functions without instrumentation.
+>=20
+> I had to change the handling of the command line parsing to make the
+> code self-contained in kernel/pi/cmd_early.c to avoid calling too many
+> __pi prefixed functions from outside this file.
+>=20
+> I'll use this approach like arm64 to handle the extraction of the random
+> seedi from the device tree for KASLR.
+>=20
+> @Ard: I copied the "pi" name but I have to admit I don't know what it
+> means.
+>=20
+> Alexandre Ghiti (1):
+>   riscv: Allow to downgrade paging mode from the command line
+>=20
+>  .../admin-guide/kernel-parameters.txt         |  5 +-
+>  arch/riscv/kernel/Makefile                    |  2 +
+>  arch/riscv/kernel/pi/Makefile                 | 34 ++++++++++++
+>  arch/riscv/kernel/pi/cmdline_early.c          | 52 +++++++++++++++++++
+>  arch/riscv/lib/memcpy.S                       |  2 +
+>  arch/riscv/lib/memmove.S                      |  2 +
+>  arch/riscv/mm/init.c                          | 36 ++++++++++---
+>  7 files changed, 126 insertions(+), 7 deletions(-)
+>  create mode 100644 arch/riscv/kernel/pi/Makefile
+>  create mode 100644 arch/riscv/kernel/pi/cmdline_early.c
+>=20
+> --=20
+> 2.37.2
+>=20
+
+--caGKd7o6+JAz/98x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9lrBwAKCRB4tDGHoIJi
+0gfGAQCENcv+3hKs/6TXI0FLA0kreZMihuI32sRzt84sGUGHIQEA/uU1ZjoXVe2E
+ZyLE2YYl1Osh/cmRboDUYwy3r6oGNQE=
+=/x1y
+-----END PGP SIGNATURE-----
+
+--caGKd7o6+JAz/98x--
