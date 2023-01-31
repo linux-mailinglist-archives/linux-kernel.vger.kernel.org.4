@@ -2,68 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6623968336E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF3E683370
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjAaRMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S231745AbjAaRNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:13:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbjAaRM2 (ORCPT
+        with ESMTP id S229991AbjAaRNr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:12:28 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA8F530E6;
-        Tue, 31 Jan 2023 09:12:15 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id jh15so6706805plb.8;
-        Tue, 31 Jan 2023 09:12:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dKf5Ya064WBi5OgBkq2boKVDTlvDbMuuWdhqR5krYGY=;
-        b=mqueMbfMP3IEhLybhAA8wG/50RMR8IPrnkkeeXekST9xj6SNcPnynFddM+QJjdzY9t
-         wT59vqZuVUyOx9UnmEhpw51Di+HmojLtRq33Yx+AL4QzYPLm9MAeJ+D4BUhfaJuuETgT
-         DbmlVtmd14YC/HixY3PQZBMux+c/4KNIThuphlvfNGFDIsQed4GpvEy+d5lBJT5XXEr5
-         KI3s+rGNcZ3+ouAcDZ3SXgf8F3VhoM+UofmlEPCl/GEe64rcm1k/1rO00o+7CJYzYvoG
-         09aE32nj09QjhpLh7DIFo/pK0F+hG0aQLLf0W3jJaRhx+RlvpAtPWbup8KSdts5zKX0S
-         zQhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dKf5Ya064WBi5OgBkq2boKVDTlvDbMuuWdhqR5krYGY=;
-        b=lSWoSoWgy0qIx7Uw0XEGOp4XAN32rblD8WW/d2BUiqoMLMqiKo1UNFNLSN+Nd5dUz2
-         pdfwxOqmggkrl7Unk8aEAxKPX1gNS5BhgMolaHBOPMXSvf5lG4cVzl4W1+BzP7uPK3xQ
-         wnIXgmtQY+D1mnGPatLfuaBIfUdzNM17SWxV622beoiQcS6y8cNJc86WletuJsC6av7p
-         MgltTiny4LMEYIhxHj5wMSDTuJn58h3VG8ClB2QQNBU9nyYpHw8aQjTqHP8mAvKqNJ5w
-         njsnj1jQa2uXsNrvfd7+W11FwHkmb3KVnsNN1c3I3hZjdt4ov6CHoMM/lG5RNtwz1rgS
-         V08Q==
-X-Gm-Message-State: AFqh2kopuOcBkwJDPTF10nZ7HnzAADW+0TPrEo9FhJjhbed7Q4lg3m0z
-        Qw64g9TeLslf8/ur3YlFfEXaWpWIb2oBPGyHRmQ=
-X-Google-Smtp-Source: AMrXdXtC29gomKq5jmS7Tfuvvbo+9CTRB4gl4f4Ry4LIsjH2UKCed7susPKjMtgBInlgosqEbP85u2qV+fNMlB2cSlE=
-X-Received: by 2002:a17:90a:6342:b0:229:4c59:3eeb with SMTP id
- v2-20020a17090a634200b002294c593eebmr5781742pjs.51.1675185135179; Tue, 31 Jan
- 2023 09:12:15 -0800 (PST)
+        Tue, 31 Jan 2023 12:13:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6125357C
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:12:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675185162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SPyDkzNg7Fk5+AnC1Y48zK4yNGiKKgn6ZNnFIe1+xxQ=;
+        b=a+jL3fyIa5pZF6EVDVtFi6UKwtnom/D5zFlPoaDiL7NE8eo6w/NoPI7VwQ4ELxdOhYSNh0
+        QrPEjxXtRpayRF4L+h8c5xKeBFz+L3yaM2wswxBigfvVFSgGlGYbVdJ1DKp5WxmqXM1ejG
+        oxHbov/keHUetdQJQFyyPmCoA8CIYEY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-215-F0VE428gNFajppeeb4ManQ-1; Tue, 31 Jan 2023 12:12:41 -0500
+X-MC-Unique: F0VE428gNFajppeeb4ManQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1AFC9385F39B;
+        Tue, 31 Jan 2023 17:12:31 +0000 (UTC)
+Received: from warthog.procyon.org.uk.com (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F0B50C15BAD;
+        Tue, 31 Jan 2023 17:12:29 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 00/13] rxrpc: Increasing SACK size and moving away from softirq, part 5
+Date:   Tue, 31 Jan 2023 17:12:14 +0000
+Message-Id: <20230131171227.3912130-1-dhowells@redhat.com>
 MIME-Version: 1.0
-References: <20230130134316.327556078@linuxfoundation.org>
-In-Reply-To: <20230130134316.327556078@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Tue, 31 Jan 2023 09:12:04 -0800
-Message-ID: <CAJq+SaAx2ripBHbmNN4QmdkmWVQ=ey3sBkO+yLRSqhWwp+bCOw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/204] 5.15.91-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +62,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.15.91 release.
-> There are 204 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 01 Feb 2023 13:42:39 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.91-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+Here's the fifth part of patches in the process of moving rxrpc from doing
+a lot of its stuff in softirq context to doing it in an I/O thread in
+process context and thereby making it easier to support a larger SACK
+table.
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+The full description is in the description for the first part[1] which is
+now upstream.  The second and third parts are also upstream[2].  A subset
+of the original fourth part[3] got applied as a fix for a race[4].
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+The fifth part includes some cleanups:
 
-Thanks.
+ (1) Miscellaneous trace header cleanups: fix a trace string, display the
+     security index in rx_packet rather than displaying the type twice,
+     remove some whitespace to make checkpatch happier and remove some
+     excess tabulation.
+
+ (2) Convert ->recvmsg_lock to a spinlock as it's only ever locked
+     exclusively.
+
+ (3) Make ->ackr_window and ->ackr_nr_unacked non-atomic as they're only
+     used in the I/O thread.
+
+ (4) Don't use call->tx_lock to access ->tx_buffer as that is only accessed
+     inside the I/O thread.  sendmsg() loads onto ->tx_sendmsg and the I/O
+     thread decants from that to the buffer.
+
+ (5) Remove local->defrag_sem as DATA packets are transmitted serially by
+     the I/O thread.
+
+ (6) Remove the service connection bundle is it was only used for its
+     channel_lock - which has now gone.
+
+And some more significant changes:
+
+ (7) Add a debugging option to allow a delay to be injected into packet
+     reception to help investigate the behaviour over longer links than
+     just a few cm.
+
+ (8) Generate occasional PING ACKs to probe for RTT information during a
+     receive heavy call.
+
+ (9) Simplify the SACK table maintenance and ACK generation.  Now that both
+     parts are done in the same thread, there's no possibility of a race
+     and no need to try and be cunning to avoid taking a BH spinlock whilst
+     copying the SACK table (which in the future will be up to 2K) and no
+     need to rotate the copy to fit the ACK packet table.
+
+(10) Use SKB_CONSUMED when freeing received DATA packets (stop dropwatch
+     complaining).
+
+The patches are tagged here:
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/rxrpc-next-20230131
+
+And can be found on this branch:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=rxrpc-next
+
+David
+
+Link: https://lore.kernel.org/r/166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk/ [1]
+Link: https://lore.kernel.org/r/166994010342.1732290.13771061038178613124.stgit@warthog.procyon.org.uk/ [2]
+Link: https://lore.kernel.org/r/167034231605.1105287.1693064952174322878.stgit@warthog.procyon.org.uk/ [3]
+Link: https://lore.kernel.org/r/167308517118.1538866.3440481802366869065.stgit@warthog.procyon.org.uk/ [4]
+
+David Howells (13):
+  rxrpc: Fix trace string
+  rxrpc: Remove whitespace before ')' in trace header
+  rxrpc: Shrink the tabulation in the rxrpc trace header a bit
+  rxrpc: Convert call->recvmsg_lock to a spinlock
+  rxrpc: Allow a delay to be injected into packet reception
+  rxrpc: Generate extra pings for RTT during heavy-receive call
+  rxrpc: De-atomic call->ackr_window and call->ackr_nr_unacked
+  rxrpc: Simplify ACK handling
+  rxrpc: Don't lock call->tx_lock to access call->tx_buffer
+  rxrpc: Remove local->defrag_sem
+  rxrpc: Show consumed and freed packets as non-dropped in dropwatch
+  rxrpc: Change rx_packet tracepoint to display securityIndex not type
+    twice
+  rxrpc: Kill service bundle
+
+ include/trace/events/rxrpc.h | 480 +++++++++++++++++++----------------
+ net/rxrpc/Kconfig            |   9 +
+ net/rxrpc/af_rxrpc.c         |   2 +-
+ net/rxrpc/ar-internal.h      |  15 +-
+ net/rxrpc/call_accept.c      |   2 +-
+ net/rxrpc/call_event.c       |  15 +-
+ net/rxrpc/call_object.c      |   7 +-
+ net/rxrpc/conn_service.c     |   7 -
+ net/rxrpc/input.c            |  60 ++---
+ net/rxrpc/io_thread.c        |  48 +++-
+ net/rxrpc/local_object.c     |   7 +-
+ net/rxrpc/misc.c             |   7 +
+ net/rxrpc/output.c           |  69 ++---
+ net/rxrpc/proc.c             |   4 +-
+ net/rxrpc/recvmsg.c          |  18 +-
+ net/rxrpc/skbuff.c           |   4 +-
+ net/rxrpc/sysctl.c           |  17 +-
+ net/rxrpc/txbuf.c            |  12 +-
+ 18 files changed, 438 insertions(+), 345 deletions(-)
+
