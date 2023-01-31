@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C357F682D8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCE5682D8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjAaNQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S231653AbjAaNQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbjAaNQn (ORCPT
+        with ESMTP id S231407AbjAaNQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:16:43 -0500
+        Tue, 31 Jan 2023 08:16:44 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6B110C9;
-        Tue, 31 Jan 2023 05:16:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFFC2D4D;
+        Tue, 31 Jan 2023 05:16:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675171001; x=1706707001;
+  t=1675171003; x=1706707003;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bDKkyRtHwSFPxVEw6hcGJuHrCfS3E8nNGIlQ35mRFSA=;
-  b=VLi80FMgmSaNNzfdEZPaax8C2iOYBp715qh3DrEhO66yT40bLrzDWnMO
-   JDTj/AN3HVIjRdn1YKQg5E8A//sM8RlmKKRDOTpFyIs30RBmUclsQVB80
-   h4VS8AF111BZ0qjhyamUk/U9n/29jYuvjSm1Vd3SyQIngti/GyvaJnbtG
-   aCBMjphhVqyxrJKR12IwZmNZ208J9E0h4d0UtUyMYOUtWQy8Xl2x30rBm
-   xfQpNOH11e+BTBGhldUEy2LSWXDPciLGt1b8ZO1slegLioecedSt6wgHy
-   sLQjE54h2mn/yzAQgOZeVHynPmU7DxDax4B8rqFY2abKK9EqTR7WS+d+W
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="325534141"
+  bh=EaD2lkLbiSUPIvN7w5iSQEWoS+/2QEnz2PV2lI9JMV8=;
+  b=JCd0m3Vx/ANxHc1y8ubVgrCHU6eBZBlWpeM6qSJgLZLm71f0fNN4tOE4
+   QA4zR714uglyLZtPMMrsE7giEb3rbyDpi7sU1hLp/RhloZond35FmroIM
+   5Y5kK3avtILDw2WvRw3d33frOc15qnQnKJqFF+wFTgKAXE0vUazOzzFq5
+   IjNirywNyYBd6QNKX7J+Vrqb3QEl9CmUCPK9GAw9IORwtEWEcVKS+M/oa
+   a7RbE7VrCfDHzKjruZXCqkrqAlkb3I2YMdivUkBjvEVkN9TaFxI/Y7Xdj
+   Q6iGlqBfm/MXFs2kcqBlxayLWQvRsq44rLbYbGYV+sFc5HNJ8EAGgggMd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="325534148"
 X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="325534141"
+   d="scan'208";a="325534148"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 05:16:40 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="657864791"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 05:16:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="657864800"
 X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="657864791"
+   d="scan'208";a="657864800"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.47.218])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 05:16:38 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 05:16:40 -0800
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>
 Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
         Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH V2 1/9] perf symbols: Correct plt entry sizes for x86
-Date:   Tue, 31 Jan 2023 15:16:17 +0200
-Message-Id: <20230131131625.6964-2-adrian.hunter@intel.com>
+Subject: [PATCH V2 2/9] perf symbols: Add support for x86 .plt.sec
+Date:   Tue, 31 Jan 2023 15:16:18 +0200
+Message-Id: <20230131131625.6964-3-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230131131625.6964-1-adrian.hunter@intel.com>
 References: <20230131131625.6964-1-adrian.hunter@intel.com>
@@ -62,9 +62,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In 32-bit executables the .plt entry size can be set to 4 when it is really
-16. In fact the only sizes used for x86 (32 or 64 bit) are 8 or 16, so
-check for those and, if not, use the alignment to choose which it is.
+The section .plt.sec was originally added for MPX and was first called
+.plt.bnd. While MPX has been deprecated, .plt.sec is now also used for IBT.
+On x86_64, IBT may be enabled by default, but can be switched off
+using gcc option -fcf-protection=none, or switched on by -z ibt or
+ -z ibtplt. On 32-bit, option -z ibt or -z ibtplt will enable IBT.
+
+With .plt.sec, calls are made into .plt.sec instead of .plt, so it
+makes more sense to put the symbols there instead of .plt. A notable
+difference is that .plt.sec does not have a header entry.
+
+For x86, when synthesizing symbols for plt, use offset and entry size of
+.plt.sec instead of .plt when there is a .plt.sec section.
 
 Example on Ubuntu 22.04 gcc 11.3:
 
@@ -94,83 +103,111 @@ Example on Ubuntu 22.04 gcc 11.3:
     Copyright (C) 2021 Free Software Foundation, Inc.
     This is free software; see the source for copying conditions.  There is NO
     warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-    $ gcc -m32 -Wall -Wextra -shared -o libtstpltlib32.so tstpltlib.c
-    $ gcc -m32 -Wall -Wextra -o tstplt32 tstplt.c -L . -ltstpltlib32 -Wl,-rpath=$(pwd)
-    $ perf record -e intel_pt//u --filter 'filter main @ ./tstplt32' ./tstplt32
+    $ gcc -Wall -Wextra -shared -o libtstpltlib.so tstpltlib.c
+    $ gcc -Wall -Wextra -z ibt -o tstplt tstplt.c -L . -ltstpltlib -Wl,-rpath=$(pwd)
+    $ readelf -SW tstplt | grep 'plt\|Name'
+      [Nr] Name              Type            Address          Off    Size   ES Flg Lk Inf Al
+      [11] .rela.plt         RELA            0000000000000698 000698 000060 18  AI  6  24  8
+      [13] .plt              PROGBITS        0000000000001020 001020 000050 10  AX  0   0 16
+      [14] .plt.got          PROGBITS        0000000000001070 001070 000010 10  AX  0   0 16
+      [15] .plt.sec          PROGBITS        0000000000001080 001080 000040 10  AX  0   0 16
+    $ perf record -e intel_pt//u --filter 'filter main @ ./tstplt' ./tstplt
     [ perf record: Woken up 1 times to write data ]
-    [ perf record: Captured and wrote 0.011 MB perf.data ]
-    $ readelf -SW tstplt32 | grep 'plt\|Name'
-      [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf Al
-      [10] .rel.plt          REL             0000041c 00041c 000028 08  AI  5  22  4
-      [12] .plt              PROGBITS        00001030 001030 000060 04  AX  0   0 16   <- ES is 0x04, should be 0x10
-      [13] .plt.got          PROGBITS        00001090 001090 000008 08  AX  0   0  8
+    [ perf record: Captured and wrote 0.015 MB perf.data ]
     $ perf script --itrace=be --ns -F+flags,-event,+addr,-period,-comm,-tid,-cpu,-dso
-    17894.383903029:   tr strt                               0 [unknown] =>         565b81cd main+0x0
-    17894.383903029:   tr end  call                   565b81d4 main+0x7 =>         565b80d0 __x86.get_pc_thunk.bx+0x0
-    17894.383903031:   tr strt                               0 [unknown] =>         565b81d9 main+0xc
-    17894.383903031:   tr end  call                   565b81df main+0x12 =>         565b8070 [unknown]
-    17894.383903032:   tr strt                               0 [unknown] =>         565b81e4 main+0x17
-    17894.383903032:   tr end  call                   565b81e4 main+0x17 =>         565b8050 [unknown]
-    17894.383903033:   tr strt                               0 [unknown] =>         565b81e9 main+0x1c
-    17894.383903033:   tr end  call                   565b81e9 main+0x1c =>         565b8080 [unknown]
-    17894.383903033:   tr strt                               0 [unknown] =>         565b81ee main+0x21
-    17894.383903033:   tr end  call                   565b81ee main+0x21 =>         565b8060 [unknown]
-    17894.383903237:   tr strt                               0 [unknown] =>         565b81f3 main+0x26
-    17894.383903237:   tr end  return                 565b81fc main+0x2f =>         f7c21519 [unknown]
+    38970.522546686:   tr strt                               0 [unknown] =>     55fc222a81a9 main+0x0
+    38970.522546686:   tr end  call               55fc222a81b1 main+0x8 =>     55fc222a80a0 [unknown]
+    38970.522546687:   tr strt                               0 [unknown] =>     55fc222a81b6 main+0xd
+    38970.522546687:   tr end  call               55fc222a81b6 main+0xd =>     55fc222a8080 [unknown]
+    38970.522546688:   tr strt                               0 [unknown] =>     55fc222a81bb main+0x12
+    38970.522546688:   tr end  call               55fc222a81bb main+0x12 =>     55fc222a80b0 [unknown]
+    38970.522546688:   tr strt                               0 [unknown] =>     55fc222a81c0 main+0x17
+    38970.522546688:   tr end  call               55fc222a81c0 main+0x17 =>     55fc222a8090 [unknown]
+    38970.522546689:   tr strt                               0 [unknown] =>     55fc222a81c5 main+0x1c
+    38970.522546894:   tr end  return             55fc222a81cb main+0x22 =>     7f3a4dc29d90 __libc_start_call_main+0x80
 
   After:
 
     $ perf script --itrace=be --ns -F+flags,-event,+addr,-period,-comm,-tid,-cpu,-dso
-    17894.383903029:   tr strt                               0 [unknown] =>         565b81cd main+0x0
-    17894.383903029:   tr end  call                   565b81d4 main+0x7 =>         565b80d0 __x86.get_pc_thunk.bx+0x0
-    17894.383903031:   tr strt                               0 [unknown] =>         565b81d9 main+0xc
-    17894.383903031:   tr end  call                   565b81df main+0x12 =>         565b8070 fn4@plt+0x0
-    17894.383903032:   tr strt                               0 [unknown] =>         565b81e4 main+0x17
-    17894.383903032:   tr end  call                   565b81e4 main+0x17 =>         565b8050 fn1@plt+0x0
-    17894.383903033:   tr strt                               0 [unknown] =>         565b81e9 main+0x1c
-    17894.383903033:   tr end  call                   565b81e9 main+0x1c =>         565b8080 fn2@plt+0x0
-    17894.383903033:   tr strt                               0 [unknown] =>         565b81ee main+0x21
-    17894.383903033:   tr end  call                   565b81ee main+0x21 =>         565b8060 fn3@plt+0x0
-    17894.383903237:   tr strt                               0 [unknown] =>         565b81f3 main+0x26
-    17894.383903237:   tr end  return                 565b81fc main+0x2f =>         f7c21519 [unknown]
+    38970.522546686:   tr strt                               0 [unknown] =>     55fc222a81a9 main+0x0
+    38970.522546686:   tr end  call               55fc222a81b1 main+0x8 =>     55fc222a80a0 fn4@plt+0x0
+    38970.522546687:   tr strt                               0 [unknown] =>     55fc222a81b6 main+0xd
+    38970.522546687:   tr end  call               55fc222a81b6 main+0xd =>     55fc222a8080 fn1@plt+0x0
+    38970.522546688:   tr strt                               0 [unknown] =>     55fc222a81bb main+0x12
+    38970.522546688:   tr end  call               55fc222a81bb main+0x12 =>     55fc222a80b0 fn2@plt+0x0
+    38970.522546688:   tr strt                               0 [unknown] =>     55fc222a81c0 main+0x17
+    38970.522546688:   tr end  call               55fc222a81c0 main+0x17 =>     55fc222a8090 fn3@plt+0x0
+    38970.522546689:   tr strt                               0 [unknown] =>     55fc222a81c5 main+0x1c
+    38970.522546894:   tr end  return             55fc222a81cb main+0x22 =>     7f3a4dc29d90 __libc_start_call_main+0x80
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- tools/perf/util/symbol-elf.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ tools/perf/util/symbol-elf.c | 30 +++++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
 
 diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index aa62735aea7b..9328c162d68f 100644
+index 9328c162d68f..bb1b5cb3ff12 100644
 --- a/tools/perf/util/symbol-elf.c
 +++ b/tools/perf/util/symbol-elf.c
-@@ -360,14 +360,23 @@ static bool get_plt_sizes(struct dso *dso, GElf_Ehdr *ehdr, GElf_Shdr *shdr_plt,
- 		*plt_header_size = 128;
- 		*plt_entry_size = 32;
- 		return true;
-+	case EM_386:
-+	case EM_X86_64:
-+		*plt_entry_size = shdr_plt->sh_entsize;
-+		/* Size is 8 or 16, if not, assume alignment indicates size */
-+		if (*plt_entry_size != 8 && *plt_entry_size != 16)
-+			*plt_entry_size = shdr_plt->sh_addralign == 8 ? 8 : 16;
-+		*plt_header_size = *plt_entry_size;
-+		break;
- 	default: /* FIXME: s390/alpha/mips/parisc/poperpc/sh/xtensa need to be checked */
- 		*plt_header_size = shdr_plt->sh_entsize;
- 		*plt_entry_size = shdr_plt->sh_entsize;
--		if (*plt_entry_size)
--			return true;
--		pr_debug("Missing PLT entry size for %s\n", dso->long_name);
--		return false;
-+		break;
- 	}
-+	if (*plt_entry_size)
-+		return true;
-+	pr_debug("Missing PLT entry size for %s\n", dso->long_name);
-+	return false;
+@@ -379,6 +379,11 @@ static bool get_plt_sizes(struct dso *dso, GElf_Ehdr *ehdr, GElf_Shdr *shdr_plt,
+ 	return false;
  }
  
++static bool machine_is_x86(GElf_Half e_machine)
++{
++	return e_machine == EM_386 || e_machine == EM_X86_64;
++}
++
  /*
+  * We need to check if we have a .dynsym, so that we can handle the
+  * .plt, synthesizing its symbols, that aren't on the symtabs (be it
+@@ -391,8 +396,8 @@ int dso__synthesize_plt_symbols(struct dso *dso, struct symsrc *ss)
+ 	uint32_t nr_rel_entries, idx;
+ 	GElf_Sym sym;
+ 	u64 plt_offset, plt_header_size, plt_entry_size;
+-	GElf_Shdr shdr_plt;
+-	struct symbol *f;
++	GElf_Shdr shdr_plt, plt_sec_shdr;
++	struct symbol *f, *plt_sym;
+ 	GElf_Shdr shdr_rel_plt, shdr_dynsym;
+ 	Elf_Data *syms, *symstrs;
+ 	Elf_Scn *scn_plt_rel, *scn_symstrs, *scn_dynsym;
+@@ -422,10 +427,23 @@ int dso__synthesize_plt_symbols(struct dso *dso, struct symsrc *ss)
+ 		return 0;
+ 
+ 	/* Add a symbol for .plt header */
+-	f = symbol__new(shdr_plt.sh_offset, plt_header_size, STB_GLOBAL, STT_FUNC, ".plt");
+-	if (!f)
++	plt_sym = symbol__new(shdr_plt.sh_offset, plt_header_size, STB_GLOBAL, STT_FUNC, ".plt");
++	if (!plt_sym)
+ 		goto out_elf_end;
+-	symbols__insert(&dso->symbols, f);
++	symbols__insert(&dso->symbols, plt_sym);
++
++	/* Only x86 has .plt.sec */
++	if (machine_is_x86(ehdr.e_machine) &&
++	    elf_section_by_name(elf, &ehdr, &plt_sec_shdr, ".plt.sec", NULL)) {
++		if (!get_plt_sizes(dso, &ehdr, &plt_sec_shdr, &plt_header_size, &plt_entry_size))
++			return 0;
++		/* Extend .plt symbol to entire .plt */
++		plt_sym->end = plt_sym->start + shdr_plt.sh_size;
++		/* Use .plt.sec offset */
++		plt_offset = plt_sec_shdr.sh_offset;
++	} else {
++		plt_offset = shdr_plt.sh_offset + plt_header_size;
++	}
+ 
+ 	scn_dynsym = ss->dynsym;
+ 	shdr_dynsym = ss->dynshdr;
+@@ -474,8 +492,6 @@ int dso__synthesize_plt_symbols(struct dso *dso, struct symsrc *ss)
+ 		goto out_elf_end;
+ 
+ 	nr_rel_entries = shdr_rel_plt.sh_size / shdr_rel_plt.sh_entsize;
+-	plt_offset = shdr_plt.sh_offset;
+-	plt_offset += plt_header_size;
+ 
+ 	ri.is_rela = shdr_rel_plt.sh_type == SHT_RELA;
+ 
 -- 
 2.34.1
 
