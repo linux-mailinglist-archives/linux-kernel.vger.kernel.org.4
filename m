@@ -2,79 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68484682BDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353F7682BDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjAaLwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 06:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
+        id S229624AbjAaLwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 06:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjAaLwS (ORCPT
+        with ESMTP id S229962AbjAaLwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:52:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0C7101
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:52:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19E5B614D5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 11:52:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AC4C433D2;
-        Tue, 31 Jan 2023 11:52:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675165936;
-        bh=TkDgebvBcy1nAPBeWdAqve5nYhA8Jlh68COgNvMgJq8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fEw/isx6nokL5MQajzj0UenWpA26QRuZ9I9TS7D7SPAGyG8zFlRvvnkNHwRsBZUhB
-         Bv5NamFV1ZUxxQdxm4mdYEWV6Bsu9zZ7z41P1nX1WYFElOVcDCIlPacUqvdgD9yv9x
-         PhvaZcAKTM2D9vSiSBtl8SblcXIROWm5J4arqWiY=
-Date:   Tue, 31 Jan 2023 12:52:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers: Restore alignment and newline in Makefile
-Message-ID: <Y9kA7RRfZx1drk5e@kroah.com>
-References: <20230124104145.3962497-1-geert+renesas@glider.be>
+        Tue, 31 Jan 2023 06:52:47 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3351C5FD7;
+        Tue, 31 Jan 2023 03:52:44 -0800 (PST)
+Received: from dggpeml500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4P5k1s4jznzfZ4D;
+        Tue, 31 Jan 2023 19:52:33 +0800 (CST)
+Received: from [10.174.178.240] (10.174.178.240) by
+ dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 31 Jan 2023 19:52:41 +0800
+Subject: Re: [Question] neighbor entry doesn't switch to the STALE state after
+ the reachable timer expires
+To:     Julian Anastasov <ja@ssi.bg>
+CC:     Network Development <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Zhang Changzhong <zhangchangzhong@huawei.com>
+References: <b1d8722e-5660-c38e-848f-3220d642889d@huawei.com>
+ <99532c7f-161e-6d39-7680-ccc1f20349@ssi.bg>
+ <9ebd0210-a4bb-afda-8a4d-5041b8395d78@huawei.com>
+ <9ac5f4f6-36cc-cc6b-1220-f45db141656c@ssi.bg>
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+Message-ID: <1252089d-75db-a45c-d735-6883c772d95a@huawei.com>
+Date:   Tue, 31 Jan 2023 19:52:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230124104145.3962497-1-geert+renesas@glider.be>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9ac5f4f6-36cc-cc6b-1220-f45db141656c@ssi.bg>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.240]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 11:41:45AM +0100, Geert Uytterhoeven wrote:
-> The introduction of drivers/accel/ broke alignment, and removed the
-> newline at the end of the file.  Fix all of that.
+On 2023/1/30 19:01, Julian Anastasov wrote:> On Mon, 30 Jan 2023, Zhang Changzhong wrote:
 > 
-> Fixes: 35b137630f08d913 ("accel/ivpu: Introduce a new DRM driver for Intel VPU")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> On 2023/1/30 3:43, Julian Anastasov wrote:
+>>>
+>>>> Does anyone have a good idea to solve this problem? Or are there other scenarios that might cause
+>>>> such a neighbor entry?
+>>>
+>>> 	Is the neigh entry modified somehow, for example,
+>>> with 'arp -s' or 'ip neigh change' ? Or is bond0 reconfigured
+>>> after initial setup? I mean, 4 days ago?>
+>>
+>> So far, we haven't found any user-space program that modifies the neigh
+>> entry or bond0.
+> 
+> 	Ouch, we do not need tools to hit the problem,
+> thanks to gc_thresh1.
+> 
+>> In fact, the neigh entry has been rarely used since initialization.
+>> 4 days ago, our machine just needed to download files from 172.16.1.18.
+>> However, the laddr has changed, and the neigh entry wrongly switched to
+>> NUD_REACHABLE state, causing the laddr to fail to update.
+> 
+> 	Received ARP packets should be able to change
+> the address. But we do not refresh the entry because
+> its timer is scheduled days ahead.
+> 
+
+Yep.
+
+>>> 	Looking at __neigh_update, there are few cases that
+>>> can assign NUD_STALE without touching neigh->confirmed:
+>>> lladdr = neigh->ha should be called, NEIGH_UPDATE_F_ADMIN
+>>> should be provided. Later, as you explain, it can wrongly
+>>> switch to NUD_REACHABLE state for long time.
+>>>
+>>> 	May be there should be some measures to keep
+>>> neigh->confirmed valid during admin modifications.
+>>>
+>>
+>> This problem can also occur if the neigh entry stays in NUD_STALE state
+>> for more than 99 days, even if it is not modified by the administrator.
+> 
+> 	I see.
+> 
+>>> 	What is the kernel version?
+>>>
+>>
+>> We encountered this problem in 4.4 LTS, and the mainline doesn't seem
+>> to fix it yet.
+> 
+> 	Yep, kernel version is irrelevant.
+> 
+> 	Here is a change that you can comment/test but
+> I'm not sure how many days (100?) are needed :) Not tested.
+> 
+> : From: Julian Anastasov <ja@ssi.bg>
+> Subject: [PATCH] neigh: make sure used and confirmed times are valid
+> 
+> Entries can linger without timer for days, thanks to
+> the gc_thresh1 limit. Later, on traffic, NUD_STALE entries
+> can switch to NUD_DELAY and start the timer which can see
+> confirmed time in the future causing switch to NUD_REACHABLE.
+> But then timer is started again based on the wrong
+> confirmed time, so days in the future. This is more
+> visible on 32-bit platforms.
+> 
+> Problem and the wrong state change reported by Zhang Changzhong:
+> 
+> 172.16.1.18 dev bond0 lladdr 0a:0e:0f:01:12:01 ref 1 used 350521/15994171/350520 probes 4 REACHABLE
+> 
+> 350520 seconds have elapsed since this entry was last updated, but it is
+> still in the REACHABLE state (base_reachable_time_ms is 30000),
+> preventing lladdr from being updated through probe.
+> 
+> Fix it by ensuring timer is started with valid used/confirmed
+> times. There are also places that need used/updated times to be
+> validated.
+> 
+> Reported-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> Signed-off-by: Julian Anastasov <ja@ssi.bg>
 > ---
->  drivers/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  net/core/neighbour.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/Makefile b/drivers/Makefile
-> index f0972e2226c97cb5..9ea6eb3b5d7b7f17 100644
-> --- a/drivers/Makefile
-> +++ b/drivers/Makefile
-> @@ -189,4 +189,4 @@ obj-$(CONFIG_COUNTER)		+= counter/
->  obj-$(CONFIG_MOST)		+= most/
->  obj-$(CONFIG_PECI)		+= peci/
->  obj-$(CONFIG_HTE)		+= hte/
-> -obj-$(CONFIG_DRM_ACCEL)	+= accel/
-> \ No newline at end of file
-> +obj-$(CONFIG_DRM_ACCEL)		+= accel/
-> -- 
-> 2.34.1
+> diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+> index a77a85e357e0..f063e8b8fb7d 100644
+> --- a/net/core/neighbour.c
+> +++ b/net/core/neighbour.c
+> @@ -269,7 +269,7 @@ static int neigh_forced_gc(struct neigh_table *tbl)
+>  			    (n->nud_state == NUD_NOARP) ||
+>  			    (tbl->is_multicast &&
+>  			     tbl->is_multicast(n->primary_key)) ||
+> -			    time_after(tref, n->updated))
+> +			    !time_in_range(n->updated, tref, jiffies))
+>  				remove = true;
+>  			write_unlock(&n->lock);
+>  
+> @@ -289,7 +289,13 @@ static int neigh_forced_gc(struct neigh_table *tbl)
+>  
+>  static void neigh_add_timer(struct neighbour *n, unsigned long when)
+>  {
+> +	unsigned long mint = jiffies - MAX_JIFFY_OFFSET + 86400 * HZ;
+> +
+>  	neigh_hold(n);
+> +	if (!time_in_range(n->confirmed, mint, jiffies))
+> +		n->confirmed = mint;
+> +	if (time_before(n->used, n->confirmed))
+> +		n->used = n->confirmed;
+>  	if (unlikely(mod_timer(&n->timer, when))) {
+>  		printk("NEIGH: BUG, double timer add, state is %x\n",
+>  		       n->nud_state);
+> @@ -982,12 +988,14 @@ static void neigh_periodic_work(struct work_struct *work)
+>  				goto next_elt;
+>  			}
+>  
+> -			if (time_before(n->used, n->confirmed))
+> +			if (time_before(n->used, n->confirmed) &&
+> +			    time_is_before_eq_jiffies(n->confirmed))
+>  				n->used = n->confirmed;
+>  
+>  			if (refcount_read(&n->refcnt) == 1 &&
+>  			    (state == NUD_FAILED ||
+> -			     time_after(jiffies, n->used + NEIGH_VAR(n->parms, GC_STALETIME)))) {
+> +			     !time_in_range_open(jiffies, n->used,
+> +						 n->used + NEIGH_VAR(n->parms, GC_STALETIME)))) {
+>  				*np = n->next;
+>  				neigh_mark_dead(n);
+>  				write_unlock(&n->lock);
 > 
 
+Thanks for your fix!
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I reproduced this problem by directly modifying the confirmed time of
+the neigh entry in STALE state. Your change can fix the problem in this
+scenario.
+
+Just curious, why did you choose 'jiffies - MAX_JIFFY_OFFSET + 86400 * HZ'
+as the value of 'mint'?
+
+Regards,
+Changzhong
+
