@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13A568339A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17F5683398
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjAaRSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
+        id S231407AbjAaRR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjAaRRt (ORCPT
+        with ESMTP id S229647AbjAaRRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:17:49 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47705564B4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:17:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675185440; x=1706721440;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9zBjP78++PUeYFI1Tn93XmBcUNX5nkcvT3SvfzZepBI=;
-  b=JglOxe1aMMNuSmlCUtJcqrhWDwkh/W7M3mjMHEa7I5Lgj3PObF7prvYt
-   GnF8iBAewv7cDJIhPKWPZwPZscKpdA6iFNUzDSJYPeANiaS1kqntvZEa7
-   xuOzRypYhBWfpn/P7u5GT8FMHW/Elo+t1zB8VjriFkglgnrCTVwmuEydm
-   aUd/lbWQXqD+ZCFFcwK2nNDkpaYh5qm+xyhojAHwt0/xq4upepvQttgYz
-   xm8bHHR/BstHOy7y5et9ND6fnJFO+dZTtfu1bSCqfBPVMD8X8GQCP78Au
-   4Mlgja5f3VLzRFLxDqjb/gPH8sw8Vh6hf7e4XI86TdNdZVw5HCEAhqnF2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="308241413"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="308241413"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 09:16:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="909985397"
-X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="909985397"
-Received: from akleen-mobl3.amr.corp.intel.com (HELO [10.241.232.75]) ([10.241.232.75])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 09:16:15 -0800
-Message-ID: <ee5d8c26-a453-678c-be48-d586271573d6@linux.intel.com>
-Date:   Tue, 31 Jan 2023 09:16:11 -0800
+        Tue, 31 Jan 2023 12:17:25 -0500
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3668568A3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:17:00 -0800 (PST)
+Received: from martin by viti.kaiser.cx with local (Exim 4.89)
+        (envelope-from <martin@viti.kaiser.cx>)
+        id 1pMuEv-0000k5-9M; Tue, 31 Jan 2023 18:16:13 +0100
+Date:   Tue, 31 Jan 2023 18:16:13 +0100
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: fix NULL check for rcu pointer
+Message-ID: <20230131171613.mubqpogkk5e6lnrk@viti.kaiser.cx>
+References: <20230131090057.241779-1-martin@kaiser.cx>
+ <Y9kvF0C1kiDctEUw@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/4] swiotlb: Add a new cc-swiotlb implementation for
- Confidential VMs
-To:     Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        konrad.wilk@oracle.com, linux-coco@lists.linux.dev
-Cc:     robin.murphy@arm.com
-References: <20230128083254.86012-1-GuoRui.Yu@linux.alibaba.com>
- <20230128083254.86012-3-GuoRui.Yu@linux.alibaba.com>
- <9b167caf-1b10-f97a-d96a-b7ead8e785e8@linux.intel.com>
- <2ec59355-c8d5-c794-16e8-7d646b43c455@linux.alibaba.com>
- <09a56915-7ce2-b70c-33ec-3a8767269637@linux.intel.com>
- <ccc21265-07aa-cd82-f679-4fee9c51df47@linux.alibaba.com>
-Content-Language: en-US
-From:   Andi Kleen <ak@linux.intel.com>
-In-Reply-To: <ccc21265-07aa-cd82-f679-4fee9c51df47@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9kvF0C1kiDctEUw@kroah.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+Sender: Martin Kaiser <martin@viti.kaiser.cx>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- >No, this cannot guarantee we always have sufficient TLB caches, so we 
-can also have a "No memory for cc-swiotlb buffer" warning.
+Hello Greg and all,
 
-It's not just a warning, it will be IO errors, right?
+Thus wrote Greg Kroah-Hartman (gregkh@linuxfoundation.org):
 
->
-> But I want to emphasize that in this case, the current implementation 
-> is no worse than the legacy implementation. Moreover, dynamic TLB 
-> allocation is more suitable for situations where more disks/network 
-> devices will be hotplugged, in which case you cannot pre-set a 
-> reasonable value.
+> On Tue, Jan 31, 2023 at 10:00:57AM +0100, Martin Kaiser wrote:
+> > Fix the NULL check for padapter->pnetdev->rx_handler_data.
 
-That's a reasonable stand point, but have to emphasize that is 
-"probabilistic" in all the descriptions and comments.
+> > The current code calls rcu_dereference while it holds the rcu read lock
+> > and checks the pointer after releasing the lock. An rcu pointer may only be
+> > used between calls to rcu_read_lock and rcu_read_unlock.
 
-I assume you did some stress testing (E.g. all cores submitting at full 
-bandwidth) to validate that it works for you?
+> > Replace the check with rcu_access_pointer. My understanding is that this
+> > function returns the value of the pointer and needs no locking. We can
+> > then check the pointer but we must not dereference it.
 
--Andi
+> > Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 
+> What commit id does this fix?
 
+the code that checks br_port has been around since the driver was
+imported into staging.
+
+If the patch is considered as a fix, it should have
+
+Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
+
+Best regards,
+
+   Martin
