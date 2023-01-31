@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B029682441
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 06:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6576E682445
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjAaF6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 00:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S230156AbjAaGBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 01:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjAaF6G (ORCPT
+        with ESMTP id S229716AbjAaGBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 00:58:06 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBC38E;
-        Mon, 30 Jan 2023 21:58:00 -0800 (PST)
-X-UUID: 3628b976a12c11eda06fc9ecc4dadd91-20230131
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=KBnNi8SQX4pTbtzS2PM5rlD98IpxdGTkY+6/oG1LIQI=;
-        b=A/gKWnc9FJU8QvYonj802wo+Y0jgpxSt3lpaSimPdI+gVGE7a+H+Nx4V0H5qYz2gzML5lMXK3p98dptc4o4Lr3ySO3ySBvVNHk4CYIRKX92B+vihEBJeypdHW4xn93ey4nxHIHexSi547ZtfTqPaddyyY18E/CGOtHuMToBDMrI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.18,REQID:a64f0095-e040-4b29-87eb-f0c710ddf4cf,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:3ca2d6b,CLOUDID:0a96d355-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: 3628b976a12c11eda06fc9ecc4dadd91-20230131
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 722342448; Tue, 31 Jan 2023 13:57:57 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 31 Jan 2023 13:57:56 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Tue, 31 Jan 2023 13:57:55 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, kyrie wu <kyrie.wu@mediatek.com>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, Irui Wang <irui.wang@mediatek.com>
-Subject: [V5] media: mtk-jpeg: Fixes jpeghw multi-core judgement
-Date:   Tue, 31 Jan 2023 13:57:53 +0800
-Message-ID: <20230131055753.20572-1-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 31 Jan 2023 01:01:37 -0500
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E313B3F9
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 22:01:31 -0800 (PST)
+Received: by mail-vs1-xe31.google.com with SMTP id a24so12905636vsl.2
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 22:01:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+jH9jtw54xpyA3LsRz4MvxNgaHM7qf/mASxIp14kGwU=;
+        b=Xe+fcSj6UKNT8s+4fYZgUIM1+O2VECK/uLab2bCFNZHpaA1Cw291Dn2vZYt6yHkj6W
+         04gmIeNZSuxOhlh4B5MwNZTnNU4gVwq5br6cQWtmoVtb6cm7tTjaZxtu6uL27Iqd4t9R
+         tqdT0LMuv6CySqxMNp8Qbysw3UZ9OGVNCIOk5wj1hbu1xlglsaObX4P4AkqTdFUhkiKk
+         x/bQpLU9FIbUHQvvluXYbkfwxXUEeyKm+naVg9f5ISLlWyQ9DfdHOtqJIBgrC0tZkWM/
+         QkoY1fxbgwUwXx15kpfnP2jntPWT5pSbhGSYS6irEu5lrBdnOZjic7/7Bo1/KomxyBVw
+         uDqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+jH9jtw54xpyA3LsRz4MvxNgaHM7qf/mASxIp14kGwU=;
+        b=zIuMYwnIYpzkVlYua3w41aeUmu5t8ToSQgUGCXs/XEW+6V200F06ho58mKhjo573BJ
+         hmjdh/7Crf095yFJsxvlwC9K/DqrX/fMbUPXYDD72WenGaR355m9td+y0J6vldd8woo6
+         y7gWoSbbgbe30f8Mf7KHjhiFWlhPLBJn1VDhiMBppxCwMIrnpFza0hzol9s7GwnAQ0Jz
+         pEeDxGm2/DrI08Ikfz/KRrwl+YlID3Ax0+frLOzgFcn1ZgOtKTDKwedY7jrDAxSPJPYj
+         gCLc+phMCvl4MNpeK5cmy9UUfMBFRiYIU+fA7JguWEF9dP+VjmK/wHnEWc6NJbcldJmy
+         3tPg==
+X-Gm-Message-State: AO0yUKWFsZwO0nlrizr8D5FGV1TvcF7cpFIuGQpSeX85hwmI5ZMdHsFy
+        c0qrd7XpYQi5HcFmbO5r37qQ07mkS4UsDWKWsn+FOw24SlLGHw==
+X-Google-Smtp-Source: AK7set8T8zGFEyjd7YIsBGyAbXe+hLHmog7RQVHiqnPBoaPeefEtsDF+IRzZWa18/zB+XQZSyeHb16GQwO/ao//beQo=
+X-Received: by 2002:a05:6102:3098:b0:3ec:1029:9eae with SMTP id
+ l24-20020a056102309800b003ec10299eaemr2618701vsb.10.1675144890577; Mon, 30
+ Jan 2023 22:01:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+References: <20230128072737.2995881-1-apatel@ventanamicro.com>
+In-Reply-To: <20230128072737.2995881-1-apatel@ventanamicro.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Tue, 31 Jan 2023 11:31:19 +0530
+Message-ID: <CAK9=C2W=MPqU8UGBt89HMWW7Mpda8prm3_8WnuTR=8vipynDYQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] RISC-V KVM virtualize AIA CSRs
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,70 +71,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+Hi Palmer,
 
-some chips have multi-hw, but others have only one,
-modify the condition of multi-hw judgement
+On Sat, Jan 28, 2023 at 12:57 PM Anup Patel <apatel@ventanamicro.com> wrote:
+>
+> The RISC-V AIA specification is now frozen as-per the RISC-V international
+> process. The latest frozen specifcation can be found at:
+> https://github.com/riscv/riscv-aia/releases/download/1.0-RC1/riscv-interrupts-1.0-RC1.pdf
+>
+> This series implements first phase of AIA virtualization which targets
+> virtualizing AIA CSRs. This also provides a foundation for the second
+> phase of AIA virtualization which will target in-kernel AIA irqchip
+> (including both IMSIC and APLIC).
+>
+> The first two patches are shared with the "Linux RISC-V AIA Support"
+> series which adds AIA driver support.
+>
+> To test this series, use AIA drivers from the "Linux RISC-V AIA Support"
+> series and use KVMTOOL from the riscv_aia_v1 branch at:
+> https://github.com/avpatel/kvmtool.git
+>
+> These patches can also be found in the riscv_kvm_aia_csr_v2 branch at:
+> https://github.com/avpatel/linux.git
+>
+> Changes since v1:
+>  - Addressed from Drew and Conor in PATCH1
+>  - Use alphabetical ordering for SMAIA and SSAIA enum in PATCH2
+>  - Use GENMASK() in PATCH3
+>
+> Anup Patel (7):
+>   RISC-V: Add AIA related CSR defines
+>   RISC-V: Detect AIA CSRs from ISA string
+>   RISC-V: KVM: Drop the _MASK suffix from hgatp.VMID mask defines
+>   RISC-V: KVM: Initial skeletal support for AIA
+>   RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+>   RISC-V: KVM: Virtualize per-HART AIA CSRs
+>   RISC-V: KVM: Implement guest external interrupt line management
 
-Fixes: 934e8bccac95 ("mtk-jpegenc: support jpegenc multi-hardware")
+Can you please provide ACK for the first two patches so that I can
+take it through the KVM RISC-V tree. ?
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-Signed-off-by: irui wang <irui.wang@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 4 +++-
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+Regards,
+Anup
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 79a8f1b1965c..857afaa24cab 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -1694,7 +1694,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	if (list_empty(&pdev->dev.devres_head)) {
-+	if (!jpeg->variant->multi_core) {
- 		INIT_DELAYED_WORK(&jpeg->job_timeout_work,
- 				  mtk_jpeg_job_timeout_work);
- 
-@@ -1888,6 +1888,7 @@ static struct mtk_jpeg_variant mtk8195_jpegenc_drvdata = {
- 	.ioctl_ops = &mtk_jpeg_enc_ioctl_ops,
- 	.out_q_default_fourcc = V4L2_PIX_FMT_YUYV,
- 	.cap_q_default_fourcc = V4L2_PIX_FMT_JPEG,
-+	.multi_core = true,
- };
- 
- static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
-@@ -1899,6 +1900,7 @@ static const struct mtk_jpeg_variant mtk8195_jpegdec_drvdata = {
- 	.ioctl_ops = &mtk_jpeg_dec_ioctl_ops,
- 	.out_q_default_fourcc = V4L2_PIX_FMT_JPEG,
- 	.cap_q_default_fourcc = V4L2_PIX_FMT_YUV420M,
-+	.multi_core = true,
- };
- 
- #if defined(CONFIG_OF)
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-index b9126476be8f..20517f7a5405 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-@@ -60,6 +60,7 @@ enum mtk_jpeg_ctx_state {
-  * @ioctl_ops:			the callback of jpeg v4l2_ioctl_ops
-  * @out_q_default_fourcc:	output queue default fourcc
-  * @cap_q_default_fourcc:	capture queue default fourcc
-+ * @multi_core:			mark jpeg hw is multi_core or not
-  */
- struct mtk_jpeg_variant {
- 	struct clk_bulk_data *clks;
-@@ -74,6 +75,7 @@ struct mtk_jpeg_variant {
- 	const struct v4l2_ioctl_ops *ioctl_ops;
- 	u32 out_q_default_fourcc;
- 	u32 cap_q_default_fourcc;
-+	bool multi_core;
- };
- 
- struct mtk_jpeg_src_buf {
--- 
-2.18.0
-
+>
+>  arch/riscv/include/asm/csr.h      | 107 ++++-
+>  arch/riscv/include/asm/hwcap.h    |   8 +
+>  arch/riscv/include/asm/kvm_aia.h  | 137 +++++++
+>  arch/riscv/include/asm/kvm_host.h |  14 +-
+>  arch/riscv/include/uapi/asm/kvm.h |  22 +-
+>  arch/riscv/kernel/cpu.c           |   2 +
+>  arch/riscv/kernel/cpufeature.c    |   2 +
+>  arch/riscv/kvm/Makefile           |   1 +
+>  arch/riscv/kvm/aia.c              | 624 ++++++++++++++++++++++++++++++
+>  arch/riscv/kvm/main.c             |  14 +
+>  arch/riscv/kvm/mmu.c              |   3 +-
+>  arch/riscv/kvm/vcpu.c             | 185 +++++++--
+>  arch/riscv/kvm/vcpu_insn.c        |   4 +-
+>  arch/riscv/kvm/vm.c               |   4 +
+>  arch/riscv/kvm/vmid.c             |   4 +-
+>  15 files changed, 1075 insertions(+), 56 deletions(-)
+>  create mode 100644 arch/riscv/include/asm/kvm_aia.h
+>  create mode 100644 arch/riscv/kvm/aia.c
+>
+> --
+> 2.34.1
+>
