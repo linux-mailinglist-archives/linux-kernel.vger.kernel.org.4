@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5325D6837EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEF3683805
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 21:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjAaUxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 15:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S231819AbjAaUzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 15:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbjAaUxY (ORCPT
+        with ESMTP id S231815AbjAaUzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 15:53:24 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B759233DE;
-        Tue, 31 Jan 2023 12:53:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1675198373; bh=HDxB0P5zwGe+abY0IPTRkMgnzZ77OEeJH9Ujawc8nac=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=IHQ0MyKh50LjZyqH4Ip8oUE4FdiyeJ4Sjz0lsxOl6lH0aRSlIS+e1565NVL9FHxzE
-         n7c4h7nmVoPj1laI6Rkru4nNHbrRKq/qLqNOnpk3Z1y2Hv06x+dhkqW/p941u63mVt
-         uQK0cDzYwRjLxofjOlczeQG0Ro8yVD/wEzBXE7xcGk5qgJqJcX98bXb8NrSKjiO9DH
-         Xl3ej7Q4hY1P4hKHr4vJX2H8xgyn+zbnXxGXCA9S8EWEicAuoYYdHdgNlr4m9b0Eqw
-         X/105Hpb2hbBURRDjTPDTRTqsLdJge2xFqkg7XREoVA4bZj5FM/+Gu11Y47y9ZqIdh
-         ds6DZD8ywsjDw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWAOW-1p7ys32rJS-00XbHB; Tue, 31
- Jan 2023 21:52:53 +0100
-Date:   Tue, 31 Jan 2023 21:52:52 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        devicetree@vger.kernel.org,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Pratyush Yadav <p.yadav@ti.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: bus: moxtet: Fix reference to SPI
- peripheral DT properties
-Message-ID: <Y9l/pGzBCgWcLR2w@probook>
-References: <20230129123553.1284503-1-j.neuschaefer@gmx.net>
- <20230130221626.GA3618337-robh@kernel.org>
+        Tue, 31 Jan 2023 15:55:18 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664E94A234
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:55:07 -0800 (PST)
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DAF873F194
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:55:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1675198505;
+        bh=B79xjy+K/93G68irDU5evQCBz5+5dY2qXWejhUcP4yM=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=i/8NOjjfW+iKS22JuMVldan6hBW+Qyw2fyIzKDCFbwovicoDR/vWbuzTEF8yGREkS
+         lys5PB0lNqKr2C/gRzTz+ACaU5X48gp10kW9zq/irTwZA6LW0Lwre4Ye4W6BFC27up
+         M5VW7C9V1khthekvW9KOQZXDnI/4BAZF1w6j8rJH27C4E4Cea2JLPLDdjTBNyOWj5c
+         8F4wXJ2zlnAWAr/rbioiYDi1kVSQCakuLmcEBAUf8l+mFvJYdRmV8mFadHSOZGU5gG
+         vRgVuf6puR3sTiXCDNVsuMug5B9v8V/f3wLnEmN2y+XCw8/Ipc+aVX3hsDlSvyN+32
+         S5HUq1VFSQIgg==
+Received: by mail-wm1-f69.google.com with SMTP id o2-20020a05600c510200b003dc51c95c6aso888049wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 12:55:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B79xjy+K/93G68irDU5evQCBz5+5dY2qXWejhUcP4yM=;
+        b=jxD3YYVhkJTRlxtNcZa40oJ7WpxzCLwAGG7GENKR0eaa9q1L3BZiCsC2Fqsq1KXOqv
+         O7RB4rwKJgSQ2jVMb9VgbL+O/tMME8ISed3UPv1MkbVGqPUq5WNI2czBgYlfgrHE9H1j
+         GYqP0eAOeOVB6ah+WTt47JEaDpvmduCHFxBomayvGF+AbZLlR+NAKgWzCqIpi5WgK0tr
+         V4mT6cARriXVD53jBnRETw0B/WYDYBZqePP+TDMCu9UzxffGOtV1sbbbH6BQlP6O0QtZ
+         1AhbkVjUKlUj1OtVXEkz8z5F+lYtxtvLqfwIb+31fNL3j6usHU0eF+IJjhgjJp/QRHTq
+         7VCA==
+X-Gm-Message-State: AO0yUKV4HOWMML3vai71Cb6xhV+6ZzWA7qAdfND4UtZCFO1+zPFUH7Ta
+        fI0pAchoy8MEZCTUP+UpsGfrE8rMD3n3kZTmv/GMbDgMmIQWNF5uGr2NLtDxuERcwezcgDf6FPk
+        T2x8bjEoJuS+WISgYRGdhE6rPOfET2Y9QF6YtbLb7YQ==
+X-Received: by 2002:a05:600c:4f83:b0:3dc:5506:7e2c with SMTP id n3-20020a05600c4f8300b003dc55067e2cmr10463858wmq.19.1675198504917;
+        Tue, 31 Jan 2023 12:55:04 -0800 (PST)
+X-Google-Smtp-Source: AK7set82sJixkvkLMLHoa3nvqG8TLbzfqqWI1GTKGu1ymE03gyMXrfvh4vUm95VYrte1QuVWUQpV1A==
+X-Received: by 2002:a05:600c:4f83:b0:3dc:5506:7e2c with SMTP id n3-20020a05600c4f8300b003dc55067e2cmr10463842wmq.19.1675198504626;
+        Tue, 31 Jan 2023 12:55:04 -0800 (PST)
+Received: from qwirkle.internal ([81.2.157.149])
+        by smtp.gmail.com with ESMTPSA id bd16-20020a05600c1f1000b003d1f3e9df3csm21316535wmb.7.2023.01.31.12.55.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 12:55:04 -0800 (PST)
+From:   Andrei Gherzan <andrei.gherzan@canonical.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Andrei Gherzan <andrei.gherzan@canonical.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 1/4] selftests: net: udpgso_bench_rx: Fix 'used uninitialized' compiler warning
+Date:   Tue, 31 Jan 2023 20:53:16 +0000
+Message-Id: <20230131205318.475414-1-andrei.gherzan@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="syKY1ZXdedU5+4rp"
-Content-Disposition: inline
-In-Reply-To: <20230130221626.GA3618337-robh@kernel.org>
-X-Provags-ID: V03:K1:7lRz+bdu1ad+wEiPBtAh1XCwjNWoWay9EuEAnQGWvm25gFHTEu2
- wOaeKJ4mSiOcJDyspIbXmBzBVQwPKkGGLtBeCaQME8Fhq9XjbizeUc7O8mafBtp6K6qhE60
- R3m7hyR+g10NM9YB3TV0qzd6RzWPyKxYZRvNiKDXs8/tvYH+0SBOZIOdA+AY/ESbmX5APPU
- 8+pGeryq83YW/ZuMAyWpA==
-UI-OutboundReport: notjunk:1;M01:P0:FJ07ktveZSg=;F8DE8xdz/2jFX+E3tkuVSisKGtM
- LYR4sD0r/i9V4RoAYHTrHhNnY5TIIwB6rGNxvxG7+5ghcssW27hT01+YRxKo5xRBS0szDa59Y
- 6xnD8QOA28npgBoQ+rJy5U64C/8E9POc+tX9vSLaKy0rqMKjGvIIkgUMesgPaGJyqyvU00r4j
- BS+xBSatgawoxCtDs6EchASIsAlvZCSD3zq3LhlxyLQeDyciN+/ymg6lY4BzrQxSZysP2pErk
- TUnpUzuCg7Kdv8oCHTzL9vcTRjIWmhJD5+UIkYww8W4WgHhkLbxRQfv2hZdcbBc2ArHdU8AdA
- It1NtIT9AR2kRslEH6pJrJ1L1WCxhUa5gBtQvbMrXm6wk1MYD7fLEU31I8MLH8lKG7htT0DWh
- TR78hIstjc4fIV3gqccFlp6/aorZK3kWkSJ7rX7DIDOUzd4oP/iaLOs6HgCKZc5WTkvGuqtgg
- d6qenvbfeEi1ZO9bfKu4ZnE1AEdHS8sW3MvDfU9CSwbwx21pesGVn9/3r7syZwZ1rUrBgdZoi
- cyDILk2wsUFQ16JDicCsBzqmjA0QEZ0DKIAyx9ObRkZ9+z4rFeXYmL0RzNxuFRieExOBYhM/F
- knH+EoHAcFVM8SH3swHgQz4B33OwQozblqJAjWav7zNmLTCgUFEEyyRrtx4syiJSa0KoHhTdy
- WGrvfa+NjNj7NTN8FDFtBGuVnwtfhyx4Uq6cl5bsYazeuYZ3kiJBFdJ8b23YDxf7o370NI44i
- K085BuhcU8o9G86ZPsiSGCPJEd1rS3n0Fk/rF/K028rwDhAcI9lOJKqyL9Fc3EKZC5v1hHbGs
- 6qb2Vhs4PJK5xkVPPIG97zNXa9RZhGOD465X/f0nYOkuEU6U2obAQfzVC2y8ms7P98Zu1ITIM
- o0IQRwd7u7Sp1TUBwmAga66MdIciFn9rXJTvTEMwJWI/rLsk8k7hcJ6xaKWwun/psWdCuQaB3
- UJ7T14Lt91CN9JYkjWiA+d7fCpA=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This change fixes the following compiler warning:
 
---syKY1ZXdedU5+4rp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+/usr/include/x86_64-linux-gnu/bits/error.h:40:5: warning: ‘gso_size’ may
+be used uninitialized [-Wmaybe-uninitialized]
+   40 |     __error_noreturn (__status, __errnum, __format,
+   __va_arg_pack ());
+         |
+	 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	 udpgso_bench_rx.c: In function ‘main’:
+	 udpgso_bench_rx.c:253:23: note: ‘gso_size’ was declared here
+	   253 |         int ret, len, gso_size, budget = 256;
 
-On Mon, Jan 30, 2023 at 04:16:26PM -0600, Rob Herring wrote:
-> On Sun, Jan 29, 2023 at 01:35:53PM +0100, Jonathan Neusch=C3=A4fer wrote:
-> > spi-bus.txt has been converted to YAML and the peripheral properties
-> > have been moved to spi-controller.yaml.
-> >=20
-> > Fixes: 0a1b929356830 ("spi: Add YAML schemas for the generic SPI option=
-s")
-> > Fixes: 8762b07c95c18 ("spi: dt-bindings: add schema listing peripheral-=
-specific properties")
-> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> > ---
-> >  Documentation/devicetree/bindings/bus/moxtet.txt | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> I'm not really interested in fixes to .txt bindings. Fix it by=20
-> converting to schema if you want to.
+Fixes: 3327a9c46352 ("selftests: add functionals test for UDP GRO")
+Signed-off-by: Andrei Gherzan <andrei.gherzan@canonical.com>
+---
+ tools/testing/selftests/net/udpgso_bench_rx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fair enough.
+diff --git a/tools/testing/selftests/net/udpgso_bench_rx.c b/tools/testing/selftests/net/udpgso_bench_rx.c
+index 6a193425c367..d0895bd1933f 100644
+--- a/tools/testing/selftests/net/udpgso_bench_rx.c
++++ b/tools/testing/selftests/net/udpgso_bench_rx.c
+@@ -250,7 +250,7 @@ static int recv_msg(int fd, char *buf, int len, int *gso_size)
+ static void do_flush_udp(int fd)
+ {
+ 	static char rbuf[ETH_MAX_MTU];
+-	int ret, len, gso_size, budget = 256;
++	int ret, len, gso_size = 0, budget = 256;
+ 
+ 	len = cfg_read_all ? sizeof(rbuf) : 0;
+ 	while (budget--) {
+-- 
+2.34.1
 
-> By my count, there's 37 other cases, why just this one?
-
-Mainly because a patch to a large number of files seemed harder to
-coordinate well.
-
-
-Jonathan
-
---syKY1ZXdedU5+4rp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmPZf34ACgkQCDBEmo7z
-X9v8LxAAp84UuYkoLEGgNNgB5bDiBPkYSLZtIiV/sbNbjuvjkDQz4pcxSkfKufo/
-ARMFrucQkSD3OkRfvF4L9RLmHaty1adwiKYS9pbGikfTcNI0OjAv8JVC+zxzstjg
-zHp7rxItVhRtlIsH93o8owMMCf3bhkpnRLMzfln27iUcEzTct9L610oKsrde4B7v
-S7ocuNr4+tK5tHdSjVew4CAR+YL+hxffYVZti7YKYx6PA0ip8lXALxH+2qCPGL90
-dGOWv6/7OrOGDgN4UAHIE//qr/ulpxXPVu9vjWyw5Gn58CD+TYmZgRwc2YHdqFYJ
-QsuzGW7ZrIlYJ9L6ECFThs33j67Ck0KlwqDtz5Ak/Ew1UehLL7EtPxZcRY6plmpU
-BWFxIuVh7BIcKGRQOF7WVDMqnnTz+eHVeYV7UWPft+IOE7qDvpsed9c2IY7m32ir
-fGMYoX1GJVUhEugBjnlOGLD4S+sUIkY5LF96yfWKZGV//gQRH1oTj2HJnTUj5QVw
-Rw9yW7vRaH0jnDrG1vlF7vyeTJo/y4gs23bmmdas8hu6dfORDFAgyqn+1qBl5taC
-mV/qqUiOz8TRbFaM9coFvUDIwswcSuxw7DSJ+bz5mOoZ9IQLLPpr/b9IIMWJ5qz3
-qwHJ7UmoD5AXReRvHL6toh9GKqU8KinAF5YI+SoTohuqS5b5UPQ=
-=lOlu
------END PGP SIGNATURE-----
-
---syKY1ZXdedU5+4rp--
