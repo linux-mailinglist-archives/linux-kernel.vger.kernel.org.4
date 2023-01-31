@@ -2,156 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC3268245E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 333DF682460
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbjAaGRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 01:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S230370AbjAaGR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 01:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjAaGRW (ORCPT
+        with ESMTP id S229686AbjAaGRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 01:17:22 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83573B672;
-        Mon, 30 Jan 2023 22:17:20 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30ULNuSD024707;
-        Mon, 30 Jan 2023 22:17:08 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=l2L3cisvEjmiAD01KHy6Fs1+AkDIVGzwS00H0AHdScM=;
- b=TI6Jy8DyQ/zHSGV8FKddcg8pzLvcRe/FxNuhJ17Y8WRmoSCIQPX61cEXOi/EJ00C6S3Q
- SvhCRyoM13Ew5nMvY11AaL66n4Bed0/RHnJn9KYh7xN/pfNaJm/zSjaMKJM46aehGpGO
- /HKyiGd2OK8IL58rHTTyEBWTF9ZaPwC/mhbwt435rWV1U1cczHLvHhLRDF7/ujKcIx/y
- rGVONokb4h+txXtCkW2Zxri/6jukqs2AqPly/9i13bmc3G53qf/4NOwmDzbVtqWG9upJ
- 1cOOJWdCT38n2a497Cb91RP3naIMFmGHvCGz42KRrZecGvoeRUcTzGuYyDDUXhH+qpLk gg== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3nd1xurc5y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 30 Jan 2023 22:17:07 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 30 Jan
- 2023 22:17:06 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Mon, 30 Jan 2023 22:17:06 -0800
-Received: from localhost.localdomain (unknown [10.28.36.165])
-        by maili.marvell.com (Postfix) with ESMTP id 1F0C23F7078;
-        Mon, 30 Jan 2023 22:17:02 -0800 (PST)
-From:   Ratheesh Kannoth <rkannoth@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <leon@kernel.org>, <jiri@resnulli.us>
-CC:     <sgoutham@marvell.com>, Ratheesh Kannoth <rkannoth@marvell.com>
-Subject: [net PATCH v2] octeontx2-af: Fix devlink unregister
-Date:   Tue, 31 Jan 2023 11:46:59 +0530
-Message-ID: <20230131061659.1025137-1-rkannoth@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 31 Jan 2023 01:17:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3313B641;
+        Mon, 30 Jan 2023 22:17:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 567FE612E6;
+        Tue, 31 Jan 2023 06:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17996C433EF;
+        Tue, 31 Jan 2023 06:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675145842;
+        bh=GMEUHLupoK0SLnzwoNrELALifXu7rHL8trakhBe60h4=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=uxfkiJCiW5WhOuRBS4BNgeXUffWbsrOlGizOBCGS/UIl5arVe+6S/Nf0jw56N0f7C
+         XsQ2rlXcU9la577QEiw/swtUUqciaPxKIVzZzd60BpNODNekhVK4OX4RAuL9QU9UsV
+         fpz2+DDVjEprzKZ47BJgswq9feotRSfR8FH7TduQdYOXAdiisKiGEUiTki22Mk/v9+
+         Elc12LkVYARdHIqcZuu8aK+3FOSGyekfBQZSEU8ujP0bBGB5L+4hHJy4HY3PzeVFJJ
+         YkoG+RDNzk82i8gV4sDgp77pWQKxce2xU4b8/WF4anVRs7q7wajjsL4rRyQFuNWWP6
+         sn8aOoDnWg+Ag==
+Date:   Tue, 31 Jan 2023 06:17:17 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
+CC:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_6/7=5D_riscv=3A_dts=3A_starfive=3A?= =?US-ASCII?Q?_Add_initial_StarFive_JH7110_device_tree?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <0db7824b-184d-dfae-f61d-3048392c9895@starfivetech.com>
+References: <20221220011247.35560-1-hal.feng@starfivetech.com> <20221220011247.35560-7-hal.feng@starfivetech.com> <0db7824b-184d-dfae-f61d-3048392c9895@starfivetech.com>
+Message-ID: <39F228FA-2298-4813-9BDE-7100DE920213@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: pK-3cuWDnJGWAUzTtPi0N8klhnIr_qSw
-X-Proofpoint-GUID: pK-3cuWDnJGWAUzTtPi0N8klhnIr_qSw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_02,2023-01-30_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Exact match feature is only available in CN10K-B.
-Unregister exact match devlink entry only for
-this silicon variant.
 
-Fixes: 87e4ea29b030 ("octeontx2-af: Debugsfs support for exact match.")
-Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
----
- .../marvell/octeontx2/af/rvu_devlink.c        | 35 ++++++++++++++-----
- 1 file changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
-index bda1a6fa2ec4..e4407f09c9d3 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_devlink.c
-@@ -1500,6 +1500,9 @@ static const struct devlink_param rvu_af_dl_params[] = {
- 			     BIT(DEVLINK_PARAM_CMODE_RUNTIME),
- 			     rvu_af_dl_dwrr_mtu_get, rvu_af_dl_dwrr_mtu_set,
- 			     rvu_af_dl_dwrr_mtu_validate),
-+};
-+
-+static const struct devlink_param rvu_af_dl_param_exact_match[] = {
- 	DEVLINK_PARAM_DRIVER(RVU_AF_DEVLINK_PARAM_ID_NPC_EXACT_FEATURE_DISABLE,
- 			     "npc_exact_feature_disable", DEVLINK_PARAM_TYPE_STRING,
- 			     BIT(DEVLINK_PARAM_CMODE_RUNTIME),
-@@ -1556,7 +1559,6 @@ int rvu_register_dl(struct rvu *rvu)
- {
- 	struct rvu_devlink *rvu_dl;
- 	struct devlink *dl;
--	size_t size;
- 	int err;
- 
- 	dl = devlink_alloc(&rvu_devlink_ops, sizeof(struct rvu_devlink),
-@@ -1578,21 +1580,32 @@ int rvu_register_dl(struct rvu *rvu)
- 		goto err_dl_health;
- 	}
- 
-+	err = devlink_params_register(dl, rvu_af_dl_params, ARRAY_SIZE(rvu_af_dl_params));
-+	if (err) {
-+		dev_err(rvu->dev,
-+			"devlink params register failed with error %d", err);
-+		goto err_dl_health;
-+	}
-+
- 	/* Register exact match devlink only for CN10K-B */
--	size = ARRAY_SIZE(rvu_af_dl_params);
- 	if (!rvu_npc_exact_has_match_table(rvu))
--		size -= 1;
-+		goto done;
- 
--	err = devlink_params_register(dl, rvu_af_dl_params, size);
-+	err = devlink_params_register(dl, rvu_af_dl_param_exact_match,
-+				      ARRAY_SIZE(rvu_af_dl_param_exact_match));
- 	if (err) {
- 		dev_err(rvu->dev,
--			"devlink params register failed with error %d", err);
--		goto err_dl_health;
-+			"devlink exact match params register failed with error %d", err);
-+		goto err_dl_exact_match;
- 	}
- 
-+done:
- 	devlink_register(dl);
- 	return 0;
- 
-+err_dl_exact_match:
-+	devlink_params_unregister(dl, rvu_af_dl_params, ARRAY_SIZE(rvu_af_dl_params));
-+
- err_dl_health:
- 	rvu_health_reporters_destroy(rvu);
- 	devlink_free(dl);
-@@ -1605,8 +1618,14 @@ void rvu_unregister_dl(struct rvu *rvu)
- 	struct devlink *dl = rvu_dl->dl;
- 
- 	devlink_unregister(dl);
--	devlink_params_unregister(dl, rvu_af_dl_params,
--				  ARRAY_SIZE(rvu_af_dl_params));
-+
-+	devlink_params_unregister(dl, rvu_af_dl_params, ARRAY_SIZE(rvu_af_dl_params));
-+
-+	/* Unregister exact match devlink only for CN10K-B */
-+	if (rvu_npc_exact_has_match_table(rvu))
-+		devlink_params_unregister(dl, rvu_af_dl_param_exact_match,
-+					  ARRAY_SIZE(rvu_af_dl_param_exact_match));
-+
- 	rvu_health_reporters_destroy(rvu);
- 	devlink_free(dl);
- }
--- 
-2.25.1
+On 31 January 2023 02:00:26 GMT, Hal Feng <hal=2Efeng@starfivetech=2Ecom> =
+wrote:
+>On Tue, 20 Dec 2022 09:12:46 +0800, Hal Feng wrote:
+>> From: Emil Renner Berthing <kernel@esmil=2Edk>
+>>=20
+>> Add initial device tree for the JH7110 RISC-V SoC by StarFive
+>> Technology Ltd=2E
+>>=20
+>> Signed-off-by: Emil Renner Berthing <kernel@esmil=2Edk>
+>> Co-developed-by: Jianlong Huang <jianlong=2Ehuang@starfivetech=2Ecom>
+>> Signed-off-by: Jianlong Huang <jianlong=2Ehuang@starfivetech=2Ecom>
+>> Co-developed-by: Hal Feng <hal=2Efeng@starfivetech=2Ecom>
+>> Signed-off-by: Hal Feng <hal=2Efeng@starfivetech=2Ecom>
+>> ---
+>>  arch/riscv/boot/dts/starfive/jh7110=2Edtsi | 411 +++++++++++++++++++++=
+++
+>>  1 file changed, 411 insertions(+)
+>>  create mode 100644 arch/riscv/boot/dts/starfive/jh7110=2Edtsi
+>
+>I wanna add i2c nodes (i2c0-6) in the next version, so someone else
+>can use them when they submit i2c driver patches=2E
+
+All of the other series depend on this one for enablement,
+so unless the binding for i2c is already upstream I'd advise keeping it se=
+parate=2E
+
+Cheers,
+Conor=2E
 
