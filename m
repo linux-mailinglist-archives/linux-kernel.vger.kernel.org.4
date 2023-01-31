@@ -2,87 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BD2682D31
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3773682D28
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:01:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjAaNB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
+        id S230432AbjAaNBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjAaNBv (ORCPT
+        with ESMTP id S229624AbjAaNBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:01:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F074C6FD
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675170066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5LAlV4rwXGaZAkBT5gd6JtG7tn12Ct026ebSvrWPbW4=;
-        b=CmXfT2YgESrhThVHbUMr6LrO1NCoGdzhGMEWJRNlUc4nf2IalZUHUZk8dT0/56qoT2ygLS
-        CBl8iu8Ynlw1bTcs4XUdWvbSd6L4NfaS7KjAOHLM6Y3R0x2uH5J3m3swXtuKrfM+gZrMi1
-        idIMzbqAOAG0AObf2e0X3+ADYwPnFlk=
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com
- [209.85.160.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-212-JdCVZGF4OQKlIn36R_S9QA-1; Tue, 31 Jan 2023 08:01:05 -0500
-X-MC-Unique: JdCVZGF4OQKlIn36R_S9QA-1
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-15ba18af8d6so5580437fac.23
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:00:49 -0800 (PST)
+        Tue, 31 Jan 2023 08:01:06 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190134C0EF;
+        Tue, 31 Jan 2023 05:01:05 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id c4-20020a1c3504000000b003d9e2f72093so12394735wma.1;
+        Tue, 31 Jan 2023 05:01:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VcbQEiUfrn1ZLUYtm1to7N6PATT0Q4d4Al24IcBS9+8=;
+        b=gxbalLRF7g/piLUDzum6ebHhSbBaltk6UMjAP7SzNURpivtTQRNbXwLEF3xjaouFBn
+         jtFHwMyOW0WxQK0V1w2+IWl0yv85YcEJXQf6uPgkCbbSV6zGUMvwpM8jO54q0LJmsfzE
+         Sn+g6BOpSl2VHk6D7eM0XrTl34FLD9+JxoVqEcjU4QX8LfQlYpCbtWtzySRmxaTAeiN2
+         Yho9h0l1V3OoxmRXvtL6RwynC9iju0zES5zGPs6pd2AaktDox1ymMdOjA/tRnwTAIp5L
+         +woUlu2SxAF3KNorJCpALEkhhOF+HRlFpsYDcDjt9frz5AKSF7B80R8n6Bg6o4yi4UAd
+         qz3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5LAlV4rwXGaZAkBT5gd6JtG7tn12Ct026ebSvrWPbW4=;
-        b=Do0rbrrdenIfCLpXXbGhMp4UMuuMhyLmxJnL2RABKKbHx2vMsQWNHwCeWgobR1a8GQ
-         BaCeyUsRbyFf2qZKBf7QQUrnRXgPetB0lCsC7NfzVRnpkRG1+nnmgSe2JzFDRjtA2b11
-         ITXJq9fV8HlQ1m9jWswMXQccDnMLZcfOWfoJ8FB8szooN9La8TmEpS5pX9gy3biIz3xA
-         bFH9Ur3dDqAQ/Rj0Y3X0ebxuBDVJT5nvwmFbL1GPYL9vZyA82901hHD27JRZSBrOos/R
-         VT+OBuEAUV3ln3NbLpb0Ld+mJ681Rnd7wz7NF+bvC68dUvw7iVMvRMvtQIaOt2Hfd81V
-         Xt4Q==
-X-Gm-Message-State: AO0yUKX0nZXtQoXPEYj7obJBQhXbGp8WB0UMzh2kzth8UgENLiJol+66
-        76iObU7BQ7yL9nTo9dTtUn85CeWvAh7nTfVN3NHrUFBZ0g5eri0Y9m+SwCrMoX3zzw+igC8LTTZ
-        I1Ox2wimzYDiwaRpOSrjMo0zs
-X-Received: by 2002:a05:6870:ebc3:b0:163:758d:a6b7 with SMTP id cr3-20020a056870ebc300b00163758da6b7mr2880302oab.1.1675170048988;
-        Tue, 31 Jan 2023 05:00:48 -0800 (PST)
-X-Google-Smtp-Source: AK7set/3EcOyUfREamMpigitPUuOxl0q6+e2Sf3auXXnXQriycKTacCv8kCcq1zOOtoetgGsmXZm4Q==
-X-Received: by 2002:a05:6870:ebc3:b0:163:758d:a6b7 with SMTP id cr3-20020a056870ebc300b00163758da6b7mr2880278oab.1.1675170048723;
-        Tue, 31 Jan 2023 05:00:48 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-113-28.dyn.eolo.it. [146.241.113.28])
-        by smtp.gmail.com with ESMTPSA id dy31-20020a05620a60df00b0070531c5d655sm9925169qkb.90.2023.01.31.05.00.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 05:00:48 -0800 (PST)
-Message-ID: <f753ad2b0c19e085867698f7bbbe37f6d172772e.camel@redhat.com>
-Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: disable hardware DSA
- untagging for second MAC
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     arinc9.unal@gmail.com, Felix Fietkau <nbd@nbd.name>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        erkin.bozoglu@xeront.com
-Date:   Tue, 31 Jan 2023 14:00:43 +0100
-In-Reply-To: <20230128094232.2451947-1-arinc.unal@arinc9.com>
-References: <20230128094232.2451947-1-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VcbQEiUfrn1ZLUYtm1to7N6PATT0Q4d4Al24IcBS9+8=;
+        b=g3ycmcJmGxADuAkDuyk85H444mLRexcacPILOnZo8ThX8ymIvqV535YvN0K3G/wTQD
+         DqhwCN2JXh/s66oK7LkyrOq4VTo803Myx4HAJ2Vahc6Xw5hARylvMuJ69wNhc9eQvhxw
+         duu3daoHEOuBYcOP5fqU7uGF+vmgITpgN1u3qnIqByhSOnuTcOw5fpfX7FADYY+tmZal
+         Qjirwv5dhD8Jo6BIulE6lNJ0VE1JHvbA/zBlPWEbvt2KL2e0CCTQ/tqHiJxvTNe3sVFC
+         AXOuaHP7I9nUKgqp+m0ak8IPNnm3pOLxbzpQOmUkNVdGawxA/U10wWXcfkXUGI5FZ+Sn
+         0m3A==
+X-Gm-Message-State: AFqh2kozHCIpCbdhCY7jkuJRE4Qd55beZonWIOkd+qWskXu7Je4tOzD7
+        RYm4T5NhmM1TBmZYyoqpsv0=
+X-Google-Smtp-Source: AMrXdXuDDJd2SOnxH8EH5v5wZHtF9KUTDRi/lGRngFPYhNv4y5IUyuOEIXA9HCw05LZe4uX1KZugCA==
+X-Received: by 2002:a05:600c:a4e:b0:3db:14d0:65be with SMTP id c14-20020a05600c0a4e00b003db14d065bemr48389876wmq.34.1675170063488;
+        Tue, 31 Jan 2023 05:01:03 -0800 (PST)
+Received: from smtpclient.apple ([167.99.200.149])
+        by smtp.gmail.com with ESMTPSA id g8-20020adfe408000000b002bdda9856b5sm14901344wrm.50.2023.01.31.05.01.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 31 Jan 2023 05:01:02 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] media: rc: add keymap for Beelink Mini MXIII remote
+From:   Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <Y9kJfPqtd98wIQ6r@gofer.mess.org>
+Date:   Tue, 31 Jan 2023 17:00:59 +0400
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 (3.46.3-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Message-Id: <34CD7297-AC0A-404D-B90C-D00FA861A43E@gmail.com>
+References: <20230128034117.3983105-1-christianshewitt@gmail.com>
+ <6e953652-4a24-6f3c-74e7-07c25fa1c6c1@linaro.org>
+ <Y9YwbiJz9vOBejdL@gofer.mess.org> <20230130213020.GA3541260-robh@kernel.org>
+ <Y9kJfPqtd98wIQ6r@gofer.mess.org>
+To:     Sean Young <sean@mess.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,37 +81,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-01-28 at 12:42 +0300, arinc9.unal@gmail.com wrote:
-> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
->=20
-> According to my tests on MT7621AT and MT7623NI SoCs, hardware DSA untaggi=
-ng
-> won't work on the second MAC. Therefore, disable this feature when the
-> second MAC of the MT7621 and MT7623 SoCs is being used.
->=20
-> Fixes: 2d7605a72906 ("net: ethernet: mtk_eth_soc: enable hardware DSA unt=
-agging")
-> Link: https://lore.kernel.org/netdev/6249fc14-b38a-c770-36b4-5af6d41c21d3=
-@arinc9.com/
-> Tested-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> ---
->=20
-> Final send which should end up on the list. I tested this with Felix's
-> upcoming patch series. This fix is still needed on top of it.
->=20
-> https://lore.kernel.org/netdev/20221230073145.53386-1-nbd@nbd.name/
->=20
-> The MTK_GMAC1_TRGMII capability is only on the MT7621 and MT7623 SoCs whi=
-ch
-> I see this problem on. I'm new to coding so I took an educated guess from
-> the use of MTK_NETSYS_V2 to disable this feature altogether for MT7986 So=
-C.
 
-Keeping this one a little more on pw. It would be great is someone else
-could validate the above on the relevant H/W.
+> On 31 Jan 2023, at 4:28 pm, Sean Young <sean@mess.org> wrote:
+>=20
+> On Mon, Jan 30, 2023 at 03:30:20PM -0600, Rob Herring wrote:
+>> On Sun, Jan 29, 2023 at 08:38:06AM +0000, Sean Young wrote:
+>>> On Sat, Jan 28, 2023 at 11:11:32AM +0100, Krzysztof Kozlowski wrote:
+>>>> On 28/01/2023 04:41, Christian Hewitt wrote:
+>>>>> Add a keymap and bindings for the simple IR (NEC) remote used with
+>>>>> the Beelink Mini MXIII Android STB device.
+>>>>>=20
+>>>>> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+>>>>> ---
+>>>>> .../devicetree/bindings/media/rc.yaml         |  1 +
+>>>>> drivers/media/rc/keymaps/Makefile             |  1 +
+>>>>> drivers/media/rc/keymaps/rc-beelink-mxiii.c   | 54 =
++++++++++++++++++++
+>>>>> include/media/rc-map.h                        |  1 +
+>>>>> 4 files changed, 57 insertions(+)
+>>>>> create mode 100644 drivers/media/rc/keymaps/rc-beelink-mxiii.c
+>>>>>=20
+>>>>> diff --git a/Documentation/devicetree/bindings/media/rc.yaml =
+b/Documentation/devicetree/bindings/media/rc.yaml
+>>>>> index 266f1d5cae51..f390a5d2c82d 100644
+>>>>> --- a/Documentation/devicetree/bindings/media/rc.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/media/rc.yaml
+>>>>> @@ -39,6 +39,7 @@ properties:
+>>>>>       - rc-avertv-303
+>>>>>       - rc-azurewave-ad-tu700
+>>>>>       - rc-beelink-gs1
+>>>>> +      - rc-beelink-mxiii
+>>>>=20
+>>>> Bindings are separate patches. Didn't you get such feedback =
+already?
+>>>=20
+>>> The only change for new keymaps is an added entry to the rc-map-name =
+enum.
+>>> In the past, new keymaps have been accepted with that single line in =
+the
+>>> same commit.
+>>=20
+>> It's been a checkpatch.pl warning since 2018. The separation is so =
+that=20
+>> commit messages in the DT only repo[1] make sense.
+>=20
+> Ok, makes sense.=20
 
-Thanks,
+I will resend v2 series(s) with the bindings separated. Are there any =
+other
+issues to address?
 
-Paolo
-
+Christian=
