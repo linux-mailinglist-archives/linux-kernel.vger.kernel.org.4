@@ -2,220 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D5B6829D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D1B682966
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbjAaKCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:02:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60874 "EHLO
+        id S232799AbjAaJrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:47:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbjAaKBz (ORCPT
+        with ESMTP id S232776AbjAaJqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:01:55 -0500
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 31 Jan 2023 02:01:45 PST
-Received: from mail.multiname.org (h4.multiname.org [94.130.68.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221834B19A;
-        Tue, 31 Jan 2023 02:01:44 -0800 (PST)
-Received: from webmail.multiname.org (unknown [10.0.10.104])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.multiname.org (Postfix) with ESMTPSA id 4P5gBf04bKzPLtZC;
-        Tue, 31 Jan 2023 10:44:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ccbib.org; s=20220806;
-        t=1675158298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u92+jTmd41zljmbXNuo5Urnc5+K1eFfPMB3du4y+R74=;
-        b=mhQP+PBiE7mkse22lhpvhHcKOXJhwDbjsgVQnI7m/0bwvTvUNbw3vsKbyt2/CQMOFoW0zV
-        YzGWlK5Vah9zvehcED7KrKNV902o9gDTAlcxGSetPMaHpvxCpE+HoLcIOiUC5qcYSUBbfq
-        y5nExMivJr2ru+ykXsmmgqgWXWEvK39oxniZBOnIoRG7/dnpln/x/p0QqdH+rO+h8Zt6+I
-        fRKAMnsa1i++oatCj0BXdJHULVNYKO8H143FkySe2mxB4GhWsYnEYaldnFIthZarBjDt0n
-        Sa6tNP9xBLUkyZwRWQYglrV1WQ3ZqsRI/DdCaqYxDJNJYOHfGc/Ng5hTneMtzJv9INVDq0
-        KnP7Nk0LFm2aVqj342Me/VLt1Zvtli2MpEeytXrET81QTjlOQYzljl/cJ39co9lNNUQNcO
-        mTYl+u/x2QXPqByTnMy897XuR+r0KzuEacgR5ZPvrPV4dvuDhbXvo+47omSHfGevX7TN1L
-        1s1ziuw0SFmYfqP9aib+j216zZNyLsBQUpkeY+pJVIKGKtGHC+y08v1m0t94RAp5iMUZDY
-        0y85wyo2Qqx1YGd73A2pnyM1WbbSfkTeaeYVrN8DHv/+kGdA+FsplXfme25IC1cKdUgSXk
-        hnmIWO24z5KrooYQGzN/mObG93RmLQdZR8bbfJNBLgVKHCK4U5u60=
+        Tue, 31 Jan 2023 04:46:47 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D823A28D01
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:46:08 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id j1so2820562uan.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:46:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3iVwQ6OE7I/ZpBzOfnMMeG4GgdbN3q4VGBz+KufgsBA=;
+        b=IBcfJ9TYShiDcDsVsc5wbFq8KvDYb+Gpnp3FKEbuwRyqlEWqaHOKL4k0GEZw88VVUc
+         e+b6/pmmlFa+P3d1Fk9O+9QG3hfztRsmWRt0RKu+VBLr71H9HkvKmrlSXz/2omPPAJve
+         JE9cXHpn5D0fC73lWA6fzu334HEU22QFLI9OKbuN1SzEWEzrUZt7LWovikmwhOhfh1SZ
+         5p5+rcQ/+flmXkPB/7dIAuoQ7t9Qpl5q/gfuio4xn3Um8gxpydIWbrTCalrma28vl0D5
+         6NAqTvoGPb4+Cv7dBhlxhTro5yPaEDiWo/SmxF1CO3g5VJEN1vRsWo5ajAkxu+rS3koG
+         oeEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3iVwQ6OE7I/ZpBzOfnMMeG4GgdbN3q4VGBz+KufgsBA=;
+        b=qDlMkLfYKFuUPIgl8X8u74FMjC2lPynK6wh6sr0eJw6TH5qTe3aaX7ZJSaJDWaXrFm
+         8cw/k540ftTmFjJk8fhHA+i/4RSbKMFFD+Yw5lPrFqobWCauIXSwTS7gh4PQytFBeOrS
+         h5a5ULbttsrV44EV2EfFK5FwuLSImN1Gzc2TlGgRpkpZEGBI0BXR8TXzKpbrdfK6UBca
+         gSG0beocBsJfJuyfZstJi3vpGUetzFtl0fbM3lmI5qogeieTW1Zs8KD1p2mxqxziF1gA
+         0cAdU6o+nvC8sPA04MkkXObiy8iP8jZ363XwvacGpK+uJ6TUvKzG5reEAeDSdkoj1mac
+         AHfw==
+X-Gm-Message-State: AFqh2kraZArKlFVyronntt9xueZefEYMH6L78nX7y8Ih5ZqekS1Me8SY
+        u53DaSk+kIWt3XMrm6bzd4rHuYkGeeFJU1hqMzQ2Gg==
+X-Google-Smtp-Source: AMrXdXuGWo/seGO07O9e25GfBiJrqx0QHSq8MH8+pXYsFFt1Gvp7d5VBGq3efWEznQ+YPMxSvdkz2EpEuoaDZJJaIQ0=
+X-Received: by 2002:ab0:274a:0:b0:63d:5ab4:6c66 with SMTP id
+ c10-20020ab0274a000000b0063d5ab46c66mr4832432uap.25.1675158323289; Tue, 31
+ Jan 2023 01:45:23 -0800 (PST)
 MIME-Version: 1.0
-Date:   Tue, 31 Jan 2023 10:44:57 +0100
-From:   harald@ccbib.org
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Andreas Feldner <pelzi@flying-snail.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: dht11: Read bit stream from IRQ on falling edges
- only
-In-Reply-To: <20230130202216.42034309@jic23-huawei>
-References: <Y9a0RZ+inWs44Kn8@debian-qemu.internal.flying-snail.de>
- <20230130202216.42034309@jic23-huawei>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <45efc11e5b4cdba3766f19190bb65840@ccbib.org>
-X-Sender: harald@ccbib.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230130134306.862721518@linuxfoundation.org>
+In-Reply-To: <20230130134306.862721518@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 31 Jan 2023 15:15:12 +0530
+Message-ID: <CA+G9fYtYXAeOv9SXb0B9LxxpLU30Td-xUVZF5jpvTfwhu0JQnQ@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/143] 5.10.166-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-01-30 21:22, Jonathan Cameron wrote:
-> On Sun, 29 Jan 2023 19:05:23 +0100
-> Andreas Feldner <pelzi@flying-snail.de> wrote:
-> 
->> Currently, IRQs for both falling and raising edges of the GPIO
->> line connected to the DHT11 device are requested. However, the
->> low states do not carry information, it is possible to determine
->> 0 and 1 bits from the timing of two adjacent falling edges as
->> well.
+On Mon, 30 Jan 2023 at 19:51, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.166 release.
+> There are 143 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 01 Feb 2023 13:42:39 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.166-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This probably is true, but it wasn't obvious from reading the data
-sheet, how constant the low times actually are. Back then the idea
-also was, to use the low times to do recovery from line noise etc.
-In the end the driver works reliably without, so we could make
-this change.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-However aside from the DHT11 there are also a number of different
-chips sold as DHT22. I tried to get as many of them as possible
-and made extensive tests to ensure they all work properly and
-with different timer resolutions.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-It would be quite an effort to replicate this for your new
-algorithm. However, if you want to pursue this, the first step
-would be to prove (probably by calculation), that no matter the
-timer resolution (ie some systems have 32kHz timers only) the
-new algorithm doesn't lead to decoding ambiguity in cases where
-the current algorithm is unambiguous.
+## Build
+* kernel: 5.10.166-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 930bc29c79c40d957f1ec23eba4fc9abec745eb5
+* git describe: v5.10.165-144-g930bc29c79c4
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.165-144-g930bc29c79c4
 
->> Doing so does no longer requires to read the GPIO line value
->> within the IRQ handler, plus halves the number of IRQs to be
->> handled at all.
+## Test Regressions (compared to v5.10.165)
 
-This seems like a really small benefit. And we would lose the
-low state timings in debug output, which I personally find quite
-convenient. Unless there is data, that this change actually improves
-something for somebody, I'd reject it.
+## Metric Regressions (compared to v5.10.165)
 
-Also if we ever are to support shared interrupts, we will need to
-read the line value anyway.
+## Test Fixes (compared to v5.10.165)
 
->> Signed-off-by: Andreas Feldner <pelzi@flying-snail.de>
-> 
-> +CC Harald  Not been that many years since Harald replied, so address
-> may still be good.
+## Metric Fixes (compared to v5.10.165)
 
-Thanks for including me in the discussion.
+## Test result summary
+total: 152407, pass: 125784, fail: 3629, skip: 22665, xfail: 329
 
-best regards,
-Harald
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 150 passed, 1 failed
+* arm64: 49 total, 46 passed, 3 failed
+* i386: 39 total, 37 passed, 2 failed
+* mips: 31 total, 29 passed, 2 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 32 total, 25 passed, 7 failed
+* riscv: 16 total, 14 passed, 2 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 42 total, 40 passed, 2 failed
 
->> ---
->>  drivers/iio/humidity/dht11.c | 28 +++++++++++-----------------
->>  1 file changed, 11 insertions(+), 17 deletions(-)
->> 
->> diff --git a/drivers/iio/humidity/dht11.c 
->> b/drivers/iio/humidity/dht11.c
->> index c97e25448772..d1cd053c5dd4 100644
->> --- a/drivers/iio/humidity/dht11.c
->> +++ b/drivers/iio/humidity/dht11.c
->> @@ -30,13 +30,13 @@
->> 
->>  #define DHT11_DATA_VALID_TIME	2000000000  /* 2s in ns */
->> 
->> -#define DHT11_EDGES_PREAMBLE 2
->> +#define DHT11_EDGES_PREAMBLE 1
->>  #define DHT11_BITS_PER_READ 40
->>  /*
->>   * Note that when reading the sensor actually 84 edges are detected, 
->> but
->>   * since the last edge is not significant, we only store 83:
->>   */
->> -#define DHT11_EDGES_PER_READ (2 * DHT11_BITS_PER_READ + \
->> +#define DHT11_EDGES_PER_READ (DHT11_BITS_PER_READ + \
->>  			      DHT11_EDGES_PREAMBLE + 1)
->> 
->>  /*
->> @@ -46,6 +46,7 @@
->>   * 1-bit: 68-75uS -- typically 70uS (AM2302)
->>   * The acutal timings also depend on the properties of the cable, 
->> with
->>   * longer cables typically making pulses shorter.
->> + * Low time is constant 50uS.
->>   *
->>   * Our decoding depends on the time resolution of the system:
->>   * timeres > 34uS ... don't know what a 1-tick pulse is
->> @@ -63,7 +64,8 @@
->>  #define DHT11_START_TRANSMISSION_MIN	18000  /* us */
->>  #define DHT11_START_TRANSMISSION_MAX	20000  /* us */
->>  #define DHT11_MIN_TIMERES	34000  /* ns */
->> -#define DHT11_THRESHOLD		49000  /* ns */
->> +#define DHT11_LOW		50000  /* ns */
->> +#define DHT11_THRESHOLD		(49000 + DHT11_LOW)  /* ns */
->>  #define DHT11_AMBIG_LOW		23000  /* ns */
->>  #define DHT11_AMBIG_HIGH	30000  /* ns */
->> 
->> @@ -83,7 +85,7 @@ struct dht11 {
->> 
->>  	/* num_edges: -1 means "no transmission in progress" */
->>  	int				num_edges;
->> -	struct {s64 ts; int value; }	edges[DHT11_EDGES_PER_READ];
->> +	struct {s64 ts; }	edges[DHT11_EDGES_PER_READ];
->>  };
->> 
->>  #ifdef CONFIG_DYNAMIC_DEBUG
->> @@ -99,7 +101,7 @@ static void dht11_edges_print(struct dht11 *dht11)
->>  	for (i = 1; i < dht11->num_edges; ++i) {
->>  		dev_dbg(dht11->dev, "%d: %lld ns %s\n", i,
->>  			dht11->edges[i].ts - dht11->edges[i - 1].ts,
->> -			dht11->edges[i - 1].value ? "high" : "low");
->> +			"falling");
->>  	}
->>  }
->>  #endif /* CONFIG_DYNAMIC_DEBUG */
->> @@ -125,14 +127,8 @@ static int dht11_decode(struct dht11 *dht11, int 
->> offset)
->>  	unsigned char temp_int, temp_dec, hum_int, hum_dec, checksum;
->> 
->>  	for (i = 0; i < DHT11_BITS_PER_READ; ++i) {
->> -		t = dht11->edges[offset + 2 * i + 2].ts -
->> -			dht11->edges[offset + 2 * i + 1].ts;
->> -		if (!dht11->edges[offset + 2 * i + 1].value) {
->> -			dev_dbg(dht11->dev,
->> -				"lost synchronisation at edge %d\n",
->> -				offset + 2 * i + 1);
->> -			return -EIO;
->> -		}
->> +		t = dht11->edges[offset + i + 1].ts -
->> +		    dht11->edges[offset + i].ts;
->>  		bits[i] = t > DHT11_THRESHOLD;
->>  	}
->> 
->> @@ -174,9 +170,7 @@ static irqreturn_t dht11_handle_irq(int irq, void 
->> *data)
->>  	struct dht11 *dht11 = iio_priv(iio);
->> 
->>  	if (dht11->num_edges < DHT11_EDGES_PER_READ && dht11->num_edges >= 
->> 0) {
->> -		dht11->edges[dht11->num_edges].ts = ktime_get_boottime_ns();
->> -		dht11->edges[dht11->num_edges++].value =
->> -						gpiod_get_value(dht11->gpiod);
->> +		dht11->edges[dht11->num_edges++].ts = ktime_get_boottime_ns();
->> 
->>  		if (dht11->num_edges >= DHT11_EDGES_PER_READ)
->>  			complete(&dht11->completion);
->> @@ -224,7 +218,7 @@ static int dht11_read_raw(struct iio_dev *iio_dev,
->>  			goto err;
->> 
->>  		ret = request_irq(dht11->irq, dht11_handle_irq,
->> -				  IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
->> +				  IRQF_TRIGGER_FALLING,
->>  				  iio_dev->name, iio_dev);
->>  		if (ret)
->>  			goto err;
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
