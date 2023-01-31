@@ -2,111 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E0968225B
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC18682261
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 03:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjAaCtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 21:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
+        id S229787AbjAaCxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 21:53:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjAaCtu (ORCPT
+        with ESMTP id S229489AbjAaCxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 21:49:50 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E917425287;
-        Mon, 30 Jan 2023 18:49:48 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30V2V3UM021098;
-        Tue, 31 Jan 2023 02:49:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=BWcjC5DZ3idQSQAxRdqK3fIUmKR0z6P+iv+wHKcKKZU=;
- b=DiybgHbJhd8hyJF5ju2xguD+IYjdJ3r9uG3KkWvK8rl0AaMQ250mREgEdDlcx6PsBJaz
- EzyRlLPxlOwDbLaQvv13JuhCYMffrn0t1Rva40cWcnLa2SgIXomVJyy2YR1xzLlXjQEh
- vHw7rtyPrz5Hpcx7VuHBkp1xWsxdkwF0QhX51iFnBmlg5l7BhhyO/yDgc3Z1Omwdct8y
- BExas+jnR6pmUS+WKmdpN8vvkD86AWEdIxIs4EdePc5tpyS2MtOKTp3VMKMt77JGIF4Y
- yD2W6BxV0QAHbxnSTMYWzE5GfGvM+3TKSpXknh/7OK52/FBJzMMhShWjgXMRXOccMG16 yQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nejdm0uah-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 02:49:42 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30V2nfAJ016448
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 02:49:41 GMT
-Received: from [10.239.154.244] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 30 Jan
- 2023 18:49:40 -0800
-Message-ID: <5f37bdef-5447-8def-7bb0-a498879abc4c@quicinc.com>
-Date:   Tue, 31 Jan 2023 10:49:37 +0800
+        Mon, 30 Jan 2023 21:53:21 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134AC8A5D;
+        Mon, 30 Jan 2023 18:53:19 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5V3c4KZJz4x1d;
+        Tue, 31 Jan 2023 13:53:16 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675133597;
+        bh=09jW2tvc8pZY2j9cfBuPWS9KOrpAa6KgScWfS9szkK4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=e7LMQiOrH61qDTdRlHMlopNk6ET3y7ruynPtEDHYAa3SAB0DgGXzIv0HBt9Z1pq6y
+         m8ZBklOUWS1qa6lbYz3yUrtPKfLG6Sulm+7wd2T1h2wmrcCpdJaS+DQ/lDqJZhiSc/
+         MTWjpVSDnK+BwfII2pLVh9wTpeo7M7bsnILWuKbonBJb3U7bMxyEzxqhivWbHIhVlj
+         UyLazyokr7VIqmr3vAsnm8j+ujVRzo6T1zRZa0ZZkHotcl7mAkIfZd0P0dpxQRaT7+
+         raOQ1wDp2LfabnsZpghQUvMJTVb6r+ywardO1MFc99CfcGzDPUz1bXK1tk4QYiOACW
+         jqClF+axhxLeQ==
+Date:   Tue, 31 Jan 2023 13:53:15 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Vlastimil Babka <vbabka@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the mm tree
+Message-ID: <20230131135315.7d0544da@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5] trace: acquire buffer from temparary trace sequence
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-References: <1675065249-23368-1-git-send-email-quic_linyyuan@quicinc.com>
- <28cd9aca-1945-ceed-2756-162132d576ef@quicinc.com>
- <20230130143041.713c4c7b@gandalf.local.home>
- <e2735a3a-4a9b-8b3a-0671-b3f56187cbe2@quicinc.com>
- <20230130213735.72cdcee4@gandalf.local.home>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <20230130213735.72cdcee4@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VC6qKWC0c4KKGGg27GVlldL-4Sgg7LDf
-X-Proofpoint-GUID: VC6qKWC0c4KKGGg27GVlldL-4Sgg7LDf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-30_19,2023-01-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- priorityscore=1501 spamscore=0 suspectscore=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=748 bulkscore=0 mlxscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301310023
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/RowAaNrbXg=hPkYgIfpf3XW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/RowAaNrbXg=hPkYgIfpf3XW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 1/31/2023 10:37 AM, Steven Rostedt wrote:
-> On Tue, 31 Jan 2023 10:06:22 +0800
-> Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
->
->> yes, agree it will be safe for dwc3, but i don't know if any possible
->> hacker,
->>
->> as the function always return a valid pointer even when hacker input a
->> large size.
-> But gives a nice big warning if that's the case. This is not something that
-> can be modified by user input. We do not need to worry about
-> kernel implementations that could overflow (and trigger a WARN_ON() when
-> they do). Especially since the max size is greater than the max size of the
-> content of an event.
->
-> A lot of systems that worry about hackers enable "panic_on_warn" which
-> means that if the WARN_ON() triggers, the machine will crash, which will at
-> most cause a DOS, but not something people can use to hack into the machine
-> with.
+Hi all,
 
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-thanks, please help review the change.
+  72082700a92e ("Revert "mm/compaction: fix set skip in fast_find_migratebl=
+ock"")
 
+It is commit
 
->
-> -- Steve
+  95e7a450b819 ("Revert "mm/compaction: fix set skip in fast_find_migratebl=
+ock"")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RowAaNrbXg=hPkYgIfpf3XW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYgpsACgkQAVBC80lX
+0GxH5ggAliGdexnz0oBKm/shUs832p0G9JDtTaufd3elP1sysAEYeWbmh6/kCLRN
+1CQtjbzS4A1biIXv9Jtf3SQ6dZGNS5Wl4wBWKxOl9p0lKBJVroHyhn0VxHCmsC4Q
+o4imF3CmpG1Pwr5o9cqduGNiE7LBshSaZjWDqEvzy3ZMw4bJzEOnF6JUo74iukQ9
+/DQjtokN7SCXSfQvNTyyh7drr+Yrl2AgcsbMkIBQzXVAUxHIvB7XFTw+bGu9rXTM
+l9VzscTxnQwTsjp+L7PFbfqeueo5uxaxcf9F5E8JQ8RMLyS2Z0EPfyZDLa9GgoHt
+ES1MoxsMu+yJPJeGcQUJgghG7FlMFg==
+=LXlc
+-----END PGP SIGNATURE-----
+
+--Sig_/RowAaNrbXg=hPkYgIfpf3XW--
