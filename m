@@ -2,235 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC6B68344E
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FF368344B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjAaRvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
+        id S229816AbjAaRvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbjAaRvJ (ORCPT
+        with ESMTP id S229546AbjAaRu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:51:09 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0065913DC0
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:51:04 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VG0615009054;
-        Tue, 31 Jan 2023 17:50:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=SSdWI2Q6EgXRJJN3L5+J3f3kteoq06xmdprIwXSPPJE=;
- b=NQxKfyMeABtFuUjxWbk40GMU36F0aVYw+8PI383rQ2WJ9hV+fLihFCW2bTeibJ7WPEwX
- BJZIDByYoemolBBr+EEarTCy2zRkLSaBAyWd4saUO7Qz1Zz8MsTKa4+OjlDblyLAGo9S
- HbT48UMI6t+J/H832tXMXHaeK+SXDQ2G5PCQGytBtuX7rlJnZroaHZZEfwOIQZEQF5vB
- guyKWpV4LQvgzICMT6ElATxx8mUSkUT3IJjT6h+NWnMcIYOD9KEpoLQlN04wUenv4b+H
- DF9TN5hQdefnw4lTo3AQI41VtdsClBxQX4HxtAReOY+OJ7NZfY5aDZGkAt2AoY7ontFz vQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ngmcc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 17:50:33 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VHoX5x008320;
-        Tue, 31 Jan 2023 17:50:33 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ngmbd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 17:50:33 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFOC3g028514;
-        Tue, 31 Jan 2023 17:50:31 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuyh9y4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 31 Jan 2023 17:50:31 +0000
-Received: from b03ledav001.gho.boulder.ibm.com ([9.17.130.232])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VHoT9i38142510
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Jan 2023 17:50:30 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 222666E050;
-        Tue, 31 Jan 2023 17:52:37 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45A526E04E;
-        Tue, 31 Jan 2023 17:52:32 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.211.110.248])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 31 Jan 2023 17:52:32 +0000 (GMT)
-Message-ID: <706d1a6ad110749a9519548a2d5bebf090301586.camel@linux.ibm.com>
-Subject: Re: Linux guest kernel threat model for Confidential Computing
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     "Reshetova, Elena" <elena.reshetova@intel.com>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
-        "Kleen, Andi" <andi.kleen@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Wunner, Lukas" <lukas.wunner@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
-        "jbachmann@google.com" <jbachmann@google.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        "Lange, Jon" <jlange@microsoft.com>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>
-Date:   Tue, 31 Jan 2023 12:49:54 -0500
-In-Reply-To: <DM8PR11MB5750EC7B7FE96476BA0F652EE7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
-References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <Y9EkCvAfNXnJ+ATo@kroah.com>
-         <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <Y9Jh2x9XJE1KEUg6@unreal>
-         <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <Y9JyW5bUqV7gWmU8@unreal>
-         <DM8PR11MB57507D9C941D77E148EE9E87E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <702f22df28e628d41babcf670c909f1fa1bb3c0c.camel@linux.ibm.com>
-         <DM8PR11MB5750F939C0B70939AD3CBC37E7D39@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <220b0be95a8c733f0a6eeddc08e37977ee21d518.camel@linux.ibm.com>
-         <DM8PR11MB575074D3BCBD02F3DD677A57E7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
-         <261bc99edc43990eecb1aac4fe8005cedc495c20.camel@linux.ibm.com>
-         <DM8PR11MB5750EC7B7FE96476BA0F652EE7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wIpV78JSaQ2gvlK6paZZOBEPS4yk-4OE
-X-Proofpoint-GUID: 1sY5Ys9OXj7tZuMX3rxUFDInKLKllRZB
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 31 Jan 2023 12:50:58 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B971230D8;
+        Tue, 31 Jan 2023 09:50:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VbskzU7X9Fy1feYQOMwfReVNyBZCcsxLwpu1H601V3gPyHVyddIi4YS43pIwdASm+6Uq4RBuqImhTIt4BdGxP+X/D7Odx2FzUlRdBh4h3XbzICrmg9z+Q6s881CzFR2BQxTcyXE/k2lCXYN8y1aptZUscKQ7VdLy57YOB/O8zLK2DKnJ/dlq22suVETh0QEU7NjMTLU5/IB+SZPSs2pCh5IV+I794T2byv3LSUku9jQHNtf/3cWWQf681YlZEmB8lleWTWniqChfuy2fmUII0NqI1zYuq1fshXxB+vXPxjJXCbtWZP3GJ5r0HT+pQ9+DMLBkJUVIi8IlQq8o5aoFYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/h8lmHZ2ZmGfvfyx77Io58q5Eit8nG/QiqTaT7ESWUE=;
+ b=RfjiwDlVRdbGYxXQPnXWzlHr6bMEdMTkOxle1Cp1BPE9iu1aC7mscycanV3Pv+2w/SDUj7mP6zQn9lFL4E80/TGfLlzuT/ArjWvmT2Lp10OBjGAh5B2NKRK3B5KJKwS43RkJpQf4ZjPuIegwfl5entEc26sgVo6m4lZFnGI+9nj7+6W02upGukdtcwBFewgW8l6ccYzrqLvmmGOKvpJ8wTSE84ZvFkKg3FXj5gJrFdc5TriT7y8TPSaNu3uE47JJSAiHCdBoM3b9W7qIlKT/b5+cYBMViRvI9rvUTbS4mDGWygpHjyzttZdVeMjaacQw7Jw8gJpmaM5PkbBCNjZ+9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/h8lmHZ2ZmGfvfyx77Io58q5Eit8nG/QiqTaT7ESWUE=;
+ b=yVwHCP1L+vgnxNvszSCKMFpaMrOD2JAmZweIHs7CP1ZyvWMOkKCjnzRIhWOAX2MnNSVp29rNX8Z0ZLou/QWGB4g8xbxm/9lALTPuXfvZVZtSfBxgWIazVRcLT1l21+9m5zyYgHaQIZM3zwMclkSm0113TYxcPs2ib83JY2x/GDE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by CH2PR12MB4325.namprd12.prod.outlook.com (2603:10b6:610:a9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
+ 2023 17:50:54 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.6043.033; Tue, 31 Jan 2023
+ 17:50:54 +0000
+Date:   Tue, 31 Jan 2023 17:50:40 +0000
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     torvic9@mailbox.org
+Cc:     Rafael J Wysocki <rafael@kernel.org>,
+        Huang Rui <ray.huang@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
+        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Ananth Narayan <ananth.narayan@amd.com>, gautham.shenoy@amd.com
+Subject: Re: [PATCH v4 0/6] amd_pstate: Add guided autonomous mode support
+Message-ID: <Y9lU8BZKP/eorxmk@beas>
+References: <20230131052141.96475-1-wyes.karny@amd.com>
+ <1501106335.274.1675161471528@office.mailbox.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1501106335.274.1675161471528@office.mailbox.org>
+X-ClientProxiedBy: PN2PR01CA0225.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:ea::20) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
- phishscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2301310155
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|CH2PR12MB4325:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12f0b070-0900-46a3-9ec0-08db03b3b30a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8+x/EN1tZLW+PegxQgQzfvzygOKqq6KBGOHHJ5Rm53FkWCDQ3ZGJS4D5989rkavzIVrzPBdBDat2T2AU7zkfsRdXJRye+SsoB8VzzVUEweD8jFvv+g/la9QlRHxyLm4XJW/uYdBDAXvUQ72Afv0rQQZ/q7RJn2SWhk9rOERzTgz+BMuqPLUQoJKOXUPI4EVBDAhPwqip4u+hbiSaIlWYZB7jLRqeVISD1plYMuFpE90S79yecley6XVLGyLn5mt1hrCPt800viwKmBFF8uThwwaNArW4g3S6/bWbWwy26IF4pi6CAKV87LB/gQhuVgqBnKqkRvfKQgwhIIHWSn+/m7fh9Xh5PxDfBp+PLumm2fhgeuuMA163GIwVKqOZ9xxy56IuIbzbw8ozca6l5iIQfVy9nS0Jkxv89pLwltXuM4ljYKjQjwgLbRXT6eQoaFSNpUfeOtlvkFpS5/wRyUkT7l8V2N+yQTkh+qd41hNzNhht7iKSr3ndhfpCXPWK8WZM1rEMLmFp2z4mRPZ8xP9IB0SZNcLqMRYTM6zvC/qrM9szBDa67zoT/nl+5Fc9bUWG/gkfITyRpxjDXGu2QrfR+1eUujyyQErTSXcto9GEdnRUpZVXIX4xe80S7i/birV2bbFmYjKXq8oe3syxR00wFNZI866ZFFybNFjuOew7oO6XnNa0ea2oxPYFT8oUOK1MMCgiwUfnsDqXrN/LxG9njg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(366004)(346002)(396003)(376002)(39860400002)(136003)(451199018)(6666004)(6916009)(4326008)(66946007)(8676002)(66556008)(8936002)(44832011)(83380400001)(966005)(7416002)(41300700001)(6506007)(5660300002)(316002)(54906003)(478600001)(9686003)(186003)(6512007)(26005)(38100700002)(86362001)(66476007)(33716001)(6486002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fmJBpxaibXYWggRPmL2lEVy80SgmOMmOmsW5Mpk7HoG8y/cga7RNTwaIZ7BS?=
+ =?us-ascii?Q?452/J/22Rd+1zs0Ui9zlZH1BnU6yPkRpJZbXpI+vI9jLlhthQkOCT+cVBczP?=
+ =?us-ascii?Q?wLA9uCZ3k5XytLThl7nKRs+BeumHy+kF85rsWfYmVrcn9x5RTlQLYayMhCWj?=
+ =?us-ascii?Q?no+UZyDEz124IX4fhBvplQH/2RGri6ku659BbqIw/io/N5/Nc+N1SkaVs2FH?=
+ =?us-ascii?Q?W1xUXYlD0QU5Fbmo8/itaVN2rzB6AZWXfSAuzklMOaw4BPS7NkC1V+QSdq66?=
+ =?us-ascii?Q?ZTlwAdOcZjNjWmHJ7c2i8d9Gn0KTuUQQnIeuRbTWLsIz41LIPZVSOZ7V2q9G?=
+ =?us-ascii?Q?dnEcnv2+LaQllSkcOgnEXQ0YRQa2fGSurbXkZnrMycVgfd5IGY5b4qBSf4KS?=
+ =?us-ascii?Q?zY5w6kdPXtZCgIMl0QogxgX6ezN9ZEsHgkX8n4YsZcAwMUtBDhs+Bl59n4ZD?=
+ =?us-ascii?Q?HU/XuAY87i4WcXY3CxlX9HKCr2ztIqe69fcYZPRTJVcRmrWuxxbBR3sRtq9z?=
+ =?us-ascii?Q?DBlTvQcq89I+71wHW/0VYLUlTkz4vWoPOn1WwwQWi1tolmAuUaIr4IiuNB9P?=
+ =?us-ascii?Q?/t2bhBVvH986TNefbQyTFSTeTCF787E1TzpY6zkkVerMiWJWIWTtvqJj1UjH?=
+ =?us-ascii?Q?QxD8ZhLGaGQe0NPhP9Q3k0G2uJ0n492FgsRcd7zh6DpZlWYIMy8nwMWL3vYN?=
+ =?us-ascii?Q?3NssSN14qI7W1QNa68tL5/xYRL+l+6QOlkLt+n1Lxhg13tKD9RRPb6LVEFYW?=
+ =?us-ascii?Q?zCPF3hRi+WdQMgboinvLh6lRmOUTTVmf1F9BpEJHLmgUukv3JTcekGHqf/ev?=
+ =?us-ascii?Q?YjdAEoWfCDFFsBuoW6NmRGsPaG1xIiW7nOX9xyO+E57yuDojTDA4vjiOOWUi?=
+ =?us-ascii?Q?qzMa/KrgPxO1eACvAzYgxVNoLoSfrX7ABnNhCP8ufJqDX9u+qMLrEtiCBEKS?=
+ =?us-ascii?Q?gXNLhpt2ggAQ7teEurxGXGpEamBPzr8CkTm8VY4/JjMRYB2TbFecTStUV1Cq?=
+ =?us-ascii?Q?AxpYSg6Zsf5dL9dtJCGkm/4qEkKlBkQhRJsHMuHEPaWtDumiX1YoObQG99tD?=
+ =?us-ascii?Q?HUdHHV+qPpxMBoHObi3IzqSwn+YtjiRZXGEvcBQ/NIogq3SvWCZq2nAdgiTf?=
+ =?us-ascii?Q?AbKED+ToZLurrbgmXO+62+qvXF0tHprYtYMm+KMDO81+C9NQVhf0z3+lNn8w?=
+ =?us-ascii?Q?yI4b6TrW2/EjPDZEHlNwOfHV2weBJ2lyWtvxG/Mcj5Ii33I1otSLy3agLGdf?=
+ =?us-ascii?Q?xSKlUiUs/gdXNW/JM1LLELAQtuwbwkAeJjlMFsEOCiGJxH5Kw9O8xYjTP2yf?=
+ =?us-ascii?Q?y7gjMEgCyUivYnEaIdVebT70HnEYkgGELvId1HA8Qhx8/8hMoI+6SRTlCG7Z?=
+ =?us-ascii?Q?B/IUVWMz6+Vc6ozlwktZMCjH0jQfZr5Xixf3RKRObbe0WPEvrc/i4YkXDN7k?=
+ =?us-ascii?Q?36B2zUdeTM2PIxNt/fjN14SbnG3P33+p2geyI1aULKGZhEED8MRc4DstmobH?=
+ =?us-ascii?Q?C9VjKvAWXTEKinCInhUGMgyhfn8gXZiaXVP27FTEWHUH/2m3Jx9LHyg10XXG?=
+ =?us-ascii?Q?XeNm4+4RIY+STFmvE23inbDvuUytiItZHMalRZ19?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12f0b070-0900-46a3-9ec0-08db03b3b30a
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:50:54.3247
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hp4uPEdvE6laU1ZGDoKRGiHFdmuun5GUPhn8W+ySRnVnjuymgbmdZYfxwgmiWWaaro4Bg5ugslsDUWPt8tZ35Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4325
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-31 at 16:34 +0000, Reshetova, Elena wrote:
-[...]
-> > You cited this as your example.  I'm pointing out it seems to be an
-> > event of the class we've agreed not to consider because it's an
-> > oops not an exploit.  If there are examples of fixing actual
-> > exploits to CC VMs, what are they?
-> > 
-> > This patch is, however, an example of the problem everyone else on
-> > the thread is complaining about: a patch which adds an unnecessary
-> > check to the MSI subsystem; unnecessary because it doesn't fix a CC
-> > exploit and in the real world the tables are correct (or the
-> > manufacturer is quickly chastened), so it adds overhead to no
-> > benefit.
+On 31 Jan 11:37, torvic9@mailbox.org wrote:
 > 
-> How can you make sure there is no exploit possible using this crash
-> as a stepping stone into a CC guest?
-
-I'm not, what I'm saying is you haven't proved it can be used to
-exfiltrate secrets.  In a world where the PCI device is expected to be
-correct, and the non-CC kernel doesn't want to second guess that, there
-are loads of lies you can tell to the PCI subsystem that causes a crash
-or a hang.  If we fix every one, we end up with a massive patch set and
-a huge potential slow down for the non-CC kernel.  If there's no way to
-tell what lies might leak data, the fuzzing results are a mass of noise
-with no real signal and we can't even quantify by how much (or even if)
-we've improved the CC VM attack surface even after we merge the huge
-patch set it generates.
-
->  Or are you saying that we are back to the times when we can merge
-> the fixes for crashes and out of bound errors in kernel only given
-> that we submit a proof of concept exploit with the patch for every
-> issue? 
-
-The PCI people have already said that crashing in the face of bogus
-configuration data is expected behaviour, so just generating the crash
-doesn't prove there's a problem to be fixed.  That means you do have to
-go beyond and demonstrate there could be an information leak in a CC VM
-on the back of it, yes.
-
-> > [...]
-> > > > see what else it could detect given the signal will be
-> > > > smothered by oopses and secondly I think the PCI interface is
-> > > > likely the wrong place to begin and you should probably begin
-> > > > on the virtio bus and the hypervisor generated configuration
-> > > > space.
-> > > 
-> > > This is exactly what we do. We don’t fuzz from the PCI config
-> > > space, we supply inputs from the host/vmm via the legitimate
-> > > interfaces that it can inject them to the guest: whenever guest
-> > > requests a pci config space (which is controlled by
-> > > host/hypervisor as you said) read operation, it gets input
-> > > injected by the kafl fuzzer.  Same for other interfaces that are
-> > > under control of host/VMM (MSRs, port IO, MMIO, anything that
-> > > goes via #VE handler in our case). When it comes to virtio, we
-> > > employ  two different fuzzing techniques: directly injecting kafl
-> > > fuzz input when virtio core or virtio drivers gets the data
-> > > received from the host (via injecting input in functions
-> > > virtio16/32/64_to_cpu and others) and directly fuzzing DMA memory
-> > > pages using kfx fuzzer. More information can be found in
-> > > https://intel.github.io/ccc-linux-guest-hardening-docs/tdx-guest-
-> > hardening.html#td-guest-fuzzing
+> > Wyes Karny <wyes.karny@amd.com> hat am 31.01.2023 05:21 GMT geschrieben:
 > > 
-> > Given that we previously agreed that oppses and other DoS attacks
-> > are out of scope for CC, I really don't think fuzzing, which
-> > primarily finds oopses, is at all a useful tool unless you filter
-> > the results by the question "could we exploit this in a CC VM to
-> > reveal secrets". Without applying that filter you're sending a load
-> > of patches which don't really do much to reduce the CC attack
-> > surface and which do annoy non-CC people because they add pointless
-> > checks to things they expect the cards and config tables to get
-> > right.
+> >  
+> > From ACPI spec[1] below 3 modes for CPPC can be defined:
+> > 1. Non autonomous: OS scaling governor specifies operating frequency/
+> >    performance level through `Desired Performance` register and platform
+> > follows that.
+> > 2. Guided autonomous: OS scaling governor specifies min and max
+> >    frequencies/ performance levels through `Minimum Performance` and
+> > `Maximum Performance` register, and platform can autonomously select an
+> > operating frequency in this range.
+> > 3. Fully autonomous: OS only hints (via EPP) to platform for the required
+> >    energy performance preference for the workload and platform autonomously
+> > scales the frequency.
+> > 
+> > Currently (1) is supported by amd_pstate as passive mode, and (3) is
+> > implemented by EPP support[2]. This change is to support (2).
+> > 
+> > In guided autonomous mode the min_perf is based on the input from the
+> > scaling governor. For example, in case of schedutil this value depends
+> > on the current utilization. And max_perf is set to max capacity.
+> > 
+> > To activate guided auto mode ``amd_pstate=guided`` command line
+> > parameter has to be passed in the kernel.
+> > 
+> > Below are the results (normalized) of benchmarks with this patch:
+> > System: Genoa 96C 192T
+> > Kernel: 6.2.0-rc2 + EPP v11 + patch
+> > Scaling governor: schedutil
+> > 
+> > ================ dbench comparisons ================
+> > dbench result comparison:
+> > Here results are throughput (MB/s)
+> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> >     1	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
+> >     2	   1.07 (0.00 pct)	   1.06 (-0.93 pct)	   1.07 (0.00 pct)
+> >     4	   1.68 (0.00 pct)	   1.70 (1.19 pct)	   1.72 (2.38 pct)
+> >     8	   2.61 (0.00 pct)	   2.68 (2.68 pct)	   2.76 (5.74 pct)
+> >    16	   4.16 (0.00 pct)	   4.24 (1.92 pct)	   4.53 (8.89 pct)
+> >    32	   5.98 (0.00 pct)	   6.17 (3.17 pct)	   7.30 (22.07 pct)
+> >    64	   8.67 (0.00 pct)	   8.99 (3.69 pct)	  10.71 (23.52 pct)
+> >   128	  11.98 (0.00 pct)	  12.52 (4.50 pct)	  14.67 (22.45 pct)
+> >   256	  15.73 (0.00 pct)	  16.13 (2.54 pct)	  17.81 (13.22 pct)
+> >   512	  15.77 (0.00 pct)	  16.32 (3.48 pct)	  16.39 (3.93 pct)
+> > dbench power comparison:
+> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> >     1	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   1.04 (4.00 pct)
+> >     2	   0.99 (0.00 pct)	   0.97 (-2.02 pct)	   1.02 (3.03 pct)
+> >     4	   0.98 (0.00 pct)	   0.98 (0.00 pct)	   1.02 (4.08 pct)
+> >     8	   0.98 (0.00 pct)	   0.99 (1.02 pct)	   1.02 (4.08 pct)
+> >    16	   0.99 (0.00 pct)	   1.00 (1.01 pct)	   1.04 (5.05 pct)
+> >    32	   1.02 (0.00 pct)	   1.02 (0.00 pct)	   1.07 (4.90 pct)
+> >    64	   1.05 (0.00 pct)	   1.05 (0.00 pct)	   1.11 (5.71 pct)
+> >   128	   1.08 (0.00 pct)	   1.08 (0.00 pct)	   1.15 (6.48 pct)
+> >   256	   1.12 (0.00 pct)	   1.12 (0.00 pct)	   1.20 (7.14 pct)
+> >   512	   1.18 (0.00 pct)	   1.17 (-0.84 pct)	   1.26 (6.77 pct)
+> > 
+> > ================ git-source comparisons ================
+> > git-source result comparison:
+> > Here results are throughput (compilations per 1000 sec)
+> > Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> >   192	   1.00 (0.00 pct)	   0.93 (-7.00 pct)	   1.00 (0.00 pct)
+> > git-source power comparison:
+> > Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> >   192	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.96 (-4.00 pct)
+> > 
+> > ================ kernbench comparisons ================
+> > kernbench result comparison:
+> > Here results are throughput (compilations per 1000 sec)
+> > Load:	   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> > 32	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
+> > 48	   1.26 (0.00 pct)	   1.28 (1.58 pct)	   1.25 (-0.79 pct)
+> > 64	   1.39 (0.00 pct)	   1.47 (5.75 pct)	   1.43 (2.87 pct)
+> > 96	   1.48 (0.00 pct)	   1.50 (1.35 pct)	   1.49 (0.67 pct)
+> > 128	   1.29 (0.00 pct)	   1.32 (2.32 pct)	   1.33 (3.10 pct)
+> > 192	   1.17 (0.00 pct)	   1.20 (2.56 pct)	   1.21 (3.41 pct)
+> > 256	   1.17 (0.00 pct)	   1.18 (0.85 pct)	   1.20 (2.56 pct)
+> > 384	   1.16 (0.00 pct)	   1.17 (0.86 pct)	   1.21 (4.31 pct)
+> > kernbench power comparison:
+> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> >    32	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.00 (0.00 pct)
+> >    48	   0.87 (0.00 pct)	   0.81 (-6.89 pct)	   0.88 (1.14 pct)
+> >    64	   0.81 (0.00 pct)	   0.73 (-9.87 pct)	   0.77 (-4.93 pct)
+> >    96	   0.75 (0.00 pct)	   0.74 (-1.33 pct)	   0.75 (0.00 pct)
+> >   128	   0.83 (0.00 pct)	   0.79 (-4.81 pct)	   0.83 (0.00 pct)
+> >   192	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+> >   256	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+> >   384	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+> > 
+> > ================ tbench comparisons ================
+> > tbench result comparison:
+> > Here results are throughput (MB/s)
+> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> >     1	   1.00 (0.00 pct)	   0.70 (-30.00 pct)	   1.37 (37.00 pct)
+> >     2	   2.64 (0.00 pct)	   1.39 (-47.34 pct)	   2.70 (2.27 pct)
+> >     4	   4.89 (0.00 pct)	   2.75 (-43.76 pct)	   5.28 (7.97 pct)
+> >     8	   9.46 (0.00 pct)	   5.42 (-42.70 pct)	  10.22 (8.03 pct)
+> >    16	  19.05 (0.00 pct)	  10.42 (-45.30 pct)	  19.94 (4.67 pct)
+> >    32	  37.50 (0.00 pct)	  20.23 (-46.05 pct)	  36.87 (-1.68 pct)
+> >    64	  61.24 (0.00 pct)	  43.08 (-29.65 pct)	  62.96 (2.80 pct)
+> >   128	  67.16 (0.00 pct)	  69.08 (2.85 pct)	  67.34 (0.26 pct)
+> >   256	 154.59 (0.00 pct)	 162.33 (5.00 pct)	 156.78 (1.41 pct)
+> >   512	 154.02 (0.00 pct)	 156.74 (1.76 pct)	 153.48 (-0.35 pct)
+> > tbench power comparison:
+> > Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+> >     1	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.08 (8.00 pct)
+> >     2	   1.04 (0.00 pct)	   0.97 (-6.73 pct)	   1.11 (6.73 pct)
+> >     4	   1.12 (0.00 pct)	   0.99 (-11.60 pct)	   1.18 (5.35 pct)
+> >     8	   1.25 (0.00 pct)	   1.04 (-16.80 pct)	   1.31 (4.80 pct)
+> >    16	   1.53 (0.00 pct)	   1.13 (-26.14 pct)	   1.58 (3.26 pct)
+> >    32	   2.01 (0.00 pct)	   1.36 (-32.33 pct)	   2.03 (0.99 pct)
+> >    64	   2.58 (0.00 pct)	   2.14 (-17.05 pct)	   2.61 (1.16 pct)
+> >   128	   2.80 (0.00 pct)	   2.81 (0.35 pct)	   2.81 (0.35 pct)
+> >   256	   3.39 (0.00 pct)	   3.43 (1.17 pct)	   3.42 (0.88 pct)
+> >   512	   3.44 (0.00 pct)	   3.44 (0.00 pct)	   3.44 (0.00 pct)
+> > 
+> > Note: this series is based on top of EPP v11 [3] series
 > 
-> I don’t think we have agreed that random kernel crashes are out of
-> scope in CC threat model (controlled safe panic is out of scope, but
-> this is not what we have here). 
+> Hi Wyes,
+> 
+> Can you rebase this patchset onto the newest EPP v12 series [1] ?
 
-So perhaps making it a controlled panic in the CC VM, so we can
-guarantee no information leak, would be the first place to start?
+Sure, I'll rebase this on top of EPP v12.
 
-> It all depends if this ops can be used in a successful attack against
-> guest private memory or not and this is *not* a trivial thing to
-> decide.
+Thanks,
+Wyes
 
-Right, but if you can't decide that, you can't extract the signal from
-your fuzzing tool noise.
-
-> That's said, we are mostly focusing on KASAN findings, which
-> have higher likelihood to be exploitable at least for host -> guest
-> privilege escalation (which in turn compromised guest private memory
-> confidentiality). Fuzzing has a long history of find such issues in
-> past (including the ones that have been exploited after). But even
-> for this ops bug, can anyone guarantee it cannot be chained with
-> other ones to cause a more complex privilege escalation attack?
-> I wont be making such a claim, I feel it is safer to fix this vs
-> debating whenever it can be used for an attack or not. 
-
-The PCI people have already been clear that adding a huge framework of
-checks to PCI table parsing simply for the promise it "might possibly"
-improve CC VM security is way too much effort for too little result. 
-If you can hone that down to a few places where you can show it will
-prevent a CC information leak, I'm sure they'll be more receptive. 
-Telling them to disprove your assertion that there might be an exploit
-here isn't going to make them change their minds.
-
-James
-
+> 
+> [1] https://lore.kernel.org/linux-pm/20230131090016.3970625-1-perry.yuan@amd.com/
+> 
+> Cheers,
+> Tor Vic
+> 
+> > 
+> > Change log:
+> > 
+> > v3 -> v4:
+> > - Fixed active mode low frequency issue reported by Peter Jung and Tor Vic
+> > - Documentation modification suggested by Bagas Sanjaya
+> > 
+> > v2 -> v3:
+> > - Addressed review comments form Mario.
+> > - Picked up RB tag from Mario.
+> > - Rebase on top of EPP v11 [3].
+> > 
+> > v1 -> v2:
+> > - Fix issue with shared mem systems.
+> > - Rebase on top of EPP series.
+> > 
+> > [1]: https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
+> > [2]: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
+> > [3]: https://lore.kernel.org/linux-pm/20230118075210.447418-1-perry.yuan@amd.com/
+> > 
+> > Wyes Karny (6):
+> >   acpi: cppc: Add min and max perf reg writing support
+> >   acpi: cppc: Add auto select register read/write support
+> >   cpufreq: amd_pstate: Add guided autonomous mode
+> >   Documentation: amd_pstate: Move amd_pstate param to alphabetical order
+> >   cpufreq: amd_pstate: Add guided mode control support via sysfs
+> >   Documentation: amd_pstate: Update amd_pstate status sysfs for guided
+> > 
+> >  .../admin-guide/kernel-parameters.txt         |  41 ++--
+> >  Documentation/admin-guide/pm/amd-pstate.rst   |  31 ++-
+> >  drivers/acpi/cppc_acpi.c                      | 121 +++++++++++-
+> >  drivers/cpufreq/amd-pstate.c                  | 184 +++++++++++++-----
+> >  include/acpi/cppc_acpi.h                      |  11 ++
+> >  include/linux/amd-pstate.h                    |   2 +
+> >  6 files changed, 309 insertions(+), 81 deletions(-)
+> > 
+> > -- 
+> > 2.34.1
