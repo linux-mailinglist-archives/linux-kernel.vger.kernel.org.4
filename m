@@ -2,99 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177C26831E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 669A66831E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 16:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjAaPxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 10:53:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S233461AbjAaPyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 10:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbjAaPxo (ORCPT
+        with ESMTP id S230146AbjAaPyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 10:53:44 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035D417154
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:53:44 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id l4-20020a17090a850400b0023013402671so2816541pjn.5
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 07:53:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BDBGIr020TIEN48KHoXszHSY7JH31zE2b6DhwjqkpU=;
-        b=i0jigBhmeRjaAtvW2bVUaQPHSOXnmtp6KW5DRBVBoMs9M95X0qKfuKWydeztA7qQ9A
-         +PqS3GEUcHUGwBfRKP3Zuz3rfg+thRbu4mVBTTUBXhpE9TUVjx24IUQzns0scPtIXuMT
-         ctgHAVgpKcpJ7by5c58aOPLIilAVT9b9knMJz8fqgIO1SLTBHQ7f8kLcc5QbQOpKEC9Q
-         qJFBMGogqJC3mGYSXcXl1IxvbUJfJ6CHTl5z6jH2in9+Gl1URvuhstI5fQt6nPIRDK0n
-         wBCdfAIvDjt2WfX6v2ee8EjsAimhl2K90y6zivnNcHzOd78Q7m/lJtG+6nBvZHCHKZmh
-         iFHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8BDBGIr020TIEN48KHoXszHSY7JH31zE2b6DhwjqkpU=;
-        b=Ori/HJITzC4lKM74OiR/s7o1etYYcreke/zCRXKTNwPOjJmf0CFokLW0f9dLrFtv4m
-         wjtQ0wRIIPKgiWT6sy+pj9/jWz7EhtZ2ZWjBz8WbJlQYVHOXSM1R1+pwtizkLH2vQyNY
-         hMIAkDeVFITMvBec7MTO6QgKtA/YFh1K+VzyhsgOBfVCOjP4U63ucy+XnRJOZz/L/F+v
-         OQNoqZETNUSuRWc6Hf0X4GQRdrRtFaW+wsg00uscpLWnte/kbWSiBoB4tqpqp0w8vvzD
-         n9oWxAn2OeGmiKDnbUThoUYRiBEUY9oQbupv8Df02MFGv2RoMJIabLhGhQqFPYoZkjeP
-         L1QA==
-X-Gm-Message-State: AO0yUKXFGTWAF658jHAblYDJwFbbGfHLgJ033pGtd9QbxF9nEEzM3MZM
-        J+WOhTGe5SEqr4CIj6fo5aaBxg==
-X-Google-Smtp-Source: AK7set86Spbju15zAbisK2mmq3j8WKEdenghpKFRQltXbuwmg9z/EBPdC24x5DEU09pf9f5AKKLB0w==
-X-Received: by 2002:a17:902:b686:b0:191:4367:7fde with SMTP id c6-20020a170902b68600b0019143677fdemr1307314pls.0.1675180423267;
-        Tue, 31 Jan 2023 07:53:43 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x17-20020a170902ea9100b00196768692e0sm5338448plb.86.2023.01.31.07.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 07:53:42 -0800 (PST)
-Date:   Tue, 31 Jan 2023 15:53:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Alexey Kardashevskiy <aik@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jiri Kosina <jkosina@suse.cz>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [Question PATCH kernel] x86/amd/sev/nmi+vc: Fix stack handling
- (why is this happening?)
-Message-ID: <Y9k5g5jYA/rjIwUj@google.com>
-References: <20230127035616.508966-1-aik@amd.com>
- <Y9OUfofjxDtTmwyV@hirez.programming.kicks-ass.net>
- <Y9OpcoSacyOkPkvl@8bytes.org>
- <b7880f0b-a592-cf2d-03b9-1ccfd83f8223@amd.com>
- <Y9QI9JwCVvRmtbr+@8bytes.org>
- <3bb3e080-caee-8bc8-7de9-f44969f16e75@amd.com>
- <38C572D7-E637-48C2-A57A-E62D44FF19BB@zytor.com>
- <Y9jX9AKYP8H34wGI@8bytes.org>
+        Tue, 31 Jan 2023 10:54:22 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA5B3402B;
+        Tue, 31 Jan 2023 07:54:21 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFHxZI012741;
+        Tue, 31 Jan 2023 15:54:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xU8BpF5sLLcX15OpEtEfyQ9Jy3K+3ENin2AexJDa7wQ=;
+ b=JY2NVr3GhJ5RagpbxVCJkUqkLVxduj4meF/9KjyFjcNjr4mKcuJkhrG7/f240tywDsHU
+ eqHPAsmt/5X8jQOZ8lwNYwnJKJxNAoX4dHB8nZNWtD5WSLky9LnsrJjY5FsoAWb19/DB
+ lkowYKaNja667wxOI965187H3C/hPVkafS8Q2HrNY3EQyU0FCW45/sk4JQuKCTgYqcZN
+ nC56HEcIb80P4U8ARMUV4o/GNSVjOSpNWoQn8NboY6JAXEgLc4NEP9EiXW2bewB5pqfs
+ 0o2q9LezgyWDrDtty++hvE2oOmS9fy4ioEuj3ql1zwv/7TqIxqprUBVCraOWGbQ0O026 hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3xjbw9h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:54:11 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VFirRp007376;
+        Tue, 31 Jan 2023 15:54:11 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf3xjbw96-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:54:11 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFZfvo028510;
+        Tue, 31 Jan 2023 15:54:10 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuygta6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 15:54:10 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VFs8cp33030516
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 15:54:09 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F13758058;
+        Tue, 31 Jan 2023 15:54:08 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AA36358059;
+        Tue, 31 Jan 2023 15:54:07 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 15:54:07 +0000 (GMT)
+Message-ID: <574522c3-3fc3-2c89-dfeb-587b9d7cd32c@linux.ibm.com>
+Date:   Tue, 31 Jan 2023 10:54:07 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9jX9AKYP8H34wGI@8bytes.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 11/25] powerpc/secvar: Allow backend to populate static
+ list of variable names
+Content-Language: en-US
+To:     Andrew Donnellan <ajd@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Cc:     ruscur@russell.cc, bgray@linux.ibm.com, nayna@linux.ibm.com,
+        gcwilson@linux.ibm.com, gjoyce@linux.ibm.com, brking@linux.ibm.com,
+        sudhakar@linux.ibm.com, erichte@linux.ibm.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        zohar@linux.ibm.com, joel@jms.id.au, npiggin@gmail.com
+References: <20230131063928.388035-1-ajd@linux.ibm.com>
+ <20230131063928.388035-12-ajd@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230131063928.388035-12-ajd@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: e-XYZajuYaGSfAUEL3QNH1MVaeIWIELE
+X-Proofpoint-GUID: sy9HBSIV6Psy5TBiiQD7wBPvDleTt6lU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 mlxlogscore=999 suspectscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301310137
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023, Joerg Roedel wrote:
-> On Mon, Jan 30, 2023 at 09:30:38AM -0800, H. Peter Anvin wrote:
-> > It's somewhat odd to me that reading %dr7 is volatile, but %dr6 is
-> > not... %dr6 is the status register!
-> 
-> The reason is that on SEV-ES only accesses to DR7 will cause #VC
-> exceptions, DR0-DR6 are not intercepted.
 
-I don't think that is technically true.  A _well-behaved_ hypervisor will not
-intercept DR0-DR6 accesses for SEV-ES guests, but AFAICT nothing in the SEV-ES
-architecture enforces that behavior.
+
+On 1/31/23 01:39, Andrew Donnellan wrote:
+> Currently, the list of variables is populated by calling
+> secvar_ops->get_next() repeatedly, which is explicitly modelled on the
+> OPAL API (including the keylen parameter).
+> 
+> For the upcoming PLPKS backend, we have a static list of variable names.
+> It is messy to fit that into get_next(), so instead, let the backend put
+> a NULL-terminated array of variable names into secvar_ops->var_names,
+> which will be used if get_next() is undefined.
+> 
+> Signed-off-by: Andrew Donnellan <ajd@linux.ibm.com>
+> Signed-off-by: Russell Currey <ruscur@russell.cc>
+> 
+> ---
+> 
+> v3: New patch (ajd/mpe)
+> ---
+>   arch/powerpc/include/asm/secvar.h  |  4 ++
+>   arch/powerpc/kernel/secvar-sysfs.c | 67 ++++++++++++++++++++----------
+>   2 files changed, 50 insertions(+), 21 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm/secvar.h
+> index 011a53a8076c..4828e0ab7e3c 100644
+> --- a/arch/powerpc/include/asm/secvar.h
+> +++ b/arch/powerpc/include/asm/secvar.h
+> @@ -21,6 +21,10 @@ struct secvar_operations {
+>   	ssize_t (*format)(char *buf, size_t bufsize);
+>   	int (*max_size)(u64 *max_size);
+>   	const struct attribute **config_attrs;
+> +
+> +	// NULL-terminated array of fixed variable names
+> +	// Only used if get_next() isn't provided
+> +	const char * const *var_names;
+>   };
+>   
+>   #ifdef CONFIG_PPC_SECURE_BOOT
+> diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/secvar-sysfs.c
+> index 7df32be86507..2cbc60b37e4e 100644
+> --- a/arch/powerpc/kernel/secvar-sysfs.c
+> +++ b/arch/powerpc/kernel/secvar-sysfs.c
+> @@ -157,9 +157,31 @@ static int secvar_sysfs_config(struct kobject *kobj)
+>   	return 0;
+>   }
+>   
+> -static int secvar_sysfs_load(void)
+> +static int add_var(const char *name)
+>   {
+>   	struct kobject *kobj;
+> +	int rc;
+> +
+> +	kobj = kzalloc(sizeof(*kobj), GFP_KERNEL);
+> +	if (!kobj)
+> +		return -ENOMEM;
+> +
+> +	kobject_init(kobj, &secvar_ktype);
+> +
+> +	rc = kobject_add(kobj, &secvar_kset->kobj, "%s", name);
+> +	if (rc) {
+> +		pr_warn("kobject_add error %d for attribute: %s\n", rc,
+> +			name);
+> +		kobject_put(kobj);
+> +		return rc;
+> +	}
+> +
+> +	kobject_uevent(kobj, KOBJ_ADD);
+> +	return 0;
+> +}
+> +
+> +static int secvar_sysfs_load(void)
+> +{
+>   	u64 namesize = 0;
+>   	char *name;
+>   	int rc;
+> @@ -179,31 +201,26 @@ static int secvar_sysfs_load(void)
+>   			break;
+>   		}
+>   
+> -		kobj = kzalloc(sizeof(*kobj), GFP_KERNEL);
+> -		if (!kobj) {
+> -			rc = -ENOMEM;
+> -			break;
+> -		}
+> -
+> -		kobject_init(kobj, &secvar_ktype);
+> -
+> -		rc = kobject_add(kobj, &secvar_kset->kobj, "%s", name);
+> -		if (rc) {
+> -			pr_warn("kobject_add error %d for attribute: %s\n", rc,
+> -				name);
+> -			kobject_put(kobj);
+> -			kobj = NULL;
+> -		}
+> -
+> -		if (kobj)
+> -			kobject_uevent(kobj, KOBJ_ADD);
+> -
+> +		rc = add_var(name);
+>   	} while (!rc);
+>   
+>   	kfree(name);
+>   	return rc;
+>   }
+>   
+> +static int secvar_sysfs_load_static(void)
+> +{
+> +	const char * const *name_ptr = secvar_ops->var_names;
+> +	int rc;
+
+Missing newline ?
+
+> +	while (*name_ptr) {
+> +		rc = add_var(*name_ptr);
+> +		if (rc)
+> +			return rc;
+> +		name_ptr++;
+> +	}
+> +	return 0;
+> +}
+> +
+>   static int secvar_sysfs_init(void)
+>   {
+>   	int rc;
+> @@ -245,7 +262,15 @@ static int secvar_sysfs_init(void)
+>   		goto err;
+>   	}
+>   
+> -	secvar_sysfs_load();
+> +	if (secvar_ops->get_next)
+> +		rc = secvar_sysfs_load();
+> +	else
+> +		rc = secvar_sysfs_load_static();
+> +
+> +	if (rc) {
+> +		pr_err("Failed to create variable attributes\n");
+> +		goto err;
+> +	}
+>   
+>   	return 0;
+>   err:
+
+With the above change:
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
