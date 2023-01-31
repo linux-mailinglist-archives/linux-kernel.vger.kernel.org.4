@@ -2,87 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7958D682D9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1069682D9D
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 14:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjAaNSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 08:18:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56676 "EHLO
+        id S229909AbjAaNTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 08:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjAaNSs (ORCPT
+        with ESMTP id S229661AbjAaNTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 08:18:48 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC8D4FAEF
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:18:12 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id pj3so1342434pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 05:18:12 -0800 (PST)
+        Tue, 31 Jan 2023 08:19:38 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679FBCA2C;
+        Tue, 31 Jan 2023 05:19:15 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso10567355wmq.5;
+        Tue, 31 Jan 2023 05:19:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=RUPOFXSiFqFDkTBIM2iuxVDE2FxqjRSmdHPSkuTbjvs=;
-        b=GdqyDwbmy5rnoq9oZbPnp5mA5ZVZNhV4irkutSKNey2T//p0bsMbfsN1KO390PDMYb
-         oY2xmoy4bF0IqR+sydYjHaNHkGx8pNSDAA72w7vh0UodEPziE8RmW74fsMebiEGOllh+
-         pMKJSv3k2BZ635niC98nD1v1mPhTR/MGZtbtM=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cZRozeW6YOLnif6Ckl8oBilHTLhswPBqWjV3sIbziCE=;
+        b=ixjiW/Mvj8mquMLB2q4In9V9xg/bqrhPrhLU5eE2hrmI5S83T3XuE8Ru6YhmJwZU8Y
+         KqWpCNXj9zZV1bKiCN5REGN1wffrL9jfiyHn63kd0wO4FLkxzVIYo8aqT+adaKuobu41
+         79S8TVhV+Q6F8uWgJrBqYuz3FZP++KVIEnE49NtXttFJBm0LKUIey4VMIja4miJs2TYY
+         snsBfizbCqneIQOSjuq38VrrKNkgR6sG7ykJgLNOaPg8Ot8Gr4CV7RNii3lwLVfMQnLb
+         TvvM1r9eRZkpALIIwm8qHfsXyHWKJz6WtKVl6IXXR6+bvekyStjs5lUh1ntHyS0lgWfl
+         7bfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RUPOFXSiFqFDkTBIM2iuxVDE2FxqjRSmdHPSkuTbjvs=;
-        b=vW29+3Hih1IIeEV9/AjcO7ybZqMqNAY8EYn7rC01WWGjbz1LMFLsx1UXHEKU37r8yA
-         UtZ38egHVrapTTfN0BTJQtjs3SUw87zGkwuBGe9tBvXtV+sZhbaRYbRQBWknZR4KBGGm
-         BeuJQSjbiV7yneicEIkqumlxgcPkpe9K7OrERsHIYDhnD+WnFH8cAyjWff+rV8okEOWY
-         jqGdbdbEvdd//byQkbwawuDt7f2iMvq5KyoOa4fK12QyotTbYM2dgqqbwsHbfQo2MWal
-         pXDZLrWQ3bJ2FziUaYYgaaHCefry2/2VEQttjw7XLyZcnIE8Ondga0/B7UAwrX+LDpD0
-         1g3g==
-X-Gm-Message-State: AO0yUKUq2My8SSZ/lq1kaoiJr9qBhr5dnQHNdmLyRj5lkHnZu/KvjWUn
-        izlBQuCZ8TvT+KC+OUyljfU1vA==
-X-Google-Smtp-Source: AK7set8BEakqNepA6gKGPtI38cFRulrXnuyJElw2b1NAulYQLSiOc80+P+OspHNlxRdbO9q6bgiNTg==
-X-Received: by 2002:a17:902:e74d:b0:196:7103:259f with SMTP id p13-20020a170902e74d00b001967103259fmr12943785plf.7.1675171088675;
-        Tue, 31 Jan 2023 05:18:08 -0800 (PST)
-Received: from [10.176.68.61] ([192.19.148.250])
-        by smtp.gmail.com with ESMTPSA id je5-20020a170903264500b001896522a23bsm9816364plb.39.2023.01.31.05.18.02
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cZRozeW6YOLnif6Ckl8oBilHTLhswPBqWjV3sIbziCE=;
+        b=PIBVDhqoC/7JpYgN3z7HJ4lETM0R38ABqg1DEqW2FtmbaCVQIpQGRuatfplBVlL1qw
+         DDlvBs40ADXNijgUNu4a6DpVys/2QmkljXXLZBunUTcSM3B16qnnryk25xOFikpumN9Y
+         MbIOU9589V+bYtv1J/rpvCvQ+uo/i4TJxAf6GfSOCHL564fZcao4kb31+WpGDqKwFjpe
+         0b32ndTSgAOnNHTvwblQzJBA5BvVPeIf5hqr666R27BRkeXK5sqOaLUqx1SLeFcmxGRc
+         L0WgXmbWBc7OEp31iNwLhDnjOlQDSZvjGjO12MSlDumRa0Jttek+J6ydwEXUgxTNbhvZ
+         HdMg==
+X-Gm-Message-State: AO0yUKUMeHtjs3gZTz2zV3blH1Xm1t3YqEdg4uyFQpMhb0RmteUaSnuu
+        OI9PGzWWd5JVu+kjTfm6Rfs=
+X-Google-Smtp-Source: AK7set8lMoCchUZ47rKVO1EMdvOM6q/D8z6KJP3FDh7nmVCHolnlrg/SPfjfh340KcvspftNZR5YCQ==
+X-Received: by 2002:a05:600c:6022:b0:3dc:5ad1:7a40 with SMTP id az34-20020a05600c602200b003dc5ad17a40mr7548204wmb.30.1675171153067;
+        Tue, 31 Jan 2023 05:19:13 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id a19-20020a05600c349300b003cfa622a18asm20309226wmq.3.2023.01.31.05.19.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 05:18:07 -0800 (PST)
-Message-ID: <f71ef248-1019-a70d-3f07-1b7874772cf8@broadcom.com>
-Date:   Tue, 31 Jan 2023 14:18:00 +0100
+        Tue, 31 Jan 2023 05:19:12 -0800 (PST)
+Message-ID: <5192bc94-12c7-dce4-c2e6-fa4b8c1ced9d@gmail.com>
+Date:   Tue, 31 Jan 2023 14:19:11 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/5] brcmfmac: Drop all the RAW device IDs
-To:     Hector Martin <marcan@marcan.st>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Prutskov <alep@cypress.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Ian Lin <ian.lin@infineon.com>,
-        Soontak Lee <soontak.lee@cypress.com>,
-        Joseph chuang <jiac@cypress.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Aditya Garg <gargaditya08@live.com>, asahi@lists.linux.dev,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230131112840.14017-1-marcan@marcan.st>
- <20230131112840.14017-2-marcan@marcan.st>
-From:   Arend van Spriel <arend.vanspriel@broadcom.com>
-In-Reply-To: <20230131112840.14017-2-marcan@marcan.st>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b2e9a705f38f2943"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Subject: Re: [PATCH v4 05/14] soc: mediatek: mtk-svs: use svs clk control APIs
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230111074528.29354-1-roger.lu@mediatek.com>
+ <20230111074528.29354-6-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230111074528.29354-6-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,165 +84,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000b2e9a705f38f2943
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 1/31/2023 12:28 PM, 'Hector Martin' via BRCM80211-DEV-LIST,PDL wrote:
-> These device IDs are only supposed to be visible internally, in devices
-> without a proper OTP. They should never be seen in devices in the wild,
-> so drop them to avoid confusion.
 
-Thanks for this cleanup.
-
-Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->   drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c       | 4 ----
->   drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h | 4 ----
->   2 files changed, 8 deletions(-)
+On 11/01/2023 08:45, Roger Lu wrote:
+> In MediaTek HW design, svs and thermal both use the same clk source.
+> It means that svs clk reference count from CCF includes thermal control
+> counts. That makes svs driver confuse whether it disabled svs's main clk
+> or not from CCF's perspective and lead to turn off their shared clk
+> unexpectedly. Therefore, we add svs clk control APIs to make sure svs's
+> main clk is controlled well by svs driver itself.
 > 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> index ae57a9a3ab05..93f961d484c3 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-> @@ -2589,17 +2589,14 @@ static const struct dev_pm_ops brcmf_pciedrvr_pm = {
->   static const struct pci_device_id brcmf_pcie_devid_table[] = {
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4350_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE_SUB(0x4355, BRCM_PCIE_VENDOR_ID_BROADCOM, 0x4355, WCC),
-> -	BRCMF_PCIE_DEVICE(BRCM_PCIE_4354_RAW_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4356_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43567_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43570_DEVICE_ID, WCC),
-> -	BRCMF_PCIE_DEVICE(BRCM_PCIE_43570_RAW_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4358_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4359_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_2G_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_5G_DEVICE_ID, WCC),
-> -	BRCMF_PCIE_DEVICE(BRCM_PCIE_43602_RAW_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4364_DEVICE_ID, BCA),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4365_DEVICE_ID, BCA),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4365_2G_DEVICE_ID, BCA),
-> @@ -2611,7 +2608,6 @@ static const struct pci_device_id brcmf_pcie_devid_table[] = {
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4371_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(BRCM_PCIE_4378_DEVICE_ID, WCC),
->   	BRCMF_PCIE_DEVICE(CY_PCIE_89459_DEVICE_ID, CYW),
-> -	BRCMF_PCIE_DEVICE(CY_PCIE_89459_RAW_DEVICE_ID, CYW),
->   	{ /* end: all zeroes */ }
+> Here is a NG example. Rely on CCF's reference count and cause problem.
+> 
+> thermal probe (clk ref = 1)
+> -> svs probe (clk ref = 2)
+>     -> svs suspend (clk ref = 1)
+>        -> thermal suspend (clk ref = 0)
+>        -> thermal resume (clk ref = 1)
+>     -> svs resume (encounter error, clk ref = 1)
+>     -> svs suspend (clk ref = 0)
+>        -> thermal suspend (Fail here, thermal HW control w/o clk)
+> 
+> Fixes: a825d72f74a3 ("soc: mediatek: fix missing clk_disable_unprepare() on err in svs_resume()")
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+
+That looks wrong. Although I don't out of my mind, there should be a way to tell 
+the clock framework that this clock is shared between several devices.
+
+I wonder if using clk_enable and clk_disable in svs_resume/suspend wouldn't be 
+enough.
+
+Regards,
+Matthias
+
+> ---
+>   drivers/soc/mediatek/mtk-svs.c | 57 ++++++++++++++++++++++++++--------
+>   1 file changed, 44 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index 9575aa645643..830263bad81e 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -326,6 +326,7 @@ static const u32 svs_regs_v2[] = {
+>    * @bank_max: total number of svs banks
+>    * @efuse: svs efuse data received from NVMEM framework
+>    * @tefuse: thermal efuse data received from NVMEM framework
+> + * @clk_cnt: clock count shows the clk enable/disable times by svs driver
+>    */
+>   struct svs_platform {
+>   	char *name;
+> @@ -343,6 +344,7 @@ struct svs_platform {
+>   	u32 bank_max;
+>   	u32 *efuse;
+>   	u32 *tefuse;
+> +	s32 clk_cnt;
 >   };
 >   
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> index f4939cf62767..a211a72fca42 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> +++ b/drivers/net/wireless/broadcom/brcm80211/include/brcm_hw_ids.h
-> @@ -71,17 +71,14 @@
->   /* PCIE Device IDs */
->   #define BRCM_PCIE_4350_DEVICE_ID	0x43a3
->   #define BRCM_PCIE_4354_DEVICE_ID	0x43df
-> -#define BRCM_PCIE_4354_RAW_DEVICE_ID	0x4354
->   #define BRCM_PCIE_4356_DEVICE_ID	0x43ec
->   #define BRCM_PCIE_43567_DEVICE_ID	0x43d3
->   #define BRCM_PCIE_43570_DEVICE_ID	0x43d9
-> -#define BRCM_PCIE_43570_RAW_DEVICE_ID	0xaa31
->   #define BRCM_PCIE_4358_DEVICE_ID	0x43e9
->   #define BRCM_PCIE_4359_DEVICE_ID	0x43ef
->   #define BRCM_PCIE_43602_DEVICE_ID	0x43ba
->   #define BRCM_PCIE_43602_2G_DEVICE_ID	0x43bb
->   #define BRCM_PCIE_43602_5G_DEVICE_ID	0x43bc
-> -#define BRCM_PCIE_43602_RAW_DEVICE_ID	43602
->   #define BRCM_PCIE_4364_DEVICE_ID	0x4464
->   #define BRCM_PCIE_4365_DEVICE_ID	0x43ca
->   #define BRCM_PCIE_4365_2G_DEVICE_ID	0x43cb
-> @@ -92,7 +89,6 @@
->   #define BRCM_PCIE_4371_DEVICE_ID	0x440d
->   #define BRCM_PCIE_4378_DEVICE_ID	0x4425
->   #define CY_PCIE_89459_DEVICE_ID         0x4415
-> -#define CY_PCIE_89459_RAW_DEVICE_ID     0x4355
+>   struct svs_platform_data {
+> @@ -502,6 +504,32 @@ static void svs_switch_bank(struct svs_platform *svsp)
+>   	svs_writel_relaxed(svsp, svsb->core_sel, CORESEL);
+>   }
 >   
->   /* brcmsmac IDs */
->   #define BCM4313_D11N2G_ID	0x4727	/* 4313 802.11n 2.4G device */
-
---000000000000b2e9a705f38f2943
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
-Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
-ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
-zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
-sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
-BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
-N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
-p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
-bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBGXQO4RV9EvCrVf9rG
-Rkm24mBb0vCROLuWkrOR0NipgDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMzAxMzExMzE4MDlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEA7QwgBgm5tBUFXjgAoYepRE9txfqbLt5Zq7Pu
-xpTsFhQ5rGsz2WnNG9wqsxQZ8lvvuxBGyKif0p8bwZxb49XCtZixUmCWjKGJz+uSLwTPL1P3ObkH
-NI8wRBh5J2dOx+7CRSvs8v6t5RzmZyusrtIxB56pV3qF6UJ3lWo9trBWopQf0mZdiqDI92nLykPn
-6GKGG+BrRRW/a+d+CiygcJJejjyu6q9Gjin01CAOG+kaOTTq1vpwCMtsG52hwhxeJ6wMBkfkey+B
-PoDMriHmNMCq1p4/wM5/TFkTYczOIkNc9e1NFpmdtMHzc80j9VPhGKZea8BTo5ZhU8KYjSJPAnqg
-aA==
---000000000000b2e9a705f38f2943--
+> +static bool svs_is_clk_enabled(struct svs_platform *svsp)
+> +{
+> +	return svsp->clk_cnt > 0 ? true : false;
+> +}
+> +
+> +static int svs_clk_enable(struct svs_platform *svsp)
+> +{
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(svsp->main_clk);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "cannot enable main_clk: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	svsp->clk_cnt++;
+> +
+> +	return 0;
+> +}
+> +
+> +static void svs_clk_disable(struct svs_platform *svsp)
+> +{
+> +	clk_disable_unprepare(svsp->main_clk);
+> +	svsp->clk_cnt--;
+> +}
+> +
+>   static u32 svs_bank_volt_to_opp_volt(u32 svsb_volt, u32 svsb_volt_step,
+>   				     u32 svsb_volt_base)
+>   {
+> @@ -1569,6 +1597,12 @@ static int svs_suspend(struct device *dev)
+>   	int ret;
+>   	u32 idx;
+>   
+> +	if (!svs_is_clk_enabled(svsp)) {
+> +		dev_err(svsp->dev, "svs clk is disabled already (%d)\n",
+> +			svsp->clk_cnt);
+> +		return 0;
+> +	}
+> +
+>   	for (idx = 0; idx < svsp->bank_max; idx++) {
+>   		svsb = &svsp->banks[idx];
+>   
+> @@ -1590,7 +1624,7 @@ static int svs_suspend(struct device *dev)
+>   		return ret;
+>   	}
+>   
+> -	clk_disable_unprepare(svsp->main_clk);
+> +	svs_clk_disable(svsp);
+>   
+>   	return 0;
+>   }
+> @@ -1600,16 +1634,14 @@ static int svs_resume(struct device *dev)
+>   	struct svs_platform *svsp = dev_get_drvdata(dev);
+>   	int ret;
+>   
+> -	ret = clk_prepare_enable(svsp->main_clk);
+> -	if (ret) {
+> -		dev_err(svsp->dev, "cannot enable main_clk, disable svs\n");
+> +	ret = svs_clk_enable(svsp);
+> +	if (ret)
+>   		return ret;
+> -	}
+>   
+>   	ret = reset_control_deassert(svsp->rst);
+>   	if (ret) {
+>   		dev_err(svsp->dev, "cannot deassert reset %d\n", ret);
+> -		goto out_of_resume;
+> +		goto svs_resume_clk_disable;
+>   	}
+>   
+>   	ret = svs_init02(svsp);
+> @@ -1624,8 +1656,9 @@ static int svs_resume(struct device *dev)
+>   	dev_err(svsp->dev, "assert reset: %d\n",
+>   		reset_control_assert(svsp->rst));
+>   
+> -out_of_resume:
+> -	clk_disable_unprepare(svsp->main_clk);
+> +svs_resume_clk_disable:
+> +	svs_clk_disable(svsp);
+> +
+>   	return ret;
+>   }
+>   
+> @@ -2411,11 +2444,9 @@ static int svs_probe(struct platform_device *pdev)
+>   		goto svs_probe_free_resource;
+>   	}
+>   
+> -	ret = clk_prepare_enable(svsp->main_clk);
+> -	if (ret) {
+> -		dev_err(svsp->dev, "cannot enable main clk: %d\n", ret);
+> +	ret = svs_clk_enable(svsp);
+> +	if (ret)
+>   		goto svs_probe_free_resource;
+> -	}
+>   
+>   	svsp->base = of_iomap(svsp->dev->of_node, 0);
+>   	if (IS_ERR_OR_NULL(svsp->base)) {
+> @@ -2456,7 +2487,7 @@ static int svs_probe(struct platform_device *pdev)
+>   	iounmap(svsp->base);
+>   
+>   svs_probe_clk_disable:
+> -	clk_disable_unprepare(svsp->main_clk);
+> +	svs_clk_disable(svsp);
+>   
+>   svs_probe_free_resource:
+>   	if (!IS_ERR_OR_NULL(svsp->efuse))
