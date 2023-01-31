@@ -2,104 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840A76826A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B576826A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 09:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbjAaIiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 03:38:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S231417AbjAaIjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 03:39:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbjAaIiJ (ORCPT
+        with ESMTP id S229964AbjAaIjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 03:38:09 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674851B56C
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:38:08 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 36so9513997pgp.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:38:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z0YOgb1qqY+eYSMvEeNHP+Hqfb8/SIN7dXd5+Q8wSDw=;
-        b=ISQTBSXKp5vZheNDNbgJgxc8QhRpCjt4p/8zTq2lmx/K/QORLle9hCl0aRHYNmE7bA
-         DAIbYEOe+wqRfihl5meXLKnT2L1jCw/qdo+UDM0JpmbttQdugF6PoRuPWMHTwR0+6iL3
-         +4qgQxUfNJnZx9exU/Ov6WHNn3Z24QFcPDGk30U8fvL8+buiDP8YMrw+vfBP4uSvUPjd
-         7NZVEJZUr0nc1qsQNpcpw7Q7O49tf1lLq9Sc+uPD2bQmZB1ZzVzAl1mdH7YSCil2WP5u
-         +zkoZx0eflRnKw4IuL7RKYSrJ8Hb8G3OykIwmA75G7aBoc4rAMFMw4/gnvDuy5FMZgQV
-         jvog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z0YOgb1qqY+eYSMvEeNHP+Hqfb8/SIN7dXd5+Q8wSDw=;
-        b=jxnTLfAHhVMTHZIWsW6IPJ5o7qPUYy+gSnBaKGan6ILbgE7fo9zNjfDYyf9hd3R1/+
-         75OIwy/RAWlCQTyeZu+l0hC7YhlSWmMY3dK4XsamDMj/T6sSAi89K4mQcV3M27C3f3Uc
-         nsgX6mnJljQcT4hXzGQjcgKrZ4T2y6Kz8o18jh5V6mcP0FLO6C6Kcb6yeEEw9Yu9/jaL
-         2DqbmTzfkMpVVf4hSsQ6QaRvv91zLxDyygY8aaa/qTrkcb9ad8dj4CClj68J2oDwCxD/
-         cjC+K3HscQDgZFizXdrXRImMq5K83ochRYU4yFwZawCotJpkXOSruYX5pwYXcU99vPse
-         9Dow==
-X-Gm-Message-State: AO0yUKVpzAlRasBu/sIofdE7jQr5uV1VjjNHEBuCNG0ygbA0NDIO5x6T
-        mI80TeRpf8gblhMuSi7KSG0=
-X-Google-Smtp-Source: AK7set9V4v10dCKnXellHnRjZZLAYKhT7gKtrOZH79TXD4DPm7ZFZxn/mEmSjdBWDr+GYGEfwIHscQ==
-X-Received: by 2002:a62:cf43:0:b0:593:a3f1:7c04 with SMTP id b64-20020a62cf43000000b00593a3f17c04mr8372501pfg.8.1675154287816;
-        Tue, 31 Jan 2023 00:38:07 -0800 (PST)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id t63-20020a628142000000b00585cb0efebbsm9089629pfd.175.2023.01.31.00.38.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 00:38:07 -0800 (PST)
-Date:   Tue, 31 Jan 2023 17:38:02 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>, Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew WilCox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH mm-unstable v4 1/3] mmflags.h: use less error prone
- method to define pageflag_names
-Message-ID: <Y9jTahuqsqID87aU@hyeyoo>
-References: <20230130042514.2418-1-42.hyeyoo@gmail.com>
- <20230130042514.2418-2-42.hyeyoo@gmail.com>
- <Y9e5qD2whT3+xDMD@smile.fi.intel.com>
+        Tue, 31 Jan 2023 03:39:12 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0B815556
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 00:39:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675154352; x=1706690352;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RCAx/SVdwzpoxtG6dsVhEuTiwPDXXArst9gLzvIUq5g=;
+  b=NLCtQCSmRqbVRZ0lAyjxn1OsiNHbTrSUmK7Qm5IhbORTuygFDxPSvAnM
+   IE/YA3Al2Wm2WEAUDf1fLr8WXaDVWDIiyCkepF0o3ZbVJuHBeccoHcQ6C
+   ePD/mLYQ4KBNRYIU5VIdrQJROBmLuCCo7T6hPq1RO/tfG0Wha5XjaMfQv
+   S34jtrwGvOqrdjxjzm3lW6k1WAa+2qt1iMQFRzEwTVYhZqFK4zA/rY1eT
+   gup7cxnNycm5nWCoqHPRe6ZZ+XBmkGJmGaC0holUDjfX+9KUXmO/zNNaW
+   7Jpw185F4VjhwygmlZYkmBtEUnUO0IWG5tFTjAtOIHz4wvPCZYPPTG2q2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="414002124"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="414002124"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 00:39:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="664420245"
+X-IronPort-AV: E=Sophos;i="5.97,259,1669104000"; 
+   d="scan'208";a="664420245"
+Received: from dianaman-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.33.19])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 00:39:04 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 090D610DF86; Tue, 31 Jan 2023 11:39:02 +0300 (+03)
+Date:   Tue, 31 Jan 2023 11:39:01 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] x86/tdx: Do not corrupt frame-pointer in
+ __tdx_hypercall()
+Message-ID: <20230131083901.ssg5huno2lhrbmzg@box.shutemov.name>
+References: <20230130135354.27674-1-kirill.shutemov@linux.intel.com>
+ <Y9jShNfS/d8LGu8w@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9e5qD2whT3+xDMD@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9jShNfS/d8LGu8w@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 02:35:52PM +0200, Andy Shevchenko wrote:
-> On Mon, Jan 30, 2023 at 01:25:12PM +0900, Hyeonggon Yoo wrote:
-> > As suggested by Andy Shevchenko, use helper macro to decrease chances
-> > of typo when defining pageflag_names.
+On Tue, Jan 31, 2023 at 09:34:12AM +0100, Peter Zijlstra wrote:
+> On Mon, Jan 30, 2023 at 04:53:54PM +0300, Kirill A. Shutemov wrote:
+> > If compiled with CONFIG_FRAME_POINTER=y, objtool in not happy that
+> > __tdx_hypercall() messes up RBP.
+> > 
+> >   objtool: __tdx_hypercall+0x7f: return with modified stack frame
+> > 
+> > Rework the function to store TDX_HCALL_ flags on stack instead of RBP.
 > 
-> Suggested-by: ? :-)
+> Also, on IRC you mentioned that per TDX spec, BP is a valid argument
+> register too and you were going to raise this and get it fixed, TDX
+> hypercalls must not use BP to pass data.
 
-oh, yeah I only wrote in changelog forgot to add the tag.
-I think Andrew will kindly add that when picking this series up?
+I've raised the question yesterday. No progress so far. It will take time
+to get it into the public spec.
 
-> > Link: https://lore.kernel.org/lkml/Y6AycLbpjVzXM5I9@smile.fi.intel.com
-> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> 
-> LGTM, thank you!
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Thank you a lot!
-
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-
-Best Regards,
-Hyeonggon
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
