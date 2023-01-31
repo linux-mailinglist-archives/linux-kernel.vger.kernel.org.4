@@ -2,209 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27BE6682D1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D58682D1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjAaM64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:58:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S231407AbjAaM7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjAaM6x (ORCPT
+        with ESMTP id S229613AbjAaM7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:58:53 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0510A4B4A8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:58:51 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id m8so5084991edd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:58:50 -0800 (PST)
+        Tue, 31 Jan 2023 07:59:47 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8226A4DCE8;
+        Tue, 31 Jan 2023 04:59:39 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id h12so14109464wrv.10;
+        Tue, 31 Jan 2023 04:59:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IkyFyenacXd17rNywCrJx/hKCAb3GagOAKoON+f0+6U=;
-        b=xvjussJajMGrV0E16LOEg6Xo1NdVhD1K2qehnwgL2nO62EsrAsujBgzOvxLBNuWIjc
-         FItyKlZPBGn9TEhEOoKVsBF4uKWKuNRBCPYaoa39PgMG2j183FwRryXCD1kFW487MSPK
-         f8kYY4gNZj4Ryd8bQmFio6830hyXTSS98GbnjqYT0YWbp0JDy9QhR/OyDKCRp1vQSzYY
-         WbyfgjJx3FGIGd8NYg69KOZbtAUliGMClLUWZnhvoVbWyNyiWp3KNT5RyewaWO2Z11RO
-         4ivceMHpQouAnBjIkkmbPeLfef1tBj3/zN07qHmKZ26a1NUhIimLyyS9VrvqYbYFdR0E
-         qlFQ==
+        bh=3UndeySbwJtYhBstLS+7W0sTuNpKqoxWhQG5bKCKu1E=;
+        b=kcA47SugyoASWc7ydEtwePhQFM0twx4+y19Z7wadyt7XQFZsZEJSpna+gvXiMiscEq
+         IFOkCKqb6zFJl8Hll5lSlYJu8amy7v6m6HNpc7AB9o177uxiIjaCKPFc5aRo5PGFxVyM
+         N23MA+9g8B+nUGHIW9Quq4A9Sveb1HSRp+4DNsKCP3RuIeVz14NU5O9RVD3WVhrkrhSi
+         cW4H8Mnj8bCiB/ngDAqhyGzFIbm3qfrp0Ki3vJdRZ8cyBKvwWmUFbvPcgGIxNETLk0ZI
+         gnslR4N/O0vXCZbyvSER8rWmxvarMbqbS+BGhLdFvPRPiNwKx0TUzkj0BOC1LoqtbaWw
+         d4tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IkyFyenacXd17rNywCrJx/hKCAb3GagOAKoON+f0+6U=;
-        b=h7R0CC1Pn2l5EUVtIKUY5V7s13fl2MVwS2d21j0X8zNakyGSyrIhr838t3+BVs3poK
-         vMTXLgSCkAbzm9YxBElE52s4gVs0rTHwRzNI3VlzU7YMPwAGtea7qjOjK7ed8RVEKmZC
-         l6stOVgtRar1Q1PKwaqEH0s3Xe0bp6k5RgoyO+3y8Zif+nkX1yYibBD/GoCpzglQatyt
-         5SX2od5+s5h4t6Pn4pl8rjJxa2pUJEb5bCuZe6K6scxjwsk7VOCqQRCihYqPg/ovBTtJ
-         f9Q5fU+Jvj9rfS2Udoy82g9+/CNJ8kBqaQE3ZLPJv8ZF1tW8b6ZbDTFexZSDe0eZho5y
-         w19Q==
-X-Gm-Message-State: AO0yUKXRBqSmqJBJorUSSEdLN2ZMsMxYaZu36Mj7VYggGdsTIDlnKLD4
-        hsQYBsS2lwW2l66jXwQaelTSFQ==
-X-Google-Smtp-Source: AK7set9DTffFITUeObIldoYH99bvR7fanzNv9obiIvPU2KG2ZgBN3vkTKSyWZa/gE145bKkkX5/SZw==
-X-Received: by 2002:a05:6402:4502:b0:4a2:b97:adc4 with SMTP id ez2-20020a056402450200b004a20b97adc4mr3204700edb.38.1675169929238;
-        Tue, 31 Jan 2023 04:58:49 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id i11-20020a50870b000000b004a0f9d31d18sm7957666edb.71.2023.01.31.04.58.48
+        bh=3UndeySbwJtYhBstLS+7W0sTuNpKqoxWhQG5bKCKu1E=;
+        b=UzBLMJ0qv30AYvfjVxtGt5ttmjP4l09pHe6rJOvvt3Fzf//XkDNctMzZ8R3481eEMP
+         Js2y6fZSof4IgeHsUiidLf6WeB8aalEABrsRHxQstVEvsLTTrkJIOidauaBv/zn67S9r
+         Q4EEPmH1gMvAlJZobiLDT7XNxaIjwoIpPK76HdF3k33SW3k204o8p2vMxNh4j0rQet5c
+         BYEg45ykXVRJY8TclEDVHb8xruh57DI+MPQwkgOqFD6wJQrVhBiybKLr0nBsusLb44Rt
+         RpXQrztRBMU6DXRBh2YRwPsTETpklmPMQHtZfsy5QzABXzW4hoUB9jJWIhVGKlZZv8vL
+         efXA==
+X-Gm-Message-State: AFqh2kqnT3Y+wPvX/Vfy/5eAm+7qzZlHkhAghwaRtIBrcJVMysGWE7gv
+        65JLw1EwP8UAI13hjPXy9AM=
+X-Google-Smtp-Source: AMrXdXuQTnI7ooh6atfJ1l+iKecwB8hqvSyt3CFwVI9zZ+9rWAa4lGHia0YO6Ocu7iA5lZ7l35q2iw==
+X-Received: by 2002:adf:a31a:0:b0:2bf:96ae:7cc8 with SMTP id c26-20020adfa31a000000b002bf96ae7cc8mr33668033wrb.4.1675169977792;
+        Tue, 31 Jan 2023 04:59:37 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id b14-20020a05600010ce00b0029e1aa67fd2sm14798814wrx.115.2023.01.31.04.59.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 04:58:48 -0800 (PST)
-Message-ID: <60af517c-e22d-780c-221c-4df41f1e7c5c@linaro.org>
-Date:   Tue, 31 Jan 2023 14:58:47 +0200
+        Tue, 31 Jan 2023 04:59:37 -0800 (PST)
+Message-ID: <561d9a97-64c7-6633-ff10-d85ae2c7f314@gmail.com>
+Date:   Tue, 31 Jan 2023 13:59:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v12 13/14] drm/msm/disp/dpu: add PSR support for eDP
- interface in dpu driver
-Content-Language: en-GB
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
-        quic_vproddut@quicinc.com, quic_bjorande@quicinc.com,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
-References: <1675091494-13988-1-git-send-email-quic_vpolimer@quicinc.com>
- <1675091494-13988-14-git-send-email-quic_vpolimer@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1675091494-13988-14-git-send-email-quic_vpolimer@quicinc.com>
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v4 03/14] soc: mediatek: mtk-svs: enable the IRQ later
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Ricardo Ribalda <ribalda@chromium.org>
+References: <20230111074528.29354-1-roger.lu@mediatek.com>
+ <20230111074528.29354-4-roger.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230111074528.29354-4-roger.lu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/01/2023 17:11, Vinod Polimera wrote:
-> Enable PSR on eDP interface using drm self-refresh librabry.
-> This patch uses a trigger from self-refresh library to enter/exit
-> into PSR, when there are no updates from framework.
+
+
+On 11/01/2023 08:45, Roger Lu wrote:
+> From: Ricardo Ribalda <ribalda@chromium.org>
 > 
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> If the system does not come from reset (like when is booted via
+> kexec(), the peripheral might trigger an IRQ before the data structures
+> are initialized.
+> 
+> Fixes:
+> 
+> [    0.227710] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000f08
+> [    0.227913] Call trace:
+> [    0.227918]  svs_isr+0x8c/0x538
+> 
+
+This patch is different from
+https://lore.kernel.org/r/20221127-mtk-svs-v2-0-145b07663ea8@chromium.org
+
+If you think the patch from Ricardo is wrong, then you should have mentioned 
+that in the review.
+
+Regards,
+Matthias
+
+> Fixes: 681a02e95000 ("soc: mediatek: SVS: introduce MTK SVS engine")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    | 13 ++++++++++++-
->   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 14 ++++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
->   3 files changed, 27 insertions(+), 2 deletions(-)
+>   drivers/soc/mediatek/mtk-svs.c | 28 ++++++++++++++--------------
+>   1 file changed, 14 insertions(+), 14 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> index f29a339..60e5984 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> @@ -21,6 +21,7 @@
->   #include <drm/drm_probe_helper.h>
->   #include <drm/drm_rect.h>
->   #include <drm/drm_vblank.h>
-> +#include <drm/drm_self_refresh_helper.h>
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index a803b92afc3d..64d4d03ab71c 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -2403,20 +2403,6 @@ static int svs_probe(struct platform_device *pdev)
+>   		goto svs_probe_free_resource;
+>   	}
 >   
->   #include "dpu_kms.h"
->   #include "dpu_hw_lm.h"
-> @@ -1021,6 +1022,9 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+> -	svsp_irq = platform_get_irq(pdev, 0);
+> -	if (svsp_irq < 0) {
+> -		ret = svsp_irq;
+> -		goto svs_probe_free_resource;
+> -	}
+> -
+> -	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
+> -					IRQF_ONESHOT, svsp->name, svsp);
+> -	if (ret) {
+> -		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
+> -			svsp_irq, ret);
+> -		goto svs_probe_free_resource;
+> -	}
+> -
+>   	svsp->main_clk = devm_clk_get(svsp->dev, "main");
+>   	if (IS_ERR(svsp->main_clk)) {
+>   		dev_err(svsp->dev, "failed to get clock: %ld\n",
+> @@ -2438,6 +2424,20 @@ static int svs_probe(struct platform_device *pdev)
+>   		goto svs_probe_clk_disable;
+>   	}
 >   
->   	DRM_DEBUG_KMS("crtc%d\n", crtc->base.id);
->   
-> +	if (old_crtc_state->self_refresh_active)
-> +		return;
-> +
-
-I have been looking at the crtc_needs_disable(). It explicitly mentions 
-that 'We also need to run through the crtc_funcs->disable() function 
-[..] if it's transitioning to self refresh mode...'. Don't we need to 
-perform some cleanup here (like disabling the vblank irq handling, 
-freeing the bandwidth, etc)?
-
->   	/* Disable/save vblank irq handling */
->   	drm_crtc_vblank_off(crtc);
->   
-> @@ -1577,7 +1581,7 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->   {
->   	struct drm_crtc *crtc = NULL;
->   	struct dpu_crtc *dpu_crtc = NULL;
-> -	int i;
-> +	int i, ret;
->   
->   	dpu_crtc = kzalloc(sizeof(*dpu_crtc), GFP_KERNEL);
->   	if (!dpu_crtc)
-> @@ -1614,6 +1618,13 @@ struct drm_crtc *dpu_crtc_init(struct drm_device *dev, struct drm_plane *plane,
->   	/* initialize event handling */
->   	spin_lock_init(&dpu_crtc->event_lock);
->   
-> +	ret = drm_self_refresh_helper_init(crtc);
-> +	if (ret) {
-> +		DPU_ERROR("Failed to initialize %s with self-refresh helpers %d\n",
-> +			crtc->name, ret);
-> +		return ERR_PTR(ret);
+> +	svsp_irq = platform_get_irq(pdev, 0);
+> +	if (svsp_irq < 0) {
+> +		ret = svsp_irq;
+> +		goto svs_probe_iounmap;
 > +	}
 > +
->   	DRM_DEBUG_KMS("%s: successfully initialized crtc\n", dpu_crtc->name);
->   	return crtc;
->   }
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index 01b7509..450abb1 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -12,6 +12,7 @@
->   #include <linux/kthread.h>
->   #include <linux/seq_file.h>
->   
-> +#include <drm/drm_atomic.h>
->   #include <drm/drm_crtc.h>
->   #include <drm/drm_file.h>
->   #include <drm/drm_probe_helper.h>
-> @@ -1212,11 +1213,24 @@ static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
->   					struct drm_atomic_state *state)
->   {
->   	struct dpu_encoder_virt *dpu_enc = NULL;
-> +	struct drm_crtc *crtc;
-> +	struct drm_crtc_state *old_state = NULL;
->   	int i = 0;
->   
->   	dpu_enc = to_dpu_encoder_virt(drm_enc);
->   	DPU_DEBUG_ENC(dpu_enc, "\n");
->   
-> +	crtc = drm_atomic_get_old_crtc_for_encoder(state, drm_enc);
-> +	if (crtc)
-> +		old_state = drm_atomic_get_old_crtc_state(state, crtc);
+> +	ret = devm_request_threaded_irq(svsp->dev, svsp_irq, NULL, svs_isr,
+> +					IRQF_ONESHOT, svsp->name, svsp);
+> +	if (ret) {
+> +		dev_err(svsp->dev, "register irq(%d) failed: %d\n",
+> +			svsp_irq, ret);
+> +		goto svs_probe_iounmap;
+> +	}
 > +
-> +	/*
-> +	 * The encoder is already disabled if self refresh mode was set earlier,
-> +	 * in the old_state for the corresponding crtc.
-> +	 */
-> +	if (old_state && old_state->self_refresh_active)
-> +		return;
-> +
-
-Again the same question here, doesn't crtc_needs_disable() take care of 
-this clause? I might be missing something in the PSR state transitions. 
-Could you please add some explanation here?
-
->   	mutex_lock(&dpu_enc->enc_lock);
->   	dpu_enc->enabled = false;
->   
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index a683bd9..681dd2e 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -491,7 +491,7 @@ static void dpu_kms_wait_for_commit_done(struct msm_kms *kms,
->   		return;
->   	}
->   
-> -	if (!crtc->state->active) {
-> +	if (!drm_atomic_crtc_effectively_active(crtc->state)) {
->   		DPU_DEBUG("[crtc:%d] not active\n", crtc->base.id);
->   		return;
->   	}
-
--- 
-With best wishes
-Dmitry
-
+>   	ret = svs_start(svsp);
+>   	if (ret) {
+>   		dev_err(svsp->dev, "svs start fail: %d\n", ret);
