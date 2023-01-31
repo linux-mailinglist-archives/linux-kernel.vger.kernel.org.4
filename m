@@ -2,308 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B686825B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A976825DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 08:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjAaHpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 02:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S229716AbjAaHu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 02:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjAaHpR (ORCPT
+        with ESMTP id S229565AbjAaHu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 02:45:17 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C6638EBA;
-        Mon, 30 Jan 2023 23:45:15 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 40C181C0004;
-        Tue, 31 Jan 2023 07:45:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1675151114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wMe+6sH9kAIkOp6zpYrCxiYnhxYIO5nkKGD3Z8ma8r0=;
-        b=kut/azU7sBFwJKKha2Hf0Qt0ZLGEVip7CNkI2Hx1xDS2aW9gbjDBCVPYMFN0t5YhIGVEyF
-        hYiBnzl0ipwhmV/lrsSteBmr1Zu+OLvnxoeCywGzWHVdv+8ySOKo/qyOkpd+FvrP3eMIZz
-        RvoOqoh6E4nBbOeNQ83gcZFm+nAGAfMQge79AxgkzGmMoN/WrwksO3Eez8J3qvGlDzMLzW
-        xWdg9eAnBa88KKiAlbj5gtNSjFMHT3BmNaA9/qbSJaEtKj/VSQQYauN/ZZbeVGd1djLBPL
-        7Z4vDPDnYaRDN4adENmDTXiZuLnMoFxbnKXGaKqp8h1ErfazEJDupN/PRANAEg==
-Date:   Tue, 31 Jan 2023 08:45:08 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Li Yang <leoyang.li@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC
- controller
-Message-ID: <20230131084508.32b80a1b@bootlin.com>
-In-Reply-To: <20230130183037.GA3076426-robh@kernel.org>
-References: <20230126083222.374243-1-herve.codina@bootlin.com>
-        <20230126083222.374243-6-herve.codina@bootlin.com>
-        <20230130183037.GA3076426-robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        Tue, 31 Jan 2023 02:50:58 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30B44EC6
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 23:50:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1675151457; x=1706687457;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QEYpzWsqXeG2kt3ZV9Y8atrc/7sYS0UcUWG1ZHvmLcI=;
+  b=ujfLQEHP4clxyRDNmlRun0j5tCug5EP0h3a0m3M43XWHbUCoUp+4Kphb
+   nrRm3UlwgFsw5JSOdDwIF8cGS/l//doGwxjd2jHYprn9DpVGpR3Gu+RsS
+   snoX0/wvRW1lv7pt+nNOVkLHt5BDt+6Rh20jfICzAsES3hrOXHlniZTCM
+   w6WyipmXsS/RoqOG+E6iM3+sj0sxZrCeVKnN/pisF6Y2PsX6qhTde/a0D
+   arTo64g2aFsobX1R7Z2TcWibbh0tajdCYYfu02L7ZxvUSsiiqDxZl1I1o
+   KMuKU3hHhNLbZRg5GYgX+E9VIcVtAzjbkm5pSjMTNMPnWsd/ie2vdSyXs
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,259,1669100400"; 
+   d="asc'?scan'208";a="194585332"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Jan 2023 00:50:47 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 31 Jan 2023 00:50:45 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Tue, 31 Jan 2023 00:50:44 -0700
+Date:   Tue, 31 Jan 2023 07:50:20 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Guo Ren <guoren@kernel.org>
+CC:     Changbin Du <changbin.du@huawei.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hui Wang <hw.huiwang@huawei.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Changbin Du <changbin.du@gmail.com>,
+        Zong Li <zong.li@sifive.com>
+Subject: Re: [PATCH v3] riscv: patch: Fixup lockdep warning in stop_machine
+Message-ID: <Y9jIPOLxRRrjMo2t@wendy>
+References: <20230130232659.3374212-1-changbin.du@huawei.com>
+ <Y9fdtcoh8POLZ6CD@wendy>
+ <CAJF2gTQm_iHHEOEv+38G6nqjDO5b+oDcUOXi8uKxZLXvG249Kw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3SGwvimAJZ7frTLb"
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTQm_iHHEOEv+38G6nqjDO5b+oDcUOXi8uKxZLXvG249Kw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+--3SGwvimAJZ7frTLb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, 30 Jan 2023 12:30:37 -0600
-Rob Herring <robh@kernel.org> wrote:
+On Tue, Jan 31, 2023 at 03:26:33PM +0800, Guo Ren wrote:
+> On Mon, Jan 30, 2023 at 11:10 PM Conor Dooley
+> <conor.dooley@microchip.com> wrote:
+> >
+> > Hey Changbin,
+> >
+> > On Tue, Jan 31, 2023 at 07:26:59AM +0800, Changbin Du wrote:
+> > > From: Changbin Du <changbin.du@gmail.com>
+> > >
+> > > The task of ftrace_arch_code_modify(_post)_prepare() caller is
+> > > stop_machine, whose caller and work thread are of different tasks. The
+> > > lockdep checker needs the same task context, or it's wrong. That means
+> > > it's a bug here to use lockdep_assert_held because we don't guarantee
+> > > the same task context.
+> > >
+> > > kernel/locking/lockdep.c:
+> > > int __lock_is_held(const struct lockdep_map *lock, int read)
+> > > {
+> > >         struct task_struct *curr = current;
+> > >         int i;
+> > >
+> > >         for (i = 0; i < curr->lockdep_depth; i++) {
+> > >                       ^^^^^^^^^^^^^^^^^^^
+> > >                 struct held_lock *hlock = curr->held_locks + i;
+> > >                                         ^^^^^^^^^^^^^^^^
+> > >                 if (match_held_lock(hlock, lock)) {
+> > >                         if (read == -1 || !!hlock->read == read)
+> > >                                 return LOCK_STATE_HELD;
+> > >
+> > > The __lock_is_held depends on current held_locks records; if
+> > > stop_machine makes the checker runing on another task, that's wrong.
+> > >
+> > > Here is the log:
+> > > [   15.761523] ------------[ cut here ]------------
+> > > [   15.762125] WARNING: CPU: 0 PID: 15 at arch/riscv/kernel/patch.c:63 patch_insn_write+0x72/0x364
+> > > [   15.763258] Modules linked in:
+> > > [   15.764154] CPU: 0 PID: 15 Comm: migration/0 Not tainted 6.1.0-rc1-00014-g66924be85884-dirty #377
+> > > [   15.765339] Hardware name: riscv-virtio,qemu (DT)
+> > > [   15.765985] Stopper: multi_cpu_stop+0x0/0x192 <- stop_cpus.constprop.0+0x90/0xe2
+> > > [   15.766711] epc : patch_insn_write+0x72/0x364
+> > > [   15.767011]  ra : patch_insn_write+0x70/0x364
+> > > [   15.767276] epc : ffffffff8000721e ra : ffffffff8000721c sp : ff2000000067bca0
+> > > [   15.767622]  gp : ffffffff81603f90 tp : ff60000002432a00 t0 : 7300000000000000
+> > > [   15.767919]  t1 : 0000000000000000 t2 : 73695f6b636f6c5f s0 : ff2000000067bcf0
+> > > [   15.768238]  s1 : 0000000000000008 a0 : 0000000000000000 a1 : 0000000000000000
+> > > [   15.768537]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+> > > [   15.768837]  a5 : 0000000000000000 a6 : 0000000000000000 a7 : 0000000000000000
+> > > [   15.769139]  s2 : ffffffff80009faa s3 : ff2000000067bd10 s4 : ffffffffffffffff
+> > > [   15.769447]  s5 : 0000000000000001 s6 : 0000000000000001 s7 : 0000000000000003
+> > > [   15.769740]  s8 : 0000000000000002 s9 : 0000000000000004 s10: 0000000000000003
+> > > [   15.770027]  s11: 0000000000000002 t3 : 0000000000000000 t4 : ffffffff819af097
+> > > [   15.770323]  t5 : ffffffff819af098 t6 : ff2000000067ba28
+> > > [   15.770574] status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
+> > > [   15.771102] [<ffffffff80007520>] patch_text_nosync+0x10/0x3a
+> > > [   15.771421] [<ffffffff80009c66>] ftrace_update_ftrace_func+0x74/0x10a
+> > > [   15.771704] [<ffffffff800fa17e>] ftrace_modify_all_code+0xb0/0x16c
+> > > [   15.771958] [<ffffffff800fa24c>] __ftrace_modify_code+0x12/0x1c
+> > > [   15.772196] [<ffffffff800e110e>] multi_cpu_stop+0x14a/0x192
+> > > [   15.772454] [<ffffffff800e0a34>] cpu_stopper_thread+0x96/0x14c
+> > > [   15.772699] [<ffffffff8003f4ea>] smpboot_thread_fn+0xf8/0x1cc
+> > > [   15.772945] [<ffffffff8003ac9c>] kthread+0xe2/0xf8
+> > > [   15.773160] [<ffffffff80003e98>] ret_from_exception+0x0/0x14
+> > > [   15.773471] ---[ end trace 0000000000000000 ]---
+> >
+> > FWIW, you can always crop the [15.192321] stuff out of commit messages,
+> > as it just adds noise.
+> >
+> > > By the way, this also fixes the same issue for patch_text().
+> > >
+> > > Fixes: 0ff7c3b33127 ("riscv: Use text_mutex instead of patch_lock")
+> > > Co-developed-by: Guo Ren <guoren@kernel.org>
+> > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > Cc: Zong Li <zong.li@sifive.com>
+> > > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > > Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> > > ---
+> > > Changes in v3:
+> > >  - denote this also fixes function patch_text().
+> > >
+> > > Changes in v2:
+> > >  - Rewrite commit log with lockdep explanation [Guo Ren]
+> > >  - Rebase on v6.1 [Guo Ren]
+> > >
+> > > v1:
+> > > https://lore.kernel.org/linux-riscv/20210417023532.354714-1-changbin.du@gmail.com/
+> > > ---
+> > >  arch/riscv/kernel/patch.c | 7 -------
+> > >  1 file changed, 7 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
+> > > index 765004b60513..8619706f8dfd 100644
+> > > --- a/arch/riscv/kernel/patch.c
+> > > +++ b/arch/riscv/kernel/patch.c
+> > > @@ -55,13 +55,6 @@ static int patch_insn_write(void *addr, const void *insn, size_t len)
+> > >       bool across_pages = (((uintptr_t) addr & ~PAGE_MASK) + len) > PAGE_SIZE;
+> > >       int ret;
+> > >
+> > > -     /*
+> > > -      * Before reaching here, it was expected to lock the text_mutex
+> > > -      * already, so we don't need to give another lock here and could
+> > > -      * ensure that it was safe between each cores.
+> > > -      */
+> > > -     lockdep_assert_held(&text_mutex);
+> >
+> > I must admit, patches like this do concern me a little, as a someone
+> > unfamiliar with the world of probing and tracing.
+> > Seeing an explicit check that the lock was held, leads me to believe
+> > that the original author (Zong Li I think) thought that the text_mutex
+> > lock was insufficient.
+> > Do you think that their fear is unfounded? Explaining why it is safe to
+> > remove this assertion in the commit message would go a long way towards
+> > easing my anxiety!
+> >
+> > Also, why delete the comment altogether? The comment provides some
+> > information that doesn't appear to become invalid, even with the
+> > assertion removed?
+> Stop_machine separated the mutex context and made a lockdep warning.
+> So text_mutex can't be used here. We need to find another check
+> solution. I agree with the patch.
 
-> On Thu, Jan 26, 2023 at 09:32:17AM +0100, Herve Codina wrote:
-> > Add support for the QMC (QUICC Multichannel Controller)
-> > available in some PowerQUICC SoC such as MPC885 or MPC866.
-> >=20
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  .../bindings/soc/fsl/cpm_qe/fsl,qmc.yaml      | 167 ++++++++++++++++++=
- =20
->=20
-> fsl,cpm1-scc-qmc.yaml
+Whether or not you agree with the change is not the point (with your SoB
+I'd hope you agree with it).
+I understand that you two are trying to fix a false positive lockdep
+warning, but what I am asking for an explanation as to why the original
+author's fear is unfounded.
+Surely, having added the assertion, they were not thinking of the same
+code path that you guys are hitting the false positive on?
 
-Ok, will be changed in the next iteration.
+Perhaps Zong themselves can tell us what the original fear was?
 
->=20
-> >  1 file changed, 167 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fs=
-l,qmc.yaml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.y=
-aml b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
-> > new file mode 100644
-> > index 000000000000..9141a8ca183b
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,qmc.yaml
-> > @@ -0,0 +1,167 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/soc/fsl/cpm_qe/fsl,qmc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: PowerQUICC CPM QUICC Multichannel Controller (QMC)
-> > +
-> > +maintainers:
-> > +  - Herve Codina <herve.codina@bootlin.com>
-> > +
-> > +description:
-> > +  The QMC (QUICC Multichannel Controller) emulates up to 64 channels w=
-ithin one
-> > +  serial controller using the same TDM physical interface routed from =
-TSA.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - fsl,mpc885-scc-qmc
-> > +          - fsl,mpc866-scc-qmc
-> > +      - const: fsl,cpm1-scc-qmc
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: SCC (Serial communication controller) register ba=
-se
-> > +      - description: SCC parameter ram base
-> > +      - description: Dual port ram base
-> > +
-> > +  reg-names:
-> > +    items:
-> > +      - const: scc_regs
-> > +      - const: scc_pram
-> > +      - const: dpram
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +    description: SCC interrupt line in the CPM interrupt controller
-> > +
-> > +  fsl,tsa-serial:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > +    items:
-> > +      - items:
-> > +          - description: phandle to TSA node
-> > +          - enum: [1, 2, 3]
-> > +            description: |
-> > +              TSA serial interface (dt-bindings/soc/fsl,tsa.h defines =
-these
-> > +              values)
-> > +               - 1: SCC2
-> > +               - 2: SCC3
-> > +               - 3: SCC4
-> > +    description:
-> > +      Should be a phandle/number pair. The phandle to TSA node and the=
- TSA
-> > +      serial interface to use.
-> > +
-> > +  '#address-cells':
-> > +    const: 1
-> > +
-> > +  '#size-cells':
-> > +    const: 0
-> > +
-> > +  '#chan-cells':
-> > +    const: 1 =20
->=20
-> What's this?
+Thanks,
+Conor.
 
-A QMC consumer, such as "QMC audio" in this series, can have a phandle with
-an argument that points to this QMC node. For instance, in the "QMC audio"
-node, we have:
-  fsl,qmc-chan =3D <&qmc 16>;
+--3SGwvimAJZ7frTLb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The #chan-cells property in TSA specify the presence of this argument.
+-----BEGIN PGP SIGNATURE-----
 
-What do you think if I add the following description:
-   '#chan-cells':
-     const: 1
-     description:
-       QMC consumers that use a phandle to QMC need to pass the channel
-       number with this phandle.
-       For instance "fsl,qmc-chan =3D <&qmc 16>;".
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY9jIMAAKCRB4tDGHoIJi
+0g8ZAQCMmO+5DxVrDdkolU3lOfOo1Lc2GAa8MC5DI2raeusTpQD+Mr0ePFOFe9K0
+7GH3kdLzbxc/6iZ8Mgy+iOjkFMn1Zg4=
+=yPOO
+-----END PGP SIGNATURE-----
 
->=20
-> > +
-> > +patternProperties:
-> > +  '^channel@([0-9]|[1-5][0-9]|6[0-3])$':
-> > +    description:
-> > +      A channel managed by this controller
-> > +    type: object
-> > +
-> > +    properties:
-> > +      reg:
-> > +        minimum: 0
-> > +        maximum: 63
-> > +        description:
-> > +          The channel number
-> > +
-> > +      fsl,operational-mode:
-> > +        $ref: /schemas/types.yaml#/definitions/string
-> > +        enum: [transparent, hdlc]
-> > +        default: transparent
-> > +        description: |
-> > +          The channel operational mode
-> > +            - hdlc: The channel handles HDLC frames
-> > +            - transparent: The channel handles raw data without any pr=
-ocessing
-> > +
-> > +      fsl,reverse-data:
-> > +        $ref: /schemas/types.yaml#/definitions/flag
-> > +        description:
-> > +          The bit order as seen on the channels is reversed,
-> > +          transmitting/receiving the MSB of each octet first.
-> > +          This flag is used only in 'transparent' mode.
-> > +
-> > +      fsl,tx-ts-mask:
-> > +        $ref: /schemas/types.yaml#/definitions/uint64
-> > +        description:
-> > +          Channel assigned Tx time-slots within the Tx time-slots rout=
-ed by the
-> > +          TSA to this cell.
-> > +
-> > +      fsl,rx-ts-mask:
-> > +        $ref: /schemas/types.yaml#/definitions/uint64
-> > +        description:
-> > +          Channel assigned Rx time-slots within the Rx time-slots rout=
-ed by the
-> > +          TSA to this cell.
-> > +
-> > +    required:
-> > +      - reg
-> > +      - fsl,tx-ts-mask
-> > +      - fsl,rx-ts-mask
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - reg-names
-> > +  - interrupts
-> > +  - fsl,tsa-serial
-> > +  - '#address-cells'
-> > +  - '#size-cells'
-> > +  - '#chan-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/soc/fsl,tsa.h>
-> > +
-> > +    qmc@a60 {
-> > +        compatible =3D "fsl,mpc885-scc-qmc", "fsl,cpm1-scc-qmc";
-> > +        reg =3D <0xa60 0x20>,
-> > +              <0x3f00 0xc0>,
-> > +              <0x2000 0x1000>;
-> > +        reg-names =3D "scc_regs", "scc_pram", "dpram";
-> > +        interrupts =3D <27>;
-> > +        interrupt-parent =3D <&CPM_PIC>;
-> > +
-> > +        #address-cells =3D <1>;
-> > +        #size-cells =3D <0>;
-> > +        #chan-cells =3D <1>;
-> > +
-> > +        fsl,tsa-serial =3D <&tsa FSL_CPM_TSA_SCC4>;
-> > +
-> > +        channel@16 {
-> > +            /* Ch16 : First 4 even TS from all routed from TSA */
-> > +            reg =3D <16>;
-> > +            fsl,mode =3D "transparent";
-> > +            fsl,reverse-data;
-> > +            fsl,tx-ts-mask =3D <0x00000000 0x000000aa>;
-> > +            fsl,rx-ts-mask =3D <0x00000000 0x000000aa>;
-> > +        };
-> > +
-> > +        channel@17 {
-> > +            /* Ch17 : First 4 odd TS from all routed from TSA */
-> > +            reg =3D <17>;
-> > +            fsl,mode =3D "transparent";
-> > +            fsl,reverse-data;
-> > +            fsl,tx-ts-mask =3D <0x00000000 0x00000055>;
-> > +            fsl,rx-ts-mask =3D <0x00000000 0x00000055>;
-> > +        };
-> > +
-> > +        channel@19 {
-> > +            /* Ch19 : 8 TS (TS 8..15) from all routed from TSA */
-> > +            reg =3D <19>;
-> > +            fsl,mode =3D "hdlc";
-> > +            fsl,tx-ts-mask =3D <0x00000000 0x0000ff00>;
-> > +            fsl,rx-ts-mask =3D <0x00000000 0x0000ff00>;
-> > +        };
-> > +    };
-> > --=20
-> > 2.39.0
-> >  =20
-
-Thanks for the review,
-Herv=C3=A9
-
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--3SGwvimAJZ7frTLb--
