@@ -2,121 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D50683857
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF0B683859
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 22:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbjAaVJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 16:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S232043AbjAaVJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 16:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjAaVJA (ORCPT
+        with ESMTP id S231731AbjAaVJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 16:09:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB77253982
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:08:58 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Tue, 31 Jan 2023 16:09:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309FF8A50
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 13:09:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 79BA81EC0104;
-        Tue, 31 Jan 2023 22:08:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675199337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=LMP/QMFsFKhoP9e1MvUTWpew6YMs3U0h5i1EaPY92UQ=;
-        b=EwMtOlDiRCT4wJONiPQwtEbJyA/stzMzHWjqvGB6ZN9/h9wgNHY1fSexiTSMmsdPWxodls
-        3N24+SbRKXwMtIQ+PehXry/l+GD3pw3eQeCRIJqLuiAvWvc16yh7oSl7B7Zs8W+LYneO2Q
-        +TeAbRLEicg9YQqu0Yf5NVPjIFliRBk=
-Date:   Tue, 31 Jan 2023 22:08:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "Raj, Ashok" <ashok.raj@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Ostrovsky, Boris" <boris.ostrovsky@oracle.com>,
-        Martin Pohlack <mpohlack@amazon.de>
-Subject: Re: [Patch v3 Part2 3/9] x86/microcode/intel: Fix collect_cpu_info()
- to reflect current microcode
-Message-ID: <Y9mDYMASXCFaFkNU@zn.tnic>
-References: <20230130213955.6046-1-ashok.raj@intel.com>
- <20230130213955.6046-4-ashok.raj@intel.com>
- <Y9lGdh+0faIrIIiQ@zn.tnic>
- <SJ1PR11MB6083580526A7FFA11F110B77FCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <Y9l8yGVvVHBLKAoh@zn.tnic>
- <SJ1PR11MB60837E6E6AE7C82511DC039EFCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB60837E6E6AE7C82511DC039EFCD09@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id D749DB81EE8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 21:09:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD57C433D2;
+        Tue, 31 Jan 2023 21:09:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1675199381;
+        bh=Tm1IkHgEuHwmAFiQVyifjp2n8Pl5xNEUo9KiuSOrqUc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tbik8kpbarV1KV7UJ2qY/rFT6JWvSF4fTPKjQOZDQ5YwJSJqII27B4Du3yKbUbjtB
+         GaqKtxSKOtH36tgYcaK4FpuOFBO0CR3qU9Mv5ftUYly94yxlRf8BNDsRDcBLr1ekSN
+         oYa6MIII5NMElrZF0VMR0mZX/aykVy4QOlEGSIsw=
+Date:   Tue, 31 Jan 2023 13:09:40 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Joe Perches <joe@perches.com>, Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew WilCox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH mm-unstable v4 1/3] mmflags.h: use less error prone
+ method to define pageflag_names
+Message-Id: <20230131130940.94a7d42220857b4c75761b01@linux-foundation.org>
+In-Reply-To: <Y9jTahuqsqID87aU@hyeyoo>
+References: <20230130042514.2418-1-42.hyeyoo@gmail.com>
+        <20230130042514.2418-2-42.hyeyoo@gmail.com>
+        <Y9e5qD2whT3+xDMD@smile.fi.intel.com>
+        <Y9jTahuqsqID87aU@hyeyoo>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 08:49:52PM +0000, Luck, Tony wrote:
-> What happens here if the update on the first hyperthread failed (sure, it shouldn't,
-> but stuff happens at large scale).  In this case the current rev is still older that the
-> the cache version ... so there is no "goto out", and this hyperthread will now write
-> the MSR to initiate microcode update here, while the first thread is off executing
-> arbitrary code (the situation that we want to avoid).
+On Tue, 31 Jan 2023 17:38:02 +0900 Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
 
-Lemme see if I can follow: we sync all threads in __reload_late() and
-once they all arrive, we send them down into ->apply_microcode.
+> On Mon, Jan 30, 2023 at 02:35:52PM +0200, Andy Shevchenko wrote:
+> > On Mon, Jan 30, 2023 at 01:25:12PM +0900, Hyeonggon Yoo wrote:
+> > > As suggested by Andy Shevchenko, use helper macro to decrease chances
+> > > of typo when defining pageflag_names.
+> > 
+> > Suggested-by: ? :-)
+> 
+> oh, yeah I only wrote in changelog forgot to add the tag.
+> I think Andrew will kindly add that when picking this series up?
 
-T0 arrives, and fails the update. That is this piece:
+Sure.
 
-        /* write microcode via MSR 0x79 */
-        wrmsrl(MSR_IA32_UCODE_WRITE, (unsigned long)mc->bits);
-
-        rev = intel_get_microcode_revision();
-
-        if (rev != mc->hdr.rev) {
-                pr_err("CPU%d update to revision 0x%x failed\n",
-                       cpu, mc->hdr.rev);
-                return UCODE_ERROR;
-        }
-
-We return here without updating cpu_sig.rev, as we should.
-
-T1 arrives, updates successfully and updates its cpu_sig.rev.
-
-T0's patch level has been updated too with that because the microcode
-engine is shared between the threads. T0's cpu_sig.rev isn't, however,
-as that has happened "behind its back", so to speak.
-
-Is that the scenario you're talking about?
-
-If so, if you look at __reload_late(), it'll say
-
-	pr_warn("Error reloading microcode on CPU %d\n", cpu);
-
-and the large scale operator will know.
-
-And well, the easy fix is, do the reload again. :-)
-
-That'll update the cached values too.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+We're at -rc6 so I'm slowing down on the features and cleanups.  I'll
+probably park this series for the next -rc cycle.
