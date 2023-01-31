@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EC06821AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:58:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 192176821AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjAaB57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S231131AbjAaB6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbjAaB55 (ORCPT
+        with ESMTP id S230513AbjAaB6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:57:57 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844185B8E;
-        Mon, 30 Jan 2023 17:57:54 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 30V1vcxN122920;
-        Mon, 30 Jan 2023 19:57:38 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1675130258;
-        bh=nI385oO1ob+RB9n+M3klKZg7ccw2Sb7CN4Tuz0NDZrs=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=bXSP2fCAh+EfJqWTO3N+57PRFLSoKXw0e4q57O24Xj2tpzBDnxURCt/zDfMnjhgGs
-         eY0fDPfwxOdeRpPVY6W7JWCneYuHLMjG0SYZsZ0LdJrlXEuZ4zEk/w3ndh6YSlwZVW
-         kCliAlpsaSLLa8zkEIizxJp74bsqp4xpohd5h/yQ=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 30V1vcRx113032
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 30 Jan 2023 19:57:38 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 30
- Jan 2023 19:57:38 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 30 Jan 2023 19:57:38 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 30V1vc9Q028990;
-        Mon, 30 Jan 2023 19:57:38 -0600
-Date:   Mon, 30 Jan 2023 19:57:28 -0600
-From:   Bryan Brattlof <bb@ti.com>
-To:     "Raghavendra, Vignesh" <vigneshr@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Keerthy <j-keerthy@ti.com>
-Subject: Re: [PATCH v2 2/6] arm64: dts: ti: k3-am62-wakeup: add VTM node
-Message-ID: <20230131015728.347i3cttyxtitcwi@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20230120003051.9100-1-bb@ti.com>
- <20230120003051.9100-3-bb@ti.com>
- <0172f045-4bd0-ec5e-35a0-efc80da5ace0@ti.com>
+        Mon, 30 Jan 2023 20:58:06 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C6ACDC6;
+        Mon, 30 Jan 2023 17:58:04 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VaUebrP_1675130280;
+Received: from 30.240.116.180(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VaUebrP_1675130280)
+          by smtp.aliyun-inc.com;
+          Tue, 31 Jan 2023 09:58:01 +0800
+Message-ID: <926a3de3-ec6d-95e9-d799-c01e7ba9d2f9@linux.alibaba.com>
+Date:   Tue, 31 Jan 2023 09:57:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <0172f045-4bd0-ec5e-35a0-efc80da5ace0@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: [PATCH] ACPI: APEI: EINJ: Limit error type to 32-bit width
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Luck, Tony" <tony.luck@intel.com>, "bp@alien8.de" <bp@alien8.de>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "jaylu102@amd.com" <jaylu102@amd.com>,
+        "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        "zhuo.song@linux.alibaba.com" <zhuo.song@linux.alibaba.com>
+References: <20230118063504.58026-1-xueshuai@linux.alibaba.com>
+ <SJ1PR11MB60831C602B33D51DC6E604E6FCC79@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <202e4635-5233-9588-6c5e-ac61d280a431@linux.alibaba.com>
+ <CAJZ5v0hJ=XVVyw-feraYmTkGKeis7wrxDehtHOYuRSPUzYrSHA@mail.gmail.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <CAJZ5v0hJ=XVVyw-feraYmTkGKeis7wrxDehtHOYuRSPUzYrSHA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vignesh!
 
-On January 28, 2023 thus sayeth Raghavendra, Vignesh:
-> Hi Bryan,
+
+On 2023/1/30 PM11:41, Rafael J. Wysocki wrote:
+> On Thu, Jan 19, 2023 at 3:10 AM Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+>>
+>>
+>>
+>> On 2023/1/19 AM12:37, Luck, Tony wrote:
+>>>> The bit map of error types to inject is 32-bit width[1]. Add parameter
+>>>> check to reflect the fact.
+>>>>
+>>>> [1] ACPI Specification 6.4, Section 18.6.4. Error Types
+>>>>
+>>>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>>>
+>>> Reviewed-by: Tony Luck <tony.luck@intel.com>
 > 
-> On 1/20/2023 6:00 AM, Bryan Brattlof wrote:
-> > @@ -94,10 +95,13 @@ cbass_wakeup: bus@2b000000 {
-> >  			compatible = "simple-bus";
-> >  			#address-cells = <2>;
-> >  			#size-cells = <2>;
-> > -			ranges = <0x00 0x2b000000 0x00 0x2b000000 0x00 0x00300400>, /* Peripheral Window */
-> > +			ranges = <0x00 0x00b00000 0x00 0x00b00000 0x00 0x00002400>, /* VTM */
-> 
-> You would need to update unit address in node name as well:
-> 			cbass_wakeup: bus@b00000 {
+> Applied as 6.3 material, thanks!
 
-Ah! I missed that. I'll get this fixed
+Thank you.
 
-~Bryan
+Cheers
+Shuai
