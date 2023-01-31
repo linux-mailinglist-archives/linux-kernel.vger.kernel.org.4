@@ -2,346 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE300683448
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC6B68344E
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjAaRtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S231331AbjAaRvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjAaRtL (ORCPT
+        with ESMTP id S231253AbjAaRvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:49:11 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892371739;
-        Tue, 31 Jan 2023 09:49:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TWOjZYatK3IR5nXzPfY3Q10PLfz336pIqFyWUqDm/D4CE7pFHcvGUGk+NdFS58QR9SmPHe8r2WW3LzvPTX5yKQq+vaB8VUq1hsh08EkRLKfNVeFtf5xw9dmxaEuBwrC25sT3iIscYxMGowZz6xYLCngXBTFbL+ypJiMadaziycYSS+Tw99bU3p/mNjGB86V+SsZjLcm6fUhZczzAVJpx0tINeU83QbxP4op1wqvJb8kh+tIoZ4zw9PvhgVrtnMUK6QWww+33fGQiWre6QhUEPItyGX7JLzCktQTOEcZN8RO+uXY7sCxhTF3qo1f91OlXtzeOo+TxnGYFLsC1GmK5dQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BTmFGEm6ORW6jn4JL1u/8/sBN/6OVq0b+gT+ghFfJuA=;
- b=JxKGZDtBn6HII++pO7Zav5qBLxSvZwC/N0GCLRvrSK3D83XbITj8EyeDB0/AP0Uy4fv/b4G4cL42zFtc++9mIP42HwmWy4Wjyw/GlFPhVEAIt322sBRNFyVdqnOcbSjc9Gq8KuLuq15vdUDvhSoA20xRQ3lWLEBBqiZAhKkXbo4te7ZRyOpKPYG7upYjMDlSD9LE4neOApCpvl5NNJ+GwKUGFa8YZO4BRwExrK70l8Y4JqSs6eICp+WO2/aFSB9JNc3nKQBFtRrluLeLW2d9uwQFhbZHAcZ3esjs9jezfcP/yKX4lTXm0Z4gtSOJLvMfnGoKDBB0M27ELx5gSYzLTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BTmFGEm6ORW6jn4JL1u/8/sBN/6OVq0b+gT+ghFfJuA=;
- b=DfC4Nn1KXn1fC79yG4CrI7ekD3/BCjZp0wfQb2xBLMIrf81QDrBVsNgi3Jf8GCWf3y0kQDE2l7jZAzNtvsWP1KcFQR6n6NqS0jDz2XRGxSRTituHqbadzRnslEr4XbjMXIsquDpdpTfZ4CbgZfkZO203qjXCZcfyHLGBJn5T/Jg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by CH2PR12MB4325.namprd12.prod.outlook.com (2603:10b6:610:a9::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Tue, 31 Jan
- 2023 17:49:06 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.6043.033; Tue, 31 Jan 2023
- 17:49:06 +0000
-Date:   Tue, 31 Jan 2023 17:48:51 +0000
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>, Perry.Yuan@amd.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
-        santosh.shukla@amd.com, Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        gautham.shenoy@amd.com, Tor Vic <torvic9@mailbox.org>
-Subject: Re: [PATCH v4 5/6] cpufreq: amd_pstate: Add guided mode control
- support via sysfs
-Message-ID: <Y9lUgxevhdlv840K@beas>
-References: <20230131052141.96475-1-wyes.karny@amd.com>
- <20230131052141.96475-6-wyes.karny@amd.com>
- <661a55c4-5703-ef84-728a-229997737416@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <661a55c4-5703-ef84-728a-229997737416@amd.com>
-X-ClientProxiedBy: PN3PR01CA0175.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:de::20) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        Tue, 31 Jan 2023 12:51:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0065913DC0
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:51:04 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30VG0615009054;
+        Tue, 31 Jan 2023 17:50:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=SSdWI2Q6EgXRJJN3L5+J3f3kteoq06xmdprIwXSPPJE=;
+ b=NQxKfyMeABtFuUjxWbk40GMU36F0aVYw+8PI383rQ2WJ9hV+fLihFCW2bTeibJ7WPEwX
+ BJZIDByYoemolBBr+EEarTCy2zRkLSaBAyWd4saUO7Qz1Zz8MsTKa4+OjlDblyLAGo9S
+ HbT48UMI6t+J/H832tXMXHaeK+SXDQ2G5PCQGytBtuX7rlJnZroaHZZEfwOIQZEQF5vB
+ guyKWpV4LQvgzICMT6ElATxx8mUSkUT3IJjT6h+NWnMcIYOD9KEpoLQlN04wUenv4b+H
+ DF9TN5hQdefnw4lTo3AQI41VtdsClBxQX4HxtAReOY+OJ7NZfY5aDZGkAt2AoY7ontFz vQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ngmcc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 17:50:33 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30VHoX5x008320;
+        Tue, 31 Jan 2023 17:50:33 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nf31ngmbd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 17:50:33 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30VFOC3g028514;
+        Tue, 31 Jan 2023 17:50:31 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuyh9y4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 31 Jan 2023 17:50:31 +0000
+Received: from b03ledav001.gho.boulder.ibm.com ([9.17.130.232])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30VHoT9i38142510
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Jan 2023 17:50:30 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 222666E050;
+        Tue, 31 Jan 2023 17:52:37 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45A526E04E;
+        Tue, 31 Jan 2023 17:52:32 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.110.248])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 31 Jan 2023 17:52:32 +0000 (GMT)
+Message-ID: <706d1a6ad110749a9519548a2d5bebf090301586.camel@linux.ibm.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     "Reshetova, Elena" <elena.reshetova@intel.com>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Date:   Tue, 31 Jan 2023 12:49:54 -0500
+In-Reply-To: <DM8PR11MB5750EC7B7FE96476BA0F652EE7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
+References: <DM8PR11MB57505481B2FE79C3D56C9201E7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <Y9EkCvAfNXnJ+ATo@kroah.com>
+         <DM8PR11MB5750FA4849C3224F597C101AE7CE9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <Y9Jh2x9XJE1KEUg6@unreal>
+         <DM8PR11MB5750414F6638169C7097E365E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <Y9JyW5bUqV7gWmU8@unreal>
+         <DM8PR11MB57507D9C941D77E148EE9E87E7CF9@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <702f22df28e628d41babcf670c909f1fa1bb3c0c.camel@linux.ibm.com>
+         <DM8PR11MB5750F939C0B70939AD3CBC37E7D39@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <220b0be95a8c733f0a6eeddc08e37977ee21d518.camel@linux.ibm.com>
+         <DM8PR11MB575074D3BCBD02F3DD677A57E7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
+         <261bc99edc43990eecb1aac4fe8005cedc495c20.camel@linux.ibm.com>
+         <DM8PR11MB5750EC7B7FE96476BA0F652EE7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: wIpV78JSaQ2gvlK6paZZOBEPS4yk-4OE
+X-Proofpoint-GUID: 1sY5Ys9OXj7tZuMX3rxUFDInKLKllRZB
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|CH2PR12MB4325:EE_
-X-MS-Office365-Filtering-Correlation-Id: ec70a19d-8270-4911-2e86-08db03b3721d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GjYnSH7BLVZZeQYiL31zmIo7fE6YYvCTr0ecRvHor8oXAaapEqdsIy/NIxmoOLmgSirpDumxq+1hr+fHKzWuQlPUgdYjacb40YZoBGwoBrqJTR/jKG5TVMCJCs1N0xi0TgMLEu3N+JZzmIrc2jRNTQqm26wZvF/qOrkA442DOyJeSlIXEhlaqZXwRtFpVjNzTsWL8fU7BCxYV7mxefx5QVMSbZAtwyRht8D1Jl3U/53rJPl6NZvMASPYbUNjP783/7xpu843tJNPaCP6u8mVSjOltCyIFNQoHv/hjXO7f/fcfsMCO+ITOGt8NMOMkWxgNlpDkECkSTSuqmBo7xlyusuLT7hqzn3fcxNLQCmBaC/r25MgVydUbo2FxYfCCDJsAgS6LQwvyQkm78myjfsi2VXdNMs0JdiQ0zIltm50Yr1tBsAZNFUM988dNqYZYV9FfXeiLDisoQwPUJLE0iKej2LGd3+FCgE8o9AANihd1q07qNzhuyl/+NA69TfoUoimgQN7Nwzc6PSjO34Rlyc0uO1k/kMBoAKBJgzgaq60r1qq0Oq/D+sE2VLhoa+hOK8KcoIYEHUi1nEOOjhzl39uQDAWNItGWkwCO8+Xag4xleglZAiDkgI1kMwjHv8Ac41NqErMfJNnqEewlTKBZPChvA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(366004)(346002)(396003)(376002)(39860400002)(136003)(451199018)(6666004)(4326008)(66946007)(8676002)(66556008)(8936002)(44832011)(83380400001)(6862004)(7416002)(53546011)(41300700001)(6506007)(5660300002)(316002)(54906003)(6636002)(478600001)(9686003)(186003)(6512007)(26005)(38100700002)(86362001)(66476007)(33716001)(6486002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PSYiIKNj76+RBs9y2gL2IqliBKugQ079BkCr0DVPRqpog1g41G3ogBj5iobQ?=
- =?us-ascii?Q?IcvZ0zlMm22m3DCZGRJu0tZH9jD75WosZGRfZTkmMsxnv+zzyErZ4KlP3VCC?=
- =?us-ascii?Q?FBMtX4Z3ahof8TpgHKmvlSywe4k6+/7D57RJbkz6yEmBx3agDhSevnvwoo1z?=
- =?us-ascii?Q?Ll1oYZbaV6njv+6vWRkeru+g9idSRiziIwn/bJmNobStQ6PgFgzN8CWP4SIP?=
- =?us-ascii?Q?mItf9yJJoeKBAdw/gTE8zV2eZaMQT89OUW9S4fu4F2EBc+l7uo5NEW3PJIav?=
- =?us-ascii?Q?QJKzXLmkHyvpS+qT7iUvY4VpeFtafU22neQSeQvEFzzslku3x7V/3SbCsY7C?=
- =?us-ascii?Q?lWML97fzdXSM112PP5mvwABq4d594PuOrn8uZV/y1X9uTFaS5KrzIYG2VGNp?=
- =?us-ascii?Q?lDjFRZ8SdyQuZHICOXuZjtFStKMbLS2pWIlefcJCqpevmjakD4weQv/X9zCI?=
- =?us-ascii?Q?GolAcWLNBr1p5iuT5RFokSAZSOPeINU5qKsiNh/B1ULr0Me3HupfiIr/xje8?=
- =?us-ascii?Q?dwbk7+qOXEzgl8VNfifw9+VD1mnk0Lxqs+mCxiIqLJw7BTIbzxrzJhk0LH3+?=
- =?us-ascii?Q?/nHCpjfJHIDZekkvi7tt8KVEUCBZqg9nvu4jzriS17XywVUsFj7U0TJLRQ59?=
- =?us-ascii?Q?M/GMFmhDnuSrPDOflxlX4trvSjm/rXrxiiCjObTsPjuGOLoKZZ1KuIpZfg9u?=
- =?us-ascii?Q?lu17o8zImcpS2JcFjBKvZkmlZnTtDP0X4SNm4Xq3bx4jNmzQGlTfpq7mtLkj?=
- =?us-ascii?Q?z4nahmO6zSU8/JWkugkQYls19HjeBgHuPPRPVTHn3ReR9zTryrxYD/ZrIjUG?=
- =?us-ascii?Q?Cx5dSk/AYV2jyJFjWhY6qrHq4kGbkPZdznwSygnCbcpDFlPdLk8Jq11lTxtU?=
- =?us-ascii?Q?4grgUhuYQZl2lWYd7S2c/L+609XyBASnN60F5WuGBPZVj9gOdMSHHEF4hXRy?=
- =?us-ascii?Q?q7ZG/VAR2v6/DDhhaiO4Jy6uBRaw9n6zXMUdc6sBfNbYZbuUmlzQyYYA+tyy?=
- =?us-ascii?Q?ALshgpUOs6YOZnsoeqJskmQHjCPv/hyTcEPSucitelmDFPmh294apT/01XDv?=
- =?us-ascii?Q?cwUTWiIiahfsSX8PS0a5FW+qLXeReHBLLsHy+OkH4r+8NoxRtPkZ2d5fQg5D?=
- =?us-ascii?Q?mJRoXMMq5UtPzCRd3CkJZyJqqM2QkX8i7NMoYjReiA2MwGOMkCGuuH+BM7ri?=
- =?us-ascii?Q?yfbKu0xOIm/z5Wi7Es9h7Z6b7UCoXMECtRW/yElvfobnMRKMnQtoBXk21rJL?=
- =?us-ascii?Q?XPYyIuWYzfmCNig+4h7coNGrCgGbGKjIXZcGKbvJKIQe/zwgKDraG5747h9d?=
- =?us-ascii?Q?Ngf7XphSumiOO5JIaO2cUp/tYdutm9/H674NoIq28oJWQQiK071cOh3vi2jb?=
- =?us-ascii?Q?rNB6b8oKWjOUZKcTEBBkTMgnE4vk/Sa+CyKcyWcVQVPzJKyxOMhHHIGRKZsj?=
- =?us-ascii?Q?oSX+3ienFrEV7Fn642Fd3jIVrt5vHvJtcQ+3bzBWNBPUbyK85XJtp0RknEw1?=
- =?us-ascii?Q?taj79bPrUXPKGARWv04QXaETnQPdsL1WtTlWPZc4sgEv0loBN3VPaoBINCX0?=
- =?us-ascii?Q?RzDD5VrQgBJOOAtf9jYPRXLjkwyU1C0ZIeiPfu06?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec70a19d-8270-4911-2e86-08db03b3721d
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2023 17:49:05.7226
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zVCxHBky/L4O9yXP9XXl/qZzbEGDGT8m1pccXHiraNOqpow6TVC802g4hd8yOeQsD5WnNvLJKR3WTnFehWXtqw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4325
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301310155
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31 Jan 07:45, Mario Limonciello wrote:
-> On 1/30/23 23:21, Wyes Karny wrote:
-> > amd_pstate driver's `status` sysfs entry helps to control the driver's
-> > mode dynamically by user. After the addition of guided mode the
-> > combinations of mode transitions have been increased (16 combinations).
-> > Therefore optimise the amd_pstate_update_status function by implementing
-> > a state transition table.
+On Tue, 2023-01-31 at 16:34 +0000, Reshetova, Elena wrote:
+[...]
+> > You cited this as your example.  I'm pointing out it seems to be an
+> > event of the class we've agreed not to consider because it's an
+> > oops not an exploit.  If there are examples of fixing actual
+> > exploits to CC VMs, what are they?
 > > 
-> > There are 4 states amd_pstate supports, namely: 'disable', 'passive',
-> > 'active', and 'guided'.  The transition from any state to any other
-> > state is possible after this change. Only if the state requested matches
-> > with the current state then -EBUSY value is returned.
+> > This patch is, however, an example of the problem everyone else on
+> > the thread is complaining about: a patch which adds an unnecessary
+> > check to the MSI subsystem; unnecessary because it doesn't fix a CC
+> > exploit and in the real world the tables are correct (or the
+> > manufacturer is quickly chastened), so it adds overhead to no
+> > benefit.
 > 
-> I realized this after I finished reviewing doc patch, but you probably want
-> to explain -EBUSY return code in documentation patch too.
+> How can you make sure there is no exploit possible using this crash
+> as a stepping stone into a CC guest?
 
-Yes, I'll add this to documentation. Thanks!
+I'm not, what I'm saying is you haven't proved it can be used to
+exfiltrate secrets.  In a world where the PCI device is expected to be
+correct, and the non-CC kernel doesn't want to second guess that, there
+are loads of lies you can tell to the PCI subsystem that causes a crash
+or a hang.  If we fix every one, we end up with a massive patch set and
+a huge potential slow down for the non-CC kernel.  If there's no way to
+tell what lies might leak data, the fuzzing results are a mass of noise
+with no real signal and we can't even quantify by how much (or even if)
+we've improved the CC VM attack surface even after we merge the huge
+patch set it generates.
 
+>  Or are you saying that we are back to the times when we can merge
+> the fixes for crashes and out of bound errors in kernel only given
+> that we submit a proof of concept exploit with the patch for every
+> issue? 
+
+The PCI people have already said that crashing in the face of bogus
+configuration data is expected behaviour, so just generating the crash
+doesn't prove there's a problem to be fixed.  That means you do have to
+go beyond and demonstrate there could be an information leak in a CC VM
+on the back of it, yes.
+
+> > [...]
+> > > > see what else it could detect given the signal will be
+> > > > smothered by oopses and secondly I think the PCI interface is
+> > > > likely the wrong place to begin and you should probably begin
+> > > > on the virtio bus and the hypervisor generated configuration
+> > > > space.
+> > > 
+> > > This is exactly what we do. We don’t fuzz from the PCI config
+> > > space, we supply inputs from the host/vmm via the legitimate
+> > > interfaces that it can inject them to the guest: whenever guest
+> > > requests a pci config space (which is controlled by
+> > > host/hypervisor as you said) read operation, it gets input
+> > > injected by the kafl fuzzer.  Same for other interfaces that are
+> > > under control of host/VMM (MSRs, port IO, MMIO, anything that
+> > > goes via #VE handler in our case). When it comes to virtio, we
+> > > employ  two different fuzzing techniques: directly injecting kafl
+> > > fuzz input when virtio core or virtio drivers gets the data
+> > > received from the host (via injecting input in functions
+> > > virtio16/32/64_to_cpu and others) and directly fuzzing DMA memory
+> > > pages using kfx fuzzer. More information can be found in
+> > > https://intel.github.io/ccc-linux-guest-hardening-docs/tdx-guest-
+> > hardening.html#td-guest-fuzzing
+> > 
+> > Given that we previously agreed that oppses and other DoS attacks
+> > are out of scope for CC, I really don't think fuzzing, which
+> > primarily finds oopses, is at all a useful tool unless you filter
+> > the results by the question "could we exploit this in a CC VM to
+> > reveal secrets". Without applying that filter you're sending a load
+> > of patches which don't really do much to reduce the CC attack
+> > surface and which do annoy non-CC people because they add pointless
+> > checks to things they expect the cards and config tables to get
+> > right.
 > 
-> > 
-> > Sysfs interface:
-> > 
-> > To disable amd_pstate driver:
-> >   # echo disable > /sys/devices/system/cpu/amd_pstate/status
-> > 
-> > To enable passive mode:
-> >   # echo passive > /sys/devices/system/cpu/amd_pstate/status
-> > 
-> > To change mode to active:
-> >   # echo active > /sys/devices/system/cpu/amd_pstate/status
-> > 
-> > To change mode to guided:
-> >   # echo guided > /sys/devices/system/cpu/amd_pstate/status
-> > 
-> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> > ---
-> >   drivers/cpufreq/amd-pstate.c | 150 +++++++++++++++++++++++++----------
-> >   1 file changed, 108 insertions(+), 42 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > index 48ab4684c3a5..6c522dec6967 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -65,6 +65,8 @@ static struct cpufreq_driver amd_pstate_epp_driver;
-> >   static int cppc_state = AMD_PSTATE_DISABLE;
-> >   struct kobject *amd_pstate_kobj;
-> > +typedef int (*cppc_mode_transition_fn)(int);
-> > +
-> >   static inline int get_mode_idx_from_str(const char *str, size_t size)
-> >   {
-> >   	int i;
-> > @@ -797,6 +799,105 @@ static ssize_t show_energy_performance_preference(
-> >   	return sysfs_emit(buf, "%s\n", energy_perf_strings[preference]);
-> >   }
-> > +static void amd_pstate_driver_cleanup(void)
-> > +{
-> > +	amd_pstate_enable(false);
-> > +	cppc_state = AMD_PSTATE_DISABLE;
-> > +	current_pstate_driver = NULL;
-> > +}
-> > +
-> > +static int amd_pstate_register_driver(int mode)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (mode == AMD_PSTATE_PASSIVE || mode == AMD_PSTATE_GUIDED)
-> > +		current_pstate_driver = &amd_pstate_driver;
-> > +	else if (mode == AMD_PSTATE_ACTIVE)
-> > +		current_pstate_driver = &amd_pstate_epp_driver;
-> > +	else
-> > +		return -EINVAL;
-> > +
-> > +	cppc_state = mode;
-> > +	ret = cpufreq_register_driver(current_pstate_driver);
-> > +	if (ret) {
-> > +		amd_pstate_driver_cleanup();
-> > +		return ret;
-> > +	}
-> > +	return 0;
-> > +}
-> > +
-> > +static int amd_pstate_unregister_driver(int dummy)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = cpufreq_unregister_driver(current_pstate_driver);
-> > +
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	amd_pstate_driver_cleanup();
-> > +	return 0;
-> > +}
-> > +
-> > +static int amd_pstate_change_mode_without_dvr_change(int mode)
-> > +{
-> > +	int cpu = 0;
-> > +
-> > +	cppc_state = mode;
-> > +
-> > +	if (boot_cpu_has(X86_FEATURE_CPPC) || cppc_state == AMD_PSTATE_ACTIVE)
-> > +		return 0;
-> > +
-> > +	for_each_present_cpu(cpu) {
-> > +		cppc_set_auto_sel(cpu, (cppc_state == AMD_PSTATE_PASSIVE) ? 0 : 1);
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int amd_pstate_change_driver_mode(int mode)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = amd_pstate_unregister_driver(0);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = amd_pstate_register_driver(mode);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/* Mode transition table */
-> 
-> This seems to be a pointless comment to me.
-> 
-> > +cppc_mode_transition_fn mode_state_machine[AMD_PSTATE_MAX][AMD_PSTATE_MAX] = {
-> > +	[AMD_PSTATE_DISABLE]         = {
-> > +		[AMD_PSTATE_DISABLE]     = NULL,
-> > +		[AMD_PSTATE_PASSIVE]     = amd_pstate_register_driver,
-> > +		[AMD_PSTATE_ACTIVE]      = amd_pstate_register_driver,
-> > +		[AMD_PSTATE_GUIDED]      = amd_pstate_register_driver,
-> > +	},
-> > +	[AMD_PSTATE_PASSIVE]         = {
-> > +		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
-> > +		[AMD_PSTATE_PASSIVE]     = NULL,
-> > +		[AMD_PSTATE_ACTIVE]      = amd_pstate_change_driver_mode,
-> > +		[AMD_PSTATE_GUIDED]      = amd_pstate_change_mode_without_dvr_change,
-> > +	},
-> > +	[AMD_PSTATE_ACTIVE]          = {
-> > +		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
-> > +		[AMD_PSTATE_PASSIVE]     = amd_pstate_change_driver_mode,
-> > +		[AMD_PSTATE_ACTIVE]      = NULL,
-> > +		[AMD_PSTATE_GUIDED]      = amd_pstate_change_driver_mode,
-> > +	},
-> > +	[AMD_PSTATE_GUIDED]          = {
-> > +		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
-> > +		[AMD_PSTATE_PASSIVE]     = amd_pstate_change_mode_without_dvr_change,
-> > +		[AMD_PSTATE_ACTIVE]      = amd_pstate_change_driver_mode,
-> > +		[AMD_PSTATE_GUIDED]      = NULL,
-> > +	},
-> > +};
-> > +
-> >   static ssize_t amd_pstate_show_status(char *buf)
-> >   {
-> >   	if (!current_pstate_driver)
-> > @@ -805,57 +906,22 @@ static ssize_t amd_pstate_show_status(char *buf)
-> >   	return sysfs_emit(buf, "%s\n", amd_pstate_mode_string[cppc_state]);
-> >   }
-> > -static void amd_pstate_driver_cleanup(void)
-> > -{
-> > -	current_pstate_driver = NULL;
-> > -}
-> > -
-> >   static int amd_pstate_update_status(const char *buf, size_t size)
-> >   {
-> > -	int ret;
-> >   	int mode_idx;
-> > -	if (size > 7 || size < 6)
-> > +	if (size > strlen("passive") || size < strlen("active"))
-> >   		return -EINVAL;
-> > -	mode_idx = get_mode_idx_from_str(buf, size);
-> > -	switch(mode_idx) {
-> > -	case AMD_PSTATE_DISABLE:
-> > -		if (!current_pstate_driver)
-> > -			return -EINVAL;
-> > -		if (cppc_state == AMD_PSTATE_ACTIVE)
-> > -			return -EBUSY;
-> > -		ret = cpufreq_unregister_driver(current_pstate_driver);
-> > -		amd_pstate_driver_cleanup();
-> > -		break;
-> > -	case AMD_PSTATE_PASSIVE:
-> > -		if (current_pstate_driver) {
-> > -			if (current_pstate_driver == &amd_pstate_driver)
-> > -				return 0;
-> > -			cpufreq_unregister_driver(current_pstate_driver);
-> > -			cppc_state = AMD_PSTATE_PASSIVE;
-> > -			current_pstate_driver = &amd_pstate_driver;
-> > -		}
-> > +	mode_idx = get_mode_idx_from_str(buf, size);
-> > -		ret = cpufreq_register_driver(current_pstate_driver);
-> > -		break;
-> > -	case AMD_PSTATE_ACTIVE:
-> > -		if (current_pstate_driver) {
-> > -			if (current_pstate_driver == &amd_pstate_epp_driver)
-> > -				return 0;
-> > -			cpufreq_unregister_driver(current_pstate_driver);
-> > -			current_pstate_driver = &amd_pstate_epp_driver;
-> > -			cppc_state = AMD_PSTATE_ACTIVE;
-> > -		}
-> > +	if (mode_idx < 0 || mode_idx >= AMD_PSTATE_MAX)
-> > +		return -EINVAL;
-> > -		ret = cpufreq_register_driver(current_pstate_driver);
-> > -		break;
-> > -	default:
-> > -		ret = -EINVAL;
-> > -		break;
-> > -	}
-> > +	if (mode_state_machine[cppc_state][mode_idx])
-> > +		return mode_state_machine[cppc_state][mode_idx](mode_idx);
-> > -	return ret;
-> > +	return -EBUSY;
-> >   }
-> >   static ssize_t show_status(struct kobject *kobj,
-> 
-> With one nit fixed,
-> 
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> I don’t think we have agreed that random kernel crashes are out of
+> scope in CC threat model (controlled safe panic is out of scope, but
+> this is not what we have here). 
+
+So perhaps making it a controlled panic in the CC VM, so we can
+guarantee no information leak, would be the first place to start?
+
+> It all depends if this ops can be used in a successful attack against
+> guest private memory or not and this is *not* a trivial thing to
+> decide.
+
+Right, but if you can't decide that, you can't extract the signal from
+your fuzzing tool noise.
+
+> That's said, we are mostly focusing on KASAN findings, which
+> have higher likelihood to be exploitable at least for host -> guest
+> privilege escalation (which in turn compromised guest private memory
+> confidentiality). Fuzzing has a long history of find such issues in
+> past (including the ones that have been exploited after). But even
+> for this ops bug, can anyone guarantee it cannot be chained with
+> other ones to cause a more complex privilege escalation attack?
+> I wont be making such a claim, I feel it is safer to fix this vs
+> debating whenever it can be used for an attack or not. 
+
+The PCI people have already been clear that adding a huge framework of
+checks to PCI table parsing simply for the promise it "might possibly"
+improve CC VM security is way too much effort for too little result. 
+If you can hone that down to a few places where you can show it will
+prevent a CC information leak, I'm sure they'll be more receptive. 
+Telling them to disprove your assertion that there might be an exploit
+here isn't going to make them change their minds.
+
+James
+
