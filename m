@@ -2,127 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12ACC682BD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45857682BD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 12:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbjAaLu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 06:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S230315AbjAaLvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 06:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjAaLuy (ORCPT
+        with ESMTP id S231687AbjAaLvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 06:50:54 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65619101
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 03:50:51 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        Tue, 31 Jan 2023 06:51:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0619D5FE6;
+        Tue, 31 Jan 2023 03:51:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 824D71EC03B3;
-        Tue, 31 Jan 2023 12:50:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675165849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=OKfnuTrZYSVnVFbkRYRHSmoyog1UQGkLSVDafNAA0BA=;
-        b=n7G6LnXgTx+iTXTz5YqUpYnFaD5qwD4Z198beewlTnKp51c54KFWvGmma3fEwijnJlwJGa
-        K9Z30FcSQ69BjasiKkuE+VvO6vUiZ2zHjQ0uF1fBqKJg3X8MQWcpjnsc69CWPJ1TE4/4Qj
-        fnJvz8QMAf/Ceradj3YTVxQ0R4l08aQ=
-Date:   Tue, 31 Jan 2023 12:50:44 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86 <x86@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Stefan Talpalaru <stefantalpalaru@yahoo.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Peter Zilstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Martin Pohlack <mpohlack@amazon.de>
-Subject: Re: [Patch v3 Part2 1/9] x86/microcode: Taint kernel only if
- microcode loading was successful
-Message-ID: <Y9kAlKFfdek2rq6g@zn.tnic>
-References: <20230130213955.6046-1-ashok.raj@intel.com>
- <20230130213955.6046-2-ashok.raj@intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95374614BB;
+        Tue, 31 Jan 2023 11:51:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE9E9C433AF;
+        Tue, 31 Jan 2023 11:51:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675165875;
+        bh=wOrERF5X5WEzWRIC0mThKgFJ6snvf78JNjJijHRaCCM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZE9U5TsAQP9zhwXWCH0H3VP7fhzly0OK10EmV8z40Wauno6uy7y0WRB+N2Nw91no4
+         OWQFMEnkZb9j4gLMrw8mmmWp7N86PmanrpDUFgu4+C48owW6+ZIygs/sVuWEIFaQr/
+         4iqMbuzvzpxJcIUGVPJLy9fp5+K2ydaTM5jo6da8=
+Date:   Tue, 31 Jan 2023 12:51:11 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: add doc to struct usb_composite_dev
+Message-ID: <Y9kAryJ6Y2lQyKZK@kroah.com>
+References: <Y86cy1AM4w5ju5A4@kroah.com>
+ <Y9FmWVF+J08V4RbP@jo-einhundert>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230130213955.6046-2-ashok.raj@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y9FmWVF+J08V4RbP@jo-einhundert>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 01:39:47PM -0800, Ashok Raj wrote:
->  arch/x86/kernel/cpu/microcode/core.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+On Wed, Jan 25, 2023 at 06:26:49PM +0100, Jó Ágila Bitsch wrote:
+> Added documentation to the new struct members:
+> * bcd_webusb_version
+> * b_webusb_vendor_code
+> * landing_page
+> * use_webusb
+> to avoid warnings in the build of htmldocs
+> 
+> Signed-off-by: Jó Ágila Bitsch <jgilab@gmail.com>
 
-Why all this hoopla and unrelated changes?
+You forgot a Reported-by: tag?
 
-Why don't you simply hoist the call to ->request_microcode_fw outside of
-the locked region as it doesn't have to be there and then do the usual
-pattern?
+Also didn't cc: the linux-usb mailing list?
 
----
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index 14a2280fdcd2..23f4f22df581 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -481,28 +481,28 @@ static ssize_t reload_store(struct device *dev,
- 	if (val != 1)
- 		return size;
- 
-+	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
-+	if (tmp_ret != UCODE_NEW)
-+		return ret;
-+
- 	cpus_read_lock();
- 
- 	ret = check_online_cpus();
- 	if (ret)
--		goto put;
--
--	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
--	if (tmp_ret != UCODE_NEW)
--		goto put;
-+		goto unlock;
- 
- 	mutex_lock(&microcode_mutex);
- 	ret = microcode_reload_late();
- 	mutex_unlock(&microcode_mutex);
- 
--put:
--	cpus_read_unlock();
--
- 	if (ret == 0)
- 		ret = size;
- 
- 	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
- 
-+unlock:
-+	cpus_read_unlock();
-+
- 	return ret;
- }
- 
+please fix up and send v2.
 
--- 
-Regards/Gruss,
-    Boris.
+thanks,
 
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h
