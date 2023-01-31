@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D34F68393C
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC38468393F
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 23:21:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjAaWVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 17:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
+        id S230390AbjAaWVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 17:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbjAaWVG (ORCPT
+        with ESMTP id S229944AbjAaWVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 17:21:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5525A83B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 14:21:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B63C16172A
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 22:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 152FEC4339B;
-        Tue, 31 Jan 2023 22:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675203661;
-        bh=v3FjEdRmmEt3NyVgaKzEfe9CNRFEtOqilNNlSnvu+VA=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=R4IgY3/BayvBrlVlgVHD9c2rtsypzG7Sz3pee1ZxmG8T++MoOVZVDikEJ1F63udi2
-         PdEdg58Z5q2LUGZPSYJhSz/Pzeqsytaebbd644gaFZgiB3SCj5f7mjBPrgha9ITILm
-         QjB4jvyQ5xk8Lwo3u6DRCvPsZ2oOg0JmzNCdgpVe67V4q1PnRAzXZ+xgLA7+ncNCge
-         vkzvoXo38U2syseapUOGGOjBbkmdEXUW21POKFKha9gsm2w1fDId1E/OnEgiHt5OKP
-         9Bb1X0YP9M3iKhyFrWdTaea9hLDglv3gb1afjfqulxyy4QOnQFRRDGM0D/OTQh27Wu
-         Iu1v1S+0pZUVw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 31 Jan 2023 22:20:45 +0000
-Subject: [PATCH v3 7/7] arm64/signal: Only read new data when parsing the
- ZT context
+        Tue, 31 Jan 2023 17:21:44 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EC0DBF4;
+        Tue, 31 Jan 2023 14:21:17 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id o13so15560281pjg.2;
+        Tue, 31 Jan 2023 14:21:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=hYlTCWU4D6zFu1UQJkS9/xemXij0e8AmBdRmgEzuwoo=;
+        b=A57+gxlvG503jp1nTjrGMT9lh0+EOn8owntFD9UdE5J1fd2F30Ujva0Lz5SysUVETD
+         atDNmEDGCctu41xqxCLpZ4UtYQbIHIvjq2L2T2Gd4P0Ds9h1lqdpY3yjvCATtCB3LwmH
+         lj0c4PSH9OA1dn414ej95BXEc/B8O2lozGpmennj1ErMXSDvyQvR0ehjn1sjR/AgQRkn
+         sybHt2aOTPz7UnCHwFmtf4uISgfy0BqTXOC6aEh1sYqXAsqqLCHEsHiEpVb6fOiVJCZ3
+         EU74R4GZLOkrTr9bnAC6ogOsom6+Xh6URJs4d8YSiZy+QXd10wL+0hBjcDGGRZudjF8I
+         0G2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hYlTCWU4D6zFu1UQJkS9/xemXij0e8AmBdRmgEzuwoo=;
+        b=e5Kv47Eey0IXBUKxVvuUB9eUQrRhL7DLDm71GTJFMEAwyVp/fMabOOVr2GiLu/Sp+N
+         OL6X1HmLk7og8ve+cNnpyev57zXVKoYO/+mRJHH8lzaow9BMUD0yHD9f4xKmVii0yCYM
+         wgFxaSgZrlB+xwwpry5qEyeq686ZcVMysINSA2AuN44J7b9bA88Ue1kfilwfQiI6/roB
+         JR7kbOhc1DZ/rEw8zSu/+IAs3iR5X5WZpalkm584XvUHAnT83rZfBS4lpvV7W26J9MRZ
+         AY17ztVojTCxJMHO4ygBGeFa4tn/TmINQjs6J7kmhLpUsEnc4wMpL4RkSUGO86Rm+eNW
+         kMnw==
+X-Gm-Message-State: AO0yUKUMB+/G7SEBs6+wzd8I5LArSY/M+1+k4FN/UoMiEwrJEqtQmpsm
+        p8B3KzN63XlwHrr+l2BeUnI=
+X-Google-Smtp-Source: AK7set9fcAERknjvZWviVAiTQE0NrjgOeygKlQfkvI9/JNRo6AN+VfkYagP8LLUdgJe6vkQlexhAHQ==
+X-Received: by 2002:a17:903:1384:b0:196:790a:8bae with SMTP id jx4-20020a170903138400b00196790a8baemr398832plb.43.1675203672211;
+        Tue, 31 Jan 2023 14:21:12 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:1ad6])
+        by smtp.gmail.com with ESMTPSA id m5-20020a170902db8500b00186b3c3e2dasm10280071pld.155.2023.01.31.14.21.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 14:21:11 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 31 Jan 2023 12:21:10 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        Waiman Long <longman@redhat.com>
+Subject: [GIT PULL] cgroup fixes for v6.2-rc6
+Message-ID: <Y9mUVtmR0AGJKWty@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221212-arm64-signal-cleanup-v3-7-4545c94b20ff@kernel.org>
-References: <20221212-arm64-signal-cleanup-v3-0-4545c94b20ff@kernel.org>
-In-Reply-To: <20221212-arm64-signal-cleanup-v3-0-4545c94b20ff@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1352; i=broonie@kernel.org;
- h=from:subject:message-id; bh=v3FjEdRmmEt3NyVgaKzEfe9CNRFEtOqilNNlSnvu+VA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBj2ZRALr0svZCl9sk06hJBwcGaS+7GOBnxP/4lIysy
- 3PhsAIuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCY9mUQAAKCRAk1otyXVSH0GwrB/
- 9pa2+QCNmzp2hYTGFfcZUm/fCzdSM8BCi0zTOykaFZAJek1FpPgVW2CbYFmPAtZdzk2ivw56QVk3hB
- E9w2hFr/ktL0C5ZuRPJTzfj3xbzJaH8ALvCY5MtL30ytV7xDAbpsN1V0ZbvylCwx3Xu0N/TX1a4QY9
- sObfG7NR0aKsQ6FIGlkEbu/oWSJDEpGpIN820K14QGNtQCtTRdZBkLCbJGAsLu0h9uDeykqGUgnV+b
- gEV/D1BL7rcEi4vL3CmaQd0F7BYP/6n/fK8vQpLp16MaPmHhUPmGcUBtDoHKUTCj5YwnXVM66hdoFl
- CW+jJI7nwD7E6jXCUVZYf0V7iKN9pu
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we parse the ZT signal context we read the entire context from
-userspace, including the generic signal context header which was already
-read by parse_user_sigframe() and padding bytes that we ignore. Avoid the
-possibility of relying on the second read of the data read twice by only
-reading the data which we are actually going to use.
+The following changes since commit 58706f7fb045b7019bada81fa17f372189315fe5:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- arch/arm64/kernel/signal.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+  Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi (2023-01-31 11:39:08 -0800)
 
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 7810d090c025..d7b5ed8a9b7f 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -521,7 +521,7 @@ static int preserve_zt_context(struct zt_context __user *ctx)
- static int restore_zt_context(struct user_ctxs *user)
- {
- 	int err;
--	struct zt_context zt;
-+	u16 nregs;
- 
- 	/* ZA must be restored first for this check to be valid */
- 	if (!thread_za_enabled(&current->thread))
-@@ -530,10 +530,10 @@ static int restore_zt_context(struct user_ctxs *user)
- 	if (user->zt_size != ZT_SIG_CONTEXT_SIZE(1))
- 		return -EINVAL;
- 
--	if (__copy_from_user(&zt, user->zt, sizeof(zt)))
-+	if (__copy_from_user(&nregs, &(user->zt->nregs), sizeof(nregs)))
- 		return -EFAULT;
- 
--	if (zt.nregs != 1)
-+	if (nregs != 1)
- 		return -EINVAL;
- 
- 	/*
+are available in the Git repository at:
 
--- 
-2.30.2
+  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.2-fixes
 
+for you to fetch changes up to e5ae8803847b80fe9d744a3174abe2b7bfed222a:
+
+  cgroup/cpuset: Fix wrong check in update_parent_subparts_cpumask() (2023-01-31 12:14:02 -1000)
+
+----------------------------------------------------------------
+Cgroup fixes for v6.2-rc6
+
+This is a very late pull request but cpuset has a bug which can cause an
+oops after some configuration operations, which is introduced during the
+v6.1 cycle. This pull request contains only one commit to fix the bug.
+
+----------------------------------------------------------------
+Waiman Long (1):
+      cgroup/cpuset: Fix wrong check in update_parent_subparts_cpumask()
+
+ kernel/cgroup/cpuset.c                            | 3 ++-
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+--
+tejun
