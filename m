@@ -2,198 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C035683353
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E3B683355
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 18:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbjAaRGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 12:06:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
+        id S231903AbjAaRG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 12:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjAaRGP (ORCPT
+        with ESMTP id S231897AbjAaRGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:06:15 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D8F3401B;
-        Tue, 31 Jan 2023 09:06:09 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id x26-20020a056830115a00b0068bbc0ee3eeso2917194otq.0;
-        Tue, 31 Jan 2023 09:06:09 -0800 (PST)
+        Tue, 31 Jan 2023 12:06:25 -0500
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026734316;
+        Tue, 31 Jan 2023 09:06:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n+8rBCXp9QUszN6EtdlrzESk2YRd1LhFxQMBHxqvRZ8=;
-        b=KIotuXGen7IPQ2MM3jARlRJcgpTMmXnjonwSHT+XpZMX1+12fCZD0G96L0aAkPfdMS
-         JAHa/KIhvXy01RkzKieONIFgBovrC4z8J77AAyJPbvvJGJBhYkeZE63h9y9Q+dalddna
-         PRK0CAY2UAlQhTL3jJs0e4S33SYUchhScZ+3cEp1zWv3CrhIaqr1ZwwH9rnrfE5O1uGb
-         8yb79/rJu1S0QRRcyN2iE0OAsr3Yp7k2g9ph4snwSPo9xtOyX3Yjc6HPa4d6SIGZbfnd
-         Tfg87yjJPUuO696M3UjVX7oStAxPrNPOkWDXt/2gqibuMnOUNXmVnRByLYZqWojpaWgB
-         GukQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n+8rBCXp9QUszN6EtdlrzESk2YRd1LhFxQMBHxqvRZ8=;
-        b=m5n7Z95g9DZ3AInOfflZcZtffAaZDCZ5PvuIxSlHUtzdOsq5xCKfEr9Iu40Ex8gDLg
-         iyP8VlTeQvgd+/8Citg8WwVFstcug1dh5Acwx1skV01o9O16wXsnBNmtb+AG5swrou4X
-         ttDy29XutbwDPAkVxt9dQkrxV0BE6/FZw/EbEVy0MBKNlSmf7Yc4ak8akCg/E+yTM8IC
-         SpYJaQbvKVehpbxta7TzQNhT3Kn3oKsFPCpgO9fU7953CDsOj0744PMKUE+dthmlC6fn
-         RAbzo7EVpo9F9WrydAWdEBntNu3FC4vYnhGnbBmji/ZgUhtIs1tvZAt5BENjgi/sdm5v
-         9fdw==
-X-Gm-Message-State: AO0yUKVUCDOFkowTeAbJyihOwwLXqCETHKK3TTkeknL6E2z2G8RbGNvh
-        /LFXrx3pvdv7XZmJNdan8Ro=
-X-Google-Smtp-Source: AK7set/3cx199W6dlm+bCYeBqwh7XTb78l9Pdy4589af0XRP0nPAx1JUE7sHjjl+5ymFcH8PmR8lxQ==
-X-Received: by 2002:a9d:688:0:b0:68d:3e10:2951 with SMTP id 8-20020a9d0688000000b0068d3e102951mr89946otx.3.1675184768344;
-        Tue, 31 Jan 2023 09:06:08 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t14-20020a9d590e000000b006864816ecd9sm6740348oth.59.2023.01.31.09.06.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 09:06:07 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 31 Jan 2023 09:06:06 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 3/7] dt-bindings: watchdog: convert meson-wdt.txt to
- dt-schema
-Message-ID: <20230131170606.GA3599161@roeck-us.net>
-References: <20221117-b4-amlogic-bindings-convert-v3-0-e28dd31e3bed@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v3-3-e28dd31e3bed@linaro.org>
+  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
+  t=1675184784; x=1706720784;
+  h=message-id:date:mime-version:from:to:references:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=J2AkhPTMGISpTBHHUJbbjfnBrK8QBklJ2lmqINVAGNI=;
+  b=aFB1+1c1q9U2gmiIzAnFnWFH2HeSxM2hLlQWGH6yNPgsnArbY5uYKSgu
+   TMpqMmhvhsIooFNEbg6LD1zx4PZLf7m5JGDgRUyG/RwGtjRXMIdcUXHhU
+   ySQf4SirYdnnfbPrXf7Lw0+70SzV5KgECWQNUZnQ9YpZoR5qi0Er6xcAH
+   k=;
+X-IronPort-AV: E=Sophos;i="5.97,261,1669075200"; 
+   d="scan'208";a="176920456"
+Subject: Re: [PATCH v2 0/2] [RFC] virtio-rng entropy leak reporting feature
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-245b69b1.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 17:06:20 +0000
+Received: from EX13D50EUB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1e-m6i4x-245b69b1.us-east-1.amazon.com (Postfix) with ESMTPS id CFD983423B1;
+        Tue, 31 Jan 2023 17:06:18 +0000 (UTC)
+Received: from EX19D037EUB003.ant.amazon.com (10.252.61.119) by
+ EX13D50EUB001.ant.amazon.com (10.43.166.192) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Tue, 31 Jan 2023 17:06:17 +0000
+Received: from [192.168.9.28] (10.43.160.120) by EX19D037EUB003.ant.amazon.com
+ (10.252.61.119) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.24; Tue, 31 Jan
+ 2023 17:06:13 +0000
+Message-ID: <1f8279ce-ea85-901e-a64b-ad3f21886a52@amazon.es>
+Date:   Tue, 31 Jan 2023 18:06:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v3-3-e28dd31e3bed@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+From:   <bchalios@amazon.es>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Olivia Mackall <olivia@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <sgarzare@redhat.com>,
+        <amit@kernel.org>, <graf@amazon.de>, <xmarcalx@amazon.co.uk>
+References: <20230131145543.86369-1-bchalios@amazon.es>
+ <Y9lBeymca9eFaJ33@zx2c4.com>
+In-Reply-To: <Y9lBeymca9eFaJ33@zx2c4.com>
+X-Originating-IP: [10.43.160.120]
+X-ClientProxiedBy: EX13D35UWC001.ant.amazon.com (10.43.162.197) To
+ EX19D037EUB003.ant.amazon.com (10.252.61.119)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 11:10:00AM +0100, Neil Armstrong wrote:
-> Convert the Amlogic Meson6 SoCs Watchdog timer bindings to dt-schema.
-> 
-> Take in account the used interrupts property.
-> 
-> The "amlogic,meson8-wdt" representation has been simplified
-> since there's no users of this compatible used along the
-> "amlogic,meson6-wdt".
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+SGkgSmFzb24sCgpJIHJlYWxseSBkaWRuJ3QgbWVhbiB0byBpbnRlcnJ1cHQgeW91ciBob2xpZGF5
+cy4KCkkgcG9zdGVkIHRoaXMgYXMgYW4gUkZDIGV4YWN0bHkgYmVjYXVzZSBJIGRvbid0IHdhbnQg
+dGhpcyB0byBiZSBtZXJnZWQgX2FzIGlzXywgaXQncyBqdXN0IGEgdHJpZ2dlciBmb3IgZGlzY3Vz
+c2lvbi4KSXQgaXMgdjIganVzdCBhcyBhIHJlc3BvbnNlIHRvIE1pY2hhZWwncyBjb21tZW50cyBp
+biB0aGUgcHJldmlvdXMgdmVyc2lvbiBhbmQgZml4ZXMgZm9yIHRoZSBDSS4KCkFsc28sIHRoZXJl
+IGFyZSBvdGhlciBwZW9wbGUgdGhhdCBleHByZXNzZWQgaW50ZXJlc3QgaW4gdGhpcyBhbmQgdGhl
+eSB3YW50ZWQgdG8gcGFydGljaXBhdGUgaW4gdGhlIGNvdmVyc2F0aW9uLCBzbyB0aGF0J3MganVz
+dAp0aGF0LgoKSSBob3BlIHlvdSBlbmpveSB5b3VyIHZhY2F0aW9uLCBnZXQgc29tZSByZXN0IGFu
+ZCBzcGVhayB0byB5b3Ugb25jZSB5b3UnIHJlIGJhY2sgOikKCkNoZWVycywKQmFiaXMKCk9uIDEv
+MzEvMjMgNToyNyBQTSwgIkphc29uIEEuIERvbmVuZmVsZCIgPEphc29uQHp4MmM0LmNvbT4gd3Jv
+dGU6Cj4gQ0FVVElPTjogVGhpcyBlbWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUg
+b3JnYW5pemF0aW9uLiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxl
+c3MgeW91IGNhbiBjb25maXJtIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2Fm
+ZS4KPiAKPiAKPiAKPiBZb3Ugc2VudCBhIHYyLCBidXQgSSdtIG5vdCBiYWNrIHVudGlsIHRoZSAx
+MXRoIHRvIHByb3ZpZGUgY29tbWVudHMgb24KPiB2MS4gSSBzdGlsbCB0aGluayB0aGlzIGlzbid0
+IHRoZSByaWdodCBkaXJlY3Rpb24sIGFzIHRoaXMgbmVlZHMgdGllLWlucwo+IHRvIHRoZSBybmcg
+dG8gYWN0dWFsbHkgYmUgdXNlZnVsLiBQbGVhc2Ugc3RvcCBwb3N0aW5nIG5ldyB2ZXJzaW9ucyBv
+Zgo+IHRoaXMgZm9yIG5vdywgc28gdGhhdCBzb21lYm9keSBkb2Vzbid0IGFjY2lkZW50YWxseSBt
+ZXJnZSBpdDsgdGhhdCdkIGJlCj4gYSBiaWcgbWlzdGFrZS4gSSdsbCBwYXN0ZSB3aGF0IEkgd3Jv
+dGUgeW91IHByaW9yOgo+IAo+IHwgSGkgQmFiaXMsCj4gfAo+IHwgQXMgSSBtZW50aW9uZWQgdG8g
+eW91IHByaXZhdGVseSB0aGlzIHdlZWssIEknbSBhYm91dCB0byBiZSBvdXQgb2YgdG93biwKPiB8
+IHNvIEkgd29uJ3QgYmUgYWJsZSB0byBsb29rIGF0IHRoaXMgdW50aWwgSSdtIGJhY2sgaW4gYSBm
+ZXcgd2Vla3MuIEkKPiB8IGFwcHJlY2lhdGUgeW91ciBwYXRpZW5jZS4KPiB8Cj4gfCBCdXQgYXMg
+YSBjdXJzb3J5IGxvb2ssIEknbSBoYXBweSB0aGF0IHlvdSd2ZSB3cml0dGVuIHRoZSBoYXJkd2Fy
+ZS1zaWRlCj4gfCBjb2RlIGZvciB0aGlzLiBUaGF0J3MgYSBncmVhdCBzdGFydGluZyBwb2ludC4g
+VGhlIHBsdW1iaW5nIGlzIG5vdCBzbwo+IHwgbmljZSwgdGhvdWdoLiBUaGlzIG5lZWRzIHRvIGJl
+IGludGVncmF0ZWQgbW9yZSBjbG9zZWx5IHdpdGggcmFuZG9tLmMKPiB8IGl0c2VsZiwgc2ltaWxh
+ciB0byBob3cgdm1nZW5pZCB3b3Jrcy4KPiB8Cj4gfCBXaGVuIEknbSBiYWNrIGluIGEgZmV3IHdl
+ZWtzLCBJJ2xsIHNlZSBpZiBJIGNhbiBlaXRoZXIgd3JpdGUgYQo+IHwgZGVzY3JpcHRpb24gb2Yg
+d2hhdCBJIGhhdmUgaW4gbWluZCwgb3Igc2ltcGx5IGludGVncmF0ZSB0aGUgdXNlZnVsCj4gfCBo
+YXJkd2FyZSB3b3JrIGhlcmUgaW50byBhbiBleHBhbmRlZCBwYXRjaCBzZXJpZXMuCj4gfAo+IHwg
+W1BsZWFzZSBkb24ndCBtZXJnZSBhbnl0aGluZyBmb3Igbm93Ll0KPiAKPiBTbzogeW91IHdyb3Rl
+IHNvbWUgbWF5YmUgdXNlZnVsIGhhcmR3YXJlIGNvZGUuIFRoZSByZXN0IGlzIHdyb25nLiBBbmQg
+d2UKPiBoYXZlbid0IGV2ZW4gY29uY2x1ZGVkIGRpc2N1c3Npb25zIG9uIHdoZXRoZXIgdGhlIHZp
+cnRpbyBpbnRlcmZhY2UgaXMKPiB0aGUgcmlnaHQgb25lLiBJbiBmYWN0LCBJIGhhZCBwcmV2aW91
+c2x5IGFza2VkIGlmIHdlIGNvdWxkIHNjaGVkdWxlIHRoaXMKPiBhbGwgdW50aWwgTWFyY2guIE1h
+cmNvIGZyb20geW91ciB0ZWFtIHRoZW4gc2VudCBhbiBpbXBhdGllbnQgZW1haWwsIHNvIEkKPiBz
+YWlkLCBhbHJpZ2h0LCB3aGF0IGFib3V0IEZlYiAxMSB3aGVuIEknbSBiYWNrLiBUaGF0J3MgYW5u
+b3lpbmcgZm9yIG1lCj4gYnV0IEkgZmlndXJlZCBJJ2QganVzdCBzaHVmZmxlIGV2ZXJ5dGhpbmcg
+YXJvdW5kIGFuZCBwcmlvcml0aXplIHRoaXMuCj4gVGhlbiwgaW5zdGVhZCBvZiB3YWl0aW5nIGZv
+ciB0aGF0LCB5b3UgcG9zdGVkIHYxIG9mIHRoaXMgcGF0Y2hzZXQgdGhlCj4gbmV4dCBkYXkuIEkg
+YXNrZWQgeW91IGFnYWluLiBBbmQgbm93LCB3aGlsZSBJJ20gYXdheSBvbiB0aGUgZmlyc3QKPiBo
+b2xpZGF5IGluIGEgd2hpbGUgd2l0aCB2ZXJ5IGxpdHRsZSBjb25uZWN0aXZpdHkgYW5kIG5vIGxh
+cHRvcCwgeW91IHBvc3QKPiBhIHYyLiBTbyBJJ20gcmVhbGx5IGFubm95ZWQuIEluIG9yZGVyIHRv
+IGF2b2lkIGFsbCBkb3VidCBhYm91dCB0aGlzLCBsZXQKPiBtZSB0aGVuIGp1c3QgTkFDSyB0aGlz
+LCBhbmQgSSdsbCBsaWZ0IHRoZSBuYWNrIHdoZW4gSSdtIGJhY2s6Cj4gCj4gICAgICBOYWNrZWQt
+Ynk6IEphc29uIEEuIERvbmVuZmVsZCA8SmFzb25AengyYzQuY29tPgo+IApBbWF6b24gU3BhaW4g
+U2VydmljZXMgc29jaWVkYWQgbGltaXRhZGEgdW5pcGVyc29uYWwsIENhbGxlIFJhbWlyZXogZGUg
+UHJhZG8gNSwgMjgwNDUgTWFkcmlkLiBSZWdpc3RybyBNZXJjYW50aWwgZGUgTWFkcmlkIC4gVG9t
+byAyMjQ1OCAuIEZvbGlvIDEwMiAuIEhvamEgTS00MDEyMzQgLiBDSUYgQjg0NTcwOTM2Cg==
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  .../bindings/watchdog/amlogic,meson6-wdt.yaml      | 50 ++++++++++++++++++++++
->  .../devicetree/bindings/watchdog/meson-wdt.txt     | 21 ---------
->  2 files changed, 50 insertions(+), 21 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson6-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson6-wdt.yaml
-> new file mode 100644
-> index 000000000000..84732cb58ec4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson6-wdt.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/amlogic,meson6-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Meson6 SoCs Watchdog timer
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +          - amlogic,meson6-wdt
-> +          - amlogic,meson8-wdt
-> +          - amlogic,meson8b-wdt
-> +      - items:
-> +          - const: amlogic,meson8m2-wdt
-> +          - const: amlogic,meson8b-wdt
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    wdt: watchdog@c1109900 {
-> +        compatible = "amlogic,meson6-wdt";
-> +        reg = <0xc1109900 0x8>;
-> +        interrupts = <GIC_SPI 0 IRQ_TYPE_EDGE_RISING>;
-> +        timeout-sec = <10>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/watchdog/meson-wdt.txt b/Documentation/devicetree/bindings/watchdog/meson-wdt.txt
-> deleted file mode 100644
-> index 7588cc3971bf..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/meson-wdt.txt
-> +++ /dev/null
-> @@ -1,21 +0,0 @@
-> -Meson SoCs Watchdog timer
-> -
-> -Required properties:
-> -
-> -- compatible : depending on the SoC this should be one of:
-> -	"amlogic,meson6-wdt" on Meson6 SoCs
-> -	"amlogic,meson8-wdt" and "amlogic,meson6-wdt" on Meson8 SoCs
-> -	"amlogic,meson8b-wdt" on Meson8b SoCs
-> -	"amlogic,meson8m2-wdt" and "amlogic,meson8b-wdt" on Meson8m2 SoCs
-> -- reg : Specifies base physical address and size of the registers.
-> -
-> -Optional properties:
-> -- timeout-sec: contains the watchdog timeout in seconds.
-> -
-> -Example:
-> -
-> -wdt: watchdog@c1109900 {
-> -	compatible = "amlogic,meson6-wdt";
-> -	reg = <0xc1109900 0x8>;
-> -	timeout-sec = <10>;
-> -};
