@@ -2,166 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02531682CFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A28E682D02
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjAaMvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
+        id S231982AbjAaMwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbjAaMvk (ORCPT
+        with ESMTP id S231978AbjAaMwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:51:40 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C2F35277
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:51:38 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id hn2-20020a05600ca38200b003dc5cb96d46so3414380wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:51:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n65vnVKUKNt8sq6OAnE9DvWi7qEHkIEJrwEj31voYJc=;
-        b=UdiQFxg8bARvB8WUDhiJW5v0fhBx6P/SghoR4ExMXmol8S8ZOSR2N+/MLh2zBciUZj
-         y/ARlUt9g/Eo8QFMkaHr297lO1wN1/szlws64TROBwrW1M3qohGMzBShVdhFPSKwMot5
-         dAMJuflQqocRWPrl+nJaNGjXrg5eTobBJw9IkHFx4shQAS24q9KAO6jz47iep36vd/AT
-         PnfhRqaJTR0CL9bC2FZ/p38o7vdBNXwdHYa00u9flA0Bvyn5XSimcKzw1r5+eKytmgg4
-         oCgFwreYrfJjIJgNve1LoGUeRBnipbP+zHhF/XkBARDFwbwigPdtzVUStnFph+UPvis6
-         MQLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n65vnVKUKNt8sq6OAnE9DvWi7qEHkIEJrwEj31voYJc=;
-        b=NY0+VfcZMz+u3uxJ79EnyCdZzLtF6aK3zmjstbn9wCcdJggAmUv4hgXBBUvnuGpgFy
-         7Zd2wRxuvUCkdErdfyqE1uog4LS5v9KKON0BU7Ekd+NxtB6msruALihH5H/q3yduRrLw
-         fMteFS7u1MPvYKjmOgGPMH2/JwrWvMr9BzfAp1hzQWz6R6r6ZA27hm8JjWsIp9jQUscC
-         +LT9OJoHbk7fijxBdMyt7DYWvrFCGVQZPq+19Mz+gGaOVZf1rLxDhLYZ/BqOr2bg5OQd
-         01fQUbGbMWo3k7ek+jOGRuu6AmbscXfYwAvKBOT8KJxsCiWAbGh1VU9jIKy7P1aDEDIm
-         k5QA==
-X-Gm-Message-State: AO0yUKVOWgKnFBU2ylZsqnxSwtL6mp/sMb/lONqnQNikOrDrwA9etH8q
-        xlzXP+puzmBkH6blTwBykk6FWA==
-X-Google-Smtp-Source: AK7set87qQhpYFQ5Ln/lqHrC79343lQuL5eRVq9AVr7ltHrMJ+M2G75KQraxNDzZODnnDlOY3iQPVw==
-X-Received: by 2002:a05:600c:500d:b0:3dd:97d6:8f2e with SMTP id n13-20020a05600c500d00b003dd97d68f2emr1559900wmr.17.1675169496919;
-        Tue, 31 Jan 2023 04:51:36 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id l16-20020a7bc350000000b003d9aa76dc6asm22318343wmj.0.2023.01.31.04.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 04:51:36 -0800 (PST)
-Date:   Tue, 31 Jan 2023 14:51:34 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Russell King <linux@armlinux.org.uk>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 00/19] ARM: imx: make Ethernet refclock configurable
-Message-ID: <Y9kO1rGH5hDWky//@linaro.org>
-References: <20230131084642.709385-1-o.rempel@pengutronix.de>
+        Tue, 31 Jan 2023 07:52:13 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845D34E512
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 04:51:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675169517; x=1706705517;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6bmhDvv4ZeGdpWzIo7dtVDn5+MD2AlT6GxJia3cLkPg=;
+  b=DYtu8vz0y3za3YR8N9DhvYisZVxsGLrfFS6sz7l/9aJv/254E/7aVmoZ
+   331djcmbob0yDAHOYTn512xpA+c3SUgoq8BTbd+wez9W2VIrLeOv+Bnlk
+   Vnt6wjgP7k6gbmSD94pIYTHrjdgZ/iWB2BhZEQ19sXj0R/4HtL9QZ+rj+
+   0gXKhrqdoiTfSZU4M7XfziShyCzyHGjIIDSPEGPFBkP2JGV3xvzFClI7F
+   aOKs0DfwkTqyp1Nmg+nO/AfB/IzZpRj37OGHZDhTXGra4hN23N1yRC7bk
+   sApu0/MiD3PSvANcGnCHXyJh29HuHSYZ3AO6nua9bam3ZNRoqsmL+6KRo
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="311451347"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="311451347"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:51:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="666490940"
+X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
+   d="scan'208";a="666490940"
+Received: from jlawryno-mobl.ger.corp.intel.com (HELO [10.237.142.112]) ([10.237.142.112])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:51:39 -0800
+Message-ID: <864f6835-ceff-a124-2631-70203d8461e1@linux.intel.com>
+Date:   Tue, 31 Jan 2023 13:51:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131084642.709385-1-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] drivers: Restore alignment and newline in Makefile
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230124104145.3962497-1-geert+renesas@glider.be>
+From:   Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20230124104145.3962497-1-geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-31 09:46:23, Oleksij Rempel wrote:
-> changes v3:
-> - add Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
-> - rebase on top of abelvesa/for-next
+Applied to drm-misc-next.
+Thanks.
 
-Applied all clk/imx ones. Thanks!
-
+On 24.01.2023 11:41, Geert Uytterhoeven wrote:
+> The introduction of drivers/accel/ broke alignment, and removed the
+> newline at the end of the file.  Fix all of that.
 > 
-> changes v2:
-> - remove "ARM: imx6q: use of_clk_get_by_name() instead of_clk_get() to
->   get ptp clock" patch
-> - fix build warnings
-> - add "Acked-by: Lee Jones <lee@kernel.org>"
-> - reword some commits as suggested by Fabio
+> Fixes: 35b137630f08d913 ("accel/ivpu: Introduce a new DRM driver for Intel VPU")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Most of i.MX SoC variants have configurable FEC/Ethernet reference
-> lock
-> used by RMII specification. This functionality is located in the
-> general purpose registers (GRPx) and till now was not implemented as
-> part of SoC clock tree.
-> 
-> With this patch set, we move forward and add this missing functionality
-> to some of i.MX clk drivers. So, we will be able to configure clock
-> opology
-> by using devicetree and be able to troubleshoot clock dependencies
-> by using clk_summary etc.
-> 
-> Currently implemented and tested i.MX6Q, i.MX6DL and i.MX6UL variants.
-> 
-> 
-> Oleksij Rempel (19):
->   clk: imx: add clk-gpr-mux driver
->   clk: imx6q: add ethernet refclock mux support
->   ARM: imx6q: skip ethernet refclock reconfiguration if enet_clk_ref is
->     present
->   ARM: dts: imx6qdl: use enet_clk_ref instead of enet_out for the FEC
->     node
->   ARM: dts: imx6dl-lanmcu: configure ethernet reference clock parent
->   ARM: dts: imx6dl-alti6p: configure ethernet reference clock parent
->   ARM: dts: imx6dl-plybas: configure ethernet reference clock parent
->   ARM: dts: imx6dl-plym2m: configure ethernet reference clock parent
->   ARM: dts: imx6dl-prtmvt: configure ethernet reference clock parent
->   ARM: dts: imx6dl-victgo: configure ethernet reference clock parent
->   ARM: dts: imx6q-prtwd2: configure ethernet reference clock parent
->   ARM: dts: imx6qdl-skov-cpu: configure ethernet reference clock parent
->   ARM: dts: imx6dl-eckelmann-ci4x10: configure ethernet reference clock
->     parent
->   clk: imx: add imx_obtain_fixed_of_clock()
->   clk: imx6ul: fix enet1 gate configuration
->   clk: imx6ul: add ethernet refclock mux support
->   ARM: dts: imx6ul: set enet_clk_ref to CLK_ENETx_REF_SEL
->   ARM: mach-imx: imx6ul: remove not optional ethernet refclock overwrite
->   ARM: dts: imx6ul-prti6g: configure ethernet reference clock parent
-> 
->  arch/arm/boot/dts/imx6dl-alti6p.dts           |  12 +-
->  arch/arm/boot/dts/imx6dl-eckelmann-ci4x10.dts |  13 +-
->  arch/arm/boot/dts/imx6dl-lanmcu.dts           |  12 +-
->  arch/arm/boot/dts/imx6dl-plybas.dts           |  12 +-
->  arch/arm/boot/dts/imx6dl-plym2m.dts           |  12 +-
->  arch/arm/boot/dts/imx6dl-prtmvt.dts           |  11 +-
->  arch/arm/boot/dts/imx6dl-victgo.dts           |  12 +-
->  arch/arm/boot/dts/imx6q-prtwd2.dts            |  17 ++-
->  arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi       |  12 +-
->  arch/arm/boot/dts/imx6qdl.dtsi                |   4 +-
->  arch/arm/boot/dts/imx6ul-prti6g.dts           |  14 ++-
->  arch/arm/boot/dts/imx6ul.dtsi                 |  10 +-
->  arch/arm/mach-imx/mach-imx6q.c                |  10 +-
->  arch/arm/mach-imx/mach-imx6ul.c               |  20 ---
->  drivers/clk/imx/Makefile                      |   1 +
->  drivers/clk/imx/clk-gpr-mux.c                 | 119 ++++++++++++++++++
->  drivers/clk/imx/clk-imx6q.c                   |  13 ++
->  drivers/clk/imx/clk-imx6ul.c                  |  33 ++++-
->  drivers/clk/imx/clk.c                         |  14 +++
->  drivers/clk/imx/clk.h                         |   8 ++
->  include/dt-bindings/clock/imx6qdl-clock.h     |   4 +-
->  include/dt-bindings/clock/imx6ul-clock.h      |   7 +-
->  include/linux/mfd/syscon/imx6q-iomuxc-gpr.h   |   6 +-
->  23 files changed, 296 insertions(+), 80 deletions(-)
->  create mode 100644 drivers/clk/imx/clk-gpr-mux.c
-> 
-> -- 
-> 2.30.2
-> 
+> diff --git a/drivers/Makefile b/drivers/Makefile
+> index f0972e2226c97cb5..9ea6eb3b5d7b7f17 100644
+> --- a/drivers/Makefile
+> +++ b/drivers/Makefile
+> @@ -189,4 +189,4 @@ obj-$(CONFIG_COUNTER)		+= counter/
+>  obj-$(CONFIG_MOST)		+= most/
+>  obj-$(CONFIG_PECI)		+= peci/
+>  obj-$(CONFIG_HTE)		+= hte/
+> -obj-$(CONFIG_DRM_ACCEL)	+= accel/
+> \ No newline at end of file
+> +obj-$(CONFIG_DRM_ACCEL)		+= accel/
