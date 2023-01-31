@@ -2,122 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EBA682180
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4784682182
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 02:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjAaBoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 30 Jan 2023 20:44:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
+        id S230407AbjAaBqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 30 Jan 2023 20:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjAaBox (ORCPT
+        with ESMTP id S229505AbjAaBqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 30 Jan 2023 20:44:53 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EE3166C9
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:44:52 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4P5SXb42rpz4f3t0j
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 09:44:47 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP2 (Coremail) with SMTP id Syh0CgBXSOaOcthjisG2Cg--.29955S2;
-        Tue, 31 Jan 2023 09:44:49 +0800 (CST)
-Subject: Re: [dm-devel] [PATCH] dm: remove unnecessary check when using
- dm_get_mdptr()
-To:     dm-devel@redhat.com, Mike Snitzer <snitzer@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
-        Hou Tao <houtao1@huawei.com>
-References: <20221216042353.3132139-1-houtao@huaweicloud.com>
- <e7fcd9fd-a882-2a97-a072-faf09441efbe@huawei.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <5d93f5fc-05fa-906e-b2e9-0e9abcdf16f6@huaweicloud.com>
-Date:   Tue, 31 Jan 2023 09:44:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 30 Jan 2023 20:46:10 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2483A2529D
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:45:40 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p24so13553009plw.11
+        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 17:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cbM1BOQ4XWE4OUgtCo6C4bdHxYq4OBKrEZY8jLQ57ds=;
+        b=J7nzSQOGmpCmGBqVDqLzDaKqdmThacQyaLPB0hwEiZvvwznIEUic9aw+4OeNlfTMpM
+         jqhHiNK6l7iTxBN6PudMuHzqECrXGGaV/v97OxIrG3237tUu4bmM3wiLV6SkBRnxKETM
+         ghxsrAbZDpwBvLScb3jAYI/cSpbCILEEohizUJq8aF5WlgciyI6Ehl25zn52Y7mmnhLT
+         iXiJ7nlbR+raD/8nKbEZJ5a1zULtWPWsW6gK1CfSE/xwE57rEBBmcRa/20jNRQGF/yhG
+         AUAomNcMCNCDUAkshyxhy40wGcfGs8yYt5smnE0DKNcrT9DQy2VaYFiKdaEZxAi7pqlM
+         +gUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cbM1BOQ4XWE4OUgtCo6C4bdHxYq4OBKrEZY8jLQ57ds=;
+        b=OuY8B9ILIA0LBG7DKCHi9GmtxEBRpF9YPOpEiVeG+436D8h2Ehlretk+OMmiNCSIb/
+         ExG5CEiti795JZdTVseGoTxRqTdBiwAA5WOdXw53R4lMkSd3OSvbr4n6+ehoHt3NYhsS
+         8A2uAdZMVO0Ntvch+Y42RcFyKBJCUlqdDK9OV3+fEjlMW4wKaAcqrNk773L+Sf6b5bzU
+         5o1L9xply46MMBf7QQ87He3Kk6EyWrsPDmCl/ujMcXGvT+GkQhVw8GcCKILVZqTStUfG
+         f+g/pkXJ4yNiaU0/Ks4nf7e0UOsBJwEnAoHZrr/rYdeQuH/ldT6lU+LT8hHRr52jSEvV
+         Lifw==
+X-Gm-Message-State: AO0yUKXzlSAJ72MHqxFBp0Ol3whYceJ1aWV5cbHeY1BfrhuopbP1fRCX
+        j5oNU1ADmk1hiWiUD0iL/ZP5Y9p2r+PgY5hvnJA2Zw==
+X-Google-Smtp-Source: AK7set9N5P5ldD/yETehszirsCZuTnymewwCNrvHg2d+SXQHdcYE+TA92gT37/hltVGbBH/wAx6boLx8qdTaCxypjo8=
+X-Received: by 2002:a17:902:714c:b0:196:3088:5def with SMTP id
+ u12-20020a170902714c00b0019630885defmr3074407plm.32.1675129539114; Mon, 30
+ Jan 2023 17:45:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <e7fcd9fd-a882-2a97-a072-faf09441efbe@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-CM-TRANSID: Syh0CgBXSOaOcthjisG2Cg--.29955S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJr13CrWkury7uFy5Wr1kGrg_yoW8ZF4xpr
-        1FgrW3urWkJFsF9r4jvanruF9Igw1YkrWUGryxKa4Y93WDu348WayUGFWxXFyrAF97AF4Y
-        gF4xW3y5Ca1DA37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230128001639.3510083-1-tj@kernel.org> <20230128001639.3510083-28-tj@kernel.org>
+ <CABk29Nt2-CCGnogpfEgJ3ZDk5Esk04n6EwsAqpw_vdeVfKuFUQ@mail.gmail.com> <Y9hgLENFI5y3Qtx2@slm.duckdns.org>
+In-Reply-To: <Y9hgLENFI5y3Qtx2@slm.duckdns.org>
+From:   Josh Don <joshdon@google.com>
+Date:   Mon, 30 Jan 2023 17:45:26 -0800
+Message-ID: <CABk29NuwpSDAy6inXD5dPjtw9SqjxNr0hK5SkM98b7jHinWFFw@mail.gmail.com>
+Subject: Re: [PATCH 27/30] sched_ext: Implement core-sched support
+To:     Tejun Heo <tj@kernel.org>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        brho@google.com, pjt@google.com, derkling@google.com,
+        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
+        dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping ? Any comments on this clean up patch ?
-
-On 1/18/2023 9:16 PM, Hou Tao wrote:
-> ping ?
+On Mon, Jan 30, 2023 at 4:26 PM Tejun Heo <tj@kernel.org> wrote:
 >
-> On 12/16/2022 12:23 PM, Hou Tao wrote:
->> From: Hou Tao <houtao1@huawei.com>
->>
->> __hash_remove() removes hash_cell with _hash_lock locked, so acquiring
->> _hash_lock can guarantee no-NULL hc returned from dm_get_mdptr() must
->> have not been removed and hc->md must still be md.
->>
->> __hash_remove() also acquires dm_hash_cells_mutex before setting mdptr
->> as NULL, so in dm_copy_name_and_uuid() after acquiring
->> dm_hash_cells_mutex and ensuring returned hc is not NULL, the returned
->> hc must still be alive and hc->md must still be md.
->>
->> So removing these unnecessary hc->md != md checks when using
->> dm_get_mdptr() with _hash_lock or dm_hash_cells_mutex acquired.
->>
->> Signed-off-by: Hou Tao <houtao1@huawei.com>
->> ---
->>  drivers/md/dm-ioctl.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
->> index 3bfc1583c20a..2a86524661d1 100644
->> --- a/drivers/md/dm-ioctl.c
->> +++ b/drivers/md/dm-ioctl.c
->> @@ -772,7 +772,7 @@ static struct dm_table *dm_get_inactive_table(struct mapped_device *md, int *src
->>  
->>  	down_read(&_hash_lock);
->>  	hc = dm_get_mdptr(md);
->> -	if (!hc || hc->md != md) {
->> +	if (!hc) {
->>  		DMERR("device has been removed from the dev hash table.");
->>  		goto out;
->>  	}
->> @@ -1476,7 +1476,7 @@ static int table_load(struct file *filp, struct dm_ioctl *param, size_t param_si
->>  	/* stage inactive table */
->>  	down_write(&_hash_lock);
->>  	hc = dm_get_mdptr(md);
->> -	if (!hc || hc->md != md) {
->> +	if (!hc) {
->>  		DMERR("device has been removed from the dev hash table.");
->>  		up_write(&_hash_lock);
->>  		r = -ENXIO;
->> @@ -2128,7 +2128,7 @@ int dm_copy_name_and_uuid(struct mapped_device *md, char *name, char *uuid)
->>  
->>  	mutex_lock(&dm_hash_cells_mutex);
->>  	hc = dm_get_mdptr(md);
->> -	if (!hc || hc->md != md) {
->> +	if (!hc) {
->>  		r = -ENXIO;
->>  		goto out;
->>  	}
+> Hello,
+>
+> On Mon, Jan 30, 2023 at 01:38:15PM -0800, Josh Don wrote:
+> > > The core-sched support is composed of the following parts:
+> >
+> > Thanks, this looks pretty reasonable overall.
+> >
+> > One meta comment is that I think we can shortcircuit from
+> > touch_core_sched when we have sched_core_disabled().
+>
+> Yeah, touch_core_sched() is really cheap (it's just an assignment from an rq
+> field to a task field) but sched_core_disabled() is also just a static
+> branch. Will update.
 
+Yep, true, I was just going through and reasoning about whether
+anything needed to be done in the !sched_core_disabled() case.
+
+> > Reviewed-by: Josh Don <joshdon@google.com>
+> >
+> > > +                       /*
+> > > +                        * While core-scheduling, rq lock is shared among
+> > > +                        * siblings but the debug annotations and rq clock
+> > > +                        * aren't. Do pinning dance to transfer the ownership.
+> > > +                        */
+> > > +                       WARN_ON_ONCE(__rq_lockp(rq) != __rq_lockp(srq));
+> > > +                       rq_unpin_lock(rq, rf);
+> > > +                       rq_pin_lock(srq, &srf);
+> > > +
+> > > +                       update_rq_clock(srq);
+> >
+> > Unfortunate that we have to do this superfluous update; maybe we can
+> > save/restore the clock flags from before the pinning shenanigans?
+>
+> So, this one isn't really superflous. There are two rq's involved - self and
+> sibling. self's rq clock is saved and restored through rq_unpin_lock() and
+> rq_repin_lock(). We're transferring the lock owner ship from self to sibling
+> without actually unlocking and relocking the lock as they should be sharing
+> the same lock; however, that doesn't mean that the two queues share rq
+> clocks, so the sibling needs to update its rq clock upon getting the lock
+> transferred to it. It might make sense to make the siblings share the rq
+> clock when core-sched is enabled but that's probably for some other time.
+
+Yep, whoops, I forgot that part didn't make it.
