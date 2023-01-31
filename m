@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7131682A78
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0F9682A7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 11:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjAaK11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 05:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
+        id S230224AbjAaK2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 05:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjAaK1Z (ORCPT
+        with ESMTP id S229637AbjAaK2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 05:27:25 -0500
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DF31C5A3
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:27:24 -0800 (PST)
-Received: by mail-vs1-xe29.google.com with SMTP id k6so15580590vsk.1
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:27:24 -0800 (PST)
+        Tue, 31 Jan 2023 05:28:40 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6619C3929B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:28:39 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id h9so997366uag.9
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 02:28:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7vPWeuf5HEeoiMZZem+4HAgZK7oUQUzCNRu6zAcOzxQ=;
-        b=d0QrZt2/YokTvL+hDJBgelYaAy0J8SP4K8EMhc7chajopVJ9Nlio3w/CDpncsH4Ifv
-         sXi0w3X6ifBjZLUcxB6DqgCOuPBqbJaiD4LGHa5do04ro4Ji9OERaEiQ7kRc93FKqq3l
-         YbL20Z3EKSJvSGdRN47iqu3rp+i5HjuIbniRcZAotqel9EoP0PiLa/Hnu81vF66YPS/h
-         1P+xxYdjk2eDFlVcD/DzefKACWL3tuMXUfR8ItaZmx2qHLkZytKuaqhMR/uPnq+lLXkv
-         fpAKfDxb94xyP6dfwFmYlzOY2Ey1PgtRP0Pwt2a8vOXJxkwK7gl7hyusI+hrqpxQJi/A
-         R71w==
+        bh=a6g8bNkySwa49lfZtMhX0bn0GNfblJVVbDTJj9FWuJw=;
+        b=hJF5vaV+oa+2XOIHPbi9yGGm4JPUxaZ5xQGNygYMpar6HRmrNjopq9y7sBCZV3lw5+
+         L6dFABwbPpTYSkKu8tDclscWJ1E59NMn+rTgu4pXkFhS1fFi+hp8mlxKG8NIi+DoE5hW
+         RxEP//Q4oSSDi1t5GINca7F3R36NS8fBxQF42QHWXn/nbtTZD1ZkTOX32+hirRyg0bvf
+         bzvei0AnXdXB605ldqC4nQRTYO/72Yacp5VrRpvvs8jkpEH9KWNS66GD8ln4IppUcJg1
+         E5ogCozY8SisRn+fDTtP/nIP4aXgvt+95D0PqHKZapsw86BhZLZ5U982waFC45ezydY0
+         uf8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7vPWeuf5HEeoiMZZem+4HAgZK7oUQUzCNRu6zAcOzxQ=;
-        b=dd0uxLUlATrSRuS+wD+uNh9EjWYy35NGZxlpxPJY4PUGMj57Qjc+Yo7w0Wl7isLzVc
-         pzbjkBZKlLwF0BBWovsSoPPantchVR5xveboMdh4LR33V0PRlLoLE8uoDvz162DY2kI9
-         s84w+2tq+XIicK0n5U646wn+dLqrG7ndHWsduprb9vEyvTsNgwVIrjs6XzakWWsppWMG
-         mEN6L7Cd4SRse/VHm2grAL+6D7cb/jNXlLpQY9+Unms7tMXuJ3brXmFFTCeeJYHNwRpU
-         o3R9TasR0cyD1z7dQRLksmTXU6YLgmT9gzb5mlZIaw0W9J6XWV8Aaldy2ZENGFKP3Jaf
-         mWaw==
-X-Gm-Message-State: AO0yUKUDmpbipqA6j8t46p6eV/GjXuBVa9hhg3aSdZ4t9CjNo+sdnE0L
-        yFe7fs0hr3fN+KiHPZNeti8h7k5BMpvdX297vvzp6A==
-X-Google-Smtp-Source: AK7set/igvas3mHgDrpV7OmNmqQ41Qn7hSdNp8uv7LS9rdA5j+x7iEyRDrkHXIf/QsJD6u4sr1RPaSXxtGwUbyVpql4=
-X-Received: by 2002:a05:6102:3237:b0:3f4:eee1:d8c4 with SMTP id
- x23-20020a056102323700b003f4eee1d8c4mr1110810vsf.19.1675160844015; Tue, 31
- Jan 2023 02:27:24 -0800 (PST)
+        bh=a6g8bNkySwa49lfZtMhX0bn0GNfblJVVbDTJj9FWuJw=;
+        b=GVsyrbqNANNFgY4o1+byLcCTHtcfoDVtfX440Ocx+O2ayEcs121HX44fAsY6tlXbaR
+         D6P36g59phljTpa+QIw4Meww5F9iLmQfOTDUsfxxmRR8BJntZLq/4eqZcn7iEVOC/zQO
+         2nSm9peyU211B3vzJt8jCNfPg7JIMk3JpqjgdDN6+QemL6i/uXkC2ira0YtvCA9aUEdc
+         0NDIXz3nLvnXx9wzx7A1cJ+PStaHKwB0bxR66Cq1vLjqUkcu9ZOBe8/uOHg1K9COR0op
+         R87FujVySQ2Acd6sRhRUUOMl+MDWuPCnE6fEwPVjxQwQK519HuAqnXQREbOFL3+svk5w
+         tMxw==
+X-Gm-Message-State: AO0yUKWhfR0YGPfnQhsKpet38ZISdVWhQXqM/eajUVS+bsWLS95fy1A3
+        N1aViQqs5sJoWG/LrXxhrJlJn7dn8bhU7Oh5uvHsLA==
+X-Google-Smtp-Source: AK7set+ct9z/1Lzg7mpjtAKjfuw5FSBRQWuPSTRH3eNE7Pl+sNhvB4pFbroK4L0ro4leMaid5sS6wWx8YNCLj/aLk+Y=
+X-Received: by 2002:a05:6130:83:b0:655:5dfb:9d10 with SMTP id
+ x3-20020a056130008300b006555dfb9d10mr3561535uaf.63.1675160918398; Tue, 31 Jan
+ 2023 02:28:38 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1675111415.git.andreyknvl@google.com> <cb34925852c81be2ec6aac75766292e4e590523e.1675111415.git.andreyknvl@google.com>
-In-Reply-To: <cb34925852c81be2ec6aac75766292e4e590523e.1675111415.git.andreyknvl@google.com>
+References: <cover.1675111415.git.andreyknvl@google.com> <293567627b0d59f1ae5a27ac9537c027a5ff729d.1675111415.git.andreyknvl@google.com>
+In-Reply-To: <293567627b0d59f1ae5a27ac9537c027a5ff729d.1675111415.git.andreyknvl@google.com>
 From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 31 Jan 2023 11:26:48 +0100
-Message-ID: <CAG_fn=VPVrp8BW=QpN63o40NSuJCd0P5aJee4gBod7JUgoQ4ig@mail.gmail.com>
-Subject: Re: [PATCH 04/18] lib/stackdepot, mm: rename stack_depot_want_early_init
+Date:   Tue, 31 Jan 2023 11:28:02 +0100
+Message-ID: <CAG_fn=Vs5SEdCRDEKQGd=ijMas_dgH=VMeoLs9zq8PBmjY9rGA@mail.gmail.com>
+Subject: Re: [PATCH 05/18] lib/stackdepot: rename stack_depot_disable
 To:     andrey.konovalov@linux.dev
 Cc:     Marco Elver <elver@google.com>,
         Andrey Konovalov <andreyknvl@gmail.com>,
@@ -77,11 +77,13 @@ On Mon, Jan 30, 2023 at 9:49 PM <andrey.konovalov@linux.dev> wrote:
 >
 > From: Andrey Konovalov <andreyknvl@google.com>
 >
-> Rename stack_depot_want_early_init to stack_depot_request_early_init.
+> Rename stack_depot_disable to stack_depot_disabled to make its name look
+> similar to the names of other stack depot flags.
 >
-> The old name is confusing, as it hints at returning some kind of intention
-> of stack depot. The new name reflects that this function requests an action
-> from stack depot instead.
+> Also put stack_depot_disabled's definition together with the other flags.
+>
+> Also rename is_stack_depot_disabled to disable_stack_depot: this name
+> looks more conventional for a function that processes a boot parameter.
 >
 > No functional changes.
 >
