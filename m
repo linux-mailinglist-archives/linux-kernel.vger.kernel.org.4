@@ -2,44 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743716824E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E9D682516
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 07:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjAaGyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 01:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
+        id S230502AbjAaG4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 01:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjAaGyi (ORCPT
+        with ESMTP id S230428AbjAaG4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 01:54:38 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908F524118
-        for <linux-kernel@vger.kernel.org>; Mon, 30 Jan 2023 22:54:37 -0800 (PST)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4P5bND3SnzzJrW6;
-        Tue, 31 Jan 2023 14:53:00 +0800 (CST)
-Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 31 Jan
- 2023 14:54:34 +0800
-From:   ruanjinjie <ruanjinjie@huawei.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <haibinzhang@tencent.com>, <hewenliang4@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH v5.10] arm64: fix a concurrency issue in emulation_proc_handler()
-Date:   Tue, 31 Jan 2023 14:52:11 +0800
-Message-ID: <20230131065211.2826133-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 31 Jan 2023 01:56:38 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A367B2748F;
+        Mon, 30 Jan 2023 22:56:36 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 78A7424E1EB;
+        Tue, 31 Jan 2023 14:56:28 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 31 Jan
+ 2023 14:56:28 +0800
+Received: from [192.168.125.128] (183.27.97.127) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 31 Jan
+ 2023 14:56:27 +0800
+Message-ID: <93f9e7b9-90a7-0c9f-91c2-301a1431b12d@starfivetech.com>
+Date:   Tue, 31 Jan 2023 14:52:19 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.83]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 06/11] clk: starfive: Add StarFive JH7110
+ Image-Signal-Process clock driver
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230120024445.244345-1-xingyu.wu@starfivetech.com>
+ <20230120024445.244345-7-xingyu.wu@starfivetech.com>
+ <26437c6f0bda4dd18e16fa1f58013911.sboyd@kernel.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <26437c6f0bda4dd18e16fa1f58013911.sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.127]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,71 +65,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is addressing an issue in stable linux-5.10 only.
+On 2023/1/31 8:38, Stephen Boyd wrote:
+> Quoting Xingyu Wu (2023-01-19 18:44:40)
+>> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-isp.c b/drivers/clk/starfive/clk-starfive-jh7110-isp.c
+>> new file mode 100644
+>> index 000000000000..f9fc94b4c6f8
+>> --- /dev/null
+>> +++ b/drivers/clk/starfive/clk-starfive-jh7110-isp.c
+>> @@ -0,0 +1,218 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * StarFive JH7110 Image-Signal-Process Clock Driver
+> [...]
+>> +
+>> +static int jh7110_isp_top_crg_enable(struct isp_top_crg *top)
+>> +{
+>> +       int ret;
+>> +
+>> +       ret = clk_bulk_prepare_enable(top->top_clks_num, top->top_clks);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       return reset_control_deassert(top->top_rsts);
+>> +}
+> 
+> This needs to be undone on driver remove.
 
-In linux-6.1, the related code is refactored in 124c49b1b("arm64:
-armv8_deprecated: rework deprected instruction handling") and
-this issue was incidentally fixed. However, the patch changes a lot and
-is not specific to this issue.
+Will add in next patch.
 
-This patch is designed to solve the problem of repeated addition of linked
-lists described below with few changes.
-
-In emulation_proc_handler(), read and write operations are performed on
-insn->current_mode. In the concurrency scenario, mutex only protects
-writing insn->current_mode, and not protects the read. Suppose there are
-two concurrent tasks, task1 updates insn->current_mode to INSN_EMULATE
-in the critical section, the prev_mode of task2 is still the old data
-INSN_UNDEF of insn->current_mode. As a result, two tasks call
-update_insn_emulation_mode twice with prev_mode = INSN_UNDEF and
-current_mode = INSN_EMULATE, then call register_emulation_hooks twice,
-resulting in a list_add double problem.
-
-Call trace:
- __list_add_valid+0xd8/0xe4
- register_undef_hook+0x94/0x13c
- update_insn_emulation_mode+0xd0/0x12c
- emulation_proc_handler+0xd8/0xf4
- proc_sys_call_handler+0x140/0x250
- proc_sys_write+0x1c/0x2c
- new_sync_write+0xec/0x18c
- vfs_write+0x214/0x2ac
- ksys_write+0x70/0xfc
- __arm64_sys_write+0x24/0x30
- el0_svc_common.constprop.0+0x7c/0x1bc
- do_el0_svc+0x2c/0x94
- el0_svc+0x20/0x30
- el0_sync_handler+0xb0/0xb4
- el0_sync+0x160/0x180
-
-Fixes: af483947d472 ("arm64: fix oops in concurrently setting insn_emulation sysctls")
-Cc: stable@vger.kernel.org#5.10.x
-Cc: gregkh@linuxfoundation.org
-Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
----
- arch/arm64/kernel/armv8_deprecated.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
-index 91b8a8378ba3..5f8da0d7b832 100644
---- a/arch/arm64/kernel/armv8_deprecated.c
-+++ b/arch/arm64/kernel/armv8_deprecated.c
-@@ -208,10 +208,12 @@ static int emulation_proc_handler(struct ctl_table *table, int write,
- 				  loff_t *ppos)
- {
- 	int ret = 0;
--	struct insn_emulation *insn = container_of(table->data, struct insn_emulation, current_mode);
--	enum insn_emulation_mode prev_mode = insn->current_mode;
-+	struct insn_emulation *insn;
-+	enum insn_emulation_mode prev_mode;
- 
- 	mutex_lock(&insn_emulation_mutex);
-+	insn = container_of(table->data, struct insn_emulation, current_mode);
-+	prev_mode = insn->current_mode;
- 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
- 
- 	if (ret || !write || prev_mode == insn->current_mode)
--- 
-2.25.1
-
+Best regards,
+Xingyu Wu
