@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 011806823A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 06:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D716823A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 06:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjAaFK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 00:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S229964AbjAaFLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 00:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAaFKV (ORCPT
+        with ESMTP id S229868AbjAaFLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 00:10:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AFC30B09;
-        Mon, 30 Jan 2023 21:10:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 00:11:36 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A3730B24;
+        Mon, 30 Jan 2023 21:11:33 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79D01B819A5;
-        Tue, 31 Jan 2023 05:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11173C433AE;
-        Tue, 31 Jan 2023 05:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675141817;
-        bh=DQ5RF1MS4vtaaJGGCy0zMvZ6Y471iESY5zZMmC496Ik=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SNoDqOfNs5v0OmfRfAhVCHV6/KoZB+t/lGOo7MaqbstiKQsOgxD3mns4vboo+v/LV
-         2LfG8/b/gcMN9nFLgmmv2mMECGgPiqopmtZif/zv09aIKSCmzw6ssvkfTy4YZWkvB7
-         TCacCv+eEtxmdbfWMmXLQ5tBLWrpvx/NLxBKAxXhbv5lLT0KG66DE0oVTXvKopkP3i
-         FOKlN9BQFEjjcsTNq0dXOBFEw0zqf3I/wtv/53IOCv2dxlUOsgS3oE+5BdnHzZHjJC
-         3FElxH/AgQNFc6PWJmUxJkHhNTs9ICyegwyE7nuDJ2u3gqxf4OoS8wKe0t28eUFZS8
-         vdCndUuK7Q9LQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7A79E50D6B;
-        Tue, 31 Jan 2023 05:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P5Y7554Lcz4wgv;
+        Tue, 31 Jan 2023 16:11:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675141889;
+        bh=A3B/7yXHPQTZ01yG4M+Om5AqTRao+IUfpWqMVK+rdWY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NzzxPum6yNsdEaFRf2HXm2EzrFw2zGpwToHpimmWVq/pnUu5SuSWU23u6ZKoKx560
+         Tkp6wvfQFZML96i/iLNiSZcv0ulSYjf/q63fIZeqxwsUZ6swprMGurtThra+axgSsv
+         5vPBlOpxRxLtbAE1acZlXyq09I6r0PhesMFpyZauAmBxPv2lRDQihhAVVOvwhkTgoj
+         vI/+3XmEx0ZfqB0jIWnaN/ejlLW5EWIUE1ZQ14/qBp76YFfJLmVLHcyquWg7hKez5v
+         a8aoVo4y8suPlj8ZV9R59s+WWZb7Irc1L9sxhs6iNDgc3ZGCsxKwDd4/b7/NiPTWIq
+         2zmpSB4B0VFgA==
+Date:   Tue, 31 Jan 2023 16:11:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the qcom tree
+Message-ID: <20230131161128.3845f226@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: b44: Remove the unused function __b44_cam_read()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167514181694.11863.11779733080664866743.git-patchwork-notify@kernel.org>
-Date:   Tue, 31 Jan 2023 05:10:16 +0000
-References: <20230128090413.79824-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20230128090413.79824-1-jiapeng.chong@linux.alibaba.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     michael.chan@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        abaci@linux.alibaba.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LWB+tOMHk1sWBSNBK7Wa=Zc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+--Sig_/LWB+tOMHk1sWBSNBK7Wa=Zc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Hi all,
 
-On Sat, 28 Jan 2023 17:04:13 +0800 you wrote:
-> The function __b44_cam_read() is defined in the b44.c file, but not called
-> elsewhere, so remove this unused function.
-> 
-> drivers/net/ethernet/broadcom/b44.c:199:20: warning: unused function '__b44_cam_read'.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3858
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> 
-> [...]
+Commit
 
-Here is the summary with links:
-  - net: b44: Remove the unused function __b44_cam_read()
-    https://git.kernel.org/netdev/net-next/c/1586f31e30ed
+  bb8379ce26d0 ("dt-bindings: interconnect: Add QDU1000/QRU1000 devices")
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+is missing a Signed-off-by from its committer.
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/LWB+tOMHk1sWBSNBK7Wa=Zc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPYowAACgkQAVBC80lX
+0GwLdwf/VrHE3z5kbBSbHlZsN17zhdSndP/Uiyi5xoCEKO13A8KiZfnDzkf9klCZ
+cLUTu9C6NfY7tV0D5Og+YnqeTMahtYtu3KrskeCZz45OwxKaGoiNFPWAL9CzuXdG
+tpx2IaNmAnHWXmyk6H+vepoCrxJC/lShTNt1jxmNtzKLK9NjeE2Q9s05TzfN3bXF
+sX9zM3Cx22JYnBilaNgqv1GkzzFmr6FEWWNsO/Dpgr2Iizr67AY9jor2d/T2TvVP
+qtZupoCPEHyBeN5zUMETlNKbVlxzY+/y7x0tBfDLm6icmpaBR5HZwyBdCZn644J0
+OVpkj+0qjn6AnL9hoXh1KsOX73lZDg==
+=xbu3
+-----END PGP SIGNATURE-----
+
+--Sig_/LWB+tOMHk1sWBSNBK7Wa=Zc--
