@@ -2,138 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C766829A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4B46829A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 10:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbjAaJyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 04:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
+        id S232201AbjAaJzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 04:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjAaJya (ORCPT
+        with ESMTP id S231127AbjAaJz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 04:54:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFA95B9D
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:54:29 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pMnLO-0000Lh-C7; Tue, 31 Jan 2023 10:54:26 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pMnLM-0004mS-V0; Tue, 31 Jan 2023 10:54:24 +0100
-Date:   Tue, 31 Jan 2023 10:54:24 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] arm64: dts: imx8mq: update usb compatible string
-Message-ID: <20230131095424.vlj4z4qci4722gy7@pengutronix.de>
-References: <20230131091140.3696808-1-peng.fan@oss.nxp.com>
- <20230131092455.2s63zr6d56v2u6ka@pengutronix.de>
- <DU0PR04MB941741A921F3953E165BB45F88D09@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        Tue, 31 Jan 2023 04:55:29 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B863125A8
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:55:28 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id z1so6989375plg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 01:55:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zNQqeS9ux7+sgyQiwT83A6zxgTgZIe3tVN+lKtRdGfM=;
+        b=Z7UOQmcn7L2RlBmoZSiXDwvkFIJ+SlgEOxHQpYhBkrUjwOzuAmSAj53hL+LjXAd5k2
+         4yaH/xNHkX/zvV9UF/T+3SjaEWWffwDS4WRPjL2GBdzcSqJMm1yw7B7A29SE0vzswiS7
+         vIt9r312aJwT6W033TiCa+8rwUahkowK+zGP0pNALbBjwKS+zDvxFZBK0fibiglQDfzD
+         mRujYUZ/TfxqoYNve7X6MemsX75+VVHpFJVMpo30faLvfUauO8K4ca2qnx3/GrLFDIaN
+         FQ6h+jluRK4C0oKcR61NL9M6Q9owsto62tOW1XLWX+CTDueZJUN6HzSAF0cWjmRXzqRF
+         sA/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zNQqeS9ux7+sgyQiwT83A6zxgTgZIe3tVN+lKtRdGfM=;
+        b=g4YulgogGvsjm8xsLbYXi2Ekwdi8vnvWiyCbteTbiTmyONnzxjK0fTJQA5jMFL/8tM
+         PE99c7nsUOJcSjNYa0MaPQ5Rovulrz6BvoaguPXP48awCv1Y/yhARX9ef72ufFVAyXEu
+         5JDzit79gJNNYXV7T/8d6I8mCY3SDWpRBXGkTucbsMi9g3mf7PbBab5xsvKmfB/V/dYX
+         bGrlbfEShfPeCbCB/PaX4nty6oMkb0/femv57pqIskwNC6HIUuKQoci8F9/t/FzQq0A5
+         6H1A92/6bW9Q9jG2z4jCHBGJ7EcJb5tcGIbBndLbmMJJGzPY1yJ2yiHHuOIfyiSH9gF8
+         iWlw==
+X-Gm-Message-State: AO0yUKW5W91s0QnEXs5D+HPVMoh1exJTLd5tNNX7G4vHsCpdRdJRTDku
+        ABMNPXatQwe/5WjatRj50otTZWbV+ICly39mQwOz2JhzojA=
+X-Google-Smtp-Source: AK7set95Kp3WLJXYec9occ2wfiNYNeo8X4kuhcLYffg4C8ramLyCodU/v/NRU8YxPhQPUHCQ9UV5On/pJ8meQbg+sEc=
+X-Received: by 2002:a17:902:ab97:b0:196:2b0d:feb5 with SMTP id
+ f23-20020a170902ab9700b001962b0dfeb5mr3139739plr.26.1675158927728; Tue, 31
+ Jan 2023 01:55:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DU0PR04MB941741A921F3953E165BB45F88D09@DU0PR04MB9417.eurprd04.prod.outlook.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220819032706.695212-1-xiehuan09@gmail.com> <20221017154057.78babf40@gandalf.local.home>
+ <CAEr6+ECqn7rABE0cJP_oPr6g37B1kXu2xpge7Pg67hxywqyO0g@mail.gmail.com>
+ <20221129113006.0d745fae@gandalf.local.home> <CAEr6+EArZtwJPwZnKAB_61a=khPpC1=6ogqEC8r4npaaX0WvjA@mail.gmail.com>
+In-Reply-To: <CAEr6+EArZtwJPwZnKAB_61a=khPpC1=6ogqEC8r4npaaX0WvjA@mail.gmail.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Tue, 31 Jan 2023 17:55:16 +0800
+Message-ID: <CAEr6+EB89otsHVOnYNGQ_gbo_g=2fNiU4+3pk06YWFrpZDy=kQ@mail.gmail.com>
+Subject: Re: [PATCH v15 0/4] trace: Introduce objtrace trigger to trace the
+ kernel object
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
+        linux-kernel@vger.kernel.org, chensong_2000@189.cn
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-01-31, Peng Fan wrote:
-> > Subject: Re: [PATCH] arm64: dts: imx8mq: update usb compatible string
-> > 
-> > Hi,
-> > 
-> > On 23-01-31, Peng Fan (OSS) wrote:
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > There is no fsl,imx8mq-dwc3 binding doc, no driver use this compatible
-> > > string. Drop it.
-> > 
-> > please don't. I'm not aware of the driver state but the compatibles are there
-> > for _possible_ quirk handling, so the driver can add a match on demand.
-> 
-> NXP downstream also not has driver use this compatible string, and pass
-> several GA releases.
+ Hi Steve,
 
-This shouldn't be an argument, because there is no bug at the moment
-doesn't mean that there is one. Also the compatible may used by other
-projects using this device tree too.
+On Sat, Dec 17, 2022 at 4:27 PM Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> On Wed, Nov 30, 2022 at 12:30 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > On Wed, 30 Nov 2022 00:09:51 +0800
+> > Jeff Xie <xiehuan09@gmail.com> wrote:
+> >
+> > > > Now instead of searching the function arguments for "obj", we should just
+> > > > read the obj value at every function and report when it changed, as well as
+> > > > the last function it was still the same. The report will be like the
+> > > > "func_repeats" entry. And instead we can print when the object changes,
+> > > > something like this:
+> > > >
+> > > >               cat-117     [002] ...2.     1.602245: bio_add_page <-ext4_mpage_readpages object:0xffff88811bee4000 value:0x2000 (last value:0x1000 at [002] __bio_add_page <-bio_add_page ts: 1.602245)
+> > >
+> > >
+> > > I'm just curious if we'll see this rewritten version in the next merge
+> > > window  ;-)
+> >
+> > Unfortunately, this ended up getting dropped in priority, as my workload
+> > increased internally. :-/
+>
 
-> People could add it back when it is needed together with binding doc.
+I would like to ask if there is any hope that this patchset can be
+merged into the linux kernel in the end.
 
-Nope since a DTB is firmware which is updated relativ rare. The kernel
-instead is updated more often. So please instead of removing it add
-support to the dt-bindings doc.
+We spent a lot of time on this patchset, I don't want to give up so easily ;-)
 
-Regards,
-  Marco
-
-
-> Thanks,
-> Peng.
-> 
-> > 
-> > Regards,
-> >   Marco
-> > 
-> > 
-> > >
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > ---
-> > >  arch/arm64/boot/dts/freescale/imx8mq.dtsi | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > index d59156fdee0b..d308f94a7c52 100644
-> > > --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> > > @@ -1431,7 +1431,7 @@ gpu: gpu@38000000 {
-> > >  		};
-> > >
-> > >  		usb_dwc3_0: usb@38100000 {
-> > > -			compatible = "fsl,imx8mq-dwc3", "snps,dwc3";
-> > > +			compatible = "snps,dwc3";
-> > >  			reg = <0x38100000 0x10000>;
-> > >  			clocks = <&clk IMX8MQ_CLK_USB1_CTRL_ROOT>,
-> > >  			         <&clk IMX8MQ_CLK_USB_CORE_REF>, @@ -
-> > 1463,7 +1463,7 @@
-> > > usb3_phy0: usb-phy@381f0040 {
-> > >  		};
-> > >
-> > >  		usb_dwc3_1: usb@38200000 {
-> > > -			compatible = "fsl,imx8mq-dwc3", "snps,dwc3";
-> > > +			compatible = "snps,dwc3";
-> > >  			reg = <0x38200000 0x10000>;
-> > >  			clocks = <&clk IMX8MQ_CLK_USB2_CTRL_ROOT>,
-> > >  			         <&clk IMX8MQ_CLK_USB_CORE_REF>,
-> > > --
-> > > 2.37.1
-> > >
-> > >
-> > >
-> 
+-- 
+Thanks,
+JeffXie
