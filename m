@@ -2,61 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78667682F25
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE7F682F32
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 15:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjAaOXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 09:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
+        id S229624AbjAaOZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 09:25:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbjAaOXF (ORCPT
+        with ESMTP id S231453AbjAaOZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 09:23:05 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9CD51C5A;
-        Tue, 31 Jan 2023 06:22:42 -0800 (PST)
-Date:   Tue, 31 Jan 2023 14:22:41 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1675174961;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 31 Jan 2023 09:25:29 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E28551C4F;
+        Tue, 31 Jan 2023 06:24:34 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 7352022B20;
+        Tue, 31 Jan 2023 14:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1675175042; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=QpNIJKaiSPxzce4dG4J7cfut+YjJQ42C6IM37ZHcyFo=;
-        b=gDW+5nJyeqOY4XyKnp0+yZR+EhXwFJRcm+Fv9YIV+E3frxXexh+/xENK+f7DpC8VaYddbm
-        5yZTXLMLqY0kcSo0rdB2ica2nYTLwji9seAdF1iSRGFTlALm/CX3wRX+WmDeCAhd4I0hzl
-        2TmdARkqiNWliM9UE5CjeOGlQbG72pwJOlem35C/Ry5V76efPlt+ZyzxwL2N9hcla9KMth
-        NNViBIlnojHEQeUOGoKVnCrOypsbz118Gob7zYGgfvCONTPd73l8txvyj/BBQStVSnB/Vr
-        3H+eG9pztDaZwHh/xX/Pc6ssn4tnDrnCK36mJlyJA+fjjmxrJoPTTANps1aNAA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1675174961;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QpNIJKaiSPxzce4dG4J7cfut+YjJQ42C6IM37ZHcyFo=;
-        b=gQdFoaxwSU37KGdOlSZHmc+8rY2NbO2X3BJlvzK4rzKcvSeDY1/pWg9X7+RRcpSZJuytTB
-        e9ZvBoCzUPZMO0DA==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/alternatives] x86/static_call: Add support for Jcc tail-calls
-Cc:     "Erhard F." <erhard_f@mailbox.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <Y9Kdg9QjHkr9G5b5@hirez.programming.kicks-ass.net>
-References: <Y9Kdg9QjHkr9G5b5@hirez.programming.kicks-ass.net>
+        bh=2pnGyHfGTSNbv47Fo4KFIPFGOEJ57bu4NsyejObITEY=;
+        b=L32KJ3WRu6pXWQ9gsEwNv7HGM4cgXvkkMAA3bFqLJAbYLyubHZHditddKlffhMBZ1miwkf
+        Br+SPOYWskc5qR1gIgr+3dMbVD+Zkhyl0j8ayyA12gIpgpNBnOVUCJvS8fj3I7wCHGOoz8
+        L1+gPn4k2c8iq3kYQ17muQQ7nvGFVhM=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4690A2C141;
+        Tue, 31 Jan 2023 14:24:02 +0000 (UTC)
+Date:   Tue, 31 Jan 2023 15:23:58 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
+ shadow variables
+Message-ID: <Y9kkflJxq2A9+W8Q@alley>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-5-mpdesouza@suse.com>
+ <20230131044008.atapgt326nsl6fdp@treble>
 MIME-Version: 1.0
-Message-ID: <167517496101.4906.9654598039677692808.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131044008.atapgt326nsl6fdp@treble>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,136 +56,249 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/alternatives branch of tip:
+On Mon 2023-01-30 20:40:08, Josh Poimboeuf wrote:
+> On Wed, Oct 26, 2022 at 04:41:22PM -0300, Marcos Paulo de Souza wrote:
+> > +#define klp_for_each_shadow_type(obj, shadow_type, i)			\
+> > +	for (shadow_type = obj->shadow_types ? obj->shadow_types[0] : NULL, i = 1; \
+> > +	     shadow_type; \
+> > +	     shadow_type = obj->shadow_types[i++])
+> > +
+> > +int klp_shadow_register(struct klp_shadow_type *shadow_type);
+> > +void klp_shadow_unregister(struct klp_shadow_type *shadow_type);
+> 
+> More cases where 'shadow_type' can be shortened to 'type'.
+> (And the same comment elsewhere)
 
-Commit-ID:     923510c88d2b7d947c4217835fd9ca6bd65cc56c
-Gitweb:        https://git.kernel.org/tip/923510c88d2b7d947c4217835fd9ca6bd65cc56c
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Thu, 26 Jan 2023 16:34:27 +01:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Tue, 31 Jan 2023 15:05:31 +01:00
+Works for me.
 
-x86/static_call: Add support for Jcc tail-calls
+> > +
+> >  void *klp_shadow_get(void *obj, struct klp_shadow_type *shadow_type);
+> >  void *klp_shadow_alloc(void *obj, struct klp_shadow_type *shadow_type,
+> >  		       size_t size, gfp_t gfp_flags, void *ctor_data);
+> 
+> I find the type-based interface to be unnecessarily clunky and
+> confusing:
+> 
+> - It obscures the fact that uniqueness is determined by ID, not by type.
+> 
+> - It's weird to be passing around the type even after it has been
+>   registered: e.g., why doesn't klp remember the ctor/dtor?
 
-Clang likes to create conditional tail calls like:
+ctor/dtor must be implemented in each livepatch. klp_shadow_register()
+would need to remember all registered implementations.
+klp_shadow_alloc/get/free would need to find and choose one.
+It would add an extra overhead and non-determines.
 
-  0000000000000350 <amd_pmu_add_event>:
-  350:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1) 351: R_X86_64_NONE      __fentry__-0x4
-  355:       48 83 bf 20 01 00 00 00         cmpq   $0x0,0x120(%rdi)
-  35d:       0f 85 00 00 00 00       jne    363 <amd_pmu_add_event+0x13>     35f: R_X86_64_PLT32     __SCT__amd_pmu_branch_add-0x4
-  363:       e9 00 00 00 00          jmp    368 <amd_pmu_add_event+0x18>     364: R_X86_64_PLT32     __x86_return_thunk-0x4
+The overhead might be negligible. The callbacks should be compatible.
+But still, is it worth the potential troubles?
 
-Where 0x35d is a static call site that's turned into a conditional
-tail-call using the Jcc class of instructions.
+IMHO, it is just about POV. Does it really matter if we pass id or type?
 
-Teach the in-line static call text patching about this.
+Switching to type might be a slight complication for existing API users
+that are used to ID. But we are changing the API anyway.
 
-Notably, since there is no conditional-ret, in that case patch the Jcc
-to point at an empty stub function that does the ret -- or the return
-thunk when needed.
 
-Reported-by: "Erhard F." <erhard_f@mailbox.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Link: https://lore.kernel.org/r/Y9Kdg9QjHkr9G5b5@hirez.programming.kicks-ass.net
----
- arch/x86/kernel/static_call.c | 50 +++++++++++++++++++++++++++++++---
- 1 file changed, 47 insertions(+), 3 deletions(-)
+> - It complicates the registration interface for the normal case where
+>   we normally don't have constructors/destructors.
 
-diff --git a/arch/x86/kernel/static_call.c b/arch/x86/kernel/static_call.c
-index 2ebc338..b70670a 100644
---- a/arch/x86/kernel/static_call.c
-+++ b/arch/x86/kernel/static_call.c
-@@ -9,6 +9,7 @@ enum insn_type {
- 	NOP = 1,  /* site cond-call */
- 	JMP = 2,  /* tramp / site tail-call */
- 	RET = 3,  /* tramp / site cond-tail-call */
-+	JCC = 4,
- };
- 
- /*
-@@ -25,12 +26,40 @@ static const u8 xor5rax[] = { 0x2e, 0x2e, 0x2e, 0x31, 0xc0 };
- 
- static const u8 retinsn[] = { RET_INSN_OPCODE, 0xcc, 0xcc, 0xcc, 0xcc };
- 
-+static u8 __is_Jcc(u8 *insn) /* Jcc.d32 */
-+{
-+	u8 ret = 0;
-+
-+	if (insn[0] == 0x0f) {
-+		u8 tmp = insn[1];
-+		if ((tmp & 0xf0) == 0x80)
-+			ret = tmp;
-+	}
-+
-+	return ret;
-+}
-+
-+extern void __static_call_return(void);
-+
-+asm (".global __static_call_return\n\t"
-+     ".type __static_call_return, @function\n\t"
-+     ASM_FUNC_ALIGN "\n\t"
-+     "__static_call_return:\n\t"
-+     ANNOTATE_NOENDBR
-+     ANNOTATE_RETPOLINE_SAFE
-+     "ret; int3\n\t"
-+     ".size __static_call_return, . - __static_call_return \n\t");
-+
- static void __ref __static_call_transform(void *insn, enum insn_type type,
- 					  void *func, bool modinit)
- {
- 	const void *emulate = NULL;
- 	int size = CALL_INSN_SIZE;
- 	const void *code;
-+	u8 op, buf[6];
-+
-+	if ((type == JMP || type == RET) && (op = __is_Jcc(insn)))
-+		type = JCC;
- 
- 	switch (type) {
- 	case CALL:
-@@ -57,6 +86,20 @@ static void __ref __static_call_transform(void *insn, enum insn_type type,
- 		else
- 			code = &retinsn;
- 		break;
-+
-+	case JCC:
-+		if (!func) {
-+			func = __static_call_return;
-+			if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
-+				func = x86_return_thunk;
-+		}
-+
-+		buf[0] = 0x0f;
-+		__text_gen_insn(buf+1, op, insn+1, func, 5);
-+		code = buf;
-+		size = 6;
-+
-+		break;
- 	}
- 
- 	if (memcmp(insn, code, size) == 0)
-@@ -68,9 +111,9 @@ static void __ref __static_call_transform(void *insn, enum insn_type type,
- 	text_poke_bp(insn, code, size, emulate);
- }
- 
--static void __static_call_validate(void *insn, bool tail, bool tramp)
-+static void __static_call_validate(u8 *insn, bool tail, bool tramp)
- {
--	u8 opcode = *(u8 *)insn;
-+	u8 opcode = insn[0];
- 
- 	if (tramp && memcmp(insn+5, tramp_ud, 3)) {
- 		pr_err("trampoline signature fail");
-@@ -79,7 +122,8 @@ static void __static_call_validate(void *insn, bool tail, bool tramp)
- 
- 	if (tail) {
- 		if (opcode == JMP32_INSN_OPCODE ||
--		    opcode == RET_INSN_OPCODE)
-+		    opcode == RET_INSN_OPCODE ||
-+		    __is_Jcc(insn))
- 			return;
- 	} else {
- 		if (opcode == CALL_INSN_OPCODE ||
+I am sorry but I do not understand this concern. The new API hides
+ctor/dtor into struct klp_shadow_type. It removes one NULL parameter
+from klp_alloc/get/free API. It looks like a simplification to me.
+
+
+> - I don't understand the exposed klp_shadow_{un}register() interfaces.
+>   What's the point of forcing their use if there's no garbage
+>   collection?
+
+I probably do not understand it correctly.
+
+Normal livepatch developers do not need to use klp_shadow_{un}register().
+They are called transparently in __klp_enable_patch()/klp_complete_transition()
+and klp_module_coming()/klp_cleanup_module_patches_limited().
+
+The main reason why they are exposed via include/linux/livepatch.h
+and EXPORT_SYMBOL_GPL() is the selftest lib/livepatch/test_klp_shadow_vars.c.
+
+Well, the selftest probably could be bundled into a livepatch to go
+around this.
+
+
+> - It's internally confusing in klp to have both 'type' and 'type_reg'.
+
+I do not like it much either.
+
+An idea. We could replace "bool registered" with "struct list_head
+register_node" in struct klp_shadow_type. Then we could use it
+for registration.
+
+All the registered types will be in a global list (klp_type_register).
+klp_shadow_unregister() would do the garbage collection when it
+removed the last entry with the given id from the global list.
+
+
+> One question: has anybody actually used destructors in the real world?
+> 
+> > @@ -988,6 +1012,13 @@ static int __klp_enable_patch(struct klp_patch *patch)
+> >  		if (!klp_is_object_loaded(obj))
+> >  			continue;
+> >  
+> > +		ret = klp_register_shadow_types(obj);
+> > +		if (ret) {
+> > +			pr_warn("failed to register shadow types for object '%s'\n",
+> > +				klp_is_module(obj) ? obj->name : "vmlinux");
+> > +			goto err;
+> > +		}
+> > +
+> 
+> If this fails for some reason then the error path doesn't unregister.
+> Presumably klp_register_shadow_types() needs to be self-cleaning on
+> error like klp_patch_object() is.
+
+Good point!
+
+They actually are unregisterd via:
+
+  + __klp_enable_patch()
+    + klp_cancel_transition()    # err: in __klp_enabled_patch()
+      + klp_complete_transition()
+	+ klp_unregister_shadow_types()
+
+But there is a problem. It tries to unregister all types.
+We have to make sure that it does not complain when a type has
+not been registered yet.
+
+> And BTW, it might be easier to do so if klp_shadow_type has a 'reg'
+> pointer to its corresponding reg struct.  Then the 'registered' boolean
+> is no longer needed and klp_shadow_unregister() doesn't need to call
+> klp_shadow_type_get_reg().
+
+Yup. It would be easier also if the use list_head pointing to the
+global register.
+
+> > +++ b/kernel/livepatch/shadow.c
+> 
+> > +static struct klp_shadow_type_reg *
+> > +klp_shadow_type_get_reg(struct klp_shadow_type *shadow_type)
+> > +{
+> > +	struct klp_shadow_type_reg *shadow_type_reg;
+> > +	lockdep_assert_held(&klp_shadow_lock);
+> > +
+> > +	list_for_each_entry(shadow_type_reg, &klp_shadow_types, list) {
+> > +		if (shadow_type_reg->id == shadow_type->id)
+> > +			return shadow_type_reg;
+> > +	}
+> > +
+> > +	return NULL;
+> > +}
+> 
+> It seems like overkill to have both klp_shadow_hash and
+> klp_shadow_types.  For example 'struct klp_shadow' could have a link to
+> its type and then klp_shadow_type_get_reg could iterate through the
+> klp_shadow_hash.
+
+I guess that there is a misunderstanding. We need two databases:
+
+   + One for the registered shadow_types. I does the reference
+     counting. It counts the number of livepatched objects
+     (livepatches) that might the shadow type. It says _when_ the garbage
+     collection must be done.
+
+   + Second for existing shadow variables. It is needed for finding
+     the shadow data. It says _what_ variables have to freed when
+     the garbage collection is being proceed.
+
+
+> > +
+> > +/**
+> > + * klp_shadow_register() - register the given shadow variable type
+> > + * @shadow_type:	shadow type to be registered
+> > + *
+> > + * Tell the system that the given shadow type is going to used by the caller
+> > + * (livepatch module). It allows to check and maintain lifetime of shadow
+> > + * variables.
+> 
+> It's probably worth mentioning here that this function typically isn't
+> called directly by the livepatch, and is only needed if the klp_object
+> doesn't have the type in its 'shadow_types' array.
+
+Yup.
+
+> > + *
+> > + * Return: 0 on suceess, -ENOMEM when there is not enough memory.
+> 
+> "success"
+> 
+> > + */
+> > +int klp_shadow_register(struct klp_shadow_type *shadow_type)
+> > +{
+> > +	struct klp_shadow_type_reg *shadow_type_reg;
+> > +	struct klp_shadow_type_reg *new_shadow_type_reg;
+> > +
+> > +	new_shadow_type_reg =
+> > +		kzalloc(sizeof(struct klp_shadow_type_reg), GFP_KERNEL);
+> > +	if (!new_shadow_type_reg)
+> > +		return -ENOMEM;
+> > +
+> > +	spin_lock_irq(&klp_shadow_lock);
+> > +
+> > +	if (shadow_type->registered) {
+> > +		pr_err("Trying to register shadow variable type that is already registered: %lu",
+> > +		       shadow_type->id);
+> > +		kfree(new_shadow_type_reg);
+> > +		goto out;
+> 
+> Shouldn't this return -EINVAL or so?
+
+Yes, it would make more sense.
+
+> > +	}
+> > +
+> > +	shadow_type_reg = klp_shadow_type_get_reg(shadow_type);
+> > +	if (!shadow_type_reg) {
+> > +		shadow_type_reg = new_shadow_type_reg;
+> > +		shadow_type_reg->id = shadow_type->id;
+> > +		list_add(&shadow_type_reg->list, &klp_shadow_types);
+> > +	} else {
+> > +		kfree(new_shadow_type_reg);
+> > +	}
+> > +
+> > +	shadow_type_reg->ref_cnt++;
+> > +	shadow_type->registered = true;
+> > +out:
+> > +	spin_unlock_irq(&klp_shadow_lock);
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(klp_shadow_register);
+> > +
+> > +void klp_shadow_unregister(struct klp_shadow_type *shadow_type)
+> > +{
+> > +	struct klp_shadow_type_reg *shadow_type_reg;
+> > +
+> > +	spin_lock_irq(&klp_shadow_lock);
+> > +
+> > +	if (!shadow_type->registered) {
+> > +		pr_err("Trying to unregister shadow variable type that is not registered: %lu",
+> > +		       shadow_type->id);
+> > +		goto out;
+> > +	}
+> > +
+> > +	shadow_type_reg = klp_shadow_type_get_reg(shadow_type);
+> > +	if (!shadow_type_reg) {
+> > +		pr_err("Can't find shadow variable type registration: %lu", shadow_type->id);
+> > +		goto out;
+> > +	}
+> 
+> Since it's too late to report these errors and they might indicate a
+> major bug, maybe they should WARN().
+
+This probably won't be needed after we get rid of shadow_type_reg.
+
+Also this is actually a valid scenario. klp_complete_transition()
+might try to unregister a not-yet-registered type. It might happen
+when called from __klp_enabled_patch() error path.
+
+Thanks a lot for the review.
+
+Best Regards,
+Petr
