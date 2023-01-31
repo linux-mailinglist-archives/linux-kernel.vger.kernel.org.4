@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27AF682C80
-	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA887682C83
+	for <lists+linux-kernel@lfdr.de>; Tue, 31 Jan 2023 13:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjAaMYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 07:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S231725AbjAaMZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 07:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbjAaMYf (ORCPT
+        with ESMTP id S230177AbjAaMZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 07:24:35 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D994201;
-        Tue, 31 Jan 2023 04:24:34 -0800 (PST)
+        Tue, 31 Jan 2023 07:25:13 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00CD49437;
+        Tue, 31 Jan 2023 04:25:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675167874; x=1706703874;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B+jzb4I37dNSApzbqADF2C9W9v68b2IUVH3ZFuuIjjs=;
-  b=U5tyjvxutlV+DuFWPQVgGNES23tEt5giL6skrC+WvWcgBANvQJq5ZOlT
-   EhVnAtXwUECWJ9kNJQ03Iqs5V5tS8JT1iYcozF8jvVKBwAF+O44YvTmKb
-   UOr2BAxKSszGICfkfzMZ5fQfPjonbGlARRnxBs3vpaB8UtfMttoZSS6gN
-   +8bBWC+B07+DdyyNSg/d85mChatFzjgQm1X44dbGYHLoA0sTIpQJbcwV8
-   LzMGOBMFjUG4NUpnxvyteLPa47YDKlaLCdLasKMnkLCw8IHXfZA7XQuLg
-   cpeUAu2uKeRby3d/GoVLGW3UZMFxyenQ6EL+hmf1IRElG3sg4pQIEXkVY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="307481917"
+  t=1675167910; x=1706703910;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Xwpytf7n2WVkp5REBbivE5cf38oXPNvYW56xA7xKr2k=;
+  b=lCrGO3LI3Aj0itywazpmJE80skLzQauTMtQjU43Ph2SIIAYasqOer9h2
+   xk/KceaYTqv7j+9S0xis+EGKDVQHBo7L49vHSUV7k24vqIviniFqymG65
+   2yLqJUBSp48EjmGD3UoQefqkLgdAKhJMdTy6IZG1lvwT4a9gUIc3dUbzE
+   Jl1CEDOmnVSRjiX+Efgiydp0L/wwmu0vcZUNDpgJuKkuigVTgMgmaRUjj
+   KArWtMdsyPVlfwRa30YWQmNkJUPGAJRkYSeWcQabak6wmiSOIQPRQjc/w
+   JDvOGF1YB0pw3UAEO2u9QJ7nCrDZGtSQq4kyed7c1wzO7bjuzsGcf18oJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="390188361"
 X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="307481917"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:24:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="993242918"
+   d="scan'208";a="390188361"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:25:10 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="657853563"
 X-IronPort-AV: E=Sophos;i="5.97,261,1669104000"; 
-   d="scan'208";a="993242918"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 31 Jan 2023 04:24:30 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pMpga-000FEz-2w;
-        Tue, 31 Jan 2023 14:24:28 +0200
-Date:   Tue, 31 Jan 2023 14:24:28 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Sahin, Okan" <Okan.Sahin@analog.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v3 3/5] drivers: regulator: Add ADI MAX77541/MAX77540
- Regulator Support
-Message-ID: <Y9kIfEj70XdO3Q/7@smile.fi.intel.com>
-References: <20230118063822.14521-1-okan.sahin@analog.com>
- <20230118063822.14521-4-okan.sahin@analog.com>
- <Y8erlpofdk24vwCC@smile.fi.intel.com>
- <MN2PR03MB5168EC97926AB33D4D806FCCE7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
+   d="scan'208";a="657853563"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.172.41]) ([10.249.172.41])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 04:25:07 -0800
+Message-ID: <8cb478bf-db44-0a8f-8521-771529ca0706@linux.intel.com>
+Date:   Tue, 31 Jan 2023 20:25:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN2PR03MB5168EC97926AB33D4D806FCCE7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, Bjorn Helgaas <bhelgaas@google.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
+ pci_enable_pasid()
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20230130183810.GA1692786@bhelgaas>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230130183810.GA1692786@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 07:20:52AM +0000, Sahin, Okan wrote:
-> On Wed, 18 Jan 2022 11:20 AM
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >On Wed, Jan 18, 2023 at 09:38:10AM +0300, Okan Sahin wrote:
+On 2023/1/31 2:38, Bjorn Helgaas wrote:
+> PCIe r6.0, sec 6.20.1:
+> 
+>    A Function is not permitted to generate Requests using Translated
+>    Addresses and a PASID unless both PASID Enable and Translated
+>    Requests with PASID Enable are Set.
+> 
+> You want AMD graphics devices to do DMA with translated addresses and
+> PASID, right?  pci_enable_pasid() sets PASID Enable
+> (PCI_PASID_CTRL_ENABLE), but I don't see where "Translated Requests
+> with PASID Enable" is set.  We don't even have a #define for it.
+> 
+> I would think we should check "Translated Requests with PASID
+> Supported" before setting "Translated Requests with PASID Enable",
+> too?
 
-...
+This seems to be an ECN for PCIe 5.x:
 
-> >> +		rdev = devm_regulator_register(dev,
-> >> +					       &desc[i], &config);
-> >
-> >This is perfectly one line.
-> Thank you, I will arrange it.
-> >
-> >> +		if (IS_ERR(rdev))
-> >> +			return dev_err_probe(dev, PTR_ERR(rdev),
-> >> +					     "Failed to register regulator\n");
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +}
+https://members.pcisig.com/wg/PCI-SIG/document/14929
 
-> However, this one is not fit when I set max-line-length argument as 80 in
-> checkpatch script. What do you suggest? This line has 99 characters.
+What I read from this ECN is that,
 
-Which line do you refer to?
+With this ECN, translated memory requests for PASIDs are not allowed to
+carry a PASID prefix if "Translated Requests with PASID Enabled" is not
+set. It does not mean whether the device can generate translated memory
+requests for PASID, but whether the memory request can carry a PASID
+prefix.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Best regards,
+baolu
