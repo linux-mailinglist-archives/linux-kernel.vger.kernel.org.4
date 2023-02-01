@@ -2,227 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E04686336
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25932686338
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbjBAJzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
+        id S232171AbjBAJ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:57:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbjBAJzl (ORCPT
+        with ESMTP id S232019AbjBAJ5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:55:41 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289CA518E8
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:55:40 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id o20so28453905lfk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:55:40 -0800 (PST)
+        Wed, 1 Feb 2023 04:57:13 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E27F4FCE4
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:57:12 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id cw4so11954267edb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:57:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gOPXlgNZjtNho8nzp/sMGlDYULpras0FGxK/VYvvstM=;
-        b=YX8ktkNzJZtPZ3Jbj7KrEDO8skM9T914XRHeeK1oBaJRbGWCess/PSYDtNFg7mKxt8
-         y6G0ln1hS5ZYQHzyEiFkaowo//IMfMvWx5NzcjHIv55BR4W1+Xa8ly023lW3LuvEsrC5
-         wgROR9RtxiKQF6n8zSPJ4SkXHguJnoP++KRaq8I4Fh7GOV0tgxAwXNrOVk1371bUXT9u
-         ikglRTLFIyWk2jtT80JmnUysyFkdUlRkby96IksxDp7O+6jD/pwFoopv9npzSubcX3pO
-         7gavGWgLxzxCaYmSYs8GZ0Z9n9gKy+BsyuLUAtM1MtD4844MpOLUTpyo+SoZPecnWCTv
-         mPmw==
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=CbGtVMl4D3yAuumXbuiDf4eoHhp70SUjpqszqwRehuY=;
+        b=ku/8EGPkKZsZ3drqjgkomJrMaaPJk0SMovwbqH7AV+iZKme0iN7iKfGIyD0Aul2xHf
+         nXh3+QWPDODDQpIXtBxlKvPm107LKg+bQq1OM1wCB6D5aj8gW0BB6AHjmhJrRihwb/s1
+         stOyeLCMvIMaQNUB+5vodtt/PNd2e0HwvOi/IpfA67+LmFfnZCGUuhfk/P7406J4s0uu
+         824vZAbc7PYGPSS5QWfE9qgMu2kFF1qEvz4iHtm5xMWPvyEkGypEQANw1UGcv9tjRRrx
+         e5GwGO77i68NEf6fHfIJ1EDrBUGMGwSbMBaG39usiTn6iRvdEpSZZVksKQ11TT8WKYzb
+         ixiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gOPXlgNZjtNho8nzp/sMGlDYULpras0FGxK/VYvvstM=;
-        b=FWwoRWjaujOaQXEoAW59ijchZx+OIU0CsnssXZ7f5vvaA8ObfFHsBmeSUu4zEko3bC
-         HFnoy9J3Vutvxx/DjP5FSsxxenT8oY1QM2moKg9sSZObtuhORAwdggLcwLFD17/PBjcK
-         IgPaF49Fv4z6M9a+WSs2qfsIZbyT3GPWhpYyg2CYZWEBb/h3qn393HKxx+H2+ynSUljp
-         MKqAxV6+CSfXnrMzDDUm9M74b/0UjD5m8s/uwbKnFQdNWp/c7S6mO2QEHRft54RXcHhb
-         xLaa40TaFoB1t0QQpyk4YYUC+PncX+jXbZj4domXh1juEqoKrvBO+MgSyV64Te7b1vYk
-         aSkw==
-X-Gm-Message-State: AO0yUKUtK/V/kOJ+uz04E45zxlKG3NWJqrPMrXfdJiWDyXqKJOMOLTNC
-        fC3vm7OL2Yg9TBjb8Ri88gda/g==
-X-Google-Smtp-Source: AK7set8BI0ZQnFDpVw0CC9Cl2mgE9DoCr+cHoOhlCNRo90UyZJAJErsgJ8Y8LW3PlQlbiJr3qnQY2A==
-X-Received: by 2002:ac2:5a01:0:b0:4b5:987c:de3e with SMTP id q1-20020ac25a01000000b004b5987cde3emr1348094lfn.69.1675245338383;
-        Wed, 01 Feb 2023 01:55:38 -0800 (PST)
-Received: from ta1.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
-        by smtp.gmail.com with ESMTPSA id y7-20020a197507000000b004cc83be556dsm1131634lfe.247.2023.02.01.01.55.37
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CbGtVMl4D3yAuumXbuiDf4eoHhp70SUjpqszqwRehuY=;
+        b=LvXbexaNsjpGVRbzbjLdXy/rNG0sChzIHvavLH8lyLyL/gkeojWOpn++zmDHyYU0r1
+         1I3sLdwK9Cl6EXmwCibOfPP/9hozmk2SuaPjhpeF0sSTSvHZdsFEn7LjC2p6hFA58WON
+         ANMSnRkg2MJyhPdbsKqF0jkFITdEHPbsfulGmChFgiI1AJkoWUMsh8sFSI3eCL65P7Tc
+         5vCIApewyvwlVuyMOoeFzUJVOyg01r/kjIBvsQoybbGn4KBCevB7Yoz/9b7H4eGpRFa9
+         vkL9zEJIpEYc+Fn5E1iUD/1JgO6/d563uGM1ZzuJKOcce9dHNffCdrIazC1xDb28+wOC
+         4KvA==
+X-Gm-Message-State: AO0yUKXda4UQCxDvP2Nl7066V8/RNYZ5+ojRmKE8e31sX2A8+52F8YzE
+        LQb0KVZd6ZdkZTTdbXC6DL9mfg==
+X-Google-Smtp-Source: AK7set8hXkmW8vgNk6vWNpzWGXYB6GZ1r8BKTHUx3yZJbg0dAVcbOw11U87cEtM8NmxoCY47lUQtuQ==
+X-Received: by 2002:a50:d688:0:b0:49c:91d8:e989 with SMTP id r8-20020a50d688000000b0049c91d8e989mr1314187edi.42.1675245430690;
+        Wed, 01 Feb 2023 01:57:10 -0800 (PST)
+Received: from localhost ([79.142.230.49])
+        by smtp.gmail.com with ESMTPSA id 11-20020a170906010b00b0088272bac7c5sm6810698eje.121.2023.02.01.01.57.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 01:55:38 -0800 (PST)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     stable@vger.kernel.org
-Cc:     davem@davemloft.net, kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joneslee@google.com, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH][for stable {4.14, 4.19, 5.4}.y] ipv6: ensure sane device mtu in tunnels
-Date:   Wed,  1 Feb 2023 09:55:33 +0000
-Message-Id: <20230201095533.2628469-1-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+        Wed, 01 Feb 2023 01:57:10 -0800 (PST)
+References: <20230130064404.744600-1-wedsonaf@gmail.com>
+ <20230130064404.744600-3-wedsonaf@gmail.com>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: Re: [PATCH v2 3/5] rust: types: implement `ForeignOwnable` for
+ `Box<T>`
+Date:   Wed, 01 Feb 2023 10:56:24 +0100
+In-reply-to: <20230130064404.744600-3-wedsonaf@gmail.com>
+Message-ID: <87o7qdk8sq.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit d89d7ff01235f218dad37de84457717f699dee79 ]
+Wedson Almeida Filho <wedsonaf@gmail.com> writes:
 
-Another syzbot report [1] with no reproducer hints
-at a bug in ip6_gre tunnel (dev:ip6gretap0)
+> This allows us to hand ownership of Rust dynamically allocated
+> objects to the C side of the kernel.
+>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+> Reviewed-by: Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>
+> ---
 
-Since ipv6 mcast code makes sure to read dev->mtu once
-and applies a sanity check on it (see commit b9b312a7a451
-"ipv6: mcast: better catch silly mtu values"), a remaining
-possibility is that a layer is able to set dev->mtu to
-an underflowed value (high order bit set).
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 
-This could happen indeed in ip6gre_tnl_link_config_route(),
-ip6_tnl_link_config() and ipip6_tunnel_bind_dev()
-
-Make sure to sanitize mtu value in a local variable before
-it is written once on dev->mtu, as lockless readers could
-catch wrong temporary value.
-
-[1]
-skbuff: skb_over_panic: text:ffff80000b7a2f38 len:40 put:40 head:ffff000149dcf200 data:ffff000149dcf2b0 tail:0xd8 end:0xc0 dev:ip6gretap0
-------------[ cut here ]------------
-kernel BUG at net/core/skbuff.c:120
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 10241 Comm: kworker/1:1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Workqueue: mld mld_ifc_work
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : skb_panic+0x4c/0x50 net/core/skbuff.c:116
-lr : skb_panic+0x4c/0x50 net/core/skbuff.c:116
-sp : ffff800020dd3b60
-x29: ffff800020dd3b70 x28: 0000000000000000 x27: ffff00010df2a800
-x26: 00000000000000c0 x25: 00000000000000b0 x24: ffff000149dcf200
-x23: 00000000000000c0 x22: 00000000000000d8 x21: ffff80000b7a2f38
-x20: ffff00014c2f7800 x19: 0000000000000028 x18: 00000000000001a9
-x17: 0000000000000000 x16: ffff80000db49158 x15: ffff000113bf1a80
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff000113bf1a80
-x11: ff808000081c0d5c x10: 0000000000000000 x9 : 73f125dc5c63ba00
-x8 : 73f125dc5c63ba00 x7 : ffff800008161d1c x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff0001fefddcd0 x1 : 0000000100000000 x0 : 0000000000000089
-Call trace:
-skb_panic+0x4c/0x50 net/core/skbuff.c:116
-skb_over_panic net/core/skbuff.c:125 [inline]
-skb_put+0xd4/0xdc net/core/skbuff.c:2049
-ip6_mc_hdr net/ipv6/mcast.c:1714 [inline]
-mld_newpack+0x14c/0x270 net/ipv6/mcast.c:1765
-add_grhead net/ipv6/mcast.c:1851 [inline]
-add_grec+0xa20/0xae0 net/ipv6/mcast.c:1989
-mld_send_cr+0x438/0x5a8 net/ipv6/mcast.c:2115
-mld_ifc_work+0x38/0x290 net/ipv6/mcast.c:2653
-process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
-worker_thread+0x340/0x610 kernel/workqueue.c:2436
-kthread+0x12c/0x158 kernel/kthread.c:376
-ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-Code: 91011400 aa0803e1 a90027ea 94373093 (d4210000)
-
-Fixes: c12b395a4664 ("gre: Support GRE over IPv6")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20221024020124.3756833-1-eric.dumazet@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-[ta: Backport patch for stable kernels < 5.10.y. Fix conflict in
-net/ipv6/ip6_tunnel.c, mtu initialized with:
-mtu = rt->dst.dev->mtu - t_hlen;]
-Cc: <stable@vger.kernel.org> # 4.14.y, 4.19.y, 5.4.y
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- net/ipv6/ip6_gre.c    | 12 +++++++-----
- net/ipv6/ip6_tunnel.c | 10 ++++++----
- net/ipv6/sit.c        |  8 +++++---
- 3 files changed, 18 insertions(+), 12 deletions(-)
-
-diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-index 4a6396d574a0..fd4da1019e44 100644
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -1137,14 +1137,16 @@ static void ip6gre_tnl_link_config_route(struct ip6_tnl *t, int set_mtu,
- 				dev->needed_headroom = dst_len;
- 
- 			if (set_mtu) {
--				dev->mtu = rt->dst.dev->mtu - t_hlen;
-+				int mtu = rt->dst.dev->mtu - t_hlen;
-+
- 				if (!(t->parms.flags & IP6_TNL_F_IGN_ENCAP_LIMIT))
--					dev->mtu -= 8;
-+					mtu -= 8;
- 				if (dev->type == ARPHRD_ETHER)
--					dev->mtu -= ETH_HLEN;
-+					mtu -= ETH_HLEN;
- 
--				if (dev->mtu < IPV6_MIN_MTU)
--					dev->mtu = IPV6_MIN_MTU;
-+				if (mtu < IPV6_MIN_MTU)
-+					mtu = IPV6_MIN_MTU;
-+				WRITE_ONCE(dev->mtu, mtu);
- 			}
- 		}
- 		ip6_rt_put(rt);
-diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
-index 878a08c40fff..acc75975edde 100644
---- a/net/ipv6/ip6_tunnel.c
-+++ b/net/ipv6/ip6_tunnel.c
-@@ -1430,6 +1430,7 @@ static void ip6_tnl_link_config(struct ip6_tnl *t)
- 	struct __ip6_tnl_parm *p = &t->parms;
- 	struct flowi6 *fl6 = &t->fl.u.ip6;
- 	int t_hlen;
-+	int mtu;
- 
- 	memcpy(dev->dev_addr, &p->laddr, sizeof(struct in6_addr));
- 	memcpy(dev->broadcast, &p->raddr, sizeof(struct in6_addr));
-@@ -1472,12 +1473,13 @@ static void ip6_tnl_link_config(struct ip6_tnl *t)
- 			dev->hard_header_len = rt->dst.dev->hard_header_len +
- 				t_hlen;
- 
--			dev->mtu = rt->dst.dev->mtu - t_hlen;
-+			mtu = rt->dst.dev->mtu - t_hlen;
- 			if (!(t->parms.flags & IP6_TNL_F_IGN_ENCAP_LIMIT))
--				dev->mtu -= 8;
-+				mtu -= 8;
- 
--			if (dev->mtu < IPV6_MIN_MTU)
--				dev->mtu = IPV6_MIN_MTU;
-+			if (mtu < IPV6_MIN_MTU)
-+				mtu = IPV6_MIN_MTU;
-+			WRITE_ONCE(dev->mtu, mtu);
- 		}
- 		ip6_rt_put(rt);
- 	}
-diff --git a/net/ipv6/sit.c b/net/ipv6/sit.c
-index 117d374695fe..1179608955f5 100644
---- a/net/ipv6/sit.c
-+++ b/net/ipv6/sit.c
-@@ -1083,10 +1083,12 @@ static void ipip6_tunnel_bind_dev(struct net_device *dev)
- 
- 	if (tdev && !netif_is_l3_master(tdev)) {
- 		int t_hlen = tunnel->hlen + sizeof(struct iphdr);
-+		int mtu;
- 
--		dev->mtu = tdev->mtu - t_hlen;
--		if (dev->mtu < IPV6_MIN_MTU)
--			dev->mtu = IPV6_MIN_MTU;
-+		mtu = tdev->mtu - t_hlen;
-+		if (mtu < IPV6_MIN_MTU)
-+			mtu = IPV6_MIN_MTU;
-+		WRITE_ONCE(dev->mtu, mtu);
- 	}
- }
- 
--- 
-2.39.1.519.gcb327c4b5f-goog
+> v1 -> v2: Add `use alloc::boxed::Box`, which wasn't needed before
+>
+>  rust/kernel/types.rs | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> index 72710b7442a3..411655eca3e9 100644
+> --- a/rust/kernel/types.rs
+> +++ b/rust/kernel/types.rs
+> @@ -2,6 +2,7 @@
+>  
+>  //! Kernel types.
+>  
+> +use alloc::boxed::Box;
+>  use core::{
+>      cell::UnsafeCell,
+>      mem::MaybeUninit,
+> @@ -62,6 +63,28 @@ pub trait ForeignOwnable: Sized {
+>      unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self;
+>  }
+>  
+> +impl<T: 'static> ForeignOwnable for Box<T> {
+> +    type Borrowed<'a> = &'a T;
+> +
+> +    fn into_foreign(self) -> *const core::ffi::c_void {
+> +        Box::into_raw(self) as _
+> +    }
+> +
+> +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> &'a T {
+> +        // SAFETY: The safety requirements for this function ensure that the object is still alive,
+> +        // so it is safe to dereference the raw pointer.
+> +        // The safety requirements of `from_foreign` also ensure that the object remains alive for
+> +        // the lifetime of the returned value.
+> +        unsafe { &*ptr.cast() }
+> +    }
+> +
+> +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self {
+> +        // SAFETY: The safety requirements of this function ensure that `ptr` comes from a previous
+> +        // call to `Self::into_foreign`.
+> +        unsafe { Box::from_raw(ptr as _) }
+> +    }
+> +}
+> +
+>  /// Runs a cleanup function/closure when dropped.
+>  ///
+>  /// The [`ScopeGuard::dismiss`] function prevents the cleanup function from running.
 
