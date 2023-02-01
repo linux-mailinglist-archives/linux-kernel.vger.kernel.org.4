@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B04D686A0E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BF1686A13
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjBAPVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S232344AbjBAPVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjBAPV1 (ORCPT
+        with ESMTP id S232380AbjBAPV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 10:21:27 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AAE1F5DF
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 07:21:20 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1733045wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 07:21:20 -0800 (PST)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB4BB76A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 07:21:21 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id k8-20020a05600c1c8800b003dc57ea0dfeso1676387wms.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 07:21:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2xDvLHuSGsMQKguNv/ZDYnaK3vl6YmrvH8TUn7lN/FY=;
-        b=ri9kKbfu+aKtCgfFQ3b+hJFuijuObx43Lc2YSA9UfBT0hOv/dGQHEzZncqnvQlInoq
-         cmr/thH3pgX8mQXVtBsu4NQhfQf3M2fsSpAPeHBfgTGzuX0VsrO7TxqlT7jULieesbeS
-         UMfl5KWeYdFK7tL1Pr+rhd4NGmMhj8Q9WhTwsk41F3o2WZiK8QZMAH3h8zp0AIZru8CR
-         8eVL7Obr1Udvp7zb7Ph8Gdta395DpPGmBEk19l4yRxRcDcgKXlYW2yxEuLMwFenmx8OY
-         DLA1BFmXPHDKra6G/evSyZGpYdAXL4dUjKdbVrSJ4sgbpd61ihULCL4PDR3Db/HAiujz
-         f3Gw==
+        bh=NfiAJhWCSMgCEcGEAhFzJhf5R1x05G+rWIUQ9Ziqj6k=;
+        b=x+9NnYk7j0azIF0oaj/wBp5N+RsuvyR7zMLKMnKU6GxSLUW8uyh0b2cp6v7jXc0+Ua
+         2ORp09r5Rw87cGjGuxaoJHwrFcCPB48cWWsWpYkmUt8FV6heeqyP30AB1gXR1slTMT49
+         58SWaNC4Spz7agvhGgP92ICVRUkfcz+WTZpFISgoiVGXt0LslmWfwKD6Ey61/UnE1M4K
+         GD0PGP1hKJu/5Fzj2UpdNMx/NSykD/mTr+t1EDGbHGA+gFWl28SSwdi6bD+ZLlXqplFH
+         QWwEX5D2UUZJ04/DUhfn+DalN4Afq5uV6BfZpSnj6EfjAlV0YS/eGWNICyl7VOLooPaj
+         CaUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2xDvLHuSGsMQKguNv/ZDYnaK3vl6YmrvH8TUn7lN/FY=;
-        b=NbfNBhPphyu4s45kzrmw0T+YY8OqoqonHCglbEN0SxMHoLoNVN782D15Hy6q/W5iN3
-         FjZfAUdKePQUUoYJveTa3OuMlY1F30rRUDr1yjk3u89EWYXWR88bF4izXMiFJucsg1I5
-         Q/WPGTuPnNru8sQ1ob0KuunNHuHNeTji3U5AhzD0NcezjW7VWUxfR5en1yB4OVbkXvdH
-         Mn6UHDjSnWmtSLzI+/Nw+KjNckVraZloufHqrQ9bQiEKXa0KTxmEmWS+FTIp001n6ZOa
-         Ui9ScMiUAAYCuORvJ6VoNuQUcBezt+92afE1EdK9hjGI+fMJeHogCevGrPoiN4n7+w4q
-         KRSw==
-X-Gm-Message-State: AO0yUKXD7RsBaZmu5k5eD3QJMNM/+U8sb8pNXmOl/slMn4+XyqVhwpNx
-        1pNyt1cYBVyI5NXES+cLMqT4Tg==
-X-Google-Smtp-Source: AK7set+jfKlYb3NXWvKe2s/DXGOiOakAnv5/vjFBeBy/gDlWR91/U8D7AX2C9qnM4Wt9OKa/cUTOdQ==
-X-Received: by 2002:a05:600c:358a:b0:3da:fcb7:39e5 with SMTP id p10-20020a05600c358a00b003dafcb739e5mr2596926wmq.23.1675264879054;
-        Wed, 01 Feb 2023 07:21:19 -0800 (PST)
+        bh=NfiAJhWCSMgCEcGEAhFzJhf5R1x05G+rWIUQ9Ziqj6k=;
+        b=XBU2n+yVgmMJ5HGaVTT3IHdgTJRSUxE5tD/7MiT6h3wCK++l/BwtqoKq1wqkD0LvBw
+         OR3E3gscD5P6UR6dG/SFzm1Wz9urRnZP+W3Ik0n4c0Py1UIRgjLpmTpOhp5rEmnW7z8/
+         TzxePVmTghKLjevnTtH8Qtvh+be9ZdrScGicWmN+2nV/PbLOTTS2US9CZz19rLLI+3b0
+         Dg0BJAON8qGRIsi1p2ktyj40wk9BGt8C7F+xjOQfbK6DBRiOsR6+dsYTs+7DuT4dtue5
+         BAIxfiaxWkBCierL6HE80tLf7om8xt5JoQuvn4CgE0+VoQziZM0blML4TmKWsdHfO0Tn
+         gHDg==
+X-Gm-Message-State: AO0yUKUbajsYZwaxtqy2AvGeCmxQVrtLEoDfDoMBqv9Yvb+dSfkoqyNH
+        48pHWv2zLChvJrdTCzZ048U2cw==
+X-Google-Smtp-Source: AK7set9tX6J/22MdEHrh5v8f/7/SM5D41B6DcAA0B8xBdCcFkBIXcZ4hctkopjCq1xzU56oMCYRedw==
+X-Received: by 2002:a05:600c:511f:b0:3dc:55d9:ec8 with SMTP id o31-20020a05600c511f00b003dc55d90ec8mr2504689wms.41.1675264880047;
+        Wed, 01 Feb 2023 07:21:20 -0800 (PST)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d64:a4e6:40a8:8e69])
-        by smtp.gmail.com with ESMTPSA id j19-20020a05600c42d300b003dc53217e07sm1893120wme.16.2023.02.01.07.21.18
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c42d300b003dc53217e07sm1893120wme.16.2023.02.01.07.21.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 07:21:18 -0800 (PST)
+        Wed, 01 Feb 2023 07:21:19 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 3/5] dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-sa8775p compatible
-Date:   Wed,  1 Feb 2023 16:20:36 +0100
-Message-Id: <20230201152038.203387-4-brgl@bgdev.pl>
+Subject: [PATCH v3 4/5] dt-bindings: arm: qcom: add the sa8775p-ride board
+Date:   Wed,  1 Feb 2023 16:20:37 +0100
+Message-Id: <20230201152038.203387-5-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230201152038.203387-1-brgl@bgdev.pl>
 References: <20230201152038.203387-1-brgl@bgdev.pl>
@@ -83,26 +83,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Add a compatible for the sa8775p platform's KPSS watchdog.
+Document the sa8775p SoC and its reference board: sa8775p-ride.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-index d8ac0be36e6c..27fb484d5f8d 100644
---- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-@@ -18,6 +18,7 @@ properties:
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 22553637c519..6709e64a4480 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -49,6 +49,7 @@ description: |
+         qru1000
+         sa8155p
+         sa8540p
++        sa8775p
+         sc7180
+         sc7280
+         sc8180x
+@@ -89,6 +90,7 @@ description: |
+         liquid
+         mtp
+         qrd
++        ride
+         sbc
+         x100
+ 
+@@ -805,6 +807,11 @@ properties:
+               - qcom,sa8540p-ride
+           - const: qcom,sa8540p
+ 
++      - items:
++          - enum:
++              - qcom,sa8775p-ride
++          - const: qcom,sa8775p
++
        - items:
            - enum:
-               - qcom,apss-wdt-qcs404
-+              - qcom,apss-wdt-sa8775p
-               - qcom,apss-wdt-sc7180
-               - qcom,apss-wdt-sc7280
-               - qcom,apss-wdt-sc8180x
+               - google,cheza
 -- 
 2.37.2
 
