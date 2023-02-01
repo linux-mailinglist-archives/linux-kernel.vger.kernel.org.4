@@ -2,124 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96021686475
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E8F686472
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbjBAKig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S232146AbjBAKiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:38:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231946AbjBAKiH (ORCPT
+        with ESMTP id S232022AbjBAKiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:38:07 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35E661BD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:37:58 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id r9so15324130oig.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:37:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ufispace-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V9HXHdBtE5H4bl8z/S/UD0KX8Uzi+CVOeWYp/70CnSU=;
-        b=6xUaW2l5sWqpJ9TK3pv/glxvIHBTA8EnnmR+lTHKGUThsQKl5pk2G//7BD7YWy1XC4
-         kfnM0sOkk6wZW8fZ0tVL8rtT3hSIvQudjtBaLzShMDy+OmCERyzmgKkjV53+fp9NFgwR
-         4FtTNbTX90KlCL+IQX4+cSt1tWfq2npLAQtMryHUeZSmh07M84IVN/tAg/Ce1+x1jZ27
-         VjuCrUvk9ImitmogqZUoWkIZ8v4l1Og7luvlxkY1oBrtrgs1jydber4iMOqzeuEugkmB
-         5PzOQylKm3xsGSryk1ic3Plp6ZxKDf1vwvRhUjIZB0OggVXO4+XYbhQX/Ia7kYHKWMFc
-         GIvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V9HXHdBtE5H4bl8z/S/UD0KX8Uzi+CVOeWYp/70CnSU=;
-        b=r71Mhuieka93JA7GIa2OykvV6VtAIK7XHni7PC/DYk4hojRlgPmTcacUld3EFdc0aA
-         DcwrHi3kSeKUYpN5/IN9MM65D4sdUtzzs1h2ohq+C2krkYHdZclXa4uLQ9v7Rex8RILW
-         MyQy0eS6nqkDUdKwX9Z0C8li7UjnORbmhTYT00D8XUKWK+y2Qo/Dj8Qs9kwHhqbAt/cJ
-         sSgVKXF+nJ2ZZ2yyzAIr12qRYAV7pmF2KgVITJlX8xH2EMFaiEd+duIhKPzD4ea6H2WF
-         49NQLmomfmcAQlDdzWFMTIUpofQRTNU5rG/aNC4tvUW6ognp7/ozzX8bMvm7tHP2EGgC
-         9itA==
-X-Gm-Message-State: AO0yUKVhivHPSqCMuHtQTsJ25idGWzz9DqU5a+mm7rElawVSQVbcQy9z
-        5u0Xzyw1ZjiS1xADXK980Hb9wk/d1/oAFLnBPjOcmg==
-X-Google-Smtp-Source: AK7set9uClQE84nhhdw56rlphOg08vTFoT3Prz55IEhG5el860pUruT6tsfWOA+cHt+lT7rtFaHQAc0KJmxs3Zn/kg0=
-X-Received: by 2002:a05:6808:d4b:b0:378:7ba4:b818 with SMTP id
- w11-20020a0568080d4b00b003787ba4b818mr146767oik.144.1675247878050; Wed, 01
- Feb 2023 02:37:58 -0800 (PST)
+        Wed, 1 Feb 2023 05:38:01 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF85CE58
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:37:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C6CFF3370C;
+        Wed,  1 Feb 2023 10:37:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675247868; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7dknyLkO73ygt9vBhoceK7Ye2jngYAD05fHku6QQaSY=;
+        b=K8StW1l2cdNxZxs+GDvb44NHOFDZYqjDdcHmqps9gFa5H8tNVUYPDcwKz9+lqX3+nkwE3C
+        f7k8kplVFFtTj/Qj0ZZzvRn5VWUIphp5bIc74vfIKm9GxE36D8kI96gUFpvg9tSPTeUBmJ
+        3J2aDJx1Rms9jrWBBUHswsvFslQykhQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675247868;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7dknyLkO73ygt9vBhoceK7Ye2jngYAD05fHku6QQaSY=;
+        b=23PuvmDkNBVnzIG2NJqs3GcM5hue36Pn8MrUBdTC4h/94lsKtt8LuW/L/y5/nZaKybqVmJ
+        hF7gHaeCX2j4ucCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 983A313A10;
+        Wed,  1 Feb 2023 10:37:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tZu8I/xA2mPcBQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 01 Feb 2023 10:37:48 +0000
+Message-ID: <857f4b92-fba7-0afe-55d9-52e84543e58f@suse.de>
+Date:   Wed, 1 Feb 2023 11:37:48 +0100
 MIME-Version: 1.0
-References: <20230119102102.73414-1-jordan.chang@ufispace.com>
- <20230119102102.73414-4-jordan.chang@ufispace.com> <3e242c03-f8fd-2136-0263-2306acb9f610@linaro.org>
- <CAJ3czeT1O3iw2S_SK3z0C6dMiJ+-fUrWXPox4LJpJkMy_rVsJA@mail.gmail.com> <307017b7-2ecf-2ce5-4031-27bb6f09feb1@linaro.org>
-In-Reply-To: <307017b7-2ecf-2ce5-4031-27bb6f09feb1@linaro.org>
-From:   Jordan Chang <jordan.chang@ufispace.com>
-Date:   Wed, 1 Feb 2023 18:37:47 +0800
-Message-ID: <CAJ3czeS7y6xj+DAJy66oujOfk73kAaJWiQsWAwL-4D2CaFimJg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ARM: dts: aspeed: Add device tree for Ufispace
- NCPLite BMC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        robh+dt@kernel.org, jay.tc.lin@ufispace.com,
-        eason.ys.huang@ufispace.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 2/2] accel/ivpu: avoid duplciate assignment
+Content-Language: en-US
+To:     Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Krystian Pradzynski <krystian.pradzynski@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230126163804.3648051-1-arnd@kernel.org>
+ <20230126163804.3648051-2-arnd@kernel.org>
+ <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------mbh0nDHae58PyReWvashjCa7"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------mbh0nDHae58PyReWvashjCa7
+Content-Type: multipart/mixed; boundary="------------mDyCDoTDlytybpA01dMLZzzG";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+ Arnd Bergmann <arnd@kernel.org>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ Oded Gabbay <ogabbay@kernel.org>, Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
+ Krystian Pradzynski <krystian.pradzynski@linux.intel.com>,
+ Arnd Bergmann <arnd@arndb.de>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <857f4b92-fba7-0afe-55d9-52e84543e58f@suse.de>
+Subject: Re: [PATCH 2/2] accel/ivpu: avoid duplciate assignment
+References: <20230126163804.3648051-1-arnd@kernel.org>
+ <20230126163804.3648051-2-arnd@kernel.org>
+ <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
+In-Reply-To: <92f5faec-7fd5-4205-0b0f-1ed15626c30b@linux.intel.com>
 
-Thanks for your reply.
+--------------mDyCDoTDlytybpA01dMLZzzG
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On Wed, Feb 1, 2023 at 6:14 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 01/02/2023 11:06, Jordan Chang wrote:
-> >>> +     gpio-keys {
-> >>> +             compatible = "gpio-keys";
-> >>> +
-> >>> +             fan-status-int-l {
-> >>
-> >> Does not look like you tested the DTS against bindings. Please run `make
-> >> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-> >> for instructions).
-> >>
-> >> These will bring warnings. Missing generic name,
-> >>
-> > I have run the `make dtbs_check` command, and did not notice the warning
-> > message 'Missing generic name'. It shows lots of compatible failed messages.
-> > - /ahb/ftgmac@1e670000: failed to match any schema with compatible:
->
-> You can run it with DT_SCHEMA_FILES=gpio-keys
-I see. Will fix the naming issue.
+DQoNCkFtIDMxLjAxLjIzIHVtIDE1OjAwIHNjaHJpZWIgSmFjZWsgTGF3cnlub3dpY3o6DQo+
+IEFwcGxpZWQgdG8gZHJtLW1pc2MtbmV4dC4gVGhhbmtzLg0KDQpJIGhhdmUgY2hlcnJ5LXBp
+Y2tlZCB0aGUgcGF0Y2ggaW50byBkcm0tbWlzYy1uZXh0LWZpeGVzLg0KDQo+IA0KPiBPbiAy
+Ni4wMS4yMDIzIDE3OjM3LCBBcm5kIEJlcmdtYW5uIHdyb3RlOg0KPj4gRnJvbTogQXJuZCBC
+ZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4+DQo+PiBXaXRoIGV4dHJhIHdhcm5pbmdzIGVu
+YWJsZWQsIGdjYyB3YXJucyBhYm91dCB0d28gYXNzaWdubWVudHMNCj4+IG9mIHRoZSBzYW1l
+IC5tbWFwIGNhbGxiYWNrOg0KPj4NCj4+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkcml2ZXJz
+L2FjY2VsL2l2cHUvaXZwdV9kcnYuYzoxMDoNCj4+IGluY2x1ZGUvZHJtL2RybV9hY2NlbC5o
+OjMxOjI3OiBlcnJvcjogaW5pdGlhbGl6ZWQgZmllbGQgb3ZlcndyaXR0ZW4gWy1XZXJyb3I9
+b3ZlcnJpZGUtaW5pdF0NCj4+ICAgICAzMSB8ICAgICAgICAgLm1tYXAgICAgICAgICAgID0g
+ZHJtX2dlbV9tbWFwDQo+PiAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+
+fn5+fn5+fn5+fg0KPj4gZHJpdmVycy9hY2NlbC9pdnB1L2l2cHVfZHJ2LmM6MzYwOjk6IG5v
+dGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyAnRFJNX0FDQ0VMX0ZPUFMnDQo+PiAgICAzNjAg
+fCAgICAgICAgIERSTV9BQ0NFTF9GT1BTLA0KPj4gICAgICAgIHwgICAgICAgICBefn5+fn5+
+fn5+fn5+fg0KPj4NCj4+IFJlbW92ZSB0aGUgdW51c2VkIGxvY2FsIGFzc2lnbm1lbnQuDQo+
+Pg0KPj4gRml4ZXM6IDIwNzA5YWE5NDM1YiAoImFjY2VsOiBBZGQgLm1tYXAgdG8gRFJNX0FD
+Q0VMX0ZPUFMiKQ0KPj4gU2lnbmVkLW9mZi1ieTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5k
+Yi5kZT4NCj4+IC0tLQ0KPj4gICBkcml2ZXJzL2FjY2VsL2l2cHUvaXZwdV9kcnYuYyB8IDEg
+LQ0KPj4gICAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPj4NCj4+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL2FjY2VsL2l2cHUvaXZwdV9kcnYuYyBiL2RyaXZlcnMvYWNjZWwvaXZw
+dS9pdnB1X2Rydi5jDQo+PiBpbmRleCAyYmMyZjFiOTA2NzEuLmEyOWU4ZWUwZGNlNiAxMDA2
+NDQNCj4+IC0tLSBhL2RyaXZlcnMvYWNjZWwvaXZwdS9pdnB1X2Rydi5jDQo+PiArKysgYi9k
+cml2ZXJzL2FjY2VsL2l2cHUvaXZwdV9kcnYuYw0KPj4gQEAgLTM1Niw3ICszNTYsNiBAQCBp
+bnQgaXZwdV9zaHV0ZG93bihzdHJ1Y3QgaXZwdV9kZXZpY2UgKnZkZXYpDQo+PiAgIA0KPj4g
+ICBzdGF0aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBpdnB1X2ZvcHMgPSB7DQo+
+PiAgIAkub3duZXIJCT0gVEhJU19NT0RVTEUsDQo+PiAtCS5tbWFwICAgICAgICAgICA9IGRy
+bV9nZW1fbW1hcCwNCj4+ICAgCURSTV9BQ0NFTF9GT1BTLA0KPj4gICB9Ow0KPj4gICANCg0K
+LS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VT
+RSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQw
+OSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2No
+w6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
->
->
-> >>> +
-> >>> +&i2c4 {
-> >>> +     status = "okay";
-> >>> +
-> >>> +     psu@58 {
-> >>> +             compatible = "pmbus";
-> >>
-> >> Where is this compatible documented?
-> > Can not find the corresponding document.
-> >>
-> >> Did you run checkpatch? Did it pass without warnings?
-> > Yes, I did run the ./scripts/checkpatch.pl and there were two warnings left.
-> > - WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-> > - WARNING: line length of 104 exceeds 100 columns
-> > I just ignore those warnings that Joel has informed me in the previous
-> > mail loop.
-> >
->
-> Hm, is it then correct compatible?
-I think it might be since it did not show the fail message.
+--------------mDyCDoTDlytybpA01dMLZzzG--
 
-Best regards,
-Jordan Chang
+--------------mbh0nDHae58PyReWvashjCa7
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmPaQPwFAwAAAAAACgkQlh/E3EQov+Ai
+6A//cMMsJ4AvQxwOKxpV+caBp18tLIC1n+76EBkATeS137PYg67IypnbTLqxGPHg49U7Lo8p+YUY
+YZiXk68URCw7m+eNSHQ3+3cPXZMO83eEJA2DGcS3iX94rCmAzR0a/lb/B9wOeA8Tba6o0HS9lFa3
+SVPCe8upp5atqd3NQWj5CFdXcu6OeDD2Raz/iCuAZab3rdBCDI9AE7yGCr6uvRVreG3Ux3Lb7NwC
+VImhyreXRTkSJ0xJZ2LIqYgDVKqSp/W2SRTU0O4eR7n3amsKIkn2M0Lw1PDSLLXVXne5K8QEL5iw
+ouoFnRuJvUyo9AFGPqkDu+fuf2uzksCUsQOb9ICMqTxBC7cfZJl5relVnUyh3kUYPk52sVuTz35p
+zGcq7Ozvn2VPa8yj9zA0KnpyivPEoJbFu/Dafd4II8CcJ8QQxhpQ131GIeY45E/l7KS3AJPPB7//
+guckXhSAFjTuH9twIgZPtqNX0rBhhlvxvpMQL23VG7q0PrG2zjITWIuN8hu8Za5e9sxZBSdU9K07
+RSEze8DIZKR8m0M0PzJpTVX1Rqty8qubbwleddoEefq+kg/pUvD6vLyDWaR14DbIko+ohq1MGAM7
+077FXhmU+Z86f3CRHvQjFCm5YR8hoxIJ7IOQqvfLsrhshns08sduPP3YndSvGp+q2wSsmRcVTabW
+WBM=
+=XwQL
+-----END PGP SIGNATURE-----
+
+--------------mbh0nDHae58PyReWvashjCa7--
