@@ -2,110 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C95685D4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 03:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E40685D50
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 03:23:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbjBACWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 21:22:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S231660AbjBACXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 21:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjBACW1 (ORCPT
+        with ESMTP id S229863AbjBACXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 21:22:27 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D859A183;
-        Tue, 31 Jan 2023 18:22:25 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 31 Jan 2023 21:23:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDD91351B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 18:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675218168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2C4BiigdKT84bDNRIWzBmLkBfIRGo6QWd2Ll/wDEDrM=;
+        b=Pjh5mxwFWIvX/xkPT06+g4Ey1qrBwJ0fvc83yjRkpG/J0ZmWvadP413ZHOvyCnDjeJanin
+        Gv153xfRqWFutPsagn143Q/lfsHMVKqkpuzJEe4wZpcuZirpdF8ooGzO6x/zBHmGhKGY0N
+        xNfp65pIJiAFS8QfdZFKw6WpHOZObPE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-550-2PwwgUdlNuuiJGVcyD99RQ-1; Tue, 31 Jan 2023 21:22:45 -0500
+X-MC-Unique: 2PwwgUdlNuuiJGVcyD99RQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4P65KW3Yw1z6FMyr;
-        Wed,  1 Feb 2023 10:22:23 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl2.zte.com.cn with SMTP id 3112MIjp082981;
-        Wed, 1 Feb 2023 10:22:19 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 1 Feb 2023 10:22:19 +0800 (CST)
-Date:   Wed, 1 Feb 2023 10:22:19 +0800 (CST)
-X-Zmail-TransId: 2af963d9ccdb3c5e9129
-X-Mailer: Zmail v1.0
-Message-ID: <202302011022199155711@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <clm@fb.com>
-Cc:     <josef@toxicpanda.com>, <dsterba@suse.com>,
-        <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBCdHJmczogZml4IGNvbXBpbGUgZXJyb3IgYWJvdXQgdW5pbml0aWFsaXplZCB2YXJpYWJsZQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 3112MIjp082981
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63D9CCDF.000 by FangMail milter!
-X-FangMail-Envelope: 1675218143/4P65KW3Yw1z6FMyr/63D9CCDF.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63D9CCDF.000/4P65KW3Yw1z6FMyr
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE2773806622;
+        Wed,  1 Feb 2023 02:22:44 +0000 (UTC)
+Received: from [10.22.9.39] (unknown [10.22.9.39])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7349F492B05;
+        Wed,  1 Feb 2023 02:22:44 +0000 (UTC)
+Message-ID: <66cdf2e8-f1aa-5dfe-cd2e-0e37dc0ae799@redhat.com>
+Date:   Tue, 31 Jan 2023 21:22:44 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/2] cpuset: Call set_cpus_allowed_ptr() with appropriate
+ mask for task
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, Peter Zijlstra <peterz@infradead.org>,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+References: <20230131221719.3176-1-will@kernel.org>
+ <20230131221719.3176-3-will@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230131221719.3176-3-will@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On 1/31/23 17:17, Will Deacon wrote:
+> set_cpus_allowed_ptr() will fail with -EINVAL if the requested
+> affinity mask is not a subset of the task_cpu_possible_mask() for the
+> task being updated. Consequently, on a heterogeneous system with cpusets
+> spanning the different CPU types, updates to the cgroup hierarchy can
+> silently fail to update task affinities when the effective affinity
+> mask for the cpuset is expanded.
+>
+> For example, consider an arm64 system with 4 CPUs, where CPUs 2-3 are
+> the only cores capable of executing 32-bit tasks. Attaching a 32-bit
+> task to a cpuset containing CPUs 0-2 will correctly affine the task to
+> CPU 2. Extending the cpuset to CPUs 0-3, however, will fail to extend
+> the affinity mask of the 32-bit task because update_tasks_cpumask() will
+> pass the full 0-3 mask to set_cpus_allowed_ptr().
+>
+> Extend update_tasks_cpumask() to take a temporary 'cpumask' paramater
+> and use it to mask the 'effective_cpus' mask with the possible mask for
+> each task being updated.
+>
+> Fixes: 431c69fac05b ("cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()")
+> Signed-off-by: Will Deacon <will@kernel.org>
+> ---
+>
+> Note: We wondered whether it was worth calling guarantee_online_cpus()
+> if the cpumask_and() returns 0 in update_tasks_cpumask(), but given that
+> this path is only called when the effective mask changes, it didn't
+> seem appropriate. Ultimately, if you have 32-bit tasks attached to a
+> cpuset containing only 64-bit cpus, then the affinity is going to be
+> forced.
 
-fs/btrfs/tree-log.c:6166:6: note: 'last_range_start' was declared here
-fs/btrfs/volumes.c:2598:27: note: 'seed_devices' was declared here
-fs/btrfs/send.c:1909:13: error: 'right_gen' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+Now I see how the sched_setaffinity() change is impacting arm64. Instead 
+of putting in the bandage in cpuset. I would suggest doing another cpu 
+masking in __set_cpus_allowed_ptr() similar to what is now done for 
+user_cpus_ptr.
 
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- fs/btrfs/send.c     | 2 +-
- fs/btrfs/tree-log.c | 2 +-
- fs/btrfs/volumes.c  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Another suggestion that I have is to add a helper like 
+has_task_cpu_possible_mask() that returns a true/false value. In this 
+way, we only need to do an additional masking if we have some mismatched 
+32-bit only cpus available in the system running 32-bit binaries so that 
+we can skip this step in most cases compiling them out in non-arm64 systems.
 
-diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
-index c3146ce84156..3c9f2d30065d 100644
---- a/fs/btrfs/send.c
-+++ b/fs/btrfs/send.c
-@@ -1875,7 +1875,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen,
- 	int left_ret;
- 	int right_ret;
- 	u64 left_gen;
--	u64 right_gen;
-+	u64 right_gen = 0;
- 	struct btrfs_inode_info info;
+By doing that, we may be able to remove some of the existing usages of 
+task_cpu_possible_mask().
 
- 	ret = get_inode_info(sctx->send_root, ino, &info);
-diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 200cea6e49e5..b91fa398b814 100644
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -6163,7 +6163,7 @@ static int log_delayed_deletions_incremental(struct btrfs_trans_handle *trans,
- {
- 	struct btrfs_root *log = inode->root->log_root;
- 	const struct btrfs_delayed_item *curr;
--	u64 last_range_start;
-+	u64 last_range_start = 0;
- 	u64 last_range_end = 0;
- 	struct btrfs_key key;
+Thought?
 
-diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-index 83cb2db43779..1298569cf8b5 100644
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -2595,7 +2595,7 @@ int btrfs_init_new_device(struct btrfs_fs_info *fs_info, const char *device_path
- 	struct block_device *bdev;
- 	struct super_block *sb = fs_info->sb;
- 	struct btrfs_fs_devices *fs_devices = fs_info->fs_devices;
--	struct btrfs_fs_devices *seed_devices;
-+	struct btrfs_fs_devices *seed_devices = NULL;
- 	u64 orig_super_total_bytes;
- 	u64 orig_super_num_devices;
- 	int ret = 0;
--- 
-2.25.1
+Cheers,
+Longman
+
