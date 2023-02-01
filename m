@@ -2,70 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D732A6863AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04FFE686385
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbjBAKQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
+        id S231917AbjBAKP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbjBAKQe (ORCPT
+        with ESMTP id S230236AbjBAKPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:16:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41EF3EFD5;
-        Wed,  1 Feb 2023 02:16:33 -0800 (PST)
+        Wed, 1 Feb 2023 05:15:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E952ED46;
+        Wed,  1 Feb 2023 02:15:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80AFB61751;
-        Wed,  1 Feb 2023 10:16:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A0EFC4332D;
-        Wed,  1 Feb 2023 10:16:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57C6CB8212E;
+        Wed,  1 Feb 2023 10:15:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD693C433EF;
+        Wed,  1 Feb 2023 10:15:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675246592;
-        bh=3ZA4545fQI8S0sUIbvtn7IX3oT84gFcfHkjp0CW1z7w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jnusNns8+ekGRz4eU3QdosvcxStBjz1nldTspeKVFXVxeH8ttnwipe47M45dIUapq
-         XxeZhkwuZReM+XE1jUKbvMh0DLijmPNKTftg54EFrc3sawKeP9YvMdsv+6EKP/+Zlx
-         3AUCcFpI5YKCQB4JbpcaaXgPEbJ9fq730UuwwF9jtgSMZJNhtU0XDBybCqN6YBWcD5
-         1CP8dFvHNrjiNbVJLzIqXKnQ+bebDtyCFdW26szebi7VotkJzJsaVhhGlXpsh+xIM1
-         tmpU45HuuAjT/BMBFl4B3IHuS1lESaJaBU0EC3uMeOOyepQ1Dkb9+atWoLt2xEMXEs
-         rL/KdXfaisSvw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pNAAf-00043u-JB; Wed, 01 Feb 2023 11:16:53 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH 07/23] interconnect: qcom: rpm: fix probe PM domain error handling
-Date:   Wed,  1 Feb 2023 11:15:43 +0100
-Message-Id: <20230201101559.15529-8-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201101559.15529-1-johan+linaro@kernel.org>
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
+        s=k20201202; t=1675246551;
+        bh=4F/4o9bF1W2DN0Tz9O4TNOCLMwNbDxBuiXPZyCpB0gs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X6igeg86uPp8w2LARhr1dVShiLvJlu602IgYEwsfwmNCqSbfImHEtymayqwOCwoCx
+         mnoOXuiBB0Dgxhfw67E7Xd2XhQd//LHoTx0kcgSDKhels8D3aPm9fTGqgDlwBdau3R
+         b6OpM6GQrYrZ2+JJ8pJ/gMVp/X0WbiX8xmSwifwyuBXiOxFKnV5Cs3lLTTrTsE5Pzy
+         UB47pRjlwTtvIpiAflR9ODXgiHMs47Kbj+v+qAY2JsP0sgT3JvYJ+hKK+8DVa9ESXm
+         2MnOO8w0ruL0fgWwVktbuVS57MXKrYW+FyL7P6w2PGUFCiiF8XLNGAGXoBxOBeoyd6
+         P6xL6IwbYp+Tw==
+Date:   Wed, 1 Feb 2023 10:15:43 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     patchwork-bot+netdevbpf@kernel.org,
+        Colin Foster <colin.foster@in-advantage.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux@armlinux.org.uk,
+        richardcochran@gmail.com, f.fainelli@gmail.com, andrew@lunn.ch,
+        UNGLinuxDriver@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.manoil@nxp.com, vladimir.oltean@nxp.com, pabeni@redhat.com,
+        edumazet@google.com, davem@davemloft.net,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Subject: Re: [PATCH v5 net-next 00/13] add support for the the vsc7512
+ internal copper phys
+Message-ID: <Y9o7z0Ddbwus0M1R@google.com>
+References: <20230127193559.1001051-1-colin.foster@in-advantage.com>
+ <167514242005.16180.6859220313239539967.git-patchwork-notify@kernel.org>
+ <Y9jaDvtvzPxIrgFi@google.com>
+ <20230131114538.43e68eb3@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230131114538.43e68eb3@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,52 +65,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure to disable clocks also in case attaching the power domain
-fails.
+On Tue, 31 Jan 2023, Jakub Kicinski wrote:
 
-Fixes: 7de109c0abe9 ("interconnect: icc-rpm: Add support for bus power domain")
-Cc: stable@vger.kernel.org      # 5.17
-Cc: Yassine Oudjana <y.oudjana@protonmail.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/interconnect/qcom/icc-rpm.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> On Tue, 31 Jan 2023 09:06:22 +0000 Lee Jones wrote:
+> > Please don't do that.  The commits do not have proper Acked-by tags.
+> > 
+> > The plan is to merge these via MFD and send out a pull-request to an
+> > immutable branch.  However, if you're prepared to convert all of the:
+> > 
+> >   Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+> > 
+> > to
+> > 
+> >   Acked-by: Lee Jones <lee@kernel.org>
+> 
+> Sorry, I must have been blind yesterday because I definitely double
+> checked this doesn't touch mfd code. And it does :/
+> 
+> The patches should not be sent for net-next if they are not supposed 
+> to be applied directly. Or at the very least says something about
+> merging in the cover letter!
+> 
+> > ... and send out a pull request to a succinct (only these patches) and
+> > immutable branch then that is also an acceptable solution.
+> > 
+> > Please let me know what works best for you.
+> 
+> Sorry for messing up again. Stable branch would obviously had been best.
+> Do we have to take action now, or can we just wait for the trees to
+> converge during the merge window?
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 91778cfcbc65..da595059cafd 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -498,8 +498,7 @@ int qnoc_probe(struct platform_device *pdev)
- 
- 	if (desc->has_bus_pd) {
- 		ret = dev_pm_domain_attach(dev, true);
--		if (ret)
--			return ret;
-+		goto err_disable_clks;
- 	}
- 
- 	provider = &qp->provider;
-@@ -514,8 +513,7 @@ int qnoc_probe(struct platform_device *pdev)
- 	ret = icc_provider_add(provider);
- 	if (ret) {
- 		dev_err(dev, "error adding interconnect provider: %d\n", ret);
--		clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
--		return ret;
-+		goto err_disable_clks;
- 	}
- 
- 	for (i = 0; i < num_nodes; i++) {
-@@ -550,8 +548,9 @@ int qnoc_probe(struct platform_device *pdev)
- 	return 0;
- err:
- 	icc_nodes_remove(provider);
--	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
- 	icc_provider_del(provider);
-+err_disable_clks:
-+	clk_bulk_disable_unprepare(qp->num_clks, qp->bus_clks);
- 
- 	return ret;
- }
+Russell explained to me (off-list) that the net-next branch is immutable
+and the only way to fix this would be to revert the whole set.
+
+Let's not go to that much trouble this time.
+
+It does mean that I cannot take any more commits on the affected files,
+but that shouldn't be a big deal seeing how far into the release cycle
+we are.
+
+No real harm done.
+
 -- 
-2.39.1
-
+Lee Jones [李琼斯]
