@@ -2,171 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B056860E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E20A686083
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjBAHqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 02:46:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S231801AbjBAHWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:22:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjBAHpx (ORCPT
+        with ESMTP id S231808AbjBAHWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:45:53 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3945EF80;
-        Tue, 31 Jan 2023 23:44:31 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id 3so18708359vsq.7;
-        Tue, 31 Jan 2023 23:44:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=J0fsN0zafmOy6v04Ga2Ws7LTKT/5u/B8+RmnKRZAN2A=;
-        b=WBRMHnh8kAyR5qWZAj93pb70pPO0xBG6RcmlwZPIV7AlwIHSmp3ei/Js2epe6f4DBr
-         ZuB0fVz0iHsPVa2mJPwp+2LtYUY1kQwiZMXRCe71sluBCY6/We2QHzmYH5MstBXDyArk
-         vKd4JOeOc9xWXTCGH2HtGBM/1JAlwHYwZcYpJfGe56u4znGatNeir/hVXrKH/tIWx0Le
-         y78hUkrGVhJTQYSvNtuFpBx9bLUNcP6WG2hOWBm/8SWNlUjvbS4dNVJeGLNOGvEMUUMj
-         L/z8CThZsLZ3y48gCkhFnNd36F1NKzHDzzvmURbaCKi8uulKkkVS9mWTgrJJtHxEjxp7
-         TJvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=J0fsN0zafmOy6v04Ga2Ws7LTKT/5u/B8+RmnKRZAN2A=;
-        b=petc6IOAp0HJYvoA1dCmzwsRWJxrrozh0+ZzIFrlIXFZeQ9xdODa3zfKMjy1/BRrX5
-         /F6RDNYyhls4zgTxAytC/HoJ/TeH8QyyfMpA5PdWn4xQQS/EwBbUM0G4paPK+B9ean/r
-         org+YrTDFmHcsi9dlhgiRu5/w9bCev7u421C1pQvy2YsSvnm9LMUud6lD5Qgt1CO4kgl
-         EJcuAiGYscBEOPN7XhlibNcK/10bWWMAgvzktjLA+GjgTxgf0gzQXduVphZGjqMBf7i6
-         DAlU+tjmtDXYnToGCGbwtWVb/FhDbG+p4s6xj+nhL1g8zzN0f4AaFfpS/W28vvcHr8zM
-         6oyA==
-X-Gm-Message-State: AO0yUKUPu7iRJjBGamC70sggONbEjHW5hFiFIJLGRlosTUYExcFmrCiv
-        NIJGdVZ1AfvPAUzG0rRaCFGwT+ZI2x0pKRbg9Uw=
-X-Google-Smtp-Source: AK7set9OzjXJJIKgepqMgJ+FNx09mEhSlGTv4LLZi4lGKwRjvU90bR2OYHVAZNYIwXyyIuAa3YFUp/WyLEUaoP9eabA=
-X-Received: by 2002:a05:6102:34c8:b0:3d3:e956:1303 with SMTP id
- a8-20020a05610234c800b003d3e9561303mr299653vst.71.1675237470169; Tue, 31 Jan
- 2023 23:44:30 -0800 (PST)
+        Wed, 1 Feb 2023 02:22:36 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5525D128
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:22:16 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P6CtK18jBzJqtB;
+        Wed,  1 Feb 2023 15:17:45 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 1 Feb 2023 15:22:14 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
+        <linmiaohe@huawei.com>, <tony.luck@intel.com>,
+        <linux-kernel@vger.kernel.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH v4] mm: hwposion: support recovery from ksm_might_need_to_copy()
+Date:   Wed, 1 Feb 2023 15:44:33 +0800
+Message-ID: <20230201074433.96641-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
- <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
- <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
-In-Reply-To: <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 1 Feb 2023 09:44:18 +0200
-Message-ID: <CAOQ4uxhzGru2Z8tjcAWvKVi0reNeX9SHMi6cwdyA9Vws8c1ppw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>
-Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Alexander Larsson <alexl@redhat.com>, gscrivan@redhat.com,
-        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, david@fromorbit.com,
-        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 6:28 AM Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
->
-> Hi all,
->
-> There are some updated performance statistics with different
-> combinations on my test environment if you are interested.
->
+When the kernel copy a page from ksm_might_need_to_copy(), but runs
+into an uncorrectable error, it will crash since poisoned page is
+consumed by kernel, this is similar to the issue recently fixed by
+Copy-on-write poison recovery.
 
-Cool report!
+When an error is detected during the page copy, return VM_FAULT_HWPOISON
+in do_swap_page(), and install a hwpoison entry in unuse_pte() when
+swapoff, which help us to avoid system crash. Note, memory failure on
+a KSM page will be skipped, but still call memory_failure_queue() to
+be consistent with general memory failure process, and we could support
+KSM page recovery in the feature.
 
->
-> On 1/27/23 6:24 PM, Gao Xiang wrote:
-> > ...
-> >
-> > I've made a version and did some test, it can be fetched from:
-> > git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git -b
-> > experimental
-> >
->
-> Setup
-> ======
-> CPU: x86_64 Intel(R) Xeon(R) Platinum 8269CY CPU @ 2.50GHz
-> Disk: 6800 IOPS upper limit
-> OS: Linux v6.2 (with composefs v3 patchset)
->
-> I build erofs/squashfs images following the scripts attached on [1],
-> with each file in the rootfs tagged with "metacopy" and "redirect" xattr.
->
-> The source rootfs is from the docker image of tensorflow [2].
->
-> The erofs images are built with mkfs.erofs with support for sparse file
-> added [3].
->
-> [1]
-> https://lore.kernel.org/linux-fsdevel/5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com/
-> [2]
-> https://hub.docker.com/layers/tensorflow/tensorflow/2.10.0/images/sha256-7f9f23ce2473eb52d17fe1b465c79c3a3604047343e23acc036296f512071bc9?context=explore
-> [3]
-> https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?h=experimental&id=7c49e8b195ad90f6ca9dfccce9f6e3e39a8676f6
->
->
->
-> Image size
-> ===========
-> 6.4M large.composefs
-> 5.7M large.composefs.w/o.digest (w/o --compute-digest)
-> 6.2M large.erofs
-> 5.2M large.erofs.T0 (with -T0, i.e. w/o nanosecond timestamp)
-> 1.7M large.squashfs
-> 5.8M large.squashfs.uncompressed (with -noI -noD -noF -noX)
->
-> (large.erofs.T0 is built without nanosecond timestamp, so that we get
-> smaller disk inode size (same with squashfs).)
->
->
-> Runtime Perf
-> =============
->
-> The "uncached" column is tested with:
-> hyperfine -p "echo 3 > /proc/sys/vm/drop_caches" "ls -lR $MNTPOINT"
->
->
-> While the "cached" column is tested with:
-> hyperfine -w 1 "ls -lR $MNTPOINT"
->
->
-> erofs and squashfs are mounted with loopback device.
->
->
->                                   | uncached(ms)| cached(ms)
-> ----------------------------------|-------------|-----------
-> composefs (with digest)           | 326         | 135
-> erofs (w/o -T0)                   | 264         | 172
-> erofs (w/o -T0) + overlayfs       | 651         | 238
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+v4:
+- update changelog and directly return ERR_PTR(-EHWPOISON) in
+  ksm_might_need_to_copy() suggested HORIGUCHI NAOYA
+- add back unlikely in unuse_pte()
 
-This is a nice proof of the overlayfs "early lookup" overhead.
-As I wrote, this overhead could be optimized by doing "lazy lookup"
-on open like composefs does.
+ mm/ksm.c      |  7 +++++--
+ mm/memory.c   |  3 +++
+ mm/swapfile.c | 20 ++++++++++++++------
+ 3 files changed, 22 insertions(+), 8 deletions(-)
 
-Here is a suggestion for a simple test variant that could be used to
-approximate the expected improvement -
-if you set all the metacopy files in erofs to redirect to the same
-lower block, most of the lower lookup time will be amortized
-because all but the first lower lookup are cached.
-If you get a performance number with erofs + overlayfs that are
-close to composefs performance numbers, it will prove the point
-that same functionality and performance could be achieved by
-modifying ovelrayfs/mkfs.erofs.
+diff --git a/mm/ksm.c b/mm/ksm.c
+index dd02780c387f..addf490da146 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -2629,8 +2629,11 @@ struct page *ksm_might_need_to_copy(struct page *page,
+ 		new_page = NULL;
+ 	}
+ 	if (new_page) {
+-		copy_user_highpage(new_page, page, address, vma);
+-
++		if (copy_mc_user_highpage(new_page, page, address, vma)) {
++			put_page(new_page);
++			memory_failure_queue(page_to_pfn(page), 0);
++			return ERR_PTR(-EHWPOISON);
++		}
+ 		SetPageDirty(new_page);
+ 		__SetPageUptodate(new_page);
+ 		__SetPageLocked(new_page);
+diff --git a/mm/memory.c b/mm/memory.c
+index aad226daf41b..5b2c137dfb2a 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3840,6 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 		if (unlikely(!page)) {
+ 			ret = VM_FAULT_OOM;
+ 			goto out_page;
++		} else if (unlikely(PTR_ERR(page) == -EHWPOISON)) {
++			ret = VM_FAULT_HWPOISON;
++			goto out_page;
+ 		}
+ 		folio = page_folio(page);
+ 
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 908a529bca12..3ef2468d7130 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1763,12 +1763,15 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 	struct page *swapcache;
+ 	spinlock_t *ptl;
+ 	pte_t *pte, new_pte;
++	bool hwposioned = false;
+ 	int ret = 1;
+ 
+ 	swapcache = page;
+ 	page = ksm_might_need_to_copy(page, vma, addr);
+ 	if (unlikely(!page))
+ 		return -ENOMEM;
++	else if (unlikely(PTR_ERR(page) == -EHWPOISON))
++		hwposioned = true;
+ 
+ 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+ 	if (unlikely(!pte_same_as_swp(*pte, swp_entry_to_pte(entry)))) {
+@@ -1776,15 +1779,19 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 		goto out;
+ 	}
+ 
+-	if (unlikely(!PageUptodate(page))) {
+-		pte_t pteval;
++	if (unlikely(hwposioned || !PageUptodate(page))) {
++		swp_entry_t swp_entry;
+ 
+ 		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
+-		pteval = swp_entry_to_pte(make_swapin_error_entry());
+-		set_pte_at(vma->vm_mm, addr, pte, pteval);
+-		swap_free(entry);
++		if (hwposioned) {
++			swp_entry = make_hwpoison_entry(swapcache);
++			page = swapcache;
++		} else {
++			swp_entry = make_swapin_error_entry();
++		}
++		new_pte = swp_entry_to_pte(swp_entry);
+ 		ret = 0;
+-		goto out;
++		goto setpte;
+ 	}
+ 
+ 	/* See do_swap_page() */
+@@ -1816,6 +1823,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 		new_pte = pte_mksoft_dirty(new_pte);
+ 	if (pte_swp_uffd_wp(*pte))
+ 		new_pte = pte_mkuffd_wp(new_pte);
++setpte:
+ 	set_pte_at(vma->vm_mm, addr, pte, new_pte);
+ 	swap_free(entry);
+ out:
+-- 
+2.35.3
 
-Thanks,
-Amir.
