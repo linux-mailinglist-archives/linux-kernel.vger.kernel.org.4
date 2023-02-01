@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92795686998
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4663968699B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbjBAPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S232742AbjBAPKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbjBAPJr (ORCPT
+        with ESMTP id S230417AbjBAPJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 10:09:47 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3940069B26;
-        Wed,  1 Feb 2023 07:08:26 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id lu11so14978562ejb.3;
-        Wed, 01 Feb 2023 07:08:26 -0800 (PST)
+        Wed, 1 Feb 2023 10:09:44 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445BE6BBC1;
+        Wed,  1 Feb 2023 07:08:28 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id dr8so30717619ejc.12;
+        Wed, 01 Feb 2023 07:08:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rp5plCaK+Ee0v6zJJSPg3nVKcz7Ocb0iI+K21w1Y4qU=;
-        b=NRcPeMqBEWHBNfeM1QbytTGZ1tgUxGV947jrBR4ORmkwM2cjGj3VYO0Izn3sEkPeze
-         TDSUaTP5zxyGloM9o75uwKb/ZyZk+fFS41eEBX/ap94gmlod2QhZDMBcdzZ+T6SWJIxm
-         xuFMcqYWNXTFaAXiqxSzjvITMIqrA3UicyA6oKp7NZlv1V6pLdXCS4ya609Bdnz2D9Hi
-         b9YuqWqFWdwJuTWGcraM1KZR1fSnQ3h7rueNOAopZZIlBcNIbA5q/QflEcWfVU8VhwXZ
-         LsM4DihK15XNeSKhFz6YbZWMfSSGuU6F0Wy8Oq6rqwFlvmWH50agLQkQB+J8MR8Y3z3k
-         S12Q==
+        bh=aCIsnGFwfhB3GdHRBSUurOPmrL4KoA1jNcMHDebxURA=;
+        b=BoPO7gpLDoTuKhel0GzrIKGVr1TL37RGWdatMkKU0QJJY+2/5Q79vJ3ju3SNEP0hUi
+         pS4R4XFaydaMFuGZ1BHFw2bOiaHCZz6cImmmpdB9bnx7OCWudj9X1EkAa8hpCqiDHkvc
+         AXrztKeyxki0DyD7ogtOJXKnVZVw9gTLmZsrB71UvG2iScNVZ1fkXsxG7PoYXaaI38oE
+         v8yTaTAe3z5sHYG7e/DL76rJRpPUCm6D5cH2rmKbyMa/oiQ9H+QJ3tfX+YGKRZRXqv31
+         40m4gkFYfLThinnJF9d22bciAQBsclWsv27RAzxjq5qL8dNOk3NXmRxTNxF1pPv81S2j
+         LGgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Rp5plCaK+Ee0v6zJJSPg3nVKcz7Ocb0iI+K21w1Y4qU=;
-        b=yQceJNKmuBB00xxZzAR1uTlwZUQY1IdE2Jv98ijCpejFbtBFUO6pg5dk85r0PcAf+/
-         4bcfFzPI/tEGGzznpvOSAzUrCx6rxWpQdsm+opSod3HmEmANTmBrD6PuE+3tWdhixLVl
-         qENeAPcP3CB12jr7Mrz4lxVVe+W6YASy3KhUxXLvJbqk0zxk6oE1ml2YLjZsXBTYTFT+
-         hvSDs76UX4Gm4LbVRhOXaBh74v8mD6s4mTZXha9eEBb/5YffS2xD3g6R9PSx4q4ZrOXR
-         NaQR0ZvWOtCV7gEJu4tAfBfkbJfzNusZwDD6v4yAxqKfg0M/pAvLQ6SrsQlg6EWNjeh4
-         6KnQ==
-X-Gm-Message-State: AO0yUKUnvqqw4FPA1lTMPE0zxU09pbIuNUBeO/hwZzQvI5IZ64F+cG6q
-        r7YrfcgGuNlh3LXmZ2wuY6CipJWiFglyrw==
-X-Google-Smtp-Source: AK7set8NF2CoMDa5EkVRC5udmJtZtSKjC3hoECJADkYaqeir3itK2k08NKHNlbPCOhBbCT7H7ScyXA==
-X-Received: by 2002:a17:907:98f9:b0:87b:db62:d659 with SMTP id ke25-20020a17090798f900b0087bdb62d659mr3026308ejc.19.1675264105400;
-        Wed, 01 Feb 2023 07:08:25 -0800 (PST)
+        bh=aCIsnGFwfhB3GdHRBSUurOPmrL4KoA1jNcMHDebxURA=;
+        b=NH+oMjMNt8Y1lTUwXK3Kfr2jYif8DPhrd5IZv5w70ys9DT26WIeJ5rB01AOjibvSFI
+         +TZlEddBS/hOoEMoz4GSnSiR3u3MuXIgjIdB9zP/EivmpCTPMg4ZzW3Pde9zGOuOpbA5
+         lFXuTpjzC/koN6jta1acP2DeANYgnivZxrj60zGmUtfwxie5FUYo7K9UicBo7y3KC/GU
+         TZt+DNCuUa35PM7vhnCUAAyZM6rZi3hDYDHlZ8S3EPE+OgVhGagw8wcww7Ve/HYL70Iz
+         +GdwcgAIQq33Xa35WmAXQQmVhaIekNe41gzfA38N+K9I4IgGbEyqf/TRCWgzm8yekivF
+         bekQ==
+X-Gm-Message-State: AO0yUKWhbkLqVPv9H21eZAICnqaDYrznvHfU6OSO5eugEnavzb/cqvzW
+        +dYDdboAMeBwN/OThAwwjHSDRsXRA0meYg==
+X-Google-Smtp-Source: AK7set8Y/Z/c78ObALKOzGqUDP4vWGfAwQ4UcwS2igsc0DL0dqu01vIw+yZCyXzDj7ltwNPUfnHrtw==
+X-Received: by 2002:a17:906:1441:b0:870:d15a:c2dc with SMTP id q1-20020a170906144100b00870d15ac2dcmr2800269ejc.74.1675264106371;
+        Wed, 01 Feb 2023 07:08:26 -0800 (PST)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id qc26-20020a170906d8ba00b008787e94c5ccsm9585774ejb.184.2023.02.01.07.08.24
+        by smtp.gmail.com with ESMTPSA id qc26-20020a170906d8ba00b008787e94c5ccsm9585774ejb.184.2023.02.01.07.08.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 07:08:25 -0800 (PST)
+        Wed, 01 Feb 2023 07:08:26 -0800 (PST)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
@@ -63,11 +63,10 @@ Cc:     Uladzislau Rezki <urezki@gmail.com>,
         Bob Pearson <rpearsonhpe@gmail.com>,
         Ariel Levkovich <lariel@nvidia.com>,
         Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Vlad Buslov <vladbu@nvidia.com>
-Subject: [PATCH 08/13] net/mlx5: Rename kfree_rcu() to kfree_rcu_mightsleep()
-Date:   Wed,  1 Feb 2023 16:08:14 +0100
-Message-Id: <20230201150815.409582-9-urezki@gmail.com>
+        Lukas Czerner <lczerner@redhat.com>
+Subject: [PATCH 09/13] ext4/super: Rename kfree_rcu() to kfree_rcu_mightsleep()
+Date:   Wed,  1 Feb 2023 16:08:15 +0100
+Message-Id: <20230201150815.409582-10-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230201150815.409582-1-urezki@gmail.com>
 References: <20230201150815.409582-1-urezki@gmail.com>
@@ -87,50 +86,26 @@ The kfree_rcu()'s single argument name is deprecated therefore
 rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
 underline that it is for sleepable contexts.
 
-Cc: Ariel Levkovich <lariel@nvidia.com>
-Cc: Saeed Mahameed <saeedm@nvidia.com>
-Cc: Vlad Buslov <vladbu@nvidia.com>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Cc: Lukas Czerner <lczerner@redhat.com>
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c  | 2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ fs/ext4/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
-index ca834bbcb44f..8afcec0c5d3c 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c
-@@ -242,7 +242,7 @@ mlx5e_int_port_remove(struct mlx5e_tc_int_port_priv *priv,
- 		mlx5_del_flow_rules(int_port->rx_rule);
- 	mapping_remove(ctx, int_port->mapping);
- 	mlx5e_int_port_metadata_free(priv, int_port->match_metadata);
--	kfree_rcu(int_port);
-+	kfree_rcu_mightsleep(int_port);
- 	priv->num_ports--;
- }
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 260c1b3e3ef2..87aa23d047c9 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -2500,7 +2500,7 @@ static void ext4_apply_quota_options(struct fs_context *fc,
+ 			qname = rcu_replace_pointer(sbi->s_qf_names[i], qname,
+ 						lockdep_is_held(&sb->s_umount));
+ 			if (qname)
+-				kfree_rcu(qname);
++				kfree_rcu_mightsleep(qname);
+ 		}
+ 	}
  
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
-index 9369a580743e..5d32a8a5e5a4 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c
-@@ -672,7 +672,7 @@ static int mlx5e_macsec_del_txsa(struct macsec_context *ctx)
- 
- 	mlx5e_macsec_cleanup_sa(macsec, tx_sa, true);
- 	mlx5_destroy_encryption_key(macsec->mdev, tx_sa->enc_key_id);
--	kfree_rcu(tx_sa);
-+	kfree_rcu_mightsleep(tx_sa);
- 	macsec_device->tx_sa[assoc_num] = NULL;
- 
- out:
-@@ -851,7 +851,7 @@ static void macsec_del_rxsc_ctx(struct mlx5e_macsec *macsec, struct mlx5e_macsec
- 	xa_erase(&macsec->sc_xarray, rx_sc->sc_xarray_element->fs_id);
- 	metadata_dst_free(rx_sc->md_dst);
- 	kfree(rx_sc->sc_xarray_element);
--	kfree_rcu(rx_sc);
-+	kfree_rcu_mightsleep(rx_sc);
- }
- 
- static int mlx5e_macsec_del_rxsc(struct macsec_context *ctx)
 -- 
 2.30.2
 
