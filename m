@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5926C685F42
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 06:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A217685F48
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 06:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbjBAFvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 00:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
+        id S231569AbjBAFvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 00:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjBAFu5 (ORCPT
+        with ESMTP id S231561AbjBAFv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 00:50:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB095C0F1;
-        Tue, 31 Jan 2023 21:50:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B78061166;
-        Wed,  1 Feb 2023 05:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CCAB3C433EF;
-        Wed,  1 Feb 2023 05:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675230619;
-        bh=Tb4W3pCcjNAi7UolnOrEcolSUc5iHIeJzmJZTcUvLHY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CvFSEhgHs1trFjGMDlHTPXZoe2vBskPAH5zfy0cMkTutBPId8TyM/WseynKu5gjR9
-         rfD8RGHdzelJXyQqxCHKGY8DLbBuBUI3Q8zPkerUN5wxKP+Gokd8TcFbVqKoZRygRQ
-         aGBHkZwORoMRfCzdwak8n0YWUSLD8g9s6OosSEFMNO8vb29O8WxX4LfoiABdI6AyJ4
-         QPI7PAlupDq1sNb2Up7wpYMPjvRfxx3Dse/34uHAgGX3NjLi+X/fHhAzCnHsFQYRWs
-         kIv0jRdAB30Cgpu3HFIwZMWu6k6+XRrRzKbB4zx5Sp9emMYVN8qPVu+UffLfMR7dVg
-         1OXR7IsocIvDg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A9B46E21EEC;
-        Wed,  1 Feb 2023 05:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 1 Feb 2023 00:51:28 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EFB5C0C1;
+        Tue, 31 Jan 2023 21:51:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675230672; x=1706766672;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UpSfjG2fNdu4lyj9iOWuaj3VrvjjDLnBYjkh3m1GIYY=;
+  b=bDhDx5JL2EYT6kpwcd6cFDytiSiGy1qZT31x0snmB0HJ9fbH+3qIxkAA
+   WL854Mp85dLvc1DriAoUmfrddh9tOUSbSSDd0KCCL+ih/UygjCuF0vR6m
+   0JXxqqLxiPW7zBiH3sePRpiMa/e7WeY0muof2wyN3d42BH32oQNyyCv7K
+   JMM47DI2VnI06+pfEwg/GO+xWkFLk9vY7yhUL/lXKpYygvlgMeptB8TxV
+   bsGO80fsQqmUYw50ASgBUgsjtYKAsciX4IVdnAfFjh12sq0AJlDDIkAkP
+   HtS/Kv+d/j+YIu75GaqWcgZeU7IckXakYkKS1Cs5RNQj1lvncdhpkakTQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="325754966"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="325754966"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 21:51:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="773302025"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="773302025"
+Received: from xduan-mobl1.ccr.corp.intel.com (HELO [10.254.215.167]) ([10.254.215.167])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 21:51:09 -0800
+Message-ID: <c15d0137-af02-ab85-70f3-def691d8f81b@linux.intel.com>
+Date:   Wed, 1 Feb 2023 13:51:07 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/8] net: ipa: remaining IPA v5.0 support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167523061968.13377.15290570490808834749.git-patchwork-notify@kernel.org>
-Date:   Wed, 01 Feb 2023 05:50:19 +0000
-References: <20230130210158.4126129-1-elder@linaro.org>
-In-Reply-To: <20230130210158.4126129-1-elder@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, caleb.connolly@linaro.org, mka@chromium.org,
-        evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Cc:     baolu.lu@linux.intel.com, Bjorn Helgaas <bhelgaas@google.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Matt Fagnani <matt.fagnani@bell.net>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Tony Zhu <tony.zhu@intel.com>, linux-pci@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
+ pci_enable_pasid()
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+References: <20230201001419.GA1776086@bhelgaas>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230201001419.GA1776086@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 2023/2/1 8:14, Bjorn Helgaas wrote:
+>> The translated address is specified by the IOMMU driver. The IOMMU
+>> driver ensures that the address is a DMA buffer address instead of any
+>> P2P address in the PCI fabric. Therefore, any translated memory request
+>> will eventually be routed to IOMMU regardless of whether there is ACS
+>> control in the up-streaming path.
+> A Memory Request with an address that is not a P2P address, i.e., it
+> is not contained in any bridge aperture, will*always*  be routed
+> toward the RC, won't it? 
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+Yes.
 
-On Mon, 30 Jan 2023 15:01:50 -0600 you wrote:
-> This series includes almost all remaining IPA code changes required
-> to support IPA v5.0.  IPA register definitions and configuration
-> data for IPA v5.0 will be sent later (soon).  Note that the GSI
-> register definitions still require work.  GSI for IPA v5.0 supports
-> up to 256 (rather than 32) channels, and this changes the way GSI
-> register offsets are calculated.  A few GSI register fields also
-> change.
-> 
-> [...]
+> Isn't that the case regardless of whether
+> the address is translated or untranslated, and even regardless of ACS?
 
-Here is the summary with links:
-  - [net-next,1/8] net: ipa: support more endpoints
-    https://git.kernel.org/netdev/net-next/c/07abde549bc1
-  - [net-next,2/8] net: ipa: extend endpoints in packet init command
-    https://git.kernel.org/netdev/net-next/c/c84ddc119704
-  - [net-next,3/8] net: ipa: define IPA v5.0+ registers
-    https://git.kernel.org/netdev/net-next/c/8ba59716d16a
-  - [net-next,4/8] net: ipa: update table cache flushing
-    https://git.kernel.org/netdev/net-next/c/8e7c89d84a2b
-  - [net-next,5/8] net: ipa: support zeroing new cache tables
-    (no matching commit)
-  - [net-next,6/8] net: ipa: greater timer granularity options
-    https://git.kernel.org/netdev/net-next/c/32079a4ab106
-  - [net-next,7/8] net: ipa: support a third pulse register
-    (no matching commit)
-  - [net-next,8/8] net: ipa: define two new memory regions
-    https://git.kernel.org/netdev/net-next/c/5157d6bfcad3
+They are different. The translated addresses are approved by the Linux
+kernel. But untranslated addresses are not. Malicious or buggy userspace
+applications could program the device to DMA to addresses locating in
+the P2P aperture.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> IIUC, ACS basically causes peer-to-peer requests to be routed upstream
+> instead of directly to the peer.
 
+Yes.
 
+Best regards,
+baolu
