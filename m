@@ -2,115 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E4C685CB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 02:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BC8685CB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 02:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjBABin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 20:38:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        id S231180AbjBABjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 20:39:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjBABil (ORCPT
+        with ESMTP id S229863AbjBABje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 20:38:41 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16D9521DE;
-        Tue, 31 Jan 2023 17:38:40 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4fd37a1551cso226563057b3.13;
-        Tue, 31 Jan 2023 17:38:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IYV1PkpzfhgRPyGiRj90Sy3TFLGA2xJdyexuKq3v2Js=;
-        b=XHlEdUJ03iay/M2j1In2oyHo1cfXjMnm6H/Xi6VsNeZKosP/0RmGkFBacbgKUEqBVX
-         i172XHg+X678FCHVRBQi2E68EIzWRcuYKCJvqJBx6Coagl5R8GB+rZ7N0+YKqyxU1mOL
-         NTJs2QKMsZ+HcAxWmPozJVLy8AHNYY+RloncPJWJrgcK9s9rIkB2LZhH8hCccxxrPjM4
-         pV6ss8Ab8SzeVUB1Q7leZXnLYqrd9wv5DMeAR/hI6djn4/OZ4i5+5na7Oa0sCm7/fZjq
-         ojprYntFM7hrCLW+mUs7bU5jfaJurqEiZoiWAeJNCIYXNOrLM4ugSWuJ1fnw7POtAUnl
-         5Rcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IYV1PkpzfhgRPyGiRj90Sy3TFLGA2xJdyexuKq3v2Js=;
-        b=5cQ+Ly+og9ra4nSjCN6tEsO0OH/rfveqbdFr9zERcQcampZ7lY9jQOa7DwArbgYCm4
-         sSEF465LH2dbP+OAK14xbio0fLbRnTTX4H4Cnu9azvP78lQ+JyaePVfJvGEoPO1JdNIF
-         rzxfUwBIJlIESLWAHYKgGaDvGl4E/7QxfdPbDbCY5xoQ9vbhGw2uTFntusAZ0ixo0bB0
-         kcmUPv54RXezOPT9YCwDmxJ83F9GtnmzHsOmkt2OnPIHxSod3Io12kE5Mo6hC9aXGVhy
-         aYle2cNqIIZBPTb5kEWhTlZafRc4ZSHFTD6kNfUyeYW0DmbASigLiKJ4P5Hhk3Y/I1Su
-         KcAA==
-X-Gm-Message-State: AO0yUKW9CyKnuGumRRZUJAVjgiu6zE27yw5p2q7tnevazrCxt9RDRVv+
-        SCJsRFchr2u158ehcTfIqOZu0fNzCXgklC5mdaA5fXZrMoajqw==
-X-Google-Smtp-Source: AK7set+iERPfWWyWGiZoAkGhsc3jflB/Hj7kF17HirXukKDxN68JkyGKqVX+lFBorVZcSEKyqJWfcQ+mEh5HrXyxyBg=
-X-Received: by 2002:a05:690c:c87:b0:506:c44:ca69 with SMTP id
- cm7-20020a05690c0c8700b005060c44ca69mr40089ywb.67.1675215519931; Tue, 31 Jan
- 2023 17:38:39 -0800 (PST)
+        Tue, 31 Jan 2023 20:39:34 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 928AB521DE;
+        Tue, 31 Jan 2023 17:39:33 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 4375620E0A43; Tue, 31 Jan 2023 17:39:33 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4375620E0A43
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675215573;
+        bh=XpQhT9NIysGEPHEUWmwIA/c/PHSo1/eWTpwuRKMmvg0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FI7f/O4pB0kP0feT1rxwZ3ENwxscMoUDw009gs/ywZN8iGkk4GWwo3XJ8WdkJoTfc
+         PY5EFxZWAN05OZh0kAjsjXsVkOrejuKMAAnCWUZO5SiQz9ZEyaEjgf6Lcw97/IS84h
+         ao7rpsSOa59l0b/dsPtvbOHTTeBiCyEXxXM1e2gk=
+Date:   Tue, 31 Jan 2023 17:39:33 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+Subject: Re: [PATCH v2 5/6] dt-bindings: hypervisor: Add dt-bindings for VMBus
+Message-ID: <20230201013933.GA20379@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675188609-20913-6-git-send-email-ssengar@linux.microsoft.com>
+ <63fd0037-0994-bbfd-6b99-f9dcd095cbca@linaro.org>
 MIME-Version: 1.0
-References: <20230128072258.3384037-1-boqun.feng@gmail.com>
-In-Reply-To: <20230128072258.3384037-1-boqun.feng@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 1 Feb 2023 02:38:28 +0100
-Message-ID: <CANiq72mGk72tvLx+uH-puXZ=MvAA9dzNVqTXYmPq2iadwYuyWA@mail.gmail.com>
-Subject: Re: [PATCH v2] rust: MAINTAINERS: Add the zulip link
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     rust-for-linux@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63fd0037-0994-bbfd-6b99-f9dcd095cbca@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 28, 2023 at 8:23 AM Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> Zulip organization "rust-for-linux" has been created since about 2 years
+On Tue, Jan 31, 2023 at 07:51:20PM +0100, Krzysztof Kozlowski wrote:
+> On 31/01/2023 19:10, Saurabh Sengar wrote:
+> > Add dt-bindings for Hyper-V VMBus
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  .../bindings/hypervisor/msft,vmbus.yaml       | 50 +++++++++++++++++++
+> >  .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
+> >  MAINTAINERS                                   |  1 +
+> >  3 files changed, 53 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/hypervisor/msft,vmbus.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/hypervisor/msft,vmbus.yaml b/Documentation/devicetree/bindings/hypervisor/msft,vmbus.yaml
+> > new file mode 100644
+> > index 000000000000..8f50d6097c48
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/hypervisor/msft,vmbus.yaml
+> > @@ -0,0 +1,50 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/hypervisor/msft,vmbus.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Microsoft Hyper-V VMBus device tree bindings
+> 
+> This is a friendly reminder during the review process.
+> 
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all
+> requested changes or keep discussing them.
+> 
+> Thank you.
+> 
+> (other places as well...)
 
-"was created about 2 years ago ... and has proven" maybe?
+Hi Krzysztof,
 
-> [1]: https://lore.kernel.org/rust-for-linux/CANiq72=3DxVaMQkgCA9rspjV8bhW=
-DGqAn4x78B0_4U1WBJYj1PiA@mail.gmail.com/
+Thank you for the review. Sorry I missed this, will fix in V3.
+The patches have gone significant modification, and I have thought
+I have fixed all the comments you have provided hence didnt send the
+follow up discussion. Apparently, I may have missed few will look again
+and fix in next version.
 
-We typically do links as a tag, like:
+Regards,
+Saurabh
 
-    Link: https://..../ [1]
-
->  R:     Gary Guo <gary@garyguo.net>
->  R:     Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
->  L:     rust-for-linux@vger.kernel.org
-> +C:     zulip://rust-for-linux.zulipchat.com
->  S:     Supported
->  W:     https://github.com/Rust-for-Linux/linux
->  B:     https://github.com/Rust-for-Linux/linux/issues
-
-The preferred order according to the top of the file is `C:` after
-`B:` -- could you please move it? (even if not everybody follows it)
-
-Thanks Boqun!
-
-Also, for reference for others: a few of us discussed a bit in Zulip
-whether to use `zulip://` or `https://` here: `zulip://` hints at the
-fact that it is possible to join with apps/clients and not just with a
-web browser, which is why Boqun wants to use this one. Support for the
-URI scheme in place of the `https://` one isn't great in some of the
-apps, though, so I worried it could be confusing.
-
-Hopefully the URI scheme support will improve in the future. So let's
-try `zulip://` -- it may help getting better support for that URI
-scheme too :)
-
-Cheers,
-Miguel
+> 
+> Best regards,
+> Krzysztof
