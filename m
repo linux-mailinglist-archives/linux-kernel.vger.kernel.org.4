@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572E66866DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1E06866DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232245AbjBANaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S232224AbjBAN37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbjBAN3x (ORCPT
+        with ESMTP id S232272AbjBAN3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:29:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C94410B4
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:29:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675258153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BHlHNKgyQKHJdr2+kCJrUmuRwsOYKakAfKoGgM7YMEs=;
-        b=CDnZ3gwU9SdNNqGxrQiOa5TFrXIEy0FIZ/Zy+/CF+4ILMjG0uwe+TnY8cfltrBI2hfo9WR
-        Owu3GEun/LMXDwYY+LiWkckEia33SHw4qTdz+ELh0wNADLdJnSYOnOoXzHxkNxmvp/I1ND
-        KrXSHAF/9amvw3eNVELSF5WAFt88dVU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-9U5y46XbM4GnkLcPdeGhew-1; Wed, 01 Feb 2023 08:29:12 -0500
-X-MC-Unique: 9U5y46XbM4GnkLcPdeGhew-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 1 Feb 2023 08:29:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1217463874
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:29:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A7A63C02548;
-        Wed,  1 Feb 2023 13:29:10 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B244C40C2064;
-        Wed,  1 Feb 2023 13:29:09 +0000 (UTC)
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-To:     kvm@vger.kernel.org
-Cc:     Jim Mattson <jmattson@google.com>,
-        Ben Serebrin <serebrin@google.com>,
-        Peter Shier <pshier@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Subject: [PATCH 3/3] kvm: x86: Advertise FLUSH_L1D to user space
-Date:   Wed,  1 Feb 2023 08:29:05 -0500
-Message-Id: <20230201132905.549148-4-eesposit@redhat.com>
-In-Reply-To: <20230201132905.549148-1-eesposit@redhat.com>
-References: <20230201132905.549148-1-eesposit@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A21046179F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 13:29:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B988EC433EF;
+        Wed,  1 Feb 2023 13:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675258160;
+        bh=JAkFMc2dp9aZIGy+X9W+0UNRWy7+puxfrgWYGUKvqE4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WKU6JBJGVX831/YeO/vIYsFoeoansxJf7b8w4H9k88wixsW4a+ZvxfWZfEUPVbNhr
+         OKHeNYRnuU3FdrkiRLgpSFU0y2bw89SGaykTQdwiEl1bako/8BQEmSrEuM8zwSua9G
+         1RzCzjSQgugchSWQZ9xFwvXYCwpd+7HQK6UhCGYxrdNmcBh/YYsYxaR/vqwxsSmxBT
+         5d+6am272vW6rpWOr6bBMi++KUCfwOrN7sMrQ9/xHYPhjtjcDeDEnV2f2+SDuaqc9p
+         0MccYrRNUFLXxlltVf/1bzp/LHIRfPwU8fteA3wPgDnhfi6fgLRxsQFhvvDTKTSFNu
+         qJpHQlaYwirZQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Chen Guokai <chenguokai17@mails.ucas.ac.cn>,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, rostedt@goodmis.org, mingo@redhat.com,
+        sfr@canb.auug.org.au
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        liaochang1@huawei.com, Chen Guokai <chenguokai17@mails.ucas.ac.cn>
+Subject: Re: [PATCH v6 00/13] Add OPTPROBES feature on RISCV
+In-Reply-To: <20230127130541.1250865-1-chenguokai17@mails.ucas.ac.cn>
+References: <20230127130541.1250865-1-chenguokai17@mails.ucas.ac.cn>
+Date:   Wed, 01 Feb 2023 14:29:17 +0100
+Message-ID: <87zg9xtsya.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-FLUSH_L1D was already added in 11e34e64e4103, but the feature is not
-visible to userspace yet.
+Chen Guokai <chenguokai17@mails.ucas.ac.cn> writes:
 
-The bit definition:
-CPUID.(EAX=7,ECX=0):EDX[bit 28]
+> Add jump optimization support for RISC-V.
+>
+> Replaces ebreak instructions used by normal kprobes with an AUIPC/JALR
+> instruction pair with the aim of suppressing the probe-hit overhead.
+>
+> All known optprobe-capable RISC architectures have been using a single
+> jump or branch instructions while this patch chooses not. RISC-V has a
+> quite limited jump range (4KB or 2MB) for both its branch and jump
+> instructions, which prevent optimizations from supporting probes that
+> spread all over the kernel.
+>
+> AUIPC/JALR instruction pair is introduced with a much wider jump range
+> (4GB), where AUIPC loads the upper 12 bits to a free register and JALR
+> Deaconappends the lower 20 bits to form a 32 bits immediate. Note that
+> returns from probe handler require another free register. As kprobes
+> can appear almost anywhere inside the kernel, the free register should
+> be found generically, not depending on calling convention or any other
+> regulations.
+>
+> The algorithm for finding the free register is inspired by the register
+> renaming in modern processors. From the perspective of register
+> renaming, a register could be represented as two different registers if
+> two neighbor instructions both write to it but no one ever reads it.
+> Extending this fact, a register is considered to be free if there is no
+> read before its next write in the execution flow. We are free to change
+> its value without interfering normal execution.
+>
+> Static analysis shows that 51% of instructions of the kernel (default
+> config) is capable of being replaced i.e. one free register can be found
+> at both the start and end of replaced instruction pairs while the
+> replaced instructions can be directly executed. We also made an
+> efficiency test on Gem 5 RISCV which shows a more than 5x speedup on=20
+> breakpoint-based implementation.
+>
+> Contribution:
+> Chen Guokai invents the algorithm for searching free register, evaluate
+> the ratio of optimization, the basic function support RVI kernel binary.
+> Liao Chang adds the support for hybrid RVI and RVC kernel binary, fix
+> some bugs with different kernel configure, refactor out the entire
+> feature into some individual patches.
 
-If the feature is supported by the host, kvm should support it too so
-that userspace can choose whether to expose it to the guest or not.
-One disadvantage of not exposing it is that the guest will report
-a non existing vulnerability in
-/sys/devices/system/cpu/vulnerabilities/mmio_stale_data
-because the mitigation is present only if the guest supports
-(FLUSH_L1D and MD_CLEAR) or FB_CLEAR.
+Thank you for continuing to work on this series! I took it for a spin,
+and it worked nicely on my QEMU setup.
 
-Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
----
- arch/x86/kvm/cpuid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It would be nice to have it run on some *actual* hardware as well. :-)
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 2a9f1e200dbc..9c70cbb663a2 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -649,7 +649,7 @@ void kvm_set_cpu_caps(void)
- 		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
- 		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
- 		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
--		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
-+		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16) | F(FLUSH_L1D)
- 	);
- 
- 	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
--- 
-2.39.1
+I have some additional comments on the series, but I'll add those to the
+relevant patch. It's mostly minor things!
 
+
+Bj=C3=B6rn
