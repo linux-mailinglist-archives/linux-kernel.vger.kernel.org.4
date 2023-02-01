@@ -2,104 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D01685EB5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 06:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBF3685EB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 06:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjBAFFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 00:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S230444AbjBAFGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 00:06:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjBAFF0 (ORCPT
+        with ESMTP id S230146AbjBAFGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 00:05:26 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5B34F369
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 21:05:22 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id bj22so5706395oib.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 21:05:22 -0800 (PST)
+        Wed, 1 Feb 2023 00:06:45 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460634F344
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 21:06:43 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id o36so5753748wms.1
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 21:06:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eclypsium.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h6q4IwOecTcEOy5VQEjXPXoIpKM8CGc/pqjZdiY7fyw=;
-        b=MPawYchqKt9uaJ41XmXgTP1DkHtqFZVt2TGFm5XIzekKwTgBgqjtMQcKwak3L2k1Kd
-         H7oso3XmnqxQAiMcstp+okiYqPc0V+nffn2K7hiwDqiu6vCWj7s/RPRdgjgaP/aSRYE5
-         Q4cD5IslT1XhLTpoIh8pIOBC57VklFggs/4m2Jn6cdzubrjbpatnx32Pv0gmR6AE9ypw
-         jiUSYvQmvUTwXww4jyRLfRxmC+5kJnn1MsUHOyWutsMDyAFIhUHLIWLGZ1MJtJqBfAFy
-         IDcP84ZVC9aQj8epIvkSyMsWPxiYmEqrd3cGlHxKVL/amFQBLHtevazxB9Jrk6C8+rCX
-         GGDQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aICBJrKVWPHeedxD0FVA8WOU0XSPMA5Nridqt13rtlk=;
+        b=h4vZW0GhGYie/hJSB99EfkUDdaNWQ2L9Wl0h/Gg04fWaEfzSwCC+i9Nz7pGlXH5fmQ
+         A0pPDBEnNzFIckAG0xlcGc0u0ViV/dkZo32NDPqRC/jehUDgHz2zwje0wYDTedmpXtOk
+         FiQKb0b4KP86pmde5iS/rO1xqor7e3hSQ4h6bSNK38I1uZGXty6WtQV/1QW7E6/cMJwc
+         MNZldPJ9F+qhjo5RYq7dv1LUDOwgYr/XmqDs88seq88rSVF33STO+CfI56ARfUBQWLLJ
+         YzddvIQvPVqW6eednLlhLKdpgoCRkZeDfW4rejM50gucZX2B8IHqMUs5k7z1BzUu4t+d
+         qH8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h6q4IwOecTcEOy5VQEjXPXoIpKM8CGc/pqjZdiY7fyw=;
-        b=JNpjuCH0FCWOQoqSE+NFTrJYYkWpv04Qyb/WuqJPx5uO9EsokO3zieWkYu7rH9GjnK
-         4sXpJn0OwEwKDShlD/74kozuZMVEnWcgK2aWthVWbt5am1hUKI21fgmDguJJV4Hx1nCR
-         SZ5+VkvTnTBMCmJ7VcEQ3R99Kcs36lc0Z4ufbLTzsoyOyUr67ThOvboFUEBDZfbNygrm
-         4wzNDPDIz1yfSMrdCCY3LsuFIBb4zR7y7B199mLQuNxJZpIYxSA05Jf8zrgyLBNMWxeQ
-         2+y5dY7Qo9Pukln8o+f4hnY0GfusI6nTRW4xPYGMiazqYMfI/0pGUQfuPoAPgIuUPCsj
-         ch+w==
-X-Gm-Message-State: AO0yUKXFX3tXmgML0ATCMYz4bGeHEjOy9bxyMWd/G0PC51ijRLEU2sSS
-        Nq2MxSe5WpLz52u2RP7sRCTv1A==
-X-Google-Smtp-Source: AK7set+s2jXxEB4pjtE6MZ/6UtRVKhnTRdbp6ivGExrbYLS0jjbEwaTdJARmqxRTCeS124Ho0eS6Sw==
-X-Received: by 2002:aca:b30b:0:b0:37a:3ebc:d3a8 with SMTP id c11-20020acab30b000000b0037a3ebcd3a8mr463112oif.43.1675227921849;
-        Tue, 31 Jan 2023 21:05:21 -0800 (PST)
-Received: from fedora.. ([186.122.181.28])
-        by smtp.gmail.com with ESMTPSA id cd26-20020a056830621a00b0068be61a7ac6sm1123445otb.56.2023.01.31.21.05.20
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aICBJrKVWPHeedxD0FVA8WOU0XSPMA5Nridqt13rtlk=;
+        b=hOamuC+/U91t9B8s5K3tOQDsR0ePMr1YDdmUIj/YLRtBeAkQq0wJScNCFDYMc9B/hG
+         U5TrjCMQBdXqZnaoT8eyM7wnRHU+Fb56xe5m+hw3G++HmhF9gmosZ3GS3Ua9Fxds9r76
+         SOJ0YEKieK2oo1oM41vJtD2SbA3XiGR1YMCCved+kPETcZdBHYJNAQjgg/isqdnRUDSJ
+         n3RMdfKPMFk+U3NbDkrS+d91rzRZ4qi6aaJGU5QDHzQ+IUtYb49OTTKoGFeNz+RbfU2T
+         8YNQablhr46bMfe8f40ODMPATTHNfkUE0NjnEiNKvuKg+r09ps/Sa6FRIjT6aKqrG9Dw
+         N8aA==
+X-Gm-Message-State: AO0yUKVmL8S6HGntikHIQXAJhMuFH5PAi0h+ODI9Z9F5Xm2PlpTehnkd
+        CvykHwJjBc636+/nu56z278=
+X-Google-Smtp-Source: AK7set/KReGr4XP1Lixp7Q+J0OK/uexI/rucZoin9FOfNPCTOQP/g/RvjPZpLCsHA0uNOBkBpZzqTA==
+X-Received: by 2002:a05:600c:4fd2:b0:3dc:523c:22b4 with SMTP id o18-20020a05600c4fd200b003dc523c22b4mr587346wmq.27.1675228001614;
+        Tue, 31 Jan 2023 21:06:41 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b003daf6e3bc2fsm1580004wms.1.2023.01.31.21.06.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 21:05:21 -0800 (PST)
-From:   Mauro Lima <mauro.lima@eclypsium.com>
-To:     mika.westerberg@linux.intel.com
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mauro Lima <mauro.lima@eclypsium.com>
-Subject: [PATCH 2/2] spi: intel: Add support for controllers
-Date:   Wed,  1 Feb 2023 02:04:55 -0300
-Message-Id: <20230201050455.505135-3-mauro.lima@eclypsium.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201050455.505135-1-mauro.lima@eclypsium.com>
-References: <20230201050455.505135-1-mauro.lima@eclypsium.com>
+        Tue, 31 Jan 2023 21:06:36 -0800 (PST)
+Date:   Wed, 1 Feb 2023 08:06:31 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Martin Kaiser <martin@kaiser.cx>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: fix NULL check for rcu pointer
+Message-ID: <Y9nzV1CSCh3PvDt9@kadam>
+References: <20230131090057.241779-1-martin@kaiser.cx>
+ <Y9kvF0C1kiDctEUw@kroah.com>
+ <20230131171613.mubqpogkk5e6lnrk@viti.kaiser.cx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230131171613.mubqpogkk5e6lnrk@viti.kaiser.cx>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device IDs to the module table for the following controllers:
-	- 9da4  Cannon Lake 300 Series On-Package
-	- a2a4  200 Series/Z370 Chipset Family SPI Controller
-	- 9d24  Intel® 200 Series Chipset Family (Including Intel® X299),
-		Intel® Z370 Intel® H310C,B365,
-		also Intel® B460 and H410 Chipset Platform Controller Hub
+On Tue, Jan 31, 2023 at 06:16:13PM +0100, Martin Kaiser wrote:
+> Hello Greg and all,
+> 
+> Thus wrote Greg Kroah-Hartman (gregkh@linuxfoundation.org):
+> 
+> > On Tue, Jan 31, 2023 at 10:00:57AM +0100, Martin Kaiser wrote:
+> > > Fix the NULL check for padapter->pnetdev->rx_handler_data.
+> 
+> > > The current code calls rcu_dereference while it holds the rcu read lock
+> > > and checks the pointer after releasing the lock. An rcu pointer may only be
+> > > used between calls to rcu_read_lock and rcu_read_unlock.
+> 
+> > > Replace the check with rcu_access_pointer. My understanding is that this
+> > > function returns the value of the pointer and needs no locking. We can
+> > > then check the pointer but we must not dereference it.
+> 
+> > > Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> 
+> > What commit id does this fix?
+> 
+> the code that checks br_port has been around since the driver was
+> imported into staging.
+> 
+> If the patch is considered as a fix, it should have
+> 
+> Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
 
-Signed-off-by: Mauro Lima <mauro.lima@eclypsium.com>
----
- drivers/spi/spi-intel-pci.c | 3 +++
- 1 file changed, 3 insertions(+)
+I don't think it is a fix as we discuss later in the thread.
 
-diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
-index 10fa3a7fa4f5..ba08f64e56eb 100644
---- a/drivers/spi/spi-intel-pci.c
-+++ b/drivers/spi/spi-intel-pci.c
-@@ -80,6 +80,9 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, 0xa224), (unsigned long)&bxt_info },
- 	{ PCI_VDEVICE(INTEL, 0xa324), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa3a4), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0x9da4), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0xa2a4), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0x9d24), (unsigned long)&cnl_info },
- 	{ },
- };
- MODULE_DEVICE_TABLE(pci, intel_spi_pci_ids);
--- 
-2.39.1
+But if it were then it's still really useful to record that.  I normally
+don't record when Fixes are from before the git era because one time,
+ten years ago, one person said not to do that.  But really even there I
+personally think Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2") is useful.
+
+It tells the tools how far to backport things.  It tells us if most of
+our bugs come from the very start or if we're introducing them later.
+
+regards,
+dan carpenter
 
