@@ -2,291 +2,472 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C466685E8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4738685E8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjBAEhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 23:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S230447AbjBAEhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 23:37:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjBAEhH (ORCPT
+        with ESMTP id S229962AbjBAEhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 31 Jan 2023 23:37:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B4E3D90B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:36:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675226176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BiFkmS3tbcnlONUhHqfYNt9fP+0R9mL8avFHp+lRK9A=;
-        b=XgDQnVCGEkYDVQImU6H2RSj8pObDA0n/0iXiC0ZgLdguIFcoxIXv7sJ4z7z+edqAhO0Obs
-        Tdx0UPvOByIjekyXau6PbNbYOK9ra91OA8pENziHKpcUKGMvtAAhSBuCmseXdoORJUg0BE
-        LhdTo+zwspLEG2m96Mn7oy/hmo6ZuUM=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-102-sCehqs7lMwi3BQHPvcq2Mw-1; Tue, 31 Jan 2023 23:36:14 -0500
-X-MC-Unique: sCehqs7lMwi3BQHPvcq2Mw-1
-Received: by mail-oi1-f198.google.com with SMTP id r17-20020a056808211100b0036e886e0e3bso7114396oiw.12
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:36:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BiFkmS3tbcnlONUhHqfYNt9fP+0R9mL8avFHp+lRK9A=;
-        b=fIA5aDIsL1K+AyEAlkAwyV3wMSX4WdOcZMH/29FNTrMDqbaxU/8Kbk33TmfKq9Cmko
-         iJQqNXb7BTcEVGZOAh9GV2FM5m1k+EdVqkVGZVvO1GcWoJ8WgH+AB8iLVUFqDK8fgQxD
-         jn2qn/hqoSpnMaEa71eA/fTTpCbG0+SQ7o+qTX4NBLfZ3M54b6e+lsU/0rQchiitdo5d
-         1sjen36T6mS6hbOlOdkJFeqAjL8o7s14nrCO6UaCXl7DDqnLUDENfAE8wHyZ52YLCn3R
-         sZiNtZoMGxuZvyHeQlJk31VHTLmMEjgRLMoOUBZXsTgScSkium5NfXTOXZUb6/U2czEy
-         ZUzA==
-X-Gm-Message-State: AO0yUKUbb/2xbwXGTz3x2EDYfsDUUjA6CpcDa1pjXexjLGnBIdiSJEb3
-        PHBS+D6c28Y7Tlx+Gdrp/BrUF0ayQSprhkY/xpx8QjlNTEQJ5l6iwlW5p4fqqI3p2TT5i6cztUm
-        DiE37gOclWH7WPjhZuWOCDNMi
-X-Received: by 2002:a05:6871:721:b0:152:4c46:fa6c with SMTP id f33-20020a056871072100b001524c46fa6cmr348953oap.17.1675226173527;
-        Tue, 31 Jan 2023 20:36:13 -0800 (PST)
-X-Google-Smtp-Source: AK7set9I+XbBlHDkMe6JZXfDndS488Wpi+CAx0Lsc2GvEYuE/fTytkaATmKQj00gyUrFyQU54ZtHcQ==
-X-Received: by 2002:a05:6871:721:b0:152:4c46:fa6c with SMTP id f33-20020a056871072100b001524c46fa6cmr348944oap.17.1675226173240;
-        Tue, 31 Jan 2023 20:36:13 -0800 (PST)
-Received: from ?IPv6:2804:1b3:a800:6912:c477:c73a:cf7c:3a27? ([2804:1b3:a800:6912:c477:c73a:cf7c:3a27])
-        by smtp.gmail.com with ESMTPSA id fz16-20020a056870ed9000b00160323101efsm7400841oab.42.2023.01.31.20.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 20:36:12 -0800 (PST)
-Message-ID: <5ba79c4feb829ed75cfd98cf5c8042dcb2ddea91.camel@redhat.com>
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 01 Feb 2023 01:36:07 -0300
-In-Reply-To: <Y9j9BnMwfm4TJks7@tpad>
-References: <20230125073502.743446-1-leobras@redhat.com>
-         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
-         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
-         <Y9FzSBw10MGXm2TK@tpad> <Y9IvoDJbLbFcitTc@dhcp22.suse.cz>
-         <Y9LDAZmApLeffrT8@tpad> <Y9LQ615H13RmG7wL@dhcp22.suse.cz>
-         <0122005439ffb7895efda7a1a67992cbe41392fe.camel@redhat.com>
-         <Y9j9BnMwfm4TJks7@tpad>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 145073EC43;
+        Tue, 31 Jan 2023 20:37:03 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxnOpu7NljIi4LAA--.22782S3;
+        Wed, 01 Feb 2023 12:37:02 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axur1t7NljURsmAA--.9629S3;
+        Wed, 01 Feb 2023 12:37:01 +0800 (CST)
+Subject: Re: [PATCH v10 2/4] clk: clk-loongson2: add clock controller driver
+ support
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        lvjianmin@loongson.cn, wanghongliang@loongson.cn,
+        liupeibao@loongson.cn, zhuyinbo@loongson.cn
+References: <20221129034157.15036-1-zhuyinbo@loongson.cn>
+ <20221129034157.15036-2-zhuyinbo@loongson.cn>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <696c5747-f1ef-895f-f73c-2af7b185db4a@loongson.cn>
+Date:   Wed, 1 Feb 2023 12:37:01 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221129034157.15036-2-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Axur1t7NljURsmAA--.9629S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWfJw1UGFykAr4rWF1xZw1kZrb_yoWktryrpF
+        yfAay3GFWjqr4Uurs8JryDGFn8AasxK3W7ZF43G34UuFZ7X34UWr48GFyxCF4UZrWkAay2
+        vFZa9rWUCFs8W37anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jO-B_UUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-01-31 at 08:35 -0300, Marcelo Tosatti wrote:
-> On Fri, Jan 27, 2023 at 03:55:39AM -0300, Leonardo Br=C3=A1s wrote:
-> > On Thu, 2023-01-26 at 20:13 +0100, Michal Hocko wrote:
-> > > On Thu 26-01-23 15:14:25, Marcelo Tosatti wrote:
-> > > > On Thu, Jan 26, 2023 at 08:45:36AM +0100, Michal Hocko wrote:
-> > > > > On Wed 25-01-23 15:22:00, Marcelo Tosatti wrote:
-> > > > > [...]
-> > > > > > Remote draining reduces interruptions whether CPU=20
-> > > > > > is marked as isolated or not:
-> > > > > >=20
-> > > > > > - Allows isolated CPUs from benefiting of pcp caching.
-> > > > > > - Removes the interruption to non isolated CPUs. See for exampl=
-e=20
-> > > > > >=20
-> > > > > > https://lkml.org/lkml/2022/6/13/2769
-> > > > >=20
-> > > > > This is talking about page allocato per cpu caches, right? In thi=
-s patch
-> > > > > we are talking about memcg pcp caches. Are you sure the same appl=
-ies
-> > > > > here?
-> > > >=20
-> > > > Both can stall the users of the drain operation.
-> > >=20
-> > > Yes. But it is important to consider who those users are. We are
-> > > draining when
-> > > 	- we are charging and the limit is hit so that memory reclaim
-> > > 	  has to be triggered.
-> > > 	- hard, high limits are set and require memory reclaim.
-> > > 	- force_empty - full memory reclaim for a memcg
-> > > 	- memcg offlining - cgroup removel - quite a heavy operation as
-> > > 	  well.
-> > > all those could be really costly kernel operations and they affect
-> > > isolated cpu only if the same memcg is used by both isolated and non-=
-isolated
-> > > cpus. In other words those costly operations would have to be trigger=
-ed
-> > > from non-isolated cpus and those are to be expected to be stalled. It=
- is
-> > > the side effect of the local cpu draining that is scheduled that affe=
-cts
-> > > the isolated cpu as well.
-> > >=20
-> > > Is that more clear?
-> >=20
-> > I think so, please help me check:
 
-Michal, Roman: Could you please review my argumentation below, so I can
-understand what exactly is wrong ?
-
-> >=20
-> > IIUC, we can approach this by dividing the problem in two working modes=
-:
-> > 1 - Normal, meaning no drain_all_stock() running.
-> > 2 - Draining, grouping together pre-OOM and userspace 'config' : changi=
-ng,
-> > destroying, reconfiguring a memcg.
-> >=20
-> > For (1), we will have (ideally) only local cpu working on the percpu st=
-ruct.
-> > This mode will not have any kind of contention, because each CPU will h=
-old it's
-> > own spinlock only.=20
-> >=20
-> > For (2), we will have a lot of drain_all_stock() running. This will mea=
-n a lot
-> > of schedule_work_on() running (on upstream) or possibly causing content=
-ion, i.e.
-> > local cpus having to wait for a lock to get their cache, on the patch p=
-roposal.
-> >=20
-> > Ok, given the above is correct:
-> >=20
-> > # Some arguments point that (1) becomes slower with this patch.
-> >=20
-> > This is partially true: while test 2.2 pointed that local cpu functions=
- running
-> > time had became slower by a few cycles, test 2.4 points that the usersp=
-ace
-> > perception of it was that the syscalls and pagefaulting actually became=
- faster:
-> >=20
-> > During some debugging tests before getting the performance on test 2.4,=
- I
-> > noticed that the 'syscall + write' test would call all those functions =
-that
-> > became slower on test 2.2. Those functions were called multiple million=
-s of
-> > times during a single test, and still the patched version performance t=
-est
-> > returned faster for test 2.4 than upstream version. Maybe the functions=
- became
-> > slower, but overall the usage of them in the usual context became faste=
-r.
-> >=20
-> > Is not that a small improvement?
-> >=20
-> > # Regarding (2), I notice that we fear contention=20
-> >=20
-> > While this seems to be the harder part of the discussion, I think we ha=
-ve enough
-> > data to deal with it.=20
-> >=20
-> > In which case contention would be a big problem here?=C2=A0
-> > IIUC it would be when a lot of drain_all_stock() get running because th=
-e memory
-> > limit is getting near.=C2=A0I mean, having the user to create / modify =
-a memcg
-> > multiple times a second for a while is not something that is expected, =
-IMHO.
->=20
-> Considering that the use of spinlocks with remote draining is the more ge=
-neral solution,
-> what would be a test-case to demonstrate a contention problem?
-
-IIUC we could try to reproduce a memory tight workload that keeps allocatin=
-g /
-freeing from different cpus (without hitting OOM).
-
-Michal, Roman: Is that correct? You have any workload like that so we can t=
-est?
-
->=20
-> > Now, if I assumed correctly and the case where contention could be a pr=
-oblem is
-> > on a memcg with high memory pressure, then we have the argument that Ma=
-rcelo
-> > Tosatti brought to the discussion[P1]: using spinlocks on percpu caches=
- for page
-> > allocation brought better results than local_locks + schedule_work_on()=
-.
-> >=20
-> > I mean, while contention would cause the cpu to wait for a while before=
- getting
-> > the lock for allocating a page from cache, something similar would happ=
-en with
-> > schedule_work_on(), which would force the current task to wait while th=
-e
-> > draining happens locally.=C2=A0
-> >=20
-> > What I am able to see is that, for each drain_all_stock(), for each cpu=
- getting
-> > drained we have the option to (a) (sometimes) wait for a lock to be fre=
-ed, or
-> > (b) wait for a whole context switch to happen.
-> > And IIUC, (b) is much slower than (a) on average, and this is what caus=
-es the
-> > improved performance seen in [P1].
->=20
-> Moreover, there is a delay for the remote CPU to execute a work item=20
-> (there could be high priority tasks, IRQ handling on the remote CPU,
-> which delays execution of the work item even further).
->=20
-> Also, the other point is that the spinlock already exists for
-> PREEMPT_RT (which means that any potential contention issue=20
-> with the spinlock today is limited to PREEMPT_RT users).
->=20
-> So it would be good to point out a specific problematic=20
-> testcase/scenario with using the spinlock in this particular case?
+Friendly ping ?
 
 
-Oh, that's a good point, but IIUC spin_lock() replaces local_lock() in memc=
-g,
-meaning it will always run in the same CPU, and there should only be any
-contention if the memcg local cpu functions get preempted by something that
-calls a memcg local cpu function.
-
->=20
-> > (I mean, waiting while drain_local_stock() runs in the local CPU vs wai=
-ting for
-> > it to run on the remote CPU may not be that different, since the cachel=
-ine is
-> > already writen to by the remote cpu on Upstream)
-> >=20
-> > Also according to test 2.2, for the patched version, drain_local_stock(=
-) have
-> > gotten faster (much faster for 128 cpus), even though it does all the d=
-raining
-> > instead of just scheduling it on the other cpus.=C2=A0
-> > I mean, summing that to the brief nature of local cpu functions, we may=
- not hit
-> > contention as much as we are expected.
-> >=20
-> > ##
-> >=20
-> > Sorry for the long text.
-> > I may be missing some point, please let me know if that's the case.
-> >=20
-> > Thanks a lot for reviewing!
-> > Leo
-> >=20
-> > [P1]: https://lkml.org/lkml/2022/6/13/2769
-> >=20
-> >=20
->=20
-
-Thanks!
-Leo
+ÔÚ 2022/11/29 ÉÏÎç11:41, Yinbo Zhu Ð´µÀ:
+> This driver provides support for clock controller on Loongson-2 SoC,
+> the Loongson-2 SoC uses a 100MHz clock as the PLL reference clock,
+> there are five independent PLLs inside, each of which PLL can
+> provide up to three sets of frequency dependent clock outputs.
+>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v10:
+> 		1. Detach of_clk_init to another patch.
+> Change in v9:
+> 		1. Add all history changelog information.
+> Change in v8:
+> 		1. Remove the flag "CLK_IS_BASIC".
+> Change in v7:
+> 		1. Adjust position alphabetically in Kconfig and Makefile.
+> 		2. Add static for loongson2_pll_base.
+> 		3. Move other file-scope variables in probe.
+> Change in v6:
+> 		1. NO change, but other patch in this series of patches has
+> 		   changes.
+> Change in v5:
+> 		1. Replace loongson2 with Loongson-2 in commit info.
+> 		2. Replace Loongson2 with Loongson-2 in binding and
+> 		   Kconfig file.
+> 		3. Replace soc with SoC.
+> Change in v4:
+> 		1. Fixup clock-names that replace "xxx-clk" with "xxx".
+> Change in v3:
+> 		1. NO change, but other patch in this series of patches has
+> 		   changes.
+> Change in v2:
+> 		1. Update the include filename.
+> 		2. Change string from refclk/REFCLK to ref/REF.
+>
+>   MAINTAINERS                 |   1 +
+>   arch/loongarch/Kconfig      |   1 +
+>   drivers/clk/Kconfig         |   9 ++
+>   drivers/clk/Makefile        |   1 +
+>   drivers/clk/clk-loongson2.c | 286 ++++++++++++++++++++++++++++++++++++
+>   5 files changed, 298 insertions(+)
+>   create mode 100644 drivers/clk/clk-loongson2.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ab94893fe2f6..73fa56f1fd5d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12025,6 +12025,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
+>   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+>   L:	linux-clk@vger.kernel.org
+>   S:	Maintained
+> +F:	drivers/clk/clk-loongson2.c
+>   F:	include/dt-bindings/clock/loongson,ls2k-clk.h
+>   
+>   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 903096bd87f8..4f8f1b8f796d 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -127,6 +127,7 @@ config LOONGARCH
+>   	select USE_PERCPU_NUMA_NODE_ID
+>   	select USER_STACKTRACE_SUPPORT
+>   	select ZONE_DMA32
+> +	select COMMON_CLK
+>   
+>   config 32BIT
+>   	bool
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index d79905f3e174..d13626f63739 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -326,6 +326,15 @@ config COMMON_CLK_LOCHNAGAR
+>   	  This driver supports the clocking features of the Cirrus Logic
+>   	  Lochnagar audio development board.
+>   
+> +config COMMON_CLK_LOONGSON2
+> +	bool "Clock driver for Loongson-2 SoC"
+> +	depends on COMMON_CLK && OF
+> +	help
+> +	  This driver provides support for Clock Controller that base on
+> +	  Common Clock Framework Controller (CCF) on Loongson-2 SoC. The
+> +	  Clock Controller can generates and supplies clock to various
+> +	  peripherals within the SoC.
+> +
+>   config COMMON_CLK_NXP
+>   	def_bool COMMON_CLK && (ARCH_LPC18XX || ARCH_LPC32XX)
+>   	select REGMAP_MMIO if ARCH_LPC32XX
+> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> index e3ca0d058a25..b298c5dabc1a 100644
+> --- a/drivers/clk/Makefile
+> +++ b/drivers/clk/Makefile
+> @@ -43,6 +43,7 @@ obj-$(CONFIG_COMMON_CLK_K210)		+= clk-k210.o
+>   obj-$(CONFIG_LMK04832)			+= clk-lmk04832.o
+>   obj-$(CONFIG_COMMON_CLK_LAN966X)	+= clk-lan966x.o
+>   obj-$(CONFIG_COMMON_CLK_LOCHNAGAR)	+= clk-lochnagar.o
+> +obj-$(CONFIG_COMMON_CLK_LOONGSON2)	+= clk-loongson2.o
+>   obj-$(CONFIG_COMMON_CLK_MAX77686)	+= clk-max77686.o
+>   obj-$(CONFIG_COMMON_CLK_MAX9485)	+= clk-max9485.o
+>   obj-$(CONFIG_ARCH_MILBEAUT_M10V)	+= clk-milbeaut.o
+> diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
+> new file mode 100644
+> index 000000000000..7487effceeab
+> --- /dev/null
+> +++ b/drivers/clk/clk-loongson2.c
+> @@ -0,0 +1,286 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/clkdev.h>
+> +#include <linux/err.h>
+> +#include <linux/init.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <dt-bindings/clock/loongson,ls2k-clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/slab.h>
+> +#include <linux/clk.h>
+> +
+> +#define LOONGSON2_PLL_MULT_SHIFT		32
+> +#define LOONGSON2_PLL_MULT_WIDTH		10
+> +#define LOONGSON2_PLL_DIV_SHIFT			26
+> +#define LOONGSON2_PLL_DIV_WIDTH			6
+> +#define LOONGSON2_APB_FREQSCALE_SHIFT		20
+> +#define LOONGSON2_APB_FREQSCALE_WIDTH		3
+> +#define LOONGSON2_USB_FREQSCALE_SHIFT		16
+> +#define LOONGSON2_USB_FREQSCALE_WIDTH		3
+> +#define LOONGSON2_SATA_FREQSCALE_SHIFT		12
+> +#define LOONGSON2_SATA_FREQSCALE_WIDTH		3
+> +
+> +static void __iomem *loongson2_pll_base;
+> +
+> +static struct clk_hw *loongson2_clk_register(struct device *dev,
+> +					  const char *name,
+> +					  const char *parent_name,
+> +					  const struct clk_ops *ops,
+> +					  unsigned long flags)
+> +{
+> +	int ret;
+> +	struct clk_hw *hw;
+> +	struct clk_init_data init;
+> +
+> +	/* allocate the divider */
+> +	hw = kzalloc(sizeof(*hw), GFP_KERNEL);
+> +	if (!hw)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	init.name = name;
+> +	init.ops = ops;
+> +	init.flags = flags;
+> +	init.parent_names = (parent_name ? &parent_name : NULL);
+> +	init.num_parents = (parent_name ? 1 : 0);
+> +	hw->init = &init;
+> +
+> +	/* register the clock */
+> +	ret = clk_hw_register(dev, hw);
+> +	if (ret) {
+> +		kfree(hw);
+> +		hw = ERR_PTR(ret);
+> +	}
+> +
+> +	return hw;
+> +}
+> +
+> +static struct clk_hw *loongson2_clk_pll_register(const char *name,
+> +				const char *parent, void __iomem *reg)
+> +{
+> +	u64 val;
+> +	u32 mult = 1, div = 1;
+> +
+> +	val = readq((void *)reg);
+> +
+> +	mult = (val >> LOONGSON2_PLL_MULT_SHIFT) &
+> +			clk_div_mask(LOONGSON2_PLL_MULT_WIDTH);
+> +	div = (val >> LOONGSON2_PLL_DIV_SHIFT) &
+> +			clk_div_mask(LOONGSON2_PLL_DIV_WIDTH);
+> +
+> +	return clk_hw_register_fixed_factor(NULL, name, parent,
+> +				CLK_SET_RATE_PARENT, mult, div);
+> +}
+> +
+> +static unsigned long loongson2_apb_recalc_rate(struct clk_hw *hw,
+> +					  unsigned long parent_rate)
+> +{
+> +	u64 val;
+> +	u32 mult;
+> +	unsigned long rate;
+> +
+> +	val = readq((void *)(loongson2_pll_base + 0x50));
+> +
+> +	mult = (val >> LOONGSON2_APB_FREQSCALE_SHIFT) &
+> +			clk_div_mask(LOONGSON2_APB_FREQSCALE_WIDTH);
+> +
+> +	rate = parent_rate * (mult + 1);
+> +	do_div(rate, 8);
+> +
+> +	return rate;
+> +}
+> +
+> +static const struct clk_ops loongson2_apb_clk_ops = {
+> +	.recalc_rate = loongson2_apb_recalc_rate,
+> +};
+> +
+> +static unsigned long loongson2_usb_recalc_rate(struct clk_hw *hw,
+> +					  unsigned long parent_rate)
+> +{
+> +	u64 val;
+> +	u32 mult;
+> +	unsigned long rate;
+> +
+> +	val = readq((void *)(loongson2_pll_base + 0x50));
+> +
+> +	mult = (val >> LOONGSON2_USB_FREQSCALE_SHIFT) &
+> +			clk_div_mask(LOONGSON2_USB_FREQSCALE_WIDTH);
+> +
+> +	rate = parent_rate * (mult + 1);
+> +	do_div(rate, 8);
+> +
+> +	return rate;
+> +}
+> +
+> +static const struct clk_ops loongson2_usb_clk_ops = {
+> +	.recalc_rate = loongson2_usb_recalc_rate,
+> +};
+> +
+> +static unsigned long loongson2_sata_recalc_rate(struct clk_hw *hw,
+> +					  unsigned long parent_rate)
+> +{
+> +	u64 val;
+> +	u32 mult;
+> +	unsigned long rate;
+> +
+> +	val = readq((void *)(loongson2_pll_base + 0x50));
+> +
+> +	mult = (val >> LOONGSON2_SATA_FREQSCALE_SHIFT) &
+> +			clk_div_mask(LOONGSON2_SATA_FREQSCALE_WIDTH);
+> +
+> +	rate = parent_rate * (mult + 1);
+> +	do_div(rate, 8);
+> +
+> +	return rate;
+> +}
+> +
+> +static const struct clk_ops loongson2_sata_clk_ops = {
+> +	.recalc_rate = loongson2_sata_recalc_rate,
+> +};
+> +
+> +static void loongson2_check_clk_hws(struct clk_hw *clks[], unsigned int count)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < count; i++)
+> +		if (IS_ERR(clks[i]))
+> +			pr_err("Loongson2 clk %u: register failed with %ld\n"
+> +				, i, PTR_ERR(clks[i]));
+> +}
+> +
+> +static struct clk_hw *loongson2_obtain_fixed_clk_hw(
+> +					struct device_node *np,
+> +					const char *name)
+> +{
+> +	struct clk *clk;
+> +
+> +	clk = of_clk_get_by_name(np, name);
+> +	if (IS_ERR(clk))
+> +		return ERR_PTR(-ENOENT);
+> +
+> +	return __clk_get_hw(clk);
+> +}
+> +
+> +static void __init loongson2_clocks_init(struct device_node *np)
+> +{
+> +	struct clk_hw **hws;
+> +	struct clk_hw_onecell_data *clk_hw_data;
+> +	spinlock_t loongson2_clk_lock;
+> +
+> +	loongson2_pll_base = of_iomap(np, 0);
+> +
+> +	if (!loongson2_pll_base) {
+> +		pr_err("clk: unable to map loongson2 clk registers\n");
+> +		goto err;
+> +	}
+> +
+> +	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws, LOONGSON2_CLK_END),
+> +					GFP_KERNEL);
+> +	if (WARN_ON(!clk_hw_data))
+> +		goto err;
+> +
+> +	clk_hw_data->num = LOONGSON2_CLK_END;
+> +	hws = clk_hw_data->hws;
+> +
+> +	hws[LOONGSON2_REF_100M] = loongson2_obtain_fixed_clk_hw(np,
+> +						"ref_100m");
+> +
+> +	hws[LOONGSON2_NODE_PLL] = loongson2_clk_pll_register("node_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base);
+> +
+> +	hws[LOONGSON2_DDR_PLL] = loongson2_clk_pll_register("ddr_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base + 0x10);
+> +
+> +	hws[LOONGSON2_DC_PLL] = loongson2_clk_pll_register("dc_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base + 0x20);
+> +
+> +	hws[LOONGSON2_PIX0_PLL] = loongson2_clk_pll_register("pix0_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base + 0x30);
+> +
+> +	hws[LOONGSON2_PIX1_PLL] = loongson2_clk_pll_register("pix1_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base + 0x40);
+> +
+> +	hws[LOONGSON2_NODE_CLK] = clk_hw_register_divider(NULL, "node",
+> +						"node_pll", 0,
+> +						loongson2_pll_base + 0x8, 0,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	/*
+> +	 * The hda clk divisor in the upper 32bits and the clk-prodiver
+> +	 * layer code doesn't support 64bit io operation thus a conversion
+> +	 * is required that subtract shift by 32 and add 4byte to the hda
+> +	 * address
+> +	 */
+> +	hws[LOONGSON2_HDA_CLK] = clk_hw_register_divider(NULL, "hda",
+> +						"ddr_pll", 0,
+> +						loongson2_pll_base + 0x22, 12,
+> +						7, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_GPU_CLK] = clk_hw_register_divider(NULL, "gpu",
+> +						"ddr_pll", 0,
+> +						loongson2_pll_base + 0x18, 22,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_DDR_CLK] = clk_hw_register_divider(NULL, "ddr",
+> +						"ddr_pll", 0,
+> +						loongson2_pll_base + 0x18, 0,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_GMAC_CLK] = clk_hw_register_divider(NULL, "gmac",
+> +						"dc_pll", 0,
+> +						loongson2_pll_base + 0x28, 22,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_DC_CLK] = clk_hw_register_divider(NULL, "dc",
+> +						"dc_pll", 0,
+> +						loongson2_pll_base + 0x28, 0,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_APB_CLK] = loongson2_clk_register(NULL, "apb",
+> +						"gmac",
+> +						&loongson2_apb_clk_ops, 0);
+> +
+> +	hws[LOONGSON2_USB_CLK] = loongson2_clk_register(NULL, "usb",
+> +						"gmac",
+> +						&loongson2_usb_clk_ops, 0);
+> +
+> +	hws[LOONGSON2_SATA_CLK] = loongson2_clk_register(NULL, "sata",
+> +						"gmac",
+> +						&loongson2_sata_clk_ops, 0);
+> +
+> +	hws[LOONGSON2_PIX0_CLK] = clk_hw_register_divider(NULL, "pix0",
+> +						"pix0_pll", 0,
+> +						loongson2_pll_base + 0x38, 0, 6,
+> +						CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_PIX1_CLK] = clk_hw_register_divider(NULL, "pix1",
+> +						"pix1_pll", 0,
+> +						loongson2_pll_base + 0x48, 0, 6,
+> +						CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	loongson2_check_clk_hws(hws, LOONGSON2_CLK_END);
+> +
+> +	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
+> +
+> +err:
+> +	iounmap(loongson2_pll_base);
+> +}
+> +
+> +CLK_OF_DECLARE(loongson2_clk, "loongson,ls2k-clk", loongson2_clocks_init);
 
