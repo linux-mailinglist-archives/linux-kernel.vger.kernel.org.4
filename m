@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3653B6864F0
+	by mail.lfdr.de (Postfix) with ESMTP id 81D976864F1
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbjBALBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 06:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S232375AbjBALBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 06:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBALBb (ORCPT
+        with ESMTP id S232363AbjBALBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 06:01:31 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A61E9ECB;
-        Wed,  1 Feb 2023 03:01:26 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Feb 2023 06:01:46 -0500
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3727B49542
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:01:40 -0800 (PST)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D917A1EC04C1;
-        Wed,  1 Feb 2023 12:01:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675249284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=z8r3tqpTOCugqbjchw7davFdI781zmRXaztbV66xvXI=;
-        b=YFmDe5qmaGXQ9822SHvm9YThC0H082UQm2dw0ZO8kjxGAvEoBhVAPDd4p+bpK5+SzgnKwe
-        0fHkgMN2IwuWBO/ZkctytZODottaFy/JljNGplig/M53tMAH5E1LTYrM/QTAby2ZlhOpH9
-        Ty8Pn9zG3mXo9EJXE/XpdgwwlvoaY14=
-Date:   Wed, 1 Feb 2023 12:01:18 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Subject: Re: [PATCH v5 06/39] x86/fpu: Add helper for modifying xstate
-Message-ID: <Y9pGfsiG9am4HoTZ@zn.tnic>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-7-rick.p.edgecombe@intel.com>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6362C200EB;
+        Wed,  1 Feb 2023 12:01:37 +0100 (CET)
+Date:   Wed, 1 Feb 2023 12:01:36 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com
+Subject: Re: [PATCH 0/3] Reserve dspps based on user request
+Message-ID: <20230201110136.xy5xifym624ehthb@SoMainline.org>
+References: <1675092092-26412-1-git-send-email-quic_kalyant@quicinc.com>
+ <31661b18-8519-cadb-0c56-6a1fa34633b2@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119212317.8324-7-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <31661b18-8519-cadb-0c56-6a1fa34633b2@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 01:22:44PM -0800, Rick Edgecombe wrote:
-> +void fpregs_lock_and_load(void)
-> +{
-> +	/*
-> +	 * fpregs_lock() only disables preemption (mostly). So modifying state
-> +	 * in an interrupt could screw up some in progress fpregs operation,
-> +	 * but appear to work. Warn about it.
+On 2023-01-30 21:18:30, Dmitry Baryshkov wrote:
+> On 30/01/2023 17:21, Kalyan Thota wrote:
+> > This series will enable color features on sc7280 target which has primary panel as eDP
+> > 
+> > The series removes dspp allocation based on encoder type and allows the dspp reservation
+> > based on user request via ctm.
+> > 
+> > The series will release/reserve the dpu resources when ever there is a topology change
+> > to suit the new requirements.
+> 
+> Nit: the subject of the cover letter should include the version, if you 
+> are including one into the individual patches Subject.
 
-I don't like comments where it sounds like we don't know what we're
-doing. "Appear to work"?
+Indeed this makes it hard to tell the versions apart, and lore also
+confusingly bundles both series in "loose matches on Subject: below".
 
--- 
-Regards/Gruss,
-    Boris.
+Nit ^2: and individual patches should still have the PATCH moniker, i.e.
+[PATCH v2 1/3].  git format-patch -v2 --cover-letter ... takes care of
+/all this/ this for you.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+And one more: as DSPP is an abbreviation, can we capitalize it?  So
+DSPP / DSPPs in these titles?
+
+> > 
+> > Kalyan Thota (3):
+> >    drm/msm/disp/dpu1: clear dspp reservations in rm release
+> >    drm/msm/disp/dpu1: add dspps into reservation if there is a ctm
+> >      request
+> >    drm/msm/disp/dpu1: reserve the resources on topology change
+
+We just discussed in the DSC series that the subsystem prefix is
+drm/msm/dpu.
+
+- Marijn
+
+> >   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h    |  1 +
+> >   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 54 +++++++++++++++++++++++------
+> >   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  4 ++-
+> >   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 +-
+> >   drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c      |  6 ++--
+> >   5 files changed, 50 insertions(+), 17 deletions(-)
+> > 
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
