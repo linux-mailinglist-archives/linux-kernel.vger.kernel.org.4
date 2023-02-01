@@ -2,207 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBB76865B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4686865BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjBAMJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S231733AbjBAMMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 07:12:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjBAMJ0 (ORCPT
+        with ESMTP id S231273AbjBAMMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:09:26 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E66A24122
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:09:25 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id k4so45313201eje.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 04:09:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p5YWm9YbNTKMxYNk4AOnV0WnqUFfbVvtTz0AfUn/Qgo=;
-        b=5k0f2FB8TrOh0RzvKmfVJTTjHOQlLek/0/QvrYCjl8ZcOnHEph12KwYvHOIQ4CtH7Y
-         UIJXaMqNTykXUXZz64gc/Nq2aT4/IZ2KK+p/ZvUtIG7BmbZfqhKsCX9JiaNCR/JGxa2H
-         5ilyFkW6hKEaD2OLEir+62tDAoD+Pdx2n15xe50bflaO4hBfEDAVObbm7KqtLjdlM1l4
-         7fa4yxe0LKz46yvjfmrsxgcuc3yZ/4H5FL7jJxNnDsDagrh+6Wk9jAFN+w8lLseqGQ1F
-         mUBvx7iyl9j+r1+3nZ7awN+ZjojIYCkGxVpF+UkNEaJGQWFA+2adayH/DsXb2OnUskHJ
-         aU9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p5YWm9YbNTKMxYNk4AOnV0WnqUFfbVvtTz0AfUn/Qgo=;
-        b=EDllLh2DAWUyhvxxqkJf1ddXLlr/TycXJMkOb/jISQd7MFq+h70bcByWND8RrNfZ4+
-         v1kbBSXL5PbUVqhTSf6Lzlsv3b/7E/tedxvG2LbBa+5szPeHFu50+5Ww4kqp8k3vwjbS
-         wQ7b9jkf759ERbfoY+o/yvpWSxG2wkMtFeoI6TuKs45gBcf+wcUmKc1YnIUxspvZbSW/
-         pEJii3TmYYsLvLJgKTx5sckAsD49mmp8758IDaeFyZgHcf7icRrjYyfiiXR1Sz5ZvcRY
-         7GBUCH1hDgL7189MIHcE+jPg+hAMzl8rvQak7YsJ15EwnfrFnTg3cdmp5E9T5PJdf+0w
-         Jr7w==
-X-Gm-Message-State: AO0yUKUdbYC562OFcfVwiK5xqQGs8+Ns8QSMuvvB21GPEJNzeEcg9Qm9
-        TVi03vik943wqDdJNoMw4HD5OA==
-X-Google-Smtp-Source: AK7set/NYyoxW+LDvGrhoWLOgDtKBMbhRQ/b6XMJ6R7ywgrZ52vlwSMuJrPgsrJQbSCvr/vqQsptkg==
-X-Received: by 2002:a17:906:5048:b0:878:4bc1:dd19 with SMTP id e8-20020a170906504800b008784bc1dd19mr2099414ejk.52.1675253363585;
-        Wed, 01 Feb 2023 04:09:23 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id v9-20020a170906380900b00877ec3b9b8bsm9992797ejc.153.2023.02.01.04.09.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 04:09:22 -0800 (PST)
-Date:   Wed, 1 Feb 2023 13:09:20 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     taoyuan_eddy@hotmail.com
-Cc:     dev@openvswitch.org, Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: openvswitch: reduce cpu_used_mask memory consumption
-Message-ID: <Y9pWcFdwaa4l6bPP@nanopsycho>
-References: <OS3P286MB2295C30BCD41592C25805136F5D09@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <OS3P286MB2295C30BCD41592C25805136F5D09@OS3P286MB2295.JPNP286.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 1 Feb 2023 07:12:31 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92180442E8
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:12:30 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 41D3B20DA6;
+        Wed,  1 Feb 2023 12:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1675253549; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hskn5wbLCyMCr9B8BR8CQUkQzxcpqNiKf8xyLuw6SZE=;
+        b=aMZ6tlcYqeCBSkH9uqfQ7T78seVdU5VNY0rue/rpNAiMRKbhWeDFP1Gx7+3CCxwmCFugrn
+        ATmqBntDf2URpHP3hhDBGg/CRslPzkPGamiGr6aNSdK43Q/fn7+C7S3rKpU8ZklP/nu/2N
+        1ZLfkJB+eCBR10dCg6zmGw2vDmO00jA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1675253549;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hskn5wbLCyMCr9B8BR8CQUkQzxcpqNiKf8xyLuw6SZE=;
+        b=vfNYhiOUFhufPJ5hpWo8f58YHFOOnre+8rJHdG6D58eJRZ6WpqJ2bdz+Kjz3TYaApD5xOM
+        pub6cdoVOn3w8MDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 321921348C;
+        Wed,  1 Feb 2023 12:12:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lkrtCy1X2mPrMwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 01 Feb 2023 12:12:29 +0000
+Date:   Wed, 01 Feb 2023 13:12:28 +0100
+Message-ID: <87a61xy47n.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] ALSA: emu10k1: clean up some inconsistent indenting
+In-Reply-To: <20230131084304.12920-1-jiapeng.chong@linux.alibaba.com>
+References: <20230131084304.12920-1-jiapeng.chong@linux.alibaba.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Jan 31, 2023 at 02:58:22PM CET, taoyuan_eddy@hotmail.com wrote:
->From: eddytaoyuan <taoyuan_eddy@hotmail.com>
->
->struct cpumask cpu_used_mask is directly embedded in struct sw_flow
->however, its size is hardcoded to CONFIG_NR_CPUS bits, which
->can be as large as 8192 by default, it cost memory and slows down
->ovs_flow_alloc, this fix used actual CPU number instead
->
->Signed-off-by: eddytaoyuan <taoyuan_eddy@hotmail.com>
+On Tue, 31 Jan 2023 09:43:04 +0100,
+Jiapeng Chong wrote:
+> 
+> No functional modification involved.
+> 
+> sound/pci/emu10k1/memory.c:446 snd_emu10k1_synth_free() warn: inconsistent indenting.
 
-Hmm, I guess that the name should be rather "Dddy Taoyuan" ? Please fix,
-also in your "From:" header and preferably email client.
+How is this warning generated?  Does it come from clang or any other
+compiler, or is it just some tool?
 
-
->---
-> net/openvswitch/flow.c       |  6 +++---
-> net/openvswitch/flow.h       |  2 +-
-> net/openvswitch/flow_table.c | 25 ++++++++++++++++++++++---
-> 3 files changed, 26 insertions(+), 7 deletions(-)
->
->diff --git a/net/openvswitch/flow.c b/net/openvswitch/flow.c
->index e20d1a973417..06345cd8c777 100644
->--- a/net/openvswitch/flow.c
->+++ b/net/openvswitch/flow.c
->@@ -107,7 +107,7 @@ void ovs_flow_stats_update(struct sw_flow *flow, __be16 tcp_flags,
-> 
-> 					rcu_assign_pointer(flow->stats[cpu],
-> 							   new_stats);
->-					cpumask_set_cpu(cpu, &flow->cpu_used_mask);
->+					cpumask_set_cpu(cpu, flow->cpu_used_mask);
-> 					goto unlock;
-> 				}
-> 			}
->@@ -135,7 +135,7 @@ void ovs_flow_stats_get(const struct sw_flow *flow,
-> 	memset(ovs_stats, 0, sizeof(*ovs_stats));
-> 
-> 	/* We open code this to make sure cpu 0 is always considered */
->-	for (cpu = 0; cpu < nr_cpu_ids; cpu = cpumask_next(cpu, &flow->cpu_used_mask)) {
->+	for (cpu = 0; cpu < nr_cpu_ids; cpu = cpumask_next(cpu, flow->cpu_used_mask)) {
-> 		struct sw_flow_stats *stats = rcu_dereference_ovsl(flow->stats[cpu]);
-> 
-> 		if (stats) {
->@@ -159,7 +159,7 @@ void ovs_flow_stats_clear(struct sw_flow *flow)
-> 	int cpu;
-> 
-> 	/* We open code this to make sure cpu 0 is always considered */
->-	for (cpu = 0; cpu < nr_cpu_ids; cpu = cpumask_next(cpu, &flow->cpu_used_mask)) {
->+	for (cpu = 0; cpu < nr_cpu_ids; cpu = cpumask_next(cpu, flow->cpu_used_mask)) {
-> 		struct sw_flow_stats *stats = ovsl_dereference(flow->stats[cpu]);
-> 
-> 		if (stats) {
->diff --git a/net/openvswitch/flow.h b/net/openvswitch/flow.h
->index 073ab73ffeaa..b5711aff6e76 100644
->--- a/net/openvswitch/flow.h
->+++ b/net/openvswitch/flow.h
->@@ -229,7 +229,7 @@ struct sw_flow {
-> 					 */
-> 	struct sw_flow_key key;
-> 	struct sw_flow_id id;
->-	struct cpumask cpu_used_mask;
->+	struct cpumask *cpu_used_mask;
-> 	struct sw_flow_mask *mask;
-> 	struct sw_flow_actions __rcu *sf_acts;
-> 	struct sw_flow_stats __rcu *stats[]; /* One for each CPU.  First one
->diff --git a/net/openvswitch/flow_table.c b/net/openvswitch/flow_table.c
->index 0a0e4c283f02..c0fdff73272f 100644
->--- a/net/openvswitch/flow_table.c
->+++ b/net/openvswitch/flow_table.c
->@@ -87,11 +87,12 @@ struct sw_flow *ovs_flow_alloc(void)
-> 	if (!stats)
-> 		goto err;
-> 
->+	flow->cpu_used_mask = (struct cpumask *)&(flow->stats[nr_cpu_ids]);
-> 	spin_lock_init(&stats->lock);
-> 
-> 	RCU_INIT_POINTER(flow->stats[0], stats);
-> 
->-	cpumask_set_cpu(0, &flow->cpu_used_mask);
->+	cpumask_set_cpu(0, flow->cpu_used_mask);
-> 
-> 	return flow;
-> err:
->@@ -115,7 +116,7 @@ static void flow_free(struct sw_flow *flow)
-> 					  flow->sf_acts);
-> 	/* We open code this to make sure cpu 0 is always considered */
-> 	for (cpu = 0; cpu < nr_cpu_ids;
->-	     cpu = cpumask_next(cpu, &flow->cpu_used_mask)) {
->+	     cpu = cpumask_next(cpu, flow->cpu_used_mask)) {
-> 		if (flow->stats[cpu])
-> 			kmem_cache_free(flow_stats_cache,
-> 					(struct sw_flow_stats __force *)flow->stats[cpu]);
->@@ -1194,9 +1195,27 @@ int ovs_flow_init(void)
-> 	BUILD_BUG_ON(__alignof__(struct sw_flow_key) % __alignof__(long));
-> 	BUILD_BUG_ON(sizeof(struct sw_flow_key) % sizeof(long));
-> 
->+        /*
->+         * Simply including 'struct cpumask' in 'struct sw_flow'
->+         * consumes memory unnecessarily large.
->+         * The reason is that compilation option CONFIG_NR_CPUS(default 8192)
->+         * decides the value of NR_CPUS, which in turn decides size of
->+         * 'struct cpumask', which means 1024 bytes are needed for the cpumask
->+         * It affects ovs_flow_alloc performance as well as memory footprint.
->+         * We should use actual CPU count instead of hardcoded value.
->+         *
->+         * To address this, 'cpu_used_mask' is redefined to pointer
->+         * and append a cpumask_size() after 'stat' to hold the actual memory
->+         * of struct cpumask
->+         *
->+         * cpumask APIs like cpumask_next and cpumask_set_cpu have been defined
->+         * to never access bits beyond cpu count by design, thus above change is
->+         * safe even though the actual memory provided is smaller than
->+         * sizeof(struct cpumask)
-
-I don't understand the reason to have this comment in the code. From
-what I see, this should be moved to the patch description. Of course
-with changing the mood to imperation when you say the codebase what to
-do.
+In general, I take such a white-space-fix-only patch when it's tied
+with other real fix patches.  But if the compiler warns, it's worth to
+pick up, of course.
 
 
+thanks,
 
+Takashi
 
->+         */
-> 	flow_cache = kmem_cache_create("sw_flow", sizeof(struct sw_flow)
-> 				       + (nr_cpu_ids
->-					  * sizeof(struct sw_flow_stats *)),
->+					  * sizeof(struct sw_flow_stats *)) + cpumask_size(),
-> 				       0, 0, NULL);
-> 	if (flow_cache == NULL)
-> 		return -ENOMEM;
->-- 
->2.27.0
->
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3903
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  sound/pci/emu10k1/memory.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/sound/pci/emu10k1/memory.c b/sound/pci/emu10k1/memory.c
+> index edb3f1763719..6a7406014f81 100644
+> --- a/sound/pci/emu10k1/memory.c
+> +++ b/sound/pci/emu10k1/memory.c
+> @@ -443,7 +443,7 @@ snd_emu10k1_synth_free(struct snd_emu10k1 *emu, struct snd_util_memblk *memblk)
+>  		unmap_memblk(emu, blk);
+>  	spin_unlock_irqrestore(&emu->memblk_lock, flags);
+>  	synth_free_pages(emu, blk);
+> -	 __snd_util_mem_free(hdr, memblk);
+> +	__snd_util_mem_free(hdr, memblk);
+>  	mutex_unlock(&hdr->block_mutex);
+>  	return 0;
+>  }
+> -- 
+> 2.20.1.7.g153144c
+> 
