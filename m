@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4203E686147
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A7368614F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:10:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjBAIIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 03:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S231899AbjBAIKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 03:10:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbjBAIIi (ORCPT
+        with ESMTP id S229665AbjBAIKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 03:08:38 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1363749437
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 00:08:36 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id r2so16442040wrv.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 00:08:35 -0800 (PST)
+        Wed, 1 Feb 2023 03:10:31 -0500
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291D322A22;
+        Wed,  1 Feb 2023 00:10:31 -0800 (PST)
+Received: by mail-pj1-x1041.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so1241349pjl.0;
+        Wed, 01 Feb 2023 00:10:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fPMQb9ClpEWunoZz1SRe7U0hhsmgySgDI2+LUjx4p1s=;
-        b=Wnvz4a5tihLzWQ3UGZK5oxgZvkkZABlKkArVeCdLwp0FnuzvvFHfJqA7i29ZsuH5mt
-         NB/JSGhuiTfbuEV09T5RltL4eloJo2pyUNrQQaIBWqmid4vGirVGr0ZlOfXcddYWM2Dz
-         CoWMeE0mQ7Opa57MlGv7udJLN+IU7udA1FujAx1G5KVQQEEQJIoQ041elSVEXGI5O3Dp
-         ny9+UaQqgs3yD5JDWECyMc8koD3rStLcN0IsuVWGLKk3nQtb8J8ZruWO740jgV/18nu7
-         dUW/HWWSb+kjonp+rRzVWq1JXYzPEG1YSr54GR+KbnjUPGYoWJk1AG7tOc7yuEv7BZxn
-         uK2w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4z+xa/ZOS4lg8JgsJpJcIgnYCYncFcyrb0bhc7tc1UM=;
+        b=iYQlW31fvbyXVLjXTe6OP40e+MO0N6txv06HbybCw/ww1D5R7S8QZ50bK/3gIQcYcV
+         dJg8glVQ6xlxGDZVxxqSemYLsrjEnY8HX0c0VDQpErG/OF36j/uMiROeZZAO6LlSrQ89
+         Xo+WYFvpjzL+XtjCugj5EE4jfDB0VRp2Mda9VINqjQWUXMdDNSYhd6J7OkbIzWjJFAsG
+         1CE94Z06+f1ILfo/eIdTElR5C7ckIySM86CDOr86ZhhUgGwDgEO2B9K7ZOEyRbk5MeGY
+         +RbzZt6W0VYboZAlvhqeymvH+bteCXbRjXjI3x6oOFuCnRpTUw51I/wccDoCcTThyNSE
+         MKtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fPMQb9ClpEWunoZz1SRe7U0hhsmgySgDI2+LUjx4p1s=;
-        b=QZp6r8Ip6CZDVeZJ30JX1cfxmekJgEJkRZYejLyKjpnJ65Vz1+rEO8okf2StftiyDG
-         pT0vdKZhLAJyCB0tUzljo3jxuf/1mZZIsG+OlrCTDWi+/du6o4xjzSnLxNZRLJUkbmlo
-         SFm7ukKNPTsj86AvKVMEu+JyFP+4E+hbGLswDFzd1C0B2IsPqTSbIYoasJ8OEVVuZrY1
-         sCwUjHgSibaUdZ/8BvtOvaHH5edjS7kTOLfSli8HX6Xf0cdXtAaAywjekj3TW075/Y7d
-         ebT/3sH4AL9wAKWF1OjSNJSJpjS492Xq2sjaMlqag4cIowHX4ukHSOWrAWvBSoj/SsWd
-         fr+Q==
-X-Gm-Message-State: AO0yUKVsCJJQ+G/5RvWtRqtFdF6IJouq+Mh2ktdPz9keqcvdFWbGIrxZ
-        T6DJUnl8u/oOkXGdRlYxooRoEQ==
-X-Google-Smtp-Source: AK7set9AeNdwZS/UJ9g7Dad8wwPgTBxvI+2rWkgtcVhilHAuC/iLNmynZ6qONCst5pTutyqG1/HQHw==
-X-Received: by 2002:a5d:65c6:0:b0:2bf:d17c:609b with SMTP id e6-20020a5d65c6000000b002bfd17c609bmr1361527wrw.64.1675238914573;
-        Wed, 01 Feb 2023 00:08:34 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m3-20020a056000180300b002755e301eeasm16731971wrh.100.2023.02.01.00.08.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 00:08:34 -0800 (PST)
-Message-ID: <a738fdec-0218-e0a5-8750-e39ff87967a5@linaro.org>
-Date:   Wed, 1 Feb 2023 09:08:31 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4z+xa/ZOS4lg8JgsJpJcIgnYCYncFcyrb0bhc7tc1UM=;
+        b=NcrOF0qpT1dc1OVB2v0jhFsKEBe223wFOGFFQcf+XUDMXRavtjp9OaHoQFc44y89Lp
+         CuWbX/wm5E6qy/xcHjsaWtzBsQMm8aj5oDwQ8sjLKcuAxdxXjNpRLR6Nh523u2/VipR0
+         he50G0zOs6UKhvswx6XOgdcp/Jl3h2I2fXEstTnjEq/SFFcj+O1jZtt0RLXLMSiRqLGi
+         SDpIPF1XcqTUUgDENAZ2kymKlue+kuG0liMQbWketqlPV+n3f4kmQIzSmJuGp7XGQ7kt
+         PmevWIyHPi8AbHeDGCrsRwcPU5ETnaTdR8jeXbUpNfKB1rhxFmu0oohwFjh5gKic+STN
+         /cpQ==
+X-Gm-Message-State: AO0yUKUaMidaL8MXxHnHQ5hJLWm67rBTn8uPF8QRemCDesF+1gpQGTBV
+        LK8j6OvrWr93iifjTwRA71gd+QeK1YLMxw==
+X-Google-Smtp-Source: AK7set+D6hQE2PoMqJ60RX22kdP39VVJZPsldfFGc2h+t22OE5ujHWY4p9yHxqoxRzCIZom0eYvFUA==
+X-Received: by 2002:a05:6a20:5488:b0:bf:6e8:39a7 with SMTP id i8-20020a056a20548800b000bf06e839a7mr2091617pzk.4.1675239030715;
+        Wed, 01 Feb 2023 00:10:30 -0800 (PST)
+Received: from hbh25y.. ([129.227.150.140])
+        by smtp.gmail.com with ESMTPSA id w79-20020a627b52000000b0058193135f6bsm10751985pfc.84.2023.02.01.00.10.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 00:10:30 -0800 (PST)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     linkinjeon@kernel.org, sfrench@samba.org, senozhatsky@chromium.org,
+        tom@talpey.com, hyc.lee@gmail.com, lsahlber@redhat.com
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] ksmbd: fix possible memory leak in smb2_lock()
+Date:   Wed,  1 Feb 2023 16:10:10 +0800
+Message-Id: <20230201081010.17446-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 2/5] dt-bindings: mfd: Add ADI MAX77541/MAX77540
-Content-Language: en-US
-To:     "Sahin, Okan" <Okan.Sahin@analog.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-References: <20230118063822.14521-1-okan.sahin@analog.com>
- <20230118063822.14521-3-okan.sahin@analog.com>
- <c4433cba-ce35-e5d3-f04b-ba8f9f501732@linaro.org>
- <MN2PR03MB51685B56D49CBB590BBE6B7EE7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
- <04ac07ef-ee4b-abb8-9fb2-114e3a646a2f@linaro.org>
- <MN2PR03MB5168884376CEE35E73739A95E7D09@MN2PR03MB5168.namprd03.prod.outlook.com>
- <f67f81fd-c770-45b2-9c5e-7ea53e956db9@linaro.org>
- <MN2PR03MB5168CACCB1367E84DECEFC62E7D19@MN2PR03MB5168.namprd03.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MN2PR03MB5168CACCB1367E84DECEFC62E7D19@MN2PR03MB5168.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 08:46, Sahin, Okan wrote:
->> "bindings are before usage" - what's unclear?
->>
->> How can you use binding before defining it?
->>
->> Best regards,
->> Krzysztof
-> 
-> Hi Krysztof,
-> 
-> It is crystal clear that "bindings are before usage", but what I want to know is what is the correct order of patchset for mfd device? Max77541 is multi-functional device. It has both adc and regulator subdevices. I thought I need to put mfd driver first, yet it looks wrong to me right now?
+argv needs to be free when setup_async_work fails or when the current
+process is woken up.
 
-MFD driver is also usually the last.
+Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ fs/ksmbd/smb2pdu.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index d681f91947d9..5b7668c04f76 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -7050,6 +7050,7 @@ int smb2_lock(struct ksmbd_work *work)
+ 						      smb2_remove_blocked_lock,
+ 						      argv);
+ 				if (rc) {
++					kfree(argv);
+ 					err = -ENOMEM;
+ 					goto out;
+ 				}
+@@ -7061,6 +7062,8 @@ int smb2_lock(struct ksmbd_work *work)
+ 
+ 				ksmbd_vfs_posix_lock_wait(flock);
+ 
++				work->cancel_fn = NULL;
++				kfree(argv);
+ 				if (work->state != KSMBD_WORK_ACTIVE) {
+ 					list_del(&smb_lock->llist);
+ 					spin_lock(&work->conn->llist_lock);
+-- 
+2.34.1
 
