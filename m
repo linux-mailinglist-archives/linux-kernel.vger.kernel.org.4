@@ -2,72 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC49C6862B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A488968629D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjBAJVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:21:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
+        id S231899AbjBAJOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjBAJVM (ORCPT
+        with ESMTP id S230189AbjBAJOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:21:12 -0500
-X-Greylist: delayed 468 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Feb 2023 01:21:10 PST
-Received: from out-49.mta1.migadu.com (out-49.mta1.migadu.com [95.215.58.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33783B64B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:21:10 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675242797;
+        Wed, 1 Feb 2023 04:14:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C68D199D7
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:13:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675242828;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding;
-        bh=DS/uJDmsJIF4f3HNKFPKSCWe/LmhrIUEuIGlaX1YzoQ=;
-        b=R2GqVBvqDPlaiv0H07DLTuRb5J4wn65xwoK7oZnlceG7INyE682cEWbLFRe9bEU+9mVox6
-        3F72yy1DAVvvNikZ1ASvZj93CE39fm2lVianNwFcynQWKiYXtBLD9V/4gn/O4WUxaoghc2
-        FVmPaTk4gstZriOFoaVH2XW3TgBIx5Q=
-From:   Cixi Geng <cixi.geng@linux.dev>
-To:     mturquette@baylibre.com, sboyd@kernel.org, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cixi.geng1@unisoc.com
-Subject: [PATCH] clk: sprd: Add dependency for SPRD_UMS512_CLK
-Date:   Wed,  1 Feb 2023 17:13:00 +0800
-Message-Id: <20230201091300.3201-1-cixi.geng@linux.dev>
+        bh=fJF72Zd85F4nvkHLPmd4ED2J4KvlszW2tzIwzQ+dNaM=;
+        b=guO/EpD/CGu0zjxE3nrsowZCZ/wDZ8Pi9Uy1CMSevKv3vuPObGFHUUPQ9dHwmCSJUADbUI
+        A0lQRG1/vEsfpyZBSl3WXkywdyEhYRM5WaCeHazIbM52iO8A33JG6yruRS2IE1sXim0d5h
+        Rvln5KmgwvSRi6HFQJE1qUDdB+gRhjI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-659-qnPyJGJvPkuZbXLpej_Qrg-1; Wed, 01 Feb 2023 04:13:47 -0500
+X-MC-Unique: qnPyJGJvPkuZbXLpej_Qrg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83D50800B23;
+        Wed,  1 Feb 2023 09:13:46 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-13-89.pek2.redhat.com [10.72.13.89])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 00D79492C3E;
+        Wed,  1 Feb 2023 09:13:41 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        stephen.s.brennan@oracle.com, urezki@gmail.com, lstoakes@gmail.com,
+        willy@infradead.org, hch@infradead.org, error27@gmail.com,
+        Baoquan He <bhe@redhat.com>
+Subject: [PATCH v4 0/7] mm/vmalloc.c: allow vread() to read out vm_map_ram areas
+Date:   Wed,  1 Feb 2023 17:13:32 +0800
+Message-Id: <20230201091339.61761-1-bhe@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
+Problem:
+***
+Stephen reported vread() will skip vm_map_ram areas when reading out
+/proc/kcore with drgn utility. Please see below link to get more
+details. 
 
-Add depends on and default for ums512 clk config.
+  /proc/kcore reads 0's for vmap_block
+  https://lore.kernel.org/all/87ilk6gos2.fsf@oracle.com/T/#u
 
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
----
- drivers/clk/sprd/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Root cause:
+***
+The normal vmalloc API uses struct vmap_area to manage the virtual
+kernel area allocated, and associate a vm_struct to store more
+information and pass out. However, area reserved through vm_map_ram()
+interface doesn't allocate vm_struct to associate with. So the current
+code in vread() will skip the vm_map_ram area through 'if (!va->vm)'
+conditional checking.
 
-diff --git a/drivers/clk/sprd/Kconfig b/drivers/clk/sprd/Kconfig
-index c744bd9d2f96..2f19c8d58ff2 100644
---- a/drivers/clk/sprd/Kconfig
-+++ b/drivers/clk/sprd/Kconfig
-@@ -24,6 +24,8 @@ config SPRD_SC9863A_CLK
- 
- config SPRD_UMS512_CLK
- 	tristate "Support for the Spreadtrum UMS512 clocks"
-+	depends on (ARM64 && ARCH_SPRD) || COMPILE_TEST
-+	default ARM64 && ARCH_SPRD
- 	help
- 	  Support for the global clock controller on ums512 devices.
- 	  Say Y if you want to use peripheral devices on ums512 SoC.
+Solution:
+***
+To mark the area reserved through vm_map_ram() interface, add field 'flags'
+into struct vmap_area. Bit 0 indicates this is vm_map_ram area created
+through vm_map_ram() interface, bit 1 marks out the type of vm_map_ram area
+which makes use of vmap_block to manage split regions via vb_alloc/free().
+
+And also add bitmap field 'used_map' into struct vmap_block to mark those
+further subdivided regions being used to differentiate with dirty and free
+regions in vmap_block.
+
+With the help of above vmap_area->flags and vmap_block->used_map, we can
+recognize and handle vm_map_ram areas successfully. All these are done
+in patch 1~3.
+
+Meanwhile, do some improvement on areas related to vm_map_ram areas in
+patch 4, 5. And also change area flag from VM_ALLOC to VM_IOREMAP in
+patch 6, 7 because this will show them as 'ioremap' in /proc/vmallocinfo,
+and exclude them from /proc/kcore.
+
+Testing
+***
+Only did the basic testing on kvm guest, and run below commands to
+access kcore file to do statistics:
+
+	makedumpfile --mem-usage /proc/kcore
+
+Changelog
+***
+v3->v4:
+- Fix typo in pach 2 catched by Lorenzo.
+- Add WARN_ON(flags == VMAP_BLOCK) in vread() to address Dan's concern
+  that VMAP_BLOCK could be set alone in vmap->flags.
+- Add checking on the returned value from xa_load() in vmap_ram_vread(),
+  Uladzislau commented on the risk of this place.
+- Fix a bug in s_show() which is changed in patch 5. The old change will
+  cause 'va->vm is NULL but the VMAP_RAM flag is not set' case wrongly
+  handled. Please see below link for details.
+  - https://lore.kernel.org/all/Y8aAmuUY9OxrYlLm@kili/T/#u
+- Add Uladzislau and Lorenzo's Reviewed-by.
+
+v2->v3:
+- Benefited from find_unlink_vmap_area() introduced by Uladzislau, do
+  not need to worry about the va->vm and va->flags reset during freeing.
+- Change to identify vm_map_area with VMAP_RAM in vmap->flags in
+  vread(). 
+- Rename the old vb_vread() to vmap_ram_vread().
+- Handle two kinds of vm_map_area area reading in vmap_ram_vread()
+  respectively. 
+- Fix bug of the while loop code block in vmap_block reading, found by
+  Lorenzo.
+- Improve conditional check related to vm_map_ram area, suggested by
+  Lorenzo.
+
+v1->v2:
+- Change alloc_vmap_area() to pass in va_flags so that we can pass and
+  set vmap_area->flags for vm_map_ram area. With this, no extra action
+  need be added to acquire vmap_area_lock when doing the vmap_area->flags
+  setting. Uladzislau reviewed v1 and pointed out the issue.
+- Improve vb_vread() to cover the case where reading is started from a
+  dirty or free region.
+
+RFC->v1:
+- Add a new field flags in vmap_area to mark vm_map_ram area. It cold be
+  risky reusing the vm union in vmap_area in RFC. I will consider
+  reusing the union in vmap_area to save memory later. Now just take the
+  simpler way to let's focus on resolving the main problem.
+- Add patch 4~7 for optimization.
+
+Baoquan He (7):
+  mm/vmalloc.c: add used_map into vmap_block to track space of
+    vmap_block
+  mm/vmalloc.c: add flags to mark vm_map_ram area
+  mm/vmalloc.c: allow vread() to read out vm_map_ram areas
+  mm/vmalloc: explicitly identify vm_map_ram area when shown in
+    /proc/vmcoreinfo
+  mm/vmalloc: skip the uninitilized vmalloc areas
+  powerpc: mm: add VM_IOREMAP flag to the vmalloc area
+  sh: mm: set VM_IOREMAP flag to the vmalloc area
+
+ arch/powerpc/kernel/pci_64.c |   2 +-
+ arch/sh/kernel/cpu/sh4/sq.c  |   2 +-
+ include/linux/vmalloc.h      |   1 +
+ mm/vmalloc.c                 | 126 ++++++++++++++++++++++++++++++-----
+ 4 files changed, 111 insertions(+), 20 deletions(-)
+
 -- 
 2.34.1
 
