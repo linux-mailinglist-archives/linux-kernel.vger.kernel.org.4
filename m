@@ -2,169 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25645686BEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A104A686BF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjBAQie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S231752AbjBAQk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:40:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbjBAQiZ (ORCPT
+        with ESMTP id S230046AbjBAQk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:38:25 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730BFC173
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:38:16 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id a3so11188301wrt.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:38:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mrcqv7iS1cquJvqoLMbtEWKy/UDB0TOdu8u7+euImwo=;
-        b=HEnQif1tx0zTKMoBmkbT/iretYU8xu0ia36crD/trQlO9VlhcVSmUCN7JS+mDuJR0r
-         xhIq3L+JUzUfNlSm5Ys44fRrSdBdwnpqGZzoWWuMxYTw3WC3sTQxbHP8Fz/gsAZY0xt2
-         jIv+diZVnT53pAec9I8up8qiO4aoDW/v/rMGjqtP546MMJeiHeRcqz/I22nD6BI3k8g3
-         +76rPG4dPa/NrF51x5fqtQiJWCi13TmPVOPjqfeaqoNfFmy5ppaAnoBQKkB0cw3Y2ET6
-         a12d/ZY4PnuDz1suVsmH6J1iT/RA8UrW57OdnsYnyP3vw+8e/cLeu52TbTQ68niy52to
-         Eb1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mrcqv7iS1cquJvqoLMbtEWKy/UDB0TOdu8u7+euImwo=;
-        b=5yqGD2Ju/iIsEC7agi0W1hyf2me+wVFHNeHRyc884cAynfNwfU1Vem7iSvJpDtuGfT
-         uhI/cLqJ0w1t/G846Xo5pP6q2ujShTe+BmuahLQioMq7WqBV1RSTYm/WsquyAn7szSz/
-         D3cqC8Qt2yJMW0FK5vE8tzZk6oCSAO42F7UsJ8Cb65SF2C3rX0wa8ZMbUlGcEBBowC9D
-         sW8kH/sfS25TT+d4KgVlOjb6ajGVIInFs/mXP5EFRtpCAhpYw7h5NLQ1C2C4aGbLd6ia
-         pIVu4m7yC2hK1LWffUDtekfQ77zPP94x/zHJmi5Vh7v2XnEgyFfKcQKEi55aFPPnOPSL
-         wtvQ==
-X-Gm-Message-State: AO0yUKWNPFnGlKqCoYAutqK9Rlmc0/jbQBD2AC6O2kKCioHf1ADMJPnI
-        bKgVfHul7KCXDcRNUF7ejO+W5g==
-X-Google-Smtp-Source: AK7set8OjV9bsPy0E5o71+igl9MbubLZ/y4xjVKKORsyD+9B+4sJKoouxiK/GQ+Z54tO2tWR7YYa9w==
-X-Received: by 2002:adf:c713:0:b0:2bf:e9dc:5536 with SMTP id k19-20020adfc713000000b002bfe9dc5536mr3432655wrg.45.1675269495424;
-        Wed, 01 Feb 2023 08:38:15 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:7611:c340:3d8d:d46c? ([2a02:6b6a:b566:0:7611:c340:3d8d:d46c])
-        by smtp.gmail.com with ESMTPSA id k6-20020a5d6d46000000b002bfeccd872bsm9688027wri.70.2023.02.01.08.38.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 08:38:15 -0800 (PST)
-Message-ID: <7fda05c9-9d4a-6005-0ce5-91bda1bb06c1@bytedance.com>
-Date:   Wed, 1 Feb 2023 16:38:14 +0000
+        Wed, 1 Feb 2023 11:40:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC37468D
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:40:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 270FF6187C
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 16:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 092EBC433EF;
+        Wed,  1 Feb 2023 16:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675269654;
+        bh=KSq1dYBd01CzJMTzCKqs3/YS7g3At35mPs1z5Nkv6oc=;
+        h=From:Date:Subject:To:Cc:From;
+        b=pLn5/92olQ9nSSmkCMuwj0xDGN1IQyrCHURuiCr6Yvz7DZZ1xzj0xwncGpVapYgKQ
+         x4UvvH4nl69IDx71CiE4rchBSe1rgHO7f9apalpCeBREUYDCz5ElsKhCTxmdqgeWZb
+         HW3kqmUR7ema+E5KwMX9p8Qw1Wt9kTg+3tJ54GAdsVBSliJTPlexPoHFX6Pqs9vHNt
+         FuWxniMl4FOnxoOb63OEjHbv+Hy4djOvVAgfbC4PE9ZSstEA/uplUO9Uw69qKeOtjv
+         eD10TIBYkwn0+/8XsYM8lWlorSD3E6DFhdMAVsb1GF5LWCWnkOCnMzd0JPjaGuvswv
+         cEBdt5pe/n7VA==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Wed, 01 Feb 2023 09:40:22 -0700
+Subject: [PATCH] f2fs: Fix type of single bit bitfield in f2fs_io_info
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v4 0/9] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Punit Agrawal <punit.agrawal@bytedance.com>,
-        simon.evans@bytedance.com, liangma@liangbit.com
-References: <20220201205328.123066-1-dwmw2@infradead.org>
- <ff876008-b642-4dbc-aa41-1639905e08b6@bytedance.com>
- <1d0ed92ab68409b62a14cd29d0021f92c6e2568a.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <1d0ed92ab68409b62a14cd29d0021f92c6e2568a.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230201-f2fs-fix-single-length-bitfields-v1-1-e386f7916b94@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPWV2mMC/x3NywoCMQyF4VcZsjbQqQuLryIueknbQK2SFBkY5
+ t3tuPw58J0dlIRJ4b7sIPRl5XefsV4WiNX3QshpNlhjr8aaFbPNipk3VO6lETbqZVQMPDJTS4o
+ puxhvjpwzHiYTvBIG8T3WE3p5HSTn8BGazv/78TyOHxPv+SWLAAAA
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     ndesaulniers@google.com, trix@redhat.com,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, kernel test robot <lkp@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2740; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=KSq1dYBd01CzJMTzCKqs3/YS7g3At35mPs1z5Nkv6oc=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDMm3ponK+HZaB8susOx5+HD3Be2z2eVxq2sn7JBWWu25+
+ rurt5dkRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjI9mWMDPfVpHOfPMr9qxNd
+ +XXlDeYXhpfDFJcrCvdG5SS3y3AxcjH8Zu25G351up/Ea2X55u0n3/jZu72XDg3IWCFu69pUIRL
+ ADgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Clang warns:
 
+  ../fs/f2fs/data.c:995:17: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
+          fio->submitted = 1;
+                         ^ ~
+  ../fs/f2fs/data.c:1011:15: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
+                          fio->retry = 1;
+                                     ^ ~
 
-On 01/02/2023 15:08, David Woodhouse wrote:
-> On Wed, 2023-02-01 at 14:40 +0000, Usama Arif wrote:
->> On 01/02/2022 20:53, David Woodhouse wrote:
->>> Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
->>> them shaves about 80% off the AP bringup time on a 96-thread 2-socket
->>> Skylake box (EC2 c5.metal) — from about 500ms to 100ms.
->>>
->>> There are more wins to be had with further parallelisation, but this is
->>> the simple part.
->>>
->>
->> Hi,
->>
->> We are interested in reducing the boot time of servers (with kexec), and
->> smpboot takes up a significant amount of time while booting. When
->> testing the patch series (rebased to v6.1) on a server with 128 CPUs
->> split across 2 NUMA nodes, it brought down the smpboot time from ~700ms
->> to 100ms. Adding another cpuhp state for do_wait_cpu_initialized to make
->> sure cpu_init is reached (as done in v1 of the series + using the
->> cpu_finishup_mask) brought it down further to ~30ms.
->>
->> I just wanted to check what was needed to progress the patch series
->> further for review? There weren't any comments on v4 of the patch so I
->> couldn't figure out what more is needed. I think its quite useful to
->> have this working so would be really glad help in anything needed to
->> restart the review.
-> 
-> 
-> I believe the only thing holding it back was the fact that it broke on
-> some AMD CPUs.
-> 
-> We don't *think* there are any remaining software issues; we think it's
-> hardware. Either an actual hardware race in CPU or chipset, or perhaps
-> even something as simple as a voltage regulator which can't cope with
-> an increase in power draw from *all* the CPUs at the same time.
-> 
-> We have prodded AMD a few times to investigate, but so far to no avail.
-> 
-> Last time I actually spoke to Thomas in person, I think he agreed that
-> we should just merge it and disable the parallel mode for the affected
-> AMD CPUs.
->
+  ../fs/f2fs/segment.c:3320:16: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
+                  fio->in_list = 1;
+                               ^ ~
 
- From the comments in v3, it seems to affect multiple generations, would 
-it be worth proceeding with the patches by disabling it on all AMD CPUs 
-to be on the safe side, until the actual issue is found and what causes 
-it, and then follow up later if the issue is found by disabling it only 
-on affected cpus. Maybe simply do something like below?
+There is not a bug here because the value of these fields is never
+explicitly compared against (just whether it is zero or non-zero) but
+it is easy to silence the warning by using an unsigned type to allow
+an assignment of 0 or 1 without implicit conversion.
 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 0f144773a7fc..6b8884592341 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1575,7 +1575,8 @@ void __init native_smp_prepare_cpus(unsigned int 
-max_cpus)
-          * for SEV-ES guests because they can't use CPUID that early.
-          */
-         if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 
-0x0B ||
--           cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-+           cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT) ||
-+           boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
-                 do_parallel_bringup = false;
+Fixes: 998863dadd2c ("f2fs: reduce stack memory cost by using bitfield in struct f2fs_io_info")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1796
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ fs/f2fs/f2fs.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-         if (do_parallel_bringup) {
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 08dc64c5050e..89f6fdfeed19 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1213,12 +1213,12 @@ struct f2fs_io_info {
+ 	int compr_blocks;	/* # of compressed block addresses */
+ 	int need_lock:8;	/* indicate we need to lock cp_rwsem */
+ 	int version:8;		/* version of the node */
+-	int submitted:1;	/* indicate IO submission */
+-	int in_list:1;		/* indicate fio is in io_list */
+-	int is_por:1;		/* indicate IO is from recovery or not */
+-	int retry:1;		/* need to reallocate block address */
+-	int encrypted:1;	/* indicate file is encrypted */
+-	int post_read:1;	/* require post read */
++	unsigned int submitted:1;	/* indicate IO submission */
++	unsigned int in_list:1;		/* indicate fio is in io_list */
++	unsigned int is_por:1;		/* indicate IO is from recovery or not */
++	unsigned int retry:1;		/* need to reallocate block address */
++	unsigned int encrypted:1;	/* indicate file is encrypted */
++	unsigned int post_read:1;	/* require post read */
+ 	enum iostat_type io_type;	/* io type */
+ 	struct writeback_control *io_wbc; /* writeback control */
+ 	struct bio **bio;		/* bio for ipu */
 
+---
+base-commit: de6b3a5e09b29c014bd04044b023896107cfa2ee
+change-id: 20230201-f2fs-fix-single-length-bitfields-df8cc78e880a
 
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
-
-> If you've already rebased to a newer kernel and tested it, perhaps now
-> is the time to do just that.
-
-If you would like me to repost the rebased patches to restart the 
-reviews (with do_parallel_bringup disabled for AMD), please let me know!
-
-Thanks,
-Usama
