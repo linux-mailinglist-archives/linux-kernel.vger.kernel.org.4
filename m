@@ -2,54 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82851687144
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 23:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DE3687194
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjBAWyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 17:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S230208AbjBAXA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 18:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjBAWyP (ORCPT
+        with ESMTP id S229671AbjBAXAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 17:54:15 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F9B65EFC;
-        Wed,  1 Feb 2023 14:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=mVUi9b3avKXCGkK7PJdGHQrWxThubRuQlGj56CQ3xTs=; b=phPs7X3hpkW4twrII4KP+oIuET
-        4nkK2sS9ogAQ42Cv1E2uaa9OELjfE0Ew6d7R9PCAUZPfGFHTyWCc77NEmNYHXcnYh3+w7r8yx+H4u
-        s71F26uf904LTKwha30xsCWc1QdFugAfeUOppDJ9Ju7JDLhUo30bvn7K7rlmoY4boy6g=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pNLzO-003qJ4-Ao; Wed, 01 Feb 2023 23:54:02 +0100
-Date:   Wed, 1 Feb 2023 23:54:02 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] net: fec: do not double-parse
- 'phy-reset-active-high' property
-Message-ID: <Y9rtil2/y3ykeQoF@lunn.ch>
-References: <20230201215320.528319-1-dmitry.torokhov@gmail.com>
- <20230201215320.528319-2-dmitry.torokhov@gmail.com>
+        Wed, 1 Feb 2023 18:00:25 -0500
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973976C114;
+        Wed,  1 Feb 2023 15:00:23 -0800 (PST)
+From:   Sam James <sam@gentoo.org>
+To:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Sam James <sam@gentoo.org>
+Subject: [PATCH] gcc-plugins: drop -std=gnu++11 to fix GCC 13 build
+Date:   Wed,  1 Feb 2023 23:00:09 +0000
+Message-Id: <20230201230009.2252783-1-sam@gentoo.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201215320.528319-2-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,22 +33,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 01:53:20PM -0800, Dmitry Torokhov wrote:
-> Conversion to gpiod API done in commit 468ba54bd616 ("fec: convert
-> to gpio descriptor") clashed with gpiolib applying the same quirk to the
-> reset GPIO polarity (introduced in commit b02c85c9458c). This results in
-> the reset line being left active/device being left in reset state when
-> reset line is "active low".
-> 
-> Remove handling of 'phy-reset-active-high' property from the driver and
-> rely on gpiolib to apply needed adjustments to avoid ending up with the
-> double inversion/flipped logic.
+The latest GCC 13 snapshot (13.0.1 20230129) gives the following:
+```
+cc1: error: cannot load plugin ./scripts/gcc-plugins/randomize_layout_plugin.so
+ :./scripts/gcc-plugins/randomize_layout_plugin.so: undefined symbol: tree_code_type
+```
 
-I searched the in tree DT files from 4.7 to 6.0. None use
-phy-reset-active-high. I'm don't think it has ever had an in tree
-user.
+This ends up being because of https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;h=b0241ce6e37031
+upstream in GCC which changes the visibility of some types used by the kernel's
+plugin infrastructure like tree_code_type.
 
-This property was marked deprecated Jul 18 2019. So i suggest we
-completely drop it.
+After discussion with the GCC folks, we found that the kernel needs to be building
+plugins with the same flags used to build GCC - and GCC defaults to gnu++17
+right now. The minimum GCC version needed to build the kernel is GCC 5.1
+and GCC 5.1 already defaults to gnu++14 anyway, so just drop the flag, as
+all GCCs that could be used to build GCC already default to an acceptable
+version which was >= the version we forced via flags until now.
 
-	   Andrew
+Bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108634
+Signed-off-by: Sam James <sam@gentoo.org>
+---
+ scripts/gcc-plugins/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/gcc-plugins/Makefile b/scripts/gcc-plugins/Makefile
+index b34d11e22636..320afd3cf8e8 100644
+--- a/scripts/gcc-plugins/Makefile
++++ b/scripts/gcc-plugins/Makefile
+@@ -29,7 +29,7 @@ GCC_PLUGINS_DIR = $(shell $(CC) -print-file-name=plugin)
+ plugin_cxxflags	= -Wp,-MMD,$(depfile) $(KBUILD_HOSTCXXFLAGS) -fPIC \
+ 		  -include $(srctree)/include/linux/compiler-version.h \
+ 		  -DPLUGIN_VERSION=$(call stringify,$(KERNELVERSION)) \
+-		  -I $(GCC_PLUGINS_DIR)/include -I $(obj) -std=gnu++11 \
++		  -I $(GCC_PLUGINS_DIR)/include -I $(obj) \
+ 		  -fno-rtti -fno-exceptions -fasynchronous-unwind-tables \
+ 		  -ggdb -Wno-narrowing -Wno-unused-variable \
+ 		  -Wno-format-diag
+-- 
+2.39.1
+
