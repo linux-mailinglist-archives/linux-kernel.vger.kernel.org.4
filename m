@@ -2,183 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BAC685C50
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1AF685C6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjBAAo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 19:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
+        id S230369AbjBAAs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 19:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjBAAoZ (ORCPT
+        with ESMTP id S229613AbjBAAsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 19:44:25 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D1F4FACB
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:44:24 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id jh15so7814485plb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:44:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fILGJLKFTgQqBASICVRglDo5VTpMJSJN+N2x7b/rdBk=;
-        b=VtqeeEdUWzK83zLh2INNladmSIBZCqmMoDTcy0EhHYItIUfhNKPsU1oklDEaDOYMcd
-         D3pvcHeIwlo/3R5VmzTUXxZnnMutOu2ZSdGJo2yQWH8u2eD7XnzqnUZ164wBFW3Aq3d6
-         FmgBV0/FgPQUg8jxWPDgfkRZPi/NgTJMuvuKCZ+MK738RUHtc8LFMXlop6Aw72+sEeuP
-         ev4VVywtpayNbqTXj1q32o8gECFDfxR2nU8uYyv/xBH8qxsf7iVxjEg9FCWq0xmIm3B+
-         n1Beq+jzh1IUT9GNTuRHoTcIbcFtFIph71dnYmIPUrqsXkj1UnHHPYCbhQWjX9DLh8s+
-         HDKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fILGJLKFTgQqBASICVRglDo5VTpMJSJN+N2x7b/rdBk=;
-        b=VuczntY3Arm4mtLLZqSTi++z4wUFatiNvnyU8Jd52c/UEYDdFCFls5FTNLP5vAzuaJ
-         HIO7tH3YhPVlcmI6pz9eq6bzVbmGue0O7slYPkq6Bh42fEc203Ihq0WO7LIBLwobKF47
-         AtTOQe6lDS5xY3pKfhPTykzUdoamUVLYcbcMhiMWCR1jbf8g2iZL6QAjzeYsWbW/YlSs
-         2f21lgOqWKXyT+aKUkSppBdypOwVwu+irg0/lef8+tYUdJyQJFdbecY6iu583YNs26mC
-         AW+QFWMUJo2azaVpZX6x3Tn+8Fz4qBn5qQIE+cl1ZF0ejdwOXE9PwN6zOPmdtkMn1lbn
-         7wYg==
-X-Gm-Message-State: AO0yUKVeGsJ1oMXkFlQ8ddKr/d2b93LWylAcx6AJczjx0jAKO7idXKaZ
-        +JrtzDJyPfS5vBM76vsxerRSOQ==
-X-Google-Smtp-Source: AK7set/DWqn5PC0ETUdENyV490PneHjvVT5utDZH/R2pbIRwQjfTGT6Stq1kYwJ6EwRYjRtRlkVLbQ==
-X-Received: by 2002:a17:902:daca:b0:198:af4f:de04 with SMTP id q10-20020a170902daca00b00198af4fde04mr3274plx.4.1675212263899;
-        Tue, 31 Jan 2023 16:44:23 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id e17-20020a656891000000b004768b74f208sm9378137pgt.4.2023.01.31.16.44.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 16:44:23 -0800 (PST)
-Date:   Wed, 1 Feb 2023 00:44:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        Jing Liu <jing2.liu@intel.com>,
-        Wyes Karny <wyes.karny@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Santosh Shukla <santosh.shukla@amd.com>
-Subject: Re: [PATCH v2 11/11] KVM: nSVM: implement support for nested VNMI
-Message-ID: <Y9m15P8xQ2dxvIzd@google.com>
-References: <20221129193717.513824-1-mlevitsk@redhat.com>
- <20221129193717.513824-12-mlevitsk@redhat.com>
+        Tue, 31 Jan 2023 19:48:53 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB297125A3;
+        Tue, 31 Jan 2023 16:48:52 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 6F5F120E0A00; Tue, 31 Jan 2023 16:48:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6F5F120E0A00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675212532;
+        bh=QtJOGoJNRx6Y5psopcsbrkvVOd9n83DwG6TAX2fVAEM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qhvwMPCpPd9vbDNzrPjs1oZIe5jI0seyMdSzUuuc5HR6DkZ14Hf6P0cI2f+oh6DGv
+         76VMuAXIVoCv65wvxPld5tZex+OTLKcBVka2rNlJJBrhjS44ZIHEQ+lFV1y4yUS9qY
+         CduWMrllvFR26wDQtbMgNAHH2QmUm72WhSPXXT2E=
+Date:   Tue, 31 Jan 2023 16:48:52 -0800
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v9 00/16] Integrity Policy Enforcement LSM (IPE)
+Message-ID: <20230201004852.GB30104@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <033335b26f6becdc3dc0325ef926efd94fcc4dda.camel@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129193717.513824-12-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <033335b26f6becdc3dc0325ef926efd94fcc4dda.camel@huaweicloud.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022, Maxim Levitsky wrote:
-> This patch allows L1 to use vNMI to accelerate its injection
-> of NMIs to L2 by passing through vNMI int_ctl bits from vmcb12
-> to/from vmcb02.
+On Tue, Jan 31, 2023 at 03:22:05PM +0100, Roberto Sassu wrote:
+> On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > IPE has two known gaps:
+> > 
+> > 1. IPE cannot verify the integrity of anonymous executable memory, such as
+> >   the trampolines created by gcc closures and libffi (<3.4.2), or JIT'd code.
+> >   Unfortunately, as this is dynamically generated code, there is no way
+> >   for IPE to ensure the integrity of this code to form a trust basis. In all
+> >   cases, the return result for these operations will be whatever the admin
+> >   configures the DEFAULT action for "EXECUTE".
 > 
-> While L2 runs, L1's vNMI is inhibited, and L1's NMIs are injected
-> normally.
-
-Same feedback on stating the change as a command instead of describing the net
-effects.
-
-> In order to support nested VNMI requires saving and restoring the VNMI
-> bits during nested entry and exit.
-
-Again, avoid saving+restoring.  And it's not just for terminology, it's not a
-true save/restore, e.g. a pending vNMI for L1 needs to be recognized and trigger
-a nested VM-Exit.  I.e. KVM can't simply stash the state and restore it later,
-KVM needs to actively process the pending NMI.
-
-> In case of L1 and L2 both using VNMI- Copy VNMI bits from vmcb12 to
-> vmcb02 during entry and vice-versa during exit.
-> And in case of L1 uses VNMI and L2 doesn't- Copy VNMI bits from vmcb01 to
-> vmcb02 during entry and vice-versa during exit.
+> I think it would be useful to handle special cases, for example you
+> could allow a process that created a file with memfd to use it, at the
+> condition that nobody else writes it.
 > 
-> Tested with the KVM-unit-test and Nested Guest scenario.
+> This would be required during the boot, otherwise services could fail
+> to start (depending on the policy).
 > 
+Thanks for the suggestion. I agree with your opinion and I think supporting
+memfd is possible but restricting read/write needs more hooks. We would like
+to avoid adding more complexity to this initial posting as necessary. 
+We will consider this as a future work and will post follow-on patches
+in the future.
+
+-Fan
+
+> > 2. IPE cannot verify the integrity of interpreted languages' programs when
+> >   these scripts invoked via ``<interpreter> <file>``. This is because the
+> >   way interpreters execute these files, the scripts themselves are not
+> >   evaluated as executable code through one of IPE's hooks. Interpreters
+> >   can be enlightened to the usage of IPE by trying to mmap a file into
+> >   executable memory (+X), after opening the file and responding to the
+> >   error code appropriately. This also applies to included files, or high
+> >   value files, such as configuration files of critical system components.
 > 
-> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Same SoB issues.
-
-> ---
->  arch/x86/kvm/svm/nested.c | 13 ++++++++++++-
->  arch/x86/kvm/svm/svm.c    |  5 +++++
->  arch/x86/kvm/svm/svm.h    |  6 ++++++
->  3 files changed, 23 insertions(+), 1 deletion(-)
+> Ok, it is a well known issue. Hopefully, it will be fixed soon.
 > 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 5bea672bf8b12d..81346665058e26 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -278,6 +278,11 @@ static bool __nested_vmcb_check_controls(struct kvm_vcpu *vcpu,
->  	if (CC(!nested_svm_check_tlb_ctl(vcpu, control->tlb_ctl)))
->  		return false;
->  
-> +	if (CC((control->int_ctl & V_NMI_ENABLE) &&
-> +		!vmcb12_is_intercept(control, INTERCEPT_NMI))) {
-
-Align indentation.
-
-	if (CC((control->int_ctl & V_NMI_ENABLE) &&
-	       !vmcb12_is_intercept(control, INTERCEPT_NMI))) {
-		return false;
-	}
-
-> +		return false;
-> +	}
-> +
->  	return true;
->  }
->  
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 0b7e1790fadde1..8fb2085188c5ac 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -271,6 +271,7 @@ struct vcpu_svm {
->  	bool pause_filter_enabled         : 1;
->  	bool pause_threshold_enabled      : 1;
->  	bool vgif_enabled                 : 1;
-> +	bool vnmi_enabled                 : 1;
->  
->  	u32 ldr_reg;
->  	u32 dfr_reg;
-> @@ -545,6 +546,11 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
->  	return svm->nested.ctl.nested_ctl & SVM_NESTED_CTL_NP_ENABLE;
->  }
->  
-> +static inline bool nested_vnmi_enabled(struct vcpu_svm *svm)
-> +{
-> +	return svm->vnmi_enabled && (svm->nested.ctl.int_ctl & V_NMI_ENABLE);
-
-Gah, the "nested" flags in vcpu_svm are super confusing.  I initially read this
-as "if vNMI is enabled in L1 and vmcb12".  
-
-I have a series that I originally prepped for the architectural LBRs series that
-will allow turning this into
-
-	return guest_can_use(vcpu, X86_FEATURE_VNMI) &&
-	       (svm->nested.ctl.int_ctl & V_NMI_ENABLE);
-
-I'll get that series posted.
-
-Nothing to do on your end, just an FYI.  I'll sort out conflicts if/when they happen.
+> Roberto
+> 
