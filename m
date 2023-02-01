@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BFF686DED
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80054686DD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjBAS2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:28:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S231790AbjBASWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjBAS2C (ORCPT
+        with ESMTP id S231540AbjBASWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:28:02 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04114AD25
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 10:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675276081; x=1706812081;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=KJfvR0PNRjVIZ5qVTjcc05Xxt8yxLl4gMU5LDLRTEu0=;
-  b=ZS/BmpPImOtMdT7aj84rMFE3dBbAtFKv6JuwyLmzFHLEbiFb4zzgyPec
-   WLr1R5ig/Tke6B1Oh8cZiHe21ykT1nh4CQTOKYCasz84xGbThSz1AWJ0B
-   QmjEF7YbQrqkjUMDMsVz6REFAxPbJw5oQEMQxv0JoS8v39GlNQRng79Wp
-   nKorZKkm6NhmjfwgHT4sLpsJgwOLqPJI1qrBfCZLThRE4HOe+PEMFUcDk
-   Nry/u4iRTNuWL0doBEOxa2t4mPEFxOR++7q3r2TRb1wmpJt9ERMEn8nIS
-   hmkmyJJiGxTaA2BiUbQ3z8kGbm0wvEx7b5wJfJfr21z/0LD6VPKhoIZ4V
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414437036"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="414437036"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:20:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667009268"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="667009268"
-Received: from sgkhacha-mobl1.amr.corp.intel.com (HELO [10.212.227.86]) ([10.212.227.86])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:20:34 -0800
-Message-ID: <b1ea8d3b-d5f4-0aac-d7b4-45fef9afe778@intel.com>
-Date:   Wed, 1 Feb 2023 10:20:33 -0800
+        Wed, 1 Feb 2023 13:22:34 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FD57BE7F;
+        Wed,  1 Feb 2023 10:22:33 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C97791EC0426;
+        Wed,  1 Feb 2023 19:22:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1675275751;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=LK1P/CMLNeISz/c0nlGst2RWi/0NZ0o/BpvrK0rFx2Q=;
+        b=OFXvmyKPcyconiHwMNrgQAUNOb0dhANdfQjhsK1+Kr8nj9iA+ITBUH/1kjILD7uoP/A/d9
+        G3Jihf+k44XEUC+K34HG/rOGRbCMHMbFe0JMSFsqVnG2UGxr1YUgSM2sL+g+LqvF1lO6NK
+        poXHV6aglKBiEyXYXfKUQsOYwEpKe+s=
+Date:   Wed, 1 Feb 2023 19:22:31 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
+        pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, vbabka@suse.cz,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
+        ashish.kalra@amd.com, harald@profian.com,
+        Nikunj A Dadhania <nikunj@amd.com>
+Subject: Re: [PATCH RFC v7 11/64] KVM: SEV: Support private pages in
+ LAUNCH_UPDATE_DATA
+Message-ID: <Y9qt50zW+eJcz7cm@zn.tnic>
+References: <20221214194056.161492-1-michael.roth@amd.com>
+ <20221214194056.161492-12-michael.roth@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 3/7] x86/cpu: Disable kernel LASS when patching kernel
- alternatives
-Content-Language: en-US
-To:     Sohil Mehta <sohil.mehta@intel.com>,
-        "Chen, Yian" <yian.chen@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ravi Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Paul Lai <paul.c.lai@intel.com>
-References: <20230110055204.3227669-1-yian.chen@intel.com>
- <20230110055204.3227669-4-yian.chen@intel.com>
- <693d8332-3b86-3dcf-fc87-5c3a08a752db@intel.com>
- <ad2da884-c8c8-bc57-e21f-452a08cb10cc@intel.com>
- <b9e73d06-bd95-7c54-3ff1-f9e43c9967a4@intel.com>
- <9e0a8b20-cb76-b06d-67fb-f8942df5a2f7@intel.com>
- <f8352c29-6b9f-2711-ddf4-223a6806f42f@intel.com>
- <ed41ccf1-8f2d-6d4a-7692-7a3465aca73a@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <ed41ccf1-8f2d-6d4a-7692-7a3465aca73a@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221214194056.161492-12-michael.roth@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/23 18:25, Sohil Mehta wrote:
->> 	/*
->> 	 * Set cr4 to a known state:
->> 	 *  - physical address extension enabled
->> 	 *  - 5-level paging, if it was enabled before
->> 	 */
->> 	movl	$X86_CR4_PAE, %eax
->> 	testq	$X86_CR4_LA57, %r13
->> 	jz	1f
->> 	orl	$X86_CR4_LA57, %eax
->> 1:
->> 	movq	%rax, %cr4
->>
->> 	jmp 1f
->> 1:
-> Dave, does this address your concern or were you looking for something
-> else? Is there some path other than kexec that should also be audited
-> for this scenario?
+On Wed, Dec 14, 2022 at 01:40:03PM -0600, Michael Roth wrote:
+> From: Nikunj A Dadhania <nikunj@amd.com>
+> 
+> Pre-boot guest payload needs to be encrypted and VMM has copied it
 
-Yep, that addresses it.  I don't know of any other path that would
-matter.  Couldn't hurt to poke around and look for other CR4
-manipulation that might need to be LASS-aware, though.
+"has to have copied it over" I presume?
 
+> over to the private-fd. Add support to get the pfn from the memfile fd
+> for encrypting the payload in-place.
+
+Why is that a good thing?
+
+I guess with UPM you're supposed to get the PFN of that encrypted guest
+payload from that memslot.
+
+IOW, such commit messages are too laconic for my taste and you could try
+to explain more why this is happening instead of me having to
+"reverse-deduce" what you're doing from the code...
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
