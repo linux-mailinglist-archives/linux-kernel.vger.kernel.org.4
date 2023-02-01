@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAC7686F32
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C587D686F3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjBATsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S232029AbjBATtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBATsc (ORCPT
+        with ESMTP id S231953AbjBATtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:48:32 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196D4658A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:48:31 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id gr7so30073798ejb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:48:31 -0800 (PST)
+        Wed, 1 Feb 2023 14:49:47 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CF92725
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:49:46 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d3so19515929plr.10
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:49:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GbKw2bj7MYWmb9R9AKQkFPSCVCTf6nBSBsfonYBTpx0=;
-        b=IgZVtlmpLu8K76cmIHlymzNS1y0BMQxmg8LPWlOgZreANxdb5QBAELtJADmCCDgJ1c
-         RJOljtHVD0muvMOkFZqBpq5pHqILjMF2O9h8XxoKaadZ/vUubQ3PMFvVwWSaZzEQ9OFQ
-         HFghC3rv07WunN/7Xj4Kw0+prXcd/XVXfjHR8W/PkZMEc+Vm4oO4/HlYLyf4M3QIHppk
-         mWdiGjuibLgl4i6Btm+A7HSScAtaXHEvS+PcqJP+rDiat40oYM9309BQmk5ofyFBWVqP
-         ShyBFjcgB51M3b8jHbJy3eY2rE+H3iGsACCDllnMAFhA3QibJbTpDG9Srz1M99kgqwlC
-         3f5w==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:cc:date:message-id:subject:mime-version
+         :content-transfer-encoding:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1dg+uXzaaDlrvsfZB5ZVYE69CBYsnyR8HC8FMGd9uOk=;
+        b=mUdhzyCgYPNycF/3bkAMsoqXvQQ/tso4Texyq30NkVnpEYdcyRuKmzz2Rr9fp34Eje
+         PStVXCIBfTeS/ewMRxcWIN0eZkpiwVz+K9wrlYOCPExPoX8XDqDeXpo/xdlz8Mb6P8yH
+         rcBTRdi3v3r589fekBvveOZSmC7+ooKvp8fSGwL7tL9TYZnQkCuAxoflAaTlkZplc+kS
+         eEtwnPc7zlSIS/pHv8ONU0y+IeI1t0HUSWZ8XxQfIZDEqXbwAz2erCpu4iuptmGQRHkV
+         n2pvh7Je1PuerQguKUAuzrm4EdS0tWGOF8oz7CtrfidrPzyq9yyoll/nea+iLRYeDveu
+         pE4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GbKw2bj7MYWmb9R9AKQkFPSCVCTf6nBSBsfonYBTpx0=;
-        b=DNupz3IjjqV6OBRtLUz0cbydk7DO+wAOfFOSaC9VHt8q8soUJ+N73mNIEc8cym/12n
-         8DpJwuHhJgnAh+Wurg4s2fO5SE4Y0M62fMXp08/1FuDn4jeukUwiV3S9zHNKif7RIjje
-         Sh5t9xMeiswLmJRQzMNCgu0nLPVoQvTY07Uzw5jJFO9iwHkPchTLTzGv90YJHHV3RPMA
-         zjIRGv1j0owdZGBStDtO1bPiwWgBa58LrbTolRHIawzKVP3YqcK1pxcHek+gs17vWfU2
-         MeJEWGe4T/tGMUVAOh4Cknxh+achqVJ3QEdc9QC8Vi7uTz6YjKRTMcancEj4dymq3BbD
-         xm7Q==
-X-Gm-Message-State: AO0yUKWv5seSnNahjmBKStwzOyUbrDo2cWIh8bi5HezWGubeDyQTjiBP
-        ZPbU6ytHOndNhMV+FlXp4Pw9BLHWj9pAaMkeUd2L8Q==
-X-Google-Smtp-Source: AK7set9Op0DiDjKw4XTcFVxiN3uCmIlijP4RGLcpuX/DBce7/Gn8JMuA7xa11GsJO9wnxH7ue5JE866jce75SYd3ZgY=
-X-Received: by 2002:a17:906:80a:b0:878:8bd5:4bdf with SMTP id
- e10-20020a170906080a00b008788bd54bdfmr931813ejd.270.1675280909555; Wed, 01
- Feb 2023 11:48:29 -0800 (PST)
-MIME-Version: 1.0
-References: <20221221222418.3307832-1-bgardon@google.com> <20221221222418.3307832-2-bgardon@google.com>
- <Y9rBQAJg+ITHnVfw@google.com>
-In-Reply-To: <Y9rBQAJg+ITHnVfw@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Wed, 1 Feb 2023 11:48:18 -0800
-Message-ID: <CANgfPd8gAW=u6yaPkrEURZ6vi0SWDrEKASAQAanGwBQLWqo+mg@mail.gmail.com>
-Subject: Re: [RFC 01/14] KVM: x86/MMU: Add shadow_mmu.(c|h)
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Nagareddy Reddy <nspreddy@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=to:cc:date:message-id:subject:mime-version
+         :content-transfer-encoding:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1dg+uXzaaDlrvsfZB5ZVYE69CBYsnyR8HC8FMGd9uOk=;
+        b=ds8zJ8JSjhaHTurMaj57Uc5vg25iVtfPJtsndVCnI1bPgpKFY8QCasZzUvZ2Cijbpg
+         xYlg4M5XKdzP7jQX0HXWeJdT5lLzkmpTzQxsG+Hcp7UTQNTPT0zrw6LLJQDRBHr5Jal5
+         8va7Xd0gqhaX0FiZgR60tyLBMXFg8q8MHa+s4GRgLEg9Vg/FjSCGn8XEKNF2Vc1ODyn5
+         cIiqMw3jbMVFKAg2CkdkMZWa1POF2u6JF1tly1dnurvXM0MQijX7H6GNALadGtbMp3F+
+         Q5JfYCA4nuwdbvTno4mswyrH+yKSSjyLBLvsV5JRguYCuIc2OLma2slKkyl1rAXpEmsu
+         eXYw==
+X-Gm-Message-State: AO0yUKVvf74/XOlrrg5UclidDwJguaB35iwlLz0v8QLe0PFEQtXGhZm9
+        4G09Zgs5cOGcQdQAb+ODU6tEme0mzlRpXZw6
+X-Google-Smtp-Source: AK7set+GulbmfTJcMlD3KZbcW1D0M9MZZW397DAJ+hjZSoE0ohBkXfhXkx7rlEzwdgu1mqowUP6nKw==
+X-Received: by 2002:a17:902:d415:b0:196:6298:6226 with SMTP id b21-20020a170902d41500b0019662986226mr3453841ple.49.1675280986263;
+        Wed, 01 Feb 2023 11:49:46 -0800 (PST)
+Received: from smtpclient.apple ([51.52.155.79])
+        by smtp.gmail.com with ESMTPSA id q9-20020a170902b10900b0019608291564sm4015021plr.134.2023.02.01.11.49.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 01 Feb 2023 11:49:45 -0800 (PST)
+From:   Matt Evans <mev@rivosinc.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: [PATCH V2] clocksource: riscv: Patch riscv_clock_next_event() jump
+ before first use
+Message-Id: <CDDAB2D0-264E-42F3-8E31-BA210BEB8EC1@rivosinc.com>
+Date:   Wed, 1 Feb 2023 19:49:42 +0000
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Atish Patra <atishp@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 11:45 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Wed, Dec 21, 2022, Ben Gardon wrote:
-> > diff --git a/arch/x86/kvm/mmu/shadow_mmu.c b/arch/x86/kvm/mmu/shadow_mmu.c
-> > new file mode 100644
-> > index 000000000000..7bce5ec52b2e
-> > --- /dev/null
-> > +++ b/arch/x86/kvm/mmu/shadow_mmu.c
-> > @@ -0,0 +1,21 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * KVM Shadow MMU
-> > + *
-> > + * This file implements the Shadow MMU: the KVM MMU implementation which has
-> > + * developed organically from hardware which did not have second level paging,
-> > + * and so used "shadow paging" to virtualize guest memory. The Shadow MMU is
-> > + * an alternative to the TDP MMU which only supports hardware with Two
-> > + * Dimentional Paging. (e.g. EPT on Intel or NPT on AMD CPUs.) Note that the
-> > + * Shadow MMU also supports TDP, it's just less scalable. The Shadow and TDP
-> > + * MMUs can cooperate to support nested virtualization on hardware with TDP.
-> > + */
->
-> Eh, I vote to omit the comment.  For newbies, Documentation is likely a better
-> landing spot for describing the MMUs, and people that are familiar with KVM x86
-> MMU already know what the shadow MMU is and does.  That way we avoid bikeshedding
-> this comment, at least in the conext of this series.  E.g. I'm pretty sure much
-> of the shadow MMU behavior wasn't developed organically, it was stolen from Xen.
-> And the line about the Shadow and TDP MMUs cooperating support nested virt is
-> loaded with assumptions and qualifiers, and makes it sound like nested virt only
-> works with _the_ TDP MMU as oposed to _a_ TDP MMU`.
+A static key is used to select between SBI and Sstc timer usage in
+riscv_clock_next_event(), but currently the direction is resolved
+after cpuhp_setup_state() is called (which sets the next event).  The
+first event will therefore fall through the sbi_set_timer() path; this
+breaks Sstc-only systems.  So, apply the jump patching before first
+use.
 
-Sounds good, I can dump the comment. I plan to send out a rebased
-version of this series tomorrow, incorporating all the feedback this
-series has gotten. Thanks for taking another look at it.
+Fixes: 9f7a8ff6391f ("RISC-V: Prefer sstc extension if available")
+Signed-off-by: Matt Evans <mev@rivosinc.com>
+---
+
+V1 -> V2: Commit msg tweak.
+
+ drivers/clocksource/timer-riscv.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/clocksource/timer-riscv.c =
+b/drivers/clocksource/timer-riscv.c
+index 969a552da8d2..a36d173fd6cd 100644
+--- a/drivers/clocksource/timer-riscv.c
++++ b/drivers/clocksource/timer-riscv.c
+@@ -177,6 +177,11 @@ static int __init riscv_timer_init_dt(struct =
+device_node *n)
+ 		return error;
+ 	}
+=20
++	if (riscv_isa_extension_available(NULL, SSTC)) {
++		pr_info("Timer interrupt in S-mode is available via sstc =
+extension\n");
++		static_branch_enable(&riscv_sstc_available);
++	}
++
+ 	error =3D cpuhp_setup_state(CPUHP_AP_RISCV_TIMER_STARTING,
+ 			 "clockevents/riscv/timer:starting",
+ 			 riscv_timer_starting_cpu, =
+riscv_timer_dying_cpu);
+@@ -184,11 +189,6 @@ static int __init riscv_timer_init_dt(struct =
+device_node *n)
+ 		pr_err("cpu hp setup state failed for RISCV timer =
+[%d]\n",
+ 		       error);
+=20
+-	if (riscv_isa_extension_available(NULL, SSTC)) {
+-		pr_info("Timer interrupt in S-mode is available via sstc =
+extension\n");
+-		static_branch_enable(&riscv_sstc_available);
+-	}
+-
+ 	return error;
+ }
+=20
+--=20
+2.30.2
+
+
