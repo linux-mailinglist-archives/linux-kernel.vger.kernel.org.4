@@ -2,233 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDE1686AEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A57C686AED
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbjBAP4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
+        id S232527AbjBAP4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:56:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbjBAP4H (ORCPT
+        with ESMTP id S229612AbjBAP4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 10:56:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AB169518;
-        Wed,  1 Feb 2023 07:56:06 -0800 (PST)
+        Wed, 1 Feb 2023 10:56:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91641BF2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 07:56:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 009BB6183B;
-        Wed,  1 Feb 2023 15:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA4BC433D2;
-        Wed,  1 Feb 2023 15:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675266965;
-        bh=xoo+m5nnKJwCHyu3Pdsr89f7T1zFTE7ZqK87QXapMiI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O0Gl5qGVfyCsUe5osNP2EMaXkPApSKr1jyt24tHk80aZi1qxgyBmhdCvCReXTQ+ED
-         2Yorcy61vc9U3LDLFGSj1V7PfbNgREjLFI/I5gwEXHgXKWhsjMecR3J86Ry3WF/8wQ
-         fjFfvl1plo7x9J0n3m6GzzY433mU2odkn8ibCy45FH7leyXHGCgVTPSlByGG14w05d
-         YzzD2erLTVuj+wcVVAPCBeS8pQOCF2lpBYvuRyqzbnNB1vYEK06tD+J6uEjtQvbT2J
-         UpZwkGlb0/ELFYDmY9NciMXXlGFVLfWMq08eRlJxmdOV66aFo8kL7GjmIMh4vpNC+I
-         YGzlWtxhf2GBg==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     linux-trace-kernel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH v3 01/10] fprobe: Pass entry_data to handlers
-Date:   Thu,  2 Feb 2023 00:56:01 +0900
-Message-Id:  <167526696173.433354.17408372048319432574.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-In-Reply-To:  <167526695292.433354.8949652607331707144.stgit@mhiramat.roam.corp.google.com>
-References:  <167526695292.433354.8949652607331707144.stgit@mhiramat.roam.corp.google.com>
-User-Agent: StGit/0.19
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86BAFB821BC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 15:56:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B93C433D2;
+        Wed,  1 Feb 2023 15:56:07 +0000 (UTC)
+Date:   Wed, 1 Feb 2023 10:56:03 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Song Chen <chensong_2000@189.cn>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kernel/sched/core: adjust rt_priority accordingly when
+ prio is changed
+Message-ID: <20230201105603.1d377866@gandalf.local.home>
+In-Reply-To: <1675245680-2811-1-git-send-email-chensong_2000@189.cn>
+References: <1675245680-2811-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Wed,  1 Feb 2023 18:01:20 +0800
+Song Chen <chensong_2000@189.cn> wrote:
 
-Pass the private entry_data to the entry and exit handlers so that
-they can share the context data, something like saved function
-arguments etc.
-User must specify the private entry_data size by @entry_data_size
-field before registering the fprobe.
+> When a high priority process is acquiring a rtmutex which is held by a
+> low priority process, the latter's priority will be boosted up by calling
+> rt_mutex_setprio->__setscheduler_prio.
+> 
+> However, p->prio is changed but p->rt_priority is not, as a result, the
+> equation between prio and rt_priority is broken, which is:
+> 
+> 	prio = MAX_RT_PRIO - 1 - rt_priority
+> 
+> It's confusing to the user when it calls sched_getparam, which only
+> returns rt_priority.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- include/linux/fprobe.h          |    8 ++++++--
- kernel/trace/bpf_trace.c        |    2 +-
- kernel/trace/fprobe.c           |   21 ++++++++++++++-------
- lib/test_fprobe.c               |    6 ++++--
- samples/fprobe/fprobe_example.c |    6 ++++--
- 5 files changed, 29 insertions(+), 14 deletions(-)
+If it is boosted, then that's an internal implementation and not the real
+priority of the task. It should not be exposed to a user interface. In
+fact, there's discussion of implementing a "proxy" algorithm which will
+make what the "priority" of a task is even more complicated when acquiring
+mutexes.
 
-diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-index 1c2bde0ead73..e0d4e6136249 100644
---- a/include/linux/fprobe.h
-+++ b/include/linux/fprobe.h
-@@ -13,6 +13,7 @@
-  * @nmissed: The counter for missing events.
-  * @flags: The status flag.
-  * @rethook: The rethook data structure. (internal data)
-+ * @entry_data_size: The private data storage size.
-  * @entry_handler: The callback function for function entry.
-  * @exit_handler: The callback function for function exit.
-  */
-@@ -29,9 +30,12 @@ struct fprobe {
- 	unsigned long		nmissed;
- 	unsigned int		flags;
- 	struct rethook		*rethook;
-+	size_t			entry_data_size;
- 
--	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
--	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
-+	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip,
-+			      struct pt_regs *regs, void *entry_data);
-+	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip,
-+			     struct pt_regs *regs, void *entry_data);
- };
- 
- /* This fprobe is soft-disabled. */
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index f47274de012b..834c0a7efcdb 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2649,7 +2649,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
- 
- static void
- kprobe_multi_link_handler(struct fprobe *fp, unsigned long fentry_ip,
--			  struct pt_regs *regs)
-+			  struct pt_regs *regs, void *data)
- {
- 	struct bpf_kprobe_multi_link *link;
- 
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index e8143e368074..fa25d09c9d57 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -17,14 +17,16 @@
- struct fprobe_rethook_node {
- 	struct rethook_node node;
- 	unsigned long entry_ip;
-+	char data[];
- };
- 
- static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
- 			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
- {
- 	struct fprobe_rethook_node *fpr;
--	struct rethook_node *rh;
-+	struct rethook_node *rh = NULL;
- 	struct fprobe *fp;
-+	void *entry_data = NULL;
- 	int bit;
- 
- 	fp = container_of(ops, struct fprobe, ops);
-@@ -37,9 +39,6 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
- 		return;
- 	}
- 
--	if (fp->entry_handler)
--		fp->entry_handler(fp, ip, ftrace_get_regs(fregs));
--
- 	if (fp->exit_handler) {
- 		rh = rethook_try_get(fp->rethook);
- 		if (!rh) {
-@@ -48,9 +47,16 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
- 		}
- 		fpr = container_of(rh, struct fprobe_rethook_node, node);
- 		fpr->entry_ip = ip;
--		rethook_hook(rh, ftrace_get_regs(fregs), true);
-+		if (fp->entry_data_size)
-+			entry_data = fpr->data;
- 	}
- 
-+	if (fp->entry_handler)
-+		fp->entry_handler(fp, ip, ftrace_get_regs(fregs), entry_data);
-+
-+	if (rh)
-+		rethook_hook(rh, ftrace_get_regs(fregs), true);
-+
- out:
- 	ftrace_test_recursion_unlock(bit);
- }
-@@ -81,7 +87,8 @@ static void fprobe_exit_handler(struct rethook_node *rh, void *data,
- 
- 	fpr = container_of(rh, struct fprobe_rethook_node, node);
- 
--	fp->exit_handler(fp, fpr->entry_ip, regs);
-+	fp->exit_handler(fp, fpr->entry_ip, regs,
-+			 fp->entry_data_size ? (void *)fpr->data : NULL);
- }
- NOKPROBE_SYMBOL(fprobe_exit_handler);
- 
-@@ -146,7 +153,7 @@ static int fprobe_init_rethook(struct fprobe *fp, int num)
- 	for (i = 0; i < size; i++) {
- 		struct fprobe_rethook_node *node;
- 
--		node = kzalloc(sizeof(*node), GFP_KERNEL);
-+		node = kzalloc(sizeof(*node) + fp->entry_data_size, GFP_KERNEL);
- 		if (!node) {
- 			rethook_free(fp->rethook);
- 			fp->rethook = NULL;
-diff --git a/lib/test_fprobe.c b/lib/test_fprobe.c
-index 1fb56cf5e5ce..e4f65d114ed2 100644
---- a/lib/test_fprobe.c
-+++ b/lib/test_fprobe.c
-@@ -30,7 +30,8 @@ static noinline u32 fprobe_selftest_target2(u32 value)
- 	return (value / div_factor) + 1;
- }
- 
--static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip,
-+				     struct pt_regs *regs, void *data)
- {
- 	KUNIT_EXPECT_FALSE(current_test, preemptible());
- 	/* This can be called on the fprobe_selftest_target and the fprobe_selftest_target2 */
-@@ -39,7 +40,8 @@ static notrace void fp_entry_handler(struct fprobe *fp, unsigned long ip, struct
- 	entry_val = (rand1 / div_factor);
- }
- 
--static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+static notrace void fp_exit_handler(struct fprobe *fp, unsigned long ip,
-+				    struct pt_regs *regs, void *data)
- {
- 	unsigned long ret = regs_return_value(regs);
- 
-diff --git a/samples/fprobe/fprobe_example.c b/samples/fprobe/fprobe_example.c
-index e22da8573116..dd794990ad7e 100644
---- a/samples/fprobe/fprobe_example.c
-+++ b/samples/fprobe/fprobe_example.c
-@@ -48,7 +48,8 @@ static void show_backtrace(void)
- 	stack_trace_print(stacks, len, 24);
- }
- 
--static void sample_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+static void sample_entry_handler(struct fprobe *fp, unsigned long ip,
-+				 struct pt_regs *regs, void *data)
- {
- 	if (use_trace)
- 		/*
-@@ -63,7 +64,8 @@ static void sample_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_
- 		show_backtrace();
- }
- 
--static void sample_exit_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+static void sample_exit_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs,
-+				void *data)
- {
- 	unsigned long rip = instruction_pointer(regs);
- 
 
+> 
+> This patch addresses this issue by adjusting rt_priority according to
+> the new value of prio, what's more, it also returns normal_prio for
+> CFS processes instead of just a zero.
+
+The comment above sched_getparam() is:
+
+/**
+ * sys_sched_getparam - get the RT priority of a thread
+ * @pid: the pid in question.
+ * @param: structure containing the RT priority.
+ *
+ * Return: On success, 0 and the RT priority is in @param. Otherwise, an error
+ * code.
+ */
+
+So returning the nice value is incorrect. If anything, perhaps it should
+return -EINVAL if the task is not an RT task?
+
+-- Steve
+
+> 
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> ---
