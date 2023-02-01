@@ -2,133 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58468686F5D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D6F686F60
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjBATyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:54:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
+        id S232156AbjBATzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbjBATyM (ORCPT
+        with ESMTP id S232118AbjBATze (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:54:12 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD38B84197;
-        Wed,  1 Feb 2023 11:53:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675281228; x=1706817228;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6HAwN89xCS0t9HJi/h3nmQ7e1/evEaQAYP62NFj2lds=;
-  b=PnA1s/6oiWwXWdXIaWc1z3Dsc7Vq7QYh+xCcf7cd4h4/QuiT4DPscmoq
-   3/q+/yo/jtZUG3vH30NGwCtRBZpfFCJqXHfghK+ipXL1ITacYaW5NmyyZ
-   3woqZncWaMntugaPYE6aElY+iAZ7V7PTUXNeeDvhN6XybIbJUQz0QmQln
-   ynIom5Z5WTjMufIMbWK3To7/XMFcKWTOWdIsnzz5AZq5VcL3W6lIdG7pt
-   Fb60ElGAnIhTgaYB8T+KlwiIk6qhZlNoBmXQF10Iy7IIhU/IRbcLtrndW
-   qei1Qcx8Lqrs446MMd+1sJDrPvCCSbrUiHTYFtQa+H1VSc97n5MQZkqZk
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="308598531"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="308598531"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 11:53:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="807702685"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="807702685"
-Received: from sgkhacha-mobl1.amr.corp.intel.com (HELO [10.212.227.86]) ([10.212.227.86])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 11:53:47 -0800
-Message-ID: <0097571c-890f-997d-5b6a-0a7b474d8fe9@intel.com>
-Date:   Wed, 1 Feb 2023 11:53:46 -0800
+        Wed, 1 Feb 2023 14:55:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE825399E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:54:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675281283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y4O+OE90XnoUkDMuD0O0m1OCqKGNb1pVnn32lSIj0pE=;
+        b=ZROZ1QXKFmTcBb8Fq9oneHlBUAute/et4bcYrV6Na/2Ds8XIapUdEULNSxyE0kpw+GCPnz
+        pR9EAFxhnUO8ItoHMailrkew+ReEWc00FwtYrG5hI634p+cTEvcxPb1XY/Q4JA+pvACwbQ
+        Zi5qwzw89RYgXibWlb2HCgoGn68kJmU=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-665-MGZmIaXNP2KcGwYPV7MHlQ-1; Wed, 01 Feb 2023 14:54:41 -0500
+X-MC-Unique: MGZmIaXNP2KcGwYPV7MHlQ-1
+Received: by mail-qt1-f199.google.com with SMTP id cr22-20020a05622a429600b003b694a9f291so8827978qtb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:54:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y4O+OE90XnoUkDMuD0O0m1OCqKGNb1pVnn32lSIj0pE=;
+        b=zu+YuKKj3qZ577S5y+UowUUtEUG0YSdCwd60jd1ul9FeawHQztYxInQLmphiVAEy/3
+         Dowo6z76YjhnJevRmFTT3rOU+mJwEHRO8l1Gx+RyAxJNvECEE+osxs3ANs+HEpZ5Vhb7
+         eSskxbLUPmhsIGSrpkNorLUrxQLd8iThBy4lTWv0pCoY5nCnhXz6UZuBLLTJrjOwrPtv
+         EM9XRLHkHuh+wflVu+7+5RID+91fj2vstggE0KmyA55knx3Z3KRUG2NMvETUJnocDfe8
+         LTmjOdf2iMCHNGdM9ks0sLJjLIDsLnRCbuvTA6COQrdCISu/XInxVoZGsv30dbqCLHQ8
+         VvtA==
+X-Gm-Message-State: AO0yUKXWSjnaGlqpW9XR0/NeSjSpQBD/xeT8Y5un3bOuiaTtqed3r3rz
+        zs/LSDtpCh14ElXUGwXrm/M9KYKM61FZU63Ubw5axQxvlfu6TJVniom3BwRwF7K5onOj1BrfwXu
+        msy+ekoJjg+XJbFOZjdNhbxWq
+X-Received: by 2002:a05:622a:54c:b0:3b8:3629:7cb7 with SMTP id m12-20020a05622a054c00b003b836297cb7mr5720677qtx.64.1675281281513;
+        Wed, 01 Feb 2023 11:54:41 -0800 (PST)
+X-Google-Smtp-Source: AK7set9Q+M5qIrbxp3xH54KEIWotWIlba2l/wzI+xUL6SESK0mYeTEsH+N4VPERX8EXbE9R4srp8Hg==
+X-Received: by 2002:a05:622a:54c:b0:3b8:3629:7cb7 with SMTP id m12-20020a05622a054c00b003b836297cb7mr5720643qtx.64.1675281281222;
+        Wed, 01 Feb 2023 11:54:41 -0800 (PST)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id 77-20020a370650000000b0071c2a68d6f2sm8746441qkg.20.2023.02.01.11.54.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 11:54:40 -0800 (PST)
+Subject: Re: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta
+ datacenters
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Daniel Kolesa <q66@chimera-linux.org>,
+        Chris Mason <clm@meta.com>
+References: <20230201192509.4124319-1-ndesaulniers@google.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <28a46c56-e971-bee0-37d6-e442d15aa431@redhat.com>
+Date:   Wed, 1 Feb 2023 11:54:38 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 4/5] platform/x86/intel/ifs: Implement Array BIST test
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Macieira, Thiago" <thiago.macieira@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>
-References: <20230131234302.3997223-1-jithu.joseph@intel.com>
- <20230131234302.3997223-5-jithu.joseph@intel.com>
- <aedc760b-ca4d-031d-6797-4f0a1ab2d5d7@intel.com>
- <SJ1PR11MB6083616D3AA5738944EE37DDFCD19@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <SJ1PR11MB6083616D3AA5738944EE37DDFCD19@SJ1PR11MB6083.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230201192509.4124319-1-ndesaulniers@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Language: en-US
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/23 11:43, Luck, Tony wrote:
->> Why bother with a bitfield?  Just do:
-> How much "bother" is a bitfield?
-> 
->> union ifs_array {
->>       u64     data;
->>       struct {
->>               u32     array_bitmask;
->>               u16     array_bank;
->>               u16     flags;
->>       };
->> };
->>
->> Then you only need to mask 'ctrl_result' out of flags.  You don't need
->> any crazy macros.
-> "only need" to special case this one field ... but that's extra
-> code for humans to read (and humans aren't good at that)
-> rather than the computer (compiler) which is really good at
-> doing this.
 
-I don't follow.
+On 2/1/23 11:25 AM, Nick Desaulniers wrote:
+> Chimera Linux is a Linux distribution from 2021 that builds its kernels
+> with Clang.
+>
+> Google transitioned its data center fleet to run Clang built kernels in
+> 2021, and Meta did so as well in 2022.  Meta talked about this at LPC
+> 2022 at a talk titled Kernel Live Patching at Scale.
+>
+> These were important milestones for building the kernel with Clang.
+> Making note of them helps improve confidence in the project.
+>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Cc: Daniel Kolesa <q66@chimera-linux.org>
+> Cc: Chris Mason <clm@meta.com>
+> ---
+>   Documentation/kbuild/llvm.rst | 15 +++++++++------
+>   1 file changed, 9 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+> index 6b2bac8e9ce0..6a37ab903e45 100644
+> --- a/Documentation/kbuild/llvm.rst
+> +++ b/Documentation/kbuild/llvm.rst
+> @@ -15,12 +15,15 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
+>   <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
+>   used as viable substitutes. Distributions such as `Android
+>   <https://www.android.com/>`_, `ChromeOS
+> -<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
+> -<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
+> -collection of toolchain components implemented in terms of C++ objects
+> -<https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
+> -supports C and the GNU C extensions required by the kernel, and is pronounced
+> -"klang," not "see-lang."
+> +https://www.chromium.org/chromium-os>`_, `OpenMandriva
+> +<https://www.openmandriva.org/>`_, and `Chimera Linux
+> +<https://chimera-linux.org/>`_ use Clang built kernels. Google's and Meta's
+> +datacenter fleets also run kernels built with Clang.
+> +
+> +`LLVM is a collection of toolchain components implemented in terms of C++
+> +objects <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM
+> +that supports C and the GNU C extensions required by the kernel, and is
+> +pronounced "klang," not "see-lang."
 
-If you have:
+:) yes it is klang.
 
-	struct foo {
-		u16	rsvd			:15;
-		u16	ctrl_result		:1;
-	};
+Looks fine.
 
-versus:
+Reviewed-by: Tom Rix <trix@redhat.com>
 
-	struct bar {
-		u16	flags;
-	};
+>   
+>   Clang
+>   -----
 
-and you do:
-
-	if (foo->ctrl_result)
-		something();
-
-versus:
-
-	if (bar->flags & CTRL_RESULT_MASK)
-		something();
-
-I think both of those are quite readable.  I'd argue that humans will be
-less _surprised_ by 'bar'.  I also like to write portable code even if
-it's going to be x86 only.  It helps people who are used to reading
-portable generic code read and find bugs in x86 only code.
