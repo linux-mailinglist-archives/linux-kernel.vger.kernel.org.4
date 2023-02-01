@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6AE6870C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 23:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A266870C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 23:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjBAWAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 17:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S231642AbjBAWAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 17:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbjBAWAL (ORCPT
+        with ESMTP id S231607AbjBAWAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 17:00:11 -0500
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD37728D1;
-        Wed,  1 Feb 2023 14:00:10 -0800 (PST)
-Received: by mail-oi1-f180.google.com with SMTP id r28so526977oiw.3;
-        Wed, 01 Feb 2023 14:00:10 -0800 (PST)
+        Wed, 1 Feb 2023 17:00:23 -0500
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A147D7266F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 14:00:19 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id bx13so11149212oib.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 14:00:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Vj0b1ZK3fckZ4VvFRyf/KYc9WA7HNMJVi8mYiiJF7CM=;
-        b=76Rsq/LOlR63GR1MYsDQgQIpjiF5+3AzXL3Jwn1bOKh1AyhoSwr/f4A5trlASv4xtB
-         6BsupJrwVBcI0zmNfPIW8xtRGr8ppItP1bmjPf4UMDoDZ6WV7IvamJjJ1VUNm6ALjd60
-         xpCN1ViuY9p+LmriynCivUFSaPN/jY3j6D24mBd1mjJV5Kw/VFm9nI825AxOgk4dQ1ij
-         gHm3FSqeinskWywT+BAew5uiM19xhMLoHpn6BQW7H6AABp5A2dlMrrDZWS7ykVujvdTF
-         peNoxCeFhaBwXR6q5HsUD8uY64i+LidYz7xDn6foWUnWNeZukYxPOPi9gHl5su7SOXaO
-         gYEw==
-X-Gm-Message-State: AO0yUKX71hT96W+6EbtrlkvzLtH4+Dubd8DqRsJZVH6xWCNORchEDxFN
-        hl3EhTzr0TivLWT2RgIpmJqa1kh6Mw==
-X-Google-Smtp-Source: AK7set9RqCkO37nOMZk3VE97UdW3F6KdrsVcaoBbY/5KlonMFk7VdUFXJJ19kcx9oQ0CM4FAcLhnYA==
-X-Received: by 2002:a05:6808:f0c:b0:378:6396:13cc with SMTP id m12-20020a0568080f0c00b00378639613ccmr2286307oiw.56.1675288809257;
-        Wed, 01 Feb 2023 14:00:09 -0800 (PST)
+        bh=1XkbBn50HbU84B9DuICUZoT4NR3IzYgz7CKBq7MuAxw=;
+        b=4n8H8qmqtFsHfszHzHtrf1VTHNp342jQiJP9qitPmeiYxBH6RlyLQIO2Leqx7yfYRx
+         uU6D5C5V+Ar8OMWpM0QQJV6YP7AE1vg4eiiwlO+Uv4CrLz9W9fT+Py7bYgnVqCYwWmcE
+         XhFdp4kxtAio9Rs6uluQORJMlHeCwcP+iRcnvOlrGodzUSBRCt8Nm7A3tv0h5f5yuCPd
+         UOraqeQXEd+LCBrFbhO6tHP4pXOMxQTe7gghl8JCnYmvvL43HJpZDE2pIC/qhNhRwP61
+         nfEuvIsknMDCDUTcA5E2azzkZzDhgUmcM/MWRYAxwoK/yKrzZjQXJPuDsCX2mPxCSYWd
+         bqkA==
+X-Gm-Message-State: AO0yUKWF93goHTjYd0chMM6KCZP2xRO2wgVFjXIGEhOORZWZycw0bNew
+        MUC2lEnL14trEWpg9fcolOx/G5yVOg==
+X-Google-Smtp-Source: AK7set+jOLkoidQpkXezdpSyqHhfDQEIuM5uDLkeDa17UAn3sp+hbfiK31GUqWVbrvLf1BpYzxvwBg==
+X-Received: by 2002:a05:6808:ab7:b0:367:18a6:eb26 with SMTP id r23-20020a0568080ab700b0036718a6eb26mr1802405oij.42.1675288818506;
+        Wed, 01 Feb 2023 14:00:18 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id my11-20020a056870698b00b00143ae7d4ccesm8331600oab.45.2023.02.01.14.00.08
+        by smtp.gmail.com with ESMTPSA id a186-20020acab1c3000000b00363760f96dcsm7308714oif.42.2023.02.01.14.00.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 14:00:08 -0800 (PST)
-Received: (nullmailer pid 247042 invoked by uid 1000);
-        Wed, 01 Feb 2023 22:00:08 -0000
+        Wed, 01 Feb 2023 14:00:17 -0800 (PST)
+Received: (nullmailer pid 247224 invoked by uid 1000);
+        Wed, 01 Feb 2023 22:00:17 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] bus: ti-sysc: Remove open coded "ranges" parsing
-Date:   Wed,  1 Feb 2023 16:00:02 -0600
-Message-Id: <20230201220002.246907-1-robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] bus: unifier-system-bus: Remove open coded "ranges" parsing
+Date:   Wed,  1 Feb 2023 16:00:11 -0600
+Message-Id: <20230201220011.247100-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,66 +67,84 @@ Signed-off-by: Rob Herring <robh@kernel.org>
 ---
 Compile tested only!
 ---
- drivers/bus/ti-sysc.c | 41 +++++++++--------------------------------
- 1 file changed, 9 insertions(+), 32 deletions(-)
+ drivers/bus/uniphier-system-bus.c | 54 +++++++------------------------
+ 1 file changed, 11 insertions(+), 43 deletions(-)
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
-index 6afae9897843..9c8985515376 100644
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -648,43 +648,20 @@ static int sysc_init_resets(struct sysc *ddata)
- static int sysc_parse_and_check_child_range(struct sysc *ddata)
+diff --git a/drivers/bus/uniphier-system-bus.c b/drivers/bus/uniphier-system-bus.c
+index f70dedace20b..cb5c89ce7b86 100644
+--- a/drivers/bus/uniphier-system-bus.c
++++ b/drivers/bus/uniphier-system-bus.c
+@@ -176,10 +176,9 @@ static int uniphier_system_bus_probe(struct platform_device *pdev)
  {
- 	struct device_node *np = ddata->dev->of_node;
+ 	struct device *dev = &pdev->dev;
+ 	struct uniphier_system_bus_priv *priv;
 -	const __be32 *ranges;
--	u32 nr_addr, nr_size;
--	int len, error;
--
--	ranges = of_get_property(np, "ranges", &len);
--	if (!ranges) {
--		dev_err(ddata->dev, "missing ranges for %pOF\n", np);
--
--		return -ENOENT;
--	}
--
--	len /= sizeof(*ranges);
--
--	if (len < 3) {
--		dev_err(ddata->dev, "incomplete ranges for %pOF\n", np);
--
--		return -EINVAL;
--	}
--
--	error = of_property_read_u32(np, "#address-cells", &nr_addr);
--	if (error)
--		return -ENOENT;
+-	u32 cells, addr, size;
+-	u64 paddr;
+-	int pna, bank, rlen, rone, ret;
 +	struct of_range_parser parser;
 +	struct of_range range;
-+	int error;
++	int ret;
  
--	error = of_property_read_u32(np, "#size-cells", &nr_size);
-+	error = of_range_parser_init(&parser, np);
- 	if (error)
--		return -ENOENT;
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -191,48 +190,17 @@ static int uniphier_system_bus_probe(struct platform_device *pdev)
+ 
+ 	priv->dev = dev;
+ 
+-	pna = of_n_addr_cells(dev->of_node);
 -
--	if (nr_addr != 1 || nr_size != 1) {
--		dev_err(ddata->dev, "invalid ranges for %pOF\n", np);
-+		return error;
- 
+-	ret = of_property_read_u32(dev->of_node, "#address-cells", &cells);
+-	if (ret) {
+-		dev_err(dev, "failed to get #address-cells\n");
+-		return ret;
+-	}
+-	if (cells != 2) {
+-		dev_err(dev, "#address-cells must be 2\n");
 -		return -EINVAL;
-+	for_each_of_range(&parser, &range) {
-+		ddata->module_pa = range.cpu_addr;
-+		ddata->module_size = range.size;
-+		break;
- 	}
- 
--	ranges++;
--	ddata->module_pa = of_translate_address(np, ranges++);
--	ddata->module_size = be32_to_cpup(ranges);
+-	}
 -
- 	return 0;
- }
+-	ret = of_property_read_u32(dev->of_node, "#size-cells", &cells);
+-	if (ret) {
+-		dev_err(dev, "failed to get #size-cells\n");
++	ret = of_range_parser_init(&parser, dev->of_node);
++	if (ret)
+ 		return ret;
+-	}
+-	if (cells != 1) {
+-		dev_err(dev, "#size-cells must be 1\n");
+-		return -EINVAL;
+-	}
  
+-	ranges = of_get_property(dev->of_node, "ranges", &rlen);
+-	if (!ranges) {
+-		dev_err(dev, "failed to get ranges property\n");
+-		return -ENOENT;
+-	}
+-
+-	rlen /= sizeof(*ranges);
+-	rone = pna + 2;
+-
+-	for (; rlen >= rone; rlen -= rone) {
+-		bank = be32_to_cpup(ranges++);
+-		addr = be32_to_cpup(ranges++);
+-		paddr = of_translate_address(dev->of_node, ranges);
+-		if (paddr == OF_BAD_ADDR)
++	for_each_of_range(&parser, &range) {
++		if (range.cpu_addr == OF_BAD_ADDR)
+ 			return -EINVAL;
+-		ranges += pna;
+-		size = be32_to_cpup(ranges++);
+-
+-		ret = uniphier_system_bus_add_bank(priv, bank, addr,
+-						   paddr, size);
++		ret = uniphier_system_bus_add_bank(priv,
++						   upper_32_bits(range.bus_addr),
++						   lower_32_bits(range.bus_addr),
++						   range.cpu_addr, range.size);
+ 		if (ret)
+ 			return ret;
+ 	}
 -- 
 2.39.0
 
