@@ -2,163 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D572368684C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9CC68687C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232249AbjBAObC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S230255AbjBAOjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:39:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjBAOa7 (ORCPT
+        with ESMTP id S229972AbjBAOjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:30:59 -0500
-Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94877C161;
-        Wed,  1 Feb 2023 06:30:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1675261856; i=@fujitsu.com;
-        bh=0ZDzmk/46NIteFVAff959RyjgW31rh1zhUtYYCkV5hk=;
-        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=esPXAnOJMYtx3QqOwNFcer1ITu+62ZTn6x+Pk5fjZVN1knR/Ju31awhxNklp4yAwB
-         aAhpvwAEI0yC3z+xjOStOjqTKJNBa3EuNrZh9uF/1uVJvyjYfo5eize+2ZNpCFCrXN
-         zvXSrgFWZA6X4QhpfuJGGZEdsrD6qCmWXZhON7N46xgKUMJKKjzisD8b1ymF2NT8TD
-         pg3qwujS/cxPnGuN1WW+XNJ04HlaVcl8LOa1x+FGIj29m7XvrepqkzovLMf0NNkoED
-         B0bsai0fBSEKoxSfOZgLkhA5ZqnqzKQV0JGS5ywEFUcyZcaXpiRJ7eg48/A6Yxkd+K
-         HdOjD12WmWnug==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNIsWRWlGSWpSXmKPExsViZ8ORqDu//Fa
-  ywaR1khY3pslZbDu9gd1i5owTjBZvN01hsZjyaymzxeVdc9gsnh3qZXFg9zj95g6Tx6ZVnWwe
-  CxumMnt83iTnsfXzbZYA1ijWzLyk/IoE1oye19MZCx7LVGxbf5+5gfGNRBcjF4eQwBZGiR23V
-  rFAOCuYJJbfe8MI4RxglHg86TJbFyMnB5uAhsS9lpuMILaIQJDE0jWvmUCKmAVaGSWONE1iBk
-  kIC3hK/L55DcxmEVCReLXkPSuIzSvgKNH59As7iC0hoCAx5eF7Zoi4oMTJmU9YQGxmAQmJgy9
-  eAMU5gGqUJGZ2x0OUV0q0fvjFAmGrSVw9t4l5AiP/LCTds5B0L2BkWsVoVpxaVJZapGtoqJdU
-  lJmeUZKbmJmjl1ilm6iXWqpbnlpcomukl1herJdaXKxXXJmbnJOil5dasokRGO4pxcoeOxif9
-  v3VO8QoycGkJMrbkHorWYgvKT+lMiOxOCO+qDQntfgQowwHh5IE784CoJxgUWp6akVaZg4w9m
-  DSEhw8SiK8hoVAad7igsTc4sx0iNQpRl2ODQ8O7GUWYsnLz0uVEuf9VwZUJABSlFGaBzcClgY
-  uMcpKCfMyMjAwCPEUpBblZpagyr9iFOdgVBLm1S8BmsKTmVcCt+kV0BFMQEfctb4JckRJIkJK
-  qoFp+s/1UYeLOwSvpHx1tm7UeHYvfjHDjeKVO82CbJcdYY2eXr5XoWv7yYxUoQmT1Z1l7uSv4
-  DzdPy03uFvBMHjVd56dj/cIvTbU0r/24syOCF0RXhnrd7s535wQmLp4f9i3G9ZqC/1PsKXtX3
-  Vuw+3p3022MnG33Ll/rv3jXVczzcapSU465TeW3zlbtfN1rT2n+wKJ8I4LAnZHF4u89T+6eYr
-  dtzA25Wc2e+p2WOnMsttvdML1+tvayf/l9z/68zj7t0Pncqm2+7OusGpEWc42DwgInXa9WUtd
-  fN3C0ETbygeFjldnGrnNeBj6at6ziwvTjy9315+d+aCq6uCCxwtrLNP0NohPutwqzaux2SE4S
-  omlOCPRUIu5qDgRANFsO4J+AwAA
-X-Env-Sender: lizhijian@fujitsu.com
-X-Msg-Ref: server-6.tower-571.messagelabs.com!1675261855!123222!1
-X-Originating-IP: [62.60.8.97]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.102.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 23045 invoked from network); 1 Feb 2023 14:30:55 -0000
-Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
-  by server-6.tower-571.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 1 Feb 2023 14:30:55 -0000
-Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id 0B959100195;
-        Wed,  1 Feb 2023 14:30:55 +0000 (GMT)
-Received: from R01UKEXCASM223.r01.fujitsu.local (R01UKEXCASM223 [10.182.185.121])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id EF95F100194;
-        Wed,  1 Feb 2023 14:30:54 +0000 (GMT)
-Received: from 2754e32d63a1.localdomain (10.167.225.141) by
- R01UKEXCASM223.r01.fujitsu.local (10.182.185.121) with Microsoft SMTP Server
- (TLS) id 15.0.1497.42; Wed, 1 Feb 2023 14:30:51 +0000
-From:   Li Zhijian <lizhijian@fujitsu.com>
-To:     <haris.iqbal@ionos.com>, <jinpu.wang@ionos.com>,
-        <linux-rdma@vger.kernel.org>
-CC:     <jgg@ziepe.ca>, <leon@kernel.org>, <guoqing.jiang@linux.dev>,
-        <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH RFC] RDMA/rtrs: Don't call kobject_del for srv_path->kobj
-Date:   Wed, 1 Feb 2023 14:30:33 +0000
-Message-ID: <1675261833-2-1-git-send-email-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 1 Feb 2023 09:39:44 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624F2190
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:39:43 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ud5so52055861ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:39:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bltqkr1sg0pNhxWiFSaqOu4KLSvgA4P8R645R0umaT4=;
+        b=MUyYmiIgYK0KvPfJGx+PT/BoYMovWZN84nzOepalN21d2CzKtHVvbAcQkFQWZTL/Qx
+         Z9GTXgkmOKOwde1Mjl/JKnGdMXPVqtrnrg7UDlf/NZcjbeQXjHviOJyyogmg4p9AsyV4
+         osP4p6xx6eKRARDizd1unrTY4ZmwhU0C9ykj8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bltqkr1sg0pNhxWiFSaqOu4KLSvgA4P8R645R0umaT4=;
+        b=3PdSsUiwgq6Uc5dzYo3XQT+FUIfr60z9lJsLySrp50IWO07mhtLRUKxKWzOAUAx/fC
+         lWOgxuBS53AqwBG9OVNBHEP2m2b2Njrz6GcuOM3UtGozV+HWIRYr8whJVYnIt9QGrfmb
+         +4XF2Axljyx9h4AHnk5iWOxZYgZzK/sYB78S+FDGYxJ2sYj0OUJGvFvuc5MnZ/BAp3G2
+         ydTzJUTFX1k0+htCAJOCPGTmMqx5hshXW/oPRjhDe72ODRBIT1Rrbw2Y/6KUDZx4x0b0
+         g9oL5O4YQfqSqJ81upbKwbFAtCSk4RwDOkOk39ziEJU4kXpJIaql474r80mWahdjp7M+
+         z/YA==
+X-Gm-Message-State: AO0yUKWUMpzAUHvBdCoFmpk7yCumZF3u4sHUicJ4pb+Acwsm/cw3yMEL
+        O0mAn4mWTsRY+h+NqrnjKsbtQRlQ6L+E4lsh2M4=
+X-Google-Smtp-Source: AK7set/BsViDIucmT3z1HAFfvBlTUMUyq2Mm4GK0DhM2jtAhtQDJM+xrxPCjHv0GYm5l2BmfSJ3G9g==
+X-Received: by 2002:a17:906:261b:b0:887:d8b0:27c5 with SMTP id h27-20020a170906261b00b00887d8b027c5mr2887538ejc.52.1675262381687;
+        Wed, 01 Feb 2023 06:39:41 -0800 (PST)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id o25-20020a1709061b1900b0084d4e9a13cbsm10203001ejg.221.2023.02.01.06.39.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 06:39:41 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso1545312wmp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:39:41 -0800 (PST)
+X-Received: by 2002:a05:600c:a03:b0:3dc:42e7:8d38 with SMTP id
+ z3-20020a05600c0a0300b003dc42e78d38mr115107wmp.93.1675262005713; Wed, 01 Feb
+ 2023 06:33:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.167.225.141]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM223.r01.fujitsu.local (10.182.185.121)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230131141756.RFT.v2.1.I723a3761d57ea60c5dd754c144aed6c3b2ea6f5a@changeid>
+ <20230131141756.RFT.v2.2.I4cfeab9d0e07e98ead23dd0736ab4461e6c69002@changeid> <43095d93-29c8-b30a-08c0-0a452770c1ce@quicinc.com>
+In-Reply-To: <43095d93-29c8-b30a-08c0-0a452770c1ce@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 1 Feb 2023 06:33:01 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=X6A4aZVCaqhT9yP0tD82R3fnaDak67w+p8+Z=WkaRxfw@mail.gmail.com>
+Message-ID: <CAD=FV=X6A4aZVCaqhT9yP0tD82R3fnaDak67w+p8+Z=WkaRxfw@mail.gmail.com>
+Subject: Re: [RFT PATCH v2 2/3] drm/msm/dsi: Stop unconditionally powering up
+ DSI hosts at modeset
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Sean Paul <sean@poorly.run>, Jonas Karlman <jonas@kwiboo.se>,
+        Vinod Koul <vkoul@kernel.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        freedreno@lists.freedesktop.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the mention in commmit f7452a7e96c1 ("RDMA/rtrs-srv: fix memory leak by missing kobject free"),
-it's intended to remove the kobject_del for srv_path->kobj.
+Hi,
 
-A kernel panic will be triggered by following script
------------------------
-$ while true;
-do
-        echo "sessname=foo path=ip:<ip address> device_path=/dev/nvme0n1" > /sys/devices/virtual/rnbd-client/ctl/map_device
-        echo "normal" > /sys/block/rnbd0/rnbd/unmap_device
-done
------------------------
-The bisection pointed to commit 6af4609c18b3 ("RDMA/rtrs-srv: Fix several issues in rtrs_srv_destroy_path_files")
-at last.
+On Tue, Jan 31, 2023 at 3:32 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
+>
+> On 1/31/2023 2:18 PM, Douglas Anderson wrote:
+> > In commit 7d8e9a90509f ("drm/msm/dsi: move DSI host powerup to modeset
+> > time"), we moved powering up DSI hosts to modeset time. This wasn't
+> > because it was an elegant design, but there were no better options.
+> >
+> > That commit actually ended up breaking ps8640, and thus was born
+> > commit ec7981e6c614 ("drm/msm/dsi: don't powerup at modeset time for
+> > parade-ps8640") as a temporary hack to un-break ps8640 by moving it to
+> > the old way of doing things. It turns out that ps8640 _really_ doesn't
+> > like its pre_enable() function to be called after
+> > dsi_mgr_bridge_power_on(). Specifically (from experimentation, not
+> > because I have any inside knowledge), it looks like the assertion of
+> > "RST#" in the ps8640 runtime resume handler seems like it's not
+> > allowed to happen after dsi_mgr_bridge_power_on()
+> >
+> > Recently, Dave Stevenson's series landed allowing bridges some control
+> > over pre_enable ordering. The meaty commit for our purposes is commit
+> > 4fb912e5e190 ("drm/bridge: Introduce pre_enable_prev_first to alter
+> > bridge init order"). As documented by that series, if a bridge doesn't
+> > set "pre_enable_prev_first" then we should use the old ordering.
+> >
+> > Now that we have the commit ("drm/bridge: tc358762: Set
+> > pre_enable_prev_first") we can go back to the old ordering, which also
+> > allows us to remove the ps8640 special case.
+> >
+> > One last note is that even without reverting commit 7d8e9a90509f
+> > ("drm/msm/dsi: move DSI host powerup to modeset time"), if you _just_
+> > revert the ps8640 special case and try it out then it doesn't seem to
+> > fail anymore. I spent time bisecting / debugging this and it turns out
+> > to be mostly luck, so we still want this patch to make sure it's
+> > solid. Specifically the reason it sorta works these days is because
+> > we implemented wait_hpd_asserted() in ps8640 now, plus the magic of
+> > "pm_runtime" autosuspend. The fact that we have wait_hpd_asserted()
+> > implemented means that we actually power the bridge chip up just a wee
+> > bit earlier and then the bridge happens to stay on because of
+> > autosuspend and thus ends up powered before dsi_mgr_bridge_power_on().
+> >
+> > Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> >
+> > Changes in v2:
+> > - Don't fold dsi_mgr_bridge_power_on() back into dsi_mgr_bridge_pre_enable()
+> >
+> >   drivers/gpu/drm/msm/dsi/dsi_manager.c | 38 +--------------------------
+> >   1 file changed, 1 insertion(+), 37 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> > index 1bbac72dad35..2197a54b9b96 100644
+> > --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> > +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> > @@ -34,32 +34,6 @@ static struct msm_dsi_manager msm_dsim_glb;
+> >   #define IS_SYNC_NEEDED()    (msm_dsim_glb.is_sync_needed)
+> >   #define IS_MASTER_DSI_LINK(id)      (msm_dsim_glb.master_dsi_link_id == id)
+> >
+> > -#ifdef CONFIG_OF
+> > -static bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
+> > -{
+> > -     struct drm_bridge *next_bridge = drm_bridge_get_next_bridge(bridge);
+> > -
+> > -     /*
+> > -      * If the next bridge in the chain is the Parade ps8640 bridge chip
+> > -      * then don't power on early since it seems to violate the expectations
+> > -      * of the firmware that the bridge chip is running.
+> > -      *
+> > -      * NOTE: this is expected to be a temporary special case. It's expected
+> > -      * that we'll eventually have a framework that allows the next level
+> > -      * bridge to indicate whether it needs us to power on before it or
+> > -      * after it. When that framework is in place then we'll use it and
+> > -      * remove this special case.
+> > -      */
+> > -     return !(next_bridge && next_bridge->of_node &&
+> > -              of_device_is_compatible(next_bridge->of_node, "parade,ps8640"));
+> > -}
+> > -#else
+> > -static inline bool dsi_mgr_power_on_early(struct drm_bridge *bridge)
+> > -{
+> > -     return true;
+> > -}
+> > -#endif
+> > -
+> >   static inline struct msm_dsi *dsi_mgr_get_dsi(int id)
+> >   {
+> >       return msm_dsim_glb.dsi[id];
+> > @@ -265,12 +239,6 @@ static void dsi_mgr_bridge_power_on(struct drm_bridge *bridge)
+> >       int ret;
+> >
+> >       DBG("id=%d", id);
+> > -     if (!msm_dsi_device_connected(msm_dsi))
+> > -             return;
+> > -
+> > -     /* Do nothing with the host if it is slave-DSI in case of bonded DSI */
+> > -     if (is_bonded_dsi && !IS_MASTER_DSI_LINK(id))
+> > -             return;
+> >
+>
+> Why are these two checks removed?
 
- rnbd_server L777: </dev/nvme0n1@foo>: Opened device 'nvme0n1'
- general protection fault, probably for non-canonical address 0x765f766564753aea: 0000 [#1] PREEMPT SMP PTI
- CPU: 0 PID: 3558 Comm: systemd-udevd Kdump: loaded Not tainted 6.1.0-rc3-roce-flush+ #51
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
- RIP: 0010:kernfs_dop_revalidate+0x36/0x180
- Code: 00 00 41 55 41 54 55 53 48 8b 47 68 48 89 fb 48 85 c0 0f 84 db 00 00 00 48 8b a8 60 04 00 00 48 8b 45 30 48 85 c0 48 0f 44 c5 <4c> 8b 60 78 49 81 c4 d8 00 00 00 4c 89 e7 e8 b7 78 7b 00 8b 05 3d
- RSP: 0018:ffffaf1700b67c78 EFLAGS: 00010206
- RAX: 765f766564753a72 RBX: ffff89e2830849c0 RCX: 0000000000000000
- RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff89e2830849c0
- RBP: ffff89e280361bd0 R08: 0000000000000000 R09: 0000000000000001
- R10: 0000000000000065 R11: 0000000000000000 R12: ffff89e2830849c0
- R13: ffff89e283084888 R14: d0d0d0d0d0d0d0d0 R15: 2f2f2f2f2f2f2f2f
- FS:  00007f13fbce7b40(0000) GS:ffff89e2bbc00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 00007f93e055d340 CR3: 0000000104664002 CR4: 00000000001706f0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- Call Trace:
-  <TASK>
-  lookup_fast+0x7b/0x100
-  walk_component+0x21/0x160
-  link_path_walk.part.0+0x24d/0x390
-  path_openat+0xad/0x9a0
-  do_filp_open+0xa9/0x150
-  ? lock_release+0x13c/0x2e0
-  ? _raw_spin_unlock+0x29/0x50
-  ? alloc_fd+0x124/0x1f0
-  do_sys_openat2+0x9b/0x160
-  __x64_sys_openat+0x54/0xa0
-  do_syscall_64+0x3b/0x90
-  entry_SYSCALL_64_after_hwframe+0x63/0xcd
- RIP: 0033:0x7f13fc9d701b
- Code: 25 00 00 41 00 3d 00 00 41 00 74 4b 64 8b 04 25 18 00 00 00 85 c0 75 67 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 91 00 00 00 48 8b 54 24 28 64 48 2b 14 25
- RSP: 002b:00007ffddf242640 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
- RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f13fc9d701b
- RDX: 0000000000080000 RSI: 00007ffddf2427c0 RDI: 00000000ffffff9c
- RBP: 00007ffddf2427c0 R08: 00007f13fcc5b440 R09: 21b2131aa64b1ef2
- R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000080000
- R13: 00007ffddf2427c0 R14: 000055ed13be8db0 R15: 0000000000000000
+After this patch there is now one caller to this function and the one
+caller does those exact same two checks immediately before calling
+this function. Thus, they no longer do anything useful.
 
-Fixes: 6af4609c18b3 ("RDMA/rtrs-srv: Fix several issues in rtrs_srv_destroy_path_files")
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
- drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c b/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c
-index da8e205ce331..7fe905424109 100644
---- a/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c
-+++ b/drivers/infiniband/ulp/rtrs/rtrs-srv-sysfs.c
-@@ -313,7 +313,6 @@ void rtrs_srv_destroy_path_files(struct rtrs_srv_path *srv_path)
- 
- 	if (srv_path->kobj.state_in_sysfs) {
- 		sysfs_remove_group(&srv_path->kobj, &rtrs_srv_path_attr_group);
--		kobject_del(&srv_path->kobj);
- 		kobject_put(&srv_path->kobj);
- 	}
- 
--- 
-1.8.3.1
-
+-Doug
