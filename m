@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6712A686F15
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:44:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EF0686F1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjBATo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
+        id S232176AbjBAToc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjBATo2 (ORCPT
+        with ESMTP id S232081AbjBATo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 14:44:28 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476B878ACB
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:44:26 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id p26so43432688ejx.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:44:26 -0800 (PST)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A85B7A4B4
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:44:27 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id gr7so30044349ejb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:44:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=grsecurity.net; s=grsec;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Glsk6GqDCsK8JWqYgY447JDtR2RT71OPsgo1ighXW0M=;
-        b=M5+kSariHHFLd57G6JYUJC8w45gG+h+MnDfBiVK5ZKHLd8tzimsCFikYk86NLSjyrD
-         lAmiHje922XfYOZuI33DBjAWsP0ZVKeGSAuGQsRFRpf7Ptb9M2ZKb2gZdX1G79k5wbYP
-         mTPZBQRSlm0nIkRjmADmOcevI2yvbx/SHxx0J1j5BnkeMuyIC6XwCJlmKAgRZ4cNoC6I
-         Eq2y+szd+cmuK37d0a9+xkWiGaGLeY1haLU/g4gWKVUmAOxKYKV8RTe6GZohRhlac393
-         2dHCJdXE4J/6VDG6EgEr1ifjokVdliqhWfReqo4Hp6b7DW71TjozBcAjitW3pIZ9ebuE
-         miXQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HICwk+ZaGfDJCbBt6gOrUiuKx+JyONa1rsd399znELE=;
+        b=s+TkGtd0CJKn0fgzwiRNSQ0hciitR9Qd6pS4R55tq+1KVcodwIh7hzdgMhVzvVJQl/
+         Vogax6v8Gs19BrA4b+x/qdMusyTdBCEx4Y7dfR68DJXA7Iha1agsWxF5Bn6Tryp4+0o3
+         iA53H/yFXVCL79uMOWiCoCkgi/QGS9xr1UlpMZsSMFL4zjLwN6bRgumgIBMmy+uZ9w+8
+         ifMxfGaPOdhU2cgK1wRoX5Swx0HuIiG6bM/tkO/ugP/iLROL4hMcMxJvk8YxgtJq6CbA
+         GsDlvTkmOpcp5+nRgvXWHg7dHGEhDVIvHPIUJ2wOvtewT6J+x5xjElC4R23hET6sLn+J
+         yQ8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Glsk6GqDCsK8JWqYgY447JDtR2RT71OPsgo1ighXW0M=;
-        b=i+nWkqwhjdhW2ON3nvZN+FNqG+TVypyVc4Ofp9ABtjVFzbjPuoh8yhbLcFFGGrVeJF
-         MEHPPzfpFmJohRWRforxlt5b8XPUDCuXMEc6XZ9igYDu50dogz9od+hB1nVcsk34wEJl
-         UZQqB91eyadg55QOTB5wdq+d3hHXKylhNlOGg6U3sdic/WlDY5D/HcKgbDGvsV0eZjI2
-         2as/NZnnz5KDHoCIU3Dcx/RRSbuCVkBL/ABwdhH4Z7C5CAo0HGpgmAXSKbrzQzN8AQik
-         9LTpCR87/m4DnPjXYq5x/vCqo3R41zG4DuHGrPex2opdqQ49DS+Tbc1w5A1u/HLbE4ok
-         ppkg==
-X-Gm-Message-State: AO0yUKXhG91jxwQAAOh3vDAj3WnAbNvgSBWvSaqqW/ZH3QZSFRNm1Xth
-        zrRSIG8v+ULnc3SaU9e/qbqWQw==
-X-Google-Smtp-Source: AK7set8h3Jz/AwqKX5SGPy+s9WPMBP1SFKRVcLcrvfE99A9ePySNvis13Wmu8Q8TFYZiHIqLFPoFtQ==
-X-Received: by 2002:a17:906:4941:b0:88c:a3f0:4e3f with SMTP id f1-20020a170906494100b0088ca3f04e3fmr3699428ejt.22.1675280664798;
-        Wed, 01 Feb 2023 11:44:24 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HICwk+ZaGfDJCbBt6gOrUiuKx+JyONa1rsd399znELE=;
+        b=UDR0DEAFq7aPz7IdWGJe5B2SZmFGse3S9X0fhdeUI7zjJ+A2kfDN0OlH6/5hX/Y6tM
+         /4ChEJbW+pJSQvgkQNCqFq4UF+9VQgAThFHFuGaBlUiJQ0Fa7B7FJWdMEk4YaG4UAKwX
+         8WR5HHW34nm7mobW9I9dUHVu9GD2K83UcUAd3hEYTi3cyncwHiS+nV16cNjeuc2cyt+v
+         muumGwqADNG0IxNLkxf89dolL4mWyzqyU3lLBJc8raCuHfVpiEKTQvaYEluWa//8q1Im
+         CP7+8LOEB8kLLOQaI+qk5cOJ/aJVaG2QR4tF7C2zgYgWsvVIXi39gTynij4IEGmWrYC8
+         01vQ==
+X-Gm-Message-State: AO0yUKUHK5k8uFc5+5Q0Hypa/qdSUn1x4Wez0jVTwGo9eQ/pg8iwVLkS
+        +YpCmLDdOMrNWXzYas17REL1GA==
+X-Google-Smtp-Source: AK7set/j6gNNmp0yFuQKk+e8rNCH+mRK3HddNhFIoeOWrjreVn5bODqIdpKpIdRW7/Wo+taUerV1pA==
+X-Received: by 2002:a17:907:990b:b0:87b:dac1:bbe6 with SMTP id ka11-20020a170907990b00b0087bdac1bbe6mr4042757ejc.36.1675280665653;
+        Wed, 01 Feb 2023 11:44:25 -0800 (PST)
 Received: from nuc.fritz.box (p200300f6af111a00277482c051eca183.dip0.t-ipconnect.de. [2003:f6:af11:1a00:2774:82c0:51ec:a183])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b00869f2ca6a87sm10397579ejd.135.2023.02.01.11.44.23
+        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b00869f2ca6a87sm10397579ejd.135.2023.02.01.11.44.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 11:44:24 -0800 (PST)
+        Wed, 01 Feb 2023 11:44:25 -0800 (PST)
 From:   Mathias Krause <minipli@grsecurity.net>
 To:     kvm@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Mathias Krause <minipli@grsecurity.net>
-Subject: [PATCH v3 0/6] KVM: MMU: performance tweaks for heavy CR0.WP users
-Date:   Wed,  1 Feb 2023 20:45:58 +0100
-Message-Id: <20230201194604.11135-1-minipli@grsecurity.net>
+Subject: [PATCH v3 1/6] KVM: x86/mmu: Avoid indirect call for get_cr3
+Date:   Wed,  1 Feb 2023 20:45:59 +0100
+Message-Id: <20230201194604.11135-2-minipli@grsecurity.net>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230201194604.11135-1-minipli@grsecurity.net>
+References: <20230201194604.11135-1-minipli@grsecurity.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,81 +74,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2: https://lore.kernel.org/kvm/20230118145030.40845-1-minipli@grsecurity.net/
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-This series is a resurrection of the missing pieces of Paolo's previous
-attempt[1] to avoid needless MMU roots unloading. The performance gap
-between TDP and legacy MMU is still existent, especially noticeable under
-grsecurity which implements kernel W^X by toggling CR0.WP, which happens
-very frequently.
+Most of the time, calls to get_guest_pgd result in calling
+kvm_read_cr3 (the exception is only nested TDP).  Hardcode
+the default instead of using the get_cr3 function, avoiding
+a retpoline if they are enabled.
 
-Patches 1-13 and 17 of the old series had been merged, but, unfortunately,
-the remaining parts never saw a v3. I therefore took care of these, took
-Sean's feedback into account[2] and simplified the whole approach to just
-handle the case we care most about explicitly.
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+---
+ arch/x86/kvm/mmu/mmu.c         | 31 ++++++++++++++++++++-----------
+ arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
+ 2 files changed, 21 insertions(+), 12 deletions(-)
 
-Patch 1 is a v3 of [3], addressing Sean's feedback.
-
-Patch 2 is specifically useful for grsecurity, as handle_cr() is by far
-*the* top vmexit reason.
-
-Patch 3 is the most important one, as it skips unloading the MMU roots for
-CR0.WP toggling.
-
-Sean was suggesting another change on top of v2 of this series, to skip
-intercepting CR0.WP writes completely for VMX[4]. That turned out to be
-yet another performance boost and is implemenmted in patch 6.
-
-While patches 1 and 2 bring small performance improvements already, the
-big gains come from patches 3 and 6.
-
-I used 'ssdd 10 50000' from rt-tests[5] as a micro-benchmark, running on a
-grsecurity L1 VM. Below table shows the results (runtime in seconds, lower
-is better):
-
-                         legacy     TDP    shadow
-    kvm.git/queue        11.55s   13.91s    75.2s
-    + patches 1-3         7.32s    7.31s    74.6s
-    + patches 4-6         4.89s    4.89s    73.4s
-
-This series builds on top of kvm.git/queue, namely commit de60733246ff
-("Merge branch 'kvm-hw-enable-refactor' into HEAD").
-
-Patches 1-3 didn't change from v2, beside minor changlog mangling.
-
-Patches 4-6 are new to v3.
-
-Thanks,
-Mathias
-
-[1] https://lore.kernel.org/kvm/20220217210340.312449-1-pbonzini@redhat.com/
-[2] https://lore.kernel.org/kvm/YhATewkkO%2Fl4P9UN@google.com/
-[3] https://lore.kernel.org/kvm/YhAB1d1%2FnQbx6yvk@google.com/
-[4] https://lore.kernel.org/kvm/Y8cTMnyBzNdO5dY3@google.com/
-[5] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
-
-Mathias Krause (5):
-  KVM: VMX: Avoid retpoline call for control register caused exits
-  KVM: x86: Do not unload MMU roots when only toggling CR0.WP
-  KVM: x86: Make use of kvm_read_cr*_bits() when testing bits
-  KVM: x86/mmu: Fix comment typo
-  KVM: VMX: Make CR0.WP a guest owned bit
-
-Paolo Bonzini (1):
-  KVM: x86/mmu: Avoid indirect call for get_cr3
-
- arch/x86/kvm/kvm_cache_regs.h   |  3 ++-
- arch/x86/kvm/mmu/mmu.c          | 31 ++++++++++++++++++++-----------
- arch/x86/kvm/mmu/paging_tmpl.h  |  2 +-
- arch/x86/kvm/mmu/spte.c         |  2 +-
- arch/x86/kvm/pmu.c              |  4 ++--
- arch/x86/kvm/vmx/capabilities.h |  1 +
- arch/x86/kvm/vmx/nested.c       |  4 ++--
- arch/x86/kvm/vmx/vmx.c          | 15 ++++++++++++---
- arch/x86/kvm/vmx/vmx.h          |  8 ++++++++
- arch/x86/kvm/x86.c              |  9 +++++++++
- 10 files changed, 58 insertions(+), 21 deletions(-)
-
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index aeb240b339f5..505768631614 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -241,6 +241,20 @@ static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
+ 	return regs;
+ }
+ 
++static unsigned long get_guest_cr3(struct kvm_vcpu *vcpu)
++{
++	return kvm_read_cr3(vcpu);
++}
++
++static inline unsigned long kvm_mmu_get_guest_pgd(struct kvm_vcpu *vcpu,
++						  struct kvm_mmu *mmu)
++{
++	if (IS_ENABLED(CONFIG_RETPOLINE) && mmu->get_guest_pgd == get_guest_cr3)
++		return kvm_read_cr3(vcpu);
++
++	return mmu->get_guest_pgd(vcpu);
++}
++
+ static inline bool kvm_available_flush_tlb_with_range(void)
+ {
+ 	return kvm_x86_ops.tlb_remote_flush_with_range;
+@@ -3722,7 +3736,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 	int quadrant, i, r;
+ 	hpa_t root;
+ 
+-	root_pgd = mmu->get_guest_pgd(vcpu);
++	root_pgd = kvm_mmu_get_guest_pgd(vcpu, mmu);
+ 	root_gfn = root_pgd >> PAGE_SHIFT;
+ 
+ 	if (mmu_check_root(vcpu, root_gfn))
+@@ -4172,7 +4186,7 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 	arch.token = alloc_apf_token(vcpu);
+ 	arch.gfn = gfn;
+ 	arch.direct_map = vcpu->arch.mmu->root_role.direct;
+-	arch.cr3 = vcpu->arch.mmu->get_guest_pgd(vcpu);
++	arch.cr3 = kvm_mmu_get_guest_pgd(vcpu, vcpu->arch.mmu);
+ 
+ 	return kvm_setup_async_pf(vcpu, cr2_or_gpa,
+ 				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
+@@ -4191,7 +4205,7 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
+ 		return;
+ 
+ 	if (!vcpu->arch.mmu->root_role.direct &&
+-	      work->arch.cr3 != vcpu->arch.mmu->get_guest_pgd(vcpu))
++	      work->arch.cr3 != kvm_mmu_get_guest_pgd(vcpu, vcpu->arch.mmu))
+ 		return;
+ 
+ 	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
+@@ -4592,11 +4606,6 @@ void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd)
+ }
+ EXPORT_SYMBOL_GPL(kvm_mmu_new_pgd);
+ 
+-static unsigned long get_cr3(struct kvm_vcpu *vcpu)
+-{
+-	return kvm_read_cr3(vcpu);
+-}
+-
+ static bool sync_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, gfn_t gfn,
+ 			   unsigned int access)
+ {
+@@ -5147,7 +5156,7 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
+ 	context->page_fault = kvm_tdp_page_fault;
+ 	context->sync_page = nonpaging_sync_page;
+ 	context->invlpg = NULL;
+-	context->get_guest_pgd = get_cr3;
++	context->get_guest_pgd = get_guest_cr3;
+ 	context->get_pdptr = kvm_pdptr_read;
+ 	context->inject_page_fault = kvm_inject_page_fault;
+ 
+@@ -5297,7 +5306,7 @@ static void init_kvm_softmmu(struct kvm_vcpu *vcpu,
+ 
+ 	kvm_init_shadow_mmu(vcpu, cpu_role);
+ 
+-	context->get_guest_pgd     = get_cr3;
++	context->get_guest_pgd     = get_guest_cr3;
+ 	context->get_pdptr         = kvm_pdptr_read;
+ 	context->inject_page_fault = kvm_inject_page_fault;
+ }
+@@ -5311,7 +5320,7 @@ static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu,
+ 		return;
+ 
+ 	g_context->cpu_role.as_u64   = new_mode.as_u64;
+-	g_context->get_guest_pgd     = get_cr3;
++	g_context->get_guest_pgd     = get_guest_cr3;
+ 	g_context->get_pdptr         = kvm_pdptr_read;
+ 	g_context->inject_page_fault = kvm_inject_page_fault;
+ 
+diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+index e5662dbd519c..78448fb84bd6 100644
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -324,7 +324,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
+ 	trace_kvm_mmu_pagetable_walk(addr, access);
+ retry_walk:
+ 	walker->level = mmu->cpu_role.base.level;
+-	pte           = mmu->get_guest_pgd(vcpu);
++	pte           = kvm_mmu_get_guest_pgd(vcpu, mmu);
+ 	have_ad       = PT_HAVE_ACCESSED_DIRTY(mmu);
+ 
+ #if PTTYPE == 64
 -- 
 2.39.1
 
