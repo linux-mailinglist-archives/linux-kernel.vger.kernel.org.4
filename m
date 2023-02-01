@@ -2,107 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E5168705C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 22:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBB168706A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 22:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjBAVL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 16:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S230503AbjBAVQ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 16:16:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjBAVLZ (ORCPT
+        with ESMTP id S229632AbjBAVQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 16:11:25 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AC02D7F;
-        Wed,  1 Feb 2023 13:11:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=eQ62sI2LaH5K93mDteIKKvfXZlAXtr2Rm8TFfldgNso=; b=i5XQu02i0rUZkkaMlzRQPLcq6n
-        c15AesJp084H/0wYTlUcdNMnfX6McXTm88rbMrGAIO1WhNY8ud/aPxhaWn2bmBd6Dal/a/8qATMZ9
-        60qWxuyRtROY/s6+MWvfT0Y7hSCdyaxN1mCwWG5+KgS61otXliI5GJpPoAN2JM3CeC2IgQpHR5Il3
-        65uMjyrak7qWnWZ5I+2ajEJ72rOS/BWQLnM4PmzzccnZokOIjeu5hIXVsUL8sRumyVLPPwhDKxn/h
-        6egXjLvlI67XNJIDJc21H787lqbAel0wYy6PzotdyneH9zZA/gIG+zBCPTpWCdK9F+65Q9p7yQyBr
-        5MgXYw7w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pNKMv-004uBg-36;
-        Wed, 01 Feb 2023 21:10:14 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AC2E830013F;
-        Wed,  1 Feb 2023 22:10:46 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8E8E5200DCC72; Wed,  1 Feb 2023 22:10:46 +0100 (CET)
-Date:   Wed, 1 Feb 2023 22:10:46 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, Zefan Li <lizefan.x@bytedance.com>,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpuset: Fix cpuset_cpus_allowed() to not filter
- offline CPUs
-Message-ID: <Y9rVVldS19oyIZ+g@hirez.programming.kicks-ass.net>
-References: <20230131221719.3176-1-will@kernel.org>
- <20230131221719.3176-2-will@kernel.org>
- <6b068916-5e1b-a943-1aad-554964d8b746@redhat.com>
- <Y9otWX+MGOLDKU6t@hirez.programming.kicks-ass.net>
- <83e53632-27ed-8dde-84f4-68c6776d6da8@redhat.com>
- <a892d340-ea99-1562-0e70-176f02f195c2@redhat.com>
+        Wed, 1 Feb 2023 16:16:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C3C6D5FD;
+        Wed,  1 Feb 2023 13:16:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C6876195A;
+        Wed,  1 Feb 2023 21:16:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0E1C433D2;
+        Wed,  1 Feb 2023 21:16:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675286212;
+        bh=GjAJTCPxFyK/Ksgvsd+9f/hTN+Uz4VEAS+IvJJTfcQM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VU5TuFGfDXYueW1KttmiC1CFnyMpUz7CaycnbbeKpduPd4yJf0jrGqXsEWvvS0E/L
+         JJhK5NExglSo879CIZD2PNm0W+vqF0bJGAnpoVSIJjK4rueuVVS3o13qjDO6kETnXs
+         dtRv/xFuiMt4EpdIvhmpttgZmr2REcWdNgI7rKljovic8XjTSJs5QuIwu4wkG69csw
+         m/sF4F9Gff/92OsU2QtXKWKgv4HC3g1r/bgcsD/YptJS6rX7Bg/Ri0MaRmjtqIWl7u
+         ePqmhi2GdwHabRq7VMtSkkRs8XpEhx1+3RnaZXULvEPDOmLN/caDtnS1xAwhbNYKDm
+         IaVgY77YA36nA==
+Date:   Wed, 1 Feb 2023 14:16:50 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>, Tom Rix <trix@redhat.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Daniel Kolesa <q66@chimera-linux.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta
+ datacenters
+Message-ID: <Y9rWwmRkYnUiroFY@dev-arch.thelio-3990X>
+References: <20230201192509.4124319-1-ndesaulniers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a892d340-ea99-1562-0e70-176f02f195c2@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230201192509.4124319-1-ndesaulniers@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 01:46:11PM -0500, Waiman Long wrote:
-
-> Note that using cpus_allowed directly in cgroup v2 may not be right because
-> cpus_allowed may have no relationship to effective_cpus at all in some
-> cases, e.g.
+On Wed, Feb 01, 2023 at 11:25:09AM -0800, Nick Desaulniers wrote:
+> Chimera Linux is a Linux distribution from 2021 that builds its kernels
+> with Clang.
 > 
->    root
->     |
->     V
->     A (cpus_allowed = 1-4, effective_cpus = 1-4)
->     |
->     V
->     B (cpus_allowed = 5-8, effective_cpus = 1-4)
+> Google transitioned its data center fleet to run Clang built kernels in
+> 2021, and Meta did so as well in 2022.  Meta talked about this at LPC
+> 2022 at a talk titled Kernel Live Patching at Scale.
 > 
-> In the case of cpuset B, passing back cpus 5-8 as the allowed_cpus is wrong.
+> These were important milestones for building the kernel with Clang.
+> Making note of them helps improve confidence in the project.
+> 
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I think my patch as written does the right thing here. Since the
-intersection of (1-4) and (5-8) is empty it will move up the hierarchy
-and we'll end up with (1-4) from the cgroup side of things.
+Reading a docs diff makes my head hurt :)
 
-So the purpose of __cs_cpus_allowed() is to override the cpus_allowed of
-the root set and force it to cpu_possible_mask.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-Then cs_cpus_allowed() computes the intersection of cs->cpus_allowed and
-all it's parents. This will, in the case of B above, result in the empty
-mask.
+One note, the signoff plus authorship looks odd to me. Perhaps this
+should be using Co-developed-by: ?
 
-Then cpuset_cpus_allowed() has a loop that starts with
-task_cpu_possible_mask(), intersects that with cs_cpus_allowed() and if
-the intersection of that and cpu_online_mask is empty, moves up the
-hierarchy. Given cs_cpus_allowed(B) is the empty mask, we'll move to A.
+https://kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+Documentation/process/submitting-patches.rst, "When to use Acked-by:, Cc:, and Co-developed-by:"
 
-Note that since we force the mask of root to cpu_possible_mask,
-cs_cpus_allowed(root) will be a no-op and if we guarantee (in arch code)
-that cpu_online_mask always has a non-empty intersection with
-task_cpu_possible_mask(), this loop is guaranteed to terminate with a
-viable mask.
-
-
+> ---
+> Cc: Daniel Kolesa <q66@chimera-linux.org>
+> Cc: Chris Mason <clm@meta.com>
+> ---
+>  Documentation/kbuild/llvm.rst | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+> index 6b2bac8e9ce0..6a37ab903e45 100644
+> --- a/Documentation/kbuild/llvm.rst
+> +++ b/Documentation/kbuild/llvm.rst
+> @@ -15,12 +15,15 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
+>  <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
+>  used as viable substitutes. Distributions such as `Android
+>  <https://www.android.com/>`_, `ChromeOS
+> -<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
+> -<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
+> -collection of toolchain components implemented in terms of C++ objects
+> -<https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
+> -supports C and the GNU C extensions required by the kernel, and is pronounced
+> -"klang," not "see-lang."
+> +https://www.chromium.org/chromium-os>`_, `OpenMandriva
+> +<https://www.openmandriva.org/>`_, and `Chimera Linux
+> +<https://chimera-linux.org/>`_ use Clang built kernels. Google's and Meta's
+> +datacenter fleets also run kernels built with Clang.
+> +
+> +`LLVM is a collection of toolchain components implemented in terms of C++
+> +objects <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM
+> +that supports C and the GNU C extensions required by the kernel, and is
+> +pronounced "klang," not "see-lang."
+>  
+>  Clang
+>  -----
+> -- 
+> 2.39.1.456.gfc5497dd1b-goog
+> 
