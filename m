@@ -2,103 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0B1685EA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E15685E63
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjBAEur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 23:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46288 "EHLO
+        id S229900AbjBAEYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 23:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjBAEuo (ORCPT
+        with ESMTP id S229615AbjBAEYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 23:50:44 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1178A1E2A3;
-        Tue, 31 Jan 2023 20:50:41 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B98602F4;
-        Tue, 31 Jan 2023 20:51:22 -0800 (PST)
-Received: from [10.162.41.8] (unknown [10.162.41.8])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 622DD3F71E;
-        Tue, 31 Jan 2023 20:50:35 -0800 (PST)
-Message-ID: <e1688749-bcdf-14f4-ac34-137a602286e1@arm.com>
-Date:   Wed, 1 Feb 2023 10:20:32 +0530
+        Tue, 31 Jan 2023 23:24:07 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1279C38641;
+        Tue, 31 Jan 2023 20:24:05 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4P681q2G67z4f3jJF;
+        Wed,  1 Feb 2023 12:23:59 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP4 (Coremail) with SMTP id gCh0CgD3rLBf6dljLNYlCw--.26190S4;
+        Wed, 01 Feb 2023 12:24:01 +0800 (CST)
+From:   Hou Tao <houtao@huaweicloud.com>
+To:     linux-block@vger.kernel.org
+Cc:     Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, houtao1@huawei.com
+Subject: [PATCH] blk-ioprio: Introduce promote-to-rt policy
+Date:   Wed,  1 Feb 2023 12:52:27 +0800
+Message-Id: <20230201045227.2203123-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] arm64: Add a couple of missing part numbers
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        D Scott Phillips <scott@os.amperecomputing.com>,
-        Michal Orzel <michal.orzel@arm.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230201000900.3150295-1-konrad.dybcio@linaro.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20230201000900.3150295-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3rLBf6dljLNYlCw--.26190S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF1ftF4UWrW3Zw1ruFW3Jrb_yoWfJrWfpF
+        4fArZxCF9YqF1xtrnrXa18Xryrtw4fAw4UJF43GFWF9w1jvw1vgw10yrn7XFyfArWDXrZ8
+        JrZ8JrWUuF1UAr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Hou Tao <houtao1@huawei.com>
 
+Since commit a78418e6a04c ("block: Always initialize bio IO priority on
+submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
+blkcg_set_ioprio(), so there will be no way to promote the io-priority
+of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
+greater than or equals to IOPRIO_CLASS_RT.
 
-On 2/1/23 05:39, Konrad Dybcio wrote:
-> Add Cortex X1C and add/clarify various recent Qualcomm Kryo cores,
-> which almost exclusively mimic ARM IDs nowadays.
+It seems possible to call blkcg_set_ioprio() first then try to
+initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
+for bio in which bi_ioprio is already initialized (e.g., direct-io), so
+introduce a new ioprio policy to promote the iopriority of bio to
+IOPRIO_CLASS_RT if the ioprio is not already RT.
 
-Why add these cpu numbers ? Is there an errata being worked on for them ?
-Without specific implementation requirement, these might not be necessary.
+To distinguish between the demotion policy and the promotion policy,
+use a bit in upper 16-bits of the policy to accomplish that and handle
+the bit accordingly in blkcg_set_ioprio().
 
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> v1 -> v2:
-> 
-> - Don't change the name of QCOM_CPU_PART_KRYO_4XX_SILVER
-> 
->  arch/arm64/include/asm/cputype.h | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm64/include/asm/cputype.h b/arch/arm64/include/asm/cputype.h
-> index 683ca3af4084..a4260d3194fc 100644
-> --- a/arch/arm64/include/asm/cputype.h
-> +++ b/arch/arm64/include/asm/cputype.h
-> @@ -84,6 +84,7 @@
->  #define ARM_CPU_PART_CORTEX_X2		0xD48
->  #define ARM_CPU_PART_NEOVERSE_N2	0xD49
->  #define ARM_CPU_PART_CORTEX_A78C	0xD4B
-> +#define ARM_CPU_PART_CORTEX_X1C		0xD4C
->  
->  #define APM_CPU_PART_POTENZA		0x000
->  
-> @@ -107,9 +108,17 @@
->  #define QCOM_CPU_PART_KRYO		0x200
->  #define QCOM_CPU_PART_KRYO_2XX_GOLD	0x800
->  #define QCOM_CPU_PART_KRYO_2XX_SILVER	0x801
-> +#define QCOM_CPU_PART_KRYO_3XX_GOLD	0x802
->  #define QCOM_CPU_PART_KRYO_3XX_SILVER	0x803
->  #define QCOM_CPU_PART_KRYO_4XX_GOLD	0x804
->  #define QCOM_CPU_PART_KRYO_4XX_SILVER	0x805
-> +#define QCOM_CPU_PART_KRYO_5XX_GOLD	ARM_CPU_PART_CORTEX_A77
-> +#define QCOM_CPU_PART_KRYO_6XX_GOLD	ARM_CPU_PART_CORTEX_A78
-> +#define QCOM_CPU_PART_KRYO_6XX_GOLDPLUS	ARM_CPU_PART_CORTEX_X1
-> +#define QCOM_CPU_PART_KRYO_6XX_SILVER_V1	ARM_CPU_PART_CORTEX_A55
-> +#define QCOM_CPU_PART_KRYO_7XX_GOLD	ARM_CPU_PART_CORTEX_A710
-> +#define QCOM_CPU_PART_KRYO_7XX_GOLDPLUS	ARM_CPU_PART_CORTEX_X2
-> +#define QCOM_CPU_PART_KRYO_7XX_SILVER	ARM_CPU_PART_CORTEX_A510
->  
->  #define NVIDIA_CPU_PART_DENVER		0x003
->  #define NVIDIA_CPU_PART_CARMEL		0x004
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ Documentation/admin-guide/cgroup-v2.rst | 38 ++++++----
+ block/blk-ioprio.c                      | 94 +++++++++++++++++--------
+ 2 files changed, 92 insertions(+), 40 deletions(-)
+
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index c8ae7c897f14..e0b9f73ef62a 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -2038,17 +2038,27 @@ that attribute:
+ 	Change the I/O priority class of all requests into IDLE, the lowest
+ 	I/O priority class.
+ 
++  promote-to-rt
++	For requests that have I/O priority class BE or that have I/O priority
++        class IDLE, change it into RT. Do not modify the I/O priority class
++        of requests that have priority class RT.
++
+ The following numerical values are associated with the I/O priority policies:
+ 
+-+-------------+---+
+-| no-change   | 0 |
+-+-------------+---+
+-| none-to-rt  | 1 |
+-+-------------+---+
+-| rt-to-be    | 2 |
+-+-------------+---+
+-| all-to-idle | 3 |
+-+-------------+---+
++
+++---------------+---------+-----+
++| policy        | inst    | num |
+++---------------+---------+-----+
++| no-change     | demote  | 0   |
+++---------------+---------+-----+
++| none-to-rt    | demote  | 1   |
+++---------------+---------+-----+
++| rt-to-be      | demote  | 2   |
+++---------------+---------+-----+
++| idle          | demote  | 3   |
+++---------------+---------+-----+
++| promote-to-rt | promote | 1   |
+++---------------+---------+-----+
+ 
+ The numerical value that corresponds to each I/O priority class is as follows:
+ 
+@@ -2064,9 +2074,13 @@ The numerical value that corresponds to each I/O priority class is as follows:
+ 
+ The algorithm to set the I/O priority class for a request is as follows:
+ 
+-- Translate the I/O priority class policy into a number.
+-- Change the request I/O priority class into the maximum of the I/O priority
+-  class policy number and the numerical I/O priority class.
++-- Translate the I/O priority class policy into an instruction and a number
++-- If the instruction is demotion, change the request I/O priority class
++-  into the maximum of the I/O priority class policy number and the numerical
++-  I/O priority class.
++-- If the instruction is promotion, change the request I/O priority class
++-  into the minimum of the I/O priority class policy number and the numerical
++-  I/O priority class.
+ 
+ PID
+ ---
+diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
+index 8bb6b8eba4ce..0d400bee9c72 100644
+--- a/block/blk-ioprio.c
++++ b/block/blk-ioprio.c
+@@ -20,6 +20,13 @@
+ #include "blk-ioprio.h"
+ #include "blk-rq-qos.h"
+ 
++/*
++ * Upper 16-bits are reserved for special flags.
++ *
++ * @IOPRIO_POL_PROMOTION: Promote bi_ioprio instead of demote it.
++ */
++#define IOPRIO_POL_PROMOTION (1U << 17)
++
+ /**
+  * enum prio_policy - I/O priority class policy.
+  * @POLICY_NO_CHANGE: (default) do not modify the I/O priority class.
+@@ -27,21 +34,30 @@
+  * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
+  *		IOPRIO_CLASS_BE.
+  * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
+- *
++ * @POLICY_PROMOTE_TO_RT: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_BE into
++ * 		IOPRIO_CLASS_RT.
+  * See also <linux/ioprio.h>.
+  */
+ enum prio_policy {
+-	POLICY_NO_CHANGE	= 0,
+-	POLICY_NONE_TO_RT	= 1,
+-	POLICY_RESTRICT_TO_BE	= 2,
+-	POLICY_ALL_TO_IDLE	= 3,
++	POLICY_NO_CHANGE	= IOPRIO_CLASS_NONE,
++	POLICY_NONE_TO_RT	= IOPRIO_CLASS_RT,
++	POLICY_RESTRICT_TO_BE	= IOPRIO_CLASS_BE,
++	POLICY_ALL_TO_IDLE	= IOPRIO_CLASS_IDLE,
++	POLICY_PROMOTE_TO_RT	= IOPRIO_CLASS_RT | IOPRIO_POL_PROMOTION,
++};
++
++struct ioprio_policy_tuple {
++	const char *name;
++	enum prio_policy policy;
+ };
+ 
+-static const char *policy_name[] = {
+-	[POLICY_NO_CHANGE]	= "no-change",
+-	[POLICY_NONE_TO_RT]	= "none-to-rt",
+-	[POLICY_RESTRICT_TO_BE]	= "restrict-to-be",
+-	[POLICY_ALL_TO_IDLE]	= "idle",
++/* ioprio_alloc_cpd() needs POLICY_NO_CHANGE to be the first policy */
++static const struct ioprio_policy_tuple ioprio_policies[] = {
++	{ "no-change",		POLICY_NO_CHANGE },
++	{ "none-to-rt",		POLICY_NONE_TO_RT },
++	{ "restrict-to-be",	POLICY_RESTRICT_TO_BE },
++	{ "idle",		POLICY_ALL_TO_IDLE },
++	{ "promote-to-rt",	POLICY_PROMOTE_TO_RT }
+ };
+ 
+ static struct blkcg_policy ioprio_policy;
+@@ -57,11 +73,11 @@ struct ioprio_blkg {
+ /**
+  * struct ioprio_blkcg - Per cgroup data.
+  * @cpd: blkcg_policy_data structure.
+- * @prio_policy: One of the IOPRIO_CLASS_* values. See also <linux/ioprio.h>.
++ * @ioprio: Policy name and definition.
+  */
+ struct ioprio_blkcg {
+ 	struct blkcg_policy_data cpd;
+-	enum prio_policy	 prio_policy;
++	const struct ioprio_policy_tuple *ioprio;
+ };
+ 
+ static inline struct ioprio_blkg *pd_to_ioprio(struct blkg_policy_data *pd)
+@@ -95,23 +111,35 @@ static int ioprio_show_prio_policy(struct seq_file *sf, void *v)
+ {
+ 	struct ioprio_blkcg *blkcg = ioprio_blkcg_from_css(seq_css(sf));
+ 
+-	seq_printf(sf, "%s\n", policy_name[blkcg->prio_policy]);
++	seq_printf(sf, "%s\n", blkcg->ioprio->name);
+ 	return 0;
+ }
+ 
++static const struct ioprio_policy_tuple *ioprio_match_policy(const char *buf)
++{
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(ioprio_policies); i++) {
++		if (sysfs_streq(ioprio_policies[i].name, buf))
++			return &ioprio_policies[i];
++	}
++
++	return NULL;
++}
++
+ static ssize_t ioprio_set_prio_policy(struct kernfs_open_file *of, char *buf,
+ 				      size_t nbytes, loff_t off)
+ {
+ 	struct ioprio_blkcg *blkcg = ioprio_blkcg_from_css(of_css(of));
+-	int ret;
++	const struct ioprio_policy_tuple *ioprio;
+ 
+ 	if (off != 0)
+ 		return -EIO;
+ 	/* kernfs_fop_write_iter() terminates 'buf' with '\0'. */
+-	ret = sysfs_match_string(policy_name, buf);
+-	if (ret < 0)
+-		return ret;
+-	blkcg->prio_policy = ret;
++	ioprio = ioprio_match_policy(buf);
++	if (!ioprio)
++		return -EINVAL;
++	blkcg->ioprio = ioprio;
+ 	return nbytes;
+ }
+ 
+@@ -141,7 +169,7 @@ static struct blkcg_policy_data *ioprio_alloc_cpd(gfp_t gfp)
+ 	blkcg = kzalloc(sizeof(*blkcg), gfp);
+ 	if (!blkcg)
+ 		return NULL;
+-	blkcg->prio_policy = POLICY_NO_CHANGE;
++	blkcg->ioprio = &ioprio_policies[0];
+ 	return &blkcg->cpd;
+ }
+ 
+@@ -186,20 +214,30 @@ void blkcg_set_ioprio(struct bio *bio)
+ 	struct ioprio_blkcg *blkcg = ioprio_blkcg_from_bio(bio);
+ 	u16 prio;
+ 
+-	if (!blkcg || blkcg->prio_policy == POLICY_NO_CHANGE)
++	if (!blkcg || blkcg->ioprio->policy == POLICY_NO_CHANGE)
+ 		return;
+ 
++	WARN_ON_ONCE(bio->bi_ioprio == IOPRIO_CLASS_NONE);
++
+ 	/*
+ 	 * Except for IOPRIO_CLASS_NONE, higher I/O priority numbers
+-	 * correspond to a lower priority. Hence, the max_t() below selects
+-	 * the lower priority of bi_ioprio and the cgroup I/O priority class.
+-	 * If the bio I/O priority equals IOPRIO_CLASS_NONE, the cgroup I/O
+-	 * priority is assigned to the bio.
++	 * correspond to a lower priority.
++	 *
++	 * When IOPRIO_POL_PROMOTION is enabled, the min_t() below selects
++	 * the higher priority of bi_ioprio and the cgroup I/O priority class,
++	 * otherwise the lower priority is selected.
+ 	 */
+-	prio = max_t(u16, bio->bi_ioprio,
+-			IOPRIO_PRIO_VALUE(blkcg->prio_policy, 0));
+-	if (prio > bio->bi_ioprio)
+-		bio->bi_ioprio = prio;
++	if (blkcg->ioprio->policy & IOPRIO_POL_PROMOTION) {
++		prio = min_t(u16, bio->bi_ioprio,
++				IOPRIO_PRIO_VALUE(blkcg->ioprio->policy, 0));
++		if (prio < bio->bi_ioprio)
++			bio->bi_ioprio = prio;
++	} else {
++		prio = max_t(u16, bio->bi_ioprio,
++				IOPRIO_PRIO_VALUE(blkcg->ioprio->policy, 0));
++		if (prio > bio->bi_ioprio)
++			bio->bi_ioprio = prio;
++	}
+ }
+ 
+ void blk_ioprio_exit(struct gendisk *disk)
+-- 
+2.29.2
+
