@@ -2,111 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E06206867FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3DA6867FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjBAOJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S232206AbjBAOKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbjBAOJZ (ORCPT
+        with ESMTP id S232196AbjBAOJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:09:25 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718165CFD3;
-        Wed,  1 Feb 2023 06:09:20 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P6NwG19ZDz6J7Z5;
-        Wed,  1 Feb 2023 22:05:02 +0800 (CST)
-Received: from localhost (10.45.150.75) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Feb
- 2023 14:09:16 +0000
-Date:   Wed, 1 Feb 2023 14:09:15 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Bjorn Helgaas <helgaas@kernel.org>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "Matt Fagnani" <matt.fagnani@bell.net>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Tony Zhu <tony.zhu@intel.com>, <linux-pci@vger.kernel.org>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
- pci_enable_pasid()
-Message-ID: <20230201140915.000024a0@Huawei.com>
-In-Reply-To: <Y9nQK9P3HOxEeZ4U@nvidia.com>
-References: <030e66e0-fb54-b77d-5094-4786684ba97d@linux.intel.com>
-        <20230201001419.GA1776086@bhelgaas>
-        <Y9nQK9P3HOxEeZ4U@nvidia.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 1 Feb 2023 09:09:59 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCA305CE6B
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:09:53 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1112)
+        id 0025020B74F7; Wed,  1 Feb 2023 06:09:52 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0025020B74F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675260593;
+        bh=BpHDMeAxSkqr/r5ajATqGfq+lFWwlQzDumLrikNSywc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jRd6LZ3QFVwTPKPZj/uygOVXVFsJiFH4xChtXBAtsxvP+ojseL9py+BJ2/fPAKjJL
+         Wcr5WL+e/UwLlaJDaqNirQFGoUsFd1xoDnTnRWzrB6BQwS7jqWchHOiIf+U3BR5m51
+         dcJS4FC6tqvgrvkcTgCv/8H3XjnBv2bRTD40jMJs=
+Date:   Wed, 1 Feb 2023 06:09:52 -0800
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Subject: Re: [PATCH v1 3/8] x86/psp: Register PSP platform device when ASP
+ table is present
+Message-ID: <20230201140952.GA31392@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20230123152250.26413-1-jpiotrowski@linux.microsoft.com>
+ <20230123152250.26413-4-jpiotrowski@linux.microsoft.com>
+ <194d8448-dde2-3452-7ccf-4e88fddbff75@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.150.75]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <194d8448-dde2-3452-7ccf-4e88fddbff75@amd.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 31 Jan 2023 22:36:27 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+On Tue, Jan 31, 2023 at 12:49:54PM -0600, Tom Lendacky wrote:
+> On 1/23/23 09:22, Jeremi Piotrowski wrote:
+> >The ASP table contains the memory location of the register window for
+> >communication with the Platform Security Processor. The device is not
+> >exposed as an acpi node, so it is necessary to probe for the table and
+> >register a platform_device to represent it in the kernel.
+> >
+> >At least conceptually, the same PSP may be exposed on the PCIe bus as
+> >well, in which case it would be necessary to choose whether to use a PCI
+> >BAR or the register window defined in ASPT for communication. There is
+> >no advantage to using the ACPI and there are no known bare-metal systems
+> >that expose the ASP table, so device registration is restricted to the
+> >only systems known to provide an ASPT: Hyper-V VMs. Hyper-V VMs also do
+> >not expose the PSP over PCIe.
+> >
+> >This is a skeleton device at this point, as the ccp driver is not yet
+> >prepared to correctly probe it. Interrupt configuration will come later
+> >on as well.
+> >
+> >Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+> >---
+> >  arch/x86/kernel/Makefile |  2 +-
+> >  arch/x86/kernel/psp.c    | 39 +++++++++++++++++++++++++++++++++++++++
+> 
+> Based on comments about other SEV related items, this should
+> probably be moved into the arch/x86/coco/sev/ directory.
+> 
+> Thanks,
+> Tom
 
-> On Tue, Jan 31, 2023 at 06:14:19PM -0600, Bjorn Helgaas wrote:
-> 
-> > > AMD GPU is one of those devices.  
-> > 
-> > I guess you mean the AMD GPU has ATS, PRI, and PASID Capabilities?
-> > And furthermore, that the GPU *always* uses Translated addresses with
-> > PASID?  
-> 
-> I'm not versed in the spec lingo, but the GPU issues MemRd/Wrs with
-> the translated bit set and no PASID header - which is the correct form
-> for an address that was translated by ATS.
+I'll do that. This will make the code depend on CONFIG_ARCH_HAS_CC_PLATFORM
+and CONFIG_AMD_MEM_ENCRYPT, the latter selects the former. This will work
+as long as CONFIG_AMD_MEM_ENCRYPT continues to be needed for both SNP guest
+and host sides.
 
-FWIW there is a capability bit and enable bit in the PASID cap/control
-registers that says whether a device can/should add a PASID to a
-translated request or not.  I think the intent is that a host can
-sanity check AT requests to make sure the device isn't making them
-up. To do that it needs the PASID.  Not sure any hosts do this yet
-though ;)
-
-Not worth much, but I thought it always sent the PASID so dug out spec
-to check (I was wrong as it is both optional and configurable).
+Jeremi
 
 > 
-> To get to that it issues ATS requests, and only the ATS related
-> requests will carry the PASID.
-> 
-> ATS related requests always route to the root port, which is why it is
-> functionally equivalent to ACS RR/UF in these cases.
-> 
-> Translated requests always route where they are supposed to go, even
-> with P2P and things.
-> 
-> > And this applies even if there is no ACS or ACS doesn't support
-> > PCI_ACS_RR and PCI_ACS_UF.
-> > 
-> > The black screen happens because ... ?  
-> 
-> AMD GPU driver bugs blow up if it cannot setup PASID.
-> 
-> > I couldn't figure out the NULL pointer dereference.  I expected it to
-> > be from a BUG() or similar in report_iommu_fault(), but I don't see
-> > that.  
-> 
-> IIRC it is a buggy error unwind handling in the AMD GPU driver.
->  
-> Jason
-
+> >  2 files changed, 40 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/x86/kernel/psp.c
+> >
+> >diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+> >index f901658d9f7c..e2e19f2d08a7 100644
+> >--- a/arch/x86/kernel/Makefile
+> >+++ b/arch/x86/kernel/Makefile
+> >@@ -139,7 +139,7 @@ obj-$(CONFIG_UNWINDER_ORC)		+= unwind_orc.o
+> >  obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
+> >  obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+> >-obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
+> >+obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= psp.o sev.o
+> >  obj-$(CONFIG_CFI_CLANG)			+= cfi.o
+> >diff --git a/arch/x86/kernel/psp.c b/arch/x86/kernel/psp.c
+> >new file mode 100644
+> >index 000000000000..d404df47cc04
+> >--- /dev/null
+> >+++ b/arch/x86/kernel/psp.c
+> >@@ -0,0 +1,39 @@
+> >+// SPDX-License-Identifier: GPL-2.0-only
+> >+
+> >+#include <linux/platform_data/psp.h>
+> >+#include <linux/platform_device.h>
+> >+#include <asm/hypervisor.h>
+> >+
+> >+static struct platform_device psp_device = {
+> >+	.name           = "psp",
+> >+	.id             = PLATFORM_DEVID_NONE,
+> >+};
+> >+
+> >+static int __init psp_init_platform_device(void)
+> >+{
+> >+	struct psp_platform_data pdata = {};
+> >+	struct resource res[1];
+> >+	int err;
+> >+
+> >+	/*
+> >+	 * The ACPI PSP interface is mutually exclusive with the PCIe interface,
+> >+	 * but there is no reason to use the ACPI interface over the PCIe one.
+> >+	 * Restrict probing ACPI PSP to platforms known to only expose the ACPI
+> >+	 * interface, which at this time is SNP-host capable Hyper-V VMs.
+> >+	 */
+> >+	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
+> >+		return -ENODEV;
+> >+
+> >+	err = acpi_parse_aspt(res, &pdata);
+> >+	if (err)
+> >+		return err;
+> >+	err = platform_device_add_resources(&psp_device, res, 1);
+> >+	if (err)
+> >+		return err;
+> >+
+> >+	err = platform_device_register(&psp_device);
+> >+	if (err)
+> >+		return err;
+> >+	return 0;
+> >+}
+> >+device_initcall(psp_init_platform_device);
