@@ -2,110 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA4C686775
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C9F68696F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbjBANuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
+        id S232844AbjBAPBK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Feb 2023 10:01:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbjBANuB (ORCPT
+        with ESMTP id S232841AbjBAO7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:50:01 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A97446086
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:49:52 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id qw12so35654080ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 05:49:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ACzUjtExd1GIrXZr1vO/BegTBXZjaP/+ZCi6MVW3dcE=;
-        b=XqDxeyaONwSMSPBNLF2wQqvVaptIMfUXKIL+odbcSjOEZWz8roz/UWW0pxxPb3rcZr
-         XFDmxM9TAigHeKTHQNxt3sps1g+kXk+XspyzHQ5nM5bVtha7xLYeGTaNdb6wdqMkBygt
-         WSEV1c7E4T0OUWeGWS+B6KE7T7kIMhklClCadFuGuBww3apkEKZPesqOgZ9QRbiHKG/s
-         RhLPhfcLZUjCzjYqLQHasEL3rbrwMn3G0UFhkARdB2BfN7ojuinil2MH8DDWf2Qw7UB2
-         ZZJQivmgEIaA59HQPwDukXmfcC2PdEJW/QS3cJCIN/QIrsmdmoW50R6C9Sw/k3AukrL8
-         +d3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ACzUjtExd1GIrXZr1vO/BegTBXZjaP/+ZCi6MVW3dcE=;
-        b=hP7m7rHGBswfadJmI5DTwd0nXtYhNhOQcR4OIhzaW047bNxfmebTyPR/Pj86LkO1qP
-         GcZHgCV8qJ8yBzknS18IkrDrtgivtQZHFnK/0110wQzafeS8NgGnjyzjqmb6CL4Lt5l5
-         hS5GWZ1DTMG8sNqBQK3VO/mMvi5jKWfyTWWpgSguenYavYGTQ1FbDQCBFegTMyClAPi7
-         kNmA9/OVZimuhdbuz+ypqv6xVgFY1senD0SGbp0gse9v6VckRGyQqvBpqdL9Zadxdhtl
-         6obC7hnUK1mVx7QfNuPFn3zf8Y3hXezBABM74MQs7+15pL91jJS4zOBnkjMd/DwIm6ox
-         iYGg==
-X-Gm-Message-State: AO0yUKWo1I0qa4EKQi6oc7m0CAw+8MoNGW/yLKqkMhD9zPy4bGCw7h71
-        ZsLmJfLhseQSVtPN9dXao1anKw==
-X-Google-Smtp-Source: AK7set8R0ihVH9gQLKTpTgxDtC0l0P5jQ5GnLv1eb/VCHQJYaBQmNmb6DhTSWztbpqMBqXz4Dg9UCA==
-X-Received: by 2002:a17:906:2b0d:b0:877:a9d2:e5e9 with SMTP id a13-20020a1709062b0d00b00877a9d2e5e9mr2588659ejg.42.1675259391045;
-        Wed, 01 Feb 2023 05:49:51 -0800 (PST)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id gt15-20020a170906f20f00b0088bd62b1cbbsm2858318ejb.192.2023.02.01.05.49.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 05:49:49 -0800 (PST)
-Message-ID: <05344ca0-3847-ea55-1e61-04aacc58995c@linaro.org>
-Date:   Wed, 1 Feb 2023 15:49:48 +0200
+        Wed, 1 Feb 2023 09:59:48 -0500
+Received: from mail.pgj.campeche.gob.mx (unknown [187.157.28.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F9E6ACBB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:59:11 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 141561BC293E;
+        Wed,  1 Feb 2023 08:05:24 -0600 (CST)
+Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
+        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id EibNg--6G5wW; Wed,  1 Feb 2023 08:05:21 -0600 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id E6E0F1BC2881;
+        Wed,  1 Feb 2023 07:57:55 -0600 (CST)
+X-Virus-Scanned: amavisd-new at pgj.campeche.gob.mx
+Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
+        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id NFdA9vfm6vjs; Wed,  1 Feb 2023 07:57:54 -0600 (CST)
+Received: from [23.146.243.45] (_gateway [172.24.1.254])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTPSA id A75A41BC3BFD;
+        Wed,  1 Feb 2023 07:50:34 -0600 (CST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [v1 2/3] drm/msm/disp/dpu1: add dspps into reservation if there
- is a ctm request
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Kalyan Thota <quic_kalyant@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com
-References: <1675092092-26412-1-git-send-email-quic_kalyant@quicinc.com>
- <1675092092-26412-3-git-send-email-quic_kalyant@quicinc.com>
- <20230201111604.htgczy6yvdkywhvl@SoMainline.org>
- <20230201112631.mgwuboehrwdefqnd@SoMainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230201112631.mgwuboehrwdefqnd@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Se requiere respuesta urgente.
+To:     Recipients <jnaaluitz@pgj.campeche.gob.mx>
+From:   "zimbra@" <jnaaluitz@pgj.campeche.gob.mx>
+Date:   Wed, 01 Feb 2023 05:50:16 -0800
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230201135034.A75A41BC3BFD@mail.pgj.campeche.gob.mx>
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,KHOP_HELO_FCRDNS,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [187.157.28.107 listed in bl.score.senderscore.com]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [187.157.28.107 listed in wl.mailspike.net]
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [webmasterzimbra1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
+        *      dynamic-looking rDNS
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 13:26, Marijn Suijten wrote:
-> On 2023-02-01 12:16:05, Marijn Suijten wrote:
-> <snip>
->>> +	if (dpu_kms->catalog->dspp &&
->>> +	    crtc_state->ctm && (dpu_kms->catalog->dspp_count >= topology.num_lm))
->>
->> Multiline-if-clause is typically indented with two tabs, not a half tab
->> (4 spaces).
-> 
-> Hmm, Dmitry requested indent-to-opening-parenthesis in v1 instead; and
-> the majority of dpu1 uses the worst version of all: indent with a single
-> tab so that the contents line up with the code block below.  Dmitry,
-> I'll leave final say to you (and fix it up in my own DPU series
-> accordingly too).
+Atención:Webmail User,
 
-Well,
 
-:set cino=(0
+Le hemos estado enviando una serie de correos electrónicos con respecto a la actualización de su cuenta de correo web. Has estado demostrando ser fuerte. Te damos 24 horas o desactivas tu cuenta.
 
-> 
-> - Marijn
+1) Contraseña:
+2) Vuelva a escribir la contraseña:
 
--- 
-With best wishes
-Dmitry
 
+Envíe la información de la contraseña lo antes posible para evitar la desactivación.
+
+
+Señal
+
+Gestión de correo web.
