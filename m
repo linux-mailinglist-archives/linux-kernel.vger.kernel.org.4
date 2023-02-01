@@ -2,111 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6EB686F91
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 21:10:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C86A4686F96
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 21:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbjBAUKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 15:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S230000AbjBAUP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 15:15:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBAUKN (ORCPT
+        with ESMTP id S229884AbjBAUPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 15:10:13 -0500
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBFD7A4B1;
-        Wed,  1 Feb 2023 12:10:12 -0800 (PST)
-Received: by mail-oi1-f180.google.com with SMTP id o66so16715777oia.6;
-        Wed, 01 Feb 2023 12:10:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=thv61RGE52PGRvsnVozB8FKirAqwTf3FwZG6EZOwRLI=;
-        b=CWxE/LmDyagbi1vzR278n8pEDwCGsAOEJ6j4jeq0AOTsBhtB8Pgnk1+ls02s4Llg9P
-         zYnycPprD931eKhrlbxrC8bsvRB8YvDoth9qURx6Vt5VnTn2GAKwe8MKtSXINIqnGsx3
-         ZP6t5YFB7ibceV0tlCZAtQfMQFKELuGWajXRcBfwJl7KhNBj6kJo0LUVbLicZ7x9lwtX
-         1WBaQjGUru3LYBet6jklhDYZh/BLif4ScPwOkdw9n1u8uniD+kNKQuj1e6Y1DTY8wTVp
-         PpJLuydRt/IpchJka0t702f2gwJIhsiLTwH20Rn2ZFlN+dmP208+SsZN3bwis6nHrekF
-         gMeg==
-X-Gm-Message-State: AO0yUKVmZWY0Nt11RhkTJfnZs9BixgSicIbBVyYUEXghwa0rii9cukbf
-        1Bk8nzwiWcRgfbF80j7cFg==
-X-Google-Smtp-Source: AK7set9pEQ8YxfQ5+TXI2j14YoEUsCqPxiSU97fv0Dnk34onmDzBb6axbRhsy4mrUsnDj8yjYENVWg==
-X-Received: by 2002:aca:1905:0:b0:36e:fe3f:a02 with SMTP id l5-20020aca1905000000b0036efe3f0a02mr1683334oii.19.1675282211365;
-        Wed, 01 Feb 2023 12:10:11 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f8-20020a05680814c800b003785a948b27sm3423288oiw.16.2023.02.01.12.10.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 12:10:10 -0800 (PST)
-Received: (nullmailer pid 100238 invoked by uid 1000);
-        Wed, 01 Feb 2023 20:10:10 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 1 Feb 2023 15:15:55 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB266187F;
+        Wed,  1 Feb 2023 12:15:52 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id B826F1257;
+        Wed,  1 Feb 2023 21:15:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1675282550;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dw3R/I+yQHjbga5kkUsb3LzIPZtMRUNJ7Qu6UJsxVlc=;
+        b=Ecugun7uzW1hw7a3z38sfJT+nhgz3Z1Q3neEokWdTu86aqzBtqesqoSFkhm3jA8Rvh/ftl
+        5dwia8olYcp67iwQ8YxIp1DiTo79YKVtrDC/IbFp2h9Z1EJSj9rCMLJle1/ZFdy4rzNA4o
+        6wMVHimniMcNaMjAI8i91cRTRD7Qm8Q/HrCDKcQykwB6dw4844dKiy5gjdzMjyQkT1GKWI
+        V71hCZexWpugNzXH8n8/Flbbpberea0MN08Zviv0ywthtaAxBolNtlqtEGvBHgV+3i/3CI
+        nGfoTZPsg0eikF19TNwkz1u+PsESr3ZCvjU6JidAD/Xoi//8ZbCBXFGHI3qnzA==
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Frieder Schrempf <frieder@fris.de>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rtc@vger.kernel.org
-In-Reply-To: <20230201143431.863784-2-frieder@fris.de>
-References: <20230201143431.863784-1-frieder@fris.de>
- <20230201143431.863784-2-frieder@fris.de>
-Message-Id: <167527873911.37677.14204981120737397534.robh@kernel.org>
-Subject: Re: [PATCH 1/7] dt-bindings: rtc: Move RV3028 to separate binding
- file
-Date:   Wed, 01 Feb 2023 14:10:10 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Date:   Wed, 01 Feb 2023 21:15:50 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh@kernel.org>
+Cc:     =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>,
+        devicetree@vger.kernel.org, hayashi.kunihiko@socionext.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        mhiramat@kernel.org, rafal@milecki.pl,
+        srinivas.kandagatla@linaro.org
+Subject: Re: [PATCH 3/4] nvmem: mtk-efuse: replace driver with a generic MMIO
+ one
+In-Reply-To: <20230201185402.GA4084724-robh@kernel.org>
+References: <20230201064717.18410-4-zajec5@gmail.com>
+ <20230201084821.1719839-1-michael@walle.cc>
+ <8452b341-8695-05d8-9d03-47c9aeca0ec7@gmail.com>
+ <017a17eb99ac2b2c858d27b65c5dd372@walle.cc>
+ <20230201185402.GA4084724-robh@kernel.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1b3024876259eab4464db9ca676a884f@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 01 Feb 2023 15:34:23 +0100, Frieder Schrempf wrote:
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+Am 2023-02-01 19:54, schrieb Rob Herring:
+> On Wed, Feb 01, 2023 at 11:46:01AM +0100, Michael Walle wrote:
+>> > Before I convert brcm,nvram to NVMEM layout I need some binding & driver
+>> > providing MMIO device access. How to handle that?
+>> 
+>> I'm not arguing against having the mmio nvmem driver. But I don't
+>> think we should sacrifice possible write access with other drivers. 
+>> And
+>> I presume write access won't be possible with your generic driver as 
+>> it
+>> probably isn't just a memcpy_toio().
+>> 
+>> It is a great fallback for some nvmem peripherals which just maps a
+>> memory region, but doesn't replace a proper driver for an nvmem 
+>> device.
+>> 
+>> What bothers me the most isn't the driver change. The driver can be
+>> resurrected once someone will do proper write access, but the generic
+>> "mediatek,efuse" compatible together with the comment above the older
+>> compatible string. These imply that you should use "mediatek,efuse",
+>> but we don't know if all mediatek efuse peripherals will be the
+>> same - esp. for writing which is usually more complex than the 
+>> reading.
 > 
-> The RV3028 driver uses properties that are not covered by the
-> trivial-rtc bindings. Use custom bindings for it.
+> Because the kernel can't pick the "best" driver when there are multiple
+> matches, it's all Mediatek platforms use the generic driver or all use
+> the Mediatek driver.
+
+Isn't that the whole point of having multiple compatible strings?
+   compatible = "fsl,imx27-mmc", "fsl,imx21-mmc";
+The OS might either load the driver for "fsl,imx21-mmc" or one for
+"fsl,imx27-mmc", with the latter considered to be the preferred one.
+
+> Personally, I think it is easy enough to revive the driver if needed
+> unless writing is a soon and likely feature.
+
+That what was actually triggered my initial reply. We are planning a
+new board with a mediatek SoC and we'll likely need the write support.
+
+But I thought the "mediatek,efuse" was a new compatible with this patch
+and the (new!) comment make it looks like these compatible are 
+deprecated
+in favor of "mmio-nvmem". Which would make it impossible to distinguish
+between the different efuse peripherals and thus make it impossible to
+add write support.
+
+> The other way to share is providing library functions for drivers to
+> use. Then the Mediatek driver can use the generic read functions and
+> custom write functions.
 > 
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> ---
->  .../bindings/rtc/microcrystal,rv3028.yaml     | 56 +++++++++++++++++++
->  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
->  2 files changed, 56 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/microcrystal,rv3028.yaml
+>> nitpick btw: why not "nvmem-mmio"?
+>> 
+>> So it's either:
+>>  (1) compatible = "mediatek,mt8173-efuse"
+>>  (2) compatible = "mediatek,mt8173-efuse", "mmio-nvmem"
+>> 
+>> (1) will be supported any anyway for older dts and you need to add
+>> the specific compatibles to the nvmem-mmio driver - or keep the
+>> driver as is.
+>> 
+>> With (2) you wouldn't need to do that and the kernel can load the
+>> proper driver if available or fall back to the nvmem-mmio one. I'd
+>> even make that one "default y" so it will be available on future
+>> kernels and boards can already make use of the nvmem device even
+>> if there is no proper driver for them.
+>> 
+>> I'd prefer (2). Dunno what the dt maintainers agree.
 > 
+> No because you are changing the DT. The DT can't change when you want 
+> to
+> change drivers. This thinking is one reason why 'generic' bindings are
+> rejected.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+There is no change in the DT. Newer bindings will have
 
-yamllint warnings/errors:
+   compatible = "vendor,ip-block", "mmio-nvmem"
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/rtc/microcrystal,rv3028.example.dts:23.20-29.15: Warning (i2c_bus_reg): /example-0/i2c/rtc@51: I2C bus unit address format error, expected "52"
+when the ip block is compatible with mmio-nvmem. Otherwise I don't get
+why there is a mmio-nvmem compatible at all. Just having
 
-doc reference errors (make refcheckdocs):
+   compatible = "mmio-nvmem"
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230201143431.863784-2-frieder@fris.de
+looks wrong as it would just work correctly in some minor cases, i.e.
+when write support is just a memcpy_toio() - or we deliberately ignore
+any write support. But even then, you always tell people to add specific
+compatibles for the case when quirks are needed..
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+-michael
