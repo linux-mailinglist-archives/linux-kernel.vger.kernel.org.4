@@ -2,71 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E88685E86
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C466685E8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbjBAEdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 23:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
+        id S230295AbjBAEhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 23:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjBAEdP (ORCPT
+        with ESMTP id S229961AbjBAEhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 23:33:15 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B35206A4
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:33:13 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id b1so20813986ybn.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:33:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w+equ0OXLQSU+hv7wnXcxBcLOvybdS5qTQU7VbT5N+E=;
-        b=O//SdZM9TvFEwgU0y9FvaIHBAYEJtDs79CDXwt49LL8HiYZ/xZCzx4XyWF1pkmurNz
-         agFlIG6jjgiP/Qc31IWMJo2k8iHtkscGSnBgQDcoPBAkMOc4TGQcHHL2gjMLMoRchPyO
-         0Jnz2cBO6izaMBzPtsDZLbZ9EUqFEmX9OogIWrIEDEvsO18QZFU8IhNmkdu94I5cXDjJ
-         GMvX4xlKdK4WYAYR7vLW5p1DJ5JLTNushKZJu6+6tOMH5Wtooe2vYYSUEafRAo28DZnt
-         aVG9lVcsF8w5EFi88itaHn82ltX7/ID31jt1DKgN2T8w5aEkOI6BkmtaN+sI/wZAo0Dz
-         EHMA==
+        Tue, 31 Jan 2023 23:37:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B4E3D90B
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:36:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675226176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BiFkmS3tbcnlONUhHqfYNt9fP+0R9mL8avFHp+lRK9A=;
+        b=XgDQnVCGEkYDVQImU6H2RSj8pObDA0n/0iXiC0ZgLdguIFcoxIXv7sJ4z7z+edqAhO0Obs
+        Tdx0UPvOByIjekyXau6PbNbYOK9ra91OA8pENziHKpcUKGMvtAAhSBuCmseXdoORJUg0BE
+        LhdTo+zwspLEG2m96Mn7oy/hmo6ZuUM=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-102-sCehqs7lMwi3BQHPvcq2Mw-1; Tue, 31 Jan 2023 23:36:14 -0500
+X-MC-Unique: sCehqs7lMwi3BQHPvcq2Mw-1
+Received: by mail-oi1-f198.google.com with SMTP id r17-20020a056808211100b0036e886e0e3bso7114396oiw.12
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:36:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w+equ0OXLQSU+hv7wnXcxBcLOvybdS5qTQU7VbT5N+E=;
-        b=ckW0oYov1g+k5N4pONWbOmTeaSqd5Ag4aUxO31O+xbLdl3VWHSGABEWJyZyTyVwI5C
-         0p6maOdRHoiGlCdCCDzGy7uTnaXw0LaAeTwlbnxJK057f01noQx4aYtjJ4W8LI804xhn
-         SgFGRweuXqSqbohxte/b6wgn9CNyYx6Z3PiAQhDRiY1C0LRoHEwqtOCsNG6KA7FqaW5S
-         I2cEq0RmtGS57jgQjgwc1dTxA//GmVhrZvyEe2OSVB6UkNxcZqwkZA74EiARFxyna3di
-         /9o20UkMBXKCnbSU2vTtAikW6c88i1X+B/Rw8Yzwp1HpaEGIGP0ne00xI5lpMYr3fQ7G
-         1Rpw==
-X-Gm-Message-State: AO0yUKWTV04p7ARsUk5W7ANFlY0TgcZV8HHH3Rx5/i3lRe1AAkF9wCAs
-        D/vMRbOmJI4n9gBJO2mvlDV0+khkr5Y0TSEDbHc=
-X-Google-Smtp-Source: AK7set8lv9qDveBknf2O3EOWTLsq6kjtnmFqGBO9PHHBmB+CTgj7RKGdrF/0SpgaSAZGCP+sbHI+jCRAd8fSeBXr31I=
-X-Received: by 2002:a25:7412:0:b0:802:f667:b222 with SMTP id
- p18-20020a257412000000b00802f667b222mr173860ybc.100.1675225992374; Tue, 31
- Jan 2023 20:33:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20230113004933.2082072-1-daeho43@gmail.com> <ed5f65a7-13bb-581c-cfb5-df5ab30fbc4c@kernel.org>
- <CACOAw_zhVgS84gOXpfZuvptMgsZDhP3QX2EFm=5CoKibB+3V1A@mail.gmail.com>
- <8f1c15a3-d056-7709-af45-fe7cba56463f@kernel.org> <CACOAw_zSaZ5JKFtFSxRK3a5_260AYbeYCMzHL11pD8=mWM91Sw@mail.gmail.com>
- <CACOAw_xjNz2AKa+MMqpVKo4SOC_ptbXY1P3S4tY2g8JneTzkPQ@mail.gmail.com>
- <CACOAw_wUOv6GjiErE=m8vVHL8T9wzAe-TQ6=xYaNKWcoMaNDYw@mail.gmail.com>
- <CACOAw_w41sYTZnmJ6fMth_9YQJhcZbbQP9rdm2Ttz5uwhGPK9A@mail.gmail.com> <9a12ecdc-ed7b-661c-be69-93428510dfce@kernel.org>
-In-Reply-To: <9a12ecdc-ed7b-661c-be69-93428510dfce@kernel.org>
-From:   Daeho Jeong <daeho43@gmail.com>
-Date:   Tue, 31 Jan 2023 20:33:01 -0800
-Message-ID: <CACOAw_zbagTRmx81SwYND4s_f-3Rcu=Te9ne5ogEtLAFtCyReA@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH] f2fs: synchronize atomic write aborts
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>,
-        syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BiFkmS3tbcnlONUhHqfYNt9fP+0R9mL8avFHp+lRK9A=;
+        b=fIA5aDIsL1K+AyEAlkAwyV3wMSX4WdOcZMH/29FNTrMDqbaxU/8Kbk33TmfKq9Cmko
+         iJQqNXb7BTcEVGZOAh9GV2FM5m1k+EdVqkVGZVvO1GcWoJ8WgH+AB8iLVUFqDK8fgQxD
+         jn2qn/hqoSpnMaEa71eA/fTTpCbG0+SQ7o+qTX4NBLfZ3M54b6e+lsU/0rQchiitdo5d
+         1sjen36T6mS6hbOlOdkJFeqAjL8o7s14nrCO6UaCXl7DDqnLUDENfAE8wHyZ52YLCn3R
+         sZiNtZoMGxuZvyHeQlJk31VHTLmMEjgRLMoOUBZXsTgScSkium5NfXTOXZUb6/U2czEy
+         ZUzA==
+X-Gm-Message-State: AO0yUKUbb/2xbwXGTz3x2EDYfsDUUjA6CpcDa1pjXexjLGnBIdiSJEb3
+        PHBS+D6c28Y7Tlx+Gdrp/BrUF0ayQSprhkY/xpx8QjlNTEQJ5l6iwlW5p4fqqI3p2TT5i6cztUm
+        DiE37gOclWH7WPjhZuWOCDNMi
+X-Received: by 2002:a05:6871:721:b0:152:4c46:fa6c with SMTP id f33-20020a056871072100b001524c46fa6cmr348953oap.17.1675226173527;
+        Tue, 31 Jan 2023 20:36:13 -0800 (PST)
+X-Google-Smtp-Source: AK7set9I+XbBlHDkMe6JZXfDndS488Wpi+CAx0Lsc2GvEYuE/fTytkaATmKQj00gyUrFyQU54ZtHcQ==
+X-Received: by 2002:a05:6871:721:b0:152:4c46:fa6c with SMTP id f33-20020a056871072100b001524c46fa6cmr348944oap.17.1675226173240;
+        Tue, 31 Jan 2023 20:36:13 -0800 (PST)
+Received: from ?IPv6:2804:1b3:a800:6912:c477:c73a:cf7c:3a27? ([2804:1b3:a800:6912:c477:c73a:cf7c:3a27])
+        by smtp.gmail.com with ESMTPSA id fz16-20020a056870ed9000b00160323101efsm7400841oab.42.2023.01.31.20.36.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 20:36:12 -0800 (PST)
+Message-ID: <5ba79c4feb829ed75cfd98cf5c8042dcb2ddea91.camel@redhat.com>
+Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
+From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 01 Feb 2023 01:36:07 -0300
+In-Reply-To: <Y9j9BnMwfm4TJks7@tpad>
+References: <20230125073502.743446-1-leobras@redhat.com>
+         <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
+         <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
+         <Y9FzSBw10MGXm2TK@tpad> <Y9IvoDJbLbFcitTc@dhcp22.suse.cz>
+         <Y9LDAZmApLeffrT8@tpad> <Y9LQ615H13RmG7wL@dhcp22.suse.cz>
+         <0122005439ffb7895efda7a1a67992cbe41392fe.camel@redhat.com>
+         <Y9j9BnMwfm4TJks7@tpad>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.2 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,269 +91,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 5:40 PM Chao Yu <chao@kernel.org> wrote:
->
-> Hi Daeho,
->
-> On 2023/2/1 6:34, Daeho Jeong wrote:
-> > On Tue, Jan 31, 2023 at 1:57 PM Daeho Jeong <daeho43@gmail.com> wrote:
-> >>
-> >> On Tue, Jan 31, 2023 at 1:38 PM Daeho Jeong <daeho43@gmail.com> wrote:
-> >>>
-> >>> On Tue, Jan 31, 2023 at 11:13 AM Daeho Jeong <daeho43@gmail.com> wrote:
-> >>>>
-> >>>> Hi Chao,
-> >>>>
-> >>>> On Tue, Jan 31, 2023 at 3:37 AM Chao Yu <chao@kernel.org> wrote:
-> >>>>>
-> >>>>> Hi Daeho,
-> >>>>>
-> >>>>> On 2023/1/31 0:34, Daeho Jeong wrote:
-> >>>>>> Hi Chao,
-> >>>>>>
-> >>>>>> I read your patch series now and I like it.
-> >>>>>
-> >>>>> Thank you for checking the patches. :)
-> >>>>>
-> >>>>>> However, how about a race condition between start_atomic_write and
-> >>>>>> abort_atomic_write?
-> >>>>>
-> >>>>> Yup, I noticed that issue, I guess we can avoid this race condition by
-> >>>>> covering these two flows w/ i_atomic_sem.
-> >>>>>
-> >>>>>> abort_atomic_write is called without inode_lock in closing filp scenarios.
-> >>>>>> What do you think about this?
-> >>>>>
-> >>>>> I'm fine w/ your change as it's more clean, but it's better to drop cow_inode's
-> >>>>> page cache if atomic_write is committed or aborted to avoid caching obsolete page?
-> >>>>
-> >>>> It's better to put that part in f2fs_abort_atomic_write().
-> >>>> On top of that, maybe, we should move
-> >>>> f2fs_do_truncate_blocks(fi->cow_inode, 0, true) part from
-> >>>> f2fs_ioc_start_atomic_write() to f2fs_abort_atomic_write(), too.
-> >>>
-> >>> Oh, we shouldn't touch the f2fs_do_truncate_blocks() part, since there
-> >>> might be some left writeback after aborting atomic write.
-> >>> Plz. review it related to the timing of calling truncate_inode_pages_final().
-> >>
-> >> Looks like the scenario becomes too complicated if I think about more
-> >> than one writer's scenario.
-> >> How about we check writecount in commit_atomic_write ioctl and return
-> >> EBUSY when it's not only one writer?
-> >> In that case, we can make the scenario simple and effective, and we
-> >> can release all the resources in abort_atomic_write().
-> >
-> > Oh, I totally forgot this. We don't use pages of COW inode. So, we
->
-> Yes, after atomic_write is committed or aborted, we don't use pages of
-> cow_inode, so they are obsolete, IMO, we'd better to reclaim them
-> immediately to avoid unnecessary memory use.
+On Tue, 2023-01-31 at 08:35 -0300, Marcelo Tosatti wrote:
+> On Fri, Jan 27, 2023 at 03:55:39AM -0300, Leonardo Br=C3=A1s wrote:
+> > On Thu, 2023-01-26 at 20:13 +0100, Michal Hocko wrote:
+> > > On Thu 26-01-23 15:14:25, Marcelo Tosatti wrote:
+> > > > On Thu, Jan 26, 2023 at 08:45:36AM +0100, Michal Hocko wrote:
+> > > > > On Wed 25-01-23 15:22:00, Marcelo Tosatti wrote:
+> > > > > [...]
+> > > > > > Remote draining reduces interruptions whether CPU=20
+> > > > > > is marked as isolated or not:
+> > > > > >=20
+> > > > > > - Allows isolated CPUs from benefiting of pcp caching.
+> > > > > > - Removes the interruption to non isolated CPUs. See for exampl=
+e=20
+> > > > > >=20
+> > > > > > https://lkml.org/lkml/2022/6/13/2769
+> > > > >=20
+> > > > > This is talking about page allocato per cpu caches, right? In thi=
+s patch
+> > > > > we are talking about memcg pcp caches. Are you sure the same appl=
+ies
+> > > > > here?
+> > > >=20
+> > > > Both can stall the users of the drain operation.
+> > >=20
+> > > Yes. But it is important to consider who those users are. We are
+> > > draining when
+> > > 	- we are charging and the limit is hit so that memory reclaim
+> > > 	  has to be triggered.
+> > > 	- hard, high limits are set and require memory reclaim.
+> > > 	- force_empty - full memory reclaim for a memcg
+> > > 	- memcg offlining - cgroup removel - quite a heavy operation as
+> > > 	  well.
+> > > all those could be really costly kernel operations and they affect
+> > > isolated cpu only if the same memcg is used by both isolated and non-=
+isolated
+> > > cpus. In other words those costly operations would have to be trigger=
+ed
+> > > from non-isolated cpus and those are to be expected to be stalled. It=
+ is
+> > > the side effect of the local cpu draining that is scheduled that affe=
+cts
+> > > the isolated cpu as well.
+> > >=20
+> > > Is that more clear?
+> >=20
+> > I think so, please help me check:
 
-I mean we don't use page cache of the COW inode at all during the
-whole atomic write procedure.
-We only use the page cache of the original file.
+Michal, Roman: Could you please review my argumentation below, so I can
+understand what exactly is wrong ?
 
->
-> The implementation may be:
->
-> - f2fs_ioc_abort_atomic_write
->   - f2fs_abort_atomic_write
->    - truncate_inode_pages_final(cow_inode)
->
-> - f2fs_ioc_commit_atomic_write
->   - f2fs_abort_atomic_write
->    - truncate_inode_pages_final(cow_inode)
->
-> Thanks,
->
-> > don't need to clean them up.
-> >
-> >>
-> >>>
-> >>>>
-> >>>> Thanks,
-> >>>>
-> >>>>>
-> >>>>> Thanks,
-> >>>>>
-> >>>>>>
-> >>>>>> Thanks,
-> >>>>>>
-> >>>>>>
-> >>>>>> On Fri, Jan 27, 2023 at 6:07 PM Chao Yu <chao@kernel.org> wrote:
-> >>>>>>>
-> >>>>>>> Hi Daeho, Jaegeuk,
-> >>>>>>>
-> >>>>>>> Please take a look at patchset in below link:
-> >>>>>>>
-> >>>>>>> https://lore.kernel.org/linux-f2fs-devel/20230109034453.490176-1-chao@kernel.org/T/#t
-> >>>>>>>
-> >>>>>>> In PATCH 4/5, I'm trying to fix the same issue w/ alternative way, let me
-> >>>>>>> know your preference. :)
-> >>>>>>>
-> >>>>>>> One comment as below.
-> >>>>>>>
-> >>>>>>> On 2023/1/13 8:49, Daeho Jeong wrote:
-> >>>>>>>> From: Daeho Jeong <daehojeong@google.com>
-> >>>>>>>>
-> >>>>>>>> To fix a race condition between atomic write aborts, I use the inode
-> >>>>>>>> lock and make COW inode to be re-usable thoroughout the whole
-> >>>>>>>> atomic file inode lifetime.
-> >>>>>>>>
-> >>>>>>>> Reported-by: syzbot+823000d23b3400619f7c@syzkaller.appspotmail.com
-> >>>>>>>> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
-> >>>>>>>> Signed-off-by: Daeho Jeong <daehojeong@google.com>
-> >>>>>>>> ---
-> >>>>>>>>     fs/f2fs/file.c    | 43 ++++++++++++++++++++++++++++---------------
-> >>>>>>>>     fs/f2fs/inode.c   | 11 +++++++++--
-> >>>>>>>>     fs/f2fs/segment.c |  3 ---
-> >>>>>>>>     fs/f2fs/super.c   |  2 --
-> >>>>>>>>     4 files changed, 37 insertions(+), 22 deletions(-)
-> >>>>>>>>
-> >>>>>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> >>>>>>>> index ecbc8c135b49..ff072a9ed258 100644
-> >>>>>>>> --- a/fs/f2fs/file.c
-> >>>>>>>> +++ b/fs/f2fs/file.c
-> >>>>>>>> @@ -1866,7 +1866,10 @@ static int f2fs_release_file(struct inode *inode, struct file *filp)
-> >>>>>>>>                         atomic_read(&inode->i_writecount) != 1)
-> >>>>>>>>                 return 0;
-> >>>>>>>>
-> >>>>>>>> +     inode_lock(inode);
-> >>>>>>>>         f2fs_abort_atomic_write(inode, true);
-> >>>>>>>> +     inode_unlock(inode);
-> >>>>>>>> +
-> >>>>>>>>         return 0;
-> >>>>>>>>     }
-> >>>>>>>>
-> >>>>>>>> @@ -1880,8 +1883,11 @@ static int f2fs_file_flush(struct file *file, fl_owner_t id)
-> >>>>>>>>          * until all the writers close its file. Since this should be done
-> >>>>>>>>          * before dropping file lock, it needs to do in ->flush.
-> >>>>>>>>          */
-> >>>>>>>> -     if (F2FS_I(inode)->atomic_write_task == current)
-> >>>>>>>> +     if (F2FS_I(inode)->atomic_write_task == current) {
-> >>>>>>>> +             inode_lock(inode);
-> >>>>>>>>                 f2fs_abort_atomic_write(inode, true);
-> >>>>>>>> +             inode_unlock(inode);
-> >>>>>>>> +     }
-> >>>>>>>>         return 0;
-> >>>>>>>>     }
-> >>>>>>>>
-> >>>>>>>> @@ -2087,19 +2093,28 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
-> >>>>>>>>                 goto out;
-> >>>>>>>>         }
-> >>>>>>>>
-> >>>>>>>> -     /* Create a COW inode for atomic write */
-> >>>>>>>> -     pinode = f2fs_iget(inode->i_sb, fi->i_pino);
-> >>>>>>>> -     if (IS_ERR(pinode)) {
-> >>>>>>>> -             f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> >>>>>>>> -             ret = PTR_ERR(pinode);
-> >>>>>>>> -             goto out;
-> >>>>>>>> -     }
-> >>>>>>>> +     /* Check if the inode already has a COW inode */
-> >>>>>>>> +     if (fi->cow_inode == NULL) {
-> >>>>>>>> +             /* Create a COW inode for atomic write */
-> >>>>>>>> +             pinode = f2fs_iget(inode->i_sb, fi->i_pino);
-> >>>>>>>> +             if (IS_ERR(pinode)) {
-> >>>>>>>> +                     f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> >>>>>>>> +                     ret = PTR_ERR(pinode);
-> >>>>>>>> +                     goto out;
-> >>>>>>>> +             }
-> >>>>>>>>
-> >>>>>>>> -     ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
-> >>>>>>>> -     iput(pinode);
-> >>>>>>>> -     if (ret) {
-> >>>>>>>> -             f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> >>>>>>>> -             goto out;
-> >>>>>>>> +             ret = f2fs_get_tmpfile(mnt_userns, pinode, &fi->cow_inode);
-> >>>>>>>> +             iput(pinode);
-> >>>>>>>> +             if (ret) {
-> >>>>>>>> +                     f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
-> >>>>>>>> +                     goto out;
-> >>>>>>>> +             }
-> >>>>>>>> +
-> >>>>>>>> +             set_inode_flag(fi->cow_inode, FI_COW_FILE);
-> >>>>>>>> +             clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
-> >>>>>>>> +     } else {
-> >>>>>>>> +             /* Reuse the already created COW inode */
-> >>>>>>>> +             f2fs_do_truncate_blocks(fi->cow_inode, 0, true);
-> >>>>>>>>         }
-> >>>>>>>>
-> >>>>>>>>         f2fs_write_inode(inode, NULL);
-> >>>>>>>> @@ -2107,8 +2122,6 @@ static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
-> >>>>>>>>         stat_inc_atomic_inode(inode);
-> >>>>>>>>
-> >>>>>>>>         set_inode_flag(inode, FI_ATOMIC_FILE);
-> >>>>>>>> -     set_inode_flag(fi->cow_inode, FI_COW_FILE);
-> >>>>>>>> -     clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
-> >>>>>>>>
-> >>>>>>>>         isize = i_size_read(inode);
-> >>>>>>>>         fi->original_i_size = isize;
-> >>>>>>>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> >>>>>>>> index ff6cf66ed46b..4921f7209e28 100644
-> >>>>>>>> --- a/fs/f2fs/inode.c
-> >>>>>>>> +++ b/fs/f2fs/inode.c
-> >>>>>>>> @@ -766,11 +766,18 @@ int f2fs_write_inode(struct inode *inode, struct writeback_control *wbc)
-> >>>>>>>>     void f2fs_evict_inode(struct inode *inode)
-> >>>>>>>>     {
-> >>>>>>>>         struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-> >>>>>>>> -     nid_t xnid = F2FS_I(inode)->i_xattr_nid;
-> >>>>>>>> +     struct f2fs_inode_info *fi = F2FS_I(inode);
-> >>>>>>>> +     nid_t xnid = fi->i_xattr_nid;
-> >>>>>>>>         int err = 0;
-> >>>>>>>>
-> >>>>>>>>         f2fs_abort_atomic_write(inode, true);
-> >>>>>>>>
-> >>>>>>>> +     if (fi->cow_inode) {
-> >>>>>>>> +             clear_inode_flag(fi->cow_inode, FI_COW_FILE);
-> >>>>>>>> +             iput(fi->cow_inode);
-> >>>>>>>> +             fi->cow_inode = NULL;
-> >>>>>>>> +     }
-> >>>>>>>> +
-> >>>>>>>>         trace_f2fs_evict_inode(inode);
-> >>>>>>>>         truncate_inode_pages_final(&inode->i_data);
-> >>>>>>>>
-> >>>>>>>> @@ -857,7 +864,7 @@ void f2fs_evict_inode(struct inode *inode)
-> >>>>>>>>         stat_dec_inline_inode(inode);
-> >>>>>>>>         stat_dec_compr_inode(inode);
-> >>>>>>>>         stat_sub_compr_blocks(inode,
-> >>>>>>>> -                     atomic_read(&F2FS_I(inode)->i_compr_blocks));
-> >>>>>>>> +                     atomic_read(&fi->i_compr_blocks));
-> >>>>>>>>
-> >>>>>>>>         if (likely(!f2fs_cp_error(sbi) &&
-> >>>>>>>>                                 !is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
-> >>>>>>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> >>>>>>>> index ae3c4e5474ef..536d7c674b04 100644
-> >>>>>>>> --- a/fs/f2fs/segment.c
-> >>>>>>>> +++ b/fs/f2fs/segment.c
-> >>>>>>>> @@ -192,9 +192,6 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
-> >>>>>>>>         if (!f2fs_is_atomic_file(inode))
-> >>>>>>>>                 return;
-> >>>>>>>>
-> >>>>>>>> -     clear_inode_flag(fi->cow_inode, FI_COW_FILE);
-> >>>>>>>> -     iput(fi->cow_inode);
-> >>>>>>>> -     fi->cow_inode = NULL;
-> >>>>>>>>         release_atomic_write_cnt(inode);
-> >>>>>>>>         clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
-> >>>>>>>>         clear_inode_flag(inode, FI_ATOMIC_REPLACE);
-> >>>>>>>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> >>>>>>>> index 1f812b9ce985..10463f084d30 100644
-> >>>>>>>> --- a/fs/f2fs/super.c
-> >>>>>>>> +++ b/fs/f2fs/super.c
-> >>>>>>>> @@ -1430,8 +1430,6 @@ static int f2fs_drop_inode(struct inode *inode)
-> >>>>>>>>                         atomic_inc(&inode->i_count);
-> >>>>>>>>                         spin_unlock(&inode->i_lock);
-> >>>>>>>>
-> >>>>>>>> -                     f2fs_abort_atomic_write(inode, true);
-> >>>>>>>
-> >>>>>>> In order to avoid caching obsolete page of cow_inode, how about truncating
-> >>>>>>> them here?
-> >>>>>>>
-> >>>>>>> if (f2fs_is_atomic_file() && cow_inode)
-> >>>>>>>           truncate_inode_pages_final(&cow_inode->i_data);
-> >>>>>>>
-> >>>>>>> Thanks,
-> >>>>>>>
-> >>>>>>>> -
-> >>>>>>>>                         /* should remain fi->extent_tree for writepage */
-> >>>>>>>>                         f2fs_destroy_extent_node(inode);
-> >>>>>>>>
+> >=20
+> > IIUC, we can approach this by dividing the problem in two working modes=
+:
+> > 1 - Normal, meaning no drain_all_stock() running.
+> > 2 - Draining, grouping together pre-OOM and userspace 'config' : changi=
+ng,
+> > destroying, reconfiguring a memcg.
+> >=20
+> > For (1), we will have (ideally) only local cpu working on the percpu st=
+ruct.
+> > This mode will not have any kind of contention, because each CPU will h=
+old it's
+> > own spinlock only.=20
+> >=20
+> > For (2), we will have a lot of drain_all_stock() running. This will mea=
+n a lot
+> > of schedule_work_on() running (on upstream) or possibly causing content=
+ion, i.e.
+> > local cpus having to wait for a lock to get their cache, on the patch p=
+roposal.
+> >=20
+> > Ok, given the above is correct:
+> >=20
+> > # Some arguments point that (1) becomes slower with this patch.
+> >=20
+> > This is partially true: while test 2.2 pointed that local cpu functions=
+ running
+> > time had became slower by a few cycles, test 2.4 points that the usersp=
+ace
+> > perception of it was that the syscalls and pagefaulting actually became=
+ faster:
+> >=20
+> > During some debugging tests before getting the performance on test 2.4,=
+ I
+> > noticed that the 'syscall + write' test would call all those functions =
+that
+> > became slower on test 2.2. Those functions were called multiple million=
+s of
+> > times during a single test, and still the patched version performance t=
+est
+> > returned faster for test 2.4 than upstream version. Maybe the functions=
+ became
+> > slower, but overall the usage of them in the usual context became faste=
+r.
+> >=20
+> > Is not that a small improvement?
+> >=20
+> > # Regarding (2), I notice that we fear contention=20
+> >=20
+> > While this seems to be the harder part of the discussion, I think we ha=
+ve enough
+> > data to deal with it.=20
+> >=20
+> > In which case contention would be a big problem here?=C2=A0
+> > IIUC it would be when a lot of drain_all_stock() get running because th=
+e memory
+> > limit is getting near.=C2=A0I mean, having the user to create / modify =
+a memcg
+> > multiple times a second for a while is not something that is expected, =
+IMHO.
+>=20
+> Considering that the use of spinlocks with remote draining is the more ge=
+neral solution,
+> what would be a test-case to demonstrate a contention problem?
+
+IIUC we could try to reproduce a memory tight workload that keeps allocatin=
+g /
+freeing from different cpus (without hitting OOM).
+
+Michal, Roman: Is that correct? You have any workload like that so we can t=
+est?
+
+>=20
+> > Now, if I assumed correctly and the case where contention could be a pr=
+oblem is
+> > on a memcg with high memory pressure, then we have the argument that Ma=
+rcelo
+> > Tosatti brought to the discussion[P1]: using spinlocks on percpu caches=
+ for page
+> > allocation brought better results than local_locks + schedule_work_on()=
+.
+> >=20
+> > I mean, while contention would cause the cpu to wait for a while before=
+ getting
+> > the lock for allocating a page from cache, something similar would happ=
+en with
+> > schedule_work_on(), which would force the current task to wait while th=
+e
+> > draining happens locally.=C2=A0
+> >=20
+> > What I am able to see is that, for each drain_all_stock(), for each cpu=
+ getting
+> > drained we have the option to (a) (sometimes) wait for a lock to be fre=
+ed, or
+> > (b) wait for a whole context switch to happen.
+> > And IIUC, (b) is much slower than (a) on average, and this is what caus=
+es the
+> > improved performance seen in [P1].
+>=20
+> Moreover, there is a delay for the remote CPU to execute a work item=20
+> (there could be high priority tasks, IRQ handling on the remote CPU,
+> which delays execution of the work item even further).
+>=20
+> Also, the other point is that the spinlock already exists for
+> PREEMPT_RT (which means that any potential contention issue=20
+> with the spinlock today is limited to PREEMPT_RT users).
+>=20
+> So it would be good to point out a specific problematic=20
+> testcase/scenario with using the spinlock in this particular case?
+
+
+Oh, that's a good point, but IIUC spin_lock() replaces local_lock() in memc=
+g,
+meaning it will always run in the same CPU, and there should only be any
+contention if the memcg local cpu functions get preempted by something that
+calls a memcg local cpu function.
+
+>=20
+> > (I mean, waiting while drain_local_stock() runs in the local CPU vs wai=
+ting for
+> > it to run on the remote CPU may not be that different, since the cachel=
+ine is
+> > already writen to by the remote cpu on Upstream)
+> >=20
+> > Also according to test 2.2, for the patched version, drain_local_stock(=
+) have
+> > gotten faster (much faster for 128 cpus), even though it does all the d=
+raining
+> > instead of just scheduling it on the other cpus.=C2=A0
+> > I mean, summing that to the brief nature of local cpu functions, we may=
+ not hit
+> > contention as much as we are expected.
+> >=20
+> > ##
+> >=20
+> > Sorry for the long text.
+> > I may be missing some point, please let me know if that's the case.
+> >=20
+> > Thanks a lot for reviewing!
+> > Leo
+> >=20
+> > [P1]: https://lkml.org/lkml/2022/6/13/2769
+> >=20
+> >=20
+>=20
+
+Thanks!
+Leo
+
