@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A4C686E48
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1697B686E4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbjBASln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:41:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S232007AbjBASmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231661AbjBASlj (ORCPT
+        with ESMTP id S231934AbjBASmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:41:39 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4B06A69;
-        Wed,  1 Feb 2023 10:41:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675276887; x=1706812887;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Nk2UjAD3MyqHuQla+/DxMZglQldIVZk+vp5CLUYP/LQ=;
-  b=Kz/8ANOIGY5PdmMX8hmSZ4JjpjW5gfDUau6eeXRpf7eywjM0MQduoB6W
-   oWR+Lw/jY7xjnTsy0uuNTRleiwtoh/aO+Z5OEzET0+/e/K7s/bV58fPxA
-   FnrSpubbbCeYKyhD/nPeXIZw00l2N6pZnYB5yzbbEzc3FSsGzyQaCzAIP
-   03cBYfnIfRKzv6KZnJuKNRgbbGDP+L5MGgUoTEm/D9vA1Nn+WDFw0z+bq
-   zWRXmafeFFfFttvhutC4ZxIkBl5xIduw8v+yq4WzPe8YDxwLgKRQNpxTB
-   QHJyYpLXiE2Hl1g7q2eX19zxWPb5fLH8UqhPDqGNlGAKROoebQpwhAbvf
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="328249072"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="328249072"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:41:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="993793228"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="993793228"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Feb 2023 10:41:20 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pNI2m-000pi2-0y;
-        Wed, 01 Feb 2023 20:41:16 +0200
-Date:   Wed, 1 Feb 2023 20:41:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     John Stultz <jstultz@google.com>
-Cc:     Yongqin Liu <yongqin.liu@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Won Chung <wonchung@google.com>,
-        David Gow <davidgow@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        llvm@lists.linux.dev, Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
-Message-ID: <Y9qyTLmfdD2lR+YU@smile.fi.intel.com>
-References: <20221101222520.never.109-kees@kernel.org>
- <20221101223321.1326815-5-keescook@chromium.org>
- <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
- <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
+        Wed, 1 Feb 2023 13:42:00 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC46346A2
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 10:41:56 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id z11so18684415ede.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 10:41:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6ehnntGKDa7eVQQXOOpPUsFKwUBTB8JqaOLp9/2yOYY=;
+        b=DTd+/4e/1SnRBgPOnGHgrZt3/SmKSOx9lc9nMYZG2Fy3mp9d+TU+hhjX1wchEwAUzs
+         b8hdk/wLEYHNSHU+DOvR0QoHimi9RTBefYQKs1Ee/1ZphQ++2Ek7w+LvPM1qaZo0tvQT
+         EdtNGvlOUYPlLem7f0ZBLVHMuejFHNJRC5nQs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6ehnntGKDa7eVQQXOOpPUsFKwUBTB8JqaOLp9/2yOYY=;
+        b=eOHJVolXSKol3BguvSxJ8cGunBkJrAWTBmx1kFk50wpKG3sTMyUuVmKAumgp7OZdSW
+         0MXXBgkZW+rH1FKoLBT8DQdXqDDnRrKWj+Yv/odmbdGjej1xysM1JK7OdR400xjHOylQ
+         gONAupoqqE4rC/gweAS3ra1O6t9AP346HQduI4iGBNbgOjZakGZNT7L/L0KduyT08fMZ
+         eb1EnjvFT6z/ReusBTIRosqFbbW9fKSk3+PTCsmqOm5wV34bh2vmtxupP6BXTATx7y/h
+         Qa2vfndz2E6RkXMnF2AiJEtz65m9RoW8pNJK7GDBw19dAcxmA4M210R8WtTd8nUeskvQ
+         CoqQ==
+X-Gm-Message-State: AO0yUKXFFXcKM4IboDSzeJyJJlZgARgcmtoy+6w10qIQYhg9eUiuSRDS
+        kcJPnLA6gr0/QzuQTjMys44y9LD43qmG9RfHgXQ=
+X-Google-Smtp-Source: AK7set8nYjzzaV2iBTo7lUF3cbyHEb/GJPgbq+LfgGoeBp7pPPWeAmfNtMD9gCqv2rYxolb/qcm8ZA==
+X-Received: by 2002:aa7:c448:0:b0:4a0:af87:b3ab with SMTP id n8-20020aa7c448000000b004a0af87b3abmr2807727edr.36.1675276915228;
+        Wed, 01 Feb 2023 10:41:55 -0800 (PST)
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
+        by smtp.gmail.com with ESMTPSA id b20-20020aa7d494000000b0049b58744f93sm10182545edr.81.2023.02.01.10.41.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 10:41:54 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso2091967wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 10:41:54 -0800 (PST)
+X-Received: by 2002:a05:600c:a03:b0:3dc:42e7:8d38 with SMTP id
+ z3-20020a05600c0a0300b003dc42e78d38mr157425wmp.93.1675276914417; Wed, 01 Feb
+ 2023 10:41:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230201101112.1.Ia7bc164622c8bb2dd7720ecd456672ccfd70fc5b@changeid>
+In-Reply-To: <20230201101112.1.Ia7bc164622c8bb2dd7720ecd456672ccfd70fc5b@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 1 Feb 2023 10:41:24 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UKDbnw7b_sVWBS2aS4dXqDeDCcQdgKHfU4zvGWa0+S8A@mail.gmail.com>
+Message-ID: <CAD=FV=UKDbnw7b_sVWBS2aS4dXqDeDCcQdgKHfU4zvGWa0+S8A@mail.gmail.com>
+Subject: Re: [PATCH] docs: cpufreq: Frequencies are in Hz, not kHz
+To:     rafael@kernel.org, viresh.kumar@linaro.org, corbet@lwn.net
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 12:11:41AM -0800, John Stultz wrote:
-> On Tue, Jan 31, 2023 at 11:36 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
+Hi,
 
-...
+On Wed, Feb 1, 2023 at 10:11 AM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> Though the documentation for the cpufreq files has always specified
+> that the frequencies are in kHz, they simply aren't. For as long as I
+> can remember looking at these files they've always been in straight
+> Hz. Fix the docs.
+>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> NOTE: git blame shows that this has been wrong since before the kernel
+> switched to git. I've tagged the first git commit as Fixes, but we
+> could easily just drop the Fixes tag if that's a better way to go.
+>
+>  Documentation/admin-guide/pm/cpufreq.rst | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 
-> data->nr_sensors = 1;
-> data->sensor = devm_kzalloc(dev, sizeof(*data->sensor) *
->    data->nr_sensors, GFP_KERNEL);
+Ugh. Please ignore this patch. Somehow I read these numbers many times
+and convinced myself that it was Hz enough to actually post a patch.
+...but then someone corrected me and pointed out that I'm utterly and
+completely wrong. Sorry for the noise.
 
-Side note: This should use devm_kcalloc().
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+-Doug
