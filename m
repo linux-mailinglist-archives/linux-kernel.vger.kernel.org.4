@@ -2,140 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B80686345
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC1F686343
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjBAKBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
+        id S229609AbjBAKBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:01:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjBAKBM (ORCPT
+        with ESMTP id S232303AbjBAKAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:01:12 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE72611FB;
-        Wed,  1 Feb 2023 02:01:08 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R281e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VagQuEQ_1675245665;
-Received: from 30.97.49.11(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VagQuEQ_1675245665)
-          by smtp.aliyun-inc.com;
-          Wed, 01 Feb 2023 18:01:06 +0800
-Message-ID: <0d2ef9d6-3b0e-364d-ec2f-c61b19d638e2@linux.alibaba.com>
-Date:   Wed, 1 Feb 2023 18:01:05 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
- image filesystem
-To:     Alexander Larsson <alexl@redhat.com>,
-        Jingbo Xu <jefflexu@linux.alibaba.com>,
-        Amir Goldstein <amir73il@gmail.com>, gscrivan@redhat.com,
-        brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        david@fromorbit.com, viro@zeniv.linux.org.uk,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>
-References: <cover.1674227308.git.alexl@redhat.com>
- <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
- <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
- <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
- <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
- <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
- <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
- <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com>
- <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
- <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com>
- <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
- <071074ad149b189661681aada453995741f75039.camel@redhat.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <071074ad149b189661681aada453995741f75039.camel@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Feb 2023 05:00:55 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A4AE32517
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:00:52 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:49242.919551229
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id C7CAB1002AE;
+        Wed,  1 Feb 2023 18:00:49 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-5cf44cb88-lf9qz with ESMTP id 2a85ec2559e34408a72b32d4ebc4d7fa for mingo@redhat.com;
+        Wed, 01 Feb 2023 18:00:50 CST
+X-Transaction-ID: 2a85ec2559e34408a72b32d4ebc4d7fa
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From:   Song Chen <chensong_2000@189.cn>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Song Chen <chensong_2000@189.cn>
+Subject: [PATCH] kernel/sched/core: adjust rt_priority accordingly when prio is changed
+Date:   Wed,  1 Feb 2023 18:01:20 +0800
+Message-Id: <1675245680-2811-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When a high priority process is acquiring a rtmutex which is held by a
+low priority process, the latter's priority will be boosted up by calling
+rt_mutex_setprio->__setscheduler_prio.
 
+However, p->prio is changed but p->rt_priority is not, as a result, the
+equation between prio and rt_priority is broken, which is:
 
-On 2023/2/1 17:46, Alexander Larsson wrote:
+	prio = MAX_RT_PRIO - 1 - rt_priority
 
-...
+It's confusing to the user when it calls sched_getparam, which only
+returns rt_priority.
 
->>
->>                                    | uncached(ms)| cached(ms)
->> ----------------------------------|-------------|-----------
->> composefs (with digest)           | 326         | 135
->> erofs (w/o -T0)                   | 264         | 172
->> erofs (w/o -T0) + overlayfs       | 651         | 238
->> squashfs (compressed)	            | 538         | 211
->> squashfs (compressed) + overlayfs | 968         | 302
-> 
-> 
-> Clearly erofs with sparse files is the best fs now for the ro-fs +
-> overlay case. But still, we can see that the additional cost of the
-> overlayfs layer is not negligible.
-> 
-> According to amir this could be helped by a special composefs-like mode
-> in overlayfs, but its unclear what performance that would reach, and
-> we're then talking net new development that further complicates the
-> overlayfs codebase. Its not clear to me which alternative is easier to
-> develop/maintain.
-> 
-> Also, the difference between cached and uncached here is less than in
-> my tests. Probably because my test image was larger. With the test
-> image I use, the results are:
-> 
->                                    | uncached(ms)| cached(ms)
-> ----------------------------------|-------------|-----------
-> composefs (with digest)           | 681         | 390
-> erofs (w/o -T0) + overlayfs       | 1788        | 532
-> squashfs (compressed) + overlayfs | 2547        | 443
-> 
-> 
-> I gotta say it is weird though that squashfs performed better than
-> erofs in the cached case. May be worth looking into. The test data I'm
-> using is available here:
+This patch addresses this issue by adjusting rt_priority according to
+the new value of prio, what's more, it also returns normal_prio for
+CFS processes instead of just a zero.
 
-As another wild guess, cached performance is a just vfs-stuff.
+Signed-off-by: Song Chen <chensong_2000@189.cn>
+---
+ kernel/sched/core.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-I think the performance difference may be due to ACL (since both
-composefs and squashfs don't support ACL).  I already asked Jingbo
-to get more "perf data" to analyze this but he's now busy in another
-stuff.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index bb1ee6d7bdde..1c2c4ada08cc 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6933,14 +6933,16 @@ EXPORT_SYMBOL(default_wake_function);
+ 
+ static void __setscheduler_prio(struct task_struct *p, int prio)
+ {
++	p->prio = prio;
++
+ 	if (dl_prio(prio))
+ 		p->sched_class = &dl_sched_class;
+-	else if (rt_prio(prio))
++	else if (rt_prio(prio)) {
++		p->rt_priority = MAX_RT_PRIO - 1 - prio;
+ 		p->sched_class = &rt_sched_class;
++	}
+ 	else
+ 		p->sched_class = &fair_sched_class;
+-
+-	p->prio = prio;
+ }
+ 
+ #ifdef CONFIG_RT_MUTEXES
+@@ -8058,6 +8060,8 @@ SYSCALL_DEFINE2(sched_getparam, pid_t, pid, struct sched_param __user *, param)
+ 
+ 	if (task_has_rt_policy(p))
+ 		lp.sched_priority = p->rt_priority;
++	else
++		lp.sched_priority = normal_prio(p);
+ 	rcu_read_unlock();
+ 
+ 	/*
+-- 
+2.25.1
 
-Again, my overall point is quite simple as always, currently
-composefs is a read-only filesystem with massive symlink-like files.
-It behaves as a subset of all generic read-only filesystems just
-for this specific use cases.
-
-In facts there are many options to improve this (much like Amir
-said before):
-   1) improve overlayfs, and then it can be used with any local fs;
-
-   2) enhance erofs to support this (even without on-disk change);
-
-   3) introduce fs/composefs;
-
-In addition to option 1), option 2) has many benefits as well, since
-your manifest files can save real regular files in addition to composefs
-model.
-
-Even if you guys still consider 3), I'm not sure that is all codebase
-you will just do bugfix and don't add any new features like what I
-said.  So eventually, I still think that is another read-only fs which
-is much similar to compressed-part-truncated EROFS.
-
-
-Thanks,
-Gao Xiang
-
-
->    
-> https://my.owndrive.com/index.php/s/irHJXRpZHtT3a5i
-> 
-> 
