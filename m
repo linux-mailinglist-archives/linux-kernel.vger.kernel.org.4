@@ -2,104 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846E8686570
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F0A686576
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjBALcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 06:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S230461AbjBALdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 06:33:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjBALcE (ORCPT
+        with ESMTP id S229574AbjBALdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 06:32:04 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D3ECDC6
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:32:03 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 143so12256890pgg.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 03:32:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8BBlFMphcYAKGu8ilzPr5Z81/fHgzzMqhp9aruKhD+k=;
-        b=au5gJa1iq220Ld8ZF6MxmOrYAyHIOGCXtNmqgX/IMCnFlogzvvEwcW12Gdoi/Zax4k
-         EZK1jbpR1vUuym1nFbHScy157/n2kdUnRl423j+ble5oXFtDeRU3QkG1MwWo9CmnEG1E
-         e09TS3oWTWI+4YBxwdLunnsLQF0ecBi7y0LDKvlMpb+lQNgeDvrxPKJHDa7q93HkvERT
-         QkcCo0so/Z8j7pBg0qAGliK7lAcyuTom7o5J/wre9d3SjwKYoKSDUIrtas5+bNKvETqz
-         2sv86qfkJ0bmdj+bs7SO9TjUz739qXefSwj1W0jzG2Bo8I8xmjJzmk/9A54n4QzNpZya
-         oTkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8BBlFMphcYAKGu8ilzPr5Z81/fHgzzMqhp9aruKhD+k=;
-        b=i//sUWL12TL4BRMYOK2T9xoqdzNsgb5RdUQNGH7VgHgB+nZo7fsWNALY313OlfwtdI
-         CeThce7oGX95JHpneTmSlvTw6cd+m80Vsds7WcegLLQgV7dLGo0tOxDTkZD2cSyvdGsv
-         I/evDpYWoDYKgYdvTvqH74q53s8p3uGjChe918Jt+PnClBd0CBUOf9m34xjZvRI62yA8
-         akIfjWgCMxYVJ8fvec6AoC4PE5MMGiNsABK11maf0TzyYD+SRWxFdYSieC3FenQ0NwRk
-         vNejws6orH/lMhfkQa0PV8mXol9f1Ov/PM8oasWuAZTCAFWf0UCe2fxw5e3cMnGN5w2l
-         bvXQ==
-X-Gm-Message-State: AO0yUKUGLLbgFRFfJ0c7p6gLNh7tSsQWlsWU/q0/BBZV017hOAH/sjIQ
-        OYBW7HkGKpTIdTrGHF4PdImXeA==
-X-Google-Smtp-Source: AK7set+C0uPsa2mdXLmzGnjX/RqEqmB7QuIr0iNYXeo+TID3anmh3rbkC6bKeQcgcvGxz8S+AWYnxg==
-X-Received: by 2002:aa7:8dd2:0:b0:593:3ab1:a144 with SMTP id j18-20020aa78dd2000000b005933ab1a144mr2006259pfr.12.1675251122558;
-        Wed, 01 Feb 2023 03:32:02 -0800 (PST)
-Received: from localhost.localdomain ([124.123.179.186])
-        by smtp.gmail.com with ESMTPSA id y15-20020a056a001c8f00b0059260f01115sm10024336pfw.76.2023.02.01.03.31.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 03:32:02 -0800 (PST)
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-To:     christophe.leroy@csgroup.eu
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        mpe@ellerman.id.au, npiggin@gmail.com, pali@kernel.org,
-        arnd@arndb.de, anders.roxell@linaro.org, llvm@lists.linux.dev,
-        nathan@kernel.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Subject: [PATCH 1/2] powerpc/64: Set default CPU in Kconfig
-Date:   Wed,  1 Feb 2023 17:01:55 +0530
-Message-Id: <20230201113155.18113-1-naresh.kamboju@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <76c11197b058193dcb8e8b26adffba09cfbdab11.1674632329.git.christophe.leroy@csgroup.eu>
-References: <76c11197b058193dcb8e8b26adffba09cfbdab11.1674632329.git.christophe.leroy@csgroup.eu>
+        Wed, 1 Feb 2023 06:33:22 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D87113F1
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:33:20 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1675251198;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nI1PAwKddaSlonMOIonB4C8xfAlPiE+lPzih70stM2Q=;
+        b=DEP0O1kN6+ScaSW6M0RPcv/dP/fRnYqSxB1GUlqBk3fBf5Rz31zEVvaXsgLWhJ3l0q9qDf
+        p88rrVpmb+uDEhJ2WEcn/qm6KA/lyhhRAj6y546vrUFf1H1Iub12F036/L18p7LH3HenTA
+        1j4JwR2ZNFJwx7Enz0GGndT0LLLTWFqZ+c3NH936h5hv2vKTWnSDBmu7k2HZ2hBSnBYK/F
+        44KVo0WHhUmy2nuj306rJt6lbcdmSUf/9ljZJK+GcdkB8hbz5J7ufdlsSbo9LCDru/renp
+        2sjsLwwMD2shZgKiEZn5BOXr8MHczLZp7SaYQBQqRZ9Hd1lpMnkt/oqj6vsBkQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1675251198;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nI1PAwKddaSlonMOIonB4C8xfAlPiE+lPzih70stM2Q=;
+        b=Ig6VyHyEiPO2YkxAMHiu3NPx6My5ePCG7Qh0v6zCmtEwdojwebYra/4Lti5kIshJvQsSNN
+        Haz3abKT7gzfHVCw==
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com, eric.devolder@oracle.com
+Subject: Re: [PATCH v18 5/7] kexec: exclude hot remove cpu from elfcorehdr
+ notes
+In-Reply-To: <20230131224236.122805-6-eric.devolder@oracle.com>
+References: <20230131224236.122805-1-eric.devolder@oracle.com>
+ <20230131224236.122805-6-eric.devolder@oracle.com>
+Date:   Wed, 01 Feb 2023 12:33:17 +0100
+Message-ID: <87sffpzkle.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build regression started from next-20230131.
+Eric!
 
-Regressions found on powerpc:
+On Tue, Jan 31 2023 at 17:42, Eric DeVolder wrote:
+> --- a/kernel/crash_core.c
+> +++ b/kernel/crash_core.c
+> @@ -366,6 +366,14 @@ int crash_prepare_elf64_headers(struct kimage *image, struct crash_mem *mem,
+>  
+>  	/* Prepare one phdr of type PT_NOTE for each present CPU */
+>  	for_each_present_cpu(cpu) {
+> +#ifdef CONFIG_CRASH_HOTPLUG
+> +		if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
+> +			/* Skip the soon-to-be offlined cpu */
+> +			if ((image->hp_action == KEXEC_CRASH_HP_REMOVE_CPU) &&
+> +				(cpu == image->offlinecpu))
+> +				continue;
+> +		}
+> +#endif
 
-  build/clang-nightly-tqm8xx_defconfig
-  build/clang-nightly-ppc64e_defconfig
+I'm failing to see how the above is correct in any way. Look at the
+following sequence of events:
 
+     1) Offline CPU$N
 
-make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- HOSTCC=clang CC=clang LLVM=1 LLVM_IAS=0 tqm8xx_defconfig
-make --silent --keep-going --jobs=8 O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-gnu- HOSTCC=clang CC=clang LLVM=1 LLVM_IAS=0
+        -> Prepare elf headers with CPU$N excluded
 
-error: unknown target CPU '860'
-note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
-make[2]: *** [/builds/linux/scripts/Makefile.build:114: scripts/mod/devicetable-offsets.s] Error 1
-error: unknown target CPU '860'
-note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
-make[2]: *** [/builds/linux/scripts/Makefile.build:252: scripts/mod/empty.o] Error 1
+     2) Another hotplug operation != 'Online CPU$N'
 
-    
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+        -> Prepare elf headers with CPU$N included
 
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230201/testrun/14479384/suite/build/test/clang-nightly-tqm8xx_defconfig/history/
+Also in case of loading the crash kernel in the situation where not all
+present CPUs are online (think boot time SMT disable) then your
+resulting crash image will contain all present CPUs and none of the
+offline CPUs are excluded.
 
-The bisection pointed to this commit,
-  45f7091aac35 ("powerpc/64: Set default CPU in Kconfig")
+How does that make any sense at all?
 
---
-Linaro LKFT
-https://lkft.linaro.org
+This image->hp_action and image->offlinecpu dance is engineering
+voodoo. You just can do:
+
+        for_each_present_cpu(cpu) {
+            if (!cpu_online(cpu))
+            	continue;
+            do_stuff(cpu);
+
+which does the right thing in all situations and can be further
+simplified to:
+
+        for_each_online_cpu(cpu) {
+            do_stuff(cpu);
+
+without the need for ifdefs or whatever.
+
+No?
+
+Thanks,
+
+        tglx
