@@ -2,118 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68704686F2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1516686F2F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232113AbjBATrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        id S232292AbjBATrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:47:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjBATr1 (ORCPT
+        with ESMTP id S231438AbjBATrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:47:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3842C841A1;
-        Wed,  1 Feb 2023 11:47:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E29F5B8228F;
-        Wed,  1 Feb 2023 19:47:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01C89C433D2;
-        Wed,  1 Feb 2023 19:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675280835;
-        bh=A9tTG8dWtmVDJMbXWhKt0soYbv6crDy7nFqy+MC4d2k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kYyDEcOIYUjcY88IYKRyJ3v0ffkxC6DFXM6AOwI/RNsVCxS8ZVdc+hWO33907UT3q
-         9aHeIdmineumpKvWWoJWqkSsy1kh/2l5XfRRyyFPP3hYPPA+5TcsQV/BMCWl7gCLMF
-         EcPAQDIhcnGzYXwKo5gmC2+DKybMMVeiCssPK3OQ=
-Date:   Wed, 1 Feb 2023 20:47:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH] maple: remove unneeded maple_bus_uevent() callback.
-Message-ID: <Y9rBwMf6p6QmkVPp@kroah.com>
-References: <20230201125642.624255-1-gregkh@linuxfoundation.org>
- <2f10003fcf3671ccdd285952ba76153f5c2d5307.camel@physik.fu-berlin.de>
+        Wed, 1 Feb 2023 14:47:35 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393A67D6CF
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:47:25 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id q19so8905563edd.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:47:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=grsecurity.net; s=grsec;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tthTFJYUUhy2iSLAXFe4WJFnmH1a4NUAK3uBBkBZ1+Q=;
+        b=usBEPstacT7Yk5Rq3V0KVu6gtI7AkE7nkXeyVLrwO2W0J6hDivESJB3+O55HaEXYx3
+         ioZ0wl1r+kgaIpoGE1zCXwWRDBG7sIk9IPRCj97OCs9EV+52eKWjMrk6BHzRJX9qUMP9
+         mPyejeXtxc3vrWEwWlyL8nQMIWQFweVHr5awAqWg8JgSvbqsLWskg9BwdiogsLVPWvx/
+         A+WzjtXpuOeoi3QbuKrX9uUgB0RhZDx8CvEDTZCfTzuFkIZEIYpUR9olvXizYHB20CoK
+         lr9kyZBU+2oiDauiHNsK5Vyz3jz5hKUYfegRi9oCs40QY75fMuuIZJBg727caGvlDOdN
+         fdnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tthTFJYUUhy2iSLAXFe4WJFnmH1a4NUAK3uBBkBZ1+Q=;
+        b=JkHgcVlJGx4J61hy0kzUZ6mPAUpTrwf2RnpQeE4+m6TNvkzles7hhxEvzwfRAZj0Pq
+         EmMQnjyde+aCImkVEQzXt1Xv4ViepqSg9Uzrl/j/lpc8ddv/ri1yoVyj6w8BmAI0jA4X
+         FuSCvdJvCfIQ6H1IhzF6IRbRY28nkZYAvuD/Oram9MYk0UhGMDDw3dCvzjVO3p8wEhPZ
+         ReZoCbEhyJANGWNyap1bVGZ+NFNaJU7bJhpqR/yyhUSjcLidX6eFW9EY4jdEBBJz2BUq
+         FRn88hu3CDv9kPFCrnFILWRXtrXSZaNGI7VojGGkcBj0xBo0bV2KK2lwlRIQrIr0y+hw
+         hT1A==
+X-Gm-Message-State: AO0yUKWxE9aM0hDhXGq0WYJYsQXvhsxLqZug106C6ImRgWd/W09xRdSa
+        xndZWRQmWbDTy/2M3WtPTsSRZg==
+X-Google-Smtp-Source: AK7set+Fc1gEX1k5nC/2ryukBTh5CkW6m9XkfztkdVqCmjJPcBXhRLHsACQClLJTlr3PYyXqYB9lcg==
+X-Received: by 2002:a50:aa92:0:b0:492:bf3d:1a15 with SMTP id q18-20020a50aa92000000b00492bf3d1a15mr3769817edc.1.1675280843700;
+        Wed, 01 Feb 2023 11:47:23 -0800 (PST)
+Received: from ?IPV6:2003:f6:af11:1a00:4837:80b9:2673:1df7? (p200300f6af111a00483780b926731df7.dip0.t-ipconnect.de. [2003:f6:af11:1a00:4837:80b9:2673:1df7])
+        by smtp.gmail.com with ESMTPSA id e9-20020a50fb89000000b0048ecd372fc9sm10335233edq.2.2023.02.01.11.47.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 11:47:23 -0800 (PST)
+Message-ID: <77df9cb1-e978-7fb0-9b8b-e0264a2f605c@grsecurity.net>
+Date:   Wed, 1 Feb 2023 20:47:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f10003fcf3671ccdd285952ba76153f5c2d5307.camel@physik.fu-berlin.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 0/3] KVM: MMU: performance tweaks for heavy CR0.WP
+ users
+Content-Language: en-US, de-DE
+To:     kvm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20230118145030.40845-1-minipli@grsecurity.net>
+From:   Mathias Krause <minipli@grsecurity.net>
+In-Reply-To: <20230118145030.40845-1-minipli@grsecurity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 08:05:21PM +0100, John Paul Adrian Glaubitz wrote:
-> Hi Greg!
-> 
-> On Wed, 2023-02-01 at 13:56 +0100, Greg Kroah-Hartman wrote:
-> > The driver core recently changed the uevent bus callback to take a const
-> > pointer, and the maple_bus_uevent() was not correctly fixed up.  Instead
-> > of fixing the function parameter types, just remove the callback
-> > entirely as it does not do anything, so it is not necessary.
-> > 
-> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> > Cc: Rich Felker <dalias@libc.org>
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > Fixes: 2a81ada32f0e ("driver core: make struct bus_type.uevent() take a const *")
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> > sh maintainers, I'll take this through my tree as that's where the
-> > offending commit is that causes the build breakage.
-> > 
-> >  drivers/sh/maple/maple.c | 7 -------
-> >  1 file changed, 7 deletions(-)
-> > 
-> > diff --git a/drivers/sh/maple/maple.c b/drivers/sh/maple/maple.c
-> > index e24e220e56ee..e05473c5c267 100644
-> > --- a/drivers/sh/maple/maple.c
-> > +++ b/drivers/sh/maple/maple.c
-> > @@ -760,12 +760,6 @@ static int maple_match_bus_driver(struct device *devptr,
-> >  	return 0;
-> >  }
-> >  
-> > -static int maple_bus_uevent(struct device *dev,
-> > -			    struct kobj_uevent_env *env)
-> > -{
-> > -	return 0;
-> > -}
-> > -
-> >  static void maple_bus_release(struct device *dev)
-> >  {
-> >  }
-> > @@ -782,7 +776,6 @@ static struct maple_driver maple_unsupported_device = {
-> >  struct bus_type maple_bus_type = {
-> >  	.name = "maple",
-> >  	.match = maple_match_bus_driver,
-> > -	.uevent = maple_bus_uevent,
-> >  };
-> >  EXPORT_SYMBOL_GPL(maple_bus_type);
-> 
-> Through which tree is this supposed to be picked up?
+I just send a v3 which should appear any time soon here:
 
-As the comment below the --- line said above:
+https://lore.kernel.org/kvm/20230201194604.11135-1-minipli@grsecurity.net/
 
-	sh maintainers, I'll take this through my tree as that's where the
-	offending commit is that causes the build breakage.
-
-So I took it :)
-
-thanks,
-
-greg k-h
+Thanks,
+Mathias
