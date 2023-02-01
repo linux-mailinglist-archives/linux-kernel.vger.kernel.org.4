@@ -2,168 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11D2686D9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD96686D9B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjBASEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
+        id S231903AbjBASE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbjBASEm (ORCPT
+        with ESMTP id S231864AbjBASEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:04:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A32470B7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 10:03:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675274635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NHqnRVrVGsH0s7BP5ODEjlWZFmtlmfotNCTTEzO/Y1o=;
-        b=ENuUVF4mS0NSpc3hVEh3S49wQw470fIlulGXpRgPygv++IRQvkrPT3UG8MSu0XL9JGP4GU
-        LTm+57ajtLxlrXUeBAOF+tP6Bn+eXz284FBEPbhCpbDS98n4rDWu7JJs8xTb8viUbpCtWC
-        fEzet9VYkrxNTRG9MHksLtjyfUBw0W4=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-248-4fqCDs80Pv6-r87TPDZWoA-1; Wed, 01 Feb 2023 13:03:53 -0500
-X-MC-Unique: 4fqCDs80Pv6-r87TPDZWoA-1
-Received: by mail-wr1-f72.google.com with SMTP id r6-20020adff106000000b002bfe5fb9649so2033677wro.14
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 10:03:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NHqnRVrVGsH0s7BP5ODEjlWZFmtlmfotNCTTEzO/Y1o=;
-        b=eZvYqLEQJ6PDR5jDi5lRW+ZaUMRKkG/AbOwpAt+iiQw8OZbiQdjp0Qg1olgHjIe9hJ
-         AFTZCqrvKFyzfW7AlSsKVQrk+2az3xKl0t2nPSVLnK0VBKH37zPkbAXDqREDsNKrq17x
-         8730OEq4+hntf/r6963nu1tS1UmtzZENcX4e3txXHx0y6cD1JWG5VPGl3ZFI0/Ys4bMC
-         2BSiG5dICx7zFoms8C5NdfI9fTm00FVXJaYz0f9IvJRWOXV3IDK5j7agdaKYLi6wKN+b
-         ErFD6Nv0Boh50E3NeciYq0hggHdgIKlelFLgbm02wVbMpI6/O2TbvEPeOrR0YmU0MuTD
-         mJfQ==
-X-Gm-Message-State: AO0yUKUI/doP0WRGUaApL7NNU0qrVOWYyzPpUjR6SiSX4jTZbsxK8OXp
-        MVVIHgeZBU7pj1MkHJMBGnDhmiwCs5eD7wk5ekqjPmYv5zsapuSBcXhZ2Jkz5+JI7t6UaY6NkAT
-        5KD0PFoRFtqT1d4Qoj3Thz+i4
-X-Received: by 2002:a05:600c:4e53:b0:3dc:5390:6499 with SMTP id e19-20020a05600c4e5300b003dc53906499mr2951547wmq.1.1675274632546;
-        Wed, 01 Feb 2023 10:03:52 -0800 (PST)
-X-Google-Smtp-Source: AK7set8RWgxHAxxme3PCml6Vw4YQkL/Vp0Q30f/GZD4RoMNh8TWXDsQ+OvBtB+e0X6QNaxXSFYW6iA==
-X-Received: by 2002:a05:600c:4e53:b0:3dc:5390:6499 with SMTP id e19-20020a05600c4e5300b003dc53906499mr2951490wmq.1.1675274632249;
-        Wed, 01 Feb 2023 10:03:52 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:3100:e20e:4ace:6f25:6a79? (p200300cbc7053100e20e4ace6f256a79.dip0.t-ipconnect.de. [2003:cb:c705:3100:e20e:4ace:6f25:6a79])
-        by smtp.gmail.com with ESMTPSA id p11-20020a1c544b000000b003dc4fd6e624sm2570630wmi.19.2023.02.01.10.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 10:03:51 -0800 (PST)
-Message-ID: <fb8446af-fd87-5609-05bf-5064615c7918@redhat.com>
-Date:   Wed, 1 Feb 2023 19:03:49 +0100
+        Wed, 1 Feb 2023 13:04:44 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255CF5356C;
+        Wed,  1 Feb 2023 10:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=OH6U4yR0+G89QSEnVcr38KhJN3Zf5DdwI7KCj4KlqMs=; b=0f4n4TmoRbXPn6e1c7WoA+60LF
+        0NTVfL5ycrTrbA57ptyKusE5K/lB7Nppzd6Nc2iYTdBU5NqFCXBqfn5AnXbhO1Fj9icxwsWqQ6TOa
+        tE8bkQy4EabSGsfK4Rmy6xO97Vt+TwgI+drCqI6roTPbeawiD1DXlL/CQwEI8nb67eOw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pNHTB-003p7i-OB; Wed, 01 Feb 2023 19:04:29 +0100
+Date:   Wed, 1 Feb 2023 19:04:29 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] net: fec: fix conversion to gpiod API
+Message-ID: <Y9qprbyr/0sa3sBN@lunn.ch>
+References: <Y9nbJJP/2gvJmpnO@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 18/39] mm: Handle faultless write upgrades for shstk
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-19-rick.p.edgecombe@intel.com>
- <7f63d13d-7940-afb6-8b25-26fdf3804e00@redhat.com>
- <50cf64932507ba60639eca28692e7df285bcc0a7.camel@intel.com>
- <1327c608-1473-af4f-d962-c24f04f3952c@redhat.com>
- <8c3820ae1448de4baffe7c476b4b5d9ba0a309ff.camel@intel.com>
- <4d224020-f26f-60a4-c7ab-721a024c7a6d@redhat.com>
- <dd06b54291ad5721da392a42f2d8e5636301ffef.camel@intel.com>
- <899d8f3baaf45b896cf335dec2143cd0969a2d8a.camel@intel.com>
- <ad7d94dd-f0aa-bf21-38c3-58ef1e9e46dc@redhat.com>
- <27b141c06c37da78afca7214ec7efeaf730162d9.camel@intel.com>
- <f4b62ed9-21a9-4b23-567e-51b339a643ac@redhat.com>
- <6a38779c1539c2bcfeb6bc8251ed04aa9b06802e.camel@intel.com>
- <0e29a2d0-08d8-bcd6-ff26-4bea0e4037b0@redhat.com>
- <f337d3b0e401c210b67a6465bf35f66f6a46fc3d.camel@intel.com>
- <a4857ccd-1d5f-2169-40bc-e7a75a0c896f@redhat.com>
- <f55d9563c432db15f8a768381103abe8e986a42b.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <f55d9563c432db15f8a768381103abe8e986a42b.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9nbJJP/2gvJmpnO@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.02.23 18:32, Edgecombe, Rick P wrote:
-> On Wed, 2023-02-01 at 10:03 +0100, David Hildenbrand wrote:
->>>
->>> The other problem is that one of NULL passers is not for kernel
->>> memory.
->>> huge_pte_mkwrite() calls pte_mkwrite(). Shadow stack memory can't
->>> be
->>> created with MAP_HUGETLB, so it is not needed. Using
->>> pte_mkwrite_kernel() would look weird in this case, but making
->>> huge_pte_mkwrite() take a VMA would be for no reason. Maybe making
->>> huge_pte_mkwrite() take a VMA is the better of those two options.
->>> Or
->>> keep the NULL semantics...  Any thoughts?
->>
->> Well, the reason would be consistency. From a core-mm point of view
->> it
->> makes sense to handle this all consistency, even if the single user
->> (x86) wouldn't strictly require it right now.
->>
->> I'd just pass in the VMA and call it a day :)
+On Tue, Jan 31, 2023 at 07:23:16PM -0800, Dmitry Torokhov wrote:
+> The reset line is optional, so we should be using devm_gpiod_get_optional()
+> and not abort probing if it is not available. Also, there is a quirk in
+> gpiolib (introduced in b02c85c9458cdd15e2c43413d7d2541a468cde57) that
+> transparently handles "phy-reset-active-high" property. Remove handling
+> from the driver to avoid ending up with the double inversion/flipped
+> logic.
 > 
-> Ok, I'll give it a spin.
+> Fixes: 468ba54bd616 ("fec: convert to gpio descriptor")
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-It would be good to get more opinions on that, but I'm afraid we won't 
-get more deep down in this thread :)
+Please split this into two:
 
--- 
-Thanks,
+1) Fix for it being optional
+2) Removing support for phy-reset-active-high
 
-David / dhildenb
+The breakage is in net-next, so we are not in a rush, and we don't
+need a minimum of patches. So since this is two logical changes, it
+should be two patches.
 
+Please also update the binding document to indicate that
+'phy-reset-active-high' is no longer deprecated, it has actually been
+removed. So we want the DT checking tools to error out if such a
+property is found.
+
+Thanks
+	Andrew
