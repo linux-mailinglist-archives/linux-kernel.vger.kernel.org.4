@@ -2,302 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05946871DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D196871E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjBAXZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 18:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S229884AbjBAX0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 18:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjBAXY7 (ORCPT
+        with ESMTP id S229457AbjBAX0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 18:24:59 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FFA6EB4
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 15:24:32 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so3915572pjq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 15:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/6eWRjWKiT+gMF2Kx54kumkGUgR4LPjtTyKTiPj5l0=;
-        b=ckQjopjrhkWo6X7I571v3IxwHakCp+4z8GU9uuF7Y/Bjwp1koefwtOVL4LzKiFcJ9C
-         XcHGNn1hCKhVYQeg8XhLchKFfSMN38z2M6Yj4CAHz6lLSJBaBcRvydMKDm1U27BRF8id
-         tw+wAddPb3sS/YV7szeazVejE6Y3KFzlXjWRIHjH5cQJp+LoRrEDr5Lodp9Z5nZYYZtG
-         mm9JVcsH1gEuW3vjtCypkhg+an2xzkI48Msdf7QLvicHGwE6bzrhc7X/hdhiagvbaGzh
-         mIfbDUzRI0s7rYCfQp083m75Jy91TPdVW7I7kmZyf01Gqm9G30POTF5iR8/do5rLmN7D
-         08nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E/6eWRjWKiT+gMF2Kx54kumkGUgR4LPjtTyKTiPj5l0=;
-        b=K3Z+enhvKotcR/oEopku6JqzJvpclusyFNM/NsiPaxgLl9FuZ1ZrDh90gFgFjGqIz1
-         aCjViRjYmAjaRyKdvPpkic7Mx8bA4E++HXbvO0x90DxeQ7QjKdNlsUi1Spxt6cNJ4nHs
-         8ZrmLKBkvDCB+PqWST0rPoGfoefeRvbI+phcMDseOntOIuI4xArKBRPpLURg71bRhWGv
-         tRg0jPgfT3HOUaPmfoK+ohgKT3Pyt4LNW+tnJAxhQ7/AC2K0JHHaqi3D+vGMsp2r2acr
-         h3RKIn0t215w0zuEUnSzSkVdwK3+UhpQETgCEPLHNdwAe3GMVWr/w+vINYO/is1FMI7Y
-         njyw==
-X-Gm-Message-State: AO0yUKXL3qcLjGebjYo7wt1kcWOrxqKyi5pWCk4PhP2M3FJWM8k1P5Gw
-        j6eCHlxSmGb2iErFz+Ju6VaIJA==
-X-Google-Smtp-Source: AK7set8Z/TpzonRQfgXFCS0rW4Tud6nVMBKkhAcojJ5fXlAhaL2OoO+ufoYoQ8/5jlrYaXFnGfhDKQ==
-X-Received: by 2002:a17:902:b58a:b0:198:af4f:de08 with SMTP id a10-20020a170902b58a00b00198af4fde08mr131238pls.8.1675293871408;
-        Wed, 01 Feb 2023 15:24:31 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p10-20020a056a000a0a00b00588fb6fafe0sm12006529pfh.188.2023.02.01.15.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 15:24:31 -0800 (PST)
-Date:   Wed, 1 Feb 2023 23:24:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, dmatlack@google.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        m Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [Patch v4 12/13] KVM: selftests: Make vCPU exit reason test
- assertion common.
-Message-ID: <Y9r0q9cuK/ifu+OW@google.com>
-References: <20221212183720.4062037-1-vipinsh@google.com>
- <20221212183720.4062037-13-vipinsh@google.com>
+        Wed, 1 Feb 2023 18:26:40 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABB1A10E8;
+        Wed,  1 Feb 2023 15:26:39 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id 6288E20B7102; Wed,  1 Feb 2023 15:26:39 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6288E20B7102
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675293999;
+        bh=BX5vYqzCUuxBDhWDfQG+i4l5HC6duxNMf1A8F9utGsI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ObNoaB606rE1/dxhUr21FdCxl9YLwN6dJIHFoJKrSkNCMotvzhTwTiKjOlc4x6ddf
+         mya4GY8c/KVQJ1Ht+q3y/fpT3Tr1q2ww5jT2vidqUuHljLIMTWHQ9rGbEzwZbC9GrH
+         nfzEYKS5IN3w9uoEDlFv+HmmzCZxXXZo9fTsGP8U=
+Date:   Wed, 1 Feb 2023 15:26:39 -0800
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
+        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
+        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        eparis@redhat.com, paul@paul-moore.com, linux-doc@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, linux-audit@redhat.com,
+        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>
+Subject: Re: [RFC PATCH v9 10/16] dm-verity: consume root hash digest and
+ signature data via LSM hook
+Message-ID: <20230201232639.GB9075@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-11-git-send-email-wufan@linux.microsoft.com>
+ <4f029a41d80d883d9b4729cbc85211955c9efe8e.camel@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212183720.4062037-13-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4f029a41d80d883d9b4729cbc85211955c9efe8e.camel@huaweicloud.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+all the other KVM selftests maintainers and reviewers
-
-On Mon, Dec 12, 2022, Vipin Sharma wrote:
-> Make TEST_ASSERT_KVM_EXIT_REASON() macro and replace all exit reason
-> test assert statements with it.
+On Tue, Jan 31, 2023 at 02:22:01PM +0100, Roberto Sassu wrote:
+> On Mon, 2023-01-30 at 14:57 -0800, Fan Wu wrote:
+> > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > 
+> > dm-verity provides a strong guarantee of a block device's integrity. As
+> > a generic way to check the integrity of a block device, it provides
+> > those integrity guarantees to its higher layers, including the filesystem
+> > level.
 > 
-> No functional changes intended.
+> I think you could reuse most of is_trusted_verity_target(), in
+> particular dm_verity_get_root_digest().
 > 
-> Suggested-by: David Matlack <dmatlack@google.com>
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> ---
->  .../testing/selftests/kvm/aarch64/psci_test.c |  4 +--
->  .../testing/selftests/kvm/include/test_util.h | 10 ++++++++
->  .../kvm/lib/s390x/diag318_test_handler.c      |  3 +--
->  .../selftests/kvm/s390x/sync_regs_test.c      | 15 +++--------
->  .../selftests/kvm/set_memory_region_test.c    |  6 +----
->  tools/testing/selftests/kvm/x86_64/amx_test.c |  8 +-----
->  .../kvm/x86_64/cr4_cpuid_sync_test.c          |  8 +-----
->  .../testing/selftests/kvm/x86_64/debug_regs.c |  2 +-
->  .../selftests/kvm/x86_64/flds_emulation.h     |  5 +---
->  .../selftests/kvm/x86_64/hyperv_clock.c       |  7 +-----
->  .../selftests/kvm/x86_64/hyperv_evmcs.c       |  8 +-----
->  .../selftests/kvm/x86_64/hyperv_features.c    | 14 ++---------
->  .../testing/selftests/kvm/x86_64/hyperv_ipi.c |  6 +----
->  .../selftests/kvm/x86_64/hyperv_svm_test.c    |  7 +-----
->  .../selftests/kvm/x86_64/hyperv_tlb_flush.c   | 14 ++---------
->  .../selftests/kvm/x86_64/kvm_clock_test.c     |  5 +---
->  .../selftests/kvm/x86_64/kvm_pv_test.c        |  5 +---
->  .../selftests/kvm/x86_64/monitor_mwait_test.c |  9 +------
->  .../kvm/x86_64/nested_exceptions_test.c       |  5 +---
->  .../selftests/kvm/x86_64/platform_info_test.c | 14 +++--------
->  .../kvm/x86_64/pmu_event_filter_test.c        |  6 +----
->  tools/testing/selftests/kvm/x86_64/smm_test.c |  9 +------
->  .../testing/selftests/kvm/x86_64/state_test.c |  8 +-----
->  .../selftests/kvm/x86_64/svm_int_ctl_test.c   |  8 +-----
->  .../kvm/x86_64/svm_nested_shutdown_test.c     |  7 +-----
->  .../kvm/x86_64/svm_nested_soft_inject_test.c  |  6 +----
->  .../selftests/kvm/x86_64/svm_vmcall_test.c    |  6 +----
->  .../selftests/kvm/x86_64/sync_regs_test.c     | 25 ++++---------------
->  .../kvm/x86_64/triple_fault_event_test.c      |  9 ++-----
->  .../selftests/kvm/x86_64/tsc_scaling_sync.c   |  6 +----
->  .../kvm/x86_64/ucna_injection_test.c          | 22 +++-------------
->  .../selftests/kvm/x86_64/userspace_io_test.c  |  6 +----
->  .../kvm/x86_64/userspace_msr_exit_test.c      | 22 +++-------------
->  .../kvm/x86_64/vmx_apic_access_test.c         | 11 ++------
->  .../kvm/x86_64/vmx_close_while_nested_test.c  |  5 +---
->  .../selftests/kvm/x86_64/vmx_dirty_log_test.c |  7 +-----
->  .../vmx_exception_with_invalid_guest_state.c  |  4 +--
->  .../x86_64/vmx_invalid_nested_guest_state.c   |  4 +--
->  .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |  6 +----
->  .../kvm/x86_64/vmx_preemption_timer_test.c    |  8 +-----
->  .../kvm/x86_64/vmx_tsc_adjust_test.c          |  6 +----
->  .../selftests/kvm/x86_64/xapic_ipi_test.c     |  6 +----
->  .../selftests/kvm/x86_64/xen_shinfo_test.c    |  7 +-----
->  .../selftests/kvm/x86_64/xen_vmcall_test.c    |  5 +---
->  44 files changed, 71 insertions(+), 293 deletions(-)
+> And probably, the previous patch is not necessary.
+> 
+> Roberto
+> 
+Thanks for the info. This function seems could be used to get the roothash
+but for saving the signature we still need the hook function in the previous
+patch.
 
-I love the cleanup, but in the future, please don't squeeze KVM-wide changes in
-the middle of an otherwise arch-specific series unless it's absolutely necessary.
-I get why you added the macro before copy-pasting more code into a new test, but
-the unfortunate side effect is that complicates grabbing the entire series.
-
-And incorporate ./scripts/get_maintainer.pl into your workflow, the other KVM
-selftests folks need to be in the loop for these types of changes.
-
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index 80d6416f3012..3f15f216d2a6 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -63,6 +63,16 @@ void test_assert(bool exp, const char *exp_str,
->  		    #a, #b, #a, (unsigned long) __a, #b, (unsigned long) __b); \
->  } while (0)
->  
-> +#define TEST_ASSERT_KVM_EXIT_REASON(vcpu, expected_exit_reason)		\
-> +({									\
-
-Unless the macro needs to "return" a value, do-while(0) is generally preferred.
-
-> +	__u32 exit_reason = (vcpu)->run->exit_reason;			\
-> +									\
-> +	TEST_ASSERT(exit_reason == (expected_exit_reason),		\
-> +		    "Unexpected exit reason: %u (%s)",			\
-
-This "needs" to opportunistically enhance the message to spit out the expected
-reason, and to clarify that it's a KVM exit reason.  In the open coded form, the
-expected reason is _usually_ captured in the assertion, but that's not guaranteed,
-e.g. if it's not hardcoded.  But with the common code, the expected exit reason
-will generally get resolved into its literal, which isn't very human friendly.
-
-And even when it is provided, I find it annoying to have to search back a few
-lines to understand what failed.
-
-E.g. the new macro yields "x86_64/hyperv_evmcs.c:269: exit_reason == (2)".
-
-> +		    exit_reason,					\
-> +		    exit_reason_str(exit_reason));			\
-
-No need to put these on separate lines.
-
-How about this?
-
-#define TEST_ASSERT_KVM_EXIT_REASON(vcpu, expected)			\
-do {									\
-	__u32 exit_reason = (vcpu)->run->exit_reason;			\
-									\
-	TEST_ASSERT(exit_reason == (expected),				\
-		    "Wanted KVM exit reason: %u (%s), got: %u (%s)",	\
-		    expected, exit_reason_str(expected),		\
-		    exit_reason, exit_reason_str(exit_reason));		\
-} while (0)
-
-which yields errors like:
-
-==== Test Assertion Failure ====
-  x86_64/hyperv_extended_hypercalls.c:71: exit_reason == (2)
-  pid=108104 tid=108104 errno=0 - Success
-     1	0x0000000000401793: main at hyperv_extended_hypercalls.c:71
-     2	0x00000000004148b3: __libc_start_call_main at libc-start.o:?
-     3	0x0000000000415eff: __libc_start_main_impl at ??:?
-     4	0x00000000004018f0: _start at ??:?
-  Wanted KVM exit reason: 2 (IO), got: 27 (HYPERV)
-
-On a related topic, exit_reason_str() is a bit stale and also annoying to update.
-Can you fold in the below when you send v2 of this patch?  And then if you're
-feeling ambititous, add another patch to update the array?
-
---
-From: Sean Christopherson <seanjc@google.com>
-Date: Wed, 1 Feb 2023 23:17:19 +0000
-Subject: [PATCH] KVM: selftests: Add macro to generate KVM exit reason strings
-
-Add and use a macro to generate the KVM exit reason strings array instead
-of relying on developers to correctly copy+paste+edit each string.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/lib/kvm_util.c | 55 ++++++++++++----------
- 1 file changed, 29 insertions(+), 26 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index f25b3e9b5a07..b3682b25eedf 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1815,38 +1815,41 @@ void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
- 		vcpu_dump(stream, vcpu, indent + 2);
- }
- 
-+#define KVM_EXIT_STRING(x) {KVM_EXIT_##x, #x}
-+
- /* Known KVM exit reasons */
- static struct exit_reason {
- 	unsigned int reason;
- 	const char *name;
- } exit_reasons_known[] = {
--	{KVM_EXIT_UNKNOWN, "UNKNOWN"},
--	{KVM_EXIT_EXCEPTION, "EXCEPTION"},
--	{KVM_EXIT_IO, "IO"},
--	{KVM_EXIT_HYPERCALL, "HYPERCALL"},
--	{KVM_EXIT_DEBUG, "DEBUG"},
--	{KVM_EXIT_HLT, "HLT"},
--	{KVM_EXIT_MMIO, "MMIO"},
--	{KVM_EXIT_IRQ_WINDOW_OPEN, "IRQ_WINDOW_OPEN"},
--	{KVM_EXIT_SHUTDOWN, "SHUTDOWN"},
--	{KVM_EXIT_FAIL_ENTRY, "FAIL_ENTRY"},
--	{KVM_EXIT_INTR, "INTR"},
--	{KVM_EXIT_SET_TPR, "SET_TPR"},
--	{KVM_EXIT_TPR_ACCESS, "TPR_ACCESS"},
--	{KVM_EXIT_S390_SIEIC, "S390_SIEIC"},
--	{KVM_EXIT_S390_RESET, "S390_RESET"},
--	{KVM_EXIT_DCR, "DCR"},
--	{KVM_EXIT_NMI, "NMI"},
--	{KVM_EXIT_INTERNAL_ERROR, "INTERNAL_ERROR"},
--	{KVM_EXIT_OSI, "OSI"},
--	{KVM_EXIT_PAPR_HCALL, "PAPR_HCALL"},
--	{KVM_EXIT_DIRTY_RING_FULL, "DIRTY_RING_FULL"},
--	{KVM_EXIT_X86_RDMSR, "RDMSR"},
--	{KVM_EXIT_X86_WRMSR, "WRMSR"},
--	{KVM_EXIT_XEN, "XEN"},
--	{KVM_EXIT_HYPERV, "HYPERV"},
-+	KVM_EXIT_STRING(UNKNOWN),
-+	KVM_EXIT_STRING(EXCEPTION),
-+	KVM_EXIT_STRING(IO),
-+	KVM_EXIT_STRING(HYPERCALL),
-+	KVM_EXIT_STRING(DEBUG),
-+	KVM_EXIT_STRING(HLT),
-+	KVM_EXIT_STRING(MMIO),
-+	KVM_EXIT_STRING(IRQ_WINDOW_OPEN),
-+	KVM_EXIT_STRING(SHUTDOWN),
-+	KVM_EXIT_STRING(FAIL_ENTRY),
-+	KVM_EXIT_STRING(INTR),
-+	KVM_EXIT_STRING(SET_TPR),
-+	KVM_EXIT_STRING(TPR_ACCESS),
-+	KVM_EXIT_STRING(S390_SIEIC),
-+	KVM_EXIT_STRING(S390_RESET),
-+	KVM_EXIT_STRING(DCR),
-+	KVM_EXIT_STRING(NMI),
-+	KVM_EXIT_STRING(INTERNAL_ERROR),
-+	KVM_EXIT_STRING(OSI),
-+	KVM_EXIT_STRING(PAPR_HCALL),
-+	KVM_EXIT_STRING(DIRTY_RING_FULL),
-+	KVM_EXIT_STRING(X86_RDMSR),
-+	KVM_EXIT_STRING(X86_WRMSR),
-+	KVM_EXIT_STRING(XEN),
-+	KVM_EXIT_STRING(HYPERV),
-+
- #ifdef KVM_EXIT_MEMORY_NOT_PRESENT
--	{KVM_EXIT_MEMORY_NOT_PRESENT, "MEMORY_NOT_PRESENT"},
-+	KVM_EXIT_STRING(MEMORY_NOT_PRESENT),
- #endif
- };
- 
-
-base-commit: b20015517a2c6b45bafa09aee45d1698f91428d6
--- 
-
+-Fan
