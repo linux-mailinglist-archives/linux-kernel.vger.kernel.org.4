@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE6268689C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3716868AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbjBAOnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S232691AbjBAOnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:43:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjBAOnC (ORCPT
+        with ESMTP id S230514AbjBAOnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:43:02 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A1FEFBC;
-        Wed,  1 Feb 2023 06:43:01 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 311EgoUn027702;
-        Wed, 1 Feb 2023 14:42:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=uRmV9H0IlKkoZw9pYEG5xkBsyGSu+nnUgHhSpuqI//4=;
- b=Jz5QG43urG3CzJMuNJWlJlMMDmofbZMKOAc6siINhvBfcQ9WnpPdjaSDzypLJRffOJdq
- vcKJahRe08FggT6+w1rqFBSedmaQ7epbBV7V9kA1dO89bSoDZhvhXaqbcKZuGsW6/D3U
- f6LxqOmzBC64L9shez2u3kUTyuWZhccC7bpYYYOkbRP3+VDkSILOB4aftneBgp7gjsy0
- cs4VdTSXUz/VMINomPR98eqjeg+6D25a9UYv2Uvm6KVT9//wOKKv67nLWBYQjWLwYuaX
- jSzuYcPpTPHLFie8d1eXkRfPRJJsHz/ZQushWbSu+GeE39WUJqSCWz4X5bKsBgh5+zpM BA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfsp60kyk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 14:42:55 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 311Egsq2028141;
-        Wed, 1 Feb 2023 14:42:54 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfsp60ky3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 14:42:54 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 311DY22M007780;
-        Wed, 1 Feb 2023 14:42:54 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3ncvtex7tc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 14:42:53 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 311Egq9265863984
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Feb 2023 14:42:52 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 475A758045;
-        Wed,  1 Feb 2023 14:42:52 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C19CF58050;
-        Wed,  1 Feb 2023 14:42:49 +0000 (GMT)
-Received: from [9.65.253.123] (unknown [9.65.253.123])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Feb 2023 14:42:49 +0000 (GMT)
-Message-ID: <3b52ffdb-c18c-f3d4-559d-9838419e2bc7@linux.ibm.com>
-Date:   Wed, 1 Feb 2023 09:42:49 -0500
+        Wed, 1 Feb 2023 09:43:19 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B98930EB7
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:43:16 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id o18so8058998wrj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:43:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dC2Rf+qs0P/jrCe9msdGE8AkAgDIJW5HtHWs9aRUyUM=;
+        b=ibXFxt9BRYojnFB5aMpK5zHfRUr3rTuXK8gbzrbbANcmXrBoR3/gZFAibr8X/eCyvG
+         nZM2qAouhLUMXlBtMMSSx22Q2Wh+QbUCfXVemidC222OvyJrgcpA2z3s6d0cGPUOooas
+         KfadIZ9z7m0x69PB9tFiOVfdYU/Ynba6LssKc07/efXQ255RPM8osrkZf3G4oXwnvGyJ
+         hPqhdqdZrA0LkIDPCzL+aAsGQ5LcfPAg6yvUiSx1EiXVR2TfIplLZtYvjZQgZgA2SNw9
+         E4SeopzvVb5y0LGJbxCZzJvQtw6EmxbQvpnV2Je6RJhpaZj7HrcpJgIWti8ZHGNrppvk
+         gd0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dC2Rf+qs0P/jrCe9msdGE8AkAgDIJW5HtHWs9aRUyUM=;
+        b=srkzZPzhz82Yfoogl6AXVoJHB7s6wDKWjucWul8D4ovcCOyXxUu+2I2XAxqK5LoO/K
+         j7CfpB8fL2uQsRflUnVARqz0vtNl1962JUykbm/nWlxKF9pbe46D46RLCaSHfKsAoSUx
+         Wl1a9v65+S9AmMA4svM3eBDX5/Szds/HJN/CoK/tgNFpB1S93APEPz22VB1W5l3WHKwd
+         SA/JjbbCdJ7v+KD8N492J69tIBWUY6N6bzkbgTBX6yq37q+0FQ6oP8G4KjhJclOFxkwx
+         kEYA5gddQxmqHykLaPVsAYOS2MUBRGljJI3Zc/BBWFSFaff/2Wf77u5wHU33hpkcFEnE
+         mQBw==
+X-Gm-Message-State: AO0yUKVDJTP1PhkzYLsKfsRlG77/jClFJE1e7r/+s6BCrM7Bw6uu928y
+        N0aKxlkbTEk60Ff5UTxVIYrkJg==
+X-Google-Smtp-Source: AK7set8PI06q3hLefAX/yzLn2ALEYmydTMRpaxfh4uUmHXpFyC9Y/mCBDAhLTB1c6A+QZNC14bxd6A==
+X-Received: by 2002:adf:d1e9:0:b0:2bf:9543:2bea with SMTP id g9-20020adfd1e9000000b002bf95432beamr3759674wrd.35.1675262594646;
+        Wed, 01 Feb 2023 06:43:14 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id r8-20020adfda48000000b002be25db0b7bsm17513102wrl.10.2023.02.01.06.43.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 06:43:14 -0800 (PST)
+Message-ID: <6491d6fb-2a10-1c80-d422-8300d5a75ce4@linaro.org>
+Date:   Wed, 1 Feb 2023 15:43:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] vfio: fix deadlock between group lock and kvm lock
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] ASoC: dt-bindings: Drop broken irondevice,sma1303 binding
 Content-Language: en-US
-To:     "Liu, Yi L" <yi.l.liu@intel.com>, Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
-        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "Christopherson, , Sean" <seanjc@google.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230131200635.44227-1-mjrosato@linux.ibm.com>
- <Y9l5OmCRGYZM2nPy@nvidia.com>
- <DS0PR11MB7529D62614A5DFC56920EE96C3D19@DS0PR11MB7529.namprd11.prod.outlook.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <DS0PR11MB7529D62614A5DFC56920EE96C3D19@DS0PR11MB7529.namprd11.prod.outlook.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kiseok Jo <kiseok.jo@irondevice.com>
+References: <20230201131059.65527-1-krzysztof.kozlowski@linaro.org>
+ <1bcd61d6-810f-1239-1b6e-367e0fe87370@linaro.org>
+ <Y9pxGUMWyMeXQpZM@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y9pxGUMWyMeXQpZM@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rhb6pu5ZmBvC2a_9wXw7DPV0FRJCly6d
-X-Proofpoint-ORIG-GUID: NZfy7QwErcrBf-5ZqhPHGIzECnA7emIn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-01_04,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- spamscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0 mlxlogscore=999
- mlxscore=0 phishscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302010125
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/23 7:43 AM, Liu, Yi L wrote:
->> From: Jason Gunthorpe <jgg@nvidia.com>
->> Sent: Wednesday, February 1, 2023 4:26 AM
->>
->> On Tue, Jan 31, 2023 at 03:06:35PM -0500, Matthew Rosato wrote:
->>> @@ -799,13 +794,14 @@
->> EXPORT_SYMBOL_GPL(vfio_file_enforced_coherent);
->>>  void vfio_file_set_kvm(struct file *file, struct kvm *kvm)
->>>  {
->>>  	struct vfio_group *group = file->private_data;
->>> +	unsigned long flags;
->>>
->>>  	if (!vfio_file_is_group(file))
->>>  		return;
->>>
->>> -	mutex_lock(&group->group_lock);
->>> +	spin_lock_irqsave(&group->kvm_ref_lock, flags);
->>>  	group->kvm = kvm;
->>> -	mutex_unlock(&group->group_lock);
->>> +	spin_unlock_irqrestore(&group->kvm_ref_lock, flags);
->>
->> We know we are in a sleeping context here so these are just
->> 'spin_lock()', same with the other one
+On 01/02/2023 15:03, Mark Brown wrote:
+> On Wed, Feb 01, 2023 at 02:13:46PM +0100, Krzysztof Kozlowski wrote:
+>> On 01/02/2023 14:10, Krzysztof Kozlowski wrote:
 > 
-> a dumb question. Why spinlock is required here? 😊
+>>> Because the binding:
+>>> 1. Was never tested,
+>>> 2. Was never sent to Devicetree maintainers,
+>>> 3. Is entirely broken and wrong, so it would have to be almost rewritten
+>>>    from scratch,
+>>> 4. It does not match the driver, IOW, the binding is fake.
 > 
+>> I understand that in general we tend to fix, not just to revert. But the
+>> poor quality of this binding and the next patch, which was suppose to
+>> fix it, plus complete lack of testing, means I do not believe the author
+>> will send correct binding.
+> 
+>> More over, fixing binding might require dropping incorrect properties,
+>> thus changing the driver. I am not willing to do that, I doubt that
+>> anyone has the time for it.
+> 
+> It is an absolutely trivial binding as is, it is utterly
+> disproportionate to delete both the binding and the driver to fix
+> whatever it is that the issues you're seeing are (I can't really tell
+> TBH).  Undocumented properties are a separate thing but again a revert
+> is obviously disproportionate here, glancing at the driver the code is
+> all well enough separated and can have default values.  Looking again I
+> did miss the sysclk selection which should be dropped, clocks should use
+> the clock bindings.
+> 
+>> It's the job of submitter to work on it.
+> 
+> It's also not the end of the world if we have a driver that isn't
+> perfect.
+> 
+> Please, try to keep things constructive.
 
-You mean as opposed to another mutex?  I don't think it's required per se (we are replacing a mutex so we could have again used another mutex here), but all current users of this new lock hold it over a very short window (e.g. set a pointer as above, or refcount++ and copy the pointer as in the first device_open)
+I tried. I started writing patch to fix few things in this binding and
+then noticed that it is entirely empty and documents nothing.
+
+The trouble is that soon you will send it to Linus and then it becomes
+the ABI even though no one ever approved or reviewed the actual ABI.
+
+Best regards,
+Krzysztof
 
