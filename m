@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC81D687058
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 22:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E5168705C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 22:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231642AbjBAVH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 16:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S231215AbjBAVL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 16:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjBAVH0 (ORCPT
+        with ESMTP id S229915AbjBAVLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 16:07:26 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A221E6D5C6;
-        Wed,  1 Feb 2023 13:07:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675285634; x=1706821634;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yL+AMeADaYah1JlX3xyOr7TA/KaBboijzv98KqvU194=;
-  b=BgZoCtx/algIw5eQQ+2yreQshQMMJzkXTRomByz2U+LDCO3uqCt/a7Ri
-   rtWyXORGGrP3GAqsrxr3NOENz1uly3tmFkVQwsoyUVfkuoNbDZBaMuOOH
-   UNxQXnjkEpWUE7hkOl7+lsH+0+iH2kxcL+oKv8/AVkW2sBigWGpuEAY0J
-   8QX6Zel3RUedIRO4zlNK6L0j34YmqZhi1QwZwC3IhlazxsM9f/v6T3Kd5
-   Hs0wN1fe5oJAGaAj1JmgE2rAncT/AJ3EsswBIT9jfXb9oZuPr0ZvsPn56
-   QlpS1p1iua+KXOuQ4t/s8MbjtXLXBOokpeGUGf+2KhWaafCabjdWCRToD
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311919614"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="311919614"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:07:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="838931372"
-X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
-   d="scan'208";a="838931372"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2023 13:07:13 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
-Date:   Wed,  1 Feb 2023 13:07:12 -0800
-Message-Id: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Wed, 1 Feb 2023 16:11:25 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AC02D7F;
+        Wed,  1 Feb 2023 13:11:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=eQ62sI2LaH5K93mDteIKKvfXZlAXtr2Rm8TFfldgNso=; b=i5XQu02i0rUZkkaMlzRQPLcq6n
+        c15AesJp084H/0wYTlUcdNMnfX6McXTm88rbMrGAIO1WhNY8ud/aPxhaWn2bmBd6Dal/a/8qATMZ9
+        60qWxuyRtROY/s6+MWvfT0Y7hSCdyaxN1mCwWG5+KgS61otXliI5GJpPoAN2JM3CeC2IgQpHR5Il3
+        65uMjyrak7qWnWZ5I+2ajEJ72rOS/BWQLnM4PmzzccnZokOIjeu5hIXVsUL8sRumyVLPPwhDKxn/h
+        6egXjLvlI67XNJIDJc21H787lqbAel0wYy6PzotdyneH9zZA/gIG+zBCPTpWCdK9F+65Q9p7yQyBr
+        5MgXYw7w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pNKMv-004uBg-36;
+        Wed, 01 Feb 2023 21:10:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AC2E830013F;
+        Wed,  1 Feb 2023 22:10:46 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8E8E5200DCC72; Wed,  1 Feb 2023 22:10:46 +0100 (CET)
+Date:   Wed, 1 Feb 2023 22:10:46 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, Zefan Li <lizefan.x@bytedance.com>,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpuset: Fix cpuset_cpus_allowed() to not filter
+ offline CPUs
+Message-ID: <Y9rVVldS19oyIZ+g@hirez.programming.kicks-ass.net>
+References: <20230131221719.3176-1-will@kernel.org>
+ <20230131221719.3176-2-will@kernel.org>
+ <6b068916-5e1b-a943-1aad-554964d8b746@redhat.com>
+ <Y9otWX+MGOLDKU6t@hirez.programming.kicks-ass.net>
+ <83e53632-27ed-8dde-84f4-68c6776d6da8@redhat.com>
+ <a892d340-ea99-1562-0e70-176f02f195c2@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a892d340-ea99-1562-0e70-176f02f195c2@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the user is reading cur_state from the thermal cooling device for
-Intel powerclamp device:
-- It returns the idle ratio from Package C-state counters when
-there is active idle injection session.
-- -1, when there is no active idle injection session.
+On Wed, Feb 01, 2023 at 01:46:11PM -0500, Waiman Long wrote:
 
-This information is not very useful as the package C-state counters vary
-a lot from read to read. Instead just return the last requested cur_state.
+> Note that using cpus_allowed directly in cgroup v2 may not be right because
+> cpus_allowed may have no relationship to effective_cpus at all in some
+> cases, e.g.
+> 
+>    root
+>     |
+>     V
+>     A (cpus_allowed = 1-4, effective_cpus = 1-4)
+>     |
+>     V
+>     B (cpus_allowed = 5-8, effective_cpus = 1-4)
+> 
+> In the case of cpuset B, passing back cpus 5-8 as the allowed_cpus is wrong.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+I think my patch as written does the right thing here. Since the
+intersection of (1-4) and (5-8) is empty it will move up the hierarchy
+and we'll end up with (1-4) from the cgroup side of things.
 
-diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-index 2f4cbfdf26a0..72a45cf2708c 100644
---- a/drivers/thermal/intel/intel_powerclamp.c
-+++ b/drivers/thermal/intel/intel_powerclamp.c
-@@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
- static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
- 				 unsigned long *state)
- {
--	if (clamping) {
--		if (poll_pkg_cstate_enable)
--			*state = pkg_cstate_ratio_cur;
--		else
--			*state = set_target_ratio;
--	} else {
--		/* to save power, do not poll idle ratio while not clamping */
--		*state = -1; /* indicates invalid state */
--	}
--
--	return 0;
-+	return set_target_ratio;
- }
- 
- static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
--- 
-2.39.1
+So the purpose of __cs_cpus_allowed() is to override the cpus_allowed of
+the root set and force it to cpu_possible_mask.
+
+Then cs_cpus_allowed() computes the intersection of cs->cpus_allowed and
+all it's parents. This will, in the case of B above, result in the empty
+mask.
+
+Then cpuset_cpus_allowed() has a loop that starts with
+task_cpu_possible_mask(), intersects that with cs_cpus_allowed() and if
+the intersection of that and cpu_online_mask is empty, moves up the
+hierarchy. Given cs_cpus_allowed(B) is the empty mask, we'll move to A.
+
+Note that since we force the mask of root to cpu_possible_mask,
+cs_cpus_allowed(root) will be a no-op and if we guarantee (in arch code)
+that cpu_online_mask always has a non-empty intersection with
+task_cpu_possible_mask(), this loop is guaranteed to terminate with a
+viable mask.
+
 
