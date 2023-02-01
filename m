@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A806871C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20C16871CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjBAXTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 18:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
+        id S231716AbjBAXTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 18:19:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjBAXTN (ORCPT
+        with ESMTP id S230377AbjBAXTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 18:19:13 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303C35264;
-        Wed,  1 Feb 2023 15:19:13 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id z1so10721008pfg.12;
-        Wed, 01 Feb 2023 15:19:13 -0800 (PST)
+        Wed, 1 Feb 2023 18:19:38 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BDD1EFCB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 15:19:37 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 7so110786pga.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 15:19:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZCpAfT76lyu9WSQ8sHNsBdoZYA3P4hVoZekbvfvR1LI=;
-        b=DKHC7S+NYDvR4NW+8PEjb/MU79hC8oKcJFX6OpxY7ehBmP2ocp7y+KJg7cqy0SHCZv
-         omO9170g0ssDa4dEFGw1TN2wgFzAbkyhFtiqFSIpIE5ixMKn79/wN9ptKO2su2NwXmvC
-         P/bT5nT6WZNvOiFUSBe+V2hkWA24bU3UoB4SqpXoggFtdWlz2q6ZsA+/vfu9DPs4wKVF
-         na8a78DjHv9JlpoU8b2tdm1avKm9NRm7+jM8YSt/1oTMZ4W/WpIK5liGa7dMYN5vdkoA
-         R5b8WQFNNkd40WVX2IchxWbP59iflE9VcoOM4dL1E+y37eF12tjyS7B7PZE1rxVmMcYB
-         ymvQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UfvfdYoklJloAro8ZE+SRmZ2YsAYATSVu+Qj+tuYXzs=;
+        b=ndoZUIiiXWibJX2FI3qUcRHP9YcXJd3NDudb2WUoXWuvbltA3Ox2R7fcgJIg2rgSWB
+         C4HtH9soZJG4frvEWKXm61nj0xe8Qrz7qBMV9k/DZsQb4go6lyojJhqNYiPj211zca5o
+         BMKNteONR293rcXzYN5HKQPV58Ke4WUud+StdtLyuKqeriV9ZSQQPfCX/3zQKt76Mp6o
+         hvcu5ZrnVpstxJ/h0Ns3wrXJcBP3LKy4EbBYEqWYk1miTpLjyVOXq2fh+XD8Bl58+34U
+         GJ24GI8dk26Dm/DUphHrG3VIDsfVw5u812C/8X/BBX4WD7gtLVFJB8SOYLcF335lMBPc
+         J6rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZCpAfT76lyu9WSQ8sHNsBdoZYA3P4hVoZekbvfvR1LI=;
-        b=wIoU4jESJPlWJGv2T/dQdw8AcMy6KmLWZ3cX7tAtjz7r5np+pTnUeUQXgdXaMd8/mq
-         cAB6RTr+RsetQiXm8BVE7KStnLddievraIChn6HuNecA8gzAqxIMzpJzbNhJul1O9jGc
-         812bh4s6WUnZuONxcT+k6yruCboKkfuZVG+vMj9gWsnKcI8lOgJmtXw60UZYHYpy0U8W
-         AEWn77AWc/xMc6b2aulWTJPUe6iFAnZm9jdGkCJQ+yxCB5QsrNmyl7j+hpix7gy9I81N
-         gAPXEqRb92mc+DEqmXsH38bnoylAieChzGAS7nBk3serjSlsWQAuey7HXYz4QnMuTXdh
-         UDxA==
-X-Gm-Message-State: AO0yUKU3DwdKU+QPejThRox861YbX684TFi4fvVVsk7GJXdyMrssqJ7E
-        Ic3M7DU23g+wn5tR4KGTII3naXRZj77++g==
-X-Google-Smtp-Source: AK7set/IcQBUvBSZs+t3KuIOdX+M9J7f1R/17y/44RT9X902YXrEf+YxcSqNcfX5+eeMHnFaOhVb5g==
-X-Received: by 2002:a05:6a00:1818:b0:58d:b8f8:5e2f with SMTP id y24-20020a056a00181800b0058db8f85e2fmr5249624pfa.10.1675293552489;
-        Wed, 01 Feb 2023 15:19:12 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id g62-20020a625241000000b00580fb018e4bsm6336137pfb.211.2023.02.01.15.19.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 15:19:10 -0800 (PST)
-Message-ID: <319ebea0-61dc-2e08-f48b-4555b8fb894a@gmail.com>
-Date:   Wed, 1 Feb 2023 15:19:08 -0800
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UfvfdYoklJloAro8ZE+SRmZ2YsAYATSVu+Qj+tuYXzs=;
+        b=Yrk+lz1W8mcKFXR/nn9FijU25XVZLmGcl0kRW3M1II7Q6+DrHOqyzbfMk2QFXc9QhX
+         q6jUZUY4b7zWP2pfudT4D75TU/fPRyNA9/ETtG2VIDWjXvRLpL8+1ZeOrZ1EJL2H0bLu
+         6cB51QckC140+x6hVuortrS1B9vgfxYrzJiSsf2+NMZ0E8LepbzOpotrr8pQg8yqncTO
+         /ViGoVSPGRBggebne6qWIHnNV9im1pBtYGp2K6/0NP7GBap3dfCIBnAZ25RHkDh+OjMp
+         T4J3AyK2GrdBEcs/DeOZJMcPL8o7/G8Gk8R/ypjOoMM3d9ZCnH5dltd68rOikyN+NnMb
+         pBoA==
+X-Gm-Message-State: AO0yUKWgVZTqHbefmtYuczYC+pGstunHZq32TCQw5AxGMECkjUb5KPp3
+        JvK3aTdjOZyN8H1MrkjJnDIc/A==
+X-Google-Smtp-Source: AK7set9inbJv/M/vfdju8z207Qoxp12XibCyhHzDRAcGnrVUKe0FvFj3EQzothiblU4uGo1rVlTICQ==
+X-Received: by 2002:a62:b41a:0:b0:593:d7fd:aaf7 with SMTP id h26-20020a62b41a000000b00593d7fdaaf7mr413693pfn.16.1675293576923;
+        Wed, 01 Feb 2023 15:19:36 -0800 (PST)
+Received: from google.com ([2620:15c:2d1:203:341e:6979:102e:c9d9])
+        by smtp.gmail.com with ESMTPSA id t26-20020aa7947a000000b0058bbe1240easm349789pfq.190.2023.02.01.15.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 15:19:36 -0800 (PST)
+Date:   Wed, 1 Feb 2023 15:19:31 -0800
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Robin Murphy <robin.murphy@arm.com>,
+        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] gpu: host1x: fix uninitialized variable use
+Message-ID: <Y9rzg9Mizckjf+Fp@google.com>
+References: <20230127221418.2522612-1-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH stable 5.4] usb: host: xhci-plat: add wakeup entry at
- sysfs
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>
-References: <20230201174404.32777-1-f.fainelli@gmail.com>
- <20230201174404.32777-3-f.fainelli@gmail.com> <Y9qsZysFUFnq7VQW@kroah.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <Y9qsZysFUFnq7VQW@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127221418.2522612-1-arnd@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,42 +80,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/23 10:16, Greg Kroah-Hartman wrote:
-> On Wed, Feb 01, 2023 at 09:44:04AM -0800, Florian Fainelli wrote:
->> From: Peter Chen <peter.chen@nxp.com>
->>
->> commit  4bb4fc0dbfa23acab9b762949b91ffd52106fe4b upstream
->>
->> With this change, there will be a wakeup entry at /sys/../power/wakeup,
->> and the user could use this entry to choose whether enable xhci wakeup
->> features (wake up system from suspend) or not.
->>
->> Tested-by: Matthias Kaehlcke <mka@chromium.org>
->> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->> Signed-off-by: Peter Chen <peter.chen@nxp.com>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> Link: https://lore.kernel.org/r/20200918131752.16488-6-mathias.nyman@linux.intel.com
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>   drivers/usb/host/xhci-plat.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Jan 27, 2023 at 11:14:00PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Why is this new feature needed on these older kernels?  What does it fix
-> that is broken?
-
-It fixes the inability to make the XHCI controller a wake-up device 
-since there is no /sys/*/*xhci/power/wakeup sysfs entry to manipulate 
-unless this patch is applied.
-
+> The error handling for platform_get_irq() failing no longer
+> works after a recent change, clang now points this out with
+> a warning:
 > 
-> And why not just use a newer kernel release if you want to use this
-> feature?
+> drivers/gpu/host1x/dev.c:520:6: error: variable 'syncpt_irq' is uninitialized when used here [-Werror,-Wuninitialized]
+>         if (syncpt_irq < 0)
+>             ^~~~~~~~~~
+> 
+> Fix this by removing the variable and checking the correct
+> error status.
+> 
+> Fixes: 625d4ffb438c ("gpu: host1x: Rewrite syncpoint interrupt handling")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Because I maintain multiple version streams so I have always have a way 
-to compare an older with a newer kernel and ensure they all behave properly.
+Thanks Arnd, I saw some reports from kernelci about this, too.
+https://lore.kernel.org/linux-next/?q=warning%3A+variable+%27syncpt_irq%27+is+uninitialized+when+used+here
 
-This should have been flagged with a Fixes: tag IMHO in the first place.
--- 
-Florian
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> ---
+>  drivers/gpu/host1x/dev.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+> index 4872d183d860..aae2efeef503 100644
+> --- a/drivers/gpu/host1x/dev.c
+> +++ b/drivers/gpu/host1x/dev.c
+> @@ -487,7 +487,6 @@ static int host1x_get_resets(struct host1x *host)
+>  static int host1x_probe(struct platform_device *pdev)
+>  {
+>  	struct host1x *host;
+> -	int syncpt_irq;
+>  	int err;
+>  
+>  	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
+> @@ -517,8 +516,8 @@ static int host1x_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	host->syncpt_irq = platform_get_irq(pdev, 0);
+> -	if (syncpt_irq < 0)
+> -		return syncpt_irq;
+> +	if (host->syncpt_irq < 0)
+> +		return host->syncpt_irq;
+>  
+>  	mutex_init(&host->devices_lock);
+>  	INIT_LIST_HEAD(&host->devices);
+> -- 
+> 2.39.0
+> 
+> 
