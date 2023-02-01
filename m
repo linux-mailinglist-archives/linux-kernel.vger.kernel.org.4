@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE0D686C38
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263E4686C3C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjBAQ5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
+        id S231569AbjBAQ5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjBAQ5S (ORCPT
+        with ESMTP id S230444AbjBAQ5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:57:18 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518B061D58
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:57:16 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id mf7so34563865ejc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:57:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5QwLG2T0p0/wJ6lz+hF7UZawl4kCGwRAecIdikVjtEo=;
-        b=FjiELNOx4rVbcVrAuGwCv258MtT3ykNsIol/GqUpI0nt+Edk0r1icdxutjlmTcXBWW
-         GZ0V9voJ08dFm3E2wMYq6E7SMJ9cZWjL2ObcTY7C1ggoWR7sihQ/Afp4BDOKJGDCotPv
-         D4Jdlut/yMLyzF9tvIMo4sXDiX9IdrBmHptId5qYX8Q6tKdFCufPLxz/0/jSaarruZ9e
-         YftF69lT280fZq2surf4jBOozRQOl8Huf+8cVVp6k6pCXbi5EQQp6IZJW+2J3x1TTvJZ
-         Q7GuvvU7UTTVyyvsoKlHyf1jcZMugXO52qvphTuNl2WtYU2DriOkvH0D53/yQc8Vwpeb
-         CIKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5QwLG2T0p0/wJ6lz+hF7UZawl4kCGwRAecIdikVjtEo=;
-        b=6KmroTU7ZrNVzMsiH6pgEwOGJOAF1mElsAUPNa9mGj0GHm1XQkyiyjayY7FAgfp26I
-         eyP+PU9Z8VbbKVsfImodTXeT2roTANPI3VbXnlbWA2TjD001mubZnWpQMyvw8emX2ZpP
-         nDdf3rg5HVKe+RNnGkCVOEpYrVkHf+kALRr4ZCgj9UUcIkDwegi8C4RkYU+HFTUN9VR1
-         jlonmeb/vYqAyLcjbyVSVffhLhane+9ep/S8NqoOCVsKNGD+FEVJ61uXFBsOGCW73j+8
-         PBU1d4hagCgHr2/IFWgK3ion8iNXLzGOSiAbJ4Ip+oLkYLkQg5Z4ONWfFTkH5j7xcbyQ
-         AjRA==
-X-Gm-Message-State: AO0yUKUCr/USZGt+1G55kdTpLLduj8DxQhdqH3K44WkXjPv3o1njoE2X
-        ocQ13lrrqKyy7l6+u8gyttxUHQ==
-X-Google-Smtp-Source: AK7set9KH3KAy6EZVpBWgeg+qNgCuSj1hLv7Q2CPEU+vYqF8yGOPPNkySgRFVjuyZvEfvpW8fknKDg==
-X-Received: by 2002:a17:906:2c6:b0:887:87e2:5102 with SMTP id 6-20020a17090602c600b0088787e25102mr7004327ejk.13.1675270634684;
-        Wed, 01 Feb 2023 08:57:14 -0800 (PST)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170906344d00b0088385cd6166sm7094168ejb.195.2023.02.01.08.57.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 08:57:13 -0800 (PST)
-Date:   Wed, 1 Feb 2023 16:57:09 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, kvmarm@lists.cs.columbia.edu,
-        kernel-team@android.com
-Subject: Re: [PATCH 0/4] KVM: arm64: Fix CPU resume/on with pKVM
-Message-ID: <Y9qZ5XoXW1XQ70eE@google.com>
-References: <20230201103755.1398086-1-qperret@google.com>
- <86bkmd1ly4.wl-maz@kernel.org>
+        Wed, 1 Feb 2023 11:57:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FE87AE6B;
+        Wed,  1 Feb 2023 08:57:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6FF0617FE;
+        Wed,  1 Feb 2023 16:57:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90412C433D2;
+        Wed,  1 Feb 2023 16:57:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675270650;
+        bh=88ud5EpOU9fVi8hvERQFc6r3nXAyErWparuTT1Z9qrQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ITMgGWC6UUatXejr/qQoEjL0/tsX0KqlgCAA/AjKR6Z0+M/ltYdVilOC3qMq+ivfe
+         OgQlQoKhXIHPgISSIBJPZ2Dig5eKCEUh/q4sV0V8D3nPl+9QXIupbjRl0B5JEpZSv0
+         tePQs04RPtqFYjzGfPJfJu3uSAIzjE1k5TFPPG473njGYcbV9IGdMMz137K9uEOZXZ
+         HU9Z2K2t1/5z4u9+QHVOx5qAUgxcaIBh3/Jq/WUUN1xGmgzrXd/AARzH8dBjtFhHu/
+         T92B44n5ABCXwUl7Va0nmAcBldq/PF9OGOIIlNvqHB+gXuM4y7z1NzHLGbhgTWd8Kp
+         bLNTzttmcVwgw==
+Date:   Wed, 1 Feb 2023 08:57:27 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, netdev@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>,
+        live-patching@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
+ loaded vhost worker kthreads
+Message-ID: <20230201165727.lnywx6zyefbqbrke@treble>
+References: <Y9OpTtqWjAkC2pal@hirez.programming.kicks-ass.net>
+ <20230127165236.rjcp6jm6csdta6z3@treble>
+ <20230127170946.zey6xbr4sm4kvh3x@treble>
+ <20230127221131.sdneyrlxxhc4h3fa@treble>
+ <Y9e6ssSHUt+MUvum@hirez.programming.kicks-ass.net>
+ <Y9gOMCWGmoc5GQMj@FVFF77S0Q05N>
+ <20230130194823.6y3rc227bvsgele4@treble>
+ <Y9jr0fP7DtA9Of1L@FVFF77S0Q05N>
+ <20230131163832.z46ihurbmjcwuvck@treble>
+ <Y9pInB8KvcyhAwDa@FVFF77S0Q05N>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <86bkmd1ly4.wl-maz@kernel.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y9pInB8KvcyhAwDa@FVFF77S0Q05N>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 01 Feb 2023 at 14:48:03 (+0000), Marc Zyngier wrote:
-> On Wed, 01 Feb 2023 10:37:50 +0000,
-> Quentin Perret <qperret@google.com> wrote:
+On Wed, Feb 01, 2023 at 11:10:20AM +0000, Mark Rutland wrote:
+> On Tue, Jan 31, 2023 at 08:38:32AM -0800, Josh Poimboeuf wrote:
+> > On Tue, Jan 31, 2023 at 10:22:09AM +0000, Mark Rutland wrote:
+> > > > Hm, it might be nice if our out-of-line static call implementation would
+> > > > automatically do a static key check as part of static_call_cond() for
+> > > > NULL-type static calls.
+> > > > 
+> > > > But the best answer is probably to just add inline static calls to
+> > > > arm64.  Is the lack of objtool the only thing blocking that?
+> > > 
+> > > The major issues were branch range limitations (and needing the linker to add
+> > > PLTs),
 > > 
-> > When using pKVM, we do not reset the EL2 exception vectors back to the
-> > stubs for e.g. Power Management or CPU hotplug as we normally do in KVM.
-> > As consequence, the initialisation perfomed by __finalise_el2 is missing
-> > on e.g. the CPU_RESUME path with pKVM, hence leaving certain registers
-> > in an incorrect state.
+> > Does the compiler do the right thing (e.g., force PLT) if the branch
+> > target is outside the translation unit?  I'm wondering if we could for
+> > example use objtool to help enforce such rules at the call site.
+> 
+> It's the linker (rather than the compiler) that'll generate the PLT if the
+> caller and callee are out of range at link time. There are a few other issues
+> too (e.g. no guarnatee that the PLT isn't used by multiple distinct callers,
+> CMODX patching requirements), so we'd have to generate a pseudo-PLT ourselves
+> at build time with a patching-friendly code sequence. Ard had a prototype for
+> that:
+> 
+>   https://lore.kernel.org/linux-arm-kernel/20211105145917.2828911-1-ardb@kernel.org/
+> 
+> ... but that was sufficiently painful that we went with the current static key
+> approach:
+> 
+>   https://lore.kernel.org/all/20211109172408.49641-1-mark.rutland@arm.com/
+
+Thanks for the background.
+
+Was there a reason for putting it out-of-line rather than directly in
+_cond_resched()?
+
+If it were inline then it wouldn't be that much different from the
+static called version and I wonder if we could simplify by just using
+the static key for all PREEMPT_DYNAMIC configs.
+
+> > > If we knew each call-site would only call a particular function or skip the
+> > > call, then we could do better (and would probably need something like objtool
+> > > to NOP that out at compile time), but since we don't know the callee at build
+> > > time we can't ensure we have a PLT in range when necessary.
 > > 
-> > One such example is ZCR_EL2 which remains configured with SVE traps
-> > enabled. And so using SVE on a CPU that has gone through a hotplug
-> > off/on cycle leads to a hyp panic. Not good.
-> > 
-> > This series fixes this by macroizing the first half of __finalise_el2
-> > (that is, the part that is not specific to VHE) to allow its re-use
-> > from pKVM's PSCI relay.
+> > Unfortunately most static calls have multiple destinations.
 > 
-> For the series:
+> Sure, but here we're just enabling/disabling a call, which we could treat
+> differently, or wrap at a different level within the scheduler code. I'm happy
+> to take a look at that.
+
+I can try to emulate what you did for PREEMPT_DYNAMIC.  I'll Cc you on
+my actual patch to come soon-ish.
+
+> > And most don't have the option of being NULL.
 > 
-> Reviewed-by: Marc Zyngier <maz@kernel.org>
-> 
-> I think it might be a bit late to send this as fixes for 6.2 (my
-> latest pull request for kvmarm-fixes-6.2-3 is still in limbo), so I'd
-> suggest we take it for 6.3.
+> Oh, I was under the impression that all could be disabled/skipped, which is
+> what a NULL target implied.
 
-Works for me.
+I guess what I was trying to say is that if the target can be NULL, the
+call site has to use static_call_cond() to not break the
+!HAVE_STATIC_CALL case.  But most call sites use static_call().
 
-> How do you want to deal with the backports? None of the patches have a
-> Cc: stable, and only the last one has a Fixes: tag, but cannot be
-> applied standalone.
-
-Right, I wasn't sure what was best -- the first patches aren't really
-fixing anything per se but yeah, we kinda need them...
-
-Happy to re-post a version with the same 'Fixes:' tag on all patches and
-'Cc: stable' everywhere if that makes things easier. Wdyt?
-
-Cheers,
-Quentin
+-- 
+Josh
