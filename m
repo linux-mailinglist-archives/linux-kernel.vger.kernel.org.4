@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A8A686DDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBA9686E0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjBASZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S231934AbjBASfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbjBASZ3 (ORCPT
+        with ESMTP id S231926AbjBASfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:25:29 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CBA7F338;
-        Wed,  1 Feb 2023 10:25:20 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id pj3so5288244pjb.1;
-        Wed, 01 Feb 2023 10:25:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WT1kYk71H5+F2NIHrZR2ueHQKDmqPxHY0Sy9yM/Jt/U=;
-        b=W1kcdOPsY9NR/pom5pLjLb482PINGXLbueZICSBtQNSt8qJ95BM+rqPOzCjbaVs3/X
-         BMvmtvDr/ikGQ+nQDTEG5sd/u3So03MMi4AijNBxshj3jiePqF7O1VR5TnWQ+fRJ16WH
-         ArQ4apiDNUC71NntKg0TmozqgIBlXbare24It9qhmbZ4W3JFGwFFe6SMtCHXKdegOzR2
-         nyjgF1KNgwyuaYLMSUNpwfhRP+xs0tyeRTWEvlgJLLk4YaixUMfgDslnaEZ5xoe6TVgh
-         sIROCEubLAC+BnlPqYwnqaVvYTa6C9anYog46BDwOVuGWz4X9wmcpjVTyv6sPljxXAsn
-         hqeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WT1kYk71H5+F2NIHrZR2ueHQKDmqPxHY0Sy9yM/Jt/U=;
-        b=UAlHuMfoKqvhLZqZLcj2FN027No4Z0xgmQuq3/+Q23hG0yv1QTjjj8BGQq/zDmZwkz
-         xecOAWoO0yEJMhNCWEtBgcADU4QfKBy6UzGt6XQmBFMEvqsPTAg+M8jqCx6Ujk/ZsbGw
-         BBWKedpkKK3cXJIVtVPt2KNgw+BsYD3YjPZmp8JCgT+LKYZDYd6wP+AwzGD92vpLVQZt
-         /cZthCR/LaHnkdD7qZUcWgfoYY91CjE3n1J+hUCH/LzJ27kDyecf6ZoMfbWBHLajCr9S
-         poCIJVfbhs6uehysK2BEqXq5ojgxGVqXyTcQIsENhKrnMTJwPJkZSCNK3XgPnmuSG8Zq
-         xPTw==
-X-Gm-Message-State: AO0yUKW09g6wKc4OuP3OksL/BvHKk9adtn7hZ3AblUwo9fLaUlDb7Tvt
-        6vk+mNg/g6yFOnKDbbEVARQ=
-X-Google-Smtp-Source: AK7set/pnb0eWwpI76x18nzTVch/uj1fmn8qELtYyV7aoHwyCho/5m5WqDYG+29mbNx7ukB+A6C7VA==
-X-Received: by 2002:a17:902:d293:b0:196:6215:8856 with SMTP id t19-20020a170902d29300b0019662158856mr2792979plc.64.1675275920116;
-        Wed, 01 Feb 2023 10:25:20 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:ce3a:44de:62b3:7a4b])
-        by smtp.gmail.com with ESMTPSA id g23-20020a170902869700b00195f0f318b0sm10537138plo.91.2023.02.01.10.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 10:25:18 -0800 (PST)
-Date:   Wed, 1 Feb 2023 10:25:15 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: fec: fix conversion to gpiod API
-Message-ID: <Y9qui5431SMSUy0K@google.com>
-References: <Y9nbJJP/2gvJmpnO@google.com>
- <Y9qprbyr/0sa3sBN@lunn.ch>
+        Wed, 1 Feb 2023 13:35:30 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB227F692;
+        Wed,  1 Feb 2023 10:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675276524; x=1706812524;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=m8lj5D4ewZeXHvV9EGTjWwSj8HiD530yrHpf7fXqADE=;
+  b=nGYOszuzb9L/fdd4PW0uN/QD4XZga0AnlqlDvD/51S8SfrJjkQOoXWGz
+   ALZqOOD0D0G8A9UpO5NjAi8PS4+483QrGKi7Yja2HQGaP5LWLJOj9+NeY
+   8HmYgdJwrgnmunxarLKMZaXxnsLERvGJb48fSMccDHJeqYxLe2hKuB20b
+   kR4cw2Hb7Uwguk6/JwjmhYl6fuD19Dto4iHcA/+kurjN3hZar1TbWe/LX
+   IUaTD3YnXPxEj2V7fLxcJ6gKECZvV+3ElewSD1Bzv1yvbQIP50KRqLYHg
+   sl8iRIxNBICX9ltTdzWsKw63pOtPyc0Gg1uiFlUXM7vGkBNCTnXlNw0CG
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414440434"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="414440434"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:28:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667014251"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="667014251"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Feb 2023 10:28:55 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v5 0/4] Use idle_inject framework for intel_powerclamp
+Date:   Wed,  1 Feb 2023 10:28:50 -0800
+Message-Id: <20230201182854.2158535-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9qprbyr/0sa3sBN@lunn.ch>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 07:04:29PM +0100, Andrew Lunn wrote:
-> On Tue, Jan 31, 2023 at 07:23:16PM -0800, Dmitry Torokhov wrote:
-> > The reset line is optional, so we should be using devm_gpiod_get_optional()
-> > and not abort probing if it is not available. Also, there is a quirk in
-> > gpiolib (introduced in b02c85c9458cdd15e2c43413d7d2541a468cde57) that
-> > transparently handles "phy-reset-active-high" property. Remove handling
-> > from the driver to avoid ending up with the double inversion/flipped
-> > logic.
-> > 
-> > Fixes: 468ba54bd616 ("fec: convert to gpio descriptor")
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> Please split this into two:
-> 
-> 1) Fix for it being optional
-> 2) Removing support for phy-reset-active-high
-> 
-> The breakage is in net-next, so we are not in a rush, and we don't
-> need a minimum of patches. So since this is two logical changes, it
-> should be two patches.
+Dropped the per core idle injection patch from this series. Hence the
+subject of this series is changed. Now it is just for using
+idle inject framework for intel_powerclamp.
+Add additionl patch for module paramters to set cpumask and max idle percent.
 
-Hm, so you want the driver be still broken after changing the call to be
-devm_gpiod_get_optional()? Because you can not have this driver use
-gpiod API and keep parsing 'phy-reset-active-high' (by the driver
-itself).
+The old cover letter:
+This series introduces per CPU idle injection. In preparation for this
+enhance the existing powercap/idle_inject and modify intel_powerclamp
+to use this. Then add per core idle injection driver.
 
-OK, I suppose I can do that...
+v5:
+- additionl patch for module paramters to set cpumask and max idle percent
+- One fix for update callback
+- Rebased on top of patch 
+ "thermal: intel_powerclamp: Fix cur_state for multi package system"
 
-> 
-> Please also update the binding document to indicate that
-> 'phy-reset-active-high' is no longer deprecated, it has actually been
-> removed. So we want the DT checking tools to error out if such a
-> property is found.
+v4:
+- Dropped the per core idle inject patch
 
-We still parse 'phy-reset-active-high', just parsing happens elsewhere
-(in gpiolib), so it is not an error to have it in a binding.
+v3
+- Change callback from per CPU to per device and use in intel_powerclamp
+- Remove unused var in per cpu idle injection module
 
-Thanks.
+v2
+- Update based on feedback from Rafael on patch 2/4
+- Kconfig dependency issue
+Reported-by: kernel test robot <lkp@intel.com>
+
+Srinivas Pandruvada (4):
+  powercap: idle_inject: Export symbols
+  powercap: idle_inject: Add update callback
+  thermal/drivers/intel_powerclamp: Use powercap idle-inject framework
+  thermal/drivers/intel_powerclamp: Add additional module params
+
+ .../driver-api/thermal/intel_powerclamp.rst   |  22 +
+ drivers/powercap/idle_inject.c                |  57 +-
+ drivers/thermal/intel/Kconfig                 |   2 +
+ drivers/thermal/intel/intel_powerclamp.c      | 512 ++++++++++--------
+ include/linux/idle_inject.h                   |   3 +
+ 5 files changed, 367 insertions(+), 229 deletions(-)
 
 -- 
-Dmitry
+2.39.1
+
