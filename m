@@ -2,60 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D48686B15
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B229B686B10
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbjBAQEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:04:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
+        id S232620AbjBAQDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjBAQEn (ORCPT
+        with ESMTP id S232387AbjBAQDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:04:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A23F3E098
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:03:59 -0800 (PST)
+        Wed, 1 Feb 2023 11:03:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB05A3AB8
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:02:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675267438;
+        s=mimecast20190719; t=1675267354;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=AiUOCdYZiZ0EhpszTzQvWhcI8sDqoZDTm+/tkKX62Oo=;
-        b=IHazJrw/sgERUoR+odTrp9nC17nT5gw6xNF07ZsZKd2Jk5HPHmNxQvwISTwKhAQPDfnQ2c
-        4gGRRo7eP/Gc1tiDJEYaF6LRe48pFhtWpcAUn3Z3bC3+2QR1sFfa/dr+BIlalp2uVOYs0v
-        c5apCbJsOrnbIQuUhFN8J4MuukKbfxg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-25-hY-NQHINNpGkAjV3mvyciA-1; Wed, 01 Feb 2023 11:03:54 -0500
-X-MC-Unique: hY-NQHINNpGkAjV3mvyciA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E1DE38149AB;
-        Wed,  1 Feb 2023 16:03:53 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9741D404BEC4;
-        Wed,  1 Feb 2023 16:03:52 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 30599403CC75B; Wed,  1 Feb 2023 13:01:47 -0300 (-03)
-Date:   Wed, 1 Feb 2023 13:01:47 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Leonardo Bras <leobras@redhat.com>,
-        Yair Podemsky <ypodemsk@redhat.com>, P J P <ppandit@redhat.com>
-Subject: [PATCH v3] fs/buffer.c: update per-CPU bh_lru cache via RCU
-Message-ID: <Y9qM68F+nDSYfrJ1@tpad>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EElzE8+e1kmP7S3k+GEUsksfz7cKl253GIZfZ0NLa3M=;
+        b=P2PvdQzXU42h35TEZPRKXdiC9qCdiDdWESF9t06RjLkprIH4szTdPuHg4o951klU35nvvA
+        jKLqQ9cDgLfXuOSeTk0VDX90vWET1O2xFOm7idSoGM9xbQNf9m9SoyysysWlzXaB++X9F7
+        yL/KEPTLi0JworrIebBriHH5C7Cw1Ag=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-638-td_2H3-_N8qgviyfdjloWw-1; Wed, 01 Feb 2023 11:02:18 -0500
+X-MC-Unique: td_2H3-_N8qgviyfdjloWw-1
+Received: by mail-wm1-f70.google.com with SMTP id l19-20020a7bc353000000b003dc554c8263so5757290wmj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:02:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EElzE8+e1kmP7S3k+GEUsksfz7cKl253GIZfZ0NLa3M=;
+        b=HgKLuiLTB8y81U+60sErvaPqud5M/24zlbscges+/sdSNHEMRRW+dfUgRLWxozFZKp
+         T5SqVFvrMp52RuFjnJyLeG6eZ+jjLCa4HgJ06PgrKyVqX2U9ZgA/DUaXtyUti8yx9MbG
+         ZdKLfkDFdSLoqLbvSBa5Gtn1irSbceCcRuqVrDcEtaQ8KoIKOas49vvGgjVncTxtWIPW
+         u4pcub1TZ0cBVRn0gQQXWdzgZqeGxrPAF489SjPjTl3VtAttOdgGkDmaWsd70yDFptrw
+         u74i2+LFj0fvIQlZgHKGoR2UZTYibFdbnAZhYNZ2wpmXuhpUNpqqsNJGyoFpNF5T/NSl
+         6xkQ==
+X-Gm-Message-State: AO0yUKU86MccQmPENutl0dy7Lf1CxAX1ZUeYijJHKgeKzX+bdpYyPhhi
+        JmReLRmwsP29N1tIc5HoZ8buY1s3F59vG8qgt+7r1jspf3G8ehqnGnH7ZfrHVBRPZs8dZIkOali
+        NbMT7yiitJ68yFRT/kj82uvE3
+X-Received: by 2002:adf:fd88:0:b0:2bf:5dc0:56c8 with SMTP id d8-20020adffd88000000b002bf5dc056c8mr2253282wrr.51.1675267336905;
+        Wed, 01 Feb 2023 08:02:16 -0800 (PST)
+X-Google-Smtp-Source: AK7set/cViVu8qXP79IJNXkXkroLfOIDkTqq67u9Yp+KKjFvc+/ficndq3vQOcHptFk86I0MldWauA==
+X-Received: by 2002:adf:fd88:0:b0:2bf:5dc0:56c8 with SMTP id d8-20020adffd88000000b002bf5dc056c8mr2253258wrr.51.1675267336661;
+        Wed, 01 Feb 2023 08:02:16 -0800 (PST)
+Received: from redhat.com ([2.52.144.173])
+        by smtp.gmail.com with ESMTPSA id r25-20020adfa159000000b00297dcfdc90fsm18127882wrr.24.2023.02.01.08.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 08:02:15 -0800 (PST)
+Date:   Wed, 1 Feb 2023 11:02:09 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Christophe de Dinechin Dupont de Dinechin <cdupontd@redhat.com>
+Cc:     Christophe de Dinechin <dinechin@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "Reshetova, Elena" <elena.reshetova@intel.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Shishkin, Alexander" <alexander.shishkin@intel.com>,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Kuppuswamy, Sathyanarayanan" <sathyanarayanan.kuppuswamy@intel.com>,
+        "Kleen, Andi" <andi.kleen@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Wunner, Lukas" <lukas.wunner@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Poimboe, Josh" <jpoimboe@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        Cfir Cohen <cfir@google.com>, Marc Orr <marcorr@google.com>,
+        "jbachmann@google.com" <jbachmann@google.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "Lange, Jon" <jlange@microsoft.com>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: Linux guest kernel threat model for Confidential Computing
+Message-ID: <20230201105305-mutt-send-email-mst@kernel.org>
+References: <702f22df28e628d41babcf670c909f1fa1bb3c0c.camel@linux.ibm.com>
+ <DM8PR11MB5750F939C0B70939AD3CBC37E7D39@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <220b0be95a8c733f0a6eeddc08e37977ee21d518.camel@linux.ibm.com>
+ <DM8PR11MB575074D3BCBD02F3DD677A57E7D09@DM8PR11MB5750.namprd11.prod.outlook.com>
+ <261bc99edc43990eecb1aac4fe8005cedc495c20.camel@linux.ibm.com>
+ <m2h6w6k5on.fsf@redhat.com>
+ <20230131123033-mutt-send-email-mst@kernel.org>
+ <6BCC3285-ACA3-4E38-8811-1A91C9F03852@redhat.com>
+ <20230201055412-mutt-send-email-mst@kernel.org>
+ <4B78D161-2712-434A-8E6F-9D8BA468BB3A@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4B78D161-2712-434A-8E6F-9D8BA468BB3A@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,248 +113,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 01, 2023 at 02:15:10PM +0100, Christophe de Dinechin Dupont de Dinechin wrote:
+> 
+> 
+> > On 1 Feb 2023, at 12:01, Michael S. Tsirkin <mst@redhat.com> wrote:
+> > 
+> > On Wed, Feb 01, 2023 at 11:52:27AM +0100, Christophe de Dinechin Dupont de Dinechin wrote:
+> >> 
+> >> 
+> >>> On 31 Jan 2023, at 18:39, Michael S. Tsirkin <mst@redhat.com> wrote:
+> >>> 
+> >>> On Tue, Jan 31, 2023 at 04:14:29PM +0100, Christophe de Dinechin wrote:
+> >>>> Finally, security considerations that apply irrespective of whether the
+> >>>> platform is confidential or not are also outside of the scope of this
+> >>>> document. This includes topics ranging from timing attacks to social
+> >>>> engineering.
+> >>> 
+> >>> Why are timing attacks by hypervisor on the guest out of scope?
+> >> 
+> >> Good point.
+> >> 
+> >> I was thinking that mitigation against timing attacks is the same
+> >> irrespective of the source of the attack. However, because the HV
+> >> controls CPU time allocation, there are presumably attacks that
+> >> are made much easier through the HV. Those should be listed.
+> > 
+> > Not just that, also because it can and does emulate some devices.
+> > For example, are disk encryption systems protected against timing of
+> > disk accesses?
+> > This is why some people keep saying "forget about emulated devices, require
+> > passthrough, include devices in the trust zone".
+> > 
+> >>> 
+> >>>> </doc>
+> >>>> 
+> >>>> Feel free to comment and reword at will ;-)
+> >>>> 
+> >>>> 
+> >>>> 3/ PCI-as-a-threat: where does that come from
+> >>>> 
+> >>>> Isn't there a fundamental difference, from a threat model perspective,
+> >>>> between a bad actor, say a rogue sysadmin dumping the guest memory (which CC
+> >>>> should defeat) and compromised software feeding us bad data? I think there
+> >>>> is: at leats inside the TCB, we can detect bad software using measurements,
+> >>>> and prevent it from running using attestation.  In other words, we first
+> >>>> check what we will run, then we run it. The security there is that we know
+> >>>> what we are running. The trust we have in the software is from testing,
+> >>>> reviewing or using it.
+> >>>> 
+> >>>> This relies on a key aspect provided by TDX and SEV, which is that the
+> >>>> software being measured is largely tamper-resistant thanks to memory
+> >>>> encryption. In other words, after you have measured your guest software
+> >>>> stack, the host or hypervisor cannot willy-nilly change it.
+> >>>> 
+> >>>> So this brings me to the next question: is there any way we could offer the
+> >>>> same kind of service for KVM and qemu? The measurement part seems relatively
+> >>>> easy. Thetamper-resistant part, on the other hand, seems quite difficult to
+> >>>> me. But maybe someone else will have a brilliant idea?
+> >>>> 
+> >>>> So I'm asking the question, because if you could somehow prove to the guest
+> >>>> not only that it's running the right guest stack (as we can do today) but
+> >>>> also a known host/KVM/hypervisor stack, we would also switch the potential
+> >>>> issues with PCI, MSRs and the like from "malicious" to merely "bogus", and
+> >>>> this is something which is evidently easier to deal with.
+> >>> 
+> >>> Agree absolutely that's much easier.
+> >>> 
+> >>>> I briefly discussed this with James, and he pointed out two interesting
+> >>>> aspects of that question:
+> >>>> 
+> >>>> 1/ In the CC world, we don't really care about *virtual* PCI devices. We
+> >>>>  care about either virtio devices, or physical ones being passed through
+> >>>>  to the guest. Let's assume physical ones can be trusted, see above.
+> >>>>  That leaves virtio devices. How much damage can a malicious virtio device
+> >>>>  do to the guest kernel, and can this lead to secrets being leaked?
+> >>>> 
+> >>>> 2/ He was not as negative as I anticipated on the possibility of somehow
+> >>>>  being able to prevent tampering of the guest. One example he mentioned is
+> >>>>  a research paper [1] about running the hypervisor itself inside an
+> >>>>  "outer" TCB, using VMPLs on AMD. Maybe something similar can be achieved
+> >>>>  with TDX using secure enclaves or some other mechanism?
+> >>> 
+> >>> Or even just secureboot based root of trust?
+> >> 
+> >> You mean host secureboot? Or guest?
+> >> 
+> >> If it’s host, then the problem is detecting malicious tampering with
+> >> host code (whether it’s kernel or hypervisor).
+> > 
+> > Host.  Lots of existing systems do this.  As an extreme boot a RO disk,
+> > limit which packages are allowed.
+> 
+> Is that provable to the guest?
+> 
+> Consider a cloud provider doing that: how do they prove to their guest:
+> 
+> a) What firmware, kernel and kvm they run
+> 
+> b) That what they booted cannot be maliciouly modified, e.g. by a rogue
+>    device driver installed by a rogue sysadmin
+> 
+> My understanding is that SecureBoot is only intended to prevent non-verified
+> operating systems from booting. So the proof is given to the cloud provider,
+> and the proof is that the system boots successfully.
 
-umount calls invalidate_bh_lrus which IPIs each
-CPU that has non empty per-CPU buffer_head cache:
+I think I should have said measured boot not secure boot.
 
-       	on_each_cpu_cond(has_bh_in_lru, invalidate_bh_lru, NULL, 1);
+> 
+> After that, I think all bets are off. SecureBoot does little AFAICT
+> to prevent malicious modifications of the running system by someone with
+> root access, including deliberately loading a malicious kvm-zilog.ko
 
-This interrupts CPUs which might be executing code sensitive
-to interferences.
+So disable module loading then or don't allow root access?
 
-To avoid the IPI, free the per-CPU caches remotely via RCU.
-Two bh_lrus structures for each CPU are allocated: one is being
-used (assigned to per-CPU bh_lru pointer), and the other is
-being freed (or idle).
+> 
+> It does not mean it cannot be done, just that I don’t think we
+> have the tools at the moment.
 
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+Phones, chromebooks do this all the time ...
 
----
-v3: fix CPU hotplug 
-v2: fix sparse warnings (kernel test robot)
-
-diff --git a/fs/buffer.c b/fs/buffer.c
-index d9c6d1fbb6dd..0c54ffe9fd62 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -1203,7 +1203,21 @@ struct bh_lru {
- 	struct buffer_head *bhs[BH_LRU_SIZE];
- };
- 
--static DEFINE_PER_CPU(struct bh_lru, bh_lrus) = {{ NULL }};
-+
-+/*
-+ * Allocate two bh_lrus structures for each CPU. bh_lru points to the
-+ * one that is currently in use, and the update path does
-+ * (consider cpu->bh_lru = bh_lrus[0]).
-+ *
-+ * cpu->bh_lrup = bh_lrus[1]
-+ * synchronize_rcu()
-+ * free bh's in bh_lrus[0]
-+ */
-+static unsigned int bh_lru_idx;
-+static DEFINE_PER_CPU(struct bh_lru, bh_lrus[2]) = {{{ NULL }}, {{NULL}}};
-+static DEFINE_PER_CPU(struct bh_lru __rcu *, bh_lrup);
-+
-+static DEFINE_MUTEX(bh_lru_invalidate_mutex);
- 
- #ifdef CONFIG_SMP
- #define bh_lru_lock()	local_irq_disable()
-@@ -1245,16 +1259,19 @@ static void bh_lru_install(struct buffer_head *bh)
- 		return;
- 	}
- 
--	b = this_cpu_ptr(&bh_lrus);
-+	rcu_read_lock();
-+	b = rcu_dereference(per_cpu(bh_lrup, smp_processor_id()));
- 	for (i = 0; i < BH_LRU_SIZE; i++) {
- 		swap(evictee, b->bhs[i]);
- 		if (evictee == bh) {
-+			rcu_read_unlock();
- 			bh_lru_unlock();
- 			return;
- 		}
- 	}
- 
- 	get_bh(bh);
-+	rcu_read_unlock();
- 	bh_lru_unlock();
- 	brelse(evictee);
- }
-@@ -1266,28 +1283,32 @@ static struct buffer_head *
- lookup_bh_lru(struct block_device *bdev, sector_t block, unsigned size)
- {
- 	struct buffer_head *ret = NULL;
-+	struct bh_lru *lru;
- 	unsigned int i;
- 
- 	check_irqs_on();
- 	bh_lru_lock();
-+	rcu_read_lock();
-+
-+	lru = rcu_dereference(per_cpu(bh_lrup, smp_processor_id()));
- 	for (i = 0; i < BH_LRU_SIZE; i++) {
--		struct buffer_head *bh = __this_cpu_read(bh_lrus.bhs[i]);
-+		struct buffer_head *bh = lru->bhs[i];
- 
- 		if (bh && bh->b_blocknr == block && bh->b_bdev == bdev &&
- 		    bh->b_size == size) {
- 			if (i) {
- 				while (i) {
--					__this_cpu_write(bh_lrus.bhs[i],
--						__this_cpu_read(bh_lrus.bhs[i - 1]));
-+					lru->bhs[i] = lru->bhs[i - 1];
- 					i--;
- 				}
--				__this_cpu_write(bh_lrus.bhs[0], bh);
-+				lru->bhs[0] = bh;
- 			}
- 			get_bh(bh);
- 			ret = bh;
- 			break;
- 		}
- 	}
-+	rcu_read_unlock();
- 	bh_lru_unlock();
- 	return ret;
- }
-@@ -1381,35 +1402,54 @@ static void __invalidate_bh_lrus(struct bh_lru *b)
- 		b->bhs[i] = NULL;
- 	}
- }
--/*
-- * invalidate_bh_lrus() is called rarely - but not only at unmount.
-- * This doesn't race because it runs in each cpu either in irq
-- * or with preempt disabled.
-- */
--static void invalidate_bh_lru(void *arg)
--{
--	struct bh_lru *b = &get_cpu_var(bh_lrus);
--
--	__invalidate_bh_lrus(b);
--	put_cpu_var(bh_lrus);
--}
- 
- bool has_bh_in_lru(int cpu, void *dummy)
- {
--	struct bh_lru *b = per_cpu_ptr(&bh_lrus, cpu);
-+	struct bh_lru *b;
- 	int i;
--	
-+
-+	rcu_read_lock();
-+	b = rcu_dereference(per_cpu(bh_lrup, cpu));
- 	for (i = 0; i < BH_LRU_SIZE; i++) {
--		if (b->bhs[i])
-+		if (b->bhs[i]) {
-+			rcu_read_unlock();
- 			return true;
-+		}
- 	}
- 
-+	rcu_read_unlock();
- 	return false;
- }
- 
-+/*
-+ * invalidate_bh_lrus() is called rarely - but not only at unmount.
-+ */
- void invalidate_bh_lrus(void)
- {
--	on_each_cpu_cond(has_bh_in_lru, invalidate_bh_lru, NULL, 1);
-+	int cpu, oidx;
-+
-+	mutex_lock(&bh_lru_invalidate_mutex);
-+	cpus_read_lock();
-+	oidx = bh_lru_idx;
-+	bh_lru_idx++;
-+	if (bh_lru_idx >= 2)
-+		bh_lru_idx = 0;
-+
-+	/* Assign the per-CPU bh_lru pointer */
-+	for_each_online_cpu(cpu)
-+		rcu_assign_pointer(per_cpu(bh_lrup, cpu),
-+				   per_cpu_ptr(&bh_lrus[bh_lru_idx], cpu));
-+	synchronize_rcu_expedited();
-+
-+	for_each_online_cpu(cpu) {
-+		struct bh_lru *b = per_cpu_ptr(&bh_lrus[oidx], cpu);
-+
-+		bh_lru_lock();
-+		__invalidate_bh_lrus(b);
-+		bh_lru_unlock();
-+	}
-+	cpus_read_unlock();
-+	mutex_unlock(&bh_lru_invalidate_mutex);
- }
- EXPORT_SYMBOL_GPL(invalidate_bh_lrus);
- 
-@@ -1422,8 +1462,10 @@ void invalidate_bh_lrus_cpu(void)
- 	struct bh_lru *b;
- 
- 	bh_lru_lock();
--	b = this_cpu_ptr(&bh_lrus);
-+	rcu_read_lock();
-+	b = rcu_dereference(per_cpu(bh_lrup, smp_processor_id()));
- 	__invalidate_bh_lrus(b);
-+	rcu_read_unlock();
- 	bh_lru_unlock();
- }
- 
-@@ -2920,15 +2962,25 @@ void free_buffer_head(struct buffer_head *bh)
- }
- EXPORT_SYMBOL(free_buffer_head);
- 
-+static int buffer_cpu_online(unsigned int cpu)
-+{
-+	rcu_assign_pointer(per_cpu(bh_lrup, cpu),
-+			   per_cpu_ptr(&bh_lrus[bh_lru_idx], cpu));
-+	return 0;
-+}
-+
- static int buffer_exit_cpu_dead(unsigned int cpu)
- {
- 	int i;
--	struct bh_lru *b = &per_cpu(bh_lrus, cpu);
-+	struct bh_lru *b;
- 
-+	rcu_read_lock();
-+	b = rcu_dereference(per_cpu(bh_lrup, cpu));
- 	for (i = 0; i < BH_LRU_SIZE; i++) {
- 		brelse(b->bhs[i]);
- 		b->bhs[i] = NULL;
- 	}
-+	rcu_read_unlock();
- 	this_cpu_add(bh_accounting.nr, per_cpu(bh_accounting, cpu).nr);
- 	per_cpu(bh_accounting, cpu).nr = 0;
- 	return 0;
-@@ -3021,7 +3073,7 @@ EXPORT_SYMBOL(__bh_read_batch);
- void __init buffer_init(void)
- {
- 	unsigned long nrpages;
--	int ret;
-+	int ret, cpu;
- 
- 	bh_cachep = kmem_cache_create("buffer_head",
- 			sizeof(struct buffer_head), 0,
-@@ -3029,6 +3081,11 @@ void __init buffer_init(void)
- 				SLAB_MEM_SPREAD),
- 				NULL);
- 
-+	cpus_read_lock();
-+	for_each_online_cpu(cpu)
-+		rcu_assign_pointer(per_cpu(bh_lrup, cpu), per_cpu_ptr(&bh_lrus[0], cpu));
-+	cpus_read_unlock();
-+
- 	/*
- 	 * Limit the bh occupancy to 10% of ZONE_NORMAL
- 	 */
-@@ -3037,4 +3094,7 @@ void __init buffer_init(void)
- 	ret = cpuhp_setup_state_nocalls(CPUHP_FS_BUFF_DEAD, "fs/buffer:dead",
- 					NULL, buffer_exit_cpu_dead);
- 	WARN_ON(ret < 0);
-+	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN, "fs/buffer:online",
-+					NULL, buffer_cpu_online);
-+	WARN_ON(ret < 0);
- }
+> > 
+> >> If it’s guest, at the moment at least, the measurements do not extend
+> >> beyond the TCB.
+> >> 
+> >>> 
+> >>> -- 
+> >>> MST
+> 
 
