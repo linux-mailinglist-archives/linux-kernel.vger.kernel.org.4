@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDBF68664C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0581268664D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbjBAM4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
+        id S231714AbjBAM5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 07:57:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjBAM4v (ORCPT
+        with ESMTP id S229487AbjBAM5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:56:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37844C33;
-        Wed,  1 Feb 2023 04:56:49 -0800 (PST)
+        Wed, 1 Feb 2023 07:57:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3954442DB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:57:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AD2B8B82164;
-        Wed,  1 Feb 2023 12:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB208C433D2;
-        Wed,  1 Feb 2023 12:56:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675256207;
-        bh=cM5MtNWV+d8D8YxWSV+fcLmFAHndu+7kCKP50Gsy+Ss=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uCeFZDpARJQWvcjjupzg/14o9OvKZi6lO7FQOa/K9+V8nBiCcwhp0s9H/SoiKad8F
-         IPV0TNrP6u9MytuFndp0C22da+OuubwgClRYpDPAQKfgv/HaOf4Do1ZyzlgKEepsWC
-         IwFkjnnPaDtZi/ROHrcQM6jmimdTl8MX4ov2TPxs=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-sh@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: [PATCH] maple: remove unneeded maple_bus_uevent() callback.
-Date:   Wed,  1 Feb 2023 13:56:42 +0100
-Message-Id: <20230201125642.624255-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E8F61761
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 12:57:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA15CC433EF;
+        Wed,  1 Feb 2023 12:57:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675256257;
+        bh=8dtRUXoHN3LUlKfLhDcM61zlUbHfbbjOfI95C6JYLAQ=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=ClPgW21A6heaqpnKL9sHaOtJyXrz4nRxyJGWAswMJH4Pkh0PHJR9aHJ1Wfpu+HfVi
+         YX5GsyUMi07pvqxP4D6tidoBz01e4C5d1eb0DD0Wm5sJkqjabGEc1gnpERxIWpbHFc
+         czGQH8MIjGF/xwIS8G/I9VcLGAkpjHUlzm4dwjXDRVzU0NFMQYskxw2GQwrkhNx7RJ
+         3conp0KsLw0K1SDcEoc97wukWESVfsXDvrav2JH9XiDFAvuT6lxOA9i9ozv5zj9sPJ
+         7aBWmyrtXQuHmrTi+1Ir8z7uWeuGJZENfpqVDCvw1jxLiVypVVp+meyClsa9rjsLX9
+         TbKOmuyVK5xYQ==
+Message-ID: <938a8e61-4e47-1acc-938c-c90d213d2c86@kernel.org>
+Date:   Wed, 1 Feb 2023 20:57:33 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1619; i=gregkh@linuxfoundation.org; h=from:subject; bh=cM5MtNWV+d8D8YxWSV+fcLmFAHndu+7kCKP50Gsy+Ss=; b=owGbwMvMwCRo6H6F97bub03G02pJDMm3EjsEH1sfFFzeVc/LcDOwRG+J7butvl8rzTyWP130Y+qO bf4hHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRnPMMc2W0dWPrr5df1inbtumDj8 H2J69bmxkWNF651Z5l7F/14jXz2fuHTiQsMbi+HwA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     qixiaoyu <qxy65535@gmail.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     xiongping1@xiaomi.com, qixiaoyu1@xiaomi.com,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20230113125859.15651-1-qixiaoyu1@xiaomi.com>
+ <20230116030850.20260-1-qixiaoyu1@xiaomi.com>
+ <7c12ebaa-4d3d-e475-dfb2-7b459cd26e64@kernel.org>
+ <Y9ZWDVV3HJ431Fis@mi-HP-ProDesk-680-G4-MT>
+ <Y9pZqOMBipT2NZk0@mi-HP-ProDesk-680-G4-MT>
+From:   Chao Yu <chao@kernel.org>
+Subject: Re: [PATCH 1/2 v2] f2fs: fix wrong calculation of block age
+In-Reply-To: <Y9pZqOMBipT2NZk0@mi-HP-ProDesk-680-G4-MT>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver core recently changed the uevent bus callback to take a const
-pointer, and the maple_bus_uevent() was not correctly fixed up.  Instead
-of fixing the function parameter types, just remove the callback
-entirely as it does not do anything, so it is not necessary.
+On 2023/2/1 20:23, qixiaoyu wrote:
+>>>
+>>> How about updating as below to avoid lossing accuracy if new is less than 100?
+>>>
+>>> return div_u64(new * (100 - LAST_AGE_WEIGHT), 100) +
+>>> 		div_u64(old * LAST_AGE_WEIGHT, 100);
+>>>
+>>> Thanks,
+>>>
+>>
+>> We want to avoid overflow by doing the division first. To keep the accuracy, how
 
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Fixes: 2a81ada32f0e ("driver core: make struct bus_type.uevent() take a const *")
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-sh maintainers, I'll take this through my tree as that's where the
-offending commit is that causes the build breakage.
+Alright,
 
- drivers/sh/maple/maple.c | 7 -------
- 1 file changed, 7 deletions(-)
+>> about updating as below:
+>>
+>> 	res = div_u64_rem(new, 100, &rem_new) * (100 - LAST_AGE_WEIGHT)
+>> 		+ div_u64_rem(old, 100, &rem_old) * LAST_AGE_WEIGHT;
+>> 	res += rem_new * (100 - LAST_AGE_WEIGHT) / 100 + rem_old * LAST_AGE_WEIGHT / 100;
+>> 	return res;
 
-diff --git a/drivers/sh/maple/maple.c b/drivers/sh/maple/maple.c
-index e24e220e56ee..e05473c5c267 100644
---- a/drivers/sh/maple/maple.c
-+++ b/drivers/sh/maple/maple.c
-@@ -760,12 +760,6 @@ static int maple_match_bus_driver(struct device *devptr,
- 	return 0;
- }
- 
--static int maple_bus_uevent(struct device *dev,
--			    struct kobj_uevent_env *env)
--{
--	return 0;
--}
--
- static void maple_bus_release(struct device *dev)
- {
- }
-@@ -782,7 +776,6 @@ static struct maple_driver maple_unsupported_device = {
- struct bus_type maple_bus_type = {
- 	.name = "maple",
- 	.match = maple_match_bus_driver,
--	.uevent = maple_bus_uevent,
- };
- EXPORT_SYMBOL_GPL(maple_bus_type);
- 
--- 
-2.39.1
+if (rem_new)
+	res += rem_new * (100 - LAST_AGE_WEIGHT) / 100;
+if (rem_old)
+	res += rem_old * LAST_AGE_WEIGHT / 100;
 
+Otherwise, it looks fine to me. :)
+
+Thanks,
+
+>>
+>> Thanks,
+>>
+> 
+> Friendly ping
+> 
+>>>>    }
+>>>>    /* This returns a new age and allocated blocks in ei */
