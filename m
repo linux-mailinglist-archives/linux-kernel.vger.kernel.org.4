@@ -2,87 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8566860E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B81366860E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjBAHqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 02:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S232019AbjBAHrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbjBAHq1 (ORCPT
+        with ESMTP id S230207AbjBAHqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:46:27 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECB05356A;
-        Tue, 31 Jan 2023 23:45:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4ZX9vjIxwOHrfewyJfr8xGs3SYgx2A9oZbI6nWkz+6I=; b=JWMbAFRJy7LzBo/apgeIlCm+gl
-        KhgodpB9T0dyedZZ2VhQE4eolmPlCwIzVItsT0dwI3nVtLah0U5U4CJiRP3EbJ/n1o6sDkZkVel9C
-        lXZc3zmAZM/wYEHQ/jAl4tK7F8eLqlvQcyqCOMAfxJ2VHhSdCRRAkbObFuFm43owZA/tXC4omewnf
-        qG9WyM32ibnqS0aXZRj3UAeYyEa3tC+z/bK9Ik/5wZ09ZIt/klT5LmdGGMUSon9csSJ6KD6jv9j82
-        2xY1miqNQQ8huYuSy+CIE5io0N0eYsVeQQl6cl97ysMoAUbt4dNSHFx20zHc3frFUM2dTaU25OIAf
-        1CQyVAVg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pN7oZ-00Ag07-95; Wed, 01 Feb 2023 07:45:55 +0000
-Date:   Tue, 31 Jan 2023 23:45:55 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
+        Wed, 1 Feb 2023 02:46:43 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5243B5D12B;
+        Tue, 31 Jan 2023 23:46:09 -0800 (PST)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1500CE0003;
+        Wed,  1 Feb 2023 07:46:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675237567;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z25cfYozFGO7GRW7aRvp/LnRji5Y6L8B9ioccgyMGOo=;
+        b=FVczT2DdcQRv21R6CZfD8lXiI6mt72zNv/4Dsv1FyVceB+PrtVgU3PeLgVGrLg2otMRWqe
+        hR4dxyxdOb+hwvssL6bMIjIeajlHUISohPD3bvgqjMmplFkgaw0aUcOQ+AuaJgiGJjVhFY
+        hUIIehahUdvRMoUx1F5FXX8IZZxu6hip3gzHuXxAbYQ7KG6h3rq6+siyp+CHGKbLPITWYY
+        4igq1MEU9EzThXmhOeM9BKwX8T3FL2fe6vhBXiEIpsFK9+48TiZGUm2k28ZlQuo6dVK+wU
+        WVOB85Jl9inH8Vnak10doHqSRMhMCGtIa6KS15Zl39TNPUoBoSBKiJOegpwE+Q==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] block: Support creating a struct file from a
- block device
-Message-ID: <Y9oYs+KycfdFYlu2@infradead.org>
-References: <20230126033358.1880-1-demi@invisiblethingslab.com>
- <20230126033358.1880-2-demi@invisiblethingslab.com>
- <Y9d692WEX/ZvBhXI@infradead.org>
- <Y9gZAJGgdjFtsm9I@itl-email>
- <Y9jW73uAtE3HdCou@infradead.org>
- <Y9lBlKD3U/jMug9j@itl-email>
+Subject: Re: [PATCH] arm64: dts: marvell: Fix compatible strings for Armada
+ 3720 boards
+In-Reply-To: <20220713125644.3117-1-pali@kernel.org>
+References: <20220713125644.3117-1-pali@kernel.org>
+Date:   Wed, 01 Feb 2023 08:46:05 +0100
+Message-ID: <87h6w5bzgi.fsf@BL-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9lBlKD3U/jMug9j@itl-email>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 11:27:59AM -0500, Demi Marie Obenour wrote:
-> While it is easy to provide userspace with an FD to any struct file, it
-> is *not* easy to obtain a struct file for a given struct block_device.
-> I could have had device-mapper implement everything itself, but that
-> would have duplicated a large amount of code already in the block layer.
-> Instead, I decided to refactor the block layer to provide a function
-> that does exactly what was needed.  The result was this patch.  In the
-> future, I would like to add an ioctl for /dev/loop-control that creates
-> a loop device and returns a file descriptor to the loop device.  I could
-> also see iSCSI supporting this, with the socket file descriptor being
-> passed in from userspace.
+Pali Roh=C3=A1r <pali@kernel.org> writes:
 
-And it is somewhat intentional that you can't.  Block device inodes
-have interesting life times and are never directly exposed to userspace
-at all.  They are internal, and only f_mapping of a file system inode
-delegates to them or I/O.  Your patch now magically exposes them to
-userspace.  And it then bypasses all pathname and inode permission
-based access checks and auditing.  So we can't just do it.
+> All Armada 3720 boards have Armada 3720 processor which is of Armada 3700
+> family and do not have Armada 3710 processor. So none of them should have
+> compatible string for Armada 3710 processor.
+>
+> Fix compatible string for all these boards by removing wrong processor
+> string "marvell,armada3710" and adding family string "marvell,armada3700"
+> as the last one. (Note that this is same way how are defined Armada 3710
+> DTS files).
+>
+> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
 
-> blkdev_do_open() does not solve any problem for me at this time.
-> Instead, it represents the code shared by blkdev_get_by_dev() and
-> blkdev_get_file().  I decided to export it because it could be of
-> independent use to others.  In particular, it could potentially
-> simplify disk_scan_partitions() in block/genhd.c, pkt_new_dev() in
-> pktcdvd, backing_dev_store() in zram, and f2fs_scan_devices() in f2fs.
 
-All thse need to actually open the underlying device as they do I/O.
-Doing I/O without opening the device is a no-go.
+Fixedd a marge conflict and applied on mvebu/dt64
+
+Thanks,
+
+Gregory
+
+> ---
+>  arch/arm64/boot/dts/marvell/armada-3720-db.dts                  | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts    | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts   | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts      | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts         | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts          | 2 +-
+>  arch/arm64/boot/dts/marvell/armada-372x.dtsi                    | 2 +-
+>  8 files changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-db.dts b/arch/arm64/=
+boot/dts/marvell/armada-3720-db.dts
+> index bd4e61d5448e..0cfb38492021 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-db.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-db.dts
+> @@ -18,7 +18,7 @@
+>=20=20
+>  / {
+>  	model =3D "Marvell Armada 3720 Development Board DB-88F3720-DDR3";
+> -	compatible =3D "marvell,armada-3720-db", "marvell,armada3720", "marvell=
+,armada3710";
+> +	compatible =3D "marvell,armada-3720-db", "marvell,armada3720", "marvell=
+,armada3700";
+>=20=20
+>  	chosen {
+>  		stdout-path =3D "serial0:115200n8";
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts=
+ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
+> index 5c4d8f379704..6715a19c1483 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
+> @@ -18,7 +18,7 @@
+>  / {
+>  	model =3D "Globalscale Marvell ESPRESSOBin Board (eMMC)";
+>  	compatible =3D "globalscale,espressobin-emmc", "globalscale,espressobin=
+",
+> -		     "marvell,armada3720", "marvell,armada3710";
+> +		     "marvell,armada3720", "marvell,armada3700";
+>  };
+>=20=20
+>  &sdhci0 {
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dt=
+s b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
+> index 070725b81be5..447760b69850 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
+> @@ -13,7 +13,7 @@
+>  / {
+>  	model =3D "Globalscale Marvell ESPRESSOBin Ultra Board";
+>  	compatible =3D "globalscale,espressobin-ultra", "marvell,armada3720",
+> -		     "marvell,armada3710";
+> +		     "marvell,armada3700";
+>=20=20
+>  	aliases {
+>  		/* ethernet1 is WAN port */
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.=
+dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
+> index 75401eab4d42..2a8aa3901a9f 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
+> @@ -19,7 +19,7 @@
+>  	model =3D "Globalscale Marvell ESPRESSOBin Board V7 (eMMC)";
+>  	compatible =3D "globalscale,espressobin-v7-emmc", "globalscale,espresso=
+bin-v7",
+>  		     "globalscale,espressobin", "marvell,armada3720",
+> -		     "marvell,armada3710";
+> +		     "marvell,armada3700";
+>=20=20
+>  	aliases {
+>  		/* ethernet1 is wan port */
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts b=
+/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
+> index 48a7f50fb427..b03af87611a9 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
+> @@ -18,7 +18,7 @@
+>  / {
+>  	model =3D "Globalscale Marvell ESPRESSOBin Board V7";
+>  	compatible =3D "globalscale,espressobin-v7", "globalscale,espressobin",
+> -		     "marvell,armada3720", "marvell,armada3710";
+> +		     "marvell,armada3720", "marvell,armada3700";
+>=20=20
+>  	aliases {
+>  		/* ethernet1 is wan port */
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts b/ar=
+ch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
+> index 1542d836c090..c5a834b33b77 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
+> @@ -16,5 +16,5 @@
+>=20=20
+>  / {
+>  	model =3D "Globalscale Marvell ESPRESSOBin Board";
+> -	compatible =3D "globalscale,espressobin", "marvell,armada3720", "marvel=
+l,armada3710";
+> +	compatible =3D "globalscale,espressobin", "marvell,armada3720", "marvel=
+l,armada3700";
+>  };
+> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arc=
+h/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> index caf9c8529fca..5840ed129309 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> @@ -14,7 +14,7 @@
+>  / {
+>  	model =3D "CZ.NIC Turris Mox Board";
+>  	compatible =3D "cznic,turris-mox", "marvell,armada3720",
+> -		     "marvell,armada3710";
+> +		     "marvell,armada3700";
+>=20=20
+>  	aliases {
+>  		spi0 =3D &spi0;
+> diff --git a/arch/arm64/boot/dts/marvell/armada-372x.dtsi b/arch/arm64/bo=
+ot/dts/marvell/armada-372x.dtsi
+> index 5ce55bdbb995..02ae1e153288 100644
+> --- a/arch/arm64/boot/dts/marvell/armada-372x.dtsi
+> +++ b/arch/arm64/boot/dts/marvell/armada-372x.dtsi
+> @@ -13,7 +13,7 @@
+>=20=20
+>  / {
+>  	model =3D "Marvell Armada 3720 SoC";
+> -	compatible =3D "marvell,armada3720", "marvell,armada3710";
+> +	compatible =3D "marvell,armada3720", "marvell,armada3700";
+>=20=20
+>  	cpus {
+>  		cpu1: cpu@1 {
+> --=20
+> 2.20.1
+>
+
+--=20
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com
