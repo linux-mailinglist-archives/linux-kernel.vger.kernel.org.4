@@ -2,292 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D07626861D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1166861DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjBAIk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 03:40:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S230200AbjBAIlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 03:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjBAIkZ (ORCPT
+        with ESMTP id S231802AbjBAIlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 03:40:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228AD5C0EB;
-        Wed,  1 Feb 2023 00:40:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5293B82130;
-        Wed,  1 Feb 2023 08:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29429C433D2;
-        Wed,  1 Feb 2023 08:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675240821;
-        bh=jzTt9dKyGXgNou3BaoTiCeYmItoDdqwQ+Q0fw7Ry0aY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TktCtgU3b8zrlcdTv8Y8nVrSwrpWu8sMoEgklEetKqiqkYN3KvfwppWhcYdPcL8Kg
-         JO4I12icaJFat6OureDlA7Wl/AjWk6Tn1o3OO3csoB2ciZSrgfpy/gKlaMs5S+Gh/G
-         YQHliIPot8BtA03Xka7W+fBvkaOlRKomLbC9N13Q=
-Date:   Wed, 1 Feb 2023 09:40:18 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "D. Starke" <daniel.starke@siemens.com>
-Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] tty: n_gsm: add keep alive support
-Message-ID: <Y9olcm0PiSCSikri@kroah.com>
-References: <20230201080151.2068-1-daniel.starke@siemens.com>
+        Wed, 1 Feb 2023 03:41:40 -0500
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2069.outbound.protection.outlook.com [40.107.241.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B1360C8A;
+        Wed,  1 Feb 2023 00:41:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lqfru936AN33yhQUegxvYqd0MlSI0SuJWtcTYi8myCgs48wjO/2+8oTtH3STbargNinyvZOzXjNluNyNGhCgZ1idN2EY+RaGPHm2w5ye/0ZWorha4P+eED2dsV9Qb6okSMfcTgXWNXl/AMDh0XZAU+BovIvk2jx0I9U0eBUJVe5DSMiRGYrKBsxtzIyz58JmYaFq7jKU2JK9pUMsOevjvlJZlSXkem95lVk9iE9+3rzouF/nYBMR0d1mABjvUxXrJpWYLIbKanoPrmeutGHwq7haKnC3LB3Z335YQa42LlIBDAtyVbuSWD3VdIaqLeFPAVuZS+u7CX+sRV5hGjV4bA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CxfyGVHaxg6QtbRsrBEg0EL95DEQg4p1DJnJN7JgoJk=;
+ b=C9fP5XH/tdaZr/2MEh2Iq6dC51aNL2wZaIY2ub5XHIZlXpEjtvvWAqzevhNg+ZYtme7V94Fn68RQ5vO7WuMK1uj7CIUYy0gUjdBUKGfchMLHOeQeiT0iUTqH0DepNATTcEGHgNpiTW8YVKz0nRJ7Hfrj4KMUIhZX6Hh6XJRxpkn+rTgyJSJem50XJ5UFKuRY9XYHNQymDPt0fTJXc+4OH4/rh36OrQV/RaZouGqUzpT/iAJwagrkj+tPKXbq/W3gH7HL3nblj3gVH29+IgOYQSBbT2R98kvLdXHEdhVW2ONaqkzJJEcqfysEDhu3tU4sZXHPkZ+Clx+QDDmtsSVFsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CxfyGVHaxg6QtbRsrBEg0EL95DEQg4p1DJnJN7JgoJk=;
+ b=N3UqOfUVfRhmNhTFwkPswjk/ek8XCVI0Uq/jvnI3OyIFzIp8zvSmWTkE6SVJEKAP8ppfFGO02GkTBZ5nN4t9eqErLrK8J0e1bPXK9cDssf7cLbfHN/LAQHSCiAS5LPT0IUnZBNfIAdNn6DE5RskjHVFoeIRSp1Eqy3bVyi8gYvA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB9628.eurprd04.prod.outlook.com (2603:10a6:10:30b::14)
+ by DB9PR04MB9449.eurprd04.prod.outlook.com (2603:10a6:10:36a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Wed, 1 Feb
+ 2023 08:41:36 +0000
+Received: from DB9PR04MB9628.eurprd04.prod.outlook.com
+ ([fe80::aec2:20b6:cf99:2886]) by DB9PR04MB9628.eurprd04.prod.outlook.com
+ ([fe80::aec2:20b6:cf99:2886%5]) with mapi id 15.20.6043.038; Wed, 1 Feb 2023
+ 08:41:36 +0000
+Message-ID: <30b1aa51-2fac-16b8-8fba-e82a88e3219d@nxp.com>
+Date:   Wed, 1 Feb 2023 10:41:15 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] remoteproc: imx_dsp_rproc: add custom memory copy
+ implementation for i.MX DSP Cores
+To:     Peng Fan <peng.fan@oss.nxp.com>,
+        "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "S.J. Wang" <shengjiu.wang@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Paul Olaru <paul.olaru@nxp.com>,
+        Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
+Cc:     linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20230131170436.31280-1-iuliana.prodan@oss.nxp.com>
+ <abd74bb6-9131-3769-513f-954234981403@oss.nxp.com>
+Content-Language: en-US
+From:   Iuliana Prodan <iuliana.prodan@nxp.com>
+In-Reply-To: <abd74bb6-9131-3769-513f-954234981403@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS4P251CA0005.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d2::10) To DB9PR04MB9628.eurprd04.prod.outlook.com
+ (2603:10a6:10:30b::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201080151.2068-1-daniel.starke@siemens.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9628:EE_|DB9PR04MB9449:EE_
+X-MS-Office365-Filtering-Correlation-Id: 64189862-a671-449c-c12a-08db043020b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5Aj3MCpgihb70OUjbMRTy/xJFRkNLefP/mpLvhZ0ScYEYO/nka8blbVzR0V8TWJ/qCmPI0cilf3c66bzAkXctVHMSb/NN3z7TrQ1s2Kykild+jCGCJpEsKE1hJpsMXu1V7drqHXIckM0ERvB1X0kP9H+dsO/I3iZC508N0wAiYhhkWYtdwaB/7eXcp3+YZ7eBK236BYCkKmHiZod4+GhAITBMZmx9ZZWEhQ+UpYBNAkZygXHg2os8xvqvmUTFw0cdvbeRSKi/hQYwQ7/akRFMLEWXewiZA6b9TA9xxrXcVD6Jk3nrpaLkhCvU5h9po+68wdfhc3raCdMRMYLkg4RiW2koLF/3gZyX09Fw88Jo73MvLioi02gsrVZqpnhPBZeIK0RRKqZrmu4Hw/JND7D9kPqAZw4Mlqfv86/zHuNUK/8UPIJeCmF8rkCV+DvZenVGLehB3XrSCqW3mwAvajBShfaTP31ZL4PYd03Rrziu1CDTEsCvzLVSSm/6LpmsNW7Fi07GBjcxuNPbIY/0ozp8TjYGXSe0WduBfJ6utmR2Fx6GfOpAuVsvtCg+dmKGzWB12fwwPsqEZTCzUCjxJwz3YLmdxvdO+QnTt0SC1P9d6ivpO7/1ra0CtChtMSjJnrAyhrMYSl9jnZSFoSj9SF1rAIzor8U3UrNmYHyjsGYgK8rLyHd/HI+LOJbM+1oWq7w93g0dIjQmimxwksNlsXzIMBDRfz1HBzU8NBpgLhUVi1NmoVkCIPSKiV2iGCnx+Yr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9628.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(366004)(346002)(376002)(39860400002)(451199018)(31686004)(2906002)(86362001)(921005)(4744005)(44832011)(83380400001)(8936002)(41300700001)(31696002)(6512007)(54906003)(36756003)(478600001)(26005)(6666004)(186003)(55236004)(53546011)(5660300002)(66899018)(6506007)(110136005)(66476007)(6486002)(2616005)(4326008)(66946007)(66556008)(8676002)(38100700002)(316002)(6636002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QmEyblNWeUcyQ2FFOHBCRkY3RWR1WVltekZ5UmFVb2lqNmc3K3BOeWRRSkJM?=
+ =?utf-8?B?STR1V3V5dE8yYUgyZGZEc2Q5L2tPT1NubFZmbndsVml1WjYyOFVtaEpaaTFi?=
+ =?utf-8?B?bXRlVUMzemM1RGFJS1lXZVo0VXhDSDErU3duRERPQ3JaV3RLTytHclh2MHZD?=
+ =?utf-8?B?WVJRL0NWTzNGTHlOdGs1NFZOVGRZSHRQa3Z1eHFLR1VITU4zRTcwZHNxTnVX?=
+ =?utf-8?B?UnBIUFBJMVQydkhaRSsvWGNya0tsWTJ1aVREZ1kxZEp5d0RBTkxCM2pXNWQr?=
+ =?utf-8?B?ZGNiSEMwU0UvZ2FHcnRpWjRCSE5zdFVNUHFqbHpXSkdQa2hQRnFrMWV0VE1N?=
+ =?utf-8?B?YlZ4dktOc0FyeWNBa25sbkttcHJwZlkxQllFTVo1NTF3UzExVmFqNXJvczd5?=
+ =?utf-8?B?Q3dYNWsrOFNCM0JOOUlRM3J3bUxmQmdZeWZqVVZ1eUFiS0I1YkpOOGFoRU1s?=
+ =?utf-8?B?eDI5L2M4QTIxMjltWHhhK3JVQ2FralI5RHRwbWlaQmpGQW9BdDJudmZaY0xB?=
+ =?utf-8?B?N1dmQTM5RDZvbEJjejBNK091UHNManhCSHVWWE0valE1L2hjTlo3SDlHUnVV?=
+ =?utf-8?B?QXV4Z1NIcENOUlNYMVN1c1Zxc0xzR1B6Z21Qcy95bEwwUGNRK2JBbnQ3YS94?=
+ =?utf-8?B?WENGMVBtVHlpNXVFZUhKUFVIdURGeXY5VHRFcDNNNWYxVWlzTm94NlpBUE9m?=
+ =?utf-8?B?M1hqQkFJaFBpRG5Eem5teHNkaEtpcVRNc1BocW93KytMZzkvNXNKQ1c4bFdi?=
+ =?utf-8?B?bXZlZmFISXM1aXoxcW01WUJkd1dFTkdmVjY3L2lJVzlnbkszVmlhVnArdGlP?=
+ =?utf-8?B?MGpUUE1uUWZQT2ZXVXhWdjE2N3dzQWRNQzhkaE4rY3cvbU95cUZnMGxRUjU5?=
+ =?utf-8?B?amRpQ09PL1NLWGR4UTdWWGUzOXIrOGhGMVk3eExYZlJvMGZESjlvRG16R2JN?=
+ =?utf-8?B?cll5L00xVnFHSngyMzh5bnc1MG1Ub0lDQkR1d1VvMlk3QjZZUS8zc3RqVkxt?=
+ =?utf-8?B?NG9jNjQwWVpUNVdJeUp6bmF5SFlsdU0xWkdhMS82cDhPNHdGeVk4eHVLa3Iy?=
+ =?utf-8?B?Qjk1dFVUY2ZQUUlRTWN0a0N0ZVlBTW9VSmJWWVE1MUZLZm9NbnVHSFRtckE2?=
+ =?utf-8?B?QzR2SEJnWFdEcHI1a3FaMWFWSDAxK1dCTW9sVmREZFpWdzNMd2tWUlRaRi8w?=
+ =?utf-8?B?NVIwNkJsc1BPSHJyTVJCaUpQNWFwelFlUUU2QzE2UW1YRENTT25mQWtETlh1?=
+ =?utf-8?B?SVg3VTBtN2FjcXF6UTE5cVNhZmI4ZnFGNUpuMGdPc0Q3S1JwOVBWWmJnRE13?=
+ =?utf-8?B?bm5wWWRVY1dXdm1nTFdmNVlYdEM5V3FTSHVFWXFRQ200d2hBdnVPbXI4YjJD?=
+ =?utf-8?B?REFLUWV2YkFCbnY5d01FbWVoeGhNKy9BaDArWDh2WHB2RmgyWkxJR20rOGF2?=
+ =?utf-8?B?WW14STlDRzNLWW5FcHQvMHNLelpjZDVhYzMxWm5wZzRNMFpMZ21NY0NSUWNa?=
+ =?utf-8?B?THgvOG5QYXh4ajl5cmNpUlhhNGloMFhqRW9LOGNvLzJ0bHBaSkQ2VjlQMjhP?=
+ =?utf-8?B?eFlQUVhhaDF6Uyt6MUVCRjgzYkRVY0NOTTQ2akZvSy9lWWxIQUdKY25pK2th?=
+ =?utf-8?B?Qmxpa3NLRy9iMk5WeUJlYjB1RHo0ZCtaM1pIYml0dG1xOFI2ZzEzSlpLdE9m?=
+ =?utf-8?B?SzJERXZyQnE0N1RCd0RuMHNrMm4zSk9kTHFoTGJac3Q0Tml3MlptRlo1d1Fx?=
+ =?utf-8?B?cmV6cUhsczcyVkpaeURvS2Q2aW9EZHR2REVZcFBaZWZQSHVSYkxabk1uV3Ax?=
+ =?utf-8?B?L0s1VUZmdVhXMXowQmhkN2IvWXVIdVJJU29kSnRwSVFaYkgxTTRaVFNUTDVl?=
+ =?utf-8?B?VHJCNWhmajNTMENKS1laVjBQc1Z2WHVCMlZpdGRQM3I4YmJ1Y2Z2aGI0eU1K?=
+ =?utf-8?B?THMvQkU0YmU0SjFCTW5VT2pZcDFOa283cjZ6b2NEcVZaTnhOZ0lieWNuOVNu?=
+ =?utf-8?B?d2FrTUFjR3NsdFlWYkkvUllWTHd1cmt0OFFSanN1K21EamJ2cURxbmtBei9p?=
+ =?utf-8?B?NDJQZFdIOFRUNSs5Q2pUa1Y0a2dQZEdlSVhRSlNZbEhoeXhoWlZ2Q05ldFAx?=
+ =?utf-8?B?MU1VNUN0Ylg4SEVDSjdsUDBGellLQllhZXlsL0llQ0pJZmdLVjQ1OEpLZDY1?=
+ =?utf-8?B?QUE9PQ==?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64189862-a671-449c-c12a-08db043020b6
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9628.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 08:41:35.8252
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /SiwY3+LAkEvrQoOBRjiQdIRhlZIpi00TRjhgJp+y3h5nWp+BMRa7wh9ONx78tFzsH9fOLBsc331mkNN+xt9zg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9449
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 09:01:49AM +0100, D. Starke wrote:
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-> the newer 27.010 here. Chapters 5.4.6.3.4 and 5.1.8.1.3 describe the test
-> command which can be used to test the mux connection between both sides.
-> 
-> Currently, no algorithm is implemented to make use of this command. This
-> requires that each multiplexed upper layer protocol supervises the
-> underlying muxer connection to handle possible connection losses.
-> 
-> Introduce an ioctl parameter and functions to optionally enable keep alive
-> handling via the test command as described in chapter 5.4.6.3.4. A single
-> incrementing octet is being used to distinguish between multiple retries.
-> Retry count and interval are taken from the general parameters N2 and T2.
-> 
-> Note that support for the test command is mandatory and already present in
-> the muxer implementation since the very first version.
-> 
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-> ---
->  drivers/tty/n_gsm.c         | 89 +++++++++++++++++++++++++++++++++----
->  include/uapi/linux/gsmmux.h |  3 +-
->  2 files changed, 83 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index 5783801d6524..98577b54f1fd 100644
-> --- a/drivers/tty/n_gsm.c
-> +++ b/drivers/tty/n_gsm.c
-> @@ -318,13 +318,19 @@ struct gsm_mux {
->  	struct gsm_control *pending_cmd;/* Our current pending command */
->  	spinlock_t control_lock;	/* Protects the pending command */
->  
-> +	/* Keep-alive */
-> +	struct timer_list ka_timer;	/* Keep-alive response timer */
-> +	u8 ka_num;			/* Keep-alive match pattern */
-> +	int ka_retries;			/* Keep-alive retry counter */
-> +
->  	/* Configuration */
-> -	int adaption;		/* 1 or 2 supported */
-> -	u8 ftype;		/* UI or UIH */
-> -	int t1, t2;		/* Timers in 1/100th of a sec */
-> -	unsigned int t3;	/* Power wake-up timer in seconds. */
-> -	int n2;			/* Retry count */
-> -	u8 k;			/* Window size */
-> +	int adaption;			/* 1 or 2 supported */
-> +	u8 ftype;			/* UI or UIH */
-> +	int t1, t2;			/* Timers in 1/100th of a sec */
-> +	unsigned int t3;		/* Power wake-up timer in seconds. */
-> +	int n2;				/* Retry count */
-> +	u8 k;				/* Window size */
-> +	unsigned int keep_alive;	/* Control channel keep-alive in ms */
->  
->  	/* Statistics (not currently exposed) */
->  	unsigned long bad_fcs;
-> @@ -1897,11 +1903,13 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
->  						const u8 *data, int clen)
->  {
->  	struct gsm_control *ctrl;
-> +	struct gsm_dlci *dlci;
->  	unsigned long flags;
->  
->  	spin_lock_irqsave(&gsm->control_lock, flags);
->  
->  	ctrl = gsm->pending_cmd;
-> +	dlci = gsm->dlci[0];
->  	command |= 1;
->  	/* Does the reply match our command */
->  	if (ctrl != NULL && (command == ctrl->cmd || command == CMD_NSC)) {
-> @@ -1916,10 +1924,57 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
->  	/* Or did we receive the PN response to our PN command */
->  	} else if (command == CMD_PN) {
->  		gsm_control_negotiation(gsm, 0, data, clen);
-> +	/* Or did we receive the TEST response to our TEST command */
-> +	} else if (command == CMD_TEST && clen == 1 && *data == gsm->ka_num) {
-> +		gsm->ka_retries = -1; /* trigger new keep-alive message */
-> +		if (dlci && !dlci->dead)
-> +			mod_timer(&gsm->ka_timer,
-> +				  jiffies + gsm->keep_alive * HZ / 100);
->  	}
->  	spin_unlock_irqrestore(&gsm->control_lock, flags);
->  }
->  
-> +/**
-> + * gsm_control_keep_alive	-	check timeout or start keep-alive
-> + * @t: timer contained in our gsm object
-> + *
-> + * Called off the keep-alive timer expiry signaling that our link
-> + * partner is not responding anymore. Link will be closed.
-> + * This is also called to startup our timer.
-> + */
-> +
-> +static void gsm_control_keep_alive(struct timer_list *t)
-> +{
-> +	struct gsm_mux *gsm = from_timer(gsm, t, ka_timer);
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&gsm->control_lock, flags);
-> +	if (gsm->ka_num && gsm->ka_retries == 0) {
-> +		/* Keep-alive expired -> close the link */
-> +		if (debug & DBG_ERRORS)
-> +			pr_info("%s keep-alive timed out\n", __func__);
-> +		spin_unlock_irqrestore(&gsm->control_lock, flags);
-> +		if (gsm->dlci[0])
-> +			gsm_dlci_begin_close(gsm->dlci[0]);
-> +	} else if (gsm->keep_alive && gsm->dlci[0] && !gsm->dlci[0]->dead) {
-> +		if (gsm->ka_retries > 0) {
-> +			/* T2 expired for keep-alive -> resend */
-> +			gsm->ka_retries--;
-> +		} else {
-> +			/* Start keep-alive timer */
-> +			gsm->ka_num++;
-> +			if (!gsm->ka_num)
-> +				gsm->ka_num++;
-> +			gsm->ka_retries = gsm->n2;
-> +		}
-> +		gsm_control_command(gsm, CMD_TEST, &gsm->ka_num,
-> +				    sizeof(gsm->ka_num));
-> +		mod_timer(&gsm->ka_timer,
-> +			  jiffies + gsm->t2 * HZ / 100);
-> +		spin_unlock_irqrestore(&gsm->control_lock, flags);
-> +	}
-> +}
-> +
->  /**
->   *	gsm_control_transmit	-	send control packet
->   *	@gsm: gsm mux
-> @@ -2061,8 +2116,10 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
->  		/* Ensure that gsmtty_open() can return. */
->  		tty_port_set_initialized(&dlci->port, false);
->  		wake_up_interruptible(&dlci->port.open_wait);
-> -	} else
-> +	} else {
-> +		del_timer(&dlci->gsm->ka_timer);
->  		dlci->gsm->dead = true;
-> +	}
->  	/* A DLCI 0 close is a MUX termination so we need to kick that
->  	   back to userspace somehow */
->  	gsm_dlci_data_kick(dlci);
-> @@ -2078,6 +2135,8 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
->  
->  static void gsm_dlci_open(struct gsm_dlci *dlci)
->  {
-> +	struct gsm_mux *gsm = dlci->gsm;
-> +
->  	/* Note that SABM UA .. SABM UA first UA lost can mean that we go
->  	   open -> open */
->  	del_timer(&dlci->t1);
-> @@ -2087,8 +2146,15 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
->  	if (debug & DBG_ERRORS)
->  		pr_debug("DLCI %d goes open.\n", dlci->addr);
->  	/* Send current modem state */
-> -	if (dlci->addr)
-> +	if (dlci->addr) {
->  		gsm_modem_update(dlci, 0);
-> +	} else {
-> +		/* Start keep-alive control */
-> +		gsm->ka_num = 0;
-> +		gsm->ka_retries = -1;
-> +		mod_timer(&gsm->ka_timer,
-> +			  jiffies + gsm->keep_alive * HZ / 100);
-> +	}
->  	gsm_dlci_data_kick(dlci);
->  	wake_up(&dlci->gsm->event);
->  }
-> @@ -2840,6 +2906,7 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
->  	/* Finish outstanding timers, making sure they are done */
->  	del_timer_sync(&gsm->kick_timer);
->  	del_timer_sync(&gsm->t2_timer);
-> +	del_timer_sync(&gsm->ka_timer);
->  
->  	/* Finish writing to ldisc */
->  	flush_work(&gsm->tx_work);
-> @@ -2987,6 +3054,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
->  	INIT_LIST_HEAD(&gsm->tx_data_list);
->  	timer_setup(&gsm->kick_timer, gsm_kick_timer, 0);
->  	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
-> +	timer_setup(&gsm->ka_timer, gsm_control_keep_alive, 0);
->  	INIT_WORK(&gsm->tx_work, gsmld_write_task);
->  	init_waitqueue_head(&gsm->event);
->  	spin_lock_init(&gsm->control_lock);
-> @@ -3003,6 +3071,7 @@ static struct gsm_mux *gsm_alloc_mux(void)
->  	gsm->mru = 64;	/* Default to encoding 1 so these should be 64 */
->  	gsm->mtu = 64;
->  	gsm->dead = true;	/* Avoid early tty opens */
-> +	gsm->keep_alive = 0;	/* Disabled */
->  
->  	/* Store the instance to the mux array or abort if no space is
->  	 * available.
-> @@ -3046,6 +3115,7 @@ static void gsm_copy_config_values(struct gsm_mux *gsm,
->  	c->mru = gsm->mru;
->  	c->mtu = gsm->mtu;
->  	c->k = gsm->k;
-> +	c->keep_alive = gsm->keep_alive;
->  }
->  
->  static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
-> @@ -3094,6 +3164,8 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
->  		need_restart = 1;
->  	if (c->mtu != gsm->mtu)
->  		need_restart = 1;
-> +	if (c->keep_alive != gsm->keep_alive)
-> +		need_restart = true;
->  
->  	/*
->  	 * Close down what is needed, restart and initiate the new
-> @@ -3109,6 +3181,7 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
->  	gsm->encoding = c->encapsulation ? GSM_ADV_OPT : GSM_BASIC_OPT;
->  	gsm->adaption = c->adaption;
->  	gsm->n2 = c->n2;
-> +	gsm->keep_alive = c->keep_alive;
->  
->  	if (c->i == 1)
->  		gsm->ftype = UIH;
-> diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
-> index cb8693b39cb7..b64360aca1f9 100644
-> --- a/include/uapi/linux/gsmmux.h
-> +++ b/include/uapi/linux/gsmmux.h
-> @@ -19,7 +19,8 @@ struct gsm_config
->  	unsigned int mtu;
->  	unsigned int k;
->  	unsigned int i;
-> -	unsigned int unused[8];		/* Padding for expansion without
-> +	unsigned int keep_alive;
-> +	unsigned int unused[7];		/* Padding for expansion without
+Hi Peng,
 
-"unsigned int" is not really a valid uapi variable type.
+On 2/1/2023 2:27 AM, Peng Fan wrote:
+>
+>
+> On 2/1/2023 1:04 AM, Iuliana Prodan (OSS) wrote:
+>> From: Iuliana Prodan <iuliana.prodan@nxp.com>
+>>
+>> The IRAM is part of the HiFi DSP.
+>> According to hardware specification only 32-bits write are allowed
+>> otherwise we get a Kernel panic.
+>>
+>> Therefore add a custom memory copy and memset functions to deal with
+>> the above restriction.
+>
+> Which platform has this limitation? This driver has been landed for
+> quite some time, is there any specific condition to trigger the issue?
+>
+> Regards,
+> Peng.
+>
+Any platform with HiFi DSP.
 
-Shouldn't this be __u32 instead?
+As I explained in the previous version, until now, it was used in a 
+limited scenario and the firmware was correctly built to respect the 
+write restriction - having the IRAM sections size a multiple of 4bytes.
 
-Should you document this field as to what the value is and the units as
-you are creating a new user/kernel api here.
+Now, I was trying a simple hello_world sample from Zephyr, compiled with 
+GCC and I crashed the Kernel trying to load it on the hifi4 DSP.
 
-And finally, "unused" here is being properly checked to be all 0, right?
-If not, then this change can't happen for obvious reasons :(
+Thanks,
 
-thanks,
+Iulia
 
-greg k-h
