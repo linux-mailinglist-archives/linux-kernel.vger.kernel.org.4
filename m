@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA076686152
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E9F686156
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbjBAIKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 03:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S232031AbjBAIL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 03:11:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjBAIKk (ORCPT
+        with ESMTP id S232021AbjBAILz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 03:10:40 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7DA4A1D3;
-        Wed,  1 Feb 2023 00:10:38 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id p26so37726923ejx.13;
-        Wed, 01 Feb 2023 00:10:38 -0800 (PST)
+        Wed, 1 Feb 2023 03:11:55 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3595249437
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 00:11:54 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-501c3a414acso235668797b3.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 00:11:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sAw/2Lb4WEMKODNRpea0RgUuW7spEUL/UcL2ikpdsPM=;
-        b=hypU2ywqUPnhOFmO53k3vWMtaI3TZk9w/pAiV2phxid8BLcmhkZuK41q9GCZhvKV4U
-         4FAOXwwT1jJ8UXX7p9DBkJ6FiBkXRkRgMRGUVbmqizXWe1WW/yJxWJG49X3dwnUb3y6g
-         oDsp1vtU4rMVLRJV+Cg2QfEpBiQeivDtiRBzQA0L6Ks/OAa8NjlK4BUv1jQ8DEtELsDk
-         tlnIDtN+/JKx1I1e3XEblB03aMsxjz6GYdutVfrTzF5am6rYxqnU1LA/lA7yj0QVQqu+
-         YjP65yHGatxQtbF3C7VAGtHlIK+cJk9MwDVHTDLDYMYnUtrlbzTBJagHwxfnhSJwUNjH
-         CE+Q==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=At9QD5kQjTIN7A9/f4GSWoe10ugai8T63OJMf7OTkzc=;
+        b=KQsIgzHYJD6gFfJcAx1ztrsmZ4fgArEtf11xPKhBZKcaDERprO8I5tBF9CgSoGm7AI
+         9GKM97KU/Asl6pE9xu4I2DVRjU3HusXAL6nKTZc+NWQ3OX/VCFaKNFOluPLrR4YeIfmJ
+         zdnIKmyVSi4cC2PTFiJT+96LUsA9DrAVdvjxMGOuIA0sR76xvtbatRijeITVpWKC5rno
+         KF+r5jppu8Re7XigLmEJHnF/x9O9aGiMNgt1VHbU+n+RTcuAK4GUdTGDkDSv3zRUJj5Y
+         Evc1zhj3yFzv/e03hSz2f7mLZf8nleLwSJhxT6JOVWWfgqv1azVAXJquWGoRehSE+ajo
+         t2Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sAw/2Lb4WEMKODNRpea0RgUuW7spEUL/UcL2ikpdsPM=;
-        b=5C1mygzeZ10f+9szz1TTYhDYzQtzKQiZvfLUOAzBixK/b0JAVVGhERAv2xR86tK1zk
-         xJku5VO+KuJ00AgUnXcZwk1KQ9VrfVZrOxy7ts6M1rQ9q5uPUdyukR7blbLvVHpzXeoH
-         vSVZNvSyDYR1qRbHJY1OWmQOAqbNHzAbBFL0lNbMtuLbv9tBk9uRQMAQDZqsX2aL8nze
-         F3Uuc11ley9xGmuzcD/O/ABxf79BdDeJ5Zmlqzr0qMRz7X76DY6iNsWpgWE1VJo1d5HE
-         S+T01X7isWjMvKcN7kOGsgNGXVDFzRdyDVRtpFBCaeCF3/DboUw3fn4IVdizCTq6/58j
-         l/lg==
-X-Gm-Message-State: AO0yUKUAnbEw5V4HrpawwD3D1ZoiIV2Ux4kA3bIq/c9mLXweuRifT0yR
-        0qSu7Vw0geNIqPdaxYFmAN5QvwRWAWWk/ox9owUreLRe
-X-Google-Smtp-Source: AK7set+9h23A/qVuAHRJqdAxWAXuK7e3mK/l4CvEdFLsZLVp6YEZc8fcyuPeZ7PdWPEF2EwqPFPsM2fTVnMzSM05ZfA=
-X-Received: by 2002:a17:906:2c53:b0:83d:2544:a11 with SMTP id
- f19-20020a1709062c5300b0083d25440a11mr387344ejh.226.1675239037037; Wed, 01
- Feb 2023 00:10:37 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=At9QD5kQjTIN7A9/f4GSWoe10ugai8T63OJMf7OTkzc=;
+        b=MFyk/UKH6Q5apLNhKJjkg1jM3QctmwI8sneO1Yfx1phxqGwOY9JhjWg2rd+v4Ct8dM
+         HkDU6HkkYUILaKcAySsrTglxtcfHCIBrvrGf+K06MyM7RUdFNxnAnuVhjVjhLP1fJKe9
+         F3ms+7L8iU7m4gXr5ciYZs8F0hHptyUenkG7e5oLN0AsyF5SzMe2IXT3bFY+/52mAMgD
+         mPiITD3LNlJKhuZOWos4TXTq7cTXRsEnxB5nNkcy7R9nG/LSh4Qr+nSDhg6f2ZAc7eoB
+         XouEJ9609TolTr6r0YyLvOnV4H46yHRZQy4Yz98wsIaQacjXiIw8CVhisn2Gk82FDijt
+         s4eA==
+X-Gm-Message-State: AO0yUKWQQxn/PeDyZol9okzFy1Jr3JahxyA0FF09yLgoTkB5V9VrXQ4L
+        O/e0ZuU/4lHLMudVlxwIdY7s2TwikE/vJuGbY3Tb
+X-Google-Smtp-Source: AK7set/UJ1BPXYvvYXtGMUfSxN51Xg9/xMArbwz1k1EfPttM2o2rxAApsWohbp+P1UaJU6RJPmiF9RFP/icUNo8AxJc=
+X-Received: by 2002:a05:690c:b8d:b0:4ff:6a1e:49cc with SMTP id
+ ck13-20020a05690c0b8d00b004ff6a1e49ccmr161270ywb.464.1675239113306; Wed, 01
+ Feb 2023 00:11:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118061256.2689-1-dakr@redhat.com> <20230118061256.2689-6-dakr@redhat.com>
- <Y9MjSeMcsd18r9vM@DUT025-TGLU.fm.intel.com> <7c046ff9-728d-7634-9d77-8536308c7481@redhat.com>
- <c2256c7d-e768-ae3f-d465-b9f8080d111b@amd.com> <2427a918-5348-d1ef-ccae-a29c1ff33c83@redhat.com>
- <a214b28b-043c-a8bb-69da-b4d8216fce56@amd.com> <3a76bfa9-8ee5-a7d9-b9fb-a98181baec0b@redhat.com>
- <49ac3f95-6eda-9009-4b28-0167213301b2@amd.com> <bc523c5c-efe6-1a7f-b49a-e0867dc1413d@redhat.com>
- <15fb0179-c7c5-8a64-ed08-841189919f5e@redhat.com> <1840e9fb-fd1b-79b7-4238-54ae97333d0b@amd.com>
-In-Reply-To: <1840e9fb-fd1b-79b7-4238-54ae97333d0b@amd.com>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Wed, 1 Feb 2023 18:10:24 +1000
-Message-ID: <CAPM=9txON8VCb3H7vDY_DOgtUg2Ad3mBvYVxgSMyZ1noOu-rBQ@mail.gmail.com>
-Subject: Re: [Nouveau] [PATCH drm-next 05/14] drm/nouveau: new VM_BIND uapi interfaces
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Danilo Krummrich <dakr@redhat.com>,
-        Matthew Brost <matthew.brost@intel.com>, daniel@ffwll.ch,
-        corbet@lwn.net, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mripard@kernel.org, bskeggs@redhat.com, jason@jlekstrand.net,
-        nouveau@lists.freedesktop.org, airlied@redhat.com
+References: <20221101222520.never.109-kees@kernel.org> <20221101223321.1326815-5-keescook@chromium.org>
+ <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
+In-Reply-To: <CAMSo37W3gRkP02tSCxGX71ZDAt3WgPZrkTRTM6J1iQ4gvUS9vg@mail.gmail.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Wed, 1 Feb 2023 00:11:41 -0800
+Message-ID: <CANDhNCogJrvt=yEXFK-xVmGjkcRxSNGZUqUeNw2MV9bFRrwPdQ@mail.gmail.com>
+Subject: Re: [PATCH 5/6] driver core: Add __alloc_size hint to devm allocators
+To:     Yongqin Liu <yongqin.liu@linaro.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Nishanth Menon <nm@ti.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Won Chung <wonchung@google.com>,
+        David Gow <davidgow@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
+        llvm@lists.linux.dev, Sumit Semwal <sumit.semwal@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,209 +92,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 at 23:02, Christian K=C3=B6nig <christian.koenig@amd.co=
-m> wrote:
+On Tue, Jan 31, 2023 at 11:36 PM Yongqin Liu <yongqin.liu@linaro.org> wrote:
 >
-> Am 29.01.23 um 19:46 schrieb Danilo Krummrich:
-> > On 1/27/23 22:09, Danilo Krummrich wrote:
-> >> On 1/27/23 16:17, Christian K=C3=B6nig wrote:
-> >>> Am 27.01.23 um 15:44 schrieb Danilo Krummrich:
-> >>>> [SNIP]
-> >>>>>>>
-> >>>>>>> What you want is one component for tracking the VA allocations
-> >>>>>>> (drm_mm based) and a different component/interface for tracking
-> >>>>>>> the VA mappings (probably rb tree based).
-> >>>>>>
-> >>>>>> That's what the GPUVA manager is doing. There are gpuva_regions
-> >>>>>> which correspond to VA allocations and gpuvas which represent the
-> >>>>>> mappings. Both are tracked separately (currently both with a
-> >>>>>> separate drm_mm, though). However, the GPUVA manager needs to
-> >>>>>> take regions into account when dealing with mappings to make sure
-> >>>>>> the GPUVA manager doesn't propose drivers to merge over region
-> >>>>>> boundaries. Speaking from userspace PoV, the kernel wouldn't
-> >>>>>> merge mappings from different VKBuffer objects even if they're
-> >>>>>> virtually and physically contiguous.
-> >>>>>
-> >>>>> That are two completely different things and shouldn't be handled
-> >>>>> in a single component.
-> >>>>
-> >>>> They are different things, but they're related in a way that for
-> >>>> handling the mappings (in particular merging and sparse) the GPUVA
-> >>>> manager needs to know the VA allocation (or region) boundaries.
-> >>>>
-> >>>> I have the feeling there might be a misunderstanding. Userspace is
-> >>>> in charge to actually allocate a portion of VA space and manage it.
-> >>>> The GPUVA manager just needs to know about those VA space
-> >>>> allocations and hence keeps track of them.
-> >>>>
-> >>>> The GPUVA manager is not meant to be an allocator in the sense of
-> >>>> finding and providing a hole for a given request.
-> >>>>
-> >>>> Maybe the non-ideal choice of using drm_mm was implying something
-> >>>> else.
-> >>>
-> >>> Uff, well long story short that doesn't even remotely match the
-> >>> requirements. This way the GPUVA manager won't be usable for a whole
-> >>> bunch of use cases.
-> >>>
-> >>> What we have are mappings which say X needs to point to Y with this
-> >>> and hw dependent flags.
-> >>>
-> >>> The whole idea of having ranges is not going to fly. Neither with
-> >>> AMD GPUs and I strongly think not with Intels XA either.
-> >>
-> >> A range in the sense of the GPUVA manager simply represents a VA
-> >> space allocation (which in case of Nouveau is taken in userspace).
-> >> Userspace allocates the portion of VA space and lets the kernel know
-> >> about it. The current implementation needs that for the named
-> >> reasons. So, I think there is no reason why this would work with one
-> >> GPU, but not with another. It's just part of the design choice of the
-> >> manager.
-> >>
-> >> And I'm absolutely happy to discuss the details of the manager
-> >> implementation though.
-> >>
-> >>>
-> >>>>> We should probably talk about the design of the GPUVA manager once
-> >>>>> more when this should be applicable to all GPU drivers.
-> >>>>
-> >>>> That's what I try to figure out with this RFC, how to make it
-> >>>> appicable for all GPU drivers, so I'm happy to discuss this. :-)
-> >>>
-> >>> Yeah, that was really good idea :) That proposal here is really far
-> >>> away from the actual requirements.
-> >>>
-> >>
-> >> And those are the ones I'm looking for. Do you mind sharing the
-> >> requirements for amdgpu in particular?
-> >>
-> >>>>>> For sparse residency the kernel also needs to know the region
-> >>>>>> boundaries to make sure that it keeps sparse mappings around.
-> >>>>>
-> >>>>> What?
-> >>>>
-> >>>> When userspace creates a new VKBuffer with the
-> >>>> VK_BUFFER_CREATE_SPARSE_BINDING_BIT the kernel may need to create
-> >>>> sparse mappings in order to ensure that using this buffer without
-> >>>> any memory backed mappings doesn't fault the GPU.
-> >>>>
-> >>>> Currently, the implementation does this the following way:
-> >>>>
-> >>>> 1. Userspace creates a new VKBuffer and hence allocates a portion
-> >>>> of the VA space for it. It calls into the kernel indicating the new
-> >>>> VA space region and the fact that the region is sparse.
-> >>>>
-> >>>> 2. The kernel picks up the region and stores it in the GPUVA
-> >>>> manager, the driver creates the corresponding sparse mappings /
-> >>>> page table entries.
-> >>>>
-> >>>> 3. Userspace might ask the driver to create a couple of memory
-> >>>> backed mappings for this particular VA region. The GPUVA manager
-> >>>> stores the mapping parameters, the driver creates the corresponding
-> >>>> page table entries.
-> >>>>
-> >>>> 4. Userspace might ask to unmap all the memory backed mappings from
-> >>>> this particular VA region. The GPUVA manager removes the mapping
-> >>>> parameters, the driver cleans up the corresponding page table
-> >>>> entries. However, the driver also needs to re-create the sparse
-> >>>> mappings, since it's a sparse buffer, hence it needs to know the
-> >>>> boundaries of the region it needs to create the sparse mappings in.
-> >>>
-> >>> Again, this is not how things are working. First of all the kernel
-> >>> absolutely should *NOT* know about those regions.
-> >>>
-> >>> What we have inside the kernel is the information what happens if an
-> >>> address X is accessed. On AMD HW this can be:
-> >>>
-> >>> 1. Route to the PCIe bus because the mapped BO is stored in system
-> >>> memory.
-> >>> 2. Route to the internal MC because the mapped BO is stored in local
-> >>> memory.
-> >>> 3. Route to other GPUs in the same hive.
-> >>> 4. Route to some doorbell to kick of other work.
-> >>> ...
-> >>> x. Ignore write, return 0 on reads (this is what is used for sparse
-> >>> mappings).
-> >>> x+1. Trigger a recoverable page fault. This is used for things like
-> >>> SVA.
-> >>> x+2. Trigger a non-recoverable page fault. This is used for things
-> >>> like unmapped regions where access is illegal.
-> >>>
-> >>> All this is plus some hw specific caching flags.
-> >>>
-> >>> When Vulkan allocates a sparse VKBuffer what should happen is the
-> >>> following:
-> >>>
-> >>> 1. The Vulkan driver somehow figures out a VA region A..B for the
-> >>> buffer. This can be in userspace (libdrm_amdgpu) or kernel (drm_mm),
-> >>> but essentially is currently driver specific.
-> >>
-> >> Right, for Nouveau we have this in userspace as well.
-> >>
-> >>>
-> >>> 2. The kernel gets a request to map the VA range A..B as sparse,
-> >>> meaning that it updates the page tables from A..B with the sparse
-> >>> setting.
-> >>>
-> >>> 3. User space asks kernel to map a couple of memory backings at
-> >>> location A+1, A+10, A+15 etc....
-> >>>
-> >>> 4. The VKBuffer is de-allocated, userspace asks kernel to update
-> >>> region A..B to not map anything (usually triggers a non-recoverable
-> >>> fault).
-> >>
-> >> Until here this seems to be identical to what I'm doing.
-> >>
-> >> It'd be interesting to know how amdgpu handles everything that
-> >> potentially happens between your 3) and 4). More specifically, how
-> >> are the page tables changed when memory backed mappings are mapped on
-> >> a sparse range? What happens when the memory backed mappings are
-> >> unmapped, but the VKBuffer isn't de-allocated, and hence sparse
-> >> mappings need to be re-deployed?
-> >>
-> >> Let's assume the sparse VKBuffer (and hence the VA space allocation)
-> >> is pretty large. In Nouveau the corresponding PTEs would have a
-> >> rather huge page size to cover this. Now, if small memory backed
-> >> mappings are mapped to this huge sparse buffer, in Nouveau we'd
-> >> allocate a new PT with a corresponding smaller page size overlaying
-> >> the sparse mappings PTEs.
-> >>
-> >> How would this look like in amdgpu?
-> >>
-> >>>
-> >>> When you want to unify this between hw drivers I strongly suggest to
-> >>> completely start from scratch once more.
-> >>>
-> >
-> > I just took some time digging into amdgpu and, surprisingly, aside
-> > from the gpuva_regions it seems like amdgpu basically does exactly the
-> > same as I do in the GPU VA manager. As explained, those region
-> > boundaries are needed for merging only and, depending on the driver,
-> > might be useful for sparse mappings.
-> >
-> > For drivers that don't intend to merge at all and (somehow) are
-> > capable of dealing with sparse regions without knowing the sparse
-> > region's boundaries, it'd be easy to make those gpuva_regions optional.
+> Hi, Kees
 >
-> Yeah, but this then defeats the approach of having the same hw
-> independent interface/implementation for all drivers.
+> This change causes "Kernel panic - not syncing: BRK handler: Fatal exception"
+> for the android-mainline based hikey960 build, with this commit reverted,
+> there is no problem for the build to boot to the homescreen.
+> Not sure if you have any idea about it and give some suggestions.
+>
+> Here is part of the kernel panic log:
+>
+>     [    9.479878][  T122] ueventd: Loading module
+> /vendor/lib/modules/spi-pl022.ko with args ''
+>     [    9.480276][  T115] apexd-bootstrap: Pre-allocated loop device 29
+>     [    9.480517][  T123] ueventd: LoadWithAliases was unable to load
+> of:Nhi3660_i2sT(null)Chisilicon,hi3660-i2s-1.0
+>     [    9.480632][  T121] Unexpected kernel BRK exception at EL1
+>     [    9.480637][  T121] Internal error: BRK handler:
+> 00000000f2000001 [#1] PREEMPT SMP
+>     [    9.480644][  T121] Modules linked in: cpufreq_dt(E+)
+> hisi_thermal(E+) phy_hi3660_usb3(E) btqca(E) hi6421_pmic_core(E)
+> btbcm(E) spi_pl022(E) hi3660_mailbox(E) i2c_designware_platform(E)
+> mali_kbase(OE) dw_mmc_k3(E) bluetooth(E) dw_mmc_pltfm(E) dw_mmc(E)
+> kirin_drm(E) rfkill(E) kirin_dsi(E) i2c_designware_core(E) k3dma(E)
+> drm_dma_helper(E) cma_heap(E) system_heap(E)
+>     [    9.480688][  T121] CPU: 4 PID: 121 Comm: ueventd Tainted: G
+>        OE      6.2.0-rc6-mainline-14196-g1d9f94ec75b9 #1
+>     [    9.480694][  T121] Hardware name: HiKey960 (DT)
+>     [    9.480697][  T121] pstate: 20400005 (nzCv daif +PAN -UAO -TCO
+> -DIT -SSBS BTYPE=--)
+>     [    9.480703][  T121] pc : hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
+>     [    9.480722][  T121] lr : hi3660_thermal_probe+0x38/0x74 [hisi_thermal]
+>     [    9.480733][  T121] sp : ffffffc00aa13700
+>     [    9.480735][  T121] x29: ffffffc00aa13700 x28: 0000007ff8ae8531
+> x27: 00000000000008c0
+>     [    9.480743][  T121] x26: ffffffc00aa2a300 x25: ffffffc00aa2ab40
+> x24: 000000000000001d
+>     [    9.480749][  T121] x23: ffffffc00a29d000 x22: 0000000000000000
+> x21: ffffff8001fa4a80
+>     [    9.480755][  T121] x20: 0000000000000001 x19: ffffff8001fa4a80
+> x18: ffffffc00a8810b0
+>     [    9.480761][  T121] x17: 000000007ab542f2 x16: 000000007ab542f2
+> x15: ffffffc00aa01000
+>     [    9.480767][  T121] x14: ffffffc00966f250 x13: ffffffc0b58f9000
+> x12: ffffffc00a055f10
+>     [    9.480771][  T123] ueventd: LoadWithAliases was unable to load
+> cpu:type:aarch64:feature:,0000,0001,0002,0003,0004,0005,0006,0007,000B
+>     [    9.480773][  T121]
+>     [    9.480774][  T121] x11: 0000000000000000 x10: 0000000000000001
+> x9 : 0000000100000000
+>     [    9.480780][  T123] ueventd:
+>     [    9.480780][  T121] x8 : ffffffc0044154cb x7 : 0000000000000000
+> x6 : 000000000000003f
+>     [    9.480786][  T121] x5 : 0000000000000020 x4 : ffffffc0098db323
+> x3 : ffffff801aeb62c0
+>     [    9.480792][  T121] x2 : ffffff801aeb62c0 x1 : 0000000000000000
+> x0 : ffffff8001fa4c80
+>     [    9.480798][  T121] Call trace:
+>     [    9.480801][  T121]  hi3660_thermal_probe+0x6c/0x74 [hisi_thermal]
+>     [    9.480813][  T121]  hisi_thermal_probe+0xbc/0x284 [hisi_thermal]
 
-I think you are running a few steps ahead here. The plan isn't to have
-an independent interface, it's to provide a set of routines and
-tracking that will be consistent across drivers, so that all drivers
-once using them will operate in mostly the same fashion with respect
-to GPU VA tracking and VA/BO lifetimes. Already in the tree we have
-amdgpu and freedreno which I think end up operating slightly different
-around lifetimes. I'd like to save future driver writers the effort of
-dealing with those decisions and this should drive their user api
-design so to enable vulkan sparse bindings.
 
-Now if merging is a feature that makes sense to one driver maybe it
-makes sense to all, however there may be reasons amdgpu gets away
-without merging that other drivers might not benefit from, there might
-also be a benefit to amdgpu from merging that you haven't looked at
-yet, so I think we could leave merging as an optional extra driver
-knob here. The userspace API should operate the same, it would just be
-the gpu pagetables that would end up different sizes.
+Taking a look here, it looks pretty obvious:
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/hisi_thermal.c#n414
 
-Dave.
+data->nr_sensors = 1;
+data->sensor = devm_kzalloc(dev, sizeof(*data->sensor) *
+   data->nr_sensors, GFP_KERNEL);
+
+Here as nr_sensors=1, we allocate only one structure for the array.
+But then below that, we modify two entries, writing past the valid
+array, and corrupting data when writing the second sensor values.
+
+data->sensor[0].id = HI3660_BIG_SENSOR;
+data->sensor[0].irq_name = "tsensor_a73";
+data->sensor[0].data = data;
+
+data->sensor[1].id = HI3660_LITTLE_SENSOR;
+data->sensor[1].irq_name = "tsensor_a53";
+data->sensor[1].data = data;
+
+I suspect nr_sensors needs to be set to 2.
+
+Nice work, Kees!
+
+thanks
+-john
