@@ -2,137 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20211686922
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A45CE686930
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbjBAO4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:56:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S231835AbjBAO5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:57:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232520AbjBAO4B (ORCPT
+        with ESMTP id S229608AbjBAO5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:56:01 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2067.outbound.protection.outlook.com [40.107.95.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B6E6601E;
-        Wed,  1 Feb 2023 06:55:58 -0800 (PST)
+        Wed, 1 Feb 2023 09:57:43 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2048.outbound.protection.outlook.com [40.107.92.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EBD66028
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:57:42 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MIV40u4v9TvyEZUbOmmm5iczX8nEvn9wXiG5WnE+N7srtkPace1w8wT9EEbaQQtxoU6t654obezCKKc+cuZaBZt9mdYvkx4re2bZ0jFENx+QMixhE4c0i4Ykp2AyCQ1SRDk9L20FqQyWv6DBWSommBaoWCwE7KV8lH9uVfAT8O2l05S6sIyNt+rSNQJLxodL97DGBdlVMOe9TcfmK6XXuge8z2DHud3NVvE6yUqTqhMDQMTUbs2rOXAEyPlMTz4domX8/TKro5EmBio13RGMyA7YcpTkYhs0AoKj4hzW4GDZr8FNjZJkc6nRTUtRyAyTULZeJ+wV+1tS+HexgdUOww==
+ b=AgJO/nq8eNoX+l1MIOTfA1vnFJc3auiPVv5INCtkmt0osepdGrUZtzvpl1upHlODiyI0eXul+epI/3U8L905KwsVcJDsw34hpRwbZKPOkwidsxpgpDfTvQjCd+GIlGf3eD7j8/HrDMPgaYPDBxC2HFCy6nsIpg8DC2M/ddy6wynRnU5paSo/YihgoMtvpCpPWKilgfVQW8zDlOdDzTc7yoOrrtNAVMoPJPR9cCF9qev0RPV39kzQ87qr64YgsEMXly3hTaef0tUAICc0iaiE1q1ecXvk5qZhtO0IW3eAJhV95BPsoIlRp2jTKBcEl7R+e+foxG37vW1Br0x7xHZ/vA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ba3qIqduVCFj0XaIg44SthSyEoSamoF8rAte4pXdOtQ=;
- b=HFuE1Etw+ssrIVTUTduyvwd3tw6cTzePaXetjT4RSr3umrXAz2a2d3sKtOguzQl15KCVoEUgyR1w3F/VKRDamS+BTs4HSo8WsmOVgi8l26qXfdM5EXYzo7o7CusezahgIefZG3VDI03RR1J1xHGcZ8TtlJrKdZ7eZcb4/v6EhT0oE81JiO8QgIQ5QJS8DBWrXpwf8zoLqEXsDHScANIHBuWcR3N15glkGdwBj4yjng3froePg33j9G6A8kM1lJF3d2L3Eo8q1l776Mx6nhCi7yXPKiO1ynXe0ish3JmRu+I4wJneRCveOaaq2CpNQnYJ/KbzYQ4rbn+hErp7MbXqJg==
+ bh=yExOB4QodvBlH6WLwKU87MU63BQOh0Wl0owTBeZoHUM=;
+ b=H7LnofBxLuahRIsYb0W0xsa2nm/BVHJp+mPoZvwPJ/2ZJoNs+JM0yVX63T7PfyKhGTa+cqoJU0ABSmMWHzEdc9yF4NfpyFRmOrazO1kB7233MnJfn2J8ztn2miV/CNfFbVeFfu/JfbtPH24M3/KD++9Zk6I6ovSf2vOTWg4MiI2zb/Iu5NvLICzOrpOpGQ5zugIXAXHZseHSocrq9YYRR/ozvJJKLmmPcqciamVhZ49WJvu0n9YydArsoklYZYVvqUah6SO1Ty+3TL///gr41kCD4saKtaxotE29JgG6G89YzGuiX718xw0MQPuqUeoA+6vH2NcVOu9rZWr1+FJfyw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ba3qIqduVCFj0XaIg44SthSyEoSamoF8rAte4pXdOtQ=;
- b=FYsNiVlgh/GRO4ISN4CwM2eNt82MYP8QcUvU8B/V2J0h6O4NqPK3O+uXkSGdjYRSA/6MpTWJyyhdylu/IGCsRMMf1ivpV9txHVE1sH6+C9dEQYtqTjUBu1lmUWObn4o6MJJTXQdUzdCTRVkmXy1WapFBi6LBpkV890clhtyGvDSvd8eXJAf/uzePdoPDJUY5LxTqo8DHjiZmoCconORHM696ZehrGiK94xKxBMYSgi9dEtHGJjPx3f1lKIBHTaAnqN/7MqfH8kgTWxmVlys1u48ho1nvQ7A62A27kkXPFo0uEQDasScMFWXCmiGX2KpjX0qutxlhd9CUkNR9b5UXMg==
+ bh=yExOB4QodvBlH6WLwKU87MU63BQOh0Wl0owTBeZoHUM=;
+ b=vrBMWxnypk2Z3bls2sjMhJq9fMtAQLTs9xA0vYAiN1SkkKX0mbrbXm4Wue8T76NSbF3UQTUUgzy2MKRTGTpQNBVF0Pd5DRKHBfOCm/scNv0YmWkgcZWVtfzJJmYk4p4fkpCnxksu2BYTlwzPhyoPHBtIMmaoNWzGTPA/VBrUiFE=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH0PR12MB7010.namprd12.prod.outlook.com (2603:10b6:510:21c::11) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by PH0PR12MB8097.namprd12.prod.outlook.com (2603:10b6:510:295::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Wed, 1 Feb
- 2023 14:55:56 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6043.038; Wed, 1 Feb 2023
- 14:55:55 +0000
-Date:   Wed, 1 Feb 2023 10:55:54 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
-        "yong.wu@mediatek.com" <yong.wu@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "vdumpa@nvidia.com" <vdumpa@nvidia.com>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: Re: [PATCH 1/4] iommu: Add a broken_unmanaged_domain flag in
- iommu_ops
-Message-ID: <Y9p9ehPsg9Hdn1OK@nvidia.com>
-References: <cover.1674849118.git.nicolinc@nvidia.com>
- <0875479d24a53670e17db8a11945664a6bb4a25b.1674849118.git.nicolinc@nvidia.com>
- <dfad6d75-6f4d-99ef-1c6a-4bf397dcaa13@arm.com>
- <Y9RkG2dejdXptUTB@nvidia.com>
- <BN9PR11MB5276C9BDCCA7FB295C25BC738CD29@BN9PR11MB5276.namprd11.prod.outlook.com>
- <Y9fHJSTIP6zXAStX@nvidia.com>
- <BN9PR11MB52769E3A3DD09983C11677F88CD19@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52769E3A3DD09983C11677F88CD19@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1PR13CA0133.namprd13.prod.outlook.com
- (2603:10b6:208:2bb::18) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Wed, 1 Feb
+ 2023 14:57:40 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::6cc0:9c7a:bd00:441c]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::6cc0:9c7a:bd00:441c%9]) with mapi id 15.20.6064.025; Wed, 1 Feb 2023
+ 14:57:40 +0000
+Message-ID: <74008dc7-ee85-003e-b172-209f8c97963d@amd.com>
+Date:   Wed, 1 Feb 2023 08:57:37 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 3/8] x86/psp: Register PSP platform device when ASP
+ table is present
+Content-Language: en-US
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+References: <20230123152250.26413-1-jpiotrowski@linux.microsoft.com>
+ <20230123152250.26413-4-jpiotrowski@linux.microsoft.com>
+ <194d8448-dde2-3452-7ccf-4e88fddbff75@amd.com>
+ <20230201140952.GA31392@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230201140952.GA31392@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR08CA0016.namprd08.prod.outlook.com
+ (2603:10b6:5:80::29) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH0PR12MB7010:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5adec3d1-e313-4f6f-497f-08db04646b86
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|PH0PR12MB8097:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7fbeb73d-e7ee-4ac4-b88b-08db0464aa05
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DZ+1smc6Z5k75EG5LuXooClvQ/CLev1mYodUjEft4L34lKITRRq3gWq8gGzHVcsXQ/mZMwqzPfoJ977z4tnMzWRAaEt3DGdNXh3kXeI4Bs6AhcXdV2yfu9zTJNxQneKrJUYkN63p38ZHjb3/Osa8VgRFps8wHwTY45c5x3gcPEuNAbHaR7OUYJu/ffVFk0YhULsWS3Gd8LOAe6SFxOtamivNJd6I9DHcKRDsPE+R+t7Fm7uuHal57o8x6UlzFytr8zbHOreXVc4S6d9b8gtqvZsQft5SEbX7fe+Mwwf6WxiYtuw5Q/Xb+wO/l7GMzeYsA4yNqrT1MaTFOc5IOmSKKKhj1JWQRbPr/0N103c7WOepkwGaEyTeUsRlhr5NLRRJQ+libOFUCxWXL4Ir0ceUwdAEL65k7dV/I2MVLfKmuRCtgox7k16G0+JApgAGxwLmatu0YIcRMcoSR/sIVO5r4U3gtYzks3no1isCiH4n1YPlY/F2+QyjwZw+usnPhFUEjm3ICgtvLJLK8NSNMNvdbXrAdIkAC7QI17FX8R3TgIGDDrhvkb98j+JaNFGGhsFNP8CHytf6b844emnjOGCd0CVImhKOyOhI0oMeItDbMrUpJgLJ5l5CpBWN0Ggf3o12/sI3NlgjtlSDQSb4/J+5Rg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(396003)(136003)(366004)(39860400002)(451199018)(5660300002)(7416002)(8936002)(2906002)(54906003)(6506007)(83380400001)(86362001)(41300700001)(6916009)(66476007)(8676002)(36756003)(66946007)(478600001)(4326008)(26005)(6512007)(186003)(6486002)(66556008)(2616005)(316002)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: EAutJY+glmXZ4tQXqwpSEmhwKBWrsgLL8BGXjczJBPcNSDSYtTNtasT5KfRUHq+gIrGxAa9xOBXwcFSW/vhKP/boGWlnEe/jvZP60b52sfzZAnKZb89wVklHS3kycrgRcaoJk4G2K6u7QjSzCbFSydDT1wP2+0dRDM5ZhbXRnOB6spXidJQ1h9jbSnCIUD+AvOjwOFc8uZeYZ07qHYc6whuSA313JBlou85nDpREVGZMIeHAkI8MrJqPFcw3PdZtnghobZcT6IscBoMfBvZHWb1oEzdf8VXPiE1WvnU9A8qj92yzM0jnIuSybUiDJ2dIKYv7s92wfzyeGd5kQOJlP9sTr+yyABXrvvmgFBBairLv6dpgKfaQtPPZ3dhQZ1huRJk41zrRChetjMfVAeVSs8WKSB2q2gclmrIpGtbV9T+cNw3shxgYZNWscOt9TyGofebVeSnY8GIdUwuxxEZi2etOuICINXT1geoitMldlIrtVQyEjAp4lOQQOhUUupE/LgDGdAxdws0YXm0a2s/U4VfPmUO8YjBxo+7Wq/scpe0ypLwZyzemENnzDbBvXVEFqSsRTltegxoAuicWftfnP7s9YHxrdRkHiyB7vOoeEIbBFun61Pv7+WDTE73jkfpBlRhQXiB3uRDuGb6yZbkDK5GGR+7Px3HYulxQjeAyTz1jYPi18gX/x2LtHbuxfLz5rJxPCHvPhxWBFvMvbYAw4MXsrfpVLST/JxCpQHPbFEk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(396003)(376002)(346002)(451199018)(31696002)(38100700002)(86362001)(36756003)(6916009)(41300700001)(5660300002)(316002)(8676002)(66946007)(54906003)(4326008)(66476007)(8936002)(66556008)(2906002)(2616005)(6486002)(83380400001)(478600001)(186003)(6512007)(26005)(53546011)(6506007)(6666004)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jUkzPL9yeOQZTYN/DnVwTsivgruGid+ORYYiAGSAPEjI+nU3pkPOJ4Jyt8lH?=
- =?us-ascii?Q?WP6t+sq9fDEzETMZ5NvEwlUL3Vf2Acob1BMe6kd4+osElDqDk5hEQBN0Q9qI?=
- =?us-ascii?Q?knU+kPdgx3i/LHqeGQ+0/RHUAvuKupzpqopD0kqEKNjahrGg4WdgXgviyK+T?=
- =?us-ascii?Q?6QXeTcTx4Stk6DztQOeMPAfK37yTLJh6Jy6jE70F0cJkmcMKY3SbDpZKyrdJ?=
- =?us-ascii?Q?A7jLMxMMgprwe+n6RLdKCzSogs7JdhD1Ok2e4f9r4rayD6Gyf1soWkWF001W?=
- =?us-ascii?Q?lU8J0rryd8vWf/IvoxqQ5aOIOzVUOkLFB3jn+yDSLB+JeDeSWU42rqopRcD7?=
- =?us-ascii?Q?t0l3bgQbAoVVi/XByXMHxtis8IKyMnhMqJJie/givzaAcZ0ZUQ0mNMSWs89s?=
- =?us-ascii?Q?KZy0GtGdrMMIvdhQv2pLn6pUuVkYA/MpgdE6HAIyhlGS5ZuSRlbu6sPMQj8H?=
- =?us-ascii?Q?rz4tF9blppKo9bxaoABItefFBuUVK549+zqr0zWEnKEVrNHNQGCJpE6Dj6lN?=
- =?us-ascii?Q?tMJAiGyRpsrqNMDvYTTFMdTbcQteBHtbpPwLBva0DOo51dGW2b9fXA9oAv42?=
- =?us-ascii?Q?RKviGsYdiQM5nTDzMETKV9F8L/d0+VaeJVa60BIBM75SDl4/1SWfukIyqX5K?=
- =?us-ascii?Q?qIlT+D2FcYPKWCUJaDBkrecu8iXGVJrhTKKSjHtOKDwik+n2nmTJ5DszYMuT?=
- =?us-ascii?Q?7CdIlDIi9Gf/iyp8UWt+P3xMH30l10y8qIbgRg6vLe3UohVwWEFcYOQZBSNP?=
- =?us-ascii?Q?YwWBHYgWV4Mc9d/R4NQBgynxtGoTdLZ5yFZEPb0wtlAFx1Nvh+C7TPatBB/D?=
- =?us-ascii?Q?bRsC6jPa+oPlC/nvmdFrCSiw5nQY9HkNtXK14V4f0VjrPFoIfyo33mSEO34L?=
- =?us-ascii?Q?syKx2PY6snbByrWADu9Ghf46WvZxjkZ02QsM/iKO4OtLGes9VlHwHIeryJlF?=
- =?us-ascii?Q?WJjGaqTjSnyHt0H/0OhWLTwRlaPuVFon+tMl+tmrGWXB+uEZZABdQopsrJr2?=
- =?us-ascii?Q?cKNW+LKxj6yo7hbkBIK9J3UoOfwXiTFJQBIM1omJTTHzvIQD1hEedD0SbEH+?=
- =?us-ascii?Q?8ww9pGsz2uVnvn8kcxcCO1L7UPW/eVv7aov90Mvk3gekS4DYjsyUNxYoSSn3?=
- =?us-ascii?Q?oUJoj8SXxhCvjMP/sciYGckJgzdRh5ldYPfB714jWBBPgb0MP1kU/Cz36Tn+?=
- =?us-ascii?Q?af15CPPC7Fh9pypCZ9dhvmkjhb7gbYrGY0rKAJ0N5u0RDv76mnAiWEw71w+J?=
- =?us-ascii?Q?YcerYLQQz1qbtTG7Eol9AJmNW5K7Zr60q4MnjYhMTXmU6kd+RoYrnDV62Snl?=
- =?us-ascii?Q?GaEewEjK7kjnzegmOgq3DyTqi4y1YZ4ZCWpbVV98roEiw2TdySbEpGroauyZ?=
- =?us-ascii?Q?/vC03uIWaR4h9FkbqG8071I4pW1rsentMGKYCZV4Y0CmCvLcyszyZGgqvr1q?=
- =?us-ascii?Q?l1C4PUnI0NPf2gLGrnCCXnkNvskye/qACNaMxpl7iWyr51AhgyCPUfx1TT1o?=
- =?us-ascii?Q?/8y/2izP9JRWpOktafAnzYVCmg28DFkQZeWb5WlhI6ZYweVyyg2LAxekWIK2?=
- =?us-ascii?Q?KYUcoZi0wUWDcFUDIRRpuwGclVet//DdUxV3tH4/?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5adec3d1-e313-4f6f-497f-08db04646b86
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZkR4VmpkUnlac2RkZFZuc3d0U2ZwaTRRY3F2NjZ0UDJRNzF1cHhKWHNuZk4x?=
+ =?utf-8?B?R3RKQktmY0s2bTh5QjVBV1JZWGRlQmJwQkdZQTd5aVRUakhBKzZkU2VDcm1z?=
+ =?utf-8?B?cmZUQnVhNFVrVi9IWXNBaytKOXJKOVNWZkhRTkhSU0k2dWxIa0VGcXJsVDRw?=
+ =?utf-8?B?T2t4cEM2TXhOUXhUbEk1c01YQ0tsTDc5VWtqTnhZeEJUNXduYUtRd2RkQVpH?=
+ =?utf-8?B?WTJ4bGV0SVpNUWN1bHVlUmdKcHJRL0VXY3BUaVhvallBMGxscDM5SkIyRnVv?=
+ =?utf-8?B?N1NaOTdTcGJsb05VSnd3Rk55ZExzNnNiVGNFdngwNEZZd25zazh4Y2xBT0tI?=
+ =?utf-8?B?WWdldEt6dHJiKzlqR2lWVGxkSGdmNDdZeDcvRmRRbXNrLzFQL2NhVDd0Qk80?=
+ =?utf-8?B?RGRPNkhzUkxxWlVhYUx4TmdLYWRpdGpxNHpQSmQ5R3JUOGE3bm9vZ00ycEZS?=
+ =?utf-8?B?TXlFSFFRa1JKL2tUSmFpaWl4clVBMXhIYWFVMXZhWGx3TFpmbkZsdXZKUVhi?=
+ =?utf-8?B?WXd1bHVqUmV3NzZDQzZVYnJ3S0JrcExuamhybDBDbHE4dG9pTXJzb3FSamJP?=
+ =?utf-8?B?YlV3czFreXdoVE1iODVoZHcva0F1MW80aFlaK280Tm13Q1VSSHZoVk93NklB?=
+ =?utf-8?B?b1BtRlFHYXQwTmF0VkthcS93cm1SYVQrdHlMU3I4NUQzaVNDSk9OZjFrd2Uw?=
+ =?utf-8?B?TDhCZjhwWVBRVGZRSWZLL0Z5VFF5M2IrdHUyT3pSZzM0OStEdkFERWtkWTJs?=
+ =?utf-8?B?VEhZWHV3WWMzN2kwVHUzT05GTlhlS1hhTE5SSDFqMW53VU1vK29mQjBFRHNI?=
+ =?utf-8?B?akY5TDRZZUdsZVM4VFBJMmxmYVRwdWo2R1VLMTFxQmEzenk0WmVoYk1vY2x1?=
+ =?utf-8?B?aitTMGlQTUUvK2o0N1p5Y2V4RVE4K044bDZZZXV3QWh4QnZNVHMwSnBaRndh?=
+ =?utf-8?B?TVdXdnc0RFVZbzRodzNBYU1hbkxYdXJ5dlE0RitKTXFmb1ZIWlRKMUp5dHRC?=
+ =?utf-8?B?SVhBOGxUdm9TVEp0SXYwRnozcFNNa203NmdZaURJOUpxaHQvbU1GMTRlbGVD?=
+ =?utf-8?B?eStyK2Y3T24yRGdndlJxNllUdHVtNlJOR2MzZFJIUXN2Lys2OG13UHlUSG91?=
+ =?utf-8?B?d1BpZVBLc0cyYXlGdHYxc3h3Q3AwaEVabkdVYXRHM2tMcjk3M2JpZ2lyY1ZY?=
+ =?utf-8?B?cHZ2RHNEQlVVREk4ZEpYZyszOEF1eFplSnBVWm5Ld3FZNjNBUHRWbGNCWGVo?=
+ =?utf-8?B?UTI3TW9ScEk3WlpFbkVPN0ludFdZb2RaSS9jZ2E3UTFoWjdTQzNRMHFUbWdY?=
+ =?utf-8?B?MEE5bnNYRW9NdjB1ZXErRzAwNzNvVkkvdGFRbHY0amJxeTFUNldIRCswZVJQ?=
+ =?utf-8?B?alltU0NnUFlxVnFiblQ3dktmMXI4Q3FKSlRBUDFoTDl6b0NYQUwwL2Uvc0lT?=
+ =?utf-8?B?OHlva2V2RFNaRzJVdmx1WmRmb1cyR0FCdVBPK0NKRmh1cmRVTVNYRWw1L1p1?=
+ =?utf-8?B?QUpxRVlLbyszeVRkV2lkUFRqVm9FYzlxRnMycEFvUUVtdzN5TmFIdTU1Tm96?=
+ =?utf-8?B?RnlRMXhWRXVyUFlVL3pwZkVjSUJoN01VaXREU0M0SkpuNWhMY05XaGRRWTBB?=
+ =?utf-8?B?MGhBakxjczFwT0NBTlRFbUE1Q3N4MjJodEhMcG1aVW9MU2U5aWRDcmFqMDd6?=
+ =?utf-8?B?b1M1UkJGMVBWd3RZVm9iOHdCcjU5Vndnb2RqYkNOZzRRZHFWMjRka202Mytl?=
+ =?utf-8?B?cFRmTWdiOWpmVkNzQ0FGM1ZZZlBMeG5TblZmejBtallrOWNqMlUrMk5HZTc4?=
+ =?utf-8?B?d2ZKb0YzYUU2SlptaVYvQUlrT2tkNTNaWVlLdVFGUklOeC9CckJCK1ZvanhD?=
+ =?utf-8?B?bk9YT1RjTE1uZFk1YTN2NUlyN042N290NGRzSmdGcXQ2RGJVZGg3QnZNazda?=
+ =?utf-8?B?M1JuYWdoN0NZVVhRYU9yd25PZ3ZZblVOcXpoRXpJQXJtMlNqQlhvS1dZQUVy?=
+ =?utf-8?B?UjBrbmc0UllBNHRIdXM1Tjg4ejdXb3BSRWZISWVFZU51cDhFbU02cXI4MVlv?=
+ =?utf-8?B?YzBKRU1yNXY3MmdYWWNRM1IybitYZjFMdHBsYm8wRGdxakw3RnBCUnJ2cFF0?=
+ =?utf-8?Q?pB4jGQk/gsxB7adKhmw02QX5e?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7fbeb73d-e7ee-4ac4-b88b-08db0464aa05
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 14:55:55.3229
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 14:57:40.0517
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XcwCMEEGmWYUdezhof4PYIle/2RRgR8UsoKldvFRulaVT738PXi//oUQG1/lGGb2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7010
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-CrossTenant-UserPrincipalName: xIHS/MRCP/LWjfynndJbGBFI8AUgp1wcYdQBpf+SkgZdXcne0OQm6GV9BuEJ2udoeQvaImpZjY8XueDUbFWiPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8097
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -141,38 +132,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 03:14:03AM +0000, Tian, Kevin wrote:
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Monday, January 30, 2023 9:33 PM
-> > 
-> > On Sun, Jan 29, 2023 at 08:11:48AM +0000, Tian, Kevin wrote:
-> > 
-> > > " I'd also question sprd-iommu, which hardly has a generally-useful
-> > > domain size, and has only just recently gained the ability to unmap
-> > > anything successfully."
-> > 
-> > So long as it has a correct kernel API and exposes the right (small)
-> > aperture then it is OK.
-> > 
-> > The device will not be useful for qemu, but it would run some dpdk
-> > configurations just fine.
+On 2/1/23 08:09, Jeremi Piotrowski wrote:
+> On Tue, Jan 31, 2023 at 12:49:54PM -0600, Tom Lendacky wrote:
+>> On 1/23/23 09:22, Jeremi Piotrowski wrote:
+>>> The ASP table contains the memory location of the register window for
+>>> communication with the Platform Security Processor. The device is not
+>>> exposed as an acpi node, so it is necessary to probe for the table and
+>>> register a platform_device to represent it in the kernel.
+>>>
+>>> At least conceptually, the same PSP may be exposed on the PCIe bus as
+>>> well, in which case it would be necessary to choose whether to use a PCI
+>>> BAR or the register window defined in ASPT for communication. There is
+>>> no advantage to using the ACPI and there are no known bare-metal systems
+>>> that expose the ASP table, so device registration is restricted to the
+>>> only systems known to provide an ASPT: Hyper-V VMs. Hyper-V VMs also do
+>>> not expose the PSP over PCIe.
+>>>
+>>> This is a skeleton device at this point, as the ccp driver is not yet
+>>> prepared to correctly probe it. Interrupt configuration will come later
+>>> on as well.
+>>>
+>>> Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+>>> ---
+>>>   arch/x86/kernel/Makefile |  2 +-
+>>>   arch/x86/kernel/psp.c    | 39 +++++++++++++++++++++++++++++++++++++++
+>>
+>> Based on comments about other SEV related items, this should
+>> probably be moved into the arch/x86/coco/sev/ directory.
+>>
+>> Thanks,
+>> Tom
 > 
-> I still didn't get the restriction here. Can you elaborate why it works
-> with dpdk but not qemu?
+> I'll do that. This will make the code depend on CONFIG_ARCH_HAS_CC_PLATFORM
+> and CONFIG_AMD_MEM_ENCRYPT, the latter selects the former. This will work
+> as long as CONFIG_AMD_MEM_ENCRYPT continues to be needed for both SNP guest
+> and host sides.
 
-dpdk needs like, say, 64M of aperture and doesn't care what the IOVAs
-are
+CONFIG_AMD_MEM_ENCRYPT is only required on the guest side. It is not 
+needed to launch an SEV guest of any type. I believe the latest SNP 
+hypervisor patches are being updated to remove that dependency and replace 
+it with CONFIG_KVM_AMD_SEV. So you'll have to figure out what you want for 
+your CONFIG requirement.
 
-qemu needs the entire guest memory of aperture and must have IOVAs
-that are 1:1 with the GPA.
+Thanks,
+Tom
 
-So aperture size and location can exclude qemu
-
-> Can qemu verify this restriction via existing path or need new uAPI
-> flag to communicate?
-
-It already happens, the aperture/etc is convayed to qemu through
-IOMMUFD_CMD_IOAS_IOVA_RANGES and if qemu cannot get the IOVA's it
-needs to create the guest it should fail.
-
-Jason
+> 
+> Jeremi
+> 
+>>
+>>>   2 files changed, 40 insertions(+), 1 deletion(-)
+>>>   create mode 100644 arch/x86/kernel/psp.c
+>>>
+>>> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+>>> index f901658d9f7c..e2e19f2d08a7 100644
+>>> --- a/arch/x86/kernel/Makefile
+>>> +++ b/arch/x86/kernel/Makefile
+>>> @@ -139,7 +139,7 @@ obj-$(CONFIG_UNWINDER_ORC)		+= unwind_orc.o
+>>>   obj-$(CONFIG_UNWINDER_FRAME_POINTER)	+= unwind_frame.o
+>>>   obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
+>>> -obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
+>>> +obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= psp.o sev.o
+>>>   obj-$(CONFIG_CFI_CLANG)			+= cfi.o
+>>> diff --git a/arch/x86/kernel/psp.c b/arch/x86/kernel/psp.c
+>>> new file mode 100644
+>>> index 000000000000..d404df47cc04
+>>> --- /dev/null
+>>> +++ b/arch/x86/kernel/psp.c
+>>> @@ -0,0 +1,39 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +
+>>> +#include <linux/platform_data/psp.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <asm/hypervisor.h>
+>>> +
+>>> +static struct platform_device psp_device = {
+>>> +	.name           = "psp",
+>>> +	.id             = PLATFORM_DEVID_NONE,
+>>> +};
+>>> +
+>>> +static int __init psp_init_platform_device(void)
+>>> +{
+>>> +	struct psp_platform_data pdata = {};
+>>> +	struct resource res[1];
+>>> +	int err;
+>>> +
+>>> +	/*
+>>> +	 * The ACPI PSP interface is mutually exclusive with the PCIe interface,
+>>> +	 * but there is no reason to use the ACPI interface over the PCIe one.
+>>> +	 * Restrict probing ACPI PSP to platforms known to only expose the ACPI
+>>> +	 * interface, which at this time is SNP-host capable Hyper-V VMs.
+>>> +	 */
+>>> +	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
+>>> +		return -ENODEV;
+>>> +
+>>> +	err = acpi_parse_aspt(res, &pdata);
+>>> +	if (err)
+>>> +		return err;
+>>> +	err = platform_device_add_resources(&psp_device, res, 1);
+>>> +	if (err)
+>>> +		return err;
+>>> +
+>>> +	err = platform_device_register(&psp_device);
+>>> +	if (err)
+>>> +		return err;
+>>> +	return 0;
+>>> +}
+>>> +device_initcall(psp_init_platform_device);
