@@ -2,144 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931C6687050
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 22:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC81D687058
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 22:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjBAVGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 16:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S231642AbjBAVH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 16:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbjBAVGf (ORCPT
+        with ESMTP id S231185AbjBAVH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 16:06:35 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DBD6F215
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 13:06:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1675285592; x=1706821592;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iRKnL0h2vDqLOR7wwetQc+wVcIvEQsrF0Mp7+5R7hA4=;
-  b=QwHCYcsJD6Yvn/3NIIUK14yHL37SOhS0KRNw90rxJhcZzru9R5fn65Ix
-   uV7yaHjNSdMvOjk/eEp8Cj+Edo1xPPmVccbnMN37W9UiyLIVYJGDwXf6L
-   sTE07KyHF7nB76lrQilD00OI4UMkUaAw8wzwTyiDoe0JisvdFuhTCMbHL
-   NChrSz26QCDieznxN426+30wEfTJE9PdGUDWXBFXkkkEcQauDFxBDBFQn
-   tonUua8C9rceN0RDjRQOWg9J6Graw4DspI04tIc1y6/UhspNwPQZvVLiO
-   FQ8kfvWuKeijozGpr9QAjjO/pnrc7hz+AtvGOVy+c+KfdXsgypGDUJvxf
-   g==;
-X-IronPort-AV: E=Sophos;i="5.97,265,1669046400"; 
-   d="scan'208";a="222354879"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Feb 2023 05:06:29 +0800
-IronPort-SDR: HafJkjajxr1VQAEEZsj3UxLHR3XI7euhDvrTN2uz6ow+DR06DtQL0ggVs8dWlJU5xvTtzZfPbv
- al/Uks977tkbajLVoIMGQ7O8eHNu1SrLPRGCfVYfswagvqbe//vrRHVST5KxyvmJmLhZq7qZtq
- OwdEqDg6q9XhP6YnBkVAF/aR6qgfaNb8ll75vziZr0Cl+48NhTjyDzxI/LZD3Zbvq1rswkAaCI
- Frz2Zeksi54w6QZ3qKll6b5aAIadmhrF8gd8xDe9L/Sv9MakNLmZNtKnzu7HyArGpir7X9szWM
- LA4=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Feb 2023 12:18:08 -0800
-IronPort-SDR: u9W9PsjArgFd61KGPAVTbaDgbwTue9mq0OnM4yLoOxLdaDh9hDVnz0bCp5YWWPo6D9kJAGtwtH
- TLvGWdBbX9nDRTdSk0Ahtl27gipFdWfyAQDvC6j4i52RCsYg57l3F7Q+XMMjqp2uUW7Mr7IQ4S
- 0ZrZZkPDFZptqCcs24Vx7n4jdajzxSJEKggOuhvT39fLkuQ5410g618H4VVpO90rGBPdz6tWxL
- 2Tg6ue+9ZldGg+DCkVgrNvYXuqcUZBYgOCeklpEJoP38MPrpK9ioMrNjfOvkUR0NYL9T2lOXlA
- saA=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Feb 2023 13:06:29 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P6ZGY2NMdz1Rwtm
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 13:06:29 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1675285588; x=1677877589; bh=iRKnL0h2vDqLOR7wwetQc+wVcIvEQsrF0Mp
-        7+5R7hA4=; b=V8ZS818BsRUL1nCwybqdEYTe8Wx0WBi6qOXAxFoZKbXfCBwwWFf
-        VOosxalLJs4cfWKySVQbx1ZrLB5YonTFBaoj/OLDVfT8cUBJ8bD5tiSE5hzQ46RF
-        TEakRsy3ipmA2B41lBPZ393WOLeL83l8wWtcOnR/4nSLayBR+cXU60TKUAZZkqU3
-        m9id8XIALxEB+iWm2k7m3TXJnm913IifTzv30TSMO2LexFx2Yy+QwW5uL0PLMTEh
-        vHlfWflhhZbCIVwDj00GWrUNQ6CJKTuSmUOhYwjGnWlId5TVTF+fr24Bl74RV9QG
-        GmSDm/bX8s7qZ+Mjsw8eY/3NXzRSKvHjbdA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TR-9IEDm6v5M for <linux-kernel@vger.kernel.org>;
-        Wed,  1 Feb 2023 13:06:28 -0800 (PST)
-Received: from [10.225.163.79] (unknown [10.225.163.79])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P6ZGV4bwJz1RvLy;
-        Wed,  1 Feb 2023 13:06:26 -0800 (PST)
-Message-ID: <7cf17a27-13dc-e6b4-c34c-47454239af30@opensource.wdc.com>
-Date:   Thu, 2 Feb 2023 06:06:25 +0900
+        Wed, 1 Feb 2023 16:07:26 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A221E6D5C6;
+        Wed,  1 Feb 2023 13:07:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675285634; x=1706821634;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yL+AMeADaYah1JlX3xyOr7TA/KaBboijzv98KqvU194=;
+  b=BgZoCtx/algIw5eQQ+2yreQshQMMJzkXTRomByz2U+LDCO3uqCt/a7Ri
+   rtWyXORGGrP3GAqsrxr3NOENz1uly3tmFkVQwsoyUVfkuoNbDZBaMuOOH
+   UNxQXnjkEpWUE7hkOl7+lsH+0+iH2kxcL+oKv8/AVkW2sBigWGpuEAY0J
+   8QX6Zel3RUedIRO4zlNK6L0j34YmqZhi1QwZwC3IhlazxsM9f/v6T3Kd5
+   Hs0wN1fe5oJAGaAj1JmgE2rAncT/AJ3EsswBIT9jfXb9oZuPr0ZvsPn56
+   QlpS1p1iua+KXOuQ4t/s8MbjtXLXBOokpeGUGf+2KhWaafCabjdWCRToD
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311919614"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="311919614"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:07:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="838931372"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="838931372"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2023 13:07:13 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal: intel_powerclamp: Return last requested state as cur_state
+Date:   Wed,  1 Feb 2023 13:07:12 -0800
+Message-Id: <20230201210712.2170312-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v3] powerpc: macio: Make remove callback of macio driver
- void returned
-Content-Language: en-US
-To:     Dawei Li <set_pte_at@outlook.com>, mpe@ellerman.id.au
-Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, linux-ide@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <TYCP286MB232391520CB471E7C8D6EA84CAD19@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <TYCP286MB232391520CB471E7C8D6EA84CAD19@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/23 23:36, Dawei Li wrote:
-> Commit fc7a6209d571 ("bus: Make remove callback return void") forces
-> bus_type::remove be void-returned, it doesn't make much sense for any
-> bus based driver implementing remove callbalk to return non-void to
-> its caller.
-> 
-> This change is for macio bus based drivers.
-> 
-> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
-> ---
-> v2 -> v3
-> - Rebased on latest powerpc/next.
-> - cc' to relevant subsysem lists.
-> 
-> v1 -> v2
-> - Revert unneeded changes.
-> - Rebased on latest powerpc/next.
-> 
-> v1
-> - https://lore.kernel.org/all/TYCP286MB2323FCDC7ECD87F8D97CB74BCA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
-> ---
->  arch/powerpc/include/asm/macio.h                | 2 +-
->  drivers/ata/pata_macio.c                        | 4 +---
->  drivers/macintosh/rack-meter.c                  | 4 +---
->  drivers/net/ethernet/apple/bmac.c               | 4 +---
->  drivers/net/ethernet/apple/mace.c               | 4 +---
->  drivers/net/wireless/intersil/orinoco/airport.c | 4 +---
->  drivers/scsi/mac53c94.c                         | 5 +----
->  drivers/scsi/mesh.c                             | 5 +----
->  drivers/tty/serial/pmac_zilog.c                 | 7 ++-----
->  sound/aoa/soundbus/i2sbus/core.c                | 4 +---
->  10 files changed, 11 insertions(+), 32 deletions(-)
+When the user is reading cur_state from the thermal cooling device for
+Intel powerclamp device:
+- It returns the idle ratio from Package C-state counters when
+there is active idle injection session.
+- -1, when there is no active idle injection session.
 
-For the ata bits:
+This information is not very useful as the package C-state counters vary
+a lot from read to read. Instead just return the last requested cur_state.
 
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/thermal/intel/intel_powerclamp.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index 2f4cbfdf26a0..72a45cf2708c 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -590,17 +590,7 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
+ static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long *state)
+ {
+-	if (clamping) {
+-		if (poll_pkg_cstate_enable)
+-			*state = pkg_cstate_ratio_cur;
+-		else
+-			*state = set_target_ratio;
+-	} else {
+-		/* to save power, do not poll idle ratio while not clamping */
+-		*state = -1; /* indicates invalid state */
+-	}
+-
+-	return 0;
++	return set_target_ratio;
+ }
+ 
+ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
 -- 
-Damien Le Moal
-Western Digital Research
+2.39.1
 
