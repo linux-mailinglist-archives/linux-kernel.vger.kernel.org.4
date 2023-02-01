@@ -2,45 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8856866B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DEF6866BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbjBANWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:22:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
+        id S232195AbjBANW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjBANWm (ORCPT
+        with ESMTP id S232240AbjBANWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:22:42 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78C764681;
-        Wed,  1 Feb 2023 05:22:26 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pND3w-0004yA-I2; Wed, 01 Feb 2023 14:22:08 +0100
-Message-ID: <3d568611-8119-37c7-7d84-61cb97532446@leemhuis.info>
-Date:   Wed, 1 Feb 2023 14:22:07 +0100
+        Wed, 1 Feb 2023 08:22:51 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC555206AC
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:22:49 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id d14so17288655wrr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 05:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yQsTT7vzEv2btlkh6hAE9R2TMqftLVwRfIlZmCyBNZ4=;
+        b=ObeEnKk3ZN9uzXVtLvh0MFNQR/+WxPcY4FvzCab4X0MGlPdZSUy3gmObjKOve07PE7
+         YPJtuFqgvXnaEnnQizzr8+FdlJsb3Pftjy6r6xbalhpTRev+5eRW7gUS8D0MBRhYswGG
+         qj/1WpLyBJM1GD43luSHyr1wPMU1kWM/kztHhr0B+dUpjIqRlaki3dBYZM3zdfwRez5h
+         0rflqUrAgUbJwGiDYHgEsGKl+/Otdwxo+G2XWLEDpGjkCDXpdDbvvpvfbTRa29mP5lV5
+         jftA5JfCWHiR4Yk86Iq59W77u6BTRG3yeh684RzhVP5i6Q71WgJ4n/ZWDoHoDsGC+cbk
+         DYKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yQsTT7vzEv2btlkh6hAE9R2TMqftLVwRfIlZmCyBNZ4=;
+        b=Wz7hCqRyQqYr9AEXy/0wWU6I6jMkhrV+70dB7wlh0Xi+n6fmbWSvY7sTT3hFUd/2I6
+         KrYJx9t47zB2UUWUS3GJYEp443x6yKqZYOVOVVwY9gwGenJOoL58b/z61eUIsV5Vfa2H
+         q9G0NVVqc1vPJpzicuwG+JIuHG1Ay4XkHSQlXX/BCGen9HQd37ikqaqnXJH0CVJxYR24
+         Ozo7Gbhm+IdmtX23LkSdmiBSJxcs8pRYZ+SnEqwQ+hBdh0I0hshDKsJJzC6YRaFhmz/r
+         OADK31bpfTVUU/pL7p1nWs4o/ME8xOw93xHPNKUYfp0ecTMa6pABR0fFhe5XBHRfydE8
+         XRFg==
+X-Gm-Message-State: AO0yUKWFCv+1fNLtLbp1d+n76aezJFxSYxP2IF2UM7cpptIEz1YKVBM1
+        HLICo2r7m6hjnNjugnDFLeN9iaGZ818=
+X-Google-Smtp-Source: AK7set8617xhhvfVL6x561L03xUlErWEyI0KsbQ4bh1o9aPwd8pdzJJQUkKMSnlzhu9d3E4JWEeJwQ==
+X-Received: by 2002:a5d:4103:0:b0:2c3:733e:cec3 with SMTP id l3-20020a5d4103000000b002c3733ecec3mr2292900wrp.15.1675257768176;
+        Wed, 01 Feb 2023 05:22:48 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m17-20020a7bce11000000b003dc492e4430sm1789256wmc.28.2023.02.01.05.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 05:22:47 -0800 (PST)
+Date:   Wed, 1 Feb 2023 16:22:43 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Guru Mehar Rachaputi' <gurumeharrachaputi@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] staging: pi433: modify bit_rate from u16 to u32
+Message-ID: <Y9pno7gZHa+r/Rg3@kadam>
+References: <Y9h42l/8EcPqn63x@combine-ThinkPad-S1-Yoga>
+ <Y9ilj812USHrSXe+@kroah.com>
+ <Y9jrOKMGl7ITKxhP@combine-ThinkPad-S1-Yoga>
+ <19e492521b4a4d31aa13c45e8616689b@AcuMS.aculab.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Content-Language: en-US, de-DE
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-References: <fabdb45fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info>
- <Y9peNbWUR9JmTJbo@kroah.com> <Y9pep+GBBaTiN/sN@kroah.com>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v1] docs: describe how to quickly build Linux
-In-Reply-To: <Y9pep+GBBaTiN/sN@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1675257746;7ee893ce;
-X-HE-SMSGID: 1pND3w-0004yA-I2
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <19e492521b4a4d31aa13c45e8616689b@AcuMS.aculab.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,68 +76,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.02.23 13:44, Greg KH wrote:
-> On Wed, Feb 01, 2023 at 01:42:29PM +0100, Greg KH wrote:
->> On Wed, Feb 01, 2023 at 12:52:30PM +0100, Thorsten Leemhuis wrote:
->>> Add a text explaining how to quickly build a kernel, as that's something
->>> users will often have to do when they want to report an issue or test
->>> proposed fixes. This is a huge and frightening task for quite a few
->>> users these days, as many rely on pre-compiled kernels and have never
->>> built their own. They find help on quite a few websites explaining the
->>> process in various ways, but those howtos often omit important details
->>> or make things too hard for the 'quickly build just for testing' case
->>> that 'localmodconfig' is really useful for. Hence give users something
->>> at hand to guide them, as that makes it easier for them to help with
->>> testing, debugging, and fixing the kernel.
->>
->> First off, this is great, thanks for doing this.
+On Wed, Feb 01, 2023 at 12:34:50PM +0000, David Laight wrote:
+> In reality having a uapi structure with embedded padding should
+> be banned.
+> But that would need a compiler attribute to enforce it.
 
-Thx, feels good to hear.
+It would be simple enough to grep the names of all the UAPI struct and
+use pahole to make a list of the existing structs which have holes.
+Then re-run the script every week and complain when new holey struct
+types are added.
 
-Bisection is next on my todo list once this matured...
+You could do a similar thing with Smatch looking at copy_to/from_user()
+struct types.
 
->> One minor comment, to prevent people from "overloading" the
->> git.kernel.org systems:
->>
->>> +.. _sources_sbs:
->>> +
->>> + * Retrieve the sources of the Linux version you intend to build; then change
->>> +   into the directory holding them, as all further commands in this guide are
->>> +   meant to be executed from there.
->>> +
->>> +   If you plan to only build one particular kernel version, download its source
->>> +   archive from https://kernel.org; afterwards extract its content to '~/linux/'
->>> +   and change into the directory created during extraction.
->>> +
->>> +   In most other situations your best choice is to fetch the sources using git::
->>> +
->>> +          git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git \
->>> +            ~/linux/sources
->>> +          cd ~/linux/sources/
->>
->> Ideally you should never do a "full clone from scratch" like this, as it
->> takes up loads of server resources.  The "best" way to do this is to
->> download the kernel git bundle, and then pull and resolve the remaining
->> bits.  It's explained, with a script to do the work for you, here:
->>
->> 	https://kernel.org/best-way-to-do-linux-clones-for-your-ci.html
-> 
-> Oops, here's the full steps involved:
-> 	https://www.kernel.org/cloning-linux-from-a-bundle.html
-> the first link above has a script that does it all for you, but you
-> probably just want to copy the steps at this last link instead.
-
-Great idea, thx for bringing this up -- now that you mention it, I
-remember those pages and the script again... :-/
-
-Sadly my "after cloning Linus tree, add the stable tree as remote and
-fetch everything" approach would will still create a lot of load. I
-could use the script with the stable git repo, as that includes
-mainline; but I noticed it sometimes is not fully up2date. At least I
-once noticed it was quite a few hours (or maybe even a day?) behind. Is
-that normal? I assume you should know.
-
-Anyway: maybe "a little bit behind" isn't something that's much of a
-problem for this document.
-
-Ciao, Thorsten
+regards,
+dan carpenter
