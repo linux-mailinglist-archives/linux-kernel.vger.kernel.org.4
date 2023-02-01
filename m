@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B950A686DF6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2C2686DF5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbjBASbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S230369AbjBASbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:31:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231569AbjBASbu (ORCPT
+        with ESMTP id S230177AbjBASbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:31:50 -0500
-Received: from out-215.mta1.migadu.com (out-215.mta1.migadu.com [IPv6:2001:41d0:203:375::d7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE09F7E6C5
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 10:31:47 -0800 (PST)
-Date:   Wed, 1 Feb 2023 10:31:40 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1675276305;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2k9RdWKbuchR7Tzph+cOMm2F328+gYOorWNDRphKPTY=;
-        b=lmsm5EJw7Ag76Ab2u0I+odcANv0IJvSUVxiwTozoluqHE0itOLpy3pK5ukk3jFQ+0ZbszO
-        cTqWApnPoXqtuihkawaz9n7RekvDrLJlvDoGpCOwa9TN/xc5xpQlU5QClV/g0GZuhsQm6f
-        dndefcr6GKweZLSl45WWLTr2WF3u46E=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Leonardo =?iso-8859-1?Q?Br=E1s?= <leobras@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] Introduce memcg_stock_pcp remote draining
-Message-ID: <Y9qwDGXZviWdtonc@P9FQF9L96D.corp.robot.car>
-References: <20230125073502.743446-1-leobras@redhat.com>
- <Y9DpbVF+JR/G+5Or@dhcp22.suse.cz>
- <9e61ab53e1419a144f774b95230b789244895424.camel@redhat.com>
- <Y9FzSBw10MGXm2TK@tpad>
- <Y9G36AiqPPFDlax3@P9FQF9L96D.corp.robot.car>
- <Y9Iurktut9B9T+Tl@dhcp22.suse.cz>
- <Y9LAf4pRyClZ1vfx@tpad>
- <Y9LSjnNEEUiF/70R@dhcp22.suse.cz>
+        Wed, 1 Feb 2023 13:31:44 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22B982BF36;
+        Wed,  1 Feb 2023 10:31:43 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id CD32520B74F7; Wed,  1 Feb 2023 10:31:41 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CD32520B74F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675276301;
+        bh=5l6X8n+sLaMl1oSrN2WO8DaIAyt6VmAKYZDLl+sqKbE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IehjFntxghdUgdtSLPG710qlB8D8CpfRUmwLBLBKOrMcwMPSvINFYFZWbiRR0DSDh
+         6L9s0i7pLY/W4IEBQ9TxWGBIp0eUIyxQjQRS8L1/MKELA8riP26DzjB2/WEP6mpD5g
+         rJI+x8H6Y84GgYNVJsm7r0jHo7QdBnub6eypD92M=
+Date:   Wed, 1 Feb 2023 10:31:41 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+Subject: Re: [PATCH v2 6/6] Driver: VMBus: Add device tree support
+Message-ID: <20230201183141.GA6988@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675188609-20913-7-git-send-email-ssengar@linux.microsoft.com>
+ <CAL_JsqK_7eTTrSd6EKDGy9A8kC5w6cjVEtSi3CB1M7Awj+zg6g@mail.gmail.com>
+ <20230201165133.GA24116@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <20230201174638.GA3872117-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y9LSjnNEEUiF/70R@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230201174638.GA3872117-robh@kernel.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,92 +57,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 08:20:46PM +0100, Michal Hocko wrote:
-> On Thu 26-01-23 15:03:43, Marcelo Tosatti wrote:
-> > On Thu, Jan 26, 2023 at 08:41:34AM +0100, Michal Hocko wrote:
-> > > On Wed 25-01-23 15:14:48, Roman Gushchin wrote:
-> > > > On Wed, Jan 25, 2023 at 03:22:00PM -0300, Marcelo Tosatti wrote:
-> > > > > On Wed, Jan 25, 2023 at 08:06:46AM -0300, Leonardo Brás wrote:
-> > > > > > On Wed, 2023-01-25 at 09:33 +0100, Michal Hocko wrote:
-> > > > > > > On Wed 25-01-23 04:34:57, Leonardo Bras wrote:
-> > > > > > > > Disclaimer:
-> > > > > > > > a - The cover letter got bigger than expected, so I had to split it in
-> > > > > > > >     sections to better organize myself. I am not very confortable with it.
-> > > > > > > > b - Performance numbers below did not include patch 5/5 (Remove flags
-> > > > > > > >     from memcg_stock_pcp), which could further improve performance for
-> > > > > > > >     drain_all_stock(), but I could only notice the optimization at the
-> > > > > > > >     last minute.
-> > > > > > > > 
-> > > > > > > > 
-> > > > > > > > 0 - Motivation:
-> > > > > > > > On current codebase, when drain_all_stock() is ran, it will schedule a
-> > > > > > > > drain_local_stock() for each cpu that has a percpu stock associated with a
-> > > > > > > > descendant of a given root_memcg.
-> > > > 
-> > > > Do you know what caused those drain_all_stock() calls? I wonder if we should look
-> > > > into why we have many of them and whether we really need them?
-> > > > 
-> > > > It's either some user's actions (e.g. reducing memory.max), either some memcg
-> > > > is entering pre-oom conditions. In the latter case a lot of drain calls can be
-> > > > scheduled without a good reason (assuming the cgroup contain multiple tasks running
-> > > > on multiple cpus).
+On Wed, Feb 01, 2023 at 11:46:38AM -0600, Rob Herring wrote:
+> On Wed, Feb 01, 2023 at 08:51:33AM -0800, Saurabh Singh Sengar wrote:
+> > On Tue, Jan 31, 2023 at 02:12:53PM -0600, Rob Herring wrote:
+> > > On Tue, Jan 31, 2023 at 12:10 PM Saurabh Sengar
+> > > <ssengar@linux.microsoft.com> wrote:
+> > > >
+(...)
+> > > > @@ -2442,6 +2443,7 @@ void vmbus_free_mmio(resource_size_t start, resource_size_t size)
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(vmbus_free_mmio);
+> > > >
+> > > > +#ifdef CONFIG_ACPI
 > > > 
-> > > I believe I've never got a specific answer to that. We
-> > > have discussed that in the previous version submission
-> > > (20221102020243.522358-1-leobras@redhat.com and specifically
-> > > Y2TQLavnLVd4qHMT@dhcp22.suse.cz). Leonardo has mentioned a mix of RT and
-> > > isolcpus. I was wondering about using memcgs in RT workloads because
-> > > that just sounds weird but let's say this is the case indeed. 
+> > > It's better to put C 'if (!IS_ENABLED(CONFIG_ACPI)' code in the
 > > 
-> > This could be the case. You can consider an "edge device" where it is
-> > necessary to run a RT workload. It might also be useful to run 
-> > non realtime applications on the same system.
-> > 
-> > > Then an RT task or whatever task that is running on an isolated
-> > > cpu can have pcp charges.
-> > 
-> > Usually the RT task (or more specifically the realtime sensitive loop
-> > of the application) runs entirely on userspace. But i suppose there
-> > could be charges on application startup.
+> > I wanted to have separate function for ACPI and device tree flow, which
+> > can be easily maintained with #ifdef. Please let me know if its fine.
 > 
-> What is the role of memcg then? If the memory limit is in place and the
-> workload doesn't fit in then it will get reclaimed during start up and
-> memory would need to be refaulted if not mlocked. If it is mlocked then
-> the limit cannot be enforced and the start up would likely fail as a
-> result of the memcg oom killer.
+> Yes, you can have separate functions:
 > 
-> [...]
-> > > > Overall I'm somewhat resistant to an idea of making generic allocation & free paths slower
-> > > > for an improvement of stock draining. It's not a strong objection, but IMO we should avoid
-> > > > doing this without a really strong reason.
+> static int vmbus_acpi_add(struct platform_device *pdev)
+> {
+> 	if (!IS_ENABLED(CONFIG_ACPI))
+> 		return -ENODEV;
+> 
+> 	...
+> }
+> 
+> The compiler will throw away the function in the end if CONFIG_ACPI is 
+> not enabled.
+> 
+> That is easier for us to maintain because it reduces the combinations to 
+> build.
+
+Thanks, Will fix this in v3.
+
+> 
+> > 
 > > > 
-> > > Are you OK with a simple opt out on isolated CPUs? That would make
-> > > charges slightly slower (atomic on the hierarchy counters vs. a single
-> > > pcp adjustment) but it would guarantee that the isolated workload is
-> > > predictable which is the primary objective AFAICS.
+> > > >  static int vmbus_acpi_add(struct platform_device *pdev)
+> > > >  {
+> > > >         acpi_status result;
+> > > > @@ -2496,10 +2498,68 @@ static int vmbus_acpi_add(struct platform_device *pdev)
+> > > >                 vmbus_mmio_remove();
+> > > >         return ret_val;
+> > > >  }
+> > > > +#else
+> > > > +
+> > > > +static int vmbus_device_add(struct platform_device *pdev)
+> > > > +{
+> > > > +       struct resource **cur_res = &hyperv_mmio;
+> > > > +       struct device_node *np;
+> > > > +       u32 *ranges, len;
+> > > > +       u64 start;
+> > > > +       int nr_ranges, child_cells = 2, cur_cell = 0, ret = 0;
+> > > > +
+> > > > +       hv_dev = pdev;
+> > > > +       np = pdev->dev.of_node;
+> > > > +
+> > > > +       nr_ranges = device_property_count_u32(&pdev->dev, "ranges");
+> > > 
+> > > Parsing ranges yourself is a bad sign. It's a standard property and we
+> > > have functions which handle it. If those don't work, then something is
+> > > wrong with your DT or they need to be fixed/expanded.
 > > 
-> > This would make isolated CPUs "second class citizens": it would be nice
-> > to be able to execute non realtime apps on isolated CPUs as well
-> > (think of different periods of time during a day, one where 
-> > more realtime apps are required, another where less 
-> > realtime apps are required).
+> > I find all the  standard functions which parse "ranges" property are doing
+> > much more then I need. Our requirement is to only pass the mmio memory range
+> > and size, I couldn't find any standard API doing this.
 > 
-> An alternative requires to make the current implementation that is
-> lockless to use locks and introduce potential lock contention. This
-> could be harmful to regular workloads. Not using pcp caching would make
-> a fast path using few atomics rather than local pcp update. That is not
-> a terrible cost to pay for special cased workloads which use isolcpus.
-> Really we are not talking about a massive cost to be payed. At least
-> nobody has shown that in any numbers.
+> You can't just change how standard properties work to suit your needs.
+> 
+> We shouldn't even be having this discussion because we have tools to 
+> check all this now. dtc does some and dtschema does a lot more.
+> 
+> > I see some of the drivers are using these APIs to parse ranges property hence
+> > I follwed those examples. I will be happy to improve it if I get any better
+> > alternative.
+> 
+> You can always find bad examples to follow...
+> 
+> > > > +       if (nr_ranges < 0)
+> > > > +               return nr_ranges;
+> > > > +       ranges = kcalloc(nr_ranges, sizeof(u32), GFP_KERNEL);
+> > > > +       if (!ranges)
+> > > > +               return -ENOMEM;
+> > > > +
+> > > > +       if (device_property_read_u32_array(&pdev->dev, "ranges", ranges, nr_ranges)) {
+> > > > +               ret =  -EINVAL;
+> > > > +               goto free_ranges;
+> > > > +       }
+> > > > +
+> > > > +       while (cur_cell < nr_ranges) {
+> > > > +               struct resource *res;
+> > > > +
+> > > > +               /* The first u64 in the ranges description isn't used currently. */
+> > > > +               cur_cell = cur_cell + child_cells;
+> > > > +               start = ranges[cur_cell++];
+> > > > +               start = (start << 32) | ranges[cur_cell++];
+> > > > +               len = ranges[cur_cell++];
+> > > 
+> > > To expand my last point, the format of ranges is <child_addr
+> > > parent_addr length>. That's not what your 'ranges' has. You've also
+> > > just ignored '#address-cells' and '#size-cells'.
+> > 
+> > Got it. However I need to check if there is any standard API which can
+> > give me these values, otherwise I may have to parse these as well :(
+> 
+> for_each_of_range()
+> 
+> That is not how linux works. When the core code doesn't do what you 
+> want, you adapt it to your needs. You don't work around it. Read 
+> this[1].
+> 
+> Rob
+> 
+> [1] https://lwn.net/Articles/443531/
 
-Can't agree more.
-I also agree that the whole pcpu stock draining code can be enhanced,
-but I believe we should go into the direction almost directly opposite
-to what's being proposed here.
-
-Can we please return to the original problem which the patchset aims to solve?
-Is it the latency introduced by execution of draining works on isolated cpus?
-Maybe schedule these works with a delay and cancel them if the draining
-occurred naturally during the delay?
-
-Thanks!
+Thanks I will work on this suggestion and fix this up in next version.
