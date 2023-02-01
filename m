@@ -2,124 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3196862E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D85256862E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232022AbjBAJbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S232009AbjBAJb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:31:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbjBAJbC (ORCPT
+        with ESMTP id S232007AbjBAJbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:31:02 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA2861D5A;
-        Wed,  1 Feb 2023 01:30:52 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id m2so49072430ejb.8;
-        Wed, 01 Feb 2023 01:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0W0uwriFZ/qWa8L1CESLZ45Mvp1IN80djmUBD3/EzTo=;
-        b=HTkcHa8jyOLjzkZpHjI4NCxstknuNZlj+HN2dJ1zaqNxSgO9PQ8W04vpviVTSjAVPU
-         EqgG4dyCipoOAo0byMFhNi0CzWgP92T6iL4pCVy3yVoutx8RHKLxWx4ROMLuZmAJfOOV
-         gGthZllAk2jDrFQdMrFdfN/kratEJQe+q/gZ2gLHTTf6eFxRSpPFyGMEivsqnYRUoPSl
-         Y0ljCEE+CI0zgT7LdontXHs2wEmcVTr9lIgXVhcIOoc4VMJLSjycweWk0oQzuubEmV1u
-         /ZPIgX/ZL8giIu6eivQYaobyQgDVj3GbVdbxDttvVUSRBvGx17XpIWEnesXUorpnvhhm
-         pZbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0W0uwriFZ/qWa8L1CESLZ45Mvp1IN80djmUBD3/EzTo=;
-        b=oAqgfHFSi9tVUf2K6r/f6/dk0J/AapIQ+1/FXoJBumfQFyjvmm81HCDLh+jZK5mMBx
-         sRybxg19yqOKQ0PkBfVI/MVDJZ9cljF00L1r2TGyVCM5yHiE1PJnFh7SBwpzifW58JcV
-         cdTLyKy5gxQ0XnoKszbFV1wDyPxYljYUrnoZcHD4U8UtCTQgWHjyfCkq9aQwaXEhiT0T
-         P+RKYrughZNKo/SDNYBndqMt2wngO9t37fT+R/QOQOBOIoiAEur9kU067GI9eZ71eV+i
-         ngPWsp70DCCMmOdxVSl671kDYA4gYAN8PNlPUDzjM96ZRfABYoTYq18kNTwk5PpcmQAN
-         h74A==
-X-Gm-Message-State: AO0yUKW2MAkWlFndA3mQQKTDxh88RnRIFlD/5b0apb0i2+gPu268+3Lx
-        ILsSfdnCj4NIeH71qQIgbTEvAW5DtzQ=
-X-Google-Smtp-Source: AK7set/0cQB2FiTDh1W3kpeL3CSXwH6Hu0hx8ld2hzv2F4WbquBKlup62j9maJz2n/aHSCvmd/vckQ==
-X-Received: by 2002:a17:906:fb19:b0:86b:9216:2ddb with SMTP id lz25-20020a170906fb1900b0086b92162ddbmr1602330ejb.52.1675243851020;
-        Wed, 01 Feb 2023 01:30:51 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id r5-20020a170906a20500b00871075bfcfesm9656003ejy.133.2023.02.01.01.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 01:30:50 -0800 (PST)
-Message-ID: <8452b341-8695-05d8-9d03-47c9aeca0ec7@gmail.com>
-Date:   Wed, 1 Feb 2023 10:30:48 +0100
+        Wed, 1 Feb 2023 04:31:55 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E553761873;
+        Wed,  1 Feb 2023 01:31:36 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 311801M4020506;
+        Wed, 1 Feb 2023 09:31:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=poMPKTkErIDSsr/9JLUflP7fyo2b0wsDzmUjt27HgZ0=;
+ b=lBJ+hrC2vbjROp4YS/ho+xo0NvU9ZJPingNb4n+Sz+VZJzhIFZDzBM2VebkS7ySjho6Y
+ NiM+AO3lOckQyzwsnKHOajj4sufYObYHNrDSrq8X3O81EcjufYm9ksUz+2hI2jrXATCD
+ 7pc6lM/UVqcClq4FIOUi+M9WfUxDcnblCKBD+l1fMzE5KdRyiJkDodyIscacrig0VHea
+ R0R3QOlJ5/eqzphCk4LUOeTNAgMPIqY0xamVZ2b5+1HXgrRs3VAAXPYymfIvlxDtKBB1
+ N8x7HUFCjWHiiL9b0Fo01i8vFld58pCJ/4YurfNYfUhrc5Q1gsOkQv/RC/VmY1S4aWgC nQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3neuwcbqg2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 09:31:15 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3119VEdV007776
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 1 Feb 2023 09:31:14 GMT
+Received: from [10.216.52.229] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 1 Feb 2023
+ 01:30:58 -0800
+Message-ID: <3644f111-0d69-1006-f032-782e1b00cd17@quicinc.com>
+Date:   Wed, 1 Feb 2023 15:00:53 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH 3/4] nvmem: mtk-efuse: replace driver with a generic MMIO
- one
-To:     Michael Walle <michael@walle.cc>
-Cc:     devicetree@vger.kernel.org, hayashi.kunihiko@socionext.com,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        mhiramat@kernel.org, rafal@milecki.pl, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org
-References: <20230201064717.18410-4-zajec5@gmail.com>
- <20230201084821.1719839-1-michael@walle.cc>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <20230201084821.1719839-1-michael@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 02/14] drm/msm/a6xx: Extend UBWC config
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <andersson@kernel.org>,
+        <agross@kernel.org>, <krzysztof.kozlowski@linaro.org>
+CC:     <marijn.suijten@somainline.org>, Rob Clark <robdclark@gmail.com>,
+        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230126151618.225127-1-konrad.dybcio@linaro.org>
+ <20230126151618.225127-3-konrad.dybcio@linaro.org>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20230126151618.225127-3-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KHR2-mIP4vS_NAFximysDwfT3Cw8d1NT
+X-Proofpoint-ORIG-GUID: KHR2-mIP4vS_NAFximysDwfT3Cw8d1NT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-01_03,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ malwarescore=0 bulkscore=0 suspectscore=0 phishscore=0 spamscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302010082
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1.02.2023 09:48, Michael Walle wrote:
->> From: Rafał Miłecki <rafal@milecki.pl>
->>
->> Mediatek EFUSE uses a simple MMIO that can be handled with a generic
->> driver. Replace this driver to avoid code duplication.
-> 
-> I don't think this is the correct approach. You'll restrict that driver
-> to being read-only. I admit that right now, it's read only, but it can
-> be extended to also support efuse writing. With this changes, it's not
-> possible.
-> 
->> static const struct of_device_id mmio_nvmem_of_match_table[] = {
->> 	{ .compatible = "mmio-nvmem", },
->> +	/* Custom bindings that were introduced before the mmio one */
->> +	{ .compatible = "mediatek,mt8173-efuse", },
->> +	{ .compatible = "mediatek,efuse", },
-> 
-> Why do you assume that all mediatek efuses will be the same? This should
-> rather be something like (in the dts/binding):
-> 
-> compatible = "mediatek,mt8173-efuse", "mmio-nvmem";
-> 
-> So if there is no driver for the particular efuse, it will fall back to the
-> generic one.
+On 1/26/2023 8:46 PM, Konrad Dybcio wrote:
+> Port setting min_access_length, ubwc_mode and upper_bit from downstream.
+> Values were validated using downstream device trees for SM8[123]50 and
+> left default (as per downstream) elsewhere.
+>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 26 ++++++++++++++++++--------
+>  1 file changed, 18 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index c5f5d0bb3fdc..ad5d791b804c 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -786,17 +786,22 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+>  static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
+>  {
+>  	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+> -	u32 lower_bit = 2;
+> +	u32 lower_bit = 1;
+Wouldn't this break a630?
 
-Oh great, I'm making circles now.
-
-Rob suggested I should convert existing drivers, see:
-[PATCH 2/2] nvmem: add generic driver for devices with I/O based access
-and I thought efuse ones should be good.
-
-Please tell me how I should handle brcm,nvram without wasting more time.
-I thought I had it sorted out but I just wasted 2 days.
-
-
-I believe I need to make brcm,nvram NVMEM layout. Without converting it
-I'm afraid you'll refuse my changes adding cell post processing (that
-happened to my U-Boot attempts).
-
-Before I convert brcm,nvram to NVMEM layout I need some binding & driver
-providing MMIO device access. How to handle that?
-
+-Akhil.
+> +	u32 upper_bit = 0;
+>  	u32 amsbc = 0;
+>  	u32 rgb565_predicator = 0;
+>  	u32 uavflagprd_inv = 0;
+> +	u32 min_acc_len = 0;
+> +	u32 ubwc_mode = 0;
+>  
+>  	/* a618 is using the hw default values */
+>  	if (adreno_is_a618(adreno_gpu))
+>  		return;
+>  
+> -	if (adreno_is_a640_family(adreno_gpu))
+> +	if (adreno_is_a640_family(adreno_gpu)) {
+>  		amsbc = 1;
+> +		lower_bit = 2;
+> +	}
+>  
+>  	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu)) {
+>  		/* TODO: get ddr type from bootloader and use 2 for LPDDR4 */
+> @@ -807,18 +812,23 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
+>  	}
+>  
+>  	if (adreno_is_7c3(adreno_gpu)) {
+> -		lower_bit = 1;
+>  		amsbc = 1;
+>  		rgb565_predicator = 1;
+>  		uavflagprd_inv = 2;
+>  	}
+>  
+>  	gpu_write(gpu, REG_A6XX_RB_NC_MODE_CNTL,
+> -		rgb565_predicator << 11 | amsbc << 4 | lower_bit << 1);
+> -	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, lower_bit << 1);
+> -	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL,
+> -		uavflagprd_inv << 4 | lower_bit << 1);
+> -	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, lower_bit << 21);
+> +		  rgb565_predicator << 11 | upper_bit << 10 | amsbc << 4 |
+> +		  min_acc_len << 3 | lower_bit << 1 | ubwc_mode);
+> +
+> +	gpu_write(gpu, REG_A6XX_TPL1_NC_MODE_CNTL, upper_bit << 4 |
+> +		  min_acc_len << 3 | lower_bit << 1 | ubwc_mode);
+> +
+> +	gpu_write(gpu, REG_A6XX_SP_NC_MODE_CNTL, upper_bit << 10 |
+> +		  uavflagprd_inv << 4 | min_acc_len << 3 |
+> +		  lower_bit << 1 | ubwc_mode);
+> +
+> +	gpu_write(gpu, REG_A6XX_UCHE_MODE_CNTL, min_acc_len << 23 | lower_bit << 21);
+>  }
+>  
+>  static int a6xx_cp_init(struct msm_gpu *gpu)
 
