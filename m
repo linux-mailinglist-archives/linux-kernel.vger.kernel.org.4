@@ -2,85 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9272E686880
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814F0686886
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbjBAOkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
+        id S232154AbjBAOlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:41:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbjBAOkg (ORCPT
+        with ESMTP id S232088AbjBAOk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:40:36 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E98B9028
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:40:12 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so1643495wmq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:40:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ntqD2+JXvdh0eVlKapCiL5KQqPWBOr/MM6KuL8nVXn8=;
-        b=uQLHiaQ7A/DFeUxgi+JDnmQc11d51gg6i8PiotXoZFfqWNXsZWSTp1Nm6gzHhuoaQB
-         SaQ3xOzci4arbzweFCCwzHblApQbSZZoIsFfx1/CbvtYtKAXxUwkkr15KdoYeKHT6+gk
-         q54ZXGalW4J05i/Nj75nQWgwGcDYgjSQy/qJ9cSJ+/huMkYfWgHH3P1w/jyxtovcTZtD
-         NIvr4dp+Gwk98ruC1EZm7VmgUHqleaQtsZHkJV2oBBfZSzq4Ie6/e2Wq++6N3f4o040c
-         TnrTs3fDscpAgM7mj03EJmM1yUX3Op11satjIue8hnY6h9xg7O1oSLT03CRfsRw0vXK8
-         6zLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntqD2+JXvdh0eVlKapCiL5KQqPWBOr/MM6KuL8nVXn8=;
-        b=2Jjn3fiI1lckDUEYKIJrequTpMZ/AsmnKYI6tLudB89Jyb5LzZBz1HkIZWHyaPC6SD
-         fkcsYAPOyrz+UXHXGIGdJcsAu0EEBYTlrBtG9YV7AAhagyJt8KxbhSzi6jFqI3P1chmS
-         G4Qhy30RETrc2yHCeG8JCJg/5rrkhv4mgln8TnwxS2dK1OHObjmPhEhxPvWKmBC7Zv5H
-         wJYelTo80lYZz8PjgqvfyURPKQjOI0VOvZoWFqzy5E5jhaIIDkE7cEMcMBqsSHc549ho
-         CViy1HU4J0aAAMvYARKIEJRkJiNMzFKcrORtccq4g+ZGV5U0hw8koepCvU77V+wUsKgQ
-         1laQ==
-X-Gm-Message-State: AO0yUKU6vD0GzLZAlKNBf8k8uXmttp9lmiAyanvc0tqUUHJiYm4M84D7
-        hpdoNCll6iE89vXsK8uXlUi7eQ==
-X-Google-Smtp-Source: AK7set8CH2pFHo/EOLHu4jCReTo9hfE+OIR2c8OVbzsL2VHrYohdwGOPlboTAjqO6SFBSnZ8xPZfVg==
-X-Received: by 2002:a05:600c:4f93:b0:3dc:5823:d6c0 with SMTP id n19-20020a05600c4f9300b003dc5823d6c0mr2509942wmq.6.1675262411008;
-        Wed, 01 Feb 2023 06:40:11 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:7611:c340:3d8d:d46c? ([2a02:6b6a:b566:0:7611:c340:3d8d:d46c])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05600c3b8900b003d9aa76dc6asm2205329wms.0.2023.02.01.06.40.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 06:40:10 -0800 (PST)
-Message-ID: <ff876008-b642-4dbc-aa41-1639905e08b6@bytedance.com>
-Date:   Wed, 1 Feb 2023 14:40:09 +0000
+        Wed, 1 Feb 2023 09:40:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1E01353B;
+        Wed,  1 Feb 2023 06:40:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42DD7B82181;
+        Wed,  1 Feb 2023 14:40:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 833F4C4339B;
+        Wed,  1 Feb 2023 14:40:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675262452;
+        bh=KtS59Ia92JMXEp6HI/ACr8/i5UoMboazeSuRwj5Gwys=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FeowVP6fl+RQKPyGSsV51OlkN9+Q+MDQD+ZLvW8A+38wZaNYjMd7fc0h5jFnyHUGS
+         0fljAB7xQbxdH84e1F9OmIkV0q/HpPU/M0y9wALI6beGsPzoMy+K4K8DKc1Cc+I4Rv
+         MxZ0qZx+Ki4Q2S7ij7Gb7+oCpFuGOaPM3hc9Dn5lUQoqOy6l66socywszAfSn1REpD
+         ewPCUWkHwkoELT3peEMeREWSS4bU6qsjmyexExo4nY3UrpqFkslKUjIbBKYgIi+4ha
+         Su2MJa96XAsAnFUtCE943JTIy2RaRNKeqIbP43L+pd04CazY5DFdoVGLTATTQz6j36
+         7uuhpL1OOtyow==
+Date:   Wed, 1 Feb 2023 14:40:46 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        quic_plai@quicinc.com, bgoswami@quicinc.com,
+        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, devicetree@vger.kernel.org,
+        konrad.dybcio@linaro.org
+Subject: Re: [PATCH 02/14] ASoC: qcom: SC7280: audioreach: Add sc7280
+ hardware param fixup callback
+Message-ID: <Y9p57qn9+Pig9igE@sirena.org.uk>
+References: <20230201134947.1638197-1-quic_mohs@quicinc.com>
+ <20230201134947.1638197-3-quic_mohs@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 0/9] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        hushiyuan@huawei.com, luolongjun@huawei.com, hejingxian@huawei.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Punit Agrawal <punit.agrawal@bytedance.com>,
-        simon.evans@bytedance.com, liangma@liangbit.com
-References: <20220201205328.123066-1-dwmw2@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <20220201205328.123066-1-dwmw2@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="It/vzamgdtamVvYL"
+Content-Disposition: inline
+In-Reply-To: <20230201134947.1638197-3-quic_mohs@quicinc.com>
+X-Cookie: Oh no, not again.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,81 +64,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--It/vzamgdtamVvYL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 01/02/2022 20:53, David Woodhouse wrote:
-> Doing the INIT/SIPI/SIPI in parallel for all APs and *then* waiting for
-> them shaves about 80% off the AP bringup time on a 96-thread 2-socket
-> Skylake box (EC2 c5.metal) — from about 500ms to 100ms.
-> 
-> There are more wins to be had with further parallelisation, but this is
-> the simple part.
-> 
+On Wed, Feb 01, 2023 at 07:19:35PM +0530, Mohammad Rafi Shaik wrote:
 
-Hi,
+> +#define DEFAULT_SAMPLE_RATE_48K	48000
 
-We are interested in reducing the boot time of servers (with kexec), and 
-smpboot takes up a significant amount of time while booting. When 
-testing the patch series (rebased to v6.1) on a server with 128 CPUs 
-split across 2 NUMA nodes, it brought down the smpboot time from ~700ms 
-to 100ms. Adding another cpuhp state for do_wait_cpu_initialized to make 
-sure cpu_init is reached (as done in v1 of the series + using the 
-cpu_finishup_mask) brought it down further to ~30ms.
+Why are we bothering with a define here given that the define also
+encodes the value and it's only used in once place?
 
-I just wanted to check what was needed to progress the patch series 
-further for review? There weren't any comments on v4 of the patch so I 
-couldn't figure out what more is needed. I think its quite useful to 
-have this working so would be really glad help in anything needed to 
-restart the review.
+>  	for_each_card_prelinks(card, i, link) {
+>  		link->init = sc7280_init;
+>  		link->ops = &sc7280_ops;
+> +		if (link->no_pcm == 1)
+> +			link->be_hw_params_fixup = sc7280_snd_be_hw_params_fixup;
 
-Thanks!
-Usama
+We only set the fixup in the case where there's no PCM but we removed
+the constraint in all cases - isn't the constraint needed otherwise?
 
+--It/vzamgdtamVvYL
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-> v2: Cut it back to just INIT/SIPI/SIPI in parallel for now, nothing more
-> v3: Clean up x2apic patch, add MTRR optimisation, lock topology update
->      in preparation for more parallelisation.
-> v4: Fixes to the real mode parallelisation patch spotted by SeanC, to
->      avoid scribbling on initial_gs in common_cpu_up(), and to allow all
->      24 bits of the physical X2APIC ID to be used. That patch still needs
->      a Signed-off-by from its original author, who once claimed not to
->      remember writing it at all. But now we've fixed it, hopefully he'll
->      admit it now :)
-> 
-> David Woodhouse (8):
->        x86/apic/x2apic: Fix parallel handling of cluster_mask
->        cpu/hotplug: Move idle_thread_get() to <linux/smpboot.h>
->        cpu/hotplug: Add dynamic parallel bringup states before CPUHP_BRINGUP_CPU
->        x86/smpboot: Reference count on smpboot_setup_warm_reset_vector()
->        x86/smpboot: Split up native_cpu_up into separate phases and document them
->        x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
->        x86/mtrr: Avoid repeated save of MTRRs on boot-time CPU bringup
->        x86/smpboot: Serialize topology updates for secondary bringup
-> 
-> Thomas Gleixner (1):
->        x86/smpboot: Support parallel startup of secondary CPUs
-> 
-> [dwoodhou@i7 linux-2.6]$ git diff --stat  v5.17-rc2..share/parallel-5.17-part1
->   arch/x86/include/asm/realmode.h       |   3 +
->   arch/x86/include/asm/smp.h            |  13 +-
->   arch/x86/include/asm/topology.h       |   2 -
->   arch/x86/kernel/acpi/sleep.c          |   1 +
->   arch/x86/kernel/apic/apic.c           |   2 +-
->   arch/x86/kernel/apic/x2apic_cluster.c | 108 ++++++-----
->   arch/x86/kernel/cpu/common.c          |   6 +-
->   arch/x86/kernel/cpu/mtrr/mtrr.c       |   9 +
->   arch/x86/kernel/head_64.S             |  73 ++++++++
->   arch/x86/kernel/smpboot.c             | 325 ++++++++++++++++++++++++----------
->   arch/x86/realmode/init.c              |   3 +
->   arch/x86/realmode/rm/trampoline_64.S  |  14 ++
->   arch/x86/xen/smp_pv.c                 |   4 +-
->   include/linux/cpuhotplug.h            |   2 +
->   include/linux/smpboot.h               |   7 +
->   kernel/cpu.c                          |  27 ++-
->   kernel/smpboot.c                      |   2 +-
->   kernel/smpboot.h                      |   2 -
->   18 files changed, 442 insertions(+), 161 deletions(-)
-> 
-> 
-> 
-> 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPaee0ACgkQJNaLcl1U
+h9CiNgf/SDWbO2koQKvCH5xT7veA8uFDK7FX/PmIQ0kAWddbyKY2R+povhqysfIW
+wg9TAzbz60wfmDhq+NTTeiHrB4TqbEhpOsRS9E5GyA5+D64d8JEc6iNju+SUhb8x
+XjyRIKFntWKqSxgEDiw3ZSPj+unDqfJjsW9JSj06gMzYBM58mvXiDKIUm1PkXwdz
+1CjZSKA4Yq1Oy8JXCJulti9SkgzaFI/ylXPK/+zqXR6BjZ/uWY0xicLF4W6nGfkQ
+wRoXtjAMfcK9LKLAf2U0i0Lmb6tJdP7waq0qaGQIB/2kT4GDtPGcgCCqROqMjXFT
+90ffHxNOpdMnd0EQSrSTUWQBwYTaCg==
+=Ge6o
+-----END PGP SIGNATURE-----
+
+--It/vzamgdtamVvYL--
