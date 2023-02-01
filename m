@@ -2,108 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E0E687824
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 10:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C62687A03
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 11:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjBBJCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Feb 2023 04:02:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S232230AbjBBKUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Feb 2023 05:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbjBBJCr (ORCPT
+        with ESMTP id S232613AbjBBKUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Feb 2023 04:02:47 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318DC5454E
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 01:02:46 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id n13so814447wmr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Feb 2023 01:02:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tAzoaco2ejEfJ8IOcFTgCAN7HiD6JKdUffxiXGJRKvQ=;
-        b=lDkLv5diE/c9URvqEzqU0QRKqW5UIzto2y7t4n/bhgjkwn9WMjnvUQZx449oqwD5qn
-         x96MWCiI8k/DiiCILlGjhpez00P5thhk35xt6FQGh74ib2XY7bYo12+UmjOo1Zyt4Sxb
-         5vYwp+JT5V/n6FjeOl7gWS8nx3X+kdIsF6e53O8RjPRX96iR+ftVJcIH80uEXQsk+8+C
-         Z90IraukxKaIK4Sg82+hgNLglvoniJZT7VH+FUZxt8SDXDpWkpV6KNJBXyIvYG7VgZ1v
-         QissFv0rKZXyAPtSnwy9PWS119huCxMjcF3HXW9JKB7NgxD27WvISTXpafC7XZ6YbRvk
-         AYgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tAzoaco2ejEfJ8IOcFTgCAN7HiD6JKdUffxiXGJRKvQ=;
-        b=HAC7HtKRtUwe0SUOwPMK3ijWZ0YWGSJcIlmlgS1UsVamPXvBmMII7ZBkFF22/MUOsA
-         Ub2Er6cRoSHTDApS7l9cQZqQBOZa0/8qoddLXhRvUWuDVz2EMZ36PmbrOA9Eks1H5XB9
-         WRN5Wz21/RaX7alRhm+DeLc1eRf5DOB7F3TVj8TGkAjlhEOfRA1t5VOyrpoezkC+MgEW
-         zy15sklyPdksbGGZmcP3GtEqLhctD+XEM5KKJp3NTbhRmW051iuq6OWk2bB0bRdlHTjG
-         1gl3dnrsQdTleVe81MpGpsIWo5nMpnCXtQj0fgvEn9oac9+45fWz93HtRuPt+ZZMa2SX
-         6xdw==
-X-Gm-Message-State: AO0yUKUVUPk4CqFV47Bf1P/SrwJRo9Lwehqh9/ehBr+IGMKZmY9H+Jgt
-        0cdc/OBu29az0nquqztAjDzeYw==
-X-Google-Smtp-Source: AK7set9luXTtHtQPjeR6Y3wxBmh7O3wx7Pt57EqX0r7jI3zq/wa0I4gmucrV08A2mLC2lXXAGmct6Q==
-X-Received: by 2002:a05:600c:548d:b0:3db:114:a67f with SMTP id iv13-20020a05600c548d00b003db0114a67fmr5047340wmb.17.1675328564733;
-        Thu, 02 Feb 2023 01:02:44 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i6-20020adff306000000b002425be3c9e2sm19444201wro.60.2023.02.02.01.02.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 01:02:44 -0800 (PST)
-Message-ID: <dcf16715-203d-6357-661a-47c007ce11e5@linaro.org>
-Date:   Thu, 2 Feb 2023 10:02:42 +0100
+        Thu, 2 Feb 2023 05:20:54 -0500
+X-Greylist: delayed 90837 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Feb 2023 02:20:52 PST
+Received: from mail.corrib.pl (mail.corrib.pl [185.58.226.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF46D80FB6
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Feb 2023 02:20:52 -0800 (PST)
+Received: by mail.corrib.pl (Postfix, from userid 1001)
+        id 70325A42A9; Wed,  1 Feb 2023 09:06:25 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=corrib.pl; s=mail;
+        t=1675242400; bh=X6IEpSISwJiYlJ3uA866lskXve3r+4o2hf4z7VM6m5o=;
+        h=Date:From:To:Subject:From;
+        b=C8XFFpSry+GuzfzWFVekdhEhXYmvYDSjWN19Uu+1JxL9lonQYH23InXh0hL8JUYxC
+         WJoRDkeRk6esQ5jOSZmmHSCuUIR5hCsiwzBS0pk/mgHRUezZVXQkVXeLIsenzfq/vf
+         rHCpSwjSeoPeg9PWL24zMHCq+KMDleV1Ay+nUCo8C6Pinep1SZuHbng00rqvo359N3
+         ijPm4omHkRaN1tlUnrM94h81e1RKa72av46yaUgAsHMbNFjVBzS3JX6HgExXDpAodh
+         ZELQugtPnKjkwnq1QLqhei/ucdCMBr0lADm0nRjJB9WGLE/38qGa0rbH+jcaByOxJe
+         9IGNzEr38Z9wg==
+Received: by mail.corrib.pl for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 09:06:19 GMT
+Message-ID: <20230201074500-0.1.58.fhu4.0.w82lfq2ono@corrib.pl>
+Date:   Wed,  1 Feb 2023 09:06:19 GMT
+From:   =?UTF-8?Q? "Szczepan_Kie=C5=82basa" ?= 
+        <szczepan.kielbasa@corrib.pl>
+To:     <linux-kernel@vger.kernel.org>
+Subject: Faktoring
+X-Mailer: mail.corrib.pl
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 0/3] Add ASPEED AST2600 I2C new controller driver
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Ryan Chen <ryan_chen@aspeedtech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230201103359.1742140-1-ryan_chen@aspeedtech.com>
- <ac9be40d-bbcb-02b1-2708-61f88095111b@linaro.org>
-In-Reply-To: <ac9be40d-bbcb-02b1-2708-61f88095111b@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/02/2023 10:00, Krzysztof Kozlowski wrote:
-> On 01/02/2023 11:33, Ryan Chen wrote:
->> This series add AST2600 i2c new register set driver. The i2c new
->> register set have new clock divider option for more flexiable generation.
->> And also have separate i2c master and slave register set for control.
->>
->> v4:
->> -fix i2c-ast2600.c driver buffer mode use single buffer conflit in
->>  master slave mode both enable.
->> -fix kmemleak issue when use dma mode.
->> -fix typo aspeed,i2c-ast2600.yaml compatible is "aspeed,ast2600-i2c"
->> -fix typo aspeed,i2c-ast2600.ymal to aspeed,i2c-ast2600.yaml
->>
-> 
-> How this can be a v4? Where are all others?
-> 
-> https://lore.kernel.org/all/?q=dfn%3Aaspeed%2Ci2c-ast2600-global.yaml
-> https://lore.kernel.org/all/?q=dfn%3Aaspeed%2Ci2c-ast2600.yaml
-> 
-> I see it for the first time.
+Dzie=C5=84 dobry,
 
-Ah, so v3 was never sent to DT maintainers:
-https://lore.kernel.org/all/20220516064900.30517-3-ryan_chen@aspeedtech.com/
+rozwa=C5=BCali Pa=C5=84stwo wyb=C3=B3r finansowania, kt=C3=B3re spe=C5=82=
+ni potrzeby firmy, zapewniaj=C4=85c natychmiastowy dost=C4=99p do got=C3=B3=
+wki, bez zb=C4=99dnych przestoj=C3=B3w?=20
 
-Best regards,
-Krzysztof
+Przygotowali=C5=9Bmy rozwi=C4=85zania faktoringowe dopasowane do Pa=C5=84=
+stwa bran=C5=BCy i wielko=C5=9Bci firmy, dzi=C4=99ki kt=C3=B3rym, nie mus=
+z=C4=85 Pa=C5=84stwo martwi=C4=87 si=C4=99 o niewyp=C5=82acalno=C5=9B=C4=87=
+ kontrahent=C3=B3w, poniewa=C5=BC transakcje s=C4=85 zabezpieczone i posi=
+adaj=C4=85 gwarancj=C4=99 sp=C5=82aty.=20
+Chc=C4=85 Pa=C5=84stwo przeanalizowa=C4=87 dost=C4=99pne opcje?
 
+
+Pozdrawiam
+Szczepan Kie=C5=82basa
