@@ -2,90 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BC6686CBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 18:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF4D686CC0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 18:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjBARUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 12:20:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
+        id S232173AbjBARVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 12:21:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbjBARUr (ORCPT
+        with ESMTP id S232193AbjBARVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 12:20:47 -0500
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED95A5CE7A;
-        Wed,  1 Feb 2023 09:20:43 -0800 (PST)
-Received: by mail-pf1-f179.google.com with SMTP id g9so13098876pfo.5;
-        Wed, 01 Feb 2023 09:20:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/m5EN+3VdeWh1OMObW1zbnBPYL38BrWixkk4sUJ7ZQ=;
-        b=bMbpXTH8p3ntjbe6qSoF7braFyRcZAqI6Wmt+3xf62Sw2p9ZvRgJA7zbSpPreNDTf8
-         yU1bRoOsdXy3k8Mo78rauUVTYYjdEtZLsqOg2Xehwltd2GiWMcd3zlatsXerhqsp5fHA
-         lPnRiDuK3xDqiiXP0N+aNt0/I5Pwh2+gX/+lwNgyImiGBqhlpHokHW7hsq/3PrwHdV42
-         PaXzUNB1o64SyjdGcGVSDX0xw56PMU26roeeJQhrjTxm+NscwAba8Hx58J++6DQQYqjA
-         4yOyYiuuDRw6CcFj/p821eOi5rTSVyEJCpMN27hvAW7RAoKB8UnObrTP29gAKKUCHlaF
-         lHyA==
-X-Gm-Message-State: AO0yUKW6T94HmCEw2WWtbeL6M1V2ru4ko10CS4b6lTQLJz5VBJT4BTm3
-        TKnGmJwxHMOZR2LBERtRN3Q=
-X-Google-Smtp-Source: AK7set/7Sg43RCqeO0j24bZVWFb7mbonwYPKYBQa0jAvf+8TBoY5Sb5oEMP5EanhSM5rOlqHMRBfdw==
-X-Received: by 2002:a05:6a00:1f04:b0:593:adeb:39a9 with SMTP id be4-20020a056a001f0400b00593adeb39a9mr2748694pfb.33.1675272042391;
-        Wed, 01 Feb 2023 09:20:42 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:f3cf:17ca:687:af15? ([2620:15c:211:201:f3cf:17ca:687:af15])
-        by smtp.gmail.com with ESMTPSA id x5-20020a056a00188500b0059072da44f3sm5879618pfh.130.2023.02.01.09.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 09:20:41 -0800 (PST)
-Message-ID: <b9bc20f3-cf68-6546-1979-6b36f622913f@acm.org>
-Date:   Wed, 1 Feb 2023 09:20:39 -0800
+        Wed, 1 Feb 2023 12:21:23 -0500
+Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6DF7CCBE;
+        Wed,  1 Feb 2023 09:21:10 -0800 (PST)
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Wed, 1 Feb
+ 2023 20:21:08 +0300
+Received: from localhost (10.0.253.157) by Ex16-01.fintech.ru (10.0.10.18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Wed, 1 Feb 2023
+ 20:21:08 +0300
+From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+To:     Potnuri Bharat Teja <bharat@chelsio.com>
+CC:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Roland Dreier <roland@purestorage.com>,
+        Vipul Pandya <vipul@chelsio.com>, <linux-rdma@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
+Subject: [PATCH] RDMA/cxgb4: add null-ptr-check after ip_dev_find()
+Date:   Wed, 1 Feb 2023 09:21:03 -0800
+Message-ID: <20230201172103.17261-1-n.zhandarovich@fintech.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] scsi: ufs: core: Limit DMA alignment check
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>
-Cc:     Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, mani@kernel.org
-References: <20230201034917.1902330-1-quic_bjorande@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230201034917.1902330-1-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.253.157]
+X-ClientProxiedBy: Ex16-01.fintech.ru (10.0.10.18) To Ex16-01.fintech.ru
+ (10.0.10.18)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1/31/23 19:49, Bjorn Andersson wrote:
-> The three DMA memory regions allocated for the host memory space is
-> documented to require alignment of 128, 1024 and 1024 respectively, but
-> the returned address is checked for PAGE_SIZE alignment.
-> 
-> In the case these allocations are serviced by e.g. the Arm SMMU, the
-> size and alignment will be determined by its supported page sizes. In
-> most cases SZ_4K and a few larger sizes are available.
-> 
-> In the typical configuration this does not cause problems, but in the
-> event that the system PAGE_SIZE is increased beyond 4k, it's no longer
-> reasonable to expect that the allocation will be PAGE_SIZE aligned.
-> 
-> Limit the DMA alignment check to the actual alignment requirements
-> written in the comments in the code, to avoid the UFS core refusing to
-> initialize with such configuration.
+ip_dev_find() may return NULL and assign it to pdev which is
+dereferenced later.
+Fix this by checking the return value of ip_dev_find() for NULL
+similar to the way it is done with other instances of said function.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Fixes: 1cab775c3e75 ("RDMA/cxgb4: Fix LE hash collision bug for passive open connection")
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+---
+ drivers/infiniband/hw/cxgb4/cm.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/infiniband/hw/cxgb4/cm.c b/drivers/infiniband/hw/cxgb4/cm.c
+index c16017f6e8db..07d0bafb7ac5 100644
+--- a/drivers/infiniband/hw/cxgb4/cm.c
++++ b/drivers/infiniband/hw/cxgb4/cm.c
+@@ -4151,6 +4151,10 @@ static int rx_pkt(struct c4iw_dev *dev, struct sk_buff *skb)
+ 
+ 	if (neigh->dev->flags & IFF_LOOPBACK) {
+ 		pdev = ip_dev_find(&init_net, iph->daddr);
++		if (!pdev) {
++			pr_err("%s - failed to find device!\n", __func__);
++			goto free_dst;
++		}
+ 		e = cxgb4_l2t_get(dev->rdev.lldi.l2t, neigh,
+ 				    pdev, 0);
+ 		pi = (struct port_info *)netdev_priv(pdev);
+-- 
+2.25.1
+
