@@ -2,142 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FEBC686E8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EDA686E8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjBAS75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S231766AbjBATAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:00:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjBAS74 (ORCPT
+        with ESMTP id S229512AbjBATAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:59:56 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FE546B7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 10:59:55 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id k4so7964941edo.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 10:59:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RCdDJqiPyvlEgNaMuW56Bk3ntaEZh8ldmtaeG6ero6M=;
-        b=GjrEzbLXIjIWlwNOZOfP2f5X9YoFo+2+Xr35YxzXAD2x5QSJgVdEZ7aM6QA36l64cB
-         v9qq5VWRrVEMZgNPy4UUQLEO0vKpD39Ep14AVRoCCbEFQ4hHEj249QJt8JVQRoLbAEp2
-         P41Du0FaICEl76xcka4IgUZPNz/wPKKk855e5DNsnPCEs+F+ufXCPK5cR9ocTcobuSaD
-         1+89DBgpcZgINpF1BhTxr9+glSYIVNMwX8rG9F3gQKN6YHgtPjhDgTGX8AnXdkoVT3+2
-         MNeQzEJdGqtcgIjwaPC5Hua3u5MRXSMxyYGvW6hEK4lIo2YjruvEJMOHEj/g4USL8/lS
-         2zpQ==
-X-Gm-Message-State: AO0yUKXKqE2ELiL9BEyNGAWxj8fYdwkB/d+RhNFGCbHrakTeeY7RcJ/W
-        NTxsp3DWSkgCNtQblkzlcuTpLSyXf//EvWo660/Puvu8bfE=
-X-Google-Smtp-Source: AK7set8j7OpX2sMskbgbKDUzkj8Qm0slEDDKLNtZf+xy/T0W8PA9VplyGooV6SAJNjUDILSVxtHszs1mZnvJLAgWL1s=
-X-Received: by 2002:a50:c350:0:b0:4a2:56e7:178 with SMTP id
- q16-20020a50c350000000b004a256e70178mr974268edb.58.1675277993359; Wed, 01 Feb
- 2023 10:59:53 -0800 (PST)
+        Wed, 1 Feb 2023 14:00:39 -0500
+Received: from out-148.mta0.migadu.com (out-148.mta0.migadu.com [91.218.175.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F9026A0
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:00:38 -0800 (PST)
+Date:   Wed, 1 Feb 2023 11:00:25 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675278035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nYaJBwWv04VyrNu+X4EgPv0Xb15I2c3WvPYD3xQxlig=;
+        b=dgUfIgYxZt9wZbnGKSDK2uiNaZZ/5zUS5bhvJ5luv/cRV8MxqT28jSeyHUkeRbs/VPvSZT
+        QvWHYE9Dj1WHn0PdlnWgWFBx1C7x/fVWfKqcuVcq5es654OVipyrBV1RVeVOn51zpxvWv4
+        o22/GhZRvsJkMFHf6ifH2R6v4EqvoJA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Chris Goldsworthy <quic_cgoldswo@quicinc.com>,
+        Rik van Riel <riel@surriel.com>
+Cc:     Sukadev Bhattiprolu <quic_sukadev@quicinc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Joonsoo Kim <js1304@gmail.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Georgi Djakov <quic_c_gdjako@quicinc.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm,page_alloc,cma: configurable CMA utilization
+Message-ID: <Y9q2yUZmCiNd7iYC@P9FQF9L96D.corp.robot.car>
+References: <20230131071052.GB19285@hu-sbhattip-lv.qualcomm.com>
+ <Y9lZoI89Nw4bjjOZ@P9FQF9L96D.corp.robot.car>
+ <20230131201001.GA8585@hu-sbhattip-lv.qualcomm.com>
+ <Y9mraBHucYdnHXiS@P9FQF9L96D.corp.robot.car>
+ <20230201040628.GA3767@hu-cgoldswo-sd.qualcomm.com>
 MIME-Version: 1.0
-References: <20230201083349.4038660-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20230201083349.4038660-1-gregkh@linuxfoundation.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Feb 2023 19:59:42 +0100
-Message-ID: <CAJZ5v0h5=HRRQ9oEHEgm362WtPFGYkfQeQLh_g1V7qF2OiFgUg@mail.gmail.com>
-Subject: Re: [PATCH] driver core: bus: move lock_class_key into dynamic structure
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201040628.GA3767@hu-cgoldswo-sd.qualcomm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 9:33 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> Move the lock_class_key structure out of struct bus_type and into the
-> dynamic structure we create already for all bus_types registered with
-> the kernel.  This saves on static space and removes one more writable
-> field in struct bus_type.
->
-> In the future, the same field can be moved out of the struct class logic
-> because it shares this same private structure.
->
-> Most everyone will never notice this change, as lockdep is not enabled
-> in real systems so no memory or logic changes are happening for them.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Tue, Jan 31, 2023 at 08:06:28PM -0800, Chris Goldsworthy wrote:
+> On Tue, Jan 31, 2023 at 03:59:36PM -0800, Roman Gushchin wrote:
+> > On Tue, Jan 31, 2023 at 12:10:01PM -0800, Sukadev Bhattiprolu wrote:
+> > > On Tue, Jan 31, 2023 at 10:10:40AM -0800, Roman Gushchin wrote:
+> > > > Hi Sukadev!
+> > > > 
+> > > > Can you, please, share a bit more details about your setup? E.g. what is
+> > > > the zone size, the cma area size and the value you want to set your sysctl to?
+> > > 
+> > > Hi Roman,
+> > > 
+> > > I currently have a device with 8GB Zone normal and 600MB of CMA. We have a
+> > > slightly different implementation and use up all the available CMA region.
+> > > i.e. going forward, we intend to set the ratio to 100 or even higher.
+> 
+> 
+> Hi Roman,
+> 
+> > It means you want allocations be always served from a cma region first?
+> 
+> Exactly.
+> 
+> > What's the point of it?
+> 
+> We're operating in a resource constrained environment, and we want to maximize
+> the amount of memory free / headroom for GFP_KERNEL allocations on our SoCs,
+> which are especially important for DMA allocations that use an IOMMU. We need a
+> large amount of CMA on our SoCs for various reasons (e.g. for devices not
+> upstream of an IOMMU), but whilst that CMA memory is not in use, we want to
+> route all GFP_MOVABLE allocations to the CMA regions, which will free up memory
+> for GFP_KERNEL allocations. 
+> 
+> > The idea behind the current formula is to keep cma regions free if there is
+> > a plenty of other free memory, otherwise treat it on par with other memory.
+> 
+> With the current approach, if we have a large amount of movable memory allocated
+> that has not gone into the CMA regions yet, and a DMA use case starts that
+> causes the above condition to be met, we would head towards OOM conditions when
+> we otherwise could have delayed this with this change.
+> Note that since we're
+> working on Android, there is a daemon built on top of PSI called LMKD that will
+> start killing things under memory pressure (before an OOM is actually reached)
+> in order to free up memory. This patch should then reduce kills accordingly for
+> a better user experience by keeping a larger set of background apps alive. When
+> a CMA allocation does occur and pages get migrated out, there is a similar
+> reduction in headroom (you probably already know this and know of the FB
+> equivalent made by Johannes Weiner).
 
-This looks reasonable to me, so
+I see... Thank you for the explanation!
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+So the problem is that movable allocations are spread between cma and non-cma
+evenly, so that non-movable allocations might fail. And the idea is to use
+the cma area more actively for movable allocations to keep a headroom for
+non-movable allocations. Is it correct?
 
-> ---
->  drivers/base/base.h        | 2 ++
->  drivers/base/bus.c         | 5 ++++-
->  include/linux/device/bus.h | 1 -
->  3 files changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/base/base.h b/drivers/base/base.h
-> index 2208af509ce8..0e806f641079 100644
-> --- a/drivers/base/base.h
-> +++ b/drivers/base/base.h
-> @@ -52,6 +52,8 @@ struct subsys_private {
->
->         struct kset glue_dirs;
->         struct class *class;
-> +
-> +       struct lock_class_key lock_key;
->  };
->  #define to_subsys_private(obj) container_of_const(obj, struct subsys_private, subsys.kobj)
->
-> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-> index cf1b8f00b4c0..aa70b3a7d778 100644
-> --- a/drivers/base/bus.c
-> +++ b/drivers/base/bus.c
-> @@ -154,6 +154,7 @@ static void bus_release(struct kobject *kobj)
->         struct subsys_private *priv = to_subsys_private(kobj);
->         struct bus_type *bus = priv->bus;
->
-> +       lockdep_unregister_key(&priv->lock_key);
->         kfree(priv);
->         bus->p = NULL;
->  }
-> @@ -743,7 +744,7 @@ int bus_register(struct bus_type *bus)
->  {
->         int retval;
->         struct subsys_private *priv;
-> -       struct lock_class_key *key = &bus->lock_key;
-> +       struct lock_class_key *key;
->
->         priv = kzalloc(sizeof(struct subsys_private), GFP_KERNEL);
->         if (!priv)
-> @@ -785,6 +786,8 @@ int bus_register(struct bus_type *bus)
->         }
->
->         INIT_LIST_HEAD(&priv->interfaces);
-> +       key = &priv->lock_key;
-> +       lockdep_register_key(key);
->         __mutex_init(&priv->mutex, "subsys mutex", key);
->         klist_init(&priv->klist_devices, klist_devices_get, klist_devices_put);
->         klist_init(&priv->klist_drivers, NULL, NULL);
-> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-> index 87e4d029c915..e3094db1e9fa 100644
-> --- a/include/linux/device/bus.h
-> +++ b/include/linux/device/bus.h
-> @@ -112,7 +112,6 @@ struct bus_type {
->         const struct iommu_ops *iommu_ops;
->
->         struct subsys_private *p;
-> -       struct lock_class_key lock_key;
->
->         bool need_parent_lock;
->  };
-> --
-> 2.39.1
->
+Then _maybe_ a new knob is justified, at least I don't have better ideas.
+Rik, do you have any input here?
+
+Let's then define it in a more generic way and _maybe_ move to the cma
+sysfs/debugfs (not 100% sure about this part, but probably worth exploring).
+
+Thanks!
