@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1894F6860C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:37:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2C46860C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbjBAHhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 02:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
+        id S229879AbjBAHiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjBAHhp (ORCPT
+        with ESMTP id S229819AbjBAHiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:37:45 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C183B3CE
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:37:43 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id bk16so16364774wrb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:37:43 -0800 (PST)
+        Wed, 1 Feb 2023 02:38:54 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E167B51C42
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:38:51 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id l8so11959316wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:38:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vtEz6HgYvxRUvaHEz9ZnWOfkR0mMjLhI8XOy+dkVNLE=;
-        b=xz0o1BDFiWYKQbIO3tBcvo/YDKW3Wb5ekPNta5Gb+/VxHCzyh/xLxdwqAmEy61FWbZ
-         GG63C5+HLPa1VxKuFeb+JHwX+Em4qy4Q2zyIehc3mSY89R2DhPcaESdOJsZhIczh9ugK
-         M9Hf1ngMucGLy6E1JpX7oMeK2MMdYZrtr6Jb3nOtzHheNcolB8/wlcub8KECYoQ+joIS
-         u8ywdn4DzTI8hKgzrizXCRcv2M2Z/qYIcgBaLqy8dtyMdxPd1AgDhlNPkpkzApNLWSD3
-         FDxmsxeQQVQMjOLPhTHc5bAf5sUuEZcNrkLcmwvU5CowUtLQ9Crxktl/94rkFKOnh/Lz
-         beFQ==
+        bh=rruAmV9Uf5Hcl9hQCEy5robAKir9unM5ck997RFMX8I=;
+        b=FwBoEPVRCogQqe9FwjlzFft0Yxyu7UPcvYex7ji4jlsu95uk9nYCx1cEOEUSki+gkx
+         zCHJXMksh3fWfV54ewKL50IhcuElkTz3Cot5aHKBjnIExMbB95i8wGhgDlI/tUb/cFKT
+         JkDUHYlxfd5PfOPHgxjTEVU61qjzu0lWaP2jGov6x3zJYG9J4CJvwGTl8DouXu2ITrcL
+         zG1vyN+tSsTo2ixiP+1ZddVu9n2fQ/3f3rlkDF0nl49pi99p0GKALZ/4puE0L6nyBXhl
+         qGsfi/Br8MOdmpjgL4ppSJt/03t4hCgSlDWLlXaBXHV62a/Uf741AFd8Mt18IstcvqmW
+         O+OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vtEz6HgYvxRUvaHEz9ZnWOfkR0mMjLhI8XOy+dkVNLE=;
-        b=oSV+g18z/BHIiVKsd8Gbk7e2OaZfqC/FosBMJO15Ad4NK/pwzmHdMJPhUVEco07MwO
-         /DTpX8WpoO6Zw1gHLC0bVVfETavu+iEAtfphEzNlKT+WWfomUlCPIH+vpTGsxnN1ccAX
-         I1pxKTUvVs0SjsmeNgL9tXKbxcJSptXSUq5jAgIO/fwAXCrCCfWsRVmf6mDbSSiJFUs6
-         eOF04aTo9vb9U305oQCgNWi6Rc4PduF0iL5fjlqgSABGwaHlpMWMJ6m3PuUJUk1+U7qD
-         ahOcjaFa9oxReY4sZSBjdJaa9EyEB70kox7j53wrIOIiNKoY5AAVs9XHNSC7bj4cOMda
-         V1IQ==
-X-Gm-Message-State: AO0yUKXZqrqxrDkWJpRfQ/aX6PHq94ZhSWkvkfEqMTgdgjT4t3jXZ0Ss
-        EKHpwbGKxhuFm7AfaYhO2rtedg==
-X-Google-Smtp-Source: AK7set+WxI2wxDu/UXDfZmDEZtvOwJLAs2HZa186Mvnwh+h13QxLftJaM+ds3wqNh+gw73VngtvHfg==
-X-Received: by 2002:adf:d846:0:b0:2bf:cc26:c6cd with SMTP id k6-20020adfd846000000b002bfcc26c6cdmr4938218wrl.43.1675237062411;
-        Tue, 31 Jan 2023 23:37:42 -0800 (PST)
+        bh=rruAmV9Uf5Hcl9hQCEy5robAKir9unM5ck997RFMX8I=;
+        b=XThT8p/sPv2fCoRKCNILz0JJErYbXF7wq2yEtqLdDEDevY4phDzlph257FJxFEyVOX
+         fkBXHF8SlSsSadl0btH+u/1gFXd3YDP76zfOX+YDf136vdgeJ0TMUcqPZDupVON84qFK
+         rrEgDz56qFhViC72rmloh2u1Pd6rAiq8+oP0JHIMmshdgtlMu2+PwbuSfp1LSZQrSE06
+         hedme0drXYBTMzWjnLI0F7tgIKAksGx4J+DnRGJr/19wTE/W/WD1diMKrc5/6/kQ/+d3
+         HDR+M2FSzZ98YHp39W62O692ycvJ/b3MfdggU6YyWARaeMhbpohnXCsMJNZFLjpUeskG
+         mAsQ==
+X-Gm-Message-State: AO0yUKVuH5tZTtBnZ98TE084xC70zMqSvRNtqmidxt5pvXSqlLmfrxJf
+        AholZUoBW86FhIrbUd6sjrl90w==
+X-Google-Smtp-Source: AK7set92R7HYwYsOrLSUKb+5aTwkUFUbqOC2ASSd7D2z7qSN8UK8bmDodyucNPdtXWOYT5Tw8IvPxQ==
+X-Received: by 2002:a05:600c:4f07:b0:3db:15b1:fb28 with SMTP id l7-20020a05600c4f0700b003db15b1fb28mr1002455wmq.19.1675237130432;
+        Tue, 31 Jan 2023 23:38:50 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m8-20020a5d56c8000000b002bf94527b9esm16253376wrw.85.2023.01.31.23.37.39
+        by smtp.gmail.com with ESMTPSA id y6-20020a7bcd86000000b003dc4480df80sm845229wmj.34.2023.01.31.23.38.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Jan 2023 23:37:42 -0800 (PST)
-Message-ID: <91ddc32e-0e59-fe49-b8c2-b33b962c943e@linaro.org>
-Date:   Wed, 1 Feb 2023 08:37:39 +0100
+        Tue, 31 Jan 2023 23:38:50 -0800 (PST)
+Message-ID: <31e979dd-f4e9-081e-1bf2-e44dffc4e70f@linaro.org>
+Date:   Wed, 1 Feb 2023 08:38:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH V4 6/7] arm64: dts: qcom: Add ipq9574 SoC and AL02 board
- support
+Subject: Re: [PATCH 2/3] dt-bindings: rtc: moxart: use proper names for gpio
+ properties
 Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linus.walleij@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
-        shawnguo@kernel.org, arnd@arndb.de, marcel.ziswiler@toradex.com,
-        dmitry.baryshkov@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <20230201060319.20434-1-quic_devipriy@quicinc.com>
- <20230201060319.20434-7-quic_devipriy@quicinc.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230201054815.4112632-1-dmitry.torokhov@gmail.com>
+ <20230201054815.4112632-2-dmitry.torokhov@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230201060319.20434-7-quic_devipriy@quicinc.com>
+In-Reply-To: <20230201054815.4112632-2-dmitry.torokhov@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,39 +80,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/02/2023 07:03, Devi Priya wrote:
-> Add initial device tree support for Qualcomm IPQ9574 SoC and AL02 board
+On 01/02/2023 06:48, Dmitry Torokhov wrote:
+> MOXA ART RTC driver has been switched to gpiod API and is now using
+> properly named properties for its gpios (with gpiolib implementing a
+> quirk to recognize legacy names). Change binding document to use
+> proper names as well.
 > 
-> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
-> Co-developed-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-> Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > ---
+>  .../devicetree/bindings/rtc/moxa,moxart-rtc.txt      | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> index c9d3ac1477fe..1374df7bf9d6 100644
+> --- a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> +++ b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
+> @@ -3,15 +3,15 @@ MOXA ART real-time clock
+>  Required properties:
+>  
+>  - compatible : Should be "moxa,moxart-rtc"
+> -- gpio-rtc-sclk : RTC sclk gpio, with zero flags
+> -- gpio-rtc-data : RTC data gpio, with zero flags
+> -- gpio-rtc-reset : RTC reset gpio, with zero flags
+> +- rtc-sclk-gpios : RTC sclk gpio, with zero flags
+> +- rtc-data-gpios : RTC data gpio, with zero flags
+> +- rtc-reset-gpios : RTC reset gpio, with zero flags
 
-
-> +
-> +		sdhc_1: mmc@7804000 {
-> +			compatible = "qcom,ipq9574-sdhci", "qcom,sdhci-msm-v5";
-> +			reg = <0x07804000 0x1000>, <0x07805000 0x1000>;
-> +			reg-names = "hc", "cqhci";
-> +
-> +			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "hc_irq", "pwr_irq";
-> +
-> +			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
-> +				 <&gcc GCC_SDCC1_APPS_CLK>,
-> +				 <&xo_board_clk>;
-> +			clock-names = "iface", "core", "xo";
-> +			mmc-ddr-1_8v;
-> +			mmc-hs200-1_8v;
-> +			mmc-hs400-1_8v;
-> +			mmc-hs400-enhanced-strobe;
-> +			max-frequency = <384000000>;
-> +			bus-width = <8>;
-
-None of these 6 are properties of the SoC. Move them to the DTS.
+Your driver breaks the ABI, doesn't it? If not, how are the old
+properties parsed?
 
 Best regards,
 Krzysztof
