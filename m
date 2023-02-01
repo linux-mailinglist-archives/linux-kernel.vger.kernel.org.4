@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0510685DB8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 04:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6CB685DBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 04:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjBADKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 22:10:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S230520AbjBADLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 22:11:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjBADKJ (ORCPT
+        with ESMTP id S229754AbjBADK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 22:10:09 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F240619D;
-        Tue, 31 Jan 2023 19:10:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675221008; x=1706757008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hG0Cqd9tAcf9bnbBhEdpsPgvTCJitgXKwvwPCaj9CO8=;
-  b=UpUbRuW9Y945dLAHXmWHcSxnooUZDmPsltN7KpJ95OH77KHryL3s8FB5
-   mD1N89fvEshXC44+OoDzzwJyQpAYefg3rp8gmk2Fq1QqtikYTJbdzMsHB
-   zkvgx6kBQQ+JA114894B/tvULi63LP8mjpkylh4X+0shT/DppYSZnlrIp
-   yGh0RhkQJlYexBLp3jaEw6DVTZE/Vd9PahnDp09cIfF7hV+XEdZ5md+Nl
-   0cszVJuMYXhxkjb1yX5TFnQ7MpxGQ56SlYHAnmSriotexhWIh6XqOfAcQ
-   hPDIxZGSxQAwMXPjEfMXpPtWh9ZdGOqD8VFR2PmlpRpzAtN4NfWwW/QpN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="414233287"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="414233287"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 19:09:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="695185072"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="695185072"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 31 Jan 2023 19:09:41 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pN3VE-0004ys-1B;
-        Wed, 01 Feb 2023 03:09:40 +0000
-Date:   Wed, 1 Feb 2023 11:09:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     bchihi@baylibre.com, daniel.lezcano@linaro.org,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Subject: Re: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage
- Thermal Sensor driver
-Message-ID: <202302011058.17Vvc1pN-lkp@intel.com>
-References: <20230131153816.21709-1-bchihi@baylibre.com>
+        Tue, 31 Jan 2023 22:10:58 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCDFCC04
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 19:10:58 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id m2so12132922plg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 19:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dNwmbpoUgpK9RVRkp7WNwRkV3sDOdGK+t1bOk0Us3Hk=;
+        b=uG73jEp1pU2t8G6JHpz8OVvf+yA+gdH9PWjp2kRgjfrsq8czTp9COZCbTrUx//NYbM
+         daMPid1pjogAgV30y1s4yxAiTlW+nRiftfnOeA1RF2tRhMFjA/hawNexXC7jquDXmYSU
+         DvtJzueJqGTs75yE5BaAxl8SHthb5ZcI/Ajyf0UO4t4kBfDHfMKd/KlQF9w1aGFur1g6
+         2HBO5F9vUH/rcu+ybeOVyP91fK1t1XZ7QzGf9yYEjybGgRpx6ziGy3QyWZTt7LhKbKGj
+         ybSEIuhqSPxmjLKxFkqzN4YLTmjll9JKHv57g+ZOkRM2wglcO8at+9mCl/RO7bCsG0cp
+         sdfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dNwmbpoUgpK9RVRkp7WNwRkV3sDOdGK+t1bOk0Us3Hk=;
+        b=bzAFZFJPg5cMtvdwNLcjpCFGYCaH1AVc1nPeK03xhSqR4O6ZAV6rPb1xdUu0035pPy
+         TrQNLnCX/g+I8Zp0Fgyk4YN8v7Bay0imDbmo8TAqcaaDTt2680rfDZSmq3vjjqSTvL9T
+         thqyMhAZgU6FfcRYjiqGXO/WWazw3A0N47x/GP7y0PUxa0bg28DQNehdoyP+eJiIE2Kk
+         w9mx/H+9xCwZ4lavOtbTJ/awVrIW7y3eusvi+Q20WfdPw5RS2fb1/tGV+Sv6Q+UQ9pV/
+         7LFzcFDxBo8B3hGuXGPdXBu5Q1tXQ9ikLC1K2wi4YUcURn04PAzh0LV++IkSR1ylCFlE
+         2ebA==
+X-Gm-Message-State: AO0yUKVtHye34ITXs8fBH52bcf1Y/ofnPZqyp3eHxB8Qz1UT0U+fM9aD
+        Qp9T/MhIUiwPXcXIXH49FQRBIzdvp0bx4E1XoRw=
+X-Google-Smtp-Source: AK7set9DGBNGEDhGrSL+h9Vf4nUXZLRGNhzNmVbfvX3VyTGxttxQ7Wg3L8E5XC0X+7fM+r9ZhpFOSQ==
+X-Received: by 2002:a17:902:e1d2:b0:194:9de0:bed1 with SMTP id t18-20020a170902e1d200b001949de0bed1mr964856pla.32.1675221057642;
+        Tue, 31 Jan 2023 19:10:57 -0800 (PST)
+Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
+        by smtp.gmail.com with ESMTPSA id g17-20020a170902869100b00189c62eac37sm10518521plo.32.2023.01.31.19.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 19:10:57 -0800 (PST)
+Date:   Tue, 31 Jan 2023 19:10:55 -0800
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Pietro Borrello <borrello@diag.uniroma1.it>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/2] tun: tun_chr_open(): correctly initialize
+ socket uid
+Message-ID: <20230131191055.45bb4ab7@hermes.local>
+In-Reply-To: <20230131-tuntap-sk-uid-v1-1-af4f9f40979d@diag.uniroma1.it>
+References: <20230131-tuntap-sk-uid-v1-0-af4f9f40979d@diag.uniroma1.it>
+        <20230131-tuntap-sk-uid-v1-1-af4f9f40979d@diag.uniroma1.it>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131153816.21709-1-bchihi@baylibre.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Balsam,
+On Wed, 01 Feb 2023 00:35:45 +0000
+Pietro Borrello <borrello@diag.uniroma1.it> wrote:
 
-Thank you for the patch! Yet something to improve:
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index a7d17c680f4a..6713fffb1488 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+> @@ -3450,6 +3450,11 @@ static int tun_chr_open(struct inode *inode, struct file * file)
+>  
+>  	sock_init_data(&tfile->socket, &tfile->sk);
+>  
+> +	// sock_init_data initializes sk.sk_uid assuming tfile->socket is embedded
+> +	// in a struct socket_alloc and reading its corresponding inode. Since we
+> +	// pass a socket contained in a struct tun_file we have to fix this manually
+> +	tfile->sk.sk_uid = inode->i_uid;
+> +
 
+Do not use C++ style comments in the kernel.
 
-
-url:    https://github.com/intel-lab-lkp/linux/commits/UPDATE-20230131-234122/bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230124-211910
-base:   the 4th patch of https://lore.kernel.org/r/20230124131717.128660-5-bchihi%40baylibre.com
-patch link:    https://lore.kernel.org/r/20230131153816.21709-1-bchihi%40baylibre.com
-patch subject: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage Thermal Sensor driver
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230201/202302011058.17Vvc1pN-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5646ebf6f10ff0fc60c04d8c57523f7c44526b41
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review UPDATE-20230131-234122/bchihi-baylibre-com/thermal-drivers-mediatek-Relocate-driver-to-mediatek-folder/20230124-211910
-        git checkout 5646ebf6f10ff0fc60c04d8c57523f7c44526b41
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/thermal/mediatek/lvts_thermal.c:20:10: fatal error: dt-bindings/thermal/mediatek,lvts-thermal.h: No such file or directory
-      20 | #include <dt-bindings/thermal/mediatek,lvts-thermal.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +20 drivers/thermal/mediatek/lvts_thermal.c
-
-  > 20	#include <dt-bindings/thermal/mediatek,lvts-thermal.h>
-    21	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Rule #1 of code maintenance. Bug fixes should not stand out.
