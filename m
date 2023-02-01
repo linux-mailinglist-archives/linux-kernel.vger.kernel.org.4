@@ -2,216 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D68686173
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7A3686179
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:19:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbjBAITZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 03:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S229973AbjBAITu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 03:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbjBAITK (ORCPT
+        with ESMTP id S232129AbjBAITr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 03:19:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254B12884B
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 00:18:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675239501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TgQuCO8xB/43JdXjOiR6k2nwVgC6qNNzFrln4BazGqw=;
-        b=PXhjHZyBnjwb2X4MSw7fyvWk09sqF+nr/8VJfKHzuZbq21VVR+7ogVI4yIAQEN7ULGxvAF
-        1E6TUN69zbyhfgC++7Pm1rriXBAUloX0sjm5mZoa48/IbSXd1UuTXZkz9IbfOmxLmAYb32
-        kvDsr4xOIjcq1E8cXLH+x1ZImsQEC1c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-571-Di-7GZaYMX-GJGyl-HdKkw-1; Wed, 01 Feb 2023 03:18:20 -0500
-X-MC-Unique: Di-7GZaYMX-GJGyl-HdKkw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9ABD8185A794;
-        Wed,  1 Feb 2023 08:18:19 +0000 (UTC)
-Received: from localhost (ovpn-13-89.pek2.redhat.com [10.72.13.89])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C501D112132C;
-        Wed,  1 Feb 2023 08:18:18 +0000 (UTC)
-Date:   Wed, 1 Feb 2023 16:18:15 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, Milan Broz <gmazyland@gmail.com>,
-        Thomas Staudt <tstaudt@de.ibm.com>,
-        Kairui Song <ryncsn@gmail.com>, dm-devel@redhat.com,
-        Jan Pazdziora <jpazdziora@redhat.com>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Dave Young <dyoung@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC v2 0/5] Support kdump with LUKS encryption by reusing LUKS
- volume key
-Message-ID: <Y9ogR0/zPRBGI1kq@MiWiFi-R3L-srv>
-References: <20221104113000.487098-1-coxu@redhat.com>
+        Wed, 1 Feb 2023 03:19:47 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997C85D132
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 00:19:46 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id n28-20020a05600c3b9c00b003ddca7a2bcbso730616wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 00:19:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VvoNTnMSUBG9rGEWOXzGw8leDVKkmxXHRdw/8wBL9Pk=;
+        b=X70q4EIFe04waZs3aJ9oYudxeE97R4ccQO4nlrT+6KySZJAHmydxTTYbEQ+mg0PSPK
+         tE6ymg6C5SrWtA2eOnH9MIoLkKwtZ25YEH3CRAoxfEdqS2Rlxx2c/KMdkeQldRF6UT9g
+         i6FlMGcNUvrVudXubJoBlQWwBM5oHPS6X+bsymzCg7OTsJBYUntR9j0qDN0sZYe+rzcK
+         9WFbqiDXzUzCZKdnLWgc+3DNCuyP72ISb9kh1/r7Qt4i6pwr7SAsoFR6JO9BnD4Wb4JS
+         NWSy2T1CUXCdc1dji4GHqDilbC20qIt3Gd2fYaK3SKI8W9l9BkbfVl/Rg4ZpjcxOK8bB
+         vHww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VvoNTnMSUBG9rGEWOXzGw8leDVKkmxXHRdw/8wBL9Pk=;
+        b=JpE9AGqcAKo0qpcZEHmykhs8puZOSjJKuQP0LFkkuquzxDyXivV1eksGgWXAxSw/PF
+         Xu1VqyulDs/Ldnu35t7NSLIpJOmVI3pRU+OQjbK6kKMKHe6s4PMg93yd1wXN5cqL4KNP
+         rrgOtP33BRSNwpK8e3BThb/ENE+qZlNnz3Y/YXp9tGT4sFLjY1nW/JITkBLnOBry1N4h
+         yfCZT+DUt4Wl3Dfv8CTMx7KZ/jZOJ7iToi0wyxAD+RN6zNGmEhVgATi+ypsCTKwjPcHX
+         dQYA8L9rVcs+VeorkhJ89nchQc8h4DxnIx519ayQbD/qw9Ewv1HrtBQ5CVD3hI9RJDn4
+         jF+A==
+X-Gm-Message-State: AO0yUKVS0Py/IDK5a8m6V1havA/URcjmmSMucwCmqLZuSpxXX7/JDZkT
+        SYQq+JiMYuZn74v1VhbNx0sY3w==
+X-Google-Smtp-Source: AK7set8iji9QZ9s4X+GxpH1QSjtynCBbdorxCE0bUw3yPC/dlwz0uArXguJ0sbG8mdGj7TyYbOFyaQ==
+X-Received: by 2002:a05:600c:3caa:b0:3da:270b:ba6b with SMTP id bg42-20020a05600c3caa00b003da270bba6bmr1057745wmb.41.1675239585174;
+        Wed, 01 Feb 2023 00:19:45 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id p11-20020a05600c468b00b003dc4050c97bsm1785889wmo.3.2023.02.01.00.19.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 00:19:44 -0800 (PST)
+Message-ID: <44d94a1d-47d6-f93e-4a20-d9d83375398d@linaro.org>
+Date:   Wed, 1 Feb 2023 09:19:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104113000.487098-1-coxu@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 1/3] dt-bindings: cpufreq: qcom-cpufreq-nvmem: specify
+ supported opp tables
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230131151819.16612-1-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230131151819.16612-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Coiby,
+On 31/01/2023 16:18, Christian Marangi wrote:
+> Add additional info on what opp tables the defined devices in this schema
+> supports (operating-points-v2-kryo-cpu and operating-points-v2-qcom-level)
+> and reference them.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+> Changes v5:
+> - Swap patch 1 and patch 2 to fix dt_check_warning on single
+>   patch bisecting 
+> Changes v4:
+> - Add patch split from patch 1
+> 
+>  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 35 ++++++++++++++-----
 
-On 11/04/22 at 07:29pm, Coiby Xu wrote:
-> RFC v2
->  - libcryptsetup interacts with the kernel via sysfs instead of "hacking"
->    dm-crypt 
->    - to save a kdump copy of the LUKS volume key in 1st kernel
->    - to add a logon key using the copy for libcryptsetup in kdump kernel [Milan]
->    - to avoid the incorrect usage of LUKS master key in dm-crypt [Milan]
->  - save the kdump copy of LUKS volume key randomly [Jan]
->  - mark the kdump copy inaccessible [Pingfan]
->  - Miscellaneous
->    - explain when operations related to the LUKS volume key happen [Jan]
->    - s/master key/volume key/g
->    - use crash_ instead of kexec_ as function prefix
->    - fix commit subject prefixes e.g. "x86, kdump" to x86/crash
-> 
-> With kdump enabled, when the 1st kernel crashes, the system could boot
-> into the kdump/crash kernel and dump the memory image i.e. /proc/vmcore
-> to a specified target. Currently, when dumping vmcore to a LUKS
-> encrypted device, there are two problems,
+This patch causes new warnings:
 
-I went through this patchset, have some concerns. Do you mind sending a
-formal patchset with some adjustment?
+arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb: /: opp-table-cluster0:
+Unevaluated properties are not allowed ('compatible', 'nvmem-cells',
+'opp-1036800000', 'opp-1113600000', 'opp-1190400000', 'opp-1228800000',
+'opp-1324800000', 'opp-1363200000', 'opp-1401600000', 'opp-1478400000',
+'opp-1497600000', 'opp-1593600000', 'opp-307200000', 'opp-422400000',
+'opp-480000000', 'opp-556800000', 'opp-652800000', 'opp-729600000',
+'opp-844800000', 'opp-960000000', 'opp-shared' were unexpected)
 
-1) maybe put the luks key handling related to crash_dump out into
-a separate file. e.g kernel/crash_dump_luks.c. This will reduce the code
-complexity to other kdump code from luks handling. At least from code
-reading side.
-2) please rearrange your patches order so that generic luks handling at
-the beginning. Then the x86 specific code comes next. Please refer to
-below patchset. Like this, other arch can easily add its specific code
-accordingly.
 
-[PATCH v18 0/7] crash: Kernel handling of CPU and memory hot un/plug
-
-And I am wondering
-1) in what proportion the luks system is used,
-2) in which cases the dumped vmcore have to be saved into luks disk,
-   no workaround?
-3) with the 1 hour aging of luks key, to what extent it's still
-   worthwhile to add the support of luks kdumping? E.g for me, I have
-   been using Fedora, and often start kexec-tools service when I need to
-   do test kdump w/o reboot. With that, the key has aged.
-
-I am not familiar with LUKS and it's key mechanism, my above concerns
-could be shallow, anyone please help clarify if it does impact. Please
-also show your support if this adding is really helpful.
-
-Thanks
-Baoquan
-
-> 
->  - for some machines, a system administrator may not have a chance to
->    enter the password to decrypt the device in kdump initramfs after the
->    1st kernel crashes 
-> 
->  - LUKS2 by default use the memory-hard Argon2 key derivation function
->    which is quite memory-consuming compared to the limited memory reserved
->    for kdump. Take Fedora example, by default, only 256M is reserved for
->    systems having memory between 4G-64G. With LUKS enabled, ~1300M needs
->    to be reserved for kdump. Note if the memory reserved for kdump can't
->    be used by 1st kernel i.e. an user sees ~1300M memory missing in the
->    1st kernel. 
->  
-> Besides users (at least for Fedora) usually expect kdump to work out of
-> the box i.e. no manual password input is needed. And it doesn't make
-> sense to derivate the key again in kdump kernel which seems to be
-> redundant work.
-> 
-> Based on Milan's feedback [1] on Kairui's ideas to support kdump with
-> LUKS encryption, this patch set addresses the above issues by reusing
-> the LUKS volume key in kdump kernel and here is the life cycle of this
-> kdump copy of LUKS volume key,
-> 
->  1. After the 1st kernel loads the initramfs during boot, systemd
->     asks for a passphrase from the user and uses it to de-crypt the LUKS
->     volume key
-> 
->  2. After the 1st kernel saving the volume key as a logon key,
->     libcrytpsetup notifies the kernel to read this logon key and store a
->     temporary copy by writing the key description to
->     /sys/kernel/crash_luks_volume_key
-> 
->  3. After switching to the real root fs, kdump.serivce is started and it 
->     loads the kdump kernel using the kexec_file_load syscall
-> 
->  4. The kexec_file_load syscall saves the temporary copy of the volume
->     key to kdump reserved memory and wipe the copy.
-> 
->  5. When the 1st kernel crashes and kdump kernel is booted,
->     libcryptsetup asks the kdump kernel to add a logon key using
->     the volume key stored in kdump reserved memory by writing the key
->     description to /sys/kernel/crash_luks_volume_key
-> 
->  6. The system gets rebooted to the 1st kernel after dumping vmcore to
->     the LUKS encrypted device is finished
-> 
-> Note the kdump copy of LUKS volume key never leaves the kernel space and
-> is saved in the memory area exclusively reserved for kdump where even
-> the 1st kernel has no direct access. 
-> 
-> Milan's major concern [2] on previous version is "storing the encryption
-> key to yet another place are creating another attack vector". To further
-> secure this copy, two additional protections are added,
->  - save the copy randomly in kdump reserved memory as suggested by Jan
->  - clear the _PAGE_PRESENT flag of the page that stores the copy as
->    suggested by Pingfan
-> 
-> If there is no further security concern with this approach or any other
-> concern, I will drop the following assumptions,
->   - only x86 is supported
->   - there is only one LUKS device for the system
-> 
-> to extend the support to other architectures including POWER, ARM and
-> s390x and address the case of multiple LUKS devices. Any feedback will be 
-> appreciated, thanks!
-> 
-> For a proof of concept, I've patched cryptsetup [3] in a quick-and-dirty
-> way to support a new option "--kdump-kernel-master-key"
-> and hacked systemd [4]. It works for Fedora 35.
-> 
-> [1] https://yhbt.net/lore/all/e5abd089-3398-fdb4-7991-0019be434b79@gmail.com/
-> [2] https://lwn.net/ml/linux-kernel/c857dcf8-024e-ab8a-fd26-295ce2e0ae41@gmail.com/
-> [3] https://gitlab.com/coxu/cryptsetup/-/commit/750a46d933fac82e0c994b5c41de40a0b8cac647
-> [4] https://github.com/coiby/systemd/tree/reuse_kdump_master_key
-> 
-> Coiby Xu (5):
->   kexec_file: allow to place kexec_buf randomly
->   crash_dump: save the LUKS volume key temporarily
->   x86/crash: pass the LUKS volume key to kdump kernel
->   x86/crash: make the page that stores the LUKS volume key inaccessible
->   crash_dump: retrieve LUKS volume key in kdump kernel
-> 
->  arch/x86/include/asm/crash.h       |   1 +
->  arch/x86/kernel/crash.c            |  47 ++++++-
->  arch/x86/kernel/kexec-bzimage64.c  |   7 +
->  arch/x86/kernel/machine_kexec_64.c |  16 +++
->  include/linux/crash_core.h         |   2 +
->  include/linux/crash_dump.h         |   2 +
->  include/linux/kexec.h              |   6 +
->  kernel/crash_dump.c                | 200 +++++++++++++++++++++++++++++
->  kernel/kexec_file.c                |  15 +++
->  kernel/ksysfs.c                    |  19 +++
->  10 files changed, 314 insertions(+), 1 deletion(-)
-> 
-> -- 
-> 2.37.3
-> 
+Best regards,
+Krzysztof
 
