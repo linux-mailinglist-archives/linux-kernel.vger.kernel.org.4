@@ -2,215 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CF2686D82
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 18:59:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1974E686D81
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 18:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbjBAR7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 12:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S231668AbjBAR6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 12:58:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjBAR7O (ORCPT
+        with ESMTP id S231665AbjBAR6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 12:59:14 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03007E055
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 09:59:05 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id y8so20607246vsq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 09:59:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cPFfYuyib9emhUUABsRMDshvSQtpvkW/9z+CFnKeyvA=;
-        b=rh4iOj//EViSBgmMXraaxnVrS7aQUuct5v/JQggXExkCBiIrUBfB/wBG8GSQhA2rfL
-         56BWRpdpjBpnx8FjpOK2cR8RgQHkUgfgZevn4PrBrc4mla8JOo5VbpIfw/TwNGBqB4g5
-         NJ0GkLi9SvCZ30Lboa3RYZrUEuAR+CWW8gKc36f4Tl6ih1BAB8vwlXYZ2ovZ3M6cTtRM
-         t78dC9D7GgUvbX272ejErN8ALQR8KN2eg6hXtsI5V7YbWtVE5aKVuKZpwsLGbFhtwKK2
-         hLRq1rzEuUtEsG7hydLDZHk7KqXPntE1Y/EPIaxAQWbmq5NLjyvyLz3ZrDL/G1Qnw/w1
-         w8nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cPFfYuyib9emhUUABsRMDshvSQtpvkW/9z+CFnKeyvA=;
-        b=LSDl9C0C5G1m+c58gZOjExJWLIUcdeWSaDECQqoe27KtZ9ZuZ9hfaEtYFsuQo/mJHl
-         x5izzkFADaY/fsonVBpR913bhe/0fqfuFQ4IW02yv7RCDa8A233LRBA2l1eHOIUihZhL
-         FWRS5whNFsrZVQUP8KrLAT4ADOwRzQ+39cOkaiSLjCX4N3KOgY1JlxHmQuOkfORCMkcD
-         Lpw7N0IIsRJmBJsr+hR5WRpI0a92G4l8xuIIz6XHyCs9kdTYoRoEGvzIvF06wauOhF5V
-         yksOm3TIcAIF9B/hOPTYefUMQpscrWfWD1BHZn10/nXlh2ADsJW7Vl3s0Q4eltY9qn5u
-         igdg==
-X-Gm-Message-State: AO0yUKXJtWBjWLWZ0UOYFXC5htMoX8IFNy7mT7GPyPZd2dAm6B1Dccig
-        OBP4um44BpOoVu55h1XCN6Z/xhgHBk+FeNRAVlXPDg==
-X-Google-Smtp-Source: AK7set8IO/rVKPm/kvAT1ID0Rhcp8vh6DVh2oh2sEO4whdwrRXgDKzRppiwa7e5hGgyQzT5cvqgvJjZhxhOVd7T0/zM=
-X-Received: by 2002:a67:d984:0:b0:3f9:9403:6000 with SMTP id
- u4-20020a67d984000000b003f994036000mr572591vsj.1.1675274344768; Wed, 01 Feb
- 2023 09:59:04 -0800 (PST)
+        Wed, 1 Feb 2023 12:58:46 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C637C706;
+        Wed,  1 Feb 2023 09:58:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675274322; x=1706810322;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=+AgHcRXjVsavxfByZSNcTknGeQWex9C6z2ssXzA4jPM=;
+  b=U8Rsi2BoPQiajOUPgzEq3pZSBOK057QdX2Lkbgri74fHgfSPDkKiGh2V
+   7uaH8TKo0XVFu1LPYVDRiCd4AUxwz4uvTqEvut8xOpcmLWvM1yWGwV4Mf
+   UkA65PGj/4GA8cL2gjiof7x9kD6i+m+7vxN5nmMTXvD8yhQvRPMmWZv69
+   zTZL7LnDRX3FazvGqwQNo6gO4eio1dKdnNmsNWvkgWBHytq932FOicts0
+   KosRZwq6bUyRQ9vdRNuzW9hdgEpQ9ORrA2GqH0eSEC/4CgG5gTYJNTT+J
+   xIg5BsAC0vwf3+pWy1Ntv6xupFCLdYCWuEx1rrpQi08kpYOWSpX14/nGA
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="316220262"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="316220262"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 09:58:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="838863126"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="838863126"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2023 09:58:41 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 1 Feb 2023 09:58:40 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 1 Feb 2023 09:58:40 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.45) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 1 Feb 2023 09:58:40 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nwFBsx93X8YQIn6lSqc/e5SZpy0ifzsszkpaY1YWfw75c4pFQGvtf0NiQKH90imlUZeoqq+URmmiseANXAxuAa4JAS5HoABH3r8TO+0g8m6TdHi0DZKni2yVgllDNo/qzVA2rbnVQKIpQ05pYl2KBrmNKkpxZILFxkkmDer3Gi9U3ojUGnhi6fBpPm7ylgr41+2AH4beIqGsGQNsXwEawCBVHzUuouR1TVzAMMCS1lvnZS1d/wwm8kyC+QqE2Hsh4UglQiKBHWZW1fOYLDEqkSxqpHBxdMwILNES+u+93jrYBzji4bq1zdcVIBwkau8zXjQKWd4VhCmFZhSqxb+mhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rs7kmnwbMEPKh/Izv8yXmyvKw21e7HUxyS+uPp2LfhI=;
+ b=n1KZy3u9qeiba+PUIrocCte2egFJ5Q3ghMoq3ITqyFazU9E35nDm9Yiu0hxQZgFQN41BBLg67OSSat5UmUsXLUvY/3i5k6J9cjOvsqQmbgBEoqCq0B93912QJGcGIxxqeddpunFHjZKtER0r2E0Ahg8SIcTXOgDhNZqs37TjAxPZjABFqj49m6AGVz6yq4uc9F4qzzoV2oGn0QhmZruPErGKdxY+FEeno+e9AyhSX4VJwTfJmc9N8bGtf/vyEWsg4sUb4rwByszo9dcxq7obt41n8QxArZua0jy/Py/CJWneHBfWehu/uP7nWal+TT689kT7y4MmdD/3nmQoUCz2pQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by DS7PR11MB7808.namprd11.prod.outlook.com (2603:10b6:8:ee::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.25; Wed, 1 Feb 2023 17:58:39 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%6]) with mapi id 15.20.6043.038; Wed, 1 Feb 2023
+ 17:58:39 +0000
+Date:   Wed, 1 Feb 2023 09:58:36 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Fan Ni <fan.ni@samsung.com>
+CC:     "alison.schofield@intel.com" <alison.schofield@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cxl/region: Fix null pointer dereference for resetting
+ decoder
+Message-ID: <63daa84cf5a4_ea222294c9@dwillia2-xfh.jf.intel.com.notmuch>
+References: <CGME20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06@uscas1p2.samsung.com>
+ <20221215170909.2650271-1-fan.ni@samsung.com>
+ <20230113110108.00002122@Huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230113110108.00002122@Huawei.com>
+X-ClientProxiedBy: SJ0PR13CA0127.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c6::12) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-References: <CADrL8HUggALQET-09Zw3BhFjZdw_G9+v6CU=qtGtK=KZ_DeAsw@mail.gmail.com>
- <Y8l+f2wNp2gAjvYg@monkey> <CADrL8HVdL_NMdNq2mEemNCfwkYBAWnbqwyjsAYdQ2fF0iz34Hw@mail.gmail.com>
- <CADrL8HV92DaNm5bUwcOxsG8Lg4yLT6F13KWSbjkySPNAsgCfpA@mail.gmail.com>
- <Y9Li93O6Ffwcr+vn@x1n> <CADrL8HVJb9mA3Lbz5UKJ8EudTk9sGDY-pdRqvW3TGawD_bJB0A@mail.gmail.com>
- <Y9f+jMLWy6ngpYuR@x1n> <CADrL8HX3sf6OO3PXS1g6b2dKf8b5phQ7oyNR0dVT=sAOdTmmqw@mail.gmail.com>
- <Y9gzOqwKcu7p/PEw@x1n> <CADrL8HXX9YDFUxmPPsm2s3Pno0XXgAyFB40fV1PdtP9eb-5D2A@mail.gmail.com>
- <Y9m/VVRABt0Blfjh@x1n> <CADrL8HXpfTE1+eE3rNGQyOr1QRtDtG5mBp-b3xcNX22QJRvPaQ@mail.gmail.com>
- <7a1bc3c5-6efe-87ab-1276-f71fc440c821@redhat.com>
-In-Reply-To: <7a1bc3c5-6efe-87ab-1276-f71fc440c821@redhat.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 1 Feb 2023 09:58:27 -0800
-Message-ID: <CADrL8HWNitzWTs4N=-CdGaY_GNUi4PORoN9r=qH3xbHmdcMwjA@mail.gmail.com>
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Peter Xu <peterx@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|DS7PR11MB7808:EE_
+X-MS-Office365-Filtering-Correlation-Id: c013d6a8-b2bd-49ba-cec6-08db047df262
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G1PjklxML9mCle1mzjOQoTVFyW+Yg+p5DfU5rIOsG0rrCftrKuxc0L7X4Wyy/EsYGH6s6DYPyimo/0tIVMYoI8YQ25KRhMUa3/vGTTSq5AdmaKuxlDW+nY7FSacZA4PSIt2EkXUtx+EL0+avb5ii5nzWfsuixmW6gPoNmi1tef/2JmHg4Ws1fSKFKsMV9Fi9mLVpWU4JCksDueOkCfYCo99qt+v2gpKt8hd6yt3Z8S6Lm6ZQKoX2Y/ptJ8hGU7EuDqj85z3rf4gboE0hGkb5xn2TRJYSZxUgYRAApZ6tgHId60ki5pka5sXiUaKd+TKLTfya6FeGBtT80CP17iP5jsDLUvPmuCtz2T3uxStPC2CeRzDK58ajUfiRBEiyWk9N9GYzlSjq+OLv20+sJZLWj4lYRaQLzk4UIPypT7SV5EKO7bm8RgFJJczMR9mlv8EYaSTD1mNDoucDF91BJvpg61QU+STOqXO2d67ctyg87rT0SCimrXEQdsp9DGhsNd41lu3kaqCTdwiif+6RryjrXnLL+PenZCgrFZssIlATvecPKC4vzANUYj+2dyVx0gcueMD3WrmmgEFvrsrm/b1MJQnUgGR/ITWfDs8W3SO/u8NB5AAtshXu2FJY4W6d4YMzRzjdUAs1RtrIQb4HmtSS6Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(136003)(346002)(39860400002)(366004)(451199018)(2906002)(316002)(110136005)(54906003)(6666004)(38100700002)(6486002)(478600001)(9686003)(6512007)(26005)(8676002)(186003)(6506007)(66946007)(66476007)(66556008)(4326008)(5660300002)(41300700001)(86362001)(8936002)(82960400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lWD9GGwsMbk4t4aqWk5bK859geFcOIPJ/jAnMNsu6NYcPRo+7dqR2hKUuswe?=
+ =?us-ascii?Q?c/kjXlCLC39o23XyHhy4IJxRJ97rPBNN8uB90AZaAFKPW6HJQtgP15ep+Dj5?=
+ =?us-ascii?Q?NHZbp5w3bsv3K5TTwXp9/XgBz0/FV95DW16i8g/9n3PCpB3gcvvoybcAveVR?=
+ =?us-ascii?Q?7CMOHZk0j4hYjopeucEK9CSph3oIiHTgA0Hl0ffTZPACmRH3q25oC2qFiP6t?=
+ =?us-ascii?Q?ze/uaonjlz6D0fPKr60zv0h8VjbYk0/vAfMOTS+MJD7VdjNIoBJ8I8ATsUaj?=
+ =?us-ascii?Q?LuubCW5lV4Q8+4ynT1VSg8Qm2TAVtg276dNc/PHyKiqikfDgRmxzcro9sMPd?=
+ =?us-ascii?Q?CJcN3TSIcZXxVebSCKKtQcNJXILDt4VS17a+uA11IP8yhcBagGBKzRG0ouWD?=
+ =?us-ascii?Q?yZCSdxYp8kvuAj17xsupCJQpG6QHZotyjQsEOqi2TLxUxpW30KbsiLW4O99M?=
+ =?us-ascii?Q?hTJqp87kx5jzyCub3Jl1946LJMJH2hepbQWAuFckLq/Pwe3ax6W6OlMB03WN?=
+ =?us-ascii?Q?vYYRqCMQRsXXNHEQDd9I62T0FZZJ2mf+Yzj8017+He/pCSvw7ZA8zGvF73jt?=
+ =?us-ascii?Q?b/AsGn3F23lie6RBdjA+tTrRY0vm3IJDzjTRdN7bNOqWtyYNPpDhmJ1C/Mvg?=
+ =?us-ascii?Q?uYtPzWbFZD3Ic9R774TbbY2ZH2h71wCUq06UoBIOx/jU5Jk6LtxO+JPshxL8?=
+ =?us-ascii?Q?77oiKh7Z+5bapGlLrXn06iMKZAprSdIlsqbIh7pZLB1tgb7PnYnohiHEzXSn?=
+ =?us-ascii?Q?99J63vt8uVMvN6DX/kVx65YxigZ7N1ofdtFVeRcYup+x4QXRfkC5wU7iqPSL?=
+ =?us-ascii?Q?c8J+xwd6cYklOXew9d+2AsR8fAkUDdayvydPBftZEpnqrfBio9mQN4rfAU1y?=
+ =?us-ascii?Q?cd3uaoFJunvc0SdOoXPm5EaL1ReVBsF+FsNhmF510HWUNiJPI2hGT/MwxFk/?=
+ =?us-ascii?Q?n3FKWD+TvOAp7R2ZZQMYZrEgmhcmliveHnT2g7OXkmHK+T1bV+pVuKh+KiTL?=
+ =?us-ascii?Q?uSxnv6iujHNBX1xvEF5PldBDMP+Sb6y26UGGPYaUvUjkmol4qTiZdGxbr8Ow?=
+ =?us-ascii?Q?Fmp+0v7A4nnafAwi2hdVd/KfSYXhioJz+uszZwCEpb85j+IYc8D7xuIWfITC?=
+ =?us-ascii?Q?okHSPB4v3USIvzseeVru7kCZcWswuu7euMMOdIhnI5cj7YHY9+sZP5ivh9ka?=
+ =?us-ascii?Q?NxQj2Fsp0aJNBDiC1weTLIrNvy1KS+FIzkaEm9/MAkZBlnVP11rTudUgu5bB?=
+ =?us-ascii?Q?KdwkcAc0E0Sq38qOANthqaM3Zt6yfkaQfoy0wyq0UXdFpMMV2tRgk9wnrWcN?=
+ =?us-ascii?Q?Hj2W7OU7X1QxN1un5zfQaBCsuyvOcEe8d5sxEmq7KAs/X/wLA8sGPoc4od1C?=
+ =?us-ascii?Q?dbRL6lG+CaE77tIdtXqtb/JNalbeFWXn5BUOJ+1B973qgg3keBDCnwJQy+dJ?=
+ =?us-ascii?Q?qJMTLLnK8N/iyZbk2RTjScmtaf6MQ2NnuqEXX73rLW+70gGOSyyUW5mY4Knd?=
+ =?us-ascii?Q?iy2V9qp90yY7jlncgru8qvMUfTPuCVoAwNSeBzqPK6JxMpJ4VIjvHBALHWpi?=
+ =?us-ascii?Q?F/F8xfo3aUolXYc5SUcXP4KmZlvSERI6J88QSDvXA/3UKK/2nn+CsKkfD5sH?=
+ =?us-ascii?Q?sg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c013d6a8-b2bd-49ba-cec6-08db047df262
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 17:58:38.8760
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: td+9TtDVSvKlEFqeXAcceXn/f27GVUq1p/DHDkwe3yRawldkjgDwK67a8BhJnpCw/1glE57y70tDpd1pYPW55FAvTQyZ63WI3JcO4SsL/NI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7808
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 7:56 AM David Hildenbrand <david@redhat.com> wrote:
->
-> On 01.02.23 16:45, James Houghton wrote:
-> > On Tue, Jan 31, 2023 at 5:24 PM Peter Xu <peterx@redhat.com> wrote:
-> >>
-> >> On Tue, Jan 31, 2023 at 04:24:15PM -0800, James Houghton wrote:
-> >>> On Mon, Jan 30, 2023 at 1:14 PM Peter Xu <peterx@redhat.com> wrote:
-> >>>>
-> >>>> On Mon, Jan 30, 2023 at 10:38:41AM -0800, James Houghton wrote:
-> >>>>> On Mon, Jan 30, 2023 at 9:29 AM Peter Xu <peterx@redhat.com> wrote:
-> >>>>>>
-> >>>>>> On Fri, Jan 27, 2023 at 01:02:02PM -0800, James Houghton wrote:
-> > [snip]
-> >>>>>> Another way to not use thp mapcount, nor break smaps and similar calls to
-> >>>>>> page_mapcount() on small page, is to only increase the hpage mapcount only
-> >>>>>> when hstate pXd (in case of 1G it's PUD) entry being populated (no matter
-> >>>>>> as leaf or a non-leaf), and the mapcount can be decreased when the pXd
-> >>>>>> entry is removed (for leaf, it's the same as for now; for HGM, it's when
-> >>>>>> freeing pgtable of the PUD entry).
-> >>>>>
-> >>>>> Right, and this is doable. Also it seems like this is pretty close to
-> >>>>> the direction Matthew Wilcox wants to go with THPs.
-> >>>>
-> >>>> I may not be familiar with it, do you mean this one?
-> >>>>
-> >>>> https://lore.kernel.org/all/Y9Afwds%2FJl39UjEp@casper.infradead.org/
-> >>>
-> >>> Yep that's it.
-> >>>
-> >>>>
-> >>>> For hugetlb I think it should be easier to maintain rather than any-sized
-> >>>> folios, because there's the pgtable non-leaf entry to track rmap
-> >>>> information and the folio size being static to hpage size.
-> >>>>
-> >>>> It'll be different to folios where it can be random sized pages chunk, so
-> >>>> it needs to be managed by batching the ptes when install/zap.
-> >>>
-> >>> Agreed. It's probably easier for HugeTLB because they're always
-> >>> "naturally aligned" and yeah they can't change sizes.
-> >>>
-> >>>>
-> >>>>>
-> >>>>> Something I noticed though, from the implementation of
-> >>>>> folio_referenced()/folio_referenced_one(), is that folio_mapcount()
-> >>>>> ought to report the total number of PTEs that are pointing on the page
-> >>>>> (or the number of times page_vma_mapped_walk returns true). FWIW,
-> >>>>> folio_referenced() is never called for hugetlb folios.
-> >>>>
-> >>>> FWIU folio_mapcount is the thing it needs for now to do the rmap walks -
-> >>>> it'll walk every leaf page being mapped, big or small, so IIUC that number
-> >>>> should match with what it expects to see later, more or less.
-> >>>
-> >>> I don't fully understand what you mean here.
-> >>
-> >> I meant the rmap_walk pairing with folio_referenced_one() will walk all the
-> >> leaves for the folio, big or small.  I think that will match the number
-> >> with what got returned from folio_mapcount().
-> >
-> > See below.
-> >
-> >>
-> >>>
-> >>>>
-> >>>> But I agree the mapcount/referenced value itself is debatable to me, just
-> >>>> like what you raised in the other thread on page migration.  Meanwhile, I
-> >>>> am not certain whether the mapcount is accurate either because AFAICT the
-> >>>> mapcount can be modified if e.g. new page mapping established as long as
-> >>>> before taking the page lock later in folio_referenced().
-> >>>>
-> >>>> It's just that I don't see any severe issue either due to any of above, as
-> >>>> long as that information is only used as a hint for next steps, e.g., to
-> >>>> swap which page out.
-> >>>
-> >>> I also don't see a big problem with folio_referenced() (and you're
-> >>> right that folio_mapcount() can be stale by the time it takes the
-> >>> folio lock). It still seems like folio_mapcount() should return the
-> >>> total number of PTEs that map the page though. Are you saying that
-> >>> breaking this would be ok?
-> >>
-> >> I didn't quite follow - isn't that already doing so?
-> >>
-> >> folio_mapcount() is total_compound_mapcount() here, IIUC it is an
-> >> accumulated value of all possible PTEs or PMDs being mapped as long as it's
-> >> all or part of the folio being mapped.
-> >
-> > We've talked about 3 ways of handling mapcount:
-> >
-> > 1. The RFC v2 way, which is head-only, and we increment the compound
-> > mapcount for each PT mapping we have. So a PTE-mapped 2M page,
-> > compound_mapcount=512, subpage->_mapcount=0 (ignoring the -1 bias).
-> > 2. The THP-like way. If we are fully mapping the hugetlb page with the
-> > hstate-level PTE, we increment the compound mapcount, otherwise we
-> > increment subpage->_mapcount.
-> > 3. The RFC v1 way (the way you have suggested above), which is
-> > head-only, and we increment the compound mapcount if the hstate-level
-> > PTE is made present.
-> >
-> > With #1 and #2, there is no concern with folio_mapcount(). But with
-> > #3, folio_mapcount() for a PTE-mapped 2M page mapped in a single VMA
-> > would yield 1 instead of 512 (right?). That's what I mean.
->
-> My 2 cents:
->
-> The mapcount is primarily used (in hugetlb context) to
->
-> (a) Detect if a page might be shared. mapcount > 1 implies that two
-> independent page table hierarchies are mapping the page. We care about
-> mapcount == 1 vs. mapcount != 1.
->
-> (b) Detect if unmapping was sucessfull. We care about mapcount == 0 vs.
-> mapcount != 0.
->
-> For hugetlb, I don't see why we should care about the subpage mapcount
-> at all.
+Jonathan Cameron wrote:
+> On Thu, 15 Dec 2022 17:09:14 +0000
+> Fan Ni <fan.ni@samsung.com> wrote:
+> 
+> > Not all decoders have a reset callback.
+> > 
+> > The CXL specification allows a host bridge with a single root port to
+> > have no explicit HDM decoders. Currently the region driver assumes there
+> > are none.  As such the CXL core creates a special pass through decoder
+> > instance without a commit/reset callback.
+> > 
+> > Prior to this patch, the ->reset() callback was called unconditionally when
+> > calling cxl_region_decode_reset. Thus a configuration with 1 Host Bridge,
+> > 1 Root Port, and one directly attached CXL type 3 device or multiple CXL
+> > type 3 devices attached to downstream ports of a switch can cause a null
+> > pointer dereference.
+> > 
+> > Before the fix, a kernel crash was observed when we destroy the region, and
+> > a pass through decoder is reset.
+> > 
+> > The issue can be reproduced as below,
+> >     1) create a region with a CXL setup which includes a HB with a
+> >     single root port under which a memdev is attached directly.
+> >     2) destroy the region with cxl destroy-region regionX -f.
+> > 
+> > Fixes: 176baefb2eb5 ("cxl/hdm: Commit decoder state to hardware")
+> > Signed-off-by: Fan Ni <fan.ni@samsung.com>
+> 
+> Explanation seems correct to me.  Only question (and it's one for the
+> Maintainers) is whether they prefer optionality here or a stub reset()
+> implementation for the pass through decoder.
 
-Agreed -- it shouldn't really matter all that much.
-
->
-> For (a) it's even good to count "somehow mapped into a single page table
-> structure" as "mapcount == 1" For (b), we don't care as long as "still
-> mapped" implies "mapcount != 0".
-
-Thanks for your thoughts, David. So it sounds like you're still
-squarely in the #3 camp. :)
+Yeah, I think this fix as is works for the purposes of the -stable
+backport and then a follow-on can add the optionality.
