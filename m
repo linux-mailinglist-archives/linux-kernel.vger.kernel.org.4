@@ -2,151 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B394D686843
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C97686846
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbjBAO2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S232124AbjBAO2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:28:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbjBAO17 (ORCPT
+        with ESMTP id S232024AbjBAO2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:27:59 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A4B3C31;
-        Wed,  1 Feb 2023 06:27:57 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 311EGiCj017993;
-        Wed, 1 Feb 2023 14:27:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=AksKXheM6eLJ2HJAaoqsPb0evevC0hzy3+GFy9Z9YPg=;
- b=CfgjhILKgVXjlprS6ndI6w88DM4Nm8UgkSI824MJn2Y0774QADwyhnFNy4kCC7zk6285
- S8OgktA9wsQ/eHl76jBQGYAB5hfSLUFDaV9tyar7qSvL/D9WCKdI/JWxF+YiCkKe/rFd
- gZFigVd2+9aQ1x+w3PDy1uvo1fJFArGxmj6Ow0Ppf7VNL1Im5dLa3t0gbOir3AOhluG3
- e2UgFBuyLWBBN9AU2z1Wow4a3HuTab9blm+mXplhdu64TYYgnYVbmaprYZOFPkPZ8qMO
- bUaatYewFboUqXJ/C1kOodzk/sFIvbGEJ1iHoh1IyCsTUetxgrLjwi9YI/0CjzQe7HIU 1w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfsps88yc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 14:27:52 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 311EH02Q022226;
-        Wed, 1 Feb 2023 14:27:51 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfsps88xe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 14:27:51 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 311DSoA6028521;
-        Wed, 1 Feb 2023 14:27:49 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ncvuyp5pd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 14:27:49 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 311ERmTg52756914
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Feb 2023 14:27:48 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8140A58050;
-        Wed,  1 Feb 2023 14:27:48 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EC90B58056;
-        Wed,  1 Feb 2023 14:27:45 +0000 (GMT)
-Received: from [9.65.253.123] (unknown [9.65.253.123])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Feb 2023 14:27:45 +0000 (GMT)
-Message-ID: <9b6c0c4d-57c9-6a9a-379e-82f073b73988@linux.ibm.com>
-Date:   Wed, 1 Feb 2023 09:27:45 -0500
+        Wed, 1 Feb 2023 09:28:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D8E1BDE
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:28:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 471FDB8219F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 14:28:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70612C433EF;
+        Wed,  1 Feb 2023 14:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675261730;
+        bh=YroCa+avc6rV4GCcybGDD1acE12dRIov4jxYSHm88V0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U2Mhgl1rdL0Jzvs+9wFXh9wA8eb3DoUn7zkp+T8azFnhYLtvd55sb/56x04zVF3dJ
+         mn1dnaqbmTUDfBEIpyLNjj6Hyt3LbBDlqx3kA4OYulUVweI4dVf3d7oIlIcD2aJTaa
+         yDhVbnRNtPMeT0g8E2HyDdzqo5MrRgSQN46Gr6J8MifY1Y1OsXP3B+4OeFqDU8tifT
+         YE7/QVAs8XkofazahY3PO7ARW/DQYQMvzPcDdx1I+VhBCj84rYqIZRkcgBKRGKFUdP
+         LQzQFjsOnvzsBte9XsYTTAY4An0TCwZLCFAkgEsM6Ijc3sgpoRuw82bo3gCSEbT5ea
+         f6PRvKA/TJL9w==
+Date:   Wed, 1 Feb 2023 15:28:46 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>, fweisbec@gmail.com,
+        mingo@kernel.org, liwei391@huawei.com, adobriyan@gmail.com,
+        mirsad.todorovac@alu.unizg.hr, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH RFC] tick/nohz: fix data races in get_cpu_idle_time_us()
+Message-ID: <Y9p3HjW3yzn0UYrZ@lothringen>
+References: <20230128020051.2328465-1-liaoyu15@huawei.com>
+ <20230201045302.316-1-hdanton@sina.com>
+ <20230201140117.539-1-hdanton@sina.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] vfio: fix deadlock between group lock and kvm lock
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>, "jgg@nvidia.com" <jgg@nvidia.com>
-Cc:     "cohuck@redhat.com" <cohuck@redhat.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
-        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
-        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        "Christopherson, , Sean" <seanjc@google.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230131200635.44227-1-mjrosato@linux.ibm.com>
- <BN9PR11MB5276E39EE37A7BA2E1B896278CD19@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Language: en-US
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <BN9PR11MB5276E39EE37A7BA2E1B896278CD19@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NJqvptLaEdfJ-3joEq6sHAB0jl6RLbQ7
-X-Proofpoint-GUID: SsuqcBrPe_cn_3aaAd2-Jqa6moPwAGMh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-01_04,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- spamscore=0 phishscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999
- adultscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302010120
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230201140117.539-1-hdanton@sina.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/1/23 1:13 AM, Tian, Kevin wrote:
->> From: Matthew Rosato <mjrosato@linux.ibm.com>
->> Sent: Wednesday, February 1, 2023 4:07 AM
->>
->> -	device->kvm = kvm;
->> +	/*
->> +	 * Get the KVM pointer currently associated with the group, if there
->> +	 * is one, and obtain a reference now that will be held until the
->> +	 * open_count reaches 0.  Save the pointer in the device for use by
->> +	 * drivers.
->> +	 */
->> +	spin_lock_irqsave(&group->kvm_ref_lock, flags);
->> +	if (group->kvm && vfio_kvm_get_kvm_safe(device, group->kvm))
->> +		device->kvm = group->kvm;
->> +	spin_unlock_irqrestore(&group->kvm_ref_lock, flags);
->> +
+On Wed, Feb 01, 2023 at 10:01:17PM +0800, Hillf Danton wrote:
+> > > +++ b/kernel/time/tick-sched.c
+> > > @@ -640,13 +640,26 @@ static void tick_nohz_update_jiffies(kti
+> > >  /*
+> > >   * Updates the per-CPU time idle statistics counters
+> > >   */
+> > > -static void
+> > > -update_ts_time_stats(int cpu, struct tick_sched *ts, ktime_t now, u64 *last_update_time)
+> > > +static u64 update_ts_time_stats(int cpu, struct tick_sched *ts, ktime_t now,
+> > > +				int io, u64 *last_update_time)
+> > >  {
+> > >  	ktime_t delta;
+> > >  
+> > > +	if (last_update_time)
+> > > +		*last_update_time = ktime_to_us(now);
+> > > +
+> > >  	if (ts->idle_active) {
+> > >  		delta = ktime_sub(now, ts->idle_entrytime);
+> > > +
+> > > +		/* update is only expected on the local CPU */
+> > > +		if (cpu != smp_processor_id()) {
+> > 
+> > Why not just updating it only on idle exit then?
 > 
-> No group reference in vfio_main.c. 
+> This aligns to idle exit as much as it can by disallowing remote update.
 
-OK -- I think to do that I'll have to move the lock/unlock of the dev_set lock to group.c right before we call vfio_device_{open,close} and check open_count there to make decisions about the kvm ref (before calling vfio_device_open to decide to get kvm ref, after returning from vfio_device_open to see if we to drop ref on error, after close to see if we need to drop ref).
+I mean why bother updating if idle does it for us already?
+
+One possibility is that we get some more precise values if we read during
+long idle periods with nr_iowait_cpu() changes in the middle.
+
+> > 
+> > > +			if (io)
+> > 
+> > I fear it's not up to the caller to decides if the idle time is IO or not.
+> 
+> Could you specify a bit on your concern, given the callers of this function?
+
+You are randomly stating if the elapsing idle time is IO or not depending on
+the caller, without verifying nr_iowait_cpu(). Or am I missing something?
+
+> > 
+> > > +				delta = ktime_add(ts->iowait_sleeptime, delta);
+> > > +			else
+> > > +				delta = ktime_add(ts->idle_sleeptime, delta);
+> > > +			return ktime_to_us(delta);
+> 
+> Based on the above comments, I guest you missed this line which prevents
+> get_cpu_idle_time_us() and get_cpu_iowait_time_us() from updating ts.
+
+Right...
+
+> > But then you may race with the local updater, risking to return
+> > the delta added twice. So you need at least a seqcount.
+> 
+> Add seqcount if needed. No problem.
+> > 
+> > But in the end, nr_iowait_cpu() is broken because that counter can be
+> > decremented remotely and so the whole thing is beyond repair:
+> > 
+> > CPU 0                       CPU  1                    CPU 2
+> > -----                       -----                     ------
+> > //io_schedule() TASK A
+> > current->in_iowait = 1
+> > rq(0)->nr_iowait++
+> > //switch to idle
+> >                     // READ /proc/stat
+> >                     // See nr_iowait_cpu(0) == 1
+> >                     return ts->iowait_sleeptime + ktime_sub(ktime_get(), ts->idle_entrytime)
+> > 
+> >                                                       //try_to_wake_up(TASK A)
+> >                                                       rq(0)->nr_iowait--
+> > //idle exit
+> > // See nr_iowait_cpu(0) == 0
+> > ts->idle_sleeptime += ktime_sub(ktime_get(), ts->idle_entrytime)
+> 
+> Ah see your point.
+> 
+> The diff disallows remotely updating ts, and it is updated in idle exit
+> after my proposal, so what nr_iowait_cpu() breaks is mitigated.
+
+Only halfway mitigated. This doesn't prevent from backward or forward jumps
+when non-updating readers are involved at all.
+
+Thanks.
 
 > 
-> btw Yi, looks the deadlock issue also exists in your cdev work.
+> Thanks for taking a look, particularly the race linked to nr_iowait_cpu().
 > 
-> kvm_vfio_release() holds kvm lock and then try to acquire
-> device->device_set->lock in vfio_device_file_set_kvm().
-> 
-> vfio_device_ioctl_bind_iommufd() holds device->device_set->lock
-> and then call vfio_device_open() which finally hit kvm lock
-> acquisition in driver's open_device routine (e.g. vfio-ap).
-> 
-> A similar fix is required in your series.
-> 
-> Thanks
-> Kevin
-
+> Hillf
