@@ -2,122 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC437685E2A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87D2C685E2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 05:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjBAEKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 23:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S231157AbjBAELl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 23:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjBAEJ5 (ORCPT
+        with ESMTP id S229500AbjBAELi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 23:09:57 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EC0EC71
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 20:09:56 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31137Cc7022955;
-        Wed, 1 Feb 2023 04:09:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=zy6Rha6dBVIMAWy3lFXkqLXt6GDCnsCwrZjTyGqNoWQ=;
- b=KtW5+IQhcXsJKukL4v6raDyHWRqT/D4byuAcAvnF9M3B4bUfzggzWBAGdL/tew2g1GgJ
- PZzmc8ghCakcjVR5Zv+PF54uzdrMGOAMXHvnebad5UoV8msJ84vFgGZ7y7t3ZyAH/Iip
- mWha4E1s9JzQ9p4GiKD8rpUHr7MzbrmND3GO9mrqhKNpxEyHYlGv/we4KefEI64xF/Hq
- YFHSaSRCPvjMMWd6VqTz/x11TYL1pRH7Ko7oUumn5I4ZaGzbMMEkcucJdezwbuS51O+d
- LfslIvVdFFYNWmHLQoFmXEibETrdK2B3BXUjaDjf+gUTaNdHr0HKhuyz39Z0C9UorEKi RQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nexb02guu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 04:09:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31149LPp028958
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 1 Feb 2023 04:09:21 GMT
-Received: from hu-cgoldswo-sd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 31 Jan 2023 20:09:21 -0800
-Date:   Tue, 31 Jan 2023 20:09:13 -0800
-From:   Chris Goldsworthy <quic_cgoldswo@quicinc.com>
-To:     Hillf Danton <hdanton@sina.com>
-CC:     Chris Goldsworthy <quic_cgoldswo@quicinc.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        <dave.hansen@linux.intel.com>, <bp@alien8.de>, <hpa@zytor.com>,
-        <hch@lst.de>, <m.szyprowski@samsung.com>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <djakov@kernel.org>
-Subject: Re: [RFC] mm: Allow ZONE_DMA32 to be disabled via kernel command line
-Message-ID: <20230201040913.GA4959@hu-cgoldswo-sd.qualcomm.com>
-References: <20230126164352.17562-1-quic_c_gdjako@quicinc.com>
- <555fca66-81b6-3406-eac1-140c00669477@arm.com>
- <20230127085553.5120-1-hdanton@sina.com>
+        Tue, 31 Jan 2023 23:11:38 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F57EC71;
+        Tue, 31 Jan 2023 20:11:35 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P67lS5B2Sz4x1f;
+        Wed,  1 Feb 2023 15:11:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675224694;
+        bh=ZxoymRVk02ddEs9/fYpUAdMk5ZQOF6B6GW8rBCDkzC0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DLr8ZxcoUfgnD8jAXCMQ0ANO9I/L3eqxPSdQqmH7e7ryKwY9FTJ8hQdNzb9bfjxM2
+         DrRBUPpgyWdSRsh6E3j5GGYdNDmOlON+r5LSc/wy/hCuwvV6KgzyeKAnfvESt9gQ4I
+         9UqTlT2EiTpYM8RZowy8Q7ZBad708GiQaH+LjN6UhtxZPixPd03LjBhd4veWgJwS2L
+         15lFE6XMJbMNMb/7vbnZKIu1VBodwwnar7gwdhicYGGz0x/slkePyfn9f7CaFMhgYa
+         g1O2zYtj44yjkCK86+J9OyVeJ2+s0rQEuhIF4hfXQL02rdoh7/xvXTdatvHZ5inwmm
+         w5fkaUV0UdrHw==
+Date:   Wed, 1 Feb 2023 15:11:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     John Harrison <john.c.harrison@intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg KH <greg@kroah.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "Jani Nikula" <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the
+ drm-intel-fixes tree
+Message-ID: <20230201151113.22382269@oak.ozlabs.ibm.com>
+In-Reply-To: <9566dc52-2ff1-760d-c9cb-fdfef9278f05@intel.com>
+References: <20230131130305.019029ff@canb.auug.org.au>
+        <Y9kNRVppj5Uxa9ub@smile.fi.intel.com>
+        <9566dc52-2ff1-760d-c9cb-fdfef9278f05@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230127085553.5120-1-hdanton@sina.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 1o19gB-wBRlPAda26TeSBX4RL71zd1Vy
-X-Proofpoint-ORIG-GUID: 1o19gB-wBRlPAda26TeSBX4RL71zd1Vy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-31_08,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=494
- malwarescore=0 clxscore=1011 adultscore=0 suspectscore=0 spamscore=0
- bulkscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302010034
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/=65UFbDmGI+=z0lGGX0n6Id";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 04:55:53PM +0800, Hillf Danton wrote:
-> On Thu, 26 Jan 2023 18:20:26 -0800 Chris Goldsworthy <quic_cgoldswo@quicinc.com>
-> > On Thu, Jan 26, 2023 at 07:15:26PM +0000, Robin Murphy wrote:
-> > > However, I'm just going to take a step back and read the commit message a
-> > > few more times... Given what it claims, I can't help but ask why wouldn't we
-> > > want a parameter to control kswapd's behaviour and address that issue
-> > > directly, rather than a massive hammer that breaks everyone allocating
-> > > explicitly or implicitly with __GFP_DMA32 (especially on systems where it
-> > > doesn't normally matter because all memory is below 4GB anyway), just to
-> > > achieve one rather niche side-effect?
-> > > 
-> > > Thanks,
-> > > Robin.
-> > 
-> > Hi Robin,
-> > 
-> > The commit text doesn't spell out the scenario we want to avoid, so I
-> > will do that for clarity. We use a kernel binary compiled for us, and
-> > by default has CONFIG_ZONE_DMA32 (and it can't be disabled for now as
-> > another party needs it). Our higher-end SoCs are usually used with
-> > 8-12 GB of DDR, so using a 12 GB device as an example, we would have 8
-> > GB of ZONE_NORMAL memory and 4 GB of ZONE_MOVABLE memory with the
-> > feature, and 4 GB of ZONE_DMA32, 4 GB of ZONE_NORMAL and 4 GB of
-> > ZONE_MOVABLE otherwise.
-> > 
-> > Without the feature enabled, consider a GFP_KERNEL allocation that
-> > causes a low watermark beach in ZONE_NORMAL, such that such that
-> > ZONE_DMA32 is almost full. This will cause kswapd to start reclaiming
-> > memory, despite the fact that that we might have gigabytes of free
-> > memory in ZONE_DMA32 that can be used by anyone (since GFP_MOVABLE and
-> > GFP_NORMAL can fall back to using ZONE_DMA32).
-> 
-> If kswapd is busy reclaiming pages even given gigabytes of free memory
-> in the DMA32 zone then it is a CPU hog.
-> 
-> Feel free to check pgdat_balanced() and prepare_kswapd_sleep().
+--Sig_/=65UFbDmGI+=z0lGGX0n6Id
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for pointing out this gap in my understanding - I'm taking a closer look
-at these paths to see whether there is room for what Robin suggested.
+Hi all,
 
+On Tue, 31 Jan 2023 10:27:29 -0800 John Harrison <john.c.harrison@intel.com=
+> wrote:
+>
+> On 1/31/2023 04:44, Andy Shevchenko wrote:
+> > On Tue, Jan 31, 2023 at 01:03:05PM +1100, Stephen Rothwell wrote: =20
+> >>
+> >> Today's linux-next merge of the usb tree got a conflict in:
+> >>
+> >>    drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> >>
+> >> between commit:
+> >>
+> >>    5bc4b43d5c6c ("drm/i915: Fix up locking around dumping requests lis=
+ts")
+> >>
+> >> from the drm-intel-fixes tree and commit:
+> >>
+> >>    4d70c74659d9 ("i915: Move list_count() to list.h as list_count_node=
+s() for broader use")
+> >>
+> >> from the usb tree.
+> >>
+> >> I fixed it up (the former removed the code changed by the latter) =20
+> > Hmm... Currently I see that 20230127002842.3169194-4-John.C.Harrison@In=
+tel.com
+> > moves the code to the drivers/gpu/drm/i915/gt/intel_execlists_submissio=
+n.c.
+> >
+> > Is there any new series beside the above mentioned that touches that fi=
+le and
+> > actually _removes_ that code? =20
+> As long as the removal is limited to list_count/list_count_nodes,
+> that's fine. I only moved it from one file to another because the one
+> and only function that was using it was being moved to the other
+> file. If someone else has found a use for the same and wants to move
+> it to a more common place then great. I assume there was no conflict
+> happening in the i915 specific code.
+
+I have added this fix up patch to linux-next today (more or less - this
+is a hand hacked version, but you get the idea):
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 1 Feb 2023 13:13:01 +1100
+Subject: [PATCH] i915: fix up for "drm/i915: Fix up locking around dumping =
+requests lists"
+
+interacting with "i915: Move list_count() to list.h as list_count_nodes() f=
+or broader use"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ .../gpu/drm/i915/gt/intel_execlists_submission.c    | 15 +------------
+ 1 file changed, 2 insertion(+), 13 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c b/drivers=
+/gpu/drm/i915/gt/intel_execlists_submission.c
+index 3c573d41d404..e919d41a48d9 100644
+--- a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
++++ b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+@@ -4150,17 +4150,6 @@ void intel_execlists_show_requests(struct intel_engi=
+ne_cs *engine,
+ 	spin_unlock_irqrestore(&sched_engine->lock, flags);
+ }
+=20
+-static unsigned long list_count(struct list_head *list)
+-{
+-	struct list_head *pos;
+-	unsigned long count =3D 0;
+-
+-	list_for_each(pos, list)
+-		count++;
+-
+-	return count;
+-}
+-
+ void intel_execlists_dump_active_requests(struct intel_engine_cs *engine,
+ 					  struct i915_request *hung_rq,
+ 					  struct drm_printer *m)
+@@ -4172,7 +4161,7 @@ void intel_execlists_dump_active_requests(struct inte=
+l_engine_cs *engine,
+ 	intel_engine_dump_active_requests(&engine->sched_engine->requests, hung_r=
+q, m);
+=20
+-	drm_printf(m, "\tOn hold?: %lu\n",
+-		   list_count(&engine->sched_engine->hold));
++	drm_printf(m, "\tOn hold?: %zu\n",
++		   list_count_nodes(&engine->sched_engine->hold));
+=20
+ 	spin_unlock_irqrestore(&engine->sched_engine->lock, flags);
+ }
+--=20
+2.35.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=65UFbDmGI+=z0lGGX0n6Id
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPZ5nMACgkQAVBC80lX
+0GwZSgf+J3HPZ1ZJA5+d4OY81uKWKuMZJ5FKUiR+PijIJt/sW0bnG4JzcsHpuXzs
+3//OTlFawYLzfGCqrHPDF58h5I5a5Eubjffwla1LnXM9lJG0qffm7mp8/ZksQ7BC
+yDgDVx0hPWLem4UASwpiFo/NTkcxUBmyLkttqsw/3vc5KB2iUCdn9m5W5fYZdctR
+CNYXPouHcY1yjWx6tXJXjbCjHHXo+M/JkGDRDRByggEDDPterS7K0HDeRLU1BrXj
+DjBc9G5DigbkR6kCMmwqAqYOqeCOxm6bJvn2N7VVGqdfUmOW2t2Rqls6na5b2gTU
+iu6hRSeH9OX50CQ1P0IM8rDRbTPVnQ==
+=YPei
+-----END PGP SIGNATURE-----
+
+--Sig_/=65UFbDmGI+=z0lGGX0n6Id--
