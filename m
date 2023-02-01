@@ -2,223 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7A66867AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2D16867B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjBAN4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S231215AbjBAN5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBAN4W (ORCPT
+        with ESMTP id S230372AbjBAN5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:56:22 -0500
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03A63C292;
-        Wed,  1 Feb 2023 05:55:15 -0800 (PST)
-Received: from mta-01.yadro.com (localhost.localdomain [127.0.0.1])
-        by mta-01.yadro.com (Proxmox) with ESMTP id 6DE273416B0;
-        Wed,  1 Feb 2023 16:54:56 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yadro.com; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :from:from:in-reply-to:message-id:mime-version:references
-        :reply-to:subject:subject:to:to; s=mta-01; bh=vz5uwBQJeE6VWRoQR0
-        gz8uq9qSMnCxwIj8iMT8bAa8A=; b=EtcFGkRdES06zrM1TF+Cri5P+4dR81u8S6
-        5mRP9a06S3m4swC/QoxRCATWd7vlIvnVBDC026EXfiMGgTwgKRTElnpl2AtNtFvh
-        HK4XawdYsCbl3l+CKPZzcJSGfCiqm6hiQdiIystkvgd6Y9TpxP0o0GHylwi6c7G/
-        Wb6yAp20k=
-Received: from T-EXCH-08.corp.yadro.com (unknown [172.17.10.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Proxmox) with ESMTPS id 623A5341658;
-        Wed,  1 Feb 2023 16:54:56 +0300 (MSK)
-Received: from [10.199.21.212] (10.199.21.212) by T-EXCH-08.corp.yadro.com
- (172.17.11.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Wed, 1 Feb 2023
- 16:54:55 +0300
-Message-ID: <46ba97c9-85ff-eb47-0d05-79dc3960d7b4@yadro.com>
-Date:   Wed, 1 Feb 2023 16:54:55 +0300
+        Wed, 1 Feb 2023 08:57:19 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF68B2E0C1;
+        Wed,  1 Feb 2023 05:56:08 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id lu11so14315064ejb.3;
+        Wed, 01 Feb 2023 05:56:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zA00Qz0JPk4MiJn8NwFtqQLVGcoqmJxWG2bf2W8xESw=;
+        b=dOiccATA0bf1VpwwjW79XyJkwhl08xOgcaeX84t8kBmVgnjmooFAvxlLfIRddZvBa8
+         Fbyat6rjG2fgB/34PNH4i6iiUJXhV7jiZ0+jC0Xpi0rPVTSAQABNxM0r4ohkUIpNsS/k
+         PQSfjjRwkvb3nIh+KIcegIcQeqYZAgbum10TwIx6HDQ7waa+CXDknuEoLL7QD5HfiaZ6
+         rOOaCeIb15puNHlMqkUdCigXVCHxO7EUSQBAByWXss6rHkTDCInDzDwyhQzAkV2lgC80
+         yKdgYE5CC6LS4rhE68ZEfgmYVrCtlViiiZoCwQzO4qlAQ8Jd4eulL7Zo8AYItyfCeb5I
+         1IKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zA00Qz0JPk4MiJn8NwFtqQLVGcoqmJxWG2bf2W8xESw=;
+        b=UpecaXTa7/ONvVGoIuhKze2JwRXTEDyBnVo+G3+dL6WytEWQMPtdYY2cZsN2aeyxhJ
+         PFqiWEZC9EH4mSnmfyh5stqptaMikOPaSbLo5zHoDjXrORIBtbErKZeO6dY1ngKWeYFT
+         4q+Cem2ck53ycsQtn4laKGOHqkeZDidMj+0uXdRChYV0l6E8G1JrfSfo5SyITJOtG767
+         1UtfFQIxNxJtPi3JkKc9y0tJdTQBA53XxC/wJNF+sFg5FiovpERzff33a3Q4jKW1Iqlb
+         wpg3cDFaE1rfxIAQtElrdzFKa/6GeCQ6BjkDH7n0QzWeYCmJqXLxYje6Q3Mrsa2wnJbO
+         R31g==
+X-Gm-Message-State: AO0yUKWQz3kI8I+Stiw03kJQVtPzaLBeyr/3PV+uIFesE2YNML2SnQwG
+        aqnE6jDbOR5wjXn1Wze9GZo=
+X-Google-Smtp-Source: AK7set9wtZYBiXOAl5E1LAVfq6s+bHA946NV7XKZ5kmjMt3I8p1RpJKvYpLlfWkDOLxurF2oK+63SA==
+X-Received: by 2002:a17:906:6b98:b0:878:7833:816a with SMTP id l24-20020a1709066b9800b008787833816amr2336086ejr.43.1675259767429;
+        Wed, 01 Feb 2023 05:56:07 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id pv5-20020a170907208500b00888fddc4eb2sm4598051ejb.164.2023.02.01.05.56.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 05:56:06 -0800 (PST)
+Message-ID: <c3ba77ad-cc90-3246-2bcd-ee29029bfd7d@gmail.com>
+Date:   Wed, 1 Feb 2023 14:56:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 0/2] PCI: dwc: Add support for 64-bit MSI target
- addresses
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 0/7] MediaTek watchdog: Convert mtk-wdt.txt to
+ dt-schema
 Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     <kernel-team@android.com>, Vidya Sagar <vidyas@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, <linux@yadro.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Will McVicker <willmcvicker@google.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-References: <20220825235404.4132818-1-willmcvicker@google.com>
- <decae9e4-3446-2384-4fc5-4982b747ac03@yadro.com>
- <c014b074-6d7f-773b-533a-c0500e239ab8@arm.com>
-From:   Evgenii Shatokhin <e.shatokhin@yadro.com>
-In-Reply-To: <c014b074-6d7f-773b-533a-c0500e239ab8@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+References: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
+ <CAGXv+5EkPWF77ATVRhxygVOyYmxXgdTNPmOefP7jGeOMeZw_MA@mail.gmail.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAGXv+5EkPWF77ATVRhxygVOyYmxXgdTNPmOefP7jGeOMeZw_MA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.199.21.212]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-08.corp.yadro.com (172.17.11.58)
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.01.2023 15:42, Robin Murphy wrote:
+
+
+On 29/12/2022 11:37, Chen-Yu Tsai wrote:
+> On Tue, Nov 8, 2022 at 12:03 PM Allen-KH Cheng
+> <allen-kh.cheng@mediatek.com> wrote:
+>>
+>> Based on git/groeck/linux-staging.git, watchdog-next.
+>> We use [1] and [2] as references to send a new series.
+>>
+>> This series converts mtk-wdt.txt to dt-schema and contains
+>> - Fix watchdog compatibles for MT7986, MT8186, MT8188 and MT8195,
+>> - Fix the watchdog name of mt8516
+>> - Add mt6795 and MT8173 watchdog compatible
+>>
+>> Changes since v4:
+>>   - Drop label for watchdog node in mt8516
+>>
+>> Changes since v3:
+>>   - Drop label for watchdog example in yaml
+>>
+>> Changes since v2:
+>>   - Drop merged patch from series
+>>   - Rebase to watchdog-next (for mt8188)
+>>
+>> Changes since v1:
+>>   - Drop "items" for a single enum·
+>>
+>> Changes since [1]:
+>>    - Update the commit message with some details
+>>   - Drop "timeout-sec: true" and use unevaluatedProperties
+>> [1] https://lore.kernel.org/all/20221005113517.70628-1-angelogioacchino.delregno@collabora.com/
+>> [2] https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@mediatek.com/
+>>
+>> Allen-KH Cheng (3):
+>>    arm64: dts: mediatek: mt7986: Fix watchdog compatible
+>>    arm64: dts: mediatek: mt8516: Fix the watchdog node name
+>>    dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8173
+>>
+>> AngeloGioacchino Del Regno (4):
+>>    arm64: dts: mediatek: mt8186: Fix watchdog compatible
+>>    arm64: dts: mediatek: mt8195: Fix watchdog compatible
 > 
-> On 2023-01-31 12:29, Evgenii Shatokhin wrote:
->> Hi,
->>
->> On 26.08.2022 02:54, Will McVicker wrote:
->>> Hi All,
->>>
->>> I've update patch 2/2 to address Robin's suggestions. This includes:
->>>
->>>   * Dropping the while-loop for retrying with a 64-bit mask in favor of
->>>     retrying within the error if-statement.
->>>   * Using an int for the DMA mask instead of a bool and ternary
->>> operation.
->>>
->>> Thanks again for the reviews and sorry for the extra revision today!
->>> Hopefully this is the last one :) If not, I'd be fine to submit patch 
->>> 1/2
->>> without 2/2 to avoid resending patch 1/2 for future revisions of patch
->>> 2/2
->>> (unless I don't need to do that anyway).
->>
->> The first patch of the series made it into the mainline kernel, but, it
->> seems, the second one ("PCI: dwc: Add support for 64-bit MSI target
->> address") did not. As of 6.2-rc6, it is still missing.
->>
->> Was it intentionally dropped because of some issues or, perhaps, just by
->> accident? If it was by accident, could you please queue it for inclusion
->> into mainline again?
+> Looks like the dt-bindings have been merged, but the dts fixes haven't.
 > 
-> Yes, it was dropped due to the PCI_MSI_FLAGS_64BIT usage apparently
-> being incorrect, and some other open debate (which all happened on the
-> v5 thread):
-> 
-> https://lore.kernel.org/linux-pci/YzVTmy9MWh+AjshC@lpieralisi/
-
-I see. If I understand it correctly, the problem was that 
-PCI_MSI_FLAGS_64BIT flag did not guarantee that 64-bit mask could be 
-used for that particular allocation. Right?
-
-> 
-> The DMA mask issues have now been sorted out, 
-
-I suppose, you mean 
-https://lore.kernel.org/all/20230113171409.30470-26-Sergey.Semin@baikalelectronics.ru/?
-
-It still breaks our particular case when the SoC has no 
-32-bit-addressable RAM. We'd set DMA masks to DMA_BIT_MASK(36) in the 
-platform-specific driver before calling dw_pcie_host_init(). However, 
-dw_pcie_msi_host_init() resets it to 32-bit, tries dmam_alloc_coherent() 
-and fails.
-
-With 36-bit masks, the kernel seems to play well with the devices in our 
-case.
-
-I saw your comment in 
-https://lore.kernel.org/linux-pci/4dc31a63-00b1-f379-c5ac-7dc9425937f4@arm.com/ 
-that drivers should always explicitly set their masks.
-
-Is it a really bad idea to check the current coherent mask's bits in 
-dw_pcie_msi_host_init() and if it is more than 32 - just issue a warning 
-rather than reset it to 32-bit unconditionally? That would help in our 
-case. Or, perhaps, there is a better workaround.
-
-Looking forward to your comments.
-
-
-> so you, or Will, or anyone
-> else interested should be free to rework this on top of linux-next
-> (although at this point, more realistically on top of 6.3-rc1 in a few
-> weeks).
-> 
-> Thanks,
-> Robin.
-> 
->> Support for 64-bit MSI target addresses is needed for some of our SoCs.
->> I ran into a situation when there was no available RAM in ZONE_DMA32
->> during initialization of PCIe host. Hence, dmam_alloc_coherent() failed
->> in dw_pcie_msi_host_init() and initialization failed with -ENOMEM:
->>
->> [    0.374834] dw-pcie 4000000.pcie0: host bridge /soc/pcie0@4000000
->> ranges:
->> [    0.375813] dw-pcie 4000000.pcie0:      MEM
->> 0x0041000000..0x004fffffff -> 0x0041000000
->> [    0.376171] dw-pcie 4000000.pcie0:   IB MEM
->> 0x0400000000..0x07ffffffff -> 0x0400000000
->> [    0.377914] dw-pcie 4000000.pcie0: Failed to alloc and map MSI data
->> [    0.378191] dw-pcie 4000000.pcie0: Failed to initialize host
->> [    0.378255] dw-pcie: probe of 4000000.pcie0 failed with error -12
->>
->> Mainline kernel 6.2-rc6 was used in that test.
->>
->> The hardware supports 64-bit target addresses, so the patch "PCI: dwc:
->> Add support for 64-bit MSI target address" should help with this
->> particular failure.
->>
->>
->>>
->>> Thanks,
->>> Will
->>>
->>> Will McVicker (2):
->>>    PCI: dwc: Drop dependency on ZONE_DMA32
->>>
->>> v6:
->>>   * Retrying DMA allocation with 64-bit mask within the error
->>> if-statement.
->>>   * Use an int for the DMA mask instead of a bool and ternary operation.
->>>
->>> v5:
->>>   * Updated patch 2/2 to first try with a 32-bit DMA mask. On failure,
->>>     retry with a 64-bit mask if supported.
->>>
->>> v4:
->>>   * Updated commit descriptions.
->>>   * Renamed msi_64b -> msi_64bit.
->>>   * Dropped msi_64bit ternary use.
->>>   * Dropped export of dw_pcie_msi_capabilities.
->>>
->>> v3:
->>>    * Switched to a managed DMA allocation.
->>>    * Simplified the DMA allocation cleanup.
->>>    * Dropped msi_page from struct dw_pcie_rp.
->>>    * Allocating a u64 instead of a full page.
->>>
->>> v2:
->>>    * Fixed build error caught by kernel test robot
->>>    * Fixed error handling reported by Isaac Manjarres
->>>   PCI: dwc: Add support for 64-bit MSI target address
->>>
->>>   .../pci/controller/dwc/pcie-designware-host.c | 43 +++++++++----------
->>>   drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
->>>   drivers/pci/controller/dwc/pcie-designware.h  |  2 +-
->>>   3 files changed, 30 insertions(+), 23 deletions(-)
->>>
->>>
->>> base-commit: 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
->>
->> Thank you in advance.
->>
->> Regards,
->> Evgenii
->>
->>
->>
+> Matthias, could you queue them up?
 > 
 
+I just added 1-4 to my tree.
 
+Thanks for the reminder!
+
+Matthias
+
+
+> 
+> Thanks
+> ChenYu
+> 
+>>    dt-bindings: watchdog: mediatek: Convert mtk-wdt to json-schema
+>>    dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT6795
+>>
+>>   .../bindings/watchdog/mediatek,mtk-wdt.yaml   | 80 +++++++++++++++++++
+>>   .../devicetree/bindings/watchdog/mtk-wdt.txt  | 43 ----------
+>>   arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  3 +-
+>>   arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  3 +-
+>>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  3 +-
+>>   arch/arm64/boot/dts/mediatek/mt8516.dtsi      |  2 +-
+>>   6 files changed, 84 insertions(+), 50 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+>>   delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+>>
+>> --
+>> 2.18.0
+>>
+>>
