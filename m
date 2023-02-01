@@ -2,200 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFEE686044
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:05:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9A8686049
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjBAHFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 02:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
+        id S231473AbjBAHHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbjBAHFm (ORCPT
+        with ESMTP id S230177AbjBAHHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:05:42 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDDEE398;
-        Tue, 31 Jan 2023 23:05:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675235127; x=1706771127;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z5PhnpmOAJuOc0Bq/L9mnpqUibI5L8+buBwNICS6zF8=;
-  b=OksAj4sGo/g9GaSWuBOpoksQGFKLCwXLu4QrDJLMvSa4fs4+qqexxye0
-   rnjq534doOPX3m7eIWQ5em4iUOED5EnQ3BSnT4J6Q1gfkULhQC+qPx8O0
-   hGvWx7czm+O/F6iixKl43yAVMk5HO5+7Rg8k2/F5BN2ya94PdZH3/vJIP
-   CiAYqKrFUf8O0TlVsKnZgYe+9Up7FhKRXkOwYxMcrOOKxWcmW/r/uuumR
-   EOy0fRWD9i/Pjp2j9TCJpYS5+r1DMvEN+AbZp5oqpluu/bw/S5g20dYZN
-   6bOzbw+5OUl7TQLejO+a1Czf69fxTDNPo5n8eHQjavmtVSd0MbaBqAqBc
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="326724098"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="326724098"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 23:05:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="642303771"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="642303771"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 31 Jan 2023 23:05:12 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pN7B9-0005CK-2j;
-        Wed, 01 Feb 2023 07:05:11 +0000
-Date:   Wed, 1 Feb 2023 15:04:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>
-Subject: Re: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or
- the clear info about PTEs
-Message-ID: <202302011447.7lSFpVO5-lkp@intel.com>
-References: <20230131083257.3302830-3-usama.anjum@collabora.com>
+        Wed, 1 Feb 2023 02:07:31 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0818132;
+        Tue, 31 Jan 2023 23:07:29 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31176V3A014693;
+        Wed, 1 Feb 2023 07:07:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2d1m9AVsZa7UosTZCP8MZLtV62QNTY81t8fBssCzMrA=;
+ b=Ax7e6UYOd9v14eZ6sFyIIZbF4G0OTwQ4UtOTomVqgl86NVTFFJtbJP85GOHj5IvYi55H
+ gwlvCVAcaSv4ccuERgv+4IjrTofK++gbzRG125h16rMtVLIUSwTaNiy74RIgBcONLf4p
+ ZbXVTuQWOM36df/SJxlE1ozzazGlzI1+WQb+3EJQ7aDCPIOKZXz/mCwpNiHxwh51c6vz
+ CA1uhcD0a0rPS3BdiMkm8ZOryKmaj2q2TGp155NQe+oGVUgPZG+Jt/rahxMXDiNy5v2H
+ oX+13vFchZA7CxpLA83Hy88/iTztRyU7av4FFzMNUMlEKqgxxWOHbxxzO9NkexJXCOf3 iA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nfkdbg024-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 07:07:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31177KkO022456
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 1 Feb 2023 07:07:20 GMT
+Received: from [10.216.43.35] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
+ 2023 23:07:16 -0800
+Message-ID: <b1ae5119-423e-1d6a-546a-85b4e212e5f9@quicinc.com>
+Date:   Wed, 1 Feb 2023 12:37:13 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230131083257.3302830-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6 5/6] clk: qcom: lpassaudiocc-sc7280: Merge lpasscc into
+ lpass_aon
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <broonie@kernel.org>,
+        <konrad.dybcio@somainline.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mturquette@baylibre.com>,
+        <quic_plai@quicinc.com>, <quic_rohkumar@quicinc.com>,
+        <robh+dt@kernel.org>
+References: <1674728065-24955-1-git-send-email-quic_srivasam@quicinc.com>
+ <1674728065-24955-6-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n50y4JEQqW2wgS_qoDkdrqP=bzpC6b_LpA6Q9P+jDc00ZQ@mail.gmail.com>
+ <c8d779fe-2508-4aa1-8de9-26d858bc068b@quicinc.com>
+ <CAE-0n50fJWqHE0A3R8yawGZAcNb_QDNQ5h2=CXxKAX0eOghegQ@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <CAE-0n50fJWqHE0A3R8yawGZAcNb_QDNQ5h2=CXxKAX0eOghegQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TyddGFluiuRivz_-NbUh4r72UdO4Teaj
+X-Proofpoint-GUID: TyddGFluiuRivz_-NbUh4r72UdO4Teaj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-01_02,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 clxscore=1015
+ adultscore=0 spamscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302010061
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Muhammad,
 
-Thank you for the patch! Yet something to improve:
+On 2/1/2023 1:56 AM, Stephen Boyd wrote:
+Thanks for your time Stephen!!!
+> Quoting Srinivasa Rao Mandadapu (2023-01-31 01:29:16)
+>> On 1/31/2023 6:34 AM, Stephen Boyd wrote:
+>> Thanks for your Time Stephen!!!
+>>> Quoting Srinivasa Rao Mandadapu (2023-01-26 02:14:24)
+>>>> Merge lpasscc clocks into lpass_aon clk_regmap structure as they
+>>>> are using same register space.
+>>>> Add conditional check for doing lpasscc clock registration only
+>>>> if regname specified in device tree node.
+>>>> In existing implementation, lpasscc clocks and lpass_aon clocks are
+>>>> being registered exclusively and overlapping if both of them are
+>>>> to be used.
+>>>> This is required to avoid such overlapping and to register
+>>>> lpasscc clocks and lpass_aon clocks simultaneously.
+>>> Can you describe the register ranges that are overlapping?
+>> Okay. Will add register ranges in description.
+> Thanks!
+>
+>>> Here's what I see in DT right now:
+>>>
+>>>                   lpasscc: lpasscc@3000000 {
+>>>                           compatible = "qcom,sc7280-lpasscc";
+>>>                           reg = <0 0x03000000 0 0x40>,
+>>>                                 <0 0x03c04000 0 0x4>;
+>>>                           ...
+>>>                   };
+>>>
+>>>                   lpass_audiocc: clock-controller@3300000 {
+>>>                           compatible = "qcom,sc7280-lpassaudiocc";
+>>>                           reg = <0 0x03300000 0 0x30000>,
+>>>                                 <0 0x032a9000 0 0x1000>;
+>>>                           ...
+>>>                   };
+>>>
+>>>                   lpass_aon: clock-controller@3380000 {
+>>>                           compatible = "qcom,sc7280-lpassaoncc";
+>>>                           reg = <0 0x03380000 0 0x30000>;
+>>>                           ...
+>>>                   };
+>>>
+>>>                   lpass_core: clock-controller@3900000 {
+>>>                           compatible = "qcom,sc7280-lpasscorecc";
+>>>                           reg = <0 0x03900000 0 0x50000>;
+>>>                           ...
+>>>                   };
+>>>
+>>> Presumably lpascc is really supposed to be a node named
+>>> 'clock-controller' and is the node that is overlapping with lpass_aon?
+>> Okay. As it's been coming previous patches, didn't change the name.
+>>
+>> May be we need to do it as separate patch.
+> Sure, another patch to rename lpasscc to clock-controller would be
+> appreciated.
+>
+>> Yes. It's overlapping with lpass_aon ( <0 0x03380000 0 0x30000>).
+>>
+>> CC clocks range is <0 0x03389000 0 0x24>;
+> Is that a new register range for lpasscc? Why do we have that node at
+> all? Can we add different properties to the existing lpass_audiocc,
+> lpass_aon, or lpass_core nodes to indicate what clks should or shouldn't
+> be registered or provided to the kernel?
 
-[auto build test ERROR on shuah-kselftest/fixes]
-[also build test ERROR on linus/master v6.2-rc6]
-[cannot apply to shuah-kselftest/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+It's not new register range. They are actually AHBM and AHBS clock 
+registers within lpass_aon regmap range.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git fixes
-patch link:    https://lore.kernel.org/r/20230131083257.3302830-3-usama.anjum%40collabora.com
-patch subject: [PATCH v9 2/3] fs/proc/task_mmu: Implement IOCTL to get and/or the clear info about PTEs
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20230201/202302011447.7lSFpVO5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/11677b6b7fda958031115ea40aa219fc32c7dea4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-Add-UFFD-WP-Async-support/20230131-163537
-        git checkout 11677b6b7fda958031115ea40aa219fc32c7dea4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+Here what I meant lpasscc clocks are not of lpasscc node. I am sorry to 
+make you confused.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+As the reg-name used as "CC", mentioning it as lpasscc clocks. I will 
+rephrase commit message and re-post.
 
-All errors (new ones prefixed by >>):
-
->> fs/proc/task_mmu.c:1907:5: error: implicit declaration of function 'uffd_wp_range' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                                   uffd_wp_range(walk->mm, vma, start, HPAGE_SIZE, true);
-                                   ^
-   fs/proc/task_mmu.c:1927:3: error: implicit declaration of function 'uffd_wp_range' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   uffd_wp_range(walk->mm, vma, start, addr - start, true);
-                   ^
-   2 errors generated.
+Previously these two clocks are registered separately. Now we are 
+merging them into lpass_aon clk reg space.
 
 
-vim +/uffd_wp_range +1907 fs/proc/task_mmu.c
+>
+>>>> Fixes: 4ab43d171181 ("clk: qcom: Add lpass clock controller driver for SC7280")
+>>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>>> Tested-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+>>>> ---
+>>>>    drivers/clk/qcom/lpassaudiocc-sc7280.c | 13 +++++++++----
+>>>>    1 file changed, 9 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
+>>>> index 1339f92..8e2f433 100644
+>>>> --- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
+>>>> +++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
+>>>> @@ -826,10 +829,12 @@ static int lpass_aon_cc_sc7280_probe(struct platform_device *pdev)
+>>>>                   return ret;
+>>>>
+>>>>           if (of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode")) {
+>>>> -               lpass_audio_cc_sc7280_regmap_config.name = "cc";
+>>>> -               desc = &lpass_cc_sc7280_desc;
+>>>> -               ret = qcom_cc_probe(pdev, desc);
+>>>> -               goto exit;
+>>>> +               res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cc");
+>>> We shouldn't need to check for reg-name property. Instead, the index
+>>> should be the only thing that matters.
+>> As qcom_cc_probe() function is mapping the zero index reg property, and
+>>
+>> in next implementation qcom_cc_really_probe() is also probing zero index
+>> reg property,
+>>
+>> unable to map the same region twice.
+> Use qcom_cc_probe_by_index()?
 
-  1874	
-  1875	static inline int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
-  1876						 unsigned long end, struct mm_walk *walk)
-  1877	{
-  1878		struct pagemap_scan_private *p = walk->private;
-  1879		struct vm_area_struct *vma = walk->vma;
-  1880		unsigned long addr = end;
-  1881		spinlock_t *ptl;
-  1882		int ret = 0;
-  1883		pte_t *pte;
-  1884	
-  1885	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-  1886		ptl = pmd_trans_huge_lock(pmd, vma);
-  1887		if (ptl) {
-  1888			bool pmd_wt;
-  1889	
-  1890			pmd_wt = !is_pmd_uffd_wp(*pmd);
-  1891			/*
-  1892			 * Break huge page into small pages if operation needs to be performed is
-  1893			 * on a portion of the huge page.
-  1894			 */
-  1895			if (pmd_wt && IS_WP_ENGAGE_OP(p) && (end - start < HPAGE_SIZE)) {
-  1896				spin_unlock(ptl);
-  1897				split_huge_pmd(vma, pmd, start);
-  1898				goto process_smaller_pages;
-  1899			}
-  1900			if (IS_GET_OP(p))
-  1901				ret = pagemap_scan_output(pmd_wt, vma->vm_file, pmd_present(*pmd),
-  1902							  is_swap_pmd(*pmd), p, start,
-  1903							  (end - start)/PAGE_SIZE);
-  1904			spin_unlock(ptl);
-  1905			if (!ret) {
-  1906				if (pmd_wt && IS_WP_ENGAGE_OP(p))
-> 1907					uffd_wp_range(walk->mm, vma, start, HPAGE_SIZE, true);
-  1908			}
-  1909			return ret;
-  1910		}
-  1911	process_smaller_pages:
-  1912		if (pmd_trans_unstable(pmd))
-  1913			return 0;
-  1914	#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-  1915	
-  1916		pte = pte_offset_map_lock(vma->vm_mm, pmd, start, &ptl);
-  1917		if (IS_GET_OP(p)) {
-  1918			for (addr = start; addr < end; pte++, addr += PAGE_SIZE) {
-  1919				ret = pagemap_scan_output(!is_pte_uffd_wp(*pte), vma->vm_file,
-  1920							  pte_present(*pte), is_swap_pte(*pte), p, addr, 1);
-  1921				if (ret)
-  1922					break;
-  1923			}
-  1924		}
-  1925		pte_unmap_unlock(pte - 1, ptl);
-  1926		if ((!ret || ret == -ENOSPC) && IS_WP_ENGAGE_OP(p) && (addr - start))
-  1927			uffd_wp_range(walk->mm, vma, start, addr - start, true);
-  1928	
-  1929		cond_resched();
-  1930		return ret;
-  1931	}
-  1932	
+With this, if we mention some index and if it's not present in DT, it 
+will return error.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Is it okay if error is ignored and proceed?
+
+>
+>> Hence all I want here is to skip this cc clock probing by keeping some
+>> check.
+>>
+>> If we remove, it may cause ABI break.
+>>
+> I'm not sure what you mean here about ABI break, but hopefully just
+> using qcom_cc_probe_by_index() works!
