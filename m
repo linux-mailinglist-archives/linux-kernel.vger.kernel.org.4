@@ -2,132 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C4368635A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0660C68634F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:04:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbjBAKFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S231273AbjBAKEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:04:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjBAKFc (ORCPT
+        with ESMTP id S230269AbjBAKEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:05:32 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A416186D;
-        Wed,  1 Feb 2023 02:05:18 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4P6HbM1plhz9sgV;
-        Wed,  1 Feb 2023 11:05:03 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id S_-gyKi_iQBk; Wed,  1 Feb 2023 11:05:03 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4P6HbJ61V7z9sgb;
-        Wed,  1 Feb 2023 11:05:00 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B41198B787;
-        Wed,  1 Feb 2023 11:05:00 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id RXOSX6CA2QxX; Wed,  1 Feb 2023 11:05:00 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4432E8B77D;
-        Wed,  1 Feb 2023 11:05:00 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 311A4rLh3908598
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 1 Feb 2023 11:04:53 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 311A4r243908597;
-        Wed, 1 Feb 2023 11:04:53 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH v2 9/9] powerpc/bpf/32: perform three operands ALU operations
-Date:   Wed,  1 Feb 2023 11:04:31 +0100
-Message-Id: <b6719beaf01f9dcbcdbb787ef67c4a2f8e3a4cb6.1675245773.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <4fd69ef7945518c3e27f96b95046a5c1468d35bf.1675245773.git.christophe.leroy@csgroup.eu>
-References: <4fd69ef7945518c3e27f96b95046a5c1468d35bf.1675245773.git.christophe.leroy@csgroup.eu>
+        Wed, 1 Feb 2023 05:04:44 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7632A4F35C
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:04:42 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id k4-20020a6b7e44000000b0071e11cafea7so4280597ioq.15
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:04:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fdqRayzcVj9GrkW60ip7rWWzNJPEBAcTfyxei4Frw3A=;
+        b=6KmpVQMD97J9LKzmC3ojT9MsPdYc959VOaaXQct/Lhs6eSv68YDCezb9djqQmCc0pE
+         O+JXoTOV3iAW59Lgcj+QBbcQuGaz6mjCSC1++Yzr78uv+Gc8PdngSCu9KAStSb0PP3Um
+         DPqBNRoMJbli7gVbpf1O7mafq2bKHVRuOimMVaybVR0Pn8i05yZCDaGOBFy4zOlzNSSr
+         DEht7nSGPUAvp1iGZehK+NvozLvI2nu12JvvYEf9uowksu8RYtUDtjBGIPsIrxNTfmyK
+         DfrsVC+MW+mS23D0xJ0JOsGoh11Ia3DVxuuQwzzEruvZVrzyVSdNgsDpYIvDNhWeYP1C
+         8bAQ==
+X-Gm-Message-State: AO0yUKUN32X1EB7JPh17hfqWG8HOGgZe3KHBycc092X83xo5zeM1E5/c
+        8Yo3aBE9MSas+aWHxfD70gO/6HMo6oOeLPa1ccbdGbfxAjOl
+X-Google-Smtp-Source: AK7set+iGZdE8Z66crosqd0dDD/u7PJnBZBxvdE1MOGJlkW2zc1fLH/sSfcsoO1pptIrpje217WpUm6IyflvaDzSuB6som8wiwFm
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1675245869; l=2064; s=20211009; h=from:subject:message-id; bh=4k+9p9BOgr5AsQmTaugfewxV5KK1NxF/SGog2G5s/xY=; b=/RfY7znmvGZdByYmvM8hJYJtEV0uJWaxtyyI1ViNdALkZ7DpkxBbL0pZn96UtYJerNX6d1CZZfZ2 loxq/B/kBk/traYsL6xqhf0sLRwVY/lqgq64rIMEpxQp0xL2/rmH
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cbcc:0:b0:3ad:800c:6c7a with SMTP id
+ u12-20020a02cbcc000000b003ad800c6c7amr377776jaq.9.1675245881698; Wed, 01 Feb
+ 2023 02:04:41 -0800 (PST)
+Date:   Wed, 01 Feb 2023 02:04:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b0b3c005f3a09383@google.com>
+Subject: [syzbot] general protection fault in skb_dequeue (3)
+From:   syzbot <syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        hch@lst.de, jhubbard@nvidia.com, johannes@sipsolutions.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an ALU instruction is preceded by a MOV instruction
-that just moves a source register into the destination register of
-the ALU, replace that MOV+ALU instructions by an ALU operation
-taking the source of the MOV as second source instead of using its
-destination.
+Hello,
 
-Before the change, code could look like the following, with
-superfluous separate register move (mr) instructions.
+syzbot found the following issue on:
 
-  70:	7f c6 f3 78 	mr      r6,r30
-  74:	7f a5 eb 78 	mr      r5,r29
-  78:	30 c6 ff f4 	addic   r6,r6,-12
-  7c:	7c a5 01 d4 	addme   r5,r5
+HEAD commit:    80bd9028feca Add linux-next specific files for 20230131
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1468e369480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=904dc2f450eaad4a
+dashboard link: https://syzkaller.appspot.com/bug?extid=a440341a59e3b7142895
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12c5d2be480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11259a79480000
 
-With this commit, addition instructions take r30 and r29 directly.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/924618188238/disk-80bd9028.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7a03cf86e545/vmlinux-80bd9028.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/568e80043a41/bzImage-80bd9028.xz
 
-  70:	30 de ff f4 	addic   r6,r30,-12
-  74:	7c bd 01 d4 	addme   r5,r29
+The issue was bisected to:
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+commit 920756a3306a35f1c08f25207d375885bef98975
+Author: David Howells <dhowells@redhat.com>
+Date:   Sat Jan 21 12:51:18 2023 +0000
+
+    block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=170384f9480000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=148384f9480000
+console output: https://syzkaller.appspot.com/x/log.txt?x=108384f9480000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a440341a59e3b7142895@syzkaller.appspotmail.com
+Fixes: 920756a3306a ("block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages")
+
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 0 PID: 2838 Comm: kworker/u4:6 Not tainted 6.2.0-rc6-next-20230131-syzkaller-09515-g80bd9028feca #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+Workqueue: phy4 ieee80211_iface_work
+RIP: 0010:__skb_unlink include/linux/skbuff.h:2321 [inline]
+RIP: 0010:__skb_dequeue include/linux/skbuff.h:2337 [inline]
+RIP: 0010:skb_dequeue+0xf5/0x180 net/core/skbuff.c:3511
+Code: 8d 7e 08 49 8b 5c 24 08 48 b8 00 00 00 00 00 fc ff df 49 c7 44 24 08 00 00 00 00 48 89 fa 49 c7 04 24 00 00 00 00 48 c1 ea 03 <80> 3c 02 00 75 6d 48 89 da 49 89 5e 08 48 b8 00 00 00 00 00 fc ff
+RSP: 0018:ffffc9000ca2fc80 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff8808951d RDI: 0000000000000008
+RBP: 0000000000000293 R08: 0000000000000001 R09: 0000000000000003
+R10: fffff52001945f7e R11: 0000000000000000 R12: ffff88801d8f63c0
+R13: ffff888075675880 R14: 0000000000000000 R15: ffff888075675868
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4a51f6d150 CR3: 0000000072a78000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ieee80211_iface_work+0x369/0xd70 net/mac80211/iface.c:1631
+ process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__skb_unlink include/linux/skbuff.h:2321 [inline]
+RIP: 0010:__skb_dequeue include/linux/skbuff.h:2337 [inline]
+RIP: 0010:skb_dequeue+0xf5/0x180 net/core/skbuff.c:3511
+Code: 8d 7e 08 49 8b 5c 24 08 48 b8 00 00 00 00 00 fc ff df 49 c7 44 24 08 00 00 00 00 48 89 fa 49 c7 04 24 00 00 00 00 48 c1 ea 03 <80> 3c 02 00 75 6d 48 89 da 49 89 5e 08 48 b8 00 00 00 00 00 fc ff
+RSP: 0018:ffffc9000ca2fc80 EFLAGS: 00010002
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff8808951d RDI: 0000000000000008
+RBP: 0000000000000293 R08: 0000000000000001 R09: 0000000000000003
+R10: fffff52001945f7e R11: 0000000000000000 R12: ffff88801d8f63c0
+R13: ffff888075675880 R14: 0000000000000000 R15: ffff888075675868
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4a51f6d150 CR3: 0000000072a78000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	8d 7e 08             	lea    0x8(%rsi),%edi
+   3:	49 8b 5c 24 08       	mov    0x8(%r12),%rbx
+   8:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+   f:	fc ff df
+  12:	49 c7 44 24 08 00 00 	movq   $0x0,0x8(%r12)
+  19:	00 00
+  1b:	48 89 fa             	mov    %rdi,%rdx
+  1e:	49 c7 04 24 00 00 00 	movq   $0x0,(%r12)
+  25:	00
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	75 6d                	jne    0x9d
+  30:	48 89 da             	mov    %rbx,%rdx
+  33:	49 89 5e 08          	mov    %rbx,0x8(%r14)
+  37:	48                   	rex.W
+  38:	b8 00 00 00 00       	mov    $0x0,%eax
+  3d:	00 fc                	add    %bh,%ah
+  3f:	ff                   	.byte 0xff
+
+
 ---
- arch/powerpc/net/bpf_jit_comp32.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
-index 5d36ff7a0a8b..7f91ea064c08 100644
---- a/arch/powerpc/net/bpf_jit_comp32.c
-+++ b/arch/powerpc/net/bpf_jit_comp32.c
-@@ -290,6 +290,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
- 
- 	for (i = 0; i < flen; i++) {
- 		u32 code = insn[i].code;
-+		u32 prevcode = i ? insn[i - 1].code : 0;
- 		u32 dst_reg = bpf_to_ppc(insn[i].dst_reg);
- 		u32 dst_reg_h = dst_reg - 1;
- 		u32 src_reg = bpf_to_ppc(insn[i].src_reg);
-@@ -308,6 +309,15 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
- 		u32 tmp_idx;
- 		int j;
- 
-+		if (i && (BPF_CLASS(code) == BPF_ALU64 || BPF_CLASS(code) == BPF_ALU) &&
-+		    (BPF_CLASS(prevcode) == BPF_ALU64 || BPF_CLASS(prevcode) == BPF_ALU) &&
-+		    BPF_OP(prevcode) == BPF_MOV && BPF_SRC(prevcode) == BPF_X &&
-+		    insn[i - 1].dst_reg == insn[i].dst_reg && insn[i - 1].imm != 1) {
-+			src2_reg = bpf_to_ppc(insn[i - 1].src_reg);
-+			src2_reg_h = src2_reg - 1;
-+			ctx->idx = addrs[i - 1] / 4;
-+		}
-+
- 		/*
- 		 * addrs[] maps a BPF bytecode address into a real offset from
- 		 * the start of the body code.
--- 
-2.39.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
