@@ -2,120 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86CEA6867EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2658C6867F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbjBAOFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S232041AbjBAOFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:05:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbjBAOFG (ORCPT
+        with ESMTP id S231630AbjBAOFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:05:06 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCCC268C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:05:06 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id z3so12678290pfb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mYY8AT0ENZljGYO6C36OZtTsh5N/Rgqc7QoUfqtNprw=;
-        b=AbuPCU9Tw0G5TTVc51fl5WvI38E1Rmzh5FShZrE3cucqPCgOc2Yi0QgNCbbpMV2heM
-         hMXm3e4/fDHgw/FTr0beIUcg67DkLTsEWMlT00c4cWwrrYfX2z6TnGPelTFc+HIkEIDe
-         Ouqu4hQFo4qzZRVsvhbmXaZC9AKQXPLhzwT7vdSdbAd1sxDXY/WXtEwR4RqGUw6UMn0p
-         O1fvyW36YkMIKF6owbirP6Mxe54zSFHMT6Tuds9y6GX2DJG7HsvnVHx0nf4kdHXSH+mM
-         NHrDONd0dOpFxN7VmY3Ge8n0gsk8PKxfO37xhfQf6HWtjD6hAr48Lx5gOLzx5NZKGLwd
-         hAkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mYY8AT0ENZljGYO6C36OZtTsh5N/Rgqc7QoUfqtNprw=;
-        b=ZClhOe8ed6OeFrgS+BkHGCaPc7oELpGR6RXYQPwRg3bYwH/2637TaiqVZ1EhnNmBdB
-         dLC9pEr4c9/1bomLLudmXIwEyPeTtPFb5b060g6wCcdWzsfjAP3qbcdeXMp5G+EJeH0R
-         IlEZOPyAlvS5b6OMsVpBdTOpf0W81bEAS1eA2hXFwsmzuo07QnH/Kl4s4A/cT+k9vl+/
-         RrDJrsSw7k7F7Hp1p460tZYTdajigaavq+pLuyNdbheZJTn4GybicLexh5E4iZFxr0/P
-         QErWtVXeEpnuQAxI3ftFqYuIRQxasy3Yl3IfqG8lPlhiQOhJPU2tIu032iu+AiTXXoKB
-         sWpg==
-X-Gm-Message-State: AO0yUKUVWOE2ad8zXgAd+3SKiDsgO1Qs/OOZuwOljDgJFHVYiynpXxS4
-        YwVW+AX/JfrTQRQn7FDQxgQBLA/jePTjMmkI
-X-Google-Smtp-Source: AK7set9x6nWuFrvi6ArGt3T+3uQRCwNeeLU8SBVZ6ln0Utp7Gt+56jRquS+ahU+0v5NzakhFDYUDvQ==
-X-Received: by 2002:a05:6a00:1d89:b0:593:afaa:b5e5 with SMTP id z9-20020a056a001d8900b00593afaab5e5mr2202126pfw.6.1675260305524;
-        Wed, 01 Feb 2023 06:05:05 -0800 (PST)
-Received: from qxy-XPS-13-9360 ([43.224.245.247])
-        by smtp.gmail.com with ESMTPSA id e5-20020aa78c45000000b0058d9710cb18sm6879770pfd.2.2023.02.01.06.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 06:05:05 -0800 (PST)
-Date:   Wed, 1 Feb 2023 22:04:59 +0800
-From:   qixiaoyu <qxy65535@gmail.com>
-To:     Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     xiongping1@xiaomi.com, qixiaoyu1@xiaomi.com,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH 1/2 v2] f2fs: fix wrong calculation of block age
-Message-ID: <Y9pxi7C+uUumQKFA@qxy-XPS-13-9360>
-References: <20230113125859.15651-1-qixiaoyu1@xiaomi.com>
- <20230116030850.20260-1-qixiaoyu1@xiaomi.com>
- <7c12ebaa-4d3d-e475-dfb2-7b459cd26e64@kernel.org>
- <Y9ZWDVV3HJ431Fis@mi-HP-ProDesk-680-G4-MT>
- <Y9pZqOMBipT2NZk0@mi-HP-ProDesk-680-G4-MT>
- <938a8e61-4e47-1acc-938c-c90d213d2c86@kernel.org>
+        Wed, 1 Feb 2023 09:05:10 -0500
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52128133;
+        Wed,  1 Feb 2023 06:05:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=fC9O1tEpoVUREhcwsJEO8jppUnA8MHBCevsNPI2hq+k=; b=wWgEZibEOQIDRpDLCtGjyz8fP2
+        fsTGeqH3zibK4z9yd6nlumZSdE4q8QIjPJFhF3IR2i7Wj6BiK7QN9Djv/XlELWxpQzXhAPJNj9FAW
+        QzaZba6ItMMXgke0/IytvQ+1IX4s18+HFPLcSAGT/pNj1gcqxfeTc5Yj2oTEzOunw88oIlFxs9pKY
+        P0+Ga2IzMoFpgR3wmnwvBMqnGVFqqI4tA4f/6EJWeBf8WwE58DYMnYhj72UW3GcuiqmLNRTNLErT7
+        I6yvI1WGdIPV2xxYxVPOEKnRIDmf2sh4zKDnZEsSmrQgOMa986DfR20IG7o4sbA2DnzYsUaL4QzrF
+        907B3UJFVsu8uOh4XlSuzyLp4JBhOiV/vQ6yLfaU8XHB7nHl8BLIBc0p5wAWqXqKbaK1ZH9nsN271
+        ugfU2VTGwoyRoljdW2jeZ4M6U9yrKDUHon22XyzVwv4lcrJTs4gfvPKhOcEtphplL/nz5Sgf5z+g4
+        sDMFGqnvi1wF2NW1vN6IP9rx;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1pNDjX-00BF5D-Eq; Wed, 01 Feb 2023 14:05:07 +0000
+Message-ID: <be4dfc12-5593-e93a-3f78-638ee8ea9ad8@samba.org>
+Date:   Wed, 1 Feb 2023 15:05:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <938a8e61-4e47-1acc-938c-c90d213d2c86@kernel.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 11/12] cifs: Fix problem with encrypted RDMA data read
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Steve French <smfrench@gmail.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Long Li <longli@microsoft.com>,
+        Namjae Jeon <linkinjeon@kernel.org>
+References: <20230131182855.4027499-1-dhowells@redhat.com>
+ <20230131182855.4027499-12-dhowells@redhat.com>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <20230131182855.4027499-12-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 08:57:33PM +0800, Chao Yu wrote:
-> On 2023/2/1 20:23, qixiaoyu wrote:
-> > > > 
-> > > > How about updating as below to avoid lossing accuracy if new is less than 100?
-> > > > 
-> > > > return div_u64(new * (100 - LAST_AGE_WEIGHT), 100) +
-> > > > 		div_u64(old * LAST_AGE_WEIGHT, 100);
-> > > > 
-> > > > Thanks,
-> > > > 
-> > > 
-> > > We want to avoid overflow by doing the division first. To keep the accuracy, how
+Am 31.01.23 um 19:28 schrieb David Howells:
+> When the cifs client is talking to the ksmbd server by RDMA and the ksmbd
+> server has "smb3 encryption = yes" in its config file, the normal PDU
+> stream is encrypted, but the directly-delivered data isn't in the stream
+> (and isn't encrypted), but is rather delivered by DDP/RDMA packets (at
+> least with IWarp).
 > 
-> Alright,
+> Currently, the direct delivery fails with:
 > 
-> > > about updating as below:
-> > > 
-> > > 	res = div_u64_rem(new, 100, &rem_new) * (100 - LAST_AGE_WEIGHT)
-> > > 		+ div_u64_rem(old, 100, &rem_old) * LAST_AGE_WEIGHT;
-> > > 	res += rem_new * (100 - LAST_AGE_WEIGHT) / 100 + rem_old * LAST_AGE_WEIGHT / 100;
-> > > 	return res;
+>     buf can not contain only a part of read data
+>     WARNING: CPU: 0 PID: 4619 at fs/cifs/smb2ops.c:4731 handle_read_data+0x393/0x405
+>     ...
+>     RIP: 0010:handle_read_data+0x393/0x405
+>     ...
+>      smb3_handle_read_data+0x30/0x37
+>      receive_encrypted_standard+0x141/0x224
+>      cifs_demultiplex_thread+0x21a/0x63b
+>      kthread+0xe7/0xef
+>      ret_from_fork+0x22/0x30
 > 
-> if (rem_new)
-> 	res += rem_new * (100 - LAST_AGE_WEIGHT) / 100;
-> if (rem_old)
-> 	res += rem_old * LAST_AGE_WEIGHT / 100;
+> The problem apparently stemming from the fact that it's trying to manage
+> the decryption, but the data isn't in the smallbuf, the bigbuf or the page
+> array).
 > 
-> Otherwise, it looks fine to me. :)
+> This can be fixed simply by inserting an extra case into handle_read_data()
+> that checks to see if use_rdma_mr is true, and if it is, just setting
+> rdata->got_bytes to the length of data delivered and allowing normal
+> continuation.
 > 
-> Thanks,
+> This can be seen in an IWarp packet trace.  With the upstream code, it does
+> a DDP/RDMA packet, which produces the warning above and then retries,
+> retrieving the data inline, spread across several SMBDirect messages that
+> get glued together into a single PDU.  With the patch applied, only the
+> DDP/RDMA packet is seen.
+> 
+> Note that this doesn't happen if the server isn't told to encrypt stuff and
+> it does also happen with softRoCE.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Steve French <smfrench@gmail.com>
+> cc: Tom Talpey <tom@talpey.com>
+> cc: Long Li <longli@microsoft.com>
+> cc: Namjae Jeon <linkinjeon@kernel.org>
+> cc: Stefan Metzmacher <metze@samba.org>
+> cc: linux-cifs@vger.kernel.org
+> 
+> Link: https://lore.kernel.org/r/166855224228.1998592.2212551359609792175.stgit@warthog.procyon.org.uk/ # v1
+> ---
+>   fs/cifs/smb2ops.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+> index cea578a45ed8..73b66ac86abf 100644
+> --- a/fs/cifs/smb2ops.c
+> +++ b/fs/cifs/smb2ops.c
+> @@ -4733,6 +4733,9 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
+>   		if (length < 0)
+>   			return length;
+>   		rdata->got_bytes = data_len;
+> +	} else if (use_rdma_mr) {
+> +		/* The data was delivered directly by RDMA. */
+> +		rdata->got_bytes = data_len;
+
+I actually don't understand why this would only be a problem with encryption.
+
+I guess there's much more needed and data_offset should most likely be
+ignored completely in the rdma offload case. So I'd guess its just luck
+that we don't trigger the below warning/error more often.
+
+>   	} else {
+>   		/* read response payload cannot be in both buf and pages */
+>   		WARN_ONCE(1, "buf can not contain only a part of read data");
 > 
 
-Thank you! I will update v3 soon :)
-
-> > > 
-> > > Thanks,
-> > > 
-> > 
-> > Friendly ping
-> > 
-> > > > >    }
-> > > > >    /* This returns a new age and allocated blocks in ei */
