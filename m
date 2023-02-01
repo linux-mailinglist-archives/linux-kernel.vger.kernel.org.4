@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A7DF6865A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D426865A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjBAMAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
+        id S231434AbjBAMBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 07:01:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBAMAq (ORCPT
+        with ESMTP id S231473AbjBAMBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:00:46 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A6627D72
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:00:44 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id k16so12492128wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 04:00:44 -0800 (PST)
+        Wed, 1 Feb 2023 07:01:12 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9212BEE5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:01:06 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id d8so6786179ljq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 04:01:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=luqjBbwnzOHV1V80oPmyfyIdt66TA1GvqfXDIDpwaYI=;
-        b=Jk0exLlgmQWv8NxPHx6jR6KVIZ+u6/oYNDtv2967DrY1orw9TrSY3YEscR9JbKF8rC
-         BV31GOD3b292MKBPm53sx+SWCehNmZtjaXCusLDYUaV3x5LHmjaFhS4Exc/FcrhzGVOO
-         HD4wfzP9q2YLWaIatnEWGH+m4+GLSndA/4Q3rSRYeP/eceUn2kDEyxwqFNQERvEBnPEe
-         MSbP7QDx8Lsy3xzaHFJ88J091aTyOIFq1oK8bX1XL5ZOB8edwGCvvzuPcYvttaUfq/+z
-         2qnQoP2nXBTDsL0Av7g68d5kF1XY9rRdE+rgPSMpgdoU3EDJVhUflknRa5awA0GiOlJO
-         J/Yw==
+        bh=XkDaAs7NEt8L2ex9bykzKZqXj4em5dtmEAnn6lTD46I=;
+        b=fYBQpmj9+BCFujF4ggobCLF8XcT7axTJSwBqGi4rHoqTmgZG3IV/eTiVL8hjJBWqxB
+         cCItiSoVjZfEwznFZWj914HVyfoIwkePYVADQsQpNd7zQjY2m39QG4VL8t5PtpjGQ6Uj
+         4fFqQ3ZKZUFm9//ZLWqnF8CN+KC+vnv9uv2Zwv9PiTcAM/mHP3dw9DeHjsPDel8ioSbk
+         2Uxa1Irw1zYCEW17iQkT6X8OzIsQyeNiruRCkJya8biexSSyFupnHPGdoM//rC/KNWN2
+         2wN7p2lN6oSIsg3ZnTV51I8FUU3ctF8Mu4k+FOQ5tnhOcinfq7J5uqKAQ6eLfBt8Z0P9
+         j4rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=luqjBbwnzOHV1V80oPmyfyIdt66TA1GvqfXDIDpwaYI=;
-        b=d3xrI6R9vCR1B765dbQaNEQpHLvntW1q4tzw9msaCajoAWEcjYou6PYtDFCaookL1/
-         vYTV2Q4f2MMGf/ib535WQilfleSh60tzeRnlvdh+9zZKhHRFsRWrFgYbB8S1CPVA+zSl
-         aDCvCqIdOjGz8sG66RKNUKpVD6HLYg0Ry5735fNr78s4g3P5kON7hYBIovelHadgHvQ6
-         XQckELifRQwnKPfQbcFl65SOhO8N9y194NXqkgwGgH9Fo6jkPS5jgrkSagqauHeY3CLz
-         DHkEYBT4ka+xTyzFOfGQpNpEZWd61lb5AsZe+1VDdXVmNC1IIyKzQFeA1/0Ulqcf63cJ
-         QdNQ==
-X-Gm-Message-State: AO0yUKVGRwLMglGHMfkl6WqNnXiyE86wYzNZihjdziXw8VXwrUWhZJob
-        tXeKpA5GW7FZgb/3dBGI654vnc1dPM4XUHSOcXB5bz1a
-X-Google-Smtp-Source: AK7set8hbqbSlaYJzAa+DyTtcrKtXgSDG625BwasUrD9vG/j/PmuK2/fVTSOwVx6CdUH4c1vspGAE4RGCLrxZ+FVM3Y=
-X-Received: by 2002:a05:600c:5545:b0:3dd:7baa:693e with SMTP id
- iz5-20020a05600c554500b003dd7baa693emr139421wmb.36.1675252842826; Wed, 01 Feb
- 2023 04:00:42 -0800 (PST)
+        bh=XkDaAs7NEt8L2ex9bykzKZqXj4em5dtmEAnn6lTD46I=;
+        b=3uZLNIJhxUlqVxKpXuF+Bo8UcyBHCNUWrZ291KqLfdqipe15q+PXb3B8c2Xpuou4wW
+         CtPE0mjGxwY/gsJmLfdPqw1iC42hllc96aBSfq0B6UISCa08ygzGgBOM1YSLwdDV71cq
+         SdWWgxgHQvysD0b3slmMI50hzU4NjXZdxIA7HCSp+jVzANjHDVECsxfef8YO7m8y8wKb
+         l9w55fLj3HAee4sNJ2yNq0xhcpQGgEVR/XSMbVsT2U16mZbvDqSmCUQYVZVZ4ym0vBVb
+         ygsAdoChctJbzlqhnvSYPqToil99Ojtgo6DA4mCO3k4BDeWDN4XpdIUvFvjFgaG8KCCq
+         IO5g==
+X-Gm-Message-State: AO0yUKXVnq7Y7aXXEBdR5yIB6nIaIrWDmp6kjAxNtTE+Kiqc5f3scB3L
+        UaIqigXAtBXcYDmcXh56Ix4zNyXB3+lzVQmZfreLiA==
+X-Google-Smtp-Source: AK7set+zVln3WH05zdXmKTDplM012eLlf6r2VhDXYbH6vrJMeKcnnpLEzXKgjxgvPsUsRQCoWkdKb7pqe3DO1S9pXCQ=
+X-Received: by 2002:a05:651c:200a:b0:290:7c00:8cee with SMTP id
+ s10-20020a05651c200a00b002907c008ceemr241094ljo.144.1675252864135; Wed, 01
+ Feb 2023 04:01:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20230131221154.39291-1-skhan@linuxfoundation.org>
-In-Reply-To: <20230131221154.39291-1-skhan@linuxfoundation.org>
-From:   Alexander Kapshuk <alexander.kapshuk@gmail.com>
-Date:   Wed, 1 Feb 2023 14:00:06 +0200
-Message-ID: <CAJ1xhMX2VHPB43MTphSXEaKPywAOgUwW1V7zrxUyt7zN1F6OPQ@mail.gmail.com>
-Subject: Re: [PATCH v3] ver_linux: add missing software to checklist
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org
+References: <20230127162409.2505312-1-elver@google.com> <Y9QUi7oU3nbdIV1J@FVFF77S0Q05N>
+ <CANpmjNNGCf_NqS96iB+YLU1M+JSFy2tRRbuLfarkUchfesk2=A@mail.gmail.com>
+ <Y9ef8cKrE4RJsrO+@FVFF77S0Q05N> <CANpmjNOEG2KPN+NaF37E-d8tbAExKvjVMAXUORC10iG=Bmk=vA@mail.gmail.com>
+ <CACT4Y+Yriv_JYXm9N1YAMh+YuiT57irnF-vyCqxnTTux-2Ffwg@mail.gmail.com> <Y9pS4MNnFWOEO2Fr@FVFF77S0Q05N>
+In-Reply-To: <Y9pS4MNnFWOEO2Fr@FVFF77S0Q05N>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 1 Feb 2023 13:00:51 +0100
+Message-ID: <CACT4Y+Y3E7nu7PGj3m6+83Hs_D=3dVZe4rBh5-Pn=Gsm07r-=g@mail.gmail.com>
+Subject: Re: [PATCH v2] perf: Allow restricted kernel breakpoints on user addresses
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, Jann Horn <jannh@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrey Konovalov <andreyknvl@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,97 +80,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 12:39 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Wed, 1 Feb 2023 at 12:54, Mark Rutland <mark.rutland@arm.com> wrote:
 >
-> Update to add missing software checks to bring it in sync with the
-> Documentation/Changes list. Make improvements to the output with
-> separator between different sections.
+> Hi Dmitry,
 >
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
-> Changes since v2: Fix extra line in usage
+> We raced to reply here, so there's more detail in my reply to Marco. I'm
+> providing minimal detail here, sorry for being terse! :)
 >
->  scripts/ver_linux | 28 ++++++++++++++++++++++++----
->  1 file changed, 24 insertions(+), 4 deletions(-)
+> On Wed, Feb 01, 2023 at 10:53:44AM +0100, Dmitry Vyukov wrote:
+> > On Wed, 1 Feb 2023 at 10:34, Marco Elver <elver@google.com> wrote:
+> > >
+> > > On Mon, 30 Jan 2023 at 11:46, Mark Rutland <mark.rutland@arm.com> wrote:
+> > > [...]
+> > > > > This again feels like a deficiency with access_ok(). Is there a better
+> > > > > primitive than access_ok(), or can we have something that gives us the
+> > > > > guarantee that whatever it says is "ok" is a userspace address?
+> > > >
+> > > > I don't think so, since this is contextual and temporal -- a helper can't give
+> > > > a single correct answert in all cases because it could change.
+> > >
+> > > That's fair, but unfortunate. Just curious: would
+> > > copy_from_user_nofault() reliably fail if it tries to access one of
+> > > those mappings but where access_ok() said "ok"?
+> >
+> > I also wonder if these special mappings are ever accessible in a user
+> > task context?
 >
-> diff --git a/scripts/ver_linux b/scripts/ver_linux
-> index 1a8ee4ff0e32..adef5dc67038 100755
-> --- a/scripts/ver_linux
-> +++ b/scripts/ver_linux
-> @@ -6,20 +6,29 @@
->  # differ on your system.
+> No. The special mappings are actually distinct page tables from the user page
+> tables, so whenever userspace is executing and can issue a syscall, the user
+> page tables are installed.
 >
->  BEGIN {
-> -       usage = "If some fields are empty or look unusual you may have an old version.\n"
-> -       usage = usage "Compare to the current minimal requirements in Documentation/Changes.\n"
-> +       usage = "\nMinimum required software versions to build and run current kernel version.\n"
-> +       usage = usage "If some fields are empty or look unusual you may have an old version.\n"
-> +       usage = usage "Compare with the current minimal requirements in Documentation/Changes."
->         print usage
+> The special mappings are only installed for transient periods within the
+> context of a user task. There *might* be some latent issues with work happening
+> in IPI context (e.g. perf user backtrace) on some architectures.
 >
-> +       separator = "\n===================================================\n"
-> +
-> +       print separator
->         system("uname -a")
-> -       printf("\n")
+> > If yes, can a racing process_vm_readv/writev mess with these special mappings?
 >
->         vernum = "[0-9]+([.]?[0-9]+)+"
->         libc = "libc[.]so[.][0-9]+$"
->         libcpp = "(libg|stdc)[+]+[.]so([.][0-9]+)+$"
+> No; those happen in task context, and cannot be invoked within the critical
+> section where the page tables with the special mappings are installed.
 >
-> +       print separator
->         printversion("GNU C", version("gcc -dumpversion"))
-> +       printversion("Clang/LLVM (optional)", version("clang --version"))
-> +       printversion("Rust (optional)", version("rustc --version"))
-> +       printversion("bindgen (optional)", version("bindgen --version"))
->         printversion("GNU Make", version("make --version"))
-> +       printversion("bash", version("bash --version"))
->         printversion("Binutils", version("ld -v"))
-> +       printversion("pahole", version("pahole --version"))
->         printversion("Util-linux", version("mount --version"))
->         printversion("Mount", version("mount --version"))
->         printversion("Module-init-tools", version("depmod -V"))
-> @@ -28,6 +37,8 @@ BEGIN {
->         printversion("Reiserfsprogs", version("reiserfsck -V"))
->         printversion("Reiser4fsprogs", version("fsck.reiser4 -V"))
->         printversion("Xfsprogs", version("xfs_db -V"))
-> +       printversion("squashfs-tools", version("mksquashfs -version"))
-> +       printversion("btrfs-progs", version("mkfs.btrfs --version"))
->         printversion("Pcmciautils", version("pccardctl -V"))
->         printversion("Pcmcia-cs", version("cardmgr -V"))
->         printversion("Quota-tools", version("quota -V"))
-> @@ -36,7 +47,15 @@ BEGIN {
->         printversion("Nfs-utils", version("showmount --version"))
->         printversion("Bison", version("bison --version"))
->         printversion("Flex", version("flex --version"))
-> +       printversion("Grub", version("grub-install --version"))
-> +       printversion("mcelog", version("mcelog --version"))
-> +       printversion("iptables", version("iptables --version"))
-> +       printversion("openssl & libcrypto", version("openssl version"))
-> +       printversion("bc", version("bc --version"))
-> +       printversion("Sphinx (for doc builds)", version("sphinx-build --version"))
-> +       printversion("cpio", version("cpio --version"))
+> > We could use copy_from_user() to probe that the watchpoint address is
+> > legit. But I think the memory can be potentially PROT_NONE but still
+> > legit, so copy_from_user() won't work for these corner cases.
 >
-> +       print separator
->         while ("ldconfig -p 2>/dev/null" | getline > 0)
->                 if ($NF ~ libc || $NF ~ libcpp)
->                         if (!seen[ver = version("readlink " $NF)]++)
-> @@ -51,11 +70,12 @@ BEGIN {
->         printversion("Udev", version("udevadm --version"))
->         printversion("Wireless-tools", version("iwconfig --version"))
->
-> +       print separator
->         while ("sort /proc/modules" | getline > 0) {
->                 mods = mods sep $1
->                 sep = " "
->         }
-> -       printversion("Modules Loaded", mods)
-> +       printversion("Modules Loaded:\n", mods)
->  }
->
->  function version(cmd,    ver) {
-> --
-> 2.34.1
->
+> Please see my other reply; ahead-of-time checks cannot help here. An address
+> might be a legitimate user address and *also* transiently be a special mapping
+> (since the two aare in entirely separate page tables).
 
-LGTM, thanks.
+This brings more clarity. Thanks for the explanations.
+
+If addresses overlap, then it seems that the kernel must disable all
+watchpoints while the mapping is installed. This patch tries to relax
+checks, but CAP_ADMIN can install such watchpoints today. And they can
+unintentionally break kernel, or produce false watchpoint triggers.
+And if all watchpoints are disabled while the mapping is installed,
+then this patch should be OK, right?
