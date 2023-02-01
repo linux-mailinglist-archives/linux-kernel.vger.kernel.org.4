@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47EF0686F1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B80686F20
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbjBAToc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54578 "EHLO
+        id S232129AbjBAToe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:44:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjBATo2 (ORCPT
+        with ESMTP id S232094AbjBATo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 14:44:28 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A85B7A4B4
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C877A7BE6F
         for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:44:27 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id gr7so30044349ejb.5
+Received: by mail-ej1-x62b.google.com with SMTP id p26so43432882ejx.13
         for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:44:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=grsecurity.net; s=grsec;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HICwk+ZaGfDJCbBt6gOrUiuKx+JyONa1rsd399znELE=;
-        b=s+TkGtd0CJKn0fgzwiRNSQ0hciitR9Qd6pS4R55tq+1KVcodwIh7hzdgMhVzvVJQl/
-         Vogax6v8Gs19BrA4b+x/qdMusyTdBCEx4Y7dfR68DJXA7Iha1agsWxF5Bn6Tryp4+0o3
-         iA53H/yFXVCL79uMOWiCoCkgi/QGS9xr1UlpMZsSMFL4zjLwN6bRgumgIBMmy+uZ9w+8
-         ifMxfGaPOdhU2cgK1wRoX5Swx0HuIiG6bM/tkO/ugP/iLROL4hMcMxJvk8YxgtJq6CbA
-         GsDlvTkmOpcp5+nRgvXWHg7dHGEhDVIvHPIUJ2wOvtewT6J+x5xjElC4R23hET6sLn+J
-         yQ8g==
+        bh=SwDZjz3R/xUrA9TRfuAPMHW2TTSVBtiLMqPJ61VaYAk=;
+        b=RaxIe/1DMFnMimcNs7o86F/NH2QJAimOB2DuKkM8Rlp3M6jd8ZwN2g3mowK0Iz+Pqg
+         bYC5ACF10ECbb0drnKJUP3eHL/RHsNmek0qc7K+fOTMcmg7/SFSpv2rJKMJEx3GdsV07
+         rT9ycN16bqmTAY+53MXGTPGDbAMHlLjodfIG0FT7QxHQpmyYi2igCaIjsIehkX2f4CCl
+         4qjCG11Xd6eatyCxEBzgvTJT5UBgwiW3lcZf46NgbwCU5LLkDkuZAUX0KTkWTcmt4Otn
+         zwrh/hdBGwSjBdsza6opiEjbdZvqe+jcqP9ZK9WfeWU1nlFVG97Ldwg+a19E3iJeccod
+         1Fmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HICwk+ZaGfDJCbBt6gOrUiuKx+JyONa1rsd399znELE=;
-        b=UDR0DEAFq7aPz7IdWGJe5B2SZmFGse3S9X0fhdeUI7zjJ+A2kfDN0OlH6/5hX/Y6tM
-         /4ChEJbW+pJSQvgkQNCqFq4UF+9VQgAThFHFuGaBlUiJQ0Fa7B7FJWdMEk4YaG4UAKwX
-         8WR5HHW34nm7mobW9I9dUHVu9GD2K83UcUAd3hEYTi3cyncwHiS+nV16cNjeuc2cyt+v
-         muumGwqADNG0IxNLkxf89dolL4mWyzqyU3lLBJc8raCuHfVpiEKTQvaYEluWa//8q1Im
-         CP7+8LOEB8kLLOQaI+qk5cOJ/aJVaG2QR4tF7C2zgYgWsvVIXi39gTynij4IEGmWrYC8
-         01vQ==
-X-Gm-Message-State: AO0yUKUHK5k8uFc5+5Q0Hypa/qdSUn1x4Wez0jVTwGo9eQ/pg8iwVLkS
-        +YpCmLDdOMrNWXzYas17REL1GA==
-X-Google-Smtp-Source: AK7set/j6gNNmp0yFuQKk+e8rNCH+mRK3HddNhFIoeOWrjreVn5bODqIdpKpIdRW7/Wo+taUerV1pA==
-X-Received: by 2002:a17:907:990b:b0:87b:dac1:bbe6 with SMTP id ka11-20020a170907990b00b0087bdac1bbe6mr4042757ejc.36.1675280665653;
-        Wed, 01 Feb 2023 11:44:25 -0800 (PST)
+        bh=SwDZjz3R/xUrA9TRfuAPMHW2TTSVBtiLMqPJ61VaYAk=;
+        b=7NWDBTGQ14qzJKNgSw7EqvXEkp8Nw7KgG56QRPfTgFCuZj4FG37J6okB5tVZZH50l/
+         7ElhovdD/p0XSMpmotBx1DqO5XaH8iJoSqiE87n6JJqaddvM3i7qvyv6SCRCIDN3x6Xj
+         E9Wxel5HvAYPTPZZrgfC3AXKlEcIHMpN1AfA8cBIRxk2oMH1zn+DQzeHj4IEDjTcAwKK
+         4unfPEkNG7qMnX5BB4y4g2aUAMJIXAYnPHevLEZimCx+yKHvY1NOIELixK3+CVu80W/7
+         aMQ3SUpfmyRKuBRyldvGJTswX1PG8HnPg/DDktM97qlD+gORGAQ66nApJ7axe7agvdXz
+         d0Aw==
+X-Gm-Message-State: AO0yUKXWRrcgUcBAdzpLkjCclDb9PtlBEM3oxdo8lqS36Uja32kVw9BC
+        J8m9SRvajz5l4eZveyc8Gwt4gQ==
+X-Google-Smtp-Source: AK7set9WlNbz3bkf6/JRn2TnBfZf0ctA61mbKzUuRSsK5tJf/PCFFaf38agpEEofskCEfNIoGDqsOw==
+X-Received: by 2002:a17:906:3a91:b0:88b:a30:25f0 with SMTP id y17-20020a1709063a9100b0088b0a3025f0mr3397279ejd.32.1675280666358;
+        Wed, 01 Feb 2023 11:44:26 -0800 (PST)
 Received: from nuc.fritz.box (p200300f6af111a00277482c051eca183.dip0.t-ipconnect.de. [2003:f6:af11:1a00:2774:82c0:51ec:a183])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b00869f2ca6a87sm10397579ejd.135.2023.02.01.11.44.24
+        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b00869f2ca6a87sm10397579ejd.135.2023.02.01.11.44.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 11:44:25 -0800 (PST)
+        Wed, 01 Feb 2023 11:44:26 -0800 (PST)
 From:   Mathias Krause <minipli@grsecurity.net>
 To:     kvm@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Mathias Krause <minipli@grsecurity.net>
-Subject: [PATCH v3 1/6] KVM: x86/mmu: Avoid indirect call for get_cr3
-Date:   Wed,  1 Feb 2023 20:45:59 +0100
-Message-Id: <20230201194604.11135-2-minipli@grsecurity.net>
+Subject: [PATCH v3 2/6] KVM: VMX: Avoid retpoline call for control register caused exits
+Date:   Wed,  1 Feb 2023 20:46:00 +0100
+Message-Id: <20230201194604.11135-3-minipli@grsecurity.net>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230201194604.11135-1-minipli@grsecurity.net>
 References: <20230201194604.11135-1-minipli@grsecurity.net>
@@ -74,124 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+Complement commit 4289d2728664 ("KVM: retpolines: x86: eliminate
+retpoline from vmx.c exit handlers") and avoid a retpoline call for
+control register accesses as well.
 
-Most of the time, calls to get_guest_pgd result in calling
-kvm_read_cr3 (the exception is only nested TDP).  Hardcode
-the default instead of using the get_cr3 function, avoiding
-a retpoline if they are enabled.
+This speeds up guests that make heavy use of it, like grsecurity
+kernels toggling CR0.WP to implement kernel W^X.
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Mathias Krause <minipli@grsecurity.net>
 ---
- arch/x86/kvm/mmu/mmu.c         | 31 ++++++++++++++++++++-----------
- arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
- 2 files changed, 21 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index aeb240b339f5..505768631614 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -241,6 +241,20 @@ static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
- 	return regs;
- }
- 
-+static unsigned long get_guest_cr3(struct kvm_vcpu *vcpu)
-+{
-+	return kvm_read_cr3(vcpu);
-+}
-+
-+static inline unsigned long kvm_mmu_get_guest_pgd(struct kvm_vcpu *vcpu,
-+						  struct kvm_mmu *mmu)
-+{
-+	if (IS_ENABLED(CONFIG_RETPOLINE) && mmu->get_guest_pgd == get_guest_cr3)
-+		return kvm_read_cr3(vcpu);
-+
-+	return mmu->get_guest_pgd(vcpu);
-+}
-+
- static inline bool kvm_available_flush_tlb_with_range(void)
- {
- 	return kvm_x86_ops.tlb_remote_flush_with_range;
-@@ -3722,7 +3736,7 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
- 	int quadrant, i, r;
- 	hpa_t root;
- 
--	root_pgd = mmu->get_guest_pgd(vcpu);
-+	root_pgd = kvm_mmu_get_guest_pgd(vcpu, mmu);
- 	root_gfn = root_pgd >> PAGE_SHIFT;
- 
- 	if (mmu_check_root(vcpu, root_gfn))
-@@ -4172,7 +4186,7 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 	arch.token = alloc_apf_token(vcpu);
- 	arch.gfn = gfn;
- 	arch.direct_map = vcpu->arch.mmu->root_role.direct;
--	arch.cr3 = vcpu->arch.mmu->get_guest_pgd(vcpu);
-+	arch.cr3 = kvm_mmu_get_guest_pgd(vcpu, vcpu->arch.mmu);
- 
- 	return kvm_setup_async_pf(vcpu, cr2_or_gpa,
- 				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
-@@ -4191,7 +4205,7 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
- 		return;
- 
- 	if (!vcpu->arch.mmu->root_role.direct &&
--	      work->arch.cr3 != vcpu->arch.mmu->get_guest_pgd(vcpu))
-+	      work->arch.cr3 != kvm_mmu_get_guest_pgd(vcpu, vcpu->arch.mmu))
- 		return;
- 
- 	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
-@@ -4592,11 +4606,6 @@ void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd)
- }
- EXPORT_SYMBOL_GPL(kvm_mmu_new_pgd);
- 
--static unsigned long get_cr3(struct kvm_vcpu *vcpu)
--{
--	return kvm_read_cr3(vcpu);
--}
--
- static bool sync_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, gfn_t gfn,
- 			   unsigned int access)
- {
-@@ -5147,7 +5156,7 @@ static void init_kvm_tdp_mmu(struct kvm_vcpu *vcpu,
- 	context->page_fault = kvm_tdp_page_fault;
- 	context->sync_page = nonpaging_sync_page;
- 	context->invlpg = NULL;
--	context->get_guest_pgd = get_cr3;
-+	context->get_guest_pgd = get_guest_cr3;
- 	context->get_pdptr = kvm_pdptr_read;
- 	context->inject_page_fault = kvm_inject_page_fault;
- 
-@@ -5297,7 +5306,7 @@ static void init_kvm_softmmu(struct kvm_vcpu *vcpu,
- 
- 	kvm_init_shadow_mmu(vcpu, cpu_role);
- 
--	context->get_guest_pgd     = get_cr3;
-+	context->get_guest_pgd     = get_guest_cr3;
- 	context->get_pdptr         = kvm_pdptr_read;
- 	context->inject_page_fault = kvm_inject_page_fault;
- }
-@@ -5311,7 +5320,7 @@ static void init_kvm_nested_mmu(struct kvm_vcpu *vcpu,
- 		return;
- 
- 	g_context->cpu_role.as_u64   = new_mode.as_u64;
--	g_context->get_guest_pgd     = get_cr3;
-+	g_context->get_guest_pgd     = get_guest_cr3;
- 	g_context->get_pdptr         = kvm_pdptr_read;
- 	g_context->inject_page_fault = kvm_inject_page_fault;
- 
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index e5662dbd519c..78448fb84bd6 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -324,7 +324,7 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
- 	trace_kvm_mmu_pagetable_walk(addr, access);
- retry_walk:
- 	walker->level = mmu->cpu_role.base.level;
--	pte           = mmu->get_guest_pgd(vcpu);
-+	pte           = kvm_mmu_get_guest_pgd(vcpu, mmu);
- 	have_ad       = PT_HAVE_ACCESSED_DIRTY(mmu);
- 
- #if PTTYPE == 64
+Meanwhile I got my hands on a AMD system and while doing a similar change
+for SVM gives a small measurable win (1.1% faster for grsecurity guests),
+it would provide nothing for other guests, as the change I was testing was
+specifically targeting CR0 caused exits.
+
+A more general approach would instead cover CR3 and, maybe, CR4 as well.
+However, that would require a lot more exit code compares, likely
+vanishing the gains in the general case. So this tweak is VMX only.
+
+ arch/x86/kvm/vmx/vmx.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index c788aa382611..c8198c8a9b55 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6538,6 +6538,8 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
+ 		return handle_external_interrupt(vcpu);
+ 	else if (exit_reason.basic == EXIT_REASON_HLT)
+ 		return kvm_emulate_halt(vcpu);
++	else if (exit_reason.basic == EXIT_REASON_CR_ACCESS)
++		return handle_cr(vcpu);
+ 	else if (exit_reason.basic == EXIT_REASON_EPT_MISCONFIG)
+ 		return handle_ept_misconfig(vcpu);
+ #endif
 -- 
 2.39.1
 
