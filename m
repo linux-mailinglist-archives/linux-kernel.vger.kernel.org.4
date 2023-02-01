@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591AE6871D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417256871D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbjBAXW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 18:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
+        id S231939AbjBAXW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 18:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjBAXWy (ORCPT
+        with ESMTP id S231897AbjBAXW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 18:22:54 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021025FE3;
-        Wed,  1 Feb 2023 15:22:53 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id f10so219388qtv.1;
-        Wed, 01 Feb 2023 15:22:53 -0800 (PST)
+        Wed, 1 Feb 2023 18:22:56 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482971BDC;
+        Wed,  1 Feb 2023 15:22:55 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id k18so27141qvm.7;
+        Wed, 01 Feb 2023 15:22:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=e9T8fet1CUQmVg3snpX3iSNOAS+cmwVNSWuh5ppSIfo=;
-        b=a9Lw7+SwX7wcvGyay6W1ThB79WXKHKJqNwLOGJ/M8yeuBJo6fgX0UvCYpJfjNFCE5X
-         4WjR70CLNuM7AFd8xm/lgCfz19cf4HCowAsa67F6d0a1QdG9nFQcg/hi+LI0Ix4pSJz+
-         PtUvlRIpGfgH6l44GBy9jc+8loO4MCMR6L+fFcELJUOYdEPaJoUJF+NYj+DJU0LxIIko
-         Riu35P0TU0LdVf4EhAkIrDn2uD/wzUKd71RXi5UZhUxiC6QbjzRkH09gv46IpR8FxVIk
-         PF4eLqmgheBW+7tnD8+L6tYb0qly7CE26mjbIkMLqOqJD2Z1/rDm1LaxU5+GYNy181Wm
-         ev8w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xDOpfFKpqkig/ifJO3DdK44tzsI39GfXAo3DZPsupvI=;
+        b=SWIFInt+tnHdNOuNDsy1BmdUYNLVTjdcAJto1P0JfMykBg4bI8D7W4yZy00i0n3QXa
+         JBfOskH/f31gPO6cNFvcqf+tBkaFPJYVi7wfEU3pbtdziSU++uBtuBWE92S3riwEDAd1
+         VpOMQq21Z5UeO5g2jynQuBhCZNhOXBnvzYQroZtJBI8bfKy3Akv4JtqdUCO7i3zkdkAM
+         JcviuUA6fPEYBJBkhnRpIHPfg3cwXqpQoJwIiiDibalvZWsQKHGVp7lrLKnBBrnhYT8Z
+         EE67zWuUSL79pSt5lmytovjpoJFJXh/HU3aQ2fhHqFfq/Qg0y13TOAaiEDq3FB4Rf8et
+         H+QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e9T8fet1CUQmVg3snpX3iSNOAS+cmwVNSWuh5ppSIfo=;
-        b=CBDiq7/cvK8DyL7leR369vudvUuyPsIJ0Dh2Mgtz5hDeUD8ti8Nu0L9XwYtrhuQ8+7
-         UpW8GXbQzlAEBjcjFLy+1W6Y+qAeUC2pQ5qYlM8FoyYBx693PPD4qRb9t9UTQnTnZlnk
-         PLmgWlEJDalr4xAXgUPwkfUCq55CfmFd2XzXc/+x76+sqh5O86VxXLmW+GWr1Z+FE1yh
-         QdRmM0yi3vHpE5AJbg4eSsMNfPoeoR/SwWAx3hhThKaKuu9DWKmyFO4DiHxqIzWUnlZr
-         a9603f8WmcCEsYlVnuiV0pLzVvfa0hmv8esn55bA4QN6C/8a6wNQxklj10cQRaMXVUnq
-         Kjmw==
-X-Gm-Message-State: AO0yUKVmTEnDwmNLXaWeHWjle2XmytRH8XSAMiVLmjDIjgRgqKoGWADs
-        eFloZcCCFRx2OXJMPOWIhfQ=
-X-Google-Smtp-Source: AK7set8TDl0PIeRDInoWh2RQ+i3sE6uMlw6xh1Ex/su1FVjBn5s4MJJzL3Hc+Tcl54YHhrEQxRPbRg==
-X-Received: by 2002:a05:622a:1303:b0:3b8:52fc:2c31 with SMTP id v3-20020a05622a130300b003b852fc2c31mr6377745qtk.62.1675293773113;
-        Wed, 01 Feb 2023 15:22:53 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xDOpfFKpqkig/ifJO3DdK44tzsI39GfXAo3DZPsupvI=;
+        b=fqpFzhAxybaN09pbv0syxdkp9OPhd6ofEOPri84W6ucaDfHum8497Kicakh0lINqUR
+         5yL7VPrneDAcwc+PBs7aU7wO+j8/anFoFL3l566QBYnH1Z8JTDQvC5nTXxFaB8deUGUR
+         UCIIpnfVnoTwJ+A4tyRw8hdmr5UsEmr/x0aC31ZtsEJtfiVmWniDCNnwkXs2jUehJRb8
+         NkildCetlQKOBmGjyL0CzpO1Bv++7PT8G6rZ62HdQaqGiedQCPSgdiVJv5UtKh3Tm0VF
+         HAsAiD/JGvYq6BoOC6OwfP55fsQQMuqKnO3+Qb1IrSCUuI3fVejRuNAZ4ys76EA4SiOV
+         saoA==
+X-Gm-Message-State: AO0yUKX/brJf1O2j5X86/1U+Gzx9CTCGYBXzTBkeNxOAyyqNtgSEqSq3
+        XNMcjRKxwi2XqENUWY2HNdvX4PFHG6A=
+X-Google-Smtp-Source: AK7set9a6IxO3IXNd54tsP2BmFYctJnxgkrmxnm4fG+vw1gzaPtFWoaaQhoRP8o0OPSgdQJfcqPFVg==
+X-Received: by 2002:ad4:5009:0:b0:534:7371:ab01 with SMTP id s9-20020ad45009000000b005347371ab01mr6384503qvo.7.1675293774237;
+        Wed, 01 Feb 2023 15:22:54 -0800 (PST)
 Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id 136-20020a37068e000000b00719d9f823c4sm10564820qkg.34.2023.02.01.15.22.51
+        by smtp.gmail.com with ESMTPSA id pi48-20020a05620a37b000b006e16dcf99c8sm13181950qkn.71.2023.02.01.15.22.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 15:22:52 -0800 (PST)
+        Wed, 01 Feb 2023 15:22:53 -0800 (PST)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 87C6827C0054;
-        Wed,  1 Feb 2023 18:22:50 -0500 (EST)
+        by mailauth.nyi.internal (Postfix) with ESMTP id D1FCB27C005A;
+        Wed,  1 Feb 2023 18:22:52 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 01 Feb 2023 18:22:51 -0500
-X-ME-Sender: <xms:SvTaYwS-uBwq3RO9PM_nLlYe4aPsvdvA_VpmHmQ5CDyEQmkYINgAww>
-    <xme:SvTaY9ybBiENlOyWGiada07q-tgFGTdxQ4frKMU4YYpXqZmUXEXbKNFvpIc3NRX5_
-    MFgSzGVnTwkXSE6qA>
-X-ME-Received: <xmr:SvTaY91cCG5oj0f4RK6SL20k7VBtGh-RVwMnQGbGK5P1K8tPwtcs2RvmsiQ>
+  by compute5.internal (MEProxy); Wed, 01 Feb 2023 18:22:52 -0500
+X-ME-Sender: <xms:TPTaY3xXB-HxQSgUahUQcOSAyJ3bUcC02MU5trXHF45yL41SJofAww>
+    <xme:TPTaY_TD_95-vje3fqUoJRhEqq6RUbnRR-AD55MbIamGaCRtC_Ng_t9J_p0t2N8dp
+    vfg9Kns41efeW_exw>
+X-ME-Received: <xmr:TPTaYxX_Q_E2Q_nW9moXdnTRoDe1g7Riw9iumoT1_mg5GisV3Cm427Ha7fQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefjedgudduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpefgteffhfehjeegtdduieffudetfeehgfegudejudfhieefgfeigfevueduledu
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvg
-X-ME-Proxy: <xmx:SvTaY0CEnePu6Q3obf90-b8eJKglAqAETSNGM5O46y6ztzn7yXvLww>
-    <xmx:SvTaY5iTJhayOVnBhXlwcbeIRP1OABRqqvjywBy-jG4jXHkHoS4JZQ>
-    <xmx:SvTaYwoEDnheUAmUpARtUlqL8UVo4uSMMSZAU3j0hKxBN5Glc7l2ig>
-    <xmx:SvTaY-Y7OV56oICq0rreKvIuo2n5Nhl1UOLdYf6yeSZ9ZNvpHhv0LA>
+    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehfedvtdekjedtleffkefgtdehueegfeffkeeggffhjefhudeikeejgeeh
+    tedvfeenucffohhmrghinhepphhtrhdrrghsnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhs
+    ohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnh
+    hgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:TPTaYxjmX3MOrdV8ot4lWsBhS9Zpx95Xt9rnZQMEv1jeZ3SCzcYyMA>
+    <xmx:TPTaY5BM8nLcU6fE6_aL2pk8CtORJSMquh7wcCD13RoKhPsy2PjLkg>
+    <xmx:TPTaY6KVmpeQCYuTLFTfB-iS70QIG6pIen9K4o4bagXcvo54GuK0zA>
+    <xmx:TPTaY94ixVV-p54I2waD4b-Biq6YjHov9CWNSwOwjxTt6tkDxFRPdQ>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 1 Feb 2023 18:22:49 -0500 (EST)
+ 1 Feb 2023 18:22:52 -0500 (EST)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Will Deacon <will@kernel.org>,
@@ -86,10 +87,12 @@ Cc:     Will Deacon <will@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Subject: [RFC 0/5] rust: sync: Arc: Implement Debug and Display
-Date:   Wed,  1 Feb 2023 15:22:39 -0800
-Message-Id: <20230201232244.212908-1-boqun.feng@gmail.com>
+Subject: [RFC 1/5] rust: sync: impl Display for {Unique,}Arc
+Date:   Wed,  1 Feb 2023 15:22:40 -0800
+Message-Id: <20230201232244.212908-2-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230201232244.212908-1-boqun.feng@gmail.com>
+References: <20230201232244.212908-1-boqun.feng@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -102,34 +105,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I found that our Arc doesn't implement `Debug` or `Display` when I tried
-to play with them, therefore add these implementation.
+This allows printing the inner data of `Arc` and its friends if the
+inner data implements `Display`. It's useful for logging and debugging
+purpose.
 
-With these changes, I could get the following print with the sample code
-in patch #5:
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+---
+ rust/kernel/sync/arc.rs | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-	[..] rust_print: 1
-	[..] rust_print: UniqueArc { inner: Arc { refcount: 1, data: "hello, world" } }
-	[..] rust_print: [samples/rust/rust_print.rs:34] c = Arc {
-	[..]     refcount: 2,
-	[..]     data: "hello, world",
-	[..] }
-	[..] rust_print: Arc {
-	[..]     refcount: 0x1,
-	[..]     data: "hello, world",
-	[..] }
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+index 519a6ec43644..fc680a4a795c 100644
+--- a/rust/kernel/sync/arc.rs
++++ b/rust/kernel/sync/arc.rs
+@@ -22,6 +22,7 @@ use crate::{
+ };
+ use alloc::boxed::Box;
+ use core::{
++    fmt,
+     marker::{PhantomData, Unsize},
+     mem::{ManuallyDrop, MaybeUninit},
+     ops::{Deref, DerefMut},
+@@ -522,3 +523,15 @@ impl<T: ?Sized> DerefMut for UniqueArc<T> {
+         unsafe { &mut self.inner.ptr.as_mut().data }
+     }
+ }
++
++impl<T: fmt::Display + ?Sized> fmt::Display for UniqueArc<T> {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        fmt::Display::fmt(self.deref(), f)
++    }
++}
++
++impl<T: fmt::Display + ?Sized> fmt::Display for Arc<T> {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        fmt::Display::fmt(self.deref(), f)
++    }
++}
+-- 
+2.39.1
 
-Note that I make the `Debug` implementation of `Arc` also print the
-current reference count, which I think may be useful: myself sometimes
-wonder "how many references exist at this point" during my own
-development. But I'm open to suggestions and changes.
-
-Wedson, I know that you are considering to get rid of `ArcBorrow`, so
-the patch #3 may have some conflicts with what you may be working on.
-I'm happy to wait and rebase since this series is not something urgent
-;-)
-
-Suggestions and comments are welcome!
-
-Regards,
-Boqun
