@@ -2,138 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF027686C14
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DBB686C17
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjBAQux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
+        id S230377AbjBAQvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:51:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjBAQuv (ORCPT
+        with ESMTP id S229597AbjBAQvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:50:51 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8F05CFF2;
-        Wed,  1 Feb 2023 08:50:50 -0800 (PST)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 311EEQxR001796;
-        Wed, 1 Feb 2023 08:50:49 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : mime-version; s=s2048-2021-q4;
- bh=wGAGEIjifVazRuzzG6XJEY197hofKNytYPSZB/kep/U=;
- b=S8SJJFAImxQvdrVmIpaJGpnKXobrApdRQKy16nj5QoLKoS4S4qJUiXjAI82FKl6SbYK2
- vPuoRC8tq19QSLfTdkecp5ZzstmMOapgqemQFGHYgpxAqeEyAbpDW+cEKy9ua96THuwT
- VK//mTilNlMlQQWxXbaPmpeeilVKU34wQt/6C3lDhDOAsuyhoeZqu3Kpmoo+uS5awGOs
- 9YmE3wPdBsUoR3ByOf4uamKGdC/kibpjJAE4T5b7bZ9nlimfKdNYMWD2zyTZFSxQFXRB
- oXx1qpEIbk+NbfhOUIhIraSm+RET7WnuxDEW80V1HEIIrOZB56ZXGoIt7F92YdH2unKQ 3w== 
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2109.outbound.protection.outlook.com [104.47.58.109])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nfq39a2t9-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 08:50:49 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b/iOK01wo5pX64LhWEn+RKuTAQK98zGNmpK4MpBMa0O/AcKwj9BrFzwDwUfoPoOKxTM0ov+IO0+jt0JL8gdpnkXTJiOgcFGnXOHmrQkleBlVNuXYJ4vywLIpDxDBjjb/+Vbfs2WIab4+WCFfMkI11cUOeNLObVsAGc/AfNAjxNF8PrLnOHxI5/Qyq0KjWWV7RN086kO6REgO/alclFQo8apysnbUbXMiG5nRBbkyFpZnU8gtC8mHpyuQpyVLacpprwJ8ht+HMWpQAjfnuiv6K6snCFpyVHLMKJjv+SUCIeTkf2jwqM1hQcHYLpT34yd+k7/FKoKTs7G9fBAvZ66ENg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wGAGEIjifVazRuzzG6XJEY197hofKNytYPSZB/kep/U=;
- b=Jow9GNmNP0jvWBviqzsfR2keO8WmzHkWlJ/qixQsh+DiyCXXYXZpaXy/bRLLayElayzWLsLBjbD+kNNGEZ4p7b+KtmupCHbPF0FMnlhT43hhBL9DzcbqR56lzL3Vp31UVlicc3/sGt0XMvr/RUkZfLcy9/04I09jpTcXcWtM9NMtMCHW0GT6G26dWkC/QhNous1PEHbwjJiIqaCeOpkqZ0ZVW9SCbMUOOkb9MqRteynFjALbfyiP18i0QGX69ZoGl9mTkN4fZn2cWvcg5+WR79K7c2kFLqrET9Jr89EHc9xHQ4T9H/2KW3g6Eyc9j9M+z82eFtcU/1t8X/g5G4wVZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by SN7PR15MB4237.namprd15.prod.outlook.com (2603:10b6:806:103::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Wed, 1 Feb
- 2023 16:50:47 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::7b61:8691:5b41:ecf8]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::7b61:8691:5b41:ecf8%4]) with mapi id 15.20.6064.022; Wed, 1 Feb 2023
- 16:50:47 +0000
-From:   Song Liu <songliubraving@meta.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Song Liu <song@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Kernel Team <kernel-team@meta.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v5] module: replace module_layout with module_memory
-Thread-Topic: [PATCH v5] module: replace module_layout with module_memory
-Thread-Index: AQHZNgkbMNiiPNNmR0Sa/FwZeHqHYq653d+AgABwqwA=
-Date:   Wed, 1 Feb 2023 16:50:47 +0000
-Message-ID: <8F559BD9-D7D4-4669-9C87-0582F06E730F@fb.com>
-References: <20230201064720.1949224-1-song@kernel.org>
- <Y9o52aAC33YlRueI@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y9o52aAC33YlRueI@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.300.101.1.3)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|SN7PR15MB4237:EE_
-x-ms-office365-filtering-correlation-id: d4bb4083-b9bc-481d-7e0b-08db0474779e
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: purQjCJbqdHjuL9wxgu75aRkTXe7ETqQxHMUhr4OS1z2PJ7/7QNX8jmj1L0XsTBaGVjQknxKXfdzs8OR9g3hM7wXgvCz1clN/FWrRIj0IEi2GTiIeeqk+jHgJHZ9TvLfitawxg1okqCJjYdbBSw3xHmXKQ8qzInaPm/fdZD1Nm3u6wQvKyYTCSKmN9VzY6bewgIBWj+CVDqp/gsXLa+0J9cn/v/tEhl8rkv8XKnyFohor2aXjiUYlkMXiUkLqXW2Kjs9v9kjWe2kQrwRyI30nNPgqdFUikyoJorcajUmNPTvMuHAv4s8Z+RP2rbumFvXA947mkYW3OyCZl5vRAGOlXO55wNc3gHEa9ilvhJ/2mLWvHv1mIsXK/NgDmcnWkVgB5EJIYwBsk8TLlHRxX6gFnBexrsGvlboGwXzanVSAw4r3SKYrQkJWgxJ3y4qWmbQUMSX8QI/cJFzCv6u/jFLDkry4M8d97a6sRKiqQjxmIcqGvmOAKn1STx22rUosnnhinJJLuyI9kp99DL5f4V7t6/gs2ZPgKc7Mw62kiR9u/n39D6gQ1dgBKdTspTLnxq9Ly0qs6hB3GXwmTo2yvxzxKvmbX0x05KMZcUOWiIKyzXVGsZXjjHynI57HOezHoYLyQfex+XV8ZBkwPe/Z0Pxosa6FbWw6E/1KIJwbxcjSqwMfJ+r5Fiaoh31zrOC5wk7xSSJh3TlRpz8sxDACGHx8g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(346002)(39860400002)(366004)(396003)(451199018)(4326008)(91956017)(76116006)(66946007)(6916009)(66476007)(66556008)(66446008)(64756008)(41300700001)(8676002)(8936002)(6486002)(316002)(54906003)(5660300002)(2906002)(4744005)(33656002)(36756003)(71200400001)(38100700002)(478600001)(86362001)(122000001)(38070700005)(9686003)(186003)(6506007)(53546011)(6512007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xAftoRL8hEKG+EFDPrFImvEkFxr1rBHjyyVZ+UE995Y2TqJ9VWZppro2hY35?=
- =?us-ascii?Q?BpjZrBY/UTg32sUwXUZT9GFJkpAuCzww6Ibi+kyP3RGFvf6b+pe9LFR1Bwhn?=
- =?us-ascii?Q?Ldb+y5LMdNLa/jTdKscTuVqM88cmmbOPzRycOr+0VUpoj+xuQSb+6RoOCB62?=
- =?us-ascii?Q?35FZ7t5TJaumi8iHQv6C66gxolABe1Lg5F2REz4fN9jcyb+5rTfO56re58R/?=
- =?us-ascii?Q?k23nRZvFSJyX83/Lxlu5go/a2d6iHG63l5422DjtS2LwSm2+mx6fpLQGo3F7?=
- =?us-ascii?Q?EoVAZSGpQghZzbQDizjvfkEblL7unWsfFVuGMnc5TWe8kbrWMrxQeoxKJq/L?=
- =?us-ascii?Q?382vEdx1J1iGGw+FyNal40hkAC3RU7dylz8ayYnsXlu4WDAxE67CtOS1c8PR?=
- =?us-ascii?Q?mzfPnW0NNimavlpiYTz2uRX248igOh/03PMzV/csjy/MfMJvkXI0vblBZHv0?=
- =?us-ascii?Q?iLLvaNcJ5otR6aQkEarbm2rVYP2IpANYGxwSOLJ8TISdyMCxWHtnmkWuMmcf?=
- =?us-ascii?Q?1f5rRO/l0F65YN9ZC7c8ablj4lc4gqGTK/dyr1hEg1uGAUuionWVp3LyjbsZ?=
- =?us-ascii?Q?exADaUnLBSIpBqBD2MIiweJMirefyCuRpgh10CXPcPudqR6JjSN+SKuSOv98?=
- =?us-ascii?Q?DPGXp5qDMDs6gJAysBp9xFfwcnSE6axtPBMRG+XJ19HEUALI+oIMBldl0mkS?=
- =?us-ascii?Q?HRXQApnIBln+Eh573lhWwYY9RpTq1bG6V4hOSAq80t6OdUz9O6v8yw6bF3Co?=
- =?us-ascii?Q?ZWVT0gy5Ec0asFsl2RG/c/JZuueZ0E9DFU5XDYxdK7o3diX9ET9lmceOUkMl?=
- =?us-ascii?Q?zkskzvM24UsFJ6DLOwT/LCRJ6lvYhtPtaH0XqeXQ1Voo64uHzT+V4aE5MM92?=
- =?us-ascii?Q?grEapPFkl0nDIgWWNeYsiQyXXy1BN5ixf0MiW4UtWPQGoUr10wgYKEFB++n+?=
- =?us-ascii?Q?vGR7g/IKifeT1AxbWMUIV9EUykFaVThWfaSmuN8aiMONgJtE9EWlxlqh25oq?=
- =?us-ascii?Q?2p1BJuYWNGXRJQb7YtLeiy7fg1r5Pi1fZ2h4Vdlk6VqCDUFYPWckzW6eVAR6?=
- =?us-ascii?Q?TvaCt3cCrJmt1398H1J9ybUrvxRyzEhpwIctKWV6BCIdK5OrVGLvTGzhqpIY?=
- =?us-ascii?Q?HJaynOg0ArGlgrszvcw3RQXIvZmeOO198vlqg2anzULeJ0gH7i3Jqw0434wx?=
- =?us-ascii?Q?c76WhPhtBlCavnGTzVia93S7BNelPCtTw7fTNlrStBFPskS0aZXxc0qBXWt5?=
- =?us-ascii?Q?IJttQXk8cn9Gr2cgM0C/Gt3DRW3f1HD4H0YC55PrOh3dm8z8+HE5WJTEqzTR?=
- =?us-ascii?Q?pQ+zimcQLJETWdCqHXaPb0PjR+77YyBARMBmZMwbc2M8xIS/VcYo7vNAGOoC?=
- =?us-ascii?Q?aXaBcI3otTh6WnnvsmPuWIfoKUkSnDS6eRLUjOJZMf/t5PYmw3iVRrE72daE?=
- =?us-ascii?Q?AxtfF+AOMP5val5KkH6SxCtsxB1c6yqwj81l8R1ml5B/PRivOp4vxwkz63Y/?=
- =?us-ascii?Q?VIs2NUbwY9dPUITav3l7HO68XkZQsu0bRNZND3Uie1YcBrOmOd/p19EHpqpF?=
- =?us-ascii?Q?l43XLuhzUtjx1hEOmmzwdzbxP3DVcXKXg2Iqq2xMs8VisjHpJThvt2eeYHhM?=
- =?us-ascii?Q?+ZE/F/XakI7eJbi+4O4/3+brjnXGuPAcpgbTB4/ilcpo?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <6B56A8A3F2C4BF409675286CFF500959@namprd15.prod.outlook.com>
+        Wed, 1 Feb 2023 11:51:35 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5CB95DC1A;
+        Wed,  1 Feb 2023 08:51:33 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 97AB020B7102; Wed,  1 Feb 2023 08:51:33 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 97AB020B7102
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1675270293;
+        bh=KJbAwCn0TGn9+iQ2/tVx4JONaQBj9mJvNHGMDGM632U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M9+xi+rv2I/V3tvdmJwTYKVfNxwHXrhk3YuFjRx9VmV1lc+o1A9Wu+cOUOX6Iwt4w
+         qWbJ0+X0KIq3CtjGHl5FYFxixRmdGMvV2Cg828Y6P7R6uOVC5mS0IIHIsKt7uR60/B
+         23Hq+dq0qXf7mxfRScckrGtO4KqjHpYAcUEiu/XI=
+Date:   Wed, 1 Feb 2023 08:51:33 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        virtualization@lists.linux-foundation.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
+        ssengar@microsoft.com
+Subject: Re: [PATCH v2 6/6] Driver: VMBus: Add device tree support
+Message-ID: <20230201165133.GA24116@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
+ <1675188609-20913-7-git-send-email-ssengar@linux.microsoft.com>
+ <CAL_JsqK_7eTTrSd6EKDGy9A8kC5w6cjVEtSi3CB1M7Awj+zg6g@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4bb4083-b9bc-481d-7e0b-08db0474779e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Feb 2023 16:50:47.2181
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VIIPsWSiyCW1Ahdx1W37GK1Z+6C46fBSH74YZFpnPmcNywvENcpZ3RPs+3M+fR6XCiwn+KX00q7/45eUTipDRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR15MB4237
-X-Proofpoint-GUID: H2z2WLq2zrTs2rWRCCjGFqnDG45QLko2
-X-Proofpoint-ORIG-GUID: H2z2WLq2zrTs2rWRCCjGFqnDG45QLko2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-01_04,2023-01-31_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqK_7eTTrSd6EKDGy9A8kC5w6cjVEtSi3CB1M7Awj+zg6g@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -141,33 +55,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jan 31, 2023 at 02:12:53PM -0600, Rob Herring wrote:
+> On Tue, Jan 31, 2023 at 12:10 PM Saurabh Sengar
+> <ssengar@linux.microsoft.com> wrote:
+> >
+> > Update the driver to support device tree boot as well along with ACPI.
+> > At present the device tree parsing only provides the mmio region info
+> > and is not the exact copy of ACPI parsing. This is sufficient to cater
+> > all the current device tree usecases for VMBus.
+> >
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  drivers/hv/vmbus_drv.c | 75 ++++++++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 73 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> > index 49030e756b9f..1741f1348f9f 100644
+> > --- a/drivers/hv/vmbus_drv.c
+> > +++ b/drivers/hv/vmbus_drv.c
+> > @@ -2152,7 +2152,7 @@ void vmbus_device_unregister(struct hv_device *device_obj)
+> >         device_unregister(&device_obj->device);
+> >  }
+> >
+> > -
+> > +#ifdef CONFIG_ACPI
+> >  /*
+> >   * VMBUS is an acpi enumerated device. Get the information we
+> >   * need from DSDT.
+> > @@ -2262,6 +2262,7 @@ static acpi_status vmbus_walk_resources(struct acpi_resource *res, void *ctx)
+> >
+> >         return AE_OK;
+> >  }
+> > +#endif
+> >
+> >  static void vmbus_mmio_remove(void)
+> >  {
+> > @@ -2282,7 +2283,7 @@ static void vmbus_mmio_remove(void)
+> >         }
+> >  }
+> >
+> > -static void vmbus_reserve_fb(void)
+> > +static void __maybe_unused vmbus_reserve_fb(void)
+> >  {
+> >         resource_size_t start = 0, size;
+> >         struct pci_dev *pdev;
+> > @@ -2442,6 +2443,7 @@ void vmbus_free_mmio(resource_size_t start, resource_size_t size)
+> >  }
+> >  EXPORT_SYMBOL_GPL(vmbus_free_mmio);
+> >
+> > +#ifdef CONFIG_ACPI
+> 
+> It's better to put C 'if (!IS_ENABLED(CONFIG_ACPI)' code in the
 
-
-> On Feb 1, 2023, at 2:07 AM, Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-[...]
+I wanted to have separate function for ACPI and device tree flow, which
+can be easily maintained with #ifdef. Please let me know if its fine.
 
 > 
-> ... you write something like:
+> >  static int vmbus_acpi_add(struct platform_device *pdev)
+> >  {
+> >         acpi_status result;
+> > @@ -2496,10 +2498,68 @@ static int vmbus_acpi_add(struct platform_device *pdev)
+> >                 vmbus_mmio_remove();
+> >         return ret_val;
+> >  }
+> > +#else
+> > +
+> > +static int vmbus_device_add(struct platform_device *pdev)
+> > +{
+> > +       struct resource **cur_res = &hyperv_mmio;
+> > +       struct device_node *np;
+> > +       u32 *ranges, len;
+> > +       u64 start;
+> > +       int nr_ranges, child_cells = 2, cur_cell = 0, ret = 0;
+> > +
+> > +       hv_dev = pdev;
+> > +       np = pdev->dev.of_node;
+> > +
+> > +       nr_ranges = device_property_count_u32(&pdev->dev, "ranges");
 > 
-> #define for_class_mod_mem_type(type, class) \
-> for_each_mod_mem_type(type) \
-> if (mod_mem_type_is_##class(type))
-> 
-> Then we can write things like:
-> 
-> for_class_mod_mem_type(type, init)
-> for_class_mod_mem_type(type, data)
-> 
-> and
-> 
-> for_class_mod_mem_type(type, core_data)
-> 
-> (this last could be used in show_datasize() for example).
-> 
-> Does that make sense?
+> Parsing ranges yourself is a bad sign. It's a standard property and we
+> have functions which handle it. If those don't work, then something is
+> wrong with your DT or they need to be fixed/expanded.
 
-It sure does. Let me give it a try. 
+I find all the  standard functions which parse "ranges" property are doing
+much more then I need. Our requirement is to only pass the mmio memory range
+and size, I couldn't find any standard API doing this.
 
-Thanks,
-Song
+I see some of the drivers are using these APIs to parse ranges property hence
+I follwed those examples. I will be happy to improve it if I get any better
+alternative.
+
+> 
+> > +       if (nr_ranges < 0)
+> > +               return nr_ranges;
+> > +       ranges = kcalloc(nr_ranges, sizeof(u32), GFP_KERNEL);
+> > +       if (!ranges)
+> > +               return -ENOMEM;
+> > +
+> > +       if (device_property_read_u32_array(&pdev->dev, "ranges", ranges, nr_ranges)) {
+> > +               ret =  -EINVAL;
+> > +               goto free_ranges;
+> > +       }
+> > +
+> > +       while (cur_cell < nr_ranges) {
+> > +               struct resource *res;
+> > +
+> > +               /* The first u64 in the ranges description isn't used currently. */
+> > +               cur_cell = cur_cell + child_cells;
+> > +               start = ranges[cur_cell++];
+> > +               start = (start << 32) | ranges[cur_cell++];
+> > +               len = ranges[cur_cell++];
+> 
+> To expand my last point, the format of ranges is <child_addr
+> parent_addr length>. That's not what your 'ranges' has. You've also
+> just ignored '#address-cells' and '#size-cells'.
+
+Got it. However I need to check if there is any standard API which can
+give me these values, otherwise I may have to parse these as well :(
+
+Regards,
+Saurabh
+
+> 
+> > +
+> > +               res = kzalloc(sizeof(*res), GFP_ATOMIC);
+> > +               if (!res) {
+> > +                       ret = -ENOMEM;
+> > +                       goto free_ranges;
+> > +               }
+> > +
+> > +               res->name = "hyperv mmio";
+> > +               res->flags = IORESOURCE_MEM | IORESOURCE_MEM_64;
+> > +               res->start = start;
+> > +               res->end = start + len;
+> > +
+> > +               *cur_res = res;
+> > +               cur_res = &res->sibling;
+> > +       }
+> > +
+> > +free_ranges:
+> > +       kfree(ranges);
+> > +       return ret;
+> > +}
+> > +#endif
+> >
+> >  static int vmbus_platform_driver_probe(struct platform_device *pdev)
+> >  {
+> > +#ifdef CONFIG_ACPI
+> >         return vmbus_acpi_add(pdev);
+> > +#else
+> > +       return vmbus_device_add(pdev);
+> > +#endif
+> >  }
+> >
+> >  static int vmbus_platform_driver_remove(struct platform_device *pdev)
+> > @@ -2645,6 +2705,16 @@ static int vmbus_bus_resume(struct device *dev)
+> >  #define vmbus_bus_resume NULL
+> >  #endif /* CONFIG_PM_SLEEP */
+> >
+> > +static const struct of_device_id vmbus_of_match[] = {
+> > +       {
+> > +               .compatible = "msft,vmbus",
+> > +       },
+> > +       {
+> > +               /* sentinel */
+> > +       },
+> > +};
+> > +MODULE_DEVICE_TABLE(of, vmbus_of_match);
+> > +
+> >  static const struct acpi_device_id vmbus_acpi_device_ids[] = {
+> >         {"VMBUS", 0},
+> >         {"VMBus", 0},
+> > @@ -2679,6 +2749,7 @@ static struct platform_driver vmbus_platform_driver = {
+> >         .driver = {
+> >                 .name = "vmbus",
+> >                 .acpi_match_table = ACPI_PTR(vmbus_acpi_device_ids),
+> > +               .of_match_table = of_match_ptr(vmbus_of_match),
+> >                 .pm = &vmbus_bus_pm,
+> >                 .probe_type = PROBE_FORCE_SYNCHRONOUS,
+> >         }
+> > --
+> > 2.25.1
+> >
