@@ -2,115 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2894A685F1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 06:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC28685F1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 06:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjBAFoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 00:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
+        id S229615AbjBAFol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 00:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBAFo2 (ORCPT
+        with ESMTP id S229879AbjBAFoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 00:44:28 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9424453E4E;
-        Tue, 31 Jan 2023 21:44:27 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3114ppdE019207;
-        Wed, 1 Feb 2023 05:44:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=yyrvuqIAayvmV3kjDmLIH/MLDWztKQ2tswffEB2Aw6c=;
- b=NhWSU4lIei+ZoVKatpRzQlrwMal6D2NMWqKsazwMlWmIYAXK00ChIEoTBtIuw+DRQtul
- Ap0RVg9ds8s6OAwoie+0SvBX5JdKKaDBvqkXoILIkSaKhsdmWRKphWdoa9ySAmMUI4lQ
- xVL9h/OYmyayw9NFtMz1C2Mf9ZU6H23xI+Tbwv91u+m5emUiz49sDBNK3TgM+3r/A45R
- jW41vMRB+qsyV1Jrb5PdfoAaSCKqzaeWVtF/XtdOIFvXC0vU2SEi+4WKcuAP32zwp32o
- +tvfHMGvrjpRF+hO/FA6S4Px2XDVUrg4Reagq6faSb0FSFFQ6jbuhSO592t32Hhb7Nv4 2w== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3nexn8jhtf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Feb 2023 05:44:06 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3115i5l8006932
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 1 Feb 2023 05:44:05 GMT
-Received: from [10.50.28.88] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 31 Jan
- 2023 21:43:58 -0800
-Message-ID: <f463564a-5ac4-8ef0-30c8-2e4b3580b5d8@quicinc.com>
-Date:   Wed, 1 Feb 2023 11:13:55 +0530
+        Wed, 1 Feb 2023 00:44:38 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F485AA4F;
+        Tue, 31 Jan 2023 21:44:36 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id m11so16312831pji.0;
+        Tue, 31 Jan 2023 21:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VUSXz5oiUQzUPPLXOFquXDII3pYY0FoDQHxExlFjJwA=;
+        b=ipm3n1b5KqSemHjgdVTe2BY8fI4A4GAJ307zSHPmpNB1gpzUaLslA3dqrylTAfXYYJ
+         UXUeBIV+cDWee5nz5nixzXKHyasm4eCKuYuoVQIYMDycvwLjCw53hMjfihCfOFBvd57y
+         KdQxjgJo1bRSEv6KXvh9PIzLjmLquGiUek34YqXsVATvBrdnOqvfeyN+8StAqkyDZEa8
+         o0oyhijysjdCWPcOb8qCKewaZyCYPJayexzjCpkLrGwyzC6l4CyYamA/dV2SWTIWM3ne
+         4IrsZrW3juQxC/KghP9+eSEi268tNAwqfF8zBKVt4g6VI4346WFdLWbaeGJ4mQqy69Jl
+         U6cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VUSXz5oiUQzUPPLXOFquXDII3pYY0FoDQHxExlFjJwA=;
+        b=UuwkvES+N7oJZXc012FocBThkBfSbMsidrTWxN45NGI7JCu5b8wrf0aVPD0h0HJsHE
+         OZjrBCZKPHeYPgO3g30w41IUlYerbv5NJDpAXEk0drxdNHyRt9slh5Q9RFFHMO4gLzki
+         0xGrhbT4B+vdr/UGOryCnDhQQcZ7NhPuodE71UWmNOafVJSWvUtpUfH+j0w8V/Sy9L3R
+         SN3jVHfMH9lfWMuh0tRTXEAnuGUDUXRSSixZWyyBUo0AXWoAOEhZ3/cOeqhTQIUNIOq/
+         cfJ9LexvRKR/TtvWJtcNbO3mTkSoUK8O0bjbilNaIR+XvzhDp/7HoffWdyRxJ2QClNKk
+         KkAw==
+X-Gm-Message-State: AO0yUKXScEsKdCE428E9+FBle7PnTvT8U1PliG1FAhBCAwJfQQVc91uT
+        LgfyXHZjUE7kI5siBEhGBCY=
+X-Google-Smtp-Source: AK7set/suMfeSqpa9Wrl1DhhrPBU0Sm2LO2MnRTiq6S9s6c3CXW6occY0sIgTftgc0A0lDZ6EuFqgw==
+X-Received: by 2002:a17:902:f102:b0:194:a60a:2900 with SMTP id e2-20020a170902f10200b00194a60a2900mr1404958plb.6.1675230275453;
+        Tue, 31 Jan 2023 21:44:35 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:ce3a:44de:62b3:7a4b])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902ecc100b001948720f6bdsm10703959plh.98.2023.01.31.21.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 21:44:34 -0800 (PST)
+Date:   Tue, 31 Jan 2023 21:44:31 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] gpiolib: remove gpio_set_debounce
+Message-ID: <Y9n8P1rP+cYyoNIH@google.com>
+References: <20230127101149.3475929-1-arnd@kernel.org>
+ <20230127101149.3475929-5-arnd@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH V2 0/9] Add minimal boot support for IPQ5332
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <dmitry.baryshkov@linaro.org>, <marcel.ziswiler@toradex.com>,
-        <nfraprado@collabora.com>, <robimarko@gmail.com>,
-        <quic_gurus@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230130114702.20606-1-quic_kathirav@quicinc.com>
- <cf41cb9f-e633-c0e5-95cc-98b2a4312886@linaro.org>
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <cf41cb9f-e633-c0e5-95cc-98b2a4312886@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nOqB_B2vyEgOJg99S6acB6PPYO3I9RrB
-X-Proofpoint-ORIG-GUID: nOqB_B2vyEgOJg99S6acB6PPYO3I9RrB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-01_02,2023-01-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 adultscore=0 priorityscore=1501 suspectscore=0
- impostorscore=0 mlxlogscore=781 mlxscore=0 clxscore=1015 bulkscore=0
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302010048
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230127101149.3475929-5-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jan 27, 2023 at 11:11:46AM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> gpio_set_debounce() only has a single user, which is trivially
+> converted to gpiod_set_debounce().
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  Documentation/driver-api/gpio/legacy.rst      |  2 --
+>  .../zh_CN/driver-api/gpio/legacy.rst          |  1 -
+>  Documentation/translations/zh_TW/gpio.txt     |  1 -
+>  drivers/input/touchscreen/ads7846.c           | 25 ++++++++++---------
+>  include/linux/gpio.h                          | 10 --------
+>  5 files changed, 13 insertions(+), 26 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
+> index a0559d93efd1..e0306e78e34b 100644
+> --- a/Documentation/driver-api/gpio/legacy.rst
+> +++ b/Documentation/driver-api/gpio/legacy.rst
+> @@ -238,8 +238,6 @@ setup or driver probe/teardown code, so this is an easy constraint.)::
+>          ## 	gpio_free_array()
+>  
+>                  gpio_free()
+> -                gpio_set_debounce()
+> -
+>  
+>  
+>  Claiming and Releasing GPIOs
+> diff --git a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+> index 74fa473bb504..dee2a0517c1c 100644
+> --- a/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+> +++ b/Documentation/translations/zh_CN/driver-api/gpio/legacy.rst
+> @@ -219,7 +219,6 @@ GPIO 值的命令需要等待其信息排到队首才发送命令，再获得其
+>          ## 	gpio_free_array()
+>  
+>                  gpio_free()
+> -                gpio_set_debounce()
+>  
+>  
+>  
+> diff --git a/Documentation/translations/zh_TW/gpio.txt b/Documentation/translations/zh_TW/gpio.txt
+> index 1b986bbb0909..dc608358d90a 100644
+> --- a/Documentation/translations/zh_TW/gpio.txt
+> +++ b/Documentation/translations/zh_TW/gpio.txt
+> @@ -226,7 +226,6 @@ GPIO 值的命令需要等待其信息排到隊首才發送命令，再獲得其
+>  ## 	gpio_free_array()
+>  
+>  	gpio_free()
+> -	gpio_set_debounce()
+>  
+>  
+>  
+> diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+> index 4c3dd01902d0..da3c55d9cb98 100644
+> --- a/drivers/input/touchscreen/ads7846.c
+> +++ b/drivers/input/touchscreen/ads7846.c
+> @@ -25,8 +25,8 @@
+>  #include <linux/slab.h>
+>  #include <linux/pm.h>
+>  #include <linux/of.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/of_device.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/gpio.h>
+>  #include <linux/spi/spi.h>
+>  #include <linux/spi/ads7846.h>
+> @@ -139,7 +139,7 @@ struct ads7846 {
+>  	int			(*filter)(void *data, int data_idx, int *val);
+>  	void			*filter_data;
+>  	int			(*get_pendown_state)(void);
+> -	int			gpio_pendown;
+> +	struct gpio_desc	*gpio_pendown;
+>  
+>  	void			(*wait_for_sync)(void);
+>  };
+> @@ -222,7 +222,7 @@ static int get_pendown_state(struct ads7846 *ts)
+>  	if (ts->get_pendown_state)
+>  		return ts->get_pendown_state();
+>  
+> -	return !gpio_get_value(ts->gpio_pendown);
+> +	return !gpiod_get_value(ts->gpio_pendown);
 
-On 2/1/2023 12:57 AM, Krzysztof Kozlowski wrote:
-> On 30/01/2023 12:46, Kathiravan Thirumoorthy wrote:
->> From: Kathiravan T <quic_kathirav@quicinc.com>
->>
->> The IPQ5332 is Qualcomm's 802.11ax SoC for Routers, Gateways and
->> Access Points.
->>
->> This series adds minimal board boot support for ipq5332-mi01.2 board.
->>
->> Also, this series depends on the below patch
->> https://lore.kernel.org/linux-arm-msm/20230120082631.22053-1-quic_kathirav@quicinc.com/
-> You sent it even before answering to me in old thread, so even before
-> giving me a chance to read your answer... Don't send v2 before we finish
-> discussing previous one.
+No, we can not blindly do that without checking annotations on GPIOs.
 
+> +		ts->gpio_pendown = gpiod_get(&spi->dev, "pendown-gpio", GPIOD_IN);
 
-Got it, I have responded to your queries in V2. I will wait for couple 
-of days to see if any other comments are coming in.
+Wrong name, you will be looking for "pendown-gpio-gpios".
 
+Sorry, but I have to NAK this in the current form.
 
->
-> Best regards,
-> Krzysztof
->
+Thanks.
+
+-- 
+Dmitry
