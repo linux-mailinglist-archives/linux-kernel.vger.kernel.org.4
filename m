@@ -2,107 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B96168609A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7990968609D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjBAHbn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Feb 2023 02:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S231893AbjBAHbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjBAHbm (ORCPT
+        with ESMTP id S230009AbjBAHbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:31:42 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92D31C33B;
-        Tue, 31 Jan 2023 23:31:40 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 08C3124E22D;
-        Wed,  1 Feb 2023 15:31:39 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Feb
- 2023 15:31:39 +0800
-Received: from [192.168.125.110] (183.27.97.127) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Feb
- 2023 15:31:38 +0800
-Message-ID: <eb255bf6-ed92-d9d8-931b-9eb4212c3780@starfivetech.com>
-Date:   Wed, 1 Feb 2023 15:31:37 +0800
+        Wed, 1 Feb 2023 02:31:47 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E3127D56;
+        Tue, 31 Jan 2023 23:31:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675236706; x=1706772706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=eRiSlPgbw5gdrVkB44EWzW53fRepFsBpI0nB3aDL76o=;
+  b=coPPzcHzZtWG53ackoxlIblmZitZMKiV8Sgb7Dl/k7ZFBjmI6ieEc06a
+   Lu1Z6l128IrRBnX037TjACsSkayFFwfZT9cwJlSWWEWANZEqrDgP6qx0F
+   QRlNbFluwDXyd2oqLcFWb3Qz5GHBvUJslpPY5V3hYd1yGizoAVH61SmIQ
+   DzU9wTd60y9gz9+0Lxc8ksy/QaijdhL+RSIp42JYxJoWNGhCLzusFF3B8
+   P3Nta1XCPOIYW178mMVwelNL0oliWyZOU2B4Qh7jTYLbN1/Fqu1t87QZF
+   6maqjK5thBzX9v3R4Ph6p8+LkixCJXsdKIJTNx4neQS1WjwaFs0IanJb3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="329368987"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="329368987"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 23:31:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="807465084"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="807465084"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Jan 2023 23:31:40 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 01 Feb 2023 09:31:39 +0200
+Date:   Wed, 1 Feb 2023 09:31:39 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gilles BULOZ <gilles.buloz@kontron.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] serial: 8250_dma: Fix DMA Rx completion race
+Message-ID: <Y9oVW8J6cFYnqawn@kuha.fi.intel.com>
+References: <20230130114841.25749-1-ilpo.jarvinen@linux.intel.com>
+ <20230130114841.25749-2-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
- device tree
-Content-Language: en-US
-To:     Icenowy Zheng <uwu@icenowy.me>, Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-7-hal.feng@starfivetech.com> <Y6zHy9oL4xzl+6Rd@spud>
- <dda144a8397a175f3ce092485f08896c9a66d232.camel@icenowy.me>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <dda144a8397a175f3ce092485f08896c9a66d232.camel@icenowy.me>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [183.27.97.127]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230130114841.25749-2-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Dec 2022 13:25:00 +0800, Icenowy Zheng wrote:
-> 在 2022-12-28星期三的 22:48 +0000，Conor Dooley写道：
->> Hey,
->> 
->> On Tue, Dec 20, 2022 at 09:12:46AM +0800, Hal Feng wrote:
-[...]
->> > +               U74_1: cpu@1 {
->> > +                       compatible = "sifive,u74-mc", "riscv";
->> > +                       reg = <1>;
->> > +                       d-cache-block-size = <64>;
->> > +                       d-cache-sets = <64>;
->> > +                       d-cache-size = <32768>;
->> > +                       d-tlb-sets = <1>;
->> > +                       d-tlb-size = <40>;
->> > +                       device_type = "cpu";
->> > +                       i-cache-block-size = <64>;
->> > +                       i-cache-sets = <64>;
->> > +                       i-cache-size = <32768>;
->> > +                       i-tlb-sets = <1>;
->> > +                       i-tlb-size = <40>;
->> > +                       mmu-type = "riscv,sv39";
->> > +                       next-level-cache = <&ccache>;
->> > +                       riscv,isa = "rv64imafdc";
->> 
->> That also begs the question:
->> Do your u74s support RV64GBC, as the (current) SiFive documentation
->> suggests?
+On Mon, Jan 30, 2023 at 01:48:40PM +0200, Ilpo J�rvinen wrote:
+> __dma_rx_complete() is called from two places:
+>   - Through the DMA completion callback dma_rx_complete()
+>   - From serial8250_rx_dma_flush() after IIR_RLSI or IIR_RX_TIMEOUT
+> The former does not hold port's lock during __dma_rx_complete() which
+> allows these two to race and potentially insert the same data twice.
 > 
-> It supports RV64GCZbaZbb.
+> Extend port's lock coverage in dma_rx_complete() to prevent the race
+> and check if the DMA Rx is still pending completion before calling
+> into __dma_rx_complete().
 > 
-> B is not a well-defined thing by specifications, so it should be
-> prevented here.
+> Reported-by: Gilles BULOZ <gilles.buloz@kontron.com>
+> Tested-by: Gilles BULOZ <gilles.buloz@kontron.com>
+> Fixes: 9ee4b83e51f7 ("serial: 8250: Add support for dmaengine")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Ilpo J�rvinen <ilpo.jarvinen@linux.intel.com>
 
-Thank you for your kindly reply.
+FWIW:
 
-Best regards,
-Hal
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/tty/serial/8250/8250_dma.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
+> index 37d6af2ec427..5594883a96f8 100644
+> --- a/drivers/tty/serial/8250/8250_dma.c
+> +++ b/drivers/tty/serial/8250/8250_dma.c
+> @@ -62,9 +62,14 @@ static void dma_rx_complete(void *param)
+>  	struct uart_8250_dma *dma = p->dma;
+>  	unsigned long flags;
+>  
+> -	__dma_rx_complete(p);
+> -
+>  	spin_lock_irqsave(&p->port.lock, flags);
+> +	if (dma->rx_running)
+> +		__dma_rx_complete(p);
+> +
+> +	/*
+> +	 * Cannot be combined with the previous check because __dma_rx_complete()
+> +	 * changes dma->rx_running.
+> +	 */
+>  	if (!dma->rx_running && (serial_lsr_in(p) & UART_LSR_DR))
+>  		p->dma->rx_dma(p);
+>  	spin_unlock_irqrestore(&p->port.lock, flags);
+> -- 
+> 2.30.2
+
+-- 
+heikki
