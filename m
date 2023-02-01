@@ -2,119 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59BB6860FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D186860FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjBAHw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 02:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S231860AbjBAHxR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Feb 2023 02:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjBAHw1 (ORCPT
+        with ESMTP id S230013AbjBAHxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:52:27 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136685244
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:52:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675237946; x=1706773946;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UftT0es0p7C8C1f+ayrijKzdaPsIbazkX0gT4btA5CA=;
-  b=DsbsVCIQxCyBUVnNdQ5xf4NgCsK1/Mj2O306Dw9eCGCDB93m+8ER2kFP
-   oQH9eFywBk4bkx/WDjU4N7cNmLk5O94NItD3XhrmxXb89QarlRHFAl79O
-   NY5A6CS+fSUHAPuUEKr6y+bP/0a2s4Y1fOP9bqrTkbA70pi8VnAC5gMLh
-   N5cni57VhIGUq5Ut9PjmFdFX5n52CYW4J7drlEZw2zxtrc9isXSbYJ8AE
-   g2t8oTTvsmzxhsO+hPegZuoMrTTtCQN1LE69xlQkniBl5DGCl1qX7SSmB
-   91zkLcJIPV1oMO5/QfmumwMd69iOIzeCdJSQY1fWxoKR/8MvMBge2KYve
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="311722922"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="311722922"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 23:52:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="728291211"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="728291211"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 31 Jan 2023 23:52:13 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pN7uf-0005E5-0E;
-        Wed, 01 Feb 2023 07:52:13 +0000
-Date:   Wed, 01 Feb 2023 15:51:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 99f9b95e30d3f667ecf99ada91ea965cfd95c0dd
-Message-ID: <63da1a18.hUnb0KjGfeFKLwNR%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 1 Feb 2023 02:53:15 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE078769F;
+        Tue, 31 Jan 2023 23:53:08 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 2562C24E22E;
+        Wed,  1 Feb 2023 15:53:07 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Feb
+ 2023 15:53:07 +0800
+Received: from [192.168.125.110] (183.27.97.127) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Feb
+ 2023 15:53:05 +0800
+Message-ID: <abe67217-ce94-c410-5a51-3ad3a6570045@starfivetech.com>
+Date:   Wed, 1 Feb 2023 15:53:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
+ device tree
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>, Icenowy Zheng <uwu@icenowy.me>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221220011247.35560-1-hal.feng@starfivetech.com>
+ <20221220011247.35560-7-hal.feng@starfivetech.com> <Y6zHy9oL4xzl+6Rd@spud>
+ <dda144a8397a175f3ce092485f08896c9a66d232.camel@icenowy.me>
+ <51F38449-56BA-4260-B46F-0996FD29E169@kernel.org>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <51F38449-56BA-4260-B46F-0996FD29E169@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [183.27.97.127]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 99f9b95e30d3f667ecf99ada91ea965cfd95c0dd  Merge x86/cpu into tip/master
+On Thu, 29 Dec 2022 09:02:15 +0000, Conor Dooley wrote:
+> Hey Icenowy, Hal
+> 
+> On 29 December 2022 05:25:00 GMT, Icenowy Zheng <uwu@icenowy.me> wrote:
+>>在 2022-12-28星期三的 22:48 +0000，Conor Dooley写道：
+>>> Hey,
+>>> 
+>>> On Tue, Dec 20, 2022 at 09:12:46AM +0800, Hal Feng wrote:
+[...]
+>>> > +               U74_1: cpu@1 {
+>>> > +                       compatible = "sifive,u74-mc", "riscv";
+>>> > +                       reg = <1>;
+>>> > +                       d-cache-block-size = <64>;
+>>> > +                       d-cache-sets = <64>;
+>>> > +                       d-cache-size = <32768>;
+>>> > +                       d-tlb-sets = <1>;
+>>> > +                       d-tlb-size = <40>;
+>>> > +                       device_type = "cpu";
+>>> > +                       i-cache-block-size = <64>;
+>>> > +                       i-cache-sets = <64>;
+>>> > +                       i-cache-size = <32768>;
+>>> > +                       i-tlb-sets = <1>;
+>>> > +                       i-tlb-size = <40>;
+>>> > +                       mmu-type = "riscv,sv39";
+>>> > +                       next-level-cache = <&ccache>;
+>>> > +                       riscv,isa = "rv64imafdc";
+>>> 
+>>> That also begs the question:
+>>> Do your u74s support RV64GBC, as the (current) SiFive documentation
+>>> suggests?
+>>
+>>It supports RV64GCZbaZbb.
+> 
+> Sweet, thanks.
+> 
+>>B is not a well-defined thing by specifications, so it should be
+>>prevented here.
+> 
+> Yah, don't worry - my next question was going to be which bits were supported :)
+> 
+> Hal, can you update the isa string in the next version please?
 
-elapsed time: 724m
+The current isa description is correct. Please see my reply [1].
+Thank you.
 
-configs tested: 37
-configs skipped: 81
+[1] https://lore.kernel.org/all/c507e0b2-5ca3-cffe-55d2-873ed8c24e3d@starfivetech.com/
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                              defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-i386                 randconfig-a002-20230130
-i386                 randconfig-a001-20230130
-i386                 randconfig-a004-20230130
-x86_64               randconfig-a001-20230130
-i386                 randconfig-a003-20230130
-x86_64               randconfig-a003-20230130
-x86_64               randconfig-a002-20230130
-x86_64               randconfig-a004-20230130
-i386                 randconfig-a005-20230130
-i386                 randconfig-a006-20230130
-i386                                defconfig
-x86_64               randconfig-a006-20230130
-x86_64               randconfig-a005-20230130
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-i386                             allyesconfig
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64                          rhel-8.3-rust
-i386                 randconfig-a013-20230130
-i386                 randconfig-a012-20230130
-i386                 randconfig-a014-20230130
-x86_64               randconfig-a012-20230130
-x86_64               randconfig-a013-20230130
-x86_64               randconfig-a011-20230130
-x86_64               randconfig-a014-20230130
-i386                 randconfig-a011-20230130
-i386                 randconfig-a015-20230130
-i386                 randconfig-a016-20230130
-x86_64               randconfig-a015-20230130
-x86_64               randconfig-a016-20230130
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+Hal
