@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 398586862C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:28:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B785C6862C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjBAJ2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S231639AbjBAJ2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbjBAJ17 (ORCPT
+        with ESMTP id S231656AbjBAJ2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:27:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69786587;
-        Wed,  1 Feb 2023 01:27:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D13161723;
-        Wed,  1 Feb 2023 09:27:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 646B2C433D2;
-        Wed,  1 Feb 2023 09:27:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675243677;
-        bh=eTmxy+fQ3CapAdxgxRocAgiDcADfaJKCN4N8iMW4OIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xO1YHaCTzzVrlWlXX3kfHoWq6pCFsj1Di7enpaQi6IZ2XJTLnHILyRMku+xmfjKFp
-         H1pc3SYUcNUS0mhc3Mss+nXADPrCCn1sxUFx9Q8d8NSn9V/HwsN4gt+OCIKLDJP5+N
-         gEaIOlqZbKcKAzNLGyh8Zbu7tQrBlpt692tSKJBU=
-Date:   Wed, 1 Feb 2023 10:27:53 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Starke, Daniel" <daniel.starke@siemens.com>
-Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] tty: n_gsm: add keep alive support
-Message-ID: <Y9owmfZwKn9+1xBf@kroah.com>
-References: <20230201080151.2068-1-daniel.starke@siemens.com>
- <Y9olcm0PiSCSikri@kroah.com>
- <DB9PR10MB58814F4711FC3403F7AF089BE0D19@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+        Wed, 1 Feb 2023 04:28:14 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E3926850;
+        Wed,  1 Feb 2023 01:28:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uBqa2qCNn8nNZNQm2RpLKt9huRiq1AbsZ1uxZ3fnKUQ=; b=glL0Vv/ZTQjmiYfBZcx+ukbuuc
+        yXnYZAK1ShtCed7HXWnFNlnHecHK6mGLHx5Ozq23gL+EjAYgFaLOTvW1gQtI7NPshMX002felYenk
+        Vc225vwbP4Ku+OcbQLDFJIbfHVBdPjpq801dzs/cuFiFwvZGbIUfCnAiXV0fg3w+WrzYR6xpHuj43
+        s6839afKxLeZ3rnzkfH9eti0Nf/AtFeZ2nrKxpNNiqMJ9z3LL9zrODPqkl2MTFCdPQY5GsNP0PIaJ
+        IiYZ+5M2cuVCHlypJQ3jd5C6lNaqTHcVEdd3QmV/elJwg/F+LwTTS1dECalWorXZT+cakGD8Vwzsa
+        Z0cVAt1Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pN9Ok-004iHn-1K;
+        Wed, 01 Feb 2023 09:27:22 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5E99E300472;
+        Wed,  1 Feb 2023 10:27:56 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3F10023CDCE2E; Wed,  1 Feb 2023 10:27:56 +0100 (CET)
+Date:   Wed, 1 Feb 2023 10:27:56 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Waiman Long <longman@redhat.com>,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org
+Subject: Re: [PATCH 2/2] cpuset: Call set_cpus_allowed_ptr() with appropriate
+ mask for task
+Message-ID: <Y9ownMtTdM6R/4tp@hirez.programming.kicks-ass.net>
+References: <20230131221719.3176-1-will@kernel.org>
+ <20230131221719.3176-3-will@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DB9PR10MB58814F4711FC3403F7AF089BE0D19@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230131221719.3176-3-will@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 09:17:31AM +0000, Starke, Daniel wrote:
-> > > index cb8693b39cb7..b64360aca1f9 100644
-> > > --- a/include/uapi/linux/gsmmux.h
-> > > +++ b/include/uapi/linux/gsmmux.h
-> > > @@ -19,7 +19,8 @@ struct gsm_config
-> > >  	unsigned int mtu;
-> > >  	unsigned int k;
-> > >  	unsigned int i;
-> > > -	unsigned int unused[8];		/* Padding for expansion without
-> > > +	unsigned int keep_alive;
-> > > +	unsigned int unused[7];		/* Padding for expansion without
-> > 
-> > "unsigned int" is not really a valid uapi variable type.
-> > 
-> > Shouldn't this be __u32 instead?
+On Tue, Jan 31, 2023 at 10:17:19PM +0000, Will Deacon wrote:
+> set_cpus_allowed_ptr() will fail with -EINVAL if the requested
+> affinity mask is not a subset of the task_cpu_possible_mask() for the
+> task being updated. Consequently, on a heterogeneous system with cpusets
+> spanning the different CPU types, updates to the cgroup hierarchy can
+> silently fail to update task affinities when the effective affinity
+> mask for the cpuset is expanded.
 > 
-> I know but changing it to a fixed size data type may break compatibility
-> as this may change the overall size of the structure.
-
-Will it?  It shouldn't that's why using the correct data types is
-essencial.
-
-> This is why I
-> took a field out of the "unused" array for the "keep_alive" parameter.
-> A value of zero disables keep-alive polling.
+> For example, consider an arm64 system with 4 CPUs, where CPUs 2-3 are
+> the only cores capable of executing 32-bit tasks. Attaching a 32-bit
+> task to a cpuset containing CPUs 0-2 will correctly affine the task to
+> CPU 2. Extending the cpuset to CPUs 0-3, however, will fail to extend
+> the affinity mask of the 32-bit task because update_tasks_cpumask() will
+> pass the full 0-3 mask to set_cpus_allowed_ptr().
 > 
-> > Should you document this field as to what the value is and the units as
-> > you are creating a new user/kernel api here.
+> Extend update_tasks_cpumask() to take a temporary 'cpumask' paramater
+> and use it to mask the 'effective_cpus' mask with the possible mask for
+> each task being updated.
 > 
-> I will add a comment here. Comments for the other fields remain subject to
-> another patch.
+> Fixes: 431c69fac05b ("cpuset: Honour task_cpu_possible_mask() in guarantee_online_cpus()")
+> Signed-off-by: Will Deacon <will@kernel.org>
+> ---
 > 
-> > And finally, "unused" here is being properly checked to be all 0, right?
-> > If not, then this change can't happen for obvious reasons :(
-> 
-> This was not the case until now. I assumed there was some coding guideline
-> that unused fields need to be initialized to zero. Obviously, checking it
-> prevents misuse here. I will add relevant checks for this.
+> Note: We wondered whether it was worth calling guarantee_online_cpus()
+> if the cpumask_and() returns 0 in update_tasks_cpumask(), but given that
+> this path is only called when the effective mask changes, it didn't
+> seem appropriate. Ultimately, if you have 32-bit tasks attached to a
+> cpuset containing only 64-bit cpus, then the affinity is going to be
+> forced.
 
-If the value was not checked previously, then you can not use the field
-now, otherwise things will break, sorry.  Those are useless fields and
-should be marked as such :(
+Right, so the case above where the cpuset is shrunk to 0-1, then the
+intersection between the cpuset and task_cpu_possible_mask() is empty
+and it currently simply fails to update mask.
 
-sorry,
+I argued it was probably desired to walk up the tree to find a wider
+parent until the intersection of {cpuset, task_cpu_possible_mask,
+online} becomes non-empty.
 
-greg k-h
+But I suppose that can wait until we have more time.
+
