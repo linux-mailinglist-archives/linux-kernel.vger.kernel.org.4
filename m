@@ -2,166 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469FB6864C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCD56864DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjBAKxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S229574AbjBAK5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjBAKxP (ORCPT
+        with ESMTP id S231799AbjBAK5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:53:15 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55FD644BDD;
-        Wed,  1 Feb 2023 02:53:14 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 1042920B74F7; Wed,  1 Feb 2023 02:53:14 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1042920B74F7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675248794;
-        bh=u6xY+MjMRo8fO7fdvwYCp6a/E0wL/T2x+iwrgYUQBA4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V/T21LLk285Lc3xQ3YEJ2yYzCwz37PZFw0s0JZPHeJAGbtfX0bdEszVUIq6veJe4J
-         5fRyxzl2aJ8mRayr1QgasGIyKYfLky7w430pj20/L0KTH/0QsrM/s86sIoTRFKMJhC
-         kFu3wjomkuvMuwrY0erQDWOw2sG5togbWMFdclhc=
-Date:   Wed, 1 Feb 2023 02:53:14 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, daniel.lezcano@linaro.org, tglx@linutronix.de,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-Subject: Re: [PATCH 4/4] dt-bindings: hv: Add dt-bindings for VMBus
-Message-ID: <20230201105314.GA5733@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1673887688-19151-1-git-send-email-ssengar@linux.microsoft.com>
- <1673887688-19151-5-git-send-email-ssengar@linux.microsoft.com>
- <f74fe561-dc20-0681-12af-4a4782a060be@linaro.org>
+        Wed, 1 Feb 2023 05:57:00 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B329CDD7;
+        Wed,  1 Feb 2023 02:56:58 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id iv8-20020a05600c548800b003db04a0a46bso2349439wmb.0;
+        Wed, 01 Feb 2023 02:56:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LinfPfwdc69r+5MS9+W8GWtbQTG5CSXHZBHVy7HHbcc=;
+        b=d9PgESiUcaaRDq+WJ3qIgUQfDcb66ZTE97cDw7SP6ZgJ3dD3SeK72xuDAnSYhmTgnq
+         /wpB10A26l+EJ3cf+WDXXjHtkOZQX+0iGr4nLsuWOH6fZ3ADULkg0w6ayIs+izB5KSi3
+         BilQgqt1RChReSbl/E+QB82h9uyKf+ipLBKu2aLDxw1DHdtsRaKE6d9prSeFiURA7Sds
+         UpTOPVYZicbDAuMSU2Ajfb77KnWRDP3xSOClB6BFn7p2uYWGHRq8sf2qLel5NtGxWeRV
+         1Vpiht2CFIr3Y0u6shqlmXHt0q7gl47P+Hfu4euynXC9rExcBXgf1ooc3cr52Ta87HJ0
+         3F/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LinfPfwdc69r+5MS9+W8GWtbQTG5CSXHZBHVy7HHbcc=;
+        b=Lf1e+6fkJqNq3N9CAsdqCxlMZCaipoFDPZWl71OuZHXg7VfOwKyMGT2tCuZeK5bDSY
+         K3dzEJdPnrOQijw1K/VjoKhT0g1L2BbEEN+HOS7P5NE8LhDm8FP006f7GWoRlajLMr96
+         Kn/ciWepXJXEolG8OJ2BhsiEFMD3w847L8aQCCX7nlTB+yYFg/RgCG976/RTxw1pr/+B
+         68aRAzpsqcrXsHnDxHbXID3Kr1rh9wFOFS8A90akfjyaNtfTBXPmmENnilPcJMR9PPle
+         BPLCX809f5cwHt5wJ6Li92TiBH0KG9VI4g6G8qfGgJar2vi2c22TklDtTzICJ0XWPIX0
+         jbZg==
+X-Gm-Message-State: AO0yUKV4Kh2czdgisTcYl0LIjCfYKLGHZiMVydW62v2Jmt1jebebJkuH
+        My3dc3asRpWk0sE35rzYpss=
+X-Google-Smtp-Source: AK7set/YIe/I+C+MEjw/u4XskuAdX7Srwo/ASJLfYgnYv2wbXKrk75N0foIaGyXaEO3k+QVkOVLCEQ==
+X-Received: by 2002:a05:600c:601b:b0:3dc:557f:6129 with SMTP id az27-20020a05600c601b00b003dc557f6129mr1566953wmb.2.1675249016755;
+        Wed, 01 Feb 2023 02:56:56 -0800 (PST)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id l16-20020a1c7910000000b003dc1d668866sm1357736wme.10.2023.02.01.02.56.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 02:56:56 -0800 (PST)
+Message-ID: <f5e283bf-2cd2-779e-eb2d-ef36f4780153@gmail.com>
+Date:   Wed, 1 Feb 2023 11:56:54 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f74fe561-dc20-0681-12af-4a4782a060be@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 1/2] arm64: dts: mediatek: mt7622: Add missing
+ pwm-cells to pwm node
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        robh+dt@kernel.org, john@phrozen.org, sean.wang@mediatek.com,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221128112028.58021-1-angelogioacchino.delregno@collabora.com>
+ <20221128112028.58021-2-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20221128112028.58021-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 07:53:07PM +0100, Krzysztof Kozlowski wrote:
-> On 16/01/2023 17:48, Saurabh Sengar wrote:
-> > Add dt-bindings for Hyper-V VMBus
-> 
-> Missing full stop.
-> 
-> Subject: drop second/last, redundant "dt-bindings for". The
-> "dt-bindings" prefix is already stating that these are bindings.
 
-Will fix in v3.
 
+On 28/11/2022 12:20, AngeloGioacchino Del Regno wrote:
+> Specify #pwm-cells on pwm@11006000 to make it actually usable.
 > 
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  .../devicetree/bindings/hv/msft,vmbus.yaml         | 34 ++++++++++++++++++++++
-> >  1 file changed, 34 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/hv/msft,vmbus.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/hv/msft,vmbus.yaml b/Documentation/devicetree/bindings/hv/msft,vmbus.yaml
-> > new file mode 100644
-> > index 0000000..66cb426
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/hv/msft,vmbus.yaml
-> > @@ -0,0 +1,34 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/hv/msft,vmbus.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Microsoft Hyper-V VMBus device tree bindings
-> 
-> Drop "device tree bindings"
+> Fixes: ae457b7679c4 ("arm64: dts: mt7622: add SoC and peripheral related device nodes")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Will fix in v3
+Applied, thanks!
 
+> ---
+>   arch/arm64/boot/dts/mediatek/mt7622.dtsi | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> > +
-> > +maintainers:
-> > +  - Saurabh Sengar <ssengar@linux.microsoft.com>
-> > +
-> > +description:
-> > +  VMBus is a software bus that implement the protocols for communication
-> > +  between the root or host OS and guest OSs (virtual machines).
-> 
-> Why this cannot be auto-discoverable? Why do you need OF for this?
-
-This is a virtulization device, and I guess we have discussed this in greater
-length in other thread.
-
-> 
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: msft,vmbus
-> > +
-> > +  ranges :
-> > +    const: <0x00 0x00 0x0f 0xf0000000 0x10000000>
-> 
-> Did you test the bindings?
-> 
-> This property does not look correct. If you have static addresses, you
-> do not need OF. What do you want to discover here?
-
-fixed in v2
-
-> 
-> > +
-> > +required:
-> > +  - compatible
-> > +  - ranges
-> > +
-> > +examples:
-> > +  - |
-> > +        vmbus {
-> 
-> Use 4 spaces for example indentation.
-
-Fix in v2
-
-> 
-> > +		#address-cells = <0x02>;
-> > +		#size-cells = <0x01>;
-> 
-> That's not correct style. Drop hex notation. Drop leading zeros.
-
-Will fix in v3
-
-> 
-> But anyway you did not test the bindings. This cannot work. Try.
-> 
-> > +		compatible = "msft,vmbus";
-> 
-> compatible is a first property.
-
-fixed in v2
-
-> 
-> > +		ranges = <0x00 0x00 0x0f 0xf0000000 0x10000000>;
-> 
-> What do you translate? There is no reg, no unit address.
-
-Commented on v2 thread, if there is any further concern using ranges
-please let me know.
-
-> 
-> > +	};
-> 
-> Best regards,
-> Krzysztof
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7622.dtsi b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+> index 146e18b5b1f4..f321c6d0fd7c 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt7622.dtsi
+> @@ -435,6 +435,7 @@ uart3: serial@11005000 {
+>   	pwm: pwm@11006000 {
+>   		compatible = "mediatek,mt7622-pwm";
+>   		reg = <0 0x11006000 0 0x1000>;
+> +		#pwm-cells = <2>;
+>   		interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_LOW>;
+>   		clocks = <&topckgen CLK_TOP_PWM_SEL>,
+>   			 <&pericfg CLK_PERI_PWM_PD>,
