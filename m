@@ -2,396 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D0F686A68
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAD8686A6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbjBAPc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S231821AbjBAPdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbjBAPcQ (ORCPT
+        with ESMTP id S232452AbjBAPdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 10:32:16 -0500
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2051.outbound.protection.outlook.com [40.107.14.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65C074A56;
-        Wed,  1 Feb 2023 07:31:46 -0800 (PST)
+        Wed, 1 Feb 2023 10:33:07 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4620728E5;
+        Wed,  1 Feb 2023 07:32:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675265573; x=1706801573;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=3r//c4+5Sjd+iJEFNT1BbOtIs1xQHUtwkX0mdbGf9bo=;
+  b=ZM3BinKrUIuE9SPXYx3nsX4B1DRnKJ0SeBKU6KqzSnSJsVmk7M/wBRqB
+   IhZNVzIA2xypQ2TAZ3c4kEdtlnR0AMqn2CjLdtuASM8Bjpd1pMk2ZI1xH
+   YjuSWgC9zT1Wvy6bN5eDKngsrnwnGUG1xRfzTQnOymGOk68pPq4vyzk1w
+   uQ7SWHuGDJoL0zqkf5he3Ez9xLJieSDgMLx9OkSYd/E4X21VcKg16U39P
+   vIXNMxyrxbQculFYiHfG1K2tTstPzvwqVrPqGlikFepTTBXXRCzmD3qrF
+   EIb+gYduWlvKSTNNz51DLwEec2XfPBUeY5CyKPum+DcB5rtqDgLmS+PJZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="414381395"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="414381395"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 07:31:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="910350519"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="910350519"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Feb 2023 07:31:35 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 1 Feb 2023 07:31:35 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 1 Feb 2023 07:31:35 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 1 Feb 2023 07:31:35 -0800
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.44) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 1 Feb 2023 07:31:33 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NXUinsH6US0TxYCovMuinxRAjpWCcFRlRYxJTCUbE+BSb7OmJCigt1hZaMwQGsJ12NiNjiymhB9ucLbslaRxXHfX2ZPzysD8C9jDdO1WuL/gcCmwHBa9121bnYIX/lzCD+/0jPT0QapSKGe9a3k6AwSdp/lQUT1JWRkoNgz3qxi5F23pD902VX12NoA/qy3NuRKpO3CVTOxyOoAbr9rnEJemv910FpOT/l4B1ucdLHR7pd4tCRENtbRy5P0ehyFgj11rrva083jaqf4sY41mnZZotojntR8ewYJ/5blZWkjMKliRcDqTeAHdUQufGKKyXATt99RIsop3XIEPaxnz6g==
+ b=E1bFDHPKW637D6ZPmC2XGUQqB6/DBAv/ll/Ud+FNHyJUyNOJ6CRwhucDneRCYlrEB1YrE6bz5ax1cQW+h/yekb2yQ7GbW/Hjtymnr9OdhYO27stjSxm20oBcNljWmtiC6llGlEwt40TfJwmXmwTcMKY0Ih1D1Ki/bNW9TmDqpd3DvaQPrcIEEDRNIkdkzv2HzXIbYgXdsEPN7ATWr6L7D5iXECdjlFSih1SyFY9lQOaXKT0JcVhsIHiJo+ulUgbvZt+NNCQpeFaDtkBUR6hYoPKw8zr9TOsUAACdn+9e8dEhz2FLW+GL9z/bYrFLu4A/TUF65MCvTSUQATWcObLYZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0v4g926Najd70D6JVRBk6pqZDBXe2q3YTcW0i3rC4W4=;
- b=jVgsKknVEhiqhUW0fXF6JhFQ0vwTYcq9tIdUrZF+yC00+t9TmEwGUj9w9+or9971d9OHln/vwdpROkkZzlRV9nBmNG94BKR1pycYwkYr5O7RbkQgy8UVgOQYriuPG3RRGBwuWzo49bB4Qe2ehS78K83kyMpXjmotweE2nl6fdmHZK4vYniwTD9G7FbnL6Hp/QxGz/c+WkAiF2x+e95gNpc1pY9kP5bu6ZadnLaK7mHkwu7l+A4cZ/dg0rpZxdkHvyen7QxQ+bKRv21+CY6yVuZzCeXAKuEbwFQQnRBw6yuwlZqCW4ipyIsvCsolo4hFuP4aJxtOinTWlV3Skg3E3gw==
+ bh=k9nJrUobmTVI5lr3JhKoN0Mg3gPhOnIs2JnuVJzj3Kg=;
+ b=kQ3T/0KMsOELZ4V5uICtw3UwPKl2hnbrKJYQFpjXQ0B1DZKYcZjEXVL2NphWz5uwk4CAnFp9buL0wKXffvsrIBvLnds/taQwD/ehUuA6c6cVp1j8R5s5z7tkqcqXLlLD9l6p+CjiHszE1MxKbfwSLmFjhzRyiPUKKQ/YHoZqdqG2yE2sfpK5xkTwKTos+eW7MehP4yd+nVVtGB4jiOkU3PamcKkcpcNEHqukZwR4HlVt9uDS7cnhg+VbMXqqbHpDFw79vAMy9ugQUor/IcMB4ShEy6vTZgg+HpsAcyUdFD2NAIDfkDOl0TnkxqxlXQPiAVLdGDB7FXq56E09p73pFw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0v4g926Najd70D6JVRBk6pqZDBXe2q3YTcW0i3rC4W4=;
- b=l2gDgQ6SUiEmy7e63G/q0VRUsqD42Qd1+xc1wb8VlnGG/6W09FWKoQXdV6e0MfAdxwk1Y80QS5V8vj/GN175vbUWdj3B/BR9MpPC6phu9b4R74AGwAhcts1iCSRGXgQFk7/mqcOyI+eJ2KOUTUcE8sTWV3XnM7pEUGR63A/gUnS5Qh/SKjrGMuu2/RKB0mER7sadGGtzk+L9O9uvVchieut0hl2o14y/LtpgUfBW0mk7FHigJpH9/fcrLegKti2hk/kDVaV0rFnbcsj6YY2pSRkAULovXrH+UbAyRhJhKtb3rukvMOnbgZlmYQwhJp7+SWOcMlPbbpEQauwi9V17Uw==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com (2603:10a6:803:4::13)
- by PAXPR04MB8734.eurprd04.prod.outlook.com (2603:10a6:102:21e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Wed, 1 Feb
- 2023 15:31:34 +0000
-Received: from VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::f46b:8bec:aa6:b8a1]) by VI1PR0402MB3439.eurprd04.prod.outlook.com
- ([fe80::f46b:8bec:aa6:b8a1%7]) with mapi id 15.20.6043.036; Wed, 1 Feb 2023
- 15:31:34 +0000
-Date:   Wed, 1 Feb 2023 23:31:17 +0800
-From:   Chester Lin <clin@suse.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>, s32@nxp.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Matthew Nunez <matthew.nunez@nxp.com>,
-        Phu Luu An <phu.luuan@nxp.com>,
-        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-Subject: Re: [PATCH v4 2/3] pinctrl: add NXP S32 SoC family support
-Message-ID: <Y9qFxbDIzJClmEKz@linux-8mug>
-References: <20230118094728.3814-1-clin@suse.com>
- <20230118094728.3814-3-clin@suse.com>
- <CACRpkdZgjoxV-PPUcVHp=e0uMzx8UnvLoLMLXynm8X4VtBdN7g@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by DM4PR11MB6333.namprd11.prod.outlook.com (2603:10b6:8:b4::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.24; Wed, 1 Feb 2023 15:31:31 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::3bd5:710c:ebab:6158]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::3bd5:710c:ebab:6158%7]) with mapi id 15.20.6064.022; Wed, 1 Feb 2023
+ 15:31:31 +0000
+Date:   Wed, 1 Feb 2023 10:31:25 -0500
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     John Harrison <john.c.harrison@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg KH <greg@kroah.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the
+ drm-intel-fixes tree
+Message-ID: <Y9qFmmi2C20AFQB7@intel.com>
+References: <20230131130305.019029ff@canb.auug.org.au>
+ <Y9kNRVppj5Uxa9ub@smile.fi.intel.com>
+ <9566dc52-2ff1-760d-c9cb-fdfef9278f05@intel.com>
+ <20230201151113.22382269@oak.ozlabs.ibm.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CACRpkdZgjoxV-PPUcVHp=e0uMzx8UnvLoLMLXynm8X4VtBdN7g@mail.gmail.com>
-X-ClientProxiedBy: TYCPR01CA0110.jpnprd01.prod.outlook.com
- (2603:1096:405:4::26) To VI1PR0402MB3439.eurprd04.prod.outlook.com
- (2603:10a6:803:4::13)
+In-Reply-To: <20230201151113.22382269@oak.ozlabs.ibm.com>
+X-ClientProxiedBy: SJ0PR03CA0072.namprd03.prod.outlook.com
+ (2603:10b6:a03:331::17) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR0402MB3439:EE_|PAXPR04MB8734:EE_
-X-MS-Office365-Filtering-Correlation-Id: fdd17444-fbb5-42ec-f904-08db04696645
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|DM4PR11MB6333:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3b90b4d2-f6dc-4789-a77e-08db046964c3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lriGmScR+7aZ5TLs/xNVeBJ0WgtymmAYPvowdWK1YCnxMB9f1/hYDVQT23NQyneYaNUfL98OX9lBur2F92+NLqyIeL1MJnrpa1lfDi8+GWrwuJLJzmdqZWRvjB6pLCVOTHIoNup0qp8wzKWt4Zwq0MWu22L7g0NXXbkl5y1bSnOBUUzMpOEfxBJMvNYUyFoHAovlTeAYKLnKptr8xHTpHmBbFgpU4j/1MmBLhHXMnWgzyK8KLdOm7aOPNAzuA3Pq5JVqvlgh5E3lSGshc7bgpo4rL/nhih08V/0s6SrjqP/jWzhFcB9MdZ+zsfX8DthPRSSHN8WOBPPRy753EtkP3Q/K4KATBBpO3eTmKRaR77Mp+3wNkKXU3cYXQVLDklmJPROJ05lyqeEXk9sqseSVUy84XzbZpQBDNh++fuh8Zhl6xgsmPpF3qai6kzRCRkFV5uv3zH+G78m0jLFzQx9Jk0TQe7qKqFCx54ieP8S6SfQ4TiI/y04YxbeMrvcoqVLK77zGug/pXMTaX4o3RgcnUtMAttRExpRv88VvlbncXItHvgcpfnVsqQlZYLbKMyjQrUhtzfaCUJYzD56jdB74lqHixp/qb0V7Nz7KNFNSCskBBrU/wu6osNV4lH383v5OHjkgYkxHK91joLzG0LctHv4nV6Q+bOLPbSGXeUHYPRKGT7C6K01glMi5MoV/Qdad
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3439.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(376002)(346002)(366004)(39860400002)(396003)(136003)(451199018)(66946007)(66556008)(66476007)(6916009)(4326008)(966005)(33716001)(41300700001)(8936002)(8676002)(6666004)(6486002)(83380400001)(54906003)(5660300002)(478600001)(86362001)(38100700002)(316002)(6506007)(53546011)(2906002)(26005)(9686003)(7416002)(6512007)(186003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: RDYrOMeqi6Avk8D14Yc46U/W3Rc5chEf7oeNeJ2E0YilqgfR6TvFV/ONWYpoOfePvTvxY11DlcaXdpLJkwPcC6ostL9/YNIZ3u5Rox50hIFj9p3IXLsxNMrqb2ypiTZPh2MyiCbXNkyu8zGVARjtS8Yzod7r3LRGa1oUNTMsyEXfl3hoi+k5m5nAvV580iIwD3GeUaZ5ztydYZwnmPjf6peCKOv7Ou5xikRP3tUv0EBfji1cTaFNMTacTi57K0MzHLQzXjVObB73ZyYy96IjgcErz2z3Ghh6a66QL4AjVcmeCgiBb9t74NPcG4fqRSfwcvfxQ+6g3EjzfXWDWWzsJ2IKdFk8ddVazLUIPVPfkxQzFDd2BLS/6pcTfDYnu3KjFAXAE0jOGexAsT7PBMmsiHoANFivfEFwN6KdiscjTRILtUJNmMeWaesDm8WuBkcgn4xykg6G0SwsVbhSYpPDlVLJx+dV9LnrwfT5hChN9XePeDCdA/WSNeHp/Yresmr3hqIzr6afLgRYBwDsiwXm4BblJu0qXJRE1qlNA0Ez31lN30gnNzqirrcACfmXNA8b6oWXnXBGY/j3hk9jBgFIdxjVx5YhOQtAOUZecbzxVphe+y4CQzR91qnjGTh6BvBgc/VVWxFV4lQBw5dEtz21Zg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(366004)(39860400002)(136003)(376002)(346002)(451199018)(6512007)(186003)(26005)(82960400001)(2616005)(38100700002)(53546011)(6506007)(6666004)(2906002)(478600001)(6486002)(36756003)(7416002)(316002)(5660300002)(54906003)(8936002)(86362001)(44832011)(41300700001)(66476007)(66946007)(83380400001)(66556008)(6916009)(8676002)(4326008);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RSJz1IzGFfsAjlfceaS1XUUi4j106aMwMIaEewWpUZwq7GGpgTiQO7M0XLlh?=
- =?us-ascii?Q?C+2LPxxH5Ro97seTQt1Y1PVjquPbANtKjD3Q6dwqZbqbIsBJySdBWyDg/8H8?=
- =?us-ascii?Q?TxAjB8PjCsIggP1KRBZFNXLcxMPPlJS/xXoalTmReDrvvsazWR+8vCSPrDe/?=
- =?us-ascii?Q?AKb3iUipHpqFrGhDho4TPKu7PaYB6Hzj8eG2UinA/EJEZymG098hvuVYcdq7?=
- =?us-ascii?Q?GVKGEJ56ejTv1+cI10fOu95eWWn1Jkkl2uerubJtRegMZZIwZByjUSUHQw3M?=
- =?us-ascii?Q?mNqVj+eGIRUMtfZuX4ERpbC0TvMAiDq6CQCsk0zPpD3DXobd/VeUJCLHqK5E?=
- =?us-ascii?Q?mN020b4twNMrCh9DduDKOmdUOR+bYI2MfA/X3IbQsZSYcsfbWz9kb8extP5e?=
- =?us-ascii?Q?9sncyrmfTe+5toWbUduK8M3biWXgq+cn+3GPiB+2MqH07xRUs+1uIdN7Mkr1?=
- =?us-ascii?Q?niSCdZSoJxGE1rZD+/WG1+0sa5YrySz39t4S/pzNl2A7ogtGJ9tXQ/fW1SON?=
- =?us-ascii?Q?l7H1G07Zn+gG2kogt7pl5q4qxs6xySqvSj0+hmPfqW8aTxXwBbC+vwEeAuS/?=
- =?us-ascii?Q?W1kjcMQxpBhKsQWEOAdpp6s24m6+IWTqXaqkO8GmGpxa5JCV/3CATguFwEDy?=
- =?us-ascii?Q?1oSSWnG5W9KXDbr6ffQePVKkx3uxTsJC6wkEZS9F0zMbv1TukYtgRX2MRiw1?=
- =?us-ascii?Q?6mXWPbK+NZ+0I0CiVu6IMPmFKi4nVf+lQJBti6tec9VeJFvVC1vlDLlk7o5W?=
- =?us-ascii?Q?eBYj80K6khPXQ/N4S4CjiJj6jYLDdyvWYn3fJrfV9Z9FbMm3w/c6uCv/UfRL?=
- =?us-ascii?Q?mnG8ERYZAiTyFhl1YBy05Ux5nZ4MmBQv/w2pEC3AV3yVVcuXRR6t68Q1xJWJ?=
- =?us-ascii?Q?6yoavEC14ICPNI90fScsm8fWqXzkg+rguIjIJnrZi3uBO7OH4o3i4tkA7fiK?=
- =?us-ascii?Q?IKLjgVFuYcEKtpyag110nlO43HuhvznhUDkTp23ANUL41/eC2mmDva2o5iib?=
- =?us-ascii?Q?YtSCJAbAONcvPv9LtexB4ZyK+QCKF0tsDvJsSIZ6H+Y/MrQNQl11Tzfuzd2r?=
- =?us-ascii?Q?rDdTOlZjTFio/yv3yZIEc4JB79Feq8ulZsK+x1Pkn5p9xSO5LrJEW9QtAPWx?=
- =?us-ascii?Q?K7dFd+t0cKkP8PGq2wcW6lyt+Eu4nUVdCojhDqVSoVyO3IcpjaquYYIZcu+l?=
- =?us-ascii?Q?GB7srKDjUHYORDOAMb7gj+Yih3bCaAjS+tk4Ps6pYAyJtF3e/2xVkLZ9t2FY?=
- =?us-ascii?Q?OvobmuofyLQmIAqIfB8LVB0igblMYxsKxHNMTO6FtqxQULos17Ug/ekU/lWX?=
- =?us-ascii?Q?paCxIr4qa6QFq82R+Ptfwyf6tr/F/05tHNKmKp0dd5+cBL+dfr6GvKJsclir?=
- =?us-ascii?Q?prShOSrymXXacgTzCHgEHe4/N9AWZTaauM9LRb+EytUGzYByP/HBziLiLoPX?=
- =?us-ascii?Q?TOUFxaOMKbQF3PtsMeJRw4805dWWSlb1tWDkjSZ/R0xUiZVkYRULbSm25+zk?=
- =?us-ascii?Q?RecUz++wbMYmjQ3w8UgsASdnUVow0fRQOd/fheXivZ4oUgeQMiK3BSbG2Prr?=
- =?us-ascii?Q?qE1C8+FFbDIVeT1d/sU=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdd17444-fbb5-42ec-f904-08db04696645
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3439.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XKJV8SJ19mDFW+RrZyNrJY2wMpmfIzZwj2gHgev+LaC6up/TPNklmGWSKqOs?=
+ =?us-ascii?Q?MKkBJDVri/QPf086fWOS931wxrPcPxEzAZ6V584JX+g4XsNL9xePVeUJK/4K?=
+ =?us-ascii?Q?whrLkCvZXMOMRuseFst4XRZAT6w/QUtO9l1cQSo8BALdkuwE82ezA368V6nQ?=
+ =?us-ascii?Q?gf3OmfAq2YL13TX+2bSarAUG/C4qTxeFY8GtZZqNPegf+7gcnqkIAkDLKPil?=
+ =?us-ascii?Q?wSeV58Wi27U1uyRB6i3VoWeigoMYp4jkK+HJKdK44izMxIqyEe/m+ih/jyFG?=
+ =?us-ascii?Q?FCcooYdmwXCyST2vy2ZyhRAm1G/ht7guF810lCFNWG7sLIcywvooTngV9FUE?=
+ =?us-ascii?Q?Kc/nkjPR+nQDPNAvLxMoLZBUPCt/86Yx1QxTuKkqHGL9rcc7whOL2v3hiUfF?=
+ =?us-ascii?Q?dRIgKtU9LN6nGoOrdmde16cy8eixY6zXUZYp7GTFRDroyGTZbtenCz5r48qi?=
+ =?us-ascii?Q?aF7xidQq9HxiyK759aGaU9r9muQozbD7vXUoBSfdOSfYHGNIgvfBz2oHM71M?=
+ =?us-ascii?Q?H8cRzclcEX1JXjE+zIIHtiWP6zLGf8Z+a2HerbfT+1KE9yy18GRY8k5CwxY+?=
+ =?us-ascii?Q?ajtswxGxAiU1e2hkmWFJ8OEe4/i1+4rgegJKiNgSr6dlZA9FWmeuDeXm/Ht1?=
+ =?us-ascii?Q?IeK+xzsUWdBGyzXCIiX0R7SmA6x4Jbtoda1cib63NEPROap9WtYGBh7CvzWC?=
+ =?us-ascii?Q?RB/BFZ0cEsTki0uDbsyspsC0xjS7E6SByXuGBkbv/TuVKzE2UPV4R6UUKL9w?=
+ =?us-ascii?Q?C7qzRWc15oGjIyyQv/OxaJjv5tKhpXPmzjjrFwrD5+c0+y4fufD0b4OTZ/XJ?=
+ =?us-ascii?Q?1okDlnu7NCWCDw2GyFGK3nV0/Lc4JhCGQlSRXrhzCioH34QD5LDd6QGKHdd7?=
+ =?us-ascii?Q?2EpgW0yfDcQDKj/tMucRucX3053t7MIf14M0tHxpxpzgvM6WaGfkk5tmITtm?=
+ =?us-ascii?Q?jTEUMv8pCVP02iiEwBt69hwPojORhX3hH0nF2zzzBDACW22e5swB1Ko26Ayc?=
+ =?us-ascii?Q?4gulUdnOjYk2bVu++kPocqzeCIB1E2LAdDissIh/SDDArOi0/oyBIZBK6V20?=
+ =?us-ascii?Q?jOLCNvw8iagaCeI+1bshHGpBVUj949SUqqaBTn0SY5gpWAEYbGpPSXv/XSOz?=
+ =?us-ascii?Q?jGHsPGbfIWz4myU4upiH3ae6yH+U+gGuLPakJW70YWyM7A3Jcp4mghDpZcO9?=
+ =?us-ascii?Q?pVESUnyrC+QBy7haCFa90bHlyklR29MA54OVkua8Panuguj1ztdbJ4RDxRaI?=
+ =?us-ascii?Q?lE844EhCqT7dIJb2lWF/Sgx8BkBKmVV/ciXA7Bqyr52/3PF2ktC+eq2TJ27m?=
+ =?us-ascii?Q?3optrngeg/YaoMFCL4RW5wOHfg9RXOpthdVxSf2ubDKyZb9QJ7Sfn5vhXDsV?=
+ =?us-ascii?Q?mhYRMy/YIXjpM6aTeVKxuFmVjVen2NB6617g2UjsqK0u13efwMSZUNqxTKXb?=
+ =?us-ascii?Q?0oMubuU1Iq6Jv8JYYohHzYOfJpPohxaQQkReBL0mzrtPfCHqk3I4TdblU5wh?=
+ =?us-ascii?Q?bQnvjayDXkoK6ME95d2SWNKCCqNHvHJQgIR5VIa0505UanHfF47O9CGchKCJ?=
+ =?us-ascii?Q?PnPCuskeWCHBy5LPDFSHyvtnLSzjA7BNuvK569VBdJWlLvYUSM46CyfmOL+7?=
+ =?us-ascii?Q?bg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b90b4d2-f6dc-4789-a77e-08db046964c3
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 15:31:34.2776
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 15:31:31.8083
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZBUjDiqRaVlWc5+ywCsoQ3WocLB4ulHGQPhJRG9Xrny+WDqNx375Gy1Dd8v9Egbz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8734
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: HU+wZvHxBT3KQjBGiOagxEC5swP5K8ZkYi5uwfFHZCPFxW97gWh2kr45pu0q/vzS8uJvSf4Ay12Taq2h9mLqdQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6333
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-Sorry for the late reply and thank you for reviewing this patch!
-
-On Thu, Jan 26, 2023 at 02:25:50PM +0100, Linus Walleij wrote:
-> Hi Chester!
+On Wed, Feb 01, 2023 at 03:11:31PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> thanks for your patch!
-> 
-> This looks much better and the DT bindings are finished which is
-> nice. As the driver is pretty big I need to find time to do review and
-> look closer.
-> 
-> Here follows some concerns:
-> 
-> On Wed, Jan 18, 2023 at 10:47 AM Chester Lin <clin@suse.com> wrote:
-> 
-> > Add the pinctrl driver for NXP S32 SoC family. This driver is mainly based
-> > on NXP's downstream implementation on nxp-auto-linux repo[1].
+> On Tue, 31 Jan 2023 10:27:29 -0800 John Harrison <john.c.harrison@intel.com> wrote:
 > >
-> > [1] https://github.com/nxp-auto-linux/linux/tree/bsp35.0-5.15.73-rt/drivers/pinctrl/freescale
-> >
-> > Signed-off-by: Matthew Nunez <matthew.nunez@nxp.com>
-> > Signed-off-by: Phu Luu An <phu.luuan@nxp.com>
-> > Signed-off-by: Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-> > Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
-> > Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>
-> > Signed-off-by: Andrei Stefanescu <andrei.stefanescu@nxp.com>
-> > Signed-off-by: Radu Pirea <radu-nicolae.pirea@nxp.com>
-> > Signed-off-by: Chester Lin <clin@suse.com>
+> > On 1/31/2023 04:44, Andy Shevchenko wrote:
+> > > On Tue, Jan 31, 2023 at 01:03:05PM +1100, Stephen Rothwell wrote:  
+> > >>
+> > >> Today's linux-next merge of the usb tree got a conflict in:
+> > >>
+> > >>    drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> > >>
+> > >> between commit:
+> > >>
+> > >>    5bc4b43d5c6c ("drm/i915: Fix up locking around dumping requests lists")
+> > >>
+> > >> from the drm-intel-fixes tree and commit:
+> > >>
+> > >>    4d70c74659d9 ("i915: Move list_count() to list.h as list_count_nodes() for broader use")
+> > >>
+> > >> from the usb tree.
+> > >>
+> > >> I fixed it up (the former removed the code changed by the latter)  
+> > > Hmm... Currently I see that 20230127002842.3169194-4-John.C.Harrison@Intel.com
+> > > moves the code to the drivers/gpu/drm/i915/gt/intel_execlists_submission.c.
+> > >
+> > > Is there any new series beside the above mentioned that touches that file and
+> > > actually _removes_ that code?  
+> > As long as the removal is limited to list_count/list_count_nodes,
+> > that's fine. I only moved it from one file to another because the one
+> > and only function that was using it was being moved to the other
+> > file. If someone else has found a use for the same and wants to move
+> > it to a more common place then great. I assume there was no conflict
+> > happening in the i915 specific code.
 > 
-> (...)
+> I have added this fix up patch to linux-next today (more or less - this
+> is a hand hacked version, but you get the idea):
 > 
-> > +++ b/drivers/pinctrl/nxp/Kconfig
-> > @@ -0,0 +1,14 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +config PINCTRL_S32CC
-> > +       bool
-> > +       depends on ARCH_S32 && OF
-> > +       select GENERIC_PINCTRL_GROUPS
-> > +       select GENERIC_PINMUX_FUNCTIONS
-> > +       select GENERIC_PINCONF
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 1 Feb 2023 13:13:01 +1100
+> Subject: [PATCH] i915: fix up for "drm/i915: Fix up locking around dumping requests lists"
 > 
-> Maybe select REGMAP_MMIO
-> Maybe select GPIO_GENERIC or GPIO_REGMAP
-> see further below.
+> interacting with "i915: Move list_count() to list.h as list_count_nodes() for broader use"
 > 
-> > +#ifdef CONFIG_PM_SLEEP
-> > +int s32_pinctrl_resume(struct device *dev);
-> > +int s32_pinctrl_suspend(struct device *dev);
-> > +#endif
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  .../gpu/drm/i915/gt/intel_execlists_submission.c    | 15 +------------
+>  1 file changed, 2 insertion(+), 13 deletions(-)
 > 
-> I think these are usually handled by tagging the functions with __maybe_unused.
-> 
+> diff --git a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+> index 3c573d41d404..e919d41a48d9 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_execlists_submission.c
+> @@ -4150,17 +4150,6 @@ void intel_execlists_show_requests(struct intel_engine_cs *engine,
+>  	spin_unlock_irqrestore(&sched_engine->lock, flags);
+>  }
+>  
+> -static unsigned long list_count(struct list_head *list)
+> -{
+> -	struct list_head *pos;
+> -	unsigned long count = 0;
+> -
+> -	list_for_each(pos, list)
+> -		count++;
+> -
+> -	return count;
+> -}
+> -
+>  void intel_execlists_dump_active_requests(struct intel_engine_cs *engine,
+>  					  struct i915_request *hung_rq,
+>  					  struct drm_printer *m)
+> @@ -4172,7 +4161,7 @@ void intel_execlists_dump_active_requests(struct intel_engine_cs *engine,
+>  	intel_engine_dump_active_requests(&engine->sched_engine->requests, hung_rq, m);
+>  
+> -	drm_printf(m, "\tOn hold?: %lu\n",
+> -		   list_count(&engine->sched_engine->hold));
+> +	drm_printf(m, "\tOn hold?: %zu\n",
+> +		   list_count_nodes(&engine->sched_engine->hold));
 
-Will fix it.
+something awkward here.
+The resolution on linux-next should align with the resolution on drm-tip
+where we have the list_count still there as we preferred the version
+on drm-intel-gt-next as the resolution of the conflict instead of the
+fixes one.
 
-> > +static u32 get_pin_no(u32 pinmux)
-> > +{
-> > +       return pinmux >> S32CC_PIN_NO_SHIFT;
+>  
+>  	spin_unlock_irqrestore(&engine->sched_engine->lock, flags);
+>  }
+> -- 
+> 2.35.1
 > 
-> Maybe add a mask too so it is clear that you just rely
-> on bits being shifted out to the righy.
-> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Will do.
 
-> > +static inline int s32_pinctrl_readl_nolock(struct pinctrl_dev *pctldev,
-> > +                                          unsigned int pin,
-> > +                                          unsigned long *config)
-> > +{
-> > +       struct s32_pinctrl_mem_region *region;
-> > +       unsigned int offset;
-> > +
-> > +       region = s32_get_region(pctldev, pin);
-> > +       if (!region)
-> > +               return -EINVAL;
-> > +
-> > +       offset = pin - region->pin_range->start;
-> > +
-> > +       *config = readl(region->base + S32_PAD_CONFIG(offset));
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static inline int s32_pinctrl_readl(struct pinctrl_dev *pctldev,
-> > +                                   unsigned int pin,
-> > +                                   unsigned long *config)
-> > +{
-> > +       struct s32_pinctrl *ipctl = pinctrl_dev_get_drvdata(pctldev);
-> > +       unsigned long flags;
-> > +       int ret;
-> > +
-> > +       spin_lock_irqsave(&ipctl->reg_lock, flags);
-> > +       ret = s32_pinctrl_readl_nolock(pctldev, pin, config);
-> > +       spin_unlock_irqrestore(&ipctl->reg_lock, flags);
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static inline int s32_pinctrl_writel_nolock(struct pinctrl_dev *pctldev,
-> > +                                           unsigned int pin,
-> > +                                           unsigned long config)
-> > +{
-> > +       struct s32_pinctrl_mem_region *region;
-> > +       unsigned int offset;
-> > +
-> > +       region = s32_get_region(pctldev, pin);
-> > +       if (!region)
-> > +               return -EINVAL;
-> > +
-> > +       offset = pin - region->pin_range->start;
-> > +
-> > +       writel(config, region->base + S32_PAD_CONFIG(offset));
-> > +
-> > +       return 0;
-> > +
-> > +}
-> > +
-> > +static inline int s32_pinctrl_writel(unsigned long config,
-> > +                                    struct pinctrl_dev *pctldev,
-> > +                                    unsigned int pin)
-> > +{
-> > +       struct s32_pinctrl *ipctl = pinctrl_dev_get_drvdata(pctldev);
-> > +       unsigned long flags;
-> > +       int ret;
-> > +
-> > +       spin_lock_irqsave(&ipctl->reg_lock, flags);
-> > +       ret = s32_pinctrl_writel_nolock(pctldev, pin, config);
-> > +       spin_unlock_irqrestore(&ipctl->reg_lock, flags);
-> > +
-> > +       return ret;
-> > +}
-> 
-> If you turn this around, *first* get the offset and *then* issye the read/write
-> to respective registers, you will find that you have re-implemented
-> regmap_mmio, which will take care of serializing your writes so that
-> you do not need a lock either. At least consider it.
-> 
-> > +static int s32_update_pin_mscr(struct pinctrl_dev *pctldev, unsigned int pin,
-> > +                              unsigned long mask, unsigned long new_mask)
-> > +{
-> > +       struct s32_pinctrl *ipctl = pinctrl_dev_get_drvdata(pctldev);
-> > +       unsigned long config, flags;
-> > +       int ret;
-> > +
-> > +       spin_lock_irqsave(&ipctl->reg_lock, flags);
-> > +
-> > +       ret = s32_pinctrl_readl_nolock(pctldev, pin, &config);
-> > +       if (ret)
-> > +               goto unlock;
-> > +
-> > +       config &= ~mask;
-> > +       config |= new_mask;
-> > +
-> > +       ret = s32_pinctrl_writel_nolock(pctldev, pin, config);
-> > +       if (ret)
-> > +               goto unlock;
-> 
-> And after having pointed out how regmap MMIO was reimplemented,
-> here you re-implement regmap_update_bits() which performs mask
-> and set.
-> 
-
-Thanks for your suggestion.
-
-IIUC, that means I should use devm_regmap_init_mmio() to acquire a regmap and
-then use regmap APIs to access registers, such as regmap_read(), regmap_write()
-or regmap_update_bits(). My main concern is that this driver would need a regmap
-array to map all register base addresses since they are scattered based on the
-memory map of S32G2 SoC.
-
-> > +static int s32_pinconf_get(struct pinctrl_dev *pctldev,
-> > +                          unsigned int pin_id,
-> > +                          unsigned long *config)
-> > +{
-> > +       int ret = s32_pinctrl_readl(pctldev, pin_id, config);
-> > +
-> > +       if (ret)
-> > +               return -EINVAL;
-> > +
-> > +       return 0;
-> 
-> This looks like unnecessary indirection since every call site has
-> to check the return code anyway, can't you just inline the s32_pinctrl_readl()
-> calls?
-> 
-
-Will fix it, thanks!
-
-> (...)
-> > +#ifdef CONFIG_PM_SLEEP
-> 
-> Use __maybe_unused and compile in unconditionally.
-> 
-
-Will do.
-
-> > +static void s32_pinctrl_parse_groups(struct device_node *np,
-> > +                                    struct s32_pin_group *grp,
-> > +                                    struct s32_pinctrl_soc_info *info)
-> > +{
-> > +       const __be32 *p;
-> > +       struct device *dev;
-> > +       struct property *prop;
-> > +       int i, npins;
-> > +       u32 pinmux;
-> > +
-> > +       dev = info->dev;
-> > +
-> > +       dev_dbg(dev, "group: %s\n", np->name);
-> > +
-> > +       /* Initialise group */
-> > +       grp->name = np->name;
-> > +
-> > +       npins = of_property_count_elems_of_size(np, "pinmux", sizeof(u32));
-> 
-> There is a lot of code here for handling the funky pinmux stuff. Don't we have
-> generic helpers for this? Well maybe not :/
-> 
-> > +static void s32_pinctrl_parse_functions(struct device_node *np,
-> > +                                       struct s32_pinctrl_soc_info *info,
-> > +                                       u32 index)
-> > +{
-> > +       struct device_node *child;
-> > +       struct s32_pmx_func *func;
-> > +       struct s32_pin_group *grp;
-> > +       u32 i = 0;
-> > +
-> > +       dev_dbg(info->dev, "parse function(%d): %s\n", index, np->name);
-> > +
-> > +       func = &info->functions[index];
-> > +
-> > +       /* Initialise function */
-> > +       func->name = np->name;
-> > +       func->num_groups = of_get_child_count(np);
-> > +       if (func->num_groups == 0) {
-> > +               dev_err(info->dev, "no groups defined in %s\n", np->full_name);
-> > +               return;
-> > +       }
-> > +       func->groups = devm_kzalloc(info->dev,
-> > +                       func->num_groups * sizeof(char *), GFP_KERNEL);
-> > +
-> > +       for_each_child_of_node(np, child) {
-> > +               func->groups[i] = child->name;
-> > +               grp = &info->groups[info->grp_index++];
-> > +               s32_pinctrl_parse_groups(child, grp, info);
-> > +               i++;
-> > +       }
-> > +}
-> 
-> This also looks like helpers we should already have, can you look around
->  a bit in other recently merged drivers?
-
-You probably mean these two helpers in pinconf-generic.c:
-
-  pinconf_generic_dt_node_to_map()
-  pinconf_generic_dt_subnode_to_map()
-
-Since we use specific pinmux format [as described in dt-bindings] to represent
-pin ID and mux settings, to my understanding, calling generic helpers would get
-nothing due to lack of generic properties, such as 'pins', 'groups' and 'function'.
-
-Please feel free to correct me if anything wrong.
-
-Thanks,
-Chester
-
-> 
-> Yours,
-> Linus Walleij
