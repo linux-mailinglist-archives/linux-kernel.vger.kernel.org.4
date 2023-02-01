@@ -2,148 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5380A6869ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12CC686A03
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjBAPTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:19:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S232153AbjBAPV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:21:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbjBAPTO (ORCPT
+        with ESMTP id S232120AbjBAPVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 10:19:14 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E476E41C;
-        Wed,  1 Feb 2023 07:18:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675264735; x=1706800735;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4JRv8nyNKoPha8aIjwZ2KZ1kP577uTomNfk6/0Tmsfc=;
-  b=WxF0NDcEdJGzM+HeEyBa/tqTAE0qRw/n5YQQxDiT9xo3IEOY3CCNdRVb
-   FwKrGMolprQIm55GduVY168vXneUWPiN3TvDAxuNUAECkUDkC8LBZ0/ao
-   RA2MOq3ztOsfbTKV4hsKS6xqzO3+RrmpxUjL6Lel75tp1OzarNiPbdknx
-   2KZwmtbHLRI+mMIvk4JMobtEeBTSH65DYovVDUk5WFpiF5vJ/KkmKS6YW
-   4B2/9CMESpf3XfD9Fy1p6i5x8Fl8P6bO0V/7tC5BGgSPU35z2rFdETLja
-   KhjI0O1Bfq1BKqMYZYQLqmvOPmVI7Kx9KBr0FPDN1Di4/YY3/xjZVvmQo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="330300975"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="330300975"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 07:18:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="993729630"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="993729630"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Feb 2023 07:18:31 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNEsY-0005Wy-1w;
-        Wed, 01 Feb 2023 15:18:30 +0000
-Date:   Wed, 1 Feb 2023 23:18:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@quicinc.com,
-        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Subject: Re: [PATCH 11/14] ASoC: q6dsp: q6apm-dai: Add compress set params
- and metadata DAI callbacks
-Message-ID: <202302012348.LL8vhyj4-lkp@intel.com>
-References: <20230201134947.1638197-12-quic_mohs@quicinc.com>
+        Wed, 1 Feb 2023 10:21:23 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AD15253
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 07:21:17 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id d4-20020a05600c3ac400b003db1de2aef0so1732888wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 07:21:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=87tvueRd2jMJ3I0zmFC1ExMPpE2u2ENBfUILZoyxQTw=;
+        b=lk6Z1f/dTiXfiWKLliINNJnni4OHlyqmAvr/jR936PbaXeiCk14SDsO8QLDXIEhOUQ
+         U6nhqwrYndkpETIiYi/SHMZP+8ivpMgcL0dTsREKAXiLMXr4y/o/VLYlcsFI/tivxm+i
+         DSb53kh2mOgPf55zKCoAaAGVLkd/GgHHbiJXx2YoQPqLdYenN2zeEfO1w6j/wohQC5YB
+         EAgROM0VnDAvqB6RtmljoNqSwPKauS1dtbgDJOHpr99amWi15M/9uIzelOtByfMVtgYX
+         PNpB5KAq1I/WgFffRKZfA77sG6kH3hM5Rfch9Z0NzRiLm4xi3wCp5YmTuHC/TnnISL8A
+         NYkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=87tvueRd2jMJ3I0zmFC1ExMPpE2u2ENBfUILZoyxQTw=;
+        b=XCzslvgMmERfCyzRiEYMdLPy35lQKWi/t0RKD+PTGwrJ2df9Z+ZmJSZaL+NAxp9VwD
+         S5ERCubUQxueyKLOgXBCKuAaTtfxMu/evcVOGqhPYguB7QFAqcmHPyrjJbjdnWhh85dx
+         FVOI5gG2fSfM+ZMMcSXGybsqTb7/UOcNsrOU8GCOtqSu6Z/4wJvtGt+yKFV98j3l9GuZ
+         30P6VlanWk9EbkWqBtMlkFHky15JIGrOyZhjLkKxX0yROWr9Yvzbb6wAUfwPHy2dHVst
+         UxXauvQWI0nxivFZk6VaPuuMm5ZIspacUURX69tC7zMEji7RywrqPib37hYEs7Rzak9o
+         TsjA==
+X-Gm-Message-State: AO0yUKWnKV7+60iMlei3j0G7U0uy5f+NgYYGfdR0XrZFHK8D+MVUG170
+        jLOGBXzi1J0SZxlJnZSDYQoaIQ==
+X-Google-Smtp-Source: AK7set8DA60s1ZaHq4wltMareWdZQqQaP1m3qNr/7luxj+0055vEF0R7zqjgLFyvlToBICe4bCI1Lw==
+X-Received: by 2002:a7b:ce94:0:b0:3dc:43a0:83bb with SMTP id q20-20020a7bce94000000b003dc43a083bbmr2582411wmj.3.1675264876040;
+        Wed, 01 Feb 2023 07:21:16 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d64:a4e6:40a8:8e69])
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c42d300b003dc53217e07sm1893120wme.16.2023.02.01.07.21.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 07:21:15 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v3 0/5] arm64: qcom: add initial support for qcom sa8775p-ride
+Date:   Wed,  1 Feb 2023 16:20:33 +0100
+Message-Id: <20230201152038.203387-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201134947.1638197-12-quic_mohs@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mohammad,
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Thank you for the patch! Perhaps something to improve:
+This iteration contains a fixed DTS and all not already applied DT bindings
+patches (with tags collected).
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on next-20230201]
-[cannot apply to tiwai-sound/for-next tiwai-sound/for-linus linus/master v6.2-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+v2 -> v3:
+- reorder properties (reg always first, etc.)
+- tweak node names
+- remove properties filled in by the firmware
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mohammad-Rafi-Shaik/ALSA-compress-Update-compress-set-params-for-gapless-playback/20230201-215622
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20230201134947.1638197-12-quic_mohs%40quicinc.com
-patch subject: [PATCH 11/14] ASoC: q6dsp: q6apm-dai: Add compress set params and metadata DAI callbacks
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230201/202302012348.LL8vhyj4-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f6204693a956c267d6cdfd17f5c27da0f4594ca3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mohammad-Rafi-Shaik/ALSA-compress-Update-compress-set-params-for-gapless-playback/20230201-215622
-        git checkout f6204693a956c267d6cdfd17f5c27da0f4594ca3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash sound/soc/qcom/qdsp6/
+v1 -> v2:
+- lots of improvements all around the place to make the dts pass dtbs_check
+  (with some additional patches fixing bugs in existing dt bindings),
+  make dtbs W=1 and checkpatch.pl
+- move board-specific properties to the board .dts file
+- ordered top-level nodes alphabetically and sub-nodes by the reg property
+- fixed licensing
+- set #address-cells and #size-cells to <2> in the soc node and update sub-nodes
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+Bartosz Golaszewski (5):
+  dt-bindings: firmware: qcom,scm: add qcom,scm-sa8775p compatible
+  dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
+  dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-sa8775p compatible
+  dt-bindings: arm: qcom: add the sa8775p-ride board
+  arm64: dts: qcom: add initial support for qcom sa8775p-ride
 
-All warnings (new ones prefixed by >>):
-
-   sound/soc/qcom/qdsp6/q6apm-dai.c:152:6: warning: no previous prototype for 'event_handler_compr' [-Wmissing-prototypes]
-     152 | void event_handler_compr(uint32_t opcode, uint32_t token,
-         |      ^~~~~~~~~~~~~~~~~~~
-   sound/soc/qcom/qdsp6/q6apm-dai.c:576:5: warning: no previous prototype for 'q6apm_dai_compr_trigger' [-Wmissing-prototypes]
-     576 | int q6apm_dai_compr_trigger(struct snd_soc_component *component,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/qcom/qdsp6/q6apm-dai.c:610:5: warning: no previous prototype for 'q6apm_dai_compr_ack' [-Wmissing-prototypes]
-     610 | int q6apm_dai_compr_ack(struct snd_soc_component *component, struct snd_compr_stream *stream,
-         |     ^~~~~~~~~~~~~~~~~~~
-   sound/soc/qcom/qdsp6/q6apm-dai.c: In function '__q6apm_dai_compr_set_codec_params':
->> sound/soc/qcom/qdsp6/q6apm-dai.c:632:34: warning: variable 'codec_options' set but not used [-Wunused-but-set-variable]
-     632 |         union snd_codec_options *codec_options;
-         |                                  ^~~~~~~~~~~~~
-
-
-vim +/codec_options +632 sound/soc/qcom/qdsp6/q6apm-dai.c
-
-   623	
-   624	static int __q6apm_dai_compr_set_codec_params(struct snd_soc_component *component,
-   625						      struct snd_compr_stream *stream,
-   626						      struct snd_codec *codec,
-   627						      int stream_id)
-   628	{
-   629		struct snd_compr_runtime *runtime = stream->runtime;
-   630		struct q6apm_dai_rtd *prtd = runtime->private_data;
-   631		struct device *dev = component->dev;
- > 632		union snd_codec_options *codec_options;
-   633	
-   634		codec_options = &(prtd->codec.options);
-   635	
-   636		memcpy(&prtd->codec, codec, sizeof(*codec));
-   637		q6apm_set_real_module_id(dev, prtd->graph, codec->id);
-   638	
-   639		return 0;
-   640	}
-   641	
+ .../devicetree/bindings/arm/qcom.yaml         |   7 +
+ .../bindings/firmware/qcom,scm.yaml           |   1 +
+ .../bindings/mailbox/qcom-ipcc.yaml           |   1 +
+ .../bindings/watchdog/qcom-wdt.yaml           |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  47 +
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 812 ++++++++++++++++++
+ 7 files changed, 870 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8775p.dtsi
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.37.2
+
