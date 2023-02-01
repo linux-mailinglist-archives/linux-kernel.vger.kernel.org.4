@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C315685F39
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 06:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3DE685F3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 06:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjBAFsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 00:48:32 -0500
+        id S231439AbjBAFtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 00:49:05 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbjBAFs1 (ORCPT
+        with ESMTP id S231282AbjBAFs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 00:48:27 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0D3166E5;
-        Tue, 31 Jan 2023 21:48:22 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so2638361pjq.1;
-        Tue, 31 Jan 2023 21:48:22 -0800 (PST)
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2AC61A4B6;
+        Tue, 31 Jan 2023 21:48:25 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id e10-20020a17090a630a00b0022bedd66e6dso992453pjj.1;
+        Tue, 31 Jan 2023 21:48:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2feaPTiFf6nFchWNFm62ii1folwFLguTnGsIZ0OJssw=;
-        b=YMpzAQ8fSIRxXawrqIgaOXYDEBG33SRSWpmrJnMmSK2OmQZgwHGwnRbudSsCj+yyxr
-         3rTv0zv0BkaTn18vomuhgoyWeFUmoeWGkQoBuUTf3erEAD98ucoD0r20wrTQSffGrGIW
-         qaR+uoKXBbLnFh7MGh7cIhqvQkPtLpkhzHv0VqK9lBQMS01ESJ5UZv9v7xu/eWFgmHZJ
-         rRrcPK4aZFTZbbQnoRXpPqVXPinXGowI1lPB3lxXcfDvE41gKH5hfQXejCqquluqsBEJ
-         Xc8J4DtqgF76zAOle7igHctSN7wHKCEfBQoz86Onk68CZW/sO5F9AwF030MvmWVJWF/z
-         8XbA==
+        bh=PHMEwx5DpAADNj0aeVoFdx46vZBaLLK3nsLX9ugqjV0=;
+        b=hhIbgJ5zhQunawb5Bl72W2gs9ckvnnog5fFrNBFVZU5xthmVvUioqOvfB9itiLJosf
+         Ui8A9WDQD/wc7osP3mifVMwf9vHUSRUw56ZWGxkmPnoz6DtNWvFD9MpfLOBMWp2DA4nV
+         YUNs6i1IWg7+Lk9DN7N3iPyRCG5hqN9msCf28DxD0fW2KQA5vD6b61UlaHwZ/ULDFwRo
+         Fs6LIKbQ0T0rf9e78LGVpXFqXEjmVPm321XOFgTnW3CAnwcTzcj81HjV50dLtZEH+iZa
+         rDbT66ZJZKri7ncs1G7jug5XIssUoAnMIMOjQ8/1wH0346UExHr1i/7Fbu3+Iwj5tkC2
+         wkhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2feaPTiFf6nFchWNFm62ii1folwFLguTnGsIZ0OJssw=;
-        b=Px9bGtvh2qfHWksl7RpSKEaTyngELDTyLtwhNQdVhslko3I48CYYcoYribQsYu3ZU3
-         FuRP+uXUhGktayKO/ipZjXySP9mt3Zzp58HEhTR7jsa/9Fq7fYuDO3U+ZNMyyOD3Xiah
-         kvFhznMxlWLF+Cw1IdrbH48K7gjekIr19wJxJ4cjY38RI2bFGJZs9c4zw+MtVQK/xj59
-         JaI5mOcNUHRg4lpwH9oIusMRkL5C3ADJE0ilXccFJANGRMZbvyN2Xw9UbLcjxyw6Kfk7
-         YcJ09A8ttoYm7hVVROkmvBoLGmCLi1etCXEJuXLPvNJgbOlK8p5R3nP7P26/XCq44Eb1
-         xsNA==
-X-Gm-Message-State: AO0yUKVJZDIyjE+8r06wzyZozl9FtVu2FDO1G1CAzpVC2wNjPUPz8oqR
-        bb86Kd7VxEhies9CQOWZ9Tk=
-X-Google-Smtp-Source: AK7set9/DlMG+CPp/mVQehVhBkFrwmrOoHnW2npCWOboxIglzV+uSKWwQM1MOfN3MHrHHkOBv9jSFA==
-X-Received: by 2002:a17:903:1111:b0:196:6ec4:52db with SMTP id n17-20020a170903111100b001966ec452dbmr1854428plh.51.1675230502394;
-        Tue, 31 Jan 2023 21:48:22 -0800 (PST)
+        bh=PHMEwx5DpAADNj0aeVoFdx46vZBaLLK3nsLX9ugqjV0=;
+        b=wmhgG+c5sDH5LGG7GFcsKpvYueLDcBGQCRQjYcFC8w3cHDqXS8SeUEDE6M1KWbegjc
+         cLbkFLcWeiKEEYN3c4emJura6nNHM9h18kYOzAi9QpYag0VKLWli5+sPpxvuTkikVKJu
+         Cj+9U/VqcCDqmihxPSDxI12DL352bVPu3hbYHtIBURlaVVlWQYNU51L8RVGGWCqNQ0qr
+         mHldvZo6Tf15tLoY/GW640RA4JirxUjJfdkygwmTIC5i0n7aCGdcmD6CzZhtJ3q3w5B7
+         6SsayiB0ks9oEKHdZRJr2xaCJhQlfiklZcFeMHe7fPvWbAMhl2xboeAHFqQEq4dmukG0
+         4tew==
+X-Gm-Message-State: AO0yUKUCtGTPT1B3C+EFDiGcQ3vAoN78Io/PbcrFQnrDgLNOjN0YiHak
+        w7Wha8CUyDK/tHnZRHmdxsKuNphQ4EQ=
+X-Google-Smtp-Source: AK7set8aYqlBrLc5gOPVDCORD1xQltDDEDG+ZVQMeRIHy3czWOR2/R4tqJWnDUpEyrr8d9fTlQrtuA==
+X-Received: by 2002:a17:902:d48b:b0:194:5c63:3638 with SMTP id c11-20020a170902d48b00b001945c633638mr1783199plg.61.1675230504356;
+        Tue, 31 Jan 2023 21:48:24 -0800 (PST)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:ce3a:44de:62b3:7a4b])
-        by smtp.gmail.com with ESMTPSA id w2-20020a1709027b8200b00196025a34b9sm7461575pll.159.2023.01.31.21.48.19
+        by smtp.gmail.com with ESMTPSA id w2-20020a1709027b8200b00196025a34b9sm7461575pll.159.2023.01.31.21.48.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 21:48:21 -0800 (PST)
+        Tue, 31 Jan 2023 21:48:23 -0800 (PST)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -57,9 +57,9 @@ To:     Alessandro Zummo <a.zummo@towertech.it>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 2/3] dt-bindings: rtc: moxart: use proper names for gpio properties
-Date:   Tue, 31 Jan 2023 21:48:14 -0800
-Message-Id: <20230201054815.4112632-2-dmitry.torokhov@gmail.com>
+Subject: [PATCH 3/3] ARM: dts: moxart: switch to proper names for RTC GPIOs
+Date:   Tue, 31 Jan 2023 21:48:15 -0800
+Message-Id: <20230201054815.4112632-3-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
 In-Reply-To: <20230201054815.4112632-1-dmitry.torokhov@gmail.com>
 References: <20230201054815.4112632-1-dmitry.torokhov@gmail.com>
@@ -75,42 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MOXA ART RTC driver has been switched to gpiod API and is now using
-properly named properties for its gpios (with gpiolib implementing a
-quirk to recognize legacy names). Change binding document to use
-proper names as well.
+Update DTS to use proper names for RTC GPIOs. While the driver/gpiolib
+will still recognize the old variants of names, there is no reason why
+we should not update DTS that is present in the kernel.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- .../devicetree/bindings/rtc/moxa,moxart-rtc.txt      | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/moxart.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
-index c9d3ac1477fe..1374df7bf9d6 100644
---- a/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
-+++ b/Documentation/devicetree/bindings/rtc/moxa,moxart-rtc.txt
-@@ -3,15 +3,15 @@ MOXA ART real-time clock
- Required properties:
+diff --git a/arch/arm/boot/dts/moxart.dtsi b/arch/arm/boot/dts/moxart.dtsi
+index 11cbea5b94d2..622742956b2b 100644
+--- a/arch/arm/boot/dts/moxart.dtsi
++++ b/arch/arm/boot/dts/moxart.dtsi
+@@ -74,9 +74,9 @@ gpio: gpio@98700000 {
  
- - compatible : Should be "moxa,moxart-rtc"
--- gpio-rtc-sclk : RTC sclk gpio, with zero flags
--- gpio-rtc-data : RTC data gpio, with zero flags
--- gpio-rtc-reset : RTC reset gpio, with zero flags
-+- rtc-sclk-gpios : RTC sclk gpio, with zero flags
-+- rtc-data-gpios : RTC data gpio, with zero flags
-+- rtc-reset-gpios : RTC reset gpio, with zero flags
+ 		rtc: rtc {
+ 			compatible = "moxa,moxart-rtc";
+-			gpio-rtc-sclk = <&gpio 5 0>;
+-			gpio-rtc-data = <&gpio 6 0>;
+-			gpio-rtc-reset = <&gpio 7 0>;
++			rtc-sclk-gpios = <&gpio 5 0>;
++			rtc-data-gpios = <&gpio 6 0>;
++			rtc-reset-gpios = <&gpio 7 0>;
+ 		};
  
- Example:
- 
- 	rtc: rtc {
- 		compatible = "moxa,moxart-rtc";
--		gpio-rtc-sclk = <&gpio 5 0>;
--		gpio-rtc-data = <&gpio 6 0>;
--		gpio-rtc-reset = <&gpio 7 0>;
-+		rtc-sclk-gpios = <&gpio 5 0>;
-+		rtc-data-gpios = <&gpio 6 0>;
-+		rtc-reset-gpios = <&gpio 7 0>;
- 	};
+ 		dma: dma@90500000 {
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
