@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AA3686505
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D221686514
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjBALKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 06:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S230095AbjBALLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 06:11:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjBALKA (ORCPT
+        with ESMTP id S231967AbjBALLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 06:10:00 -0500
-Received: from smtp.tiscali.it (michael-notr.mail.tiscali.it [213.205.33.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 065554673C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:09:56 -0800 (PST)
-Received: from [192.168.178.50] ([79.16.97.72])
-        by michael.mail.tiscali.it with 
-        id Fn9j2903F1ZhrJf01n9lci; Wed, 01 Feb 2023 11:09:53 +0000
-X-Spam-Final-Verdict: clean
-X-Spam-State: 0
-X-Spam-Score: -100
-X-Spam-Verdict: clean
-x-auth-user: fantonifabio@tiscali.it
-Message-ID: <d16bba68-f470-62a0-baa9-03be2882047d@tiscali.it>
-Date:   Wed, 1 Feb 2023 12:09:40 +0100
+        Wed, 1 Feb 2023 06:11:08 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CC0518DD;
+        Wed,  1 Feb 2023 03:11:00 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 311BAO7W095237;
+        Wed, 1 Feb 2023 05:10:24 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1675249824;
+        bh=C2fkhzDKpyC6VYBjXs0epirB6kkQ1d7SHJaX7hY3p5M=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Kd3elvazf8+kce8AdbbtUdUzRirqwPadF0fPGxFHnfxBtAKUlrOTMGFP4lce9y5wQ
+         j4RT3xYu7Rk5dIfpoDse84jM9sFXwU32pvGT/gtoT1bWAShi08/qbvKA7q8KDuI7Zy
+         iUm/Sb/bG8V7jYIfuixeEvW+QXwFq7E0WWWbtaQM=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 311BAOvh004554
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 1 Feb 2023 05:10:24 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 1
+ Feb 2023 05:10:24 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 1 Feb 2023 05:10:24 -0600
+Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 311BAIUQ129851;
+        Wed, 1 Feb 2023 05:10:18 -0600
+Message-ID: <703df816-e7bf-dfef-4a55-6fd784f5854c@ti.com>
+Date:   Wed, 1 Feb 2023 16:40:17 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Reply-To: fantonifabio@tiscali.it
-Subject: Re: [PATCH v2 02/21] block, blkfilter: Block Device Filtering
- Mechanism
-To:     Mike Snitzer <snitzer@kernel.org>,
-        Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, corbet@lwn.net, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dm-devel@redhat.com
-References: <20221209142331.26395-1-sergei.shtepa@veeam.com>
- <20221209142331.26395-3-sergei.shtepa@veeam.com>
- <Y9mrJJDFnMNWR7Vn@redhat.com>
-From:   Fabio Fantoni <fantonifabio@tiscali.it>
-In-Reply-To: <Y9mrJJDFnMNWR7Vn@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [EXTERNAL] Re: [PATCH v3 1/2] dt-bindings: net: Add ICSSG
+ Ethernet Driver bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Tero Kristo <t-kristo@ti.com>,
+        Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, <andrew@lunn.ch>
+CC:     <nm@ti.com>, <ssantosh@kernel.org>, <srk@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221223110930.1337536-1-danishanwar@ti.com>
+ <20221223110930.1337536-2-danishanwar@ti.com>
+ <b17e9a32-cfdb-223c-f500-c897061753f6@linaro.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <b17e9a32-cfdb-223c-f500-c897061753f6@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Antivirus: Avast (VPS 230131-14, 31/1/2023), Outbound message
-X-Antivirus-Status: Clean
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tiscali.it; s=smtp;
-        t=1675249793; bh=LQObqF2Wtm61LjOqnqVe5XmyFxSqQ68OZlRKTllaPUI=;
-        h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To;
-        b=ByEPtDn7FeFehZ/a+IjdPIeEm0NNxSMQIfzRfrHdtFf7vD+odoEX1suL91kBphP1n
-         vmSWJYcI6hcR8BwIdtyONdGlP5VCQWyi6VSSqynXBThU87Y2zQ4RMq96w+IR1JcTVo
-         kbQak+3gE0qGXvgLkg4r3fE0wdVFFS+WkEwKasgk=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,188 +83,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/02/2023 00:58, Mike Snitzer ha scritto:
-> On Fri, Dec 09 2022 at  9:23P -0500,
-> Sergei Shtepa <sergei.shtepa@veeam.com> wrote:
->
->> Allows to attach block device filters to the block devices. Kernel
->> modules can use this functionality to extend the capabilities of the
->> block layer.
+Hi Krzysztof,
+
+On 23/12/22 17:01, Krzysztof Kozlowski wrote:
+> On 23/12/2022 12:09, MD Danish Anwar wrote:
+>> From: Puranjay Mohan <p-mohan@ti.com>
 >>
->> Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
+>> Add a YAML binding document for the ICSSG Programmable real time unit
+>> based Ethernet driver. This driver uses the PRU and PRUSS consumer APIs
+>> to interface the PRUs and load/run the firmware for supporting ethernet
+>> functionality.
+>>
+>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>> Signed-off-by: Md Danish Anwar <danishanwar@ti.com>
 >> ---
->>   block/bdev.c              | 70 ++++++++++++++++++++++++++++++++++++++
->>   block/blk-core.c          | 19 +++++++++--
->>   include/linux/blk_types.h |  2 ++
->>   include/linux/blkdev.h    | 71 +++++++++++++++++++++++++++++++++++++++
->>   4 files changed, 160 insertions(+), 2 deletions(-)
+>>  .../bindings/net/ti,icssg-prueth.yaml         | 174 ++++++++++++++++++
+>>  1 file changed, 174 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
 >>
->> diff --git a/block/bdev.c b/block/bdev.c
->> index d699ecdb3260..b820178824b2 100644
->> --- a/block/bdev.c
->> +++ b/block/bdev.c
->> @@ -427,6 +427,7 @@ static void init_once(void *data)
->>   
->>   static void bdev_evict_inode(struct inode *inode)
->>   {
->> +	bdev_filter_detach(I_BDEV(inode));
->>   	truncate_inode_pages_final(&inode->i_data);
->>   	invalidate_inode_buffers(inode); /* is it needed here? */
->>   	clear_inode(inode);
->> @@ -502,6 +503,7 @@ struct block_device *bdev_alloc(struct gendisk *disk, u8 partno)
->>   		return NULL;
->>   	}
->>   	bdev->bd_disk = disk;
->> +	bdev->bd_filter = NULL;
->>   	return bdev;
->>   }
->>   
->> @@ -1092,3 +1094,71 @@ void bdev_statx_dioalign(struct inode *inode, struct kstat *stat)
->>   
->>   	blkdev_put_no_open(bdev);
->>   }
+>> diff --git a/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+>> new file mode 100644
+>> index 000000000000..7659f5fd3132
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
+>> @@ -0,0 +1,174 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/net/ti,icssg-prueth.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +/**
->> + * bdev_filter_attach - Attach the filter to the original block device.
->> + * @bdev:
->> + *	Block device.
->> + * @flt:
->> + *	Filter that needs to be attached to the block device.
->> + *
->> + * Before adding a filter, it is necessary to initialize &struct bdev_filter
->> + * using a bdev_filter_init() function.
->> + *
->> + * The bdev_filter_detach() function allows to detach the filter from the block
->> + * device.
->> + *
->> + * Return: 0 if succeeded, or -EALREADY if the filter already exists.
->> + */
->> +int bdev_filter_attach(struct block_device *bdev,
->> +				     struct bdev_filter *flt)
->> +{
->> +	int ret = 0;
+>> +title:
+>> +  Texas Instruments ICSSG PRUSS Ethernet
+> 
+> Keep it in one line.
+> 
+
+Sure, I'll do it.
+
 >> +
->> +	blk_mq_freeze_queue(bdev->bd_queue);
->> +	blk_mq_quiesce_queue(bdev->bd_queue);
+>> +maintainers:
+>> +  - Puranjay Mohan <p-mohan@ti.com>
+>> +  - Md Danish Anwar <danishanwar@ti.com>
 >> +
->> +	if (bdev->bd_filter)
->> +		ret = -EALREADY;
->> +	else
->> +		bdev->bd_filter = flt;
+>> +description:
+>> +  Ethernet based on the Programmable Real-Time
+>> +  Unit and Industrial Communication Subsystem.
 >> +
->> +	blk_mq_unquiesce_queue(bdev->bd_queue);
->> +	blk_mq_unfreeze_queue(bdev->bd_queue);
+>> +allOf:
+>> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
 >> +
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL(bdev_filter_attach);
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - ti,am654-icssg-prueth  # for AM65x SoC family
 >> +
->> +/**
->> + * bdev_filter_detach - Detach the filter from the block device.
->> + * @bdev:
->> + *	Block device.
->> + *
->> + * The filter should be added using the bdev_filter_attach() function.
->> + *
->> + * Return: 0 if succeeded, or -ENOENT if the filter was not found.
->> + */
->> +int bdev_filter_detach(struct block_device *bdev)
->> +{
->> +	int ret = 0;
->> +	struct bdev_filter *flt = NULL;
+>> +  sram:
+>> +    description:
+>> +      phandle to MSMC SRAM node
+> 
+> Where does the definition of this come from? If from nowhere, usually
+> you need vendor prefix and type/ref.
+> 
+
+It is phandle to sram node in SoC DT file. I'll change it to ti,sram as it is
+TI specific. I'll also add $ref: /schemas/types.yaml#/definitions/phandle
+
 >> +
->> +	blk_mq_freeze_queue(bdev->bd_queue);
->> +	blk_mq_quiesce_queue(bdev->bd_queue);
+>> +  dmas:
+>> +    maxItems: 10
 >> +
->> +	flt = bdev->bd_filter;
->> +	if (flt)
->> +		bdev->bd_filter = NULL;
->> +	else
->> +		ret = -ENOENT;
+>> +  dma-names:
+>> +    items:
+>> +      - const: tx0-0
+>> +      - const: tx0-1
+>> +      - const: tx0-2
+>> +      - const: tx0-3
+>> +      - const: tx1-0
+>> +      - const: tx1-1
+>> +      - const: tx1-2
+>> +      - const: tx1-3
+>> +      - const: rx0
+>> +      - const: rx1
 >> +
->> +	blk_mq_unquiesce_queue(bdev->bd_queue);
->> +	blk_mq_unfreeze_queue(bdev->bd_queue);
+>> +  ethernet-ports:
+>> +    type: object
+>> +    properties:
+>> +      '#address-cells':
+>> +        const: 1
+>> +      '#size-cells':
+>> +        const: 0
 >> +
->> +	if (flt)
->> +		bdev_filter_put(flt);
+>> +    patternProperties:
+>> +      ^port@[0-1]$:
+>> +        type: object
+>> +        description: ICSSG PRUETH external ports
 >> +
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL(bdev_filter_detach);
-> What about bio-based devices? (DM, MD, etc)
->
-> DM uses freeze_bdev() and thaw_bdev(), seems like you're missing some
-> work here.
->
->> diff --git a/block/blk-core.c b/block/blk-core.c
->> index 5487912befe8..284b295a7b23 100644
->> --- a/block/blk-core.c
->> +++ b/block/blk-core.c
->> @@ -678,9 +678,24 @@ void submit_bio_noacct_nocheck(struct bio *bio)
->>   	 * to collect a list of requests submited by a ->submit_bio method while
->>   	 * it is active, and then process them after it returned.
->>   	 */
->> -	if (current->bio_list)
->> +	if (current->bio_list) {
->>   		bio_list_add(&current->bio_list[0], bio);
->> -	else if (!bio->bi_bdev->bd_disk->fops->submit_bio)
->> +		return;
->> +	}
+>> +        $ref: ethernet-controller.yaml#
 >> +
->> +	if (bio->bi_bdev->bd_filter && !bio_flagged(bio, BIO_FILTERED)) {
-> Shouldn't this be: if (unlikely(...))?
->
-> But that obviously assumes a fair amount about the only consumer
-> (temporary filter that lasts as long as it takes to do a backup).
->
->> +		bool pass;
+>> +        unevaluatedProperties: false
+>> +        additionalProperties: false
+> 
+> You cannot have both. Did you test the binding? I doubt it...
+> 
+
+Sorry, must have missed it in testing. I will remove additionalProperties and
+just keep unevaluatedProperties.
+
+>> +        properties:
+>> +          reg:
+>> +            items:
+>> +              - enum: [0, 1]
+>> +            description: ICSSG PRUETH port number
 >> +
->> +		pass = bio->bi_bdev->bd_filter->fops->submit_bio_cb(bio);
->> +		bio_set_flag(bio, BIO_FILTERED);
->> +		if (!pass) {
->> +			bio->bi_status = BLK_STS_OK;
->> +			bio_endio(bio);
->> +			return;
->> +		}
->> +	}
+>> +          ti,syscon-rgmii-delay:
+>> +            $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +            description:
+>> +              phandle to system controller node and register offset
+>> +              to ICSSG control register for RGMII transmit delay
+> 
+> You need to describe the items. And in your own bindings from TI you
+> will even find example...
+> 
+
+Sure. I'll describe the items for this.
+
 >> +
->> +	if (!bio->bi_bdev->bd_disk->fops->submit_bio)
->>   		__submit_bio_noacct_mq(bio);
->>   	else
->>   		__submit_bio_noacct(bio);
-> And you currently don't allow for blkfilter to be involved if a bio
-> recurses (which is how bio splitting works now).  Not sure it
-> matters, just mentioning it...
-Hi, thanks for review this project that I think is very useful and I 
-hope it will be able to reach a very good quality, that will be 
-integrated into the kernel and that more backup solutions will use it 
-improving backups on linux in several cases.
-In the last month Sergei made big changes, applying Christoph Hellwig 
-changes and working following the received replies, the new version of 
-the patch is not ready yet but the many changes done for now are 
-available here: https://github.com/SergeiShtepa/linux/commits/blksnap-master
-I suppose that full review now of v2 when many things was already 
-changed for next version can risk to waste time. I hope I've helped with 
-this, if I haven't, sorry to have bother you.
->
-> But taking a step back, in the hopes of stepping out of your way:
->
-> Myself and others on the DM team (past and present) have always hoped
-> all block devices could have the flexibility of DM. It was that hope
-> that caused my frustration when I first saw your blkfilter approach.
->
-> But I was too idealistic that a byproduct of your efforts
-> (blk-interposer before and blkfilter now) would usher in _all_ block
-> devices being able to comprehensively change their identity (and IO
-> processing) like DM enjoys.
->
-> DM showcases all the extra code needed to achieve its extreme IO
-> remapping and stacking flexibilty -- I don't yet see a way to distill
-> the essence of what DM achieves without imposing too much on all block
-> core.
->
-> So I do think blkfilter is a pragmatic way to achieve your goals.
->
-> Mike
->
->
+>> +        required:
+>> +          - reg
+>> +
+>> +  ti,mii-g-rt:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: |
+>> +      phandle to MII_G_RT module's syscon regmap.
+>> +
+>> +  ti,mii-rt:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: |
+>> +      phandle to MII_RT module's syscon regmap
+> 
+> Why do you have so many phandles? Aren't you missing some phys?
+> 
+
+That is because control bits were sprinkled around System Control register so
+we need to use syscon regmap to access them.
+
+>> +
+>> +  interrupts:
+>> +    minItems: 2
+> 
+> Drop minItems
+> 
+
+Sure. I'll drop minItems.
+
+>> +    maxItems: 2
+>> +    description: |
+>> +      Interrupt specifiers to TX timestamp IRQ.
+>> +
+>> +  interrupt-names:
+>> +    items:
+>> +      - const: tx_ts0
+>> +      - const: tx_ts1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - sram
+>> +  - ti,mii-g-rt
+> 
+> Keep same order as in properties:.
+> 
+
+Sure, I will make sure it has same order as in properties.
+
+>> +  - dmas
+>> +  - dma-names
+>> +  - ethernet-ports
+>> +  - interrupts
+>> +  - interrupt-names
+>> +
+>> +unevaluatedProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +
+> 
+> No need for blank line.
+> 
+
+I'll remove this blank line.
+
+>> +    /* Example k3-am654 base board SR2.0, dual-emac */
+>> +    pruss2_eth: pruss2_eth {
+> 
+> No underscores in node names.
+> 
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+
+I will change the node name 'pruss2_eth' to generic for example 'ethernet'.
+
+>> +        compatible = "ti,am654-icssg-prueth";
+>> +        pinctrl-names = "default";
+>> +        pinctrl-0 = <&icssg2_rgmii_pins_default>;
+>> +        sram = <&msmc_ram>;
+>> +
+>> +        ti,prus = <&pru2_0>, <&rtu2_0>, <&tx_pru2_0>,
+>> +                  <&pru2_1>, <&rtu2_1>, <&tx_pru2_1>;
+>> +        firmware-name = "ti-pruss/am65x-pru0-prueth-fw.elf",
+>> +                        "ti-pruss/am65x-rtu0-prueth-fw.elf",
+>> +                        "ti-pruss/am65x-txpru0-prueth-fw.elf",
+>> +                        "ti-pruss/am65x-pru1-prueth-fw.elf",
+>> +                        "ti-pruss/am65x-rtu1-prueth-fw.elf",
+>> +                        "ti-pruss/am65x-txpru1-prueth-fw.elf";
+> 
+> I really doubt it was tested... and maybe there will be no testing from
+> Rob's bot due to dependency.
+> 
+> Please post dt_binding_check testing results.
+> 
+
+I had run dt_binding check before posting, must have missed these errors. I
+will be careful to check for this errors before posting patches.
+
+I will post new revision after doing the above mentioned changes. I will make
+sure to do testing properly.
+
+> Best regards,
+> Krzysztof
+> 
+
+-- 
+Thanks and Regards,
+Danish.
