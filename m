@@ -2,167 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1AB686408
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E22E368645F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbjBAKRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:17:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
+        id S231760AbjBAKf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjBAKQg (ORCPT
+        with ESMTP id S231707AbjBAKf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:16:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C284F36F;
-        Wed,  1 Feb 2023 02:16:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ABE061753;
-        Wed,  1 Feb 2023 10:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F27C4FE03;
-        Wed,  1 Feb 2023 10:16:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675246593;
-        bh=0m8gstcsjAXKkZ3q2p9aNR2mJM0JHgPPjx74c1l8cI4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eCMI8uXF/3vctbgf7q2GxhrLQtBbH/VJSdgU6kRcOZYJk6w1zND0LltlmGXMpu5r2
-         GVjX2U9TEyhcbCTGv68EyJBQZLoJR45HCd00Xx2/Rreo9DP3652aLKLEAJZTa5P1ZR
-         PoqUB4+BvpCTM4je2Wbfzs2YWRPZ0CTOFbY3JYn9GqaasgZapVhY4GjzfQbPYB+pnw
-         YcA1Rjr5+JXstyjwU6E09Wkb0GBmD0CKPQ1ulM/5kYTqt3imJh5qIGjEpdAOVpexP7
-         j5m7NZn0teGWSBDX0agvbbR0Jh2HgCqEreB7PMeUYuro7SIGrR2Dxf9oj9SOSGZQPS
-         5dHo+4LzWQpMw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pNAAh-00044i-1D; Wed, 01 Feb 2023 11:16:55 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 23/23] interconnect: drop unused icc_link_destroy() interface
-Date:   Wed,  1 Feb 2023 11:15:59 +0100
-Message-Id: <20230201101559.15529-24-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201101559.15529-1-johan+linaro@kernel.org>
-References: <20230201101559.15529-1-johan+linaro@kernel.org>
+        Wed, 1 Feb 2023 05:35:57 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EF253E7E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:35:55 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id p26so38831258ejx.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:35:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=aSHKCE9vJDcU6FD7uBVxN+faUF9zdCQJNIAv8u5C1R8=;
+        b=DUABZjJxTjMTArmt5AilcvhMfi/ZzdMLhADxcEMvvzsfRVtsrZ+CwUPxUfEtGR3rmT
+         11LQ6AMy29373ZOcBZpYICqmSSw+zG5cK809rmRh3iXJjDJ64VFb9frqCR/yUuZV/s56
+         QSlPYP3Ou4e1J+yh0pdeYYkODo6BMwtXimdivq1sbQuRMJUPxlEucoIdE87UM49L/zke
+         cXZJtd+hO+xlOQXPU+RQJ2qdN/V35pNa2fn4bTzjsekCtbR6IQO+vp2ZbJFcThRX0hwq
+         nyzDrfQYYZGuWehp563eUJTKVu6aMcbvsNrYwSiFtWauYhzTTxe2kt2UidfoPQtaNENM
+         1x9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aSHKCE9vJDcU6FD7uBVxN+faUF9zdCQJNIAv8u5C1R8=;
+        b=IT8vQqKlAgi4NWqa35iNVWV+nTBr2kmNR8JVYZWJA1ynQo6r4lJABH+VrzOZOCUcqa
+         B1Fz6z6a6G/xYLHDxgN5vJZJPOTyz7SCd5NoqmgAsvpVRSe3Q0nWpY4e/FEVdR4944XQ
+         j+OPIghzr01nQzawau/qGaity15YHEELq3GnGAVZVT8X0gMLMq1qkjcr1SMjdEcblOsb
+         NOXY5y+dgfJq9KzA08Sg96xXwvDg3q4+6MsUB7MDc5NYN51dy/uX/RLRA5DnfzZs/wh3
+         xHD4P70FY4tani/RQiy9gYEmvjaBXmepKihuNHG+y+Ytx1E6UJj3fhwp3ZyZopc7Hq3L
+         zx3g==
+X-Gm-Message-State: AO0yUKV4DeoHhPitItG+2HO5FuUZxGt9Naqz+FRbg2lM2mBtTv3xZpli
+        DiCOvN63SLjDhxv/i2Tnsx7bdA==
+X-Google-Smtp-Source: AK7set+fsG7o4K0HNSeLZhFcCnBgSznqi+fResUXsIDQBgxMYEkfQSbBWKyjnJA+nWSPM4KYC0GB6g==
+X-Received: by 2002:a17:906:5450:b0:887:31c8:9794 with SMTP id d16-20020a170906545000b0088731c89794mr1749511ejp.37.1675247753823;
+        Wed, 01 Feb 2023 02:35:53 -0800 (PST)
+Received: from localhost ([79.142.230.49])
+        by smtp.gmail.com with ESMTPSA id n3-20020a05640204c300b004a23609fab4sm5411014edw.70.2023.02.01.02.35.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 02:35:53 -0800 (PST)
+References: <20230130064404.744600-1-wedsonaf@gmail.com>
+ <20230130064404.744600-5-wedsonaf@gmail.com>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
+        Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: Re: [PATCH v2 5/5] rust: types: implement `ForeignOwnable` for
+ `Arc<T>`
+Date:   Wed, 01 Feb 2023 11:17:16 +0100
+In-reply-to: <20230130064404.744600-5-wedsonaf@gmail.com>
+Message-ID: <87h6w5isfq.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the link array is deallocated when destroying nodes and the
-explicit link removal has been dropped from the exynos driver there are
-no further users of and no need for the icc_link_destroy() interface.
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/interconnect/core.c           | 46 ---------------------------
- include/linux/interconnect-provider.h |  6 ----
- 2 files changed, 52 deletions(-)
+Wedson Almeida Filho <wedsonaf@gmail.com> writes:
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 8cca5e9a9d5f..d40b35bdc6ef 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -859,52 +859,6 @@ int icc_link_create(struct icc_node *node, const int dst_id)
- }
- EXPORT_SYMBOL_GPL(icc_link_create);
- 
--/**
-- * icc_link_destroy() - destroy a link between two nodes
-- * @src: pointer to source node
-- * @dst: pointer to destination node
-- *
-- * Return: 0 on success, or an error code otherwise
-- */
--int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
--{
--	struct icc_node **new;
--	size_t slot;
--	int ret = 0;
--
--	if (IS_ERR_OR_NULL(src))
--		return -EINVAL;
--
--	if (IS_ERR_OR_NULL(dst))
--		return -EINVAL;
--
--	mutex_lock(&icc_lock);
--
--	for (slot = 0; slot < src->num_links; slot++)
--		if (src->links[slot] == dst)
--			break;
--
--	if (WARN_ON(slot == src->num_links)) {
--		ret = -ENXIO;
--		goto out;
--	}
--
--	src->links[slot] = src->links[--src->num_links];
--
--	new = krealloc(src->links, src->num_links * sizeof(*src->links),
--		       GFP_KERNEL);
--	if (new)
--		src->links = new;
--	else
--		ret = -ENOMEM;
--
--out:
--	mutex_unlock(&icc_lock);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(icc_link_destroy);
--
- /**
-  * icc_node_add() - add interconnect node to interconnect provider
-  * @node: pointer to the interconnect node
-diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
-index b9af9016a95e..e6d8aca6886d 100644
---- a/include/linux/interconnect-provider.h
-+++ b/include/linux/interconnect-provider.h
-@@ -118,7 +118,6 @@ int icc_std_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- struct icc_node *icc_node_create(int id);
- void icc_node_destroy(int id);
- int icc_link_create(struct icc_node *node, const int dst_id);
--int icc_link_destroy(struct icc_node *src, struct icc_node *dst);
- void icc_node_add(struct icc_node *node, struct icc_provider *provider);
- void icc_node_del(struct icc_node *node);
- int icc_nodes_remove(struct icc_provider *provider);
-@@ -150,11 +149,6 @@ static inline int icc_link_create(struct icc_node *node, const int dst_id)
- 	return -ENOTSUPP;
- }
- 
--static inline int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
--{
--	return -ENOTSUPP;
--}
--
- static inline void icc_node_add(struct icc_node *node, struct icc_provider *provider)
- {
- }
--- 
-2.39.1
+> This allows us to hand ownership of Rust ref-counted objects to
+> the C side of the kernel.
+>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+> Reviewed-by: Alice Ferrazzi <alice.ferrazzi@miraclelinux.com>
+> ---
+> v1 -> v2: Unmodified
+>
+>  rust/kernel/sync/arc.rs | 32 +++++++++++++++++++++++++++++++-
+>  1 file changed, 31 insertions(+), 1 deletion(-)
+>
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index ff73f9240ca1..519a6ec43644 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -15,7 +15,11 @@
+>  //!
+>  //! [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
+>  
+> -use crate::{bindings, error::Result, types::Opaque};
+> +use crate::{
+> +    bindings,
+> +    error::Result,
+> +    types::{ForeignOwnable, Opaque},
+> +};
+>  use alloc::boxed::Box;
+>  use core::{
+>      marker::{PhantomData, Unsize},
+> @@ -189,6 +193,32 @@ impl<T: ?Sized> Arc<T> {
+>      }
+>  }
+>  
+> +impl<T: 'static> ForeignOwnable for Arc<T> {
+> +    type Borrowed<'a> = ArcBorrow<'a, T>;
+> +
+> +    fn into_foreign(self) -> *const core::ffi::c_void {
+> +        ManuallyDrop::new(self).ptr.as_ptr() as _
+> +    }
+> +
+> +    unsafe fn borrow<'a>(ptr: *const core::ffi::c_void) -> ArcBorrow<'a, T> {
+> +        // SAFETY: By the safety requirement of this function, we know that `ptr` came from
+> +        // a previous call to `Arc::into_foreign`.
+> +        let inner = NonNull::new(ptr as *mut ArcInner<T>).unwrap();
+> +
+> +        // SAFETY: The safety requirements of `from_foreign` ensure that the object remains alive
+> +        // for the lifetime of the returned value. Additionally, the safety requirements of
+> +        // `ForeignOwnable::borrow_mut` ensure that no new mutable references are created.
+> +        unsafe { ArcBorrow::new(inner) }
+> +    }
+> +
+> +    unsafe fn from_foreign(ptr: *const core::ffi::c_void) -> Self {
+> +        // SAFETY: By the safety requirement of this function, we know that `ptr` came from
+> +        // a previous call to `Arc::into_foreign`, which owned guarantees that `ptr` is valid and
+> +        // owns a reference.
 
+The last part of the sentence does not read clearly to me. Would this
+make sense instead:
+
+// SAFETY: By the safety requirement of this function, we know that `ptr` came from
+// a previous call to `Arc::into_foreign`, which guarantees that `ptr` is valid and
+// holds a reference count increment that is transferrable to us.
+
+> +        unsafe { Self::from_inner(NonNull::new(ptr as _).unwrap()) }
+> +    }
+> +}
+> +
+>  impl<T: ?Sized> Deref for Arc<T> {
+>      type Target = T;
+
+
+Cheers,
+Andreas
