@@ -2,190 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2CD685C71
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 480F4685C75
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:51:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbjBAAuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 19:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S229948AbjBAAvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 19:51:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbjBAAuq (ORCPT
+        with ESMTP id S231752AbjBAAvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 19:50:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89DE5420B
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:50:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67D8BB81FCD
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 00:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A118C433D2;
-        Wed,  1 Feb 2023 00:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675212637;
-        bh=i7A155inveJdph4tpzmVjkuXEr70uWnEgiqPBrxQf+Q=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ro/NpVrD/l8tPeDChw4K70wDLBGKfnsvlkz4ARnWCZlIHe1p1v8uYML5ne30k9Keb
-         uNl8Z0Dd9A5pZKglhulwMQi3S5UHzI+El9bRMQ7MAAUDlGg/o188DN7MTpCaG1l694
-         2wqSCaPnAfbPVCjhSFpPWKcd1W7o54Ty09O+Yru6WAtWyp3aShCyI28HgRga35Y/Ga
-         9mpb7VydWMWrcYNleLdWaOS8PtoE6WUSLnTr4AP7POFMAFAzANNK8fgKkB1OUgwtRC
-         bn0Dg8f3rbeCG+Sqz56XVXaDm9x43Kiz8TOgB7+nX+NlxMwAiqaBy4pEdpBh4+SCk2
-         TcAPyxwzseGxA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A1FFC5C0623; Tue, 31 Jan 2023 16:50:36 -0800 (PST)
-Date:   Tue, 31 Jan 2023 16:50:36 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org,
-        john.stultz@linaro.org, sboyd@kernel.org, corbet@lwn.net,
-        Mark.Rutland@arm.com, maz@kernel.org, kernel-team@meta.com,
-        neeraju@codeaurora.org, ak@linux.intel.com, feng.tang@intel.com,
-        zhengjun.xing@intel.com, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Waiman Long <longman@redhat.com>,
-        x86@kernel.org
-Subject: Re: [PATCH v2 clocksource 6/7] clocksource: Verify HPET and PMTMR
- when TSC unverified
-Message-ID: <20230201005036.GA3855979@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230125002708.GA1471122@paulmck-ThinkPad-P17-Gen-1>
- <20230125002730.1471349-6-paulmck@kernel.org>
- <9b7337b7-756a-2066-aaf6-ca0e57e5b4de@linaro.org>
+        Tue, 31 Jan 2023 19:51:37 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD6F53553
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:51:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675212693; x=1706748693;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QpwGEpji+Y3H1fPfysmCNbiTJNwGl7Ig/3gnlx9RP1I=;
+  b=Zq/h5Z8MjIYVCN3nZQFLCX3EwSBAUACfiuUIRqjo23hzwr1XVvDqzZl7
+   WkzQo+rGpXZAWfEt0uFIBaCehwqSWr8RPJbemZy62HlQslu9tfJWl+E0y
+   0g2v20JVWS8bDo1sXAP+Us86+A3GVaNIPDpdZuaBE1ohokN2wwiKCY06a
+   VFXOeGhDihYaKe0t6MX/R+KKrlOakKbBrFlJkD6nvNrPWPWmkSbTyz3ir
+   6N7Jpc14J7Tp1qNqlrBVKfd5lXSTXcEQuCC44FPcLA9EPVmS2AXGwOAps
+   EvxEZjipXBxhuzjYy16Mt6WZMJ88QzDQ+XtCw3nJRIXph7X9j3TBGJdZA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="329276879"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="329276879"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 16:51:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="910110566"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="910110566"
+Received: from ncollins-mobl.amr.corp.intel.com (HELO [10.212.85.244]) ([10.212.85.244])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2023 16:51:31 -0800
+Message-ID: <c5161bc3-62cb-d0a1-2ba2-d670285b6958@linux.intel.com>
+Date:   Tue, 31 Jan 2023 18:51:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH 01/19] ASoC: amd: ps: create platform devices based on acp
+ config
+Content-Language: en-US
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Mukunda, Vijendar" <Vijendar.Mukunda@amd.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Cc:     "Katragadda, Mastan" <Mastan.Katragadda@amd.com>,
+        "Dommati, Sunil-kumar" <Sunil-kumar.Dommati@amd.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Hiregoudar, Basavaraj" <Basavaraj.Hiregoudar@amd.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "kondaveeti, Arungopal" <Arungopal.kondaveeti@amd.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        "Saba Kareem, Syed" <Syed.SabaKareem@amd.com>
+References: <20230111090222.2016499-1-Vijendar.Mukunda@amd.com>
+ <20230111090222.2016499-2-Vijendar.Mukunda@amd.com>
+ <9f2229fb-499b-f802-993b-56a7ad2ce361@linux.intel.com>
+ <257b6f1e-f403-573f-3978-13ffb14342ad@amd.com>
+ <2b4c12ce-2586-0277-ede0-560f8317e4e4@linux.intel.com>
+ <27eabbf2-eff2-0964-b72b-f9db251c3b57@amd.com>
+ <87ddd91b-fb5f-4f27-942b-dc439b32ce20@amd.com>
+ <fa4cdd91-b430-eb1b-a151-d144f62e827d@linux.intel.com>
+ <MN0PR12MB6101DBF0419C2C565F7F6840E2D09@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <MN0PR12MB6101DBF0419C2C565F7F6840E2D09@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9b7337b7-756a-2066-aaf6-ca0e57e5b4de@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 11:57:41AM +0100, Daniel Lezcano wrote:
-> 
-> Hi Thomas,
-> 
-> are you ok with this patch ? Shall I pick it ?
 
-Seeing no response, I sent a pull request.
+>>>>>> we should create two separate ACPI companion devices for separate
+>>>>>> manager instance.  Currently we have limitations with BIOS.
+>>>>>> we are going with single ACPI companion device.
+>>>>>> We will update the changes later.
+>>>>> Humm, this is tricky. The BIOS interface isn't something that can be
+>>>>> changed at will on the kernel side, you'd have to maintain two solutions
+>>>>> with a means to detect which one to use.
+>>>>>
+>>>>> Or is this is a temporary issue on development devices, then that part
+>>>>> should probably not be upstreamed.
+>>>> It's a temporary issue on development devices.
+>>>> We had discussion with Windows dev team and BIOS team.
+>>>> They have agreed to modify ACPI companion device logic.
+>>>> We will update the two companion devices logic for two manager
+>>>> instances in V2 version.
+>>> After experimenting, two ACPI companion devices approach,
+>>> we got an update from Windows team, there is a limitation
+>>> on windows stack. For current platform, we can't proceed
+>>> with two ACPI companion devices.
+>>
+>> so how would the two controllers be declared then in the DSDT used by
+>> Windows? There's a contradiction between having a single companion
+>> device and the ability to set the 'manager-number' to one.
+>>
+>> You probably want to give an example of what you have, otherwise we
+>> probably will talk past each other.
+>>>
+>>> Even on Linux side, if we create two ACPI companion devices
+>>> followed by creating a single soundwire manager instance per
+>>> Soundwire controller, we have observed an issue in a scenario,
+>>> where similar codec parts(UID are also same) are connected on
+>>> both soundwire manager instances.
+>>
+>> We've been handling this case of two identical amplifiers on two
+>> different links for the last 3 years. I don't see how this could be a
+>> problem, the codecs are declared in the scope of the companion device
+>> and the _ADR defines in bits [51..48] which link the codec is connected to.
+>>
+> 
+> The problem is that there are two managers in the specified AMD design, and
+> the codecs are both on "Link 0" for each manager.
 
-If it would be helpful for me to make the pilgrimmage to (say) Intel
-Jones Farm, I can easily make that trip.
+You're confusing Controller and Manager.
 
-							Thanx, Paul
+A Manager is the same as a 'Link', the two terms are interchangeable. It
+makes no sense to refer to a link number for a manager because there is
+no such concept.
 
-> Thanks
-> 
->   -- Daniel
-> 
-> 
-> On 25/01/2023 01:27, Paul E. McKenney wrote:
-> > On systems with two or fewer sockets, when the boot CPU has CONSTANT_TSC,
-> > NONSTOP_TSC, and TSC_ADJUST, clocksource watchdog verification of the
-> > TSC is disabled.  This works well much of the time, but there is the
-> > occasional production-level system that meets all of these criteria, but
-> > which still has a TSC that skews significantly from atomic-clock time.
-> > This is usually attributed to a firmware or hardware fault.  Yes, the
-> > various NTP daemons do express their opinions of userspace-to-atomic-clock
-> > time skew, but they put them in various places, depending on the daemon
-> > and distro in question.  It would therefore be good for the kernel to
-> > have some clue that there is a problem.
-> > 
-> > The old behavior of marking the TSC unstable is a non-starter because a
-> > great many workloads simply cannot tolerate the overheads and latencies
-> > of the various non-TSC clocksources.  In addition, NTP-corrected systems
-> > sometimes can tolerate significant kernel-space time skew as long as
-> > the userspace time sources are within epsilon of atomic-clock time.
-> > 
-> > Therefore, when watchdog verification of TSC is disabled, enable it for
-> > HPET and PMTMR (AKA ACPI PM timer).  This provides the needed in-kernel
-> > time-skew diagnostic without degrading the system's performance.
-> > 
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Waiman Long <longman@redhat.com>
-> > Cc: <x86@kernel.org>
-> > Tested-by: Feng Tang <feng.tang@intel.com>
-> > ---
-> >   arch/x86/include/asm/time.h   | 1 +
-> >   arch/x86/kernel/hpet.c        | 2 ++
-> >   arch/x86/kernel/tsc.c         | 5 +++++
-> >   drivers/clocksource/acpi_pm.c | 6 ++++--
-> >   4 files changed, 12 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/time.h b/arch/x86/include/asm/time.h
-> > index 8ac563abb567b..a53961c64a567 100644
-> > --- a/arch/x86/include/asm/time.h
-> > +++ b/arch/x86/include/asm/time.h
-> > @@ -8,6 +8,7 @@
-> >   extern void hpet_time_init(void);
-> >   extern void time_init(void);
-> >   extern bool pit_timer_init(void);
-> > +extern bool tsc_clocksource_watchdog_disabled(void);
-> >   extern struct clock_event_device *global_clock_event;
-> > diff --git a/arch/x86/kernel/hpet.c b/arch/x86/kernel/hpet.c
-> > index 71f336425e58a..c8eb1ac5125ab 100644
-> > --- a/arch/x86/kernel/hpet.c
-> > +++ b/arch/x86/kernel/hpet.c
-> > @@ -1091,6 +1091,8 @@ int __init hpet_enable(void)
-> >   	if (!hpet_counting())
-> >   		goto out_nohpet;
-> > +	if (tsc_clocksource_watchdog_disabled())
-> > +		clocksource_hpet.flags |= CLOCK_SOURCE_MUST_VERIFY;
-> >   	clocksource_register_hz(&clocksource_hpet, (u32)hpet_freq);
-> >   	if (id & HPET_ID_LEGSUP) {
-> > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> > index a78e73da4a74b..af3782fb6200c 100644
-> > --- a/arch/x86/kernel/tsc.c
-> > +++ b/arch/x86/kernel/tsc.c
-> > @@ -1186,6 +1186,11 @@ static void __init tsc_disable_clocksource_watchdog(void)
-> >   	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> >   }
-> > +bool tsc_clocksource_watchdog_disabled(void)
-> > +{
-> > +	return !(clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY);
-> > +}
-> > +
-> >   static void __init check_system_tsc_reliable(void)
-> >   {
-> >   #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
-> > diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
-> > index 279ddff81ab49..82338773602ca 100644
-> > --- a/drivers/clocksource/acpi_pm.c
-> > +++ b/drivers/clocksource/acpi_pm.c
-> > @@ -23,6 +23,7 @@
-> >   #include <linux/pci.h>
-> >   #include <linux/delay.h>
-> >   #include <asm/io.h>
-> > +#include <asm/time.h>
-> >   /*
-> >    * The I/O port the PMTMR resides at.
-> > @@ -210,8 +211,9 @@ static int __init init_acpi_pm_clocksource(void)
-> >   		return -ENODEV;
-> >   	}
-> > -	return clocksource_register_hz(&clocksource_acpi_pm,
-> > -						PMTMR_TICKS_PER_SEC);
-> > +	if (tsc_clocksource_watchdog_disabled())
-> > +		clocksource_acpi_pm.flags |= CLOCK_SOURCE_MUST_VERIFY;
-> > +	return clocksource_register_hz(&clocksource_acpi_pm, PMTMR_TICKS_PER_SEC);
-> >   }
-> >   /* We use fs_initcall because we want the PCI fixups to have run
-> 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
-> 
+Only a Controller can have multiple links or managers. And each
+Controller needs to be declared as an ACPI device if you want to use the
+DisCo properties.
+
+The Managers/Links are not described as ACPI devices, that's a
+regrettable design decision made in MIPI circles many moons ago, that's
+why in the Intel code we have to manually create auxiliary devices based
+on the 'mipi-sdw-master-count' property.
+
+> So the _ADR really is identical for both.
+
+That cannot possible work, even for Windows. You need to have a
+controller scope, and the _ADR can then be identical for different
+peripherals as long as this ADR is local to a controller scope.
+
