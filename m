@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EFB3686F19
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5B9686F1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbjBATok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
+        id S232245AbjBAToi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbjBATo3 (ORCPT
+        with ESMTP id S232141AbjBAToa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:44:29 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A49F78ACB
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:44:28 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id hx15so35095972ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:44:28 -0800 (PST)
+        Wed, 1 Feb 2023 14:44:30 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777E37A4B4
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:44:29 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id lu11so17314023ejb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:44:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=grsecurity.net; s=grsec;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2E5YMmSOIqZe/jnf+n11QdKNSwd3QkONdPmR1/5wHHU=;
-        b=dN6uhAsKaM6VDdtUOahHFzOhYO0AzcwTuctDdbSBi1eK7+SJZo9eHgYPeHkXfTqYXM
-         jFGUyi6ConRUKTp/znJ+WnsVXoR8yHvTEM9JJt/hz5C4/Hi16zD1lVck944gFlUofPyA
-         X4LxeoB7DxASdjidq8sq/Aw9rQKVqp8uRZIspm/O2CSouFTY0go1AI3HK6vy4ZNjnfeh
-         C3BKsRtassll4W9+PjLg6hklei4tWVPFFoChPdCsl8zxVIycdYQAQE6iZ5qxqgKsBpnS
-         AoBvG6UClRQ3ZoCpCwcOwIxtk2ViC8B6QPuFmDUxCtBE4h9vlap6TJAXndDECJckgs75
-         ynKg==
+        bh=KunpYARU3Z8opuHOQvkXAppY0penEFLU7lOORGdMuTM=;
+        b=AI1HafiS7yvl+3Vfl6WZGwTbF4dqFNC7qE0AlRRxIcILQypAR3O1OWlF8mQVoGQ/aN
+         mPFTcy+IcLwRC9EpggiAmx2I7s2RFGMAWK3OWFi8Qo36/dHwJnxDx4Z7q3dTJP35uKan
+         EjiialoxgW7rIayXBv3gpS2QYrrVFaOnZZPeXZpVs3xdSEPsXpz91JLi40vUF26p5HK6
+         RImt/CnMpqcbH88FaixMQAmxzE6C57B+3hSyFkaCI3IvkQyGK2lqHBhFCWzhkNcK5FMJ
+         sl68khinMx9LmNefwLC8hP5uKyf64IkbT9FRHCvBQB9EEDkQBfaB66dsVn88wIQwazFW
+         GApw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2E5YMmSOIqZe/jnf+n11QdKNSwd3QkONdPmR1/5wHHU=;
-        b=syiRBo/er9F6AI1EtwVzog00ZWlTLeOS/WSqvrr+O1aPiQ2jTThNlAjGQW/gOZDAxz
-         Y+CsmYmYnPaqSFI7hm1LMMvC9t4p3P6OTrKbmZw62TCkZbQjEVWvj/TdyibuTpxpKjJE
-         89Uomo9TZq9zFPP9p9JmWBgAAYhchZfObeoeunrqOu2G4Wxr9o4+DGE/cOsFAHyQ8qF4
-         QZdm0gd1meabf7amlSBOMQdywau/EICZAvID0lFTXk6xplpv0j8N4T74xTerrtFJn28n
-         lzAbLa+6Gn6dZ1SqelhiLvC5cSvasSheLNHmZadwYsl+MOAYPPB0mjOpdwz6SVGNZxX4
-         ie3w==
-X-Gm-Message-State: AO0yUKUD53frgayjwvmMgC6xYm0qHRjedZ5TZrQFsLr+WVCiHd36xVEy
-        mutCdWZSjvyC0k1xy1K6QKnXxg==
-X-Google-Smtp-Source: AK7set+NXo9TG0IVeGQsdO6K2ylckwuZ/VPruLUn8EfGOGIBcpGHMzEq3mWOaJq14cXbn3rYN1VB0g==
-X-Received: by 2002:a17:907:2d28:b0:88e:682e:3a9e with SMTP id gs40-20020a1709072d2800b0088e682e3a9emr2765126ejc.61.1675280667157;
+        bh=KunpYARU3Z8opuHOQvkXAppY0penEFLU7lOORGdMuTM=;
+        b=DjLcpr2CeTX3C20ifu060U5N3hWGjbIurXj1RGwWG/XtcAmvy7i2Zg4HZ7XeadykWL
+         1Nw0+yQOh5U1c4WExxnT5QaHeQB9hKRTRg5I/RVsF5A0qspYibh6uvTCfDjvqbFsgy3D
+         1OOmj2maUyT74IF5mEvcdBbD8/GTVC3heQImbFUuRqMwbz6Aqn+pOMKlJ9D8wtLiQzpQ
+         G3N71S/QWQqc0fqNNOBQnpAVuoV34oy7sbQGP+5d1bwa1IEbJkqbMfmQ1qpzI7axYUma
+         3P+QM4B8VTS4/leQHML+ByG9XFkzJEHQtWqMXPwle2ak+tpMBLeROhU8rLOkQhyCHscO
+         /QDw==
+X-Gm-Message-State: AO0yUKU8ZqmKdGeBLkkmCPnL/6+bWSpM4XUiZPaOjkLcZRQzDE94KjS2
+        fECzXx8gyMB7H/ZpY0KLSZoPWoTGrFKgGPJ1MNA=
+X-Google-Smtp-Source: AK7set/JFfkn/b5GsffBgc4e8Fy+BrGURO7rdpefg0PJWlsJ1HiIwkSDMzFQxUbFqL/TkWiGPU1ktw==
+X-Received: by 2002:a17:906:dd4:b0:877:667b:f1e2 with SMTP id p20-20020a1709060dd400b00877667bf1e2mr3330879eji.11.1675280667922;
         Wed, 01 Feb 2023 11:44:27 -0800 (PST)
 Received: from nuc.fritz.box (p200300f6af111a00277482c051eca183.dip0.t-ipconnect.de. [2003:f6:af11:1a00:2774:82c0:51ec:a183])
-        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b00869f2ca6a87sm10397579ejd.135.2023.02.01.11.44.26
+        by smtp.gmail.com with ESMTPSA id c23-20020a170906155700b00869f2ca6a87sm10397579ejd.135.2023.02.01.11.44.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 11:44:26 -0800 (PST)
+        Wed, 01 Feb 2023 11:44:27 -0800 (PST)
 From:   Mathias Krause <minipli@grsecurity.net>
 To:     kvm@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Mathias Krause <minipli@grsecurity.net>
-Subject: [PATCH v3 3/6] KVM: x86: Do not unload MMU roots when only toggling CR0.WP
-Date:   Wed,  1 Feb 2023 20:46:01 +0100
-Message-Id: <20230201194604.11135-4-minipli@grsecurity.net>
+Subject: [PATCH v3 4/6] KVM: x86: Make use of kvm_read_cr*_bits() when testing bits
+Date:   Wed,  1 Feb 2023 20:46:02 +0100
+Message-Id: <20230201194604.11135-5-minipli@grsecurity.net>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230201194604.11135-1-minipli@grsecurity.net>
 References: <20230201194604.11135-1-minipli@grsecurity.net>
@@ -74,62 +74,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to unload the MMU roots for a direct MMU role when only
-CR0.WP has changed -- the paging structures are still valid, only the
-permission bitmap needs to be updated.
+Make use of the kvm_read_cr{0,4}_bits() helper functions when we only
+want to know the state of certain bits instead of the whole register.
 
-One heavy user of toggling CR0.WP is grsecurity's KERNEXEC feature to
-implement kernel W^X.
+This not only makes the intend cleaner, it also avoids a VMREAD in case
+the tested bits aren't guest owned.
 
-The optimization brings a huge performance gain for this case as the
-following micro-benchmark running 'ssdd 10 50000' from rt-tests[1] on a
-grsecurity L1 VM shows (runtime in seconds, lower is better):
-
-                       legacy     TDP    shadow
-kvm.git/queue          11.55s   13.91s    75.2s
-kvm.git/queue+patch     7.32s    7.31s    74.6s
-
-For legacy MMU this is ~36% faster, for TTP MMU even ~47% faster. Also
-TDP and legacy MMU now both have around the same runtime which vanishes
-the need to disable TDP MMU for grsecurity.
-
-Shadow MMU sees no measurable difference and is still slow, as expected.
-
-[1] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
-
-Co-developed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Mathias Krause <minipli@grsecurity.net>
 ---
-v2: handle the CR0.WP case directly in kvm_post_set_cr0() and only for
-the direct MMU role -- Sean
+ arch/x86/kvm/pmu.c     | 4 ++--
+ arch/x86/kvm/vmx/vmx.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I re-ran the benchmark and it's even faster than with my patch, as the
-critical path is now the first one handled and is now inline. Thanks a
-lot for the suggestion, Sean!
-
- arch/x86/kvm/x86.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 508074e47bc0..f09bfc0a3cc1 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -902,6 +902,15 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index d939d3b84e6f..d9922277df67 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -439,9 +439,9 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+ 	if (!pmc)
+ 		return 1;
  
- void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
- {
-+	/*
-+	 * Toggling just CR0.WP doesn't invalidate page tables per se, only the
-+	 * permission bits.
-+	 */
-+	if (vcpu->arch.mmu->root_role.direct && (cr0 ^ old_cr0) == X86_CR0_WP) {
-+		kvm_init_mmu(vcpu);
-+		return;
-+	}
-+
- 	if ((cr0 ^ old_cr0) & X86_CR0_PG) {
- 		kvm_clear_async_pf_completion_queue(vcpu);
- 		kvm_async_pf_hash_reset(vcpu);
+-	if (!(kvm_read_cr4(vcpu) & X86_CR4_PCE) &&
++	if (!(kvm_read_cr4_bits(vcpu, X86_CR4_PCE)) &&
+ 	    (static_call(kvm_x86_get_cpl)(vcpu) != 0) &&
+-	    (kvm_read_cr0(vcpu) & X86_CR0_PE))
++	    (kvm_read_cr0_bits(vcpu, X86_CR0_PE)))
+ 		return 1;
+ 
+ 	*data = pmc_read_counter(pmc) & mask;
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index c8198c8a9b55..d3b49e0b6c32 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -5487,7 +5487,7 @@ static int handle_cr(struct kvm_vcpu *vcpu)
+ 		break;
+ 	case 3: /* lmsw */
+ 		val = (exit_qualification >> LMSW_SOURCE_DATA_SHIFT) & 0x0f;
+-		trace_kvm_cr_write(0, (kvm_read_cr0(vcpu) & ~0xful) | val);
++		trace_kvm_cr_write(0, (kvm_read_cr0_bits(vcpu, ~0xful) | val));
+ 		kvm_lmsw(vcpu, val);
+ 
+ 		return kvm_skip_emulated_instruction(vcpu);
+@@ -7547,7 +7547,7 @@ static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+ 	if (!kvm_arch_has_noncoherent_dma(vcpu->kvm))
+ 		return (MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
+ 
+-	if (kvm_read_cr0(vcpu) & X86_CR0_CD) {
++	if (kvm_read_cr0_bits(vcpu, X86_CR0_CD)) {
+ 		if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
+ 			cache = MTRR_TYPE_WRBACK;
+ 		else
 -- 
 2.39.1
 
