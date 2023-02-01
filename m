@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151C96866E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 572E66866DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbjBANaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:30:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S232245AbjBANaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbjBANaH (ORCPT
+        with ESMTP id S232259AbjBAN3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:30:07 -0500
+        Wed, 1 Feb 2023 08:29:53 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0047410B2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C94410B4
         for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:29:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675258154;
+        s=mimecast20190719; t=1675258153;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n5g5BRaVE7Y5sLa48yF1mcVGIt0PT9vmJ+7t6OX7GDw=;
-        b=evrQxQLjY75uEDbxtMNI/F8NI+1nrTJtLJ9YJ4j+zq5u6ilHHDO32lJ23S4/6l3LwoKIZa
-        MC8JzIfZ6ka1gufwqRqfpKf2iruxJ8xTzm55c3xbRahUoq/bGdvaVoCTRyAAjFFm7E0K/Y
-        gvfc7WwjYAbUdjLB6nHser7IWdbItTo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=BHlHNKgyQKHJdr2+kCJrUmuRwsOYKakAfKoGgM7YMEs=;
+        b=CDnZ3gwU9SdNNqGxrQiOa5TFrXIEy0FIZ/Zy+/CF+4ILMjG0uwe+TnY8cfltrBI2hfo9WR
+        Owu3GEun/LMXDwYY+LiWkckEia33SHw4qTdz+ELh0wNADLdJnSYOnOoXzHxkNxmvp/I1ND
+        KrXSHAF/9amvw3eNVELSF5WAFt88dVU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-315-82CvK5LLMseqK97uy1yOKA-1; Wed, 01 Feb 2023 08:29:11 -0500
-X-MC-Unique: 82CvK5LLMseqK97uy1yOKA-1
+ us-mta-347-9U5y46XbM4GnkLcPdeGhew-1; Wed, 01 Feb 2023 08:29:12 -0500
+X-MC-Unique: 9U5y46XbM4GnkLcPdeGhew-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A9289802C17;
-        Wed,  1 Feb 2023 13:29:09 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1A7A63C02548;
+        Wed,  1 Feb 2023 13:29:10 +0000 (UTC)
 Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C33140C2064;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B244C40C2064;
         Wed,  1 Feb 2023 13:29:09 +0000 (UTC)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     kvm@vger.kernel.org
@@ -51,9 +51,9 @@ Cc:     Jim Mattson <jmattson@google.com>,
         Maxim Levitsky <mlevitsk@redhat.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Subject: [PATCH 2/3] kvm: svm: Add IA32_FLUSH_CMD guest support
-Date:   Wed,  1 Feb 2023 08:29:04 -0500
-Message-Id: <20230201132905.549148-3-eesposit@redhat.com>
+Subject: [PATCH 3/3] kvm: x86: Advertise FLUSH_L1D to user space
+Date:   Wed,  1 Feb 2023 08:29:05 -0500
+Message-Id: <20230201132905.549148-4-eesposit@redhat.com>
 In-Reply-To: <20230201132905.549148-1-eesposit@redhat.com>
 References: <20230201132905.549148-1-eesposit@redhat.com>
 MIME-Version: 1.0
@@ -69,78 +69,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose IA32_FLUSH_CMD to the guest if the guest CPUID enumerates
-support for this MSR. As with IA32_PRED_CMD, permission for
-unintercepted writes to this MSR will be granted to the guest after
-the first non-zero write.
+FLUSH_L1D was already added in 11e34e64e4103, but the feature is not
+visible to userspace yet.
+
+The bit definition:
+CPUID.(EAX=7,ECX=0):EDX[bit 28]
+
+If the feature is supported by the host, kvm should support it too so
+that userspace can choose whether to expose it to the guest or not.
+One disadvantage of not exposing it is that the guest will report
+a non existing vulnerability in
+/sys/devices/system/cpu/vulnerabilities/mmio_stale_data
+because the mitigation is present only if the guest supports
+(FLUSH_L1D and MD_CLEAR) or FB_CLEAR.
 
 Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
 ---
- arch/x86/kvm/svm/svm.c | 44 +++++++++++++++++++++++++++++-------------
- 1 file changed, 31 insertions(+), 13 deletions(-)
+ arch/x86/kvm/cpuid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index d13cf53e7390..8a4fa8edf6ee 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -2866,6 +2866,28 @@ static int svm_set_vm_cr(struct kvm_vcpu *vcpu, u64 data)
- 	return 0;
- }
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+index 2a9f1e200dbc..9c70cbb663a2 100644
+--- a/arch/x86/kvm/cpuid.c
++++ b/arch/x86/kvm/cpuid.c
+@@ -649,7 +649,7 @@ void kvm_set_cpu_caps(void)
+ 		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
+ 		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
+ 		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
+-		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
++		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16) | F(FLUSH_L1D)
+ 	);
  
-+static int svm_set_msr_ia32_cmd(struct kvm_vcpu *vcpu, struct msr_data *msr,
-+				bool guest_has_feat, u64 cmd,
-+				int x86_feature_bit)
-+{
-+	struct vcpu_svm *svm = to_svm(vcpu);
-+
-+	if (!msr->host_initiated && !guest_has_feat)
-+		return 1;
-+
-+	if (!(msr->data & ~cmd))
-+		return 1;
-+	if (!boot_cpu_has(x86_feature_bit))
-+		return 1;
-+	if (!msr->data)
-+		return 0;
-+
-+	wrmsrl(msr->index, cmd);
-+	set_msr_interception(vcpu, svm->msrpm, msr->index, 0, 1);
-+
-+	return 0;
-+}
-+
- static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -2940,19 +2962,15 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
- 		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_SPEC_CTRL, 1, 1);
- 		break;
- 	case MSR_IA32_PRED_CMD:
--		if (!msr->host_initiated &&
--		    !guest_has_pred_cmd_msr(vcpu))
--			return 1;
--
--		if (data & ~PRED_CMD_IBPB)
--			return 1;
--		if (!boot_cpu_has(X86_FEATURE_IBPB))
--			return 1;
--		if (!data)
--			break;
--
--		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
--		set_msr_interception(vcpu, svm->msrpm, MSR_IA32_PRED_CMD, 0, 1);
-+		r = svm_set_msr_ia32_cmd(vcpu, msr,
-+					 guest_has_pred_cmd_msr(vcpu),
-+					 PRED_CMD_IBPB, X86_FEATURE_IBPB);
-+		break;
-+	case MSR_IA32_FLUSH_CMD:
-+		bool guest_flush_l1d = guest_cpuid_has(vcpu,
-+						       X86_FEATURE_FLUSH_L1D);
-+		r = svm_set_msr_ia32_cmd(vcpu, msr, guest_flush_l1d,
-+					 L1D_FLUSH, X86_FEATURE_FLUSH_L1D);
- 		break;
- 	case MSR_AMD64_VIRT_SPEC_CTRL:
- 		if (!msr->host_initiated &&
+ 	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
 -- 
 2.39.1
 
