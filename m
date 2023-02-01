@@ -2,115 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E1368719D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393276871A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjBAXJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 18:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        id S229451AbjBAXM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 18:12:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjBAXJu (ORCPT
+        with ESMTP id S229771AbjBAXMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 18:09:50 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D1B69B1A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 15:09:49 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0E2A35C0175;
-        Wed,  1 Feb 2023 18:09:47 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 01 Feb 2023 18:09:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1675292987; x=1675379387; bh=/s
-        KWUZMDVI94wHC4x6lwKTIhggnPQvFEE4dYpx4w/HQ=; b=b8RQRP5np+jz807OEH
-        DHu5YAt8x5RYyinq+y6LBzpG+nKRIv5T4jAUEVBjj63BRWQTin+AgUziBUC6h8Km
-        1rWdX7O6llZS36L1j9SuWElnwRgVJp0nSNkBTwMDjRtLcpHBDEw71NkeIQSJ32H+
-        BQyWCFmS3jKKY8IuqkHy8BEFbNmIQ+nP0wGRJj9sWGgsTYcJRr11oF8t0R9/3yD5
-        WL1tbISA4nRY4XDi7wgDA/HDSyITwL2uv5I2bomGW2qJJtlDRBv+YJKBnrg/404t
-        gYpXHkh3dOzVJSvlB3VyZAjvXA//OPg0Eei9+D7FJS9Daas+XbqSg1QOq2dS7JYu
-        C+tg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675292987; x=1675379387; bh=/sKWUZMDVI94wHC4x6lwKTIhggnP
-        QvFEE4dYpx4w/HQ=; b=pHh0WxDyyzBT7DrH1FApGkT/BM8H2burTrCSRagoYQ4j
-        c1Htpdd/KaA9cLzbDKs6RHp29vS3F3oYfOglCxQloyIl3p/SX/L7Otpc6SxVFzhp
-        rKFhZsIS66xVWUhlxew1rJdDrLBV1JMpcOYpb6hMTXPlaGu8yD1VvQGy0fhWk9d4
-        4Vffq68kxAgvxgXFjsILifo8SB43u1aq0uJJL75xQeBTCWYbIjppu1/rT8UOuRVF
-        tKdAGvLEHfQh1hb8eUxQod1gj2ZHrZf8xYgymp6ngROOAdCpKa+7wZjP1pcdff22
-        MHsFDBYeX1aLK8f3v2BwAG+OiUPZ7GBOzUSRiKZ7yA==
-X-ME-Sender: <xms:OvHaY8sLpoaub0iiwG3dAupsYiCxw0bIJAbk8S9wtjM7-0zweewVdA>
-    <xme:OvHaY5eDZbQcz2Da5CwPrFMJauBofsbRk2iNcOvutQ3eo0lo45F3zgt085GrBNQ7j
-    ip-y37zBHnbOfXE9Lw>
-X-ME-Received: <xmr:OvHaY3wJBzySt0KANEFSXGQJ0a1zgBUhfKbqS2Ph0UlzPUVD1jdtoqFz19s367krZnkxXA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefjedgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:OvHaY_Pdt2ypsvT9E2IXo7t9F0yjCjRidqixBWGD2b0L4mB3eOyZSQ>
-    <xmx:OvHaY8-W-Q3G-4yAB3879lOaGur7X9wCs6A2K3qrtKxuXgLzEduNFg>
-    <xmx:OvHaY3XMfTrCpG7wRlr1ZbtITYvDI2hLmA8eIMwdBF2iG-W-fCrN5w>
-    <xmx:O_HaY-IOjeuSjRgdO-JdPP3tumXGSADbRHcJb_M-sKDQsjQ0jXdfFw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 1 Feb 2023 18:09:46 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 0691410E381; Thu,  2 Feb 2023 02:09:44 +0300 (+03)
-Date:   Thu, 2 Feb 2023 02:09:43 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/khugepaged: skip shmem with armed userfaultfd
-Message-ID: <20230201230943.fg2q6fmvu7gggxar@box.shutemov.name>
-References: <20230201034137.2463113-1-stevensd@google.com>
+        Wed, 1 Feb 2023 18:12:55 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9083A6DFD3
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 15:12:53 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id pj3so269981pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 15:12:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9tAtzjeHojtEDtxt65Up2XJCtorJ5dH8vJi//jm5SK8=;
+        b=T5Tvgujc1usQ+DzfONjL8+ISjVZg2pmf9LFbeyRSHWmvMSr+3r665WHmzPqgbCnRnK
+         PYyz9R9udgjzNstYKj7xREH6oiZmyB8YbcCRHXEgBC74F9KuIbHpHuiwq6m28A08m+To
+         bfyGwkqJc8412Q6k2kXjX3YT5KWUns6MZfuGHvzZ53CPEzojRhge1w6k7jlo2w2+XSR1
+         SJIeN8cukKxDFLD4Lo8KL6VQ1RjSz3YqSd3qpk8wWkcKW2F+Zk9aSn9KiNFREusHTuTj
+         /His0UCRUwS2oNFkhqZkCdi6UzJmECRsgnGqyqxJdfjvrP3F/Bfthrk/mHYEmzG1XOqH
+         SoRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9tAtzjeHojtEDtxt65Up2XJCtorJ5dH8vJi//jm5SK8=;
+        b=I/qdEX5uq6t8a/5guuNQ16fYd9FS+Hm6BUs6cO+HvdZSLzUpqI9nzahPP46bCyxijQ
+         lHRvse29gqC+zmuqyaZ64XXLqK7N48u1HnyqImQPImiUIYIs4+W91mxj3g+QqtRjFpiN
+         r+dMIYGKhqJkhRaVJsoHl+0Elsuhea3ipIHLLbdaoi5dgMgDMyuOnyo9Tdlc21iSokt/
+         NDnjXHwlGSSoMI/GnJ6uJvF8gE9bEcQslF/tVOSVbWSRm1xHYO8buPkYZ3r5IBA6UW6u
+         57yTE17d+YOJuE7GdjMVQT6zpBTtRtUDrCq0TeSnXRRjZxC+9AN9i0k7s7wRmdpLmrYj
+         ZGWg==
+X-Gm-Message-State: AO0yUKU7PCuxAYb8EVxWCeBAndjd/awzGEhiUTjVLVKPbOZ6RgJm51D9
+        4AyrTYqT9awifECwLN3c4xixI10A33cjCP8B
+X-Google-Smtp-Source: AK7set81x9SFPlR2xt2LL3p/gzp9UDd4QwKeSPV35HuGWe1moKyUrZEQddhquz69J42M/1OcHdR4Nw==
+X-Received: by 2002:a17:90b:3ec3:b0:230:3af9:183 with SMTP id rm3-20020a17090b3ec300b002303af90183mr337135pjb.20.1675293172782;
+        Wed, 01 Feb 2023 15:12:52 -0800 (PST)
+Received: from atishp.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id t3-20020a17090a510300b0022bf0b0e1b7sm1861774pjh.10.2023.02.01.15.12.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 15:12:52 -0800 (PST)
+From:   Atish Patra <atishp@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Eric Lin <eric.lin@sifive.com>, Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH v4 00/14] KVM perf support 
+Date:   Wed,  1 Feb 2023 15:12:36 -0800
+Message-Id: <20230201231250.3806412-1-atishp@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201034137.2463113-1-stevensd@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 12:41:37PM +0900, David Stevens wrote:
-> From: David Stevens <stevensd@chromium.org>
-> 
-> Collapsing memory in a vma that has an armed userfaultfd results in
-> zero-filling any missing pages, which breaks user-space paging for those
-> filled pages. Avoid khugepage bypassing userfaultfd by not collapsing
-> pages in shmem reached via scanning a vma with an armed userfaultfd if
-> doing so would zero-fill any pages.
+This series extends perf support for KVM. The KVM implementation relies
+on the SBI PMU extension and trap n emulation of hpmcounter CSRs.
+The KVM implementation exposes the virtual counters to the guest and internally
+manage the counters using kernel perf counters. 
 
-Could you elaborate on the failure? Will zero-filling the page prevent
-userfaultfd from catching future access?
+This series doesn't support the counter overflow as the Sscofpmf extension
+doesn't allow trap & emulation mechanism of scountovf CSR yet. The required
+changes to allow that are being under discussions. Supporting overflow interrupt
+also requires AIA interrupt filtering support.
 
-A test-case would help a lot.
+1. PATCH 1-5 are generic KVM/PMU driver improvements.
+2. PATCH 9 disables hpmcounter for now. It will be enabled to maintain ABI
+requirement once the ONE reg interface is settled. 
 
-And what prevents the same pages be filled (with zeros or otherwise) via
-write(2) bypassing VMA checks? I cannot immediately see it.
+perf stat works in kvm guests with this series. 
 
-BTW, there's already a check that prevent establishing PMD in the place if
-VM_UFFD_WP is set.
+Here is example of running perf stat in a guest running in KVM.
 
-Maybe just an update of the check in retract_page_tables() from
-userfaultfd_wp() to userfaultfd_armed() would be enough?
+===========================================================================
+/ # /host/apps/perf stat -e instructions -e cycles -e r8000000000000005 \
+> -e r8000000000000006 -e r8000000000000007 -e r8000000000000008 \
+> -e r800000000000000a perf bench sched messaging -g 10 -l 10
 
-I have very limited understanding of userfaultfd(). Sorry in advance for
-stupid questions.
+# Running 'sched/messaging' benchmark:
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+     Total time: 7.769 [sec]
+                 
+ Performance counter stats for 'perf bench sched messaging -g 10 -l 10':
+
+       73556259604      cycles
+       73387266056      instructions              #    1.00  insn per cycle
+                 0      dTLB-store-misses
+                 0      iTLB-load-misses
+                 0      r8000000000000005
+              2595      r8000000000000006
+              2272      r8000000000000007
+                10      r8000000000000008
+                 0      r800000000000000a
+
+      12.173720400 seconds time elapsed
+
+       1.002716000 seconds user
+      21.931047000 seconds sys
+
+
+Note: The SBI_PMU_FW_SET_TIMER (eventid : r8000000000000005) is zero
+as kvm guest supports sstc now. 
+
+This series can be found here as well.
+https://github.com/atishp04/linux/tree/kvm_perf_v4
+
+TODO:
+1. Add sscofpmf support.
+2. Add One reg interface for the following operations:
+	1. Enable/Disable PMU (should it at VM level rather than vcpu ?)
+	2. Number of hpmcounter and width of the counters
+	3. Init PMU
+	4. Allow guest user to access cycle & instret without trapping
+3. Move counter mask to a bitmask instead of unsigned long so that it can work
+   for RV32 systems where number of total counters are more than 32.
+   This will also accomodate future systems which may define maximum counters
+   to be more than 64. 
+
+Changes from v3->v4:
+1. Addressed all the comments on v3.
+2. Modified the vcpu_pmu_init to void return type.
+3. Redirect illegal instruction trap to guest for invalid hpmcounter access
+   instead of exiting to the userpsace.
+4. Got rid of unecessary error messages.
+
+Changes v2->v3:
+1. Changed the exported functions to GPL only export.
+2. Addressed all the nit comments on v2.
+3. Split non-kvm related changes into separate patches.
+4. Reorgainze the PATCH 11 and 10 based on Drew's suggestions.
+
+Changes from v1->v2:
+1. Addressed comments from Andrew.
+2. Removed kvpmu sanity check.
+3. Added a kvm pmu init flag and the sanity check to probe function.
+4. Improved the linux vs sbi error code handling.
+ 
+
+Atish Patra (14):
+perf: RISC-V: Define helper functions expose hpm counter width and
+count
+perf: RISC-V: Improve privilege mode filtering for perf
+RISC-V: Improve SBI PMU extension related definitions
+RISC-V: KVM: Define a probe function for SBI extension data structures
+RISC-V: KVM: Return correct code for hsm stop function
+RISC-V: KVM: Modify SBI extension handler to return SBI error code
+RISC-V: KVM: Add skeleton support for perf
+RISC-V: KVM: Add SBI PMU extension support
+RISC-V: KVM: Make PMU functionality depend on Sscofpmf
+RISC-V: KVM: Disable all hpmcounter access for VS/VU mode
+RISC-V: KVM: Implement trap & emulate for hpmcounters
+RISC-V: KVM: Implement perf support without sampling
+RISC-V: KVM: Support firmware events
+RISC-V: KVM: Increment firmware pmu events
+
+arch/riscv/include/asm/kvm_host.h     |   4 +
+arch/riscv/include/asm/kvm_vcpu_pmu.h | 110 +++++
+arch/riscv/include/asm/kvm_vcpu_sbi.h |  13 +-
+arch/riscv/include/asm/sbi.h          |   7 +-
+arch/riscv/kvm/Makefile               |   1 +
+arch/riscv/kvm/main.c                 |   3 +-
+arch/riscv/kvm/tlb.c                  |   4 +
+arch/riscv/kvm/vcpu.c                 |   7 +
+arch/riscv/kvm/vcpu_insn.c            |   4 +-
+arch/riscv/kvm/vcpu_pmu.c             | 627 ++++++++++++++++++++++++++
+arch/riscv/kvm/vcpu_sbi.c             |  72 ++-
+arch/riscv/kvm/vcpu_sbi_base.c        |  43 +-
+arch/riscv/kvm/vcpu_sbi_hsm.c         |  28 +-
+arch/riscv/kvm/vcpu_sbi_pmu.c         |  85 ++++
+arch/riscv/kvm/vcpu_sbi_replace.c     |  50 +-
+arch/riscv/kvm/vcpu_sbi_v01.c         |  18 +-
+drivers/perf/riscv_pmu_sbi.c          |  64 ++-
+include/linux/perf/riscv_pmu.h        |   5 +
+18 files changed, 1029 insertions(+), 116 deletions(-)
+create mode 100644 arch/riscv/include/asm/kvm_vcpu_pmu.h
+create mode 100644 arch/riscv/kvm/vcpu_pmu.c
+create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
+
+--
+2.25.1
+
