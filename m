@@ -2,266 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210E4686239
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A41AA68623B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjBAI7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 03:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S231292AbjBAI7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 03:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjBAI7J (ORCPT
+        with ESMTP id S231226AbjBAI7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 03:59:09 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC645D90A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 00:59:08 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id e6so9559260plg.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 00:59:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MsiWfKMhO8V8ake/oMGe13EZKsi0si1DZ5pIY6nialg=;
-        b=QQ4xw7awnS2eQeWmbichWhcwdgl0psemdV5DTEqye2xxbnf30Om3rRBkyNtwI8M5Pp
-         X0KEJvGHX4xInJ4TsWXwbxlqoGfdEtw+DMlbjiIl6SI2439kwf9f4KiVjWJtk7dphYzC
-         rXne3lAenDp4/eDSNJq2CCnWnP/Hy1gUiENu8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MsiWfKMhO8V8ake/oMGe13EZKsi0si1DZ5pIY6nialg=;
-        b=EtatCzFBnQfxybiLi7EoRjw/IB2fjvzjP1dJHIun2F2FpyxAbFsEQP6ZK7RRHV7tD4
-         y1t1ym5kmngV5CzTaR8E/ITc7pd4XgoXP4Uz2hivxARk2aVzgoRLXEk6HHaj7m6+bqkj
-         W0f7H37pXT6YW04gcgZ1neUbykJXyhy2cuHRM9QLNa1QZrD5n5lZzKv7uo9uvDBayUJd
-         ir6+tkfGN0ViEG0BF1USKDD91yOlXtl6SKEaVH2lsxwsrF32/QehrYIuGvaPh2ndUA0M
-         vr3Ezsl6ymWKhVpO2FShvn1Ob7LD2I901dCGr33HoTmxWha42gq0+WGXLRVz29wN7aW7
-         IkHg==
-X-Gm-Message-State: AO0yUKVQMTEaO3nAQrIFAvzGhCNizMBo0k2j3K4uOZePRaFoIitCytkl
-        t6cLP3TGGf7kzUBVnPqc6IZZ+5QU1KL1pCQfWJjo
-X-Google-Smtp-Source: AK7set/7hUDhdbximkycvws+gp+DAtJQVy+K2ZGiJXrD0KIyNd0YO7VDr6uvWis6v4ws3ZeBQwaXAEhGKT70VbgU4FE=
-X-Received: by 2002:a17:90a:1346:b0:22c:1613:164f with SMTP id
- y6-20020a17090a134600b0022c1613164fmr228761pjf.103.1675241947590; Wed, 01 Feb
- 2023 00:59:07 -0800 (PST)
+        Wed, 1 Feb 2023 03:59:34 -0500
+Received: from out30-6.freemail.mail.aliyun.com (out30-6.freemail.mail.aliyun.com [115.124.30.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AA55D907;
+        Wed,  1 Feb 2023 00:59:28 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VafSXjC_1675241963;
+Received: from 30.221.131.106(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VafSXjC_1675241963)
+          by smtp.aliyun-inc.com;
+          Wed, 01 Feb 2023 16:59:24 +0800
+Message-ID: <ea8819bc-c340-bf4c-ad91-1a520fe3914b@linux.alibaba.com>
+Date:   Wed, 1 Feb 2023 16:59:23 +0800
 MIME-Version: 1.0
-References: <20230127182558.2416400-1-atishp@rivosinc.com> <20230127182558.2416400-12-atishp@rivosinc.com>
- <CAAhSdy1+6AprOdzRRTG98p6swisNFO6MUKjXobxW3RWbixvjCg@mail.gmail.com> <CAOnJCU+=A1GXvaQis5RrDabPAvAZccmc9HF1KU4ReuRTSx5pCQ@mail.gmail.com>
-In-Reply-To: <CAOnJCU+=A1GXvaQis5RrDabPAvAZccmc9HF1KU4ReuRTSx5pCQ@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 1 Feb 2023 00:58:54 -0800
-Message-ID: <CAOnJCUL27aBGre7=mPX7BwMUkUN8CC_UFzmFh7W9LzCxktyGVg@mail.gmail.com>
-Subject: Re: [PATCH v3 11/14] RISC-V: KVM: Implement trap & emulate for hpmcounters
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+Content-Language: en-US
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Alexander Larsson <alexl@redhat.com>, gscrivan@redhat.com,
+        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david@fromorbit.com,
+        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+References: <cover.1674227308.git.alexl@redhat.com>
+ <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+ <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+ <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
+ <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com>
+ <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
+ <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com>
+ <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
+ <CAOQ4uxhzGru2Z8tjcAWvKVi0reNeX9SHMi6cwdyA9Vws8c1ppw@mail.gmail.com>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <CAOQ4uxhzGru2Z8tjcAWvKVi0reNeX9SHMi6cwdyA9Vws8c1ppw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 2:46 PM Atish Patra <atishp@atishpatra.org> wrote:
->
-> On Sun, Jan 29, 2023 at 4:44 AM Anup Patel <anup@brainfault.org> wrote:
-> >
-> > On Fri, Jan 27, 2023 at 11:56 PM Atish Patra <atishp@rivosinc.com> wrote:
-> > >
-> > > As the KVM guests only see the virtual PMU counters, all hpmcounter
-> > > access should trap and KVM emulates the read access on behalf of guests.
-> > >
-> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > > ---
-> > >  arch/riscv/include/asm/kvm_vcpu_pmu.h | 16 ++++++++++
-> > >  arch/riscv/kvm/vcpu_insn.c            |  4 ++-
-> > >  arch/riscv/kvm/vcpu_pmu.c             | 45 ++++++++++++++++++++++++++-
-> > >  3 files changed, 63 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/include/asm/kvm_vcpu_pmu.h b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> > > index 3f43a43..022d45d 100644
-> > > --- a/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> > > +++ b/arch/riscv/include/asm/kvm_vcpu_pmu.h
-> > > @@ -43,6 +43,19 @@ struct kvm_pmu {
-> > >  #define vcpu_to_pmu(vcpu) (&(vcpu)->arch.pmu)
-> > >  #define pmu_to_vcpu(pmu)  (container_of((pmu), struct kvm_vcpu, arch.pmu))
-> > >
-> > > +#if defined(CONFIG_32BIT)
-> > > +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
-> > > +{ .base = CSR_CYCLEH,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm }, \
-> > > +{ .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
-> > > +#else
-> > > +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
-> > > +{ .base = CSR_CYCLE,      .count = 31, .func = kvm_riscv_vcpu_pmu_read_hpm },
-> > > +#endif
-> > > +
-> > > +int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
-> > > +                               unsigned long *val, unsigned long new_val,
-> > > +                               unsigned long wr_mask);
-> > > +
-> > >  int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_ext_data *edata);
-> > >  int kvm_riscv_vcpu_pmu_ctr_info(struct kvm_vcpu *vcpu, unsigned long cidx,
-> > >                                 struct kvm_vcpu_sbi_ext_data *edata);
-> > > @@ -65,6 +78,9 @@ void kvm_riscv_vcpu_pmu_reset(struct kvm_vcpu *vcpu);
-> > >  #else
-> > >  struct kvm_pmu {
-> > >  };
-> > > +#define KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS \
-> > > +{ .base = 0,      .count = 0, .func = NULL },
-> > > +
-> >
-> > Redundant newline here.
-> >
->
-> Fixed.
->
-> > >
-> > >  static inline int kvm_riscv_vcpu_pmu_init(struct kvm_vcpu *vcpu)
-> > >  {
-> > > diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
-> > > index 0bb5276..f689337 100644
-> > > --- a/arch/riscv/kvm/vcpu_insn.c
-> > > +++ b/arch/riscv/kvm/vcpu_insn.c
-> > > @@ -213,7 +213,9 @@ struct csr_func {
-> > >                     unsigned long wr_mask);
-> > >  };
-> > >
-> > > -static const struct csr_func csr_funcs[] = { };
-> > > +static const struct csr_func csr_funcs[] = {
-> > > +       KVM_RISCV_VCPU_HPMCOUNTER_CSR_FUNCS
-> > > +};
-> > >
-> > >  /**
-> > >   * kvm_riscv_vcpu_csr_return -- Handle CSR read/write after user space
-> > > diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-> > > index 7713927..894053a 100644
-> > > --- a/arch/riscv/kvm/vcpu_pmu.c
-> > > +++ b/arch/riscv/kvm/vcpu_pmu.c
-> > > @@ -17,6 +17,44 @@
-> > >
-> > >  #define kvm_pmu_num_counters(pmu) ((pmu)->num_hw_ctrs + (pmu)->num_fw_ctrs)
-> > >
-> > > +static int pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
-> > > +                       unsigned long *out_val)
-> > > +{
-> > > +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> > > +       struct kvm_pmc *pmc;
-> > > +       u64 enabled, running;
-> > > +
-> > > +       pmc = &kvpmu->pmc[cidx];
-> > > +       if (!pmc->perf_event)
-> > > +               return -EINVAL;
-> > > +
-> > > +       pmc->counter_val += perf_event_read_value(pmc->perf_event, &enabled, &running);
-> > > +       *out_val = pmc->counter_val;
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +int kvm_riscv_vcpu_pmu_read_hpm(struct kvm_vcpu *vcpu, unsigned int csr_num,
-> > > +                               unsigned long *val, unsigned long new_val,
-> > > +                               unsigned long wr_mask)
-> > > +{
-> > > +       struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> > > +       int cidx, ret = KVM_INSN_CONTINUE_NEXT_SEPC;
-> > > +
-> > > +       if (!kvpmu || !kvpmu->init_done)
-> > > +               return KVM_INSN_EXIT_TO_USER_SPACE;
-> >
-> > As discussed previously, this should be KVM_INSN_ILLEGAL_TRAP.
-> >
 
-Thinking about it more, this results in a panic in guest S-mode which
-is probably undesirable.
-As per your earlier suggestion, we can return 0 for cycle/instret
-counters if accessed.
-This is only possible through legacy pmu drivers running in guests or
-some other OS that access any hpmcounters
-for random reasons.
 
-I think we should return KVM_INSN_ILLEGAL_TRAP for other counters and
-make the guest kernel panic.
-This does separate the behavior between fixed and programmable
-counters when everything is denied access in hcounteren.
+On 2/1/23 3:44 PM, Amir Goldstein wrote:
+> On Wed, Feb 1, 2023 at 6:28 AM Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
+>>
+>> Hi all,
+>>
+>> There are some updated performance statistics with different
+>> combinations on my test environment if you are interested.
+>>
+> 
+> Cool report!
+> 
+>>
+>> On 1/27/23 6:24 PM, Gao Xiang wrote:
+>>> ...
+>>>
+>>> I've made a version and did some test, it can be fetched from:
+>>> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git -b
+>>> experimental
+>>>
+>>
+>> Setup
+>> ======
+>> CPU: x86_64 Intel(R) Xeon(R) Platinum 8269CY CPU @ 2.50GHz
+>> Disk: 6800 IOPS upper limit
+>> OS: Linux v6.2 (with composefs v3 patchset)
+>>
+>> I build erofs/squashfs images following the scripts attached on [1],
+>> with each file in the rootfs tagged with "metacopy" and "redirect" xattr.
+>>
+>> The source rootfs is from the docker image of tensorflow [2].
+>>
+>> The erofs images are built with mkfs.erofs with support for sparse file
+>> added [3].
+>>
+>> [1]
+>> https://lore.kernel.org/linux-fsdevel/5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com/
+>> [2]
+>> https://hub.docker.com/layers/tensorflow/tensorflow/2.10.0/images/sha256-7f9f23ce2473eb52d17fe1b465c79c3a3604047343e23acc036296f512071bc9?context=explore
+>> [3]
+>> https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?h=experimental&id=7c49e8b195ad90f6ca9dfccce9f6e3e39a8676f6
+>>
+>>
+>>
+>> Image size
+>> ===========
+>> 6.4M large.composefs
+>> 5.7M large.composefs.w/o.digest (w/o --compute-digest)
+>> 6.2M large.erofs
+>> 5.2M large.erofs.T0 (with -T0, i.e. w/o nanosecond timestamp)
+>> 1.7M large.squashfs
+>> 5.8M large.squashfs.uncompressed (with -noI -noD -noF -noX)
+>>
+>> (large.erofs.T0 is built without nanosecond timestamp, so that we get
+>> smaller disk inode size (same with squashfs).)
+>>
+>>
+>> Runtime Perf
+>> =============
+>>
+>> The "uncached" column is tested with:
+>> hyperfine -p "echo 3 > /proc/sys/vm/drop_caches" "ls -lR $MNTPOINT"
+>>
+>>
+>> While the "cached" column is tested with:
+>> hyperfine -w 1 "ls -lR $MNTPOINT"
+>>
+>>
+>> erofs and squashfs are mounted with loopback device.
+>>
+>>
+>>                                   | uncached(ms)| cached(ms)
+>> ----------------------------------|-------------|-----------
+>> composefs (with digest)           | 326         | 135
+>> erofs (w/o -T0)                   | 264         | 172
+>> erofs (w/o -T0) + overlayfs       | 651         | 238
+> 
+> This is a nice proof of the overlayfs "early lookup" overhead.
+> As I wrote, this overhead could be optimized by doing "lazy lookup"
+> on open like composefs does.
+> 
+> Here is a suggestion for a simple test variant that could be used to
+> approximate the expected improvement -
+> if you set all the metacopy files in erofs to redirect to the same
+> lower block, most of the lower lookup time will be amortized
+> because all but the first lower lookup are cached.
+> If you get a performance number with erofs + overlayfs that are
+> close to composefs performance numbers, it will prove the point
+> that same functionality and performance could be achieved by
+> modifying ovelrayfs/mkfs.erofs.
+> 
 
-The new code will look like this:
+I redid the test with suggestion from Amir, with all files inside the
+erofs layer are redirected to the same lower block, e.g.
+"/objects/00/014430a0b489d101c8a103ef829dd258448a13eb48b4d1e9ff0731d1e82b92".
 
-if (!kvpmu || !kvpmu->init_done) {
-    if (csr_num == CSR_CYCLE || csr_num == CSR_INSTRET) {
-        *val = 0;
-        return ret;
-    } else
-         return KVM_INSN_ILLEGAL_TRAP;
-}
+The result is shown in the fourth line.
 
-Let me know if you think otherwise.
+				  | uncached(ms)| cached(ms)
+----------------------------------|-------------|-----------
+composefs (with digest)		  | 326		| 135
+erofs (w/o -T0)			  | 264		| 172
+erofs (w/o -T0) + overlayfs	  | 651		| 238
+erofs (hacked and redirect to one |		|
+lower block) + overlayfs	  | 400		| 230
 
->
-> Done.
-> > > +
-> > > +       if (wr_mask)
-> > > +               return KVM_INSN_ILLEGAL_TRAP;
-> > > +
-> > > +       cidx = csr_num - CSR_CYCLE;
-> > > +
-> > > +       if (pmu_ctr_read(vcpu, cidx, val) < 0)
-> > > +               return KVM_INSN_EXIT_TO_USER_SPACE;
-> >
-> > Same as above.
-> >
+It seems that the "lazy lookup" in overlayfs indeed optimizes in this
+situation.
 
-We can get rid of this as pmu_ctr_read doesn't return errors anyways.
 
->
-> Done.
->
-> > > +
-> > > +       return ret;
-> > > +}
-> > > +
-> > >  int kvm_riscv_vcpu_pmu_num_ctrs(struct kvm_vcpu *vcpu, struct kvm_vcpu_sbi_ext_data *edata)
-> > >  {
-> > >         struct kvm_pmu *kvpmu = vcpu_to_pmu(vcpu);
-> > > @@ -69,7 +107,12 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
-> > >  int kvm_riscv_vcpu_pmu_ctr_read(struct kvm_vcpu *vcpu, unsigned long cidx,
-> > >                                 struct kvm_vcpu_sbi_ext_data *edata)
-> > >  {
-> > > -       /* TODO */
-> > > +       int ret;
-> > > +
-> > > +       ret = pmu_ctr_read(vcpu, cidx, &edata->out_val);
-> > > +       if (ret == -EINVAL)
-> > > +               edata->err_val = SBI_ERR_INVALID_PARAM;
-> > > +
-> > >         return 0;
-> > >  }
-> > >
-> > > --
-> > > 2.25.1
-> > >
-> >
-> > Regards,
-> > Anup
->
->
->
-> --
-> Regards,
-> Atish
+The performance gap in cached situation (especially comparing composefs
+and standalone erofs) is still under investigation and I will see if
+there's any hint by perf diff.
 
+
+
+overlayfs + loopback erofs(redirect to the one same lwer block) - uncached
+Benchmark 1: ls -lR /mnt/ovl/mntdir
+  Time (mean ± σ):     399.5 ms ±   3.8 ms    [User: 69.9 ms, System:
+298.1 ms]
+  Range (min … max):   394.3 ms … 403.7 ms    10 runs
+
+overlayfs + loopback erofs(w/o -T0) - cached
+Benchmark 1: ls -lR /mnt/ovl/mntdir
+  Time (mean ± σ):     230.5 ms ±   5.7 ms    [User: 63.8 ms, System:
+165.6 ms]
+  Range (min … max):   220.4 ms … 240.2 ms    12 runs
 
 
 -- 
-Regards,
-Atish
+Thanks,
+Jingbo
