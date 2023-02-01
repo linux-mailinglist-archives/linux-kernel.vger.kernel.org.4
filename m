@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F946867A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A186867A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjBANx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S229719AbjBANxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbjBANwr (ORCPT
+        with ESMTP id S231297AbjBANxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:52:47 -0500
+        Wed, 1 Feb 2023 08:53:12 -0500
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A1A677A6;
-        Wed,  1 Feb 2023 05:52:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222AB65EDE;
+        Wed,  1 Feb 2023 05:52:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1675259557; x=1706795557;
+  t=1675259564; x=1706795564;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=wBmBChPRMDvyUaZVMkF2hmabYMJY1CnETS2hVl+c0qg=;
-  b=Wr1o8bHkbbIuEdmexoT5TtqXsBamGkzE/CL27X3DOnW7o91cVGb2P+rD
-   o2kY744Yt5YtGPzToRJfp8XORM+Amlo3XzBB9n26+yFRGCicTxv02s5vX
-   KFPIQprI4za7giq5hod2D1b2zSjcKQZcngNHcINZfM8XOPycN5QvZAaNm
-   o=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Feb 2023 05:52:37 -0800
+  bh=6yIIgPFIFODAxKPkgPqqwq+s+KBvSCKTf+wd3Xgqe4g=;
+  b=k5qJyAvnNxhxwVZEVLu6tlFPaVpXorWpxy2+IBxlxBeJ/nGGZPrU5Ycl
+   MRo3Ab0JnWuoNW36XyvJMCBZi5VRkcc6qLGWWNmqmtzRePm+PcbNSriP7
+   zEk15D2lRbeA7JAz36ljUNCFyGMIimBA2GQgBtT2CV/tHcsA/TCghxYeM
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Feb 2023 05:52:44 -0800
 X-QCInternal: smtphost
 Received: from nalasex01b.na.qualcomm.com ([10.47.209.197])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 05:52:37 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 05:52:43 -0800
 Received: from hu-mohs-hyd.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 1 Feb 2023 05:52:31 -0800
+ 15.2.986.36; Wed, 1 Feb 2023 05:52:37 -0800
 From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 To:     <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
         <andersson@kernel.org>, <lgirdwood@gmail.com>,
@@ -45,9 +45,9 @@ To:     <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
         <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
         <konrad.dybcio@linaro.org>
 CC:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Subject: [PATCH 12/14] ASoC: q6dsp: q6apm-dai: Add mmap and copy compress DAI callbacks
-Date:   Wed, 1 Feb 2023 19:19:45 +0530
-Message-ID: <20230201134947.1638197-13-quic_mohs@quicinc.com>
+Subject: [PATCH 13/14] ASoC: qdsp6: audioreach: Add MP3, AAC and FLAC compress format support
+Date:   Wed, 1 Feb 2023 19:19:46 +0530
+Message-ID: <20230201134947.1638197-14-quic_mohs@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230201134947.1638197-1-quic_mohs@quicinc.com>
 References: <20230201134947.1638197-1-quic_mohs@quicinc.com>
@@ -66,115 +66,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add q6apm mmap and copy compress DAI callbacks to support compress
-offload playback.
+Add support for handling compressed formats such as MP3, AAC and FLAC.
 
 Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/qdsp6/q6apm-dai.c | 81 ++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+ sound/soc/qcom/qdsp6/audioreach.c | 106 ++++++++++++++++++++++++------
+ 1 file changed, 86 insertions(+), 20 deletions(-)
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
-index 8ee14822362b..2c0aa2f4caaf 100644
---- a/sound/soc/qcom/qdsp6/q6apm-dai.c
-+++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
-@@ -740,6 +740,85 @@ static int q6apm_dai_compr_set_metadata(struct snd_soc_component *component,
- 	return ret;
+diff --git a/sound/soc/qcom/qdsp6/audioreach.c b/sound/soc/qcom/qdsp6/audioreach.c
+index 7c45c36e9156..250ed828c7d3 100644
+--- a/sound/soc/qcom/qdsp6/audioreach.c
++++ b/sound/soc/qcom/qdsp6/audioreach.c
+@@ -852,6 +852,68 @@ static int audioreach_mfc_set_media_format(struct q6apm_graph *graph,
+ 	return rc;
  }
  
-+static int q6apm_dai_compr_mmap(struct snd_soc_component *component,
-+				struct snd_compr_stream *stream,
-+				struct vm_area_struct *vma)
++static int  audioreach_set_compr_media_format(struct media_format *media_fmt_hdr,
++					      void *p, struct audioreach_module_config *mcfg)
 +{
-+	struct snd_compr_runtime *runtime = stream->runtime;
-+	struct q6apm_dai_rtd *prtd = runtime->private_data;
-+	struct device *dev = component->dev;
++	struct payload_media_fmt_aac_t *aac_cfg;
++	struct payload_media_fmt_pcm *mp3_cfg;
++	struct payload_media_fmt_flac_t *flac_cfg;
++	int ret = 0;
 +
-+	return dma_mmap_coherent(dev, vma, prtd->dma_buffer.area, prtd->dma_buffer.addr,
-+				 prtd->dma_buffer.bytes);
++	switch (mcfg->fmt) {
++	case SND_AUDIOCODEC_MP3:
++		media_fmt_hdr->data_format = DATA_FORMAT_RAW_COMPRESSED;
++		media_fmt_hdr->fmt_id = MEDIA_FMT_ID_MP3;
++		media_fmt_hdr->payload_size = 0;
++		p = p + sizeof(*media_fmt_hdr);
++		mp3_cfg = p;
++		mp3_cfg->sample_rate = mcfg->sample_rate;
++		mp3_cfg->bit_width = mcfg->bit_width;
++		mp3_cfg->alignment = PCM_LSB_ALIGNED;
++		mp3_cfg->bits_per_sample = mcfg->bit_width;
++		mp3_cfg->q_factor = mcfg->bit_width - 1;
++		mp3_cfg->endianness = PCM_LITTLE_ENDIAN;
++		mp3_cfg->num_channels = mcfg->num_channels;
++
++		if (mcfg->num_channels == 1) {
++			mp3_cfg->channel_mapping[0] =  PCM_CHANNEL_L;
++		} else if (mcfg->num_channels == 2) {
++			mp3_cfg->channel_mapping[0] =  PCM_CHANNEL_L;
++			mp3_cfg->channel_mapping[1] =  PCM_CHANNEL_R;
++		}
++		break;
++	case SND_AUDIOCODEC_AAC:
++		media_fmt_hdr->data_format = DATA_FORMAT_RAW_COMPRESSED;
++		media_fmt_hdr->fmt_id = MEDIA_FMT_ID_AAC;
++		media_fmt_hdr->payload_size = sizeof(struct payload_media_fmt_aac_t);
++		p = p + sizeof(*media_fmt_hdr);
++		aac_cfg = p;
++		aac_cfg->aac_fmt_flag = 0;
++		aac_cfg->audio_obj_type = 5;
++		aac_cfg->num_channels = mcfg->num_channels;
++		aac_cfg->total_size_of_PCE_bits = 0;
++		aac_cfg->sample_rate = mcfg->sample_rate;
++		break;
++	case SND_AUDIOCODEC_FLAC:
++		media_fmt_hdr->data_format = DATA_FORMAT_RAW_COMPRESSED;
++		media_fmt_hdr->fmt_id = MEDIA_FMT_ID_FLAC;
++		media_fmt_hdr->payload_size = sizeof(struct payload_media_fmt_flac_t);
++		p = p + sizeof(*media_fmt_hdr);
++		flac_cfg = p;
++		flac_cfg->sample_size = mcfg->codec.options.flac_d.sample_size;
++		flac_cfg->num_channels = mcfg->num_channels;
++		flac_cfg->min_blk_size = mcfg->codec.options.flac_d.min_blk_size;
++		flac_cfg->max_blk_size = mcfg->codec.options.flac_d.max_blk_size;
++		flac_cfg->sample_rate = mcfg->sample_rate;
++		flac_cfg->min_frame_size = mcfg->codec.options.flac_d.min_frame_size;
++		flac_cfg->max_frame_size = mcfg->codec.options.flac_d.max_frame_size;
++		break;
++	default:
++		return -EINVAL;
++	}
++	return ret;
 +}
 +
-+static int q6apm_compr_copy(struct snd_soc_component *component,
-+			    struct snd_compr_stream *stream, char __user *buf,
-+			    size_t count)
-+{
-+	struct snd_compr_runtime *runtime = stream->runtime;
-+	struct q6apm_dai_rtd *prtd = runtime->private_data;
-+	void *dstn;
-+	unsigned long flags;
-+	size_t copy;
-+	u32 wflags = 0;
-+	u32 app_pointer;
-+	u32 bytes_received;
-+	uint32_t bytes_to_write;
-+	int avail, bytes_in_flight = 0;
-+
-+	bytes_received = prtd->bytes_received;
-+
-+	/**
-+	 * Make sure that next track data pointer is aligned at 32 bit boundary
-+	 * This is a Mandatory requirement from DSP data buffers alignment
-+	 */
-+	if (prtd->next_track)
-+		bytes_received = ALIGN(prtd->bytes_received, prtd->pcm_count);
-+
-+	app_pointer = bytes_received/prtd->pcm_size;
-+	app_pointer = bytes_received -  (app_pointer * prtd->pcm_size);
-+	dstn = prtd->dma_buffer.area + app_pointer;
-+
-+	if (count < prtd->pcm_size - app_pointer) {
-+		if (copy_from_user(dstn, buf, count))
-+			return -EFAULT;
-+	} else {
-+		copy = prtd->pcm_size - app_pointer;
-+		if (copy_from_user(dstn, buf, copy))
-+			return -EFAULT;
-+		if (copy_from_user(prtd->dma_buffer.area, buf + copy, count - copy))
-+			return -EFAULT;
-+	}
-+
-+	spin_lock_irqsave(&prtd->lock, flags);
-+	bytes_in_flight = prtd->bytes_received - prtd->copied_total;
-+
-+	if (prtd->next_track) {
-+		prtd->next_track = false;
-+		prtd->copied_total = ALIGN(prtd->copied_total, prtd->pcm_count);
-+		prtd->bytes_sent = ALIGN(prtd->bytes_sent, prtd->pcm_count);
-+	}
-+
-+	prtd->bytes_received = bytes_received + count;
-+
-+	/* Kick off the data to dsp if its starving!! */
-+	if (prtd->state == Q6APM_STREAM_RUNNING && (bytes_in_flight == 0)) {
-+		bytes_to_write = prtd->pcm_count;
-+		avail = prtd->bytes_received - prtd->bytes_sent;
-+
-+		if (avail < prtd->pcm_count)
-+			bytes_to_write = avail;
-+
-+		q6apm_write_async_compr(prtd->graph, bytes_to_write, 0, 0, wflags);
-+		prtd->bytes_sent += bytes_to_write;
-+	}
-+
-+	spin_unlock_irqrestore(&prtd->lock, flags);
-+
-+	return count;
-+}
-+
- static const struct snd_compress_ops q6apm_dai_compress_ops = {
- 	.open		= q6apm_dai_compr_open,
- 	.free		= q6apm_dai_compr_free,
-@@ -750,6 +829,8 @@ static const struct snd_compress_ops q6apm_dai_compress_ops = {
- 	.ack		= q6apm_dai_compr_ack,
- 	.set_params	= q6apm_dai_compr_set_params,
- 	.set_metadata	= q6apm_dai_compr_set_metadata,
-+	.mmap		= q6apm_dai_compr_mmap,
-+	.copy		= q6apm_compr_copy,
- };
+ static int audioreach_i2s_set_media_format(struct q6apm_graph *graph,
+ 					   struct audioreach_module *module,
+ 					   struct audioreach_module_config *cfg)
+@@ -1055,26 +1117,29 @@ static int audioreach_shmem_set_media_format(struct q6apm_graph *graph,
+ 	p = p + APM_MODULE_PARAM_DATA_SIZE;
  
- static const struct snd_soc_component_driver q6apm_fe_dai_component = {
+ 	header = p;
+-	header->data_format = DATA_FORMAT_FIXED_POINT;
+-	header->fmt_id = MEDIA_FMT_ID_PCM;
+-	header->payload_size = payload_size - sizeof(*header);
++	if (mcfg->fmt == SND_AUDIOCODEC_PCM) {
++		header->data_format = DATA_FORMAT_FIXED_POINT;
++		header->fmt_id =  MEDIA_FMT_ID_PCM;
++		header->payload_size = payload_size - sizeof(*header);
+ 
+-	p = p + sizeof(*header);
+-	cfg = p;
+-	cfg->sample_rate = mcfg->sample_rate;
+-	cfg->bit_width = mcfg->bit_width;
+-	cfg->alignment = PCM_LSB_ALIGNED;
+-	cfg->bits_per_sample = mcfg->bit_width;
+-	cfg->q_factor = mcfg->bit_width - 1;
+-	cfg->endianness = PCM_LITTLE_ENDIAN;
+-	cfg->num_channels = mcfg->num_channels;
+-
+-	if (mcfg->num_channels == 1) {
+-		cfg->channel_mapping[0] =  PCM_CHANNEL_L;
+-	} else if (num_channels == 2) {
+-		cfg->channel_mapping[0] =  PCM_CHANNEL_L;
+-		cfg->channel_mapping[1] =  PCM_CHANNEL_R;
+-	}
++		p = p + sizeof(*header);
++		cfg = p;
++		cfg->sample_rate = mcfg->sample_rate;
++		cfg->bit_width = mcfg->bit_width;
++		cfg->alignment = PCM_LSB_ALIGNED;
++		cfg->bits_per_sample = mcfg->bit_width;
++		cfg->q_factor = mcfg->bit_width - 1;
++		cfg->endianness = PCM_LITTLE_ENDIAN;
++		cfg->num_channels = mcfg->num_channels;
++
++		if (mcfg->num_channels == 1)
++			cfg->channel_mapping[0] =  PCM_CHANNEL_L;
++		else if (num_channels == 2) {
++			cfg->channel_mapping[0] =  PCM_CHANNEL_L;
++			cfg->channel_mapping[1] =  PCM_CHANNEL_R;
++		}
++	} else
++		audioreach_set_compr_media_format(header, p, mcfg);
+ 
+ 	rc = audioreach_graph_send_cmd_sync(graph, pkt, 0);
+ 
+@@ -1401,7 +1466,8 @@ int audioreach_compr_set_param(struct q6apm_graph *graph, struct audioreach_modu
+ 			cfg->channel_mapping[0] =  PCM_CHANNEL_L;
+ 			cfg->channel_mapping[1] =  PCM_CHANNEL_R;
+ 		}
+-	}
++	} else
++		audioreach_set_compr_media_format(header, p, mcfg);
+ 
+ 	rc = gpr_send_port_pkt(graph->port, pkt);
+ 	kfree(pkt);
 -- 
 2.25.1
 
