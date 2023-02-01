@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96B96865F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4A36865F3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbjBAMbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:31:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
+        id S231967AbjBAMcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 07:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBAMbk (ORCPT
+        with ESMTP id S229483AbjBAMcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:31:40 -0500
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C5C485A8;
-        Wed,  1 Feb 2023 04:31:37 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VagnY4o_1675254694;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VagnY4o_1675254694)
+        Wed, 1 Feb 2023 07:32:15 -0500
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CD423662;
+        Wed,  1 Feb 2023 04:32:12 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vagxb9L_1675254728;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Vagxb9L_1675254728)
           by smtp.aliyun-inc.com;
-          Wed, 01 Feb 2023 20:31:35 +0800
+          Wed, 01 Feb 2023 20:32:08 +0800
 From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
@@ -26,9 +26,9 @@ To:     Herbert Xu <herbert@gondor.apana.org.au>,
         Will Deacon <will@kernel.org>, linux-crypto@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH v3] crypto: arm64/sm4-gcm - Fix possible crash in GCM cryption
-Date:   Wed,  1 Feb 2023 20:31:33 +0800
-Message-Id: <20230201123133.99768-1-tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] crypto: arm64/sm4-ccm - Rewrite skcipher walker loop
+Date:   Wed,  1 Feb 2023 20:32:07 +0800
+Message-Id: <20230201123207.99858-1-tianjia.zhang@linux.alibaba.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -41,89 +41,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the cryption total length is zero, GCM cryption call
-skcipher_walk_done() will cause an unexpected crash, so skip calling
-this function to avoid possible crash when the GCM cryption length
-is equal to zero.
+The fact that an error in the skcipher walker API are indicated
+not only by a non-zero return value, but also by the fact that
+walk->nbytes is zero, causes the layout of the skcipher walker
+loop to be sufficiently different from the usual layout, which
+is not a problem in itself, but it is likely to cause reading
+confusion and difficulty in code maintenance.
 
-This patch also rewrite the skcipher walker loop, and separates the
-cryption of the last chunk from the walker loop. In addition to
-following the usual convention of checking walk->nbytes, it also makes
-the execution logic of the loop clearer and easier to understand.
+This patch rewrites skcipher walker loop, and separates the
+last chunk cryption from the loop to avoid wrong calls to the
+skcipher walker API. In addition to following the usual convention
+of checking walk->nbytes, it also makes the loop execute logic
+clearer and easier to understand.
 
-Fixes: ae1b83c7d572 ("crypto: arm64/sm4 - add CE implementation for GCM mode")
 Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
 ---
- arch/arm64/crypto/sm4-ce-gcm-glue.c | 43 ++++++++++++++---------------
- 1 file changed, 20 insertions(+), 23 deletions(-)
+ arch/arm64/crypto/sm4-ce-ccm-glue.c | 44 ++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 20 deletions(-)
 
-diff --git a/arch/arm64/crypto/sm4-ce-gcm-glue.c b/arch/arm64/crypto/sm4-ce-gcm-glue.c
-index c450a2025ca9..80ac4e94a90d 100644
---- a/arch/arm64/crypto/sm4-ce-gcm-glue.c
-+++ b/arch/arm64/crypto/sm4-ce-gcm-glue.c
-@@ -143,7 +143,7 @@ static int gcm_crypt(struct aead_request *req, struct skcipher_walk *walk,
+diff --git a/arch/arm64/crypto/sm4-ce-ccm-glue.c b/arch/arm64/crypto/sm4-ce-ccm-glue.c
+index f2cec7b52efc..5e7e17bbec81 100644
+--- a/arch/arm64/crypto/sm4-ce-ccm-glue.c
++++ b/arch/arm64/crypto/sm4-ce-ccm-glue.c
+@@ -166,7 +166,7 @@ static int ccm_crypt(struct aead_request *req, struct skcipher_walk *walk,
+ 					unsigned int nbytes, u8 *mac))
  {
- 	u8 __aligned(8) iv[SM4_BLOCK_SIZE];
- 	be128 __aligned(8) lengths;
+ 	u8 __aligned(8) ctr0[SM4_BLOCK_SIZE];
 -	int err;
 +	int err = 0;
  
- 	memset(ghash, 0, SM4_BLOCK_SIZE);
- 
-@@ -158,34 +158,31 @@ static int gcm_crypt(struct aead_request *req, struct skcipher_walk *walk,
+ 	/* preserve the initial ctr0 for the TAG */
+ 	memcpy(ctr0, walk->iv, SM4_BLOCK_SIZE);
+@@ -177,33 +177,37 @@ static int ccm_crypt(struct aead_request *req, struct skcipher_walk *walk,
  	if (req->assoclen)
- 		gcm_calculate_auth_mac(req, ghash);
+ 		ccm_calculate_auth_mac(req, mac);
  
 -	do {
 +	while (walk->nbytes && walk->nbytes != walk->total) {
  		unsigned int tail = walk->nbytes % SM4_BLOCK_SIZE;
 -		const u8 *src = walk->src.virt.addr;
 -		u8 *dst = walk->dst.virt.addr;
--
--		if (walk->nbytes == walk->total) {
+ 
+-		if (walk->nbytes == walk->total)
 -			tail = 0;
--
--			sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, dst, src, iv,
--					       walk->nbytes, ghash,
--					       ctx->ghash_table,
--					       (const u8 *)&lengths);
--		} else if (walk->nbytes - tail) {
--			sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, dst, src, iv,
--					       walk->nbytes - tail, ghash,
--					       ctx->ghash_table, NULL);
--		}
++		sm4_ce_ccm_crypt(rkey_enc, walk->dst.virt.addr,
++				 walk->src.virt.addr, walk->iv,
++				 walk->nbytes - tail, mac);
 +
-+		sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, walk->dst.virt.addr,
-+				       walk->src.virt.addr, iv,
-+				       walk->nbytes - tail, ghash,
-+				       ctx->ghash_table, NULL);
++		kernel_neon_end();
++
++		err = skcipher_walk_done(walk, tail);
++
++		kernel_neon_begin();
++	}
+ 
+-		if (walk->nbytes - tail)
+-			sm4_ce_ccm_crypt(rkey_enc, dst, src, walk->iv,
+-					 walk->nbytes - tail, mac);
++	if (walk->nbytes) {
++		sm4_ce_ccm_crypt(rkey_enc, walk->dst.virt.addr,
++				 walk->src.virt.addr, walk->iv,
++				 walk->nbytes, mac);
+ 
+-		if (walk->nbytes == walk->total)
+-			sm4_ce_ccm_final(rkey_enc, ctr0, mac);
++		sm4_ce_ccm_final(rkey_enc, ctr0, mac);
  
  		kernel_neon_end();
  
- 		err = skcipher_walk_done(walk, tail);
--		if (err)
--			return err;
--		if (walk->nbytes)
--			kernel_neon_begin();
+-		if (walk->nbytes) {
+-			err = skcipher_walk_done(walk, tail);
+-			if (err)
+-				return err;
+-			if (walk->nbytes)
+-				kernel_neon_begin();
+-		}
 -	} while (walk->nbytes > 0);
++		err = skcipher_walk_done(walk, 0);
++	} else {
++		sm4_ce_ccm_final(rkey_enc, ctr0, mac);
  
 -	return 0;
-+		kernel_neon_begin();
++		kernel_neon_end();
 +	}
-+
-+	sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, walk->dst.virt.addr,
-+			       walk->src.virt.addr, iv, walk->nbytes, ghash,
-+			       ctx->ghash_table, (const u8 *)&lengths);
-+
-+	kernel_neon_end();
-+
-+	if (walk->nbytes)
-+		err = skcipher_walk_done(walk, 0);
 +
 +	return err;
  }
  
- static int gcm_encrypt(struct aead_request *req)
+ static int ccm_encrypt(struct aead_request *req)
 -- 
 2.24.3 (Apple Git-128)
 
