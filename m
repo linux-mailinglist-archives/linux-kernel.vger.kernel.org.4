@@ -2,97 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F7E686C80
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 18:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0445686C86
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 18:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbjBARMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 12:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S231335AbjBARNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 12:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjBARMm (ORCPT
+        with ESMTP id S232005AbjBARNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 12:12:42 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0B69EED;
-        Wed,  1 Feb 2023 09:12:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=hGzG/sA63e+whllyzMxtyCU4dN4cHFGosz/XbA42Rbo=; b=QpRVxHzm/Z+iz1HHu18q5ar0Vg
-        bytU7wJkj+A/7MJ2hijJHqPaSPHS8yMZBVyppjYl22azUXzXNZeJixr0tr8sdt0YhqH4FFtxqN/lG
-        gX427TufG1zr5RTVRMP1Gusrm23fPQkN56hivbi1QA044K/AZ2laTtcN0WO9FbwuUFSo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pNGet-003ooW-4K; Wed, 01 Feb 2023 18:12:31 +0100
-Date:   Wed, 1 Feb 2023 18:12:31 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Wei Fang <wei.fang@nxp.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com, intel-wired-lan@lists.osuosl.org
-Subject: Re: [PATCH net-next v4 02/23] net: phy: add
- genphy_c45_read_eee_abilities() function
-Message-ID: <Y9qdfwlgQ48Rj1X3@lunn.ch>
-References: <20230201145845.2312060-1-o.rempel@pengutronix.de>
- <20230201145845.2312060-3-o.rempel@pengutronix.de>
+        Wed, 1 Feb 2023 12:13:02 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D41E5FFB
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 09:12:56 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id t7so9624299wrp.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 09:12:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i3v4lvgMJrNqsvAO9VMzJDJpTxWMbyB0Tj1uMZ3edH4=;
+        b=jveV7rE6VkRhavv5UZTPo6oGPvccJ5HfKD92qZWtbyJpxrqdRXX9MEY8T+XIZatBEa
+         Tvl8zhkPJuwdAzyExpZ1cDy7KuOnLUtg/lpOWt67jjBZfpR0tkSCpx+oLyOoIgKywKpN
+         GAb/zREN8Hav3nJAwOTimNAaI3a8s8/9nK0GEUa1pCQbt5uMIskVilVCQJSN887YJ5uJ
+         NqzTzPqmL8LAG5DtlM7klEOyEptCnKFM2/0V3Z3wfM/9t2l4B+3jE+Ofu3hiiDgDSdmk
+         KP3Q4GrbaVgEhXnR5yp9KWXgKP5fbGBk19wrb6VLPH0UCvB7A6j0nCXTFrisjv/rWDDu
+         cOaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i3v4lvgMJrNqsvAO9VMzJDJpTxWMbyB0Tj1uMZ3edH4=;
+        b=wq8Jw8ytk70iDhOd9D/FPc1Do0Ts/FzbuS60QxdMHtAPgicPjUvQbrAnNZ+2p4A/Nl
+         qXi0EdaySIEqHsJGHRvjtcs0ioWlHisSy4qotpC2iP5vQE0lmHblGtpr7kjxsUtY/naI
+         PsbQz0HIcdApyUVlVLY0EoXaFdW+mEoHWNaAAJuYXnC9iblRjFE4p3UkYf4IIKwfrANR
+         FZYuCyEeLAWJ62sKedM4pfXdcvFdN/cTlcmIBw8FehxSyIGKfjdUWW/wqz0REkO8GqOP
+         RZ0Wzj1ZHWu3TVfstrLxmxHkl1kaARmGltqLioEj7yBIgd3BfsNvaSwk88OU1rqoPwfV
+         9xfg==
+X-Gm-Message-State: AO0yUKXKc83iIBHmNwzyRGmBJBymcpR6PB45j0gwFcSEnGsvjPLmRCFl
+        lYX7nKQCPdcCKEzQn7xqY9Jdmg==
+X-Google-Smtp-Source: AK7set9vFVx2h/65GJtKCAcoqYhL2uenVpmVGmEzti3KxJGPZTdKkO9JVCu2AFbygJ/RAySdrArmIw==
+X-Received: by 2002:a05:6000:a04:b0:2c3:bc42:2ff9 with SMTP id co4-20020a0560000a0400b002c3bc422ff9mr1145931wrb.25.1675271574640;
+        Wed, 01 Feb 2023 09:12:54 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id m2-20020a056000180200b002bfb5618ee7sm17827215wrh.91.2023.02.01.09.12.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 09:12:53 -0800 (PST)
+Message-ID: <8662c6bd-b32d-3d3d-b3b7-7f4aeb028309@linaro.org>
+Date:   Wed, 1 Feb 2023 18:12:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201145845.2312060-3-o.rempel@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v12] thermal: drivers: mediatek: Add the Low Voltage
+ Thermal Sensor driver
+Content-Language: en-US
+To:     Balsam CHIHI <bchihi@baylibre.com>
+Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230124131717.128660-5-bchihi@baylibre.com>
+ <20230131153816.21709-1-bchihi@baylibre.com>
+ <ab1e4822-d5f4-79f6-ea38-47e2342ebe49@linaro.org>
+ <CAGuA+oqLiCxb1g7pwf+RwUTWHV37pXdAWUXHV51TnUy1-xUOXQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAGuA+oqLiCxb1g7pwf+RwUTWHV37pXdAWUXHV51TnUy1-xUOXQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 03:58:24PM +0100, Oleksij Rempel wrote:
-> Add generic function for EEE abilities defined by IEEE 802.3
-> specification. For now following registers are supported:
-> - IEEE 802.3-2018 45.2.3.10 EEE control and capability 1 (Register 3.20)
-> - IEEE 802.3cg-2019 45.2.1.186b 10BASE-T1L PMA status register
->   (Register 1.2295)
+On 01/02/2023 17:46, Balsam CHIHI wrote:
+>>> +#ifdef CONFIG_MTK_LVTS_THERMAL_DEBUGFS
+>>> +
+>>> +static struct dentry *root;
+>>
+>> How do you handle two instances of driver?
 > 
-> Since I was not able to find any flag signaling support of this
-> registers, we should detect link mode abilities first and then based on
-> this abilities doing EEE link modes detection.
+> This root node is the topmost directory for debugfs called 'lvts', the
+> different driver instances are below this. It is a singleton.
 
-Hi Oleksij
+Indeed. What about removal? Aren't you remobing entire directory
+structure on first device removal?
 
-There was a discussion along these lines with Chris Healy
-recently. The meson-gxl PHYs don't have these registers, and reads
-return 0xffff. The 802.3 2018 standard says the top 2 bits are
-reserved and should read as 0. Also, it seems unlikely anybody will
-build a PHY which supports 100GBASE-R deep sleep all the way down to
-100BASE-TX EEE. So i would suggest adding a check when reading
-MDIO_PCS_EEE_ABLE and if it is 0xffff assume EEE is not supported.
+(...)
 
-> +		val = phy_read_mmd(phydev, MDIO_MMD_PCS, MDIO_PCS_EEE_ABLE);
-> +		if (val < 0)
-> +			return val;
-> +
-> +		mii_eee_100_10000_adv_mod_linkmode_t(phydev->supported_eee, val);
-> +
-> +		/* Some buggy devices claim not supported EEE link modes */
-> +		linkmode_and(phydev->supported_eee, phydev->supported_eee,
-> +			     phydev->supported);
+>>> +
+>>> +     of_property_for_each_string(np, "nvmem-cell-names", prop, cell_name) {
+>>> +             size_t len;
+>>> +             u8 *efuse;
+>>> +
+>>> +             cell = of_nvmem_cell_get(np, cell_name);
+>>> +             if (IS_ERR(cell)) {
+>>> +                     dev_dbg(dev, "Failed to get cell '%s'\n", cell_name);
+>>
+>> Is this an error? If so, why debug? dbg is not for errors.
+> 
+> AFAIK using dev_dbg does not increase ELF size when DEBUG is disabled.
+> If this is not a good reason for you, then I will change it to dev_err.
 
-That comment could be improved. What i think you mean is
+But also dev_dbg are not visible in error or warn level logs. If this is
+not an error, then indeed dev_dbg could be fine. But errors should be
+verbose.
 
-/* Some buggy devices indicate EEE link modes in MDIO_PCS_EEE_ABLE
-   which they don't support as indicated by BMSR, ESTATUS etc. */
+> 
+>>
+>>> +                     return PTR_ERR(cell);
+>>> +             }
+>>> +
+>>> +             efuse = nvmem_cell_read(cell, &len);
+>>> +
+>>> +             nvmem_cell_put(cell);
+>>> +
+>>> +             if (IS_ERR(efuse)) {
+>>> +                     dev_dbg(dev, "Failed to read cell '%s'\n", cell_name);
+>>> +                     return PTR_ERR(efuse);
+>>> +             }
+>>> +
+>>> +             lvts_td->calib = devm_krealloc(dev, lvts_td->calib,
+>>> +                                            lvts_td->calib_len + len, GFP_KERNEL);
+>>> +             if (!lvts_td->calib)
+>>> +                     return -ENOMEM;
+>>> +
+>>> +             memcpy(lvts_td->calib + lvts_td->calib_len, efuse, len);
+>>> +
+>>> +             lvts_td->calib_len += len;
+>>> +
+>>> +             kfree(efuse);
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int __init lvts_golden_temp_init(struct device *dev, u32 *value)
+>>
+>> You did not test it, right? Build with section mismatch analysis...
+> 
+> I'm not sure to fully understand this comment.
+> Would you explain, please?
 
-   Andrew
+git grep -i "section mismatch" leads to lib/Kconfig.debug and
+DEBUG_SECTION_MISMATCH
+
+(...)
+
+>>> +static struct lvts_ctrl_data mt8195_lvts_data_ctrl[] = {
+>>
+>> Why this cannot be const?
+> 
+> I've got the following warning when I added "const"
+> drivers/thermal/mediatek/lvts_thermal.c:1286:27: warning:
+> initialization discards ‘const’ qualifier from pointer target type
+> [-Wdiscarded-qualifiers]
+>  1286 |         .lvts_ctrl      = mt8195_lvts_data_ctrl,
+>       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+As with every const... Do you need lvts_ctrl to be non-const? If yes,
+then how do you handle multiple devices (singleton)?
+
+Best regards,
+Krzysztof
+
