@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D186860FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF75686101
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231860AbjBAHxR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Feb 2023 02:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S231934AbjBAHyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjBAHxP (ORCPT
+        with ESMTP id S230013AbjBAHye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:53:15 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE078769F;
-        Tue, 31 Jan 2023 23:53:08 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 2562C24E22E;
-        Wed,  1 Feb 2023 15:53:07 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Feb
- 2023 15:53:07 +0800
-Received: from [192.168.125.110] (183.27.97.127) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Feb
- 2023 15:53:05 +0800
-Message-ID: <abe67217-ce94-c410-5a51-3ad3a6570045@starfivetech.com>
-Date:   Wed, 1 Feb 2023 15:53:05 +0800
+        Wed, 1 Feb 2023 02:54:34 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E0D83EF
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:54:31 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id br9so28023988lfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:54:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0diAaeCGuTZlOnZxWXSitLoB/1kBFfQP3ozqLMthdrY=;
+        b=lF1UqyudEA09FkqGGF5NmMuHvah8KKfPO3eWxAubAvEp7iQ9LhiLV+T8p4K8BfqCkI
+         o5XDl4XUegL87wDptfNUHusoDNEWwR3kFLY8uWxHBNe6XtsuzkcfE7wHub8jBpu78zJ3
+         8u1P4xOeiohBEfpUULqu61VPZz9Xew9ZVJI6Yz75XRZe614dAnDNrWbqS7E5xSrbl2U7
+         96TkvetBtlpEr4RcP2JS1DfMs9a6a2wTTGBG1810gECpndWZgdeP3309sd66sbxpUGhw
+         AE378mpGhvx2hHZVLhvgMzMtgL07iSV3ITOMMuFfTEgj1ZCx285Z7z0BsGCManr5FYdf
+         DJBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0diAaeCGuTZlOnZxWXSitLoB/1kBFfQP3ozqLMthdrY=;
+        b=tE5rFMAiq/mxds8vlp6gtrxtYSF/08sLSDcZ5ko6mMH48jNhPxuJhRDLofE21JRXMk
+         uOEILO5d5g8JFKAkEqdc51Omyr20YNYpllYr+F+K+vecn3fKdH5ZJdy/211Rd/78s7PG
+         i4vEzg2pwaTobIq0Mn0TETd8hkUFa4GC0ypfv1HjqvbEtD+b/faE/UJc+slhfJOsYgAj
+         +mhxbguzwGpIESKgDINO0eM2RsfprEJTmrOvy5/xZmOj/kv1F87Gyhx1VqTFKJYyTXwk
+         Rkf9QwPDwulBJT9nOLObkZYjqD/vY+anvRHctf8IrphyhUDqla1p+QI8L+s/wEe4b+VQ
+         CuqQ==
+X-Gm-Message-State: AO0yUKWrxQbrXdX0tN99Xh8mITkGL4lJTUCWjZrDn9/3ceBFnGEHxpN7
+        7ZxTDIS5NNpJ/mzCzhG19meWnI3LDoJJb6KCEXwgeg==
+X-Google-Smtp-Source: AK7set/pcUtZ6NpoWDLM7Q0eQN46Pgx8dTWbO5ck5QVBIuUe66c4GmhgfonlDo7ZR0OVUA9vhbz0YNjfIAEBW1Cds4k=
+X-Received: by 2002:a05:6512:b01:b0:4cc:8686:8c87 with SMTP id
+ w1-20020a0565120b0100b004cc86868c87mr152383lfu.188.1675238069550; Tue, 31 Jan
+ 2023 23:54:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v3 6/7] riscv: dts: starfive: Add initial StarFive JH7110
- device tree
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>, Icenowy Zheng <uwu@icenowy.me>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221220011247.35560-1-hal.feng@starfivetech.com>
- <20221220011247.35560-7-hal.feng@starfivetech.com> <Y6zHy9oL4xzl+6Rd@spud>
- <dda144a8397a175f3ce092485f08896c9a66d232.camel@icenowy.me>
- <51F38449-56BA-4260-B46F-0996FD29E169@kernel.org>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <51F38449-56BA-4260-B46F-0996FD29E169@kernel.org>
+References: <0000000000008be6b405f01164f8@google.com> <0000000000005eca3205f391aade@google.com>
+In-Reply-To: <0000000000005eca3205f391aade@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 1 Feb 2023 08:54:16 +0100
+Message-ID: <CACT4Y+Ym4=mzMO6XNB0fYQJMo_QvUpYwkC1K7cmwr_XwKSdwzA@mail.gmail.com>
+Subject: Re: [syzbot] [ntfs3?] KASAN: out-of-bounds Read in ntfs_set_ea
+To:     syzbot <syzbot+8778f030156c6cd16d72@syzkaller.appspotmail.com>
+Cc:     almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [183.27.97.127]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Dec 2022 09:02:15 +0000, Conor Dooley wrote:
-> Hey Icenowy, Hal
-> 
-> On 29 December 2022 05:25:00 GMT, Icenowy Zheng <uwu@icenowy.me> wrote:
->>在 2022-12-28星期三的 22:48 +0000，Conor Dooley写道：
->>> Hey,
->>> 
->>> On Tue, Dec 20, 2022 at 09:12:46AM +0800, Hal Feng wrote:
-[...]
->>> > +               U74_1: cpu@1 {
->>> > +                       compatible = "sifive,u74-mc", "riscv";
->>> > +                       reg = <1>;
->>> > +                       d-cache-block-size = <64>;
->>> > +                       d-cache-sets = <64>;
->>> > +                       d-cache-size = <32768>;
->>> > +                       d-tlb-sets = <1>;
->>> > +                       d-tlb-size = <40>;
->>> > +                       device_type = "cpu";
->>> > +                       i-cache-block-size = <64>;
->>> > +                       i-cache-sets = <64>;
->>> > +                       i-cache-size = <32768>;
->>> > +                       i-tlb-sets = <1>;
->>> > +                       i-tlb-size = <40>;
->>> > +                       mmu-type = "riscv,sv39";
->>> > +                       next-level-cache = <&ccache>;
->>> > +                       riscv,isa = "rv64imafdc";
->>> 
->>> That also begs the question:
->>> Do your u74s support RV64GBC, as the (current) SiFive documentation
->>> suggests?
->>
->>It supports RV64GCZbaZbb.
-> 
-> Sweet, thanks.
-> 
->>B is not a well-defined thing by specifications, so it should be
->>prevented here.
-> 
-> Yah, don't worry - my next question was going to be which bits were supported :)
-> 
-> Hal, can you update the isa string in the next version please?
+On Tue, 31 Jan 2023 at 17:17, syzbot
+<syzbot+8778f030156c6cd16d72@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 0e8235d28f3a0e9eda9f02ff67ee566d5f42b66b
+> Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+> Date:   Mon Oct 10 10:15:33 2022 +0000
+>
+>     fs/ntfs3: Check fields while reading
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11d9c385480000
+> start commit:   02bf43c7b7f7 Merge tag 'fs.xattr.simple.rework.rbtree.rwlo..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8c59170b68d26a55
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8778f030156c6cd16d72
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136b8f57880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=175ca3a3880000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: fs/ntfs3: Check fields while reading
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-The current isa description is correct. Please see my reply [1].
-Thank you.
+Looks reasonable, let's close the bug report:
 
-[1] https://lore.kernel.org/all/c507e0b2-5ca3-cffe-55d2-873ed8c24e3d@starfivetech.com/
-
-Best regards,
-Hal
+#syz fix: fs/ntfs3: Check fields while reading
