@@ -2,76 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10296871CF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:22:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 591AE6871D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjBAXWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 18:22:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S231907AbjBAXW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 18:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjBAXV7 (ORCPT
+        with ESMTP id S229771AbjBAXWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 18:21:59 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68CA1BDC;
-        Wed,  1 Feb 2023 15:21:58 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id h9so93809plf.9;
-        Wed, 01 Feb 2023 15:21:58 -0800 (PST)
+        Wed, 1 Feb 2023 18:22:54 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021025FE3;
+        Wed,  1 Feb 2023 15:22:53 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id f10so219388qtv.1;
+        Wed, 01 Feb 2023 15:22:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RuQ5ZmzHJIrYN8wm48zgeDU5xnjvRW/FpaERWiXybpo=;
-        b=IqdLn+RFjvw7BwQXmWwheKLqRV++uYfps0JfKof5xVFHVTKzAeROH0xE6GdOa9mmmP
-         dot32/qVThL03nNWutT7d/yl4O9c1g8kH+jRgfkAOLPH41znB4mN+B8LYTDul9qeeR8s
-         RVzIwfPe4y4atzb2Aib96bvYV53CcWwlFna3kWB9WPeu6etn49ffj4IvEO62S/2gCMQ1
-         9wGgn32LmBd7oyrAz4V0J6NNYcacqa3UJiOl4HEbiPxZxwLMYfyLvFEsgRILHCZxvg4N
-         L3FKbP2/W5IgsTjBOeLUJyMExCCe/U9+jBTk/syYU9Br+o+nSEpTqdcZzRyTCOwnyalM
-         eQxA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=e9T8fet1CUQmVg3snpX3iSNOAS+cmwVNSWuh5ppSIfo=;
+        b=a9Lw7+SwX7wcvGyay6W1ThB79WXKHKJqNwLOGJ/M8yeuBJo6fgX0UvCYpJfjNFCE5X
+         4WjR70CLNuM7AFd8xm/lgCfz19cf4HCowAsa67F6d0a1QdG9nFQcg/hi+LI0Ix4pSJz+
+         PtUvlRIpGfgH6l44GBy9jc+8loO4MCMR6L+fFcELJUOYdEPaJoUJF+NYj+DJU0LxIIko
+         Riu35P0TU0LdVf4EhAkIrDn2uD/wzUKd71RXi5UZhUxiC6QbjzRkH09gv46IpR8FxVIk
+         PF4eLqmgheBW+7tnD8+L6tYb0qly7CE26mjbIkMLqOqJD2Z1/rDm1LaxU5+GYNy181Wm
+         ev8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RuQ5ZmzHJIrYN8wm48zgeDU5xnjvRW/FpaERWiXybpo=;
-        b=31yBNNXuqkieK8f3Ep1V/SkOLLgpdHx/rt+iX0UkEIx49A48wAF5ENRLjyRXfDU9BG
-         NQ4cRcwrs9TTzR6wcN8BuXplD2D8P5ZUk0hw9y0U47aVh81UiGTg1apGlfwjCcn8HCpW
-         MO77G6N0+XGEjZ6NN/rEEJFOoKyi9OWoGUR18VdrFs+II1wPJyrWEYq4LuC4BeT0TR2Q
-         lkjwfddScurVVSrdv4HEmW/cGr/oCioTdo1LKd+15CjcYEixwazB0W06jNhbbrcabIZH
-         fOFAwxksWhIixiHmElZqNWaI7BKhTog7RGPM8+FnNL7ecWw+XZ2PQSjXIT9T6mQHn/36
-         qlag==
-X-Gm-Message-State: AO0yUKW/9nJyWNyFmH8piUDwgLAWsZwjBbRsAyNcumbXC8RhV2QkKiLU
-        76LrqGCLL/Aq+y7oTLv7gv0=
-X-Google-Smtp-Source: AK7set962Bo0v1fb70EvXQjNlgRDHTIQWJ0R/tcZLG8/EAxjYsRiNArEvM1gyiSS7T6gtR8QyUzSVQ==
-X-Received: by 2002:a17:902:ec81:b0:196:7bfb:f0d1 with SMTP id x1-20020a170902ec8100b001967bfbf0d1mr5586980plg.34.1675293718268;
-        Wed, 01 Feb 2023 15:21:58 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:ce3a:44de:62b3:7a4b])
-        by smtp.gmail.com with ESMTPSA id jc7-20020a17090325c700b00192588bcce7sm12322178plb.125.2023.02.01.15.21.56
+        bh=e9T8fet1CUQmVg3snpX3iSNOAS+cmwVNSWuh5ppSIfo=;
+        b=CBDiq7/cvK8DyL7leR369vudvUuyPsIJ0Dh2Mgtz5hDeUD8ti8Nu0L9XwYtrhuQ8+7
+         UpW8GXbQzlAEBjcjFLy+1W6Y+qAeUC2pQ5qYlM8FoyYBx693PPD4qRb9t9UTQnTnZlnk
+         PLmgWlEJDalr4xAXgUPwkfUCq55CfmFd2XzXc/+x76+sqh5O86VxXLmW+GWr1Z+FE1yh
+         QdRmM0yi3vHpE5AJbg4eSsMNfPoeoR/SwWAx3hhThKaKuu9DWKmyFO4DiHxqIzWUnlZr
+         a9603f8WmcCEsYlVnuiV0pLzVvfa0hmv8esn55bA4QN6C/8a6wNQxklj10cQRaMXVUnq
+         Kjmw==
+X-Gm-Message-State: AO0yUKVmTEnDwmNLXaWeHWjle2XmytRH8XSAMiVLmjDIjgRgqKoGWADs
+        eFloZcCCFRx2OXJMPOWIhfQ=
+X-Google-Smtp-Source: AK7set8TDl0PIeRDInoWh2RQ+i3sE6uMlw6xh1Ex/su1FVjBn5s4MJJzL3Hc+Tcl54YHhrEQxRPbRg==
+X-Received: by 2002:a05:622a:1303:b0:3b8:52fc:2c31 with SMTP id v3-20020a05622a130300b003b852fc2c31mr6377745qtk.62.1675293773113;
+        Wed, 01 Feb 2023 15:22:53 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id 136-20020a37068e000000b00719d9f823c4sm10564820qkg.34.2023.02.01.15.22.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 15:21:57 -0800 (PST)
-Date:   Wed, 1 Feb 2023 15:21:53 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] net: fec: do not double-parse
- 'phy-reset-active-high' property
-Message-ID: <Y9r0EWOZbiBvkxj0@google.com>
-References: <20230201215320.528319-1-dmitry.torokhov@gmail.com>
- <20230201215320.528319-2-dmitry.torokhov@gmail.com>
- <Y9rtil2/y3ykeQoF@lunn.ch>
+        Wed, 01 Feb 2023 15:22:52 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 87C6827C0054;
+        Wed,  1 Feb 2023 18:22:50 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 01 Feb 2023 18:22:51 -0500
+X-ME-Sender: <xms:SvTaYwS-uBwq3RO9PM_nLlYe4aPsvdvA_VpmHmQ5CDyEQmkYINgAww>
+    <xme:SvTaY9ybBiENlOyWGiada07q-tgFGTdxQ4frKMU4YYpXqZmUXEXbKNFvpIc3NRX5_
+    MFgSzGVnTwkXSE6qA>
+X-ME-Received: <xmr:SvTaY91cCG5oj0f4RK6SL20k7VBtGh-RVwMnQGbGK5P1K8tPwtcs2RvmsiQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefjedgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpefgteffhfehjeegtdduieffudetfeehgfegudejudfhieefgfeigfevueduledu
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvg
+X-ME-Proxy: <xmx:SvTaY0CEnePu6Q3obf90-b8eJKglAqAETSNGM5O46y6ztzn7yXvLww>
+    <xmx:SvTaY5iTJhayOVnBhXlwcbeIRP1OABRqqvjywBy-jG4jXHkHoS4JZQ>
+    <xmx:SvTaYwoEDnheUAmUpARtUlqL8UVo4uSMMSZAU3j0hKxBN5Glc7l2ig>
+    <xmx:SvTaY-Y7OV56oICq0rreKvIuo2n5Nhl1UOLdYf6yeSZ9ZNvpHhv0LA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 1 Feb 2023 18:22:49 -0500 (EST)
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Subject: [RFC 0/5] rust: sync: Arc: Implement Debug and Display
+Date:   Wed,  1 Feb 2023 15:22:39 -0800
+Message-Id: <20230201232244.212908-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9rtil2/y3ykeQoF@lunn.ch>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -82,33 +102,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 11:54:02PM +0100, Andrew Lunn wrote:
-> On Wed, Feb 01, 2023 at 01:53:20PM -0800, Dmitry Torokhov wrote:
-> > Conversion to gpiod API done in commit 468ba54bd616 ("fec: convert
-> > to gpio descriptor") clashed with gpiolib applying the same quirk to the
-> > reset GPIO polarity (introduced in commit b02c85c9458c). This results in
-> > the reset line being left active/device being left in reset state when
-> > reset line is "active low".
-> > 
-> > Remove handling of 'phy-reset-active-high' property from the driver and
-> > rely on gpiolib to apply needed adjustments to avoid ending up with the
-> > double inversion/flipped logic.
-> 
-> I searched the in tree DT files from 4.7 to 6.0. None use
-> phy-reset-active-high. I'm don't think it has ever had an in tree
-> user.
-> 
-> This property was marked deprecated Jul 18 2019. So i suggest we
-> completely drop it.
+I found that our Arc doesn't implement `Debug` or `Display` when I tried
+to play with them, therefore add these implementation.
 
-I'd be happy kill the quirk in gpiolibi-of.c if that is what we want to
-do, although DT people sometimes are pretty touchy about keeping
-backward compatibility.
+With these changes, I could get the following print with the sample code
+in patch #5:
 
-I believe this should not stop us from merging this patch though, as the
-code is currently broken when this deprecated property is not present.
+	[..] rust_print: 1
+	[..] rust_print: UniqueArc { inner: Arc { refcount: 1, data: "hello, world" } }
+	[..] rust_print: [samples/rust/rust_print.rs:34] c = Arc {
+	[..]     refcount: 2,
+	[..]     data: "hello, world",
+	[..] }
+	[..] rust_print: Arc {
+	[..]     refcount: 0x1,
+	[..]     data: "hello, world",
+	[..] }
 
-Thanks.
+Note that I make the `Debug` implementation of `Arc` also print the
+current reference count, which I think may be useful: myself sometimes
+wonder "how many references exist at this point" during my own
+development. But I'm open to suggestions and changes.
 
--- 
-Dmitry
+Wedson, I know that you are considering to get rid of `ArcBorrow`, so
+the patch #3 may have some conflicts with what you may be working on.
+I'm happy to wait and rebase since this series is not something urgent
+;-)
+
+Suggestions and comments are welcome!
+
+Regards,
+Boqun
