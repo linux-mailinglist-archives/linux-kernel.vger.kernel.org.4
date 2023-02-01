@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2FF685C8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 02:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B7A685C8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 02:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjBABPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 20:15:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S230301AbjBABQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 20:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjBABPI (ORCPT
+        with ESMTP id S229686AbjBABQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 20:15:08 -0500
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020082E82A;
-        Tue, 31 Jan 2023 17:15:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
-        t=1675214102; bh=DqekhiSJm1T8wnRWgxaRj/AIyfp4gkNM2suDsJHedPQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=CNEHieuqAx4PysftJ4B8Jg52ktIDTr8sLgVwQ+rv6QuHwI7w6u084e+EXVhgAEfAT
-         2Wewpmp3RrNVoYFqDMAXGgJwRx2R7SBcDOkkziSQyrovRK7QeHO0OFLf3vJOopOHbK
-         DsHeSaZvnXsv4UjKIUurWfxAShlNfjPmYqs/eBEdoTcyKDiLGG1mfSzjm9PriIA4sl
-         eiaYWG3SDnmLYQhXkYrpdxrh46owk4rM95LI3cEji20scVRcDqiE3cA0FxxVbw8r1j
-         IwWI6FvFOGGGAVxR3ZdlaDNubKVRofuZmBbDyfuXG5JG0Guq9ZxxJ09OPpvU3b86/H
-         WgkhG3i5d1Btw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from luka-spectre.fritz.box ([77.189.113.187]) by smtp.web.de
- (mrweb106 [213.165.67.124]) with ESMTPSA (Nemesis) id
- 1MYLmq-1pAOgO2LoI-00VR14; Wed, 01 Feb 2023 02:15:02 +0100
-From:   Luka Guzenko <l.guzenko@web.de>
-To:     benjamin.tissoires@redhat.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luka Guzenko <l.guzenko@web.de>
-Subject: [PATCH v2] HID: Ignore battery for ELAN touchscreen 29DF on HP
-Date:   Wed,  1 Feb 2023 02:14:37 +0100
-Message-Id: <20230201011437.33330-1-l.guzenko@web.de>
-X-Mailer: git-send-email 2.39.1
+        Tue, 31 Jan 2023 20:16:11 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A8F4743E
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 17:16:10 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id q9so11365971pgq.5
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 17:16:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2wnrYUzee19FSJlLCQb56qXFqePNff3HtjyVB4nLqz8=;
+        b=V116rHBjqqaEqJgSC6ebGrH1ErdpkZTppM1AS4ZYyYvj2KI5XwmhCVnQ14ikX2Z9ir
+         ARmWzFuLN0y6vuwM6nPJiQ8rteZBowECPeYyCoNNiUZvbldcqMos7POL12gw9FvlxIBS
+         84m/oAW0lL4OxvnkngKjSFTEXs2eZNA5CaTaY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2wnrYUzee19FSJlLCQb56qXFqePNff3HtjyVB4nLqz8=;
+        b=msCLbN7gqMupBANl0oPEwIUx+zFgd5euyL+mIL1dwW3h5pDMP3Fp7UP17lCCrt4Bun
+         gNyVQ7OtnKX74pmxM5wzQaWXJSIuT7bfe88WPttCaPDD61oG+9DK4YL+SFJf4frHtB1X
+         20ErdI5gfnXvSi+iIAFF0vwcc6GVcvVygl69+OOXAlRScslAR9E1mEOfxoO++w5lPaY7
+         8Ai70vjmFi1vLLpbwIBbEx7lzYXRrs0XtNZFUWCh9Y+tZa4Eq1b3kXo3xkQv7FMwMy6g
+         Zd4hkh4aEY63nRTkG6MwyYWDx9M8X/1R9vT8+DirEqbal3lNqHO3QcV38TKRil8DqsYV
+         QEAA==
+X-Gm-Message-State: AO0yUKUtqAI8GCMcrYVLjFxOZKah2lFZs6r+cysG9UpNJlG0wV7fkCFN
+        GlSlpgbPZbwIOdVP/fYcEQHusw==
+X-Google-Smtp-Source: AK7set8dfks2z1Q5YFWDvWwLI4WY12awPuiNWnsxvHA17MweK66ldjVjNfW8b3MfDQjzbWtlMVMXIg==
+X-Received: by 2002:a05:6a00:2911:b0:58b:c1a1:4006 with SMTP id cg17-20020a056a00291100b0058bc1a14006mr350156pfb.18.1675214170063;
+        Tue, 31 Jan 2023 17:16:10 -0800 (PST)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id w79-20020a627b52000000b0058193135f6bsm10042297pfc.84.2023.01.31.17.16.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Jan 2023 17:16:09 -0800 (PST)
+Date:   Wed, 1 Feb 2023 10:16:04 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
+Subject: Re: [PATCH] zsmalloc: fix a race with deferred_handles storing
+Message-ID: <Y9m9VKzkBn41YLQI@google.com>
+References: <20230110231701.326724-1-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:tF3phlFBStpC5YhXGcwUe6ABAGGfWxeWHVa2p3ElhF5sQsny7kO
- kEvFNTRl7BfBR/L53xgsVSIm+tXoQxRQXTChOce8tIsJelM0VBQowfn/Y4ldJmHaoM/5Ewf
- wzsew48aXK9Sc/q4f3g6YrmCrcxNY9mvyXhgLVA7+PiEqj3cLItqwQkiNdSIc/PPMpJg5Yb
- cqoNHm8dyKVHWzveeRjqw==
-UI-OutboundReport: notjunk:1;M01:P0:RfFrLgyRLIQ=;7H19azSMDjvJvalM8c7ruIsjvOT
- uwr+KJeihIgqitS+Gw/BtEOqELVT95jPinfYYp2IPE31waswaGrRpA0Ac4ZLhDZEpW1M1J/a+
- 2IkYkvdV9MLvZcV5l/OI567piWAWpmQ6PZa/dWrBzrT1p2YEur0Prjv/mTgpk650elMI7PLda
- WzPu+37I+S4z4z0DMwBFwXlyIyv+DqgbKrwe83W/tSoy3wICHChbk8du0Zbdqq/2OPG9sp8CI
- yVYlo2eB78Z/Vpj2v/4/An5HwNZjn68DGF9Rl5oHXcHbRl3g5JyTc0a91H5Rcc6ed7WmpvFhn
- FwkQm/38AMIClFgVInXHnpiI9kmcfrKhIJyAjNTXxlpeKEgwxuWLCh0KVLRzYlJYzJfnGFOZ4
- Cbcy5KKOEgDFIMSvTsPUm4+AXGj16m4EMDXkzWBIFcA050xjg2oUx427v8M5/HC8eIlGReQGM
- VSaE60KFw57PPy3Z/nvwyqyAiGLZRO2Iat1av8iTqvnzhpOtug/HVDBZwdJmJeUVk7tTrKkg8
- huXGOIMK2JlQm1XVFPUA4ZsjpSPLhwbbvyJd4KFDoENbHp7w5YjqAtIapbyFmlrBqoTthFd6d
- QJTTJWs8AsLM12jynUhotFroidP7IMMeA/uQ5rmATGHHThtqWGMLYxUbU14lFfDhtQ6wIqYOG
- +Ep++xEJF4DGoZMm8FFemb3P7OigQEtYwQiXrH52QVXCmJxlwnzWyWndrC7lUouL+0NGSqzaw
- Bu62e52To+CqLhzGDHtxXqg2ydJluKbrRDiVbFnJuEqm8mXGwy09WXkpRDNrFWkqrtaXYZpeR
- JmGwZ13q8R47qY0rpo8duGTJkTBvXQP10qzwp64w6E4J5TKyN+LZ+Mi7yjrkX170hNqfEFyRV
- ZTqImTaJTbKXmif5Sg2/Lx+XP8T4mjDmyd3kx/1lu2mo4iuX4IrvpJayBJh2HnzYwrW/AojTb
- 9Uk7gbjs23Q9yGgBHse7nJ43gY0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230110231701.326724-1-nphamcs@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The touchscreen reports a battery status of 0% and jumps to 1% when a
-stylus is used. The device ID was added and the battery ignore quirk was
-enabled for it.
+On (23/01/10 15:17), Nhat Pham wrote:
+> +#ifdef CONFIG_ZPOOL
+> +/*
+> + * The second least-significant bit in the object's header identifies if the
+> + * value stored at the header is a deferred handle from the last reclaim
+> + * attempt.
+> + *
+> + * As noted above, this is valid because we have room for two bits.
+> + */
+> +#define OBJ_DEFERRED_HANDLE_TAG	2
+> +#define OBJ_TAG_BITS	2
+> +#define OBJ_TAG_MASK	(OBJ_ALLOCATED_TAG | OBJ_DEFERRED_HANDLE_TAG)
+> +#else
+> +#define OBJ_TAG_BITS	1
+> +#define OBJ_TAG_MASK	OBJ_ALLOCATED_TAG
+> +#endif /* CONFIG_ZPOOL */
+> +
+>  #define OBJ_INDEX_BITS	(BITS_PER_LONG - _PFN_BITS - OBJ_TAG_BITS)
+>  #define OBJ_INDEX_MASK	((_AC(1, UL) << OBJ_INDEX_BITS) - 1)
+>  
+> @@ -222,6 +238,12 @@ struct link_free {
+>  		 * Handle of allocated object.
+>  		 */
+>  		unsigned long handle;
+> +#ifdef CONFIG_ZPOOL
+> +		/*
+> +		 * Deferred handle of a reclaimed object.
+> +		 */
+> +		unsigned long deferred_handle;
+> +#endif
 
-Signed-off-by: Luka Guzenko <l.guzenko@web.de>
-=2D--
-V1 -> V2: linux-hardware.org suggests that this touchscreen is present in =
-all
-	  devices of the Spectre x360 13-aw0xxx family. Renamed Device_ID
- drivers/hid/hid-ids.h   | 1 +
- drivers/hid/hid-input.c | 2 ++
- 2 files changed, 3 insertions(+)
-
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 82713ef3aaa6..78f4846e5711 100644
-=2D-- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -414,6 +414,7 @@
- #define I2C_DEVICE_ID_HP_ENVY_X360_15T_DR100	0x29CF
- #define I2C_DEVICE_ID_HP_ENVY_X360_EU0009NV	0x2CF9
- #define I2C_DEVICE_ID_HP_SPECTRE_X360_15	0x2817
-+#define I2C_DEVICE_ID_HP_SPECTRE_X360_13_AW0XXX    0x29DF
- #define USB_DEVICE_ID_ASUS_UX550VE_TOUCHSCREEN	0x2544
- #define USB_DEVICE_ID_ASUS_UX550_TOUCHSCREEN	0x2706
- #define I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREEN	0x261A
-diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-index 9b59e436df0a..27f17fafce58 100644
-=2D-- a/drivers/hid/hid-input.c
-+++ b/drivers/hid/hid-input.c
-@@ -384,6 +384,8 @@ static const struct hid_device_id hid_battery_quirks[]=
- =3D {
- 	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_HP_SPECTRE_X360_15),
- 	  HID_BATTERY_QUIRK_IGNORE },
-+	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_HP_SPECTRE_X360_13_AW=
-0XXX),
-+	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO_TOUCHSCREE=
-N),
- 	  HID_BATTERY_QUIRK_IGNORE },
- 	{ HID_I2C_DEVICE(USB_VENDOR_ID_ELAN, I2C_DEVICE_ID_SURFACE_GO2_TOUCHSCRE=
-EN),
-=2D-
-2.39.1
-
+A nit:
+Do we really need to have that #ifdef and add a member to anon uion?
+I see that we use ->deferred_handle only in one place, so I'm not sure
+if it makes code any simpler.
