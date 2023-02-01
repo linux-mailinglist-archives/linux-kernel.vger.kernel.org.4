@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA806861F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A7B6861FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 09:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjBAIsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 03:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S230095AbjBAIss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 03:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBAIsN (ORCPT
+        with ESMTP id S230200AbjBAIsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 03:48:13 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D95D539
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 00:48:10 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pN8mb-0006kl-VB; Wed, 01 Feb 2023 09:47:58 +0100
-Received: from pengutronix.de (hardanger-6.fritz.box [IPv6:2a03:f580:87bc:d400:8296:86a1:ae4c:835e])
+        Wed, 1 Feb 2023 03:48:40 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7E41ADC9;
+        Wed,  1 Feb 2023 00:48:30 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6EBA516C02A;
-        Wed,  1 Feb 2023 08:46:22 +0000 (UTC)
-Date:   Wed, 1 Feb 2023 09:46:22 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Wei Fang <wei.fang@nxp.com>, Jakub Kicinski <kuba@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: fec: fix conversion to gpiod API
-Message-ID: <20230201084622.5tzezlax4a6iwbip@pengutronix.de>
-References: <Y9nbJJP/2gvJmpnO@google.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id CCDF1126A;
+        Wed,  1 Feb 2023 09:48:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1675241308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5LVbd7jMGTqPofcbHc2TSxV+zHK32m9KszR9jNPn+f0=;
+        b=IEe4l47u14uRCeFaJXl+EM8cQsUA0cu2Vny9UkvZ+jDGbBPGKzpJ5NOLJa8ellGSkAryB4
+        +XF1PYzyYHMc6V19ZfNi4sMaDV9NDoIDDfKLEjgU0nf+yiqkMrF2BKQkX91jXa4B1HH0sh
+        TXMwXVB/exdMbD0TEjqC6cNbzU9V1hI4w1y/jd169DsfglVKU7sZDlCY45bxm5eeC6ZteV
+        QY9dZEulLjmLZlIHcF3ta/6m7etnjvSvBSusnbWJYBfIIbFrE5ZV7Vb3a9aHRWTOmxV924
+        R3rtB9tUIY9RioDFMGqEs+0MKeYXGX9Qh+RE4u46lK4Cd2caU0AKkSRfORKA1Q==
+From:   Michael Walle <michael@walle.cc>
+To:     zajec5@gmail.com
+Cc:     devicetree@vger.kernel.org, hayashi.kunihiko@socionext.com,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        mhiramat@kernel.org, rafal@milecki.pl, robh+dt@kernel.org,
+        srinivas.kandagatla@linaro.org, Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH 3/4] nvmem: mtk-efuse: replace driver with a generic MMIO one
+Date:   Wed,  1 Feb 2023 09:48:21 +0100
+Message-Id: <20230201084821.1719839-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230201064717.18410-4-zajec5@gmail.com>
+References: <20230201064717.18410-4-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2jdoexbfryawm6tm"
-Content-Disposition: inline
-In-Reply-To: <Y9nbJJP/2gvJmpnO@google.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> Mediatek EFUSE uses a simple MMIO that can be handled with a generic
+> driver. Replace this driver to avoid code duplication.
 
---2jdoexbfryawm6tm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't think this is the correct approach. You'll restrict that driver
+to being read-only. I admit that right now, it's read only, but it can
+be extended to also support efuse writing. With this changes, it's not
+possible.
 
-On 31.01.2023 19:23:16, Dmitry Torokhov wrote:
-> The reset line is optional, so we should be using devm_gpiod_get_optional=
-()
-> and not abort probing if it is not available. Also, there is a quirk in
-> gpiolib (introduced in b02c85c9458cdd15e2c43413d7d2541a468cde57) that
-> transparently handles "phy-reset-active-high" property. Remove handling
-> from the driver to avoid ending up with the double inversion/flipped
-> logic.
->=20
-> Fixes: 468ba54bd616 ("fec: convert to gpio descriptor")
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> static const struct of_device_id mmio_nvmem_of_match_table[] = {
+> 	{ .compatible = "mmio-nvmem", },
+>+	/* Custom bindings that were introduced before the mmio one */
+>+	{ .compatible = "mediatek,mt8173-efuse", },
+>+	{ .compatible = "mediatek,efuse", },
 
-Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Tested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Why do you assume that all mediatek efuses will be the same? This should
+rather be something like (in the dts/binding):
 
-Marc
+compatible = "mediatek,mt8173-efuse", "mmio-nvmem";
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+So if there is no driver for the particular efuse, it will fall back to the
+generic one.
 
---2jdoexbfryawm6tm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmPaJtoACgkQrX5LkNig
-013fmQf+PINBDIH3rMvwngjKhbM9eQmEa6SWNdUktZ9ow7VxLzxbTlp5Q2ARIZRL
-Ho/KdpyPtYZCyjBm5LX3fglaAn4E/vr1HcQ1sTl3EeIyVxXXL460c9U6uIDY6+/p
-mtJbNJCrVxbeB8H5zDf4tkylg0O6n+jEo4W2JqJ2u0qNmX/9YvSYjcI+77XiUpFg
-DQqbuR/VQpFPtrrFTvv/0FlxFW/2lAS5zVYQcdmZPfD+AWzwCSzQlljtJHizHiUU
-vg2qaVD1rGd+sXzuIeumVcapsO+53rjlLblY52BdxT7tg5xNlc/4JFC4g/gIXCn0
-bE/nGEiSl+ODGcE0RmXOwUj0qKTvHQ==
-=DRin
------END PGP SIGNATURE-----
-
---2jdoexbfryawm6tm--
+-michael
