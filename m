@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB246863C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2075A6863CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBAKQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S231444AbjBAKQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbjBAKQf (ORCPT
+        with ESMTP id S231237AbjBAKQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:16:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF524ED3E;
-        Wed,  1 Feb 2023 02:16:34 -0800 (PST)
+        Wed, 1 Feb 2023 05:16:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1154F3EFD5;
+        Wed,  1 Feb 2023 02:16:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02D0661757;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6474261760;
         Wed,  1 Feb 2023 10:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235EDC4361B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347EEC43141;
         Wed,  1 Feb 2023 10:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1675246593;
-        bh=0nF8bFxY3P5D9tTctpmyCeHRuEBYqHVlVkGhiXKBwvI=;
+        bh=wRymLHXCWqnkYqQGyutZODF79K4cpesmi8Cm/ANh5+g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sz/RSIN67O56ujGi0CSF/0DVIJH32aKT1O15exs+nQ7Qbiz3JZaX8YQnhqQOhcVYF
-         IExipRlxc1qw0prEIMH9jsgFFHERR0sGSJ/DKvik0ImXY+wpwX7uoUTUKbGSsU73YT
-         VmDA17WCjEzSZ7JUu8WsIxEubtswYy/r5+pDsbncIfSCheRmzfbtlm2nQz1/XVOiIP
-         Ep4+nEojXdkXUNdPmdULXeyPfiJ0EYWHvbQiN2PLftsmWMX8HmezLS+JfbLeEI5OjQ
-         tU8X3ffKs8YfJAaz0uCXpc5t7NgbHZj9zOBCS+g+zU00yngr5ek6MDRNxTUeQRdrPP
-         UPLkdGa4aY6Aw==
+        b=TkCAzV47/PLKloW530+0THEICphvDfNQEdS+t9TEv3KlDrgGF7yZUb2YKrABsIjX6
+         FXYcW1joCD8cysr//4Ub5XaSPmTn8gE9dOiq5IWTMJPwJgWEqTfnoaZonrVoNvYQ/V
+         c7uueRVHuwcD3M/AmCO1DrRt6CL3LC6D8/56ytCqT0Pbs1CrqnvYtDtrkOiIXPk9/O
+         qf/OHqlzb2Po8dH910Z2Nd63i5cqBqS1OHmd+7s97GtYT6CZq0MBPV0Ok16ad5la/V
+         oP5BCmUdIKvdprgTtv3PU038A+Lw+N39GzGOVwRK76MqY6ZfstFOt4OUft/2YpFwd7
+         URPzlAOnE+4Ag==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pNAAg-00044K-Am; Wed, 01 Feb 2023 11:16:54 +0100
+        id 1pNAAg-00044N-Dz; Wed, 01 Feb 2023 11:16:54 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Georgi Djakov <djakov@kernel.org>
 Cc:     Shawn Guo <shawnguo@kernel.org>,
@@ -54,17 +54,17 @@ Cc:     Shawn Guo <shawnguo@kernel.org>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 15/23] interconnect: exynos: fix registration race
-Date:   Wed,  1 Feb 2023 11:15:51 +0100
-Message-Id: <20230201101559.15529-16-johan+linaro@kernel.org>
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 16/23] interconnect: exynos: drop redundant link destroy
+Date:   Wed,  1 Feb 2023 11:15:52 +0100
+Message-Id: <20230201101559.15529-17-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230201101559.15529-1-johan+linaro@kernel.org>
 References: <20230201101559.15529-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,81 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current interconnect provider registration interface is inherently
-racy as nodes are not added until the after adding the provider. This
-can specifically cause racing DT lookups to trigger a NULL-pointer
-deference when either a NULL pointer or not fully initialised node is
-returned from exynos_generic_icc_xlate().
+There is no longer any need to explicitly destroy node links as this is
+now done when the node is destroyed as part of icc_nodes_remove().
 
-Switch to using the new API where the provider is not registered until
-after it has been fully initialised.
-
-Fixes: 2f95b9d5cf0b ("interconnect: Add generic interconnect driver for Exynos SoCs")
-Cc: stable@vger.kernel.org      # 5.11
-Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/interconnect/samsung/exynos.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ drivers/interconnect/samsung/exynos.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
 diff --git a/drivers/interconnect/samsung/exynos.c b/drivers/interconnect/samsung/exynos.c
-index e70665899482..72e42603823b 100644
+index 72e42603823b..ebf09bbf725b 100644
 --- a/drivers/interconnect/samsung/exynos.c
 +++ b/drivers/interconnect/samsung/exynos.c
-@@ -98,12 +98,13 @@ static int exynos_generic_icc_remove(struct platform_device *pdev)
+@@ -96,14 +96,8 @@ static struct icc_node *exynos_generic_icc_xlate(struct of_phandle_args *spec,
+ static int exynos_generic_icc_remove(struct platform_device *pdev)
+ {
  	struct exynos_icc_priv *priv = platform_get_drvdata(pdev);
- 	struct icc_node *parent_node, *node = priv->node;
+-	struct icc_node *parent_node, *node = priv->node;
  
-+	icc_provider_deregister(&priv->provider);
-+
- 	parent_node = exynos_icc_get_parent(priv->dev->parent->of_node);
- 	if (parent_node && !IS_ERR(parent_node))
- 		icc_link_destroy(node, parent_node);
- 
+ 	icc_provider_deregister(&priv->provider);
+-
+-	parent_node = exynos_icc_get_parent(priv->dev->parent->of_node);
+-	if (parent_node && !IS_ERR(parent_node))
+-		icc_link_destroy(node, parent_node);
+-
  	icc_nodes_remove(&priv->provider);
--	icc_provider_del(&priv->provider);
  
  	return 0;
- }
-@@ -132,15 +133,11 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
- 	provider->inter_set = true;
- 	provider->data = priv;
- 
--	ret = icc_provider_add(provider);
--	if (ret < 0)
--		return ret;
-+	icc_provider_init(provider);
- 
- 	icc_node = icc_node_create(pdev->id);
--	if (IS_ERR(icc_node)) {
--		ret = PTR_ERR(icc_node);
--		goto err_prov_del;
--	}
-+	if (IS_ERR(icc_node))
-+		return PTR_ERR(icc_node);
- 
- 	priv->node = icc_node;
- 	icc_node->name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "%pOFn",
-@@ -171,14 +168,17 @@ static int exynos_generic_icc_probe(struct platform_device *pdev)
- 			goto err_pmqos_del;
- 	}
- 
-+	ret = icc_provider_register(provider);
-+	if (ret < 0)
-+		goto err_pmqos_del;
-+
- 	return 0;
- 
- err_pmqos_del:
- 	dev_pm_qos_remove_request(&priv->qos_req);
- err_node_del:
- 	icc_nodes_remove(provider);
--err_prov_del:
--	icc_provider_del(provider);
-+
- 	return ret;
- }
- 
 -- 
 2.39.1
 
