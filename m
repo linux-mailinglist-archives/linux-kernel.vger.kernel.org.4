@@ -2,84 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6475B6865EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C96B96865F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjBAMbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S231947AbjBAMbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 07:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBAMbR (ORCPT
+        with ESMTP id S229483AbjBAMbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:31:17 -0500
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C55723662
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:31:16 -0800 (PST)
-Received: by mail-io1-f49.google.com with SMTP id j4so3898719iog.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 04:31:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ry7RKsC44YIA2lXtFpKOlx3NNoFtQJigiycKjbL6JaQ=;
-        b=KitrQxaEEe2X7W4RGsO4hTJUOIAwmyBay0jinYYXO80qAHYeFCpuduxjqhv2SIKhCL
-         aa2zfWn0VHEakeBohCzxjl3SUeChrjgPbFJh7LEG4M22UF2IJFdb9cvlhsc+qB9sXARq
-         kCBJ5b7bNUVPAWaFiU/CThMb9EaIsTIns10cBENuiK3nz3nIovr4THdh/H292q0ZLf71
-         4XOjsobhHPEmQSuM7Feykd/7UUuU8FxKDBH3Lf+jn93Rwoz1GB5gqzWef4mnkCItHsUs
-         9v1UMHQXWl/FYlmYFWhzMLYdvg9B7yoyH3J9HpdgbdxUyQhTW6gsBBXdWI8V6mYgAJbz
-         SlWw==
-X-Gm-Message-State: AO0yUKXf20UG6UGX9Siar+NTIZKaRucfKK4Yzgb8ZGcXtQ34bwzyr/Lf
-        4xe4xjhTlE/cr1GgJ97yIo9M9Th4kF1dnmXoPDI=
-X-Google-Smtp-Source: AK7set/22zFbaAD/SedVoGIZzZWDAmeupj6/sVk0gpmsbzpaeR2J7s0j8j0EBKaHhVqMtusjJWmKQe9/Y/braAmuCeU=
-X-Received: by 2002:a02:a58a:0:b0:3a5:f7fb:178e with SMTP id
- b10-20020a02a58a000000b003a5f7fb178emr372339jam.86.1675254675457; Wed, 01 Feb
- 2023 04:31:15 -0800 (PST)
+        Wed, 1 Feb 2023 07:31:40 -0500
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C5C485A8;
+        Wed,  1 Feb 2023 04:31:37 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VagnY4o_1675254694;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VagnY4o_1675254694)
+          by smtp.aliyun-inc.com;
+          Wed, 01 Feb 2023 20:31:35 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-crypto@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH v3] crypto: arm64/sm4-gcm - Fix possible crash in GCM cryption
+Date:   Wed,  1 Feb 2023 20:31:33 +0800
+Message-Id: <20230201123133.99768-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-References: <20221125094216.3663444-1-bigeasy@linutronix.de> <Y7/KN7amVvF7NAiV@linutronix.de>
-In-Reply-To: <Y7/KN7amVvF7NAiV@linutronix.de>
-From:   Roland Mainz <roland.mainz@nrubsig.org>
-Date:   Wed, 1 Feb 2023 13:30:49 +0100
-Message-ID: <CAKAoaQnTwOxQCxp5uy8mFmHz_46SQFDboPVRJrpHFZcu0n5=vw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] x86: Provide a vdso for getcpu on x86-32.
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Roland Mainz <roland.mainz@rovema.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 9:52 AM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
-> On 2022-11-25 10:42:13 [+0100], To linux-kernel@vger.kernel.org wrote:
-> > This tiny series provides getcpu in vdso on x86-32. Due to the setup
-> > RDTSCP now also returns CPU and node information like x86-64 does.
-> >
-> > The usage of RDTSCP + vdso has been tested in a VM with 64bit kernel and
-> > 32bit binary and a 32bit kernel.
->
-> ping.
+When the cryption total length is zero, GCM cryption call
+skcipher_walk_done() will cause an unexpected crash, so skip calling
+this function to avoid possible crash when the GCM cryption length
+is equal to zero.
 
-Is there a commit id for the Linux mainline yet ?
+This patch also rewrite the skcipher walker loop, and separates the
+cryption of the last chunk from the walker loop. In addition to
+following the usual convention of checking walk->nbytes, it also makes
+the execution logic of the loop clearer and easier to understand.
 
-----
+Fixes: ae1b83c7d572 ("crypto: arm64/sm4 - add CE implementation for GCM mode")
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ arch/arm64/crypto/sm4-ce-gcm-glue.c | 43 ++++++++++++++---------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
 
-Bye,
-Roland
+diff --git a/arch/arm64/crypto/sm4-ce-gcm-glue.c b/arch/arm64/crypto/sm4-ce-gcm-glue.c
+index c450a2025ca9..80ac4e94a90d 100644
+--- a/arch/arm64/crypto/sm4-ce-gcm-glue.c
++++ b/arch/arm64/crypto/sm4-ce-gcm-glue.c
+@@ -143,7 +143,7 @@ static int gcm_crypt(struct aead_request *req, struct skcipher_walk *walk,
+ {
+ 	u8 __aligned(8) iv[SM4_BLOCK_SIZE];
+ 	be128 __aligned(8) lengths;
+-	int err;
++	int err = 0;
+ 
+ 	memset(ghash, 0, SM4_BLOCK_SIZE);
+ 
+@@ -158,34 +158,31 @@ static int gcm_crypt(struct aead_request *req, struct skcipher_walk *walk,
+ 	if (req->assoclen)
+ 		gcm_calculate_auth_mac(req, ghash);
+ 
+-	do {
++	while (walk->nbytes && walk->nbytes != walk->total) {
+ 		unsigned int tail = walk->nbytes % SM4_BLOCK_SIZE;
+-		const u8 *src = walk->src.virt.addr;
+-		u8 *dst = walk->dst.virt.addr;
+-
+-		if (walk->nbytes == walk->total) {
+-			tail = 0;
+-
+-			sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, dst, src, iv,
+-					       walk->nbytes, ghash,
+-					       ctx->ghash_table,
+-					       (const u8 *)&lengths);
+-		} else if (walk->nbytes - tail) {
+-			sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, dst, src, iv,
+-					       walk->nbytes - tail, ghash,
+-					       ctx->ghash_table, NULL);
+-		}
++
++		sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, walk->dst.virt.addr,
++				       walk->src.virt.addr, iv,
++				       walk->nbytes - tail, ghash,
++				       ctx->ghash_table, NULL);
+ 
+ 		kernel_neon_end();
+ 
+ 		err = skcipher_walk_done(walk, tail);
+-		if (err)
+-			return err;
+-		if (walk->nbytes)
+-			kernel_neon_begin();
+-	} while (walk->nbytes > 0);
+ 
+-	return 0;
++		kernel_neon_begin();
++	}
++
++	sm4_ce_pmull_gcm_crypt(ctx->key.rkey_enc, walk->dst.virt.addr,
++			       walk->src.virt.addr, iv, walk->nbytes, ghash,
++			       ctx->ghash_table, (const u8 *)&lengths);
++
++	kernel_neon_end();
++
++	if (walk->nbytes)
++		err = skcipher_walk_done(walk, 0);
++
++	return err;
+ }
+ 
+ static int gcm_encrypt(struct aead_request *req)
 -- 
-  __ .  . __
- (o.\ \/ /.o) roland.mainz@nrubsig.org
-  \__\/\/__/  MPEG specialist, C&&JAVA&&Sun&&Unix programmer
-  /O /==\ O\  TEL +49 641 3992797
- (;O/ \/ \O;)
+2.24.3 (Apple Git-128)
+
