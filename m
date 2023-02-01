@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043F2683AE7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B9C683AEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 01:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjBAAEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 19:04:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S231567AbjBAAFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 19:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjBAAED (ORCPT
+        with ESMTP id S230204AbjBAAF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 19:04:03 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CDA3C22
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:04:01 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id c124so20272352ybb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:04:01 -0800 (PST)
+        Tue, 31 Jan 2023 19:05:28 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5498422C
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:05:27 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id g9so9346385pfk.13
+        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 16:05:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZUycsi7Qy1G+kA/BDKEqAynjD+S1ub0yGcBr2S1csDg=;
-        b=kjgH2CMPcbJUL89I13duLHr/x00EFsX3fEJyRMjgA3lmo+3BlhNvsXihc340eh4Mo2
-         xJLlakMeru4DhNc2LQ7VdXDjksVjD8J95ylIlceJjZjmLcziSrIGjflqo01hf0aIuPRr
-         /Tm7tSWg1BzuIO5SMCXWDrfUCKN94wOyzFfYw06eAp4JwvSUDIkxnWZVGG8jazLCRLQ4
-         fy9jQY5nCrkr6ftTyn2XwMB2wYenW9lk/kPwLomUt2hRm3TEP3rTyKcgDtcfIeERobCm
-         uThPnsvu8qu2+2UDFWG+LRF+g46vJaxVjEr6TrfgDRaIL6R7vK5wPEjDj7fJztXMnUO3
-         CX+Q==
+        bh=w8A9vBT/khKMaGZggBlfcaoxdg/zaX7WQ2GHlPfZ9xs=;
+        b=BiSpvB811IcBJct74KPKQULQwFcRN0Wg6Ar62bSSgLA3zig9AYd/fuex8mOqSUPSJ5
+         Ziod9DDVVIQgSwvdnd6FioMZH2mxYqPmSkXelMU6CCiIp8HRvw1tog/oKIgQnrhpMIZw
+         aBUu8itI0Sq+J8QKloY6eNIDrpdFjkXefbQ0uuFK7QW12BgBk0n0oNX68PmfFUDStSe2
+         wIVNM2FYkwp4klqPWgCgMtXJIEZDyxZndFyilZ10JPT0SS1S1orCP13X222wVTHKrPWO
+         g2Iw0peEIoMgZSWbrfkkaAAZAYt3YkysTEQ2FC9IOpLb5BQUJyaAcOyjLu9wpjM53cyk
+         nBtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZUycsi7Qy1G+kA/BDKEqAynjD+S1ub0yGcBr2S1csDg=;
-        b=2MCE8D9tdviY3JzIsl7BTkmNiT42tkV50gpvvAuQgjqdm12axUh/nnev0NEyLDuGSj
-         0zcr7MIJOorbnx+igHReuZecRjfFrFqC23G+/GVLk5GV39NVHq+pCC2XqDZc4VR/MUFp
-         OR3tYxXrQ53kwZRfwJxB1/hQ4fIN8+hsp8mAN+nvtZMhKjLYel/3kdyEAib1j7QneBHY
-         qBpmsbOd5gNvqCXULn6pi01aQTJGH7JACrmznL/ZYx32n0hDSZnO2l28O/VTxV5hTLWD
-         wyWcqSRH9ZbD3w0xo7Vvwhzfr9VY7e5Qn49Xm8rHZj/AT4Iw4Fbdun3sKDdbLBzBu90Z
-         vtdg==
-X-Gm-Message-State: AO0yUKV53uQ4XqTVMOqrWrJcQA2/j92f9n4nCIXTn5GM34qGOVBjiywg
-        KFCW2DRQFVtlzsrxm94DPuQ8xB4l5hEbUGlumL/uzg==
-X-Google-Smtp-Source: AK7set8i/R4jubc4/eBLZr1C2uot2lhviGeGxjdH9LtwH5rX8BcQ29iFG2gEY6poGbAAfxlHLKG4eGpFSJTOl8lO5k0=
-X-Received: by 2002:a25:2441:0:b0:80b:5988:2045 with SMTP id
- k62-20020a252441000000b0080b59882045mr107656ybk.59.1675209840310; Tue, 31 Jan
- 2023 16:04:00 -0800 (PST)
+        bh=w8A9vBT/khKMaGZggBlfcaoxdg/zaX7WQ2GHlPfZ9xs=;
+        b=fobnH0Ck6VD4yYZEcNNrF6wv8WjdgEm8UDVQJIMZdceGOMYQY7SisIjGX8uCxJ9jfD
+         nn19HLhnomCZh3SPsBFRdaSSxhodiIScHFjqBGZDEsAXtGYmXFTqtI4rAWLmVSWNtsR3
+         i77CVNgQoI9GZzK1t+KS/+wvHSyJi2NF7ioEA2n+M9KyNyyBzIw8vkdzuPrI2vjRYODs
+         JKqIVSyMfWDR/iIvJY+bvrac4CblcViP0XUUZNGjfpy5sPZPUMSAxZNvTGIHospR6X/7
+         IjP2PPPAyRJm0paSk9qVl6E5nTlvXQEy4GuDYdbhmDnDFSydWlLU0Hkpj1Km8J21oMpJ
+         KdQQ==
+X-Gm-Message-State: AO0yUKUIjgFwFWh/R8Ap1niNYjSJ9H1cmz+QIrkQJMF2gs/0TnxTpDRl
+        VpBYhNuGvAP3VVAlVDx41qj5UV6mLKH2P6KD6bwHjQ==
+X-Google-Smtp-Source: AK7set9l/4wp/xKINl4PM5P7x4+dC0lcSiZC7hllzJdRw5eYtA9+kDO5qRjUUrC9bYnufKTMSSBDyeVqchrW61Oiww8=
+X-Received: by 2002:a05:6a00:a18:b0:58b:506d:d6ae with SMTP id
+ p24-20020a056a000a1800b0058b506dd6aemr77372pfh.24.1675209926940; Tue, 31 Jan
+ 2023 16:05:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20230126193752.297968-1-surenb@google.com> <20230126193752.297968-5-surenb@google.com>
- <Y9jSFFeHYZE1/yFg@hyeyoo> <CAJuCfpEzaVkgQt=C-33jAh1vLVJAjoyM8X5AD9CzyDUJnPDCkw@mail.gmail.com>
- <20230131125355.f07f42af56b23bfa28b2a58c@linux-foundation.org>
- <CAJuCfpHmtkzrKx45SQQ0gXLoybtgHxHmTP5J4L74ChTqSfFA-g@mail.gmail.com> <20230131151209.d53ba65c3c065979808d9912@linux-foundation.org>
-In-Reply-To: <20230131151209.d53ba65c3c065979808d9912@linux-foundation.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 31 Jan 2023 16:03:49 -0800
-Message-ID: <CAJuCfpF-Lu2fX6azVzmpJn75qDgwjpWjKT85=CEbwo2YAnx-Qw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] mm: replace vma->vm_flags direct modifications
- with modifier calls
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20230130181915.1113313-1-zwisler@google.com> <20230130181915.1113313-4-zwisler@google.com>
+ <CAADnVQJ7KxEK92qOz0Ya4MrACHpxngSpG4W38xuGEgZmXEG-vQ@mail.gmail.com>
+ <20230130145932.37cf6b73@gandalf.local.home> <CAADnVQ+F3Z70mu3-QyyNFyJ2qCkDXnMJCW-o+fcnZo=LWj5d9g@mail.gmail.com>
+ <20230130183419.0626dc21@gandalf.local.home> <20230131005315.phdnhkeeconxxm3e@macbook-pro-6.dhcp.thefacebook.com>
+ <20230131145048.6fac87d3@gandalf.local.home> <CAADnVQKpkuBdQWWGDBh13NCrx2WMPs4fVUyVujF4L-6XnjXFpg@mail.gmail.com>
+In-Reply-To: <CAADnVQKpkuBdQWWGDBh13NCrx2WMPs4fVUyVujF4L-6XnjXFpg@mail.gmail.com>
+From:   Ross Zwisler <zwisler@google.com>
+Date:   Tue, 31 Jan 2023 17:05:15 -0700
+Message-ID: <CAGRrVHzNcWx4Rws6GVi2UPRG1ZyzowBJQSqaS83WhsNVymU0Ww@mail.gmail.com>
+Subject: Re: [PATCH 3/9] selftests/bpf: use canonical ftrace path
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -89,38 +86,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 3:12 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 31 Jan 2023 13:08:19 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
->
-> > On Tue, Jan 31, 2023 at 12:54 PM Andrew Morton
-> > <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Tue, 31 Jan 2023 10:54:22 -0800 Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > > > > -             vma->vm_flags &= ~VM_MAYWRITE;
-> > > > > > +             vm_flags_clear(vma, VM_MAYSHARE);
-> > > > > >       }
-> > > > >
-> > > > > I think it should be:
-> > > > >         s/VM_MAYSHARE/VM_MAYWRITE/
-> > > >
-> > >
-> > > I added the fixup.  Much better than resending a seven patch series for a
-> > > single line change.  Unless you have substantial other changes pending.
-> >
-> > Thanks! That sounds reasonable.
-> >
-> > I'll also need to introduce vm_flags_reset_once() to use in
-> > replacement of WRITE_ONCE(vma->vm_flags, newflags) case. Should I send
-> > a separate short patch for that?
->
-> That depends on what the patch looks like.  How about you send it
-> and we'll see?
+On Tue, Jan 31, 2023 at 4:26 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> Fair enough. Please resubmit these two patches towards bpf-next
+> with [PATCH bpf-next] subj, so that BPF CI can chew on it.
 
-Here it is: https://lore.kernel.org/all/20230201000116.1333160-1-surenb@google.com/
-
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+Will do, thanks.
