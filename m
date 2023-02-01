@@ -2,88 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929C968665A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:04:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61A368665F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjBANEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:04:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S232122AbjBANFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:05:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjBANEr (ORCPT
+        with ESMTP id S229935AbjBANFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:04:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACCF2D4C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:04:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45C35B82169
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 13:04:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B540C433EF;
-        Wed,  1 Feb 2023 13:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1675256683;
-        bh=egp+vy8zGy5Wkq76d+uDukeqmJJcPUunh3Iv5Ex08JA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CiX9oHa6DzEIA9EzmoYFbemqKaeVZnOPRTUHWeUM5OV8j0GBeULeiK9oQFUyNcUZN
-         tyRjxsYUj3u/A8FNjS2H0VF1EJhlNWsA3GD2b3YRzoAQMa3aORL9NINZtnK6h9TDiS
-         4EpYzaMNx+DemhyGtCetfDwt/S9s9CEocN1VnJqY=
-Date:   Wed, 1 Feb 2023 14:04:41 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        ioana.ciornei@nxp.com
-Subject: Re: [PATCH] bus: fsl-mc: don't assume child devices are all fsl-mc
- devices
-Message-ID: <Y9pjaQVOda8tY/Qt@kroah.com>
-References: <20230127131636.20889-1-laurentiu.tudor@nxp.com>
- <Y9kB8F3Nls8d1Koi@kroah.com>
- <d6297aae-7f9e-1b4e-d2f3-da5664804ab0@nxp.com>
+        Wed, 1 Feb 2023 08:05:32 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36A21E2B3;
+        Wed,  1 Feb 2023 05:05:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675256730; x=1706792730;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1ezy7vzV4A+mQkaS59I0Os4yOVb8/Gz4isjpFiZSdb8=;
+  b=FxpJn5kVbeWQRegMNBJ55hWkNxhF9McQoYBzFyaoSKeddDjO0Mq8C8i1
+   zKRtqrHU8I4ye8ia8m/uNXDZHyVgyNYNcUcnwRbJSY2Zw9F7MOqbAFpAy
+   5gQANq5y62eQb+SBCSh+C0tJO0lKDr4C1O6MzoXxybn+Ugs8cE8lLjS8D
+   uqEo1HXuru1klnMshSLnx3o2m4oVbAQg7TrnP4onnhQudLLBbuGpZ4mc7
+   GKBRI1zGZ0Vo24gUbCOxCWzMixo1otTVRc3INYeA5BS66juoBsBFve2ZH
+   UEa254EedH5sC9ep04WTA8OKFVszI1YJfOQAGUXG/WdfOeuef1HqlHGPA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="329426793"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="329426793"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 05:05:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="993685455"
+X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
+   d="scan'208";a="993685455"
+Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Feb 2023 05:05:27 -0800
+Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pNCnm-0005Ry-2J;
+        Wed, 01 Feb 2023 13:05:26 +0000
+Date:   Wed, 1 Feb 2023 21:05:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ye Bin <yebin@huaweicloud.com>, tytso@mit.edu,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH 2/5] ext4: introudce helper for jounral recover handle
+Message-ID: <202302012039.pe8277UH-lkp@intel.com>
+References: <20230201114651.4090446-3-yebin@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d6297aae-7f9e-1b4e-d2f3-da5664804ab0@nxp.com>
+In-Reply-To: <20230201114651.4090446-3-yebin@huaweicloud.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 01:50:11PM +0200, Laurentiu Tudor wrote:
-> Hi Greg,
-> 
-> On 1/31/2023 1:56 PM, Greg KH wrote:
-> > On Fri, Jan 27, 2023 at 03:16:36PM +0200, laurentiu.tudor@nxp.com wrote:
-> > > From: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-> > > 
-> > > Changes in VFIO caused a pseudo-device to be created as child of
-> > > fsl-mc devices causing a crash [1] when trying to bind a fsl-mc
-> > > device to VFIO. Fix this by checking the device type when enumerating
-> > > fsl-mc child devices.
-> > 
-> > What changes?  What commit id does this fix?  Does it need to be
-> > backported?
-> 
-> There were a lot of changes in the VFIO area but I'd point at this commit
-> [1].
-> 
-> I'll resend the patch with a "Fixes:" tag pointing at this commit if that's
-> ok with you.
+Hi Ye,
 
-Please do.
+Thank you for the patch! Perhaps something to improve:
 
-> > And what type of "pseudo device" is being created? Why would it be
-> > passed to this driver if it's the wrong type?
-> 
-> It's not passed to the driver per-se. The problem shows up when the
-> implementation of the driver does a device_for_each_child() [2] and the
-> callback blindly assumes that all enumerated children devices are fsl-mc
-> devices. The patch just adds a check for this case.
+[auto build test WARNING on tytso-ext4/dev]
+[also build test WARNING on linus/master v6.2-rc6 next-20230201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Ah, that makes more sense, sorry for the noise.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ye-Bin/jbd2-introduce-callback-for-recovery-journal/20230201-192400
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
+patch link:    https://lore.kernel.org/r/20230201114651.4090446-3-yebin%40huaweicloud.com
+patch subject: [PATCH 2/5] ext4: introudce helper for jounral recover handle
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230201/202302012039.pe8277UH-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/316c2a97e3b3629813acbac07b6a03d836a00fa1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ye-Bin/jbd2-introduce-callback-for-recovery-journal/20230201-192400
+        git checkout 316c2a97e3b3629813acbac07b6a03d836a00fa1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/
 
-greg k-h
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> fs/ext4/ext4_jbd2.c:399:6: warning: no previous prototype for 'ext4_replay_end_callback' [-Wmissing-prototypes]
+     399 | void ext4_replay_end_callback(struct journal_s *journal)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/ext4_replay_end_callback +399 fs/ext4/ext4_jbd2.c
+
+   398	
+ > 399	void ext4_replay_end_callback(struct journal_s *journal)
+   400	{
+   401		kfree(journal->j_replay_private_data);
+   402		journal->j_replay_private_data = NULL;
+   403		journal->j_replay_callback = NULL;
+   404		journal->j_replay_end_callback = NULL;
+   405	}
+   406	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
