@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5526871D4
+	by mail.lfdr.de (Postfix) with ESMTP id D89096871D5
 	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjBAXXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 18:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
+        id S230515AbjBAXXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 18:23:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjBAXXA (ORCPT
+        with ESMTP id S232001AbjBAXXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 18:23:00 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA9510E8;
-        Wed,  1 Feb 2023 15:22:59 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id bb40so210851qtb.2;
-        Wed, 01 Feb 2023 15:22:59 -0800 (PST)
+        Wed, 1 Feb 2023 18:23:02 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A927A264;
+        Wed,  1 Feb 2023 15:23:00 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id m12so201226qth.4;
+        Wed, 01 Feb 2023 15:23:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=RJ2eqJLEVXk0Nl1is9sUWLnCG7hj77zSsF65ucYjqnM=;
-        b=i4yh+W+BrM8RY8XP1P/LnT/bYfNWNsm8jzEkujYQ5E28NinCeb/zJ33eelJMgMCCja
-         zoXTfnMmpxYc2/lU8Iv2RVB1Xc3XegWyc+QtaOaVyKNbLwPkWKiO3ga41LQbfKh/zhy5
-         cYLSKjDhX1fgFTcGU5RSnCvlDfPgd/UO+P8KW0Z/S4lnnGXLmDV7EeckFig4+SWyBbwa
-         pMRa7j3i1/fwL0wRwbdyA7DzNp6KVGoGoALEgLhEtuj1Iu1C8tSWTmhGyVO9/SW387w6
-         EEI/dvZnSsmgJZZJBK6wsx0A5p8lpEdGjT7OpwVMtElTIkQuwH6cXAU7YCe/ERlXv6WQ
-         rO3Q==
+        bh=WRf7FsW0svSQ5uvgmd0AHIX9qix6pe5dIuAX0+vgnjk=;
+        b=AaGH4xIRJHiGzFMV++RFKatLGmRKIlREolVmZNjG58XdbhhZh+dfTsMyJYEO+70aem
+         tBqEufwqM5laAYG07ZQPu8n6RGmg+qrsVt5Zqo6b3ISlGXUwbys8dTWui33h1xrvKKA5
+         n1CihKRhSpTe+48nBn480C5vwmB2HicalOCh4HRM7mt6aqy+/iCOMgYHhHUIr5HHjlb+
+         RTvpnbVpRzvWisvXms2l3y4e2SiNqRVZuutfDxnXhU20zU+YdCNjwQK+lRq6PAmCYORR
+         GUZoSPcR+/cRSEgsWhh9yJQuWrTv2e0f9ucLgKuoOFB0FpBtRudXBfgQgpQfmUXiFefQ
+         5bBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RJ2eqJLEVXk0Nl1is9sUWLnCG7hj77zSsF65ucYjqnM=;
-        b=xe5kuZKzcWYBGhDr4gjDJcdMUBnA2nl0RmcF4AvKnKcW3sBSaG30Bc3cHSoa0Wu1j1
-         tcbnvmly6Q1qOvV9UxXgyzqXrXuG/G10uG8xzo2q7n5m3BNL/5Rakq3t5nfVRN6if5dQ
-         +28qR5w4abUdy4vqIRVLWhlmoSiyariZyz61SgidaUqFHJ7BBbJ6U130ngC2CigTyXzC
-         du2PGTSRQH4keJRjR2TOE79b0GP9AbUVP6usjeDqNM0pEyDeX+eWrejgOoohOw50oh4e
-         tTflRqAWjsmVSroVhyipzwCjkak/iNP90A4BPn4HNHBPrUOO6Dad7RXWhbwWKp/LcGuL
-         iC1A==
-X-Gm-Message-State: AO0yUKVhglYOGHIZPXPrjdVMXGUOaM41jVIDtL5+a3Al9tREKPb7HM+y
-        0F2SFVqrEET5Ue6DnNrBLn21rXW2vCk=
-X-Google-Smtp-Source: AK7set8MH15M8ebrTvc95LvO8zsJP+EmB0ENiE3zoR7Td84Jayz3huuk8xDs0cpChxcOfs/NubPEsQ==
-X-Received: by 2002:a05:622a:152:b0:3b8:6bc1:155b with SMTP id v18-20020a05622a015200b003b86bc1155bmr8312505qtw.45.1675293778224;
-        Wed, 01 Feb 2023 15:22:58 -0800 (PST)
+        bh=WRf7FsW0svSQ5uvgmd0AHIX9qix6pe5dIuAX0+vgnjk=;
+        b=U37R2xk4+D4anO1F0nsjAloxJMblkiq7mMafhdrkrMXPRp67OS6Cx4Z8iRn1u3d1v/
+         C1JxTnnHxqBHge2pcXJaYUHu73iCYL/LHhaIIXQHR2o2+ZpD4YeepVVRnraG4HO1ZKK8
+         y8XTmYiYNl/a5Yssk0rVk7w5Aycf3qPMTb/Gvrot9qY/qn5WpAU9jTqLvR3EQYoUCB8Z
+         btVvkCRYCZzUd77VsM3IAxtDUl4VYLOqIzcbBlAADbOqSdu1b76LGa9tY15pFWrZtE7L
+         3I3S0ECWgUj3VU3H51S/Xj/fgjOWfN/o9KGH3MG7KkXo40rJhrxCfJlfCwCWCcPtscr6
+         Y2WA==
+X-Gm-Message-State: AO0yUKXTNLQM17qKt4uRunEa3KHfc/k4efigedRgZTSKtg2lJkHBENFd
+        EK2FRHa8Y7uJzoM2jpxu80U=
+X-Google-Smtp-Source: AK7set8a4O590xcb1r76E6BdTkcepn8WXa7kzVn5DCamhrt0fB+pXN3hlNimrLvuOLFWYKwV+G0Z+Q==
+X-Received: by 2002:ac8:5886:0:b0:3b9:b297:5ec5 with SMTP id t6-20020ac85886000000b003b9b2975ec5mr7535406qta.13.1675293779687;
+        Wed, 01 Feb 2023 15:22:59 -0800 (PST)
 Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id o2-20020a375a02000000b007055dce4cecsm13076809qkb.97.2023.02.01.15.22.57
+        by smtp.gmail.com with ESMTPSA id s39-20020a05622a1aa700b003a7e38055c9sm12735406qtc.63.2023.02.01.15.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 15:22:57 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 1383A27C0054;
-        Wed,  1 Feb 2023 18:22:57 -0500 (EST)
+        Wed, 01 Feb 2023 15:22:58 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 71F4527C0054;
+        Wed,  1 Feb 2023 18:22:58 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 01 Feb 2023 18:22:57 -0500
-X-ME-Sender: <xms:UPTaY6yb3NAL2cABcgH4xxLlBuLBXXeVFMtldJ4Okf6ygAHEo7Lt4Q>
-    <xme:UPTaY2TsUBTbKRcoHI3PuqcC0FUVxA7EoVTp8zoKpyeh8DmslxnK73smMOJgUHvSM
-    SKyBwIQ5r6sfwEUiQ>
-X-ME-Received: <xmr:UPTaY8XWZvYex_tdzx6r7jSE4XAvyskHaENRbUjXT2evHr-mTFo1Kd0h4Ms>
+  by compute1.internal (MEProxy); Wed, 01 Feb 2023 18:22:58 -0500
+X-ME-Sender: <xms:UvTaY-AnHLgtb4I40VMzL9cSsKBUaYVsDrybfHp_MjqEaari3wEgug>
+    <xme:UvTaY4hWRvoFfYkqdnThqUilTxrXyJWR4QzO6JE2S0N2YRVEfJCixxv66cpz4hBhQ
+    y33a5KjrutI6398NQ>
+X-ME-Received: <xmr:UvTaYxlgcW4XaiKaGmAptmrIXpURDTndFNdK1xwNGUuoSIb3mw_nV4Vk_FM>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefjedgudduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -69,13 +69,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefjedgudduucetufdoteggod
     gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
     gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
     igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:UPTaYwjcPWfbvGfylH7BxbidBfZp1s28ICA2jDaofs_BLy3neqz4VQ>
-    <xmx:UPTaY8CjqYyc29DSpMWDjPNKh_0jAbe9niTEiYBCmpeMh23nrZSIDw>
-    <xmx:UPTaYxLVP0PJYCUKE_p86YaJroTPdornsJYf6Ymp79MMRzEUyTMebQ>
-    <xmx:UfTaYw6mwM2mOOqcg48B9kU92gZNb_UuAnOlNA7iDo9B-1srjfE6Lg>
+X-ME-Proxy: <xmx:UvTaY8zMi2zYNBIfZSv25qmIz8XfGUIKhg5eqvp5Or43Oq9zAeLuNQ>
+    <xmx:UvTaYzQ_2cHwEKVNwA8oxxtDyTuqsFbCu51kTuBO_pvB1BxuBiDpLg>
+    <xmx:UvTaY3Y9H5XPJgAYUTXRCLeo7vSIYAmNVZVcXshqNfeOVwDXyf_bSQ>
+    <xmx:UvTaY4IGnp6pA3NG7yqSPzTVgAOBFkuyylu8H8s1rNiK2-deCp0Alw>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 1 Feb 2023 18:22:56 -0500 (EST)
+ 1 Feb 2023 18:22:57 -0500 (EST)
 From:   Boqun Feng <boqun.feng@gmail.com>
 To:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Will Deacon <will@kernel.org>,
@@ -87,9 +87,9 @@ Cc:     Will Deacon <will@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Subject: [RFC 4/5] rust: sync: impl Debug for {Unique,}Arc
-Date:   Wed,  1 Feb 2023 15:22:43 -0800
-Message-Id: <20230201232244.212908-5-boqun.feng@gmail.com>
+Subject: [RFC 5/5] sample: rust: print: Add sampe code for Arc printing
+Date:   Wed,  1 Feb 2023 15:22:44 -0800
+Message-Id: <20230201232244.212908-6-boqun.feng@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230201232244.212908-1-boqun.feng@gmail.com>
 References: <20230201232244.212908-1-boqun.feng@gmail.com>
@@ -105,42 +105,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This allows printing macros to print the data and the refcount nubmer
-of these struct for debugging purposes.
+This both demonstrates the usage of different print format in Rust and
+serves as a selftest for the `Display` and `Debug` implementation of
+`Arc` and its friends.
 
 Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
 ---
- rust/kernel/sync/arc.rs | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ samples/rust/rust_print.rs | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index 4d8de20c996f..f143d8305c36 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -474,6 +474,7 @@ impl<T: ?Sized> Deref for ArcBorrow<'_, T> {
- ///
- /// # test().unwrap();
- /// ```
-+#[derive(Debug)]
- pub struct UniqueArc<T: ?Sized> {
-     inner: Arc<T>,
- }
-@@ -545,3 +546,15 @@ impl<T: fmt::Display + ?Sized> fmt::Display for Arc<T> {
-         fmt::Display::fmt(self.deref(), f)
+diff --git a/samples/rust/rust_print.rs b/samples/rust/rust_print.rs
+index 8b39d9cef6d1..165a8d7b1c07 100644
+--- a/samples/rust/rust_print.rs
++++ b/samples/rust/rust_print.rs
+@@ -15,6 +15,30 @@ module! {
+ 
+ struct RustPrint;
+ 
++fn arc_print() -> Result {
++    use kernel::sync::*;
++
++    let a = Arc::try_new(1)?;
++    let b = UniqueArc::try_new("hello, world")?;
++
++    // Prints the value of data in `a`.
++    pr_info!("{}", a);
++
++    // Uses ":?" to print debug fmt of `b`.
++    pr_info!("{:?}", b);
++
++    let a: Arc<&str> = b.into();
++    let c = a.clone();
++
++    // Uses `dbg` to print, will move `c`.
++    dbg!(c);
++
++    // Prints debug fmt with pretty-print "#" and number-in-hex "x".
++    pr_info!("{:#x?}", a);
++
++    Ok(())
++}
++
+ impl kernel::Module for RustPrint {
+     fn init(_module: &'static ThisModule) -> Result<Self> {
+         pr_info!("Rust printing macros sample (init)\n");
+@@ -43,6 +67,8 @@ impl kernel::Module for RustPrint {
+         pr_cont!(" is {}", "continued");
+         pr_cont!(" with {}\n", "args");
+ 
++        arc_print()?;
++
+         Ok(RustPrint)
      }
  }
-+
-+impl<T: fmt::Debug + ?Sized> fmt::Debug for Arc<T> {
-+    /// Formats debug output for [`Arc`].
-+    ///
-+    /// Refcount is also printed for debugging purpose.
-+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-+        f.debug_struct("Arc")
-+            .field("refcount", &self.get_inner().count())
-+            .field("data", &self.deref())
-+            .finish()
-+    }
-+}
 -- 
 2.39.1
 
