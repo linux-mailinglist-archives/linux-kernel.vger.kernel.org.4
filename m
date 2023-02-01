@@ -2,104 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5266E686B78
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9E2686B04
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjBAQYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:24:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S231705AbjBAQAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBAQYq (ORCPT
+        with ESMTP id S231576AbjBAQAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:24:46 -0500
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFEADBCB;
-        Wed,  1 Feb 2023 08:24:43 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 35FD37E1092;
-        Wed,  1 Feb 2023 16:24:42 +0000 (UTC)
-Received: from pdx1-sub0-mail-a221.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 93E7F7E1833;
-        Wed,  1 Feb 2023 16:24:41 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1675268681; a=rsa-sha256;
-        cv=none;
-        b=k5Hl/+1VqHnQE5h6iaeLNKlyabU9PxObDnT+CZPFyWg/t2djrSj3aMZEdSqjhUjISgrFog
-        AwnKgscHNeevmlP859kTIIIErn0JtbFdEwSr0yvMvyRQpTztkd0RzPRjxtiz8kQDZTZofC
-        qHcv+semoMd/lsS9hGJblLctlufvVPZZpj64pnk1zr86Roh4tdNJxm1Gv/sO3BtsgeAtQ2
-        nNh1tmWt6R8nOMSaV/7N5PjLeSSsGjM1Xd9jLHiiN42N6yfWFnvQdar7yYC9uqg0ZxIUB7
-        +EKqOpyJEt/qwIEKakBcfQ7+RQTJ/B6gFnCiB4nJNT0DsvVV4XQr5FMDGrk7lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1675268681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=2bdI4TPDn3elYpB6pyzaj01gJj8K33x3qyWJhEoPEM8=;
-        b=LbZGUF6QSs3y7wOPxFBhRqB3D0H3roqdQ1rL4qwrx6C4NA+YvZav2ZA1UpoBrhfmyb32AK
-        60B99/Wj/zACupc15wXGeqaIR3n6bdP7FlseI4WUKfkNoQLDygHUbzLpHbqCVUN5UJVrJZ
-        iMVuJUphYI4qmdVYdJP7k0muIDqSHqjPTZiT2acd57PN1kpDMrXHdZXfbR1+CCjU1aEGH6
-        87mqI3x953PArjO7tzAnfwy9oz7WKz7R7t1xfLVyyV0lL5IGPDkY6h2i78j0T9zZuOz3dG
-        LA5He9zX9NXWbqKidnWTF2WEZUWkn6ywdCPiNdyaNml2mLB7tRW5+fJqffBjhg==
-ARC-Authentication-Results: i=1;
-        rspamd-5fb8f68d88-2xntm;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Sponge-Versed: 3d14cdde207f1031_1675268682015_240600750
-X-MC-Loop-Signature: 1675268682015:2355844550
-X-MC-Ingress-Time: 1675268682015
-Received: from pdx1-sub0-mail-a221.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.123.200.120 (trex/6.7.1);
-        Wed, 01 Feb 2023 16:24:42 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a221.dreamhost.com (Postfix) with ESMTPSA id 4P6S1M6qCqz9t;
-        Wed,  1 Feb 2023 08:24:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1675268681;
-        bh=2bdI4TPDn3elYpB6pyzaj01gJj8K33x3qyWJhEoPEM8=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=Udzue+WIdmQOAtw7WDMz1KaYZmcXYFd6qamRuW7aQPDrtdWa4shS7pcl5orFfkVKJ
-         GuhZ8gUO031w5RLJI8K7HMhU+TbMpPK+kJ18I2wpBJj2zEy5mCTv2kbjydDSEDKxXr
-         IJu3TYdTBXbA8NhyqiX8rBH739c62xVrVw9q6ATkjttoqEQFMWeDeVrG1S9NpED7fx
-         m2ohl51LHhUK/V57sb1r2jCsX4oJX3FAuzWH2uEc6Gldn0CrVf+AndPlgWG+z+mR/y
-         Qw/3Esbdav7osvAx5PnkybLo4vJjiLuntt/LmqKTZ3gP3CU9NHqBFC6M6o3+wqiIn5
-         22V+0Kqw35iHg==
-Date:   Wed, 1 Feb 2023 07:57:29 -0800
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Fan Ni <fan.ni@samsung.com>
-Cc:     "alison.schofield@intel.com" <alison.schofield@intel.com>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cxl/region: Fix null pointer dereference for resetting
- decoder
-Message-ID: <20230201155729.wnil24dijtd2rfhl@offworld>
-References: <CGME20221215170915uscas1p262ccdf32fb2ccd3840189376c2793d06@uscas1p2.samsung.com>
- <20221215170909.2650271-1-fan.ni@samsung.com>
+        Wed, 1 Feb 2023 11:00:10 -0500
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83B92111
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 08:00:08 -0800 (PST)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-501c3a414acso251970717b3.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 08:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WhQ1Ee4LLK1kS+iLl0ypqNTcaPW0swiiMAeM4qNO1x0=;
+        b=ZuJ6hfKixfCR8eRtPorkBH+0LBGtz2T01ts/KGzMJgVgZdeT+2RaoLi+/gD4/aIHrE
+         grNdiJG2U4UyNgy5nZ6QlEI+wcjygwuWEypAH3UNixt+sBtOYaHNWq8hvrD4WjoSesCt
+         wBB4t2iSY+QymEd4EGTfXs1oKwOZnJE89QP+ThYqKEGhC0daIpl80BLdwzeLLZsyPzLT
+         bWm5yef8G/kzfGSBLAkzZzyrTcGeRkhvNIGUDKyfyQBSw3jFibu7bo3hi9d5sg/Nbcd2
+         wBVDUyQOnoPjUeQHvJJ+TJi6f59TPdbmUyZ2sMn1y8+4YmcxnpPzEIx9ObqLTNo3gA56
+         qpQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WhQ1Ee4LLK1kS+iLl0ypqNTcaPW0swiiMAeM4qNO1x0=;
+        b=XE1JWSBFkgalVJ50jzNTNiG+Fqfhl+ydo9KCSpmbnuM9jBud5GrX9HOWiIsKVRvOH1
+         LLTXZDoNSxwW1TCWpKMaWDUU2p4whIoTI50gs7VKmphFQNxJga+MFB3iEqAYwv9ZyxP5
+         T2XA3hjlzPmXw3qGN8mv4fd91raQZj/ldjVoiWB5c3wCHp4N1ikDAaUk0ZMhtJlcVwqz
+         ERyB4UlTAfC7XMsvPZv84Lf9j4vekiqt2pIfz8ti0V3v53DGaL9eAZ0ZBPeVNsXQoJO1
+         odXvCdoq/3BX58AXEoQ38WIo+rr5/RSUbZxxlvPbzhBR9sNF/j3m/VHFrvU2wBuJE1YW
+         vaXg==
+X-Gm-Message-State: AO0yUKUfPIvmU7vNuwSs/FBH7XpmYN08vwVdNV2tiujGpMgVuthPlZci
+        3OeCxntEfj9uX4nCoriojTjdOpDOXSgSNsrGW05KhQ==
+X-Google-Smtp-Source: AK7set8VLqG28iKN+AIlAC7bpaZD8Nv0jXcErIJZStDGyHs3T/Ubbv5KszE/fNkUhDBcyR81IeQGtsQq6UskLEyruDM=
+X-Received: by 2002:a05:690c:446:b0:506:3acd:e022 with SMTP id
+ bj6-20020a05690c044600b005063acde022mr246450ywb.228.1675267207966; Wed, 01
+ Feb 2023 08:00:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221215170909.2650271-1-fan.ni@samsung.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230201054522.162611-1-shahuang@redhat.com>
+In-Reply-To: <20230201054522.162611-1-shahuang@redhat.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Wed, 1 Feb 2023 08:00:00 -0800
+Message-ID: <CAHVum0eH_XrrPiviYYWEu=FouhEXeWq1mcx0=BoiF8NaoyVj_g@mail.gmail.com>
+Subject: Re: [PATCH] selftests: KVM: Replace optarg with arg in guest_modes_cmdline
+To:     shahuang@redhat.com
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,30 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Dec 2022, Fan Ni wrote:
+On Tue, Jan 31, 2023 at 9:46 PM <shahuang@redhat.com> wrote:
+>
+> From: Shaoqin Huang <shahuang@redhat.com>
+>
+> The parameter arg in guest_modes_cmdline not being used now, and the
+> optarg should be replaced with arg in guest_modes_cmdline.
+>
+> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/lib/guest_modes.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/kvm/lib/guest_modes.c b/tools/testing/selftests/kvm/lib/guest_modes.c
+> index 99a575bbbc52..1f2dca4520ab 100644
+> --- a/tools/testing/selftests/kvm/lib/guest_modes.c
+> +++ b/tools/testing/selftests/kvm/lib/guest_modes.c
+> @@ -127,7 +127,7 @@ void guest_modes_cmdline(const char *arg)
+>                 mode_selected = true;
+>         }
+>
+> -       mode = strtoul(optarg, NULL, 10);
+> +       mode = strtoul(arg, NULL, 10);
 
->Not all decoders have a reset callback.
->
->The CXL specification allows a host bridge with a single root port to
->have no explicit HDM decoders. Currently the region driver assumes there
->are none.  As such the CXL core creates a special pass through decoder
->instance without a commit/reset callback.
->
->Prior to this patch, the ->reset() callback was called unconditionally when
->calling cxl_region_decode_reset. Thus a configuration with 1 Host Bridge,
->1 Root Port, and one directly attached CXL type 3 device or multiple CXL
->type 3 devices attached to downstream ports of a switch can cause a null
->pointer dereference.
->
->Before the fix, a kernel crash was observed when we destroy the region, and
->a pass through decoder is reset.
->
->The issue can be reproduced as below,
->    1) create a region with a CXL setup which includes a HB with a
->    single root port under which a memdev is attached directly.
->    2) destroy the region with cxl destroy-region regionX -f.
->
->Fixes: 176baefb2eb5 ("cxl/hdm: Commit decoder state to hardware")
->Signed-off-by: Fan Ni <fan.ni@samsung.com>
+While you are at it, can you also change strtoul to atoi_non_negative()?
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+An underflow negative number will print an error message with a wrong
+positive guest mode ID not passed by the user.
+
+>         TEST_ASSERT(mode < NUM_VM_MODES, "Guest mode ID %d too big", mode);
+>         guest_modes[mode].enabled = true;
+>  }
+> --
+> 2.39.0
+>
