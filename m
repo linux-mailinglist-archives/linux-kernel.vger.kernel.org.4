@@ -2,92 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE673686AE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBC3686AEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjBAPzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:55:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        id S232678AbjBAP4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:56:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbjBAPzJ (ORCPT
+        with ESMTP id S232921AbjBAPz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 10:55:09 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEA97751C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 07:54:33 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id dr8so31139543ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 07:54:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bXWqBgMOKv5SnbTsUMFlWPl1mxwCaGFXLbhg+69mJBo=;
-        b=Sqps5nHkF4vfpjGc70sbUfCvx2Zc88TDnLNGyx0VmKmTxcv6JhSgWBbqee2E0+Q0KH
-         yEM4HUxIchphwRzb5/SMvgThKH7jdGa7pafz04o1GUcvwGaMyejbgk4PWSeN+stZoGUm
-         XTcTPqYBDzKAwpYXi5GPegLxK/7GH8Bf2kmv0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bXWqBgMOKv5SnbTsUMFlWPl1mxwCaGFXLbhg+69mJBo=;
-        b=oo+Qe1+6I3Nu9nA4hhxy+VdsqJGwTGm6r+bbELCMg/UkdkYz3FMbVB3C6723+aiB+z
-         BtVETH2mkh922UxlB9MrmeIeF4xPm5IOKUgf7KW2ygiQ0BEClmjQipVIsWRylPbbjuBE
-         k5QAxhFHX3TseyLTgtprE8GEf46Tk7q3h4Nw+uIaUUiIdzssErEekS2TUqI/AVg+vMgz
-         OqInKVLl1CgFyvS6SN1LJRo4bZvi+t/1YqXq0l+usjLenSrsJ0XjDfQxQzguGWRiR8ok
-         5Vxiy5wTb9gedovYmOC2dXyS70vp6siuJLPt7d9v+AHI2w8mrQrjC28Dvj4ln+Q3mrOT
-         bv6w==
-X-Gm-Message-State: AO0yUKXse01D/RM/UKZDOJjrqRoMa5NJeiY7qbIsgdJ+tQe0itMB+g3I
-        pjN4Vpk+3QhjBOHnFGxAm376tQrEagZfPiS86LR7J2I5Hq4pKA==
-X-Google-Smtp-Source: AK7set8r8OoF7qrGxnNKdUpD+LKehxKmaT8vY+FzeL9YI2CliNZodxhhagWUKTRdSPk3WuV2thOqVJYqKrXrhfb22XI=
-X-Received: by 2002:a17:906:709:b0:88d:5c5d:6a6f with SMTP id
- y9-20020a170906070900b0088d5c5d6a6fmr855247ejb.236.1675266872159; Wed, 01 Feb
- 2023 07:54:32 -0800 (PST)
+        Wed, 1 Feb 2023 10:55:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C84EFBB;
+        Wed,  1 Feb 2023 07:55:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0710F6183D;
+        Wed,  1 Feb 2023 15:55:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B05DC433D2;
+        Wed,  1 Feb 2023 15:55:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675266956;
+        bh=40GdS+rwMYs2Yful9xBXhZyaR+bABLOD5AQzvE0Jcy8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LSXHN+KXIG4sZ7SLuxnI104UUjwyvka7b+zEp1Txr+SVJdOj/z8EayxbvK7W0L/MN
+         EUO/dttq/4p+zrlhUDH623Hai3iYH82IAyx5CQE1hySUwumSgmHd/LlQc9LRPXDq8m
+         cw7Ev4Hd4z9SHRyumWCJt/YtrJoOSVECPv80xCPKucXDzQjGenTuyntZYaUGcsAa1F
+         xgNzY948Fh9/s35jyiBnYXm1BUz0aouMFteTKVAGFKD19AHPMXUwezjKldDyO57vBg
+         CZbZTNGIj+kXHoX4/F0osV31cqVCbmNvvXHtlC2VuZhTN4D68K4FuLbrhqdWpWFnVJ
+         EQYgjUrVAfVOg==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     linux-trace-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH v3 00/10] tracing: Add fprobe events
+Date:   Thu,  2 Feb 2023 00:55:53 +0900
+Message-Id:  <167526695292.433354.8949652607331707144.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-References: <20221111093702.80975-1-zhangjiachen.jaycee@bytedance.com> <CAFQAk7isS3AgkU_nMum8=iqy8NgLdGN5USq4gk_TE8SUzRr4tQ@mail.gmail.com>
-In-Reply-To: <CAFQAk7isS3AgkU_nMum8=iqy8NgLdGN5USq4gk_TE8SUzRr4tQ@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 1 Feb 2023 16:54:21 +0100
-Message-ID: <CAJfpegtqGDt4fnDsLtLEhg3ysw5TtfPamJ18TGSpSJve94KNzQ@mail.gmail.com>
-Subject: Re: [PATCH] fuse: initialize attr_version of new fuse inodes by fc->attr_version
-To:     Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Nov 2022 at 09:52, Jiachen Zhang
-<zhangjiachen.jaycee@bytedance.com> wrote:
->
-> On Fri, Nov 11, 2022 at 5:37 PM Jiachen Zhang
-> <zhangjiachen.jaycee@bytedance.com> wrote:
-> >
-> > The FUSE_READDIRPLUS request reply handler fuse_direntplus_link() might
-> > call fuse_iget() to initialize a new fuse_inode and change its attributes.
-> > But as the new fi->attr_version is always initialized with 0, even if the
-> > attr_version of the FUSE_READDIRPLUS request has become staled, staled attr
-> > may still be set to the new fuse_inode. This may cause file size
-> > inconsistency even when a filesystem backend is mounted with a single FUSE
-> > mountpoint.
-> >
-> > This commit fixes the issue by initializing new fuse_inode attr_versions by
-> > the global fc->attr_version. This may introduce more FUSE_GETATTR but can
-> > avoid weird attributes rollback being seen by users.
-> >
-> > Fixes: 19332138887c ("fuse: initialize attr_version of new fuse inodes by fc->attr_version")
->
-> Ping..., and the Fixes tag should be:
->
-> Fixes: fbee36b92abc ("fuse: fix uninitialized field in fuse_inode")
+Hi,
 
-Do you have a reproducer?
+Here is the 3rd version of improve fprobe and add a basic fprobe event
+support for ftrace (tracefs) and perf. Here is the previous version.
 
-Thanks,
-Miklos
+https://lore.kernel.org/all/167518170369.336834.15310137713178284219.stgit@mhiramat.roam.corp.google.com/T/#u
+
+This version fixes a bug reported by kernel test robot[9/10].
+
+With this fprobe events, we can continue to trace function entry/exit
+even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
+CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
+it is not available if the architecture only supports
+CONFIG_DYNAMIC_FTRACE_WITH_ARGS (e.g. arm64). And that means kprobe
+events can not probe function entry/exit effectively on such architecture.
+But this problem can be solved if the dynamic events supports fprobe events
+because fprobe events doesn't use kprobe but ftrace via fprobe.
+
+With this series, user can add new events on the entry and exit of kernel
+functions (which can be ftraced). Unlike kprobe events, the fprobe events
+can only probe the function entry and exit, the IP address will have some
+offsets from the symbol address. And it can only trace the function args,
+return value, and stacks. (no registers)
+For probing function body, users can continue to use the kprobe events.
+
+The fprobe events syntax is here;
+
+ f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
+ f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
+
+E.g.
+
+ # echo 'f vfs_read $arg1'  >> dynamic_events
+ # echo 'f vfs_read%return $retval'  >> dynamic_events
+ # cat dynamic_events
+ f:fprobes/vfs_read_entry vfs_read arg1=$arg1
+ f:fprobes/vfs_read_exit vfs_read%return arg1=$retval
+ # echo 1 > events/fprobes/enable
+ # head -n 20 trace | tail
+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+ #              | |         |   |||||     |         |
+              sh-142     [005] ...1.   448.386420: vfs_read_entry: (vfs_read+0x4/0x340) arg1=0xffff888007f7c540
+              sh-142     [005] .....   448.386436: vfs_read_exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=0x1
+              sh-142     [005] ...1.   448.386451: vfs_read_entry: (vfs_read+0x4/0x340) arg1=0xffff888007f7c540
+              sh-142     [005] .....   448.386458: vfs_read_exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=0x1
+              sh-142     [005] ...1.   448.386469: vfs_read_entry: (vfs_read+0x4/0x340) arg1=0xffff888007f7c540
+              sh-142     [005] .....   448.386476: vfs_read_exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=0x1
+              sh-142     [005] ...1.   448.602073: vfs_read_entry: (vfs_read+0x4/0x340) arg1=0xffff888007f7c540
+              sh-142     [005] .....   448.602089: vfs_read_exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=0x1
+
+Future works:
+ - Trace multiple function entry/exit (wildcard).
+ - Integrate it with the function graph tracer.
+ - Use ftrace_regs instead of pt_regs and remove dependency of
+   CONFIG_DYNAMIC_FTRACE_WITH_REGS.
+ - Support (limited) register access via ftrace_regs.
+ - Support fprobe event by perf probe.
+ - Support entry data accessing from exit event.
+ - Support BTF for trace arguments.
+
+This fprobe event may eventually replace the kprobe events for
+function entry and exit on some archs (e.g. arm64).
+
+Here's my current migration (kretprobe to fprobe) idea:
+
+Phase 1. introduce fprobe events. (THIS)
+Phase 2. introduce generic function graph shadow stack
+Phase 3. Replace the rethook with function shadow stack
+         and use ftrace_regs in fprobe handlers.
+Phase 4. Extend this fprobe support to other archs.
+
+Even if kretprobe event is replaced with fprobe event, tracefs user can
+transparently use fprobe events for function entry/exit with 'p:...'
+and 'r:...' syntax (for backward compatibility.)
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (10):
+      fprobe: Pass entry_data to handlers
+      lib/test_fprobe: Add private entry_data testcases
+      fprobe: Add nr_maxactive to specify rethook_node pool size
+      lib/test_fprobe: Add a test case for nr_maxactive
+      fprobe: Skip exit_handler if entry_handler returns !0
+      lib/test_fprobe: Add a testcase for skipping exit_handler
+      docs: tracing: Update fprobe documentation
+      fprobe: Pass return address to the handlers
+      tracing/probes: Add fprobe events for tracing function entry and exit.
+      selftests/ftrace: Add fprobe related testcases
+
+
+ Documentation/trace/fprobe.rst                     |   16 
+ include/linux/fprobe.h                             |   17 
+ include/linux/rethook.h                            |    2 
+ include/linux/trace_events.h                       |    3 
+ kernel/kprobes.c                                   |    1 
+ kernel/trace/Kconfig                               |   14 
+ kernel/trace/Makefile                              |    1 
+ kernel/trace/bpf_trace.c                           |   19 
+ kernel/trace/fprobe.c                              |   45 +
+ kernel/trace/rethook.c                             |    3 
+ kernel/trace/trace.c                               |    3 
+ kernel/trace/trace.h                               |   11 
+ kernel/trace/trace_fprobe.c                        | 1125 ++++++++++++++++++++
+ kernel/trace/trace_probe.c                         |    4 
+ kernel/trace/trace_probe.h                         |    3 
+ lib/test_fprobe.c                                  |  109 ++
+ samples/fprobe/fprobe_example.c                    |   11 
+ .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 
+ .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |   88 ++
+ 19 files changed, 1470 insertions(+), 31 deletions(-)
+ create mode 100644 kernel/trace/trace_fprobe.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
