@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7066869A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9206869A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 16:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjBAPLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 10:11:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
+        id S230189AbjBAPLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 10:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbjBAPK2 (ORCPT
+        with ESMTP id S232045AbjBAPK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Feb 2023 10:10:28 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373595BA3;
-        Wed,  1 Feb 2023 07:09:59 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id qw12so36384652ejc.2;
-        Wed, 01 Feb 2023 07:09:59 -0800 (PST)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E95F6A4A;
+        Wed,  1 Feb 2023 07:10:00 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id me3so52324270ejb.7;
+        Wed, 01 Feb 2023 07:10:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w+s0R1N5QaJjHALhKlJSDlz82DJDrm00TxCc4cLTynw=;
-        b=Qy9VJITeqinyGIT2g5k9PON9xuMsEZT32GMlDTA7zKIvzrlg5Z211EN1RzNeTX/mNx
-         nB5CLyJHh3Jki7YQ3/feplUozmCCzwX1ABJbBEk2RbAJxdV8EcftopU3SZwc3oXTvymF
-         k6VS/x2dgKnZDlwFr4kbgcolrs3bANv222/mQeCp/UpBMsRydfmSh4USN4/KodAA5dCM
-         o23R5/YrTratVJXjGVfe8Eeq3+LaMjQKspQXMG6ZS4KqDWY2ip5IdBJJj4j3VPheGkwI
-         8xeu6PT8TkD1oT+v3cdyuB4fH8botO5lAi08pY5ZdqYTdMxfETjNiF/QcxXgYqymXO3S
-         ZxxQ==
+        bh=udBAvOMF3811JfYnSoT7LY+mJh84zG4u72FA8SZ9FR4=;
+        b=OHVpVmxeTI4WIC/hMW77qq/3M0DYZ8oeiiu5IwlZPDc2WrZd5zGiPSY3+MgQshnyhq
+         q8RRXneNaoThH+BSsl7yGpGAXOIdI5GQ2o+idk+Ep7WHv7x60cthSzv9HyAhJdcE+wfc
+         11xvrWuwk/WVhOz/ALiP14scR4RIIfgymPP+u4yoVFyJRZRgNXbAUL83fypVgRO/8MED
+         dbSP9u/V6eFX/Hgjet+gdwWTsjdEo8acvqFDhgqNb1+3macxbT2UqHm0ognGTVKgR3ji
+         b1p5ScJtqq3hCyJWVjyfnl4D/LceUb0ApBREvhvbaGZb+5LWDvVt3VnZbjRjqHmtAc6Q
+         qwJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=w+s0R1N5QaJjHALhKlJSDlz82DJDrm00TxCc4cLTynw=;
-        b=FZlRI6RK/Sc5gg0MCcZ7p6deM5MSt1xxfJg9rVWr24clyU+pHbVWTFayO50FeVLsye
-         y5FA366yOzJCXp+QvZCa94GTH5NDVc57c2XjZaGRXEUg64YZjm0Qrd7XQ2pJo6Wfzzxk
-         iGHb/7AxPj4OnC67j0c5cPD2d1ArWzZX0dZjXdceoEKz76R4pM+qJfRjvFe/D3wbDuKO
-         MpRSDMq5YU7thONKuGn0bIHNrj7ICB/PKLGNASSukaXhfEby0TrmR8XkCpaFMBftLpmm
-         CqcbwCu3gAgH5iU81XobYlkNFpnDXt8+M8smQpM96bRpgBGIZEQL3fIvCz4aPjnFQlYl
-         4QCg==
-X-Gm-Message-State: AO0yUKXkUYljtJt/UYHnQFDkT/cxvxpohkYx0Kh/KOmPVu8UGxKFD6VJ
-        /bp9gnC9iLnhwhN2niPhRoz0/B5xJNtCbg==
-X-Google-Smtp-Source: AK7set8ZyNUoXKvFo6xr0GrDAZKFdBPmefZVr+mqOJR23Id/PYszl3ggYPzgMQme0vYI5wfLbPhxHQ==
-X-Received: by 2002:a17:906:688b:b0:87b:7c1d:e02b with SMTP id n11-20020a170906688b00b0087b7c1de02bmr2263849ejr.36.1675264197595;
-        Wed, 01 Feb 2023 07:09:57 -0800 (PST)
+        bh=udBAvOMF3811JfYnSoT7LY+mJh84zG4u72FA8SZ9FR4=;
+        b=AhFMEMzO+so2ItRBqS0N1pJcafxsOq23BsiihevxFADEUynU5KPB4mUrmeWiHmGOQx
+         JgN/YrfvS2U9/Am1mG2U01RONH14w9EgKhSvLT1Og7S+VcWof4cgHtI89v41VyBG6cOc
+         G1wPbC3i8SBURnG3ubSHy06kdJIYs0jRRMDRGxtLApLZplCoOFBR/0f2mJupaBoEPxa1
+         fEGxGlJOmT+CrFcHMHuN9xteKwUlDRBltWRslCZ8cvjsO17NRrA34+lmRKLoY1oCNwEf
+         ioZTwPCGAK/8u/TN/YxDuhIGAU24UTMOf+O5CXZMx7i2+FCJZjPZLIy3z90hT6FpBZRs
+         WHgw==
+X-Gm-Message-State: AO0yUKXO7BDJQEnBh3UClnNoC8myNs+GF0+dvPN31zDrGf2PMp/NUkV4
+        Ni3tJ0NDuJFycf0V6oUbOhztK48Us2n6PA==
+X-Google-Smtp-Source: AK7set8Zq5qLxwsm8eqV1R5IX9i4Gxd//12L/Vowaguej6tjOQpjg4wElp4KSFf0R3ZExOJsSuF20g==
+X-Received: by 2002:a17:907:6d15:b0:877:6549:bb6 with SMTP id sa21-20020a1709076d1500b0087765490bb6mr3397994ejc.58.1675264198532;
+        Wed, 01 Feb 2023 07:09:58 -0800 (PST)
 Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id fe15-20020a1709072a4f00b008845c668408sm6627147ejc.169.2023.02.01.07.09.56
+        by smtp.gmail.com with ESMTPSA id fe15-20020a1709072a4f00b008845c668408sm6627147ejc.169.2023.02.01.07.09.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 07:09:57 -0800 (PST)
+        Wed, 01 Feb 2023 07:09:58 -0800 (PST)
 From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
@@ -63,9 +63,9 @@ Cc:     Uladzislau Rezki <urezki@gmail.com>,
         Bob Pearson <rpearsonhpe@gmail.com>,
         Ariel Levkovich <lariel@nvidia.com>,
         Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: [PATCH 11/13] rcuscale: Rename kfree_rcu() to kfree_rcu_mightsleep()
-Date:   Wed,  1 Feb 2023 16:09:52 +0100
-Message-Id: <20230201150954.409693-2-urezki@gmail.com>
+Subject: [PATCH 12/13] doc: Update whatisRCU.rst
+Date:   Wed,  1 Feb 2023 16:09:53 +0100
+Message-Id: <20230201150954.409693-3-urezki@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230201150954.409693-1-urezki@gmail.com>
 References: <20230201150954.409693-1-urezki@gmail.com>
@@ -81,28 +81,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kfree_rcu()'s single argument name is deprecated therefore
-rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
-underline that it is for sleepable contexts.
+The kfree_rcu() macro is deprecated. Rename it to the
+kfree_rcu_mightsleep() in this documentation.
 
 Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 ---
- kernel/rcu/rcuscale.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/RCU/whatisRCU.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index 4120f94030c3..e82ec9f9a5d8 100644
---- a/kernel/rcu/rcuscale.c
-+++ b/kernel/rcu/rcuscale.c
-@@ -715,7 +715,7 @@ kfree_scale_thread(void *arg)
- 			// is tested.
- 			if ((kfree_rcu_test_single && !kfree_rcu_test_double) ||
- 					(kfree_rcu_test_both && torture_random(&tr) & 0x800))
--				kfree_rcu(alloc_ptr);
-+				kfree_rcu_mightsleep(alloc_ptr);
- 			else
- 				kfree_rcu(alloc_ptr, rh);
- 		}
+diff --git a/Documentation/RCU/whatisRCU.rst b/Documentation/RCU/whatisRCU.rst
+index 2c5563a91998..8eddef28d3a1 100644
+--- a/Documentation/RCU/whatisRCU.rst
++++ b/Documentation/RCU/whatisRCU.rst
+@@ -597,10 +597,10 @@ to avoid having to write your own callback::
+ If the occasional sleep is permitted, the single-argument form may
+ be used, omitting the rcu_head structure from struct foo.
+ 
+-	kfree_rcu(old_fp);
++	kfree_rcu_mightsleep(old_fp);
+ 
+-This variant of kfree_rcu() almost never blocks, but might do so by
+-invoking synchronize_rcu() in response to memory-allocation failure.
++This variant almost never blocks, but might do so by invoking
++synchronize_rcu() in response to memory-allocation failure.
+ 
+ Again, see checklist.rst for additional rules governing the use of RCU.
+ 
 -- 
 2.30.2
 
