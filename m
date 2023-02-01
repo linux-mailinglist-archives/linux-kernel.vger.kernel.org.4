@@ -2,181 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B33686B66
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551EE686B69
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjBAQTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S231786AbjBAQTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:19:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjBAQTK (ORCPT
+        with ESMTP id S231237AbjBAQTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:19:10 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD4666EEF;
-        Wed,  1 Feb 2023 08:19:09 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id DB2875C01EC;
-        Wed,  1 Feb 2023 11:19:05 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 01 Feb 2023 11:19:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1675268345; x=
-        1675354745; bh=hGkZ2VpFg3uEzHOUEbaF+QJhRmurf7E0YdJuys1SWPA=; b=T
-        Xgb+B8iIDbmLTaLqjnSQaeoxd6Vz+4rvJKnCfiXuN9ge/yOBYIyYAQmrARzqFk3v
-        2i5dkbbwVtrvJ4N9U8mCSzI0/lV10p0HR3L8f4wDBOOS7asJ0yfnz7DUHQYHzGbB
-        psZiOOua5uDlFeaYQFL41+wkfOIfIJ7PYM9rCJEj3jzgJoBtiAO7i4RM8QbOaJrR
-        0xmxQpPfhvFZkzDDAANh4xnykZfuE6CTiKMzaX2+GA1SnrioM/6W/EYxJE/I96ci
-        4DNjbdnMYLZw8x1Ltod8PF0wHjOs8HrC4hcNLY2KYC2J/YdyDARqiKxbODOlostw
-        P0BtaVxUzahCTum4RaR9w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675268345; x=1675354745; bh=hGkZ2VpFg3uEzHOUEbaF+QJhRmur
-        f7E0YdJuys1SWPA=; b=QyOY53v5EXxOsKBKuoy6Yr/bJWJV/6PvdMaBY0ceMUyZ
-        TJ6JquKyHiyC2Bpr92u5HvdmX6mATLyY8QisKKKigWq2ejcF78AxwVA5rQmBNJ8b
-        sV3z9me4Z6xDOx1U/zVnt+xUl5EeLv9jCGCCANfVgax+yybResU7DQAtvWpz9J/l
-        O2naZLCvnK8n3+qvbia4fukO5IiC0gL3iqoWh3H2zM/aO/1RxNJWf2aaCUn4d5RA
-        yaKdIhd84HezTZsP6r0hsOu5+PJrT+X8HrqnZsCl3eNDjIwnRMMXo6WvKH1G7uKl
-        hrkLwl5LLNwvrj7Kg8zG5yN7fbd5ZL7l6A1ABYa8XA==
-X-ME-Sender: <xms:-ZDaYzgqUR9xp2oDCZI01ZFYKBmM2ibmCOO4ghOBBH_oDOACnPM0CA>
-    <xme:-ZDaYwBmEwUCHXqFFkz2Y5pw3OVDL4RcdUHitjnhVHJhhuAWyAOGvdHOt7-2FZoSf
-    6Q38mk1cjVoWrM>
-X-ME-Received: <xmr:-ZDaYzHGRpYd5j2eGse-RwGSswCYVXwnQ032PSBEn6bdmrvdCktQTYz8V5Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefiedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
-    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:-ZDaYwTVQQosofRRjTdfs0UTm08CWvG3snzDzDUTgDjQupHJZcyBwg>
-    <xmx:-ZDaYwwPXZcnoi7UA_f-N_PboXyC3LurLurAT8mxMul3H02Wt1GCXg>
-    <xmx:-ZDaY27MGtZUp8qdDQDdQUgdfusJ0BVbCNZVOcJDQyGUh9_vjKgX0w>
-    <xmx:-ZDaY79x3qz0adSGL85DMrgq75i3beUKGEbxc1rBFG0Tgb9ZLq_JHg>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 1 Feb 2023 11:19:04 -0500 (EST)
-Date:   Wed, 1 Feb 2023 11:18:54 -0500
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] block: Support creating a struct file from a
- block device
-Message-ID: <Y9qQ9i6rNvJWPbV+@itl-email>
-References: <20230126033358.1880-1-demi@invisiblethingslab.com>
- <20230126033358.1880-2-demi@invisiblethingslab.com>
- <Y9d692WEX/ZvBhXI@infradead.org>
- <Y9gZAJGgdjFtsm9I@itl-email>
- <Y9jW73uAtE3HdCou@infradead.org>
- <Y9lBlKD3U/jMug9j@itl-email>
- <Y9oYs+KycfdFYlu2@infradead.org>
+        Wed, 1 Feb 2023 11:19:32 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6BD6F20D;
+        Wed,  1 Feb 2023 08:19:28 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id c10-20020a17090a1d0a00b0022e63a94799so2739098pjd.2;
+        Wed, 01 Feb 2023 08:19:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L51QcybdvZxC0Y33sJNQYA8JyEbOgptDcqBfhpm3m8c=;
+        b=QyMFtOrOtBs6vi0ArDT0UrCKsg0l4+hDJVlT0HlTEH+lt9E833uCPsVHcAAzu40dL3
+         O5JlJrazRZmgPzZWftIE1BWjgfosw2dVNWn0KXvA3d337ne1lCz1UkyycqpFunkgfUEJ
+         DDA3iNLJfqr9fU/+phvsHr2WGgLj8nDk/kjwBehBwJbneJqeEN8SdWu02F/cmDE6smuA
+         Y/ghYckg2l3lPyg09bTlhUvSlxfFUs17BXYP6t17B91oBUHszaLWj1nQzRIs4sSes5O6
+         ouM4cX4lWour33n9svAo6MoHGNQ6LPhe5gldtFqpGmWssqv2nyIGu2mugMHja3kUZK6d
+         RO4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L51QcybdvZxC0Y33sJNQYA8JyEbOgptDcqBfhpm3m8c=;
+        b=BSerUxBfQ9PKiSGYOnbv2FsG/og6Bggwk4GmBt86uJJBpX92q43X5kb6ue9SLaZ9Iv
+         OBPl/ll4dImEUY0cVDg/g/sEZA1Rx9rPr3QlXIEXTuB2wxKeVJLgSqNIv4w5gtif0Jqj
+         o8SDEbcV8ESYCiLK6zKh6l6pRhCoc0NvzDD3ryh1kgbsOsgxf+7FEa9hOe8aEpCJTUgx
+         APSqYJGfr1YrjPOwh2wJ5ZKXt4mb4n0Na9vS9eUB62vnWhLw/06IkuocdjzPvjUXFsHI
+         GDkmC++B614lzoKyFtlea7PBmUbGDO/ZG8onYuJDG6v0M982T57PYtCvpZSNXjh6oRCv
+         SEyg==
+X-Gm-Message-State: AO0yUKUETkm5/N8d6yDlVQc425+4qqo2wSpxidk+VVnP0gdyH4EwJmrk
+        /Z8ThhK0vLQUCSQlwFlRM5c=
+X-Google-Smtp-Source: AK7set8EhnXKVPNM6SIPjuW7MGwCBpWV1VRZhfvColDvuSqyc1gDnLJD5mzQJ0AX9vc6nV6c0bsP5g==
+X-Received: by 2002:a17:903:20c4:b0:189:894c:6b48 with SMTP id i4-20020a17090320c400b00189894c6b48mr2505773plb.59.1675268367526;
+        Wed, 01 Feb 2023 08:19:27 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:ce3a:44de:62b3:7a4b])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1709026b8400b0019141c79b1dsm11792457plk.254.2023.02.01.08.19.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 08:19:26 -0800 (PST)
+Date:   Wed, 1 Feb 2023 08:19:23 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Stefan Schmidt <stefan@datenfreihafen.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] [v2] at86rf230: convert to gpio descriptors
+Message-ID: <Y9qRC2qz7ZbKslnb@google.com>
+References: <20230126162323.2986682-1-arnd@kernel.org>
+ <CAKdAkRQT_Jk5yBeMZqh=M1JscVLFieZTQjLGOGxy8nHh8SnD3A@mail.gmail.com>
+ <CAKdAkRSuDJgdsSQqy9Cc_eUYuOfFsLmBJ8Rd93uQhY6HV8nN4w@mail.gmail.com>
+ <77b78287-a352-85ae-0c3d-c3837be9bf1d@datenfreihafen.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pHrCnqjgacOmsNWC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9oYs+KycfdFYlu2@infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <77b78287-a352-85ae-0c3d-c3837be9bf1d@datenfreihafen.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 01, 2023 at 01:42:37PM +0100, Stefan Schmidt wrote:
+> Hello Dmitry.
+> 
+> On 01.02.23 01:50, Dmitry Torokhov wrote:
+> > On Tue, Jan 31, 2023 at 3:52 PM Dmitry Torokhov
+> > <dmitry.torokhov@gmail.com> wrote:
+> > > 
+> > > Hi Arnd,
+> > > 
+> > > On Thu, Jan 26, 2023 at 8:32 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> > > > 
+> > > >          /* Reset */
+> > > > -       if (gpio_is_valid(rstn)) {
+> > > > +       if (rstn) {
+> > > >                  udelay(1);
+> > > > -               gpio_set_value_cansleep(rstn, 0);
+> > > > +               gpiod_set_value_cansleep(rstn, 0);
+> > > >                  udelay(1);
+> > > > -               gpio_set_value_cansleep(rstn, 1);
+> > > > +               gpiod_set_value_cansleep(rstn, 1);
+> > > 
+> > > For gpiod conversions, if we are not willing to chase whether existing
+> > > DTSes specify polarities
+> > > properly and create workarounds in case they are wrong, we should use
+> > > gpiod_set_raw_value*()
+> > > (my preference would be to do the work and not use "raw" variants).
+> > > 
+> > > In this particular case, arch/arm/boot/dts/vf610-zii-dev-rev-c.dts
+> > > defines reset line as active low,
+> > > so you are leaving the device in reset state.
+> > > 
+> > > Please review your other conversion patches.
+> > 
+> > We also can not change the names of requested GPIOs from "reset-gpio"
+> > to "rstn-gpios" and expect
+> > this to work.
+> > 
+> > Stefan, please consider reverting this and applying a couple of
+> > patches I will send out shortly.
+> 
+> Thanks for having another look at these patches. Do you have the same
+> concern for the convesion patch to cc2520 that has been posted and applied
+> as well?
 
---pHrCnqjgacOmsNWC
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 1 Feb 2023 11:18:54 -0500
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Jens Axboe <axboe@kernel.dk>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/7] block: Support creating a struct file from a
- block device
+There are no DT users of cc2520 in the tree, so while ideally reset line
+should not be left in "logical active" state at the end of the probe, we
+can deal with this in a follow up patch, I doubt it will lead to
+regressions as it is.
 
-On Tue, Jan 31, 2023 at 11:45:55PM -0800, Christoph Hellwig wrote:
-> On Tue, Jan 31, 2023 at 11:27:59AM -0500, Demi Marie Obenour wrote:
-> > While it is easy to provide userspace with an FD to any struct file, it
-> > is *not* easy to obtain a struct file for a given struct block_device.
-> > I could have had device-mapper implement everything itself, but that
-> > would have duplicated a large amount of code already in the block layer.
-> > Instead, I decided to refactor the block layer to provide a function
-> > that does exactly what was needed.  The result was this patch.  In the
-> > future, I would like to add an ioctl for /dev/loop-control that creates
-> > a loop device and returns a file descriptor to the loop device.  I could
-> > also see iSCSI supporting this, with the socket file descriptor being
-> > passed in from userspace.
->=20
-> And it is somewhat intentional that you can't.  Block device inodes
-> have interesting life times and are never directly exposed to userspace
-> at all.  They are internal, and only f_mapping of a file system inode
-> delegates to them or I/O.  Your patch now magically exposes them to
-> userspace.
+If I were really nitpicky I would adjust error messages when we fail to
+get GPIOs, but again, can be done as a followup.
 
-The intention is that the file descriptor is equvalent to what one would
-get by first creating the device and then opening it.  If it is not,
-that is a bug in one of my patches.
+> 
+> Arnd, if you have any concerns about the revert please speak up soon as I am
+> going to revert your patch and get these patches into my tree later today.
+> 
 
-> And it then bypasses all pathname and inode permission
-> based access checks and auditing.  So we can't just do it.
+Thanks.
 
-Accessing /dev/mapper/control is already enough to panic the kernel, so
-presumably only fully trusted userspace can make the ioctl to begin
-with.  Furthermore, this only allows a userspace process to get a file
-descriptor to the device-mapper device it itself created.
-
-> > blkdev_do_open() does not solve any problem for me at this time.
-> > Instead, it represents the code shared by blkdev_get_by_dev() and
-> > blkdev_get_file().  I decided to export it because it could be of
-> > independent use to others.  In particular, it could potentially
-> > simplify disk_scan_partitions() in block/genhd.c, pkt_new_dev() in
-> > pktcdvd, backing_dev_store() in zram, and f2fs_scan_devices() in f2fs.
->=20
-> All thse need to actually open the underlying device as they do I/O.
-> Doing I/O without opening the device is a no-go.
-
-blkdev_do_open() *does* open the device.  If it doesn=E2=80=99t, that=E2=80=
-=99s a bug.
-In v2 I will add the same access control checks that blkdev_get_by_dev()
-does.  Is this sufficient?
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---pHrCnqjgacOmsNWC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmPakPYACgkQsoi1X/+c
-IsGKyw/9Hs+s8xlrXGrh/7V99Ied9nhGpUllLF37lmssb7at6VDvhQQSI+KqMDWD
-NgFet7GmBJlNc7Hd8dJm7aLUxd/i7YqOJMD3vQabso0lTxcOtTZPilfwoqlmmeTn
-04C90lumgPgvCiRWkscLU0sNGb0zPxnbOw+jDSAjFfgWJ3ppU+D6gM7nYx09T7fG
-q4b6MQhVNRsJ80oo+70/kePnea9+pLJTmH+kSJ7aOEfggp7Zn2F2kZFT7Q+J/ES0
-gEUmcuVM6gqRXgfOPxyMDrxorU3kniuhBWeNB8ZtTie8u7ZY+5gEVhvY/gMLurYO
-B+DP1noCXsjC4c76dLX5igAznMbRZoSnttAHXqkZ+eV1mN8Vc/B9C5BtL1BDqSne
-YoFfPp8XCIZZVKyBQIxmbGHBSb/uQYaCZ3EtYekhftgTp4akrsVyu7aj6U/ivOSz
-0HY0nrip3HgaTqSpr138JIX4QsDyE+CFpvqXDOlTNOaVq/jIPMw2EEOOFYjC1nOB
-hy/qfiXHwj9ZGEKpMzIzht2ZWhRlPUa7uEui35UpWeSc/Oo6mEa2sqq3sXcTPr6W
-npUtkt+qHBs4udmVWahxR7GLmSq403GCRjS6VABu7WKTSV4AVZ/bLDfF73vGRbm6
-Iczu88uhIha88Q27yEnEkbszzwRWwPjYS2NqMRo0YUkiIv8ykXA=
-=TOo+
------END PGP SIGNATURE-----
-
---pHrCnqjgacOmsNWC--
+-- 
+Dmitry
