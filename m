@@ -2,150 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFC2686645
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E11686640
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 13:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjBAMwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 07:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
+        id S231157AbjBAMvx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Feb 2023 07:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbjBAMwh (ORCPT
+        with ESMTP id S231438AbjBAMvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 07:52:37 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B00C47096
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:52:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675255956; x=1706791956;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hzkSKWrXwWr6jUg/DUKJfBtRjECZNSsVG/IXJMuYf5s=;
-  b=U8nzfoCGdZq2EbPuV7IJrxd4p4aT/FaSEZrT2OWP4VLutZL06Eu0JOpL
-   vbmok+ieMoYxJkQM6E0XzfaKCahwGLgdUiPYfCHP56VE4NKdSH8u/3C6C
-   p1GOgds60UlY185IwRDC2VMmNyNj45I2JaZitVUK4XbgdUfOUQPOLQ8Hk
-   yfLhKtC2s6B8To5FePjnQUCs+EDiXQL62F+RLQmxYE1xDekynMRJYv8O7
-   PTF4s/vvVIQGbrvX1jKTkW6hw8AvVrzv9LWxrvts0E6KoOXRr/iw4DSrx
-   XDnX9P9EFM41aKdNUbukZuAo7qFuvQbbftYynrNCP7exE61jl0cstZiv0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="414340256"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="414340256"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 04:52:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10607"; a="838770332"
-X-IronPort-AV: E=Sophos;i="5.97,263,1669104000"; 
-   d="scan'208";a="838770332"
-Received: from lkp-server01.sh.intel.com (HELO ffa7f14d1d0f) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 01 Feb 2023 04:52:27 -0800
-Received: from kbuild by ffa7f14d1d0f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pNCbC-0005R4-0L;
-        Wed, 01 Feb 2023 12:52:26 +0000
-Date:   Wed, 01 Feb 2023 20:51:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fam-memcpy] BUILD SUCCESS
- fdcf66694e87642136df93fb2bc2f56c77cd568f
-Message-ID: <63da6055.9a5Rcl02Ha3ZjMh6%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 1 Feb 2023 07:51:51 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CA4410AE
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 04:51:49 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-315-EUqCJtIWNAG0cMue-ssItw-1; Wed, 01 Feb 2023 12:51:47 +0000
+X-MC-Unique: EUqCJtIWNAG0cMue-ssItw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Wed, 1 Feb
+ 2023 12:51:46 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.045; Wed, 1 Feb 2023 12:51:46 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     =?iso-8859-1?Q?=27Thomas_Wei=DFschuh=27?= <linux@weissschuh.net>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 0/8] objtool: reduce maximum memory usage
+Thread-Topic: [PATCH v2 0/8] objtool: reduce maximum memory usage
+Thread-Index: AQHZNSfK1Pp9dgy34k2krggntueDJq66C5XQ
+Date:   Wed, 1 Feb 2023 12:51:46 +0000
+Message-ID: <093273245f624bcab3fac9d391f6d249@AcuMS.aculab.com>
+References: <20221216-objtool-memory-v2-0-17968f85a464@weissschuh.net>
+ <20230129214339.76hyytrllggbvuat@t-8ch.de>
+ <20230131000356.5u2siglndnjyarql@treble>
+ <20230131035442.yzq4opasci7azt2j@t-8ch.de>
+In-Reply-To: <20230131035442.yzq4opasci7azt2j@t-8ch.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam-memcpy
-branch HEAD: fdcf66694e87642136df93fb2bc2f56c77cd568f  wifi: mwifiex: Replace one-element array with flexible-array member
+From: Thomas Weißschuh.
+> Sent: 31 January 2023 03:55
+...
+> I have another half-finished series that replaces the doubly-linked
+> list_heads used by elf.h with a custom singly-linked list.
+> This would save a few pointers per struct.
+> 
+> Do you think this is worth it?
 
-elapsed time: 720m
+If you allocate the structures in blocks of (say) 256 you
+can use an array of pointers to the blocks and then a
+32bit index instead of a 64bit pointer.
 
-configs tested: 68
-configs skipped: 2
+For real space-saving you might decide that the index can
+never exceed 2^^24 and use a bitfield!
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+	David
 
-gcc tested configs:
-x86_64                            allnoconfig
-m68k                             allyesconfig
-arc                                 defconfig
-m68k                             allmodconfig
-s390                             allmodconfig
-arc                              allyesconfig
-x86_64                              defconfig
-x86_64                          rhel-8.3-func
-alpha                            allyesconfig
-alpha                               defconfig
-x86_64                               rhel-8.3
-powerpc                           allnoconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64               randconfig-a001-20230130
-x86_64               randconfig-a003-20230130
-x86_64               randconfig-a004-20230130
-x86_64               randconfig-a002-20230130
-i386                                defconfig
-x86_64                           rhel-8.3-syz
-x86_64               randconfig-a006-20230130
-x86_64                         rhel-8.3-kunit
-x86_64               randconfig-a005-20230130
-arc                  randconfig-r043-20230129
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-arm                  randconfig-r046-20230129
-i386                 randconfig-a001-20230130
-i386                             allyesconfig
-i386                 randconfig-a005-20230130
-sh                               allmodconfig
-i386                 randconfig-a004-20230130
-i386                 randconfig-a003-20230130
-i386                 randconfig-a002-20230130
-arm                  randconfig-r046-20230130
-mips                             allyesconfig
-arc                  randconfig-r043-20230130
-i386                 randconfig-a006-20230130
-powerpc                          allmodconfig
-ia64                             allmodconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-clang tested configs:
-x86_64                          rhel-8.3-rust
-hexagon              randconfig-r041-20230129
-riscv                randconfig-r042-20230129
-riscv                randconfig-r042-20230130
-hexagon              randconfig-r045-20230130
-hexagon              randconfig-r041-20230130
-hexagon              randconfig-r045-20230129
-i386                 randconfig-a013-20230130
-i386                 randconfig-a012-20230130
-s390                 randconfig-r044-20230129
-s390                 randconfig-r044-20230130
-i386                 randconfig-a014-20230130
-i386                 randconfig-a011-20230130
-i386                 randconfig-a015-20230130
-x86_64               randconfig-a012-20230130
-x86_64               randconfig-a013-20230130
-i386                 randconfig-a016-20230130
-x86_64               randconfig-a011-20230130
-x86_64               randconfig-a014-20230130
-x86_64               randconfig-a015-20230130
-x86_64               randconfig-a016-20230130
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
