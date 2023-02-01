@@ -2,247 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F7468707E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 22:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA22C687080
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 22:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbjBAVdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 16:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S230295AbjBAVfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 16:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjBAVdB (ORCPT
+        with ESMTP id S229451AbjBAVfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 16:33:01 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4013A96
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 13:32:59 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id 187so21189437vsv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 13:32:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Uv8I/QjkdxzEkIUmSYvjSg/PHgTPlp0tPiyLW4fKv8=;
-        b=dpuMGhFDEogBEYDwhb/+S5JAmIDlrvugV8gXV11nhjxHDvMWyQ8EVtY9Uky2mo5QqZ
-         XeB/49xAPSM3sbMKPLG4RIz5XdRdcpqU2v5HpLhcf9xQQfHpQ+0E5PExVbfHOAeI5TWy
-         nyXjuJQrcGDkl+wrfYp/+7+ZLM7V5693xOUlIRBINBmNO0D8rOYSWSYhYHy+iAy+v85u
-         Ty3RG1cv6JZPeoOLzpHs4AByEua9ndpiiADWxyGdPnjcepU76cgGvvoBR1z9jUHyS8R8
-         1q0ExboirG6wpkklf0lwVopMcdO01lkwtDaXeuo1MTv2YW1Rsuj5QKglLftTZDZyBHQR
-         vlKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Uv8I/QjkdxzEkIUmSYvjSg/PHgTPlp0tPiyLW4fKv8=;
-        b=7SHqjsFfgC1iqk+8xg1yPtSfySvdbwReZVyw0kYHocxf5l7Of+sFvdI7Yl0uAvIoKo
-         mWJLN5CNGbYQ9Dsaq0dY+l56RYlmz6uAGFHM73Y3xNjsWY9G3DG95b8puoVtqeG/RRE6
-         Cgapla9XMo3UbiBUJYLHz4cKdkUUPFU70efRQYjpL+B6CBgVmZW5ANhZ25/ZEHPZRpLE
-         VCo549wl8xichrRo1j8M2Ewt0kOvHeMCfdRBE16Mo1nfuzFm8K0wFaPH3cNtbmp+kOn+
-         x7g5KKnr3ZzdjFm9B8odbcAIu0NvMttbWYll+juR8AoUtYZwS3HA2KyQq59cAYFI2Bxi
-         /g6Q==
-X-Gm-Message-State: AO0yUKWXXcXWkA0R8ychHEh05FCECupH7h7wDov9FqP71HUXsmQxR/Tx
-        F2A3n8Zq58pKrhHE9TVlebzILWJSJjpm3FrBciHqOQ==
-X-Google-Smtp-Source: AK7set/ei7WWj0xLUVQhlDZjLV+BoDyYbHz8SY3q1K6E5P4LsyXJmcsBa1fgHO9m+g8U65CLaY5Ys2fF7z79awCKfTk=
-X-Received: by 2002:a67:d984:0:b0:3f9:9403:6000 with SMTP id
- u4-20020a67d984000000b003f994036000mr678395vsj.1.1675287178588; Wed, 01 Feb
- 2023 13:32:58 -0800 (PST)
+        Wed, 1 Feb 2023 16:35:01 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480D739BA4;
+        Wed,  1 Feb 2023 13:35:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675287300; x=1706823300;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=6B4MaqNQG5xuO56wJUw9yve1mc3BT7qV/W3lUMhPX1Q=;
+  b=N+yJUSorulo8tKzbnWjsqk5XGCrK/tj36Aa6J0iZhDqJZetClGQg4/6h
+   LSJk3p4cdqVWJoOyuXp8KzSnKovE+wgBWswapDFr7KOWWjHz1UxSrf0MV
+   F0F+Qo1FIkqi3M66YA/aZ/o0Z9QO6OjpVSBPtn439a5+nuJfC17G5PL/w
+   sBaha/2vWGpuqMCbYeZ5QZO2AXtbDw5rLOzUKZbAzKdQ+MyWw/eZxk/77
+   WpMwAyrmaRgMYFo/h8SyIhKEaVN1jNWuYrSEOdUTLzWCEu09XrmiW9D5A
+   8kfF50W3DixF+eSTe7MCY+VY5ZmzXRILAJUpNFtYodMlrWYV/o4OFFq+P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="355615095"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="355615095"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 13:34:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="658482252"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="658482252"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga007.jf.intel.com with ESMTP; 01 Feb 2023 13:34:59 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 1 Feb 2023 13:34:58 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 1 Feb 2023 13:34:58 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.41) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 1 Feb 2023 13:34:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N4kAeadvG5WliG3fKUhmKy9motwO6CApg2rSmGLKcOz7dNY/Iq9JJGxlRNwrUgRFLJnm3bZ6SNrWeUWhHl4y6iqchg8ObroiIwK9s3QVL6JQZpNoTI9hL012/dyCP2WumuUXMqnIoMD1OlotECYTf/sV6ACNN1GY92QjvgrGgA1z5fn4hPTo+xeYICiuo9PpcGM6w1zaKT/ohgSo56blZnVvry+nF9GCxZQgYK9Ci6XUx/6P/eTcy9h94aZ5u5gUWKrpjZZe6O7hMFxRTNCEknE3gHg6BmZ7zpSH+hu0jeA6zqslFamb7Qt4vEMF6WTMVOiZe4BiV2OgAdzPTm380g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6B4MaqNQG5xuO56wJUw9yve1mc3BT7qV/W3lUMhPX1Q=;
+ b=R1ZLv2ulVoCtom6mEr4ZiRO/BiCdR8f+Of7zGI8HaSGhe4VElQwRjQAjcLbtrUgUbQ2dT49MDTwwdJMLA4jNd5jGzWncSd9IIGzYFzDFBfEsE6hCbGrymrXPeYnmb01HHFliHYbIXnEjx1GHkVOPVo3U/+6B5jMIyYac16YE/f+eJtA3mxhX4SfzuFwCGJzuST+UMheoTCB31S7vtYHvib2ORUCJS/NjQhQhDTUJP9ztqth6jOEZwH7tSlpmeiOJ5bYW6ft8ZjyxqEOQBOcD6NfDs2G84pvrTzY8Uhj1by9aYGHdJiXQLJqvI4IwoATEVZH2A+g6mhYSJ3PVNbhmuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by SJ0PR11MB4973.namprd11.prod.outlook.com (2603:10b6:a03:2de::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.24; Wed, 1 Feb
+ 2023 21:34:55 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::ee6a:b9b2:6f37:86a1]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::ee6a:b9b2:6f37:86a1%9]) with mapi id 15.20.6043.030; Wed, 1 Feb 2023
+ 21:34:55 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Macieira, Thiago" <thiago.macieira@intel.com>,
+        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>
+Subject: RE: [PATCH 4/5] platform/x86/intel/ifs: Implement Array BIST test
+Thread-Topic: [PATCH 4/5] platform/x86/intel/ifs: Implement Array BIST test
+Thread-Index: AQHZNc4J4EU3Q3ktD0OwChsEsRbA+K66f+8AgAADG4CAAA6sAIAAC0rQ
+Date:   Wed, 1 Feb 2023 21:34:55 +0000
+Message-ID: <SJ1PR11MB60833440D921F960C62677ACFCD19@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20230131234302.3997223-1-jithu.joseph@intel.com>
+ <20230131234302.3997223-5-jithu.joseph@intel.com>
+ <6a675f9b-2bbb-9317-2015-0b3362e49fdc@intel.com>
+ <c04c1aee-b84c-324c-e7db-c004e778ef4e@intel.com>
+ <ee97e1d6-5a21-2c5c-4fdf-05e2700e94cc@intel.com>
+In-Reply-To: <ee97e1d6-5a21-2c5c-4fdf-05e2700e94cc@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|SJ0PR11MB4973:EE_
+x-ms-office365-filtering-correlation-id: 64364611-7d74-430a-288e-08db049c291c
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yR3h32jUN9e61Ciz2XdamAz6WCNwqpwVmrbaMEDtUKHcmSiw2xY7oy5qZHQEgOoCIbSrKwvIKxWSkvAW9vO2O9DFVJKPIEXFVRyI3rl+ZnixPpIqapFlxA12/CEYkTEPV1p2f2XcPYdEkuXu+pjWjEwMxJrzLqRnjVxMBuXR5SK9TM6xNdRmsp+1xJbwUhLpYqfIFy1J+bK2XJnenpMWgYweTZ6maly0/g4FWQQV6VYYV3R07vKpHgjwefOUb9PNN5O0uHeF9jYkc5eCP+3YZvNXyw2/YX1FOJM98EYvVIQuH16UiupAr8fLcboLgEwdG8wiE/zVpf9hEw+kM+OXWWF76nrXqD5NVELjVSR5WevNpJYgbZClv56wUkoCAwZ88wgP2dooW6/GU7xVBiAk7EyMACpmBaSaToDHbaSI/MW4BYki2bRSM0do1cdpyVqIHtvUWB2p1AXZ33h4biPuGcYCjCAACwKx4+iyVN63XIxTBMkQWyLCXZx5pV8C4mVl6uamdKPCcrPZ9ET+te8jkBB/rHBeR1DF6hjerlz/hASjLUJJhTo3l35KPB0hcL3Q3BtPng+yTFPuBLr92MgR9WenOAljS4LOXOdRrgPGja37Cn3mV2C5YErXGNKzzMxkwiDOjJxOGYcU40qcf7YIpAmxkPbK3c4J6uGrKjsddLd37wboyO4JsgevMTjaQkya
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(136003)(396003)(39860400002)(376002)(451199018)(6506007)(9686003)(7416002)(7696005)(4744005)(5660300002)(71200400001)(26005)(186003)(110136005)(316002)(478600001)(54906003)(76116006)(64756008)(8676002)(4326008)(41300700001)(52536014)(8936002)(82960400001)(2906002)(66556008)(66476007)(66446008)(122000001)(66946007)(38100700002)(86362001)(33656002)(38070700005)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?U3psR2RBNE9jSmQ2eVEveGFpekdBYXk3ckMvWVA0WnZSZ3FuNFpPaTV0WXY3?=
+ =?utf-8?B?NTRMdEEzaDN3SlVhT1FjZmdmSndWYythczJjcmJDWGYzOHJra3pQV2hmaDNQ?=
+ =?utf-8?B?WTF3eGk0NXdYVlI4ZEZrNm83ekxJYzhicWtCWkVGZ1J1MTZOU2RSN3REUkNi?=
+ =?utf-8?B?a29BR0hJMWFnNTNvS2VQQW5uYkcwa1pTQW4xc3FPZjZ4bnZvbXEveHBtQ2ov?=
+ =?utf-8?B?U0ViaGNCclkwbURZSExNOCtPdVFSVkxKcTNFWEg2MkhvZFlPdDRpNGwrZTFl?=
+ =?utf-8?B?VldJNVVmOWRkOWxjWlh2bVlqR21GMFdESkRjU0tnVWMrMGdrZE9vS3FMYWtj?=
+ =?utf-8?B?cXFNWS9WWGxYZXFxR3BsVHluRGswZ0drZThnUzRpbDF1ckdabDdCaVV2Tjl4?=
+ =?utf-8?B?KzNKTHgySnNhWnd1K0drVFZQY2VNV1IxRnlLOHlOTjR3enBRV3dxRHloNmVr?=
+ =?utf-8?B?a2c2UW9taEUyaFI4TmVlNlpGaDJRSEd6dEpub3RaV2U1ZThYR3VWbkhrdWdM?=
+ =?utf-8?B?WjVMT0ovWjhiL1lhNDBzOS9zbkgvSXlTTGIzdEdIbjMycStLY3BoVENQbmk3?=
+ =?utf-8?B?aWR2eXNxWURnVllrVkZZV1VqZzRQTUZaU2J6dHlDRk8ySjJ0Wi9iaHFjazU4?=
+ =?utf-8?B?OUZ3dU5LeWU5VXdVbGNIL3duck41NzlPa2l2Zk5mMTVEekI0WkZDTmRidFJO?=
+ =?utf-8?B?YW9waC9rL28yTXRnTzdvUEVKbmVMWjNyU1Z1dnkwOG9qU0tkSkdpdG1pb1JP?=
+ =?utf-8?B?NVp1aW5wZ1Q5V1R1OWh4Q1dPK1RwNWtIQmwySGJaNlYycXZkc1BYRDEzSUhm?=
+ =?utf-8?B?dXlpNzhGaDdYcFZoZ0JzV21TNzdsTDlwaGFYdWxFWUd6ZlhPbzFSdC82T0tM?=
+ =?utf-8?B?QjErS0JubkNjSEdRR0tkdERZVTF4T1Axc050R3RSdWlqSVRodzd5RlR2ZDNs?=
+ =?utf-8?B?RXJFL2w0TDFQOThWdk9RZGVudEdGOXZTRTZlV3Z5VVNzQXBDTzFBTXlpbWY3?=
+ =?utf-8?B?WnltdllXTko3VDJ1UldqdnFSRE1pR3BtZVY0cjdPdWlXVDRJRzdFUThVaGs2?=
+ =?utf-8?B?cDlSOEwxQ2doTFZZVHlDMkZLZFJ3RUFFRmRpZXgxUmQ2VlQrMG12bmROY2R2?=
+ =?utf-8?B?QnpLQnU0ZkpBNzMwUUluSTlpUG8zSW9BNkthT3E1WkxCTXFZWlgrRFpFdnFE?=
+ =?utf-8?B?SEJibU40c1lpVWpBa3RTY2ExT24vK2ROU1U2d0duQkljRlpxNDJqS0hNZ2hZ?=
+ =?utf-8?B?ZGJzeTJnU1ZqNzl1ZlE2cmt4dU5oQzVlbUR4QUdPRXNpZDY0dFpZbXk4a1Zp?=
+ =?utf-8?B?Z0RwMVovVW1wZzNrMVkxZUoxMGlJQmo5bGtzRk8zVStvRHpZQnlSWnVtT1pQ?=
+ =?utf-8?B?RHIvVCt5c2FRWmorMlFBVmd4ekM1b3owUnNrTnJUYXNXb3ZJRXdVbkhUem00?=
+ =?utf-8?B?R2NPZ2duVUs5ZUpuMXR5V0F5OE43TWwrenNRMXB5REh6WVVDUnJuUDJmK1J1?=
+ =?utf-8?B?bVJMZWI5TitYNFVVRWpiNWdVbFBLTWJxZHhuR3JwRlQ1Z0dQSGcyNkVZRFlY?=
+ =?utf-8?B?SFpzc01uTjByZHExK3p2WXBwMVRYTlVUY2dLYVdod1hLRmhjd09kd0lyNWI5?=
+ =?utf-8?B?Y3pwV0hOYUxhQzhxNnNCNlJTWTJMNURZOUZBOUFIZWhuOVErK0Q2aitwSjlL?=
+ =?utf-8?B?YmVlNjFRcnNWbzJya3Fjb0ZXRkNJVk1PSitVUGl2azVqclI0enYrUjJ1azZj?=
+ =?utf-8?B?dndMdzBnUEZsVzBMa3JXK0JZSVdIQU1tdWl4SkVGMFFtNzBBN1dETXpjQlMr?=
+ =?utf-8?B?WSt0Ty8wSkNBMjFidEhIMHJ3K3pYODI0U3kzSGtVaGYrTlR2N3FhK25yQ3kr?=
+ =?utf-8?B?Ym1VbzNTaFdWMDFRU2VzNjZkTVFkSVpJcnlCNW9PcjBJcHVnek9UY3lTcGxm?=
+ =?utf-8?B?OHZ2Rk5kcnVFZ0o1eUo3djhZQzduaHgzVXFlZExJQmZYdGExNzJPUHhnYld0?=
+ =?utf-8?B?RFBFeFpMSVEzRmdlYzdKMTZYb001NVd2UmdSUCtCUlI5TTFNKzJlUlJGZC9k?=
+ =?utf-8?B?bG9neVQ4NnRSSjZFakJDVjFyc0h6RUdNOU5ndTNMQ1ZhNnRsM1p1QlBKMkpX?=
+ =?utf-8?Q?90aCkf/1Buec/DF7CIX9KEk94?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CADrL8HVdL_NMdNq2mEemNCfwkYBAWnbqwyjsAYdQ2fF0iz34Hw@mail.gmail.com>
- <CADrL8HV92DaNm5bUwcOxsG8Lg4yLT6F13KWSbjkySPNAsgCfpA@mail.gmail.com>
- <Y9Li93O6Ffwcr+vn@x1n> <CADrL8HVJb9mA3Lbz5UKJ8EudTk9sGDY-pdRqvW3TGawD_bJB0A@mail.gmail.com>
- <Y9f+jMLWy6ngpYuR@x1n> <CADrL8HX3sf6OO3PXS1g6b2dKf8b5phQ7oyNR0dVT=sAOdTmmqw@mail.gmail.com>
- <Y9gzOqwKcu7p/PEw@x1n> <CADrL8HXX9YDFUxmPPsm2s3Pno0XXgAyFB40fV1PdtP9eb-5D2A@mail.gmail.com>
- <Y9m/VVRABt0Blfjh@x1n> <CADrL8HXpfTE1+eE3rNGQyOr1QRtDtG5mBp-b3xcNX22QJRvPaQ@mail.gmail.com>
- <Y9qRta3bd4JqjUHx@x1n>
-In-Reply-To: <Y9qRta3bd4JqjUHx@x1n>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 1 Feb 2023 13:32:21 -0800
-Message-ID: <CADrL8HU809O0cPa9hXjf3k+ob139SQqvxOvpqm6UEv=zrPjHSg@mail.gmail.com>
-Subject: Re: [PATCH 21/46] hugetlb: use struct hugetlb_pte for walk_hugetlb_range
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64364611-7d74-430a-288e-08db049c291c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Feb 2023 21:34:55.3540
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3KIoP+pAphCqCjCYXeeuLxKSMk6HE7VY7D3AGWYWlGpVpPRmn/OPTEJy2o2/yNHCsAgHXymd1ZbVuPC1HOVoLA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4973
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 8:22 AM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Feb 01, 2023 at 07:45:17AM -0800, James Houghton wrote:
-> > On Tue, Jan 31, 2023 at 5:24 PM Peter Xu <peterx@redhat.com> wrote:
-> > >
-> > > On Tue, Jan 31, 2023 at 04:24:15PM -0800, James Houghton wrote:
-> > > > On Mon, Jan 30, 2023 at 1:14 PM Peter Xu <peterx@redhat.com> wrote:
-> > > > >
-> > > > > On Mon, Jan 30, 2023 at 10:38:41AM -0800, James Houghton wrote:
-> > > > > > On Mon, Jan 30, 2023 at 9:29 AM Peter Xu <peterx@redhat.com> wrote:
-> > > > > > >
-> > > > > > > On Fri, Jan 27, 2023 at 01:02:02PM -0800, James Houghton wrote:
-> > [snip]
-> > > > > > > Another way to not use thp mapcount, nor break smaps and similar calls to
-> > > > > > > page_mapcount() on small page, is to only increase the hpage mapcount only
-> > > > > > > when hstate pXd (in case of 1G it's PUD) entry being populated (no matter
-> > > > > > > as leaf or a non-leaf), and the mapcount can be decreased when the pXd
-> > > > > > > entry is removed (for leaf, it's the same as for now; for HGM, it's when
-> > > > > > > freeing pgtable of the PUD entry).
-> > > > > >
-> > > > > > Right, and this is doable. Also it seems like this is pretty close to
-> > > > > > the direction Matthew Wilcox wants to go with THPs.
-> > > > >
-> > > > > I may not be familiar with it, do you mean this one?
-> > > > >
-> > > > > https://lore.kernel.org/all/Y9Afwds%2FJl39UjEp@casper.infradead.org/
-> > > >
-> > > > Yep that's it.
-> > > >
-> > > > >
-> > > > > For hugetlb I think it should be easier to maintain rather than any-sized
-> > > > > folios, because there's the pgtable non-leaf entry to track rmap
-> > > > > information and the folio size being static to hpage size.
-> > > > >
-> > > > > It'll be different to folios where it can be random sized pages chunk, so
-> > > > > it needs to be managed by batching the ptes when install/zap.
-> > > >
-> > > > Agreed. It's probably easier for HugeTLB because they're always
-> > > > "naturally aligned" and yeah they can't change sizes.
-> > > >
-> > > > >
-> > > > > >
-> > > > > > Something I noticed though, from the implementation of
-> > > > > > folio_referenced()/folio_referenced_one(), is that folio_mapcount()
-> > > > > > ought to report the total number of PTEs that are pointing on the page
-> > > > > > (or the number of times page_vma_mapped_walk returns true). FWIW,
-> > > > > > folio_referenced() is never called for hugetlb folios.
-> > > > >
-> > > > > FWIU folio_mapcount is the thing it needs for now to do the rmap walks -
-> > > > > it'll walk every leaf page being mapped, big or small, so IIUC that number
-> > > > > should match with what it expects to see later, more or less.
-> > > >
-> > > > I don't fully understand what you mean here.
-> > >
-> > > I meant the rmap_walk pairing with folio_referenced_one() will walk all the
-> > > leaves for the folio, big or small.  I think that will match the number
-> > > with what got returned from folio_mapcount().
-> >
-> > See below.
-> >
-> > >
-> > > >
-> > > > >
-> > > > > But I agree the mapcount/referenced value itself is debatable to me, just
-> > > > > like what you raised in the other thread on page migration.  Meanwhile, I
-> > > > > am not certain whether the mapcount is accurate either because AFAICT the
-> > > > > mapcount can be modified if e.g. new page mapping established as long as
-> > > > > before taking the page lock later in folio_referenced().
-> > > > >
-> > > > > It's just that I don't see any severe issue either due to any of above, as
-> > > > > long as that information is only used as a hint for next steps, e.g., to
-> > > > > swap which page out.
-> > > >
-> > > > I also don't see a big problem with folio_referenced() (and you're
-> > > > right that folio_mapcount() can be stale by the time it takes the
-> > > > folio lock). It still seems like folio_mapcount() should return the
-> > > > total number of PTEs that map the page though. Are you saying that
-> > > > breaking this would be ok?
-> > >
-> > > I didn't quite follow - isn't that already doing so?
-> > >
-> > > folio_mapcount() is total_compound_mapcount() here, IIUC it is an
-> > > accumulated value of all possible PTEs or PMDs being mapped as long as it's
-> > > all or part of the folio being mapped.
-> >
-> > We've talked about 3 ways of handling mapcount:
-> >
-> > 1. The RFC v2 way, which is head-only, and we increment the compound
-> > mapcount for each PT mapping we have. So a PTE-mapped 2M page,
-> > compound_mapcount=512, subpage->_mapcount=0 (ignoring the -1 bias).
-> > 2. The THP-like way. If we are fully mapping the hugetlb page with the
-> > hstate-level PTE, we increment the compound mapcount, otherwise we
-> > increment subpage->_mapcount.
-> > 3. The RFC v1 way (the way you have suggested above), which is
-> > head-only, and we increment the compound mapcount if the hstate-level
-> > PTE is made present.
->
-> Oh that's where it come from!  It took quite some months going through all
-> these, I can hardly remember the details.
->
-> >
-> > With #1 and #2, there is no concern with folio_mapcount(). But with
-> > #3, folio_mapcount() for a PTE-mapped 2M page mapped in a single VMA
-> > would yield 1 instead of 512 (right?). That's what I mean.
-> >
-> > #1 has problems wrt smaps and migration (though there were other
-> > problems with those anyway that Mike has fixed), and #2 makes
-> > MADV_COLLAPSE slow to the point of being unusable for some
-> > applications.
->
-> Ah so you're talking about after HGM being applied..  while I was only
-> talking about THPs.
->
-> If to apply the logic here with idea 3), the worst case is we'll need to
-> have special care of HGM hugetlb in folio_referenced_one(), so the default
-> page_vma_mapped_walk() may not apply anymore - the resource is always in
-> hstate sized, so counting small ptes do not help too - we can just walk
-> until the hstate entry and do referenced++ if it's not none, at the
-> entrance of folio_referenced_one().
->
-> But I'm not sure whether that'll be necessary at all, as I'm not sure
-> whether that path can be triggered at all in any form (where from the top
-> it should always be shrink_page_list()).  In that sense maybe we can also
-> consider adding a WARN_ON_ONCE() in folio_referenced() where it is a
-> hugetlb page that got passed in?  Meanwhile, adding a TODO comment
-> explaining that current walk won't work easily for HGM only, so when it
-> will be applicable to hugetlb we need to rework?
->
-> I confess that's not pretty, though.  But that'll make 3) with no major
-> defect from function-wise.
-
-Another potential idea would be to add something like page_vmacount().
-For non-HugeTLB pages, page_vmacount() == page_mapcount(). Then for
-HugeTLB pages, we could keep a separate count (in one of the tail
-pages, I guess). And then in the places that matter (so smaps,
-migration, and maybe CoW and hwpoison), potentially change their calls
-to page_vmacount() instead of page_mapcount().
-
-Then to implement page_vmacount(), we do the RFC v1 mapcount approach
-(but like.... correctly this time). And then for page_mapcount(), we
-do the RFC v2 mapcount approach (head-only, once per PTE).
-
-Then we fix folio_referenced() without needing to special-case it for
-HugeTLB. :) Or we could just special-case it. *shrug*
-
-Does that sound reasonable? We still have the problem where a series
-of partially unmaps could leave page_vmacount() incremented, but I
-don't think that's a big problem.
-
->
-> Side note: did we finish folio conversion on hugetlb at all?  I think at
-> least we need some helper like folio_test_huge().  It seems still missing.
-> Maybe it's another clue that hugetlb is not important to folio_referenced()
-> because it's already fully converted?
-
-I'm not sure. A lot of work was done very pretty recently, so I bet
-there's probably some work left to do.
+PiBCdXQsIHdoZW4gaXQncyBkb3duIHRvIGEgc2luZ2xlIGJpdCBpbiBhbiBvdGhlcndpc2UgY29t
+cGxldGVseQ0KPiB1bnBvcHVsYXRlZCBieXRlLXNpemVkIGZpZWxkLCB5b3VyIGFyZ3VtZW50cyBm
+b3IgdXNpbmcgYSBiaXRmaWVsZCBraW5kYQ0KPiBkcnkgdXAuICBCdXQsIGhlY2ssIGlmIHRoYXQn
+cyB0aGUgaGlsbCB5b3Ugd2FudCB0byBkaWUgb24sIHdobyBhbSBJIHRvDQo+IHN0b3AgeW91Pw0K
+DQpJdCBoZWxwcyBmb3IgY29uc2lzdGVuY3kgb2Ygc3R5bGUgd2l0aCBhbGwgdGhlIG90aGVyIGRl
+ZmluaXRpb25zIGhlcmUgd2hlcmUNCnNvbWUgb3RoZXIgcmVnaXN0ZXJzIGRvbid0IGhhdmUgc3Vj
+aCB0cml2aWFsIG1hcHBpbmdzIG9mIGZpZWxkcyB0byBDIGJhc2UgdHlwZXMuDQoNCkkga25vdyB0
+aGF0IHVzaW5nIGJpdGZpZWxkcyBpbiBhcmNoIGluZGVwZW5kZW50IGNvZGUgaXMgZnJhdWdodCB3
+aXRoIHByb2JsZW1zLg0KDQpCdXQgdGhlc2UgZGVmaW5pdGlvbnMgYXJlIGZvciB0aGUgYml0cyBp
+biBJbnRlbCBNU1JzIChtb2RlbCBzcGVjaWZpYyByZWdpc3RlcnMpLg0KVGhpcyBzZWVtcyB0byBi
+ZSBhbiBvcGVuICYgc2h1dCBjYXNlIHRoYXQgdGhpcyBjb2RlIGlzIG5ldmVyIGdvaW5nIHRvIGJl
+DQp1c2VkIG9uIHNvbWUgb3RoZXIgYXJjaGl0ZWN0dXJlLg0KDQotVG9ueQ0K
