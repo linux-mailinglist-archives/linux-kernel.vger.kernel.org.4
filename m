@@ -2,187 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5F468657E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C916686584
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjBALmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 06:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
+        id S229816AbjBALn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 06:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjBALmH (ORCPT
+        with ESMTP id S229597AbjBALn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 06:42:07 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F7A3F29D
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:42:05 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 1 Feb 2023 06:43:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0044539B4;
+        Wed,  1 Feb 2023 03:43:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 82018336FD;
-        Wed,  1 Feb 2023 11:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1675251724; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oHYQwYae+Nqi8c2dcOjmXgPDqVbUG/Drybt00Yrvza0=;
-        b=fqsLR5dML4iyyZirtgGS0cGyrakP2+KduDZ2Cm8PzNuG47ZMl9NuRkD5hs3AyCXd0FJ3zg
-        bbXQcPSYxKisgVCKjgaw6L2qQM32JBBNDWS+RnrFHAm5Q56C0t+f0+Mjfm8BSi0LBLwxW0
-        tf1c3xYEqMb6i77W+iViPs8gIuPOqx0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1675251724;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oHYQwYae+Nqi8c2dcOjmXgPDqVbUG/Drybt00Yrvza0=;
-        b=YfDms+Q+Rk1hbKoD3OG/K4cScXLpb+APyCjAQRfPp+dBECGQawGudYp6iSNjSOT+m8ymI5
-        YJE7QIYMuiFtpmBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 76E0C1348C;
-        Wed,  1 Feb 2023 11:42:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QcfEHAxQ2mNCJgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 01 Feb 2023 11:42:04 +0000
-Date:   Wed, 01 Feb 2023 12:42:03 +0100
-Message-ID: <87edr9y5mc.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF8E3B810FD;
+        Wed,  1 Feb 2023 11:43:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A586C433D2;
+        Wed,  1 Feb 2023 11:43:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675251819;
+        bh=MmpffVf8hWOZgiIPLTUppyG844PtEs1DvL1GWwkqiDY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=k5X21ojPzgg64FyE0xLoklKIZ3cC3qnVqQ78IQszlmXX1/dSDT+N1mfUsmFkEC5Km
+         mlxz3LFAE9E7Z6JoA28n5m9iUUP4nWyHd+L8Q61fFaTMEja9sGiLReo/8H28rHJMcy
+         S2h3siUiaQHgc0KZJn3gx7gS8XYkOVpmNWjI99OekPPUu3uq5aSnxONRrS1Mqd6NXo
+         Plvc6pukuchxj/QtAgbYYLHCs9YlHPgSlVy/dCANsZAZ9jKCI5GTsc/Tjyk01AR/gc
+         9u0dAPzipbvLYli4GXBHDl0D9ref8rySSsTbySLA3E08ilvACYevxfqWEDYkyujgQ4
+         WHVun4uDpW6Sg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] sound fixes for 6.2-rc7
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-2
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220622061106.35071-1-y.oudjana@protonmail.com>
+References: <20220622061106.35071-1-y.oudjana@protonmail.com>
+Subject: Re: [PATCH] ASoC: qcom: apq8096: set driver name correctly
+Message-Id: <167525181733.63465.381746473105058457.b4-ty@kernel.org>
+Date:   Wed, 01 Feb 2023 11:43:37 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Wed, 22 Jun 2022 10:11:06 +0400, Yassine Oudjana wrote:
+> Set driver name to allow matching different UCM2 configurations
+> for the multiple devices sharing the same APQ8096 ASoC.
+> 
+> 
 
-please pull sound fixes for v6.2-rc7 from:
+Applied to
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.2-rc7
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-The topmost commit is c7a806d9ce6757ff56078674916e53bd859f242d
+Thanks!
 
-----------------------------------------------------------------
+[1/1] ASoC: qcom: apq8096: set driver name correctly
+      commit: 86b753a86f6dc31ca9bccb489ebde1968d26c89b
 
-sound fixes for 6.2-rc7
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-A bit higher volume of changes than wished, but each change is
-relatively small and the fix targets are mostly device-specific,
-so those should be safe as a late stage merge.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-The most significant LoC is about the memalloc helper fix, which
-is applied only to Xen PV.  The other major parts are ASoC Intel
-SOF and AVS fixes that are scattered as various small code
-changes.  The rest are device-specific fixes and quirks for HD-
-and USB-audio, FireWire and ASoC AMD / HDMI.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-----------------------------------------------------------------
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Amadeusz S³awiñski (1):
-      ASoC: Intel: avs: Implement PCI shutdown
-
-Andy Shevchenko (6):
-      ASoC: amd: acp-es8336: Drop reference count of ACPI device after use
-      ASoC: Intel: bytcht_es8316: Drop reference count of ACPI device after use
-      ASoC: Intel: bytcr_rt5651: Drop reference count of ACPI device after use
-      ASoC: Intel: bytcr_rt5640: Drop reference count of ACPI device after use
-      ASoC: Intel: bytcr_wm5102: Drop reference count of ACPI device after use
-      ASoC: Intel: sof_es8336: Drop reference count of ACPI device after use
-
-Arnd Bergmann (1):
-      ASoC: cs42l56: fix DT probe
-
-Artemii Karasev (1):
-      ALSA: hda/via: Avoid potential array out-of-bound in add_secret_dac_path()
-
-Bard Liao (3):
-      ASoC: SOF: sof-audio: start with the right widget type
-      ASoC: SOF: sof-audio: unprepare when swidget->use_count > 0
-      ASoC: SOF: keep prepare/unprepare widgets in sink path
-
-Cezary Rojewski (1):
-      ALSA: hda: Do not unset preset when cleaning up codec
-
-Dan Carpenter (1):
-      ASoC: SOF: ipc4-mtrace: prevent underflow in sof_ipc4_priority_mask_dfs_write()
-
-Jeremy Szu (1):
-      ALSA: hda/realtek: fix mute/micmute LEDs, speaker don't work for a HP platform
-
-Krzysztof Kozlowski (1):
-      ASoC: codecs: wsa883x: correct playback min/max rates
-
-Kuninori Morimoto (1):
-      ASoC: hdmi-codec: zero clear HDMI pdata
-
-Peter Ujfalusi (1):
-      ASoC: SOF: sof-audio: prepare_widgets: Check swidget for NULL on sink failure
-
-Pierre-Louis Bossart (4):
-      ASoC: Intel: sof_rt5682: always set dpcm_capture for amplifiers
-      ASoC: Intel: sof_cs42l42: always set dpcm_capture for amplifiers
-      ASoC: Intel: sof_nau8825: always set dpcm_capture for amplifiers
-      ASoC: Intel: sof_ssp_amp: always set dpcm_capture for amplifiers
-
-Ranjani Sridharan (1):
-      ASoC: SOF: sof-audio: skip prepare/unprepare if swidget is NULL
-
-Syed Saba Kareem (1):
-      ASoC: amd: yc: Add DMI support for new acer/emdoor platforms
-
-Takashi Iwai (2):
-      ALSA: usb-audio: Add FIXED_RATE quirk for JBL Quantum610 Wireless
-      ALSA: memalloc: Workaround for Xen PV
-
-Takashi Sakamoto (2):
-      firewire: fix memory leak for payload of request subaction to IEC 61883-1 FCP region
-      ALSA: firewire-motu: fix unreleased lock warning in hwdep device
-
-Victor Shyba (1):
-      ALSA: hda/realtek: Add Acer Predator PH315-54
-
-fengwk (1):
-      ASoC: amd: yc: Add Xiaomi Redmi Book Pro 15 2022 into DMI table
-
----
- drivers/firewire/core-cdev.c                       |  4 +-
- .../gpu/drm/bridge/synopsys/dw-hdmi-i2s-audio.c    |  1 +
- sound/core/memalloc.c                              | 87 +++++++++++++++++-----
- sound/firewire/motu/motu-hwdep.c                   |  4 +
- sound/pci/hda/hda_bind.c                           |  2 +
- sound/pci/hda/hda_codec.c                          |  1 -
- sound/pci/hda/patch_realtek.c                      |  2 +
- sound/pci/hda/patch_via.c                          |  3 +
- sound/soc/amd/acp-es8336.c                         |  6 +-
- sound/soc/amd/yc/acp6x-mach.c                      | 21 ++++++
- sound/soc/codecs/cs42l56.c                         |  6 --
- sound/soc/codecs/wsa883x.c                         |  4 +-
- sound/soc/intel/avs/core.c                         | 24 ++++++
- sound/soc/intel/boards/bytcht_es8316.c             | 20 +++--
- sound/soc/intel/boards/bytcr_rt5640.c              | 12 +--
- sound/soc/intel/boards/bytcr_rt5651.c              |  2 +-
- sound/soc/intel/boards/bytcr_wm5102.c              |  2 +-
- sound/soc/intel/boards/sof_cs42l42.c               |  3 +
- sound/soc/intel/boards/sof_es8336.c                | 14 ++--
- sound/soc/intel/boards/sof_nau8825.c               |  5 +-
- sound/soc/intel/boards/sof_rt5682.c                |  5 +-
- sound/soc/intel/boards/sof_ssp_amp.c               |  5 +-
- sound/soc/sof/ipc4-mtrace.c                        |  7 +-
- sound/soc/sof/sof-audio.c                          | 16 ++--
- sound/usb/quirks.c                                 |  2 +
- 25 files changed, 189 insertions(+), 69 deletions(-)
+Thanks,
+Mark
 
