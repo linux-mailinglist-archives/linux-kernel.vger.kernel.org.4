@@ -2,214 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C7F686D95
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47759686DA4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 19:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjBASEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 13:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S231718AbjBASGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 13:06:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbjBASEl (ORCPT
+        with ESMTP id S231211AbjBASGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 13:04:41 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD525B58E;
-        Wed,  1 Feb 2023 10:04:39 -0800 (PST)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 20448CC3DE;
-        Wed,  1 Feb 2023 18:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1675274678; bh=UeHSEREc8p7jIiPE+MKJj2ZLuJH5lXrVt4NUwIbJxBw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=oQZWkVTkECkrdiAEE6+Yr/NRWt7VPHAp8KARyQRDBoEvlwhxEutzFL5uomOcQBL6R
-         kNMsp03VyRFLkPELSKvMzxHNMxHyTSsEHjK9HFhMJNbQs4gW4tYpEPfcxT38W/utIK
-         +oXvI6Ou8rl8/NApgxBTQiNviBwCL1G8ehHn5Rbk=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, mturquette@baylibre.com,
-        sboyd@kernel.org, mka@chromium.org,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan+linaro@kernel.org, quic_kriskura@quicinc.com,
-        dianders@chromium.org, linux-clk@vger.kernel.org,
-        angelogioacchino.delregno@collabora.com,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v3 1/3] clk: qcom: gdsc: Fix the handling of PWRSTS_RET support
-Date:   Wed, 01 Feb 2023 19:04:37 +0100
-Message-ID: <2619574.X9hSmTKtgW@z3ntu.xyz>
-In-Reply-To: <5c2442d3-1f65-9106-2ef4-d6beec159538@quicinc.com>
-References: <20220920111517.10407-1-quic_rjendra@quicinc.com> <5897497.lOV4Wx5bFT@g550jk>
- <5c2442d3-1f65-9106-2ef4-d6beec159538@quicinc.com>
+        Wed, 1 Feb 2023 13:06:48 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D597D2A8;
+        Wed,  1 Feb 2023 10:06:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675274807; x=1706810807;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=217n0jzbEqwc1KMujYEh03wa1IX6hmrZDo8bwPhDwWA=;
+  b=Ve0ZUIRrkwq+mIjUZHs9EuTo1IWVHFI2nKxS3LqaKMIKT3dmpGWffElS
+   o6N9YckYzS/OyZP8f15jhVUV4joEdlgwP7eCvqdSKGKdQxhxz5KU0XEZU
+   HGbYyWM+bRs8GGZX0+KLbugpTk4x13zXF/hu6tireik/F0F8rya8LkU53
+   ULKo2vH33QP1ZY7f7lw0/IiZ1Be86fmwRvws0amOKImq0qgFkdLILIG99
+   0v90PqyfAQUVfn7/vnzd0rO4WrXfTAcI/XKbr87OrS3BvB+icy51DUJGQ
+   UuxKHWeNP8igYtTQel53DhDisro3dgaEutHf5ndzrCzus32s0/pkpyZmi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="311868002"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="311868002"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 10:06:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10608"; a="667002139"
+X-IronPort-AV: E=Sophos;i="5.97,265,1669104000"; 
+   d="scan'208";a="667002139"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Feb 2023 10:06:27 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] thermal: intel_powerclamp: Fix cur_state for multi package system
+Date:   Wed,  1 Feb 2023 10:06:25 -0800
+Message-Id: <20230201180625.2156520-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 23. J=E4nner 2023 05:30:55 CET Rajendra Nayak wrote:
-> On 1/22/2023 5:45 AM, Luca Weiss wrote:
-> > Hi Rajendra,
-> >=20
-> > On Dienstag, 20. September 2022 13:15:15 CET Rajendra Nayak wrote:
-> >> GDSCs cannot be transitioned into a Retention state in SW.
-> >> When either the RETAIN_MEM bit, or both the RETAIN_MEM and
-> >> RETAIN_PERIPH bits are set, and the GDSC is left ON, the HW
-> >> takes care of retaining the memory/logic for the domain when
-> >> the parent domain transitions to power collapse/power off state.
-> >>=20
-> >> On some platforms where the parent domains lowest power state
-> >> itself is Retention, just leaving the GDSC in ON (without any
-> >> RETAIN_MEM/RETAIN_PERIPH bits being set) will also transition
-> >> it to Retention.
-> >>=20
-> >> The existing logic handling the PWRSTS_RET seems to set the
-> >> RETAIN_MEM/RETAIN_PERIPH bits if the cxcs offsets are specified
-> >> but then explicitly turns the GDSC OFF as part of _gdsc_disable().
-> >> Fix that by leaving the GDSC in ON state.
-> >>=20
-> >> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-> >> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.co=
-m>
-> >> ---
-> >> v3:
-> >> Updated changelog
-> >>=20
-> >> There are a few existing users of PWRSTS_RET and I am not
-> >> sure if they would be impacted with this change
-> >>=20
-> >> 1. mdss_gdsc in mmcc-msm8974.c, I am expecting that the
-> >> gdsc is actually transitioning to OFF and might be left
-> >> ON as part of this change, atleast till we hit system wide
-> >> low power state.
-> >> If we really leak more power because of this
-> >> change, the right thing to do would be to update .pwrsts for
-> >> mdss_gdsc to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
-> >> I dont have a msm8974 hardware, so if anyone who has can report
-> >> any issues I can take a look further on how to fix it.
-> >=20
-> > Unfortunately indeed this patch makes problems on msm8974, at least on
-> > fairphone-fp2 hardware.
-> >=20
-> > With this patch in place, the screen doesn't initialize correctly in ma=
-ybe
-> > 80% of boots and is stuck in weird states, mostly just becomes complete=
-ly
-> > blue.
-> >=20
-> > Kernel log at least sometimes includes messages like this:
-> > [   25.847541] dsi_cmds2buf_tx: cmd dma tx failed, type=3D0x39, data0=
-=3D0x51,
-> > len=3D8, ret=3D-110
-> >=20
-> > Do you have anything I can try on msm8974? For now, reverting this patch
-> > makes display work again on v6.1
->=20
-> hmm, I was really expecting this to leak more power than break anything
-> functionally, Did you try moving to PWRSTS_OFF_ON instead of PWRSTS_RET_ON
-> for mdss_gdsc?
+The powerclamp cooling device cur_state shows actual idle observed by
+package C-state idle counters. But the implementation is not sufficient
+for multi package or multi die system. The cur_state value is incorrect.
+On these systems, these counters must be read from each package/die and
+somehow aggregate them. But there is no good method for aggregation.
 
-Hi Rajendra,
+It was not a problem when explicit CPU model addition was required to
+enable intel powerclamp. In this way certain CPU models could have
+been avoided. But with the removal of CPU model check with the
+availability of Package C-state counters, the driver is loaded on most
+of the recent systems.
 
-yes with this change the display init works fine again. Do you think this i=
-s=20
-the intended solution then? I also haven't tested really more than this sim=
-ple=20
-case.
+For multi package/die systems, just show the actual target idle state,
+the system is trying to achieve. In powerclamp this is the user set
+state minus one.
 
-Let me know what you think.
+Also there is no use of starting a worker thread for polling package
+C-state counters and applying any compensation.
 
-Regards
-Luca
+Fixes: b721ca0d1927 ("thermal/powerclamp: remove cpu whitelist")
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org # 4.14+
+---
+ drivers/thermal/intel/intel_powerclamp.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/qcom/mmcc-msm8974.c b/drivers/clk/qcom/mmcc-msm897=
-4.c
-index 26f3f8f06edf..f95e38abde13 100644
-=2D-- a/drivers/clk/qcom/mmcc-msm8974.c
-+++ b/drivers/clk/qcom/mmcc-msm8974.c
-@@ -2389,7 +2389,7 @@ static struct gdsc mdss_gdsc =3D {
- 	.pd =3D {
- 		.name =3D "mdss",
- 	},
-=2D	.pwrsts =3D PWRSTS_RET_ON,
-+	.pwrsts =3D PWRSTS_OFF_ON,
- };
-=20
- static struct gdsc camss_jpeg_gdsc =3D {
-
-
-> > Regards
-> > Luca
-> >=20
-> >> 2. gpu_gx_gdsc in gpucc-msm8998.c and
-> >>=20
-> >>     gpu_gx_gdsc in gpucc-sdm660.c
-> >>=20
-> >> Both of these seem to add support for 3 power state
-> >> OFF, RET and ON, however I dont see any logic in gdsc
-> >> driver to handle 3 different power states.
-> >> So I am expecting that these are infact just transitioning
-> >> between ON and OFF and RET state is never really used.
-> >> The ideal fix for them would be to just update their resp.
-> >> .pwrsts to PWRSTS_OFF_ON only.
-> >>=20
-> >>   drivers/clk/qcom/gdsc.c | 10 ++++++++++
-> >>   drivers/clk/qcom/gdsc.h |  5 +++++
-> >>   2 files changed, 15 insertions(+)
-> >>=20
-> >> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> >> index d3244006c661..ccf63771e852 100644
-> >> --- a/drivers/clk/qcom/gdsc.c
-> >> +++ b/drivers/clk/qcom/gdsc.c
-> >> @@ -368,6 +368,16 @@ static int _gdsc_disable(struct gdsc *sc)
-> >>=20
-> >>   	if (sc->pwrsts & PWRSTS_OFF)
-> >>   =09
-> >>   		gdsc_clear_mem_on(sc);
-> >>=20
-> >> +	/*
-> >> +	 * If the GDSC supports only a Retention state, apart from ON,
-> >> +	 * leave it in ON state.
-> >> +	 * There is no SW control to transition the GDSC into
-> >> +	 * Retention state. This happens in HW when the parent
-> >> +	 * domain goes down to a Low power state
-> >> +	 */
-> >> +	if (sc->pwrsts =3D=3D PWRSTS_RET_ON)
-> >> +		return 0;
-> >> +
-> >>=20
-> >>   	ret =3D gdsc_toggle_logic(sc, GDSC_OFF);
-> >>   	if (ret)
-> >>   =09
-> >>   		return ret;
-> >>=20
-> >> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-> >> index 5de48c9439b2..981a12c8502d 100644
-> >> --- a/drivers/clk/qcom/gdsc.h
-> >> +++ b/drivers/clk/qcom/gdsc.h
-> >> @@ -49,6 +49,11 @@ struct gdsc {
-> >>=20
-> >>   	const u8			pwrsts;
-> >>  =20
-> >>   /* Powerdomain allowable state bitfields */
-> >>   #define PWRSTS_OFF		BIT(0)
-> >>=20
-> >> +/*
-> >> + * There is no SW control to transition a GDSC into
-> >> + * PWRSTS_RET. This happens in HW when the parent
-> >> + * domain goes down to a low power state
-> >> + */
-> >>=20
-> >>   #define PWRSTS_RET		BIT(1)
-> >>   #define PWRSTS_ON		BIT(2)
-> >>   #define PWRSTS_OFF_ON		(PWRSTS_OFF | PWRSTS_ON)
-
-
-
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index b80e25ec1261..64f082c584b2 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -57,6 +57,7 @@
+ 
+ static unsigned int target_mwait;
+ static struct dentry *debug_dir;
++static bool poll_pkg_cstate_enable;
+ 
+ /* user selected target */
+ static unsigned int set_target_ratio;
+@@ -261,6 +262,9 @@ static unsigned int get_compensation(int ratio)
+ {
+ 	unsigned int comp = 0;
+ 
++	if (!poll_pkg_cstate_enable)
++		return 0;
++
+ 	/* we only use compensation if all adjacent ones are good */
+ 	if (ratio == 1 &&
+ 		cal_data[ratio].confidence >= CONFIDENCE_OK &&
+@@ -519,7 +523,8 @@ static int start_power_clamp(void)
+ 	control_cpu = cpumask_first(cpu_online_mask);
+ 
+ 	clamping = true;
+-	schedule_delayed_work(&poll_pkg_cstate_work, 0);
++	if (poll_pkg_cstate_enable)
++		schedule_delayed_work(&poll_pkg_cstate_work, 0);
+ 
+ 	/* start one kthread worker per online cpu */
+ 	for_each_online_cpu(cpu) {
+@@ -585,11 +590,15 @@ static int powerclamp_get_max_state(struct thermal_cooling_device *cdev,
+ static int powerclamp_get_cur_state(struct thermal_cooling_device *cdev,
+ 				 unsigned long *state)
+ {
+-	if (true == clamping)
+-		*state = pkg_cstate_ratio_cur;
+-	else
++	if (true == clamping) {
++		if (poll_pkg_cstate_enable)
++			*state = pkg_cstate_ratio_cur;
++		else
++			*state = set_target_ratio;
++	} else {
+ 		/* to save power, do not poll idle ratio while not clamping */
+ 		*state = -1; /* indicates invalid state */
++	}
+ 
+ 	return 0;
+ }
+@@ -712,6 +721,9 @@ static int __init powerclamp_init(void)
+ 		goto exit_unregister;
+ 	}
+ 
++	if (topology_max_packages() == 1 && topology_max_die_per_package() == 1)
++		poll_pkg_cstate_enable = true;
++
+ 	cooling_dev = thermal_cooling_device_register("intel_powerclamp", NULL,
+ 						&powerclamp_cooling_ops);
+ 	if (IS_ERR(cooling_dev)) {
+-- 
+2.39.1
 
