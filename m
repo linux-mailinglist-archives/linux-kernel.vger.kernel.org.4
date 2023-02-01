@@ -2,94 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F410685CA9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 02:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E4C685CB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 02:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjBABfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 31 Jan 2023 20:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S230481AbjBABin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 31 Jan 2023 20:38:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjBABfT (ORCPT
+        with ESMTP id S229863AbjBABil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 31 Jan 2023 20:35:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB814FAE0;
-        Tue, 31 Jan 2023 17:35:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C0EF9CE1F6F;
-        Wed,  1 Feb 2023 01:35:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157BFC4339B;
-        Wed,  1 Feb 2023 01:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675215315;
-        bh=knDY0XR4EkjmaIgy15F+qM9DAUlql49vNU3peyz0Hek=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=An/6iSd5cTu0MUvnoKKcTPuwO1211upjIrUtoCe3ckm/2QyEntUftFmQ5nVZndtdB
-         2XsISWuO5IaQ7U/5SvcZgDq8dEKntNJn16okG3TT5OUk77ns9LmH3wH4cVlhhrT4NB
-         fkbPlF+NP8IownpmBhSV2rrM4ttaQmRYcNS2tjCM9TEo3Wcw2PXaNRy349sm4r70r1
-         vLzFN1qKqgz4h9tSqyaYqqMDLlHfSHHjV8fEHsGjplGWjwhftAehSxqpNFuAyA+M4u
-         BWgFriidNL6NLMXeSlnad4zykCCSCvy3Noa4bQ7iHjDD6N1orPWgh+Yz3nqedlj0o0
-         7ZRHZuKKxfeJg==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-169b190e1fdso677838fac.4;
-        Tue, 31 Jan 2023 17:35:15 -0800 (PST)
-X-Gm-Message-State: AO0yUKVmm8vtg4eTxfaqqQV4bWzSfxh+3W/QoR2CC8fY2ctpcBEmx0ZW
-        /f85lVW2NLiHI/VvCTyv9IzMcZ+Nf3u8kz961t0=
-X-Google-Smtp-Source: AK7set8ovKWewUNojM8tT5otQ7+J12ZeiWWmwI48LIYQMiby/06BIbG9cryG7NjOKanNJnfLIjV2s+Dun3VGa7nwsJc=
-X-Received: by 2002:a05:6871:441:b0:163:a45a:9e41 with SMTP id
- e1-20020a056871044100b00163a45a9e41mr6476oag.194.1675215314331; Tue, 31 Jan
- 2023 17:35:14 -0800 (PST)
+        Tue, 31 Jan 2023 20:38:41 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16D9521DE;
+        Tue, 31 Jan 2023 17:38:40 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-4fd37a1551cso226563057b3.13;
+        Tue, 31 Jan 2023 17:38:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IYV1PkpzfhgRPyGiRj90Sy3TFLGA2xJdyexuKq3v2Js=;
+        b=XHlEdUJ03iay/M2j1In2oyHo1cfXjMnm6H/Xi6VsNeZKosP/0RmGkFBacbgKUEqBVX
+         i172XHg+X678FCHVRBQi2E68EIzWRcuYKCJvqJBx6Coagl5R8GB+rZ7N0+YKqyxU1mOL
+         NTJs2QKMsZ+HcAxWmPozJVLy8AHNYY+RloncPJWJrgcK9s9rIkB2LZhH8hCccxxrPjM4
+         pV6ss8Ab8SzeVUB1Q7leZXnLYqrd9wv5DMeAR/hI6djn4/OZ4i5+5na7Oa0sCm7/fZjq
+         ojprYntFM7hrCLW+mUs7bU5jfaJurqEiZoiWAeJNCIYXNOrLM4ugSWuJ1fnw7POtAUnl
+         5Rcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IYV1PkpzfhgRPyGiRj90Sy3TFLGA2xJdyexuKq3v2Js=;
+        b=5cQ+Ly+og9ra4nSjCN6tEsO0OH/rfveqbdFr9zERcQcampZ7lY9jQOa7DwArbgYCm4
+         sSEF465LH2dbP+OAK14xbio0fLbRnTTX4H4Cnu9azvP78lQ+JyaePVfJvGEoPO1JdNIF
+         rzxfUwBIJlIESLWAHYKgGaDvGl4E/7QxfdPbDbCY5xoQ9vbhGw2uTFntusAZ0ixo0bB0
+         kcmUPv54RXezOPT9YCwDmxJ83F9GtnmzHsOmkt2OnPIHxSod3Io12kE5Mo6hC9aXGVhy
+         aYle2cNqIIZBPTb5kEWhTlZafRc4ZSHFTD6kNfUyeYW0DmbASigLiKJ4P5Hhk3Y/I1Su
+         KcAA==
+X-Gm-Message-State: AO0yUKW9CyKnuGumRRZUJAVjgiu6zE27yw5p2q7tnevazrCxt9RDRVv+
+        SCJsRFchr2u158ehcTfIqOZu0fNzCXgklC5mdaA5fXZrMoajqw==
+X-Google-Smtp-Source: AK7set+iERPfWWyWGiZoAkGhsc3jflB/Hj7kF17HirXukKDxN68JkyGKqVX+lFBorVZcSEKyqJWfcQ+mEh5HrXyxyBg=
+X-Received: by 2002:a05:690c:c87:b0:506:c44:ca69 with SMTP id
+ cm7-20020a05690c0c8700b005060c44ca69mr40089ywb.67.1675215519931; Tue, 31 Jan
+ 2023 17:38:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127150225.18148-1-andriy.shevchenko@linux.intel.com> <167521487245.2279300.8949761709442968191.robh@kernel.org>
-In-Reply-To: <167521487245.2279300.8949761709442968191.robh@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 1 Feb 2023 10:34:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARNRgTSXpRou5xvwAdO=UK9Ebed0LXKgaPXgb1x7ODM+w@mail.gmail.com>
-Message-ID: <CAK7LNARNRgTSXpRou5xvwAdO=UK9Ebed0LXKgaPXgb1x7ODM+w@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] dt-bindings: Fix .gitignore
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+References: <20230128072258.3384037-1-boqun.feng@gmail.com>
+In-Reply-To: <20230128072258.3384037-1-boqun.feng@gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 1 Feb 2023 02:38:28 +0100
+Message-ID: <CANiq72mGk72tvLx+uH-puXZ=MvAA9dzNVqTXYmPq2iadwYuyWA@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: MAINTAINERS: Add the zulip link
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 10:27 AM Rob Herring <robh@kernel.org> wrote:
+On Sat, Jan 28, 2023 at 8:23 AM Boqun Feng <boqun.feng@gmail.com> wrote:
 >
->
-> On Fri, 27 Jan 2023 17:02:25 +0200, Andy Shevchenko wrote:
-> > The tracked files should not be ignored.
-> >
-> > Fixes: 44ec8b20d1e9 ("dt-bindings: Add running yamllint to dt_binding_check")
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  Documentation/devicetree/bindings/.gitignore | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
->
-> Applied, thanks!
->
+> Zulip organization "rust-for-linux" has been created since about 2 years
 
+"was created about 2 years ago ... and has proven" maybe?
 
-!/.yamllint
+> [1]: https://lore.kernel.org/rust-for-linux/CANiq72=3DxVaMQkgCA9rspjV8bhW=
+DGqAn4x78B0_4U1WBJYj1PiA@mail.gmail.com/
 
+We typically do links as a tag, like:
 
-please since this file exists in
-Documentation/devicetree/bindings, but never in sub-directories.
+    Link: https://..../ [1]
 
+>  R:     Gary Guo <gary@garyguo.net>
+>  R:     Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
+>  L:     rust-for-linux@vger.kernel.org
+> +C:     zulip://rust-for-linux.zulipchat.com
+>  S:     Supported
+>  W:     https://github.com/Rust-for-Linux/linux
+>  B:     https://github.com/Rust-for-Linux/linux/issues
 
+The preferred order according to the top of the file is `C:` after
+`B:` -- could you please move it? (even if not everybody follows it)
 
+Thanks Boqun!
 
+Also, for reference for others: a few of us discussed a bit in Zulip
+whether to use `zulip://` or `https://` here: `zulip://` hints at the
+fact that it is possible to join with apps/clients and not just with a
+web browser, which is why Boqun wants to use this one. Support for the
+URI scheme in place of the `https://` one isn't great in some of the
+apps, though, so I worried it could be confusing.
 
--- 
-Best Regards
-Masahiro Yamada
+Hopefully the URI scheme support will improve in the future. So let's
+try `zulip://` -- it may help getting better support for that URI
+scheme too :)
+
+Cheers,
+Miguel
