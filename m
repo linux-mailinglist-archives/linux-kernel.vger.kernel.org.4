@@ -2,301 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8ADF686EDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55986686EE1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjBATYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:24:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S231252AbjBATZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:25:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjBATYL (ORCPT
+        with ESMTP id S229608AbjBATZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:24:11 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F5C081B3B;
-        Wed,  1 Feb 2023 11:24:10 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id 02D9A20B7102; Wed,  1 Feb 2023 11:24:10 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 02D9A20B7102
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675279450;
-        bh=EPJPPr3ChGOrp2Xq1Cs4W8MzEv9V0kxUPttEaK356pw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M5qIKCVtbdQkoMT+9JeiWYvw4Z26avwz+jaYZGlX74oVu1EULxWpLjXmZ5AtbyMMP
-         9qkgtjNgziTPKqx8gnUcCOXzEEfTpsv7XuDdeyjdD17/RRmksPsqosdMYLIQK6xp5A
-         aBSQ9qTvyHT6XK0oZKITJ61xJPG8bqA4mfOtSfmU=
-Date:   Wed, 1 Feb 2023 11:24:09 -0800
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v1 6/8] crypto: ccp - Add vdata for platform device
-Message-ID: <20230201192409.GA14074@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20230123152250.26413-1-jpiotrowski@linux.microsoft.com>
- <20230123152250.26413-7-jpiotrowski@linux.microsoft.com>
- <6f76fe2b-63ea-8c45-87d8-3de30d3d76c2@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f76fe2b-63ea-8c45-87d8-3de30d3d76c2@amd.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 1 Feb 2023 14:25:22 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C161881B24
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:25:20 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-4cddba76f55so214090897b3.23
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 11:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ncv2AWcbqOMo4MNaMipLFizY1qd9n4hGfaa8OZXFvS8=;
+        b=m/Mdjwp3dUBf6VTBiurB9nnwzOZ33uzAOOtgQWT1q7NhzRZbEoLo1RBSR3nW3rknZM
+         zY9fMllht/v8RTpIIbi7oqFIcv/J4pZ8rBukmC6I8fiLmiOrgvxZ7BgzSv9wM2j2H+X3
+         dmAOpdl91GMZO7trXBfqh/m+UkQkjVXWG3fmgWw0HAxa+ry70hRn0OCU9/YwPuqDr3VA
+         pqTK0jRxYizC19yumQ2L61GEeshHNcGyMXh0fPqJAuyhjMlR6yffgATHJN9bePTWbWHh
+         Sc81tDSlLkkPa67jv2WCyBrfrj2bIGeBz/l/foGmEf5oFxIDhmz/06BH2fegZ7psB/zz
+         loFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ncv2AWcbqOMo4MNaMipLFizY1qd9n4hGfaa8OZXFvS8=;
+        b=Myqm0MYwKU2wlAl3HeqboJFrc1st/uhOGY3mb/3Dfl8vGZrrl/GfO5tndyGWDBkQQa
+         Pk1Ih/kjzo5FT6Puf0PnrqZDOzBSGIzeENt2tOCqi8V3hOjMbRef6d3VuWedE/WVt6MP
+         xH/RF7t1p4/1yQgSO+HWXbiiWE/UE8wVENJfyigCb0uK8ZymJJ1TmgZbzLxiqDub+YfV
+         GNa2C3Z0k7ODD3aE7JVT+FkQ+wvlBSTWw98WxXE5Fir6UiLxQgI97LAGn51uIbufkVSf
+         1iFQw2uL2gs8cWqWrevcQG7FHqwhB8v8uy1ISyc0IocTb/LF7ewKXBrRAFmZQF1bHmqe
+         o6hw==
+X-Gm-Message-State: AO0yUKUXIxAJsi+t8jux4mG1i5ojogv7hLKMoj2pFnXOuuLiyg3SlfeE
+        R88hfKUkLdAp4H9HbaMKbTSJe2+d3fKzQHm83d4=
+X-Google-Smtp-Source: AK7set/c1inzpZ7TQCOJc5TB6xx5wuHuM8dE93kXMIu+AFUmDrtZ7hC7fXOzY+3KheWl2FZsdzwQkK/TYBXPBu0hdNA=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:341e:6979:102e:c9d9])
+ (user=ndesaulniers job=sendgmr) by 2002:a81:91cf:0:b0:521:db3f:a116 with SMTP
+ id i198-20020a8191cf000000b00521db3fa116mr0ywg.0.1675279519542; Wed, 01 Feb
+ 2023 11:25:19 -0800 (PST)
+Date:   Wed,  1 Feb 2023 11:25:09 -0800
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1675279509; l=2134;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=6sFm896c1fl0Nm5FPB/sT4t9TM1yBeKr5pt0TQ/7JMg=;
+ b=w6Zh7GjRYNUZDcP6eQUWslQfi/JP1bRYJZhHA1IUNgOJ00ldWR8TQhiN6NeXLCxVZxG06cyUE5Fd
+ T8g8MOJ7CgazzzkKFG3wSpq7qMFnQXr9/8LXaz2eepLWvwhl6qaN
+X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
+Message-ID: <20230201192509.4124319-1-ndesaulniers@google.com>
+Subject: [PATCH] Documentation/llvm: add Chimera Linux, Google and Meta datacenters
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Jonathan Corbet <corbet@lwn.net>, llvm@lists.linux.dev,
+        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Daniel Kolesa <q66@chimera-linux.org>,
+        Chris Mason <clm@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 02:36:01PM -0600, Tom Lendacky wrote:
-> On 1/23/23 09:22, Jeremi Piotrowski wrote:
-> >When matching the "psp" platform_device, determine the register offsets
-> >at runtime from the ASP ACPI table. Pass the parsed register offsets
-> >from the ASPT through platdata.
-> >
-> >To support this scenario, mark the members of 'struct sev_vdata' and
-> >'struct psp_vdata' non-const so that the probe function can write the
-> >values. This does not affect the other users of sev_vdata/psp_vdata as
-> >they define the whole struct const and the pointer in struct
-> >sp_dev_vdata stays const too.
-> >
-> >Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-> >---
-> >  arch/x86/kernel/psp.c            |  3 ++
-> >  drivers/crypto/ccp/sp-dev.h      | 12 +++----
-> >  drivers/crypto/ccp/sp-platform.c | 57 +++++++++++++++++++++++++++++++-
-> >  3 files changed, 65 insertions(+), 7 deletions(-)
-> >
-> >diff --git a/arch/x86/kernel/psp.c b/arch/x86/kernel/psp.c
-> >index 24181d132bae..68511a14df63 100644
-> >--- a/arch/x86/kernel/psp.c
-> >+++ b/arch/x86/kernel/psp.c
-> >@@ -199,6 +199,9 @@ static int __init psp_init_platform_device(void)
-> >  	if (err)
-> >  		return err;
-> >  	err = platform_device_add_resources(&psp_device, res, 2);
-> >+	if (err)
-> >+		return err;
-> >+	err = platform_device_add_data(&psp_device, &pdata, sizeof(pdata));
-> >  	if (err)
-> >  		return err;
-> >diff --git a/drivers/crypto/ccp/sp-dev.h b/drivers/crypto/ccp/sp-dev.h
-> >index 20377e67f65d..aaa651364425 100644
-> >--- a/drivers/crypto/ccp/sp-dev.h
-> >+++ b/drivers/crypto/ccp/sp-dev.h
-> >@@ -40,9 +40,9 @@ struct ccp_vdata {
-> >  };
-> >  struct sev_vdata {
-> >-	const unsigned int cmdresp_reg;
-> >-	const unsigned int cmdbuff_addr_lo_reg;
-> >-	const unsigned int cmdbuff_addr_hi_reg;
-> >+	unsigned int cmdresp_reg;
-> >+	unsigned int cmdbuff_addr_lo_reg;
-> >+	unsigned int cmdbuff_addr_hi_reg;
-> >  };
-> >  struct tee_vdata {
-> >@@ -56,9 +56,9 @@ struct tee_vdata {
-> >  struct psp_vdata {
-> >  	const struct sev_vdata *sev;
-> >  	const struct tee_vdata *tee;
-> >-	const unsigned int feature_reg;
-> >-	const unsigned int inten_reg;
-> >-	const unsigned int intsts_reg;
-> >+	unsigned int feature_reg;
-> >+	unsigned int inten_reg;
-> >+	unsigned int intsts_reg;
-> >  };
-> >  /* Structure to hold SP device data */
-> >diff --git a/drivers/crypto/ccp/sp-platform.c b/drivers/crypto/ccp/sp-platform.c
-> >index ea8926e87981..281dbf6b150c 100644
-> >--- a/drivers/crypto/ccp/sp-platform.c
-> >+++ b/drivers/crypto/ccp/sp-platform.c
-> >@@ -22,6 +22,7 @@
-> >  #include <linux/of.h>
-> >  #include <linux/of_address.h>
-> >  #include <linux/acpi.h>
-> >+#include <linux/platform_data/psp.h>
-> >  #include "ccp-dev.h"
-> >@@ -30,11 +31,31 @@ struct sp_platform {
-> >  	unsigned int irq_count;
-> >  };
-> >+#ifdef CONFIG_CRYPTO_DEV_SP_PSP
-> >+static struct sev_vdata sev_platform = {
-> >+	.cmdresp_reg = -1,
-> >+	.cmdbuff_addr_lo_reg = -1,
-> >+	.cmdbuff_addr_hi_reg = -1,
-> >+};
-> >+static struct psp_vdata psp_platform = {
-> >+	.sev = &sev_platform,
-> >+	.feature_reg = -1,
-> >+	.inten_reg = -1,
-> >+	.intsts_reg = -1,
-> >+};
-> >+#endif
-> >+
-> >  static const struct sp_dev_vdata dev_vdata[] = {
-> >  	{
-> >  		.bar = 0,
-> >  #ifdef CONFIG_CRYPTO_DEV_SP_CCP
-> >  		.ccp_vdata = &ccpv3_platform,
-> >+#endif
-> >+	},
-> >+	{
-> >+		.bar = 0,
-> >+#ifdef CONFIG_CRYPTO_DEV_SP_PSP
-> >+		.psp_vdata = &psp_platform,
-> >  #endif
-> >  	},
-> >  };
-> >@@ -57,7 +78,7 @@ MODULE_DEVICE_TABLE(of, sp_of_match);
-> >  #endif
-> >  static const struct platform_device_id sp_plat_match[] = {
-> >-	{ "psp" },
-> >+	{ "psp", (kernel_ulong_t)&dev_vdata[1] },
-> >  	{ },
-> >  };
-> >  MODULE_DEVICE_TABLE(platform, sp_plat_match);
-> >@@ -86,6 +107,38 @@ static struct sp_dev_vdata *sp_get_acpi_version(struct platform_device *pdev)
-> >  	return NULL;
-> >  }
-> >+static struct sp_dev_vdata *sp_get_plat_version(struct platform_device *pdev)
-> >+{
-> >+	struct sp_dev_vdata *drvdata = (struct sp_dev_vdata *)pdev->id_entry->driver_data;
-> 
-> s/drvdata/vdata/
-> 
+Chimera Linux is a Linux distribution from 2021 that builds its kernels
+with Clang.
 
-ok
+Google transitioned its data center fleet to run Clang built kernels in
+2021, and Meta did so as well in 2022.  Meta talked about this at LPC
+2022 at a talk titled Kernel Live Patching at Scale.
 
-> >+	struct device *dev = &pdev->dev;
-> >+
-> 
-> Should check for null vdata and return NULL, e.g.:
-> 
-> 	if (!vdata)
-> 		return NULL;
-> 
+These were important milestones for building the kernel with Clang.
+Making note of them helps improve confidence in the project.
 
-ok
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Cc: Daniel Kolesa <q66@chimera-linux.org>
+Cc: Chris Mason <clm@meta.com>
+---
+ Documentation/kbuild/llvm.rst | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-> >+	if (drvdata == &dev_vdata[1]) {
-> 
-> This should be a check for vdata->psp_vdata being non-NULL and
-> vdata->psp_vdata->sev being non-NULL, e.g.:
-> 
-> 	if (vdata->psp_vdata && vdata->psp_vdata->sev) {
-> 
-> >+		struct psp_platform_data *pdata = dev_get_platdata(dev);
-> >+
-> >+		if (!pdata) {
-> >+			dev_err(dev, "missing platform data\n");
-> >+			return NULL;
-> >+		}
-> >+#ifdef CONFIG_CRYPTO_DEV_SP_PSP
-> 
-> No need for this with the above checks
-> 
-> >+		psp_platform.feature_reg = pdata->feature_reg;
-> 
-> These should then be:
-> 
-> 		vdata->psp_vdata->inten_reg = pdata->feature_reg;
-> 		...
+diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rst
+index 6b2bac8e9ce0..6a37ab903e45 100644
+--- a/Documentation/kbuild/llvm.rst
++++ b/Documentation/kbuild/llvm.rst
+@@ -15,12 +15,15 @@ such as GCC and binutils. Ongoing work has allowed for `Clang
+ <https://clang.llvm.org/>`_ and `LLVM <https://llvm.org/>`_ utilities to be
+ used as viable substitutes. Distributions such as `Android
+ <https://www.android.com/>`_, `ChromeOS
+-<https://www.chromium.org/chromium-os>`_, and `OpenMandriva
+-<https://www.openmandriva.org/>`_ use Clang built kernels.  `LLVM is a
+-collection of toolchain components implemented in terms of C++ objects
+-<https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM that
+-supports C and the GNU C extensions required by the kernel, and is pronounced
+-"klang," not "see-lang."
++https://www.chromium.org/chromium-os>`_, `OpenMandriva
++<https://www.openmandriva.org/>`_, and `Chimera Linux
++<https://chimera-linux.org/>`_ use Clang built kernels. Google's and Meta's
++datacenter fleets also run kernels built with Clang.
++
++`LLVM is a collection of toolchain components implemented in terms of C++
++objects <https://www.aosabook.org/en/llvm.html>`_. Clang is a front-end to LLVM
++that supports C and the GNU C extensions required by the kernel, and is
++pronounced "klang," not "see-lang."
+ 
+ Clang
+ -----
+-- 
+2.39.1.456.gfc5497dd1b-goog
 
-I see where you're going with this and the above suggestions, but
-the psp_vdata pointer is const in struct sp_dev_vdata and so is the
-sev pointer in struct psp_vdata. I find these consts to be important
-and doing it this way would require casting away the const. I don't
-think that's worth doing.
-
-> 
-> >+		psp_platform.inten_reg = pdata->irq_en_reg;
-> >+		psp_platform.intsts_reg = pdata->irq_st_reg;
-> >+		sev_platform.cmdresp_reg = pdata->sev_cmd_resp_reg;
-> 
-> And this should be:
-> 
-> 		vdata->psp_vdata->sev->cmdbuff_addr_lo = ...
-> 
-> >+		sev_platform.cmdbuff_addr_lo_reg = pdata->sev_cmd_buf_lo_reg;
-> >+		sev_platform.cmdbuff_addr_hi_reg = pdata->sev_cmd_buf_hi_reg;
-> >+		dev_dbg(dev, "GLBL feature:\t%x\n", pdata->feature_reg);
-> 
-> s/GLBL feature/PSP feature register/
-> 
-> >+		dev_dbg(dev, "GLBL irq en:\t%x\n", pdata->irq_en_reg);
-> 
-> s/GLBL irq en/PSP IRQ enable register/
-> 
-> >+		dev_dbg(dev, "GLBL irq st:\t%x\n", pdata->irq_st_reg);
-> 
-> s/GLBL irq st/PSP IRQ status register/
-> 
-> >+		dev_dbg(dev, "SEV cmdresp:\t%x\n", pdata->sev_cmd_resp_reg);
-> 
-> s/SEV cmdresp/SEV cmdresp register/
-> 
-> >+		dev_dbg(dev, "SEV cmdbuf lo:\t%x\n", pdata->sev_cmd_buf_lo_reg);
-> 
-> s/SEV cmdbuf lo/SEV cmdbuf lo register/
-> 
-> >+		dev_dbg(dev, "SEV cmdbuf hi:\t%x\n", pdata->sev_cmd_buf_hi_reg);
-> 
-> s/SEV cmdbuf hi/SEV cmdbuf hi register/
-> 
-> >+		dev_dbg(dev, "SEV mbox:\t%x\n", pdata->mbox_irq_id);
-> 
-> s/SEV mbox/SEV cmdresp IRQ/
-> 
-
-ok to all the above rewordings
-
-> 
-> >+		dev_dbg(dev, "ACPI cmdresp:\t%x\n", pdata->acpi_cmd_resp_reg);
-> 
-> Duplicate entry
-
-I don't see it. This is the ACPI register (the one used for the IRQ config).
-Here's how these prints look when the module is loaded with dyndbg=+p:
-
-  ccp psp: GLBL feature:  0
-  ccp psp: GLBL irq en:   4
-  ccp psp: GLBL irq st:   8
-  ccp psp: SEV cmdresp:   10
-  ccp psp: SEV cmdbuf lo: 14
-  ccp psp: SEV cmdbuf hi: 18
-  ccp psp: SEV mbox:      1
-  ccp psp: ACPI cmdresp:  20
-
-> 
-> >+#endif
-> >+	}
-> >+	return drvdata;
-> >+}
-> >+
-> >  static int sp_get_irqs(struct sp_device *sp)
-> >  {
-> >  	struct sp_platform *sp_platform = sp->dev_specific;
-> >@@ -137,6 +190,8 @@ static int sp_platform_probe(struct platform_device *pdev)
-> >  	sp->dev_specific = sp_platform;
-> >  	sp->dev_vdata = pdev->dev.of_node ? sp_get_of_version(pdev)
-> >  					 : sp_get_acpi_version(pdev);
-> >+	if (!sp->dev_vdata && pdev->id_entry)
-> 
-> Move this pdev->id_entry check into sp_get_plat_version(), returning
-> NULL if not set.
-> 
-
-ok
-
-> Thanks,
-> Tom
-> 
-> >+		sp->dev_vdata = sp_get_plat_version(pdev);
-> >  	if (!sp->dev_vdata) {
-> >  		ret = -ENODEV;
-> >  		dev_err(dev, "missing driver data\n");
