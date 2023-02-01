@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A44686476
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0D3686477
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 11:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbjBAKiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 05:38:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S232179AbjBAKiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 05:38:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbjBAKiN (ORCPT
+        with ESMTP id S232113AbjBAKiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 05:38:13 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A94E8686
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:38:01 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id j25-20020adfd219000000b002bfd1484f9bso2333895wrh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:38:01 -0800 (PST)
+        Wed, 1 Feb 2023 05:38:14 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D45F7D8A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 02:38:04 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id l5-20020a1ced05000000b003db300f2e1cso797405wmh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 02:38:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=s4zWblSgk9sC59/aeD2C4zXhl1NkdUvsWjCEZ+kae5w=;
-        b=kDd5sNOxRKfGTyQyrwC8Z9FLlQkrpsj/Nng2DTWB6IJUir3WQndNIexufILUN++wdV
-         JDwcGHttIbcRuSGZu7j9qulGqGELbopzYZ3m8BIvsoLl5QqurHIf6HGUOy+1AH4o06Ba
-         VNDrWbdJVT7ESS5kjdleefmF0NLuB3WcOoOJtsonsWVaNaBJDrHQTAgCuYmv5i/ph5Zl
-         UR2zJtbSKKV85ivzBHyqklZSKeSB/QSPrTRbPWkBl7+94vRWUCwYOn/R+g7PNWGcQH08
-         xrRKBM3IyQbvObsc3VmNRqTfnUlUIxxqTU0sIC/IIuFBnorDytqD1S3czSqHoRXsHpoc
-         XzaA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkxKzYtJyLBnk6YaWLdXcrP+huEFDCptixA8sQJDrTA=;
+        b=Cgj3iAnktqlF5j/X2Zs/AvWwSuC377hgw3vsTJuLls35Ku4dcC9GOC8s5WkGAsylPx
+         8AD2/jIoyM8KmqnlJl59pnaJQeBFva/t4Qkup7aDeVurYyMFaO8bHtgpv6AV3plLPdQ4
+         VCLJ7+3S1j2wHgTZcZVoLoIOnxREru4FkIT04NnLjyfs2ZAI+CoC22iK7KKmdYDbZBEZ
+         A7JU0AkOvPaLeskvPozEUdct2hwGx13diIFSZTkyz7MbnZCeqMX5U/yK5A59yhC5ukaQ
+         Ho7EhcjY2SG2hUizVbhCRUNeOMprPoAbyuf60umZEht/F//XRPeLdP5kQyxywilKLbBP
+         xWfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s4zWblSgk9sC59/aeD2C4zXhl1NkdUvsWjCEZ+kae5w=;
-        b=Walh0lLKd/JI9ZpCLBh674MGd4MKRJZtX52YkbYD/HN/YL/aT9g39PHuWDKZPN/O1K
-         bEvFxsJZ+k+6ED8t+MBSKRuWtwsRWD4CFer3lsgtwDnzfa0bgqIRFRSQuhfor89X6XPX
-         ZRcrf19NfqJSzCyfSJGLCPp8GUgquBq/lO72cMdRS2fDsR8lP4F6B5PKijkobke2jQeR
-         bmLjZaFAP4UL21kCFgBp/cpAX2AKOkpwhcvXT1WudtSzwUOf6BVJ3cQ97FCHMoZykfN2
-         QAykv89uBy+fwwHiUneIX9BaGEwv8+cx8KQAGcqmZUAE3MGCPoVjfrqYArRN656K+Jx1
-         8fNQ==
-X-Gm-Message-State: AO0yUKV6i4xFqtJSswj/LQbBxj7Ol/gOgxfNGhPX9OU36ZDURQY2gRBX
-        QBU7hCtjd03bqt018zr1P6Ct3P6epb0+
-X-Google-Smtp-Source: AK7set9OO31MOIG5ytUAh8LFORGHH4kWKzwK1XEnu8LH1geO7NiaHrTAAjdFjC0NALlJrHjXuGZHsPmGikuT
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkxKzYtJyLBnk6YaWLdXcrP+huEFDCptixA8sQJDrTA=;
+        b=JvGuVS9daUyBBxVarS1KxtYluug6djZXvBhbLolGlcyF8gTzT39VjEzZF9lW5mqINr
+         LuooP8RRkHYDDHx5C/A3u6GJTTVehbuXPQeipGdCy0WzoOTjJltU7L1T0auCdKLgTU6P
+         Ii4HZUh5ZPFNGa3JnitOR1BQYYj3yBgPKZaVGa+NXgfAK0C3/OTExUo4pq8L+JI0Bgdt
+         wF+5nOC1RK4XLt9vMlJqBlKG4m+zZeFXpfa/zUIYaCx3gtIJ3N5ApzvmtIqLwrPRWTZZ
+         0EGXF+B8f1sMPCL6olHklfTGiVw5aJrj2ORCD6xzkAkGqq9pvMGzIwIWYMvBCtl7xG2J
+         ap5w==
+X-Gm-Message-State: AO0yUKVkZPOpK2C+VFnKskvn4dDMcFyO2/P5YbLNoQWeuYCxyghDvTRd
+        3561Hio1NMvZSpyO11a6lw8San+zPFJJ
+X-Google-Smtp-Source: AK7set+4dyT64Ybcc5I/aCMrcw8Vd3S+aCXtsLCGbugPPvCPuVOfo5Ea5wI/nh9/m6q+UBsRN/El5Os2d/wi
 X-Received: from big-boi.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:129])
- (user=qperret job=sendgmr) by 2002:a05:600c:170a:b0:3dc:5240:a87b with SMTP
- id c10-20020a05600c170a00b003dc5240a87bmr145717wmn.12.1675247879605; Wed, 01
- Feb 2023 02:37:59 -0800 (PST)
-Date:   Wed,  1 Feb 2023 10:37:50 +0000
+ (user=qperret job=sendgmr) by 2002:a05:600c:4f0e:b0:3dd:f488:4a87 with SMTP
+ id l14-20020a05600c4f0e00b003ddf4884a87mr67576wmq.54.1675247882739; Wed, 01
+ Feb 2023 02:38:02 -0800 (PST)
+Date:   Wed,  1 Feb 2023 10:37:51 +0000
+In-Reply-To: <20230201103755.1398086-1-qperret@google.com>
 Mime-Version: 1.0
+References: <20230201103755.1398086-1-qperret@google.com>
 X-Mailer: git-send-email 2.39.1.456.gfc5497dd1b-goog
-Message-ID: <20230201103755.1398086-1-qperret@google.com>
-Subject: [PATCH 0/4] KVM: arm64: Fix CPU resume/on with pKVM
+Message-ID: <20230201103755.1398086-2-qperret@google.com>
+Subject: [PATCH 1/4] KVM: arm64: Provide sanitized SYS_ID_AA64SMFR0_EL1 to nVHE
 From:   Quentin Perret <qperret@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
@@ -73,34 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When using pKVM, we do not reset the EL2 exception vectors back to the
-stubs for e.g. Power Management or CPU hotplug as we normally do in KVM.
-As consequence, the initialisation perfomed by __finalise_el2 is missing
-on e.g. the CPU_RESUME path with pKVM, hence leaving certain registers
-in an incorrect state.
+We will need a sanitized copy of SYS_ID_AA64SMFR0_EL1 from the nVHE EL2
+code shortly, so make sure to provide it with a copy.
 
-One such example is ZCR_EL2 which remains configured with SVE traps
-enabled. And so using SVE on a CPU that has gone through a hotplug
-off/on cycle leads to a hyp panic. Not good.
+Signed-off-by: Quentin Perret <qperret@google.com>
+---
+ arch/arm64/include/asm/kvm_hyp.h   | 1 +
+ arch/arm64/kvm/arm.c               | 1 +
+ arch/arm64/kvm/hyp/nvhe/sys_regs.c | 1 +
+ 3 files changed, 3 insertions(+)
 
-This series fixes this by macroizing the first half of __finalise_el2
-(that is, the part that is not specific to VHE) to allow its re-use
-from pKVM's PSCI relay.
-
-Quentin Perret (4):
-  KVM: arm64: Provide sanitized SYS_ID_AA64SMFR0_EL1 to nVHE
-  KVM: arm64: Introduce finalise_el2_state macro
-  KVM: arm64: Use sanitized values in __check_override in nVHE
-  KVM: arm64: Finalise EL2 state from pKVM PSCI relay
-
- arch/arm64/include/asm/el2_setup.h | 92 ++++++++++++++++++++++++++++++
- arch/arm64/include/asm/kvm_hyp.h   |  1 +
- arch/arm64/kernel/hyp-stub.S       | 79 +------------------------
- arch/arm64/kvm/arm.c               |  1 +
- arch/arm64/kvm/hyp/nvhe/hyp-init.S |  1 +
- arch/arm64/kvm/hyp/nvhe/sys_regs.c |  1 +
- 6 files changed, 98 insertions(+), 77 deletions(-)
-
+diff --git a/arch/arm64/include/asm/kvm_hyp.h b/arch/arm64/include/asm/kvm_hyp.h
+index 6797eafe7890..bdd9cf546d95 100644
+--- a/arch/arm64/include/asm/kvm_hyp.h
++++ b/arch/arm64/include/asm/kvm_hyp.h
+@@ -122,6 +122,7 @@ extern u64 kvm_nvhe_sym(id_aa64isar2_el1_sys_val);
+ extern u64 kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val);
+ extern u64 kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val);
+ extern u64 kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val);
++extern u64 kvm_nvhe_sym(id_aa64smfr0_el1_sys_val);
+ 
+ extern unsigned long kvm_nvhe_sym(__icache_flags);
+ extern unsigned int kvm_nvhe_sym(kvm_arm_vmid_bits);
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 9c5573bc4614..d9c6ec650b42 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -1887,6 +1887,7 @@ static void kvm_hyp_init_symbols(void)
+ 	kvm_nvhe_sym(id_aa64mmfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR0_EL1);
+ 	kvm_nvhe_sym(id_aa64mmfr1_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR1_EL1);
+ 	kvm_nvhe_sym(id_aa64mmfr2_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64MMFR2_EL1);
++	kvm_nvhe_sym(id_aa64smfr0_el1_sys_val) = read_sanitised_ftr_reg(SYS_ID_AA64SMFR0_EL1);
+ 	kvm_nvhe_sym(__icache_flags) = __icache_flags;
+ 	kvm_nvhe_sym(kvm_arm_vmid_bits) = kvm_arm_vmid_bits;
+ }
+diff --git a/arch/arm64/kvm/hyp/nvhe/sys_regs.c b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+index 0f9ac25afdf4..08d2b004f4b7 100644
+--- a/arch/arm64/kvm/hyp/nvhe/sys_regs.c
++++ b/arch/arm64/kvm/hyp/nvhe/sys_regs.c
+@@ -26,6 +26,7 @@ u64 id_aa64isar2_el1_sys_val;
+ u64 id_aa64mmfr0_el1_sys_val;
+ u64 id_aa64mmfr1_el1_sys_val;
+ u64 id_aa64mmfr2_el1_sys_val;
++u64 id_aa64smfr0_el1_sys_val;
+ 
+ /*
+  * Inject an unknown/undefined exception to an AArch64 guest while most of its
 -- 
 2.39.1.456.gfc5497dd1b-goog
 
