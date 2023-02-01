@@ -2,84 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F8F68624A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B48686251
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 10:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbjBAJD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 04:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
+        id S231527AbjBAJEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 04:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjBAJDy (ORCPT
+        with ESMTP id S230245AbjBAJEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 04:03:54 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DC6199E1
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:03:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+6lBzAzYUDLtb1/53bE7o1+u8f0NnSXZC2nk3HkkMg0=; b=cvFdg3K/a4i1JC02Kk3pA0XT3i
-        abS83KqcdG0CZzEnqHiOKeDk4nSsBjOvoK/UZEkiwyTJK0msDlzF628wmNM4bHgMwFlLOFnV/F2m3
-        KeMoRGY3xaZmqZE3hcpbORZz6CftMjJmaePadvCKcWlikG4YIg83k+XBimKoME4VFXxTFaLvJGB1S
-        oQDcdN2pGnytU2plmVhntAoMOzVEjOrvz6MWo5DFaPtaeOXB4zJ8G5Xsen6BVQbvJ2ocZoapwP8Lg
-        QW4gHhZzDbGutWyDJS566N0sD/CW95k3YvbuAfwsWKiZM1wy6Hi/qUAN6g+kUA2VRIKmnxfF0uF4Q
-        CQCg4S2w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pN916-004hvJ-0W;
-        Wed, 01 Feb 2023 09:02:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9117930012F;
-        Wed,  1 Feb 2023 10:03:28 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 64C9D20D6DE1A; Wed,  1 Feb 2023 10:03:28 +0100 (CET)
-Date:   Wed, 1 Feb 2023 10:03:28 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>, fweisbec@gmail.com,
-        mingo@kernel.org, liwei391@huawei.com, adobriyan@gmail.com,
-        mirsad.todorovac@alu.unizg.hr, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] tick/nohz: fix data races in get_cpu_idle_time_us()
-Message-ID: <Y9oq4OSJXJvr56Oj@hirez.programming.kicks-ass.net>
-References: <20230128020051.2328465-1-liaoyu15@huawei.com>
- <87357q228f.ffs@tglx>
- <Y9lyx38kHmKEF5CQ@hirez.programming.kicks-ass.net>
- <Y9mEB7LMaZ0dMQS/@lothringen>
+        Wed, 1 Feb 2023 04:04:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D263F301A5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 01:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675242227;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=a8vyRUGLmPZw1cx7uiPTXStMX6sS7pJs7SRmtCoOPQ0=;
+        b=Lu0QIVDo5qsP/nuVjpMPt/krULE24S0OroVcm69Eo5hwxB9pQDLLXlOI5IAxUFN1TXWhw4
+        7b3Pik5hfqucQOzr8+q+odo3oJuXs2D5becMXAkE4ekWV2qR8Uny2bdYTXRBTOTdtkLPrL
+        X6gb8yW3bfQPWweD1zs7/WOYJCKcEhg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-480-725fkwHkOr-Vp3lxb2ir3g-1; Wed, 01 Feb 2023 04:03:43 -0500
+X-MC-Unique: 725fkwHkOr-Vp3lxb2ir3g-1
+Received: by mail-wr1-f69.google.com with SMTP id w16-20020a5d4b50000000b002bfca568cdfso2702974wrs.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 01:03:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a8vyRUGLmPZw1cx7uiPTXStMX6sS7pJs7SRmtCoOPQ0=;
+        b=4kMA4iiwIWb+BV8H6z4iZIyQs1UUhmMQFgZzyAHh63WeZHSrKhk9LCuhwW1p3HmHiu
+         0dUcCoRNvlD8hrXHsVfYgXPGVko4xVLLifnPg2sDd0cRTVy9j5eS3UKnM1TJr3JnOK+S
+         16vwnECjuFDf17cItYoggCipknp31MXARy/Rc1BMepb4GACgeQtjC3nDelsCckBEgzn+
+         AXlNUCeh8ObgYZ5Jeboxg/Wv3hvYBn7MDCO2rF1Zn84N+iTVOToc7BgGt3o60gKdAQuM
+         rChZwmcot/EIHdhlg4I5DX1nv1OQE24OrcR+vSy0Vclx2eDtVbYZW351VjMFAcuVfNue
+         Xr8A==
+X-Gm-Message-State: AO0yUKXS6hK2BdHx8pAgc5bivkpOo0lpzVFdJt2X5xxkK5APSjkBueTZ
+        yR4Vu/bgWa794IVEnH5qHB4PJuYklVWMHvkmTSzld0D6GWaGJxKaYWlJN76pu/l9uiSPqS7MCST
+        Aa3q6n/g8IF36aV5z71f7qkef
+X-Received: by 2002:a05:600c:3b9d:b0:3d2:3be4:2d9a with SMTP id n29-20020a05600c3b9d00b003d23be42d9amr1322214wms.20.1675242222434;
+        Wed, 01 Feb 2023 01:03:42 -0800 (PST)
+X-Google-Smtp-Source: AK7set/gMluqZSQ5LKXrgZW/yePv93crC07VbTZ6hjsNCTASxrv++pCMxw86gG10oZFOIcmNhL6zeQ==
+X-Received: by 2002:a05:600c:3b9d:b0:3d2:3be4:2d9a with SMTP id n29-20020a05600c3b9d00b003d23be42d9amr1322185wms.20.1675242222113;
+        Wed, 01 Feb 2023 01:03:42 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:3100:e20e:4ace:6f25:6a79? (p200300cbc7053100e20e4ace6f256a79.dip0.t-ipconnect.de. [2003:cb:c705:3100:e20e:4ace:6f25:6a79])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05600c469000b003a84375d0d1sm1100168wmo.44.2023.02.01.01.03.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Feb 2023 01:03:41 -0800 (PST)
+Message-ID: <a4857ccd-1d5f-2169-40bc-e7a75a0c896f@redhat.com>
+Date:   Wed, 1 Feb 2023 10:03:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9mEB7LMaZ0dMQS/@lothringen>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 18/39] mm: Handle faultless write upgrades for shstk
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-19-rick.p.edgecombe@intel.com>
+ <7f63d13d-7940-afb6-8b25-26fdf3804e00@redhat.com>
+ <50cf64932507ba60639eca28692e7df285bcc0a7.camel@intel.com>
+ <1327c608-1473-af4f-d962-c24f04f3952c@redhat.com>
+ <8c3820ae1448de4baffe7c476b4b5d9ba0a309ff.camel@intel.com>
+ <4d224020-f26f-60a4-c7ab-721a024c7a6d@redhat.com>
+ <dd06b54291ad5721da392a42f2d8e5636301ffef.camel@intel.com>
+ <899d8f3baaf45b896cf335dec2143cd0969a2d8a.camel@intel.com>
+ <ad7d94dd-f0aa-bf21-38c3-58ef1e9e46dc@redhat.com>
+ <27b141c06c37da78afca7214ec7efeaf730162d9.camel@intel.com>
+ <f4b62ed9-21a9-4b23-567e-51b339a643ac@redhat.com>
+ <6a38779c1539c2bcfeb6bc8251ed04aa9b06802e.camel@intel.com>
+ <0e29a2d0-08d8-bcd6-ff26-4bea0e4037b0@redhat.com>
+ <f337d3b0e401c210b67a6465bf35f66f6a46fc3d.camel@intel.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <f337d3b0e401c210b67a6465bf35f66f6a46fc3d.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 10:11:35PM +0100, Frederic Weisbecker wrote:
-> On Tue, Jan 31, 2023 at 08:57:59PM +0100, Peter Zijlstra wrote:
-> > On Tue, Jan 31, 2023 at 03:44:00PM +0100, Thomas Gleixner wrote:
-> > 
-> > > P.S.: I hate the spinlock in the idle code path, but I don't have a
-> > >       better idea.
-> > 
-> > seqcount? It would avoid the obvious interleave and put most of the onus
-> > on the reader (which never happens anyway).
+On 01.02.23 00:33, Edgecombe, Rick P wrote:
+> On Tue, 2023-01-31 at 09:46 +0100, David Hildenbrand wrote:
+>> Sure ...
+>>
+>> but I reconsidered :)
+>>
+>> Maybe there is a cleaner way to do it and avoid the "NULL" argument.
+>>
+>> What about having (while you're going over everything already):
+>>
+>> pte_mkwrite(pte, vma)
+>> pte_mkwrite_kernel(pte)
+>>
+>> The latter would only be used in that arch code where we're working
+>> on
+>> kernel pgtables. We already have pte_offset_kernel() and
+>> pte_alloc_kernel_track(), so it's not too weird.
 > 
-> Yep, and do the update locally only on idle exit. But note that neither
-> seqcount nor spinlock will fix the nr_iowait_cpu() based thing. This counter
-> can be decremented remotely even during the idle period so the reader
-> can see an iowait period that may eventually be accounted as !iowait,
-> or the reverse. Breaking the monotonicity and even coherency.
-> 
-> That stuff is broken by design and this is the reason why it got never
-> really fixed. The seqcount/spinlock would make it just a bit less worse.
+> Hmm, one downside is the "mk" part might lead people to guess
+> pte_mkwrite_kernel() would make it writable AND a kernel page (like
+> U/S=0 on x86). Instead of being a mkwrite() that's useful for setting
+> on kernel PTEs.
 
-Yeah, iowait is a random number generator, -EWONTFIX on that.
+At least I wouldn't worry about that too much. We handle nowhere in 
+common code user vs. supervisor access that way explicitly (e.g., 
+mkkernel), and it wouldn't even apply on architectures where we cannot 
+make such a decision on a per-PTE basis.
+
+> 
+> The other problem is that one of NULL passers is not for kernel memory.
+> huge_pte_mkwrite() calls pte_mkwrite(). Shadow stack memory can't be
+> created with MAP_HUGETLB, so it is not needed. Using
+> pte_mkwrite_kernel() would look weird in this case, but making
+> huge_pte_mkwrite() take a VMA would be for no reason. Maybe making
+> huge_pte_mkwrite() take a VMA is the better of those two options. Or
+> keep the NULL semantics...  Any thoughts?
+
+Well, the reason would be consistency. From a core-mm point of view it 
+makes sense to handle this all consistency, even if the single user 
+(x86) wouldn't strictly require it right now.
+
+I'd just pass in the VMA and call it a day :)
+
+-- 
+Thanks,
+
+David / dhildenb
+
