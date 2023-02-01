@@ -2,175 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E02686887
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD7A68688D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbjBAOlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:41:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        id S231653AbjBAOlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:41:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjBAOlH (ORCPT
+        with ESMTP id S231893AbjBAOld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:41:07 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255B3C67C;
-        Wed,  1 Feb 2023 06:41:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1675262466; x=1706798466;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FP3eOSKVuO2pSoDoClWW9jU0h8Pdb0AyhKyqyRnXwSc=;
-  b=r1T9jDiSeP+TS1u56fv3ezZqx1ENuC7DNwTe7BQQbPm5wVcohBBNZX6Y
-   AnTXmygQqCPj/h/FDmCclnD12WPWfLTyYPKxRqGLNsagjHH77fIBfjQXk
-   H4ZJ8rJS98Ifn8HzU/tEMax1Slgh5GjMuIYv46IgYSI0A8ikbk182hG2k
-   U=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Feb 2023 06:41:05 -0800
-X-QCInternal: smtphost
-Received: from nalasex01a.na.qualcomm.com ([10.47.209.196])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2023 06:41:05 -0800
-Received: from [10.50.40.201] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 1 Feb 2023
- 06:40:56 -0800
-Message-ID: <f21b74b2-cdaf-1be1-17e7-d004bfdddedd@quicinc.com>
-Date:   Wed, 1 Feb 2023 20:10:52 +0530
+        Wed, 1 Feb 2023 09:41:33 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F706953B;
+        Wed,  1 Feb 2023 06:41:25 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 311ELMCC012947;
+        Wed, 1 Feb 2023 14:41:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Pghwgw7p54xgyN9qvh8HSRlvihxDFi0FYDGjkwN9hfQ=;
+ b=KB+5oFs7D3P74ddhr0ubhPjwvgMwPNg0zmRJ/qQv81hNu8xJnBvcDZx47tDr0KeOXuIN
+ 7unHMwuYhGXgzAAUT+nGwXn5FPg3nd+YcRW0wItD1M7Squ4JHUmnE/P67mbAl3lxZ1Un
+ JDNc601NmU7ChhDq7btkIvuw2Q/Wel5u4fUmom/PeiM8ojxs4YORjAz9GgDCWTHDZtly
+ t5UpcNpWra2Z1pqyuVsrvPreZya0n2Mygg0mX/fWDr7PsgBNOxnI1BvhIqjjmg5DYGwS
+ VIvLlW7kI2B1O6OmgSnb5Uypg+JoscDJlsLDinr4mTV9xOPjB5XmQc7sBgXwm2R62rBm pg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfss7gk1n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 14:41:22 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 311EMqpS017781;
+        Wed, 1 Feb 2023 14:41:21 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nfss7gk17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 14:41:21 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 311DBe48019159;
+        Wed, 1 Feb 2023 14:41:20 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3ncvuqunpk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Feb 2023 14:41:20 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 311EfI587340750
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Feb 2023 14:41:18 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 733895805E;
+        Wed,  1 Feb 2023 14:41:18 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 09FDC58052;
+        Wed,  1 Feb 2023 14:41:16 +0000 (GMT)
+Received: from [9.65.253.123] (unknown [9.65.253.123])
+        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Feb 2023 14:41:15 +0000 (GMT)
+Message-ID: <7879b29d-5cf5-c9f6-cc36-fb9ce6c0d2d4@linux.ibm.com>
+Date:   Wed, 1 Feb 2023 09:41:15 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 6/6] clk: qcom: Fix APSS PLL and RCG Configuration
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] vfio: fix deadlock between group lock and kvm lock
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <jassisinghbrar@gmail.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <20230113143647.14961-1-quic_devipriy@quicinc.com>
- <20230113143647.14961-7-quic_devipriy@quicinc.com>
- <b87ab80d-0936-5a5a-25da-35c0dbdede33@linaro.org>
- <ea0dbbf0-958c-145b-abaa-3bbcb620df5c@quicinc.com>
- <b8eee15f-e3e4-4a2d-853e-31e966c19cf5@linaro.org>
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <b8eee15f-e3e4-4a2d-853e-31e966c19cf5@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>
+Cc:     "cohuck@redhat.com" <cohuck@redhat.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>,
+        "pmorel@linux.ibm.com" <pmorel@linux.ibm.com>,
+        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "akrowiak@linux.ibm.com" <akrowiak@linux.ibm.com>,
+        "jjherne@linux.ibm.com" <jjherne@linux.ibm.com>,
+        "pasic@linux.ibm.com" <pasic@linux.ibm.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        "Christopherson, , Sean" <seanjc@google.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230131200635.44227-1-mjrosato@linux.ibm.com>
+ <DS0PR11MB752972035A4CE4B2319A6C45C3D19@DS0PR11MB7529.namprd11.prod.outlook.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <DS0PR11MB752972035A4CE4B2319A6C45C3D19@DS0PR11MB7529.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oWB3pJerof2Dt5aM4oiHXKVIqzotBGLN
+X-Proofpoint-ORIG-GUID: BtkvJrH744mvpTcVM5fLTJoJKq6hIf8X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-01_04,2023-01-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ mlxlogscore=782 clxscore=1015 impostorscore=0 phishscore=0 adultscore=0
+ spamscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302010125
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/1/23 7:42 AM, Liu, Yi L wrote:
+>> From: Matthew Rosato <mjrosato@linux.ibm.com>
+...
+>> +	if (device->kvm) {
+>> +		vfio_kvm_put_kvm(device);
+>> +		device->put_kvm = NULL;
+> 
+> Can "device->put_kvm = NULL;" be part of vfio_kvm_put_kvm()?
 
+Sure
 
-On 1/31/2023 3:10 PM, Dmitry Baryshkov wrote:
-> On 31/01/2023 11:17, Devi Priya wrote:
->> Thanks for taking time to review the patch
->>
->> On 1/13/2023 8:50 PM, Konrad Dybcio wrote:
->>>
->>>
->>> On 13.01.2023 15:36, devi priya wrote:
->>>> Included CLK_IS_CRITICAL flag which helps to properly enable
->>>> the APSS PLL during bootup.
->>> Please describe the issue and not only the user-visible impact it
->>> makes. Does the PLL get shut down by clk_ignore_unused? Maybe you
->>> would be interested in the sync_state changes that landed in recent
->>> -next that may solve it for you?
->>>
->>> I don't think it should be always-on, as you have an alternate source
->>> for low power modes, adding CLK_IS_CRITICAL will keep the PLL enabled
->>> even if you're not using it.
->> Yeah, got it. Will drop the critical flag
->>>
->>>> clk_rcg2_ops should be used for APSS clock RCG, as other ops
->>>> will not configure the RCG register
->>> RCG register meaning RCG register*s*, meaning in this case M/N/D
->>> which would be required for proper rate setting and not only input
->>> switching (which arguably doesn't seem to be of much concern on a
->>> single-parent clock)? This all is not obvious..
->>>
->>> Konrad
->> The source selection is done by configuring the RCGR config register 
->> with the source entry (P_APSS_PLL_EARLY) added to the frequency table. 
->> Proper rate is achieved by configuring the PLL and hence M/N/D values 
->> are not configured
-> 
-> But the clk_rcg2_mux_closest_ops also programs the parent for the clock. 
-> So from your description it isn't obvious what is wrong with the current 
-> _ops used for the clock.
-> 
-Okay, understood & agreed.
-Will re-verify it once and update it accordingly in V2
->>>>
->>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>> Signed-off-by: devi priya <quic_devipriy@quicinc.com>
->>>> ---
->>>>   drivers/clk/qcom/apss-ipq-pll.c | 1 +
->>>>   drivers/clk/qcom/apss-ipq6018.c | 8 +++++++-
->>>>   2 files changed, 8 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/clk/qcom/apss-ipq-pll.c 
->>>> b/drivers/clk/qcom/apss-ipq-pll.c
->>>> index dd0c01bf5a98..75486a124fcd 100644
->>>> --- a/drivers/clk/qcom/apss-ipq-pll.c
->>>> +++ b/drivers/clk/qcom/apss-ipq-pll.c
->>>> @@ -33,6 +33,7 @@ static struct clk_alpha_pll ipq_pll = {
->>>>               },
->>>>               .num_parents = 1,
->>>>               .ops = &clk_alpha_pll_huayra_ops,
->>>> +            .flags = CLK_IS_CRITICAL,
->>>>           },
->>>>       },
->>>>   };
->>>> diff --git a/drivers/clk/qcom/apss-ipq6018.c 
->>>> b/drivers/clk/qcom/apss-ipq6018.c
->>>> index f2f502e2d5a4..0d0e7196a4dc 100644
->>>> --- a/drivers/clk/qcom/apss-ipq6018.c
->>>> +++ b/drivers/clk/qcom/apss-ipq6018.c
->>>> @@ -33,15 +33,21 @@ static const struct parent_map 
->>>> parents_apcs_alias0_clk_src_map[] = {
->>>>       { P_APSS_PLL_EARLY, 5 },
->>>>   };
->>>> +static const struct freq_tbl ftbl_apcs_alias0_clk_src[] = {
->>>> +    { .src = P_APSS_PLL_EARLY, .pre_div = 1 },
->>>> +    { }
->>>> +};
->>>> +
->>>>   static struct clk_rcg2 apcs_alias0_clk_src = {
->>>>       .cmd_rcgr = 0x0050,
->>>> +    .freq_tbl = ftbl_apcs_alias0_clk_src,
->>>>       .hid_width = 5,
->>>>       .parent_map = parents_apcs_alias0_clk_src_map,
->>>>       .clkr.hw.init = &(struct clk_init_data){
->>>>           .name = "apcs_alias0_clk_src",
->>>>           .parent_data = parents_apcs_alias0_clk_src,
->>>>           .num_parents = ARRAY_SIZE(parents_apcs_alias0_clk_src),
->>>> -        .ops = &clk_rcg2_mux_closest_ops,
->>>> +        .ops = &clk_rcg2_ops,
->>>>           .flags = CLK_SET_RATE_PARENT,
->>>>       },
->>>>   };
->> Best Regards,
->> Devi Priya
-> 
-Best Regards,
-Devi Priya
