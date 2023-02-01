@@ -2,238 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DBB686C17
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C600686C20
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 17:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjBAQvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 11:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
+        id S231552AbjBAQwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 11:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjBAQvf (ORCPT
+        with ESMTP id S231509AbjBAQwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 11:51:35 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5CB95DC1A;
-        Wed,  1 Feb 2023 08:51:33 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 97AB020B7102; Wed,  1 Feb 2023 08:51:33 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 97AB020B7102
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1675270293;
-        bh=KJbAwCn0TGn9+iQ2/tVx4JONaQBj9mJvNHGMDGM632U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M9+xi+rv2I/V3tvdmJwTYKVfNxwHXrhk3YuFjRx9VmV1lc+o1A9Wu+cOUOX6Iwt4w
-         qWbJ0+X0KIq3CtjGHl5FYFxixRmdGMvV2Cg828Y6P7R6uOVC5mS0IIHIsKt7uR60/B
-         23Hq+dq0qXf7mxfRScckrGtO4KqjHpYAcUEiu/XI=
-Date:   Wed, 1 Feb 2023 08:51:33 -0800
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, mikelley@microsoft.com,
-        ssengar@microsoft.com
-Subject: Re: [PATCH v2 6/6] Driver: VMBus: Add device tree support
-Message-ID: <20230201165133.GA24116@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675188609-20913-1-git-send-email-ssengar@linux.microsoft.com>
- <1675188609-20913-7-git-send-email-ssengar@linux.microsoft.com>
- <CAL_JsqK_7eTTrSd6EKDGy9A8kC5w6cjVEtSi3CB1M7Awj+zg6g@mail.gmail.com>
+        Wed, 1 Feb 2023 11:52:12 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D52677A3;
+        Wed,  1 Feb 2023 08:52:07 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id f7so11105345edw.5;
+        Wed, 01 Feb 2023 08:52:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/WfkJK1m4uMcYazdq9Xzjjoa4w46FK18lwbBMkuuqyk=;
+        b=KO8P3ldzNOgJXkygyVUbD37TO7GjteZYnODMUz+IUTiYRU/hwmNf4VrJ7QGLReogbU
+         zm4WVsfGlHBMt2d3fMkQITMS+slphHX8l80TnBol8fRAhPWMn7Lan7TXf0SvcBEjOKHL
+         o/JXfltNBUmE0w/lODjD/zFQXFgmJPq4lO1FsGhvQ5J0Y0Jyze72birAO4ftVhgovynf
+         cZW0o42q2XLFS51kiR5CqWLh4ZWc0VKd/5EYU6Ec/hvCqjyTTQjTlvzSVa2pXunIQwvh
+         B+SVPhOTqhau97qbY3yd+fXu0kzG283kM9XRiHaQZF7E20Zae+Pp1st1SjJWhH9riEV2
+         1+Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/WfkJK1m4uMcYazdq9Xzjjoa4w46FK18lwbBMkuuqyk=;
+        b=zcww1t2lJ2GbeiVWa2AIbx7ziGGixDKodZw51R+sOCzuDrXNIZvi/m8SOMxq8bI50d
+         PPpC4EZHapUZ1mrBcTK+dBpZewaD2rKi8GfGkH9orMsheHvv3hjef4mEa6tL0qgLFM5N
+         9zt8YU1pvC8FRnJMzs/J7MU026mJM20T6DLayY6X45KRMz65iX+wva1Vs4JbvAsBcbI7
+         8UGWMEKFgiooJmn4l9iNGkK3EnuEh9fmxzM3vxCT3MmJPA5U65sJAefRwSvGi72pu20s
+         KDxJgLtq2iBcInXvb+EIEXWcXz3lTvPVKhaPcd54rR715xVWAwL1kpvGdX8BmzT/s/W/
+         7uQQ==
+X-Gm-Message-State: AO0yUKVcbyHBVqIU/MJQb50vKkK7v5BaZZPl8PiSwgqvgl8E0uSN5s0d
+        OCd4Uw+jBe6UAYnkryrtVFU=
+X-Google-Smtp-Source: AK7set8lps1GUVXwzeD8oYwd5gb5p6Ce2ecb5MWRyPPhaxSb9by6FbnjnxCOiif9l7YrqRNvUF0L4Q==
+X-Received: by 2002:a50:9304:0:b0:4a2:7489:a70a with SMTP id m4-20020a509304000000b004a27489a70amr3113695eda.22.1675270326062;
+        Wed, 01 Feb 2023 08:52:06 -0800 (PST)
+Received: from pc636 (host-78-79-169-126.mobileonline.telia.com. [78.79.169.126])
+        by smtp.gmail.com with ESMTPSA id b17-20020aa7df91000000b0049b5c746df7sm10127186edy.0.2023.02.01.08.52.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 08:52:05 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Wed, 1 Feb 2023 17:52:02 +0100
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Jiri Wiesner <jwiesner@suse.de>
+Subject: Re: [PATCH 10/13] ipvs: Rename kfree_rcu() to kfree_rcu_mightsleep()
+Message-ID: <Y9qYsi5x7nxtSsx/@pc636>
+References: <20230201150954.409693-1-urezki@gmail.com>
+ <Y9qLB6Zyx5atcFUV@salvia>
+ <7e87836a-c72-eefd-9c74-fc2637accd2@ssi.bg>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAL_JsqK_7eTTrSd6EKDGy9A8kC5w6cjVEtSi3CB1M7Awj+zg6g@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7e87836a-c72-eefd-9c74-fc2637accd2@ssi.bg>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 02:12:53PM -0600, Rob Herring wrote:
-> On Tue, Jan 31, 2023 at 12:10 PM Saurabh Sengar
-> <ssengar@linux.microsoft.com> wrote:
-> >
-> > Update the driver to support device tree boot as well along with ACPI.
-> > At present the device tree parsing only provides the mmio region info
-> > and is not the exact copy of ACPI parsing. This is sufficient to cater
-> > all the current device tree usecases for VMBus.
-> >
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  drivers/hv/vmbus_drv.c | 75 ++++++++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 73 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> > index 49030e756b9f..1741f1348f9f 100644
-> > --- a/drivers/hv/vmbus_drv.c
-> > +++ b/drivers/hv/vmbus_drv.c
-> > @@ -2152,7 +2152,7 @@ void vmbus_device_unregister(struct hv_device *device_obj)
-> >         device_unregister(&device_obj->device);
-> >  }
-> >
-> > -
-> > +#ifdef CONFIG_ACPI
-> >  /*
-> >   * VMBUS is an acpi enumerated device. Get the information we
-> >   * need from DSDT.
-> > @@ -2262,6 +2262,7 @@ static acpi_status vmbus_walk_resources(struct acpi_resource *res, void *ctx)
-> >
-> >         return AE_OK;
-> >  }
-> > +#endif
-> >
-> >  static void vmbus_mmio_remove(void)
-> >  {
-> > @@ -2282,7 +2283,7 @@ static void vmbus_mmio_remove(void)
-> >         }
-> >  }
-> >
-> > -static void vmbus_reserve_fb(void)
-> > +static void __maybe_unused vmbus_reserve_fb(void)
-> >  {
-> >         resource_size_t start = 0, size;
-> >         struct pci_dev *pdev;
-> > @@ -2442,6 +2443,7 @@ void vmbus_free_mmio(resource_size_t start, resource_size_t size)
-> >  }
-> >  EXPORT_SYMBOL_GPL(vmbus_free_mmio);
-> >
-> > +#ifdef CONFIG_ACPI
+On Wed, Feb 01, 2023 at 06:12:04PM +0200, Julian Anastasov wrote:
 > 
-> It's better to put C 'if (!IS_ENABLED(CONFIG_ACPI)' code in the
-
-I wanted to have separate function for ACPI and device tree flow, which
-can be easily maintained with #ifdef. Please let me know if its fine.
-
+> 	Hello,
 > 
-> >  static int vmbus_acpi_add(struct platform_device *pdev)
-> >  {
-> >         acpi_status result;
-> > @@ -2496,10 +2498,68 @@ static int vmbus_acpi_add(struct platform_device *pdev)
-> >                 vmbus_mmio_remove();
-> >         return ret_val;
-> >  }
-> > +#else
-> > +
-> > +static int vmbus_device_add(struct platform_device *pdev)
-> > +{
-> > +       struct resource **cur_res = &hyperv_mmio;
-> > +       struct device_node *np;
-> > +       u32 *ranges, len;
-> > +       u64 start;
-> > +       int nr_ranges, child_cells = 2, cur_cell = 0, ret = 0;
-> > +
-> > +       hv_dev = pdev;
-> > +       np = pdev->dev.of_node;
-> > +
-> > +       nr_ranges = device_property_count_u32(&pdev->dev, "ranges");
+> On Wed, 1 Feb 2023, Pablo Neira Ayuso wrote:
 > 
-> Parsing ranges yourself is a bad sign. It's a standard property and we
-> have functions which handle it. If those don't work, then something is
-> wrong with your DT or they need to be fixed/expanded.
-
-I find all the  standard functions which parse "ranges" property are doing
-much more then I need. Our requirement is to only pass the mmio memory range
-and size, I couldn't find any standard API doing this.
-
-I see some of the drivers are using these APIs to parse ranges property hence
-I follwed those examples. I will be happy to improve it if I get any better
-alternative.
-
+> > Hi,
+> > 
+> > On Wed, Feb 01, 2023 at 04:09:51PM +0100, Uladzislau Rezki (Sony) wrote:
+> > > The kfree_rcu()'s single argument name is deprecated therefore
+> > > rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
+> > > underline that it is for sleepable contexts.
+> > > 
+> > > Cc: Julian Anastasov <ja@ssi.bg>
+> > > Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+> > > Cc: Jiri Wiesner <jwiesner@suse.de>
+> > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > ---
+> > >  net/netfilter/ipvs/ip_vs_est.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
+> > > index ce2a1549b304..a39baf6d1367 100644
+> > > --- a/net/netfilter/ipvs/ip_vs_est.c
+> > > +++ b/net/netfilter/ipvs/ip_vs_est.c
+> > > @@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
+> > >  	__set_bit(row, kd->avail);
+> > >  	if (!kd->tick_len[row]) {
+> > >  		RCU_INIT_POINTER(kd->ticks[row], NULL);
+> > > -		kfree_rcu(td);
+> > 
+> > I also found this kfree_rcu() without rcu_head call a few weeks ago.
+> > 
+> > @Wiesner, @Julian: Any chance this can be turned into kfree_rcu(td, rcu_head); ?
 > 
-> > +       if (nr_ranges < 0)
-> > +               return nr_ranges;
-> > +       ranges = kcalloc(nr_ranges, sizeof(u32), GFP_KERNEL);
-> > +       if (!ranges)
-> > +               return -ENOMEM;
-> > +
-> > +       if (device_property_read_u32_array(&pdev->dev, "ranges", ranges, nr_ranges)) {
-> > +               ret =  -EINVAL;
-> > +               goto free_ranges;
-> > +       }
-> > +
-> > +       while (cur_cell < nr_ranges) {
-> > +               struct resource *res;
-> > +
-> > +               /* The first u64 in the ranges description isn't used currently. */
-> > +               cur_cell = cur_cell + child_cells;
-> > +               start = ranges[cur_cell++];
-> > +               start = (start << 32) | ranges[cur_cell++];
-> > +               len = ranges[cur_cell++];
+> 	Yes, as simple as this:
 > 
-> To expand my last point, the format of ranges is <child_addr
-> parent_addr length>. That's not what your 'ranges' has. You've also
-> just ignored '#address-cells' and '#size-cells'.
-
-Got it. However I need to check if there is any standard API which can
-give me these values, otherwise I may have to parse these as well :(
-
-Regards,
-Saurabh
-
+> diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+> index c6c61100d244..6d71a5ff52df 100644
+> --- a/include/net/ip_vs.h
+> +++ b/include/net/ip_vs.h
+> @@ -461,6 +461,7 @@ void ip_vs_stats_free(struct ip_vs_stats *stats);
+>  
+>  /* Multiple chains processed in same tick */
+>  struct ip_vs_est_tick_data {
+> +	struct rcu_head		rcu_head;
+>  	struct hlist_head	chains[IPVS_EST_TICK_CHAINS];
+>  	DECLARE_BITMAP(present, IPVS_EST_TICK_CHAINS);
+>  	DECLARE_BITMAP(full, IPVS_EST_TICK_CHAINS);
+> diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
+> index df56073bb282..25c7118d9348 100644
+> --- a/net/netfilter/ipvs/ip_vs_est.c
+> +++ b/net/netfilter/ipvs/ip_vs_est.c
+> @@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
+>  	__set_bit(row, kd->avail);
+>  	if (!kd->tick_len[row]) {
+>  		RCU_INIT_POINTER(kd->ticks[row], NULL);
+> -		kfree_rcu(td);
+> +		kfree_rcu(td, rcu_head);
+>  	}
+>  	kd->est_count--;
+>  	if (kd->est_count) {
 > 
-> > +
-> > +               res = kzalloc(sizeof(*res), GFP_ATOMIC);
-> > +               if (!res) {
-> > +                       ret = -ENOMEM;
-> > +                       goto free_ranges;
-> > +               }
-> > +
-> > +               res->name = "hyperv mmio";
-> > +               res->flags = IORESOURCE_MEM | IORESOURCE_MEM_64;
-> > +               res->start = start;
-> > +               res->end = start + len;
-> > +
-> > +               *cur_res = res;
-> > +               cur_res = &res->sibling;
-> > +       }
-> > +
-> > +free_ranges:
-> > +       kfree(ranges);
-> > +       return ret;
-> > +}
-> > +#endif
-> >
-> >  static int vmbus_platform_driver_probe(struct platform_device *pdev)
-> >  {
-> > +#ifdef CONFIG_ACPI
-> >         return vmbus_acpi_add(pdev);
-> > +#else
-> > +       return vmbus_device_add(pdev);
-> > +#endif
-> >  }
-> >
-> >  static int vmbus_platform_driver_remove(struct platform_device *pdev)
-> > @@ -2645,6 +2705,16 @@ static int vmbus_bus_resume(struct device *dev)
-> >  #define vmbus_bus_resume NULL
-> >  #endif /* CONFIG_PM_SLEEP */
-> >
-> > +static const struct of_device_id vmbus_of_match[] = {
-> > +       {
-> > +               .compatible = "msft,vmbus",
-> > +       },
-> > +       {
-> > +               /* sentinel */
-> > +       },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, vmbus_of_match);
-> > +
-> >  static const struct acpi_device_id vmbus_acpi_device_ids[] = {
-> >         {"VMBUS", 0},
-> >         {"VMBus", 0},
-> > @@ -2679,6 +2749,7 @@ static struct platform_driver vmbus_platform_driver = {
-> >         .driver = {
-> >                 .name = "vmbus",
-> >                 .acpi_match_table = ACPI_PTR(vmbus_acpi_device_ids),
-> > +               .of_match_table = of_match_ptr(vmbus_of_match),
-> >                 .pm = &vmbus_bus_pm,
-> >                 .probe_type = PROBE_FORCE_SYNCHRONOUS,
-> >         }
-> > --
-> > 2.25.1
-> >
+> 	I was about to reply to Uladzislau Rezki but his patchset
+> looks more like a renaming, so I'm not sure how we are about
+> to integrate this change, as separate patch or as part of his
+> patchset. I don't have preference, just let me know how to
+> handle it.
+> 
+If you give on this patch an Ack i will resend it once i collect
+all other ACKs. So it will be integrated via RCU-tree.
+
+So this is just renaming.
+
+If the ip_vs_stop_estimator() can be invoked from an atomic context
+then it is a bug and you need to integrate rcu_head in your structure.
+
+--
+Uladzislau Rezki
