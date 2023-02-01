@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDC5686CB0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 18:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC664686CB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 18:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbjBART7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 12:19:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S232111AbjBARUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 12:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbjBARTz (ORCPT
+        with ESMTP id S232055AbjBARUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 12:19:55 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43363303F2;
-        Wed,  1 Feb 2023 09:19:54 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id lu11so16166326ejb.3;
-        Wed, 01 Feb 2023 09:19:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i9+p9Bcm6YyaW1LZ9eaYctAF7uXc0lrq3SOegE0u2Qs=;
-        b=RSlq5fUaB9+KvDOjVoOnR0jnyYtYl0GQ3BOcquQpUdMOHMCWN1oo9ryy5XqY+aBUjf
-         W5NhPeaiemy5UsWK8AX3fFgwspul9TY+9Axz9qrRrrdU3LBwoUjRNj2zuwGGlZP2c/D8
-         t07T1Y8dsyOG1Nmd7nSUfZDzIbGNDMFILcQYtAIy5utg/zeIYRw6n9e20aErZJpZzVD0
-         V2mAs/BUmsUneeLvazdQtoGoP+ClovI+2aptjCzNhTQ60aOzHMxeQVqWOLmyiYCf3es0
-         3MJpAT7qE+0zaF3F88CPCQNKz1XEB59g4pBhF7GyJ4rxwZRqFRhL3ZMNbGSFgD/WuHyS
-         pMDQ==
+        Wed, 1 Feb 2023 12:20:13 -0500
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21FF4F36F;
+        Wed,  1 Feb 2023 09:20:09 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-16346330067so24419855fac.3;
+        Wed, 01 Feb 2023 09:20:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=i9+p9Bcm6YyaW1LZ9eaYctAF7uXc0lrq3SOegE0u2Qs=;
-        b=BN3DvpeCp82uoJbO2zeanenat1PjDXHY7Iy/fkwaXO+H7yp6LsF+5ZrnGHSiFyyeV8
-         U5xKqgYdsgNVfKivq3nzZdojMh/wmVLCigUFAeksuYEmZd1RIEv2ZzSC6zpuG97eIrD0
-         j9NDzaoJt2dub8z27PrYyMdtnIBiPU3KFmcRR/daYetDeJb1Eb44PmdNfqjhFPI6Eh/p
-         Uv3JWKrA8/KY7ch13CUagvjGPSX1/GeCkL5RNNDrYnWUgJdv4dCzh0EZL45f7rFWlC4r
-         PhffaLDwqvCf96UoOYDDiP2OBEtrTPmm7m6hIeZMwvHWqfdANMY7xr/r7Et56y78wLBj
-         deeQ==
-X-Gm-Message-State: AO0yUKWeeQnaQYCzTVUqjrWx453yzQB0y01v5uxpVlNggWT5lSedC2QY
-        M8kkR+QUnPrv+QnpRfylU+I=
-X-Google-Smtp-Source: AK7set/H9XGmOyLCS2ORbkrfZ4es9omjadD8XEMs2BwGebRujc8mkNylnRDyymc7latf127BOS8Yjg==
-X-Received: by 2002:a17:907:1707:b0:884:3174:119d with SMTP id le7-20020a170907170700b008843174119dmr3285735ejc.14.1675271992617;
-        Wed, 01 Feb 2023 09:19:52 -0800 (PST)
-Received: from pc636 (host-78-79-169-126.mobileonline.telia.com. [78.79.169.126])
-        by smtp.gmail.com with ESMTPSA id r22-20020a1709064d1600b00878803d4049sm9804309eju.93.2023.02.01.09.19.50
+        bh=JvS6IzC8bwewPncy4ABn16veV+Ux4xgWqkXAqCcyLxY=;
+        b=i1ymH9eG1KTE8s//6Zg7bEKO+1EgQlH+OSfPTDFvkT+Ph3XWGefVK4qwuBR/817YaM
+         6w3TyXA9HBVCgxg8ECWlbopFV2zDwYXOdh5edKivDeOpyZBy+Kz9Tddd3ecGF9S8Hth5
+         +d1M7kI+pGGnEfHf10WE89bxfUU9Bkg9qKUfdB1CI9KuE4qGzXryIAubC+wUGP5/mMCv
+         qlCkeVSLDeZiNgBxv/gMCEfhpIAyBInhFniNcouU266Mcq+8NXsBTFS7qzxbQ0PCgUj9
+         p6qjoYp4kDkQu5QMS7MWCrRL+G3b/QN3kqnleMEquKnPF9dUEwo8D6vpUrH22PLVzpaU
+         +Bdw==
+X-Gm-Message-State: AO0yUKUHqUlcZgVrhZgeyRuGN5XoWxF0rdxxsphBaxsxhvXheJJVtlQo
+        6ohjlCdS0uWIFLBO4OXcTA==
+X-Google-Smtp-Source: AK7set/BDnVzkpsE8Teoq5qX/sm2jzdvxGaWqxAltLjnnVeHkNBTa305CN2wWkzToMcN1ClyGheccg==
+X-Received: by 2002:a05:6871:28e:b0:166:732f:243b with SMTP id i14-20020a056871028e00b00166732f243bmr1364046oae.52.1675272009003;
+        Wed, 01 Feb 2023 09:20:09 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q42-20020a05687082aa00b001676a4dc22bsm1312853oae.58.2023.02.01.09.20.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 09:19:52 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 1 Feb 2023 18:19:49 +0100
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-Cc:     Julian Anastasov <ja@ssi.bg>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Jiri Wiesner <jwiesner@suse.de>
-Subject: Re: [PATCH 10/13] ipvs: Rename kfree_rcu() to kfree_rcu_mightsleep()
-Message-ID: <Y9qfNV0IX1tBsTxP@pc636>
-References: <20230201150954.409693-1-urezki@gmail.com>
- <Y9qLB6Zyx5atcFUV@salvia>
- <7e87836a-c72-eefd-9c74-fc2637accd2@ssi.bg>
- <Y9qc+lgR1CgdszKs@salvia>
+        Wed, 01 Feb 2023 09:20:08 -0800 (PST)
+Received: (nullmailer pid 3750008 invoked by uid 1000);
+        Wed, 01 Feb 2023 17:20:07 -0000
+Date:   Wed, 1 Feb 2023 11:20:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Youghandhar Chintala <quic_youghand@quicinc.com>, kvalo@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt: bindings: add dt entry for XO calibration
+ support
+Message-ID: <20230201172007.GA3733090-robh@kernel.org>
+References: <20230131140345.6193-1-quic_youghand@quicinc.com>
+ <20230131140345.6193-2-quic_youghand@quicinc.com>
+ <622ef51f-643e-5eb5-3884-3f22bf4fa9be@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9qc+lgR1CgdszKs@salvia>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <622ef51f-643e-5eb5-3884-3f22bf4fa9be@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,82 +70,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023 at 06:10:18PM +0100, Pablo Neira Ayuso wrote:
-> On Wed, Feb 01, 2023 at 06:12:04PM +0200, Julian Anastasov wrote:
-> > 
-> > 	Hello,
-> > 
-> > On Wed, 1 Feb 2023, Pablo Neira Ayuso wrote:
-> > 
-> > > Hi,
-> > > 
-> > > On Wed, Feb 01, 2023 at 04:09:51PM +0100, Uladzislau Rezki (Sony) wrote:
-> > > > The kfree_rcu()'s single argument name is deprecated therefore
-> > > > rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
-> > > > underline that it is for sleepable contexts.
-> > > > 
-> > > > Cc: Julian Anastasov <ja@ssi.bg>
-> > > > Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> > > > Cc: Jiri Wiesner <jwiesner@suse.de>
-> > > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > > ---
-> > > >  net/netfilter/ipvs/ip_vs_est.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
-> > > > index ce2a1549b304..a39baf6d1367 100644
-> > > > --- a/net/netfilter/ipvs/ip_vs_est.c
-> > > > +++ b/net/netfilter/ipvs/ip_vs_est.c
-> > > > @@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
-> > > >  	__set_bit(row, kd->avail);
-> > > >  	if (!kd->tick_len[row]) {
-> > > >  		RCU_INIT_POINTER(kd->ticks[row], NULL);
-> > > > -		kfree_rcu(td);
-> > > 
-> > > I also found this kfree_rcu() without rcu_head call a few weeks ago.
-> > > 
-> > > @Wiesner, @Julian: Any chance this can be turned into kfree_rcu(td, rcu_head); ?
-> > 
-> > 	Yes, as simple as this:
-> > 
-> > diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-> > index c6c61100d244..6d71a5ff52df 100644
-> > --- a/include/net/ip_vs.h
-> > +++ b/include/net/ip_vs.h
-> > @@ -461,6 +461,7 @@ void ip_vs_stats_free(struct ip_vs_stats *stats);
-> >  
-> >  /* Multiple chains processed in same tick */
-> >  struct ip_vs_est_tick_data {
-> > +	struct rcu_head		rcu_head;
-> >  	struct hlist_head	chains[IPVS_EST_TICK_CHAINS];
-> >  	DECLARE_BITMAP(present, IPVS_EST_TICK_CHAINS);
-> >  	DECLARE_BITMAP(full, IPVS_EST_TICK_CHAINS);
-> > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
-> > index df56073bb282..25c7118d9348 100644
-> > --- a/net/netfilter/ipvs/ip_vs_est.c
-> > +++ b/net/netfilter/ipvs/ip_vs_est.c
-> > @@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
-> >  	__set_bit(row, kd->avail);
-> >  	if (!kd->tick_len[row]) {
-> >  		RCU_INIT_POINTER(kd->ticks[row], NULL);
-> > -		kfree_rcu(td);
-> > +		kfree_rcu(td, rcu_head);
-> >  	}
-> >  	kd->est_count--;
-> >  	if (kd->est_count) {
-> > 
-> > 	I was about to reply to Uladzislau Rezki but his patchset
-> > looks more like a renaming, so I'm not sure how we are about
-> > to integrate this change, as separate patch or as part of his
-> > patchset. I don't have preference, just let me know how to
-> > handle it.
+On Tue, Jan 31, 2023 at 07:02:16PM +0100, Krzysztof Kozlowski wrote:
+> On 31/01/2023 15:03, Youghandhar Chintala wrote:
+> > Add dt binding to get XO calibration data support for Wi-Fi RF clock.
 > 
-> @Uladzislau Rezki: Are you fine with dropping this patch from your
-> series and Julian will send us a patch for inclusion into net-next to
-> use the kfree_rcu(x, rcu_head) variant?
-Absolutely. So i will drop it from my series.
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
+> Hint: dt-bindings: net: qcom,ath11k:
+> 
+> > 
+> > Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
+> > ---
+> >  .../devicetree/bindings/net/wireless/qcom,ath11k.yaml         | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+> > index f7cf135aa37f..205ee949daba 100644
+> > --- a/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+> > +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml
+> > @@ -41,6 +41,10 @@ properties:
+> >          * reg
+> >          * reg-names
+> >  
+> > +  xo-cal-data:
+> > +    description:
+> > +      XO cal offset to be configured in XO trim register
+> 
+> Missing type. I also do not understand what's this and why some register
+> offset should be stored in DT. Please give us some justification why
+> this is suitable for DT.
 
-Thanks!
+I think that's a voltage offset or something, but you are right, we 
+shouldn't have to guess.
 
---
-Uladzislau Rezki
+It needs a vendor prefix, too.
+
+Rob
