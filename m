@@ -2,102 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89096871D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E05946871DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Feb 2023 00:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjBAXXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 18:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
+        id S230294AbjBAXZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 18:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbjBAXXC (ORCPT
+        with ESMTP id S229974AbjBAXY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 18:23:02 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A927A264;
-        Wed,  1 Feb 2023 15:23:00 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id m12so201226qth.4;
-        Wed, 01 Feb 2023 15:23:00 -0800 (PST)
+        Wed, 1 Feb 2023 18:24:59 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FFA6EB4
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 15:24:32 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id n20-20020a17090aab9400b00229ca6a4636so3915572pjq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 15:24:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WRf7FsW0svSQ5uvgmd0AHIX9qix6pe5dIuAX0+vgnjk=;
-        b=AaGH4xIRJHiGzFMV++RFKatLGmRKIlREolVmZNjG58XdbhhZh+dfTsMyJYEO+70aem
-         tBqEufwqM5laAYG07ZQPu8n6RGmg+qrsVt5Zqo6b3ISlGXUwbys8dTWui33h1xrvKKA5
-         n1CihKRhSpTe+48nBn480C5vwmB2HicalOCh4HRM7mt6aqy+/iCOMgYHhHUIr5HHjlb+
-         RTvpnbVpRzvWisvXms2l3y4e2SiNqRVZuutfDxnXhU20zU+YdCNjwQK+lRq6PAmCYORR
-         GUZoSPcR+/cRSEgsWhh9yJQuWrTv2e0f9ucLgKuoOFB0FpBtRudXBfgQgpQfmUXiFefQ
-         5bBw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E/6eWRjWKiT+gMF2Kx54kumkGUgR4LPjtTyKTiPj5l0=;
+        b=ckQjopjrhkWo6X7I571v3IxwHakCp+4z8GU9uuF7Y/Bjwp1koefwtOVL4LzKiFcJ9C
+         XcHGNn1hCKhVYQeg8XhLchKFfSMN38z2M6Yj4CAHz6lLSJBaBcRvydMKDm1U27BRF8id
+         tw+wAddPb3sS/YV7szeazVejE6Y3KFzlXjWRIHjH5cQJp+LoRrEDr5Lodp9Z5nZYYZtG
+         mm9JVcsH1gEuW3vjtCypkhg+an2xzkI48Msdf7QLvicHGwE6bzrhc7X/hdhiagvbaGzh
+         mIfbDUzRI0s7rYCfQp083m75Jy91TPdVW7I7kmZyf01Gqm9G30POTF5iR8/do5rLmN7D
+         08nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:feedback-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WRf7FsW0svSQ5uvgmd0AHIX9qix6pe5dIuAX0+vgnjk=;
-        b=U37R2xk4+D4anO1F0nsjAloxJMblkiq7mMafhdrkrMXPRp67OS6Cx4Z8iRn1u3d1v/
-         C1JxTnnHxqBHge2pcXJaYUHu73iCYL/LHhaIIXQHR2o2+ZpD4YeepVVRnraG4HO1ZKK8
-         y8XTmYiYNl/a5Yssk0rVk7w5Aycf3qPMTb/Gvrot9qY/qn5WpAU9jTqLvR3EQYoUCB8Z
-         btVvkCRYCZzUd77VsM3IAxtDUl4VYLOqIzcbBlAADbOqSdu1b76LGa9tY15pFWrZtE7L
-         3I3S0ECWgUj3VU3H51S/Xj/fgjOWfN/o9KGH3MG7KkXo40rJhrxCfJlfCwCWCcPtscr6
-         Y2WA==
-X-Gm-Message-State: AO0yUKXTNLQM17qKt4uRunEa3KHfc/k4efigedRgZTSKtg2lJkHBENFd
-        EK2FRHa8Y7uJzoM2jpxu80U=
-X-Google-Smtp-Source: AK7set8a4O590xcb1r76E6BdTkcepn8WXa7kzVn5DCamhrt0fB+pXN3hlNimrLvuOLFWYKwV+G0Z+Q==
-X-Received: by 2002:ac8:5886:0:b0:3b9:b297:5ec5 with SMTP id t6-20020ac85886000000b003b9b2975ec5mr7535406qta.13.1675293779687;
-        Wed, 01 Feb 2023 15:22:59 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id s39-20020a05622a1aa700b003a7e38055c9sm12735406qtc.63.2023.02.01.15.22.58
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E/6eWRjWKiT+gMF2Kx54kumkGUgR4LPjtTyKTiPj5l0=;
+        b=K3Z+enhvKotcR/oEopku6JqzJvpclusyFNM/NsiPaxgLl9FuZ1ZrDh90gFgFjGqIz1
+         aCjViRjYmAjaRyKdvPpkic7Mx8bA4E++HXbvO0x90DxeQ7QjKdNlsUi1Spxt6cNJ4nHs
+         8ZrmLKBkvDCB+PqWST0rPoGfoefeRvbI+phcMDseOntOIuI4xArKBRPpLURg71bRhWGv
+         tRg0jPgfT3HOUaPmfoK+ohgKT3Pyt4LNW+tnJAxhQ7/AC2K0JHHaqi3D+vGMsp2r2acr
+         h3RKIn0t215w0zuEUnSzSkVdwK3+UhpQETgCEPLHNdwAe3GMVWr/w+vINYO/is1FMI7Y
+         njyw==
+X-Gm-Message-State: AO0yUKXL3qcLjGebjYo7wt1kcWOrxqKyi5pWCk4PhP2M3FJWM8k1P5Gw
+        j6eCHlxSmGb2iErFz+Ju6VaIJA==
+X-Google-Smtp-Source: AK7set8Z/TpzonRQfgXFCS0rW4Tud6nVMBKkhAcojJ5fXlAhaL2OoO+ufoYoQ8/5jlrYaXFnGfhDKQ==
+X-Received: by 2002:a17:902:b58a:b0:198:af4f:de08 with SMTP id a10-20020a170902b58a00b00198af4fde08mr131238pls.8.1675293871408;
+        Wed, 01 Feb 2023 15:24:31 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a000a0a00b00588fb6fafe0sm12006529pfh.188.2023.02.01.15.24.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 15:22:58 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 71F4527C0054;
-        Wed,  1 Feb 2023 18:22:58 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 01 Feb 2023 18:22:58 -0500
-X-ME-Sender: <xms:UvTaY-AnHLgtb4I40VMzL9cSsKBUaYVsDrybfHp_MjqEaari3wEgug>
-    <xme:UvTaY4hWRvoFfYkqdnThqUilTxrXyJWR4QzO6JE2S0N2YRVEfJCixxv66cpz4hBhQ
-    y33a5KjrutI6398NQ>
-X-ME-Received: <xmr:UvTaYxlgcW4XaiKaGmAptmrIXpURDTndFNdK1xwNGUuoSIb3mw_nV4Vk_FM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefjedgudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpeegleejiedthedvheeggfejveefjeejkefgveffieeujefhueeigfegueeh
-    geeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
-    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
-    igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:UvTaY8zMi2zYNBIfZSv25qmIz8XfGUIKhg5eqvp5Or43Oq9zAeLuNQ>
-    <xmx:UvTaYzQ_2cHwEKVNwA8oxxtDyTuqsFbCu51kTuBO_pvB1BxuBiDpLg>
-    <xmx:UvTaY3Y9H5XPJgAYUTXRCLeo7vSIYAmNVZVcXshqNfeOVwDXyf_bSQ>
-    <xmx:UvTaY4IGnp6pA3NG7yqSPzTVgAOBFkuyylu8H8s1rNiK2-deCp0Alw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 1 Feb 2023 18:22:57 -0500 (EST)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Subject: [RFC 5/5] sample: rust: print: Add sampe code for Arc printing
-Date:   Wed,  1 Feb 2023 15:22:44 -0800
-Message-Id: <20230201232244.212908-6-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230201232244.212908-1-boqun.feng@gmail.com>
-References: <20230201232244.212908-1-boqun.feng@gmail.com>
+        Wed, 01 Feb 2023 15:24:31 -0800 (PST)
+Date:   Wed, 1 Feb 2023 23:24:27 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        m Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [Patch v4 12/13] KVM: selftests: Make vCPU exit reason test
+ assertion common.
+Message-ID: <Y9r0q9cuK/ifu+OW@google.com>
+References: <20221212183720.4062037-1-vipinsh@google.com>
+ <20221212183720.4062037-13-vipinsh@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221212183720.4062037-13-vipinsh@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,59 +85,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This both demonstrates the usage of different print format in Rust and
-serves as a selftest for the `Display` and `Debug` implementation of
-`Arc` and its friends.
++all the other KVM selftests maintainers and reviewers
 
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+On Mon, Dec 12, 2022, Vipin Sharma wrote:
+> Make TEST_ASSERT_KVM_EXIT_REASON() macro and replace all exit reason
+> test assert statements with it.
+> 
+> No functional changes intended.
+> 
+> Suggested-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> Reviewed-by: David Matlack <dmatlack@google.com>
+> ---
+>  .../testing/selftests/kvm/aarch64/psci_test.c |  4 +--
+>  .../testing/selftests/kvm/include/test_util.h | 10 ++++++++
+>  .../kvm/lib/s390x/diag318_test_handler.c      |  3 +--
+>  .../selftests/kvm/s390x/sync_regs_test.c      | 15 +++--------
+>  .../selftests/kvm/set_memory_region_test.c    |  6 +----
+>  tools/testing/selftests/kvm/x86_64/amx_test.c |  8 +-----
+>  .../kvm/x86_64/cr4_cpuid_sync_test.c          |  8 +-----
+>  .../testing/selftests/kvm/x86_64/debug_regs.c |  2 +-
+>  .../selftests/kvm/x86_64/flds_emulation.h     |  5 +---
+>  .../selftests/kvm/x86_64/hyperv_clock.c       |  7 +-----
+>  .../selftests/kvm/x86_64/hyperv_evmcs.c       |  8 +-----
+>  .../selftests/kvm/x86_64/hyperv_features.c    | 14 ++---------
+>  .../testing/selftests/kvm/x86_64/hyperv_ipi.c |  6 +----
+>  .../selftests/kvm/x86_64/hyperv_svm_test.c    |  7 +-----
+>  .../selftests/kvm/x86_64/hyperv_tlb_flush.c   | 14 ++---------
+>  .../selftests/kvm/x86_64/kvm_clock_test.c     |  5 +---
+>  .../selftests/kvm/x86_64/kvm_pv_test.c        |  5 +---
+>  .../selftests/kvm/x86_64/monitor_mwait_test.c |  9 +------
+>  .../kvm/x86_64/nested_exceptions_test.c       |  5 +---
+>  .../selftests/kvm/x86_64/platform_info_test.c | 14 +++--------
+>  .../kvm/x86_64/pmu_event_filter_test.c        |  6 +----
+>  tools/testing/selftests/kvm/x86_64/smm_test.c |  9 +------
+>  .../testing/selftests/kvm/x86_64/state_test.c |  8 +-----
+>  .../selftests/kvm/x86_64/svm_int_ctl_test.c   |  8 +-----
+>  .../kvm/x86_64/svm_nested_shutdown_test.c     |  7 +-----
+>  .../kvm/x86_64/svm_nested_soft_inject_test.c  |  6 +----
+>  .../selftests/kvm/x86_64/svm_vmcall_test.c    |  6 +----
+>  .../selftests/kvm/x86_64/sync_regs_test.c     | 25 ++++---------------
+>  .../kvm/x86_64/triple_fault_event_test.c      |  9 ++-----
+>  .../selftests/kvm/x86_64/tsc_scaling_sync.c   |  6 +----
+>  .../kvm/x86_64/ucna_injection_test.c          | 22 +++-------------
+>  .../selftests/kvm/x86_64/userspace_io_test.c  |  6 +----
+>  .../kvm/x86_64/userspace_msr_exit_test.c      | 22 +++-------------
+>  .../kvm/x86_64/vmx_apic_access_test.c         | 11 ++------
+>  .../kvm/x86_64/vmx_close_while_nested_test.c  |  5 +---
+>  .../selftests/kvm/x86_64/vmx_dirty_log_test.c |  7 +-----
+>  .../vmx_exception_with_invalid_guest_state.c  |  4 +--
+>  .../x86_64/vmx_invalid_nested_guest_state.c   |  4 +--
+>  .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |  6 +----
+>  .../kvm/x86_64/vmx_preemption_timer_test.c    |  8 +-----
+>  .../kvm/x86_64/vmx_tsc_adjust_test.c          |  6 +----
+>  .../selftests/kvm/x86_64/xapic_ipi_test.c     |  6 +----
+>  .../selftests/kvm/x86_64/xen_shinfo_test.c    |  7 +-----
+>  .../selftests/kvm/x86_64/xen_vmcall_test.c    |  5 +---
+>  44 files changed, 71 insertions(+), 293 deletions(-)
+
+I love the cleanup, but in the future, please don't squeeze KVM-wide changes in
+the middle of an otherwise arch-specific series unless it's absolutely necessary.
+I get why you added the macro before copy-pasting more code into a new test, but
+the unfortunate side effect is that complicates grabbing the entire series.
+
+And incorporate ./scripts/get_maintainer.pl into your workflow, the other KVM
+selftests folks need to be in the loop for these types of changes.
+
+> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+> index 80d6416f3012..3f15f216d2a6 100644
+> --- a/tools/testing/selftests/kvm/include/test_util.h
+> +++ b/tools/testing/selftests/kvm/include/test_util.h
+> @@ -63,6 +63,16 @@ void test_assert(bool exp, const char *exp_str,
+>  		    #a, #b, #a, (unsigned long) __a, #b, (unsigned long) __b); \
+>  } while (0)
+>  
+> +#define TEST_ASSERT_KVM_EXIT_REASON(vcpu, expected_exit_reason)		\
+> +({									\
+
+Unless the macro needs to "return" a value, do-while(0) is generally preferred.
+
+> +	__u32 exit_reason = (vcpu)->run->exit_reason;			\
+> +									\
+> +	TEST_ASSERT(exit_reason == (expected_exit_reason),		\
+> +		    "Unexpected exit reason: %u (%s)",			\
+
+This "needs" to opportunistically enhance the message to spit out the expected
+reason, and to clarify that it's a KVM exit reason.  In the open coded form, the
+expected reason is _usually_ captured in the assertion, but that's not guaranteed,
+e.g. if it's not hardcoded.  But with the common code, the expected exit reason
+will generally get resolved into its literal, which isn't very human friendly.
+
+And even when it is provided, I find it annoying to have to search back a few
+lines to understand what failed.
+
+E.g. the new macro yields "x86_64/hyperv_evmcs.c:269: exit_reason == (2)".
+
+> +		    exit_reason,					\
+> +		    exit_reason_str(exit_reason));			\
+
+No need to put these on separate lines.
+
+How about this?
+
+#define TEST_ASSERT_KVM_EXIT_REASON(vcpu, expected)			\
+do {									\
+	__u32 exit_reason = (vcpu)->run->exit_reason;			\
+									\
+	TEST_ASSERT(exit_reason == (expected),				\
+		    "Wanted KVM exit reason: %u (%s), got: %u (%s)",	\
+		    expected, exit_reason_str(expected),		\
+		    exit_reason, exit_reason_str(exit_reason));		\
+} while (0)
+
+which yields errors like:
+
+==== Test Assertion Failure ====
+  x86_64/hyperv_extended_hypercalls.c:71: exit_reason == (2)
+  pid=108104 tid=108104 errno=0 - Success
+     1	0x0000000000401793: main at hyperv_extended_hypercalls.c:71
+     2	0x00000000004148b3: __libc_start_call_main at libc-start.o:?
+     3	0x0000000000415eff: __libc_start_main_impl at ??:?
+     4	0x00000000004018f0: _start at ??:?
+  Wanted KVM exit reason: 2 (IO), got: 27 (HYPERV)
+
+On a related topic, exit_reason_str() is a bit stale and also annoying to update.
+Can you fold in the below when you send v2 of this patch?  And then if you're
+feeling ambititous, add another patch to update the array?
+
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Wed, 1 Feb 2023 23:17:19 +0000
+Subject: [PATCH] KVM: selftests: Add macro to generate KVM exit reason strings
+
+Add and use a macro to generate the KVM exit reason strings array instead
+of relying on developers to correctly copy+paste+edit each string.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- samples/rust/rust_print.rs | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ tools/testing/selftests/kvm/lib/kvm_util.c | 55 ++++++++++++----------
+ 1 file changed, 29 insertions(+), 26 deletions(-)
 
-diff --git a/samples/rust/rust_print.rs b/samples/rust/rust_print.rs
-index 8b39d9cef6d1..165a8d7b1c07 100644
---- a/samples/rust/rust_print.rs
-+++ b/samples/rust/rust_print.rs
-@@ -15,6 +15,30 @@ module! {
- 
- struct RustPrint;
- 
-+fn arc_print() -> Result {
-+    use kernel::sync::*;
-+
-+    let a = Arc::try_new(1)?;
-+    let b = UniqueArc::try_new("hello, world")?;
-+
-+    // Prints the value of data in `a`.
-+    pr_info!("{}", a);
-+
-+    // Uses ":?" to print debug fmt of `b`.
-+    pr_info!("{:?}", b);
-+
-+    let a: Arc<&str> = b.into();
-+    let c = a.clone();
-+
-+    // Uses `dbg` to print, will move `c`.
-+    dbg!(c);
-+
-+    // Prints debug fmt with pretty-print "#" and number-in-hex "x".
-+    pr_info!("{:#x?}", a);
-+
-+    Ok(())
-+}
-+
- impl kernel::Module for RustPrint {
-     fn init(_module: &'static ThisModule) -> Result<Self> {
-         pr_info!("Rust printing macros sample (init)\n");
-@@ -43,6 +67,8 @@ impl kernel::Module for RustPrint {
-         pr_cont!(" is {}", "continued");
-         pr_cont!(" with {}\n", "args");
- 
-+        arc_print()?;
-+
-         Ok(RustPrint)
-     }
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index f25b3e9b5a07..b3682b25eedf 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -1815,38 +1815,41 @@ void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
+ 		vcpu_dump(stream, vcpu, indent + 2);
  }
+ 
++#define KVM_EXIT_STRING(x) {KVM_EXIT_##x, #x}
++
+ /* Known KVM exit reasons */
+ static struct exit_reason {
+ 	unsigned int reason;
+ 	const char *name;
+ } exit_reasons_known[] = {
+-	{KVM_EXIT_UNKNOWN, "UNKNOWN"},
+-	{KVM_EXIT_EXCEPTION, "EXCEPTION"},
+-	{KVM_EXIT_IO, "IO"},
+-	{KVM_EXIT_HYPERCALL, "HYPERCALL"},
+-	{KVM_EXIT_DEBUG, "DEBUG"},
+-	{KVM_EXIT_HLT, "HLT"},
+-	{KVM_EXIT_MMIO, "MMIO"},
+-	{KVM_EXIT_IRQ_WINDOW_OPEN, "IRQ_WINDOW_OPEN"},
+-	{KVM_EXIT_SHUTDOWN, "SHUTDOWN"},
+-	{KVM_EXIT_FAIL_ENTRY, "FAIL_ENTRY"},
+-	{KVM_EXIT_INTR, "INTR"},
+-	{KVM_EXIT_SET_TPR, "SET_TPR"},
+-	{KVM_EXIT_TPR_ACCESS, "TPR_ACCESS"},
+-	{KVM_EXIT_S390_SIEIC, "S390_SIEIC"},
+-	{KVM_EXIT_S390_RESET, "S390_RESET"},
+-	{KVM_EXIT_DCR, "DCR"},
+-	{KVM_EXIT_NMI, "NMI"},
+-	{KVM_EXIT_INTERNAL_ERROR, "INTERNAL_ERROR"},
+-	{KVM_EXIT_OSI, "OSI"},
+-	{KVM_EXIT_PAPR_HCALL, "PAPR_HCALL"},
+-	{KVM_EXIT_DIRTY_RING_FULL, "DIRTY_RING_FULL"},
+-	{KVM_EXIT_X86_RDMSR, "RDMSR"},
+-	{KVM_EXIT_X86_WRMSR, "WRMSR"},
+-	{KVM_EXIT_XEN, "XEN"},
+-	{KVM_EXIT_HYPERV, "HYPERV"},
++	KVM_EXIT_STRING(UNKNOWN),
++	KVM_EXIT_STRING(EXCEPTION),
++	KVM_EXIT_STRING(IO),
++	KVM_EXIT_STRING(HYPERCALL),
++	KVM_EXIT_STRING(DEBUG),
++	KVM_EXIT_STRING(HLT),
++	KVM_EXIT_STRING(MMIO),
++	KVM_EXIT_STRING(IRQ_WINDOW_OPEN),
++	KVM_EXIT_STRING(SHUTDOWN),
++	KVM_EXIT_STRING(FAIL_ENTRY),
++	KVM_EXIT_STRING(INTR),
++	KVM_EXIT_STRING(SET_TPR),
++	KVM_EXIT_STRING(TPR_ACCESS),
++	KVM_EXIT_STRING(S390_SIEIC),
++	KVM_EXIT_STRING(S390_RESET),
++	KVM_EXIT_STRING(DCR),
++	KVM_EXIT_STRING(NMI),
++	KVM_EXIT_STRING(INTERNAL_ERROR),
++	KVM_EXIT_STRING(OSI),
++	KVM_EXIT_STRING(PAPR_HCALL),
++	KVM_EXIT_STRING(DIRTY_RING_FULL),
++	KVM_EXIT_STRING(X86_RDMSR),
++	KVM_EXIT_STRING(X86_WRMSR),
++	KVM_EXIT_STRING(XEN),
++	KVM_EXIT_STRING(HYPERV),
++
+ #ifdef KVM_EXIT_MEMORY_NOT_PRESENT
+-	{KVM_EXIT_MEMORY_NOT_PRESENT, "MEMORY_NOT_PRESENT"},
++	KVM_EXIT_STRING(MEMORY_NOT_PRESENT),
+ #endif
+ };
+ 
+
+base-commit: b20015517a2c6b45bafa09aee45d1698f91428d6
 -- 
-2.39.1
 
