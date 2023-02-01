@@ -2,131 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A075686F5B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBB3686F46
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 20:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjBATyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 14:54:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S230054AbjBATvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 14:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjBATyH (ORCPT
+        with ESMTP id S229615AbjBATvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 14:54:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBABC81B3E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675281158;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=RfB/f1HZnnyt4KmfLrM33LwiKIajQ5La7psNOJtN5bk=;
-        b=eClg/Id8/IXSXoB8yHtcRuRiVwhS6/VzCMlYNWAqEi9VYHA8Zu3nXiL0PBlNGXt3y5o+gL
-        bWb0K0OiMNYiyjPoXUH6JX9LKEIc62IKWAE3CCWSPxz52+sgOAUBa65QTFOSO0mKooILph
-        EwtFJhDAUr80GkRB3p64JyhyM/GPtcs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-185-B_uXfheIP_evsOcpf2nA9A-1; Wed, 01 Feb 2023 14:52:32 -0500
-X-MC-Unique: B_uXfheIP_evsOcpf2nA9A-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 1 Feb 2023 14:51:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD100273A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 11:51:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E4B5800186;
-        Wed,  1 Feb 2023 19:52:32 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E6744112132C;
-        Wed,  1 Feb 2023 19:52:31 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 1B70D403C47C9; Wed,  1 Feb 2023 16:51:49 -0300 (-03)
-Message-ID: <20230201195104.507817318@redhat.com>
-User-Agent: quilt/0.67
-Date:   Wed, 01 Feb 2023 16:50:18 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Christoph Lameter <cl@linux.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH 5/5] mm/vmstat: refresh stats remotely instead of via work item
-References: <20230201195013.881721887@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD85461913
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 19:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D135C433EF;
+        Wed,  1 Feb 2023 19:51:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675281078;
+        bh=yiHfvhT6ZcBvqKpoeXaUCaKBibrKOqdXjfhaXZsSRhM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=uAYSHhK9HD/ioE7EB4Dhazwh2en9EYFN1KAxlFtcGD02vx4wQvpvDnoyXSJ31Mtmk
+         eYtm1MdA2T4ZtElQi/6idB6xqINFHZ286XPXrxk45WFSD9WJ+4DY6dDXDPi+1JhrCg
+         hPhvwA4e49iU94R5CjZsbN6fIIJjPC+kDv5STNfpr8zrs7oDbwPt1R0lXMwSARYmvM
+         0nz4KfWRw91Y+lqad7KbQx5Xe9P69sKlC7HxgWkFZaAP78q/WXTyc1xNz9fX5sJknl
+         etntJIvgfxjloBKe3WEbKFDLImL/iPg8Cv5Yu8kIzTwLJRdu3AVCuk5qw1r549dE80
+         D/zm2GRI/f5ew==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B737A5C06D0; Wed,  1 Feb 2023 11:51:17 -0800 (PST)
+Date:   Wed, 1 Feb 2023 11:51:17 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
+        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
+        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
+        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Waiman Long <longman@redhat.com>, x86@kernel.org
+Subject: Re: [PATCH v2 clocksource 6/7] clocksource: Verify HPET and PMTMR
+ when TSC unverified
+Message-ID: <20230201195117.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230125002708.GA1471122@paulmck-ThinkPad-P17-Gen-1>
+ <20230125002730.1471349-6-paulmck@kernel.org>
+ <87wn51znsh.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wn51znsh.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refresh per-CPU stats remotely, instead of queueing 
-work items, for the stat_refresh procfs method.
+On Wed, Feb 01, 2023 at 11:24:14AM +0100, Thomas Gleixner wrote:
+> Paul!
+> 
+> On Tue, Jan 24 2023 at 16:27, Paul E. McKenney wrote:
+> > On systems with two or fewer sockets, when the boot CPU has CONSTANT_TSC,
+> > NONSTOP_TSC, and TSC_ADJUST, clocksource watchdog verification of the
+> > TSC is disabled.  This works well much of the time, but there is the
+> > occasional production-level system that meets all of these criteria, but
+> > which still has a TSC that skews significantly from atomic-clock time.
+> > This is usually attributed to a firmware or hardware fault.  Yes, the
+> > various NTP daemons do express their opinions of userspace-to-atomic-clock
+> > time skew, but they put them in various places, depending on the daemon
+> > and distro in question.  It would therefore be good for the kernel to
+> > have some clue that there is a problem.
+> >
+> > The old behavior of marking the TSC unstable is a non-starter because a
+> > great many workloads simply cannot tolerate the overheads and latencies
+> > of the various non-TSC clocksources.  In addition, NTP-corrected systems
+> > sometimes can tolerate significant kernel-space time skew as long as
+> > the userspace time sources are within epsilon of atomic-clock time.
+> >
+> > Therefore, when watchdog verification of TSC is disabled, enable it for
+> > HPET and PMTMR (AKA ACPI PM timer).  This provides the needed in-kernel
+> > time-skew diagnostic without degrading the system's performance.
+> 
+> I'm more than unhappy about this. We finally have a point where the TSC
+> watchdog overhead can go away without adding TSC=reliable to the kernel
+> commandline.
+> 
+> Now you add an unconditionally enforce the watchdog again in a way which
+> even cannot be disabled on the kernel command line.
+> 
+> Patently bad idea, no cookies for you!
 
-This fixes sosreport hang (which uses vmstat_refresh) with
-spinning SCHED_FIFO process.
+What can I say?  40,000 parts per million TSC clock skew did raise some
+eyebrows, and therefore the complete suppressing of that diagnostic
+completely was not at all a welcome development.
 
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+So how about the (untested) patch below, either on top of the existing
+series or folded into e57818b20b0b ("clocksource: Verify HPET and PMTMR
+when TSC unverified")?
 
-Index: linux-vmstat-remote/mm/vmstat.c
-===================================================================
---- linux-vmstat-remote.orig/mm/vmstat.c
-+++ linux-vmstat-remote/mm/vmstat.c
-@@ -1865,11 +1865,21 @@ static DEFINE_PER_CPU(struct delayed_wor
- int sysctl_stat_interval __read_mostly = HZ;
+The idea is to provide TSC checking of HPET and PMTMR only when the
+TSC is deemed reliable and the new tsc=watchdog kernel boot parameter
+is provided.  If both tsc=watchdog and tsc=nowatchdog are provided,
+tsc=watchdog wins and a console message is emitted (no splat).
+
+To restate, with this patch, unless the sysadmin asks for it, there will
+be no clocksource watchdog unless there also would have been one without
+this patch.
+
+Thoughts?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 115829d71d0ca..d681f9252aaa7 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6382,6 +6382,12 @@
+ 			(HPET or PM timer) on systems whose TSC frequency was
+ 			obtained from HW or FW using either an MSR or CPUID(0x15).
+ 			Warn if the difference is more than 500 ppm.
++			[x86] watchdog: Use TSC as the watchdog clocksource with
++			which to check other HW timers (HPET or PM timer), but
++			only on systems where TSC has been deemed trustworthy.
++			This will be suppressed by an earlier tsc=nowatchdog and
++			can be overridden by a later tsc=nowatchdog.  A console
++			message will flag any such suppression or overriding.
  
- #ifdef CONFIG_PROC_FS
-+
-+#ifdef CONFIG_HAVE_CMPXCHG_LOCAL
-+static int refresh_all_vm_stats(void);
-+#else
- static void refresh_vm_stats(struct work_struct *work)
+ 	tsc_early_khz=  [X86] Skip early TSC calibration and use the given
+ 			value instead. Useful when the early TSC frequency discovery
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index a5371c6d4b64b..306c233c98d84 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -294,6 +294,7 @@ __setup("notsc", notsc_setup);
+ 
+ static int no_sched_irq_time;
+ static int no_tsc_watchdog;
++static int tsc_as_watchdog;
+ 
+ static int __init tsc_setup(char *str)
  {
- 	refresh_cpu_vm_stats();
+@@ -303,10 +304,22 @@ static int __init tsc_setup(char *str)
+ 		no_sched_irq_time = 1;
+ 	if (!strcmp(str, "unstable"))
+ 		mark_tsc_unstable("boot parameter");
+-	if (!strcmp(str, "nowatchdog"))
++	if (!strcmp(str, "nowatchdog")) {
+ 		no_tsc_watchdog = 1;
++		if (tsc_as_watchdog)
++			pr_alert("%s: Overriding earlier tsc=watchdog with tsc=nowatchdog\n",
++				 __func__);
++		tsc_as_watchdog = 0;
++	}
+ 	if (!strcmp(str, "recalibrate"))
+ 		tsc_force_recalibrate = 1;
++	if (!strcmp(str, "watchdog")) {
++		if (no_tsc_watchdog)
++			pr_alert("%s: tsc=watchdog overridden by earlier tsc=nowatchdog\n",
++				 __func__);
++		else
++			tsc_as_watchdog = 1;
++	}
+ 	return 1;
  }
  
-+static int refresh_all_vm_stats(void)
-+{
-+	return schedule_on_each_cpu(refresh_vm_stats);
-+}
-+#endif
-+
- int vmstat_refresh(struct ctl_table *table, int write,
- 		   void *buffer, size_t *lenp, loff_t *ppos)
+@@ -1192,7 +1205,8 @@ static void __init tsc_disable_clocksource_watchdog(void)
+ 
+ bool tsc_clocksource_watchdog_disabled(void)
  {
-@@ -1889,7 +1899,7 @@ int vmstat_refresh(struct ctl_table *tab
- 	 * transiently negative values, report an error here if any of
- 	 * the stats is negative, so we know to go looking for imbalance.
- 	 */
--	err = schedule_on_each_cpu(refresh_vm_stats);
-+	err = refresh_all_vm_stats();
- 	if (err)
- 		return err;
- 	for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
-@@ -2009,7 +2019,7 @@ static DECLARE_DEFERRABLE_WORK(shepherd,
- 
- #ifdef CONFIG_HAVE_CMPXCHG_LOCAL
- /* Flush counters remotely if CPU uses cmpxchg to update its per-CPU counters */
--static void vmstat_shepherd(struct work_struct *w)
-+static int refresh_all_vm_stats(void)
- {
- 	int cpu;
- 
-@@ -2019,7 +2029,12 @@ static void vmstat_shepherd(struct work_
- 		cond_resched();
- 	}
- 	cpus_read_unlock();
-+	return 0;
-+}
- 
-+static void vmstat_shepherd(struct work_struct *w)
-+{
-+	refresh_all_vm_stats();
- 	schedule_delayed_work(&shepherd,
- 		round_jiffies_relative(sysctl_stat_interval));
+-	return !(clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY);
++	return !(clocksource_tsc.flags & CLOCK_SOURCE_MUST_VERIFY) &&
++	       tsc_as_watchdog && !no_tsc_watchdog;
  }
-
-
+ 
+ static void __init check_system_tsc_reliable(void)
