@@ -2,119 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22776867B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:57:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BDB6867BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 14:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbjBAN5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 08:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S231688AbjBAN6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 08:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbjBAN5j (ORCPT
+        with ESMTP id S231482AbjBAN6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 08:57:39 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9F5D508
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 05:56:57 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id cw4so12629216edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 05:56:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKitcKKw73X1uo1uIzQcYZyxxtvSIaIwF803pkaRmSE=;
-        b=FhJUuGyjgf0pkYLwIlP1FpcxIZB3jRzpwHy0CX43ITrZwZiv83McD06EZgYXSO4r11
-         dJobdMR8ZOSWRtyrc0Xmp8Yp4nb+hSM/6X5B0n+kJcqwp0/OagZwS+NJE7+L3tr2Vd76
-         2PddzgUBgIgwgAv7OoNTXaiAN/+iEq6wD//HY3qidEe5Kjq9oSaIYl3kw259xt92DBpx
-         YVpu7Z0QdUjOfnlV0STj1kPGyRHw1K3qJoYft1KBKvD0f4YhaM3aQC1xMkP2oznRJAXf
-         20BIwqusiH/5Juk5cXptDlDRFa+kI+LQoMHKQWAf69g58OWBPQaQ99yEWc1MsNOFf/N2
-         o7Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pKitcKKw73X1uo1uIzQcYZyxxtvSIaIwF803pkaRmSE=;
-        b=ZmRpCG+GMfzyEXoJE9EkhVXF+GQxE9O/FYnnmoQBxIMkYndZNmqrYxjNzvyKZftFCh
-         Vi3xs95CzvXhGiEAhXc4+wxoQS+7OQx5pmQp3n/0z8ZKFWbN+uKb0+2wuMXlR1T6j06G
-         /Bl5pLZAjiZ+tDlEqP9X8bdPWg6Um7XATYKJnH43APDzM/PwRtGd6j6UDCzwkaZaFu58
-         Xe0xl2YRipYEOYkBIUvOQGCbgFZAeENH8WH0xIvdVrv41P60GrUwQe6rTBxVQh8r3wIb
-         GA9sgaG3Iq6NUYbZpEqqTgFd8FVeVvGkCVO/zLyRDJjDLJl222vIGNRkgigBzgjHgyiX
-         Ey3A==
-X-Gm-Message-State: AO0yUKVU+mRbbFBaewL9sMsgRvb2uhNs/BPHDvEej9zdeM0CrwiAvJDg
-        ORiNiFZ2PajYbMe1cDVt1Ilnndf8hz5dppuDAFar1g==
-X-Google-Smtp-Source: AK7set+fW2KmoaBx/FnBrFLbvMtCz3uygU6NdCIHnSnRTpwoLCvXeW88aNhs0BlU1KBStOhx9bPS0QWyidRRPGNGZ8w=
-X-Received: by 2002:a50:f60f:0:b0:4a2:27c2:aa9a with SMTP id
- c15-20020a50f60f000000b004a227c2aa9amr643917edn.61.1675259803909; Wed, 01 Feb
- 2023 05:56:43 -0800 (PST)
+        Wed, 1 Feb 2023 08:58:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4213693F0;
+        Wed,  1 Feb 2023 05:57:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0C40617B2;
+        Wed,  1 Feb 2023 13:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9C58C433EF;
+        Wed,  1 Feb 2023 13:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675259864;
+        bh=SpI7KwADUFU7LsbCXaag3YbpvOzij0u/n2sLMpli8zM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=J+gWjVwhlExx/kQG6HBH333Bk6FbQ3RN+UdWZ0kJIewW9wN3j8Mf3kQteaovGFv86
+         u2oE9NGNpu9NmrB/ownkgk2gQKCRIj2OedRN4vuA9WhTshG4lufDkeknzyQkpY6UdY
+         AS6p64fr4NTxNvP/d5OkLNkzWL0qydlmOkQsI5l0bUeDwiPxwZB8EHJbZUyDFuFtbI
+         sEijVQfSNJq7AqeMorekg6Z+53JqVokPn71gIEW/2r6QhiHNzBidvbYlGC3TeIdTsU
+         cmSJkCagjvADr3IrUJ8WtYRbFaLwYhz0B0axL1N+J6ahLdweQ+b24KAxeJAbjW5ard
+         H//g0Cj7MvffA==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [RFC 0/5] mm/bpf/perf: Store build id in file object
+Date:   Wed,  1 Feb 2023 14:57:32 +0100
+Message-Id: <20230201135737.800527-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230126161048.94089-1-bchihi@baylibre.com> <20230131140439.600164-1-bchihi@baylibre.com>
- <ab3357ad-01ec-8a1a-d627-a1543874f0ef@linaro.org> <CAGuA+oqXN3eoVyYkjuZjefPa-q542b7QLkBv+E-0a7k3U8BbFA@mail.gmail.com>
- <ad24739b-f8e7-45ad-ecd7-6d3329f01986@linaro.org>
-In-Reply-To: <ad24739b-f8e7-45ad-ecd7-6d3329f01986@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 1 Feb 2023 14:56:08 +0100
-Message-ID: <CAGuA+oqGDSQhUGaK8D+NQATJ_c8d0egULdQ+-S0fjHwW4moYKQ@mail.gmail.com>
-Subject: Re: [PATCH v3] dt-bindings: thermal: mediatek: Add LVTS thermal controllers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+hi,
+we have a use cases for bpf programs to use binary file's build id.
 
-On Wed, Feb 1, 2023 at 2:37 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 01/02/2023 14:34, Balsam CHIHI wrote:
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    enum:
-> >>> +      - mediatek,mt8195-lvts-ap
-> >>> +      - mediatek,mt8195-lvts-mcu
-> >>
-> >> What about other devices? You called the file name as generic for all
-> >> Mediatek SoCs, so why only one SoC is here? Is there going to be more?
-> >> If yes, why they cannot be added now?
-> >
-> > Yes, there is another MTK SoC mt8192 that supports LVTS,
-> > I was asked in v10 of the series to remove the unimplemented SoC.
-> > It will be added later with the driver that supports it.
-> > just let me know if you still want to add mt8192 bindings in the next
-> > version without the driver.
->
-> The binding should be complete, if that's possible, so if you had mt8192
-> already there, it could stay. Anyway it's fine then.
+After some attempts to add helpers/kfuncs [1] [2] Andrii had an idea [3]
+to store build id directly in the file object. That would solve our use
+case and might be beneficial for other profiling/tracing use cases with
+bpf programs.
 
-OK, I will put back mt8192 dt-bindings.
-this is the link to the v10 patch
-"https://patchwork.kernel.org/project/linux-pm/patch/20230112152855.216072-3-bchihi@baylibre.com/",
-it will be the same in next version (v13) of series.
-it would be great if you review it in advance, so I could take into
-account the new changes if needed.
-is it possible to resend this patch under v13, to simplify the review
-and avoid breaking the series again?
+This RFC patchset adds new config CONFIG_FILE_BUILD_ID option, which adds
+build id object pointer to the file object when enabled. The build id is
+read/populated when the file is mmap-ed.
 
->
-> Best regards,
-> Krzysztof
->
+I also added bpf and perf changes that would benefit from this.
 
-Best regards,
-Balsam
+I'm not sure what's the policy on adding stuff to file object, so apologies
+if that's out of line. I'm open to any feedback or suggestions if there's
+better place or way to do this.
+
+thanks,
+jirka
+
+
+[1] https://lore.kernel.org/bpf/20221108222027.3409437-1-jolsa@kernel.org/
+[2] https://lore.kernel.org/bpf/20221128132915.141211-1-jolsa@kernel.org/
+[3] https://lore.kernel.org/bpf/CAEf4BzaZCUoxN_X2ALXwQeFTCwtL17R4P_B_-hUCcidfyO2xyQ@mail.gmail.com/
+---
+Jiri Olsa (5):
+      mm: Store build id in file object
+      bpf: Use file object build id in stackmap
+      perf: Use file object build id in perf_event_mmap_event
+      selftests/bpf: Add file_build_id test
+      selftests/bpf: Add iter_task_vma_buildid test
+
+ fs/file_table.c                                               |  3 +++
+ include/linux/buildid.h                                       | 17 +++++++++++++++++
+ include/linux/fs.h                                            |  3 +++
+ kernel/bpf/stackmap.c                                         |  8 ++++++++
+ kernel/events/core.c                                          | 43 +++++++++++++++++++++++++++++++++++++++----
+ lib/buildid.c                                                 | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ mm/Kconfig                                                    |  7 +++++++
+ mm/mmap.c                                                     | 15 +++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c             | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/prog_tests/file_build_id.c        | 70 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.c | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/file_build_id.c             | 34 ++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/trace_helpers.c                   | 35 +++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/trace_helpers.h                   |  1 +
+ 14 files changed, 413 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/file_build_id.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_vma_buildid.c
+ create mode 100644 tools/testing/selftests/bpf/progs/file_build_id.c
