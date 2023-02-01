@@ -2,149 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230496860D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B056860E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 08:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjBAHnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 02:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S232029AbjBAHqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 02:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjBAHns (ORCPT
+        with ESMTP id S231431AbjBAHpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 02:43:48 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4157E410A6
-        for <linux-kernel@vger.kernel.org>; Tue, 31 Jan 2023 23:43:46 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5D0B333A5A;
-        Wed,  1 Feb 2023 07:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1675237424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EIPupChmZWdqCbipzzk6WIge6ktn1mIlacRGTtLMASA=;
-        b=plb39T261+q73vUMZloi+nvkH8nnyo+NMJ3mWpZsLfYYmeWt/WorRYCmo/s5C1ChCTGt2v
-        3zeJW7/3Quy+a++wy39qc2ym1EPIKxsP++jtuZtDVsjGQBIcgFFF7gE5Hjqq1lrrCau9wl
-        eZlhFhYILXyWtEI3TjhVbj0vmXaTico=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2C2211348C;
-        Wed,  1 Feb 2023 07:43:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UybHCTAY2mOWMwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 01 Feb 2023 07:43:44 +0000
-Date:   Wed, 1 Feb 2023 08:43:43 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, 42.hyeyoo@gmail.com, jannh@google.com,
-        shakeelb@google.com, tatashin@google.com, edumazet@google.com,
-        gthelen@google.com, gurua@google.com, arjunroy@google.com,
-        soheil@google.com, leewalsh@google.com, posk@google.com,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 1/1] mm: introduce vm_flags_reset_once to replace
- WRITE_ONCE vm_flags updates
-Message-ID: <Y9oYL93beiezSf3V@dhcp22.suse.cz>
-References: <20230201000116.1333160-1-surenb@google.com>
+        Wed, 1 Feb 2023 02:45:53 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3945EF80;
+        Tue, 31 Jan 2023 23:44:31 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id 3so18708359vsq.7;
+        Tue, 31 Jan 2023 23:44:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J0fsN0zafmOy6v04Ga2Ws7LTKT/5u/B8+RmnKRZAN2A=;
+        b=WBRMHnh8kAyR5qWZAj93pb70pPO0xBG6RcmlwZPIV7AlwIHSmp3ei/Js2epe6f4DBr
+         ZuB0fVz0iHsPVa2mJPwp+2LtYUY1kQwiZMXRCe71sluBCY6/We2QHzmYH5MstBXDyArk
+         vKd4JOeOc9xWXTCGH2HtGBM/1JAlwHYwZcYpJfGe56u4znGatNeir/hVXrKH/tIWx0Le
+         y78hUkrGVhJTQYSvNtuFpBx9bLUNcP6WG2hOWBm/8SWNlUjvbS4dNVJeGLNOGvEMUUMj
+         L/z8CThZsLZ3y48gCkhFnNd36F1NKzHDzzvmURbaCKi8uulKkkVS9mWTgrJJtHxEjxp7
+         TJvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J0fsN0zafmOy6v04Ga2Ws7LTKT/5u/B8+RmnKRZAN2A=;
+        b=petc6IOAp0HJYvoA1dCmzwsRWJxrrozh0+ZzIFrlIXFZeQ9xdODa3zfKMjy1/BRrX5
+         /F6RDNYyhls4zgTxAytC/HoJ/TeH8QyyfMpA5PdWn4xQQS/EwBbUM0G4paPK+B9ean/r
+         org+YrTDFmHcsi9dlhgiRu5/w9bCev7u421C1pQvy2YsSvnm9LMUud6lD5Qgt1CO4kgl
+         EJcuAiGYscBEOPN7XhlibNcK/10bWWMAgvzktjLA+GjgTxgf0gzQXduVphZGjqMBf7i6
+         DAlU+tjmtDXYnToGCGbwtWVb/FhDbG+p4s6xj+nhL1g8zzN0f4AaFfpS/W28vvcHr8zM
+         6oyA==
+X-Gm-Message-State: AO0yUKUPu7iRJjBGamC70sggONbEjHW5hFiFIJLGRlosTUYExcFmrCiv
+        NIJGdVZ1AfvPAUzG0rRaCFGwT+ZI2x0pKRbg9Uw=
+X-Google-Smtp-Source: AK7set9OzjXJJIKgepqMgJ+FNx09mEhSlGTv4LLZi4lGKwRjvU90bR2OYHVAZNYIwXyyIuAa3YFUp/WyLEUaoP9eabA=
+X-Received: by 2002:a05:6102:34c8:b0:3d3:e956:1303 with SMTP id
+ a8-20020a05610234c800b003d3e9561303mr299653vst.71.1675237470169; Tue, 31 Jan
+ 2023 23:44:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230201000116.1333160-1-surenb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1674227308.git.alexl@redhat.com> <CAOQ4uxgGc33_QVBXMbQTnmbpHio4amv=W7ax2vQ1UMet0k_KoA@mail.gmail.com>
+ <1ea88c8d1e666b85342374ed7c0ddf7d661e0ee1.camel@redhat.com>
+ <CAOQ4uxinsBB-LpGh4h44m6Afv0VT5yWRveDG7sNvE2uJyEGOkg@mail.gmail.com>
+ <5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com>
+ <CAOQ4uxhGX9NVxwsiBMP0q21ZRot6-UA0nGPp1wGNjgmKBjjBBA@mail.gmail.com>
+ <b8601c976d6e5d3eccf6ef489da9768ad72f9571.camel@redhat.com>
+ <e840d413-c1a7-d047-1a63-468b42571846@linux.alibaba.com> <2ef122849d6f35712b56ffbcc95805672980e185.camel@redhat.com>
+ <8ffa28f5-77f6-6bde-5645-5fb799019bca@linux.alibaba.com> <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
+In-Reply-To: <51d9d1b3-2b2a-9b58-2f7f-f3a56c9e04ac@linux.alibaba.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 1 Feb 2023 09:44:18 +0200
+Message-ID: <CAOQ4uxhzGru2Z8tjcAWvKVi0reNeX9SHMi6cwdyA9Vws8c1ppw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Composefs: an opportunistically sharing verified
+ image filesystem
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>
+Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Alexander Larsson <alexl@redhat.com>, gscrivan@redhat.com,
+        brauner@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david@fromorbit.com,
+        viro@zeniv.linux.org.uk, Vivek Goyal <vgoyal@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 31-01-23 16:01:16, Suren Baghdasaryan wrote:
-> Provide vm_flags_reset_once() and replace the vm_flags updates which used
-> WRITE_ONCE() to prevent compiler optimizations.
-> 
-> Fixes: 0cce31a0aa0e ("mm: replace vma->vm_flags direct modifications with modifier calls")
-> Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+On Wed, Feb 1, 2023 at 6:28 AM Jingbo Xu <jefflexu@linux.alibaba.com> wrote:
+>
+> Hi all,
+>
+> There are some updated performance statistics with different
+> combinations on my test environment if you are interested.
+>
 
-This would have been better folded into the vm_flags modification patch
-because it would be more obvious change. Hugh has provided a very nice
-comment in mlock_vma_pages_range but the git blame would be more visible
-when the conversion is from WRITE_ONCE.
+Cool report!
 
-One way or the other
-Acked-by: Michal Hocko <mhocko@suse.com>
+>
+> On 1/27/23 6:24 PM, Gao Xiang wrote:
+> > ...
+> >
+> > I've made a version and did some test, it can be fetched from:
+> > git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git -b
+> > experimental
+> >
+>
+> Setup
+> ======
+> CPU: x86_64 Intel(R) Xeon(R) Platinum 8269CY CPU @ 2.50GHz
+> Disk: 6800 IOPS upper limit
+> OS: Linux v6.2 (with composefs v3 patchset)
+>
+> I build erofs/squashfs images following the scripts attached on [1],
+> with each file in the rootfs tagged with "metacopy" and "redirect" xattr.
+>
+> The source rootfs is from the docker image of tensorflow [2].
+>
+> The erofs images are built with mkfs.erofs with support for sparse file
+> added [3].
+>
+> [1]
+> https://lore.kernel.org/linux-fsdevel/5fb32a1297821040edd8c19ce796fc0540101653.camel@redhat.com/
+> [2]
+> https://hub.docker.com/layers/tensorflow/tensorflow/2.10.0/images/sha256-7f9f23ce2473eb52d17fe1b465c79c3a3604047343e23acc036296f512071bc9?context=explore
+> [3]
+> https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?h=experimental&id=7c49e8b195ad90f6ca9dfccce9f6e3e39a8676f6
+>
+>
+>
+> Image size
+> ===========
+> 6.4M large.composefs
+> 5.7M large.composefs.w/o.digest (w/o --compute-digest)
+> 6.2M large.erofs
+> 5.2M large.erofs.T0 (with -T0, i.e. w/o nanosecond timestamp)
+> 1.7M large.squashfs
+> 5.8M large.squashfs.uncompressed (with -noI -noD -noF -noX)
+>
+> (large.erofs.T0 is built without nanosecond timestamp, so that we get
+> smaller disk inode size (same with squashfs).)
+>
+>
+> Runtime Perf
+> =============
+>
+> The "uncached" column is tested with:
+> hyperfine -p "echo 3 > /proc/sys/vm/drop_caches" "ls -lR $MNTPOINT"
+>
+>
+> While the "cached" column is tested with:
+> hyperfine -w 1 "ls -lR $MNTPOINT"
+>
+>
+> erofs and squashfs are mounted with loopback device.
+>
+>
+>                                   | uncached(ms)| cached(ms)
+> ----------------------------------|-------------|-----------
+> composefs (with digest)           | 326         | 135
+> erofs (w/o -T0)                   | 264         | 172
+> erofs (w/o -T0) + overlayfs       | 651         | 238
 
-> ---
-> Notes:
-> - The patch applies cleanly over mm-unstable
-> - The SHA in Fixes: line is from mm-unstable, so is... unstable
-> 
->  include/linux/mm.h | 7 +++++++
->  mm/mlock.c         | 4 ++--
->  2 files changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 5bf0ad48faaa..23ce04f6e91e 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -648,6 +648,13 @@ static inline void vm_flags_reset(struct vm_area_struct *vma,
->  	vm_flags_init(vma, flags);
->  }
->  
-> +static inline void vm_flags_reset_once(struct vm_area_struct *vma,
-> +				       vm_flags_t flags)
-> +{
-> +	mmap_assert_write_locked(vma->vm_mm);
-> +	WRITE_ONCE(ACCESS_PRIVATE(vma, __vm_flags), flags);
-> +}
-> +
->  static inline void vm_flags_set(struct vm_area_struct *vma,
->  				vm_flags_t flags)
->  {
-> diff --git a/mm/mlock.c b/mm/mlock.c
-> index ed49459e343e..617469fce96d 100644
-> --- a/mm/mlock.c
-> +++ b/mm/mlock.c
-> @@ -380,7 +380,7 @@ static void mlock_vma_pages_range(struct vm_area_struct *vma,
->  	 */
->  	if (newflags & VM_LOCKED)
->  		newflags |= VM_IO;
-> -	vm_flags_reset(vma, newflags);
-> +	vm_flags_reset_once(vma, newflags);
->  
->  	lru_add_drain();
->  	walk_page_range(vma->vm_mm, start, end, &mlock_walk_ops, NULL);
-> @@ -388,7 +388,7 @@ static void mlock_vma_pages_range(struct vm_area_struct *vma,
->  
->  	if (newflags & VM_IO) {
->  		newflags &= ~VM_IO;
-> -		vm_flags_reset(vma, newflags);
-> +		vm_flags_reset_once(vma, newflags);
->  	}
->  }
->  
-> -- 
-> 2.39.1.456.gfc5497dd1b-goog
+This is a nice proof of the overlayfs "early lookup" overhead.
+As I wrote, this overhead could be optimized by doing "lazy lookup"
+on open like composefs does.
 
--- 
-Michal Hocko
-SUSE Labs
+Here is a suggestion for a simple test variant that could be used to
+approximate the expected improvement -
+if you set all the metacopy files in erofs to redirect to the same
+lower block, most of the lower lookup time will be amortized
+because all but the first lower lookup are cached.
+If you get a performance number with erofs + overlayfs that are
+close to composefs performance numbers, it will prove the point
+that same functionality and performance could be achieved by
+modifying ovelrayfs/mkfs.erofs.
+
+Thanks,
+Amir.
