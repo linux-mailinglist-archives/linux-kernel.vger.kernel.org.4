@@ -2,137 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5C06864E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C54E06864EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 12:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232334AbjBALBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 06:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S232364AbjBALBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 06:01:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjBALBM (ORCPT
+        with ESMTP id S230054AbjBALB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 06:01:12 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089429ECB;
-        Wed,  1 Feb 2023 03:01:11 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id mc11so27747120ejb.10;
-        Wed, 01 Feb 2023 03:01:10 -0800 (PST)
+        Wed, 1 Feb 2023 06:01:28 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00584941F
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 03:01:24 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id lu11so12930392ejb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 03:01:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ykUZcZURVXB/3zMYBdPYuNhDjgfUm115ZWrfevf/KU=;
-        b=HCTpoDckU4A8dRNfpWfoQIuZW+ALGjdLX4rU7prLxk6M01ZWYWpVcRilDN5mxIrsi+
-         UArefBzqsRd/Rd19nl46gU+sPXgTtURPMveAXUFse1PUcX/XlFGUq0MjB6hwKZnazc4m
-         T2k0IwphBobMhA+Nhul1nPnj5SVF9I+vQTqJpHUjylI7EJDn8sJ45Vqd9tXAsOmBZtUn
-         OfoDtfwJWQY6Ko+ShNP5W6zrPfNqPyDyPcIxod/OaMJf5TK4aniuPBPfKaFROfgn+xmm
-         ttzpEF7kxi2lSnDneLu4w7ze1uPKvDzKrKAFSJHZ9Z/mWGCqv7oZ3gYfLCX4JybFY5CN
-         gyCw==
+        d=diag.uniroma1.it; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DkRIv/QAxxum41z2Wild0v5lK+azmjI3SmMGNQ2shaE=;
+        b=y5tkf2zyzHVYFHjAVwOhH3lBY7KL/izCgu3sFbtAn/5ava++TxzHsVzeK5dIGI7BaD
+         QtKuFIUdWpAi6RVfBbf/X9BmHbJxTtUsf3RbeuKFf/xlPa0jbAKg7HTOUGNnIwNNaRb0
+         uUDzofu73EwLvzFfdpLLnxRquLe+/SX4J0+XQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+ykUZcZURVXB/3zMYBdPYuNhDjgfUm115ZWrfevf/KU=;
-        b=j8QZT+QAaELEQyjzSumAe8bLqzX8ayAgdjjvRtq/0A+c9Hp24g87WpNREmEf+N+PO9
-         NTp426bYgT9EUYPmOKBRdJ7H/q+Sv4UUhnwdUiVOL1Y97sOdJWyGRbcw1m0iHDFQ9waY
-         tbU+wa/taN0wDesRKjA7murjqnr9uvqeVuYKsmNm+YDiISfCNRWQFOEWkE8pWqIG3w2d
-         vIqJi7bCHgQIoMPchTw5xZF1JaaFGNCMz2nGg4xUqmgrs1BnV6AH4o6nIbhzwHuhC6PS
-         AhEX5NzeplQv/jkz5LpLUu1i34fYcPWuAvCFg68Dhx1n+U6pCjergzXAvvBDkdgJ1BBr
-         gwRg==
-X-Gm-Message-State: AO0yUKVxsiJFLm+SQarytIT+75MX4feBjgol82r8zDwreOrHCXLXhmRM
-        5Ig2M7wWV6lO+k9LiL0lCD8=
-X-Google-Smtp-Source: AK7set8htpLs17WtIha84GzJupQJaOVpvGk9F3VBPJU5BKY5qKjlqWwbP16VDKuDRQISkFpOpNTV+w==
-X-Received: by 2002:a17:906:6a24:b0:888:d373:214d with SMTP id qw36-20020a1709066a2400b00888d373214dmr2528655ejc.29.1675249269292;
-        Wed, 01 Feb 2023 03:01:09 -0800 (PST)
-Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.googlemail.com with ESMTPSA id g9-20020a170906394900b00872a726783dsm9811108eje.217.2023.02.01.03.01.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 03:01:08 -0800 (PST)
-Message-ID: <618392ed-7d20-a49f-1ec5-b27850d71dec@gmail.com>
-Date:   Wed, 1 Feb 2023 12:01:07 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DkRIv/QAxxum41z2Wild0v5lK+azmjI3SmMGNQ2shaE=;
+        b=FI9UhEayq43Knz+hRkeyhr5dHqF1iCFY0yP7oCNzr8DNNElO5GdZ9vuDzwcwjeqcxs
+         iEWwBUS2PifzdoePPY1VyGMG1+hFbKcOfpmgP+8TU+j1kJumQmBmjNmVclvNj+7lPyix
+         Bt/bWjkBxzuhSyqxlRml4QaNFak5DqPHWhS11KB6iq0DYGAQj6Ll9CI2YidpLirNtQsB
+         3tCeGnD4pnZEbHrYmcXm7LLiLFR6LZv0Ls219rtsf4xbjc0M06hgoVLYfzMHbehuWwKk
+         Yg+/Tu5kc1DQA6lEfWXHI6UEg7oFeYDcFp/NaROTlsE2OTf+SubBjmMXWeMBXAdMEdqp
+         eYLQ==
+X-Gm-Message-State: AO0yUKV+KENCLq5nLK573ATmYzn48zdlvXrAlvvaUZQ8XReq770O2IW2
+        nlzZtdO0Z6jnBauCx3+SzOtufLwg4S/lKs2GdLlDyA==
+X-Google-Smtp-Source: AK7set8PtqanzwwYI1yyKrOIZchiZ+JGyocBPkHUh8tfC2Rs38UyldSn1YHnl9RGLbmFS8Uobtx2/P7Vfav6edr89ig=
+X-Received: by 2002:a17:906:f203:b0:88d:33fe:3302 with SMTP id
+ gt3-20020a170906f20300b0088d33fe3302mr520031ejb.203.1675249283513; Wed, 01
+ Feb 2023 03:01:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
- Thunderbird/96.0
-Subject: Re: [PATCH 3/4] nvmem: mtk-efuse: replace driver with a generic MMIO
- one
-To:     Michael Walle <michael@walle.cc>
-Cc:     devicetree@vger.kernel.org, hayashi.kunihiko@socionext.com,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        mhiramat@kernel.org, rafal@milecki.pl, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org
-References: <20230201064717.18410-4-zajec5@gmail.com>
- <20230201084821.1719839-1-michael@walle.cc>
- <8452b341-8695-05d8-9d03-47c9aeca0ec7@gmail.com>
- <017a17eb99ac2b2c858d27b65c5dd372@walle.cc>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-In-Reply-To: <017a17eb99ac2b2c858d27b65c5dd372@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230131-tuntap-sk-uid-v1-0-af4f9f40979d@diag.uniroma1.it>
+ <20230131-tuntap-sk-uid-v1-1-af4f9f40979d@diag.uniroma1.it> <20230131191055.45bb4ab7@hermes.local>
+In-Reply-To: <20230131191055.45bb4ab7@hermes.local>
+From:   Pietro Borrello <borrello@diag.uniroma1.it>
+Date:   Wed, 1 Feb 2023 12:01:12 +0100
+Message-ID: <CAEih1qWd_C=v5zrivZK3thbUaftX7N1qdiU7AkryvEotiGPZYw@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/2] tun: tun_chr_open(): correctly initialize
+ socket uid
+To:     stephen@networkplumber.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 1.02.2023 11:46, Michael Walle wrote:
->> Before I convert brcm,nvram to NVMEM layout I need some binding & driver
->> providing MMIO device access. How to handle that?
-> 
-> I'm not arguing against having the mmio nvmem driver. But I don't
-> think we should sacrifice possible write access with other drivers. And
-> I presume write access won't be possible with your generic driver as it
-> probably isn't just a memcpy_toio().
-> 
-> It is a great fallback for some nvmem peripherals which just maps a
-> memory region, but doesn't replace a proper driver for an nvmem device.
+On Wed, 1 Feb 2023 at 04:10, Stephen Hemminger
+<stephen@networkplumber.org> wrote:
+>
+> On Wed, 01 Feb 2023 00:35:45 +0000
+> Pietro Borrello <borrello@diag.uniroma1.it> wrote:
+>
+> > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> > index a7d17c680f4a..6713fffb1488 100644
+> > --- a/drivers/net/tun.c
+> > +++ b/drivers/net/tun.c
+> > @@ -3450,6 +3450,11 @@ static int tun_chr_open(struct inode *inode, struct file * file)
+> >
+> >       sock_init_data(&tfile->socket, &tfile->sk);
+> >
+> > +     // sock_init_data initializes sk.sk_uid assuming tfile->socket is embedded
+> > +     // in a struct socket_alloc and reading its corresponding inode. Since we
+> > +     // pass a socket contained in a struct tun_file we have to fix this manually
+> > +     tfile->sk.sk_uid = inode->i_uid;
+> > +
+>
+> Do not use C++ style comments in the kernel.
 
-OK, then maybe I'll retry again with generic MMIO and without converting
-existing specific drivers. That is what (AFAIU) Rob asked though.
+Thanks for pointing it out. I will fix this in v2.
 
+> Rule #1 of code maintenance. Bug fixes should not stand out.
 
-> What bothers me the most isn't the driver change. The driver can be
-> resurrected once someone will do proper write access, but the generic
-> "mediatek,efuse" compatible together with the comment above the older
-> compatible string. These imply that you should use "mediatek,efuse",
-> but we don't know if all mediatek efuse peripherals will be the
-> same - esp. for writing which is usually more complex than the reading.
+Thanks for the comment. I agree bug fixes should not stand out.
+I sent the patches also to sparkle some discussion on how this should be
+better fixed.
+As briefly mentioned in the cover letter, I am not sure what is the
+cleanest fix according
+to Linux standards.
+Are you suggesting a briefer comment or removing it completely?
 
-mediatek,efuse was already there, don't blame me for it ;)
+The alternative fixes I see, would be:
+1) pass a NULL socket and manually initialize it, which I think would
+make the fix
+to stand out more, but it would be probably cleaner
+2) change the API of sock_init_data, but probably not worth it, given
+tuntap devices
+are the only 2 users among almost 60 to break the socket_alloc assumption
+3) introduce a sock_init_data_with_inode which explicitly uses an
+inode to initialize
+uid, but would be a bad solution for code duplication
+4) wrap sock_init_data call to fix uid in a similar fashion as done
+here, maybe cleaner
 
-
-> nitpick btw: why not "nvmem-mmio"?
-
-Because I read from left to right ;)
-It's MMIO based NVMEM. Not MMIO on top of NVMEM.
-
-Sure, we have "nvmem-cells" but that is because those are cells of NVMEM
-device.
-
-Unless my English knowledge fails me.
-
-
-> So it's either:
->   (1) compatible = "mediatek,mt8173-efuse"
->   (2) compatible = "mediatek,mt8173-efuse", "mmio-nvmem"
-> 
-> (1) will be supported any anyway for older dts and you need to add
-> the specific compatibles to the nvmem-mmio driver - or keep the
-> driver as is.
-> 
-> With (2) you wouldn't need to do that and the kernel can load the
-> proper driver if available or fall back to the nvmem-mmio one. I'd
-> even make that one "default y" so it will be available on future
-> kernels and boards can already make use of the nvmem device even
-> if there is no proper driver for them.
-> 
-> I'd prefer (2). Dunno what the dt maintainers agree.
-
-(2) looks OK, Rob, Krzysztof?
+Best regards,
+Pietro
