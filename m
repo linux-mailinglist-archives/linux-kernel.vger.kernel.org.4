@@ -2,132 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D62E6867FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E06206867FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Feb 2023 15:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232123AbjBAOIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Feb 2023 09:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S232239AbjBAOJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Feb 2023 09:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbjBAOIc (ORCPT
+        with ESMTP id S231664AbjBAOJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Feb 2023 09:08:32 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA5A49564
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Feb 2023 06:08:31 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id a184so12680697pfa.9
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Feb 2023 06:08:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=z8ihYsabv6FaCkZlvJjrpqfzbw0j+BAuZu4TGOzb3Wc=;
-        b=wZr8IXRvFmr1P4okOUsClwu3fvZSrYNl5laSrqV6rhDYXsSFpVJn3aenwvoDtDCMsF
-         78aRNpZc7o+Yrk0DTrq3exRArljuq6Bp6eVYQxzoA1/gSFLweevRETG1H3cfaVAT2uyi
-         kjqMZSHC5em6IFqDMUIon+3uSzbinAn4/+WTonJdTQHoA4BtwtVQp+gqnN5ifiLjHT2S
-         ow4/Px4dY0IQa+SYKjrM2NRv9BvI8Pj9Sn860sozPwgmX4GHk2NYziG+wFWmhyliAtYM
-         zc5lwiEJJxt6NehLue8vhjnS1bTjYcHLn5aO2HRlcMCPC6h+VjHcPZOpxBaNU1Gmk7Mn
-         7l0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z8ihYsabv6FaCkZlvJjrpqfzbw0j+BAuZu4TGOzb3Wc=;
-        b=0pR6ZmMHnVCmN46tg0FQpE8LLj4yhsCPn2jSOz0prCMROJC4qbwj8ard+t1VUIU2G2
-         FPsAk1JSv+xXpTVzOi9hdQWBHvlNQ4LUIlKrULj2hjYV4QSnTWS49ph+HnmbW4UzkeMm
-         N7O8dGO6FYuWJzYPMRrOi3es4yHlzsRuq86cQZh/l7p77746ekPFPvDETO6uTf1YeXwm
-         lXxbUdpWtGTzO1aZ20HaC81BIJmwMfhlD2lbCVM6aIKxq6jsM5fT/AwJKzStRTwimSt4
-         PsMHmg+MiWiKOQIdq3ribL6rFkldmXN6CfZDKufBam1Hg7LuXsC2rhppYqqNXibce9LG
-         lhGg==
-X-Gm-Message-State: AO0yUKVQMKFrRTX0Y+PxDwv1IjkOVo8i7MTxEyjESgNLR4n+PsRXrSFf
-        yQ3FkXXJnP1T7Xz/HlOvOb0OfTSdGLry1X+gXHjLjg==
-X-Google-Smtp-Source: AK7set/hxn7sAfblMpdpMPWHyLNDxBQTxnDdGtDdgs0nJfpnRDUKJhUHAHezrgSwMNAg6vv4MsSFeNhbD/acHeXiqCA=
-X-Received: by 2002:aa7:8215:0:b0:593:92e9:991e with SMTP id
- k21-20020aa78215000000b0059392e9991emr610338pfi.43.1675260511059; Wed, 01 Feb
- 2023 06:08:31 -0800 (PST)
+        Wed, 1 Feb 2023 09:09:25 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718165CFD3;
+        Wed,  1 Feb 2023 06:09:20 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4P6NwG19ZDz6J7Z5;
+        Wed,  1 Feb 2023 22:05:02 +0800 (CST)
+Received: from localhost (10.45.150.75) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 1 Feb
+ 2023 14:09:16 +0000
+Date:   Wed, 1 Feb 2023 14:09:15 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Bjorn Helgaas <helgaas@kernel.org>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "Matt Fagnani" <matt.fagnani@bell.net>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Vasant Hegde <vasant.hegde@amd.com>,
+        Tony Zhu <tony.zhu@intel.com>, <linux-pci@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/1] PCI: Add translated request only flag for
+ pci_enable_pasid()
+Message-ID: <20230201140915.000024a0@Huawei.com>
+In-Reply-To: <Y9nQK9P3HOxEeZ4U@nvidia.com>
+References: <030e66e0-fb54-b77d-5094-4786684ba97d@linux.intel.com>
+        <20230201001419.GA1776086@bhelgaas>
+        <Y9nQK9P3HOxEeZ4U@nvidia.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230201125642.624255-1-gregkh@linuxfoundation.org>
-In-Reply-To: <20230201125642.624255-1-gregkh@linuxfoundation.org>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Wed, 1 Feb 2023 15:08:20 +0100
-Message-ID: <CADYN=9LPvuxr6EjQtiGqnT8XA7FvurBmzYjfXz1yxvr+D+TN8w@mail.gmail.com>
-Subject: Re: [PATCH] maple: remove unneeded maple_bus_uevent() callback.
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-sh@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.45.150.75]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Feb 2023 at 13:56, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> The driver core recently changed the uevent bus callback to take a const
-> pointer, and the maple_bus_uevent() was not correctly fixed up.  Instead
-> of fixing the function parameter types, just remove the callback
-> entirely as it does not do anything, so it is not necessary.
->
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Fixes: 2a81ada32f0e ("driver core: make struct bus_type.uevent() take a const *")
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Tue, 31 Jan 2023 22:36:27 -0400
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Thank you for the quick fix.
+> On Tue, Jan 31, 2023 at 06:14:19PM -0600, Bjorn Helgaas wrote:
+> 
+> > > AMD GPU is one of those devices.  
+> > 
+> > I guess you mean the AMD GPU has ATS, PRI, and PASID Capabilities?
+> > And furthermore, that the GPU *always* uses Translated addresses with
+> > PASID?  
+> 
+> I'm not versed in the spec lingo, but the GPU issues MemRd/Wrs with
+> the translated bit set and no PASID header - which is the correct form
+> for an address that was translated by ATS.
 
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
+FWIW there is a capability bit and enable bit in the PASID cap/control
+registers that says whether a device can/should add a PASID to a
+translated request or not.  I think the intent is that a host can
+sanity check AT requests to make sure the device isn't making them
+up. To do that it needs the PASID.  Not sure any hosts do this yet
+though ;)
 
+Not worth much, but I thought it always sent the PASID so dug out spec
+to check (I was wrong as it is both optional and configurable).
 
-Cheers,
-Anders
+> 
+> To get to that it issues ATS requests, and only the ATS related
+> requests will carry the PASID.
+> 
+> ATS related requests always route to the root port, which is why it is
+> functionally equivalent to ACS RR/UF in these cases.
+> 
+> Translated requests always route where they are supposed to go, even
+> with P2P and things.
+> 
+> > And this applies even if there is no ACS or ACS doesn't support
+> > PCI_ACS_RR and PCI_ACS_UF.
+> > 
+> > The black screen happens because ... ?  
+> 
+> AMD GPU driver bugs blow up if it cannot setup PASID.
+> 
+> > I couldn't figure out the NULL pointer dereference.  I expected it to
+> > be from a BUG() or similar in report_iommu_fault(), but I don't see
+> > that.  
+> 
+> IIRC it is a buggy error unwind handling in the AMD GPU driver.
+>  
+> Jason
 
-> ---
-> sh maintainers, I'll take this through my tree as that's where the
-> offending commit is that causes the build breakage.
->
->  drivers/sh/maple/maple.c | 7 -------
->  1 file changed, 7 deletions(-)
->
-> diff --git a/drivers/sh/maple/maple.c b/drivers/sh/maple/maple.c
-> index e24e220e56ee..e05473c5c267 100644
-> --- a/drivers/sh/maple/maple.c
-> +++ b/drivers/sh/maple/maple.c
-> @@ -760,12 +760,6 @@ static int maple_match_bus_driver(struct device *devptr,
->         return 0;
->  }
->
-> -static int maple_bus_uevent(struct device *dev,
-> -                           struct kobj_uevent_env *env)
-> -{
-> -       return 0;
-> -}
-> -
->  static void maple_bus_release(struct device *dev)
->  {
->  }
-> @@ -782,7 +776,6 @@ static struct maple_driver maple_unsupported_device = {
->  struct bus_type maple_bus_type = {
->         .name = "maple",
->         .match = maple_match_bus_driver,
-> -       .uevent = maple_bus_uevent,
->  };
->  EXPORT_SYMBOL_GPL(maple_bus_type);
->
-> --
-> 2.39.1
->
